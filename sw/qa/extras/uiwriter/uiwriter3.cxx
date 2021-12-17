@@ -1939,6 +1939,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf116315)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144364)
+{
+    SwDoc* const pDoc = createSwDoc();
+    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    // expands autotext (via F3)
+    pWrtSh->Insert("AR");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F3);
+    Scheduler::ProcessEventsToIdle();
+
+    // was ...'letter of <placeholder:"November 21, 2004":"Click placeholder and overwrite">'
+    const OUString sStr("We hereby acknowledge the receipt of your letter of <November 21, 2004>.");
+    CPPUNIT_ASSERT_EQUAL(sStr, getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf141613)
 {
     SwDoc* const pDoc = createSwDoc();
