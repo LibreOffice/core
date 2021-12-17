@@ -77,7 +77,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
                                                                                                 const css::uno::Sequence< css::uno::Any >& lArguments)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     auto & cache = GetTheFilterCache();
 
@@ -167,7 +167,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     {
         // SAFE -> ----------------------
         {
-            osl::MutexGuard aLock(m_aLock);
+            osl::MutexGuard aLock(m_aMutex);
             // May be not all filters was loaded ...
             // But we need it now!
             impl_loadOnDemand();
@@ -253,7 +253,7 @@ std::vector<OUString> FilterFactory::impl_queryMatchByDocumentService(const Quer
         nEFlags = pIt->second.toInt32();
 
     // SAFE -> ----------------------
-    osl::ClearableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aMutex);
 
     // search suitable filters
     FilterCache* pCache       = impl_getWorkingCache();
@@ -409,7 +409,7 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterList(const QueryTokeniz
 std::vector<OUString> FilterFactory::impl_getListOfInstalledModules() const
 {
     // SAFE -> ----------------------
-    osl::ClearableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aMutex);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aLock.clear();
     // <- SAFE ----------------------
@@ -431,7 +431,7 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterListForModule(const OUS
     lIProps[PROPNAME_DOCUMENTSERVICE] <<= sModule;
 
     // SAFE -> ----------------------
-    osl::ClearableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aMutex);
     FilterCache* pCache        = impl_getWorkingCache();
     std::vector<OUString> lOtherFilters = pCache->getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
     aLock.clear();
@@ -472,7 +472,7 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterListForModule(const OUS
 std::vector<OUString> FilterFactory::impl_readSortedFilterListFromConfig(const OUString& sModule) const
 {
     // SAFE -> ----------------------
-    osl::ClearableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aMutex);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aLock.clear();
     // <- SAFE ----------------------

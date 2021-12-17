@@ -25,7 +25,7 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
 DNDListenerContainer::DNDListenerContainer( sal_Int8 nDefaultActions )
-    : WeakComponentImplHelper< XDragGestureRecognizer, XDropTargetDragContext, XDropTargetDropContext, XDropTarget >(GetMutex())
+    : WeakComponentImplHelper< XDragGestureRecognizer, XDropTargetDragContext, XDropTargetDropContext, XDropTarget >(m_aMutex)
 {
     m_bActive = true;
     m_nDefaultActions = nDefaultActions;

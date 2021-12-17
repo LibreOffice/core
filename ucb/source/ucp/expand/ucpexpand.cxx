@@ -22,6 +22,7 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
@@ -41,16 +42,11 @@ using namespace ::com::sun::star;
 namespace
 {
 
-struct MutexHolder
-{
-    mutable ::osl::Mutex m_mutex;
-};
-
 typedef ::cppu::WeakComponentImplHelper<
     lang::XServiceInfo, ucb::XContentProvider > t_impl_helper;
 
 
-class ExpandContentProviderImpl : protected MutexHolder, public t_impl_helper
+class ExpandContentProviderImpl : protected cppu::BaseMutex, public t_impl_helper
 {
     uno::Reference< uno::XComponentContext > m_xComponentContext;
     uno::Reference< util::XMacroExpander >   m_xMacroExpander;
@@ -64,7 +60,7 @@ protected:
 public:
     explicit ExpandContentProviderImpl(
         uno::Reference< uno::XComponentContext > const & xComponentContext )
-        : t_impl_helper( m_mutex ),
+        : t_impl_helper( m_aMutex ),
           m_xComponentContext( xComponentContext ),
           m_xMacroExpander( util::theMacroExpander::get(xComponentContext) )
         {}

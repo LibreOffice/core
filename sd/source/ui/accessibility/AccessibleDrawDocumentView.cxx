@@ -202,7 +202,7 @@ uno::Reference<XAccessible> SAL_CALL
 {
     ThrowIfDisposed ();
 
-    ::osl::ClearableMutexGuard aGuard (maMutex);
+    ::osl::ClearableMutexGuard aGuard (m_aMutex);
 
     // Take care of children of the base class.
     sal_Int32 nCount = AccessibleDocumentViewBase::getAccessibleChildCount();

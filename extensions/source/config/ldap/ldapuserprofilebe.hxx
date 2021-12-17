@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include "ldapaccess.hxx"
 
@@ -41,13 +42,12 @@ struct LdapDefinition;
 typedef cppu::WeakComponentImplHelper<css::beans::XPropertySet,
                                        lang::XServiceInfo> BackendBase ;
 
-struct LdapProfileMutexHolder { osl::Mutex mMutex; };
 /**
   Implements the PlatformBackend service, a specialization of the
   XPropertySet service for retrieving LDAP user profile
   configuration settings from an LDAP repository.
   */
-class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
+class LdapUserProfileBe : private cppu::BaseMutex, public BackendBase
 {
     public:
 

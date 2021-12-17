@@ -23,6 +23,7 @@
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
@@ -49,7 +50,7 @@ using namespace ::com::sun::star::datatransfer::dnd;
 // If the service calls OleInitialize then it also calls OleUnitialize when
 // it is destroyed. Therefore no second instance may exist which was
 // created in the same thread and still needs OLE.
-class DropTarget : public MutexDummy,
+class DropTarget : public cppu::BaseMutex,
                    public WeakComponentImplHelper<XInitialization, XDropTarget, XServiceInfo>
 
 {

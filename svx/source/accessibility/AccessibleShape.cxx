@@ -359,7 +359,7 @@ uno::Reference<XAccessible> SAL_CALL
 uno::Reference<XAccessibleRelationSet> SAL_CALL
     AccessibleShape::getAccessibleRelationSet()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     if (mpParent == nullptr)
         return uno::Reference<XAccessibleRelationSet>();
 
@@ -384,7 +384,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 uno::Reference<XAccessibleStateSet> SAL_CALL
     AccessibleShape::getAccessibleStateSet()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     if (IsDisposed())
     {
@@ -456,7 +456,7 @@ uno::Reference<XAccessible > SAL_CALL
     AccessibleShape::getAccessibleAtPoint (
         const awt::Point& aPoint)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     sal_Int32 nChildCount = getAccessibleChildCount ();
     for (sal_Int32 i=0; i<nChildCount; ++i)
@@ -487,7 +487,7 @@ uno::Reference<XAccessible > SAL_CALL
 awt::Rectangle SAL_CALL AccessibleShape::getBounds()
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     ThrowIfDisposed ();
     awt::Rectangle aBoundingBox;
@@ -896,7 +896,7 @@ uno::Sequence<uno::Type> SAL_CALL
 void AccessibleShape::disposing (const lang::EventObject& aEvent)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     try
     {
@@ -1011,7 +1011,7 @@ OUString AccessibleShape::GetFullAccessibleName (AccessibleShape *shape)
 void AccessibleShape::disposing()
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     // Make sure to send an event that this object loses the focus in the
     // case that it has the focus.

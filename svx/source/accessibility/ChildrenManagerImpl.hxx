@@ -72,7 +72,7 @@ typedef ::std::vector<ChildDescriptor> ChildDescriptorListType;
     @see ChildrenManager
 */
 class ChildrenManagerImpl final
-    :   public MutexOwner,
+    :   public cppu::BaseMutex,
         public cppu::WeakComponentImplHelper<
             css::document::XEventListener,
             css::view::XSelectionChangeListener>,

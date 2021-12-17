@@ -151,15 +151,10 @@ public:
                 On the other side there exists some interactions, which allow a retry.
                 So this helper allow to set a list of interactions combined with a retry value.
  */
-struct ThreadHelpBase2
+class PreventDuplicateInteraction final :
+                                  public ::cppu::WeakImplHelper<css::lang::XInitialization, css::task::XInteractionHandler2>
 {
-    public:
-        mutable ::osl::Mutex m_aLock;
-};
-
-class PreventDuplicateInteraction final : private ThreadHelpBase2
-                                  , public ::cppu::WeakImplHelper<css::lang::XInitialization, css::task::XInteractionHandler2>
-{
+    mutable ::osl::Mutex m_aLock;
 
     // structs, types etc.
     public:

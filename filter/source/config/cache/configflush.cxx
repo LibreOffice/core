@@ -26,8 +26,7 @@
 namespace filter::config{
 
 ConfigFlush::ConfigFlush()
-    : BaseLock   (       )
-    , m_lListener(m_aLock)
+    : m_lListener(m_aMutex)
 {
 }
 

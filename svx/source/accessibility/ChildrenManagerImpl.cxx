@@ -71,7 +71,7 @@ ChildrenManagerImpl::ChildrenManagerImpl (
     AccessibleContextBase& rContext)
     : ::cppu::WeakComponentImplHelper<
           css::document::XEventListener,
-          css::view::XSelectionChangeListener>(maMutex),
+          css::view::XSelectionChangeListener>(m_aMutex),
       mxShapeList (rxShapeList),
       mxParent (rxParent),
       maShapeTreeInfo (rShapeTreeInfo),

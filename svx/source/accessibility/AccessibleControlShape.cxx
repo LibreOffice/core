@@ -357,7 +357,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( AccessibleControlShape )
 
 void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent& _rEvent )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     // check if it is the name or the description
     if  (   _rEvent.PropertyName == lcl_getNamePropertyName()
@@ -427,7 +427,7 @@ void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& 
         AccessibleEventObject aTranslatedEvent( _rEvent );
 
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            ::osl::MutexGuard aGuard( m_aMutex );
 
             // let the child manager translate the event
             aTranslatedEvent.Source = *this;

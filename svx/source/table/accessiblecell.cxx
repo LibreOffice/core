@@ -181,7 +181,7 @@ Reference<XAccessible> SAL_CALL AccessibleCell::getAccessibleChild (sal_Int32 nI
 Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet()
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     Reference<XAccessibleStateSet> xStateSet;
 
     if (rBHelper.bDisposed || mpText == nullptr)
@@ -261,7 +261,7 @@ sal_Bool SAL_CALL AccessibleCell::containsPoint( const css::awt::Point& aPoint)
 Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const css::awt::Point& aPoint)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     sal_Int32 nChildCount = getAccessibleChildCount ();
     for (sal_Int32 i=0; i<nChildCount; ++i)
@@ -291,7 +291,7 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const c
 css::awt::Rectangle SAL_CALL AccessibleCell::getBounds()
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     ThrowIfDisposed ();
     css::awt::Rectangle aBoundingBox;
@@ -426,7 +426,7 @@ OUString SAL_CALL AccessibleCell::getToolTipText()
 void SAL_CALL AccessibleCell::addAccessibleEventListener( const Reference<XAccessibleEventListener >& rxListener)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         Reference<XInterface> xSource( static_cast<XComponent *>(this) );
@@ -489,7 +489,7 @@ void AccessibleCell::ViewForwarderChanged()
 void AccessibleCell::disposing()
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     // Make sure to send an event that this object loses the focus in the
     // case that it has the focus.

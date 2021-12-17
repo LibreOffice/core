@@ -30,7 +30,7 @@ namespace filter::config {
                 global filter cache, if the underlying configuration
                 wa changed by other processes.
  */
-class CacheUpdateListener : public BaseLock // must be the first one to guarantee right initialized mutex member!
+class CacheUpdateListener : public cppu::BaseMutex // must be the first one to guarantee right initialized mutex member!
                           , public ::cppu::WeakImplHelper< css::util::XChangesListener >
 {
 

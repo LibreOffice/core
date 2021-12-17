@@ -38,12 +38,6 @@ namespace svt
 {
 
 
-struct TMutexInit
-{
-    ::osl::Mutex m_aLock;
-};
-
-
 /**
     @descr  implements a helper, which can be used to
             convert vcl key codes into awt key codes ...
@@ -67,10 +61,11 @@ struct TMutexInit
             Of course this queue will be stopped if the environment
             will be destructed...
  */
-class SVT_DLLPUBLIC AcceleratorExecute final : private TMutexInit
+class SVT_DLLPUBLIC AcceleratorExecute final
 {
     // member
     private:
+        ::osl::Mutex m_aLock;
 
         /** TODO document me */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;

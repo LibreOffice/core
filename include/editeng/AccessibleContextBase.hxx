@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <editeng/editengdllapi.h>
 
 namespace com::sun::star::accessibility { class XAccessibleStateSet; }
@@ -35,8 +36,6 @@ namespace com::sun::star::accessibility { struct AccessibleEventObject; }
 
 namespace accessibility {
 
-struct MutexOwner {mutable ::osl::Mutex maMutex;};
-
 /** @descr
         This base class provides an implementation of the
         AccessibleContext service. Apart from the
@@ -44,7 +43,7 @@ struct MutexOwner {mutable ::osl::Mutex maMutex;};
         interfaces it supports the XServiceInfo interface.
 */
 class EDITENG_DLLPUBLIC AccessibleContextBase
-    :   public MutexOwner,
+    :   public cppu::BaseMutex,
         public cppu::WeakComponentImplHelper<
         css::accessibility::XAccessible,
         css::accessibility::XAccessibleContext,

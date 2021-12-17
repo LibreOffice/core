@@ -21,6 +21,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
@@ -37,12 +38,7 @@ typedef cppu::WeakImplHelper<
             css::util::XOfficeInstallationDirectories,
             css::lang::XServiceInfo > UnoImplBase;
 
-struct mutex_holder
-{
-    osl::Mutex m_aMutex;
-};
-
-class OfficeInstallationDirectories : public mutex_holder, public UnoImplBase
+class OfficeInstallationDirectories : public cppu::BaseMutex, public UnoImplBase
 {
 public:
     explicit OfficeInstallationDirectories(

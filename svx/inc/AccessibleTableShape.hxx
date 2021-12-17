@@ -142,7 +142,7 @@ typedef ::cppu::WeakImplHelper<
             css::accessibility::XAccessibleTableSelection >
             AccessibleTableHeaderShape_BASE;
 
-class AccessibleTableHeaderShape final : public MutexOwner,
+class AccessibleTableHeaderShape final : public cppu::BaseMutex,
     public AccessibleTableHeaderShape_BASE
 {
 public:

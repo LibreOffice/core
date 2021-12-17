@@ -240,7 +240,7 @@ Reference<XAccessible> SAL_CALL
 {
     ThrowIfDisposed ();
 
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     if (mxAccessibleOLEObject.is())
         if (nIndex == 0)
             return mxAccessibleOLEObject;
@@ -260,7 +260,7 @@ uno::Reference<XAccessible > SAL_CALL
 {
     ThrowIfDisposed ();
 
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     uno::Reference<XAccessible> xChildAtPosition;
 
     sal_Int32 nChildCount = getAccessibleChildCount ();
@@ -604,7 +604,7 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
     // Assume that the accessible OLE Object disposes itself correctly.
 
     {
-        ::osl::MutexGuard aGuard (maMutex);
+        ::osl::MutexGuard aGuard (m_aMutex);
         mxAccessibleOLEObject = xOLEObject;
     }
 
@@ -622,7 +622,7 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
 ::osl::Mutex&
     AccessibleDocumentViewBase::implGetMutex()
 {
-    return maMutex;
+    return m_aMutex;
 }
 
 // return ourself as context in default case
@@ -647,7 +647,7 @@ void
 
 uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     uno::Any anyAttribute;
     OUStringBuffer sValue;
@@ -766,7 +766,7 @@ sal_Int32 SAL_CALL AccessibleDocumentViewBase::getForeground(  )
 sal_Int32 SAL_CALL AccessibleDocumentViewBase::getBackground(  )
 {
     ThrowIfDisposed ();
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     return sal_Int32(mpViewShell->GetView()->getColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
 }
 } // end of namespace accessibility

@@ -39,6 +39,7 @@
 #include <osl/mutex.hxx>
 #include <sal/macros.h>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -54,7 +55,6 @@ namespace pq_sdbc_driver
                                SAL_STRINGIFY(PQ_SDBC_MINOR) "." \
                                SAL_STRINGIFY(PQ_SDBC_MICRO)
 
-struct MutexHolder { osl::Mutex m_mutex; };
 // use this to switch off sdbc support !
 // typedef cppu::WeakComponentImplHelper<
 //     css::sdbc::XDriver,
@@ -64,14 +64,14 @@ typedef cppu::WeakComponentImplHelper<
     css::sdbc::XDriver,
     css::lang::XServiceInfo,
     css::sdbcx::XDataDefinitionSupplier > DriverBase ;
-class Driver : public MutexHolder, public DriverBase
+class Driver : public cppu::BaseMutex, public DriverBase
 {
     css::uno::Reference< css::uno::XComponentContext > m_ctx;
     css::uno::Reference< css::lang::XMultiComponentFactory > m_smgr;
 
 public:
     explicit Driver ( const css::uno::Reference < css::uno::XComponentContext > & ctx )
-        : DriverBase( m_mutex ),
+        : DriverBase( m_aMutex ),
           m_ctx( ctx ),
           m_smgr( ctx->getServiceManager() )
     {}

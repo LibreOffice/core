@@ -30,19 +30,6 @@
 namespace filter::config {
 
 
-/** @short  Must be used as first derived base class
-            to get a full initialized mutex member,
-            which can be used during the ctor runs too!
- */
-struct BaseLock
-{
-    public:
-
-        // must be mutable to be usable in const environments too!
-        mutable ::osl::Mutex m_aLock;
-};
-
-
 /** @short  represent an item of a FilterCache
             instance.
 

@@ -85,7 +85,6 @@ class AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEventListener>
 }
 
 AcceleratorExecute::AcceleratorExecute()
-    : TMutexInit()
 {
 }
 

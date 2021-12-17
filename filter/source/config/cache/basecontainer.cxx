@@ -33,9 +33,8 @@
 namespace filter::config{
 
 BaseContainer::BaseContainer()
-    : BaseLock     (       )
-    , m_eType()
-    , m_lListener  (m_aLock)
+    : m_eType()
+    , m_lListener  (m_aMutex)
 {
     GetTheFilterCache().load(FilterCache::E_CONTAINS_STANDARD);
 }
@@ -52,7 +51,7 @@ void BaseContainer::init(const css::uno::Reference< css::uno::XComponentContext 
                                FilterCache::EItemType                                  eType              )
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     m_sImplementationName = sImplementationName;
     m_lServiceNames       = lServiceNames      ;
@@ -66,7 +65,7 @@ void BaseContainer::impl_loadOnDemand()
 {
 #ifdef LOAD_IMPLICIT
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // A generic container needs all items of a set of our cache!
     // Of course it can block for a while, till the cache is really filled.
@@ -101,7 +100,7 @@ void BaseContainer::impl_loadOnDemand()
 void BaseContainer::impl_initFlushMode()
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
     if (!m_pFlushCache)
         m_pFlushCache = GetTheFilterCache().clone();
     if (!m_pFlushCache)
@@ -114,7 +113,7 @@ void BaseContainer::impl_initFlushMode()
 FilterCache* BaseContainer::impl_getWorkingCache() const
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
     if (m_pFlushCache)
         return m_pFlushCache.get();
     else
@@ -161,7 +160,7 @@ void SAL_CALL BaseContainer::insertByName(const OUString& sItem ,
     impl_loadOnDemand();
 
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // create write copy of used cache on demand ...
     impl_initFlushMode();
@@ -179,7 +178,7 @@ void SAL_CALL BaseContainer::removeByName(const OUString& sItem)
     impl_loadOnDemand();
 
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // create write copy of used cache on demand ...
     impl_initFlushMode();
@@ -211,7 +210,7 @@ void SAL_CALL BaseContainer::replaceByName(const OUString& sItem ,
     impl_loadOnDemand();
 
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // create write copy of used cache on demand ...
     impl_initFlushMode();
@@ -235,7 +234,7 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
     impl_loadOnDemand();
 
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     CacheItem aItem;
     try
@@ -268,7 +267,7 @@ css::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
     impl_loadOnDemand();
 
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     try
     {
@@ -295,7 +294,7 @@ sal_Bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
     impl_loadOnDemand();
 
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     try
     {
@@ -329,7 +328,7 @@ sal_Bool SAL_CALL BaseContainer::hasElements()
     impl_loadOnDemand();
 
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     try
     {
@@ -363,7 +362,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
     impl_loadOnDemand();
 
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     try
     {
@@ -403,7 +402,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 void SAL_CALL BaseContainer::flush()
 {
     // SAFE ->
-    osl::ClearableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aMutex);
 
     if (!m_pFlushCache)
         throw css::lang::WrappedTargetRuntimeException(

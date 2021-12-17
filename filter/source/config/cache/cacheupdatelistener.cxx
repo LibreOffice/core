@@ -33,8 +33,7 @@ namespace filter::config{
 CacheUpdateListener::CacheUpdateListener(FilterCache &rFilterCache,
                                          const css::uno::Reference< css::uno::XInterface >& xConfigAccess,
                                          FilterCache::EItemType eConfigType)
-    : BaseLock()
-    , m_rCache(rFilterCache)
+    : m_rCache(rFilterCache)
     , m_xConfig(xConfigAccess)
     , m_eConfigType(eConfigType)
 {
@@ -47,7 +46,7 @@ CacheUpdateListener::~CacheUpdateListener()
 void CacheUpdateListener::startListening()
 {
     // SAFE ->
-    osl::ClearableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aMutex);
     css::uno::Reference< css::util::XChangesNotifier > xNotifier(m_xConfig, css::uno::UNO_QUERY);
     aLock.clear();
     // <- SAFE
@@ -63,7 +62,7 @@ void CacheUpdateListener::startListening()
 void CacheUpdateListener::stopListening()
 {
     // SAFE ->
-    osl::ClearableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aMutex);
     css::uno::Reference< css::util::XChangesNotifier > xNotifier(m_xConfig, css::uno::UNO_QUERY);
     aLock.clear();
     // <- SAFE
@@ -79,7 +78,7 @@ void CacheUpdateListener::stopListening()
 void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEvent& aEvent)
 {
     // SAFE ->
-    osl::ClearableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aMutex);
 
     // disposed ?
     if ( ! m_xConfig.is())
@@ -173,7 +172,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
 void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEvent)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
     if (aEvent.Source == m_xConfig)
         m_xConfig.clear();
     // <- SAFE

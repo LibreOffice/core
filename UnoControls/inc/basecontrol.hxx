@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/component.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -39,19 +40,13 @@ namespace unocontrols { class OMRCListenerMultiplexerHelper; }
 
 namespace unocontrols {
 
-struct IMPL_MutexContainer
-{
-    // Is necessary to initialize "BaseControl" and make this class thread-safe.
-    ::osl::Mutex m_aMutex;
-};
-
 class BaseControl   : public css::lang::XServiceInfo
                     , public css::awt::XPaintListener
                     , public css::awt::XWindowListener
                     , public css::awt::XView
                     , public css::awt::XWindow
                     , public css::awt::XControl
-                    , public IMPL_MutexContainer
+                    , public cppu::BaseMutex
                     , public ::cppu::OComponentHelper
 {
 public:
