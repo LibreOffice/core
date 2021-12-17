@@ -2907,41 +2907,32 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     CPPUNIT_ASSERT_MESSAGE("Style Name2 : Has Attribute number format, but it shouldn't.",
         !pStyleSheet->GetItemSet().HasItem(ATTR_VALUE_FORMAT, &pItem));
 
-    /* Test for Style "Name3"
-     * Hidden, protected and content is printed.
-     */
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name3", SfxStyleFamily::Para);
-    CPPUNIT_ASSERT_MESSAGE("Style Name3 : Doesn't have Attribute Protection, but it should have.",
-        pStyleSheet->GetItemSet().HasItem(ATTR_PROTECTION, &pItem));
+    auto checkProtection = [pStyleSheetPool](const OUString& rName, const ScProtectionAttr& rExpected)
+    {
+        ScStyleSheet* pStyle = pStyleSheetPool->FindCaseIns(rName, SfxStyleFamily::Para);
+        CPPUNIT_ASSERT(pStyle);
 
-    CPPUNIT_ASSERT_MESSAGE("Style Name 3 : Error with Protection attribute." ,bool(ScProtectionAttr(true, false, true, true) == *pItem));
+        const SfxPoolItem* p = nullptr;
+        CPPUNIT_ASSERT(pStyle->GetItemSet().HasItem(ATTR_PROTECTION, &p));
 
-    /* Test for Style "Name4"
-     * Hidden, protected and content is printed.
-     */
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name4", SfxStyleFamily::Para);
-    CPPUNIT_ASSERT_MESSAGE("Style Name4 : Doesn't have Attribute Protection, but it should have.",
-        pStyleSheet->GetItemSet().HasItem(ATTR_PROTECTION, &pItem));
+        std::ostringstream os;
+        os << "Wrong protection attributes for style named '" << rName << "'";
+        CPPUNIT_ASSERT_MESSAGE(os.str(), rExpected == *p);
 
-    CPPUNIT_ASSERT_MESSAGE("Style Name 4 : Error with Protection attribute." ,bool(ScProtectionAttr(true, true, false, false) == *pItem));
+        return pStyle;
+    };
 
-    /* Test for Style "Name5"
-     * Hidden, protected and content is printed.
-     */
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name5", SfxStyleFamily::Para);
-    CPPUNIT_ASSERT_MESSAGE("Style Name5 : Doesn't have Attribute Protection, but it should have.",
-        pStyleSheet->GetItemSet().HasItem(ATTR_PROTECTION, &pItem));
+    checkProtection("Name3", ScProtectionAttr(true, false, true, true));
+    checkProtection("Name4", ScProtectionAttr(true, true, false, false));
+    pStyleSheet = checkProtection("Name5", ScProtectionAttr(false, false, false, true));
 
-    CPPUNIT_ASSERT_MESSAGE("Style Name5 : Error with Protection attribute.",
-        ScProtectionAttr(false, false, false, true) == *pItem);
-
-    CPPUNIT_ASSERT_MESSAGE("Style Name5 : Has Attribute Border, but it shouldn't.",
+    CPPUNIT_ASSERT_MESSAGE("Style Name5: Has Attribute Border, but it shouldn't.",
         !pStyleSheet->GetItemSet().HasItem(ATTR_BORDER, &pItem));
     CPPUNIT_ASSERT_MESSAGE("Style Name5: Has Attribute background, but it shouldn't.",
         !pStyleSheet->GetItemSet().HasItem(ATTR_BACKGROUND, &pItem));
-    CPPUNIT_ASSERT_MESSAGE("Style Name5 : Has Attribute font, but it shouldn't.",
+    CPPUNIT_ASSERT_MESSAGE("Style Name5: Has Attribute font, but it shouldn't.",
         !pStyleSheet->GetItemSet().HasItem(ATTR_FONT, &pItem));
-    CPPUNIT_ASSERT_MESSAGE("Style Name5 : Has Attribute number format, but it shouldn't.",
+    CPPUNIT_ASSERT_MESSAGE("Style Name5: Has Attribute number format, but it shouldn't.",
         !pStyleSheet->GetItemSet().HasItem(ATTR_VALUE_FORMAT, &pItem));
 
     /* Test for Style "Name6"
