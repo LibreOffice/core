@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d37abf44_6577c279",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-17T13:54:53Z",
+      "side": 1,
+      "message": "No objection to have Shapes also when in context for this item.",
+      "revId": "a29c39bcf818273f83145d285f1a3f470d32d217",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
