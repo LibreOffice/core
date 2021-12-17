@@ -16,6 +16,29 @@
       "message": "Thanks a lot, I\u0027m now happy with this.",
       "revId": "699eca8e9b119439d3fdc1476b8922e274f848bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd35462a_4218d29b",
+        "filename": "sw/source/core/text/itrcrsr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-17T15:28:34Z",
+      "side": 1,
+      "message": "The updated patch set should now work and old ODF documents will still stick to the old behaviour, but this line here seems to be a performance problem - It queries the document settings for each of the nodes. How do I make it to query only once? By adding a new parameter to SwTextMargin::CtorInitTextMargin, e.g. void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *pNewInf, bool bUseLineSpace)?",
+      "range": {
+        "startLine": 255,
+        "startChar": 12,
+        "endLine": 255,
+        "endChar": 121
+      },
+      "revId": "699eca8e9b119439d3fdc1476b8922e274f848bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
