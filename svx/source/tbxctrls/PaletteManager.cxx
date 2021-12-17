@@ -45,7 +45,7 @@
 
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
-    mnNumOfPalettes(2),
+    mnNumOfPalettes(3),
     mnCurrentPalette(0),
     mnColorCount(0),
     mpBtnUpdater(nullptr),
@@ -141,6 +141,28 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
             ++nIx;
         }
     }
+    else if (mnCurrentPalette == mnNumOfPalettes - 2)
+    {
+        SfxObjectShell* pObjectShell = SfxObjectShell::Current();
+        if (pObjectShell)
+        {
+            std::vector<Color> aColors = pObjectShell->GetThemeColors();
+            mnColorCount = aColors.size();
+            rColorSet.Clear();
+            std::vector<OUString> aNames = {
+                SvxResId(RID_SVXSTR_THEME_COLOR1),  SvxResId(RID_SVXSTR_THEME_COLOR2),
+                SvxResId(RID_SVXSTR_THEME_COLOR3),  SvxResId(RID_SVXSTR_THEME_COLOR4),
+                SvxResId(RID_SVXSTR_THEME_COLOR5),  SvxResId(RID_SVXSTR_THEME_COLOR6),
+                SvxResId(RID_SVXSTR_THEME_COLOR7),  SvxResId(RID_SVXSTR_THEME_COLOR8),
+                SvxResId(RID_SVXSTR_THEME_COLOR9),  SvxResId(RID_SVXSTR_THEME_COLOR10),
+                SvxResId(RID_SVXSTR_THEME_COLOR11), SvxResId(RID_SVXSTR_THEME_COLOR12),
+            };
+            for (int i = 0; i < 12; ++i)
+            {
+                rColorSet.InsertItem(i, aColors[i], aNames[i]);
+            }
+        }
+    }
     else if( mnCurrentPalette == mnNumOfPalettes - 1 )
     {
         // Add doc colors to palette
@@ -188,6 +210,7 @@ std::vector<OUString> PaletteManager::GetPaletteList()
     {
         aPaletteNames.push_back( (*it).GetName() );
     }
+    aPaletteNames.push_back(SvxResId(RID_SVXSTR_THEME_COLORS));
     aPaletteNames.push_back( SvxResId ( RID_SVXSTR_DOC_COLORS ) );
 
     return aPaletteNames;
@@ -245,7 +268,7 @@ OUString PaletteManager::GetPaletteName()
 
 OUString PaletteManager::GetSelectedPalettePath()
 {
-    if(mnCurrentPalette != mnNumOfPalettes - 1 && mnCurrentPalette != 0)
+    if (mnCurrentPalette < m_Palettes.size() && mnCurrentPalette != 0)
         return m_Palettes[mnCurrentPalette - 1]->GetPath();
     else
         return OUString();
