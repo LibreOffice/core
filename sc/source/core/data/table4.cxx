@@ -1967,7 +1967,6 @@ inline bool isOverflow( const double& rVal, const double& rMax, const double& rS
                 return rVal > rMax;
             else
                 return rVal < rMax;
-        break;
         case FILL_GROWTH:
             if (rStep > 0.0)
             {
