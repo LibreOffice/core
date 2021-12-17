@@ -31,4 +31,20 @@
     <style:table-cell-properties style:vertical-align="middle"/>
     <style:paragraph-properties fo:text-align="end"/>
   </style:style>
+
+  <style:style style:name="Accent" style:family="table-cell" style:parent-style-name="Default">
+    <style:text-properties fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Accent 1" style:family="table-cell" style:parent-style-name="Accent">
+    <style:table-cell-properties fo:background-color="#000000"/>
+    <style:text-properties fo:color="#ffffff"/>
+  </style:style>
+  <style:style style:name="Accent 2" style:family="table-cell" style:parent-style-name="Accent">
+    <style:table-cell-properties fo:background-color="#808080"/>
+    <style:text-properties fo:color="#ffffff"/>
+  </style:style>
+  <style:style style:name="Accent 3" style:family="table-cell" style:parent-style-name="Accent">
+    <style:table-cell-properties fo:background-color="#dddddd"/>
+  </style:style>
+
 </office:styles>

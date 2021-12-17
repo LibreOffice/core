@@ -2925,14 +2925,15 @@ void ScFiltersTest::testOrcusODSStyleInterface()
 
     CPPUNIT_ASSERT_MESSAGE("Style Name 4 : Error with Protection attribute." ,bool(ScProtectionAttr(true, true, false, false) == *pItem));
 
-    /* Test for Style "Name3"
+    /* Test for Style "Name5"
      * Hidden, protected and content is printed.
      */
     pStyleSheet = pStyleSheetPool->FindCaseIns("Name5", SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name5 : Doesn't have Attribute Protection, but it should have.",
         pStyleSheet->GetItemSet().HasItem(ATTR_PROTECTION, &pItem));
 
-    CPPUNIT_ASSERT_MESSAGE("Style Name 5 : Error with Protection attribute." ,bool(ScProtectionAttr(false, false, false, true) == *pItem));
+    CPPUNIT_ASSERT_MESSAGE("Style Name5 : Error with Protection attribute.",
+        ScProtectionAttr(false, false, false, true) == *pItem);
 
     CPPUNIT_ASSERT_MESSAGE("Style Name5 : Has Attribute Border, but it shouldn't.",
         !pStyleSheet->GetItemSet().HasItem(ATTR_BORDER, &pItem));
@@ -3032,6 +3033,32 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     const SvxVerJustifyItem* pVerJustify = static_cast<const SvxVerJustifyItem*>(pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name10 :Error with ver justify", SvxCellVerJustify::Center, pVerJustify->GetValue());
 
+    auto checkFontWeight = [pStyleSheetPool]( const OUString& rName, FontWeight eExpected )
+    {
+        ScStyleSheet* pStyle = pStyleSheetPool->FindCaseIns(rName, SfxStyleFamily::Para);
+        CPPUNIT_ASSERT(pStyle);
+
+        const SfxPoolItem* pItem = nullptr;
+
+        {
+            std::ostringstream os;
+            os << "Style named '" << rName << "' does not have a font weight attribute.";
+            CPPUNIT_ASSERT_MESSAGE(os.str(), pStyle->GetItemSet().HasItem(ATTR_FONT_WEIGHT, &pItem));
+        }
+
+        const SvxWeightItem* pWeight = static_cast<const SvxWeightItem*>(pItem);
+        FontWeight eActual = pWeight->GetWeight();
+        {
+            std::ostringstream os;
+            os << "Wrong font weight value: expected=" << eExpected << "; actual=" << eActual;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(os.str(), eExpected, eActual);
+        }
+    };
+
+    checkFontWeight("Accent", WEIGHT_BOLD);
+    checkFontWeight("Accent 1", WEIGHT_BOLD); // inherits from 'Accent'
+    checkFontWeight("Accent 2", WEIGHT_BOLD); // inherits from 'Accent'
+    checkFontWeight("Accent 3", WEIGHT_BOLD); // inherits from 'Accent'
 }
 
 void ScFiltersTest::testLiteralInFormulaXLS()
