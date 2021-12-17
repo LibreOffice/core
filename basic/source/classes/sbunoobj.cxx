@@ -27,7 +27,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -4166,12 +4166,12 @@ namespace {
 
 class ModuleInvocationProxy : public WeakImplHelper< XInvocation, XComponent >
 {
-    ::osl::Mutex        m_aMutex;
+    std::mutex          m_aMutex;
     OUString            m_aPrefix;
     SbxObjectRef        m_xScopeObj;
     bool                m_bProxyIsClassModuleObject;
 
-    ::comphelper::OInterfaceContainerHelper2 m_aListeners;
+    ::comphelper::OInterfaceContainerHelper4<XEventListener> m_aListeners;
 
 public:
     ModuleInvocationProxy( std::u16string_view aPrefix, SbxObjectRef const & xScopeObj );
@@ -4199,7 +4199,6 @@ public:
 ModuleInvocationProxy::ModuleInvocationProxy( std::u16string_view  aPrefix, SbxObjectRef const & xScopeObj )
     : m_aPrefix( OUString::Concat(aPrefix) + "_" )
     , m_xScopeObj( xScopeObj )
-    , m_aListeners( m_aMutex )
 {
     m_bProxyIsClassModuleObject = xScopeObj.is() && dynamic_cast<const SbClassModuleObject*>( xScopeObj.get() ) != nullptr;
 }
@@ -4355,21 +4354,23 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
 
 void SAL_CALL ModuleInvocationProxy::dispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     EventObject aEvent( static_cast<XComponent*>(this) );
-    m_aListeners.disposeAndClear( aEvent );
+    m_aListeners.disposeAndClear( aGuard, aEvent );
 
     m_xScopeObj = nullptr;
 }
 
 void SAL_CALL ModuleInvocationProxy::addEventListener( const Reference< XEventListener >& xListener )
 {
+    std::unique_lock aGuard( m_aMutex );
     m_aListeners.addInterface( xListener );
 }
 
 void SAL_CALL ModuleInvocationProxy::removeEventListener( const Reference< XEventListener >& xListener )
 {
+    std::unique_lock aGuard( m_aMutex );
     m_aListeners.removeInterface( xListener );
 }
 
