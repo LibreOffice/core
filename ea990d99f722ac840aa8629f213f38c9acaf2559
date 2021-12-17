@@ -242,6 +242,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "778f85da_f6d73d80",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-17T07:34:36Z",
+      "side": 1,
+      "message": "\"yes\" doesn\u0027t answer my question",
+      "parentUuid": "aa069532_076ed33c",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fff34bdf_b6bf2b29",
         "filename": "svx/util/svx.component.breakpad",
         "patchSetId": 4

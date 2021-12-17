@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d08e2f8_9c8822af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-17T07:34:36Z",
+      "side": 1,
+      "message": "\u003e Uploaded patch set 7.\n\nI like the explicit use of \u003coptional\u003e and the wildcard magic gone.  Thanks!",
+      "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
