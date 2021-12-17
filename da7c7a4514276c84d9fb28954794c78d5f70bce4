@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c0bf0e4d_2bedf182",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2021-12-17T03:59:32Z",
+      "side": 1,
+      "message": "I saw the xlsx doc attached to BZ, and it imports the DB range as __Anonymous_Sheet_DB__\u003cnumber\u003e. That prefix is typically used for sheet local anonymous DB, not a global named DB.  So, maybe you can also look into whether that range should be imported into Calc as a sheet-local anonymous DB?  Note that Calc currently only supports one local anonymous DB per sheet.  But I know Excel supports multiple of those per sheet.  It would be reasonable to extend Calc\u0027s current implementation to allow multiple sheet-local anonymous DBs.  The current code seems to handle copying of sheet-local DB\u0027s on sheet copy.  That way you won\u0027t need to worry about naming clash...",
+      "revId": "da7c7a4514276c84d9fb28954794c78d5f70bce4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "760570d6_b88c2ce9",
         "filename": "sc/source/core/data/documen2.cxx",
         "patchSetId": 1
