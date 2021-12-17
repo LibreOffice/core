@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e29ea91c_9d4b9830",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-17T13:28:37Z",
+      "side": 1,
+      "message": "I think its best to tweak the dependent patch to not depend on this. Let me try that",
+      "revId": "a5d53648ac81ccbc9f5301a4e9490962119bff64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
