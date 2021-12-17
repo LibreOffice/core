@@ -25,7 +25,7 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>
 
@@ -61,7 +61,7 @@ class UCBHELPER_DLLPUBLIC PropertyValueSet final :
 {
     css::uno::Reference< css::uno::XComponentContext >   m_xContext;
     css::uno::Reference< css::script::XTypeConverter >   m_xTypeConverter;
-    osl::Mutex      m_aMutex;
+    std::mutex      m_aMutex;
     std::unique_ptr<PropertyValues>                      m_pValues;
     bool        m_bWasNull;
     bool        m_bTriedToGetTypeConverter;
