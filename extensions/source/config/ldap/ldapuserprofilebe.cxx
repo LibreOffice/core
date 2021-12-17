@@ -35,8 +35,7 @@
 namespace extensions::config::ldap {
 
 LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContext>& xContext)
-: LdapProfileMutexHolder(),
-  BackendBase(mMutex)
+: BackendBase(m_aMutex)
 {
     LdapDefinition aDefinition;
     OUString loggedOnUser;

@@ -28,8 +28,7 @@
 namespace sfx2 {
 
 PreventDuplicateInteraction::PreventDuplicateInteraction(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
-    : ThreadHelpBase2()
-    , m_xContext(rxContext)
+    : m_xContext(rxContext)
 {
 }
 

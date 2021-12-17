@@ -49,8 +49,7 @@ namespace unocontrols {
 //  construct/destruct
 
 BaseControl::BaseControl( const Reference< XComponentContext >& rxContext )
-    : IMPL_MutexContainer       (                       )
-    , OComponentHelper          ( m_aMutex              )
+    : OComponentHelper          ( m_aMutex              )
     , m_xComponentContext       ( rxContext              )
     , m_nX                      ( DEFAULT_X             )
     , m_nY                      ( DEFAULT_Y             )

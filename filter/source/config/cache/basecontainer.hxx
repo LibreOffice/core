@@ -49,7 +49,7 @@ namespace filter::config {
                 present by this base class!) was full initialized inside our own
                 ctor as first!
  */
-class BaseContainer : public BaseLock
+class BaseContainer : public cppu::BaseMutex
                     , public ::cppu::WeakImplHelper< css::lang::XServiceInfo         ,
                                                       css::container::XNameContainer  , // => XNameReplace => XNameAccess => XElementAccess
                                                       css::container::XContainerQuery ,

@@ -45,7 +45,7 @@ namespace accessibility {
 AccessibleContextBase::AccessibleContextBase (
         const uno::Reference<XAccessible>& rxParent,
         const sal_Int16 aRole)
-    :   WeakComponentImplHelper(MutexOwner::maMutex),
+    :   WeakComponentImplHelper(m_aMutex),
         mxParent(rxParent),
         meDescriptionOrigin(NotSet),
         meNameOrigin(NotSet),
@@ -75,7 +75,7 @@ AccessibleContextBase::~AccessibleContextBase()
 
 bool AccessibleContextBase::SetState (sal_Int16 aState)
 {
-    ::osl::ClearableMutexGuard aGuard (maMutex);
+    ::osl::ClearableMutexGuard aGuard (m_aMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
         static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
     if ((pStateSet != nullptr) && !pStateSet->contains(aState))
@@ -104,7 +104,7 @@ bool AccessibleContextBase::SetState (sal_Int16 aState)
 
 bool AccessibleContextBase::ResetState (sal_Int16 aState)
 {
-    ::osl::ClearableMutexGuard aGuard (maMutex);
+    ::osl::ClearableMutexGuard aGuard (m_aMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
         static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
     if ((pStateSet != nullptr) && pStateSet->contains(aState))
@@ -128,7 +128,7 @@ bool AccessibleContextBase::ResetState (sal_Int16 aState)
 
 bool AccessibleContextBase::GetState (sal_Int16 aState)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
         static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
     if (pStateSet != nullptr)
@@ -415,7 +415,7 @@ void SAL_CALL AccessibleContextBase::disposing()
 {
     SetState (AccessibleStateType::DEFUNC);
 
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     // Send a disposing to all listeners.
     if ( mnClientId )

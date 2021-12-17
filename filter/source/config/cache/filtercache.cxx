@@ -56,8 +56,7 @@
 namespace filter::config{
 
 FilterCache::FilterCache()
-    : BaseLock    (                                        )
-    , m_eFillState(E_CONTAINS_NOTHING                      )
+    : m_eFillState(E_CONTAINS_NOTHING                      )
 {
     int i = 0;
     OUString sStandardProps[10];
@@ -119,7 +118,7 @@ FilterCache::~FilterCache()
 std::unique_ptr<FilterCache> FilterCache::clone() const
 {
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     auto pClone = std::make_unique<FilterCache>();
 
@@ -151,7 +150,7 @@ std::unique_ptr<FilterCache> FilterCache::clone() const
 void FilterCache::takeOver(const FilterCache& rClone)
 {
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // a)
     // Don't copy the configuration access points here!
@@ -199,7 +198,7 @@ void FilterCache::takeOver(const FilterCache& rClone)
 void FilterCache::load(EFillState eRequired)
 {
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // check if required fill state is already reached ...
     // There is nothing to do then.
@@ -238,7 +237,7 @@ void FilterCache::load(EFillState eRequired)
 bool FilterCache::isFillState(FilterCache::EFillState eState) const
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
     return ((m_eFillState & eState) == eState);
     // <- SAFE
 }
@@ -249,7 +248,7 @@ std::vector<OUString> FilterCache::getMatchingItemsByProps(      EItemType  eTyp
                                                   const CacheItem& lEProps) const
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // search for right list
     // An exception is thrown - "eType" is unknown.
@@ -279,7 +278,7 @@ std::vector<OUString> FilterCache::getMatchingItemsByProps(      EItemType  eTyp
 bool FilterCache::hasItems(EItemType eType) const
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // search for right list
     // An exception is thrown - "eType" is unknown.
@@ -294,7 +293,7 @@ bool FilterCache::hasItems(EItemType eType) const
 std::vector<OUString> FilterCache::getItemNames(EItemType eType) const
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // search for right list
     // An exception is thrown - "eType" is unknown.
@@ -315,7 +314,7 @@ bool FilterCache::hasItem(      EItemType        eType,
                               const OUString& sItem)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // search for right list
     // An exception is thrown - "eType" is unknown.
@@ -347,7 +346,7 @@ CacheItem FilterCache::getItem(      EItemType        eType,
                                const OUString& sItem)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // search for right list
     // An exception is thrown if "eType" is unknown.
@@ -397,7 +396,7 @@ void FilterCache::removeItem(      EItemType        eType,
                              const OUString& sItem)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // search for right list
     // An exception is thrown - "eType" is unknown.
@@ -418,7 +417,7 @@ void FilterCache::setItem(      EItemType        eType ,
                           const CacheItem&       aValue)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // search for right list
     // An exception is thrown - "eType" is unknown.
@@ -445,7 +444,7 @@ void FilterCache::refreshItem(      EItemType        eType,
                               const OUString& sItem)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
     impl_loadItemOnDemand(eType, sItem);
 }
 
@@ -455,7 +454,7 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
                                             CacheItem&       rItem)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // Note: Opening of the configuration layer throws some exceptions
     // if it failed. So we mustn't check any reference here...
@@ -559,7 +558,7 @@ void FilterCache::removeStatePropsFromItem(CacheItem& rItem)
 void FilterCache::flush()
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // renew all dependencies and optimizations
     impl_validateAndOptimize();
@@ -661,7 +660,7 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
     sExtension = sExtension.toAsciiLowerCase();
 
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
 
     // i) Step over all well known URL pattern
@@ -710,7 +709,7 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
 const CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
 {
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     switch(eType)
     {
@@ -729,7 +728,7 @@ const CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
 CacheItemList& FilterCache::impl_getItemList(EItemType eType)
 {
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     switch(eType)
     {
@@ -747,7 +746,7 @@ CacheItemList& FilterCache::impl_getItemList(EItemType eType)
 
 css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfigProvider eProvider)
 {
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     OUString                              sPath      ;
     css::uno::Reference< css::uno::XInterface >* pConfig = nullptr;
@@ -873,7 +872,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
                                                                                        bool         bLocalesMode)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     css::uno::Reference< css::uno::XInterface > xCfg;
 
@@ -933,7 +932,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
 void FilterCache::impl_validateAndOptimize()
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // First check if any filter or type could be read
     // from the underlying configuration!
@@ -1260,7 +1259,7 @@ FilterCache::EItemFlushState FilterCache::impl_specifyFlushOperation(const css::
 void FilterCache::impl_load(EFillState eRequiredState)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aMutex);
 
     // Attention: Detect services are part of the standard set!
     // So there is no need to handle it separately.
@@ -1473,7 +1472,7 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
 {
 
     // SAFE -> ----------------------------------
-    osl::ClearableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aMutex);
     OUString sActLocale     = m_sActLocale    ;
     aLock.clear();
     // <- SAFE ----------------------------------
@@ -2204,7 +2203,7 @@ bool FilterCache::impl_isModuleInstalled(const OUString& sModule)
 
     // SAFE ->
     {
-        osl::MutexGuard aLock(m_aLock);
+        osl::MutexGuard aLock(m_aMutex);
         if (!m_xModuleCfg.is())
         {
             m_xModuleCfg = officecfg::Setup::Office::Factories::get();
