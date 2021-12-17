@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c406931_81fa85f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-17T07:52:27Z",
+      "side": 1,
+      "message": "I is a good idea to remove the test immediately because it can affect other patch builds. I will modify the fix, not to conflict.",
+      "revId": "29828a5b4c741268364b7dfb6f61c95edcbafedd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
