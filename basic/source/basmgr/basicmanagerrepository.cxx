@@ -42,6 +42,7 @@
 #include <sot/storage.hxx>
 
 #include <map>
+#include <mutex>
 
 
 namespace basic
@@ -206,8 +207,8 @@ namespace basic
     {
         tools::SvRef<SvRefBase>& repository = GetSbxData_Impl().mrImplRepository;
         {
-            static osl::Mutex aMutex;
-            osl::MutexGuard aGuard(aMutex);
+            static std::mutex aMutex;
+            std::unique_lock aGuard(aMutex);
             if (!repository)
                 repository = new ImplRepository;
         }
