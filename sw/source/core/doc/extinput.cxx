@@ -25,6 +25,7 @@
 #include <osl/diagnose.h>
 #include <svl/languageoptions.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/svapp.hxx>
 
 #include <hintids.hxx>
 #include <extinput.hxx>
@@ -46,6 +47,8 @@ SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
 
 SwExtTextInput::~SwExtTextInput()
 {
+    SolarMutexGuard aGuard;
+
     SwDoc& rDoc = GetDoc();
     if (rDoc.IsInDtor()) { return; /* #i58606# */ }
 
@@ -109,20 +112,24 @@ SwExtTextInput::~SwExtTextInput()
     {
         // we need to keep correct formatting
         // ie. when we erase first, then we will lost information about format
+        // 1. Insert text at the end, so we will use the same formatting
+        //    ABC<OLD><NEW>
+        // 2. Then remove old (not tracked) content
+        //    ABC<NEW>
 
         sal_Int32 nLenghtOfOldString = nEndCnt - nSttCnt;
 
         if( m_bInsText )
         {
+            rIdx = nEndCnt;
             rDoc.getIDocumentContentOperations().InsertString( *this, sText );
-
-            // Copy formatting to the inserted string
-            SfxItemSet aSet(pTNd->GetDoc().GetAttrPool(), aCharFormatSetRange);
-            pTNd->GetParaAttr( aSet, nSttCnt + nLenghtOfOldString, nEndCnt + nLenghtOfOldString );
-            pTNd->SetAttr( aSet, nSttCnt, nEndCnt );
+            rIdx = nSttCnt;
         }
 
         pTNd->EraseText( rIdx, nLenghtOfOldString );
+
+        if( m_bInsText )
+            rIdx = nEndCnt;
     }
     if (!bWasIME)
     {
@@ -155,6 +162,8 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
     SwTextNode* pTNd = GetPoint()->nNode.GetNode().GetTextNode();
     if( !pTNd )
         return;
+
+    SolarMutexGuard aGuard;
 
     sal_Int32 nSttCnt = GetPoint()->nContent.GetIndex();
     sal_Int32 nEndCnt = GetMark()->nContent.GetIndex();

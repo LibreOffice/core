@@ -138,6 +138,7 @@ public:
     void testRedlineField();
     void testIMESupport();
     void testIMEFormattingAtEndOfParagraph();
+    void testIMEFormattingAfterHeader();
     void testSplitNodeRedlineCallback();
     void testDeleteNodeRedlineCallback();
     void testVisCursorInvalidation();
@@ -222,6 +223,7 @@ public:
     CPPUNIT_TEST(testRedlineField);
     CPPUNIT_TEST(testIMESupport);
     CPPUNIT_TEST(testIMEFormattingAtEndOfParagraph);
+    CPPUNIT_TEST(testIMEFormattingAfterHeader);
     CPPUNIT_TEST(testSplitNodeRedlineCallback);
     CPPUNIT_TEST(testDeleteNodeRedlineCallback);
     CPPUNIT_TEST(testVisCursorInvalidation);
@@ -2531,6 +2533,75 @@ void SwTiledRenderingTest::testIMEFormattingAtEndOfParagraph()
 
     // check the content
     CPPUNIT_ASSERT_EQUAL(OUString("bab"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+}
+
+void SwTiledRenderingTest::testIMEFormattingAfterHeader()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    VclPtr<vcl::Window> pDocWindow = pXTextDocument->getDocWindow();
+
+    SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
+    assert(pView);
+
+    // delete all characters
+
+    for (int i = 0; i < 9; i++)
+    {
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DELETE);
+    }
+
+    Scheduler::ProcessEventsToIdle();
+
+    pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "a");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // status: "a\n"
+
+    comphelper::dispatchCommand(
+        ".uno:StyleApply?Style:string=Heading 2&FamilyName:string=ParagraphStyles",
+        uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "b");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+
+    pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "b");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+    Scheduler::ProcessEventsToIdle();
+
+    std::unique_ptr<SfxPoolItem> pItem;
+    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pItem);
+    auto pWeightItem = dynamic_cast<SvxWeightItem*>(pItem.get());
+    CPPUNIT_ASSERT(pWeightItem);
+
+    CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_BOLD, pWeightItem->GetWeight());
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // status: "a\n
+    //          <h2>bb</h2>\n"
+
+    pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "c");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+    Scheduler::ProcessEventsToIdle();
+
+    // status: "a\n
+    //          <h2>bb</h2>\n"
+    //          c"
+
+    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pItem);
+    auto pWeightItem2 = dynamic_cast<SvxWeightItem*>(pItem.get());
+    CPPUNIT_ASSERT(pWeightItem2);
+
+    CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_NORMAL, pWeightItem2->GetWeight());
 }
 
 void SwTiledRenderingTest::testSplitNodeRedlineCallback()
