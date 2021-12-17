@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7821e6e_6dcaef95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-12-17T18:04:09Z",
+      "side": 1,
+      "message": "\u003e Patch Set 4: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/103140/ : FAILURE\n\u003e \n\u003e the cppunit test CppunitTest_sw_uiwriter2 failed ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/103357/ )\n\nSorry, likely this crash resulted by the commit 8c028b7e41e3d350d0e67005b16faf0159cc5c12. \n\nI suggest to rebase your patch set to the suggested fix in https://gerrit.libreoffice.org/c/core/+/127014, or to b58dbb862296b63f3f2395c59d30fba40fa5f59f, parent of my bad commit.",
+      "revId": "699eca8e9b119439d3fdc1476b8922e274f848bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd35462a_4218d29b",
