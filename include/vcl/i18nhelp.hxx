@@ -22,7 +22,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <rtl/ustring.hxx>
 #include <tools/long.hxx>
 #include <vcl/dllapi.h>
@@ -41,7 +41,7 @@ namespace vcl
 
 class VCL_DLLPUBLIC I18nHelper
 {
-    ::osl::Mutex                    maMutex;
+    mutable std::mutex              maMutex;
     LanguageTag                     maLanguageTag;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
