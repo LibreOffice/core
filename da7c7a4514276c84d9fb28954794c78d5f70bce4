@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91537ea9_399ae59c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2021-12-17T14:16:29Z",
+      "side": 1,
+      "message": "Actually let\u0027s scratch this. When loading from xlsx, every autofilter range is named now, so I guess we can\u0027t really map it to a sheet-local anonymous DB...",
+      "parentUuid": "c0bf0e4d_2bedf182",
+      "revId": "da7c7a4514276c84d9fb28954794c78d5f70bce4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "760570d6_b88c2ce9",
         "filename": "sc/source/core/data/documen2.cxx",
         "patchSetId": 1
