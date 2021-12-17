@@ -3128,6 +3128,21 @@
         </prop>
       </group>
     </group>
+    <group oor:name="BookmarkDialog">
+      <info>
+        <desc>Specifies options related to the bookmark dialog.</desc>
+      </info>
+      <prop oor:name="Width" oor:type="xs:int">
+        <info>
+          <desc>Stores the width of the bookmark dialog.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Height" oor:type="xs:int">
+        <info>
+          <desc>Stores the height of the bookmark dialog.</desc>
+        </info>
+      </prop>        
+  </group>  
     <group oor:name="Print">
       <info>
         <desc>Specifies options related to printing.</desc>
