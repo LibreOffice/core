@@ -24,6 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <vcl/accessibletableprovider.hxx>
+#include <mutex>
 
 namespace accessibility {
 
@@ -196,7 +197,7 @@ class AccessibleBrowseBoxAccess final :
     public ::vcl::IAccessibleBrowseBox
 {
 private:
-    ::osl::Mutex                        m_aMutex;
+    std::mutex                          m_aMutex;
     css::uno::Reference< css::accessibility::XAccessible >
                                         m_xParent;
     ::vcl::IAccessibleTableProvider&    m_rBrowseBox;
