@@ -439,7 +439,7 @@ namespace ucb::ucp::ext
 
     Reference< XRow > Content::getPropertyValues( const Sequence< Property >& i_rProperties, const Reference< XCommandEnvironment >& i_rEnv )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         switch ( m_eExtContentType )
         {
@@ -485,7 +485,7 @@ namespace ucb::ucp::ext
 
     Sequence< Any > Content::setPropertyValues( const Sequence< PropertyValue >& i_rValues)
     {
-        ::osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         Sequence< Any > aRet( i_rValues.getLength() );
 

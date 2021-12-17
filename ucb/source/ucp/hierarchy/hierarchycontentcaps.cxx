@@ -80,7 +80,9 @@ using namespace hierarchy_ucp;
 uno::Sequence< beans::Property > HierarchyContent::getProperties(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    const bool bIsReadOnly = isReadOnly();
+
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_eKind == LINK )
     {
@@ -89,7 +91,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
         // Link: Supported properties
 
 
-        if ( isReadOnly() )
+        if ( bIsReadOnly )
         {
             static const beans::Property aLinkPropertyInfoTable[] =
             {
@@ -209,7 +211,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
         // Folder: Supported properties
 
 
-        if ( isReadOnly() )
+        if ( bIsReadOnly )
         {
             static const beans::Property aFolderPropertyInfoTable[] =
             {
@@ -374,7 +376,9 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
 uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    const bool bIsReadOnly = isReadOnly();
+
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_eKind == LINK )
     {
@@ -383,7 +387,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
         // Link: Supported commands
 
 
-        if ( isReadOnly() )
+        if ( bIsReadOnly )
         {
             static const ucb::CommandInfo aLinkCommandInfoTable[] =
             {
@@ -473,7 +477,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
         // Folder: Supported commands
 
 
-        if ( isReadOnly() )
+        if ( bIsReadOnly )
         {
             static const ucb::CommandInfo aFolderCommandInfoTable[] =
             {
@@ -583,7 +587,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
         // Root Folder: Supported commands
 
 
-        if ( isReadOnly() )
+        if ( bIsReadOnly )
         {
             static const ucb::CommandInfo aRootFolderCommandInfoTable[] =
             {

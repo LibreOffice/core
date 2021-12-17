@@ -35,6 +35,7 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>
+#include <mutex>
 
 namespace com::sun::star::ucb {
     struct CommandInfo;
@@ -97,7 +98,7 @@ class UCBHELPER_DLLPUBLIC ContentImplHelper :
     std::unique_ptr<ucbhelper_impl::ContentImplHelper_Impl> m_pImpl;
 
 protected:
-    osl::Mutex                       m_aMutex;
+    std::mutex                       m_aMutex;
     css::uno::Reference< css::uno::XComponentContext >
                                      m_xContext;
     css::uno::Reference< css::ucb::XContentIdentifier >

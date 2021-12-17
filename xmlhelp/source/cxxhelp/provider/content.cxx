@@ -323,7 +323,7 @@ uno::Any SAL_CALL Content::execute(
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
     const uno::Sequence< beans::Property >& rProperties )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow =
         new ::ucbhelper::PropertyValueSet( m_xContext );

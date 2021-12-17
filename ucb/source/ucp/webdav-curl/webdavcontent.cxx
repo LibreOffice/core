@@ -575,7 +575,7 @@ uno::Any SAL_CALL Content::execute(
         {
             std::unique_ptr< DAVResourceAccess > xResAccess;
             {
-                osl::Guard< osl::Mutex > aGuard( m_aMutex );
+                std::unique_lock aGuard( m_aMutex );
                 xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
             }
             aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
@@ -583,7 +583,7 @@ uno::Any SAL_CALL Content::execute(
             removeCachedPropertyNames( xResAccess->getURL() );
             xResAccess->DESTROY( Environment );
             {
-                osl::Guard< osl::Mutex > aGuard( m_aMutex );
+                std::unique_lock aGuard( m_aMutex );
                 m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
             }
         }
@@ -778,12 +778,12 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     {
         std::unique_ptr< DAVResourceAccess > xResAccess;
         {
-            osl::MutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
         }
         xResAccess->abort();
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
         }
     }
@@ -856,7 +856,7 @@ void Content::addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
         // Set property value at server.
         std::unique_ptr< DAVResourceAccess > xResAccess;
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
         }
         aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
@@ -865,7 +865,7 @@ void Content::addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
         removeCachedPropertyNames( xResAccess->getURL() );
         xResAccess->PROPPATCH( aProppatchValues, xEnv );
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
         }
 
@@ -966,7 +966,7 @@ void Content::removeProperty( const OUString& Name,
         // Remove property value from server.
         std::unique_ptr< DAVResourceAccess > xResAccess;
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
         }
         aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
@@ -975,7 +975,7 @@ void Content::removeProperty( const OUString& Name,
         removeCachedPropertyNames( xResAccess->getURL() );
         xResAccess->PROPPATCH( aProppatchValues, xEnv );
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
         }
 
@@ -1069,7 +1069,7 @@ void SAL_CALL Content::removeProperty( const OUString& Name )
 uno::Sequence< ucb::ContentInfo > SAL_CALL
 Content::queryCreatableContentsInfo()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
@@ -1102,8 +1102,6 @@ Content::queryCreatableContentsInfo()
 uno::Reference< ucb::XContent > SAL_CALL
 Content::createNewContent( const ucb::ContentInfo& Info )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     if ( !Info.Type.getLength() )
         return uno::Reference< ucb::XContent >();
 
@@ -1111,6 +1109,8 @@ Content::createNewContent( const ucb::ContentInfo& Info )
          &&
          ( Info.Type != WEBDAV_CONTENT_TYPE ) )
         return uno::Reference< ucb::XContent >();
+
+    std::unique_lock aGuard( m_aMutex );
 
     OUString aURL = m_xIdentifier->getContentIdentifier();
 
@@ -1314,7 +1314,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     rtl::Reference< ::ucbhelper::ContentProviderImplHelper > xProvider;
 
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         aUnescapedTitle = DecodeURI(m_aEscapedTitle);
         xContext.set( m_xContext );
@@ -1695,7 +1695,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                              xIdentifier->getContentIdentifier() );
 
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if (!m_xCachedProps)
             m_xCachedProps.reset( new CachableContentProperties( *xProps ) );
@@ -1720,7 +1720,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     std::unique_ptr< DAVResourceAccess > xResAccess;
 
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         xProvider.set( m_pProvider );
         xIdentifier.set( m_xIdentifier );
@@ -2097,7 +2097,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     if ( aNewTitle.getLength() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         aEvent.PropertyName = "Title";
         aEvent.OldValue     <<= aOldTitle;
@@ -2116,7 +2116,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     }
 
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
     }
 
@@ -2185,7 +2185,7 @@ uno::Any Content::open(
                 std::unique_ptr< DAVResourceAccess > xResAccess;
 
                 {
-                    osl::MutexGuard aGuard( m_aMutex );
+                    std::unique_lock aGuard( m_aMutex );
 
                     xResAccess.reset(
                         new DAVResourceAccess( *m_xResAccess ) );
@@ -2200,7 +2200,7 @@ uno::Any Content::open(
                 m_bDidGetOrHead = true;
 
                 {
-                    osl::MutexGuard aGuard( m_aMutex );
+                    std::unique_lock aGuard( m_aMutex );
 
                     // cache headers.
                     if (!m_xCachedProps)
@@ -2230,7 +2230,7 @@ uno::Any Content::open(
                 {
                     std::unique_ptr< DAVResourceAccess > xResAccess;
                     {
-                        osl::MutexGuard aGuard( m_aMutex );
+                        std::unique_lock aGuard( m_aMutex );
 
                         xResAccess.reset(
                             new DAVResourceAccess( *m_xResAccess ) );
@@ -2264,7 +2264,7 @@ uno::Any Content::open(
                     m_bDidGetOrHead = true;
 
                     {
-                        osl::MutexGuard aGuard( m_aMutex );
+                        std::unique_lock aGuard( m_aMutex );
 
                         // cache headers.
                         if (!m_xCachedProps)
@@ -2319,7 +2319,7 @@ void Content::post(
         {
             std::unique_ptr< DAVResourceAccess > xResAccess;
             {
-                osl::MutexGuard aGuard( m_aMutex );
+                std::unique_lock aGuard( m_aMutex );
                 xResAccess.reset(
                     new DAVResourceAccess( *m_xResAccess ) );
             }
@@ -2332,7 +2332,7 @@ void Content::post(
                                     xEnv );
 
             {
-                 osl::MutexGuard aGuard( m_aMutex );
+                 std::unique_lock aGuard( m_aMutex );
                  m_xResAccess.reset(
                      new DAVResourceAccess( *xResAccess ) );
             }
@@ -2354,7 +2354,7 @@ void Content::post(
             {
                 std::unique_ptr< DAVResourceAccess > xResAccess;
                 {
-                    osl::MutexGuard aGuard( m_aMutex );
+                    std::unique_lock aGuard( m_aMutex );
                     xResAccess.reset(
                         new DAVResourceAccess( *m_xResAccess ) );
                 }
@@ -2367,7 +2367,7 @@ void Content::post(
                                   xEnv );
 
                 {
-                    osl::MutexGuard aGuard( m_aMutex );
+                    std::unique_lock aGuard( m_aMutex );
                     m_xResAccess.reset(
                         new DAVResourceAccess( *xResAccess ) );
                 }
@@ -2450,7 +2450,7 @@ void Content::insert(
     std::unique_ptr< DAVResourceAccess > xResAccess;
 
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         bTransient    = m_bTransient;
         bCollection   = m_bCollection;
@@ -2620,7 +2620,7 @@ void Content::insert(
                         insert( xInputStream, bReplaceExisting, Environment );
 
                         {
-                            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+                            std::unique_lock aGuard( m_aMutex );
                             m_xResAccess.reset(
                                 new DAVResourceAccess( *xResAccess ) );
                         }
@@ -2658,7 +2658,7 @@ void Content::insert(
         }
 
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             m_xIdentifier
                 = new ::ucbhelper::ContentIdentifier( aURL );
         }
@@ -2666,7 +2666,7 @@ void Content::insert(
         inserted();
 
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             m_bTransient = false;
         }
     }
@@ -2701,7 +2701,7 @@ void Content::insert(
     }
 
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
     }
 }
@@ -2717,7 +2717,7 @@ void Content::transfer(
     std::unique_ptr< DAVResourceAccess > xResAccess;
 
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         xContext.set( m_xContext );
         xIdentifier.set( m_xIdentifier );
@@ -2958,7 +2958,7 @@ void Content::transfer(
     }
 
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
     }
 }
@@ -2972,7 +2972,7 @@ void Content::destroy( bool bDeletePhysical )
 
     deleted();
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Process instantiated children...
 
@@ -2992,7 +2992,7 @@ Content::ResourceType Content::resourceTypeForLocks(
 {
     ResourceType eResourceTypeForLocks = UNKNOWN;
     {
-        osl::MutexGuard g(m_aMutex);
+        std::unique_lock g(m_aMutex);
         //check if cache contains what we need, usually the first PROPFIND on the URI has supported lock
         if (m_xCachedProps)
         {
@@ -3175,7 +3175,7 @@ Content::ResourceType Content::resourceTypeForLocks(
 
         //}
     }
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     if (m_eResourceTypeForLocks == UNKNOWN)
     {
         m_eResourceTypeForLocks = eResourceTypeForLocks;
@@ -3197,12 +3197,12 @@ Content::ResourceType Content::resourceTypeForLocks(
 {
     std::unique_ptr< DAVResourceAccess > xResAccess;
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
     }
     Content::ResourceType ret = resourceTypeForLocks( Environment, xResAccess );
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
     }
     return ret;
@@ -3230,7 +3230,7 @@ void Content::lock(
     {
         std::unique_ptr< DAVResourceAccess > xResAccess;
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
         }
 
@@ -3253,7 +3253,7 @@ void Content::lock(
         xResAccess->LOCK( aLock, Environment );
 
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
         }
     }
@@ -3362,7 +3362,7 @@ void Content::unlock(
     {
         std::unique_ptr< DAVResourceAccess > xResAccess;
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
         }
 
@@ -3382,7 +3382,7 @@ void Content::unlock(
         }
 
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
         }
     }
@@ -3433,7 +3433,7 @@ bool Content::exchangeIdentity(
     if ( !xNewId.is() )
         return false;
 
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Reference< ucb::XContent > xThis = this;
 
@@ -3451,7 +3451,7 @@ bool Content::exchangeIdentity(
     {
         OUString aOldURL = m_xIdentifier->getContentIdentifier();
 
-        aGuard.clear();
+        aGuard.unlock();
         if ( exchange( xNewId ) )
         {
             // Process instantiated children...
@@ -3494,7 +3494,7 @@ bool Content::isFolder(
             const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( m_bTransient )
             return m_bCollection;
@@ -3722,7 +3722,7 @@ void Content::cancelCommandExecution(
 OUString
 Content::getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // First, try to obtain value of response header "Content-Location".
     if (m_xCachedProps)
@@ -3755,7 +3755,7 @@ Content::ResourceType Content::getResourceType(
                     bool * networkAccessAllowed )
 {
     {
-        osl::MutexGuard g(m_aMutex);
+        std::unique_lock g(m_aMutex);
         if (m_eResourceType != UNKNOWN) {
             return m_eResourceType;
         }
@@ -3821,7 +3821,7 @@ Content::ResourceType Content::getResourceType(
                         }
                     }
 #endif
-                    osl::MutexGuard g(m_aMutex);
+                    std::unique_lock g(m_aMutex);
                     m_xCachedProps.reset(
                         new CachableContentProperties( ContentProperties( resources[ 0 ] ) ) );
                     m_xCachedProps->containsAllNames(
@@ -3934,7 +3934,7 @@ Content::ResourceType Content::getResourceType(
         }
     }
 
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     if (m_eResourceType == UNKNOWN) {
         m_eResourceType = eResourceType;
     } else {
@@ -3953,12 +3953,12 @@ Content::ResourceType Content::getResourceType(
 {
     std::unique_ptr< DAVResourceAccess > xResAccess;
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
     }
     const Content::ResourceType & ret = getResourceType( xEnv, xResAccess );
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
     }
     return ret;

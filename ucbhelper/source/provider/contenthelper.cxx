@@ -29,6 +29,8 @@
 #include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/multiinterfacecontainer4.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -101,19 +103,20 @@ typedef std::unordered_map
 >
 PropertiesEventListenerMap;
 
-typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+typedef comphelper::OMultiTypeInterfaceContainerHelperVar4<beans::XPropertiesChangeListener, OUString>
     PropertyChangeListeners;
 
 struct ContentImplHelper_Impl
 {
     rtl::Reference< ::ucbhelper::PropertySetInfo >      m_xPropSetInfo;
     rtl::Reference< ::ucbhelper::CommandProcessorInfo > m_xCommandsInfo;
-    std::unique_ptr<cppu::OInterfaceContainerHelper>    m_pDisposeEventListeners;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::ucb::XContentEventListener>>
+    std::unique_ptr<comphelper::OInterfaceContainerHelper4<lang::XEventListener>>   m_pDisposeEventListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper4<css::ucb::XContentEventListener>>
                                                         m_pContentEventListeners;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper3<beans::XPropertySetInfoChangeListener>>
+    std::unique_ptr<comphelper::OInterfaceContainerHelper4<beans::XPropertySetInfoChangeListener>>
                                                         m_pPropSetChangeListeners;
-    std::unique_ptr<cppu::OInterfaceContainerHelper>    m_pCommandChangeListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper4<css::ucb::XCommandInfoChangeListener>>
+                                                        m_pCommandChangeListeners;
     std::unique_ptr<PropertyChangeListeners>            m_pPropertyChangeListeners;
 };
 
@@ -191,14 +194,14 @@ sal_Bool SAL_CALL ContentImplHelper::supportsService(
 // virtual
 void SAL_CALL ContentImplHelper::dispose()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_pImpl->m_pDisposeEventListeners &&
          m_pImpl->m_pDisposeEventListeners->getLength() )
     {
         lang::EventObject aEvt;
         aEvt.Source = static_cast< lang::XComponent * >( this );
-        m_pImpl->m_pDisposeEventListeners->disposeAndClear( aEvt );
+        m_pImpl->m_pDisposeEventListeners->disposeAndClear( aGuard, aEvt );
     }
 
     if ( m_pImpl->m_pContentEventListeners &&
@@ -206,7 +209,7 @@ void SAL_CALL ContentImplHelper::dispose()
     {
         lang::EventObject aEvt;
         aEvt.Source = static_cast< css::ucb::XContent * >( this );
-        m_pImpl->m_pContentEventListeners->disposeAndClear( aEvt );
+        m_pImpl->m_pContentEventListeners->disposeAndClear( aGuard, aEvt );
     }
 
     if ( m_pImpl->m_pPropSetChangeListeners &&
@@ -215,7 +218,7 @@ void SAL_CALL ContentImplHelper::dispose()
         lang::EventObject aEvt;
         aEvt.Source
             = static_cast< beans::XPropertySetInfoChangeNotifier * >( this );
-        m_pImpl->m_pPropSetChangeListeners->disposeAndClear( aEvt );
+        m_pImpl->m_pPropSetChangeListeners->disposeAndClear( aGuard, aEvt );
     }
 
     if ( m_pImpl->m_pCommandChangeListeners &&
@@ -223,7 +226,7 @@ void SAL_CALL ContentImplHelper::dispose()
     {
         lang::EventObject aEvt;
         aEvt.Source = static_cast<  css::ucb::XCommandInfoChangeNotifier * >( this );
-        m_pImpl->m_pCommandChangeListeners->disposeAndClear( aEvt );
+        m_pImpl->m_pCommandChangeListeners->disposeAndClear( aGuard, aEvt );
     }
 
     if ( m_pImpl->m_pPropertyChangeListeners )
@@ -231,7 +234,7 @@ void SAL_CALL ContentImplHelper::dispose()
         lang::EventObject aEvt;
         aEvt.Source
             = static_cast< beans::XPropertiesChangeNotifier * >( this );
-        m_pImpl->m_pPropertyChangeListeners->disposeAndClear( aEvt );
+        m_pImpl->m_pPropertyChangeListeners->disposeAndClear( aGuard, aEvt );
     }
 }
 
@@ -239,11 +242,11 @@ void SAL_CALL ContentImplHelper::dispose()
 void SAL_CALL ContentImplHelper::addEventListener(
         const uno::Reference< lang::XEventListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_pImpl->m_pDisposeEventListeners )
         m_pImpl->m_pDisposeEventListeners.reset(
-            new cppu::OInterfaceContainerHelper( m_aMutex ));
+            new comphelper::OInterfaceContainerHelper4<lang::XEventListener>());
 
     m_pImpl->m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -252,7 +255,7 @@ void SAL_CALL ContentImplHelper::addEventListener(
 void SAL_CALL ContentImplHelper::removeEventListener(
         const uno::Reference< lang::XEventListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_pImpl->m_pDisposeEventListeners )
         m_pImpl->m_pDisposeEventListeners->removeInterface( Listener );
@@ -269,11 +272,11 @@ ContentImplHelper::getIdentifier()
 void SAL_CALL ContentImplHelper::addContentEventListener(
         const uno::Reference< css::ucb::XContentEventListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_pImpl->m_pContentEventListeners )
         m_pImpl->m_pContentEventListeners.reset(
-            new comphelper::OInterfaceContainerHelper3<css::ucb::XContentEventListener>( m_aMutex ));
+            new comphelper::OInterfaceContainerHelper4<css::ucb::XContentEventListener>());
 
     m_pImpl->m_pContentEventListeners->addInterface( Listener );
 }
@@ -282,7 +285,7 @@ void SAL_CALL ContentImplHelper::addContentEventListener(
 void SAL_CALL ContentImplHelper::removeContentEventListener(
         const uno::Reference< css::ucb::XContentEventListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_pImpl->m_pContentEventListeners )
         m_pImpl->m_pContentEventListeners->removeInterface( Listener );
@@ -291,7 +294,7 @@ void SAL_CALL ContentImplHelper::removeContentEventListener(
 // virtual
 sal_Int32 SAL_CALL ContentImplHelper::createCommandIdentifier()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Just increase counter on every call to generate an identifier.
     return ++m_nCommandId;
@@ -302,11 +305,11 @@ void SAL_CALL ContentImplHelper::addPropertiesChangeListener(
         const uno::Sequence< OUString >& PropertyNames,
         const uno::Reference< beans::XPropertiesChangeListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
         m_pImpl->m_pPropertyChangeListeners.reset(
-            new PropertyChangeListeners( m_aMutex ));
+            new PropertyChangeListeners());
 
     if ( !PropertyNames.hasElements() )
     {
@@ -330,7 +333,7 @@ void SAL_CALL ContentImplHelper::removePropertiesChangeListener(
         const uno::Sequence< OUString >& PropertyNames,
         const uno::Reference< beans::XPropertiesChangeListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
         return;
@@ -356,11 +359,11 @@ void SAL_CALL ContentImplHelper::removePropertiesChangeListener(
 void SAL_CALL ContentImplHelper::addCommandInfoChangeListener(
         const uno::Reference< css::ucb::XCommandInfoChangeListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_pImpl->m_pCommandChangeListeners )
         m_pImpl->m_pCommandChangeListeners.reset(
-            new cppu::OInterfaceContainerHelper( m_aMutex ));
+            new comphelper::OInterfaceContainerHelper4<css::ucb::XCommandInfoChangeListener>());
 
     m_pImpl->m_pCommandChangeListeners->addInterface( Listener );
 }
@@ -369,7 +372,7 @@ void SAL_CALL ContentImplHelper::addCommandInfoChangeListener(
 void SAL_CALL ContentImplHelper::removeCommandInfoChangeListener(
         const uno::Reference< css::ucb::XCommandInfoChangeListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_pImpl->m_pCommandChangeListeners )
         m_pImpl->m_pCommandChangeListeners->removeInterface( Listener );
@@ -381,8 +384,6 @@ void SAL_CALL ContentImplHelper::addProperty(
         sal_Int16 Attributes,
         const uno::Any& DefaultValue )
 {
-    osl::MutexGuard aGuard( m_aMutex );
-
     // Make sure a property with the requested name does not already
     // exist in dynamic and static(!) properties.
 
@@ -441,6 +442,8 @@ void SAL_CALL ContentImplHelper::addProperty(
         throw;
     }
 
+    std::unique_lock aGuard( m_aMutex );
+
     // Success!
 
     if ( m_pImpl->m_xPropSetInfo.is() )
@@ -465,7 +468,7 @@ void SAL_CALL ContentImplHelper::addProperty(
 // virtual
 void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     try
     {
@@ -562,11 +565,11 @@ void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
 void SAL_CALL ContentImplHelper::addPropertySetInfoChangeListener(
         const uno::Reference< beans::XPropertySetInfoChangeListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_pImpl->m_pPropSetChangeListeners )
         m_pImpl->m_pPropSetChangeListeners.reset(
-            new comphelper::OInterfaceContainerHelper3<beans::XPropertySetInfoChangeListener>( m_aMutex ));
+            new comphelper::OInterfaceContainerHelper4<beans::XPropertySetInfoChangeListener>());
 
     m_pImpl->m_pPropSetChangeListeners->addInterface( Listener );
 }
@@ -575,7 +578,7 @@ void SAL_CALL ContentImplHelper::addPropertySetInfoChangeListener(
 void SAL_CALL ContentImplHelper::removePropertySetInfoChangeListener(
         const uno::Reference< beans::XPropertySetInfoChangeListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_pImpl->m_pPropSetChangeListeners )
         m_pImpl->m_pPropSetChangeListeners->removeInterface( Listener );
@@ -651,18 +654,12 @@ void ContentImplHelper::notifyPropertiesChange(
         return;
 
     // First, notify listeners interested in changes of every property.
-    cppu::OInterfaceContainerHelper* pAllPropsContainer
+    comphelper::OInterfaceContainerHelper4<beans::XPropertiesChangeListener>* pAllPropsContainer
         = m_pImpl->m_pPropertyChangeListeners->getContainer(
             OUString() );
     if ( pAllPropsContainer )
     {
-        cppu::OInterfaceIteratorHelper aIter( *pAllPropsContainer );
-        while ( aIter.hasMoreElements() )
-        {
-            // Propagate event.
-            static_cast< beans::XPropertiesChangeListener* >(
-                aIter.next())->propertiesChange( evt );
-        }
+        pAllPropsContainer->notifyEach( &beans::XPropertiesChangeListener::propertiesChange, evt );
     }
 
     PropertiesEventListenerMap aListeners;
@@ -671,18 +668,16 @@ void ContentImplHelper::notifyPropertiesChange(
     {
         const OUString& rName = rEvent.PropertyName;
 
-        cppu::OInterfaceContainerHelper* pPropsContainer
+        comphelper::OInterfaceContainerHelper4<beans::XPropertiesChangeListener>* pPropsContainer
             = m_pImpl->m_pPropertyChangeListeners->getContainer( rName );
         if ( pPropsContainer )
         {
-            cppu::OInterfaceIteratorHelper aIter( *pPropsContainer );
+            comphelper::OInterfaceIteratorHelper4 aIter( *pPropsContainer );
             while ( aIter.hasMoreElements() )
             {
                 PropertyEventSequence* p = nullptr;
 
-                beans::XPropertiesChangeListener* pListener =
-                    static_cast< beans::XPropertiesChangeListener * >(
-                                                        aIter.next() );
+                beans::XPropertiesChangeListener* pListener = aIter.next().get();
                 PropertiesEventListenerMap::iterator it =
                         aListeners.find( pListener );
                 if ( it == aListeners.end() )
@@ -793,7 +788,7 @@ bool ContentImplHelper::exchange(
 {
     uno::Reference< css::ucb::XContent > xThis = this;
 
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     rtl::Reference< ContentImplHelper > xContent
         = m_xProvider->queryExistingContent( rNewId );
@@ -813,7 +808,7 @@ bool ContentImplHelper::exchange(
     m_xIdentifier = rNewId;
     m_xProvider->registerNewContent( this );
 
-    aGuard.clear();
+    aGuard.unlock();
 
     // Notify "EXCHANGED" event.
     css::ucb::ContentEvent aEvt(
@@ -830,7 +825,7 @@ ContentImplHelper::getCommandInfo(
     const uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
     bool bCache )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_pImpl->m_xCommandsInfo.is() )
         m_pImpl->m_xCommandsInfo
@@ -846,7 +841,7 @@ ContentImplHelper::getPropertySetInfo(
     const uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
     bool bCache )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_pImpl->m_xPropSetInfo.is() )
         m_pImpl->m_xPropSetInfo
