@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "330f3b72_08b576ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-12-17T18:00:35Z",
+      "side": 1,
+      "message": "@Xisco, I made a uitest for this patch. I would appreciate it if you would review and let me know what you think.",
+      "revId": "89b5add27f02c8a062361f328c842cc69481daad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
