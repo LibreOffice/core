@@ -441,7 +441,7 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     {
         // If this happened we have a real problem.
         pToken->SetIndex(0);
-        OSL_FAIL("inserting the range name should not fail");
+        assert(!"inserting the range name should not fail");
         return;
     }
 
