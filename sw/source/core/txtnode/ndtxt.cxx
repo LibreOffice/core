@@ -894,9 +894,13 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
             assert(rFirstNode.GetIndex() <= rNode.GetIndex());
             pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
                         *pFrame, rFirstNode, eMode));
-            assert(pFrame->GetMergedPara());
-            assert(pFrame->GetMergedPara()->listener.IsListeningTo(&rNode));
-            assert(rNode.GetIndex() <= pFrame->GetMergedPara()->pLastNode->GetIndex());
+            // there is no merged para in case the deleted node had one but
+            // nothing was actually hidden
+            if (pFrame->GetMergedPara())
+            {
+                assert(pFrame->GetMergedPara()->listener.IsListeningTo(&rNode));
+                assert(rNode.GetIndex() <= pFrame->GetMergedPara()->pLastNode->GetIndex());
+            }
             eMode = sw::FrameMode::New; // Existing is not idempotent!
         }
     }
@@ -1007,14 +1011,29 @@ SwContentNode *SwTextNode::JoinNext()
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nOldLen, true );
         }
         SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
+        auto eRecreateMerged(eOldMergeFlag == SwNode::Merge::First
+                    ? sw::Recreate::ThisNode
+                    : sw::Recreate::No);
+        if (eRecreateMerged == sw::Recreate::No)
+        {
+            // tdf#137318 if a delete is inside one node, flag is still None!
+            SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pTextNode);
+            for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+            {
+                if (pFrame->GetMergedPara())
+                {
+                    eRecreateMerged = sw::Recreate::ThisNode;
+                    break;
+                }
+            }
+        }
+
         rNds.Delete(aIdx);
         SetWrong( pList, false );
         SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false );
         InvalidateNumRule();
-        CheckResetRedlineMergeFlag(*this, eOldMergeFlag == SwNode::Merge::First
-                                            ? sw::Recreate::ThisNode
-                                            : sw::Recreate::No);
+        CheckResetRedlineMergeFlag(*this, eRecreateMerged);
     }
     else {
         OSL_FAIL( "No TextNode." );
