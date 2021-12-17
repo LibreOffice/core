@@ -39,6 +39,30 @@
       },
       "revId": "699eca8e9b119439d3fdc1476b8922e274f848bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04532725_9bfbd9d7",
+        "filename": "sw/source/core/text/itrcrsr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-17T15:31:11Z",
+      "side": 1,
+      "message": "I mean, the getIDocumentSettingAccess()-\u003eget(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) should be executed only once at the time of FILEOPEN, and then the flag should then be carried down to the SwTextMargin::CtorInitTextMargin, so that it is not done for each of the paragraphs.",
+      "parentUuid": "dd35462a_4218d29b",
+      "range": {
+        "startLine": 255,
+        "startChar": 12,
+        "endLine": 255,
+        "endChar": 121
+      },
+      "revId": "699eca8e9b119439d3fdc1476b8922e274f848bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
