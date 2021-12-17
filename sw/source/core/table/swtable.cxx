@@ -1723,8 +1723,10 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(SwRedlineTable::siz
             nRet = SwRedlineTable::npos;
             // set TextChangesOnly = true to remove the tracked deletion
             SvxPrintItem aUnsetTracking(RES_PRINT, true);
-            SwFrameFormat *pNew = const_cast<SwTableLine*>(this)->ClaimFrameFormat();
-            pNew->SetFormatAttr( aUnsetTracking );
+            SwFrameFormat *pFormat = const_cast<SwTableLine*>(this)->ClaimFrameFormat();
+            pFormat->LockModify();
+            pFormat->SetFormatAttr( aUnsetTracking );
+            pFormat->UnlockModify();
         }
     }
 
