@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a16e5ea5_e9d2aa9c",
+        "filename": "svx/source/sdr/contact/viewobjectcontact.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-17T11:30:21Z",
+      "side": 1,
+      "message": "This looks like some leftover?",
+      "range": {
+        "startLine": 350,
+        "startChar": 99,
+        "endLine": 350,
+        "endChar": 100
+      },
+      "revId": "b33a4d3c4acc37b9284c611caaaa661d2fe34db8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
