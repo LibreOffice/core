@@ -202,7 +202,7 @@ private:
 
     virtual void SAL_CALL disposing(lang::EventObject const &) override
     {
-        osl::MutexGuard g(editor_.mutex_);
+        std::unique_lock g(editor_.mutex_);
         editor_.notifier_.clear();
     }
 
@@ -255,7 +255,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
         officecfg::Office::Common::Font::SourceViewFont::get(),
         UNO_QUERY_THROW);
     {
-        osl::MutexGuard g(mutex_);
+        std::unique_lock g(mutex_);
         notifier_ = n;
     }
     const Sequence<OUString> aPropertyNames{"FontHeight", "FontName"};
@@ -278,7 +278,7 @@ void EditorWindow::dispose()
 
     Reference< beans::XMultiPropertySet > n;
     {
-        osl::MutexGuard g(mutex_);
+        std::unique_lock g(mutex_);
         n = notifier_;
     }
     if (n.is()) {
