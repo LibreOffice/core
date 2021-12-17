@@ -281,7 +281,7 @@ AccessibleBrowseBoxAccess::~AccessibleBrowseBoxAccess()
 
 void AccessibleBrowseBoxAccess::dispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if (m_xContext.is())
     {
@@ -293,7 +293,7 @@ void AccessibleBrowseBoxAccess::dispose()
 
 css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibleContext()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // if the context died meanwhile (there is no listener, so it won't tell us explicitly when this happens),
     // then reset and re-create.
