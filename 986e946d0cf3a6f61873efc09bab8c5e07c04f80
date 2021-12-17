@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9badf790_96d2e63a",
+        "filename": ".vscode/vs-code-template.code-workspace.in",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-17T12:07:04Z",
+      "side": 1,
+      "message": "Hmm, you are right.\n\nFirst of all, it should be a separate change.\nI wanted to avoid the absolute patch substituted from autoconf, where possible. Currently, when there\u0027s such a path, I don\u0027t see if that was builddir, or sourcedir - they are the same in my setup, but semantically different. I also wanted to be able to change them in one place in the workspace, and have the effect throughout the uses of that variable.\n\nI know that I can just add user variables to the workspace into settings ( https://stackoverflow.com/questions/53206904/vscode-custom-variables-in-launch-settings ), and refer to those instead of pre-defined {workspaceFolder:foodir}. But that would introduce warnings in the workspace.\n\nAlso I could bale instdir/workdir just use {workspaceFolder:builddir}/hardcoded_dir_name. That should be OK, but is it future-proof?\n\nOr I can of course revert to fixed paths throughout the workspace - something I would like to avoid.\n\nWhat would you suggest as a follow-up fix?",
+      "parentUuid": "ab1b9c3d_e6ac8974",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 4
+      },
+      "revId": "986e946d0cf3a6f61873efc09bab8c5e07c04f80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9bc003db_b0fed6e9",
         "filename": ".vscode/vs-code-template.code-workspace.in",
         "patchSetId": 5
