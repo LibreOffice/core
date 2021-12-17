@@ -88,13 +88,13 @@ css::uno::Sequence< OUString > SAL_CALL ResultSetImplHelper::getSupportedService
 // virtual
 void SAL_CALL ResultSetImplHelper::dispose()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
     {
         lang::EventObject aEvt;
         aEvt.Source = static_cast< lang::XComponent * >( this );
-        m_pDisposeEventListeners->disposeAndClear( aEvt );
+        m_pDisposeEventListeners->disposeAndClear( aGuard, aEvt );
     }
 }
 
@@ -103,10 +103,10 @@ void SAL_CALL ResultSetImplHelper::dispose()
 void SAL_CALL ResultSetImplHelper::addEventListener(
         const uno::Reference< lang::XEventListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners.reset(new cppu::OInterfaceContainerHelper( m_aMutex ));
+        m_pDisposeEventListeners.reset(new comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>());
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -116,7 +116,7 @@ void SAL_CALL ResultSetImplHelper::addEventListener(
 void SAL_CALL ResultSetImplHelper::removeEventListener(
         const uno::Reference< lang::XEventListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_pDisposeEventListeners )
         m_pDisposeEventListeners->removeInterface( Listener );
@@ -130,7 +130,7 @@ void SAL_CALL ResultSetImplHelper::removeEventListener(
 uno::Reference< sdbc::XResultSet > SAL_CALL
 ResultSetImplHelper::getStaticResultSet()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_xListener.is() )
         throw css::ucb::ListenerAlreadySetException();
@@ -144,7 +144,7 @@ ResultSetImplHelper::getStaticResultSet()
 void SAL_CALL ResultSetImplHelper::setListener(
         const uno::Reference< css::ucb::XDynamicResultSetListener >& Listener )
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bStatic || m_xListener.is() )
         throw css::ucb::ListenerAlreadySetException();
@@ -173,7 +173,7 @@ void SAL_CALL ResultSetImplHelper::setListener(
             0, // Count; not used
             css::ucb::ListActionType::WELCOME,
             aInfo ) };
-    aGuard.clear();
+    aGuard.unlock();
 
     Listener->notify(
         css::ucb::ListEvent(
@@ -229,8 +229,6 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
 
 void ResultSetImplHelper::init( bool bStatic )
 {
-    osl::MutexGuard aGuard( m_aMutex );
-
     if ( m_bInitDone )
         return;
 
