@@ -16,6 +16,24 @@
       "message": "crashtesting reports a failure since this commit reproducible with\n\nwget https://bz.apache.org/ooo/attachment.cgi?id\u003d16236 -O ooo31011-1.sxw\n./instdir/program/soffice.bin --headless --convert-to odt ./ooo31011-1.sxw",
       "revId": "681e10eecf67a1a01bdec2cc9b834e0345e25206",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ef695da_a0015534",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-17T08:57:39Z",
+      "side": 1,
+      "message": "fix here:\n https://gerrit.libreoffice.org/c/core/+/126995",
+      "parentUuid": "bb0d7a4d_f6d1bda9",
+      "revId": "681e10eecf67a1a01bdec2cc9b834e0345e25206",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
