@@ -52,7 +52,7 @@ public:
 
     static std::unique_ptr<IconChoicePage> Create(weld::Container* pWindow, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet);
 
-    virtual bool        AskApply () override;
+    virtual bool        AskApply ( bool bShowWarning ) override;
     virtual void        DoApply () override;
 
     virtual void        SetInitFocus() override;

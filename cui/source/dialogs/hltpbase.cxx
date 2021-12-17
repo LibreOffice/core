@@ -293,7 +293,7 @@ void SvxHyperlinkTabPageBase::DoApply ()
 }
 
 // Ask page whether an insert is possible
-bool SvxHyperlinkTabPageBase::AskApply ()
+bool SvxHyperlinkTabPageBase::AskApply ( bool /* bShowWarning */ )
 {
     // default-implementation
     return true;
