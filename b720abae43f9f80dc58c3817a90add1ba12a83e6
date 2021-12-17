@@ -122,6 +122,23 @@
       "parentUuid": "f4fea06f_b4371244",
       "revId": "b720abae43f9f80dc58c3817a90add1ba12a83e6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08cf52b5_ac0a2383",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-17T10:12:38Z",
+      "side": 1,
+      "message": "My understanding is that automatic first-line indent is a feature that exists in Writer but not in Word. So you don\u0027t have to consider DOC/DOCX compatibility in this case. (If you load the ODT bugdoc into Word, they just give you 0 indent.)",
+      "revId": "b720abae43f9f80dc58c3817a90add1ba12a83e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
