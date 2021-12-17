@@ -201,6 +201,8 @@ public:
 
     void                    ClearUndoBuffer();
 
+    std::vector<Color> GetThemeColors() override;
+
 protected:
 
     SdDrawDocument*         mpDoc;

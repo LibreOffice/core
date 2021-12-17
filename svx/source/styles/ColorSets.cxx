@@ -312,6 +312,21 @@ void Theme::UpdateSdrPage(SdrPage* pPage)
     }
 }
 
+std::vector<Color> Theme::GetColors() const
+{
+    if (!mpColorSet)
+    {
+        return {};
+    }
+
+    std::vector<Color> aColors;
+    for (size_t i = 0; i < 12; ++i)
+    {
+        aColors.push_back(mpColorSet->getColor(i));
+    }
+    return aColors;
+}
+
 } // end of namespace svx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

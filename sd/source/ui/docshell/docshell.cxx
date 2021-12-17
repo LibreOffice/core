@@ -59,6 +59,8 @@
 #include <ViewShellBase.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <comphelper/lok.hxx>
+#include <DrawViewShell.hxx>
+#include <sdpage.hxx>
 
 using namespace sd;
 #define ShellClass_DrawDocShell
@@ -483,6 +485,29 @@ void DrawDocShell::ClearUndoBuffer()
     SfxUndoManager* pUndoManager = GetUndoManager();
     if(pUndoManager && pUndoManager->GetUndoActionCount())
         pUndoManager->Clear();
+}
+
+std::vector<Color> DrawDocShell::GetThemeColors()
+{
+    auto pViewShell = dynamic_cast<sd::DrawViewShell*>(GetViewShell());
+    if (!pViewShell)
+    {
+        return {};
+    }
+
+    SdPage* pPage = pViewShell->getCurrentPage();
+    svx::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+    if (!pPage->IsMasterPage())
+    {
+        pTheme = pPage->TRG_GetMasterPage().getSdrPageProperties().GetTheme();
+    }
+
+    if (!pTheme)
+    {
+        return {};
+    }
+
+    return pTheme->GetColors();
 }
 
 } // end of namespace sd
