@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "873d04dc_c3e02dcc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-17T19:41:45Z",
+      "side": 1,
+      "message": "To make this even more explicit, you may remove the else and just put \"return rVal \u003c rMax;\"\nSo it would be:\n        case FILL_LINEAR:\n        case FILL_DATE:\n            if (rStep \u003e\u003d 0.0)\n                return rVal \u003e rMax;\n            return rVal \u003c rMax;\n        case ...",
+      "revId": "f92a216dadcbe3405eed4ea1a626b15266b377a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
