@@ -33,6 +33,24 @@
       "message": "doesn\u0027t this need a dependency on the source .component file (aka COMPONENTSOURCE)?",
       "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82dd7fe0_52fe14d1",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-17T14:37:27Z",
+      "side": 1,
+      "message": "Hmm, yup; can\u0027t access this and can\u0027t use $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,%)) either :-(",
+      "parentUuid": "a53c6113_436322fa",
+      "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
