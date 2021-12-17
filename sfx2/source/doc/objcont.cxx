@@ -321,6 +321,8 @@ std::set<Color> SfxObjectShell::GetDocColors()
     return empty;
 }
 
+std::vector<Color> SfxObjectShell::GetThemeColors() { return std::vector<Color>(); }
+
 sfx::AccessibilityIssueCollection SfxObjectShell::runAccessibilityCheck()
 {
     sfx::AccessibilityIssueCollection aCollection;
