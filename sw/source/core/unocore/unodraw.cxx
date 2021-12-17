@@ -1016,7 +1016,6 @@ uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo()
     SolarMutexGuard aGuard;
     if (!mxPropertySetInfo)
     {
-        uno::Reference< beans::XPropertySetInfo >  aRet;
         if(m_xShapeAgg.is())
         {
             const uno::Type& rPropSetType = cppu::UnoType<beans::XPropertySet>::get();

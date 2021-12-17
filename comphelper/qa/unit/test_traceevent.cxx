@@ -31,8 +31,6 @@ namespace
 {
 void trace_event_test()
 {
-    std::shared_ptr<comphelper::AsyncEvent> pAsync7Locked;
-
     {
         // When we start recording is off and this will not generate any 'X' event when we leave the scope
         comphelper::ProfileZone aZone0("test0");

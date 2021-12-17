@@ -640,7 +640,6 @@ public:
         for (int i = 0; i < nLength; i++)
         {
             uno::Any aArrayValue = mxIdlArray->get(maAny, i);
-            uno::Reference<uno::XInterface> xCurrent;
 
             auto* pObjectInspectorNode
                 = createNodeObjectForAny(OUString::number(i), aArrayValue, "");
