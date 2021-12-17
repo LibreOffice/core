@@ -59,6 +59,9 @@ private:
     // possible on-demand calculated GridOffset for non-linear ViewToDevice transformation (calc)
     basegfx::B2DVector                              maGridOffset;
 
+    // used to to detect ActionChanged() during primitive construction
+    int                                             mnActionChangedCount;
+
     // This bool gets set when the object gets invalidated by ActionChanged() and
     // can be used from the OC to late-invalidates
     bool                                            mbLazyInvalidate : 1;

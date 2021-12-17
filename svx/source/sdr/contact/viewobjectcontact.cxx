@@ -147,6 +147,7 @@ ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact&
 :   mrObjectContact(rObjectContact),
     mrViewContact(rViewContact),
     maGridOffset(0.0, 0.0),
+    mnActionChangedCount(0),
     mbLazyInvalidate(false)
 {
     // make the ViewContact remember me
@@ -210,6 +211,7 @@ void ViewObjectContact::ActionChanged()
 {
     // clear cached primitives
     mxPrimitive2DSequence.clear();
+    ++mnActionChangedCount;
 
     if(mbLazyInvalidate)
         return;
@@ -345,7 +347,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
     drawinglayer::primitive2d::Primitive2DContainer xNewPrimitiveSequence;
 
     // take care of redirectors and create new list
-    ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();
+    ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();\
 
     if(pRedirector)
     {
@@ -421,8 +423,8 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
     if(!isPrimitiveVisible(rDisplayInfo))
         return;
 
-    const drawinglayer::primitive2d::Primitive2DContainer& xRetval = getPrimitive2DSequence(rDisplayInfo);
-    if(xRetval.empty())
+    getPrimitive2DSequence(rDisplayInfo);
+    if(mxPrimitive2DSequence.empty())
         return;
 
     // get ranges
@@ -434,7 +436,15 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
     if(!bVisible)
         return;
 
-    rVisitor.visit(xRetval);
+    // temporarily take over the mxPrimitive2DSequence, in case it gets invalidated while we want to iterate over it
+    auto tmp = std::move(const_cast<ViewObjectContact*>(this)->mxPrimitive2DSequence);
+    int nPrevCount = mnActionChangedCount;
+
+    rVisitor.visit(tmp);
+
+    // if we received ActionChanged() calls while walking the primitives, then leave it empty, otherwise move it back
+    if (mnActionChangedCount == nPrevCount)
+        const_cast<ViewObjectContact*>(this)->mxPrimitive2DSequence = std::move(tmp);
 }
 
 void ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
