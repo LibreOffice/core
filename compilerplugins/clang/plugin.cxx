@@ -818,6 +818,42 @@ bool hasExternalLinkage(VarDecl const * decl) {
     return true;
 }
 
+bool isSmartPointerType(QualType qt)
+{
+    // First check whether the object type as written is, or is derived from, std::unique_ptr or
+    // std::shared_ptr, in case the get member function is declared at a base class of that std
+    // type:
+    if (loplugin::isDerivedFrom(
+            qt->getAsCXXRecordDecl(),
+            [](Decl const * decl) {
+                auto const dc = loplugin::DeclCheck(decl);
+                return dc.ClassOrStruct("unique_ptr").StdNamespace()
+                    || dc.ClassOrStruct("shared_ptr").StdNamespace();
+            }))
+        return true;
+
+    // Then check the object type coerced to the type of the get member function, in
+    // case the type-as-written is derived from one of these types (tools::SvRef is
+    // final, but the rest are not):
+    auto const tc2 = loplugin::TypeCheck(qt);
+    if (tc2.ClassOrStruct("unique_ptr").StdNamespace()
+           || tc2.ClassOrStruct("shared_ptr").StdNamespace()
+           || tc2.Class("Reference").Namespace("uno").Namespace("star")
+                .Namespace("sun").Namespace("com").GlobalNamespace()
+           || tc2.Class("Reference").Namespace("rtl").GlobalNamespace()
+           || tc2.Class("SvRef").Namespace("tools").GlobalNamespace()
+           || tc2.Class("WeakReference").Namespace("tools").GlobalNamespace()
+           || tc2.Class("ScopedReadAccess").Namespace("Bitmap").GlobalNamespace()
+           || tc2.Class("ScopedVclPtrInstance").GlobalNamespace()
+           || tc2.Class("VclPtr").GlobalNamespace()
+           || tc2.Class("ScopedVclPtr").GlobalNamespace()
+           || tc2.Class("intrusive_ptr").Namespace("boost").GlobalNamespace())
+    {
+        return true;
+    }
+    return false;
+}
+
 bool isSmartPointerType(const Expr* e)
 {
     // First check whether the object type as written is, or is derived from, std::unique_ptr or

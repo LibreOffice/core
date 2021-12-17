@@ -55,8 +55,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetCont
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
-    SvXMLImportContextRef xContext;
-
     switch( mxMapper->getPropertySetMapper()
                     ->GetEntryContextId( rProp.mnIndex ) )
     {

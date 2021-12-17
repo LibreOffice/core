@@ -2287,7 +2287,6 @@ bool OApplicationController::requestQuickHelp(const void* /*pUserData*/, OUStrin
 bool OApplicationController::requestDrag(const weld::TreeIter& /*rEntry*/)
 {
     bool bSuccess = false;
-    rtl::Reference<TransferableHelper> pTransfer;
 
     OApplicationView* pContainer = getContainer();
     if (pContainer && pContainer->getSelectionCount())

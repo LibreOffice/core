@@ -47,8 +47,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChartPropertyContex
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
-    SvXMLImportContextRef xContext;
-
     switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
         case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE:

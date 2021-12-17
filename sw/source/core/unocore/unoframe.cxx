@@ -3262,7 +3262,6 @@ SwXTextFrame::CreateCursor()
 uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor()
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XTextCursor >  aRef;
     SwFrameFormat* pFormat = GetFrameFormat();
     if(!pFormat)
         throw uno::RuntimeException();

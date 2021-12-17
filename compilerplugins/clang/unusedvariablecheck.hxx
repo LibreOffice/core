@@ -23,6 +23,8 @@ class UnusedVariableCheck
         explicit UnusedVariableCheck( const InstantiationData& data );
         virtual void run() override;
         bool VisitVarDecl( const VarDecl* var );
+    private:
+        bool isUnusedSmartPointer( const VarDecl* var );
     };
 
 } // namespace

@@ -404,7 +404,6 @@ std::vector<uno::Reference<graphic::XGraphic>>
     lcl_getGraphics(const uno::Reference<lang::XComponent>& xComponent)
 {
     std::vector<uno::Reference<graphic::XGraphic>> aGraphics;
-    uno::Reference<drawing::XShape> xShape;
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
