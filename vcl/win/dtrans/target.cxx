@@ -47,7 +47,7 @@ using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams);
 
 DropTarget::DropTarget( const Reference<XComponentContext>& rxContext):
-    WeakComponentImplHelper<XInitialization,XDropTarget, XServiceInfo>(m_mutex),
+    WeakComponentImplHelper<XInitialization,XDropTarget, XServiceInfo>(m_aMutex),
     m_hWnd( nullptr),
     m_threadIdWindow(0),
     m_threadIdTarget(0),
@@ -291,7 +291,7 @@ sal_Bool SAL_CALL DropTarget::isActive(  )
 
 void SAL_CALL DropTarget::setActive( sal_Bool _b )
 {
-    MutexGuard g(m_mutex);
+    MutexGuard g(m_aMutex);
     m_bActive= _b;
 }
 

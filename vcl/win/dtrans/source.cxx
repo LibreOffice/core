@@ -51,7 +51,7 @@ using namespace com::sun::star::lang;
 static unsigned __stdcall DndOleSTAFunc(LPVOID pParams);
 
 DragSource::DragSource( const Reference<XComponentContext>& rxContext):
-    WeakComponentImplHelper< XDragSource, XInitialization, XServiceInfo >(m_mutex),
+    WeakComponentImplHelper< XDragSource, XInitialization, XServiceInfo >(m_aMutex),
     m_xContext( rxContext ),
 //  m_pcurrentContext_impl(0),
     m_hAppWindow(nullptr),

@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
 #include <comphelper/documentconstants.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
@@ -54,7 +55,7 @@ class CacheUpdateListener;
                 Further we make it public. So any user of this class
                 can lock us from outside too.
  */
-class FilterCache : public BaseLock
+class FilterCache : public cppu::BaseMutex
 {
 
     // public types

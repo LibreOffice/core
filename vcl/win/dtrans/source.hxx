@@ -23,6 +23,7 @@
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <osl/mutex.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "globals.hxx"
@@ -43,7 +44,7 @@ class SourceContext;
 // RIGHT MOUSE BUTTON drag and drop not supported currently.
 // ALT modifier is considered to effect a user selection of effects
 class DragSource:
-      public MutexDummy,
+      public cppu::BaseMutex,
       public WeakComponentImplHelper<XDragSource, XInitialization, XServiceInfo>,
       public IDropSource
 
