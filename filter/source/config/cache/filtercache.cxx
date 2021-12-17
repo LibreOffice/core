@@ -1014,7 +1014,7 @@ void FilterCache::impl_validateAndOptimize()
 
         // create an optimized registration for this type to
         // its set list of extensions/url pattern. If it's a "normal" type
-        // set it at the end of this optimized list. But if its
+        // set it at the end of this optimized list. But if it's
         // a "Preferred" one - set it to the front of this list.
         // Of course multiple "Preferred" registrations can occur
         // (they shouldn't - but they can!) ... Ignore it. The last

@@ -856,7 +856,7 @@ void SvxPositionSizeTabPage::Construct()
             m_xTsbAutoGrowWidth->connect_toggled( LINK( this, SvxPositionSizeTabPage, ClickSizeProtectHdl ) );
             m_xTsbAutoGrowHeight->connect_toggled( LINK( this, SvxPositionSizeTabPage, ClickSizeProtectHdl ) );
 
-            // is used as flag to evaluate if its selectable
+            // is used as flag to evaluate if it's selectable
             mbIgnoreAutoGrowWidth = false;
             mbIgnoreAutoGrowHeight = false;
         }

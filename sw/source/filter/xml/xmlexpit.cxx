@@ -257,7 +257,7 @@ void SvXMLExportItemMapper::exportElementItems(
         rExport.IgnorableWhitespace();
 }
 
-/** returns the item with the given WhichId from the given ItemSet if its
+/** returns the item with the given WhichId from the given ItemSet if it's
     set
 */
 const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,

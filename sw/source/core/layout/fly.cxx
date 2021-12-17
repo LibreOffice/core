@@ -2418,10 +2418,10 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
     SwSortedObjs& rObjs = *(pPageFrame->GetSortedObjs());
     for (SwAnchoredObject* pObj : rObjs)
     {
-        // #i26945# - check, if anchored object is a lower
+        // #i26945# - check if anchored object is a lower
         // of the layout frame is changed to check, if its anchor frame
         // is a lower of the layout frame.
-        // determine the anchor frame - usually it's the anchor frame,
+        // Determine the anchor frame - usually it's the anchor frame,
         // for at-character/as-character anchored objects the anchor character
         // text frame is taken.
         const SwFrame* pAnchorFrame = pObj->GetAnchorFrameContainingAnchPos();
