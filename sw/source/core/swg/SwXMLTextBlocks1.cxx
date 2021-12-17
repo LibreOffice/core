@@ -31,6 +31,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -194,6 +195,9 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
         uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
 
+        // get parser
+        uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
+
         // create descriptor and reference to it. Either
         // both or neither must be kept because of the
         // reference counting!
@@ -205,15 +209,21 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
         OUString sFilterComponent = bOasis
             ? OUString("com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter")
             : OUString("com.sun.star.comp.Writer.XMLAutotextEventsImporter");
-        uno::Reference< xml::sax::XFastParser > xFilter(
+        uno::Reference< xml::sax::XDocumentHandler > xFilter(
             xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                 sFilterComponent, aFilterArguments, xContext),
-            UNO_QUERY_THROW );
+            UNO_QUERY );
+        OSL_ENSURE( xFilter.is(), "can't instantiate autotext-events filter");
+        if ( !xFilter.is() )
+            return ERR_SWG_READ_ERROR;
+
+        // connect parser and filter
+        xParser->setDocumentHandler( xFilter );
 
         // parse the stream
         try
         {
-            xFilter->parseStream( aParserInput );
+            xParser->parseStream( aParserInput );
         }
         catch( xml::sax::SAXParseException& )
         {
