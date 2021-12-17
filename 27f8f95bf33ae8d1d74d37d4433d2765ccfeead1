@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac330941_e3406751",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-17T09:59:02Z",
+      "side": 1,
+      "message": "Seems like an obvious enough fix.\n\nI tested merged cells to see how that would affect a note. However, my comment disappeared when I merged the cells. So it seems to be irrelevant, and testing for hidden column doesn\u0027t have to worry about merged stuff.",
+      "revId": "27f8f95bf33ae8d1d74d37d4433d2765ccfeead1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "188c68ed_620d1e80",
+        "filename": "sc/source/ui/view/output.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2332,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-17T09:59:02Z",
+      "side": 1,
+      "message": "In LO 3.6, there was a test for pCell here.",
+      "range": {
+        "startLine": 2332,
+        "startChar": 20,
+        "endLine": 2332,
+        "endChar": 47
+      },
+      "revId": "27f8f95bf33ae8d1d74d37d4433d2765ccfeead1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
