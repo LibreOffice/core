@@ -74,10 +74,10 @@ SwExtTextInput::~SwExtTextInput()
 
     // In order to get Undo/Redlining etc. working correctly,
     // we need to go through the Doc interface
-    rIdx = nSttCnt;
     const OUString sText( pTNd->GetText().copy(nSttCnt, nEndCnt - nSttCnt));
     if( m_bIsOverwriteCursor && !m_sOverwriteText.isEmpty() )
     {
+        rIdx = nSttCnt;
         const sal_Int32 nLen = sText.getLength();
         const sal_Int32 nOWLen = m_sOverwriteText.getLength();
         if( nLen > nOWLen )
@@ -109,20 +109,22 @@ SwExtTextInput::~SwExtTextInput()
     {
         // we need to keep correct formatting
         // ie. when we erase first, then we will lost information about format
+        // 1. Insert text at the end, so we will use the same formatting
+        //    ABC<OLD><NEW>
+        // 2. Then remove old (not tracked) content
+        //    ABC<NEW>
 
         sal_Int32 nLenghtOfOldString = nEndCnt - nSttCnt;
 
         if( m_bInsText )
-        {
             rDoc.getIDocumentContentOperations().InsertString( *this, sText );
 
-            // Copy formatting to the inserted string
-            SfxItemSet aSet(pTNd->GetDoc().GetAttrPool(), aCharFormatSetRange);
-            pTNd->GetParaAttr( aSet, nSttCnt + nLenghtOfOldString, nEndCnt + nLenghtOfOldString );
-            pTNd->SetAttr( aSet, nSttCnt, nEndCnt );
-        }
+        rIdx = nSttCnt;
 
         pTNd->EraseText( rIdx, nLenghtOfOldString );
+
+        if( m_bInsText )
+            rIdx = nEndCnt;
     }
     if (!bWasIME)
     {
