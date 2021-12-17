@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc9b845b_974f4026",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-17T08:20:52Z",
+      "side": 1,
+      "message": "René: thought you might be interested in this one since you\u0027re the maintainer of LO package for Debian.",
+      "revId": "02f3a75fc6d9a11306651551a6a92bc50c4f6f8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
