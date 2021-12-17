@@ -332,9 +332,15 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, weld::TreeView&, void)
                     break;
 
                 case REF_SEQUENCEFLD:
-                    sName = static_cast<SwGetRefField*>(GetCurField())->GetSetRefName();
+                {
+                    SwGetRefField const*const pRefField(dynamic_cast<SwGetRefField*>(GetCurField()));
+                    if (pRefField)
+                    {
+                        sName = pRefField->GetSetRefName();
+                    }
                     nFlag = REFFLDFLAG;
                     break;
+                }
             }
 
             if (m_xTypeLB->find_text(sName) == -1)   // reference to deleted mark
@@ -470,8 +476,13 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
     SwWrtShell *pSh = GetWrtShell();
     if(!pSh)
         pSh = ::GetActiveWrtShell();
-    SwGetRefField* pRefField = static_cast<SwGetRefField*>(GetCurField());
+    SwGetRefField const*const pRefField(dynamic_cast<SwGetRefField*>(GetCurField()));
     const sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
+
+    if (!pRefField)
+    {
+        return;
+    }
 
     OUString sOldSel;
     // #i83479#
@@ -956,7 +967,11 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
         }
     }
 
-    SwGetRefField* pRefField = static_cast<SwGetRefField*>(GetCurField());
+    SwGetRefField const*const pRefField(dynamic_cast<SwGetRefField*>(GetCurField()));
+    if (!pRefField)
+    {
+        return false;
+    }
 
     if (REFFLDFLAG & nTypeId)
     {

@@ -101,10 +101,13 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     if (IsFieldEdit())
     {
         const SwField* pCurField = GetCurField();
-        nSubType = static_cast<const SwDocInfoField*>(pCurField)->GetSubType() & 0xff;
+        nSubType = pCurField->GetSubType() & 0xff;
         if( nSubType == DI_CUSTOM )
         {
-            m_sOldCustomFieldName = static_cast<const SwDocInfoField*>(pCurField)->GetName();
+            if (auto const pField = dynamic_cast<SwDocInfoField const*>(pCurField))
+            {
+                m_sOldCustomFieldName = pField->GetName();
+            }
         }
         m_xFormatLB->SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
         SwWrtShell *pSh = GetWrtShell();
@@ -313,12 +316,17 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
         bEnable = true;
     }
 
-    sal_uInt32 nFormat = IsFieldEdit() ? static_cast<SwDocInfoField*>(GetCurField())->GetFormat() : 0;
+    sal_uInt32 nFormat = 0;
 
-    sal_uInt16 nOldSubType = IsFieldEdit() ? (static_cast<SwDocInfoField*>(GetCurField())->GetSubType() & 0xff00) : 0;
+    sal_uInt16 nOldSubType = 0;
 
     if (IsFieldEdit())
     {
+        if (auto const pField = dynamic_cast<SwDocInfoField const*>(GetCurField()))
+        {
+            nFormat = pField->GetFormat();
+            nOldSubType = pField->GetSubType() & 0xff00;
+        }
         nPos = m_xSelectionLB->get_selected_index();
         if (nPos != -1)
         {
@@ -369,10 +377,14 @@ sal_Int32 SwFieldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
 
     sal_uInt16 nSize = 0;
     sal_Int32 nSelPos = -1;
-    sal_uInt16 nExtSubType = IsFieldEdit() ? (static_cast<SwDocInfoField*>(GetCurField())->GetSubType() & 0xff00) : 0;
+    sal_uInt16 nExtSubType = 0;
 
     if (IsFieldEdit())
     {
+        if (auto const pField = dynamic_cast<SwDocInfoField const*>(GetCurField()))
+        {
+            nExtSubType = pField->GetSubType() & 0xff00;
+        }
         m_xFixedCB->set_active((nExtSubType & DI_SUB_FIXED) != 0);
         nExtSubType = ((nExtSubType & ~DI_SUB_FIXED) >> 8) - 1;
     }

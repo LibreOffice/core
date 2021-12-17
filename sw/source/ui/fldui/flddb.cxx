@@ -303,12 +303,18 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
         OUString sColumnName;
         if (nTypeId == SwFieldTypesEnum::Database)
         {
-            aData = static_cast<SwDBField*>(GetCurField())->GetDBData();
-            sColumnName = static_cast<SwDBFieldType*>(GetCurField()->GetTyp())->GetColumnName();
+            if (auto const*const pField = dynamic_cast<SwDBField*>(GetCurField()))
+            {
+                aData = pField->GetDBData();
+                sColumnName = static_cast<SwDBFieldType*>(GetCurField()->GetTyp())->GetColumnName();
+            }
         }
         else
         {
-            aData = static_cast<SwDBNameInfField*>(GetCurField())->GetDBData(pSh->GetDoc());
+            if (auto *const pField = dynamic_cast<SwDBNameInfField*>(GetCurField()))
+            {
+                aData = pField->GetDBData(pSh->GetDoc());
+            }
         }
         m_xDatabaseTLB->Select(aData.sDataSource, aData.sCommand, sColumnName);
     }
