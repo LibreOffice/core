@@ -104,6 +104,24 @@
       "message": "I would argue that given now you have a commit to follow, this is just a mechanical task, so it\u0027s likely you could do it if you give it a try.\n\nJust read how c5cf8824a619401627f18abc7b3049551c71ac2a added that new mbSubtractFlys, you can mostly ignore the paintfrm.cxx piece.\n\nCould you please do so? And if you have a specific question, don\u0027t hesitate to ask for more help. Thanks.",
       "revId": "b720abae43f9f80dc58c3817a90add1ba12a83e6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aa5f0e9_eb905102",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-17T10:10:35Z",
+      "side": 1,
+      "message": "\u003e Just read how c5cf8824a619401627f18abc7b3049551c71ac2a added that new mbSubtractFlys, you can mostly ignore the paintfrm.cxx piece.\n\nI took a rough look into the example commit. I think now I understand what a capability flag is: for a new document this flag is written into settings.xml, and there is no such flag in old documents so that the deletion of those rows related to line-height will not have effect on old documents.\n\nBut I have one question: How about old docx/doc files? How about any (new or old) doc/docx documents created by MS Word? Since in Word the line height is not considered when setting the first line indent, I think we should also not consider that, even though there is no such capability flag, correct? In other words, we should only check this flag for ODF files, not any other files (for other file formats the new behaviour of first line indent should apply without any preconditions), am I correct? If this is the case, I think I need to learn more.\n\nAnyway, I can try to add such flag without considering the doc/docx issue above, and add improvements afterwards. This may take some time for me to learn.",
+      "parentUuid": "f4fea06f_b4371244",
+      "revId": "b720abae43f9f80dc58c3817a90add1ba12a83e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
