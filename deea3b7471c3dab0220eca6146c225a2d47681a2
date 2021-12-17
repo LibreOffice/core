@@ -68,6 +68,23 @@
       "message": "oops, that was a misclick",
       "revId": "deea3b7471c3dab0220eca6146c225a2d47681a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1bdacee_2e9aaed9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-12-17T14:00:05Z",
+      "side": 1,
+      "message": "so the timer ends up doing \"m_pCurField \u003d pSh-\u003eGetCurField( true )\"\n\nvia SwFieldPage::Init() called from SwFieldDlg::ReInitTabPage()\n\nas such any static_cast of m_pCurField is bogus, no guarantees can be made about the type of the object it points to\n\nsee also fldref.cxx:292 where it\u0027s already dynamic_cast",
+      "revId": "deea3b7471c3dab0220eca6146c225a2d47681a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
