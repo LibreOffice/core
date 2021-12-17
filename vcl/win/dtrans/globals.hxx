@@ -65,11 +65,6 @@ DWORD dndActionsToDropEffects(sal_Int8 actions);
 // or Alt).
 DWORD dndActionsToSingleDropEffect(sal_Int8 actions);
 
-struct MutexDummy
-{
-    osl::Mutex m_mutex;
-};
-
 extern css::uno::Reference<css::datatransfer::XTransferable> g_XTransferable;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

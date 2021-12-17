@@ -26,20 +26,17 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/component_context.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <jvmaccess/virtualmachine.hxx>
 #include <jvmaccess/unovirtualmachine.hxx>
 #include <osl/mutex.hxx>
 
 namespace {
 
-struct MutexHolder
-{
-    ::osl::Mutex m_mutex;
-};
 typedef ::cppu::WeakComponentImplHelper<
     css::lang::XSingleComponentFactory > t_impl;
 
-class SingletonFactory : public MutexHolder, public t_impl
+class SingletonFactory : public cppu::BaseMutex, public t_impl
 {
     ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > m_vm_access;
 
@@ -48,7 +45,7 @@ protected:
 
 public:
     explicit SingletonFactory( ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access )
-        : t_impl( m_mutex ),
+        : t_impl( m_aMutex ),
           m_vm_access( vm_access )
         {}
 

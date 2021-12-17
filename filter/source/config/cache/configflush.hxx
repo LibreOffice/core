@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 
 namespace filter::config {
@@ -34,7 +35,7 @@ namespace filter::config {
     @descr      Such refresh listener will be called in case the
                 type/filter configuration will be changed at runtime.
  */
-class ConfigFlush final : public BaseLock
+class ConfigFlush final : public cppu::BaseMutex
                   , public ::cppu::WeakImplHelper<
                                                     css::util::XRefreshable,
                                                     css::lang::XServiceInfo

@@ -26,10 +26,9 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 
-#include <vcl/unohelp2.hxx>
-
-class DNDListenerContainer final : public vcl::unohelper::MutexHelper,
+class DNDListenerContainer final : public cppu::BaseMutex,
                                 public ::cppu::WeakComponentImplHelper<
     css::datatransfer::dnd::XDragGestureRecognizer,
     css::datatransfer::dnd::XDropTargetDragContext,
