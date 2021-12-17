@@ -33,6 +33,24 @@
       "message": "@Julien: I am already using --with-system-nss since always (and if the default changes I get to see it since I get any configure.ac change mailed anyway).\n\nUsing internal nss is out of the question in any case for me (I didn\u0027t need to care about patching any LO since people get the fix via https://www.debian.org/security/2021/dsa-5016 (or  the corresponding unstable upload) anyways)",
       "revId": "02f3a75fc6d9a11306651551a6a92bc50c4f6f8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a253613e_02bbf890",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-17T11:53:05Z",
+      "side": 1,
+      "message": "Ok so no pb here.\nThank you for the quick feedback! :-)",
+      "parentUuid": "b620a4ee_1386d6b7",
+      "revId": "02f3a75fc6d9a11306651551a6a92bc50c4f6f8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
