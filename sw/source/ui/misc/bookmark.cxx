@@ -24,6 +24,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <officecfg/Office/Common.hxx>
+//#include <vcl/windowstate.hxx>
+#include <unotools/viewoptions.hxx>
 
 #include <swabstdlg.hxx>
 #include <swuiexp.hxx>
@@ -349,6 +351,18 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS)
     // disabled until "Hide" flag is not checked
     m_xConditionED->set_sensitive(false);
     m_xConditionFT->set_sensitive(false);
+
+    // restore dialog size
+    SvtViewOptions aDlgOpt( EViewType::Dialog, "BookmarkDialog");
+    if ( aDlgOpt.Exists() )
+        m_xDialog->set_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_UTF8));
+}
+
+SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
+{
+    // tdf#146261 - Remember size of bookbark dialog
+    SvtViewOptions aDlgOpt( EViewType::Dialog, "BookmarkDialog" );
+    aDlgOpt.SetWindowState(OStringToOUString(m_xDialog->get_window_state(WindowStateMask::All), RTL_TEXTENCODING_UTF8));
 }
 
 IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)
@@ -382,13 +396,10 @@ IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)
     }
 }
 
-SwInsertBookmarkDlg::~SwInsertBookmarkDlg() {}
-
 BookmarkTable::BookmarkTable(std::unique_ptr<weld::TreeView> xControl)
     : m_xControl(std::move(xControl))
 {
-    m_xControl->set_size_request(450, 250);
-    m_xControl->set_column_fixed_widths({ 40, 110, 150, 160 });
+    m_xControl->set_size_request(-1, m_xControl->get_height_rows(8));
     m_xControl->set_selection_mode(SelectionMode::Multiple);
 }
 
