@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <mutex>
 #include <layout.hxx>
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
@@ -73,7 +74,7 @@ private:
     ModulWindow&                     rModulWindow;
 
     rtl::Reference< ChangesListener > listener_;
-    osl::Mutex                        mutex_;
+    std::mutex                        mutex_;
     css::uno::Reference< css::beans::XMultiPropertySet >
                                       notifier_;
 
