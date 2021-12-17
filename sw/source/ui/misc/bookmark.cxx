@@ -349,6 +349,12 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS)
     // disabled until "Hide" flag is not checked
     m_xConditionED->set_sensitive(false);
     m_xConditionFT->set_sensitive(false);
+    getDialog()->set_size_request(300,300);
+}
+
+SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
+{
+     getDialog()->get_size() );
 }
 
 IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)
@@ -382,13 +388,11 @@ IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)
     }
 }
 
-SwInsertBookmarkDlg::~SwInsertBookmarkDlg() {}
-
 BookmarkTable::BookmarkTable(std::unique_ptr<weld::TreeView> xControl)
     : m_xControl(std::move(xControl))
 {
-    m_xControl->set_size_request(450, 250);
-    m_xControl->set_column_fixed_widths({ 40, 110, 150, 160 });
+//    m_xControl->set_size_request(450, 250);
+//    m_xControl->set_column_fixed_widths({ 40, 110, 150, 160 });
     m_xControl->set_selection_mode(SelectionMode::Multiple);
 }
 
