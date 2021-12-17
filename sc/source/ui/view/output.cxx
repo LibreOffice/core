@@ -2327,11 +2327,10 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                     SCCOL nMergeX = nX;
                     SCROW nMergeY = nY;
                     mpDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
-                    // use origin's pCell for NotePtr test below
                 }
 
-                if ( mpDoc->GetNote(nX, pRowInfo[nArrY].nRowNo, nTab) && ( bIsMerged ||
-                        ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
+                if (!mpDoc->ColHidden(nX, nTab) && mpDoc->GetNote(nX, pRowInfo[nArrY].nRowNo, nTab)
+                    && (bIsMerged || (!pInfo->bHOverlapped && !pInfo->bVOverlapped)))
                 {
                     if (bFirst)
                     {
