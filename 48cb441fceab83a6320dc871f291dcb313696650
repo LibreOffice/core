@@ -34,6 +34,24 @@
       "parentUuid": "8629ba3a_2609b77d",
       "revId": "48cb441fceab83a6320dc871f291dcb313696650",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91c12cb9_bb86e3ed",
+        "filename": "cui/qa/uitest/tabpages/themepage.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-17T07:36:14Z",
+      "side": 1,
+      "message": "Aha, documented the \"how to pick a color\" thing at \u003chttps://wiki.documentfoundation.org/index.php?title\u003dDevelopment%2FUITests\u0026type\u003drevision\u0026diff\u003d426003\u0026oldid\u003d376191\u003e.",
+      "parentUuid": "92e6451e_0ae9755b",
+      "revId": "48cb441fceab83a6320dc871f291dcb313696650",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
