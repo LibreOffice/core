@@ -119,7 +119,7 @@ SwExtTextInput::~SwExtTextInput()
             // Copy formatting to the inserted string
             SfxItemSet aSet(pTNd->GetDoc().GetAttrPool(), aCharFormatSetRange);
             pTNd->GetParaAttr( aSet, nSttCnt + nLenghtOfOldString, nEndCnt + nLenghtOfOldString );
-            pTNd->SetAttr( aSet, nSttCnt, nEndCnt );
+            pTNd->SetAttr( aSet, nSttCnt, nEndCnt-1 );
         }
 
         pTNd->EraseText( rIdx, nLenghtOfOldString );
