@@ -771,6 +771,8 @@ namespace o3tl
 #define LANGUAGE_USER_YIDDISH_ISRAEL        LanguageType(0x843D)  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_YIDDISH)) */
 #define LANGUAGE_USER_KLINGON               LanguageType(0x06AC)
 #define LANGUAGE_USER_ENGLISH_ISRAEL        LanguageType(0xB409)  /* makeLangID( 0x2D, getPrimaryLanguage( LANGUAGE_ENGLISH_US)) */
+#define LANGUAGE_USER_INTERSLAVIC_LATIN     LanguageType(0x06AD)
+#define LANGUAGE_USER_INTERSLAVIC_CYRILLIC  LanguageType(0x06AE)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
