@@ -158,7 +158,7 @@ PropertyValueSet::~PropertyValueSet()
 template <class T, T ucbhelper_impl::PropertyValue::*_member_name_>
 T PropertyValueSet::getValue(PropsSet nTypeName, sal_Int32 columnIndex)
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     T aValue {};   /* default ctor */
 
@@ -352,7 +352,7 @@ Any SAL_CALL PropertyValueSet::getObject(
                                     sal_Int32 columnIndex,
                                          const Reference< XNameAccess >& )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     Any aValue;
 
@@ -510,7 +510,7 @@ Reference< XArray > SAL_CALL PropertyValueSet::getArray( sal_Int32 columnIndex )
 // virtual
 sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !columnName.isEmpty() )
     {
@@ -530,7 +530,7 @@ sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
 
 const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
     {
@@ -548,7 +548,7 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
 template <class T, T ucbhelper_impl::PropertyValue::*_member_name_>
 void PropertyValueSet::appendValue(const OUString& rPropName, PropsSet nTypeName, const T& rValue)
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     ucbhelper_impl::PropertyValue aNewValue;
     aNewValue.sPropertyName = rPropName;
