@@ -144,7 +144,7 @@ namespace io_acceptor
     {
         Pipe pipe;
         {
-            MutexGuard guard( m_mutex );
+            std::unique_lock guard( m_mutex );
             pipe = m_pipe;
         }
         if( ! pipe.is() )
@@ -177,7 +177,7 @@ namespace io_acceptor
         m_bClosed = true;
         Pipe pipe;
         {
-            MutexGuard guard( m_mutex );
+            std::unique_lock guard( m_mutex );
             pipe = m_pipe;
             m_pipe.clear();
         }
