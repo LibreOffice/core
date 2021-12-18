@@ -19,7 +19,7 @@
 #pragma once
 
 #include <memory>
-#include <MutexContainer.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -44,7 +44,7 @@ typedef ::cppu::WeakComponentImplHelper<
 }
 
 class AccessibleTextHelper :
-        public MutexContainer,
+        public cppu::BaseMutex,
         public impl::AccessibleTextHelper_Base
 {
 public:

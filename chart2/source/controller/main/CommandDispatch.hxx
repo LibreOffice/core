@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <MutexContainer.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -44,7 +44,7 @@ typedef ::cppu::WeakComponentImplHelper<
 /** This is the base class for an XDispatch.
  */
 class CommandDispatch :
-        public MutexContainer,
+        public cppu::BaseMutex,
         public impl::CommandDispatch_Base
 {
 public:

@@ -485,7 +485,6 @@
 #include <ItemPropertyMap.hxx>
 #include <LegendHelper.hxx>
 #include <LinePropertiesHelper.hxx>
-#include <MutexContainer.hxx>
 #include <ObjectHierarchy.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ObjectNameProvider.hxx>

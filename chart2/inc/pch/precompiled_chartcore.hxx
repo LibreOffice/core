@@ -300,7 +300,6 @@
 #include <MediaDescriptorHelper.hxx>
 #include <MinimumAndMaximumSupplier.hxx>
 #include <ModifyListenerHelper.hxx>
-#include <MutexContainer.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <OPropertySet.hxx>
 #include <ObjectIdentifier.hxx>
