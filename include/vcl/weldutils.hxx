@@ -16,6 +16,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <tools/time.hxx>
 #include <vcl/dllapi.h>
@@ -35,10 +36,9 @@ namespace weld
 {
 typedef cppu::WeakComponentImplHelper<css::awt::XWindow> TransportAsXWindow_Base;
 
-class VCL_DLLPUBLIC TransportAsXWindow : public TransportAsXWindow_Base
+class VCL_DLLPUBLIC TransportAsXWindow : public cppu::BaseMutex, public TransportAsXWindow_Base
 {
 private:
-    osl::Mutex m_aHelperMtx;
     weld::Widget* m_pWeldWidget;
     weld::Builder* m_pWeldWidgetBuilder;
 
@@ -51,15 +51,15 @@ private:
 
 public:
     TransportAsXWindow(weld::Widget* pWeldWidget, weld::Builder* pWeldWidgetBuilder = nullptr)
-        : TransportAsXWindow_Base(m_aHelperMtx)
+        : TransportAsXWindow_Base(m_aMutex)
         , m_pWeldWidget(pWeldWidget)
         , m_pWeldWidgetBuilder(pWeldWidgetBuilder)
-        , m_aWindowListeners(m_aHelperMtx)
-        , m_aKeyListeners(m_aHelperMtx)
-        , m_aFocusListeners(m_aHelperMtx)
-        , m_aMouseListeners(m_aHelperMtx)
-        , m_aMotionListeners(m_aHelperMtx)
-        , m_aPaintListeners(m_aHelperMtx)
+        , m_aWindowListeners(m_aMutex)
+        , m_aKeyListeners(m_aMutex)
+        , m_aFocusListeners(m_aMutex)
+        , m_aMouseListeners(m_aMutex)
+        , m_aMotionListeners(m_aMutex)
+        , m_aPaintListeners(m_aMutex)
     {
     }
 
