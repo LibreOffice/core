@@ -164,7 +164,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
                                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // SAFE {
-    const ::osl::MutexGuard aLock( GetMutex() );
+    const ::osl::MutexGuard aLock( m_aMutex );
 
     utl::MediaDescriptor aDescriptor(lDescriptor);
 
@@ -276,7 +276,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
 IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify, Timer *, void)
 {
     // SAFE {
-    ::osl::ClearableMutexGuard aLock( GetMutex() );
+    ::osl::ClearableMutexGuard aLock( m_aMutex );
 
     if (m_xPlayer.is() && m_xPlayer->isPlaying() && m_xPlayer->getMediaTime() < m_xPlayer->getDuration())
     {

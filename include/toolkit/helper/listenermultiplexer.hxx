@@ -42,10 +42,10 @@
 #include <com/sun/star/awt/tree/XTreeExpansionListener.hpp>
 #include <com/sun/star/awt/tree/XTreeEditListener.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/interfacecontainer3.hxx>
-#include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
 #include <com/sun/star/awt/tab/XTabPageContainerListener.hpp>
@@ -53,7 +53,7 @@
 //  class ListenerMultiplexerBase
 
 template <class ListenerT>
-class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) ListenerMultiplexerBase : public MutexHelper,
+class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) ListenerMultiplexerBase : public cppu::BaseMutex,
                                 public ::comphelper::OInterfaceContainerHelper3<ListenerT>,
                                 public css::uno::XInterface
 {
@@ -65,7 +65,7 @@ protected:
 
 public:
     ListenerMultiplexerBase( ::cppu::OWeakObject& rSource )
-        : ::comphelper::OInterfaceContainerHelper3<ListenerT>(GetMutex()), mrContext(rSource)
+        : ::comphelper::OInterfaceContainerHelper3<ListenerT>(m_aMutex), mrContext(rSource)
     {
     }
 
