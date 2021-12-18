@@ -306,8 +306,8 @@ namespace
         return false;
     }
 
-// Gets "YPos" for SwRegionContent, i.e. a number used to sort sections in Navigator's list
-sal_Int32 getYPosForSection(const SwNodeIndex& rNodeIndex)
+// Gets "YPos" for SwRegionContent or SwOutlineContent, i.e. a number used to sort sections in Navigator's list
+sal_Int32 getYPosForSectionOrOutline(const SwNodeIndex& rNodeIndex)
 {
     SwNodeOffset nIndex = rNodeIndex.GetIndex();
     if (rNodeIndex.GetNodes().GetEndOfExtras().GetIndex() >= nIndex)
@@ -319,7 +319,7 @@ sal_Int32 getYPosForSection(const SwNodeIndex& rNodeIndex)
             // Get node index of anchor
             if (auto pSwPosition = pFlyFormat->GetAnchor().GetContentAnchor())
             {
-                return getYPosForSection(pSwPosition->nNode);
+                return getYPosForSectionOrOutline(pSwPosition->nNode);
             }
         }
     }
@@ -473,7 +473,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                     }
 
                     std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, rSectionName,
-                            nLevel, getYPosForSection(*pNodeIndex)));
+                            nLevel, getYPosForSectionOrOutline(*pNodeIndex)));
 
                     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, nullptr );
                     if( !pFormat->GetInfo( aAskItem ) &&
@@ -652,12 +652,14 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         --m_nMemberCount;
                         continue; // don't hide it, just skip it
                     }
+                    tools::Long nYPos = getYPosForSectionOrOutline(
+                                *m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(i));
                     OUString aEntry(comphelper::string::stripStart(
                         m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
                                             i, m_pWrtShell->GetLayout(), true, false, false), ' '));
                     aEntry = SwNavigationPI::CleanEntry(aEntry);
-                    std::unique_ptr<SwOutlineContent> pCnt(new SwOutlineContent(this, aEntry, i, nLevel,
-                                                        m_pWrtShell->IsOutlineMovable( i ), nPos ));
+                    auto pCnt(make_unique<SwOutlineContent>(this, aEntry, i, nLevel,
+                                                        m_pWrtShell->IsOutlineMovable( i ), nYPos));
                     m_pMember->insert(std::move(pCnt));
                     // with the same number and existing "pOldMember" the
                     // old one is compared with the new OutlinePos.
@@ -927,7 +929,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     }
 
                     std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, sSectionName,
-                            nLevel, getYPosForSection(*pNodeIndex)));
+                            nLevel, getYPosForSectionOrOutline(*pNodeIndex)));
                     if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
