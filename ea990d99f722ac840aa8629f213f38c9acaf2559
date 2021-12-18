@@ -258,6 +258,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d606f251_41bc2bc0",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-18T02:11:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "778f85da_f6d73d80",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fff34bdf_b6bf2b29",

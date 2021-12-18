@@ -105,6 +105,24 @@
       "parentUuid": "497c2973_ce196f38",
       "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aef26026_40ac4788",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-18T02:11:25Z",
+      "side": 1,
+      "message": "Turned out the real missing prerequisite was\n\n\u003e | $(call gb_ExternalExecutable_get_dependencies,xsltproc)",
+      "parentUuid": "abdda8b2_e2bf2ed2",
+      "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
