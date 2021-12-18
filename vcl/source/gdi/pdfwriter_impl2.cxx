@@ -60,8 +60,9 @@ void PDFWriterImpl::implWriteGradient( const tools::PolyPolygon& i_rPolyPoly, co
                                        VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
 {
     GDIMetaFile        aTmpMtf;
+    Gradient aGradient(i_rGradient);
 
-    i_pDummyVDev->AddGradientActions( i_rPolyPoly.GetBoundRect(), i_rGradient, aTmpMtf );
+    aGradient.AddGradientActions( i_rPolyPoly.GetBoundRect(), aTmpMtf );
 
     m_rOuterFace.Push();
     m_rOuterFace.IntersectClipRegion( i_rPolyPoly.getB2DPolyPolygon() );

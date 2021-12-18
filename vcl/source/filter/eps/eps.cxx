@@ -1515,7 +1515,8 @@ void PSWriter::ImplWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gra
     ScopedVclPtrInstance< VirtualDevice > l_pVDev;
     GDIMetaFile     aTmpMtf;
     l_pVDev->SetMapMode( rVDev.GetMapMode() );
-    l_pVDev->AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
+    Gradient aGradient(rGradient);
+    aGradient.AddGradientActions( rPolyPoly.GetBoundRect(), aTmpMtf );
     ImplWriteActions( aTmpMtf, rVDev );
 }
 
