@@ -1805,12 +1805,9 @@
 #define RID_SVXSTR_TABLE_PRESET_OUTERHORI           NC_("RID_SVXSTR_TABLE_PRESET_OUTERHORI", "Outer Border and Horizontal Lines")
 #define RID_SVXSTR_TABLE_PRESET_OUTERALL            NC_("RID_SVXSTR_TABLE_PRESET_OUTERALL", "Outer Border and All Inner Lines")
 #define RID_SVXSTR_TABLE_PRESET_OUTERVERI           NC_("RID_SVXSTR_TABLE_PRESET_OUTERVERI", "Outer Border and Vertical Lines")
-#define RID_SVXSTR_TABLE_PRESET_OUTERINNER          NC_("RID_SVXSTR_TABLE_PRESET_OUTERINNER", "Outer Border Without Changing Inner Lines")
-#define RID_SVXSTR_PARA_PRESET_DIAGONAL             NC_("RID_SVXSTR_PARA_PRESET_DIAGONAL", "Diagonal Lines Only")
 #define RID_SVXSTR_PARA_PRESET_DIAGONALDOWN         NC_("RID_SVXSTR_PARA_PRESET_DIAGONALDOWN", "Diagonal Down Border")
 #define RID_SVXSTR_PARA_PRESET_DIAGONALUP           NC_("RID_SVXSTR_PARA_PRESET_DIAGONALUP", "Diagonal Up Border")
 #define RID_SVXSTR_PARA_PRESET_CRISSCROSS           NC_("RID_SVXSTR_PARA_PRESET_CRISSCROSS", "Criss-Cross Border")
-#define RID_SVXSTR_PARA_PRESET_ALL                  NC_("RID_SVXSTR_PARA_PRESET_ALL", "All Four Borders")
 #define RID_SVXSTR_PARA_PRESET_LEFTRIGHT            NC_("RID_SVXSTR_PARA_PRESET_LEFTRIGHT", "Left and Right Borders Only")
 #define RID_SVXSTR_PARA_PRESET_TOPBOTTOM            NC_("RID_SVXSTR_PARA_PRESET_TOPBOTTOM", "Top and Bottom Borders Only")
 #define RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI        NC_("RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI", "Top and Bottom Borders, and All Horizontal Lines")
@@ -1818,8 +1815,6 @@
 #define RID_SVXSTR_PARA_PRESET_ONLYRIGHT            NC_("RID_SVXSTR_PARA_PRESET_ONLYRIGHT", "Right Border Only")
 #define RID_SVXSTR_PARA_PRESET_ONLYTOP              NC_("RID_SVXSTR_PARA_PRESET_ONLYTOP", "Top Border Only")
 #define RID_SVXSTR_PARA_PRESET_ONLYTBOTTOM          NC_("RID_SVXSTR_PARA_PRESET_ONLYTBOTTOM", "Bottom Border Only")
-#define RID_SVXSTR_HOR_PRESET_ONLYHOR               NC_("RID_SVXSTR_HOR_PRESET_ONLYHOR", "Top and Bottom Borders, and All Inner Lines")
-#define RID_SVXSTR_VER_PRESET_ONLYVER               NC_("RID_SVXSTR_VER_PRESET_ONLYVER", "Left and Right Borders, and All Inner Lines")
 
 /*--------------------------------------------------------------------
     Description: GraphicSizeCheck strings
