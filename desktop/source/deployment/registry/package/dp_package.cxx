@@ -1249,7 +1249,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
         }
         OSL_ASSERT( lower_end == upper_end );
 
-        const ::osl::MutexGuard guard( getMutex() );
+        const ::osl::MutexGuard guard( m_aMutex );
         pBundle = m_pBundle;
         if (pBundle == nullptr) {
             m_bundle = ret;

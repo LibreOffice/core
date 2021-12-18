@@ -668,7 +668,7 @@ void PackageManagerImpl::insertToActivationLayerDB(
     OUString const & id, ActivePackages::Data const & dbData )
 {
     //access to the database must be guarded. See removePackage
-    const ::osl::MutexGuard guard( getMutex() );
+    const ::osl::MutexGuard guard( m_aMutex );
     m_activePackagesDB->put( id, dbData );
 }
 
@@ -871,7 +871,7 @@ void PackageManagerImpl::removePackage(
     try {
         Reference<deployment::XPackage> xPackage;
         {
-            const ::osl::MutexGuard guard(getMutex());
+            const ::osl::MutexGuard guard(m_aMutex);
             //Check if this extension exist and throw an IllegalArgumentException
             //if it does not
             //If the files of the extension are already removed, or there is a
@@ -1051,7 +1051,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
         xCmdEnv.set( xCmdEnv_ );
 
     try {
-        const ::osl::MutexGuard guard( getMutex() );
+        const ::osl::MutexGuard guard( m_aMutex );
         return getDeployedPackage_( id, fileName, xCmdEnv );
     }
     catch (const RuntimeException &) {
@@ -1089,7 +1089,7 @@ PackageManagerImpl::getDeployedPackages(
         xCmdEnv.set( xCmdEnv_ );
 
     try {
-        const ::osl::MutexGuard guard( getMutex() );
+        const ::osl::MutexGuard guard( m_aMutex );
         return getDeployedPackages_( xCmdEnv );
     }
     catch (const RuntimeException &) {
@@ -1428,7 +1428,7 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
 
     try
     {
-        const ::osl::MutexGuard guard( getMutex() );
+        const ::osl::MutexGuard guard( m_aMutex );
         // clean up activation layer, scan for zombie temp dirs:
         ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 

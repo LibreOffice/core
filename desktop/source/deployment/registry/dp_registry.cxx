@@ -29,6 +29,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/sequence.hxx>
 #include <ucbhelper/content.hxx>
@@ -62,7 +63,7 @@ typedef ::cppu::WeakComponentImplHelper<
     deployment::XPackageRegistry, util::XUpdatable > t_helper;
 
 
-class PackageRegistryImpl : private MutexHolder, public t_helper
+class PackageRegistryImpl : private cppu::BaseMutex, public t_helper
 {
     struct ci_string_hash {
         std::size_t operator () ( OUString const & str ) const {
@@ -97,7 +98,7 @@ protected:
     virtual void SAL_CALL disposing() override;
 
     virtual ~PackageRegistryImpl() override;
-    PackageRegistryImpl() : t_helper( getMutex() ) {}
+    PackageRegistryImpl() : t_helper( m_aMutex ) {}
 
 
 public:
@@ -122,7 +123,7 @@ public:
 
 void PackageRegistryImpl::check()
 {
-    ::osl::MutexGuard guard( getMutex() );
+    ::osl::MutexGuard guard( m_aMutex );
     if (rBHelper.bInDispose || rBHelper.bDisposed) {
         throw lang::DisposedException(
             "PackageRegistry instance has already been disposed!",

@@ -367,7 +367,7 @@ void BackendImpl::configmgrini_verify_init(
 {
     if (transientMode())
         return;
-    const ::osl::MutexGuard guard( getMutex() );
+    const ::osl::MutexGuard guard( m_aMutex );
     if ( m_configmgrini_inited)
         return;
 
@@ -478,7 +478,7 @@ void BackendImpl::addToConfigmgrIni( bool isSchema, bool isURL, OUString const &
                               Reference<XCommandEnvironment> const & xCmdEnv )
 {
     const OUString rcterm( isURL ? dp_misc::makeRcTerm(url_) : url_ );
-    const ::osl::MutexGuard guard( getMutex() );
+    const ::osl::MutexGuard guard( m_aMutex );
     configmgrini_verify_init( xCmdEnv );
     std::deque<OUString> & rSet = getFiles(isSchema);
     if (std::find( rSet.begin(), rSet.end(), rcterm ) == rSet.end()) {
@@ -495,7 +495,7 @@ bool BackendImpl::removeFromConfigmgrIni(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
-    const ::osl::MutexGuard guard( getMutex() );
+    const ::osl::MutexGuard guard( m_aMutex );
     configmgrini_verify_init( xCmdEnv );
     std::deque<OUString> & rSet = getFiles(isSchema);
     auto i(std::find(rSet.begin(), rSet.end(), rcterm));
