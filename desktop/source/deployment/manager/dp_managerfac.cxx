@@ -36,7 +36,7 @@ typedef ::cppu::WeakComponentImplHelper<
 
 namespace {
 
-class PackageManagerFactoryImpl : private MutexHolder, public t_pmfac_helper
+class PackageManagerFactoryImpl : private cppu::BaseMutex, public t_pmfac_helper
 {
     Reference<XComponentContext> m_xComponentContext;
 
@@ -71,7 +71,7 @@ public:
 
 PackageManagerFactoryImpl::PackageManagerFactoryImpl(
     Reference<XComponentContext> const & xComponentContext )
-    : t_pmfac_helper( getMutex() ),
+    : t_pmfac_helper( m_aMutex ),
       m_xComponentContext( xComponentContext )
 {
 }
@@ -95,7 +95,7 @@ css::uno::Sequence< OUString > PackageManagerFactoryImpl::getSupportedServiceNam
 
 inline void PackageManagerFactoryImpl::check()
 {
-    ::osl::MutexGuard guard( getMutex() );
+    ::osl::MutexGuard guard( m_aMutex );
     if (rBHelper.bInDispose || rBHelper.bDisposed)
     {
         throw lang::DisposedException(
@@ -108,7 +108,7 @@ inline void PackageManagerFactoryImpl::check()
 void PackageManagerFactoryImpl::disposing()
 {
     // dispose all managers:
-    ::osl::MutexGuard guard( getMutex() );
+    ::osl::MutexGuard guard( m_aMutex );
     for (auto const& elem : m_managers)
         try_dispose( elem.second );
     m_managers = t_string2weakref();
@@ -126,7 +126,7 @@ Reference<deployment::XPackageManager>
 PackageManagerFactoryImpl::getPackageManager( OUString const & context )
 {
     Reference< deployment::XPackageManager > xRet;
-    ::osl::ResettableMutexGuard guard( getMutex() );
+    ::osl::ResettableMutexGuard guard( m_aMutex );
     check();
     t_string2weakref::const_iterator const iFind( m_managers.find( context ) );
     if (iFind != m_managers.end()) {

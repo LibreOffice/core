@@ -63,7 +63,7 @@ void PackageRegistryBackend::disposing( lang::EventObject const & event )
     Reference<deployment::XPackage> xPackage(
         event.Source, UNO_QUERY_THROW );
     OUString url( xPackage->getURL() );
-    ::osl::MutexGuard guard( getMutex() );
+    ::osl::MutexGuard guard( m_aMutex );
     if ( m_bound.erase( url ) != 1 )
     {
         SAL_WARN("desktop.deployment", "erase(" << url << ") != 1");
@@ -74,7 +74,7 @@ void PackageRegistryBackend::disposing( lang::EventObject const & event )
 PackageRegistryBackend::PackageRegistryBackend(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext )
-    : t_BackendBase( getMutex() ),
+    : t_BackendBase( m_aMutex ),
       m_xComponentContext( xContext ),
       m_eContext( Context::Unknown )
 {
@@ -102,7 +102,7 @@ PackageRegistryBackend::PackageRegistryBackend(
 
 void PackageRegistryBackend::check()
 {
-    ::osl::MutexGuard guard( getMutex() );
+    ::osl::MutexGuard guard( m_aMutex );
     if (rBHelper.bInDispose || rBHelper.bDisposed) {
         throw lang::DisposedException(
             "PackageRegistryBackend instance has already been disposed!",
@@ -137,7 +137,7 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     OUString const & url, OUString const & mediaType, sal_Bool  bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    ::osl::ResettableMutexGuard guard( getMutex() );
+    ::osl::ResettableMutexGuard guard( m_aMutex );
     check();
 
     t_string2ref::const_iterator const iFind( m_bound.find( url ) );
@@ -303,7 +303,7 @@ Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
                   Reference<deployment::XPackageTypeInfo> const & xPackageType,
                   bool bRemoved,
                   OUString const & identifier)
-    : t_PackageBase( getMutex() ),
+    : t_PackageBase( m_aMutex ),
       m_myBackend( myBackend ),
       m_url( url ),
       m_name( rName ),
@@ -335,7 +335,7 @@ void Package::disposing()
 
 void Package::check() const
 {
-    ::osl::MutexGuard guard( getMutex() );
+    ::osl::MutexGuard guard( m_aMutex );
     if (rBHelper.bInDispose || rBHelper.bDisposed) {
         throw lang::DisposedException(
             "Package instance has already been disposed!",
@@ -574,7 +574,7 @@ beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     try {
-        ::osl::ResettableMutexGuard guard( getMutex() );
+        ::osl::ResettableMutexGuard guard( m_aMutex );
         return isRegistered_( guard,
                               AbortChannel::get(xAbortChannel),
                               xCmdEnv );
@@ -611,7 +611,7 @@ void Package::processPackage_impl(
 
     try {
         try {
-            ::osl::ResettableMutexGuard guard( getMutex() );
+            ::osl::ResettableMutexGuard guard( m_aMutex );
             beans::Optional< beans::Ambiguous<sal_Bool> > option(
                 isRegistered_( guard, AbortChannel::get(xAbortChannel),
                                xCmdEnv ) );

@@ -22,6 +22,7 @@
 #include <strings.hrc>
 #include <dp_misc.h>
 #include <dp_shared.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/deployment/XExtensionManager.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
@@ -37,7 +38,7 @@ typedef std::unordered_map<
     OUString,
     std::vector<css::uno::Reference<css::deployment::XPackage> > > id2extensions;
 
-class ExtensionManager : private ::dp_misc::MutexHolder,
+class ExtensionManager : private cppu::BaseMutex,
         public ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager, css::lang::XServiceInfo >
 {
 public:
