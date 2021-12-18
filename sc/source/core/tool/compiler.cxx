@@ -4380,7 +4380,8 @@ bool ScCompiler::NextNewToken( bool bInArray )
          * handled by IsPredetectedReference(), this case here remains for
          * manual/API input. */
         OUString aBad( aFormula.copy( nSrcPos-1 ) );
-        eLastOp = pArr->AddBad( aBad )->GetOpCode();
+        const FormulaToken* pBadToken = pArr->AddBad(aBad);
+        eLastOp = pBadToken ? pBadToken->GetOpCode() : ocNone;
         return false;
     }
 
