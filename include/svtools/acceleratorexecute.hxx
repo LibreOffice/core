@@ -22,6 +22,7 @@
 #include <svtools/svtdllapi.h>
 
 #include <memory>
+#include <mutex>
 
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <vcl/keycod.hxx>
@@ -65,7 +66,7 @@ class SVT_DLLPUBLIC AcceleratorExecute final
 {
     // member
     private:
-        ::osl::Mutex m_aLock;
+        std::mutex m_aLock;
 
         /** TODO document me */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
