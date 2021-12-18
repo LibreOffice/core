@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer3.hxx>
@@ -36,15 +37,9 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-class SvxShapeCollectionMutex
-{
-public:
-    ::osl::Mutex maMutex;
-};
-
 class SvxShapeCollection :
-    public cppu::WeakAggImplHelper3<drawing::XShapes, lang::XServiceInfo, lang::XComponent>,
-    public SvxShapeCollectionMutex
+    public cppu::BaseMutex,
+    public cppu::WeakAggImplHelper3<drawing::XShapes, lang::XServiceInfo, lang::XComponent>
 {
 private:
     comphelper::OInterfaceContainerHelper3<drawing::XShape> maShapeContainer;
@@ -81,7 +76,7 @@ public:
 };
 
 SvxShapeCollection::SvxShapeCollection() noexcept
-: maShapeContainer( maMutex ), mrBHelper( maMutex )
+: maShapeContainer( m_aMutex ), mrBHelper( m_aMutex )
 {
 }
 

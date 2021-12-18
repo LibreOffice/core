@@ -44,6 +44,7 @@
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -56,13 +57,6 @@ class FmXGridCell;
 namespace dbtools {
     class FormattedColumnValue;
 }
-
-class FmMutexHelper
-{
-protected:
-    ::osl::Mutex    m_aMutex;
-};
-
 
 // DbGridColumn, column description
 
@@ -191,7 +185,7 @@ private:
 // Is usually only required for complex controls such as combo boxes.
 
 class DbCellControl
-        :public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
+        :public cppu::BaseMutex           // _before_ the listener, so the listener is to be destroyed first!
         ,public ::comphelper::OPropertyChangeListener
 {
 private:
