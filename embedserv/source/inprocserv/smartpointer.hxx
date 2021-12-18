@@ -22,8 +22,6 @@
 
 namespace inprocserv{
 
-void WriteDebugInfo( DWORD pThis, char* pString, DWORD nToWrite );
-
 template< class T > class ComSmart
 {
     T* m_pInterface;
