@@ -25,13 +25,15 @@
 #include <osl/time.h>
 
 #include <helper/wakeupthread.hxx>
+#include <chrono>
+
+using namespace std::chrono_literals;
 
 void framework::WakeUpThread::execute() {
     for (;;) {
-        TimeValue t{0, 25000000}; // 25 msec
-        condition_.wait(&t);
         {
-            osl::MutexGuard g(mutex_);
+            std::unique_lock g(mutex_);
+            condition_.wait_for(g, 25ms, [this] { return terminate_; });
             if (terminate_) {
                 break;
             }
@@ -50,10 +52,10 @@ framework::WakeUpThread::WakeUpThread(
 
 void framework::WakeUpThread::stop() {
     {
-        osl::MutexGuard g(mutex_);
+        std::unique_lock g(mutex_);
         terminate_ = true;
     }
-    condition_.set();
+    condition_.notify_one();
     join();
 }
 
