@@ -1034,11 +1034,6 @@ void FmXGridPeer::columnChanged()
 
 FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
             :m_xContext(_rxContext)
-            ,m_aModifyListeners(m_aMutex)
-            ,m_aUpdateListeners(m_aMutex)
-            ,m_aContainerListeners(m_aMutex)
-            ,m_aSelectionListeners(m_aMutex)
-            ,m_aGridControlListeners(m_aMutex)
             ,m_aMode("DataMode")
             ,m_nCursorListening(0)
             ,m_bInterceptingDispatch(false)
@@ -1125,12 +1120,14 @@ void FmXGridPeer::disposing(const EventObject& e)
 
 void FmXGridPeer::addModifyListener(const Reference< css::util::XModifyListener >& l)
 {
+    std::unique_lock aGuard(m_aMutex);
     m_aModifyListeners.addInterface( l );
 }
 
 
 void FmXGridPeer::removeModifyListener(const Reference< css::util::XModifyListener >& l)
 {
+    std::unique_lock aGuard(m_aMutex);
     m_aModifyListeners.removeInterface( l );
 }
 
@@ -1434,12 +1431,14 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt)
 
 void FmXGridPeer::addUpdateListener(const Reference< XUpdateListener >& l)
 {
+    std::unique_lock aGuard(m_aMutex);
     m_aUpdateListeners.addInterface(l);
 }
 
 
 void FmXGridPeer::removeUpdateListener(const Reference< XUpdateListener >& l)
 {
+    std::unique_lock aGuard(m_aMutex);
     m_aUpdateListeners.removeInterface(l);
 }
 
@@ -1451,11 +1450,14 @@ sal_Bool FmXGridPeer::commit()
         return true;
 
     EventObject aEvt(static_cast< ::cppu::OWeakObject* >(this));
-    ::comphelper::OInterfaceIteratorHelper3 aIter(m_aUpdateListeners);
     bool bCancel = false;
-    while (aIter.hasMoreElements() && !bCancel)
-        if ( !aIter.next()->approveUpdate( aEvt ) )
-            bCancel = true;
+    {
+        std::unique_lock aGuard(m_aMutex);
+        ::comphelper::OInterfaceIteratorHelper4 aIter(m_aUpdateListeners);
+        while (aIter.hasMoreElements() && !bCancel)
+            if ( !aIter.next()->approveUpdate( aEvt ) )
+                bCancel = true;
+    }
 
     if (!bCancel)
         bCancel = !pGrid->commit();
@@ -2039,9 +2041,18 @@ void FmXGridPeer::dispose()
 {
     EventObject aEvt;
     aEvt.Source = static_cast< ::cppu::OWeakObject* >(this);
-    m_aModifyListeners.disposeAndClear(aEvt);
-    m_aUpdateListeners.disposeAndClear(aEvt);
-    m_aContainerListeners.disposeAndClear(aEvt);
+    {
+        std::unique_lock aGuard(m_aMutex);
+        m_aModifyListeners.disposeAndClear(aGuard, aEvt);
+    }
+    {
+        std::unique_lock aGuard(m_aMutex);
+        m_aUpdateListeners.disposeAndClear(aGuard, aEvt);
+    }
+    {
+        std::unique_lock aGuard(m_aMutex);
+        m_aContainerListeners.disposeAndClear(aGuard, aEvt);
+    }
 
     // release all interceptors
     Reference< XDispatchProviderInterceptor > xInterceptor( m_xFirstDispatchInterceptor );
@@ -2096,11 +2107,13 @@ void FmXGridPeer::dispose()
 
 void FmXGridPeer::addContainerListener(const Reference< XContainerListener >& l)
 {
+    std::unique_lock aGuard(m_aMutex);
     m_aContainerListeners.addInterface( l );
 }
 
 void FmXGridPeer::removeContainerListener(const Reference< XContainerListener >& l)
 {
+    std::unique_lock aGuard(m_aMutex);
     m_aContainerListeners.removeInterface( l );
 }
 
@@ -2203,12 +2216,14 @@ void FmXGridPeer::setRowSet(const Reference< XRowSet >& _rDatabaseCursor)
 
 void SAL_CALL FmXGridPeer::addGridControlListener( const Reference< XGridControlListener >& _listener )
 {
+    std::unique_lock aGuard(m_aMutex);
     m_aGridControlListeners.addInterface( _listener );
 }
 
 
 void SAL_CALL FmXGridPeer::removeGridControlListener( const Reference< XGridControlListener >& _listener )
 {
+    std::unique_lock aGuard(m_aMutex);
     m_aGridControlListeners.removeInterface( _listener );
 }
 
@@ -2587,12 +2602,14 @@ Any SAL_CALL FmXGridPeer::getSelection(  )
 
 void SAL_CALL FmXGridPeer::addSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener )
 {
+    std::unique_lock aGuard(m_aMutex);
     m_aSelectionListeners.addInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridPeer::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener )
 {
+    std::unique_lock aGuard(m_aMutex);
     m_aSelectionListeners.removeInterface( _rxListener );
 }
 
