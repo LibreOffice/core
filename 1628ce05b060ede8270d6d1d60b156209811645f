@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "beb8a36d_9bb36201",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-12-18T13:06:58Z",
+      "side": 1,
+      "message": "Hi Tomaz, turns out we were adding too many actions into the SVM!",
+      "revId": "1628ce05b060ede8270d6d1d60b156209811645f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
