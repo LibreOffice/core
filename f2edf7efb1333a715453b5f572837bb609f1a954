@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7668d005_75949aa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-12-18T13:08:51Z",
+      "side": 1,
+      "message": "Tomaz, this is the third in a series of patches. Ultimately, decomposing a gradient to individual metaactions is not something that needs to be handled by OutputDevice - it can be done via Gradient.",
+      "revId": "f2edf7efb1333a715453b5f572837bb609f1a954",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
