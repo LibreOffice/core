@@ -54,11 +54,12 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
-#include <comphelper/multicontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <memory>
+#include <mutex>
 #include <string_view>
 
 using namespace css;
@@ -212,8 +213,9 @@ private:
     OUString                                                  m_aModuleIdentifier;
     css::uno::Reference< css::embed::XTransactedObject >      m_xUserRootCommit;
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
-    osl::Mutex                                                m_mutex;
-    comphelper::OMultiTypeInterfaceContainerHelper2           m_aListenerContainer;   /// container for ALL Listener
+    std::mutex                                                m_mutex;
+    comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListeners;
+    comphelper::OInterfaceContainerHelper4<css::ui::XUIConfigurationListener> m_aConfigListeners;
     rtl::Reference< ImageManager >                            m_xModuleImageManager;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
 };
@@ -829,7 +831,6 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     , m_aXMLPostfix( ".xml" )
     , m_aPropUIName( "UIName" )
     , m_xContext( xContext )
-    , m_aListenerContainer( m_mutex )
 {
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!
@@ -897,7 +898,14 @@ void SAL_CALL ModuleUIConfigurationManager::dispose()
     Reference< XComponent > xThis(this);
 
     css::lang::EventObject aEvent( xThis );
-    m_aListenerContainer.disposeAndClear( aEvent );
+    {
+        std::unique_lock aGuard(m_mutex);
+        m_aEventListeners.disposeAndClear( aGuard, aEvent );
+    }
+    {
+        std::unique_lock aGuard(m_mutex);
+        m_aConfigListeners.disposeAndClear( aGuard, aEvent );
+    }
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aGuard;
@@ -934,13 +942,15 @@ void SAL_CALL ModuleUIConfigurationManager::addEventListener( const Reference< X
             throw DisposedException();
     }
 
-    m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
+    std::unique_lock aGuard(m_mutex);
+    m_aEventListeners.addInterface( xListener );
 }
 
 void SAL_CALL ModuleUIConfigurationManager::removeEventListener( const Reference< XEventListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), xListener );
+    std::unique_lock aGuard(m_mutex);
+    m_aEventListeners.removeInterface( xListener );
 }
 
 // XUIConfiguration
@@ -954,13 +964,15 @@ void SAL_CALL ModuleUIConfigurationManager::addConfigurationListener( const Refe
             throw DisposedException();
     }
 
-    m_aListenerContainer.addInterface( cppu::UnoType<ui::XUIConfigurationListener>::get(), xListener );
+    std::unique_lock aGuard(m_mutex);
+    m_aConfigListeners.addInterface( xListener );
 }
 
 void SAL_CALL ModuleUIConfigurationManager::removeConfigurationListener( const Reference< css::ui::XUIConfigurationListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( cppu::UnoType<ui::XUIConfigurationListener>::get(), xListener );
+    std::unique_lock aGuard(m_mutex);
+    m_aConfigListeners.removeInterface( xListener );
 }
 
 // XUIConfigurationManager
@@ -1610,11 +1622,8 @@ sal_Bool SAL_CALL ModuleUIConfigurationManager::isReadOnly()
 
 void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::ConfigurationEvent& aEvent, NotifyOp eOp )
 {
-    comphelper::OInterfaceContainerHelper2* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::ui::XUIConfigurationListener>::get());
-    if ( pContainer == nullptr )
-        return;
-
-    comphelper::OInterfaceIteratorHelper2 pIterator( *pContainer );
+    std::unique_lock aGuard(m_mutex);
+    comphelper::OInterfaceIteratorHelper4 pIterator( m_aConfigListeners );
     while ( pIterator.hasMoreElements() )
     {
         try
@@ -1622,13 +1631,13 @@ void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::Con
             switch ( eOp )
             {
                 case NotifyOp_Replace:
-                    static_cast< css::ui::XUIConfigurationListener*>(pIterator.next())->elementReplaced( aEvent );
+                    pIterator.next()->elementReplaced( aEvent );
                     break;
                 case NotifyOp_Insert:
-                    static_cast< css::ui::XUIConfigurationListener*>(pIterator.next())->elementInserted( aEvent );
+                    pIterator.next()->elementInserted( aEvent );
                     break;
                 case NotifyOp_Remove:
-                    static_cast< css::ui::XUIConfigurationListener*>(pIterator.next())->elementRemoved( aEvent );
+                    pIterator.next()->elementRemoved( aEvent );
                     break;
             }
         }
