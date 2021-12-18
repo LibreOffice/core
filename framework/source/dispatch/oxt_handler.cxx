@@ -91,7 +91,7 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
                                                      const css::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
                                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     css::uno::Sequence< css::uno::Any > lParams{ css::uno::Any(aURL.Main) };
 
