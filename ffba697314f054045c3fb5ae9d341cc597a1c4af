@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a85ba431_db9e2d3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-12-18T13:07:46Z",
+      "side": 1,
+      "message": "I\u0027ve made some further changes so that we can shift adding gradient actions into the Gradient class itself - we don\u0027t need this to be processed via OutputDevice. ",
+      "revId": "ffba697314f054045c3fb5ae9d341cc597a1c4af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
