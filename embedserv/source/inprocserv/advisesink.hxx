@@ -29,7 +29,7 @@
 #endif
 #include <windows.h>
 #include <objidl.h>
-#include "smartpointer.hxx"
+#include <systools/win32/comtools.hxx>
 
 namespace inprocserv
 {
@@ -38,7 +38,7 @@ class OleWrapperAdviseSink : public IAdviseSink
 protected:
     ULONG m_nRefCount;
 
-    ComSmart<IAdviseSink> m_pListener;
+    sal::systools::COMReference<IAdviseSink> m_pListener;
     DWORD m_nListenerID;
 
     std::unique_ptr<FORMATETC> m_pFormatEtc;
@@ -57,14 +57,15 @@ public:
     OleWrapperAdviseSink();
 
     // an AdviseSink for IOleObject interface
-    explicit OleWrapperAdviseSink(const ComSmart<IAdviseSink>& pListener);
+    explicit OleWrapperAdviseSink(const sal::systools::COMReference<IAdviseSink>& pListener);
 
     // an AdviseSink for IDataObject interface
-    OleWrapperAdviseSink(const ComSmart<IAdviseSink>& pListener, FORMATETC* pFormatEtc,
-                         DWORD nDataRegFlag);
+    OleWrapperAdviseSink(const sal::systools::COMReference<IAdviseSink>& pListener,
+                         FORMATETC* pFormatEtc, DWORD nDataRegFlag);
 
     // an AdviseSink for IViewObject interface
-    OleWrapperAdviseSink(const ComSmart<IAdviseSink>& pListener, DWORD nAspect, DWORD nViewRegFlag);
+    OleWrapperAdviseSink(const sal::systools::COMReference<IAdviseSink>& pListener, DWORD nAspect,
+                         DWORD nViewRegFlag);
 
     virtual ~OleWrapperAdviseSink();
 
@@ -77,7 +78,7 @@ public:
 
     FORMATETC* GetFormatEtc() { return m_pFormatEtc.get(); }
     DWORD GetAspect() { return m_nAspect; }
-    ComSmart<IAdviseSink>& GetOrigAdvise() { return m_pListener; }
+    sal::systools::COMReference<IAdviseSink>& GetOrigAdvise() { return m_pListener; }
     void DisconnectOrigAdvise() { m_pListener = nullptr; }
 
     void SetClosed() { m_bClosed = TRUE; }

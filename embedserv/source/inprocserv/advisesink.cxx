@@ -36,7 +36,7 @@ OleWrapperAdviseSink::OleWrapperAdviseSink()
 {
 }
 
-OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pListener )
+OleWrapperAdviseSink::OleWrapperAdviseSink( const sal::systools::COMReference< IAdviseSink >& pListener )
 : m_nRefCount( 0 )
 , m_pListener( pListener )
 , m_nAspect( DVASPECT_CONTENT )
@@ -49,7 +49,7 @@ OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pList
 {
 }
 
-OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pListener, FORMATETC* pFormatEtc, DWORD nDataRegFlag )
+OleWrapperAdviseSink::OleWrapperAdviseSink( const sal::systools::COMReference< IAdviseSink >& pListener, FORMATETC* pFormatEtc, DWORD nDataRegFlag )
 : m_nRefCount( 0 )
 , m_pListener( pListener )
 , m_nAspect( DVASPECT_CONTENT )
@@ -71,7 +71,7 @@ OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pList
     }
 }
 
-OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pListener, DWORD nAspect, DWORD nViewRegFlag )
+OleWrapperAdviseSink::OleWrapperAdviseSink( const sal::systools::COMReference< IAdviseSink >& pListener, DWORD nAspect, DWORD nViewRegFlag )
 : m_nRefCount( 0 )
 , m_pListener( pListener )
 , m_nAspect( nAspect )

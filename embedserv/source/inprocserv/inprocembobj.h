@@ -26,7 +26,7 @@
 #include <windows.h>
 #include <oleidl.h>
 
-#include "smartpointer.hxx"
+#include <systools/win32/comtools.hxx>
 #include "advisesink.hxx"
 
 #define DEFAULT_ARRAY_LEN 256
@@ -69,24 +69,24 @@ class InprocEmbedDocument_Impl : public InprocCountedObject_Impl
 
     GUID  m_guid;
 
-    ComSmart< IUnknown > m_pDefHandler;
+    sal::systools::COMReference< IUnknown > m_pDefHandler;
     InitModes m_nInitMode;
 
     DWORD m_nFileOpenMode;
     wchar_t* m_pFileName;
 
-    ComSmart< IStorage > m_pStorage;
+    sal::systools::COMReference< IStorage > m_pStorage;
 
-    ComSmart< IOleClientSite > m_pClientSite;
-    ComSmart< IOleContainer >  m_pOleContainer;
+    sal::systools::COMReference< IOleClientSite > m_pClientSite;
+    sal::systools::COMReference< IOleContainer >  m_pOleContainer;
 
     ULONG m_nCallsOnStack;
 
     // the listeners have wrappers that are directly connected to the object and call the listeners,
     // the wrappers will be reconnected correctly to the new default inprocess holder object
-    ComSmart< OleWrapperAdviseSink > m_pOleAdvises[DEFAULT_ARRAY_LEN];
-    ComSmart< OleWrapperAdviseSink > m_pDataAdvises[DEFAULT_ARRAY_LEN];
-    ComSmart< OleWrapperAdviseSink > m_pViewAdvise;
+    sal::systools::COMReference< OleWrapperAdviseSink > m_pOleAdvises[DEFAULT_ARRAY_LEN];
+    sal::systools::COMReference< OleWrapperAdviseSink > m_pDataAdvises[DEFAULT_ARRAY_LEN];
+    sal::systools::COMReference< OleWrapperAdviseSink > m_pViewAdvise;
 
     class InternalCacheWrapper final: public IOleCache2
     {
@@ -134,7 +134,7 @@ public:
     {}
 
     BOOL CheckDefHandler();
-    ComSmart< IUnknown >& GetDefHandler() { return m_pDefHandler; }
+    sal::systools::COMReference< IUnknown >& GetDefHandler() { return m_pDefHandler; }
 
     /* IUnknown methods */
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObj) override;
