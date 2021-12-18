@@ -488,7 +488,7 @@ public:
 
     oslGenericFunction getFunctionSymbolByName(
             const OUString& localeName, const char* pFunction,
-            std::unique_ptr<LocaleDataLookupTableItem>* pOutCachedItem );
+            std::unique_ptr<LocaleDataLookupTableItem>& rOutCachedItem );
 
 private:
     ::osl::Mutex maMutex;
@@ -519,7 +519,7 @@ lcl_LookupTableHelper::~lcl_LookupTableHelper()
 
 oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
         const OUString& localeName, const char* pFunction,
-        std::unique_ptr<LocaleDataLookupTableItem>* pOutCachedItem )
+        std::unique_ptr<LocaleDataLookupTableItem>& rOutCachedItem )
 {
     OUString aFallback;
     bool bFallback = (localeName.indexOf( cUnder) < 0);
@@ -546,18 +546,12 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
                 {
                     if (rCurrent.dllName == i.pLib)
                     {
-                        OSL_ASSERT( pOutCachedItem );
-                        if( pOutCachedItem )
-                        {
-                            (*pOutCachedItem).reset(new LocaleDataLookupTableItem( rCurrent ));
-                            (*pOutCachedItem)->localeName = i.pLocale;
-                            OString sSymbolName = OString::Concat(pFunction) + "_" +
-                                    (*pOutCachedItem)->localeName;
-                            return (*pOutCachedItem)->module->getFunctionSymbol(
-                                    sSymbolName.getStr());
-                        }
-                        else
-                            return nullptr;
+                        rOutCachedItem.reset(new LocaleDataLookupTableItem( rCurrent ));
+                        rOutCachedItem->localeName = i.pLocale;
+                        OString sSymbolName = OString::Concat(pFunction) + "_" +
+                                rOutCachedItem->localeName;
+                        return rOutCachedItem->module->getFunctionSymbol(
+                                sSymbolName.getStr());
                     }
                 }
             }
@@ -575,20 +569,14 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
                 ::osl::MutexGuard aGuard( maMutex );
                 auto pTmpModule = module.get();
                 maLookupTable.emplace_back(i.pLib, module.release(), i.pLocale);
-                OSL_ASSERT( pOutCachedItem );
-                if( pOutCachedItem )
-                {
-                    pOutCachedItem->reset(new LocaleDataLookupTableItem( maLookupTable.back() ));
-                    OString sSymbolName = OString::Concat(pFunction) + "_" + (*pOutCachedItem)->localeName;
-                    return pTmpModule->getFunctionSymbol(sSymbolName.getStr());
-                }
-                else
-                    return nullptr;
+                rOutCachedItem.reset(new LocaleDataLookupTableItem( maLookupTable.back() ));
+                OString sSymbolName = OString::Concat(pFunction) + "_" + rOutCachedItem->localeName;
+                return pTmpModule->getFunctionSymbol(sSymbolName.getStr());
             }
             else
                 module.reset();
 #else
-            (void) pOutCachedItem;
+            (void) rOutCachedItem;
 
             if( strcmp(pFunction, "getAllCalendars") == 0 )
                 return i.getAllCalendars;
@@ -1452,13 +1440,13 @@ oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, con
     // Load function with name <func>_<lang>_<country> or <func>_<bcp47> and
     // fallbacks.
     pSymbol = rLookupTable.getFunctionSymbolByName( LocaleDataImpl::getFirstLocaleServiceName( rLocale),
-            pFunction, &pCachedItem);
+            pFunction, pCachedItem);
     if (!pSymbol)
     {
         ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
         for (const auto& rFallback : aFallbacks)
         {
-            pSymbol = rLookupTable.getFunctionSymbolByName(rFallback, pFunction, &pCachedItem);
+            pSymbol = rLookupTable.getFunctionSymbolByName(rFallback, pFunction, pCachedItem);
             if (pSymbol)
                 break;
         }
@@ -1466,7 +1454,7 @@ oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, con
     if (!pSymbol)
     {
         // load default function with name <func>_en_US
-        pSymbol = rLookupTable.getFunctionSymbolByName("en_US", pFunction, &pCachedItem);
+        pSymbol = rLookupTable.getFunctionSymbolByName("en_US", pFunction, pCachedItem);
     }
 
     if (!pSymbol)
@@ -1494,7 +1482,7 @@ LocaleDataImpl::getAllInstalledLocaleNames()
         // Check if the locale is really available and not just in the table,
         // don't allow fall backs.
         std::unique_ptr<LocaleDataLookupTableItem> pCachedItem;
-        if (lcl_LookupTableStatic().getFunctionSymbolByName( name, "getLocaleItem", &pCachedItem )) {
+        if (lcl_LookupTableStatic().getFunctionSymbolByName( name, "getLocaleItem", pCachedItem )) {
             if( pCachedItem )
                 cachedItem = std::move( pCachedItem );
             seqRange[nInstalled++] = LanguageTag::convertToLocale( name.replace( cUnder, cHyphen), false);
