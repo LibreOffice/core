@@ -19,11 +19,10 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
-
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
 #include <vcl/vclptr.hxx>
@@ -60,7 +59,7 @@ typedef ::cppu::WeakComponentImplHelper <
     For some views in some panes this class also acts as a cache.
 */
 class BasicViewFactory
-    : private sd::MutexOwner,
+    : private cppu::BaseMutex,
       public BasicViewFactoryInterfaceBase
 {
 public:

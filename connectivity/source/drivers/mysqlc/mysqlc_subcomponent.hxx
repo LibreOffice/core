@@ -106,12 +106,6 @@ template <class TYPE>::cppu::IPropertyArrayHelper* OPropertyArrayUsageHelper<TYP
     return s_pProps;
 }
 
-class OBase_Mutex
-{
-public:
-    ::osl::Mutex m_aMutex;
-};
-
 namespace internal
 {
 template <class T> void implCopySequence(const T* _pSource, T*& _pDest, sal_Int32 _nSourceLen)

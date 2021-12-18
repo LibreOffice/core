@@ -26,6 +26,7 @@
 #include <com/sun/star/mail/XMailMessage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <vcl/customweld.hxx>
@@ -168,14 +169,8 @@ public:
     virtual css::uno::Any SAL_CALL getValueByName(const OUString& Name) override;
 };
 
-class SwMutexBase
-{
-public:
-    osl::Mutex m_aMutex;
-};
-
 class SW_DLLPUBLIC SwConnectionListener final :
-        public SwMutexBase,
+        public cppu::BaseMutex,
         public cppu::WeakComponentImplHelper<css::mail::XConnectionListener>
 {
     using cppu::WeakComponentImplHelperBase::disposing;
@@ -194,7 +189,7 @@ public:
 };
 
 class SW_DLLPUBLIC SwMailTransferable final :
-        public SwMutexBase,
+        public cppu::BaseMutex,
         public cppu::WeakComponentImplHelper<css::datatransfer::XTransferable, css::beans::XPropertySet>
 {
     OUString  m_aMimeType;
@@ -229,7 +224,7 @@ class SW_DLLPUBLIC SwMailTransferable final :
 };
 
 class SW_DLLPUBLIC SwMailMessage final :
-        public SwMutexBase,
+        public cppu::BaseMutex,
         public cppu::WeakComponentImplHelper<css::mail::XMailMessage>
 {
     OUString m_sSenderName;

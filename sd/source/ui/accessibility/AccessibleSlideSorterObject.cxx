@@ -54,7 +54,7 @@ AccessibleSlideSorterObject::AccessibleSlideSorterObject(
     const Reference<XAccessible>& rxParent,
     ::sd::slidesorter::SlideSorter& rSlideSorter,
     sal_uInt16 nPageNumber)
-    : AccessibleSlideSorterObjectBase(::sd::MutexOwner::maMutex),
+    : AccessibleSlideSorterObjectBase(m_aMutex),
       mxParent(rxParent),
       mnPageNumber(nPageNumber),
       mrSlideSorter(rSlideSorter),
@@ -236,7 +236,7 @@ void SAL_CALL AccessibleSlideSorterObject::addAccessibleEventListener(
     if (!rxListener.is())
         return;
 
-    const osl::MutexGuard aGuard(maMutex);
+    const osl::MutexGuard aGuard(m_aMutex);
 
     if (IsDisposed())
     {
@@ -258,7 +258,7 @@ void SAL_CALL AccessibleSlideSorterObject::removeAccessibleEventListener(
     if (!(rxListener.is() && mnClientId))
         return;
 
-    const osl::MutexGuard aGuard(maMutex);
+    const osl::MutexGuard aGuard(m_aMutex);
 
     sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
     if ( !nListenerCount )

@@ -105,7 +105,7 @@ void ChildWindowPane::Hide()
 
 void SAL_CALL ChildWindowPane::disposing()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     mrViewShellBase.GetViewShellManager()->DeactivateShell(mpShell.get());
     mpShell.reset();

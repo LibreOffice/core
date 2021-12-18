@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "MutexOwner.hxx"
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -42,7 +42,7 @@ typedef ::cppu::WeakComponentImplHelper<
 /** This class makes page objects of the slide sorter accessible.
 */
 class AccessibleSlideSorterObject
-    : public ::sd::MutexOwner,
+    : public cppu::BaseMutex,
       public AccessibleSlideSorterObjectBase
 {
 public:

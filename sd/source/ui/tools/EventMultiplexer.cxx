@@ -19,7 +19,6 @@
 
 #include <EventMultiplexer.hxx>
 
-#include <MutexOwner.hxx>
 #include <ViewShellBase.hxx>
 #include <drawdoc.hxx>
 #include <DrawController.hxx>
@@ -33,6 +32,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -61,7 +61,7 @@ typedef cppu::WeakComponentImplHelper<
     > EventMultiplexerImplementationInterfaceBase;
 
 class EventMultiplexer::Implementation
-    : protected MutexOwner,
+    : protected cppu::BaseMutex,
       public EventMultiplexerImplementationInterfaceBase,
       public SfxListener
 {
@@ -186,8 +186,7 @@ void EventMultiplexer::MultiplexEvent(
 //===== EventMultiplexer::Implementation ======================================
 
 EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
-    : MutexOwner(),
-      EventMultiplexerImplementationInterfaceBase(maMutex),
+    : EventMultiplexerImplementationInterfaceBase(m_aMutex),
       mrBase (rBase),
       mbListeningToController (false),
       mbListeningToFrame (false),

@@ -19,9 +19,8 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
-
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
 namespace com::sun::star::drawing::framework { class XConfigurationController; }
@@ -38,7 +37,7 @@ typedef ::cppu::WeakComponentImplHelper <
     the center pane.
 */
 class ViewTabBarModule
-    : private sd::MutexOwner,
+    : private cppu::BaseMutex,
       public ViewTabBarModuleInterfaceBase
 {
 public:

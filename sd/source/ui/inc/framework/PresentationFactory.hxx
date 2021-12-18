@@ -19,10 +19,9 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
-
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
 namespace com::sun::star::frame { class XController; }
@@ -39,7 +38,7 @@ typedef ::cppu::WeakComponentImplHelper <
     application window).
 */
 class PresentationFactory
-    : private sd::MutexOwner,
+    : private cppu::BaseMutex,
       public PresentationFactoryInterfaceBase
 {
 public:
