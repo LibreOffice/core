@@ -33,6 +33,23 @@
       "message": "So this just passed a python3 infra/helper.py check_build libreoffice.\n\nBranch is also in private/jmux/oss-fuzz + an extra patch to move the LO downloads to an extra directory.",
       "revId": "7d5ee9b608094bf71a8b0ddb632da959d1f22a1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4129f9b8_79b0f39d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-18T16:55:20Z",
+      "side": 1,
+      "message": "tried it here too and it seems to work great",
+      "revId": "7d5ee9b608094bf71a8b0ddb632da959d1f22a1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
