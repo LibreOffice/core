@@ -113,6 +113,7 @@ namespace XSLT
         ListenerList m_listeners;
 
         OString m_styleSheetURL;
+        OString m_styleSheetText;
 
         ::std::map<const char *, OString> m_parameters;
 
@@ -167,6 +168,8 @@ namespace XSLT
 
         const OString&
         getStyleSheetURL() const { return m_styleSheetURL; }
+
+        const OString& getStyleSheetText() const { return m_styleSheetText; }
 
         const ::std::map<const char*, OString>&
         getParameters() const { return m_parameters; }
