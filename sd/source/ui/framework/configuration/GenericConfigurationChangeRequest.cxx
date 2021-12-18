@@ -34,7 +34,7 @@ namespace sd::framework {
 GenericConfigurationChangeRequest::GenericConfigurationChangeRequest (
     const Reference<XResourceId>& rxResourceId,
     const Mode eMode)
-    : GenericConfigurationChangeRequestInterfaceBase(MutexOwner::maMutex),
+    : GenericConfigurationChangeRequestInterfaceBase(m_aMutex),
       mxResourceId(rxResourceId),
       meMode(eMode)
 {

@@ -31,13 +31,13 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <svl/lstner.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <sfx2/request.hxx>
 
-#include <MutexOwner.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
@@ -64,7 +64,7 @@ typedef ::cppu::WeakComponentImplHelper <
     actual callback object is called and the CallbackCaller destroys itself.
 */
 class CallbackCaller
-    : public ::sd::MutexOwner,
+    : public cppu::BaseMutex,
       public CallbackCallerInterfaceBase
 {
 public:
@@ -117,7 +117,7 @@ typedef ::cppu::WeakComponentImplHelper <
     one of them and Release() when both of them are destroyed.
 */
 class LifetimeController
-    : public ::sd::MutexOwner,
+    : public cppu::BaseMutex,
       public LifetimeControllerInterfaceBase,
       public SfxListener
 {
@@ -256,7 +256,7 @@ namespace {
 }
 
 class FrameworkHelper::DisposeListener
-    : public ::sd::MutexOwner,
+    : public cppu::BaseMutex,
       public FrameworkHelperDisposeListenerInterfaceBase
 {
 public:
@@ -766,7 +766,7 @@ Reference<XResourceId> FrameworkHelper::CreateResourceId (
 
 FrameworkHelper::DisposeListener::DisposeListener (
     const ::std::shared_ptr<FrameworkHelper>& rpHelper)
-    : FrameworkHelperDisposeListenerInterfaceBase(maMutex),
+    : FrameworkHelperDisposeListenerInterfaceBase(m_aMutex),
       mpHelper(rpHelper)
 {
     Reference<XComponent> xComponent (mpHelper->mxConfigurationController, UNO_QUERY);
@@ -808,7 +808,7 @@ CallbackCaller::CallbackCaller (
     const OUString& rsEventType,
     const ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter& rFilter,
     const ::sd::framework::FrameworkHelper::Callback& rCallback)
-    : CallbackCallerInterfaceBase(MutexOwner::maMutex),
+    : CallbackCallerInterfaceBase(m_aMutex),
       msEventType(rsEventType),
       maFilter(rFilter),
       maCallback(rCallback)
@@ -889,7 +889,7 @@ void SAL_CALL CallbackCaller::notifyConfigurationChange (
 //----- LifetimeController -------------------------------------------------
 
 LifetimeController::LifetimeController (::sd::ViewShellBase& rBase)
-    : LifetimeControllerInterfaceBase(maMutex),
+    : LifetimeControllerInterfaceBase(m_aMutex),
       mrBase(rBase),
       mbListeningToViewShellBase(false),
       mbListeningToController(false)

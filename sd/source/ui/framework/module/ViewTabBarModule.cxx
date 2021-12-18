@@ -48,7 +48,7 @@ namespace sd::framework {
 ViewTabBarModule::ViewTabBarModule (
     const Reference<frame::XController>& rxController,
     const Reference<XResourceId>& rxViewTabBarId)
-    : ViewTabBarModuleInterfaceBase(MutexOwner::maMutex),
+    : ViewTabBarModuleInterfaceBase(m_aMutex),
       mxViewTabBarId(rxViewTabBarId)
 {
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);

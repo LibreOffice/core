@@ -33,7 +33,7 @@ SlotStateListener::SlotStateListener (
     Link<const OUString&,void> const & rCallback,
     const uno::Reference<frame::XDispatchProvider>& rxDispatchProvider,
     const OUString& rSlotName)
-    : SlotStateListenerInterfaceBase(maMutex),
+    : SlotStateListenerInterfaceBase(m_aMutex),
       mxDispatchProviderWeak(nullptr)
 {
     SetCallback(rCallback);

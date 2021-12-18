@@ -59,7 +59,7 @@ bool IsEqual (const TabBarButton& rButton1, const TabBarButton& rButton2)
 ViewTabBar::ViewTabBar (
     const Reference<XResourceId>& rxViewTabBarId,
     const Reference<frame::XController>& rxController)
-    : ViewTabBarInterfaceBase(maMutex),
+    : ViewTabBarInterfaceBase(m_aMutex),
       mpTabControl(VclPtr<TabBarControl>::Create(GetAnchorWindow(rxViewTabBarId,rxController), this)),
       mxController(rxController),
       mxViewTabBarId(rxViewTabBarId),

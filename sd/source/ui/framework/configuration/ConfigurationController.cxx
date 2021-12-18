@@ -102,7 +102,7 @@ ConfigurationController::Lock::~Lock()
 //===== ConfigurationController ===============================================
 
 ConfigurationController::ConfigurationController() noexcept
-    : ConfigurationControllerInterfaceBase(MutexOwner::maMutex)
+    : ConfigurationControllerInterfaceBase(m_aMutex)
     , mbIsDisposed(false)
 {
 }
@@ -169,7 +169,7 @@ void SAL_CALL ConfigurationController::addConfigurationChangeListener (
     const OUString& rsEventType,
     const Any& rUserData)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     ThrowIfDisposed();
     OSL_ASSERT(mpImplementation != nullptr);
@@ -179,7 +179,7 @@ void SAL_CALL ConfigurationController::addConfigurationChangeListener (
 void SAL_CALL ConfigurationController::removeConfigurationChangeListener (
     const Reference<XConfigurationChangeListener>& rxListener)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     ThrowIfDisposed();
     mpImplementation->mpBroadcaster->RemoveListener(rxListener);
@@ -199,7 +199,7 @@ void SAL_CALL ConfigurationController::lock()
     OSL_ASSERT(mpImplementation != nullptr);
     OSL_ASSERT(mpImplementation->mpConfigurationUpdater != nullptr);
 
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     ++mpImplementation->mnLockCount;
@@ -210,7 +210,7 @@ void SAL_CALL ConfigurationController::lock()
 
 void SAL_CALL ConfigurationController::unlock()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     // Allow unlocking while the ConfigurationController is being disposed
     // (but not when that is done and the controller is disposed.)
@@ -227,7 +227,7 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     const Reference<XResourceId>& rxResourceId,
     ResourceActivationMode eMode)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     // Check whether we are being disposed.  This is handled differently
@@ -282,7 +282,7 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
 void SAL_CALL ConfigurationController::requestResourceDeactivation (
     const Reference<XResourceId>& rxResourceId)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     SAL_INFO("sd.fwk", __func__ << ": ConfigurationController::requestResourceDeactivation() " <<
@@ -317,7 +317,7 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
 Reference<XResource> SAL_CALL ConfigurationController::getResource (
     const Reference<XResourceId>& rxResourceId)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     ConfigurationControllerResourceManager::ResourceDescriptor aDescriptor (
@@ -327,7 +327,7 @@ Reference<XResource> SAL_CALL ConfigurationController::getResource (
 
 void SAL_CALL ConfigurationController::update()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     if (mpImplementation->mpQueueProcessor->IsEmpty())
@@ -345,7 +345,7 @@ void SAL_CALL ConfigurationController::update()
 
 sal_Bool SAL_CALL ConfigurationController::hasPendingRequests()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     return ! mpImplementation->mpQueueProcessor->IsEmpty();
@@ -354,7 +354,7 @@ sal_Bool SAL_CALL ConfigurationController::hasPendingRequests()
 void SAL_CALL ConfigurationController::postChangeRequest (
     const Reference<XConfigurationChangeRequest>& rxRequest)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     mpImplementation->mpQueueProcessor->AddRequest(rxRequest);
@@ -362,7 +362,7 @@ void SAL_CALL ConfigurationController::postChangeRequest (
 
 Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfiguration()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     if (mpImplementation->mxRequestedConfiguration.is())
@@ -374,7 +374,7 @@ Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfigur
 
 Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfiguration()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     Reference<XConfiguration> xCurrentConfiguration(
@@ -391,7 +391,7 @@ Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfigurat
 void SAL_CALL ConfigurationController::restoreConfiguration (
     const Reference<XConfiguration>& rxNewConfiguration)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     // We will probably be making a couple of activation and deactivation
@@ -445,7 +445,7 @@ void SAL_CALL ConfigurationController::addResourceFactory(
     const OUString& sResourceURL,
     const Reference<XResourceFactory>& rxResourceFactory)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
     mpImplementation->mpResourceFactoryContainer->AddFactory(sResourceURL, rxResourceFactory);
 }
@@ -453,7 +453,7 @@ void SAL_CALL ConfigurationController::addResourceFactory(
 void SAL_CALL ConfigurationController::removeResourceFactoryForURL(
     const OUString& sResourceURL)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
     mpImplementation->mpResourceFactoryContainer->RemoveFactoryForURL(sResourceURL);
 }
@@ -461,7 +461,7 @@ void SAL_CALL ConfigurationController::removeResourceFactoryForURL(
 void SAL_CALL ConfigurationController::removeResourceFactoryForReference(
     const Reference<XResourceFactory>& rxResourceFactory)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
     mpImplementation->mpResourceFactoryContainer->RemoveFactoryForReference(rxResourceFactory);
 }
@@ -469,7 +469,7 @@ void SAL_CALL ConfigurationController::removeResourceFactoryForReference(
 Reference<XResourceFactory> SAL_CALL ConfigurationController::getResourceFactory (
     const OUString& sResourceURL)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     return mpImplementation->mpResourceFactoryContainer->GetFactory(sResourceURL);
@@ -479,7 +479,7 @@ Reference<XResourceFactory> SAL_CALL ConfigurationController::getResourceFactory
 
 void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArguments)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
 
     if (aArguments.getLength() == 1)
     {

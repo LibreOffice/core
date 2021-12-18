@@ -49,7 +49,7 @@ typedef ::cppu::WeakComponentImplHelper3<css::sdbc::XWarningsSupplier, css::util
 //************ Class: OCommonStatement
 // is a base class for the normal statement and for the prepared statement
 
-class OCommonStatement : public OBase_Mutex,
+class OCommonStatement : public cppu::BaseMutex,
                          public OCommonStatement_IBase,
                          public ::cppu::OPropertySetHelper,
                          public OPropertyArrayUsageHelper<OCommonStatement>

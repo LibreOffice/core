@@ -22,6 +22,7 @@
 #include <DrawController.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <tools/diagnose_ex.h>
@@ -42,7 +43,7 @@ namespace {
 typedef ::cppu::WeakComponentImplHelper <lang::XInitialization> PresentationFactoryProviderInterfaceBase;
 
 class PresentationFactoryProvider
-    : protected MutexOwner,
+    : protected cppu::BaseMutex,
       public PresentationFactoryProviderInterfaceBase
 {
 public:
@@ -63,12 +64,12 @@ typedef ::cppu::WeakComponentImplHelper <XView> PresentationViewInterfaceBase;
     (in another application window).
 */
 class PresentationView
-    : protected MutexOwner,
+    : protected cppu::BaseMutex,
       public PresentationViewInterfaceBase
 {
 public:
     explicit PresentationView (const Reference<XResourceId>& rxViewId)
-        : PresentationViewInterfaceBase(maMutex),mxResourceId(rxViewId) {};
+        : PresentationViewInterfaceBase(m_aMutex),mxResourceId(rxViewId) {};
 
     // XView
 
@@ -90,7 +91,7 @@ constexpr OUStringLiteral gsPresentationViewURL = u"private:resource/view/Presen
 
 PresentationFactory::PresentationFactory (
     const Reference<frame::XController>& rxController)
-    : PresentationFactoryInterfaceBase(MutexOwner::maMutex),
+    : PresentationFactoryInterfaceBase(m_aMutex),
       mxController(rxController)
 {
 }
@@ -157,7 +158,7 @@ namespace {
 //===== PresentationFactoryProvider ===========================================
 
 PresentationFactoryProvider::PresentationFactoryProvider ()
-    : PresentationFactoryProviderInterfaceBase(maMutex)
+    : PresentationFactoryProviderInterfaceBase(m_aMutex)
 {
 }
 

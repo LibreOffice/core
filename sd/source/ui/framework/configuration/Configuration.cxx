@@ -62,7 +62,7 @@ public:
 Configuration::Configuration (
     const Reference<XConfigurationControllerBroadcaster>& rxBroadcaster,
     bool bBroadcastRequestEvents)
-    : ConfigurationInterfaceBase(MutexOwner::maMutex),
+    : ConfigurationInterfaceBase(m_aMutex),
       mpResourceContainer(new ResourceContainer()),
       mxBroadcaster(rxBroadcaster),
       mbBroadcastRequestEvents(bBroadcastRequestEvents)
@@ -73,7 +73,7 @@ Configuration::Configuration (
     const Reference<XConfigurationControllerBroadcaster>& rxBroadcaster,
     bool bBroadcastRequestEvents,
     const ResourceContainer& rResourceContainer)
-    : ConfigurationInterfaceBase(MutexOwner::maMutex),
+    : ConfigurationInterfaceBase(m_aMutex),
       mpResourceContainer(new ResourceContainer(rResourceContainer)),
       mxBroadcaster(rxBroadcaster),
       mbBroadcastRequestEvents(bBroadcastRequestEvents)
@@ -86,7 +86,7 @@ Configuration::~Configuration()
 
 void SAL_CALL Configuration::disposing()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     mpResourceContainer->clear();
     mxBroadcaster = nullptr;
 }
@@ -130,7 +130,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     const OUString& rsResourceURLPrefix,
     AnchorBindingMode eMode)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     const bool bFilterResources (!rsResourceURLPrefix.isEmpty());
@@ -168,7 +168,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
 
 sal_Bool SAL_CALL Configuration::hasResource (const Reference<XResourceId>& rxResourceId)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     return rxResourceId.is()
@@ -179,7 +179,7 @@ sal_Bool SAL_CALL Configuration::hasResource (const Reference<XResourceId>& rxRe
 
 Reference<util::XCloneable> SAL_CALL Configuration::createClone()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     return new Configuration(
@@ -192,7 +192,7 @@ Reference<util::XCloneable> SAL_CALL Configuration::createClone()
 
 OUString SAL_CALL Configuration::getName()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     OUStringBuffer aString;
 
     if (rBHelper.bDisposed || rBHelper.bInDispose)

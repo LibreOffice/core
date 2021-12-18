@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <memory>
 #include <set>
@@ -46,7 +46,7 @@ typedef ::cppu::WeakComponentImplHelper <
     detects this and remembers it for the future.
 */
 class SlideSorterModule
-    : private sd::MutexOwner,
+    : private cppu::BaseMutex,
       public SlideSorterModuleBase
 {
 public:
