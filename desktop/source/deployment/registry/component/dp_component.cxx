@@ -352,7 +352,7 @@ BackendImpl::ComponentPackageImpl::getRDB() const
     //would otherwise cause problems when copying the rdbs.
     //See  http://qa.openoffice.org/issues/show_bug.cgi?id=99257
     {
-        const ::osl::MutexGuard guard( getMutex() );
+        const ::osl::MutexGuard guard( m_aMutex );
         if (!that->bSwitchedRdbFiles)
         {
             that->bSwitchedRdbFiles = true;
@@ -733,7 +733,7 @@ void BackendImpl::unorc_verify_init(
 {
     if (transientMode())
         return;
-    const ::osl::MutexGuard guard( getMutex() );
+    const ::osl::MutexGuard guard( m_aMutex );
     if ( m_unorc_inited)
         return;
 
@@ -972,7 +972,7 @@ void BackendImpl::addToUnoRc( RcItem kind, OUString const & url_,
                               Reference<XCommandEnvironment> const & xCmdEnv )
 {
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
-    const ::osl::MutexGuard guard( getMutex() );
+    const ::osl::MutexGuard guard( m_aMutex );
     unorc_verify_init( xCmdEnv );
     std::deque<OUString> & rSet = getRcItemList(kind);
     if (std::find( rSet.begin(), rSet.end(), rcterm ) == rSet.end()) {
@@ -989,7 +989,7 @@ void BackendImpl::removeFromUnoRc(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
-    const ::osl::MutexGuard guard( getMutex() );
+    const ::osl::MutexGuard guard( m_aMutex );
     unorc_verify_init( xCmdEnv );
     std::deque<OUString> & aRcItemList = getRcItemList(kind);
     aRcItemList.erase(std::remove(aRcItemList.begin(), aRcItemList.end(), rcterm), aRcItemList.end());
@@ -1003,7 +1003,7 @@ bool BackendImpl::hasInUnoRc(
     RcItem kind, OUString const & url_ )
 {
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
-    const ::osl::MutexGuard guard( getMutex() );
+    const ::osl::MutexGuard guard( m_aMutex );
     std::deque<OUString> const & rSet = getRcItemList(kind);
     return std::find( rSet.begin(), rSet.end(), rcterm ) != rSet.end();
 }
@@ -1020,14 +1020,14 @@ css::uno::Reference< css::uno::XComponentContext > BackendImpl::getRootContext()
 
 void BackendImpl::releaseObject( OUString const & id )
 {
-    const ::osl::MutexGuard guard( getMutex() );
+    const ::osl::MutexGuard guard( m_aMutex );
     m_backendObjects.erase( id );
 }
 
 
 Reference<XInterface> BackendImpl::getObject( OUString const & id )
 {
-    const ::osl::MutexGuard guard( getMutex() );
+    const ::osl::MutexGuard guard( m_aMutex );
     const t_string2object::const_iterator iFind( m_backendObjects.find( id ) );
     if (iFind == m_backendObjects.end())
         return Reference<XInterface>();
@@ -1039,7 +1039,7 @@ Reference<XInterface> BackendImpl::getObject( OUString const & id )
 Reference<XInterface> BackendImpl::insertObject(
     OUString const & id, Reference<XInterface> const & xObject )
 {
-    const ::osl::MutexGuard guard( getMutex() );
+    const ::osl::MutexGuard guard( m_aMutex );
     const std::pair<t_string2object::iterator, bool> insertion(
         m_backendObjects.emplace( id, xObject ) );
     return insertion.first->second;

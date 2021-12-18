@@ -23,6 +23,7 @@
 #include <dp_shared.hxx>
 #include <dp_interact.h>
 #include <rtl/ref.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -42,7 +43,7 @@ typedef ::cppu::WeakComponentImplHelper<
     css::deployment::XPackage > t_PackageBase;
 
 
-class Package : protected ::dp_misc::MutexHolder, public t_PackageBase
+class Package : protected cppu::BaseMutex, public t_PackageBase
 {
     PackageRegistryBackend * getMyBackend() const;
     void processPackage_impl(
@@ -192,7 +193,7 @@ typedef ::cppu::WeakComponentImplHelper<
 
 
 class PackageRegistryBackend
-    : protected ::dp_misc::MutexHolder, public t_BackendBase
+    : protected cppu::BaseMutex, public t_BackendBase
 {
     //The map held originally WeakReferences. The map entries are removed in the disposing
     //function, which is called when the XPackages are destructed or they are

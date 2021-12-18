@@ -19,6 +19,7 @@
 
 
 #include <dp_misc.h>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/anytostring.hxx>
@@ -38,7 +39,7 @@ typedef ::cppu::WeakComponentImplHelper<ucb::XProgressHandler, lang::XServiceInf
 
 namespace {
 
-class ProgressLogImpl : public ::dp_misc::MutexHolder, public t_log_helper
+class ProgressLogImpl : public cppu::BaseMutex, public t_log_helper
 {
     std::unique_ptr<comphelper::EventLogger> m_logger;
 
@@ -76,7 +77,7 @@ void ProgressLogImpl::disposing()
 ProgressLogImpl::ProgressLogImpl(
     Sequence<Any> const & /* args */,
     Reference<XComponentContext> const & xContext )
-    : t_log_helper( getMutex() )
+    : t_log_helper( m_aMutex )
 {
     // Use the logger created by unopkg app
     m_logger.reset(new comphelper::EventLogger(xContext, "unopkg"));

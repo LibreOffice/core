@@ -21,6 +21,7 @@
 
 #include <dp_misc.h>
 #include "dp_activepackages.hxx"
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/content.hxx>
@@ -35,7 +36,7 @@ typedef ::cppu::WeakComponentImplHelper<
     css::deployment::XPackageManager > t_pm_helper;
 
 
-class PackageManagerImpl final : private ::dp_misc::MutexHolder, public t_pm_helper
+class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
 {
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     OUString m_context;
@@ -118,7 +119,7 @@ class PackageManagerImpl final : private ::dp_misc::MutexHolder, public t_pm_hel
     PackageManagerImpl(
         css::uno::Reference<css::uno::XComponentContext>
         const & xComponentContext, OUString const & context )
-        : t_pm_helper( getMutex() ),
+        : t_pm_helper( m_aMutex ),
           m_xComponentContext( xComponentContext ),
           m_context( context ),
           m_readOnly( true )
@@ -213,7 +214,7 @@ public:
 
 inline void PackageManagerImpl::check()
 {
-    ::osl::MutexGuard guard( getMutex() );
+    ::osl::MutexGuard guard( m_aMutex );
     if (rBHelper.bInDispose || rBHelper.bDisposed)
         throw css::lang::DisposedException(
             "PackageManager instance has already been disposed!",

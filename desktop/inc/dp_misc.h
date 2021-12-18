@@ -36,14 +36,6 @@ const char CR = 0x0d;
 const char LF = 0x0a;
 
 
-class MutexHolder
-{
-    mutable ::osl::Mutex m_mutex;
-protected:
-    ::osl::Mutex & getMutex() const { return m_mutex; }
-};
-
-
 inline void try_dispose( css::uno::Reference< css::uno::XInterface> const & x )
 {
     css::uno::Reference< css::lang::XComponent> xComp( x, css::uno::UNO_QUERY );
