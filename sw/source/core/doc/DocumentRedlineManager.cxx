@@ -456,7 +456,7 @@ namespace
             {
                 // update property "HasTextChangesOnly"
                 SwRedlineTable::size_type nPos = 0;
-                pLine->UpdateTextChangesOnly(nPos);
+                (void)pLine->UpdateTextChangesOnly(nPos);
             }
         }
     }
