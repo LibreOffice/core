@@ -795,11 +795,6 @@ public:
     void                        DrawGradient( const tools::Rectangle& rRect, const Gradient& rGradient );
     void                        DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
 
-    void                        AddGradientActions(
-                                    const tools::Rectangle& rRect,
-                                    const Gradient& rGradient,
-                                    GDIMetaFile& rMtf );
-
 protected:
 
     virtual bool                UsePolyPolygonForComplexGradient() = 0;
@@ -810,13 +805,8 @@ private:
 
     SAL_DLLPRIVATE void         DrawLinearGradient( const tools::Rectangle& rRect, const Gradient& rGradient, const tools::PolyPolygon* pClipPolyPoly );
     SAL_DLLPRIVATE void         DrawComplexGradient( const tools::Rectangle& rRect, const Gradient& rGradient, const tools::PolyPolygon* pClipPolyPoly );
-
     SAL_DLLPRIVATE void         DrawGradientToMetafile( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
-    SAL_DLLPRIVATE void         DrawLinearGradientToMetafile( const tools::Rectangle& rRect, const Gradient& rGradient );
-    SAL_DLLPRIVATE void         DrawComplexGradientToMetafile( const tools::Rectangle& rRect, const Gradient& rGradient );
-
     SAL_DLLPRIVATE tools::Long  GetGradientSteps(Gradient const& rGradient, tools::Rectangle const& rRect);
-
     SAL_DLLPRIVATE Color        GetSingleColorGradientFill();
     ///@}
 

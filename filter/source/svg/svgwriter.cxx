@@ -2255,9 +2255,15 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
 
                 GDIMetaFile aTmpMtf;
                 if( pHatch )
+                {
                     mpVDev->AddHatchActions( rPolyPoly, *pHatch, aTmpMtf );
+                }
                 else if ( pGradient )
-                    mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), *pGradient, aTmpMtf );
+                {
+                    Gradient aGradient(*pGradient);
+                    aGradient.AddGradientActions( rPolyPoly.GetBoundRect(), aTmpMtf );
+                }
+
                 ImplWriteActions( aTmpMtf, nWriteFlags, "" );
             }
         }

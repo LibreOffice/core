@@ -1170,7 +1170,8 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pAction);
                 GDIMetaFile                 aTmpMtf;
 
-                maVDev->AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
+                Gradient aGradient = pA->GetGradient();
+                aGradient.AddGradientActions( pA->GetRect(), aTmpMtf );
                 ImplWrite( aTmpMtf );
             }
             break;
