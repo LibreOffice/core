@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include "MutexContainer.hxx"
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
@@ -40,7 +40,7 @@ typedef cppu::WeakImplHelper<
 }
 
 class LabeledDataSequence :
-        public MutexContainer,
+        public cppu::BaseMutex,
         public impl::LabeledDataSequence_Base
 {
 public:

@@ -19,12 +19,12 @@
 #pragma once
 
 #include "WrappedProperty.hxx"
-#include "MutexContainer.hxx"
 #include "charttoolsdllapi.hxx"
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <memory>
@@ -37,7 +37,7 @@ namespace chart
 {
 
 class OOO_DLLPUBLIC_CHARTTOOLS WrappedPropertySet :
-                           public MutexContainer
+                           public cppu::BaseMutex
                          , public ::cppu::WeakImplHelper
                          < css::beans::XPropertySet
                          , css::beans::XMultiPropertySet

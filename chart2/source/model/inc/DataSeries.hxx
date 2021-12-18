@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 // helper classes
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
@@ -36,7 +37,6 @@
 #include <vector>
 #include <map>
 
-#include <MutexContainer.hxx>
 #include <OPropertySet.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
@@ -59,7 +59,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class DataSeries final :
-    public MutexContainer,
+    public cppu::BaseMutex,
     public impl::DataSeries_Base,
     public ::property::OPropertySet
 {

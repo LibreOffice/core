@@ -19,7 +19,7 @@
 #pragma once
 
 #include <OPropertySet.hxx>
-#include <MutexContainer.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -55,7 +55,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class Diagram final :
-    public MutexContainer,
+    public cppu::BaseMutex,
     public impl::Diagram_Base,
     public ::property::OPropertySet
 {

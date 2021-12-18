@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include "MutexContainer.hxx"
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
@@ -46,7 +46,7 @@ typedef ::cppu::WeakComponentImplHelper<
 }
 
 class RangeHighlighter :
-        public MutexContainer,
+        public cppu::BaseMutex,
         public impl::RangeHighlighter_Base
 {
 public:

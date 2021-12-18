@@ -24,9 +24,9 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 
-#include <MutexContainer.hxx>
 #include <OPropertySet.hxx>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
@@ -45,7 +45,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class RegressionEquation final :
-        public MutexContainer,
+        public cppu::BaseMutex,
         public impl::RegressionEquation_Base,
         public ::property::OPropertySet
 {

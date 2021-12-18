@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include "MutexContainer.hxx"
+#include <cppuhelper/basemutex.hxx>
 #include "charttoolsdllapi.hxx"
 
 #include <cppuhelper/implbase.hxx>
@@ -58,7 +58,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class ErrorBar final :
-        public MutexContainer,
+        public cppu::BaseMutex,
         public impl::ErrorBar_Base
 {
 private:

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <MutexContainer.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/component.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -40,7 +40,7 @@ class VclWindowEvent;
 namespace chart
 {
 
-class CreationWizardUnoDlg : public MutexContainer
+class CreationWizardUnoDlg : public cppu::BaseMutex
                             , public ::cppu::OComponentHelper
                             , public css::ui::dialogs::XAsynchronousExecutableDialog
                             , public css::lang::XServiceInfo
