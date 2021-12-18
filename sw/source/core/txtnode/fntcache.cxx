@@ -1660,78 +1660,83 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else
         {
-            sal_Unicode nCh;
-
-            // In case of Pair Kerning the printer influence on the positioning
-            // grows
-            const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
-            const int nDiv = nMul+1;
-
-            // nSpaceSum contains the sum of the intermediate space distributed
-            // among Spaces by the Justification.
-            // The Spaces themselves will be positioned in the middle of the
-            // intermediate space, hence the nSpace/2.
-            // In case of word-by-word underlining they have to be positioned
-            // at the beginning of the intermediate space, so that the space
-            // is not underlined.
-            // A Space at the beginning or end of the text must be positioned
-            // before (resp. after) the whole intermediate space, otherwise
-            // the underline/strike-through would have gaps.
-            tools::Long nSpaceSum = 0;
             // in word line mode and for Arabic, we disable the half space trick:
             const tools::Long nHalfSpace = m_pPrtFont->IsWordLineMode() || bNoHalfSpace ? 0 : nSpaceAdd / 2;
-            const tools::Long nOtherHalf = nSpaceAdd - nHalfSpace;
-            if ( nSpaceAdd && ( cChPrev == CH_BLANK ) )
-                nSpaceSum = nHalfSpace;
-            for (sal_Int32 i = 1; i < sal_Int32(nCnt); ++i, nKernSum += rInf.GetKern())
+
+            // if "Character spacing" is set then adjust the glyph positions
+            if (nKernSum)
             {
-                nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
+                sal_Unicode nCh;
 
-                tools::Long nScr = aScrArray[ i ] - aScrArray[ i - 1 ];
+                // In case of Pair Kerning the printer influence on the positioning
+                // grows
+                const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
+                const int nDiv = nMul+1;
 
-                // If there is an (ex-)Space before us, position optimally,
-                // i.e., our right margin to the 100% printer position;
-                // if we _are_ an ex-Space, position us left-aligned to the
-                // printer position.
-                if ( nCh == CH_BLANK )
+                // nSpaceSum contains the sum of the intermediate space distributed
+                // among Spaces by the Justification.
+                // The Spaces themselves will be positioned in the middle of the
+                // intermediate space, hence the nSpace/2.
+                // In case of word-by-word underlining they have to be positioned
+                // at the beginning of the intermediate space, so that the space
+                // is not underlined.
+                // A Space at the beginning or end of the text must be positioned
+                // before (resp. after) the whole intermediate space, otherwise
+                // the underline/strike-through would have gaps.
+                tools::Long nSpaceSum = 0;
+                const tools::Long nOtherHalf = nSpaceAdd - nHalfSpace;
+                if ( nSpaceAdd && ( cChPrev == CH_BLANK ) )
+                    nSpaceSum = nHalfSpace;
+                for (sal_Int32 i = 1; i < sal_Int32(nCnt); ++i, nKernSum += rInf.GetKern())
                 {
-                    nScrPos = aKernArray[i-1] + nScr;
+                    nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
 
-                    if ( cChPrev == CH_BLANK )
-                        nSpaceSum += nOtherHalf;
-                    if (i + 1 == sal_Int32(nCnt))
-                        nSpaceSum += nSpaceAdd;
-                    else
-                        nSpaceSum += nHalfSpace;
-                }
-                else
-                {
-                    if ( cChPrev == CH_BLANK )
+                    tools::Long nScr = aScrArray[ i ] - aScrArray[ i - 1 ];
+
+                    // If there is an (ex-)Space before us, position optimally,
+                    // i.e., our right margin to the 100% printer position;
+                    // if we _are_ an ex-Space, position us left-aligned to the
+                    // printer position.
+                    if ( nCh == CH_BLANK )
                     {
                         nScrPos = aKernArray[i-1] + nScr;
-                        // no Pixel is lost:
-                        nSpaceSum += nOtherHalf;
+
+                        if ( cChPrev == CH_BLANK )
+                            nSpaceSum += nOtherHalf;
+                        if (i + 1 == sal_Int32(nCnt))
+                            nSpaceSum += nSpaceAdd;
+                        else
+                            nSpaceSum += nHalfSpace;
                     }
-                    else if ( cChPrev == '-' )
-                        nScrPos = aKernArray[i-1] + nScr;
                     else
                     {
-                        nScrPos += nScr;
-                        nScrPos = ( nMul * nScrPos + aKernArray[i] ) / nDiv;
+                        if ( cChPrev == CH_BLANK )
+                        {
+                            nScrPos = aKernArray[i-1] + nScr;
+                            // no Pixel is lost:
+                            nSpaceSum += nOtherHalf;
+                        }
+                        else if ( cChPrev == '-' )
+                            nScrPos = aKernArray[i-1] + nScr;
+                        else
+                        {
+                            nScrPos += nScr;
+                            nScrPos = ( nMul * nScrPos + aKernArray[i] ) / nDiv;
+                        }
                     }
+                    cChPrev = nCh;
+                    aKernArray[i-1] = nScrPos - nScr + nKernSum + nSpaceSum;
+                    // In word line mode and for Arabic, we disabled the half space trick. If a portion
+                    // ends with a blank, the full nSpaceAdd value has been added to the character in
+                    // front of the blank. This leads to painting artifacts, therefore we remove the
+                    // nSpaceAdd value again:
+                    if ((bNoHalfSpace || m_pPrtFont->IsWordLineMode()) && i+1 == sal_Int32(nCnt) && nCh == CH_BLANK)
+                        aKernArray[i-1] = aKernArray[i-1] - nSpaceAdd;
                 }
-                cChPrev = nCh;
-                aKernArray[i-1] = nScrPos - nScr + nKernSum + nSpaceSum;
-                // In word line mode and for Arabic, we disabled the half space trick. If a portion
-                // ends with a blank, the full nSpaceAdd value has been added to the character in
-                // front of the blank. This leads to painting artifacts, therefore we remove the
-                // nSpaceAdd value again:
-                if ((bNoHalfSpace || m_pPrtFont->IsWordLineMode()) && i+1 == sal_Int32(nCnt) && nCh == CH_BLANK)
-                    aKernArray[i-1] = aKernArray[i-1] - nSpaceAdd;
+
+                // the layout engine requires the total width of the output
+                aKernArray[sal_Int32(rInf.GetLen()) - 1] += nKernSum + nSpaceSum;
             }
-
-            // the layout engine requires the total width of the output
-            aKernArray[sal_Int32(rInf.GetLen()) - 1] += nKernSum + nSpaceSum;
 
             if( rInf.GetGreyWave() )
             {
