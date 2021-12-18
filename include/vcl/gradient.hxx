@@ -33,6 +33,7 @@ namespace tools { class Rectangle; }
 
 class Point;
 class SvStream;
+class GDIMetaFile;
 
 class VCL_DLLPUBLIC Gradient
 {
@@ -78,11 +79,19 @@ public:
 
     void            GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle &rBoundRect, Point& rCenter ) const;
 
+    void AddGradientActions(tools::Rectangle const& rRect, GDIMetaFile& rMetaFile);
+
     Gradient&       operator=( const Gradient& rGradient );
     Gradient&       operator=( Gradient&& rGradient );
     bool            operator==( const Gradient& rGradient ) const;
     bool            operator!=( const Gradient& rGradient ) const
                         { return !(Gradient::operator==( rGradient )); }
+
+private:
+    tools::Long GetMetafileSteps(tools::Rectangle const& rRect) const;
+
+    void DrawComplexGradientToMetafile(tools::Rectangle const& rRect, GDIMetaFile& rMetaFile) const;
+    void DrawLinearGradientToMetafile(tools::Rectangle const& rRect, GDIMetaFile& rMetaFile) const;
 };
 
 #endif // INCLUDED_VCL_GRADIENT_HXX
