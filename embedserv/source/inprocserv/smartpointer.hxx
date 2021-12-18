@@ -156,25 +156,6 @@ public:
     }
 };
 
-class ULONGGuard
-{
-    ULONG* m_pValue;
-
-public:
-    explicit ULONGGuard( ULONG* pValue )
-    : m_pValue( pValue )
-    {
-        if ( m_pValue )
-            (*m_pValue)++;
-    }
-
-    ~ULONGGuard()
-    {
-        if ( m_pValue )
-            (*m_pValue)--;
-    }
-};
-
 } // namespace inprocserv
 
 #endif
