@@ -104,7 +104,7 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
                               const css::uno::Reference< css::frame::XFrame >&              xEnv )
 {
     // SAFE -> ----------------------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    std::unique_lock aLock(m_aLock);
 
     // take over the uno service manager
     m_xContext = rxContext;
@@ -115,19 +115,19 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
     m_xDispatcher.set(xEnv, css::uno::UNO_QUERY);
     if (!m_xDispatcher.is())
     {
-        aLock.clear();
+        aLock.unlock();
         // <- SAFE ------------------------------
 
         css::uno::Reference< css::frame::XDispatchProvider > xDispatcher(css::frame::Desktop::create(rxContext), css::uno::UNO_QUERY_THROW);
 
         // SAFE -> ------------------------------
-        aLock.reset();
+        aLock.lock();
 
         m_xDispatcher  = xDispatcher;
         bDesktopIsUsed = true;
     }
 
-    aLock.clear();
+    aLock.unlock();
     // <- SAFE ----------------------------------
 
     // open all needed configuration objects
@@ -153,13 +153,13 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
     }
 
     // SAFE -> ------------------------------
-    aLock.reset();
+    aLock.lock();
 
     m_xGlobalCfg = xGlobalCfg;
     m_xModuleCfg = xModuleCfg;
     m_xDocCfg    = xDocCfg   ;
 
-    aLock.clear();
+    aLock.unlock();
     // <- SAFE ----------------------------------
 }
 
@@ -183,11 +183,11 @@ bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     }
 
     // SAFE -> ----------------------------------
-    osl::ClearableMutexGuard aLock(m_aLock);
+    std::unique_lock aLock(m_aLock);
 
     css::uno::Reference< css::frame::XDispatchProvider > xProvider = m_xDispatcher;
 
-    aLock.clear();
+    aLock.unlock();
     // <- SAFE ----------------------------------
 
     // convert command in URL structure
@@ -261,13 +261,13 @@ OUString AcceleratorExecute::findCommand(const css::awt::KeyEvent& aKey)
 OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
 {
     // SAFE -> ----------------------------------
-    osl::ClearableMutexGuard aLock(m_aLock);
+    std::unique_lock aLock(m_aLock);
 
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg = m_xGlobalCfg;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xModuleCfg = m_xModuleCfg;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xDocCfg    = m_xDocCfg   ;
 
-    aLock.clear();
+    aLock.unlock();
     // <- SAFE ----------------------------------
 
     OUString sCommand;
@@ -423,21 +423,21 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
 css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_getURLParser()
 {
     // SAFE -> ----------------------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    std::unique_lock aLock(m_aLock);
 
     if (m_xURLParser.is())
         return m_xURLParser;
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
 
-    aLock.clear();
+    aLock.unlock();
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::util::XURLTransformer > xParser =  css::util::URLTransformer::create( xContext );
 
     // SAFE -> ----------------------------------
-    aLock.reset();
+    aLock.lock();
     m_xURLParser = xParser;
-    aLock.clear();
+    aLock.unlock();
     // <- SAFE ----------------------------------
 
     return xParser;
