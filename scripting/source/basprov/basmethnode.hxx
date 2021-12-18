@@ -27,6 +27,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
 
@@ -44,7 +45,7 @@ namespace basprov
         css::script::XInvocation > BasicMethodNodeImpl_BASE;
 
     class BasicMethodNodeImpl : public BasicMethodNodeImpl_BASE,
-                                public ::scripting_helper::OMutexHolder,
+                                public cppu::BaseMutex,
                                 public ::scripting_helper::OBroadcastHelperHolder,
                                 public ::comphelper::OPropertyContainer,
                                 public ::comphelper::OPropertyArrayUsageHelper< BasicMethodNodeImpl >

@@ -26,18 +26,6 @@
 namespace scripting_helper
 {
 
-
-
-
-    class OMutexHolder
-    {
-    protected:
-        ::osl::Mutex m_aMutex;
-    };
-
-
-
-
     class OBroadcastHelperHolder
     {
         ::cppu::OBroadcastHelper    m_aBHelper;
