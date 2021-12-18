@@ -85,15 +85,15 @@ namespace framework
 
 static GlobalImageList*     pGlobalImageList = nullptr;
 
-static osl::Mutex& getGlobalImageListMutex()
+static std::mutex& getGlobalImageListMutex()
 {
-    static osl::Mutex mutex;
+    static std::mutex mutex;
     return mutex;
 }
 
 static GlobalImageList* getGlobalImageList( const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    osl::MutexGuard guard( getGlobalImageListMutex() );
+    std::unique_lock guard( getGlobalImageListMutex() );
 
     if ( pGlobalImageList == nullptr )
         pGlobalImageList = new GlobalImageList( rxContext );
@@ -183,26 +183,26 @@ GlobalImageList::GlobalImageList( const uno::Reference< uno::XComponentContext >
 
 GlobalImageList::~GlobalImageList()
 {
-    osl::MutexGuard guard( getGlobalImageListMutex() );
+    std::unique_lock guard( getGlobalImageListMutex() );
     // remove global pointer as we destroy the object now
     pGlobalImageList = nullptr;
 }
 
 Image GlobalImageList::getImageFromCommandURL( vcl::ImageType nImageType, const OUString& rCommandURL )
 {
-    osl::MutexGuard guard( getGlobalImageListMutex() );
+    std::unique_lock guard( getGlobalImageListMutex() );
     return CmdImageList::getImageFromCommandURL( nImageType, rCommandURL );
 }
 
 bool GlobalImageList::hasImage( vcl::ImageType nImageType, const OUString& rCommandURL )
 {
-    osl::MutexGuard guard( getGlobalImageListMutex() );
+    std::unique_lock guard( getGlobalImageListMutex() );
     return CmdImageList::hasImage( nImageType, rCommandURL );
 }
 
 ::std::vector< OUString >& GlobalImageList::getImageCommandNames()
 {
-    osl::MutexGuard guard( getGlobalImageListMutex() );
+    std::unique_lock guard( getGlobalImageListMutex() );
     return CmdImageList::getImageCommandNames();
 }
 
