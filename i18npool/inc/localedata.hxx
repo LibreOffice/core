@@ -32,6 +32,7 @@
 #include <vector>
 #include <string_view>
 #include <memory>
+#include <optional>
 #include <osl/module.hxx>
 
 
@@ -47,6 +48,22 @@ namespace com::sun::star::lang { struct Locale; }
 struct LocaleDataLookupTableItem;
 
 namespace i18npool {
+
+struct LocaleDataLookupTableItem
+{
+    const char* dllName;
+    osl::Module *module;
+    const char* localeName;
+    css::lang::Locale aLocale;
+
+    LocaleDataLookupTableItem(const char *name, osl::Module* m, const char* lname) : dllName(name), module(m), localeName(lname)
+    {
+    }
+    bool equals(const css::lang::Locale& rLocale) const
+    {
+        return (rLocale == aLocale);
+    }
+};
 
 class LocaleDataImpl final : public cppu::WeakImplHelper
 <
@@ -127,7 +144,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    ::std::unique_ptr< LocaleDataLookupTableItem > cachedItem;
+    ::std::optional< LocaleDataLookupTableItem > moCachedItem;
     css::i18n::Calendar2 ref_cal;
     OUString ref_name;
 
