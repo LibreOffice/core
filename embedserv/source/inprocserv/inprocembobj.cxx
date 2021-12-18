@@ -29,21 +29,15 @@ namespace {
 
 class ULONGGuard
 {
-    ULONG* m_pValue;
+    ULONG& m_rValue;
 
 public:
-    explicit ULONGGuard( ULONG* pValue )
-    : m_pValue( pValue )
+    explicit ULONGGuard( ULONG& rValue )
+    : m_rValue( ++rValue )
     {
-        if ( m_pValue )
-            (*m_pValue)++;
     }
 
-    ~ULONGGuard()
-    {
-        if ( m_pValue )
-            (*m_pValue)--;
-    }
+    ~ULONGGuard() { --m_rValue; }
 };
 
 void SetName( LPCOLESTR pszNameFromOutside, wchar_t*& pOwnName )
@@ -169,7 +163,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
             {
                 sal::systools::COMReference< IPersistStorage > pPersist(m_pDefHandler, sal::systools::COM_QUERY);
 
-                ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+                ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
                 if ( pPersist && m_pStorage )
                     hr = pPersist->InitNew( m_pStorage.get() );
             }
@@ -177,7 +171,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
             {
                 sal::systools::COMReference< IPersistStorage > pPersist(m_pDefHandler, sal::systools::COM_QUERY);
 
-                ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+                ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
                 if ( pPersist && m_pStorage )
                     hr = pPersist->Load( m_pStorage.get() );
             }
@@ -185,7 +179,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
             {
                 sal::systools::COMReference< IPersistFile > pPersistFile(m_pDefHandler, sal::systools::COM_QUERY);
 
-                ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+                ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
                 if ( pPersistFile && m_pFileName )
                     hr = pPersistFile->Load( m_pFileName, m_nFileOpenMode );
             }
@@ -404,7 +398,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::IsDirty()
     {
         sal::systools::COMReference< IPersistStorage > pPersist(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pPersist )
             return pPersist->IsDirty();
     }
@@ -419,7 +413,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::InitNew( IStorage *p
     {
         sal::systools::COMReference< IPersistStorage > pPersist(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pPersist )
         {
             HRESULT hr = pPersist->InitNew( pStg );
@@ -450,7 +444,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Load( IStorage *pStg
     {
         sal::systools::COMReference< IPersistStorage > pPersist(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pPersist )
         {
             HRESULT hr = pPersist->Load( pStg );
@@ -484,7 +478,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Save( IStorage *pStg
     {
         sal::systools::COMReference< IPersistStorage > pPersist(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pPersist )
             return pPersist->Save( pStgSave, fSameAsLoad );
     }
@@ -507,7 +501,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( IStor
     {
         sal::systools::COMReference< IPersistStorage > pPersist(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pPersist )
         {
             HRESULT hr = pPersist->SaveCompleted( pStgNew );
@@ -541,7 +535,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::HandsOffStorage()
     {
         sal::systools::COMReference< IPersistStorage > pPersist(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pPersist )
         {
             HRESULT hr = pPersist->HandsOffStorage();
@@ -565,7 +559,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Load( LPCOLESTR pszF
     {
         sal::systools::COMReference< IPersistFile > pPersist(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pPersist )
         {
             HRESULT hr = pPersist->Load( pszFileName, dwMode );
@@ -594,7 +588,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Save( LPCOLESTR pszF
     {
         sal::systools::COMReference< IPersistFile > pPersist(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pPersist )
             return pPersist->Save( pszFileName, fRemember );
     }
@@ -609,7 +603,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( LPCOL
     {
         sal::systools::COMReference< IPersistFile > pPersist(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pPersist )
         {
             HRESULT hr = pPersist->SaveCompleted( pszFileName );
@@ -637,7 +631,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetCurFile( LPOLESTR
     {
         sal::systools::COMReference< IPersistFile > pPersist(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pPersist )
             return pPersist->GetCurFile( ppszFileName );
     }
@@ -666,7 +660,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SetClientSite( IOleC
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
         {
             HRESULT hr2 = pOleObject->SetClientSite( pSite );
@@ -699,7 +693,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetClientSite( IOleC
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->GetClientSite( pSite );
     }
@@ -715,7 +709,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SetHostNames( LPCOLE
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
         {
             pOleObject->SetHostNames( szContainerApp, szContainerObj );
@@ -734,7 +728,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Close( DWORD dwSaveO
         // no need to close if there is no default handler.
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
         {
             HRESULT hr = pOleObject->Close( dwSaveOption );
@@ -759,7 +753,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SetMoniker( DWORD dw
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->SetMoniker( dwWhichMoniker, pmk );
     }
@@ -774,7 +768,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetMoniker( DWORD dw
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->GetMoniker( dwAssign, dwWhichMoniker, ppmk );
     }
@@ -789,7 +783,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::InitFromData( IDataO
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->InitFromData( pDataObject, fCreation, dwReserved );
     }
@@ -804,7 +798,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetClipboardData( DW
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->GetClipboardData( dwReserved, ppDataObject );
     }
@@ -825,7 +819,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::DoVerb(
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
         {
             return pOleObject->DoVerb( iVerb, pMsg, pActiveSite, nLong, hWin, pRect );
@@ -843,7 +837,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::EnumVerbs( IEnumOLEV
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->EnumVerbs( ppEnumOleVerb );
     }
@@ -859,7 +853,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Update()
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->Update();
     }
@@ -874,7 +868,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::IsUpToDate()
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->IsUpToDate();
     }
@@ -898,7 +892,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetUserType( DWORD d
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->GetUserType( dwFormOfType, pszUserType );
     }
@@ -913,7 +907,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SetExtent( DWORD dwD
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->SetExtent( dwDrawAspect, psizel );
     }
@@ -928,7 +922,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwD
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->GetExtent( dwDrawAspect, psizel );
     }
@@ -954,7 +948,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Advise( IAdviseSink 
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
         {
             sal::systools::COMReference pOwnAdvise(new OleWrapperAdviseSink(pAdvSink));
@@ -985,7 +979,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Unadvise( DWORD dwCo
         {
             sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-            ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+            ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
             if ( pOleObject )
             {
                 DWORD nID = m_pOleAdvises[dwConnection]->GetRegID();
@@ -1015,7 +1009,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetMiscStatus( DWORD
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->GetMiscStatus( dwAspect, pdwStatus );
     }
@@ -1030,7 +1024,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SetColorScheme( LOGP
     {
         sal::systools::COMReference< IOleObject > pOleObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pOleObject )
             return pOleObject->SetColorScheme( pLogpal );
     }
@@ -1046,7 +1040,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetData( FORMATETC *
     {
         sal::systools::COMReference< IDataObject > pIDataObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIDataObject )
             return pIDataObject->GetData( pFormatetc, pMedium );
     }
@@ -1061,7 +1055,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetDataHere( FORMATE
     {
         sal::systools::COMReference< IDataObject > pIDataObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIDataObject )
             return pIDataObject->GetDataHere( pFormatetc, pMedium );
     }
@@ -1076,7 +1070,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::QueryGetData( FORMAT
     {
         sal::systools::COMReference< IDataObject > pIDataObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIDataObject )
             return pIDataObject->QueryGetData( pFormatetc );
     }
@@ -1091,7 +1085,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetCanonicalFormatEt
     {
         sal::systools::COMReference< IDataObject > pIDataObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIDataObject )
             return pIDataObject->GetCanonicalFormatEtc( pFormatetcIn, pFormatetcOut );
     }
@@ -1106,7 +1100,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SetData( FORMATETC *
     {
         sal::systools::COMReference< IDataObject > pIDataObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIDataObject )
             return pIDataObject->SetData( pFormatetc, pMedium, fRelease );
     }
@@ -1121,7 +1115,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::EnumFormatEtc( DWORD
     {
         sal::systools::COMReference< IDataObject > pIDataObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIDataObject )
             return pIDataObject->EnumFormatEtc( dwDirection, ppFormatetc );
     }
@@ -1147,7 +1141,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::DAdvise( FORMATETC *
     {
         sal::systools::COMReference< IDataObject > pIDataObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIDataObject )
         {
             sal::systools::COMReference pOwnAdvise( new OleWrapperAdviseSink( pAdvSink, pFormatetc, advf ) );
@@ -1178,7 +1172,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::DUnadvise( DWORD dwC
         {
             sal::systools::COMReference< IDataObject > pIDataObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-            ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+            ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
             if ( pIDataObject )
             {
                 DWORD nID = m_pDataAdvises[dwConnection]->GetRegID();
@@ -1202,7 +1196,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::EnumDAdvise( IEnumST
     {
         sal::systools::COMReference< IDataObject > pIDataObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIDataObject )
             return pIDataObject->EnumDAdvise( ppenumAdvise );
     }
@@ -1218,7 +1212,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetRunningClass( LPC
     {
         sal::systools::COMReference< IRunnableObject > pIRunObj(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIRunObj )
             return pIRunObj->GetRunningClass( lpClsid );
     }
@@ -1233,7 +1227,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Run( LPBINDCTX pbc )
     {
         sal::systools::COMReference< IRunnableObject > pIRunObj(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIRunObj )
             return pIRunObj->Run( pbc );
     }
@@ -1247,7 +1241,7 @@ BOOL STDMETHODCALLTYPE InprocEmbedDocument_Impl::IsRunning()
     {
         sal::systools::COMReference< IRunnableObject > pIRunObj(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIRunObj )
             return pIRunObj->IsRunning();
     }
@@ -1261,7 +1255,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::LockRunning( BOOL fL
     {
         sal::systools::COMReference< IRunnableObject > pIRunObj(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIRunObj )
             return pIRunObj->LockRunning( fLock, fLastUnlockCloses );
     }
@@ -1276,7 +1270,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SetContainedObject( 
     {
         sal::systools::COMReference< IRunnableObject > pIRunObj(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIRunObj )
             return pIRunObj->SetContainedObject( fContained );
     }
@@ -1293,7 +1287,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Draw( DWORD dwDrawAs
     {
         sal::systools::COMReference< IViewObject > pIViewObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIViewObject )
             return pIViewObject->Draw( dwDrawAspect, lindex, pvAspect, ptd, hdcTargetDev, hdcDraw, lprcBounds, lprcWBounds, pfnContinue, dwContinue );
     }
@@ -1308,7 +1302,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetColorSet( DWORD d
     {
         sal::systools::COMReference< IViewObject > pIViewObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIViewObject )
             return pIViewObject->GetColorSet( dwDrawAspect, lindex, pvAspect, ptd, hicTargetDev, ppColorSet );
     }
@@ -1323,7 +1317,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Freeze( DWORD dwDraw
     {
         sal::systools::COMReference< IViewObject > pIViewObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIViewObject )
             return pIViewObject->Freeze( dwDrawAspect, lindex, pvAspect, pdwFreeze );
     }
@@ -1338,7 +1332,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Unfreeze( DWORD dwFr
     {
         sal::systools::COMReference< IViewObject > pIViewObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIViewObject )
             return pIViewObject->Unfreeze( dwFreeze );
     }
@@ -1361,7 +1355,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SetAdvise( DWORD asp
     {
         sal::systools::COMReference< IViewObject > pIViewObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIViewObject )
         {
             sal::systools::COMReference pOwnAdvise(new OleWrapperAdviseSink(pAdvSink, aspects, advf));
@@ -1409,7 +1403,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwD
     {
         sal::systools::COMReference< IViewObject2 > pIViewObject2(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIViewObject2 )
             return pIViewObject2->GetExtent( dwDrawAspect, lindex, ptd, lpsizel );
     }
@@ -1426,7 +1420,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetWindow( HWND *phw
     {
         sal::systools::COMReference< IOleWindow > pIOleWindow(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleWindow )
             return pIOleWindow->GetWindow( phwnd );
     }
@@ -1441,7 +1435,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::ContextSensitiveHelp
     {
         sal::systools::COMReference< IOleWindow > pIOleWindow(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleWindow )
             return pIOleWindow->ContextSensitiveHelp( fEnterMode );
     }
@@ -1458,7 +1452,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::InPlaceDeactivate()
     {
         sal::systools::COMReference< IOleInPlaceObject > pIOleInPlaceObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleInPlaceObject )
             return pIOleInPlaceObject->InPlaceDeactivate();
     }
@@ -1473,7 +1467,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::UIDeactivate()
     {
         sal::systools::COMReference< IOleInPlaceObject > pIOleInPlaceObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleInPlaceObject )
             return pIOleInPlaceObject->UIDeactivate();
     }
@@ -1488,7 +1482,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::SetObjectRects( LPCR
     {
         sal::systools::COMReference< IOleInPlaceObject > pIOleInPlaceObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleInPlaceObject )
             return pIOleInPlaceObject->SetObjectRects( lprcPosRect, lprcClipRect );
     }
@@ -1503,7 +1497,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::ReactivateAndUndo()
     {
         sal::systools::COMReference< IOleInPlaceObject > pIOleInPlaceObject(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleInPlaceObject )
             return pIOleInPlaceObject->ReactivateAndUndo();
     }
@@ -1520,7 +1514,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfoCount( UI
     {
         sal::systools::COMReference< IDispatch > pIDispatch(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIDispatch )
             return pIDispatch->GetTypeInfoCount( pctinfo );
     }
@@ -1535,7 +1529,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfo( UINT iT
     {
         sal::systools::COMReference< IDispatch > pIDispatch(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIDispatch )
             return pIDispatch->GetTypeInfo( iTInfo, lcid, ppTInfo );
     }
@@ -1550,7 +1544,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::GetIDsOfNames( REFII
     {
         sal::systools::COMReference< IDispatch > pIDispatch(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIDispatch )
             return pIDispatch->GetIDsOfNames( riid, rgszNames, cNames, lcid, rgDispId );
     }
@@ -1565,7 +1559,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Invoke( DISPID dispI
     {
         sal::systools::COMReference< IDispatch > pIDispatch(m_pDefHandler, sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_nCallsOnStack ); // avoid reentrance problem
         if ( pIDispatch )
             return pIDispatch->Invoke( dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr );
     }
@@ -1605,7 +1599,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper
     {
         sal::systools::COMReference< IOleCache > pIOleCache(m_rOwnDocument.GetDefHandler(), sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleCache )
             return pIOleCache->Cache( pformatetc, advf, pdwConnection );
     }
@@ -1620,7 +1614,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper
     {
         sal::systools::COMReference< IOleCache > pIOleCache(m_rOwnDocument.GetDefHandler(), sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleCache )
             return pIOleCache->Uncache( dwConnection );
     }
@@ -1635,7 +1629,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper
     {
         sal::systools::COMReference< IOleCache > pIOleCache(m_rOwnDocument.GetDefHandler(), sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleCache )
             return pIOleCache->EnumCache( ppenumSTATDATA );
     }
@@ -1650,7 +1644,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper
     {
         sal::systools::COMReference< IOleCache > pIOleCache(m_rOwnDocument.GetDefHandler(), sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleCache )
             return pIOleCache->InitCache( pDataObject );
     }
@@ -1665,7 +1659,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper
     {
         sal::systools::COMReference< IOleCache > pIOleCache(m_rOwnDocument.GetDefHandler(), sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleCache )
             return pIOleCache->SetData( pformatetc, pmedium, fRelease );
     }
@@ -1681,7 +1675,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper
     {
         sal::systools::COMReference< IOleCache2 > pIOleCache2(m_rOwnDocument.GetDefHandler(), sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleCache2 )
             return pIOleCache2->UpdateCache( pDataObject, grfUpdf, pReserved );
     }
@@ -1696,7 +1690,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper
     {
         sal::systools::COMReference< IOleCache2 > pIOleCache2(m_rOwnDocument.GetDefHandler(), sal::systools::COM_QUERY);
 
-        ULONGGuard aGuard( &m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
+        ULONGGuard aGuard( m_rOwnDocument.m_nCallsOnStack ); // avoid reentrance problem
         if ( pIOleCache2 )
             return pIOleCache2->DiscardCache( dwDiscardOptions );
     }
