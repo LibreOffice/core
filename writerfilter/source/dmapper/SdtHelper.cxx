@@ -21,12 +21,14 @@
 #include "DomainMapper_Impl.hxx"
 #include "StyleSheetTable.hxx"
 #include <officecfg/Office/Writer.hxx>
-
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-
+#include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <ooxml/OOXMLDocument.hxx>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 
 namespace writerfilter::dmapper
@@ -82,10 +84,67 @@ SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl,
     , m_aControlType(SdtControlType::unknown)
     , m_bHasElements(false)
     , m_bOutsideAParagraph(false)
+    , m_bPropertiesXMLsLoaded(false)
 {
 }
 
 SdtHelper::~SdtHelper() = default;
+
+void SdtHelper::loadPropertiesXMLs()
+{
+    // Initialize properties xml storage (m_xPropertiesXMLs)
+    uno::Reference<uno::XInterface> xTemp
+        = m_xComponentContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.document.OOXMLDocumentPropertiesImporter", m_xComponentContext);
+    uno::Reference<document::XOOXMLDocumentPropertiesImporter> xImporter(xTemp, uno::UNO_QUERY);
+    if (!xImporter.is())
+        return;
+
+    uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(
+        xml::dom::DocumentBuilder::create(m_xComponentContext));
+    if (!xDomBuilder.is())
+        return;
+
+    std::vector<uno::Reference<xml::dom::XDocument>> aPropDocs;
+
+    // Load core properties
+    try
+    {
+        auto xCorePropsStream = xImporter->getCorePropertiesStream(m_rDM_Impl.m_xDocumentStorage);
+        aPropDocs.push_back(xDomBuilder->parse(xCorePropsStream));
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("writerfilter",
+                 "SdtHelper::loadPropertiesXMLs: failed loading core properties XML");
+    }
+
+    // Load extended properties
+    try
+    {
+        auto xExtPropsStream
+            = xImporter->getExtendedPropertiesStream(m_rDM_Impl.m_xDocumentStorage);
+        aPropDocs.push_back(xDomBuilder->parse(xExtPropsStream));
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("writerfilter",
+                 "SdtHelper::loadPropertiesXMLs: failed loading extended properties XML");
+    }
+
+    // TODO: some other property items?
+
+    // Add custom XMLs
+    uno::Sequence<uno::Reference<xml::dom::XDocument>> aCustomXmls
+        = m_rDM_Impl.getDocumentReference()->getCustomXmlDomList();
+    for (const auto& xDoc : aCustomXmls)
+    {
+        aPropDocs.push_back(xDoc);
+    }
+
+    m_xPropertiesXMLs = comphelper::containerToSequence(aPropDocs);
+    m_bPropertiesXMLsLoaded = true;
+}
 
 static void lcl_registerNamespaces(const OUString& sNamespaceString,
                                    uno::Reference<XXPathAPI> xXPathAPI)
@@ -125,33 +184,26 @@ std::optional<OUString> SdtHelper::getValueFromDataBinding()
     if (m_sDataBindingXPath.isEmpty())
         return {};
 
-    writerfilter::ooxml::OOXMLDocument* pDocument = m_rDM_Impl.getDocumentReference();
-    assert(pDocument);
-    if (!pDocument)
-        return {};
+    // Load properties XMLs
+    if (!m_bPropertiesXMLsLoaded)
+        loadPropertiesXMLs();
 
-    // Iterate all custom xmls documents and evaluate xpath to get value
-    uno::Sequence<uno::Reference<xml::dom::XDocument>> aCustomXmls
-        = pDocument->getCustomXmlDomList();
-    for (const auto& xCustomXml : aCustomXmls)
+    uno::Reference<XXPathAPI> xXpathAPI = XPathAPI::create(m_xComponentContext);
+
+    lcl_registerNamespaces(m_sDataBindingPrefixMapping, xXpathAPI);
+
+    // Iterate all properties xml documents and try to fetch data
+    for (const auto& xDocument : m_xPropertiesXMLs)
     {
-        uno::Reference<XXPathAPI> xXpathAPI = XPathAPI::create(m_xComponentContext);
+        uno::Reference<XXPathObject> xResult = xXpathAPI->eval(xDocument, m_sDataBindingXPath);
 
-        lcl_registerNamespaces(m_sDataBindingPrefixMapping, xXpathAPI);
-
-        uno::Reference<XXPathObject> xResult = xXpathAPI->eval(xCustomXml, m_sDataBindingXPath);
-
-        if (xResult.is())
+        if (xResult.is() && xResult->getNodeList() && xResult->getNodeList()->getLength())
         {
             return xResult->getString();
         }
     }
 
-    // Still not found?
-    // TODO: iterate core-properties
-    // TODO: iterate extended-properties
-    // TODO: iterate coverPageProps
-
+    // No data
     return {};
 }
 
@@ -238,6 +290,10 @@ void SdtHelper::createPlainTextControl()
     // add it into document
     m_rDM_Impl.appendTextContent(xControlModel, uno::Sequence<beans::PropertyValue>());
 
+    // Store all unused sdt parameters from grabbag
+    xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG,
+                                   uno::makeAny(getInteropGrabBagAndClear()));
+
     // clean up
     m_aDropDownItems.clear();
     setControlType(SdtControlType::unknown);
@@ -318,7 +374,8 @@ void SdtHelper::createDateContentControl()
     setControlType(SdtControlType::unknown);
 
     // Store all unused sdt parameters from grabbag
-    xNameCont->insertByName("SdtParams", uno::makeAny(getInteropGrabBagAndClear()));
+    xNameCont->insertByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG,
+                            uno::makeAny(getInteropGrabBagAndClear()));
 }
 
 void SdtHelper::createControlShape(awt::Size aSize,

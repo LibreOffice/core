@@ -38,6 +38,9 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
+//#include <com/sun/star/xml/xslt/XSLTTransformer.hpp>
+#include <com/sun/star/xml/xslt/XSLTTransformer.hpp>
+
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>
@@ -1514,6 +1517,35 @@ void DocxExport::WriteGlossary()
     }
 }
 
+void lcl_UpdateXmlValues(const SdtData& sdtData, const uno::Reference<css::io::XInputStream>& xInputStream, const uno::Reference<css::io::XOutputStream>& xOutputStream)
+{
+    uno::Sequence<uno::Any> aArgs{
+    uno::Any(beans::NamedValue("StylesheetText", uno::Any(OUString("<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
+<xsl:stylesheet\
+    xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"\
+    " + sdtData.namespaces + "\
+    version=\"1.0\">\
+  <xsl:template match=\"@* | node()\">\
+    <xsl:copy>\
+      <xsl:apply-templates select=\"@* | node()\"/>\
+    </xsl:copy>\
+  </xsl:template>\
+  <xsl:template match = \"" + sdtData.xpath + "\">\
+    <xsl:copy>\
+      <xsl:text>" + sdtData.data + "</xsl:text>\
+    </xsl:copy>\
+  </xsl:template>\
+</xsl:stylesheet>\
+"))))
+    };
+
+    css::uno::Reference<css::xml::xslt::XXSLTTransformer> xTransformer =
+        css::xml::xslt::XSLTTransformer::create(comphelper::getProcessComponentContext(), aArgs);
+    xTransformer->setInputStream(xInputStream);
+    xTransformer->setOutputStream(xOutputStream);
+    xTransformer->start();
+}
+
 void DocxExport::WriteCustomXml()
 {
     uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
@@ -1548,10 +1580,50 @@ void DocxExport::WriteCustomXml()
 
             uno::Reference< xml::sax::XSAXSerializable > serializer( customXmlDom, uno::UNO_QUERY );
             uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
-            writer->setOutputStream( GetFilter().openFragmentStream( "customXml/item"+OUString::number(j+1)+".xml",
-                "application/xml" ) );
-            serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
-                uno::Sequence< beans::StringPair >() );
+
+            uno::Reference < css::io::XOutputStream > xOutStream = GetFilter().openFragmentStream("customXml/item" + OUString::number(j + 1) + ".xml",
+                "application/xml");
+            if (m_SdtData.size())
+            {
+                uno::Reference< io::XStream > xMemStream(
+                    comphelper::getProcessComponentContext()->getServiceManager()->createInstanceWithContext("com.sun.star.comp.MemoryStream",
+                        comphelper::getProcessComponentContext()),
+                    uno::UNO_QUERY_THROW);
+
+                writer->setOutputStream(xMemStream->getOutputStream());
+
+                serializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(writer, uno::UNO_QUERY_THROW),
+                    uno::Sequence< beans::StringPair >());
+
+                uno::Reference< io::XStream > xXSLTInStream = xMemStream;
+                uno::Reference< io::XStream > xXSLTOutStream;
+                for (size_t i = 0; i < m_SdtData.size(); i++)
+                {
+                    if (i == m_SdtData.size() - 1)
+                    {
+                        // last transformation
+                        lcl_UpdateXmlValues(m_SdtData[i], xXSLTInStream->getInputStream(), xOutStream);
+                    }
+                    else
+                    {
+                        xXSLTOutStream.set(
+                            comphelper::getProcessComponentContext()->getServiceManager()->createInstanceWithContext("com.sun.star.comp.MemoryStream",
+                                comphelper::getProcessComponentContext()),
+                            uno::UNO_QUERY_THROW);
+                        lcl_UpdateXmlValues(m_SdtData[i], xXSLTInStream->getInputStream(), xXSLTOutStream->getOutputStream());
+
+                        xXSLTInStream.set( xXSLTOutStream );
+                    }
+                }
+
+            }
+            else
+            {
+                writer->setOutputStream(xOutStream);
+
+                serializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(writer, uno::UNO_QUERY_THROW),
+                    uno::Sequence< beans::StringPair >());
+            }
         }
 
         if (customXmlDomProps.is())
