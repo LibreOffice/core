@@ -30,6 +30,7 @@
 #include <uno/current_context.h>
 #include <uno/lbnames.h>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -270,16 +271,12 @@ public:
         { ::uno_setCurrentContext( m_cc, s_envType.pData, nullptr ); }
 };
 
-struct MutexHolder
-{
-    Mutex m_mutex;
-};
 typedef WeakComponentImplHelper<
     security::XAccessController, lang::XServiceInfo, lang::XInitialization > t_helper;
 
 
 class AccessController
-    : public MutexHolder
+    : public cppu::BaseMutex
     , public t_helper
 {
     Reference< XComponentContext > m_xComponentContext;
@@ -338,7 +335,7 @@ public:
 };
 
 AccessController::AccessController( Reference< XComponentContext > const & xComponentContext )
-    : t_helper( m_mutex )
+    : t_helper( m_aMutex )
     , m_xComponentContext( xComponentContext )
     , m_mode( Mode::On ) // default
     , m_defaultPerm_init( false )
@@ -445,7 +442,7 @@ Reference< security::XPolicy > const & AccessController::getPolicy()
                 "cannot get policy singleton!", static_cast<OWeakObject *>(this) );
         }
 
-        MutexGuard guard( m_mutex );
+        MutexGuard guard( m_aMutex );
         if (! m_xPolicy.is())
         {
             m_xPolicy = xPolicy;
@@ -526,7 +523,7 @@ void AccessController::checkAndClearPostPoned()
             PermissionCollection const * pPermissions;
             // lookup policy for user
             {
-                MutexGuard guard( m_mutex );
+                MutexGuard guard( m_aMutex );
                 pPermissions = m_user2permissions.lookup( p.first );
             }
             OSL_ASSERT( pPermissions );
@@ -583,7 +580,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         }
 
         // lookup policy for user
-        MutexGuard guard( m_mutex );
+        MutexGuard guard( m_aMutex );
         PermissionCollection const * pPermissions = m_user2permissions.lookup( userId );
         if (pPermissions)
             return *pPermissions;
@@ -623,7 +620,7 @@ PermissionCollection AccessController::getEffectivePermissions(
             PermissionCollection defaultPermissions(
                 getPolicy()->getDefaultPermissions() );
             // assign
-            MutexGuard guard( m_mutex );
+            MutexGuard guard( m_aMutex );
             if (! m_defaultPerm_init)
             {
                 m_defaultPermissions = defaultPermissions;
@@ -645,7 +642,7 @@ PermissionCollection AccessController::getEffectivePermissions(
                 getPolicy()->getPermissions( userId ), m_defaultPermissions );
             {
             // assign
-            MutexGuard guard( m_mutex );
+            MutexGuard guard( m_aMutex );
             if (m_singleUser_init)
             {
                 ret = m_singleUserPermissions;
@@ -672,7 +669,7 @@ PermissionCollection AccessController::getEffectivePermissions(
                 getPolicy()->getPermissions( userId ), m_defaultPermissions );
             {
             // cache
-            MutexGuard guard( m_mutex );
+            MutexGuard guard( m_aMutex );
             m_user2permissions.set( userId, ret );
             }
 #ifdef __DIAGNOSE
