@@ -19,7 +19,7 @@
 #pragma once
 
 #include <OPropertySet.hxx>
-#include <MutexContainer.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 
 #include "ChartTypeTemplate.hxx"
@@ -29,7 +29,7 @@ namespace chart
 {
 
 class BarChartTypeTemplate :
-        public MutexContainer,
+        public cppu::BaseMutex,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {

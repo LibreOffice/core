@@ -19,7 +19,7 @@
 #pragma once
 
 #include <OPropertySet.hxx>
-#include <MutexContainer.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XTitle.hpp>
@@ -43,7 +43,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class Title final :
-    public MutexContainer,
+    public cppu::BaseMutex,
     public impl::Title_Base,
     public ::property::OPropertySet
 {

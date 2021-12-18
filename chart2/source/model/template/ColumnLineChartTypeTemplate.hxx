@@ -22,14 +22,14 @@
 #include <StackMode.hxx>
 
 #include <OPropertySet.hxx>
-#include <MutexContainer.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace chart
 {
 
 class ColumnLineChartTypeTemplate :
-        public MutexContainer,
+        public cppu::BaseMutex,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {

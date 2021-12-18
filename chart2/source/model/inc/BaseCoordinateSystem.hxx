@@ -19,7 +19,7 @@
 #pragma once
 
 #include <OPropertySet.hxx>
-#include <MutexContainer.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -48,7 +48,7 @@ typedef ::cppu::WeakImplHelper
 
 class BaseCoordinateSystem :
         public impl::BaseCoordinateSystem_Base,
-        public MutexContainer,
+        public cppu::BaseMutex,
         public ::property::OPropertySet
 {
 public:

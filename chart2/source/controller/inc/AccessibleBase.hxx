@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 #include <tools/color.hxx>
@@ -34,8 +35,6 @@
 #include <map>
 #include <vector>
 #include <memory>
-
-#include <MutexContainer.hxx>
 
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::chart2 { class XChartDocument; }
@@ -89,7 +88,7 @@ typedef ::cppu::WeakComponentImplHelper<
 /** Base class for all Chart Accessibility objects
  */
 class AccessibleBase :
-    public MutexContainer,
+    public cppu::BaseMutex,
     public impl::AccessibleBase_Base
 {
 public:
