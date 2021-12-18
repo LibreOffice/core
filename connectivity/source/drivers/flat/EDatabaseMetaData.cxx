@@ -53,7 +53,7 @@ Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
 
     static ODatabaseMetaDataResultSet::ORows aRows = []()
     {
-        ODatabaseMetaDataResultSet::ORows tmp(10);
+        ODatabaseMetaDataResultSet::ORows tmp;
         ODatabaseMetaDataResultSet::ORow aRow
         {
              ODatabaseMetaDataResultSet::getEmptyValue() ,
