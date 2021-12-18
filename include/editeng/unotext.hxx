@@ -41,11 +41,11 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <osl/diagnose.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <comphelper/servicehelper.hxx>
 #include <svl/itemset.hxx>
 #include <svl/solar.hrc>
@@ -522,8 +522,8 @@ private:
     const SvxUnoTextBase&   mrParentText;
 
     // for xComponent
-    ::osl::Mutex maDisposeContainerMutex;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> maDisposeListeners;
+    std::mutex maDisposeContainerMutex;
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maDisposeListeners;
     bool mbDisposing;
 
 protected:

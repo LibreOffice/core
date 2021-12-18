@@ -118,7 +118,6 @@ SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_Int32 nPa
 :   SvxUnoTextRangeBase(rText)
 ,   mnParagraph(nPara)
 ,   mrParentText(rText)
-,   maDisposeListeners(maDisposeContainerMutex)
 ,   mbDisposing( false )
 {
     mxParentText = const_cast<SvxUnoTextBase*>(&rText);
@@ -131,7 +130,6 @@ SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) noexce
 ,   lang::XTypeProvider()
 ,   cppu::OWeakAggObject()
 ,   mrParentText(rContent.mrParentText)
-,   maDisposeListeners(maDisposeContainerMutex)
 ,   mbDisposing( false )
 {
     mxParentText = rContent.mxParentText;
@@ -232,7 +230,10 @@ void SAL_CALL SvxUnoTextContent::dispose()
 
     lang::EventObject aEvt;
     aEvt.Source = *static_cast<OWeakAggObject*>(this);
-    maDisposeListeners.disposeAndClear(aEvt);
+    {
+        std::unique_lock aMutexGuard(maDisposeContainerMutex);
+        maDisposeListeners.disposeAndClear(aMutexGuard, aEvt);
+    }
 
     if( mxParentText.is() )
         mxParentText->removeTextContent( this );
@@ -240,11 +241,13 @@ void SAL_CALL SvxUnoTextContent::dispose()
 
 void SAL_CALL SvxUnoTextContent::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
+    std::unique_lock aGuard(maDisposeContainerMutex);
     maDisposeListeners.addInterface(xListener);
 }
 
 void SAL_CALL SvxUnoTextContent::removeEventListener( const uno::Reference< lang::XEventListener >& aListener )
 {
+   std::unique_lock aGuard(maDisposeContainerMutex);
    maDisposeListeners.removeInterface(aListener);
 }
 
