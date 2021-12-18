@@ -103,15 +103,14 @@ public:
             auto pADsys = sal::systools::COMReference<IADsADSystemInfo>().CoCreateInstance(
                 CLSID_ADSystemInfo, nullptr, CLSCTX_INPROC_SERVER);
 
-            BSTR sUserDN;
-            HRESULT hr = pADsys->get_UserName(&sUserDN);
+            smartBSTR sUserDN;
+            HRESULT hr = pADsys->get_UserName(&sUserDN.ptr);
             if (FAILED(hr))
                 throw sal::systools::ComError("get_UserName failed", hr);
-            BSTRGuard aUserNameGuard(sUserDN, SysFreeString);
             // If this user is an AD user, then without an active connection to the domain, all the
             // above will succeed, and m_sUserDN will be correctly initialized, but the following
             // call to ADsGetObject will fail, and we will attempt reading cached values.
-            m_sUserDN = o3tl::toU(sUserDN);
+            m_sUserDN = o3tl::toU(sUserDN.ptr);
             OUString sLdapUserDN = "LDAP://" + m_sUserDN;
             sal::systools::COMReference<IADsUser> pUser;
             hr = ADsGetObject(o3tl::toW(sLdapUserDN.getStr()), IID_IADsUser,
@@ -160,26 +159,29 @@ public:
     virtual OUString GetMail() override { return m_aMap[mail]; }
 
 private:
-    typedef std::unique_ptr<OLECHAR, decltype(&SysFreeString)> BSTRGuard;
+    struct smartBSTR
+    {
+        BSTR ptr = nullptr;
+        ~smartBSTR() { SysFreeString(ptr); }
+    };
 
     typedef HRESULT (__stdcall IADsUser::*getstrfunc)(BSTR*);
     static OUString Str(IADsUser* pUser, getstrfunc func)
     {
-        BSTR sBstr;
-        if (FAILED((pUser->*func)(&sBstr)))
+        smartBSTR sBstr;
+        if (FAILED((pUser->*func)(&sBstr.ptr)))
             return "";
-        BSTRGuard aBstrGuard(sBstr, SysFreeString);
-        return OUString(o3tl::toU(sBstr));
+        return OUString(o3tl::toU(sBstr.ptr));
     }
     static OUString Str(IADsUser* pUser, const wchar_t* property)
     {
-        BSTRGuard sBstrProp(SysAllocString(property), SysFreeString);
+        smartBSTR sBstrProp{ SysAllocString(property) };
         struct AutoVariant : public VARIANT
         {
             AutoVariant() { VariantInit(this); }
             ~AutoVariant() { VariantClear(this); }
         } varArr;
-        if (FAILED(pUser->GetEx(sBstrProp.get(), &varArr)))
+        if (FAILED(pUser->GetEx(sBstrProp.ptr, &varArr)))
             return "";
         SAFEARRAY* sa = V_ARRAY(&varArr);
         LONG nStart, nEnd;
