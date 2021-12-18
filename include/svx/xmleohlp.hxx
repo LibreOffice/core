@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_XMLEOHLP_HXX
 #define INCLUDED_SVX_XMLEOHLP_HXX
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
@@ -45,10 +46,9 @@ class OutputStorageWrapper_Impl;
 
 
 class SVXCORE_DLLPUBLIC SvXMLEmbeddedObjectHelper final :
+    public cppu::BaseMutex,
     public cppu::WeakComponentImplHelper< css::document::XEmbeddedObjectResolver, css::container::XNameAccess >
 {
-    ::osl::Mutex                maMutex;
-
     OUString             maCurContainerStorageName;
 
 

@@ -120,14 +120,14 @@ void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
 }
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
-    WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
+    WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( m_aMutex ),
     mpDocPersist( nullptr ),
     meCreateMode( SvXMLEmbeddedObjectHelperMode::Read )
 {
 }
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHelper& rDocPersist, SvXMLEmbeddedObjectHelperMode eCreateMode ) :
-    WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
+    WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( m_aMutex ),
     mpDocPersist( nullptr ),
     meCreateMode( SvXMLEmbeddedObjectHelperMode::Read )
 {
@@ -546,7 +546,7 @@ rtl::Reference<SvXMLEmbeddedObjectHelper> SvXMLEmbeddedObjectHelper::Create(
 
 OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL(const OUString& rURL)
 {
-    MutexGuard          aGuard( maMutex );
+    MutexGuard          aGuard( m_aMutex );
 
     OUString sRet;
     try
@@ -571,7 +571,7 @@ OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL(const OUSt
 Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
         const OUString& rURLStr )
 {
-    MutexGuard          aGuard( maMutex );
+    MutexGuard          aGuard( m_aMutex );
     Any aRet;
     if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
     {
@@ -672,7 +672,7 @@ Sequence< OUString > SAL_CALL SvXMLEmbeddedObjectHelper::getElementNames()
 
 sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr )
 {
-    MutexGuard          aGuard( maMutex );
+    MutexGuard          aGuard( m_aMutex );
     if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
     {
         return true;
@@ -694,7 +694,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr 
 // XNameAccess
 Type SAL_CALL SvXMLEmbeddedObjectHelper::getElementType()
 {
-    MutexGuard          aGuard( maMutex );
+    MutexGuard          aGuard( m_aMutex );
     if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
         return cppu::UnoType<XOutputStream>::get();
     else
@@ -703,7 +703,7 @@ Type SAL_CALL SvXMLEmbeddedObjectHelper::getElementType()
 
 sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasElements()
 {
-    MutexGuard          aGuard( maMutex );
+    MutexGuard          aGuard( m_aMutex );
     if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
     {
         return true;
