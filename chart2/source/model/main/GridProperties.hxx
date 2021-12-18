@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -26,7 +27,6 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 
 #include <OPropertySet.hxx>
-#include <MutexContainer.hxx>
 
 namespace chart
 {
@@ -42,7 +42,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class GridProperties final :
-        public MutexContainer,
+        public cppu::BaseMutex,
         public impl::GridProperties_Base,
         public ::property::OPropertySet
 {

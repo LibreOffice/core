@@ -18,10 +18,10 @@
  */
 #pragma once
 
-#include <MutexContainer.hxx>
 #include <WrappedIgnoreProperty.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
@@ -37,7 +37,7 @@ namespace chart::wrapper
 
 class Chart2ModelContact;
 
-class MinMaxLineWrapper : public MutexContainer
+class MinMaxLineWrapper : public cppu::BaseMutex
                         , public ::cppu::WeakImplHelper
                         < css::lang::XComponent
                         , css::lang::XServiceInfo
