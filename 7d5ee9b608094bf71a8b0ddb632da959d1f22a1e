@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "777b244f_fd01087c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-18T13:24:06Z",
+      "side": 1,
+      "message": "I didn\u0027t do a full oss-fuzz run yet, just a local --enable-fuzzers build, so this is currently just FYI or if you want to play with it.",
+      "revId": "7d5ee9b608094bf71a8b0ddb632da959d1f22a1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
