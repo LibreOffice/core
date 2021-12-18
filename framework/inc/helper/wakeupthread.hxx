@@ -23,8 +23,8 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <osl/conditn.hxx>
-#include <osl/mutex.hxx>
+#include <condition_variable>
+#include <mutex>
 #include <salhelper/thread.hxx>
 
 namespace com::sun::star::util
@@ -37,9 +37,8 @@ namespace framework
 class WakeUpThread final : public salhelper::Thread
 {
     css::uno::WeakReference<css::util::XUpdatable> updatable_;
-    osl::Condition condition_;
-
-    osl::Mutex mutex_;
+    std::condition_variable condition_;
+    std::mutex mutex_;
     bool terminate_;
 
     void execute() override;
