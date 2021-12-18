@@ -26,6 +26,8 @@
 #define SECURITY_WIN32
 #include <Security.h>
 
+#include <systools/win32/comtools.hxx>
+
 namespace extensions
 {
 namespace config
@@ -92,35 +94,30 @@ public:
             {
                 CoInitializeGuard()
                 {
-                    if (FAILED(CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED)))
-                        throw css::uno::RuntimeException();
+                    if (HRESULT hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED); FAILED(hr))
+                        throw sal::systools::ComError("CoInitializeEx failed", hr);
                 }
                 ~CoInitializeGuard() { CoUninitialize(); }
             } aCoInitializeGuard;
 
-            IADsADSystemInfo* pADsys;
-            HRESULT hr = CoCreateInstance(CLSID_ADSystemInfo, nullptr, CLSCTX_INPROC_SERVER,
-                                          IID_IADsADSystemInfo, reinterpret_cast<void**>(&pADsys));
-            if (FAILED(hr))
-                throw css::uno::RuntimeException();
-            CoIfPtr<IADsADSystemInfo> aADsysGuard(pADsys);
+            auto pADsys = sal::systools::COMReference<IADsADSystemInfo>().CoCreateInstance(
+                CLSID_ADSystemInfo, nullptr, CLSCTX_INPROC_SERVER);
 
             BSTR sUserDN;
-            hr = pADsys->get_UserName(&sUserDN);
+            HRESULT hr = pADsys->get_UserName(&sUserDN);
             if (FAILED(hr))
-                throw css::uno::RuntimeException();
+                throw sal::systools::ComError("get_UserName failed", hr);
             BSTRGuard aUserNameGuard(sUserDN, SysFreeString);
             // If this user is an AD user, then without an active connection to the domain, all the
             // above will succeed, and m_sUserDN will be correctly initialized, but the following
             // call to ADsGetObject will fail, and we will attempt reading cached values.
             m_sUserDN = o3tl::toU(sUserDN);
             OUString sLdapUserDN = "LDAP://" + m_sUserDN;
-            IADsUser* pUser;
+            sal::systools::COMReference<IADsUser> pUser;
             hr = ADsGetObject(o3tl::toW(sLdapUserDN.getStr()), IID_IADsUser,
                               reinterpret_cast<void**>(&pUser));
             if (FAILED(hr))
-                throw css::uno::RuntimeException();
-            CoIfPtr<IADsUser> pUserGuard(pUser);
+                throw sal::systools::ComError("ADsGetObject failed", hr);
             // Fetch all the required information right now, when we know to have access to AD
             // (later the connection may already be lost)
             m_aMap[givenname] = Str(pUser, &IADsUser::get_FirstName);
@@ -140,7 +137,7 @@ public:
 
             CacheData(xContext);
         }
-        catch (css::uno::Exception&)
+        catch (sal::systools::ComError&)
         {
             // Maybe we temporarily lost connection to AD; try to get cached data
             GetCachedData(xContext);
@@ -163,19 +160,6 @@ public:
     virtual OUString GetMail() override { return m_aMap[mail]; }
 
 private:
-    static void ReleaseIUnknown(IUnknown* p)
-    {
-        if (p)
-            p->Release();
-    }
-    template <class If> class CoIfPtr : public std::unique_ptr<If, decltype(&ReleaseIUnknown)>
-    {
-    public:
-        CoIfPtr(If* p = nullptr)
-            : std::unique_ptr<If, decltype(&ReleaseIUnknown)>(p, ReleaseIUnknown)
-        {
-        }
-    };
     typedef std::unique_ptr<OLECHAR, decltype(&SysFreeString)> BSTRGuard;
 
     typedef HRESULT (__stdcall IADsUser::*getstrfunc)(BSTR*);
