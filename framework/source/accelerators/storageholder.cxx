@@ -47,7 +47,7 @@ StorageHolder::~StorageHolder()
 
 void StorageHolder::forgetCachedStorages()
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
     for (auto & lStorage : m_lStorages)
     {
         TStorageInfo& rInfo = lStorage.second;
@@ -59,13 +59,13 @@ void StorageHolder::forgetCachedStorages()
 
 void StorageHolder::setRootStorage(const css::uno::Reference< css::embed::XStorage >& xRoot)
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
     m_xRoot = xRoot;
 }
 
 css::uno::Reference< css::embed::XStorage > StorageHolder::getRootStorage() const
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
     return m_xRoot;
 }
 
@@ -76,9 +76,9 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
     std::vector<OUString> lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
 
     // SAFE -> ----------------------------------
-    osl::ResettableMutexGuard aReadLock(m_mutex);
+    std::unique_lock aReadLock(m_mutex);
     css::uno::Reference< css::embed::XStorage > xParent = m_xRoot;
-    aReadLock.clear();
+    aReadLock.unlock();
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::embed::XStorage > xChild;
@@ -89,7 +89,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
         OUString  sCheckPath (sRelPath + lFolder + PATH_SEPARATOR);
 
         // SAFE -> ------------------------------
-        aReadLock.reset();
+        aReadLock.lock();
 
         // If we found an already open storage ... we must increase
         // its use count. Otherwise it will may be closed too early :-)
@@ -101,12 +101,12 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
             ++(pInfo->UseCount);
             xChild = pInfo->Storage;
 
-            aReadLock.clear();
+            aReadLock.unlock();
             // <- SAFE ------------------------------
         }
         else
         {
-            aReadLock.clear();
+            aReadLock.unlock();
             // <- SAFE ------------------------------
 
             try
@@ -130,7 +130,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
                     throw;
                 }
 
-            osl::MutexGuard g(m_mutex);
+            std::unique_lock g(m_mutex);
             pInfo = &(m_lStorages[sCheckPath]);
             pInfo->Storage  = xChild;
             pInfo->UseCount = 1;
@@ -154,7 +154,7 @@ StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sP
     StorageHolder::TStorageList  lStoragesOfPath;
     OUString              sRelPath;
 
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     for (auto const& lFolder : lFolders)
     {
@@ -196,7 +196,7 @@ void StorageHolder::commitPath(const OUString& sPath)
 
     // SAFE -> ------------------------------
     {
-        osl::MutexGuard aReadLock(m_mutex);
+        std::unique_lock aReadLock(m_mutex);
         xCommit.set(m_xRoot, css::uno::UNO_QUERY);
     }
     // <- SAFE ------------------------------
@@ -223,7 +223,7 @@ void StorageHolder::closePath(const OUString& rPath)
         sParentPath = sCurrentRelPath;
     }
 
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     std::vector<OUString>::reverse_iterator pIt2;
     for (  pIt2  = lFolders.rbegin();
@@ -249,7 +249,7 @@ void StorageHolder::notifyPath(const OUString& sPath)
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
 
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     TPath2StorageInfo::iterator pIt1 = m_lStorages.find(sNormedPath);
     if (pIt1 == m_lStorages.end())
@@ -268,7 +268,7 @@ void StorageHolder::addStorageListener(      XMLBasedAcceleratorConfiguration* p
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
 
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     TPath2StorageInfo::iterator pIt1 = m_lStorages.find(sNormedPath);
     if (pIt1 == m_lStorages.end())
@@ -285,7 +285,7 @@ void StorageHolder::removeStorageListener(      XMLBasedAcceleratorConfiguration
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
 
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     TPath2StorageInfo::iterator pIt1 = m_lStorages.find(sNormedPath);
     if (pIt1 == m_lStorages.end())
@@ -299,7 +299,7 @@ void StorageHolder::removeStorageListener(      XMLBasedAcceleratorConfiguration
 
 OUString StorageHolder::getPathOfStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     for (auto const& lStorage : m_lStorages)
     {
@@ -334,7 +334,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
 
     // SAFE -> ----------------------------------
     {
-        osl::MutexGuard aReadLock(m_mutex);
+        std::unique_lock aReadLock(m_mutex);
 
         // b)
         if (c < 2)
@@ -361,7 +361,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
 
 StorageHolder& StorageHolder::operator=(const StorageHolder& rCopy)
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
     m_xRoot     = rCopy.m_xRoot;
     m_lStorages = rCopy.m_lStorages;
     return *this;
