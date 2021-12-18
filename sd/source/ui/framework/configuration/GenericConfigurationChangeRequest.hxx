@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
 namespace com::sun::star::drawing::framework { class XConfiguration; }
@@ -41,7 +41,7 @@ typedef ::cppu::WeakComponentImplHelper <
     requested: the resources linked to it have to be deactivated as well.
 */
 class GenericConfigurationChangeRequest
-    : private MutexOwner,
+    : private cppu::BaseMutex,
       public GenericConfigurationChangeRequestInterfaceBase
 {
 public:

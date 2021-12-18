@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
 namespace com::sun::star::drawing::framework { class XConfiguration; }
@@ -42,7 +42,7 @@ typedef ::cppu::WeakComponentImplHelper <
     configuration when it is removed as last request from the queue.
 */
 class UpdateRequest
-    : private MutexOwner,
+    : private cppu::BaseMutex,
       public UpdateRequestInterfaceBase
 {
 public:

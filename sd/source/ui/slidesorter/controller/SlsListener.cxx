@@ -54,7 +54,7 @@ namespace sd::slidesorter::controller {
 
 Listener::Listener (
     SlideSorter& rSlideSorter)
-    : ListenerInterfaceBase(maMutex),
+    : ListenerInterfaceBase(m_aMutex),
       mrSlideSorter(rSlideSorter),
       mrController(mrSlideSorter.GetController()),
       mpBase(mrSlideSorter.GetViewShellBase()),

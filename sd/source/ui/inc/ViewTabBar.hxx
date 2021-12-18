@@ -24,9 +24,9 @@
 #include <com/sun/star/drawing/framework/XToolBar.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <vcl/InterimItemWindow.hxx>
-#include "MutexOwner.hxx"
 
 #include <vector>
 
@@ -70,7 +70,7 @@ typedef ::cppu::WeakComponentImplHelper <
 /** Tab control for switching between views in the center pane.
 */
 class ViewTabBar final
-    : private sd::MutexOwner,
+    : private cppu::BaseMutex,
       public ViewTabBarInterfaceBase
 {
 public:

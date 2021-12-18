@@ -19,12 +19,12 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/XRelocatableResource.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
 #include <memory>
@@ -46,7 +46,7 @@ typedef ::cppu::WeakComponentImplHelper    <   css::lang::XUnoTunnel
     Most importantly it provides a tunnel to the ViewShell implementation.
     Then it forwards size changes of the pane window to the view shell.
 */
-class ViewShellWrapper  :private sd::MutexOwner
+class ViewShellWrapper  :private cppu::BaseMutex
                         ,public ViewShellWrapperInterfaceBase
 {
 public:

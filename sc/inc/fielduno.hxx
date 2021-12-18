@@ -20,7 +20,6 @@
 #pragma once
 
 #include "address.hxx"
-#include "mutexhlp.hxx"
 
 #include <svl/lstner.hxx>
 #include <editeng/editdata.hxx>
@@ -33,6 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/component.hxx>
@@ -164,7 +164,7 @@ typedef cppu::WeakComponentImplHelper<
                             css::beans::XPropertySet,
                             css::lang::XUnoTunnel,
                             css::lang::XServiceInfo> ScEditFieldObj_Base;
-class ScEditFieldObj final : public ScMutexHelper, public ScEditFieldObj_Base
+class ScEditFieldObj final : public cppu::BaseMutex, public ScEditFieldObj_Base
 {
     ScEditFieldObj() = delete;
     ScEditFieldObj(const ScEditFieldObj&) = delete;

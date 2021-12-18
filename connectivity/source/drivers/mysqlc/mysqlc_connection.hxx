@@ -35,6 +35,7 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/string.hxx>
@@ -82,7 +83,7 @@ typedef OMetaConnection_BASE OConnection_BASE;
 
 typedef std::vector<css::uno::WeakReferenceHelper> OWeakRefArray;
 
-class OConnection final : public OBase_Mutex, public OConnection_BASE
+class OConnection final : public cppu::BaseMutex, public OConnection_BASE
 {
 private:
     MYSQL m_mysql;

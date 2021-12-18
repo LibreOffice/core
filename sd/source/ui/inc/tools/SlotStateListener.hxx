@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
 #include <com/sun/star/frame/XStatusListener.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <tools/link.hxx>
 
@@ -40,7 +40,7 @@ typedef cppu::WeakComponentImplHelper<
     be used to relay state changes of other slots as well.
 */
 class SlotStateListener final
-    : protected MutexOwner,
+    : protected cppu::BaseMutex,
       public SlotStateListenerInterfaceBase
 {
 public:

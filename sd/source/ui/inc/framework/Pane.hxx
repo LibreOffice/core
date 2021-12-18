@@ -19,11 +19,10 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
-
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XPane2.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
@@ -49,7 +48,7 @@ typedef ::cppu::WeakComponentImplHelper <
     on direct access on the Window class.
 */
 class Pane
-    : protected MutexOwner,
+    : protected cppu::BaseMutex,
       public PaneInterfaceBase
 {
 public:

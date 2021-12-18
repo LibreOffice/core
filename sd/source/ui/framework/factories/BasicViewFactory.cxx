@@ -83,7 +83,7 @@ public:
 //===== ViewFactory ===========================================================
 
 BasicViewFactory::BasicViewFactory ()
-    : BasicViewFactoryInterfaceBase(MutexOwner::maMutex),
+    : BasicViewFactoryInterfaceBase(m_aMutex),
       mpViewShellContainer(new ViewShellContainer()),
       mpBase(nullptr),
       mpFrameView(nullptr),

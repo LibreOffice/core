@@ -36,7 +36,7 @@ Pane::Pane (
     const Reference<XResourceId>& rxPaneId,
     vcl::Window* pWindow)
     noexcept
-    : PaneInterfaceBase(MutexOwner::maMutex),
+    : PaneInterfaceBase(m_aMutex),
       mxPaneId(rxPaneId),
       mpWindow(pWindow),
       mxWindow(VCLUnoHelper::GetInterface(pWindow))
@@ -72,7 +72,7 @@ Reference<awt::XWindow> SAL_CALL Pane::getWindow()
 
 Reference<rendering::XCanvas> SAL_CALL Pane::getCanvas()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     if ( ! mxCanvas.is())

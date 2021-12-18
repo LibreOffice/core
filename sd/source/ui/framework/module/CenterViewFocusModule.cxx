@@ -40,7 +40,7 @@ namespace sd::framework {
 //===== CenterViewFocusModule ====================================================
 
 CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController> const & rxController)
-    : CenterViewFocusModuleInterfaceBase(MutexOwner::maMutex),
+    : CenterViewFocusModuleInterfaceBase(m_aMutex),
       mbValid(false),
       mpBase(nullptr),
       mbNewViewCreated(false)
