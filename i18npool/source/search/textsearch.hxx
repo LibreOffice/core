@@ -26,6 +26,7 @@
 
 #include <map>
 #include <memory>
+#include <mutex>
 
 #include <unicode/regex.h>
 #include <unicode/unistr.h>
@@ -48,7 +49,7 @@ class TextSearch: public cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 {
-    osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
     css::util::SearchOptions2 aSrchPara;
