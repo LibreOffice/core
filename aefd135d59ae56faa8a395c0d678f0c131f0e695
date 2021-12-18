@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3135e2f8_df90502d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-18T14:36:09Z",
+      "side": 1,
+      "message": "It builds and I don\u0027t reproduce the hang with gtk3 or gen rendering.\nAbout the code, I suppose it\u0027s ok but I must recognize I don\u0027t understand how it works so can\u0027t tell.",
+      "revId": "aefd135d59ae56faa8a395c0d678f0c131f0e695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
