@@ -31,6 +31,7 @@
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/graphicmimetype.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -946,22 +947,10 @@ typedef cppu::WeakComponentImplHelper<lang::XInitialization,
                                         lang::XServiceInfo>
     SvXMLGraphicImportExportHelper_Base;
 
-class MutexContainer
-{
-public:
-    virtual ~MutexContainer();
-
-protected:
-    mutable ::osl::Mutex m_aMutex;
-};
-
-MutexContainer::~MutexContainer()
-{}
-
 } // namespace impl
 
 class SvXMLGraphicImportExportHelper :
-    public impl::MutexContainer,
+    public cppu::BaseMutex,
     public impl::SvXMLGraphicImportExportHelper_Base
 {
 public:
