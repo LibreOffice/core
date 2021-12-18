@@ -19,10 +19,10 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
 #include <memory>
@@ -58,7 +58,7 @@ typedef ::cppu::WeakComponentImplHelper <
     XConfigurationChangeOperation interface.
 */
 class Configuration
-    : private sd::MutexOwner,
+    : private cppu::BaseMutex,
       public ConfigurationInterfaceBase
 {
 public:

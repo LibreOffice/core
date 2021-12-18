@@ -48,7 +48,7 @@ namespace sd::framework {
 SlideSorterModule::SlideSorterModule (
     const Reference<frame::XController>& rxController,
     const OUString& rsLeftPaneURL)
-    : SlideSorterModuleBase(MutexOwner::maMutex),
+    : SlideSorterModuleBase(m_aMutex),
       mxResourceId(FrameworkHelper::CreateResourceId(FrameworkHelper::msSlideSorterURL, rsLeftPaneURL)),
       mxMainViewAnchorId(FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL)),
       mxViewTabBarId(FrameworkHelper::CreateResourceId(

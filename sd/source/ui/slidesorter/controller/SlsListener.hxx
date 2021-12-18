@@ -19,12 +19,12 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
 #include <svl/lstner.hxx>
@@ -58,7 +58,7 @@ typedef cppu::WeakComponentImplHelper<
     to the old controller and register as listener at the new one.
 */
 class Listener
-    : protected MutexOwner,
+    : protected cppu::BaseMutex,
       public ListenerInterfaceBase,
       public SfxListener
 {

@@ -510,7 +510,6 @@
 #include <GraphicViewShell.hxx>
 #include <LayerTabBar.hxx>
 #include <MasterPageObserver.hxx>
-#include <MutexOwner.hxx>
 #include <OutlineView.hxx>
 #include <OutlineViewShell.hxx>
 #include <Outliner.hxx>

@@ -52,7 +52,7 @@ typedef ::cppu::WeakComponentImplHelper12<
     css::sdbc::XColumnLocate, css::lang::XServiceInfo>
     OPreparedResultSet_BASE;
 
-class OPreparedResultSet final : public OBase_Mutex,
+class OPreparedResultSet final : public cppu::BaseMutex,
                                  public OPreparedResultSet_BASE,
                                  public ::cppu::OPropertySetHelper,
                                  public OPropertyArrayUsageHelper<OPreparedResultSet>

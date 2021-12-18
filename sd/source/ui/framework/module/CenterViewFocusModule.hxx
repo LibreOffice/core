@@ -19,9 +19,8 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
-
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
 namespace com::sun::star::drawing::framework
@@ -48,7 +47,7 @@ typedef ::cppu::WeakComponentImplHelper<css::drawing::framework::XConfigurationC
     we are moving away from the shell stack this module may become obsolete
     or has to be modified.
 */
-class CenterViewFocusModule : private sd::MutexOwner, public CenterViewFocusModuleInterfaceBase
+class CenterViewFocusModule : private cppu::BaseMutex, public CenterViewFocusModuleInterfaceBase
 {
 public:
     explicit CenterViewFocusModule(

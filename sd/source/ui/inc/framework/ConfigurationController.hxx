@@ -19,11 +19,10 @@
 
 #pragma once
 
-#include <MutexOwner.hxx>
-
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
 #include <memory>
@@ -48,7 +47,7 @@ typedef ::cppu::WeakComponentImplHelper <
         for an extended documentation.
 */
 class ConfigurationController
-    : private sd::MutexOwner,
+    : private cppu::BaseMutex,
       public ConfigurationControllerInterfaceBase
 {
 public:
