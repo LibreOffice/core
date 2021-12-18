@@ -369,7 +369,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
 SvXMLGraphicHelper::SvXMLGraphicHelper(SvXMLGraphicHelperMode eCreateMode)
     : cppu::WeakComponentImplHelper<document::XGraphicObjectResolver,
                                     document::XGraphicStorageHandler,
-                                    document::XBinaryStreamResolver>(maMutex)
+                                    document::XBinaryStreamResolver>(m_aMutex)
 {
     Init( nullptr, eCreateMode );
 }
@@ -377,7 +377,7 @@ SvXMLGraphicHelper::SvXMLGraphicHelper(SvXMLGraphicHelperMode eCreateMode)
 SvXMLGraphicHelper::SvXMLGraphicHelper()
     : cppu::WeakComponentImplHelper<document::XGraphicObjectResolver,
                                     document::XGraphicStorageHandler,
-                                    document::XBinaryStreamResolver>(maMutex)
+                                    document::XBinaryStreamResolver>(m_aMutex)
     , meCreateMode(SvXMLGraphicHelperMode::Read)
 {
 }
@@ -580,7 +580,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& /
 // XGraphicStorageHandler
 uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphic(OUString const & rURL)
 {
-    osl::MutexGuard aGuard(maMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     uno::Reference<graphic::XGraphic> xGraphic;
 
@@ -612,7 +612,7 @@ uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphic(OUStr
 
 uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphicFromOutputStream(uno::Reference<io::XOutputStream> const & rxOutputStream)
 {
-    osl::MutexGuard aGuard(maMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     uno::Reference<graphic::XGraphic> xGraphic;
 
