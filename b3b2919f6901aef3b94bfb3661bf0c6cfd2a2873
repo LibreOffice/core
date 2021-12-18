@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "029fd90c_c3b08f00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-18T21:15:34Z",
+      "side": 1,
+      "message": "ah, the character spacing feature at least",
+      "revId": "b3b2919f6901aef3b94bfb3661bf0c6cfd2a2873",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
