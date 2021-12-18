@@ -21,7 +21,7 @@
 
 #include <unordered_set>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <com/sun/star/connection/XConnection.hpp>
@@ -70,7 +70,7 @@ namespace io_acceptor {
         oslInterlockedCount m_nStatus;
         OUString m_sDescription;
 
-        ::osl::Mutex _mutex;
+        std::mutex _mutex;
         bool     _started;
         bool     _closed;
         bool     _error;
@@ -85,7 +85,7 @@ namespace io_acceptor {
         XStreamListener_hash_set listeners;
 
         {
-            ::osl::MutexGuard guard(pCon->_mutex);
+            std::unique_lock guard(pCon->_mutex);
             if(!*notified)
             {
                 *notified = true;
@@ -253,14 +253,14 @@ namespace io_acceptor {
     // XConnectionBroadcaster
     void SAL_CALL SocketConnection::addStreamListener(const Reference<XStreamListener> & aListener)
     {
-        MutexGuard guard(_mutex);
+        std::unique_lock guard(_mutex);
 
         _listeners.insert(aListener);
     }
 
     void SAL_CALL SocketConnection::removeStreamListener(const Reference<XStreamListener> & aListener)
     {
-        MutexGuard guard(_mutex);
+        std::unique_lock guard(_mutex);
 
         _listeners.erase(aListener);
     }
