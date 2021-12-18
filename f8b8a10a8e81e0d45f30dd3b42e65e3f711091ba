@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9b5301c_8c2d2422",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-12-18T20:23:07Z",
+      "side": 1,
+      "message": "I have manually checked that this does not break with --disable-pch on Windows.",
+      "revId": "f8b8a10a8e81e0d45f30dd3b42e65e3f711091ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
