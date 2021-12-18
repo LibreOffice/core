@@ -21,13 +21,13 @@
 #define INCLUDED_VCL_GRADIENT_HXX
 
 #include <sal/types.h>
-#include <vcl/dllapi.h>
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
-
-#include <vcl/vclenum.hxx>
+#include <tools/long.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
+#include <vcl/dllapi.h>
+#include <vcl/vclenum.hxx>
 
 namespace tools { class Rectangle; }
 
