@@ -239,13 +239,10 @@ namespace frm
 
     Sequence< Reference< XDispatch > > SAL_CALL ORichTextControl::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests )
     {
-        Sequence< Reference< XDispatch > > aReturn;
-        Reference< XDispatchProvider > xTypedPeer( getPeer(), UNO_QUERY );
-        if ( xTypedPeer.is() )
-        {
-            aReturn = xTypedPeer->queryDispatches( _rRequests );
-        }
-        return aReturn;
+        Reference<XDispatchProvider> xTypedPeer(getPeer(), UNO_QUERY);
+        if (xTypedPeer.is())
+            return xTypedPeer->queryDispatches(_rRequests);
+        return Sequence<Reference<XDispatch>>();
     }
 
     bool ORichTextControl::requiresNewPeer( const OUString& _rPropertyName ) const
