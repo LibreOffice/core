@@ -133,7 +133,6 @@ namespace xmloff
     #define PROPERTY_VISUAL_EFFECT "VisualEffect"
     #define PROPERTY_IMAGE_POSITION "ImagePosition"
     #define PROPERTY_IMAGE_ALIGN "ImageAlign"
-    #define PROPERTY_SCALE_IMAGE "ScaleImage"
     #define PROPERTY_GROUP_NAME "GroupName"
 
     #define PROPERTY_BOUND_CELL "BoundCell"

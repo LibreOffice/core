@@ -25,7 +25,7 @@
 #include <core_resource.hxx>
 #include <core_resource.hrc>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
@@ -316,7 +316,7 @@ const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr, sal_Unicode c )
 struct OpCodeMapData
 {
     FormulaCompiler::NonConstOpCodeMapPtr mxSymbolMap;
-    osl::Mutex maMtx;
+    std::mutex maMtx;
 };
 
 
@@ -894,7 +894,7 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
 static void lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, bool bDestroy = false )
 {
     static OpCodeMapData aSymbolMap;
-    osl::MutexGuard aGuard(&aSymbolMap.maMtx);
+    std::unique_lock aGuard(aSymbolMap.maMtx);
 
     if ( bDestroy )
     {
@@ -934,7 +934,7 @@ void FormulaCompiler::InitSymbolsNative() const
 void FormulaCompiler::InitSymbolsEnglish() const
 {
     static OpCodeMapData aMap;
-    osl::MutexGuard aGuard(&aMap.maMtx);
+    std::unique_lock aGuard(aMap.maMtx);
     if (!aMap.mxSymbolMap)
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_ENGLISH, aMap.mxSymbolMap);
     mxSymbolsEnglish = aMap.mxSymbolMap;
@@ -943,7 +943,7 @@ void FormulaCompiler::InitSymbolsEnglish() const
 void FormulaCompiler::InitSymbolsPODF() const
 {
     static OpCodeMapData aMap;
-    osl::MutexGuard aGuard(&aMap.maMtx);
+    std::unique_lock aGuard(aMap.maMtx);
     if (!aMap.mxSymbolMap)
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsPODF = aMap.mxSymbolMap;
@@ -952,7 +952,7 @@ void FormulaCompiler::InitSymbolsPODF() const
 void FormulaCompiler::InitSymbolsAPI() const
 {
     static OpCodeMapData aMap;
-    osl::MutexGuard aGuard(&aMap.maMtx);
+    std::unique_lock aGuard(aMap.maMtx);
     if (!aMap.mxSymbolMap)
         // XFunctionAccess API always used PODF grammar, keep it.
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_API, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
@@ -962,7 +962,7 @@ void FormulaCompiler::InitSymbolsAPI() const
 void FormulaCompiler::InitSymbolsODFF() const
 {
     static OpCodeMapData aMap;
-    osl::MutexGuard aGuard(&aMap.maMtx);
+    std::unique_lock aGuard(aMap.maMtx);
     if (!aMap.mxSymbolMap)
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF, FormulaGrammar::GRAM_ODFF, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsODFF = aMap.mxSymbolMap;
@@ -971,7 +971,7 @@ void FormulaCompiler::InitSymbolsODFF() const
 void FormulaCompiler::InitSymbolsEnglishXL() const
 {
     static OpCodeMapData aMap;
-    osl::MutexGuard aGuard(&aMap.maMtx);
+    std::unique_lock aGuard(aMap.maMtx);
     if (!aMap.mxSymbolMap)
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_ENGLISH, aMap.mxSymbolMap);
     mxSymbolsEnglishXL = aMap.mxSymbolMap;
@@ -987,7 +987,7 @@ void FormulaCompiler::InitSymbolsEnglishXL() const
 void FormulaCompiler::InitSymbolsOOXML() const
 {
     static OpCodeMapData aMap;
-    osl::MutexGuard aGuard(&aMap.maMtx);
+    std::unique_lock aGuard(aMap.maMtx);
     if (!aMap.mxSymbolMap)
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML, FormulaGrammar::GRAM_OOXML, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsOOXML = aMap.mxSymbolMap;
