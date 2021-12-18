@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <mutex>
 #include <string_view>
 
 #include <cppuhelper/implbase.hxx>
@@ -44,7 +45,7 @@ class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceIn
 
     // member
     private:
-        osl::Mutex m_mutex;
+        std::mutex m_mutex;
 
         /** @short  reference to a uno service manager. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
