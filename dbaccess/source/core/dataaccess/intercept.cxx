@@ -303,14 +303,13 @@ Reference< XDispatch > SAL_CALL OInterceptor::queryDispatch( const URL& URL,cons
 
 Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  const Sequence<DispatchDescriptor >& Requests )
 {
-    Sequence< Reference< XDispatch > > aRet;
     osl::MutexGuard aGuard(m_aMutex);
-    if(m_xSlaveDispatchProvider.is())
-        aRet = m_xSlaveDispatchProvider->queryDispatches(Requests);
-    else
-        aRet.realloc(Requests.getLength());
-    auto aRetRange = asNonConstRange(aRet);
+    typedef Sequence<Reference<XDispatch>> DispatchSeq;
+    DispatchSeq aRet = m_xSlaveDispatchProvider.is() ?
+        m_xSlaveDispatchProvider->queryDispatches(Requests) :
+        DispatchSeq(Requests.getLength());
 
+    auto aRetRange = asNonConstRange(aRet);
     for(sal_Int32 i = 0; i < Requests.getLength(); ++i)
     {
         const OUString* pIter = m_aInterceptedURL.getConstArray();

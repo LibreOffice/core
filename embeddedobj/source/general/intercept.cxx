@@ -250,12 +250,12 @@ uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL
 Interceptor::queryDispatches(
     const uno::Sequence<frame::DispatchDescriptor >& Requests )
 {
-    uno::Sequence< uno::Reference< frame::XDispatch > > aRet;
     osl::MutexGuard aGuard(m_aMutex);
-    if(m_xSlaveDispatchProvider.is())
-        aRet = m_xSlaveDispatchProvider->queryDispatches(Requests);
-    else
-        aRet.realloc(Requests.getLength());
+    typedef uno::Sequence<uno::Reference<frame::XDispatch>> DispatchSeq;
+    DispatchSeq aRet = m_xSlaveDispatchProvider.is()
+        ? m_xSlaveDispatchProvider->queryDispatches(Requests)
+        : DispatchSeq(Requests.getLength());
+
     auto aRetRange = asNonConstRange(aRet);
     for(sal_Int32 i = 0; i < Requests.getLength(); ++i)
         if(m_aInterceptedURL[0] == Requests[i].FeatureURL.Complete)
