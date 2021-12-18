@@ -321,7 +321,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     }
 
     // calculate step count
-    tools::Long nStepCount = GetLinearGradientSteps(rGradient, aRect, false/*bMtf*/);
+    tools::Long nStepCount = GetGradientSteps(rGradient, aRect);
 
     // minimal three steps and maximal as max color steps
     tools::Long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
@@ -443,7 +443,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     if ( UsePolyPolygonForComplexGradient() )
         xPolyPoly = tools::PolyPolygon( 2 );
 
-    tools::Long nStepCount = GetComplexGradientSteps(rGradient, rRect, false/*bMtf*/);
+    tools::Long nStepCount = GetGradientSteps(rGradient, rRect);
 
     // at least three steps and at most the number of colour differences
     tools::Long nSteps = std::max( nStepCount, tools::Long(2) );
@@ -581,6 +581,20 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     ImplDrawPolygon( rPoly, pClixPolyPoly );
 }
 
+static tools::Long GetGradientMetafileSteps(Gradient const& rGradient, tools::Rectangle const& rRect)
+{
+    // calculate step count
+    tools::Long nStepCount = rGradient.GetSteps();
+
+    if (nStepCount)
+        return nStepCount;
+
+    if (rGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial)
+        return rRect.GetHeight();
+    else
+        return std::min(rRect.GetWidth(), rRect.GetHeight());
+}
+
 void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
                                                  const Gradient& rGradient )
 {
@@ -679,7 +693,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
         }
     }
 
-    tools::Long    nStepCount  = GetLinearGradientSteps( rGradient, aRect, true/*bMtf*/ );
+    tools::Long nStepCount  = GetGradientMetafileSteps(rGradient, aRect);
 
     // minimal three steps and maximal as max color steps
     tools::Long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
@@ -780,7 +794,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     xPolyPoly = tools::PolyPolygon( 2 );
 
     // last parameter - true if complex gradient, false if linear
-    tools::Long nStepCount = GetComplexGradientSteps(rGradient, rRect, true);
+    tools::Long nStepCount = GetGradientMetafileSteps(rGradient, rRect);
 
     // at least three steps and at most the number of colour differences
     tools::Long nSteps = std::max(nStepCount, tools::Long(2));
@@ -915,48 +929,27 @@ tools::Long OutputDevice::GetGradientStepCount( tools::Long nMinRect )
     return nInc;
 }
 
-tools::Long OutputDevice::GetLinearGradientSteps(Gradient const& rGradient, tools::Rectangle const& rRect, bool bMtf)
+tools::Long OutputDevice::GetGradientSteps(Gradient const& rGradient, tools::Rectangle const& rRect)
 {
     // calculate step count
-    tools::Long nStepCount  = rGradient.GetSteps();
+    tools::Long nStepCount = rGradient.GetSteps();
 
-    // generate nStepCount, if not passed
-    tools::Long nMinRect = rRect.GetHeight();
+    if (nStepCount)
+        return nStepCount;
 
-    if ( !nStepCount )
-    {
-        tools::Long nInc;
+    tools::Long nMinRect = 0;
 
-        nInc = GetGradientStepCount(nMinRect);
-        if ( !nInc || bMtf )
-            nInc = 1;
+    if (rGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial)
+        nMinRect = rRect.GetHeight();
+    else
+        nMinRect = std::min(rRect.GetWidth(), rRect.GetHeight());
 
-        nStepCount = nMinRect / nInc;
-    }
+    tools::Long nInc = GetGradientStepCount(nMinRect);
 
-    return nStepCount;
-}
+    if (!nInc)
+        nInc = 1;
 
-tools::Long OutputDevice::GetComplexGradientSteps(Gradient const& rGradient, tools::Rectangle const& rRect, bool bMtf)
-{
-    // calculate step count
-    tools::Long nStepCount  = rGradient.GetSteps();
-
-    // generate nStepCount, if not passed
-    tools::Long nMinRect = std::min(rRect.GetWidth(), rRect.GetHeight());
-
-    if ( !nStepCount )
-    {
-        tools::Long nInc;
-        nInc = GetGradientStepCount(nMinRect);
-
-        if ( !nInc || bMtf )
-            nInc = 1;
-
-        nStepCount = nMinRect / nInc;
-    }
-
-    return nStepCount;
+    return nMinRect / nInc;
 }
 
 Color OutputDevice::GetSingleColorGradientFill()
