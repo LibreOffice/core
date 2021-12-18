@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVX_XMLGRHLP_HXX
 #define INCLUDED_SVX_XMLGRHLP_HXX
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/graph.hxx>
 #include <rtl/ref.hxx>
 
@@ -46,12 +46,13 @@ struct SvxGraphicHelperStream_Impl
     css::uno::Reference < css::io::XStream > xStream;
 };
 
-class SVXCORE_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHelper<css::document::XGraphicObjectResolver,
-                                                                                    css::document::XGraphicStorageHandler,
-                                                                                    css::document::XBinaryStreamResolver>
+class SVXCORE_DLLPUBLIC SvXMLGraphicHelper final :
+        public cppu::BaseMutex,
+        public cppu::WeakComponentImplHelper<css::document::XGraphicObjectResolver,
+                                            css::document::XGraphicStorageHandler,
+                                            css::document::XBinaryStreamResolver>
 {
 private:
-    ::osl::Mutex                maMutex;
     css::uno::Reference < css::embed::XStorage > mxRootStorage;
     OUString             maCurStorageName;
     std::vector< css::uno::Reference< css::io::XOutputStream > >
