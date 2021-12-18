@@ -756,6 +756,7 @@ private:
     void WriteFlyFrame(const ww8::Frame& rFrame);
 
     void WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang, const uno::Sequence<beans::PropertyValue>& aGrabBagSdt);
+    void WriteSdtPlainText(const OUString& sValue, const uno::Sequence<beans::PropertyValue>& aGrabBagSdt);
     void WriteSdtDropDownStart(std::u16string_view rName, OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
     void WriteSdtDropDownEnd(OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
     void WriteSdtEnd();
