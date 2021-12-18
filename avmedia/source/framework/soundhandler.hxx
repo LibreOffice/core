@@ -29,12 +29,12 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weak.hxx>
 
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <tools/link.hxx>
-#include <toolkit/helper/mutexhelper.hxx>
 
 namespace avmedia{
 
@@ -56,7 +56,7 @@ class SoundHandler  :   // interfaces
                     ,   public  css::document::XExtendedFilterDetection
                         // baseclasses
                         // Order is necessary for right initialization!
-                    ,   private MutexHelper
+                    ,   private cppu::BaseMutex
                     ,   public  ::cppu::OWeakObject
 {
     // public methods
