@@ -87,6 +87,24 @@
       "parentUuid": "8a99e70d_213b549e",
       "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abdda8b2_e2bf2ed2",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-18T00:56:34Z",
+      "side": 1,
+      "message": "Oh - after a short nap, you actually can :-) I totally misunderstood you. And adding some more correct dependencies while at it.",
+      "parentUuid": "497c2973_ce196f38",
+      "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
