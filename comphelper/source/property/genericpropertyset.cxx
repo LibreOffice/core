@@ -44,19 +44,14 @@ namespace comphelper
 {
     namespace {
 
-    struct IMPL_GenericPropertySet_MutexContainer
-    {
-        Mutex maMutex;
-    };
-
     class GenericPropertySet :  public OWeakAggObject,
                                 public XServiceInfo,
                                 public XTypeProvider,
-                                public PropertySetHelper,
-                                private IMPL_GenericPropertySet_MutexContainer
+                                public PropertySetHelper
     {
     private:
         std::map<OUString, Any>   maAnyMap;
+        osl::Mutex                maMutex;
         comphelper::OMultiTypeInterfaceContainerHelperVar3<XPropertyChangeListener, OUString> m_aListener;
 
     protected:
