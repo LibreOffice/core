@@ -48,6 +48,7 @@
 #include <com/sun/star/awt/XToolkitExperimental.hpp>
 #include <com/sun/star/awt/XToolkitRobot.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -427,13 +428,7 @@ public:
     sal_Int32 m_nPauseMilliseconds;
 };
 
-class VCLXToolkitMutexHelper
-{
-protected:
-    ::osl::Mutex    maMutex;
-};
-
-class VCLXToolkit : public VCLXToolkitMutexHelper,
+class VCLXToolkit : public cppu::BaseMutex,
                     public cppu::WeakComponentImplHelper<
                     css::awt::XToolkitExperimental,
                     css::awt::XToolkitRobot,
@@ -467,7 +462,7 @@ class VCLXToolkit : public VCLXToolkitMutexHelper,
     void callFocusListeners(::VclSimpleEvent const * pEvent, bool bGained);
 
 protected:
-    ::osl::Mutex&   GetMutex() { return maMutex; }
+    ::osl::Mutex&   GetMutex() { return m_aMutex; }
 
     virtual void SAL_CALL disposing() override;
 
