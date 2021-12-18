@@ -230,6 +230,24 @@
       "message": "What is the use of this CustomTarget?  Where is the consumer of that generated services_constructors.list?",
       "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "936d4aac_c35445aa",
+        "filename": "postprocess/CustomTarget_components.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-18T02:52:20Z",
+      "side": 1,
+      "message": "See https://gerrit.libreoffice.org/c/core/+/126790",
+      "parentUuid": "eba9e36a_4b26ee6d",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
