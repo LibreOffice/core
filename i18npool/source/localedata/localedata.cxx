@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <mutex>
 #include <string_view>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -491,7 +492,7 @@ public:
             std::unique_ptr<LocaleDataLookupTableItem>* pOutCachedItem );
 
 private:
-    ::osl::Mutex maMutex;
+    std::mutex maMutex;
     ::std::vector< LocaleDataLookupTableItem >  maLookupTable;
 };
 
@@ -541,7 +542,7 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
         {
 #ifndef DISABLE_DYNLOADING
             {
-                ::osl::MutexGuard aGuard( maMutex );
+                std::unique_lock aGuard( maMutex );
                 for (LocaleDataLookupTableItem & rCurrent : maLookupTable)
                 {
                     if (rCurrent.dllName == i.pLib)
@@ -572,7 +573,7 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
             std::unique_ptr<osl::Module> module(new osl::Module());
             if ( module->loadRelative(&thisModule, sModuleName.getStr()) )
             {
-                ::osl::MutexGuard aGuard( maMutex );
+                std::unique_lock aGuard( maMutex );
                 auto pTmpModule = module.get();
                 maLookupTable.emplace_back(i.pLib, module.release(), i.pLocale);
                 OSL_ASSERT( pOutCachedItem );
