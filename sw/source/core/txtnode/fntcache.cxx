@@ -1486,7 +1486,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             bBullet = false;
         std::vector<sal_Int32> aKernArray;
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
-        tools::Long nScrPos;
 
         // get screen array
         std::vector<sal_Int32> aScrArray;
@@ -1587,8 +1586,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             }
         }
 
-        nScrPos = aScrArray[ 0 ];
-
         if( bBullet )
         {
             // !!! HACK !!!
@@ -1662,11 +1659,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         {
             sal_Unicode nCh;
 
-            // In case of Pair Kerning the printer influence on the positioning
-            // grows
-            const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
-            const int nDiv = nMul+1;
-
             // nSpaceSum contains the sum of the intermediate space distributed
             // among Spaces by the Justification.
             // The Spaces themselves will be positioned in the middle of the
@@ -1687,16 +1679,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             {
                 nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
 
-                tools::Long nScr = aScrArray[ i ] - aScrArray[ i - 1 ];
-
                 // If there is an (ex-)Space before us, position optimally,
                 // i.e., our right margin to the 100% printer position;
                 // if we _are_ an ex-Space, position us left-aligned to the
                 // printer position.
                 if ( nCh == CH_BLANK )
                 {
-                    nScrPos = aKernArray[i-1] + nScr;
-
                     if ( cChPrev == CH_BLANK )
                         nSpaceSum += nOtherHalf;
                     if (i + 1 == sal_Int32(nCnt))
@@ -1708,20 +1696,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     if ( cChPrev == CH_BLANK )
                     {
-                        nScrPos = aKernArray[i-1] + nScr;
                         // no Pixel is lost:
                         nSpaceSum += nOtherHalf;
                     }
-                    else if ( cChPrev == '-' )
-                        nScrPos = aKernArray[i-1] + nScr;
-                    else
-                    {
-                        nScrPos += nScr;
-                        nScrPos = ( nMul * nScrPos + aKernArray[i] ) / nDiv;
-                    }
                 }
+
                 cChPrev = nCh;
-                aKernArray[i-1] = nScrPos - nScr + nKernSum + nSpaceSum;
+                aKernArray[i-1] += nKernSum + nSpaceSum;
                 // In word line mode and for Arabic, we disabled the half space trick. If a portion
                 // ends with a blank, the full nSpaceAdd value has been added to the character in
                 // front of the blank. This leads to painting artifacts, therefore we remove the
@@ -2003,7 +1984,6 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
             rInf.GetOut().SetFont( *m_pScrFont );
-        tools::Long nScrPos;
 
         m_pPrinter->GetTextArray(rInf.GetText(), &aKernArray,
                 sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
@@ -2014,50 +1994,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         else
             rInf.SetKanaDiff( 0 );
 
-        if ( rInf.GetKanaDiff() )
-            nScrPos = aKernArray[ sal_Int32(nLn) - 1 ];
-        else
-        {
-            std::vector<sal_Int32> aScrArray;
-            rInf.GetOut().GetTextArray( rInf.GetText(), &aScrArray,
-                        sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
-            nScrPos = aScrArray[ 0 ];
-            TextFrameIndex nCnt(rInf.GetText().getLength());
-            if ( nCnt < rInf.GetIdx() )
-                nCnt = TextFrameIndex(0); // assert???
-            else
-                nCnt = nCnt - rInf.GetIdx();
-            nCnt = std::min(nCnt, nLn);
-            sal_Unicode nChPrev = rInf.GetText()[ sal_Int32(rInf.GetIdx()) ];
-
-            sal_Unicode nCh;
-
-            // In case of Pair Kerning the printer influence on the positioning
-            // grows
-            const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
-            const int nDiv = nMul+1;
-            for (sal_Int32 i = 1; i < sal_Int32(nCnt); i++)
-            {
-                nCh = rInf.GetText()[ sal_Int32(rInf.GetIdx()) + i ];
-                tools::Long nScr = aScrArray[ i ] - aScrArray[ i - 1 ];
-                if ( nCh == CH_BLANK )
-                    nScrPos = aKernArray[i-1]+nScr;
-                else
-                {
-                    if ( nChPrev == CH_BLANK || nChPrev == '-' )
-                        nScrPos = aKernArray[i-1]+nScr;
-                    else
-                    {
-                        nScrPos += nScr;
-                        nScrPos = ( nMul * nScrPos + aKernArray[i] ) / nDiv;
-                    }
-                }
-                nChPrev = nCh;
-                aKernArray[i-1] = nScrPos - nScr;
-            }
-        }
-
-        aTextSize.setWidth( nScrPos );
+        aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
     }
     else
     {
