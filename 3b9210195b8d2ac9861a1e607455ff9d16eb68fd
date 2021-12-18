@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbf52f04_f196a23b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-12-18T17:56:13Z",
+      "side": 1,
+      "message": "I\u0027ve backported it to my 7.2.4-2 (and following) packages, thanks.\n\nBut shouldn\u0027t that ideally be also backported to libreoffice-7-2-5 branch for official 7.2.5?",
+      "revId": "3b9210195b8d2ac9861a1e607455ff9d16eb68fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
