@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "MutexContainer.hxx"
 #include "charttoolsdllapi.hxx"
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XRequestCallback.hpp>
 
@@ -22,7 +22,7 @@ namespace impl
 typedef cppu::WeakComponentImplHelper<css::awt::XRequestCallback> PopupRequest_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS PopupRequest : public MutexContainer, public impl::PopupRequest_Base
+class OOO_DLLPUBLIC_CHARTTOOLS PopupRequest : public cppu::BaseMutex, public impl::PopupRequest_Base
 {
 public:
     explicit PopupRequest();

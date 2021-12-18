@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <MutexContainer.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
@@ -35,7 +35,7 @@ namespace chart::wrapper
 class Chart2ModelContact;
 struct lcl_Operator;
 
-class ChartDataWrapper final : public MutexContainer, public
+class ChartDataWrapper final : public cppu::BaseMutex, public
     ::cppu::WeakImplHelper<
     css::chart2::XAnyDescriptionAccess,
     css::chart::XDateCategories,
