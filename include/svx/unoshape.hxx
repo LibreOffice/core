@@ -56,6 +56,7 @@
 
 #include <comphelper/servicehelper.hxx>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase12.hxx>
 
 class SfxItemSet;
@@ -69,12 +70,6 @@ namespace basegfx
     {
         class B2DPolyPolygon;
     } // end of namespace basegfx
-
-class SvxShapeMutex
-{
-protected:
-    ::osl::Mutex maMutex;
-};
 
 struct SvxShapeImpl;
 class SvxShapeMaster;
@@ -103,9 +98,10 @@ typedef ::cppu::WeakAggImplHelper12<
     css::document::XActionLockable,
     css::beans::XMultiPropertyStates> SvxShape_UnoImplHelper;
 
-class SVXCORE_DLLPUBLIC SvxShape : public SvxShape_UnoImplHelper,
-                 public SfxListener,
-                 public SvxShapeMutex
+class SVXCORE_DLLPUBLIC SvxShape :
+                 public cppu::BaseMutex,
+                 public SvxShape_UnoImplHelper,
+                 public SfxListener
 {
 private:
     css::awt::Size maSize;
