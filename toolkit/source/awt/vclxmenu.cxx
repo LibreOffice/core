@@ -479,16 +479,17 @@ sal_Int16 VCLXMenu::execute(
     sal_Int16 nFlags )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( maMutex );
-
-    sal_Int16 nRet = 0;
-    if ( mpMenu && IsPopupMenu() )
+    auto pMenu = mpMenu;
     {
-        nRet = static_cast<PopupMenu*>(mpMenu.get())->Execute( VCLUnoHelper::GetWindow( rxWindowPeer ),
-                                              VCLRectangle( rPos ),
-                                              static_cast<PopupMenuFlags>(nFlags) | PopupMenuFlags::NoMouseUpClose );
+        std::unique_lock aGuard( maMutex );
+        if ( !mpMenu || !IsPopupMenu() )
+            return 0;
     }
-    return nRet;
+    // cannot call this with mutex locked because it will call back into us
+    return static_cast<PopupMenu*>(pMenu.get())->Execute(
+                VCLUnoHelper::GetWindow( rxWindowPeer ),
+                VCLRectangle( rPos ),
+                static_cast<PopupMenuFlags>(nFlags) | PopupMenuFlags::NoMouseUpClose );
 }
 
 
