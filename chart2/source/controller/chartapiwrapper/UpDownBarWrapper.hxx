@@ -18,9 +18,9 @@
  */
 #pragma once
 
-#include <MutexContainer.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
@@ -36,7 +36,7 @@ namespace chart::wrapper
 
 class Chart2ModelContact;
 
-class UpDownBarWrapper : public MutexContainer
+class UpDownBarWrapper : public cppu::BaseMutex
                        , public ::cppu::WeakImplHelper
                         < css::lang::XComponent
                         , css::lang::XServiceInfo

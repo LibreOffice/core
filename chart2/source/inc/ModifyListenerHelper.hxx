@@ -20,9 +20,8 @@
 
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-
-#include "MutexContainer.hxx"
 
 #include <vector>
 #include <algorithm>
@@ -45,7 +44,7 @@ css::uno::Reference< css::util::XModifyListener > createModifyEventForwarder();
     this case.</p>
  */
 class ModifyEventForwarder :
-        public MutexContainer,
+        public cppu::BaseMutex,
         public ::cppu::WeakComponentImplHelper<
             css::util::XModifyBroadcaster,
             css::util::XModifyListener >

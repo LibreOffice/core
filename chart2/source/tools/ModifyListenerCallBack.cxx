@@ -19,7 +19,7 @@
 
 #include <ModifyListenerCallBack.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <MutexContainer.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -30,7 +30,7 @@ typedef ::cppu::WeakComponentImplHelper< css::util::XModifyListener >
     ModifyListenerCallBack_Base;
 
 class ModifyListenerCallBack_impl
-    : public ::chart::MutexContainer
+    : public cppu::BaseMutex
     , public ModifyListenerCallBack_Base
 {
 public:
