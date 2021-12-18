@@ -29,6 +29,10 @@ namespace awt
 struct Size;
 class XControlModel;
 }
+namespace xml::dom
+{
+class XDocument;
+}
 }
 
 namespace writerfilter::dmapper
@@ -83,12 +87,21 @@ class SdtHelper final : public virtual SvRefBase
     /// The last stored SDT element is outside paragraphs.
     bool m_bOutsideAParagraph;
 
+    /// Storage for all properties documents as xml::dom::XDocument for later quering xpath for data
+    css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument>> m_xPropertiesXMLs;
+
+    /// Check if m_xPropertiesXMLs is initialized and loaded (need extra flag to distinguish
+    /// empty sequence from not yet initialized)
+    bool m_bPropertiesXMLsLoaded;
+
     /// Create and append the drawing::XControlShape, containing the various models.
     void createControlShape(css::awt::Size aSize,
                             css::uno::Reference<css::awt::XControlModel> const& xControlModel,
                             const css::uno::Sequence<css::beans::PropertyValue>& rGrabBag);
 
     std::optional<OUString> getValueFromDataBinding();
+
+    void loadPropertiesXMLs();
 
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl,
