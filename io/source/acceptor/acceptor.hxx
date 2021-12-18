@@ -21,7 +21,7 @@
 
 #include <osl/pipe.hxx>
 #include <osl/socket.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -39,7 +39,7 @@ namespace io_acceptor {
 
         void stopAccepting();
 
-        ::osl::Mutex m_mutex;
+        std::mutex m_mutex;
         ::osl::Pipe m_pipe;
         OUString m_sPipeName;
         OUString m_sConnectionDescription;
