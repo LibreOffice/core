@@ -137,25 +137,6 @@ public:
     }
 };
 
-class CSGuard
-{
-    CRITICAL_SECTION* m_pCriticalSection;
-
-public:
-    explicit CSGuard( CRITICAL_SECTION* pCS )
-    : m_pCriticalSection( pCS )
-    {
-        if ( m_pCriticalSection )
-            EnterCriticalSection( m_pCriticalSection );
-    }
-
-    ~CSGuard()
-    {
-        if ( m_pCriticalSection )
-            LeaveCriticalSection( m_pCriticalSection );
-    }
-};
-
 } // namespace inprocserv
 
 #endif
