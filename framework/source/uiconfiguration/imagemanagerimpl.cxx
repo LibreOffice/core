@@ -478,7 +478,6 @@ ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext
     m_xContext( rxContext )
     , m_pOwner(pOwner)
     , m_aResourceString( "private:resource/images/moduleimages" )
-    , m_aListenerContainer( m_mutex )
     , m_bUseGlobal(_bUseGlobal)
     , m_bReadOnly( true )
     , m_bInitialized( false )
@@ -501,7 +500,14 @@ void ImageManagerImpl::dispose()
 {
     uno::Reference< uno::XInterface > xOwner(m_pOwner);
     css::lang::EventObject aEvent( xOwner );
-    m_aListenerContainer.disposeAndClear( aEvent );
+    {
+        std::unique_lock aGuard(m_mutex);
+        m_aEventListeners.disposeAndClear( aGuard, aEvent );
+    }
+    {
+        std::unique_lock aGuard(m_mutex);
+        m_aConfigListeners.disposeAndClear( aGuard, aEvent );
+    }
 
     {
         SolarMutexGuard g;
@@ -530,13 +536,15 @@ void ImageManagerImpl::addEventListener( const uno::Reference< XEventListener >&
             throw DisposedException();
     }
 
-    m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
+    std::unique_lock aGuard(m_mutex);
+    m_aEventListeners.addInterface( xListener );
 }
 
 void ImageManagerImpl::removeEventListener( const uno::Reference< XEventListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), xListener );
+    std::unique_lock aGuard(m_mutex);
+    m_aEventListeners.removeInterface( xListener );
 }
 
 // XInitialization
@@ -1145,23 +1153,21 @@ void ImageManagerImpl::addConfigurationListener( const uno::Reference< css::ui::
             throw DisposedException();
     }
 
-    m_aListenerContainer.addInterface( cppu::UnoType<XUIConfigurationListener>::get(), xListener );
+    std::unique_lock aGuard(m_mutex);
+    m_aConfigListeners.addInterface( xListener );
 }
 
 void ImageManagerImpl::removeConfigurationListener( const uno::Reference< css::ui::XUIConfigurationListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( cppu::UnoType<XUIConfigurationListener>::get(), xListener );
+    std::unique_lock aGuard(m_mutex);
+    m_aConfigListeners.removeInterface( xListener );
 }
 
 void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
 {
-    comphelper::OInterfaceContainerHelper2* pContainer = m_aListenerContainer.getContainer(
-                                        cppu::UnoType<css::ui::XUIConfigurationListener>::get());
-    if ( pContainer == nullptr )
-        return;
-
-    comphelper::OInterfaceIteratorHelper2 pIterator( *pContainer );
+    std::unique_lock aGuard(m_mutex);
+    comphelper::OInterfaceIteratorHelper4 pIterator( m_aConfigListeners );
     while ( pIterator.hasMoreElements() )
     {
         try
@@ -1169,13 +1175,13 @@ void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent&
             switch ( eOp )
             {
                 case NotifyOp_Replace:
-                    static_cast< css::ui::XUIConfigurationListener*>(pIterator.next())->elementReplaced( aEvent );
+                    pIterator.next()->elementReplaced( aEvent );
                     break;
                 case NotifyOp_Insert:
-                    static_cast< css::ui::XUIConfigurationListener*>(pIterator.next())->elementInserted( aEvent );
+                    pIterator.next()->elementInserted( aEvent );
                     break;
                 case NotifyOp_Remove:
-                    static_cast< css::ui::XUIConfigurationListener*>(pIterator.next())->elementRemoved( aEvent );
+                    pIterator.next()->elementRemoved( aEvent );
                     break;
             }
         }

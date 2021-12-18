@@ -27,12 +27,13 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
 #include <cppuhelper/weak.hxx>
-#include <comphelper/multicontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <rtl/ustring.hxx>
 
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
+#include <mutex>
 #include <unordered_map>
 #include <vector>
 
@@ -170,8 +171,9 @@ namespace framework
             std::unique_ptr<CmdImageList>                                                   m_pDefaultImageList;
             OUString                                                                   m_aModuleIdentifier;
             OUString                                                                   m_aResourceString;
-            osl::Mutex m_mutex;
-            comphelper::OMultiTypeInterfaceContainerHelper2                                 m_aListenerContainer;   /// container for ALL Listener
+            std::mutex m_mutex;
+            comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>               m_aEventListeners;
+            comphelper::OInterfaceContainerHelper4<css::ui::XUIConfigurationListener>       m_aConfigListeners;
             o3tl::enumarray<vcl::ImageType,std::unique_ptr<ImageList>>                      m_pUserImageList;
             o3tl::enumarray<vcl::ImageType,bool>                                            m_bUserImageListModified;
             bool                                                                            m_bUseGlobal;
