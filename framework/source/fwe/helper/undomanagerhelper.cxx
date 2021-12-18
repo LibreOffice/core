@@ -38,6 +38,7 @@
 #include <osl/conditn.hxx>
 
 #include <functional>
+#include <mutex>
 #include <stack>
 #include <queue>
 
@@ -198,7 +199,7 @@ namespace framework
     {
     private:
         ::osl::Mutex                        m_aMutex;
-        ::osl::Mutex                        m_aQueueMutex;
+        std::mutex                          m_aQueueMutex;
         bool                                m_bAPIActionRunning;
         bool                                m_bProcessingEvents;
         sal_Int32                           m_nLockCount;
@@ -452,7 +453,7 @@ namespace framework
         // create the request, and add it to our queue
         ::rtl::Reference< UndoManagerRequest > pRequest( new UndoManagerRequest( i_request ) );
         {
-            ::osl::MutexGuard aQueueGuard( m_aQueueMutex );
+            std::unique_lock aQueueGuard( m_aQueueMutex );
             m_aEventQueue.push( pRequest );
         }
 
@@ -470,7 +471,7 @@ namespace framework
         {
             pRequest.clear();
             {
-                ::osl::MutexGuard aQueueGuard( m_aQueueMutex );
+                std::unique_lock aQueueGuard( m_aQueueMutex );
                 if ( m_aEventQueue.empty() )
                 {
                     // reset the flag before releasing the queue mutex, otherwise it's possible that another thread
@@ -492,7 +493,7 @@ namespace framework
                 {
                     // no chance to process further requests, if the current one failed
                     // => discard them
-                    ::osl::MutexGuard aQueueGuard( m_aQueueMutex );
+                    std::unique_lock aQueueGuard( m_aQueueMutex );
                     while ( !m_aEventQueue.empty() )
                     {
                         pRequest = m_aEventQueue.front();
