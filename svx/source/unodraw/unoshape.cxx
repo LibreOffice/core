@@ -194,7 +194,7 @@ sal_Int16 GetTextFitToSizeScale(SdrObject* pObject)
 
 SvxShape::SvxShape( SdrObject* pObject )
 :   maSize(100,100)
-,   mpImpl( new SvxShapeImpl( *this, maMutex ) )
+,   mpImpl( new SvxShapeImpl( *this, m_aMutex ) )
 ,   mbIsMultiPropertyCall(false)
 ,   mpPropSet(getSvxMapProvider().GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
 ,   maPropMapEntries(getSvxMapProvider().GetMap(SVXMAP_SHAPE))
@@ -207,7 +207,7 @@ SvxShape::SvxShape( SdrObject* pObject )
 
 SvxShape::SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet )
 :   maSize(100,100)
-,   mpImpl( new SvxShapeImpl( *this, maMutex ) )
+,   mpImpl( new SvxShapeImpl( *this, m_aMutex ) )
 ,   mbIsMultiPropertyCall(false)
 ,   mpPropSet(pPropertySet)
 ,   maPropMapEntries(pEntries)
@@ -1353,14 +1353,14 @@ Reference< beans::XPropertySetInfo > const &
 
 void SAL_CALL SvxShape::addPropertyChangeListener( const OUString& _propertyName, const Reference< beans::XPropertyChangeListener >& _listener  )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
     mpImpl->maPropertyNotifier.addPropertyChangeListener( _propertyName, _listener );
 }
 
 
 void SAL_CALL SvxShape::removePropertyChangeListener( const OUString& _propertyName, const Reference< beans::XPropertyChangeListener >& _listener  )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
     mpImpl->maPropertyNotifier.removePropertyChangeListener( _propertyName, _listener );
 }
 
