@@ -614,7 +614,7 @@ public:
     SAL_DLLPRIVATE void SetEmbedFontScriptAsian(bool bUse) { mbEmbedFontScriptAsian = bUse; }
     SAL_DLLPRIVATE void SetEmbedFontScriptComplex(bool bUse) { mbEmbedFontScriptComplex = bUse; }
 
-    sal_Int32 getImagePreferredDPI() { return mnImagePreferredDPI; }
+    sal_Int32 getImagePreferredDPI() const override { return mnImagePreferredDPI; }
     void setImagePreferredDPI(sal_Int32 nValue) { mnImagePreferredDPI = nValue; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
