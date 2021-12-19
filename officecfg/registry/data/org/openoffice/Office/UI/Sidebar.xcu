@@ -1855,10 +1855,7 @@
         <prop oor:name="ContextList">
           <value oor:separator=";">
             Calc,           Draw,       hidden ;
-            Calc,           Graphic,    hidden ;
-            Calc,           Media,      hidden ;
             DrawImpress,    Draw,       hidden ;
-            DrawImpress,    Graphic,    hidden ;
             DrawImpress,    TextObject, hidden ;
             WriterVariants, Graphic,    hidden ;
           </value>
