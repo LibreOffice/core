@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b242d09_cd78ac8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-19T12:16:44Z",
+      "side": 1,
+      "message": "Now the indices for figures should work as well. I have to make some additional tests and figure out how the pLayout and IsParaPropsNode work together.",
+      "revId": "009c831df14577ad06c7511716aaf7320cd9504d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
