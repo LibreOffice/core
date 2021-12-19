@@ -56,6 +56,7 @@ class SvxGrfCropPage : public SfxTabPage
     tools::Long            nOldWidth;
     tools::Long            nOldHeight;
     bool            bSetOrigSize;
+    sal_Int32 m_aPreferredDPI;
 
     SvxCropExample m_aExampleWN;
 
@@ -92,7 +93,7 @@ class SvxGrfCropPage : public SfxTabPage
     void            GraphicHasChanged(bool bFound);
     virtual void    ActivatePage(const SfxItemSet& rSet) override;
 
-    static Size     GetGrfOrigSize(const Graphic&);
+    Size GetGrfOrigSize(const Graphic& rGraphic);
 public:
     SvxGrfCropPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet );
