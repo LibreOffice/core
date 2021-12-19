@@ -57,6 +57,7 @@ SvxGrfCropPage::SvxGrfCropPage(weld::Container* pPage, weld::DialogController* p
     , nOldWidth(0)
     , nOldHeight(0)
     , bSetOrigSize(false)
+    , m_aPreferredDPI(0)
     , m_xCropFrame(m_xBuilder->weld_widget("cropframe"))
     , m_xZoomConstRB(m_xBuilder->weld_radio_button("keepscale"))
     , m_xSizeConstRB(m_xBuilder->weld_radio_button("keepsize"))
@@ -286,6 +287,11 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Where is the pool?" );
 #endif
+
+    if (!GetUserData().isEmpty())
+    {
+        m_aPreferredDPI = GetUserData().toInt32();
+    }
 
     bSetOrigSize = false;
 
@@ -670,13 +676,27 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
 
 Size SvxGrfCropPage::GetGrfOrigSize(const Graphic& rGrf)
 {
-    const MapMode aMapTwip( MapUnit::MapTwip );
-    Size aSize( rGrf.GetPrefSize() );
-    if( MapUnit::MapPixel == rGrf.GetPrefMapMode().GetMapUnit() )
-        aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMapTwip);
+    Size aSize;
+
+    if (m_aPreferredDPI > 0)
+    {
+        Size aPixelSize = rGrf.GetSizePixel();
+        double fWidth = aPixelSize.Width() / double(m_aPreferredDPI);
+        double fHeight = aPixelSize.Height() / double(m_aPreferredDPI);
+        fWidth = o3tl::convert(fWidth, o3tl::Length::in, o3tl::Length::twip);
+        fHeight = o3tl::convert(fHeight, o3tl::Length::in, o3tl::Length::twip);
+        aSize = Size(fWidth, fHeight);
+    }
     else
-        aSize = OutputDevice::LogicToLogic( aSize,
-                                        rGrf.GetPrefMapMode(), aMapTwip );
+    {
+        const MapMode aMapTwip( MapUnit::MapTwip );
+        aSize = rGrf.GetPrefSize();
+        if( MapUnit::MapPixel == rGrf.GetPrefMapMode().GetMapUnit() )
+            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMapTwip);
+        else
+            aSize = OutputDevice::LogicToLogic( aSize,
+                                            rGrf.GetPrefMapMode(), aMapTwip );
+    }
     return aSize;
 }
 
