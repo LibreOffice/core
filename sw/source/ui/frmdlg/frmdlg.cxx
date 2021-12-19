@@ -32,6 +32,7 @@
 #include <wrap.hxx>
 #include <column.hxx>
 #include <macassgn.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 #include <globals.hrc>
 #include <strings.hrc>
@@ -193,6 +194,12 @@ void SwFrameDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     else if (rId == "transparence")
     {
         rPage.PageCreated(m_rSet);
+    }
+    else if (rId == "crop")
+    {
+        sal_Int32 nPreferredDPI = m_pWrtShell->GetDoc()->getIDocumentSettingAccess().getImagePreferredDPI();
+        if (nPreferredDPI)
+            rPage.getAdditionalProperties().emplace("PreferredDPI", css::uno::makeAny(nPreferredDPI));
     }
 }
 
