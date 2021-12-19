@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a1c1fd2_839fa45e",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2786,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-12-19T07:05:42Z",
+      "side": 1,
+      "message": "need to check this pointer",
+      "range": {
+        "startLine": 2786,
+        "startChar": 20,
+        "endLine": 2786,
+        "endChar": 42
+      },
+      "revId": "46b42805272513b0470f9324a83297973025e331",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
