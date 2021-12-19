@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf0a6513_cab7fb51",
+        "filename": "sc/inc/fielduno.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-19T09:35:28Z",
+      "side": 1,
+      "message": "Recently I wondered why the helper can\u0027t inherit from mutex base itself? It could init its other parent with that mutex itself?",
+      "range": {
+        "startLine": 162,
+        "startChar": 14,
+        "endLine": 162,
+        "endChar": 37
+      },
+      "revId": "639d53c11fbfc45bfc2a2b7b82c6d06a61acd81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
