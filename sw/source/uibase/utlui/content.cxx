@@ -2171,6 +2171,9 @@ void SwContentTree::Expand(const weld::TreeIter& rParent, std::vector<std::uniqu
 IMPL_LINK(SwContentTree, ExpandHdl, const weld::TreeIter&, rParent, bool)
 {
     Expand(rParent, nullptr);
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+    if (m_xTreeView->get_selected(xEntry.get()) && m_xTreeView->iter_compare(*xEntry, rParent) == 0)
+        UpdateToolBox(UpdateToolBoxMode::Expanding);
     return true;
 }
 
@@ -2213,6 +2216,10 @@ IMPL_LINK(SwContentTree, CollapseHdl, const weld::TreeIter&, rParent, bool)
         void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
         mOutLineNodeMap[key] = false;
     }
+
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+    if (m_xTreeView->get_selected(xEntry.get()) && m_xTreeView->iter_compare(*xEntry, rParent) == 0)
+        UpdateToolBox(UpdateToolBoxMode::Collapsing);
 
     return true;
 }
@@ -2498,8 +2505,8 @@ void SwContentTree::Display( bool bActive )
             if (xSelEntry)
             {
                 m_xTreeView->set_cursor(*xSelEntry);
-                Select();
             }
+            UpdateToolBox();
         }
         // root content navigation view
         else
@@ -2577,13 +2584,13 @@ void SwContentTree::Display( bool bActive )
                 {
                     // set_cursor unselects all entries, makes passed entry visible, and selects it
                     m_xTreeView->set_cursor(*xSelEntry);
-                    Select();
+                    UpdateToolBox();
                 }
             }
             else
             {
                 m_xTreeView->set_cursor(*xEntry);
-                Select();
+                UpdateToolBox();
             }
         }
     }
@@ -2782,7 +2789,7 @@ void SwContentTree::ToggleToRoot()
         {
             for (ContentTypeId i : o3tl::enumrange<ContentTypeId>())
             {
-                if (i != m_nLastSelType)
+                if (i != m_nLastSelType && m_aActiveContentArr[i])
                     m_aActiveContentArr[i]->FillMemberList();
             }
         }
@@ -3149,7 +3156,7 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
                     if (m_xTreeView->get_cursor(xEntry.get()))
                     {
                         m_xTreeView->select(*xEntry);
-                        Select();
+                        UpdateToolBox();
                     }
                     else
                         m_xTreeView->unselect_all();
@@ -3442,7 +3449,7 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
                 if (m_xTreeView->iter_parent(*xParent) && !m_xTreeView->get_row_expanded(*xParent))
                     m_xTreeView->expand_row(*xParent);
                 m_xTreeView->set_cursor(*xListEntry); // unselect all entries, make entry visible, set focus, and select
-                Select();
+                UpdateToolBox();
                 break;
             }
         }
@@ -3557,7 +3564,7 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
             {
                 // unselect all entries and make passed entry visible and selected
                 rContentTree.set_cursor(*xIter);
-                pThis->Select();
+                pThis->UpdateToolBox();
             }
             return;
         }
@@ -3593,7 +3600,7 @@ static void lcl_SelectByContentTypeAndName(SwContentTree* pThis, weld::TreeView&
             {
                 // unselect all entries and make passed entry visible and selected
                 rContentTree.set_cursor(*xIter);
-                pThis->Select();
+                pThis->UpdateToolBox();
             }
             break;
         }
@@ -3764,7 +3771,7 @@ void SwContentTree::UpdateTracking()
                     // clear treeview selections
                     m_xTreeView->unselect_all();
                 }
-                Select();
+                UpdateToolBox();
             }
             return;
         }
@@ -3956,7 +3963,7 @@ void SwContentTree::UpdateTracking()
                         }
                         // unselect all entries, make pEntry visible, and select
                         m_xTreeView->set_cursor(rEntry);
-                        Select();
+                        UpdateToolBox();
                     }
                     bRet = true;
                 }
@@ -3977,7 +3984,7 @@ void SwContentTree::UpdateTracking()
     {
         // clear treeview selections
         m_xTreeView->unselect_all();
-        Select();
+        UpdateToolBox();
     }
 }
 
@@ -4032,7 +4039,7 @@ void SwContentTree::SelectOutlinesWithSelection()
         });
     }
 
-    Select();
+    UpdateToolBox();
 }
 
 void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
@@ -4856,41 +4863,85 @@ IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::TreeView&, void)
         ContentDoubleClickHdl(*m_xTreeView);
         grab_focus();
     }
-    Select();
+    UpdateToolBox();
 }
 
-// Here the buttons for moving outlines are en-/disabled.
-void SwContentTree::Select()
+// Here the Navigator tool box controls are en-/disabled.
+void SwContentTree::UpdateToolBox(UpdateToolBoxMode eMode)
 {
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_selected(xEntry.get()))
-        return;
-
     bool bEnable = false;
-    std::unique_ptr<weld::TreeIter> xParentEntry(m_xTreeView->make_iterator(xEntry.get()));
-    bool bParentEntry = m_xTreeView->iter_parent(*xParentEntry);
-    while (bParentEntry && (!lcl_IsContentType(*xParentEntry, *m_xTreeView)))
-        bParentEntry = m_xTreeView->iter_parent(*xParentEntry);
-    if (!m_bIsLastReadOnly)
+
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+    const bool bSensitive = m_xTreeView->get_selected(xEntry.get());
+
+    SwNavigationPI* pNavi = GetParentWindow();
+    const bool bZoomedIn = pNavi->IsZoomedIn();
+
+    bool bChapterUp = false;
+    bool bChapterDown = false;
+    bool bLevelPromote = false;
+    bool bLevelDemote = false;
+
+    if (bSensitive && !bZoomedIn)
     {
-        if (!m_xTreeView->get_visible())
-            bEnable = true;
-        else if (bParentEntry)
+        std::unique_ptr<weld::TreeIter> xParentEntry(m_xTreeView->make_iterator(xEntry.get()));
+        bool bParentEntry = m_xTreeView->iter_parent(*xParentEntry);
+        while (bParentEntry && (!lcl_IsContentType(*xParentEntry, *m_xTreeView)))
+            bParentEntry = m_xTreeView->iter_parent(*xParentEntry);
+        if (!m_bIsLastReadOnly)
         {
-            if ((m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE) ||
-                (lcl_IsContent(*xEntry, *m_xTreeView) &&
-                    reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xParentEntry).toInt64())->GetType() == ContentTypeId::OUTLINE))
+            if (!m_xTreeView->get_visible()) // when does this happen?
+                bEnable = false; // was true;
+            else if (bParentEntry)
             {
-                bEnable = true;
+                if ((m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE) ||
+                        (lcl_IsContent(*xEntry, *m_xTreeView) && reinterpret_cast<SwContentType*>(
+                             m_xTreeView->get_id(*xParentEntry).toInt64())->GetType() ==
+                         ContentTypeId::OUTLINE))
+                {
+                    bEnable = true;
+                    if (lcl_IsContent(*xEntry, *m_xTreeView))
+                    {
+                        // set sensitivity of chapter level buttons
+                        SwOutlineContent* pCnt = reinterpret_cast<SwOutlineContent*>(
+                                    m_xTreeView->get_id(*xEntry).toInt64());
+                        bLevelDemote = pCnt->GetOutlineLevel() < 9;
+                        bLevelPromote = pCnt->GetOutlineLevel() > 0;
+                    }
+                    // set sensitivity of chapter up/down buttons
+                    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator(xEntry.get()));
+                    if (!m_xTreeView->iter_has_child(*xIter) ||
+                            (m_xTreeView->iter_has_child(*xIter)
+                             && eMode == UpdateToolBoxMode::Expanding) ||
+                            (m_xTreeView->get_row_expanded(*xIter)
+                             && eMode != UpdateToolBoxMode::Collapsing))
+                    {
+                        bChapterDown = m_xTreeView->iter_next(*xIter) &&
+                                lcl_IsContent(*xIter, *m_xTreeView);
+                        m_xTreeView->copy_iterator(*xEntry, *xIter);
+                        bChapterUp = m_xTreeView->iter_previous(*xIter) &&
+                                lcl_IsContent(*xIter, *m_xTreeView);
+                    }
+                    else
+                    {
+                        bChapterDown = m_xTreeView->iter_next_sibling(*xIter) &&
+                                lcl_IsContent(*xIter, *m_xTreeView);
+                        m_xTreeView->copy_iterator(*xEntry, *xIter);
+                        bChapterUp = m_xTreeView->iter_previous_sibling(*xIter) &&
+                                lcl_IsContent(*xIter, *m_xTreeView);
+                    }
+                }
             }
         }
     }
 
-    SwNavigationPI* pNavi = GetParentWindow();
-    pNavi->m_xContent6ToolBox->set_item_sensitive("chapterup",  bEnable);
-    pNavi->m_xContent6ToolBox->set_item_sensitive("chapterdown", bEnable);
-    pNavi->m_xContent6ToolBox->set_item_sensitive("promote", bEnable);
-    pNavi->m_xContent6ToolBox->set_item_sensitive("demote", bEnable);
+    pNavi->m_xContent5ToolBox->set_item_sensitive("root", bSensitive && !bZoomedIn);
+    pNavi->m_xContent5ToolBox->set_item_sensitive("headings", bSensitive && bEnable && !bZoomedIn);
+    pNavi->m_xContent6ToolBox->set_item_sensitive("dragmode", bSensitive && !bZoomedIn);
+    pNavi->m_xContent6ToolBox->set_item_sensitive("chapterup",  bSensitive && bChapterUp);
+    pNavi->m_xContent6ToolBox->set_item_sensitive("chapterdown", bSensitive && bChapterDown);
+    pNavi->m_xContent6ToolBox->set_item_sensitive("promote", bSensitive && bEnable && bLevelPromote);
+    pNavi->m_xContent6ToolBox->set_item_sensitive("demote", bSensitive && bEnable && bLevelDemote);
 }
 
 void SwContentTree::SetRootType(ContentTypeId nType)

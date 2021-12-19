@@ -128,6 +128,13 @@ class SwContentTree final : public SfxListener
 
     SwOutlineNodes::size_type m_nLastGotoContentWasOutlinePos = SwOutlineNodes::npos;
 
+    enum class UpdateToolBoxMode
+    {
+        None,
+        Collapsing,
+        Expanding
+    };
+
     enum class State { ACTIVE, CONSTANT, HIDDEN } m_eState;
 
     bool                m_bIsRoot             :1;
@@ -257,7 +264,7 @@ public:
     const SwWrtShell*   GetActiveWrtShell() const {return m_pActiveShell;}
     SwWrtShell*         GetHiddenWrtShell() {return m_pHiddenShell;}
 
-    void Select();
+    void UpdateToolBox(UpdateToolBoxMode eMode = UpdateToolBoxMode::None);
 
     void UpdateTracking();
     void SelectOutlinesWithSelection();

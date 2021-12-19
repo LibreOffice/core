@@ -421,7 +421,7 @@ void SwNavigationPI::ZoomOut()
     pNav->SetMinOutputSizePixel(aOptimalSize);
     pNav->SetOutputSizePixel(aNewSize);
 
-    m_xContentTree->Select(); // Enable toolbox
+    m_xContentTree->UpdateToolBox();
     m_pConfig->SetSmall(false);
     m_xContent6ToolBox->set_item_active("listbox", true);
 }
@@ -450,7 +450,7 @@ void SwNavigationPI::ZoomIn()
     pNav->SetMinOutputSizePixel(aOptimalSize);
     pNav->SetOutputSizePixel(aNewSize);
 
-    m_xContentTree->Select(); // Enable toolbox
+    m_xContentTree->UpdateToolBox();
 
     m_pConfig->SetSmall(true);
     m_xContent6ToolBox->set_item_active("listbox", false);
