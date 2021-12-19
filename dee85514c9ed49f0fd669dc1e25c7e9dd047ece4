@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b102a88_9230b280",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-19T09:18:50Z",
+      "side": 1,
+      "message": "For the test, I tried:\n- opening Evolution local \"Personal\" table\n- sorting columns\nit worked.",
+      "revId": "dee85514c9ed49f0fd669dc1e25c7e9dd047ece4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
