@@ -16,6 +16,23 @@
       "message": "unfortunately we can\u0027t use std::mutex here, because sometimes it can call back into getRtti while it is already in getRtti",
       "revId": "cde0e34328306c7b30dcfddd0667d8747d52a9ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28bfda92_fe7c9797",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-12-19T19:47:04Z",
+      "side": 1,
+      "message": "But the getrtti it calls doesn\u0027t use thé mute, no ?",
+      "revId": "cde0e34328306c7b30dcfddd0667d8747d52a9ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
