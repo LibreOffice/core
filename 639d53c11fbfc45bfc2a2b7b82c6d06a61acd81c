@@ -22,6 +22,30 @@
       },
       "revId": "639d53c11fbfc45bfc2a2b7b82c6d06a61acd81c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1ef4bba_733ab8ed",
+        "filename": "sc/inc/fielduno.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-19T10:21:09Z",
+      "side": 1,
+      "message": "can\u0027t change it anymore, it\u0027s public API.\n\n....But I have a plan to replace many usages of WeakComponentImplHelper with a more efficient version that uses std::mutex :-)",
+      "parentUuid": "bf0a6513_cab7fb51",
+      "range": {
+        "startLine": 162,
+        "startChar": 14,
+        "endLine": 162,
+        "endChar": 37
+      },
+      "revId": "639d53c11fbfc45bfc2a2b7b82c6d06a61acd81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
