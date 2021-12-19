@@ -20,6 +20,7 @@
 #define INCLUDED_SFX2_TABDLG_HXX
 
 #include <memory>
+#include <unordered_map>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/basedlgs.hxx>
@@ -180,6 +181,8 @@ private:
     const SfxItemSet*   pSet;
     OUString            aUserString;
     bool                bHasExchangeSupport;
+    std::unordered_map<OString, css::uno::Any> maAdditionalProperties;
+
     std::unique_ptr< TabPageImpl >        pImpl;
 
 protected:
@@ -241,6 +244,11 @@ public:
     bool            IsVisible() const { return m_xContainer->get_visible(); }
 
     weld::Window*   GetFrameWeld() const;
+
+    std::unordered_map<OString, css::uno::Any>& getAdditionalProperties()
+    {
+        return maAdditionalProperties;
+    }
 };
 
 #endif

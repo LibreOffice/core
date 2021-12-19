@@ -603,6 +603,8 @@ public:
     bool DoesMakePageObjectsNamesUnique() const { return mbMakePageObjectsNamesUnique; }
     void DoMakePageObjectsNamesUnique(bool bDo) { mbMakePageObjectsNamesUnique = bDo; }
 
+    virtual sal_Int32 getImagePreferredDPI() const { return 0; }
+
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
