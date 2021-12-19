@@ -654,6 +654,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
                     std::unique_ptr<SfxTabPage> xTabPage = (*fnCreatePage)(aCropDialog.get_content_area(), &aCropDialog, &aCropDlgAttr);
+                    OUString sPreferredDPI = OUString::number(rView.getSdrModelFromSdrView().getImagePreferredDPI());
+                    xTabPage->SetUserData(sPreferredDPI);
                     xTabPage->SetPageTitle(aCropStr);
                     aCropDialog.SetTabPage(std::move(xTabPage));
 
