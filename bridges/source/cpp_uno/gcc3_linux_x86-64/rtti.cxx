@@ -58,7 +58,6 @@ private:
 
 class GeneratedPad: public Generated {
 public:
-public:
     GeneratedPad(std::unique_ptr<char[]> && pad): pad_(std::move(pad)) {};
 
     ~GeneratedPad() override { get()->~type_info(); }
