@@ -65,8 +65,6 @@ namespace connectivity::evoab
         {
             OEvoabConnection*                      m_pConnection;
 
-            ODatabaseMetaDataResultSet::ORows getColumnRows( const OUString& columnNamePattern );
-
         protected:
             virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
             // cached database information

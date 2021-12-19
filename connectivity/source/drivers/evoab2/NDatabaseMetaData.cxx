@@ -253,8 +253,14 @@ OEvoabDatabaseMetaData::~OEvoabDatabaseMetaData()
 }
 
 
-ODatabaseMetaDataResultSet::ORows OEvoabDatabaseMetaData::getColumnRows( const OUString& columnNamePattern )
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
+    const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*tableNamePattern*/,
+    const OUString& columnNamePattern )
 {
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumns );
+
     ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow  aRow(19);
 
@@ -309,7 +315,9 @@ ODatabaseMetaDataResultSet::ORows OEvoabDatabaseMetaData::getColumnRows( const O
         }
     }
 
-    return aRows ;
+    pResultSet->setRows(std::move(aRows));
+
+    return pResultSet;
 }
 
 OUString OEvoabDatabaseMetaData::impl_getCatalogSeparator_throw(  )
@@ -1045,18 +1053,6 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
     pResultSet->setRows(std::move(aRows));
     return pResultSet;
 }
-
-Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
-    const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*tableNamePattern*/,
-    const OUString& columnNamePattern )
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumns );
-    pResultSet->setRows( getColumnRows( columnNamePattern ) );
-    return pResultSet;
-}
-
 
 bool isSourceBackend(ESource *pSource, const char *backendname)
 {
