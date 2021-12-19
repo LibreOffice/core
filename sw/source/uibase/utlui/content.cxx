@@ -2782,7 +2782,7 @@ void SwContentTree::ToggleToRoot()
         {
             for (ContentTypeId i : o3tl::enumrange<ContentTypeId>())
             {
-                if (i != m_nLastSelType)
+                if (i != m_nLastSelType && m_aActiveContentArr[i])
                     m_aActiveContentArr[i]->FillMemberList();
             }
         }
