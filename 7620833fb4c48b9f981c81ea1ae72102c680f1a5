@@ -16,6 +16,24 @@
       "message": "why mix in unrelated clean-up here?",
       "revId": "7620833fb4c48b9f981c81ea1ae72102c680f1a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86f54715_414862dc",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/rtti.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-12-20T09:58:19Z",
+      "side": 0,
+      "message": "Just removed this clean-up.",
+      "parentUuid": "5d3714ff_36cc5fbb",
+      "revId": "7620833fb4c48b9f981c81ea1ae72102c680f1a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

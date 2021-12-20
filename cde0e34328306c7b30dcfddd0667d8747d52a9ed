@@ -137,6 +137,24 @@
       "message": "please explain in the commit message why the mutex needs to be moved out of RTTI to the call site, it is non-obvious at least to the casual reader",
       "revId": "cde0e34328306c7b30dcfddd0667d8747d52a9ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8038245_2e62c8a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-12-20T09:58:19Z",
+      "side": 1,
+      "message": "Done in the commit and in the source.",
+      "parentUuid": "ea476c74_4118deaa",
+      "revId": "cde0e34328306c7b30dcfddd0667d8747d52a9ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
