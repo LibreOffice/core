@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "936f356a_25886439",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-12-20T11:23:11Z",
+      "side": 1,
+      "message": "i think this is still needed as it is checked in line 1559",
+      "revId": "b0173a98410a90954732bd9d574474d836f1ed74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
