@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <tools/GenericTypeSerializer.hxx>
 #include <tools/helpers.hxx>
 #include <tools/line.hxx>
@@ -25,6 +26,7 @@
 #include <tools/vcompat.hxx>
 
 #include <vcl/hatch.hxx>
+#include <vcl/metaact.hxx>
 
 extern "C" {
 
@@ -297,6 +299,128 @@ void Hatch::GenerateHatchLinePoints(tools::Line const& rLine, tools::PolyPolygon
 
         if (nPCounter & 1)
             nPCounter--;
+    }
+}
+
+void Hatch::AddHatchActions(tools::PolyPolygon const& rPolyPoly,
+                                   tools::Long nLogPixelWidth, tools::Long nWidth, Point const& rRef,
+                                   GDIMetaFile& rMtf) const
+{
+
+    tools::PolyPolygon aPolyPoly( rPolyPoly );
+    aPolyPoly.Optimize( PolyOptimizeFlags::NO_SAME | PolyOptimizeFlags::CLOSE );
+
+    if( aPolyPoly.Count() )
+    {
+        AddHatchLinesToMetafile(aPolyPoly, nLogPixelWidth, nWidth, rRef, rMtf);
+        rMtf.AddAction(new MetaPopAction());
+    }
+}
+
+const size_t HATCH_MAXPOINTS = 1024;
+
+void Hatch::AddHatchLinesToMetafile(tools::PolyPolygon const& rPolyPoly,
+                                    tools::Long nLogPixelWidth, tools::Long nWidth, Point const& rRef,
+                                    GDIMetaFile& rMtf) const
+{
+    if (!rPolyPoly.Count())
+        return;
+
+    // #i115630# DrawHatch does not work with beziers included in the polypolygon, take care of that
+    bool bIsCurve = false;
+
+    for (sal_uInt16 a = 0; !bIsCurve && a < rPolyPoly.Count(); a++)
+    {
+        if (rPolyPoly[a].HasFlags())
+            bIsCurve = true;
+    }
+
+    if (bIsCurve)
+    {
+        SAL_WARN("vcl.gdi", "DrawHatch does *not* support curves, falling back to AdaptiveSubdivide()...");
+        tools::PolyPolygon aPolyPoly;
+
+        rPolyPoly.AdaptiveSubdivide(aPolyPoly);
+        AddHatchLinesToMetafile(aPolyPoly, nLogPixelWidth, nWidth, rRef, rMtf);
+    }
+    else
+    {
+        tools::Rectangle aRect(rPolyPoly.GetBoundRect());
+        std::unique_ptr<Point[]> pPtBuffer(new Point[HATCH_MAXPOINTS]);
+        Point aPt1, aPt2, aEndPt1;
+        Size aInc;
+
+        // Single hatch
+        aRect.AdjustLeft(-nLogPixelWidth);
+        aRect.AdjustTop(-nLogPixelWidth);
+        aRect.AdjustRight(nLogPixelWidth);
+        aRect.AdjustBottom(nLogPixelWidth);
+
+        Hatch::CalcHatchValues(aRect, nWidth, GetAngle(), aPt1, aPt2, aInc, aEndPt1, rRef);
+
+        do
+        {
+            Hatch::AddHatchLines(tools::Line(aPt1, aPt2), rPolyPoly, pPtBuffer.get(), rMtf);
+
+            aPt1.AdjustX(aInc.Width());
+            aPt1.AdjustY(aInc.Height());
+
+            aPt2.AdjustX(aInc.Width());
+            aPt2.AdjustY(aInc.Height());
+        }
+        while((aPt1.X() <= aEndPt1.X()) && (aPt1.Y() <= aEndPt1.Y()));
+
+        if ((GetStyle() == HatchStyle::Double) || (GetStyle() == HatchStyle::Triple))
+        {
+            // Double hatch
+            Hatch::CalcHatchValues(aRect, nWidth, GetAngle() + 900_deg10, aPt1, aPt2, aInc, aEndPt1, rRef);
+
+            do
+            {
+                Hatch::AddHatchLines(tools::Line(aPt1, aPt2), rPolyPoly, pPtBuffer.get(), rMtf);
+
+                aPt1.AdjustX(aInc.Width());
+                aPt1.AdjustY(aInc.Height());
+
+                aPt2.AdjustX(aInc.Width());
+                aPt2.AdjustY(aInc.Height());
+            }
+            while ((aPt1.X() <= aEndPt1.X()) && (aPt1.Y() <= aEndPt1.Y()));
+
+            if (GetStyle() == HatchStyle::Triple)
+            {
+                // Triple hatch
+                Hatch::CalcHatchValues(aRect, nWidth, GetAngle() + 450_deg10, aPt1, aPt2, aInc, aEndPt1, rRef);
+
+                do
+                {
+                    Hatch::AddHatchLines(tools::Line(aPt1, aPt2), rPolyPoly, pPtBuffer.get(), rMtf);
+
+                    aPt1.AdjustX(aInc.Width());
+                    aPt1.AdjustY(aInc.Height());
+
+                    aPt2.AdjustX(aInc.Width());
+                    aPt2.AdjustY(aInc.Height());
+                }
+                while ((aPt1.X() <= aEndPt1.X()) && (aPt1.Y() <= aEndPt1.Y()));
+            }
+        }
+    }
+}
+
+void Hatch::AddHatchLines(tools::Line const& rLine, tools::PolyPolygon const& rPolyPoly,
+                                  Point* pPtBuffer, GDIMetaFile& rMtf) const
+{
+    tools::Long nPCounter = 0;
+
+    Hatch::GenerateHatchLinePoints(rLine, rPolyPoly, nPCounter, pPtBuffer);
+
+    if (nPCounter <= 1)
+        return;
+
+    for (tools::Long i = 0; i < nPCounter; i += 2)
+    {
+        rMtf.AddAction(new MetaLineAction(pPtBuffer[i], pPtBuffer[i + 1]));
     }
 }
 
