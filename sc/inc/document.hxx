@@ -47,6 +47,7 @@
 #include <cassert>
 #include <memory>
 #include <map>
+#include <mutex>
 #include <optional>
 #include <set>
 #include <unordered_map>
@@ -469,7 +470,7 @@ private:
 
     mutable ScInterpreterContext maInterpreterContext;
 
-    osl::Mutex mScLookupMutex; // protection for thread-unsafe parts of handling ScLookup
+    std::mutex mScLookupMutex; // protection for thread-unsafe parts of handling ScLookup
 
     static const sal_uInt16 nSrcVer;                        // file version (load/save)
     sal_uInt16              nFormulaTrackCount;

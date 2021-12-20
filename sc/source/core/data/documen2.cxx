@@ -1167,7 +1167,7 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange, ScInterprete
         pCache = findIt->second.get();
         // The StartListeningArea() call is not thread-safe, as all threads
         // would access the same SvtBroadcaster.
-        osl::MutexGuard guard( mScLookupMutex );
+        std::unique_lock guard( mScLookupMutex );
         StartListeningArea(rRange, false, pCache);
     }
     else
