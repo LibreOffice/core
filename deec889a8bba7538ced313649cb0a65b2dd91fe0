@@ -34,6 +34,24 @@
       "parentUuid": "ba2057d8_11cd4646",
       "revId": "deec889a8bba7538ced313649cb0a65b2dd91fe0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b63d1660_b417f269",
+        "filename": "include/systools/win32/comtools.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-20T20:47:47Z",
+      "side": 1,
+      "message": "\u003e Thanks for the comments!\n\u003e \n\u003e \u003e In comparison to the CoCreateInstance class function, returning the HRESULT instead of COMReference\u003cT\u003e\u0026 looks very strange.\n\u003e \n\u003e This is as intended. In throwing case, I am sure that expression like\n\u003e \n\u003e   COMReference\u003cIFoo\u003e().CoCreateInstance(...)-\u003edoSomething()\n\u003e \n\u003e works as intended, or throws. It never tries to deref nullptr.\n\nOk\n\n\u003e using its operator bool, it is more informative to return HRESULT to know better what\u0027s the problem, without loosing anything:\n\u003e \n\u003e   if (COMReference\u003cIFoo\u003e i; SUCCEEDED(i.CoCreateInstance(...)))\n\nYeah; missed that the exception contained hr.\n\n\u003e \u003e Are you sure you want the old com_ptr_ value to remain in the case of failure?\n\u003e \n\u003e Yes. There are specific code replaced in https://gerrit.libreoffice.org/c/core/+/127189, that was written that way, and I want it that way. The old value will not leak anyway...\n\nMy comment was not about leaking, just different error case handling. For whatever reason the depending patch 127189 isn\u0027t listed by Gerrit as a chained relation.\n\nMakes all sense. Sorry for the noise.",
+      "parentUuid": "afaf0de7_7024b31b",
+      "revId": "deec889a8bba7538ced313649cb0a65b2dd91fe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
