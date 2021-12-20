@@ -33,6 +33,24 @@
       "message": "Such a comment discussing what a commit changes (\"is now here\") is IMO more confusing than helpful for a reader of the resulting code.  I would drop it completely (the resulting code isn\u0027t non-obvious---what was non-obvious was why the commit moved the mutex around rather than just replacing osl::Mutex with std::mutex, and the commit message is the perfect place to document that).",
       "revId": "c1b671a2183ac016e02c52f2170a768a2dd010e3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fe93d05_548a0b50",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/rtti.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-12-20T11:54:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46a58d00_fa5b0048",
+      "revId": "c1b671a2183ac016e02c52f2170a768a2dd010e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
