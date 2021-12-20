@@ -657,8 +657,8 @@ SwFlyNotify::SwFlyNotify( SwFlyFrame *pFlyFrame ) :
     SwLayNotify( pFlyFrame ),
     // #115759# - keep correct page frame - the page frame
     // the Writer fly frame is currently registered at.
-    pOldPage( pFlyFrame->GetPageFrame() ),
-    aFrameAndSpace( pFlyFrame->GetObjRectWithSpaces() )
+    m_pOldPage( pFlyFrame->GetPageFrame() ),
+    m_aFrameAndSpace( pFlyFrame->GetObjRectWithSpaces() )
 {
 }
 
@@ -673,11 +673,11 @@ void SwFlyNotify::ImplDestroy()
         {
             //If in the LayAction the IsAgain is set it can be
             //that the old page is destroyed in the meantime!
-            ::Notify( pFly, pOldPage, aFrameAndSpace, &maPrt );
+            ::Notify( pFly, m_pOldPage, m_aFrameAndSpace, &maPrt );
             // #i35640# - additional notify anchor text frame,
             // if Writer fly frame has changed its page
             if ( pFly->GetAnchorFrame()->IsTextFrame() &&
-                 pFly->GetPageFrame() != pOldPage )
+                 pFly->GetPageFrame() != m_pOldPage )
             {
                 pFly->AnchorFrame()->Prepare( PrepareHint::FlyFrameLeave );
             }

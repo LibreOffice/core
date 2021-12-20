@@ -261,8 +261,8 @@ public:
 
 class SwFlyNotify : public SwLayNotify
 {
-    SwPageFrame *pOldPage;
-    const SwRect aFrameAndSpace;
+    SwPageFrame *m_pOldPage;
+    const SwRect m_aFrameAndSpace;
 
     void ImplDestroy();
 

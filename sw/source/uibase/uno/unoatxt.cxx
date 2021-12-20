@@ -923,7 +923,7 @@ const struct SvEventDescription aAutotextEvents[] =
 SwAutoTextEventDescriptor::SwAutoTextEventDescriptor(
     SwXAutoTextEntry& rAutoText ) :
         SvBaseEventDescriptor(aAutotextEvents),
-        rAutoTextEntry(rAutoText)
+        m_rAutoTextEntry(rAutoText)
 {
 }
 
@@ -940,23 +940,23 @@ void SwAutoTextEventDescriptor::replaceByName(
     const SvMacroItemId nEvent,
     const SvxMacro& rMacro)
 {
-    OSL_ENSURE( nullptr != rAutoTextEntry.GetGlossaries(),
+    OSL_ENSURE( nullptr != m_rAutoTextEntry.GetGlossaries(),
                 "Strangely enough, the AutoText vanished!" );
     OSL_ENSURE( (nEvent == SvMacroItemId::SwEndInsGlossary) ||
                 (nEvent == SvMacroItemId::SwStartInsGlossary) ,
                 "Unknown event ID" );
 
     SwGlossaries *const pGlossaries =
-        const_cast<SwGlossaries*>(rAutoTextEntry.GetGlossaries());
+        const_cast<SwGlossaries*>(m_rAutoTextEntry.GetGlossaries());
     std::unique_ptr<SwTextBlocks> pBlocks(
-        pGlossaries->GetGroupDoc( rAutoTextEntry.GetGroupName() ));
+        pGlossaries->GetGroupDoc( m_rAutoTextEntry.GetGroupName() ));
     OSL_ENSURE( pBlocks,
                 "can't get autotext group; SwAutoTextEntry has illegal name?");
 
     if( !pBlocks || pBlocks->GetError())
         return;
 
-    sal_uInt16 nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
+    sal_uInt16 nIndex = pBlocks->GetIndex( m_rAutoTextEntry.GetEntryName() );
     if( nIndex != USHRT_MAX )
     {
         SvxMacroTableDtor aMacroTable;
@@ -973,15 +973,15 @@ void SwAutoTextEventDescriptor::getByName(
     SvxMacro& rMacro,
     const SvMacroItemId nEvent )
 {
-    OSL_ENSURE( nullptr != rAutoTextEntry.GetGlossaries(), "no AutoText" );
+    OSL_ENSURE( nullptr != m_rAutoTextEntry.GetGlossaries(), "no AutoText" );
     OSL_ENSURE( (nEvent == SvMacroItemId::SwEndInsGlossary) ||
                 (nEvent == SvMacroItemId::SwStartInsGlossary) ,
                 "Unknown event ID" );
 
     SwGlossaries *const pGlossaries =
-        const_cast<SwGlossaries*>(rAutoTextEntry.GetGlossaries());
+        const_cast<SwGlossaries*>(m_rAutoTextEntry.GetGlossaries());
     std::unique_ptr<SwTextBlocks> pBlocks(
-        pGlossaries->GetGroupDoc( rAutoTextEntry.GetGroupName() ));
+        pGlossaries->GetGroupDoc( m_rAutoTextEntry.GetGroupName() ));
     OSL_ENSURE( pBlocks,
                 "can't get autotext group; SwAutoTextEntry has illegal name?");
 
@@ -993,7 +993,7 @@ void SwAutoTextEventDescriptor::getByName(
     if ( !pBlocks || pBlocks->GetError())
         return;
 
-    sal_uInt16 nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
+    sal_uInt16 nIndex = pBlocks->GetIndex( m_rAutoTextEntry.GetEntryName() );
     if( nIndex != USHRT_MAX )
     {
         SvxMacroTableDtor aMacroTable;

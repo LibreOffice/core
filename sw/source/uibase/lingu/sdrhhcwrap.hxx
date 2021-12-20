@@ -28,15 +28,15 @@ class SdrHHCWrapper : public SdrOutliner
 {
     // modified version of SdrSpeller
 
-    SwView*             pView;
-    SdrTextObj*         pTextObj;
-    std::unique_ptr<OutlinerView> pOutlView;
-    sal_Int32           nOptions;
-    sal_uInt16          nDocIndex;
-    LanguageType        nSourceLang;
-    LanguageType        nTargetLang;
-    const vcl::Font*    pTargetFont;
-    bool                bIsInteractive;
+    SwView*             m_pView;
+    SdrTextObj*         m_pTextObj;
+    std::unique_ptr<OutlinerView> m_pOutlView;
+    sal_Int32           m_nOptions;
+    sal_uInt16          m_nDocIndex;
+    LanguageType        m_nSourceLang;
+    LanguageType        m_nTargetLang;
+    const vcl::Font*    m_pTargetFont;
+    bool                m_bIsInteractive;
 
 public:
     SdrHHCWrapper( SwView* pVw,
