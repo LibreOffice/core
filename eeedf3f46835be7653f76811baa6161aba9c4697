@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7bca7c1_e7206c8f",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-20T10:58:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8458e5c_857ef347",
+      "revId": "eeedf3f46835be7653f76811baa6161aba9c4697",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "934f2357_364d712e",
@@ -66,6 +84,24 @@
       "writtenOn": "2021-12-20T10:27:11Z",
       "side": 1,
       "message": "yes, good to set it here if it\u0027s not in the document :)",
+      "revId": "eeedf3f46835be7653f76811baa6161aba9c4697",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e2539fb_fe56198d",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1560,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-20T10:58:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "934f2357_364d712e",
       "revId": "eeedf3f46835be7653f76811baa6161aba9c4697",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
