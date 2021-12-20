@@ -311,14 +311,13 @@ namespace XSLT
         // the input stream that represents the imported file
         // is most important here since we need to supply it to
         // the sax parser that drives the supplied document handler
-        sal_Int32 nLength = aSourceData.getLength();
         OUString aName, aURL;
         css::uno::Reference<XInputStream> xInputStream;
         css::uno::Reference<XInteractionHandler> xInterActionHandler;
-        for (sal_Int32 i = 0; i < nLength; i++)
+        for (const auto& sourceDataItem : aSourceData)
         {
-            aName = aSourceData[i].Name;
-            Any value = aSourceData[i].Value;
+            aName = sourceDataItem.Name;
+            Any value = sourceDataItem.Value;
             if ( aName == "InputStream" )
                 value >>= xInputStream;
             else if ( aName == "URL" )

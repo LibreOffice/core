@@ -22,11 +22,10 @@ namespace chart {
 ChartToolbarController::ChartToolbarController(const css::uno::Sequence<css::uno::Any>& rProperties)
 {
     css::uno::Reference<css::frame::XFrame> xFrame;
-    sal_Int32 nLength = rProperties.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& rProperty : rProperties)
     {
         css::beans::PropertyValue aPropValue;
-        rProperties[i] >>= aPropValue;
+        rProperty >>= aPropValue;
         if (aPropValue.Name == "Frame")
             aPropValue.Value >>= xFrame;
     }

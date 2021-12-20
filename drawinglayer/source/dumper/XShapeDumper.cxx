@@ -1077,9 +1077,8 @@ void dumpInteropGrabBagAsElement(const uno::Sequence< beans::PropertyValue>& aIn
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "InteropGrabBag" ));
 
-    sal_Int32 nLength = aInteropGrabBag.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
-        dumpPropertyValueAsElement(aInteropGrabBag[i], xmlWriter);
+    for (const auto& item: aInteropGrabBag)
+        dumpPropertyValueAsElement(item, xmlWriter);
 
     (void)xmlTextWriterEndElement( xmlWriter );
 }
