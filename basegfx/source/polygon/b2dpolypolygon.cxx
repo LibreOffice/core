@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b2dpolygon.hxx>

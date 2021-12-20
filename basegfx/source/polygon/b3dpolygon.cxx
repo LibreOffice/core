@@ -26,6 +26,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cassert>
 #include <memory>
+#include <utility>
 #include <vector>
 #include <algorithm>
 
