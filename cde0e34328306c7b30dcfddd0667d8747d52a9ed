@@ -85,6 +85,24 @@
       "message": "I moyen the lock outside the class to avoid the récursive lock",
       "revId": "cde0e34328306c7b30dcfddd0667d8747d52a9ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b396413a_5a7a4005",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-12-20T07:54:15Z",
+      "side": 1,
+      "message": "I moved the lock outside the class to avoid the double lock, sorry still on my phone",
+      "parentUuid": "e3724c40_751025c2",
+      "revId": "cde0e34328306c7b30dcfddd0667d8747d52a9ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
