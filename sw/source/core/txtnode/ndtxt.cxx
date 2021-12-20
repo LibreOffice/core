@@ -878,9 +878,13 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
             assert(rFirstNode.GetIndex() <= rNode.GetIndex());
             pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
                         *pFrame, rFirstNode, eMode));
-            assert(pFrame->GetMergedPara());
-            assert(pFrame->GetMergedPara()->listener.IsListeningTo(&rNode));
-            assert(rNode.GetIndex() <= pFrame->GetMergedPara()->pLastNode->GetIndex());
+            // there is no merged para in case the deleted node had one but
+            // nothing was actually hidden
+            if (pFrame->GetMergedPara())
+            {
+                assert(pFrame->GetMergedPara()->listener.IsListeningTo(&rNode));
+                assert(rNode.GetIndex() <= pFrame->GetMergedPara()->pLastNode->GetIndex());
+            }
             eMode = sw::FrameMode::New; // Existing is not idempotent!
         }
     }
