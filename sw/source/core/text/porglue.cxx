@@ -156,6 +156,19 @@ SwFixPortion::SwFixPortion()
     SetWhichPor( PortionType::Fix );
 }
 
+void SwFixPortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFixPortion"));
+    SwGluePortion::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("fix"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OString::number(m_nFix).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwMarginPortion::SwMarginPortion()
     :SwGluePortion( 0 )
 {

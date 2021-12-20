@@ -56,6 +56,8 @@ public:
     SwFixPortion();
     void   SetFix( const sal_uInt16 nNewFix ) { m_nFix = nNewFix; }
     sal_uInt16 GetFix() const { return m_nFix; }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SwMarginPortion : public SwGluePortion
