@@ -12,5 +12,5 @@ $(eval $(call gb_UITest_add_modules,impress_tests,$(SRCDIR)/sd/qa/uitest,\
 ))
 
 $(eval $(call gb_UITest_set_defs,impress_tests, \
-    TDOC="$(SRCDIR)/sd/qa/uitest/impress_tests/data" \
+    TDOC="$(SRCDIR)/sd/qa/uitest/data" \
 ))
