@@ -110,12 +110,21 @@ namespace sal::systools
             return operator=(p.template QueryInterface<T>(t));
         }
 
+        HRESULT TryCoCreateInstance(REFCLSID clsid, IUnknown* pOuter = nullptr,
+                                    DWORD nCtx = CLSCTX_ALL)
+        {
+            T* ip;
+            HRESULT hr = ::CoCreateInstance(clsid, pOuter, nCtx, __uuidof(T),
+                                      reinterpret_cast<void**>(&ip));
+            if (SUCCEEDED(hr))
+                release(std::exchange(com_ptr_, ip));
+            return hr;
+        }
+
         COMReference<T>& CoCreateInstance(REFCLSID clsid, IUnknown* pOuter = nullptr,
                                           DWORD nCtx = CLSCTX_ALL)
         {
-            clear();
-            HRESULT hr = ::CoCreateInstance(clsid, pOuter, nCtx, __uuidof(T),
-                                            reinterpret_cast<void**>(&com_ptr_));
+            HRESULT hr = TryCoCreateInstance(clsid, pOuter, nCtx);
             if (FAILED(hr))
                 throw ComError("CoCreateInstance failed!", hr);
 
