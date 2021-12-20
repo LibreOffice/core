@@ -134,6 +134,13 @@ inline Sequence< E > & Sequence< E >::operator = ( const Sequence & rSeq )
     return *this;
 }
 
+#if defined LIBO_INTERNAL_ONLY
+template<typename E> Sequence<E> & Sequence<E>::operator =(Sequence && other) {
+    std::swap(_pSequence, other._pSequence);
+    return *this;
+}
+#endif
+
 template< class E >
 inline bool Sequence< E >::operator == ( const Sequence & rSeq ) const
 {

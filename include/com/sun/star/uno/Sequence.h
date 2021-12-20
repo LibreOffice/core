@@ -141,6 +141,10 @@ public:
     */
     inline Sequence & SAL_CALL operator = ( const Sequence & rSeq );
 
+#if defined LIBO_INTERNAL_ONLY
+    inline Sequence & operator =(Sequence && other);
+#endif
+
     /** Gets length of the sequence.
 
         @return length of sequence
