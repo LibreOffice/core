@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ce4dcdc_1ce98db0",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-20T08:21:09Z",
+      "side": 1,
+      "message": "do you mean gb_ComponentTarget_XSLT_DUMP_OPTIONALS?",
+      "range": {
+        "startLine": 60,
+        "startChar": 7,
+        "endLine": 60,
+        "endChar": 40
+      },
+      "revId": "35229cf050a2b0de130681a741a2be5428f9f8a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca8302a2_e4073ced",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 12
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-20T08:21:09Z",
+      "side": 1,
+      "message": "do you mean the renamed gb_ComponentTarget_XSLT_CREATE_COMPONENT?",
+      "range": {
+        "startLine": 75,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 38
+      },
+      "revId": "35229cf050a2b0de130681a741a2be5428f9f8a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
