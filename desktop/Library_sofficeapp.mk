@@ -156,13 +156,11 @@ ifneq ($(filter $(OS),ANDROID iOS MACOSX WNT),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
 	desktop/source/lib/lokinteractionhandler \
-	$(if $(filter-out $(OS),IOS), \
-		desktop/source/lib/lokclipboard) \
+	desktop/source/lib/lokclipboard \
 	$(if $(filter $(OS),ANDROID), \
 		desktop/source/lib/lokandroid) \
 ))
-$(if $(filter-out $(OS),IOS), \
-    $(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/lokclipboard)))
+$(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/lokclipboard))
 else
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\

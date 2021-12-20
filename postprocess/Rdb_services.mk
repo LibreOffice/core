@@ -341,9 +341,8 @@ endif
 
 # lokclipboard.component
 ifneq ($(filter $(OS),ANDROID iOS MACOSX WNT),)
-$(if $(filter-out $(OS),IOS), \
-    $(eval $(call gb_Rdb_add_components,services,\
-		desktop/lokclipboard)))
+$(eval $(call gb_Rdb_add_components,services,\
+	desktop/lokclipboard))
 else
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Rdb_add_components,services,\
