@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b110968_fc8df2ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-20T08:16:18Z",
+      "side": 1,
+      "message": "I happened to notice in this commit:\n\n\u003e $(if $(filter-out $(OS),IOS), \\\n\nBut the value of $(OS) for iOS is \"iOS\", not \"IOS\". (Don\u0027t remember why it was changed that way, I think originally it was \"IOS\".) So this does not do what was intended.",
+      "revId": "8bd8fa55b2fd04006aa43a9e638c8801d24b06ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
