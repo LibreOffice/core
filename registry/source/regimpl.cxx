@@ -503,7 +503,7 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
 
 RegError ORegistry::closeRegistry()
 {
-    REG_GUARD(m_mutex);
+    std::unique_lock aGuard( m_mutex );
 
     if (m_file.isValid())
     {
@@ -519,7 +519,7 @@ RegError ORegistry::closeRegistry()
 
 RegError ORegistry::destroyRegistry(const OUString& regName)
 {
-    REG_GUARD(m_mutex);
+    std::unique_lock aGuard( m_mutex );
 
     if (!regName.isEmpty())
     {
@@ -582,7 +582,7 @@ RegError ORegistry::acquireKey (RegKeyHandle hKey)
     if (!pKey)
         return RegError::INVALID_KEY;
 
-    REG_GUARD(m_mutex);
+    std::unique_lock aGuard( m_mutex );
     pKey->acquire();
 
     return RegError::NO_ERROR;
@@ -594,7 +594,7 @@ RegError ORegistry::releaseKey (RegKeyHandle hKey)
     if (!pKey)
         return RegError::INVALID_KEY;
 
-    REG_GUARD(m_mutex);
+    std::unique_lock aGuard( m_mutex );
     if (pKey->release() == 0)
     {
         m_openKeyTable.erase(pKey->getName());
@@ -613,7 +613,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, std::u16string_view keyName,
     if (keyName.empty())
         return RegError::INVALID_KEYNAME;
 
-    REG_GUARD(m_mutex);
+    std::unique_lock aGuard( m_mutex );
 
     if (hKey)
         pKey = static_cast<ORegKey*>(hKey);
@@ -672,7 +672,7 @@ RegError ORegistry::openKey(RegKeyHandle hKey, std::u16string_view keyName,
         return RegError::INVALID_KEYNAME;
     }
 
-    REG_GUARD(m_mutex);
+    std::unique_lock aGuard( m_mutex );
 
     if (hKey)
         pKey = static_cast<ORegKey*>(hKey);
@@ -709,7 +709,7 @@ RegError ORegistry::closeKey(RegKeyHandle hKey)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
 
-    REG_GUARD(m_mutex);
+    std::unique_lock aGuard( m_mutex );
 
     OUString const aKeyName (pKey->getName());
     if (m_openKeyTable.count(aKeyName) <= 0)
@@ -741,7 +741,7 @@ RegError ORegistry::deleteKey(RegKeyHandle hKey, std::u16string_view keyName)
     if (keyName.empty())
         return RegError::INVALID_KEYNAME;
 
-    REG_GUARD(m_mutex);
+    std::unique_lock aGuard( m_mutex );
 
     if (!pKey)
         pKey = m_openKeyTable[ROOT];
@@ -861,7 +861,7 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
         return _ret;
     ORegKey* pRootKey = aReg.getRootKey();
 
-    REG_GUARD(m_mutex);
+    std::unique_lock aGuard( m_mutex );
 
     OStoreDirectory::iterator   iter;
     OStoreDirectory             rStoreDir(pRootKey->getStoreDir());

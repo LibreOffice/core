@@ -228,7 +228,7 @@ RegError ORegKey::getValueInfo(std::u16string_view valueName, RegValueType* pVal
 
     OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
-    REG_GUARD(m_pRegistry->m_mutex);
+    std::unique_lock aGuard( m_pRegistry->m_mutex );
 
     if ( rValue.create(m_pRegistry->getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, accessMode) )
     {
@@ -287,7 +287,7 @@ RegError ORegKey::setValue(std::u16string_view valueName, RegValueType vType, Re
 
     OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
-    REG_GUARD(m_pRegistry->m_mutex);
+    std::unique_lock aGuard( m_pRegistry->m_mutex );
 
     if ( rValue.create(getStoreFile(), m_name + ORegistry::ROOT , sImplValueName, storeAccessMode::Create) )
     {
@@ -353,7 +353,7 @@ RegError ORegKey::setLongListValue(std::u16string_view valueName, sal_Int32 cons
 
     OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
-    REG_GUARD(m_pRegistry->m_mutex);
+    std::unique_lock aGuard( m_pRegistry->m_mutex );
 
     if (rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, storeAccessMode::Create) )
     {
@@ -409,7 +409,7 @@ RegError ORegKey::setStringListValue(
 
     OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
-    REG_GUARD(m_pRegistry->m_mutex);
+    std::unique_lock aGuard( m_pRegistry->m_mutex );
 
     if (rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, storeAccessMode::Create) )
     {
@@ -473,7 +473,7 @@ RegError ORegKey::setUnicodeListValue(std::u16string_view valueName, sal_Unicode
 
     OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
-    REG_GUARD(m_pRegistry->m_mutex);
+    std::unique_lock aGuard( m_pRegistry->m_mutex );
 
     if (rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, storeAccessMode::Create) )
     {
@@ -540,7 +540,7 @@ RegError ORegKey::getValue(std::u16string_view valueName, RegValue value) const
 
     OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
-    REG_GUARD(m_pRegistry->m_mutex);
+    std::unique_lock aGuard( m_pRegistry->m_mutex );
 
     if (rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, accessMode) )
     {
@@ -619,7 +619,7 @@ RegError ORegKey::getLongListValue(std::u16string_view valueName, sal_Int32** pV
 
     OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
-    REG_GUARD(m_pRegistry->m_mutex);
+    std::unique_lock aGuard( m_pRegistry->m_mutex );
 
     if (rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, accessMode) )
     {
@@ -722,7 +722,7 @@ RegError ORegKey::getStringListValue(std::u16string_view valueName, char*** pVal
 
     OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
-    REG_GUARD(m_pRegistry->m_mutex);
+    std::unique_lock aGuard( m_pRegistry->m_mutex );
 
     if ( rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, accessMode) )
     {
@@ -819,7 +819,7 @@ RegError ORegKey::getUnicodeListValue(std::u16string_view valueName, sal_Unicode
 
     OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
-    REG_GUARD(m_pRegistry->m_mutex);
+    std::unique_lock aGuard( m_pRegistry->m_mutex );
 
     if ( rValue.create(getStoreFile(), m_name + ORegistry::ROOT, sImplValueName, accessMode) )
     {
@@ -914,7 +914,7 @@ RegError ORegKey::getResolvedKeyName(std::u16string_view keyName,
 
 sal_uInt32 ORegKey::countSubKeys()
 {
-    REG_GUARD(m_pRegistry->m_mutex);
+    std::unique_lock aGuard( m_pRegistry->m_mutex );
 
     OStoreDirectory::iterator   iter;
     OStoreDirectory             rStoreDir = getStoreDir();

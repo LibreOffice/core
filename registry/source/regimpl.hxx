@@ -28,16 +28,13 @@
 #include <regapi.hxx>
 #include <registry/regtype.h>
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <store/store.hxx>
 
 // 5 bytes = 1 (byte for the type) + 4 (bytes for the size of the data)
 #define VALUE_HEADERSIZE    5
 #define VALUE_TYPEOFFSET    1
 #define VALUE_HEADEROFFSET  5
-
-#define REG_GUARD(mutex) \
-    osl::Guard< osl::Mutex > aGuard( mutex );
 
 class ORegKey;
 class RegistryTypeReader;
@@ -141,7 +138,7 @@ private:
     typedef std::unordered_map< OUString, ORegKey* > KeyMap;
 
     sal_uInt32          m_refCount;
-    osl::Mutex          m_mutex;
+    std::mutex          m_mutex;
     bool                m_readOnly;
     bool                m_isOpen;
     OUString            m_name;
