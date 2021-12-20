@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64c2b7f0_5091a2a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-12-20T13:17:11Z",
+      "side": 1,
+      "message": "I guess I could do the same for all plateforms :-)",
+      "revId": "587c530d13a5427ea6610d68d3db3fde27f50725",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
