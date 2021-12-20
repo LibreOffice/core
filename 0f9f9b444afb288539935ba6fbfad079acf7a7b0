@@ -16,6 +16,23 @@
       "message": "But I wonder whether I just should do what my commit message suggests, without first merging this stopgap measure. The fact is that copy/paste between the iOS and and other apps on iOS does not work at all currently (and to build the iOS app at all, this patch is necessary). Perhaps I should fix that in the same change that makes it buildable.",
       "revId": "0f9f9b444afb288539935ba6fbfad079acf7a7b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27864075_4ae57269",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-20T14:32:45Z",
+      "side": 1,
+      "message": "Nah, fixing this \"properly\", i.e. making the inter-app clipboard functionality actually work, is hard. Let\u0027s at least get the build fix in first. ",
+      "revId": "0f9f9b444afb288539935ba6fbfad079acf7a7b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
