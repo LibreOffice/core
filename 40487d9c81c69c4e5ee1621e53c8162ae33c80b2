@@ -16,6 +16,24 @@
       "message": "Hi Michael,\nCould you please elaborate a bit more ? Why does it need to change to another tab ?",
       "revId": "40487d9c81c69c4e5ee1621e53c8162ae33c80b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cef82c78_8f473f27",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-12-20T11:39:27Z",
+      "side": 1,
+      "message": "it looks like every one of these tabpages handles particular subclasses of SwField, and what happened is that the cursor was moved to a field which the current tab-page cannot handle.\n\nso this patch just avoids crashing, but maybe detecting the mismatch and switching to a different tab page would be better? i don\u0027t know how this UI stuff works anyway...",
+      "parentUuid": "dd9787cf_911ed92e",
+      "revId": "40487d9c81c69c4e5ee1621e53c8162ae33c80b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
