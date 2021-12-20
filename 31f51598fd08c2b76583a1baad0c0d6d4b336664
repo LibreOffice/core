@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2c2da89_27178b52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-20T09:09:02Z",
+      "side": 1,
+      "message": "Last crashtesting run failed to upload results apparently because there was \u003e 200 backtraces and it ran out of space. To reproduce one of them:\n\nwget https://bugzilla.mozilla.org/attachment.cgi?id\u003d587515 -O moz715138-3.doc\n./instdir/program/soffice --headless --convert-to odt ./moz715138-3.doc",
+      "revId": "31f51598fd08c2b76583a1baad0c0d6d4b336664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
