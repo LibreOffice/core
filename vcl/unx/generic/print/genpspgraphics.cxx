@@ -149,10 +149,10 @@ void PspSalLayout::InitFont() const
 void GenPspGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     const GlyphItem* pGlyph;
-    Point aPos;
+    DevicePoint aPos;
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
-        m_pPrinterGfx->DrawGlyph(aPos, *pGlyph);
+        m_pPrinterGfx->DrawGlyph(Point(aPos.getX(), aPos.getY()), *pGlyph);
 }
 
 FontCharMapRef GenPspGraphics::GetFontCharMap() const

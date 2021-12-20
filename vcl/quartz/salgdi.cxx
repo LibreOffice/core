@@ -363,10 +363,10 @@ bool AquaSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*,
 
 void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    mpBackend->drawTextLayout(rLayout);
+    mpBackend->drawTextLayout(rLayout, getTextRenderModeForResolutionIndependentLayoutEnabled());
 }
 
-void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
+void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout, bool bTextRenderModeForResolutionIndependentLayout)
 {
 #ifdef IOS
     if (!mrShared.checkContext())
@@ -387,7 +387,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
     CTFontRef pFont = static_cast<CTFontRef>(CFDictionaryGetValue(rStyle.GetStyleDict(), kCTFontAttributeName));
     CGAffineTransform aRotMatrix = CGAffineTransformMakeRotation(-rStyle.mfFontRotation);
 
-    Point aPos;
+    DevicePoint aPos;
     const GlyphItem* pGlyph;
     std::vector<CGGlyph> aGlyphIds;
     std::vector<CGPoint> aGlyphPos;
@@ -395,7 +395,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
-        CGPoint aGCPos = CGPointMake(aPos.X(), -aPos.Y());
+        CGPoint aGCPos = CGPointMake(aPos.getX(), -aPos.getY());
 
         // Whether the glyph should be upright in vertical mode or not
         bool bUprightGlyph = false;
@@ -458,6 +458,14 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
         CGContextSetStrokeColor(mrShared.maContextHolder.get(), textColor.AsArray());
         CGContextSetLineWidth(mrShared.maContextHolder.get(), fSize);
         CGContextSetTextDrawingMode(mrShared.maContextHolder.get(), kCGTextFillStroke);
+    }
+
+    if (bTextRenderModeForResolutionIndependentLayout)
+    {
+        CGContextSetAllowsFontSubpixelQuantization(mrShared.maContextHolder.get(), false);
+        CGContextSetShouldSubpixelQuantizeFonts(mrShared.maContextHolder.get(), false);
+        CGContextSetAllowsFontSubpixelPositioning(mrShared.maContextHolder.get(), true);
+        CGContextSetShouldSubpixelPositionFonts(mrShared.maContextHolder.get(), true);
     }
 
     auto aIt = aGlyphOrientation.cbegin();

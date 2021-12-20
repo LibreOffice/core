@@ -7,23 +7,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_DEVICE_COORDINATE_HXX
-#define INCLUDED_VCL_DEVICE_COORDINATE_HXX
+#pragma once
 
 #include <config_vcl.h>
 #include <tools/long.hxx>
 
-#if VCL_FLOAT_DEVICE_PIXEL
 #include <basegfx/point/b2dpoint.hxx>
+typedef basegfx::B2DPoint DevicePoint;
+
+#if VCL_FLOAT_DEVICE_PIXEL
+
 typedef double DeviceCoordinate;
 
 #else /* !VCL_FLOAT_DEVICE_PIXEL */
 
-#include <basegfx/point/b2ipoint.hxx>
 typedef sal_Int32 DeviceCoordinate;
 
 #endif /* ! Carpet Cushion */
-
-#endif /* NDef INCLUDED_VCL_DEVICE_COORDINATE_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

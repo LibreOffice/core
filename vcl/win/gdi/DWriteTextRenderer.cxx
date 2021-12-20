@@ -99,7 +99,7 @@ HRESULT checkResult(HRESULT hr, const char* file, size_t line)
 
 } // end anonymous namespace
 
-D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
+D2DWriteTextOutRenderer::D2DWriteTextOutRenderer(bool bRenderingModeNatural)
     : mpD2DFactory(nullptr),
     mpDWriteFactory(nullptr),
     mpGdiInterop(nullptr),
@@ -110,6 +110,7 @@ D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
     mpFontFace(nullptr),
     mlfEmHeight(0.0f),
     mhDC(nullptr),
+    mbRenderingModeNatural(bRenderingModeNatural),
     meTextAntiAliasMode(D2DTextAntiAliasMode::Default)
 {
     HRESULT hr = S_OK;
@@ -118,7 +119,7 @@ D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
     if (SUCCEEDED(hr))
     {
         hr = mpDWriteFactory->GetGdiInterop(&mpGdiInterop);
-        hr = CreateRenderTarget();
+        hr = CreateRenderTarget(bRenderingModeNatural);
     }
     meTextAntiAliasMode = lclGetSystemTextAntiAliasMode();
 }
@@ -135,7 +136,7 @@ D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
         mpD2DFactory->Release();
 }
 
-void D2DWriteTextOutRenderer::applyTextAntiAliasMode()
+void D2DWriteTextOutRenderer::applyTextAntiAliasMode(bool bRenderingModeNatural)
 {
     D2D1_TEXT_ANTIALIAS_MODE eTextAAMode = D2D1_TEXT_ANTIALIAS_MODE_DEFAULT;
     DWRITE_RENDERING_MODE eRenderingMode = DWRITE_RENDERING_MODE_DEFAULT;
@@ -160,11 +161,15 @@ void D2DWriteTextOutRenderer::applyTextAntiAliasMode()
         default:
             break;
     }
+
+    if (bRenderingModeNatural)
+        eRenderingMode = DWRITE_RENDERING_MODE_CLEARTYPE_NATURAL;
+
     mpRT->SetTextRenderingParams(lclSetRenderingMode(mpDWriteFactory, eRenderingMode));
     mpRT->SetTextAntialiasMode(eTextAAMode);
 }
 
-HRESULT D2DWriteTextOutRenderer::CreateRenderTarget()
+HRESULT D2DWriteTextOutRenderer::CreateRenderTarget(bool bRenderingModeNatural)
 {
     if (mpRT)
     {
@@ -173,17 +178,8 @@ HRESULT D2DWriteTextOutRenderer::CreateRenderTarget()
     }
     HRESULT hr = CHECKHR(mpD2DFactory->CreateDCRenderTarget(&mRTProps, &mpRT));
     if (SUCCEEDED(hr))
-        applyTextAntiAliasMode();
+        applyTextAntiAliasMode(bRenderingModeNatural);
     return hr;
-}
-
-void D2DWriteTextOutRenderer::changeTextAntiAliasMode(D2DTextAntiAliasMode eMode)
-{
-    if (meTextAntiAliasMode != eMode)
-    {
-        meTextAntiAliasMode = eMode;
-        applyTextAntiAliasMode();
-    }
 }
 
 bool D2DWriteTextOutRenderer::Ready() const
@@ -199,7 +195,7 @@ HRESULT D2DWriteTextOutRenderer::BindDC(HDC hDC, tools::Rectangle const & rRect)
     return CHECKHR(mpRT->BindDC(hDC, &rc));
 }
 
-bool D2DWriteTextOutRenderer::operator ()(GenericSalLayout const & rLayout, SalGraphics& rGraphics, HDC hDC)
+bool D2DWriteTextOutRenderer::operator()(GenericSalLayout const & rLayout, SalGraphics& rGraphics, HDC hDC, bool bRenderingModeNatural)
 {
     bool bRetry = false;
     bool bResult = false;
@@ -207,13 +203,13 @@ bool D2DWriteTextOutRenderer::operator ()(GenericSalLayout const & rLayout, SalG
     do
     {
        bRetry = false;
-       bResult = performRender(rLayout, rGraphics, hDC, bRetry);
+       bResult = performRender(rLayout, rGraphics, hDC, bRetry, bRenderingModeNatural);
        nCount++;
     } while (bRetry && nCount < 3);
     return bResult;
 }
 
-bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, SalGraphics& rGraphics, HDC hDC, bool& bRetry)
+bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, SalGraphics& rGraphics, HDC hDC, bool& bRetry, bool bRenderingModeNatural)
 {
     if (!Ready())
         return false;
@@ -223,14 +219,14 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
 
     if (hr == D2DERR_RECREATE_TARGET)
     {
-        CreateRenderTarget();
+        CreateRenderTarget(bRenderingModeNatural);
         bRetry = true;
         return false;
     }
     if (FAILED(hr))
     {
         // If for any reason we can't bind fallback to legacy APIs.
-        return ExTextOutRenderer()(rLayout, rGraphics, hDC);
+        return ExTextOutRenderer()(rLayout, rGraphics, hDC, bRenderingModeNatural);
     }
 
     mlfEmHeight = 0;
@@ -261,15 +257,15 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
         mpRT->BeginDraw();
 
         int nStart = 0;
-        Point aPos(0, 0);
+        DevicePoint aPos;
         const GlyphItem* pGlyph;
         while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
         {
             UINT16 glyphIndices[] = { pGlyph->glyphId() };
             FLOAT glyphAdvances[] = { static_cast<FLOAT>(pGlyph->m_nNewWidth) / fHScale };
             DWRITE_GLYPH_OFFSET glyphOffsets[] = { { 0.0f, 0.0f }, };
-            D2D1_POINT_2F baseline = { static_cast<FLOAT>(aPos.X() - bounds.Left()) / fHScale,
-                                       static_cast<FLOAT>(aPos.Y() - bounds.Top()) };
+            D2D1_POINT_2F baseline = { static_cast<FLOAT>(aPos.getX() - bounds.Left()) / fHScale,
+                                       static_cast<FLOAT>(aPos.getY() - bounds.Top()) };
             WinFontTransformGuard aTransformGuard(mpRT, fHScale, rLayout, baseline, pGlyph->IsVertical());
             DWRITE_GLYPH_RUN glyphs = {
                 mpFontFace,
@@ -295,7 +291,7 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
 
     if (hr == D2DERR_RECREATE_TARGET)
     {
-        CreateRenderTarget();
+        CreateRenderTarget(bRenderingModeNatural);
         bRetry = true;
     }
 

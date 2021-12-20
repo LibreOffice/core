@@ -70,11 +70,11 @@ class VCL_DLLPUBLIC SalLayout
 public:
     virtual         ~SalLayout();
     // used by upper layers
-    Point&          DrawBase()                              { return maDrawBase; }
-    const Point&    DrawBase() const                        { return maDrawBase; }
+    DevicePoint&    DrawBase()                              { return maDrawBase; }
+    const DevicePoint& DrawBase() const                     { return maDrawBase; }
     Point&          DrawOffset()                            { return maDrawOffset; }
     const Point&    DrawOffset() const                      { return maDrawOffset; }
-    Point           GetDrawPosition( const Point& rRelative = Point(0,0) ) const;
+    DevicePoint     GetDrawPosition( const DevicePoint& rRelative = DevicePoint(0,0) ) const;
 
     virtual bool    LayoutText( vcl::text::ImplLayoutArgs&, const SalLayoutGlyphsImpl* ) = 0;  // first step of layouting
     virtual void    AdjustLayout( vcl::text::ImplLayoutArgs& );    // adjusting after fallback etc.
@@ -84,6 +84,11 @@ public:
     int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
     Degree10        GetOrientation() const                  { return mnOrientation; }
 
+    void            SetTextRenderModeForResolutionIndependentLayout(bool bTextRenderModeForResolutionIndependentLayout)
+    {
+        mbTextRenderModeForResolutionIndependentLayout = bTextRenderModeForResolutionIndependentLayout;
+    }
+
     // methods using string indexing
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const = 0;
     virtual DeviceCoordinate FillDXArray( std::vector<DeviceCoordinate>* pDXArray ) const = 0;
@@ -92,7 +97,7 @@ public:
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
-    virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
+    virtual bool    GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr,
                                  const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const = 0;
     virtual bool GetOutline(basegfx::B2DPolyPolygonVector&) const;
@@ -116,7 +121,9 @@ protected:
     Degree10        mnOrientation;
 
     mutable Point   maDrawOffset;
-    Point           maDrawBase;
+    DevicePoint     maDrawBase;
+
+    bool            mbTextRenderModeForResolutionIndependentLayout;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

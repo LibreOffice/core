@@ -294,11 +294,26 @@ std::unique_ptr<GenericSalLayout> QtGraphics::GetTextLayout(int nFallbackLevel)
     return std::make_unique<QtCommonSalLayout>(*m_pTextStyle[nFallbackLevel]);
 }
 
+static QRawFont GetRawFont(const QFont& rFont, bool bWithoutHintingInTextDirection)
+{
+    QFont::HintingPreference eHinting = rFont.hintingPreference();
+    bool bAllowedHintStyle
+        = !bWithoutHintingInTextDirection
+          || (eHinting == QFont::PreferNoHinting || eHinting == QFont::PreferVerticalHinting);
+    if (bWithoutHintingInTextDirection && !bAllowedHintStyle)
+    {
+        QFont aFont(rFont);
+        aFont.setHintingPreference(QFont::PreferVerticalHinting);
+        return QRawFont::fromFont(aFont);
+    }
+    return QRawFont::fromFont(rFont);
+}
+
 void QtGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     const QtFont* pFont = static_cast<const QtFont*>(&rLayout.GetFont());
     assert(pFont);
-    QRawFont aRawFont(QRawFont::fromFont(*pFont));
+    QRawFont aRawFont(GetRawFont(*pFont, getTextRenderModeForResolutionIndependentLayoutEnabled()));
 
     QVector<quint32> glyphIndexes;
     QVector<QPointF> positions;
@@ -311,13 +326,13 @@ void QtGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     if (nOrientation)
         pQtLayout->SetOrientation(0_deg10);
 
-    Point aPos;
+    DevicePoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         glyphIndexes.push_back(pGlyph->glyphId());
-        positions.push_back(QPointF(aPos.X(), aPos.Y()));
+        positions.push_back(QPointF(aPos.getX(), aPos.getY()));
     }
 
     // seems to be common to try to layout an empty string...

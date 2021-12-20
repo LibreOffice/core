@@ -37,6 +37,7 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCh
     , mnEndCharPos(nEndCharPos)
     , m_pTextLayoutCache(pLayoutCache)
     , mpDXArray(nullptr)
+    , mpAltNaturalDXArray(nullptr)
     , mnLayoutWidth(0)
     , mnOrientation(0)
 {
@@ -100,6 +101,11 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCh
 void ImplLayoutArgs::SetLayoutWidth(DeviceCoordinate nWidth) { mnLayoutWidth = nWidth; }
 
 void ImplLayoutArgs::SetDXArray(DeviceCoordinate const* pDXArray) { mpDXArray = pDXArray; }
+
+void ImplLayoutArgs::SetAltNaturalDXArray(double const* pDXArray)
+{
+    mpAltNaturalDXArray = pDXArray;
+}
 
 void ImplLayoutArgs::SetOrientation(Degree10 nOrientation) { mnOrientation = nOrientation; }
 
@@ -304,7 +310,7 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
     s << "\"";
 
     s << ",DXArray=";
-    if (rArgs.mpDXArray)
+    if (rArgs.mpDXArray || rArgs.mpAltNaturalDXArray)
     {
         s << "[";
         int count = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
@@ -313,7 +319,10 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
             lim = 7;
         for (int i = 0; i < lim; i++)
         {
-            s << rArgs.mpDXArray[i];
+            if (rArgs.mpDXArray)
+                s << rArgs.mpDXArray[i];
+            else
+                s << rArgs.mpAltNaturalDXArray[i];
             if (i < lim - 1)
                 s << ",";
         }
@@ -321,7 +330,10 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
         {
             if (count > lim + 1)
                 s << "...";
-            s << rArgs.mpDXArray[count - 1];
+            if (rArgs.mpDXArray)
+                s << rArgs.mpDXArray[count - 1];
+            else
+                s << rArgs.mpAltNaturalDXArray[count - 1];
         }
         s << "]";
     }

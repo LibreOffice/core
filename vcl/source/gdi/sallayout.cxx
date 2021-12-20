@@ -135,7 +135,8 @@ SalLayout::SalLayout()
     mnEndCharPos( -1 ),
     mnUnitsPerPixel( 1 ),
     mnOrientation( 0 ),
-    maDrawOffset( 0, 0 )
+    maDrawOffset( 0, 0 ),
+    mbTextRenderModeForResolutionIndependentLayout(false)
 {}
 
 SalLayout::~SalLayout()
@@ -148,10 +149,11 @@ void SalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
     mnOrientation = rArgs.mnOrientation;
 }
 
-Point SalLayout::GetDrawPosition( const Point& rRelative ) const
+DevicePoint SalLayout::GetDrawPosition(const DevicePoint& rRelative) const
 {
-    Point aPos = maDrawBase;
-    Point aOfs = rRelative + maDrawOffset;
+    DevicePoint aPos(maDrawBase);
+    DevicePoint aOfs(rRelative.getX() + maDrawOffset.X(),
+                     rRelative.getY() + maDrawOffset.Y());
 
     if( mnOrientation == 0_deg10 )
         aPos += aOfs;
@@ -168,11 +170,20 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
             fSin = sin( fRad );
         }
 
-        double fX = aOfs.X();
-        double fY = aOfs.Y();
-        tools::Long nX = static_cast<tools::Long>( +fCos * fX + fSin * fY );
-        tools::Long nY = static_cast<tools::Long>( +fCos * fY - fSin * fX );
-        aPos += Point( nX, nY );
+        double fX = aOfs.getX();
+        double fY = aOfs.getY();
+        if (mbTextRenderModeForResolutionIndependentLayout)
+        {
+            double nX = +fCos * fX + fSin * fY;
+            double nY = +fCos * fY - fSin * fX;
+            aPos += DevicePoint(nX, nY);
+        }
+        else
+        {
+            tools::Long nX = static_cast<tools::Long>( +fCos * fX + fSin * fY );
+            tools::Long nY = static_cast<tools::Long>( +fCos * fY - fSin * fX );
+            aPos += DevicePoint(nX, nY);
+        }
     }
 
     return aPos;
@@ -185,7 +196,7 @@ bool SalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rVector) const
 
     basegfx::B2DPolyPolygon aGlyphOutline;
 
-    Point aPos;
+    DevicePoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     const LogicalFontInstance* pGlyphFont;
@@ -198,9 +209,9 @@ bool SalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rVector) const
         // only add non-empty outlines
         if( bSuccess && (aGlyphOutline.count() > 0) )
         {
-            if( aPos.X() || aPos.Y() )
+            if( aPos.getX() || aPos.getY() )
             {
-                aGlyphOutline.transform(basegfx::utils::createTranslateB2DHomMatrix(aPos.X(), aPos.Y()));
+                aGlyphOutline.transform(basegfx::utils::createTranslateB2DHomMatrix(aPos.getX(), aPos.getY()));
             }
 
             // insert outline at correct position
@@ -218,7 +229,7 @@ bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
 
     tools::Rectangle aRectangle;
 
-    Point aPos;
+    DevicePoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     const LogicalFontInstance* pGlyphFont;
@@ -228,7 +239,7 @@ bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
         if (pGlyph->GetGlyphBoundRect(pGlyphFont, aRectangle))
         {
             // merge rectangle
-            aRectangle += aPos;
+            aRectangle += Point(aPos.getX(), aPos.getY());
             if (rRect.IsEmpty())
                 rRect = aRectangle;
             else
@@ -322,7 +333,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
         for( pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
         {
             // move glyph to justified position
-            pGlyphIter->m_aLinearPos.AdjustX(nDeltaSum );
+            pGlyphIter->m_aLinearPos.adjustX(nDeltaSum);
 
             // do not stretch non-stretchable glyphs
             if( pGlyphIter->IsDiacritic() || (nStretchable <= 0) )
@@ -438,7 +449,7 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
 
         // adjust the glyph positions to the new glyph widths
         if( pGlyphIter+1 != pGlyphIterEnd )
-            pGlyphIter->m_aLinearPos.AdjustX(nOffset);
+            pGlyphIter->m_aLinearPos.adjustX(nOffset);
     }
 }
 
@@ -491,7 +502,7 @@ sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoor
 }
 
 bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
-                                    Point& rPos, int& nStart,
+                                    DevicePoint& rPos, int& nStart,
                                     const LogicalFontInstance** ppGlyphFont,
                                     const vcl::font::PhysicalFontFace**) const
 {
@@ -521,10 +532,10 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
         *ppGlyphFont = m_GlyphItems.GetFont().get();
 
     // calculate absolute position in pixel units
-    Point aRelativePos = pGlyphIter->m_aLinearPos;
+    DevicePoint aRelativePos = pGlyphIter->m_aLinearPos;
 
-    aRelativePos.setX( aRelativePos.X() / mnUnitsPerPixel );
-    aRelativePos.setY( aRelativePos.Y() / mnUnitsPerPixel );
+    aRelativePos.setX( aRelativePos.getX() / mnUnitsPerPixel );
+    aRelativePos.setY( aRelativePos.getY() / mnUnitsPerPixel );
     rPos = GetDrawPosition( aRelativePos );
 
     return true;
@@ -550,7 +561,7 @@ void GenericSalLayout::MoveGlyph( int nStart, tools::Long nNewXPos )
     {
         for( std::vector<GlyphItem>::iterator pGlyphIterEnd = m_GlyphItems.end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
         {
-            pGlyphIter->m_aLinearPos.AdjustX(nXDelta );
+            pGlyphIter->m_aLinearPos.adjustX(nXDelta);
         }
     }
 }
@@ -637,7 +648,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
     vcl::text::ImplLayoutArgs aMultiArgs = rArgs;
     std::vector<DeviceCoordinate> aJustificationArray;
 
-    if( !rArgs.mpDXArray && rArgs.mnLayoutWidth )
+    if( !rArgs.HasDXArray() && rArgs.mnLayoutWidth )
     {
         // for stretched text in a MultiSalLayout the target width needs to be
         // distributed by individually adjusting its virtual character widths
@@ -702,6 +713,17 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
         }
     }
 
+    if (aMultiArgs.mpAltNaturalDXArray)
+        ImplAdjustMultiLayout(rArgs, aMultiArgs, aMultiArgs.mpAltNaturalDXArray);
+    else
+        ImplAdjustMultiLayout(rArgs, aMultiArgs, aMultiArgs.mpDXArray);
+}
+
+template<typename DC>
+void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
+                                           vcl::text::ImplLayoutArgs& rMultiArgs,
+                                           const DC* pMultiDXArray)
+{
     // Compute rtl flags, since in some scripts glyphs/char order can be
     // reversed for a few character sequences e.g. Myanmar
     std::vector<bool> vRtl(rArgs.mnEndCharPos - rArgs.mnMinCharPos, false);
@@ -721,17 +743,17 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
     const GlyphItem* pGlyphs[MAX_FALLBACK];
     bool bValid[MAX_FALLBACK] = { false };
 
-    Point aPos;
+    DevicePoint aPos;
     int nLevel = 0, n;
     for( n = 0; n < mnLevel; ++n )
     {
         // now adjust the individual components
         if( n > 0 )
         {
-            aMultiArgs.maRuns = maFallbackRuns[ n-1 ];
-            aMultiArgs.mnFlags |= SalLayoutFlags::ForFallback;
+            rMultiArgs.maRuns = maFallbackRuns[ n-1 ];
+            rMultiArgs.mnFlags |= SalLayoutFlags::ForFallback;
         }
-        mpLayouts[n]->AdjustLayout( aMultiArgs );
+        mpLayouts[n]->AdjustLayout( rMultiArgs );
 
         // remove unused parts of component
         if( n > 0 )
@@ -830,7 +852,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
         }
 
         // skip to end of layout run and calculate its advance width
-        DeviceCoordinate nRunAdvance = 0;
+        DC nRunAdvance = 0;
         bool bKeepNotDef = (nFBLevel >= nLevel);
         for(;;)
         {
@@ -886,7 +908,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
                 bKeepNotDef = bNeedFallback;
             }
             // check for reordered glyphs
-            if (aMultiArgs.mpDXArray &&
+            if (pMultiDXArray &&
                 nRunVisibleEndChar < mnEndCharPos &&
                 nRunVisibleEndChar >= mnMinCharPos &&
                 pGlyphs[n]->charPos() < mnEndCharPos &&
@@ -894,14 +916,14 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
             {
                 if (vRtl[nActiveCharPos - mnMinCharPos])
                 {
-                    if (aMultiArgs.mpDXArray[nRunVisibleEndChar-mnMinCharPos]
-                        >= aMultiArgs.mpDXArray[pGlyphs[n]->charPos() - mnMinCharPos])
+                    if (pMultiDXArray[nRunVisibleEndChar-mnMinCharPos]
+                        >= pMultiDXArray[pGlyphs[n]->charPos() - mnMinCharPos])
                     {
                         nRunVisibleEndChar = pGlyphs[n]->charPos();
                     }
                 }
-                else if (aMultiArgs.mpDXArray[nRunVisibleEndChar-mnMinCharPos]
-                         <= aMultiArgs.mpDXArray[pGlyphs[n]->charPos() - mnMinCharPos])
+                else if (pMultiDXArray[nRunVisibleEndChar-mnMinCharPos]
+                         <= pMultiDXArray[pGlyphs[n]->charPos() - mnMinCharPos])
                 {
                     nRunVisibleEndChar = pGlyphs[n]->charPos();
                 }
@@ -910,7 +932,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
 
         // if a justification array is available
         // => use it directly to calculate the corresponding run width
-        if( aMultiArgs.mpDXArray )
+        if (pMultiDXArray)
         {
             // the run advance is the width from the first char
             // in the run to the first char in the next run
@@ -919,16 +941,16 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
             if (nActiveCharIndex >= 0 && vRtl[nActiveCharIndex])
             {
               if (nRunVisibleEndChar > mnMinCharPos && nRunVisibleEndChar <= mnEndCharPos)
-                  nRunAdvance -= aMultiArgs.mpDXArray[nRunVisibleEndChar - 1 - mnMinCharPos];
+                  nRunAdvance -= pMultiDXArray[nRunVisibleEndChar - 1 - mnMinCharPos];
               if (nLastRunEndChar > mnMinCharPos && nLastRunEndChar <= mnEndCharPos)
-                  nRunAdvance += aMultiArgs.mpDXArray[nLastRunEndChar - 1 - mnMinCharPos];
+                  nRunAdvance += pMultiDXArray[nLastRunEndChar - 1 - mnMinCharPos];
             }
             else
             {
                 if (nRunVisibleEndChar >= mnMinCharPos)
-                  nRunAdvance += aMultiArgs.mpDXArray[nRunVisibleEndChar - mnMinCharPos];
+                  nRunAdvance += pMultiDXArray[nRunVisibleEndChar - mnMinCharPos];
                 if (nLastRunEndChar >= mnMinCharPos)
-                  nRunAdvance -= aMultiArgs.mpDXArray[nLastRunEndChar - mnMinCharPos];
+                  nRunAdvance -= pMultiDXArray[nLastRunEndChar - mnMinCharPos];
             }
             nLastRunEndChar = nRunVisibleEndChar;
             nRunVisibleEndChar = pGlyphs[nFirstValid]->charPos();
@@ -1105,7 +1127,7 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray )
 }
 
 bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
-                                  Point& rPos, int& nStart,
+                                  DevicePoint& rPos, int& nStart,
                                   const LogicalFontInstance** ppGlyphFont,
                                   const vcl::font::PhysicalFontFace** pFallbackFont) const
 {
@@ -1123,8 +1145,8 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
             nStart |= nFontTag;
             if (pFallbackFont)
                 *pFallbackFont = pFontFace;
-            rPos += maDrawBase;
-            rPos += maDrawOffset;
+            rPos.adjustX(maDrawBase.getX() + maDrawOffset.X());
+            rPos.adjustY(maDrawBase.getY() + maDrawOffset.Y());
             return true;
         }
     }

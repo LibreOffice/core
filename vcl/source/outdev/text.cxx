@@ -168,9 +168,9 @@ void OutputDevice::ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY,
 void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
 {
     const tools::Long nWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
-    const Point aBase = rSalLayout.DrawBase();
-    const tools::Long nX = aBase.X();
-    const tools::Long nY = aBase.Y();
+    const DevicePoint aBase = rSalLayout.DrawBase();
+    const tools::Long nX = aBase.getX();
+    const tools::Long nY = aBase.getY();
 
     if ( mbLineColor || mbInitLineColor )
     {
@@ -187,9 +187,9 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
 
 tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout ) const
 {
-    Point aPoint = rSalLayout.GetDrawPosition();
-    tools::Long nX = aPoint.X();
-    tools::Long nY = aPoint.Y();
+    DevicePoint aPoint = rSalLayout.GetDrawPosition();
+    tools::Long nX = aPoint.getX();
+    tools::Long nY = aPoint.getY();
 
     tools::Long nWidth = rSalLayout.GetTextWidth();
     tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
@@ -225,11 +225,11 @@ tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout
 
 bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 {
-    tools::Long nX = rSalLayout.DrawBase().X();
-    tools::Long nY = rSalLayout.DrawBase().Y();
+    tools::Long nX = rSalLayout.DrawBase().getX();
+    tools::Long nY = rSalLayout.DrawBase().getY();
 
     tools::Rectangle aBoundRect;
-    rSalLayout.DrawBase() = Point( 0, 0 );
+    rSalLayout.DrawBase() = DevicePoint( 0, 0 );
     rSalLayout.DrawOffset() = Point( 0, 0 );
     if (!rSalLayout.GetBoundRect(aBoundRect))
     {
@@ -261,7 +261,8 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     pVDev->ImplInitTextColor();
 
     // draw text into upper left corner
-    rSalLayout.DrawBase() -= aBoundRect.TopLeft();
+    rSalLayout.DrawBase().adjustX(-aBoundRect.Left());
+    rSalLayout.DrawBase().adjustY(-aBoundRect.Top());
     rSalLayout.DrawText( *pVDev->mpGraphics );
 
     Bitmap aBmp = pVDev->GetBitmap( Point(), aBoundRect.GetSize() );
@@ -302,18 +303,18 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
         if( ImplDrawRotateText( rSalLayout ) )
             return;
 
-    tools::Long nOldX = rSalLayout.DrawBase().X();
+    auto nOldX = rSalLayout.DrawBase().getX();
     if( HasMirroredGraphics() )
     {
         tools::Long w = IsVirtual() ? mnOutWidth : mpGraphics->GetGraphicsWidth();
-        tools::Long x = rSalLayout.DrawBase().X();
+        auto x = rSalLayout.DrawBase().getX();
         rSalLayout.DrawBase().setX( w - 1 - x );
         if( !IsRTLEnabled() )
         {
             OutputDevice *pOutDevRef = this;
             // mirror this window back
             tools::Long devX = w-pOutDevRef->mnOutWidth-pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
-            rSalLayout.DrawBase().setX( devX + ( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) ) ) ;
+            rSalLayout.DrawBase().setX( devX + ( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().getX() - devX) ) ) ;
         }
     }
     else if( IsRTLEnabled() )
@@ -322,7 +323,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
 
         // mirror this window back
         tools::Long devX = pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
-        rSalLayout.DrawBase().setX( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) + devX );
+        rSalLayout.DrawBase().setX( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().getX() - devX) + devX );
     }
 
     rSalLayout.DrawText( *mpGraphics );
@@ -345,7 +346,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
     Color       aOldOverlineColor   = GetOverlineColor();
     FontRelief  eRelief             = maFont.GetRelief();
 
-    Point aOrigPos = rSalLayout.DrawBase();
+    DevicePoint aOrigPos = rSalLayout.DrawBase();
     if ( eRelief != FontRelief::NONE )
     {
         Color   aReliefColor( COL_LIGHTGRAY );
@@ -413,9 +414,9 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
             else
                 SetTextColor( COL_BLACK );
             ImplInitTextColor();
-            rSalLayout.DrawBase() += Point( nOff, nOff );
+            rSalLayout.DrawBase() += DevicePoint( nOff, nOff );
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() -= Point( nOff, nOff );
+            rSalLayout.DrawBase() -= DevicePoint( nOff, nOff );
             SetTextColor( aOldColor );
             SetTextLineColor( aOldTextLineColor );
             SetOverlineColor( aOldOverlineColor );
@@ -427,21 +428,21 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 
         if ( maFont.IsOutline() )
         {
-            rSalLayout.DrawBase() = aOrigPos + Point(-1,-1);
+            rSalLayout.DrawBase() = aOrigPos + DevicePoint(-1,-1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(+1,+1);
+            rSalLayout.DrawBase() = aOrigPos + DevicePoint(+1,+1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(-1,+0);
+            rSalLayout.DrawBase() = aOrigPos + DevicePoint(-1,+0);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(-1,+1);
+            rSalLayout.DrawBase() = aOrigPos + DevicePoint(-1,+1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(+0,+1);
+            rSalLayout.DrawBase() = aOrigPos + DevicePoint(+0,+1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(+0,-1);
+            rSalLayout.DrawBase() = aOrigPos + DevicePoint(+0,-1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(+1,-1);
+            rSalLayout.DrawBase() = aOrigPos + DevicePoint(+1,-1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.DrawBase() = aOrigPos + Point(+1,+0);
+            rSalLayout.DrawBase() = aOrigPos + DevicePoint(+1,+0);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
             rSalLayout.DrawBase() = aOrigPos;
 
@@ -468,7 +469,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
     if( mbInitTextColor )
         ImplInitTextColor();
 
-    rSalLayout.DrawBase() += Point( mnTextOffX, mnTextOffY );
+    rSalLayout.DrawBase() += DevicePoint(mnTextOffX, mnTextOffY);
 
     if( IsTextFillColor() )
         ImplDrawTextBackground( rSalLayout );
@@ -986,12 +987,13 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
     }
 
 #if VCL_FLOAT_DEVICE_PIXEL
-    std::unique_ptr<DeviceCoordinate[]> pDXPixelArray;
+    std::unique_ptr<std::vector<DeviceCoordinate>> xDXPixelArray;
     if(pDXAry)
     {
-        pDXPixelArray.reset(new DeviceCoordinate[nLen]);
+        xDXPixelArray.reset(new std::vector<DeviceCoordinate>(nLen));
     }
-    DeviceCoordinate nWidth = pSalLayout->FillDXArray( pDXPixelArray.get() );
+    std::vector<DeviceCoordinate>* pDXPixelArray = xDXPixelArray.get();
+    DeviceCoordinate nWidth = pSalLayout->FillDXArray(pDXPixelArray);
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
 
     // convert virtual char widths to virtual absolute positions
@@ -999,7 +1001,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
     {
         for( int i = 1; i < nLen; ++i )
         {
-            pDXPixelArray[ i ] += pDXPixelArray[ i-1 ];
+            (*pDXPixelArray)[i] += (*pDXPixelArray)[i - 1];
         }
     }
     if( mbMap )
@@ -1008,7 +1010,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
         {
             for( int i = 0; i < nLen; ++i )
             {
-                pDXPixelArray[i] = ImplDevicePixelToLogicWidth( pDXPixelArray[i] );
+                (*pDXPixelArray)[i] = ImplDevicePixelToLogicWidth((*pDXPixelArray)[i]);
             }
         }
         nWidth = ImplDevicePixelToLogicWidth( nWidth );
@@ -1019,7 +1021,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
         {
             for( int i = 0; i < nLen; ++i )
             {
-                pDXPixelArray[i] /= nWidthFactor;
+                (*pDXPixelArray)[i] /= nWidthFactor;
             }
         }
         nWidth /= nWidthFactor;
@@ -1029,7 +1031,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
         pDXAry->resize(nLen);
         for( int i = 0; i < nLen; ++i )
         {
-            (*pDXAry)[i] = basegfx::fround(pDXPixelArray[i]);
+            (*pDXAry)[i] = basegfx::fround((*pDXPixelArray)[i]);
         }
     }
     return basegfx::fround(nWidth);
@@ -1148,7 +1150,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
 
 vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
                                                     const sal_Int32 nMinIndex, const sal_Int32 nLen,
-                                                    DeviceCoordinate nPixelWidth, const DeviceCoordinate* pDXArray,
+                                                    DeviceCoordinate nPixelWidth,
                                                     SalLayoutFlags nLayoutFlags,
          vcl::text::TextLayoutCache const*const pLayoutCache) const
 {
@@ -1241,7 +1243,6 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     aLayoutArgs.SetOrientation( nOrientation );
 
     aLayoutArgs.SetLayoutWidth( nPixelWidth );
-    aLayoutArgs.SetDXArray( pDXArray );
 
     return aLayoutArgs;
 }
@@ -1338,21 +1339,47 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
         nPixelWidth = LogicWidthToDeviceCoordinate( nLogicalWidth );
     }
 
+    vcl::text::ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen,
+            nPixelWidth, flags, pLayoutCache);
+
+    bool bTextRenderModeForResolutionIndependentLayout(false);
+    DeviceCoordinate nEndGlyphCoord(0);
     std::unique_ptr<DeviceCoordinate[]> xDXPixelArray;
-    DeviceCoordinate* pDXPixelArray(nullptr);
+    std::unique_ptr<double[]> xNaturalDXPixelArray;
     if( !pDXArray.empty() )
     {
-        if(mbMap)
+        DeviceCoordinate* pDXPixelArray(nullptr);
+        if (mbMap)
         {
-            // convert from logical units to font units using a temporary array
-            xDXPixelArray.reset(new DeviceCoordinate[nLen]);
-            pDXPixelArray = xDXPixelArray.get();
-            // using base position for better rounding a.k.a. "dancing characters"
-            DeviceCoordinate nPixelXOfs2 = LogicWidthToDeviceCoordinate(rLogicalPos.X() * 2);
-            for( int i = 0; i < nLen; ++i )
+            if (GetTextRenderModeForResolutionIndependentLayout())
             {
-                pDXPixelArray[i] = (LogicWidthToDeviceCoordinate((rLogicalPos.X() + pDXArray[i]) * 2) - nPixelXOfs2) / 2;
+                bTextRenderModeForResolutionIndependentLayout = true;
+
+                // convert from logical units to font units using a temporary array
+                xNaturalDXPixelArray.reset(new double[nLen]);
+
+                for (int i = 0; i < nLen; ++i)
+                    xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceFontWidth(pDXArray[i]);
+
+                aLayoutArgs.SetAltNaturalDXArray(xNaturalDXPixelArray.get());
+                nEndGlyphCoord = std::lround(xNaturalDXPixelArray[nLen - 1]);
             }
+            else
+            {
+                // convert from logical units to font units using a temporary array
+                xDXPixelArray.reset(new DeviceCoordinate[nLen]);
+                pDXPixelArray = xDXPixelArray.get();
+                // using base position for better rounding a.k.a. "dancing characters"
+                DeviceCoordinate nPixelXOfs2 = LogicWidthToDeviceCoordinate(rLogicalPos.X() * 2);
+                for( int i = 0; i < nLen; ++i )
+                {
+                    pDXPixelArray[i] = (LogicWidthToDeviceCoordinate((rLogicalPos.X() + pDXArray[i]) * 2) - nPixelXOfs2) / 2;
+                }
+
+                aLayoutArgs.SetDXArray(pDXPixelArray);
+                nEndGlyphCoord = pDXPixelArray[nLen - 1];
+            }
+
         }
         else
         {
@@ -1361,16 +1388,16 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
             pDXPixelArray = xDXPixelArray.get();
             for( int i = 0; i < nLen; ++i )
             {
-                pDXPixelArray[i] = (*pDXArray)[i];
+                pDXPixelArray[i] = pDXArray[i];
             }
 #else /* !VCL_FLOAT_DEVICE_PIXEL */
             pDXPixelArray = const_cast<DeviceCoordinate*>(pDXArray.data());
 #endif /* !VCL_FLOAT_DEVICE_PIXEL */
+
+            aLayoutArgs.SetDXArray(pDXPixelArray);
+            nEndGlyphCoord = pDXPixelArray[nLen - 1];
         }
     }
-
-    vcl::text::ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen,
-            nPixelWidth, pDXPixelArray, flags, pLayoutCache);
 
     // get matching layout object for base font
     std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout(0);
@@ -1384,6 +1411,8 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     if( !pSalLayout )
         return nullptr;
 
+    pSalLayout->SetTextRenderModeForResolutionIndependentLayout(bTextRenderModeForResolutionIndependentLayout);
+
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
     if (aLayoutArgs.HasFallbackRun() && mpFontInstance->GetFontSelectPattern().mnHeight >= 3)
@@ -1396,13 +1425,21 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 
     // position, justify, etc. the layout
     pSalLayout->AdjustLayout( aLayoutArgs );
-    pSalLayout->DrawBase() = ImplLogicToDevicePixel( rLogicalPos );
+
+    if (bTextRenderModeForResolutionIndependentLayout)
+        pSalLayout->DrawBase() = ImplLogicToDeviceFontCoordinate(rLogicalPos);
+    else
+    {
+        Point aDevicePos = ImplLogicToDevicePixel(rLogicalPos);
+        pSalLayout->DrawBase() = DevicePoint(aDevicePos.X(), aDevicePos.Y());
+    }
+
     // adjust to right alignment if necessary
     if( aLayoutArgs.mnFlags & SalLayoutFlags::RightAlign )
     {
         DeviceCoordinate nRTLOffset;
-        if( pDXPixelArray )
-            nRTLOffset = pDXPixelArray[ nLen - 1 ];
+        if (!pDXArray.empty())
+            nRTLOffset = nEndGlyphCoord;
         else if( nPixelWidth )
             nRTLOffset = nPixelWidth;
         else
@@ -1425,7 +1462,7 @@ std::shared_ptr<vcl::text::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
 bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     OUString aStr( rString );
-    vcl::text::ImplLayoutArgs aArgs = ImplPrepareLayoutArgs( aStr, nIndex, nLen, 0, nullptr );
+    vcl::text::ImplLayoutArgs aArgs = ImplPrepareLayoutArgs(aStr, nIndex, nLen, 0);
     bool bRTL = false;
     int nCharPos = -1;
     if (!aArgs.GetNextPos(&nCharPos, &bRTL))
@@ -2365,7 +2402,8 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
             }
 
             Point aRotatedOfs( mnTextOffX, mnTextOffY );
-            aRotatedOfs -= pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
+            DevicePoint aPos = pSalLayout->GetDrawPosition(DevicePoint(nXOffset, 0));
+            aRotatedOfs -= Point(aPos.getX(), aPos.getY());
             aPixelRect += aRotatedOfs;
             rRect = PixelToLogic( aPixelRect );
             if( mbMap )
@@ -2432,9 +2470,9 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
             int nWidthFactor = pSalLayout->GetUnitsPerPixel();
             if( nXOffset | mnTextOffX | mnTextOffY )
             {
-                Point aRotatedOfs( mnTextOffX*nWidthFactor, mnTextOffY*nWidthFactor );
-                aRotatedOfs -= pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
-                aMatrix.translate( aRotatedOfs.X(), aRotatedOfs.Y() );
+                DevicePoint aRotatedOfs( mnTextOffX*nWidthFactor, mnTextOffY*nWidthFactor );
+                aRotatedOfs -= pSalLayout->GetDrawPosition(DevicePoint(nXOffset, 0));
+                aMatrix.translate( aRotatedOfs.getX(), aRotatedOfs.getY() );
             }
 
             if( nWidthFactor > 1 )

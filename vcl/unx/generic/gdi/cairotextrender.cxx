@@ -125,15 +125,15 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     std::vector<int> glyph_extrarotation;
     cairo_glyphs.reserve( 256 );
 
-    Point aPos;
+    DevicePoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         cairo_glyph_t aGlyph;
         aGlyph.index = pGlyph->glyphId();
-        aGlyph.x = aPos.X();
-        aGlyph.y = aPos.Y();
+        aGlyph.x = aPos.getX();
+        aGlyph.y = aPos.getY();
         cairo_glyphs.push_back(aGlyph);
 
         if (pGlyph->IsVertical())
@@ -172,12 +172,25 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     if (const cairo_font_options_t* pFontOptions = pSVData->mpDefInst->GetCairoFontOptions())
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        if (!rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias())
+        bool bDisableAA = !rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias();
+
+        const bool bResolutionIndependentLayoutEnabled = rGraphics.getTextRenderModeForResolutionIndependentLayoutEnabled();
+        cairo_hint_style_t eHintStyle = cairo_font_options_get_hint_style(pFontOptions);
+        cairo_hint_metrics_t eHintMetricsStyle = cairo_font_options_get_hint_metrics(pFontOptions);
+        bool bAllowedHintStyle = !bResolutionIndependentLayoutEnabled || (eHintStyle == CAIRO_HINT_STYLE_NONE || eHintStyle == CAIRO_HINT_STYLE_SLIGHT);
+        bool bAllowedHintMetricStyle = !bResolutionIndependentLayoutEnabled || (eHintMetricsStyle == CAIRO_HINT_METRICS_OFF);
+
+        if (bDisableAA || !bAllowedHintStyle || !bAllowedHintMetricStyle)
         {
             // Disable font AA in case global AA setting is supposed to affect
             // font rendering (not the default) and AA is disabled.
             cairo_font_options_t* pOptions = cairo_font_options_copy(pFontOptions);
-            cairo_font_options_set_antialias(pOptions, CAIRO_ANTIALIAS_NONE);
+            if (bDisableAA)
+                cairo_font_options_set_antialias(pOptions, CAIRO_ANTIALIAS_NONE);
+            if (!bAllowedHintStyle)
+                cairo_font_options_set_hint_style(pOptions, CAIRO_HINT_STYLE_SLIGHT);
+            if (!bAllowedHintMetricStyle)
+                cairo_font_options_set_hint_metrics(pOptions, CAIRO_HINT_METRICS_OFF);
             cairo_set_font_options(cr, pOptions);
             cairo_font_options_destroy(pOptions);
         }

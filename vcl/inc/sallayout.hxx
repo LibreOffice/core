@@ -64,7 +64,7 @@ public:
     sal_Int32       GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
     DeviceCoordinate FillDXArray(std::vector<DeviceCoordinate>* pDXArray) const override;
     void            GetCaretPositions(int nArraySize, sal_Int32* pCaretXArray) const override;
-    bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
+    bool            GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr,
                                  const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const override;
     bool            GetOutline(basegfx::B2DPolyPolygonVector&) const override;
@@ -82,7 +82,11 @@ public:
 
     void SetIncomplete(bool bIncomplete);
 
-public:
+    template<typename DC>
+    void            ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
+                                          vcl::text::ImplLayoutArgs& rMultiArgs,
+                                          const DC* pMultiDXArray);
+
     virtual         ~MultiSalLayout() override;
 
 private:
@@ -97,7 +101,10 @@ private:
 
 class VCL_DLLPUBLIC GenericSalLayout : public SalLayout
 {
-    friend void MultiSalLayout::AdjustLayout(vcl::text::ImplLayoutArgs&);
+    template<typename DC> friend void MultiSalLayout::ImplAdjustMultiLayout(
+            vcl::text::ImplLayoutArgs& rArgs,
+            vcl::text::ImplLayoutArgs& rMultiArgs,
+            const DC* pMultiDXArray);
 
 public:
                     GenericSalLayout(LogicalFontInstance&);
@@ -121,7 +128,7 @@ public:
     LogicalFontInstance& GetFont() const
         { return *m_GlyphItems.GetFont(); }
 
-    bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
+    bool            GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr,
                                  const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const override;
 
@@ -136,7 +143,8 @@ private:
                     GenericSalLayout( const GenericSalLayout& ) = delete;
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 
-    void            ApplyDXArray(const DeviceCoordinate*, SalLayoutFlags nLayoutFlags);
+    template<typename DC>
+    void            ApplyDXArray(const DC*, SalLayoutFlags nLayoutFlags);
     void            Justify(DeviceCoordinate nNewWidth);
     void            ApplyAsianKerning(const OUString& rStr);
 

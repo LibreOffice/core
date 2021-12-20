@@ -113,7 +113,7 @@ static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
     {
         if ( SwScriptInfo::IsArabicText( *pStr, nPos, nEnd - nPos ) && pSI->CountKashida() )
         {
-            const sal_Int32 nKashRes = pSI->KashidaJustify( nullptr, nullptr, nPos, nEnd - nPos );
+            const sal_Int32 nKashRes = pSI->KashidaJustify(nullptr, nPos, nEnd - nPos);
             // i60591: need to check result of KashidaJustify
             // determine if kashida justification is applicable
             if (nKashRes != -1)
@@ -129,7 +129,7 @@ static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
 
         if ( LANGUAGE_THAI == aLang )
         {
-            nCnt = SwScriptInfo::ThaiJustify( *pStr, nullptr, nullptr, nPos, nEnd - nPos );
+            nCnt = SwScriptInfo::ThaiJustify(*pStr, nullptr, nPos, nEnd - nPos);
 
             const SwLinePortion* pPor = rPor.GetNextPortion();
             if ( pPor && ( pPor->IsKernPortion() ||

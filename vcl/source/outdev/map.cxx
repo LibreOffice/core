@@ -1879,11 +1879,32 @@ DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( tools::Long nWidth 
         return static_cast<DeviceCoordinate>(nWidth);
 
 #if VCL_FLOAT_DEVICE_PIXEL
-    return (double)nWidth * maMapRes.mfScaleX * mnDPIX;
+    return ImplLogicToPixel(static_cast<double>(nWidth), mnDPIX, maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
 #else
-
     return ImplLogicToPixel(nWidth, mnDPIX, maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
 #endif
+}
+
+double OutputDevice::ImplLogicWidthToDeviceFontWidth(tools::Long nWidth) const
+{
+    if (!mbMap)
+        return nWidth;
+
+    return ImplLogicToPixel(static_cast<double>(nWidth), mnDPIX,
+                            maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
+}
+
+DevicePoint OutputDevice::ImplLogicToDeviceFontCoordinate(const Point& rPoint) const
+{
+    if (!mbMap)
+        return DevicePoint(rPoint.X() + mnOutOffX, rPoint.Y() + mnOutOffY);
+
+    return DevicePoint(ImplLogicToPixel(static_cast<double>(rPoint.X() + maMapRes.mnMapOfsX), mnDPIX,
+                                        maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX)
+                                        + mnOutOffX + mnOutOffOrigX,
+                       ImplLogicToPixel(static_cast<double>(rPoint.Y() + maMapRes.mnMapOfsY), mnDPIY,
+                                        maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY)
+                                        + mnOutOffY + mnOutOffOrigY);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -316,7 +316,7 @@ public:
 private:
     // local helpers
 
-    void                    DrawTextLayout(const GenericSalLayout&, HDC, bool bUseDWrite);
+    void DrawTextLayout(const GenericSalLayout&, HDC, bool bUseDWrite, bool bRenderingModeNatural);
 
 public:
     // public SalGraphics methods, the interface to the independent vcl part

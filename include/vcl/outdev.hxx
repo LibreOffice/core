@@ -242,6 +242,7 @@ private:
     Point                           maRefPoint;
     AntialiasingFlags               mnAntialiasing;
     LanguageType                    meTextLanguage;
+    bool mbTextRenderModeForResolutionIndependentLayout;
 
     mutable bool                    mbMap : 1;
     mutable bool                    mbClipRegion : 1;
@@ -488,6 +489,10 @@ public:
 
     void                        SetAntialiasing( AntialiasingFlags nMode );
     AntialiasingFlags           GetAntialiasing() const { return mnAntialiasing; }
+
+    // Render glyphs with a mode suitable for rendering of resolution-independent layout positions.
+    void                        SetTextRenderModeForResolutionIndependentLayout(bool bMode);
+    bool                        GetTextRenderModeForResolutionIndependentLayout() const { return mbTextRenderModeForResolutionIndependentLayout; }
 
     void                        SetDrawMode( DrawModeFlags nDrawMode );
     DrawModeFlags               GetDrawMode() const { return mnDrawMode; }
@@ -1244,8 +1249,9 @@ public:
                                             o3tl::span<const sal_Int32> pLogicDXArray={}, SalLayoutFlags flags = SalLayoutFlags::NONE,
                                             vcl::text::TextLayoutCache const* = nullptr,
                                             const SalLayoutGlyphs* pGlyphs = nullptr) const;
+
     SAL_DLLPRIVATE vcl::text::ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
-                                                         DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray,
+                                                         DeviceCoordinate nPixelWidth,
                                                          SalLayoutFlags flags = SalLayoutFlags::NONE,
                                                          vcl::text::TextLayoutCache const* = nullptr) const;
     SAL_DLLPRIVATE std::unique_ptr<SalLayout>
@@ -1693,6 +1699,7 @@ public:
      @returns Physical point on the device.
      */
     SAL_DLLPRIVATE Point        ImplLogicToDevicePixel( const Point& rLogicPt ) const;
+    SAL_DLLPRIVATE DevicePoint  ImplLogicToDeviceFontCoordinate(const Point& rLogicPt) const;
 
     /** Convert a logical width to a width in units of device pixels.
 
@@ -1705,6 +1712,7 @@ public:
      @returns Width in units of device pixels.
      */
     SAL_DLLPRIVATE tools::Long         ImplLogicWidthToDevicePixel( tools::Long nWidth ) const;
+    SAL_DLLPRIVATE double              ImplLogicWidthToDeviceFontWidth(tools::Long nWidth) const;
 
     SAL_DLLPRIVATE DeviceCoordinate LogicWidthToDeviceCoordinate( tools::Long nWidth ) const;
 
