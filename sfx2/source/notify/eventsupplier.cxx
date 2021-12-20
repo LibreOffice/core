@@ -56,52 +56,54 @@ using namespace ::com::sun::star;
 
 void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::Any & rElement )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     // find the event in the list and replace the data
     auto nIndex = comphelper::findValue(maEventNames, aName);
-    if (nIndex != -1)
+    if (nIndex == -1)
+        throw container::NoSuchElementException();
+
+    // check for correct type of the element
+    if ( !::comphelper::NamedValueCollection::canExtractFrom( rElement ) )
+        throw lang::IllegalArgumentException();
+    ::comphelper::NamedValueCollection const aEventDescriptor( rElement );
+
+    // create Configuration at first, creation might call this method also and that would overwrite everything
+    // we might have stored before!
+    if ( mpObjShell && !mpObjShell->IsLoading() )
     {
-        // check for correct type of the element
-        if ( !::comphelper::NamedValueCollection::canExtractFrom( rElement ) )
-            throw lang::IllegalArgumentException();
-        ::comphelper::NamedValueCollection const aEventDescriptor( rElement );
-
-        // create Configuration at first, creation might call this method also and that would overwrite everything
-        // we might have stored before!
-        if ( mpObjShell && !mpObjShell->IsLoading() )
-            mpObjShell->SetModified();
-
-        ::comphelper::NamedValueCollection aNormalizedDescriptor;
-        NormalizeMacro( aEventDescriptor, aNormalizedDescriptor, mpObjShell );
-
-        OUString sType;
-        if  (   ( aNormalizedDescriptor.size() == 1 )
-            &&  !aNormalizedDescriptor.has( PROP_EVENT_TYPE ) //TODO
-            &&  ( aNormalizedDescriptor.get( PROP_EVENT_TYPE ) >>= sType )
-            &&  ( sType.isEmpty() )
-            )
-        {
-            // An empty event type means no binding. Therefore reset data
-            // to reflect that state.
-            // (that's for compatibility only. Nowadays, the Tools/Customize dialog should
-            // set an empty sequence to indicate the request for resetting the assignment.)
-            OSL_ENSURE( false, "legacy event assignment format detected" );
-            aNormalizedDescriptor.clear();
-        }
-
-        if ( !aNormalizedDescriptor.empty() )
-        {
-            maEventData[nIndex] <<= aNormalizedDescriptor.getPropertyValues();
-        }
-        else
-        {
-            maEventData[nIndex].clear();
-        }
-        return;
+        // SetModified will end up calling into our documentEventOccured method
+        aGuard.unlock();
+        mpObjShell->SetModified();
+        aGuard.lock();
     }
 
-    throw container::NoSuchElementException();
+    ::comphelper::NamedValueCollection aNormalizedDescriptor;
+    NormalizeMacro( aEventDescriptor, aNormalizedDescriptor, mpObjShell );
+
+    OUString sType;
+    if  (   ( aNormalizedDescriptor.size() == 1 )
+         &&  !aNormalizedDescriptor.has( PROP_EVENT_TYPE ) //TODO
+         &&  ( aNormalizedDescriptor.get( PROP_EVENT_TYPE ) >>= sType )
+         &&  ( sType.isEmpty() )
+        )
+    {
+        // An empty event type means no binding. Therefore reset data
+        // to reflect that state.
+        // (that's for compatibility only. Nowadays, the Tools/Customize dialog should
+        // set an empty sequence to indicate the request for resetting the assignment.)
+        OSL_ENSURE( false, "legacy event assignment format detected" );
+        aNormalizedDescriptor.clear();
+    }
+
+    if ( !aNormalizedDescriptor.empty() )
+    {
+        maEventData[nIndex] <<= aNormalizedDescriptor.getPropertyValues();
+    }
+    else
+    {
+        maEventData[nIndex].clear();
+    }
 }
 
 
@@ -109,7 +111,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::
 
 uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     // find the event in the list and return the data
 
@@ -129,7 +131,7 @@ uno::Sequence< OUString > SAL_CALL SfxEvents_Impl::getElementNames()
 
 sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     // find the event in the list and return the data
 
@@ -148,7 +150,7 @@ uno::Type SAL_CALL SfxEvents_Impl::getElementType()
 
 sal_Bool SAL_CALL SfxEvents_Impl::hasElements()
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     return maEventNames.hasElements();
 }
@@ -282,7 +284,7 @@ void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::Docum
 
 void SAL_CALL SfxEvents_Impl::documentEventOccured( const document::DocumentEvent& aEvent )
 {
-    ::osl::ClearableMutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     // get the event name, find the corresponding data, execute the data
 
@@ -291,7 +293,7 @@ void SAL_CALL SfxEvents_Impl::documentEventOccured( const document::DocumentEven
         return;
 
     uno::Any aEventData = maEventData[ nIndex ];
-    aGuard.clear();
+    aGuard.unlock();
     Execute( aEventData, aEvent, mpObjShell );
 }
 
@@ -300,7 +302,7 @@ void SAL_CALL SfxEvents_Impl::documentEventOccured( const document::DocumentEven
 
 void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if ( mxBroadcaster.is() )
     {
