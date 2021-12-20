@@ -128,9 +128,9 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         }
     }
 
-    if(bIsCurve)
+    if (bIsCurve)
     {
-        OSL_ENSURE(false, "DrawHatch does *not* support curves, falling back to AdaptiveSubdivide()...");
+        SAL_WARN("vcl.gdi", "DrawHatch does *not* support curves, falling back to AdaptiveSubdivide()...");
         tools::PolyPolygon aPolyPoly;
 
         rPolyPoly.AdaptiveSubdivide(aPolyPoly);
