@@ -347,7 +347,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
     drawinglayer::primitive2d::Primitive2DContainer xNewPrimitiveSequence;
 
     // take care of redirectors and create new list
-    ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();\
+    ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();
 
     if(pRedirector)
     {
