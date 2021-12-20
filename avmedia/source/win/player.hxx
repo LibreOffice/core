@@ -29,6 +29,7 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <systools/win32/comtools.hxx>
 
 struct IGraphBuilder;
 struct IBaseFilter;
@@ -92,23 +93,18 @@ public:
 private:
 
     OUString                maURL;
-    IGraphBuilder*          mpGB;
-    IBaseFilter*            mpOMF;
-    IMediaControl*          mpMC;
-    IMediaEventEx*          mpME;
-    IMediaSeeking*          mpMS;
-    IMediaPosition*         mpMP;
-    IBasicAudio*            mpBA;
-    IBasicVideo*            mpBV;
-    IVideoWindow*           mpVW;
-    IDDrawExclModeVideo*    mpEV;
+    sal::systools::COMReference<IGraphBuilder>          mpGB;
+    sal::systools::COMReference<IMediaControl>          mpMC;
+    sal::systools::COMReference<IMediaEventEx>          mpME;
+    sal::systools::COMReference<IMediaPosition>         mpMP;
+    sal::systools::COMReference<IBasicAudio>            mpBA;
+    sal::systools::COMReference<IBasicVideo>            mpBV;
+    sal::systools::COMReference<IVideoWindow>           mpVW;
     long                    mnUnmutedVolume;
     HWND                    mnFrameWnd;
     bool                    mbMuted;
     bool                    mbLooping;
     bool                    mbAddWindow;
-
-    void                    ImplLayoutVideoWindow();
 };
 
 } // namespace avmedia::win
