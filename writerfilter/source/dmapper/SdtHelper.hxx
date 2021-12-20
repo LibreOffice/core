@@ -86,7 +86,7 @@ class SdtHelper final : public virtual SvRefBase
     /// The last stored SDT element is outside paragraphs.
     bool m_bOutsideAParagraph;
 
-    /// Storage for all properties documents as xml::dom::XDocument for later quering xpath for data
+    /// Storage for all properties documents as xml::dom::XDocument for later querying xpath for data
     css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument>> m_xPropertiesXMLs;
 
     /// Check if m_xPropertiesXMLs is initialized and loaded (need extra flag to distinguish

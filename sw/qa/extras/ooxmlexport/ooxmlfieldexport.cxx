@@ -598,7 +598,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtCompanyMultipara)
 {
     loadAndReload("sdt-company-multipara.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    // Here is just imple text node, so there should be either one or zero paragraphs
+    // Here is just a simple text node, so there should be either one or zero paragraph
     // (in this case sdt element is inside paragraph)
     assertXPath(pXmlDoc, "//w:sdtContent/w:p", 0);
     assertXPath(pXmlDoc, "//w:sdtContent/w:r", 1);
