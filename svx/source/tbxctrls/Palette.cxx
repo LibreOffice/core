@@ -361,4 +361,17 @@ bool PaletteSOC::IsValid()
     return true;
 }
 
+namespace svx
+{
+NamedColor NamedThemedColor::ToNamedColor() const { return { m_aColor, m_aName }; }
+
+NamedThemedColor NamedThemedColor::FromNamedColor(const NamedColor& rNamedColor)
+{
+    NamedThemedColor aColor;
+    aColor.m_aColor = rNamedColor.first;
+    aColor.m_aName = rNamedColor.second;
+    return aColor;
+}
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

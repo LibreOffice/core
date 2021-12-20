@@ -24,13 +24,29 @@
 #include <functional>
 
 #include <rtl/ustring.hxx>
+#include <tools/color.hxx>
+#include <svx/svxdllapi.h>
 
-class Color;
 class SvxColorValueSet;
 
 typedef std::pair<Color, OUString> NamedColor;
 
-typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
+namespace svx
+{
+/// A color with an optional name and other theming-related properties.
+struct SVXCORE_DLLPUBLIC NamedThemedColor
+{
+    Color m_aColor;
+    OUString m_aName;
+    sal_Int16 m_nThemeIndex = -1;
+
+    static NamedThemedColor FromNamedColor(const NamedColor& rNamedColor);
+
+    NamedColor ToNamedColor() const;
+};
+}
+
+typedef std::function<void(const OUString&, const svx::NamedThemedColor&)> ColorSelectFunction;
 
 class Palette
 {

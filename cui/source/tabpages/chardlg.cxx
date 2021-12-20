@@ -1573,28 +1573,38 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
     const SfxItemSet& rOldSet = GetItemSet();
 
-    Color aSelectedColor;
+    svx::NamedThemedColor aSelectedColor;
     bool bChanged = m_bNewFontColor;
 
     if (bChanged)
     {
-        aSelectedColor = m_xFontColorLB->GetSelectEntryColor();
+        aSelectedColor = m_xFontColorLB->GetSelectedEntryThemedColor();
 
         if (m_xFontTransparencyMtr->get_value_changed_from_saved())
         {
             double fTransparency
                 = m_xFontTransparencyMtr->get_value(FieldUnit::PERCENT) * 255.0 / 100;
-            aSelectedColor.SetAlpha(255 - static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
+            aSelectedColor.m_aColor.SetAlpha(255 - static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
         }
 
         if (m_bOrigFontColor)
-            bChanged = aSelectedColor != m_aOrigFontColor;
-        if (m_bEnableNoneFontColor && bChanged && aSelectedColor == COL_NONE_COLOR)
+            bChanged = aSelectedColor.m_aColor != m_aOrigFontColor;
+        if (m_bEnableNoneFontColor && bChanged && aSelectedColor.m_aColor == COL_NONE_COLOR)
             bChanged = false;
     }
 
     if (bChanged)
-        rSet.Put( SvxColorItem( aSelectedColor, nWhich ) );
+    {
+        SvxColorItem aItem( aSelectedColor.m_aColor, nWhich );
+
+        if (aSelectedColor.m_nThemeIndex != -1)
+        {
+            // The color was picked from the theme palette, remember its index.
+            aItem.SetThemeIndex(aSelectedColor.m_nThemeIndex);
+        }
+
+        rSet.Put(aItem);
+    }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
         rSet.InvalidateItem(nWhich);
 
