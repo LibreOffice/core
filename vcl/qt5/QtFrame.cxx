@@ -512,11 +512,10 @@ void QtFrame::SetDefaultPos()
     if (m_pParent)
     {
         const qreal fRatio = devicePixelRatioF();
-        QWidget* const pWindow = m_pParent->GetQWidget()->window();
-        QWidget* const pWidget = asChild();
-        QPoint aPos = pWindow->rect().center() - pWidget->rect().center();
-        SetPosSize(round(aPos.x() * fRatio), round(aPos.y() * fRatio), 0, 0,
-                   SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y);
+        QWidget* const pParentWin = m_pParent->asChild()->window();
+        QWidget* const pChildWin = asChild()->window();
+        QPoint aPos = (pParentWin->rect().center() - pChildWin->rect().center()) * fRatio;
+        SetPosSize(aPos.x(), aPos.y(), 0, 0, SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y);
         assert(!m_bDefaultPos);
     }
     else
@@ -863,7 +862,7 @@ void QtFrame::SetPointerPos(tools::Long nX, tools::Long nY)
 {
     // some cursor already exists (and it has m_ePointerStyle shape)
     // so here we just reposition it
-    QCursor::setPos(m_pQWidget->mapToGlobal(QPoint(nX, nY)));
+    QCursor::setPos(asChild()->mapToGlobal(QPoint(nX, nY)));
 }
 
 void QtFrame::Flush()
