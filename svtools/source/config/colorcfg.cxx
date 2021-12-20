@@ -32,7 +32,7 @@
 #include <unotools/configpaths.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svl/poolitem.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 #include "itemholder2.hxx"
 
@@ -53,9 +53,9 @@ namespace svtools
 static sal_Int32            nColorRefCount_Impl = 0;
 namespace
 {
-    ::osl::Mutex& ColorMutex_Impl()
+    std::mutex& ColorMutex_Impl()
     {
-        static ::osl::Mutex SINGLETON;
+        static std::mutex SINGLETON;
         return SINGLETON;
     }
 }
@@ -378,7 +378,7 @@ ColorConfig::ColorConfig()
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
-    ::osl::MutexGuard aGuard( ColorMutex_Impl() );
+    std::unique_lock aGuard( ColorMutex_Impl() );
     if ( !m_pImpl )
     {
         m_pImpl = new ColorConfig_Impl;
@@ -392,7 +392,7 @@ ColorConfig::~ColorConfig()
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
-    ::osl::MutexGuard aGuard( ColorMutex_Impl() );
+    std::unique_lock aGuard( ColorMutex_Impl() );
     m_pImpl->RemoveListener(this);
     if(!--nColorRefCount_Impl)
     {

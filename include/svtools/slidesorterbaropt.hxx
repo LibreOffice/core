@@ -23,8 +23,6 @@
 #include <unotools/options.hxx>
 #include <memory>
 
-namespace osl { class Mutex; }
-
 /** forward declaration to our private date container implementation
 
     We use these class as internal member to support small memory requirements.
@@ -56,16 +54,6 @@ class SVT_DLLPUBLIC SvtSlideSorterBarOptions final : public utl::detail::Options
         bool GetVisibleDrawView() const;
         void SetVisibleDrawView( bool bVisible );
 
-
-    private:
-        /** return a reference to a static mutex
-
-            These class is partially threadsafe (for de-/initialization only).
-            All access methods aren't safe!
-            We create a static mutex only for one ime and use at different times.
-
-            \return     A reference to a static mutex member.*/
-        SVT_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
 
     private:
         std::shared_ptr<SvtSlideSorterBarOptions_Impl> m_pImpl;
