@@ -247,6 +247,10 @@ SAL_CALL XMLSignature_NssImpl::validate(
         // We do certificate verification ourselves.
         pDsigCtx->keyInfoReadCtx.flags |= XMLSEC_KEYINFO_FLAGS_X509DATA_DONT_VERIFY_CERTS;
 
+        // limit possible key data to valid X509 certificates only, no KeyValues
+        if (xmlSecPtrListAdd(&(pDsigCtx->keyInfoReadCtx.enabledKeyData), BAD_CAST xmlSecNssKeyDataX509GetKlass()) < 0)
+            throw RuntimeException("failed to limit allowed key data");
+
         xmlBufferPtr pBuf = xmlBufferCreate();
         xmlNodeDump(pBuf, nullptr, pNode, 0, 0);
         SAL_INFO("xmlsecurity.xmlsec", "xmlSecDSigCtxVerify input XML node is '"
