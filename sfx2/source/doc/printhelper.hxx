@@ -31,7 +31,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
 struct  IMPL_PrintListener_DataContainer;
@@ -57,7 +56,6 @@ public:
 
 private:
 
-    osl::Mutex m_aMutex;
     std::unique_ptr<IMPL_PrintListener_DataContainer> m_pData ;
     void impl_setPrinter(const css::uno::Sequence< css::beans::PropertyValue >& rPrinter,
                          VclPtr<SfxPrinter>& pPrinter,
