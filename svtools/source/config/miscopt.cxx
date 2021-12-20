@@ -32,6 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
+#include <mutex>
 #include <vector>
 
 using namespace ::utl                   ;
@@ -46,6 +47,13 @@ constexpr OUStringLiteral PROPERTYNAME_SYMBOLSET = u"SymbolSet";
 #define PROPERTYHANDLE_SYMBOLSET                0
 constexpr OUStringLiteral PROPERTYNAME_ICONTHEME = u"SymbolStyle";
 #define PROPERTYHANDLE_SYMBOLSTYLE              1
+
+static std::mutex & GetInitMutex()
+{
+    static std::mutex theSvtMiscOptionsMutex;
+    return theSvtMiscOptionsMutex;
+}
+
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
@@ -363,13 +371,14 @@ std::weak_ptr<SvtMiscOptions_Impl> g_pMiscOptions;
 SvtMiscOptions::SvtMiscOptions()
 {
     // Global access, must be guarded (multithreading!).
-    MutexGuard aGuard( GetInitMutex() );
+    std::unique_lock aGuard( GetInitMutex() );
 
     m_pImpl = g_pMiscOptions.lock();
     if( !m_pImpl )
     {
         m_pImpl = std::make_shared<SvtMiscOptions_Impl>();
         g_pMiscOptions = m_pImpl;
+        aGuard.unlock(); // because holdConfigItem will call this constructor
         svtools::ItemHolder2::holdConfigItem(EItem::MiscOptions);
     }
 }
@@ -377,7 +386,7 @@ SvtMiscOptions::SvtMiscOptions()
 SvtMiscOptions::~SvtMiscOptions()
 {
     // Global access, must be guarded (multithreading!)
-    MutexGuard aGuard( GetInitMutex() );
+    std::unique_lock aGuard( GetInitMutex() );
 
     m_pImpl.reset();
 }
@@ -426,12 +435,6 @@ OUString SvtMiscOptions::GetIconTheme() const
 void SvtMiscOptions::SetIconTheme(const OUString& iconTheme)
 {
     m_pImpl->SetIconTheme(iconTheme, SvtMiscOptions_Impl::SetModifiedFlag::SET);
-}
-
-Mutex & SvtMiscOptions::GetInitMutex()
-{
-    static osl::Mutex theSvtMiscOptionsMutex;
-    return theSvtMiscOptionsMutex;
 }
 
 void SvtMiscOptions::AddListenerLink( const Link<LinkParamNone*,void>& rLink )

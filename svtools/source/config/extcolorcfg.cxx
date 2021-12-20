@@ -31,7 +31,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <comphelper/sequence.hxx>
 #include <svl/hint.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -50,9 +50,9 @@ namespace svtools
 static sal_Int32            nExtendedColorRefCount_Impl = 0;
 namespace
 {
-    ::osl::Mutex& ColorMutex_Impl()
+    std::mutex& ColorMutex_Impl()
     {
-        static ::osl::Mutex SINGLETON;
+        static std::mutex SINGLETON;
         return SINGLETON;
     }
 }
@@ -508,7 +508,7 @@ IMPL_LINK( ExtendedColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, 
 
 ExtendedColorConfig::ExtendedColorConfig()
 {
-    ::osl::MutexGuard aGuard( ColorMutex_Impl() );
+    std::unique_lock aGuard( ColorMutex_Impl() );
     if ( !m_pImpl )
         m_pImpl = new ExtendedColorConfig_Impl;
     ++nExtendedColorRefCount_Impl;
@@ -517,7 +517,7 @@ ExtendedColorConfig::ExtendedColorConfig()
 
 ExtendedColorConfig::~ExtendedColorConfig()
 {
-    ::osl::MutexGuard aGuard( ColorMutex_Impl() );
+    std::unique_lock aGuard( ColorMutex_Impl() );
     EndListening( *m_pImpl);
     if(!--nExtendedColorRefCount_Impl)
     {

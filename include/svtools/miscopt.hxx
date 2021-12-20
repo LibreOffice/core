@@ -24,7 +24,6 @@
 #include <unotools/options.hxx>
 #include <memory>
 
-namespace osl { class Mutex; }
 template <typename Arg, typename Ret> class Link;
 class LinkParamNone;
 
@@ -62,18 +61,6 @@ class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
         OUString    GetIconTheme() const;
         void        SetIconTheme(const OUString&);
         bool        IconThemeWasSetAutomatically() const;
-
-    private:
-
-        /*-****************************************************************************************************
-            @short      return a reference to a static mutex
-            @descr      These class is partially threadsafe (for de-/initialization only).
-                        All access methods aren't safe!
-                        We create a static mutex only for one ime and use at different times.
-            @return     A reference to a static mutex member.
-        *//*-*****************************************************************************************************/
-
-        SVT_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
 
     private:
         std::shared_ptr<SvtMiscOptions_Impl> m_pImpl;
