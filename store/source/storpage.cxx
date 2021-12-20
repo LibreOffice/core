@@ -70,9 +70,6 @@ storeError OStorePageManager::initialize (
     storeAccessMode eAccessMode,
     sal_uInt16 &    rnPageSize)
 {
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
-
     // Check arguments.
     if (!pLockBytes)
         return store_E_InvalidParameter;
@@ -81,6 +78,9 @@ storeError OStorePageManager::initialize (
     storeError eErrCode = base::initialize (pLockBytes, eAccessMode, rnPageSize);
     if (eErrCode != store_E_None)
         return eErrCode;
+
+    // Acquire exclusive access.
+    std::unique_lock aGuard(GetMutex());
 
     // Check for (not) writeable.
     if (!base::isWriteable())
@@ -248,7 +248,7 @@ storeError OStorePageManager::iget (
     storeAccessMode             eMode)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
+    std::unique_lock aGuard(GetMutex());
 
     // Check precond.
     if (!self::isValid())
@@ -333,7 +333,7 @@ storeError OStorePageManager::iterate (
     sal_uInt32 &     rAttrib)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
+    std::unique_lock aGuard(GetMutex());
 
     // Check precond.
     if (!self::isValid())
@@ -439,7 +439,7 @@ storeError OStorePageManager::save_dirpage_Impl (
 storeError OStorePageManager::remove (const OStorePageKey &rKey)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
+    std::unique_lock aGuard(GetMutex());
 
     // Check precond.
     if (!self::isValid())
