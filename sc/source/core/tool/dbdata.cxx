@@ -546,44 +546,43 @@ bool ScDBData::HasSubTotalParam() const
 
 void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
 {
-        ScRange aRange;
-        GetArea( aRange );
-        SCTAB nTab = aRange.aStart.Tab();               // a database range is only on one sheet
+    ScRange aRange;
+    GetArea(aRange);
+    SCTAB nTab = aRange.aStart.Tab(); // a database range is only on one sheet
 
-        //  customize as the current table as ScTablesHint (tabvwsh5.cxx)
+    //  customize as the current table as ScTablesHint (tabvwsh5.cxx)
 
-        if ( nTab == nOldPos )                          // moved sheet
-            nTab = nNewPos;
-        else if ( nOldPos < nNewPos )                   // moved to the back
-        {
-            if ( nTab > nOldPos && nTab <= nNewPos )    // move this sheet
-                --nTab;
-        }
-        else                                            // moved to the front
-        {
-            if ( nTab >= nNewPos && nTab < nOldPos )    // move this sheet
-                ++nTab;
-        }
+    if (nTab == nOldPos) // moved sheet
+        nTab = nNewPos;
+    else if (nOldPos < nNewPos) // moved to the back
+    {
+        if (nTab > nOldPos && nTab <= nNewPos) // move this sheet
+            --nTab;
+    }
+    else // moved to the front
+    {
+        if (nTab >= nNewPos && nTab < nOldPos) // move this sheet
+            ++nTab;
+    }
 
-        bool bChanged = ( nTab != aRange.aStart.Tab() );
-        if (bChanged)
-        {
-            // SetArea() invalidates column names, but it is the same column range
-            // just on a different sheet; remember and set new.
-            ::std::vector<OUString> aNames( maTableColumnNames);
-            bool bTableColumnNamesDirty = mbTableColumnNamesDirty;
-            // Same column range.
-            SetArea( nTab, aRange.aStart.Col(), aRange.aStart.Row(),
-                    aRange.aEnd.Col(),aRange.aEnd.Row() );
-            // Do not use SetTableColumnNames() because that resets mbTableColumnNamesDirty.
-            maTableColumnNames = aNames;
-            mbTableColumnNamesDirty = bTableColumnNamesDirty;
-        }
+    bool bChanged = (nTab != aRange.aStart.Tab());
+    if (bChanged)
+    {
+        // SetArea() invalidates column names, but it is the same column range
+        // just on a different sheet; remember and set new.
+        ::std::vector<OUString> aNames(maTableColumnNames);
+        bool bTableColumnNamesDirty = mbTableColumnNamesDirty;
+        // Same column range.
+        SetArea(nTab, aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(),
+                aRange.aEnd.Row());
+        // Do not use SetTableColumnNames() because that resets mbTableColumnNamesDirty.
+        maTableColumnNames = aNames;
+        mbTableColumnNamesDirty = bTableColumnNamesDirty;
+    }
 
-        //  MoveTo() is not necessary if only the sheet changed.
+    //  MoveTo() is not necessary if only the sheet changed.
 
-        SetModified(bChanged);
-
+    SetModified(bChanged);
 }
 
 bool ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
