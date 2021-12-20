@@ -34,6 +34,7 @@ namespace tools
     class PolyPolygon;
 }
 
+class GDIMetaFile;
 class SvStream;
 
 struct ImplHatch
@@ -72,6 +73,10 @@ public:
     void            SetAngle( Degree10 nAngle10 );
     Degree10        GetAngle() const { return mpImplHatch->mnAngle; }
 
+    void AddHatchActions(tools::PolyPolygon const& rPolyPoly,
+                         tools::Long nLogPixelWidth, tools::Long nWidth, Point const& rRef,
+                         GDIMetaFile& rMtf) const;
+
     static void CalcHatchValues(tools::Rectangle const& rRect, tools::Long nDist, Degree10 nAngle10,
                     Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1, Point const& rRef);
 
@@ -82,7 +87,14 @@ public:
     friend SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch );
 
 private:
-    o3tl::cow_wrapper< ImplHatch >          mpImplHatch;
+    void AddHatchLines(tools::Line const& rLine, tools::PolyPolygon const& rPolyPoly,
+                                  Point* pPtBuffer, GDIMetaFile& rMtf) const;
+
+    void AddHatchLinesToMetafile(tools::PolyPolygon const& rPolyPoly,
+                                 tools::Long nLogPixelWidth, tools::Long nWidth, Point const& rRef,
+                                 GDIMetaFile& rMtf) const;
+
+    o3tl::cow_wrapper<ImplHatch> mpImplHatch;
 };
 
 #endif // INCLUDED_VCL_HATCH_HXX
