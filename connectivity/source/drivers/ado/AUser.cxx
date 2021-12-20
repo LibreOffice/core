@@ -40,7 +40,7 @@ OAdoUser::OAdoUser(OCatalog* _pParent,bool _bCase, ADOUser* _pUser)
     construct();
 
     if(_pUser)
-        m_aUser = WpADOUser(_pUser);
+        m_aUser.set(_pUser);
     else
         m_aUser.Create();
 }
@@ -157,7 +157,7 @@ sal_Int32 SAL_CALL OAdoUser::getGrantablePrivileges( const OUString& objName, sa
     RightsEnum eRights = m_aUser.GetPermissions(objName, ADOS::mapObjectType2Ado(objType));
     if((eRights & adRightWithGrant) == adRightWithGrant)
         nRights = ADOS::mapAdoRights2Sdbc(eRights);
-    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+    ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),*this);
     return nRights;
 }
 
@@ -166,7 +166,7 @@ void SAL_CALL OAdoUser::grantPrivileges( const OUString& objName, sal_Int32 objT
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
     m_aUser.SetPermissions(objName,ADOS::mapObjectType2Ado(objType),adAccessGrant,RightsEnum(ADOS::mapRights2Ado(objPrivileges)));
-    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+    ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),*this);
 }
 
 void SAL_CALL OAdoUser::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
@@ -174,7 +174,7 @@ void SAL_CALL OAdoUser::revokePrivileges( const OUString& objName, sal_Int32 obj
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
     m_aUser.SetPermissions(objName,ADOS::mapObjectType2Ado(objType),adAccessRevoke,RightsEnum(ADOS::mapRights2Ado(objPrivileges)));
-    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+    ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),*this);
 }
 
 // XUser
@@ -183,7 +183,7 @@ void SAL_CALL OAdoUser::changePassword( const OUString& objPassword, const OUStr
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
     m_aUser.ChangePassword(objPassword,newPassword);
-    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+    ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),*this);
 }
 
 

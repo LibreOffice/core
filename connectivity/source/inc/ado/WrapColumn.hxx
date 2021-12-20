@@ -31,7 +31,7 @@ namespace connectivity::ado
         class WpADOColumn : public WpOLEBase<_ADOColumn>
         {
         public:
-            WpADOColumn(_ADOColumn* pInt=nullptr)  :   WpOLEBase<_ADOColumn>(pInt){}
+            WpADOColumn() = default;
             WpADOColumn(const WpADOColumn& rhs) : WpOLEBase<_ADOColumn>(rhs) {}
 
             void Create();

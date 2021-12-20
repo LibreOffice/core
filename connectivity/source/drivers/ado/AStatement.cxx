@@ -41,7 +41,7 @@ using namespace ::comphelper;
 
 #define CHECK_RETURN(x)                                                 \
     if(!x)                                                              \
-        ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+        ADOS::ThrowException(m_pConnection->getConnection(),*this);
 
 
 using namespace connectivity::ado;
@@ -67,7 +67,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
     if(m_Command.IsValid())
         m_Command.putref_ActiveConnection(m_pConnection->getConnection());
     else
-        ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+        ADOS::ThrowException(m_pConnection->getConnection(),*this);
 
     m_RecordsAffected.setNoArg();
     m_Parameters.setNoArg();
@@ -95,7 +95,7 @@ void OStatement_Base::disposing()
     disposeResultSet();
 
     if ( m_Command.IsValid() )
-        m_Command.putref_ActiveConnection( nullptr );
+        m_Command.putref_ActiveConnection({});
     m_Command.clear();
 
     if ( m_RecordSet.IsValid() )
@@ -240,7 +240,7 @@ void OStatement_Base::setWarning (const SQLWarning &ex)
 void OStatement_Base::assignRecordSet( ADORecordset* _pRS )
 {
     WpADORecordset aOldRS( m_RecordSet );
-    m_RecordSet = WpADORecordset( _pRS );
+    m_RecordSet.set( _pRS );
 
     if ( aOldRS.IsValid() )
         aOldRS.PutRefDataSource( nullptr );

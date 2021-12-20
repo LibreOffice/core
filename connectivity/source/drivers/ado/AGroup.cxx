@@ -36,26 +36,14 @@ using namespace com::sun::star::sdbcx;
 
 void WpADOGroup::Create()
 {
-    ADOGroup* pGroup = nullptr;
-    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOGROUP_25,
-                          nullptr,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOGROUP_25,
-                          reinterpret_cast<void**>(&pGroup) );
-
-
-    if( !FAILED( hr ) )
-    {
-        operator=( pGroup );
-        pGroup->Release();
-    }
+    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOGROUP_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 OAdoGroup::OAdoGroup(OCatalog* _pParent,bool _bCase,    ADOGroup* _pGroup) : OGroup_ADO(_bCase),m_pCatalog(_pParent)
 {
     construct();
     if(_pGroup)
-        m_aGroup = WpADOGroup(_pGroup);
+        m_aGroup.set(_pGroup);
     else
         m_aGroup.Create();
 

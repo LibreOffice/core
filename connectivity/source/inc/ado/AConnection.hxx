@@ -56,7 +56,7 @@ namespace connectivity::ado
             css::uno::WeakReference< css::sdbcx::XTablesSupplier>      m_xCatalog;
             ODriver*                    m_pDriver;
         private:
-            WpADOConnection*            m_pAdoConnection;
+            WpADOConnection             m_aAdoConnection;
             OCatalog*                   m_pCatalog;
             sal_Int32                   m_nEngineType;
             bool                        m_bClosed;
@@ -106,7 +106,7 @@ namespace connectivity::ado
             virtual css::uno::Any SAL_CALL getWarnings(  ) override;
             virtual void SAL_CALL clearWarnings(  ) override;
 
-            WpADOConnection* getConnection() { return m_pAdoConnection; }
+            WpADOConnection& getConnection() { return m_aAdoConnection; }
             void setCatalog(const css::uno::WeakReference< css::sdbcx::XTablesSupplier>& _xCat) { m_xCatalog = _xCat; }
             void setCatalog(OCatalog* _pCatalog) { m_pCatalog = _pCatalog; }
 

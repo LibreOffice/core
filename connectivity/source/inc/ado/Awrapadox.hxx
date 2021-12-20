@@ -89,7 +89,7 @@ namespace connectivity::ado
         class WpADOGroup : public WpOLEBase<ADOGroup>
         {
         public:
-            WpADOGroup(ADOGroup* pInt=nullptr) :   WpOLEBase<ADOGroup>(pInt){}
+            WpADOGroup() = default;
             WpADOGroup(const WpADOGroup& rhs) : WpOLEBase<ADOGroup>(rhs) {}
 
             WpADOGroup& operator=(const WpADOGroup& rhs)
@@ -113,7 +113,7 @@ namespace connectivity::ado
         class WpADOUser : public WpOLEBase<_ADOUser>
         {
         public:
-            WpADOUser(_ADOUser* pInt=nullptr)  :   WpOLEBase<_ADOUser>(pInt){}
+            WpADOUser() = default;
             WpADOUser(const WpADOUser& rhs) : WpOLEBase<_ADOUser>(rhs) {}
 
             WpADOUser& operator=(const WpADOUser& rhs)

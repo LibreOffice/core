@@ -95,7 +95,7 @@ namespace connectivity::ado
         if(aProp.IsValid())                                         \
             aVar = aProp.GetValue();                                \
         else                                                        \
-            ADOS::ThrowException(*m_pADOConnection,*this);
+            ADOS::ThrowException(m_rADOConnection,*this);
 
 
 

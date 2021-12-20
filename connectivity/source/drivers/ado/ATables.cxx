@@ -71,7 +71,7 @@ sdbcx::ObjectType OTables::appendObject( const OUString&, const Reference< XProp
 
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     if(!m_aCollection.Append(pTable->getImpl()))
-        ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
+        ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
     m_aCollection.Refresh();
 
     return new OAdoTable(this,isCaseSensitive(),m_pCatalog,pTable->getImpl());
@@ -82,7 +82,7 @@ void OTables::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementName)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     if ( !m_aCollection.Delete(_sElementName) )
-        ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
+        ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 }
 
 void OTables::appendNew(const OUString& _rsNewTable)

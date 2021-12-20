@@ -42,16 +42,15 @@ namespace connectivity::ado
         class WpADOError;
         class WpADOProperty;
 
-        typedef WpOLEAppendCollection<  ADOFields,      ADOField,       WpADOField>         WpADOFields;
-        typedef WpOLECollection<        ADOProperties,  ADOProperty,    WpADOProperty>      WpADOProperties;
+        typedef WpOLEAppendCollection<  ADOFields,      WpADOField>         WpADOFields;
+        typedef WpOLECollection<        ADOProperties,  WpADOProperty>      WpADOProperties;
 
 
         class WpADOConnection : public WpOLEBase<ADOConnection>
         {
-            friend class WpADOCommand;
         public:
 
-            WpADOConnection(ADOConnection* pInt)    :   WpOLEBase<ADOConnection>(pInt){}
+            WpADOConnection() = default;
 
             WpADOConnection(const WpADOConnection& rhs) : WpOLEBase<ADOConnection>(rhs) {}
 
@@ -140,11 +139,9 @@ namespace connectivity::ado
         class WpADOCommand : public WpOLEBase<ADOCommand>
         {
         public:
-            WpADOCommand(){}
+            WpADOCommand() = default;
             // Ctors, operator=
             // They only call the superclass
-            WpADOCommand(ADOCommand* pInt)  :   WpOLEBase<ADOCommand>(pInt){}
-
             WpADOCommand(const WpADOCommand& rhs) : WpOLEBase<ADOCommand>(rhs) {}
 
              WpADOCommand& operator=(const WpADOCommand& rhs)
@@ -152,7 +149,7 @@ namespace connectivity::ado
                 WpOLEBase<ADOCommand>::operator=(rhs); return *this;}
 
 
-            bool putref_ActiveConnection( WpADOConnection *pCon);
+            bool putref_ActiveConnection(const WpADOConnection& rCon);
 
             void put_ActiveConnection(/* [in] */ const OLEVariant& vConn);
              void Create();
@@ -181,7 +178,7 @@ namespace connectivity::ado
 
             // Ctors, operator=
             // They only call the superclass
-            WpADOError(ADOError* pInt):WpOLEBase<ADOError>(pInt){}
+            WpADOError() = default;
 
             WpADOError(const WpADOError& rhs) : WpOLEBase<ADOError>(rhs) {}
 
@@ -204,7 +201,7 @@ namespace connectivity::ado
 
             // Ctors, operator=
             // They only call the superclass
-            WpADOField(ADOField* pInt=nullptr):WpOLEBase<ADOField>(pInt){}
+            WpADOField() = default;
             WpADOField(const WpADOField& rhs) : WpOLEBase<ADOField>(rhs) {}
 
              WpADOField& operator=(const WpADOField& rhs)
@@ -250,7 +247,7 @@ namespace connectivity::ado
         public:
             // Ctors, operator=
             // They only call the superclass
-            WpADOProperty(ADOProperty* pInt=nullptr):WpOLEBase<ADOProperty>(pInt){}
+            WpADOProperty() = default;
             WpADOProperty(const WpADOProperty& rhs) : WpOLEBase<ADOProperty>(rhs) {}
              WpADOProperty& operator=(const WpADOProperty& rhs)
                 {WpOLEBase<ADOProperty>::operator=(rhs); return *this;}
@@ -272,7 +269,7 @@ namespace connectivity::ado
         public:
             // Ctors, operator=
             // They only call the superclass
-            WpADORecordset(ADORecordset* pInt=nullptr):WpOLEBase<ADORecordset>(pInt){}
+            WpADORecordset() = default;
             WpADORecordset(const WpADORecordset& rhs) : WpOLEBase<ADORecordset>() {operator=(rhs);}
              WpADORecordset& operator=(const WpADORecordset& rhs)
             {
@@ -332,7 +329,7 @@ namespace connectivity::ado
         public:
             // Ctors, operator=
             // They only call the superclass
-            WpADOParameter(ADOParameter* pInt):WpOLEBase<ADOParameter>(pInt){}
+            WpADOParameter() = default;
             WpADOParameter(const WpADOParameter& rhs):WpOLEBase<ADOParameter>(rhs){}
              WpADOParameter& operator=(const WpADOParameter& rhs)
                 {WpOLEBase<ADOParameter>::operator=(rhs); return *this;}

@@ -51,7 +51,6 @@ IMPLEMENT_SERVICE_INFO(OConnection,"com.sun.star.sdbcx.AConnection","com.sun.sta
 OConnection::OConnection(ODriver*   _pDriver)
                          : m_xCatalog(nullptr),
                          m_pDriver(_pDriver),
-                         m_pAdoConnection(nullptr),
                          m_pCatalog(nullptr),
                          m_nEngineType(0),
                          m_bClosed(false),
@@ -59,36 +58,19 @@ OConnection::OConnection(ODriver*   _pDriver)
 {
     osl_atomic_increment( &m_refCount );
 
-    IClassFactory2* pIUnknown   = nullptr;
-    HRESULT         hr;
-    hr = CoGetClassObject( ADOS::CLSID_ADOCONNECTION_21,
-                          CLSCTX_INPROC_SERVER,
-                          nullptr,
-                          IID_IClassFactory2,
-                          reinterpret_cast<void**>(&pIUnknown) );
-
-    if( !FAILED( hr ) )
+    sal::systools::COMReference<IClassFactory2> pIUnknown;
+    if (!FAILED(pIUnknown.TryCoGetClassObject(ADOS::CLSID_ADOCONNECTION_21, CLSCTX_INPROC_SERVER)))
     {
-        ADOConnection *pCon         = nullptr;
-        IUnknown *pOuter     = nullptr;
-        hr = pIUnknown->CreateInstanceLic(  pOuter,
+        HRESULT hr = pIUnknown->CreateInstanceLic(nullptr,
                                             nullptr,
                                             ADOS::IID_ADOCONNECTION_21,
                                             ADOS::GetKeyStr().asBSTR(),
-                                            reinterpret_cast<void**>(&pCon));
+                                            reinterpret_cast<void**>(&m_aAdoConnection));
 
         if( !FAILED( hr ) )
         {
-            OSL_ENSURE( pCon, "OConnection::OConnection: invalid ADO object!" );
-
-            m_pAdoConnection = new WpADOConnection( pCon );
-            // CreateInstanceLic returned an object which was already acquired
-            pCon->Release( );
-
+            OSL_ENSURE(m_aAdoConnection, "OConnection::OConnection: invalid ADO object!");
         }
-
-        // Class Factory is no longer needed
-        pIUnknown->Release();
     }
 
     osl_atomic_decrement( &m_refCount );
@@ -124,16 +106,16 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     }
     try
     {
-        if(m_pAdoConnection)
+        if(m_aAdoConnection)
         {
-            if(m_pAdoConnection->Open(aDSN,aUID,aPWD,adConnectUnspecified))
-                m_pAdoConnection->PutCommandTimeout(nTimeout);
+            if(m_aAdoConnection.Open(aDSN,aUID,aPWD,adConnectUnspecified))
+                m_aAdoConnection.PutCommandTimeout(nTimeout);
             else
-                ADOS::ThrowException(*m_pAdoConnection,*this);
-            if(m_pAdoConnection->get_State() != adStateOpen)
+                ADOS::ThrowException(m_aAdoConnection,*this);
+            if(m_aAdoConnection.get_State() != adStateOpen)
                 throwGenericSQLException( STR_NO_CONNECTION,*this );
 
-            WpADOProperties aProps = m_pAdoConnection->get_Properties();
+            WpADOProperties aProps = m_aAdoConnection.get_Properties();
             if(aProps.IsValid())
             {
                 OTools::putValue(aProps, std::u16string_view(u"Jet OLEDB:ODBC Parsing"), true);
@@ -196,13 +178,13 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& _sql )
 
 
     OUString sql = _sql;
-    WpADOProperties aProps = m_pAdoConnection->get_Properties();
+    WpADOProperties aProps = m_aAdoConnection.get_Properties();
     if(aProps.IsValid())
     {
         OTools::putValue(aProps, std::u16string_view(u"Jet OLEDB:ODBC Parsing"), true);
         WpADOCommand aCommand;
         aCommand.Create();
-        aCommand.put_ActiveConnection(static_cast<IDispatch*>(*m_pAdoConnection));
+        aCommand.put_ActiveConnection(static_cast<IDispatch*>(m_aAdoConnection));
         aCommand.put_CommandText(sql);
         sql = aCommand.get_CommandText();
     }
@@ -218,9 +200,9 @@ void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit )
 
     m_bAutocommit = autoCommit;
     if(!autoCommit)
-        m_pAdoConnection->BeginTrans();
+        m_aAdoConnection.BeginTrans();
     else
-        m_pAdoConnection->RollbackTrans();
+        m_aAdoConnection.RollbackTrans();
 }
 
 sal_Bool SAL_CALL OConnection::getAutoCommit(  )
@@ -238,7 +220,7 @@ void SAL_CALL OConnection::commit(  )
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    m_pAdoConnection->CommitTrans();
+    m_aAdoConnection.CommitTrans();
 }
 
 void SAL_CALL OConnection::rollback(  )
@@ -247,14 +229,14 @@ void SAL_CALL OConnection::rollback(  )
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    m_pAdoConnection->RollbackTrans();
+    m_aAdoConnection.RollbackTrans();
 }
 
 sal_Bool SAL_CALL OConnection::isClosed(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return OConnection_BASE::rBHelper.bDisposed && !m_pAdoConnection->get_State();
+    return OConnection_BASE::rBHelper.bDisposed && !m_aAdoConnection.get_State();
 }
 
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  )
@@ -279,8 +261,8 @@ void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly )
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    m_pAdoConnection->put_Mode(readOnly ? adModeRead : adModeReadWrite);
-    ADOS::ThrowException(*m_pAdoConnection,*this);
+    m_aAdoConnection.put_Mode(readOnly ? adModeRead : adModeReadWrite);
+    ADOS::ThrowException(m_aAdoConnection,*this);
 }
 
 sal_Bool SAL_CALL OConnection::isReadOnly(  )
@@ -289,7 +271,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  )
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    return m_pAdoConnection->get_Mode() == adModeRead;
+    return m_aAdoConnection.get_Mode() == adModeRead;
 }
 
 void SAL_CALL OConnection::setCatalog( const OUString& catalog )
@@ -297,8 +279,8 @@ void SAL_CALL OConnection::setCatalog( const OUString& catalog )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    m_pAdoConnection->PutDefaultDatabase(catalog);
-    ADOS::ThrowException(*m_pAdoConnection,*this);
+    m_aAdoConnection.PutDefaultDatabase(catalog);
+    ADOS::ThrowException(m_aAdoConnection,*this);
 }
 
 OUString SAL_CALL OConnection::getCatalog(  )
@@ -306,7 +288,7 @@ OUString SAL_CALL OConnection::getCatalog(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    return m_pAdoConnection->GetDefaultDatabase();
+    return m_aAdoConnection.GetDefaultDatabase();
 }
 
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level )
@@ -337,8 +319,8 @@ void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level )
             OSL_FAIL("OConnection::setTransactionIsolation invalid level");
             return;
     }
-    m_pAdoConnection->put_IsolationLevel(eIso);
-    ADOS::ThrowException(*m_pAdoConnection,*this);
+    m_aAdoConnection.put_IsolationLevel(eIso);
+    ADOS::ThrowException(m_aAdoConnection,*this);
 }
 
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  )
@@ -348,7 +330,7 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  )
 
 
     sal_Int32 nRet = 0;
-    switch(m_pAdoConnection->get_IsolationLevel())
+    switch(m_aAdoConnection.get_IsolationLevel())
     {
         case adXactUnspecified:
             nRet = TransactionIsolation::NONE;
@@ -368,7 +350,7 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  )
         default:
             OSL_FAIL("OConnection::setTransactionIsolation invalid level");
     }
-    ADOS::ThrowException(*m_pAdoConnection,*this);
+    ADOS::ThrowException(m_aAdoConnection,*this);
     return nRet;
 }
 
@@ -411,7 +393,7 @@ void OConnection::buildTypeInfo()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ADORecordset *pRecordset = m_pAdoConnection->getTypeInfo();
+    ADORecordset *pRecordset = m_aAdoConnection.getTypeInfo();
     if ( pRecordset )
     {
         pRecordset->AddRef();
@@ -476,15 +458,14 @@ void OConnection::disposing()
     m_xCatalog  = css::uno::WeakReference< css::sdbcx::XTablesSupplier>();
     m_pDriver   = nullptr;
 
-    m_pAdoConnection->Close();
+    m_aAdoConnection.Close();
 
     for (auto& rEntry : m_aTypeInfo)
         delete rEntry.second;
 
     m_aTypeInfo.clear();
 
-    delete m_pAdoConnection;
-    m_pAdoConnection = nullptr;
+    m_aAdoConnection.clear();
 }
 
 sal_Int64 SAL_CALL OConnection::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
