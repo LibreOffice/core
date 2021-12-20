@@ -255,10 +255,6 @@ namespace svgio::svgreader
             }
         }
 
-        double SvgTextNode::getCurrentFontSize() const
-        {
-            return getCurrentFontSizeInherited();
-        }
 } // end of namespace svgio::svgreader
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

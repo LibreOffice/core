@@ -159,7 +159,7 @@ namespace svgio::svgreader
             virtual double getCurrentFontSizeInherited() const override;
             virtual double getCurrentXHeightInherited() const override;
 
-            virtual double getCurrentFontSize() const;
+            double getCurrentFontSize() const;
             double getCurrentXHeight() const;
 
             /// Id access

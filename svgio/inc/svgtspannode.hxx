@@ -42,7 +42,7 @@ namespace svgio::svgreader
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
 
-            virtual double getCurrentFontSize() const override;
+            double getCurrentFontSize() const;
 
             /// access to SvgTextPositions
             const SvgTextPositions& getSvgTextPositions() const { return maSvgTextPositions; }
