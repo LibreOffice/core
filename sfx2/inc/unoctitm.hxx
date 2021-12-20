@@ -21,14 +21,14 @@
 #include <memory>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <comphelper/multiinterfacecontainer3.hxx>
+#include <comphelper/multiinterfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <svl/lstner.hxx>
 #include <sfx2/ctrlitem.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::frame { class XNotifyingDispatch; }
@@ -39,13 +39,14 @@ class SfxBindings;
 class SfxDispatcher;
 class SfxSlot;
 
-typedef comphelper::OMultiTypeInterfaceContainerHelperVar3<css::frame::XStatusListener, OUString>
+typedef comphelper::OMultiTypeInterfaceContainerHelperVar4<OUString, css::frame::XStatusListener>
     SfxStatusDispatcher_Impl_ListenerContainer;
 
 class SfxStatusDispatcher   :   public cppu::WeakImplHelper<css::frame::XNotifyingDispatch>
 {
-    ::osl::Mutex        aMutex;
-    SfxStatusDispatcher_Impl_ListenerContainer  aListeners;
+protected:
+    std::mutex        maMutex;
+    SfxStatusDispatcher_Impl_ListenerContainer  maListeners;
 
 public:
 
@@ -61,8 +62,8 @@ public:
 
     // Something else
     void                ReleaseAll();
-    SfxStatusDispatcher_Impl_ListenerContainer& GetListeners()
-                        { return aListeners; }
+    void                sendStatusChanged(const OUString& rURL, const css::frame::FeatureStateEvent& rEvent);
+    std::vector<OUString> getContainedTypes() { return maListeners.getContainedTypes(); };
 };
 
 class SfxSlotServer;
