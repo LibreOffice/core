@@ -38,6 +38,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/dibtools.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <systools/win32/comtools.hxx>
 
 constexpr OUStringLiteral AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.FrameGrabber_DirectX";
 constexpr OUStringLiteral AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME = u"com.sun.star.media.FrameGrabber_DirectX";
@@ -60,11 +61,11 @@ FrameGrabber::~FrameGrabber()
 
 namespace {
 
-IMediaDet* implCreateMediaDet( const OUString& rURL )
+sal::systools::COMReference<IMediaDet> implCreateMediaDet( const OUString& rURL )
 {
-    IMediaDet* pDet = nullptr;
+    sal::systools::COMReference<IMediaDet> pDet;
 
-    if( SUCCEEDED( CoCreateInstance( CLSID_MediaDet, nullptr, CLSCTX_INPROC_SERVER, IID_IMediaDet, reinterpret_cast<void**>(&pDet) ) ) )
+    if( pDet.CoCreateInstance(CLSID_MediaDet, nullptr, CLSCTX_INPROC_SERVER) )
     {
         OUString aLocalStr;
 
@@ -78,8 +79,7 @@ IMediaDet* implCreateMediaDet( const OUString& rURL )
                 // I cannot find information why do we pass a newly allocated BSTR to the put_Filename
                 // and if it frees the string internally
                 SysFreeString(bstrFilename);
-                pDet->Release();
-                pDet = nullptr;
+                pDet.clear();
             }
         }
     }
@@ -92,14 +92,8 @@ IMediaDet* implCreateMediaDet( const OUString& rURL )
 bool FrameGrabber::create( const OUString& rURL )
 {
     // just check if a MediaDet interface can be created with the given URL
-    IMediaDet*  pDet = implCreateMediaDet( rURL );
-
-    if( pDet )
-    {
+    if (implCreateMediaDet(rURL))
         maURL = rURL;
-        pDet->Release();
-        pDet = nullptr;
-    }
     else
         maURL.clear();
 
@@ -110,9 +104,7 @@ bool FrameGrabber::create( const OUString& rURL )
 uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
 {
     uno::Reference< graphic::XGraphic > xRet;
-    IMediaDet*                          pDet = implCreateMediaDet( maURL );
-
-    if( pDet )
+    if (sal::systools::COMReference<IMediaDet> pDet = implCreateMediaDet(maURL))
     {
         double  fLength;
         long    nStreamCount;
@@ -195,8 +187,6 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
                 }
             }
         }
-
-        pDet->Release();
     }
 
     return xRet;

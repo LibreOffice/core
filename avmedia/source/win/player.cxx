@@ -64,16 +64,6 @@ static LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1,
 
 Player::Player() :
     Player_BASE(m_aMutex),
-    mpGB( nullptr ),
-    mpOMF( nullptr ),
-    mpMC( nullptr ),
-    mpME( nullptr ),
-    mpMS( nullptr ),
-    mpMP( nullptr ),
-    mpBA( nullptr ),
-    mpBV( nullptr ),
-    mpVW( nullptr ),
-    mpEV( nullptr ),
     mnUnmutedVolume( 0 ),
     mnFrameWnd( nullptr ),
     mbMuted( false ),
@@ -97,47 +87,16 @@ void SAL_CALL Player::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     stop();
-    if( mpBA )
-        mpBA->Release();
-
-    if( mpBV )
-        mpBV->Release();
-
-    if( mpVW )
-        mpVW->Release();
-
-    if( mpMP )
-        mpMP->Release();
-
-    if( mpMS )
-        mpMS->Release();
-
     if( mpME )
-    {
         mpME->SetNotifyWindow( 0, WM_GRAPHNOTIFY, 0);
-        mpME->Release();
-    }
-
-    if( mpMC )
-        mpMC->Release();
-
-    if( mpEV )
-        mpEV->Release();
-
-    if( mpOMF )
-        mpOMF->Release();
-
-    if( mpGB )
-        mpGB->Release();
 }
 
 
 bool Player::create( const OUString& rURL )
 {
-    HRESULT hR;
     bool    bRet = false;
 
-    if( SUCCEEDED( hR = CoCreateInstance( CLSID_FilterGraph, nullptr, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, reinterpret_cast<void**>(&mpGB) ) ) )
+    if( mpGB.CoCreateInstance(CLSID_FilterGraph, nullptr, CLSCTX_INPROC_SERVER) )
     {
         // Don't use the overlay mixer on Windows Vista
         // It disables the desktop composition as soon as RenderFile is called
@@ -149,18 +108,17 @@ bool Player::create( const OUString& rURL )
         if (aFile.startsWithIgnoreAsciiCase("file:"))
             osl::FileBase::getSystemPathFromFileURL(rURL, aFile);
 
-        if( SUCCEEDED( hR = mpGB->RenderFile( o3tl::toW(aFile.getStr()), nullptr ) ) &&
-            SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaControl, reinterpret_cast<void**>(&mpMC) ) ) &&
-            SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaEventEx, reinterpret_cast<void**>(&mpME) ) ) &&
-            SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaSeeking, reinterpret_cast<void**>(&mpMS) ) ) &&
-            SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaPosition, reinterpret_cast<void**>(&mpMP) ) ) )
+        if( SUCCEEDED( mpGB->RenderFile( o3tl::toW(aFile.getStr()), nullptr ) ) &&
+            mpMC.set(mpGB, sal::systools::COM_QUERY) &&
+            mpME.set(mpGB, sal::systools::COM_QUERY) &&
+            mpMP.set(mpGB, sal::systools::COM_QUERY) )
         {
             // Video interfaces
-            mpGB->QueryInterface( IID_IVideoWindow, reinterpret_cast<void**>(&mpVW) );
-            mpGB->QueryInterface( IID_IBasicVideo, reinterpret_cast<void**>(&mpBV) );
+            mpVW.set(mpGB, sal::systools::COM_QUERY);
+            mpBV.set(mpGB, sal::systools::COM_QUERY);
 
             // Audio interface
-            mpGB->QueryInterface( IID_IBasicAudio, reinterpret_cast<void**>(&mpBA) );
+            mpBA.set(mpGB, sal::systools::COM_QUERY);
 
             if( mpBA )
                 mpBA->put_Volume( mnUnmutedVolume );
