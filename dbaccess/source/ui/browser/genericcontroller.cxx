@@ -1050,12 +1050,12 @@ Reference< awt::XWindow> OGenericUnoController::getTopMostContainerWindow() cons
     return xWindow;
 }
 
-Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw()
+Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw(bool bCreateIfNecessary)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
-    if ( ! m_xTitleHelper.is ())
+    if (!m_xTitleHelper.is() && bCreateIfNecessary)
     {
         Reference< XUntitledNumbers > xUntitledProvider(getPrivateModel(), UNO_QUERY      );
 
@@ -1093,7 +1093,7 @@ void SAL_CALL OGenericUnoController::addTitleChangeListener(const Reference< XTi
 
 void SAL_CALL OGenericUnoController::removeTitleChangeListener(const Reference< XTitleChangeListener >& xListener)
 {
-    Reference< XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper_throw(), UNO_QUERY);
+    Reference< XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper_throw(false), UNO_QUERY);
     if (xBroadcaster.is ())
         xBroadcaster->removeTitleChangeListener (xListener);
 }
