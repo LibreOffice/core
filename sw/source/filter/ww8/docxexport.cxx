@@ -1557,7 +1557,7 @@ static void lcl_UpdateXmlValues(const SdtData& sdtData, const uno::Reference<css
     uno::Sequence<uno::Any> aArgs{
     // XSLT transformation stylesheet:
     //  - write all elements as is
-    //  - but if element mathes sdtData.xpath, replace it's text content by sdtData.xpath
+    //  - but if element matches sdtData.xpath, replace its text content by sdtData.xpath
     uno::Any(beans::NamedValue("StylesheetText", uno::Any(OUString("<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
 <xsl:stylesheet\
     xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"\
