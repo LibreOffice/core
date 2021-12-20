@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffe39e82_31541ba5",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-20T20:37:13Z",
+      "side": 1,
+      "message": "Interesting - so the original value may live unexpectedly after the assignment in other - is this a common pattern?",
+      "revId": "7cf387c43562a78192a59bd8fcfeea9b67d96f09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
