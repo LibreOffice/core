@@ -286,7 +286,7 @@ private:
     void DefineNamespace( const OString& rPrefix, const OUString& namespaceURL );
 
 private:
-    osl::Mutex maMutex; ///< Protecting whole parseStream() execution
+    std::mutex maMutex; ///< Protecting whole parseStream() execution
     ::rtl::Reference< FastLocatorImpl >     mxDocumentLocator;
     NamespaceMap                            maNamespaceMap;
 
@@ -825,7 +825,7 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
     xmlInitParser();
 
     // Only one text at one time
-    MutexGuard guard( maMutex );
+    std::unique_lock guard( maMutex );
 
     pushEntity(maData, rStructSource);
     Entity& rEntity = getEntity();
