@@ -129,6 +129,7 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     bool isMinimized() const;
     bool isMaximized() const;
     void SetWindowStateImpl(Qt::WindowStates eState);
+    int menuBarOffset() const;
 
     void fixICCCMwindowGroup();
     void modalReparent(bool bVisible);
