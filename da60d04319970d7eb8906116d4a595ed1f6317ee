@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33f7c352_12d20801",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-20T20:46:15Z",
+      "side": 1,
+      "message": "This is my patch to store the HideWhitespace option between sessions. I can\u0027t figure out how to write a test for it. ",
+      "revId": "da60d04319970d7eb8906116d4a595ed1f6317ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
