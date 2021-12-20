@@ -120,6 +120,23 @@
       "message": "tagging sberg, Don\u0027t know enough to know if this is safe",
       "revId": "cde0e34328306c7b30dcfddd0667d8747d52a9ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea476c74_4118deaa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-20T08:46:34Z",
+      "side": 1,
+      "message": "please explain in the commit message why the mutex needs to be moved out of RTTI to the call site, it is non-obvious at least to the casual reader",
+      "revId": "cde0e34328306c7b30dcfddd0667d8747d52a9ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
