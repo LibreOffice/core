@@ -28,6 +28,11 @@
 #include <vcl/vclenum.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
+namespace tools
+{
+    class Line;
+    class PolyPolygon;
+}
 
 class SvStream;
 
@@ -69,6 +74,9 @@ public:
 
     static void CalcHatchValues(tools::Rectangle const& rRect, tools::Long nDist, Degree10 nAngle10,
                     Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1, Point const& rRef);
+
+    static void GenerateHatchLinePoints(tools::Line const& rLine, tools::PolyPolygon const& rPolyPoly,
+                    tools::Long& nPCounter, Point* pPtBuffer);
 
     friend SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch );
     friend SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch );
