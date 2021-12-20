@@ -2155,7 +2155,6 @@ tools::Long SwScriptInfo::Compress(sal_Int32* pKernArray, TextFrameIndex nIdx, T
 // have been dropped, depending on the state of the m_KashidaInvalid set.
 
 sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
-                                        sal_Int32* pScrArray,
                                         TextFrameIndex const nStt,
                                         TextFrameIndex const nLen,
                                         tools::Long nSpaceAdd ) const
@@ -2225,8 +2224,6 @@ sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
             while ( nArrayPos < nArrayEnd )
             {
                 pKernArray[ sal_Int32(nArrayPos) ] += nKashAdd;
-                if ( pScrArray )
-                    pScrArray[ sal_Int32(nArrayPos) ] += nKashAdd;
                 ++nArrayPos;
             }
             nKashAdd += nSpaceAdd;
@@ -2414,7 +2411,7 @@ void SwScriptInfo::MarkKashidasInvalid(sal_Int32 const nCnt,
 }
 
 TextFrameIndex SwScriptInfo::ThaiJustify( const OUString& rText, sal_Int32* pKernArray,
-                                     sal_Int32* pScrArray, TextFrameIndex const nStt,
+                                     TextFrameIndex const nStt,
                                      TextFrameIndex const nLen,
                                      TextFrameIndex nNumberOfBlanks,
                                      tools::Long nSpaceAdd )
@@ -2446,7 +2443,6 @@ TextFrameIndex SwScriptInfo::ThaiJustify( const OUString& rText, sal_Int32* pKer
         }
 
         if ( pKernArray ) pKernArray[ nI ] += nSpaceSum;
-        if ( pScrArray ) pScrArray[ nI ] += nSpaceSum;
     }
 
     return nCnt;
@@ -2747,7 +2743,7 @@ TextFrameIndex SwScriptInfo::CountCJKCharacters(const OUString &rText,
 }
 
 void SwScriptInfo::CJKJustify( const OUString& rText, sal_Int32* pKernArray,
-                                     sal_Int32* pScrArray, TextFrameIndex const nStt,
+                                     TextFrameIndex const nStt,
                                      TextFrameIndex const nLen, LanguageType aLang,
                                      tools::Long nSpaceAdd, bool bIsSpaceStop )
 {
@@ -2770,8 +2766,7 @@ void SwScriptInfo::CJKJustify( const OUString& rText, sal_Int32* pKernArray,
                 nSpaceSum += nSpaceAdd;
         }
         pKernArray[ nI ] += nSpaceSum;
-        if ( pScrArray )
-            pScrArray[ nI ] += nSpaceSum;
     }
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
