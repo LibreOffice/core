@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd9787cf_911ed92e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-20T11:24:52Z",
+      "side": 1,
+      "message": "Hi Michael,\nCould you please elaborate a bit more ? Why does it need to change to another tab ?",
+      "revId": "40487d9c81c69c4e5ee1621e53c8162ae33c80b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
