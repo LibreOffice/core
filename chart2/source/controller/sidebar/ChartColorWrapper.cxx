@@ -84,7 +84,7 @@ ChartColorWrapper::ChartColorWrapper(
 {
 }
 
-void ChartColorWrapper::operator()([[maybe_unused]] const OUString& , const NamedColor& rColor)
+void ChartColorWrapper::operator()([[maybe_unused]] const OUString& , const svx::NamedThemedColor& rColor)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
 
@@ -94,7 +94,7 @@ void ChartColorWrapper::operator()([[maybe_unused]] const OUString& , const Name
         return;
     }
 
-    xPropSet->setPropertyValue(maPropertyName, css::uno::makeAny(rColor.first));
+    xPropSet->setPropertyValue(maPropertyName, css::uno::makeAny(rColor.m_aColor));
 }
 
 void ChartColorWrapper::updateModel(const css::uno::Reference<css::frame::XModel>& xModel)

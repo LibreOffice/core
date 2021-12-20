@@ -126,6 +126,11 @@ void PaletteManager::LoadPalettes()
     }
 }
 
+bool PaletteManager::IsThemePaletteSelected() const
+{
+    return mnCurrentPalette == mnNumOfPalettes - 2;
+}
+
 void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 {
     if( mnCurrentPalette == 0)
@@ -141,7 +146,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
             ++nIx;
         }
     }
-    else if (mnCurrentPalette == mnNumOfPalettes - 2)
+    else if (IsThemePaletteSelected())
     {
         SfxObjectShell* pObjectShell = SfxObjectShell::Current();
         if (pObjectShell)
@@ -149,17 +154,20 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
             std::vector<Color> aColors = pObjectShell->GetThemeColors();
             mnColorCount = aColors.size();
             rColorSet.Clear();
-            std::vector<OUString> aNames = {
-                SvxResId(RID_SVXSTR_THEME_COLOR1),  SvxResId(RID_SVXSTR_THEME_COLOR2),
-                SvxResId(RID_SVXSTR_THEME_COLOR3),  SvxResId(RID_SVXSTR_THEME_COLOR4),
-                SvxResId(RID_SVXSTR_THEME_COLOR5),  SvxResId(RID_SVXSTR_THEME_COLOR6),
-                SvxResId(RID_SVXSTR_THEME_COLOR7),  SvxResId(RID_SVXSTR_THEME_COLOR8),
-                SvxResId(RID_SVXSTR_THEME_COLOR9),  SvxResId(RID_SVXSTR_THEME_COLOR10),
-                SvxResId(RID_SVXSTR_THEME_COLOR11), SvxResId(RID_SVXSTR_THEME_COLOR12),
-            };
-            for (int i = 0; i < 12; ++i)
+            if (aColors.size() >= 12)
             {
-                rColorSet.InsertItem(i, aColors[i], aNames[i]);
+                std::vector<OUString> aNames = {
+                    SvxResId(RID_SVXSTR_THEME_COLOR1),  SvxResId(RID_SVXSTR_THEME_COLOR2),
+                    SvxResId(RID_SVXSTR_THEME_COLOR3),  SvxResId(RID_SVXSTR_THEME_COLOR4),
+                    SvxResId(RID_SVXSTR_THEME_COLOR5),  SvxResId(RID_SVXSTR_THEME_COLOR6),
+                    SvxResId(RID_SVXSTR_THEME_COLOR7),  SvxResId(RID_SVXSTR_THEME_COLOR8),
+                    SvxResId(RID_SVXSTR_THEME_COLOR9),  SvxResId(RID_SVXSTR_THEME_COLOR10),
+                    SvxResId(RID_SVXSTR_THEME_COLOR11), SvxResId(RID_SVXSTR_THEME_COLOR12),
+                };
+                for (int i = 0; i < 12; ++i)
+                {
+                    rColorSet.InsertItem(i, aColors[i], aNames[i]);
+                }
             }
         }
     }
@@ -340,12 +348,12 @@ void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCo
             if (mpBtnUpdater)
                 mpBtnUpdater->Update(aNamedColor);
             AddRecentColor(aLastColor, sColorName);
-            maColorSelectFunction(aCommandCopy, aNamedColor);
+            maColorSelectFunction(aCommandCopy, svx::NamedThemedColor::FromNamedColor(aNamedColor));
         }
     });
 }
 
-void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor)
+void PaletteManager::DispatchColorCommand(const OUString& aCommand, const svx::NamedThemedColor& rColor)
 {
     using namespace css::uno;
     using namespace css::frame;
@@ -362,7 +370,7 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
     INetURLObject aObj( aCommand );
 
     Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(aObj.GetURLPath(),
-                                                                 sal_Int32(rColor.first)) };
+                                                                 sal_Int32(rColor.m_aColor)) };
 
     URL aTargetURL;
     aTargetURL.Complete = aCommand;
