@@ -16,6 +16,24 @@
       "message": "Works as described. But I think users expect what Telesto describes: a warning when certain conditions not met- but the dialog remains open (and has to be closed per Cancel). Now it looks like Okay accepts some default value, maybe \"Untitled\".",
       "revId": "eb05971278d52c74d11b65dc12d526561bf0d2af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "344460e1_7efa6803",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-12-20T17:57:28Z",
+      "side": 1,
+      "message": "That can be arranged too, but then it would be inconsistent with other hyperlink types.\nIf nothing is entered, OK closes the dialog without inserting a link in the other three tabs.\nNote that Apply pops up a warning only on this page, for others nothing happens when you press Apply in an empty dialog.",
+      "parentUuid": "4eee4634_34097c02",
+      "revId": "eb05971278d52c74d11b65dc12d526561bf0d2af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
