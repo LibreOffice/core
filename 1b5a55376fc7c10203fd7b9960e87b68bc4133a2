@@ -34,6 +34,24 @@
       "parentUuid": "5c9c38ae_7d3ff7cf",
       "revId": "1b5a55376fc7c10203fd7b9960e87b68bc4133a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cf884c7_87d26932",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-20T12:06:42Z",
+      "side": 1,
+      "message": "changed it to nave the generated file be vs-code.code-workspace.template, that won\u0027t be included in the default filter when trying to open a workspace",
+      "parentUuid": "e86946bc_3d30662e",
+      "revId": "1b5a55376fc7c10203fd7b9960e87b68bc4133a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
