@@ -20,7 +20,7 @@
 #pragma once
 
 #include <sal/config.h>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <vcl/primitive2d/baseprimitive2d.hxx>
 #include <vcl/font.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/rendercontext/State.hxx>

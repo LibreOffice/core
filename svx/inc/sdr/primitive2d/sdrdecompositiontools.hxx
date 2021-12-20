@@ -21,7 +21,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <vcl/primitive2d/Primitive2DContainer.hxx>
 
 #include <svx/svxdllapi.h>
 

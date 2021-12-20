@@ -262,7 +262,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <editeng/AccessibleComponentBase.hxx>
 #include <editeng/AccessibleContextBase.hxx>
 #include <editeng/adjustitem.hxx>

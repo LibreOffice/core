@@ -99,6 +99,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/animate/AnimationBitmap \
     vcl/source/cnttype/mcnttfactory \
     vcl/source/cnttype/mcnttype \
+    vcl/source/drawinglayer/geometry/viewinformation2d \
+    vcl/source/drawinglayer/primitive2d/baseprimitive2d \
+    vcl/source/drawinglayer/primitive2d/Primitive2DContainer \
+    vcl/source/drawinglayer/primitive2d/Tools \
     vcl/source/printer/Options \
     vcl/source/printer/QueueInfo \
     vcl/source/window/bubblewindow \

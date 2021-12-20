@@ -242,8 +242,8 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
+#include <vcl/primitive2d/Primitive2DContainer.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>

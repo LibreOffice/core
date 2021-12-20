@@ -343,9 +343,9 @@
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/primitive2d/CommonTypes.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
-#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
+#include <vcl/primitive2d/CommonTypes.hxx>
+#include <vcl/primitive2d/Primitive2DContainer.hxx>
+#include <vcl/primitive2d/Primitive2DVisitor.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>

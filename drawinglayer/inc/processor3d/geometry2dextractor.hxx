@@ -20,7 +20,7 @@
 #pragma once
 
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <vcl/primitive2d/Primitive2DContainer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 

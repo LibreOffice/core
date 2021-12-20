@@ -13,7 +13,7 @@
 #include <sal/config.h>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <libxml/tree.h>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <vcl/primitive2d/baseprimitive2d.hxx>
 #include <test/xmldocptr.hxx>
 #include <vector>
 

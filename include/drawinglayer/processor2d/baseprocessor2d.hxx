@@ -22,9 +22,9 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/primitive2d/Primitive2DVisitor.hxx>
+#include <vcl/primitive2d/baseprimitive2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 
 
 namespace drawinglayer::processor2d

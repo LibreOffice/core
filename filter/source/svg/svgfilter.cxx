@@ -44,7 +44,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/zcodec.hxx>
 
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <vcl/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 #include "svgfilter.hxx"

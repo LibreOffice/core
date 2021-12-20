@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <vcl/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 
 

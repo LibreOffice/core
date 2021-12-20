@@ -27,7 +27,7 @@
 #include <tools/gen.hxx>
 #include <svx/svxdllapi.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
 class OutputDevice;

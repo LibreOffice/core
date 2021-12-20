@@ -60,7 +60,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <calbck.hxx>

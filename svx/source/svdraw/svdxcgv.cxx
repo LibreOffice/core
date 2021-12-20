@@ -42,7 +42,7 @@
 #include <fmobj.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
