@@ -39,7 +39,7 @@ OAdoIndex::OAdoIndex(bool _bCase,OConnection* _pConnection,ADOIndex* _pIndex)
     ,m_pConnection(_pConnection)
 {
     construct();
-    m_aIndex = WpADOIndex(_pIndex);
+    m_aIndex.set(_pIndex);
     fillPropertyValues();
 }
 

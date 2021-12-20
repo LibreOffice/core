@@ -29,7 +29,7 @@ namespace connectivity::ado
         class WpADOKey : public WpOLEBase<ADOKey>
         {
         public:
-            WpADOKey(ADOKey* pInt=nullptr) :   WpOLEBase<ADOKey>(pInt){}
+            WpADOKey() = default;
             WpADOKey(const WpADOKey& rhs) : WpOLEBase<ADOKey>(rhs) {}
 
             WpADOKey& operator=(const WpADOKey& rhs)

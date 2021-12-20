@@ -71,9 +71,8 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnCount()
     if (m_vMapping.size())
         return m_mColumns.size();
 
-    ADOFields* pFields = nullptr;
-    m_pRecordSet->get_Fields(&pFields);
-    WpOLEAppendCollection<ADOFields, ADOField, WpADOField> aFields(pFields);
+    WpOLEAppendCollection<ADOFields, WpADOField> aFields;
+    m_pRecordSet->get_Fields(&aFields);
     m_nColCount = aFields.GetItemCount();
     return m_nColCount;
 }

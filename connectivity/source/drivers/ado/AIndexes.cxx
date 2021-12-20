@@ -65,7 +65,7 @@ sdbcx::ObjectType OIndexes::appendObject( const OUString& _rForName, const Refer
     ADOIndexes* pIndexes = m_aCollection;
     if ( FAILED( pIndexes->Append( OLEVariant( _rForName ), OLEVariant( pIndex->getImpl() ) ) ) )
     {
-        ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
+        ADOS::ThrowException(m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
         m_pConnection->throwGenericSQLException( STR_INVALID_INDEX_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
     }
 

@@ -310,9 +310,8 @@ WpADOField ADOS::getField(ADORecordset* _pRecordSet,sal_Int32 _nColumnIndex)
     if ( !_pRecordSet )
         return WpADOField();
 
-    ADOFields* pFields  = nullptr;
-    _pRecordSet->get_Fields(&pFields);
-    WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(pFields);
+    WpOLEAppendCollection<ADOFields, WpADOField> aFields;
+    _pRecordSet->get_Fields(&aFields);
     if(_nColumnIndex <= 0 || _nColumnIndex > aFields.GetItemCount())
         ::dbtools::throwInvalidIndexException(nullptr);
     WpADOField aField(aFields.GetItem(_nColumnIndex-1));

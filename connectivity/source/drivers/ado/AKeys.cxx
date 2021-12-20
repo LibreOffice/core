@@ -78,7 +78,7 @@ sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XProper
                             adKeyPrimary, // must be every time adKeyPrimary
                             vOptional)) )
     {
-        ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
+        ADOS::ThrowException(m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
         // just make sure that an SQLExceptionis thrown here
         m_pConnection->throwGenericSQLException( STR_INVALID_KEY_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
     }
@@ -90,7 +90,7 @@ sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XProper
 void OKeys::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementName)
 {
     if(!m_aCollection.Delete(OLEVariant(_sElementName).getString()))
-        ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
+        ADOS::ThrowException(m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
 }
 
 

@@ -109,7 +109,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
             aAddedColumn.put_RelatedColumn(aColumn.get_RelatedColumn());
         }
     }
-    ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
+    ADOS::ThrowException(m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
 
     return new OAdoColumn(isCaseSensitive(),m_pConnection,pColumn->getColumnImpl());
 }
@@ -118,7 +118,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
 void OColumns::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
-        ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
+        ADOS::ThrowException(m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
 }
 
 

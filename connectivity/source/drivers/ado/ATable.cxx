@@ -54,7 +54,7 @@ OAdoTable::OAdoTable(sdbcx::OCollection* _pTables,bool _bCase,OCatalog* _pCatalo
     ,m_pCatalog(_pCatalog)
 {
     construct();
-    m_aTable = WpADOTable(_pTable);
+    m_aTable.set(_pTable);
     //  m_aTable.putref_ParentCatalog(_pCatalog->getCatalog());
     fillPropertyValues();
 
@@ -148,7 +148,7 @@ void SAL_CALL OAdoTable::rename( const OUString& newName )
     checkDisposed(OTableDescriptor_BASE_TYPEDEF::rBHelper.bDisposed);
 
     m_aTable.put_Name(newName);
-    ADOS::ThrowException(*(m_pCatalog->getConnection()->getConnection()),*this);
+    ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),*this);
 
     OTable_TYPEDEF::rename(newName);
 }
@@ -173,7 +173,7 @@ void SAL_CALL OAdoTable::alterColumnByName( const OUString& colName, const Refer
         bError = bError || !aColumns.Append(pColumn->getColumnImpl());
     }
     if(bError)
-        ADOS::ThrowException(*(m_pCatalog->getConnection()->getConnection()),*this);
+        ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),*this);
 
     m_xColumns->refresh();
     refreshColumns();

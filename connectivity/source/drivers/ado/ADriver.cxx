@@ -187,7 +187,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
         aCatalog.Create();
         if(aCatalog.IsValid())
         {
-            aCatalog.putref_ActiveConnection(*pConnection->getConnection());
+            aCatalog.putref_ActiveConnection(pConnection->getConnection());
             rtl::Reference<OCatalog> pCatalog = new OCatalog(aCatalog,pConnection);
             xTab = pCatalog;
             pConnection->setCatalog(xTab);
@@ -206,12 +206,10 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const OUS
 
 void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >& _xInterface)
 {
-    ADOErrors *pErrors = nullptr;
+    sal::systools::COMReference<ADOErrors> pErrors;
     _pAdoCon->get_Errors(&pErrors);
     if(!pErrors)
         return; // no error found
-
-    pErrors->AddRef( );
 
     // read all noted errors and issue them
     sal_Int32 nLen;
@@ -222,11 +220,10 @@ void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >&
         aException.ErrorCode = 1000;
         for (sal_Int32 i = nLen-1; i>=0; --i)
         {
-            ADOError *pError = nullptr;
-            pErrors->get_Item(OLEVariant(i),&pError);
-            WpADOError aErr(pError);
-            OSL_ENSURE(pError,"No error in collection found! BAD!");
-            if(pError)
+            WpADOError aErr;
+            pErrors->get_Item(OLEVariant(i),&aErr);
+            OSL_ENSURE(aErr,"No error in collection found! BAD!");
+            if(aErr)
             {
                 if(i==nLen-1)
                     aException = SQLException(aErr.GetDescription(),_xInterface,aErr.GetSQLState(),aErr.GetNumber(),Any());
@@ -240,10 +237,8 @@ void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >&
             }
         }
         pErrors->Clear();
-        pErrors->Release();
         throw aException;
     }
-    pErrors->Release();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
