@@ -34,6 +34,40 @@
       "parentUuid": "3b5f7979_2d1ae948",
       "revId": "eeedf3f46835be7653f76811baa6161aba9c4697",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8458e5c_857ef347",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-12-20T10:27:11Z",
+      "side": 1,
+      "message": "i think it shouldn\u0027t be in this list... see the comment above \"// this should contain things that are actually user-settable, via Tools-\u003eOptions\" and i doubt this should be in the options dialog.",
+      "revId": "eeedf3f46835be7653f76811baa6161aba9c4697",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "934f2357_364d712e",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1560,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-12-20T10:27:11Z",
+      "side": 1,
+      "message": "yes, good to set it here if it\u0027s not in the document :)",
+      "revId": "eeedf3f46835be7653f76811baa6161aba9c4697",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
