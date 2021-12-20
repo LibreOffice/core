@@ -351,7 +351,7 @@ namespace dbaui
 
         virtual OUString getPrivateTitle() const { return OUString(); }
 
-        css::uno::Reference< css::frame::XTitle > impl_getTitleHelper_throw();
+        css::uno::Reference< css::frame::XTitle > impl_getTitleHelper_throw(bool bCreateIfNecessary = true);
         virtual css::uno::Reference< css::frame::XModel > getPrivateModel() const
         {
             return css::uno::Reference< css::frame::XModel >();
