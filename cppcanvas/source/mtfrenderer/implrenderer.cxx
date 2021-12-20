@@ -1555,9 +1555,15 @@ namespace cppcanvas::internal
                         // TODO(F2): use native Canvas hatches here
                         GDIMetaFile aTmpMtf;
 
-                        rVDev.AddHatchActions( static_cast<MetaHatchAction*>(pCurrAct)->GetPolyPolygon(),
-                                               static_cast<MetaHatchAction*>(pCurrAct)->GetHatch(),
-                                               aTmpMtf );
+                        MetaHatchAction* pHatchAction = static_cast<MetaHatchAction*>(pCurrAct);
+                        ::tools::Rectangle aBoundRect(pHatchAction->GetPolyPolygon().GetBoundRect());
+                        Hatch aHatch = pHatchAction->GetHatch();
+
+                        aHatch.AddHatchActions(pHatchAction->GetPolyPolygon(),
+                                rVDev.ImplDevicePixelToLogicWidth(1),
+                                rVDev.ImplDevicePixelToLogicWidth(std::max(rVDev.ImplLogicWidthToDevicePixel(aHatch.GetDistance()), ::tools::Long(3))),
+                                !rVDev.IsRefPoint() ? aBoundRect.TopLeft() : rVDev.GetRefPoint(), aTmpMtf);
+
                         createActions( aTmpMtf, rFactoryParms,
                                        bSubsettableActions );
                     }
