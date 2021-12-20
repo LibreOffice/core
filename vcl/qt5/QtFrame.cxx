@@ -469,7 +469,6 @@ void QtFrame::Show(bool bVisible, bool bNoActivate)
 
     // show
     SetDefaultSize();
-    SetDefaultPos();
 
     pSalInst->RunInMainThread([this, bNoActivate]() {
         QWidget* const pChild = asChild();
@@ -503,6 +502,14 @@ void QtFrame::SetMaxClientSize(tools::Long nWidth, tools::Long nHeight)
     }
 }
 
+int QtFrame::menuBarOffset() const
+{
+    QtMainWindow* pTopLevel = m_pParent->GetTopLevelWindow();
+    if (pTopLevel && pTopLevel->menuBar() && pTopLevel->menuBar()->isVisible())
+        return round(pTopLevel->menuBar()->geometry().height() * devicePixelRatioF());
+    return 0;
+}
+
 void QtFrame::SetDefaultPos()
 {
     if (!m_bDefaultPos)
@@ -515,6 +522,7 @@ void QtFrame::SetDefaultPos()
         QWidget* const pParentWin = m_pParent->asChild()->window();
         QWidget* const pChildWin = asChild()->window();
         QPoint aPos = (pParentWin->rect().center() - pChildWin->rect().center()) * fRatio;
+        aPos.ry() -= menuBarOffset();
         SetPosSize(aPos.x(), aPos.y(), 0, 0, SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y);
         assert(!m_bDefaultPos);
     }
@@ -603,7 +611,11 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
     }
 
     if (!(nFlags & (SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y)))
+    {
+        if (nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT))
+            SetDefaultPos();
         return;
+    }
 
     if (m_pParent)
     {
@@ -612,11 +624,7 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
             nX = aParentGeometry.nX + aParentGeometry.nWidth - nX - maGeometry.nWidth - 1;
         else
             nX += aParentGeometry.nX;
-        nY += aParentGeometry.nY;
-
-        QtMainWindow* pTopLevel = m_pParent->GetTopLevelWindow();
-        if (pTopLevel && pTopLevel->menuBar() && pTopLevel->menuBar()->isVisible())
-            nY += round(pTopLevel->menuBar()->geometry().height() * devicePixelRatioF());
+        nY += aParentGeometry.nY + menuBarOffset();
     }
 
     if (!(nFlags & SAL_FRAME_POSSIZE_X))
