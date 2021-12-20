@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1c2071d_cd9bbba2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-20T10:44:18Z",
+      "side": 1,
+      "message": "\u003e This should avoid crashes but it\u0027s kind of ugly.\n\nLets get this in anyway, in the hope that it gets the ASan+UBSan buildbot unstuck.\n\n\u003e Should the dialog perhaps switch to a different tab page?\n\nDo you mean that the UITest should be changed?  But even then, there would be a latent issue in the sw code here that should be fixed anyway?",
+      "revId": "d73f2e3132786a20794e3ac66f9b487fc737d514",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
