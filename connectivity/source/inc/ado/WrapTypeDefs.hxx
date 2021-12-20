@@ -29,13 +29,13 @@ namespace connectivity::ado
         class WpADOView;
         class WpADOUser;
 
-        typedef WpOLEAppendCollection<ADOTables,    _ADOTable,  WpADOTable>     WpADOTables;
-        typedef WpOLEAppendCollection<ADOKeys,      ADOKey,     WpADOKey>       WpADOKeys;
-        typedef WpOLEAppendCollection<ADOIndexes,   _ADOIndex,  WpADOIndex>     WpADOIndexes;
-        typedef WpOLEAppendCollection<ADOColumns,   _ADOColumn, WpADOColumn>    WpADOColumns;
-        typedef WpOLEAppendCollection<ADOGroups,    ADOGroup,   WpADOGroup>     WpADOGroups;
-        typedef WpOLEAppendCollection<ADOViews,     ADOView,    WpADOView>      WpADOViews;
-        typedef WpOLEAppendCollection<ADOUsers,     _ADOUser,   WpADOUser>      WpADOUsers;
+        typedef WpOLEAppendCollection<ADOTables,    WpADOTable>     WpADOTables;
+        typedef WpOLEAppendCollection<ADOKeys,      WpADOKey>       WpADOKeys;
+        typedef WpOLEAppendCollection<ADOIndexes,   WpADOIndex>     WpADOIndexes;
+        typedef WpOLEAppendCollection<ADOColumns,   WpADOColumn>    WpADOColumns;
+        typedef WpOLEAppendCollection<ADOGroups,    WpADOGroup>     WpADOGroups;
+        typedef WpOLEAppendCollection<ADOViews,     WpADOView>      WpADOViews;
+        typedef WpOLEAppendCollection<ADOUsers,     WpADOUser>      WpADOUsers;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

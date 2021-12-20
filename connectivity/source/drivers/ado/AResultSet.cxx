@@ -44,7 +44,7 @@ using namespace ::comphelper;
 
 #define CHECK_RETURN(x)                                                 \
     if(!SUCCEEDED(x))                                                               \
-        ADOS::ThrowException(*m_pStmt->m_pConnection->getConnection(),*this);
+        ADOS::ThrowException(m_pStmt->m_pConnection->getConnection(),*this);
 
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
@@ -596,7 +596,7 @@ sal_Bool SAL_CALL OResultSet::next(  )
             ++m_nRowPos;
         }
         else
-            ADOS::ThrowException(*m_pStmt->m_pConnection->getConnection(),*this);
+            ADOS::ThrowException(m_pStmt->m_pConnection->getConnection(),*this);
     }
 
     return bRet;
@@ -882,11 +882,9 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  )
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    ADOProperties* pProps = nullptr;
-    m_pRecordSet->get_Properties(&pProps);
     WpADOProperties aProps;
-    aProps.setWithOutAddRef(pProps);
-    ADOS::ThrowException(*static_cast<OConnection*>(m_pStmt->getConnection().get())->getConnection(),*this);
+    m_pRecordSet->get_Properties(&aProps);
+    ADOS::ThrowException(static_cast<OConnection*>(m_pStmt->getConnection().get())->getConnection(),*this);
     OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
 
     WpADOProperty aProp(aProps.GetItem(OUString("Bookmarks Ordered")));
@@ -894,7 +892,7 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  )
     if(aProp.IsValid())
         aVar = aProp.GetValue();
     else
-        ADOS::ThrowException(*static_cast<OConnection*>(m_pStmt->getConnection().get())->getConnection(),*this);
+        ADOS::ThrowException(static_cast<OConnection*>(m_pStmt->getConnection().get())->getConnection(),*this);
 
     bool bValue(false);
     if(!aVar.isNull() && !aVar.isEmpty())

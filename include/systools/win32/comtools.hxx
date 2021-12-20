@@ -146,6 +146,25 @@ namespace sal::systools
             return *this;
         }
 
+        HRESULT TryCoGetClassObject(REFCLSID clsid, DWORD nCtx = CLSCTX_ALL)
+        {
+            T* i;
+            HRESULT hr = ::CoGetClassObject(clsid, nCtx, nullptr, __uuidof(T),
+                                            reinterpret_cast<void**>(&i));
+            if (SUCCEEDED(hr))
+                release(std::exchange(com_ptr_, i));
+            return hr;
+        }
+
+        COMReference<T>& CoGetClassObject(REFCLSID clsid, DWORD nCtx = CLSCTX_ALL)
+        {
+            HRESULT hr = TryCoGetClassObject(clsid, nCtx);
+            if (FAILED(hr))
+                throw ComError("CoGetClassObject failed!", hr);
+
+            return *this;
+        }
+
         T* operator->() const { return com_ptr_; }
 
         T& operator*() const { return *com_ptr_; }

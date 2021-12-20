@@ -31,7 +31,7 @@ namespace connectivity::ado
         class WpADOTable : public WpOLEBase<_ADOTable>
         {
         public:
-            WpADOTable(_ADOTable* pInt=nullptr)    :   WpOLEBase<_ADOTable>(pInt){}
+            WpADOTable() = default;
             WpADOTable(const WpADOTable& rhs) : WpOLEBase<_ADOTable>(rhs) {}
 
             WpADOTable& operator=(const WpADOTable& rhs)
@@ -51,7 +51,7 @@ namespace connectivity::ado
         };
 
 
-        typedef WpOLEAppendCollection<ADOTables,    _ADOTable,  WpADOTable>     WpADOTables;
+        typedef WpOLEAppendCollection<ADOTables, WpADOTable>     WpADOTables;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
