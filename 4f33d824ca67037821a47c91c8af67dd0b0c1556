@@ -16,6 +16,24 @@
       "message": "\u003e Patch Set 2: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/103402/ : FAILURE\n\u003e \n\u003e the junit test JunitTest_forms_unoapi_4 failed ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/103606/ )\n\nThis obviously total utter nonsense, since this change isn\u0027t even affecting anything in LO-jenkins-builds as it doesn\u0027t do system-orcus (and if it did the only cause this change can cause is that a version would be too low)",
       "revId": "4f33d824ca67037821a47c91c8af67dd0b0c1556",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cf3570c_d4b33afb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-12-20T12:28:17Z",
+      "side": 1,
+      "message": "sorry for my tone, but those false -1s annoy me...\n\ns/This obviously total utter nonsense/This is a false negative, obviously/",
+      "parentUuid": "7e385c17_9f55a217",
+      "revId": "4f33d824ca67037821a47c91c8af67dd0b0c1556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
