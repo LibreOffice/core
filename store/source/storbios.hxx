@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 #include <rtl/ref.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 #include <store/types.h>
 #include "object.hxx"
@@ -43,7 +43,7 @@ public:
 
     /** Conversion into Mutex&
      */
-    inline operator osl::Mutex& (void) const;
+    inline std::mutex& GetMutex() const;
 
     /** Initialization.
      *  @param  pLockBytes [in]
@@ -117,7 +117,7 @@ private:
     /** Representation.
      */
     rtl::Reference<ILockBytes>    m_xLockBytes;
-    osl::Mutex                    m_aMutex;
+    std::mutex                    m_aMutex;
 
     std::unique_ptr<SuperBlockPage> m_pSuper;
 
@@ -170,9 +170,9 @@ private:
     OStorePageBIOS& operator= (const OStorePageBIOS&) = delete;
 };
 
-inline OStorePageBIOS::operator osl::Mutex& (void) const
+inline std::mutex& OStorePageBIOS::GetMutex() const
 {
-    return const_cast<osl::Mutex&>(m_aMutex);
+    return const_cast<std::mutex&>(m_aMutex);
 }
 inline bool OStorePageBIOS::isWriteable() const
 {
