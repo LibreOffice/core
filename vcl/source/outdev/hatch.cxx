@@ -88,7 +88,10 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         Push( vcl::PushFlags::LINECOLOR );
         SetLineColor( aHatch.GetColor() );
         InitLineColor();
-        DrawHatch( aPolyPoly, aHatch, false );
+
+        tools::Rectangle aRect(rPolyPoly.GetBoundRect());
+        DrawHatch(aPolyPoly, aHatch, !IsRefPoint() ? aRect.TopLeft() : GetRefPoint(), false);
+
         Pop();
         EnableMapMode( bOldMap );
         mpMetaFile = pOldMetaFile;
@@ -112,13 +115,16 @@ void OutputDevice::AddHatchActions( const tools::PolyPolygon& rPolyPoly, const H
         mpMetaFile = &rMtf;
         mpMetaFile->AddAction( new MetaPushAction( vcl::PushFlags::ALL ) );
         mpMetaFile->AddAction( new MetaLineColorAction( rHatch.GetColor(), true ) );
-        DrawHatch( aPolyPoly, rHatch, true );
+
+        tools::Rectangle aRect(rPolyPoly.GetBoundRect());
+        DrawHatch( aPolyPoly, rHatch, !IsRefPoint() ? aRect.TopLeft() : GetRefPoint(), true );
+
         mpMetaFile->AddAction( new MetaPopAction() );
         mpMetaFile = pOldMtf;
     }
 }
 
-void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf )
+void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, Point const& rRef, bool bMtf )
 {
     assert(!is_double_buffered_window());
 
@@ -142,7 +148,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         tools::PolyPolygon aPolyPoly;
 
         rPolyPoly.AdaptiveSubdivide(aPolyPoly);
-        DrawHatch(aPolyPoly, rHatch, bMtf);
+        DrawHatch(aPolyPoly, rHatch, rRef, bMtf);
     }
     else
     {
@@ -155,7 +161,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
 
         // Single hatch
         aRect.AdjustLeft( -nLogPixelWidth ); aRect.AdjustTop( -nLogPixelWidth ); aRect.AdjustRight(nLogPixelWidth ); aRect.AdjustBottom(nLogPixelWidth );
-        CalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
+        Hatch::CalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1, rRef);
         do
         {
             DrawHatchLines( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
@@ -167,7 +173,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         if( ( rHatch.GetStyle() == HatchStyle::Double ) || ( rHatch.GetStyle() == HatchStyle::Triple ) )
         {
             // Double hatch
-            CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900_deg10, aPt1, aPt2, aInc, aEndPt1 );
+            Hatch::CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900_deg10, aPt1, aPt2, aInc, aEndPt1, rRef);
             do
             {
                 DrawHatchLines( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
@@ -179,7 +185,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
             if( rHatch.GetStyle() == HatchStyle::Triple )
             {
                 // Triple hatch
-                CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450_deg10, aPt1, aPt2, aInc, aEndPt1 );
+                Hatch::CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450_deg10, aPt1, aPt2, aInc, aEndPt1, rRef);
                 do
                 {
                     DrawHatchLines( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
@@ -189,116 +195,6 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
                 while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
             }
         }
-    }
-}
-
-void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long nDist, Degree10 nAngle10,
-                                    Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 )
-{
-    Point   aRef;
-    Degree10    nAngle = nAngle10 % 1800_deg10;
-    tools::Long    nOffset = 0;
-
-    if( nAngle > 900_deg10 )
-        nAngle -= 1800_deg10;
-
-    aRef = ( !IsRefPoint() ? rRect.TopLeft() : GetRefPoint() );
-
-    if( 0_deg10 == nAngle )
-    {
-        rInc = Size( 0, nDist );
-        rPt1 = rRect.TopLeft();
-        rPt2 = rRect.TopRight();
-        rEndPt1 = rRect.BottomLeft();
-
-        if( aRef.Y() <= rRect.Top() )
-            nOffset = ( ( rRect.Top() - aRef.Y() ) % nDist );
-        else
-            nOffset = ( nDist - ( ( aRef.Y() - rRect.Top() ) % nDist ) );
-
-        rPt1.AdjustY( -nOffset );
-        rPt2.AdjustY( -nOffset );
-    }
-    else if( 900_deg10 == nAngle )
-    {
-        rInc = Size( nDist, 0 );
-        rPt1 = rRect.TopLeft();
-        rPt2 = rRect.BottomLeft();
-        rEndPt1 = rRect.TopRight();
-
-        if( aRef.X() <= rRect.Left() )
-            nOffset = ( rRect.Left() - aRef.X() ) % nDist;
-        else
-            nOffset = nDist - ( ( aRef.X() - rRect.Left() ) % nDist );
-
-        rPt1.AdjustX( -nOffset );
-        rPt2.AdjustX( -nOffset );
-    }
-    else if( nAngle >= Degree10(-450) && nAngle <= 450_deg10 )
-    {
-        const double    fAngle = std::abs( toRadians(nAngle) );
-        const double    fTan = tan( fAngle );
-        const tools::Long      nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
-        tools::Long            nPY;
-
-        nDist = FRound( nDist / cos( fAngle ) );
-        rInc = Size( 0, nDist );
-
-        if( nAngle > 0_deg10 )
-        {
-            rPt1 = rRect.TopLeft();
-            rPt2 = Point( rRect.Right(), rRect.Top() - nYOff );
-            rEndPt1 = Point( rRect.Left(), rRect.Bottom() + nYOff );
-            nPY = FRound( aRef.Y() - ( ( rPt1.X() - aRef.X() ) * fTan ) );
-        }
-        else
-        {
-            rPt1 = rRect.TopRight();
-            rPt2 = Point( rRect.Left(), rRect.Top() - nYOff );
-            rEndPt1 = Point( rRect.Right(), rRect.Bottom() + nYOff );
-            nPY = FRound( aRef.Y() + ( ( rPt1.X() - aRef.X() ) * fTan ) );
-        }
-
-        if( nPY <= rPt1.Y() )
-            nOffset = ( rPt1.Y() - nPY ) % nDist;
-        else
-            nOffset = nDist - ( ( nPY - rPt1.Y() ) % nDist );
-
-        rPt1.AdjustY( -nOffset );
-        rPt2.AdjustY( -nOffset );
-    }
-    else
-    {
-        const double fAngle = std::abs( toRadians(nAngle) );
-        const double fTan = tan( fAngle );
-        const tools::Long   nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
-        tools::Long         nPX;
-
-        nDist = FRound( nDist / sin( fAngle ) );
-        rInc = Size( nDist, 0 );
-
-        if( nAngle > 0_deg10 )
-        {
-            rPt1 = rRect.TopLeft();
-            rPt2 = Point( rRect.Left() - nXOff, rRect.Bottom() );
-            rEndPt1 = Point( rRect.Right() + nXOff, rRect.Top() );
-            nPX = FRound( aRef.X() - ( ( rPt1.Y() - aRef.Y() ) / fTan ) );
-        }
-        else
-        {
-            rPt1 = rRect.BottomLeft();
-            rPt2 = Point( rRect.Left() - nXOff, rRect.Top() );
-            rEndPt1 = Point( rRect.Right() + nXOff, rRect.Bottom() );
-            nPX = FRound( aRef.X() + ( ( rPt1.Y() - aRef.Y() ) / fTan ) );
-        }
-
-        if( nPX <= rPt1.X() )
-            nOffset = ( rPt1.X() - nPX ) % nDist;
-        else
-            nOffset = nDist - ( ( nPX - rPt1.X() ) % nDist );
-
-        rPt1.AdjustX( -nOffset );
-        rPt2.AdjustX( -nOffset );
     }
 }
 
