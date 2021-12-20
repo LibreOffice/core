@@ -16,6 +16,24 @@
       "message": "I could give it a try and confirm it works!\n\nRemark: I noticed these console logs:\nwarn:dbaccess:198676:198676:dbaccess/source/core/dataaccess/ModelImpl.cxx:862: DBG_UNHANDLED_EXCEPTION in commitStorageIfWriteable_ignoreErrors exception: com.sun.star.uno.DeploymentException message: component context fails to supply service com.sun.star.io.TempFile of type com.sun.star.io.XTempFile /home/julien/lo/libreoffice/workdir/UnoApiHeadersTarget/udkapi/normal/com/sun/star/io/TempFile.hpp:46\nwarn:dbaccess:198676:198676:dbaccess/source/core/dataaccess/ModelImpl.cxx:923:  com.sun.star.uno.DeploymentException message: component context fails to supply service com.sun.star.security.DocumentDigitalSignatures of type com.sun.star.security.XDocumentDigitalSignatures /home/julien/lo/libreoffice/workdir/UnoApiHeadersTarget/offapi/normal/com/sun/star/security/DocumentDigitalSignatures.hpp:80\nwarn:dbaccess:198676:198676:dbaccess/source/core/dataaccess/ModelImpl.cxx:749: ODatabaseModelImpl::commitRootStorage: could not commit the storage!\nwarn:legacy.osl:198676:198676:dbaccess/source/core/dataaccess/databasecontext.cxx:495: ODatabaseContext::storeTransientProperties: a non-empty data source which I do not know?!\nbut must be unrelated since it\u0027s ok now\n\nAnyway, thank you for the quick fix!",
       "revId": "0b0434c17e233d302da6139d840872806b68658a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e7fc935_cfc9da82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-20T19:37:21Z",
+      "side": 1,
+      "message": "its entirely possible there are other bugs here but this change should be safe and backportable.",
+      "parentUuid": "a5f3fa7f_933a9dab",
+      "revId": "0b0434c17e233d302da6139d840872806b68658a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
