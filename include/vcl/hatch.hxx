@@ -67,6 +67,9 @@ public:
     void            SetAngle( Degree10 nAngle10 );
     Degree10        GetAngle() const { return mpImplHatch->mnAngle; }
 
+    static void CalcHatchValues(tools::Rectangle const& rRect, tools::Long nDist, Degree10 nAngle10,
+                    Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1, Point const& rRef);
+
     friend SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch );
     friend SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch );
 
