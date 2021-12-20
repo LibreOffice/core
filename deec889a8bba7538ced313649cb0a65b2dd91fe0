@@ -16,6 +16,24 @@
       "message": "In comparison to the CoCreateInstance class function, returning the HRESULT instead of COMReference\u003cT\u003e\u0026 looks very strange. Are you sure you want the old com_ptr_ value to remain in the case of failure?\n\nDropping the clear() definitely changes the error case. I guess that shouldn\u0027t matter normally, but who knows...",
       "revId": "deec889a8bba7538ced313649cb0a65b2dd91fe0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afaf0de7_7024b31b",
+        "filename": "include/systools/win32/comtools.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-20T20:22:50Z",
+      "side": 1,
+      "message": "Thanks for the comments!\n\n\u003e In comparison to the CoCreateInstance class function, returning the HRESULT instead of COMReference\u003cT\u003e\u0026 looks very strange.\n\nThis is as intended. In throwing case, I am sure that expression like\n\n  COMReference\u003cIFoo\u003e().CoCreateInstance(...)-\u003edoSomething()\n\nworks as intended, or throws. It never tries to deref nullptr.\nIn case of non-throwing variant, returning self is useless, because it will not be used immediately; it will be definitely checked for validity, and while returning self could in theory be used for that - like\n\n  if (auto i \u003d COMReference\u003cIFoo\u003e().CoCreateInstance(...))\n     ...\n\nusing its operator bool, it is more informative to return HRESULT to know better what\u0027s the problem, without loosing anything:\n\n  if (COMReference\u003cIFoo\u003e i; SUCCEEDED(i.CoCreateInstance(...)))\n     ...\n\nand allows to have better diagnostics.\n\n\u003e Are you sure you want the old com_ptr_ value to remain in the case of failure?\n\nYes. There are specific code replaced in https://gerrit.libreoffice.org/c/core/+/127189, that was written that way, and I want it that way. The old value will not leak anyway...",
+      "parentUuid": "ba2057d8_11cd4646",
+      "revId": "deec889a8bba7538ced313649cb0a65b2dd91fe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
