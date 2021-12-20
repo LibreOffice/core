@@ -20,6 +20,8 @@
 
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <systools/win32/comtools.hxx>
+
 #include <map>
 #include <vector>
 
@@ -31,101 +33,59 @@ namespace rtl
 }
 namespace connectivity::ado
 {
-        class WpBase
-        {
-        protected:
-            IDispatch* pIUnknown;
-
-            void setIDispatch(IDispatch* _pIUnknown);
-        public:
-            WpBase();
-            WpBase(IDispatch* pInt);
-            //inline
-            WpBase& operator=(const WpBase& rhs);
-            WpBase& operator=(IDispatch* rhs);
-            WpBase(const WpBase& aWrapper);
-            virtual ~WpBase();
-            void clear();
-
-
-            bool IsValid() const;
-            operator IDispatch*();
-
-        };
-
         // Template class WpOLEBase<class T>
         // ==================================
         //
         // Objects of this class contain a pointer to an interface of the type T.
-        // The ctors and operator= make sure, that AddRef() and Release() are being
-        // called adhering to COM conventions.
-        // An object can also hold no pointer (null pointer), calling IsValid() then
-        // returns false.
-        //
-        // In order to do efficient pass-by-value, this class (as all derived classes)
-        // is a thin wrapper class, avoiding virtual methods and inlining.
 
-        template<class T> class WpOLEBase : public WpBase
+        template<class T> class WpOLEBase
         {
         protected:
-            T* pInterface;
+            sal::systools::COMReference<T> pInterface;
 
         public:
-            WpOLEBase(T* pInt = nullptr) : WpBase(pInt),pInterface(pInt){}
+            WpOLEBase(T* pInt = nullptr) : pInterface(pInt){}
 
+            WpOLEBase(const WpOLEBase<T>& aWrapper)
+                : pInterface( aWrapper.pInterface )
+            {
+            }
 
             //inline
             WpOLEBase<T>& operator=(const WpOLEBase<T>& rhs)
             {
-                WpBase::operator=(rhs);
                 pInterface = rhs.pInterface;
                 return *this;
             };
 
-            WpOLEBase<T>& operator=(T* rhs)
-            {
-                WpBase::operator=(rhs);
-                pInterface = rhs.pInterface;
-                return *this;
-            }
-
-            WpOLEBase(const WpOLEBase<T>& aWrapper)
-                : WpBase( aWrapper )
-                , pInterface( aWrapper.pInterface )
-            {
-            }
-
-            operator T*() const { return pInterface; }
-            void setWithOutAddRef(T* _pInterface)
-            {
-                pInterface = _pInterface;
-                WpBase::setIDispatch(_pInterface);
-            }
+            operator T*() const { return pInterface.get(); }
+            T** operator&() { return &pInterface; }
+            bool IsValid() const { return pInterface.is(); }
+            void set(T* p) { pInterface = p; }
+            void clear() { pInterface.clear(); }
         };
 
 
-        // Template class WpOLECollection<class Ts, class T, class WrapT>
+        // Template class WpOLECollection<class Ts, class WrapT>
         // ===============================================================
         //
         // This class (derived from WpOLEBase<Ts>), abstracts away the properties
         // common to DAO collections:
         //
         // They are accessed via an interface Ts (e.g. DAOFields) and can return
-        // Items of the Type T (actually: with the interface T, e.g. DAOField)
-        // via get_Item (here GetItem).
+        // Items of the type wrapped by WrapT (actually: with the interface, e.g.
+        // DAOField) via get_Item (here GetItem).
         //
-        // This wrapper class does not expose an interface T, however,
-        // it exposes an object of the class WrapT. This must allow a construction
-        // by T, preferably it is derived from WpOLEBase<T>.
+        // This wrapper class exposes an object of the class WrapT.
 
-        template<class Ts, class T, class WrapT> class WpOLECollection : public WpOLEBase<Ts>
+        template<class Ts, class WrapT> class WpOLECollection : public WpOLEBase<Ts>
         {
         public:
             using WpOLEBase<Ts>::pInterface;
             using WpOLEBase<Ts>::IsValid;
             // Ctors, operator=
             // They only call the superclass
-            WpOLECollection(Ts* pInt=nullptr):WpOLEBase<Ts>(pInt){}
+            WpOLECollection() = default;
             WpOLECollection(const WpOLECollection& rhs) : WpOLEBase<Ts>(rhs) {}
             WpOLECollection& operator=(const WpOLECollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
@@ -142,35 +102,28 @@ namespace connectivity::ado
             WrapT GetItem(sal_Int32 index) const
             {
                 OSL_ENSURE(index >= 0 && index<GetItemCount(),"Wrong index for field!");
-                T* pT = NULL;
-                WrapT aRet(NULL);
-                if(SUCCEEDED(pInterface->get_Item(OLEVariant(index), &pT)))
-                    aRet.setWithOutAddRef(pT);
+                WrapT aRet;
+                pInterface->get_Item(OLEVariant(index), &aRet);
                 return aRet;
             }
 
             WrapT GetItem(const OLEVariant& index) const
             {
-                T* pT = NULL;
-                WrapT aRet(NULL);
-                if(SUCCEEDED(pInterface->get_Item(index, &pT)))
-                    aRet.setWithOutAddRef(pT);
+                WrapT aRet;
+                pInterface->get_Item(index, &aRet);
                 return aRet;
             }
 
             WrapT GetItem(const OUString& sStr) const
             {
-                WrapT aRet(NULL);
-                T* pT = NULL;
-                if (FAILED(pInterface->get_Item(OLEVariant(sStr), &pT)))
+                WrapT aRet;
+                if (FAILED(pInterface->get_Item(OLEVariant(sStr), &aRet)))
                 {
 #if OSL_DEBUG_LEVEL > 0
                     OString sTemp("Unknown Item: " + OString(sStr.getStr(),sStr.getLength(),osl_getThreadTextEncoding()));
                     OSL_FAIL(sTemp.getStr());
 #endif
                 }
-                else
-                    aRet.setWithOutAddRef(pT);
                 return aRet;
             }
             void fillElementNames(::std::vector< OUString>& _rVector)
@@ -190,23 +143,23 @@ namespace connectivity::ado
             }
         };
 
-        template<class Ts, class T, class WrapT> class WpOLEAppendCollection:
-                public WpOLECollection<Ts,T,WrapT>
+        template<class Ts, class WrapT> class WpOLEAppendCollection:
+                public WpOLECollection<Ts,WrapT>
         {
 
         public:
             // Ctors, operator=
             // They only call the superclass
             using WpOLEBase<Ts>::pInterface;
-            WpOLEAppendCollection(Ts* pInt=nullptr):WpOLECollection<Ts,T,WrapT>(pInt){}
-            WpOLEAppendCollection(const WpOLEAppendCollection& rhs) : WpOLECollection<Ts, T, WrapT>(rhs) {}
+            WpOLEAppendCollection() = default;
+            WpOLEAppendCollection(const WpOLEAppendCollection& rhs) : WpOLECollection<Ts, WrapT>(rhs) {}
             WpOLEAppendCollection& operator=(const WpOLEAppendCollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
 
 
             bool Append(const WrapT& aWrapT)
             {
-                return SUCCEEDED(pInterface->Append(OLEVariant(static_cast<T*>(aWrapT))));
+                return SUCCEEDED(pInterface->Append(OLEVariant(aWrapT)));
             };
 
             bool Delete(const OUString& sName)

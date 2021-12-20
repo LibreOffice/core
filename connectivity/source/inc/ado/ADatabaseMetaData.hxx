@@ -40,7 +40,7 @@ namespace connectivity::ado
             };
 
             std::map<sal_uInt32,LiteralInfo>  m_aLiteralInfo;
-            WpADOConnection*                    m_pADOConnection;
+            WpADOConnection&                    m_rADOConnection;
             OConnection*                        m_pConnection;
 
             void fillLiterals();

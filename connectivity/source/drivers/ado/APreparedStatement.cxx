@@ -38,7 +38,7 @@
 
 #define CHECK_RETURN(x)                                                 \
     if(!x)                                                              \
-        ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+        ADOS::ThrowException(m_pConnection->getConnection(),*this);
 
 #ifdef max
 #   undef max
@@ -151,7 +151,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  )
     try {
         ADORecordset* pSet=nullptr;
         CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,adCmdUnknown,&pSet))
-        m_RecordSet = WpADORecordset(pSet);
+        m_RecordSet.set(pSet);
     }
     catch (SQLWarning&)
     {
@@ -171,11 +171,11 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  )
     CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,adCmdUnknown,&pSet))
     if ( VT_ERROR == m_RecordsAffected.getType() )
     {
-        ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+        ADOS::ThrowException(m_pConnection->getConnection(),*this);
         // to be sure that we get the error really thrown
         throw SQLException();
     }
-    m_RecordSet = WpADORecordset(pSet);
+    m_RecordSet.set(pSet);
     return m_RecordsAffected.getInt32();
 }
 
@@ -199,10 +199,9 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
     }
     else
     {
-        ADOParameter* pParam = nullptr;
-        m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
-        WpADOParameter aParam(pParam);
-        if(pParam)
+        WpADOParameter aParam;
+        m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&aParam);
+        if(aParam)
         {
             DataTypeEnum eType = aParam.GetADOType();
             if ( _eType != eType && _eType != adDBTimeStamp )
@@ -220,7 +219,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
                 CHECK_RETURN(aParam.PutValue(Val));
         }
     }
-    ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+    ADOS::ThrowException(m_pConnection->getConnection(),*this);
 }
 
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x )
@@ -412,10 +411,9 @@ void SAL_CALL OPreparedStatement::clearParameters(  )
         aVal.setEmpty();
         for(sal_Int32 i=0;i<nCount;++i)
         {
-            ADOParameter* pParam = nullptr;
-            m_pParameters->get_Item(OLEVariant(i),&pParam);
-            WpADOParameter aParam(pParam);
-            if(pParam)
+            WpADOParameter aParam;
+            m_pParameters->get_Item(OLEVariant(i),&aParam);
+            if(aParam)
             {
                 CHECK_RETURN(aParam.PutValue(aVal));
             }

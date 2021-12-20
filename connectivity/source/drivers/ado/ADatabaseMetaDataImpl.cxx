@@ -48,24 +48,22 @@ using namespace ::com::sun::star::uno;
 
 void ODatabaseMetaData::fillLiterals()
 {
-    ADORecordset *pRecordset = nullptr;
+    WpADORecordset aRecordset;
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
-    m_pADOConnection->OpenSchema(adSchemaDBInfoLiterals,vtEmpty,vtEmpty,&pRecordset);
+    m_rADOConnection.OpenSchema(adSchemaDBInfoLiterals,vtEmpty,vtEmpty,&aRecordset);
 
-    ADOS::ThrowException(*m_pADOConnection,*this);
+    ADOS::ThrowException(m_rADOConnection,*this);
 
-    OSL_ENSURE(pRecordset,"fillLiterals: no resultset!");
-    if ( pRecordset )
+    OSL_ENSURE(aRecordset,"fillLiterals: no resultset!");
+    if ( aRecordset )
     {
-        WpADORecordset aRecordset(pRecordset);
-
         aRecordset.MoveFirst();
         OLEVariant  aValue;
         LiteralInfo aInfo;
         while(!aRecordset.IsAtEOF())
         {
-            WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
+            WpOLEAppendCollection<ADOFields, WpADOField>  aFields(aRecordset.GetFields());
             WpADOField aField(aFields.GetItem(1));
             aInfo.pwszLiteralValue = aField.get_Value().getString();
             aField = aFields.GetItem(5);
@@ -387,19 +385,7 @@ RightsEnum OAdoGroup::Map2Right(sal_Int32 _eNum)
 
 void WpADOIndex::Create()
 {
-    _ADOIndex* pIndex = nullptr;
-    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOINDEX_25,
-                          nullptr,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOINDEX_25,
-                          reinterpret_cast<void**>(&pIndex) );
-
-
-    if( !FAILED( hr ) )
-    {
-        operator=( pIndex );
-        pIndex->Release();
-    }
+    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOINDEX_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 void OAdoIndex::fillPropertyValues()
@@ -415,19 +401,7 @@ void OAdoIndex::fillPropertyValues()
 
 void WpADOKey::Create()
 {
-    _ADOKey* pKey = nullptr;
-    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOKEY_25,
-                          nullptr,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOKEY_25,
-                          reinterpret_cast<void**>(&pKey) );
-
-
-    if( !FAILED( hr ) )
-    {
-        operator=( pKey );
-        pKey->Release();
-    }
+    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOKEY_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 void OAdoKey::fillPropertyValues()
@@ -524,19 +498,7 @@ KeyTypeEnum OAdoKey::Map2KeyRule(sal_Int32 _eNum)
 
 void WpADOTable::Create()
 {
-    _ADOTable* pTable = nullptr;
-    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOTABLE_25,
-                          nullptr,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOTABLE_25,
-                          reinterpret_cast<void**>(&pTable) );
-
-
-    if( !FAILED( hr ) )
-    {
-        operator=( pTable );
-        pTable->Release();
-    }
+    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOTABLE_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 OUString WpADOCatalog::GetObjectOwner(std::u16string_view _rName, ObjectTypeEnum _eNum)
@@ -571,19 +533,7 @@ void OAdoTable::fillPropertyValues()
 
 void WpADOUser::Create()
 {
-    _ADOUser* pUser = nullptr;
-    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOUSER_25,
-                          nullptr,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOUSER_25,
-                          reinterpret_cast<void**>(&pUser) );
-
-
-    if( !FAILED( hr ) )
-    {
-        operator=( pUser );
-        pUser->Release();
-    }
+    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOUSER_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 
