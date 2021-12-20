@@ -33,6 +33,24 @@
       "message": "But the getrtti it calls doesn\u0027t use thé mute, no ?",
       "revId": "cde0e34328306c7b30dcfddd0667d8747d52a9ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68039b8d_781e7d80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-12-20T07:03:30Z",
+      "side": 1,
+      "message": "Sorry it was from my Phone, the recursive call is inside the class and doesn\u0027t lock the mutex recursivly so I don\u0027t see any double lock",
+      "parentUuid": "28bfda92_fe7c9797",
+      "revId": "cde0e34328306c7b30dcfddd0667d8747d52a9ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
