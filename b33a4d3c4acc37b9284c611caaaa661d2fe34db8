@@ -22,6 +22,30 @@
       },
       "revId": "b33a4d3c4acc37b9284c611caaaa661d2fe34db8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c0b3393_ff1b25b4",
+        "filename": "svx/source/sdr/contact/viewobjectcontact.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-20T07:38:42Z",
+      "side": 1,
+      "message": "thanks, fixed in https://gerrit.libreoffice.org/c/core/+/127134",
+      "parentUuid": "a16e5ea5_e9d2aa9c",
+      "range": {
+        "startLine": 350,
+        "startChar": 99,
+        "endLine": 350,
+        "endChar": 100
+      },
+      "revId": "b33a4d3c4acc37b9284c611caaaa661d2fe34db8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
