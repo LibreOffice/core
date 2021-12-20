@@ -22,7 +22,7 @@
 
 #include <memory>
 #include <svx/svxdllapi.h>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <vcl/primitive2d/Primitive2DContainer.hxx>
 
 namespace vcl { class Region; }
 

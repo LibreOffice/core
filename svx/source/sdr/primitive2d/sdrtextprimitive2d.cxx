@@ -24,7 +24,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>

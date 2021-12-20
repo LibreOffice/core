@@ -306,12 +306,12 @@
 #include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <drawinglayer/primitive2d/CommonTypes.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
+#include <vcl/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
-#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <vcl/primitive2d/Primitive2DContainer.hxx>
+#include <vcl/primitive2d/Primitive2DVisitor.hxx>
+#include <vcl/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>

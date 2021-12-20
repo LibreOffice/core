@@ -29,7 +29,7 @@
 #include <svl/style.hxx>
 #include <svx/svdtext.hxx>
 #include <svx/svxdllapi.h>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <vcl/primitive2d/Primitive2DContainer.hxx>
 #include <memory>
 #include <vector>
 

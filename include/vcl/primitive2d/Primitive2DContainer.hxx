@@ -19,10 +19,10 @@
 
 #pragma once
 
-#include <drawinglayer/drawinglayerdllapi.h>
+#include <vcl/dllapi.h>
 
-#include <drawinglayer/primitive2d/CommonTypes.hxx>
-#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
+#include <vcl/primitive2d/CommonTypes.hxx>
+#include <vcl/primitive2d/Primitive2DVisitor.hxx>
 
 #include <basegfx/range/b2drange.hxx>
 #include <deque>
@@ -34,7 +34,7 @@ class ViewInformation2D;
 
 namespace drawinglayer::primitive2d
 {
-class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer final
+class SAL_WARN_UNUSED VCL_DLLPUBLIC Primitive2DContainer final
     : public std::deque<Primitive2DReference>,
       public Primitive2DDecompositionVisitor
 {

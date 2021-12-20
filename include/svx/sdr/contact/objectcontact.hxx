@@ -23,7 +23,7 @@
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/sdr/animation/animationstate.hxx>
 #include <svx/svxdllapi.h>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 
 class SdrLayerIDSet;
 namespace tools { class Rectangle; }

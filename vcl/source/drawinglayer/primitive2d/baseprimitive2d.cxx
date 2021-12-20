@@ -19,9 +19,9 @@
 
 #include <sal/config.h>
 
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/primitive2d/Tools.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/primitive2d/baseprimitive2d.hxx>
+#include <vcl/primitive2d/Tools.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>

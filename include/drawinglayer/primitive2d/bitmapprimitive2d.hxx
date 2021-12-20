@@ -21,7 +21,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <vcl/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 namespace com::sun::star::awt

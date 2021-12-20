@@ -21,7 +21,7 @@
 
 #include "ndnotxt.hxx"
 #include <svtools/embedhlp.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <vcl/primitive2d/Primitive2DContainer.hxx>
 #include <rtl/ref.hxx>
 
 class SwGrfFormatColl;

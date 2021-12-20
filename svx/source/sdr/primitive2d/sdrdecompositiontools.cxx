@@ -18,7 +18,7 @@
  */
 
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <vcl/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
@@ -42,7 +42,7 @@
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>

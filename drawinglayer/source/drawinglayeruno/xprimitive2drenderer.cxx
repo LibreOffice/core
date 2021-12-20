@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>

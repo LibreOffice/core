@@ -20,8 +20,8 @@
 #include <sal/config.h>
 
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/Tools.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/primitive2d/Tools.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <comphelper/sequence.hxx>
 

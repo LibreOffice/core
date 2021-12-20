@@ -30,7 +30,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <comphelper/base64.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 

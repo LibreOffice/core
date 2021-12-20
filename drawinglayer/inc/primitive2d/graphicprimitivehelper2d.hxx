@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <vcl/primitive2d/Primitive2DContainer.hxx>
 #include <vcl/GraphicAttributes.hxx>
 
 class Graphic;

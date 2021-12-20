@@ -23,7 +23,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/awt/PosSize.hpp>

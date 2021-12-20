@@ -27,7 +27,7 @@
 #include <svx/pagectrl.hxx>
 #include <algorithm>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>

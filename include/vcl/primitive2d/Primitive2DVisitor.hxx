@@ -19,28 +19,22 @@
 
 #pragma once
 
-#include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/primitive2d/CommonTypes.hxx>
-#include <basegfx/range/b2drange.hxx>
-
-namespace drawinglayer::geometry
-{
-class ViewInformation2D;
-}
+#include <vcl/dllapi.h>
+#include <vcl/primitive2d/CommonTypes.hxx>
 
 namespace drawinglayer::primitive2d
 {
-/// get B2DRange from a given Primitive2DReference
-basegfx::B2DRange DRAWINGLAYER_DLLPUBLIC getB2DRangeFromPrimitive2DReference(
-    const Primitive2DReference& rCandidate, const geometry::ViewInformation2D& aViewInformation);
+class Primitive2DContainer;
 
-/** compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
-    and using compare operator
- */
-bool DRAWINGLAYER_DLLPUBLIC arePrimitive2DReferencesEqual(const Primitive2DReference& rA,
-                                                          const Primitive2DReference& rB);
-
-OUString DRAWINGLAYER_DLLPUBLIC idToString(sal_uInt32 nId);
+// Visitor class for walking a tree of Primitive2DReference
+class VCL_DLLPUBLIC Primitive2DDecompositionVisitor
+{
+public:
+    virtual void visit(const Primitive2DReference&) = 0;
+    virtual void visit(const Primitive2DContainer&) = 0;
+    virtual void visit(Primitive2DContainer&&) = 0;
+    virtual ~Primitive2DDecompositionVisitor() {}
+};
 
 } // end of namespace drawinglayer::primitive2d
 

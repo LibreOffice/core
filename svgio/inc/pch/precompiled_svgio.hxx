@@ -51,8 +51,8 @@
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <vcl/primitive2d/Primitive2DContainer.hxx>
+#include <vcl/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/sorted_vector.hxx>

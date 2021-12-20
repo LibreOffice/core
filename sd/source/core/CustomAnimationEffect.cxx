@@ -69,7 +69,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <o3tl/safeint.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdopath.hxx>

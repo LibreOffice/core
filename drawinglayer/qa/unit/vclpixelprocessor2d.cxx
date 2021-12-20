@@ -14,7 +14,7 @@
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>

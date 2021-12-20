@@ -664,9 +664,9 @@ include/desktop/crashreport.hxx:104
     class rtl::OUString CrashReporter::getActiveSfxObjectName()
 include/desktop/crashreport.hxx:109
     class rtl::OUString CrashReporter::getLoggedUnoCommands()
-include/drawinglayer/geometry/viewinformation2d.hxx:119
+include/vcl/geometry/viewinformation2d.hxx:119
     _Bool drawinglayer::geometry::ViewInformation2D::operator!=(const class drawinglayer::geometry::ViewInformation2D &) const
-include/drawinglayer/primitive2d/baseprimitive2d.hxx:164
+include/vcl/primitive2d/baseprimitive2d.hxx:164
     _Bool drawinglayer::primitive2d::BasePrimitive2D::operator!=(const class drawinglayer::primitive2d::BasePrimitive2D &) const
 include/drawinglayer/primitive2d/softedgeprimitive2d.hxx:39
     void drawinglayer::primitive2d::SoftEdgePrimitive2D::setMaskGeneration(_Bool) const

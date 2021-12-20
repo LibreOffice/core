@@ -80,7 +80,7 @@
 #include <svx/lathe3d.hxx>
 #include <extrud3d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <vcl/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 #include <vcl/gdimtf.hxx>
