@@ -257,6 +257,7 @@ void QtWidget::dropEvent(QDropEvent* pEvent) { m_rFrame.handleDrop(pEvent); }
 
 void QtWidget::moveEvent(QMoveEvent* pEvent)
 {
+    // already handled by QtMainWindow::moveEvent
     if (m_rFrame.m_pTopLevel)
         return;
 
