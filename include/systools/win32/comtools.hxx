@@ -69,6 +69,11 @@ namespace sal::systools
         {
         }
 
+        COMReference(COMReference<T>&& other) :
+            COMReference(std::exchange(other.com_ptr_, nullptr), false)
+        {
+        }
+
         // Query from IUnknown*, using COM_QUERY or COM_QUERY_THROW tags
         template <typename T2, typename TAG>
         COMReference(const COMReference<T2>& p, TAG t)
@@ -79,6 +84,16 @@ namespace sal::systools
         COMReference<T>& operator=(const COMReference<T>& other)
         {
             return operator=(other.com_ptr_);
+        }
+
+        COMReference<T>& operator=(COMReference<T>&& other)
+        {
+            if (com_ptr_ != other.com_ptr_)
+            {
+                clear();
+                std::swap(com_ptr_, other.com_ptr_);
+            }
+            return *this;
         }
 
         COMReference<T>& operator=(T* comptr)
