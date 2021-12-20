@@ -75,7 +75,7 @@ sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Referen
     aCommand.put_CommandText(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND))));
     ADOViews* pViews = m_aCollection;
     if(FAILED(pViews->Append(OLEString(sName).asBSTR(),aCommand)))
-        ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
+        ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 
     OTables* pTables = static_cast<OTables*>(static_cast<OCatalog&>(m_rParent).getPrivateTables());
     if ( pTables )
@@ -88,7 +88,7 @@ sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Referen
 void OViews::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
-        ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
+        ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 }
 
 

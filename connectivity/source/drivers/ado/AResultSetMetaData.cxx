@@ -72,10 +72,9 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  )
     if ( !m_pRecordSet )
         return 0;
 
-    ADOFields* pFields  = nullptr;
+    WpOLEAppendCollection<ADOFields, WpADOField> pFields;
     m_pRecordSet->get_Fields(&pFields);
-    WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(pFields);
-    m_nColCount = aFields.GetItemCount();
+    m_nColCount = pFields.GetItemCount();
     return m_nColCount;
 }
 

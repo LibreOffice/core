@@ -40,19 +40,7 @@ using namespace com::sun::star::sdbc;
 
 void WpADOColumn::Create()
 {
-    _ADOColumn* pColumn = nullptr;
-    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOCOLUMN_25,
-                          nullptr,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOCOLUMN_25,
-                          reinterpret_cast<void**>(&pColumn) );
-
-
-    if( !FAILED( hr ) )
-    {
-        operator=( pColumn );
-        pColumn->Release( );
-    }
+    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOCOLUMN_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 OAdoColumn::OAdoColumn(bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn)
@@ -61,7 +49,7 @@ OAdoColumn::OAdoColumn(bool _bCase,OConnection* _pConnection,_ADOColumn* _pColum
 {
     construct();
     OSL_ENSURE(_pColumn,"Column can not be null!");
-    m_aColumn = WpADOColumn(_pColumn);
+    m_aColumn.set(_pColumn);
     //  m_aColumn.put_ParentCatalog(_pConnection->getAdoCatalog()->getCatalog());
     fillPropertyValues();
 }

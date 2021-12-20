@@ -29,7 +29,7 @@ namespace connectivity::ado
         class WpADOIndex : public WpOLEBase<_ADOIndex>
         {
         public:
-            WpADOIndex(_ADOIndex* pInt=nullptr)    :   WpOLEBase<_ADOIndex>(pInt){}
+            WpADOIndex() = default;
             WpADOIndex(const WpADOIndex& rhs) : WpOLEBase<_ADOIndex>(rhs) {}
 
             WpADOIndex& operator=(const WpADOIndex& rhs)

@@ -28,26 +28,15 @@ using namespace connectivity::ado;
 
 void WpADOCatalog::Create()
 {
-    _ADOCatalog* pCommand;
-    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOCATALOG_25,
-                          nullptr,
-                          CLSCTX_INPROC_SERVER,
-                          ADOS::IID_ADOCATALOG_25,
-                          reinterpret_cast<void**>(&pCommand) );
-
-
-    if( !FAILED( hr ) )
-        setWithOutAddRef(pCommand);
+    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOCATALOG_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 
 WpADOProperties WpADOConnection::get_Properties() const
 {
-    ADOProperties* pProps=nullptr;
+    WpADOProperties pProps;
     pInterface->get_Properties(&pProps);
-    WpADOProperties aProps;
-    aProps.setWithOutAddRef(pProps);
-    return aProps;
+    return pProps;
 }
 
 OUString WpADOConnection::GetConnectionString() const
@@ -252,13 +241,10 @@ OUString WpADOConnection::get_Version() const
     return aBSTR.asOUString();
 }
 
-bool WpADOCommand::putref_ActiveConnection( WpADOConnection *pCon)
+bool WpADOCommand::putref_ActiveConnection(const WpADOConnection& rCon)
 {
     assert(pInterface);
-    if(pCon)
-        return SUCCEEDED(pInterface->putref_ActiveConnection(pCon->pInterface));
-    else
-        return SUCCEEDED(pInterface->putref_ActiveConnection(nullptr));
+    return SUCCEEDED(pInterface->putref_ActiveConnection(rCon));
 }
 
 void WpADOCommand::put_ActiveConnection(/* [in] */ const OLEVariant& vConn)
@@ -269,31 +255,19 @@ void WpADOCommand::put_ActiveConnection(/* [in] */ const OLEVariant& vConn)
 
 void WpADOCommand::Create()
 {
-    IClassFactory2* pInterface2 = nullptr;
-    HRESULT hr = CoGetClassObject( ADOS::CLSID_ADOCOMMAND_21,
-                          CLSCTX_INPROC_SERVER,
-                          nullptr,
-                          IID_IClassFactory2,
-                          reinterpret_cast<void**>(&pInterface2) );
-
-    if( !FAILED( hr ) )
+    sal::systools::COMReference<IClassFactory2> pInterface2;
+    if (!FAILED(pInterface2.TryCoGetClassObject(ADOS::CLSID_ADOCOMMAND_21, CLSCTX_INPROC_SERVER)))
     {
-        ADOCommand* pCommand=nullptr;
-        IUnknown* pOuter=nullptr;
+        sal::systools::COMReference<ADOCommand> pCommand;
 
-        hr = pInterface2->CreateInstanceLic(  pOuter,
+        HRESULT hr = pInterface2->CreateInstanceLic(nullptr,
                                             nullptr,
                                             ADOS::IID_ADOCOMMAND_21,
                                             ADOS::GetKeyStr().asBSTR(),
                                             reinterpret_cast<void**>(&pCommand));
 
         if( !FAILED( hr ) )
-        {
-            operator=(pCommand);
-            pCommand->Release();
-        }
-
-        pInterface2->Release();
+            pInterface = std::move(pCommand);
     }
 }
 
@@ -454,12 +428,9 @@ sal_Int32 WpADOError::GetNativeError() const
 WpADOProperties WpADOField::get_Properties()
 {
     assert(pInterface);
-    ADOProperties* pProps = nullptr;
+    WpADOProperties pProps;
     pInterface->get_Properties(&pProps);
-    WpADOProperties aProps;
-
-    aProps.setWithOutAddRef(pProps);
-    return aProps;
+    return pProps;
 }
 
 sal_Int32 WpADOField::GetActualSize() const
@@ -677,30 +648,18 @@ bool WpADOProperty::PutAttributes(sal_Int32 _nDefSize)
 }
  void WpADORecordset::Create()
 {
-    IClassFactory2* pInterface2 = nullptr;
-    HRESULT hr = CoGetClassObject( ADOS::CLSID_ADORECORDSET_21,
-                          CLSCTX_INPROC_SERVER,
-                          nullptr,
-                          IID_IClassFactory2,
-                          reinterpret_cast<void**>(&pInterface2) );
-
-    if( !FAILED( hr ) )
+    sal::systools::COMReference<IClassFactory2> pInterface2;
+    if (!FAILED(pInterface2.TryCoGetClassObject(ADOS::CLSID_ADORECORDSET_21, CLSCTX_INPROC_SERVER)))
     {
-        ADORecordset *pRec = nullptr;
-        IUnknown *pOuter = nullptr;
-        hr = pInterface2->CreateInstanceLic(  pOuter,
+        sal::systools::COMReference<ADORecordset> pRec;
+        HRESULT hr = pInterface2->CreateInstanceLic(nullptr,
                                             nullptr,
                                             ADOS::IID_ADORECORDSET_21,
                                             ADOS::GetKeyStr().asBSTR(),
                                             reinterpret_cast<void**>(&pRec));
 
         if( !FAILED( hr ) )
-        {
-            operator=(pRec);
-            pRec->Release();
-        }
-
-        pInterface2->Release();
+            pInterface = std::move(pRec);
     }
 }
 
@@ -804,11 +763,9 @@ bool WpADORecordset::SetBookmark(const OLEVariant &pSafeAr)
 WpADOFields WpADORecordset::GetFields() const
 {
     assert(pInterface);
-    ADOFields* pFields=nullptr;
+    WpADOFields pFields;
     pInterface->get_Fields(&pFields);
-    WpADOFields aFields;
-    aFields.setWithOutAddRef(pFields);
-    return aFields;
+    return pFields;
 }
 
 
@@ -861,11 +818,9 @@ bool WpADORecordset::CancelUpdate()
 WpADOProperties WpADORecordset::get_Properties() const
 {
     assert(pInterface);
-    ADOProperties* pProps=nullptr;
+    WpADOProperties pProps;
     pInterface->get_Properties(&pProps);
-    WpADOProperties aProps;
-    aProps.setWithOutAddRef(pProps);
-    return aProps;
+    return pProps;
 }
 
 bool WpADORecordset::NextRecordset(OLEVariant& RecordsAffected,ADORecordset** ppiRset)
@@ -1127,12 +1082,9 @@ bool WpADOColumn::put_Attributes(const ColumnAttributesEnum& _eNum)
 WpADOProperties WpADOColumn::get_Properties() const
 {
     assert(pInterface);
-    ADOProperties* pProps = nullptr;
+    WpADOProperties pProps;
     pInterface->get_Properties(&pProps);
-    WpADOProperties aProps;
-
-    aProps.setWithOutAddRef(pProps);
-    return aProps;
+    return pProps;
 }
 
 OUString WpADOKey::get_Name() const
@@ -1210,11 +1162,9 @@ void WpADOKey::put_UpdateRule(const RuleEnum& _eNum)
 WpADOColumns WpADOKey::get_Columns() const
 {
     assert(pInterface);
-    ADOColumns* pCols = nullptr;
+    WpADOColumns pCols;
     pInterface->get_Columns(&pCols);
-    WpADOColumns aCols;
-    aCols.setWithOutAddRef(pCols);
-    return aCols;
+    return pCols;
 }
 
 OUString WpADOIndex::get_Name() const
@@ -1277,11 +1227,9 @@ void WpADOIndex::put_PrimaryKey(bool _b)
 WpADOColumns WpADOIndex::get_Columns() const
 {
     assert(pInterface);
-    ADOColumns* pCols = nullptr;
+    WpADOColumns pCols;
     pInterface->get_Columns(&pCols);
-    WpADOColumns aCols;
-    aCols.setWithOutAddRef(pCols);
-    return aCols;
+    return pCols;
 }
 
 void WpADOCatalog::putref_ActiveConnection(IDispatch* pCon)
@@ -1293,41 +1241,33 @@ void WpADOCatalog::putref_ActiveConnection(IDispatch* pCon)
 WpADOTables WpADOCatalog::get_Tables()
 {
     assert(pInterface);
-    ADOTables* pRet = nullptr;
+    WpADOTables pRet;
     pInterface->get_Tables(&pRet);
-    WpADOTables aRet;
-    aRet.setWithOutAddRef(pRet);
-    return aRet;
+    return pRet;
 }
 
 WpADOViews WpADOCatalog::get_Views()
 {
     assert(pInterface);
-    ADOViews* pRet = nullptr;
+    WpADOViews pRet;
     pInterface->get_Views(&pRet);
-    WpADOViews aRet;
-    aRet.setWithOutAddRef(pRet);
-    return aRet;
+    return pRet;
 }
 
 WpADOGroups WpADOCatalog::get_Groups()
 {
     assert(pInterface);
-    ADOGroups* pRet = nullptr;
+    WpADOGroups pRet;
     pInterface->get_Groups(&pRet);
-    WpADOGroups aRet;
-    aRet.setWithOutAddRef(pRet);
-    return aRet;
+    return pRet;
 }
 
 WpADOUsers WpADOCatalog::get_Users()
 {
     assert(pInterface);
-    ADOUsers* pRet = nullptr;
+    WpADOUsers pRet;
     pInterface->get_Users(&pRet);
-    WpADOUsers aRet;
-    aRet.setWithOutAddRef(pRet);
-    return aRet;
+    return pRet;
 }
 
 ADOProcedures* WpADOCatalog::get_Procedures()
@@ -1364,51 +1304,41 @@ OUString WpADOTable::get_Type() const
 WpADOColumns WpADOTable::get_Columns() const
 {
     assert(pInterface);
-    ADOColumns* pCols = nullptr;
+    WpADOColumns pCols;
     pInterface->get_Columns(&pCols);
-    WpADOColumns aCols;
-    aCols.setWithOutAddRef(pCols);
-    return aCols;
+    return pCols;
 }
 
 WpADOIndexes WpADOTable::get_Indexes() const
 {
     assert(pInterface);
-    ADOIndexes* pCols = nullptr;
-    pInterface->get_Indexes(&pCols);
-    WpADOIndexes aRet;
-    aRet.setWithOutAddRef(pCols);
-    return aRet;
+    WpADOIndexes pRet;
+    pInterface->get_Indexes(&pRet);
+    return pRet;
 }
 
 WpADOKeys WpADOTable::get_Keys() const
 {
     assert(pInterface);
-    ADOKeys* pCols = nullptr;
-    pInterface->get_Keys(&pCols);
-    WpADOKeys aRet;
-    aRet.setWithOutAddRef(pCols);
-    return aRet;
+    WpADOKeys pRet;
+    pInterface->get_Keys(&pRet);
+    return pRet;
 }
 
 WpADOCatalog WpADOTable::get_ParentCatalog() const
 {
     assert(pInterface);
-    ADOCatalog* pCat = nullptr;
+    WpADOCatalog pCat;
     pInterface->get_ParentCatalog(&pCat);
-    WpADOCatalog aRet;
-    aRet.setWithOutAddRef(pCat);
-    return aRet;
+    return pCat;
 }
 
 WpADOProperties WpADOTable::get_Properties() const
 {
     assert(pInterface);
-    ADOProperties* pProps = nullptr;
+    WpADOProperties pProps;
     pInterface->get_Properties(&pProps);
-    WpADOProperties aProps;
-    aProps.setWithOutAddRef(pProps);
-    return aProps;
+    return pProps;
 }
 
 OUString WpADOView::get_Name() const
@@ -1468,11 +1398,9 @@ bool WpADOGroup::SetPermissions(
 
 WpADOUsers WpADOGroup::get_Users( )
 {
-    ADOUsers* pRet = nullptr;
+    WpADOUsers pRet;
     pInterface->get_Users( &pRet);
-    WpADOUsers aRet;
-    aRet.setWithOutAddRef(pRet);
-    return aRet;
+    return pRet;
 }
 
 OUString WpADOUser::get_Name() const
@@ -1498,11 +1426,9 @@ bool WpADOUser::ChangePassword(std::u16string_view _rPwd,std::u16string_view _rN
 
 WpADOGroups WpADOUser::get_Groups()
 {
-    ADOGroups* pRet = nullptr;
+    WpADOGroups pRet;
     pInterface->get_Groups(&pRet);
-    WpADOGroups aRet;
-    aRet.setWithOutAddRef(pRet);
-    return aRet;
+    return pRet;
 }
 
 RightsEnum WpADOUser::GetPermissions(
@@ -1525,73 +1451,6 @@ bool WpADOUser::SetPermissions(
     OLEVariant ObjectTypeId;
     ObjectTypeId.setNoArg();
     return SUCCEEDED(pInterface->SetPermissions(Name,ObjectType,Action,Rights,adInheritNone,ObjectTypeId));
-}
-
-WpBase::WpBase() : pIUnknown(nullptr)
-{
-}
-WpBase::WpBase(IDispatch* pInt)
-    :pIUnknown(pInt)
-{
-    if (pIUnknown)
-    {
-        pIUnknown->AddRef();
-    }
-}
-
-WpBase::WpBase(const WpBase& aWrapper)
-    :pIUnknown(aWrapper.pIUnknown)
-{
-    if (pIUnknown)
-        pIUnknown->AddRef();
-}
-
-//inline
-WpBase& WpBase::operator=(const WpBase& rhs)
-{
-    operator=(rhs.pIUnknown);
-    return *this;
-};
-
-WpBase& WpBase::operator=(IDispatch* rhs)
-{
-    if (pIUnknown != rhs)
-    {
-        if (pIUnknown)
-            pIUnknown->Release();
-        pIUnknown = rhs;
-        if (pIUnknown)
-            pIUnknown->AddRef();
-    }
-    return *this;
-}
-
-WpBase::~WpBase()
-{
-    if (pIUnknown)
-    {
-        pIUnknown->Release();
-        pIUnknown = nullptr;
-    }
-}
-
-void WpBase::clear()
-{
-    if (pIUnknown)
-    {
-        pIUnknown->Release();
-        pIUnknown = nullptr;
-    }
-}
-
-
-bool WpBase::IsValid() const
-{
-    return pIUnknown != nullptr;
-}
-WpBase::operator IDispatch*()
-{
-    return pIUnknown;
 }
 
 ADORecordset* WpADOConnection::getExportedKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table )
@@ -2126,11 +1985,6 @@ void WpADOTable::putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObjec
     assert(pInterface);
     bool bRet = SUCCEEDED(pInterface->putref_ParentCatalog(ppvObject));
     SAL_WARN_IF(!bRet, "connectivity.ado", "Could not set ParentCatalog!");
-}
-
-void WpBase::setIDispatch(IDispatch* _pIUnknown)
-{
-    pIUnknown = _pIUnknown;
 }
 
 void OTools::putValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition,const OLEVariant &_aValVar)
