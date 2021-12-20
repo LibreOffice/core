@@ -930,7 +930,10 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
         GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttrTable>(*pTableNd));
     }
 
-    const SvxBorderLine aDefaultBorder(pColor, SvxBorderLineWidth::VeryThin);
+    SvxBorderLine aDefaultBorder(pBorderLine ? *pBorderLine
+                                             : SvxBorderLine(pColor, SvxBorderLineWidth::VeryThin));
+    if (pColor && pBorderLine)
+        aDefaultBorder.SetColor(*pColor);
 
     for( auto &rU : aUnions )
     {
@@ -959,7 +962,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
             {
                 aBox.reset(::GetDfltAttr(RES_BOX)->Clone());
             }
-            else if (pColor && !pBorderLine && !pTop && !pBot && !pLeft && !pRight)
+            else if ((pColor || pBorderLine) && !pTop && !pBot && !pLeft && !pRight)
             {
                 aBox->SetLine(&aDefaultBorder, SvxBoxItemLine::TOP);
                 aBox->SetLine(&aDefaultBorder, SvxBoxItemLine::BOTTOM);
