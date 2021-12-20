@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba2057d8_11cd4646",
+        "filename": "include/systools/win32/comtools.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-20T19:40:19Z",
+      "side": 1,
+      "message": "In comparison to the CoCreateInstance class function, returning the HRESULT instead of COMReference\u003cT\u003e\u0026 looks very strange. Are you sure you want the old com_ptr_ value to remain in the case of failure?\n\nDropping the clear() definitely changes the error case. I guess that shouldn\u0027t matter normally, but who knows...",
+      "revId": "deec889a8bba7538ced313649cb0a65b2dd91fe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
