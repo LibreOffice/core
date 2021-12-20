@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86c650dd_744b9398",
+        "filename": "offapi/com/sun/star/document/XOOXMLDocumentPropertiesImporter.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-20T13:12:46Z",
+      "side": 1,
+      "message": "Hi Vasily, Thorsten,\nIf we backport this to libreoffice-7-3, should it be updated in master ?",
+      "revId": "b19b038beaa4dd76f11efdfce3e54c83e335b422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
