@@ -1313,7 +1313,13 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pMA);
                 GDIMetaFile             aTmpMtf;
 
-                pVirDev->AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
+                tools::Rectangle aRect(pA->GetPolyPolygon().GetBoundRect());
+
+                pA->GetHatch().AddHatchActions( pA->GetPolyPolygon(),
+                    pVirDev->ImplDevicePixelToLogicWidth(1),
+                    pVirDev->ImplDevicePixelToLogicWidth(std::max(pVirDev->ImplLogicWidthToDevicePixel(pA->GetHatch().GetDistance()), tools::Long(3))),
+                    !pVirDev->IsRefPoint() ? aRect.TopLeft() : pVirDev->GetRefPoint(), aTmpMtf );
+
                 WriteRecords( aTmpMtf );
             }
             break;
