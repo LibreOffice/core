@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d10d6a0_d2a78349",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-20T13:14:09Z",
+      "side": 1,
+      "message": "But I wonder whether I just should do what my commit message suggests, without first merging this stopgap measure. The fact is that copy/paste between the iOS and and other apps on iOS does not work at all currently (and to build the iOS app at all, this patch is necessary). Perhaps I should fix that in the same change that makes it buildable.",
+      "revId": "0f9f9b444afb288539935ba6fbfad079acf7a7b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
