@@ -56,6 +56,7 @@
 #include <unotools/viewoptions.hxx>
 #include <rtl/strbuf.hxx>
 #include <memory>
+#include <mutex>
 #include <framework/sfxhelperfunctions.hxx>
 #include <fwkhelper.hxx>
 
@@ -100,10 +101,10 @@ namespace {
 
 SfxApplication* SfxApplication::GetOrCreate()
 {
-    static osl::Mutex theApplicationMutex;
+    static std::mutex theApplicationMutex;
 
     // SFX on demand
-    ::osl::MutexGuard aGuard(theApplicationMutex);
+    std::unique_lock aGuard(theApplicationMutex);
     if (!g_pSfxApplication)
     {
         SAL_INFO( "sfx.appl", "SfxApplication::SetApp" );
