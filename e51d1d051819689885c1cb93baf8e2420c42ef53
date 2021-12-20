@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5f18322_0117330e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-20T18:56:41Z",
+      "side": 1,
+      "message": "First things first.  Here is the change you asked for.  The follow-up patch builds on it.",
+      "revId": "e51d1d051819689885c1cb93baf8e2420c42ef53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
