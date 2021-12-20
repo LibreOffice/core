@@ -16,6 +16,40 @@
       "message": "I happened to notice in this commit:\n\n\u003e $(if $(filter-out $(OS),IOS), \\\n\nBut the value of $(OS) for iOS is \"iOS\", not \"IOS\". (Don\u0027t remember why it was changed that way, I think originally it was \"IOS\".) So this does not do what was intended.",
       "revId": "8bd8fa55b2fd04006aa43a9e638c8801d24b06ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4074bc12_36e07c3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-12-20T08:25:09Z",
+      "side": 1,
+      "message": "@tml I copied \"IOS\" condition from few lines above, so worth checking if everything is ok there too.",
+      "revId": "8bd8fa55b2fd04006aa43a9e638c8801d24b06ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7a685c7_b0d8a102",
+        "filename": "desktop/Library_sofficeapp.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-12-20T08:25:09Z",
+      "side": 1,
+      "message": "I copied that condition from here",
+      "revId": "8bd8fa55b2fd04006aa43a9e638c8801d24b06ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
