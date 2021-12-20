@@ -9202,7 +9202,7 @@ void PDFWriterImpl::drawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch&
         setLineColor( rHatch.GetColor() );
 
         tools::Rectangle aRect(rPolyPoly.GetBoundRect());
-        DrawHatch( aPolyPoly, rHatch, !IsRefPoint() ? aRect.TopLeft() : GetRefPoint(), false );
+        DrawHatch( aPolyPoly, rHatch, !IsRefPoint() ? aRect.TopLeft() : GetRefPoint() );
 
         pop();
     }
