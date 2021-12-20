@@ -46,6 +46,30 @@
       },
       "revId": "639d53c11fbfc45bfc2a2b7b82c6d06a61acd81c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d4aa19d_ddb2383a",
+        "filename": "sc/inc/fielduno.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-20T06:41:50Z",
+      "side": 1,
+      "message": "\u003e it\u0027s public API\n\nOh!\nThen shouldn\u0027t related notice be added to its header?",
+      "parentUuid": "f1ef4bba_733ab8ed",
+      "range": {
+        "startLine": 162,
+        "startChar": 14,
+        "endLine": 162,
+        "endChar": 37
+      },
+      "revId": "639d53c11fbfc45bfc2a2b7b82c6d06a61acd81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
