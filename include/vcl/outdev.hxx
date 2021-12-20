@@ -830,20 +830,15 @@ public:
 
 #ifdef _MSC_VER
     void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const ::Hatch& rHatch );
-    void                        AddHatchActions( const tools::PolyPolygon& rPolyPoly,
-                                                 const ::Hatch& rHatch,
-                                                 GDIMetaFile& rMtf );
 #else
     void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );
-    void                        AddHatchActions( const tools::PolyPolygon& rPolyPoly,
-                                                 const Hatch& rHatch,
-                                                 GDIMetaFile& rMtf );
 #endif
 
-    void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, Point const& rRef, bool bMtf );
+    void DrawHatch2(tools::PolyPolygon const& rPolyPoly, Hatch const& rHatch, Point const& rRef);
+    void DrawHatchToMetafile(tools::PolyPolygon const& rPolyPoly, Hatch const& rHatch, tools::Long nLogPixelWidth, tools::Long nWidth, Point const& rRef, GDIMetaFile& rMtf);
 
 private:
-    SAL_DLLPRIVATE void         DrawHatchLines( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
+    SAL_DLLPRIVATE void DrawHatchLines( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, Point* pPtBuffer );
     ///@}
 
 
@@ -1699,7 +1694,7 @@ public:
 
      @returns Width in units of device pixels.
      */
-    SAL_DLLPRIVATE tools::Long         ImplLogicWidthToDevicePixel( tools::Long nWidth ) const;
+    tools::Long ImplLogicWidthToDevicePixel( tools::Long nWidth ) const;
 
     SAL_DLLPRIVATE DeviceCoordinate LogicWidthToDeviceCoordinate( tools::Long nWidth ) const;
 
@@ -1750,7 +1745,7 @@ public:
 
      @returns Width in logical units.
      */
-    SAL_DLLPRIVATE tools::Long         ImplDevicePixelToLogicWidth( tools::Long nWidth ) const;
+    tools::Long ImplDevicePixelToLogicWidth( tools::Long nWidth ) const;
 
     /** Convert device pixels to a height in logical units.
 
