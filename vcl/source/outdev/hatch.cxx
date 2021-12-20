@@ -37,20 +37,6 @@
 
 #define HATCH_MAXPOINTS             1024
 
-extern "C" {
-
-static int HatchCmpFnc( const void* p1, const void* p2 )
-{
-    const tools::Long nX1 = static_cast<Point const *>(p1)->X();
-    const tools::Long nX2 = static_cast<Point const *>(p2)->X();
-    const tools::Long nY1 = static_cast<Point const *>(p1)->Y();
-    const tools::Long nY2 = static_cast<Point const *>(p2)->Y();
-
-    return ( nX1 > nX2 ? 1 : nX1 == nX2 ? nY1 > nY2 ? 1: nY1 == nY2 ? 0 : -1 : -1 );
-}
-
-}
-
 void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch )
 {
     assert(!is_double_buffered_window());
@@ -198,82 +184,31 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
     }
 }
 
-void OutputDevice::DrawHatchLines( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly,
-                                      Point* pPtBuffer, bool bMtf )
+void OutputDevice::DrawHatchLines(tools::Line const& rLine, tools::PolyPolygon const& rPolyPoly,
+                                  Point* pPtBuffer, bool bMtf)
 {
     assert(!is_double_buffered_window());
 
-    double  fX, fY;
-    tools::Long    nAdd, nPCounter = 0;
+    tools::Long nPCounter = 0;
 
-    for( tools::Long nPoly = 0, nPolyCount = rPolyPoly.Count(); nPoly < nPolyCount; nPoly++ )
-    {
-        const tools::Polygon& rPoly = rPolyPoly[ static_cast<sal_uInt16>(nPoly) ];
+    Hatch::GenerateHatchLinePoints(rLine, rPolyPoly, nPCounter, pPtBuffer);
 
-        if( rPoly.GetSize() > 1 )
-        {
-            tools::Line aCurSegment( rPoly[ 0 ], Point() );
-
-            for( tools::Long i = 1, nCount = rPoly.GetSize(); i <= nCount; i++ )
-            {
-                aCurSegment.SetEnd( rPoly[ static_cast<sal_uInt16>( i % nCount ) ] );
-                nAdd = 0;
-
-                if( rLine.Intersection( aCurSegment, fX, fY ) )
-                {
-                    if( ( fabs( fX - aCurSegment.GetStart().X() ) <= 0.0000001 ) &&
-                        ( fabs( fY - aCurSegment.GetStart().Y() ) <= 0.0000001 ) )
-                    {
-                        const tools::Line aPrevSegment( rPoly[ static_cast<sal_uInt16>( ( i > 1 ) ? ( i - 2 ) : ( nCount - 1 ) ) ], aCurSegment.GetStart() );
-                        const double    fPrevDistance = rLine.GetDistance( aPrevSegment.GetStart() );
-                        const double    fCurDistance = rLine.GetDistance( aCurSegment.GetEnd() );
-
-                        if( ( fPrevDistance <= 0.0 && fCurDistance > 0.0 ) ||
-                            ( fPrevDistance > 0.0 && fCurDistance < 0.0 ) )
-                        {
-                            nAdd = 1;
-                        }
-                    }
-                    else if( ( fabs( fX - aCurSegment.GetEnd().X() ) <= 0.0000001 ) &&
-                             ( fabs( fY - aCurSegment.GetEnd().Y() ) <= 0.0000001 ) )
-                    {
-                        const tools::Line aNextSegment( aCurSegment.GetEnd(), rPoly[ static_cast<sal_uInt16>( ( i + 1 ) % nCount ) ] );
-
-                        if( ( fabs( rLine.GetDistance( aNextSegment.GetEnd() ) ) <= 0.0000001 ) &&
-                            ( rLine.GetDistance( aCurSegment.GetStart() ) > 0.0 ) )
-                        {
-                            nAdd = 1;
-                        }
-                    }
-                    else
-                        nAdd = 1;
-
-                    if( nAdd )
-                        pPtBuffer[ nPCounter++ ] = Point( FRound( fX ), FRound( fY ) );
-                }
-
-                aCurSegment.SetStart( aCurSegment.GetEnd() );
-            }
-        }
-    }
-
-    if( nPCounter <= 1 )
+    if (nPCounter <= 1)
         return;
-
-    qsort( pPtBuffer, nPCounter, sizeof( Point ), HatchCmpFnc );
-
-    if( nPCounter & 1 )
-        nPCounter--;
 
     if( bMtf )
     {
         for( tools::Long i = 0; i < nPCounter; i += 2 )
+        {
             mpMetaFile->AddAction( new MetaLineAction( pPtBuffer[ i ], pPtBuffer[ i + 1 ] ) );
+        }
     }
     else
     {
         for( tools::Long i = 0; i < nPCounter; i += 2 )
+        {
             DrawHatchLine(pPtBuffer[i], pPtBuffer[i+1]);
+        }
     }
 }
 
