@@ -42,6 +42,10 @@
 #include <xmlsec/xmltree.h>
 #ifdef XMLSEC_CRYPTO_NSS
 #include <xmlsec/nss/pkikeys.h>
+#include <xmlsec/nss/x509.h>
+#endif
+#ifdef XMLSEC_CRYPTO_MSCRYPTO
+#include <xmlsec/mscrypto/x509.h>
 #endif
 
 #endif
