@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e86b8d25_0ba44428",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-20T15:47:23Z",
+      "side": 1,
+      "message": "I didn\u0027t see any function to get a default line size from the default table style or from rDoc. I suppose I could have made one. If I understood right, the non-HTML table style defaults to hairline anyway - which perhaps ends up being important for importing older documents. Anyway, we now have several locations that all define the default size of these new borders. Oh well.",
+      "revId": "9b6a496bc47f7ec4225815fd99ee463095ef241e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81ec7565_d256a2dc",
+        "filename": "sw/source/core/docnode/ndtbl1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-20T15:47:23Z",
+      "side": 1,
+      "message": "Another option here would be to leave aDefaultBorder alone and: if (pBorderline) aDefaultBorder-\u003eSetStyle(pBorderLine-\u003eGetStyle();\n\nThat would make all three buttons use VeryThin when creating a border. But then if CHANGING part of the borders, then the size will be mis-matched again. Or, set pBorderLine as ::VeryThin earlier on - but in that case it won\u0027t match editing older documents.\n\nIt is a minor concern, since normally styles are set universally.\n\nIt seems safest to me to leave the style\u0027s size as ::Thin.",
+      "range": {
+        "startLine": 935,
+        "startChar": 4,
+        "endLine": 935,
+        "endChar": 30
+      },
+      "revId": "9b6a496bc47f7ec4225815fd99ee463095ef241e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
