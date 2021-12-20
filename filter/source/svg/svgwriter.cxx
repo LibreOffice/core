@@ -2256,12 +2256,16 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
                 GDIMetaFile aTmpMtf;
                 if( pHatch )
                 {
-                    mpVDev->AddHatchActions( rPolyPoly, *pHatch, aTmpMtf );
+                    tools::Rectangle aBoundRect(rPolyPoly.GetBoundRect());
+
+                    pHatch->AddHatchActions( rPolyPoly,
+                        mpVDev->ImplDevicePixelToLogicWidth(1),
+                        mpVDev->ImplDevicePixelToLogicWidth(std::max(mpVDev->ImplLogicWidthToDevicePixel(pHatch->GetDistance()), tools::Long(3))),
+                        !mpVDev->IsRefPoint() ? aBoundRect.TopLeft() : mpVDev->GetRefPoint(), aTmpMtf );
                 }
                 else if ( pGradient )
                 {
-                    Gradient aGradient(*pGradient);
-                    aGradient.AddGradientActions( rPolyPoly.GetBoundRect(), aTmpMtf );
+                    mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), *pGradient, aTmpMtf );
                 }
 
                 ImplWriteActions( aTmpMtf, nWriteFlags, "" );

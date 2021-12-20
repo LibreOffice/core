@@ -1181,7 +1181,13 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pAction);
                 GDIMetaFile             aTmpMtf;
 
-                maVDev->AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
+                tools::Rectangle aRect(pA->GetPolyPolygon().GetBoundRect());
+
+                pA->GetHatch().AddHatchActions( pA->GetPolyPolygon(),
+                    maVDev->ImplDevicePixelToLogicWidth(1),
+                    maVDev->ImplDevicePixelToLogicWidth(std::max(maVDev->ImplLogicWidthToDevicePixel(pA->GetHatch().GetDistance()), tools::Long(3))),
+                    !maVDev->IsRefPoint() ? aRect.TopLeft() : maVDev->GetRefPoint(), aTmpMtf );
+
                 ImplWrite( aTmpMtf );
             }
             break;

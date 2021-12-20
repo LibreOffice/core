@@ -877,8 +877,16 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 GDIMetaFile     aTmpMtf;
 
                 l_pVirDev->SetMapMode( rVDev.GetMapMode() );
-                l_pVirDev->AddHatchActions( static_cast<const MetaHatchAction*>(pMA)->GetPolyPolygon(),
-                                            static_cast<const MetaHatchAction*>(pMA)->GetHatch(), aTmpMtf );
+
+                MetaHatchAction const* pHatchAction = static_cast<MetaHatchAction const*>(pMA);
+
+                tools::Rectangle aRect(pHatchAction->GetPolyPolygon().GetBoundRect());
+
+                pHatchAction->GetHatch().AddHatchActions( pHatchAction->GetPolyPolygon(),
+                    l_pVirDev->ImplDevicePixelToLogicWidth(1),
+                    l_pVirDev->ImplDevicePixelToLogicWidth(std::max(l_pVirDev->ImplLogicWidthToDevicePixel(pHatchAction->GetHatch().GetDistance()), tools::Long(3))),
+                    !l_pVirDev->IsRefPoint() ? aRect.TopLeft() : l_pVirDev->GetRefPoint(), aTmpMtf );
+
                 ImplWriteActions( aTmpMtf, rVDev );
             }
             break;
