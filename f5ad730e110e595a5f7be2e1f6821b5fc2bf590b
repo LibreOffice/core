@@ -16,6 +16,23 @@
       "message": "Two more needed",
       "revId": "f5ad730e110e595a5f7be2e1f6821b5fc2bf590b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6440009d_47ae1f14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-20T07:27:21Z",
+      "side": 1,
+      "message": "It would be nice to cover this fix with a test on master. :-)\n\nOne more needed.",
+      "revId": "f5ad730e110e595a5f7be2e1f6821b5fc2bf590b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
