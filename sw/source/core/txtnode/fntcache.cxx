@@ -1513,8 +1513,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else
         {
+#ifndef NDEBUG
             rInf.GetOut().GetTextArray( rInf.GetText(), &aKernArray,
                     sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+            assert(aKernArray == aScrArray);
+#endif
+            aKernArray = aScrArray;
         }
 
         // Modify Printer and ScreenArrays for special justifications
