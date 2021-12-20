@@ -16,6 +16,24 @@
       "message": "\u003e Patch Set 14 was rebased.\n\nSorry, I did that by mistake.",
       "revId": "3160888d721f97ac0876cfcd17ac8c8e391c0ec3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0f592fd_762f78c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-20T18:55:58Z",
+      "side": 1,
+      "message": "And Jenkins generated one more CppunitTest_sw_ooxmlexport5 failure on mac; I can\u0027t be that unlucky...",
+      "parentUuid": "c411dc9a_f0a2cc34",
+      "revId": "3160888d721f97ac0876cfcd17ac8c8e391c0ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
