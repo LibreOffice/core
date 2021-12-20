@@ -91,7 +91,8 @@ bool SwTextGlyphsKey::operator==(SwTextGlyphsKey const & rhs) const
 {
     bool b = m_pOutputDevice.get() == rhs.m_pOutputDevice.get()
             && m_nIndex == rhs.m_nIndex
-            && m_nLength == rhs.m_nLength;
+            && m_nLength == rhs.m_nLength
+            && m_aText.getLength() == rhs.m_aText.getLength();
     if (!b)
         return false;
     if(m_nLength >= 0 && m_nIndex >= 0 && m_nIndex + m_nLength <= m_aText.getLength())
