@@ -16,6 +16,24 @@
       "message": "@Xisco, I made a uitest for this patch. I would appreciate it if you would review and let me know what you think.",
       "revId": "89b5add27f02c8a062361f328c842cc69481daad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a83ae196_d5c3708c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-20T11:26:58Z",
+      "side": 1,
+      "message": "LGTM",
+      "parentUuid": "330f3b72_08b576ad",
+      "revId": "89b5add27f02c8a062361f328c842cc69481daad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
