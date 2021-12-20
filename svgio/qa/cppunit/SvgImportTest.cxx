@@ -70,6 +70,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf101237();
     void testTdf94765();
     void testBehaviourWhenWidthAndHeightIsOrIsNotSet();
+    void testTdf97663();
 
     Primitive2DSequence parseSvg(std::u16string_view aSource);
 
@@ -105,6 +106,7 @@ public:
     CPPUNIT_TEST(testTdf101237);
     CPPUNIT_TEST(testTdf94765);
     CPPUNIT_TEST(testBehaviourWhenWidthAndHeightIsOrIsNotSet);
+    CPPUNIT_TEST(testTdf97663);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -806,6 +808,24 @@ void Test::testBehaviourWhenWidthAndHeightIsOrIsNotSet()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(11.0, fWidth, 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(11.0, fHeight, 1E-12);
     }
+}
+
+void Test::testTdf97663()
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/em_units.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    // This can be dumped to a file using dumper.dump(container, file_url)
+    Primitive2DContainer container = comphelper::sequenceToContainer<Primitive2DContainer>(aSequence);
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(container);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    // tdf#97663: Without the fix in place, this test would have failed with
+    // - Expected: 236
+    // - Actual  : 204
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "y", "236");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
