@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c2a0c45_3f84f43f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-20T15:47:59Z",
+      "side": 1,
+      "message": "Oops. This one depends on the prior one being accepted first.  I shouldn\u0027t have added a reviewer yet.",
+      "revId": "9b6a496bc47f7ec4225815fd99ee463095ef241e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81ec7565_d256a2dc",
