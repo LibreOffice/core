@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c411dc9a_f0a2cc34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-20T16:05:16Z",
+      "side": 1,
+      "message": "\u003e Patch Set 14 was rebased.\n\nSorry, I did that by mistake.",
+      "revId": "3160888d721f97ac0876cfcd17ac8c8e391c0ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
