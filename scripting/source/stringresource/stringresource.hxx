@@ -28,21 +28,14 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer3.hxx>
-#include <osl/mutex.hxx>
-
+#include <comphelper/interfacecontainer4.hxx>
+#include <mutex>
 #include <unordered_map>
 #include <vector>
 
 
 namespace stringresource
 {
-
-
-// mutex
-
-
-::osl::Mutex& getMutex();
 
 
 // class stringresourceImpl
@@ -88,13 +81,14 @@ typedef ::cppu::WeakImplHelper<
 class StringResourceImpl : public StringResourceImpl_BASE
 {
 protected:
+    std::mutex                                                m_aMutex;
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
 
     LocaleItem*                                               m_pCurrentLocaleItem;
     LocaleItem*                                               m_pDefaultLocaleItem;
     bool                                                      m_bDefaultModified;
 
-    ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener> m_aListenerContainer;
+    ::comphelper::OInterfaceContainerHelper4<css::util::XModifyListener> m_aListenerContainer;
 
     std::vector< std::unique_ptr<LocaleItem> >                m_aLocaleItemVector;
     std::vector< std::unique_ptr<LocaleItem> >                m_aDeletedLocaleItemVector;
