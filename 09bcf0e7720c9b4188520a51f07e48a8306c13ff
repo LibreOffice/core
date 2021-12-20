@@ -34,6 +34,24 @@
       "parentUuid": "ca901347_e5b7f685",
       "revId": "09bcf0e7720c9b4188520a51f07e48a8306c13ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "807edb8d_8ce4e56b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-20T18:54:48Z",
+      "side": 1,
+      "message": "You forgot Adolfo\u0027s remark on capitalisation.",
+      "parentUuid": "1abf9fcf_63dafe48",
+      "revId": "09bcf0e7720c9b4188520a51f07e48a8306c13ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
