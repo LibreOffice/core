@@ -930,7 +930,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
         GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttrTable>(*pTableNd));
     }
 
-    const SvxBorderLine aHairlineBorder(pColor, SvxBorderLineWidth::Hairline);
+    const SvxBorderLine aDefaultBorder(pColor, SvxBorderLineWidth::VeryThin);
 
     for( auto &rU : aUnions )
     {
@@ -961,10 +961,10 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
             }
             else if (pColor && !pBorderLine && !pTop && !pBot && !pLeft && !pRight)
             {
-                aBox->SetLine(&aHairlineBorder, SvxBoxItemLine::TOP);
-                aBox->SetLine(&aHairlineBorder, SvxBoxItemLine::BOTTOM);
-                aBox->SetLine(&aHairlineBorder, SvxBoxItemLine::LEFT);
-                aBox->SetLine(&aHairlineBorder, SvxBoxItemLine::RIGHT);
+                aBox->SetLine(&aDefaultBorder, SvxBoxItemLine::TOP);
+                aBox->SetLine(&aDefaultBorder, SvxBoxItemLine::BOTTOM);
+                aBox->SetLine(&aDefaultBorder, SvxBoxItemLine::LEFT);
+                aBox->SetLine(&aDefaultBorder, SvxBoxItemLine::RIGHT);
             }
             else
             {
