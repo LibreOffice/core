@@ -73,7 +73,19 @@ void SvxThemePage::Reset(const SfxItemSet* pAttrs)
     auto itTheme = rGrabBagItem.GetGrabBag().find("Theme");
     if (itTheme == rGrabBagItem.GetGrabBag().end())
     {
-        SAL_WARN("cui.tabpages", "SvxThemePage::Reset: no Theme");
+        // No theme was defined previously, allow specifying colors.
+        m_xDk1->set_sensitive(true);
+        m_xLt1->set_sensitive(true);
+        m_xDk2->set_sensitive(true);
+        m_xLt2->set_sensitive(true);
+        m_xAccent1->set_sensitive(true);
+        m_xAccent2->set_sensitive(true);
+        m_xAccent3->set_sensitive(true);
+        m_xAccent4->set_sensitive(true);
+        m_xAccent5->set_sensitive(true);
+        m_xAccent6->set_sensitive(true);
+        m_xHlink->set_sensitive(true);
+        m_xFolHlink->set_sensitive(true);
         return;
     }
 

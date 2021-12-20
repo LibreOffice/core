@@ -26,7 +26,7 @@ public:
             SvxColorToolBoxControl* pControl,
             const OUString& rPropertyName);
 
-    void operator()(const OUString& rCommand, const NamedColor& rColor);
+    void operator()(const OUString& rCommand, const svx::NamedThemedColor& rColor);
         // ColorSelectFunction signature
 
     void updateModel(const css::uno::Reference<css::frame::XModel>& xModel);

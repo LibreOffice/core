@@ -8,6 +8,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import select_by_text
 
 # Test for cui/source/tabpages/chardlg.cxx.
 class Test(UITestCase):
@@ -42,6 +43,71 @@ class Test(UITestCase):
             # i.e. the dialog did not set transparency to 5%, instead it left the character color at
             # COL_AUTO.
             self.assertEqual(shape.CharTransparence, 5)
+
+    def testSvxCharEffectsPageTheme(self):
+        # Given a document with a document theme:
+        # Start Impress.
+        with self.ui_test.create_doc_in_start_center("impress") as component:
+            template = self.xUITest.getTopFocusWindow()
+            self.ui_test.close_dialog_through_button(template.getChild("close"))
+            doc = self.xUITest.getTopFocusWindow()
+            editWin = doc.getChild("impress_win")
+
+            # Set theme colors.
+            drawPage = component.getDrawPages().getByIndex(0)
+            master = drawPage.MasterPage
+            theme = mkPropertyValues({
+                "Name": "nameA",
+                "ColorSchemeName": "colorSetA",
+                "ColorScheme": tuple([
+                    0x000000,  # dk1
+                    0x000000,  # lt1
+                    0x000000,  # dk2
+                    0x000000,  # lt2
+                    0x000000,  # accent1
+                    0x000000,  # accent2
+                    0x000000,  # accent3
+                    0x000000,  # accent4
+                    0x000000,  # accent5
+                    0x000000,  # accent6
+                    0x000000,  # hlink
+                    0x000000,  # folHlink
+                ])
+            })
+            master.Theme = theme
+
+            # Select the title shape.
+            editWin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
+            editWin.executeAction("TYPE", mkPropertyValues({"TEXT": "t"}))
+            self.xUITest.executeCommand(".uno:SelectAll")
+
+            # Now use Format -> Character.
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                # Select RID_SVXPAGE_CHAR_EFFECTS.
+                select_pos(xTabs, "1")
+
+                # When setting the shape text color to accent 1:
+                accent1 = xDialog.getChild("fontcolorlb")
+                accent1.executeAction("OPENLIST", tuple())
+                floatWindow = self.xUITest.getFloatWindow()
+                paletteSelector = floatWindow.getChild("palette_listbox")
+                select_by_text(paletteSelector, "Theme colors")
+                colorSet = floatWindow.getChild("colorset")
+                colorSet.executeAction("CHOOSE", mkPropertyValues({"POS": "4"}))
+
+            # Then make sure the doc model has the correct color theme index:
+            drawPage = component.getDrawPages().getByIndex(0)
+            shape = drawPage.getByIndex(0)
+            paragraphs = shape.createEnumeration()
+            paragraph = paragraphs.nextElement()
+            portions = paragraph.createEnumeration()
+            portion = portions.nextElement()
+
+            # Without the accompanying fix in place, this test would have failed with:
+            # AssertionError: -1 != 4
+            # i.e. no theme index was set, instead of accent1 (index into the above color scheme).
+            self.assertEqual(portion.CharColorTheme, 4)
 
     def testSvxCharEffectsPageWriter(self):
         # Start Writer.
