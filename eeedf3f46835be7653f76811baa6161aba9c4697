@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b5f7979_2d1ae948",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-20T08:00:08Z",
+      "side": 1,
+      "message": "Looks good, do you think you could cover the fix with a test?\n\nIf you start soffice with SW_DEBUG\u003d1, then you can create an xml dump of the layout when you press F12, a layout.xml in the current directory. If you can create a layout dump before/after your fix, then you can compare the dumps and see how they differ. If you see a meaningful difference there (e.g. a text portion has a different horizontal position or something like that), then that would be straightforward to test from e.g. sw/qa/core/text/text.cxx. See for example testLineHeight in that file.",
+      "revId": "eeedf3f46835be7653f76811baa6161aba9c4697",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
