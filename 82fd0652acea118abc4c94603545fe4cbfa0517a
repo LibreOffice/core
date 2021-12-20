@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6d72627_3d0ffb8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-20T13:32:48Z",
+      "side": 1,
+      "message": "I fixed some other typos.\nLet\u0027s push this one since they\u0027re only comments.",
+      "revId": "82fd0652acea118abc4c94603545fe4cbfa0517a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
