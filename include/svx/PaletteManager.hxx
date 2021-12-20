@@ -74,7 +74,9 @@ public:
 
     void        SetColorSelectFunction(const ColorSelectFunction& aColorSelectFunction);
 
-    static void DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor);
+    bool IsThemePaletteSelected() const;
+
+    static void DispatchColorCommand(const OUString& aCommand, const svx::NamedThemedColor& rColor);
 };
 
 #endif // INCLUDED_SVX_PALETTEMANAGER_HXX
