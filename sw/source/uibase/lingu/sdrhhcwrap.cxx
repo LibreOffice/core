@@ -43,16 +43,16 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     SdrOutliner(pVw->GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->
                              GetDrawOutliner().GetEmptyItemSet().GetPool(),
                 OutlinerMode::TextObject ),
-    pView( pVw ),
-    pTextObj( nullptr ),
-    nOptions( nConvOptions ),
-    nDocIndex( 0 ),
-    nSourceLang( nSourceLanguage ),
-    nTargetLang( nTargetLanguage ),
-    pTargetFont( pTargetFnt ),
-    bIsInteractive( bInteractive )
+    m_pView( pVw ),
+    m_pTextObj( nullptr ),
+    m_nOptions( nConvOptions ),
+    m_nDocIndex( 0 ),
+    m_nSourceLang( nSourceLanguage ),
+    m_nTargetLang( nTargetLanguage ),
+    m_pTargetFont( pTargetFnt ),
+    m_bIsInteractive( bInteractive )
 {
-    SetRefDevice( pView->GetDocShell()->GetDoc()->getIDocumentDeviceAccess().getPrinter( false ) );
+    SetRefDevice( m_pView->GetDocShell()->GetDoc()->getIDocumentDeviceAccess().getPrinter( false ) );
 
     MapMode aMapMode (MapUnit::MapTwip);
     SetRefMapMode(aMapMode);
@@ -60,62 +60,62 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     Size aSize( 1, 1 );
     SetPaperSize( aSize );
 
-    pOutlView.reset( new OutlinerView( this, &(pView->GetEditWin()) ) );
-    pOutlView->GetOutliner()->SetRefDevice(pView->GetWrtShell().getIDocumentDeviceAccess().getPrinter( false ));
+    m_pOutlView.reset( new OutlinerView( this, &(m_pView->GetEditWin()) ) );
+    m_pOutlView->GetOutliner()->SetRefDevice(m_pView->GetWrtShell().getIDocumentDeviceAccess().getPrinter( false ));
 
     // Hack: all SdrTextObj attributes should be transferred to EditEngine
-    pOutlView->SetBackgroundColor( COL_WHITE );
+    m_pOutlView->SetBackgroundColor( COL_WHITE );
 
-    InsertView( pOutlView.get() );
+    InsertView( m_pOutlView.get() );
     Point aPoint( 0, 0 );
     tools::Rectangle aRect( aPoint, aSize );
-    pOutlView->SetOutputArea( aRect );
+    m_pOutlView->SetOutputArea( aRect );
 //  SetText( NULL );
     ClearModifyFlag();
 }
 
 SdrHHCWrapper::~SdrHHCWrapper()
 {
-    if (pTextObj)
+    if (m_pTextObj)
     {
-        SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
+        SdrView *pSdrView = m_pView->GetWrtShell().GetDrawView();
         OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( true );
         SetUpdateLayout(false);
-        pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1, 1) ) );
+        m_pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1, 1) ) );
     }
-    RemoveView( pOutlView.get() );
-    pOutlView.reset();
+    RemoveView( m_pOutlView.get() );
+    m_pOutlView.reset();
 }
 
 void SdrHHCWrapper::StartTextConversion()
 {
-    pOutlView->StartTextConversion(pView->GetFrameWeld(), nSourceLang, nTargetLang, pTargetFont, nOptions, bIsInteractive, true);
+    m_pOutlView->StartTextConversion(m_pView->GetFrameWeld(), m_nSourceLang, m_nTargetLang, m_pTargetFont, m_nOptions, m_bIsInteractive, true);
 }
 
 bool SdrHHCWrapper::ConvertNextDocument()
 {
     bool bNextDoc = false;
 
-    if ( pTextObj )
+    if ( m_pTextObj )
     {
-        SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
+        SdrView *pSdrView = m_pView->GetWrtShell().GetDrawView();
         OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( true );
         SetUpdateLayout(false);
-        pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1, 1) ) );
+        m_pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1, 1) ) );
         SetPaperSize( Size(1, 1) );
         Clear();
-        pTextObj = nullptr;
+        m_pTextObj = nullptr;
     }
 
-    const auto n = nDocIndex;
+    const auto n = m_nDocIndex;
 
     std::list<SdrTextObj*> aTextObjs;
-    SwDrawContact::GetTextObjectsFromFormat(aTextObjs, *pView->GetDocShell()->GetDoc());
+    SwDrawContact::GetTextObjectsFromFormat(aTextObjs, *m_pView->GetDocShell()->GetDoc());
     for (auto const& textObj : aTextObjs)
     {
-        pTextObj = textObj;
+        m_pTextObj = textObj;
         if (textObj)
         {
             OutlinerParaObject* pParaObj = textObj->GetOutlinerParaObject();
@@ -132,26 +132,26 @@ bool SdrHHCWrapper::ConvertNextDocument()
                 //!! formatted when some information is accessed, and thus
                 //!! incorrect results get returned.
                 SetUpdateLayout(true);
-                if (HasConvertibleTextPortion( nSourceLang ))
+                if (HasConvertibleTextPortion( m_nSourceLang ))
                 {
-                    SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
+                    SdrView *pSdrView = m_pView->GetWrtShell().GetDrawView();
                     OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
                     SdrPageView* pPV = pSdrView->GetSdrPageView();
-                    nDocIndex = n;
+                    m_nDocIndex = n;
                     bNextDoc = true;
-                    pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1,1)));
-                    SetPaperSize( pTextObj->GetLogicRect().GetSize() );
+                    m_pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1,1)));
+                    SetPaperSize( m_pTextObj->GetLogicRect().GetSize() );
                     SetUpdateLayout(true);
-                    pView->GetWrtShell().MakeVisible(SwRect(pTextObj->GetLogicRect()));
+                    m_pView->GetWrtShell().MakeVisible(SwRect(m_pTextObj->GetLogicRect()));
 
-                    pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), false, this, pOutlView.get(), true, true);
+                    pSdrView->SdrBeginTextEdit(m_pTextObj, pPV, &m_pView->GetEditWin(), false, this, m_pOutlView.get(), true, true);
                 }
                 else
                     SetUpdateLayout(false);
             }
 
             if ( !bNextDoc )
-                pTextObj = nullptr;
+                m_pTextObj = nullptr;
             else
                 break;
         }

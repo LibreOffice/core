@@ -239,7 +239,7 @@ public:
 /** Implement the XNameAccess for the AutoText events */
 class SwAutoTextEventDescriptor final : public SvBaseEventDescriptor
 {
-    SwXAutoTextEntry& rAutoTextEntry;
+    SwXAutoTextEntry& m_rAutoTextEntry;
 
     using SvBaseEventDescriptor::replaceByName;
     using SvBaseEventDescriptor::getByName;

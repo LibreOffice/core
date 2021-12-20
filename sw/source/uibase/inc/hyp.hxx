@@ -28,12 +28,12 @@ class SwView;
 
 class SW_DLLPUBLIC SwHyphWrapper final : public SvxSpellWrapper {
 private:
-    SwView* pView;
-    sal_uInt16      nPageCount;     // page count for progress view
-    sal_uInt16      nPageStart;     // 1st checked page
-    bool            bInSelection : 1; // separating selected text
-    bool            bAutomatic : 1; // insert separators without further inquiry
-    bool            bInfoBox : 1;   // display info-box when ending
+    SwView* m_pView;
+    sal_uInt16      m_nPageCount;     // page count for progress view
+    sal_uInt16      m_nPageStart;     // 1st checked page
+    bool            m_bInSelection : 1; // separating selected text
+    bool            m_bAutomatic : 1; // insert separators without further inquiry
+    bool            m_bInfoBox : 1;   // display info-box when ending
 
     virtual void SpellStart( SvxSpellArea eSpell ) override;
     virtual void SpellContinue() override;

@@ -31,7 +31,7 @@
 
 #include <memory>
 
-#define PSH         (&pView->GetWrtShell())
+#define PSH         (&m_pView->GetWrtShell())
 
 using namespace ::com::sun::star;
 
@@ -40,44 +40,44 @@ SwHyphWrapper::SwHyphWrapper( SwView* pVw,
             uno::Reference< linguistic2::XHyphenator > const &rxHyph,
             bool bStart, bool bOther, bool bSelect ) :
     SvxSpellWrapper( pVw->GetEditWin().GetFrameWeld(), rxHyph, bStart, bOther ),
-    pView( pVw ),
-    nPageCount( 0 ),
-    nPageStart( 0 ),
-    bInSelection( bSelect ),
-    bInfoBox( false )
+    m_pView( pVw ),
+    m_nPageCount( 0 ),
+    m_nPageStart( 0 ),
+    m_bInSelection( bSelect ),
+    m_bInfoBox( false )
 {
     uno::Reference< linguistic2::XLinguProperties >  xProp( GetLinguPropertySet() );
-    bAutomatic = xProp.is() && xProp->getIsHyphAuto();
+    m_bAutomatic = xProp.is() && xProp->getIsHyphAuto();
 }
 
 void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
 {
-    if( SvxSpellArea::Other == eSpell && nPageCount )
+    if( SvxSpellArea::Other == eSpell && m_nPageCount )
     {
-        ::EndProgress( pView->GetDocShell() );
-        nPageCount = 0;
-        nPageStart = 0;
+        ::EndProgress( m_pView->GetDocShell() );
+        m_nPageCount = 0;
+        m_nPageStart = 0;
     }
-    pView->HyphStart( eSpell );
+    m_pView->HyphStart( eSpell );
 }
 
 void SwHyphWrapper::SpellContinue()
 {
     // for automatic separation, make actions visible only at the end
     std::unique_ptr<SwWait> pWait;
-    if( bAutomatic )
+    if( m_bAutomatic )
     {
         PSH->StartAllAction();
-        pWait.reset(new SwWait( *pView->GetDocShell(), true ));
+        pWait.reset(new SwWait( *m_pView->GetDocShell(), true ));
     }
 
-    uno::Reference< uno::XInterface >  xHyphWord = bInSelection ?
+    uno::Reference< uno::XInterface >  xHyphWord = m_bInSelection ?
                 PSH->HyphContinue( nullptr, nullptr ) :
-                PSH->HyphContinue( &nPageCount, &nPageStart );
+                PSH->HyphContinue( &m_nPageCount, &m_nPageStart );
     SetLast( xHyphWord );
 
     // for automatic separation, make actions visible only at the end
-    if( bAutomatic )
+    if( m_bAutomatic )
     {
         PSH->EndAllAction();
         pWait.reset();
@@ -93,7 +93,7 @@ void SwHyphWrapper::SpellEnd()
 bool SwHyphWrapper::SpellMore()
 {
     PSH->Push();
-    bInfoBox = true;
+    m_bInfoBox = true;
     PSH->Combine();
     return false;
 }
@@ -110,11 +110,11 @@ void SwHyphWrapper::InsertHyphen( const sal_Int32 nPos )
 
 SwHyphWrapper::~SwHyphWrapper()
 {
-    if( nPageCount )
-        ::EndProgress( pView->GetDocShell() );
-    if( bInfoBox && !Application::IsHeadlessModeEnabled() )
+    if( m_nPageCount )
+        ::EndProgress( m_pView->GetDocShell() );
+    if( m_bInfoBox && !Application::IsHeadlessModeEnabled() )
     {
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pView->GetEditWin().GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_pView->GetEditWin().GetFrameWeld(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       SwResId(STR_HYP_OK)));
         xInfoBox->run();
