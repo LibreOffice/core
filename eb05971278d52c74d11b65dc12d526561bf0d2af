@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eee4634_34097c02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-20T13:55:54Z",
+      "side": 1,
+      "message": "Works as described. But I think users expect what Telesto describes: a warning when certain conditions not met- but the dialog remains open (and has to be closed per Cancel). Now it looks like Okay accepts some default value, maybe \"Untitled\".",
+      "revId": "eb05971278d52c74d11b65dc12d526561bf0d2af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
