@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/point/b3dpoint.hxx>
