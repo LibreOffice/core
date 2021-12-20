@@ -829,11 +829,9 @@ public:
                                                  GDIMetaFile& rMtf );
 #endif
 
-    void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf );
+    void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, Point const& rRef, bool bMtf );
 
 private:
-
-    SAL_DLLPRIVATE void         CalcHatchValues( const tools::Rectangle& rRect, tools::Long nDist, Degree10 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
     SAL_DLLPRIVATE void         DrawHatchLines( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
     ///@}
 
