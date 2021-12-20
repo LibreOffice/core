@@ -124,7 +124,29 @@ void SfxStatusDispatcher::ReleaseAll()
 {
     css::lang::EventObject aObject;
     aObject.Source = static_cast<cppu::OWeakObject*>(this);
-    aListeners.disposeAndClear( aObject );
+    std::unique_lock aGuard(maMutex);
+    maListeners.disposeAndClear( aGuard, aObject );
+}
+
+void SfxStatusDispatcher::sendStatusChanged(const OUString& rURL, const css::frame::FeatureStateEvent& rEvent)
+{
+    std::unique_lock aGuard(maMutex);
+    ::comphelper::OInterfaceContainerHelper4<css::frame::XStatusListener>* pContnr = maListeners.getContainer(rURL);
+    if (!pContnr)
+        return;
+    ::comphelper::OInterfaceIteratorHelper4 aIt(*pContnr);
+    aGuard.unlock();
+    while (aIt.hasMoreElements())
+    {
+        try
+        {
+            aIt.next()->statusChanged(rEvent);
+        }
+        catch (const css::uno::RuntimeException&)
+        {
+            aIt.remove();
+        }
+    }
 }
 
 void SAL_CALL SfxStatusDispatcher::dispatch( const css::util::URL&, const css::uno::Sequence< css::beans::PropertyValue >& )
@@ -139,13 +161,15 @@ void SAL_CALL SfxStatusDispatcher::dispatchWithNotification(
 }
 
 SfxStatusDispatcher::SfxStatusDispatcher()
-    : aListeners( aMutex )
 {
 }
 
 void SAL_CALL SfxStatusDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
 {
-    aListeners.addInterface( aURL.Complete, aListener );
+    {
+        std::unique_lock aGuard(maMutex);
+        maListeners.addInterface( aURL.Complete, aListener );
+    }
     if ( aURL.Complete == ".uno:LifeTime" )
     {
         css::frame::FeatureStateEvent aEvent;
@@ -159,7 +183,8 @@ void SAL_CALL SfxStatusDispatcher::addStatusListener(const css::uno::Reference< 
 
 void SAL_CALL SfxStatusDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL )
 {
-    aListeners.removeInterface( aURL.Complete, aListener );
+    std::unique_lock aGuard(maMutex);
+    maListeners.removeInterface( aURL.Complete, aListener );
 }
 
 
@@ -273,7 +298,10 @@ void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const css::util::URL&
 
 void SAL_CALL SfxOfficeDispatch::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
 {
-    GetListeners().addInterface( aURL.Complete, aListener );
+    {
+        std::unique_lock aGuard(maMutex);
+        maListeners.addInterface( aURL.Complete, aListener );
+    }
     if ( pImpl )
     {
         // ControllerItem is the Impl class
@@ -382,9 +410,7 @@ SfxDispatchController_Impl::~SfxDispatchController_Impl()
         pDispatch->pImpl = nullptr;
 
         // force all listeners to release the dispatch object
-        css::lang::EventObject aObject;
-        aObject.Source = static_cast<cppu::OWeakObject*>(pDispatch);
-        pDispatch->GetListeners().disposeAndClear( aObject );
+        pDispatch->ReleaseAll();
     }
 }
 
@@ -794,21 +820,7 @@ void SfxDispatchController_Impl::addStatusListener(const css::uno::Reference< cs
 
 void SfxDispatchController_Impl::sendStatusChanged(const OUString& rURL, const css::frame::FeatureStateEvent& rEvent)
 {
-    ::comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener>* pContnr = pDispatch->GetListeners().getContainer(rURL);
-    if (!pContnr)
-        return;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*pContnr);
-    while (aIt.hasMoreElements())
-    {
-        try
-        {
-            aIt.next()->statusChanged(rEvent);
-        }
-        catch (const css::uno::RuntimeException&)
-        {
-            aIt.remove();
-        }
-    }
+    pDispatch->sendStatusChanged(rURL, rEvent);
 }
 
 void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer const * pSlotServ )
@@ -889,7 +901,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         InterceptLOKStateChangeEvent(nSID, pDispatcher->GetFrame(), aEvent, pState);
     }
 
-    const std::vector<OUString> aContainedTypes = pDispatch->GetListeners().getContainedTypes();
+    const std::vector<OUString> aContainedTypes = pDispatch->getContainedTypes();
     for (const OUString& rName: aContainedTypes)
     {
         if (rName == aDispatchURL.Main || rName == aDispatchURL.Complete)
