@@ -80,9 +80,15 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
                     return true; // unnamed parameter -> unused
                 // If this declaration does not have a body, then the parameter is indeed not used,
                 // so ignore.
-                if( const FunctionDecl* func = dyn_cast_or_null< FunctionDecl >( param->getParentFunctionOrMethod()))
+                auto const parent = param->getParentFunctionOrMethod();
+                if( const FunctionDecl* func = dyn_cast_or_null< FunctionDecl >( parent))
                     if( !func->doesThisDeclarationHaveABody() || func->getBody() == nullptr)
                         return true;
+                if (auto const d = dyn_cast_or_null<ObjCMethodDecl>(parent)) {
+                    if (!d->hasBody()) {
+                        return true;
+                    }
+                }
                 report( DiagnosticsEngine::Warning, "unused parameter %0",
                     var->getLocation()) << var->getDeclName();
                 }
