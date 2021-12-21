@@ -66,11 +66,13 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gradient.hxx>
+#include <map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using std::map;
 
 #define CHAR_UNDERSCORE u'_'
 #define CHAR_LEFT_ARROW u'\x25C0'
@@ -1445,9 +1447,23 @@ bool SwTextFormatInfo::IsHyphenate() const
         return false;
 
     LanguageType eTmp = GetFont()->GetLanguage();
+    std::map<LanguageType, sal_Int16> lang_map = {
+        {LANGUAGE_DONTKNOW,0}            ,{LANGUAGE_NONE,1},
+        {LANGUAGE_JAPANESE,2}            ,{LANGUAGE_CHINESE_HONGKONG,3}         ,{LANGUAGE_CHINESE_LSO,4},
+        {LANGUAGE_CHINESE_MACAU,5}       ,{LANGUAGE_CHINESE_SIMPLIFIED,6}       ,{LANGUAGE_CHINESE_SINGAPORE,7},
+        {LANGUAGE_CHINESE_TRADITIONAL,8} ,{LANGUAGE_CHINESE_SIMPLIFIED_LEGACY,9},{LANGUAGE_CHINESE_TRADITIONAL_LSO,10},
+        {LANGUAGE_USER_KOREAN_NORTH,11}  ,{LANGUAGE_KOREAN,12}                  ,{LANGUAGE_FARSI,13},
+        {LANGUAGE_ARABIC_ALGERIA,14}     ,{LANGUAGE_ARABIC_BAHRAIN,15}          ,{LANGUAGE_ARABIC_EGYPT,16},
+        {LANGUAGE_ARABIC_IRAQ,17}        ,{LANGUAGE_ARABIC_JORDAN,18}           ,{LANGUAGE_ARABIC_KUWAIT,19},
+        {LANGUAGE_ARABIC_LEBANON,20}     ,{LANGUAGE_ARABIC_LIBYA,21}            ,{LANGUAGE_ARABIC_MOROCCO,22},
+        {LANGUAGE_ARABIC_OMAN,23}        ,{LANGUAGE_ARABIC_PRIMARY_ONLY,24}     ,{LANGUAGE_ARABIC_QATAR,25},
+        {LANGUAGE_ARABIC_SAUDI_ARABIA,26},{LANGUAGE_ARABIC_SYRIA,27}            ,{LANGUAGE_ARABIC_TUNISIA,28},
+        {LANGUAGE_ARABIC_UAE,29}         ,{LANGUAGE_ARABIC_YEMEN,30}            ,{LANGUAGE_PASHTO,31}
+    };
     // TODO: check for more ideographic langs w/o hyphenation as a concept
-    if ( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp || LANGUAGE_JAPANESE == eTmp )
-        return false;
+    if( lang_map.count(eTmp))
+         return false;
+
 
     uno::Reference< XHyphenator > xHyph = ::GetHyphenator();
     if (!xHyph.is())
