@@ -34,6 +34,24 @@
       "parentUuid": "991baa4f_e93121a4",
       "revId": "8c028b7e41e3d350d0e67005b16faf0159cc5c12",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1618cd53_57473198",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-12-21T10:58:17Z",
+      "side": 1,
+      "message": "Stephan, thanks for the bug report! I was able to fix the problem with a follow-up commit. The back port contains both of them: https://gerrit.libreoffice.org/c/core/+/127195",
+      "parentUuid": "93657588_0dbfe79e",
+      "revId": "8c028b7e41e3d350d0e67005b16faf0159cc5c12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
