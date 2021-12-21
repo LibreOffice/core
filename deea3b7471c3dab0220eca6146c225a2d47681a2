@@ -85,6 +85,24 @@
       "message": "so the timer ends up doing \"m_pCurField \u003d pSh-\u003eGetCurField( true )\"\n\nvia SwFieldPage::Init() called from SwFieldDlg::ReInitTabPage()\n\nas such any static_cast of m_pCurField is bogus, no guarantees can be made about the type of the object it points to\n\nsee also fldref.cxx:292 where it\u0027s already dynamic_cast",
       "revId": "deea3b7471c3dab0220eca6146c225a2d47681a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79a5eed5_43736d10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-21T07:16:43Z",
+      "side": 1,
+      "message": "\u003e (Also, at \u003chttps://ci.libreoffice.org//job/lo_ubsan/2234/consoleFull#40018799748ce9c26-9d0a-43a8-83d8-c44f54920d59\u003e, this test was killed by the kill-wrapper, with the python.bin process at\n\n...and that hang still keeps happening after \u003chttps://git.libreoffice.org/core/+/40487d9c81c69c4e5ee1621e53c8162ae33c80b2%5E!/\u003e \"tdf#145062 sw: try to fix UBSan crash in UITest\", see e.g. \u003chttps://ci.libreoffice.org//job/lo_ubsan/2239/consoleFull#-135037041348ce9c26-9d0a-43a8-83d8-c44f54920d59\u003e",
+      "parentUuid": "853e144e_a7b04803",
+      "revId": "deea3b7471c3dab0220eca6146c225a2d47681a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
