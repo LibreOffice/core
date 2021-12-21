@@ -88,60 +88,60 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
 {
     /* get the language from the user environment */
     LanguageType nLang = rSystemLanguage;
+    if ( nLang != LANGUAGE_DONTKNOW )
+        return;
+
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex());
+    nLang = rSystemLanguage;
     if ( nLang == LANGUAGE_DONTKNOW )
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex());
-        nLang = rSystemLanguage;
-        if ( nLang == LANGUAGE_DONTKNOW )
-        {
 #ifdef MACOSX
-            rtl_Locale    *procLocale;
-            (void) pGetLangFromEnv; /* unused */
+        rtl_Locale    *procLocale;
+        (void) pGetLangFromEnv; /* unused */
 
-            if ( osl_getProcessLocale(&procLocale) == osl_Process_E_None )
-            {
-                nLang = LanguageTag( *procLocale ).makeFallback().getLanguageType();
-                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-                rSystemLanguage = nLang;
-#ifdef DEBUG
-                if ( rSystemLanguage == LANGUAGE_DONTKNOW )
-                    fprintf( stderr, "intnunx.cxx:  failed to convert osl_getProcessLocale() language to system language.\n" );
-#endif
-            }
-#else   /* MACOSX */
-            bool bColonList = false;
-            OString aUnxLang( pGetLangFromEnv( bColonList));
-            if (bColonList)
-            {
-                // Only a very simple "take first". If empty try second or keep empty.
-                sal_Int32 n = aUnxLang.indexOf(':');
-                if (n >= 0)
-                {
-                    sal_Int32 s = 0;
-                    if (n == 0 && aUnxLang.getLength() > 1)
-                    {
-                        n = aUnxLang.indexOf(':', 1);
-                        if (n < 0)
-                            n = aUnxLang.getLength();
-                        if (n < 2)
-                            s = n = 0;
-                        else
-                        {
-                            s = 1;
-                            --n;
-                        }
-                    }
-                    aUnxLang = aUnxLang.copy(s,n);
-                }
-            }
-            nLang = MsLangId::convertUnxByteStringToLanguage( aUnxLang );
+        if ( osl_getProcessLocale(&procLocale) == osl_Process_E_None )
+        {
+            nLang = LanguageTag( *procLocale ).makeFallback().getLanguageType();
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             rSystemLanguage = nLang;
+#ifdef DEBUG
+            if ( rSystemLanguage == LANGUAGE_DONTKNOW )
+                fprintf( stderr, "intnunx.cxx:  failed to convert osl_getProcessLocale() language to system language.\n" );
+#endif
+        }
+#else   /* MACOSX */
+        bool bColonList = false;
+        OString aUnxLang( pGetLangFromEnv( bColonList));
+        if (bColonList)
+        {
+            // Only a very simple "take first". If empty try second or keep empty.
+            sal_Int32 n = aUnxLang.indexOf(':');
+            if (n >= 0)
+            {
+                sal_Int32 s = 0;
+                if (n == 0 && aUnxLang.getLength() > 1)
+                {
+                    n = aUnxLang.indexOf(':', 1);
+                    if (n < 0)
+                        n = aUnxLang.getLength();
+                    if (n < 2)
+                        s = n = 0;
+                    else
+                    {
+                        s = 1;
+                        --n;
+                    }
+                }
+                aUnxLang = aUnxLang.copy(s,n);
+            }
+        }
+        nLang = MsLangId::convertUnxByteStringToLanguage( aUnxLang );
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        rSystemLanguage = nLang;
 #endif  /* MACOSX */
-        }
-        else {
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        }
+    }
+    else {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
 }
 

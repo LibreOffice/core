@@ -125,38 +125,37 @@ bool AstDeclaration::hasAncestor(AstDeclaration* pDecl)
 bool AstDeclaration::dump(RegistryKey& rKey)
 {
     AstScope* pScope = declAsScope(this);
+    if ( !pScope )
+        return true;
+
     bool bRet = true;
-
-    if ( pScope )
+    DeclList::const_iterator iter = pScope->getIteratorBegin();
+    DeclList::const_iterator end = pScope->getIteratorEnd();
+    AstDeclaration* pDecl = nullptr;
+    while ( iter != end && bRet)
     {
-        DeclList::const_iterator iter = pScope->getIteratorBegin();
-        DeclList::const_iterator end = pScope->getIteratorEnd();
-        AstDeclaration* pDecl = nullptr;
-        while ( iter != end && bRet)
+        pDecl = *iter;
+        if ( pDecl->isInMainfile() )
         {
-            pDecl = *iter;
-            if ( pDecl->isInMainfile() )
+            switch ( pDecl->getNodeType() )
             {
-                switch ( pDecl->getNodeType() )
-                {
-                    case NT_module:
-                    case NT_constants:
-                    case NT_interface:
-                    case NT_struct:
-                    case NT_exception:
-                    case NT_enum:
-                    case NT_typedef:
-                    case NT_service:
-                    case NT_singleton:
-                        bRet = pDecl->dump(rKey);
-                        break;
-                    default:
-                        break;
-                }
+                case NT_module:
+                case NT_constants:
+                case NT_interface:
+                case NT_struct:
+                case NT_exception:
+                case NT_enum:
+                case NT_typedef:
+                case NT_service:
+                case NT_singleton:
+                    bRet = pDecl->dump(rKey);
+                    break;
+                default:
+                    break;
             }
-
-            ++iter;
         }
+
+        ++iter;
     }
     return bRet;
 }

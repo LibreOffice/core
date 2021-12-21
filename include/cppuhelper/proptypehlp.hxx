@@ -42,36 +42,37 @@ inline void SAL_CALL convertPropertyValue( target &value , const  css::uno::Any 
 
 void convertPropertyValue(bool & b, const css::uno::Any & a)
 {
-    if( !(a >>= b) ) {
-        switch( a.getValueType().getTypeClass() ) {
-        case css::uno::TypeClass_BYTE:
-            b = a.get<sal_Int8>() != 0;
+    if( a >>= b )
+        return;
+
+    switch( a.getValueType().getTypeClass() ) {
+    case css::uno::TypeClass_BYTE:
+        b = a.get<sal_Int8>() != 0;
+        break;
+    case css::uno::TypeClass_SHORT:
+        b = a.get<sal_Int16>() != 0;
+        break;
+    case css::uno::TypeClass_UNSIGNED_SHORT:
+        {
+            sal_uInt16 i16 = 0;
+            a >>= i16;
+            b = i16 != 0;
             break;
-        case css::uno::TypeClass_SHORT:
-            b = a.get<sal_Int16>() != 0;
-            break;
-        case css::uno::TypeClass_UNSIGNED_SHORT:
-            {
-                sal_uInt16 i16 = 0;
-                a >>= i16;
-                b = i16 != 0;
-                break;
-            }
-        case css::uno::TypeClass_LONG:
-            b = a.get<sal_Int32>() != 0;
-            break;
-        case css::uno::TypeClass_UNSIGNED_LONG:
-            b = a.get<sal_uInt32>() != 0;
-            break;
-        case css::uno::TypeClass_CHAR:
-            {
-                sal_Unicode c = *static_cast<sal_Unicode const *>(a.getValue());
-                b = c != 0;
-                break;
-            }
-        default:
-            throw css::lang::IllegalArgumentException();
         }
+    case css::uno::TypeClass_LONG:
+        b = a.get<sal_Int32>() != 0;
+        break;
+    case css::uno::TypeClass_UNSIGNED_LONG:
+        b = a.get<sal_uInt32>() != 0;
+        break;
+    case css::uno::TypeClass_CHAR:
+        {
+            sal_Unicode c = *static_cast<sal_Unicode const *>(a.getValue());
+            b = c != 0;
+            break;
+        }
+    default:
+        throw css::lang::IllegalArgumentException();
     }
 }
 
@@ -217,62 +218,64 @@ inline void SAL_CALL convertPropertyValue( sal_Int8 & i  , const css::uno::Any &
 
 inline void SAL_CALL convertPropertyValue( float &f , const css::uno::Any &a )
 {
-    if( !(a >>= f) ) {
-        switch( a.getValueType().getTypeClass() ) {
-        case css::uno::TypeClass_BOOLEAN:
-            f = static_cast<float>(a.get<bool>());
+    if( a >>= f )
+        return;
+
+    switch( a.getValueType().getTypeClass() ) {
+    case css::uno::TypeClass_BOOLEAN:
+        f = static_cast<float>(a.get<bool>());
+        break;
+    case css::uno::TypeClass_LONG:
+        f = static_cast<float>(a.get<sal_Int32>());
+        break;
+    case css::uno::TypeClass_UNSIGNED_LONG:
+        f = static_cast<float>(a.get<sal_uInt32>());
+        break;
+    case css::uno::TypeClass_HYPER:
+        f = static_cast<float>(a.get<sal_Int64>());
+        break;
+    case css::uno::TypeClass_UNSIGNED_HYPER:
+        f = static_cast<float>(a.get<sal_uInt64>());
+        break;
+    case css::uno::TypeClass_DOUBLE:
+        f = static_cast<float>(a.get<double>());
+        break;
+    case css::uno::TypeClass_CHAR:
+        {
+            sal_Unicode c;
+            c = *static_cast<sal_Unicode const *>(a.getValue());
+            f = static_cast<float>(c);
             break;
-        case css::uno::TypeClass_LONG:
-            f = static_cast<float>(a.get<sal_Int32>());
-            break;
-        case css::uno::TypeClass_UNSIGNED_LONG:
-            f = static_cast<float>(a.get<sal_uInt32>());
-            break;
-        case css::uno::TypeClass_HYPER:
-            f = static_cast<float>(a.get<sal_Int64>());
-            break;
-        case css::uno::TypeClass_UNSIGNED_HYPER:
-            f = static_cast<float>(a.get<sal_uInt64>());
-            break;
-        case css::uno::TypeClass_DOUBLE:
-            f = static_cast<float>(a.get<double>());
-            break;
-        case css::uno::TypeClass_CHAR:
-            {
-                sal_Unicode c;
-                c = *static_cast<sal_Unicode const *>(a.getValue());
-                f = static_cast<float>(c);
-                break;
-            }
-        default:
-            throw css::lang::IllegalArgumentException();
         }
+    default:
+        throw css::lang::IllegalArgumentException();
     }
 }
 
 inline void SAL_CALL convertPropertyValue( double &d , const css::uno::Any &a )
 {
-    if( !(a >>= d) ) {
-        switch( a.getValueType().getTypeClass() ) {
-        case css::uno::TypeClass_BOOLEAN:
-            d = static_cast<double>(a.get<bool>());
+    if( a >>= d )
+        return;
+
+    switch( a.getValueType().getTypeClass() ) {
+    case css::uno::TypeClass_BOOLEAN:
+        d = static_cast<double>(a.get<bool>());
+        break;
+    case css::uno::TypeClass_HYPER:
+        d = static_cast<double>(a.get<sal_Int64>());
+        break;
+    case css::uno::TypeClass_UNSIGNED_HYPER:
+        d = static_cast<double>(a.get<sal_uInt64>());
+        break;
+    case css::uno::TypeClass_CHAR:
+        {
+            sal_Unicode c;
+            c = *static_cast<sal_Unicode const *>(a.getValue());
+            d = static_cast<double>(c);
             break;
-        case css::uno::TypeClass_HYPER:
-            d = static_cast<double>(a.get<sal_Int64>());
-            break;
-        case css::uno::TypeClass_UNSIGNED_HYPER:
-            d = static_cast<double>(a.get<sal_uInt64>());
-            break;
-        case css::uno::TypeClass_CHAR:
-            {
-                sal_Unicode c;
-                c = *static_cast<sal_Unicode const *>(a.getValue());
-                d = static_cast<double>(c);
-                break;
-            }
-        default:
-            throw css::lang::IllegalArgumentException();
         }
+    default:
+        throw css::lang::IllegalArgumentException();
     }
 }
 

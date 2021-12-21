@@ -148,58 +148,58 @@ class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
         , m_nId(nId)
         , m_bBeginRecorded(false)
     {
-        if (s_bRecording)
-        {
-            long long nNow = getNow();
+        if (!s_bRecording)
+            return;
 
-            // Generate a "Start" (type S) event
-            TraceEvent::addRecording("{"
-                                     "\"name\":\""
-                                     + OUString(m_sName, strlen(m_sName), RTL_TEXTENCODING_UTF8)
-                                     + "\","
-                                       "\"ph\":\"S\""
-                                       ","
-                                       "\"id\":"
-                                     + OUString::number(m_nId) + m_sArgs
-                                     + ","
-                                       "\"ts\":"
-                                     + OUString::number(nNow)
-                                     + ","
-                                       "\"pid\":"
-                                     + OUString::number(m_nPid)
-                                     + ","
-                                       "\"tid\":"
-                                     + OUString::number(osl_getThreadIdentifier(nullptr)) + "},");
-            m_bBeginRecorded = true;
-        }
+        long long nNow = getNow();
+
+        // Generate a "Start" (type S) event
+        TraceEvent::addRecording("{"
+                                 "\"name\":\""
+                                 + OUString(m_sName, strlen(m_sName), RTL_TEXTENCODING_UTF8)
+                                 + "\","
+                                   "\"ph\":\"S\""
+                                   ","
+                                   "\"id\":"
+                                 + OUString::number(m_nId) + m_sArgs
+                                 + ","
+                                   "\"ts\":"
+                                 + OUString::number(nNow)
+                                 + ","
+                                   "\"pid\":"
+                                 + OUString::number(m_nPid)
+                                 + ","
+                                   "\"tid\":"
+                                 + OUString::number(osl_getThreadIdentifier(nullptr)) + "},");
+        m_bBeginRecorded = true;
     }
 
     void generateEnd()
     {
-        if (m_bBeginRecorded)
-        {
-            m_bBeginRecorded = false;
+        if (!m_bBeginRecorded)
+            return;
 
-            long long nNow = getNow();
-            // Generate a "Finish" (type F) event
-            TraceEvent::addRecording("{"
-                                     "\"name\":\""
-                                     + OUString(m_sName, strlen(m_sName), RTL_TEXTENCODING_UTF8)
-                                     + "\","
-                                       "\"ph\":\"F\""
-                                       ","
-                                       "\"id\":"
-                                     + OUString::number(m_nId) + m_sArgs
-                                     + ","
-                                       "\"ts\":"
-                                     + OUString::number(nNow)
-                                     + ","
-                                       "\"pid\":"
-                                     + OUString::number(m_nPid)
-                                     + ","
-                                       "\"tid\":"
-                                     + OUString::number(osl_getThreadIdentifier(nullptr)) + "},");
-        }
+        m_bBeginRecorded = false;
+
+        long long nNow = getNow();
+        // Generate a "Finish" (type F) event
+        TraceEvent::addRecording("{"
+                                 "\"name\":\""
+                                 + OUString(m_sName, strlen(m_sName), RTL_TEXTENCODING_UTF8)
+                                 + "\","
+                                   "\"ph\":\"F\""
+                                   ","
+                                   "\"id\":"
+                                 + OUString::number(m_nId) + m_sArgs
+                                 + ","
+                                   "\"ts\":"
+                                 + OUString::number(nNow)
+                                 + ","
+                                   "\"pid\":"
+                                 + OUString::number(m_nPid)
+                                 + ","
+                                   "\"tid\":"
+                                 + OUString::number(osl_getThreadIdentifier(nullptr)) + "},");
     }
 
 public:

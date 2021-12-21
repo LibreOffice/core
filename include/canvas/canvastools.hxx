@@ -461,24 +461,24 @@ namespace canvas
                     SAL_WARN("canvas", "ValueMap::ValueMap(): Key is not lowercase " << pMap->maKey);
                 }
 
-                if( mnEntries > 1 )
-                {
-                    for( ::std::size_t i=0; i<mnEntries-1; ++i, ++pMap )
-                    {
-                        if( !mapComparator(pMap[0], pMap[1]) &&
-                            mapComparator(pMap[1], pMap[0]) )
-                        {
-                            SAL_WARN("canvas", "ValueMap::ValueMap(): Map is not sorted, keys are wrong, "
-                                      << pMap[0].maKey << " and " << pMap[1].maKey);
-                            OSL_FAIL( "ValueMap::ValueMap(): Map is not sorted" );
-                        }
+                if( mnEntries <= 1 )
+                    return;
 
-                        const OString aStr2( pMap[1].maKey );
-                        if( !mbCaseSensitive &&
-                            aStr2 != aStr2.toAsciiLowerCase() )
-                        {
-                            SAL_WARN("canvas", "ValueMap::ValueMap(): Key is not lowercase" << pMap[1].maKey);
-                        }
+                for( ::std::size_t i=0; i<mnEntries-1; ++i, ++pMap )
+                {
+                    if( !mapComparator(pMap[0], pMap[1]) &&
+                        mapComparator(pMap[1], pMap[0]) )
+                    {
+                        SAL_WARN("canvas", "ValueMap::ValueMap(): Map is not sorted, keys are wrong, "
+                                  << pMap[0].maKey << " and " << pMap[1].maKey);
+                        OSL_FAIL( "ValueMap::ValueMap(): Map is not sorted" );
+                    }
+
+                    const OString aStr2( pMap[1].maKey );
+                    if( !mbCaseSensitive &&
+                        aStr2 != aStr2.toAsciiLowerCase() )
+                    {
+                        SAL_WARN("canvas", "ValueMap::ValueMap(): Key is not lowercase" << pMap[1].maKey);
                     }
                 }
 #endif

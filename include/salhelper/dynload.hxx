@@ -150,9 +150,6 @@ public:
     /// Destructor, decrease the reference count and unload the library if it is the last instance.
     ~ODynamicLoader()
     {
-        if( m_pLoader )
-            if (m_pLoader->release()==0)
-                m_pStaticLoader = NULL;
     }
 
     /// Assign operator

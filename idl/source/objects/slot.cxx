@@ -570,33 +570,32 @@ void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
 
 sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rOutStm ) const
 {
-    if( IsMethod() )
+    if( !IsMethod() )
+        return 0;
+
+    SvMetaType * pType = GetType();
+
+    if( !SvIdlDataBase::FindType( pType, rBase.aUsedTypes ) )
+        rBase.aUsedTypes.push_back( pType );
+
+    const SvRefMemberList<SvMetaAttribute *>& rList =
+                pType->GetAttrList();
+    for( size_t n = 0; n < rList.size(); n++ )
     {
-        SvMetaType * pType = GetType();
-
-        if( !SvIdlDataBase::FindType( pType, rBase.aUsedTypes ) )
-            rBase.aUsedTypes.push_back( pType );
-
-        const SvRefMemberList<SvMetaAttribute *>& rList =
-                    pType->GetAttrList();
-        for( size_t n = 0; n < rList.size(); n++ )
-        {
-            SvMetaAttribute * pPar  = rList[n];
-            SvMetaType * pPType     = pPar->GetType();
-            WriteTab( rOutStm, 1 );
-            rOutStm.WriteCharPtr("{ (const SfxType*) &a")
-                // item type
-               .WriteOString(pPType->GetName()).WriteCharPtr("_Impl, ")
-                // parameter name
-               .WriteCharPtr("\"").WriteOString(pPar->GetName()).WriteCharPtr("\", ")
-                // slot id
-               .WriteOString(pPar->GetSlotId().getString()).WriteCharPtr(" },") << endl;
-            if( !SvIdlDataBase::FindType( pPType, rBase.aUsedTypes ) )
-                rBase.aUsedTypes.push_back( pPType );
-        }
-        return static_cast<sal_uInt16>(rList.size());
+        SvMetaAttribute * pPar  = rList[n];
+        SvMetaType * pPType     = pPar->GetType();
+        WriteTab( rOutStm, 1 );
+        rOutStm.WriteCharPtr("{ (const SfxType*) &a")
+            // item type
+           .WriteOString(pPType->GetName()).WriteCharPtr("_Impl, ")
+            // parameter name
+           .WriteCharPtr("\"").WriteOString(pPar->GetName()).WriteCharPtr("\", ")
+            // slot id
+           .WriteOString(pPar->GetSlotId().getString()).WriteCharPtr(" },") << endl;
+        if( !SvIdlDataBase::FindType( pPType, rBase.aUsedTypes ) )
+            rBase.aUsedTypes.push_back( pPType );
     }
-    return 0;
+    return static_cast<sal_uInt16>(rList.size());
 }
 
 sal_uInt16 SvMetaSlot::WriteSlotMap( std::string_view rShellName, sal_uInt16 nCount,

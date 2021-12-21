@@ -66,37 +66,37 @@ bool AstEnum::dump(RegistryKey& rKey)
     }
 
     sal_uInt16 nConst = getNodeCount(NT_enum_val);
-    if ( nConst > 0 )
+    if ( nConst <= 0 )
+        return true;
+
+    typereg::Writer aBlob(
+        m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
+        getDocumentation(), "", RT_TYPE_ENUM, m_bPublished,
+        OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0,
+        nConst, 0, 0);
+
+    DeclList::const_iterator iter = getIteratorBegin();
+    DeclList::const_iterator end = getIteratorEnd();
+    sal_uInt16 index = 0;
+    while ( iter != end )
     {
-        typereg::Writer aBlob(
-            m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
-            getDocumentation(), "", RT_TYPE_ENUM, m_bPublished,
-            OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0,
-            nConst, 0, 0);
+        AstDeclaration* pDecl = *iter;
+        if ( pDecl->getNodeType() == NT_enum_val )
+            static_cast<AstConstant*>(pDecl)->dumpBlob(aBlob, index++, false);
 
-        DeclList::const_iterator iter = getIteratorBegin();
-        DeclList::const_iterator end = getIteratorEnd();
-        sal_uInt16 index = 0;
-        while ( iter != end )
-        {
-            AstDeclaration* pDecl = *iter;
-            if ( pDecl->getNodeType() == NT_enum_val )
-                static_cast<AstConstant*>(pDecl)->dumpBlob(aBlob, index++, false);
+        ++iter;
+    }
 
-            ++iter;
-        }
+    sal_uInt32 aBlobSize;
+    void const * pBlob = aBlob.getBlob(&aBlobSize);
 
-        sal_uInt32 aBlobSize;
-        void const * pBlob = aBlob.getBlob(&aBlobSize);
-
-        if (localKey.setValue("", RegValueType::BINARY,
-                                const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
-        {
-            fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
-                    idlc()->getOptions()->getProgramName().getStr(),
-                    getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-            return false;
-        }
+    if (localKey.setValue("", RegValueType::BINARY,
+                            const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
+    {
+        fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
+                idlc()->getOptions()->getProgramName().getStr(),
+                getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
+        return false;
     }
 
     return true;

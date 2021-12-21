@@ -596,23 +596,20 @@ void HWPFile::AddFBoxStyle(FBoxStyle * fbstyle)
 int HWPFile::compareCharShape(CharShape const *shape)
 {
     int count = cslist.size();
-    if( count > 0 )
+    for(int i = 0; i< count; i++)
     {
-        for(int i = 0; i< count; i++)
-        {
-            CharShape *cshape = getCharShape(i);
+        CharShape *cshape = getCharShape(i);
 
-            if( shape->size == cshape->size &&
-                shape->font[0] == cshape->font[0] &&
-                shape->ratio[0] == cshape->ratio[0] &&
-                shape->space[0] == cshape->space[0] &&
-                shape->color[1] == cshape->color[1] &&
-                shape->color[0] == cshape->color[0] &&
-                shape->shade == cshape->shade &&
-                shape->attr == cshape->attr )
-            {
-                return cshape->index;
-            }
+        if( shape->size == cshape->size &&
+            shape->font[0] == cshape->font[0] &&
+            shape->ratio[0] == cshape->ratio[0] &&
+            shape->space[0] == cshape->space[0] &&
+            shape->color[1] == cshape->color[1] &&
+            shape->color[0] == cshape->color[0] &&
+            shape->shade == cshape->shade &&
+            shape->attr == cshape->attr )
+        {
+            return cshape->index;
         }
     }
     return 0;
