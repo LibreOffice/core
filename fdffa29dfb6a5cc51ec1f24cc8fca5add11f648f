@@ -16,6 +16,24 @@
       "message": "Thanks for the comments, copying the named db with a new name works now.\n\nNot sure about updating the references. Is this a \"named range\" in UI speech? If so, why does it not show up in UI?\n\nAny idea how to get sample files where I can test the copying where references need to be adjusted?",
       "revId": "fdffa29dfb6a5cc51ec1f24cc8fca5add11f648f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f32b94e2_e9a658e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-12-21T14:07:44Z",
+      "side": 1,
+      "message": "\u003e Not sure about updating the references. Is this a \"named range\" in UI speech? If so, why does it not show up in UI?\n\nNevermind, I found this under \"Data-\u003eSelect Range ...\".",
+      "parentUuid": "bf3ab160_cc5aa3e0",
+      "revId": "fdffa29dfb6a5cc51ec1f24cc8fca5add11f648f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
