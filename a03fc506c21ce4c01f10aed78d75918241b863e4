@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5b89bf3_4a45385e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-21T12:15:58Z",
+      "side": 1,
+      "message": "After a while i am back again. I have made a debug build in a Virtual Machine with Ubuntu 21.10 and i was unable to reproduce the issue with the tests. I used GDB for debugging and everything were fine, the dispatch commands have been executed successfully, no problem were detected, after the .uno:AddTextBox command the group shape had textbox is supposed to, and there was no assert at all. So this is quite fishy, i think this one will be TODO and later i fix it but for now i have absolutely no idea and i am finding the problem in the dark because there is no problem at my local branch so this way i am unable to find the problem (on two platform, Windows and Ubuntu). I think without the problem it is hard to find the solution...  Any idea, what should i do? \nDetails:\nVersion: 7.4.0.0.alpha0+ / LibreOffice Community\nBuild ID: a03fc506c21ce4c01f10aed78d75918241b863e4\nCPU threads: 4; OS: Linux 5.13; UI render: default; VCL: gtk3\nLocale: hu-HU (hu_HU.UTF-8); UI: en-US\nCalc: threaded\nThe test branch is the same with this one (PS7)\ngcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0\nGNU gdb (Ubuntu 11.1-0ubuntu2) 11.1\nIf more details required just write me.",
+      "revId": "a03fc506c21ce4c01f10aed78d75918241b863e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
