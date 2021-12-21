@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "056ce823_1a0e23c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-21T17:19:59Z",
+      "side": 1,
+      "message": "I\u0027m assuming the printing resolution is higher than the screen resolution (which should be the case for all modern printers).\n\nI would say\n(*) after whitespace just use the screen position\n(*) unless we are in print or print-preview mode, in which case just always use the printer position\n\n",
+      "revId": "8de2cb34da3feed1ab250e165406e4c9992ea1ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
