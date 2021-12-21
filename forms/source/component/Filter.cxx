@@ -510,32 +510,31 @@ namespace frm
             default:
                 return true;
         }
-        if ( m_aText != aText )
+        if ( m_aText == aText )
+            return true;
+        // check the text with the SQL-Parser
+        OUString aNewText = aText.trim();
+        if ( !aNewText.isEmpty() )
         {
-            // check the text with the SQL-Parser
-            OUString aNewText = aText.trim();
-            if ( !aNewText.isEmpty() )
+            ::dbtools::OPredicateInputController aPredicateInput( m_xContext, m_xConnection, getParseContext() );
+            OUString sErrorMessage;
+            if ( !aPredicateInput.normalizePredicateString( aNewText, m_xField, &sErrorMessage ) )
             {
-                ::dbtools::OPredicateInputController aPredicateInput( m_xContext, m_xConnection, getParseContext() );
-                OUString sErrorMessage;
-                if ( !aPredicateInput.normalizePredicateString( aNewText, m_xField, &sErrorMessage ) )
-                {
-                    // display the error and outta here
-                    SQLContext aError;
-                    aError.Message = ResourceManager::loadString(RID_STR_SYNTAXERROR);
-                    aError.Details = sErrorMessage;
-                    displayException( aError );
-                    return false;
-                }
+                // display the error and outta here
+                SQLContext aError;
+                aError.Message = ResourceManager::loadString(RID_STR_SYNTAXERROR);
+                aError.Details = sErrorMessage;
+                displayException( aError );
+                return false;
             }
-
-            setText(aNewText);
-            TextEvent aEvt;
-            aEvt.Source = *this;
-            ::comphelper::OInterfaceIteratorHelper3 aIt(m_aTextListeners);
-            while( aIt.hasMoreElements() )
-                aIt.next()->textChanged(aEvt);
         }
+
+        setText(aNewText);
+        TextEvent aEvt;
+        aEvt.Source = *this;
+        ::comphelper::OInterfaceIteratorHelper3 aIt(m_aTextListeners);
+        while( aIt.hasMoreElements() )
+            aIt.next()->textChanged(aEvt);
 #endif
         return true;
     }

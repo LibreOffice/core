@@ -236,38 +236,38 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
 bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     OSL_PRECOND( m_xColumnUpdate.is(), "OCheckBoxModel::commitControlValueToDbColumn: not bound!" );
-    if ( m_xColumnUpdate.is() )
+    if ( !m_xColumnUpdate )
+        return true;
+
+    Any aControlValue( m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) );
+    try
     {
-        Any aControlValue( m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) );
-        try
+        sal_Int16 nValue = TRISTATE_INDET;
+        aControlValue >>= nValue;
+        switch (nValue)
         {
-            sal_Int16 nValue = TRISTATE_INDET;
-            aControlValue >>= nValue;
-            switch (nValue)
-            {
-                case TRISTATE_INDET:
-                    m_xColumnUpdate->updateNull();
-                    break;
-                case TRISTATE_TRUE:
-                    if (DbUseBool())
-                        m_xColumnUpdate->updateBoolean( true );
-                    else
-                        m_xColumnUpdate->updateString( getReferenceValue() );
-                    break;
-                case TRISTATE_FALSE:
-                    if (DbUseBool())
-                        m_xColumnUpdate->updateBoolean( false );
-                    else
-                        m_xColumnUpdate->updateString( getNoCheckReferenceValue() );
-                    break;
-                default:
-                    OSL_FAIL("OCheckBoxModel::commitControlValueToDbColumn: invalid value !");
-            }
+            case TRISTATE_INDET:
+                m_xColumnUpdate->updateNull();
+                break;
+            case TRISTATE_TRUE:
+                if (DbUseBool())
+                    m_xColumnUpdate->updateBoolean( true );
+                else
+                    m_xColumnUpdate->updateString( getReferenceValue() );
+                break;
+            case TRISTATE_FALSE:
+                if (DbUseBool())
+                    m_xColumnUpdate->updateBoolean( false );
+                else
+                    m_xColumnUpdate->updateString( getNoCheckReferenceValue() );
+                break;
+            default:
+                OSL_FAIL("OCheckBoxModel::commitControlValueToDbColumn: invalid value !");
         }
-        catch(const Exception&)
-        {
-            OSL_FAIL("OCheckBoxModel::commitControlValueToDbColumn: could not commit !");
-        }
+    }
+    catch(const Exception&)
+    {
+        OSL_FAIL("OCheckBoxModel::commitControlValueToDbColumn: could not commit !");
     }
     return true;
 }

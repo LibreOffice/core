@@ -219,40 +219,40 @@ void ODateModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 bool ODateModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
-    if ( aControlValue != m_aSaveValue )
-    {
-        if ( !aControlValue.hasValue() )
-            m_xColumnUpdate->updateNull();
-        else
-        {
-            try
-            {
-                util::Date aDate;
-                if ( !( aControlValue >>= aDate ) )
-                {
-                    sal_Int32 nAsInt(0);
-                    aControlValue >>= nAsInt;
-                    aDate = DBTypeConversion::toDate(nAsInt);
-                }
+    if ( aControlValue == m_aSaveValue )
+        return true;
 
-                if ( !m_bDateTimeField )
-                    m_xColumnUpdate->updateDate( aDate );
-                else
-                {
-                    util::DateTime aDateTime = m_xColumn->getTimestamp();
-                    aDateTime.Day = aDate.Day;
-                    aDateTime.Month = aDate.Month;
-                    aDateTime.Year = aDate.Year;
-                    m_xColumnUpdate->updateTimestamp( aDateTime );
-                }
-            }
-            catch(const Exception&)
+    if ( !aControlValue.hasValue() )
+        m_xColumnUpdate->updateNull();
+    else
+    {
+        try
+        {
+            util::Date aDate;
+            if ( !( aControlValue >>= aDate ) )
             {
-                return false;
+                sal_Int32 nAsInt(0);
+                aControlValue >>= nAsInt;
+                aDate = DBTypeConversion::toDate(nAsInt);
+            }
+
+            if ( !m_bDateTimeField )
+                m_xColumnUpdate->updateDate( aDate );
+            else
+            {
+                util::DateTime aDateTime = m_xColumn->getTimestamp();
+                aDateTime.Day = aDate.Day;
+                aDateTime.Month = aDate.Month;
+                aDateTime.Year = aDate.Year;
+                m_xColumnUpdate->updateTimestamp( aDateTime );
             }
         }
-        m_aSaveValue = aControlValue;
+        catch(const Exception&)
+        {
+            return false;
+        }
     }
+    m_aSaveValue = aControlValue;
     return true;
 }
 

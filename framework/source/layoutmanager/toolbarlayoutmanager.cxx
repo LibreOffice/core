@@ -795,81 +795,81 @@ bool ToolbarLayoutManager::dockToolbar( std::u16string_view rResourceURL, ui::Do
 {
     UIElement aUIElement = implts_findToolbar( rResourceURL );
 
-    if ( aUIElement.m_xUIElement.is() )
+    if ( !aUIElement.m_xUIElement.is() )
+        return false;
+
+    try
     {
-        try
+        uno::Reference< awt::XWindow > xWindow( aUIElement.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
+        uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
+        if ( xDockWindow.is() )
         {
-            uno::Reference< awt::XWindow > xWindow( aUIElement.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
-            uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
-            if ( xDockWindow.is() )
+            if ( eDockingArea != ui::DockingArea_DOCKINGAREA_DEFAULT )
+                aUIElement.m_aDockedData.m_nDockedArea = eDockingArea;
+
+            if ( !isDefaultPos( aPos ))
+                aUIElement.m_aDockedData.m_aPos = aPos;
+
+            if ( !xDockWindow->isFloating() )
             {
-                if ( eDockingArea != ui::DockingArea_DOCKINGAREA_DEFAULT )
-                    aUIElement.m_aDockedData.m_nDockedArea = eDockingArea;
+                vcl::Window*  pWindow( nullptr );
+                ToolBox* pToolBox( nullptr );
 
-                if ( !isDefaultPos( aPos ))
-                    aUIElement.m_aDockedData.m_aPos = aPos;
-
-                if ( !xDockWindow->isFloating() )
                 {
-                    vcl::Window*  pWindow( nullptr );
-                    ToolBox* pToolBox( nullptr );
-
+                    SolarMutexGuard aGuard;
+                    pWindow = VCLUnoHelper::GetWindow( xWindow );
+                    if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
                     {
-                        SolarMutexGuard aGuard;
-                        pWindow = VCLUnoHelper::GetWindow( xWindow );
-                        if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
-                        {
-                            pToolBox = static_cast<ToolBox *>(pWindow);
+                        pToolBox = static_cast<ToolBox *>(pWindow);
 
-                            // We have to set the alignment of the toolbox. It's possible that the toolbox is moved from a
-                            // horizontal to a vertical docking area!
-                            pToolBox->SetAlign( ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ));
-                        }
-                    }
-
-                    if ( hasDefaultPosValue( aUIElement.m_aDockedData.m_aPos ))
-                    {
-                        // Docking on its default position without a preset position -
-                        // we have to find a good place for it.
-                        ::Size aSize;
-
-                        SolarMutexGuard aGuard;
-                        {
-                            if (pToolBox)
-                                aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ) );
-                            else if (pWindow)
-                                aSize = pWindow->GetSizePixel();
-                        }
-
-                        ::Point aPixelPos;
-                        awt::Point aDockPos;
-                        implts_findNextDockingPos(aUIElement.m_aDockedData.m_nDockedArea, aSize, aDockPos, aPixelPos );
-                        aUIElement.m_aDockedData.m_aPos = aDockPos;
+                        // We have to set the alignment of the toolbox. It's possible that the toolbox is moved from a
+                        // horizontal to a vertical docking area!
+                        pToolBox->SetAlign( ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ));
                     }
                 }
 
-                implts_setToolbar( aUIElement );
-
-                if ( xDockWindow->isFloating() )
+                if ( hasDefaultPosValue( aUIElement.m_aDockedData.m_aPos ))
                 {
-                    // ATTENTION: This will call toggleFloatingMode() via notifications which
-                    // sets the floating member of the UIElement correctly!
-                    xDockWindow->setFloatingMode( false );
-                }
-                else
-                {
-                    implts_writeWindowStateData( aUIElement );
-                    implts_sortUIElements();
+                    // Docking on its default position without a preset position -
+                    // we have to find a good place for it.
+                    ::Size aSize;
 
-                    if ( aUIElement.m_bVisible )
-                        implts_setLayoutDirty();
+                    SolarMutexGuard aGuard;
+                    {
+                        if (pToolBox)
+                            aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ) );
+                        else if (pWindow)
+                            aSize = pWindow->GetSizePixel();
+                    }
+
+                    ::Point aPixelPos;
+                    awt::Point aDockPos;
+                    implts_findNextDockingPos(aUIElement.m_aDockedData.m_nDockedArea, aSize, aDockPos, aPixelPos );
+                    aUIElement.m_aDockedData.m_aPos = aDockPos;
                 }
-                return true;
             }
+
+            implts_setToolbar( aUIElement );
+
+            if ( xDockWindow->isFloating() )
+            {
+                // ATTENTION: This will call toggleFloatingMode() via notifications which
+                // sets the floating member of the UIElement correctly!
+                xDockWindow->setFloatingMode( false );
+            }
+            else
+            {
+                implts_writeWindowStateData( aUIElement );
+                implts_sortUIElements();
+
+                if ( aUIElement.m_bVisible )
+                    implts_setLayoutDirty();
+            }
+            return true;
         }
-        catch (const lang::DisposedException&)
-        {
-        }
+    }
+    catch (const lang::DisposedException&)
+    {
     }
 
     return false;
@@ -3549,32 +3549,32 @@ sal_Bool SAL_CALL ToolbarLayoutManager::prepareToggleFloatingMode( const lang::E
     bool bWinFound( !aUIDockingElement.m_aName.isEmpty() );
     uno::Reference< awt::XWindow > xWindow( e.Source, uno::UNO_QUERY );
 
-    if ( bWinFound && xWindow.is() )
-    {
-        if ( !bDockingInProgress )
-        {
-            uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
-            if ( xDockWindow->isFloating() )
-            {
-                {
-                    SolarMutexGuard aGuard;
-                    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-                    if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
-                    {
-                        ToolBox* pToolBox = static_cast< ToolBox *>( pWindow.get() );
-                        aUIDockingElement.m_aFloatingData.m_aPos = AWTPoint(pToolBox->GetPosPixel());
-                        aUIDockingElement.m_aFloatingData.m_aSize = AWTSize(pToolBox->GetOutputSizePixel());
-                        aUIDockingElement.m_aFloatingData.m_nLines        = pToolBox->GetFloatingLines();
-                        aUIDockingElement.m_aFloatingData.m_bIsHorizontal = isToolboxHorizontalAligned( pToolBox );
-                    }
-                }
+    if ( !bWinFound || !xWindow.is() )
+        return true;
 
-                UIElement aUIElement = implts_findToolbar( aUIDockingElement.m_aName );
-                if ( aUIElement.m_aName == aUIDockingElement.m_aName )
-                    implts_setToolbar( aUIDockingElement );
-            }
+    if ( bDockingInProgress )
+        return true;
+
+    uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
+    if ( !xDockWindow->isFloating() )
+        return true;
+
+    {
+        SolarMutexGuard aGuard;
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
+        if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
+        {
+            ToolBox* pToolBox = static_cast< ToolBox *>( pWindow.get() );
+            aUIDockingElement.m_aFloatingData.m_aPos = AWTPoint(pToolBox->GetPosPixel());
+            aUIDockingElement.m_aFloatingData.m_aSize = AWTSize(pToolBox->GetOutputSizePixel());
+            aUIDockingElement.m_aFloatingData.m_nLines        = pToolBox->GetFloatingLines();
+            aUIDockingElement.m_aFloatingData.m_bIsHorizontal = isToolboxHorizontalAligned( pToolBox );
         }
     }
+
+    UIElement aUIElement = implts_findToolbar( aUIDockingElement.m_aName );
+    if ( aUIElement.m_aName == aUIDockingElement.m_aName )
+        implts_setToolbar( aUIDockingElement );
 
     return true;
 }
@@ -3934,25 +3934,25 @@ uno::Sequence< uno::Reference< ui::XUIElement > > ToolbarLayoutManager::getToolb
 bool ToolbarLayoutManager::floatToolbar( std::u16string_view rResourceURL )
 {
     UIElement aUIElement = implts_findToolbar( rResourceURL );
-    if ( aUIElement.m_xUIElement.is() )
-    {
-        try
-        {
-            uno::Reference< awt::XDockableWindow > xDockWindow( aUIElement.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
-            if ( xDockWindow.is() && !xDockWindow->isFloating() )
-            {
-                aUIElement.m_bFloating = true;
-                implts_writeWindowStateData( aUIElement );
-                xDockWindow->setFloatingMode( true );
+    if ( !aUIElement.m_xUIElement.is() )
+        return false;
 
-                implts_setLayoutDirty();
-                implts_setToolbar( aUIElement );
-                return true;
-            }
-        }
-        catch (const lang::DisposedException&)
+    try
+    {
+        uno::Reference< awt::XDockableWindow > xDockWindow( aUIElement.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
+        if ( xDockWindow.is() && !xDockWindow->isFloating() )
         {
+            aUIElement.m_bFloating = true;
+            implts_writeWindowStateData( aUIElement );
+            xDockWindow->setFloatingMode( true );
+
+            implts_setLayoutDirty();
+            implts_setToolbar( aUIElement );
+            return true;
         }
+    }
+    catch (const lang::DisposedException&)
+    {
     }
 
     return false;
@@ -3961,25 +3961,25 @@ bool ToolbarLayoutManager::floatToolbar( std::u16string_view rResourceURL )
 bool ToolbarLayoutManager::lockToolbar( std::u16string_view rResourceURL )
 {
     UIElement aUIElement = implts_findToolbar( rResourceURL );
-    if ( aUIElement.m_xUIElement.is() )
-    {
-        try
-        {
-            uno::Reference< awt::XDockableWindow > xDockWindow( aUIElement.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
-            if ( xDockWindow.is() && !xDockWindow->isFloating() && !xDockWindow->isLocked() )
-            {
-                aUIElement.m_aDockedData.m_bLocked = true;
-                implts_writeWindowStateData( aUIElement );
-                xDockWindow->lock();
+    if ( !aUIElement.m_xUIElement.is() )
+        return false;
 
-                implts_setLayoutDirty();
-                implts_setToolbar( aUIElement );
-                return true;
-            }
-        }
-        catch (const lang::DisposedException&)
+    try
+    {
+        uno::Reference< awt::XDockableWindow > xDockWindow( aUIElement.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
+        if ( xDockWindow.is() && !xDockWindow->isFloating() && !xDockWindow->isLocked() )
         {
+            aUIElement.m_aDockedData.m_bLocked = true;
+            implts_writeWindowStateData( aUIElement );
+            xDockWindow->lock();
+
+            implts_setLayoutDirty();
+            implts_setToolbar( aUIElement );
+            return true;
         }
+    }
+    catch (const lang::DisposedException&)
+    {
     }
 
     return false;
@@ -3988,25 +3988,25 @@ bool ToolbarLayoutManager::lockToolbar( std::u16string_view rResourceURL )
 bool ToolbarLayoutManager::unlockToolbar( std::u16string_view rResourceURL )
 {
     UIElement aUIElement = implts_findToolbar( rResourceURL );
-    if ( aUIElement.m_xUIElement.is() )
-    {
-        try
-        {
-            uno::Reference< awt::XDockableWindow > xDockWindow( aUIElement.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
-            if ( xDockWindow.is() && !xDockWindow->isFloating() && xDockWindow->isLocked() )
-            {
-                aUIElement.m_aDockedData.m_bLocked = false;
-                implts_writeWindowStateData( aUIElement );
-                xDockWindow->unlock();
+    if ( !aUIElement.m_xUIElement.is() )
+        return false;
 
-                implts_setLayoutDirty();
-                implts_setToolbar( aUIElement );
-                return true;
-            }
-        }
-        catch (const lang::DisposedException&)
+    try
+    {
+        uno::Reference< awt::XDockableWindow > xDockWindow( aUIElement.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
+        if ( xDockWindow.is() && !xDockWindow->isFloating() && xDockWindow->isLocked() )
         {
+            aUIElement.m_aDockedData.m_bLocked = false;
+            implts_writeWindowStateData( aUIElement );
+            xDockWindow->unlock();
+
+            implts_setLayoutDirty();
+            implts_setToolbar( aUIElement );
+            return true;
         }
+    }
+    catch (const lang::DisposedException&)
+    {
     }
 
     return false;

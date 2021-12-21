@@ -160,29 +160,29 @@ bool GlobalSettings_Access::GetToolbarStateInfo( GlobalSettings::StateInfo eStat
         impl_initConfigAccess();
     }
 
-    if ( m_xConfigAccess.is() )
-    {
-        try
-        {
-            css::uno::Any a = m_xConfigAccess->getByName( m_aNodeRefStates );
-            css::uno::Reference< css::container::XNameAccess > xNameAccess;
-            if ( a >>= xNameAccess )
-            {
-                if ( eStateInfo == GlobalSettings::STATEINFO_LOCKED )
-                    a = xNameAccess->getByName( m_aPropLocked );
-                else if ( eStateInfo == GlobalSettings::STATEINFO_DOCKED )
-                    a = xNameAccess->getByName( m_aPropDocked );
+    if ( !m_xConfigAccess.is() )
+        return false;
 
-                aValue = a;
-                return true;
-            }
-        }
-        catch ( const css::container::NoSuchElementException& )
+    try
+    {
+        css::uno::Any a = m_xConfigAccess->getByName( m_aNodeRefStates );
+        css::uno::Reference< css::container::XNameAccess > xNameAccess;
+        if ( a >>= xNameAccess )
         {
+            if ( eStateInfo == GlobalSettings::STATEINFO_LOCKED )
+                a = xNameAccess->getByName( m_aPropLocked );
+            else if ( eStateInfo == GlobalSettings::STATEINFO_DOCKED )
+                a = xNameAccess->getByName( m_aPropDocked );
+
+            aValue = a;
+            return true;
         }
-        catch ( const css::uno::Exception& )
-        {
-        }
+    }
+    catch ( const css::container::NoSuchElementException& )
+    {
+    }
+    catch ( const css::uno::Exception& )
+    {
     }
 
     return false;

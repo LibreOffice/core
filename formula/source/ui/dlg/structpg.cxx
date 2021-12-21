@@ -104,22 +104,22 @@ OUString StructPage::GetEntryText(const weld::TreeIter* pEntry) const
 
 const FormulaToken* StructPage::GetFunctionEntry(const weld::TreeIter* pEntry)
 {
-    if (pEntry)
+    if (!pEntry)
+        return nullptr;
+
+    const FormulaToken * pToken = reinterpret_cast<const FormulaToken *>(m_xTlbStruct->get_id(*pEntry).toInt64());
+    if (pToken)
     {
-        const FormulaToken * pToken = reinterpret_cast<const FormulaToken *>(m_xTlbStruct->get_id(*pEntry).toInt64());
-        if (pToken)
+        if ( !(pToken->IsFunction() || pToken->GetParamCount() > 1 ) )
         {
-            if ( !(pToken->IsFunction() || pToken->GetParamCount() > 1 ) )
-            {
-                std::unique_ptr<weld::TreeIter> xParent(m_xTlbStruct->make_iterator(pEntry));
-                if (!m_xTlbStruct->iter_parent(*xParent))
-                    return nullptr;
-                return GetFunctionEntry(xParent.get());
-            }
-            else
-            {
-                return pToken;
-            }
+            std::unique_ptr<weld::TreeIter> xParent(m_xTlbStruct->make_iterator(pEntry));
+            if (!m_xTlbStruct->iter_parent(*xParent))
+                return nullptr;
+            return GetFunctionEntry(xParent.get());
+        }
+        else
+        {
+            return pToken;
         }
     }
     return nullptr;

@@ -367,89 +367,89 @@ bool ImageManagerImpl::implts_storeUserImages(
 {
     SolarMutexGuard g;
 
-    if ( m_bModified )
+    if ( !m_bModified )
+        return false;
+
+    ImageList* pImageList = implts_getUserImageList( nImageType );
+    if ( pImageList->GetImageCount() > 0 )
     {
-        ImageList* pImageList = implts_getUserImageList( nImageType );
-        if ( pImageList->GetImageCount() > 0 )
+        ImageItemDescriptorList aUserImageListInfo;
+
+        for ( sal_uInt16 i=0; i < pImageList->GetImageCount(); i++ )
         {
-            ImageItemDescriptorList aUserImageListInfo;
+            ImageItemDescriptor aItem;
+            aItem.aCommandURL = pImageList->GetImageName( i );
+            aUserImageListInfo.push_back( aItem );
+        }
 
-            for ( sal_uInt16 i=0; i < pImageList->GetImageCount(); i++ )
+        uno::Reference< XTransactedObject > xTransaction;
+        uno::Reference< XOutputStream >     xOutputStream;
+        uno::Reference< XStream > xStream = xUserImageStorage->openStreamElement( OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ),
+                                                                                  ElementModes::WRITE|ElementModes::TRUNCATE );
+        if ( xStream.is() )
+        {
+            uno::Reference< XStream > xBitmapStream =
+                xUserBitmapsStorage->openStreamElement( OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ),
+                                                        ElementModes::WRITE|ElementModes::TRUNCATE );
+            if ( xBitmapStream.is() )
             {
-                ImageItemDescriptor aItem;
-                aItem.aCommandURL = pImageList->GetImageName( i );
-                aUserImageListInfo.push_back( aItem );
-            }
-
-            uno::Reference< XTransactedObject > xTransaction;
-            uno::Reference< XOutputStream >     xOutputStream;
-            uno::Reference< XStream > xStream = xUserImageStorage->openStreamElement( OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ),
-                                                                                      ElementModes::WRITE|ElementModes::TRUNCATE );
-            if ( xStream.is() )
-            {
-                uno::Reference< XStream > xBitmapStream =
-                    xUserBitmapsStorage->openStreamElement( OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ),
-                                                            ElementModes::WRITE|ElementModes::TRUNCATE );
-                if ( xBitmapStream.is() )
                 {
-                    {
-                        std::unique_ptr<SvStream> pSvStream(utl::UcbStreamHelper::CreateStream( xBitmapStream ));
-                        vcl::PNGWriter aPngWriter( pImageList->GetAsHorizontalStrip() );
-                        aPngWriter.Write( *pSvStream );
-                    }
-
-                    // Commit user bitmaps storage
-                    xTransaction.set( xUserBitmapsStorage, UNO_QUERY );
-                    if ( xTransaction.is() )
-                        xTransaction->commit();
+                    std::unique_ptr<SvStream> pSvStream(utl::UcbStreamHelper::CreateStream( xBitmapStream ));
+                    vcl::PNGWriter aPngWriter( pImageList->GetAsHorizontalStrip() );
+                    aPngWriter.Write( *pSvStream );
                 }
 
-                xOutputStream = xStream->getOutputStream();
-                if ( xOutputStream.is() )
-                    ImagesConfiguration::StoreImages( m_xContext, xOutputStream, aUserImageListInfo );
-
-                // Commit user image storage
-                xTransaction.set( xUserImageStorage, UNO_QUERY );
+                // Commit user bitmaps storage
+                xTransaction.set( xUserBitmapsStorage, UNO_QUERY );
                 if ( xTransaction.is() )
                     xTransaction->commit();
             }
 
-            return true;
-        }
-        else
-        {
-            // Remove the streams from the storage, if we have no data. We have to catch
-            // the NoSuchElementException as it can be possible that there is no stream at all!
-            try
-            {
-                xUserImageStorage->removeElement( OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ));
-            }
-            catch ( const css::container::NoSuchElementException& )
-            {
-            }
-
-            try
-            {
-                xUserBitmapsStorage->removeElement( OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ));
-            }
-            catch ( const css::container::NoSuchElementException& )
-            {
-            }
-
-            uno::Reference< XTransactedObject > xTransaction;
+            xOutputStream = xStream->getOutputStream();
+            if ( xOutputStream.is() )
+                ImagesConfiguration::StoreImages( m_xContext, xOutputStream, aUserImageListInfo );
 
             // Commit user image storage
             xTransaction.set( xUserImageStorage, UNO_QUERY );
             if ( xTransaction.is() )
                 xTransaction->commit();
-
-            // Commit user bitmaps storage
-            xTransaction.set( xUserBitmapsStorage, UNO_QUERY );
-            if ( xTransaction.is() )
-                xTransaction->commit();
-
-            return true;
         }
+
+        return true;
+    }
+    else
+    {
+        // Remove the streams from the storage, if we have no data. We have to catch
+        // the NoSuchElementException as it can be possible that there is no stream at all!
+        try
+        {
+            xUserImageStorage->removeElement( OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ));
+        }
+        catch ( const css::container::NoSuchElementException& )
+        {
+        }
+
+        try
+        {
+            xUserBitmapsStorage->removeElement( OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ));
+        }
+        catch ( const css::container::NoSuchElementException& )
+        {
+        }
+
+        uno::Reference< XTransactedObject > xTransaction;
+
+        // Commit user image storage
+        xTransaction.set( xUserImageStorage, UNO_QUERY );
+        if ( xTransaction.is() )
+            xTransaction->commit();
+
+        // Commit user bitmaps storage
+        xTransaction.set( xUserBitmapsStorage, UNO_QUERY );
+        if ( xTransaction.is() )
+            xTransaction->commit();
+
+        return true;
     }
 
     return false;

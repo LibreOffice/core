@@ -333,50 +333,50 @@ bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
     }
 
     // Skip ObjectHeader, see [MS-OLEDS] 2.2.4.
-    if (aStream.Tell())
-    {
-        aStream.Seek(0);
-        sal_uInt32 nData;
-        aStream.ReadUInt32(nData); // OLEVersion
-        aStream.ReadUInt32(nData); // FormatID
-        aStream.ReadUInt32(nData); // ClassName
-        OString aClassName;
-        if (nData)
-        {
-            // -1 because it is null-terminated.
-            aClassName = read_uInt8s_ToOString(aStream, nData - 1);
-            // Skip null-termination.
-            aStream.SeekRel(1);
-        }
-        aStream.ReadUInt32(nData); // TopicName
-        aStream.SeekRel(nData);
-        aStream.ReadUInt32(nData); // ItemName
-        aStream.SeekRel(nData);
-        aStream.ReadUInt32(nData); // NativeDataSize
+    if (!aStream.Tell())
+        return true;
 
-        if (nData)
-        {
-            sal_uInt64 nPos = aStream.Tell();
-            sal_uInt8 aSignature[8];
-            aStream.ReadBytes(aSignature, SAL_N_ELEMENTS(aSignature));
-            aStream.Seek(nPos);
-            const sal_uInt8 aOle2Signature[8] = { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
-            // Don't use Storage::IsStorageFile() here, that would seek to the start of the stream,
-            // where the magic will always mismatch.
-            if (std::memcmp(aSignature, aOle2Signature, SAL_N_ELEMENTS(aSignature)) == 0)
-            {
-                // NativeData
-                rOle2.WriteStream(aStream, nData);
-            }
-            else
-            {
-                SvMemoryStream aStorage;
-                WrapOle1InOle2(aStream, nData, aStorage, aClassName);
-                rOle2.WriteStream(aStorage);
-            }
-            rOle2.Seek(0);
-        }
+    aStream.Seek(0);
+    sal_uInt32 nData;
+    aStream.ReadUInt32(nData); // OLEVersion
+    aStream.ReadUInt32(nData); // FormatID
+    aStream.ReadUInt32(nData); // ClassName
+    OString aClassName;
+    if (nData)
+    {
+        // -1 because it is null-terminated.
+        aClassName = read_uInt8s_ToOString(aStream, nData - 1);
+        // Skip null-termination.
+        aStream.SeekRel(1);
     }
+    aStream.ReadUInt32(nData); // TopicName
+    aStream.SeekRel(nData);
+    aStream.ReadUInt32(nData); // ItemName
+    aStream.SeekRel(nData);
+    aStream.ReadUInt32(nData); // NativeDataSize
+
+    if (!nData)
+        return true;
+
+    sal_uInt64 nPos = aStream.Tell();
+    sal_uInt8 aSignature[8];
+    aStream.ReadBytes(aSignature, SAL_N_ELEMENTS(aSignature));
+    aStream.Seek(nPos);
+    const sal_uInt8 aOle2Signature[8] = { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
+    // Don't use Storage::IsStorageFile() here, that would seek to the start of the stream,
+    // where the magic will always mismatch.
+    if (std::memcmp(aSignature, aOle2Signature, SAL_N_ELEMENTS(aSignature)) == 0)
+    {
+        // NativeData
+        rOle2.WriteStream(aStream, nData);
+    }
+    else
+    {
+        SvMemoryStream aStorage;
+        WrapOle1InOle2(aStream, nData, aStorage, aClassName);
+        rOle2.WriteStream(aStorage);
+    }
+    rOle2.Seek(0);
 
     return true;
 }

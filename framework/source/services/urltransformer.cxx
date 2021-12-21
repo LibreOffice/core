@@ -117,40 +117,40 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL )
     }
     // Try to extract the protocol
     sal_Int32 nURLIndex = aURL.Complete.indexOf( ':' );
-    if ( nURLIndex > 1 )
+    if ( nURLIndex <= 1 )
+        return false;
+
+    OUString aProtocol = aURL.Complete.copy( 0, nURLIndex+1 );
+
+    // If INetURLObject knows this protocol let it parse
+    if ( INetURLObject::CompareProtocolScheme( aProtocol ) != INetProtocol::NotValid )
     {
-        OUString aProtocol = aURL.Complete.copy( 0, nURLIndex+1 );
+        // Initialize parser with given URL.
+        INetURLObject aParser( aURL.Complete );
 
-        // If INetURLObject knows this protocol let it parse
-        if ( INetURLObject::CompareProtocolScheme( aProtocol ) != INetProtocol::NotValid )
+        // Get all information about this URL.
+        INetProtocol eINetProt = aParser.GetProtocol();
+        if ( eINetProt == INetProtocol::NotValid )
         {
-            // Initialize parser with given URL.
-            INetURLObject aParser( aURL.Complete );
-
-            // Get all information about this URL.
-            INetProtocol eINetProt = aParser.GetProtocol();
-            if ( eINetProt == INetProtocol::NotValid )
-            {
-                return false;
-            }
-            else if ( !aParser.HasError() )
-            {
-                lcl_ParserHelper(aParser,aURL,false);
-                // Return "URL is parsed".
-                return true;
-            }
+            return false;
         }
-        else
+        else if ( !aParser.HasError() )
         {
-            // Minimal support for unknown protocols. This is mandatory to support the "Protocol Handlers" implemented
-            // in framework!
-            aURL.Protocol   = aProtocol;
-            aURL.Main       = aURL.Complete;
-            aURL.Path       = aURL.Complete.copy( nURLIndex+1 );
-
+            lcl_ParserHelper(aParser,aURL,false);
             // Return "URL is parsed".
             return true;
         }
+    }
+    else
+    {
+        // Minimal support for unknown protocols. This is mandatory to support the "Protocol Handlers" implemented
+        // in framework!
+        aURL.Protocol   = aProtocol;
+        aURL.Main       = aURL.Complete;
+        aURL.Path       = aURL.Complete.copy( nURLIndex+1 );
+
+        // Return "URL is parsed".
+        return true;
     }
 
     return false;

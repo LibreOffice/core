@@ -809,38 +809,38 @@ sal_uInt16 OFormattedModel::getPersistenceFlags() const
 bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
-    if ( aControlValue != m_aSaveValue )
-    {
-        // empty string + EmptyIsNull = void
-        if  (   !aControlValue.hasValue()
-            ||  (   ( aControlValue.getValueType().getTypeClass() == TypeClass_STRING )
-                &&  getString( aControlValue ).isEmpty()
-                &&  m_bEmptyIsNull
-                )
+    if ( aControlValue == m_aSaveValue )
+        return true;
+
+    // empty string + EmptyIsNull = void
+    if  (   !aControlValue.hasValue()
+        ||  (   ( aControlValue.getValueType().getTypeClass() == TypeClass_STRING )
+            &&  getString( aControlValue ).isEmpty()
+            &&  m_bEmptyIsNull
             )
-            m_xColumnUpdate->updateNull();
-        else
+        )
+        m_xColumnUpdate->updateNull();
+    else
+    {
+        try
         {
-            try
+            double f = 0.0;
+            if ( aControlValue.getValueType().getTypeClass() == TypeClass_DOUBLE || (aControlValue >>= f)) // #i110323
             {
-                double f = 0.0;
-                if ( aControlValue.getValueType().getTypeClass() == TypeClass_DOUBLE || (aControlValue >>= f)) // #i110323
-                {
-                    DBTypeConversion::setValue( m_xColumnUpdate, m_aNullDate, getDouble( aControlValue ), m_nKeyType );
-                }
-                else
-                {
-                    DBG_ASSERT( aControlValue.getValueType().getTypeClass() == TypeClass_STRING, "OFormattedModel::commitControlValueToDbColumn: invalid value type!" );
-                    m_xColumnUpdate->updateString( getString( aControlValue ) );
-                }
+                DBTypeConversion::setValue( m_xColumnUpdate, m_aNullDate, getDouble( aControlValue ), m_nKeyType );
             }
-            catch(const Exception&)
+            else
             {
-                return false;
+                DBG_ASSERT( aControlValue.getValueType().getTypeClass() == TypeClass_STRING, "OFormattedModel::commitControlValueToDbColumn: invalid value type!" );
+                m_xColumnUpdate->updateString( getString( aControlValue ) );
             }
         }
-        m_aSaveValue = aControlValue;
+        catch(const Exception&)
+        {
+            return false;
+        }
     }
+    m_aSaveValue = aControlValue;
     return true;
 }
 

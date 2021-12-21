@@ -1997,47 +1997,45 @@ bool EscherPropertyContainer::CreatePolygonProperties(
         }
     }
 
-    if(0 != nTotalPoints && aSegments.size() >= 6 && aVertices.size() >= 6)
-    {
-        // Little endian
-        aVertices[0] = static_cast<sal_uInt8>(nTotalPoints);
-        aVertices[1] = static_cast<sal_uInt8>(nTotalPoints >> 8);
-        aVertices[2] = static_cast<sal_uInt8>(nTotalPoints);
-        aVertices[3] = static_cast<sal_uInt8>(nTotalPoints >> 8);
+    if(0 == nTotalPoints || aSegments.size() < 6 || aVertices.size() < 6)
+        return false;
 
-        aSegments.push_back(static_cast<sal_uInt8>(0));
-        aSegments.push_back(static_cast<sal_uInt8>(0x80));
+    // Little endian
+    aVertices[0] = static_cast<sal_uInt8>(nTotalPoints);
+    aVertices[1] = static_cast<sal_uInt8>(nTotalPoints >> 8);
+    aVertices[2] = static_cast<sal_uInt8>(nTotalPoints);
+    aVertices[3] = static_cast<sal_uInt8>(nTotalPoints >> 8);
 
-        const sal_uInt32 nSegmentBufSize(aSegments.size() - 6);
-        aSegments[0] = static_cast<sal_uInt8>(nSegmentBufSize >> 1);
-        aSegments[1] = static_cast<sal_uInt8>(nSegmentBufSize >> 9);
-        aSegments[2] = static_cast<sal_uInt8>(nSegmentBufSize >> 1);
-        aSegments[3] = static_cast<sal_uInt8>(nSegmentBufSize >> 9);
+    aSegments.push_back(static_cast<sal_uInt8>(0));
+    aSegments.push_back(static_cast<sal_uInt8>(0x80));
 
-        AddOpt(
-            ESCHER_Prop_geoRight,
-            rGeoRect.Width);
-        AddOpt(
-            ESCHER_Prop_geoBottom,
-            rGeoRect.Height);
-        AddOpt(
-            ESCHER_Prop_shapePath,
-            ESCHER_ShapeComplex);
-        AddOpt(
-            ESCHER_Prop_pVertices,
-            true,
-            aVertices.size() - 6,
-            aVertices);
-        AddOpt(
-            ESCHER_Prop_pSegmentInfo,
-            true,
-            aSegments.size(),
-            aSegments);
+    const sal_uInt32 nSegmentBufSize(aSegments.size() - 6);
+    aSegments[0] = static_cast<sal_uInt8>(nSegmentBufSize >> 1);
+    aSegments[1] = static_cast<sal_uInt8>(nSegmentBufSize >> 9);
+    aSegments[2] = static_cast<sal_uInt8>(nSegmentBufSize >> 1);
+    aSegments[3] = static_cast<sal_uInt8>(nSegmentBufSize >> 9);
 
-        return true;
-    }
+    AddOpt(
+        ESCHER_Prop_geoRight,
+        rGeoRect.Width);
+    AddOpt(
+        ESCHER_Prop_geoBottom,
+        rGeoRect.Height);
+    AddOpt(
+        ESCHER_Prop_shapePath,
+        ESCHER_ShapeComplex);
+    AddOpt(
+        ESCHER_Prop_pVertices,
+        true,
+        aVertices.size() - 6,
+        aVertices);
+    AddOpt(
+        ESCHER_Prop_pSegmentInfo,
+        true,
+        aSegments.size(),
+        aSegments);
 
-    return false;
+    return true;
 }
 
 
@@ -3751,22 +3749,22 @@ bool EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const uno::Refer
                                                                 const uno::Reference<drawing::XShape> & rXShape)
 {
     SdrObject* pShape = SdrObject::getSdrObjectFromXShape(rXShape);
-    if ( pShape )
-    {
-        const Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pShape));
-        const GraphicObject aGraphicObject(aGraphic);
+    if ( !pShape )
+        return false;
 
-        if (!aGraphicObject.GetUniqueID().isEmpty())
+    const Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pShape));
+    const GraphicObject aGraphicObject(aGraphic);
+
+    if (!aGraphicObject.GetUniqueID().isEmpty())
+    {
+        if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
         {
-            if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
+            sal_uInt32 nBlibId = pGraphicProvider->GetBlibID(*pPicOutStrm, aGraphicObject);
+            if ( nBlibId )
             {
-                sal_uInt32 nBlibId = pGraphicProvider->GetBlibID(*pPicOutStrm, aGraphicObject);
-                if ( nBlibId )
-                {
-                    AddOpt( ESCHER_Prop_pib, nBlibId, true );
-                    ImplCreateGraphicAttributes( rXPropSet, nBlibId, false );
-                    return true;
-                }
+                AddOpt( ESCHER_Prop_pib, nBlibId, true );
+                ImplCreateGraphicAttributes( rXPropSet, nBlibId, false );
+                return true;
             }
         }
     }

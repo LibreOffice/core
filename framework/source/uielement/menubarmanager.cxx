@@ -561,179 +561,179 @@ private:
 
 IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
 {
-    if ( pMenu == m_pVCLMenu )
+    if ( pMenu != m_pVCLMenu )
+        return true;
+
+    css::uno::ContextLayer layer(
+        new QuietInteractionContext(
+            css::uno::getCurrentContext()));
+
+    // set/unset hiding disabled menu entries
+    bool bDontHide           = officecfg::Office::Common::View::Menu::DontHideDisabledEntry::get();
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
+    bool bShowShortcuts      = m_bHasMenuBar || rSettings.GetContextMenuShortcuts();
+    bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
+
+    SolarMutexGuard g;
+
+    MenuFlags nFlag = pMenu->GetMenuFlags();
+    if ( bDontHide )
+        nFlag &= ~MenuFlags::HideDisabledEntries;
+    else
+        nFlag |= MenuFlags::HideDisabledEntries;
+    pMenu->SetMenuFlags( nFlag );
+
+    if ( m_bActive )
+        return false;
+
+    m_bActive = true;
+
+    // Check if some modes have changed so we have to update our menu images
+    OUString sIconTheme = SvtMiscOptions().GetIconTheme();
+
+    if ( m_bRetrieveImages ||
+         bShowMenuImages != m_bShowMenuImages ||
+         sIconTheme != m_sIconTheme )
     {
-        css::uno::ContextLayer layer(
-            new QuietInteractionContext(
-                css::uno::getCurrentContext()));
+        m_bShowMenuImages   = bShowMenuImages;
+        m_bRetrieveImages   = false;
+        m_sIconTheme     = sIconTheme;
+        FillMenuImages( m_xFrame, pMenu, bShowMenuImages );
+    }
 
-        // set/unset hiding disabled menu entries
-        bool bDontHide           = officecfg::Office::Common::View::Menu::DontHideDisabledEntry::get();
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
-        bool bShowShortcuts      = m_bHasMenuBar || rSettings.GetContextMenuShortcuts();
-        bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
-
-        SolarMutexGuard g;
-
-        MenuFlags nFlag = pMenu->GetMenuFlags();
-        if ( bDontHide )
-            nFlag &= ~MenuFlags::HideDisabledEntries;
-        else
-            nFlag |= MenuFlags::HideDisabledEntries;
-        pMenu->SetMenuFlags( nFlag );
-
-        if ( m_bActive )
-            return false;
-
-        m_bActive = true;
-
-        // Check if some modes have changed so we have to update our menu images
-        OUString sIconTheme = SvtMiscOptions().GetIconTheme();
-
-        if ( m_bRetrieveImages ||
-             bShowMenuImages != m_bShowMenuImages ||
-             sIconTheme != m_sIconTheme )
+    // Try to map commands to labels
+    for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
+    {
+        sal_uInt16 nItemId = pMenu->GetItemId( nPos );
+        if (( pMenu->GetItemType( nPos ) != MenuItemType::SEPARATOR ) &&
+            ( pMenu->GetItemText( nItemId ).isEmpty() ))
         {
-            m_bShowMenuImages   = bShowMenuImages;
-            m_bRetrieveImages   = false;
-            m_sIconTheme     = sIconTheme;
-            FillMenuImages( m_xFrame, pMenu, bShowMenuImages );
-        }
-
-        // Try to map commands to labels
-        for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
-        {
-            sal_uInt16 nItemId = pMenu->GetItemId( nPos );
-            if (( pMenu->GetItemType( nPos ) != MenuItemType::SEPARATOR ) &&
-                ( pMenu->GetItemText( nItemId ).isEmpty() ))
-            {
-                OUString aCommand = pMenu->GetItemCommand( nItemId );
-                if ( !aCommand.isEmpty() ) {
-                    pMenu->SetItemText( nItemId, RetrieveLabelFromCommand( aCommand ));
-                }
+            OUString aCommand = pMenu->GetItemCommand( nItemId );
+            if ( !aCommand.isEmpty() ) {
+                pMenu->SetItemText( nItemId, RetrieveLabelFromCommand( aCommand ));
             }
         }
+    }
 
-        // Try to set accelerator keys
+    // Try to set accelerator keys
+    {
+        if ( bShowShortcuts )
+            RetrieveShortcuts( m_aMenuItemHandlerVector );
+
+        for (auto const& menuItemHandler : m_aMenuItemHandlerVector)
         {
-            if ( bShowShortcuts )
-                RetrieveShortcuts( m_aMenuItemHandlerVector );
-
-            for (auto const& menuItemHandler : m_aMenuItemHandlerVector)
+            if ( !bShowShortcuts )
             {
-                if ( !bShowShortcuts )
-                {
-                    pMenu->SetAccelKey( menuItemHandler->nItemId, vcl::KeyCode() );
-                }
-                else if ( menuItemHandler->aMenuItemURL == aCmdHelpIndex )
-                {
-                    // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
-                    // Only non-popup menu items can have a short-cut
-                    vcl::KeyCode aKeyCode( KEY_F1 );
-                    pMenu->SetAccelKey( menuItemHandler->nItemId, aKeyCode );
-                }
-                else if ( pMenu->GetPopupMenu( menuItemHandler->nItemId ) == nullptr )
-                    pMenu->SetAccelKey( menuItemHandler->nItemId, menuItemHandler->aKeyCode );
+                pMenu->SetAccelKey( menuItemHandler->nItemId, vcl::KeyCode() );
             }
+            else if ( menuItemHandler->aMenuItemURL == aCmdHelpIndex )
+            {
+                // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
+                // Only non-popup menu items can have a short-cut
+                vcl::KeyCode aKeyCode( KEY_F1 );
+                pMenu->SetAccelKey( menuItemHandler->nItemId, aKeyCode );
+            }
+            else if ( pMenu->GetPopupMenu( menuItemHandler->nItemId ) == nullptr )
+                pMenu->SetAccelKey( menuItemHandler->nItemId, menuItemHandler->aKeyCode );
         }
+    }
 
-        URL aTargetURL;
+    URL aTargetURL;
 
-        // Use provided dispatch provider => fallback to frame as dispatch provider
-        Reference< XDispatchProvider > xDispatchProvider;
-        if ( m_xDispatchProvider.is() )
-            xDispatchProvider = m_xDispatchProvider;
-        else
-            xDispatchProvider.set( m_xFrame, UNO_QUERY );
+    // Use provided dispatch provider => fallback to frame as dispatch provider
+    Reference< XDispatchProvider > xDispatchProvider;
+    if ( m_xDispatchProvider.is() )
+        xDispatchProvider = m_xDispatchProvider;
+    else
+        xDispatchProvider.set( m_xFrame, UNO_QUERY );
 
-        if ( xDispatchProvider.is() )
+    if ( !xDispatchProvider.is() )
+        return true;
+
+    SvtCommandOptions aCmdOptions;
+    for (auto const& menuItemHandler : m_aMenuItemHandlerVector)
+    {
+        if (menuItemHandler)
         {
-            SvtCommandOptions aCmdOptions;
-            for (auto const& menuItemHandler : m_aMenuItemHandlerVector)
+            if ( !menuItemHandler->xMenuItemDispatch.is() &&
+                 !menuItemHandler->xSubMenuManager.is()      )
             {
-                if (menuItemHandler)
+                Reference< XDispatch > xMenuItemDispatch;
+
+                aTargetURL.Complete = menuItemHandler->aMenuItemURL;
+
+                m_xURLTransformer->parseStrict( aTargetURL );
+
+                if ( bHasDisabledEntries )
                 {
-                    if ( !menuItemHandler->xMenuItemDispatch.is() &&
-                         !menuItemHandler->xSubMenuManager.is()      )
+                    if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aTargetURL.Path ))
+                        pMenu->HideItem( menuItemHandler->nItemId );
+                }
+
+                if ( aTargetURL.Complete.startsWith( ".uno:StyleApply?" ) )
+                    xMenuItemDispatch = new StyleDispatcher( m_xFrame, m_xURLTransformer, aTargetURL );
+                else
+                    xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, menuItemHandler->aTargetFrame, 0 );
+
+                bool bPopupMenu( false );
+                if ( !menuItemHandler->xPopupMenuController.is() &&
+                     m_xPopupMenuControllerFactory->hasController( menuItemHandler->aMenuItemURL, m_aModuleIdentifier ) )
+                {
+                    if( xMenuItemDispatch.is() || menuItemHandler->aMenuItemURL != ".uno:RecentFileList" )
+                        bPopupMenu = CreatePopupMenuController(menuItemHandler.get(), m_xDispatchProvider, m_aModuleIdentifier);
+                }
+                else if ( menuItemHandler->xPopupMenuController.is() )
+                {
+                    // Force update of popup menu
+                    menuItemHandler->xPopupMenuController->updatePopupMenu();
+                    bPopupMenu = true;
+                    if (PopupMenu*  pThisPopup = pMenu->GetPopupMenu( menuItemHandler->nItemId ))
+                        pMenu->EnableItem( menuItemHandler->nItemId, pThisPopup->GetItemCount() != 0 );
+                }
+                lcl_CheckForChildren(pMenu, menuItemHandler->nItemId);
+
+                if ( xMenuItemDispatch.is() )
+                {
+                    menuItemHandler->xMenuItemDispatch = xMenuItemDispatch;
+                    menuItemHandler->aParsedItemURL    = aTargetURL.Complete;
+
+                    if ( !bPopupMenu )
                     {
-                        Reference< XDispatch > xMenuItemDispatch;
-
-                        aTargetURL.Complete = menuItemHandler->aMenuItemURL;
-
-                        m_xURLTransformer->parseStrict( aTargetURL );
-
-                        if ( bHasDisabledEntries )
-                        {
-                            if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aTargetURL.Path ))
-                                pMenu->HideItem( menuItemHandler->nItemId );
-                        }
-
-                        if ( aTargetURL.Complete.startsWith( ".uno:StyleApply?" ) )
-                            xMenuItemDispatch = new StyleDispatcher( m_xFrame, m_xURLTransformer, aTargetURL );
-                        else
-                            xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, menuItemHandler->aTargetFrame, 0 );
-
-                        bool bPopupMenu( false );
-                        if ( !menuItemHandler->xPopupMenuController.is() &&
-                             m_xPopupMenuControllerFactory->hasController( menuItemHandler->aMenuItemURL, m_aModuleIdentifier ) )
-                        {
-                            if( xMenuItemDispatch.is() || menuItemHandler->aMenuItemURL != ".uno:RecentFileList" )
-                                bPopupMenu = CreatePopupMenuController(menuItemHandler.get(), m_xDispatchProvider, m_aModuleIdentifier);
-                        }
-                        else if ( menuItemHandler->xPopupMenuController.is() )
-                        {
-                            // Force update of popup menu
-                            menuItemHandler->xPopupMenuController->updatePopupMenu();
-                            bPopupMenu = true;
-                            if (PopupMenu*  pThisPopup = pMenu->GetPopupMenu( menuItemHandler->nItemId ))
-                                pMenu->EnableItem( menuItemHandler->nItemId, pThisPopup->GetItemCount() != 0 );
-                        }
-                        lcl_CheckForChildren(pMenu, menuItemHandler->nItemId);
-
-                        if ( xMenuItemDispatch.is() )
-                        {
-                            menuItemHandler->xMenuItemDispatch = xMenuItemDispatch;
-                            menuItemHandler->aParsedItemURL    = aTargetURL.Complete;
-
-                            if ( !bPopupMenu )
-                            {
-                                xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
-                                // For the menubar, we have to keep status listening to support Ubuntu's HUD.
-                                if ( !m_bHasMenuBar )
-                                    xMenuItemDispatch->removeStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
-                            }
-                        }
-                        else if ( !bPopupMenu )
-                            pMenu->EnableItem( menuItemHandler->nItemId, false );
+                        xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
+                        // For the menubar, we have to keep status listening to support Ubuntu's HUD.
+                        if ( !m_bHasMenuBar )
+                            xMenuItemDispatch->removeStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
                     }
-                    else if ( menuItemHandler->xPopupMenuController.is() )
-                    {
-                        // Force update of popup menu
-                        menuItemHandler->xPopupMenuController->updatePopupMenu();
-                        lcl_CheckForChildren(pMenu, menuItemHandler->nItemId);
-                    }
-                    else if ( menuItemHandler->xMenuItemDispatch.is() )
-                    {
-                        // We need an update to reflect the current state
-                        try
-                        {
-                            aTargetURL.Complete = menuItemHandler->aMenuItemURL;
-                            m_xURLTransformer->parseStrict( aTargetURL );
+                }
+                else if ( !bPopupMenu )
+                    pMenu->EnableItem( menuItemHandler->nItemId, false );
+            }
+            else if ( menuItemHandler->xPopupMenuController.is() )
+            {
+                // Force update of popup menu
+                menuItemHandler->xPopupMenuController->updatePopupMenu();
+                lcl_CheckForChildren(pMenu, menuItemHandler->nItemId);
+            }
+            else if ( menuItemHandler->xMenuItemDispatch.is() )
+            {
+                // We need an update to reflect the current state
+                try
+                {
+                    aTargetURL.Complete = menuItemHandler->aMenuItemURL;
+                    m_xURLTransformer->parseStrict( aTargetURL );
 
-                            menuItemHandler->xMenuItemDispatch->addStatusListener(
-                                                                    static_cast< XStatusListener* >( this ), aTargetURL );
-                            menuItemHandler->xMenuItemDispatch->removeStatusListener(
-                                                                    static_cast< XStatusListener* >( this ), aTargetURL );
-                        }
-                        catch ( const Exception& )
-                        {
-                        }
-                    }
-                    else if ( menuItemHandler->xSubMenuManager.is() )
-                        lcl_CheckForChildren(pMenu, menuItemHandler->nItemId);
+                    menuItemHandler->xMenuItemDispatch->addStatusListener(
+                                                            static_cast< XStatusListener* >( this ), aTargetURL );
+                    menuItemHandler->xMenuItemDispatch->removeStatusListener(
+                                                            static_cast< XStatusListener* >( this ), aTargetURL );
+                }
+                catch ( const Exception& )
+                {
                 }
             }
+            else if ( menuItemHandler->xSubMenuManager.is() )
+                lcl_CheckForChildren(pMenu, menuItemHandler->nItemId);
         }
     }
 
@@ -822,45 +822,43 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
 
 bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< XURLTransformer >& rTransformer )
 {
-    if ( pPopupMenu )
+    if ( !pPopupMenu )
+        return true;
+
+    URL               aTargetURL;
+    SvtCommandOptions aCmdOptions;
+
+    sal_uInt16 nCount = pPopupMenu->GetItemCount();
+    sal_uInt16 nHideCount( 0 );
+
+    for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        URL               aTargetURL;
-        SvtCommandOptions aCmdOptions;
-
-        sal_uInt16 nCount = pPopupMenu->GetItemCount();
-        sal_uInt16 nHideCount( 0 );
-
-        for ( sal_uInt16 i = 0; i < nCount; i++ )
+        sal_uInt16 nId = pPopupMenu->GetItemId( i );
+        if ( nId > 0 )
         {
-            sal_uInt16 nId = pPopupMenu->GetItemId( i );
-            if ( nId > 0 )
+            PopupMenu* pSubPopupMenu = pPopupMenu->GetPopupMenu( nId );
+            if ( pSubPopupMenu )
             {
-                PopupMenu* pSubPopupMenu = pPopupMenu->GetPopupMenu( nId );
-                if ( pSubPopupMenu )
+                if ( MustBeHidden( pSubPopupMenu, rTransformer ))
                 {
-                    if ( MustBeHidden( pSubPopupMenu, rTransformer ))
-                    {
-                        pPopupMenu->HideItem( nId );
-                        ++nHideCount;
-                    }
-                }
-                else
-                {
-                    aTargetURL.Complete = pPopupMenu->GetItemCommand( nId );
-                    rTransformer->parseStrict( aTargetURL );
-
-                    if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aTargetURL.Path ))
-                        ++nHideCount;
+                    pPopupMenu->HideItem( nId );
+                    ++nHideCount;
                 }
             }
             else
-                ++nHideCount;
-        }
+            {
+                aTargetURL.Complete = pPopupMenu->GetItemCommand( nId );
+                rTransformer->parseStrict( aTargetURL );
 
-        return ( nCount == nHideCount );
+                if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aTargetURL.Path ))
+                    ++nHideCount;
+            }
+        }
+        else
+            ++nHideCount;
     }
 
-    return true;
+    return ( nCount == nHideCount );
 }
 
 OUString MenuBarManager::RetrieveLabelFromCommand(const OUString& rCmdURL)

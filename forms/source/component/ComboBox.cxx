@@ -755,29 +755,29 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
     bool bAddToList = bModified && !_bPostReset;
     // (only if this is not the "commit" triggered by a "reset")
 
-    if ( bAddToList )
+    if ( !bAddToList )
+        return true;
+
+    css::uno::Sequence<OUString> aStringItemList;
+    if ( !(getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aStringItemList) )
+        return true;
+
+    bool bFound = false;
+    for (const OUString& rStringItem : std::as_const(aStringItemList))
     {
-        css::uno::Sequence<OUString> aStringItemList;
-        if ( getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aStringItemList )
-        {
-            bool bFound = false;
-            for (const OUString& rStringItem : std::as_const(aStringItemList))
-            {
-                if ( (bFound = rStringItem == sNewValue) )
-                    break;
-            }
+        if ( (bFound = rStringItem == sNewValue) )
+            break;
+    }
 
-            // not found -> add
-            if (!bFound)
-            {
-                sal_Int32 nOldLen = aStringItemList.getLength();
-                aStringItemList.realloc( nOldLen + 1 );
-                aStringItemList.getArray()[ nOldLen ] = sNewValue;
+    // not found -> add
+    if (!bFound)
+    {
+        sal_Int32 nOldLen = aStringItemList.getLength();
+        aStringItemList.realloc( nOldLen + 1 );
+        aStringItemList.getArray()[ nOldLen ] = sNewValue;
 
-                setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringItemList ) );
-                setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
-            }
-        }
+        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringItemList ) );
+        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
     }
 
     return true;
