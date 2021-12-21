@@ -868,10 +868,13 @@ namespace
             case GlyphPositioningMode::PreferLayout:
                 rScrPos = rKernArray[i - 1] + nScr;
                 // just accept the print layout positions, this is what editeng does
+                // https://freddie.witherden.org/pages/font-rasterisation/#application-requirements
                 break;
             case GlyphPositioningMode::PreferReadability:
             {
                 // Overwrite KernArray with the screen-optimized glyph positions
+                // these will generally be too wide at small sizes and text will spill out
+                // of its designated zones
                 rKernArray[i - 1] = rScrPos;
                 rScrPos += nScr;
                 break;
@@ -912,6 +915,8 @@ namespace
                     rKernArray[i - 1] = rScrPos;
                     rScrPos += nScr;
                 }
+                // at small sizes the screen positions tend to get wider, and the text begins to
+                // overlap the next word. http://people.redhat.com/otaylor/grid-fitting/
                 break;
             }
         }
