@@ -765,39 +765,37 @@ OUString ExtensionBox_Impl::RequestHelp(tools::Rectangle& rRect)
 
 bool ExtensionBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() )
+    if ( !rMEvt.IsLeft() )
+        return false;
+
+    if (rMEvt.IsMod1() && m_bHasActive)
+        selectEntry(ExtensionBox_Impl::ENTRY_NOTFOUND);   // Selecting a not existing entry will deselect the current one
+    else
     {
-        if (rMEvt.IsMod1() && m_bHasActive)
-            selectEntry(ExtensionBox_Impl::ENTRY_NOTFOUND);   // Selecting a not existing entry will deselect the current one
-        else
+        auto nPos = PointToPos( rMEvt.GetPosPixel() );
+
+        if ( ( nPos >= 0 ) && ( nPos < static_cast<tools::Long>(m_vEntries.size()) ) )
         {
-            auto nPos = PointToPos( rMEvt.GetPosPixel() );
-
-            if ( ( nPos >= 0 ) && ( nPos < static_cast<tools::Long>(m_vEntries.size()) ) )
+            const auto& rEntry = m_vEntries[nPos];
+            if (!rEntry->m_sPublisher.isEmpty() && rEntry->m_aLinkRect.Contains(rMEvt.GetPosPixel()))
             {
-                const auto& rEntry = m_vEntries[nPos];
-                if (!rEntry->m_sPublisher.isEmpty() && rEntry->m_aLinkRect.Contains(rMEvt.GetPosPixel()))
+                try
                 {
-                    try
-                    {
-                        css::uno::Reference<css::system::XSystemShellExecute> xSystemShellExecute(
-                            css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
-                        //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
-                        xSystemShellExecute->execute(rEntry->m_sPublisherURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
-                    }
-                    catch (...)
-                    {
-                    }
-                    return true;
+                    css::uno::Reference<css::system::XSystemShellExecute> xSystemShellExecute(
+                        css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
+                    //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
+                    xSystemShellExecute->execute(rEntry->m_sPublisherURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
                 }
+                catch (...)
+                {
+                }
+                return true;
             }
-
-            selectEntry( nPos );
         }
-        return true;
-    }
 
-    return false;
+        selectEntry( nPos );
+    }
+    return true;
 }
 
 bool ExtensionBox_Impl::KeyInput(const KeyEvent& rKEvt)

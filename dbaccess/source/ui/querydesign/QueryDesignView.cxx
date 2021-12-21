@@ -1819,27 +1819,26 @@ namespace
         else
             return false;
 
-        if ( eJoinType == CROSS_JOIN || bNatural )
-        {
+        if ( eJoinType != CROSS_JOIN && !bNatural )
+            return true;
 
-            OQueryTableWindow*  pLeftWindow = static_cast<OQueryTableView*>(_pView->getTableView())->FindTable( getTableRange(_pView,pNode->getChild(0)) );
-            OQueryTableWindow*  pRightWindow = static_cast<OQueryTableView*>(_pView->getTableView())->FindTable( getTableRange(_pView,pRightTableRef) );
-            OSL_ENSURE(pLeftWindow && pRightWindow,"Table Windows could not be found!");
-            if ( !pLeftWindow || !pRightWindow )
-                return false;
+        OQueryTableWindow*  pLeftWindow = static_cast<OQueryTableView*>(_pView->getTableView())->FindTable( getTableRange(_pView,pNode->getChild(0)) );
+        OQueryTableWindow*  pRightWindow = static_cast<OQueryTableView*>(_pView->getTableView())->FindTable( getTableRange(_pView,pRightTableRef) );
+        OSL_ENSURE(pLeftWindow && pRightWindow,"Table Windows could not be found!");
+        if ( !pLeftWindow || !pRightWindow )
+            return false;
 
-            OTableFieldDescRef aDragLeft  = new OTableFieldDesc();
-            aDragLeft->SetTabWindow(pLeftWindow);
-            aDragLeft->SetTable(pLeftWindow->GetTableName());
-            aDragLeft->SetAlias(pLeftWindow->GetAliasName());
+        OTableFieldDescRef aDragLeft  = new OTableFieldDesc();
+        aDragLeft->SetTabWindow(pLeftWindow);
+        aDragLeft->SetTable(pLeftWindow->GetTableName());
+        aDragLeft->SetAlias(pLeftWindow->GetAliasName());
 
-            OTableFieldDescRef aDragRight = new OTableFieldDesc();
-            aDragRight->SetTabWindow(pRightWindow);
-            aDragRight->SetTable(pRightWindow->GetTableName());
-            aDragRight->SetAlias(pRightWindow->GetAliasName());
+        OTableFieldDescRef aDragRight = new OTableFieldDesc();
+        aDragRight->SetTabWindow(pRightWindow);
+        aDragRight->SetTable(pRightWindow->GetTableName());
+        aDragRight->SetAlias(pRightWindow->GetAliasName());
 
-            insertConnection(_pView,eJoinType,aDragLeft,aDragRight,bNatural);
-        }
+        insertConnection(_pView,eJoinType,aDragLeft,aDragRight,bNatural);
 
         return true;
     }

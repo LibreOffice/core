@@ -391,25 +391,25 @@ IMPL_LINK(OWizTypeSelectList, CommandHdl, const CommandEvent&, rCEvt, bool)
         xContextMenu->set_active("primarykey", true);
 
     OString sCommand(xContextMenu->popup_at_rect(m_xControl.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
-    if (sCommand == "primarykey")
+    if (sCommand != "primarykey")
+        return true;
+
+    for (sal_Int32 j = 0 ; j < nCount; ++j)
     {
-        for (sal_Int32 j = 0 ; j < nCount; ++j)
+        OFieldDescription* pFieldDescr = reinterpret_cast<OFieldDescription*>(m_xControl->get_id(j).toInt64());
+        if (pFieldDescr)
         {
-            OFieldDescription* pFieldDescr = reinterpret_cast<OFieldDescription*>(m_xControl->get_id(j).toInt64());
-            if (pFieldDescr)
+            if(!bCheckOk && m_xControl->is_selected(j))
             {
-                if(!bCheckOk && m_xControl->is_selected(j))
-                {
-                    setPrimaryKey(pFieldDescr,j,true);
-                }
-                else
-                {
-                    setPrimaryKey(pFieldDescr,j);
-                }
+                setPrimaryKey(pFieldDescr,j,true);
+            }
+            else
+            {
+                setPrimaryKey(pFieldDescr,j);
             }
         }
-        m_aChangeHdl.Call(*m_xControl);
     }
+    m_aChangeHdl.Call(*m_xControl);
 
     return true;
 }

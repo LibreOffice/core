@@ -1694,23 +1694,23 @@ bool OApplicationController::onEntryDoubleClick(const weld::TreeView& rTreeView)
     if (!rTreeView.get_cursor(xHdlEntry.get()))
         return false;
 
-    if (pContainer->isLeaf(rTreeView, *xHdlEntry))
+    if (!pContainer->isLeaf(rTreeView, *xHdlEntry))
+        return false;   // not handled
+
+    try
     {
-        try
-        {
-            // opens a new frame with either the table or the query or report or form or view
-            openElementWithArguments(
-                getContainer()->getQualifiedName(xHdlEntry.get()),
-                getContainer()->getElementType(),
-                E_OPEN_NORMAL,
-                0,
-                ::comphelper::NamedValueCollection() );
-            return true;    // handled
-        }
-        catch(const Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
+        // opens a new frame with either the table or the query or report or form or view
+        openElementWithArguments(
+            getContainer()->getQualifiedName(xHdlEntry.get()),
+            getContainer()->getElementType(),
+            E_OPEN_NORMAL,
+            0,
+            ::comphelper::NamedValueCollection() );
+        return true;    // handled
+    }
+    catch(const Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return false;   // not handled
@@ -2324,43 +2324,42 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
     sal_Int8 nActionAskedFor = _rEvt.mnAction;
     // check if we're a table or query container
     OApplicationView* pView = getContainer();
-    if ( pView && !isDataSourceReadOnly() )
+    if ( !pView || isDataSourceReadOnly() )
+        return DND_ACTION_NONE;
+
+    ElementType eType = pView->getElementType();
+    if ( eType == E_NONE || (eType == E_TABLE && isConnectionReadOnly()) )
+        return DND_ACTION_NONE;
+
+    // check for the concrete type
+    if(std::any_of(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(eType)))
+        return DND_ACTION_COPY;
+
+    if ( eType != E_FORM && eType != E_REPORT )
+        return DND_ACTION_NONE;
+
+    sal_Int8 nAction = OComponentTransferable::canExtractComponentDescriptor(_rFlavors,eType == E_FORM) ? DND_ACTION_COPY : DND_ACTION_NONE;
+    if ( nAction == DND_ACTION_NONE )
+        return DND_ACTION_NONE;
+
+    auto xHitEntry = pView->getEntry(_rEvt.maPosPixel);
+    if (xHitEntry)
     {
-        ElementType eType = pView->getElementType();
-        if ( eType != E_NONE && (eType != E_TABLE || !isConnectionReadOnly()) )
+        OUString sName = pView->getQualifiedName(xHitEntry.get());
+        if ( !sName.isEmpty() )
         {
-            // check for the concrete type
-            if(std::any_of(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(eType)))
-                return DND_ACTION_COPY;
-            if ( eType == E_FORM || eType == E_REPORT )
+            Reference< XHierarchicalNameAccess > xContainer(getElements(pView->getElementType()),UNO_QUERY);
+            if ( xContainer.is() && xContainer->hasByHierarchicalName(sName) )
             {
-                sal_Int8 nAction = OComponentTransferable::canExtractComponentDescriptor(_rFlavors,eType == E_FORM) ? DND_ACTION_COPY : DND_ACTION_NONE;
-                if ( nAction != DND_ACTION_NONE )
-                {
-                    auto xHitEntry = pView->getEntry(_rEvt.maPosPixel);
-                    if (xHitEntry)
-                    {
-                        OUString sName = pView->getQualifiedName(xHitEntry.get());
-                        if ( !sName.isEmpty() )
-                        {
-                            Reference< XHierarchicalNameAccess > xContainer(getElements(pView->getElementType()),UNO_QUERY);
-                            if ( xContainer.is() && xContainer->hasByHierarchicalName(sName) )
-                            {
-                                Reference< XHierarchicalNameAccess > xHitObject(xContainer->getByHierarchicalName(sName),UNO_QUERY);
-                                if ( xHitObject.is() )
-                                    nAction = nActionAskedFor & DND_ACTION_COPYMOVE;
-                            }
-                            else
-                                nAction = DND_ACTION_NONE;
-                        }
-                    }
-                }
-                return nAction;
+                Reference< XHierarchicalNameAccess > xHitObject(xContainer->getByHierarchicalName(sName),UNO_QUERY);
+                if ( xHitObject.is() )
+                    nAction = nActionAskedFor & DND_ACTION_COPYMOVE;
             }
+            else
+                nAction = DND_ACTION_NONE;
         }
     }
-
-    return DND_ACTION_NONE;
+    return nAction;
 }
 
 sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
@@ -2616,24 +2615,24 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     }
 
     // initial preview mode
-    if ( m_xDataSource.is() )
+    if ( !m_xDataSource )
+        return true;
+
+    try
     {
-        try
+        // to get the 'modified' for the data source
+        ::comphelper::NamedValueCollection aLayoutInfo( m_xDataSource->getPropertyValue( PROPERTY_LAYOUTINFORMATION ) );
+        if ( aLayoutInfo.has( INFO_PREVIEW ) )
         {
-            // to get the 'modified' for the data source
-            ::comphelper::NamedValueCollection aLayoutInfo( m_xDataSource->getPropertyValue( PROPERTY_LAYOUTINFORMATION ) );
-            if ( aLayoutInfo.has( INFO_PREVIEW ) )
-            {
-                const sal_Int32 nPreviewMode( aLayoutInfo.getOrDefault( INFO_PREVIEW, sal_Int32(0) ) );
-                m_ePreviewMode = static_cast< PreviewMode >( nPreviewMode );
-                if ( getView() )
-                    getContainer()->switchPreview( m_ePreviewMode );
-            }
+            const sal_Int32 nPreviewMode( aLayoutInfo.getOrDefault( INFO_PREVIEW, sal_Int32(0) ) );
+            m_ePreviewMode = static_cast< PreviewMode >( nPreviewMode );
+            if ( getView() )
+                getContainer()->switchPreview( m_ePreviewMode );
         }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return true;
