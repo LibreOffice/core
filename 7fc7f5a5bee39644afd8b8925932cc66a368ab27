@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fe40d6a_ceadeed2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-21T12:49:13Z",
+      "side": 1,
+      "message": "This survived an --with-distro\u003dLibreOfficeOssFuzz build, which also has --disable-gui set (but on top of my cross-build patches, which don\u0027t touch avmedia, so that should pass. I didn\u0027t test a real oss-fuzz build with it.\n\nSorry for the mess.",
+      "revId": "7fc7f5a5bee39644afd8b8925932cc66a368ab27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
