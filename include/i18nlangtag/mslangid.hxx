@@ -147,6 +147,9 @@ public:
     /** Whether locale is a korean locale */
     static bool isKorean( LanguageType nLang );
 
+    /** the Language which did not use Hyphenation */
+    static bool noHyphenation(LanguageType nLang);
+
     /** Whether locale is a simplified chinese locale */
     static bool isSimplifiedChinese( const css::lang::Locale & rLocale );
 
