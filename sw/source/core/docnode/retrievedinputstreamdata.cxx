@@ -34,7 +34,7 @@ SwRetrievedInputStreamDataManager& SwRetrievedInputStreamDataManager::GetManager
 SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::ReserveData(
                         std::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > const & pThreadConsumer )
 {
-    osl::MutexGuard aGuard(maMutex);
+    std::unique_lock aGuard(maMutex);
 
     // create empty data container for given thread Consumer
     tDataKey nDataKey( snNextKeyValue );
@@ -59,7 +59,7 @@ void SwRetrievedInputStreamDataManager::PushData(
         css::uno::Reference<css::io::XInputStream> const & xInputStream,
         const bool bIsStreamReadOnly )
 {
-    osl::MutexGuard aGuard(maMutex);
+    std::unique_lock aGuard(maMutex);
 
     std::map< tDataKey, tData >::iterator aIter = maInputStreamData.find( nDataKey );
 
@@ -88,7 +88,7 @@ void SwRetrievedInputStreamDataManager::PushData(
 bool SwRetrievedInputStreamDataManager::PopData( const tDataKey nDataKey,
                                                  tData& rData )
 {
-    osl::MutexGuard aGuard(maMutex);
+    std::unique_lock aGuard(maMutex);
 
     bool bDataProvided( false );
 
@@ -124,8 +124,6 @@ IMPL_LINK( SwRetrievedInputStreamDataManager,
     {
         return;
     }
-
-    osl::MutexGuard aGuard(maMutex);
 
     SwRetrievedInputStreamDataManager& rDataManager =
                             SwRetrievedInputStreamDataManager::GetManager();
