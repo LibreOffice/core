@@ -16,6 +16,24 @@
       "message": "Interesting - so the original value may live unexpectedly after the assignment in other - is this a common pattern?",
       "revId": "7cf387c43562a78192a59bd8fcfeea9b67d96f09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0512ceee_6d08e26b",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-21T07:00:21Z",
+      "side": 1,
+      "message": "Yeah, that concerned me too when I wrote it, then I thought that it should be OK as the object referenced by `other` is at the end of its lifetime anyway, now that I think of it again it might nevertheless be unexpected in scenarios like\n\n  {\n    Sequence s1 \u003d ...;\n    ...\n    s2 \u003d std::move(s1);\n    ...\n    ... lots of code that might not expect the old contents\n    ... of s2 to linger on via s1\n    ...\n  }\n\nMaybe it would be better to drain `other` here already, instead of only during its eventual destruction; maybe think about this some more.",
+      "parentUuid": "ffe39e82_31541ba5",
+      "revId": "7cf387c43562a78192a59bd8fcfeea9b67d96f09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
