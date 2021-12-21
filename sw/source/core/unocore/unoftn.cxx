@@ -19,12 +19,12 @@
 
 #include <sal/config.h>
 
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/listener.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 #include <unofootnote.hxx>
 #include <unotextrange.hxx>
@@ -61,15 +61,13 @@ GetSupportedServiceNamesImpl(
 class SwXFootnote::Impl
     : public SvtListener
 {
-private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
-
 public:
 
     SwXFootnote& m_rThis;
     uno::WeakReference<uno::XInterface> m_wThis;
     const bool m_bIsEndnote;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     bool m_bIsDescriptor;
     SwFormatFootnote* m_pFormatFootnote;
     OUString m_sLabel;
@@ -79,7 +77,6 @@ public:
             const bool bIsEndnote)
         : m_rThis(rThis)
         , m_bIsEndnote(bIsEndnote)
-        , m_EventListeners(m_Mutex)
         , m_bIsDescriptor(nullptr == pFootnote)
         , m_pFormatFootnote(pFootnote)
     {
@@ -115,7 +112,8 @@ void SwXFootnote::Impl::Invalidate()
         return;
     }
     lang::EventObject const ev(xThis);
-    m_EventListeners.disposeAndClear(ev);
+    std::unique_lock aGuard(m_Mutex);
+    m_EventListeners.disposeAndClear(aGuard, ev);
 }
 
 void SwXFootnote::Impl::Notify(const SfxHint& rHint)
@@ -379,6 +377,7 @@ SwXFootnote::addEventListener(
     const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -387,6 +386,7 @@ SwXFootnote::removeEventListener(
     const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
