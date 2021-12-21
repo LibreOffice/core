@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/idle.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <osl/interlck.h>
 #include <rtl/ref.hxx>
 
@@ -79,7 +79,7 @@ class ThreadManager final
         */
         void SuspendStartingOfThreads()
         {
-            osl::MutexGuard aGuard(maMutex);
+            std::unique_lock aGuard(maMutex);
 
             mbStartingOfThreadsSuspended = true;
         }
@@ -90,7 +90,7 @@ class ThreadManager final
 
         bool StartingOfThreadsSuspended()
         {
-            osl::MutexGuard aGuard(maMutex);
+            std::unique_lock aGuard(maMutex);
 
             return mbStartingOfThreadsSuspended;
         }
@@ -111,7 +111,7 @@ class ThreadManager final
 
         static const std::deque< tThreadData >::size_type snStartedSize;
 
-        osl::Mutex maMutex;
+        std::mutex maMutex;
 
         css::uno::WeakReference< css::util::XJobManager > mrThreadJoiner;
 
