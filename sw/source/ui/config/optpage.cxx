@@ -91,6 +91,7 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
     , m_xVRulerRightCBox(m_xBuilder->weld_check_button("vrulerright"))
     , m_xVMetric(m_xBuilder->weld_combo_box("vrulercombobox"))
     , m_xSmoothCBox(m_xBuilder->weld_check_button("smoothscroll"))
+    , m_xGlyphPosModeLB(m_xBuilder->weld_combo_box("glyphposmode"))
     , m_xGrfCB(m_xBuilder->weld_check_button("graphics"))
     , m_xTableCB(m_xBuilder->weld_check_button("tables"))
     , m_xDrwCB(m_xBuilder->weld_check_button("drawings"))
@@ -219,6 +220,7 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
         m_xShowChangesInMargin->set_active(pElemAttr->m_bShowChangesInMargin);
         m_xFieldHiddenCB->set_active( pElemAttr->m_bFieldHiddenText );
         m_xFieldHiddenParaCB->set_active( pElemAttr->m_bShowHiddenPara );
+        m_xGlyphPosModeLB->set_active(static_cast<int>(pElemAttr->m_eGlyphPositioningMode));
     }
     m_xMetricLB->set_active(-1);
     lcl_SelectMetricLB(*m_xMetricLB, SID_ATTR_METRIC, *rSet);
@@ -246,6 +248,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     aElem.m_bShowChangesInMargin  = m_xShowChangesInMargin->get_active();
     aElem.m_bFieldHiddenText      = m_xFieldHiddenCB->get_active();
     aElem.m_bShowHiddenPara       = m_xFieldHiddenParaCB->get_active();
+    aElem.m_eGlyphPositioningMode = static_cast<GlyphPositioningMode>(m_xGlyphPosModeLB->get_active());
 
     bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)

@@ -126,6 +126,13 @@ namespace o3tl {
     template<> struct typed_flags<ViewOptFlags> : is_typed_flags<ViewOptFlags, 0x01ff> {};
 }
 
+enum class GlyphPositioningMode {
+    Classic,
+    ClassicInspired,
+    PreferLayout,
+    PreferReadability
+};
+
 class SW_DLLPUBLIC SwViewOption
 {
     static Color    s_aDocColor;  // color of document boundaries
@@ -163,6 +170,7 @@ class SW_DLLPUBLIC SwViewOption
     sal_uInt8       m_nPagePreviewRow;       // Page Preview Row/Columns.
     sal_uInt8       m_nPagePreviewCol;       // Page Preview Row/Columns.
     SwFillMode      m_nShadowCursorFillMode;  // FillMode for ShadowCursor.
+    GlyphPositioningMode m_eGlyphPositioningMode; // Positioning strategy for screen glyphs
     bool            m_bReadonly : 1;      // Readonly-Doc.
     bool            m_bStarOneSetting : 1;// Prevent from UI automatics (no scrollbars in readonly documents).
     bool            m_bIsPagePreview : 1; // The preview mustn't print field/footnote/... shadings.
@@ -425,6 +433,12 @@ public:
 
     void SetPrinting(bool b)
         { SetCore2Option(b, ViewOptCoreFlags2::Printing); }
+
+    GlyphPositioningMode GetGlyphPositioningMode() const
+        { return m_eGlyphPositioningMode; }
+
+    void SetGlyphPositioningMode(GlyphPositioningMode eMode)
+        { m_eGlyphPositioningMode = eMode; }
 
     void SetCore2Option(bool b, ViewOptCoreFlags2 f)
     {
@@ -697,6 +711,7 @@ inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
     m_nUIOptions = rVOpt.m_nUIOptions;
     m_nTableDestination = rVOpt.m_nTableDestination;
     m_nShadowCursorFillMode = rVOpt.m_nShadowCursorFillMode;
+    m_eGlyphPositioningMode = rVOpt.m_eGlyphPositioningMode;
 }
 
 // Helper function for checking HTML-capabilities.

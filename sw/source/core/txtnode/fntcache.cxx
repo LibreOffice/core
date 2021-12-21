@@ -857,26 +857,64 @@ static void lcl_DrawLineForWrongListData(
 
 namespace
 {
-    void AdjustKernArray(sal_Int32 i, tools::Long& rScrPos, sal_Unicode cChPrev, sal_Unicode nCh,
+    void AdjustKernArray(GlyphPositioningMode eGlyphPositioningMode, sal_Int32 i, tools::Long& rScrPos,
+                         sal_Unicode cChPrev, sal_Unicode nCh,
                          const std::vector<sal_Int32>& rScrArray, std::vector<sal_Int32>& rKernArray,
                          int nMul)
     {
         tools::Long nScr = rScrArray[i] - rScrArray[i - 1];
-        if (nCh == CH_BLANK)
-            rScrPos = rKernArray[i - 1] + nScr;
-        else
+        switch (eGlyphPositioningMode)
         {
-            if (cChPrev == CH_BLANK || cChPrev == '-')
+            case GlyphPositioningMode::PreferLayout:
                 rScrPos = rKernArray[i - 1] + nScr;
-            else
+                // just accept the print layout positions, this is what editeng does
+                break;
+            case GlyphPositioningMode::PreferReadability:
             {
+                // Overwrite KernArray with the screen-optimized glyph positions
+                rKernArray[i - 1] = rScrPos;
                 rScrPos += nScr;
+                break;
+            }
+            case GlyphPositioningMode::Classic:
+            {
+                if (nCh == CH_BLANK)
+                    rScrPos = rKernArray[i - 1] + nScr;
+                else
+                {
+                    if (cChPrev == CH_BLANK || cChPrev == '-')
+                        rScrPos = rKernArray[i - 1] + nScr;
+                    else
+                    {
+                        rScrPos += nScr;
 
-                const int nDiv = nMul+1;
-                rScrPos = (nMul * rScrPos + rKernArray[i]) / nDiv;
+                        const int nDiv = nMul+1;
+                        rScrPos = (nMul * rScrPos + rKernArray[i]) / nDiv;
+                    }
+                }
+                rKernArray[i - 1] = rScrPos - nScr;
+                break;
+            }
+            case GlyphPositioningMode::ClassicInspired:
+            {
+                // use the print layout positions for blanks and the first glyph after a blank or -
+                // and use screen layout within a run of glyphs
+                const bool bSyncWithPrintLayout = nCh == CH_BLANK || cChPrev == CH_BLANK || cChPrev == '-';
+                if (bSyncWithPrintLayout)
+                {
+                    // Leave KernArray untouched at its print layout position in this case
+                    // sync ScreenPos to print layout position
+                    rScrPos = rKernArray[i - 1] + nScr;
+                }
+                else
+                {
+                    // Overwrite KernArray within the run to use screen-optimized glyph positions
+                    rKernArray[i - 1] = rScrPos;
+                    rScrPos += nScr;
+                }
+                break;
             }
         }
-        rKernArray[i - 1] = rScrPos - nScr;
     }
 }
 
@@ -1689,6 +1727,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else
         {
+            GlyphPositioningMode eGlyphPositioningMode = rInf.GetShell()->GetViewOptions()->GetGlyphPositioningMode();
+
             // In case of Pair Kerning the printer influence on the positioning
             // grows
             const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
@@ -1712,7 +1752,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             for (sal_Int32 i = 1; i < sal_Int32(nCnt); ++i, nKernSum += rInf.GetKern())
             {
                 sal_Unicode nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
-                AdjustKernArray(i, nScrPos, cChPrev, nCh, aScrArray, aKernArray, nMul);
+                AdjustKernArray(eGlyphPositioningMode, i, nScrPos, cChPrev, nCh, aScrArray, aKernArray, nMul);
 
                 // Apply SpaceSum
                 if (cChPrev == CH_BLANK)
@@ -2012,7 +2052,6 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
             rInf.GetOut().SetFont( *m_pScrFont );
-        tools::Long nScrPos;
 
         m_pPrinter->GetTextArray(rInf.GetText(), &aKernArray,
                 sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
@@ -2024,34 +2063,44 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.SetKanaDiff( 0 );
 
         if ( rInf.GetKanaDiff() )
-            nScrPos = aKernArray[ sal_Int32(nLn) - 1 ];
+        {
+            aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
+        }
         else
         {
-            std::vector<sal_Int32> aScrArray;
-            rInf.GetOut().GetTextArray( rInf.GetText(), &aScrArray,
-                        sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
-            nScrPos = aScrArray[ 0 ];
-            TextFrameIndex nCnt(rInf.GetText().getLength());
-            if ( nCnt < rInf.GetIdx() )
-                nCnt = TextFrameIndex(0); // assert???
-            else
-                nCnt = nCnt - rInf.GetIdx();
-            nCnt = std::min(nCnt, nLn);
-            sal_Unicode nChPrev = rInf.GetText()[ sal_Int32(rInf.GetIdx()) ];
-
-            // In case of Pair Kerning the printer influence on the positioning
-            // grows
-            const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
-
-            for (sal_Int32 i = 1; i < sal_Int32(nCnt); i++)
+            GlyphPositioningMode eGlyphPositioningMode = rInf.GetShell()->GetViewOptions()->GetGlyphPositioningMode();
+            if (eGlyphPositioningMode == GlyphPositioningMode::PreferLayout)
             {
-                sal_Unicode nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
-                AdjustKernArray(i, nScrPos, nChPrev, nCh, aScrArray, aKernArray, nMul);
-                nChPrev = nCh;
+                aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
+            }
+            else
+            {
+                std::vector<sal_Int32> aScrArray;
+                rInf.GetOut().GetTextArray( rInf.GetText(), &aScrArray,
+                            sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                tools::Long nScrPos = aScrArray[ 0 ];
+                TextFrameIndex nCnt(rInf.GetText().getLength());
+                if ( nCnt < rInf.GetIdx() )
+                    nCnt = TextFrameIndex(0); // assert???
+                else
+                    nCnt = nCnt - rInf.GetIdx();
+                nCnt = std::min(nCnt, nLn);
+                sal_Unicode nChPrev = rInf.GetText()[ sal_Int32(rInf.GetIdx()) ];
+
+                // In case of Pair Kerning the printer influence on the positioning
+                // grows
+                const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
+
+                for (sal_Int32 i = 1; i < sal_Int32(nCnt); i++)
+                {
+                    sal_Unicode nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
+                    AdjustKernArray(eGlyphPositioningMode, i, nScrPos, nChPrev, nCh, aScrArray, aKernArray, nMul);
+                    nChPrev = nCh;
+                }
+
+                aTextSize.setWidth( nScrPos );
             }
         }
-
-        aTextSize.setWidth( nScrPos );
     }
     else
     {

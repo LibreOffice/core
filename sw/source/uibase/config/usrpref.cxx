@@ -259,20 +259,21 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames() const
         "Window/HorizontalRulerUnit",           // 6
         "Window/VerticalRulerUnit",             // 7
         "Window/SmoothScroll",                  // 8
-        "Zoom/Value",                           // 9
-        "Zoom/Type",                            //10
-        "Other/IsAlignMathObjectsToBaseline",   //11
-        "Other/MeasureUnit",                    //12
+        "Window/GlyphPositioningMode",          // 9
+        "Zoom/Value",                           //10
+        "Zoom/Type",                            //11
+        "Other/IsAlignMathObjectsToBaseline",   //12
+        "Other/MeasureUnit",                    //13
         // below properties are not available in WriterWeb
-        "Other/TabStop",                        //13
-        "Window/IsVerticalRulerRight",          //14
-        "ViewLayout/Columns",                   //15
-        "ViewLayout/BookMode",                  //16
-        "Other/IsSquaredPageMode",              //17
-        "Other/ApplyCharUnit",                  //18
-        "Window/ShowScrollBarTips"              //19
+        "Other/TabStop",                        //14
+        "Window/IsVerticalRulerRight",          //15
+        "ViewLayout/Columns",                   //16
+        "ViewLayout/BookMode",                  //17
+        "Other/IsSquaredPageMode",              //18
+        "Other/ApplyCharUnit",                  //19
+        "Window/ShowScrollBarTips"              //20
     };
-    const int nCount = m_bWeb ? 13 : 20;
+    const int nCount = m_bWeb ? 14 : 21;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -323,17 +324,18 @@ void SwLayoutViewConfig::ImplCommit()
                     rVal <<= static_cast<sal_Int32>(m_rParent.m_eVScrollMetric);                     // "Window/VerticalRulerUnit"
             break;
             case  8: rVal <<= m_rParent.IsSmoothScroll(); break;                      // "Window/SmoothScroll",
-            case  9: rVal <<= static_cast<sal_Int32>(m_rParent.GetZoom()); break;                  // "Zoom/Value",
-            case 10: rVal <<= static_cast<sal_Int32>(m_rParent.GetZoomType()); break;              // "Zoom/Type",
-            case 11: rVal <<= m_rParent.IsAlignMathObjectsToBaseline(); break;        // "Other/IsAlignMathObjectsToBaseline"
-            case 12: rVal <<= static_cast<sal_Int32>(m_rParent.GetMetric()); break;                // "Other/MeasureUnit",
-            case 13: rVal <<= m_rParent.GetDefTabInMm100(); break;// "Other/TabStop",
-            case 14: rVal <<= m_rParent.IsVRulerRight(); break;                       // "Window/IsVerticalRulerRight",
-            case 15: rVal <<= static_cast<sal_Int32>(m_rParent.GetViewLayoutColumns()); break;     // "ViewLayout/Columns",
-            case 16: rVal <<= m_rParent.IsViewLayoutBookMode(); break;                // "ViewLayout/BookMode",
-            case 17: rVal <<= m_rParent.IsSquaredPageMode(); break;                   // "Other/IsSquaredPageMode",
-            case 18: rVal <<= m_rParent.IsApplyCharUnit(); break;                     // "Other/ApplyCharUnit",
-            case 19: rVal <<= m_rParent.IsShowScrollBarTips(); break;                 // "Window/ShowScrollBarTips",
+            case  9: rVal <<= static_cast<sal_Int32>(m_rParent.GetGlyphPositioningMode()); break;  // "Window/GlyphPositioningMode",
+            case 10: rVal <<= static_cast<sal_Int32>(m_rParent.GetZoom()); break;                  // "Zoom/Value",
+            case 11: rVal <<= static_cast<sal_Int32>(m_rParent.GetZoomType()); break;              // "Zoom/Type",
+            case 12: rVal <<= m_rParent.IsAlignMathObjectsToBaseline(); break;        // "Other/IsAlignMathObjectsToBaseline"
+            case 13: rVal <<= static_cast<sal_Int32>(m_rParent.GetMetric()); break;                // "Other/MeasureUnit",
+            case 14: rVal <<= m_rParent.GetDefTabInMm100(); break;// "Other/TabStop",
+            case 15: rVal <<= m_rParent.IsVRulerRight(); break;                       // "Window/IsVerticalRulerRight",
+            case 16: rVal <<= static_cast<sal_Int32>(m_rParent.GetViewLayoutColumns()); break;     // "ViewLayout/Columns",
+            case 17: rVal <<= m_rParent.IsViewLayoutBookMode(); break;                // "ViewLayout/BookMode",
+            case 18: rVal <<= m_rParent.IsSquaredPageMode(); break;                   // "Other/IsSquaredPageMode",
+            case 19: rVal <<= m_rParent.IsApplyCharUnit(); break;                     // "Other/ApplyCharUnit",
+            case 20: rVal <<= m_rParent.IsShowScrollBarTips(); break;                 // "Window/ShowScrollBarTips",
         }
     }
     PutProperties(aNames, aValues);
@@ -378,17 +380,18 @@ void SwLayoutViewConfig::Load()
                 }
                 break;
                 case  8: m_rParent.SetSmoothScroll(bSet); break;// "Window/SmoothScroll",
-                case  9: m_rParent.SetZoom( static_cast< sal_uInt16 >(nInt32Val) ); break;// "Zoom/Value",
-                case 10: m_rParent.SetZoomType( static_cast< SvxZoomType >(nInt32Val) ); break;// "Zoom/Type",
-                case 11: m_rParent.SetAlignMathObjectsToBaseline(bSet, true); break;// "Other/IsAlignMathObjectsToBaseline"
-                case 12: m_rParent.SetMetric(static_cast<FieldUnit>(nInt32Val), true); break;// "Other/MeasureUnit",
-                case 13: m_rParent.SetDefTabInMm100(nInt32Val, true); break;// "Other/TabStop",
-                case 14: m_rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
-                case 15: m_rParent.SetViewLayoutColumns( o3tl::narrowing<sal_uInt16>(nInt32Val) ); break;// "ViewLayout/Columns",
-                case 16: m_rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
-                case 17: m_rParent.SetDefaultPageMode(bSet,true); break;// "Other/IsSquaredPageMode",
-                case 18: m_rParent.SetApplyCharUnit(bSet, true); break;// "Other/ApplyUserChar"
-                case 19: m_rParent.SetShowScrollBarTips(bSet); break;// "Window/ShowScrollBarTips",
+                case  9: m_rParent.SetGlyphPositioningMode(static_cast<GlyphPositioningMode>(nInt32Val)); break;// "Window/GlyphPositioningMode",
+                case 10: m_rParent.SetZoom( static_cast< sal_uInt16 >(nInt32Val) ); break;// "Zoom/Value",
+                case 11: m_rParent.SetZoomType( static_cast< SvxZoomType >(nInt32Val) ); break;// "Zoom/Type",
+                case 12: m_rParent.SetAlignMathObjectsToBaseline(bSet, true); break;// "Other/IsAlignMathObjectsToBaseline"
+                case 13: m_rParent.SetMetric(static_cast<FieldUnit>(nInt32Val), true); break;// "Other/MeasureUnit",
+                case 14: m_rParent.SetDefTabInMm100(nInt32Val, true); break;// "Other/TabStop",
+                case 15: m_rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
+                case 16: m_rParent.SetViewLayoutColumns( o3tl::narrowing<sal_uInt16>(nInt32Val) ); break;// "ViewLayout/Columns",
+                case 17: m_rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
+                case 18: m_rParent.SetDefaultPageMode(bSet,true); break;// "Other/IsSquaredPageMode",
+                case 19: m_rParent.SetApplyCharUnit(bSet, true); break;// "Other/ApplyUserChar"
+                case 20: m_rParent.SetShowScrollBarTips(bSet); break;// "Window/ShowScrollBarTips",
             }
         }
     }

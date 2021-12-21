@@ -1459,6 +1459,14 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="GlyphPositioningMode" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Option - Text document - Layout - [Section] Window -->
+          <info>
+            <desc>Specifies the Glyph Positioning Mode.</desc>
+            <label>Glyph Positioning Mode</label>
+          </info>
+          <value>0</value>
+        </prop>
       </group>
       <group oor:name="Other">
         <info>
