@@ -288,10 +288,65 @@ bool MsLangId::isChinese( LanguageType nLang )
         MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_YUE_CHINESE_HONGKONG);
 }
 
+// static
+bool MsLangId::isChineseLanguage( LanguageType nLang )
+{
+    return  primary(nLang).anyOf(
+            primary(LANGUAGE_CHINESE_HONGKONG),
+            primary(LANGUAGE_CHINESE_LSO),
+            primary(LANGUAGE_CHINESE_MACAU),
+            primary(LANGUAGE_CHINESE_SIMPLIFIED),
+            primary(LANGUAGE_CHINESE_SINGAPORE),
+            primary(LANGUAGE_CHINESE_TRADITIONAL),
+            primary(LANGUAGE_CHINESE_SIMPLIFIED_LEGACY),
+            primary(LANGUAGE_CHINESE_TRADITIONAL_LSO));
+}
+
+// static
+bool MsLangId::isKoreanLanguage( LanguageType nLang )
+{
+    return MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_KOREAN)||
+           MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_USER_KOREAN_NORTH);
+}
+
+// static
+bool MsLangId::isPashto( LanguageType nLang )
+{
+    return MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_PASHTO);
+}
+
+// static
+bool MsLangId::isFarsi( LanguageType nLang )
+{
+    return MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_FARSI);
+}
+
 //static
 bool MsLangId::isKorean( LanguageType nLang )
 {
     return MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_KOREAN);
+}
+
+bool MsLangId::isArabic( LanguageType nLang )
+{
+    return  primary(nLang).anyOf(
+            primary(LANGUAGE_ARABIC_ALGERIA),
+            primary(LANGUAGE_ARABIC_BAHRAIN),
+            primary(LANGUAGE_ARABIC_EGYPT),
+            primary(LANGUAGE_ARABIC_IRAQ),
+            primary(LANGUAGE_ARABIC_JORDAN),
+            primary(LANGUAGE_ARABIC_KUWAIT),
+            primary(LANGUAGE_ARABIC_LEBANON),
+            primary(LANGUAGE_ARABIC_LIBYA),
+            primary(LANGUAGE_ARABIC_MOROCCO),
+            primary(LANGUAGE_ARABIC_OMAN),
+            primary(LANGUAGE_ARABIC_PRIMARY_ONLY),
+            primary(LANGUAGE_ARABIC_QATAR),
+            primary(LANGUAGE_ARABIC_SAUDI_ARABIA),
+            primary(LANGUAGE_ARABIC_SYRIA),
+            primary(LANGUAGE_ARABIC_TUNISIA),
+            primary(LANGUAGE_ARABIC_UAE),
+            primary(LANGUAGE_ARABIC_YEMEN));
 }
 
 // static
@@ -307,6 +362,21 @@ bool MsLangId::isCJK( LanguageType nLang )
     }
     if (LanguageTag::isOnTheFlyID(nLang))
         return LanguageTag::getOnTheFlyScriptType(nLang) == LanguageTag::ScriptType::CJK;
+    return false;
+}
+
+bool MsLangId::useHyphenation(LanguageType nLang)
+{
+    if(isChineseLanguage(nLang)||
+       isArabic(nLang)||
+       isCJK(nLang)||
+       isKorean(nLang)||
+       isPashto(nLang)||
+       isFarsi(nLang))
+    {
+        return true;
+    }
+
     return false;
 }
 

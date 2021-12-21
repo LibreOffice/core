@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
-
+#include <i18nlangtag/mslangid.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
@@ -66,11 +66,13 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gradient.hxx>
+#include <map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using std::map;
 
 #define CHAR_UNDERSCORE u'_'
 #define CHAR_LEFT_ARROW u'\x25C0'
@@ -1446,8 +1448,9 @@ bool SwTextFormatInfo::IsHyphenate() const
 
     LanguageType eTmp = GetFont()->GetLanguage();
     // TODO: check for more ideographic langs w/o hyphenation as a concept
-    if ( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp || LANGUAGE_JAPANESE == eTmp )
-        return false;
+    if( LANGUAGE_DONTKNOW || LANGUAGE_NONE || MsLangId::useHyphenation(eTmp))
+         return false;
+
 
     uno::Reference< XHyphenator > xHyph = ::GetHyphenator();
     if (!xHyph.is())
