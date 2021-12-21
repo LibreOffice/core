@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
-
+#include <i18nlangtag/mslangid.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
@@ -1446,8 +1446,9 @@ bool SwTextFormatInfo::IsHyphenate() const
 
     LanguageType eTmp = GetFont()->GetLanguage();
     // TODO: check for more ideographic langs w/o hyphenation as a concept
-    if ( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp || LANGUAGE_JAPANESE == eTmp )
-        return false;
+    if ( LANGUAGE_DONTKNOW || LANGUAGE_NONE || MsLangId::noHyphenation(eTmp) )
+         return false;
+
 
     uno::Reference< XHyphenator > xHyph = ::GetHyphenator();
     if (!xHyph.is())
