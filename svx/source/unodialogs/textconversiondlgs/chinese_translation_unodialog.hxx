@@ -29,7 +29,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
+#include <mutex>
 
 
 namespace textconversiondlgs
@@ -108,8 +109,8 @@ private:
 
     bool m_bDisposed; ///Dispose call ready.
     bool m_bInDispose;///In dispose call
-    osl::Mutex                      m_aContainerMutex;
-    comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_aDisposeEventListeners;
+    std::mutex                      m_aContainerMutex;
+    comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aDisposeEventListeners;
 };
 
 

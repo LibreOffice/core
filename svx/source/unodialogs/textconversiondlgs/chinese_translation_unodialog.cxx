@@ -32,7 +32,6 @@ using namespace ::com::sun::star;
 ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog()
                     : m_bDisposed(false)
                     , m_bInDispose(false)
-                    , m_aDisposeEventListeners(m_aContainerMutex)
 {
 }
 
@@ -125,8 +124,8 @@ void SAL_CALL ChineseTranslation_UnoDialog::dispose()
 
         aEvt.Source = static_cast< XComponent * >( this );
     }
-    if( m_aDisposeEventListeners.getLength() )
-        m_aDisposeEventListeners.disposeAndClear( aEvt );
+    std::unique_lock aGuard(m_aContainerMutex);
+    m_aDisposeEventListeners.disposeAndClear( aGuard, aEvt );
 }
 
 void SAL_CALL ChineseTranslation_UnoDialog::addEventListener( const uno::Reference< lang::XEventListener > & xListener )
@@ -134,6 +133,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::addEventListener( const uno::Referen
     SolarMutexGuard aSolarGuard;
     if( m_bDisposed || m_bInDispose )
         return;
+    std::unique_lock aGuard(m_aContainerMutex);
     m_aDisposeEventListeners.addInterface( xListener );
 }
 
@@ -142,6 +142,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::removeEventListener( const uno::Refe
     SolarMutexGuard aSolarGuard;
     if( m_bDisposed || m_bInDispose )
         return;
+    std::unique_lock aGuard(m_aContainerMutex);
     m_aDisposeEventListeners.removeInterface( xListener );
 }
 
