@@ -680,7 +680,7 @@ private:
 
         @return [TDocumentList::iterator]
                 which points to the located document.
-                If document does not exists - its set to
+                If document does not exists - it's set to
                 rList.end()!
      */
     static TDocumentList::iterator impl_searchDocument(      AutoRecovery::TDocumentList&               rList    ,
