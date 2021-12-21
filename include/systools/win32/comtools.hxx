@@ -59,11 +59,23 @@ namespace sal::systools
     class CoInitializeGuard
     {
     public:
-        explicit CoInitializeGuard(DWORD dwCoInit, bool bThrowOnChangeMode = false)
+        enum WhenFailed
+        {
+            NoThrow, // do not throw
+            Throw, // throw on failure
+            Abort, // std::abort on failure
+        };
+        explicit CoInitializeGuard(DWORD dwCoInit, bool failChangeMode = false,
+                                   WhenFailed whenFailed = Throw)
         {
             HRESULT hr = ::CoInitializeEx(nullptr, dwCoInit);
-            if (FAILED(hr) && (bThrowOnChangeMode || hr != RPC_E_CHANGED_MODE))
-                throw ComError("CoInitializeEx failed", hr);
+            if (whenFailed != NoThrow && FAILED(hr) && (failChangeMode || hr != RPC_E_CHANGED_MODE))
+            {
+                if (whenFailed == Throw)
+                    throw ComError("CoInitializeEx failed", hr);
+                else // if (whenFailed == Abort)
+                    std::abort();
+            }
             mbUninit = SUCCEEDED(hr);
         }
         CoInitializeGuard(const CoInitializeGuard&) = delete; // non-construction-copyable
