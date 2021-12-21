@@ -1028,7 +1028,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLRangeSomewhereCo
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    if( nElement == XML_ELEMENT(SVG, XML_DESC) )
+    if( nElement == XML_ELEMENT(SVG, XML_DESC)
+        || nElement == XML_ELEMENT(SVG_COMPAT, XML_DESC) )
     {
         return new XMLStringBufferImportContext( GetImport(), maRangeStringBuffer );
     }
