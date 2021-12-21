@@ -63,6 +63,8 @@ static int xmlStreamMatch( const char* uri )
                 OUString::createFromAscii(uri));
         }
     }
+    SAL_INFO("xmlsecurity",
+             "xmlStreamMath: uri is '" << uri << "', returning " << xInputStream.is());
     if (xInputStream.is())
         return 1;
     else
@@ -95,6 +97,8 @@ static void* xmlStreamOpen( const char* uri )
             css::io::XInputStream* pInputStream ;
             pInputStream = xInputStream.get() ;
             pInputStream->acquire() ;
+            SAL_INFO("xmlsecurity",
+                     "xmlStreamOpen: uri is '" << uri << "', returning context " << pInputStream);
             return static_cast<void*>(pInputStream) ;
         }
     }
@@ -123,6 +127,8 @@ static int xmlStreamRead( void* context, char* buffer, int len )
         }
     }
 
+    SAL_INFO("xmlsecurity", "xmlStreamRead: context is " << context << ", buffer is now '"
+                                                         << OString(buffer, numbers) << "'");
     return numbers ;
 }
 
@@ -134,6 +140,7 @@ static int xmlStreamClose( void * context )
             css::io::XInputStream* pInputStream ;
             pInputStream = static_cast<css::io::XInputStream*>(context);
             pInputStream->release() ;
+            SAL_INFO("xmlsecurity", "xmlStreamRead: closed context " << context);
         }
     }
 
