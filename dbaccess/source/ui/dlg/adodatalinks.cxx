@@ -26,6 +26,7 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <systools/win32/comtools.hxx>
 
 #include <initguid.h>
 #include <adoid.h>
@@ -37,154 +38,90 @@ namespace {
 
 OUString PromptNew(sal_IntPtr hWnd)
 {
-    HRESULT hr;
-    IDataSourceLocator* dlPrompt = nullptr;
-    ADOConnection* piTmpConnection = nullptr;
-    BSTR _result=nullptr;
+    try
+    {
+        // Initialize COM
+        sal::systools::CoInitializeGuard aGuard(COINIT_APARTMENTTHREADED);
 
-    // Initialize COM
-    hr = ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
-    if (FAILED(hr) && hr != RPC_E_CHANGED_MODE)
-        std::abort();
-    const bool bDoUninit = SUCCEEDED(hr);
-    comphelper::ScopeGuard g([bDoUninit] () {
-        if (bDoUninit)
-            CoUninitialize();
-    });
+        // Instantiate DataLinks object.
+        sal::systools::COMReference<IDataSourceLocator> dlPrompt;
+        dlPrompt.CoCreateInstance(CLSID_DataLinks,       //clsid -- Data Links UI
+                                  nullptr,               //pUnkOuter
+                                  CLSCTX_INPROC_SERVER); //dwClsContext
 
-    // Instantiate DataLinks object.
-    hr = CoCreateInstance(
-                    CLSID_DataLinks,                //clsid -- Data Links UI
-                    nullptr,                        //pUnkOuter
-                    CLSCTX_INPROC_SERVER,           //dwClsContext
-                    IID_IDataSourceLocator,     //riid
-                    reinterpret_cast<void**>(&dlPrompt)   //ppvObj
-                    );
-    if( FAILED( hr ) )
+        sal::systools::ThrowIfFailed(dlPrompt->put_hWnd(hWnd), "put_hWnd failed");
+
+        // Prompt for connection information.
+        sal::systools::COMReference<IDispatch> piDispatch;
+        sal::systools::ThrowIfFailed(dlPrompt->PromptNew(&piDispatch), "PromptNew failed");
+        sal::systools::COMReference<ADOConnection> piTmpConnection(piDispatch,
+                                                                   sal::systools::COM_QUERY_THROW);
+
+        BSTR _result = nullptr;
+        sal::systools::ThrowIfFailed(piTmpConnection->get_ConnectionString(&_result),
+                                     "get_ConnectionString failed");
+
+        // FIXME: Don't we need SysFreeString(_result)?
+        return OUString(o3tl::toU(_result), SysStringLen(_result));
+    }
+    catch (const sal::systools::ComError&)
     {
         return OUString();
     }
-
-    dlPrompt->put_hWnd(hWnd);
-    if( FAILED( hr ) )
-    {
-        dlPrompt->Release( );
-        return OUString();
-    }
-
-    // Prompt for connection information.
-    hr = dlPrompt->PromptNew(reinterpret_cast<IDispatch **>(&piTmpConnection));
-
-    if( FAILED( hr ) || !piTmpConnection )
-    {
-        dlPrompt->Release( );
-        return OUString();
-    }
-
-    hr = piTmpConnection->get_ConnectionString(&_result);
-    if( FAILED( hr ) )
-    {
-        piTmpConnection->Release( );
-        dlPrompt->Release( );
-        return OUString();
-    }
-
-    piTmpConnection->Release( );
-    dlPrompt->Release( );
-    // Don't we need SysFreeString(_result)?
-    return OUString(o3tl::toU(_result));
 }
 
 OUString PromptEdit(sal_IntPtr hWnd, OUString const & connstr)
 {
-    HRESULT hr;
-    IDataSourceLocator* dlPrompt = nullptr;
-    ADOConnection* piTmpConnection = nullptr;
-    BSTR _result=nullptr;
-
-    // Initialize COM
-    ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
-
-    hr = CoCreateInstance(CLSID_CADOConnection,
-                nullptr,
-                CLSCTX_INPROC_SERVER,
-                IID_IADOConnection,
-                reinterpret_cast<LPVOID *>(&piTmpConnection));
-    if( FAILED( hr ) )
+    try
     {
-        piTmpConnection->Release( );
-        return connstr;
-    }
+        // Initialize COM
+        sal::systools::CoInitializeGuard aGuard(COINIT_APARTMENTTHREADED);
 
+        sal::systools::COMReference<ADOConnection> piTmpConnection;
+        piTmpConnection.CoCreateInstance(CLSID_CADOConnection, nullptr, CLSCTX_INPROC_SERVER);
 
-    hr = piTmpConnection->put_ConnectionString(
-        const_cast<BSTR>(o3tl::toW(connstr.getStr())));
-    if( FAILED( hr ) )
-    {
-        piTmpConnection->Release( );
-        return connstr;
-    }
+        // FIXME: BSTR is not just cast from a random string
+        sal::systools::ThrowIfFailed(
+            piTmpConnection->put_ConnectionString(const_cast<BSTR>(o3tl::toW(connstr.getStr()))),
+            "put_ConnectionString failed");
 
-    // Instantiate DataLinks object.
-    hr = CoCreateInstance(
-                    CLSID_DataLinks,                //clsid -- Data Links UI
-                    nullptr,                        //pUnkOuter
-                    CLSCTX_INPROC_SERVER,           //dwClsContext
-                    IID_IDataSourceLocator,     //riid
-                    reinterpret_cast<void**>(&dlPrompt) //ppvObj
-                    );
-    if( FAILED( hr ) )
-    {
-        piTmpConnection->Release( );
-        dlPrompt->Release( );
-        return connstr;
-    }
+        // Instantiate DataLinks object.
+        sal::systools::COMReference<IDataSourceLocator> dlPrompt;
+        dlPrompt.CoCreateInstance(CLSID_DataLinks,       //clsid -- Data Links UI
+                                  nullptr,               //pUnkOuter
+                                  CLSCTX_INPROC_SERVER); //dwClsContext
 
-    dlPrompt->put_hWnd(hWnd);
-    if( FAILED( hr ) )
-    {
-        piTmpConnection->Release( );
-        dlPrompt->Release( );
-        return connstr;
-    }
+        sal::systools::ThrowIfFailed(dlPrompt->put_hWnd(hWnd), "put_hWnd failed");
 
-    VARIANT_BOOL pbSuccess;
-
-    // Prompt for connection information.
-    hr = dlPrompt->PromptEdit(reinterpret_cast<IDispatch **>(&piTmpConnection),&pbSuccess);
-    if( SUCCEEDED( hr ) && !pbSuccess ) //if user press cancel then sal_False == pbSuccess
-    {
-        piTmpConnection->Release( );
-        dlPrompt->Release( );
-        return connstr;
-    }
-
-    if( FAILED( hr ) )
-    {
-        // Prompt for new connection information.
-        piTmpConnection->Release( );
-        piTmpConnection = nullptr;
-        hr = dlPrompt->PromptNew(reinterpret_cast<IDispatch **>(&piTmpConnection));
-        if(  FAILED( hr ) || !piTmpConnection )
+        try
         {
-            dlPrompt->Release( );
-            return connstr;
+            // Prompt for connection information.
+            IDispatch* piDispatch = piTmpConnection.get();
+            VARIANT_BOOL pbSuccess;
+            sal::systools::ThrowIfFailed(dlPrompt->PromptEdit(&piDispatch, &pbSuccess),
+                                         "PromptEdit failed");
+            if (!pbSuccess) //if user press cancel then sal_False == pbSuccess
+                return connstr;
         }
-    }
+        catch (const sal::systools::ComError&)
+        {
+            // Prompt for new connection information.
+            sal::systools::COMReference<IDispatch> piDispatch;
+            sal::systools::ThrowIfFailed(dlPrompt->PromptNew(&piDispatch), "PromptNew failed");
+            piTmpConnection.set(piDispatch, sal::systools::COM_QUERY_THROW);
+        }
 
-    hr = piTmpConnection->get_ConnectionString(&_result);
-    if( FAILED( hr ) )
+        BSTR _result = nullptr;
+        sal::systools::ThrowIfFailed(piTmpConnection->get_ConnectionString(&_result),
+                                     "get_ConnectionString failed");
+
+        // FIXME: Don't we need SysFreeString(_result)?
+        return OUString(o3tl::toU(_result), SysStringLen(_result));
+    }
+    catch (const sal::systools::ComError&)
     {
-        piTmpConnection->Release( );
-        dlPrompt->Release( );
         return connstr;
     }
-
-    piTmpConnection->Release( );
-    dlPrompt->Release( );
-    CoUninitialize();
-    // Don't we need SysFreeString(_result)?
-    return OUString(o3tl::toU(_result));
 }
 
 }
