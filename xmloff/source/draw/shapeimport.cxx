@@ -419,7 +419,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
         }
         // add other shapes here...
         default:
-            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
+            SAL_INFO("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
             break;
     }
 
@@ -429,7 +429,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
         for(auto& aIter : *xCombinedAttrList)
         {
             if (!pContext->processAttribute( aIter ))
-                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+                SAL_INFO("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
         }
     }
 
