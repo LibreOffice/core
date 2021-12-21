@@ -51,8 +51,8 @@ void SolarThreadExecutor::execute()
     {
         m_aStart.reset();
         m_aFinish.reset();
-        SolarMutexReleaser aReleaser;
         ImplSVEvent* nEvent = Application::PostUserEvent(LINK(this, SolarThreadExecutor, worker));
+        SolarMutexReleaser aReleaser;
         if (m_aStart.wait() == osl::Condition::result_timeout)
         {
             m_bTimeout = true;
