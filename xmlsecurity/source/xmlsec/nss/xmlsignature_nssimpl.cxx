@@ -243,6 +243,13 @@ SAL_CALL XMLSignature_NssImpl::validate(
         if (xmlSecPtrListAdd(&(pDsigCtx->keyInfoReadCtx.enabledKeyData), BAD_CAST xmlSecNssKeyDataX509GetKlass()) < 0)
             throw RuntimeException("failed to limit allowed key data");
 
+        xmlBufferPtr pBuf = xmlBufferCreate();
+        xmlNodeDump(pBuf, nullptr, pNode, 0, 0);
+        SAL_INFO("xmlsecurity.xmlsec", "xmlSecDSigCtxVerify input XML node is '"
+                                           << reinterpret_cast<const char*>(xmlBufferContent(pBuf))
+                                           << "'");
+        xmlBufferFree(pBuf);
+
         //Verify signature
         int rs = xmlSecDSigCtxVerify( pDsigCtx.get() , pNode );
 
