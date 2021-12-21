@@ -462,7 +462,8 @@ namespace
     }
 
     // at rejection of a deletion in a table, remove the tracking of the table row
-    void lcl_RemoveTrackingOfTableRow( const SwPosition* pPos )
+    // (also at accepting the last redline insertion of a tracked table row insertion)
+    void lcl_RemoveTrackingOfTableRow( const SwPosition* pPos, bool bRejectDeletion )
     {
         const SwTableBox* pBox = pPos->nNode.GetNode().GetTableBox();
         if ( !pBox )
@@ -474,9 +475,21 @@ namespace
         // table row property "HasTextChangesOnly" is set and its value is false
         if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
         {
-            SvxPrintItem aUnsetTracking(RES_PRINT, true);
-            SwCursor aCursor( *pPos, nullptr );
-            pPos->GetDoc().SetRowNotTracked( aCursor, aUnsetTracking );
+            bool bNoMoreInsertion = false;
+            if ( !bRejectDeletion )
+            {
+                SwRedlineTable::size_type nPos = 0;
+                SwRedlineTable::size_type nInsert = pLine->UpdateTextChangesOnly(nPos, /*bUpdateProperty=*/false);
+
+                if ( SwRedlineTable::npos == nInsert )
+                    bNoMoreInsertion = true;
+            }
+            if ( bRejectDeletion || bNoMoreInsertion )
+            {
+                SvxPrintItem aUnsetTracking(RES_PRINT, true);
+                SwCursor aCursor( *pPos, nullptr );
+                pPos->GetDoc().SetRowNotTracked( aCursor, aUnsetTracking );
+            }
         }
     }
 
@@ -535,7 +548,15 @@ namespace
 
                 case SwComparePosition::Outside:
                 case SwComparePosition::Equal:
-                    rArr.DeleteAndDestroy( rPos-- );
+                    {
+                        bool bInsert = RedlineType::Insert == pRedl->GetType();
+                        SwPosition aPos(pRedl->Start()->nNode);
+                        rArr.DeleteAndDestroy( rPos-- );
+
+                        // remove tracking of the table row, if needed
+                        if ( bInsert )
+                            lcl_RemoveTrackingOfTableRow( &aPos, /*bRejectDelete=*/false );
+                    }
                     break;
 
                 default:
@@ -766,7 +787,7 @@ namespace
                     pRedl->GetExtraData()->Reject( *pRedl );
 
                 // remove tracking of the table row, if needed
-                lcl_RemoveTrackingOfTableRow( updatePaM.End() );
+                lcl_RemoveTrackingOfTableRow( updatePaM.End(), /*bRejectDelete=*/true );
 
                 switch( eCmp )
                 {
