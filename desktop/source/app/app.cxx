@@ -1567,20 +1567,13 @@ int Desktop::Main()
         // Reap the process started by fire_glxtest_process().
         reap_glxtest_process();
 
-        // Release solar mutex just before we wait for our client to connect
-        {
-            SolarMutexReleaser aReleaser;
+        // Post user event to startup first application component window
+        // We have to send this OpenClients message short before execute() to
+        // minimize the risk that this message overtakes type detection construction!!
+        Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
 
-            // Post user event to startup first application component window
-            // We have to send this OpenClients message short before execute() to
-            // minimize the risk that this message overtakes type detection construction!!
-            Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
-
-            // Post event to enable acceptors
-            Application::PostUserEvent( LINK( this, Desktop, EnableAcceptors_Impl) );
-
-            // Acquire solar mutex just before we enter our message loop
-        }
+        // Post event to enable acceptors
+        Application::PostUserEvent( LINK( this, Desktop, EnableAcceptors_Impl) );
 
         // call Application::Execute to process messages in vcl message loop
 #if HAVE_FEATURE_JAVA
