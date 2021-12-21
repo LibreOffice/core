@@ -555,30 +555,28 @@ handleGraphicSelectionOnButtonRelease(LOKDocView* pDocView, GdkEventButton* pEve
         }
     }
 
-    if (priv->m_bInDragGraphicSelection)
+    if (!priv->m_bInDragGraphicSelection)
+        return false;
+
+    g_info("LOKDocView_Impl::signalButton: end of drag graphic selection");
+    priv->m_bInDragGraphicSelection = false;
+
+    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
+    LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
+    pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
+    pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
+    pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
+    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+
+    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    if (error != nullptr)
     {
-        g_info("LOKDocView_Impl::signalButton: end of drag graphic selection");
-        priv->m_bInDragGraphicSelection = false;
-
-        GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
-        LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
-        pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
-        pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
-        pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
-        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-
-        g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-        if (error != nullptr)
-        {
-            g_warning("Unable to call LOK_SET_GRAPHIC_SELECTION: %s", error->message);
-            g_clear_error(&error);
-        }
-        g_object_unref(task);
-
-        return true;
+        g_warning("Unable to call LOK_SET_GRAPHIC_SELECTION: %s", error->message);
+        g_clear_error(&error);
     }
+    g_object_unref(task);
 
-    return false;
+    return true;
 }
 
 static void

@@ -409,36 +409,36 @@ gboolean LOKDocViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEventConfi
     }
 
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
-    if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
-    {
-        GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(window->scrolledwindow));
-        int rowSizePixel = GTV_CALC_HEADER_BAR(window->rowbar)->m_nSizePixel = gtk_adjustment_get_page_size(pVAdjustment);
-        int rowPosPixel = GTV_CALC_HEADER_BAR(window->rowbar)->m_nPositionPixel = gtk_adjustment_get_value(pVAdjustment);
-        GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(window->scrolledwindow));
-        int colSizePixel = GTV_CALC_HEADER_BAR(window->columnbar)->m_nSizePixel = gtk_adjustment_get_page_size(pHAdjustment);
-        int colPosPixel = GTV_CALC_HEADER_BAR(window->columnbar)->m_nPositionPixel = gtk_adjustment_get_value(pHAdjustment);
+    if (!pDocument || pDocument->pClass->getDocumentType(pDocument) != LOK_DOCTYPE_SPREADSHEET)
+        return true;
 
-        std::stringstream aCommand;
-        aCommand << ".uno:ViewRowColumnHeaders";
-        aCommand << "?x=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->lokdocview), colPosPixel));
-        aCommand << "&width=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->lokdocview), colSizePixel));
-        aCommand << "&y=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->lokdocview), rowPosPixel));
-        aCommand << "&height=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->lokdocview), rowSizePixel));
-        std::stringstream ss;
-        ss << "lok::Document::getCommandValues(" << aCommand.str() << ")";
-        g_info("%s", ss.str().c_str());
-        char* pValues = pDocument->pClass->getCommandValues(pDocument, aCommand.str().c_str());
-        g_info("lok::Document::getCommandValues() returned '%s'", pValues);
-        std::stringstream aStream(pValues);
-        free(pValues);
-        assert(!aStream.str().empty());
-        boost::property_tree::ptree aTree;
-        boost::property_tree::read_json(aStream, aTree);
+    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(window->scrolledwindow));
+    int rowSizePixel = GTV_CALC_HEADER_BAR(window->rowbar)->m_nSizePixel = gtk_adjustment_get_page_size(pVAdjustment);
+    int rowPosPixel = GTV_CALC_HEADER_BAR(window->rowbar)->m_nPositionPixel = gtk_adjustment_get_value(pVAdjustment);
+    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(window->scrolledwindow));
+    int colSizePixel = GTV_CALC_HEADER_BAR(window->columnbar)->m_nSizePixel = gtk_adjustment_get_page_size(pHAdjustment);
+    int colPosPixel = GTV_CALC_HEADER_BAR(window->columnbar)->m_nPositionPixel = gtk_adjustment_get_value(pHAdjustment);
 
-        gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->rowbar), &aTree.get_child("rows"));
-        gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->columnbar), &aTree.get_child("columns"));
-        gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->cornerarea), nullptr);
-    }
+    std::stringstream aCommand;
+    aCommand << ".uno:ViewRowColumnHeaders";
+    aCommand << "?x=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->lokdocview), colPosPixel));
+    aCommand << "&width=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->lokdocview), colSizePixel));
+    aCommand << "&y=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->lokdocview), rowPosPixel));
+    aCommand << "&height=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->lokdocview), rowSizePixel));
+    std::stringstream ss;
+    ss << "lok::Document::getCommandValues(" << aCommand.str() << ")";
+    g_info("%s", ss.str().c_str());
+    char* pValues = pDocument->pClass->getCommandValues(pDocument, aCommand.str().c_str());
+    g_info("lok::Document::getCommandValues() returned '%s'", pValues);
+    std::stringstream aStream(pValues);
+    free(pValues);
+    assert(!aStream.str().empty());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+
+    gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->rowbar), &aTree.get_child("rows"));
+    gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->columnbar), &aTree.get_child("columns"));
+    gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->cornerarea), nullptr);
 
     return true;
 }

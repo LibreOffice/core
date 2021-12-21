@@ -394,28 +394,28 @@ XMLFile::XMLFile( const XMLFile& rObj )
 
 XMLFile& XMLFile::operator=(const XMLFile& rObj)
 {
-    if( this != &rObj )
+    if( this == &rObj )
+        return *this;
+
+    XMLParentNode::operator=(rObj);
+
+    m_aNodes_localize = rObj.m_aNodes_localize;
+    m_vOrder = rObj.m_vOrder;
+
+    m_pXMLStrings.reset();
+
+    if( rObj.m_pXMLStrings )
     {
-        XMLParentNode::operator=(rObj);
-
-        m_aNodes_localize = rObj.m_aNodes_localize;
-        m_vOrder = rObj.m_vOrder;
-
-        m_pXMLStrings.reset();
-
-        if( rObj.m_pXMLStrings )
+        m_pXMLStrings.reset( new XMLHashMap );
+        for (auto const& pos : *rObj.m_pXMLStrings)
         {
-            m_pXMLStrings.reset( new XMLHashMap );
-            for (auto const& pos : *rObj.m_pXMLStrings)
+            LangHashMap* pElem=pos.second;
+            LangHashMap* pNewelem = new LangHashMap;
+            for (auto const& pos2 : *pElem)
             {
-                LangHashMap* pElem=pos.second;
-                LangHashMap* pNewelem = new LangHashMap;
-                for (auto const& pos2 : *pElem)
-                {
-                    (*pNewelem)[ pos2.first ] = new XMLElement( *pos2.second );
-                }
-                (*m_pXMLStrings)[ pos.first ] = pNewelem;
+                (*pNewelem)[ pos2.first ] = new XMLElement( *pos2.second );
             }
+            (*m_pXMLStrings)[ pos.first ] = pNewelem;
         }
     }
     return *this;
