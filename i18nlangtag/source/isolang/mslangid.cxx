@@ -310,6 +310,19 @@ bool MsLangId::isCJK( LanguageType nLang )
     return false;
 }
 
+bool MsLangId::noHyphenation(LanguageType nLang)
+{
+    if ( isCJK(nLang ) ||
+        primary(nLang).anyOf(
+        primary(LANGUAGE_PASHTO),
+        primary(LANGUAGE_FARSI),
+        primary(LANGUAGE_ARABIC_SAUDI_ARABIA)))
+    {
+        return true;
+    }
+    return false;
+}
+
 // static
 bool MsLangId::isFamilyNameFirst( LanguageType nLang )
 {
