@@ -3799,9 +3799,9 @@ if test -n "$WIN_MULTI_ARCH" -a -n "$WIN_OTHER_ARCH"; then
 fi
 
 
-if test "$_os" = "iOS" -o "$build_cpu" != "$host_cpu"; then
+if test "$build_cpu" != "$host_cpu" -o \( "$DISABLE_DYNLOADING" = TRUE -a "$enable_fuzzers" != yes \); then
     # To allow building Windows multi-arch releases without cross-tooling
-    if test -z "$WIN_MULTI_ARCH" -a -z "$WIN_OTHER_ARCH"; then
+    if test "$DISABLE_DYNLOADING" = TRUE -o \( -z "$WIN_MULTI_ARCH" -a -z "$WIN_OTHER_ARCH" \); then
         cross_compiling="yes"
     fi
 fi
@@ -5372,7 +5372,7 @@ else
 fi
 
 AC_MSG_CHECKING([if we need to build the help index tooling])
-if test "$with_help" = yes -o "$enable_extension_integration" != no; then
+if test \( "$with_help" = yes -o "$enable_extension_integration" != no \) -a -z "$DISABLE_DYNLOADING"; then
     BUILD_TYPE="$BUILD_TYPE HELPTOOLS"
     test_clucene=yes
     AC_MSG_RESULT([yes])
@@ -9005,6 +9005,17 @@ AC_SUBST(ENABLE_LWP)
 dnl ===================================================================
 dnl Check for building ODK
 dnl ===================================================================
+AC_MSG_CHECKING([whether to build the ODK])
+if test "$enable_odk" = yes; then
+    if test "$DISABLE_DYNLOADING" = TRUE; then
+        AC_MSG_ERROR([can't build ODK for --disable-dynamic-loading builds])
+    fi
+    AC_MSG_RESULT([yes])
+    BUILD_TYPE="$BUILD_TYPE ODK"
+else
+    AC_MSG_RESULT([no])
+fi
+
 if test "$enable_odk" != yes; then
     unset DOXYGEN
 else
@@ -9038,14 +9049,6 @@ else
     fi
 fi
 AC_SUBST([DOXYGEN])
-
-AC_MSG_CHECKING([whether to build the ODK])
-if test "$enable_odk" = yes; then
-    AC_MSG_RESULT([yes])
-    BUILD_TYPE="$BUILD_TYPE ODK"
-else
-    AC_MSG_RESULT([no])
-fi
 
 dnl ==================================================================
 dnl libfuzzer
