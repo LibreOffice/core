@@ -815,32 +815,30 @@ bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& 
         }
     }
 
-    if( aIndex.InField() )
-    {
-        OutputDevice* pOutDev = GetRefDevice();
-
-        DBG_ASSERT(pOutDev!=nullptr, "SvxAccessibleTextAdapter::GetIndexAtPoint: No ref device");
-
-        if( !pOutDev )
-            return false;
-
-        ESelection aSelection = MakeEESelection( aIndex );
-        SvxFont aFont = EditEngine::CreateSvxFontFromItemSet( mpTextForwarder->GetAttribs( aSelection ) );
-        AccessibleStringWrap aStringWrap( *pOutDev,
-                                          aFont,
-                                          mpTextForwarder->GetText( aSelection ) );
-
-        tools::Rectangle aRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
-        Point aPoint = rPoint;
-        aPoint.Move( -aRect.Left(), -aRect.Top() );
-
-        DBG_ASSERT(aIndex.GetIndex() + aStringWrap.GetIndexAtPoint( rPoint ) >= 0,
-                   "SvxAccessibleTextIndex::SetIndex: index value overflow");
-
-        nIndex = (aIndex.GetIndex() + aStringWrap.GetIndexAtPoint( aPoint ));
+    if( !aIndex.InField() )
         return true;
-    }
 
+    OutputDevice* pOutDev = GetRefDevice();
+
+    DBG_ASSERT(pOutDev!=nullptr, "SvxAccessibleTextAdapter::GetIndexAtPoint: No ref device");
+
+    if( !pOutDev )
+        return false;
+
+    ESelection aSelection = MakeEESelection( aIndex );
+    SvxFont aFont = EditEngine::CreateSvxFontFromItemSet( mpTextForwarder->GetAttribs( aSelection ) );
+    AccessibleStringWrap aStringWrap( *pOutDev,
+                                      aFont,
+                                      mpTextForwarder->GetText( aSelection ) );
+
+    tools::Rectangle aRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
+    Point aPoint = rPoint;
+    aPoint.Move( -aRect.Left(), -aRect.Top() );
+
+    DBG_ASSERT(aIndex.GetIndex() + aStringWrap.GetIndexAtPoint( rPoint ) >= 0,
+               "SvxAccessibleTextIndex::SetIndex: index value overflow");
+
+    nIndex = (aIndex.GetIndex() + aStringWrap.GetIndexAtPoint( aPoint ));
     return true;
 }
 

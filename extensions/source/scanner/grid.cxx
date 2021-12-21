@@ -523,32 +523,32 @@ void GridWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
 
 bool GridWindow::MouseMove( const MouseEvent& rEvt )
 {
-    if( rEvt.GetButtons() == MOUSE_LEFT && m_nDragIndex != npos )
+    if( rEvt.GetButtons() != MOUSE_LEFT || m_nDragIndex == npos )
+        return false;
+
+    Point aPoint( rEvt.GetPosPixel() );
+
+    if( m_nDragIndex == 0 || m_nDragIndex == m_aHandles.size() - 1)
     {
-        Point aPoint( rEvt.GetPosPixel() );
+        aPoint.setX( m_aHandles[m_nDragIndex].maPos.X() );
+    }
+    else
+    {
+        if(aPoint.X() < m_aGridArea.Left())
+            aPoint.setX( m_aGridArea.Left() );
+        else if(aPoint.X() > m_aGridArea.Right())
+            aPoint.setX( m_aGridArea.Right() );
+    }
 
-        if( m_nDragIndex == 0 || m_nDragIndex == m_aHandles.size() - 1)
-        {
-            aPoint.setX( m_aHandles[m_nDragIndex].maPos.X() );
-        }
-        else
-        {
-            if(aPoint.X() < m_aGridArea.Left())
-                aPoint.setX( m_aGridArea.Left() );
-            else if(aPoint.X() > m_aGridArea.Right())
-                aPoint.setX( m_aGridArea.Right() );
-        }
+    if( aPoint.Y() < m_aGridArea.Top() )
+        aPoint.setY( m_aGridArea.Top() );
+    else if( aPoint.Y() > m_aGridArea.Bottom() )
+        aPoint.setY( m_aGridArea.Bottom() );
 
-        if( aPoint.Y() < m_aGridArea.Top() )
-            aPoint.setY( m_aGridArea.Top() );
-        else if( aPoint.Y() > m_aGridArea.Bottom() )
-            aPoint.setY( m_aGridArea.Bottom() );
-
-        if( aPoint != m_aHandles[m_nDragIndex].maPos )
-        {
-            m_aHandles[m_nDragIndex].maPos = aPoint;
-            Invalidate( m_aGridArea );
-        }
+    if( aPoint != m_aHandles[m_nDragIndex].maPos )
+    {
+        m_aHandles[m_nDragIndex].maPos = aPoint;
+        Invalidate( m_aGridArea );
     }
 
     return false;

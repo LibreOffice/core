@@ -464,30 +464,28 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         // TODO: some listeners to the frame and the window ( resize for example )
     }
 
-    if ( m_xComponent.is() )
+    if ( !m_xComponent )
+        return false;
+
+    if ( !LoadDocToFrame( true ) )
     {
-        if ( !LoadDocToFrame( true ) )
-        {
-            CloseFrame();
-            return false;
-        }
-
-        uno::Reference< frame::XControllerBorder > xControllerBorder( m_xFrame->getController(), uno::UNO_QUERY );
-        if ( xControllerBorder.is() )
-        {
-            m_aBorderWidths = xControllerBorder->getBorder();
-            xControllerBorder->addBorderResizeListener( static_cast<frame::XBorderResizeListener*>(this) );
-        }
-
-        PlaceFrame( aRectangleToShow );
-
-        if ( m_xHatchWindow.is() )
-            m_xHatchWindow->setVisible( true );
-
-        return true;
+        CloseFrame();
+        return false;
     }
 
-    return false;
+    uno::Reference< frame::XControllerBorder > xControllerBorder( m_xFrame->getController(), uno::UNO_QUERY );
+    if ( xControllerBorder.is() )
+    {
+        m_aBorderWidths = xControllerBorder->getBorder();
+        xControllerBorder->addBorderResizeListener( static_cast<frame::XBorderResizeListener*>(this) );
+    }
+
+    PlaceFrame( aRectangleToShow );
+
+    if ( m_xHatchWindow.is() )
+        m_xHatchWindow->setVisible( true );
+
+    return true;
 }
 
 
@@ -934,60 +932,60 @@ void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDo
 
 bool DocumentHolder::LoadDocToFrame( bool bInPlace )
 {
-    if ( m_xFrame.is() && m_xComponent.is() )
+    if ( !m_xFrame || !m_xComponent )
+        return true;
+
+    uno::Reference < frame::XModel > xDoc( m_xComponent, uno::UNO_QUERY );
+    if ( xDoc.is() )
     {
-        uno::Reference < frame::XModel > xDoc( m_xComponent, uno::UNO_QUERY );
-        if ( xDoc.is() )
+        // load new document into the frame
+        uno::Reference< frame::XComponentLoader > xComponentLoader( m_xFrame, uno::UNO_QUERY_THROW );
+
+        ::comphelper::NamedValueCollection aArgs;
+        aArgs.put( "Model", m_xComponent );
+        aArgs.put( "ReadOnly", m_bReadOnly );
+
+        // set document title to show in the title bar
+        css::uno::Reference< css::frame::XTitle > xModelTitle( xDoc, css::uno::UNO_QUERY );
+        if( xModelTitle.is() && m_pEmbedObj && !m_pEmbedObj->getContainerName().isEmpty() )
         {
-            // load new document into the frame
-            uno::Reference< frame::XComponentLoader > xComponentLoader( m_xFrame, uno::UNO_QUERY_THROW );
-
-            ::comphelper::NamedValueCollection aArgs;
-            aArgs.put( "Model", m_xComponent );
-            aArgs.put( "ReadOnly", m_bReadOnly );
-
-            // set document title to show in the title bar
-            css::uno::Reference< css::frame::XTitle > xModelTitle( xDoc, css::uno::UNO_QUERY );
-            if( xModelTitle.is() && m_pEmbedObj && !m_pEmbedObj->getContainerName().isEmpty() )
-            {
-                std::locale aResLoc = Translate::Create("sfx");
-                OUString sEmbedded = Translate::get(STR_EMBEDDED_TITLE, aResLoc);
-                xModelTitle->setTitle( m_pEmbedObj->getContainerName() + sEmbedded );
-                m_aContainerName = m_pEmbedObj->getContainerName();
-                // TODO: get real m_aDocumentNamePart
-                m_aDocumentNamePart = sEmbedded;
-            }
-
-            if ( bInPlace )
-                aArgs.put( "PluginMode", sal_Int16(1) );
-            OUString sUrl;
-            uno::Reference< lang::XServiceInfo> xServiceInfo(xDoc,uno::UNO_QUERY);
-            if (    xServiceInfo.is()
-                &&  xServiceInfo->supportsService("com.sun.star.report.ReportDefinition") )
-            {
-                sUrl = ".component:DB/ReportDesign";
-            }
-            else if( xServiceInfo.is()
-                &&   xServiceInfo->supportsService("com.sun.star.chart2.ChartDocument"))
-                sUrl = "private:factory/schart";
-            else
-                sUrl = "private:object";
-
-            xComponentLoader->loadComponentFromURL( sUrl,
-                                                        "_self",
-                                                        0,
-                                                        aArgs.getPropertyValues() );
-
-            return true;
+            std::locale aResLoc = Translate::Create("sfx");
+            OUString sEmbedded = Translate::get(STR_EMBEDDED_TITLE, aResLoc);
+            xModelTitle->setTitle( m_pEmbedObj->getContainerName() + sEmbedded );
+            m_aContainerName = m_pEmbedObj->getContainerName();
+            // TODO: get real m_aDocumentNamePart
+            m_aDocumentNamePart = sEmbedded;
         }
+
+        if ( bInPlace )
+            aArgs.put( "PluginMode", sal_Int16(1) );
+        OUString sUrl;
+        uno::Reference< lang::XServiceInfo> xServiceInfo(xDoc,uno::UNO_QUERY);
+        if (    xServiceInfo.is()
+            &&  xServiceInfo->supportsService("com.sun.star.report.ReportDefinition") )
+        {
+            sUrl = ".component:DB/ReportDesign";
+        }
+        else if( xServiceInfo.is()
+            &&   xServiceInfo->supportsService("com.sun.star.chart2.ChartDocument"))
+            sUrl = "private:factory/schart";
         else
-        {
-            uno::Reference < frame::XSynchronousFrameLoader > xLoader( m_xComponent, uno::UNO_QUERY );
-            if ( xLoader.is() )
-                return xLoader->load( uno::Sequence < beans::PropertyValue >(), m_xFrame );
-            else
-                return false;
-        }
+            sUrl = "private:object";
+
+        xComponentLoader->loadComponentFromURL( sUrl,
+                                                    "_self",
+                                                    0,
+                                                    aArgs.getPropertyValues() );
+
+        return true;
+    }
+    else
+    {
+        uno::Reference < frame::XSynchronousFrameLoader > xLoader( m_xComponent, uno::UNO_QUERY );
+        if ( xLoader.is() )
+            return xLoader->load( uno::Sequence < beans::PropertyValue >(), m_xFrame );
+        else
+            return false;
     }
 
     return true;

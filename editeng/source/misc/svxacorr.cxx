@@ -2942,107 +2942,106 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
     // direct replacement of keywords surrounded by colons (for example, ":name:")
     bool bColonNameColon = rTxt.getLength() > nEndPos &&
         rTxt[nEndPos] == ':' && rChk[0] == ':' && rChk.endsWith(":");
-    if ( nEndPos + (bColonNameColon ? 1 : 0) >= rChk.getLength() - left_wildcard - right_wildcard )
+    if ( nEndPos + (bColonNameColon ? 1 : 0) < rChk.getLength() - left_wildcard - right_wildcard )
+        return nullptr;
+
+    bool bWasWordDelim = false;
+    sal_Int32 nCalcStt = nEndPos - rChk.getLength() + left_wildcard;
+    if (bColonNameColon)
+        nCalcStt++;
+    if( !right_wildcard && ( !nCalcStt || nCalcStt == rStt || left_wildcard || bColonNameColon ||
+          ( nCalcStt < rStt &&
+            IsWordDelim( rTxt[ nCalcStt - 1 ] ))) )
+    {
+        TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
+        OUString sWord = rTxt.copy(nCalcStt, rChk.getLength() - left_wildcard);
+        if( (!left_wildcard && rCmp.isEqual( rChk, sWord )) || (left_wildcard && rCmp.isEqual( rChk.copy(left_wildcard), sWord) ))
+        {
+            rStt = nCalcStt;
+            if (!left_wildcard)
+            {
+                // fdo#33899 avoid "1/2", "1/3".. to be replaced by fractions in dates, eg. 1/2/14
+                if (rTxt.getLength() > nEndPos && rTxt[nEndPos] == '/' && rChk.indexOf('/') != -1)
+                    return nullptr;
+                return pFnd;
+            }
+            // get the first word delimiter position before the matching ".*word" pattern
+            while( rStt && !(bWasWordDelim = IsWordDelim( rTxt[ --rStt ])))
+                ;
+            if (bWasWordDelim) rStt++;
+            OUString left_pattern = rTxt.copy(rStt, nEndPos - rStt - rChk.getLength() + left_wildcard);
+            // avoid double spaces before simple "word" replacement
+            left_pattern += (left_pattern.getLength() == 0 && pFnd->GetLong()[0] == 0x20) ? pFnd->GetLong().copy(1) : pFnd->GetLong();
+            if( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), left_pattern) ) )
+                return pNew;
+        }
+    } else
+    // match "word.*" or ".*word.*" patterns, eg. "i18n.*", ".*---.*", TODO: add transliteration support
+    if ( right_wildcard )
     {
 
-        bool bWasWordDelim = false;
-        sal_Int32 nCalcStt = nEndPos - rChk.getLength() + left_wildcard;
-        if (bColonNameColon)
-            nCalcStt++;
-        if( !right_wildcard && ( !nCalcStt || nCalcStt == rStt || left_wildcard || bColonNameColon ||
-              ( nCalcStt < rStt &&
-                IsWordDelim( rTxt[ nCalcStt - 1 ] ))) )
+        OUString sTmp( rChk.copy( left_wildcard, rChk.getLength() - left_wildcard - right_wildcard ) );
+        // Get the last word delimiter position
+        bool not_suffix;
+
+        while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nSttWdPos ])))
+            ;
+        // search the first occurrence (with a left word delimitation, if needed)
+        sal_Int32 nFndPos = -1;
+        do {
+            nFndPos = rTxt.indexOf( sTmp, nFndPos + 1);
+            if (nFndPos == -1)
+                break;
+            not_suffix = bWasWordDelim && (nSttWdPos >= (nFndPos + sTmp.getLength()));
+        } while ( (!left_wildcard && nFndPos && !IsWordDelim( rTxt[ nFndPos - 1 ])) || not_suffix );
+
+        if ( nFndPos != -1 )
         {
-            TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
-            OUString sWord = rTxt.copy(nCalcStt, rChk.getLength() - left_wildcard);
-            if( (!left_wildcard && rCmp.isEqual( rChk, sWord )) || (left_wildcard && rCmp.isEqual( rChk.copy(left_wildcard), sWord) ))
+            sal_Int32 extra_repl = nFndPos + sTmp.getLength() > nEndPos ? 1: 0; // for patterns with terminating characters, eg. "a:"
+
+            if ( left_wildcard )
             {
-                rStt = nCalcStt;
-                if (!left_wildcard)
-                {
-                    // fdo#33899 avoid "1/2", "1/3".. to be replaced by fractions in dates, eg. 1/2/14
-                    if (rTxt.getLength() > nEndPos && rTxt[nEndPos] == '/' && rChk.indexOf('/') != -1)
-                        return nullptr;
-                    return pFnd;
-                }
-                // get the first word delimiter position before the matching ".*word" pattern
-                while( rStt && !(bWasWordDelim = IsWordDelim( rTxt[ --rStt ])))
+                // get the first word delimiter position before the matching ".*word.*" pattern
+                while( nFndPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nFndPos ])))
                     ;
-                if (bWasWordDelim) rStt++;
-                OUString left_pattern = rTxt.copy(rStt, nEndPos - rStt - rChk.getLength() + left_wildcard);
-                // avoid double spaces before simple "word" replacement
-                left_pattern += (left_pattern.getLength() == 0 && pFnd->GetLong()[0] == 0x20) ? pFnd->GetLong().copy(1) : pFnd->GetLong();
-                if( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), left_pattern) ) )
-                    return pNew;
+                if (bWasWordDelim) nFndPos++;
             }
-        } else
-        // match "word.*" or ".*word.*" patterns, eg. "i18n.*", ".*---.*", TODO: add transliteration support
-        if ( right_wildcard )
-        {
-
-            OUString sTmp( rChk.copy( left_wildcard, rChk.getLength() - left_wildcard - right_wildcard ) );
-            // Get the last word delimiter position
-            bool not_suffix;
-
-            while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nSttWdPos ])))
-                ;
-            // search the first occurrence (with a left word delimitation, if needed)
-            sal_Int32 nFndPos = -1;
-            do {
-                nFndPos = rTxt.indexOf( sTmp, nFndPos + 1);
-                if (nFndPos == -1)
-                    break;
-                not_suffix = bWasWordDelim && (nSttWdPos >= (nFndPos + sTmp.getLength()));
-            } while ( (!left_wildcard && nFndPos && !IsWordDelim( rTxt[ nFndPos - 1 ])) || not_suffix );
-
-            if ( nFndPos != -1 )
+            if (nEndPos + extra_repl <= nFndPos)
             {
-                sal_Int32 extra_repl = nFndPos + sTmp.getLength() > nEndPos ? 1: 0; // for patterns with terminating characters, eg. "a:"
+                return nullptr;
+            }
+            // store matching pattern and its replacement as a new list item, eg. "i18ns" -> "internationalizations"
+            OUString aShort = rTxt.copy(nFndPos, nEndPos - nFndPos + extra_repl);
 
-                if ( left_wildcard )
-                {
-                    // get the first word delimiter position before the matching ".*word.*" pattern
-                    while( nFndPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nFndPos ])))
-                        ;
-                    if (bWasWordDelim) nFndPos++;
-                }
-                if (nEndPos + extra_repl <= nFndPos)
-                {
-                    return nullptr;
-                }
-                // store matching pattern and its replacement as a new list item, eg. "i18ns" -> "internationalizations"
-                OUString aShort = rTxt.copy(nFndPos, nEndPos - nFndPos + extra_repl);
-
-                OUString aLong;
-                rStt = nFndPos;
-                if ( !left_wildcard )
-                {
-                    sal_Int32 siz = nEndPos - nFndPos - sTmp.getLength();
-                    aLong = pFnd->GetLong() + (siz > 0 ? rTxt.copy(nFndPos + sTmp.getLength(), siz) : "");
-                } else {
-                    OUStringBuffer buf;
-                    do {
-                        nSttWdPos = rTxt.indexOf( sTmp, nFndPos);
-                        if (nSttWdPos != -1)
-                        {
-                            sal_Int32 nTmp(nFndPos);
-                            while (nTmp < nSttWdPos && !IsWordDelim(rTxt[nTmp]))
-                                nTmp++;
-                            if (nTmp < nSttWdPos)
-                                break; // word delimiter found
-                            buf.append(rTxt.subView(nFndPos, nSttWdPos - nFndPos)).append(pFnd->GetLong());
-                            nFndPos = nSttWdPos + sTmp.getLength();
-                        }
-                    } while (nSttWdPos != -1);
-                    if (nEndPos - nFndPos > extra_repl)
-                        buf.append(rTxt.subView(nFndPos, nEndPos - nFndPos));
-                    aLong = buf.makeStringAndClear();
-                }
-                if ( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(aShort, aLong) ) )
-                {
-                    if ( (rTxt.getLength() > nEndPos && IsWordDelim(rTxt[nEndPos])) || rTxt.getLength() == nEndPos )
-                        return pNew;
-                }
+            OUString aLong;
+            rStt = nFndPos;
+            if ( !left_wildcard )
+            {
+                sal_Int32 siz = nEndPos - nFndPos - sTmp.getLength();
+                aLong = pFnd->GetLong() + (siz > 0 ? rTxt.copy(nFndPos + sTmp.getLength(), siz) : "");
+            } else {
+                OUStringBuffer buf;
+                do {
+                    nSttWdPos = rTxt.indexOf( sTmp, nFndPos);
+                    if (nSttWdPos != -1)
+                    {
+                        sal_Int32 nTmp(nFndPos);
+                        while (nTmp < nSttWdPos && !IsWordDelim(rTxt[nTmp]))
+                            nTmp++;
+                        if (nTmp < nSttWdPos)
+                            break; // word delimiter found
+                        buf.append(rTxt.subView(nFndPos, nSttWdPos - nFndPos)).append(pFnd->GetLong());
+                        nFndPos = nSttWdPos + sTmp.getLength();
+                    }
+                } while (nSttWdPos != -1);
+                if (nEndPos - nFndPos > extra_repl)
+                    buf.append(rTxt.subView(nFndPos, nEndPos - nFndPos));
+                aLong = buf.makeStringAndClear();
+            }
+            if ( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(aShort, aLong) ) )
+            {
+                if ( (rTxt.getLength() > nEndPos && IsWordDelim(rTxt[nEndPos])) || rTxt.getLength() == nEndPos )
+                    return pNew;
             }
         }
     }

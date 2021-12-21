@@ -210,22 +210,24 @@ sal_Int32 SAL_CALL
     //  Use a simple but slow solution for now.  Optimize later.
 
     //  Iterate over all the parent's children and search for this object.
-    if (mxParent.is())
+    if (!mxParent.is())
+        //   Return -1 to indicate that this object's parent does not know about the
+        //   object.
+        return -1;
+
+    uno::Reference<XAccessibleContext> xParentContext (
+        mxParent->getAccessibleContext());
+    if (xParentContext.is())
     {
-        uno::Reference<XAccessibleContext> xParentContext (
-            mxParent->getAccessibleContext());
-        if (xParentContext.is())
+        sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
+        for (sal_Int32 i=0; i<nChildCount; i++)
         {
-            sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
-            for (sal_Int32 i=0; i<nChildCount; i++)
+            uno::Reference<XAccessible> xChild (xParentContext->getAccessibleChild (i));
+            if (xChild.is())
             {
-                uno::Reference<XAccessible> xChild (xParentContext->getAccessibleChild (i));
-                if (xChild.is())
-                {
-                    uno::Reference<XAccessibleContext> xChildContext = xChild->getAccessibleContext();
-                    if (xChildContext == static_cast<XAccessibleContext*>(this))
-                        return i;
-                }
+                uno::Reference<XAccessibleContext> xChildContext = xChild->getAccessibleContext();
+                if (xChildContext == static_cast<XAccessibleContext*>(this))
+                    return i;
             }
         }
     }
