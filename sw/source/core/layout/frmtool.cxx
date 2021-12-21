@@ -69,6 +69,7 @@
 #include <undobj.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentTimerAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -1944,8 +1945,10 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
 
     SwNodeIndex aTmp( rSttIdx );
     sal_uLong nEndIdx = rEndIdx.GetIndex();
+    // TODO for multiple layouts there should be a loop here
     SwNode* pNd = pDoc->GetNodes().FindPrvNxtFrameNode( aTmp,
-                                            pDoc->GetNodes()[ nEndIdx-1 ]);
+                    pDoc->GetNodes()[ nEndIdx-1 ],
+                    pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     if ( pNd )
     {
         bool bApres = aTmp < rSttIdx;
