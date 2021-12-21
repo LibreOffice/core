@@ -1689,7 +1689,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             for (sal_Int32 i = 1; i < sal_Int32(nCnt); ++i, nKernSum += rInf.GetKern())
             {
                 sal_Unicode nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
-
                 tools::Long nScr = aScrArray[ i ] - aScrArray[ i - 1 ];
 
                 // If there is an (ex-)Space before us, position optimally,
@@ -1697,16 +1696,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // if we _are_ an ex-Space, position us left-aligned to the
                 // printer position.
                 if ( nCh == CH_BLANK )
-                {
                     nScrPos = aKernArray[i-1] + nScr;
-                }
                 else
                 {
-                    if ( cChPrev == CH_BLANK )
-                    {
-                        nScrPos = aKernArray[i-1] + nScr;
-                    }
-                    else if ( cChPrev == '-' )
+                    if (cChPrev == CH_BLANK || cChPrev == '-')
                         nScrPos = aKernArray[i-1] + nScr;
                     else
                     {
@@ -2049,11 +2042,11 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                 sal_Unicode nCh = rInf.GetText()[ sal_Int32(rInf.GetIdx()) + i ];
                 tools::Long nScr = aScrArray[ i ] - aScrArray[ i - 1 ];
                 if ( nCh == CH_BLANK )
-                    nScrPos = aKernArray[i-1]+nScr;
+                    nScrPos = aKernArray[i-1] + nScr;
                 else
                 {
                     if ( nChPrev == CH_BLANK || nChPrev == '-' )
-                        nScrPos = aKernArray[i-1]+nScr;
+                        nScrPos = aKernArray[i-1] + nScr;
                     else
                     {
                         nScrPos += nScr;
