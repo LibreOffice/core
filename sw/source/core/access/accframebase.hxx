@@ -57,7 +57,7 @@ public:
 
     // The object is not visible any longer and should be destroyed
     virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
-    virtual bool SetSelectedState( bool bSeleted ) override;
+    virtual bool SetSelectedState( bool bSelected ) override;
 };
 
 #endif
