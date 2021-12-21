@@ -230,10 +230,10 @@ endif
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(and $(ENABLE_JAVA),$(filter-out HAIKU MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
-	$(if $(ENABLE_MACOSX_SANDBOX),, \
-		regmerge \
-		regview \
-	) \
+    $(call gb_CondBuildRegistryTools, \
+        regmerge \
+        regview \
+    ) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
 ))
 
