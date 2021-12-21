@@ -11,6 +11,10 @@ define gb_CondBuildLockfile
 $(if $(and $(filter-out ANDROID MACOSX iOS WNT,$(OS))),$(1),$(2))
 endef
 
+define gb_CondBuildRegistryTools
+$(if $(or $(DISABLE_DYNLOADING),$(ENABLE_MACOSX_SANDBOX)),$(2),$(1))
+endef
+
 define gb_CondSalTextEncodingLibrary
 $(if $(filter ANDROID,$(OS)),,$(if $(DISABLE_DYNLOADING),$(2),$(1)))
 endef
