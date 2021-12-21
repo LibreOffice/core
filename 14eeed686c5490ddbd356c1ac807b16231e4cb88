@@ -70,6 +70,24 @@
       "parentUuid": "e9110f4d_5fb23faf",
       "revId": "14eeed686c5490ddbd356c1ac807b16231e4cb88",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cd78758_ad81c9a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-21T13:39:41Z",
+      "side": 1,
+      "message": "I see.  I\u0027m coming from the opposite background, that\u0027s why I wondered.  (My qualms with gb_MKTEMP are that it makes it harder to debug build issues by obscuring the actual file names and easily fills TMPDIR with garbage if e.g. a recipe fails in the middle of a ... \u0026\u0026 ... \u0026\u0026 ... chain and thus never gets to the rm---which is less of an issue if the temporary file has a well-known name in WORKDIR, where it gets overwritten by the next build and/or removed by `make clean`.)",
+      "parentUuid": "cfc0d430_30421d44",
+      "revId": "14eeed686c5490ddbd356c1ac807b16231e4cb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
