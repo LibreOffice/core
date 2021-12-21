@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa942cf1_b654a2fe",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-21T06:16:43Z",
+      "side": 1,
+      "message": "we prefer using std::unique_lock/scoped_lock for this now",
+      "revId": "0e88896ee04e5e6a2d11f55a08b1ee75c8aa109c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
