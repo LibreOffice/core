@@ -43,6 +43,7 @@
 #include <svx/fmtools.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/container.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <unotools/configitem.hxx>
 #include "formcontrolling.hxx"
@@ -150,7 +151,8 @@ struct SdrViewEvent;
 class FmFormShell;
 class FmFormView;
 class FmFormObj;
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXFormShell final : public FmXFormShell_BASE
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXFormShell final : private cppu::BaseMutex
+                                    ,public FmXFormShell_BASE
                                     ,public FmXFormShell_CFGBASE
                                     ,public svx::IControllerFeatureInvalidation
 {
@@ -182,7 +184,6 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXFormShell final : public FmXFormShe
         // (the array is thus only valid during the search process)
     std::vector<sal_Int16> m_arrRelativeGridColumn;
 
-    ::osl::Mutex    m_aMutex;
     ImplSVEvent *   m_nInvalidationEvent;
     ImplSVEvent *   m_nActivationEvent;
     ::std::queue< FmLoadAction >
