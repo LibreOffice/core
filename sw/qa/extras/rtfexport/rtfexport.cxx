@@ -51,12 +51,6 @@ public:
         : SwModelTestBase("/sw/qa/extras/rtfexport/data/", "Rich Text Format")
     {
     }
-
-    bool mustTestImportOf(const char* filename) const override
-    {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return OString(filename).endsWith(".rtf");
-    }
 };
 
 DECLARE_RTFEXPORT_TEST(testZoom, "zoom.rtf")
@@ -120,8 +114,9 @@ DECLARE_RTFEXPORT_TEST(testFdo50831, "fdo50831.rtf")
     CPPUNIT_ASSERT_EQUAL(10.f, fValue);
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo48335, "fdo48335.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo48335)
 {
+    loadAndReload("fdo48335.odt");
     CPPUNIT_ASSERT_EQUAL(3, getPages());
     /*
      * The problem was that we exported a fake pagebreak, make sure it's just a soft one now.
@@ -178,8 +173,9 @@ DECLARE_RTFEXPORT_TEST(testFdo38244, "fdo38244.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
 }
 
-DECLARE_RTFEXPORT_TEST(testCommentsNested, "comments-nested.odt")
+CPPUNIT_TEST_FIXTURE(Test, testCommentsNested)
 {
+    loadAndReload("comments-nested.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xOuter
         = getProperty<uno::Reference<beans::XPropertySet>>(getRun(getParagraph(1), 2), "TextField");
@@ -387,16 +383,18 @@ CPPUNIT_TEST_FIXTURE(Test, testMathRuns)
                          getFormula(getRun(getParagraph(1), 1)));
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo77979, "fdo77979.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo77979)
 {
+    loadAndReload("fdo77979.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // font name is encoded with \fcharset of font
     CPPUNIT_ASSERT_EQUAL(OUString(u"\u5FAE\u8F6F\u96C5\u9ED1"),
                          getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo53113, "fdo53113.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo53113)
 {
+    loadAndReload("fdo53113.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     /*
@@ -428,8 +426,9 @@ DECLARE_RTFEXPORT_TEST(testFdo53113, "fdo53113.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(102), aPairs[1].Second.Value.get<sal_Int32>());
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo55939, "fdo55939.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo55939)
 {
+    loadAndReload("fdo55939.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that the exported RTF was invalid.
     // Also, the 'Footnote text.' had an additional newline at its end.
@@ -445,8 +444,9 @@ DECLARE_RTFEXPORT_TEST(testFdo55939, "fdo55939.odt")
            " Text after the footnote."); // However, this leading space is intentional and OK.
 }
 
-DECLARE_RTFEXPORT_TEST(testTextFrames, "textframes.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTextFrames)
 {
+    loadAndReload("textframes.odt");
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The output was simply invalid, so let's check if all 3 frames were imported back.
@@ -456,8 +456,9 @@ DECLARE_RTFEXPORT_TEST(testTextFrames, "textframes.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo53604, "fdo53604.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo53604)
 {
+    loadAndReload("fdo53604.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Invalid output on empty footnote.
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
@@ -465,8 +466,9 @@ DECLARE_RTFEXPORT_TEST(testFdo53604, "fdo53604.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo52286, "fdo52286.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo52286)
 {
+    loadAndReload("fdo52286.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that font size wasn't reduced in sub/super script.
     CPPUNIT_ASSERT_EQUAL(
@@ -504,8 +506,9 @@ DECLARE_RTFEXPORT_TEST(testFdo30983, "fdo30983.rtf")
                          getProperty<sal_Int16>(getShape(1), "VertOrientRelation"));
 }
 
-DECLARE_RTFEXPORT_TEST(testPlaceholder, "placeholder.odt")
+CPPUNIT_TEST_FIXTURE(Test, testPlaceholder)
 {
+    loadAndReload("placeholder.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Only the field text was exported, make sure we still have a field with the correct Hint text.
     uno::Reference<text::XTextRange> xRun(getRun(getParagraph(1), 2));
@@ -685,8 +688,9 @@ DECLARE_RTFEXPORT_TEST(testParaShadow, "para-shadow.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(convertTwipToMm100(60)), aShadow.ShadowWidth);
 }
 
-DECLARE_RTFEXPORT_TEST(testCharacterBorder, "charborder.odt")
+CPPUNIT_TEST_FIXTURE(Test, testCharacterBorder)
 {
+    loadAndReload("charborder.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
     // RTF has just one border attribute (chbrdr) for text border so all side has
@@ -755,8 +759,9 @@ DECLARE_RTFEXPORT_TEST(testFdo74709, "fdo74709.rtf")
                          getProperty<sal_Int32>(xCell, "RightBorderDistance"));
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf84832, "tdf84832.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf84832)
 {
+    loadAndReload("tdf84832.docx");
     uno::Reference<table::XCell> xCell = getCell(getParagraphOrTable(2), "A1");
     // This was 0, as left padding wasn't exported.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(108)),
@@ -797,8 +802,9 @@ DECLARE_RTFEXPORT_TEST(testFdo80167, "fdo80167.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo32613, "fdo32613.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo32613)
 {
+    loadAndReload("fdo32613.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was AS_CHARACTER, RTF export did not support writing anchored pictures.
@@ -831,8 +837,9 @@ DECLARE_RTFEXPORT_TEST(testTdf113408, "tdf113408.rtf")
                          getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
 
-DECLARE_RTFEXPORT_TEST(testAbi10039, "abi10039.odt")
+CPPUNIT_TEST_FIXTURE(Test, testAbi10039)
 {
+    loadAndReload("abi10039.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure we don't just crash on export, and additionally the shape should not be inline (as it's at-page anchored originally).
@@ -840,8 +847,9 @@ DECLARE_RTFEXPORT_TEST(testAbi10039, "abi10039.odt")
                    != getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
-DECLARE_RTFEXPORT_TEST(testAbi10076, "abi10076.odt")
+CPPUNIT_TEST_FIXTURE(Test, testAbi10076)
 {
+    loadAndReload("abi10076.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     // Just make sure that we don't crash after exporting a fully calculated layout.
 }
@@ -871,8 +879,9 @@ DECLARE_RTFEXPORT_TEST(testNumberingFont, "numbering-font.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), getProperty<OUString>(xStyle, "CharFontName"));
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo82860, "fdo82860.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo82860)
 {
+    loadAndReload("fdo82860.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that:
@@ -883,8 +892,9 @@ DECLARE_RTFEXPORT_TEST(testFdo82860, "fdo82860.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("hello"), getParagraphOfText(1, xText)->getString());
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo82858, "fdo82858.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo82858)
 {
+    loadAndReload("fdo82858.docx");
     // This was table::BorderLineStyle::SOLID, exporter failed to write explicit no line when line color was written.
     CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE,
                          getProperty<table::BorderLine2>(getShape(1), "TopBorder").LineStyle);
@@ -946,8 +956,9 @@ DECLARE_RTFEXPORT_TEST(testTdf104081, "tdf104081.rtf")
                          getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf88583, "tdf88583.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf88583)
 {
+    loadAndReload("tdf88583.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was FillStyle_NONE, as background color was missing from the color table during export.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
@@ -1025,8 +1036,9 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkWithoutURL)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), aData.indexOf("HYPERLINK"));
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf92521, "tdf92521.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf92521)
 {
+    loadAndReload("tdf92521.odt");
     // There should be a page break that's in the middle of the document: right after the table.
     // But there wasn't, so this was 1.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -1345,8 +1357,9 @@ DECLARE_RTFEXPORT_TEST(testHyperlinkTarget, "hyperlink-target.rtf")
                          getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkTarget"));
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf107620, "tdf107620.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf107620)
 {
+    loadAndReload("tdf107620.docx");
     // This failed, RTF export didn't write the \htmautsp compat flag, the
     // original bugdoc resulting in 2 pages instead of 1.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
