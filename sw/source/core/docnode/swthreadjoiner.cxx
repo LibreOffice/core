@@ -20,7 +20,7 @@
 #include <swthreadjoiner.hxx>
 #include <com/sun/star/util/JobManager.hpp>
 #include <comphelper/processfactory.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 // Testing
 
@@ -33,8 +33,8 @@ uno::Reference<util::XJobManager> pThreadJoiner;
 
 uno::Reference<util::XJobManager>& SwThreadJoiner::GetThreadJoiner()
 {
-    static osl::Mutex theJoinerMutex;
-    osl::MutexGuard aGuard(theJoinerMutex);
+    static std::mutex theJoinerMutex;
+    std::unique_lock aGuard(theJoinerMutex);
 
     if (!pThreadJoiner.is())
     {
