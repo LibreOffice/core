@@ -28,6 +28,7 @@
 #include <svdata.hxx>
 #include <salwtype.hxx>
 
+#include <systools/win32/comtools.hxx>
 #include <tools/long.hxx>
 
 #include <win/wincomp.hxx>
@@ -61,7 +62,7 @@ struct SalIcon
     SalIcon *pNext;
 };
 
-class SalData
+class SalData : public sal::systools::CoInitializeGuard
 {
 public:
     SalData();

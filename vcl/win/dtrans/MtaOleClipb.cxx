@@ -177,53 +177,6 @@ static HRESULT UnmarshalIDataObjectAndReleaseStream( LPSTREAM lpStream, IDataObj
         reinterpret_cast<LPVOID*>(ppIDataObject));
 }
 
-// helper class to ensure that the calling thread has com initialized
-
-namespace {
-
-class CAutoComInit
-{
-public:
-   /*
-       to be safe we call CoInitializeEx
-       although it is not necessary if
-       the calling thread was created
-       using osl_CreateThread because
-       this function calls CoInitializeEx
-       for every thread it creates
-    */
-    CAutoComInit( ) : m_hResult( CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED ) )
-    {
-        if ( S_OK == m_hResult )
-            OSL_FAIL(
-            "com was not yet initialized, the thread was not created using osl_createThread" );
-        else if ( FAILED( m_hResult ) && !( RPC_E_CHANGED_MODE == m_hResult ) )
-            OSL_FAIL(
-            "com could not be initialized, maybe the thread was not created using osl_createThread" );
-    }
-
-    ~CAutoComInit( )
-    {
-        /*
-            we only call CoUninitialize when
-            CoInitializeEx returned S_FALSE, what
-            means that com was already initialize
-            for that thread so we keep the balance
-            if CoInitializeEx returned S_OK what means
-            com was not yet initialized we better
-            let com initialized or we may run into
-            the realm of undefined behaviour
-        */
-        if ( m_hResult == S_FALSE )
-            CoUninitialize( );
-    }
-
-private:
-    HRESULT m_hResult;
-};
-
-}
-
 // ctor
 
 CMtaOleClipboard::CMtaOleClipboard( ) :
@@ -350,7 +303,8 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
         return E_FAIL;
     }
 
-    CAutoComInit comAutoInit;
+    sal::systools::CoInitializeGuard comAutoInit(COINIT_APARTMENTTHREADED, false,
+                                                 sal::systools::CoInitializeGuard::NoThrow);
 
     LPSTREAM lpStream;
 
@@ -384,7 +338,8 @@ HRESULT CMtaOleClipboard::setClipboard( IDataObject* pIDataObject )
         return E_FAIL;
     }
 
-    CAutoComInit comAutoInit;
+    sal::systools::CoInitializeGuard comAutoInit(COINIT_APARTMENTTHREADED, false,
+                                                 sal::systools::CoInitializeGuard::NoThrow);
 
     OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, "setClipboard from within the clipboard sta thread called" );
 
@@ -697,7 +652,8 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
     CMtaOleClipboard* pInst = static_cast< CMtaOleClipboard* >( pParam );
     OSL_ASSERT( nullptr != pInst );
 
-    CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
+    sal::systools::CoInitializeGuard comAutoInit(COINIT_APARTMENTTHREADED, false,
+                                                 sal::systools::CoInitializeGuard::NoThrow);
 
     // assuming we don't need a lock for
     // a boolean variable like m_bRun...
@@ -732,8 +688,6 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
         else
             aGuard.clear( );
     }
-
-    CoUninitialize( );
 
     return 0;
 }

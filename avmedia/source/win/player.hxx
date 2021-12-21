@@ -51,7 +51,8 @@ typedef ::cppu::WeakComponentImplHelper< css::media::XPlayer,
 
 
 class Player : public cppu::BaseMutex,
-               public Player_BASE
+               public Player_BASE,
+               public sal::systools::CoInitializeGuard
 {
 public:
 
