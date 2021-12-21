@@ -357,7 +357,7 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=1 n-rows=2 -->
+                  <!-- n-columns=1 n-rows=3 -->
                   <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -488,6 +488,50 @@
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="glyphposlabel">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="viewoptionspage|glyphposlabel">Glyph positioning:</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">glyphposmode</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="glyphposmode">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="active">0</property>
+                            <items>
+                              <item translatable="yes" context="viewoptionspage|glyphposmode">Classic</item>
+                              <item translatable="yes" context="viewoptionspage|glyphposmode">ClassicInspired</item>
+                              <item translatable="yes" context="viewoptionspage|glyphposmode">Layout</item>
+                              <item translatable="yes" context="viewoptionspage|glyphposmode">Readability</item>
+                            </items>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
                   </object>
                 </child>
                 <child type="label">
@@ -574,7 +618,7 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=3 n-rows=3 -->
+                  <!-- n-columns=1 n-rows=2 -->
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -621,27 +665,6 @@
                         <property name="top-attach">1</property>
                       </packing>
                     </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
                   </object>
                 </child>
                 <child type="label">
@@ -684,6 +707,7 @@
     <widgets>
       <widget name="vruler"/>
       <widget name="hruler"/>
+      <widget name="glyphposlabel"/>
       <widget name="measureunitlabel"/>
     </widgets>
   </object>
