@@ -112,14 +112,9 @@ static bool IsDefaultAppInstalledInReg()
 
 void LaunchRegistrationUI()
 {
-    const bool bUninit = SUCCEEDED(CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED));
-    comphelper::ScopeGuard g([bUninit]() {
-        if (bUninit)
-            CoUninitialize();
-    });
-
     try
     {
+        sal::systools::CoInitializeGuard aGuard(COINIT_APARTMENTTHREADED);
         if (IsWindows10OrGreater())
         {
             LaunchModernSettingsDialogDefaultApps();
@@ -150,11 +145,8 @@ void CheckFileExtRegistration(weld::Window* pDialogParent)
     if (!IsDefaultAppInstalledInReg())
         return;
 
-    const bool bUninit = SUCCEEDED(CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED));
-    comphelper::ScopeGuard g([bUninit]() {
-        if (bUninit)
-            CoUninitialize();
-    });
+    sal::systools::CoInitializeGuard aGuard(COINIT_APARTMENTTHREADED, false,
+                                            sal::systools::CoInitializeGuard::WhenFailed::NoThrow);
     sal::systools::COMReference<IApplicationAssociationRegistration> pAAR;
     try
     {

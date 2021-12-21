@@ -64,13 +64,14 @@ static LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1,
 
 Player::Player() :
     Player_BASE(m_aMutex),
+    sal::systools::CoInitializeGuard(COINIT_APARTMENTTHREADED, false,
+                                     sal::systools::CoInitializeGuard::WhenFailed::NoThrow),
     mnUnmutedVolume( 0 ),
     mnFrameWnd( nullptr ),
     mbMuted( false ),
     mbLooping( false ),
     mbAddWindow( true )
 {
-    ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
 }
 
 
@@ -78,8 +79,6 @@ Player::~Player()
 {
     if( mnFrameWnd )
         ::DestroyWindow( mnFrameWnd );
-
-    ::CoUninitialize();
 }
 
 

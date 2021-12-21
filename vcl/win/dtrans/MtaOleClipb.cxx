@@ -697,7 +697,8 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
     CMtaOleClipboard* pInst = static_cast< CMtaOleClipboard* >( pParam );
     OSL_ASSERT( nullptr != pInst );
 
-    CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
+    sal::systools::CoInitializeGuard aGuard(COINIT_APARTMENTTHREADED, false,
+                                            sal::systools::CoInitializeGuard::WhenFailed::NoThrow);
 
     // assuming we don't need a lock for
     // a boolean variable like m_bRun...
@@ -732,8 +733,6 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
         else
             aGuard.clear( );
     }
-
-    CoUninitialize( );
 
     return 0;
 }

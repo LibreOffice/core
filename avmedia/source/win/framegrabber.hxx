@@ -21,6 +21,8 @@
 
 #include "wincommon.hxx"
 #include <cppuhelper/implbase.hxx>
+#include <systools/win32/comtools.hxx>
+
 #include <com/sun/star/media/XFrameGrabber.hpp>
 
 struct IMediaDet;
@@ -28,7 +30,8 @@ struct IMediaDet;
 namespace avmedia::win {
 
 class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,
-                                                    css::lang::XServiceInfo >
+                                                    css::lang::XServiceInfo >,
+                     public sal::systools::CoInitializeGuard
 {
 public:
     explicit FrameGrabber();

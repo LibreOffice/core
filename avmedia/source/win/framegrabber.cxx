@@ -38,7 +38,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/dibtools.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
-#include <systools/win32/comtools.hxx>
 
 constexpr OUStringLiteral AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.FrameGrabber_DirectX";
 constexpr OUStringLiteral AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME = u"com.sun.star.media.FrameGrabber_DirectX";
@@ -49,15 +48,13 @@ namespace avmedia::win {
 
 
 FrameGrabber::FrameGrabber()
+    : sal::systools::CoInitializeGuard(COINIT_APARTMENTTHREADED, false,
+                                       sal::systools::CoInitializeGuard::WhenFailed::NoThrow)
 {
-    ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
 }
 
 
-FrameGrabber::~FrameGrabber()
-{
-    ::CoUninitialize();
-}
+FrameGrabber::~FrameGrabber() = default;
 
 namespace {
 

@@ -242,6 +242,9 @@ void SalData::initKeyCodeMap()
 // SalData
 
 SalData::SalData()
+    : sal::systools::CoInitializeGuard(COINIT_APARTMENTTHREADED, false,
+                                       sal::systools::CoInitializeGuard::WhenFailed::NoThrow)
+         // put main thread in Single Threaded Apartment (STA)
 {
     mhInst = nullptr;           // default instance handle
     mnCmdShow = 0;              // default frame show style
@@ -296,7 +299,6 @@ SalData::SalData()
     SetSalData( this );
     initNWF();
 
-    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED); // put main thread in Single Threaded Apartment (STA)
     static Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
 }
@@ -305,8 +307,6 @@ SalData::~SalData()
 {
     deInitNWF();
     SetSalData( nullptr );
-
-    CoUninitialize();
 
     if (gdiplusToken)
         Gdiplus::GdiplusShutdown(gdiplusToken);
