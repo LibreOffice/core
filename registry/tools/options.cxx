@@ -38,37 +38,37 @@ bool Options::checkArgument(std::vector< std::string> & rArgs, char const * arg,
 {
     bool result = ((arg != nullptr) && (len > 0));
     OSL_PRECOND(result, "registry::tools::Options::checkArgument(): invalid arguments");
-    if (result)
+    if (!result)
+        return false;
+
+    switch (arg[0])
     {
-        switch (arg[0])
+    case '@':
+        result = len > 1;
+        if (result)
         {
-        case '@':
-            result = len > 1;
-            if (result)
-            {
-                // "@<cmdfile>"
-                result = Options::checkCommandFile(rArgs, &(arg[1]));
-            }
-            break;
-        case '-':
-            result = len > 1;
-            if (result)
-            {
-                // "-<option>"
-                std::string option (&(arg[0]), 2);
-                rArgs.push_back(option);
-                if (len > 2)
-                {
-                    // "-<option><param>"
-                    std::string param(&(arg[2]), len - 2);
-                    rArgs.push_back(param);
-                }
-            }
-            break;
-        default:
-            rArgs.push_back(std::string(arg, len));
-            break;
+            // "@<cmdfile>"
+            result = Options::checkCommandFile(rArgs, &(arg[1]));
         }
+        break;
+    case '-':
+        result = len > 1;
+        if (result)
+        {
+            // "-<option>"
+            std::string option (&(arg[0]), 2);
+            rArgs.push_back(option);
+            if (len > 2)
+            {
+                // "-<option><param>"
+                std::string param(&(arg[2]), len - 2);
+                rArgs.push_back(param);
+            }
+        }
+        break;
+    default:
+        rArgs.push_back(std::string(arg, len));
+        break;
     }
     return result;
 }

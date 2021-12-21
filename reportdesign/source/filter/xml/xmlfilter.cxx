@@ -178,65 +178,63 @@ static ErrCode ReadThroughComponent(
     OSL_ENSURE( xStorage.is(), "Need storage!");
     OSL_ENSURE(nullptr != pStreamName, "Please, please, give me a name!");
 
-    if ( xStorage.is() )
+    if ( !xStorage )
+        // TODO/LATER: better error handling
+        return ErrCode(1);
+
+    uno::Reference< io::XStream > xDocStream;
+
+    try
     {
-        uno::Reference< io::XStream > xDocStream;
-
-        try
+        // open stream (and set parser input)
+        OUString sStreamName = OUString::createFromAscii(pStreamName);
+        if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
         {
-            // open stream (and set parser input)
-            OUString sStreamName = OUString::createFromAscii(pStreamName);
-            if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
-            {
-                // stream name not found! return immediately with OK signal
-                return ERRCODE_NONE;
-            }
-
-            // get input stream
-            xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
-        }
-        catch (const packages::WrongPasswordException&)
-        {
-            return ERRCODE_SFX_WRONGPASSWORD;
-        }
-        catch (const uno::Exception&)
-        {
-            return ErrCode(1); // TODO/LATER: error handling
+            // stream name not found! return immediately with OK signal
+            return ERRCODE_NONE;
         }
 
-        sal_Int32 nArgs = 0;
-        if (rxGraphicStorageHandler.is())
-            nArgs++;
-        if( _xEmbeddedObjectResolver.is())
-            nArgs++;
-        if ( _xProp.is() )
-            nArgs++;
-
-        uno::Sequence< uno::Any > aFilterCompArgs( nArgs );
-        auto aFilterCompArgsRange = asNonConstRange(aFilterCompArgs);
-
-        nArgs = 0;
-        if (rxGraphicStorageHandler.is())
-            aFilterCompArgsRange[nArgs++] <<= rxGraphicStorageHandler;
-        if( _xEmbeddedObjectResolver.is())
-            aFilterCompArgsRange[ nArgs++ ] <<= _xEmbeddedObjectResolver;
-        if ( _xProp.is() )
-            aFilterCompArgsRange[ nArgs++ ] <<= _xProp;
-
-        // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
-        Reference< XFastParser > xFastParser(
-            rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(_sFilterName, aFilterCompArgs, rxContext),
-            uno::UNO_QUERY_THROW );
-        uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
-        // read from the stream
-        return ReadThroughComponent( xInputStream
-                                    ,xModelComponent
-                                    ,rxContext
-                                    ,xFastParser );
+        // get input stream
+        xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+    }
+    catch (const packages::WrongPasswordException&)
+    {
+        return ERRCODE_SFX_WRONGPASSWORD;
+    }
+    catch (const uno::Exception&)
+    {
+        return ErrCode(1); // TODO/LATER: error handling
     }
 
-    // TODO/LATER: better error handling
-    return ErrCode(1);
+    sal_Int32 nArgs = 0;
+    if (rxGraphicStorageHandler.is())
+        nArgs++;
+    if( _xEmbeddedObjectResolver.is())
+        nArgs++;
+    if ( _xProp.is() )
+        nArgs++;
+
+    uno::Sequence< uno::Any > aFilterCompArgs( nArgs );
+    auto aFilterCompArgsRange = asNonConstRange(aFilterCompArgs);
+
+    nArgs = 0;
+    if (rxGraphicStorageHandler.is())
+        aFilterCompArgsRange[nArgs++] <<= rxGraphicStorageHandler;
+    if( _xEmbeddedObjectResolver.is())
+        aFilterCompArgsRange[ nArgs++ ] <<= _xEmbeddedObjectResolver;
+    if ( _xProp.is() )
+        aFilterCompArgsRange[ nArgs++ ] <<= _xProp;
+
+    // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
+    Reference< XFastParser > xFastParser(
+        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(_sFilterName, aFilterCompArgs, rxContext),
+        uno::UNO_QUERY_THROW );
+    uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
+    // read from the stream
+    return ReadThroughComponent( xInputStream
+                                ,xModelComponent
+                                ,rxContext
+                                ,xFastParser );
 }
 
 

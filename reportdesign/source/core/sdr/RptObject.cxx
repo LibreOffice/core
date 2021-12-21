@@ -62,28 +62,27 @@ SdrObjKind OObjectBase::getObjectType(const uno::Reference< report::XReportCompo
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( _xComponent , uno::UNO_QUERY );
     OSL_ENSURE(xServiceInfo.is(),"Who deletes the XServiceInfo interface!");
-    if ( xServiceInfo.is() )
+    if ( !xServiceInfo )
+        return OBJ_NONE;
+
+    if ( xServiceInfo->supportsService( SERVICE_FIXEDTEXT ))
+        return OBJ_RD_FIXEDTEXT;
+    if ( xServiceInfo->supportsService( SERVICE_FIXEDLINE ))
     {
-        if ( xServiceInfo->supportsService( SERVICE_FIXEDTEXT ))
-            return OBJ_RD_FIXEDTEXT;
-        if ( xServiceInfo->supportsService( SERVICE_FIXEDLINE ))
-        {
-            uno::Reference< report::XFixedLine> xFixedLine(_xComponent,uno::UNO_QUERY);
-            return xFixedLine->getOrientation() ? OBJ_RD_HFIXEDLINE : OBJ_RD_VFIXEDLINE;
-        }
-        if ( xServiceInfo->supportsService( SERVICE_IMAGECONTROL))
-            return OBJ_RD_IMAGECONTROL;
-        if ( xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD ))
-            return OBJ_RD_FORMATTEDFIELD;
-        if ( xServiceInfo->supportsService("com.sun.star.drawing.OLE2Shape") )
-            return OBJ_OLE2;
-        if ( xServiceInfo->supportsService( SERVICE_SHAPE ))
-            return OBJ_CUSTOMSHAPE;
-        if ( xServiceInfo->supportsService( SERVICE_REPORTDEFINITION ) )
-            return OBJ_RD_SUBREPORT;
-        return OBJ_OLE2;
+        uno::Reference< report::XFixedLine> xFixedLine(_xComponent,uno::UNO_QUERY);
+        return xFixedLine->getOrientation() ? OBJ_RD_HFIXEDLINE : OBJ_RD_VFIXEDLINE;
     }
-    return OBJ_NONE;
+    if ( xServiceInfo->supportsService( SERVICE_IMAGECONTROL))
+        return OBJ_RD_IMAGECONTROL;
+    if ( xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD ))
+        return OBJ_RD_FORMATTEDFIELD;
+    if ( xServiceInfo->supportsService("com.sun.star.drawing.OLE2Shape") )
+        return OBJ_OLE2;
+    if ( xServiceInfo->supportsService( SERVICE_SHAPE ))
+        return OBJ_CUSTOMSHAPE;
+    if ( xServiceInfo->supportsService( SERVICE_REPORTDEFINITION ) )
+        return OBJ_RD_SUBREPORT;
+    return OBJ_OLE2;
 }
 
 SdrObject* OObjectBase::createObject(
