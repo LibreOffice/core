@@ -16,6 +16,23 @@
       "message": "LGTM, thanks for fixing this issue!!",
       "revId": "d189772bbe6b3bbff574e04449cf8bc3810eb753",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71b6a2a9_93a3fad6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-21T08:59:53Z",
+      "side": 1,
+      "message": "I\u0027m sorry, I have no experience with SVG parsing, its nested elements inheritance rules etc.",
+      "revId": "d189772bbe6b3bbff574e04449cf8bc3810eb753",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
