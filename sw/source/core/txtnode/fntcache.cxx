@@ -855,6 +855,31 @@ static void lcl_DrawLineForWrongListData(
         rInf.GetOut().Pop();
 }
 
+namespace
+{
+    void AdjustKernArray(sal_Int32 i, tools::Long& rScrPos, sal_Unicode cChPrev, sal_Unicode nCh,
+                         const std::vector<sal_Int32>& rScrArray, std::vector<sal_Int32>& rKernArray,
+                         int nMul)
+    {
+        tools::Long nScr = rScrArray[i] - rScrArray[i - 1];
+        if (nCh == CH_BLANK)
+            rScrPos = rKernArray[i - 1] + nScr;
+        else
+        {
+            if (cChPrev == CH_BLANK || cChPrev == '-')
+                rScrPos = rKernArray[i - 1] + nScr;
+            else
+            {
+                rScrPos += nScr;
+
+                const int nDiv = nMul+1;
+                rScrPos = (nMul * rScrPos + rKernArray[i]) / nDiv;
+            }
+        }
+        rKernArray[i - 1] = rScrPos - nScr;
+    }
+}
+
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 {
     OSL_ENSURE( rInf.GetShell(), "SwFntObj::DrawText without shell" );
@@ -1667,7 +1692,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             // In case of Pair Kerning the printer influence on the positioning
             // grows
             const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
-            const int nDiv = nMul+1;
 
             // nSpaceSum contains the sum of the intermediate space distributed
             // among Spaces by the Justification.
@@ -1688,25 +1712,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             for (sal_Int32 i = 1; i < sal_Int32(nCnt); ++i, nKernSum += rInf.GetKern())
             {
                 sal_Unicode nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
-                tools::Long nScr = aScrArray[ i ] - aScrArray[ i - 1 ];
-
-                // If there is an (ex-)Space before us, position optimally,
-                // i.e., our right margin to the 100% printer position;
-                // if we _are_ an ex-Space, position us left-aligned to the
-                // printer position.
-                if ( nCh == CH_BLANK )
-                    nScrPos = aKernArray[i-1] + nScr;
-                else
-                {
-                    if (cChPrev == CH_BLANK || cChPrev == '-')
-                        nScrPos = aKernArray[i-1] + nScr;
-                    else
-                    {
-                        nScrPos += nScr;
-                        nScrPos = ( nMul * nScrPos + aKernArray[i] ) / nDiv;
-                    }
-                }
-                aKernArray[i-1] = nScrPos - nScr;
+                AdjustKernArray(i, nScrPos, cChPrev, nCh, aScrArray, aKernArray, nMul);
 
                 // Apply SpaceSum
                 if (cChPrev == CH_BLANK)
@@ -2036,25 +2042,12 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             // In case of Pair Kerning the printer influence on the positioning
             // grows
             const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
-            const int nDiv = nMul+1;
+
             for (sal_Int32 i = 1; i < sal_Int32(nCnt); i++)
             {
-                sal_Unicode nCh = rInf.GetText()[ sal_Int32(rInf.GetIdx()) + i ];
-                tools::Long nScr = aScrArray[ i ] - aScrArray[ i - 1 ];
-                if ( nCh == CH_BLANK )
-                    nScrPos = aKernArray[i-1] + nScr;
-                else
-                {
-                    if ( nChPrev == CH_BLANK || nChPrev == '-' )
-                        nScrPos = aKernArray[i-1] + nScr;
-                    else
-                    {
-                        nScrPos += nScr;
-                        nScrPos = ( nMul * nScrPos + aKernArray[i] ) / nDiv;
-                    }
-                }
+                sal_Unicode nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
+                AdjustKernArray(i, nScrPos, nChPrev, nCh, aScrArray, aKernArray, nMul);
                 nChPrev = nCh;
-                aKernArray[i-1] = nScrPos - nScr;
             }
         }
 
