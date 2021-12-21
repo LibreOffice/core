@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65133228_75f0ca16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-21T08:34:54Z",
+      "side": 1,
+      "message": "OK - now it is ready for discussion.",
+      "revId": "9b6a496bc47f7ec4225815fd99ee463095ef241e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81ec7565_d256a2dc",
@@ -48,6 +65,30 @@
       "writtenOn": "2021-12-20T15:47:23Z",
       "side": 1,
       "message": "Another option here would be to leave aDefaultBorder alone and: if (pBorderline) aDefaultBorder-\u003eSetStyle(pBorderLine-\u003eGetStyle();\n\nThat would make all three buttons use VeryThin when creating a border. But then if CHANGING part of the borders, then the size will be mis-matched again. Or, set pBorderLine as ::VeryThin earlier on - but in that case it won\u0027t match editing older documents.\n\nIt is a minor concern, since normally styles are set universally.\n\nIt seems safest to me to leave the style\u0027s size as ::Thin.",
+      "range": {
+        "startLine": 935,
+        "startChar": 4,
+        "endLine": 935,
+        "endChar": 30
+      },
+      "revId": "9b6a496bc47f7ec4225815fd99ee463095ef241e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "057ac1ba_456f059e",
+        "filename": "sw/source/core/docnode/ndtbl1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-21T08:34:54Z",
+      "side": 1,
+      "message": "Technically, this if clause is currently never true, so it could be eliminated. I just included it for completeness, in case the calling function ever changes.",
+      "parentUuid": "81ec7565_d256a2dc",
       "range": {
         "startLine": 935,
         "startChar": 4,
