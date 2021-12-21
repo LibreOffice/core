@@ -39,6 +39,8 @@ struct SVXCORE_DLLPUBLIC NamedThemedColor
     Color m_aColor;
     OUString m_aName;
     sal_Int16 m_nThemeIndex = -1;
+    sal_Int16 m_nLumMod = 10000;
+    sal_Int16 m_nLumOff = 0;
 
     static NamedThemedColor FromNamedColor(const NamedColor& rNamedColor);
 

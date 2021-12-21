@@ -1972,7 +1972,9 @@ IMPL_LINK(ColorWindow, SelectHdl, ValueSet*, pColorSet, void)
     auto aNamedThemedColor = svx::NamedThemedColor::FromNamedColor(aNamedColor);
     if (mxPaletteManager->IsThemePaletteSelected())
     {
-        aNamedThemedColor.m_nThemeIndex = pColorSet->GetSelectedItemId();
+        PaletteManager::GetThemeIndexLumModOff(
+            pColorSet->GetSelectedItemId(), aNamedThemedColor.m_nThemeIndex,
+            aNamedThemedColor.m_nLumMod, aNamedThemedColor.m_nLumOff);
     }
     aColorSelectFunction(sCommand, aNamedThemedColor);
 }

@@ -83,7 +83,11 @@ public:
         maTintShade = nTintOrShade;
     }
 
+    void SetLumMod(sal_Int16 nLumMod) { mnLumMod = nLumMod; }
+
     sal_Int16 GetLumMod() const { return mnLumMod; }
+
+    void SetLumOff(sal_Int16 nLumOff) { mnLumOff = nLumOff; }
 
     sal_Int16 GetLumOff() const { return mnLumOff; }
 
