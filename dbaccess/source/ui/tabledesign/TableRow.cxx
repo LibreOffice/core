@@ -130,53 +130,52 @@ namespace dbaui
         _rStr.ReadInt32( _rRow.m_nPos );
         sal_Int32 nValue = 0;
         _rStr.ReadInt32( nValue );
-        if ( nValue )
+        if ( !nValue )
+            return _rStr;
+        OFieldDescription* pFieldDesc = new OFieldDescription();
+        _rRow.m_pActFieldDescr = pFieldDesc;
+        pFieldDesc->SetName(_rStr.ReadUniOrByteString(_rStr.GetStreamCharSet()));
+        pFieldDesc->SetDescription(_rStr.ReadUniOrByteString(_rStr.GetStreamCharSet()));
+        pFieldDesc->SetHelpText(_rStr.ReadUniOrByteString(_rStr.GetStreamCharSet()));
+
+        _rStr.ReadInt32( nValue );
+        Any aControlDefault;
+        switch ( nValue )
         {
-            OFieldDescription* pFieldDesc = new OFieldDescription();
-            _rRow.m_pActFieldDescr = pFieldDesc;
-            pFieldDesc->SetName(_rStr.ReadUniOrByteString(_rStr.GetStreamCharSet()));
-            pFieldDesc->SetDescription(_rStr.ReadUniOrByteString(_rStr.GetStreamCharSet()));
-            pFieldDesc->SetHelpText(_rStr.ReadUniOrByteString(_rStr.GetStreamCharSet()));
-
-            _rStr.ReadInt32( nValue );
-            Any aControlDefault;
-            switch ( nValue )
+            case 1:
             {
-                case 1:
-                {
-                    double nControlDefault;
-                    _rStr.ReadDouble( nControlDefault );
-                    aControlDefault <<= nControlDefault;
-                    break;
-                }
-                case 2:
-                    aControlDefault <<= _rStr.ReadUniOrByteString(_rStr.GetStreamCharSet());
-                    break;
+                double nControlDefault;
+                _rStr.ReadDouble( nControlDefault );
+                aControlDefault <<= nControlDefault;
+                break;
             }
-
-            pFieldDesc->SetControlDefault(aControlDefault);
-
-            _rStr.ReadInt32( nValue );
-            pFieldDesc->SetTypeValue(nValue);
-
-            _rStr.ReadInt32( nValue );
-            pFieldDesc->SetPrecision(nValue);
-            _rStr.ReadInt32( nValue );
-            pFieldDesc->SetScale(nValue);
-            _rStr.ReadInt32( nValue );
-            pFieldDesc->SetIsNullable(nValue);
-            _rStr.ReadInt32( nValue );
-            pFieldDesc->SetFormatKey(nValue);
-            _rStr.ReadInt32( nValue );
-            pFieldDesc->SetHorJustify(static_cast<SvxCellHorJustify>(nValue));
-
-            _rStr.ReadInt32( nValue );
-            pFieldDesc->SetAutoIncrement(nValue != 0);
-            _rStr.ReadInt32( nValue );
-            pFieldDesc->SetPrimaryKey(nValue != 0);
-            _rStr.ReadInt32( nValue );
-            pFieldDesc->SetCurrency(nValue != 0);
+            case 2:
+                aControlDefault <<= _rStr.ReadUniOrByteString(_rStr.GetStreamCharSet());
+                break;
         }
+
+        pFieldDesc->SetControlDefault(aControlDefault);
+
+        _rStr.ReadInt32( nValue );
+        pFieldDesc->SetTypeValue(nValue);
+
+        _rStr.ReadInt32( nValue );
+        pFieldDesc->SetPrecision(nValue);
+        _rStr.ReadInt32( nValue );
+        pFieldDesc->SetScale(nValue);
+        _rStr.ReadInt32( nValue );
+        pFieldDesc->SetIsNullable(nValue);
+        _rStr.ReadInt32( nValue );
+        pFieldDesc->SetFormatKey(nValue);
+        _rStr.ReadInt32( nValue );
+        pFieldDesc->SetHorJustify(static_cast<SvxCellHorJustify>(nValue));
+
+        _rStr.ReadInt32( nValue );
+        pFieldDesc->SetAutoIncrement(nValue != 0);
+        _rStr.ReadInt32( nValue );
+        pFieldDesc->SetPrimaryKey(nValue != 0);
+        _rStr.ReadInt32( nValue );
+        pFieldDesc->SetCurrency(nValue != 0);
         return _rStr;
     }
 }

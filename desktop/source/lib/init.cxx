@@ -564,25 +564,25 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
 
 tools::Rectangle RectangleAndPart::SanitizedRectangle(tools::Long nLeft, tools::Long nTop, tools::Long nWidth, tools::Long nHeight)
 {
-    if (nWidth > 0 && nHeight > 0)
+    if (nWidth <= 0 || nHeight <= 0)
+        return tools::Rectangle();
+
+    // The top-left corner starts at (0, 0).
+    // Anything negative is invalid.
+    if (nLeft < 0)
     {
-        // The top-left corner starts at (0, 0).
-        // Anything negative is invalid.
-        if (nLeft < 0)
-        {
-            nWidth += nLeft;
-            nLeft = 0;
-        }
-
-        if (nTop < 0)
-        {
-            nHeight += nTop;
-            nTop = 0;
-        }
-
-        if (nWidth > 0 && nHeight > 0)
-            return tools::Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
+        nWidth += nLeft;
+        nLeft = 0;
     }
+
+    if (nTop < 0)
+    {
+        nHeight += nTop;
+        nTop = 0;
+    }
+
+    if (nWidth > 0 && nHeight > 0)
+        return tools::Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
     // Else set empty rect.
     return tools::Rectangle();
 }
@@ -2699,41 +2699,39 @@ static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
 
     xFactory = xContext->getServiceManager();
 
-    if (xFactory.is())
+    if (!xFactory)
+        return false;
+
+    uno::Reference<frame::XDispatchProvider> xDP;
+    xSFactory.set(xFactory, uno::UNO_QUERY_THROW);
+    xDP.set( xSFactory->createInstance("com.sun.star.comp.sfx2.SfxMacroLoader"), uno::UNO_QUERY );
+    uno::Reference<frame::XDispatch> xD = xDP->queryDispatch( aURL, OUString(), 0);
+
+    if (!xD.is())
     {
-        uno::Reference<frame::XDispatchProvider> xDP;
-        xSFactory.set(xFactory, uno::UNO_QUERY_THROW);
-        xDP.set( xSFactory->createInstance("com.sun.star.comp.sfx2.SfxMacroLoader"), uno::UNO_QUERY );
-        uno::Reference<frame::XDispatch> xD = xDP->queryDispatch( aURL, OUString(), 0);
-
-        if (!xD.is())
-        {
-            pLib->maLastExceptionMsg = "Macro loader is not available";
-            SAL_INFO("lok", "Macro loader is not available");
-            return false;
-        }
-
-        uno::Reference < frame::XSynchronousDispatch > xSyncDisp( xD, uno::UNO_QUERY_THROW );
-        uno::Sequence<css::beans::PropertyValue> aEmpty;
-        css::beans::PropertyValue aErr;
-        uno::Any aRet = xSyncDisp->dispatchWithReturnValue( aURL, aEmpty );
-        aRet >>= aErr;
-
-        if (aErr.Name == "ErrorCode")
-        {
-            sal_uInt32 nErrCode = 0; // ERRCODE_NONE
-            aErr.Value >>= nErrCode;
-
-            pLib->maLastExceptionMsg = "An error occurred running macro (error code: " + OUString::number( nErrCode ) + ")";
-            SAL_INFO("lok", "Macro execution terminated with error code " << nErrCode);
-
-            return false;
-        }
-
-        return true;
+        pLib->maLastExceptionMsg = "Macro loader is not available";
+        SAL_INFO("lok", "Macro loader is not available");
+        return false;
     }
 
-    return false;
+    uno::Reference < frame::XSynchronousDispatch > xSyncDisp( xD, uno::UNO_QUERY_THROW );
+    uno::Sequence<css::beans::PropertyValue> aEmpty;
+    css::beans::PropertyValue aErr;
+    uno::Any aRet = xSyncDisp->dispatchWithReturnValue( aURL, aEmpty );
+    aRet >>= aErr;
+
+    if (aErr.Name == "ErrorCode")
+    {
+        sal_uInt32 nErrCode = 0; // ERRCODE_NONE
+        aErr.Value >>= nErrCode;
+
+        pLib->maLastExceptionMsg = "An error occurred running macro (error code: " + OUString::number( nErrCode ) + ")";
+        SAL_INFO("lok", "Macro execution terminated with error code " << nErrCode);
+
+        return false;
+    }
+
+    return true;
 }
 
 static bool lo_signDocument(LibreOfficeKit* /*pThis*/,

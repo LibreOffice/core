@@ -347,34 +347,34 @@ lcl_maybeAddScript(
         OUString const& rScriptURL,
         Reference<css::script::XLibraryContainer3> const& xScriptLibs)
 {
-    if (bExists && xScriptLibs.is())
-    {
-        bool bCanAdd = true;
-        if (xScriptLibs->hasByName(rName))
-        {
-            const OUString sOriginalUrl = xScriptLibs->getOriginalLibraryLinkURL(rName);
-            //We assume here that library names in extensions are unique, which may not be the case
-            //ToDo: If the script exist in another extension, then both extensions must have the
-            //same id
-            if (sOriginalUrl.match("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE")
-                || sOriginalUrl.match("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE")
-                || sOriginalUrl.match("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")
-                || sOriginalUrl.match("$(INST)/share/basic/Access2Base/"))
-            {
-                xScriptLibs->removeLibrary(rName);
-                bCanAdd = true;
-            }
-            else
-            {
-                bCanAdd = false;
-            }
-        }
+    if (!bExists || !xScriptLibs)
+        return false;
 
-        if (bCanAdd)
+    bool bCanAdd = true;
+    if (xScriptLibs->hasByName(rName))
+    {
+        const OUString sOriginalUrl = xScriptLibs->getOriginalLibraryLinkURL(rName);
+        //We assume here that library names in extensions are unique, which may not be the case
+        //ToDo: If the script exist in another extension, then both extensions must have the
+        //same id
+        if (sOriginalUrl.match("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE")
+            || sOriginalUrl.match("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE")
+            || sOriginalUrl.match("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")
+            || sOriginalUrl.match("$(INST)/share/basic/Access2Base/"))
         {
-            xScriptLibs->createLibraryLink(rName, rScriptURL, false);
-            return xScriptLibs->hasByName(rName);
+            xScriptLibs->removeLibrary(rName);
+            bCanAdd = true;
         }
+        else
+        {
+            bCanAdd = false;
+        }
+    }
+
+    if (bCanAdd)
+    {
+        xScriptLibs->createLibraryLink(rName, rScriptURL, false);
+        return xScriptLibs->hasByName(rName);
     }
 
     return false;

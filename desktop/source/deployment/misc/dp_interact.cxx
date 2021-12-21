@@ -98,25 +98,27 @@ bool interactContinuation( Any const & request,
     OSL_ASSERT(
         cppu::UnoType<task::XInteractionContinuation>::get().isAssignableFrom(
             continuation ) );
-    if (xCmdEnv.is()) {
-        Reference<task::XInteractionHandler> xInteractionHandler(
-            xCmdEnv->getInteractionHandler() );
-        if (xInteractionHandler.is()) {
-            bool cont = false;
-            bool abort = false;
-            std::vector< Reference<task::XInteractionContinuation> > conts {
-                new InteractionContinuationImpl(continuation, &cont ),
-                new InteractionContinuationImpl( cppu::UnoType<task::XInteractionAbort>::get(), &abort ) };
-            xInteractionHandler->handle(
-                new ::comphelper::OInteractionRequest( request, std::move(conts) ) );
-            if (cont || abort) {
-                if (pcont != nullptr)
-                    *pcont = cont;
-                if (pabort != nullptr)
-                    *pabort = abort;
-                return true;
-            }
-        }
+    if (!xCmdEnv)
+        return false;
+
+    Reference<task::XInteractionHandler> xInteractionHandler(
+        xCmdEnv->getInteractionHandler() );
+    if (!xInteractionHandler)
+        return false;
+
+    bool cont = false;
+    bool abort = false;
+    std::vector< Reference<task::XInteractionContinuation> > conts {
+        new InteractionContinuationImpl(continuation, &cont ),
+        new InteractionContinuationImpl( cppu::UnoType<task::XInteractionAbort>::get(), &abort ) };
+    xInteractionHandler->handle(
+        new ::comphelper::OInteractionRequest( request, std::move(conts) ) );
+    if (cont || abort) {
+        if (pcont != nullptr)
+            *pcont = cont;
+        if (pabort != nullptr)
+            *pabort = abort;
+        return true;
     }
     return false;
 }

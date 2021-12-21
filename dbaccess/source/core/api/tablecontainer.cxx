@@ -62,26 +62,24 @@ namespace
     bool lcl_isPropertySetDefaulted(const Sequence< OUString>& _aNames,const Reference<XPropertySet>& _xProp)
     {
         Reference<XPropertyState> xState(_xProp,UNO_QUERY);
-        if ( xState.is() )
+        if ( !xState )
+            return false;
+        const OUString* pIter = _aNames.getConstArray();
+        const OUString* pEnd   = pIter + _aNames.getLength();
+        for(;pIter != pEnd;++pIter)
         {
-            const OUString* pIter = _aNames.getConstArray();
-            const OUString* pEnd   = pIter + _aNames.getLength();
-            for(;pIter != pEnd;++pIter)
+            try
             {
-                try
-                {
-                    PropertyState aState = xState->getPropertyState(*pIter);
-                    if ( aState != PropertyState_DEFAULT_VALUE )
-                        break;
-                }
-                catch(const Exception&)
-                {
-                    TOOLS_WARN_EXCEPTION("dbaccess", "" );
-                }
+                PropertyState aState = xState->getPropertyState(*pIter);
+                if ( aState != PropertyState_DEFAULT_VALUE )
+                    break;
             }
-            return ( pIter == pEnd );
+            catch(const Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("dbaccess", "" );
+            }
         }
-        return false;
+        return ( pIter == pEnd );
     }
 }
 

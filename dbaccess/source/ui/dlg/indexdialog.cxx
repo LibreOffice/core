@@ -537,28 +537,28 @@ namespace dbaui
 
     bool DbaIndexDialog::implSaveModified(bool _bPlausibility)
     {
-        if (m_xPreviousSelection)
-        {
-            // try to commit the previously selected index
-            if (m_xFields->IsModified() && !m_xFields->SaveModified())
-                return false;
+        if (!m_xPreviousSelection)
+            return true;
 
-            Indexes::iterator aPreviouslySelected = m_xIndexes->begin() + m_xIndexList->get_id(*m_xPreviousSelection).toUInt32();
+        // try to commit the previously selected index
+        if (m_xFields->IsModified() && !m_xFields->SaveModified())
+            return false;
 
-            // the unique flag
-            aPreviouslySelected->bUnique = m_xUnique->get_active();
-            if (m_xUnique->get_state_changed_from_saved())
-                aPreviouslySelected->setModified(true);
+        Indexes::iterator aPreviouslySelected = m_xIndexes->begin() + m_xIndexList->get_id(*m_xPreviousSelection).toUInt32();
 
-            // the fields
-            m_xFields->commitTo(aPreviouslySelected->aFields);
-            if (m_xFields->GetSavedValue() != aPreviouslySelected->aFields)
-                aPreviouslySelected->setModified(true);
+        // the unique flag
+        aPreviouslySelected->bUnique = m_xUnique->get_active();
+        if (m_xUnique->get_state_changed_from_saved())
+            aPreviouslySelected->setModified(true);
 
-            // plausibility checks
-            if (_bPlausibility && !implCheckPlausibility(aPreviouslySelected))
-                return false;
-        }
+        // the fields
+        m_xFields->commitTo(aPreviouslySelected->aFields);
+        if (m_xFields->GetSavedValue() != aPreviouslySelected->aFields)
+            aPreviouslySelected->setModified(true);
+
+        // plausibility checks
+        if (_bPlausibility && !implCheckPlausibility(aPreviouslySelected))
+            return false;
 
         return true;
     }
