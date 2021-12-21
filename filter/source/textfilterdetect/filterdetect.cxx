@@ -148,7 +148,11 @@ bool HandleEmptyFileUrlByExtension(MediaDescriptor& rMediaDesc, const OUString& 
         return false;
     }
 
-    std::shared_ptr<const SfxFilter> pFilter(SfxFilterMatcher().GetFilter4Extension(rExt));
+    // Requiring the export+preferred flags helps to find the relevant filter, e.g. .doc -> WW8 (and
+    // not WW6 or Mac_Word).
+    SfxFilterFlags nMust
+        = SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::PREFERED;
+    std::shared_ptr<const SfxFilter> pFilter(SfxFilterMatcher().GetFilter4Extension(rExt, nMust));
     if (!pFilter)
     {
         return false;
