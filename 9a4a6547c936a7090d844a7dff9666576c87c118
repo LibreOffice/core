@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b719c4cb_11af2b2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-12-21T15:00:46Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix! \n\nDoes OOXML support semi-transparent hatching or background? If it does, it would be fine to fix that import, too.",
+      "revId": "9a4a6547c936a7090d844a7dff9666576c87c118",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
