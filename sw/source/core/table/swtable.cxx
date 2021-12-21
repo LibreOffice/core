@@ -1599,7 +1599,8 @@ bool SwTable::IsDeleted() const
 // at tracked row insertion, return with the oldest insertion in the row, which
 // contain the change data of the row change.
 // If the return value is SwRedlineTable::npos, there is no tracked row change.
-SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(SwRedlineTable::size_type& rRedlinePos) const
+SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
+    SwRedlineTable::size_type& rRedlinePos, bool bUpdateProperty ) const
 {
     SwRedlineTable::size_type nRet = SwRedlineTable::npos;
     const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
@@ -1722,11 +1723,16 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(SwRedlineTable::siz
             // no longer tracked row insertion or deletion
             nRet = SwRedlineTable::npos;
             // set TextChangesOnly = true to remove the tracked deletion
-            SvxPrintItem aUnsetTracking(RES_PRINT, true);
-            SwFrameFormat *pFormat = const_cast<SwTableLine*>(this)->ClaimFrameFormat();
-            pFormat->LockModify();
-            pFormat->SetFormatAttr( aUnsetTracking );
-            pFormat->UnlockModify();
+            // FIXME Undo is not supported here (this is only a fallback,
+            // because using SetRowNotTracked() is not recommended here)
+            if ( bUpdateProperty )
+            {
+                SvxPrintItem aUnsetTracking(RES_PRINT, true);
+                SwFrameFormat *pFormat = const_cast<SwTableLine*>(this)->ClaimFrameFormat();
+                pFormat->LockModify();
+                pFormat->SetFormatAttr( aUnsetTracking );
+                pFormat->UnlockModify();
+            }
         }
     }
 
