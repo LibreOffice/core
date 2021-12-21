@@ -75,7 +75,7 @@ interface XOOXMLDocumentPropertiesImporter: com::sun::star::uno::XInterface
     /** find and get core properties stream
 
         (usually it is docProps\core.xml)
-        @since LibreOffice 7.4
+        @since LibreOffice 7.3
      */
 
     com::sun::star::io::XInputStream getCorePropertiesStream([in] com::sun::star::embed::XStorage xSource);
@@ -83,7 +83,7 @@ interface XOOXMLDocumentPropertiesImporter: com::sun::star::uno::XInterface
     /** find and get extended properties stream
 
         (usually it is docProps/app.xml)
-        @since LibreOffice 7.4
+        @since LibreOffice 7.3
      */
 
     com::sun::star::io::XInputStream getExtendedPropertiesStream([in] com::sun::star::embed::XStorage xSource);
@@ -91,7 +91,7 @@ interface XOOXMLDocumentPropertiesImporter: com::sun::star::uno::XInterface
     /** find and get custom properties streams
 
         (usually it is customXml\*.xml)
-        @since LibreOffice 7.4
+        @since LibreOffice 7.3
      */
 
     sequence< com::sun::star::io::XInputStream > getCustomPropertiesStreams([in] com::sun::star::embed::XStorage xSource);
