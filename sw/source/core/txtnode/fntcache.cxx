@@ -1665,8 +1665,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else
         {
-            sal_Unicode nCh;
-
             // In case of Pair Kerning the printer influence on the positioning
             // grows
             const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
@@ -1690,7 +1688,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 nSpaceSum = nHalfSpace;
             for (sal_Int32 i = 1; i < sal_Int32(nCnt); ++i, nKernSum += rInf.GetKern())
             {
-                nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
+                sal_Unicode nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
 
                 tools::Long nScr = aScrArray[ i ] - aScrArray[ i - 1 ];
 
@@ -2035,15 +2033,13 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             nCnt = std::min(nCnt, nLn);
             sal_Unicode nChPrev = rInf.GetText()[ sal_Int32(rInf.GetIdx()) ];
 
-            sal_Unicode nCh;
-
             // In case of Pair Kerning the printer influence on the positioning
             // grows
             const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
             const int nDiv = nMul+1;
             for (sal_Int32 i = 1; i < sal_Int32(nCnt); i++)
             {
-                nCh = rInf.GetText()[ sal_Int32(rInf.GetIdx()) + i ];
+                sal_Unicode nCh = rInf.GetText()[ sal_Int32(rInf.GetIdx()) + i ];
                 tools::Long nScr = aScrArray[ i ] - aScrArray[ i - 1 ];
                 if ( nCh == CH_BLANK )
                     nScrPos = aKernArray[i-1]+nScr;
