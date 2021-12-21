@@ -202,6 +202,7 @@ public:
     void testTdf104814();
     void testTableRedlineRedoCrash();
     void testTableRemoveHasTextChangesOnly();
+    void testTableRemoveHasTextChangesOnly2();
     void testTdf66405();
     void testTdf35021_tabOverMarginDemo();
     void testTdf106701_tabOverMarginAutotab();
@@ -326,6 +327,7 @@ public:
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTableRedlineRedoCrash);
     CPPUNIT_TEST(testTableRemoveHasTextChangesOnly);
+    CPPUNIT_TEST(testTableRemoveHasTextChangesOnly2);
     CPPUNIT_TEST(testTdf66405);
     CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
@@ -1682,7 +1684,6 @@ void SwUiWriterTest4::testTableRedlineRedoCrash()
 
 void SwUiWriterTest4::testTableRemoveHasTextChangesOnly()
 {
-    //createSwDoc(DATA_DIRECTORY, "tdf91292_paraBackground.docx");
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-del-add.docx");
     CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1751,6 +1752,65 @@ void SwUiWriterTest4::testTableRemoveHasTextChangesOnly()
     pXmlDoc = parseLayoutDump();
     // This was 3
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
+}
+
+void SwUiWriterTest4::testTableRemoveHasTextChangesOnly2()
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-del-add.docx");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // disable Record Changes
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // check redline count
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
+
+    // 4 rows in Show Changes mode
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
+
+    // Move the cursor to the tracked insertion, after the first redline to activate the
+    // acception of the whole table row insertion with a single "Accept Change"
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:AcceptTrackedChange", {});
+    Scheduler::ProcessEventsToIdle();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // Accepting tracked insertion results still 4 rows, but less redlines
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(11), pEditShell->GetRedlineCount());
+
+    // Undo: 4 rows again
+    pDoc->GetIDocumentUndoRedo().Undo();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
+
+    // To check Undo of HasTextChangesOnly reject the same row results 3 rows
+    dispatchCommand(mxComponent, ".uno:Escape", {});
+    dispatchCommand(mxComponent, ".uno:RejectTrackedChange", {});
+    Scheduler::ProcessEventsToIdle();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // This was 4 (lost HasTextChangesOnly)
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 3);
+
+    // Undo: 4 rows again
+    pDoc->GetIDocumentUndoRedo().Undo();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
 }
 
 void SwUiWriterTest4::testTdf66405()
