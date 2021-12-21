@@ -114,7 +114,11 @@ gb_JunitTest_get_classsetname = JunitTest/$(1)
 gb_JunitTest_get_target = $(WORKDIR)/JunitTest/$(1)/done
 gb_JunitTest_get_userdir = $(WORKDIR)/JunitTest/$(1)/user
 gb_PythonTest_get_target = $(WORKDIR)/PythonTest/$(1)/done
+# linktarget = class/object<>some_optional_target, like Library/libswlo.so<>/.../instdir/program/libswlo.so
+# while the target is optional, the workdir functions will always work correctly
 gb_LinkTarget__get_workdir_linktargetname = $(firstword $(subst <>,  ,$(1)))
+gb_LinkTarget__get_workdir_linktargetclass =  $(firstword $(subst /,  ,$(call gb_LinkTarget__get_workdir_linktargetname,$(1))))
+gb_LinkTarget__get_workdir_linktargetobject = $(lastword $(subst /,  ,$(call gb_LinkTarget__get_workdir_linktargetname,$(1))))
 gb_LinkTarget_get_headers_target = \
  $(WORKDIR)/Headers/$(call gb_LinkTarget__get_workdir_linktargetname,$(1))
 gb_LinkTarget_get_objects_list = \
