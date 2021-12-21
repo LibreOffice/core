@@ -1197,6 +1197,11 @@ define gb_PrintDeps_info
 $(info LibraryDep: $(1) links against $(2))
 endef
 
+# returns $(true), if the target class really calls a linker.
+# call gb_LinkTarget_does_real_link,linktarget
+gb_LinkTarget_does_real_link = $(if $(filter Executable CppunitTest $(if $(DISABLE_DYNLOADING),,Library), \
+    $(call gb_LinkTarget__get_workdir_linktargetclass,$(1))),$(true))
+
 # avoid problem when a module is built partially but other modules that define
 # needed libraries is not yet built: prevent invocation of pattern rule
 # for library with invalid parameters by depending on the header target
@@ -1218,12 +1223,21 @@ endif
 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(3)
 
+ifeq (,$(DISABLE_DYNLOADING))
 # depend on the exports of the library, not on the library itself
-# for faster incremental builds when the ABI is unchanged
-ifeq ($(DISABLE_DYNLOADING),)
+# for faster incremental builds when the ABI is unchanged.
+# export files are created from the library, so this also ensures the library exists.
 $(call gb_LinkTarget_get_target,$(1)) : \
 	$(foreach lib,$(3),$(call gb_Library_get_exports_target,$(lib)))
+
+else # DISABLE_DYNLOADING
+# depend on the now-static libraries themself, but only if the target actually links to it
+ifneq (,$(call gb_LinkTarget_does_real_link,$(1)))
+$(foreach lib,$(3),$(if $(filter $(lib),$(gb_Library_KNOWNLIBS)), \
+    $(eval $(call gb_LinkTarget_get_target,$(1)) : $(call gb_Library_get_target,$(lib))) \
+))
 endif
+endif # DISABLE_DYNLOADING
 
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
@@ -1311,8 +1325,12 @@ $(if $(call gb_LinkTarget__is_merged,$(1)),\
 	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,merged)) : \
 		LINKED_STATIC_LIBS += $$(if $$(filter-out StaticLibrary,$$(TARGETTYPE)),$(2)))
 
-ifeq ($(DISABLE_DYNLOADING),)
-$(call gb_LinkTarget_get_target,$(1)) : $(foreach lib,$(2),$(call gb_StaticLibrary_get_target,$(lib)))
+# depend on the static libraries, but only if the target actually links to it
+ifneq (,$(call gb_LinkTarget_does_real_link,$(1)))
+# make has a size limit for the prerequisites string, which will be exceeded for some larger static links,
+# like soffice.bin, but there seems to be no limit for makefile lines...
+$(foreach lib,$(2), \
+    $$(eval $(call gb_LinkTarget_get_target,$(1)): $(call gb_StaticLibrary_get_target,$(lib))))
 endif
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_StaticLibrary_get_headers_target,$(lib)))
