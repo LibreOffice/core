@@ -568,26 +568,25 @@ bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageTyp
 CapType capitalType(const OUString& aTerm, CharClass const * pCC)
 {
         sal_Int32 tlen = aTerm.getLength();
-        if (pCC && tlen)
+        if (!pCC || !tlen)
+            return CapType::UNKNOWN;
+
+        sal_Int32 nc = 0;
+        for (sal_Int32 tindex = 0; tindex < tlen; ++tindex)
         {
-            sal_Int32 nc = 0;
-            for (sal_Int32 tindex = 0; tindex < tlen; ++tindex)
-            {
-                if (pCC->getCharacterType(aTerm,tindex) &
-                   css::i18n::KCharacterType::UPPER) nc++;
-            }
-
-            if (nc == 0)
-                return CapType::NOCAP;
-            if (nc == tlen)
-                return CapType::ALLCAP;
-            if ((nc == 1) && (pCC->getCharacterType(aTerm,0) &
-                  css::i18n::KCharacterType::UPPER))
-                return CapType::INITCAP;
-
-            return CapType::MIXED;
+            if (pCC->getCharacterType(aTerm,tindex) &
+               css::i18n::KCharacterType::UPPER) nc++;
         }
-        return CapType::UNKNOWN;
+
+        if (nc == 0)
+            return CapType::NOCAP;
+        if (nc == tlen)
+            return CapType::ALLCAP;
+        if ((nc == 1) && (pCC->getCharacterType(aTerm,0) &
+              css::i18n::KCharacterType::UPPER))
+            return CapType::INITCAP;
+
+        return CapType::MIXED;
 }
 
 // sorted(!) array of unicode ranges for code points that are exclusively(!) used as numbers

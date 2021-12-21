@@ -545,28 +545,27 @@ LwpFooterLayout* LwpPageLayout::GetFooterLayout()
 */
 LwpPageLayout* LwpPageLayout::GetOddChildLayout()
 {
-    if (IsComplex())
+    if (!IsComplex())
+        return nullptr;
+    rtl::Reference<LwpVirtualLayout> xLay(
+        dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
+    while (xLay.is())
     {
-        rtl::Reference<LwpVirtualLayout> xLay(
-            dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
-        o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
-        while (xLay.is())
-        {
-            bool bAlreadySeen = !aSeen.insert(xLay.get()).second;
-            if (bAlreadySeen)
-                throw std::runtime_error("loop in conversion");
+        bool bAlreadySeen = !aSeen.insert(xLay.get()).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
 
-            if (xLay->GetLayoutType() == LWP_PAGE_LAYOUT)
+        if (xLay->GetLayoutType() == LWP_PAGE_LAYOUT)
+        {
+            LwpPageLayout* pPageLayout = static_cast<LwpPageLayout*>(xLay.get());
+            LwpUseWhen* pUseWhen = pPageLayout->GetUseWhen();
+            if (pUseWhen && pUseWhen->IsUseOnAllOddPages())
             {
-                LwpPageLayout* pPageLayout = static_cast<LwpPageLayout*>(xLay.get());
-                LwpUseWhen* pUseWhen = pPageLayout->GetUseWhen();
-                if (pUseWhen && pUseWhen->IsUseOnAllOddPages())
-                {
-                    return pPageLayout;
-                }
+                return pPageLayout;
             }
-            xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
         }
+        xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
     }
     return nullptr;
 }

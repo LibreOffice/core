@@ -713,30 +713,29 @@ bool LwpFrame::IsLeftWider()
 {
     rtl::Reference<LwpVirtualLayout> xLayout(m_pLayout->GetContainerLayout());
     LwpVirtualLayout* pParent = xLayout.get();
-    if (pParent)
+    if (!pParent)
+        return false;
+    LwpPoint aPoint = m_pLayout->GetOrigin();
+    double fXOffset = LwpTools::ConvertFromUnitsToMetric(aPoint.GetX());
+    double fWidth = m_pLayout->GetWidth();
+    double fWrapLeft = m_pLayout->GetExtMarginsValue(MARGIN_LEFT);
+    double fWrapRight = m_pLayout->GetExtMarginsValue(MARGIN_RIGHT);
+
+    //LwpPoint aParentPoint = pParent->GetOrigin();
+    //double fParentXOffset = LwpTools::ConvertFromUnitsToMetric(aParentPoint.GetX());
+    double fParentWidth = pParent->GetWidth();
+    if (pParent->IsCell())
     {
-        LwpPoint aPoint = m_pLayout->GetOrigin();
-        double fXOffset = LwpTools::ConvertFromUnitsToMetric(aPoint.GetX());
-        double fWidth = m_pLayout->GetWidth();
-        double fWrapLeft = m_pLayout->GetExtMarginsValue(MARGIN_LEFT);
-        double fWrapRight = m_pLayout->GetExtMarginsValue(MARGIN_RIGHT);
-
-        //LwpPoint aParentPoint = pParent->GetOrigin();
-        //double fParentXOffset = LwpTools::ConvertFromUnitsToMetric(aParentPoint.GetX());
-        double fParentWidth = pParent->GetWidth();
-        if (pParent->IsCell())
-        {
-            //Get actual width of this cell layout
-            fParentWidth = static_cast<LwpCellLayout*>(pParent)->GetActualWidth();
-        }
-        double fParentMarginLeft = pParent->GetMarginsValue(MARGIN_LEFT);
-        double fParentMarginRight = pParent->GetMarginsValue(MARGIN_RIGHT);
-
-        double fLeft = fXOffset - fWrapLeft - fParentMarginLeft;
-        double fRight = fParentWidth - fParentMarginRight - (fXOffset + fWidth + fWrapRight);
-        if (fLeft > fRight)
-            return true;
+        //Get actual width of this cell layout
+        fParentWidth = static_cast<LwpCellLayout*>(pParent)->GetActualWidth();
     }
+    double fParentMarginLeft = pParent->GetMarginsValue(MARGIN_LEFT);
+    double fParentMarginRight = pParent->GetMarginsValue(MARGIN_RIGHT);
+
+    double fLeft = fXOffset - fWrapLeft - fParentMarginLeft;
+    double fRight = fParentWidth - fParentMarginRight - (fXOffset + fWidth + fWrapRight);
+    if (fLeft > fRight)
+        return true;
     return false;
 }
 

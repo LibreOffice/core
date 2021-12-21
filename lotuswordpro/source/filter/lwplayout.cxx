@@ -1862,49 +1862,46 @@ LwpShadow* LwpLayout::GetShadow()
 XFShadow* LwpLayout::GetXFShadow()
 {
     LwpShadow* pShadow = GetShadow();
-    if (pShadow)
+    if (!pShadow)
+        return nullptr;
+    LwpColor color = pShadow->GetColor();
+    double offsetX = pShadow->GetOffsetX();
+    double offsetY = pShadow->GetOffsetY();
+
+    if (!offsetX || !offsetY || !color.IsValidColor())
+        return nullptr;
+    XFShadow* pXFShadow = new XFShadow();
+    enumXFShadowPos eXFShadowPos = enumXFShadowLeftTop;
+    double fOffset = 0;
+
+    bool left = false;
+    bool top = false;
+    if (offsetX < 0)
+        left = true;
+    if (offsetY < 0)
+        top = true;
+    if (left)
     {
-        LwpColor color = pShadow->GetColor();
-        double offsetX = pShadow->GetOffsetX();
-        double offsetY = pShadow->GetOffsetY();
-
-        if (offsetX && offsetY && color.IsValidColor())
-        {
-            XFShadow* pXFShadow = new XFShadow();
-            enumXFShadowPos eXFShadowPos = enumXFShadowLeftTop;
-            double fOffset = 0;
-
-            bool left = false;
-            bool top = false;
-            if (offsetX < 0)
-                left = true;
-            if (offsetY < 0)
-                top = true;
-            if (left)
-            {
-                fOffset = -offsetX;
-                if (top)
-                    eXFShadowPos = enumXFShadowLeftTop;
-                else
-                    eXFShadowPos = enumXFShadowLeftBottom;
-            }
-            else
-            {
-                fOffset = offsetX;
-                if (top)
-                    eXFShadowPos = enumXFShadowRightTop;
-                else
-                    eXFShadowPos = enumXFShadowRightBottom;
-            }
-
-            pXFShadow->SetPosition(eXFShadowPos);
-            pXFShadow->SetOffset(fOffset);
-            pXFShadow->SetColor(XFColor(color.To24Color()));
-
-            return pXFShadow;
-        }
+        fOffset = -offsetX;
+        if (top)
+            eXFShadowPos = enumXFShadowLeftTop;
+        else
+            eXFShadowPos = enumXFShadowLeftBottom;
     }
-    return nullptr;
+    else
+    {
+        fOffset = offsetX;
+        if (top)
+            eXFShadowPos = enumXFShadowRightTop;
+        else
+            eXFShadowPos = enumXFShadowRightBottom;
+    }
+
+    pXFShadow->SetPosition(eXFShadowPos);
+    pXFShadow->SetOffset(fOffset);
+    pXFShadow->SetColor(XFColor(color.To24Color()));
+
+    return pXFShadow;
 }
 
 /**
