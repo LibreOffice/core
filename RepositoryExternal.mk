@@ -2779,7 +2779,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 endef
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
-	clucene \
+    $(call gb_Helper_optionals_or,HELPTOOLS XMLHELP,clucene) \
 ))
 
 endif # SYSTEM_CLUCENE

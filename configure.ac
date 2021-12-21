@@ -818,6 +818,7 @@ disable_database_connectivity_dependencies()
 # This is also true for most test_* variables.
 # ===================================================================
 build_crypto=yes
+test_clucene=no
 test_gdb_index=no
 test_openldap=yes
 test_split_debug=no
@@ -5373,6 +5374,7 @@ fi
 AC_MSG_CHECKING([if we need to build the help index tooling])
 if test "$with_help" = yes -o "$enable_extension_integration" != no; then
     BUILD_TYPE="$BUILD_TYPE HELPTOOLS"
+    test_clucene=yes
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
@@ -5402,6 +5404,7 @@ fi
 AC_MSG_CHECKING([whether to include the XML-help support])
 if test "$enable_xmlhelp" = yes; then
     BUILD_TYPE="$BUILD_TYPE XMLHELP"
+    test_clucene=yes
     AC_DEFINE(HAVE_FEATURE_XMLHELP)
     AC_MSG_RESULT([yes])
 else
@@ -5514,6 +5517,7 @@ if test "$cross_compiling" = "yes"; then
         --build="$build_alias" \
         --disable-cairo-canvas \
         --disable-cups \
+        --disable-customtarget-components \
         --disable-firebird-sdbc \
         --disable-gpgmepp \
         --disable-gstreamer-1-0 \
@@ -5526,8 +5530,8 @@ if test "$cross_compiling" = "yes"; then
         --disable-opencl \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
-        --disable-customtarget-components \
         --disable-skia \
+        --disable-xmlhelp \
         --enable-icecream="$enable_icecream" \
         --without-doxygen \
         --without-webdav \
@@ -9297,8 +9301,8 @@ dnl ===================================================================
 dnl we should rather be using
 dnl libo_CHECK_SYSTEM_MODULE([clucence],[CLUCENE],[liblucence-core]) here
 dnl but the contribs-lib check seems tricky
-if test "$enable_xmlhelp" = yes -o "$enable_extension_integration" = yes; then
 AC_MSG_CHECKING([which clucene to use])
+if test "$test_clucene" = yes; then
 if test "$with_system_clucene" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CLUCENE=TRUE
@@ -9325,6 +9329,8 @@ else
     SYSTEM_CLUCENE=
     BUILD_TYPE="$BUILD_TYPE CLUCENE"
 fi
+else
+    AC_MSG_RESULT([not needed])
 fi
 AC_SUBST(SYSTEM_CLUCENE)
 AC_SUBST(CLUCENE_CFLAGS)
