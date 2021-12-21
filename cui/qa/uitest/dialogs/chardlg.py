@@ -94,7 +94,8 @@ class Test(UITestCase):
                 paletteSelector = floatWindow.getChild("palette_listbox")
                 select_by_text(paletteSelector, "Theme colors")
                 colorSet = floatWindow.getChild("colorset")
-                colorSet.executeAction("CHOOSE", mkPropertyValues({"POS": "4"}))
+                # 4 would be accent1, +12 is the first from the effect variants.
+                colorSet.executeAction("CHOOSE", mkPropertyValues({"POS": "16"}))
 
             # Then make sure the doc model has the correct color theme index:
             drawPage = component.getDrawPages().getByIndex(0)
@@ -108,6 +109,14 @@ class Test(UITestCase):
             # AssertionError: -1 != 4
             # i.e. no theme index was set, instead of accent1 (index into the above color scheme).
             self.assertEqual(portion.CharColorTheme, 4)
+
+            # Then make sure that '80% lighter' is lum-mod=2000 and lum-off=8000:
+            # Without the accompanying fix in place, this test would have failed with:
+            # AssertionError: 10000 != 2000
+            # i.e. the effects where not applied, luminancen modulation was the default instead of a
+            # custom value.
+            self.assertEqual(portion.CharColorLumMod, 2000)
+            self.assertEqual(portion.CharColorLumOff, 8000)
 
     def testSvxCharEffectsPageWriter(self):
         # Start Writer.

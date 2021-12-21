@@ -1601,6 +1601,8 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
         {
             // The color was picked from the theme palette, remember its index.
             aItem.SetThemeIndex(aSelectedColor.m_nThemeIndex);
+            aItem.SetLumMod(aSelectedColor.m_nLumMod);
+            aItem.SetLumOff(aSelectedColor.m_nLumOff);
         }
 
         rSet.Put(aItem);
