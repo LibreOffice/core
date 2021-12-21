@@ -32,7 +32,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/UnitConversion.hxx>
@@ -63,6 +63,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/listener.hxx>
+#include <mutex>
 
 using namespace ::com::sun::star;
 
@@ -1478,7 +1479,6 @@ lcl_TypeToPropertyMap_Mark(const TOXTypes eType)
 class SwXDocumentIndexMark::Impl final: public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
     SwXDocumentIndexMark & m_rThis;
     bool m_bInReplaceMark;
 
@@ -1487,7 +1487,8 @@ public:
     uno::WeakReference<uno::XInterface> m_wThis;
     SfxItemPropertySet const& m_rPropSet;
     const TOXTypes m_eTOXType;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     bool m_bIsDescriptor;
     const SwTOXType* m_pTOXType;
     const SwTOXMark* m_pTOXMark;
@@ -1514,7 +1515,6 @@ public:
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
         , m_eTOXType(eType)
-        , m_EventListeners(m_Mutex)
         , m_bIsDescriptor(nullptr == pMark)
         , m_pTOXType(pType)
         , m_pTOXMark(pMark)
@@ -1555,7 +1555,8 @@ public:
             OSL_FAIL("ReplaceTOXMark() failed!");
             lang::EventObject const ev(
                     static_cast< ::cppu::OWeakObject&>(m_rThis));
-            m_EventListeners.disposeAndClear(ev);
+            std::unique_lock aGuard(m_Mutex);
+            m_EventListeners.disposeAndClear(aGuard, ev);
             throw;
         }
     }
@@ -1573,7 +1574,8 @@ void SwXDocumentIndexMark::Impl::Invalidate()
         if (xThis.is())
         {
             lang::EventObject const ev(xThis);
-            m_EventListeners.disposeAndClear(ev);
+            std::unique_lock aGuard(m_Mutex);
+            m_EventListeners.disposeAndClear(aGuard, ev);
         }
     }
     EndListeningAll();
@@ -1987,6 +1989,7 @@ SwXDocumentIndexMark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -1995,6 +1998,7 @@ SwXDocumentIndexMark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
