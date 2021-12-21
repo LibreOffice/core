@@ -160,27 +160,28 @@ bool RenameModule (
     if ( !rDocument.renameModule( rLibName, rOldName, rNewName ) )
         return false;
 
-    if (Shell* pShell = GetShell())
+    Shell* pShell = GetShell();
+    if (!pShell)
+        return true;
+    VclPtr<ModulWindow> pWin = pShell->FindBasWin(rDocument, rLibName, rNewName, false, true);
+    if (!pWin)
+        return true;
+
+    // set new name in window
+    pWin->SetName( rNewName );
+
+    // set new module in module window
+    pWin->SetSbModule( pWin->GetBasic()->FindModule( rNewName ) );
+
+    // update tabwriter
+    sal_uInt16 nId = pShell->GetWindowId( pWin );
+    SAL_WARN_IF( nId == 0 , "basctl.basicide", "No entry in Tabbar!");
+    if ( nId )
     {
-        if (VclPtr<ModulWindow> pWin = pShell->FindBasWin(rDocument, rLibName, rNewName, false, true))
-        {
-            // set new name in window
-            pWin->SetName( rNewName );
-
-            // set new module in module window
-            pWin->SetSbModule( pWin->GetBasic()->FindModule( rNewName ) );
-
-            // update tabwriter
-            sal_uInt16 nId = pShell->GetWindowId( pWin );
-            SAL_WARN_IF( nId == 0 , "basctl.basicide", "No entry in Tabbar!");
-            if ( nId )
-            {
-                TabBar& rTabBar = pShell->GetTabBar();
-                rTabBar.SetPageText(nId, rNewName);
-                rTabBar.Sort();
-                rTabBar.MakeVisible(rTabBar.GetCurPageId());
-            }
-        }
+        TabBar& rTabBar = pShell->GetTabBar();
+        rTabBar.SetPageText(nId, rNewName);
+        rTabBar.Sort();
+        rTabBar.MakeVisible(rTabBar.GetCurPageId());
     }
     return true;
 }

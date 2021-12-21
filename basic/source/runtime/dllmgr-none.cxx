@@ -50,27 +50,26 @@ ErrCode returnInt64InOutArg(SbxArray *pArgs, SbxVariable &rRetVal,
         pOut->PutCurrency(nValue);
         return ERRCODE_NONE;
     }
-    if (pOut->IsObject())
-    {
-        // FIXME: should we clone this and use pOut->PutObject ?
-        SbxObject* pObj = dynamic_cast<SbxObject*>( pOut->GetObject() );
-        if (!pObj)
-            return ERRCODE_BASIC_BAD_ARGUMENT;
+    if (!pOut->IsObject())
+        return ERRCODE_BASIC_BAD_ARGUMENT;
 
-        // We expect two Longs but other mappings could be possible too.
-        SbxArray* pProps = pObj->GetProperties();
-        if (pProps->Count() != 2)
-            return ERRCODE_BASIC_BAD_ARGUMENT;
-        SbxVariable* pLow = pProps->Get(0);
-        SbxVariable* pHigh = pProps->Get(1);
-        if (!pLow || !pLow->IsLong() ||
-            !pHigh || !pHigh->IsLong())
-            return ERRCODE_BASIC_BAD_ARGUMENT;
-        pLow->PutLong(nValue & 0xffffffff);
-        pHigh->PutLong(nValue >> 32);
-        return ERRCODE_NONE;
-    }
-    return ERRCODE_BASIC_BAD_ARGUMENT;
+    // FIXME: should we clone this and use pOut->PutObject ?
+    SbxObject* pObj = dynamic_cast<SbxObject*>( pOut->GetObject() );
+    if (!pObj)
+        return ERRCODE_BASIC_BAD_ARGUMENT;
+
+    // We expect two Longs but other mappings could be possible too.
+    SbxArray* pProps = pObj->GetProperties();
+    if (pProps->Count() != 2)
+        return ERRCODE_BASIC_BAD_ARGUMENT;
+    SbxVariable* pLow = pProps->Get(0);
+    SbxVariable* pHigh = pProps->Get(1);
+    if (!pLow || !pLow->IsLong() ||
+        !pHigh || !pHigh->IsLong())
+        return ERRCODE_BASIC_BAD_ARGUMENT;
+    pLow->PutLong(nValue & 0xffffffff);
+    pHigh->PutLong(nValue >> 32);
+    return ERRCODE_NONE;
 }
 
 ErrCode builtin_kernel32(std::u16string_view aFuncName, SbxArray *pArgs,

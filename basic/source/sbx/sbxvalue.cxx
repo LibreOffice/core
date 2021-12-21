@@ -687,40 +687,40 @@ bool SbxValue::SetType( SbxDataType t )
         }
         t = SbxEMPTY;
     }
-    if( ( t & 0x0FFF ) != ( aData.eType & 0x0FFF ) )
+    if( ( t & 0x0FFF ) == ( aData.eType & 0x0FFF ) )
+        return true;
+
+    if( !CanWrite() || IsFixed() )
     {
-        if( !CanWrite() || IsFixed() )
+        SetError( ERRCODE_BASIC_CONVERSION );
+        return false;
+    }
+    else
+    {
+        // De-allocate potential objects
+        switch( aData.eType )
         {
-            SetError( ERRCODE_BASIC_CONVERSION );
-            return false;
+            case SbxSTRING:
+                delete aData.pOUString;
+                break;
+            case SbxOBJECT:
+                if( aData.pObj && aData.pObj != this )
+                {
+                    SAL_WARN("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
+                    SbxVariable *pThisVar = dynamic_cast<SbxVariable*>( this );
+                    sal_uInt32 nSlotId = pThisVar
+                                ? pThisVar->GetUserData() & 0xFFFF
+                                : 0;
+                    DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName() == "Parent",
+                                "SID_PARENTOBJECT is not named 'Parent'" );
+                    bool bParentProp = nSlotId == 5345;
+                    if ( !bParentProp )
+                        aData.pObj->ReleaseRef();
+                }
+                break;
+            default: break;
         }
-        else
-        {
-            // De-allocate potential objects
-            switch( aData.eType )
-            {
-                case SbxSTRING:
-                    delete aData.pOUString;
-                    break;
-                case SbxOBJECT:
-                    if( aData.pObj && aData.pObj != this )
-                    {
-                        SAL_WARN("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
-                        SbxVariable *pThisVar = dynamic_cast<SbxVariable*>( this );
-                        sal_uInt32 nSlotId = pThisVar
-                                    ? pThisVar->GetUserData() & 0xFFFF
-                                    : 0;
-                        DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName() == "Parent",
-                                    "SID_PARENTOBJECT is not named 'Parent'" );
-                        bool bParentProp = nSlotId == 5345;
-                        if ( !bParentProp )
-                            aData.pObj->ReleaseRef();
-                    }
-                    break;
-                default: break;
-            }
-            aData.clear(t);
-        }
+        aData.clear(t);
     }
     return true;
 }
