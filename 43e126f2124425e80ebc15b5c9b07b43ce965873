@@ -142,6 +142,24 @@
       "parentUuid": "4a229557_ebb23a70",
       "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c98abee6_f363f791",
+        "filename": "vcl/backendtest/benchmark/outputdevice/Benchmarks.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-12-21T14:35:24Z",
+      "side": 1,
+      "message": "Okay, um... so how should I go on about implementing the Flush method for the  OutputDevice class(just some know-hows so that I could search the code accordingly)? Thanks!",
+      "parentUuid": "bea12c30_867df9ae",
+      "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
