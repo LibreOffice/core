@@ -312,26 +312,26 @@ namespace
         // polygon is closed, one of the points is a member
         const sal_uInt32 nPointCount(rPoly.count());
 
-        if(nPointCount)
+        if(!nPointCount)
+            return false;
+
+        basegfx::B2DPoint aCurrent(rPoly.getB2DPoint(0));
+        const basegfx::B2DVector aVector(rEnd - rStart);
+
+        for(sal_uInt32 a(0); a < nPointCount; a++)
         {
-            basegfx::B2DPoint aCurrent(rPoly.getB2DPoint(0));
-            const basegfx::B2DVector aVector(rEnd - rStart);
+            const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+            const basegfx::B2DPoint aNext(rPoly.getB2DPoint(nNextIndex));
+            const basegfx::B2DVector aEdgeVector(aNext - aCurrent);
 
-            for(sal_uInt32 a(0); a < nPointCount; a++)
+            if(basegfx::utils::findCut(
+                rStart, aVector,
+                aCurrent, aEdgeVector) != CutFlagValue::NONE)
             {
-                const sal_uInt32 nNextIndex((a + 1) % nPointCount);
-                const basegfx::B2DPoint aNext(rPoly.getB2DPoint(nNextIndex));
-                const basegfx::B2DVector aEdgeVector(aNext - aCurrent);
-
-                if(basegfx::utils::findCut(
-                    rStart, aVector,
-                    aCurrent, aEdgeVector) != CutFlagValue::NONE)
-                {
-                    return true;
-                }
-
-                aCurrent = aNext;
+                return true;
             }
+
+            aCurrent = aNext;
         }
 
         return false;

@@ -817,22 +817,22 @@ namespace drawinglayer::primitive2d
         {
             const SvgGradientHelper* pSvgGradientHelper = dynamic_cast< const SvgGradientHelper* >(&rPrimitive);
 
-            if(pSvgGradientHelper && SvgGradientHelper::operator==(*pSvgGradientHelper))
-            {
-                const SvgRadialGradientPrimitive2D& rCompare = static_cast< const SvgRadialGradientPrimitive2D& >(rPrimitive);
+            if(!pSvgGradientHelper || !SvgGradientHelper::operator==(*pSvgGradientHelper))
+                return false;
 
-                if(getRadius() == rCompare.getRadius())
+            const SvgRadialGradientPrimitive2D& rCompare = static_cast< const SvgRadialGradientPrimitive2D& >(rPrimitive);
+
+            if(getRadius() == rCompare.getRadius())
+            {
+                if(isFocalSet() == rCompare.isFocalSet())
                 {
-                    if(isFocalSet() == rCompare.isFocalSet())
+                    if(isFocalSet())
                     {
-                        if(isFocalSet())
-                        {
-                            return getFocal() == rCompare.getFocal();
-                        }
-                        else
-                        {
-                            return true;
-                        }
+                        return getFocal() == rCompare.getFocal();
+                    }
+                    else
+                    {
+                        return true;
                     }
                 }
             }
@@ -1061,24 +1061,24 @@ namespace drawinglayer::primitive2d
 
         bool SvgRadialAtomPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
-            {
-                const SvgRadialAtomPrimitive2D& rCompare = static_cast< const SvgRadialAtomPrimitive2D& >(rPrimitive);
+            if(!DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
+                return false;
 
-                if(getColorA() == rCompare.getColorA()
-                    && getColorB() == rCompare.getColorB()
-                    && getScaleA() == rCompare.getScaleA()
-                    && getScaleB() == rCompare.getScaleB())
+            const SvgRadialAtomPrimitive2D& rCompare = static_cast< const SvgRadialAtomPrimitive2D& >(rPrimitive);
+
+            if(getColorA() == rCompare.getColorA()
+                && getColorB() == rCompare.getColorB()
+                && getScaleA() == rCompare.getScaleA()
+                && getScaleB() == rCompare.getScaleB())
+            {
+                if(isTranslateSet() && rCompare.isTranslateSet())
                 {
-                    if(isTranslateSet() && rCompare.isTranslateSet())
-                    {
-                        return (getTranslateA() == rCompare.getTranslateA()
-                            && getTranslateB() == rCompare.getTranslateB());
-                    }
-                    else if(!isTranslateSet() && !rCompare.isTranslateSet())
-                    {
-                        return true;
-                    }
+                    return (getTranslateA() == rCompare.getTranslateA()
+                        && getTranslateB() == rCompare.getTranslateB());
+                }
+                else if(!isTranslateSet() && !rCompare.isTranslateSet())
+                {
+                    return true;
                 }
             }
 

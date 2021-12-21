@@ -525,43 +525,41 @@ namespace drawinglayer::primitive2d
 
         bool ScenePrimitive2D::tryToCheckLastVisualisationDirectHit(const basegfx::B2DPoint& rLogicHitPoint, bool& o_rResult) const
         {
-            if(!maOldRenderedBitmap.IsEmpty() && !maOldUnitVisiblePart.isEmpty())
+            if(maOldRenderedBitmap.IsEmpty() || maOldUnitVisiblePart.isEmpty())
+                return false;
+
+            basegfx::B2DHomMatrix aInverseSceneTransform(getObjectTransformation());
+            aInverseSceneTransform.invert();
+            const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * rLogicHitPoint);
+
+            if(!maOldUnitVisiblePart.isInside(aRelativePoint))
+                return false;
+
+            // calculate coordinates relative to visualized part
+            double fDivisorX(maOldUnitVisiblePart.getWidth());
+            double fDivisorY(maOldUnitVisiblePart.getHeight());
+
+            if(basegfx::fTools::equalZero(fDivisorX))
             {
-                basegfx::B2DHomMatrix aInverseSceneTransform(getObjectTransformation());
-                aInverseSceneTransform.invert();
-                const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * rLogicHitPoint);
-
-                if(maOldUnitVisiblePart.isInside(aRelativePoint))
-                {
-                    // calculate coordinates relative to visualized part
-                    double fDivisorX(maOldUnitVisiblePart.getWidth());
-                    double fDivisorY(maOldUnitVisiblePart.getHeight());
-
-                    if(basegfx::fTools::equalZero(fDivisorX))
-                    {
-                        fDivisorX = 1.0;
-                    }
-
-                    if(basegfx::fTools::equalZero(fDivisorY))
-                    {
-                        fDivisorY = 1.0;
-                    }
-
-                    const double fRelativeX((aRelativePoint.getX() - maOldUnitVisiblePart.getMinX()) / fDivisorX);
-                    const double fRelativeY((aRelativePoint.getY() - maOldUnitVisiblePart.getMinY()) / fDivisorY);
-
-                    // combine with real BitmapSizePixel to get bitmap coordinates
-                    const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
-                    const sal_Int32 nX(basegfx::fround(fRelativeX * aBitmapSizePixel.Width()));
-                    const sal_Int32 nY(basegfx::fround(fRelativeY * aBitmapSizePixel.Height()));
-
-                    // try to get a statement about transparency in that pixel
-                    o_rResult = (0 != maOldRenderedBitmap.GetAlpha(nX, nY));
-                    return true;
-                }
+                fDivisorX = 1.0;
             }
 
-            return false;
+            if(basegfx::fTools::equalZero(fDivisorY))
+            {
+                fDivisorY = 1.0;
+            }
+
+            const double fRelativeX((aRelativePoint.getX() - maOldUnitVisiblePart.getMinX()) / fDivisorX);
+            const double fRelativeY((aRelativePoint.getY() - maOldUnitVisiblePart.getMinY()) / fDivisorY);
+
+            // combine with real BitmapSizePixel to get bitmap coordinates
+            const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
+            const sal_Int32 nX(basegfx::fround(fRelativeX * aBitmapSizePixel.Width()));
+            const sal_Int32 nY(basegfx::fround(fRelativeY * aBitmapSizePixel.Height()));
+
+            // try to get a statement about transparency in that pixel
+            o_rResult = (0 != maOldRenderedBitmap.GetAlpha(nX, nY));
+            return true;
         }
 
         ScenePrimitive2D::ScenePrimitive2D(

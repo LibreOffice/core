@@ -276,22 +276,22 @@ namespace drawinglayer::primitive2d
 
         bool BorderLinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const BorderLinePrimitive2D& rCompare = static_cast<const BorderLinePrimitive2D&>(rPrimitive);
+            if(!BufferedDecompositionPrimitive2D::operator==(rPrimitive))
+                return false;
 
-                if (getStart() == rCompare.getStart()
-                    && getEnd() == rCompare.getEnd()
-                    && getStrokeAttribute() == rCompare.getStrokeAttribute())
+            const BorderLinePrimitive2D& rCompare = static_cast<const BorderLinePrimitive2D&>(rPrimitive);
+
+            if (getStart() == rCompare.getStart()
+                && getEnd() == rCompare.getEnd()
+                && getStrokeAttribute() == rCompare.getStrokeAttribute())
+            {
+                if (getBorderLines().size() == rCompare.getBorderLines().size())
                 {
-                    if (getBorderLines().size() == rCompare.getBorderLines().size())
+                    for (size_t a(0); a < getBorderLines().size(); a++)
                     {
-                        for (size_t a(0); a < getBorderLines().size(); a++)
+                        if (!(getBorderLines()[a] == rCompare.getBorderLines()[a]))
                         {
-                            if (!(getBorderLines()[a] == rCompare.getBorderLines()[a]))
-                            {
-                                return false;
-                            }
+                            return false;
                         }
                     }
                 }

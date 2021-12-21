@@ -271,38 +271,37 @@ namespace drawinglayer::primitive2d
         bool ControlPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             // use base class compare operator
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
+            if(!BufferedDecompositionPrimitive2D::operator==(rPrimitive))
+                return false;
+
+            const ControlPrimitive2D& rCompare = static_cast<const ControlPrimitive2D&>(rPrimitive);
+
+            if(getTransform() != rCompare.getTransform())
+                return false;
+
+            // check if ControlModel references both are/are not
+            if (getControlModel().is() != rCompare.getControlModel().is())
+                return false;
+
+            if(getControlModel().is())
             {
-                const ControlPrimitive2D& rCompare = static_cast<const ControlPrimitive2D&>(rPrimitive);
-
-                if(getTransform() == rCompare.getTransform())
-                {
-                    // check if ControlModel references both are/are not
-                    bool bRetval(getControlModel().is() == rCompare.getControlModel().is());
-
-                    if(bRetval && getControlModel().is())
-                    {
-                        // both exist, check for equality
-                        bRetval = (getControlModel() == rCompare.getControlModel());
-                    }
-
-                    if(bRetval)
-                    {
-                        // check if XControl references both are/are not
-                        bRetval = (getXControl().is() == rCompare.getXControl().is());
-                    }
-
-                    if(bRetval && getXControl().is())
-                    {
-                        // both exist, check for equality
-                        bRetval = (getXControl() == rCompare.getXControl());
-                    }
-
-                    return bRetval;
-                }
+                // both exist, check for equality
+                if (getControlModel() != rCompare.getControlModel())
+                    return false;
             }
 
-            return false;
+                // check if XControl references both are/are not
+            if (getXControl().is() != rCompare.getXControl().is())
+                return false;
+
+            if(getXControl().is())
+            {
+                // both exist, check for equality
+                if (getXControl() != rCompare.getXControl())
+                    return false;
+            }
+
+            return true;
         }
 
         basegfx::B2DRange ControlPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const

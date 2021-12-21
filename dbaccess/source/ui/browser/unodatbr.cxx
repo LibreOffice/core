@@ -286,49 +286,49 @@ bool SbaTableQueryBrowser::Construct(vcl::Window* pParent)
     {
         SAL_WARN("dbaccess.ui", "SbaTableQueryBrowser::Construct: could not create (or start listening at) the database context!");
     }
+
     // some help ids
-    if (getBrowserView() && getBrowserView()->getVclControl())
-    {
+    if (!getBrowserView() || !getBrowserView()->getVclControl())
+        return true;
 
-        // create controls and set sizes
-        const tools::Long  nFrameWidth = getBrowserView()->LogicToPixel(::Size(3, 0), MapMode(MapUnit::MapAppFont)).Width();
+    // create controls and set sizes
+    const tools::Long  nFrameWidth = getBrowserView()->LogicToPixel(::Size(3, 0), MapMode(MapUnit::MapAppFont)).Width();
 
-        m_pSplitter = VclPtr<Splitter>::Create(getBrowserView(),WB_HSCROLL);
-        m_pSplitter->SetPosSizePixel( ::Point(0,0), ::Size(nFrameWidth,0) );
-        m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
+    m_pSplitter = VclPtr<Splitter>::Create(getBrowserView(),WB_HSCROLL);
+    m_pSplitter->SetPosSizePixel( ::Point(0,0), ::Size(nFrameWidth,0) );
+    m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
 
-        m_pTreeView = VclPtr<InterimDBTreeListBox>::Create(getBrowserView());
+    m_pTreeView = VclPtr<InterimDBTreeListBox>::Create(getBrowserView());
 
-        weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-        rTreeView.connect_expanding(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
+    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
+    rTreeView.connect_expanding(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
 
-        m_pTreeView->setCopyHandler(LINK(this, SbaTableQueryBrowser, OnCopyEntry));
+    m_pTreeView->setCopyHandler(LINK(this, SbaTableQueryBrowser, OnCopyEntry));
 
-        m_pTreeView->setContextMenuProvider( this );
-        m_pTreeView->setControlActionListener( this );
-        m_pTreeView->SetHelpId(HID_CTL_TREEVIEW);
+    m_pTreeView->setContextMenuProvider( this );
+    m_pTreeView->setControlActionListener( this );
+    m_pTreeView->SetHelpId(HID_CTL_TREEVIEW);
 
-        // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
-        m_pSplitter->SetSplitPosPixel(getBrowserView()->LogicToPixel(::Size(80, 0), MapMode(MapUnit::MapAppFont)).Width());
+    // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
+    m_pSplitter->SetSplitPosPixel(getBrowserView()->LogicToPixel(::Size(80, 0), MapMode(MapUnit::MapAppFont)).Width());
 
-        getBrowserView()->setSplitter(m_pSplitter);
-        getBrowserView()->setTreeView(m_pTreeView);
+    getBrowserView()->setSplitter(m_pSplitter);
+    getBrowserView()->setTreeView(m_pTreeView);
 
-        // fill view with data
-        rTreeView.set_sort_order(true);
-        rTreeView.set_sort_func([this](const weld::TreeIter& rLeft, const weld::TreeIter& rRight){
-            return OnTreeEntryCompare(rLeft, rRight);
-        });
-        rTreeView.make_sorted();
-        m_pTreeView->SetSelChangeHdl(LINK(this, SbaTableQueryBrowser, OnSelectionChange));
-        m_pTreeView->show_container();
+    // fill view with data
+    rTreeView.set_sort_order(true);
+    rTreeView.set_sort_func([this](const weld::TreeIter& rLeft, const weld::TreeIter& rRight){
+        return OnTreeEntryCompare(rLeft, rRight);
+    });
+    rTreeView.make_sorted();
+    m_pTreeView->SetSelChangeHdl(LINK(this, SbaTableQueryBrowser, OnSelectionChange));
+    m_pTreeView->show_container();
 
-        // TODO
-        getBrowserView()->getVclControl()->SetHelpId(HID_CTL_TABBROWSER);
-        if (getBrowserView()->getVclControl()->GetHeaderBar())
-            getBrowserView()->getVclControl()->GetHeaderBar()->SetHelpId(HID_DATABROWSE_HEADER);
-        InvalidateFeature(ID_BROWSER_EXPLORER);
-    }
+    // TODO
+    getBrowserView()->getVclControl()->SetHelpId(HID_CTL_TABBROWSER);
+    if (getBrowserView()->getVclControl()->GetHeaderBar())
+        getBrowserView()->getVclControl()->GetHeaderBar()->SetHelpId(HID_DATABROWSE_HEADER);
+    InvalidateFeature(ID_BROWSER_EXPLORER);
 
     return true;
 }
@@ -2427,44 +2427,44 @@ bool SbaTableQueryBrowser::implSelect(const OUString& _rDataSourceName, const OU
                                       const SharedConnection& _rxConnection,
                                       bool _bSelectDirect)
 {
-    if (_rDataSourceName.getLength() && _rCommand.getLength() && (-1 != nCommandType))
+    if (!_rDataSourceName.getLength() || !_rCommand.getLength() || (-1 == nCommandType))
+        return false;
+
+    std::unique_ptr<weld::TreeIter> xDataSource;
+    std::unique_ptr<weld::TreeIter> xCommandType;
+    std::unique_ptr<weld::TreeIter> xCommand = getObjectEntry( _rDataSourceName, _rCommand, nCommandType, &xDataSource, &xCommandType, true, _rxConnection );
+
+    if (xCommand)
     {
-        std::unique_ptr<weld::TreeIter> xDataSource;
-        std::unique_ptr<weld::TreeIter> xCommandType;
-        std::unique_ptr<weld::TreeIter> xCommand = getObjectEntry( _rDataSourceName, _rCommand, nCommandType, &xDataSource, &xCommandType, true, _rxConnection );
+        weld::TreeView& rTreeView = m_pTreeView->GetWidget();
 
-        if (xCommand)
+        bool bSuccess = true;
+        if ( _bSelectDirect )
         {
-            weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-
-            bool bSuccess = true;
-            if ( _bSelectDirect )
-            {
-                bSuccess = implSelect(xCommand.get());
-            }
-            else
-            {
-                rTreeView.select(*xCommand);
-            }
-
-            if ( bSuccess )
-            {
-                rTreeView.scroll_to_row(*xCommand);
-                rTreeView.set_cursor(*xCommand);
-            }
+            bSuccess = implSelect(xCommand.get());
         }
-        else if (!xCommandType)
+        else
         {
-            if (m_xCurrentlyDisplayed)
-            {
-                // tell the old entry (if any) it has been deselected
-                selectPath(m_xCurrentlyDisplayed.get(), false);
-                m_xCurrentlyDisplayed.reset();
-            }
-
-            // we have a command and need to display this in the rowset
-            return implLoadAnything(_rDataSourceName, _rCommand, nCommandType, _bEscapeProcessing, _rxConnection);
+            rTreeView.select(*xCommand);
         }
+
+        if ( bSuccess )
+        {
+            rTreeView.scroll_to_row(*xCommand);
+            rTreeView.set_cursor(*xCommand);
+        }
+    }
+    else if (!xCommandType)
+    {
+        if (m_xCurrentlyDisplayed)
+        {
+            // tell the old entry (if any) it has been deselected
+            selectPath(m_xCurrentlyDisplayed.get(), false);
+            m_xCurrentlyDisplayed.reset();
+        }
+
+        // we have a command and need to display this in the rowset
+        return implLoadAnything(_rDataSourceName, _rCommand, nCommandType, _bEscapeProcessing, _rxConnection);
     }
     return false;
 }
