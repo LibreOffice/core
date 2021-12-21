@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14f214da_029b754b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-12-21T17:06:03Z",
+      "side": 1,
+      "message": "By the way, about this:\nsw/source/core/access/accframebase.hxx\n60:    virtual bool SetSelectedState( bool bSeleted ) override;\n\nit\u0027s present only here...",
+      "revId": "0f472e35033b356cc2dd885762ec4c4cc7b02b8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
