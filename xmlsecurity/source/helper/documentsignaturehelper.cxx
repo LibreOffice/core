@@ -28,6 +28,7 @@
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <comphelper/documentconstants.hxx>
@@ -354,6 +355,31 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
                     aSIGStreamName = DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName();
                 else
                     aSIGStreamName = DocumentSignatureHelper::GetPackageSignatureDefaultStreamName();
+
+#ifdef SAL_LOG_INFO
+                aHelper.xSignatureStream = aHelper.xSignatureStorage->openStreamElement( aSIGStreamName, nOpenMode );
+                SAL_INFO("xmlsecurity",
+                         "DocumentSignatureHelper::OpenSignatureStream: stream name is '"
+                             << aSIGStreamName << "'");
+                if (aHelper.xSignatureStream.is())
+                {
+                    uno::Reference<io::XInputStream> xInputStream(aHelper.xSignatureStream, uno::UNO_QUERY);
+                    sal_Int64 nSize = 0;
+                    uno::Reference<beans::XPropertySet> xPropertySet(xInputStream, uno::UNO_QUERY);
+                    xPropertySet->getPropertyValue("Size") >>= nSize;
+                    if (nSize >= 0 || nSize < SAL_MAX_INT32)
+                    {
+                        uno::Sequence<sal_Int8> aData;
+                        xInputStream->readBytes(aData, nSize);
+                        SAL_INFO("xmlsecurity",
+                                 "DocumentSignatureHelper::OpenSignatureStream: stream content is '"
+                                     << OString(reinterpret_cast<const char*>(aData.getArray()),
+                                                aData.getLength())
+                                     << "'");
+                    }
+                }
+                aHelper.xSignatureStream.clear();
+#endif
 
                 aHelper.xSignatureStream = aHelper.xSignatureStorage->openStreamElement( aSIGStreamName, nOpenMode );
             }
