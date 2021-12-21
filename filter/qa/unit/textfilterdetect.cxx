@@ -111,6 +111,26 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
     // Without the accompanying fix in place, this test would have failed, as it was opened in
     // Writer instead.
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument"));
+    getComponent()->dispose();
+
+    // ... and DOC
+    aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "empty.doc";
+    // Without the accompanying fix in place, this test would have failed, the import filter aborted
+    // loading.
+    getComponent() = loadFromDesktop(aURL);
+    xServiceInfo.set(getComponent(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo.is());
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextDocument"));
+    uno::Reference<frame::XModel> xModel(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aArgs = xModel->getArgs();
+    comphelper::SequenceAsHashMap aMap(aArgs);
+    OUString aFilterName;
+    aMap["FilterName"] >>= aFilterName;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: MS Word 97
+    // - Actual  : MS WinWord 6.0
+    // i.e. opening worked, but saving back failed instead of producing a WW8 binary file.
+    CPPUNIT_ASSERT_EQUAL(OUString("MS Word 97"), aFilterName);
 }
 }
 

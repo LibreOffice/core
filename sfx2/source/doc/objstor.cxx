@@ -753,7 +753,15 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             }
             else
             {
-                bOk = ConvertFrom(*pMedium);
+                if (tools::isEmptyFileUrl(pMedium->GetName()))
+                {
+                    // The import filter would fail with empty input.
+                    bOk = true;
+                }
+                else
+                {
+                    bOk = ConvertFrom(*pMedium);
+                }
                 InitOwnModel_Impl();
             }
         }
