@@ -1359,7 +1359,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                     if(xAccContext.is() && xAccContext->getAccessibleRole() == AccessibleRole::PARAGRAPH)
                                     {
                                         SwAccessibleParagraph* pAccPara = static_cast< SwAccessibleParagraph *>(xAccContext.get());
-                                        if(pAccFrame->IsSeletedInDoc())
+                                        if(pAccFrame->IsSelectedInDoc())
                                         {
                                             m_setParaAdd.insert(pAccPara);
                                         }
@@ -1424,9 +1424,9 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             }
                             if(!isChanged)
                             {
-                                SwAccessibleContextMap_Impl::iterator aEraseIter = mpSeletedFrameMap->find( pFrame );
-                                if(aEraseIter != mpSeletedFrameMap->end())
-                                    mpSeletedFrameMap->erase(aEraseIter);
+                                SwAccessibleContextMap_Impl::iterator aEraseIter = mpSelectedFrameMap->find( pFrame );
+                                if(aEraseIter != mpSelectedFrameMap->end())
+                                    mpSelectedFrameMap->erase(aEraseIter);
                             }
                             else
                             {
@@ -1441,12 +1441,12 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
             }
         }
     }
-    if( !mpSeletedFrameMap )
-        mpSeletedFrameMap.reset( new SwAccessibleContextMap_Impl );
-    if( !mpSeletedFrameMap->empty() )
+    if( !mpSelectedFrameMap )
+        mpSelectedFrameMap.reset( new SwAccessibleContextMap_Impl );
+    if( !mpSelectedFrameMap->empty() )
     {
-        SwAccessibleContextMap_Impl::iterator aIter = mpSeletedFrameMap->begin();
-        while( aIter != mpSeletedFrameMap->end() )
+        SwAccessibleContextMap_Impl::iterator aIter = mpSelectedFrameMap->begin();
+        while( aIter != mpSelectedFrameMap->end() )
         {
             uno::Reference < XAccessible > xAcc = (*aIter).second;
             if(xAcc.is())
@@ -1455,13 +1455,13 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
             vecRemove.push_back(static_cast< SwAccessibleContext * >(xAcc.get()));
         }
         bMarkChanged = true;
-        mpSeletedFrameMap->clear();
+        mpSelectedFrameMap->clear();
     }
 
     SwAccessibleContextMap_Impl::iterator aIter = mapTemp.begin();
     while( aIter != mapTemp.end() )
     {
-        mpSeletedFrameMap->emplace( (*aIter).first, (*aIter).second );
+        mpSelectedFrameMap->emplace( (*aIter).first, (*aIter).second );
         ++aIter;
     }
     mapTemp.clear();
