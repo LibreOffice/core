@@ -53,7 +53,6 @@ void SAL_CALL MediaEventListenersImpl::disposing( const css::lang::EventObject& 
 void SAL_CALL MediaEventListenersImpl::keyPressed( const css::awt::KeyEvent& e )
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -71,7 +70,6 @@ void SAL_CALL MediaEventListenersImpl::keyPressed( const css::awt::KeyEvent& e )
 void SAL_CALL MediaEventListenersImpl::keyReleased( const css::awt::KeyEvent& e )
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -88,7 +86,6 @@ void SAL_CALL MediaEventListenersImpl::keyReleased( const css::awt::KeyEvent& e 
 void SAL_CALL MediaEventListenersImpl::mousePressed( const css::awt::MouseEvent& e )
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -136,7 +133,6 @@ void SAL_CALL MediaEventListenersImpl::mouseExited( const css::awt::MouseEvent& 
 void SAL_CALL MediaEventListenersImpl::mouseDragged( const css::awt::MouseEvent& e )
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -149,7 +145,6 @@ void SAL_CALL MediaEventListenersImpl::mouseDragged( const css::awt::MouseEvent&
 void SAL_CALL MediaEventListenersImpl::mouseMoved( const css::awt::MouseEvent& e )
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
