@@ -739,32 +739,30 @@ static PyObject* lcl_getitem_slice( PyUNO const *me, PyObject *pKey )
             nLen = xIndexAccess->getCount();
     }
 
-    if ( xIndexAccess.is() )
+    if ( !xIndexAccess )
+        return nullptr;
+
+    sal_Int32 nStart = 0, nStop = 0, nStep = 0, nSliceLength = 0;
+    int nSuccess = lcl_PySlice_GetIndicesEx(pKey, nLen, &nStart, &nStop, &nStep, &nSliceLength);
+    if ( nSuccess == -1 && PyErr_Occurred() )
+        return nullptr;
+
+    PyRef rTuple( PyTuple_New( nSliceLength ), SAL_NO_ACQUIRE, NOT_NULL );
+    sal_Int32 nCur, i;
+    for ( nCur = nStart, i = 0; i < nSliceLength; nCur += nStep, i++ )
     {
-        sal_Int32 nStart = 0, nStop = 0, nStep = 0, nSliceLength = 0;
-        int nSuccess = lcl_PySlice_GetIndicesEx(pKey, nLen, &nStart, &nStop, &nStep, &nSliceLength);
-        if ( nSuccess == -1 && PyErr_Occurred() )
-            return nullptr;
+        Any aRet;
 
-        PyRef rTuple( PyTuple_New( nSliceLength ), SAL_NO_ACQUIRE, NOT_NULL );
-        sal_Int32 nCur, i;
-        for ( nCur = nStart, i = 0; i < nSliceLength; nCur += nStep, i++ )
         {
-            Any aRet;
+            PyThreadDetach antiguard;
 
-            {
-                PyThreadDetach antiguard;
-
-                aRet = xIndexAccess->getByIndex( nCur );
-            }
-            PyRef rRet = runtime.any2PyObject( aRet );
-            PyTuple_SetItem( rTuple.get(), i, rRet.getAcquired() );
+            aRet = xIndexAccess->getByIndex( nCur );
         }
-
-        return rTuple.getAcquired();
+        PyRef rRet = runtime.any2PyObject( aRet );
+        PyTuple_SetItem( rTuple.get(), i, rRet.getAcquired() );
     }
 
-    return nullptr;
+    return rTuple.getAcquired();
 }
 
 static PyObject* lcl_getitem_string( PyUNO const *me, PyObject *pKey, Runtime const & runtime )

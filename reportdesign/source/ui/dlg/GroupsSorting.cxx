@@ -407,78 +407,78 @@ bool OFieldExpressionControl::IsTabAllowed(bool /*bForward*/) const
 bool OFieldExpressionControl::SaveModified()
 {
     sal_Int32 nRow = GetCurRow();
-    if ( nRow != BROWSER_ENDOFSELECTION )
+    if ( nRow == BROWSER_ENDOFSELECTION )
+        return true;
+
+    try
     {
-        try
+        bool bAppend = false;
+        uno::Reference< report::XGroup> xGroup;
+        if ( m_aGroupPositions[nRow] == NO_GROUP )
         {
-            bool bAppend = false;
-            uno::Reference< report::XGroup> xGroup;
-            if ( m_aGroupPositions[nRow] == NO_GROUP )
-            {
-                bAppend = true;
-                OUString sUndoAction(RptResId(RID_STR_UNDO_APPEND_GROUP));
-                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, OUString(), 0, ViewShellId(-1) );
-                xGroup = m_pParent->getGroups()->createGroup();
-                xGroup->setHeaderOn(true);
+            bAppend = true;
+            OUString sUndoAction(RptResId(RID_STR_UNDO_APPEND_GROUP));
+            m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, OUString(), 0, ViewShellId(-1) );
+            xGroup = m_pParent->getGroups()->createGroup();
+            xGroup->setHeaderOn(true);
 
-                // find position where to insert the new group
-                sal_Int32 nGroupPos = 0;
-                ::std::vector<sal_Int32>::iterator aIter = m_aGroupPositions.begin();
-                ::std::vector<sal_Int32>::const_iterator aEnd  = m_aGroupPositions.begin() + nRow;
-                for(;aIter != aEnd;++aIter)
-                    if ( *aIter != NO_GROUP )
-                        nGroupPos = *aIter + 1;
-                uno::Sequence< beans::PropertyValue > aArgs{
-                    comphelper::makePropertyValue(PROPERTY_GROUP, xGroup),
-                    comphelper::makePropertyValue(PROPERTY_POSITIONY, nGroupPos)
-                };
-                m_bIgnoreEvent = true;
-                m_pParent->m_pController->executeChecked(SID_GROUP_APPEND,aArgs);
-                m_bIgnoreEvent = false;
-                OSL_ENSURE(*aIter == NO_GROUP ,"Illegal iterator!");
-                *aIter++ = nGroupPos;
+            // find position where to insert the new group
+            sal_Int32 nGroupPos = 0;
+            ::std::vector<sal_Int32>::iterator aIter = m_aGroupPositions.begin();
+            ::std::vector<sal_Int32>::const_iterator aEnd  = m_aGroupPositions.begin() + nRow;
+            for(;aIter != aEnd;++aIter)
+                if ( *aIter != NO_GROUP )
+                    nGroupPos = *aIter + 1;
+            uno::Sequence< beans::PropertyValue > aArgs{
+                comphelper::makePropertyValue(PROPERTY_GROUP, xGroup),
+                comphelper::makePropertyValue(PROPERTY_POSITIONY, nGroupPos)
+            };
+            m_bIgnoreEvent = true;
+            m_pParent->m_pController->executeChecked(SID_GROUP_APPEND,aArgs);
+            m_bIgnoreEvent = false;
+            OSL_ENSURE(*aIter == NO_GROUP ,"Illegal iterator!");
+            *aIter++ = nGroupPos;
 
-                aEnd  = m_aGroupPositions.end();
-                for(;aIter != aEnd;++aIter)
-                    if ( *aIter != NO_GROUP )
-                        ++*aIter;
-            }
+            aEnd  = m_aGroupPositions.end();
+            for(;aIter != aEnd;++aIter)
+                if ( *aIter != NO_GROUP )
+                    ++*aIter;
+        }
+        else
+            xGroup = m_pParent->getGroup(m_aGroupPositions[nRow]);
+        if ( xGroup.is() )
+        {
+            weld::ComboBox& rComboBox = m_pComboCell->get_widget();
+            sal_Int32 nPos = rComboBox.get_active();
+            OUString sExpression;
+            if (nPos == -1)
+                sExpression = rComboBox.get_active_text();
             else
-                xGroup = m_pParent->getGroup(m_aGroupPositions[nRow]);
-            if ( xGroup.is() )
             {
-                weld::ComboBox& rComboBox = m_pComboCell->get_widget();
-                sal_Int32 nPos = rComboBox.get_active();
-                OUString sExpression;
-                if (nPos == -1)
-                    sExpression = rComboBox.get_active_text();
-                else
-                {
-                    sExpression = m_aColumnInfo[nPos].sColumnName;
-                }
-                xGroup->setExpression( sExpression );
-
-                ::rptui::adjustSectionName(xGroup,nPos);
-
-                if ( bAppend )
-                    m_pParent->m_pController->getUndoManager().LeaveListAction();
+                sExpression = m_aColumnInfo[nPos].sColumnName;
             }
+            xGroup->setExpression( sExpression );
 
-            if (Controller().is())
-                Controller()->SaveValue();
-            if ( GetRowCount() == m_pParent->getGroups()->getCount() )
-            {
-                RowInserted( GetRowCount()-1);
-                m_aGroupPositions.push_back(NO_GROUP);
-            }
+            ::rptui::adjustSectionName(xGroup,nPos);
 
-            GoToRow(nRow);
-            m_pParent->DisplayData(nRow);
+            if ( bAppend )
+                m_pParent->m_pController->getUndoManager().LeaveListAction();
         }
-        catch(uno::Exception&)
+
+        if (Controller().is())
+            Controller()->SaveValue();
+        if ( GetRowCount() == m_pParent->getGroups()->getCount() )
         {
-            TOOLS_WARN_EXCEPTION( "reportdesign", "OFieldExpressionControl::SaveModified");
+            RowInserted( GetRowCount()-1);
+            m_aGroupPositions.push_back(NO_GROUP);
         }
+
+        GoToRow(nRow);
+        m_pParent->DisplayData(nRow);
+    }
+    catch(uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "reportdesign", "OFieldExpressionControl::SaveModified");
     }
 
     return true;

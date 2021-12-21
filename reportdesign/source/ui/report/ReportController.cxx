@@ -3023,38 +3023,38 @@ void OReportController::insertGraphic()
 sal_Bool SAL_CALL OReportController::select( const Any& aSelection )
 {
     ::osl::MutexGuard aGuard( getMutex() );
-    if ( getDesignView() )
-    {
-        getDesignView()->unmarkAllObjects();
-        getDesignView()->SetMode(DlgEdMode::Select);
+    if ( !getDesignView() )
+        return true;
 
-        uno::Sequence< uno::Reference<report::XReportComponent> > aElements;
-        if ( aSelection >>= aElements )
+    getDesignView()->unmarkAllObjects();
+    getDesignView()->SetMode(DlgEdMode::Select);
+
+    uno::Sequence< uno::Reference<report::XReportComponent> > aElements;
+    if ( aSelection >>= aElements )
+    {
+        if ( aElements.hasElements() )
+            getDesignView()->showProperties(uno::Reference<uno::XInterface>(aElements[0],uno::UNO_QUERY));
+        getDesignView()->setMarked(aElements, true);
+    }
+    else
+    {
+        uno::Reference<uno::XInterface> xObject(aSelection,uno::UNO_QUERY);
+        uno::Reference<report::XReportComponent> xProp(xObject,uno::UNO_QUERY);
+        if ( xProp.is() )
         {
-            if ( aElements.hasElements() )
-                getDesignView()->showProperties(uno::Reference<uno::XInterface>(aElements[0],uno::UNO_QUERY));
+            getDesignView()->showProperties(xObject);
+            aElements = { xProp };
             getDesignView()->setMarked(aElements, true);
         }
         else
         {
-            uno::Reference<uno::XInterface> xObject(aSelection,uno::UNO_QUERY);
-            uno::Reference<report::XReportComponent> xProp(xObject,uno::UNO_QUERY);
-            if ( xProp.is() )
-            {
+            uno::Reference<report::XSection> xSection(aSelection,uno::UNO_QUERY);
+            if ( !xSection.is() && xObject.is() )
                 getDesignView()->showProperties(xObject);
-                aElements = { xProp };
-                getDesignView()->setMarked(aElements, true);
-            }
-            else
-            {
-                uno::Reference<report::XSection> xSection(aSelection,uno::UNO_QUERY);
-                if ( !xSection.is() && xObject.is() )
-                    getDesignView()->showProperties(xObject);
-                getDesignView()->setMarked(xSection,xSection.is());
-            }
+            getDesignView()->setMarked(xSection,xSection.is());
         }
-        InvalidateAll();
     }
+    InvalidateAll();
     return true;
 }
 

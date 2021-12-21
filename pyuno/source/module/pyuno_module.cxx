@@ -708,31 +708,30 @@ static PyObject * fileUrlToSystemPath(
 
 static PyObject * absolutize( SAL_UNUSED_PARAMETER PyObject *, PyObject * args )
 {
-    if( PyTuple_Check( args ) && PyTuple_Size( args ) == 2 )
-    {
-        OUString ouPath = pyString2ustring( PyTuple_GetItem( args , 0 ) );
-        OUString ouRel = pyString2ustring( PyTuple_GetItem( args, 1 ) );
-        OUString ret;
-        oslFileError e = osl_getAbsoluteFileURL( ouPath.pData, ouRel.pData, &(ret.pData) );
-        if( e != osl_File_E_None )
-        {
-            OUString buf =
-                    "Couldn't absolutize " +
-                    ouRel +
-                    " using root " +
-                    ouPath +
-                    " for reason (" +
-                    OUString::number(static_cast<sal_Int32>(e) ) +
-                    ")";
+    if( !PyTuple_Check( args ) || PyTuple_Size( args ) != 2 )
+        return nullptr;
 
-            PyErr_SetString(
-                PyExc_OSError,
-                OUStringToOString(buf,osl_getThreadTextEncoding()).getStr());
-            return nullptr;
-        }
-        return ustring2PyUnicode( ret ).getAcquired();
+    OUString ouPath = pyString2ustring( PyTuple_GetItem( args , 0 ) );
+    OUString ouRel = pyString2ustring( PyTuple_GetItem( args, 1 ) );
+    OUString ret;
+    oslFileError e = osl_getAbsoluteFileURL( ouPath.pData, ouRel.pData, &(ret.pData) );
+    if( e != osl_File_E_None )
+    {
+        OUString buf =
+                "Couldn't absolutize " +
+                ouRel +
+                " using root " +
+                ouPath +
+                " for reason (" +
+                OUString::number(static_cast<sal_Int32>(e) ) +
+                ")";
+
+        PyErr_SetString(
+            PyExc_OSError,
+            OUStringToOString(buf,osl_getThreadTextEncoding()).getStr());
+        return nullptr;
     }
-    return nullptr;
+    return ustring2PyUnicode( ret ).getAcquired();
 }
 
 static PyObject * invoke(SAL_UNUSED_PARAMETER PyObject *, PyObject *args)

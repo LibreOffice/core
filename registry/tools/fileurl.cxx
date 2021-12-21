@@ -46,28 +46,27 @@ OUString convertToFileUrl(char const* filename, sal_Int32 length)
     }
 
     OUString uFileUrl;
-    if (length > 0)
+    if (length <= 0)
+        return uFileUrl;
+    if (filename[0] != SEPARATOR)
     {
-        if (filename[0] != SEPARATOR)
+        // relative path name.
+        OUString uWorkingDir;
+        if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None)
         {
-            // relative path name.
-            OUString uWorkingDir;
-            if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None)
-            {
-                assert(false);
-            }
-            if (FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uFileUrl) != FileBase::E_None)
-            {
-                assert(false);
-            }
+            assert(false);
         }
-        else
+        if (FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uFileUrl) != FileBase::E_None)
         {
-            // absolute path name.
-            if (FileBase::getFileURLFromSystemPath(uFileName, uFileUrl) != FileBase::E_None)
-            {
-                assert(false);
-            }
+            assert(false);
+        }
+    }
+    else
+    {
+        // absolute path name.
+        if (FileBase::getFileURLFromSystemPath(uFileName, uFileUrl) != FileBase::E_None)
+        {
+            assert(false);
         }
     }
     return uFileUrl;

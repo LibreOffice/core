@@ -134,34 +134,32 @@ bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
 
     sal_Int32 nBeginInd = aPattern[0].getLength();
     sal_Int32 nEndInd = aString.getLength() - aPattern[nInd].getLength();
-    if ( nEndInd >= nBeginInd
-      && ( nEndInd == aString.getLength() || aString.subView( nEndInd ) == aPattern[nInd] )
-      && ( nBeginInd == 0 || aString.subView( 0, nBeginInd ) == aPattern[0] ) )
+    if ( nEndInd < nBeginInd
+      || ( nEndInd != aString.getLength() && aString.subView( nEndInd ) != aPattern[nInd] )
+      || ( nBeginInd != 0 && aString.subView( 0, nBeginInd ) != aPattern[0] ) )
+          return false;
+
+    for ( sal_Int32 nCurInd = aPattern.getLength() - 2; nCurInd > 0; nCurInd-- )
     {
-        for ( sal_Int32 nCurInd = aPattern.getLength() - 2; nCurInd > 0; nCurInd-- )
-        {
-            if ( aPattern[nCurInd].isEmpty() )
-                continue;
+        if ( aPattern[nCurInd].isEmpty() )
+            continue;
 
-            if ( nEndInd == nBeginInd )
-                return false;
+        if ( nEndInd == nBeginInd )
+            return false;
 
-            // check that search does not use nEndInd position
-            sal_Int32 nLastInd = aString.lastIndexOf( aPattern[nCurInd], nEndInd - 1 );
+        // check that search does not use nEndInd position
+        sal_Int32 nLastInd = aString.lastIndexOf( aPattern[nCurInd], nEndInd - 1 );
 
-            if ( nLastInd == -1 )
-                return false;
+        if ( nLastInd == -1 )
+            return false;
 
-            if ( nLastInd < nBeginInd )
-                return false;
+        if ( nLastInd < nBeginInd )
+            return false;
 
-            nEndInd = nLastInd;
-        }
-
-        return true;
+        nEndInd = nLastInd;
     }
 
-    return false;
+    return true;
 }
 
 // XInitialization

@@ -1122,61 +1122,61 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
     std::set< OUString > nameSet;
     sal_uInt32 count = checkTypeReaders(reader, reader2, nameSet);
 
-    if (count != reader.getFieldCount())
+    if (count == reader.getFieldCount())
+        return RegError::NO_ERROR;
+
+    sal_uInt16 index = 0;
+
+    RegistryTypeWriter writer(reader.getTypeClass(),
+                              reader.getTypeName(),
+                              reader.getSuperTypeName(),
+                              static_cast<sal_uInt16>(count));
+
+    for (sal_uInt32 i=0 ; i < reader.getFieldCount(); i++)
     {
-        sal_uInt16 index = 0;
-
-        RegistryTypeWriter writer(reader.getTypeClass(),
-                                  reader.getTypeName(),
-                                  reader.getSuperTypeName(),
-                                  static_cast<sal_uInt16>(count));
-
-        for (sal_uInt32 i=0 ; i < reader.getFieldCount(); i++)
+        writer.setFieldData(index,
+                           reader.getFieldName(i),
+                           reader.getFieldType(i),
+                           reader.getFieldDoku(i),
+                           reader.getFieldFileName(i),
+                           reader.getFieldAccess(i),
+                           reader.getFieldConstValue(i));
+        index++;
+    }
+    for (sal_uInt32 i=0 ; i < reader2.getFieldCount(); i++)
+    {
+        if (nameSet.find(reader2.getFieldName(i)) == nameSet.end())
         {
             writer.setFieldData(index,
-                               reader.getFieldName(i),
-                               reader.getFieldType(i),
-                               reader.getFieldDoku(i),
-                               reader.getFieldFileName(i),
-                               reader.getFieldAccess(i),
-                               reader.getFieldConstValue(i));
+                               reader2.getFieldName(i),
+                               reader2.getFieldType(i),
+                               reader2.getFieldDoku(i),
+                               reader2.getFieldFileName(i),
+                               reader2.getFieldAccess(i),
+                               reader2.getFieldConstValue(i));
             index++;
         }
-        for (sal_uInt32 i=0 ; i < reader2.getFieldCount(); i++)
-        {
-            if (nameSet.find(reader2.getFieldName(i)) == nameSet.end())
-            {
-                writer.setFieldData(index,
-                                   reader2.getFieldName(i),
-                                   reader2.getFieldType(i),
-                                   reader2.getFieldDoku(i),
-                                   reader2.getFieldFileName(i),
-                                   reader2.getFieldAccess(i),
-                                   reader2.getFieldConstValue(i));
-                index++;
-            }
-        }
+    }
 
-        const sal_uInt8*    pBlop = writer.getBlop();
-        sal_uInt32          aBlopSize = writer.getBlopSize();
+    const sal_uInt8*    pBlop = writer.getBlop();
+    sal_uInt32          aBlopSize = writer.getBlopSize();
 
-        sal_uInt8   type = sal_uInt8(RegValueType::BINARY);
-        std::vector<sal_uInt8> aBuffer(VALUE_HEADERSIZE + aBlopSize);
+    sal_uInt8   type = sal_uInt8(RegValueType::BINARY);
+    std::vector<sal_uInt8> aBuffer(VALUE_HEADERSIZE + aBlopSize);
 
-        memcpy(aBuffer.data(), &type, 1);
-        writeUINT32(aBuffer.data() + VALUE_TYPEOFFSET, aBlopSize);
-        memcpy(aBuffer.data() + VALUE_HEADEROFFSET, pBlop, aBlopSize);
+    memcpy(aBuffer.data(), &type, 1);
+    writeUINT32(aBuffer.data() + VALUE_TYPEOFFSET, aBlopSize);
+    memcpy(aBuffer.data() + VALUE_HEADEROFFSET, pBlop, aBlopSize);
 
-        sal_uInt32  rwBytes;
-        if (rTargetValue.writeAt(0, aBuffer.data(), VALUE_HEADERSIZE+aBlopSize, rwBytes))
-        {
-            return RegError::INVALID_VALUE;
-        }
+    sal_uInt32  rwBytes;
+    if (rTargetValue.writeAt(0, aBuffer.data(), VALUE_HEADERSIZE+aBlopSize, rwBytes))
+    {
+        return RegError::INVALID_VALUE;
+    }
 
-        if (rwBytes != VALUE_HEADERSIZE+aBlopSize)
-        {
-            return RegError::INVALID_VALUE;
-        }
+    if (rwBytes != VALUE_HEADERSIZE+aBlopSize)
+    {
+        return RegError::INVALID_VALUE;
     }
     return RegError::NO_ERROR;
 }
