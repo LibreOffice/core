@@ -399,12 +399,15 @@ public:
     bool IsEmpty() const;
 
     // Update TextChangesOnly property based on the redlines of the table row.
-    // rRedlinePos: search from this redline to speed up SwTable::IsDeleted().
+    // rRedlinePos: search from this redline index to speed up SwTable::IsDeleted().
+    // bUpdateProperty: don't update HasTextChangesOnly property, if bUpdateProperty = false.
+    // Set rRedlinePos after the last redline index of the table row.
     // Return with the redline, which associated to the row change (latest deletion
     // in the case of deleted row, the first insertion in the case of row insertion
     // or npos, if TextChangesOnly is true, i.e. the table row is not deleted or inserted).
     // Cache also the type of the redline associated to the changed table row.
-    SwRedlineTable::size_type UpdateTextChangesOnly(SwRedlineTable::size_type& rRedlinePos) const;
+    SwRedlineTable::size_type UpdateTextChangesOnly(
+        SwRedlineTable::size_type& rRedlinePos, bool bUpdateProperty = true) const;
     // is it a tracked deleted row
     bool IsDeleted(SwRedlineTable::size_type& rRedlinePos) const;
     // set/get (if it's possible, cached) redline type
