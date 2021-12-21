@@ -379,55 +379,54 @@ FrmMap const aVAsCharHtmlMap[] =
 
 static std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
 {
-    if( pMap )
-    {
-        if( pMap == aVParaHtmlMap )
-            return SAL_N_ELEMENTS(aVParaHtmlMap);
-        if( pMap == aVAsCharHtmlMap )
-            return SAL_N_ELEMENTS( aVAsCharHtmlMap );
-        if( pMap == aHParaHtmlMap )
-            return SAL_N_ELEMENTS( aHParaHtmlMap );
-        if( pMap == aHParaHtmlAbsMap )
-            return SAL_N_ELEMENTS( aHParaHtmlAbsMap );
-        if( pMap == aVPageMap )
-            return SAL_N_ELEMENTS( aVPageMap );
-        if( pMap == aVPageHtmlMap )
-            return SAL_N_ELEMENTS( aVPageHtmlMap );
-        if( pMap == aVAsCharMap )
-            return SAL_N_ELEMENTS( aVAsCharMap );
-        if( pMap == aVParaMap )
-            return SAL_N_ELEMENTS( aVParaMap );
-        if( pMap == aHParaMap )
-            return SAL_N_ELEMENTS( aHParaMap );
-        if( pMap == aHFrameMap )
-            return SAL_N_ELEMENTS( aHFrameMap );
-        if( pMap == aVFrameMap )
-            return SAL_N_ELEMENTS( aVFrameMap );
-        if( pMap == aHCharMap )
-            return SAL_N_ELEMENTS( aHCharMap );
-        if( pMap == aHCharHtmlMap )
-            return SAL_N_ELEMENTS( aHCharHtmlMap );
-        if( pMap == aHCharHtmlAbsMap )
-            return SAL_N_ELEMENTS( aHCharHtmlAbsMap );
-        if( pMap == aVCharMap )
-            return SAL_N_ELEMENTS( aVCharMap );
-        if( pMap == aVCharHtmlMap )
-            return SAL_N_ELEMENTS( aVCharHtmlMap );
-        if( pMap == aVCharHtmlAbsMap )
-            return SAL_N_ELEMENTS( aVCharHtmlAbsMap );
-        if( pMap == aHPageHtmlMap )
-            return SAL_N_ELEMENTS( aHPageHtmlMap );
-        if( pMap == aHFlyHtmlMap )
-            return SAL_N_ELEMENTS( aHFlyHtmlMap );
-        if( pMap == aVFlyHtmlMap )
-            return SAL_N_ELEMENTS( aVFlyHtmlMap );
-        if( pMap == aVMultiSelectionMap )
-            return SAL_N_ELEMENTS( aVMultiSelectionMap );
-        if( pMap == aHMultiSelectionMap )
-            return SAL_N_ELEMENTS( aHMultiSelectionMap );
-        return SAL_N_ELEMENTS(aHPageMap);
-    }
-    return 0;
+    if( !pMap )
+        return 0;
+
+    if( pMap == aVParaHtmlMap )
+        return SAL_N_ELEMENTS(aVParaHtmlMap);
+    if( pMap == aVAsCharHtmlMap )
+        return SAL_N_ELEMENTS( aVAsCharHtmlMap );
+    if( pMap == aHParaHtmlMap )
+        return SAL_N_ELEMENTS( aHParaHtmlMap );
+    if( pMap == aHParaHtmlAbsMap )
+        return SAL_N_ELEMENTS( aHParaHtmlAbsMap );
+    if( pMap == aVPageMap )
+        return SAL_N_ELEMENTS( aVPageMap );
+    if( pMap == aVPageHtmlMap )
+        return SAL_N_ELEMENTS( aVPageHtmlMap );
+    if( pMap == aVAsCharMap )
+        return SAL_N_ELEMENTS( aVAsCharMap );
+    if( pMap == aVParaMap )
+        return SAL_N_ELEMENTS( aVParaMap );
+    if( pMap == aHParaMap )
+        return SAL_N_ELEMENTS( aHParaMap );
+    if( pMap == aHFrameMap )
+        return SAL_N_ELEMENTS( aHFrameMap );
+    if( pMap == aVFrameMap )
+        return SAL_N_ELEMENTS( aVFrameMap );
+    if( pMap == aHCharMap )
+        return SAL_N_ELEMENTS( aHCharMap );
+    if( pMap == aHCharHtmlMap )
+        return SAL_N_ELEMENTS( aHCharHtmlMap );
+    if( pMap == aHCharHtmlAbsMap )
+        return SAL_N_ELEMENTS( aHCharHtmlAbsMap );
+    if( pMap == aVCharMap )
+        return SAL_N_ELEMENTS( aVCharMap );
+    if( pMap == aVCharHtmlMap )
+        return SAL_N_ELEMENTS( aVCharHtmlMap );
+    if( pMap == aVCharHtmlAbsMap )
+        return SAL_N_ELEMENTS( aVCharHtmlAbsMap );
+    if( pMap == aHPageHtmlMap )
+        return SAL_N_ELEMENTS( aHPageHtmlMap );
+    if( pMap == aHFlyHtmlMap )
+        return SAL_N_ELEMENTS( aHFlyHtmlMap );
+    if( pMap == aVFlyHtmlMap )
+        return SAL_N_ELEMENTS( aVFlyHtmlMap );
+    if( pMap == aVMultiSelectionMap )
+        return SAL_N_ELEMENTS( aVMultiSelectionMap );
+    if( pMap == aHMultiSelectionMap )
+        return SAL_N_ELEMENTS( aHMultiSelectionMap );
+    return SAL_N_ELEMENTS(aHPageMap);
 }
 
 static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(

@@ -188,40 +188,40 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
             break;
     }
 
-    if (m_xTblLBox && m_xTblLBox->get_visible())
-    {
-        if (nSlot != SID_ATTR_BRUSH)
-        {
-            nWhich = maSet.GetPool()->GetWhich(SID_ATTR_BRUSH);
-            if (SfxItemState::SET == maSet.GetItemState(nWhich))
-            {
-                SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
-                rCoreSet->Put(aBrushItem);
-            }
-        }
-        if (nSlot != SID_ATTR_BRUSH_ROW)
-        {
-            nWhich = maSet.GetPool()->GetWhich(SID_ATTR_BRUSH_ROW);
-            if (SfxItemState::SET == maSet.GetItemState(nWhich))
-            {
-                SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
-                rCoreSet->Put(aBrushItem);
-            }
-        }
-        if (nSlot != SID_ATTR_BRUSH_TABLE)
-        {
-            nWhich = maSet.GetPool()->GetWhich(SID_ATTR_BRUSH_TABLE);
-            if (SfxItemState::SET == maSet.GetItemState(nWhich))
-            {
-                SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
-                rCoreSet->Put(aBrushItem);
-            }
-        }
+    if (!m_xTblLBox || !m_xTblLBox->get_visible())
+        return true;
 
-        if (m_xTblLBox->get_value_changed_from_saved())
+    if (nSlot != SID_ATTR_BRUSH)
+    {
+        nWhich = maSet.GetPool()->GetWhich(SID_ATTR_BRUSH);
+        if (SfxItemState::SET == maSet.GetItemState(nWhich))
         {
-            rCoreSet->Put(SfxUInt16Item(SID_BACKGRND_DESTINATION, m_xTblLBox->get_active()));
+            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
+            rCoreSet->Put(aBrushItem);
         }
+    }
+    if (nSlot != SID_ATTR_BRUSH_ROW)
+    {
+        nWhich = maSet.GetPool()->GetWhich(SID_ATTR_BRUSH_ROW);
+        if (SfxItemState::SET == maSet.GetItemState(nWhich))
+        {
+            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
+            rCoreSet->Put(aBrushItem);
+        }
+    }
+    if (nSlot != SID_ATTR_BRUSH_TABLE)
+    {
+        nWhich = maSet.GetPool()->GetWhich(SID_ATTR_BRUSH_TABLE);
+        if (SfxItemState::SET == maSet.GetItemState(nWhich))
+        {
+            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
+            rCoreSet->Put(aBrushItem);
+        }
+    }
+
+    if (m_xTblLBox->get_value_changed_from_saved())
+    {
+        rCoreSet->Put(SfxUInt16Item(SID_BACKGRND_DESTINATION, m_xTblLBox->get_active()));
     }
 
     return true;

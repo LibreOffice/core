@@ -1684,39 +1684,38 @@ bool ChartView::getExplicitValuesForAxis(
 
     sal_Int32 nDimensionIndex=-1;
     sal_Int32 nAxisIndex=-1;
-    if( AxisHelper::getIndicesForAxis( xAxis, xCooSys, nDimensionIndex, nAxisIndex ) )
-    {
-        rExplicitScale = pVCooSys->getExplicitScale(nDimensionIndex,nAxisIndex);
-        rExplicitIncrement = pVCooSys->getExplicitIncrement(nDimensionIndex,nAxisIndex);
-        if( rExplicitScale.m_bShiftedCategoryPosition )
-        {
-            //remove 'one' from max
-            if( rExplicitScale.AxisType == css::chart2::AxisType::DATE )
-            {
-                Date aMaxDate(rExplicitScale.NullDate); aMaxDate.AddDays(::rtl::math::approxFloor(rExplicitScale.Maximum));
-                //for explicit scales with shifted categories we need one interval more
-                switch( rExplicitScale.TimeResolution )
-                {
-                case css::chart::TimeUnit::DAY:
-                    --aMaxDate;
-                    break;
-                case css::chart::TimeUnit::MONTH:
-                    aMaxDate = DateHelper::GetDateSomeMonthsAway(aMaxDate,-1);
-                    break;
-                case css::chart::TimeUnit::YEAR:
-                    aMaxDate = DateHelper::GetDateSomeYearsAway(aMaxDate,-1);
-                    break;
-                }
-                rExplicitScale.Maximum = aMaxDate - rExplicitScale.NullDate;
-            }
-            else if( rExplicitScale.AxisType == css::chart2::AxisType::CATEGORY )
-                rExplicitScale.Maximum -= 1.0;
-            else if( rExplicitScale.AxisType == css::chart2::AxisType::SERIES )
-                rExplicitScale.Maximum -= 1.0;
-        }
+    if( !AxisHelper::getIndicesForAxis( xAxis, xCooSys, nDimensionIndex, nAxisIndex ) )
+        return false;
+
+    rExplicitScale = pVCooSys->getExplicitScale(nDimensionIndex,nAxisIndex);
+    rExplicitIncrement = pVCooSys->getExplicitIncrement(nDimensionIndex,nAxisIndex);
+    if( !rExplicitScale.m_bShiftedCategoryPosition )
         return true;
+
+    //remove 'one' from max
+    if( rExplicitScale.AxisType == css::chart2::AxisType::DATE )
+    {
+        Date aMaxDate(rExplicitScale.NullDate); aMaxDate.AddDays(::rtl::math::approxFloor(rExplicitScale.Maximum));
+        //for explicit scales with shifted categories we need one interval more
+        switch( rExplicitScale.TimeResolution )
+        {
+        case css::chart::TimeUnit::DAY:
+            --aMaxDate;
+            break;
+        case css::chart::TimeUnit::MONTH:
+            aMaxDate = DateHelper::GetDateSomeMonthsAway(aMaxDate,-1);
+            break;
+        case css::chart::TimeUnit::YEAR:
+            aMaxDate = DateHelper::GetDateSomeYearsAway(aMaxDate,-1);
+            break;
+        }
+        rExplicitScale.Maximum = aMaxDate - rExplicitScale.NullDate;
     }
-    return false;
+    else if( rExplicitScale.AxisType == css::chart2::AxisType::CATEGORY )
+        rExplicitScale.Maximum -= 1.0;
+    else if( rExplicitScale.AxisType == css::chart2::AxisType::SERIES )
+        rExplicitScale.Maximum -= 1.0;
+    return true;
 }
 
 SdrPage* ChartView::getSdrPage()

@@ -44,42 +44,42 @@ extern "C" SAL_JNI_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_S
 {
     TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
     auto storage = aStoragePair.mapStorage();
-    if ( storage.is() )
+    if ( !storage )
+        return JNI_FALSE;
+
+    try
     {
+        OUString sName = StorageContainer::jstring2ustring(env,name);
         try
         {
-            OUString sName = StorageContainer::jstring2ustring(env,name);
-            try
+            OUString sOldName = StorageContainer::removeOldURLPrefix(sName);
+            if ( storage->isStreamElement(sOldName) )
             {
-                OUString sOldName = StorageContainer::removeOldURLPrefix(sName);
-                if ( storage->isStreamElement(sOldName) )
+                try
                 {
-                    try
-                    {
-                        storage->renameElement(sOldName,StorageContainer::removeURLPrefix(sName,aStoragePair.url));
-                    }
-                    catch(const Exception&)
-                    {
-                    }
+                    storage->renameElement(sOldName,StorageContainer::removeURLPrefix(sName,aStoragePair.url));
+                }
+                catch(const Exception&)
+                {
                 }
             }
-            catch(const NoSuchElementException&)
-            {
-            }
-            catch(const IllegalArgumentException&)
-            {
-            }
-            return storage->isStreamElement(StorageContainer::removeURLPrefix(sName,aStoragePair.url));
         }
         catch(const NoSuchElementException&)
         {
         }
-        catch(const Exception&)
+        catch(const IllegalArgumentException&)
         {
-            TOOLS_WARN_EXCEPTION("connectivity.hsqldb", "forwarding");
-            if (env->ExceptionCheck())
-                env->ExceptionClear();
         }
+        return storage->isStreamElement(StorageContainer::removeURLPrefix(sName,aStoragePair.url));
+    }
+    catch(const NoSuchElementException&)
+    {
+    }
+    catch(const Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("connectivity.hsqldb", "forwarding");
+        if (env->ExceptionCheck())
+            env->ExceptionClear();
     }
     return JNI_FALSE;
 }

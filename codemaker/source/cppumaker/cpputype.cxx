@@ -2088,33 +2088,33 @@ void PlainStructType::dumpComprehensiveGetCppuType(FileStream & out)
 bool PlainStructType::dumpBaseMembers(
     FileStream & out, OUString const & base, bool withType)
 {
-    bool hasMember = false;
-    if (!base.isEmpty()) {
-        rtl::Reference< unoidl::Entity > ent;
-        codemaker::UnoType::Sort sort = m_typeMgr->getSort(base, &ent);
-        if (sort != codemaker::UnoType::Sort::PlainStruct) {
-            throw CannotDumpException(
-                "plain struct type base " + base
-                + " is not a plain struct type");
+    if (base.isEmpty())
+        return false;
+
+    rtl::Reference< unoidl::Entity > ent;
+    codemaker::UnoType::Sort sort = m_typeMgr->getSort(base, &ent);
+    if (sort != codemaker::UnoType::Sort::PlainStruct) {
+        throw CannotDumpException(
+            "plain struct type base " + base
+            + " is not a plain struct type");
+    }
+    rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
+        dynamic_cast< unoidl::PlainStructTypeEntity * >(ent.get()));
+    assert(ent2.is());
+    if (!ent2.is()) {
+        return false;
+    }
+    bool hasMember = dumpBaseMembers(out, ent2->getDirectBase(), withType);
+    for (const unoidl::PlainStructTypeEntity::Member& member : ent2->getDirectMembers()) {
+        if (hasMember) {
+            out << ", ";
         }
-        rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
-            dynamic_cast< unoidl::PlainStructTypeEntity * >(ent.get()));
-        assert(ent2.is());
-        if (!ent2.is()) {
-            return false;
+        if (withType) {
+            dumpType(out, member.type, true, true);
+            out << " ";
         }
-        hasMember = dumpBaseMembers(out, ent2->getDirectBase(), withType);
-        for (const unoidl::PlainStructTypeEntity::Member& member : ent2->getDirectMembers()) {
-            if (hasMember) {
-                out << ", ";
-            }
-            if (withType) {
-                dumpType(out, member.type, true, true);
-                out << " ";
-            }
-            out << member.name << "_";
-            hasMember = true;
-        }
+        out << member.name << "_";
+        hasMember = true;
     }
     return hasMember;
 }
@@ -3198,45 +3198,46 @@ void ExceptionType::dumpDeclaration(FileStream & out)
 bool ExceptionType::dumpBaseMembers(
     FileStream & out, OUString const & base, bool withType, bool eligibleForDefaults)
 {
+    if (base.isEmpty())
+        return false;
+
     bool hasMember = false;
-    if (!base.isEmpty()) {
-        rtl::Reference< unoidl::Entity > ent;
-        codemaker::UnoType::Sort sort = m_typeMgr->getSort(base, &ent);
-        if (sort != codemaker::UnoType::Sort::Exception) {
-            throw CannotDumpException(
-                "exception type base " + base + " is not an exception type");
+    rtl::Reference< unoidl::Entity > ent;
+    codemaker::UnoType::Sort sort = m_typeMgr->getSort(base, &ent);
+    if (sort != codemaker::UnoType::Sort::Exception) {
+        throw CannotDumpException(
+            "exception type base " + base + " is not an exception type");
+    }
+    rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
+        dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
+    assert(ent2.is());
+    if (!ent2.is()) {
+        return false;
+    }
+    hasMember = dumpBaseMembers( out, ent2->getDirectBase(), withType,
+                                 eligibleForDefaults && ent2->getDirectMembers().empty() );
+    int memberCount = 0;
+    for (const unoidl::ExceptionTypeEntity::Member& member : ent2->getDirectMembers()) {
+        if (hasMember) {
+            out << ", ";
         }
-        rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
-            dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
-        assert(ent2.is());
-        if (!ent2.is()) {
-            return false;
+        if (withType) {
+            dumpType(out, member.type, true, true);
+            out << " ";
         }
-        hasMember = dumpBaseMembers( out, ent2->getDirectBase(), withType,
-                                     eligibleForDefaults && ent2->getDirectMembers().empty() );
-        int memberCount = 0;
-        for (const unoidl::ExceptionTypeEntity::Member& member : ent2->getDirectMembers()) {
-            if (hasMember) {
-                out << ", ";
-            }
-            if (withType) {
-                dumpType(out, member.type, true, true);
-                out << " ";
-            }
-            out << member.name << "_";
-            // We want to provide a default parameter value for uno::Exception subtype
-            // constructors, since most of the time we don't pass a Context object in to the exception
-            // throw sites.
-            if (eligibleForDefaults
-                && base == "com.sun.star.uno.Exception"
-                && memberCount == 1
-                && member.name == "Context"
-                && member.type == "com.sun.star.uno.XInterface") {
-                out << " = ::css::uno::Reference< ::css::uno::XInterface >()";
-            }
-            hasMember = true;
-            ++memberCount;
+        out << member.name << "_";
+        // We want to provide a default parameter value for uno::Exception subtype
+        // constructors, since most of the time we don't pass a Context object in to the exception
+        // throw sites.
+        if (eligibleForDefaults
+            && base == "com.sun.star.uno.Exception"
+            && memberCount == 1
+            && member.name == "Context"
+            && member.type == "com.sun.star.uno.XInterface") {
+            out << " = ::css::uno::Reference< ::css::uno::XInterface >()";
         }
+        hasMember = true;
+        ++memberCount;
     }
     return hasMember;
 }

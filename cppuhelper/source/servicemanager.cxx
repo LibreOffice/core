@@ -1622,37 +1622,38 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
     }
     //TODO: Updating the component context singleton data should be part of the
     // atomic service manager update:
-    if (!extra.singletons.empty()) {
-        assert(context_.is());
-        css::uno::Reference< css::container::XNameContainer > cont(
-            context_, css::uno::UNO_QUERY_THROW);
-        for (const auto& [rName, rImpls] : extra.singletons)
-        {
-            OUString name("/singletons/" + rName);
-            //TODO: Update should be atomic:
-            try {
-                cont->removeByName(name + "/arguments");
-            } catch (const css::container::NoSuchElementException &) {}
-            assert(!rImpls.empty());
-            assert(rImpls[0]);
-            SAL_INFO_IF(
-                rImpls.size() > 1, "cppuhelper",
-                "Arbitrarily choosing " << rImpls[0]->name
-                    << " among multiple implementations for singleton "
-                    << rName);
-            try {
-                cont->insertByName(
-                    name + "/service", css::uno::Any(rImpls[0]->name));
-            } catch (css::container::ElementExistException &) {
-                cont->replaceByName(
-                    name + "/service", css::uno::Any(rImpls[0]->name));
-            }
-            try {
-                cont->insertByName(name, css::uno::Any());
-            } catch (css::container::ElementExistException &) {
-                SAL_INFO("cppuhelper", "Overwriting singleton " << rName);
-                cont->replaceByName(name, css::uno::Any());
-            }
+    if (extra.singletons.empty())
+        return true;
+
+    assert(context_.is());
+    css::uno::Reference< css::container::XNameContainer > cont(
+        context_, css::uno::UNO_QUERY_THROW);
+    for (const auto& [rName, rImpls] : extra.singletons)
+    {
+        OUString name("/singletons/" + rName);
+        //TODO: Update should be atomic:
+        try {
+            cont->removeByName(name + "/arguments");
+        } catch (const css::container::NoSuchElementException &) {}
+        assert(!rImpls.empty());
+        assert(rImpls[0]);
+        SAL_INFO_IF(
+            rImpls.size() > 1, "cppuhelper",
+            "Arbitrarily choosing " << rImpls[0]->name
+                << " among multiple implementations for singleton "
+                << rName);
+        try {
+            cont->insertByName(
+                name + "/service", css::uno::Any(rImpls[0]->name));
+        } catch (css::container::ElementExistException &) {
+            cont->replaceByName(
+                name + "/service", css::uno::Any(rImpls[0]->name));
+        }
+        try {
+            cont->insertByName(name, css::uno::Any());
+        } catch (css::container::ElementExistException &) {
+            SAL_INFO("cppuhelper", "Overwriting singleton " << rName);
+            cont->replaceByName(name, css::uno::Any());
         }
     }
     return true;

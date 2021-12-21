@@ -252,22 +252,23 @@ ValueParser::ValueParser(int layer): type_(TYPE_ERROR), layer_(layer), state_() 
 ValueParser::~ValueParser() {}
 
 xmlreader::XmlReader::Text ValueParser::getTextMode() const {
-    if (node_.is()) {
-        switch (state_) {
-        case State::Text:
-            if (!items_.empty()) {
-                break;
-            }
-            [[fallthrough]];
-        case State::IT:
-            return
-                (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST ||
-                 !separator_.isEmpty())
-                ? xmlreader::XmlReader::Text::Raw
-                : xmlreader::XmlReader::Text::Normalized;
-        default:
+    if (!node_)
+        return xmlreader::XmlReader::Text::NONE;
+
+    switch (state_) {
+    case State::Text:
+        if (!items_.empty()) {
             break;
         }
+        [[fallthrough]];
+    case State::IT:
+        return
+            (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST ||
+             !separator_.isEmpty())
+            ? xmlreader::XmlReader::Text::Raw
+            : xmlreader::XmlReader::Text::Normalized;
+    default:
+        break;
     }
     return xmlreader::XmlReader::Text::NONE;
 }
