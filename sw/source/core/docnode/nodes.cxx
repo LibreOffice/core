@@ -2023,16 +2023,17 @@ SwContentNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
     return nullptr;
 }
 
-//TODO: improve documentation
 //TODO: The inventor of the "single responsibility principle" will be crying if you ever show this code to him!
-/** find the next/previous ContentNode or a table node with frames
+/** find the next/previous ContentNode or table node that should have layout
+ * frames that are siblings to the ones of the node at rFrameIdx.
  *
  * If no pEnd is given, search is started with FrameIndex; otherwise
- * search is started with the one before rFrameIdx and after pEnd.
+ * search is started backward with the one before rFrameIdx and
+ * forward after pEnd.
  *
- * @param rFrameIdx node with frames to search in
- * @param pEnd ???
- * @return result node; 0 (!!!) if not found
+ * @param rFrameIdx in: node with frames to search in; out: found node
+ * @param pEnd last node after rFrameIdx that should be excluded from search
+ * @return result node; 0 if not found
  */
 SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                                     const SwNode* pEnd ) const
@@ -2042,17 +2043,17 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
     // no layout -> skip
     if( GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        SwNode* pSttNd = &rFrameIdx.GetNode();
+        SwNode *const pSttNd = &rFrameIdx.GetNode();
 
-        // move of a hidden section?
-        SwSectionNode* pSectNd = pSttNd->IsSectionNode()
+        // inside a hidden section?
+        SwSectionNode *const pSectNd = pSttNd->IsSectionNode()
                     ? pSttNd->StartOfSectionNode()->FindSectionNode()
                     : pSttNd->FindSectionNode();
         if( !( pSectNd && pSectNd->GetSection().CalcHiddenFlag() ) )
         {
             // in a table in table situation we have to assure that we don't leave the
             // outer table cell when the inner table is looking for a PrvNxt...
-            SwTableNode* pTableNd = pSttNd->IsTableNode()
+            SwTableNode *const pTableNd = pSttNd->IsTableNode()
                     ? pSttNd->StartOfSectionNode()->FindTableNode()
                     : pSttNd->FindTableNode();
             SwNodeIndex aIdx( rFrameIdx );
@@ -2060,10 +2061,8 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
             if( pEnd )
             {
                 --aIdx;
-                pNd = &aIdx.GetNode();
             }
-            else
-                pNd = pSttNd;
+            pNd = &aIdx.GetNode();
 
             if( ( pFrameNd = pNd )->IsContentNode() )
                 rFrameIdx = aIdx;
