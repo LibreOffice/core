@@ -45,6 +45,7 @@ class SwNodeIndex;
 class SwNodeRange;
 class SwOLENode;
 class SwPaM;
+class SwRootFrame;
 class SwSectionData;
 class SwSectionFormat;
 class SwTOXBase;
@@ -305,7 +306,8 @@ public:
      forward after pEnd.
      If no valid node is found, return 0. rFrameIdx points to the node with frames. **/
     SwNode* FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
-                                const SwNode* pEnd ) const;
+                                const SwNode* pEnd,
+                                SwRootFrame const* pLayout = nullptr) const;
 
     SwNode * DocumentSectionStartNode(SwNode * pNode) const;
     SwNode * DocumentSectionEndNode(SwNode * pNode) const;
