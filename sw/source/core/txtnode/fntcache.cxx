@@ -1682,22 +1682,18 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             {
                 sal_Unicode nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
 
+                if (cChPrev == CH_BLANK)
+                {
+                    // no Pixel is lost:
+                    nSpaceSum += nOtherHalf;
+                }
+
                 if ( nCh == CH_BLANK )
                 {
-                    if ( cChPrev == CH_BLANK )
-                        nSpaceSum += nOtherHalf;
                     if (i + 1 == sal_Int32(nCnt))
                         nSpaceSum += nSpaceAdd;
                     else
                         nSpaceSum += nHalfSpace;
-                }
-                else
-                {
-                    if ( cChPrev == CH_BLANK )
-                    {
-                        // no Pixel is lost:
-                        nSpaceSum += nOtherHalf;
-                    }
                 }
 
                 cChPrev = nCh;
