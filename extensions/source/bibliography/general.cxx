@@ -454,27 +454,25 @@ IMPL_LINK(BibGeneralPage, LastElementKeyInputHdl, const KeyEvent&, rKeyEvent, bo
     bool bShift = rKeyEvent.GetKeyCode().IsShift();
     bool bCtrl = rKeyEvent.GetKeyCode().IsMod1();
     bool bAlt = rKeyEvent.GetKeyCode().IsMod2();
-    if (KEY_TAB == nCode && !bShift && !bCtrl && !bAlt)
+    if (KEY_TAB != nCode || bShift || bCtrl || bAlt)
+        return false;
+    SaveChanges();
+    uno::Reference<sdbc::XRowSet> xRowSet(pDatMan->getForm(), UNO_QUERY);
+    if (xRowSet.is())
     {
-        SaveChanges();
-        uno::Reference<sdbc::XRowSet> xRowSet(pDatMan->getForm(), UNO_QUERY);
-        if (xRowSet.is())
+        if (xRowSet->isLast())
         {
-            if (xRowSet->isLast())
-            {
-                uno::Reference<sdbc::XResultSetUpdate> xUpdateCursor(xRowSet, UNO_QUERY);
-                if (xUpdateCursor.is())
-                    xUpdateCursor->moveToInsertRow();
-            }
-            else
-                (void)xRowSet->next();
+            uno::Reference<sdbc::XResultSetUpdate> xUpdateCursor(xRowSet, UNO_QUERY);
+            if (xUpdateCursor.is())
+                xUpdateCursor->moveToInsertRow();
         }
-        xIdentifierED->grab_focus();
-        xIdentifierED->select_region(0, -1);
-        GainFocusHdl(*xIdentifierED);
-        return true;
+        else
+            (void)xRowSet->next();
     }
-    return false;
+    xIdentifierED->grab_focus();
+    xIdentifierED->select_region(0, -1);
+    GainFocusHdl(*xIdentifierED);
+    return true;
 }
 
 BibGeneralPage::~BibGeneralPage()

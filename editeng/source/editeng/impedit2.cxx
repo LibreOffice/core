@@ -302,32 +302,32 @@ bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pView )
     GetSelEngine().SelMouseButtonDown( rMEvt );
     // Special treatment
     EditSelection aCurSel( pView->pImpEditView->GetEditSelection() );
-    if ( !rMEvt.IsShift() )
+    if ( rMEvt.IsShift() )
+        return true;
+
+    if ( rMEvt.GetClicks() == 2 )
     {
-        if ( rMEvt.GetClicks() == 2 )
-        {
-            // So that the SelectionEngine knows about the anchor.
-            aSelEngine.CursorPosChanging( true, false );
+        // So that the SelectionEngine knows about the anchor.
+        aSelEngine.CursorPosChanging( true, false );
 
-            EditSelection aNewSelection( SelectWord( aCurSel ) );
-            pView->pImpEditView->DrawSelectionXOR();
-            pView->pImpEditView->SetEditSelection( aNewSelection );
-            pView->pImpEditView->DrawSelectionXOR();
-            pView->ShowCursor();
-        }
-        else if ( rMEvt.GetClicks() == 3 )
-        {
-            // So that the SelectionEngine knows about the anchor.
-            aSelEngine.CursorPosChanging( true, false );
+        EditSelection aNewSelection( SelectWord( aCurSel ) );
+        pView->pImpEditView->DrawSelectionXOR();
+        pView->pImpEditView->SetEditSelection( aNewSelection );
+        pView->pImpEditView->DrawSelectionXOR();
+        pView->ShowCursor();
+    }
+    else if ( rMEvt.GetClicks() == 3 )
+    {
+        // So that the SelectionEngine knows about the anchor.
+        aSelEngine.CursorPosChanging( true, false );
 
-            EditSelection aNewSelection( aCurSel );
-            aNewSelection.Min().SetIndex( 0 );
-            aNewSelection.Max().SetIndex( aCurSel.Min().GetNode()->Len() );
-            pView->pImpEditView->DrawSelectionXOR();
-            pView->pImpEditView->SetEditSelection( aNewSelection );
-            pView->pImpEditView->DrawSelectionXOR();
-            pView->ShowCursor();
-        }
+        EditSelection aNewSelection( aCurSel );
+        aNewSelection.Min().SetIndex( 0 );
+        aNewSelection.Max().SetIndex( aCurSel.Min().GetNode()->Len() );
+        pView->pImpEditView->DrawSelectionXOR();
+        pView->pImpEditView->SetEditSelection( aNewSelection );
+        pView->pImpEditView->DrawSelectionXOR();
+        pView->ShowCursor();
     }
     return true;
 }
@@ -603,36 +603,36 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
 
     // Special treatments
     EditSelection aCurSel( pView->pImpEditView->GetEditSelection() );
-    if ( !aCurSel.HasRange() )
-    {
-        if ( ( rMEvt.GetClicks() == 1 ) && rMEvt.IsLeft() && !rMEvt.IsMod2() )
-        {
-            const OutputDevice& rOutDev = pView->getEditViewCallbacks() ? pView->getEditViewCallbacks()->EditViewOutputDevice() : *pView->GetWindow()->GetOutDev();
-            Point aLogicClick = rOutDev.PixelToLogic(rMEvt.GetPosPixel());
-            if (const SvxFieldItem* pFld = pView->GetField(aLogicClick))
-            {
-                bool bUrlOpened = GetEditEnginePtr()->FieldClicked( *pFld );
+    if ( aCurSel.HasRange() )
+        return true;
 
-                // tdf#121039 When in edit mode, editeng is responsible for opening the URL on mouse click
-                if (!bUrlOpened)
-                {
-                    if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField()))
-                    {
-                        bool bCtrlClickHappened = rMEvt.IsMod1();
-                        bool bCtrlClickSecOption
-                            = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
-                        if ((bCtrlClickHappened && bCtrlClickSecOption)
-                            || (!bCtrlClickHappened && !bCtrlClickSecOption))
-                        {
-                            css::uno::Reference<css::system::XSystemShellExecute> exec(
-                                css::system::SystemShellExecute::create(
-                                    comphelper::getProcessComponentContext()));
-                            exec->execute(pUrlField->GetURL(), OUString(),
-                                          css::system::SystemShellExecuteFlags::DEFAULTS);
-                        }
-                    }
-                }
-            }
+    if ( ( rMEvt.GetClicks() != 1 ) || !rMEvt.IsLeft() || rMEvt.IsMod2() )
+        return true;
+
+    const OutputDevice& rOutDev = pView->getEditViewCallbacks() ? pView->getEditViewCallbacks()->EditViewOutputDevice() : *pView->GetWindow()->GetOutDev();
+    Point aLogicClick = rOutDev.PixelToLogic(rMEvt.GetPosPixel());
+    const SvxFieldItem* pFld = pView->GetField(aLogicClick);
+    if (!pFld)
+        return true;
+
+    // tdf#121039 When in edit mode, editeng is responsible for opening the URL on mouse click
+    bool bUrlOpened = GetEditEnginePtr()->FieldClicked( *pFld );
+    if (bUrlOpened)
+        return true;
+
+    if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField()))
+    {
+        bool bCtrlClickHappened = rMEvt.IsMod1();
+        bool bCtrlClickSecOption
+            = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
+        if ((bCtrlClickHappened && bCtrlClickSecOption)
+            || (!bCtrlClickHappened && !bCtrlClickSecOption))
+        {
+            css::uno::Reference<css::system::XSystemShellExecute> exec(
+                css::system::SystemShellExecute::create(
+                    comphelper::getProcessComponentContext()));
+            exec->execute(pUrlField->GetURL(), OUString(),
+                          css::system::SystemShellExecuteFlags::DEFAULTS);
         }
     }
     return true;

@@ -1052,46 +1052,46 @@ void SaneDlg::EstablishButtonOption()
 
 bool ScanPreview::MouseMove(const MouseEvent& rMEvt)
 {
-    if( mbIsDragging )
+    if( !mbIsDragging )
+        return false;
+
+    Point aMousePos = rMEvt.GetPosPixel();
+    // move into valid area
+    Point aLogicPos = GetLogicPos( aMousePos );
+    aMousePos = GetPixelPos( aLogicPos );
+    switch( meDragDirection )
     {
-        Point aMousePos = rMEvt.GetPosPixel();
-        // move into valid area
-        Point aLogicPos = GetLogicPos( aMousePos );
-        aMousePos = GetPixelPos( aLogicPos );
-        switch( meDragDirection )
-        {
-            case TopLeft:       maTopLeft = aMousePos; break;
-            case Top:           maTopLeft.setY( aMousePos.Y() ); break;
-            case TopRight:
-                maTopLeft.setY( aMousePos.Y() );
-                maBottomRight.setX( aMousePos.X() );
-                break;
-            case Right:         maBottomRight.setX( aMousePos.X() ); break;
-            case BottomRight:   maBottomRight = aMousePos; break;
-            case Bottom:        maBottomRight.setY( aMousePos.Y() ); break;
-            case BottomLeft:
-                maTopLeft.setX( aMousePos.X() );
-                maBottomRight.setY( aMousePos.Y() );
-                break;
-            case Left:          maTopLeft.setX( aMousePos.X() ); break;
-            default: break;
-        }
-        int nSwap;
-        if( maTopLeft.X() > maBottomRight.X() )
-        {
-            nSwap = maTopLeft.X();
-            maTopLeft.setX( maBottomRight.X() );
-            maBottomRight.setX( nSwap );
-        }
-        if( maTopLeft.Y() > maBottomRight.Y() )
-        {
-            nSwap = maTopLeft.Y();
-            maTopLeft.setY( maBottomRight.Y() );
-            maBottomRight.setY( nSwap );
-        }
-        Invalidate();
-        mpParentDialog->UpdateScanArea(false);
+        case TopLeft:       maTopLeft = aMousePos; break;
+        case Top:           maTopLeft.setY( aMousePos.Y() ); break;
+        case TopRight:
+            maTopLeft.setY( aMousePos.Y() );
+            maBottomRight.setX( aMousePos.X() );
+            break;
+        case Right:         maBottomRight.setX( aMousePos.X() ); break;
+        case BottomRight:   maBottomRight = aMousePos; break;
+        case Bottom:        maBottomRight.setY( aMousePos.Y() ); break;
+        case BottomLeft:
+            maTopLeft.setX( aMousePos.X() );
+            maBottomRight.setY( aMousePos.Y() );
+            break;
+        case Left:          maTopLeft.setX( aMousePos.X() ); break;
+        default: break;
     }
+    int nSwap;
+    if( maTopLeft.X() > maBottomRight.X() )
+    {
+        nSwap = maTopLeft.X();
+        maTopLeft.setX( maBottomRight.X() );
+        maBottomRight.setX( nSwap );
+    }
+    if( maTopLeft.Y() > maBottomRight.Y() )
+    {
+        nSwap = maTopLeft.Y();
+        maTopLeft.setY( maBottomRight.Y() );
+        maBottomRight.setY( nSwap );
+    }
+    Invalidate();
+    mpParentDialog->UpdateScanArea(false);
     return false;
 }
 

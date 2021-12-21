@@ -754,54 +754,52 @@ void Outliner::SetCharAttribs(sal_Int32 nPara, const SfxItemSet& rSet)
 
 bool Outliner::Expand( Paragraph const * pPara )
 {
-    if ( pParaList->HasHiddenChildren( pPara ) )
+    if ( !pParaList->HasHiddenChildren( pPara ) )
+        return false;
+
+    std::unique_ptr<OLUndoExpand> pUndo;
+    bool bUndo = IsUndoEnabled() && !IsInUndo();
+    if( bUndo )
     {
-        std::unique_ptr<OLUndoExpand> pUndo;
-        bool bUndo = IsUndoEnabled() && !IsInUndo();
-        if( bUndo )
-        {
-            UndoActionStart( OLUNDO_EXPAND );
-            pUndo.reset( new OLUndoExpand( this, OLUNDO_EXPAND ) );
-            pUndo->nCount = pParaList->GetAbsPos( pPara );
-        }
-        pParaList->Expand( pPara );
-        InvalidateBullet(pParaList->GetAbsPos(pPara));
-        if( bUndo )
-        {
-            InsertUndo( std::move(pUndo) );
-            UndoActionEnd();
-        }
-        return true;
+        UndoActionStart( OLUNDO_EXPAND );
+        pUndo.reset( new OLUndoExpand( this, OLUNDO_EXPAND ) );
+        pUndo->nCount = pParaList->GetAbsPos( pPara );
     }
-    return false;
+    pParaList->Expand( pPara );
+    InvalidateBullet(pParaList->GetAbsPos(pPara));
+    if( bUndo )
+    {
+        InsertUndo( std::move(pUndo) );
+        UndoActionEnd();
+    }
+    return true;
 }
 
 bool Outliner::Collapse( Paragraph const * pPara )
 {
-    if ( pParaList->HasVisibleChildren( pPara ) ) // expanded
+    if ( !pParaList->HasVisibleChildren( pPara ) ) // collapsed
+        return false;
+
+    std::unique_ptr<OLUndoExpand> pUndo;
+    bool bUndo = false;
+
+    if( !IsInUndo() && IsUndoEnabled() )
+        bUndo = true;
+    if( bUndo )
     {
-        std::unique_ptr<OLUndoExpand> pUndo;
-        bool bUndo = false;
-
-        if( !IsInUndo() && IsUndoEnabled() )
-            bUndo = true;
-        if( bUndo )
-        {
-            UndoActionStart( OLUNDO_COLLAPSE );
-            pUndo.reset( new OLUndoExpand( this, OLUNDO_COLLAPSE ) );
-            pUndo->nCount = pParaList->GetAbsPos( pPara );
-        }
-
-        pParaList->Collapse( pPara );
-        InvalidateBullet(pParaList->GetAbsPos(pPara));
-        if( bUndo )
-        {
-            InsertUndo( std::move(pUndo) );
-            UndoActionEnd();
-        }
-        return true;
+        UndoActionStart( OLUNDO_COLLAPSE );
+        pUndo.reset( new OLUndoExpand( this, OLUNDO_COLLAPSE ) );
+        pUndo->nCount = pParaList->GetAbsPos( pPara );
     }
-    return false;
+
+    pParaList->Collapse( pPara );
+    InvalidateBullet(pParaList->GetAbsPos(pPara));
+    if( bUndo )
+    {
+        InsertUndo( std::move(pUndo) );
+        UndoActionEnd();
+    }
+    return true;
 }
 
 
