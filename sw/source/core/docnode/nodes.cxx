@@ -2027,8 +2027,7 @@ SwContentNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
 /** find the next/previous ContentNode or table node that should have layout
  * frames that are siblings to the ones of the node at rFrameIdx.
  *
- * If no pEnd is given, search is started with FrameIndex; otherwise
- * search is started backward with the one before rFrameIdx and
+ * Search is started backward with the one before rFrameIdx and
  * forward after pEnd.
  *
  * @param rFrameIdx in: node with frames to search in; out: found node
@@ -2038,6 +2037,8 @@ SwContentNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
 SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                                     const SwNode* pEnd ) const
 {
+    assert(pEnd != nullptr); // every caller currently
+
     SwNode* pFrameNd = nullptr;
 
     // no layout -> skip
@@ -2057,12 +2058,8 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                     ? pSttNd->StartOfSectionNode()->FindTableNode()
                     : pSttNd->FindTableNode();
             SwNodeIndex aIdx( rFrameIdx );
-            SwNode* pNd;
-            if( pEnd )
-            {
-                --aIdx;
-            }
-            pNd = &aIdx.GetNode();
+            --aIdx;
+            SwNode *const pNd = &aIdx.GetNode();
 
             if( ( pFrameNd = pNd )->IsContentNode() )
                 rFrameIdx = aIdx;
@@ -2083,13 +2080,10 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
             }
             else
             {
-                if( pEnd )
-                    aIdx = pEnd->GetIndex() + 1;
-                else
-                    aIdx = rFrameIdx;
+                aIdx = pEnd->GetIndex() + 1;
 
                 // NEVER leave the section when doing this!
-                if( ( pEnd && ( pFrameNd = &aIdx.GetNode())->IsContentNode() ) ||
+                if( ( ( pFrameNd = &aIdx.GetNode())->IsContentNode() ) ||
                     ( nullptr != ( pFrameNd = GoNextSection( &aIdx, true, false )) &&
                     ::CheckNodesRange( aIdx, rFrameIdx, true ) &&
                     ( pFrameNd->FindTableNode() == pTableNd &&
@@ -2122,10 +2116,7 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                 }
                 else
                 {
-                    if( pEnd )
-                        aIdx = pEnd->GetIndex() + 1;
-                    else
-                        aIdx = rFrameIdx.GetIndex() + 1;
+                    aIdx = pEnd->GetIndex() + 1;
 
                     if( (pFrameNd = &aIdx.GetNode())->IsTableNode() )
                         rFrameIdx = aIdx;
