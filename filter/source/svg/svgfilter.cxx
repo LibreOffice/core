@@ -102,35 +102,34 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     if(mxDstDoc.is()) // Import works for Impress / draw only
         return filterImpressOrDraw(rDescriptor);
 
-    if(mxSrcDoc.is())
+    if(!mxSrcDoc)
+        return false;
+
+    for (const PropertyValue& rProp : rDescriptor)
     {
-        for (const PropertyValue& rProp : rDescriptor)
+        if (rProp.Name == "FilterName")
         {
-            if (rProp.Name == "FilterName")
+            OUString sFilterName;
+            rProp.Value >>= sFilterName;
+            if(sFilterName == "impress_svg_Export")
             {
-                OUString sFilterName;
-                rProp.Value >>= sFilterName;
-                if(sFilterName == "impress_svg_Export")
-                {
-                    mbImpressFilter = true;
-                    return filterImpressOrDraw(rDescriptor);
-                }
-                else if(sFilterName == "writer_svg_Export")
-                {
-                    mbWriterFilter = true;
-                    return filterWriterOrCalc(rDescriptor);
-                }
-                else if(sFilterName == "calc_svg_Export")
-                {
-                    mbCalcFilter = true;
-                    return filterWriterOrCalc(rDescriptor);
-                }
-                break;
+                mbImpressFilter = true;
+                return filterImpressOrDraw(rDescriptor);
             }
+            else if(sFilterName == "writer_svg_Export")
+            {
+                mbWriterFilter = true;
+                return filterWriterOrCalc(rDescriptor);
+            }
+            else if(sFilterName == "calc_svg_Export")
+            {
+                mbCalcFilter = true;
+                return filterWriterOrCalc(rDescriptor);
+            }
+            break;
         }
-        return filterImpressOrDraw(rDescriptor);
     }
-    return false;
+    return filterImpressOrDraw(rDescriptor);
 }
 
 bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescriptor )

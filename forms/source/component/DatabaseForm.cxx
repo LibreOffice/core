@@ -1033,32 +1033,31 @@ void ODatabaseForm::updateParameterInfo()
 bool ODatabaseForm::hasValidParent() const
 {
     // do we have to fill the parameters again?
-    if (m_bSubForm)
+    if (!m_bSubForm)
+        return true;
+    Reference<XResultSet>  xResultSet(m_xParent, UNO_QUERY);
+    if (!xResultSet.is())
     {
-        Reference<XResultSet>  xResultSet(m_xParent, UNO_QUERY);
-        if (!xResultSet.is())
-        {
-            OSL_FAIL("ODatabaseForm::hasValidParent() : no parent resultset !");
-            return false;
-        }
-        try
-        {
-            Reference< XPropertySet >  xSet( m_xParent, UNO_QUERY );
-            Reference< XLoadable > xLoad( m_xParent, UNO_QUERY );
-            if  (   xLoad->isLoaded()
-                &&  (   xResultSet->isBeforeFirst()
-                    ||  xResultSet->isAfterLast()
-                    ||  getBOOL( xSet->getPropertyValue( PROPERTY_ISNEW ) )
-                    )
+        OSL_FAIL("ODatabaseForm::hasValidParent() : no parent resultset !");
+        return false;
+    }
+    try
+    {
+        Reference< XPropertySet >  xSet( m_xParent, UNO_QUERY );
+        Reference< XLoadable > xLoad( m_xParent, UNO_QUERY );
+        if  (   xLoad->isLoaded()
+            &&  (   xResultSet->isBeforeFirst()
+                ||  xResultSet->isAfterLast()
+                ||  getBOOL( xSet->getPropertyValue( PROPERTY_ISNEW ) )
                 )
-                // the parent form is loaded and on a "virtual" row -> not valid
-                return false;
-        }
-        catch(const Exception&)
-        {
-            // parent could be forwardonly?
+            )
+            // the parent form is loaded and on a "virtual" row -> not valid
             return false;
-        }
+    }
+    catch(const Exception&)
+    {
+        // parent could be forwardonly?
+        return false;
     }
     return true;
 }
@@ -3110,35 +3109,34 @@ sal_Bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event)
 sal_Bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event)
 {
     // is our aggregate calling?
-    if (event.Source == css::uno::Reference<css::uno::XInterface>(static_cast<XWeak*>(this)))
-    {
-        // Our aggregate doesn't have any ApproveRowSetListeners (expect ourself), as we re-routed the queryInterface
-        // for XRowSetApproveBroadcaster-interface.
-        // So we have to multiplex this approve request.
-        ::comphelper::OInterfaceIteratorHelper3 aIter( m_aRowSetApproveListeners );
-        while ( aIter.hasMoreElements() )
-        {
-            Reference< XRowSetApproveListener > xListener( aIter.next() );
-            try
-            {
-                if ( !xListener->approveRowChange( event ) )
-                    return false;
-            }
-            catch (const DisposedException& e)
-            {
-                if ( e.Context == xListener )
-                    aIter.remove();
-            }
-            catch (const RuntimeException&)
-            {
-                throw;
-            }
-            catch (const Exception&)
-            {
-                DBG_UNHANDLED_EXCEPTION("forms.component");
-            }
-        }
+    if (event.Source != css::uno::Reference<css::uno::XInterface>(static_cast<XWeak*>(this)))
         return true;
+
+    // Our aggregate doesn't have any ApproveRowSetListeners (expect ourself), as we re-routed the queryInterface
+    // for XRowSetApproveBroadcaster-interface.
+    // So we have to multiplex this approve request.
+    ::comphelper::OInterfaceIteratorHelper3 aIter( m_aRowSetApproveListeners );
+    while ( aIter.hasMoreElements() )
+    {
+        Reference< XRowSetApproveListener > xListener( aIter.next() );
+        try
+        {
+            if ( !xListener->approveRowChange( event ) )
+                return false;
+        }
+        catch (const DisposedException& e)
+        {
+            if ( e.Context == xListener )
+                aIter.remove();
+        }
+        catch (const RuntimeException&)
+        {
+            throw;
+        }
+        catch (const Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("forms.component");
+        }
     }
     return true;
 }

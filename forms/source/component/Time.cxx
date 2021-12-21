@@ -224,43 +224,43 @@ void OTimeModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
-    if ( aControlValue != m_aSaveValue )
-    {
-        if ( !aControlValue.hasValue() )
-            m_xColumnUpdate->updateNull();
-        else
-        {
-            try
-            {
-                util::Time aTime;
-                if ( !( aControlValue >>= aTime ) )
-                {
-                    sal_Int64 nAsInt(0);
-                    aControlValue >>= nAsInt;
-                    aTime = DBTypeConversion::toTime(nAsInt);
-                }
+    if ( aControlValue == m_aSaveValue )
+        return true;
 
-                if (!m_bDateTimeField)
-                    m_xColumnUpdate->updateTime(aTime);
-                else
-                {
-                    util::DateTime aDateTime = m_xColumn->getTimestamp();
-                    if (aDateTime.Year == 0 && aDateTime.Month == 0 && aDateTime.Day == 0)
-                        aDateTime = ::com::sun::star::util::DateTime(0,0,0,0,30,12,1899, false);
-                    aDateTime.NanoSeconds = aTime.NanoSeconds;
-                    aDateTime.Seconds = aTime.Seconds;
-                    aDateTime.Minutes = aTime.Minutes;
-                    aDateTime.Hours = aTime.Hours;
-                    m_xColumnUpdate->updateTimestamp(aDateTime);
-                }
-            }
-            catch(const Exception&)
+    if ( !aControlValue.hasValue() )
+        m_xColumnUpdate->updateNull();
+    else
+    {
+        try
+        {
+            util::Time aTime;
+            if ( !( aControlValue >>= aTime ) )
             {
-                return false;
+                sal_Int64 nAsInt(0);
+                aControlValue >>= nAsInt;
+                aTime = DBTypeConversion::toTime(nAsInt);
+            }
+
+            if (!m_bDateTimeField)
+                m_xColumnUpdate->updateTime(aTime);
+            else
+            {
+                util::DateTime aDateTime = m_xColumn->getTimestamp();
+                if (aDateTime.Year == 0 && aDateTime.Month == 0 && aDateTime.Day == 0)
+                    aDateTime = ::com::sun::star::util::DateTime(0,0,0,0,30,12,1899, false);
+                aDateTime.NanoSeconds = aTime.NanoSeconds;
+                aDateTime.Seconds = aTime.Seconds;
+                aDateTime.Minutes = aTime.Minutes;
+                aDateTime.Hours = aTime.Hours;
+                m_xColumnUpdate->updateTimestamp(aDateTime);
             }
         }
-        m_aSaveValue = aControlValue;
+        catch(const Exception&)
+        {
+            return false;
+        }
     }
+    m_aSaveValue = aControlValue;
     return true;
 }
 

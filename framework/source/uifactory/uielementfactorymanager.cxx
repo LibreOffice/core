@@ -315,23 +315,23 @@ bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aEleme
     Reference< XPropertySet > xPropertySet;
     aElement >>= xPropertySet;
 
-    if ( xPropertySet.is() )
+    if ( !xPropertySet.is() )
+        return true;
+
+    try
     {
-        try
-        {
-            xPropertySet->getPropertyValue( m_aPropType ) >>= rType;
-            xPropertySet->getPropertyValue( m_aPropName ) >>= rName;
-            xPropertySet->getPropertyValue( m_aPropModule ) >>= rModule;
-            xPropertySet->getPropertyValue( m_aPropFactory ) >>= rServiceSpecifier;
-        }
-        catch ( const css::beans::UnknownPropertyException& )
-        {
-            return false;
-        }
-        catch ( const css::lang::WrappedTargetException& )
-        {
-            return false;
-        }
+        xPropertySet->getPropertyValue( m_aPropType ) >>= rType;
+        xPropertySet->getPropertyValue( m_aPropName ) >>= rName;
+        xPropertySet->getPropertyValue( m_aPropModule ) >>= rModule;
+        xPropertySet->getPropertyValue( m_aPropFactory ) >>= rServiceSpecifier;
+    }
+    catch ( const css::beans::UnknownPropertyException& )
+    {
+        return false;
+    }
+    catch ( const css::lang::WrappedTargetException& )
+    {
+        return false;
     }
 
     return true;

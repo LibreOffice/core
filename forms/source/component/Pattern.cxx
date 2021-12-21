@@ -126,32 +126,32 @@ bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
 
-    if ( aNewValue != m_aLastKnownValue )
-    {
-        OUString sNewValue;
-        aNewValue >>= sNewValue;
+    if ( aNewValue == m_aLastKnownValue )
+        return true;
 
-        if  (   !aNewValue.hasValue()
-            ||  (   sNewValue.isEmpty()         // an empty string
-                &&  m_bEmptyIsNull              // which should be interpreted as NULL
-                )
+    OUString sNewValue;
+    aNewValue >>= sNewValue;
+
+    if  (   !aNewValue.hasValue()
+        ||  (   sNewValue.isEmpty()         // an empty string
+            &&  m_bEmptyIsNull              // which should be interpreted as NULL
             )
-        {
-            m_xColumnUpdate->updateNull();
-        }
-        else
-        {
-            OSL_ENSURE(m_pFormattedValue,
-                       "OPatternModel::commitControlValueToDbColumn: no value helper!");
-            if (!m_pFormattedValue)
-                return false;
-
-            if ( !m_pFormattedValue->setFormattedValue( sNewValue ) )
-                return false;
-        }
-
-        m_aLastKnownValue = aNewValue;
+        )
+    {
+        m_xColumnUpdate->updateNull();
     }
+    else
+    {
+        OSL_ENSURE(m_pFormattedValue,
+                   "OPatternModel::commitControlValueToDbColumn: no value helper!");
+        if (!m_pFormattedValue)
+            return false;
+
+        if ( !m_pFormattedValue->setFormattedValue( sNewValue ) )
+            return false;
+    }
+
+    m_aLastKnownValue = aNewValue;
 
     return true;
 }

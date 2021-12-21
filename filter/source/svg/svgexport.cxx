@@ -789,42 +789,42 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
     Any selection = xSelectionSupplier->getSelection();
     uno::Reference<lang::XServiceInfo> xSelection;
     selection >>= xSelection;
-    if (xSelection.is() && xSelection->supportsService("com.sun.star.text.TextGraphicObject"))
-    {
-        uno::Reference<beans::XPropertySet> xPropertySet(xSelection, uno::UNO_QUERY);
+    if (!xSelection || !xSelection->supportsService("com.sun.star.text.TextGraphicObject"))
+        return true;
 
-        uno::Reference<graphic::XGraphic> xOriginalGraphic;
-        xPropertySet->getPropertyValue("Graphic") >>= xOriginalGraphic;
-        const Graphic aOriginalGraphic(xOriginalGraphic);
+    uno::Reference<beans::XPropertySet> xPropertySet(xSelection, uno::UNO_QUERY);
 
-        uno::Reference<graphic::XGraphic> xTransformedGraphic;
-        xPropertySet->getPropertyValue("TransformedGraphic") >>= xTransformedGraphic;
+    uno::Reference<graphic::XGraphic> xOriginalGraphic;
+    xPropertySet->getPropertyValue("Graphic") >>= xOriginalGraphic;
+    const Graphic aOriginalGraphic(xOriginalGraphic);
 
-        if (!xTransformedGraphic.is())
-            return false;
-        const Graphic aTransformedGraphic(xTransformedGraphic);
-        bool bSameGraphic = aTransformedGraphic == aOriginalGraphic ||
-            aOriginalGraphic.GetChecksum() == aTransformedGraphic.GetChecksum();
-        const Graphic aGraphic = bSameGraphic ? aOriginalGraphic : aTransformedGraphic;
-        uno::Reference<graphic::XGraphic> xGraphic = bSameGraphic ? xOriginalGraphic : xTransformedGraphic;
+    uno::Reference<graphic::XGraphic> xTransformedGraphic;
+    xPropertySet->getPropertyValue("TransformedGraphic") >>= xTransformedGraphic;
 
-        // Calculate size from Graphic
-        Point aPos( OutputDevice::LogicToLogic(aGraphic.GetPrefMapMode().GetOrigin(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
-        Size  aSize( OutputDevice::LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
+    if (!xTransformedGraphic.is())
+        return false;
+    const Graphic aTransformedGraphic(xTransformedGraphic);
+    bool bSameGraphic = aTransformedGraphic == aOriginalGraphic ||
+        aOriginalGraphic.GetChecksum() == aTransformedGraphic.GetChecksum();
+    const Graphic aGraphic = bSameGraphic ? aOriginalGraphic : aTransformedGraphic;
+    uno::Reference<graphic::XGraphic> xGraphic = bSameGraphic ? xOriginalGraphic : xTransformedGraphic;
 
-        assert(mSelectedPages.size() == 1);
-        SvxDrawPage* pSvxDrawPage(comphelper::getFromUnoTunnel<SvxDrawPage>(mSelectedPages[0]));
-        if(pSvxDrawPage == nullptr || pSvxDrawPage->GetSdrPage() == nullptr)
-            return false;
+    // Calculate size from Graphic
+    Point aPos( OutputDevice::LogicToLogic(aGraphic.GetPrefMapMode().GetOrigin(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
+    Size  aSize( OutputDevice::LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
 
-        SdrGrafObj* pGraphicObj = new SdrGrafObj(pSvxDrawPage->GetSdrPage()->getSdrModelFromSdrPage(), aGraphic, tools::Rectangle( aPos, aSize ));
-        uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject(pGraphicObj);
-        uno::Reference< XPropertySet > xShapePropSet(xShape, uno::UNO_QUERY);
-        xShapePropSet->setPropertyValue("Graphic", uno::Any(xGraphic));
+    assert(mSelectedPages.size() == 1);
+    SvxDrawPage* pSvxDrawPage(comphelper::getFromUnoTunnel<SvxDrawPage>(mSelectedPages[0]));
+    if(pSvxDrawPage == nullptr || pSvxDrawPage->GetSdrPage() == nullptr)
+        return false;
 
-        maShapeSelection = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
-        maShapeSelection->add(xShape);
-    }
+    SdrGrafObj* pGraphicObj = new SdrGrafObj(pSvxDrawPage->GetSdrPage()->getSdrModelFromSdrPage(), aGraphic, tools::Rectangle( aPos, aSize ));
+    uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject(pGraphicObj);
+    uno::Reference< XPropertySet > xShapePropSet(xShape, uno::UNO_QUERY);
+    xShapePropSet->setPropertyValue("Graphic", uno::Any(xGraphic));
+
+    maShapeSelection = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
+    maShapeSelection->add(xShape);
 
     return true;
 }

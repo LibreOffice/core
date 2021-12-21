@@ -430,26 +430,25 @@ namespace frm
         // returns false if parent should *abort* (user pressed cancel)
         bool checkConfirmation(bool &needConfirmation, bool &shouldCommit)
         {
-            if(needConfirmation)
-            {
-                // TODO: shouldn't this be done with an interaction handler?
-                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
-                                                               VclMessageType::Question, VclButtonsType::YesNo,
-                                                               ResourceManager::loadString(RID_STR_QUERY_SAVE_MODIFIED_ROW)));
-                xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
-                xQueryBox->set_default_response(RET_YES);
+            if(!needConfirmation)
+                return true;
+            // TODO: shouldn't this be done with an interaction handler?
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           ResourceManager::loadString(RID_STR_QUERY_SAVE_MODIFIED_ROW)));
+            xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+            xQueryBox->set_default_response(RET_YES);
 
-                switch (xQueryBox->run())
-                {
-                    case RET_NO:
-                        shouldCommit = false;
-                        [[fallthrough]]; // don't ask again!
-                    case RET_YES:
-                        needConfirmation = false;
-                        return true;
-                    case RET_CANCEL:
-                        return false;
-                }
+            switch (xQueryBox->run())
+            {
+                case RET_NO:
+                    shouldCommit = false;
+                    [[fallthrough]]; // don't ask again!
+                case RET_YES:
+                    needConfirmation = false;
+                    return true;
+                case RET_CANCEL:
+                    return false;
             }
             return true;
         }

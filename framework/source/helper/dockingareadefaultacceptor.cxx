@@ -64,32 +64,30 @@ sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css
     // Try to "lock" the frame for access to taskscontainer.
     css::uno::Reference< XFrame > xFrame( m_xOwner );
 
-    if ( xFrame.is() )
-    {
-        css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
-        css::uno::Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
+    if ( !xFrame.is() )
+        return false;
 
-        if ( xContainerWindow.is() && xComponentWindow.is() )
-        {
-            css::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, css::uno::UNO_QUERY );
-            // Convert relative size to output size.
-            css::awt::Rectangle  aRectangle  = xContainerWindow->getPosSize();
-            css::awt::DeviceInfo aInfo       = xDevice->getInfo();
-            css::awt::Size       aSize       (  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
-                                                aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
+    css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
+    css::uno::Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
 
-            css::awt::Size aMinSize( 0, 0 ); // = xLayoutConstraints->getMinimumSize();
+    if ( !xContainerWindow.is() || !xComponentWindow.is() )
+        return false;
 
-            // Check if request border space would decrease component window size below minimum size
-            if ((( aSize.Width - RequestedSpace.X - RequestedSpace.Width ) < aMinSize.Width ) ||
-                (( aSize.Height - RequestedSpace.Y - RequestedSpace.Height ) < aMinSize.Height  )       )
-                return false;
+    css::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, css::uno::UNO_QUERY );
+    // Convert relative size to output size.
+    css::awt::Rectangle  aRectangle  = xContainerWindow->getPosSize();
+    css::awt::DeviceInfo aInfo       = xDevice->getInfo();
+    css::awt::Size       aSize       (  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
+                                        aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
 
-            return true;
-        }
-    }
+    css::awt::Size aMinSize( 0, 0 ); // = xLayoutConstraints->getMinimumSize();
 
-    return false;
+    // Check if request border space would decrease component window size below minimum size
+    if ((( aSize.Width - RequestedSpace.X - RequestedSpace.Width ) < aMinSize.Width ) ||
+        (( aSize.Height - RequestedSpace.Y - RequestedSpace.Height ) < aMinSize.Height  )       )
+        return false;
+
+    return true;
 }
 
 void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::Rectangle& BorderSpace )

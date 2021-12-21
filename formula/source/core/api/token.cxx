@@ -942,68 +942,68 @@ void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
 
 bool FormulaTokenArray::HasMatrixDoubleRefOps() const
 {
-    if ( pRPN && nRPN )
+    if ( !pRPN || !nRPN )
+        return false;
+
+    // RPN-Interpreter simulation.
+    // Simply assumes a double as return value of each function.
+    std::unique_ptr<FormulaToken*[]> pStack(new FormulaToken* [nRPN]);
+    FormulaToken* pResult = new FormulaDoubleToken( 0.0 );
+    short sp = 0;
+    for ( auto t: RPNTokens() )
     {
-        // RPN-Interpreter simulation.
-        // Simply assumes a double as return value of each function.
-        std::unique_ptr<FormulaToken*[]> pStack(new FormulaToken* [nRPN]);
-        FormulaToken* pResult = new FormulaDoubleToken( 0.0 );
-        short sp = 0;
-        for ( auto t: RPNTokens() )
+        OpCode eOp = t->GetOpCode();
+        sal_uInt8 nParams = t->GetParamCount();
+        switch ( eOp )
         {
-            OpCode eOp = t->GetOpCode();
-            sal_uInt8 nParams = t->GetParamCount();
-            switch ( eOp )
+            case ocAdd :
+            case ocSub :
+            case ocMul :
+            case ocDiv :
+            case ocPow :
+            case ocPower :
+            case ocAmpersand :
+            case ocEqual :
+            case ocNotEqual :
+            case ocLess :
+            case ocGreater :
+            case ocLessEqual :
+            case ocGreaterEqual :
             {
-                case ocAdd :
-                case ocSub :
-                case ocMul :
-                case ocDiv :
-                case ocPow :
-                case ocPower :
-                case ocAmpersand :
-                case ocEqual :
-                case ocNotEqual :
-                case ocLess :
-                case ocGreater :
-                case ocLessEqual :
-                case ocGreaterEqual :
+                for ( sal_uInt8 k = nParams; k; k-- )
                 {
-                    for ( sal_uInt8 k = nParams; k; k-- )
+                    if ( sp >= k && pStack[sp-k]->GetType() == svDoubleRef )
                     {
-                        if ( sp >= k && pStack[sp-k]->GetType() == svDoubleRef )
-                        {
-                            pResult->Delete();
-                            return true;
-                        }
+                        pResult->Delete();
+                        return true;
                     }
                 }
-                break;
-                default:
-                {
-                    // added to avoid warnings
-                }
             }
-            if ( eOp == ocPush || lcl_IsReference( eOp, t->GetType() )  )
-                pStack[sp++] = t;
-            else if (FormulaCompiler::IsOpCodeJumpCommand( eOp ))
-            {   // ignore Jumps, pop previous Result (Condition)
-                if ( sp )
-                    --sp;
-            }
-            else
-            {   // pop parameters, push result
-                sp = sal::static_int_cast<short>( sp - nParams );
-                if ( sp < 0 )
-                {
-                    SAL_WARN("formula.core", "FormulaTokenArray::HasMatrixDoubleRefOps: sp < 0" );
-                    sp = 0;
-                }
-                pStack[sp++] = pResult;
+            break;
+            default:
+            {
+                // added to avoid warnings
             }
         }
-        pResult->Delete();
+        if ( eOp == ocPush || lcl_IsReference( eOp, t->GetType() )  )
+            pStack[sp++] = t;
+        else if (FormulaCompiler::IsOpCodeJumpCommand( eOp ))
+        {   // ignore Jumps, pop previous Result (Condition)
+            if ( sp )
+                --sp;
+        }
+        else
+        {   // pop parameters, push result
+            sp = sal::static_int_cast<short>( sp - nParams );
+            if ( sp < 0 )
+            {
+                SAL_WARN("formula.core", "FormulaTokenArray::HasMatrixDoubleRefOps: sp < 0" );
+                sp = 0;
+            }
+            pStack[sp++] = pResult;
+        }
     }
+    pResult->Delete();
 
     return false;
 }
@@ -1530,23 +1530,23 @@ inline bool isWhitespace( OpCode eOp ) { return eOp == ocSpaces || eOp == ocWhit
 
 bool FormulaTokenArray::MayReferenceFollow()
 {
-    if ( pCode && nLen > 0 )
+    if ( !pCode || nLen <= 0 )
+        return false;
+
+    // ignore trailing spaces
+    sal_uInt16 i = nLen - 1;
+    while (i > 0 && isWhitespace( pCode[i]->GetOpCode()))
     {
-        // ignore trailing spaces
-        sal_uInt16 i = nLen - 1;
-        while (i > 0 && isWhitespace( pCode[i]->GetOpCode()))
+        --i;
+    }
+    if (i > 0 || !isWhitespace( pCode[i]->GetOpCode()))
+    {
+        OpCode eOp = pCode[i]->GetOpCode();
+        if ( (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP ) ||
+             (SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP ) ||
+             eOp == SC_OPCODE_OPEN || eOp == SC_OPCODE_SEP )
         {
-            --i;
-        }
-        if (i > 0 || !isWhitespace( pCode[i]->GetOpCode()))
-        {
-            OpCode eOp = pCode[i]->GetOpCode();
-            if ( (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP ) ||
-                 (SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP ) ||
-                 eOp == SC_OPCODE_OPEN || eOp == SC_OPCODE_SEP )
-            {
-                return true;
-            }
+            return true;
         }
     }
     return false;
@@ -1776,26 +1776,26 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceRPN()
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceOrName()
 {
-    if( mpFTA->GetArray() )
+    if( !mpFTA->GetArray() )
+        return nullptr;
+
+    while ( mnIndex < mpFTA->GetLen() )
     {
-        while ( mnIndex < mpFTA->GetLen() )
+        FormulaToken* t = mpFTA->GetArray()[ mnIndex++ ];
+        switch( t->GetType() )
         {
-            FormulaToken* t = mpFTA->GetArray()[ mnIndex++ ];
-            switch( t->GetType() )
+            case svSingleRef:
+            case svDoubleRef:
+            case svIndex:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+            case svExternalName:
+                return t;
+            default:
             {
-                case svSingleRef:
-                case svDoubleRef:
-                case svIndex:
-                case svExternalSingleRef:
-                case svExternalDoubleRef:
-                case svExternalName:
-                    return t;
-                default:
-                {
-                    // added to avoid warnings
-                }
-             }
-        }
+                // added to avoid warnings
+            }
+         }
     }
     return nullptr;
 }

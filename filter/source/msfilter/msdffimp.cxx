@@ -422,23 +422,23 @@ SvStream& ReadSvxMSDffSolverContainer( SvStream& rIn, SvxMSDffSolverContainer& r
 {
     DffRecordHeader aHd;
     bool bOk = ReadDffRecordHeader( rIn, aHd );
-    if (bOk && aHd.nRecType == DFF_msofbtSolverContainer)
+    if (!bOk || aHd.nRecType != DFF_msofbtSolverContainer)
+        return rIn;
+
+    DffRecordHeader aCRule;
+    auto nEndPos = DffPropSet::SanitizeEndPos(rIn, aHd.GetRecEndFilePos());
+    while ( rIn.good() && ( rIn.Tell() < nEndPos ) )
     {
-        DffRecordHeader aCRule;
-        auto nEndPos = DffPropSet::SanitizeEndPos(rIn, aHd.GetRecEndFilePos());
-        while ( rIn.good() && ( rIn.Tell() < nEndPos ) )
+        if (!ReadDffRecordHeader(rIn, aCRule))
+            break;
+        if ( aCRule.nRecType == DFF_msofbtConnectorRule )
         {
-            if (!ReadDffRecordHeader(rIn, aCRule))
-                break;
-            if ( aCRule.nRecType == DFF_msofbtConnectorRule )
-            {
-                std::unique_ptr<SvxMSDffConnectorRule> pRule(new SvxMSDffConnectorRule);
-                rIn >> *pRule;
-                rContainer.aCList.push_back( std::move(pRule) );
-            }
-            if (!aCRule.SeekToEndOfRecord(rIn))
-                break;
+            std::unique_ptr<SvxMSDffConnectorRule> pRule(new SvxMSDffConnectorRule);
+            rIn >> *pRule;
+            rContainer.aCList.push_back( std::move(pRule) );
         }
+        if (!aCRule.SeekToEndOfRecord(rIn))
+            break;
     }
     return rIn;
 }
@@ -6312,31 +6312,30 @@ bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
 
     SvxMSDffShapeInfos_ById::const_iterator const it =
         m_xShapeInfosById->find(pTmpRec);
-    if (it != m_xShapeInfosById->end())
-    {
-        // Possibly delete old error flag.
-        if( rStCtrl.GetError() )
-            rStCtrl.ResetError();
-        // store FilePos of the stream(s)
-        sal_uInt64 nOldPosCtrl = rStCtrl.Tell();
-        sal_uInt64 nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
-        // jump to the shape in the control stream
-        sal_uInt64 const nFilePos((*it)->nFilePos);
-        bool bSeeked = (nFilePos == rStCtrl.Seek(nFilePos));
+    if (it == m_xShapeInfosById->end())
+        return false;
 
-        // if it failed, reset error statusF
-        if (!bSeeked || rStCtrl.GetError())
-            rStCtrl.ResetError();
-        else
-            rpShape = ImportObj( rStCtrl, rData, rData.aParentRect, rData.aParentRect, /*nCalledByGroup*/0, /*pShapeId*/nullptr );
+    // Possibly delete old error flag.
+    if( rStCtrl.GetError() )
+        rStCtrl.ResetError();
+    // store FilePos of the stream(s)
+    sal_uInt64 nOldPosCtrl = rStCtrl.Tell();
+    sal_uInt64 nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
+    // jump to the shape in the control stream
+    sal_uInt64 const nFilePos((*it)->nFilePos);
+    bool bSeeked = (nFilePos == rStCtrl.Seek(nFilePos));
 
-        // restore old FilePos of the stream(s)
-        rStCtrl.Seek( nOldPosCtrl );
-        if( &rStCtrl != pStData && pStData )
-            pStData->Seek( nOldPosData );
-        return ( nullptr != rpShape );
-    }
-    return false;
+    // if it failed, reset error statusF
+    if (!bSeeked || rStCtrl.GetError())
+        rStCtrl.ResetError();
+    else
+        rpShape = ImportObj( rStCtrl, rData, rData.aParentRect, rData.aParentRect, /*nCalledByGroup*/0, /*pShapeId*/nullptr );
+
+    // restore old FilePos of the stream(s)
+    rStCtrl.Seek( nOldPosCtrl );
+    if( &rStCtrl != pStData && pStData )
+        pStData->Seek( nOldPosData );
+    return ( nullptr != rpShape );
 }
 
 

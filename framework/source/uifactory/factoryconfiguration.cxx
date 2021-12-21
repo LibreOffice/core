@@ -262,23 +262,23 @@ bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any& aEl
     Reference< XPropertySet > xPropertySet;
     aElement >>= xPropertySet;
 
-    if ( xPropertySet.is() )
+    if ( !xPropertySet.is() )
+        return true;
+
+    try
     {
-        try
-        {
-            xPropertySet->getPropertyValue( m_aPropCommand ) >>= aCommand;
-            xPropertySet->getPropertyValue( m_aPropModule ) >>= aModule;
-            xPropertySet->getPropertyValue( m_aPropController ) >>= aServiceSpecifier;
-            xPropertySet->getPropertyValue( m_aPropValue ) >>= aValue;
-        }
-        catch ( const css::beans::UnknownPropertyException& )
-        {
-            return false;
-        }
-        catch ( const css::lang::WrappedTargetException& )
-        {
-            return false;
-        }
+        xPropertySet->getPropertyValue( m_aPropCommand ) >>= aCommand;
+        xPropertySet->getPropertyValue( m_aPropModule ) >>= aModule;
+        xPropertySet->getPropertyValue( m_aPropController ) >>= aServiceSpecifier;
+        xPropertySet->getPropertyValue( m_aPropValue ) >>= aValue;
+    }
+    catch ( const css::beans::UnknownPropertyException& )
+    {
+        return false;
+    }
+    catch ( const css::lang::WrappedTargetException& )
+    {
+        return false;
     }
 
     return true;

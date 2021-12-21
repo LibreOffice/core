@@ -1831,51 +1831,51 @@ bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilt
 
     rFilter.clear();
 
-    if ( nWildCardPos != -1 )
-    {
-        sal_Int32 nPathTokenPos = aReversePath.indexOf( '/' );
+    if ( nWildCardPos == -1 )
+        return true;
 
+    sal_Int32 nPathTokenPos = aReversePath.indexOf( '/' );
+
+    if ( nPathTokenPos == -1 )
+    {
+        OUString aDelim(
+#if defined(_WIN32)
+                '\\'
+#else
+                '/'
+#endif
+        );
+
+        nPathTokenPos = aReversePath.indexOf( aDelim );
+#if !defined( UNX )
         if ( nPathTokenPos == -1 )
         {
-            OUString aDelim(
-#if defined(_WIN32)
-                    '\\'
-#else
-                    '/'
+            nPathTokenPos = aReversePath.indexOf( ':' );
+        }
 #endif
-            );
+    }
 
-            nPathTokenPos = aReversePath.indexOf( aDelim );
-#if !defined( UNX )
-            if ( nPathTokenPos == -1 )
-            {
-                nPathTokenPos = aReversePath.indexOf( ':' );
-            }
-#endif
-        }
-
-        // check syntax
-        if ( nPathTokenPos != -1 )
+    // check syntax
+    if ( nPathTokenPos != -1 )
+    {
+        if ( nPathTokenPos < (rPath.getLength() - nWildCardPos - 1) )
         {
-            if ( nPathTokenPos < (rPath.getLength() - nWildCardPos - 1) )
-            {
-                ErrorHandler::HandleError( ERRCODE_SFX_INVALIDSYNTAX );
-                return false;
-            }
-
-            // cut off filter
-            rFilter = aReversePath.copy( 0, nPathTokenPos );
-            rFilter = comphelper::string::reverseString(rFilter);
-
-            // determine folder
-            rPath = aReversePath.copy( nPathTokenPos );
-            rPath = comphelper::string::reverseString(rPath);
+            ErrorHandler::HandleError( ERRCODE_SFX_INVALIDSYNTAX );
+            return false;
         }
-        else
-        {
-            rFilter = rPath;
-            rPath.clear();
-        }
+
+        // cut off filter
+        rFilter = aReversePath.copy( 0, nPathTokenPos );
+        rFilter = comphelper::string::reverseString(rFilter);
+
+        // determine folder
+        rPath = aReversePath.copy( nPathTokenPos );
+        rPath = comphelper::string::reverseString(rPath);
+    }
+    else
+    {
+        rFilter = rPath;
+        rPath.clear();
     }
 
     return true;

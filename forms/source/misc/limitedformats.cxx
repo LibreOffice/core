@@ -271,70 +271,68 @@ namespace frm
     {
         OSL_ENSURE(m_xAggregate.is() && (-1 != m_nFormatEnumPropertyHandle), "OLimitedFormats::convertFormatKeyPropertyValue: not initialized!");
 
-        if (m_xAggregate.is())
+        if (!m_xAggregate)
+            return false;
+
+        // the new format key to set
+        sal_Int32 nNewFormat = 0;
+        if (!(_rNewValue >>= nNewFormat))
+            throw IllegalArgumentException();
+
+        // get the old (enum) value from the aggregate
+        Any aEnumPropertyValue = m_xAggregate->getFastPropertyValue(m_nFormatEnumPropertyHandle);
+        sal_Int32 nOldEnumValue = -1;
+        ::cppu::enum2int(nOldEnumValue, aEnumPropertyValue);
+
+        // get the translation table
+        const FormatEntry* pFormats = lcl_getFormatTable(m_nTableId);
+
+        _rOldValue.clear();
+        _rConvertedValue.clear();
+
+        // look for the entry with the given format key
+        sal_Int32 nTablePosition = 0;
+        for (   ;
+                (nullptr != pFormats->pDescription) && (nNewFormat != pFormats->nKey);
+                ++pFormats, ++nTablePosition
+            )
         {
-            // the new format key to set
-            sal_Int32 nNewFormat = 0;
-            if (!(_rNewValue >>= nNewFormat))
-                throw IllegalArgumentException();
-
-            // get the old (enum) value from the aggregate
-            Any aEnumPropertyValue = m_xAggregate->getFastPropertyValue(m_nFormatEnumPropertyHandle);
-            sal_Int32 nOldEnumValue = -1;
-            ::cppu::enum2int(nOldEnumValue, aEnumPropertyValue);
-
-            // get the translation table
-            const FormatEntry* pFormats = lcl_getFormatTable(m_nTableId);
-
-            _rOldValue.clear();
-            _rConvertedValue.clear();
-
-            // look for the entry with the given format key
-            sal_Int32 nTablePosition = 0;
-            for (   ;
-                    (nullptr != pFormats->pDescription) && (nNewFormat != pFormats->nKey);
-                    ++pFormats, ++nTablePosition
-                )
-            {
-                if (nTablePosition == nOldEnumValue)
-                    _rOldValue <<= pFormats->nKey;
-            }
-
-            bool bFoundIt = (nullptr != pFormats->pDescription);
-            bool bModified = false;
-            if (bFoundIt)
-            {
-                _rConvertedValue <<= static_cast<sal_Int16>(nTablePosition);
-                bModified = nTablePosition != nOldEnumValue;
-            }
-
-            if (!_rOldValue.hasValue())
-            {   // did not reach the end of the table (means we found nNewFormat)
-                // -> go to the end to ensure that _rOldValue is set
-                while (pFormats->pDescription)
-                {
-                    if (nTablePosition == nOldEnumValue)
-                    {
-                        _rOldValue <<= pFormats->nKey;
-                        break;
-                    }
-
-                    ++pFormats;
-                    ++nTablePosition;
-                }
-            }
-
-            OSL_ENSURE(_rOldValue.hasValue(), "OLimitedFormats::convertFormatKeyPropertyValue: did not find the old enum value in the table!");
-
-            if (!bFoundIt)
-            {   // somebody gave us a format which we can't translate
-                throw IllegalArgumentException("This control supports only a very limited number of formats.", nullptr, 2);
-            }
-
-            return bModified;
+            if (nTablePosition == nOldEnumValue)
+                _rOldValue <<= pFormats->nKey;
         }
 
-        return false;
+        bool bFoundIt = (nullptr != pFormats->pDescription);
+        bool bModified = false;
+        if (bFoundIt)
+        {
+            _rConvertedValue <<= static_cast<sal_Int16>(nTablePosition);
+            bModified = nTablePosition != nOldEnumValue;
+        }
+
+        if (!_rOldValue.hasValue())
+        {   // did not reach the end of the table (means we found nNewFormat)
+            // -> go to the end to ensure that _rOldValue is set
+            while (pFormats->pDescription)
+            {
+                if (nTablePosition == nOldEnumValue)
+                {
+                    _rOldValue <<= pFormats->nKey;
+                    break;
+                }
+
+                ++pFormats;
+                ++nTablePosition;
+            }
+        }
+
+        OSL_ENSURE(_rOldValue.hasValue(), "OLimitedFormats::convertFormatKeyPropertyValue: did not find the old enum value in the table!");
+
+        if (!bFoundIt)
+        {   // somebody gave us a format which we can't translate
+            throw IllegalArgumentException("This control supports only a very limited number of formats.", nullptr, 2);
+        }
+
+        return bModified;
     }
 
 
