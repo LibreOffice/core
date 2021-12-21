@@ -16,6 +16,24 @@
       "message": "In a feature branch I was trying to create a drawinglayercore separate library still inside drawinglayer component (like svxcore and svx), which can be freely used inside vcl [1], because it doesn\u0027t depend on it. This looks similar to what you try to do, without the need to put it into vcl. I don\u0027t like we have to put them inside vcl, but I would rather have the core of drawinglayer, that isn\u0027t dependent on any backend or existing implementation as an independent component.  \n\n[1] https://cgit.freedesktop.org/libreoffice/core/commit/?h\u003dfeature/drawinglayercore2\u0026id\u003d41a6764a029f2a22d93c52dc83826ea3eed10eaa",
       "revId": "bfb06654031046dadaef98f17ed98b23842416b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08e1c2c1_34409169",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-21T06:22:20Z",
+      "side": 1,
+      "message": "\u003e In a feature branch I was trying to create a drawinglayercore \n\nI\u0027m happy to wait a bit if you\u0027re ready to push that\n\nMy personal opininion is that drawinglayer is so tied into graphics we should just move all of it into vcl.\n\nThis patch is (from my perspective) a compromise solution.",
+      "parentUuid": "df5fa7b3_37d4f1d8",
+      "revId": "bfb06654031046dadaef98f17ed98b23842416b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
