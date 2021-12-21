@@ -213,7 +213,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
 
     namespace {
 
-    /// an STL argorithm compatible predicate comparing two DriverAccess instances by their implementation names
+    /// an STL algorithm compatible predicate comparing two DriverAccess instances by their implementation names
     struct CompareDriverAccessByName
     {
 
@@ -223,7 +223,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
         }
     };
 
-    /// and STL argorithm compatible predicate comparing a DriverAccess' impl name to a string
+    /// and an STL algorithm compatible predicate comparing the impl name of a DriverAccess to a string
     struct EqualDriverAccessToName
     {
         OUString m_sImplName;
