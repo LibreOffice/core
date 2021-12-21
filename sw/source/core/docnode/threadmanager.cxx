@@ -71,7 +71,7 @@ oslInterlockedCount ThreadManager::AddThread(
                             const rtl::Reference< ObservableThread >& rThread )
 
 {
-    osl::MutexGuard aGuard(maMutex);
+    std::unique_lock aGuard(maMutex);
 
     // create new thread
     tThreadData aThreadData;
@@ -89,7 +89,7 @@ oslInterlockedCount ThreadManager::AddThread(
 
     // add thread to manager
     if ( maStartedThreads.size() < snStartedSize &&
-         !StartingOfThreadsSuspended() )
+         !mbStartingOfThreadsSuspended )
     {
         // Try to start thread
         if ( !StartThread( aThreadData ) )
@@ -116,7 +116,7 @@ void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
                                   const bool bThreadFinished )
 {
     // --> SAFE ----
-    osl::MutexGuard aGuard(maMutex);
+    std::unique_lock aGuard(maMutex);
 
     std::deque< tThreadData >::iterator aIter =
                 std::find_if( maStartedThreads.begin(), maStartedThreads.end(),
@@ -143,6 +143,7 @@ void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
         }
 
         // Try to start thread from waiting ones
+        aGuard.unlock();
         TryToStartNewThread( nullptr );
     }
     else
@@ -205,9 +206,9 @@ bool ThreadManager::StartThread( const tThreadData& rThreadData )
 
 IMPL_LINK_NOARG(ThreadManager, TryToStartNewThread, Timer *, void)
 {
-    osl::MutexGuard aGuard(maMutex);
+    std::unique_lock aGuard(maMutex);
 
-    if ( StartingOfThreadsSuspended() )
+    if ( mbStartingOfThreadsSuspended )
         return;
 
     // Try to start thread from waiting ones
@@ -225,7 +226,7 @@ IMPL_LINK_NOARG(ThreadManager, TryToStartNewThread, Timer *, void)
 
 void ThreadManager::ResumeStartingOfThreads()
 {
-    osl::MutexGuard aGuard(maMutex);
+    std::unique_lock aGuard(maMutex);
 
     mbStartingOfThreadsSuspended = false;
 
