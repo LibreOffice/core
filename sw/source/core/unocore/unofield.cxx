@@ -43,7 +43,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <editsh.hxx>
 #include <viewsh.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -81,7 +81,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>
 #include <fmtmeta.hxx>
@@ -405,11 +405,11 @@ class SwXFieldMaster::Impl
     : public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper3
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
 
     SwDoc*          m_pDoc;
     SwFieldType* m_pType;
@@ -426,8 +426,7 @@ public:
     sal_Int32       m_nParam2;
 
     Impl(SwPageDesc* const pPageDesc, SwDoc* pDoc, SwFieldIds nResId)
-        : m_EventListeners(m_Mutex)
-        , m_pDoc(pDoc)
+        : m_pDoc(pDoc)
         , m_pType(nullptr)
         , m_nResTypeId(nResId)
         , m_fParam1(0.0)
@@ -439,8 +438,7 @@ public:
     }
 
     Impl(SwFieldType* const pType, SwDoc* pDoc, SwFieldIds nResId)
-        : m_EventListeners(m_Mutex)
-        , m_pDoc(pDoc)
+        : m_pDoc(pDoc)
         , m_pType(pType)
         , m_nResTypeId(nResId)
         , m_fParam1(0.0)
@@ -995,7 +993,8 @@ void SwXFieldMaster::Impl::Notify(const SfxHint& rHint)
             return;
         }
         lang::EventObject const ev(xThis);
-        m_EventListeners.disposeAndClear(ev);
+        std::unique_lock aGuard(m_Mutex);
+        m_EventListeners.disposeAndClear(aGuard, ev);
     }
 }
 
@@ -1085,13 +1084,13 @@ class SwXTextField::Impl
     : public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper3
     SwFieldType* m_pFieldType;
     SwFormatField* m_pFormatField;
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
 
     SwDoc* m_pDoc;
     rtl::Reference<SwTextAPIObject> m_xTextObject;
@@ -1104,7 +1103,6 @@ public:
     Impl(SwDoc *const pDoc, SwFormatField *const pFormat, SwServiceType nServiceId)
         : m_pFieldType(nullptr)
         , m_pFormatField(pFormat)
-        , m_EventListeners(m_Mutex)
         , m_pDoc(pDoc)
         , m_bIsDescriptor(pFormat == nullptr)
         , m_bCallUpdate(false)
@@ -2611,7 +2609,8 @@ void SwXTextField::Impl::Invalidate()
         return;
     }
     lang::EventObject const ev(xThis);
-    m_EventListeners.disposeAndClear(ev);
+    std::unique_lock aGuard(m_Mutex);
+    m_EventListeners.disposeAndClear(aGuard, ev);
 }
 
 void SwXTextField::Impl::Notify(const SfxHint& rHint)
@@ -2827,13 +2826,9 @@ sal_Bool SwXTextFieldMasters::hasElements()
 
 class SwXTextFieldTypes::Impl
 {
-private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
-
 public:
-    ::comphelper::OInterfaceContainerHelper3<util::XRefreshListener> m_RefreshListeners;
-
-    Impl() : m_RefreshListeners(m_Mutex) { }
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper3
+    ::comphelper::OInterfaceContainerHelper4<util::XRefreshListener> m_RefreshListeners;
 };
 
 OUString SwXTextFieldTypes::getImplementationName()
@@ -2866,7 +2861,8 @@ void SwXTextFieldTypes::Invalidate()
 {
     SwUnoCollection::Invalidate();
     lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
-    m_pImpl->m_RefreshListeners.disposeAndClear(ev);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_RefreshListeners.disposeAndClear(aGuard, ev);
 }
 
 uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration()
