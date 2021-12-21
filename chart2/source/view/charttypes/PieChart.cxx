@@ -914,48 +914,49 @@ bool PieChart::PieLabelInfo::moveAwayFrom( const PieChart::PieLabelInfo* pFix, c
     ///boxes (`aOverlap`).
     ::basegfx::B2IRectangle aOverlap( lcl_getRect( xLabelGroupShape ) );
     aOverlap.intersect( lcl_getRect( pFix->xLabelGroupShape ) );
-    if( !aOverlap.isEmpty() )
-    {
-        //TODO: alternative move direction
+    if( aOverlap.isEmpty() )
+        return true;
 
-        ///the label is shifted along the direction orthogonal to the vector
-        ///starting at the pie/donut center and ending at this label anchor
-        ///point;
+    //TODO: alternative move direction
 
-        ///named `aTangentialDirection` the unit vector related to such a
-        ///direction, the magnitude of the shift along such a direction is
-        ///calculated in this way: if the horizontal component of
-        ///`aTangentialDirection` is greater than the vertical component,
-        ///the magnitude of the shift is equal to `aOverlap.Width` else to
-        ///`aOverlap.Height`;
-        basegfx::B2IVector aRadiusDirection = aFirstPosition - aOrigin;
-        aRadiusDirection.setLength(1.0);
-        basegfx::B2IVector aTangentialDirection( -aRadiusDirection.getY(), aRadiusDirection.getX() );
-        bool bShiftHorizontal = abs(aTangentialDirection.getX()) > abs(aTangentialDirection.getY());
-        sal_Int32 nShift = bShiftHorizontal ? static_cast<sal_Int32>(aOverlap.getWidth()) : static_cast<sal_Int32>(aOverlap.getHeight());
-        ///the magnitude of the shift is also increased by 1/50-th of the width
-        ///or the height of the document page;
-        nShift += (bShiftHorizontal ? nLabelDistanceX : nLabelDistanceY);
-        ///in case the `bMoveHalfWay` parameter is true the magnitude of
-        ///the shift is halved.
-        if( bMoveHalfWay )
-            nShift/=2;
-        ///in case the `bMoveClockwise` parameter is false the direction of
-        ///`aTangentialDirection` is reversed;
-        if(!bMoveClockwise)
-            nShift*=-1;
-        awt::Point aOldPos( xLabelGroupShape->getPosition() );
-        basegfx::B2IVector aNewPos = basegfx::B2IVector( aOldPos.X, aOldPos.Y ) + nShift*aTangentialDirection;
+    ///the label is shifted along the direction orthogonal to the vector
+    ///starting at the pie/donut center and ending at this label anchor
+    ///point;
 
-        ///a final check is performed in order to be sure that the moved label
-        ///is still inside the page document;
-        awt::Point aNewAWTPos( aNewPos.getX(), aNewPos.getY() );
-        if( !lcl_isInsidePage( aNewAWTPos, xLabelGroupShape->getSize(), rPageSize ) )
-            return false;
+    ///named `aTangentialDirection` the unit vector related to such a
+    ///direction, the magnitude of the shift along such a direction is
+    ///calculated in this way: if the horizontal component of
+    ///`aTangentialDirection` is greater than the vertical component,
+    ///the magnitude of the shift is equal to `aOverlap.Width` else to
+    ///`aOverlap.Height`;
+    basegfx::B2IVector aRadiusDirection = aFirstPosition - aOrigin;
+    aRadiusDirection.setLength(1.0);
+    basegfx::B2IVector aTangentialDirection( -aRadiusDirection.getY(), aRadiusDirection.getX() );
+    bool bShiftHorizontal = abs(aTangentialDirection.getX()) > abs(aTangentialDirection.getY());
+    sal_Int32 nShift = bShiftHorizontal ? static_cast<sal_Int32>(aOverlap.getWidth()) : static_cast<sal_Int32>(aOverlap.getHeight());
+    ///the magnitude of the shift is also increased by 1/50-th of the width
+    ///or the height of the document page;
+    nShift += (bShiftHorizontal ? nLabelDistanceX : nLabelDistanceY);
+    ///in case the `bMoveHalfWay` parameter is true the magnitude of
+    ///the shift is halved.
+    if( bMoveHalfWay )
+        nShift/=2;
+    ///in case the `bMoveClockwise` parameter is false the direction of
+    ///`aTangentialDirection` is reversed;
+    if(!bMoveClockwise)
+        nShift*=-1;
+    awt::Point aOldPos( xLabelGroupShape->getPosition() );
+    basegfx::B2IVector aNewPos = basegfx::B2IVector( aOldPos.X, aOldPos.Y ) + nShift*aTangentialDirection;
 
-        xLabelGroupShape->setPosition( aNewAWTPos );
-        bMoved = true;
-    }
+    ///a final check is performed in order to be sure that the moved label
+    ///is still inside the page document;
+    awt::Point aNewAWTPos( aNewPos.getX(), aNewPos.getY() );
+    if( !lcl_isInsidePage( aNewAWTPos, xLabelGroupShape->getSize(), rPageSize ) )
+        return false;
+
+    xLabelGroupShape->setPosition( aNewAWTPos );
+    bMoved = true;
+
     return true;
 
     ///note that no further test is performed in order to check that the

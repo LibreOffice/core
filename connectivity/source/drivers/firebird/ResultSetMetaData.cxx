@@ -184,34 +184,34 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32)
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
 {
     OUString sTable = getTableName(column);
-    if( !sTable.isEmpty() )
+    if( sTable.isEmpty() )
+        return false;
+
+    OUString sColumnName = getColumnName( column );
+
+    OUString sSql = "SELECT RDB$IDENTITY_TYPE FROM RDB$RELATION_FIELDS "
+               "WHERE RDB$RELATION_NAME = '"
+               + escapeWith(sTable, '\'', '\'') + "' AND "
+               "RDB$FIELD_NAME = '"+ escapeWith(sColumnName, '\'', '\'') +"'";
+
+    Reference<XStatement> xStmt =m_pConnection ->createStatement();
+
+    Reference<XResultSet> xRes =
+            xStmt->executeQuery(sSql);
+    Reference<XRow> xRow ( xRes, UNO_QUERY);
+    if(xRes->next())
     {
-        OUString sColumnName = getColumnName( column );
+        int iType = xRow->getShort(1);
+        if(iType == 1) // IDENTITY
+            return true;
+    }
+    else
+    {
+        SAL_WARN("connectivity.firebird","Column '"
+                << sColumnName
+                << "' not found in database");
 
-        OUString sSql = "SELECT RDB$IDENTITY_TYPE FROM RDB$RELATION_FIELDS "
-                   "WHERE RDB$RELATION_NAME = '"
-                   + escapeWith(sTable, '\'', '\'') + "' AND "
-                   "RDB$FIELD_NAME = '"+ escapeWith(sColumnName, '\'', '\'') +"'";
-
-        Reference<XStatement> xStmt =m_pConnection ->createStatement();
-
-        Reference<XResultSet> xRes =
-                xStmt->executeQuery(sSql);
-        Reference<XRow> xRow ( xRes, UNO_QUERY);
-        if(xRes->next())
-        {
-            int iType = xRow->getShort(1);
-            if(iType == 1) // IDENTITY
-                return true;
-        }
-        else
-        {
-            SAL_WARN("connectivity.firebird","Column '"
-                    << sColumnName
-                    << "' not found in database");
-
-            return false;
-        }
+        return false;
     }
     return false;
 }
@@ -226,34 +226,34 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32)
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
 {
     sal_Int32 nType = getColumnType(column);
-    if( nType == DataType::NUMERIC || nType == DataType::DECIMAL )
+    if( nType != DataType::NUMERIC && nType != DataType::DECIMAL )
+        return 0;
+
+    OUString sColumnName = getColumnName( column );
+
+    // RDB$FIELD_SOURCE is a unique name of column per database
+    OUString sSql = "SELECT RDB$FIELD_PRECISION FROM RDB$FIELDS "
+                " INNER JOIN RDB$RELATION_FIELDS "
+                " ON RDB$RELATION_FIELDS.RDB$FIELD_SOURCE = RDB$FIELDS.RDB$FIELD_NAME "
+                "WHERE RDB$RELATION_FIELDS.RDB$RELATION_NAME = '"
+                + escapeWith(getTableName(column), '\'', '\'') + "' AND "
+                "RDB$RELATION_FIELDS.RDB$FIELD_NAME = '"
+                + escapeWith(sColumnName, '\'', '\'') +"'";
+    Reference<XStatement> xStmt= m_pConnection->createStatement();
+
+    Reference<XResultSet> xRes =
+            xStmt->executeQuery(sSql);
+    Reference<XRow> xRow ( xRes, UNO_QUERY);
+    if(xRes->next())
     {
-        OUString sColumnName = getColumnName( column );
-
-        // RDB$FIELD_SOURCE is a unique name of column per database
-        OUString sSql = "SELECT RDB$FIELD_PRECISION FROM RDB$FIELDS "
-                    " INNER JOIN RDB$RELATION_FIELDS "
-                    " ON RDB$RELATION_FIELDS.RDB$FIELD_SOURCE = RDB$FIELDS.RDB$FIELD_NAME "
-                    "WHERE RDB$RELATION_FIELDS.RDB$RELATION_NAME = '"
-                    + escapeWith(getTableName(column), '\'', '\'') + "' AND "
-                    "RDB$RELATION_FIELDS.RDB$FIELD_NAME = '"
-                    + escapeWith(sColumnName, '\'', '\'') +"'";
-        Reference<XStatement> xStmt= m_pConnection->createStatement();
-
-        Reference<XResultSet> xRes =
-                xStmt->executeQuery(sSql);
-        Reference<XRow> xRow ( xRes, UNO_QUERY);
-        if(xRes->next())
-        {
-            return static_cast<sal_Int32>(xRow->getShort(1));
-        }
-        else
-        {
-            SAL_WARN("connectivity.firebird","Column '"
-                    << sColumnName
-                    << "' not found in database");
-            return 0;
-        }
+        return static_cast<sal_Int32>(xRow->getShort(1));
+    }
+    else
+    {
+        SAL_WARN("connectivity.firebird","Column '"
+                << sColumnName
+                << "' not found in database");
+        return 0;
     }
     return 0;
 }

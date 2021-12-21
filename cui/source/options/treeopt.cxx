@@ -1629,27 +1629,27 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 
 static bool isNodeActive( OptionsNode const * pNode, Module* pModule )
 {
-    if ( pNode )
+    if ( !pNode )
+        return false;
+
+    // Node for all modules active?
+    if ( pNode->m_bAllModules )
+        return true;
+
+    // OOo-Nodes (Writer, Calc, Impress...) are active if node is already inserted
+    if ( !getGroupName( pNode->m_sId, false ).isEmpty() )
+        return true;
+
+    // no module -> not active
+    if ( !pModule )
+        return false;
+
+    // search node in active module
+    if ( pModule->m_bActive )
     {
-        // Node for all modules active?
-        if ( pNode->m_bAllModules )
-            return true;
-
-        // OOo-Nodes (Writer, Calc, Impress...) are active if node is already inserted
-        if ( !getGroupName( pNode->m_sId, false ).isEmpty() )
-            return true;
-
-        // no module -> not active
-        if ( !pModule )
-            return false;
-
-        // search node in active module
-        if ( pModule->m_bActive )
-        {
-            for (auto const& j : pModule->m_aNodeList)
-                if ( j->m_sId == pNode->m_sId )
-                    return true;
-        }
+        for (auto const& j : pModule->m_aNodeList)
+            if ( j->m_sId == pNode->m_sId )
+                return true;
     }
     return false;
 }

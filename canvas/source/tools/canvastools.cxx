@@ -1080,25 +1080,25 @@ namespace canvas::tools
         {
             o_rxParams.realloc( 0 );
 
-            if( i_rxCanvas.is() )
+            if( !i_rxCanvas.is() )
+                return o_rxParams;
+
+            try
             {
-                try
-                {
-                    uno::Reference< rendering::XGraphicDevice > xDevice( i_rxCanvas->getDevice(),
-                                                                         uno::UNO_SET_THROW );
+                uno::Reference< rendering::XGraphicDevice > xDevice( i_rxCanvas->getDevice(),
+                                                                     uno::UNO_SET_THROW );
 
-                    uno::Reference< lang::XServiceInfo >  xServiceInfo( xDevice,
-                                                                        uno::UNO_QUERY_THROW );
-                    uno::Reference< beans::XPropertySet > xPropSet( xDevice,
+                uno::Reference< lang::XServiceInfo >  xServiceInfo( xDevice,
                                                                     uno::UNO_QUERY_THROW );
+                uno::Reference< beans::XPropertySet > xPropSet( xDevice,
+                                                                uno::UNO_QUERY_THROW );
 
-                    o_rxParams = { uno::Any(xServiceInfo->getImplementationName()),
-                                   xPropSet->getPropertyValue( "DeviceHandle" ) };
-                }
-                catch( const uno::Exception& )
-                {
-                    // ignore, but return empty sequence
-                }
+                o_rxParams = { uno::Any(xServiceInfo->getImplementationName()),
+                               xPropSet->getPropertyValue( "DeviceHandle" ) };
+            }
+            catch( const uno::Exception& )
+            {
+                // ignore, but return empty sequence
             }
 
             return o_rxParams;

@@ -2015,25 +2015,25 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
     {
         SAL_INFO( "canvas.cairo", "CanvasHelper::repaint");
 
-        if( mpCairo )
-        {
-            cairo_save( mpCairo.get() );
+        if( !mpCairo )
+            return true;
 
-            cairo_rectangle( mpCairo.get(), 0, 0, maSize.getX(), maSize.getY() );
-            cairo_clip( mpCairo.get() );
+        cairo_save( mpCairo.get() );
 
-            useStates( viewState, renderState, true );
+        cairo_rectangle( mpCairo.get(), 0, 0, maSize.getX(), maSize.getY() );
+        cairo_clip( mpCairo.get() );
 
-            cairo_matrix_t aMatrix;
+        useStates( viewState, renderState, true );
 
-            cairo_get_matrix( mpCairo.get(), &aMatrix );
-            aMatrix.xx = aMatrix.yy = 1;
-            cairo_set_matrix( mpCairo.get(), &aMatrix );
+        cairo_matrix_t aMatrix;
 
-            cairo_set_source_surface( mpCairo.get(), pSurface->getCairoSurface().get(), 0, 0 );
-            cairo_paint( mpCairo.get() );
-            cairo_restore( mpCairo.get() );
-        }
+        cairo_get_matrix( mpCairo.get(), &aMatrix );
+        aMatrix.xx = aMatrix.yy = 1;
+        cairo_set_matrix( mpCairo.get(), &aMatrix );
+
+        cairo_set_source_surface( mpCairo.get(), pSurface->getCairoSurface().get(), 0, 0 );
+        cairo_paint( mpCairo.get() );
+        cairo_restore( mpCairo.get() );
 
         return true;
     }

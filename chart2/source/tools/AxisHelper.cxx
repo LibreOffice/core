@@ -743,23 +743,23 @@ bool AxisHelper::getIndicesForAxis(
     rOutDimensionIndex = -1;
     rOutAxisIndex = -1;
 
-    if( xCooSys.is() && xAxis.is() )
+    if( !xCooSys || !xAxis )
+        return false;
+
+    Reference< XAxis > xCurrentAxis;
+    sal_Int32 nDimensionCount( xCooSys->getDimension() );
+    for( sal_Int32 nDimensionIndex = 0; nDimensionIndex < nDimensionCount; nDimensionIndex++ )
     {
-        Reference< XAxis > xCurrentAxis;
-        sal_Int32 nDimensionCount( xCooSys->getDimension() );
-        for( sal_Int32 nDimensionIndex = 0; nDimensionIndex < nDimensionCount; nDimensionIndex++ )
+        sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionIndex);
+        for( sal_Int32 nAxisIndex = 0; nAxisIndex <= nMaxAxisIndex; nAxisIndex++ )
         {
-            sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionIndex);
-            for( sal_Int32 nAxisIndex = 0; nAxisIndex <= nMaxAxisIndex; nAxisIndex++ )
-            {
-                 xCurrentAxis = xCooSys->getAxisByDimension(nDimensionIndex,nAxisIndex);
-                 if( xCurrentAxis == xAxis )
-                 {
-                     rOutDimensionIndex = nDimensionIndex;
-                     rOutAxisIndex = nAxisIndex;
-                     return true;
-                 }
-            }
+             xCurrentAxis = xCooSys->getAxisByDimension(nDimensionIndex,nAxisIndex);
+             if( xCurrentAxis == xAxis )
+             {
+                 rOutDimensionIndex = nDimensionIndex;
+                 rOutAxisIndex = nAxisIndex;
+                 return true;
+             }
         }
     }
     return false;
@@ -904,25 +904,25 @@ void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityL
 bool AxisHelper::isSecondaryYAxisNeeded( const Reference< XCoordinateSystem >& xCooSys )
 {
     Reference< chart2::XChartTypeContainer > xCTCnt( xCooSys, uno::UNO_QUERY );
-    if( xCTCnt.is() )
-    {
-        const Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes() );
-        for( Reference< chart2::XChartType > const & chartType : aChartTypes )
-        {
-            Reference< XDataSeriesContainer > xSeriesContainer( chartType, uno::UNO_QUERY );
-            if( !xSeriesContainer.is() )
-                    continue;
+    if( !xCTCnt.is() )
+        return false;
 
-            Sequence< Reference< XDataSeries > > aSeriesList( xSeriesContainer->getDataSeries() );
-            for( sal_Int32 nS = aSeriesList.getLength(); nS-- ; )
+    const Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes() );
+    for( Reference< chart2::XChartType > const & chartType : aChartTypes )
+    {
+        Reference< XDataSeriesContainer > xSeriesContainer( chartType, uno::UNO_QUERY );
+        if( !xSeriesContainer.is() )
+                continue;
+
+        Sequence< Reference< XDataSeries > > aSeriesList( xSeriesContainer->getDataSeries() );
+        for( sal_Int32 nS = aSeriesList.getLength(); nS-- ; )
+        {
+            Reference< beans::XPropertySet > xProp( aSeriesList[nS], uno::UNO_QUERY );
+            if(xProp.is())
             {
-                Reference< beans::XPropertySet > xProp( aSeriesList[nS], uno::UNO_QUERY );
-                if(xProp.is())
-                {
-                    sal_Int32 nAttachedAxisIndex = 0;
-                    if( ( xProp->getPropertyValue( "AttachedAxisIndex" ) >>= nAttachedAxisIndex ) && nAttachedAxisIndex>0 )
-                        return true;
-                }
+                sal_Int32 nAttachedAxisIndex = 0;
+                if( ( xProp->getPropertyValue( "AttachedAxisIndex" ) >>= nAttachedAxisIndex ) && nAttachedAxisIndex>0 )
+                    return true;
             }
         }
     }

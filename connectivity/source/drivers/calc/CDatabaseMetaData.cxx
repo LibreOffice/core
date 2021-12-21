@@ -59,37 +59,37 @@ static bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const 
 {
     Any aAny = xSheets->getByName( rName );
     Reference<XSpreadsheet> xSheet;
-    if ( aAny >>= xSheet )
+    if ( !(aAny >>= xSheet) )
+        return false;
+
+    //  test if sheet is hidden
+
+    Reference<XPropertySet> xProp( xSheet, UNO_QUERY );
+    if (xProp.is())
     {
-        //  test if sheet is hidden
+        bool bVisible;
+        Any aVisAny = xProp->getPropertyValue("IsVisible");
+        if ( (aVisAny >>= bVisible) && !bVisible)
+            return true;                // hidden
+    }
 
-        Reference<XPropertySet> xProp( xSheet, UNO_QUERY );
-        if (xProp.is())
+    //  use the same data area as in OCalcTable to test for empty table
+
+    Reference<XSheetCellCursor> xCursor = xSheet->createCursor();
+    Reference<XCellRangeAddressable> xRange( xCursor, UNO_QUERY );
+    if ( xRange.is() )
+    {
+        xCursor->collapseToSize( 1, 1 );        // single (first) cell
+        xCursor->collapseToCurrentRegion();     // contiguous data area
+
+        CellRangeAddress aRangeAddr = xRange->getRangeAddress();
+        if ( aRangeAddr.StartColumn == aRangeAddr.EndColumn &&
+             aRangeAddr.StartRow == aRangeAddr.EndRow )
         {
-            bool bVisible;
-            Any aVisAny = xProp->getPropertyValue("IsVisible");
-            if ( (aVisAny >>= bVisible) && !bVisible)
-                return true;                // hidden
-        }
-
-        //  use the same data area as in OCalcTable to test for empty table
-
-        Reference<XSheetCellCursor> xCursor = xSheet->createCursor();
-        Reference<XCellRangeAddressable> xRange( xCursor, UNO_QUERY );
-        if ( xRange.is() )
-        {
-            xCursor->collapseToSize( 1, 1 );        // single (first) cell
-            xCursor->collapseToCurrentRegion();     // contiguous data area
-
-            CellRangeAddress aRangeAddr = xRange->getRangeAddress();
-            if ( aRangeAddr.StartColumn == aRangeAddr.EndColumn &&
-                 aRangeAddr.StartRow == aRangeAddr.EndRow )
-            {
-                //  single cell -> check content
-                Reference<XCell> xCell = xCursor->getCellByPosition( 0, 0 );
-                if ( xCell.is() && xCell->getType() == CellContentType_EMPTY )
-                    return true;
-            }
+            //  single cell -> check content
+            Reference<XCell> xCell = xCursor->getCellByPosition( 0, 0 );
+            if ( xCell.is() && xCell->getType() == CellContentType_EMPTY )
+                return true;
         }
     }
 

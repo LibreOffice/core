@@ -421,24 +421,24 @@ sal_Int32 OStatementCommonBase::getStatementChangeCount()
     }
 
     char* pResults = aResultsBuffer;
-    if (static_cast<short>(*pResults++) == isc_info_sql_records)
-    {
+    if (static_cast<short>(*pResults++) != isc_info_sql_records)
+        return 0;
+
 //         const short aTotalLength = (short) isc_vax_integer(pResults, 2);
-        pResults += 2;
+    pResults += 2;
 
-        // Seems to be of form TOKEN (1 byte), LENGTH (2 bytes), DATA (LENGTH bytes)
-        while (*pResults != isc_info_rsb_end)
+    // Seems to be of form TOKEN (1 byte), LENGTH (2 bytes), DATA (LENGTH bytes)
+    while (*pResults != isc_info_rsb_end)
+    {
+        const char aToken = *pResults;
+        const short aLength =  static_cast<short>(isc_vax_integer(pResults+1, 2));
+
+        if (aToken == aDesiredInfoType)
         {
-            const char aToken = *pResults;
-            const short aLength =  static_cast<short>(isc_vax_integer(pResults+1, 2));
-
-            if (aToken == aDesiredInfoType)
-            {
-                return isc_vax_integer(pResults + 3, aLength);
-            }
-
-            pResults += (3 + aLength);
+            return isc_vax_integer(pResults + 3, aLength);
         }
+
+        pResults += (3 + aLength);
     }
 
     return 0;

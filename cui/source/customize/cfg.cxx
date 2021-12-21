@@ -1722,27 +1722,25 @@ bool SvxConfigPage::MoveEntryData(int nSourceEntry, int nTargetEntry)
     SvxConfigEntry* pTargetData =
         reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nTargetEntry).toInt64());
 
-    if ( pSourceData != nullptr && pTargetData != nullptr )
-    {
-        // remove the source entry from our list
-        SvxConfigPageHelper::RemoveEntry( pEntries, pSourceData );
+    if ( pSourceData == nullptr || pTargetData == nullptr )
+        return false;
 
-        SvxEntries::iterator iter = pEntries->begin();
-        SvxEntries::const_iterator end = pEntries->end();
+    // remove the source entry from our list
+    SvxConfigPageHelper::RemoveEntry( pEntries, pSourceData );
 
-        // advance the iterator to the position of the target entry
-        while (*iter != pTargetData && ++iter != end) ;
+    SvxEntries::iterator iter = pEntries->begin();
+    SvxEntries::const_iterator end = pEntries->end();
 
-        // insert the source entry at the position after the target
-        pEntries->insert( ++iter, pSourceData );
+    // advance the iterator to the position of the target entry
+    while (*iter != pTargetData && ++iter != end) ;
 
-        GetSaveInData()->SetModified();
-        GetTopLevelSelection()->SetModified();
+    // insert the source entry at the position after the target
+    pEntries->insert( ++iter, pSourceData );
 
-        return true;
-    }
+    GetSaveInData()->SetModified();
+    GetTopLevelSelection()->SetModified();
 
-    return false;
+    return true;
 }
 
 SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(

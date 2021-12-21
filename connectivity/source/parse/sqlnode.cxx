@@ -147,41 +147,41 @@ namespace
         {
         }
 
-        if(pSubTree->count())
+        if(!pSubTree->count())
+            return false;
+
+        const OSQLParseNode* pCol = pSubTree->getChild(pSubTree->count()-1);
+        if (SQL_ISRULE(pCol,column_val))
         {
-            const OSQLParseNode* pCol = pSubTree->getChild(pSubTree->count()-1);
-            if (SQL_ISRULE(pCol,column_val))
-            {
-                assert(pCol->count() == 1);
-                pCol = pCol->getChild(0);
-            }
-            const OSQLParseNode* pTable(nullptr);
-            switch (pSubTree->count())
-            {
-            case 1:
-                break;
-            case 3:
-                pTable = pSubTree->getChild(0);
-                break;
-            case 5:
-            case 7:
-                SAL_WARN("connectivity.parse", "SQL: catalog and/or schema in column_ref in predicate");
-                break;
-            default:
-                SAL_WARN("connectivity.parse", "columnMatchP: SQL grammar changed; column_ref has " << pSubTree->count() << " children");
-                assert(false);
-                break;
-            }
-            // TODO: not all DBMS match column names case-insensitively...
-            // see XDatabaseMetaData::supportsMixedCaseIdentifiers()
-            // and XDatabaseMetaData::supportsMixedCaseQuotedIdentifiers()
-            if  (   // table name matches (or no table name)?
-                    ( !pTable || pTable->getTokenValue().equalsIgnoreAsciiCase(rParam.sPredicateTableAlias) )
-                 && // column name matches?
-                    pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
-                )
-                return true;
+            assert(pCol->count() == 1);
+            pCol = pCol->getChild(0);
         }
+        const OSQLParseNode* pTable(nullptr);
+        switch (pSubTree->count())
+        {
+        case 1:
+            break;
+        case 3:
+            pTable = pSubTree->getChild(0);
+            break;
+        case 5:
+        case 7:
+            SAL_WARN("connectivity.parse", "SQL: catalog and/or schema in column_ref in predicate");
+            break;
+        default:
+            SAL_WARN("connectivity.parse", "columnMatchP: SQL grammar changed; column_ref has " << pSubTree->count() << " children");
+            assert(false);
+            break;
+        }
+        // TODO: not all DBMS match column names case-insensitively...
+        // see XDatabaseMetaData::supportsMixedCaseIdentifiers()
+        // and XDatabaseMetaData::supportsMixedCaseQuotedIdentifiers()
+        if  (   // table name matches (or no table name)?
+                ( !pTable || pTable->getTokenValue().equalsIgnoreAsciiCase(rParam.sPredicateTableAlias) )
+             && // column name matches?
+                pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
+            )
+            return true;
         return false;
     }
 }
@@ -1703,54 +1703,53 @@ void OSQLParseNode::append(OSQLParseNode* pNewNode)
 bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const
 {
     // special display for date/time values
-    if (SQL_ISRULE(this,set_fct_spec) && SQL_ISPUNCTUATION(m_aChildren[0],"{"))
+    if (!SQL_ISRULE(this,set_fct_spec) || !SQL_ISPUNCTUATION(m_aChildren[0],"{"))
+        return false;
+
+    const OSQLParseNode* pODBCNode = m_aChildren[1].get();
+    const OSQLParseNode* pODBCNodeChild = pODBCNode->m_aChildren[0].get();
+
+    if (pODBCNodeChild->getNodeType() != SQLNodeType::Keyword || !(
+        SQL_ISTOKEN(pODBCNodeChild, D) ||
+        SQL_ISTOKEN(pODBCNodeChild, T) ||
+        SQL_ISTOKEN(pODBCNodeChild, TS) ))
+        return false;
+
+    OUString suQuote("'");
+    if (rParam.bPredicate)
     {
-        const OSQLParseNode* pODBCNode = m_aChildren[1].get();
-        const OSQLParseNode* pODBCNodeChild = pODBCNode->m_aChildren[0].get();
-
-        if (pODBCNodeChild->getNodeType() == SQLNodeType::Keyword && (
-            SQL_ISTOKEN(pODBCNodeChild, D) ||
-            SQL_ISTOKEN(pODBCNodeChild, T) ||
-            SQL_ISTOKEN(pODBCNodeChild, TS) ))
-        {
-            OUString suQuote("'");
-            if (rParam.bPredicate)
-            {
-                 if (rParam.aMetaData.shouldEscapeDateTime())
-                 {
-                     suQuote = "#";
-                 }
-            }
-            else
-            {
-                 if (rParam.aMetaData.shouldEscapeDateTime())
-                 {
-                     // suQuote = "'";
-                     return false;
-                 }
-            }
-
-            if (!rString.isEmpty())
-                rString.append(" ");
-            rString.append(suQuote);
-            const OUString sTokenValue = pODBCNode->m_aChildren[1]->getTokenValue();
-            if (SQL_ISTOKEN(pODBCNodeChild, D))
-            {
-                rString.append(rParam.bPredicate ? convertDateString(rParam, sTokenValue) : sTokenValue);
-            }
-            else if (SQL_ISTOKEN(pODBCNodeChild, T))
-            {
-                rString.append(rParam.bPredicate ? convertTimeString(rParam, sTokenValue) : sTokenValue);
-            }
-            else
-            {
-                rString.append(rParam.bPredicate ? convertDateTimeString(rParam, sTokenValue) : sTokenValue);
-            }
-            rString.append(suQuote);
-            return true;
-        }
+         if (rParam.aMetaData.shouldEscapeDateTime())
+         {
+             suQuote = "#";
+         }
     }
-    return false;
+    else
+    {
+         if (rParam.aMetaData.shouldEscapeDateTime())
+         {
+             // suQuote = "'";
+             return false;
+         }
+    }
+
+    if (!rString.isEmpty())
+        rString.append(" ");
+    rString.append(suQuote);
+    const OUString sTokenValue = pODBCNode->m_aChildren[1]->getTokenValue();
+    if (SQL_ISTOKEN(pODBCNodeChild, D))
+    {
+        rString.append(rParam.bPredicate ? convertDateString(rParam, sTokenValue) : sTokenValue);
+    }
+    else if (SQL_ISTOKEN(pODBCNodeChild, T))
+    {
+        rString.append(rParam.bPredicate ? convertTimeString(rParam, sTokenValue) : sTokenValue);
+    }
+    else
+    {
+        rString.append(rParam.bPredicate ? convertDateTimeString(rParam, sTokenValue) : sTokenValue);
+    }
+    rString.append(suQuote);
+    return true;
 }
 
 void OSQLParseNode::replaceNodeValue(const OUString& rTableAlias, const OUString& rColumnName)

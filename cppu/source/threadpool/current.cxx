@@ -133,30 +133,30 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
         id.pCurrentContext = nullptr;
     }
 
-    if (pCurrentContext)
+    if (!pCurrentContext)
+        return true;
+
+    uno_Environment * pEnv = nullptr;
+    ::uno_getEnvironment( &pEnv, pEnvTypeName, pEnvContext );
+    OSL_ASSERT( pEnv && pEnv->pExtEnv );
+    if (pEnv)
     {
-        uno_Environment * pEnv = nullptr;
-        ::uno_getEnvironment( &pEnv, pEnvTypeName, pEnvContext );
-        OSL_ASSERT( pEnv && pEnv->pExtEnv );
-        if (pEnv)
+        if (pEnv->pExtEnv)
         {
-            if (pEnv->pExtEnv)
-            {
-                id.pCurrentContextEnv = pEnv->pExtEnv;
-                (*id.pCurrentContextEnv->acquireInterface)(
-                    id.pCurrentContextEnv, pCurrentContext );
-                id.pCurrentContext = pCurrentContext;
-            }
-            else
-            {
-                (*pEnv->release)( pEnv );
-                return false;
-            }
+            id.pCurrentContextEnv = pEnv->pExtEnv;
+            (*id.pCurrentContextEnv->acquireInterface)(
+                id.pCurrentContextEnv, pCurrentContext );
+            id.pCurrentContext = pCurrentContext;
         }
         else
         {
+            (*pEnv->release)( pEnv );
             return false;
         }
+    }
+    else
+    {
+        return false;
     }
     return true;
 }
