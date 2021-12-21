@@ -56,53 +56,53 @@ bool Options::checkArgument (std::vector< std::string > & rArgs, char const * ar
 {
   bool result = ((arg != nullptr) && (len > 0));
   OSL_PRECOND(result, "idlc::Options::checkArgument(): invalid arguments");
-  if (result)
+  if (!result)
+      return false;
+
+  switch(arg[0])
   {
-    switch(arg[0])
+  case '@':
+    result = len > 1;
+    if (result)
     {
-    case '@':
-      result = len > 1;
-      if (result)
+      // "@<cmdfile>"
+      result = Options::checkCommandFile (rArgs, &(arg[1]));
+    }
+    break;
+  case '-':
+    result = len > 1;
+    if (result)
+    {
+      // "-<option>"
+      switch (arg[1])
       {
-        // "@<cmdfile>"
-        result = Options::checkCommandFile (rArgs, &(arg[1]));
-      }
-      break;
-    case '-':
-      result = len > 1;
-      if (result)
-      {
-        // "-<option>"
-        switch (arg[1])
+      case 'O':
+      case 'M':
+      case 'I':
+      case 'D':
         {
-        case 'O':
-        case 'M':
-        case 'I':
-        case 'D':
+          // "-<option>[<param>]
+          std::string option(&(arg[0]), 2);
+          rArgs.push_back(option);
+          if (len > 2)
           {
-            // "-<option>[<param>]
-            std::string option(&(arg[0]), 2);
-            rArgs.push_back(option);
-            if (len > 2)
-            {
-              // "-<option><param>"
-              std::string param(&(arg[2]), len - 2);
-              rArgs.push_back(param);
-            }
-            break;
+            // "-<option><param>"
+            std::string param(&(arg[2]), len - 2);
+            rArgs.push_back(param);
           }
-        default:
-          // "-<option>" ([long] option, w/o param)
-          rArgs.emplace_back(arg, len);
           break;
         }
+      default:
+        // "-<option>" ([long] option, w/o param)
+        rArgs.emplace_back(arg, len);
+        break;
       }
-      break;
-    default:
-      // "<param>"
-      rArgs.emplace_back(arg, len);
-      break;
     }
+    break;
+  default:
+    // "<param>"
+    rArgs.emplace_back(arg, len);
+    break;
   }
   return result;
 }

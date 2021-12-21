@@ -225,23 +225,23 @@ namespace basegfx
 
         void grow(T nValue)
         {
-            if(!isEmpty())
+            if(isEmpty())
+                return;
+
+            bool bLessThanZero(nValue < 0);
+
+            if(nValue > 0 || bLessThanZero)
             {
-                bool bLessThanZero(nValue < 0);
+                mnMinimum -= nValue;
+                mnMaximum += nValue;
 
-                if(nValue > 0 || bLessThanZero)
+                if(bLessThanZero)
                 {
-                    mnMinimum -= nValue;
-                    mnMaximum += nValue;
-
-                    if(bLessThanZero)
+                    // test if range did collapse
+                    if(mnMinimum > mnMaximum)
                     {
-                        // test if range did collapse
-                        if(mnMinimum > mnMaximum)
-                        {
-                            // if yes, collapse to center
-                            mnMinimum = mnMaximum = (mnMinimum + mnMaximum) / 2;
-                        }
+                        // if yes, collapse to center
+                        mnMinimum = mnMaximum = (mnMinimum + mnMaximum) / 2;
                     }
                 }
             }

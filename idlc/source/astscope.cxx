@@ -151,37 +151,36 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
         }
     }
 
-    if ( bFindFirstScope && (firstScope != scopedName) )
+    if ( !bFindFirstScope || (firstScope == scopedName) )
+        return pDecl;
+
+    sal_Int32 i = 0;
+    sal_Int32 nOffset = 2;
+    do
     {
-        sal_Int32 i = 0;
-        sal_Int32 nOffset = 2;
-        do
+        pScope = declAsScope(pDecl);
+        if( pScope )
         {
-            pScope = declAsScope(pDecl);
-            if( pScope )
-            {
-                pDecl = pScope->lookupByNameLocal(scopedName.getToken(nOffset, ':', i ));
-                nOffset = 1;
-            }
-            if( !pDecl )
-                break;
-        } while( i != -1 );
-
-        if ( !pDecl )
-        {
-            // last try if is not the global scope and the scopeName isn't specify global too
-            pDecl = scopeAsDecl(this);
-            if ( pDecl && !pDecl->getLocalName().isEmpty() )
-            {
-                pScope = pDecl->getScope();
-                if ( pScope )
-                    pDecl = pScope->lookupByName(scopedName);
-            } else
-            {
-                pDecl = nullptr;
-            }
+            pDecl = pScope->lookupByNameLocal(scopedName.getToken(nOffset, ':', i ));
+            nOffset = 1;
         }
+        if( !pDecl )
+            break;
+    } while( i != -1 );
 
+    if ( !pDecl )
+    {
+        // last try if is not the global scope and the scopeName isn't specify global too
+        pDecl = scopeAsDecl(this);
+        if ( pDecl && !pDecl->getLocalName().isEmpty() )
+        {
+            pScope = pDecl->getScope();
+            if ( pScope )
+                pDecl = pScope->lookupByName(scopedName);
+        } else
+        {
+            pDecl = nullptr;
+        }
     }
 
     return pDecl;
