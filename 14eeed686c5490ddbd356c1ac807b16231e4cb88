@@ -16,6 +16,24 @@
       "message": "why?",
       "revId": "14eeed686c5490ddbd356c1ac807b16231e4cb88",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "881142b1_b64bfc51",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-21T12:52:29Z",
+      "side": 1,
+      "message": "Why not? I was annoyed that the cross-build did always build the same code, just because the saxparser binary was linked again. No need for new builds, if the generated source doesn\u0027t change.",
+      "parentUuid": "1fc643af_bed2b871",
+      "revId": "14eeed686c5490ddbd356c1ac807b16231e4cb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
