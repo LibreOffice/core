@@ -34,6 +34,24 @@
       "parentUuid": "1fc643af_bed2b871",
       "revId": "14eeed686c5490ddbd356c1ac807b16231e4cb88",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9110f4d_5fb23faf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-21T12:59:46Z",
+      "side": 1,
+      "message": "I rather wondered about the \"use random temporary files\" part",
+      "parentUuid": "881142b1_b64bfc51",
+      "revId": "14eeed686c5490ddbd356c1ac807b16231e4cb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
