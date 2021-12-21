@@ -247,6 +247,13 @@ SAL_CALL XMLSignature_NssImpl::validate(
         // We do certificate verification ourselves.
         pDsigCtx->keyInfoReadCtx.flags |= XMLSEC_KEYINFO_FLAGS_X509DATA_DONT_VERIFY_CERTS;
 
+        xmlBufferPtr pBuf = xmlBufferCreate();
+        xmlNodeDump(pBuf, nullptr, pNode, 0, 0);
+        SAL_INFO("xmlsecurity.xmlsec", "xmlSecDSigCtxVerify input XML node is '"
+                                           << reinterpret_cast<const char*>(xmlBufferContent(pBuf))
+                                           << "'");
+        xmlBufferFree(pBuf);
+
         //Verify signature
         int rs = xmlSecDSigCtxVerify( pDsigCtx.get() , pNode );
 
