@@ -52,6 +52,24 @@
       "parentUuid": "afaf0de7_7024b31b",
       "revId": "deec889a8bba7538ced313649cb0a65b2dd91fe0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4d9e94f_3db52be9",
+        "filename": "include/systools/win32/comtools.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-21T06:27:20Z",
+      "side": 1,
+      "message": "\u003e For whatever reason the depending patch 127189 isn\u0027t listed by Gerrit as a chained relation\n\nIt\u0027s because I created it not dependent - my mistake (or rather thought train) - I created a combined change https://gerrit.libreoffice.org/c/core/+/127189, then realized that this part (and another https://gerrit.libreoffice.org/c/core/+/127190) need own changes - so I created those, and intend to merge these two first, and then rebase that one. Sorry for confusion, but I hope to make it correctly in the end 😊\n\n\u003e Sorry for the noise\n\nNo - it\u0027s my fault - I should had put this to the commit message - clarifying my intents. And your questions all make sense, showing why it\u0027s a good idea.",
+      "parentUuid": "b63d1660_b417f269",
+      "revId": "deec889a8bba7538ced313649cb0a65b2dd91fe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
