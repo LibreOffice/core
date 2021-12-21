@@ -27,6 +27,8 @@
 #include <osl/time.h>
 #include <osl/interlck.h>
 #include <rtl/tencinfo.h>
+#include <systools/win32/comtools.hxx>
+
 #include <errno.h>
 
 namespace {
@@ -54,13 +56,12 @@ static unsigned __stdcall oslWorkerWrapperFunction(void* pData)
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(pData);
 
     /* Initialize COM - Multi Threaded Apartment (MTA) for all threads */
-    CoInitializeEx(nullptr, COINIT_MULTITHREADED); /* spawned by oslCreateThread */
+    sal::systools::CoInitializeGuard aGuard(COINIT_MULTITHREADED, false,
+                                            sal::systools::CoInitializeGuard::WhenFailed::NoThrow);
 
     /* call worker-function with data */
 
     pThreadImpl->m_WorkerFunction(pThreadImpl->m_pData);
-
-    CoUninitialize();
 
     return 0;
 }
