@@ -1706,6 +1706,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         nScrPos = ( nMul * nScrPos + aKernArray[i] ) / nDiv;
                     }
                 }
+                aKernArray[i-1] = nScrPos - nScr;
 
                 // Apply SpaceSum
                 if (cChPrev == CH_BLANK)
@@ -1723,7 +1724,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
 
                 cChPrev = nCh;
-                aKernArray[i-1] = nScrPos - nScr + nKernSum + nSpaceSum;
+                aKernArray[i-1] += nKernSum + nSpaceSum;
                 // In word line mode and for Arabic, we disabled the half space trick. If a portion
                 // ends with a blank, the full nSpaceAdd value has been added to the character in
                 // front of the blank. This leads to painting artifacts, therefore we remove the
