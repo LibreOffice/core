@@ -97,7 +97,7 @@
 #include <frmatr.hxx>
 #include <ndtxt.hxx>
 #include <ndgrf.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <vcl/svapp.hxx>
 #include <vcl/GraphicLoader.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -109,7 +109,7 @@
 #include <fmtfollowtextflow.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
@@ -1151,14 +1151,10 @@ bool SwOLEProperties_Impl::AnyToItemSet(
 
 class SwXFrame::Impl
 {
-private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
-
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
-
-    Impl() : m_EventListeners(m_Mutex) { }
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
 };
 
 const ::uno::Sequence< sal_Int8 > & SwXFrame::getUnoTunnelId()
@@ -2623,8 +2619,11 @@ void SwXFrame::DisposeInternal()
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
         return;
     }
-    lang::EventObject const ev(xThis);
-    m_pImpl->m_EventListeners.disposeAndClear(ev);
+    {
+        lang::EventObject const ev(xThis);
+        std::unique_lock aGuard(m_pImpl->m_Mutex);
+        m_pImpl->m_EventListeners.disposeAndClear(aGuard, ev);
+    }
     m_pFrameFormat = nullptr;
     EndListeningAll();
 }
