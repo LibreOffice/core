@@ -1699,7 +1699,25 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if ( nCh == CH_BLANK )
                 {
                     nScrPos = aKernArray[i-1] + nScr;
+                }
+                else
+                {
+                    if ( cChPrev == CH_BLANK )
+                    {
+                        nScrPos = aKernArray[i-1] + nScr;
+                    }
+                    else if ( cChPrev == '-' )
+                        nScrPos = aKernArray[i-1] + nScr;
+                    else
+                    {
+                        nScrPos += nScr;
+                        nScrPos = ( nMul * nScrPos + aKernArray[i] ) / nDiv;
+                    }
+                }
 
+                // Apply SpaceSum
+                if ( nCh == CH_BLANK )
+                {
                     if ( cChPrev == CH_BLANK )
                         nSpaceSum += nOtherHalf;
                     if (i + 1 == sal_Int32(nCnt))
@@ -1711,18 +1729,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     if ( cChPrev == CH_BLANK )
                     {
-                        nScrPos = aKernArray[i-1] + nScr;
                         // no Pixel is lost:
                         nSpaceSum += nOtherHalf;
                     }
-                    else if ( cChPrev == '-' )
-                        nScrPos = aKernArray[i-1] + nScr;
-                    else
-                    {
-                        nScrPos += nScr;
-                        nScrPos = ( nMul * nScrPos + aKernArray[i] ) / nDiv;
-                    }
                 }
+
                 cChPrev = nCh;
                 aKernArray[i-1] = nScrPos - nScr + nKernSum + nSpaceSum;
                 // In word line mode and for Arabic, we disabled the half space trick. If a portion
