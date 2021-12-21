@@ -130,40 +130,40 @@ bool SvxThemePage::FillItemSet(SfxItemSet* pAttrs)
 {
     const SfxItemSet& rOldSet = GetItemSet();
 
-    if (rOldSet.HasItem(SID_ATTR_CHAR_GRABBAG))
+    if (!rOldSet.HasItem(SID_ATTR_CHAR_GRABBAG))
+        return true;
+
+    SfxGrabBagItem aGrabBagItem(
+        static_cast<const SfxGrabBagItem&>(rOldSet.Get(SID_ATTR_CHAR_GRABBAG)));
+
+    comphelper::SequenceAsHashMap aMap;
+    auto it = aGrabBagItem.GetGrabBag().find("Theme");
+    if (it != aGrabBagItem.GetGrabBag().end())
     {
-        SfxGrabBagItem aGrabBagItem(
-            static_cast<const SfxGrabBagItem&>(rOldSet.Get(SID_ATTR_CHAR_GRABBAG)));
-
-        comphelper::SequenceAsHashMap aMap;
-        auto it = aGrabBagItem.GetGrabBag().find("Theme");
-        if (it != aGrabBagItem.GetGrabBag().end())
-        {
-            aMap << it->second;
-        }
-
-        aMap["Name"] <<= m_xThemeName->get_text();
-        aMap["ColorSchemeName"] <<= m_xColorSetName->get_text();
-        std::vector<util::Color> aColorScheme = {
-            static_cast<sal_Int32>(m_xDk1->GetSelectEntryColor()),
-            static_cast<sal_Int32>(m_xLt1->GetSelectEntryColor()),
-            static_cast<sal_Int32>(m_xDk2->GetSelectEntryColor()),
-            static_cast<sal_Int32>(m_xLt2->GetSelectEntryColor()),
-            static_cast<sal_Int32>(m_xAccent1->GetSelectEntryColor()),
-            static_cast<sal_Int32>(m_xAccent2->GetSelectEntryColor()),
-            static_cast<sal_Int32>(m_xAccent3->GetSelectEntryColor()),
-            static_cast<sal_Int32>(m_xAccent4->GetSelectEntryColor()),
-            static_cast<sal_Int32>(m_xAccent5->GetSelectEntryColor()),
-            static_cast<sal_Int32>(m_xAccent6->GetSelectEntryColor()),
-            static_cast<sal_Int32>(m_xHlink->GetSelectEntryColor()),
-            static_cast<sal_Int32>(m_xFolHlink->GetSelectEntryColor()),
-        };
-        aMap["ColorScheme"] <<= comphelper::containerToSequence(aColorScheme);
-
-        beans::PropertyValues aTheme = aMap.getAsConstPropertyValueList();
-        aGrabBagItem.GetGrabBag()["Theme"] <<= aTheme;
-        pAttrs->Put(aGrabBagItem);
+        aMap << it->second;
     }
+
+    aMap["Name"] <<= m_xThemeName->get_text();
+    aMap["ColorSchemeName"] <<= m_xColorSetName->get_text();
+    std::vector<util::Color> aColorScheme = {
+        static_cast<sal_Int32>(m_xDk1->GetSelectEntryColor()),
+        static_cast<sal_Int32>(m_xLt1->GetSelectEntryColor()),
+        static_cast<sal_Int32>(m_xDk2->GetSelectEntryColor()),
+        static_cast<sal_Int32>(m_xLt2->GetSelectEntryColor()),
+        static_cast<sal_Int32>(m_xAccent1->GetSelectEntryColor()),
+        static_cast<sal_Int32>(m_xAccent2->GetSelectEntryColor()),
+        static_cast<sal_Int32>(m_xAccent3->GetSelectEntryColor()),
+        static_cast<sal_Int32>(m_xAccent4->GetSelectEntryColor()),
+        static_cast<sal_Int32>(m_xAccent5->GetSelectEntryColor()),
+        static_cast<sal_Int32>(m_xAccent6->GetSelectEntryColor()),
+        static_cast<sal_Int32>(m_xHlink->GetSelectEntryColor()),
+        static_cast<sal_Int32>(m_xFolHlink->GetSelectEntryColor()),
+    };
+    aMap["ColorScheme"] <<= comphelper::containerToSequence(aColorScheme);
+
+    beans::PropertyValues aTheme = aMap.getAsConstPropertyValueList();
+    aGrabBagItem.GetGrabBag()["Theme"] <<= aTheme;
+    pAttrs->Put(aGrabBagItem);
 
     return true;
 }

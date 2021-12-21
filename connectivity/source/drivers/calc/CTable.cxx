@@ -191,24 +191,23 @@ static bool lcl_HasTextInColumn( const Reference<XSpreadsheet>& xSheet, sal_Int3
     // look for any text cell or text result in the column
 
     Reference<XCellRangeAddressable> xAddr( xSheet, UNO_QUERY );
-    if (xAddr.is())
-    {
-        CellRangeAddress aTotalRange = xAddr->getRangeAddress();
-        sal_Int32 nLastRow = aTotalRange.EndRow;
-        Reference<XCellRangesQuery> xQuery( xSheet->getCellRangeByPosition( nDocColumn, nDocRow, nDocColumn, nLastRow ), UNO_QUERY );
-        if (xQuery.is())
-        {
-            // are there text cells in the column?
-            Reference<XSheetCellRanges> xTextContent = xQuery->queryContentCells( CellFlags::STRING );
-            if ( xTextContent.is() && xTextContent->hasElements() )
-                return true;
+    if (!xAddr)
+        return false;
+    CellRangeAddress aTotalRange = xAddr->getRangeAddress();
+    sal_Int32 nLastRow = aTotalRange.EndRow;
+    Reference<XCellRangesQuery> xQuery( xSheet->getCellRangeByPosition( nDocColumn, nDocRow, nDocColumn, nLastRow ), UNO_QUERY );
+    if (!xQuery)
+        return false;
 
-            // are there formulas with text results in the column?
-            Reference<XSheetCellRanges> xTextFormula = xQuery->queryFormulaCells( FormulaResult::STRING );
-            if ( xTextFormula.is() && xTextFormula->hasElements() )
-                return true;
-        }
-    }
+    // are there text cells in the column?
+    Reference<XSheetCellRanges> xTextContent = xQuery->queryContentCells( CellFlags::STRING );
+    if ( xTextContent.is() && xTextContent->hasElements() )
+        return true;
+
+    // are there formulas with text results in the column?
+    Reference<XSheetCellRanges> xTextFormula = xQuery->queryFormulaCells( FormulaResult::STRING );
+    if ( xTextFormula.is() && xTextFormula->hasElements() )
+        return true;
 
     return false;
 }

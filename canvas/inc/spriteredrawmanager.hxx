@@ -286,64 +286,64 @@ namespace canvas
         {
             // check whether this area contains changed sprites at all
             // (if not, just ignore it)
-            if( areSpritesChanged( rUpdateArea ) )
-            {
-                // at least one of the sprites actually needs an
-                // update - process whole area.
+            if( !areSpritesChanged( rUpdateArea ) )
+                return;
 
-                // check whether this area could be handled special
-                // (background paint, direct update, scroll, etc.)
-                ::basegfx::B2DRange aMoveStart;
-                ::basegfx::B2DRange aMoveEnd;
-                if( rUpdateArea.maComponentList.empty() )
+            // at least one of the sprites actually needs an
+            // update - process whole area.
+
+            // check whether this area could be handled special
+            // (background paint, direct update, scroll, etc.)
+            ::basegfx::B2DRange aMoveStart;
+            ::basegfx::B2DRange aMoveEnd;
+            if( rUpdateArea.maComponentList.empty() )
+            {
+                rFunc.backgroundPaint( rUpdateArea.maTotalBounds );
+            }
+            else
+            {
+                // cache number of sprites in this area (it's a
+                // list, and both isAreaUpdateScroll() and
+                // isAreaUpdateOpaque() need it).
+                const ::std::size_t nNumSprites(
+                    rUpdateArea.maComponentList.size() );
+
+                if( isAreaUpdateScroll( aMoveStart,
+                                        aMoveEnd,
+                                        rUpdateArea,
+                                        nNumSprites ) )
                 {
-                    rFunc.backgroundPaint( rUpdateArea.maTotalBounds );
+                    rFunc.scrollUpdate( aMoveStart,
+                                        aMoveEnd,
+                                        rUpdateArea );
                 }
                 else
                 {
-                    // cache number of sprites in this area (it's a
-                    // list, and both isAreaUpdateScroll() and
-                    // isAreaUpdateOpaque() need it).
-                    const ::std::size_t nNumSprites(
-                        rUpdateArea.maComponentList.size() );
+                    // potentially, more than a single sprite
+                    // involved. Have to sort component lists for
+                    // sprite prio.
+                    VectorOfSprites aSortedUpdateSprites;
+                    for (auto const& elem : rUpdateArea.maComponentList)
+                    {
+                        const Sprite::Reference& rSprite( elem.second.getSprite() );
+                        if( rSprite.is() )
+                            aSortedUpdateSprites.push_back( rSprite );
+                    }
 
-                    if( isAreaUpdateScroll( aMoveStart,
-                                            aMoveEnd,
-                                            rUpdateArea,
+                    ::std::sort( aSortedUpdateSprites.begin(),
+                                 aSortedUpdateSprites.end(),
+                                 SpriteWeakOrder() );
+
+                    if( isAreaUpdateOpaque( rUpdateArea,
                                             nNumSprites ) )
                     {
-                        rFunc.scrollUpdate( aMoveStart,
-                                            aMoveEnd,
-                                            rUpdateArea );
+                        rFunc.opaqueUpdate( rUpdateArea.maTotalBounds,
+                                            aSortedUpdateSprites );
                     }
                     else
                     {
-                        // potentially, more than a single sprite
-                        // involved. Have to sort component lists for
-                        // sprite prio.
-                        VectorOfSprites aSortedUpdateSprites;
-                        for (auto const& elem : rUpdateArea.maComponentList)
-                        {
-                            const Sprite::Reference& rSprite( elem.second.getSprite() );
-                            if( rSprite.is() )
-                                aSortedUpdateSprites.push_back( rSprite );
-                        }
-
-                        ::std::sort( aSortedUpdateSprites.begin(),
-                                     aSortedUpdateSprites.end(),
-                                     SpriteWeakOrder() );
-
-                        if( isAreaUpdateOpaque( rUpdateArea,
-                                                nNumSprites ) )
-                        {
-                            rFunc.opaqueUpdate( rUpdateArea.maTotalBounds,
-                                                aSortedUpdateSprites );
-                        }
-                        else
-                        {
-                            rFunc.genericUpdate( rUpdateArea.maTotalBounds,
-                                                 aSortedUpdateSprites );
-                        }
+                        rFunc.genericUpdate( rUpdateArea.maTotalBounds,
+                                             aSortedUpdateSprites );
                     }
                 }
             }

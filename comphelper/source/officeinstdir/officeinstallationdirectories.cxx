@@ -44,30 +44,30 @@ static bool makeCanonicalFileURL( OUString & rURL )
     if ( osl::FileBase::getAbsoluteFileURL( OUString(),
                                             rURL,
                                             aNormalizedURL )
+            != osl::DirectoryItem::E_None )
+        return false;
+
+    osl::DirectoryItem aDirItem;
+    if ( osl::DirectoryItem::get( aNormalizedURL, aDirItem )
+            != osl::DirectoryItem::E_None )
+        return false;
+
+    osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
+
+    if ( aDirItem.getFileStatus( aFileStatus )
             == osl::DirectoryItem::E_None )
     {
-        osl::DirectoryItem aDirItem;
-        if ( osl::DirectoryItem::get( aNormalizedURL, aDirItem )
-                == osl::DirectoryItem::E_None )
+        aNormalizedURL = aFileStatus.getFileURL();
+
+        if ( !aNormalizedURL.isEmpty() )
         {
-            osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
+            if ( !aNormalizedURL.endsWith("/") )
+                rURL = aNormalizedURL;
+            else
+                rURL = aNormalizedURL
+                        .copy( 0, aNormalizedURL.getLength() - 1 );
 
-            if ( aDirItem.getFileStatus( aFileStatus )
-                    == osl::DirectoryItem::E_None )
-            {
-                aNormalizedURL = aFileStatus.getFileURL();
-
-                if ( !aNormalizedURL.isEmpty() )
-                {
-                    if ( !aNormalizedURL.endsWith("/") )
-                        rURL = aNormalizedURL;
-                    else
-                        rURL = aNormalizedURL
-                                .copy( 0, aNormalizedURL.getLength() - 1 );
-
-                    return true;
-                }
-            }
+            return true;
         }
     }
     return false;

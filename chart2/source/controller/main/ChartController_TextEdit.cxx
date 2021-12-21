@@ -121,32 +121,32 @@ bool ChartController::EndTextEdit()
 
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
     OutlinerParaObject* pParaObj = pTextObject->GetOutlinerParaObject();
-    if( pParaObj && pOutliner )
+    if( !pParaObj || !pOutliner )
+        return true;
+
+    pOutliner->SetText( *pParaObj );
+
+    OUString aString = pOutliner->GetText(
+                        pOutliner->GetParagraph( 0 ),
+                        pOutliner->GetParagraphCount() );
+
+    OUString aObjectCID = m_aSelection.getSelectedCID();
+    if ( !aObjectCID.isEmpty() )
     {
-        pOutliner->SetText( *pParaObj );
+        uno::Reference< beans::XPropertySet > xPropSet =
+            ObjectIdentifier::getObjectPropertySet( aObjectCID, getModel() );
 
-        OUString aString = pOutliner->GetText(
-                            pOutliner->GetParagraph( 0 ),
-                            pOutliner->GetParagraphCount() );
+        // lock controllers till end of block
+        ControllerLockGuardUNO aCLGuard( getModel() );
 
-        OUString aObjectCID = m_aSelection.getSelectedCID();
-        if ( !aObjectCID.isEmpty() )
-        {
-            uno::Reference< beans::XPropertySet > xPropSet =
-                ObjectIdentifier::getObjectPropertySet( aObjectCID, getModel() );
+        TitleHelper::setCompleteString( aString, uno::Reference<
+            css::chart2::XTitle >::query( xPropSet ), m_xCC );
 
-            // lock controllers till end of block
-            ControllerLockGuardUNO aCLGuard( getModel() );
-
-            TitleHelper::setCompleteString( aString, uno::Reference<
-                css::chart2::XTitle >::query( xPropSet ), m_xCC );
-
-            OSL_ENSURE(m_pTextActionUndoGuard, "ChartController::EndTextEdit: no TextUndoGuard!");
-            if (m_pTextActionUndoGuard)
-                m_pTextActionUndoGuard->commit();
-        }
-        m_pTextActionUndoGuard.reset();
+        OSL_ENSURE(m_pTextActionUndoGuard, "ChartController::EndTextEdit: no TextUndoGuard!");
+        if (m_pTextActionUndoGuard)
+            m_pTextActionUndoGuard->commit();
     }
+    m_pTextActionUndoGuard.reset();
     return true;
 }
 

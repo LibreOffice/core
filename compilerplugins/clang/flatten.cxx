@@ -17,6 +17,8 @@
 
 /**
   Look for places where we can flatten the control flow in a method by returning early.
+  I normally do:
+    for dir in *; do make -ks COMPILER_PLUGIN_TOOL=flatten FORCE_COMPILE=all $dir; done
  */
 namespace {
 
@@ -29,6 +31,31 @@ public:
 
     virtual void run() override
     {
+        std::string fn(handler.getMainFileName());
+        loplugin::normalizeDotDotInFilePath(fn);
+
+        // code where I don't have a better alternative
+        if (fn == SRCDIR "/solenv/bin/concat-deps.c")
+            return;
+        if (fn == SRCDIR "/vcl/unx/gtk3/gtkinst.cxx")
+            return;
+        if (fn == SRCDIR "/vcl/qt5/QtGraphics_Controls.cxx")
+            return;
+        if (fn == SRCDIR "/vcl/qt5/QtWidget.cxx")
+            return;
+        if (fn == SRCDIR "/sal/osl/unx/thread.cxx")
+            return;
+        if (fn == SRCDIR "/sal/osl/unx/file.cxx")
+            return;
+        // confused by macro
+        if (fn == SRCDIR "/oox/source/mathml/importutils.cxx")
+            return;
+        // mst currently working on this
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/ucb/source/ucp/webdav-curl/"))
+            return;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/skia/"))
+            return;
+
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
@@ -42,6 +69,7 @@ public:
     bool TraverseCXXDestructorDecl(CXXDestructorDecl *);
     bool VisitIfStmt(IfStmt const * );
 private:
+    bool isAtEnd(const CompoundStmt *, const IfStmt *);
     bool rewrite1(IfStmt const * );
     bool rewrite2(IfStmt const * );
     bool rewriteLargeIf(IfStmt const * );
@@ -194,9 +222,8 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
 
     // look for a large if(){} block at the end of a function
     if (!ifStmt->getElse()
-        && (functionDecl->getReturnType().isNull() || functionDecl->getReturnType()->isVoidType())
         && functionDeclBody && functionDeclBody->size()
-        && functionDeclBody->body_back() == ifStmt
+        && isAtEnd(functionDeclBody, ifStmt)
         && isLargeCompoundStmt(ifStmt->getThen()))
     {
         if (!rewriteLargeIf(ifStmt))
@@ -265,6 +292,27 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
         }
     }
     return true;
+}
+
+// is the ifStmt the last statement in the body, or just before a return statement.
+bool Flatten::isAtEnd(const CompoundStmt* body, const IfStmt* ifStmt)
+{
+    auto it = body->body_rbegin();
+    if (*it == ifStmt)
+        return true;
+    auto retStmt = dyn_cast<ReturnStmt>(*it);
+    if (!retStmt)
+        return false;
+    const Expr* retValue = retStmt->getRetValue();
+    if (!retValue || isa<DeclRefExpr>(retValue))
+        ; // ok
+    else if (compiler.getLangOpts().CPlusPlus && !retValue->isValueDependent() && retValue->isCXX11ConstantExpr(compiler.getASTContext()))
+        // TODO annoyingly, there is no easy API to check if a value is a compile-time constant for C code
+        ; // ok
+    else
+        return false;
+    ++it;
+    return *it == ifStmt;
 }
 
 static std::string stripOpenAndCloseBrace(std::string s);
@@ -677,10 +725,10 @@ bool Flatten::isLargeCompoundStmt(Stmt const * stmt)
 {
     auto stmtRange = stmt->getSourceRange();
     std::string s = getSourceAsString(stmtRange);
-    return std::count(s.begin(), s.end(), '\n') > 10;
+    return std::count(s.begin(), s.end(), '\n') > 15;
 }
 
-loplugin::Plugin::Registration< Flatten > X("flatten", false);
+loplugin::Plugin::Registration< Flatten > X("flatten", true);
 
 }
 

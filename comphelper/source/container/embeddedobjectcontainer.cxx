@@ -135,30 +135,30 @@ void EmbeddedObjectContainer::SwitchPersistence( const uno::Reference < embed::X
 
 bool EmbeddedObjectContainer::CommitImageSubStorage()
 {
-    if ( pImpl->mxImageStorage.is() )
+    if ( !pImpl->mxImageStorage )
+        return true;
+
+    try
     {
-        try
+        bool bReadOnlyMode = true;
+        uno::Reference < beans::XPropertySet > xSet(pImpl->mxImageStorage,uno::UNO_QUERY);
+        if ( xSet.is() )
         {
-            bool bReadOnlyMode = true;
-            uno::Reference < beans::XPropertySet > xSet(pImpl->mxImageStorage,uno::UNO_QUERY);
-            if ( xSet.is() )
-            {
-                // get the open mode from the parent storage
-                sal_Int32 nMode = 0;
-                uno::Any aAny = xSet->getPropertyValue("OpenMode");
-                if ( aAny >>= nMode )
-                    bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
-            } // if ( xSet.is() )
-            if ( !bReadOnlyMode )
-            {
-                uno::Reference< embed::XTransactedObject > xTransact( pImpl->mxImageStorage, uno::UNO_QUERY_THROW );
-                xTransact->commit();
-            }
-        }
-        catch (const uno::Exception&)
+            // get the open mode from the parent storage
+            sal_Int32 nMode = 0;
+            uno::Any aAny = xSet->getPropertyValue("OpenMode");
+            if ( aAny >>= nMode )
+                bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
+        } // if ( xSet.is() )
+        if ( !bReadOnlyMode )
         {
-            return false;
+            uno::Reference< embed::XTransactedObject > xTransact( pImpl->mxImageStorage, uno::UNO_QUERY_THROW );
+            xTransact->commit();
         }
+    }
+    catch (const uno::Exception&)
+    {
+        return false;
     }
 
     return true;
@@ -969,26 +969,26 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
     else
         SAL_WARN( "comphelper.container", "Object not found for removal!" );
 
-    if ( xPersist.is() && bKeepToTempStorage )  // #i119941#
-    {
-        // remove replacement image (if there is one)
-        RemoveGraphicStream( aName );
+    if ( !xPersist || !bKeepToTempStorage )  // #i119941#
+        return true;
 
-        // now it's time to remove the storage from the container storage
-        try
-        {
+    // remove replacement image (if there is one)
+    RemoveGraphicStream( aName );
+
+    // now it's time to remove the storage from the container storage
+    try
+    {
 #if OSL_DEBUG_LEVEL > 1
-            // if the object has a persistence and the object is not a link than it must have persistence entry in storage
-            OSL_ENSURE( bIsNotEmbedded || pImpl->mxStorage->hasByName( aName ), "The object has no persistence entry in the storage!" );
+        // if the object has a persistence and the object is not a link than it must have persistence entry in storage
+        OSL_ENSURE( bIsNotEmbedded || pImpl->mxStorage->hasByName( aName ), "The object has no persistence entry in the storage!" );
 #endif
-            if ( xPersist.is() && pImpl->mxStorage->hasByName( aName ) )
-                pImpl->mxStorage->removeElement( aName );
-        }
-        catch (const uno::Exception&)
-        {
-            SAL_WARN( "comphelper.container", "Failed to remove object from storage!" );
-            return false;
-        }
+        if ( xPersist.is() && pImpl->mxStorage->hasByName( aName ) )
+            pImpl->mxStorage->removeElement( aName );
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN( "comphelper.container", "Failed to remove object from storage!" );
+        return false;
     }
 
     return true;

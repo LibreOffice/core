@@ -134,49 +134,51 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
     }
 
     // call initNew() or load() at XLoadable
-    if(!bHaveLoadedModel)
-        try
+    if(bHaveLoadedModel)
+        return true;
+
+    try
+    {
+        utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( utl::MediaDescriptor::PROP_URL));
+        if( aIt != aMediaDescriptor.end())
         {
-            utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( utl::MediaDescriptor::PROP_URL));
-            if( aIt != aMediaDescriptor.end())
+            OUString aURL( (*aIt).second.get< OUString >());
+            if( aURL.startsWith( "private:factory/schart" ) )
             {
-                OUString aURL( (*aIt).second.get< OUString >());
-                if( aURL.startsWith( "private:factory/schart" ) )
+                // create new file
+                uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
+                xLoadable->initNew();
+            }
+            else
+            {
+                // use the URL as BaseURL, similar to what SfxBaseModel effectively does
+                if (!aURL.isEmpty())
                 {
-                    // create new file
-                    uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
-                    xLoadable->initNew();
+                    aMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTBASEURL] <<= aURL;
                 }
-                else
+                aMediaDescriptor.addInputStream();
+                uno::Sequence< beans::PropertyValue > aCompleteMediaDescriptor;
+                aMediaDescriptor >> aCompleteMediaDescriptor;
+                apphelper::MediaDescriptorHelper aMDHelper( aCompleteMediaDescriptor );
+
+                // load file
+                // @todo: replace: aMediaDescriptorHelper.getReducedForModel()
+                uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
+                xLoadable->load( aCompleteMediaDescriptor );
+
+                //resize standalone files to get correct size:
+                if( xComponentWindow.is() && aMDHelper.ISSET_FilterName && aMDHelper.FilterName == "StarChart 5.0" )
                 {
-                    // use the URL as BaseURL, similar to what SfxBaseModel effectively does
-                    if (!aURL.isEmpty())
-                    {
-                        aMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTBASEURL] <<= aURL;
-                    }
-                    aMediaDescriptor.addInputStream();
-                    uno::Sequence< beans::PropertyValue > aCompleteMediaDescriptor;
-                    aMediaDescriptor >> aCompleteMediaDescriptor;
-                    apphelper::MediaDescriptorHelper aMDHelper( aCompleteMediaDescriptor );
-
-                    // load file
-                    // @todo: replace: aMediaDescriptorHelper.getReducedForModel()
-                    uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
-                    xLoadable->load( aCompleteMediaDescriptor );
-
-                    //resize standalone files to get correct size:
-                    if( xComponentWindow.is() && aMDHelper.ISSET_FilterName && aMDHelper.FilterName == "StarChart 5.0" )
-                    {
-                        awt::Rectangle aRect( xComponentWindow->getPosSize() );
-                        xComponentWindow->setPosSize( aRect.X, aRect.Y, aRect.Width, aRect.Height, 0 );
-                    }
+                    awt::Rectangle aRect( xComponentWindow->getPosSize() );
+                    xComponentWindow->setPosSize( aRect.X, aRect.Y, aRect.Width, aRect.Height, 0 );
                 }
             }
         }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
 
     return true;
 }

@@ -179,28 +179,26 @@ namespace comphelper
     bool NamedValueCollection::get_ensureType( const OUString& _rValueName, void* _pValueLocation, const Type& _rExpectedValueType ) const
     {
         auto pos = maValues.find( _rValueName );
-        if ( pos != maValues.end() )
-        {
-            if ( uno_type_assignData(
-                    _pValueLocation, _rExpectedValueType.getTypeLibType(),
-                    const_cast< void* >( pos->second.getValue() ), pos->second.getValueType().getTypeLibType(),
-                    reinterpret_cast< uno_QueryInterfaceFunc >( cpp_queryInterface ),
-                    reinterpret_cast< uno_AcquireFunc >( cpp_acquire ),
-                    reinterpret_cast< uno_ReleaseFunc >( cpp_release )
-                ) )
-                // argument exists, and could be extracted
-                return true;
+        if ( pos == maValues.end() )
+            // argument does not exist
+            return false;
 
-            // argument exists, but is of wrong type
-            throw IllegalArgumentException(
-                "Invalid value type for '" + _rValueName
-                + "'.\nExpected: " + _rExpectedValueType.getTypeName()
-                + "\nFound: " + pos->second.getValueType().getTypeName(),
-                nullptr, 0 );
-        }
+        if ( uno_type_assignData(
+                _pValueLocation, _rExpectedValueType.getTypeLibType(),
+                const_cast< void* >( pos->second.getValue() ), pos->second.getValueType().getTypeLibType(),
+                reinterpret_cast< uno_QueryInterfaceFunc >( cpp_queryInterface ),
+                reinterpret_cast< uno_AcquireFunc >( cpp_acquire ),
+                reinterpret_cast< uno_ReleaseFunc >( cpp_release )
+            ) )
+            // argument exists, and could be extracted
+            return true;
 
-        // argument does not exist
-        return false;
+        // argument exists, but is of wrong type
+        throw IllegalArgumentException(
+            "Invalid value type for '" + _rValueName
+            + "'.\nExpected: " + _rExpectedValueType.getTypeName()
+            + "\nFound: " + pos->second.getValueType().getTypeName(),
+            nullptr, 0 );
     }
 
     const Any& NamedValueCollection::impl_get( const OUString& _rValueName ) const

@@ -806,16 +806,58 @@ namespace
 
         bool copy_content_straight(oslFileHandle& rTargetHandle)
         {
-            if (maFile && osl::File::E_None == maFile->open(osl_File_OpenFlag_Read))
-            {
-                sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
-                sal_uInt64 nBytesTransfer(0);
-                sal_uInt64 nSize(getPackFileSize());
+            if (!maFile || osl::File::E_None != maFile->open(osl_File_OpenFlag_Read))
+                return false;
 
+            sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
+            sal_uInt64 nBytesTransfer(0);
+            sal_uInt64 nSize(getPackFileSize());
+
+            // set offset in source file - when this is zero, a new file is to be added
+            if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
+            {
+                while (nSize != 0)
+                {
+                    const sal_uInt64 nToTransfer(std::min(nSize, sal_uInt64(BACKUP_FILE_HELPER_BLOCK_SIZE)));
+
+                    if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
+                    {
+                        break;
+                    }
+
+                    if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aArray), nToTransfer, &nBytesTransfer) || nBytesTransfer != nToTransfer)
+                    {
+                        break;
+                    }
+
+                    nSize -= nToTransfer;
+                }
+            }
+
+            maFile->close();
+            return (0 == nSize);
+        }
+
+        bool copy_content_compress(oslFileHandle& rTargetHandle)
+        {
+            if (!maFile || osl::File::E_None != maFile->open(osl_File_OpenFlag_Read))
+                return false;
+
+            sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
+            sal_uInt8 aBuffer[BACKUP_FILE_HELPER_BLOCK_SIZE];
+            sal_uInt64 nBytesTransfer(0);
+            sal_uInt64 nSize(getPackFileSize());
+            z_stream zstream;
+            memset(&zstream, 0, sizeof(zstream));
+
+            if (Z_OK == deflateInit(&zstream, Z_BEST_COMPRESSION))
+            {
                 // set offset in source file - when this is zero, a new file is to be added
                 if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
                 {
-                    while (nSize != 0)
+                    bool bOkay(true);
+
+                    while (bOkay && nSize != 0)
                     {
                         const sal_uInt64 nToTransfer(std::min(nSize, sal_uInt64(BACKUP_FILE_HELPER_BLOCK_SIZE)));
 
@@ -824,179 +866,131 @@ namespace
                             break;
                         }
 
-                        if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aArray), nToTransfer, &nBytesTransfer) || nBytesTransfer != nToTransfer)
+                        zstream.avail_in = nToTransfer;
+                        zstream.next_in = reinterpret_cast<unsigned char*>(aArray);
+
+                        do {
+                            zstream.avail_out = BACKUP_FILE_HELPER_BLOCK_SIZE;
+                            zstream.next_out = reinterpret_cast<unsigned char*>(aBuffer);
+#if !defined Z_PREFIX
+                            const sal_Int64 nRetval(deflate(&zstream, nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
+#else
+                            const sal_Int64 nRetval(z_deflate(&zstream, nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
+#endif
+                            if (Z_STREAM_ERROR == nRetval)
+                            {
+                                bOkay = false;
+                            }
+                            else
+                            {
+                                const sal_uInt64 nAvailable(BACKUP_FILE_HELPER_BLOCK_SIZE - zstream.avail_out);
+
+                                if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aBuffer), nAvailable, &nBytesTransfer) || nBytesTransfer != nAvailable)
+                                {
+                                    bOkay = false;
+                                }
+                            }
+                        } while (bOkay && 0 == zstream.avail_out);
+
+                        if (!bOkay)
                         {
                             break;
                         }
 
                         nSize -= nToTransfer;
                     }
-                }
 
-                maFile->close();
-                return (0 == nSize);
+#if !defined Z_PREFIX
+                    deflateEnd(&zstream);
+#else
+                    z_deflateEnd(&zstream);
+#endif
+                }
             }
 
-            return false;
-        }
+            maFile->close();
 
-        bool copy_content_compress(oslFileHandle& rTargetHandle)
-        {
-            if (maFile && osl::File::E_None == maFile->open(osl_File_OpenFlag_Read))
+            // get compressed size and add to entry
+            if (mnFullFileSize == mnPackFileSize && mnFullFileSize == zstream.total_in)
             {
-                sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
-                sal_uInt8 aBuffer[BACKUP_FILE_HELPER_BLOCK_SIZE];
-                sal_uInt64 nBytesTransfer(0);
-                sal_uInt64 nSize(getPackFileSize());
-                z_stream zstream;
-                memset(&zstream, 0, sizeof(zstream));
-
-                if (Z_OK == deflateInit(&zstream, Z_BEST_COMPRESSION))
-                {
-                    // set offset in source file - when this is zero, a new file is to be added
-                    if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
-                    {
-                        bool bOkay(true);
-
-                        while (bOkay && nSize != 0)
-                        {
-                            const sal_uInt64 nToTransfer(std::min(nSize, sal_uInt64(BACKUP_FILE_HELPER_BLOCK_SIZE)));
-
-                            if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
-                            {
-                                break;
-                            }
-
-                            zstream.avail_in = nToTransfer;
-                            zstream.next_in = reinterpret_cast<unsigned char*>(aArray);
-
-                            do {
-                                zstream.avail_out = BACKUP_FILE_HELPER_BLOCK_SIZE;
-                                zstream.next_out = reinterpret_cast<unsigned char*>(aBuffer);
-#if !defined Z_PREFIX
-                                const sal_Int64 nRetval(deflate(&zstream, nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
-#else
-                                const sal_Int64 nRetval(z_deflate(&zstream, nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
-#endif
-                                if (Z_STREAM_ERROR == nRetval)
-                                {
-                                    bOkay = false;
-                                }
-                                else
-                                {
-                                    const sal_uInt64 nAvailable(BACKUP_FILE_HELPER_BLOCK_SIZE - zstream.avail_out);
-
-                                    if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aBuffer), nAvailable, &nBytesTransfer) || nBytesTransfer != nAvailable)
-                                    {
-                                        bOkay = false;
-                                    }
-                                }
-                            } while (bOkay && 0 == zstream.avail_out);
-
-                            if (!bOkay)
-                            {
-                                break;
-                            }
-
-                            nSize -= nToTransfer;
-                        }
-
-#if !defined Z_PREFIX
-                        deflateEnd(&zstream);
-#else
-                        z_deflateEnd(&zstream);
-#endif
-                    }
-                }
-
-                maFile->close();
-
-                // get compressed size and add to entry
-                if (mnFullFileSize == mnPackFileSize && mnFullFileSize == zstream.total_in)
-                {
-                    mnPackFileSize = zstream.total_out;
-                }
-
-                return (0 == nSize);
+                mnPackFileSize = zstream.total_out;
             }
 
-            return false;
+            return (0 == nSize);
         }
 
         bool copy_content_uncompress(oslFileHandle& rTargetHandle)
         {
-            if (maFile && osl::File::E_None == maFile->open(osl_File_OpenFlag_Read))
+            if (!maFile || osl::File::E_None != maFile->open(osl_File_OpenFlag_Read))
+                return false;
+
+            sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
+            sal_uInt8 aBuffer[BACKUP_FILE_HELPER_BLOCK_SIZE];
+            sal_uInt64 nBytesTransfer(0);
+            sal_uInt64 nSize(getPackFileSize());
+            z_stream zstream;
+            memset(&zstream, 0, sizeof(zstream));
+
+            if (Z_OK == inflateInit(&zstream))
             {
-                sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
-                sal_uInt8 aBuffer[BACKUP_FILE_HELPER_BLOCK_SIZE];
-                sal_uInt64 nBytesTransfer(0);
-                sal_uInt64 nSize(getPackFileSize());
-                z_stream zstream;
-                memset(&zstream, 0, sizeof(zstream));
-
-                if (Z_OK == inflateInit(&zstream))
+                // set offset in source file - when this is zero, a new file is to be added
+                if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
                 {
-                    // set offset in source file - when this is zero, a new file is to be added
-                    if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
+                    bool bOkay(true);
+
+                    while (bOkay && nSize != 0)
                     {
-                        bool bOkay(true);
+                        const sal_uInt64 nToTransfer(std::min(nSize, sal_uInt64(BACKUP_FILE_HELPER_BLOCK_SIZE)));
 
-                        while (bOkay && nSize != 0)
+                        if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
                         {
-                            const sal_uInt64 nToTransfer(std::min(nSize, sal_uInt64(BACKUP_FILE_HELPER_BLOCK_SIZE)));
+                            break;
+                        }
 
-                            if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
-                            {
-                                break;
-                            }
+                        zstream.avail_in = nToTransfer;
+                        zstream.next_in = reinterpret_cast<unsigned char*>(aArray);
 
-                            zstream.avail_in = nToTransfer;
-                            zstream.next_in = reinterpret_cast<unsigned char*>(aArray);
-
-                            do {
-                                zstream.avail_out = BACKUP_FILE_HELPER_BLOCK_SIZE;
-                                zstream.next_out = reinterpret_cast<unsigned char*>(aBuffer);
+                        do {
+                            zstream.avail_out = BACKUP_FILE_HELPER_BLOCK_SIZE;
+                            zstream.next_out = reinterpret_cast<unsigned char*>(aBuffer);
 #if !defined Z_PREFIX
-                                const sal_Int64 nRetval(inflate(&zstream, Z_NO_FLUSH));
+                            const sal_Int64 nRetval(inflate(&zstream, Z_NO_FLUSH));
 #else
-                                const sal_Int64 nRetval(z_inflate(&zstream, Z_NO_FLUSH));
+                            const sal_Int64 nRetval(z_inflate(&zstream, Z_NO_FLUSH));
 #endif
-                                if (Z_STREAM_ERROR == nRetval)
+                            if (Z_STREAM_ERROR == nRetval)
+                            {
+                                bOkay = false;
+                            }
+                            else
+                            {
+                                const sal_uInt64 nAvailable(BACKUP_FILE_HELPER_BLOCK_SIZE - zstream.avail_out);
+
+                                if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aBuffer), nAvailable, &nBytesTransfer) || nBytesTransfer != nAvailable)
                                 {
                                     bOkay = false;
                                 }
-                                else
-                                {
-                                    const sal_uInt64 nAvailable(BACKUP_FILE_HELPER_BLOCK_SIZE - zstream.avail_out);
-
-                                    if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aBuffer), nAvailable, &nBytesTransfer) || nBytesTransfer != nAvailable)
-                                    {
-                                        bOkay = false;
-                                    }
-                                }
-                            } while (bOkay && 0 == zstream.avail_out);
-
-                            if (!bOkay)
-                            {
-                                break;
                             }
+                        } while (bOkay && 0 == zstream.avail_out);
 
-                            nSize -= nToTransfer;
+                        if (!bOkay)
+                        {
+                            break;
                         }
 
-#if !defined Z_PREFIX
-                        deflateEnd(&zstream);
-#else
-                        z_deflateEnd(&zstream);
-#endif
+                        nSize -= nToTransfer;
                     }
-                }
 
-                maFile->close();
-                return (0 == nSize);
+#if !defined Z_PREFIX
+                    deflateEnd(&zstream);
+#else
+                    z_deflateEnd(&zstream);
+#endif
+                }
             }
 
-            return false;
+            maFile->close();
+            return (0 == nSize);
         }
 
 
@@ -1421,26 +1415,24 @@ namespace
 
         bool tryPop(oslFileHandle& rHandle)
         {
-            if (!maPackedFileEntryVector.empty())
+            if (maPackedFileEntryVector.empty())
+                return false;
+
+            // already backups there, check if different from last entry
+            PackedFileEntry& aLastEntry = maPackedFileEntryVector.back();
+
+            // here the uncompress flag has to be determined, true
+            // means to add the file compressed, false means to add it
+            // uncompressed
+            bool bRetval = aLastEntry.copy_content(rHandle, true);
+
+            if (bRetval)
             {
-                // already backups there, check if different from last entry
-                PackedFileEntry& aLastEntry = maPackedFileEntryVector.back();
-
-                // here the uncompress flag has to be determined, true
-                // means to add the file compressed, false means to add it
-                // uncompressed
-                bool bRetval = aLastEntry.copy_content(rHandle, true);
-
-                if (bRetval)
-                {
-                    maPackedFileEntryVector.pop_back();
-                    mbChanged = true;
-                }
-
-                return bRetval;
+                maPackedFileEntryVector.pop_back();
+                mbChanged = true;
             }
 
-            return false;
+            return bRetval;
         }
 
         void tryReduceToNumBackups(sal_uInt16 nNumBackups)
@@ -2227,46 +2219,44 @@ namespace comphelper
     {
         const OUString aFileURL(createFileURL(rSourceURL, rName, rExt));
 
-        if (DirectoryHelper::fileExists(aFileURL))
+        if (!DirectoryHelper::fileExists(aFileURL))
+            return false;
+
+        // try Pop for base file
+        const OUString aPackURL(createPackURL(rTargetURL, rName));
+        PackedFile aPackedFile(aPackURL);
+
+        if (aPackedFile.empty())
+            return false;
+
+        oslFileHandle aHandle;
+        OUString aTempURL;
+
+        // open target temp file - it exists until deleted
+        if (osl::File::E_None != osl::FileBase::createTempFile(nullptr, &aHandle, &aTempURL))
+            return false;
+
+        bool bRetval(aPackedFile.tryPop(aHandle));
+
+        // close temp file (in all cases) - it exists until deleted
+        osl_closeFile(aHandle);
+
+        if (bRetval)
         {
-            // try Pop for base file
-            const OUString aPackURL(createPackURL(rTargetURL, rName));
-            PackedFile aPackedFile(aPackURL);
+            // copy over existing file by first deleting original
+            // and moving the temp file to old original
+            osl::File::remove(aFileURL);
+            osl::File::move(aTempURL, aFileURL);
 
-            if (!aPackedFile.empty())
-            {
-                oslFileHandle aHandle;
-                OUString aTempURL;
-
-                // open target temp file - it exists until deleted
-                if (osl::File::E_None == osl::FileBase::createTempFile(nullptr, &aHandle, &aTempURL))
-                {
-                    bool bRetval(aPackedFile.tryPop(aHandle));
-
-                    // close temp file (in all cases) - it exists until deleted
-                    osl_closeFile(aHandle);
-
-                    if (bRetval)
-                    {
-                        // copy over existing file by first deleting original
-                        // and moving the temp file to old original
-                        osl::File::remove(aFileURL);
-                        osl::File::move(aTempURL, aFileURL);
-
-                        // reduce to allowed number and flush
-                        aPackedFile.tryReduceToNumBackups(mnNumBackups);
-                        aPackedFile.flush();
-                    }
-
-                    // delete temp file (in all cases - it may be moved already)
-                    osl::File::remove(aTempURL);
-
-                    return bRetval;
-                }
-            }
+            // reduce to allowed number and flush
+            aPackedFile.tryReduceToNumBackups(mnNumBackups);
+            aPackedFile.flush();
         }
 
-        return false;
+        // delete temp file (in all cases - it may be moved already)
+        osl::File::remove(aTempURL);
+
+        return bRetval;
     }
 
     /////////////////// ExtensionInfo helpers ///////////////////////
@@ -2319,103 +2309,101 @@ namespace comphelper
         const OUString aPackURL(createPackURL(rTargetURL, u"ExtensionInfo"));
         PackedFile aPackedFile(aPackURL);
 
-        if (!aPackedFile.empty())
+        if (aPackedFile.empty())
+            return false;
+
+        oslFileHandle aHandle;
+        OUString aTempURL;
+
+        // open target temp file - it exists until deleted
+        if (osl::File::E_None != osl::FileBase::createTempFile(nullptr, &aHandle, &aTempURL))
+            return false;
+
+        bool bRetval(aPackedFile.tryPop(aHandle));
+
+        // close temp file (in all cases) - it exists until deleted
+        osl_closeFile(aHandle);
+
+        if (bRetval)
         {
-            oslFileHandle aHandle;
-            OUString aTempURL;
+            // last config is in temp file, load it to ExtensionInfo
+            ExtensionInfo aLoadedExtensionInfo;
+            FileSharedPtr aBaseFile = std::make_shared<osl::File>(aTempURL);
 
-            // open target temp file - it exists until deleted
-            if (osl::File::E_None == osl::FileBase::createTempFile(nullptr, &aHandle, &aTempURL))
+            if (osl::File::E_None == aBaseFile->open(osl_File_OpenFlag_Read))
             {
-                bool bRetval(aPackedFile.tryPop(aHandle));
-
-                // close temp file (in all cases) - it exists until deleted
-                osl_closeFile(aHandle);
-
-                if (bRetval)
+                if (aLoadedExtensionInfo.read_entries(aBaseFile))
                 {
-                    // last config is in temp file, load it to ExtensionInfo
-                    ExtensionInfo aLoadedExtensionInfo;
-                    FileSharedPtr aBaseFile = std::make_shared<osl::File>(aTempURL);
+                    // get current extension info, but from XML config files
+                    ExtensionInfo aCurrentExtensionInfo;
 
-                    if (osl::File::E_None == aBaseFile->open(osl_File_OpenFlag_Read))
+                    aCurrentExtensionInfo.createUserExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
+
+                    // now we have loaded last_working (aLoadedExtensionInfo) and
+                    // current (aCurrentExtensionInfo) ExtensionInfo and may react on
+                    // differences by de/activating these as needed
+                    const ExtensionInfoEntryVector& aUserEntries = aCurrentExtensionInfo.getExtensionInfoEntryVector();
+                    const ExtensionInfoEntryVector& rLoadedVector = aLoadedExtensionInfo.getExtensionInfoEntryVector();
+                    ExtensionInfoEntryVector aToBeDisabled;
+                    ExtensionInfoEntryVector aToBeEnabled;
+
+                    for (const auto& rCurrentInfo : aUserEntries)
                     {
-                        if (aLoadedExtensionInfo.read_entries(aBaseFile))
+                        const ExtensionInfoEntry* pLoadedInfo = nullptr;
+
+                        for (const auto& rLoadedInfo : rLoadedVector)
                         {
-                            // get current extension info, but from XML config files
-                            ExtensionInfo aCurrentExtensionInfo;
-
-                            aCurrentExtensionInfo.createUserExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
-
-                            // now we have loaded last_working (aLoadedExtensionInfo) and
-                            // current (aCurrentExtensionInfo) ExtensionInfo and may react on
-                            // differences by de/activating these as needed
-                            const ExtensionInfoEntryVector& aUserEntries = aCurrentExtensionInfo.getExtensionInfoEntryVector();
-                            const ExtensionInfoEntryVector& rLoadedVector = aLoadedExtensionInfo.getExtensionInfoEntryVector();
-                            ExtensionInfoEntryVector aToBeDisabled;
-                            ExtensionInfoEntryVector aToBeEnabled;
-
-                            for (const auto& rCurrentInfo : aUserEntries)
+                            if (rCurrentInfo.isSameExtension(rLoadedInfo))
                             {
-                                const ExtensionInfoEntry* pLoadedInfo = nullptr;
-
-                                for (const auto& rLoadedInfo : rLoadedVector)
-                                {
-                                    if (rCurrentInfo.isSameExtension(rLoadedInfo))
-                                    {
-                                        pLoadedInfo = &rLoadedInfo;
-                                        break;
-                                    }
-                                }
-
-                                if (nullptr != pLoadedInfo)
-                                {
-                                    // loaded info contains information about the Extension rCurrentInfo
-                                    const bool bCurrentEnabled(rCurrentInfo.isEnabled());
-                                    const bool bLoadedEnabled(pLoadedInfo->isEnabled());
-
-                                    if (bCurrentEnabled && !bLoadedEnabled)
-                                    {
-                                        aToBeDisabled.push_back(rCurrentInfo);
-                                    }
-                                    else if (!bCurrentEnabled && bLoadedEnabled)
-                                    {
-                                        aToBeEnabled.push_back(rCurrentInfo);
-                                    }
-                                }
-                                else
-                                {
-                                    // There is no loaded info about the Extension rCurrentInfo.
-                                    // It needs to be disabled
-                                    if (rCurrentInfo.isEnabled())
-                                    {
-                                        aToBeDisabled.push_back(rCurrentInfo);
-                                    }
-                                }
+                                pLoadedInfo = &rLoadedInfo;
+                                break;
                             }
+                        }
 
-                            if (!aToBeDisabled.empty() || !aToBeEnabled.empty())
+                        if (nullptr != pLoadedInfo)
+                        {
+                            // loaded info contains information about the Extension rCurrentInfo
+                            const bool bCurrentEnabled(rCurrentInfo.isEnabled());
+                            const bool bLoadedEnabled(pLoadedInfo->isEnabled());
+
+                            if (bCurrentEnabled && !bLoadedEnabled)
                             {
-                                ExtensionInfo::changeEnableDisableStateInXML(maUserConfigWorkURL, aToBeEnabled, aToBeDisabled);
+                                aToBeDisabled.push_back(rCurrentInfo);
                             }
-
-                            bRetval = true;
+                            else if (!bCurrentEnabled && bLoadedEnabled)
+                            {
+                                aToBeEnabled.push_back(rCurrentInfo);
+                            }
+                        }
+                        else
+                        {
+                            // There is no loaded info about the Extension rCurrentInfo.
+                            // It needs to be disabled
+                            if (rCurrentInfo.isEnabled())
+                            {
+                                aToBeDisabled.push_back(rCurrentInfo);
+                            }
                         }
                     }
 
-                    // reduce to allowed number and flush
-                    aPackedFile.tryReduceToNumBackups(mnNumBackups);
-                    aPackedFile.flush();
+                    if (!aToBeDisabled.empty() || !aToBeEnabled.empty())
+                    {
+                        ExtensionInfo::changeEnableDisableStateInXML(maUserConfigWorkURL, aToBeEnabled, aToBeDisabled);
+                    }
+
+                    bRetval = true;
                 }
-
-                // delete temp file (in all cases - it may be moved already)
-                osl::File::remove(aTempURL);
-
-                return bRetval;
             }
+
+            // reduce to allowed number and flush
+            aPackedFile.tryReduceToNumBackups(mnNumBackups);
+            aPackedFile.flush();
         }
 
-        return false;
+        // delete temp file (in all cases - it may be moved already)
+        osl::File::remove(aTempURL);
+
+        return bRetval;
     }
 
     /////////////////// FileDirInfo helpers ///////////////////////

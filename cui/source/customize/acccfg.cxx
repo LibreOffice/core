@@ -797,23 +797,24 @@ IMPL_LINK(SfxAcceleratorConfigPage, KeyInputHdl, const KeyEvent&, rKey, bool)
     sal_uInt16 nMod1 = aCode1.GetModifier();
 
     // is it related to our list box ?
-    if ((nCode1 != KEY_DOWN) && (nCode1 != KEY_UP) && (nCode1 != KEY_LEFT) && (nCode1 != KEY_RIGHT)
-        && (nCode1 != KEY_PAGEUP) && (nCode1 != KEY_PAGEDOWN))
-    {
-        for (int i = 0, nCount = m_xEntriesBox->n_children(); i < nCount; ++i)
-        {
-            TAccInfo* pUserData = reinterpret_cast<TAccInfo*>(m_xEntriesBox->get_id(i).toInt64());
-            if (pUserData)
-            {
-                sal_uInt16 nCode2 = pUserData->m_aKey.GetCode();
-                sal_uInt16 nMod2 = pUserData->m_aKey.GetModifier();
+    if ((nCode1 == KEY_DOWN) || (nCode1 == KEY_UP) || (nCode1 == KEY_LEFT) || (nCode1 == KEY_RIGHT)
+        || (nCode1 == KEY_PAGEUP) || (nCode1 == KEY_PAGEDOWN))
+        // no - handle it as normal dialog input
+        return false;
 
-                if (nCode1 == nCode2 && nMod1 == nMod2)
-                {
-                    m_xEntriesBox->select(i);
-                    m_xEntriesBox->scroll_to_row(i);
-                    return true;
-                }
+    for (int i = 0, nCount = m_xEntriesBox->n_children(); i < nCount; ++i)
+    {
+        TAccInfo* pUserData = reinterpret_cast<TAccInfo*>(m_xEntriesBox->get_id(i).toInt64());
+        if (pUserData)
+        {
+            sal_uInt16 nCode2 = pUserData->m_aKey.GetCode();
+            sal_uInt16 nMod2 = pUserData->m_aKey.GetModifier();
+
+            if (nCode1 == nCode2 && nMod1 == nMod2)
+            {
+                m_xEntriesBox->select(i);
+                m_xEntriesBox->scroll_to_row(i);
+                return true;
             }
         }
     }
