@@ -16,6 +16,24 @@
       "message": "By the way, about this:\nsw/source/core/access/accframebase.hxx\n60:    virtual bool SetSelectedState( bool bSeleted ) override;\n\nit\u0027s present only here...",
       "revId": "0f472e35033b356cc2dd885762ec4c4cc7b02b8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bd76264_55621d9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-21T17:23:36Z",
+      "side": 1,
+      "message": "Indeed!\nbSeleted is an argument of a function.\nA function can be declared like this:\nvirtual bool SetSelectedState(bool bSeleted) override;\n\nand implemented at another location like this:\nbool SetSelectedState(bool bSelected)\n{\n.... use of \"bSelected\" at a moment (remark: we can\u0027t use \"bSeleted\" here since  the argument is \"bSelected\")\n\n}",
+      "parentUuid": "14f214da_029b754b",
+      "revId": "0f472e35033b356cc2dd885762ec4c4cc7b02b8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
