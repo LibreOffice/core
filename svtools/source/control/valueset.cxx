@@ -767,9 +767,9 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
     if (weld::DrawingArea* pNeedsFormatToScroll = !mnCols ? GetDrawingArea() : nullptr)
     {
         Format(pNeedsFormatToScroll->get_ref_device());
-        // reset scrollbar so its set to the later calculated mnFirstLine on
+        // reset scrollbar so it's set to the later calculated mnFirstLine on
         // the next Format
-        RecalcScrollBar(); // reset scrollbar so its set to the later calculated
+        RecalcScrollBar();
     }
 
     // if necessary scroll to the visible area
