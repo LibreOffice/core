@@ -288,10 +288,9 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     DBG_ASSERT( pPool, "Where is the pool?" );
 #endif
 
-    if (!GetUserData().isEmpty())
-    {
-        m_aPreferredDPI = GetUserData().toInt32();
-    }
+    auto& aProperties = getAdditionalProperties();
+    if (aProperties.find("PreferredDPI") != aProperties.end())
+        m_aPreferredDPI = aProperties.at("PreferredDPI").get<sal_Int32>();
 
     bSetOrigSize = false;
 
