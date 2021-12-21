@@ -33,7 +33,7 @@
 #include <tools/debug.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <o3tl/sorted_vector.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
@@ -73,7 +73,7 @@ namespace svxform
     class FormScriptListener    :public FormScriptListener_Base
     {
     private:
-        ::osl::Mutex m_aMutex;
+        std::mutex m_aMutex;
         FormScriptingEnvironment *m_pScriptExecutor;
 
     public:
@@ -123,7 +123,7 @@ namespace svxform
             @precond
                 m_pScriptExecutor is not <NULL/>.
         */
-        void    impl_doFireScriptEvent_nothrow( ::osl::ClearableMutexGuard& _rGuard, const ScriptEvent& _rEvent, Any* _pSynchronousResult );
+        void    impl_doFireScriptEvent_nothrow( std::unique_lock<std::mutex>& _rGuard, const ScriptEvent& _rEvent, Any* _pSynchronousResult );
 
     private:
         DECL_LINK( OnAsyncScriptEvent, void*, void );
@@ -676,11 +676,11 @@ namespace svxform
     }
 
 
-    void FormScriptListener::impl_doFireScriptEvent_nothrow( ::osl::ClearableMutexGuard& _rGuard, const ScriptEvent& _rEvent, Any* _pSynchronousResult )
+    void FormScriptListener::impl_doFireScriptEvent_nothrow( std::unique_lock<std::mutex>& _rGuard, const ScriptEvent& _rEvent, Any* _pSynchronousResult )
     {
         OSL_PRECOND( m_pScriptExecutor, "FormScriptListener::impl_doFireScriptEvent_nothrow: this will crash!" );
 
-        _rGuard.clear();
+        _rGuard.unlock();
         m_pScriptExecutor->doFireScriptEvent( _rEvent, _pSynchronousResult );
     }
 
@@ -690,7 +690,7 @@ namespace svxform
         if ( _rEvent.ScriptType == "VBAInterop" )
            return; // not handled here
 
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( impl_isDisposed_nothrow() )
             return;
@@ -710,7 +710,7 @@ namespace svxform
     {
         Any aResult;
 
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         if ( !impl_isDisposed_nothrow() )
             impl_doFireScriptEvent_nothrow( aGuard, _rEvent, &aResult );
 
@@ -726,7 +726,7 @@ namespace svxform
 
     void FormScriptListener::dispose()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         m_pScriptExecutor = nullptr;
     }
 
@@ -738,7 +738,7 @@ namespace svxform
             return;
 
         {
-            ::osl::ClearableMutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
 
             if ( !impl_isDisposed_nothrow() )
                 impl_doFireScriptEvent_nothrow( aGuard, *_pEvent, nullptr );
