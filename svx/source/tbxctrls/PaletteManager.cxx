@@ -43,6 +43,17 @@
 
 #include <palettes.hxx>
 
+namespace
+{
+// Luminance modulation for the 6 effect presets.
+// 10000 is the default.
+sal_Int16 g_aLumMods[] = { 10000, 2000, 4000, 6000, 7500, 5000 };
+
+// Luminance offset for the 6 effect presets.
+// 0 is the default.
+sal_Int16 g_aLumOffs[] = { 0, 8000, 6000, 4000, 0, 0 };
+}
+
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
     mnNumOfPalettes(3),
@@ -131,6 +142,17 @@ bool PaletteManager::IsThemePaletteSelected() const
     return mnCurrentPalette == mnNumOfPalettes - 2;
 }
 
+void PaletteManager::GetThemeIndexLumModOff(sal_uInt16 nItemId, sal_Int16& rThemeIndex,
+                                            sal_Int16& rLumMod, sal_Int16& rLumOff)
+{
+    // Each column is the same color with different effects.
+    rThemeIndex = nItemId % 12;
+
+    // Each row is the same effect with different colors.
+    rLumMod = g_aLumMods[nItemId / 12];
+    rLumOff = g_aLumOffs[nItemId / 12];
+}
+
 void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 {
     if( mnCurrentPalette == 0)
@@ -156,7 +178,13 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
             rColorSet.Clear();
             if (aColors.size() >= 12)
             {
-                std::vector<OUString> aNames = {
+                std::vector<OUString> aEffectNames = {
+                    SvxResId(RID_SVXSTR_THEME_EFFECT1),  SvxResId(RID_SVXSTR_THEME_EFFECT2),
+                    SvxResId(RID_SVXSTR_THEME_EFFECT3),  SvxResId(RID_SVXSTR_THEME_EFFECT4),
+                    SvxResId(RID_SVXSTR_THEME_EFFECT5),
+                };
+
+                std::vector<OUString> aColorNames = {
                     SvxResId(RID_SVXSTR_THEME_COLOR1),  SvxResId(RID_SVXSTR_THEME_COLOR2),
                     SvxResId(RID_SVXSTR_THEME_COLOR3),  SvxResId(RID_SVXSTR_THEME_COLOR4),
                     SvxResId(RID_SVXSTR_THEME_COLOR5),  SvxResId(RID_SVXSTR_THEME_COLOR6),
@@ -164,9 +192,27 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
                     SvxResId(RID_SVXSTR_THEME_COLOR9),  SvxResId(RID_SVXSTR_THEME_COLOR10),
                     SvxResId(RID_SVXSTR_THEME_COLOR11), SvxResId(RID_SVXSTR_THEME_COLOR12),
                 };
-                for (int i = 0; i < 12; ++i)
+
+                sal_uInt16 nItemId = 0;
+                // Each row is one effect type (no effect + each type).
+                for (size_t nEffect = 0; nEffect < aEffectNames.size() + 1; ++nEffect)
                 {
-                    rColorSet.InsertItem(i, aColors[i], aNames[i]);
+                    // Each column is one color type.
+                    for (size_t nColor = 0; nColor < aColorNames.size(); ++nColor)
+                    {
+                        Color aColor = aColors[nColor];
+                        aColor.ApplyLumModOff(g_aLumMods[nEffect], g_aLumOffs[nEffect]);
+                        OUString aColorName;
+                        if (nEffect == 0)
+                        {
+                            aColorName = aColorNames[nColor];
+                        }
+                        else
+                        {
+                            aColorName = aEffectNames[nEffect - 1].replaceAll("%1", aColorNames[nColor]);
+                        }
+                        rColorSet.InsertItem(nItemId++, aColor, aColorName);
+                    }
                 }
             }
         }

@@ -1523,6 +1523,10 @@ void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(ss.str().c_str()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("theme-index"),
                                       BAD_CAST(OString::number(maThemeIndex).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("lum-mod"),
+                                      BAD_CAST(OString::number(mnLumMod).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("lum-off"),
+                                      BAD_CAST(OString::number(mnLumOff).getStr()));
 
     OUString aStr;
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());

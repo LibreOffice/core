@@ -1132,6 +1132,11 @@
 #define RID_SVXSTR_THEME_COLOR10                            NC_("RID_SVXSTR_THEME_COLOR10", "Accent 6")
 #define RID_SVXSTR_THEME_COLOR11                            NC_("RID_SVXSTR_THEME_COLOR11", "Hyperlink")
 #define RID_SVXSTR_THEME_COLOR12                            NC_("RID_SVXSTR_THEME_COLOR12", "Followed Hyperlink")
+#define RID_SVXSTR_THEME_EFFECT1                            NC_("RID_SVXSTR_THEME_EFFECT1", "%1, 80% Lighter")
+#define RID_SVXSTR_THEME_EFFECT2                            NC_("RID_SVXSTR_THEME_EFFECT2", "%1, 60% Lighter")
+#define RID_SVXSTR_THEME_EFFECT3                            NC_("RID_SVXSTR_THEME_EFFECT3", "%1, 40% Lighter")
+#define RID_SVXSTR_THEME_EFFECT4                            NC_("RID_SVXSTR_THEME_EFFECT4", "%1, 25% Darker")
+#define RID_SVXSTR_THEME_EFFECT5                            NC_("RID_SVXSTR_THEME_EFFECT5", "%1, 50% Darker")
 
 #define RID_SVX_EXTRUSION_BAR                               NC_("RID_SVX_EXTRUSION_BAR", "Extrusion")
 #define RID_SVXSTR_UNDO_APPLY_EXTRUSION_ON_OFF              NC_("RID_SVXSTR_UNDO_APPLY_EXTRUSION_ON_OFF", "Apply Extrusion On/Off")
