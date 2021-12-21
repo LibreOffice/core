@@ -664,41 +664,34 @@ public:
 
     bool operator==(const ImplB2DPolygon& rCandidate) const
     {
-        if(mbIsClosed == rCandidate.mbIsClosed)
+        if(mbIsClosed != rCandidate.mbIsClosed)
+            return false;
+        if(!(maPoints == rCandidate.maPoints))
+            return false;
+        bool bControlVectorsAreEqual(true);
+
+        if(moControlVector)
         {
-            if(maPoints == rCandidate.maPoints)
+            if(rCandidate.moControlVector)
             {
-                bool bControlVectorsAreEqual(true);
-
-                if(moControlVector)
-                {
-                    if(rCandidate.moControlVector)
-                    {
-                        bControlVectorsAreEqual = ((*moControlVector) == (*rCandidate.moControlVector));
-                    }
-                    else
-                    {
-                        // candidate has no control vector, so it's assumed all unused.
-                        bControlVectorsAreEqual = !moControlVector->isUsed();
-                    }
-                }
-                else
-                {
-                    if(rCandidate.moControlVector)
-                    {
-                        // we have no control vector, so it's assumed all unused.
-                        bControlVectorsAreEqual = !rCandidate.moControlVector->isUsed();
-                    }
-                }
-
-                if(bControlVectorsAreEqual)
-                {
-                    return true;
-                }
+                bControlVectorsAreEqual = ((*moControlVector) == (*rCandidate.moControlVector));
+            }
+            else
+            {
+                // candidate has no control vector, so it's assumed all unused.
+                bControlVectorsAreEqual = !moControlVector->isUsed();
+            }
+        }
+        else
+        {
+            if(rCandidate.moControlVector)
+            {
+                // we have no control vector, so it's assumed all unused.
+                bControlVectorsAreEqual = !rCandidate.moControlVector->isUsed();
             }
         }
 
-        return false;
+        return bControlVectorsAreEqual;
     }
 
     const basegfx::B2DPoint& getPoint(sal_uInt32 nIndex) const

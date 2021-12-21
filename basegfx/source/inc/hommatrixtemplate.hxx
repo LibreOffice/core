@@ -174,25 +174,25 @@ namespace basegfx::internal
 
             void testLastLine()
             {
-                if(mpLine)
+                if(!mpLine)
+                    return;
+
+                bool bNecessary(false);
+
+                for(sal_uInt16 a(0);!bNecessary && a < RowSize; a++)
                 {
-                    bool bNecessary(false);
+                    const double fDefault(implGetDefaultValue((RowSize - 1), a));
+                    const double fLineValue(mpLine->get(a));
 
-                    for(sal_uInt16 a(0);!bNecessary && a < RowSize; a++)
+                    if(!::basegfx::fTools::equal(fDefault, fLineValue))
                     {
-                        const double fDefault(implGetDefaultValue((RowSize - 1), a));
-                        const double fLineValue(mpLine->get(a));
-
-                        if(!::basegfx::fTools::equal(fDefault, fLineValue))
-                        {
-                            bNecessary = true;
-                        }
+                        bNecessary = true;
                     }
+                }
 
-                    if(!bNecessary)
-                    {
-                        mpLine.reset();
-                    }
+                if(!bNecessary)
+                {
+                    mpLine.reset();
                 }
             }
 

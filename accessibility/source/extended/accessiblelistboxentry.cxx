@@ -409,30 +409,29 @@ namespace accessibility
         ::osl::MutexGuard aGuard( m_aMutex );
 
         SvTreeListBox* pBox = m_pTreeListBox;
-        if(pBox)
+        if(!pBox)
+            return AccessibleRole::UNKNOWN;
+
+        SvTreeFlags treeFlag = pBox->GetTreeFlags();
+        if(treeFlag & SvTreeFlags::CHKBTN )
         {
-            SvTreeFlags treeFlag = pBox->GetTreeFlags();
-            if(treeFlag & SvTreeFlags::CHKBTN )
+            SvTreeListEntry* pEntry = pBox->GetEntryFromPath( m_aEntryPath );
+            SvButtonState eState = pBox->GetCheckButtonState( pEntry );
+            switch( eState )
             {
-                SvTreeListEntry* pEntry = pBox->GetEntryFromPath( m_aEntryPath );
-                SvButtonState eState = pBox->GetCheckButtonState( pEntry );
-                switch( eState )
-                {
-                case SvButtonState::Checked:
-                case SvButtonState::Unchecked:
-                    return AccessibleRole::CHECK_BOX;
-                case SvButtonState::Tristate:
-                default:
-                    return AccessibleRole::LABEL;
-                }
+            case SvButtonState::Checked:
+            case SvButtonState::Unchecked:
+                return AccessibleRole::CHECK_BOX;
+            case SvButtonState::Tristate:
+            default:
+                return AccessibleRole::LABEL;
             }
-            if (GetRoleType() == 0)
-                return AccessibleRole::LIST_ITEM;
-            else
-                //o is: return AccessibleRole::LABEL;
-                return AccessibleRole::TREE_ITEM;
         }
-        return AccessibleRole::UNKNOWN;
+        if (GetRoleType() == 0)
+            return AccessibleRole::LIST_ITEM;
+        else
+            //o is: return AccessibleRole::LABEL;
+            return AccessibleRole::TREE_ITEM;
     }
 
     OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  )

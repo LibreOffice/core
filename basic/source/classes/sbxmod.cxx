@@ -1596,38 +1596,38 @@ bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::GlobalSearch );
     sal_uInt8 bImage;
     rStrm.ReadUChar( bImage );
-    if( bImage )
-    {
-        std::unique_ptr<SbiImage> p(new SbiImage);
-        sal_uInt32 nImgVer = 0;
+    if( !bImage )
+        return true;
 
-        if( !p->Load( rStrm, nImgVer ) )
-        {
-            return false;
-        }
-        // If the image is in old format, we fix up the method start offsets
-        if ( nImgVer < B_EXT_IMG_VERSION )
-        {
-            fixUpMethodStart( false, p.get() );
-            p->ReleaseLegacyBuffer();
-        }
-        aComment = p->aComment;
-        SetName( p->aName );
-        if( p->GetCodeSize() )
-        {
-            aOUSource = p->aOUSource;
-            // Old version: image away
-            if( nVer == 1 )
-            {
-                SetSource32( p->aOUSource );
-            }
-            else
-                pImage = std::move(p);
-        }
-        else
+    std::unique_ptr<SbiImage> p(new SbiImage);
+    sal_uInt32 nImgVer = 0;
+
+    if( !p->Load( rStrm, nImgVer ) )
+    {
+        return false;
+    }
+    // If the image is in old format, we fix up the method start offsets
+    if ( nImgVer < B_EXT_IMG_VERSION )
+    {
+        fixUpMethodStart( false, p.get() );
+        p->ReleaseLegacyBuffer();
+    }
+    aComment = p->aComment;
+    SetName( p->aName );
+    if( p->GetCodeSize() )
+    {
+        aOUSource = p->aOUSource;
+        // Old version: image away
+        if( nVer == 1 )
         {
             SetSource32( p->aOUSource );
         }
+        else
+            pImage = std::move(p);
+    }
+    else
+    {
+        SetSource32( p->aOUSource );
     }
     return true;
 }

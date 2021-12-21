@@ -300,45 +300,45 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
 {
     const INetURLObject aURL( rURL );
 
-    if( aURL.GetProtocol() != INetProtocol::NotValid )
+    if( aURL.GetProtocol() == INetProtocol::NotValid )
+        return false;
+
+    if( bDeep || pPreferredSizePixel )
     {
-        if( bDeep || pPreferredSizePixel )
+        try
         {
-            try
-            {
-                uno::Reference< media::XPlayer > xPlayer( priv::MediaWindowImpl::createPlayer(
-                                                            aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ),
-                                                            rReferer, nullptr ) );
+            uno::Reference< media::XPlayer > xPlayer( priv::MediaWindowImpl::createPlayer(
+                                                        aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ),
+                                                        rReferer, nullptr ) );
 
-                if( xPlayer.is() )
+            if( xPlayer.is() )
+            {
+                if( pPreferredSizePixel )
                 {
-                    if( pPreferredSizePixel )
-                    {
-                        const awt::Size aAwtSize( xPlayer->getPreferredPlayerWindowSize() );
+                    const awt::Size aAwtSize( xPlayer->getPreferredPlayerWindowSize() );
 
-                        pPreferredSizePixel->setWidth( aAwtSize.Width );
-                        pPreferredSizePixel->setHeight( aAwtSize.Height );
-                    }
-
-                    return true;
+                    pPreferredSizePixel->setWidth( aAwtSize.Width );
+                    pPreferredSizePixel->setHeight( aAwtSize.Height );
                 }
-            }
-            catch( ... )
-            {
+
+                return true;
             }
         }
-        else
+        catch( ... )
         {
-            FilterNameVector        aFilters = getMediaFilters();
-            const OUString          aExt( aURL.getExtension() );
+        }
+    }
+    else
+    {
+        FilterNameVector        aFilters = getMediaFilters();
+        const OUString          aExt( aURL.getExtension() );
 
-            for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
+        for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
+        {
+            for( sal_Int32 nIndex = 0; nIndex >= 0; )
             {
-                for( sal_Int32 nIndex = 0; nIndex >= 0; )
-                {
-                    if( aExt.equalsIgnoreAsciiCase( aFilters[ i ].second.getToken( 0, ';', nIndex ) ) )
-                        return true;
-                }
+                if( aExt.equalsIgnoreAsciiCase( aFilters[ i ].second.getToken( 0, ';', nIndex ) ) )
+                    return true;
             }
         }
     }

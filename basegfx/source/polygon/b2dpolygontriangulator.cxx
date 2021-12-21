@@ -180,23 +180,23 @@ namespace basegfx
         bool Triangulator::CheckPointInTriangle(EdgeEntry* pEdgeA, EdgeEntry const * pEdgeB, const B2DPoint& rTestPoint)
         {
             // inside triangle or on edge?
-            if(utils::isPointInTriangle(pEdgeA->getStart(), pEdgeA->getEnd(), pEdgeB->getEnd(), rTestPoint, true))
+            if(!utils::isPointInTriangle(pEdgeA->getStart(), pEdgeA->getEnd(), pEdgeB->getEnd(), rTestPoint, true))
+                return true;
+
+            // but not on point
+            if(!rTestPoint.equal(pEdgeA->getEnd()) && !rTestPoint.equal(pEdgeB->getEnd()))
             {
-                // but not on point
-                if(!rTestPoint.equal(pEdgeA->getEnd()) && !rTestPoint.equal(pEdgeB->getEnd()))
-                {
-                    // found point in triangle -> split triangle inserting two edges
-                    EdgeEntry* pStart = new EdgeEntry(pEdgeA->getStart(), rTestPoint);
-                    EdgeEntry* pEnd = new EdgeEntry(*pStart);
-                    maNewEdgeEntries.emplace_back(pStart);
-                    maNewEdgeEntries.emplace_back(pEnd);
+                // found point in triangle -> split triangle inserting two edges
+                EdgeEntry* pStart = new EdgeEntry(pEdgeA->getStart(), rTestPoint);
+                EdgeEntry* pEnd = new EdgeEntry(*pStart);
+                maNewEdgeEntries.emplace_back(pStart);
+                maNewEdgeEntries.emplace_back(pEnd);
 
-                    pStart->setNext(pEnd);
-                    pEnd->setNext(pEdgeA->getNext());
-                    pEdgeA->setNext(pStart);
+                pStart->setNext(pEnd);
+                pEnd->setNext(pEdgeA->getNext());
+                pEdgeA->setNext(pStart);
 
-                    return false;
-                }
+                return false;
             }
 
             return true;

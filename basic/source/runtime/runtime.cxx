@@ -1666,40 +1666,39 @@ static bool checkUnoStructCopy( bool bVBA, SbxVariableRef const & refVal, SbxVar
         aAny = pUnoVal ? pUnoVal->getUnoAny() : pUnoStructVal->getUnoAny();
     else
         return false;
-    if (  aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
+    if (  aAny.getValueType().getTypeClass() != TypeClass_STRUCT )
+        return false;
+
+    refVar->SetType( SbxOBJECT );
+    ErrCode eOldErr = SbxBase::GetError();
+    // There are some circumstances when calling GetObject
+    // will trigger an error, we need to squash those here.
+    // Alternatively it is possible that the same scenario
+    // could overwrite and existing error. Lets prevent that
+    SbxObjectRef xVarObj = static_cast<SbxObject*>(refVar->GetObject());
+    if ( eOldErr != ERRCODE_NONE )
+        SbxBase::SetError( eOldErr );
+    else
+        SbxBase::ResetError();
+
+    SbUnoStructRefObject* pUnoStructObj = dynamic_cast<SbUnoStructRefObject*>( xVarObj.get() );
+
+    OUString sClassName = pUnoVal ? pUnoVal->GetClassName() : pUnoStructVal->GetClassName();
+    OUString sName = pUnoVal ? pUnoVal->GetName() : pUnoStructVal->GetName();
+
+    if ( pUnoStructObj )
     {
-        refVar->SetType( SbxOBJECT );
-        ErrCode eOldErr = SbxBase::GetError();
-        // There are some circumstances when calling GetObject
-        // will trigger an error, we need to squash those here.
-        // Alternatively it is possible that the same scenario
-        // could overwrite and existing error. Lets prevent that
-        SbxObjectRef xVarObj = static_cast<SbxObject*>(refVar->GetObject());
-        if ( eOldErr != ERRCODE_NONE )
-            SbxBase::SetError( eOldErr );
-        else
-            SbxBase::ResetError();
-
-        SbUnoStructRefObject* pUnoStructObj = dynamic_cast<SbUnoStructRefObject*>( xVarObj.get() );
-
-        OUString sClassName = pUnoVal ? pUnoVal->GetClassName() : pUnoStructVal->GetClassName();
-        OUString sName = pUnoVal ? pUnoVal->GetName() : pUnoStructVal->GetName();
-
-        if ( pUnoStructObj )
-        {
-            StructRefInfo aInfo = pUnoStructObj->getStructInfo();
-            aInfo.setValue( aAny );
-        }
-        else
-        {
-            SbUnoObject* pNewUnoObj = new SbUnoObject( sName, aAny );
-            // #70324: adopt ClassName
-            pNewUnoObj->SetClassName( sClassName );
-            refVar->PutObject( pNewUnoObj );
-        }
-        return true;
+        StructRefInfo aInfo = pUnoStructObj->getStructInfo();
+        aInfo.setValue( aAny );
     }
-    return false;
+    else
+    {
+        SbUnoObject* pNewUnoObj = new SbUnoObject( sName, aAny );
+        // #70324: adopt ClassName
+        pNewUnoObj->SetClassName( sClassName );
+        refVar->PutObject( pNewUnoObj );
+    }
+    return true;
 }
 
 

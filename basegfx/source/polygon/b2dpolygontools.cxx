@@ -1530,36 +1530,36 @@ namespace basegfx::utils
             const B2DPolygon& aCandidate(rCandidate.getDefaultAdaptiveSubdivision());
             const sal_uInt32 nPointCount(aCandidate.count());
 
-            if(nPointCount)
+            if(!nPointCount)
+                return false;
+
+            const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1);
+            B2DPoint aCurrent(aCandidate.getB2DPoint(0));
+
+            if(nEdgeCount)
             {
-                const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1);
-                B2DPoint aCurrent(aCandidate.getB2DPoint(0));
-
-                if(nEdgeCount)
+                // edges
+                for(sal_uInt32 a(0); a < nEdgeCount; a++)
                 {
-                    // edges
-                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
-                    {
-                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
-                        const B2DPoint aNext(aCandidate.getB2DPoint(nNextIndex));
+                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                    const B2DPoint aNext(aCandidate.getB2DPoint(nNextIndex));
 
-                        if(isInEpsilonRange(aCurrent, aNext, rTestPosition, fDistance))
-                        {
-                            return true;
-                        }
-
-                        // prepare next step
-                        aCurrent = aNext;
-                    }
-                }
-                else
-                {
-                    // no edges, but points -> not closed. Check single point. Just
-                    // use isInEpsilonRange with twice the same point, it handles those well
-                    if(isInEpsilonRange(aCurrent, aCurrent, rTestPosition, fDistance))
+                    if(isInEpsilonRange(aCurrent, aNext, rTestPosition, fDistance))
                     {
                         return true;
                     }
+
+                    // prepare next step
+                    aCurrent = aNext;
+                }
+            }
+            else
+            {
+                // no edges, but points -> not closed. Check single point. Just
+                // use isInEpsilonRange with twice the same point, it handles those well
+                if(isInEpsilonRange(aCurrent, aCurrent, rTestPosition, fDistance))
+                {
+                    return true;
                 }
             }
 
@@ -1933,29 +1933,29 @@ namespace basegfx::utils
             OSL_ENSURE(!rCandidate.areControlPointsUsed(), "hasNeutralPoints: ATM works not for curves (!)");
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if(nPointCount > 2)
+            if(nPointCount <= 2)
+                return false;
+
+            B2DPoint aPrevPoint(rCandidate.getB2DPoint(nPointCount - 1));
+            B2DPoint aCurrPoint(rCandidate.getB2DPoint(0));
+
+            for(sal_uInt32 a(0); a < nPointCount; a++)
             {
-                B2DPoint aPrevPoint(rCandidate.getB2DPoint(nPointCount - 1));
-                B2DPoint aCurrPoint(rCandidate.getB2DPoint(0));
+                const B2DPoint aNextPoint(rCandidate.getB2DPoint((a + 1) % nPointCount));
+                const B2DVector aPrevVec(aPrevPoint - aCurrPoint);
+                const B2DVector aNextVec(aNextPoint - aCurrPoint);
+                const B2VectorOrientation aOrientation(getOrientation(aNextVec, aPrevVec));
 
-                for(sal_uInt32 a(0); a < nPointCount; a++)
+                if(aOrientation == B2VectorOrientation::Neutral)
                 {
-                    const B2DPoint aNextPoint(rCandidate.getB2DPoint((a + 1) % nPointCount));
-                    const B2DVector aPrevVec(aPrevPoint - aCurrPoint);
-                    const B2DVector aNextVec(aNextPoint - aCurrPoint);
-                    const B2VectorOrientation aOrientation(getOrientation(aNextVec, aPrevVec));
-
-                    if(aOrientation == B2VectorOrientation::Neutral)
-                    {
-                        // current has neutral orientation
-                        return true;
-                    }
-                    else
-                    {
-                        // prepare next
-                        aPrevPoint = aCurrPoint;
-                        aCurrPoint = aNextPoint;
-                    }
+                    // current has neutral orientation
+                    return true;
+                }
+                else
+                {
+                    // prepare next
+                    aPrevPoint = aCurrPoint;
+                    aCurrPoint = aNextPoint;
                 }
             }
 
@@ -2015,37 +2015,37 @@ namespace basegfx::utils
             OSL_ENSURE(!rCandidate.areControlPointsUsed(), "isConvex: ATM works not for curves (!)");
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if(nPointCount > 2)
+            if(nPointCount <= 2)
+                return true;
+
+            const B2DPoint aPrevPoint(rCandidate.getB2DPoint(nPointCount - 1));
+            B2DPoint aCurrPoint(rCandidate.getB2DPoint(0));
+            B2DVector aCurrVec(aPrevPoint - aCurrPoint);
+            B2VectorOrientation aOrientation(B2VectorOrientation::Neutral);
+
+            for(sal_uInt32 a(0); a < nPointCount; a++)
             {
-                const B2DPoint aPrevPoint(rCandidate.getB2DPoint(nPointCount - 1));
-                B2DPoint aCurrPoint(rCandidate.getB2DPoint(0));
-                B2DVector aCurrVec(aPrevPoint - aCurrPoint);
-                B2VectorOrientation aOrientation(B2VectorOrientation::Neutral);
+                const B2DPoint aNextPoint(rCandidate.getB2DPoint((a + 1) % nPointCount));
+                const B2DVector aNextVec(aNextPoint - aCurrPoint);
+                const B2VectorOrientation aCurrentOrientation(getOrientation(aNextVec, aCurrVec));
 
-                for(sal_uInt32 a(0); a < nPointCount; a++)
+                if(aOrientation == B2VectorOrientation::Neutral)
                 {
-                    const B2DPoint aNextPoint(rCandidate.getB2DPoint((a + 1) % nPointCount));
-                    const B2DVector aNextVec(aNextPoint - aCurrPoint);
-                    const B2VectorOrientation aCurrentOrientation(getOrientation(aNextVec, aCurrVec));
-
-                    if(aOrientation == B2VectorOrientation::Neutral)
-                    {
-                        // set start value, maybe neutral again
-                        aOrientation = aCurrentOrientation;
-                    }
-                    else
-                    {
-                        if(aCurrentOrientation != B2VectorOrientation::Neutral && aCurrentOrientation != aOrientation)
-                        {
-                            // different orientations found, that's it
-                            return false;
-                        }
-                    }
-
-                    // prepare next
-                    aCurrPoint = aNextPoint;
-                    aCurrVec = -aNextVec;
+                    // set start value, maybe neutral again
+                    aOrientation = aCurrentOrientation;
                 }
+                else
+                {
+                    if(aCurrentOrientation != B2VectorOrientation::Neutral && aCurrentOrientation != aOrientation)
+                    {
+                        // different orientations found, that's it
+                        return false;
+                    }
+                }
+
+                // prepare next
+                aCurrPoint = aNextPoint;
+                aCurrVec = -aNextVec;
             }
 
             return true;

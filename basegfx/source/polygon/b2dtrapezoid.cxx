@@ -395,28 +395,26 @@ namespace basegfx::trapezoidhelper
                     aEdgeB.getStart(), aDeltaB,
                     CutFlagValue::LINE,
                     &fCutA,
-                    &fCutB) != CutFlagValue::NONE)
-                {
-                    // use a simple metric (length criteria) for choosing the numerically
-                    // better cut
-                    const double fSimpleLengthA(aDeltaA.getX() + aDeltaA.getY());
-                    const double fSimpleLengthB(aDeltaB.getX() + aDeltaB.getY());
-                    const bool bAIsLonger(fSimpleLengthA > fSimpleLengthB);
-                    B2DPoint* pNewPoint = bAIsLonger
-                        ? maNewPoints.allocatePoint(aEdgeA.getStart() + (fCutA * aDeltaA))
-                        : maNewPoints.allocatePoint(aEdgeB.getStart() + (fCutB * aDeltaB));
+                    &fCutB) == CutFlagValue::NONE)
+                    return false;
 
-                    // try to split both edges
-                    bool bRetval = splitEdgeAtGivenPoint(aEdgeA, *pNewPoint, aCurrent);
-                    bRetval |= splitEdgeAtGivenPoint(aEdgeB, *pNewPoint, aCurrent);
+                // use a simple metric (length criteria) for choosing the numerically
+                // better cut
+                const double fSimpleLengthA(aDeltaA.getX() + aDeltaA.getY());
+                const double fSimpleLengthB(aDeltaB.getX() + aDeltaB.getY());
+                const bool bAIsLonger(fSimpleLengthA > fSimpleLengthB);
+                B2DPoint* pNewPoint = bAIsLonger
+                    ? maNewPoints.allocatePoint(aEdgeA.getStart() + (fCutA * aDeltaA))
+                    : maNewPoints.allocatePoint(aEdgeB.getStart() + (fCutB * aDeltaB));
 
-                    if(!bRetval)
-                        maNewPoints.freeIfLast(pNewPoint);
+                // try to split both edges
+                bool bRetval = splitEdgeAtGivenPoint(aEdgeA, *pNewPoint, aCurrent);
+                bRetval |= splitEdgeAtGivenPoint(aEdgeB, *pNewPoint, aCurrent);
 
-                    return bRetval;
-                }
+                if(!bRetval)
+                    maNewPoints.freeIfLast(pNewPoint);
 
-                return false;
+                return bRetval;
             }
 
             void solveHorizontalEdges(TrDeSimpleEdges& rTrDeSimpleEdges)

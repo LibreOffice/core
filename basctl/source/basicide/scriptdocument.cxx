@@ -509,24 +509,23 @@ namespace basctl
     bool ScriptDocument::Impl::removeModuleOrDialog( LibraryContainerType _eType, const OUString& _rLibName, const OUString& _rModuleName )
     {
         OSL_ENSURE( isValid(), "ScriptDocument::Impl::removeModuleOrDialog: invalid!" );
-        if ( isValid() )
+        if ( !isValid() )
+            return false;
+        try
         {
-            try
+            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, true ) );
+            if ( xLib.is() )
             {
-                Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, true ) );
-                if ( xLib.is() )
-                {
-                    xLib->removeByName( _rModuleName );
-                    Reference< XVBAModuleInfo > xVBAModuleInfo(xLib, UNO_QUERY);
-                    if(xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo(_rModuleName))
-                        xVBAModuleInfo->removeModuleInfo(_rModuleName);
-                    return true;
-                }
+                xLib->removeByName( _rModuleName );
+                Reference< XVBAModuleInfo > xVBAModuleInfo(xLib, UNO_QUERY);
+                if(xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo(_rModuleName))
+                    xVBAModuleInfo->removeModuleInfo(_rModuleName);
+                return true;
             }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
-            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
         return false;
     }
