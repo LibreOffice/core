@@ -25,7 +25,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <vcl/svapp.hxx>
 
 #include "XMLRangeHelper.hxx"
@@ -149,14 +149,14 @@ IMPL_LINK_NOARG( SwChartLockController_Helper, DoUnlockAllCharts, Timer *, void 
     UnlockAllCharts();
 }
 
-static osl::Mutex &    GetChartMutex()
+static std::mutex &    GetChartMutex()
 {
-    static osl::Mutex   aMutex;
+    static std::mutex aMutex;
     return aMutex;
 }
 
 static void LaunchModifiedEvent(
-        ::comphelper::OInterfaceContainerHelper3<util::XModifyListener> &rICH,
+        ::comphelper::OInterfaceContainerHelper4<util::XModifyListener> &rICH,
         const uno::Reference< uno::XInterface > &rxI )
 {
     lang::EventObject aEvtObj( rxI );
@@ -498,7 +498,6 @@ static void SortSubranges( uno::Sequence< OUString > &rSubRanges, bool bCmpByCol
 }
 
 SwChartDataProvider::SwChartDataProvider( const SwDoc& rSwDoc ) :
-    m_aEventListeners( GetChartMutex() ),
     m_pDoc( &rSwDoc )
 {
     m_bDisposed = false;
@@ -1357,7 +1356,7 @@ void SAL_CALL SwChartDataProvider::dispose(  )
 {
     bool bMustDispose( false );
     {
-        osl::MutexGuard  aGuard( GetChartMutex() );
+        std::unique_lock aGuard( GetChartMutex() );
         bMustDispose = !m_bDisposed;
         if (!m_bDisposed)
             m_bDisposed = true;
@@ -1375,13 +1374,14 @@ void SAL_CALL SwChartDataProvider::dispose(  )
 
     // require listeners to release references to this object
     lang::EventObject aEvtObj( static_cast< chart2::data::XDataProvider * >(this) );
-    m_aEventListeners.disposeAndClear( aEvtObj );
+    std::unique_lock aGuard( GetChartMutex() );
+    m_aEventListeners.disposeAndClear( aGuard, aEvtObj );
 }
 
 void SAL_CALL SwChartDataProvider::addEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
 {
-    osl::MutexGuard  aGuard( GetChartMutex() );
+    std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
         m_aEventListeners.addInterface( rxListener );
 }
@@ -1389,7 +1389,7 @@ void SAL_CALL SwChartDataProvider::addEventListener(
 void SAL_CALL SwChartDataProvider::removeEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
 {
-    osl::MutexGuard  aGuard( GetChartMutex() );
+    std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
         m_aEventListeners.removeInterface( rxListener );
 }
@@ -1772,8 +1772,6 @@ SwChartDataSequence::SwChartDataSequence(
         SwFrameFormat& rTableFormat,
         const std::shared_ptr<SwUnoCursor>& pTableCursor ) :
     m_pFormat(&rTableFormat),
-    m_aEvtListeners( GetChartMutex() ),
-    m_aModifyListeners( GetChartMutex() ),
     m_aRowLabelText( SwResId( STR_CHART2_ROW_LABEL_TEXT ) ),
     m_aColLabelText( SwResId( STR_CHART2_COL_LABEL_TEXT ) ),
     m_xDataProvider( &rProvider ),
@@ -1819,8 +1817,6 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     SwChartDataSequenceBaseClass(rObj),
     SvtListener(),
     m_pFormat( rObj.m_pFormat ),
-    m_aEvtListeners( GetChartMutex() ),
-    m_aModifyListeners( GetChartMutex() ),
     m_aRole( rObj.m_aRole ),
     m_aRowLabelText( SwResId(STR_CHART2_ROW_LABEL_TEXT) ),
     m_aColLabelText( SwResId(STR_CHART2_COL_LABEL_TEXT) ),
@@ -2193,7 +2189,7 @@ void SAL_CALL SwChartDataSequence::setModified(
 void SAL_CALL SwChartDataSequence::addModifyListener(
         const uno::Reference< util::XModifyListener >& rxListener )
 {
-    osl::MutexGuard  aGuard( GetChartMutex() );
+    std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
         m_aModifyListeners.addInterface( rxListener );
 }
@@ -2201,7 +2197,7 @@ void SAL_CALL SwChartDataSequence::addModifyListener(
 void SAL_CALL SwChartDataSequence::removeModifyListener(
         const uno::Reference< util::XModifyListener >& rxListener )
 {
-    osl::MutexGuard  aGuard( GetChartMutex() );
+    std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
         m_aModifyListeners.removeInterface( rxListener );
 }
@@ -2220,7 +2216,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
 {
     bool bMustDispose( false );
     {
-        osl::MutexGuard  aGuard( GetChartMutex() );
+        std::unique_lock aGuard( GetChartMutex() );
         bMustDispose = !m_bDisposed;
         if (!m_bDisposed)
             m_bDisposed = true;
@@ -2267,14 +2263,16 @@ void SAL_CALL SwChartDataSequence::dispose(  )
 
     // require listeners to release references to this object
     lang::EventObject aEvtObj( static_cast< chart2::data::XDataSequence * >(this) );
-    m_aModifyListeners.disposeAndClear( aEvtObj );
-    m_aEvtListeners.disposeAndClear( aEvtObj );
+    std::unique_lock aGuard( GetChartMutex() );
+    m_aModifyListeners.disposeAndClear( aGuard, aEvtObj );
+    aGuard.lock();
+    m_aEvtListeners.disposeAndClear( aGuard, aEvtObj );
 }
 
 void SAL_CALL SwChartDataSequence::addEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
 {
-    osl::MutexGuard  aGuard( GetChartMutex() );
+    std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
         m_aEvtListeners.addInterface( rxListener );
 }
@@ -2282,7 +2280,7 @@ void SAL_CALL SwChartDataSequence::addEventListener(
 void SAL_CALL SwChartDataSequence::removeEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
 {
-    osl::MutexGuard  aGuard( GetChartMutex() );
+    std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
         m_aEvtListeners.removeInterface( rxListener );
 }
@@ -2504,9 +2502,7 @@ void SwChartDataSequence::ExtendTo( bool bExtendCol,
     }
 }
 
-SwChartLabeledDataSequence::SwChartLabeledDataSequence() :
-    m_aEventListeners( GetChartMutex() ),
-    m_aModifyListeners( GetChartMutex() )
+SwChartLabeledDataSequence::SwChartLabeledDataSequence()
 {
     m_bDisposed = false;
 }
@@ -2629,14 +2625,17 @@ uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServi
 void SAL_CALL SwChartLabeledDataSequence::disposing(
         const lang::EventObject& rSource )
 {
-    osl::MutexGuard  aGuard( GetChartMutex() );
+    std::unique_lock aGuard( GetChartMutex() );
     uno::Reference< uno::XInterface > xRef( rSource.Source );
     if (xRef == m_xData)
         m_xData.clear();
     if (xRef == m_xLabels)
         m_xLabels.clear();
     if (!m_xData.is() && !m_xLabels.is())
+    {
+        aGuard.unlock();
         dispose();
+    }
 }
 
 void SAL_CALL SwChartLabeledDataSequence::modified(
@@ -2651,7 +2650,7 @@ void SAL_CALL SwChartLabeledDataSequence::modified(
 void SAL_CALL SwChartLabeledDataSequence::addModifyListener(
         const uno::Reference< util::XModifyListener >& rxListener )
 {
-    osl::MutexGuard  aGuard( GetChartMutex() );
+    std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
         m_aModifyListeners.addInterface( rxListener );
 }
@@ -2659,7 +2658,7 @@ void SAL_CALL SwChartLabeledDataSequence::addModifyListener(
 void SAL_CALL SwChartLabeledDataSequence::removeModifyListener(
         const uno::Reference< util::XModifyListener >& rxListener )
 {
-    osl::MutexGuard  aGuard( GetChartMutex() );
+    std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
         m_aModifyListeners.removeInterface( rxListener );
 }
@@ -2668,7 +2667,7 @@ void SAL_CALL SwChartLabeledDataSequence::dispose(  )
 {
     bool bMustDispose( false );
     {
-        osl::MutexGuard  aGuard( GetChartMutex() );
+        std::unique_lock aGuard( GetChartMutex() );
         bMustDispose = !m_bDisposed;
         if (!m_bDisposed)
             m_bDisposed = true;
@@ -2679,15 +2678,17 @@ void SAL_CALL SwChartLabeledDataSequence::dispose(  )
 
         // require listeners to release references to this object
         lang::EventObject aEvtObj( static_cast< chart2::data::XLabeledDataSequence * >(this) );
-        m_aModifyListeners.disposeAndClear( aEvtObj );
-        m_aEventListeners.disposeAndClear( aEvtObj );
+        std::unique_lock aGuard( GetChartMutex() );
+        m_aModifyListeners.disposeAndClear( aGuard, aEvtObj );
+        aGuard.lock();
+        m_aEventListeners.disposeAndClear( aGuard, aEvtObj );
     }
 }
 
 void SAL_CALL SwChartLabeledDataSequence::addEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
 {
-    osl::MutexGuard  aGuard( GetChartMutex() );
+    std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
         m_aEventListeners.addInterface( rxListener );
 }
@@ -2695,7 +2696,7 @@ void SAL_CALL SwChartLabeledDataSequence::addEventListener(
 void SAL_CALL SwChartLabeledDataSequence::removeEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
 {
-    osl::MutexGuard  aGuard( GetChartMutex() );
+    std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
         m_aEventListeners.removeInterface( rxListener );
 }
