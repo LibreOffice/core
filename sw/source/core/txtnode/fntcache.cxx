@@ -1487,7 +1487,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             bBullet = false;
         std::vector<sal_Int32> aKernArray;
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
-        tools::Long nScrPos;
 
         // get screen array
         std::vector<sal_Int32> aScrArray;
@@ -1592,7 +1591,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             }
         }
 
-        nScrPos = aScrArray[ 0 ];
+        tools::Long nScrPos = aScrArray[ 0 ];
 
         if( bBullet )
         {
