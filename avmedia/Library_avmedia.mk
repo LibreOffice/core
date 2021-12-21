@@ -45,6 +45,7 @@ ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,avmedia,\
     epoxy \
 ))
+endif
 
 $(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia,services))
 
@@ -67,7 +68,6 @@ $(eval $(call gb_Library_add_exception_objects,avmedia,\
 	avmedia/source/viewer/mediawindow_impl \
 ))
 
-endif # !DISABLE_GUI
 endif # AVMEDIA
 
 # vim: set noet sw=4 ts=4:
