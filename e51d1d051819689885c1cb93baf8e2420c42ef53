@@ -16,6 +16,23 @@
       "message": "First things first.  Here is the change you asked for.  The follow-up patch builds on it.",
       "revId": "e51d1d051819689885c1cb93baf8e2420c42ef53",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e4ca6dd_df893e80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-21T08:29:33Z",
+      "side": 1,
+      "message": "I took a bit of time to investigate this function in general. It is ONLY used for these two uno calls (style and color). There is no documentation connected with it, so it is fairly free to re-interpret the usage of the function. So no concerns at all about redefining \"no borders \u003d\u003d all borders\". ",
+      "revId": "e51d1d051819689885c1cb93baf8e2420c42ef53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
