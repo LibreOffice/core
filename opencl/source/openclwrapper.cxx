@@ -324,39 +324,37 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
     clStatus = clBuildProgram(gpuInfo->mpArryPrograms[idx], 1, &gpuInfo->mpDevID,
                               buildOption, nullptr, nullptr);
 
+    if ( clStatus == CL_SUCCESS )
+        return true;
+
+    size_t length;
+    clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpDevID,
+                                      CL_PROGRAM_BUILD_LOG, 0, nullptr, &length);
     if ( clStatus != CL_SUCCESS )
     {
-        size_t length;
-        clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpDevID,
-                                          CL_PROGRAM_BUILD_LOG, 0, nullptr, &length);
-        if ( clStatus != CL_SUCCESS )
-        {
-            return false;
-        }
-
-        std::unique_ptr<char[]> buildLog(new char[length]);
-        clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpDevID,
-                                          CL_PROGRAM_BUILD_LOG, length, buildLog.get(), &length );
-        if ( clStatus != CL_SUCCESS )
-        {
-            return false;
-        }
-
-        OString aBuildLogFileURL = getCacheFolder() + "kernel-build.log";
-        osl::File aBuildLogFile(OStringToOUString(aBuildLogFileURL, RTL_TEXTENCODING_UTF8));
-        osl::FileBase::RC status = aBuildLogFile.open(
-                osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
-
-        if(status != osl::FileBase::E_None)
-            return false;
-
-        sal_uInt64 nBytesWritten = 0;
-        aBuildLogFile.write( buildLog.get(), length, nBytesWritten );
-
         return false;
     }
 
-    return true;
+    std::unique_ptr<char[]> buildLog(new char[length]);
+    clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpDevID,
+                                      CL_PROGRAM_BUILD_LOG, length, buildLog.get(), &length );
+    if ( clStatus != CL_SUCCESS )
+    {
+        return false;
+    }
+
+    OString aBuildLogFileURL = getCacheFolder() + "kernel-build.log";
+    osl::File aBuildLogFile(OStringToOUString(aBuildLogFileURL, RTL_TEXTENCODING_UTF8));
+    osl::FileBase::RC status = aBuildLogFile.open(
+            osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
+
+    if(status != osl::FileBase::E_None)
+        return false;
+
+    sal_uInt64 nBytesWritten = 0;
+    aBuildLogFile.write( buildLog.get(), length, nBytesWritten );
+
+    return false;
 }
 
 }
@@ -529,37 +527,37 @@ bool initOpenCLRunEnv( int argc )
     if ( ( argc > MAX_CLFILE_NUM ) || ( argc < 0 ) )
         return true;
 
-    if ( !bIsInited )
-    {
-        if ( !gpuEnv.mnIsUserCreated )
-            memset( &gpuEnv, 0, sizeof(gpuEnv) );
+    if ( bIsInited )
+        return false;
 
-        //initialize devices, context, command_queue
-        bool status = initOpenCLRunEnv( &gpuEnv );
-        if ( status )
-        {
-            return true;
-        }
-        //initialize program, kernelName, kernelCount
-        if( getenv( "SC_FLOAT" ) )
-        {
-            gpuEnv.mnKhrFp64Flag = false;
-            gpuEnv.mnAmdFp64Flag = false;
-        }
-        if( gpuEnv.mnKhrFp64Flag )
-        {
-            SAL_INFO("opencl", "Use Khr double");
-        }
-        else if( gpuEnv.mnAmdFp64Flag )
-        {
-            SAL_INFO("opencl", "Use AMD double type");
-        }
-        else
-        {
-            SAL_INFO("opencl", "USE float type");
-        }
-        bIsInited = true;
+    if ( !gpuEnv.mnIsUserCreated )
+        memset( &gpuEnv, 0, sizeof(gpuEnv) );
+
+    //initialize devices, context, command_queue
+    bool status = initOpenCLRunEnv( &gpuEnv );
+    if ( status )
+    {
+        return true;
     }
+    //initialize program, kernelName, kernelCount
+    if( getenv( "SC_FLOAT" ) )
+    {
+        gpuEnv.mnKhrFp64Flag = false;
+        gpuEnv.mnAmdFp64Flag = false;
+    }
+    if( gpuEnv.mnKhrFp64Flag )
+    {
+        SAL_INFO("opencl", "Use Khr double");
+    }
+    else if( gpuEnv.mnAmdFp64Flag )
+    {
+        SAL_INFO("opencl", "Use AMD double type");
+    }
+    else
+    {
+        SAL_INFO("opencl", "USE float type");
+    }
+    bIsInited = true;
     return false;
 }
 

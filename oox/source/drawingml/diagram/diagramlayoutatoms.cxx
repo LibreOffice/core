@@ -1985,37 +1985,39 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
     OUString aStyleLabel = pPresNode->msPresentationLayoutStyleLabel;
     if (aStyleLabel.isEmpty())
         aStyleLabel = msStyleLabel;
-    if( !aStyleLabel.isEmpty() )
-    {
-        const DiagramQStyleMap::const_iterator aStyle = mrDgm.getStyles().find(aStyleLabel);
-        if( aStyle != mrDgm.getStyles().end() )
-        {
-            const DiagramStyle& rStyle = aStyle->second;
-            rShape->getShapeStyleRefs()[XML_fillRef] = rStyle.maFillStyle;
-            rShape->getShapeStyleRefs()[XML_lnRef] = rStyle.maLineStyle;
-            rShape->getShapeStyleRefs()[XML_effectRef] = rStyle.maEffectStyle;
-            rShape->getShapeStyleRefs()[XML_fontRef] = rStyle.maTextStyle;
-        }
-        else
-        {
-            SAL_WARN("oox.drawingml", "Style " << aStyleLabel << " not found");
-        }
+    if( aStyleLabel.isEmpty() )
+        // even if no data node found, successful anyway. it's
+        // contained at the layoutnode
+        return true;
 
-        const DiagramColorMap::const_iterator aColor = mrDgm.getColors().find(aStyleLabel);
-        if( aColor != mrDgm.getColors().end() )
-        {
-            // Take the nth color from the color list in case we are the nth shape in a
-            // <dgm:forEach> loop.
-            const DiagramColor& rColor=aColor->second;
-            if( !rColor.maFillColors.empty() )
-                rShape->getShapeStyleRefs()[XML_fillRef].maPhClr = DiagramColor::getColorByIndex(rColor.maFillColors, nCurrIdx);
-            if( !rColor.maLineColors.empty() )
-                rShape->getShapeStyleRefs()[XML_lnRef].maPhClr = DiagramColor::getColorByIndex(rColor.maLineColors, nCurrIdx);
-            if( !rColor.maEffectColors.empty() )
-                rShape->getShapeStyleRefs()[XML_effectRef].maPhClr = DiagramColor::getColorByIndex(rColor.maEffectColors, nCurrIdx);
-            if( !rColor.maTextFillColors.empty() )
-                rShape->getShapeStyleRefs()[XML_fontRef].maPhClr = DiagramColor::getColorByIndex(rColor.maTextFillColors, nCurrIdx);
-        }
+    const DiagramQStyleMap::const_iterator aStyle = mrDgm.getStyles().find(aStyleLabel);
+    if( aStyle != mrDgm.getStyles().end() )
+    {
+        const DiagramStyle& rStyle = aStyle->second;
+        rShape->getShapeStyleRefs()[XML_fillRef] = rStyle.maFillStyle;
+        rShape->getShapeStyleRefs()[XML_lnRef] = rStyle.maLineStyle;
+        rShape->getShapeStyleRefs()[XML_effectRef] = rStyle.maEffectStyle;
+        rShape->getShapeStyleRefs()[XML_fontRef] = rStyle.maTextStyle;
+    }
+    else
+    {
+        SAL_WARN("oox.drawingml", "Style " << aStyleLabel << " not found");
+    }
+
+    const DiagramColorMap::const_iterator aColor = mrDgm.getColors().find(aStyleLabel);
+    if( aColor != mrDgm.getColors().end() )
+    {
+        // Take the nth color from the color list in case we are the nth shape in a
+        // <dgm:forEach> loop.
+        const DiagramColor& rColor=aColor->second;
+        if( !rColor.maFillColors.empty() )
+            rShape->getShapeStyleRefs()[XML_fillRef].maPhClr = DiagramColor::getColorByIndex(rColor.maFillColors, nCurrIdx);
+        if( !rColor.maLineColors.empty() )
+            rShape->getShapeStyleRefs()[XML_lnRef].maPhClr = DiagramColor::getColorByIndex(rColor.maLineColors, nCurrIdx);
+        if( !rColor.maEffectColors.empty() )
+            rShape->getShapeStyleRefs()[XML_effectRef].maPhClr = DiagramColor::getColorByIndex(rColor.maEffectColors, nCurrIdx);
+        if( !rColor.maTextFillColors.empty() )
+            rShape->getShapeStyleRefs()[XML_fontRef].maPhClr = DiagramColor::getColorByIndex(rColor.maTextFillColors, nCurrIdx);
     }
 
     // even if no data node found, successful anyway. it's

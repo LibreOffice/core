@@ -181,41 +181,42 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
     if( XmlFilterBase::filter( rDescriptor ) )
         return true;
 
-    if (isExportFilter())
+    if (!isExportFilter())
+        return false;
+
+    uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
     {
-        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        {"IsPPTM", uno::makeAny(exportVBA())},
+        {"IsTemplate", uno::makeAny(isExportTemplate())},
+    }));
+
+    Reference<css::lang::XMultiServiceFactory> aFactory(getComponentContext()->getServiceManager(), UNO_QUERY_THROW);
+    Reference< XExporter > xExporter(aFactory->createInstanceWithArguments("com.sun.star.comp.Impress.oox.PowerPointExport", aArguments), UNO_QUERY);
+
+    Reference<XFilter> xFilter{ xExporter, UNO_QUERY };
+    if (!xFilter)
+        return false;
+
+    Reference<util::XLockable> xUndoManager;
+    bool bWasUnLocked = true;
+    if (Reference<document::XUndoManagerSupplier> xUMS{ getModel(), UNO_QUERY })
+    {
+        xUndoManager = xUMS->getUndoManager();
+        if (xUndoManager.is())
         {
-            {"IsPPTM", uno::makeAny(exportVBA())},
-            {"IsTemplate", uno::makeAny(isExportTemplate())},
-        }));
-
-        Reference<css::lang::XMultiServiceFactory> aFactory(getComponentContext()->getServiceManager(), UNO_QUERY_THROW);
-        Reference< XExporter > xExporter(aFactory->createInstanceWithArguments("com.sun.star.comp.Impress.oox.PowerPointExport", aArguments), UNO_QUERY);
-
-        if (Reference<XFilter> xFilter{ xExporter, UNO_QUERY })
-        {
-            Reference<util::XLockable> xUndoManager;
-            bool bWasUnLocked = true;
-            if (Reference<document::XUndoManagerSupplier> xUMS{ getModel(), UNO_QUERY })
-            {
-                xUndoManager = xUMS->getUndoManager();
-                if (xUndoManager.is())
-                {
-                    bWasUnLocked = !xUndoManager->isLocked();
-                    xUndoManager->lock();
-                }
-            }
-            comphelper::ScopeGuard aGuard([xUndoManager, bWasUnLocked] {
-                if (xUndoManager && bWasUnLocked)
-                    xUndoManager->unlock();
-            });
-
-            Reference< XComponent > xDocument = getModel();
-            xExporter->setSourceDocument(xDocument);
-            if (xFilter->filter(rDescriptor))
-                return true;
+            bWasUnLocked = !xUndoManager->isLocked();
+            xUndoManager->lock();
         }
     }
+    comphelper::ScopeGuard aGuard([xUndoManager, bWasUnLocked] {
+        if (xUndoManager && bWasUnLocked)
+            xUndoManager->unlock();
+    });
+
+    Reference< XComponent > xDocument = getModel();
+    xExporter->setSourceDocument(xDocument);
+    if (xFilter->filter(rDescriptor))
+        return true;
 
     return false;
 }

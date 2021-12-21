@@ -217,25 +217,24 @@ DMLPresetShapeExporter::GetAdjustmentPointYValue(sal_Int32 nPoint)
 
 bool DMLPresetShapeExporter::WriteShape()
 {
-    if (m_pDMLexporter && m_xShape)
+    if (!m_pDMLexporter || !m_xShape)
+        return false;
+
+    // Case 1: We do not have adjustment points of the shape: just export it as preset
+    if (!m_bHasHandleValues)
     {
-        // Case 1: We do not have adjustment points of the shape: just export it as preset
-        if (!m_bHasHandleValues)
-        {
-            OUString sShapeType = GetShapeType();
-            const char* sPresetShape
-                = msfilter::util::GetOOXMLPresetGeometry(sShapeType.toUtf8().getStr());
-            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
-                                                     false, false);
-            m_pDMLexporter->WritePresetShape(sPresetShape);
-            return true;
-        }
-        else // Case2: There are adjustment points what have to be converted and exported.
-        {
-            return WriteShapeWithAVlist();
-        }
+        OUString sShapeType = GetShapeType();
+        const char* sPresetShape
+            = msfilter::util::GetOOXMLPresetGeometry(sShapeType.toUtf8().getStr());
+        m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(), false,
+                                                 false);
+        m_pDMLexporter->WritePresetShape(sPresetShape);
+        return true;
     }
-    return false;
+    else // Case2: There are adjustment points what have to be converted and exported.
+    {
+        return WriteShapeWithAVlist();
+    }
 };
 
 bool DMLPresetShapeExporter::WriteAV(const OUString& sValName, const OUString& sVal)
