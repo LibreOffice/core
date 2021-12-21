@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47cf64e8_767f263b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-12-21T13:36:11Z",
+      "side": 1,
+      "message": "If Eike is happy - I am \u003d) thanks Lubos.",
+      "revId": "8e8542acaa8126b36cdedfafe88d3e9bf0b120c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
