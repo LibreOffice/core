@@ -52,6 +52,24 @@
       "parentUuid": "881142b1_b64bfc51",
       "revId": "14eeed686c5490ddbd356c1ac807b16231e4cb88",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfc0d430_30421d44",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-21T13:29:17Z",
+      "side": 1,
+      "message": "\u003e I rather wondered about the \"use random temporary files\" part\n\nIt\u0027s temporary, so just keep it in temp? Feels more natural then made up names. gbuild OTOH is not really consistent in the $(gb_MKTEMP) usage.\n\nbikeshedding / YMMV: I think $(gb_MKTEMP) should be the preference, even if it calls a program and therefore will be a bit slower.",
+      "parentUuid": "e9110f4d_5fb23faf",
+      "revId": "14eeed686c5490ddbd356c1ac807b16231e4cb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
