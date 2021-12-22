@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <osl/diagnose.h>
 #include <comphelper/string.hxx>
 #include <o3tl/safeint.hxx>
 #include <officecfg/Office/Common.hxx>
