@@ -96,6 +96,16 @@ public:
         return m_bAntiAlias;
     }
 
+    void setTextRenderModeForResolutionIndependentLayout(bool bNew)
+    {
+        m_bTextRenderModeForResolutionIndependentLayout = bNew;
+    }
+
+    bool getTextRenderModeForResolutionIndependentLayoutEnabled() const
+    {
+        return m_bTextRenderModeForResolutionIndependentLayout;
+    }
+
     // public SalGraphics methods, the interface to the independent vcl part
 
     // get device resolution
@@ -636,6 +646,7 @@ private:
 protected:
     /// flags which hold the SetAntialiasing() value from OutputDevice
     bool                        m_bAntiAlias : 1;
+    bool                        m_bTextRenderModeForResolutionIndependentLayout : 1;
 
     inline tools::Long GetDeviceWidth(const OutputDevice& rOutDev) const;
 

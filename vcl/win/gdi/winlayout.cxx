@@ -52,7 +52,7 @@
 #include <shlwapi.h>
 #include <winver.h>
 
-TextOutRenderer& TextOutRenderer::get(bool bUseDWrite)
+TextOutRenderer& TextOutRenderer::get(bool bUseDWrite, bool bRenderingModeNatural)
 {
     SalData* const pSalData = GetSalData();
 
@@ -64,9 +64,13 @@ TextOutRenderer& TextOutRenderer::get(bool bUseDWrite)
 
     if (bUseDWrite)
     {
-        if (!pSalData->m_pD2DWriteTextOutRenderer)
+        if (!pSalData->m_pD2DWriteTextOutRenderer
+            || static_cast<D2DWriteTextOutRenderer*>(pSalData->m_pD2DWriteTextOutRenderer.get())
+                       ->GetRenderingModeNatural()
+                   != bRenderingModeNatural)
         {
-            pSalData->m_pD2DWriteTextOutRenderer.reset(new D2DWriteTextOutRenderer());
+            pSalData->m_pD2DWriteTextOutRenderer.reset(
+                new D2DWriteTextOutRenderer(bRenderingModeNatural));
         }
         return *pSalData->m_pD2DWriteTextOutRenderer;
     }
@@ -78,7 +82,7 @@ TextOutRenderer& TextOutRenderer::get(bool bUseDWrite)
 }
 
 bool ExTextOutRenderer::operator()(GenericSalLayout const& rLayout, SalGraphics& /*rGraphics*/,
-                                   HDC hDC)
+                                   HDC hDC, bool /*bRenderingModeNatural*/)
 {
     int nStart = 0;
     DevicePoint aPos;
@@ -293,10 +297,11 @@ void WinFontInstance::SetGraphics(WinSalGraphics* pGraphics)
     SelectObject(hDC, hOrigFont);
 }
 
-void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, HDC hDC, bool bUseDWrite)
+void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, HDC hDC, bool bUseDWrite,
+                                    bool bRenderingModeNatural)
 {
-    TextOutRenderer& render = TextOutRenderer::get(bUseDWrite);
-    render(rLayout, *this, hDC);
+    TextOutRenderer& render = TextOutRenderer::get(bUseDWrite, bRenderingModeNatural);
+    render(rLayout, *this, hDC, bRenderingModeNatural);
 }
 
 void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
@@ -312,7 +317,11 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     const HFONT hOrigFont = ::SelectFont(hDC, hLayoutFont);
 
     // DWrite text renderer performs vertical writing better except printing.
-    DrawTextLayout(rLayout, hDC, !mbPrinter && rLayout.GetFont().GetFontSelectPattern().mbVertical);
+    const bool bVerticalScreenText
+        = !mbPrinter && rLayout.GetFont().GetFontSelectPattern().mbVertical;
+    const bool bRenderingModeNatural = getTextRenderModeForResolutionIndependentLayoutEnabled();
+    const bool bUseDWrite = bVerticalScreenText || bRenderingModeNatural;
+    DrawTextLayout(rLayout, hDC, bUseDWrite, bRenderingModeNatural);
 
     ::SelectFont(hDC, hOrigFont);
 }
