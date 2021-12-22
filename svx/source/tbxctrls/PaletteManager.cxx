@@ -32,6 +32,7 @@
 #include <tbxcolorupdate.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <comphelper/sequence.hxx>
 #include <stack>
 #include <set>
 #include <officecfg/Office/Common.hxx>
@@ -415,8 +416,15 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const svx::N
 
     INetURLObject aObj( aCommand );
 
-    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(aObj.GetURLPath(),
-                                                                 sal_Int32(rColor.m_aColor)) };
+    std::vector<PropertyValue> aArgs{
+        comphelper::makePropertyValue(aObj.GetURLPath(), sal_Int32(rColor.m_aColor)),
+    };
+    if (rColor.m_nThemeIndex != -1)
+    {
+        aArgs.push_back(comphelper::makePropertyValue("ColorThemeIndex", rColor.m_nThemeIndex));
+        aArgs.push_back(comphelper::makePropertyValue("ColorLumMod", rColor.m_nLumMod));
+        aArgs.push_back(comphelper::makePropertyValue("ColorLumOff", rColor.m_nLumOff));
+    }
 
     URL aTargetURL;
     aTargetURL.Complete = aCommand;
@@ -426,7 +434,7 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const svx::N
     Reference<XDispatch> xDispatch = xDispatchProvider->queryDispatch(aTargetURL, OUString(), 0);
     if (xDispatch.is())
     {
-        xDispatch->dispatch(aTargetURL, aArgs);
+        xDispatch->dispatch(aTargetURL, comphelper::containerToSequence(aArgs));
         if (xFrame->getContainerWindow().is())
             xFrame->getContainerWindow()->setFocus();
     }
