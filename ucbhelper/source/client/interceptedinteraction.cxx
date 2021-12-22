@@ -107,30 +107,28 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_intercep
             return rInterception.Request.getValueType().isAssignableFrom(aRequestType);
         });
 
-    if (pIt != m_lInterceptions.end()) // intercepted ...
+    if (pIt == m_lInterceptions.end()) // not intercepted ...
+        return E_NOT_INTERCEPTED;
+
+    const InterceptedRequest& rInterception = *pIt;
+
+    // Call they might existing derived class, so they can handle that by its own.
+    // If it's not interested on that (maybe it's not overwritten and the default implementation
+    // returns E_NOT_INTERCEPTED as default) -> search required continuation
+    EInterceptionState eState = intercepted(rInterception, xRequest);
+    if (eState != E_NOT_INTERCEPTED)
+        return eState;
+
+    css::uno::Reference< css::task::XInteractionContinuation > xContinuation = InterceptedInteraction::extractContinuation(lContinuations, rInterception.Continuation);
+    if (xContinuation.is())
     {
-        const InterceptedRequest& rInterception = *pIt;
-
-        // Call they might existing derived class, so they can handle that by its own.
-        // If it's not interested on that (maybe it's not overwritten and the default implementation
-        // returns E_NOT_INTERCEPTED as default) -> search required continuation
-        EInterceptionState eState = intercepted(rInterception, xRequest);
-        if (eState != E_NOT_INTERCEPTED)
-            return eState;
-
-        css::uno::Reference< css::task::XInteractionContinuation > xContinuation = InterceptedInteraction::extractContinuation(lContinuations, rInterception.Continuation);
-        if (xContinuation.is())
-        {
-            xContinuation->select();
-            return E_INTERCEPTED;
-        }
-
-        // Can be reached only, if the request does not support the given continuation!
-        // => RuntimeError!?
-        return E_NO_CONTINUATION_FOUND;
+        xContinuation->select();
+        return E_INTERCEPTED;
     }
 
-    return E_NOT_INTERCEPTED;
+    // Can be reached only, if the request does not support the given continuation!
+    // => RuntimeError!?
+    return E_NO_CONTINUATION_FOUND;
 }
 
 } // namespace ucbhelper

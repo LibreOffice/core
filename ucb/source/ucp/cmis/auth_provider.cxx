@@ -26,41 +26,41 @@ namespace cmis
 {
     bool AuthProvider::authenticationQuery( std::string& username, std::string& password )
     {
-        if ( m_xEnv.is() )
+        if ( !m_xEnv )
+            return false;
+
+        uno::Reference< task::XInteractionHandler > xIH
+            = m_xEnv->getInteractionHandler();
+
+        if ( !xIH )
+            return false;
+
+        rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
+            = new ucbhelper::SimpleAuthenticationRequest(
+                m_sUrl, m_sBindingUrl, OUString(),
+                STD_TO_OUSTR( username ),
+                STD_TO_OUSTR( password ),
+                false, false );
+        xIH->handle( xRequest );
+
+        rtl::Reference< ucbhelper::InteractionContinuation > xSelection
+            = xRequest->getSelection();
+
+        if ( xSelection.is() )
         {
-            uno::Reference< task::XInteractionHandler > xIH
-                = m_xEnv->getInteractionHandler();
-
-            if ( xIH.is() )
+            // Handler handled the request.
+            uno::Reference< task::XInteractionAbort > xAbort(
+                xSelection.get(), uno::UNO_QUERY );
+            if ( !xAbort.is() )
             {
-                rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
-                    = new ucbhelper::SimpleAuthenticationRequest(
-                        m_sUrl, m_sBindingUrl, OUString(),
-                        STD_TO_OUSTR( username ),
-                        STD_TO_OUSTR( password ),
-                        false, false );
-                xIH->handle( xRequest );
+                const rtl::Reference<
+                    ucbhelper::InteractionSupplyAuthentication > & xSupp
+                    = xRequest->getAuthenticationSupplier();
 
-                rtl::Reference< ucbhelper::InteractionContinuation > xSelection
-                    = xRequest->getSelection();
+                username = OUSTR_TO_STDSTR( xSupp->getUserName() );
+                password = OUSTR_TO_STDSTR( xSupp->getPassword() );
 
-                if ( xSelection.is() )
-                {
-                    // Handler handled the request.
-                    uno::Reference< task::XInteractionAbort > xAbort(
-                        xSelection.get(), uno::UNO_QUERY );
-                    if ( !xAbort.is() )
-                    {
-                        const rtl::Reference<
-                            ucbhelper::InteractionSupplyAuthentication > & xSupp
-                            = xRequest->getAuthenticationSupplier();
-
-                        username = OUSTR_TO_STDSTR( xSupp->getUserName() );
-                        password = OUSTR_TO_STDSTR( xSupp->getPassword() );
-
-                        return true;
-                    }
-                }
+                return true;
             }
         }
         return false;
@@ -130,25 +130,22 @@ namespace cmis
         if (password == refreshToken)
             return true;
         const css::uno::Reference<css::ucb::XCommandEnvironment> xEnv = getXEnv();
-        if (xEnv.is())
+        if (!xEnv)
+            return false;
+        uno::Reference<task::XInteractionHandler> xIH = xEnv->getInteractionHandler();
+        uno::Reference<uno::XComponentContext> xContext
+            = ::comphelper::getProcessComponentContext();
+        uno::Reference<task::XPasswordContainer2> xMasterPasswd
+            = task::PasswordContainer::create(xContext);
+        uno::Sequence<OUString> aPasswd{ STD_TO_OUSTR(refreshToken) };
+        if (!xMasterPasswd->isPersistentStoringAllowed())
+            return false;
+        if (xMasterPasswd->hasMasterPassword())
         {
-            uno::Reference<task::XInteractionHandler> xIH = xEnv->getInteractionHandler();
-            uno::Reference<uno::XComponentContext> xContext
-                = ::comphelper::getProcessComponentContext();
-            uno::Reference<task::XPasswordContainer2> xMasterPasswd
-                = task::PasswordContainer::create(xContext);
-            uno::Sequence<OUString> aPasswd{ STD_TO_OUSTR(refreshToken) };
-            if (xMasterPasswd->isPersistentStoringAllowed())
-            {
-                if (xMasterPasswd->hasMasterPassword())
-                {
-                    xMasterPasswd->authorizateWithMasterPassword(xIH);
-                }
-                xMasterPasswd->addPersistent(m_sBindingUrl, STD_TO_OUSTR(username), aPasswd, xIH);
-                return true;
-            }
+            xMasterPasswd->authorizateWithMasterPassword(xIH);
         }
-        return false;
+        xMasterPasswd->addPersistent(m_sBindingUrl, STD_TO_OUSTR(username), aPasswd, xIH);
+        return true;
     }
 
     css::uno::WeakReference< css::ucb::XCommandEnvironment> AuthProvider::sm_xEnv;

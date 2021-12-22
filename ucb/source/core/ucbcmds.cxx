@@ -360,58 +360,57 @@ NameClashContinuation interactiveNameClashResolve(
             ) );
 
     rException = xRequest->getRequest();
-    if ( xEnv.is() )
+    if ( !xEnv )
+        return NOT_HANDLED;
+
+    uno::Reference< task::XInteractionHandler > xIH
+        = xEnv->getInteractionHandler();
+    if ( !xIH )
+        return NOT_HANDLED;
+
+    xIH->handle( xRequest );
+
+    rtl::Reference< ucbhelper::InteractionContinuation >
+        xSelection( xRequest->getSelection() );
+
+    if ( !xSelection )
+        return NOT_HANDLED;
+
+    // Handler handled the request.
+    uno::Reference< task::XInteractionAbort > xAbort(
+        xSelection.get(), uno::UNO_QUERY );
+    if ( xAbort.is() )
     {
-        uno::Reference< task::XInteractionHandler > xIH
-            = xEnv->getInteractionHandler();
-        if ( xIH.is() )
-        {
-
-            xIH->handle( xRequest );
-
-            rtl::Reference< ucbhelper::InteractionContinuation >
-                xSelection( xRequest->getSelection() );
-
-            if ( xSelection.is() )
-            {
-                // Handler handled the request.
-                uno::Reference< task::XInteractionAbort > xAbort(
+        // Abort.
+        return ABORT;
+    }
+    else
+    {
+        uno::Reference<
+            ucb::XInteractionReplaceExistingData >
+                xReplace(
                     xSelection.get(), uno::UNO_QUERY );
-                if ( xAbort.is() )
-                {
-                    // Abort.
-                    return ABORT;
-                }
-                else
-                {
-                    uno::Reference<
-                        ucb::XInteractionReplaceExistingData >
-                            xReplace(
-                                xSelection.get(), uno::UNO_QUERY );
-                    if ( xReplace.is() )
-                    {
-                        // Try again: Replace existing data.
-                        return OVERWRITE;
-                    }
-                    else
-                    {
-                        uno::Reference<
-                            ucb::XInteractionSupplyName >
-                                xSupplyName(
-                                    xSelection.get(), uno::UNO_QUERY );
-                        if ( xSupplyName.is() )
-                        {
-                            // Try again: Use new name.
-                            rNewName = xRequest->getNewName();
-                            return NEW_NAME;
-                        }
-                        else
-                        {
-                            OSL_FAIL( "Unknown interaction continuation!" );
-                            return UNKNOWN;
-                        }
-                    }
-                }
+        if ( xReplace.is() )
+        {
+            // Try again: Replace existing data.
+            return OVERWRITE;
+        }
+        else
+        {
+            uno::Reference<
+                ucb::XInteractionSupplyName >
+                    xSupplyName(
+                        xSelection.get(), uno::UNO_QUERY );
+            if ( xSupplyName.is() )
+            {
+                // Try again: Use new name.
+                rNewName = xRequest->getNewName();
+                return NEW_NAME;
+            }
+            else
+            {
+                OSL_FAIL( "Unknown interaction continuation!" );
+                return UNKNOWN;
             }
         }
     }

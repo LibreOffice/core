@@ -2567,25 +2567,25 @@ bool Content::commitStorage( const uno::Reference< embed::XStorage > & xStorage 
 bool Content::closeOutputStream(
     const uno::Reference< io::XOutputStream > & xOut )
 {
-    if ( xOut.is() )
+    if ( !xOut )
+        return false;
+
+    try
     {
-        try
-        {
-            xOut->closeOutput();
-            return true;
-        }
-        catch ( io::NotConnectedException const & )
-        {
-            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
-        }
-        catch ( io::BufferSizeExceededException const & )
-        {
-            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
-        }
-        catch ( io::IOException const & )
-        {
-            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
-        }
+        xOut->closeOutput();
+        return true;
+    }
+    catch ( io::NotConnectedException const & )
+    {
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
+    }
+    catch ( io::BufferSizeExceededException const & )
+    {
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
+    }
+    catch ( io::IOException const & )
+    {
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
     return false;
 }

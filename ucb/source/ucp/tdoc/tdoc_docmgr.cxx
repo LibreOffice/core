@@ -602,29 +602,29 @@ bool OfficeDocumentsManager::isBasicIDE(
         }
     }
 
-    if ( m_xModuleMgr.is() )
-    {
-        OUString aModule;
-        try
-        {
-            aModule = m_xModuleMgr->identify( xModel );
-        }
-        catch ( lang::IllegalArgumentException const & )
-        {
-            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
-        }
-        catch ( frame::UnknownModuleException const & )
-        {
-            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
-        }
+    if ( !m_xModuleMgr )
+        return false;
 
-        if ( !aModule.isEmpty() )
+    OUString aModule;
+    try
+    {
+        aModule = m_xModuleMgr->identify( xModel );
+    }
+    catch ( lang::IllegalArgumentException const & )
+    {
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
+    }
+    catch ( frame::UnknownModuleException const & )
+    {
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
+    }
+
+    if ( !aModule.isEmpty() )
+    {
+        // Filter unwanted items, that are no real documents.
+        if ( aModule == "com.sun.star.script.BasicIDE" )
         {
-            // Filter unwanted items, that are no real documents.
-            if ( aModule == "com.sun.star.script.BasicIDE" )
-            {
-                return true;
-            }
+            return true;
         }
     }
 
