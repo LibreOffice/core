@@ -24,6 +24,7 @@
 #include <svx/svxitems.hrc>
 #include <svx/svxids.hrc>
 #include <editeng/editids.hrc>
+#include <unotools/resmgr.hxx>
 #include <utility>
 
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))

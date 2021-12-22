@@ -21,6 +21,7 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <i18nutil/unicode.hxx>
+#include <i18nutil/transliteration.hxx>
 
 #include <svx/clipfmtitem.hxx>
 #include <svx/svxdlg.hxx>

@@ -928,6 +928,9 @@ excludelist:
     - com/sun/star/text/WritingMode.hpp
     - com/sun/star/graphic/XGraphic.hpp
     - com/sun/star/drawing/QRCode.hpp
+    - com/sun/star/text/XTextColumns.hpp
+    - com/sun/star/drawing/BarCode.hpp
+    - editeng/unoprnms.hxx
     - svx/svddef.hxx
     include/svx/xdef.hxx:
     # Needed for macro defines

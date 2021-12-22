@@ -22,7 +22,6 @@
 
 #include <svx/svxdllapi.h>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
-#include <memory>
 #include <optional>
 
 class SdrObject;

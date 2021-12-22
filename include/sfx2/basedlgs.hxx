@@ -22,7 +22,6 @@
 #include <memory>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <sal/types.h>
 #include <vcl/weld.hxx>
 
 class SfxTabPage;
@@ -30,7 +29,6 @@ class SfxBindings;
 class SfxChildWindow;
 struct SfxChildWinInfo;
 class SfxItemSet;
-class Timer;
 struct WhichRangesContainer;
 
 class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController

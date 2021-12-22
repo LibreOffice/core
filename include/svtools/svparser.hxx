@@ -25,7 +25,6 @@
 #include <tools/long.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
-#include <vector>
 #include <memory>
 
 template<typename T> struct SvParser_Impl;

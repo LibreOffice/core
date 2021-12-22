@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SFX2_SFXSTATUSLISTENER_HXX
 #define INCLUDED_SFX2_SFXSTATUSLISTENER_HXX
 
-#include <config_options.h>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <svl/poolitem.hxx>

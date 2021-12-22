@@ -24,7 +24,6 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/tabdlg.hxx>
 #include <sal/types.h>
-#include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
 
 class SFX2_DLLPUBLIC SfxCommonPrintOptionsTabPage final : public SfxTabPage

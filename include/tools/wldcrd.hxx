@@ -24,7 +24,6 @@
 #include <string_view>
 
 #include <tools/toolsdllapi.h>
-#include <osl/thread.h>
 #include <rtl/ustring.hxx>
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC WildCard

@@ -19,6 +19,8 @@
 #ifndef INCLUDED_XMLOFF_FAMILIES_HXX
 #define INCLUDED_XMLOFF_FAMILIES_HXX
 
+#include <rtl/ustring.hxx>
+
 /** These defines determine the unique ids for XML style-families
     used in the SvXMLAutoStylePoolP.
  */

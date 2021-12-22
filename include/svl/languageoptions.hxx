@@ -22,9 +22,7 @@
 #include <svl/svldllapi.h>
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
-#include <unotools/options.hxx>
 #include <i18nlangtag/lang.h>
-#include <memory>
 
 // class SvtLanguageOptions ----------------------------------------------------
 

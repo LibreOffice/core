@@ -23,8 +23,6 @@
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/weakbase.hxx>
-#include <memory>
-#include <optional>
 
 class OutlinerParaObject;
 class SdrOutliner;

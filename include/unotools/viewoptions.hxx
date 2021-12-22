@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <unotools/options.hxx>
 
 namespace com::sun::star::beans { struct NamedValue; }
 namespace com::sun::star::container { class XNameAccess; }

@@ -32,6 +32,7 @@
 #include <svx/svxids.hrc>
 #include <strings.hrc>
 #include <vcl/fieldvalues.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/unitconv.hxx>

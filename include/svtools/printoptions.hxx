@@ -19,9 +19,7 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <svtools/svtdllapi.h>
-#include <sal/types.h>
 
 namespace vcl::printer { class Options; }
 

@@ -13,10 +13,10 @@
 #include <sfx2/dllapi.h>
 #include <tools/gen.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
 
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XDispatch; }
-namespace vcl { class Window; }
 
 class SfxViewShell;
 class VirtualDevice;

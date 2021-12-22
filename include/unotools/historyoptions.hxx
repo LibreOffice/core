@@ -19,7 +19,6 @@
 #pragma once
 
 #include <unotools/unotoolsdllapi.h>
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <optional>

@@ -31,7 +31,6 @@
 #include <vcl/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/vclptr.hxx>
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <editeng/outliner.hxx>
 #include <functional>
 #include <unordered_set>

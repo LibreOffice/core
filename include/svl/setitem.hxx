@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <optional>
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
 

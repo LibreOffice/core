@@ -11,9 +11,7 @@
 
 #include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/graphicfilter.hxx>
 #include <vcl/test/TestResult.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <vector>
 

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <memory>
 #include <vcl/gdimtf.hxx>
 
 class SvStream;

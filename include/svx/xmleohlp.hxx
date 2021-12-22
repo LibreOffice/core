@@ -22,7 +22,6 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <osl/mutex.hxx>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -31,7 +30,6 @@
 #include <rtl/ref.hxx>
 #include <tools/stream.hxx>
 #include <map>
-#include <memory>
 #include <optional>
 
 enum class SvXMLEmbeddedObjectHelperMode
