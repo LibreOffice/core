@@ -70,6 +70,8 @@ include $(GBUILDDIR)/Helper.mk
 
 include $(GBUILDDIR)/Conditions.mk
 
+include $(SRCDIR)/solenv/inc/langlist.mk
+
 # optional extensions that should never be essential
 ifneq ($(wildcard $(GBUILDDIR)/extensions/pre_*.mk),)
 include $(wildcard $(GBUILDDIR)/extensions/pre_*.mk)
