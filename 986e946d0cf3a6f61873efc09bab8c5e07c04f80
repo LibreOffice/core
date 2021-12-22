@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0da9fed3_343ca0ea",
+        "filename": ".vscode/vs-code-template.code-workspace.in",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-22T18:56:33Z",
+      "side": 1,
+      "message": "hardcoded_dir_name for this use seems OK/furture proof enough. I don\u0027t see those dirs changing anytime soon.\n\nLooking again for a solutino to variables, I stumbled across https://github.com/microsoft/vscode-cpptools/issues/6476 \nSo apparently the cpp plugin has a place for custom variables already, and since the dirs are only used in the plugin\u0027s launch/task definition, should work in this case.\nhas an awful syntax however.\n\t\"C_Cpp.default.customConfigurationVariables\": {\n\t\t\t\"loprogramdir\": \"/home/cl/rpmbuild/BUILD/lo/instdir/program\"\n\t},\nso far so good, can define that in the settings section -  but to actually use it in the rules, you\u0027d have to specify input variables of type command to return the value (in launch section, and duplicate in tasks if it is needed there as well):\n\t\t\"inputs\": [\n\t\t\t{\n\t\t\t\t\"id\": \"loprogramdirinputvar\",\n\t\t\t\t\"type\": \"command\",\n\t\t\t\t\"command\": \"cpptools.activeConfigProperty\",\n\t\t\t\t\"args\": \"loprogramdir\"\n\t\t\t}\n\t\t],\nand that in turn can then be used in the actual configurations, e.g. via\n      \"program\": \"${input:loprogramdirinputvar}/soffice.bin\"\n\n(the input-id can be called the same as the customVar, but I personally don\u0027t like using same names in documentation, different names make the relations clearer)\nThere\u0027s a request to make that less awkward https://github.com/microsoft/vscode-cpptools/issues/6215 - but given that the current way it is not even documented....\nThere seems to be some caching of the default variables in addition (if modifying the values after the cpp extension is loaded it apparently doesn\u0027t refresh them)/and the activeConfigProperty command is not available until the c++ extension actually gets loaded...\n\ntldr: I\u0027d prefer hardcoded paths for the moment if the distinction should be retained in the actual workspace file and not just in the template. Another option would be to add corresponding comments/annotations.",
+      "parentUuid": "9badf790_96d2e63a",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 4
+      },
+      "revId": "986e946d0cf3a6f61873efc09bab8c5e07c04f80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9bc003db_b0fed6e9",
         "filename": ".vscode/vs-code-template.code-workspace.in",
         "patchSetId": 5
