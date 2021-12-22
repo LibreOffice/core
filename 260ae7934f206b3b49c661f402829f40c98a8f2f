@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "680bc19a_99d7ec79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-22T23:11:35Z",
+      "side": 1,
+      "message": "\u003e https://ci.libreoffice.org/job/gerrit_master/103613/ : FAILURE\n\u003e \n\u003e Uncategorized build failure\n\nCould someone re-run the windows build?",
+      "revId": "260ae7934f206b3b49c661f402829f40c98a8f2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
