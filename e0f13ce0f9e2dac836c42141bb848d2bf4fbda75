@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "327294bb_1a675446",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-22T12:14:39Z",
+      "side": 1,
+      "message": "Reference seem to be explicit in \"always passed\" idea? ",
+      "revId": "e0f13ce0f9e2dac836c42141bb848d2bf4fbda75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
