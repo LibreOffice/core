@@ -103,7 +103,6 @@
 #include <unomailmerge.hxx>
 #include <sfx2/event.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
 #include <cppuhelper/implbase.hxx>
@@ -122,6 +121,7 @@
 #include <IDocumentDeviceAccess.hxx>
 
 #include <memory>
+#include <mutex>
 #include <comphelper/propertysequence.hxx>
 
 using namespace ::com::sun::star;
@@ -293,7 +293,7 @@ struct SwDBManager::SwDBManager_Impl
     VclPtr<AbstractMailMergeDlg>  pMergeDialog;
     rtl::Reference<SwDBManager::ConnectionDisposedListener_Impl> m_xDisposeListener;
     rtl::Reference<SwDataSourceRemovedListener> m_xDataSourceRemovedListener;
-    osl::Mutex                    m_aAllEmailSendMutex;
+    std::mutex                    m_aAllEmailSendMutex;
     uno::Reference< mail::XMailMessage> m_xLastMessage;
 
     explicit SwDBManager_Impl(SwDBManager& rDBManager)
@@ -1017,7 +1017,7 @@ public:
 
     virtual void mailDelivered( uno::Reference< mail::XMailMessage> xMessage ) override
     {
-        osl::MutexGuard aGuard( m_rDBManager.m_pImpl->m_aAllEmailSendMutex );
+        std::unique_lock aGuard( m_rDBManager.m_pImpl->m_aAllEmailSendMutex );
         if ( m_rDBManager.m_pImpl->m_xLastMessage == xMessage )
             m_rDBManager.m_pImpl->m_xLastMessage.clear();
     }
@@ -1025,7 +1025,7 @@ public:
     virtual void mailDeliveryError( ::rtl::Reference<MailDispatcher> xMailDispatcher,
                 uno::Reference< mail::XMailMessage>, const OUString& ) override
     {
-        osl::MutexGuard aGuard( m_rDBManager.m_pImpl->m_aAllEmailSendMutex );
+        std::unique_lock aGuard( m_rDBManager.m_pImpl->m_aAllEmailSendMutex );
         m_rDBManager.m_aMergeStatus = MergeStatus::Error;
         m_rDBManager.m_pImpl->m_xLastMessage.clear();
         xMailDispatcher->stop();
@@ -1479,7 +1479,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 sMailEncoding, pStoreToFilter->GetMimeType() );
                             if( xMessage.is() )
                             {
-                                osl::MutexGuard aGuard( m_pImpl->m_aAllEmailSendMutex );
+                                std::unique_lock aGuard( m_pImpl->m_aAllEmailSendMutex );
                                 m_pImpl->m_xLastMessage.set( xMessage );
                                 xMailDispatcher->enqueueMailMessage( xMessage );
                                 if( !xMailDispatcher->isStarted() )
