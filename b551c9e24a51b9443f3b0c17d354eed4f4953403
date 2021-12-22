@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dad9bc0b_fb8aa8ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-22T16:07:03Z",
+      "side": 1,
+      "message": "Something appears not to work reliably here, see e.g. \u003chttps://ci.libreoffice.org//job/lo_tb_master_linux_dbg/35747\u003e hanging in UITest/writer_tests6, where the Python process is at\n\n  Thread 1 (Thread 0x2acd11686a40 (LWP 30990)):\n  Traceback (most recent call first):\n    File \"/home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/uitest/uitest/test.py\", line 95, in load_component_from_url\n      component \u003d  self.get_desktop().loadComponentFromURL(url, \"_default\", 0, tuple())\n    File \"/home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/uitest/uitest/test.py\", line 112, in load_file\n      yield self.load_component_from_url(url)\n    \u003cbuilt-in method next of module object at remote 0x2acd116e6d70\u003e\n    File \"/home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/instdir/program/python-core-3.8.10/lib/contextlib.py\", line 113, in __enter__\n      return next(self.gen)\n    File \"/home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/sw/qa/uitest/writer_tests6/save_readonly_with_password.py\", line 50, in test_save_to_docx\n      with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:\n    File \"/home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/instdir/program/python-core-3.8.10/lib/unittest/case.py\", line 633, in _callTestMethod\n      method()\n    File \"/home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/instdir/program/python-core-3.8.10/lib/unittest/case.py\", line 1700, in run\n    File \"/home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/instdir/program/python-core-3.8.10/lib/unittest/case.py\", line 736, in __call__\n      return self.run(*args, **kwds)\n    File \"/home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/instdir/program/python-core-3.8.10/lib/unittest/suite.py\", line 378, in run\n    File \"/home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/instdir/program/python-core-3.8.10/lib/unittest/suite.py\", line 84, in __call__\n      return self.run(*args, **kwds)\n    File \"/home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/instdir/program/python-core-3.8.10/lib/unittest/runner.py\", line 432, in run\n    File \"/home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/uitest/test_main.py\", line 129, in \u003cmodule\u003e\n      result \u003d unittest.TextTestRunner(stream\u003dsys.stdout, verbosity\u003d2).run(test_suite)\n\n...",
+      "revId": "b551c9e24a51b9443f3b0c17d354eed4f4953403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
