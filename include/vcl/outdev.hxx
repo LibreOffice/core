@@ -889,7 +889,7 @@ public:
                                               const OUString& rOrigStr, DrawTextFlags nStyle,
                                               std::vector< tools::Rectangle >* pVector, OUString* pDisplayText, vcl::ITextLayout& _rLayout );
 
-    void                        ImplDrawText( SalLayout& );
+    void                        ImplDrawText( SalLayout&, bool bWithoutHintingInTextDirection );
 
     void                        ImplDrawTextBackground( const SalLayout& );
 
@@ -1051,12 +1051,13 @@ public:
     tools::Long                        GetTextHeight() const;
     float                       approximate_digit_width() const;
 
-    void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                               o3tl::span<const sal_Int32> pDXAry,
-                                               sal_Int32 nIndex = 0,
-                                               sal_Int32 nLen = -1,
-                                               SalLayoutFlags flags = SalLayoutFlags::NONE,
-                                               const SalLayoutGlyphs* pLayoutCache = nullptr);
+    void                        DrawTextArray(const Point& rStartPt, const OUString& rStr,
+                                              o3tl::span<const sal_Int32> pDXAry,
+                                              sal_Int32 nIndex = 0,
+                                              sal_Int32 nLen = -1,
+                                              SalLayoutFlags flags = SalLayoutFlags::NONE,
+                                              const SalLayoutGlyphs* pLayoutCache = nullptr,
+                                              bool bWithoutHintingInTextDirection = false);
     tools::Long                        GetTextArray( const OUString& rStr, std::vector<sal_Int32>* pDXAry,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                               vcl::text::TextLayoutCache const* = nullptr,
@@ -1103,7 +1104,7 @@ protected:
 private:
     SAL_DLLPRIVATE void         ImplInitTextColor();
 
-    SAL_DLLPRIVATE void         ImplDrawTextDirect( SalLayout&, bool bTextLines);
+    SAL_DLLPRIVATE void         ImplDrawTextDirect( SalLayout&, bool bTextLines, bool bWithoutHintingInTextDirection );
     SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY, tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight );
 
