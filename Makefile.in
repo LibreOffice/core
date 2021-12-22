@@ -49,6 +49,8 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(BUILDDIR)/autogen.input \
 		$(BUILDDIR)/autogen.lastrun \
 		$(BUILDDIR)/autogen.sh \
+		$(BUILDDIR)/config_host_parsed.mk \
+		$(BUILDDIR)/config_host_parsed.mk.in \
 		) \
 		$(shell . $(SRCDIR)/bin/get_config_variables JAVA_HOME && \
 			if test -n "$${JAVA_HOME}" -a ! -d "$${JAVA_HOME}/bin"; then echo force-restart; fi)
@@ -217,11 +219,14 @@ distclean : clean compilerplugins-clean
         $(BUILDDIR)/config.warn \
         $(BUILDDIR)/config_build.mk \
         $(BUILDDIR)/config_build_lang.mk \
+        $(BUILDDIR)/config_build_parsed.mk \
         $(BUILDDIR)/config_build \
         $(BUILDDIR)/config_host.mk \
         $(BUILDDIR)/config_host.mk.stamp \
         $(BUILDDIR)/config_host_lang.mk \
         $(BUILDDIR)/config_host_lang.mk.stamp \
+        $(BUILDDIR)/config_host_parsed.mk \
+        $(BUILDDIR)/config_host_parsed.mk.in \
         $(BUILDDIR)/config_host/*.h \
         $(BUILDDIR)/configure \
         $(BUILDDIR)/hardened_runtime.xcent \

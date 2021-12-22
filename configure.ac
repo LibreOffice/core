@@ -5438,7 +5438,7 @@ m4_pattern_allow([PKG_CONFIG_LIBDIR])
 if test "$cross_compiling" = "yes"; then
     AC_MSG_CHECKING([for BUILD platform configuration])
     echo
-    rm -rf CONF-FOR-BUILD config_build.mk
+    rm -rf CONF-FOR-BUILD config_build.mk config_build_parsed.mk
     mkdir CONF-FOR-BUILD
     # Here must be listed all files needed when running the configure script. In particular, also
     # those expanded by the AC_CONFIG_FILES() call near the end of this configure.ac. For clarity,
@@ -5593,6 +5593,7 @@ if test "$cross_compiling" = "yes"; then
 
     cp config_host.mk ../config_build.mk
     cp config_host_lang.mk ../config_build_lang.mk
+    cp config_host_parsed.mk ../config_build_parsed.mk
     mv config.log ../config.Build.log
     mkdir -p ../config_build
     mv config_host/*.h ../config_build
@@ -14538,6 +14539,7 @@ AC_CONFIG_LINKS([include:include])
 # BUILD platform configuration] - otherwise breaks cross building
 AC_CONFIG_FILES([config_host.mk
                  config_host_lang.mk
+                 config_host_parsed.mk
                  Makefile
                  bin/bffvalidator.sh
                  bin/odfvalidator.sh
@@ -14592,6 +14594,11 @@ AC_OUTPUT
 if test "$CROSS_COMPILING" = TRUE; then
     (echo; echo export BUILD_TYPE_FOR_HOST=$BUILD_TYPE) >>config_build.mk
 fi
+
+sed -i -e '/@@CONFIG_PARSED_IMPORTED@@/{
+    r config_host_parsed.mk
+    d
+}' config_host.mk
 
 # touch the config timestamp file
 if test ! -f config_host.mk.stamp; then
