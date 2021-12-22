@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34f7bda7_78db6670",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-22T10:57:28Z",
+      "side": 1,
+      "message": "SbxValue::Clear happens to not error out on clearing string (or other refcounted objects) (which IMO is a bug). But it uses Put for other values, and the latter checks writability - so if you change your test case in https://gerrit.libreoffice.org/c/core/+/119905 to return an integer instead of a string, the error surfaces.",
+      "revId": "b64867a7cd3a2eb38b550a932808ac58178eec26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
