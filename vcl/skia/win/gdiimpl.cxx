@@ -221,7 +221,8 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
         SkCreateTypefaceDirectWrite(dwriteFontMgr, fontFace.get(), font.get(), fontFamily.get()));
 }
 
-bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
+bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout,
+                                            bool bWithoutHintingInTextDirection)
 {
     assert(dynamic_cast<const SkiaWinFontInstance*>(&rLayout.GetFont()));
     const SkiaWinFontInstance* pWinFont
@@ -262,6 +263,14 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     }
 
     SkFont font(typeface);
+
+    SkFontHinting eHinting = font.getHinting();
+    bool bAllowedHintStyle
+        = !bWithoutHintingInTextDirection
+          || (eHinting == SkFontHinting::kNone || eHinting == SkFontHinting::kSlight);
+    if (bWithoutHintingInTextDirection && !bAllowedHintStyle)
+        font.setHinting(SkFontHinting::kSlight);
+
     font.setEdging(logFont.lfQuality == NONANTIALIASED_QUALITY ? SkFont::Edging::kAlias
                                                                : fontEdging);
 

@@ -361,7 +361,7 @@ bool AquaSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*,
     return ::AddTempDevFont(rFontFileURL);
 }
 
-void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
+void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, bool /*bWithoutHintingInTextDirection*/)
 {
     mpBackend->drawTextLayout(rLayout);
 }
