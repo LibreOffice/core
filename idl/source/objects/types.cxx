@@ -231,6 +231,7 @@ void SvMetaType::WriteSfxItem(
     bool bExport = false, bReturn = false;
     // these are exported from sfx library
     if (rItemName == "SfxBoolItem" ||
+        rItemName == "SfxInt16Item" ||
         rItemName == "SfxStringItem" ||
         rItemName == "SfxUInt16Item" ||
         rItemName == "SfxUInt32Item" ||

@@ -816,6 +816,34 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
             std::unique_ptr<SfxItemSet> pNewArgs = pArgs->Clone();
             lcl_convertStringArguments(nSlot, pNewArgs);
+
+            // Merge the color parameters to the color itself.
+            std::unique_ptr<SvxColorItem> pColorItem;
+            if (nSlot == SID_ATTR_CHAR_COLOR)
+            {
+                pColorItem = std::make_unique<SvxColorItem>(pNewArgs->Get(EE_CHAR_COLOR));
+            }
+            const SfxPoolItem* pItem = nullptr;
+            if (pArgs->GetItemState(SID_ATTR_COLOR_THEME_INDEX, false, &pItem) == SfxItemState::SET)
+            {
+                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
+                pColorItem->SetThemeIndex(pIntItem->GetValue());
+            }
+            if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_MOD, false, &pItem) == SfxItemState::SET)
+            {
+                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
+                pColorItem->SetLumMod(pIntItem->GetValue());
+            }
+            if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_OFF, false, &pItem) == SfxItemState::SET)
+            {
+                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
+                pColorItem->SetLumOff(pIntItem->GetValue());
+            }
+            if (pColorItem)
+            {
+                pNewArgs->Put(*pColorItem);
+            }
+
             mpView->SetAttributes(*pNewArgs);
 
             // invalidate entire shell because of performance and

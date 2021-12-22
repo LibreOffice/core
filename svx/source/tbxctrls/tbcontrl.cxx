@@ -1966,15 +1966,18 @@ IMPL_LINK(ColorWindow, SelectHdl, ValueSet*, pColorSet, void)
     // triggers a callback that destroys ourself
     ColorSelectFunction aColorSelectFunction(maColorSelectFunction);
     OUString sCommand(maCommand);
+    // Same for querying IsTheme early.
+    bool bThemePaletteSelected = mxPaletteManager->IsThemePaletteSelected();
+    sal_uInt16 nSelectedItemId = pColorSet->GetSelectedItemId();
 
     maMenuButton.set_inactive();
 
     auto aNamedThemedColor = svx::NamedThemedColor::FromNamedColor(aNamedColor);
-    if (mxPaletteManager->IsThemePaletteSelected())
+    if (bThemePaletteSelected)
     {
-        PaletteManager::GetThemeIndexLumModOff(
-            pColorSet->GetSelectedItemId(), aNamedThemedColor.m_nThemeIndex,
-            aNamedThemedColor.m_nLumMod, aNamedThemedColor.m_nLumOff);
+        PaletteManager::GetThemeIndexLumModOff(nSelectedItemId, aNamedThemedColor.m_nThemeIndex,
+                                               aNamedThemedColor.m_nLumMod,
+                                               aNamedThemedColor.m_nLumOff);
     }
     aColorSelectFunction(sCommand, aNamedThemedColor);
 }
