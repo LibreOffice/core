@@ -67,6 +67,24 @@
       "message": "Hi Stephan,\nDid it happen just once or is it systematic ? Is it only happening with sw/qa/uitest/writer_tests6/save_readonly_with_password.py ?\nsd/qa/uitest/impress_tests/save_readonly_with_password.py and sc/qa/uitest/calc_tests7/save_readonly_with_password.py are pretty much the same test but for calc and impress. do they have the same problem ?",
       "revId": "b551c9e24a51b9443f3b0c17d354eed4f4953403",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "293b2eb6_dcb949c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-22T16:29:06Z",
+      "side": 1,
+      "message": "Killed jobs due to hung sw UITests are rather common as of lately in my experience.  I can\u0027t answer your questions with any certainty, but more and more of the Linux tinderboxes pick up \u003chttps://git.libreoffice.org/lode/+/ca7a45dbef56c2eefda379def6bf217a4b52935c%5E!/\u003e \"attempt to dump python backtraces\" and show useful Python backtraces for hung processes, so feel free to monitor the \u003clibreoffice-ci@global.libreoffice.org\u003e mailing list and try to find out.",
+      "parentUuid": "813d122c_8405b6d6",
+      "revId": "b551c9e24a51b9443f3b0c17d354eed4f4953403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
