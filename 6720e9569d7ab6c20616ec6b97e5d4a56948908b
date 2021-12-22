@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "645bdccc_4c158319",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-22T12:13:55Z",
+      "side": 1,
+      "message": "I removed this in \u003chttps://git.libreoffice.org/core/+/4a0f329eda7e1878dd2b78cf4529f98c9e253762%5E%21\u003e \"-Werror,-Wunused-variable\" but wanted to make you aware anyway, in case it was meant to be used after all?",
+      "range": {
+        "startLine": 99,
+        "startChar": 12,
+        "endLine": 99,
+        "endChar": 35
+      },
+      "revId": "6720e9569d7ab6c20616ec6b97e5d4a56948908b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
