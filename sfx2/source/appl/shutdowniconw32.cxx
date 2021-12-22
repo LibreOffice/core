@@ -462,7 +462,7 @@ static DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
 
     for (;;)
     {
-        auto const bRet = GetMessageW(&msg, nullptr, 0, 0);
+        int const bRet = GetMessageW(&msg, nullptr, 0, 0);
         if (bRet == 0)
         {
             break;

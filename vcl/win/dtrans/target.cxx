@@ -210,7 +210,7 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
         // for a later call to AttachThreadInput
         for (;;)
         {
-            auto const bRet = GetMessageW(&msg, nullptr, 0, 0);
+            int const bRet = GetMessageW(&msg, nullptr, 0, 0);
             if (bRet == 0)
             {
                 break;
