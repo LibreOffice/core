@@ -24,7 +24,7 @@
 #include <tools/stream.hxx>
 #include <map>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <osl/thread.h>
 #include <sal/log.hxx>
 
@@ -37,9 +37,9 @@ using namespace osl;
 
 namespace {
 
-osl::Mutex& LockMutex()
+std::mutex& LockMutex()
 {
-    static osl::Mutex SINGLETON;
+    static std::mutex SINGLETON;
     return SINGLETON;
 }
 
@@ -63,7 +63,7 @@ bool lockFile( const SvFileStream* pStream )
     if( aStatus.getFileType() == osl::FileStatus::Directory )
         return true;
 
-    osl::MutexGuard aGuard( LockMutex() );
+    std::unique_lock aGuard( LockMutex() );
     for( const auto& [rLockStream, rLockItem] : gLocks )
     {
         if( aItem.isIdenticalTo( rLockItem ) )
@@ -86,7 +86,7 @@ bool lockFile( const SvFileStream* pStream )
 
 void unlockFile( SvFileStream const * pStream )
 {
-    osl::MutexGuard aGuard( LockMutex() );
+    std::unique_lock aGuard( LockMutex() );
     gLocks.erase(pStream);
 }
 
