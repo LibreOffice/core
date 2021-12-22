@@ -28,7 +28,8 @@
 class VCL_DLLPUBLIC SkiaTextRender final : public FreeTypeTextRenderImpl
 {
 public:
-    virtual void DrawTextLayout(const GenericSalLayout&, const SalGraphics&) override;
+    virtual void DrawTextLayout(const GenericSalLayout&, const SalGraphics&,
+                                bool bWithoutHintingInTextDirection) override;
     virtual void ClearDevFontCache() override;
 
 private:
