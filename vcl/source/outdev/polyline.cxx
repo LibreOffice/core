@@ -304,27 +304,26 @@ bool OutputDevice::DrawPolyLineDirect(
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle)
 {
-    if(DrawPolyLineDirectInternal(rObjectTransform, rB2DPolygon, fLineWidth, fTransparency,
+    if(!DrawPolyLineDirectInternal(rObjectTransform, rB2DPolygon, fLineWidth, fTransparency,
         pStroke, eLineJoin, eLineCap, fMiterMinimumAngle))
+        return false;
+
+    // Worked, add metafile action (if recorded). This is done only here,
+    // because this function is public, other OutDev functions already add metafile
+    // actions, so they call the internal function directly.
+    if( mpMetaFile )
     {
-        // Worked, add metafile action (if recorded). This is done only here,
-        // because this function is public, other OutDev functions already add metafile
-        // actions, so they call the internal function directly.
-        if( mpMetaFile )
-        {
-            LineInfo aLineInfo;
-            if( fLineWidth != 0.0 )
-                aLineInfo.SetWidth( fLineWidth );
-            // Transport known information, might be needed
-            aLineInfo.SetLineJoin(eLineJoin);
-            aLineInfo.SetLineCap(eLineCap);
-            // MiterMinimumAngle does not exist yet in LineInfo
-            const tools::Polygon aToolsPolygon( rB2DPolygon );
-            mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
-        }
-        return true;
+        LineInfo aLineInfo;
+        if( fLineWidth != 0.0 )
+            aLineInfo.SetWidth( fLineWidth );
+        // Transport known information, might be needed
+        aLineInfo.SetLineJoin(eLineJoin);
+        aLineInfo.SetLineCap(eLineCap);
+        // MiterMinimumAngle does not exist yet in LineInfo
+        const tools::Polygon aToolsPolygon( rB2DPolygon );
+        mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
     }
-    return false;
+    return true;
 }
 
 bool OutputDevice::DrawPolyLineDirectInternal(
@@ -361,35 +360,35 @@ bool OutputDevice::DrawPolyLineDirectInternal(
                       RasterOp::OverPaint == GetRasterOp() &&
                       IsLineColor());
 
-    if(bTryB2d)
+    if(!bTryB2d)
+        return false;
+
+    // combine rObjectTransform with WorldToDevice
+    const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation() * rObjectTransform);
+    const bool bPixelSnapHairline((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) && rB2DPolygon.count() < 1000);
+
+    const double fAdjustedTransparency = mpAlphaVDev ? 0 : fTransparency;
+    // draw the polyline
+    bool bDrawSuccess = mpGraphics->DrawPolyLine(
+        aTransform,
+        rB2DPolygon,
+        fAdjustedTransparency,
+        fLineWidth, // tdf#124848 use LineWidth direct, do not try to solve for zero-case (aka hairline)
+        pStroke, // MM01
+        eLineJoin,
+        eLineCap,
+        fMiterMinimumAngle,
+        bPixelSnapHairline,
+        *this);
+
+    if( bDrawSuccess )
     {
-        // combine rObjectTransform with WorldToDevice
-        const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation() * rObjectTransform);
-        const bool bPixelSnapHairline((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) && rB2DPolygon.count() < 1000);
+        if (mpAlphaVDev)
+            mpAlphaVDev->DrawPolyLineDirect(rObjectTransform, rB2DPolygon, fLineWidth,
+                                            fTransparency, pStroke, eLineJoin, eLineCap,
+                                            fMiterMinimumAngle);
 
-        const double fAdjustedTransparency = mpAlphaVDev ? 0 : fTransparency;
-        // draw the polyline
-        bool bDrawSuccess = mpGraphics->DrawPolyLine(
-            aTransform,
-            rB2DPolygon,
-            fAdjustedTransparency,
-            fLineWidth, // tdf#124848 use LineWidth direct, do not try to solve for zero-case (aka hairline)
-            pStroke, // MM01
-            eLineJoin,
-            eLineCap,
-            fMiterMinimumAngle,
-            bPixelSnapHairline,
-            *this);
-
-        if( bDrawSuccess )
-        {
-            if (mpAlphaVDev)
-                mpAlphaVDev->DrawPolyLineDirect(rObjectTransform, rB2DPolygon, fLineWidth,
-                                                fTransparency, pStroke, eLineJoin, eLineCap,
-                                                fMiterMinimumAngle);
-
-            return true;
-        }
+        return true;
     }
     return false;
 }

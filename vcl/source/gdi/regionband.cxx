@@ -848,31 +848,31 @@ bool RegionBand::InsertSingleBand(ImplRegionBand* pBand, tools::Long nYBandPosit
     }
 
     // create new band behind the current in the list
-    if ( !pBand->mpNextBand )
+    if ( pBand->mpNextBand )
+        return false;
+
+    if ( nYBandPosition == pBand->mnYBottom )
     {
-        if ( nYBandPosition == pBand->mnYBottom )
-        {
-            // copy band with list and set new boundary
-            pNewBand = new ImplRegionBand( *pBand );
-            pNewBand->mnYTop = pBand->mnYBottom;
-            pNewBand->mnYBottom = nYBandPosition;
+        // copy band with list and set new boundary
+        pNewBand = new ImplRegionBand( *pBand );
+        pNewBand->mnYTop = pBand->mnYBottom;
+        pNewBand->mnYBottom = nYBandPosition;
 
-            pBand->mnYBottom = nYBandPosition-1;
+        pBand->mnYBottom = nYBandPosition-1;
 
-            // append band to the list
-            pBand->mpNextBand = pNewBand;
-            return true;
-        }
+        // append band to the list
+        pBand->mpNextBand = pNewBand;
+        return true;
+    }
 
-        if ( nYBandPosition > pBand->mnYBottom )
-        {
-            // create new band
-            pNewBand = new ImplRegionBand( pBand->mnYBottom + 1, nYBandPosition );
+    if ( nYBandPosition > pBand->mnYBottom )
+    {
+        // create new band
+        pNewBand = new ImplRegionBand( pBand->mnYBottom + 1, nYBandPosition );
 
-            // append band to the list
-            pBand->mpNextBand = pNewBand;
-            return true;
-        }
+        // append band to the list
+        pBand->mpNextBand = pNewBand;
+        return true;
     }
 
     return false;
@@ -1302,57 +1302,57 @@ const char* ImplDbgTestRegionBand(const void* pObj)
 {
     const RegionBand* pRegionBand = static_cast< const RegionBand* >(pObj);
 
-    if(pRegionBand)
+    if(!pRegionBand)
+        return nullptr;
+
+    const ImplRegionBand* pBand = pRegionBand->ImplGetFirstRegionBand();
+
+    while(pBand)
     {
-        const ImplRegionBand* pBand = pRegionBand->ImplGetFirstRegionBand();
-
-        while(pBand)
+        if(pBand->mnYBottom < pBand->mnYTop)
         {
-            if(pBand->mnYBottom < pBand->mnYTop)
-            {
-                return "YBottom < YTop";
-            }
-
-            if(pBand->mpNextBand)
-            {
-                if(pBand->mnYBottom >= pBand->mpNextBand->mnYTop)
-                {
-                    return "overlapping bands in region";
-                }
-            }
-
-            if(pBand->mbTouched)
-            {
-                return "Band-mbTouched overwrite";
-            }
-
-            ImplRegionBandSep* pSep = pBand->mpFirstSep;
-
-            while(pSep)
-            {
-                if(pSep->mnXRight < pSep->mnXLeft)
-                {
-                    return "XLeft < XRight";
-                }
-
-                if(pSep->mpNextSep)
-                {
-                    if(pSep->mnXRight >= pSep->mpNextSep->mnXLeft)
-                    {
-                        return "overlapping separations in region";
-                    }
-                }
-
-                if ( pSep->mbRemoved )
-                {
-                    return "Sep-mbRemoved overwrite";
-                }
-
-                pSep = pSep->mpNextSep;
-            }
-
-            pBand = pBand->mpNextBand;
+            return "YBottom < YTop";
         }
+
+        if(pBand->mpNextBand)
+        {
+            if(pBand->mnYBottom >= pBand->mpNextBand->mnYTop)
+            {
+                return "overlapping bands in region";
+            }
+        }
+
+        if(pBand->mbTouched)
+        {
+            return "Band-mbTouched overwrite";
+        }
+
+        ImplRegionBandSep* pSep = pBand->mpFirstSep;
+
+        while(pSep)
+        {
+            if(pSep->mnXRight < pSep->mnXLeft)
+            {
+                return "XLeft < XRight";
+            }
+
+            if(pSep->mpNextSep)
+            {
+                if(pSep->mnXRight >= pSep->mpNextSep->mnXLeft)
+                {
+                    return "overlapping separations in region";
+                }
+            }
+
+            if ( pSep->mbRemoved )
+            {
+                return "Sep-mbRemoved overwrite";
+            }
+
+            pSep = pSep->mpNextSep;
+        }
+
+        pBand = pBand->mpNextBand;
     }
 
     return nullptr;

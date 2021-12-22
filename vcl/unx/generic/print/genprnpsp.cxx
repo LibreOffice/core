@@ -564,103 +564,101 @@ bool PspSalInfoPrinter::SetData(
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), aData );
 
-    if( aData.m_pParser )
+    if( !aData.m_pParser )
+        return false;
+
+    const PPDKey* pKey;
+    const PPDValue* pValue;
+
+    // merge papersize if necessary
+    if( nSetDataFlags & JobSetFlags::PAPERSIZE )
     {
-        const PPDKey* pKey;
-        const PPDValue* pValue;
+        OUString aPaper;
 
-        // merge papersize if necessary
-        if( nSetDataFlags & JobSetFlags::PAPERSIZE )
+        if( pJobSetup->GetPaperFormat() == PAPER_USER )
+            aPaper = aData.m_pParser->matchPaper(
+                TenMuToPt( pJobSetup->GetPaperWidth() ),
+                TenMuToPt( pJobSetup->GetPaperHeight() ) );
+        else
+            aPaper = OStringToOUString(PaperInfo::toPSName(pJobSetup->GetPaperFormat()), RTL_TEXTENCODING_ISO_8859_1);
+
+        pKey = aData.m_pParser->getKey( "PageSize" );
+        pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : nullptr;
+
+        // some PPD files do not specify the standard paper names (e.g. C5 instead of EnvC5)
+        // try to find the correct paper anyway using the size
+        if( pKey && ! pValue && pJobSetup->GetPaperFormat() != PAPER_USER )
         {
-            OUString aPaper;
-
-            if( pJobSetup->GetPaperFormat() == PAPER_USER )
-                aPaper = aData.m_pParser->matchPaper(
-                    TenMuToPt( pJobSetup->GetPaperWidth() ),
-                    TenMuToPt( pJobSetup->GetPaperHeight() ) );
-            else
-                aPaper = OStringToOUString(PaperInfo::toPSName(pJobSetup->GetPaperFormat()), RTL_TEXTENCODING_ISO_8859_1);
-
-            pKey = aData.m_pParser->getKey( "PageSize" );
-            pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : nullptr;
-
-            // some PPD files do not specify the standard paper names (e.g. C5 instead of EnvC5)
-            // try to find the correct paper anyway using the size
-            if( pKey && ! pValue && pJobSetup->GetPaperFormat() != PAPER_USER )
-            {
-                PaperInfo aInfo( pJobSetup->GetPaperFormat() );
-                aPaper = aData.m_pParser->matchPaper(
-                    TenMuToPt( aInfo.getWidth() ),
-                    TenMuToPt( aInfo.getHeight() ) );
-                pValue = pKey->getValueCaseInsensitive( aPaper );
-            }
-
-            if( ! ( pKey && pValue && aData.m_aContext.setValue( pKey, pValue ) == pValue ) )
-                return false;
+            PaperInfo aInfo( pJobSetup->GetPaperFormat() );
+            aPaper = aData.m_pParser->matchPaper(
+                TenMuToPt( aInfo.getWidth() ),
+                TenMuToPt( aInfo.getHeight() ) );
+            pValue = pKey->getValueCaseInsensitive( aPaper );
         }
 
-        // merge paperbin if necessary
-        if( nSetDataFlags & JobSetFlags::PAPERBIN )
-        {
-            pKey = aData.m_pParser->getKey( "InputSlot" );
-            if( pKey )
-            {
-                int nPaperBin = pJobSetup->GetPaperBin();
-                if( nPaperBin >= pKey->countValues() )
-                    pValue = pKey->getDefaultValue();
-                else
-                    pValue = pKey->getValue( pJobSetup->GetPaperBin() );
-
-                // may fail due to constraints;
-                // real paper bin is copied back to jobsetup in that case
-                aData.m_aContext.setValue( pKey, pValue );
-            }
-            // if printer has no InputSlot key simply ignore this setting
-            // (e.g. SGENPRT has no InputSlot)
-        }
-
-        // merge orientation if necessary
-        if( nSetDataFlags & JobSetFlags::ORIENTATION )
-            aData.m_eOrientation = pJobSetup->GetOrientation() == Orientation::Landscape ? orientation::Landscape : orientation::Portrait;
-
-        // merge duplex if necessary
-        if( nSetDataFlags & JobSetFlags::DUPLEXMODE )
-        {
-            pKey = aData.m_pParser->getKey( "Duplex" );
-            if( pKey )
-            {
-                pValue = nullptr;
-                switch( pJobSetup->GetDuplexMode() )
-                {
-                case DuplexMode::Off:
-                    pValue = pKey->getValue( "None" );
-                    if( pValue == nullptr )
-                        pValue = pKey->getValue( "SimplexNoTumble" );
-                    break;
-                case DuplexMode::ShortEdge:
-                    pValue = pKey->getValue( "DuplexTumble" );
-                    break;
-                case DuplexMode::LongEdge:
-                    pValue = pKey->getValue( "DuplexNoTumble" );
-                    break;
-                case DuplexMode::Unknown:
-                default:
-                    pValue = nullptr;
-                    break;
-                }
-                if( ! pValue )
-                    pValue = pKey->getDefaultValue();
-                aData.m_aContext.setValue( pKey, pValue );
-            }
-        }
-        aData.m_bPapersizeFromSetup = pJobSetup->GetPapersizeFromSetup();
-
-        m_aJobData = aData;
-        copyJobDataToJobSetup( pJobSetup, aData );
-        return true;
+        if( ! ( pKey && pValue && aData.m_aContext.setValue( pKey, pValue ) == pValue ) )
+            return false;
     }
 
-    return false;
+    // merge paperbin if necessary
+    if( nSetDataFlags & JobSetFlags::PAPERBIN )
+    {
+        pKey = aData.m_pParser->getKey( "InputSlot" );
+        if( pKey )
+        {
+            int nPaperBin = pJobSetup->GetPaperBin();
+            if( nPaperBin >= pKey->countValues() )
+                pValue = pKey->getDefaultValue();
+            else
+                pValue = pKey->getValue( pJobSetup->GetPaperBin() );
+
+            // may fail due to constraints;
+            // real paper bin is copied back to jobsetup in that case
+            aData.m_aContext.setValue( pKey, pValue );
+        }
+        // if printer has no InputSlot key simply ignore this setting
+        // (e.g. SGENPRT has no InputSlot)
+    }
+
+    // merge orientation if necessary
+    if( nSetDataFlags & JobSetFlags::ORIENTATION )
+        aData.m_eOrientation = pJobSetup->GetOrientation() == Orientation::Landscape ? orientation::Landscape : orientation::Portrait;
+
+    // merge duplex if necessary
+    if( nSetDataFlags & JobSetFlags::DUPLEXMODE )
+    {
+        pKey = aData.m_pParser->getKey( "Duplex" );
+        if( pKey )
+        {
+            pValue = nullptr;
+            switch( pJobSetup->GetDuplexMode() )
+            {
+            case DuplexMode::Off:
+                pValue = pKey->getValue( "None" );
+                if( pValue == nullptr )
+                    pValue = pKey->getValue( "SimplexNoTumble" );
+                break;
+            case DuplexMode::ShortEdge:
+                pValue = pKey->getValue( "DuplexTumble" );
+                break;
+            case DuplexMode::LongEdge:
+                pValue = pKey->getValue( "DuplexNoTumble" );
+                break;
+            case DuplexMode::Unknown:
+            default:
+                pValue = nullptr;
+                break;
+            }
+            if( ! pValue )
+                pValue = pKey->getDefaultValue();
+            aData.m_aContext.setValue( pKey, pValue );
+        }
+    }
+    aData.m_bPapersizeFromSetup = pJobSetup->GetPapersizeFromSetup();
+
+    m_aJobData = aData;
+    copyJobDataToJobSetup( pJobSetup, aData );
+    return true;
 }
 
 void PspSalInfoPrinter::GetPageInfo(

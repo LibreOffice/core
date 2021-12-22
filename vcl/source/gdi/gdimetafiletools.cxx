@@ -40,41 +40,41 @@ namespace
         GDIMetaFile& rTarget,
         bool bStroke)
     {
-        if(rSource.count() && rClip.count())
-        {
-            const basegfx::B2DPolyPolygon aResult(
-                basegfx::utils::clipPolyPolygonOnPolyPolygon(
-                    rSource,
-                    rClip,
-                    true, // inside
-                    bStroke));
+        if(!rSource.count() || !rClip.count())
+            return true;
 
-            if(aResult.count())
+        const basegfx::B2DPolyPolygon aResult(
+            basegfx::utils::clipPolyPolygonOnPolyPolygon(
+                rSource,
+                rClip,
+                true, // inside
+                bStroke));
+
+        if(!aResult.count())
+            return true;
+
+        if(aResult == rSource)
+        {
+            // not clipped, but inside. Add original
+            return false;
+        }
+        else
+        {
+            // add clipped geometry
+            if(bStroke)
             {
-                if(aResult == rSource)
+                for(auto const& rB2DPolygon : aResult)
                 {
-                    // not clipped, but inside. Add original
-                    return false;
+                    rTarget.AddAction(
+                        new MetaPolyLineAction(
+                                tools::Polygon(rB2DPolygon)));
                 }
-                else
-                {
-                    // add clipped geometry
-                    if(bStroke)
-                    {
-                        for(auto const& rB2DPolygon : aResult)
-                        {
-                            rTarget.AddAction(
-                                new MetaPolyLineAction(
-                                        tools::Polygon(rB2DPolygon)));
-                        }
-                    }
-                    else
-                    {
-                        rTarget.AddAction(
-                            new MetaPolyPolygonAction(
-                                tools::PolyPolygon(aResult)));
-                    }
-                }
+            }
+            else
+            {
+                rTarget.AddAction(
+                    new MetaPolyPolygonAction(
+                        tools::PolyPolygon(aResult)));
             }
         }
 
@@ -87,30 +87,30 @@ namespace
         const Gradient& rGradient,
         GDIMetaFile& rTarget)
     {
-        if(rSource.count() && rClip.count())
-        {
-            const basegfx::B2DPolyPolygon aResult(
-                basegfx::utils::clipPolyPolygonOnPolyPolygon(
-                    rSource,
-                    rClip,
-                    true, // inside
-                    false)); // stroke
+        if(!rSource.count() || !rClip.count())
+            return true;
 
-            if(aResult.count())
+        const basegfx::B2DPolyPolygon aResult(
+            basegfx::utils::clipPolyPolygonOnPolyPolygon(
+                rSource,
+                rClip,
+                true, // inside
+                false)); // stroke
+
+        if(aResult.count())
+        {
+            if(aResult == rSource)
             {
-                if(aResult == rSource)
-                {
-                    // not clipped, but inside. Add original
-                    return false;
-                }
-                else
-                {
-                    // add clipped geometry
-                    rTarget.AddAction(
-                        new MetaGradientExAction(
-                            tools::PolyPolygon(aResult),
-                            rGradient));
-                }
+                // not clipped, but inside. Add original
+                return false;
+            }
+            else
+            {
+                // add clipped geometry
+                rTarget.AddAction(
+                    new MetaGradientExAction(
+                        tools::PolyPolygon(aResult),
+                        rGradient));
             }
         }
 

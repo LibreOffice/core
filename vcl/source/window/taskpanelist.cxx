@@ -150,63 +150,63 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
     // and the shortcut conflicts with tab-control shortcut ), it is no more supported
     vcl::KeyCode aKeyCode = rKeyEvent.GetKeyCode();
     bool bForward = !aKeyCode.IsShift();
-    if (TaskPaneList::IsCycleKey(aKeyCode))
+    if (!TaskPaneList::IsCycleKey(aKeyCode))
+        return false;
+
+    bool bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
+
+    // is the focus in the list ?
+    auto p = std::find_if(mTaskPanes.begin(), mTaskPanes.end(),
+        [](const VclPtr<vcl::Window>& rWinPtr) { return rWinPtr->HasChildPathFocus( true ); });
+    if( p != mTaskPanes.end() )
     {
-        bool bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
+        vcl::Window *pWin = p->get();
 
-        // is the focus in the list ?
-        auto p = std::find_if(mTaskPanes.begin(), mTaskPanes.end(),
-            [](const VclPtr<vcl::Window>& rWinPtr) { return rWinPtr->HasChildPathFocus( true ); });
-        if( p != mTaskPanes.end() )
+        // Ctrl-F6 goes directly to the document
+        if( !pWin->IsDialog() && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
         {
-            vcl::Window *pWin = p->get();
-
-            // Ctrl-F6 goes directly to the document
-            if( !pWin->IsDialog() && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
-            {
-                pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 );
-                return true;
-            }
-
-            // activate next task pane
-            vcl::Window *pNextWin = nullptr;
-
-            if( bSplitterOnly )
-                pNextWin = FindNextSplitter( *p );
-            else
-                pNextWin = FindNextFloat( *p, bForward );
-
-            if( pNextWin != pWin )
-            {
-                ImplGetSVData()->mpWinData->mbNoSaveFocus = true;
-                ImplTaskPaneListGrabFocus( pNextWin, bForward );
-                ImplGetSVData()->mpWinData->mbNoSaveFocus = false;
-            }
-            else
-            {
-                // forward key if no splitter found
-                if( bSplitterOnly )
-                    return false;
-
-                // we did not find another taskpane, so
-                // put focus back into document
-                pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 | (bForward ? GetFocusFlags::Forward : GetFocusFlags::Backward));
-            }
-
+            pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 );
             return true;
         }
 
-        // the focus is not in the list: activate first float if F6 was pressed
-        vcl::Window *pWin;
+        // activate next task pane
+        vcl::Window *pNextWin = nullptr;
+
         if( bSplitterOnly )
-            pWin = FindNextSplitter( nullptr );
+            pNextWin = FindNextSplitter( *p );
         else
-            pWin = FindNextFloat( nullptr, bForward );
-        if( pWin )
+            pNextWin = FindNextFloat( *p, bForward );
+
+        if( pNextWin != pWin )
         {
-            ImplTaskPaneListGrabFocus( pWin, bForward );
-            return true;
+            ImplGetSVData()->mpWinData->mbNoSaveFocus = true;
+            ImplTaskPaneListGrabFocus( pNextWin, bForward );
+            ImplGetSVData()->mpWinData->mbNoSaveFocus = false;
         }
+        else
+        {
+            // forward key if no splitter found
+            if( bSplitterOnly )
+                return false;
+
+            // we did not find another taskpane, so
+            // put focus back into document
+            pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 | (bForward ? GetFocusFlags::Forward : GetFocusFlags::Backward));
+        }
+
+        return true;
+    }
+
+    // the focus is not in the list: activate first float if F6 was pressed
+    vcl::Window *pWin;
+    if( bSplitterOnly )
+        pWin = FindNextSplitter( nullptr );
+    else
+        pWin = FindNextFloat( nullptr, bForward );
+    if( pWin )
+    {
+        ImplTaskPaneListGrabFocus( pWin, bForward );
+        return true;
     }
 
     return false;

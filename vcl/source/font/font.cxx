@@ -540,54 +540,54 @@ SvStream& ReadFont( SvStream& rIStm, vcl::Font& rFont )
     tools::Long nNormedFontScaling(0);
     SvStream& rRetval(ReadImplFont( rIStm, *rFont.mpImplFont, nNormedFontScaling ));
 
-    if (nNormedFontScaling > 0)
-    {
+    if (nNormedFontScaling <= 0)
+        return rIStm;
+
 #ifdef _WIN32
-        // we run on windows and a NormedFontScaling was written
-        if(rFont.GetFontSize().getWidth() == nNormedFontScaling)
-        {
-            // the writing producer was running on a non-windows system, adapt to needed windows
-            // system-specific pre-multiply
-            const tools::Long nHeight(std::max<tools::Long>(rFont.GetFontSize().getHeight(), 0));
-            sal_uInt32 nScaledWidth(0);
+    // we run on windows and a NormedFontScaling was written
+    if(rFont.GetFontSize().getWidth() == nNormedFontScaling)
+    {
+        // the writing producer was running on a non-windows system, adapt to needed windows
+        // system-specific pre-multiply
+        const tools::Long nHeight(std::max<tools::Long>(rFont.GetFontSize().getHeight(), 0));
+        sal_uInt32 nScaledWidth(0);
 
-            if(nHeight > 0)
+        if(nHeight > 0)
+        {
+            vcl::Font aUnscaledFont(rFont);
+            aUnscaledFont.SetAverageFontWidth(0);
+            const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aUnscaledFont));
+
+            if (nHeight > 0)
             {
-                vcl::Font aUnscaledFont(rFont);
-                aUnscaledFont.SetAverageFontWidth(0);
-                const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aUnscaledFont));
-
-                if (nHeight > 0)
-                {
-                    const double fScaleFactor(static_cast<double>(nNormedFontScaling) / static_cast<double>(nHeight));
-                    nScaledWidth = basegfx::fround(static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()) * fScaleFactor);
-                }
+                const double fScaleFactor(static_cast<double>(nNormedFontScaling) / static_cast<double>(nHeight));
+                nScaledWidth = basegfx::fround(static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()) * fScaleFactor);
             }
+        }
 
-            rFont.SetAverageFontWidth(nScaledWidth);
-        }
-        else
-        {
-            // the writing producer was on a windows system, correct pre-multiplied value
-            // is already set, nothing to do. Ignore 2nd value. Here a check
-            // could be done if adapting the 2nd, NormedFontScaling value would be similar to
-            // the set value for plausibility reasons
-        }
-#else
-        // we do not run on windows and a NormedFontScaling was written
-        if(rFont.GetFontSize().getWidth() == nNormedFontScaling)
-        {
-            // the writing producer was not on a windows system, correct value
-            // already set, nothing to do
-        }
-        else
-        {
-            // the writing producer was on a windows system, correct FontScaling.
-            // The correct non-pre-multiplied value is the 2nd one, use it
-            rFont.SetAverageFontWidth(nNormedFontScaling);
-        }
-#endif
+        rFont.SetAverageFontWidth(nScaledWidth);
     }
+    else
+    {
+        // the writing producer was on a windows system, correct pre-multiplied value
+        // is already set, nothing to do. Ignore 2nd value. Here a check
+        // could be done if adapting the 2nd, NormedFontScaling value would be similar to
+        // the set value for plausibility reasons
+    }
+#else
+    // we do not run on windows and a NormedFontScaling was written
+    if(rFont.GetFontSize().getWidth() == nNormedFontScaling)
+    {
+        // the writing producer was not on a windows system, correct value
+        // already set, nothing to do
+    }
+    else
+    {
+        // the writing producer was on a windows system, correct FontScaling.
+        // The correct non-pre-multiplied value is the 2nd one, use it
+        rFont.SetAverageFontWidth(nNormedFontScaling);
+    }
+#endif
 
     return rRetval;
 }
@@ -744,81 +744,81 @@ namespace
         const char* pStream = i_pBuffer;
         const char* const pExec = "eexec";
         const char* pExecPos = std::search( pStream, pStream+i_nSize, pExec, pExec+5 );
-        if( pExecPos != pStream+i_nSize)
+        if( pExecPos == pStream+i_nSize)
+            return false;
+
+        // find /FamilyName entry
+        static const char* const pFam = "/FamilyName";
+        const char* pFamPos = std::search( pStream, pExecPos, pFam, pFam+11 );
+        if( pFamPos != pExecPos )
         {
-            // find /FamilyName entry
-            static const char* const pFam = "/FamilyName";
-            const char* pFamPos = std::search( pStream, pExecPos, pFam, pFam+11 );
-            if( pFamPos != pExecPos )
+            // extract the string value behind /FamilyName
+            const char* pOpen = pFamPos+11;
+            while( pOpen < pExecPos && *pOpen != '(' )
+                pOpen++;
+            const char* pClose = pOpen;
+            while( pClose < pExecPos && *pClose != ')' )
+                pClose++;
+            if( pClose - pOpen > 1 )
             {
-                // extract the string value behind /FamilyName
-                const char* pOpen = pFamPos+11;
-                while( pOpen < pExecPos && *pOpen != '(' )
-                    pOpen++;
-                const char* pClose = pOpen;
-                while( pClose < pExecPos && *pClose != ')' )
-                    pClose++;
-                if( pClose - pOpen > 1 )
-                {
-                    o_rResult.SetFamilyName( OStringToOUString( std::string_view( pOpen+1, pClose-pOpen-1 ), RTL_TEXTENCODING_ASCII_US ) );
-                }
+                o_rResult.SetFamilyName( OStringToOUString( std::string_view( pOpen+1, pClose-pOpen-1 ), RTL_TEXTENCODING_ASCII_US ) );
             }
+        }
 
-            // parse /ItalicAngle
-            static const char* const pItalic = "/ItalicAngle";
-            const char* pItalicPos = std::search( pStream, pExecPos, pItalic, pItalic+12 );
-            if( pItalicPos != pExecPos )
-            {
-                const char* pItalicEnd = pItalicPos + 12;
-                auto nItalic = rtl_str_toInt64_WithLength(pItalicEnd, 10, pExecPos - pItalicEnd);
-                o_rResult.SetItalic( (nItalic != 0) ? ITALIC_NORMAL : ITALIC_NONE );
-            }
+        // parse /ItalicAngle
+        static const char* const pItalic = "/ItalicAngle";
+        const char* pItalicPos = std::search( pStream, pExecPos, pItalic, pItalic+12 );
+        if( pItalicPos != pExecPos )
+        {
+            const char* pItalicEnd = pItalicPos + 12;
+            auto nItalic = rtl_str_toInt64_WithLength(pItalicEnd, 10, pExecPos - pItalicEnd);
+            o_rResult.SetItalic( (nItalic != 0) ? ITALIC_NORMAL : ITALIC_NONE );
+        }
 
-            // parse /Weight
-            static const char* const pWeight = "/Weight";
-            const char* pWeightPos = std::search( pStream, pExecPos, pWeight, pWeight+7 );
-            if( pWeightPos != pExecPos )
+        // parse /Weight
+        static const char* const pWeight = "/Weight";
+        const char* pWeightPos = std::search( pStream, pExecPos, pWeight, pWeight+7 );
+        if( pWeightPos != pExecPos )
+        {
+            // extract the string value behind /Weight
+            const char* pOpen = pWeightPos+7;
+            while( pOpen < pExecPos && *pOpen != '(' )
+                pOpen++;
+            const char* pClose = pOpen;
+            while( pClose < pExecPos && *pClose != ')' )
+                pClose++;
+            if( pClose - pOpen > 1 )
             {
-                // extract the string value behind /Weight
-                const char* pOpen = pWeightPos+7;
-                while( pOpen < pExecPos && *pOpen != '(' )
-                    pOpen++;
-                const char* pClose = pOpen;
-                while( pClose < pExecPos && *pClose != ')' )
-                    pClose++;
-                if( pClose - pOpen > 1 )
-                {
-                    WeightSearchEntry aEnt;
-                    aEnt.string = pOpen+1;
-                    aEnt.string_len = (pClose-pOpen)-1;
-                    aEnt.weight = WEIGHT_NORMAL;
-                    WeightSearchEntry const * pFound = std::lower_bound( std::begin(weight_table), std::end(weight_table), aEnt );
-                    if( pFound != std::end(weight_table) &&
-                        rtl_str_compareIgnoreAsciiCase_WithLength( pFound->string, pFound->string_len, aEnt.string, aEnt.string_len) == 0 )
-                        o_rResult.SetWeight( pFound->weight );
-                }
+                WeightSearchEntry aEnt;
+                aEnt.string = pOpen+1;
+                aEnt.string_len = (pClose-pOpen)-1;
+                aEnt.weight = WEIGHT_NORMAL;
+                WeightSearchEntry const * pFound = std::lower_bound( std::begin(weight_table), std::end(weight_table), aEnt );
+                if( pFound != std::end(weight_table) &&
+                    rtl_str_compareIgnoreAsciiCase_WithLength( pFound->string, pFound->string_len, aEnt.string, aEnt.string_len) == 0 )
+                    o_rResult.SetWeight( pFound->weight );
             }
+        }
 
-            // parse isFixedPitch
-            static const char* const pFixed = "/isFixedPitch";
-            const char* pFixedPos = std::search( pStream, pExecPos, pFixed, pFixed+13 );
-            if( pFixedPos != pExecPos )
+        // parse isFixedPitch
+        static const char* const pFixed = "/isFixedPitch";
+        const char* pFixedPos = std::search( pStream, pExecPos, pFixed, pFixed+13 );
+        if( pFixedPos != pExecPos )
+        {
+            // skip whitespace
+            while( pFixedPos < pExecPos-4 &&
+                   ( *pFixedPos == ' '  ||
+                     *pFixedPos == '\t' ||
+                     *pFixedPos == '\r' ||
+                     *pFixedPos == '\n' ) )
             {
-                // skip whitespace
-                while( pFixedPos < pExecPos-4 &&
-                       ( *pFixedPos == ' '  ||
-                         *pFixedPos == '\t' ||
-                         *pFixedPos == '\r' ||
-                         *pFixedPos == '\n' ) )
-                {
-                    pFixedPos++;
-                }
-                // find "true" value
-                if( rtl_str_compareIgnoreAsciiCase_WithLength( pFixedPos, 4, "true", 4 ) == 0 )
-                    o_rResult.SetPitch( PITCH_FIXED );
-                else
-                    o_rResult.SetPitch( PITCH_VARIABLE );
+                pFixedPos++;
             }
+            // find "true" value
+            if( rtl_str_compareIgnoreAsciiCase_WithLength( pFixedPos, 4, "true", 4 ) == 0 )
+                o_rResult.SetPitch( PITCH_FIXED );
+            else
+                o_rResult.SetPitch( PITCH_VARIABLE );
         }
         return false;
     }

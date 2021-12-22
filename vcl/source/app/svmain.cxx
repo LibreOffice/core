@@ -153,28 +153,27 @@ static oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* 
         (pInfo->UserSignal == OSL_SIGNAL_USER_X11SUBSYSTEMERROR) )
         nVCLException = ExceptionCategory::UserInterface;
 
-    if ( nVCLException != ExceptionCategory::NONE )
-    {
-        bIn = true;
+    if ( nVCLException == ExceptionCategory::NONE )
+        return osl_Signal_ActCallNextHdl;
 
-        vcl::SolarMutexTryAndBuyGuard aLock;
-        if( aLock.isAcquired())
+    bIn = true;
+
+    vcl::SolarMutexTryAndBuyGuard aLock;
+    if( aLock.isAcquired())
+    {
+        // do not stop timer because otherwise the UAE-Box will not be painted as well
+        ImplSVData* pSVData = ImplGetSVData();
+        if ( pSVData->mpApp )
         {
-            // do not stop timer because otherwise the UAE-Box will not be painted as well
-            ImplSVData* pSVData = ImplGetSVData();
-            if ( pSVData->mpApp )
-            {
-                SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
-                Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
-                pSVData->mpApp->Exception( nVCLException );
-                Application::SetSystemWindowMode( nOldMode );
-            }
+            SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
+            Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
+            pSVData->mpApp->Exception( nVCLException );
+            Application::SetSystemWindowMode( nOldMode );
         }
-        bIn = false;
     }
+    bIn = false;
 
     return osl_Signal_ActCallNextHdl;
-
 }
 
 int ImplSVMain()

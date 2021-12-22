@@ -1770,30 +1770,30 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
     }
     XSendEvent( m_pDisplay, rRequest.requestor, False, 0, &aNotify );
 
-    if( rRequest.selection == XA_PRIMARY    &&
-        m_bWaitingForPrimaryConversion      &&
-        m_xDragSourceListener.is() )
+    if( rRequest.selection != XA_PRIMARY    ||
+        !m_bWaitingForPrimaryConversion      ||
+        !m_xDragSourceListener )
+        return true;
+
+    DragSourceDropEvent dsde;
+    dsde.Source                 = static_cast< OWeakObject* >(this);
+    dsde.DragSourceContext      = new DragSourceContext( m_aDropWindow, *this );
+    dsde.DragSource             = static_cast< XDragSource* >(this);
+    if( aNotify.xselection.property != None )
     {
-        DragSourceDropEvent dsde;
-        dsde.Source                 = static_cast< OWeakObject* >(this);
-        dsde.DragSourceContext      = new DragSourceContext( m_aDropWindow, *this );
-        dsde.DragSource             = static_cast< XDragSource* >(this);
-        if( aNotify.xselection.property != None )
-        {
-            dsde.DropAction         = DNDConstants::ACTION_COPY;
-            dsde.DropSuccess        = true;
-        }
-        else
-        {
-            dsde.DropAction         = DNDConstants::ACTION_NONE;
-            dsde.DropSuccess        = false;
-        }
-        css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
-        m_xDragSourceListener.clear();
-        aGuard.clear();
-        if( xListener.is() )
-            xListener->dragDropEnd( dsde );
+        dsde.DropAction         = DNDConstants::ACTION_COPY;
+        dsde.DropSuccess        = true;
     }
+    else
+    {
+        dsde.DropAction         = DNDConstants::ACTION_NONE;
+        dsde.DropSuccess        = false;
+    }
+    css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+    m_xDragSourceListener.clear();
+    aGuard.clear();
+    if( xListener.is() )
+        xListener->dragDropEnd( dsde );
 
     // we handled the event in any case by answering
     return true;

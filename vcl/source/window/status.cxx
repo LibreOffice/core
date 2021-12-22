@@ -1063,30 +1063,28 @@ tools::Rectangle StatusBar::GetItemRect( sal_uInt16 nItemId ) const
 
 Point StatusBar::GetItemTextPos( sal_uInt16 nItemId ) const
 {
-    if ( !mbFormat )
-    {
-        sal_uInt16 nPos = GetItemPos( nItemId );
-        if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        {
-            // get rectangle
-            ImplStatusItem* pItem = mvItemList[ nPos ].get();
-            tools::Rectangle aRect = ImplGetItemRectPos( nPos );
-            tools::Long nW = 1;
-            tools::Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
-                                           aRect.Right()-nW, aRect.Bottom()-nW );
-            Point aPos = ImplGetItemTextPos( aTextRect.GetSize(),
-                                             Size( GetTextWidth( pItem->maText ), GetTextHeight() ),
-                                             pItem->mnBits );
-            if ( !mbInUserDraw )
-            {
-                aPos.AdjustX(aTextRect.Left() );
-                aPos.AdjustY(aTextRect.Top() );
-            }
-            return aPos;
-        }
-    }
+    if ( mbFormat )
+        return Point();
 
-    return Point();
+    sal_uInt16 nPos = GetItemPos( nItemId );
+    if ( nPos == STATUSBAR_ITEM_NOTFOUND )
+        return Point();
+
+    // get rectangle
+    ImplStatusItem* pItem = mvItemList[ nPos ].get();
+    tools::Rectangle aRect = ImplGetItemRectPos( nPos );
+    tools::Long nW = 1;
+    tools::Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
+                                   aRect.Right()-nW, aRect.Bottom()-nW );
+    Point aPos = ImplGetItemTextPos( aTextRect.GetSize(),
+                                     Size( GetTextWidth( pItem->maText ), GetTextHeight() ),
+                                     pItem->mnBits );
+    if ( !mbInUserDraw )
+    {
+        aPos.AdjustX(aTextRect.Left() );
+        aPos.AdjustY(aTextRect.Top() );
+    }
+    return aPos;
 }
 
 sal_uLong StatusBar::GetItemWidth( sal_uInt16 nItemId ) const

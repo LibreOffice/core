@@ -588,24 +588,24 @@ bool GraphicFormatDetector::checkDXF()
         ++i;
     }
 
-    if (i < 256 && maFirstBytes[i] == '0')
+    if (i >= 256 || maFirstBytes[i] != '0')
+        return false;
+
+    ++i;
+
+    // only now do we have sufficient data to make a judgement
+    // based on a '0' + 'SECTION' == DXF argument
+
+    while (i < 256 && maFirstBytes[i] <= 32)
     {
         ++i;
+    }
 
-        // only now do we have sufficient data to make a judgement
-        // based on a '0' + 'SECTION' == DXF argument
-
-        while (i < 256 && maFirstBytes[i] <= 32)
-        {
-            ++i;
-        }
-
-        if (i + 7 < 256
-            && (strncmp(reinterpret_cast<char*>(maFirstBytes.data() + i), "SECTION", 7) == 0))
-        {
-            msDetectedFormat = "DXF";
-            return true;
-        }
+    if (i + 7 < 256
+        && (strncmp(reinterpret_cast<char*>(maFirstBytes.data() + i), "SECTION", 7) == 0))
+    {
+        msDetectedFormat = "DXF";
+        return true;
     }
     return false;
 }
@@ -622,25 +622,25 @@ bool GraphicFormatDetector::checkPCT()
 
 bool GraphicFormatDetector::checkPBMorPGMorPPM()
 {
-    if (maFirstBytes[0] == 'P')
+    if (maFirstBytes[0] != 'P')
+        return false;
+
+    switch (maFirstBytes[1])
     {
-        switch (maFirstBytes[1])
-        {
-            case '1':
-            case '4':
-                msDetectedFormat = "PBM";
-                return true;
+        case '1':
+        case '4':
+            msDetectedFormat = "PBM";
+            return true;
 
-            case '2':
-            case '5':
-                msDetectedFormat = "PGM";
-                return true;
+        case '2':
+        case '5':
+            msDetectedFormat = "PGM";
+            return true;
 
-            case '3':
-            case '6':
-                msDetectedFormat = "PPM";
-                return true;
-        }
+        case '3':
+        case '6':
+            msDetectedFormat = "PPM";
+            return true;
     }
     return false;
 }

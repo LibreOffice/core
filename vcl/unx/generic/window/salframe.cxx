@@ -328,28 +328,28 @@ static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nX
 
     icon_mask = None;
 
-    if( aIcon.IsAlpha() )
-    {
-        icon_mask = XCreatePixmap( pDisplay->GetDisplay(),
-                                   pDisplay->GetRootWindow( pDisplay->GetDefaultXScreen() ),
-                                   iconSize, iconSize, 1);
+    if( !aIcon.IsAlpha() )
+        return true;
 
-        XGCValues aValues;
-        aValues.foreground = 0xffffffff;
-        aValues.background = 0;
-        aValues.function = GXcopy;
-        GC aMonoGC = XCreateGC( pDisplay->GetDisplay(), icon_mask,
-            GCFunction|GCForeground|GCBackground, &aValues );
+    icon_mask = XCreatePixmap( pDisplay->GetDisplay(),
+                               pDisplay->GetRootWindow( pDisplay->GetDefaultXScreen() ),
+                               iconSize, iconSize, 1);
 
-        Bitmap aMask = aIcon.GetAlpha();
-        aMask.Invert();
+    XGCValues aValues;
+    aValues.foreground = 0xffffffff;
+    aValues.background = 0;
+    aValues.function = GXcopy;
+    GC aMonoGC = XCreateGC( pDisplay->GetDisplay(), icon_mask,
+        GCFunction|GCForeground|GCBackground, &aValues );
 
-        X11SalBitmap *pMask = static_cast < X11SalBitmap * >
-            (aMask.ImplGetSalBitmap().get());
+    Bitmap aMask = aIcon.GetAlpha();
+    aMask.Invert();
 
-        pMask->ImplDraw(icon_mask, nXScreen, 1, aRect, aMonoGC);
-        XFreeGC( pDisplay->GetDisplay(), aMonoGC );
-    }
+    X11SalBitmap *pMask = static_cast < X11SalBitmap * >
+        (aMask.ImplGetSalBitmap().get());
+
+    pMask->ImplDraw(icon_mask, nXScreen, 1, aRect, aMonoGC);
+    XFreeGC( pDisplay->GetDisplay(), aMonoGC );
 
     return true;
 }
@@ -3286,36 +3286,36 @@ bool X11SalFrame::HandleFocusEvent( XFocusChangeEvent const *pEvent )
             mpInputContext->SetICFocus( this );
     }
 
-    if ( pEvent->mode == NotifyNormal || pEvent->mode == NotifyWhileGrabbed ||
-         ( ( nStyle_ & SalFrameStyleFlags::PLUG ) && pEvent->window == GetShellWindow() )
+    if ( pEvent->mode != NotifyNormal && pEvent->mode != NotifyWhileGrabbed &&
+         !( ( nStyle_ & SalFrameStyleFlags::PLUG ) && pEvent->window == GetShellWindow() )
          )
+        return false;
+
+    if( hPresentationWindow != None && hPresentationWindow != GetShellWindow() )
+        return false;
+
+    if( FocusIn == pEvent->type )
     {
-        if( hPresentationWindow != None && hPresentationWindow != GetShellWindow() )
-            return false;
+        GetSalData()->m_pInstance->updatePrinterUpdate();
+        mbInputFocus = True;
+        ImplSVData* pSVData = ImplGetSVData();
 
-        if( FocusIn == pEvent->type )
+        bool nRet = CallCallback( SalEvent::GetFocus,  nullptr );
+        if ((mpParent != nullptr && nStyle_ == SalFrameStyleFlags::NONE)
+            && pSVData->mpWinData->mpFirstFloat)
         {
-            GetSalData()->m_pInstance->updatePrinterUpdate();
-            mbInputFocus = True;
-            ImplSVData* pSVData = ImplGetSVData();
-
-            bool nRet = CallCallback( SalEvent::GetFocus,  nullptr );
-            if ((mpParent != nullptr && nStyle_ == SalFrameStyleFlags::NONE)
-                && pSVData->mpWinData->mpFirstFloat)
-            {
-                FloatWinPopupFlags nMode = pSVData->mpWinData->mpFirstFloat->GetPopupModeFlags();
-                pSVData->mpWinData->mpFirstFloat->SetPopupModeFlags(
-                    nMode & ~FloatWinPopupFlags::NoAppFocusClose);
-            }
-            return nRet;
+            FloatWinPopupFlags nMode = pSVData->mpWinData->mpFirstFloat->GetPopupModeFlags();
+            pSVData->mpWinData->mpFirstFloat->SetPopupModeFlags(
+                nMode & ~FloatWinPopupFlags::NoAppFocusClose);
         }
-        else
-        {
-            mbInputFocus = False;
-            mbSendExtKeyModChange = false;
-            mnExtKeyMod = ModKeyFlags::NONE;
-            return CallCallback( SalEvent::LoseFocus, nullptr );
-        }
+        return nRet;
+    }
+    else
+    {
+        mbInputFocus = False;
+        mbSendExtKeyModChange = false;
+        mnExtKeyMod = ModKeyFlags::NONE;
+        return CallCallback( SalEvent::LoseFocus, nullptr );
     }
 
     return false;

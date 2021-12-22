@@ -66,46 +66,46 @@ atk_wrapper_focus_idle_handler (gpointer data)
     focus_notify_handler = 0;
 
     uno::Reference< accessibility::XAccessible > xAccessible = theNextFocusObject;
-    if( xAccessible.get() == static_cast < accessibility::XAccessible * > (data) )
+    if( xAccessible.get() != static_cast < accessibility::XAccessible * > (data) )
+        return false;
+
+    AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : nullptr;
+    // Gail does not notify focus changes to NULL, so do we ..
+    if( !atk_obj )
+        return false;
+
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    atk_focus_tracker_notify(atk_obj);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+    // #i93269#
+    // emit text_caret_moved event for <XAccessibleText> object,
+    // if cursor is inside the <XAccessibleText> object.
+    // also emit state-changed:focused event under the same condition.
     {
-        AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : nullptr;
-        // Gail does not notify focus changes to NULL, so do we ..
-        if( atk_obj )
+        AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
+        if( wrapper_obj && !wrapper_obj->mpText.is() )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            atk_focus_tracker_notify(atk_obj);
-            SAL_WNODEPRECATED_DECLARATIONS_POP
-            // #i93269#
-            // emit text_caret_moved event for <XAccessibleText> object,
-            // if cursor is inside the <XAccessibleText> object.
-            // also emit state-changed:focused event under the same condition.
+            wrapper_obj->mpText.set(wrapper_obj->mpContext, css::uno::UNO_QUERY);
+            if ( wrapper_obj->mpText.is() )
             {
-                AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
-                if( wrapper_obj && !wrapper_obj->mpText.is() )
+                gint caretPos = -1;
+
+                try {
+                    caretPos = wrapper_obj->mpText->getCaretPosition();
+                }
+                catch(const uno::Exception&) {
+                    g_warning( "Exception in getCaretPosition()" );
+                }
+
+                if ( caretPos != -1 )
                 {
-                    wrapper_obj->mpText.set(wrapper_obj->mpContext, css::uno::UNO_QUERY);
-                    if ( wrapper_obj->mpText.is() )
-                    {
-                        gint caretPos = -1;
-
-                        try {
-                            caretPos = wrapper_obj->mpText->getCaretPosition();
-                        }
-                        catch(const uno::Exception&) {
-                            g_warning( "Exception in getCaretPosition()" );
-                        }
-
-                        if ( caretPos != -1 )
-                        {
-                            atk_object_notify_state_change( atk_obj, ATK_STATE_FOCUSED, true );
-                            g_signal_emit_by_name( atk_obj, "text_caret_moved", caretPos );
-                        }
-                    }
+                    atk_object_notify_state_change( atk_obj, ATK_STATE_FOCUSED, true );
+                    g_signal_emit_by_name( atk_obj, "text_caret_moved", caretPos );
                 }
             }
-            g_object_unref(atk_obj);
         }
     }
+    g_object_unref(atk_obj);
 
     return false;
 }

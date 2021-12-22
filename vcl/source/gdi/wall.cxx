@@ -43,37 +43,37 @@ SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rImplWallpaper )
     rImplWallpaper.meStyle = static_cast<WallpaperStyle>(nTmp16);
 
     // version 2
-    if( aCompat.GetVersion() >= 2 )
+    if( aCompat.GetVersion() < 2 )
+        return rIStm;
+
+    bool bRect(false), bGrad(false), bBmp(false), bDummy;
+
+    rIStm.ReadCharAsBool( bRect ).ReadCharAsBool( bGrad ).ReadCharAsBool( bBmp ).ReadCharAsBool( bDummy ).ReadCharAsBool( bDummy ).ReadCharAsBool( bDummy );
+
+    if( bRect )
     {
-        bool bRect(false), bGrad(false), bBmp(false), bDummy;
+        rImplWallpaper.maRect = tools::Rectangle();
+        aSerializer.readRectangle(rImplWallpaper.maRect);
+    }
 
-        rIStm.ReadCharAsBool( bRect ).ReadCharAsBool( bGrad ).ReadCharAsBool( bBmp ).ReadCharAsBool( bDummy ).ReadCharAsBool( bDummy ).ReadCharAsBool( bDummy );
+    if( bGrad )
+    {
+        rImplWallpaper.mpGradient.emplace();
+        aSerializer.readGradient(*rImplWallpaper.mpGradient);
+    }
 
-        if( bRect )
-        {
-            rImplWallpaper.maRect = tools::Rectangle();
-            aSerializer.readRectangle(rImplWallpaper.maRect);
-        }
+    if( bBmp )
+    {
+        rImplWallpaper.maBitmap.SetEmpty();
+        ReadDIBBitmapEx(rImplWallpaper.maBitmap, rIStm);
+    }
 
-        if( bGrad )
-        {
-            rImplWallpaper.mpGradient.emplace();
-            aSerializer.readGradient(*rImplWallpaper.mpGradient);
-        }
-
-        if( bBmp )
-        {
-            rImplWallpaper.maBitmap.SetEmpty();
-            ReadDIBBitmapEx(rImplWallpaper.maBitmap, rIStm);
-        }
-
-        // version 3 (new color format)
-        if( aCompat.GetVersion() >= 3 )
-        {
-            sal_uInt32 nTmp;
-            rIStm.ReadUInt32(nTmp);
-            rImplWallpaper.maColor = ::Color(ColorTransparency, nTmp);
-        }
+    // version 3 (new color format)
+    if( aCompat.GetVersion() >= 3 )
+    {
+        sal_uInt32 nTmp;
+        rIStm.ReadUInt32(nTmp);
+        rImplWallpaper.maColor = ::Color(ColorTransparency, nTmp);
     }
 
     return rIStm;

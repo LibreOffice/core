@@ -1739,44 +1739,41 @@ weld::Container* SalInstanceDialog::weld_content_area()
 
 IMPL_LINK(SalInstanceDialog, PopupScreenShotMenuHdl, const CommandEvent&, rCEvt, bool)
 {
-    if (CommandEventId::ContextMenu == rCEvt.GetCommand())
+    if (CommandEventId::ContextMenu != rCEvt.GetCommand())
+        return false;
+
+    const Point aMenuPos(rCEvt.GetMousePosPixel());
+    ScopedVclPtrInstance<PopupMenu> aMenu;
+    sal_uInt16 nLocalID(1);
+
+    aMenu->InsertItem(nLocalID, VclResId(SV_BUTTONTEXT_SCREENSHOT));
+    aMenu->SetHelpText(nLocalID, VclResId(SV_HELPTEXT_SCREENSHOT));
+    aMenu->SetHelpId(nLocalID, "InteractiveScreenshotMode");
+    aMenu->EnableItem(nLocalID);
+
+    const sal_uInt16 nId(aMenu->Execute(m_xDialog, aMenuPos));
+
+    // 0 == no selection (so not usable as ID)
+    if (0 != nId)
     {
-        const Point aMenuPos(rCEvt.GetMousePosPixel());
-        ScopedVclPtrInstance<PopupMenu> aMenu;
-        sal_uInt16 nLocalID(1);
+        // open screenshot annotation dialog
+        VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+        VclPtr<AbstractScreenshotAnnotationDlg> pTmp = pFact->CreateScreenshotAnnotationDlg(*this);
+        ScopedVclPtr<AbstractScreenshotAnnotationDlg> pDialog(pTmp);
 
-        aMenu->InsertItem(nLocalID, VclResId(SV_BUTTONTEXT_SCREENSHOT));
-        aMenu->SetHelpText(nLocalID, VclResId(SV_HELPTEXT_SCREENSHOT));
-        aMenu->SetHelpId(nLocalID, "InteractiveScreenshotMode");
-        aMenu->EnableItem(nLocalID);
-
-        const sal_uInt16 nId(aMenu->Execute(m_xDialog, aMenuPos));
-
-        // 0 == no selection (so not usable as ID)
-        if (0 != nId)
+        if (pDialog)
         {
-            // open screenshot annotation dialog
-            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-            VclPtr<AbstractScreenshotAnnotationDlg> pTmp
-                = pFact->CreateScreenshotAnnotationDlg(*this);
-            ScopedVclPtr<AbstractScreenshotAnnotationDlg> pDialog(pTmp);
-
-            if (pDialog)
-            {
-                // currently just execute the dialog, no need to do
-                // different things for ok/cancel. This may change later,
-                // for that case use 'if (pDlg->Execute() == RET_OK)'
-                pDialog->Execute();
-            }
+            // currently just execute the dialog, no need to do
+            // different things for ok/cancel. This may change later,
+            // for that case use 'if (pDlg->Execute() == RET_OK)'
+            pDialog->Execute();
         }
-
-        // consume event when:
-        // - CommandEventId::ContextMenu
-        // - bScreenshotMode
-        return true;
     }
 
-    return false;
+    // consume event when:
+    // - CommandEventId::ContextMenu
+    // - bScreenshotMode
+    return true;
 }
 
 SalInstanceMessageDialog::SalInstanceMessageDialog(::MessageDialog* pDialog,

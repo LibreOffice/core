@@ -109,43 +109,43 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
     }
 
     // Write BMP header and conditionally (maybe invalid for now) color palette:
-    if (bStatus)
+    if (!bStatus)
+        return false;
+
+    mpBitmap.reset( new vcl::bitmap::RawBitmap( Size( nWidth, nHeight ), 24 ) );
+
+    if ( nDestBitsPerPixel <= 8 )
     {
-        mpBitmap.reset( new vcl::bitmap::RawBitmap( Size( nWidth, nHeight ), 24 ) );
-
-        if ( nDestBitsPerPixel <= 8 )
+        sal_uInt16 nColors = 1 << nDestBitsPerPixel;
+        sal_uInt8* pPal = pPalette.get();
+        mvPalette.resize( nColors );
+        for ( sal_uInt16 i = 0; i < nColors; i++, pPal += 3 )
         {
-            sal_uInt16 nColors = 1 << nDestBitsPerPixel;
-            sal_uInt8* pPal = pPalette.get();
-            mvPalette.resize( nColors );
-            for ( sal_uInt16 i = 0; i < nColors; i++, pPal += 3 )
-            {
-                mvPalette[i] = Color( pPal[ 0 ], pPal[ 1 ], pPal[ 2 ] );
-            }
+            mvPalette[i] = Color( pPal[ 0 ], pPal[ 1 ], pPal[ 2 ] );
         }
+    }
 
-        // read bitmap data
-        ImplReadBody();
+    // read bitmap data
+    ImplReadBody();
 
-        // If an extended color palette exists at the end of the file, then read it and
-        // and write again in palette:
-        if ( nDestBitsPerPixel == 8 && bStatus )
+    // If an extended color palette exists at the end of the file, then read it and
+    // and write again in palette:
+    if ( nDestBitsPerPixel == 8 && bStatus )
+    {
+        sal_uInt8* pPal = pPalette.get();
+        m_rPCX.SeekRel(1);
+        ImplReadPalette(256);
+        mvPalette.resize( 256 );
+        for ( sal_uInt16 i = 0; i < 256; i++, pPal += 3 )
         {
-            sal_uInt8* pPal = pPalette.get();
-            m_rPCX.SeekRel(1);
-            ImplReadPalette(256);
-            mvPalette.resize( 256 );
-            for ( sal_uInt16 i = 0; i < 256; i++, pPal += 3 )
-            {
-                mvPalette[i] = Color( pPal[ 0 ], pPal[ 1 ], pPal[ 2 ] );
-            }
+            mvPalette[i] = Color( pPal[ 0 ], pPal[ 1 ], pPal[ 2 ] );
         }
+    }
 
-        if ( bStatus )
-        {
-            rGraphic = vcl::bitmap::CreateFromData(std::move(*mpBitmap));
-            return true;
-        }
+    if ( bStatus )
+    {
+        rGraphic = vcl::bitmap::CreateFromData(std::move(*mpBitmap));
+        return true;
     }
     return false;
 }

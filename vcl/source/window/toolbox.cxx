@@ -910,31 +910,31 @@ ToolBox::ImplToolItems::size_type ToolBox::ImplCalcLines( tools::Long nToolSize 
 
 sal_uInt16 ToolBox::ImplTestLineSize( const Point& rPos ) const
 {
-    if ( !ImplIsFloatingMode() &&
-         (!mbScroll || (mnLines > 1) || (mnCurLines > mnVisLines)) )
-    {
-        WindowAlign eAlign = GetAlign();
+    if ( ImplIsFloatingMode() ||
+         (mbScroll && (mnLines <= 1) && (mnCurLines <= mnVisLines)) )
+        return 0;
 
-        if ( eAlign == WindowAlign::Left )
-        {
-            if ( rPos.X() > mnDX-DOCK_LINEOFFSET )
-                return DOCK_LINEHSIZE | DOCK_LINERIGHT;
-        }
-        else if ( eAlign == WindowAlign::Top )
-        {
-            if ( rPos.Y() > mnDY-DOCK_LINEOFFSET )
-                return DOCK_LINEVSIZE | DOCK_LINEBOTTOM;
-        }
-        else if ( eAlign == WindowAlign::Right )
-        {
-            if ( rPos.X() < DOCK_LINEOFFSET )
-                return DOCK_LINEHSIZE | DOCK_LINELEFT;
-        }
-        else if ( eAlign == WindowAlign::Bottom )
-        {
-            if ( rPos.Y() < DOCK_LINEOFFSET )
-                return DOCK_LINEVSIZE | DOCK_LINETOP;
-        }
+    WindowAlign eAlign = GetAlign();
+
+    if ( eAlign == WindowAlign::Left )
+    {
+        if ( rPos.X() > mnDX-DOCK_LINEOFFSET )
+            return DOCK_LINEHSIZE | DOCK_LINERIGHT;
+    }
+    else if ( eAlign == WindowAlign::Top )
+    {
+        if ( rPos.Y() > mnDY-DOCK_LINEOFFSET )
+            return DOCK_LINEVSIZE | DOCK_LINEBOTTOM;
+    }
+    else if ( eAlign == WindowAlign::Right )
+    {
+        if ( rPos.X() < DOCK_LINEOFFSET )
+            return DOCK_LINEHSIZE | DOCK_LINELEFT;
+    }
+    else if ( eAlign == WindowAlign::Bottom )
+    {
+        if ( rPos.Y() < DOCK_LINEOFFSET )
+            return DOCK_LINEVSIZE | DOCK_LINETOP;
     }
 
     return 0;

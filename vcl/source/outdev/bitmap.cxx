@@ -428,26 +428,26 @@ public:
             const tools::Long nDstWidth,
             const tools::Long nDstHeight)
     {
-        if (pSource && pSourceAlpha && pDestination)
-        {
-            ScanlineFormat nSourceFormat = pSource->GetScanlineFormat();
-            ScanlineFormat nDestinationFormat = pDestination->GetScanlineFormat();
+        if (!pSource || !pSourceAlpha || !pDestination)
+            return false;
 
-            switch (nSourceFormat)
+        ScanlineFormat nSourceFormat = pSource->GetScanlineFormat();
+        ScanlineFormat nDestinationFormat = pDestination->GetScanlineFormat();
+
+        switch (nSourceFormat)
+        {
+            case ScanlineFormat::N24BitTcRgb:
+            case ScanlineFormat::N24BitTcBgr:
             {
-                case ScanlineFormat::N24BitTcRgb:
-                case ScanlineFormat::N24BitTcBgr:
+                if ( (nSourceFormat == ScanlineFormat::N24BitTcBgr && nDestinationFormat == ScanlineFormat::N32BitTcBgra)
+                  || (nSourceFormat == ScanlineFormat::N24BitTcRgb && nDestinationFormat == ScanlineFormat::N32BitTcRgba))
                 {
-                    if ( (nSourceFormat == ScanlineFormat::N24BitTcBgr && nDestinationFormat == ScanlineFormat::N32BitTcBgra)
-                      || (nSourceFormat == ScanlineFormat::N24BitTcRgb && nDestinationFormat == ScanlineFormat::N32BitTcRgba))
-                    {
-                        blendBitmap24(pDestination, pSource, pSourceAlpha, nDstWidth, nDstHeight);
-                        return true;
-                    }
+                    blendBitmap24(pDestination, pSource, pSourceAlpha, nDstWidth, nDstHeight);
+                    return true;
                 }
-                break;
-                default: break;
             }
+            break;
+            default: break;
         }
         return false;
     }

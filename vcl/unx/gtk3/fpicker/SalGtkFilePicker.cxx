@@ -1563,30 +1563,30 @@ sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState )
     OSL_ASSERT( m_pDialog != nullptr );
 
     // TODO return m_pImpl->setShowState( bShowState );
-    if( bool(bShowState) != mbPreviewState )
+    if( bool(bShowState) == mbPreviewState )
+        return true;
+
+    if( bShowState )
     {
-        if( bShowState )
+        // Show
+        if( !mHID_Preview )
         {
-            // Show
-            if( !mHID_Preview )
-            {
-                mHID_Preview = g_signal_connect(
-                    GTK_FILE_CHOOSER( m_pDialog ), "update-preview",
-                    G_CALLBACK( update_preview_cb ), static_cast<gpointer>(this) );
-            }
-            gtk_widget_show( m_pPreview );
+            mHID_Preview = g_signal_connect(
+                GTK_FILE_CHOOSER( m_pDialog ), "update-preview",
+                G_CALLBACK( update_preview_cb ), static_cast<gpointer>(this) );
         }
-        else
-        {
-            // Hide
-            gtk_widget_hide( m_pPreview );
-        }
-
-        // also emit the signal
-        g_signal_emit_by_name( G_OBJECT( m_pDialog ), "update-preview" );
-
-        mbPreviewState = bShowState;
+        gtk_widget_show( m_pPreview );
     }
+    else
+    {
+        // Hide
+        gtk_widget_hide( m_pPreview );
+    }
+
+    // also emit the signal
+    g_signal_emit_by_name( G_OBJECT( m_pDialog ), "update-preview" );
+
+    mbPreviewState = bShowState;
     return true;
 }
 
