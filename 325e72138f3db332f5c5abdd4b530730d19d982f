@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8bb8622_6fbe0f90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-22T05:17:13Z",
+      "side": 1,
+      "message": "\u003e the cppunit test CppunitTest_sw_core_text failed ( https://ci.libreoffice.org/job/gerrit_linux_gcc_release/107196/ )\n\nWhy? Could someone please help?",
+      "revId": "325e72138f3db332f5c5abdd4b530730d19d982f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
