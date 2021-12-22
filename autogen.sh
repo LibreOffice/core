@@ -131,6 +131,40 @@ sub invalid_distro($$)
     exit (1);
 }
 
+sub generate_configure_exports()
+{
+    my $parsed_filename = "configure_parsed.mk.in";
+    my $parsed_path = "${build_path}/${parsed_filename}";
+    my $CONFIGURE;
+    my $PARSED;
+
+    open ($CONFIGURE, "configure") or die "can't read configure: $!";
+    open ($PARSED, ">${parsed_path}") or die "can't write to ${parsed_path}: $!";
+
+    # ac_subst_vars isn't sorted, but seems unique
+    my @exports;
+    my $in_ac_subst_vars = 0;
+    while (my $line = <$CONFIGURE>) {
+        $in_ac_subst_vars = 1 if ($line =~ /^ac_subst_vars='/);
+        next if (!$in_ac_subst_vars);
+        if ($line =~ /^(ac_subst_vars=')?(?<item>[A-Z][0-9A-Z_]*[0-9A-Z](_CFLAGS|_LIBS))('?)$/) {
+            push @exports, "export " . $+{item} . "=\$(gb_SPACE)@" . $+{item} . "@";
+        }
+        elsif ($line =~ /^(ac_subst_vars=')?(?<item>(ENABLE_|SYSTEM_)([0-9A-Z_]+[0-9A-Z]))('?)$/) {
+            push @exports, "export " . $+{item} . "=@" . $+{item} . "@";
+        }
+        last if ($line =~ /[^=]'$/);
+    }
+    close($CONFIGURE);
+
+    @exports = sort @exports;
+    print($PARSED "\# start ${parsed_filename} (from configure, by autogen.sh, substituted)\n");
+    print($PARSED "\# handles all ENABLE_*, SYSTEM_*, *_CFLAGS, *_LIBS\n");
+    print($PARSED join("\n", @exports));
+    print($PARSED "\n\# end ${parsed_filename}\n");
+    close($PARSED);
+}
+
 # Avoid confusing "aclocal: error: non-option arguments are not accepted: '.../m4'." error message.
 die "\$src_path must not contain spaces, but it is '$src_path'." if ($src_path =~ / /);
 
@@ -197,6 +231,7 @@ system ("$aclocal $aclocal_flags") && die "Failed to run aclocal";
 unlink ("configure");
 system ("$autoconf -I ${src_path}") && die "Failed to run autoconf";
 die "Failed to generate the configure script" if (! -f "configure");
+generate_configure_exports();
 
 # Handle help arguments first, so we don't clobber autogen.lastrun
 for my $arg (@ARGV) {
