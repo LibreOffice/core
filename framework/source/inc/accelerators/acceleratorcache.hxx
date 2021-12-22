@@ -42,18 +42,18 @@ namespace framework
  */
 class AcceleratorCache
 {
-
-    // const, types
-
     public:
 
-        /** TODO document me
+        /**
             commands -> keys
         */
         typedef ::std::vector< css::awt::KeyEvent > TKeyList;
+
+    private:
+
         typedef std::unordered_map<OUString, TKeyList> TCommand2Keys;
 
-        /** TODO document me
+        /**
             keys -> commands
         */
         typedef std::unordered_map< css::awt::KeyEvent ,
@@ -61,18 +61,12 @@ class AcceleratorCache
                                     KeyEventHashCode   ,
                                     KeyEventEqualsFunc > TKey2Commands;
 
-    // member
-
-    private:
-
         /** map commands to keys in relation 1:n.
             First key is interpreted as preferred one! */
         TCommand2Keys m_lCommand2Keys;
 
         /** map keys to commands in relation 1:1. */
         TKey2Commands m_lKey2Commands;
-
-    // interface
 
     public:
         /** @short  checks if the specified key exists.
@@ -86,7 +80,6 @@ class AcceleratorCache
         bool hasKey(const css::awt::KeyEvent& aKey) const;
         bool hasCommand(const OUString& sCommand) const;
 
-        /** TODO document me */
         TKeyList getAllKeys() const;
 
         /** @short  add a new or change an existing key-command pair
@@ -112,10 +105,7 @@ class AcceleratorCache
           */
         TKeyList getKeysByCommand(const OUString& sCommand) const;
 
-        /** TODO */
         OUString getCommandByKey(const css::awt::KeyEvent& aKey) const;
-
-        /** TODO */
         void removeKey(const css::awt::KeyEvent& aKey);
         void removeCommand(const OUString& sCommand);
 };
