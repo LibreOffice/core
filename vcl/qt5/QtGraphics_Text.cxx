@@ -294,11 +294,27 @@ std::unique_ptr<GenericSalLayout> QtGraphics::GetTextLayout(int nFallbackLevel)
     return std::make_unique<QtCommonSalLayout>(*m_pTextStyle[nFallbackLevel]);
 }
 
-void QtGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
+static QRawFont GetRawFont(const QFont& rFont, bool bWithoutHintingInTextDirection)
+{
+    QFont::HintingPreference eHinting = rFont.hintingPreference();
+    bool bAllowedHintStyle
+        = !bWithoutHintingInTextDirection
+          || (eHinting == QFont::PreferNoHinting || eHinting == QFont::PreferVerticalHinting);
+    if (bWithoutHintingInTextDirection && !bAllowedHintStyle)
+    {
+        QFont aFont(rFont);
+        aFont.setHintingPreference(QFont::PreferVerticalHinting);
+        return QRawFont::fromFont(aFont);
+    }
+    return QRawFont::fromFont(rFont);
+}
+
+void QtGraphics::DrawTextLayout(const GenericSalLayout& rLayout,
+                                bool bWithoutHintingInTextDirection)
 {
     const QtFont* pFont = static_cast<const QtFont*>(&rLayout.GetFont());
     assert(pFont);
-    QRawFont aRawFont(QRawFont::fromFont(*pFont));
+    QRawFont aRawFont(GetRawFont(*pFont, bWithoutHintingInTextDirection));
 
     QVector<quint32> glyphIndexes;
     QVector<QPointF> positions;

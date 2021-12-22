@@ -75,13 +75,14 @@ protected:
     TextOutRenderer & operator = (const TextOutRenderer &) = delete;
 
 public:
-    static TextOutRenderer & get(bool bUseDWrite);
+    static TextOutRenderer & get(bool bUseDWrite, bool bWithoutHintingInTextDirection);
 
     virtual ~TextOutRenderer() = default;
 
     virtual bool operator ()(GenericSalLayout const &rLayout,
         SalGraphics &rGraphics,
-        HDC hDC) = 0;
+        HDC hDC,
+        bool bWithoutHintingInTextDirection) = 0;
 };
 
 class ExTextOutRenderer : public TextOutRenderer
@@ -94,7 +95,8 @@ public:
 
     bool operator ()(GenericSalLayout const &rLayout,
         SalGraphics &rGraphics,
-        HDC hDC) override;
+        HDC hDC,
+        bool bWithoutHintingInTextDirection) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
