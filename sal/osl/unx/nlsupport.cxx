@@ -106,69 +106,67 @@ pair_search (const char *key, const Pair *base, unsigned int member )
 static char * compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
 {
     /* check if a valid locale is specified */
-    if( pLocale && pLocale->Language &&
-            (pLocale->Language->length == 2 || pLocale->Language->length == 3) )
+    if( !pLocale || !pLocale->Language ||
+            !(pLocale->Language->length == 2 || pLocale->Language->length == 3) )
+        return nullptr;
+
+    size_t offset = 0;
+
+    /* convert language code to ascii */
     {
-        size_t offset = 0;
+        rtl_String *pLanguage = nullptr;
 
-        /* convert language code to ascii */
+        rtl_uString2String( &pLanguage,
+            pLocale->Language->buffer, pLocale->Language->length,
+            RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
+
+        if( sal::static_int_cast<sal_uInt32>(pLanguage->length) < n )
         {
-            rtl_String *pLanguage = nullptr;
-
-            rtl_uString2String( &pLanguage,
-                pLocale->Language->buffer, pLocale->Language->length,
-                RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-
-            if( sal::static_int_cast<sal_uInt32>(pLanguage->length) < n )
-            {
-                strcpy( buffer, pLanguage->buffer );
-                offset = pLanguage->length;
-            }
-
-            rtl_string_release( pLanguage );
+            strcpy( buffer, pLanguage->buffer );
+            offset = pLanguage->length;
         }
 
-        /* convert country code to ascii */
-        if( pLocale->Country && (pLocale->Country->length == 2) )
-        {
-            rtl_String *pCountry = nullptr;
-
-            rtl_uString2String( &pCountry,
-                pLocale->Country->buffer, pLocale->Country->length,
-                RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-
-            if( offset + pCountry->length + 1 < n )
-            {
-                strcpy( buffer + offset++, "_" );
-                strcpy( buffer + offset, pCountry->buffer );
-                offset += pCountry->length;
-            }
-
-            rtl_string_release( pCountry );
-        }
-
-        /* convert variant to ascii - check if there is enough space for the variant string */
-        if( pLocale->Variant && pLocale->Variant->length &&
-            ( sal::static_int_cast<sal_uInt32>(pLocale->Variant->length) < n - 6 ) )
-        {
-            rtl_String *pVariant = nullptr;
-
-            rtl_uString2String( &pVariant,
-                pLocale->Variant->buffer, pLocale->Variant->length,
-                RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-
-            if( offset + pVariant->length + 1 < n )
-            {
-                strcpy( buffer + offset, pVariant->buffer );
-            }
-
-            rtl_string_release( pVariant );
-        }
-
-        return buffer;
+        rtl_string_release( pLanguage );
     }
 
-    return nullptr;
+    /* convert country code to ascii */
+    if( pLocale->Country && (pLocale->Country->length == 2) )
+    {
+        rtl_String *pCountry = nullptr;
+
+        rtl_uString2String( &pCountry,
+            pLocale->Country->buffer, pLocale->Country->length,
+            RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
+
+        if( offset + pCountry->length + 1 < n )
+        {
+            strcpy( buffer + offset++, "_" );
+            strcpy( buffer + offset, pCountry->buffer );
+            offset += pCountry->length;
+        }
+
+        rtl_string_release( pCountry );
+    }
+
+    /* convert variant to ascii - check if there is enough space for the variant string */
+    if( pLocale->Variant && pLocale->Variant->length &&
+        ( sal::static_int_cast<sal_uInt32>(pLocale->Variant->length) < n - 6 ) )
+    {
+        rtl_String *pVariant = nullptr;
+
+        rtl_uString2String( &pVariant,
+            pLocale->Variant->buffer, pLocale->Variant->length,
+            RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
+
+        if( offset + pVariant->length + 1 < n )
+        {
+            strcpy( buffer + offset, pVariant->buffer );
+        }
+
+        rtl_string_release( pVariant );
+    }
+
+    return buffer;
 }
 
 /*****************************************************************************

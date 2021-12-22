@@ -384,26 +384,26 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
         return true;
     }
 
-    if (pAddr1->sa_family == pAddr2->sa_family)
+    if (pAddr1->sa_family != pAddr2->sa_family)
+        return false;
+
+    switch (pAddr1->sa_family)
     {
-        switch (pAddr1->sa_family)
+        case AF_INET:
         {
-            case AF_INET:
-            {
-                struct sockaddr_in* pInetAddr1= reinterpret_cast<sockaddr_in*>(pAddr1);
-                struct sockaddr_in* pInetAddr2= reinterpret_cast<sockaddr_in*>(pAddr2);
+            struct sockaddr_in* pInetAddr1= reinterpret_cast<sockaddr_in*>(pAddr1);
+            struct sockaddr_in* pInetAddr2= reinterpret_cast<sockaddr_in*>(pAddr2);
 
-                if ((pInetAddr1->sin_family == pInetAddr2->sin_family) &&
-                    (pInetAddr1->sin_addr.s_addr == pInetAddr2->sin_addr.s_addr) &&
-                    (pInetAddr1->sin_port == pInetAddr2->sin_port))
-                    return true;
-                [[fallthrough]];
-            }
+            if ((pInetAddr1->sin_family == pInetAddr2->sin_family) &&
+                (pInetAddr1->sin_addr.s_addr == pInetAddr2->sin_addr.s_addr) &&
+                (pInetAddr1->sin_port == pInetAddr2->sin_port))
+                return true;
+            [[fallthrough]];
+        }
 
-            default:
-            {
-                return (memcmp(pAddr1, pAddr2, sizeof(struct sockaddr)) == 0);
-            }
+        default:
+        {
+            return (memcmp(pAddr1, pAddr2, sizeof(struct sockaddr)) == 0);
         }
     }
 
@@ -766,49 +766,47 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
     if (pAddr == nullptr)
         return nullptr;
 
-    if (pAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
+    if (pAddr->m_sockaddr.sa_family != FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
+        return nullptr;
+
+    const struct sockaddr_in *sin = reinterpret_cast<sockaddr_in *>(&pAddr->m_sockaddr);
+    if (sin->sin_addr.s_addr == htonl(INADDR_ANY))
+        return nullptr;
+
+    char host[MAX_HOSTBUFFER_SIZE];
+    int res = getnameinfo(&pAddr->m_sockaddr, sizeof(struct sockaddr_in),
+                          host, sizeof(host), nullptr, 0, NI_NAMEREQD);
+    if (res != 0)
+        return nullptr;
+
+    char *cn = getFullQualifiedDomainName(host);
+    SAL_WARN_IF( !cn, "sal.osl", "couldn't get full qualified domain name" );
+    if (cn == nullptr)
+        return nullptr;
+
+    oslSocketAddr pSockAddr = createSocketAddr();
+    SAL_WARN_IF( !pSockAddr, "sal.osl", "insufficient memory" );
+    if (pSockAddr == nullptr)
     {
-        const struct sockaddr_in *sin = reinterpret_cast<sockaddr_in *>(&pAddr->m_sockaddr);
-        if (sin->sin_addr.s_addr == htonl(INADDR_ANY))
-            return nullptr;
-
-        char host[MAX_HOSTBUFFER_SIZE];
-        int res = getnameinfo(&pAddr->m_sockaddr, sizeof(struct sockaddr_in),
-                              host, sizeof(host), nullptr, 0, NI_NAMEREQD);
-        if (res != 0)
-            return nullptr;
-
-        char *cn = getFullQualifiedDomainName(host);
-        SAL_WARN_IF( !cn, "sal.osl", "couldn't get full qualified domain name" );
-        if (cn == nullptr)
-            return nullptr;
-
-        oslSocketAddr pSockAddr = createSocketAddr();
-        SAL_WARN_IF( !pSockAddr, "sal.osl", "insufficient memory" );
-        if (pSockAddr == nullptr)
-        {
-            free(cn);
-            return nullptr;
-        }
-
-        memcpy(&pSockAddr->m_sockaddr, &pAddr->m_sockaddr, sizeof(pAddr->m_sockaddr));
-
-        oslHostAddr pHostAddr = static_cast<oslHostAddr>(malloc(sizeof(struct oslHostAddrImpl)));
-        SAL_WARN_IF( !pAddr, "sal.osl", "allocation error" );
-        if (pHostAddr == nullptr)
-        {
-            destroySocketAddr(pSockAddr);
-            free(cn);
-            return nullptr;
-        }
-
-        pHostAddr->pHostName = cn;
-        pHostAddr->pSockAddr = pSockAddr;
-
-        return pHostAddr;
+        free(cn);
+        return nullptr;
     }
 
-    return nullptr;
+    memcpy(&pSockAddr->m_sockaddr, &pAddr->m_sockaddr, sizeof(pAddr->m_sockaddr));
+
+    oslHostAddr pHostAddr = static_cast<oslHostAddr>(malloc(sizeof(struct oslHostAddrImpl)));
+    SAL_WARN_IF( !pAddr, "sal.osl", "allocation error" );
+    if (pHostAddr == nullptr)
+    {
+        destroySocketAddr(pSockAddr);
+        free(cn);
+        return nullptr;
+    }
+
+    pHostAddr->pHostName = cn;
+    pHostAddr->pSockAddr = pSockAddr;
+
+    return pHostAddr;
 }
 
 oslHostAddr SAL_CALL osl_copyHostAddr (const oslHostAddr pAddr)

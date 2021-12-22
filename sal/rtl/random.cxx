@@ -100,46 +100,45 @@ static double data(RandomData_Impl *pImpl)
 static bool initPool(RandomPool_Impl *pImpl)
 {
     pImpl->m_hDigest = rtl_digest_create(RTL_RANDOM_DIGEST);
-    if (pImpl->m_hDigest)
+    if (!pImpl->m_hDigest)
+        return false;
+
+    oslThreadIdentifier tid;
+    TimeValue tv;
+    RandomData_Impl rd;
+    double seed;
+
+    /* The use of uninitialized stack variables as a way to
+     * enhance the entropy of the random pool triggers
+     * memory checkers like purify and valgrind.
+     */
+
+    /*
+    seedPool (pImpl, (sal_uInt8*)&tid, sizeof(tid));
+    seedPool (pImpl, (sal_uInt8*)&tv, sizeof(tv));
+    seedPool (pImpl, (sal_uInt8*)&rd, sizeof(rd));
+    */
+
+    tid = osl::Thread::getCurrentIdentifier();
+    tid = RTL_RANDOM_RNG_2(RTL_RANDOM_RNG_1(tid));
+    seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&tid), sizeof(tid));
+
+    osl_getSystemTime (&tv);
+    tv.Seconds = RTL_RANDOM_RNG_2(tv.Seconds);
+    tv.Nanosec = RTL_RANDOM_RNG_2(tv.Nanosec);
+    seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&tv), sizeof(tv));
+
+    rd.m_nX = static_cast<sal_Int16>(((tid        >> 1) << 1) + 1);
+    rd.m_nY = static_cast<sal_Int16>(((tv.Seconds >> 1) << 1) + 1);
+    rd.m_nZ = static_cast<sal_Int16>(((tv.Nanosec >> 1) << 1) + 1);
+    seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&rd), sizeof(rd));
+
+    while (pImpl->m_nData < RTL_RANDOM_SIZE_POOL)
     {
-        oslThreadIdentifier tid;
-        TimeValue tv;
-        RandomData_Impl rd;
-        double seed;
-
-        /* The use of uninitialized stack variables as a way to
-         * enhance the entropy of the random pool triggers
-         * memory checkers like purify and valgrind.
-         */
-
-        /*
-        seedPool (pImpl, (sal_uInt8*)&tid, sizeof(tid));
-        seedPool (pImpl, (sal_uInt8*)&tv, sizeof(tv));
-        seedPool (pImpl, (sal_uInt8*)&rd, sizeof(rd));
-        */
-
-        tid = osl::Thread::getCurrentIdentifier();
-        tid = RTL_RANDOM_RNG_2(RTL_RANDOM_RNG_1(tid));
-        seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&tid), sizeof(tid));
-
-        osl_getSystemTime (&tv);
-        tv.Seconds = RTL_RANDOM_RNG_2(tv.Seconds);
-        tv.Nanosec = RTL_RANDOM_RNG_2(tv.Nanosec);
-        seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&tv), sizeof(tv));
-
-        rd.m_nX = static_cast<sal_Int16>(((tid        >> 1) << 1) + 1);
-        rd.m_nY = static_cast<sal_Int16>(((tv.Seconds >> 1) << 1) + 1);
-        rd.m_nZ = static_cast<sal_Int16>(((tv.Nanosec >> 1) << 1) + 1);
-        seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&rd), sizeof(rd));
-
-        while (pImpl->m_nData < RTL_RANDOM_SIZE_POOL)
-        {
-            seed = data (&rd);
-            seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&seed), sizeof(seed));
-        }
-        return true;
+        seed = data (&rd);
+        seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&seed), sizeof(seed));
     }
-    return false;
+    return true;
 }
 
 static void seedPool(

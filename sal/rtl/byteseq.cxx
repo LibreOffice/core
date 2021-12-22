@@ -44,33 +44,33 @@ void SAL_CALL rtl_byte_sequence_reference2One(
     OSL_ENSURE( ppSequence, "### null ptr!" );
     pSequence = *ppSequence;
 
-    if (pSequence->nRefCount > 1)
+    if (pSequence->nRefCount <= 1)
+        return;
+
+    sal_Sequence *pNew;
+    sal_Int32 nElements = pSequence->nElements;
+    if (nElements)
     {
-        sal_Sequence *pNew;
-        sal_Int32 nElements = pSequence->nElements;
-        if (nElements)
-        {
-            pNew = static_cast<sal_Sequence *>(malloc( SAL_SEQUENCE_HEADER_SIZE + nElements ));
-
-            if ( pNew != nullptr )
-                memcpy( pNew->elements, pSequence->elements, nElements );
-
-            if (! osl_atomic_decrement( &pSequence->nRefCount ))
-                free( pSequence );
-        }
-        else
-        {
-            pNew = static_cast<sal_Sequence *>(malloc( SAL_SEQUENCE_HEADER_SIZE ));
-        }
+        pNew = static_cast<sal_Sequence *>(malloc( SAL_SEQUENCE_HEADER_SIZE + nElements ));
 
         if ( pNew != nullptr )
-        {
-            pNew->nRefCount = 1;
-            pNew->nElements = nElements;
-        }
+            memcpy( pNew->elements, pSequence->elements, nElements );
 
-        *ppSequence = pNew;
+        if (! osl_atomic_decrement( &pSequence->nRefCount ))
+            free( pSequence );
     }
+    else
+    {
+        pNew = static_cast<sal_Sequence *>(malloc( SAL_SEQUENCE_HEADER_SIZE ));
+    }
+
+    if ( pNew != nullptr )
+    {
+        pNew->nRefCount = 1;
+        pNew->nElements = nElements;
+    }
+
+    *ppSequence = pNew;
 }
 
 void SAL_CALL rtl_byte_sequence_realloc(

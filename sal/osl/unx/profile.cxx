@@ -1344,41 +1344,39 @@ static bool addEntry(osl_TProfileImpl* pProfile,
                      int Line, char* Entry,
                      sal_uInt32 Len)
 {
-    if (pSection != nullptr)
-    {
-        if (pSection->m_NoEntries >= pSection->m_MaxEntries)
-        {
-            if (pSection->m_Entries == nullptr)
-            {
-                pSection->m_MaxEntries = ENTRIES_INI;
-                pSection->m_Entries = static_cast<osl_TProfileEntry *>(malloc(
-                                pSection->m_MaxEntries * sizeof(osl_TProfileEntry)));
-            }
-            else
-            {
-                pSection->m_MaxEntries += ENTRIES_ADD;
-                pSection->m_Entries = static_cast<osl_TProfileEntry *>(realloc(pSection->m_Entries,
-                                pSection->m_MaxEntries * sizeof(osl_TProfileEntry)));
-            }
+    if (!pSection)
+        return false;
 
-            if (pSection->m_Entries == nullptr)
-            {
-                pSection->m_NoEntries  = 0;
-                pSection->m_MaxEntries = 0;
-                return false;
-            }
+    if (pSection->m_NoEntries >= pSection->m_MaxEntries)
+    {
+        if (pSection->m_Entries == nullptr)
+        {
+            pSection->m_MaxEntries = ENTRIES_INI;
+            pSection->m_Entries = static_cast<osl_TProfileEntry *>(malloc(
+                            pSection->m_MaxEntries * sizeof(osl_TProfileEntry)));
+        }
+        else
+        {
+            pSection->m_MaxEntries += ENTRIES_ADD;
+            pSection->m_Entries = static_cast<osl_TProfileEntry *>(realloc(pSection->m_Entries,
+                            pSection->m_MaxEntries * sizeof(osl_TProfileEntry)));
         }
 
-        pSection->m_NoEntries++;
-
-        Entry = stripBlanks(Entry, &Len);
-        setEntry(pProfile, pSection, pSection->m_NoEntries - 1, Line,
-                 Entry, Len);
-
-        return true;
+        if (pSection->m_Entries == nullptr)
+        {
+            pSection->m_NoEntries  = 0;
+            pSection->m_MaxEntries = 0;
+            return false;
+        }
     }
 
-    return false;
+    pSection->m_NoEntries++;
+
+    Entry = stripBlanks(Entry, &Len);
+    setEntry(pProfile, pSection, pSection->m_NoEntries - 1, Line,
+             Entry, Len);
+
+    return true;
 }
 
 static void removeEntry(osl_TProfileSection *pSection, sal_uInt32 NoEntry)
@@ -1603,72 +1601,72 @@ static bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
 
 static bool storeProfile(osl_TProfileImpl* pProfile, bool bCleanup)
 {
-    if (pProfile->m_Lines != nullptr)
+    if (!pProfile->m_Lines)
+        return true;
+
+    if (pProfile->m_Flags & FLG_MODIFIED)
     {
-        if (pProfile->m_Flags & FLG_MODIFIED)
+        sal_uInt32 i;
+
+        osl_TFile* pTmpFile = osl_openTmpProfileImpl(pProfile);
+
+        if ( pTmpFile == nullptr )
         {
-            sal_uInt32 i;
+            return false;
+        }
 
-            osl_TFile* pTmpFile = osl_openTmpProfileImpl(pProfile);
+        OSL_VERIFY(OslProfile_rewindFile(pTmpFile, true));
 
-            if ( pTmpFile == nullptr )
+        for ( i = 0 ; i < pProfile->m_NoLines ; i++ )
+        {
+            OSL_VERIFY(OslProfile_putLine(pTmpFile, pProfile->m_Lines[i]));
+        }
+
+        if ( ! writeProfileImpl(pTmpFile) )
+        {
+            if ( pTmpFile->m_pWriteBuf != nullptr )
             {
-                return false;
+                free(pTmpFile->m_pWriteBuf);
             }
 
-            OSL_VERIFY(OslProfile_rewindFile(pTmpFile, true));
+            pTmpFile->m_pWriteBuf=nullptr;
+            pTmpFile->m_nWriteBufLen=0;
+            pTmpFile->m_nWriteBufFree=0;
 
-            for ( i = 0 ; i < pProfile->m_NoLines ; i++ )
-            {
-                OSL_VERIFY(OslProfile_putLine(pTmpFile, pProfile->m_Lines[i]));
-            }
-
-            if ( ! writeProfileImpl(pTmpFile) )
-            {
-                if ( pTmpFile->m_pWriteBuf != nullptr )
-                {
-                    free(pTmpFile->m_pWriteBuf);
-                }
-
-                pTmpFile->m_pWriteBuf=nullptr;
-                pTmpFile->m_nWriteBufLen=0;
-                pTmpFile->m_nWriteBufFree=0;
-
-                closeFileImpl(pTmpFile,pProfile->m_Flags);
-
-                return false;
-            }
-
-            pProfile->m_Flags &= ~FLG_MODIFIED;
-
-            closeFileImpl(pProfile->m_pFile,pProfile->m_Flags);
             closeFileImpl(pTmpFile,pProfile->m_Flags);
 
-            osl_ProfileSwapProfileNames(pProfile);
-
-            pProfile->m_pFile = openFileImpl(pProfile->m_FileName,pProfile->m_Flags);
-
+            return false;
         }
 
-        if (bCleanup)
-        {
-            while (pProfile->m_NoLines > 0)
-                removeLine(pProfile, pProfile->m_NoLines - 1);
+        pProfile->m_Flags &= ~FLG_MODIFIED;
 
-            free(pProfile->m_Lines);
-            pProfile->m_Lines = nullptr;
-            pProfile->m_NoLines = 0;
-            pProfile->m_MaxLines = 0;
+        closeFileImpl(pProfile->m_pFile,pProfile->m_Flags);
+        closeFileImpl(pTmpFile,pProfile->m_Flags);
 
-            while (pProfile->m_NoSections > 0)
-                removeSection(pProfile, &pProfile->m_Sections[pProfile->m_NoSections - 1]);
+        osl_ProfileSwapProfileNames(pProfile);
 
-            free(pProfile->m_Sections);
-            pProfile->m_Sections = nullptr;
-            pProfile->m_NoSections = 0;
-            pProfile->m_MaxSections = 0;
-        }
+        pProfile->m_pFile = openFileImpl(pProfile->m_FileName,pProfile->m_Flags);
+
     }
+
+    if (!bCleanup)
+        return true;
+
+    while (pProfile->m_NoLines > 0)
+        removeLine(pProfile, pProfile->m_NoLines - 1);
+
+    free(pProfile->m_Lines);
+    pProfile->m_Lines = nullptr;
+    pProfile->m_NoLines = 0;
+    pProfile->m_MaxLines = 0;
+
+    while (pProfile->m_NoSections > 0)
+        removeSection(pProfile, &pProfile->m_Sections[pProfile->m_NoSections - 1]);
+
+    free(pProfile->m_Sections);
+    pProfile->m_Sections = nullptr;
+    pProfile->m_NoSections = 0;
+    pProfile->m_MaxSections = 0;
 
     return true;
 }

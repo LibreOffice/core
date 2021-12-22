@@ -859,51 +859,52 @@ static bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
     char name[PATH_MAX + 1];
     snprintf(name, sizeof(name), "/proc/%u/stat", pid);
 
-    if ((fd = open(name,O_RDONLY)) >=0 )
+    fd = open(name,O_RDONLY);
+    if (fd < 0)
+        return false;
+
+    char* tmp=nullptr;
+    char prstatbuf[512];
+    memset(prstatbuf,0,512);
+    bRet = safeRead(fd, prstatbuf, 511);
+
+    close(fd);
+
+    if (!bRet)
+        return false;
+
+    tmp = strrchr(prstatbuf, ')');
+    if(tmp)
     {
-        char* tmp=nullptr;
-        char prstatbuf[512];
-        memset(prstatbuf,0,512);
-        bRet = safeRead(fd, prstatbuf, 511);
+        *tmp = '\0';
 
-        close(fd);
+        memset(procstat->command, 0, sizeof(procstat->command));
 
-        if (!bRet)
-            return false;
-
-        tmp = strrchr(prstatbuf, ')');
-        if(tmp)
-        {
-            *tmp = '\0';
-
-            memset(procstat->command, 0, sizeof(procstat->command));
-
-            sscanf(prstatbuf, "%d (%15c", &procstat->pid, procstat->command);
-            sscanf(tmp + 2,
-               "%c"
-               "%i %i %i %i %i"
-               "%lu %lu %lu %lu %lu"
-               "%lu %lu %lu %lu"
-               "%lu %li %li %li"
-               "%lu %lu %li %lu"
-               "%lu %lu %lu %lu %lu"
-               "%23s %23s %23s %23s"
-               "%lu %lu %lu",
-               &procstat->state,
-               &procstat->ppid,      &procstat->pgrp,    &procstat->session,    &procstat->tty,         &procstat->tpgid,
-               &procstat->flags,     &procstat->minflt,  &procstat->cminflt,    &procstat->majflt,      &procstat->cmajflt,
-               &procstat->utime,     &procstat->stime,   &procstat->cutime,     &procstat->cstime,
-               &procstat->priority,  &procstat->nice,    &procstat->timeout,    &procstat->itrealvalue,
-               &procstat->starttime, &procstat->vsize,   &procstat->rss,        &procstat->rss_rlim,
-               &procstat->startcode, &procstat->endcode, &procstat->startstack, &procstat->kstkesp,     &procstat->kstkeip,
-               procstat->signal,     procstat->blocked,  procstat->sigignore,   procstat->sigcatch,
-               &procstat->wchan,     &procstat->nswap,   &procstat->cnswap
-            );
-        }
-        else
-        {
-            bRet = false;
-        }
+        sscanf(prstatbuf, "%d (%15c", &procstat->pid, procstat->command);
+        sscanf(tmp + 2,
+           "%c"
+           "%i %i %i %i %i"
+           "%lu %lu %lu %lu %lu"
+           "%lu %lu %lu %lu"
+           "%lu %li %li %li"
+           "%lu %lu %li %lu"
+           "%lu %lu %lu %lu %lu"
+           "%23s %23s %23s %23s"
+           "%lu %lu %lu",
+           &procstat->state,
+           &procstat->ppid,      &procstat->pgrp,    &procstat->session,    &procstat->tty,         &procstat->tpgid,
+           &procstat->flags,     &procstat->minflt,  &procstat->cminflt,    &procstat->majflt,      &procstat->cmajflt,
+           &procstat->utime,     &procstat->stime,   &procstat->cutime,     &procstat->cstime,
+           &procstat->priority,  &procstat->nice,    &procstat->timeout,    &procstat->itrealvalue,
+           &procstat->starttime, &procstat->vsize,   &procstat->rss,        &procstat->rss_rlim,
+           &procstat->startcode, &procstat->endcode, &procstat->startstack, &procstat->kstkesp,     &procstat->kstkeip,
+           procstat->signal,     procstat->blocked,  procstat->sigignore,   procstat->sigcatch,
+           &procstat->wchan,     &procstat->nswap,   &procstat->cnswap
+        );
+    }
+    else
+    {
+        bRet = false;
     }
     return bRet;
 }
@@ -916,57 +917,58 @@ static bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
 
     snprintf(name, sizeof(name), "/proc/%u/status", pid);
 
-    if ((fd = open(name,O_RDONLY)) >=0 )
+    fd = open(name,O_RDONLY);
+    if (fd < 0)
+        return false;
+
+    char* tmp=nullptr;
+    char prstatusbuf[512];
+    memset(prstatusbuf,0,512);
+    bRet = safeRead(fd, prstatusbuf, 511);
+
+    close(fd);
+
+    if (!bRet)
+        return false;
+
+    tmp = strstr(prstatusbuf,"Uid:");
+    if(tmp)
     {
-        char* tmp=nullptr;
-        char prstatusbuf[512];
-        memset(prstatusbuf,0,512);
-        bRet = safeRead(fd, prstatusbuf, 511);
+        sscanf(tmp,"Uid:\t%d\t%d\t%d\t%d",
+               &procstat->ruid, &procstat->euid, &procstat->suid, &procstat->fuid
+            );
+    }
 
-        close(fd);
+    tmp = strstr(prstatusbuf,"Gid:");
+    if(tmp)
+    {
+        sscanf(tmp,"Gid:\t%d\t%d\t%d\t%d",
+               &procstat->rgid, &procstat->egid, &procstat->sgid, &procstat->fgid
+            );
+    }
 
-        if (!bRet)
-            return false;
+    tmp = strstr(prstatusbuf,"VmSize:");
+    if(tmp)
+    {
+        sscanf(tmp,
+               "VmSize: %lu kB\n"
+               "VmLck: %lu kB\n"
+               "VmRSS: %lu kB\n"
+               "VmData: %lu kB\n"
+               "VmStk: %lu kB\n"
+               "VmExe: %lu kB\n"
+               "VmLib: %lu kB\n",
+               &procstat->vm_size, &procstat->vm_lock, &procstat->vm_rss, &procstat->vm_data,
+               &procstat->vm_stack, &procstat->vm_exe, &procstat->vm_lib
+            );
+    }
 
-        tmp = strstr(prstatusbuf,"Uid:");
-        if(tmp)
-        {
-            sscanf(tmp,"Uid:\t%d\t%d\t%d\t%d",
-                   &procstat->ruid, &procstat->euid, &procstat->suid, &procstat->fuid
-                );
-        }
-
-        tmp = strstr(prstatusbuf,"Gid:");
-        if(tmp)
-        {
-            sscanf(tmp,"Gid:\t%d\t%d\t%d\t%d",
-                   &procstat->rgid, &procstat->egid, &procstat->sgid, &procstat->fgid
-                );
-        }
-
-        tmp = strstr(prstatusbuf,"VmSize:");
-        if(tmp)
-        {
-            sscanf(tmp,
-                   "VmSize: %lu kB\n"
-                   "VmLck: %lu kB\n"
-                   "VmRSS: %lu kB\n"
-                   "VmData: %lu kB\n"
-                   "VmStk: %lu kB\n"
-                   "VmExe: %lu kB\n"
-                   "VmLib: %lu kB\n",
-                   &procstat->vm_size, &procstat->vm_lock, &procstat->vm_rss, &procstat->vm_data,
-                   &procstat->vm_stack, &procstat->vm_exe, &procstat->vm_lib
-                );
-        }
-
-        tmp = strstr(prstatusbuf,"SigPnd:");
-        if(tmp)
-        {
-            sscanf(tmp, "SigPnd: %23s SigBlk: %23s SigIgn: %23s %*s %23s",
-                   procstat->signal, procstat->blocked, procstat->sigignore, procstat->sigcatch
-                );
-        }
+    tmp = strstr(prstatusbuf,"SigPnd:");
+    if(tmp)
+    {
+        sscanf(tmp, "SigPnd: %23s SigBlk: %23s SigIgn: %23s %*s %23s",
+               procstat->signal, procstat->blocked, procstat->sigignore, procstat->sigcatch
+            );
     }
     return bRet;
 }
@@ -1003,105 +1005,101 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
         }
     }
 
-    if (Fields & (osl_Process_HEAPUSAGE | osl_Process_CPUTIMES))
-    {
+    if (!(Fields & (osl_Process_HEAPUSAGE | osl_Process_CPUTIMES)))
+        return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
 
 #if defined(__sun)
 
-        int  fd;
-        char name[PATH_MAX + 1];
+    int  fd;
+    char name[PATH_MAX + 1];
 
-        snprintf(name, sizeof(name), "/proc/%ld", (long)pid);
+    snprintf(name, sizeof(name), "/proc/%ld", (long)pid);
 
-        if ((fd = open(name, O_RDONLY)) >= 0)
+    if ((fd = open(name, O_RDONLY)) >= 0)
+    {
+        prstatus_t prstatus;
+
+        if (ioctl(fd, PIOCSTATUS, &prstatus) >= 0)
         {
-            prstatus_t prstatus;
-
-            if (ioctl(fd, PIOCSTATUS, &prstatus) >= 0)
+            if (Fields & osl_Process_CPUTIMES)
             {
-                if (Fields & osl_Process_CPUTIMES)
-                {
-                    pInfo->UserTime.Seconds   = prstatus.pr_utime.tv_sec;
-                    pInfo->UserTime.Nanosec   = prstatus.pr_utime.tv_nsec;
-                    pInfo->SystemTime.Seconds = prstatus.pr_stime.tv_sec;
-                    pInfo->SystemTime.Nanosec = prstatus.pr_stime.tv_nsec;
-
-                    pInfo->Fields |= osl_Process_CPUTIMES;
-                }
-
-                if (Fields & osl_Process_HEAPUSAGE)
-                {
-                    pInfo->HeapUsage = prstatus.pr_brksize;
-
-                    pInfo->Fields |= osl_Process_HEAPUSAGE;
-                }
-
-                close(fd);
-
-                return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
-            }
-            else
-                close(fd);
-        }
-
-#elif defined(LINUX)
-
-        if ( (Fields & osl_Process_CPUTIMES) || (Fields & osl_Process_HEAPUSAGE) )
-        {
-            struct osl_procStat procstat;
-            memset(&procstat,0,sizeof(procstat));
-
-            if ( (Fields & osl_Process_CPUTIMES) && osl_getProcStat(pid, &procstat) )
-            {
-                /*
-                 *  mfe:
-                 *  We calculate only time of the process proper.
-                 *  Threads are processes, we do not consider their time here!
-                 *  (For this, cutime and cstime should be used, it seems not
-                 *   to work in 2.0.36)
-                 */
-
-                long clktck;
-                unsigned long hz;
-                unsigned long userseconds;
-                unsigned long systemseconds;
-
-                clktck = sysconf(_SC_CLK_TCK);
-                if (clktck <= 0) {
-                    return osl_Process_E_Unknown;
-                }
-                hz = static_cast<unsigned long>(clktck);
-
-                userseconds = procstat.utime/hz;
-                systemseconds = procstat.stime/hz;
-
-                pInfo->UserTime.Seconds   = userseconds;
-                pInfo->UserTime.Nanosec   = procstat.utime - (userseconds * hz);
-                pInfo->SystemTime.Seconds = systemseconds;
-                pInfo->SystemTime.Nanosec = procstat.stime - (systemseconds * hz);
+                pInfo->UserTime.Seconds   = prstatus.pr_utime.tv_sec;
+                pInfo->UserTime.Nanosec   = prstatus.pr_utime.tv_nsec;
+                pInfo->SystemTime.Seconds = prstatus.pr_stime.tv_sec;
+                pInfo->SystemTime.Nanosec = prstatus.pr_stime.tv_nsec;
 
                 pInfo->Fields |= osl_Process_CPUTIMES;
             }
 
-            if ( (Fields & osl_Process_HEAPUSAGE) && osl_getProcStatus(pid, &procstat) )
+            if (Fields & osl_Process_HEAPUSAGE)
             {
-                /*
-                 *  mfe:
-                 *  vm_data (found in status) shows the size of the data segment
-                 *  it a rough approximation of the core heap size
-                 */
-                pInfo->HeapUsage = procstat.vm_data*1024;
+                pInfo->HeapUsage = prstatus.pr_brksize;
 
                 pInfo->Fields |= osl_Process_HEAPUSAGE;
             }
+
+            close(fd);
+
+            return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
         }
+        else
+            close(fd);
+    }
 
+#elif defined(LINUX)
+
+    if ( !(Fields & osl_Process_CPUTIMES) && !(Fields & osl_Process_HEAPUSAGE) )
         return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
-#endif
 
+    struct osl_procStat procstat;
+    memset(&procstat,0,sizeof(procstat));
+
+    if ( (Fields & osl_Process_CPUTIMES) && osl_getProcStat(pid, &procstat) )
+    {
+        /*
+         *  mfe:
+         *  We calculate only time of the process proper.
+         *  Threads are processes, we do not consider their time here!
+         *  (For this, cutime and cstime should be used, it seems not
+         *   to work in 2.0.36)
+         */
+
+        long clktck;
+        unsigned long hz;
+        unsigned long userseconds;
+        unsigned long systemseconds;
+
+        clktck = sysconf(_SC_CLK_TCK);
+        if (clktck <= 0) {
+            return osl_Process_E_Unknown;
+        }
+        hz = static_cast<unsigned long>(clktck);
+
+        userseconds = procstat.utime/hz;
+        systemseconds = procstat.stime/hz;
+
+        pInfo->UserTime.Seconds   = userseconds;
+        pInfo->UserTime.Nanosec   = procstat.utime - (userseconds * hz);
+        pInfo->SystemTime.Seconds = systemseconds;
+        pInfo->SystemTime.Nanosec = procstat.stime - (systemseconds * hz);
+
+        pInfo->Fields |= osl_Process_CPUTIMES;
+    }
+
+    if ( (Fields & osl_Process_HEAPUSAGE) && osl_getProcStatus(pid, &procstat) )
+    {
+        /*
+         *  mfe:
+         *  vm_data (found in status) shows the size of the data segment
+         *  it a rough approximation of the core heap size
+         */
+        pInfo->HeapUsage = procstat.vm_data*1024;
+
+        pInfo->Fields |= osl_Process_HEAPUSAGE;
     }
 
     return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
+#endif
 }
 
 /** Helper function for osl_joinProcessWithTimeout

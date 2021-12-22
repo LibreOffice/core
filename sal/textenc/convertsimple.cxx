@@ -467,43 +467,43 @@ int ImplConvertUnicodeCharToChar(
             return 1;
     }
     pToCharExTab = pConvertData->mpToCharExTab;
-    if ( pToCharExTab )
-    {
-        sal_uInt16                  nLow;
-        sal_uInt16                  nHigh;
-        sal_uInt16                  nMid;
-        sal_uInt16                  nCompareChar;
-        const ImplUniCharTabData*   pCharExData;
+    if ( !pToCharExTab )
+        return 0;
 
-        nLow = 0;
-        nHigh = pConvertData->mnToCharExCount-1;
-        do
+    sal_uInt16                  nLow;
+    sal_uInt16                  nHigh;
+    sal_uInt16                  nMid;
+    sal_uInt16                  nCompareChar;
+    const ImplUniCharTabData*   pCharExData;
+
+    nLow = 0;
+    nHigh = pConvertData->mnToCharExCount-1;
+    do
+    {
+        nMid = (nLow+nHigh)/2;
+        pCharExData = pToCharExTab+nMid;
+        nCompareChar = pCharExData->mnUniChar;
+        if ( c < nCompareChar )
         {
-            nMid = (nLow+nHigh)/2;
-            pCharExData = pToCharExTab+nMid;
-            nCompareChar = pCharExData->mnUniChar;
-            if ( c < nCompareChar )
-            {
-                if ( !nMid )
-                    break;
-                nHigh = nMid-1;
-            }
+            if ( !nMid )
+                break;
+            nHigh = nMid-1;
+        }
+        else
+        {
+            if ( c > nCompareChar )
+                nLow = nMid+1;
             else
             {
-                if ( c > nCompareChar )
-                    nLow = nMid+1;
-                else
-                {
-                    dest[0] = static_cast< char >(pCharExData->mnChar);
-                    if ( pCharExData->mnChar2 == 0 )
-                        return 1;
-                    dest[1] = static_cast< char >(pCharExData->mnChar2);
-                    return 2;
-                }
+                dest[0] = static_cast< char >(pCharExData->mnChar);
+                if ( pCharExData->mnChar2 == 0 )
+                    return 1;
+                dest[1] = static_cast< char >(pCharExData->mnChar2);
+                return 2;
             }
         }
-        while ( nLow <= nHigh );
     }
+    while ( nLow <= nHigh );
     return 0;
 }
 

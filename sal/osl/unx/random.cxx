@@ -18,29 +18,28 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
 
     assert(buffer);
     fd = open("/dev/urandom", O_RDONLY);
-    if (fd != -1)
+    if (fd == -1)
+        return false;
+
+    while (desired_len)
     {
-        while (desired_len)
+        ssize_t nb_read;
+        if ((nb_read = read(fd, buffer, desired_len)) == -1)
         {
-            ssize_t nb_read;
-            if ((nb_read = read(fd, buffer, desired_len)) == -1)
+            if (errno != EINTR)
             {
-                if (errno != EINTR)
-                {
-                    close(fd);
-                    return false;
-                }
-            }
-            else
-            {
-                buffer += nb_read;
-                desired_len -= nb_read;
+                close(fd);
+                return false;
             }
         }
-        close(fd);
-        return true;
+        else
+        {
+            buffer += nb_read;
+            desired_len -= nb_read;
+        }
     }
-    return false;
+    close(fd);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
