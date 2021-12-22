@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1aec18b2_0e7b9bdd",
+        "filename": "ucb/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-22T04:43:47Z",
+      "side": 1,
+      "message": "... in git history?",
+      "range": {
+        "startLine": 27,
+        "startChar": 43,
+        "endLine": 28,
+        "endChar": 25
+      },
+      "revId": "1d21a51d814b39711cb1cc7f925b0c620b42eaa7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
