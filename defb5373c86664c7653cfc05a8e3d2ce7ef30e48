@@ -34,6 +34,24 @@
       "parentUuid": "8f9f9501_428f764f",
       "revId": "defb5373c86664c7653cfc05a8e3d2ce7ef30e48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67be0c03_8c35e975",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-22T06:39:36Z",
+      "side": 1,
+      "message": "\u003e I am just about to use some private time to do a bigger general change: Separate BasePrimitive2D C++ implementation from UNO API completely\n\nI\u0027ve already done that - here: https://gerrit.libreoffice.org/c/core/+/126487\nBut there are a couple of places in vcl/ that need typeinfo for drawinglayer stuff, and that is why I did this change.",
+      "parentUuid": "95639807_44c94004",
+      "revId": "defb5373c86664c7653cfc05a8e3d2ce7ef30e48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
