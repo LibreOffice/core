@@ -33,6 +33,24 @@
       "message": "OTOH, it looks strange that there\u0027s an optional argument that is actually required - why not remove the optional instead? And if it must be string, why not make it string, not variant?",
       "revId": "c9535db312e7b104d76f956e597e4bbc929bdaf1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab123cf6_812b373a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2021-12-22T14:05:24Z",
+      "side": 1,
+      "message": "Access2Base is a library implementing an API.\nThat design choice has been made to absolutely avoid to have a Basic run-time error opening suddenly the Basic IDE and pointing to a line of code inside the library, ... except when due to a real internal error. Hence the _CheckArgument() method that will approve or not the passed argument.\nNB: ScriptForge has adopted the same principle.",
+      "parentUuid": "51bba2fb_783ca7a4",
+      "revId": "c9535db312e7b104d76f956e597e4bbc929bdaf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
