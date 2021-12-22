@@ -16,6 +16,24 @@
       "message": "This removal doesn\u0027t look like a usual flattening - is this actually intended, or was it some unused/redundant code?",
       "revId": "494b3e69fd4bef0af19627cf31da98da376019d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3e28af3_f415e729",
+        "filename": "include/salhelper/dynload.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-22T09:12:26Z",
+      "side": 0,
+      "message": "eek, that shouldn\u0027t be there, thanks, revert in progress with\n  https://gerrit.libreoffice.org/c/core/+/127302",
+      "parentUuid": "ed1baf4d_9d75293d",
+      "revId": "494b3e69fd4bef0af19627cf31da98da376019d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
