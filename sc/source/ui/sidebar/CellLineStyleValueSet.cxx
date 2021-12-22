@@ -26,6 +26,7 @@ namespace sc { namespace sidebar {
 
 CellLineStyleValueSet::CellLineStyleValueSet(vcl::Window* pParent)
     : ValueSet(pParent, WB_TABSTOP)
+    , mnMaxTextWidth(0)
     , nSelItem(0)
 {
     SetColCount();
