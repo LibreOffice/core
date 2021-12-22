@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -44,9 +44,9 @@ namespace {
 class ODocumentCloser : public ::cppu::WeakImplHelper< css::lang::XComponent,
                                                         css::lang::XServiceInfo >
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     css::uno::Reference< css::frame::XFrame > m_xFrame;
-    std::unique_ptr<::comphelper::OInterfaceContainerHelper3<lang::XEventListener>> m_pListenersContainer; // list of listeners
+    std::unique_ptr<::comphelper::OInterfaceContainerHelper4<lang::XEventListener>> m_pListenersContainer; // list of listeners
 
     bool m_bDisposed;
 
@@ -141,7 +141,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, p, void )
 ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments)
 : m_bDisposed( false )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( !m_refCount )
         throw uno::RuntimeException(); // the object must be refcounted already!
 
@@ -164,14 +164,14 @@ ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArg
 
 void SAL_CALL ODocumentCloser::dispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
 
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
     if ( m_pListenersContainer )
-        m_pListenersContainer->disposeAndClear( aSource );
+        m_pListenersContainer->disposeAndClear( aGuard, aSource );
 
     // TODO: trigger a main thread execution to close the frame
     if ( m_xFrame.is() )
@@ -187,12 +187,12 @@ void SAL_CALL ODocumentCloser::dispose()
 
 void SAL_CALL ODocumentCloser::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
     if ( !m_pListenersContainer )
-        m_pListenersContainer.reset( new ::comphelper::OInterfaceContainerHelper3<lang::XEventListener>( m_aMutex ) );
+        m_pListenersContainer.reset( new ::comphelper::OInterfaceContainerHelper4<lang::XEventListener>() );
 
     m_pListenersContainer->addInterface( xListener );
 }
@@ -200,7 +200,7 @@ void SAL_CALL ODocumentCloser::addEventListener( const uno::Reference< lang::XEv
 
 void SAL_CALL ODocumentCloser::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( m_pListenersContainer )
         m_pListenersContainer->removeInterface( xListener );
 }
