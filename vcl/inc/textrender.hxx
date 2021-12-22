@@ -61,7 +61,7 @@ public:
 
     virtual std::unique_ptr<GenericSalLayout>
                                     GetTextLayout(int nFallbackLevel) = 0;
-    virtual void                    DrawTextLayout(const GenericSalLayout&, const SalGraphics&) = 0;
+    virtual void                    DrawTextLayout(const GenericSalLayout&, const SalGraphics&, bool bWithoutHintingInTextDirection) = 0;
 };
 
 /* vim:set tabstop=4 shiftwidth=4 softtabstop=4 expandtab: */

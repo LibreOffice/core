@@ -204,7 +204,7 @@ public:
 
     virtual std::unique_ptr<GenericSalLayout>
                                 GetTextLayout(int nFallbackLevel) = 0;
-    virtual void                DrawTextLayout( const GenericSalLayout& ) = 0;
+    virtual void                DrawTextLayout( const GenericSalLayout&, bool bWithoutHintingInTextDirection ) = 0;
 
     virtual bool                supportsOperation( OutDevSupportType ) const = 0;
 
