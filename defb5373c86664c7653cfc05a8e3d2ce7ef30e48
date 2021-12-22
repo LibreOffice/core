@@ -69,6 +69,24 @@
       "message": "So, thought about it back and forth - leading to a simple question:\n  Why do you want Primitives in vcl?\n  What do you intend to do with them?",
       "revId": "defb5373c86664c7653cfc05a8e3d2ce7ef30e48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "379ee3da_711603fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-22T09:32:57Z",
+      "side": 1,
+      "message": "\u003e   Why do you want Primitives in vcl?\n\u003e   What do you intend to do with them?\n\nThe long term plan is to make the rendering of primitives more efficient by more directly translating them to the underlying platform-specific graphic APIs.\n\nThat means, for example, instead of attempting to reflect parts of the Skia API in the OutputDevice API, we can do a processor that directly converts Primitive\u0027s into skia API.\n\nWhich means the Processor class needs to have access to stuff inside the vcl plugin code, and to the drawinglayer primitives.\n\nAnyhow, it looks like quikee\u0027s patch at \n   https://gerrit.libreoffice.org/c/core/+/127286\nis going to work for me, so I can abandon this.",
+      "parentUuid": "ca757783_60908ed3",
+      "revId": "defb5373c86664c7653cfc05a8e3d2ce7ef30e48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
