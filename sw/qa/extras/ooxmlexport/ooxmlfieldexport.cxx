@@ -19,10 +19,12 @@
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
+
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
+    Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text") {}
 
 protected:
     /**
@@ -795,6 +797,62 @@ DECLARE_OOXMLEXPORT_TEST( testSdtDatePicker, "test_sdt_datepicker.docx" )
 
     OUString sColor = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w15:color", "val");
     CPPUNIT_ASSERT_EQUAL(OUString("008000"), sColor);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
+{
+    // Test how we can roundtrip sdt plain text with databindings support
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf104823.docx";
+    loadURL(aURL, nullptr);
+
+    css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
+        mxComponent, css::uno::UNO_QUERY_THROW);
+    auto xFields(xTextFieldsSupplier->getTextFields()->createEnumeration());
+
+    // FIXME: seems order of fields is different than in source document
+    // so feel free to modify testcase if order is changed
+
+    // First field: content from core properties
+    uno::Reference<text::XTextField> xField1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    // Check field value (it should be value from data source) and set new
+    CPPUNIT_ASSERT_EQUAL(OUString("True Core Property Value"), xField1->getPresentation(false));
+    uno::Reference<beans::XPropertySet> xField1Props(xField1, uno::UNO_QUERY);
+    xField1Props->setPropertyValue("Content", uno::makeAny(OUString("New Core Property Value")));
+
+    // Third field: content from custom properties
+    uno::Reference<text::XTextField> xField2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    // Check field value (it should be value from data source) and set new
+    CPPUNIT_ASSERT_EQUAL(OUString("True Custom XML Value"), xField2->getPresentation(false));
+    uno::Reference<beans::XPropertySet> xField2Props(xField2, uno::UNO_QUERY);
+    xField2Props->setPropertyValue("Content", uno::makeAny(OUString("New Custom XML Value")));
+
+    // Second field: content from extended properties
+    uno::Reference<text::XTextField> xField3(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
+    // Check field value (it should be value from data source) and set new
+    CPPUNIT_ASSERT_EQUAL(OUString("True Extended Property Value"), xField3->getPresentation(false));
+    uno::Reference<beans::XPropertySet> xField3Props(xField3, uno::UNO_QUERY);
+    xField3Props->setPropertyValue("Content", uno::makeAny(OUString("New Extended Property Value")));
+
+    // Save and check saved data
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+    xmlDocUniquePtr pXmlCustomPropsDoc = parseExport("customXml/item1.xml");
+    CPPUNIT_ASSERT(pXmlCustomPropsDoc);
+    // FIXME: strange it won't run simple /employees/employee/name xpath query. Does not like namespaces?
+    assertXPathContent(pXmlCustomPropsDoc, "//*/*[local-name()='name']", "New Custom XML Value");
+
+    xmlDocUniquePtr pXmlAppPropsDoc = parseExport("docProps/app.xml");
+    CPPUNIT_ASSERT(pXmlAppPropsDoc);
+    // TODO: extended properties are not written yet
+    assertXPathContent(pXmlAppPropsDoc, "//*/*[local-name()='Company']", "True Extended Property Value");
+
+    xmlDocUniquePtr pXmlCorePropsDoc = parseExport("docProps/core.xml");
+    CPPUNIT_ASSERT(pXmlCorePropsDoc);
+    // TODO: core properties are not written yet
+    assertXPathContent(pXmlCorePropsDoc, "/cp:coreProperties/dc:creator", "True Core Property Value");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
