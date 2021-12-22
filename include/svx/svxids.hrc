@@ -430,6 +430,10 @@ class SdrAngleItem;
 #define SID_ATTR_TEXTCOLUMNS_NUMBER                     ( SID_SVX_START + 340 )
 #define SID_ATTR_TEXTCOLUMNS_SPACING                    ( SID_SVX_START + 341 )
 
+#define SID_ATTR_COLOR_THEME_INDEX                      ( SID_SVX_START + 342 )
+#define SID_ATTR_COLOR_LUM_MOD                          ( SID_SVX_START + 343 )
+#define SID_ATTR_COLOR_LUM_OFF                          ( SID_SVX_START + 344 )
+
 #define SID_SB_CONNECTIONPOOLING                        ( SID_SVX_START + 348 )
 #define SID_SB_DBREGISTEROPTIONS                        ( SID_SVX_START + 349 )
 #define SID_BMPMASK                                     ( SID_SVX_START + 350 )
