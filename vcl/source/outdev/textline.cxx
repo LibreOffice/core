@@ -730,7 +730,7 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
     if( mbInitClipRegion )
         InitClipRegion();
 
-    pLayout->DrawText( *mpGraphics );
+    pLayout->DrawText( *mpGraphics, false );
 
     Pop();
 

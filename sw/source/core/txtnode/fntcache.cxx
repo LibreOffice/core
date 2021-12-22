@@ -1900,7 +1900,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 aGlyphsKey = SwTextGlyphsKey{ &rInf.GetOut(), *pStr, nTmpIdx, nLen };
                 pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey);
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray,
-                                             nTmpIdx , nLen, SalLayoutFlags::NONE, pGlyphs );
+                                             nTmpIdx , nLen, SalLayoutFlags::NONE, pGlyphs,
+                                             rInf.GetShell()->GetViewOptions()->IsWithoutHintingInTextDirection() );
                 if (bBullet)
                 {
                     rInf.GetOut().Push();
