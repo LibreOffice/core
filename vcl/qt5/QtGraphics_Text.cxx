@@ -294,7 +294,8 @@ std::unique_ptr<GenericSalLayout> QtGraphics::GetTextLayout(int nFallbackLevel)
     return std::make_unique<QtCommonSalLayout>(*m_pTextStyle[nFallbackLevel]);
 }
 
-void QtGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
+void QtGraphics::DrawTextLayout(const GenericSalLayout& rLayout,
+                                bool /*bWithoutHintingInTextDirection*/)
 {
     const QtFont* pFont = static_cast<const QtFont*>(&rLayout.GetFont());
     assert(pFont);
