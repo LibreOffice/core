@@ -68,6 +68,24 @@
       "message": "Up to you (but this design makes debugging real pain - as seen in tdf#146281, where real failure happens somewhere between one _CheckArgument called from OpenDatabase, and another from (IIRC) runSQL, and we only get the error in those calls, when it\u0027s already late).\n\nI believe that shielding that way is not only wrong for *developers* like myself, but also for *users* who - in case of libraries - are also necessarily developers. But - again, up to you :-)",
       "revId": "c9535db312e7b104d76f956e597e4bbc929bdaf1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0c299ad_dfa584b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2021-12-22T14:53:30Z",
+      "side": 1,
+      "message": "\u003e Up to you (but this design makes debugging real pain - as seen in tdf#146281, where real failure happens somewhere between one _CheckArgument called from OpenDatabase, and another from (IIRC) runSQL, and we only get the error in those calls, when it\u0027s already late).\n\u003e \n\u003e I believe that shielding that way is not only wrong for *developers* like myself, but also for *users* who - in case of libraries - are also necessarily developers. But - again, up to you :-)\n\nI understand your viewpoint. It is correct as long as you\u0027re debugging the library. The user has to debug his own code and stick there.\nBTW when the provided argument is wrong, he receives a very detailed explanation about the error he made.",
+      "parentUuid": "c7469329_8bd90f93",
+      "revId": "c9535db312e7b104d76f956e597e4bbc929bdaf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
