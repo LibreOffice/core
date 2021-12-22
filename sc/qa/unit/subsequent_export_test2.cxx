@@ -146,6 +146,7 @@ public:
     void testTdf133595();
     void testTdf134769();
     void testTdf106181();
+    void testTdf145057();
     void testTdf105272();
     void testTdf118990();
     void testTdf121612();
@@ -259,6 +260,7 @@ public:
     CPPUNIT_TEST(testTdf133595);
     CPPUNIT_TEST(testTdf134769);
     CPPUNIT_TEST(testTdf106181);
+    CPPUNIT_TEST(testTdf145057);
     CPPUNIT_TEST(testTdf105272);
     CPPUNIT_TEST(testTdf118990);
     CPPUNIT_TEST(testTdf121612);
@@ -1217,6 +1219,19 @@ void ScExportTest2::testTdf106181()
         "hidden", "0");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf145057()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf145057.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xDocSh = saveAndReload(xDocSh.get(), FORMAT_XLSX);
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                     "xl/tables/table1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//x:colorFilter", "dxfId", "1");
 }
 
 void ScExportTest2::testTdf105272()
