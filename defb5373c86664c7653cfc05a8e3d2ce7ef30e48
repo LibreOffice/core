@@ -16,6 +16,24 @@
       "message": "Oh boy, this leads to lots of collisions :-)\n\nI am just about to use some private time to do a bigger general change: Separate BasePrimitive2D C++ implementation from UNO API completely. That would make Primitive2DContainer unnecessary, UNO API object connected to BasePrimitive2D only on demand - so, rarely.\nThe idea is - due to UNO API being used, but not too much - to change all that stuff to shared_ptr \u0026\u0026 shared_ptr\u003cvector\u003cPrimitive2D\u003e\u003e. Only if needed you can get an UNO API XReference for XPrimitive2D to hand around \u0026 do UNO API stuff as up to now.\nAlso included a static method at BasePrimitive2D to return to the C++ implementation class anytime and use the instances directly...\nThis was intended to avoid uno sequences for now effectively, but also to allow eventually easier addition of a visitor concept just on the C++ implementation side.\nI am pretty far with it, so maybe I can show you the changed implementation of BasePri8mitive2D soon - I would also need help, tipps \u0026 reviews as soon as it\u0027s stable, plus we will need to change the implementations of existing primitives \u0026 renderers/processors. I think it will be worth it :-)\n\nI would *not* move primitive stuff to vcl - it looks promising, but as soon as primitive stuff is used in vcl it will mix up stuff, make vcl not better and compromise the primitive concept. All necessary can be done in drawinglayer as I see it...",
       "revId": "defb5373c86664c7653cfc05a8e3d2ce7ef30e48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95639807_44c94004",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-12-22T00:15:45Z",
+      "side": 1,
+      "message": "\u003e Oh boy, this leads to lots of collisions :-)\n\u003e \n\u003e I am just about to use some private time to do a bigger general change: Separate BasePrimitive2D C++ implementation from UNO API completely. That would make Primitive2DContainer unnecessary, UNO API object connected to BasePrimitive2D only on demand - so, rarely.\n\u003e The idea is - due to UNO API being used, but not too much - to change all that stuff to shared_ptr \u0026\u0026 shared_ptr\u003cvector\u003cPrimitive2D\u003e\u003e. Only if needed you can get an UNO API XReference for XPrimitive2D to hand around \u0026 do UNO API stuff as up to now.\n\u003e Also included a static method at BasePrimitive2D to return to the C++ implementation class anytime and use the instances directly...\n\u003e This was intended to avoid uno sequences for now effectively, but also to allow eventually easier addition of a visitor concept just on the C++ implementation side.\n\u003e I am pretty far with it, so maybe I can show you the changed implementation of BasePri8mitive2D soon - I would also need help, tipps \u0026 reviews as soon as it\u0027s stable, plus we will need to change the implementations of existing primitives \u0026 renderers/processors. I think it will be worth it :-)\n\nThis sounds promising. Please do one change at a time and push to gerrit for review. IMHO the only thing that needs UNO in drawinglayer is a wrapper to pass a container of primitives around - nothing else makes sense for usage through UNO. \n\n\u003e I would *not* move primitive stuff to vcl - it looks promising, but as soon as primitive stuff is used in vcl it will mix up stuff, make vcl not better and compromise the primitive concept. All necessary can be done in drawinglayer as I see it...\n\nThis is why I instead separated the drawinglayer into 2 libraries - one would serve as core implementation and interfaces and wouldn\u0027t depend on VCL (so it can be freely used there), the other part would be the rest. The minimum implementation is in [1], we can easily move needed classes to core if necessary. \n\n[1] https://gerrit.libreoffice.org/c/core/+/127286",
+      "parentUuid": "8f9f9501_428f764f",
+      "revId": "defb5373c86664c7653cfc05a8e3d2ce7ef30e48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

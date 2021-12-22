@@ -34,6 +34,24 @@
       "parentUuid": "df5fa7b3_37d4f1d8",
       "revId": "bfb06654031046dadaef98f17ed98b23842416b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90ea80e8_6178ada1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-12-22T00:15:45Z",
+      "side": 1,
+      "message": "\u003e I\u0027m happy to wait a bit if you\u0027re ready to push that\n\nSure, I didn\u0027t plan to push this yet because I didn\u0027t change anything that would need this yet. I\u0027ll check it up and prepare the patch.\n\n\u003e My personal opininion is that drawinglayer is so tied into graphics we should just move all of it into vcl.\n\u003e \n\u003e This patch is (from my perspective) a compromise solution.\n\nIt is true that drawinglayer is tied to graphics in vcl, but ideally the core implementation and interfaces should be independent. There are other dependency loops - for example vcl \u003c-\u003e svgio (probably emfio too), which are patched-around in vcl with UNO. If the drawinglayer core and interfaces are nicely abstracted then there wouldn\u0027t be such no problem as svgio doesn\u0027t need anything vcl specific (ideally, now it needs at least BitmapEx and co).",
+      "parentUuid": "08e1c2c1_34409169",
+      "revId": "bfb06654031046dadaef98f17ed98b23842416b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
