@@ -975,66 +975,66 @@ bool XMLSectionExport::ExportIndexTemplate(
     OSL_ENSURE(eType <= TEXT_SECTION_TYPE_BIBLIOGRAPHY, "illegal index type");
     OSL_ENSURE(nOutlineLevel >= 0, "illegal outline level");
 
-    if ( (eType >= TEXT_SECTION_TYPE_TOC) &&
-         (eType <= TEXT_SECTION_TYPE_BIBLIOGRAPHY) &&
-         (nOutlineLevel >= 0) )
+    if ( (eType < TEXT_SECTION_TYPE_TOC) ||
+         (eType > TEXT_SECTION_TYPE_BIBLIOGRAPHY) ||
+         (nOutlineLevel < 0) )
+        return true;
+
+    // get level name and level attribute name from aLevelNameMap;
+    const XMLTokenEnum eLevelAttrName(
+        aTypeLevelAttrMap[eType-TEXT_SECTION_TYPE_TOC]);
+    const XMLTokenEnum eLevelName(
+        aTypeLevelNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel]);
+
+    // #92124#: some old documents may be broken, then they have
+    // too many template levels; we need to recognize this and
+    // export only as many as is legal for the respective index
+    // type. To do this, we simply return an error flag, which
+    // will then abort further template level exports.
+    OSL_ENSURE(XML_TOKEN_INVALID != eLevelName, "can't find level name");
+    if ( XML_TOKEN_INVALID == eLevelName )
     {
-        // get level name and level attribute name from aLevelNameMap;
-        const XMLTokenEnum eLevelAttrName(
-            aTypeLevelAttrMap[eType-TEXT_SECTION_TYPE_TOC]);
-        const XMLTokenEnum eLevelName(
-            aTypeLevelNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel]);
+        // output level not found? Then end of templates! #91214#
+        return false;
+    }
 
-        // #92124#: some old documents may be broken, then they have
-        // too many template levels; we need to recognize this and
-        // export only as many as is legal for the respective index
-        // type. To do this, we simply return an error flag, which
-        // will then abort further template level exports.
-        OSL_ENSURE(XML_TOKEN_INVALID != eLevelName, "can't find level name");
-        if ( XML_TOKEN_INVALID == eLevelName )
-        {
-            // output level not found? Then end of templates! #91214#
-            return false;
-        }
+    // output level name
+    if ((XML_TOKEN_INVALID != eLevelName) && (XML_TOKEN_INVALID != eLevelAttrName))
+    {
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT,
+                                      GetXMLToken(eLevelAttrName),
+                                      GetXMLToken(eLevelName));
+    }
 
-        // output level name
-        if ((XML_TOKEN_INVALID != eLevelName) && (XML_TOKEN_INVALID != eLevelAttrName))
-        {
-            GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                          GetXMLToken(eLevelAttrName),
-                                          GetXMLToken(eLevelName));
-        }
+    // paragraph level style name
+    const char* pPropName(
+        aTypeLevelStylePropNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel]);
+    OSL_ENSURE(nullptr != pPropName, "can't find property name");
+    if (nullptr != pPropName)
+    {
+        Any aAny = rPropertySet->getPropertyValue(
+            OUString::createFromAscii(pPropName));
+        OUString sParaStyleName;
+        aAny >>= sParaStyleName;
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT,
+                                 XML_STYLE_NAME,
+                                 GetExport().EncodeStyleName( sParaStyleName ));
+    }
 
-        // paragraph level style name
-        const char* pPropName(
-            aTypeLevelStylePropNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel]);
-        OSL_ENSURE(nullptr != pPropName, "can't find property name");
-        if (nullptr != pPropName)
-        {
-            Any aAny = rPropertySet->getPropertyValue(
-                OUString::createFromAscii(pPropName));
-            OUString sParaStyleName;
-            aAny >>= sParaStyleName;
-            GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                     XML_STYLE_NAME,
-                                     GetExport().EncodeStyleName( sParaStyleName ));
-        }
+    // template element
+    const XMLTokenEnum eElementName(
+        aTypeElementNameMap[eType - TEXT_SECTION_TYPE_TOC]);
+    SvXMLElementExport aLevelTemplate(GetExport(),
+                                      XML_NAMESPACE_TEXT,
+                                      GetXMLToken(eElementName),
+                                      true, true);
 
-        // template element
-        const XMLTokenEnum eElementName(
-            aTypeElementNameMap[eType - TEXT_SECTION_TYPE_TOC]);
-        SvXMLElementExport aLevelTemplate(GetExport(),
-                                          XML_NAMESPACE_TEXT,
-                                          GetXMLToken(eElementName),
-                                          true, true);
-
-        // export sequence
-        for(auto& rValue : rValues)
-        {
-            ExportIndexTemplateElement(
-                eType,  //i90246
-                rValue);
-        }
+    // export sequence
+    for(auto& rValue : rValues)
+    {
+        ExportIndexTemplateElement(
+            eType,  //i90246
+            rValue);
     }
 
     return true;

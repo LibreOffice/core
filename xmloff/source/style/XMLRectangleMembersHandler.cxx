@@ -49,29 +49,27 @@ bool XMLRectangleMembersHdl::importXML(
 
     sal_Int32 nValue;
 
-    if (rUnitConverter.convertMeasureToCore( nValue, rStrImpValue ))
-    {
-        switch( mnType )
-        {
-            case XML_TYPE_RECTANGLE_LEFT :
-                aRect.X = nValue;
-                break;
-            case XML_TYPE_RECTANGLE_TOP :
-                aRect.Y = nValue;
-                break;
-            case XML_TYPE_RECTANGLE_WIDTH :
-                aRect.Width = nValue;
-                break;
-            case XML_TYPE_RECTANGLE_HEIGHT :
-                aRect.Height = nValue;
-                break;
-        }
+    if (!rUnitConverter.convertMeasureToCore( nValue, rStrImpValue ))
+        return false;
 
-        rValue <<= aRect;
-        return true;
+    switch( mnType )
+    {
+        case XML_TYPE_RECTANGLE_LEFT :
+            aRect.X = nValue;
+            break;
+        case XML_TYPE_RECTANGLE_TOP :
+            aRect.Y = nValue;
+            break;
+        case XML_TYPE_RECTANGLE_WIDTH :
+            aRect.Width = nValue;
+            break;
+        case XML_TYPE_RECTANGLE_HEIGHT :
+            aRect.Height = nValue;
+            break;
     }
 
-    return false;
+    rValue <<= aRect;
+    return true;
 }
 
 bool XMLRectangleMembersHdl::exportXML(

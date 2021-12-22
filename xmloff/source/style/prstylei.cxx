@@ -545,42 +545,41 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
 bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
     const OUString& rFillStyleTag) const
 {
-    if(!maProperties.empty() && rFillStyleTag.getLength())
+    if(maProperties.empty() || !rFillStyleTag.getLength())
+        return false;
+
+    // no & to avoid non-obvious UAF due to the 2nd temp Reference
+    const rtl::Reference<XMLPropertySetMapper> rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
+    if(!rMapper)
+        return false;
+
+    for(const auto& a : maProperties)
     {
-        // no & to avoid non-obvious UAF due to the 2nd temp Reference
-        const rtl::Reference<XMLPropertySetMapper> rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
-
-        if(rMapper.is())
+        if(a.mnIndex != -1)
         {
-            for(const auto& a : maProperties)
+            const OUString& rPropName = rMapper->GetEntryAPIName(a.mnIndex);
+
+            if(rPropName == rFillStyleTag)
             {
-                if(a.mnIndex != -1)
+                FillStyle eFillStyle(FillStyle_NONE);
+
+                if(a.maValue >>= eFillStyle)
                 {
-                    const OUString& rPropName = rMapper->GetEntryAPIName(a.mnIndex);
+                    // okay, type was good, FillStyle is set
+                }
+                else
+                {
+                    // also try an int (see XFillStyleItem::PutValue)
+                    sal_Int32 nFillStyle(0);
 
-                    if(rPropName == rFillStyleTag)
+                    if(a.maValue >>= nFillStyle)
                     {
-                        FillStyle eFillStyle(FillStyle_NONE);
-
-                        if(a.maValue >>= eFillStyle)
-                        {
-                            // okay, type was good, FillStyle is set
-                        }
-                        else
-                        {
-                            // also try an int (see XFillStyleItem::PutValue)
-                            sal_Int32 nFillStyle(0);
-
-                            if(a.maValue >>= nFillStyle)
-                            {
-                                eFillStyle = static_cast< FillStyle >(nFillStyle);
-                            }
-                        }
-
-                        // we found the entry, check it
-                        return FillStyle_NONE != eFillStyle;
+                        eFillStyle = static_cast< FillStyle >(nFillStyle);
                     }
                 }
+
+                // we found the entry, check it
+                return FillStyle_NONE != eFillStyle;
             }
         }
     }

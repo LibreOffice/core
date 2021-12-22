@@ -58,24 +58,24 @@ inline bool getBoolAttr(
     sal_Int32 nUid )
 {
     OUString aValue( xAttributes->getValueByUidName( nUid, rAttrName ) );
-    if (!aValue.isEmpty())
+    if (aValue.isEmpty())
+        return false;
+
+    if ( aValue == "true" )
     {
-        if ( aValue == "true" )
-        {
-            *pRet = true;
-            return true;
-        }
-        else if ( aValue == "false" )
-        {
-            *pRet = false;
-            return true;
-        }
-        else
-        {
-            throw css::xml::sax::SAXException(
-                rAttrName + ": no boolean value (true|false)!",
-                css::uno::Reference<css::uno::XInterface>(), css::uno::Any() );
-        }
+        *pRet = true;
+        return true;
+    }
+    else if ( aValue == "false" )
+    {
+        *pRet = false;
+        return true;
+    }
+    else
+    {
+        throw css::xml::sax::SAXException(
+            rAttrName + ": no boolean value (true|false)!",
+            css::uno::Reference<css::uno::XInterface>(), css::uno::Any() );
     }
     return false;
 }

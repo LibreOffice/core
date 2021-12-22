@@ -122,26 +122,26 @@ ErrCode XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
         {
         }
     }
-    if (hasEvents())
+    if (!hasEvents())
+        return ERRCODE_NONE;
+
+    GetDocHandler()->startDocument();
+
+    addChaffWhenEncryptedStorage();
+
+    addNamespaces();
+
     {
-        GetDocHandler()->startDocument();
+        // container element
+        SvXMLElementExport aContainerElement(
+            *this, XML_NAMESPACE_OOO, XML_AUTO_TEXT_EVENTS,
+            true, true);
 
-        addChaffWhenEncryptedStorage();
-
-        addNamespaces();
-
-        {
-            // container element
-            SvXMLElementExport aContainerElement(
-                *this, XML_NAMESPACE_OOO, XML_AUTO_TEXT_EVENTS,
-                true, true);
-
-            exportEvents();
-        }
-
-        // and close document again
-        GetDocHandler()->endDocument();
+        exportEvents();
     }
+
+    // and close document again
+    GetDocHandler()->endDocument();
 
     return ERRCODE_NONE;
 }
