@@ -13,21 +13,22 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-03-07 12:37:18 using:
- ./bin/update_pch drawinglayer drawinglayercore --cutoff=4 --exclude:system --exclude:module --exclude:local
+ Generated on 2021-12-23 08:57:20 using:
+ ./bin/update_pch drawinglayer drawinglayercore --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./drawinglayer/inc/pch/precompiled_drawinglayercore.hxx "make drawinglayer.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
+#include <deque>
 #include <ostream>
 #include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
-#include <sal/config.h>
 #include <sal/types.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
@@ -40,7 +41,12 @@
 #include <basegfx/vector/b2dvector.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
+#include <drawinglayer/primitive2d/Tools.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
