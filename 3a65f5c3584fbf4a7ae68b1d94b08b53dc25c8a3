@@ -85,6 +85,23 @@
       "message": "the same match is done earlier, so the assembly of the value with either just the variable or the space could be done while collecting the variables, making this whole block just printing the vars to the file. print $PARSED join(\"\\n\", @export) (if using an array instead of the hash)",
       "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c08c828_78ec2d24",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 14598,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-22T16:39:13Z",
+      "side": 1,
+      "message": "alternatively could use \nAC_SUBST_FILE([CONFIG_PARSED_IMPORTED])\nCONFIG_PARSED_IMPORTED\u003dconfig_host_parsed.mk\n\nOr just a \"include config_host_parsed.mk\" that doesn\u0027t require any further replacements.\n\nanother option is to make it a combined statement in AC_CONFIG_FILES\nconfig_host.mk:config_host.mk.in:config_host_parsed.mk.in\n(or in reversed order)",
+      "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
