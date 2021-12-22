@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6323ed4e_af292b4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-12-22T16:14:29Z",
+      "side": 1,
+      "message": "i just saw a crash in a jenkins build on libreoffice-7-3 and caolan said this is related.\n\nit doesn\u0027t cherry pick to -7-2 without conflict though so not sure if it\u0027s needed.",
+      "revId": "debd871668cb41c22d5be0e595a79d749342056e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
