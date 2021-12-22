@@ -1491,6 +1491,20 @@ ScDBData* ScDBCollection::GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab )
     return pDoc->GetAnonymousDBData(nTab);  // "unbenannt"/"unnamed" only if nothing else
 }
 
+std::vector<ScDBData*> ScDBCollection::GetAllDBsFromTab(SCTAB nTab)
+{
+    std::vector<ScDBData*> pTabData;
+    for (const auto& rxNamedDB : maNamedDBs)
+    {
+        if (rxNamedDB->GetTab() == nTab)
+            pTabData.emplace_back(rxNamedDB.get());
+    }
+    auto pAnonDBData = pDoc->GetAnonymousDBData(nTab);
+    if (pAnonDBData)
+        pTabData.emplace_back(pAnonDBData);
+    return pTabData;
+}
+
 bool ScDBCollection::empty() const
 {
     return maNamedDBs.empty() && maAnonDBs.empty();

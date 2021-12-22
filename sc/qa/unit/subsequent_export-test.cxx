@@ -144,6 +144,7 @@ public:
 
     void testFormulaReferenceXLS();
     void testSheetProtectionXLSX();
+    void testTdf145057();
     void testSheetProtectionXLSB();
 
     void testCellBordersXLS();
@@ -296,6 +297,7 @@ public:
 
     CPPUNIT_TEST(testFormulaReferenceXLS);
     CPPUNIT_TEST(testSheetProtectionXLSX);
+    CPPUNIT_TEST(testTdf145057);
     CPPUNIT_TEST(testSheetProtectionXLSB);
     CPPUNIT_TEST(testCellBordersXLS);
     CPPUNIT_TEST(testCellBordersXLSX);
@@ -2259,6 +2261,17 @@ void ScExportTest::testSheetProtectionXLSX()
     CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) );
     CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) );
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf145057()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf145057.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xDocSh = saveAndReload(xDocSh.get(), FORMAT_XLSX);
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                     "xl/tables/table1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "//x:colorFilter", "dxfId", "1");
 }
 
 void ScExportTest::testSheetProtectionXLSB()

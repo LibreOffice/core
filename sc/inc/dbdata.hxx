@@ -323,6 +323,7 @@ public:
     const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     ScDBData* GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
+    std::vector<ScDBData*> GetAllDBsFromTab(SCTAB nTab);
 
     void RefreshDirtyTableColumnNames();
 
