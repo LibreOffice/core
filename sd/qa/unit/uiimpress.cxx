@@ -19,6 +19,7 @@
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -42,6 +43,7 @@
 #include <svl/stritem.hxx>
 #include <undo/undomanager.hxx>
 #include <vcl/scheduler.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
@@ -816,6 +818,66 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf142589)
     pImpressDocument->GetDoc()->getPresentationSettings().mbStartCustomShow = true;
     sd::slideshowhelp::ShowSlideShow(aRequest, *pImpressDocument->GetDoc());
     CPPUNIT_ASSERT_EQUAL(false, pImpressDocument->GetDoc()->getPresentationSettings().mbCustomShow);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
+{
+    // Given an Impress document with a shape, with its text selected:
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    {
+        uno::Reference<text::XSimpleText> xText = xShape->getText();
+        xText->insertString(xText->getStart(), "test", false);
+    }
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionSupplier> xController(xModel->getCurrentController(),
+                                                         uno::UNO_QUERY);
+    xController->select(uno::makeAny(xShape));
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Text", {});
+    Scheduler::ProcessEventsToIdle();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // When picking a theme color on the sidebar:
+    uno::Sequence<beans::PropertyValue> aColorArgs = {
+        comphelper::makePropertyValue("Color", static_cast<sal_Int32>(0xdae3f3)), // 80% light blue
+        comphelper::makePropertyValue("ColorThemeIndex", static_cast<sal_Int16>(4)), // accent 1
+        comphelper::makePropertyValue("ColorLumMod", static_cast<sal_Int16>(2000)),
+        comphelper::makePropertyValue("ColorLumOff", static_cast<sal_Int16>(8000)),
+    };
+    dispatchCommand(mxComponent, ".uno:Color", aColorArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure the theme "metadata" is set in the document model:
+    pView->EndTextEditCurrentView();
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    uno::Reference<container::XEnumerationAccess> xShapeParaAccess(xShape, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xPara(
+        xShapeParaAccess->createEnumeration()->nextElement(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
+                                                 uno::UNO_QUERY);
+    sal_Int16 nCharColorTheme{};
+    xPortion->getPropertyValue("CharColorTheme") >>= nCharColorTheme;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : -1
+    // i.e. the theme index (accent1) was not set.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), nCharColorTheme);
+    sal_Int16 nCharColorLumMod{};
+    xPortion->getPropertyValue("CharColorLumMod") >>= nCharColorLumMod;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2000), nCharColorLumMod);
+    sal_Int16 nCharColorLumOff{};
+    xPortion->getPropertyValue("CharColorLumOff") >>= nCharColorLumOff;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(8000), nCharColorLumOff);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
