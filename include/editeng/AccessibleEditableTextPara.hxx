@@ -23,8 +23,7 @@
 #include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -51,7 +50,7 @@ namespace accessibility { class AccessibleImageBullet; }
 
 namespace accessibility
 {
-    typedef ::cppu::WeakComponentImplHelper< css::accessibility::XAccessible,
+    typedef ::comphelper::WeakComponentImplHelper< css::accessibility::XAccessible,
                                      css::accessibility::XAccessibleContext,
                                      css::accessibility::XAccessibleComponent,
                                      css::accessibility::XAccessibleEditableText,
@@ -63,7 +62,7 @@ namespace accessibility
 
     /** This class implements the actual text paragraphs for the EditEngine/Outliner UAA
      */
-    class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) AccessibleEditableTextPara final : public ::cppu::BaseMutex, public AccessibleTextParaInterfaceBase, private ::comphelper::OCommonAccessibleText
+    class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) AccessibleEditableTextPara final : public AccessibleTextParaInterfaceBase, private ::comphelper::OCommonAccessibleText
     {
 
         // override OCommonAccessibleText methods
