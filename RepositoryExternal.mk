@@ -17,15 +17,79 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-# this file describes all the external libraries
-# depending on the configure options these may be taken from the system,
-# or the internal/bundled copy may be built.
-
-# for every external, a function gb_LinkTarget__use_FOO is defined,
+# This file describes all the external libraries.
+# Depending on the configure options these may be taken from the system,
+# the internal/bundled copy may be built or the feature disabled.
+#
+# For every external, a function gb_LinkTarget__use_foo is defined,
 # once for the system case, once for the internal case.
-
-# in the system case, no libraries should be registered, but the target-local
+#
+# In the system case, no libraries should be registered, but the target-local
 # variable LIBS should be set to FOO_LIBS, and INCLUDES to FOO_CFLAGS.
+# If an external can't be disabled, drop the ENABLE_FOO and !ENABLE_FOO block.
+# Same for the SYSTEM_FOO block, if there is just internal library support.
+#
+# For the matching configure.ac M4 macro see m4/libo_externals.m4
+#
+# FWIW, there is currently the redundancy of
+#   (SYSTEM_FOO,TRUE) == (,$(filter FOO,$(BUILD_TYPE)))
+#
+# The comments should indicate the start and end of the condition. The else
+# should always have a !CONDITION comment for the block start.
+#
+# The following examples shows the suggested layout. It feels like it should
+# use some eval'ed make template, but the variance is simply too large.
+
+#################################
+# Start of FOO example
+#################################
+
+ifeq ($(ENABLE_FOO),TRUE)
+ifeq ($(SYSTEM_FOO),TRUE)
+
+gb_ExternalProject__use_foo :=
+
+define gb_LinkTarget__use_foo
+$(call gb_LinkTarget_set_include,$(1),\
+    $(FOO_CFLAGS) \
+    $$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_libraries,$(1),\
+    foo \
+)
+endef
+
+else # !SYSTEM_FOO
+
+define gb_ExternalProject__use_foo
+$(call gb_ExternalProject_use_external_project,$(1),foo)
+endef
+
+define gb_LinkTarget__use_foo
+$(call gb_LinkTarget_set_include,$(1),\
+    -I$(call gb_UnpackedTarball_get_dir,foo/include) \
+    $$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),$(FOO_LIBS))
+endef
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
+    $(if ,foo) \
+))
+
+endif # !SYSTEM_FOO
+else # !ENABLE_FOO
+
+gb_ExternalProject__use_foo :=
+gb_LinkTarget__use_foo :=
+
+endif # !ENABLE_FOO
+
+#################################
+# End of FOO example
+#################################
 
 
 ifeq ($(CPUNAME),X86_64)
@@ -120,7 +184,7 @@ endef
 
 endif
 
-ifneq ($(ENABLE_SKIA),)
+ifeq ($(ENABLE_SKIA),TRUE)
 define gb_LinkTarget__use_skia
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,skia)/include/core \
@@ -144,7 +208,13 @@ endef
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
         skia \
 ))
-endif
+
+else # !ENABLE_SKIA
+
+gb_LinkTarget__use_skia :=
+
+endif # !ENABLE_SKIA
+
 
 ifeq (SANE,$(filter SANE,$(BUILD_TYPE)))
 
@@ -1213,7 +1283,9 @@ endif # !MACOSX, !WNT
 
 endif # !SYSTEM_CAIRO
 
-ifneq ($(SYSTEM_FREETYPE),)
+
+ifeq ($(ENABLE_FREETYPE),TRUE)
+ifeq ($(SYSTEM_FREETYPE),TRUE)
 
 define gb_LinkTarget__use_freetype_headers
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1225,7 +1297,7 @@ endef
 
 gb_ExternalProject__use_freetype :=
 
-else
+else # !SYSTEM_FREETYPE
 
 define gb_LinkTarget__use_freetype_headers
 $(call gb_LinkTarget_use_external_project,$(1),freetype)
@@ -1241,7 +1313,7 @@ $(call gb_ExternalProject_use_external_project,$(1),freetype)
 
 endef
 
-endif # SYSTEM_FREETYPE
+endif # !SYSTEM_FREETYPE
 
 define gb_LinkTarget__use_freetype
 $(call gb_LinkTarget_use_external,$(1),freetype_headers)
@@ -1249,7 +1321,17 @@ $(call gb_LinkTarget_add_libs,$(1),$(FREETYPE_LIBS))
 
 endef
 
-ifneq ($(SYSTEM_FONTCONFIG),)
+else # !ENABLE_FREETYPE
+
+gb_LinkTarget__use_freetype :=
+gb_LinkTarget__use_freetype_headers :=
+gb_ExternalProject__use_freetype :=
+
+endif # !ENABLE_FREETYPE
+
+
+ifeq ($(ENABLE_FONTCONFIG),TRUE)
+ifeq ($(SYSTEM_FONTCONFIG),TRUE)
 
 define gb_LinkTarget__use_fontconfig
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1284,6 +1366,14 @@ $(call gb_ExternalProject_use_external_project,$(1),fontconfig)
 endef
 
 endif # SYSTEM_FONTCONFIG
+
+else # !ENABLE_FONTCONFIG
+
+gb_LinkTarget__use_fontconfig :=
+gb_ExternalProject__use_fontconfig :=
+
+endif # !ENABLE_FONTCONFIG
+
 
 ifneq ($(SYSTEM_GRAPHITE),)
 
@@ -2624,7 +2714,8 @@ endef
 endif # !SYSTEM_LIBPNG
 
 
-ifneq ($(SYSTEM_CURL),)
+ifeq ($(ENABLE_CURL),TRUE)
+ifeq ($(SYSTEM_CURL),TRUE)
 
 define gb_LinkTarget__use_curl
 $(call gb_LinkTarget_add_defs,$(1),\
@@ -2663,7 +2754,13 @@ endif
 
 endef
 
-endif # SYSTEM_CURL
+endif # !SYSTEM_CURL
+else # !ENABLE_CURL
+
+gb_LinkTarget__use_curl :=
+
+endif # !ENABLE_CURL
+
 
 ifeq ($(ENABLE_VALGRIND),TRUE)
 
@@ -2741,9 +2838,14 @@ endef
 
 endif # SYSTEM_POPPLER
 
-endif # ENABLE_POPPLER
+else # !ENABLE_POPPLER
+
+gb_LinkTarget__use_poppler :=
+
+endif # !ENABLE_POPPLER
 
 
+ifeq ($(ENABLE_CLUCENE),TRUE)
 ifneq ($(SYSTEM_CLUCENE),)
 
 define gb_LinkTarget__use_clucene
@@ -2783,6 +2885,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
 ))
 
 endif # SYSTEM_CLUCENE
+else # !ENABLE_CLUCENE
+
+gb_LinkTarget__use_clucene :=
+
+endif # !ENABLE_CLUCENE
+
 
 define gb_LinkTarget__use_gobject
 $(call gb_LinkTarget_add_libs,$(1),\
@@ -2814,8 +2922,9 @@ endef
 
 endif # SYSTEM_HSQLDB
 
+
 ifeq ($(ENABLE_LDAP),TRUE)
-ifneq ($(SYSTEM_OPENLDAP),)
+ifeq ($(SYSTEM_OPENLDAP),TRUE)
 
 define gb_LinkTarget__use_openldap
 
@@ -2843,14 +2952,21 @@ $(call gb_LinkTarget_add_libs,$(1), \
 )
 
 endef
-endif
+
+endif # !SYSTEM_OPENLDAP
 
 define gb_ExternalProject__use_openldap
 $(call gb_ExternalProject_use_external_project,$(1),openldap)
 
 endef
 
-endif # SYSTEM_OPENLDAP
+else # !ENABLE_LDAP
+
+gb_LinkTarget__use_openldap :=
+gb_ExternalProject__use_openldap :=
+
+endif # !ENABLE_LDAP
+
 
 ifneq ($(SYSTEM_LIBTOMMATH),)
 
@@ -2883,9 +2999,9 @@ $(call gb_ExternalProject_use_external_project,$(1),libtommath)
 
 endef
 
-ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 
-ifneq ($(SYSTEM_FIREBIRD),)
+ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
+ifeq ($(SYSTEM_FIREBIRD),TRUE)
 
 define gb_LinkTarget__use_libfbembed
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2901,9 +3017,6 @@ else # !SYSTEM_FIREBIRD
 $(eval $(call gb_Helper_register_packages_for_install,firebirdsdbc,\
 	firebird \
 ))
-
-#$(call gb_LinkTarget__use_libatomic_ops,$(1))
-#$(call gb_LinkTarget__use_libtommath,$(1))
 
 define gb_LinkTarget__use_libfbembed
 $(call gb_LinkTarget_use_package,$(1),firebird)
@@ -2923,18 +3036,12 @@ endif
 
 endef
 
-
-# endef
-
-endif # SYSTEM_FIREBIRD
-
+endif # !SYSTEM_FIREBIRD
 else # !ENABLE_FIREBIRD_SDBC
 
 gb_LinkTarget__use_firebird :=
-# gb_LinkTarget__use_atomic_ops :=
-# gb_LinkTarget__use_libtommath :=
 
-endif # ENABLE_FIREBIRD_SDBC
+endif # !ENABLE_FIREBIRD_SDBC
 
 
 ifneq ($(SYSTEM_POSTGRESQL),)
@@ -3467,11 +3574,15 @@ $(call gb_LinkTarget_use_external_project,$(1),breakpad)
 
 endef
 
-endif # ENABLE_BREAKPAD
+else # !ENABLE_BREAKPAD
+
+gb_LinkTarget__use_breakpad :=
+
+endif # !ENABLE_BREAKPAD
+
 
 ifeq ($(ENABLE_GPGMEPP),TRUE)
-
-ifneq ($(SYSTEM_GPGMEPP),)
+ifeq ($(SYSTEM_GPGMEPP),TRUE)
 
 gb_ExternalProject__use_gpgmepp:=
 gb_ExternalProject__use_libassuan:=
@@ -3489,7 +3600,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-else ifneq ($(filter GPGMEPP,$(BUILD_TYPE)),) # NON-SYSTEM_GPGME
+else # !SYSTEM_GPGMEPP
 
 define gb_ExternalProject__use_gpgmepp
 $(call gb_ExternalProject_use_external_project,$(1),gpgmepp)
@@ -3555,7 +3666,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
 	gpgmepp \
 ))
 
-endif
+endif # WNT
 
 ifneq ($(filter MACOSX LINUX,$(OS)),)
 
@@ -3583,10 +3694,9 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	libgpg-error \
 ))
 
-endif
+endif # MACOSX LINUX
 
-endif
-
+endif # !SYSTEM_GPGMEPP
 else # !ENABLE_GPGMEPP
 
 gb_ExternalProject__use_gpgmepp :=
@@ -3597,7 +3707,8 @@ gb_LinkTarget__use_gpgmepp :=
 gb_LinkTarget__use_libassuan :=
 gb_LinkTarget__use_libgpg-error :=
 
-endif # ENABLE_GPGMEPP
+endif # !ENABLE_GPGMEPP
+
 
 define gb_LinkTarget__use_dconf
 $(call gb_LinkTarget_set_include,$(1),\
@@ -4155,7 +4266,9 @@ endef
 
 endif # SYSTEM_BOX2D
 
-ifneq ($(SYSTEM_ZXING),)
+
+ifeq ($(ENABLE_ZXING),TRUE)
+ifeq ($(SYSTEM_ZXING),TRUE)
 
 define gb_LinkTarget__use_zxing
 $(call gb_LinkTarget_set_include,$(1),\
@@ -4170,8 +4283,6 @@ endef
 gb_ExternalProject__use_zxing :=
 
 else # !SYSTEM_ZXING
-
-ifneq ($(ENABLE_ZXING),)
 
 define gb_LinkTarget__use_zxing
 $(call gb_LinkTarget_use_unpacked,$(1),zxing)
@@ -4190,15 +4301,12 @@ $(call gb_ExternalProject_use_static_libraries,$(1),zxing)
 
 endef
 
+endif # !SYSTEM_ZXING
 else # !ENABLE_ZXING
 
-define gb_LinkTarget__use_zxing
-endef
+gb_LinkTarget__use_zxing :=
 
-endif # ENABLE_ZXING
-
-endif # SYSTEM_ZXING
-
+endif # !ENABLE_ZXING
 
 
 ifneq ($(SYSTEM_CUCKOO),)
@@ -4229,7 +4337,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
-endif # SYSTEM_CUCKOO
+endif # !SYSTEM_CUCKOO
 
 
 # vim: set noet sw=4 ts=4:

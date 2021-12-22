@@ -17,6 +17,9 @@ dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*
 #  - test_$1: set to no, if the feature shouldn't be tested at all
 #  - test_system_$1: set to no, if the system library should not be used
 #
+# There is currently the AC_SUBST redundancy of
+#   (SYSTEM_$2,TRUE) == (,$(filter $2,$(BUILD_TYPE)))
+#
 AC_DEFUN([libo_CHECK_SYSTEM_MODULE], [
 AC_ARG_WITH(system-$1,
     AS_HELP_STRING([m4_ifnblank([$6],[--without-system-$1],[--with-system-$1])],

@@ -9316,6 +9316,7 @@ dnl libo_CHECK_SYSTEM_MODULE([clucence],[CLUCENE],[liblucence-core]) here
 dnl but the contribs-lib check seems tricky
 AC_MSG_CHECKING([which clucene to use])
 if test "$test_clucene" = yes; then
+    ENABLE_CLUCENE=TRUE
 if test "$with_system_clucene" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CLUCENE=TRUE
@@ -9345,6 +9346,7 @@ fi
 else
     AC_MSG_RESULT([not needed])
 fi
+AC_SUBST(ENABLE_CLUCENE)
 AC_SUBST(SYSTEM_CLUCENE)
 AC_SUBST(CLUCENE_CFLAGS)
 AC_SUBST(CLUCENE_LIBS)
