@@ -221,7 +221,7 @@ LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
 
 double DXFTransform::CalcRotAngle() const
 {
-    return atan2(aMX.fy,aMX.fx)/3.14159265359*180.0;
+    return atan2(aMX.fy,aMX.fx)/M_PI*180.0;
 }
 
 bool DXFTransform::Mirror() const
