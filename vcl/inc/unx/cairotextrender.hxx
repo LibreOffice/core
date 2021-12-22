@@ -36,7 +36,7 @@ protected:
     virtual void                clipRegion(cairo_t* cr) = 0;
 
 public:
-    virtual void                DrawTextLayout(const GenericSalLayout&, const SalGraphics&) override;
+    virtual void                DrawTextLayout(const GenericSalLayout&, const SalGraphics&, bool bWithoutHintingInTextDirection) override;
 };
 
 #endif

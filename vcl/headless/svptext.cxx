@@ -100,9 +100,9 @@ std::unique_ptr<GenericSalLayout> SvpSalGraphics::GetTextLayout(int nFallbackLev
     return m_aTextRenderImpl.GetTextLayout(nFallbackLevel);
 }
 
-void SvpSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
+void SvpSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, bool bWithoutHintingInTextDirection)
 {
-    m_aTextRenderImpl.DrawTextLayout(rLayout, *this);
+    m_aTextRenderImpl.DrawTextLayout(rLayout, *this, bWithoutHintingInTextDirection);
 }
 
 void SvpSalGraphics::SetTextColor( Color nColor )

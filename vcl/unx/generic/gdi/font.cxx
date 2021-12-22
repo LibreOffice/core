@@ -26,9 +26,9 @@
 #include <textrender.hxx>
 #include <sallayout.hxx>
 
-void X11SalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
+void X11SalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, bool bWithoutHintingInTextDirection)
 {
-    mxTextRenderImpl->DrawTextLayout(rLayout, *this);
+    mxTextRenderImpl->DrawTextLayout(rLayout, *this, bWithoutHintingInTextDirection);
 }
 
 FontCharMapRef X11SalGraphics::GetFontCharMap() const
