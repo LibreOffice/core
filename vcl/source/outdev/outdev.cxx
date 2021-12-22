@@ -105,6 +105,7 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     meRasterOp                      = RasterOp::OverPaint;
     mnAntialiasing                  = AntialiasingFlags::NONE;
     meTextLanguage                  = LANGUAGE_SYSTEM;  // TODO: get default from configuration?
+    mbTextRenderModeForResolutionIndependentLayout = false;
     mbLineColor                     = true;
     mbFillColor                     = true;
     mbInitLineColor                 = true;
@@ -345,14 +346,26 @@ void OutputDevice::SetAntialiasing( AntialiasingFlags nMode )
         mnAntialiasing = nMode;
         mbInitFont = true;
 
-        if(mpGraphics)
-        {
+        if (mpGraphics)
             mpGraphics->setAntiAlias(bool(mnAntialiasing & AntialiasingFlags::Enable));
-        }
     }
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetAntialiasing( nMode );
+}
+
+void OutputDevice::SetTextRenderModeForResolutionIndependentLayout(bool bMode)
+{
+    if (mbTextRenderModeForResolutionIndependentLayout!= bMode)
+    {
+        mbTextRenderModeForResolutionIndependentLayout = bMode;
+
+        if (mpGraphics)
+            mpGraphics->setTextRenderModeForResolutionIndependentLayout(bMode);
+    }
+
+    if (mpAlphaVDev)
+        mpAlphaVDev->SetTextRenderModeForResolutionIndependentLayout(bMode);
 }
 
 void OutputDevice::SetDrawMode(DrawModeFlags nDrawMode)

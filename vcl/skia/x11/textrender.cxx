@@ -57,8 +57,22 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
         font.setSkewX(1.0 * -0x4000L / 0x10000L);
     if (rFont.NeedsArtificialBold())
         font.setEmbolden(true);
-    font.setEdging(rFont.GetAntialiasAdvice() ? SkFont::Edging::kAntiAlias
-                                              : SkFont::Edging::kAlias);
+
+    bool bSubpixelPositioning = rGraphics.getTextRenderModeForResolutionIndependentLayoutEnabled();
+    SkFont::Edging ePreferredAliasing
+        = bSubpixelPositioning ? SkFont::Edging::kSubpixelAntiAlias : SkFont::Edging::kAntiAlias;
+    if (bSubpixelPositioning)
+    {
+        font.setSubpixel(true);
+
+        SkFontHinting eHinting = font.getHinting();
+        bool bAllowedHintStyle
+            = eHinting == SkFontHinting::kNone || eHinting == SkFontHinting::kSlight;
+        if (!bAllowedHintStyle)
+            font.setHinting(SkFontHinting::kSlight);
+    }
+
+    font.setEdging(rFont.GetAntialiasAdvice() ? ePreferredAliasing : SkFont::Edging::kAlias);
 
     // Vertical font, use width as "height".
     SkFont verticalFont(font);

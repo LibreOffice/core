@@ -287,8 +287,14 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     }
 
     SkFont font(typeface);
+
+    bool bSubpixelPositioning = mWinParent.getTextRenderModeForResolutionIndependentLayoutEnabled();
+    SkFont::Edging ePreferredAliasing
+        = bSubpixelPositioning ? SkFont::Edging::kSubpixelAntiAlias : fontEdging;
+    if (bSubpixelPositioning)
+        font.setSubpixel(true);
     font.setEdging(logFont.lfQuality == NONANTIALIASED_QUALITY ? SkFont::Edging::kAlias
-                                                               : fontEdging);
+                                                               : ePreferredAliasing);
 
     const vcl::font::FontSelectPattern& rFSD = pWinFont->GetFontSelectPattern();
     int nHeight = rFSD.mnHeight;
