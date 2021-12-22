@@ -28,7 +28,7 @@ $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_$(1).cxx : \
 				-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT_FOR_BUILD)/$(LIBO_LIB_FOLDER)) \
 				-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target_for_build,saxparser))) && \
 		sed 's/\(^.*get[^;]*$$$$\)/SAL_DLLPUBLIC_EXPORT \1/' $$$${TEMPSAX} > $$$${TEMPSED} && \
-		rm $$$${TEMPSAX} && $(call gb_Helper_replace_if_different_and_touch,$$$${TEMPSED},$$@))
+		rm $$$${TEMPSAX} && $$(call gb_Helper_replace_if_different_and_touch,$$$${TEMPSED},$$@))
 	$$(call gb_Trace_EndRange,$$(subst $(WORKDIR)/,,$$@),SAX)
 
 endef
