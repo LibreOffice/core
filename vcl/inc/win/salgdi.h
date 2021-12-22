@@ -316,7 +316,7 @@ public:
 private:
     // local helpers
 
-    void                    DrawTextLayout(const GenericSalLayout&, HDC, bool bUseDWrite);
+    void                    DrawTextLayout(const GenericSalLayout&, HDC, bool bUseDWrite, bool bWithoutHintingInTextDirection);
 
 public:
     // public SalGraphics methods, the interface to the independent vcl part
@@ -396,7 +396,7 @@ public:
 
     virtual std::unique_ptr<GenericSalLayout>
                             GetTextLayout(int nFallbackLevel) override;
-    virtual void            DrawTextLayout( const GenericSalLayout& ) override;
+    virtual void            DrawTextLayout( const GenericSalLayout&, bool bWithoutHintingInTextDirection ) override;
 
     virtual bool            supportsOperation( OutDevSupportType ) const override;
 

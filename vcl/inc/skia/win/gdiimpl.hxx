@@ -50,7 +50,8 @@ public:
     virtual bool RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack, int nX,
                                              int nY, ControlCacheKey& aControlCacheKey) override;
 
-    virtual bool DrawTextLayout(const GenericSalLayout& layout) override;
+    virtual bool DrawTextLayout(const GenericSalLayout& layout,
+                                bool bWithoutHintingInTextDirection) override;
     virtual void ClearDevFontCache() override;
 
     virtual void freeResources() override;

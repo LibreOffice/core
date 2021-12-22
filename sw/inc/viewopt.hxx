@@ -171,6 +171,7 @@ class SW_DLLPUBLIC SwViewOption
     sal_uInt8       m_nPagePreviewCol;       // Page Preview Row/Columns.
     SwFillMode      m_nShadowCursorFillMode;  // FillMode for ShadowCursor.
     GlyphPositioningMode m_eGlyphPositioningMode; // Positioning strategy for screen glyphs
+    bool            m_bWithoutHintingInTextDirection : 1; // Rendering strategy for screen glyphs
     bool            m_bReadonly : 1;      // Readonly-Doc.
     bool            m_bStarOneSetting : 1;// Prevent from UI automatics (no scrollbars in readonly documents).
     bool            m_bIsPagePreview : 1; // The preview mustn't print field/footnote/... shadings.
@@ -439,6 +440,12 @@ public:
 
     void SetGlyphPositioningMode(GlyphPositioningMode eMode)
         { m_eGlyphPositioningMode = eMode; }
+
+    bool IsWithoutHintingInTextDirection() const
+        { return m_bWithoutHintingInTextDirection; }
+
+    void SetWithoutHintingInTextDirection(bool bMode)
+        { m_bWithoutHintingInTextDirection = bMode; }
 
     void SetCore2Option(bool b, ViewOptCoreFlags2 f)
     {
@@ -712,6 +719,7 @@ inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
     m_nTableDestination = rVOpt.m_nTableDestination;
     m_nShadowCursorFillMode = rVOpt.m_nShadowCursorFillMode;
     m_eGlyphPositioningMode = rVOpt.m_eGlyphPositioningMode;
+    m_bWithoutHintingInTextDirection = rVOpt.m_bWithoutHintingInTextDirection;
 }
 
 // Helper function for checking HTML-capabilities.

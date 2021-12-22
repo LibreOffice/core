@@ -357,7 +357,7 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=1 n-rows=3 -->
+                  <!-- n-columns=1 n-rows=4 -->
                   <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -471,6 +471,7 @@
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">hrulercombobox</property>
                             <property name="ellipsize">end</property>
+                            <property name="xalign">0</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="hruler-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hruler">Displays the horizontal ruler. Select the desired measurement unit from the corresponding list.</property>
@@ -500,6 +501,7 @@
                             <property name="label" translatable="yes" context="viewoptionspage|glyphposlabel">Glyph positioning:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">glyphposmode</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -530,6 +532,48 @@
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="glyphrenderlabel">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="viewoptionspage|glyphposlabel">Glyph rendering:</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">glyphposmode</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="glyphrender">
+                            <property name="label" translatable="yes" context="viewoptionspage|glyphrender">No Horizontal Hinting</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="use-underline">True</property>
+                            <property name="draw-indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                   </object>
@@ -586,6 +630,9 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="viewoptionspage|measureunitlabel">Measurement unit:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">measureunit</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -708,6 +755,7 @@
       <widget name="vruler"/>
       <widget name="hruler"/>
       <widget name="glyphposlabel"/>
+      <widget name="glyphrenderlabel"/>
       <widget name="measureunitlabel"/>
     </widgets>
   </object>
