@@ -1458,6 +1458,7 @@ void SdrObjCustomShape::SetLogicRect( const tools::Rectangle& rRect )
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
+#include <drawinglayer/primitive2d/baseprimitive2d_.hxx>
 void SdrObjCustomShape::Move( const Size& rSiz )
 {
     if ( rSiz.Width() || rSiz.Height() )
@@ -1470,6 +1471,88 @@ void SdrObjCustomShape::Move( const Size& rSiz )
         BroadcastObjectChange();
         SendUserCall(SdrUserCallType::MoveOnly,aBoundRect0);
     }
+
+
+
+    // {
+    //     drawinglayer::primitive2d::TestPrimitive2D aTest();
+    // }
+
+    // {
+    //     drawinglayer::primitive2d::TestPrimitive2D* pTest(new drawinglayer::primitive2d::TestPrimitive2D());
+    //     delete pTest;
+    // }
+
+    // {
+    //     drawinglayer::primitive2d::Primitive2D_SharedPtr aShared(new drawinglayer::primitive2d::TestPrimitive2D());
+    // }
+
+
+
+    // {
+    //     drawinglayer::primitive2d::TestPrimitive2D aTest;
+    //     ::css::uno::Reference<::css::graphic::XPrimitive2D> XPrimitive(aTest.getUnoPrimitive2D());
+    // }
+
+    // {
+    //     drawinglayer::primitive2d::TestPrimitive2D* pTest(new drawinglayer::primitive2d::TestPrimitive2D());
+    //     ::css::uno::Reference<::css::graphic::XPrimitive2D> XPrimitive(pTest->getUnoPrimitive2D());
+    //     delete pTest;
+    // }
+
+    // {
+    //     drawinglayer::primitive2d::Primitive2D_SharedPtr aShared(new drawinglayer::primitive2d::TestPrimitive2D());
+    //     ::css::uno::Reference<::css::graphic::XPrimitive2D> XPrimitive(aShared->getUnoPrimitive2D());
+    // }
+
+
+
+
+    // {
+    //     drawinglayer::primitive2d::TestPrimitive2D* pTest(new drawinglayer::primitive2d::TestPrimitive2D());
+    //     ::css::uno::Reference<::css::graphic::XPrimitive2D> XPrimitive(pTest->getUnoPrimitive2D());
+    //     drawinglayer::primitive2d::Primitive2D_SharedPtr pBackA(drawinglayer::primitive2d::getKnownImplementation(XPrimitive));
+    //     delete pTest;
+    //     drawinglayer::primitive2d::Primitive2D_SharedPtr pBackB(drawinglayer::primitive2d::getKnownImplementation(XPrimitive));
+    // }
+
+    {
+        drawinglayer::primitive2d::Primitive2D_SharedPtr aShared(drawinglayer::primitive2d::TestPrimitive2D::create());
+        ::css::uno::Reference<::css::graphic::XPrimitive2D> XPrimitive(aShared->getUnoPrimitive2D());
+        drawinglayer::primitive2d::Primitive2D_SharedPtr pBackA(drawinglayer::primitive2d::TestPrimitive2D::getKnownImplementation(XPrimitive));
+        aShared.reset();
+        drawinglayer::primitive2d::Primitive2D_SharedPtr pBackB(drawinglayer::primitive2d::TestPrimitive2D::getKnownImplementation(XPrimitive));
+    }
+
+    {
+        drawinglayer::primitive2d::Primitive2D_SharedPtr aShared(drawinglayer::primitive2d::TestPrimitive2D::create());
+        ::css::uno::Reference<::css::graphic::XPrimitive2D> XPrimitive(aShared->getUnoPrimitive2D());
+
+        drawinglayer::geometry::ViewInformation2D aDummy;
+        const drawinglayer::primitive2d::Primitive2D_VectorSharedPtr& rResA(aShared->getB2DDecomposition(aDummy));
+        basegfx::B2DRange aResB(aShared->getB2DRange(aDummy));
+
+        css::uno::Sequence<css::beans::PropertyValue> aViewParameters;
+        css::uno::Sequence<::css::uno::Reference<::css::graphic::XPrimitive2D>> aResC(XPrimitive->getDecomposition(aViewParameters));
+        css::geometry::RealRectangle2D aResD(XPrimitive->getRange(aViewParameters));
+
+        bool bBla = false;
+    }
+
+
+
+
+
+
+    {
+        // drawinglayer::primitive2d::TestPrimitive2D* pTest(new drawinglayer::primitive2d::TestPrimitive2D());
+        // ::css::uno::Reference<::css::graphic::XPrimitive2D> XPrimitive(pTest->getUnoPrimitive2D());
+        // delete pTest;
+        // ::css::graphic::XPrimitive2D* pCheck = XPrimitive.get();
+        // pCheck = nullptr;
+    }
+
+
 }
 void SdrObjCustomShape::NbcMove( const Size& rSiz )
 {
