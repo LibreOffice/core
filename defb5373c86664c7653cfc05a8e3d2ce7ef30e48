@@ -87,6 +87,24 @@
       "parentUuid": "ca757783_60908ed3",
       "revId": "defb5373c86664c7653cfc05a8e3d2ce7ef30e48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0ce3bc5_13e1c6cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-22T09:45:52Z",
+      "side": 1,
+      "message": "\u003e I\u0027ve already done that - here: https://gerrit.libreoffice.org/c/core/+/126487\n\u003e But there are a couple of places in vcl/ that need typeinfo for drawinglayer stuff, and that is why I did this change.\n\nInteresting, need to check that deeper. My change is more radical and based on shared_ptr, hope to put it somewhere ASAP to discuss. It would need quite some adaptions for all primitive implementations, but also makes seq\u003cprimitives\u003e obsolete outside UNO API.\n\nCould you explain why this leaded to \"why I did this change\" - I do not see a need to have primitives in vcl. And no, I did not oversee that they would need to be used in vcl when I designed/implemented that first 40% of primitives :-)",
+      "parentUuid": "67be0c03_8c35e975",
+      "revId": "defb5373c86664c7653cfc05a8e3d2ce7ef30e48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

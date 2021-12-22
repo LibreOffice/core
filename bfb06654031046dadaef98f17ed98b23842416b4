@@ -52,6 +52,24 @@
       "parentUuid": "08e1c2c1_34409169",
       "revId": "bfb06654031046dadaef98f17ed98b23842416b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65a56d6c_8b0248b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-22T09:45:52Z",
+      "side": 1,
+      "message": "Hi Tomaž,\nsomehow could not find out how to quote/respond in orig post above, so doing it here handish:\n\n\u003eThis sounds promising. Please do one change at a time and push to gerrit for review. IMHO the only thing that needs UNO in drawinglayer is a wrapper to pass a container of primitives around - nothing else makes sense for usage through UNO. \n\nSure I will, will be interesting to see responses/get tipps/answers/help!\n\n\u003e This is why I instead separated the drawinglayer into 2 libraries - one would serve as core implementation and interfaces and wouldn\u0027t depend on VCL (so it can be freely used there), the other part would be the rest. The minimum implementation is in [1], we can easily move needed classes to core if necessary.This is why I instead separated the drawinglayer into 2 libraries - one would serve as core implementation and interfaces and wouldn\u0027t depend on VCL (so it can be freely used there), the other part would be the rest. The minimum implementation is in [1], we can easily move needed classes to core if necessary.\n\nI would prefer that one over this patch clearly, good stuff.\nBut raises still the question - why and for what should Primitives be used in vcl...?",
+      "parentUuid": "90ea80e8_6178ada1",
+      "revId": "bfb06654031046dadaef98f17ed98b23842416b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
