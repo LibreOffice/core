@@ -16,6 +16,23 @@
       "message": "\u003e the cppunit test CppunitTest_sw_core_text failed ( https://ci.libreoffice.org/job/gerrit_linux_gcc_release/107196/ )\n\nWhy? Could someone please help?",
       "revId": "325e72138f3db332f5c5abdd4b530730d19d982f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d2676de_76e3e092",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-22T07:54:31Z",
+      "side": 1,
+      "message": "Here is the actual failure: https://ci.libreoffice.org/job/gerrit_linux_gcc_release/107196/console\n\nI think you overcomplicate this a bit with the character units. :-)\n\nI would suggest that you simply assert that content of the first \u003cText Portion\u003d\"...\"\u003e, which will be only correct with the right amount of first line indent.\n\nIn the future, we could assert the actual amount of first line indent in twips, but I\u0027m afraid this is not exposed in the layout xml dump today.\n\nAlso, this is not specific to Chinese, so I would simplify the text to English. Thanks!",
+      "revId": "325e72138f3db332f5c5abdd4b530730d19d982f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
