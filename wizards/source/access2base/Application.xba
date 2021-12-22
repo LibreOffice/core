@@ -1406,8 +1406,8 @@ Dim sDatabaseURL As String
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 Const cstThisSub = &quot;OpenDatabase&quot;
 	Utils._SetCalledSub(cstThisSub)
-	If pvDatabaseURL = &quot;&quot; Then Call _TraceArguments()
 	If Not Utils._CheckArgument(pvDatabaseURL, 1, vbString) Then Goto Exit_Function
+	If pvDatabaseURL = &quot;&quot; Then Call _TraceArguments()
 	If IsMissing(pvUser) Then pvUser = &quot;&quot;
 	If IsMissing(pvPassword) Then pvPassword = &quot;&quot;
 	If Not Utils._CheckArgument(pvUser, 2, vbString) Then Goto Exit_Function
