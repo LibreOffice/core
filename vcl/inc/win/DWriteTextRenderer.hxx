@@ -37,12 +37,13 @@ enum class D2DTextAntiAliasMode
 class D2DWriteTextOutRenderer : public TextOutRenderer
 {
 public:
-    explicit D2DWriteTextOutRenderer();
+    explicit D2DWriteTextOutRenderer(bool bWithoutHintingInTextDirection);
     virtual ~D2DWriteTextOutRenderer() override;
 
-    bool operator ()(GenericSalLayout const &rLayout,
+    bool operator()(GenericSalLayout const &rLayout,
         SalGraphics &rGraphics,
-        HDC hDC) override;
+        HDC hDC,
+        bool bWithoutHintingInTextDirection) override;
 
     HRESULT BindDC(HDC hDC, tools::Rectangle const & rRect = tools::Rectangle(0, 0, 1, 1));
 
@@ -54,11 +55,11 @@ public:
     IDWriteFontFace   * GetFontFace() const { return mpFontFace; }
     float               GetEmHeight() const { return mlfEmHeight; }
 
-    HRESULT CreateRenderTarget();
+    HRESULT CreateRenderTarget(bool bWithoutHintingInTextDirection);
 
     bool Ready() const;
 
-    void applyTextAntiAliasMode();
+    void applyTextAntiAliasMode(bool bWithoutHintingInTextDirection);
 
 private:
     // This is a singleton object disable copy ctor and assignment operator

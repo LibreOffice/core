@@ -77,7 +77,7 @@ public:
     virtual bool    LayoutText( vcl::text::ImplLayoutArgs&, const SalLayoutGlyphsImpl* ) = 0;  // first step of layouting
     virtual void    AdjustLayout( vcl::text::ImplLayoutArgs& );    // adjusting after fallback etc.
     virtual void    InitFont() const {}
-    virtual void    DrawText( SalGraphics& ) const = 0;
+    virtual void    DrawText( SalGraphics&, bool bWithoutHintingInTextDirection ) const = 0;
 
     int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
     Degree10        GetOrientation() const                  { return mnOrientation; }

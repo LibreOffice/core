@@ -52,7 +52,7 @@
 #include <shlwapi.h>
 #include <winver.h>
 
-TextOutRenderer& TextOutRenderer::get(bool bUseDWrite)
+TextOutRenderer& TextOutRenderer::get(bool bUseDWrite, bool bWithoutHintingInTextDirection)
 {
     SalData* const pSalData = GetSalData();
 
@@ -66,7 +66,8 @@ TextOutRenderer& TextOutRenderer::get(bool bUseDWrite)
     {
         if (!pSalData->m_pD2DWriteTextOutRenderer)
         {
-            pSalData->m_pD2DWriteTextOutRenderer.reset(new D2DWriteTextOutRenderer());
+            pSalData->m_pD2DWriteTextOutRenderer.reset(
+                new D2DWriteTextOutRenderer(bWithoutHintingInTextDirection));
         }
         return *pSalData->m_pD2DWriteTextOutRenderer;
     }
@@ -78,7 +79,7 @@ TextOutRenderer& TextOutRenderer::get(bool bUseDWrite)
 }
 
 bool ExTextOutRenderer::operator()(GenericSalLayout const& rLayout, SalGraphics& /*rGraphics*/,
-                                   HDC hDC)
+                                   HDC hDC, bool /*bWithoutHintingInTextDirection*/)
 {
     int nStart = 0;
     Point aPos(0, 0);
@@ -293,16 +294,18 @@ void WinFontInstance::SetGraphics(WinSalGraphics* pGraphics)
     SelectObject(hDC, hOrigFont);
 }
 
-void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, HDC hDC, bool bUseDWrite)
+void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, HDC hDC, bool bUseDWrite,
+                                    bool bWithoutHintingInTextDirection)
 {
-    TextOutRenderer& render = TextOutRenderer::get(bUseDWrite);
-    render(rLayout, *this, hDC);
+    TextOutRenderer& render = TextOutRenderer::get(bUseDWrite, bWithoutHintingInTextDirection);
+    render(rLayout, *this, hDC, bWithoutHintingInTextDirection);
 }
 
-void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
+void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout,
+                                    bool bWithoutHintingInTextDirection)
 {
     WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
-    if (!mbPrinter && pImpl->DrawTextLayout(rLayout))
+    if (!mbPrinter && pImpl->DrawTextLayout(rLayout, bWithoutHintingInTextDirection))
         return; // handled by pImpl
 
     HDC hDC = getHDC();
@@ -312,7 +315,8 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     const HFONT hOrigFont = ::SelectFont(hDC, hLayoutFont);
 
     // DWrite text renderer performs vertical writing better except printing.
-    DrawTextLayout(rLayout, hDC, !mbPrinter && rLayout.GetFont().GetFontSelectPattern().mbVertical);
+    DrawTextLayout(rLayout, hDC, !mbPrinter && rLayout.GetFont().GetFontSelectPattern().mbVertical,
+                   bWithoutHintingInTextDirection);
 
     ::SelectFont(hDC, hOrigFont);
 }

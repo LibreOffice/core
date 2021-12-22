@@ -146,7 +146,7 @@ void PspSalLayout::InitFont() const
                          mnOrientation, mbVertical, mbArtItalic, mbArtBold);
 }
 
-void GenPspGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
+void GenPspGraphics::DrawTextLayout(const GenericSalLayout& rLayout, bool)
 {
     const GlyphItem* pGlyph;
     Point aPos;
