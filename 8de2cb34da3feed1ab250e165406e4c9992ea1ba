@@ -16,6 +16,24 @@
       "message": "I\u0027m assuming the printing resolution is higher than the screen resolution (which should be the case for all modern printers).\n\nI would say\n(*) after whitespace just use the screen position\n(*) unless we are in print or print-preview mode, in which case just always use the printer position\n\n",
       "revId": "8de2cb34da3feed1ab250e165406e4c9992ea1ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5b9c84b_7bda8e67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-22T09:11:56Z",
+      "side": 1,
+      "message": "Well, this provides a little playground to explore that. The \"screen\" positions are the glyph positions that would look the best when rendered on screen and the \"printing\" positions are where the glyphs will really be when printed to paper. At some lower font sizes, e.g. 50% zoom, the optimal screen positions create noticeably wider text and beginning words at their print positions and keeping their relative screen positions results in words eating the whitespace between words.",
+      "parentUuid": "056ce823_1a0e23c9",
+      "revId": "8de2cb34da3feed1ab250e165406e4c9992ea1ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
