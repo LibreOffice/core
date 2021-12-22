@@ -66,7 +66,6 @@ namespace dxcanvas::tools
                              const void*                                     hDIB )
             {
                 bool            bRet( false );
-                BitmapSharedPtr pBitmap;
 
                 const BITMAPINFO* pBI = static_cast<BITMAPINFO*>(GlobalLock( const_cast<void *>(hDIB) ));
 
