@@ -116,7 +116,7 @@ namespace
     }
 }
 
-void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics)
+void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics, bool bWithoutHintingInTextDirection)
 {
     const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
     const FreetypeFont& rFont = rInstance.GetFreetypeFont();
@@ -172,12 +172,18 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     if (const cairo_font_options_t* pFontOptions = pSVData->mpDefInst->GetCairoFontOptions())
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        if (!rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias())
+        bool bDisableAA = !rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias();
+        cairo_hint_style_t eHintStyle = cairo_font_options_get_hint_style(pFontOptions);
+        bool bAllowedHintStyle = !bWithoutHintingInTextDirection || (eHintStyle == CAIRO_HINT_STYLE_NONE || eHintStyle == CAIRO_HINT_STYLE_SLIGHT);
+        if (bDisableAA || !bAllowedHintStyle)
         {
             // Disable font AA in case global AA setting is supposed to affect
             // font rendering (not the default) and AA is disabled.
             cairo_font_options_t* pOptions = cairo_font_options_copy(pFontOptions);
-            cairo_font_options_set_antialias(pOptions, CAIRO_ANTIALIAS_NONE);
+            if (bDisableAA)
+                cairo_font_options_set_antialias(pOptions, CAIRO_ANTIALIAS_NONE);
+            if (!bAllowedHintStyle)
+                cairo_font_options_set_hint_style(pOptions, CAIRO_HINT_STYLE_SLIGHT);
             cairo_set_font_options(cr, pOptions);
             cairo_font_options_destroy(pOptions);
         }

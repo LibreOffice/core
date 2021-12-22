@@ -198,7 +198,7 @@ public:
                                             Ucs2UIntMap& rUnicodeEnc ) override;
     virtual std::unique_ptr<GenericSalLayout>
                             GetTextLayout(int nFallbackLevel) override;
-    virtual void            DrawTextLayout( const GenericSalLayout& ) override;
+    virtual void            DrawTextLayout( const GenericSalLayout&, bool bWithoutHintingInTextDirection ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
     virtual void            drawPixel( tools::Long nX, tools::Long nY ) override;
     virtual void            drawPixel( tools::Long nX, tools::Long nY, Color nColor ) override;

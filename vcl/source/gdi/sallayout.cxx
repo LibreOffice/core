@@ -979,7 +979,7 @@ void MultiSalLayout::InitFont() const
         mpLayouts[0]->InitFont();
 }
 
-void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
+void MultiSalLayout::DrawText(SalGraphics& rGraphics, bool bWithoutHintingInTextDirection) const
 {
     for( int i = mnLevel; --i >= 0; )
     {
@@ -987,7 +987,7 @@ void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
         rLayout.DrawBase() += maDrawBase;
         rLayout.DrawOffset() += maDrawOffset;
         rLayout.InitFont();
-        rLayout.DrawText( rGraphics );
+        rLayout.DrawText(rGraphics, bWithoutHintingInTextDirection);
         rLayout.DrawOffset() -= maDrawOffset;
         rLayout.DrawBase() -= maDrawBase;
     }

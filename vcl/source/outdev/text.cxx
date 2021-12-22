@@ -262,7 +262,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     // draw text into upper left corner
     rSalLayout.DrawBase() -= aBoundRect.TopLeft();
-    rSalLayout.DrawText( *pVDev->mpGraphics );
+    rSalLayout.DrawText( *pVDev->mpGraphics, false );
 
     Bitmap aBmp = pVDev->GetBitmap( Point(), aBoundRect.GetSize() );
     if ( aBmp.IsEmpty() || !aBmp.Rotate( mpFontInstance->mnOwnOrientation, COL_WHITE ) )
@@ -296,7 +296,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 }
 
 void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
-                                       bool bTextLines)
+                                       bool bTextLines, bool bWithoutHintingInTextDirection )
 {
     if( mpFontInstance->mnOwnOrientation )
         if( ImplDrawRotateText( rSalLayout ) )
@@ -325,7 +325,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
         rSalLayout.DrawBase().setX( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) + devX );
     }
 
-    rSalLayout.DrawText( *mpGraphics );
+    rSalLayout.DrawText(*mpGraphics, bWithoutHintingInTextDirection);
     rSalLayout.DrawBase().setX( nOldX );
 
     if( bTextLines )
@@ -380,14 +380,14 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
         if ( eRelief == FontRelief::Engraved )
             nOff = -nOff;
         rSalLayout.DrawOffset() += Point( nOff, nOff);
-        ImplDrawTextDirect( rSalLayout, mbTextLines );
+        ImplDrawTextDirect( rSalLayout, mbTextLines, false );
         rSalLayout.DrawOffset() -= Point( nOff, nOff);
 
         SetTextLineColor( aTextLineColor );
         SetOverlineColor( aOverlineColor );
         SetTextColor( aTextColor );
         ImplInitTextColor();
-        ImplDrawTextDirect( rSalLayout, mbTextLines );
+        ImplDrawTextDirect( rSalLayout, mbTextLines, false );
 
         SetTextLineColor( aOldTextLineColor );
         SetOverlineColor( aOldOverlineColor );
@@ -414,7 +414,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
                 SetTextColor( COL_BLACK );
             ImplInitTextColor();
             rSalLayout.DrawBase() += Point( nOff, nOff );
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            ImplDrawTextDirect( rSalLayout, mbTextLines, false );
             rSalLayout.DrawBase() -= Point( nOff, nOff );
             SetTextColor( aOldColor );
             SetTextLineColor( aOldTextLineColor );
@@ -422,34 +422,34 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
             ImplInitTextColor();
 
             if ( !maFont.IsOutline() )
-                ImplDrawTextDirect( rSalLayout, mbTextLines );
+                ImplDrawTextDirect( rSalLayout, mbTextLines, false );
         }
 
         if ( maFont.IsOutline() )
         {
             rSalLayout.DrawBase() = aOrigPos + Point(-1,-1);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            ImplDrawTextDirect( rSalLayout, mbTextLines, false );
             rSalLayout.DrawBase() = aOrigPos + Point(+1,+1);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            ImplDrawTextDirect( rSalLayout, mbTextLines, false );
             rSalLayout.DrawBase() = aOrigPos + Point(-1,+0);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            ImplDrawTextDirect( rSalLayout, mbTextLines, false );
             rSalLayout.DrawBase() = aOrigPos + Point(-1,+1);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            ImplDrawTextDirect( rSalLayout, mbTextLines, false );
             rSalLayout.DrawBase() = aOrigPos + Point(+0,+1);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            ImplDrawTextDirect( rSalLayout, mbTextLines, false );
             rSalLayout.DrawBase() = aOrigPos + Point(+0,-1);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            ImplDrawTextDirect( rSalLayout, mbTextLines, false );
             rSalLayout.DrawBase() = aOrigPos + Point(+1,-1);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            ImplDrawTextDirect( rSalLayout, mbTextLines, false );
             rSalLayout.DrawBase() = aOrigPos + Point(+1,+0);
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            ImplDrawTextDirect( rSalLayout, mbTextLines, false );
             rSalLayout.DrawBase() = aOrigPos;
 
             SetTextColor( COL_WHITE );
             SetTextLineColor( COL_WHITE );
             SetOverlineColor( COL_WHITE );
             ImplInitTextColor();
-            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            ImplDrawTextDirect( rSalLayout, mbTextLines, false );
             SetTextColor( aOldColor );
             SetTextLineColor( aOldTextLineColor );
             SetOverlineColor( aOldOverlineColor );
@@ -458,7 +458,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
     }
 }
 
-void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
+void OutputDevice::ImplDrawText(SalLayout& rSalLayout, bool bWithoutHintingInTextDirection)
 {
 
     if( mbInitClipRegion )
@@ -476,7 +476,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
     if( mbTextSpecial )
         ImplDrawSpecialText( rSalLayout );
     else
-        ImplDrawTextDirect( rSalLayout, mbTextLines );
+        ImplDrawTextDirect(rSalLayout, mbTextLines, bWithoutHintingInTextDirection);
 }
 
 tools::Long OutputDevice::ImplGetTextLines( const tools::Rectangle& rRect, const tools::Long nTextHeight,
@@ -878,7 +878,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, {}, eDefaultLayout, nullptr, pLayoutCache);
     if(pSalLayout)
     {
-        ImplDrawText( *pSalLayout );
+        ImplDrawText(*pSalLayout, false);
     }
 
     if( mpAlphaVDev )
@@ -925,7 +925,8 @@ float OutputDevice::approximate_digit_width() const
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   o3tl::span<const sal_Int32> pDXAry,
                                   sal_Int32 nIndex, sal_Int32 nLen, SalLayoutFlags flags,
-                                  const SalLayoutGlyphs* pSalLayoutCache )
+                                  const SalLayoutGlyphs* pSalLayoutCache,
+                                  bool bWithoutHintingInTextDirection )
 {
     assert(!is_double_buffered_window());
 
@@ -949,11 +950,11 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, flags, nullptr, pSalLayoutCache);
     if( pSalLayout )
     {
-        ImplDrawText( *pSalLayout );
+        ImplDrawText(*pSalLayout, bWithoutHintingInTextDirection);
     }
 
     if( mpAlphaVDev )
-        mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen, flags );
+        mpAlphaVDev->DrawTextArray(rStartPt, rStr, pDXAry, nIndex, nLen, flags, nullptr, bWithoutHintingInTextDirection);
 }
 
 tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_Int32>* pDXAry,
@@ -1139,7 +1140,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, nWidth);
     if( pSalLayout )
     {
-        ImplDrawText( *pSalLayout );
+        ImplDrawText( *pSalLayout, false );
     }
 
     if( mpAlphaVDev )
