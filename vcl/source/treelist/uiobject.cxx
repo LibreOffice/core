@@ -108,6 +108,8 @@ StringMap TreeListEntryUIObject::get_state()
     aMap["VisibleChildCount"] = OUString::number(mxTreeList->GetVisibleChildCount(mpEntry));
     aMap["IsSelected"] = OUString::boolean(mxTreeList->IsSelected(mpEntry));
 
+    aMap["IsSemiTransparent"] = OUString::boolean(bool(mpEntry->GetFlags() & SvTLEntryFlags::SEMITRANSPARENT));
+
     SvLBoxButton* pItem = static_cast<SvLBoxButton*>(mpEntry->GetFirstItem(SvLBoxItemType::Button));
     if (pItem)
         aMap["IsChecked"] = OUString::boolean(pItem->IsStateChecked());
