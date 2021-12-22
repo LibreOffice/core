@@ -25,55 +25,21 @@
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-#include <cppuhelper/weak.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <comphelper/compbase.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 #include <deque>
-#include <mutex>
 
 namespace drawinglayer::geometry
 {
 class ViewInformation2D;
 }
 
-/** This is a custom re-implementation of cppu::WeakComponentImplHelper which uses
-   std::mutex and skips parts of the XComponent stuff.
-*/
-class DRAWINGLAYERCORE_DLLPUBLIC BasePrimitive2DImplBase : public cppu::OWeakObject,
-                                                           public css::lang::XComponent,
-                                                           public css::lang::XTypeProvider,
-                                                           public css::graphic::XPrimitive2D,
-                                                           public css::util::XAccounting
-{
-public:
-    virtual ~BasePrimitive2DImplBase() override;
-
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const& aType) override;
-
-    // css::lang::XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL
-    addEventListener(css::uno::Reference<css::lang::XEventListener> const& xListener) override;
-    virtual void SAL_CALL
-    removeEventListener(css::uno::Reference<css::lang::XEventListener> const& xListener) override;
-
-    // css::lang::XTypeProvider
-    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
-    {
-        return css::uno::Sequence<sal_Int8>();
-    }
-
-protected:
-    mutable std::mutex m_aMutex;
-};
+typedef comphelper::WeakComponentImplHelper<css::graphic::XPrimitive2D, css::util::XAccounting>
+    BasePrimitive2DImplBase;
 
 namespace drawinglayer::primitive2d
 {

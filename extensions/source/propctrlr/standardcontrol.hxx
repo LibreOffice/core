@@ -26,6 +26,7 @@
 #include <com/sun/star/inspection/XStringListControl.hpp>
 #include <com/sun/star/inspection/XHyperlinkControl.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svx/colorbox.hxx>
 
