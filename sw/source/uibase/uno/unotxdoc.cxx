@@ -154,6 +154,7 @@
 #include <editeng/editview.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdview.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <memory>
 #include <redline.hxx>
@@ -258,14 +259,9 @@ static void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell const * pDocShel
 
 class SwXTextDocument::Impl
 {
-private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
-
 public:
-    ::comphelper::OInterfaceContainerHelper3<css::util::XRefreshListener> m_RefreshListeners;
-
-    Impl() : m_RefreshListeners(m_Mutex) { }
-
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<css::util::XRefreshListener> m_RefreshListeners;
 };
 
 const Sequence< sal_Int8 > & SwXTextDocument::getUnoTunnelId()
@@ -1379,7 +1375,8 @@ void SwXTextDocument::Invalidate()
     InitNewDoc();
     m_pDocShell = nullptr;
     lang::EventObject const ev(static_cast<SwXTextDocumentBaseClass &>(*this));
-    m_pImpl->m_RefreshListeners.disposeAndClear(ev);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_RefreshListeners.disposeAndClear(aGuard, ev);
 }
 
 void SwXTextDocument::Reactivate(SwDocShell* pNewDocShell)
@@ -2146,6 +2143,7 @@ void SwXTextDocument::NotifyRefreshListeners()
     // why does SwBaseShell not just call refresh? maybe because it's rSh is
     // (sometimes) a different shell than GetWrtShell()?
     lang::EventObject const ev(static_cast<SwXTextDocumentBaseClass &>(*this));
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_RefreshListeners.notifyEach(
             & util::XRefreshListener::refreshed, ev);
 }
@@ -2167,7 +2165,10 @@ void SAL_CALL SwXTextDocument::addRefreshListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     if (xListener)
+    {
+        std::unique_lock aGuard(m_pImpl->m_Mutex);
         m_pImpl->m_RefreshListeners.addInterface(xListener);
+    }
 }
 
 void SAL_CALL SwXTextDocument::removeRefreshListener(
@@ -2175,7 +2176,10 @@ void SAL_CALL SwXTextDocument::removeRefreshListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     if (xListener)
+    {
+        std::unique_lock aGuard(m_pImpl->m_Mutex);
         m_pImpl->m_RefreshListeners.removeInterface(xListener);
+    }
 }
 
 void SwXTextDocument::updateLinks(  )
