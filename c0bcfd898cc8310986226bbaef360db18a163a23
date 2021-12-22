@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ac2d924_c2943275",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-22T01:39:34Z",
+      "side": 1,
+      "message": "I think I know how to implement the test.\n(Width of the 2nd line - Width of the 1st line) / (Width of the 2nd line / Char length of the 2nd line) should equals 2.",
+      "revId": "c0bcfd898cc8310986226bbaef360db18a163a23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
