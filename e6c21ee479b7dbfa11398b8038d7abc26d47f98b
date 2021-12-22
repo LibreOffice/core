@@ -16,6 +16,24 @@
       "message": "This is the first time this *optional* variant argument is accessed. Shouldn\u0027t it be checked using IsMissing?",
       "revId": "e6c21ee479b7dbfa11398b8038d7abc26d47f98b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf6d8c3c_1b5a82b6",
+        "filename": "wizards/source/access2base/Application.xba",
+        "patchSetId": 3
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2021-12-22T14:36:21Z",
+      "side": 1,
+      "message": "Wow ... that\u0027s code dating from 2014 !\nLine 921 is today line 1407.\n\nBut, nevertheless, you\u0027re right: lines 921 and 922 should be inverted (or 1407 and 1408).\n\nWill post a patch.\nThx.",
+      "parentUuid": "2a2fd28f_58f4ea29",
+      "revId": "e6c21ee479b7dbfa11398b8038d7abc26d47f98b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
