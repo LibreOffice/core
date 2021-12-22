@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58a62888_b04dbb30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-12-22T16:06:45Z",
+      "side": 1,
+      "message": "2 subsequent patches passed jenkins -\u003e removed -1",
+      "revId": "fd0488b022b7a40642f75baca9e70bf86cdaf889",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
