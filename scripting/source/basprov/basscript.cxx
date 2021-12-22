@@ -245,7 +245,10 @@ constexpr OUStringLiteral BASSCRIPT_PROPERTY_CALLER = u"Caller";
                 aOldThisComponent = m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", makeAny( m_xDocumentScriptContext ) );
 
             // tdf#143582 - clear return value of the method before calling it
+            const SbxFlagBits nSavFlags = m_xMethod->GetFlags();
+            m_xMethod->SetFlag(SbxFlagBits::ReadWrite | SbxFlagBits::NoBroadcast);
             m_xMethod->Clear();
+            m_xMethod->SetFlags(nSavFlags);
             if ( m_caller.hasElements() && m_caller[ 0 ].hasValue()  )
             {
                 SbxVariableRef xCallerVar = new SbxVariable( SbxVARIANT );

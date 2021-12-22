@@ -1061,9 +1061,9 @@ void ScMacrosTest::testTdf143582()
     aRet >>= aReturnValue;
 
     // Without the fix in place, this test would have failed with
-    // - Expected: Test
-    // - Actual  : TeTest
-    CPPUNIT_ASSERT_EQUAL(OUString("Test"), aReturnValue);
+    // - Expected: Test6
+    // - Actual  : TeTest8
+    CPPUNIT_ASSERT_EQUAL(OUString("Test6"), aReturnValue);
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
