@@ -23,6 +23,7 @@
 
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
