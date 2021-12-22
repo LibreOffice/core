@@ -20,6 +20,7 @@
 #include <comphelper/string.hxx>
 #include <scitems.hxx>
 
+#include <i18nutil/transliteration.hxx>
 #include <editeng/adjustitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <editeng/contouritem.hxx>

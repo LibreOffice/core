@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <tools/solar.h>
 #include <vcl/animate/AnimationBitmap.hxx>
 
 BitmapChecksum AnimationBitmap::GetChecksum() const

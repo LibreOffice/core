@@ -25,7 +25,6 @@
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/weldutils.hxx>
 #include <svx/svxdllapi.h>
-#include <com/sun/star/drawing/FillStyle.hpp>
 
 class XFillStyleItem;
 class XFillColorItem;

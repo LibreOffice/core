@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 
-#include <config_options.h>
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>

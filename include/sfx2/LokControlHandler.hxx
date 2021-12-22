@@ -9,8 +9,11 @@
 
 #pragma once
 
-#include <sfx2/dllapi.h>
+#include <sfx2/lokhelper.hxx>
+#include <svx/svditer.hxx>
 #include <svx/svdouno.hxx>
+#include <tools/UnitConversion.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XControl.hpp>

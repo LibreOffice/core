@@ -19,7 +19,6 @@
 #pragma once
 
 #include <svl/svldllapi.h>
-#include <unotools/options.hxx>
 
 namespace SvtCJKOptions
 {

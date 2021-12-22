@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <svtools/svtdllapi.h>
 
 #include <osl/time.h>
@@ -17,8 +16,6 @@
 #include <vcl/timer.hxx>
 
 #include <functional>
-
-class Timer;
 
 /** Periodically checks if a file has been modified
 

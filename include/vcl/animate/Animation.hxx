@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_ANIMATE_ANIMATION_HXX
 #define INCLUDED_VCL_ANIMATE_ANIMATION_HXX
 
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>

@@ -21,7 +21,6 @@
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <memory>
 #include <vector>
 #include <unordered_map>
 

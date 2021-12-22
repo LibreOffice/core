@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 
 enum class DrawModeFlags : sal_uInt32

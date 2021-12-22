@@ -20,7 +20,6 @@
 #define INCLUDED_UNOTOOLS_DYNAMICMENUOPTIONS_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <vector>
 

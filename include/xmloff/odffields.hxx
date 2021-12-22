@@ -20,6 +20,8 @@
 #ifndef INCLUDED_XMLOFF_ODFFIELDS_HXX
 #define INCLUDED_XMLOFF_ODFFIELDS_HXX
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUStringLiteral ODF_FORMTEXT = u"vnd.oasis.opendocument.field.FORMTEXT";
 #define ODF_FORMFIELD_DEFAULT_LENGTH 5
 

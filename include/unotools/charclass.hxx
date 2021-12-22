@@ -27,7 +27,6 @@
 #include <com/sun/star/i18n/ParseResult.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <mutex>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XCharacterClassification; }

@@ -25,8 +25,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <svl/itemset.hxx>
 #include <svl/svldllapi.h>
-#include <vector>
-#include <unordered_map>
 #include <o3tl/sorted_vector.hxx>
 #include <string_view>
 

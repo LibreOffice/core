@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 
-#include <memory>
-
 #include <svl/setitem.hxx>
 #include <svx/svxdllapi.h>
 

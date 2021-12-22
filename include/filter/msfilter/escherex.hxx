@@ -37,7 +37,6 @@
 #include <svx/svdtypes.hxx>
 #include <svx/msdffdef.hxx>
 #include <tools/gen.hxx>
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <vcl/mapmod.hxx>
 #include <o3tl/typed_flags_set.hxx>

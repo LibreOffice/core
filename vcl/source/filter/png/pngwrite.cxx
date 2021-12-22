@@ -25,6 +25,7 @@
 
 #include <limits>
 #include <rtl/crc.h>
+#include <tools/solar.h>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
 #include <vcl/BitmapReadAccess.hxx>

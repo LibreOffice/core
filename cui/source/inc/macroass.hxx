@@ -29,6 +29,7 @@
 
 class SfxMacroTabPage_;
 class SfxMacroTabPage_Impl;
+class Timer;
 
 class SfxMacroTabPage final : public SfxTabPage
 {

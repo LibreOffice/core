@@ -29,7 +29,6 @@
 #include <vcl/font.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
-#include <vcl/vclenum.hxx>
 
 #include <memory>
 #include <optional>

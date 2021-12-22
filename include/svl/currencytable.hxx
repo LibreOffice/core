@@ -14,7 +14,6 @@
 #include <svl/zforlist.hxx>
 
 #include <vector>
-#include <memory>
 
 class SVL_DLLPUBLIC NfCurrencyTable
 {

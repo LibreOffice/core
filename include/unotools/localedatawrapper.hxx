@@ -32,7 +32,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <memory>
-#include <map>
 #include <string_view>
 
 namespace com::sun::star::uno { class XComponentContext; }

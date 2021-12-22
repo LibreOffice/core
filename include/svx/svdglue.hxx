@@ -23,13 +23,11 @@
 #include <tools/gen.hxx>
 #include <tools/degree.hxx>
 #include <svx/svxdllapi.h>
-#include <memory>
 #include <vector>
 #include <o3tl/typed_flags_set.hxx>
 
 namespace vcl { class Window; }
 class OutputDevice;
-class SvStream;
 class SdrObject;
 
 

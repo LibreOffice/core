@@ -22,7 +22,7 @@
 
 #include <tools/fldunit.hxx>
 #include <svx/svxdllapi.h>
-#include <vcl/outdev.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 
 class SfxItemSet;
 
