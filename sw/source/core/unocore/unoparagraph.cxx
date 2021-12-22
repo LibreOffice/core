@@ -19,7 +19,7 @@
 
 #include <unoparagraph.hxx>
 
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
@@ -112,13 +112,11 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
 class SwXParagraph::Impl
     : public SvtListener
 {
-private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
-
 public:
     SwXParagraph& m_rThis;
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     SfxItemPropertySet const& m_rPropSet;
     bool m_bIsDescriptor;
     sal_Int32 m_nSelectionStartPos;
@@ -131,7 +129,6 @@ public:
             SwTextNode* const pTextNode = nullptr, uno::Reference<text::XText> const& xParent = nullptr,
             const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = -1)
         : m_rThis(rThis)
-        , m_EventListeners(m_Mutex)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH))
         , m_bIsDescriptor(nullptr == pTextNode)
         , m_nSelectionStartPos(nSelStart)
@@ -198,7 +195,8 @@ void SwXParagraph::Impl::Notify(const SfxHint& rHint)
             return;
         }
         lang::EventObject const ev(xThis);
-        m_EventListeners.disposeAndClear(ev);
+        std::unique_lock aGuard(m_Mutex);
+        m_EventListeners.disposeAndClear(aGuard, ev);
     }
 }
 
@@ -1226,7 +1224,8 @@ void SAL_CALL SwXParagraph::dispose()
         SwCursor aCursor( SwPosition( *pTextNode ), nullptr );
         pTextNode->GetDoc().getIDocumentContentOperations().DelFullPara(aCursor);
         lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
-        m_pImpl->m_EventListeners.disposeAndClear(ev);
+        std::unique_lock aGuard2(m_pImpl->m_Mutex);
+        m_pImpl->m_EventListeners.disposeAndClear(aGuard2, ev);
     }
 }
 
@@ -1234,6 +1233,7 @@ void SAL_CALL SwXParagraph::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -1241,6 +1241,7 @@ void SAL_CALL SwXParagraph::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
