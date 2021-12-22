@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a2fd28f_58f4ea29",
+        "filename": "wizards/source/access2base/Application.xba",
+        "patchSetId": 3
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-22T06:17:52Z",
+      "side": 1,
+      "message": "This is the first time this *optional* variant argument is accessed. Shouldn\u0027t it be checked using IsMissing?",
+      "revId": "e6c21ee479b7dbfa11398b8038d7abc26d47f98b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
