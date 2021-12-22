@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca7908ab_9454d9eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-22T04:48:21Z",
+      "side": 1,
+      "message": "So I removed https://gerrit.libreoffice.org/c/core/+/126790 from the dependencies, as almost non of it\u0027s changes is related to it and added the minimal https://gerrit.libreoffice.org/c/core/+/127236 instead. It\u0027s just --enable-fuzzers tested.",
+      "revId": "07ce629bae09e273ee2e2c865478ea2f2bcd61d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
