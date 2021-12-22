@@ -80,10 +80,8 @@ void releaseDecimalPtr( SbxDecimal*& rpDecimal )
     {
         rpDecimal->mnRefCount--;
         if( rpDecimal->mnRefCount == 0 )
-        {
             delete rpDecimal;
-            rpDecimal = nullptr;
-        }
+        rpDecimal = nullptr;
     }
 }
 
