@@ -612,6 +612,42 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139922)
                          getParagraph(2)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf135061)
+{
+    createDoc("tdf135061.odt");
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    for (sal_Int32 i = 0; i < 5; ++i)
+    {
+        lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(20, getShapes());
+
+    for (sal_Int32 i = 0; i < 5; ++i)
+    {
+        // Without the fix in place, this test would have crashed here
+        lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132236)
 {
     load(DATA_DIRECTORY, "tdf132236.odt");
