@@ -3059,8 +3059,8 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     for(SCTAB nTab = 0; nTab < nTables; ++nTab)
     {
         // Color filters
-        const ScDBData* pData = rRoot.GetDoc().GetDBCollection()->GetDBNearCursor(0, 0, 0);
-        if (pData)
+        std::vector<ScDBData*> pDBData = rRoot.GetDoc().GetDBCollection()->GetAllDBsFromTab(nTab);
+        for (auto& pData : pDBData)
         {
             ScRange aRange;
             pData->GetArea(aRange);
