@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d12b4ba3_86b8f9de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-22T16:18:07Z",
+      "side": 1,
+      "message": "Thx Mike for the patch! There are so many circumstances to consider in the correct implementation of the Basic language 😞 at least the automated tests will help to maybe avoid such errors.\n\nFor the other error I still have to do some tests. I didnt\u0027t have the time to investigate and fully test the issue. Strange that it works on the 7.2 branch.",
+      "revId": "822998f1dc202aba7a558767f641687aef0c1148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
