@@ -245,7 +245,8 @@ public:
                                 std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc) override;
 
     virtual std::unique_ptr<GenericSalLayout> GetTextLayout(int nFallbackLevel) override;
-    virtual void DrawTextLayout(const GenericSalLayout&) override;
+    virtual void DrawTextLayout(const GenericSalLayout&,
+                                bool bWithoutHintingInTextDirection) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
