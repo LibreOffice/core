@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f470c87_0cda2dde",
+        "filename": "autogen.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-22T16:21:34Z",
+      "side": 1,
+      "message": "better to use \"or\" instead of \"||\" in those kind of statements",
+      "range": {
+        "startLine": 141,
+        "startChar": 35,
+        "endLine": 141,
+        "endChar": 37
+      },
+      "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0601ab4a_0f0ac444",
+        "filename": "autogen.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-22T16:21:34Z",
+      "side": 1,
+      "message": "unnecessary, just use the same open … or die",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 0
+      },
+      "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0da5f2f5_f1f98722",
+        "filename": "autogen.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-22T16:21:34Z",
+      "side": 1,
+      "message": "consider using a named capture group for clarity. Also the regex could be a precompiled one using qr/pattern/.\nAlso using hashes with undef is kinda strange, after all not actually using it as a hash in the first place.\ncould just use and array instead and push the values.",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 9
+      },
+      "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3b81dbe_f1b03c5c",
+        "filename": "autogen.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-22T16:21:34Z",
+      "side": 1,
+      "message": "the same match is done earlier, so the assembly of the value with either just the variable or the space could be done while collecting the variables, making this whole block just printing the vars to the file. print $PARSED join(\"\\n\", @export) (if using an array instead of the hash)",
+      "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
