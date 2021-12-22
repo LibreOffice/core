@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 
 // gcc 11.2.0 triggers a spurious -Werror=stringop-overread
-#if !(__GNUC__ == 11 && __GNUC_MINOR__ == 2)
+#if !(defined __GNUC__ && __GNUC__ == 11 && __GNUC_MINOR__ == 2)
 
 namespace CppUnit
 {
