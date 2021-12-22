@@ -1539,7 +1539,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
     Degree100 nOldRotateAngle=GetMarkedObjRotate();
     Degree100 nOldShearAngle=GetMarkedObjShear();
     const SdrMarkList& rMarkList=GetMarkedObjectList();
-    const size_t nMarkCount=rMarkList.GetMarkCount();
     SdrObject* pObj=nullptr;
 
     RectPoint eSizePoint=RectPoint::MM;
@@ -1751,6 +1750,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
         MoveMarkedObj(Size(nPosDX,nPosDY));
     }
 
+    const size_t nMarkCount=rMarkList.GetMarkCount();
     // protect position
     if(SfxItemState::SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_POS, true, &pPoolItem))
     {
