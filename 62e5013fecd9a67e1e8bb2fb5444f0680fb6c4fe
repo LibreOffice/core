@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1198ee3d_099f4509",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-22T11:14:44Z",
+      "side": 1,
+      "message": "This is highly experimental, and should be seen as suggestion, but works. Have fun :-)",
+      "revId": "62e5013fecd9a67e1e8bb2fb5444f0680fb6c4fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
