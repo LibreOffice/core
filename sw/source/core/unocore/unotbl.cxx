@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <limits>
 
-#include <comphelper/multicontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <editeng/memberids.h>
@@ -148,20 +148,10 @@ namespace
 
     void lcl_SendChartEvent(
             uno::Reference<uno::XInterface> const& xSource,
-            ::comphelper::OInterfaceContainerHelper3<chart::XChartDataChangeEventListener>& rListeners)
+            ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> & rListeners)
     {
-        rListeners.notifyEach(
-                &chart::XChartDataChangeEventListener::chartDataChanged,
-                createChartEvent(xSource));
-    }
-
-    void lcl_SendChartEvent(
-            uno::Reference<uno::XInterface> const& xSource,
-            ::comphelper::OMultiTypeInterfaceContainerHelper2 const& rListeners)
-    {
-        auto pContainer(rListeners.getContainer(cppu::UnoType<chart::XChartDataChangeEventListener>::get()));
-        if (pContainer)
-            pContainer->notifyEach(
+        if (rListeners.getLength())
+            rListeners.notifyEach(
                     &chart::XChartDataChangeEventListener::chartDataChanged,
                     createChartEvent(xSource));
     }
@@ -1905,11 +1895,12 @@ class SwXTextTable::Impl
 {
 private:
     SwFrameFormat* m_pFrameFormat;
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OMultiTypeInterfaceContainerHelper2 m_Listeners;
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> m_ChartListeners;
 
     const SfxItemPropertySet * m_pPropSet;
 
@@ -1927,7 +1918,6 @@ public:
 
     explicit Impl(SwFrameFormat* const pFrameFormat)
         : m_pFrameFormat(pFrameFormat)
-        , m_Listeners(m_Mutex)
         , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE))
         , m_bFirstRowAsLabel(false)
         , m_bFirstColumnAsLabel(false)
@@ -2176,16 +2166,16 @@ void SAL_CALL SwXTextTable::addEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_Listeners.addInterface(
-            cppu::UnoType<lang::XEventListener>::get(), xListener);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
 void SAL_CALL SwXTextTable::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_Listeners.removeInterface(
-            cppu::UnoType<lang::XEventListener>::get(), xListener);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 uno::Reference<table::XCell>  SwXTextTable::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
@@ -2326,7 +2316,8 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
             m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     xAllRange->setData(rData);
     // this is rather inconsistent: setData on XTextTable sends events, but e.g. CellRanges do not
-    lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
+    std::unique_lock aGuard2(m_pImpl->m_Mutex);
+    lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
 }
 
 uno::Sequence<OUString> SwXTextTable::getRowDescriptions()
@@ -2381,16 +2372,16 @@ void SAL_CALL SwXTextTable::addChartDataChangeEventListener(
     const uno::Reference<chart::XChartDataChangeEventListener> & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_Listeners.addInterface(
-            cppu::UnoType<chart::XChartDataChangeEventListener>::get(), xListener);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_ChartListeners.addInterface(xListener);
 }
 
 void SAL_CALL SwXTextTable::removeChartDataChangeEventListener(
     const uno::Reference<chart::XChartDataChangeEventListener> & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_Listeners.removeInterface(
-            cppu::UnoType<chart::XChartDataChangeEventListener>::get(), xListener);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_ChartListeners.removeInterface(xListener);
 }
 
 sal_Bool SwXTextTable::isNotANumber(double nNumber)
@@ -2500,7 +2491,8 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     bool bTmp = *o3tl::doAccess<bool>(aValue);
                     if (m_pImpl->m_bFirstRowAsLabel != bTmp)
                     {
-                        lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
+                        std::unique_lock aGuard2(m_pImpl->m_Mutex);
+                        lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
                         m_pImpl->m_bFirstRowAsLabel = bTmp;
                     }
                 }
@@ -2511,7 +2503,8 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     bool bTmp = *o3tl::doAccess<bool>(aValue);
                     if (m_pImpl->m_bFirstColumnAsLabel != bTmp)
                     {
-                        lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
+                        std::unique_lock aGuard2(m_pImpl->m_Mutex);
+                        lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
                         m_pImpl->m_bFirstColumnAsLabel = bTmp;
                     }
                 }
@@ -3085,11 +3078,15 @@ void SwXTextTable::Impl::Notify(const SfxHint& rHint)
         if(!m_pFrameFormat)
         {
             lang::EventObject const ev(xThis);
-            m_Listeners.disposeAndClear(ev);
+            std::unique_lock aGuard(m_Mutex);
+            m_EventListeners.disposeAndClear(aGuard, ev);
+            aGuard.lock();
+            m_ChartListeners.disposeAndClear(aGuard, ev);
         }
         else
         {
-            lcl_SendChartEvent(xThis, m_Listeners);
+            std::unique_lock aGuard(m_Mutex);
+            lcl_SendChartEvent(xThis, m_ChartListeners);
         }
     }
 }
@@ -3114,12 +3111,12 @@ class SwXCellRange::Impl
     : public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
     SwFrameFormat* m_pFrameFormat;
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper3<chart::XChartDataChangeEventListener> m_ChartListeners;
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> m_ChartListeners;
 
     sw::UnoCursorPointer m_pTableCursor;
 
@@ -3131,7 +3128,6 @@ public:
 
     Impl(sw::UnoCursorPointer const& pCursor, SwFrameFormat& rFrameFormat, SwRangeDescriptor const& rDesc)
         : m_pFrameFormat(&rFrameFormat)
-        , m_ChartListeners(m_Mutex)
         , m_pTableCursor(pCursor)
         , m_RangeDescriptor(rDesc)
         , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_RANGE))
@@ -3416,6 +3412,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             bool bTmp = *o3tl::doAccess<bool>(aValue);
             if (m_pImpl->m_bFirstRowAsLabel != bTmp)
             {
+                std::unique_lock aGuard2(m_pImpl->m_Mutex);
                 lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
                 m_pImpl->m_bFirstRowAsLabel = bTmp;
             }
@@ -3426,6 +3423,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             bool bTmp = *o3tl::doAccess<bool>(aValue);
             if (m_pImpl->m_bFirstColumnAsLabel != bTmp)
             {
+                std::unique_lock aGuard2(m_pImpl->m_Mutex);
                 lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
                 m_pImpl->m_bFirstColumnAsLabel = bTmp;
             }
@@ -3763,6 +3761,7 @@ void SAL_CALL SwXCellRange::addChartDataChangeEventListener(
         const uno::Reference<chart::XChartDataChangeEventListener> & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_ChartListeners.addInterface(xListener);
 }
 
@@ -3770,6 +3769,7 @@ void SAL_CALL SwXCellRange::removeChartDataChangeEventListener(
         const uno::Reference<chart::XChartDataChangeEventListener> & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_ChartListeners.removeInterface(xListener);
 }
 
@@ -3826,9 +3826,15 @@ void SwXCellRange::Impl::Notify( const SfxHint& rHint )
     if (xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
         if(m_pFrameFormat)
+        {
+            std::unique_lock aGuard(m_Mutex);
             lcl_SendChartEvent(xThis, m_ChartListeners);
+        }
         else
-            m_ChartListeners.disposeAndClear(lang::EventObject(xThis));
+        {
+            std::unique_lock aGuard(m_Mutex);
+            m_ChartListeners.disposeAndClear(aGuard, lang::EventObject(xThis));
+        }
     }
 }
 
