@@ -20,7 +20,6 @@
 #ifndef INCLUDED_XMLOFF_MARKERSTYLE_HXX
 #define INCLUDED_XMLOFF_MARKERSTYLE_HXX
 
-#include <config_options.h>
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>

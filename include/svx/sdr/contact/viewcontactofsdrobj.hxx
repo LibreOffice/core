@@ -22,12 +22,9 @@
 
 #include <sal/types.h>
 #include <svx/sdr/contact/viewcontact.hxx>
-#include <svx/sdtakitm.hxx>
 #include <svx/svxdllapi.h>
 
 class SdrObject;
-class GeoStat;
-class Bitmap;
 
 namespace sdr::contact {
 

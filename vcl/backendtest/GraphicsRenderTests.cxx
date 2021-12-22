@@ -11,6 +11,7 @@
 #include <test/outputdevice.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/test/GraphicsRenderTests.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
 
 #include <svdata.hxx>

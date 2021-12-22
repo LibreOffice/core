@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTREDIRECTOR_HXX
 
 #include <svx/svxdllapi.h>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 
 namespace sdr::contact {
 

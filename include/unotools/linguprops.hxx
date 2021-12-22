@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-variable"

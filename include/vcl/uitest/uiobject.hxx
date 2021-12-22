@@ -17,6 +17,7 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/window.hxx>
 
 #include <set>
 

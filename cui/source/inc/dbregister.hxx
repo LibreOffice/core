@@ -20,6 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <tools/solar.h>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 

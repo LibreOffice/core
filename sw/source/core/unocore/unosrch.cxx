@@ -35,6 +35,7 @@
 #include <svl/itemprop.hxx>
 #include <svl/itempool.hxx>
 #include <memory>
+#include <unordered_map>
 
 using namespace ::com::sun::star;
 

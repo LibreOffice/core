@@ -24,6 +24,7 @@
 
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/textsearch.hxx>
+#include <unotools/transliterationwrapper.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 

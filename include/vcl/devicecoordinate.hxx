@@ -11,7 +11,6 @@
 #define INCLUDED_VCL_DEVICE_COORDINATE_HXX
 
 #include <config_vcl.h>
-#include <tools/long.hxx>
 
 #if VCL_FLOAT_DEVICE_PIXEL
 #include <basegfx/point/b2dpoint.hxx>

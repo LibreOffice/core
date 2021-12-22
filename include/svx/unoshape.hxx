@@ -46,7 +46,6 @@
 #include <tools/weakbase.hxx>
 #include <svl/lstner.hxx>
 #include <editeng/unoipset.hxx>
-#include <osl/mutex.hxx>
 #include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Any.hxx>

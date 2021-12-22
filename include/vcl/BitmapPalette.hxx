@@ -22,7 +22,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/BitmapColor.hxx>
 #include <vcl/checksum.hxx>
-#include <vector>
 #include <o3tl/cow_wrapper.hxx>
 
 class ImplBitmapPalette;

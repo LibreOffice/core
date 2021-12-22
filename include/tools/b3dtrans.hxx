@@ -22,7 +22,6 @@
 
 #define ZBUFFER_DEPTH_RANGE         (double(256L * 256L * 256L))
 
-#include <config_options.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <tools/gen.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

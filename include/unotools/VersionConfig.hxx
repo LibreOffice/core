@@ -9,7 +9,6 @@
  */
 #pragma once
 
-#include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <unotools/configmgr.hxx>
 

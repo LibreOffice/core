@@ -20,7 +20,6 @@
 #ifndef INCLUDED_XMLOFF_DASHSTYLE_HXX
 #define INCLUDED_XMLOFF_DASHSTYLE_HXX
 
-#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <xmloff/dllapi.h>
 

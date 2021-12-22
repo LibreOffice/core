@@ -77,6 +77,7 @@
 #include <editeng/widwitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/xmlcnitm.hxx>
+#include <i18nutil/transliteration.hxx>
 #include <editsh.hxx>
 #include <fchrfmt.hxx>
 #include <fmtanchr.hxx>

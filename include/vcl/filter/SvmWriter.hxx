@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <memory>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 

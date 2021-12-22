@@ -22,7 +22,6 @@
 #include <ostream>
 #include <string>
 
-#include <sal/types.h>
 #include <svl/svldllapi.h>
 
 enum class SfxHintId {

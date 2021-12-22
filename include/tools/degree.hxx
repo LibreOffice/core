@@ -17,7 +17,6 @@
 #include <cstdlib>
 #include <math.h>
 #include <numeric>
-#include <utility>
 
 template <int N> struct FractionTag;
 // 1/Nth fraction of a degree

@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_ACCESSIBLETABLEPROVIDER_HXX
 
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
-#include <vcl/outdev.hxx>
+#include <vcl/window.hxx>
 
 namespace com::sun::star::accessibility { class XAccessible; }
 namespace utl { class AccessibleStateSetHelper; }

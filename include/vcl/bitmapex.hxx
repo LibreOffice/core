@@ -25,7 +25,6 @@
 #include <vcl/Scanline.hxx>
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
-#include <tools/solar.h>
 
 #include <sal/types.h>
 

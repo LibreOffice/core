@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_FILTER_WW8_WRTWW8_HXX
 
 #include <sot/storage.hxx>
+#include <svl/nfkeytab.hxx>
 #include <tools/solar.h>
 #include <tools/gen.hxx>
 #include <editeng/editdata.hxx>

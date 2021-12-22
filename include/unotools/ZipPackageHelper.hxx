@@ -19,7 +19,6 @@
 #ifndef INCLUDED_UNOTOOLS_ZIPPACKAGEHELPER_HXX
 #define INCLUDED_UNOTOOLS_ZIPPACKAGEHELPER_HXX
 
-#include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
 
 #include <com/sun/star/uno/XInterface.hpp>

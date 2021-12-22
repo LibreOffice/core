@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <rtl/string.hxx>
+
 inline constexpr OStringLiteral HID_FILEDLG_LINK_CB = "SVT_HID_FILEDLG_LINK_CB";
 inline constexpr OStringLiteral HID_FILEDLG_PREVIEW_CB = "SVT_HID_FILEDLG_PREVIEW_CB";
 inline constexpr OStringLiteral HID_FILEDLG_STANDARD = "SVT_HID_FILEDLG_STANDARD";
