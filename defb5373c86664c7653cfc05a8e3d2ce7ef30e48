@@ -105,6 +105,24 @@
       "parentUuid": "67be0c03_8c35e975",
       "revId": "defb5373c86664c7653cfc05a8e3d2ce7ef30e48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25172aff_26e7d5d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-22T10:09:30Z",
+      "side": 1,
+      "message": "\u003e The long term plan is to make the rendering of primitives more efficient by more directly translating them to the underlying platform-specific graphic APIs.\n\u003e \n\u003e That means, for example, instead of attempting to reflect parts of the Skia API in the OutputDevice API, we can do a processor that directly converts Primitive\u0027s into skia API.\n\u003e \n\u003e Which means the Processor class needs to have access to stuff inside the vcl plugin code, and to the drawinglayer primitives.\n\nYes, that is true, but does not require to have Primitive stuff available in vcl. It is separated by purpose. The long term plan for primitives - done when designing \u0026 implementing them - was always to have system-backend-specific renderers/processors.\n\nIt is separated to have a long-term path to get rid of vcl dependencies - who wants to keep that Win3.11 GDI based stuff forever? So I would prefer to not mix stuff up.\n\nThe now used pixel-processor/renderer targeted at vcl OutputDevice was always thought as an in-between solution, but it is used now for 10years - sigh - due to with the opensource area not having ressources anymore to continue that transformation stuff. We could have those system-specific renderers if there would have been support...Jehova, Jehova :-)\n\nTechnically I would do/had always planned to do something like:\n\n- use the primitive processor which is also the visitor/renderer tool for primitives. Add small UNO API like for Primitive (would just be incarnation \u0026 render(seq\u003cprimitives\u003e)) to implement e.g. cairo-dependent pixel-renderer in drawinglayer module (maybe even as seperate small library)\n\n- There is already a central place to get a pixel-renderer, extend that to  create/prepare/return the correct specialized renderer for the current runtime situation\n\n- In the implementation it would - for now - be necessary to re-use sal gdi stuff from backends to get fast progress (and not to double code). Remember that the long term view would be ideally vice-versa - use up-calls to allow current render calls at OutputDevice to be done by that renderers using temp primitives - so backends could completely move to that uno service implementations long term\n\n- Indeed we would thus for now need a possibility to access specific back-ends in specific service implementation libraries. I think we could find possibilities to do that. AFAIK e.g. cairo is already much moere open accessible than it should be...\n\nAh, for the UNO API stuff - it\u0027s just for interface, inside the processor/renderer you could go back to the C++ implementation instantly. Only a single primitive2D would need a UNO API impl object for transfer (you can always pack a vector/sequence of primitives into a neutral group primitive to reduce diameter of stuff to hand around :-)\n\nThis is what I have tried to talk about at all meetings/conferences, tried to spread if/how that can/may be developed further. If there are better ideas, that is of course welcome - it\u0027s open source now :-)\n\n\n\u003e \n\u003e Anyhow, it looks like quikee\u0027s patch at \n\u003e    https://gerrit.libreoffice.org/c/core/+/127286\n\u003e is going to work for me, so I can abandon this.",
+      "parentUuid": "379ee3da_711603fb",
+      "revId": "defb5373c86664c7653cfc05a8e3d2ce7ef30e48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
