@@ -62,6 +62,9 @@
 		"editor.rulers": [
 			100
 		],
+		// files in the repo should in general have a newline at end-of-file
+		"files.insertFinalNewline": true,
+		"editor.renderFinalNewline": false,
 		"gitlens.autolinks": [
 			{
 				"prefix": "tdf#",
