@@ -104,8 +104,7 @@ namespace accessibility
     AccessibleEditableTextPara::AccessibleEditableTextPara(
                                 const uno::Reference< XAccessible >& rParent,
                                 const AccessibleParaManager* _pParaManager )
-        : AccessibleTextParaInterfaceBase( m_aMutex ),
-          mnParagraphIndex( 0 ),
+        : mnParagraphIndex( 0 ),
           mnIndexInParent( 0 ),
           mpEditSource( nullptr ),
           maEEOffset( 0, 0 ),

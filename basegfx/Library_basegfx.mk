@@ -16,6 +16,7 @@ $(eval $(call gb_Library_set_precompiled_header,basegfx,basegfx/inc/pch/precompi
 $(eval $(call gb_Library_use_sdk_api,basegfx))
 
 $(eval $(call gb_Library_use_libraries,basegfx,\
+    comphelper \
     cppu \
     cppuhelper \
     sal \

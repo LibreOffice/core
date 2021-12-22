@@ -15,9 +15,8 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <comphelper/interfacecontainer2.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/compbase.hxx>
 #include <tools/time.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/formatter.hxx>
@@ -34,32 +33,25 @@ class Window;
 
 namespace weld
 {
-typedef cppu::WeakComponentImplHelper<css::awt::XWindow> TransportAsXWindow_Base;
+typedef comphelper::WeakComponentImplHelper<css::awt::XWindow> TransportAsXWindow_Base;
 
-class VCL_DLLPUBLIC TransportAsXWindow : public cppu::BaseMutex, public TransportAsXWindow_Base
+class VCL_DLLPUBLIC TransportAsXWindow : public TransportAsXWindow_Base
 {
 private:
     weld::Widget* m_pWeldWidget;
     weld::Builder* m_pWeldWidgetBuilder;
 
-    comphelper::OInterfaceContainerHelper2 m_aWindowListeners;
-    comphelper::OInterfaceContainerHelper2 m_aKeyListeners;
-    comphelper::OInterfaceContainerHelper2 m_aFocusListeners;
-    comphelper::OInterfaceContainerHelper2 m_aMouseListeners;
-    comphelper::OInterfaceContainerHelper2 m_aMotionListeners;
-    comphelper::OInterfaceContainerHelper2 m_aPaintListeners;
+    comphelper::OInterfaceContainerHelper4<css::awt::XWindowListener> m_aWindowListeners;
+    comphelper::OInterfaceContainerHelper4<css::awt::XKeyListener> m_aKeyListeners;
+    comphelper::OInterfaceContainerHelper4<css::awt::XFocusListener> m_aFocusListeners;
+    comphelper::OInterfaceContainerHelper4<css::awt::XMouseListener> m_aMouseListeners;
+    comphelper::OInterfaceContainerHelper4<css::awt::XMouseMotionListener> m_aMotionListeners;
+    comphelper::OInterfaceContainerHelper4<css::awt::XPaintListener> m_aPaintListeners;
 
 public:
     TransportAsXWindow(weld::Widget* pWeldWidget, weld::Builder* pWeldWidgetBuilder = nullptr)
-        : TransportAsXWindow_Base(m_aMutex)
-        , m_pWeldWidget(pWeldWidget)
+        : m_pWeldWidget(pWeldWidget)
         , m_pWeldWidgetBuilder(pWeldWidgetBuilder)
-        , m_aWindowListeners(m_aMutex)
-        , m_aKeyListeners(m_aMutex)
-        , m_aFocusListeners(m_aMutex)
-        , m_aMouseListeners(m_aMutex)
-        , m_aMotionListeners(m_aMutex)
-        , m_aPaintListeners(m_aMutex)
     {
     }
 
@@ -96,72 +88,84 @@ public:
     void SAL_CALL
     addWindowListener(const css::uno::Reference<css::awt::XWindowListener>& rListener) override
     {
+        std::unique_lock g(m_aMutex);
         m_aWindowListeners.addInterface(rListener);
     }
 
     void SAL_CALL
     removeWindowListener(const css::uno::Reference<css::awt::XWindowListener>& rListener) override
     {
+        std::unique_lock g(m_aMutex);
         m_aWindowListeners.removeInterface(rListener);
     }
 
     void SAL_CALL
     addFocusListener(const css::uno::Reference<css::awt::XFocusListener>& rListener) override
     {
+        std::unique_lock g(m_aMutex);
         m_aFocusListeners.addInterface(rListener);
     }
 
     void SAL_CALL
     removeFocusListener(const css::uno::Reference<css::awt::XFocusListener>& rListener) override
     {
+        std::unique_lock g(m_aMutex);
         m_aFocusListeners.removeInterface(rListener);
     }
 
     void SAL_CALL
     addKeyListener(const css::uno::Reference<css::awt::XKeyListener>& rListener) override
     {
+        std::unique_lock g(m_aMutex);
         m_aKeyListeners.addInterface(rListener);
     }
 
     void SAL_CALL
     removeKeyListener(const css::uno::Reference<css::awt::XKeyListener>& rListener) override
     {
+        std::unique_lock g(m_aMutex);
         m_aKeyListeners.removeInterface(rListener);
     }
 
     void SAL_CALL
     addMouseListener(const css::uno::Reference<css::awt::XMouseListener>& rListener) override
     {
+        std::unique_lock g(m_aMutex);
         m_aMouseListeners.addInterface(rListener);
     }
 
     void SAL_CALL
     removeMouseListener(const css::uno::Reference<css::awt::XMouseListener>& rListener) override
     {
+        std::unique_lock g(m_aMutex);
         m_aMouseListeners.removeInterface(rListener);
     }
 
     void SAL_CALL addMouseMotionListener(
         const css::uno::Reference<css::awt::XMouseMotionListener>& rListener) override
     {
+        std::unique_lock g(m_aMutex);
         m_aMotionListeners.addInterface(rListener);
     }
 
     void SAL_CALL removeMouseMotionListener(
         const css::uno::Reference<css::awt::XMouseMotionListener>& rListener) override
     {
+        std::unique_lock g(m_aMutex);
         m_aMotionListeners.removeInterface(rListener);
     }
 
     void SAL_CALL
     addPaintListener(const css::uno::Reference<css::awt::XPaintListener>& rListener) override
     {
+        std::unique_lock g(m_aMutex);
         m_aPaintListeners.addInterface(rListener);
     }
 
     void SAL_CALL
     removePaintListener(const css::uno::Reference<css::awt::XPaintListener>& rListener) override
     {
+        std::unique_lock g(m_aMutex);
         m_aPaintListeners.removeInterface(rListener);
     }
 };
