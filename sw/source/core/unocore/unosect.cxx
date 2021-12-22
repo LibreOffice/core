@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/SectionFileLink.hpp>
 
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -109,14 +109,12 @@ struct SwTextSectionProperties_Impl
 class SwXTextSection::Impl
     : public SvtListener
 {
-private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
-
 public:
     SwXTextSection &            m_rThis;
     uno::WeakReference<uno::XInterface> m_wThis;
     const SfxItemPropertySet &  m_rPropSet;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     const bool                  m_bIndexHeader;
     bool                        m_bIsDescriptor;
     OUString             m_sName;
@@ -127,7 +125,6 @@ public:
             SwSectionFormat* const pFormat, const bool bIndexHeader)
         : m_rThis(rThis)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_SECTION))
-        , m_EventListeners(m_Mutex)
         , m_bIndexHeader(bIndexHeader)
         , m_bIsDescriptor(nullptr == pFormat)
         , m_pProps(pFormat ? nullptr : new SwTextSectionProperties_Impl())
@@ -183,7 +180,8 @@ void SwXTextSection::Impl::Notify(const SfxHint& rHint)
             return;
         }
         lang::EventObject const ev(xThis);
-        m_EventListeners.disposeAndClear(ev);
+        std::unique_lock aGuard(m_Mutex);
+        m_EventListeners.disposeAndClear(aGuard, ev);
     }
 }
 
@@ -495,6 +493,7 @@ void SAL_CALL SwXTextSection::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -502,6 +501,7 @@ void SAL_CALL SwXTextSection::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
