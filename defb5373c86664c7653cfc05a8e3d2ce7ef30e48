@@ -52,6 +52,23 @@
       "parentUuid": "95639807_44c94004",
       "revId": "defb5373c86664c7653cfc05a8e3d2ce7ef30e48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca757783_60908ed3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-22T09:25:33Z",
+      "side": 1,
+      "message": "So, thought about it back and forth - leading to a simple question:\n  Why do you want Primitives in vcl?\n  What do you intend to do with them?",
+      "revId": "defb5373c86664c7653cfc05a8e3d2ce7ef30e48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
