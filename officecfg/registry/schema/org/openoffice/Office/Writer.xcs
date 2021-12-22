@@ -1459,7 +1459,15 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="GlyphPositioningMode" oor:type="xs:int" oor:nillable="false">
+        <prop oor:name="RenderWithoutHorizontalHinting" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
+          <info>
+            <desc>Activates rendering without horizontal hinting.</desc>
+            <label>Render Mode</label>
+          </info>
+          <value>false</value>
+        </prop>
+	<prop oor:name="GlyphPositioningMode" oor:type="xs:int" oor:nillable="false">
           <!-- UIHints: Tools - Option - Text document - Layout - [Section] Window -->
           <info>
             <desc>Specifies the Glyph Positioning Mode.</desc>
