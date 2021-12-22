@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e6c94d7_f19a8cfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-22T07:46:12Z",
+      "side": 1,
+      "message": "\u003e Uploaded patch set 4.\n\n[manual rebase to solve accrued merge conflicts across this change set relation chain]",
+      "revId": "d82ed85329bcca94938cd508314c0beb7696c701",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
