@@ -54,7 +54,8 @@ SalGraphics::SalGraphics()
     m_aLastMirrorW(0),
     m_nLastMirrorDeviceLTRButBiDiRtlTranslate(0),
     m_bLastMirrorDeviceLTRButBiDiRtlSet(false),
-    m_bAntiAlias(false)
+    m_bAntiAlias(false),
+    m_bTextRenderModeForResolutionIndependentLayout(false)
 {
     // read global RTL settings
     if( AllSettings::GetLayoutRTL() )

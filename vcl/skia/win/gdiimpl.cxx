@@ -287,6 +287,10 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     }
 
     SkFont font(typeface);
+
+    // For the standard case of DirectWrite skia seems to default to DWRITE_RENDERING_MODE_NATURAL
+    // so no explicit effort to request that needed.
+
     font.setEdging(logFont.lfQuality == NONANTIALIASED_QUALITY ? SkFont::Edging::kAlias
                                                                : fontEdging);
 
