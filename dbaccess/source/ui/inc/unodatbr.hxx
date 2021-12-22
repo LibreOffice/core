@@ -31,6 +31,7 @@
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/sdb/XDatabaseRegistrationsListener.hpp>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include "callbacks.hxx"
 #include <vcl/transfer.hxx>
