@@ -217,7 +217,7 @@ private:
 
     virtual void SAL_CALL disposing(css::lang::EventObject const &) override
     {
-        osl::MutexGuard g(m_Editor.mutex_);
+        std::unique_lock g(m_Editor.mutex_);
         m_Editor.m_xNotifier.clear();
     }
 
@@ -257,7 +257,7 @@ SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView )
         officecfg::Office::Common::Font::SourceViewFont::get(),
         css::uno::UNO_QUERY_THROW);
     {
-        osl::MutexGuard g(mutex_);
+        std::unique_lock g(mutex_);
         m_xNotifier = n;
     }
     n->addPropertiesChangeListener({ "FontHeight", "FontName" }, m_xListener);
@@ -272,7 +272,7 @@ void SwSrcEditWindow::dispose()
 {
     css::uno::Reference< css::beans::XMultiPropertySet > n;
     {
-        osl::MutexGuard g(mutex_);
+        std::unique_lock g(mutex_);
         n = m_xNotifier;
     }
     if (n.is()) {

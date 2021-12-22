@@ -25,6 +25,7 @@
 #include <vcl/idle.hxx>
 
 #include <vcl/xtextedt.hxx>
+#include <mutex>
 #include <set>
 
 namespace com::sun::star::beans { class XMultiPropertySet; }
@@ -70,7 +71,7 @@ private:
     SwSrcView*      m_pSrcView;
 
     rtl::Reference< ChangesListener > m_xListener;
-    osl::Mutex mutex_;
+    std::mutex mutex_;
     css::uno::Reference< css::beans::XMultiPropertySet >
         m_xNotifier;
 
