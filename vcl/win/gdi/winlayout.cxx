@@ -96,7 +96,6 @@ bool ExTextOutRenderer::operator()(GenericSalLayout const& rLayout, SalGraphics&
 
         if (pWinFont->IsCJKVerticalFont() && pGlyph->IsVertical())
         {
-            tools::Rectangle aRect;
             nNewTextAlign = VTA_CENTER | TA_BOTTOM;
             nYOffset = nGlyphOffset;
         }
