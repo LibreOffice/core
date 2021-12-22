@@ -30,7 +30,8 @@
 #include <SkFont.h>
 #include <SkFontMgr_fontconfig.h>
 
-void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics)
+void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics,
+                                    bool bWithoutHintingInTextDirection)
 {
     const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
     const FreetypeFont& rFont = rInstance.GetFreetypeFont();
@@ -57,6 +58,14 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
         font.setSkewX(1.0 * -0x4000L / 0x10000L);
     if (rFont.NeedsArtificialBold())
         font.setEmbolden(true);
+
+    SkFontHinting eHinting = font.getHinting();
+    bool bAllowedHintStyle
+        = !bWithoutHintingInTextDirection
+          || (eHinting == SkFontHinting::kNone || eHinting == SkFontHinting::kSlight);
+    if (bWithoutHintingInTextDirection && !bAllowedHintStyle)
+        font.setHinting(SkFontHinting::kSlight);
+
     font.setEdging(rFont.GetAntialiasAdvice() ? SkFont::Edging::kAntiAlias
                                               : SkFont::Edging::kAlias);
 

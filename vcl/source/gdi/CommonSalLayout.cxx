@@ -207,10 +207,10 @@ void GenericSalLayout::AdjustLayout(vcl::text::ImplLayoutArgs& rArgs)
         ApplyAsianKerning(rArgs.mrStr);
 }
 
-void GenericSalLayout::DrawText(SalGraphics& rSalGraphics) const
+void GenericSalLayout::DrawText(SalGraphics& rSalGraphics, bool bWithoutHintingInTextDirection) const
 {
     //call platform dependent DrawText functions
-    rSalGraphics.DrawTextLayout( *this );
+    rSalGraphics.DrawTextLayout(*this, bWithoutHintingInTextDirection);
 }
 
 // Find if the nominal glyph of the character is an input to “vert” feature.

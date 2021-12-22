@@ -93,7 +93,7 @@ public:
                                             Ucs2UIntMap& rUnicodeEnc ) override;
     virtual std::unique_ptr<GenericSalLayout>
                             GetTextLayout(int nFallbackLevel) override;
-    virtual void            DrawTextLayout( const GenericSalLayout& ) override;
+    virtual void            DrawTextLayout( const GenericSalLayout&, bool bWithoutHintingInTextDirection ) override;
 
     virtual SystemGraphicsData GetGraphicsData() const override;
 

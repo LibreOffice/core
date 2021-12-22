@@ -60,7 +60,7 @@ namespace vcl::text {
 class MultiSalLayout final : public SalLayout
 {
 public:
-    void            DrawText(SalGraphics&) const override;
+    void            DrawText(SalGraphics&, bool bWithoutHintingInTextDirection) const override;
     sal_Int32       GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
     DeviceCoordinate FillDXArray(std::vector<DeviceCoordinate>* pDXArray) const override;
     void            GetCaretPositions(int nArraySize, sal_Int32* pCaretXArray) const override;
@@ -105,7 +105,7 @@ public:
 
     void            AdjustLayout(vcl::text::ImplLayoutArgs&) final override;
     bool            LayoutText(vcl::text::ImplLayoutArgs&, const SalLayoutGlyphsImpl*) final override;
-    void            DrawText(SalGraphics&) const final override;
+    void            DrawText(SalGraphics&, bool bWithoutHintingInTextDirection) const final override;
     static std::shared_ptr<vcl::text::TextLayoutCache> CreateTextLayoutCache(OUString const&);
     SalLayoutGlyphs GetGlyphs() const final override;
 
