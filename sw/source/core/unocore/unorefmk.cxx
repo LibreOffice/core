@@ -20,7 +20,7 @@
 #include <memory>
 #include <utility>
 
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -63,20 +63,17 @@ using namespace ::com::sun::star;
 class SwXReferenceMark::Impl
     : public SvtListener
 {
-private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
-
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     bool m_bIsDescriptor;
     SwDoc* m_pDoc;
     const SwFormatRefMark* m_pMarkFormat;
     OUString m_sMarkName;
 
     Impl(SwDoc* const pDoc, SwFormatRefMark* const pRefMark)
-        : m_EventListeners(m_Mutex)
-        , m_bIsDescriptor(nullptr == pRefMark)
+        : m_bIsDescriptor(nullptr == pRefMark)
         , m_pDoc(pDoc)
         , m_pMarkFormat(pRefMark)
     {
@@ -106,7 +103,8 @@ void SwXReferenceMark::Impl::Invalidate()
         return;
     }
     lang::EventObject const ev(xThis);
-    m_EventListeners.disposeAndClear(ev);
+    std::unique_lock aGuard(m_Mutex);
+    m_EventListeners.disposeAndClear(aGuard, ev);
 }
 
 void SwXReferenceMark::Impl::Notify(const SfxHint& rHint)
@@ -361,6 +359,7 @@ void SAL_CALL SwXReferenceMark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -368,6 +367,7 @@ void SAL_CALL SwXReferenceMark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
@@ -602,12 +602,10 @@ SwXMetaText::createTextCursorByRange(
 // the Meta listens at the SwTextNode and throws away the cache when it changes
 class SwXMeta::Impl : public SvtListener
 {
-private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
-
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     std::unique_ptr<const TextRangeList_t> m_pTextPortions;
     // 3 possible states: not attached, attached, disposed
     bool m_bIsDisposed;
@@ -620,8 +618,7 @@ public:
             ::sw::Meta* const pMeta,
             uno::Reference<text::XText> const& xParentText,
             std::unique_ptr<TextRangeList_t const> pPortions)
-        : m_EventListeners(m_Mutex)
-        , m_pTextPortions(std::move(pPortions))
+        : m_pTextPortions(std::move(pPortions))
         , m_bIsDisposed(false)
         , m_bIsDescriptor(nullptr == pMeta)
         , m_xParentText(xParentText)
@@ -660,7 +657,8 @@ void SwXMeta::Impl::Notify(const SfxHint& rHint)
         return;
     }
     lang::EventObject const ev(xThis);
-    m_EventListeners.disposeAndClear(ev);
+    std::unique_lock aGuard(m_Mutex);
+    m_EventListeners.disposeAndClear(aGuard, ev);
 }
 
 uno::Reference<text::XText> const & SwXMeta::GetParentText() const
@@ -877,6 +875,7 @@ SwXMeta::addEventListener(
         uno::Reference< lang::XEventListener> const & xListener )
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -885,6 +884,7 @@ SwXMeta::removeEventListener(
         uno::Reference< lang::XEventListener> const & xListener )
 {
     // no need to lock here as m_pImpl is const and container threadsafe
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
@@ -897,7 +897,8 @@ SwXMeta::dispose()
     {
         m_pImpl->m_pTextPortions.reset();
         lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
-        m_pImpl->m_EventListeners.disposeAndClear(ev);
+        std::unique_lock aGuard(m_pImpl->m_Mutex);
+        m_pImpl->m_EventListeners.disposeAndClear(aGuard, ev);
         m_pImpl->m_bIsDisposed = true;
         m_pImpl->m_xText->Invalidate();
     }
