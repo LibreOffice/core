@@ -111,6 +111,7 @@ class CheckGbuildToJsonModules(unittest.TestCase):
             self.builddirnative = self.builddir
         shutil.copyfile(os.path.join(self.builddirnative, 'config_host.mk'), os.path.join(self.tempsrc, 'config_host.mk'))
         shutil.copyfile(os.path.join(self.builddirnative, 'config_host_lang.mk'), os.path.join(self.tempsrc, 'config_host_lang.mk'))
+        shutil.copyfile(os.path.join(self.builddirnative, 'config_host_parsed.mk'), os.path.join(self.tempsrc, 'config_host_parsed.mk'))
         shutil.copytree(os.path.join(self.builddirnative, 'config_host'),  os.path.join(self.tempsrc, 'config_host'))
         shutil.copyfile(os.path.join(self.srcdirnative, 'Repository.mk'), os.path.join(self.tempsrc, 'Repository.mk'))
         shutil.copyfile(os.path.join(self.srcdirnative, 'RepositoryExternal.mk'), os.path.join(self.tempsrc, 'RepositoryExternal.mk'))

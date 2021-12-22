@@ -52,9 +52,12 @@
 /config_host_lang.mk
 /config_host_lang.mk.last
 /config_host_lang.mk.stamp
+/config_host_parsed.mk
+/config_host_parsed.mk.in
 /config_build
 /config_build.mk
 /config_build_lang.mk
+/config_build_parsed.mk
 /configure
 /bin/bffvalidator.sh
 /bin/odfvalidator.sh
