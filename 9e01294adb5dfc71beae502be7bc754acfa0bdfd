@@ -16,6 +16,23 @@
       "message": "Note that copy/paste between the Collabora Office iOS app and other apps, either direction, does not work at all at the moment (after this build-fix commit). I have no idea what has caused that regression.",
       "revId": "9e01294adb5dfc71beae502be7bc754acfa0bdfd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a157f52c_29a10181",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-22T12:18:51Z",
+      "side": 1,
+      "message": "But I already said that, sure.",
+      "revId": "9e01294adb5dfc71beae502be7bc754acfa0bdfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
