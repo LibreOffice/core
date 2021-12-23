@@ -24,13 +24,16 @@
 
  *************************************************************************/
 #include <memory>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <mutex>
+#include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/multiinterfacecontainer4.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <ucbhelper/resultset.hxx>
 #include <ucbhelper/resultsetmetadata.hxx>
 #include <ucbhelper/macros.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 
@@ -121,19 +124,8 @@ public:
 
 }
 
-typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
-    PropertyChangeListenerContainer;
-
-namespace {
-
-class PropertyChangeListeners : public PropertyChangeListenerContainer
-{
-public:
-    explicit PropertyChangeListeners( osl::Mutex& rMtx )
-        : PropertyChangeListenerContainer( rMtx ) {}
-};
-
-}
+typedef comphelper::OMultiTypeInterfaceContainerHelperVar4<OUString, css::beans::XPropertyChangeListener>
+    PropertyChangeListeners;
 
 } // namespace ucbhelper_impl
 
@@ -154,8 +146,8 @@ struct ResultSet_Impl
     uno::Reference< sdbc::XResultSetMetaData >      m_xMetaData;
     uno::Sequence< beans::Property >                m_aProperties;
     rtl::Reference< ResultSetDataSupplier >         m_xDataSupplier;
-    osl::Mutex                          m_aMutex;
-    std::unique_ptr<cppu::OInterfaceContainerHelper> m_pDisposeEventListeners;
+    std::mutex                          m_aMutex;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper4<lang::XEventListener>> m_pDisposeEventListeners;
     std::unique_ptr<PropertyChangeListeners>        m_pPropertyChangeListeners;
     sal_Int32                           m_nPos;
     bool                            m_bWasNull;
@@ -242,21 +234,23 @@ css::uno::Sequence< OUString > SAL_CALL ResultSet::getSupportedServiceNames()
 // virtual
 void SAL_CALL ResultSet::dispose()
 {
-    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_pDisposeEventListeners &&
          m_pImpl->m_pDisposeEventListeners->getLength() )
     {
         lang::EventObject aEvt;
         aEvt.Source = static_cast< lang::XComponent * >( this );
-        m_pImpl->m_pDisposeEventListeners->disposeAndClear( aEvt );
+        m_pImpl->m_pDisposeEventListeners->disposeAndClear( aGuard, aEvt );
+        aGuard.lock();
     }
 
     if ( m_pImpl->m_pPropertyChangeListeners )
     {
         lang::EventObject aEvt;
         aEvt.Source = static_cast< beans::XPropertySet * >( this );
-        m_pImpl->m_pPropertyChangeListeners->disposeAndClear( aEvt );
+        m_pImpl->m_pPropertyChangeListeners->disposeAndClear( aGuard, aEvt );
+        aGuard.lock();
     }
 
     m_pImpl->m_xDataSupplier->close();
@@ -267,11 +261,11 @@ void SAL_CALL ResultSet::dispose()
 void SAL_CALL ResultSet::addEventListener(
         const uno::Reference< lang::XEventListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
 
     if ( !m_pImpl->m_pDisposeEventListeners )
         m_pImpl->m_pDisposeEventListeners.reset(
-            new cppu::OInterfaceContainerHelper( m_pImpl->m_aMutex ));
+            new comphelper::OInterfaceContainerHelper4<lang::XEventListener>());
 
     m_pImpl->m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -281,7 +275,7 @@ void SAL_CALL ResultSet::addEventListener(
 void SAL_CALL ResultSet::removeEventListener(
         const uno::Reference< lang::XEventListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_pDisposeEventListeners )
         m_pImpl->m_pDisposeEventListeners->removeInterface( Listener );
@@ -294,7 +288,7 @@ void SAL_CALL ResultSet::removeEventListener(
 // virtual
 uno::Reference< sdbc::XResultSetMetaData > SAL_CALL ResultSet::getMetaData()
 {
-    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
 
     if ( !m_pImpl->m_xMetaData.is() )
         m_pImpl->m_xMetaData = new ResultSetMetaData( m_pImpl->m_xContext,
@@ -313,7 +307,7 @@ sal_Bool SAL_CALL ResultSet::next()
     // Note: Cursor is initially positioned before the first row.
     //       First call to 'next()' moves it to first row.
 
-    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_bAfterLast )
     {
@@ -402,7 +396,7 @@ sal_Bool SAL_CALL ResultSet::isLast()
 // virtual
 void SAL_CALL ResultSet::beforeFirst()
 {
-    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
     m_pImpl->m_bAfterLast = false;
     m_pImpl->m_nPos = 0;
     m_pImpl->m_xDataSupplier->validate();
@@ -412,7 +406,7 @@ void SAL_CALL ResultSet::beforeFirst()
 // virtual
 void SAL_CALL ResultSet::afterLast()
 {
-    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
     m_pImpl->m_bAfterLast = true;
     m_pImpl->m_xDataSupplier->validate();
 }
@@ -424,7 +418,7 @@ sal_Bool SAL_CALL ResultSet::first()
     // getResult works zero-based!
     if ( m_pImpl->m_xDataSupplier->getResult( 0 ) )
     {
-        osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+        std::unique_lock aGuard( m_pImpl->m_aMutex );
         m_pImpl->m_bAfterLast = false;
         m_pImpl->m_nPos = 1;
         m_pImpl->m_xDataSupplier->validate();
@@ -442,7 +436,7 @@ sal_Bool SAL_CALL ResultSet::last()
     sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
     if ( nCount )
     {
-        osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+        std::unique_lock aGuard( m_pImpl->m_aMutex );
         m_pImpl->m_bAfterLast = false;
         m_pImpl->m_nPos = nCount;
         m_pImpl->m_xDataSupplier->validate();
@@ -494,7 +488,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
 
         if ( ( row * -1 ) > nCount )
         {
-            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = 0;
             m_pImpl->m_xDataSupplier->validate();
@@ -502,7 +496,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
         }
         else // |row| <= nCount
         {
-            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = ( nCount + row + 1 );
             m_pImpl->m_xDataSupplier->validate();
@@ -521,7 +515,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
 
         if ( row <= nCount )
         {
-            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = row;
             m_pImpl->m_xDataSupplier->validate();
@@ -529,7 +523,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
         }
         else // row > nCount
         {
-            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = true;
             m_pImpl->m_xDataSupplier->validate();
             return false;
@@ -564,7 +558,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
     {
         if ( ( m_pImpl->m_nPos + rows ) > 0 )
         {
-            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = ( m_pImpl->m_nPos + rows );
             m_pImpl->m_xDataSupplier->validate();
@@ -572,7 +566,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
         }
         else
         {
-            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = 0;
             m_pImpl->m_xDataSupplier->validate();
@@ -590,7 +584,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
         sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
         if ( ( m_pImpl->m_nPos + rows ) <= nCount )
         {
-            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = ( m_pImpl->m_nPos + rows );
             m_pImpl->m_xDataSupplier->validate();
@@ -598,7 +592,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
         }
         else
         {
-            osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = true;
             m_pImpl->m_xDataSupplier->validate();
             return false;
@@ -616,7 +610,7 @@ sal_Bool SAL_CALL ResultSet::previous()
     previous() is not the same as relative( -1 ) because it makes sense
     to call previous() when there is no current row.
 */
-    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_bAfterLast )
     {
@@ -641,7 +635,7 @@ sal_Bool SAL_CALL ResultSet::previous()
 // virtual
 void SAL_CALL ResultSet::refreshRow()
 {
-    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
     if ( m_pImpl->m_bAfterLast || ( m_pImpl->m_nPos == 0 ) )
         return;
 
@@ -1196,7 +1190,7 @@ ResultSet::queryContent()
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 ResultSet::getPropertySetInfo()
 {
-    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
 
     if ( !m_pImpl->m_xPropSetInfo.is() )
         m_pImpl->m_xPropSetInfo
@@ -1257,7 +1251,7 @@ void SAL_CALL ResultSet::addPropertyChangeListener(
 {
     // Note: An empty property name means a listener for "all" properties.
 
-    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
 
     if ( !aPropertyName.isEmpty() &&
          aPropertyName != "RowCount" &&
@@ -1266,7 +1260,7 @@ void SAL_CALL ResultSet::addPropertyChangeListener(
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
         m_pImpl->m_pPropertyChangeListeners.reset(
-             new PropertyChangeListeners( m_pImpl->m_aMutex ));
+             new PropertyChangeListeners());
 
     m_pImpl->m_pPropertyChangeListeners->addInterface(
                                                 aPropertyName, xListener );
@@ -1278,7 +1272,7 @@ void SAL_CALL ResultSet::removePropertyChangeListener(
         const OUString& aPropertyName,
         const uno::Reference< beans::XPropertyChangeListener >& xListener )
 {
-    osl::MutexGuard aGuard( m_pImpl->m_aMutex );
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
 
     if ( !aPropertyName.isEmpty() &&
          aPropertyName != "RowCount" &&
@@ -1319,7 +1313,7 @@ void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt ) const
         return;
 
     // Notify listeners interested especially in the changed property.
-    cppu::OInterfaceContainerHelper* pPropsContainer
+    comphelper::OInterfaceContainerHelper4<beans::XPropertyChangeListener>* pPropsContainer
         = m_pImpl->m_pPropertyChangeListeners->getContainer(
                                                         rEvt.PropertyName );
     if ( pPropsContainer )
@@ -1332,11 +1326,10 @@ void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt ) const
         = m_pImpl->m_pPropertyChangeListeners->getContainer( OUString() );
     if ( pPropsContainer )
     {
-        cppu::OInterfaceIteratorHelper aIter( *pPropsContainer );
+        comphelper::OInterfaceIteratorHelper4 aIter( *pPropsContainer );
         while ( aIter.hasMoreElements() )
         {
-            static_cast< beans::XPropertyChangeListener* >( aIter.next() )
-                    ->propertyChange( rEvt );
+            aIter.next()->propertyChange( rEvt );
         }
     }
 }
