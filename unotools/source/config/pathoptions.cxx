@@ -434,9 +434,9 @@ SvtPathOptions_Impl::SvtPathOptions_Impl()
 
 namespace
 {
-    ::osl::Mutex& lclMutex()
+    std::mutex& lclMutex()
     {
-        static ::osl::Mutex SINGLETON;
+        static std::mutex SINGLETON;
         return SINGLETON;
     }
 }
@@ -444,12 +444,13 @@ namespace
 SvtPathOptions::SvtPathOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( lclMutex() );
+    std::unique_lock aGuard( lclMutex() );
     pImpl = g_pOptions.lock();
     if ( !pImpl )
     {
         pImpl = std::make_shared<SvtPathOptions_Impl>();
         g_pOptions = pImpl;
+        aGuard.unlock(); // because holdConfigItem will call this constructor
         ItemHolder1::holdConfigItem(EItem::PathOptions);
     }
 }
@@ -457,7 +458,7 @@ SvtPathOptions::SvtPathOptions()
 SvtPathOptions::~SvtPathOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( lclMutex() );
+    std::unique_lock aGuard( lclMutex() );
 
     pImpl.reset();
 }
