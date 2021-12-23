@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03e87035_f39f0a34",
+        "filename": "basic/source/sbx/sbxvar.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T08:54:29Z",
+      "side": 1,
+      "message": "It looks to me that we could consider copying the pInfo unconditionally for tdf#146281 - or what would be the problem if we don\u0027t?\n\n(I\u0027d say that we should not even check if r.pInfo is not null - we are in operator\u003d, right? 😊)",
+      "revId": "e32d864dbe086d630a8b17c2d376e320aee0253a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
