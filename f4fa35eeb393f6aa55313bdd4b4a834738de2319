@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97e73dee_c04bc0ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-23T08:26:35Z",
+      "side": 1,
+      "message": "I think you may also include the languages in: https://gerrit.libreoffice.org/c/core/+/126435",
+      "revId": "f4fa35eeb393f6aa55313bdd4b4a834738de2319",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
