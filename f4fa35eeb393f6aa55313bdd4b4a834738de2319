@@ -16,6 +16,23 @@
       "message": "I think you may also include the languages in: https://gerrit.libreoffice.org/c/core/+/126435",
       "revId": "f4fa35eeb393f6aa55313bdd4b4a834738de2319",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f8d5f95_a6017d11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-23T08:29:35Z",
+      "side": 1,
+      "message": "Also, is the approach stated in the following the more straight-forward way to do this? (I am not sure).\nhttps://stackoverflow.com/questions/11847977/find-in-stdlist\n",
+      "revId": "f4fa35eeb393f6aa55313bdd4b4a834738de2319",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
