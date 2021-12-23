@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43635fbd_e2ab78e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-23T00:02:44Z",
+      "side": 1,
+      "message": "Thanks for the input.",
+      "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f470c87_0cda2dde",
@@ -14,6 +31,30 @@
       "writtenOn": "2021-12-22T16:21:34Z",
       "side": 1,
       "message": "better to use \"or\" instead of \"||\" in those kind of statements",
+      "range": {
+        "startLine": 141,
+        "startChar": 35,
+        "endLine": 141,
+        "endChar": 37
+      },
+      "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "064031d1_59cca570",
+        "filename": "autogen.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-23T00:02:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f470c87_0cda2dde",
       "range": {
         "startLine": 141,
         "startChar": 35,
@@ -47,6 +88,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d71a98f_6863afa9",
+        "filename": "autogen.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-23T00:02:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0601ab4a_0f0ac444",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 0
+      },
+      "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0da5f2f5_f1f98722",
@@ -60,6 +125,30 @@
       "writtenOn": "2021-12-22T16:21:34Z",
       "side": 1,
       "message": "consider using a named capture group for clarity. Also the regex could be a precompiled one using qr/pattern/.\nAlso using hashes with undef is kinda strange, after all not actually using it as a hash in the first place.\ncould just use and array instead and push the values.",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 9
+      },
+      "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac0c8387_c291ed2e",
+        "filename": "autogen.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-23T00:02:44Z",
+      "side": 1,
+      "message": "I\u0027ll use a named capture group; never heard of that before. And I\u0027ll assume the configure list is unique, so I can push the constructed value into an array and sort it before the output. All used regexp are fixed / const strings, so AFAIK perl caches it already.",
+      "parentUuid": "0da5f2f5_f1f98722",
       "range": {
         "startLine": 152,
         "startChar": 0,
@@ -87,6 +176,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1f38ced_22ddfdd8",
+        "filename": "autogen.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-23T00:02:44Z",
+      "side": 1,
+      "message": "I\u0027ll push the export-string directly when parsing. It\u0027s also simpler code.",
+      "parentUuid": "f3b81dbe_f1b03c5c",
+      "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c08c828_78ec2d24",
@@ -100,6 +207,24 @@
       "writtenOn": "2021-12-22T16:39:13Z",
       "side": 1,
       "message": "alternatively could use \nAC_SUBST_FILE([CONFIG_PARSED_IMPORTED])\nCONFIG_PARSED_IMPORTED\u003dconfig_host_parsed.mk\n\nOr just a \"include config_host_parsed.mk\" that doesn\u0027t require any further replacements.\n\nanother option is to make it a combined statement in AC_CONFIG_FILES\nconfig_host.mk:config_host.mk.in:config_host_parsed.mk.in\n(or in reversed order)",
+      "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c02d6a72_a757530b",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 14598,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-23T00:02:44Z",
+      "side": 1,
+      "message": "\u003e alternatively could use \n\u003e AC_SUBST_FILE([CONFIG_PARSED_IMPORTED])\n\u003e CONFIG_PARSED_IMPORTED\u003dconfig_host_parsed.mk\n\nI suspected some chicken-egg-problem between AC_SUBST_FILE and AC_OUTPUT, but that actually works. I prefer it to the alternative:\n\n\u003e config_host.mk:${srcdir}/config_host_header.mk.in:configure_parsed.mk.in:${srcdir}/config_host.mk.in\n\n...\n\n\u003e Or just a \"include config_host_parsed.mk\" that doesn\u0027t require any further replacements.\n\nWe can\u0027t use include (see commit message). Other scripts parse config_host.mk. An initial attempt quickly got too messy.",
+      "parentUuid": "2c08c828_78ec2d24",
       "revId": "3a65f5c3584fbf4a7ae68b1d94b08b53dc25c8a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
