@@ -50,7 +50,7 @@ class OTempFileService : public OTempFileBase
 {
 protected:
     std::optional<utl::TempFile> mpTempFile;
-    ::osl::Mutex maMutex;
+    std::mutex maMutex;
     SvStream* mpStream;
     bool mbRemoveFile;
     bool mbInClosed;
