@@ -74,8 +74,9 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)),icontest) \
 	vcldemo \
 	tiledrendering \
-    mtfdemo \
-    visualbackendtest \
+        mtfdemo \
+        visualbackendtest \
+        listfonts \
 	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), gtktiledviewer) \
 ))
 
