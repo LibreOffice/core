@@ -16,6 +16,24 @@
       "message": "It looks to me that we could consider copying the pInfo unconditionally for tdf#146281 - or what would be the problem if we don\u0027t?\n\n(I\u0027d say that we should not even check if r.pInfo is not null - we are in operator\u003d, right? 😊)",
       "revId": "e32d864dbe086d630a8b17c2d376e320aee0253a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c3dddfe_95ae4269",
+        "filename": "basic/source/sbx/sbxvar.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-23T12:06:54Z",
+      "side": 1,
+      "message": "I just copied the information from above, since I don\u0027t know how to reference a comment:\n\nConsider the following snippet:\n\nSub TestCollection(Optional optInt)\n\n\tDim cA As New Collection\n\tcA.Add(optInt) \u0027 it makes sense to add such an element to a collection(?)\n\tMsgBox cA.Item(1) + 4 \u0027 here it should throw an error\nEnd Sub\nSub Main\n\n\tTestCollection\nEnd Sub\nIn https://opengrok.libreoffice.org/xref/core/basic/source/runtime/runtime.cxx?r\u003d975c73fe\u0026mo\u003d111828\u0026fi\u003d3657#3657 the value is retrieved in https://opengrok.libreoffice.org/xref/core/basic/source/sbx/sbxvalue.cxx?r\u003d8024118d#65 AND we lose the SbxInfo including isMissing of the variable since only the value is retrieved.\n\nHowever, adding a CVErr to a collection would again lead to ERRCODE_BASIC_NOT_OPTIONAL if we don\u0027t ask isMissing 😞",
+      "parentUuid": "03e87035_f39f0a34",
+      "revId": "e32d864dbe086d630a8b17c2d376e320aee0253a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
