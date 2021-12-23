@@ -5513,6 +5513,7 @@ if test "$cross_compiling" = "yes"; then
     test "${with_system_lockfile+set}" = set && sub_conf_opts="$sub_conf_opts --with-system-lockfile=${with_system_lockfile}"
 
     # Don't bother having configure look for stuff not needed for the build platform anyway
+    # WARNING: any option with an argument containing spaces must be handled separately (see --with-theme)
     sub_conf_defaults=" \
         --build="$build_alias" \
         --disable-cairo-canvas \
@@ -5536,13 +5537,21 @@ if test "$cross_compiling" = "yes"; then
         --without-doxygen \
         --without-webdav \
         --without-x \
-        --with-parallelism="$with_parallelism" \
-        --with-theme="$with_theme" \
         --with-tls=openssl \
 "
-    echo "    Running CONF-FOR-BUILD/configure" $sub_conf_defaults $sub_conf_opts $with_build_platform_configure_options --srcdir=$srcdir
+    # single quotes added for better readability in case of spaces
+    echo "    Running CONF-FOR-BUILD/configure" \
+        $sub_conf_defaults \
+        --with-parallelism="'$with_parallelism'" \
+        --with-theme="'$with_theme'" \
+        $sub_conf_opts \
+        $with_build_platform_configure_options \
+        --srcdir=$srcdir
+
     ./configure \
         $sub_conf_defaults \
+        --with-parallelism="$with_parallelism" \
+        --with-theme="$with_theme" \
         $sub_conf_opts \
         $with_build_platform_configure_options \
         --srcdir=$srcdir \
