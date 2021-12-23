@@ -46,9 +46,9 @@ constexpr OUStringLiteral FILE_PROTOCOL = u"file:///";
 
 namespace
 {
-    osl::Mutex& theSvtLinguConfigItemMutex()
+    std::mutex& theSvtLinguConfigItemMutex()
     {
-        static osl::Mutex SINGLETON;
+        static std::mutex SINGLETON;
         return SINGLETON;
     }
 }
@@ -321,15 +321,16 @@ bool SvtLinguConfigItem::GetHdlByName(
 
 uno::Any SvtLinguConfigItem::GetProperty( const OUString &rPropertyName ) const
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
-
     sal_Int32 nHdl;
-    return GetHdlByName( nHdl, rPropertyName ) ? GetProperty( nHdl ) : uno::Any();
+    if (!GetHdlByName( nHdl, rPropertyName ))
+        return uno::Any();
+
+    return GetProperty( nHdl );
 }
 
 uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
+    std::unique_lock aGuard(theSvtLinguConfigItemMutex());
 
     uno::Any aRes;
 
@@ -411,8 +412,6 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
 
 bool SvtLinguConfigItem::SetProperty( const OUString &rPropertyName, const uno::Any &rValue )
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
-
     bool bSucc = false;
     sal_Int32 nHdl;
     if (GetHdlByName( nHdl, rPropertyName ))
@@ -422,7 +421,7 @@ bool SvtLinguConfigItem::SetProperty( const OUString &rPropertyName, const uno::
 
 bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any &rValue )
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
+    std::unique_lock aGuard(theSvtLinguConfigItemMutex());
 
     bool bSucc = false;
     if (!rValue.hasValue())
@@ -561,13 +560,13 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
 
 const SvtLinguOptions& SvtLinguConfigItem::GetOptions() const
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
+    std::unique_lock aGuard(theSvtLinguConfigItemMutex());
     return aOpt;
 }
 
 void SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyNames )
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
+    std::unique_lock aGuard(theSvtLinguConfigItemMutex());
 
     bool bRes = false;
 
@@ -686,7 +685,7 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
     if (!IsModified())
         return true;
 
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
+    std::unique_lock aGuard(theSvtLinguConfigItemMutex());
 
     bool bRet = false;
 
@@ -748,7 +747,7 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
 
 bool SvtLinguConfigItem::IsReadOnly( const OUString &rPropertyName ) const
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
+    std::unique_lock aGuard(theSvtLinguConfigItemMutex());
 
     bool bReadOnly = false;
     sal_Int32 nHdl;
@@ -759,7 +758,7 @@ bool SvtLinguConfigItem::IsReadOnly( const OUString &rPropertyName ) const
 
 bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
+    std::unique_lock aGuard(theSvtLinguConfigItemMutex());
 
     bool bReadOnly = false;
 
@@ -810,13 +809,13 @@ constexpr OUStringLiteral aG_Dictionaries = u"Dictionaries";
 SvtLinguConfig::SvtLinguConfig()
 {
     // Global access, must be guarded (multithreading)
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
+    std::unique_lock aGuard(theSvtLinguConfigItemMutex());
     ++nCfgItemRefCount;
 }
 
 SvtLinguConfig::~SvtLinguConfig()
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
+    std::unique_lock aGuard(theSvtLinguConfigItemMutex());
 
     if (pCfgItem && pCfgItem->IsModified())
         pCfgItem->Commit();
@@ -831,10 +830,11 @@ SvtLinguConfig::~SvtLinguConfig()
 SvtLinguConfigItem & SvtLinguConfig::GetConfigItem()
 {
     // Global access, must be guarded (multithreading)
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
+    std::unique_lock aGuard(theSvtLinguConfigItemMutex());
     if (!pCfgItem)
     {
         pCfgItem = new SvtLinguConfigItem;
+        aGuard.unlock(); // because holdConfigItem will call the constructor
         ItemHolder1::holdConfigItem(EItem::LinguConfig);
     }
     return *pCfgItem;
