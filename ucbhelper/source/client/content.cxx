@@ -156,10 +156,10 @@ friend ContentEventListener_Impl;
     mutable OUString               m_aURL;
     Reference< XComponentContext >      m_xCtx;
     Reference< XContent >               m_xContent;
-    Reference< XCommandProcessor >          m_xCommandProcessor;
+    Reference< XCommandProcessor >      m_xCommandProcessor;
     Reference< XCommandEnvironment >    m_xEnv;
     Reference< XContentEventListener >  m_xContentEventListener;
-    mutable osl::Mutex                  m_aMutex;
+    mutable std::mutex                  m_aMutex;
 
 private:
     void reinit( const Reference< XContent >& xContent );
@@ -1089,7 +1089,7 @@ Content_Impl::Content_Impl( const Reference< XComponentContext >& rCtx,
 
 void Content_Impl::reinit( const Reference< XContent >& xContent )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     m_xCommandProcessor = nullptr;
 
@@ -1110,6 +1110,7 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
     {
         m_xContent = xContent;
         m_xContent->addContentEventListener( m_xContentEventListener );
+        m_xCommandProcessor.set( xContent, UNO_QUERY );
 
 #if OSL_DEBUG_LEVEL > 0
         // Only done on demand in product version for performance reasons,
@@ -1149,7 +1150,7 @@ void Content_Impl::disposing( const EventObject& Source )
     Reference<XContent> xContent;
 
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         if(Source.Source != m_xContent)
             return;
 
@@ -1177,7 +1178,7 @@ const OUString& Content_Impl::getURL() const
 {
     if ( m_aURL.isEmpty() && m_xContent.is() )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( m_aURL.isEmpty() && m_xContent.is() )
         {
@@ -1195,7 +1196,7 @@ Reference< XContent > Content_Impl::getContent()
 {
     if ( !m_xContent.is() && !m_aURL.isEmpty() )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( !m_xContent.is() && !m_aURL.isEmpty() )
         {
@@ -1221,8 +1222,11 @@ Reference< XContent > Content_Impl::getContent()
                 }
 
                 if ( m_xContent.is() )
+                {
                     m_xContent->addContentEventListener(
                         m_xContentEventListener );
+                    m_xCommandProcessor.set( m_xContent, UNO_QUERY );
+                }
             }
         }
     }
@@ -1233,14 +1237,6 @@ Reference< XContent > Content_Impl::getContent()
 
 Reference< XCommandProcessor > Content_Impl::getCommandProcessor()
 {
-    if ( !m_xCommandProcessor.is() )
-    {
-        osl::MutexGuard aGuard( m_aMutex );
-
-        if ( !m_xCommandProcessor.is() )
-            m_xCommandProcessor.set( getContent(), UNO_QUERY );
-    }
-
     return m_xCommandProcessor;
 }
 
@@ -1266,7 +1262,7 @@ inline const Reference< XCommandEnvironment >&
 inline void Content_Impl::setEnvironment(
                         const Reference< XCommandEnvironment >& xNewEnv )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     m_xEnv = xNewEnv;
 }
 
@@ -1274,7 +1270,7 @@ inline void Content_Impl::setEnvironment(
 void Content_Impl::inserted()
 {
     // URL might have changed during 'insert' => recalculate in next getURL()
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     m_aURL.clear();
 }
 
