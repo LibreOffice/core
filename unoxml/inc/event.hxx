@@ -27,6 +27,7 @@
 #include <com/sun/star/util/Time.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <mutex>
 
 namespace DOM::events
 {
@@ -35,7 +36,7 @@ class CEvent : public cppu::WeakImplHelper< css::xml::dom::events::XEvent >
 friend class CEventDispatcher;
 
 protected:
-    ::osl::Mutex m_Mutex;
+    std::mutex m_Mutex;
     bool m_canceled;
     OUString m_eventType;
     css::uno::Reference< css::xml::dom::events::XEventTarget > m_target;
