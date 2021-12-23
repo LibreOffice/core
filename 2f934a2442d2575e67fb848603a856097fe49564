@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6970481c_b6bafad2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-23T10:20:18Z",
+      "side": 1,
+      "message": "one more needed ( already counting Caolán\u0027s )",
+      "revId": "2f934a2442d2575e67fb848603a856097fe49564",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
