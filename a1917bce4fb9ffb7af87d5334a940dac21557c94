@@ -34,6 +34,24 @@
       "parentUuid": "b4c810c6_3fccae3b",
       "revId": "a1917bce4fb9ffb7af87d5334a940dac21557c94",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "302e0a9a_631fec4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-23T08:27:25Z",
+      "side": 1,
+      "message": "\u003e I do think there should be a simpler way to do this\n\nI see someone is working in https://gerrit.libreoffice.org/c/core/+/127204\n\nSo these languages should also be added there?",
+      "parentUuid": "8fd98226_6f80cafb",
+      "revId": "a1917bce4fb9ffb7af87d5334a940dac21557c94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
