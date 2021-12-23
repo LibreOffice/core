@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9c1ebac_3b6b1964",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-23T06:12:28Z",
+      "side": 1,
+      "message": "Please in the future don\u0027t create patches and abandon them, but work on the same patch: https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Submitting_a_new_version",
+      "revId": "ff4445fba7116204b0c64a2fda30d5693e63bc74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
