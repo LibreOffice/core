@@ -162,7 +162,7 @@ namespace svgio::svgreader
                 if(rGraphic.getVectorGraphicData())
                 {
                     // embedded Svg
-                    rEmbedded = rGraphic.getVectorGraphicData()->getPrimitive2DSequence();
+                    rEmbedded = rGraphic.getVectorGraphicData()->getPrimitive2DContainer();
 
                     // fill aViewBox
                     rViewBox = rGraphic.getVectorGraphicData()->getRange();

@@ -251,13 +251,13 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
 
             if(bool(rVectorGraphicData) && VectorGraphicDataType::Svg == rVectorGraphicData->getType())
             {
-                const drawinglayer::primitive2d::Primitive2DContainer aContainer(rVectorGraphicData->getPrimitive2DSequence());
+                const drawinglayer::primitive2d::Primitive2DContainer & rContainer(rVectorGraphicData->getPrimitive2DContainer());
 
-                if(!aContainer.empty())
+                if(!rContainer.empty())
                 {
                     bool bAllAreHiddenGeometry(true);
 
-                    for(const auto& rCandidate : aContainer)
+                    for(const auto& rCandidate : rContainer)
                     {
                         if(rCandidate && PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D != rCandidate->getPrimitive2DID())
                         {

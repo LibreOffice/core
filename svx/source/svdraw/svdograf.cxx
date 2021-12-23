@@ -145,7 +145,7 @@ void SdrGrafObj::onGraphicChanged()
     if (rVectorGraphicDataPtr->getType() == VectorGraphicDataType::Pdf)
         return;
 
-    const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>& rContainer(rVectorGraphicDataPtr->getPrimitive2DSequence());
+    const auto& rContainer(rVectorGraphicDataPtr->getPrimitive2DContainer());
 
     if (rContainer.empty())
         return;

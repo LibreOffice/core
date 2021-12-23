@@ -322,14 +322,14 @@ void SwGrfNode::onGraphicChanged()
 
     if (rVectorGraphicDataPtr)
     {
-        const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVectorGraphicDataPtr->getPrimitive2DSequence());
+        const drawinglayer::primitive2d::Primitive2DContainer & rContainer(rVectorGraphicDataPtr->getPrimitive2DContainer());
 
-        if(!aSequence.empty())
+        if(!rContainer.empty())
         {
             drawinglayer::geometry::ViewInformation2D aViewInformation2D;
             drawinglayer::processor2d::ObjectInfoPrimitiveExtractor2D aProcessor(aViewInformation2D);
 
-            aProcessor.process(aSequence);
+            aProcessor.process(rContainer);
 
             const drawinglayer::primitive2d::ObjectInfoPrimitive2D* pResult = aProcessor.getResult();
 

@@ -45,8 +45,8 @@
 
 using namespace ::com::sun::star;
 
-BitmapEx convertPrimitive2DSequenceToBitmapEx(
-    const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
+BitmapEx convertPrimitive2DContainerToBitmapEx(
+    const drawinglayer::primitive2d::Primitive2DContainer& rContainer,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels,
     const o3tl::Length eTargetUnit,
@@ -54,7 +54,7 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
 {
     BitmapEx aRetval;
 
-    if(!rSequence.empty())
+    if(!rContainer.empty())
     {
         // create replacement graphic from maSequence
         // create XPrimitive2DRenderer
@@ -82,7 +82,7 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
 
             const uno::Reference< rendering::XBitmap > xBitmap(
                 xPrimitive2DRenderer->rasterize(
-                    comphelper::containerToSequence(rSequence),
+                    rContainer.toSequence(),
                     aViewParameters,
                     aDPI.getWidth(),
                     aDPI.getHeight(),
@@ -109,14 +109,12 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
 }
 
 static size_t estimateSize(
-    std::deque<uno::Reference<graphic::XPrimitive2D>> const& rSequence)
+    drawinglayer::primitive2d::Primitive2DContainer const& rSequence)
 {
     size_t nRet(0);
     for (auto& it : rSequence)
     {
-        uno::Reference<util::XAccounting> const xAcc(it, uno::UNO_QUERY);
-        assert(xAcc.is()); // we expect only BasePrimitive2D from SVG parser
-        nRet += xAcc->estimateUsage();
+        nRet += it->estimateUsage();
     }
     return nRet;
 }
@@ -184,9 +182,9 @@ void VectorGraphicData::ensureReplacement()
 
     ensureSequenceAndRange();
 
-    if (!maSequence.empty())
+    if (!maPrimitivesContainer.empty())
     {
-        maReplacement = convertPrimitive2DSequenceToBitmapEx(maSequence, getRange());
+        maReplacement = convertPrimitive2DContainerToBitmapEx(maPrimitivesContainer, getRange());
     }
 }
 
@@ -213,7 +211,7 @@ void VectorGraphicData::ensureSequenceAndRange()
             const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
 
             if (xInputStream.is())
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(xInputStream, OUString()));
+                maPrimitivesContainer = xSvgParser->getDecomposition(xInputStream, OUString());
 
             break;
         }
@@ -248,7 +246,7 @@ void VectorGraphicData::ensureSequenceAndRange()
                     aPropertySequence = comphelper::containerToSequence(aVector);
                 }
 
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(xInputStream, OUString(), aPropertySequence));
+                maPrimitivesContainer = xEmfParser->getDecomposition(xInputStream, OUString(), aPropertySequence);
             }
 
             break;
@@ -263,26 +261,26 @@ void VectorGraphicData::ensureSequenceAndRange()
             rtl::Reference<UnoBinaryDataContainer> xDataContainer = new UnoBinaryDataContainer(getBinaryDataContainer());
 
             auto xPrimitive2D = xPdfDecomposer->getDecomposition(xDataContainer, aDecompositionParameters);
-            maSequence = comphelper::sequenceToContainer<std::deque<uno::Reference<graphic::XPrimitive2D>>>(xPrimitive2D);
+            maPrimitivesContainer = xPrimitive2D;
 
             break;
         }
     }
 
-    if(!maSequence.empty())
+    if(!maPrimitivesContainer.empty())
     {
-        const sal_Int32 nCount(maSequence.size());
+        const sal_Int32 nCount(maPrimitivesContainer.size());
         geometry::RealRectangle2D aRealRect;
         uno::Sequence< beans::PropertyValue > aViewParameters;
 
         for(sal_Int32 a(0); a < nCount; a++)
         {
             // get reference
-            const css::uno::Reference< css::graphic::XPrimitive2D > xReference(maSequence[a]);
+            drawinglayer::primitive2d::BasePrimitive2D * pReference(maPrimitivesContainer[a].get());
 
-            if(xReference.is())
+            if(pReference)
             {
-                aRealRect = xReference->getRange(aViewParameters);
+                aRealRect = pReference->getRange(aViewParameters);
 
                 maRange.expand(
                     basegfx::B2DRange(
@@ -293,13 +291,13 @@ void VectorGraphicData::ensureSequenceAndRange()
             }
         }
     }
-    mNestedBitmapSize = estimateSize(maSequence);
+    mNestedBitmapSize = estimateSize(maPrimitivesContainer);
     mbSequenceCreated = true;
 }
 
 std::pair<VectorGraphicData::State, size_t> VectorGraphicData::getSizeBytes() const
 {
-    if (!maSequence.empty() && !maDataContainer.isEmpty())
+    if (!maPrimitivesContainer.empty() && !maDataContainer.isEmpty())
     {
         return std::make_pair(State::PARSED, maDataContainer.getSize() + mNestedBitmapSize);
     }
@@ -357,11 +355,11 @@ const basegfx::B2DRange& VectorGraphicData::getRange() const
     return maRange;
 }
 
-const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& VectorGraphicData::getPrimitive2DSequence() const
+const drawinglayer::primitive2d::Primitive2DContainer& VectorGraphicData::getPrimitive2DContainer() const
 {
     const_cast< VectorGraphicData* >(this)->ensureSequenceAndRange();
 
-    return maSequence;
+    return maPrimitivesContainer;
 }
 
 const BitmapEx& VectorGraphicData::getReplacement() const

@@ -156,7 +156,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     const drawinglayer::primitive2d::Primitive2DReference xTransformRef(
         new drawinglayer::primitive2d::TransformPrimitive2D(
             aTransform,
-            drawinglayer::primitive2d::Primitive2DContainer(aVectorGraphicData.getPrimitive2DSequence())));
+            drawinglayer::primitive2d::Primitive2DContainer(aVectorGraphicData.getPrimitive2DContainer())));
 
     // UNO dance to render from drawinglayer
 

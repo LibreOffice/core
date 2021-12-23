@@ -22,10 +22,10 @@
 
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BinaryDataContainer.hxx>
 #include <rtl/ustring.hxx>
-#include <deque>
 #include <memory>
 #include <algorithm>
 #include <optional>
@@ -39,8 +39,8 @@ typedef css::uno::Sequence<sal_Int8> VectorGraphicDataArray;
 // helper to convert any Primitive2DSequence to a good quality BitmapEx,
 // using default parameters and graphic::XPrimitive2DRenderer
 
-BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
-    const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
+BitmapEx VCL_DLLPUBLIC convertPrimitive2DContainerToBitmapEx(
+    const drawinglayer::primitive2d::Primitive2DContainer& rContainer,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels = 500000,
     const o3tl::Length eTargetUnit = o3tl::Length::mm100,
@@ -64,7 +64,7 @@ private:
     // on demand created content
     bool                        mbSequenceCreated;
     basegfx::B2DRange           maRange;
-    std::deque< css::uno::Reference< css::graphic::XPrimitive2D > > maSequence;
+    drawinglayer::primitive2d::Primitive2DContainer maPrimitivesContainer;
     BitmapEx                    maReplacement;
     size_t                      mNestedBitmapSize;
     VectorGraphicDataType meType;
@@ -115,7 +115,7 @@ public:
 
     /// data read and evtl. on demand creation
     const basegfx::B2DRange& getRange() const;
-    const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>& getPrimitive2DSequence() const;
+    const drawinglayer::primitive2d::Primitive2DContainer& getPrimitive2DContainer() const;
     const BitmapEx& getReplacement() const;
     BitmapChecksum GetChecksum() const;
 

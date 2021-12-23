@@ -710,16 +710,15 @@ const GDIMetaFile& ImpGraphic::getGDIMetaFile() const
         // representation. Use a strict virtual hook (MetafileAccessor)
         // to access the MetafilePrimitive2D directly. Also see comments in
         // XEmfParser about this.
-        const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > > aSequence(maVectorGraphicData->getPrimitive2DSequence());
+        const drawinglayer::primitive2d::Primitive2DContainer & rSequence(maVectorGraphicData->getPrimitive2DContainer());
 
-        if (1 == aSequence.size())
+        if (1 == rSequence.size())
         {
             // try to cast to MetafileAccessor implementation
-            const css::uno::Reference< css::graphic::XPrimitive2D > xReference(aSequence[0]);
-            auto pUnoPrimitive = static_cast< const drawinglayer::primitive2d::UnoPrimitive2D* >(xReference.get());
-            if (pUnoPrimitive)
+            const drawinglayer::primitive2d::BasePrimitive2D * pPrimitive = rSequence[0].get();
+            if (pPrimitive)
             {
-                const MetafileAccessor* pMetafileAccessor = dynamic_cast< const MetafileAccessor* >(pUnoPrimitive->getBasePrimitive2D().get());
+                const MetafileAccessor* pMetafileAccessor = dynamic_cast< const MetafileAccessor* >(pPrimitive);
 
                 if (pMetafileAccessor)
                 {
