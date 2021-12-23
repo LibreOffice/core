@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7b0b2f6_cfec5394",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2821,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T09:10:35Z",
+      "side": 0,
+      "message": "Previously this replaced all the original content with the new one, but now the process only appends - is that the problem in tdf#146382?",
+      "revId": "437d5a446733aca0a485218f29d8d7dcea4d3999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
