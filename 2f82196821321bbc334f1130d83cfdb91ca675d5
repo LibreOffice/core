@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f66ad0a3_d991685e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-12-23T12:36:06Z",
+      "side": 1,
+      "message": "After a quick local build of this, I still get the same error message.",
+      "revId": "2f82196821321bbc334f1130d83cfdb91ca675d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
