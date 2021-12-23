@@ -282,7 +282,7 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
     {
         SbxValue::operator=( r );
         // tdf#144353 - copy information about a missing parameter. See SbiRuntime::SetIsMissing.
-        if (r.pInfo && !dynamic_cast<const SbxMethod*>(&r))
+        if (r.pInfo && !pInfo)
             pInfo = r.pInfo;
         m_aDeclareClassName = r.m_aDeclareClassName;
         m_xComListener = r.m_xComListener;
