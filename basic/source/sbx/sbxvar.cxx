@@ -282,8 +282,17 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
     {
         SbxValue::operator=( r );
         // tdf#144353 - copy information about a missing parameter. See SbiRuntime::SetIsMissing.
-        if (r.pInfo && !dynamic_cast<const SbxMethod*>(&r))
-            pInfo = r.pInfo;
+        if (r.pInfo)
+        {
+            sal_uInt16 n = 1;
+            bool bIsMissing = false;
+            // tdf#146281 - check if there is actually an information about missing parameters
+            for (const SbxParamInfo* pParamInfo = pInfo->GetParam(n); pParamInfo && !bIsMissing;
+                 pParamInfo = pInfo->GetParam(++n))
+                bIsMissing = pParamInfo->eType & SbxMISSING;
+            if (bIsMissing)
+                pInfo = r.pInfo;
+        }
         m_aDeclareClassName = r.m_aDeclareClassName;
         m_xComListener = r.m_xComListener;
         m_pComListenerParentBasic = r.m_pComListenerParentBasic;
