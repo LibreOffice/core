@@ -63,6 +63,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 		configmgr \
 		connectivity \
 		cppcanvas \
+		drawinglayercore \
 		drawinglayer \
 		editeng \
 		emfio \
