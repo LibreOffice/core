@@ -41,6 +41,7 @@
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/resultsetmetadata.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <mutex>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;
@@ -55,7 +56,7 @@ namespace ucbhelper_impl {
 
 struct ResultSetMetaData_Impl
 {
-    osl::Mutex                                      m_aMutex;
+    std::mutex                                  m_aMutex;
     std::vector< ::ucbhelper::ResultSetColumnData > m_aColumnData;
     bool                                        m_bObtainedTypes;
 
@@ -275,7 +276,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
     {
         // No type given. Try UCB's Properties Manager...
 
-        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        std::unique_lock aGuard( m_pImpl->m_aMutex );
 
         if ( !m_pImpl->m_bObtainedTypes )
         {
