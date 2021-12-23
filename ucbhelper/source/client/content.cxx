@@ -23,7 +23,7 @@
 
 #include <o3tl/unreachable.hxx>
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <sal/log.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <cppuhelper/weak.hxx>
@@ -156,14 +156,16 @@ friend ContentEventListener_Impl;
     mutable OUString               m_aURL;
     Reference< XComponentContext >      m_xCtx;
     Reference< XContent >               m_xContent;
-    Reference< XCommandProcessor >          m_xCommandProcessor;
+    Reference< XCommandProcessor >      m_xCommandProcessor;
     Reference< XCommandEnvironment >    m_xEnv;
     Reference< XContentEventListener >  m_xContentEventListener;
-    mutable osl::Mutex                  m_aMutex;
+    mutable std::mutex                  m_aMutex;
 
 private:
     void reinit( const Reference< XContent >& xContent );
     void disposing(const EventObject& Source);
+    const OUString& getURLImpl() const;
+    Reference< XContent > getContentImpl();
 
 public:
     Content_Impl() {};
@@ -1089,7 +1091,7 @@ Content_Impl::Content_Impl( const Reference< XComponentContext >& rCtx,
 
 void Content_Impl::reinit( const Reference< XContent >& xContent )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     m_xCommandProcessor = nullptr;
 
@@ -1110,18 +1112,19 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
     {
         m_xContent = xContent;
         m_xContent->addContentEventListener( m_xContentEventListener );
+        m_xCommandProcessor.set( xContent, UNO_QUERY );
 
 #if OSL_DEBUG_LEVEL > 0
         // Only done on demand in product version for performance reasons,
         // but a nice debug helper.
-        getURL();
+        getURLImpl();
 #endif
     }
     else
     {
         // We need m_xContent's URL in order to be able to create the
         // content object again if demanded ( --> Content_Impl::getContent() )
-        getURL();
+        getURLImpl();
 
         m_xContent = nullptr;
     }
@@ -1149,7 +1152,7 @@ void Content_Impl::disposing( const EventObject& Source )
     Reference<XContent> xContent;
 
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         if(Source.Source != m_xContent)
             return;
 
@@ -1175,72 +1178,69 @@ void Content_Impl::disposing( const EventObject& Source )
 
 const OUString& Content_Impl::getURL() const
 {
+    std::unique_lock aGuard( m_aMutex );
+    return getURLImpl();
+}
+    
+const OUString& Content_Impl::getURLImpl() const
+{
     if ( m_aURL.isEmpty() && m_xContent.is() )
     {
-        osl::MutexGuard aGuard( m_aMutex );
-
-        if ( m_aURL.isEmpty() && m_xContent.is() )
-        {
-            Reference< XContentIdentifier > xId = m_xContent->getIdentifier();
-            if ( xId.is() )
-                m_aURL = xId->getContentIdentifier();
-        }
+        Reference< XContentIdentifier > xId = m_xContent->getIdentifier();
+        if ( xId.is() )
+            m_aURL = xId->getContentIdentifier();
     }
-
     return m_aURL;
 }
 
 
 Reference< XContent > Content_Impl::getContent()
 {
+    std::unique_lock aGuard( m_aMutex );
+    return getContentImpl();
+}
+    
+Reference< XContent > Content_Impl::getContentImpl()
+{
     if ( !m_xContent.is() && !m_aURL.isEmpty() )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        Reference< XUniversalContentBroker > pBroker(
+            UniversalContentBroker::create( getComponentContext() ) );
 
-        if ( !m_xContent.is() && !m_aURL.isEmpty() )
+        OSL_ENSURE( pBroker->queryContentProviders().hasElements(),
+                   "Content Broker not configured (no providers)!" );
+
+        Reference< XContentIdentifier > xId
+            = pBroker->createContentIdentifier( m_aURL );
+
+        OSL_ENSURE( xId.is(), "No Content Identifier!" );
+
+        if ( xId.is() )
         {
-            Reference< XUniversalContentBroker > pBroker(
-                UniversalContentBroker::create( getComponentContext() ) );
-
-            OSL_ENSURE( pBroker->queryContentProviders().hasElements(),
-                        "Content Broker not configured (no providers)!" );
-
-            Reference< XContentIdentifier > xId
-                = pBroker->createContentIdentifier( m_aURL );
-
-            OSL_ENSURE( xId.is(), "No Content Identifier!" );
-
-            if ( xId.is() )
+            try
             {
-                try
-                {
-                    m_xContent = pBroker->queryContent( xId );
-                }
-                catch ( IllegalIdentifierException const & )
-                {
-                }
+                m_xContent = pBroker->queryContent( xId );
+            }
+            catch ( IllegalIdentifierException const & )
+            {
+            }
 
-                if ( m_xContent.is() )
-                    m_xContent->addContentEventListener(
-                        m_xContentEventListener );
+            if ( m_xContent.is() )
+            {
+                m_xContent->addContentEventListener(
+                    m_xContentEventListener );
+                m_xCommandProcessor.set( m_xContent, UNO_QUERY );
             }
         }
     }
-
     return m_xContent;
 }
 
 
 Reference< XCommandProcessor > Content_Impl::getCommandProcessor()
 {
-    if ( !m_xCommandProcessor.is() )
-    {
-        osl::MutexGuard aGuard( m_aMutex );
-
-        if ( !m_xCommandProcessor.is() )
-            m_xCommandProcessor.set( getContent(), UNO_QUERY );
-    }
-
+    std::unique_lock aGuard( m_aMutex );
+    getContentImpl();
     return m_xCommandProcessor;
 }
 
@@ -1266,7 +1266,7 @@ inline const Reference< XCommandEnvironment >&
 inline void Content_Impl::setEnvironment(
                         const Reference< XCommandEnvironment >& xNewEnv )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     m_xEnv = xNewEnv;
 }
 
@@ -1274,7 +1274,7 @@ inline void Content_Impl::setEnvironment(
 void Content_Impl::inserted()
 {
     // URL might have changed during 'insert' => recalculate in next getURL()
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     m_aURL.clear();
 }
 
