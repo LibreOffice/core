@@ -191,31 +191,30 @@ CommandProcessorInfo::~CommandProcessorInfo()
 
 
 // virtual
-uno::Sequence< css::ucb::CommandInfo > SAL_CALL
-CommandProcessorInfo::getCommands()
+uno::Sequence< css::ucb::CommandInfo > SAL_CALL CommandProcessorInfo::getCommands()
 {
-    if ( !m_xCommands )
+    std::unique_lock aGuard( m_aMutex );
+    return getCommandsImpl();
+}
+
+const uno::Sequence< css::ucb::CommandInfo > & CommandProcessorInfo::getCommandsImpl()
+{
+    if ( m_xCommands )
+        return *m_xCommands;
+
+    // Get info for commands.
+
+    try
     {
-        osl::MutexGuard aGuard( m_aMutex );
-        if ( !m_xCommands )
-        {
-
-            // Get info for commands.
-
-
-            try
-            {
-                m_xCommands = m_pContent->getCommands( m_xEnv );
-            }
-            catch ( uno::RuntimeException const & )
-            {
-                throw;
-            }
-            catch ( uno::Exception const & )
-            {
-                m_xCommands.emplace();
-            }
-        }
+        m_xCommands = m_pContent->getCommands( m_xEnv );
+    }
+    catch ( uno::RuntimeException const & )
+    {
+        throw;
+    }
+    catch ( uno::Exception const & )
+    {
+        m_xCommands.emplace();
     }
     return *m_xCommands;
 }
@@ -268,7 +267,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 
 void CommandProcessorInfo::reset()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     m_xCommands.reset();
 }
 
@@ -277,9 +276,9 @@ bool CommandProcessorInfo::queryCommand(
     std::u16string_view rName,
     css::ucb::CommandInfo& rCommand )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    getCommands();
+    getCommandsImpl();
 
     const css::ucb::CommandInfo* pCommands
         = m_xCommands->getConstArray();
@@ -302,9 +301,9 @@ bool CommandProcessorInfo::queryCommand(
     sal_Int32 nHandle,
     css::ucb::CommandInfo& rCommand )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    getCommands();
+    getCommandsImpl();
 
     const css::ucb::CommandInfo* pCommands = m_xCommands->getConstArray();
     sal_Int32 nCount = m_xCommands->getLength();
