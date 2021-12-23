@@ -295,6 +295,10 @@ bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
             {
                 eCharSet = RTL_TEXTENCODING_UCS2; // UTF-16LE
             }
+            else if (U_SUCCESS(uerr) && !strcmp("GB18030", pEncodingName))
+            {
+                eCharSet = RTL_TEXTENCODING_GB_18030;
+            }
         }
 
         ucsdet_close(ucd);
