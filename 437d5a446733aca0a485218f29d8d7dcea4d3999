@@ -16,6 +16,24 @@
       "message": "Previously this replaced all the original content with the new one, but now the process only appends - is that the problem in tdf#146382?",
       "revId": "437d5a446733aca0a485218f29d8d7dcea4d3999",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95f2e23c_22908eea",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2821,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-23T11:14:39Z",
+      "side": 0,
+      "message": "good spotting! thanks!\n\npotential fix here:\nhttps://gerrit.libreoffice.org/c/core/+/127352",
+      "parentUuid": "c7b0b2f6_cfec5394",
+      "revId": "437d5a446733aca0a485218f29d8d7dcea4d3999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
