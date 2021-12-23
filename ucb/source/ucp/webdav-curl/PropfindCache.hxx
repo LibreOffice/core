@@ -12,7 +12,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <list>
 #include <map>
 #include <vector>
@@ -63,7 +63,7 @@ namespace http_dav_ucp
     class PropertyNamesCache
     {
         PropNameCache       m_aTheCache;
-        osl::Mutex          m_aMutex;
+        std::mutex          m_aMutex;
 
     public:
         PropertyNamesCache();
