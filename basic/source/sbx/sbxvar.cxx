@@ -281,7 +281,10 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
     {
         SbxValue::operator=( r );
         // tdf#144353 - copy information about a missing parameter. See SbiRuntime::SetIsMissing.
-        if (r.pInfo && !dynamic_cast<const SbxMethod*>(&r))
+        // We cannot unconditionally assign the data about a variable because we would overwrite
+        // the information about parameters (name, type, flags, and ids). For instance, in the case
+        // where a method will be initialized with a literal.
+        if (!pInfo)
             pInfo = r.pInfo;
         m_aDeclareClassName = r.m_aDeclareClassName;
         m_xComListener = r.m_xComListener;
