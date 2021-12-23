@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include "ContentProperties.hxx"
 #include <memory>
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
@@ -31,13 +32,9 @@ namespace http_dav_ucp {
 struct DataSupplier_Impl;
 class Content;
 struct DAVResource;
-class ContentProperties;
 
 class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
-    std::unique_ptr<DataSupplier_Impl> m_pImpl;
-
-private:
     bool getData();
 
 public:
@@ -66,6 +63,28 @@ public:
     virtual void close() override;
 
     virtual void validate() override;
+
+private:
+    struct ResultListEntry
+    {
+        OUString                             aId;
+        css::uno::Reference< css::ucb::XContentIdentifier > xId;
+        css::uno::Reference< css::ucb::XContent >           xContent;
+        css::uno::Reference< css::sdbc::XRow >              xRow;
+        std::unique_ptr<ContentProperties> pData;
+
+        explicit ResultListEntry( std::unique_ptr<ContentProperties> && pEntry ) : pData( std::move(pEntry) ) {}
+    };
+
+    typedef std::vector<std::unique_ptr<ResultListEntry>> ResultList;
+
+    osl::Mutex                                   m_aMutex;
+    ResultList                                   m_Results;
+    rtl::Reference< Content >                    m_xContent;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    sal_Int32                                    m_nOpenMode;
+    bool                                         m_bCountFinal;
+    bool                                         m_bThrowException;
 };
 
 }
