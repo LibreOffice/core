@@ -40,47 +40,47 @@ namespace DOM::events
 
     sal_Int32 SAL_CALL CMouseEvent::getScreenX()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_screenX;
     }
     sal_Int32 SAL_CALL CMouseEvent::getScreenY()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_screenY;
     }
     sal_Int32 SAL_CALL CMouseEvent::getClientX()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_clientX;
     }
     sal_Int32 SAL_CALL CMouseEvent::getClientY()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_clientY;
     }
     sal_Bool SAL_CALL CMouseEvent::getCtrlKey()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_ctrlKey;
     }
     sal_Bool SAL_CALL CMouseEvent::getShiftKey()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_shiftKey;
     }
     sal_Bool SAL_CALL CMouseEvent::getAltKey()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_altKey;
     }
     sal_Bool SAL_CALL CMouseEvent::getMetaKey()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_metaKey;
     }
     sal_Int16 SAL_CALL CMouseEvent::getButton()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_button;
     }
     Reference< XEventTarget > SAL_CALL CMouseEvent::getRelatedTarget()
@@ -105,9 +105,8 @@ namespace DOM::events
                         sal_Int16 buttonArg,
                         const Reference< XEventTarget >& /*relatedTargetArg*/)
     {
-        ::osl::MutexGuard const g(m_Mutex);
-
         CUIEvent::initUIEvent(typeArg, canBubbleArg, cancelableArg, viewArg, detailArg);
+        std::unique_lock const g(m_Mutex);
         m_screenX = screenXArg;
         m_screenY = screenYArg;
         m_clientX = clientXArg;

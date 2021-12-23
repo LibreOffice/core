@@ -33,13 +33,13 @@ namespace DOM::events
     Reference< XAbstractView > SAL_CALL
     CUIEvent::getView()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_view;
     }
 
     sal_Int32 SAL_CALL CUIEvent::getDetail()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_detail;
     }
 
@@ -49,9 +49,8 @@ namespace DOM::events
                      const Reference< XAbstractView >& viewArg,
                      sal_Int32 detailArg)
     {
-        ::osl::MutexGuard const g(m_Mutex);
-
         CEvent::initEvent(typeArg, canBubbleArg, cancelableArg);
+        std::unique_lock const g(m_Mutex);
         m_view = viewArg;
         m_detail = detailArg;
     }
