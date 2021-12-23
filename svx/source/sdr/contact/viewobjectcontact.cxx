@@ -147,7 +147,6 @@ ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact&
 :   mrObjectContact(rObjectContact),
     mrViewContact(rViewContact),
     maGridOffset(0.0, 0.0),
-    mnActionChangedCount(0),
     mbLazyInvalidate(false)
 {
     // make the ViewContact remember me
@@ -194,7 +193,7 @@ const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
         {
             // if range is not computed (new or LazyInvalidate objects), force it
             const DisplayInfo aDisplayInfo;
-            const drawinglayer::primitive2d::Primitive2DContainer& xSequence(getPrimitive2DSequence(aDisplayInfo));
+            const drawinglayer::primitive2d::Primitive2DContainer xSequence(getPrimitive2DSequence(aDisplayInfo));
 
             if(!xSequence.empty())
             {
@@ -209,10 +208,6 @@ const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
 
 void ViewObjectContact::ActionChanged()
 {
-    // clear cached primitives
-    mxPrimitive2DSequence.clear();
-    ++mnActionChangedCount;
-
     if(mbLazyInvalidate)
         return;
 
@@ -335,9 +330,6 @@ void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInf
 
 drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
-    if (!mxPrimitive2DSequence.empty())
-        return mxPrimitive2DSequence;
-
     /**
     This method is weird because
     (1) we have to re-walk the primitive tree because the flushing is unreliable
@@ -423,28 +415,21 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
     if(!isPrimitiveVisible(rDisplayInfo))
         return;
 
-    getPrimitive2DSequence(rDisplayInfo);
-    if(mxPrimitive2DSequence.empty())
+    drawinglayer::primitive2d::Primitive2DContainer xRetval = getPrimitive2DSequence(rDisplayInfo);
+    if(xRetval.empty())
         return;
 
     // get ranges
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+    const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
     const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
 
     // check geometrical visibility
-    bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(maObjectRange);
+    bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(aObjectRange);
     if(!bVisible)
         return;
 
-    // temporarily take over the mxPrimitive2DSequence, in case it gets invalidated while we want to iterate over it
-    auto tmp = std::move(const_cast<ViewObjectContact*>(this)->mxPrimitive2DSequence);
-    int nPrevCount = mnActionChangedCount;
-
-    rVisitor.visit(tmp);
-
-    // if we received ActionChanged() calls while walking the primitives, then leave it empty, otherwise move it back
-    if (mnActionChangedCount == nPrevCount)
-        const_cast<ViewObjectContact*>(this)->mxPrimitive2DSequence = std::move(tmp);
+    rVisitor.visit(std::move(xRetval));
 }
 
 void ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
