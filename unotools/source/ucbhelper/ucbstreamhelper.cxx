@@ -200,7 +200,7 @@ std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const Reference < XInpu
     if ( xLockBytes.is() )
     {
         if ( !bCloseStream )
-            xLockBytes->setDontClose_Impl();
+            xLockBytes->setDontClose();
 
         pStream.reset( new SvStream( xLockBytes.get() ) );
         pStream->SetBufferSize( 4096 );
@@ -219,7 +219,7 @@ std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const Reference < XStre
         if ( xLockBytes.is() )
         {
             if ( !bCloseStream )
-                xLockBytes->setDontClose_Impl();
+                xLockBytes->setDontClose();
 
             pStream.reset( new SvStream( xLockBytes.get() ) );
             pStream->SetBufferSize( 4096 );
