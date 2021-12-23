@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "926bd89d_d6fa637e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-12-23T18:37:05Z",
+      "side": 1,
+      "message": "besides jenkins, that also makes my autopkgtest run pass",
+      "revId": "f0972bd6b53c28cb2b927b362025d85f21cedcc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
