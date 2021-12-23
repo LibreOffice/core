@@ -1263,8 +1263,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140828)
     dispatchCommand(mxComponent, ".uno:SetAnchorAtChar", {});
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT(ShpProps->getPropertyValue("AnchorType").get<text::TextContentAnchorType>()
-                   != text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER);
+    CPPUNIT_ASSERT_EQUAL(
+        text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER,
+        ShpProps->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
 
     uno::Reference<text::XTextFrame> xTxBx(SwTextBoxHelper::getUnoTextFrame(xShp));
     CPPUNIT_ASSERT(xTxBx);
