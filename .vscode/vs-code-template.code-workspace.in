@@ -17,16 +17,6 @@
 			"name": "builddir",
 			"path": "@BUILDDIR@"
 		},
-		{
-			// This is BUILDDIR/workdir
-			"name": "workdir",
-			"path": "@WORKDIR@"
-		},
-		{
-			// This is BUILDDIR/instdir
-			"name": "instdir",
-			"path": "@INSTROOT@"
-		},
 	],
 	"settings": {
 		"search.exclude": {
@@ -50,7 +40,7 @@
 		// only used if the file doesn't match anything in the compile_commands.json - aka externals
 		// libxml includes just added as example/for reference
 		"C_Cpp.default.includePath": [
-			"${workspaceFolder:workdir}/UnpackedTarball/**",
+			"@WORKDIR@/UnpackedTarball/**",
 			"/usr/include/libxml2/"
 		],
 		"C_Cpp.default.browse.limitSymbolsToIncludedHeaders": true,
@@ -85,7 +75,7 @@
 					"isDefault": true
 				},
 				"options": {
-					"cwd": "${workspaceFolder:builddir}"
+					"cwd": "@BUILDDIR@"
 				}
 			},
 			{
@@ -104,7 +94,7 @@
 					"full make"
 				],
 				"options": {
-					"cwd": "${workspaceFolder:builddir}"
+					"cwd": "@BUILDDIR@"
 				},
 				"problemMatcher": [] // don't ask when manually running the task
 			},
@@ -115,14 +105,14 @@
 				"command": "rm",
 				"args": [
 					"-rf",
-					"${workspaceFolder:workdir}/vs-code-temporary-user-profile"
+					"@WORKDIR@/vs-code-temporary-user-profile"
 				],
 				"group": "none",
 				"dependsOn": [
 					"full make"
 				],
 				"options": {
-					"cwd": "${workspaceFolder:builddir}"
+					"cwd": "@BUILDDIR@"
 				},
 				"problemMatcher": []
 			}
@@ -134,10 +124,10 @@
 				"name": "run in debugger after make",
 				"type": "cppdbg",
 				"request": "launch",
-				"program": "${workspaceFolder:instdir}/program/soffice.bin",
+				"program": "@INSTROOT@/program/soffice.bin",
 				"args": [],
 				"stopAtEntry": false,
-				"cwd": "${workspaceFolder:builddir}",
+				"cwd": "@BUILDDIR@",
 				"environment": [
 					{
 						// added in disabled form for convenience/as an example
@@ -157,12 +147,12 @@
 					},
 					{
 						"description": "Mark pretty-printers (in solenv/gdb) safe",
-						"text": "add-auto-load-safe-path ${workspaceFolder:srcdir}",
+						"text": "add-auto-load-safe-path @INSTROOT@",
 						"ignoreFailures": true
 					},
 					{
 						"description": "Mark pretty-printers bootstrap (in instdir/program) safe",
-						"text": "add-auto-load-safe-path ${workspaceFolder:instdir}",
+						"text": "add-auto-load-safe-path @INSTROOT@",
 						"ignoreFailures": true
 					},
 				],
@@ -170,7 +160,7 @@
 					"miDebuggerPath": "/usr/libexec/gdb"
 				},
 				"osx": {
-					"program": "${workspaceFolder:instdir}/MacOS/soffice",
+					"program": "@INSTROOT@/MacOS/soffice",
 					"MIMode": "lldb",
 					"setupCommands": [
 						{
@@ -190,12 +180,12 @@
 				//	"preLaunchTask": "remove profile-dir",
 				"type": "cppdbg",
 				"request": "launch",
-				"program": "${workspaceFolder:instdir}/program/soffice.bin",
+				"program": "@INSTROOT@/program/soffice.bin",
 				"args": [
-					"-env:UserInstallation=file:///${workspaceFolder:workdir}/vs-code-temporary-user-profile"
+					"-env:UserInstallation=file:///@WORKDIR@/vs-code-temporary-user-profile"
 				],
 				"stopAtEntry": false,
-				"cwd": "${workspaceFolder:builddir}",
+				"cwd": "@BUILDDIR@",
 				"environment": [
 					{
 						"name": "SAL_LOG_DISABLED",
@@ -217,7 +207,7 @@
 					},
 					{
 						"description": "Mark pretty-printers bootstrap (in instdir/program) safe",
-						"text": "add-auto-load-safe-path ${workspaceFolder:instdir}",
+						"text": "add-auto-load-safe-path @INSTROOT@",
 						"ignoreFailures": true
 					},
 				],
@@ -225,7 +215,7 @@
 					"miDebuggerPath": "/usr/libexec/gdb"
 				},
 				"osx": {
-					"program": "${workspaceFolder:instdir}/MacOS/soffice",
+					"program": "@INSTROOT@/MacOS/soffice",
 					"MIMode": "lldb",
 					"setupCommands": [
 						{
