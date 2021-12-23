@@ -259,32 +259,34 @@ bool SvtUserOptions::Impl::IsTokenReadonly (UserOptToken nToken) const
             beans::PropertyAttribute::READONLY);
 }
 
+static std::mutex& GetInitMutex()
+{
+    static std::mutex gMutex;
+    return gMutex;
+}
+
+
 SvtUserOptions::SvtUserOptions ()
 {
     // Global access, must be guarded (multithreading)
-    osl::MutexGuard aGuard(GetInitMutex());
+    std::unique_lock aGuard(GetInitMutex());
 
-    if (xSharedImpl.expired())
+    xImpl = xSharedImpl.lock();
+    if (!xImpl)
     {
         xImpl = std::make_shared<Impl>();
         xSharedImpl = xImpl;
+        aGuard.unlock(); // because holdConfigItem will call this constructor
         ItemHolder1::holdConfigItem(EItem::UserOptions);
     }
-    xImpl = xSharedImpl.lock();
     xImpl->AddListener(this);
 }
 
 SvtUserOptions::~SvtUserOptions()
 {
     // Global access, must be guarded (multithreading)
-    osl::MutexGuard aGuard( GetInitMutex() );
+    std::unique_lock aGuard( GetInitMutex() );
     xImpl->RemoveListener(this);
-}
-
-osl::Mutex& SvtUserOptions::GetInitMutex()
-{
-    static osl::Mutex gMutex;
-    return gMutex;
 }
 
 OUString SvtUserOptions::GetCompany        () const { return GetToken(UserOptToken::Company); }
@@ -307,37 +309,37 @@ OUString SvtUserOptions::GetEncryptionKey  () const { return GetToken(UserOptTok
 
 bool SvtUserOptions::IsTokenReadonly (UserOptToken nToken) const
 {
-    osl::MutexGuard aGuard(GetInitMutex());
+    std::unique_lock aGuard(GetInitMutex());
     return xImpl->IsTokenReadonly(nToken);
 }
 
 OUString SvtUserOptions::GetToken (UserOptToken nToken) const
 {
-    osl::MutexGuard aGuard(GetInitMutex());
+    std::unique_lock aGuard(GetInitMutex());
     return xImpl->GetToken(nToken);
 }
 
 void SvtUserOptions::SetToken (UserOptToken nToken, OUString const& rNewToken)
 {
-    osl::MutexGuard aGuard(GetInitMutex());
+    std::unique_lock aGuard(GetInitMutex());
     xImpl->SetToken(nToken, rNewToken);
 }
 
 void SvtUserOptions::SetBoolValue (UserOptToken nToken, bool bNewValue)
 {
-    osl::MutexGuard aGuard(GetInitMutex());
+    std::unique_lock aGuard(GetInitMutex());
     xImpl->SetBoolValue(nToken, bNewValue);
 }
 
 bool SvtUserOptions::GetEncryptToSelf() const
 {
-    osl::MutexGuard aGuard(GetInitMutex());
+    std::unique_lock aGuard(GetInitMutex());
     return xImpl->GetBoolValue(UserOptToken::EncryptToSelf);
 }
 
 OUString SvtUserOptions::GetFullName () const
 {
-    osl::MutexGuard aGuard(GetInitMutex());
+    std::unique_lock aGuard(GetInitMutex());
     return xImpl->GetFullName();
 }
 

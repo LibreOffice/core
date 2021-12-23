@@ -60,8 +60,6 @@ public:
     SvtUserOptions ();
     virtual ~SvtUserOptions () override;
 
-    static osl::Mutex& GetInitMutex ();
-
     // get the address token
     OUString GetCompany        () const;
     OUString GetFirstName      () const;
