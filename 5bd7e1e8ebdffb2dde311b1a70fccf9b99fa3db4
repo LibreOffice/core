@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f2ab706_9180ee37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-12-23T12:49:35Z",
+      "side": 1,
+      "message": "verified in all Debian builds since 7.2.0/5 months",
+      "revId": "5bd7e1e8ebdffb2dde311b1a70fccf9b99fa3db4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
