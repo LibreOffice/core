@@ -17,16 +17,6 @@
 			"name": "builddir",
 			"path": "@BUILDDIR@"
 		},
-		{
-			// This is BUILDDIR/workdir
-			"name": "workdir",
-			"path": "@WORKDIR@"
-		},
-		{
-			// This is BUILDDIR/instdir
-			"name": "instdir",
-			"path": "@INSTROOT@"
-		},
 	],
 	"settings": {
 		"search.exclude": {
@@ -50,7 +40,7 @@
 		// only used if the file doesn't match anything in the compile_commands.json - aka externals
 		// libxml includes just added as example/for reference
 		"C_Cpp.default.includePath": [
-			"${workspaceFolder:workdir}/UnpackedTarball/**",
+			"${workspaceFolder:builddir}/workdir/UnpackedTarball/**",
 			"/usr/include/libxml2/"
 		],
 		"C_Cpp.default.browse.limitSymbolsToIncludedHeaders": true,
@@ -115,7 +105,7 @@
 				"command": "rm",
 				"args": [
 					"-rf",
-					"${workspaceFolder:workdir}/vs-code-temporary-user-profile"
+					"${workspaceFolder:builddir}/workdir/vs-code-temporary-user-profile"
 				],
 				"group": "none",
 				"dependsOn": [
@@ -134,7 +124,7 @@
 				"name": "run in debugger after make",
 				"type": "cppdbg",
 				"request": "launch",
-				"program": "${workspaceFolder:instdir}/program/soffice.bin",
+				"program": "${workspaceFolder:builddir}/instdir/program/soffice.bin",
 				"args": [],
 				"stopAtEntry": false,
 				"cwd": "${workspaceFolder:builddir}",
@@ -162,7 +152,7 @@
 					},
 					{
 						"description": "Mark pretty-printers bootstrap (in instdir/program) safe",
-						"text": "add-auto-load-safe-path ${workspaceFolder:instdir}",
+						"text": "add-auto-load-safe-path ${workspaceFolder:builddir}/instdir",
 						"ignoreFailures": true
 					},
 				],
@@ -170,7 +160,7 @@
 					"miDebuggerPath": "/usr/libexec/gdb"
 				},
 				"osx": {
-					"program": "${workspaceFolder:instdir}/MacOS/soffice",
+					"program": "${workspaceFolder:builddir}/instdir/MacOS/soffice",
 					"MIMode": "lldb",
 					"setupCommands": [
 						{
@@ -190,9 +180,9 @@
 				//	"preLaunchTask": "remove profile-dir",
 				"type": "cppdbg",
 				"request": "launch",
-				"program": "${workspaceFolder:instdir}/program/soffice.bin",
+				"program": "${workspaceFolder:builddir}/instdir/program/soffice.bin",
 				"args": [
-					"-env:UserInstallation=file:///${workspaceFolder:workdir}/vs-code-temporary-user-profile"
+					"-env:UserInstallation=file:///${workspaceFolder:builddir}/workdir/vs-code-temporary-user-profile"
 				],
 				"stopAtEntry": false,
 				"cwd": "${workspaceFolder:builddir}",
@@ -217,7 +207,7 @@
 					},
 					{
 						"description": "Mark pretty-printers bootstrap (in instdir/program) safe",
-						"text": "add-auto-load-safe-path ${workspaceFolder:instdir}",
+						"text": "add-auto-load-safe-path ${workspaceFolder:builddir}/instdir",
 						"ignoreFailures": true
 					},
 				],
@@ -225,7 +215,7 @@
 					"miDebuggerPath": "/usr/libexec/gdb"
 				},
 				"osx": {
-					"program": "${workspaceFolder:instdir}/MacOS/soffice",
+					"program": "${workspaceFolder:builddir}/instdir/MacOS/soffice",
 					"MIMode": "lldb",
 					"setupCommands": [
 						{
