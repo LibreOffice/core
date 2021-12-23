@@ -16,6 +16,137 @@
       "message": "After a quick local build of this, I still get the same error message.",
       "revId": "2f82196821321bbc334f1130d83cfdb91ca675d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "023c4e71_5b96ce8e",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2837,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T20:33:30Z",
+      "side": 1,
+      "message": "pBegin points to \"share.allotropia.de@SSL\\DavWWWRoot...\"",
+      "range": {
+        "startLine": 2837,
+        "startChar": 32,
+        "endLine": 2837,
+        "endChar": 38
+      },
+      "revId": "2f82196821321bbc334f1130d83cfdb91ca675d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16f7ed91_2bf8afa5",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2838,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T20:33:30Z",
+      "side": 1,
+      "message": "Before this line: pCanonic has \"file://\", nOriginalCanonicLength \u003d\u003d 7.\nparseHost loops through \u0027STATE_TOPLABEL\u0027, appends \"share.allotropia.de\" to pCanonic, stops at \"@\", adjusts p to point to \"@\", and returns true. p is not pEnd, so we proceed to \u0027if\u0027 body.",
+      "revId": "2f82196821321bbc334f1130d83cfdb91ca675d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e90a9433_73e39ed6",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2840,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T20:33:30Z",
+      "side": 1,
+      "message": "bNetBiosName is true",
+      "revId": "2f82196821321bbc334f1130d83cfdb91ca675d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "554f5e0a_2f9a6172",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2843,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T20:33:30Z",
+      "side": 1,
+      "message": "pBegin still points to start of \"share.allotropia.de@SSL\\DavWWWRoot...\"",
+      "range": {
+        "startLine": 2843,
+        "startChar": 23,
+        "endLine": 2843,
+        "endChar": 29
+      },
+      "revId": "2f82196821321bbc334f1130d83cfdb91ca675d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8f5797e_ac6f831e",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2848,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T20:33:30Z",
+      "side": 1,
+      "message": "nUTF32 gets next char from pBegin, i.e. it iterates characters of \"share.allotropia.de\" again (and then the rest).",
+      "revId": "2f82196821321bbc334f1130d83cfdb91ca675d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e99577ea_70eadfd8",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2879,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T20:33:30Z",
+      "side": 1,
+      "message": "nUTF32 is put to buf; \"share.allotropia.de\" is being built in buf",
+      "revId": "2f82196821321bbc334f1130d83cfdb91ca675d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d9c57e0_91c0a32f",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2883,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T20:33:30Z",
+      "side": 1,
+      "message": "buf is appended to pCanonic, that already has \"file://share.allotropia.de\", and the hostname doubles.\n\nBut previously, here we replaced everything from parseHost with buffer; so I suppose that:\n\n1. Since all codepaths in \u0027if\u0027 body discard the data from parseHost, we may call pCanonic-\u003esetLength(nOriginalCanonicLength) once right in the beginning of the body;\n2. We don\u0027t need buf, and may append to pCanonic instead;\n3. In case of wrong character, we may call pCanonic-\u003esetLength(nOriginalCanonicLength) again, to discard what was put to pCanonic.\n\nI\u0027m not sure if this eliminates the need of other changes here. What do you think?",
+      "revId": "2f82196821321bbc334f1130d83cfdb91ca675d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
