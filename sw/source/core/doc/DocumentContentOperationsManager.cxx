@@ -3481,21 +3481,28 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
         aRedlRest.Restore();
         if (bMakeNewFrames) // tdf#130685 only after aRedlRest
         {   // recreate from previous node (could be merged now)
-            if (SwTextNode *const pNode = aSavePos.GetNode().GetTextNode())
+            std::unordered_set<SwTextFrame*> frames;
+            SwTextNode * pNode = aSavePos.GetNode().GetTextNode();
+            SwTextNode *const pEndNode = rInsPos.GetNode().GetTextNode();
+            if (pEndNode)
             {
-                std::unordered_set<SwTextFrame*> frames;
-                SwTextNode *const pEndNode = rInsPos.GetNode().GetTextNode();
-                if (pEndNode)
+                SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
+                for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
                 {
-                    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
-                    for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+                    if (pFrame->getRootFrame()->IsHideRedlines())
                     {
-                        if (pFrame->getRootFrame()->IsHideRedlines())
+                        frames.insert(pFrame);
+                        // tdf#135061 check if end node is merged to a preceding node
+                        if (pNode == nullptr && pFrame->GetMergedPara()
+                            && pFrame->GetMergedPara()->pFirstNode->GetIndex() < aSavePos.GetIndex())
                         {
-                            frames.insert(pFrame);
+                            pNode = pFrame->GetMergedPara()->pFirstNode;
                         }
                     }
                 }
+            }
+            if (pNode != nullptr)
+            {
                 sw::RecreateStartTextFrames(*pNode);
                 if (!frames.empty())
                 {   // tdf#132187 check if the end node needs new frames
