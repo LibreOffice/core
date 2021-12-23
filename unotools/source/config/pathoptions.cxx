@@ -82,7 +82,7 @@ class SvtPathOptions_Impl
         VarNameSet                          m_aSystemPathVarNames;
 
         OUString                            m_aEmptyString;
-        mutable ::osl::Mutex                m_aMutex;
+        mutable std::mutex                  m_aMutex;
 
     public:
                         SvtPathOptions_Impl();
@@ -210,7 +210,7 @@ const VarNameAttribute aVarNameAttribute[] =
 
 const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     try
     {
@@ -263,7 +263,7 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
 
 void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& rNewPath )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     OUString    aResult;
     OUString    aNewValue;
