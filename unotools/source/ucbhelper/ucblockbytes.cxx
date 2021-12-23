@@ -88,13 +88,13 @@ public:
     virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) override {}
     virtual void SAL_CALL   start() override {}
     virtual void SAL_CALL   terminate() override
-                            { m_xLockBytes->terminate_Impl(); }
+                            { m_xLockBytes->terminate(); }
 
     // XActiveDataSink.
     virtual void SAL_CALL   setInputStream ( const Reference<XInputStream> &rxInputStream) override
-                            { m_xLockBytes->setInputStream_Impl (rxInputStream); }
+                            { m_xLockBytes->setInputStream(rxInputStream); }
     virtual Reference<XInputStream> SAL_CALL getInputStream() override
-                            { return m_xLockBytes->getInputStream_Impl(); }
+                            { return m_xLockBytes->getInputStream(); }
 };
 
 /**
@@ -115,11 +115,11 @@ public:
     virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) override {}
     virtual void SAL_CALL   start() override {}
     virtual void SAL_CALL   terminate() override
-                            { m_xLockBytes->terminate_Impl(); }
+                            { m_xLockBytes->terminate(); }
 
     // XActiveDataStreamer
     virtual void SAL_CALL   setStream( const Reference< XStream >& aStream ) override
-                            { m_xStream = aStream; m_xLockBytes->setStream_Impl( aStream ); }
+                            { m_xStream = aStream; m_xLockBytes->setStream( aStream ); }
     virtual Reference< XStream > SAL_CALL getStream() override
                             { return m_xStream; }
 };
@@ -170,7 +170,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
     {
         if (rPropChangeEvent.PropertyName == "DocumentHeader")
         {
-            m_xLockBytes->SetStreamValid_Impl();
+            m_xLockBytes->SetStreamValid();
         }
     }
 }
@@ -655,7 +655,7 @@ static bool UCBOpenContentSync(
 
     if ( !aScheme.equalsIgnoreAsciiCase( "http" ) &&
          !aScheme.equalsIgnoreAsciiCase( "https" ) )
-        xLockBytes->SetStreamValid_Impl();
+        xLockBytes->SetStreamValid();
 
     Reference< XPropertiesChangeListener > xListener;
     Reference< XPropertiesChangeNotifier > xProps(xContent,UNO_QUERY);
@@ -861,7 +861,7 @@ static bool UCBOpenContentSync_(
     // http protocol must be handled in a special way: during the opening process the input stream may change
     // only the last inputstream after notifying the document headers is valid
     if ( !aScheme.equalsIgnoreAsciiCase("http") )
-        xLockBytes->SetStreamValid_Impl();
+        xLockBytes->SetStreamValid();
 
     Reference< XPropertiesChangeListener > xListener = new UcbPropertiesChangeListener_Impl( xLockBytes );
     Reference< XPropertiesChangeNotifier > xProps ( xContent, UNO_QUERY );
@@ -979,23 +979,23 @@ Reference < XInputStream > UcbLockBytes::getInputStream()
     return m_xInputStream;
 }
 
-void UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
+void UcbLockBytes::setStream( const Reference<XStream>& aStream )
 {
     osl::MutexGuard aGuard( m_aMutex );
     if ( aStream.is() )
     {
         m_xOutputStream = aStream->getOutputStream();
-        setInputStream_Impl( aStream->getInputStream(), false );
+        setInputStream( aStream->getInputStream(), false );
         m_xSeekable.set( aStream, UNO_QUERY );
     }
     else
     {
         m_xOutputStream.clear();
-        setInputStream_Impl( Reference < XInputStream >() );
+        setInputStream( Reference < XInputStream >() );
     }
 }
 
-bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInputStream, bool bSetXSeekable )
+bool UcbLockBytes::setInputStream( const Reference<XInputStream> &rxInputStream, bool bSetXSeekable )
 {
     bool bRet = false;
 
@@ -1034,14 +1034,14 @@ bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInputSt
     return bRet;
 }
 
-void UcbLockBytes::SetStreamValid_Impl()
+void UcbLockBytes::SetStreamValid()
 {
     m_bStreamValid = true;
     if ( m_xInputStream.is() )
         m_aInitialized.set();
 }
 
-void UcbLockBytes::terminate_Impl()
+void UcbLockBytes::terminate()
 {
     m_bTerminated = true;
     m_aInitialized.set();
@@ -1063,7 +1063,7 @@ ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
         pThis->m_aInitialized.wait();
     }
 
-    Reference <XInputStream> xStream = getInputStream_Impl();
+    Reference <XInputStream> xStream = getInputStream();
     if ( !xStream.is() )
     {
         if ( m_bTerminated )
@@ -1075,7 +1075,7 @@ ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
     if ( pRead )
         *pRead = 0;
 
-    Reference <XSeekable> xSeekable = getSeekable_Impl();
+    Reference <XSeekable> xSeekable = getSeekable();
     if ( !xSeekable.is() )
         return ERRCODE_IO_CANTREAD;
 
@@ -1131,8 +1131,8 @@ ErrCode UcbLockBytes::WriteAt(sal_uInt64 const nPos, const void *pBuffer,
     DBG_ASSERT( IsSynchronMode(), "Writing is only possible in SynchronMode!" );
     DBG_ASSERT( m_aInitialized.check(), "Writing bevor stream is ready!" );
 
-    Reference <XSeekable> xSeekable = getSeekable_Impl();
-    Reference <XOutputStream> xOutputStream = getOutputStream_Impl();
+    Reference <XSeekable> xSeekable = getSeekable();
+    Reference <XOutputStream> xOutputStream = getOutputStream();
     if ( !xOutputStream.is() || !xSeekable.is() )
         return ERRCODE_IO_CANTWRITE;
 
@@ -1163,7 +1163,7 @@ ErrCode UcbLockBytes::WriteAt(sal_uInt64 const nPos, const void *pBuffer,
 
 ErrCode UcbLockBytes::Flush() const
 {
-    Reference <XOutputStream > xOutputStream = getOutputStream_Impl();
+    Reference <XOutputStream > xOutputStream = getOutputStream();
     if ( !xOutputStream.is() )
         return ERRCODE_IO_CANTWRITE;
 
@@ -1187,7 +1187,7 @@ ErrCode UcbLockBytes::SetSize (sal_uInt64 const nNewSize)
 
     if ( nSize > nNewSize )
     {
-        Reference < XTruncate > xTrunc( getOutputStream_Impl(), UNO_QUERY );
+        Reference < XTruncate > xTrunc( getOutputStream(), UNO_QUERY );
         if ( xTrunc.is() )
         {
             xTrunc->truncate();
@@ -1222,8 +1222,8 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat ) const
     if (!pStat)
         return ERRCODE_IO_INVALIDPARAMETER;
 
-    Reference <XInputStream> xStream = getInputStream_Impl();
-    Reference <XSeekable> xSeekable = getSeekable_Impl();
+    Reference <XInputStream> xStream = getInputStream();
+    Reference <XSeekable> xSeekable = getSeekable();
 
     if ( !xStream.is() )
     {
@@ -1253,9 +1253,9 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
         return nullptr;
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes;
-    xLockBytes->setDontClose_Impl();
-    xLockBytes->setInputStream_Impl( xInputStream );
-    xLockBytes->terminate_Impl();
+    xLockBytes->setDontClose();
+    xLockBytes->setInputStream( xInputStream );
+    xLockBytes->terminate();
     return xLockBytes;
 }
 
@@ -1265,9 +1265,9 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference< XStream >& xStre
         return nullptr;
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes;
-    xLockBytes->setDontClose_Impl();
-    xLockBytes->setStream_Impl( xStream );
-    xLockBytes->terminate_Impl();
+    xLockBytes->setDontClose();
+    xLockBytes->setStream( xStream );
+    xLockBytes->terminate();
     return xLockBytes;
 }
 

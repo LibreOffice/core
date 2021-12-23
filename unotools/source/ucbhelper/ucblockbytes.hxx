@@ -105,33 +105,33 @@ public:
     // calling this method delegates the responsibility to call closeinput to the caller!
     css::uno::Reference < css::io::XInputStream > getInputStream();
 
-    bool                    setInputStream_Impl( const css::uno::Reference < css::io::XInputStream > &rxInputStream,
+    bool                    setInputStream( const css::uno::Reference < css::io::XInputStream > &rxInputStream,
                                                  bool bSetXSeekable = true );
-    void                    setStream_Impl( const css::uno::Reference < css::io::XStream > &rxStream );
-    void                    terminate_Impl();
+    void                    setStream( const css::uno::Reference < css::io::XStream > &rxStream );
+    void                    terminate();
 
-    css::uno::Reference < css::io::XInputStream > getInputStream_Impl() const
+    css::uno::Reference < css::io::XInputStream > getInputStream() const
                             {
                                 osl::MutexGuard aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
                                 return m_xInputStream;
                             }
 
-    css::uno::Reference < css::io::XOutputStream > getOutputStream_Impl() const
+    css::uno::Reference < css::io::XOutputStream > getOutputStream() const
                             {
                                 osl::MutexGuard aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
                                 return m_xOutputStream;
                             }
 
-    css::uno::Reference < css::io::XSeekable > getSeekable_Impl() const
+    css::uno::Reference < css::io::XSeekable > getSeekable() const
                             {
                                 osl::MutexGuard aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
                                 return m_xSeekable;
                             }
 
-    void                    setDontClose_Impl()
+    void                    setDontClose()
                             { m_bDontClose = true; }
 
-    void                    SetStreamValid_Impl();
+    void                    SetStreamValid();
 };
 
 }
