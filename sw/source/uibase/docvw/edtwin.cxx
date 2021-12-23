@@ -3897,10 +3897,15 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 SwContentFrame* pContentFrame = aSwContentAtPos.aFnd.pNode->GetTextNode()->getLayoutFrame(nullptr);
                 if (pContentFrame != m_pSavedOutlineFrame)
                 {
-                    if (m_pSavedOutlineFrame && !m_pSavedOutlineFrame->IsInDtor() &&
-                            rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos) &&
-                            rSh.GetAttrOutlineContentVisible(nPos))
-                        GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+                    if (m_pSavedOutlineFrame && !m_pSavedOutlineFrame->IsInDtor())
+                    {
+                        SwTextNode* pTextNode =
+                                static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst();
+                        if (pTextNode && rNds.GetOutLineNds().Seek_Entry(pTextNode, &nPos) &&
+                                rSh.GetAttrOutlineContentVisible(nPos))
+                            GetFrameControlsManager().RemoveControlsByType(
+                                        FrameControlType::Outline, m_pSavedOutlineFrame);
+                    }
                     m_pSavedOutlineFrame = pContentFrame;
                 }
                 // show button
