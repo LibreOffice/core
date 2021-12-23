@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cffaa53_1492a130",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T20:58:02Z",
+      "side": 1,
+      "message": "I still didn\u0027t quite get why we can\u0027t restore it unconditionally 😊",
+      "revId": "8d38bbf8594744381be5edf1b01a37a5ea1813c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "442a4c90_aa598d25",
+        "filename": "basic/source/sbx/sbxvar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T20:58:02Z",
+      "side": 1,
+      "message": "Please consider simplifying the loop, to make it more comprehensible:\n\n        if (r.pInfo)\n        {\n            sal_uInt16 n \u003d 1;\n            // tdf#146281 - check if there is actually an information about missing parameters\n            for (const auto* p \u003d r.pInfo-\u003eGetParam(n); p; p \u003d r.pInfo-\u003eGetParam(++n))\n                if (p-\u003eeType \u0026 SbxMISSING)\n                {\n                    pInfo \u003d r.pInfo;\n                    break;\n                }\n        }",
+      "revId": "8d38bbf8594744381be5edf1b01a37a5ea1813c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
