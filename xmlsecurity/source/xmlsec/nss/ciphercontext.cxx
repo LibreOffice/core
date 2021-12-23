@@ -63,8 +63,6 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
 
 void OCipherContext::Dispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     if ( m_pContext )
     {
         PK11_DestroyContext( m_pContext, PR_TRUE );
@@ -94,7 +92,7 @@ void OCipherContext::Dispose()
 
 uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( const uno::Sequence< ::sal_Int8 >& aData )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bBroken )
         throw uno::RuntimeException();
@@ -174,7 +172,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
 
 uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bBroken )
         throw uno::RuntimeException();

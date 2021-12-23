@@ -22,14 +22,14 @@
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <seccomon.h>
 #include <secmodt.h>
 
 class OCipherContext : public cppu::WeakImplHelper< css::xml::crypto::XCipherContext >
 {
 private:
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
 
     PK11SlotInfo* m_pSlot;
     PK11SymKey* m_pSymKey;
