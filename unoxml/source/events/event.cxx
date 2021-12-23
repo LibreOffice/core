@@ -39,52 +39,52 @@ namespace DOM::events
 
     OUString SAL_CALL CEvent::getType()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_eventType;
     }
 
     Reference< XEventTarget > SAL_CALL
     CEvent::getTarget()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_target;
     }
 
     Reference< XEventTarget > SAL_CALL
     CEvent::getCurrentTarget()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_currentTarget;
     }
 
     PhaseType SAL_CALL CEvent::getEventPhase()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_phase;
     }
 
     sal_Bool SAL_CALL CEvent::getBubbles()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_bubbles;
     }
 
     sal_Bool SAL_CALL CEvent::getCancelable()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_cancelable;
     }
 
     css::util::Time SAL_CALL
     CEvent::getTimeStamp()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_time;
     }
 
     void SAL_CALL CEvent::stopPropagation()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         if (m_cancelable) { m_canceled = true; }
     }
 
@@ -96,7 +96,7 @@ namespace DOM::events
     CEvent::initEvent(OUString const& eventTypeArg, sal_Bool canBubbleArg,
         sal_Bool cancelableArg)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
 
         m_eventType = eventTypeArg;
         m_bubbles = canBubbleArg;
