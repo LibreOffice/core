@@ -28,6 +28,7 @@ MERGE_LIBRARY_LIST := \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(if $(filter WNT,$(OS)),directx9canvas) \
+	drawinglayercore \
 	drawinglayer \
 	editeng \
 	emfio \
