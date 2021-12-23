@@ -60,6 +60,7 @@ fuzzer_core_libraries = \
     deployment \
     deploymentmisc \
     drawinglayer \
+    drawinglayercore \
     editeng \
     emfio \
     file \
