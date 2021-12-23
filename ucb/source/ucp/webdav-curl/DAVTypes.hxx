@@ -23,7 +23,7 @@
 #include <memory>
 #include <list>
 #include <map>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -161,7 +161,7 @@ namespace http_dav_ucp
     class DAVOptionsCache
     {
         DAVOptionsMap m_aTheCache;
-        osl::Mutex         m_aMutex;
+        std::mutex    m_aMutex;
     public:
         explicit DAVOptionsCache();
         ~DAVOptionsCache();
