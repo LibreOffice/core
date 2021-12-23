@@ -104,7 +104,7 @@ DAVOptionsCache::~DAVOptionsCache()
 
 bool DAVOptionsCache::getDAVOptions( const OUString & rURL, DAVOptions & rDAVOptions )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(rURL) ) );
     normalizeURLLastChar( aEncodedUrl );
 
@@ -132,7 +132,7 @@ bool DAVOptionsCache::getDAVOptions( const OUString & rURL, DAVOptions & rDAVOpt
 
 void DAVOptionsCache::removeDAVOptions( const OUString & rURL )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(rURL) ) );
     normalizeURLLastChar( aEncodedUrl );
 
@@ -146,7 +146,7 @@ void DAVOptionsCache::removeDAVOptions( const OUString & rURL )
 
 void DAVOptionsCache::addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     OUString aURL( rDAVOptions.getURL() );
 
     OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(aURL) ) );
@@ -175,7 +175,7 @@ void DAVOptionsCache::addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 
 
 void DAVOptionsCache::setHeadAllowed( const OUString & rURL, const bool HeadAllowed )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(rURL) ) );
     normalizeURLLastChar( aEncodedUrl );
 
