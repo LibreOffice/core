@@ -157,7 +157,7 @@
 					},
 				],
 				"linux": {
-					"miDebuggerPath": "/usr/libexec/gdb"
+					"miDebuggerPath": "gdb"
 				},
 				"osx": {
 					"program": "${workspaceFolder:builddir}/instdir/MacOS/soffice",
@@ -212,7 +212,7 @@
 					},
 				],
 				"linux": {
-					"miDebuggerPath": "/usr/libexec/gdb"
+					"miDebuggerPath": "gdb"
 				},
 				"osx": {
 					"program": "${workspaceFolder:builddir}/instdir/MacOS/soffice",
