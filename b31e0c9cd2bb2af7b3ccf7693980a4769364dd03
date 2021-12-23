@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de59abb5_6856608e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-23T15:21:46Z",
+      "side": 1,
+      "message": "FYI: I created it that way because I only have gdb-headless package on my system and that\u0027s sufficient for use inside of vscode.\n\nWith gdb installed, it works without having the miDebuggerPath sepcified, so the linux configuration block is not unnecessary/the defaults work for me. So if the default of /usr/bin/gdb also is what you expect it to pick up it can be removed, If the intent is to allow custom GDB from different PATH/not from your distro, then keep the more verbose variant",
+      "revId": "b31e0c9cd2bb2af7b3ccf7693980a4769364dd03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
