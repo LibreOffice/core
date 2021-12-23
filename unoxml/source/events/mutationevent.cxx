@@ -36,31 +36,31 @@ namespace DOM::events
 
     Reference< XNode > SAL_CALL CMutationEvent::getRelatedNode()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_relatedNode;
     }
 
     OUString SAL_CALL CMutationEvent::getPrevValue()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_prevValue;
     }
 
     OUString SAL_CALL CMutationEvent::getNewValue()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_newValue;
     }
 
     OUString SAL_CALL CMutationEvent::getAttrName()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_attrName;
     }
 
     AttrChangeType SAL_CALL CMutationEvent::getAttrChange()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
         return m_attrChangeType;
     }
 
@@ -70,7 +70,7 @@ namespace DOM::events
         const OUString& newValueArg, const OUString& attrNameArg,
         AttrChangeType attrChangeArg)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::unique_lock const g(m_Mutex);
 
         CEvent::initEvent(typeArg, canBubbleArg, cancelableArg);
         m_relatedNode = relatedNodeArg;
