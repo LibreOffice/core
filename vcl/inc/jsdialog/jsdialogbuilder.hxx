@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <deque>
 #include <list>
@@ -165,10 +165,9 @@ protected:
 };
 
 class JSDropTarget final
-    : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
-                                           css::lang::XInitialization, css::lang::XServiceInfo>
+    : public comphelper::WeakComponentImplHelper<
+          css::datatransfer::dnd::XDropTarget, css::lang::XInitialization, css::lang::XServiceInfo>
 {
-    osl::Mutex m_aMutex;
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
 
 public:

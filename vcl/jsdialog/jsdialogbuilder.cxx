@@ -406,17 +406,14 @@ public:
 
 static JSTreeView* g_DragSource;
 
-JSDropTarget::JSDropTarget()
-    : WeakComponentImplHelper(m_aMutex)
-{
-}
+JSDropTarget::JSDropTarget() {}
 
 void JSDropTarget::initialize(const css::uno::Sequence<css::uno::Any>& /*rArgs*/) {}
 
 void JSDropTarget::addDropTargetListener(
     const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
 {
-    ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     m_aListeners.push_back(xListener);
 }
@@ -424,7 +421,7 @@ void JSDropTarget::addDropTargetListener(
 void JSDropTarget::removeDropTargetListener(
     const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
 {
-    ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), xListener),
                        m_aListeners.end());
@@ -456,10 +453,10 @@ css::uno::Sequence<OUString> JSDropTarget::getSupportedServiceNames()
 
 void JSDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
 {
-    osl::ClearableGuard<osl::Mutex> aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
         m_aListeners);
-    aGuard.clear();
+    aGuard.unlock();
 
     for (auto const& listener : aListeners)
     {
@@ -469,10 +466,10 @@ void JSDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& 
 
 void JSDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
 {
-    osl::ClearableGuard<::osl::Mutex> aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
         m_aListeners);
-    aGuard.clear();
+    aGuard.unlock();
 
     for (auto const& listener : aListeners)
     {
