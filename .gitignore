@@ -60,6 +60,7 @@
 /bin/odfvalidator.sh
 /bin/officeotron.sh
 /hardened_runtime.xcent
+/vs-code.code-workspace.template
 /Makefile
 
 # make id
