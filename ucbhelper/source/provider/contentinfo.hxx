@@ -27,6 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <osl/mutex.hxx>
+#include <mutex>
 
 namespace com::sun::star::ucb { class XCommandEnvironment; }
 
@@ -50,12 +51,13 @@ class PropertySetInfo :
                                 m_xEnv;
     std::optional<css::uno::Sequence< css::beans::Property >>
                                 m_xProps;
-    osl::Mutex                  m_aMutex;
+    std::mutex                  m_aMutex;
     ContentImplHelper*          m_pContent;
 
 private:
     bool queryProperty( std::u16string_view rName,
                             css::beans::Property& rProp );
+    const css::uno::Sequence< css::beans::Property > & getPropertiesImpl();
 
 public:
     PropertySetInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
@@ -63,13 +65,9 @@ public:
     virtual ~PropertySetInfo() override;
 
     // XPropertySetInfo
-    virtual css::uno::Sequence<
-                css::beans::Property > SAL_CALL
-    getProperties() override;
-    virtual css::beans::Property SAL_CALL
-    getPropertyByName( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL
-    hasPropertyByName( const OUString& Name ) override;
+    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
+    virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
+    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
     // Non-Interface methods.
     void reset();
