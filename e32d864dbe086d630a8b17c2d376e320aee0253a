@@ -34,6 +34,24 @@
       "parentUuid": "03e87035_f39f0a34",
       "revId": "e32d864dbe086d630a8b17c2d376e320aee0253a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7a0ba9b_98a55a64",
+        "filename": "basic/source/sbx/sbxvar.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T12:39:09Z",
+      "side": 1,
+      "message": "\u003e cA.Add(optInt) \u0027 it makes sense to add such an element to a collection(?)\n\nI believe that it *only* makes sense to pass *missing* optional to a function *when* that function accepts *optional* argument at that place. Since Collection.Add has its first parameter non-optional, passing there a missing optional should trigger \"arg is not optional\" on Add call.\n\nNot sure if that\u0027s relevant, just a thought.",
+      "parentUuid": "7c3dddfe_95ae4269",
+      "revId": "e32d864dbe086d630a8b17c2d376e320aee0253a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
