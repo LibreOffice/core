@@ -61,7 +61,7 @@ private:
     typedef std::map<OUString, DAVSession*> Map;
 
     Map m_aMap;
-    osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     std::unique_ptr<ucbhelper::InternetProxyDecider> m_xProxyDecider;
 
     void releaseElement(DAVSession* pElement);

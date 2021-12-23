@@ -34,7 +34,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const uno::Sequence< beans::NamedValue >& rFlags,
                 const uno::Reference< uno::XComponentContext > & rxContext )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if (!m_xProxyDecider)
         m_xProxyDecider.reset( new ucbhelper::InternetProxyDecider( rxContext ) );
@@ -79,7 +79,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
 void DAVSessionFactory::releaseElement( DAVSession * pElement )
 {
     assert( pElement );
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( pElement->m_aContainerIt != m_aMap.end() )
         m_aMap.erase( pElement->m_aContainerIt );
 }
