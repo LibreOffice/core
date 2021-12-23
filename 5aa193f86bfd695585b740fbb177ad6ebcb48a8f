@@ -33,6 +33,24 @@
       "message": "Thanks - I\u0027ll test shortly (need to finish current debug session).",
       "revId": "5aa193f86bfd695585b740fbb177ad6ebcb48a8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87e52ad7_852e9b51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-23T09:52:10Z",
+      "side": 1,
+      "message": "Hmm, doesn\u0027t seem to make a difference (I built three times after applying the patch, without touching anything, and all three times CustomTarget/i18npool/localedata/localedata_*.cxx were rebuilt)",
+      "parentUuid": "200f8269_18142b86",
+      "revId": "5aa193f86bfd695585b740fbb177ad6ebcb48a8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
