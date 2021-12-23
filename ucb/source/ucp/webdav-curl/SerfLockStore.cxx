@@ -89,9 +89,9 @@ SerfLockStore::SerfLockStore()
 
 SerfLockStore::~SerfLockStore()
 {
-    osl::ResettableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     stopTicker(aGuard);
-    aGuard.reset(); // actually no threads should even try to access members now
+    aGuard.lock(); // actually no threads should even try to access members now
     m_bFinishing = true;
 
     // release active locks, if any.
@@ -106,7 +106,7 @@ SerfLockStore::~SerfLockStore()
 
 void SerfLockStore::startTicker()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_pTickerThread.is() )
     {
@@ -116,7 +116,7 @@ void SerfLockStore::startTicker()
 }
 
 
-void SerfLockStore::stopTicker(osl::ClearableMutexGuard & rGuard)
+void SerfLockStore::stopTicker(std::unique_lock<std::mutex> & rGuard)
 {
     rtl::Reference<TickerThread> pTickerThread;
 
@@ -128,7 +128,7 @@ void SerfLockStore::stopTicker(osl::ClearableMutexGuard & rGuard)
         m_pTickerThread.clear();
     }
 
-    rGuard.clear();
+    rGuard.unlock();
 
     if (pTickerThread.is() && pTickerThread->getIdentifier() != osl::Thread::getCurrentIdentifier())
     {
@@ -141,7 +141,7 @@ SerfLockStore::getLockTokenForURI(OUString const& rURI, css::ucb::Lock const*con
 {
     assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
 
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     auto const it(m_aLockInfoMap.find(rURI));
 
@@ -179,7 +179,7 @@ void SerfLockStore::addLock( const OUString& rURI,
 {
     assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
 
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     m_aLockInfoMap[ rURI ]
         = LockInfo(sToken, rLock, xSession, nLastChanceToSendRefreshRequest);
@@ -190,9 +190,16 @@ void SerfLockStore::addLock( const OUString& rURI,
 
 void SerfLockStore::removeLock(const OUString& rURI)
 {
+    std::unique_lock aGuard( m_aMutex );
+
+    removeLockImpl(rURI);
+}
+
+void SerfLockStore::removeLockImpl(const OUString& rURI)
+{
     assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
 
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     m_aLockInfoMap.erase(rURI);
 
@@ -200,10 +207,9 @@ void SerfLockStore::removeLock(const OUString& rURI)
         stopTicker(aGuard);
 }
 
-
 void SerfLockStore::refreshLocks()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     ::std::vector<OUString> authFailedLocks;
 
@@ -244,7 +250,7 @@ void SerfLockStore::refreshLocks()
 
     for (auto const& rLock : authFailedLocks)
     {
-        removeLock(rLock);
+        removeLockImpl(rLock);
     }
 }
 

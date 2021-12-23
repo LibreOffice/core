@@ -21,7 +21,7 @@
 #pragma once
 
 #include <map>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/ucb/Lock.hpp>
@@ -58,7 +58,7 @@ typedef std::map< OUString, LockInfo > LockInfoMap;
 
 class SerfLockStore
 {
-    osl::Mutex         m_aMutex;
+    std::mutex         m_aMutex;
     rtl::Reference< TickerThread > m_pTickerThread;
     bool               m_bFinishing;
     LockInfoMap        m_aLockInfoMap;
@@ -82,8 +82,9 @@ public:
     void refreshLocks();
 
 private:
+    void removeLockImpl(const OUString& rURI);
     void startTicker();
-    void stopTicker(osl::ClearableMutexGuard & rGuard);
+    void stopTicker(std::unique_lock<std::mutex> & rGuard);
 };
 
 } // namespace http_dav_ucp
