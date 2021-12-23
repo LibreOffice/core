@@ -49,7 +49,8 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Executable_minvcl \
         Executable_fftester \
         Executable_svptest \
-        Executable_svpclient) \
+        Executable_svpclient \
+        Executable_listfonts) \
 ))
 
 endif
