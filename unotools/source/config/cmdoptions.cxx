@@ -84,6 +84,12 @@ class SvtCmdOptions
         CommandHashMap m_aCommandHashMap;
 };
 
+std::mutex& GetOwnStaticMutex()
+{
+    static std::mutex theCommandOptionsMutex;
+    return theCommandOptionsMutex;
+}
+
 }
 
 typedef ::std::vector< css::uno::WeakReference< css::frame::XFrame > > SvtFrameVector;
@@ -185,7 +191,7 @@ SvtCommandOptions_Impl::~SvtCommandOptions_Impl()
 
 void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
 {
-    MutexGuard aGuard( SvtCommandOptions::GetOwnStaticMutex() );
+    std::unique_lock aGuard( GetOwnStaticMutex() );
 
     Sequence< OUString >    lNames   = impl_GetPropertyNames ();
     Sequence< Any >         lValues  = GetProperties         ( lNames         );
@@ -296,7 +302,7 @@ std::weak_ptr<SvtCommandOptions_Impl> g_pCommandOptions;
 SvtCommandOptions::SvtCommandOptions()
 {
     // Global access, must be guarded (multithreading!).
-    MutexGuard aGuard( GetOwnStaticMutex() );
+    std::unique_lock aGuard( GetOwnStaticMutex() );
 
     m_pImpl = g_pCommandOptions.lock();
     if( !m_pImpl )
@@ -310,7 +316,7 @@ SvtCommandOptions::SvtCommandOptions()
 SvtCommandOptions::~SvtCommandOptions()
 {
     // Global access, must be guarded (multithreading!)
-    MutexGuard aGuard( GetOwnStaticMutex() );
+    std::unique_lock aGuard( GetOwnStaticMutex() );
 
     m_pImpl.reset();
 }
@@ -319,7 +325,7 @@ SvtCommandOptions::~SvtCommandOptions()
 
 bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
+    std::unique_lock aGuard( GetOwnStaticMutex() );
     return m_pImpl->HasEntries( eOption );
 }
 
@@ -327,7 +333,7 @@ bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
 
 bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandURL ) const
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
+    std::unique_lock aGuard( GetOwnStaticMutex() );
     return m_pImpl->Lookup( eCmdOption, aCommandURL );
 }
 
@@ -335,16 +341,8 @@ bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandUR
 
 void SvtCommandOptions::EstablishFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
+    std::unique_lock aGuard( GetOwnStaticMutex() );
     m_pImpl->EstablishFrameCallback(xFrame);
-}
-
-//  private method
-
-Mutex& SvtCommandOptions::GetOwnStaticMutex()
-{
-    static osl::Mutex theCommandOptionsMutex;
-    return theCommandOptionsMutex;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
