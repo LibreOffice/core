@@ -20,7 +20,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <memory>
 #include <utility>
 
 #include <rtl/ustrbuf.hxx>
@@ -29,7 +28,6 @@
 #include <ucbhelper/providerhelper.hxx>
 #include "webdavdatasupplier.hxx"
 #include "webdavcontent.hxx"
-#include "ContentProperties.hxx"
 #include "DAVProperties.hxx"
 #include "CurlUri.hxx"
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
@@ -42,21 +40,7 @@ using namespace http_dav_ucp;
 namespace http_dav_ucp
 {
 
-
-// struct ResultListEntry.
-
 namespace {
-
-struct ResultListEntry
-{
-    OUString                             aId;
-    uno::Reference< ucb::XContentIdentifier > xId;
-    uno::Reference< ucb::XContent >           xContent;
-    uno::Reference< sdbc::XRow >              xRow;
-    std::unique_ptr<ContentProperties> pData;
-
-    explicit ResultListEntry( std::unique_ptr<ContentProperties> && pEntry ) : pData( std::move(pEntry) ) {}
-};
 
 auto DumpResources(std::vector<DAVResource> const& rResources) -> OUString
 {
@@ -89,33 +73,6 @@ auto DumpResources(std::vector<DAVResource> const& rResources) -> OUString
 
 }
 
-// ResultList.
-
-
-typedef std::vector<std::unique_ptr<ResultListEntry>> ResultList;
-
-
-// struct DataSupplier_Impl.
-
-
-struct DataSupplier_Impl
-{
-    osl::Mutex                                   m_aMutex;
-    ResultList                                   m_Results;
-    rtl::Reference< Content >                    m_xContent;
-    uno::Reference< uno::XComponentContext > m_xContext;
-    sal_Int32 const                              m_nOpenMode;
-    bool                                     m_bCountFinal;
-    bool                                     m_bThrowException;
-
-    DataSupplier_Impl(
-                const uno::Reference< uno::XComponentContext >& rxContext,
-                const rtl::Reference< Content >& rContent,
-                sal_Int32 nOpenMode )
-    : m_xContent( rContent ), m_xContext( rxContext ), m_nOpenMode( nOpenMode ),
-      m_bCountFinal( false ), m_bThrowException( false ) {}
-};
-
 }
 
 
@@ -126,7 +83,8 @@ DataSupplier::DataSupplier(
             const uno::Reference< uno::XComponentContext >& rxContext,
             const rtl::Reference< Content >& rContent,
             sal_Int32 nOpenMode )
-: m_pImpl(std::make_unique<DataSupplier_Impl>(rxContext, rContent, nOpenMode))
+    : m_xContent( rContent ), m_xContext( rxContext ), m_nOpenMode( nOpenMode ),
+      m_bCountFinal( false ), m_bThrowException( false )
 {
 }
 
@@ -139,11 +97,11 @@ DataSupplier::~DataSupplier()
 // virtual
 OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if (nIndex < m_pImpl->m_Results.size())
+    if (nIndex < m_Results.size())
     {
-        OUString aId = m_pImpl->m_Results[ nIndex ]->aId;
+        OUString aId = m_Results[ nIndex ]->aId;
         if ( aId.getLength() )
         {
             // Already cached.
@@ -153,9 +111,9 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 
     if ( getResult( nIndex ) )
     {
-        OUString aId = m_pImpl->m_xContent->getResourceAccess().getURL();
+        OUString aId = m_xContent->getResourceAccess().getURL();
 
-        const ContentProperties& props(*(m_pImpl->m_Results[ nIndex ]->pData));
+        const ContentProperties& props(*(m_Results[ nIndex ]->pData));
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
             aId += "/";
@@ -165,7 +123,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         if ( props.isTrailingSlash() )
             aId += "/";
 
-        m_pImpl->m_Results[ nIndex ]->aId = aId;
+        m_Results[ nIndex ]->aId = aId;
         return aId;
     }
     return OUString();
@@ -176,12 +134,12 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 uno::Reference< ucb::XContentIdentifier >
 DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if (nIndex < m_pImpl->m_Results.size())
+    if (nIndex < m_Results.size())
     {
         uno::Reference< ucb::XContentIdentifier > xId
-            = m_pImpl->m_Results[ nIndex ]->xId;
+            = m_Results[ nIndex ]->xId;
         if ( xId.is() )
         {
             // Already cached.
@@ -194,7 +152,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     {
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aId );
-        m_pImpl->m_Results[ nIndex ]->xId = xId;
+        m_Results[ nIndex ]->xId = xId;
         return xId;
     }
     return uno::Reference< ucb::XContentIdentifier >();
@@ -205,12 +163,12 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 uno::Reference< ucb::XContent >
 DataSupplier::queryContent( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if (nIndex < m_pImpl->m_Results.size())
+    if (nIndex < m_Results.size())
     {
         uno::Reference< ucb::XContent > xContent
-            = m_pImpl->m_Results[ nIndex ]->xContent;
+            = m_Results[ nIndex ]->xContent;
         if ( xContent.is() )
         {
             // Already cached.
@@ -225,8 +183,8 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
         try
         {
             uno::Reference< ucb::XContent > xContent
-                = m_pImpl->m_xContent->getProvider()->queryContent( xId );
-            m_pImpl->m_Results[ nIndex ]->xContent = xContent;
+                = m_xContent->getProvider()->queryContent( xId );
+            m_Results[ nIndex ]->xContent = xContent;
             return xContent;
 
         }
@@ -241,9 +199,9 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
 // virtual
 bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    if (nIndex < m_pImpl->m_Results.size())
+    if (nIndex < m_Results.size())
     {
         // Result already present.
         return true;
@@ -252,7 +210,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
     // Obtain values...
     if ( getData() )
     {
-        if (nIndex < m_pImpl->m_Results.size())
+        if (nIndex < m_Results.size())
         {
             // Result already present.
             return true;
@@ -269,21 +227,21 @@ sal_uInt32 DataSupplier::totalCount()
   // Obtain values...
   getData();
 
-  return m_pImpl->m_Results.size();
+  return m_Results.size();
 }
 
 
 // virtual
 sal_uInt32 DataSupplier::currentCount()
 {
-    return m_pImpl->m_Results.size();
+    return m_Results.size();
 }
 
 
 // virtual
 bool DataSupplier::isCountFinal()
 {
-    return m_pImpl->m_bCountFinal;
+    return m_bCountFinal;
 }
 
 
@@ -291,11 +249,11 @@ bool DataSupplier::isCountFinal()
 uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
                                                     sal_uInt32 nIndex  )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if (nIndex < m_pImpl->m_Results.size())
+    if (nIndex < m_Results.size())
     {
-        uno::Reference< sdbc::XRow > xRow = m_pImpl->m_Results[ nIndex ]->xRow;
+        uno::Reference< sdbc::XRow > xRow = m_Results[ nIndex ]->xRow;
         if ( xRow.is() )
         {
             // Already cached.
@@ -307,12 +265,12 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
     {
         uno::Reference< sdbc::XRow > xRow
             = Content::getPropertyValues(
-                m_pImpl->m_xContext,
+                m_xContext,
                 getResultSet()->getProperties(),
-                *(m_pImpl->m_Results[ nIndex ]->pData),
-                m_pImpl->m_xContent->getProvider(),
+                *(m_Results[ nIndex ]->pData),
+                m_xContent->getProvider(),
                 queryContentIdentifierString( nIndex ) );
-        m_pImpl->m_Results[ nIndex ]->xRow = xRow;
+        m_Results[ nIndex ]->xRow = xRow;
         return xRow;
     }
 
@@ -323,10 +281,10 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
 // virtual
 void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if (nIndex < m_pImpl->m_Results.size())
-        m_pImpl->m_Results[ nIndex ]->xRow.clear();
+    if (nIndex < m_Results.size())
+        m_Results[ nIndex ]->xRow.clear();
 }
 
 
@@ -339,15 +297,15 @@ void DataSupplier::close()
 // virtual
 void DataSupplier::validate()
 {
-    if ( m_pImpl->m_bThrowException )
+    if ( m_bThrowException )
         throw ucb::ResultSetException();
 }
 
 bool DataSupplier::getData()
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( !m_pImpl->m_bCountFinal )
+    if ( !m_bCountFinal )
     {
         std::vector< OUString > propertyNames;
         ContentProperties::UCBNamesToDAVNames(
@@ -368,7 +326,7 @@ bool DataSupplier::getData()
         {
             // propfind depth 1, get property values for parent AND for each
             // child
-            m_pImpl->m_xContent->getResourceAccess()
+            m_xContent->getResourceAccess()
                 .PROPFIND( DAVONE,
                            propertyNames,
                            resources,
@@ -378,15 +336,15 @@ bool DataSupplier::getData()
         catch ( DAVException & )
         {
             TOOLS_WARN_EXCEPTION( "ucb.ucp.webdav", "PROPFIND : DAVException" );
-            m_pImpl->m_bThrowException = true;
+            m_bThrowException = true;
         }
 
-        if ( !m_pImpl->m_bThrowException )
+        if ( !m_bThrowException )
         {
             try
             {
                 CurlUri const aURI(
-                    m_pImpl->m_xContent->getResourceAccess().getURL() );
+                    m_xContent->getResourceAccess().getURL() );
                 OUString aPath = aURI.GetPath();
 
                 if ( aPath.endsWith("/") )
@@ -430,7 +388,7 @@ bool DataSupplier::getData()
                         = std::make_unique<ContentProperties>( rRes );
 
                     // Check resource against open mode.
-                    switch ( m_pImpl->m_nOpenMode )
+                    switch ( m_nOpenMode )
                     {
                     case ucb::OpenMode::FOLDERS:
                         {
@@ -465,7 +423,7 @@ bool DataSupplier::getData()
                         break;
                     }
 
-                    m_pImpl->m_Results.push_back(
+                    m_Results.push_back(
                         std::make_unique<ResultListEntry>(std::move(pContentProperties)));
                 }
             }
@@ -474,13 +432,13 @@ bool DataSupplier::getData()
             }
         }
 
-        m_pImpl->m_bCountFinal = true;
+        m_bCountFinal = true;
 
         // Callback possible, because listeners may be informed!
         aGuard.clear();
         getResultSet()->rowCountFinal();
     }
-    return !m_pImpl->m_bThrowException;
+    return !m_bThrowException;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
