@@ -129,6 +129,19 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithbom)
     CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf92161_gb18030)
+{
+    load(mpTestDocumentPath, "GB18030.txt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"盖闻天地之数，有十二万九千六百岁为一元。"), xPara->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithoutbom)
 {
     load(mpTestDocumentPath, "UTF16BEWITHOUTBOM.txt");
