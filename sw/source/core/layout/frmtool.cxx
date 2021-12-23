@@ -1206,8 +1206,7 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
     {
         SwFormatAnchor const& rAnchor = pFrameFormat->GetAnchor();
         if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR
-            || (rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR
-                && RES_DRAWFRMFMT == pFrameFormat->Which()))
+            || rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
         {
             assert(rAnchor.GetContentAnchor()->nNode.GetIndex() == rNode.GetIndex());
             if (!IsShown(rNode.GetIndex(), rAnchor, pIter, pEnd, pFirstNode, pLastNode))
