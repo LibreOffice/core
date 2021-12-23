@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69aa5322_31333259",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-12-23T22:16:59Z",
+      "side": 1,
+      "message": "Ordering headings in the Navigator tree by document layout position, as this patch does, causes chapter promote/demote breakage when the document has outline nodes in the Writer document model special section for frames, headers, and footers. I hadn\u0027t thought about this until after merging the patch, Ahhh! WIP on a solution. Should we revert until promote/demote works for this case? ",
+      "revId": "c8ac73daa670ab571c3d52541c67c28270ee6a08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
