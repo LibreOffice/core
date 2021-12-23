@@ -51,6 +51,24 @@
       "parentUuid": "31857d84_499cbbb5",
       "revId": "822998f1dc202aba7a558767f641687aef0c1148",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c992ec16_a7f543d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-23T17:51:58Z",
+      "side": 1,
+      "message": "Yep, I was just curious how you reduced the file size by adding additional stuff 😄",
+      "parentUuid": "70ea2f0f_c57bd446",
+      "revId": "822998f1dc202aba7a558767f641687aef0c1148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
