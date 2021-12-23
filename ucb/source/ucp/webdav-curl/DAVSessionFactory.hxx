@@ -24,7 +24,7 @@
 #endif
 #include <map>
 #include <memory>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -61,7 +61,7 @@ private:
     typedef std::map<OUString, DAVSession*> Map;
 
     Map m_aMap;
-    osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     std::unique_ptr<ucbhelper::InternetProxyDecider> m_xProxyDecider;
 
     void releaseElement(DAVSession* pElement);
