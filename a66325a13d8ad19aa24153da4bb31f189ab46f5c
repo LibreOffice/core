@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "739ee824_3458ca49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-23T20:15:18Z",
+      "side": 1,
+      "message": "Not that I suspect this changes anything for Mike. I still suspect some other change to be the origin of the rebuilds of the localedata Mike sees. These don\u0027t happen for me on Windows, with or without this patch.",
+      "revId": "a66325a13d8ad19aa24153da4bb31f189ab46f5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
