@@ -110,17 +110,6 @@ public:
     void EstablishFrameCallback(const css::uno::Reference<css::frame::XFrame>& xFrame);
 
 private:
-    /*-****************************************************************************************************
-        @short      return a reference to a static mutex
-        @descr      These class is partially threadsafe (for de-/initialization only).
-                    All access methods aren't safe!
-                    We create a static mutex only for one ime and use at different times.
-        @return     A reference to a static mutex member.
-    **-***************************************************************************************************/
-
-    UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
-
-private:
     std::shared_ptr<SvtCommandOptions_Impl> m_pImpl;
 
 }; // class SvtCmdOptions
