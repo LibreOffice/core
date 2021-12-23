@@ -56,7 +56,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL OTempFileService::getTypes(  )
 
 sal_Bool SAL_CALL OTempFileService::getRemoveFile()
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if ( !mpTempFile )
     {
@@ -68,7 +68,7 @@ sal_Bool SAL_CALL OTempFileService::getRemoveFile()
 };
 void SAL_CALL OTempFileService::setRemoveFile( sal_Bool _removefile )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if ( !mpTempFile )
     {
@@ -81,7 +81,7 @@ void SAL_CALL OTempFileService::setRemoveFile( sal_Bool _removefile )
 };
 OUString SAL_CALL OTempFileService::getUri()
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if ( !mpTempFile )
     {
@@ -93,7 +93,7 @@ OUString SAL_CALL OTempFileService::getUri()
 };
 OUString SAL_CALL OTempFileService::getResourceName()
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if ( !mpTempFile )
     {
@@ -107,7 +107,7 @@ OUString SAL_CALL OTempFileService::getResourceName()
 
 sal_Int32 SAL_CALL OTempFileService::readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
         throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
@@ -128,27 +128,28 @@ sal_Int32 SAL_CALL OTempFileService::readBytes( css::uno::Sequence< sal_Int8 >& 
 }
 sal_Int32 SAL_CALL OTempFileService::readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
-    ::osl::MutexGuard aGuard( maMutex );
-    if ( mbInClosed )
-        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
-
-    checkConnected();
-    checkError();
-
-    if (nMaxBytesToRead < 0)
-        throw css::io::BufferSizeExceededException( OUString(), static_cast < css::uno::XWeak * >( this ) );
-
-    if (mpStream->eof())
     {
-        aData.realloc(0);
-        return 0;
+        std::unique_lock aGuard( maMutex );
+        if ( mbInClosed )
+            throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
+
+        checkConnected();
+        checkError();
+
+        if (nMaxBytesToRead < 0)
+            throw css::io::BufferSizeExceededException( OUString(), static_cast < css::uno::XWeak * >( this ) );
+
+        if (mpStream->eof())
+        {
+            aData.realloc(0);
+            return 0;
+        }
     }
-    else
-        return readBytes(aData, nMaxBytesToRead);
+    return readBytes(aData, nMaxBytesToRead);
 }
 void SAL_CALL OTempFileService::skipBytes( sal_Int32 nBytesToSkip )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
         throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
@@ -159,7 +160,7 @@ void SAL_CALL OTempFileService::skipBytes( sal_Int32 nBytesToSkip )
 }
 sal_Int32 SAL_CALL OTempFileService::available(  )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
         throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
@@ -172,7 +173,7 @@ sal_Int32 SAL_CALL OTempFileService::available(  )
 }
 void SAL_CALL OTempFileService::closeInput(  )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
         throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
@@ -190,7 +191,7 @@ void SAL_CALL OTempFileService::closeInput(  )
 
 void SAL_CALL OTempFileService::writeBytes( const css::uno::Sequence< sal_Int8 >& aData )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if ( mbOutClosed )
         throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
@@ -202,7 +203,7 @@ void SAL_CALL OTempFileService::writeBytes( const css::uno::Sequence< sal_Int8 >
 }
 void SAL_CALL OTempFileService::flush(  )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if ( mbOutClosed )
         throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
@@ -212,7 +213,7 @@ void SAL_CALL OTempFileService::flush(  )
 }
 void SAL_CALL OTempFileService::closeOutput(  )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if ( mbOutClosed )
         throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
@@ -249,9 +250,11 @@ void OTempFileService::checkConnected ()
 
 void SAL_CALL OTempFileService::seek( sal_Int64 nLocation )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     checkConnected();
-    if ( nLocation < 0 || nLocation > getLength() )
+    checkError();
+    sal_Int64 nEndPos = mpStream->TellEnd();
+    if ( nLocation < 0 || nLocation > nEndPos )
         throw css::lang::IllegalArgumentException();
 
     mpStream->Seek(static_cast<sal_uInt32>(nLocation) );
@@ -259,7 +262,7 @@ void SAL_CALL OTempFileService::seek( sal_Int64 nLocation )
 }
 sal_Int64 SAL_CALL OTempFileService::getPosition(  )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     checkConnected();
 
     sal_uInt32 nPos = mpStream->Tell();
@@ -268,7 +271,7 @@ sal_Int64 SAL_CALL OTempFileService::getPosition(  )
 }
 sal_Int64 SAL_CALL OTempFileService::getLength(  )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     checkConnected();
 
     checkError();
@@ -294,7 +297,7 @@ css::uno::Reference< css::io::XOutputStream > SAL_CALL OTempFileService::getOutp
 
 void SAL_CALL OTempFileService::truncate()
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     checkConnected();
     // SetStreamSize() call does not change the position
     mpStream->Seek( 0 );
