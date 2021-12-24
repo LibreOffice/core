@@ -5591,6 +5591,7 @@ if test "$cross_compiling" = "yes"; then
         OPENSSL
         ORCUS
         PYTHON
+        SCRIPTING
         ZLIB
 "
     # converts BUILD_TYPE and PERMITTED_BUILD_TARGETS into non-whitespace,
