@@ -97,9 +97,11 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         GetDoc()->SetChanged();
 
         // inform navigator about change
-        SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
-        GetViewFrame()->GetDispatcher()->ExecuteList(SID_NAVIGATOR_INIT,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
+        if (GetViewFrame())
+        {
+            SfxBindings& rBindings = GetViewFrame()->GetBindings();
+            rBindings.Invalidate(SID_NAVIGATOR_STATE, true);
+        }
 
         // Tell the slide sorter about the name change (necessary for
         // accessibility.)

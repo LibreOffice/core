@@ -61,9 +61,6 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                 if( pNavWin )
                     pNavWin->InitTreeLB( GetDoc() );
             }
-            SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate(SID_NAVIGATOR_STATE, true);
-            rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, true);
         }
         break;
 
