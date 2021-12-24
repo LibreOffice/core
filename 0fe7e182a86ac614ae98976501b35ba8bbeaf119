@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f39c4ae7_10ee8150",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-12-24T01:02:55Z",
+      "side": 1,
+      "message": "LGTM - tiny nit, can you please use \"tdf#12345\" when referring to bugs in commit messages?",
+      "revId": "0fe7e182a86ac614ae98976501b35ba8bbeaf119",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
