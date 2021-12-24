@@ -26,10 +26,10 @@
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 #include <map>
@@ -40,22 +40,21 @@ using namespace css::uno;
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::ui::XContextChangeEventMultiplexer,
     css::lang::XServiceInfo,
     css::lang::XEventListener
     > ContextChangeEventMultiplexerInterfaceBase;
 
 class ContextChangeEventMultiplexer
-    : private ::cppu::BaseMutex,
-      public ContextChangeEventMultiplexerInterfaceBase
+    : public ContextChangeEventMultiplexerInterfaceBase
 {
 public:
     ContextChangeEventMultiplexer();
     ContextChangeEventMultiplexer(const ContextChangeEventMultiplexer&) = delete;
     ContextChangeEventMultiplexer& operator=(const ContextChangeEventMultiplexer&) = delete;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XContextChangeEventMultiplexer
     virtual void SAL_CALL addContextChangeEventListener (
@@ -106,14 +105,15 @@ public:
 };
 
 ContextChangeEventMultiplexer::ContextChangeEventMultiplexer()
-    : ContextChangeEventMultiplexerInterfaceBase(m_aMutex)
 {
 }
 
-void SAL_CALL ContextChangeEventMultiplexer::disposing()
+void ContextChangeEventMultiplexer::disposing(std::unique_lock<std::mutex>& rGuard)
 {
     ListenerMap aListeners;
     aListeners.swap(maListeners);
+
+    rGuard.unlock();
 
     css::uno::Reference<css::uno::XInterface> xThis (static_cast<XWeak*>(this));
     css::lang::EventObject aEvent (xThis);
