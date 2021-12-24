@@ -418,7 +418,6 @@ void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValu
 }
 
 ValueSetAcc::ValueSetAcc( ValueSet* pParent ) :
-    ValueSetAccComponentBase (m_aMutex),
     mpParent( pParent ),
     mbIsFocused(false)
 {
@@ -661,7 +660,7 @@ lang::Locale SAL_CALL ValueSetAcc::getLocale()
 void SAL_CALL ValueSetAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
 {
     ThrowIfDisposed();
-    ::osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard (m_aMutex);
 
     if( !rxListener.is() )
            return;
@@ -685,7 +684,7 @@ void SAL_CALL ValueSetAcc::addAccessibleEventListener( const uno::Reference< acc
 void SAL_CALL ValueSetAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
 {
     ThrowIfDisposed();
-    ::osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard (m_aMutex);
 
     if( rxListener.is() )
     {
@@ -911,21 +910,19 @@ sal_Int64 SAL_CALL ValueSetAcc::getSomething( const uno::Sequence< sal_Int8 >& r
 }
 
 
-void SAL_CALL ValueSetAcc::disposing()
+void ValueSetAcc::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy;
+    // Make a copy of the list and clear the original.
+    ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy = std::move(mxEventListeners);
 
-    {
-        // Make a copy of the list and clear the original.
-        const SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard (m_aMutex);
-        aListenerListCopy.swap(mxEventListeners);
+    // Reset the pointer to the parent.  It has to be the one who has
+    // disposed us because he is dying.
+    mpParent = nullptr;
 
-        // Reset the pointer to the parent.  It has to be the one who has
-        // disposed us because he is dying.
-        mpParent = nullptr;
-    }
+    if (aListenerListCopy.empty())
+        return;
 
+    rGuard.unlock();
     // Inform all listeners that this objects is disposing.
     lang::EventObject aEvent (static_cast<accessibility::XAccessible*>(this));
     for (auto const& listenerCopy : aListenerListCopy)
@@ -974,7 +971,7 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
 
 void ValueSetAcc::ThrowIfDisposed()
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         SAL_WARN("svx", "Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
