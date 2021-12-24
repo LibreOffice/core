@@ -16,6 +16,24 @@
       "message": "/me is curious if using comma operator for such cases could be useful?\n\n    std::vector\u003ccss::uno::Reference\u003ccss::datatransfer::dnd::XDropTargetListener\u003e\u003e aListeners(\n        (std::unique_lock(m_aMutex), m_aListeners));\n\nJust a random (unrelated to the change) idea based on own preference of limiting the scope of variables - and this one provides the temporary scope limited to the full expression in parentheses ... 😊",
       "revId": "3964c9405ecaf7165d986295ccce51fb49e8588c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a04808a_d20a342e",
+        "filename": "vcl/jsdialog/jsdialogbuilder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-24T09:39:18Z",
+      "side": 1,
+      "message": "interesting idea",
+      "parentUuid": "10eb4e75_90bdbdf1",
+      "revId": "3964c9405ecaf7165d986295ccce51fb49e8588c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
