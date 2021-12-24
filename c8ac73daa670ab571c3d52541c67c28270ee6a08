@@ -16,6 +16,24 @@
       "message": "Ordering headings in the Navigator tree by document layout position, as this patch does, causes chapter promote/demote breakage when the document has outline nodes in the Writer document model special section for frames, headers, and footers. I hadn\u0027t thought about this until after merging the patch, Ahhh! WIP on a solution. Should we revert until promote/demote works for this case? ",
       "revId": "c8ac73daa670ab571c3d52541c67c28270ee6a08",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb823fb9_fa7a1232",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-24T09:31:41Z",
+      "side": 1,
+      "message": "Hi Jim,\nI pushed a UItest for this issue the other day \u003c https://git.libreoffice.org/core/+/dd073b6e2be32749333af25c160ea637c4a27e10%5E%21 \u003e so if it\u0027s reverted, the test will start to fail. I think it\u0027s always better to fix the side-effect problems. There is still time before the release of 7.3",
+      "parentUuid": "69aa5322_31333259",
+      "revId": "c8ac73daa670ab571c3d52541c67c28270ee6a08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
