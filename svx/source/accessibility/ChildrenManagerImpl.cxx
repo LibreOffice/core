@@ -69,10 +69,7 @@ ChildrenManagerImpl::ChildrenManagerImpl (
     const uno::Reference<drawing::XShapes>& rxShapeList,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     AccessibleContextBase& rContext)
-    : ::cppu::WeakComponentImplHelper<
-          css::document::XEventListener,
-          css::view::XSelectionChangeListener>(m_aMutex),
-      mxShapeList (rxShapeList),
+    : mxShapeList (rxShapeList),
       mxParent (rxParent),
       maShapeTreeInfo (rShapeTreeInfo),
       mrContext (rContext),
@@ -83,8 +80,7 @@ ChildrenManagerImpl::ChildrenManagerImpl (
 
 ChildrenManagerImpl::~ChildrenManagerImpl()
 {
-    DBG_ASSERT (rBHelper.bDisposed || rBHelper.bInDispose,
-        "~AccessibleDrawDocumentView: object has not been disposed");
+    DBG_ASSERT (m_bDisposed, "~AccessibleDrawDocumentView: object has not been disposed");
 }
 
 
@@ -694,7 +690,7 @@ void ChildrenManagerImpl::impl_dispose()
 }
 
 
-void SAL_CALL ChildrenManagerImpl::disposing()
+void ChildrenManagerImpl::disposing()
 {
     impl_dispose();
 }
