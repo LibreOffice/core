@@ -96,6 +96,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9354065_d0eabd73",
+        "filename": ".vscode/vs-code-template.code-workspace.in",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-24T12:30:47Z",
+      "side": 1,
+      "message": "yes, you understood correctly :-)",
+      "parentUuid": "13affd23_5202b0f1",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 4
+      },
+      "revId": "986e946d0cf3a6f61873efc09bab8c5e07c04f80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9bc003db_b0fed6e9",
