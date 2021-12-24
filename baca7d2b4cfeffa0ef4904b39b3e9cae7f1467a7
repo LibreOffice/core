@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3bc5cfb_25200058",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-24T14:35:43Z",
+      "side": 1,
+      "message": "Thanks!\n\nDo you plan to add unit tests?",
+      "revId": "baca7d2b4cfeffa0ef4904b39b3e9cae7f1467a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
