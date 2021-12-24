@@ -115,14 +115,9 @@ OUString parsePart(
                 {
                     break;
                 }
-                if (encoded <= 0xFFFF) {
-                    buf.append(static_cast< sal_Unicode >(encoded));
-                } else {
-                    buf.append(static_cast< sal_Unicode >(
-                        (encoded >> 10) | 0xD800));
-                    buf.append(static_cast< sal_Unicode >(
-                        (encoded & 0x3FF) | 0xDC00));
-                }
+                sal_Unicode aUtf16[2];
+                sal_Int32 len = rtl::splitSurrogates(encoded, aUtf16);
+                buf.append(aUtf16, len);
             } else {
                 break;
             }

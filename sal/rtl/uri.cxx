@@ -220,20 +220,10 @@ namespace {
 void writeUcs4(rtl_uString ** pBuffer, sal_Int32 * pCapacity, sal_uInt32 nUtf32)
 {
     assert(rtl::isUnicodeCodePoint(nUtf32));
-    if (nUtf32 <= 0xFFFF)
-    {
-        writeUnicode(pBuffer, pCapacity, static_cast< sal_Unicode >(nUtf32));
-    }
-    else
-    {
-        nUtf32 -= 0x10000;
-        writeUnicode(
-            pBuffer, pCapacity,
-            static_cast< sal_Unicode >(nUtf32 >> 10 | 0xD800));
-        writeUnicode(
-            pBuffer, pCapacity,
-            static_cast< sal_Unicode >((nUtf32 & 0x3FF) | 0xDC00));
-    }
+    sal_Unicode buf[2];
+    size_t len = rtl::splitSurrogates(nUtf32, buf);
+    for (size_t i = 0; i < len; ++i)
+        writeUnicode(pBuffer, pCapacity, buf[i]);
 }
 
 void writeEscapeOctet(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
@@ -284,20 +274,7 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
         rtl_UnicodeToTextConverter aConverter
             = rtl_createUnicodeToTextConverter(eCharset);
         sal_Unicode aSrc[2];
-        sal_Size nSrcSize;
-        if (nUtf32 <= 0xFFFF)
-        {
-            aSrc[0] = static_cast< sal_Unicode >(nUtf32);
-            nSrcSize = 1;
-        }
-        else
-        {
-            aSrc[0] = static_cast< sal_Unicode >(
-                ((nUtf32 - 0x10000) >> 10) | 0xD800);
-            aSrc[1] = static_cast< sal_Unicode >(
-                ((nUtf32 - 0x10000) & 0x3FF) | 0xDC00);
-            nSrcSize = 2;
-        }
+        sal_Size nSrcSize = rtl::splitSurrogates(nUtf32, aSrc);
 
         char aDst[32]; // FIXME  random value
         sal_uInt32 nInfo;

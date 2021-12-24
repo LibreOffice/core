@@ -447,20 +447,22 @@ bool SaxWriterHelper::convertToXML(const sal_Unicode* pStr, sal_Int32 nStrLen,
             }
 
             // Deal with other unicode cases
-            if (c >= 0xd800 && c < 0xdc00)
+            if (rtl::isHighSurrogate(c))
             {
                 // 1. surrogate: save (until 2. surrogate)
-                OSL_ENSURE(nSurrogate == 0, "left-over Unicode surrogate");
-                nSurrogate = ((c & 0x03ff) + 0x0040);
+                if (nSurrogate != 0) // left-over lone 1st Unicode surrogate
+                {
+                    OSL_FAIL("left-over Unicode surrogate");
+                    bRet = false;
+                }
+                nSurrogate = c;
             }
-            else if (c >= 0xdc00 && c < 0xe000)
+            else if (rtl::isLowSurrogate(c))
             {
                 // 2. surrogate: write as UTF-8
-                OSL_ENSURE(nSurrogate != 0, "lone 2nd Unicode surrogate");
-
-                nSurrogate = (nSurrogate << 10) | (c & 0x03ff);
-                if (rtl::isUnicodeScalarValue(nSurrogate) && nSurrogate >= 0x00010000)
+                if (nSurrogate) // can only be 1st surrogate
                 {
+                    nSurrogate = rtl::combineSurrogates(nSurrogate, c);
                     sal_Int8 aBytes[] = { sal_Int8(0xF0 | ((nSurrogate >> 18) & 0x0F)),
                                           sal_Int8(0x80 | ((nSurrogate >> 12) & 0x3F)),
                                           sal_Int8(0x80 | ((nSurrogate >> 6) & 0x3F)),
@@ -479,7 +481,7 @@ bool SaxWriterHelper::convertToXML(const sal_Unicode* pStr, sal_Int32 nStrLen,
                         rPos++;
                     }
                 }
-                else
+                else // lone 2nd surrogate
                 {
                     OSL_FAIL("illegal Unicode character");
                     bRet = false;
@@ -526,12 +528,17 @@ bool SaxWriterHelper::convertToXML(const sal_Unicode* pStr, sal_Int32 nStrLen,
             rPos = writeSequence();
 
         // reset left-over surrogate
-        if ((nSurrogate != 0) && (c < 0xd800 || c >= 0xdc00))
+        if ((nSurrogate != 0) && !rtl::isHighSurrogate(c))
         {
-            OSL_ENSURE(nSurrogate != 0, "left-over Unicode surrogate");
+            OSL_FAIL("left-over Unicode surrogate");
             nSurrogate = 0;
             bRet = false;
         }
+    }
+    if (nSurrogate != 0) // trailing lone 1st surrogate
+    {
+        OSL_FAIL("left-over Unicode surrogate");
+        bRet = false;
     }
     return bRet;
 }
@@ -951,16 +958,15 @@ sal_Int32 SaxWriterHelper::calcXMLByteLength(const OUString& rStr, bool bDoNorma
             }
 
             // Deal with other unicode cases
-            if (c >= 0xd800 && c < 0xdc00)
+            if (rtl::isHighSurrogate(c))
             {
                 // save surrogate
-                nSurrogate = ((c & 0x03ff) + 0x0040);
+                nSurrogate = c;
             }
-            else if (c >= 0xdc00 && c < 0xe000)
+            else if (rtl::isLowSurrogate(c))
             {
                 // 2. surrogate: write as UTF-8 (if range is OK
-                nSurrogate = (nSurrogate << 10) | (c & 0x03ff);
-                if (rtl::isUnicodeScalarValue(nSurrogate) && nSurrogate >= 0x00010000)
+                if (nSurrogate)
                     nOutputLength += 4;
                 nSurrogate = 0;
             }
@@ -975,7 +981,7 @@ sal_Int32 SaxWriterHelper::calcXMLByteLength(const OUString& rStr, bool bDoNorma
         }
 
         // surrogate processing
-        if ((nSurrogate != 0) && (c < 0xd800 || c >= 0xdc00))
+        if ((nSurrogate != 0) && !rtl::isHighSurrogate(c))
             nSurrogate = 0;
     }
 

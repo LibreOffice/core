@@ -206,7 +206,7 @@ sal_Size ImplConvertEucTwToUnicode(void const * pData,
                             = pCns116431992Data[nOffset + (nChar - nFirst)];
                         if (nUnicode == 0xFFFF)
                             goto bad_input;
-                        else if (ImplIsHighSurrogate(nUnicode))
+                        else if (rtl::isHighSurrogate(nUnicode))
                             if (pDestBufEnd - pDestBufPtr >= 2)
                             {
                                 nOffset += nLast - nFirst + 1;
@@ -340,19 +340,19 @@ sal_Size ImplConvertUnicodeToEucTw(void const * pData,
         sal_uInt32 nChar = *pSrcBuf++;
         if (nHighSurrogate == 0)
         {
-            if (ImplIsHighSurrogate(nChar))
+            if (rtl::isHighSurrogate(nChar))
             {
                 nHighSurrogate = static_cast<sal_Unicode>(nChar);
                 continue;
             }
-            else if (ImplIsLowSurrogate(nChar))
+            else if (rtl::isLowSurrogate(nChar))
             {
                 bUndefined = false;
                 goto bad_input;
             }
         }
-        else if (ImplIsLowSurrogate(nChar))
-            nChar = ImplCombineSurrogates(nHighSurrogate, nChar);
+        else if (rtl::isLowSurrogate(nChar))
+            nChar = rtl::combineSurrogates(nHighSurrogate, nChar);
         else
         {
             bUndefined = false;

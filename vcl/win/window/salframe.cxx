@@ -38,6 +38,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 
+#include <rtl/character.hxx>
 #include <rtl/string.h>
 #include <rtl/ustring.h>
 #include <sal/log.hxx>
@@ -122,8 +123,6 @@ const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageW(L"SY
 bool WinSalFrame::mbInReparent = false;
 
 // Macros for support of WM_UNICHAR & Keyman 6.0
-//#define Uni_UTF32ToSurrogate1(ch)   (((unsigned long) (ch) - 0x10000) / 0x400 + 0xD800)
-#define Uni_UTF32ToSurrogate2(ch)   ((static_cast<tools::ULong>(ch) - 0x10000) % 0x400 + 0xDC00)
 #define Uni_SupplementaryPlanesStart    0x10000
 
 static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame );
@@ -3472,7 +3471,7 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
              nLastVKChar = 0;
              pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
              pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
-             wParam = static_cast<sal_Unicode>(Uni_UTF32ToSurrogate2( wParam ));
+             wParam = rtl::getLowSurrogate( wParam );
         }
 
         aKeyEvt.mnCharCode = static_cast<sal_Unicode>(wParam);
