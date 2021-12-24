@@ -35,8 +35,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/colorcfg.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -47,12 +46,11 @@ using namespace framework;
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::lang::XServiceInfo,
     css::lang::XSingleServiceFactory> TaskCreatorService_BASE;
 
-class TaskCreatorService : private cppu::BaseMutex,
-                           public TaskCreatorService_BASE
+class TaskCreatorService : public TaskCreatorService_BASE
 {
 private:
 
@@ -106,8 +104,7 @@ private:
 };
 
 TaskCreatorService::TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : TaskCreatorService_BASE(m_aMutex)
-    , m_xContext         (xContext                     )
+    : m_xContext         (xContext                     )
 {
 }
 
