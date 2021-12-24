@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85e6b865_ffc91ebd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-24T15:21:45Z",
+      "side": 1,
+      "message": "Any reason not to merge this? Is the output of this conf used for something else too?",
+      "revId": "ba056870a90b5e77b7b989c649baaf787b7d0405",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
