@@ -266,20 +266,20 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
         char cSpecialChar = 0;
         if (cHighSurrogate == 0)
         {
-            if (ImplIsHighSurrogate(c))
+            if (rtl::isHighSurrogate(c))
             {
                 cHighSurrogate = static_cast< sal_Unicode >(c);
                 continue;
             }
-            else if (ImplIsLowSurrogate(c))
+            else if (rtl::isLowSurrogate(c))
             {
                 bUndefined = false;
                 goto bad_input;
             }
         }
-        else if (ImplIsLowSurrogate(c))
+        else if (rtl::isLowSurrogate(c))
         {
-            c = ImplCombineSurrogates(cHighSurrogate, c);
+            c = rtl::combineSurrogates(cHighSurrogate, c);
         }
         else
         {

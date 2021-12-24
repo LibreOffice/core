@@ -199,10 +199,7 @@ sal_Size ImplConvertUtf8ToUnicode(
                 else
                     goto no_output;
             else if (pDestBufEnd - pDestBufPtr >= 2)
-            {
-                *pDestBufPtr++ = static_cast<sal_Unicode>(ImplGetHighSurrogate(nUtf32));
-                *pDestBufPtr++ = static_cast<sal_Unicode>(ImplGetLowSurrogate(nUtf32));
-            }
+                pDestBufPtr += rtl::splitSurrogates(nUtf32, pDestBufPtr);
             else
                 goto no_output;
         }
@@ -349,18 +346,18 @@ sal_Size ImplConvertUnicodeToUtf8(
         sal_uInt32 nChar = *pSrcBufPtr++;
         if (nHighSurrogate == 0)
         {
-            if (ImplIsHighSurrogate(nChar) && !bJavaUtf8)
+            if (rtl::isHighSurrogate(nChar) && !bJavaUtf8)
             {
                 nHighSurrogate = static_cast<sal_Unicode>(nChar);
                 continue;
             }
-            else if (ImplIsLowSurrogate(nChar) && !bJavaUtf8)
+            else if (rtl::isLowSurrogate(nChar) && !bJavaUtf8)
             {
                 goto bad_input;
             }
         }
-        else if (ImplIsLowSurrogate(nChar) && !bJavaUtf8)
-            nChar = ImplCombineSurrogates(nHighSurrogate, nChar);
+        else if (rtl::isLowSurrogate(nChar) && !bJavaUtf8)
+            nChar = rtl::combineSurrogates(nHighSurrogate, nChar);
         else
             goto bad_input;
 

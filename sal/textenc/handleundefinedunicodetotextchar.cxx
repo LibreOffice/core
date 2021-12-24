@@ -106,7 +106,7 @@ bool sal::detail::textenc::handleUndefinedUnicodeToTextChar(
 
     /* Surrogates Characters should result in */
     /* one replacement character */
-    if (ImplIsHighSurrogate(c))
+    if (rtl::isHighSurrogate(c))
     {
         if ( ((*ppSrcBuf) + 1) == pEndSrcBuf )
         {
@@ -115,7 +115,7 @@ bool sal::detail::textenc::handleUndefinedUnicodeToTextChar(
         }
 
         c = *((*ppSrcBuf)+1);
-        if (ImplIsLowSurrogate(c))
+        if (rtl::isLowSurrogate(c))
             (*ppSrcBuf)++;
         else
         {

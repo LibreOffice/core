@@ -131,7 +131,7 @@ sal_Size ImplConvertBig5HkscsToUnicode(void const * pData,
                         nUnicode = pBig5Data[nRow].mpToUniTrailTab[nChar - n];
                         if (nUnicode == 0)
                             nUnicode = 0xFFFF;
-                        assert(!ImplIsHighSurrogate(nUnicode));
+                        assert(!rtl::isHighSurrogate(nUnicode));
                     }
                 }
                 if (nUnicode == 0xFFFF)
@@ -192,11 +192,11 @@ sal_Size ImplConvertBig5HkscsToUnicode(void const * pData,
                         }
                         ++p;
                     }
-                    assert(!ImplIsHighSurrogate(nUnicode));
+                    assert(!rtl::isHighSurrogate(nUnicode));
                 }
                 if (nUnicode == 0xFFFF)
                     goto bad_input;
-                if (ImplIsHighSurrogate(nUnicode))
+                if (rtl::isHighSurrogate(nUnicode))
                     if (pDestBufEnd - pDestBufPtr >= 2)
                     {
                         nOffset += nLast - nFirst + 1;
@@ -329,19 +329,19 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(void const * pData,
         sal_uInt32 nChar = *pSrcBuf++;
         if (nHighSurrogate == 0)
         {
-            if (ImplIsHighSurrogate(nChar))
+            if (rtl::isHighSurrogate(nChar))
             {
                 nHighSurrogate = static_cast<sal_Unicode>(nChar);
                 continue;
             }
-            else if (ImplIsLowSurrogate(nChar))
+            else if (rtl::isLowSurrogate(nChar))
             {
                 bUndefined = false;
                 goto bad_input;
             }
         }
-        else if (ImplIsLowSurrogate(nChar))
-            nChar = ImplCombineSurrogates(nHighSurrogate, nChar);
+        else if (rtl::isLowSurrogate(nChar))
+            nChar = rtl::combineSurrogates(nHighSurrogate, nChar);
         else
         {
             bUndefined = false;
