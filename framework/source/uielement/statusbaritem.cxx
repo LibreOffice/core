@@ -62,8 +62,7 @@ StatusbarItem::StatusbarItem(
     StatusBar              *pStatusBar,
     sal_uInt16              nId,
     const OUString&    aCommand )
-    : StatusbarItem_Base( m_aMutex )
-    , m_pStatusBar( pStatusBar )
+    : m_pStatusBar( pStatusBar )
     , m_nId( nId )
     , m_nStyle( 0 )
     , m_aCommand( aCommand )
@@ -77,21 +76,20 @@ StatusbarItem::~StatusbarItem()
 {
 }
 
-void SAL_CALL StatusbarItem::disposing()
+void StatusbarItem::disposing(std::unique_lock<std::mutex>&)
 {
-    osl::MutexGuard aGuard( m_aMutex );
     m_pStatusBar = nullptr;
 }
 
 OUString SAL_CALL StatusbarItem::getCommand()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_aCommand;
 }
 
 ::sal_uInt16 SAL_CALL StatusbarItem::getItemId()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_nId;
 }
 
@@ -106,7 +104,7 @@ OUString SAL_CALL StatusbarItem::getCommand()
 
 ::sal_uInt16 SAL_CALL StatusbarItem::getStyle()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_nStyle;
 }
 
