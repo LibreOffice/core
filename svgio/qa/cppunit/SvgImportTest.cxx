@@ -816,9 +816,7 @@ void Test::testTdf97663()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    // This can be dumped to a file using dumper.dump(container, file_url)
-    Primitive2DContainer container = comphelper::sequenceToContainer<Primitive2DContainer>(aSequence);
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(container);
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
 
     CPPUNIT_ASSERT (pDocument);
 
