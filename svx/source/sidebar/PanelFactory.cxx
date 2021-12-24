@@ -41,8 +41,7 @@
 #include <sfx2/templdlg.hxx>
 #include <vcl/weldutils.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
@@ -61,12 +60,11 @@ constexpr OUStringLiteral IMPLEMENTATION_NAME = u"org.apache.openoffice.comp.svx
 constexpr OUStringLiteral SERVICE_NAME = u"com.sun.star.ui.UIElementFactory";
 */
 
-typedef ::cppu::WeakComponentImplHelper< css::ui::XUIElementFactory, css::lang::XServiceInfo >
+typedef comphelper::WeakComponentImplHelper< css::ui::XUIElementFactory, css::lang::XServiceInfo >
     PanelFactoryInterfaceBase;
 
 class PanelFactory
-    : private ::cppu::BaseMutex,
-      public PanelFactoryInterfaceBase
+    : public PanelFactoryInterfaceBase
 {
 public:
     PanelFactory();
@@ -89,7 +87,6 @@ public:
 };
 
 PanelFactory::PanelFactory()
-    : PanelFactoryInterfaceBase(m_aMutex)
 {
 }
 
