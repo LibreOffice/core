@@ -172,10 +172,7 @@ sal_Size ImplConvertGb18030ToUnicode(void const * pData,
                     if (pDestBufEnd - pDestBufPtr >= 2)
                     {
                         nCode -= 189000 - 0x10000;
-                        *pDestBufPtr++
-                            = static_cast<sal_Unicode>(ImplGetHighSurrogate(nCode));
-                        *pDestBufPtr++
-                            = static_cast<sal_Unicode>(ImplGetLowSurrogate(nCode));
+                        pDestBufPtr += rtl::splitSurrogates(nCode, pDestBufPtr);
                         startOfCurrentChar = nConverted + 1;
                     }
                     else
@@ -330,19 +327,19 @@ sal_Size ImplConvertUnicodeToGb18030(void const * pData,
         sal_uInt32 nChar = *pSrcBuf++;
         if (nHighSurrogate == 0)
         {
-            if (ImplIsHighSurrogate(nChar))
+            if (rtl::isHighSurrogate(nChar))
             {
                 nHighSurrogate = static_cast<sal_Unicode>(nChar);
                 continue;
             }
-            else if (ImplIsLowSurrogate(nChar))
+            else if (rtl::isLowSurrogate(nChar))
             {
                 bUndefined = false;
                 goto bad_input;
             }
         }
-        else if (ImplIsLowSurrogate(nChar))
-            nChar = ImplCombineSurrogates(nHighSurrogate, nChar);
+        else if (rtl::isLowSurrogate(nChar))
+            nChar = rtl::combineSurrogates(nHighSurrogate, nChar);
         else
         {
             bUndefined = false;

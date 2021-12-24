@@ -227,16 +227,12 @@ inline int INetMIME::getHexWeight(sal_uInt32 nChar)
 inline sal_uInt32 INetMIME::getUTF32Character(const sal_Unicode *& rBegin,
                                               const sal_Unicode * pEnd)
 {
-    DBG_ASSERT(rBegin && rBegin < pEnd,
+    assert(rBegin && rBegin < pEnd &&
                "INetMIME::getUTF32Character(): Bad sequence");
-    if (rBegin + 1 < pEnd && rBegin[0] >= 0xD800 && rBegin[0] <= 0xDBFF
-        && rBegin[1] >= 0xDC00 && rBegin[1] <= 0xDFFF)
-    {
-        sal_uInt32 nUTF32 = sal_uInt32(*rBegin++ & 0x3FF) << 10;
-        return (nUTF32 | (*rBegin++ & 0x3FF)) + 0x10000;
-    }
-    else
-        return *rBegin++;
+    sal_uInt32 nUTF32 = *rBegin++;
+    if (rBegin < pEnd && rtl::isHighSurrogate(nUTF32) && rtl::isLowSurrogate(rBegin[0]))
+        nUTF32 = rtl::combineSurrogates(nUTF32, *rBegin++);
+    return nUTF32;
 }
 
 

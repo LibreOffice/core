@@ -131,30 +131,6 @@ std::unique_ptr<sal_Unicode[]> convertToUnicode(const char * pBegin,
     return pBuffer;
 }
 
-/** Put the UTF-16 encoding of a UTF-32 character into a buffer.
-
-    @param pBuffer  Points to a buffer, must not be null.
-
-    @param nUTF32  A UTF-32 character, must be in the range 0..0x10FFFF.
-
-    @return  A pointer past the UTF-16 characters put into the buffer
-    (i.e., pBuffer + 1 or pBuffer + 2).
- */
-sal_Unicode * putUTF32Character(sal_Unicode * pBuffer,
-                                                 sal_uInt32 nUTF32)
-{
-    DBG_ASSERT(rtl::isUnicodeCodePoint(nUTF32), "putUTF32Character(): Bad char");
-    if (nUTF32 < 0x10000)
-        *pBuffer++ = sal_Unicode(nUTF32);
-    else
-    {
-        nUTF32 -= 0x10000;
-        *pBuffer++ = sal_Unicode(0xD800 | (nUTF32 >> 10));
-        *pBuffer++ = sal_Unicode(0xDC00 | (nUTF32 & 0x3FF));
-    }
-    return pBuffer;
-}
-
 void writeUTF8(OStringBuffer & rSink, sal_uInt32 nChar)
 {
     // See RFC 2279 for a discussion of UTF-8.
@@ -1386,9 +1362,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                 if (translateUTF8Char(pUTF8End, pEnd, nCharacter))
                 {
                     appendISO88591(sDecoded, pCopyBegin, p - 1);
-                    sal_Unicode aUTF16Buf[2];
-                    sal_Int32 nUTF16Len = putUTF32Character(aUTF16Buf, nCharacter) - aUTF16Buf;
-                    sDecoded.append(aUTF16Buf, nUTF16Len);
+                    sDecoded.appendUtf32(nCharacter);
                     p = pUTF8End;
                     pCopyBegin = p;
                 }
