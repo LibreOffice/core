@@ -183,8 +183,7 @@ namespace accessibility
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, const css::uno::Reference< css::accessibility::XAccessible >& _rxControlAccessible,
             const css::uno::Reference< css::awt::XWindow >& _rxFocusWindow,
             ::vcl::IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowPos, sal_uInt16 _nColPos )
-        :WeakComponentImplHelper( m_aMutex )
-        ,m_xParent( _rxParent )
+        :m_xParent( _rxParent )
         ,m_xControlAccessible( _rxControlAccessible )
         ,m_xFocusWindow( _rxFocusWindow )
         ,m_pBrowseBox( &_rBrowseBox )

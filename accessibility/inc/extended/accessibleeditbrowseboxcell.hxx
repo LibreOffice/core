@@ -20,7 +20,7 @@
 
 #include <extended/accessiblebrowseboxcell.hxx>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <comphelper/accessiblewrapper.hxx>
 
 namespace accessibility
@@ -89,8 +89,7 @@ namespace accessibility
 
     // XAccessible providing an EditBrowseBoxTableCell
     class EditBrowseBoxTableCellAccess final :
-        public cppu::BaseMutex,
-        public cppu::WeakComponentImplHelper<css::accessibility::XAccessible>
+        public comphelper::WeakComponentImplHelper<css::accessibility::XAccessible>
     {
         css::uno::WeakReference< css::accessibility::XAccessibleContext >
                                             m_aContext;
@@ -120,8 +119,8 @@ namespace accessibility
         // XAccessible
         virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
-        // XComponent/OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        // XComponent/WeakComponentImplHelper
+        virtual void disposing() override;
 
         EditBrowseBoxTableCellAccess( const EditBrowseBoxTableCellAccess& ) = delete;
         EditBrowseBoxTableCellAccess& operator=( const EditBrowseBoxTableCellAccess& ) = delete;
