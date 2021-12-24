@@ -28,8 +28,7 @@
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 
 #include <rtl/ref.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace css::uno;
@@ -41,12 +40,11 @@ using namespace framework;
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::lang::XServiceInfo,
     css::frame::XUIControllerFactory > UIControllerFactory_BASE;
 
-class UIControllerFactory : private cppu::BaseMutex,
-                            public UIControllerFactory_BASE
+class UIControllerFactory : public UIControllerFactory_BASE
 {
 public:
     virtual ~UIControllerFactory() override;
@@ -68,14 +66,13 @@ protected:
     rtl::Reference<ConfigurationAccess_ControllerFactory>    m_pConfigAccess;
 
 private:
-    virtual void SAL_CALL disposing() final override;
+    virtual void disposing(std::unique_lock<std::mutex>&) final override;
 };
 
 UIControllerFactory::UIControllerFactory(
     const Reference< XComponentContext >& xContext,
     std::u16string_view rConfigurationNode )
-    : UIControllerFactory_BASE(m_aMutex)
-    , m_bConfigRead( false )
+    : m_bConfigRead( false )
     , m_xContext( xContext )
 {
     m_pConfigAccess = new ConfigurationAccess_ControllerFactory(m_xContext,
@@ -85,12 +82,12 @@ UIControllerFactory::UIControllerFactory(
 
 UIControllerFactory::~UIControllerFactory()
 {
-    disposing();
+    std::unique_lock g(m_aMutex);
+    disposing(g);
 }
 
-void SAL_CALL UIControllerFactory::disposing()
+void UIControllerFactory::disposing(std::unique_lock<std::mutex>&)
 {
-    osl::MutexGuard g(rBHelper.rMutex);
     m_pConfigAccess.clear();
 }
 
@@ -100,7 +97,7 @@ Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithContext(
     const Reference< XComponentContext >& )
 {
     // SAFE
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
 
     if ( !m_bConfigRead )
     {
@@ -160,7 +157,7 @@ Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithArgument
     {
         OUString aServiceName;
         { // SAFE
-        osl::MutexGuard g(rBHelper.rMutex);
+        std::unique_lock g(m_aMutex);
 
         if ( !m_bConfigRead )
         {
@@ -188,7 +185,7 @@ sal_Bool SAL_CALL UIControllerFactory::hasController(
     const OUString& aCommandURL,
     const OUString& aModuleName )
 {
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
 
     if ( !m_bConfigRead )
     {
@@ -205,7 +202,7 @@ void SAL_CALL UIControllerFactory::registerController(
     const OUString& aControllerImplementationName )
 {
     // SAFE
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
 
     if ( !m_bConfigRead )
     {
@@ -222,7 +219,7 @@ void SAL_CALL UIControllerFactory::deregisterController(
     const OUString& aModuleName )
 {
     // SAFE
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
 
     if ( !m_bConfigRead )
     {
