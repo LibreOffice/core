@@ -25,12 +25,14 @@ void SAL_CALL WeakComponentImplHelperBase::dispose()
     if (m_bDisposed)
         return;
     m_bDisposed = true;
-    disposing();
+    disposing(aGuard);
+    if (!aGuard.owns_lock())
+        aGuard.lock();
     css::lang::EventObject aEvt(static_cast<OWeakObject*>(this));
     maEventListeners.disposeAndClear(aGuard, aEvt);
 }
 
-void WeakComponentImplHelperBase::disposing() {}
+void WeakComponentImplHelperBase::disposing(std::unique_lock<std::mutex>&) {}
 
 void SAL_CALL WeakComponentImplHelperBase::addEventListener(
     css::uno::Reference<css::lang::XEventListener> const& rxListener)

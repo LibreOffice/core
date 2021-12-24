@@ -391,7 +391,7 @@ void SAL_CALL TableDesignStyle::replaceByName( const OUString& rName, const Any&
 // XComponent
 
 
-void SAL_CALL TableDesignStyle::disposing()
+void TableDesignStyle::disposing()
 {
     for(Reference<XStyle> & rCellStyle : maCellStyles)
         rCellStyle.clear();

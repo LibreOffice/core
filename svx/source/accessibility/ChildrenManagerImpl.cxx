@@ -690,7 +690,7 @@ void ChildrenManagerImpl::impl_dispose()
 }
 
 
-void ChildrenManagerImpl::disposing()
+void ChildrenManagerImpl::disposing(std::unique_lock<std::mutex>&)
 {
     impl_dispose();
 }

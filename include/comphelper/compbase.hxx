@@ -41,8 +41,11 @@ public:
     virtual void SAL_CALL
     removeEventListener(css::uno::Reference<css::lang::XEventListener> const& rxListener) override;
 
-    /** called by dispose for subclasses to do dispose() work */
-    virtual void disposing();
+    /**
+        Called by dispose for subclasses to do dispose() work.
+        The mutex is held when called, and subclasses can unlock() the guard if necessary.
+     */
+    virtual void disposing(std::unique_lock<std::mutex>&);
 
 protected:
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maEventListeners;
