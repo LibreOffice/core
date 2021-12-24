@@ -21,8 +21,7 @@
 #include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
@@ -30,17 +29,15 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <comphelper/sequence.hxx>
 
-typedef cppu::WeakComponentImplHelper<css::graphic::XPrimitiveFactory2D, css::lang::XServiceInfo>
+typedef comphelper::WeakComponentImplHelper<css::graphic::XPrimitiveFactory2D,
+                                            css::lang::XServiceInfo>
     PrimitiveFactory2DImplBase;
 
 // base class for C++ implementation of css::graphic::XPrimitiveFactory2D
-class PrimitiveFactory2D : protected cppu::BaseMutex, public PrimitiveFactory2DImplBase
+class PrimitiveFactory2D final : public PrimitiveFactory2DImplBase
 {
 public:
-    PrimitiveFactory2D()
-        : PrimitiveFactory2DImplBase(m_aMutex)
-    {
-    }
+    PrimitiveFactory2D() {}
 
     // Methods from XPrimitiveFactory2D
     virtual css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>>
