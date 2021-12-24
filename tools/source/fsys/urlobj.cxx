@@ -2831,67 +2831,50 @@ bool INetURLObject::parseHostOrNetBiosName(
     EncodeMechanism eMechanism, rtl_TextEncoding eCharset, bool bNetBiosName,
     OUStringBuffer* pCanonic)
 {
+    if (pBegin >= pEnd)
+        return true;
     sal_Int32 nOriginalCanonicLength = pCanonic ? pCanonic->getLength() : 0;
-    if (pBegin < pEnd)
+    if (sal_Unicode const* p = pBegin; parseHost(p, pEnd, pCanonic) && p == pEnd)
+        return true;
+    if (pCanonic)
+        pCanonic->setLength(nOriginalCanonicLength); // discard parseHost results
+    if (!bNetBiosName)
+        return false;
+    while (pBegin < pEnd)
     {
-        sal_Unicode const * p = pBegin;
-        if (!parseHost(p, pEnd, pCanonic) || p != pEnd)
+        EscapeType eEscapeType;
+        sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, eMechanism, eCharset, eEscapeType);
+        switch (nUTF32)
         {
-            if (bNetBiosName)
-            {
-                OUStringBuffer buf;
-                while (pBegin < pEnd)
-                {
-                    EscapeType eEscapeType;
-                    sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd,
-                                                 eMechanism, eCharset,
-                                                 eEscapeType);
-                    if (!INetMIME::isVisible(nUTF32))
-                    {
-                        if (pCanonic)
-                            pCanonic->setLength(nOriginalCanonicLength);
-                        return false;
-                    }
-                    if (!rtl::isAsciiAlphanumeric(nUTF32))
-                        switch (nUTF32)
-                        {
-                        case '"':
-                        case '*':
-                        case '+':
-                        case ',':
-                        case '/':
-                        case ':':
-                        case ';':
-                        case '<':
-                        case '=':
-                        case '>':
-                        case '?':
-                        case '[':
-                        case '\\':
-                        case ']':
-                        case '`':
-                        case '|':
-                            return false;
-                        }
-                    if (pCanonic != nullptr) {
-                        appendUCS4(
-                            buf, nUTF32, eEscapeType, PART_URIC,
-                            eCharset, true);
-                    }
-                }
-                if (pCanonic)
-                {
-                    pCanonic->setLength(nOriginalCanonicLength);
-                    pCanonic->append(buf);
-                }
-            }
-            else
-            {
+            case '"':
+            case '*':
+            case '+':
+            case ',':
+            case '/':
+            case ':':
+            case ';':
+            case '<':
+            case '=':
+            case '>':
+            case '?':
+            case '[':
+            case '\\':
+            case ']':
+            case '`':
+            case '|':
                 if (pCanonic)
                     pCanonic->setLength(nOriginalCanonicLength);
                 return false;
-            }
+            default:
+                if (!INetMIME::isVisible(nUTF32))
+                {
+                    if (pCanonic)
+                        pCanonic->setLength(nOriginalCanonicLength);
+                    return false;
+                }
         }
+        if (pCanonic)
+            appendUCS4(*pCanonic, nUTF32, eEscapeType, PART_URIC, eCharset, true);
     }
     return true;
 }
