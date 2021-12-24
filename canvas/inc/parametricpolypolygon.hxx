@@ -21,8 +21,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2D.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <canvas/canvastoolsdllapi.h>
@@ -35,11 +34,10 @@ namespace com::sun::star::rendering { class XGraphicDevice; }
 
 namespace canvas
 {
-    typedef cppu::WeakComponentImplHelper< css::rendering::XParametricPolyPolygon2D,
+    typedef comphelper::WeakComponentImplHelper< css::rendering::XParametricPolyPolygon2D,
                                            css::lang::XServiceInfo > ParametricPolyPolygon_Base;
 
-    class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon final : public ::cppu::BaseMutex,
-                                  public ParametricPolyPolygon_Base
+    class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon final : public ParametricPolyPolygon_Base
     {
     public:
         enum class GradientType
