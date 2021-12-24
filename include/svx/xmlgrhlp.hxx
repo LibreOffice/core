@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SVX_XMLGRHLP_HXX
 #define INCLUDED_SVX_XMLGRHLP_HXX
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <vcl/graph.hxx>
 #include <rtl/ref.hxx>
 
@@ -47,8 +46,7 @@ struct SvxGraphicHelperStream_Impl
 };
 
 class SVXCORE_DLLPUBLIC SvXMLGraphicHelper final :
-        public cppu::BaseMutex,
-        public cppu::WeakComponentImplHelper<css::document::XGraphicObjectResolver,
+        public comphelper::WeakComponentImplHelper<css::document::XGraphicObjectResolver,
                                             css::document::XGraphicStorageHandler,
                                             css::document::XBinaryStreamResolver>
 {
@@ -81,8 +79,6 @@ private:
     void                        Init( const css::uno::Reference < css::embed::XStorage >& xXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
                                       const OUString& rGraphicMimeType = OUString() );
-
-    virtual void SAL_CALL       disposing() override;
 
     SVX_DLLPRIVATE OUString implSaveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                             OUString & rOutMimeType,
