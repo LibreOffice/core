@@ -23,8 +23,7 @@
 #include <tools/color.hxx>
 #include <vcl/image.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -68,7 +67,7 @@ struct ValueSetItem
                         GetAccessible( bool bIsTransientChildrenDisabled );
 };
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::accessibility::XAccessible,
     css::accessibility::XAccessibleEventBroadcaster,
     css::accessibility::XAccessibleContext,
@@ -77,9 +76,7 @@ typedef ::cppu::WeakComponentImplHelper<
     css::lang::XUnoTunnel >
     ValueSetAccComponentBase;
 
-class ValueSetAcc :
-    public ::cppu::BaseMutex,
-    public ValueSetAccComponentBase
+class ValueSetAcc final : public ValueSetAccComponentBase
 {
 public:
 
