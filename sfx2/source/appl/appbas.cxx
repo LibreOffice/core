@@ -43,9 +43,6 @@
 #include <appbaslib.hxx>
 #include <basic/basicmanagerrepository.hxx>
 
-#define SFX_TYPEMAP
-#include <sfxslots.hxx>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;

@@ -120,6 +120,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/sfxhelp \
     sfx2/source/appl/sfxpicklist \
     sfx2/source/appl/shutdownicon \
+    sfx2/source/appl/typemap \
     sfx2/source/appl/workwin \
     sfx2/source/appl/xpackcreator \
     sfx2/source/bastyp/bitset \
