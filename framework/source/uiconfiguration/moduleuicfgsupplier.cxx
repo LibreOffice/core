@@ -31,8 +31,7 @@
 #include <com/sun/star/ui/XModuleUIConfigurationManager2.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <unordered_map>
@@ -49,13 +48,12 @@ using namespace framework;
 
 namespace {
 
-typedef cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::lang::XServiceInfo,
     css::ui::XModuleUIConfigurationManagerSupplier >
         ModuleUIConfigurationManagerSupplier_BASE;
 
-class ModuleUIConfigurationManagerSupplier : private cppu::BaseMutex,
-                                             public ModuleUIConfigurationManagerSupplier_BASE
+class ModuleUIConfigurationManagerSupplier : public ModuleUIConfigurationManagerSupplier_BASE
 {
 public:
     explicit ModuleUIConfigurationManagerSupplier( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -80,7 +78,7 @@ public:
     virtual css::uno::Reference< css::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager( const OUString& ModuleIdentifier ) override;
 
 private:
-    virtual void SAL_CALL disposing() final override;
+    virtual void disposing(std::unique_lock<std::mutex>&) final override;
 
     typedef std::unordered_map< OUString, css::uno::Reference< css::ui::XModuleUIConfigurationManager2 > > ModuleToModuleCfgMgr;
 
@@ -92,8 +90,7 @@ private:
 };
 
 ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( const Reference< XComponentContext >& xContext ) :
-    ModuleUIConfigurationManagerSupplier_BASE(m_aMutex)
-    , m_xModuleMgr( ModuleManager::create( xContext ) )
+      m_xModuleMgr( ModuleManager::create( xContext ) )
     , m_xContext( xContext )
 {
     try
@@ -111,13 +108,12 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
 
 ModuleUIConfigurationManagerSupplier::~ModuleUIConfigurationManagerSupplier()
 {
-    disposing();
+    std::unique_lock g(m_aMutex);
+    disposing(g);
 }
 
-void SAL_CALL ModuleUIConfigurationManagerSupplier::disposing()
+void ModuleUIConfigurationManagerSupplier::disposing(std::unique_lock<std::mutex>&)
 {
-    osl::MutexGuard g(rBHelper.rMutex);
-
     // dispose all our module user interface configuration managers
     for (auto const& elem : m_aModuleToModuleUICfgMgrMap)
     {
@@ -132,7 +128,7 @@ void SAL_CALL ModuleUIConfigurationManagerSupplier::disposing()
 // XModuleUIConfigurationManagerSupplier
 Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSupplier::getUIConfigurationManager( const OUString& sModuleIdentifier )
 {
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     ModuleToModuleCfgMgr::iterator pIter = m_aModuleToModuleUICfgMgrMap.find( sModuleIdentifier );
