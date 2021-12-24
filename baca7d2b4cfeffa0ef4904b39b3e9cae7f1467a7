@@ -16,6 +16,41 @@
       "message": "Thanks!\n\nDo you plan to add unit tests?",
       "revId": "baca7d2b4cfeffa0ef4904b39b3e9cae7f1467a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29cc4943_3037042b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-24T22:45:16Z",
+      "side": 1,
+      "message": "Yes, but I have to figure out the exact case why the access2base macro fails in the first place 😊",
+      "parentUuid": "f3bc5cfb_25200058",
+      "revId": "baca7d2b4cfeffa0ef4904b39b3e9cae7f1467a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "241f4cc6_51ec170e",
+        "filename": "basic/source/sbx/sbxvar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-24T22:45:16Z",
+      "side": 1,
+      "message": "Should we check only for !pInfo and assign a null value anyway? Is that faster?",
+      "revId": "baca7d2b4cfeffa0ef4904b39b3e9cae7f1467a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
