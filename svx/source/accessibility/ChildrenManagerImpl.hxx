@@ -315,7 +315,7 @@ private:
     /** This method is called from the component helper base class while
         disposing.
     */
-    virtual void disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     void impl_dispose();
 

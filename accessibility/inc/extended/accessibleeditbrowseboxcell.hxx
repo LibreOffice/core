@@ -120,7 +120,7 @@ namespace accessibility
         virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
         // XComponent/WeakComponentImplHelper
-        virtual void disposing() override;
+        virtual void disposing(std::unique_lock<std::mutex>&) override;
 
         EditBrowseBoxTableCellAccess( const EditBrowseBoxTableCellAccess& ) = delete;
         EditBrowseBoxTableCellAccess& operator=( const EditBrowseBoxTableCellAccess& ) = delete;

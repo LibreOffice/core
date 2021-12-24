@@ -212,7 +212,7 @@ namespace accessibility
         return xMyContext;
     }
 
-    void EditBrowseBoxTableCellAccess::disposing()
+    void EditBrowseBoxTableCellAccess::disposing(std::unique_lock<std::mutex>&)
     {
         // dispose our context, if it still alive
         css::uno::Reference< XComponent > xMyContext( m_aContext.get(), UNO_QUERY );
