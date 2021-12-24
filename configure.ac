@@ -5849,7 +5849,7 @@ fi
 
 AC_SUBST(ENABLE_CUPS)
 
-libo_CHECK_SYSTEM_MODULE([fontconfig],[FONTCONFIG],[fontconfig >= 2.4.1],TRUE)
+libo_CHECK_SYSTEM_MODULE([fontconfig],[FONTCONFIG],[fontconfig >= 2.4.1],,system)
 
 dnl whether to find & fetch external tarballs?
 dnl ===================================================================
@@ -7303,7 +7303,7 @@ AC_SUBST(GPERF)
 dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.2],,TRUE)
+libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.2],enabled)
 
 dnl ===================================================================
 dnl C++11
@@ -9470,7 +9470,7 @@ if test "x$ac_config_site_64bit_host" = xYES; then
 else
     FREETYPE_LIBS_internal="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
 fi
-libo_CHECK_SYSTEM_MODULE([freetype],[FREETYPE],[freetype2 >= 9.9.3],TRUE)
+libo_CHECK_SYSTEM_MODULE([freetype],[FREETYPE],[freetype2 >= 9.9.3],,system)
 
 # ===================================================================
 # Check for system libxslt
@@ -10315,7 +10315,7 @@ AC_SUBST(LIBTOMMATH_LIBS)
 dnl ===================================================================
 dnl Check for system curl
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([curl],[CURL],[libcurl >= 7.68.0],,TRUE)
+libo_CHECK_SYSTEM_MODULE([curl],[CURL],[libcurl >= 7.68.0],enabled)
 
 dnl ===================================================================
 dnl Check for system boost
