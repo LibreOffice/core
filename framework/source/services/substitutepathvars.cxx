@@ -20,8 +20,7 @@
 #include <config_folders.h>
 
 #include <comphelper/lok.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <unotools/bootstrap.hxx>
@@ -129,12 +128,11 @@ struct ReSubstFixedVarOrder
     }
 };
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::util::XStringSubstitution,
     css::lang::XServiceInfo > SubstitutePathVariables_BASE;
 
-class SubstitutePathVariables : private cppu::BaseMutex,
-                                public SubstitutePathVariables_BASE
+class SubstitutePathVariables : public SubstitutePathVariables_BASE
 {
 public:
     explicit SubstitutePathVariables(const css::uno::Reference< css::uno::XComponentContext >& xContext);
@@ -191,7 +189,6 @@ private:
 };
 
 SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentContext >& xContext ) :
-    SubstitutePathVariables_BASE(m_aMutex),
     m_xContext( xContext )
 {
     SetPredefinedPathVariables();
@@ -227,19 +224,19 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
 // XStringSubstitution
 OUString SAL_CALL SubstitutePathVariables::substituteVariables( const OUString& aText, sal_Bool bSubstRequired )
 {
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
     return impl_substituteVariable( aText, bSubstRequired );
 }
 
 OUString SAL_CALL SubstitutePathVariables::reSubstituteVariables( const OUString& aText )
 {
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
     return impl_reSubstituteVariables( aText );
 }
 
 OUString SAL_CALL SubstitutePathVariables::getSubstituteVariableValue( const OUString& aVariable )
 {
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
     return impl_getSubstituteVariableValue( aVariable );
 }
 
