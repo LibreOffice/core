@@ -36,8 +36,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -1222,11 +1221,10 @@ void ConfigurationAccess_WindowState::impl_initializeConfigAccess()
     }
 }
 
-typedef ::cppu::WeakComponentImplHelper< css::container::XNameAccess,
+typedef comphelper::WeakComponentImplHelper< css::container::XNameAccess,
         css::lang::XServiceInfo> WindowStateConfiguration_BASE;
 
-class WindowStateConfiguration : private cppu::BaseMutex,
-                                 public WindowStateConfiguration_BASE
+class WindowStateConfiguration : public WindowStateConfiguration_BASE
 {
 public:
     explicit WindowStateConfiguration( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -1271,7 +1269,6 @@ private:
 };
 
 WindowStateConfiguration::WindowStateConfiguration( const Reference< XComponentContext >& rxContext ) :
-    WindowStateConfiguration_BASE(m_aMutex),
     m_xContext( rxContext )
 {
     css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
@@ -1317,14 +1314,14 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XComponentC
 
 WindowStateConfiguration::~WindowStateConfiguration()
 {
-    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
     m_aModuleToFileHashMap.clear();
     m_aModuleToWindowStateHashMap.clear();
 }
 
 Any SAL_CALL WindowStateConfiguration::getByName( const OUString& aModuleIdentifier )
 {
-    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
 
     ModuleToWindowStateFileMap::const_iterator pIter = m_aModuleToFileHashMap.find( aModuleIdentifier );
     if ( pIter != m_aModuleToFileHashMap.end() )
@@ -1353,14 +1350,14 @@ Any SAL_CALL WindowStateConfiguration::getByName( const OUString& aModuleIdentif
 
 Sequence< OUString > SAL_CALL WindowStateConfiguration::getElementNames()
 {
-    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
 
     return comphelper::mapKeysToSequence( m_aModuleToFileHashMap );
 }
 
 sal_Bool SAL_CALL WindowStateConfiguration::hasByName( const OUString& aName )
 {
-    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
 
     ModuleToWindowStateFileMap::const_iterator pIter = m_aModuleToFileHashMap.find( aName );
     return ( pIter != m_aModuleToFileHashMap.end() );
