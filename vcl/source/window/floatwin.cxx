@@ -685,7 +685,10 @@ void FloatingWindow::StateChanged( StateChangedType nType )
                 // we are a toplevel window, let's so far pretend to be a
                 // dialog - but maybe we'll need a separate type for this
                 // later
-                aItems.emplace_back("type", "dialog");
+                if (mbInPopupMode)
+                    aItems.emplace_back("type", "dropdown");
+                else
+                    aItems.emplace_back("type", "dialog");
                 aItems.emplace_back("position", mpImplData->maLOKTwipsPos.toString()); // twips
             }
             else
