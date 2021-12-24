@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3cade040_f99dcdbf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-24T09:52:51Z",
+      "side": 1,
+      "message": "Consider the follwoing code snippet:\n\n    Function TestOptObject(Optional A As Collection)\n        \u0027 Here an assignment happens. The literal has no pInfo, \n        \u0027 hence overwrites the pInfo of TestOptObject including the IsMissing\n        \u0027 information of the method TestOptObject\n        TestOptObject \u003d 0\n        \u0027 Leading to a parameter is not optional error here\n        If IsMissing(A) Then MsgBox \"Test\"\n    End Function",
+      "parentUuid": "0cffaa53_1492a130",
+      "revId": "8d38bbf8594744381be5edf1b01a37a5ea1813c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "442a4c90_aa598d25",
         "filename": "basic/source/sbx/sbxvar.cxx",
         "patchSetId": 2
