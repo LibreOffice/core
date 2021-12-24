@@ -623,8 +623,6 @@ void SAL_CALL TableDesignFamily::replaceByName( const OUString& rName, const Any
 
 Reference< XInterface > SAL_CALL TableDesignFamily::createInstance()
 {
-    SolarMutexGuard aGuard;
-
     return Reference< XInterface >( static_cast< XStyle* >( new TableDesignStyle ) );
 }
 
