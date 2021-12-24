@@ -75,7 +75,7 @@
 #define RID_XNSUBSETEQY         "<?> nsubseteq <?> "
 #define RID_XNSUPSETY           "<?> nsupset <?> "
 #define RID_XNSUPSETEQY         "<?> nsupseteq <?> "
-#define RID_FUNCX               "func func(<?>) "
+#define RID_FUNCX               "func <?>(<?>) "
 #define RID_ABSX                "abs{<?>} "
 #define RID_FACTX               "fact{<?>} "
 #define RID_SQRTX               "sqrt{<?>} "
