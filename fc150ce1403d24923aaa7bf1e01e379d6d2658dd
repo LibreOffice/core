@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbcd1ac9_f6bd22c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-12-24T00:51:06Z",
+      "side": 1,
+      "message": "CI is green",
+      "revId": "fc150ce1403d24923aaa7bf1e01e379d6d2658dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
