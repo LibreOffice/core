@@ -87,8 +87,7 @@ MenuBarManager::MenuBarManager(
     const Reference< XDispatchProvider >& rDispatchProvider,
     const OUString& rModuleIdentifier,
     Menu* pMenu, bool bDelete, bool bHasMenuBar ):
-    WeakComponentImplHelper( m_aMutex )
-    , m_bRetrieveImages( false )
+      m_bRetrieveImages( false )
     , m_bAcceleratorCfg( false )
     , m_bHasMenuBar( bHasMenuBar )
     , m_xContext(rxContext)
@@ -104,7 +103,7 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*Proces
 {
     SolarMutexGuard aSolarGuard;
 
-    if ( rBHelper.bDisposed || rBHelper.bInDispose )
+    if ( m_bDisposed )
         throw css::lang::DisposedException();
 
     Any a;
@@ -141,7 +140,7 @@ void MenuBarManager::Destroy()
 {
     SolarMutexGuard aGuard;
 
-    if ( rBHelper.bDisposed )
+    if ( m_bDisposed )
         return;
 
     // stop asynchronous settings timer and
@@ -159,7 +158,7 @@ void MenuBarManager::Destroy()
 }
 
 // XComponent
-void SAL_CALL MenuBarManager::disposing()
+void MenuBarManager::disposing(std::unique_lock<std::mutex>& )
 {
     Reference< XComponent > xThis( this );
 
@@ -202,7 +201,7 @@ void SAL_CALL MenuBarManager::elementInserted( const css::ui::ConfigurationEvent
     SolarMutexGuard g;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    if ( rBHelper.bDisposed || rBHelper.bInDispose )
+    if ( m_bDisposed )
         return;
 
     sal_Int16 nImageType = sal_Int16();
@@ -225,7 +224,7 @@ void SAL_CALL MenuBarManager::frameAction( const FrameActionEvent& Action )
 {
     SolarMutexGuard g;
 
-    if ( rBHelper.bDisposed || rBHelper.bInDispose )
+    if ( m_bDisposed )
         throw css::lang::DisposedException();
 
     if ( Action.Action != FrameAction_CONTEXT_CHANGED )
@@ -253,7 +252,7 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
 
     SolarMutexGuard aSolarGuard;
     {
-        if ( rBHelper.bDisposed || rBHelper.bInDispose )
+        if ( m_bDisposed )
             return;
 
         // We have to check all menu entries as there can be identical entries in a popup menu.

@@ -41,8 +41,8 @@
 #include <rtl/ustring.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <framework/addonsoptions.hxx>
 
 namespace framework
@@ -56,8 +56,7 @@ struct PopupControllerEntry
 typedef std::unordered_map< OUString, PopupControllerEntry > PopupControllerCache;
 
 class MenuBarManager final :
-    protected cppu::BaseMutex,
-    public cppu::WeakComponentImplHelper<
+    public comphelper::WeakComponentImplHelper<
         css::frame::XStatusListener,
         css::frame::XFrameActionListener,
         css::ui::XUIConfigurationListener,
@@ -121,7 +120,7 @@ class MenuBarManager final :
         DECL_LINK( Deactivate, Menu *, bool );
         DECL_LINK( AsyncSettingsHdl, Timer *, void );
 
-        void SAL_CALL disposing() override;
+        void disposing(std::unique_lock<std::mutex>&) override;
         void RemoveListener();
         void RequestImages();
         void RetrieveImageManagers();
