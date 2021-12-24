@@ -23,8 +23,7 @@
 #include <tools/color.hxx>
 #include <vcl/image.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -68,7 +67,7 @@ struct ValueSetItem
                         GetAccessible( bool bIsTransientChildrenDisabled );
 };
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::accessibility::XAccessible,
     css::accessibility::XAccessibleEventBroadcaster,
     css::accessibility::XAccessibleContext,
@@ -77,9 +76,7 @@ typedef ::cppu::WeakComponentImplHelper<
     css::lang::XUnoTunnel >
     ValueSetAccComponentBase;
 
-class ValueSetAcc :
-    public ::cppu::BaseMutex,
-    public ValueSetAccComponentBase
+class ValueSetAcc final : public ValueSetAccComponentBase
 {
 public:
 
@@ -156,7 +153,7 @@ private:
     /** Tell all listeners that the object is dying.  This callback is
         usually called from the WeakComponentImplHelper class.
     */
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     /** Return the number of items.  This takes the None-Item into account.
     */
