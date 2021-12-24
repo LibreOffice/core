@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f09a7c46_ca92d4e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-12-24T06:03:39Z",
+      "side": 1,
+      "message": "that shows a different way of writing the app, I\u0027d prefer it be kept.",
+      "parentUuid": "2bead9b6_a41f51b2",
+      "revId": "7c623769a0323abb7cdf015e69293c5dda06d754",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edf1fed4_f8b75b0c",
