@@ -31,8 +31,7 @@
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/graphicmimetype.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -930,7 +929,7 @@ namespace {
 
 namespace impl
 {
-typedef cppu::WeakComponentImplHelper<lang::XInitialization,
+typedef comphelper::WeakComponentImplHelper<lang::XInitialization,
                                         document::XGraphicObjectResolver,
                                         document::XGraphicStorageHandler,
                                         document::XBinaryStreamResolver,
@@ -940,7 +939,6 @@ typedef cppu::WeakComponentImplHelper<lang::XInitialization,
 } // namespace impl
 
 class SvXMLGraphicImportExportHelper :
-    public cppu::BaseMutex,
     public impl::SvXMLGraphicImportExportHelper_Base
 {
 public:
@@ -949,7 +947,7 @@ public:
 protected:
     // is called from WeakComponentImplHelper when XComponent::dispose() was
     // called from outside
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // ____ XInitialization ____
     // one argument is allowed, which is the XStorage
@@ -992,11 +990,10 @@ private:
 };
 
 SvXMLGraphicImportExportHelper::SvXMLGraphicImportExportHelper( SvXMLGraphicHelperMode eMode ) :
-        impl::SvXMLGraphicImportExportHelper_Base( m_aMutex ),
         m_eGraphicHelperMode( eMode )
 {}
 
-void SAL_CALL SvXMLGraphicImportExportHelper::disposing()
+void SvXMLGraphicImportExportHelper::disposing()
 {
     Reference< XComponent > xComp( m_xGraphicObjectResolver, UNO_QUERY );
     OSL_ASSERT( xComp.is());
