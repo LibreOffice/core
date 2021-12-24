@@ -119,17 +119,15 @@ void SvMetaAttribute::Insert(SvSlotElementList&)
 {
 }
 
-#define CTOR                            \
-    : nType( MetaTypeType::Base )       \
-    , bIsItem( false )                  \
-
 SvMetaType::SvMetaType()
-    CTOR
+    : nType( MetaTypeType::Base )
+    , bIsItem( false )
 {
 }
 
 SvMetaType::SvMetaType( const OString& rName )
-    CTOR
+    : nType( MetaTypeType::Base )
+    , bIsItem( false )
 {
     SetName( rName );
 }
