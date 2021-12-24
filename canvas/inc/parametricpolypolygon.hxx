@@ -90,7 +90,7 @@ namespace canvas
             const css::uno::Sequence< css::uno::Any >& rArgs );
 
         /// Dispose all internal references
-        virtual void disposing() override;
+        virtual void disposing(std::unique_lock<std::mutex>&) override;
 
         // XParametricPolyPolygon2D
         virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL getOutline( double t ) override;
