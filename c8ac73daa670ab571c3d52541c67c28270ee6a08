@@ -34,6 +34,23 @@
       "parentUuid": "69aa5322_31333259",
       "revId": "c8ac73daa670ab571c3d52541c67c28270ee6a08",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6426f1a8_58dd6751",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-24T09:32:38Z",
+      "side": 1,
+      "message": "Could you please create a bugzilla ticket for the new issue with a sample file attached ?",
+      "revId": "c8ac73daa670ab571c3d52541c67c28270ee6a08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
