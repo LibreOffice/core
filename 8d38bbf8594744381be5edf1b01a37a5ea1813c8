@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1660912_7cf358dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-24T10:16:26Z",
+      "side": 1,
+      "message": "\u003e         \u0027 Here an assignment happens. The literal has no pInfo,\n\nAh! Thank you very much - I overlooked assigning something *to* methods.\n\nSo is that enough to just check if *we* already have pInfo maybe?",
+      "parentUuid": "a0bbfd46_6eff1c53",
+      "revId": "8d38bbf8594744381be5edf1b01a37a5ea1813c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "442a4c90_aa598d25",
         "filename": "basic/source/sbx/sbxvar.cxx",
         "patchSetId": 2
