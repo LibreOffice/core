@@ -123,6 +123,97 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be91c1d2_756c039c",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-24T15:28:04Z",
+      "side": 1,
+      "message": "I honestly believe that this is not an improvement. Functions like \u0027comphelper::InitPropertySequence\u0027 are long enough, and at the same time telling enough, to not require explicit spelling of the (longish) resulting type at the assigned variable.",
+      "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ab8b34d_4c39a89c",
+        "filename": "comphelper/source/misc/anycompare.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-24T15:28:04Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df67828e_dbbdb935",
+        "filename": "comphelper/source/misc/backupfilehelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-24T15:28:04Z",
+      "side": 1,
+      "message": "Is this correct? the auto gave sal_uInt64. And this is const.",
+      "range": {
+        "startLine": 145,
+        "startChar": 14,
+        "endLine": 145,
+        "endChar": 23
+      },
+      "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41f09746_1ae77517",
+        "filename": "comphelper/source/misc/backupfilehelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-24T15:28:04Z",
+      "side": 1,
+      "message": "... and here it would be comparing signed and unsigned.",
+      "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8ded01c_df221e9d",
+        "filename": "comphelper/source/misc/servicedecl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-24T15:28:04Z",
+      "side": 1,
+      "message": "Explicit type here is redundant, and also potential pessimization / error prone: you need to provide type of elements of iterated containers ...",
+      "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c0d2bc58_e47f1916",
         "filename": "compilerplugins/clang/harmfulauto.cxx",
         "patchSetId": 1
