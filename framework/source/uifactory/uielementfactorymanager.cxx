@@ -42,8 +42,7 @@
 #include <sal/log.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::uno;
@@ -341,14 +340,13 @@ bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aEleme
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::lang::XServiceInfo,
     css::ui::XUIElementFactoryManager> UIElementFactoryManager_BASE;
 
-class UIElementFactoryManager : private cppu::BaseMutex,
-                                public UIElementFactoryManager_BASE
+class UIElementFactoryManager : public UIElementFactoryManager_BASE
 {
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 public:
     explicit UIElementFactoryManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
@@ -383,7 +381,6 @@ private:
 };
 
 UIElementFactoryManager::UIElementFactoryManager( const Reference< XComponentContext >& rxContext ) :
-    UIElementFactoryManager_BASE(m_aMutex),
     m_bConfigRead( false ),
     m_xContext(rxContext),
     m_pConfigAccess(
@@ -392,7 +389,7 @@ UIElementFactoryManager::UIElementFactoryManager( const Reference< XComponentCon
             "/org.openoffice.Office.UI.Factories/Registered/UIElementFactories"))
 {}
 
-void SAL_CALL UIElementFactoryManager::disposing()
+void UIElementFactoryManager::disposing(std::unique_lock<std::mutex>&)
 {
     m_pConfigAccess.clear();
 }
@@ -405,28 +402,28 @@ Reference< XUIElement > SAL_CALL UIElementFactoryManager::createUIElement(
     Reference< XFrame > xFrame;
     OUString aModuleId;
     { // SAFE
-    osl::MutexGuard g(rBHelper.rMutex);
-    if (rBHelper.bDisposed) {
-        throw css::lang::DisposedException(
-            "disposed", static_cast<OWeakObject *>(this));
-    }
+        std::unique_lock g(m_aMutex);
+        if (m_bDisposed) {
+            throw css::lang::DisposedException(
+                "disposed", static_cast<OWeakObject *>(this));
+        }
 
-    if ( !m_bConfigRead )
-    {
-        m_bConfigRead = true;
-        m_pConfigAccess->readConfigurationData();
-    }
+        if ( !m_bConfigRead )
+        {
+            m_bConfigRead = true;
+            m_pConfigAccess->readConfigurationData();
+        }
 
-    // Retrieve the frame instance from the arguments to determine the module identifier. This must be provided
-    // to the search function. An empty module identifier is provided if the frame is missing or the module id cannot
-    // retrieve from it.
-    for ( auto const & arg : Args )
-    {
-        if ( arg.Name == "Frame")
-            arg.Value >>= xFrame;
-        if (arg.Name == "Module")
-            arg.Value >>= aModuleId;
-    }
+        // Retrieve the frame instance from the arguments to determine the module identifier. This must be provided
+        // to the search function. An empty module identifier is provided if the frame is missing or the module id cannot
+        // retrieve from it.
+        for ( auto const & arg : Args )
+        {
+            if ( arg.Name == "Frame")
+                arg.Value >>= xFrame;
+            if (arg.Name == "Module")
+                arg.Value >>= aModuleId;
+        }
     } // SAFE
 
     Reference< XModuleManager2 > xManager = ModuleManager::create( m_xContext );
@@ -452,8 +449,8 @@ Reference< XUIElement > SAL_CALL UIElementFactoryManager::createUIElement(
 Sequence< Sequence< PropertyValue > > SAL_CALL UIElementFactoryManager::getRegisteredFactories()
 {
     // SAFE
-    osl::MutexGuard g(rBHelper.rMutex);
-    if (rBHelper.bDisposed) {
+    std::unique_lock g(m_aMutex);
+    if (m_bDisposed) {
         throw css::lang::DisposedException(
             "disposed", static_cast<OWeakObject *>(this));
     }
@@ -471,24 +468,22 @@ Reference< XUIElementFactory > SAL_CALL UIElementFactoryManager::getFactory( con
 {
     OUString aServiceSpecifier;
     { // SAFE
-    osl::MutexGuard g(rBHelper.rMutex);
-    if (rBHelper.bDisposed) {
-        throw css::lang::DisposedException(
-            "disposed", static_cast<OWeakObject *>(this));
-    }
+        std::unique_lock g(m_aMutex);
+        if (m_bDisposed) {
+            throw css::lang::DisposedException(
+                "disposed", static_cast<OWeakObject *>(this));
+        }
 
-    if ( !m_bConfigRead )
-    {
-        m_bConfigRead = true;
-        m_pConfigAccess->readConfigurationData();
-    }
+        if ( !m_bConfigRead )
+        {
+            m_bConfigRead = true;
+            m_pConfigAccess->readConfigurationData();
+        }
 
-    OUString aType;
-    OUString aName;
-
-    RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
-
-    aServiceSpecifier = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
+        OUString aType;
+        OUString aName;
+        RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
+        aServiceSpecifier = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
     } // SAFE
 
     if ( !aServiceSpecifier.isEmpty() ) try
@@ -509,8 +504,8 @@ Reference< XUIElementFactory > SAL_CALL UIElementFactoryManager::getFactory( con
 void SAL_CALL UIElementFactoryManager::registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleId, const OUString& aFactoryImplementationName )
 {
     // SAFE
-    osl::MutexGuard g(rBHelper.rMutex);
-    if (rBHelper.bDisposed) {
+    std::unique_lock g(m_aMutex);
+    if (m_bDisposed) {
         throw css::lang::DisposedException(
             "disposed", static_cast<OWeakObject *>(this));
     }
@@ -528,8 +523,8 @@ void SAL_CALL UIElementFactoryManager::registerFactory( const OUString& aType, c
 void SAL_CALL UIElementFactoryManager::deregisterFactory( const OUString& aType, const OUString& aName, const OUString& aModuleId )
 {
     // SAFE
-    osl::MutexGuard g(rBHelper.rMutex);
-    if (rBHelper.bDisposed) {
+    std::unique_lock g(m_aMutex);
+    if (m_bDisposed) {
         throw css::lang::DisposedException(
             "disposed", static_cast<OWeakObject *>(this));
     }
