@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SVX_XMLGRHLP_HXX
 #define INCLUDED_SVX_XMLGRHLP_HXX
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <vcl/graph.hxx>
 #include <rtl/ref.hxx>
 
@@ -47,8 +46,7 @@ struct SvxGraphicHelperStream_Impl
 };
 
 class SVXCORE_DLLPUBLIC SvXMLGraphicHelper final :
-        public cppu::BaseMutex,
-        public cppu::WeakComponentImplHelper<css::document::XGraphicObjectResolver,
+        public comphelper::WeakComponentImplHelper<css::document::XGraphicObjectResolver,
                                             css::document::XGraphicStorageHandler,
                                             css::document::XBinaryStreamResolver>
 {
