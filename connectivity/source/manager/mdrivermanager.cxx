@@ -102,8 +102,8 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
     return makeAny( *m_aPos++ );
 }
 
-    namespace {
-
+namespace
+{
     /// an STL functor which ensures that a SdbcDriver described by a DriverAccess is loaded
     struct EnsureDriver
     {
@@ -174,9 +174,8 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
         }
     };
 
-    }
-
-    static sal_Int32 lcl_getDriverPrecedence( const Reference<XComponentContext>& _rContext, Sequence< OUString >& _rPrecedence )
+#if !ENABLE_FUZZERS
+    sal_Int32 lcl_getDriverPrecedence( const Reference<XComponentContext>& _rContext, Sequence< OUString >& _rPrecedence )
     {
         _rPrecedence.realloc( 0 );
         try
@@ -210,8 +209,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
 
         return _rPrecedence.getLength();
     }
-
-    namespace {
+#endif
 
     /// an STL argorithm compatible predicate comparing two DriverAccess instances by their implementation names
     struct CompareDriverAccessByName
@@ -234,8 +232,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
             return lhs.sImplementationName == m_sImplName;
         }
     };
-
-    }
+}
 
 OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _rxContext )
     :OSDBCDriverManager_Base(m_aMutex)
