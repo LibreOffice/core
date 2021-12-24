@@ -19,8 +19,7 @@
 #pragma once
 
 #include <com/sun/star/ui/XStatusbarItem.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <vcl/vclptr.hxx>
 
 class StatusBar;
@@ -30,10 +29,9 @@ namespace framework
 
 struct AddonStatusbarItemData;
 
-typedef cppu::WeakComponentImplHelper< css::ui::XStatusbarItem > StatusbarItem_Base;
+typedef comphelper::WeakComponentImplHelper< css::ui::XStatusbarItem > StatusbarItem_Base;
 
-class StatusbarItem final : protected cppu::BaseMutex,
-                      public StatusbarItem_Base
+class StatusbarItem final : public StatusbarItem_Base
 {
 public:
     explicit StatusbarItem(
@@ -42,7 +40,7 @@ public:
                             const OUString&   aCommand );
     virtual ~StatusbarItem() override;
 
-    void SAL_CALL disposing() override;
+    void disposing(std::unique_lock<std::mutex>&) override;
 
     // css::ui::XStatusbarItem Attributes
     virtual OUString SAL_CALL getCommand() override;
