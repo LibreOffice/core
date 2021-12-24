@@ -25,6 +25,7 @@
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <osl/diagnose.h>
 #include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>
 #include <svx/svdpage.hxx>

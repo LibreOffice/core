@@ -35,6 +35,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <vcl/errinf.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <o3tl/any.hxx>
 #include <svx/xmlgrhlp.hxx>
