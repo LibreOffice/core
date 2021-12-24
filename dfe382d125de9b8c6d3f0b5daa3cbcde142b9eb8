@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e5001ee_a12a6dec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-24T07:02:07Z",
+      "side": 1,
+      "message": "Bringing Verified+1 by Jenkins from patchset 1.\nThank you!",
+      "revId": "dfe382d125de9b8c6d3f0b5daa3cbcde142b9eb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
