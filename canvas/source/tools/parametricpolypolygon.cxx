@@ -147,10 +147,8 @@ namespace canvas
             colors, stops, fAspectRatio );
     }
 
-    void SAL_CALL ParametricPolyPolygon::disposing()
+    void ParametricPolyPolygon::disposing()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         mxDevice.clear();
     }
 
@@ -174,7 +172,7 @@ namespace canvas
 
     uno::Reference< rendering::XColorSpace > SAL_CALL ParametricPolyPolygon::getColorSpace()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         return mxDevice.is() ? mxDevice->getDeviceColorSpace() : uno::Reference< rendering::XColorSpace >();
     }
@@ -205,7 +203,6 @@ namespace canvas
                                                   const uno::Sequence< uno::Sequence< double > >&       rColors,
                                                   const uno::Sequence< double >&                        rStops,
                                                   double                                                nAspectRatio ) :
-        ParametricPolyPolygon_Base( m_aMutex ),
         mxDevice( rDevice ),
         maValues( rGradientPoly,
                   rColors,
@@ -219,7 +216,6 @@ namespace canvas
                                                   GradientType                                          eType,
                                                   const uno::Sequence< uno::Sequence< double > >&       rColors,
                                                   const uno::Sequence< double >&                        rStops ) :
-        ParametricPolyPolygon_Base( m_aMutex ),
         mxDevice( rDevice ),
         maValues( ::basegfx::B2DPolygon(),
                   rColors,
@@ -231,7 +227,7 @@ namespace canvas
 
     ParametricPolyPolygon::Values ParametricPolyPolygon::getValues() const
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         return maValues;
     }
