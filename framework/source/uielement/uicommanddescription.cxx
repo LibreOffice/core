@@ -565,8 +565,7 @@ void UICommandDescription::ensureGenericUICommandsForLanguage(const LanguageTag&
 }
 
 UICommandDescription::UICommandDescription(const Reference< XComponentContext >& rxContext)
-    : UICommandDescription_BASE(m_aMutex)
-    , m_aPrivateResourceURL(PRIVATE_RESOURCE_URL)
+    : m_aPrivateResourceURL(PRIVATE_RESOURCE_URL)
     , m_xContext(rxContext)
 {
     SvtSysLocale aSysLocale;
@@ -584,14 +583,13 @@ UICommandDescription::UICommandDescription(const Reference< XComponentContext >&
 }
 
 UICommandDescription::UICommandDescription(const Reference< XComponentContext >& rxContext, bool)
-    : UICommandDescription_BASE(m_aMutex)
-    , m_xContext(rxContext)
+    : m_xContext(rxContext)
 {
 }
 
 UICommandDescription::~UICommandDescription()
 {
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
     m_aModuleToCommandFileMap.clear();
     m_aUICommandsHashMap.clear();
     m_xGenericUICommands.clear();
@@ -637,7 +635,7 @@ Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
     const LanguageTag& rCurrentLanguage = aSysLocale.GetUILanguageTag();
     Any a;
 
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
 
     ModuleToCommandFileMap::const_iterator pM2CIter = m_aModuleToCommandFileMap.find( aName );
     if ( pM2CIter != m_aModuleToCommandFileMap.end() )
@@ -682,14 +680,14 @@ Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
 
 Sequence< OUString > SAL_CALL UICommandDescription::getElementNames()
 {
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
 
     return comphelper::mapKeysToSequence( m_aModuleToCommandFileMap );
 }
 
 sal_Bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )
 {
-    osl::MutexGuard g(rBHelper.rMutex);
+    std::unique_lock g(m_aMutex);
 
     ModuleToCommandFileMap::const_iterator pIter = m_aModuleToCommandFileMap.find( aName );
     return ( pIter != m_aModuleToCommandFileMap.end() );

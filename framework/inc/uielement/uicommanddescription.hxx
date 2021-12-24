@@ -26,19 +26,17 @@
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 namespace framework
 {
-typedef ::cppu::WeakComponentImplHelper< css::lang::XServiceInfo,
+typedef comphelper::WeakComponentImplHelper< css::lang::XServiceInfo,
         css::container::XNameAccess > UICommandDescription_BASE;
 
-class UICommandDescription : private cppu::BaseMutex,
-                             public UICommandDescription_BASE
+class UICommandDescription : public UICommandDescription_BASE
 {
     public:
         UICommandDescription( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
