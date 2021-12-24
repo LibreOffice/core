@@ -225,6 +225,8 @@ struct ArrayImpl
     bool                IsColInClipRange( sal_Int32 nCol ) const;
     bool                IsRowInClipRange( sal_Int32 nRow ) const;
 
+    bool                OverlapsClipRange(sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow) const;
+
     sal_Int32           GetMirrorCol( sal_Int32 nCol ) const { return mnWidth - nCol - 1; }
 
     sal_Int32           GetColPosition( sal_Int32 nCol ) const;
@@ -326,6 +328,23 @@ bool ArrayImpl::IsColInClipRange( sal_Int32 nCol ) const
 bool ArrayImpl::IsRowInClipRange( sal_Int32 nRow ) const
 {
     return (mnFirstClipRow <= nRow) && (nRow <= mnLastClipRow);
+}
+
+bool ArrayImpl::OverlapsClipRange(sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow) const
+{
+    if(nLastCol < mnFirstClipCol)
+        return false;
+
+    if(nFirstCol > mnLastClipCol)
+        return false;
+
+    if(nLastRow < mnFirstClipRow)
+        return false;
+
+    if(nFirstRow > mnLastClipRow)
+        return false;
+
+    return true;
 }
 
 bool ArrayImpl::IsInClipRange( sal_Int32 nCol, sal_Int32 nRow ) const
@@ -1020,6 +1039,84 @@ static void HelperCreateVerticalEntry(
     rInstance.addSdrConnectStyleData(false, rEndFromTL, -rY - rX, true);
 }
 
+static void HelperCreateTLBREntry(
+    const Array& rArray,
+    const Style& rStyle,
+    drawinglayer::primitive2d::SdrFrameBorderDataVector& rData,
+    const basegfx::B2DPoint& rOrigin,
+    const basegfx::B2DVector& rX,
+    const basegfx::B2DVector& rY,
+    sal_Int32 nColLeft,
+    sal_Int32 nColRight,
+    sal_Int32 nRowTop,
+    sal_Int32 nRowBottom,
+    const Color* pForceColor)
+{
+    if(rStyle.IsUsed())
+    {
+        /// top-left and bottom-right Style Tables
+        rData.emplace_back(
+            rOrigin,
+            rX + rY,
+            rStyle,
+            pForceColor);
+        drawinglayer::primitive2d::SdrFrameBorderData& rInstance(rData.back());
+
+        /// Fill top-left Style Table
+        const Style& rTLFromRight(rArray.GetCellStyleTop(nColLeft, nRowTop));
+        const Style& rTLFromBottom(rArray.GetCellStyleLeft(nColLeft, nRowTop));
+
+        rInstance.addSdrConnectStyleData(true, rTLFromRight, rX, false);
+        rInstance.addSdrConnectStyleData(true, rTLFromBottom, rY, false);
+
+        /// Fill bottom-right Style Table
+        const Style& rBRFromBottom(rArray.GetCellStyleRight(nColRight, nRowBottom));
+        const Style& rBRFromLeft(rArray.GetCellStyleBottom(nColRight, nRowBottom));
+
+        rInstance.addSdrConnectStyleData(false, rBRFromBottom, -rY, true);
+        rInstance.addSdrConnectStyleData(false, rBRFromLeft, -rX, true);
+    }
+}
+
+static void HelperCreateBLTREntry(
+    const Array& rArray,
+    const Style& rStyle,
+    drawinglayer::primitive2d::SdrFrameBorderDataVector& rData,
+    const basegfx::B2DPoint& rOrigin,
+    const basegfx::B2DVector& rX,
+    const basegfx::B2DVector& rY,
+    sal_Int32 nColLeft,
+    sal_Int32 nColRight,
+    sal_Int32 nRowTop,
+    sal_Int32 nRowBottom,
+    const Color* pForceColor)
+{
+    if(rStyle.IsUsed())
+    {
+        /// bottom-left and top-right Style Tables
+        rData.emplace_back(
+            rOrigin + rY,
+            rX - rY,
+            rStyle,
+            pForceColor);
+        drawinglayer::primitive2d::SdrFrameBorderData& rInstance(rData.back());
+
+        /// Fill bottom-left Style Table
+        const Style& rBLFromTop(rArray.GetCellStyleLeft(nColLeft, nRowBottom));
+        const Style& rBLFromBottom(rArray.GetCellStyleBottom(nColLeft, nRowBottom));
+
+        rInstance.addSdrConnectStyleData(true, rBLFromTop, -rY, true);
+        rInstance.addSdrConnectStyleData(true, rBLFromBottom, rX, false);
+
+        /// Fill top-right Style Table
+        const Style& rTRFromLeft(rArray.GetCellStyleTop(nColRight, nRowTop));
+        const Style& rTRFromBottom(rArray.GetCellStyleRight(nColRight, nRowTop));
+
+        rInstance.addSdrConnectStyleData(false, rTRFromLeft, -rX, true);
+        rInstance.addSdrConnectStyleData(false, rTRFromBottom, rY, false);
+    }
+}
+
 drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
     sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow,
     const Color* pForceColor ) const
@@ -1143,88 +1240,60 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                     }
                 }
 
-                // check for crossed lines, these need special treatment, especially
-                // for merged cells, see below
-                const Style& rTLBR(GetCellStyleTLBR(nCol, nRow));
-                const Style& rBLTR(GetCellStyleBLTR(nCol, nRow));
-
-                if(rTLBR.IsUsed() || rBLTR.IsUsed())
+                // tdf#126269 check for crossed lines, these need special treatment, especially
+                // for merged cells (see comments in task). Separate treatment of merged and
+                // non-merged cells to allow better handling of both types
+                if(rCell.IsMerged())
                 {
-                    bool bContinue(true);
+                    // first check if this merged cell was already handled. To do so,
+                    // calculate and use the index of the TopLeft cell
+                    sal_Int32 nColLeft(nCol);
+                    sal_Int32 nRowTop(nRow);
+                    sal_Int32 nColRight(nCol);
+                    sal_Int32 nRowBottom(nRow);
+                    GetMergedRange(nColLeft, nRowTop, nColRight, nRowBottom, nCol, nRow);
+                    const sal_Int32 nIndexOfMergedCell(mxImpl->GetIndex(nColLeft, nRowTop));
 
-                    if(rCell.IsMerged())
+                    if(aMergedCells.end() == aMergedCells.find(nIndexOfMergedCell))
                     {
-                        // first check if this merged cell was already handled. To do so,
-                        // calculate and use the index of the TopLeft cell
-                        const sal_Int32 _nMergedFirstCol(mxImpl->GetMergedFirstCol(nCol, nRow));
-                        const sal_Int32 _nMergedFirstRow(mxImpl->GetMergedFirstRow(nCol, nRow));
-                        const sal_Int32 nIndexOfMergedCell(mxImpl->GetIndex(_nMergedFirstCol, _nMergedFirstRow));
-                        bContinue = (aMergedCells.end() == aMergedCells.find(nIndexOfMergedCell));
+                        // not found, so not yet handled. Add now to mark as handled
+                        aMergedCells.insert(nIndexOfMergedCell);
 
-                        if(bContinue)
+                        // get and check if diagonal styles are used
+                        const Style& rTLBR(GetCellStyleTLBR(nColLeft, nRowTop));
+                        const Style& rBLTR(GetCellStyleBLTR(nColLeft, nRowTop));
+
+                        if(rTLBR.IsUsed() || rBLTR.IsUsed())
                         {
-                            // not found, add now to mark as handled
-                            aMergedCells.insert(nIndexOfMergedCell);
+                            // test for in ClipRange for BottomRight corner of merged cell
+                            if(mxImpl->OverlapsClipRange(nColLeft, nRowTop, nColRight, nRowBottom))
+                            {
+                                // when merged, get extended coordinate system and derived values
+                                // for the full range of this merged cell
+                                aCoordinateSystem = rCell.CreateCoordinateSystem(*this, nCol, nRow, true);
+                                aX = basegfx::utils::getColumn(aCoordinateSystem, 0);
+                                aY = basegfx::utils::getColumn(aCoordinateSystem, 1);
+                                aOrigin = basegfx::utils::getColumn(aCoordinateSystem, 2);
 
-                            // when merged, get extended coordinate system and derived values
-                            // for the full range of this merged cell
-                            aCoordinateSystem = rCell.CreateCoordinateSystem(*this, nCol, nRow, true);
-                            aX = basegfx::utils::getColumn(aCoordinateSystem, 0);
-                            aY = basegfx::utils::getColumn(aCoordinateSystem, 1);
-                            aOrigin = basegfx::utils::getColumn(aCoordinateSystem, 2);
+                                HelperCreateTLBREntry(*this, rTLBR, *aData, aOrigin, aX, aY, nColLeft, nRowTop, nColRight, nRowBottom, pForceColor);
+                                HelperCreateBLTREntry(*this, rBLTR, *aData, aOrigin, aX, aY, nColLeft, nRowTop, nColRight, nRowBottom, pForceColor);
+                            }
                         }
                     }
-
-                    if(bContinue)
+                }
+                else
+                {
+                    // must be in clipping range: else not visible
+                    if( mxImpl->IsInClipRange( nCol, nRow ) )
                     {
-                        if(rTLBR.IsUsed())
+                        // get and check if diagonal styles are used
+                        const Style& rTLBR(GetCellStyleTLBR(nCol, nRow));
+                        const Style& rBLTR(GetCellStyleBLTR(nCol, nRow));
+
+                        if(rTLBR.IsUsed() || rBLTR.IsUsed())
                         {
-                            /// top-left and bottom-right Style Tables
-                            aData->emplace_back(
-                                aOrigin,
-                                aX + aY,
-                                rTLBR,
-                                pForceColor);
-                            drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
-
-                            /// Fill top-left Style Table
-                            const Style& rTLFromRight(GetCellStyleTop(nCol, nRow));
-                            const Style& rTLFromBottom(GetCellStyleLeft(nCol, nRow));
-
-                            rInstance.addSdrConnectStyleData(true, rTLFromRight, aX, false);
-                            rInstance.addSdrConnectStyleData(true, rTLFromBottom, aY, false);
-
-                            /// Fill bottom-right Style Table
-                            const Style& rBRFromBottom(GetCellStyleRight(nCol, nRow));
-                            const Style& rBRFromLeft(GetCellStyleBottom(nCol, nRow));
-
-                            rInstance.addSdrConnectStyleData(false, rBRFromBottom, -aY, true);
-                            rInstance.addSdrConnectStyleData(false, rBRFromLeft, -aX, true);
-                        }
-
-                        if(rBLTR.IsUsed())
-                        {
-                            /// bottom-left and top-right Style Tables
-                            aData->emplace_back(
-                                aOrigin + aY,
-                                aX - aY,
-                                rBLTR,
-                                pForceColor);
-                            drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
-
-                            /// Fill bottom-left Style Table
-                            const Style& rBLFromTop(GetCellStyleLeft(nCol, nRow));
-                            const Style& rBLFromBottom(GetCellStyleBottom(nCol, nRow));
-
-                            rInstance.addSdrConnectStyleData(true, rBLFromTop, -aY, true);
-                            rInstance.addSdrConnectStyleData(true, rBLFromBottom, aX, false);
-
-                            /// Fill top-right Style Table
-                            const Style& rTRFromLeft(GetCellStyleTop(nCol, nRow));
-                            const Style& rTRFromBottom(GetCellStyleRight(nCol, nRow));
-
-                            rInstance.addSdrConnectStyleData(false, rTRFromLeft, -aX, true);
-                            rInstance.addSdrConnectStyleData(false, rTRFromBottom, aY, false);
+                            HelperCreateTLBREntry(*this, rTLBR, *aData, aOrigin, aX, aY, nCol, nRow, nCol, nRow, pForceColor);
+                            HelperCreateBLTREntry(*this, rBLTR, *aData, aOrigin, aX, aY, nCol, nRow, nCol, nRow, pForceColor);
                         }
                     }
                 }
