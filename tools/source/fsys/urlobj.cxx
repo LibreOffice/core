@@ -2880,7 +2880,10 @@ bool INetURLObject::parseHostOrNetBiosName(
                     }
                 }
                 if (pCanonic)
+                {
+                    pCanonic->setLength(nOriginalCanonicLength);
                     pCanonic->append(buf);
+                }
             }
             else
             {

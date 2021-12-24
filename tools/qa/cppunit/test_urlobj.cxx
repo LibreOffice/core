@@ -311,6 +311,14 @@ namespace tools_urlobj
                 obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         }
 
+        void testTd146382() {
+            INetURLObject obj("file://share.allotropia.de@SSL/DavWWWRoot/remote.php");
+            CPPUNIT_ASSERT(!obj.HasError());
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("file://share.allotropia.de@SSL/DavWWWRoot/remote.php"),
+                obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+        }
+
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
@@ -326,6 +334,7 @@ namespace tools_urlobj
         CPPUNIT_TEST( testSetName );
         CPPUNIT_TEST( testSetExtension );
         CPPUNIT_TEST( testChangeScheme );
+        CPPUNIT_TEST( testTd146382 );
         CPPUNIT_TEST_SUITE_END(  );
     };                          // class createPool
 
