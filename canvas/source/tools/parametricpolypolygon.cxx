@@ -147,7 +147,7 @@ namespace canvas
             colors, stops, fAspectRatio );
     }
 
-    void ParametricPolyPolygon::disposing()
+    void ParametricPolyPolygon::disposing(std::unique_lock<std::mutex>&)
     {
         mxDevice.clear();
     }

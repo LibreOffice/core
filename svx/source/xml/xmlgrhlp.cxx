@@ -947,7 +947,7 @@ public:
 protected:
     // is called from WeakComponentImplHelper when XComponent::dispose() was
     // called from outside
-    virtual void disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // ____ XInitialization ____
     // one argument is allowed, which is the XStorage
@@ -993,7 +993,7 @@ SvXMLGraphicImportExportHelper::SvXMLGraphicImportExportHelper( SvXMLGraphicHelp
         m_eGraphicHelperMode( eMode )
 {}
 
-void SvXMLGraphicImportExportHelper::disposing()
+void SvXMLGraphicImportExportHelper::disposing(std::unique_lock<std::mutex>&)
 {
     Reference< XComponent > xComp( m_xGraphicObjectResolver, UNO_QUERY );
     OSL_ASSERT( xComp.is());
