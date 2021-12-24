@@ -37,6 +37,10 @@
   * This file is largely copied from the ICU project,
   * under folder source/extra/scrptrun/scrptrun.cpp
   */
+
+#include <sal/config.h>
+
+#include <rtl/character.hxx>
 #include <unicode/utypes.h>
 #include <unicode/uscript.h>
 
@@ -160,14 +164,14 @@ UBool ScriptRun::next()
 
         // if the character is a high surrogate and it's not the last one
         // in the text, see if it's followed by a low surrogate
-        if (high >= 0xD800 && high <= 0xDBFF && scriptEnd < charLimit - 1)
+        if (rtl::isHighSurrogate(high) && scriptEnd < charLimit - 1)
         {
             UChar low = charArray[scriptEnd + 1];
 
             // if it is followed by a low surrogate,
             // consume it and form the full character
-            if (low >= 0xDC00 && low <= 0xDFFF) {
-                ch = (high - 0xD800) * 0x0400 + low - 0xDC00 + 0x10000;
+            if (rtl::isLowSurrogate(low)) {
+                ch = rtl::combineSurrogates(high, low);
                 scriptEnd += 1;
             }
         }

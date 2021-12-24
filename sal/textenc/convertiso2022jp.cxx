@@ -375,19 +375,19 @@ sal_Size ImplConvertUnicodeToIso2022Jp(void const * pData,
         sal_uInt32 nChar = *pSrcBuf++;
         if (nHighSurrogate == 0)
         {
-            if (ImplIsHighSurrogate(nChar))
+            if (rtl::isHighSurrogate(nChar))
             {
                 nHighSurrogate = static_cast<sal_Unicode>(nChar);
                 continue;
             }
-            else if (ImplIsLowSurrogate(nChar))
+            else if (rtl::isLowSurrogate(nChar))
             {
                 bUndefined = false;
                 goto bad_input;
             }
         }
-        else if (ImplIsLowSurrogate(nChar))
-            nChar = ImplCombineSurrogates(nHighSurrogate, nChar);
+        else if (rtl::isLowSurrogate(nChar))
+            nChar = rtl::combineSurrogates(nHighSurrogate, nChar);
         else
         {
             bUndefined = false;

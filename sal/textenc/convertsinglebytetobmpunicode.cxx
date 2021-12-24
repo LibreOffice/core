@@ -111,17 +111,17 @@ sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
         bool undefined = true;
         sal_uInt32 c = *srcBuf++;
         if (highSurrogate == 0) {
-            if (ImplIsHighSurrogate(c)) {
+            if (rtl::isHighSurrogate(c)) {
                 highSurrogate = static_cast< sal_Unicode >(c);
                 continue;
             }
-            else if (ImplIsLowSurrogate(c))
+            else if (rtl::isLowSurrogate(c))
             {
                 undefined = false;
                 goto bad_input;
             }
-        } else if (ImplIsLowSurrogate(c)) {
-            c = ImplCombineSurrogates(highSurrogate, c);
+        } else if (rtl::isLowSurrogate(c)) {
+            c = rtl::combineSurrogates(highSurrogate, c);
         } else {
             undefined = false;
             goto bad_input;
