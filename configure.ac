@@ -911,6 +911,7 @@ cygwin*|wsl*)
     using_freetype_fontconfig=no
     using_x11=no
     test_openldap=no
+    test_eot=no
     build_skia=yes
     _os=WINNT
 
@@ -929,6 +930,7 @@ darwin*|macos*) # macOS
     using_freetype_fontconfig=no
     using_x11=no
     build_skia=yes
+    test_eot=no
     if test -n "$LODE_HOME" ; then
         mac_sanitize_path
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
@@ -1708,11 +1710,6 @@ libo_FUZZ_ARG_ENABLE(gstreamer-1-0,
     AS_HELP_STRING([--disable-gstreamer-1-0],
         [Disable building with the gstreamer 1.0 avmedia backend.]),
 ,test "${enable_gstreamer_1_0+set}" = set || enable_gstreamer_1_0=yes)
-
-libo_FUZZ_ARG_ENABLE([eot],
-    [AS_HELP_STRING([--enable-eot],
-        [Enable support for Embedded OpenType fonts.])],
-,test "${enable_eot+set}" = set || enable_eot=no)
 
 libo_FUZZ_ARG_ENABLE(cve-tests,
     AS_HELP_STRING([--disable-cve-tests],
@@ -9360,18 +9357,7 @@ dnl Check for system xmlsec
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([xmlsec], [XMLSEC], [xmlsec1-nss >= 1.2.28])
 
-AC_MSG_CHECKING([whether to enable Embedded OpenType support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_eot" = "yes"; then
-    ENABLE_EOT="TRUE"
-    AC_DEFINE([ENABLE_EOT])
-    AC_MSG_RESULT([yes])
-
-    libo_CHECK_SYSTEM_MODULE([libeot],[LIBEOT],[libeot >= 0.01])
-else
-    ENABLE_EOT=
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST([ENABLE_EOT])
+libo_CHECK_SYSTEM_MODULE([eot],[EOT],[libeot >= 0.01],disabled)
 
 dnl ===================================================================
 dnl Check for DLP libs
