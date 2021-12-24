@@ -24,7 +24,7 @@
 #include <svx/IAccessibleParent.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <editeng/AccessibleContextBase.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <tools/gen.hxx>
 #include <vector>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -72,8 +72,7 @@ typedef ::std::vector<ChildDescriptor> ChildDescriptorListType;
     @see ChildrenManager
 */
 class ChildrenManagerImpl final
-    :   public cppu::BaseMutex,
-        public cppu::WeakComponentImplHelper<
+    :   public comphelper::WeakComponentImplHelper<
             css::document::XEventListener,
             css::view::XSelectionChangeListener>,
         public IAccessibleViewForwarderListener,
@@ -316,7 +315,7 @@ private:
     /** This method is called from the component helper base class while
         disposing.
     */
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     void impl_dispose();
 
