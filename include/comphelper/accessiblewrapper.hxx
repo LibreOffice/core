@@ -316,7 +316,7 @@ namespace comphelper
 
 
     typedef ::std::map  <   css::uno::Reference< css::accessibility::XAccessible >
-                        ,   css::uno::Reference< css::accessibility::XAccessible >
+                        ,   rtl::Reference< comphelper::OAccessibleWrapper >
                         >   AccessibleMap;
                         // TODO: think about if we should hold these objects weak
 
