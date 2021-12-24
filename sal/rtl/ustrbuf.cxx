@@ -174,17 +174,7 @@ void rtl_uStringbuffer_insertUtf32(
     SAL_THROW_EXTERN_C()
 {
     sal_Unicode buf[2];
-    sal_Int32 len;
-    OSL_ASSERT(rtl::isUnicodeScalarValue(c));
-    if (c <= 0xFFFF) {
-        buf[0] = static_cast<sal_Unicode>(c);
-        len = 1;
-    } else {
-        c -= 0x10000;
-        buf[0] = static_cast<sal_Unicode>((c >> 10) | 0xD800);
-        buf[1] = static_cast<sal_Unicode>((c & 0x3FF) | 0xDC00);
-        len = 2;
-    }
+    sal_Int32 len = rtl::splitSurrogates(c, buf);
     rtl_uStringbuffer_insert(pThis, capacity, offset, buf, len);
 }
 
