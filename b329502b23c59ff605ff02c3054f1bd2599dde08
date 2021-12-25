@@ -34,6 +34,24 @@
       "parentUuid": "e8de9a24_afb3b3c3",
       "revId": "b329502b23c59ff605ff02c3054f1bd2599dde08",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fff1d22c_bb124d70",
+        "filename": "vcl/source/outdev/gradient.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-12-25T18:27:29Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "7a57ed3f_3595ff46",
+      "revId": "b329502b23c59ff605ff02c3054f1bd2599dde08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

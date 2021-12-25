@@ -16,6 +16,23 @@
       "message": "Hi Tomaz, turns out we were adding too many actions into the SVM!",
       "revId": "1628ce05b060ede8270d6d1d60b156209811645f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fa8e9e7_8528b377",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-12-25T18:27:29Z",
+      "side": 1,
+      "message": "DrawGradient() calls upon DrawGradientToMetaFile(). After this DrawGradient() does the actual drawing. ",
+      "revId": "1628ce05b060ede8270d6d1d60b156209811645f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
