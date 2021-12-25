@@ -16,7 +16,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/uri.hxx>
@@ -36,14 +36,13 @@
 namespace {
 
 class Provider final:
-    private osl::Mutex,
-    public cppu::WeakComponentImplHelper<
+    public comphelper::WeakComponentImplHelper<
         css::lang::XServiceInfo, css::ucb::XContentProvider>
 {
 public:
     explicit Provider(
         css::uno::Reference<css::uno::XComponentContext> const & context):
-        WeakComponentImplHelper(*static_cast<Mutex *>(this)), context_(context)
+        context_(context)
     {}
 
 private:
@@ -65,7 +64,7 @@ private:
     {
         css::uno::Reference<css::uno::XComponentContext> context;
         {
-            osl::MutexGuard g(*this);
+            std::unique_lock g(m_aMutex);
             context = context_;
         }
         if (!context.is()) {
@@ -146,7 +145,7 @@ private:
             Id2->getContentIdentifier());
     }
 
-    void SAL_CALL disposing() override {
+    void disposing(std::unique_lock<std::mutex>&) override {
         context_.clear();
     }
 
