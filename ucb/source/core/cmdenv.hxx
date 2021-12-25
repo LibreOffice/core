@@ -19,8 +19,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -30,11 +29,11 @@
 
 namespace ucb_cmdenv {
 
-using UcbCommandEnvironment_Base = cppu::WeakComponentImplHelper< css::lang::XInitialization,
+using UcbCommandEnvironment_Base = comphelper::WeakComponentImplHelper< css::lang::XInitialization,
                                       css::lang::XServiceInfo,
                                       css::ucb::XCommandEnvironment >;
 
-class UcbCommandEnvironment : public cppu::BaseMutex, public UcbCommandEnvironment_Base
+class UcbCommandEnvironment : public UcbCommandEnvironment_Base
 {
     css::uno::Reference< css::task::XInteractionHandler > m_xIH;
     css::uno::Reference< css::ucb::XProgressHandler >     m_xPH;

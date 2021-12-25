@@ -36,7 +36,7 @@ using namespace ucb_cmdenv;
 // UcbCommandEnvironment Implementation.
 
 
-UcbCommandEnvironment::UcbCommandEnvironment() : UcbCommandEnvironment_Base(m_aMutex)
+UcbCommandEnvironment::UcbCommandEnvironment()
 {
 }
 
