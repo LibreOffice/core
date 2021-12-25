@@ -52,51 +52,6 @@
 #include <tabbgcolordlg.hxx>
 #include <textimportoptions.hxx>
 
-#define DECL_ABSTDLG_BASE(Class,DialogClass)        \
-    ScopedVclPtr<DialogClass> pDlg;                 \
-public:                                             \
-    explicit        Class( DialogClass* p)          \
-                     : pDlg(p)                      \
-                     {}                             \
-    virtual         ~Class() override;                       \
-    virtual short   Execute() override ;            \
-    virtual bool    StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override; \
-    std::vector<OString> getAllPageUIXMLDescriptions() const override; \
-    bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
-    virtual BitmapEx createScreenshot() const override; \
-    virtual OString GetScreenshotId() const override; \
-
-#define IMPL_ABSTDLG_BASE(Class)                    \
-Class::~Class()                                     \
-{                                                   \
-}                                                   \
-short Class::Execute()                              \
-{                                                   \
-    return pDlg->Execute();                         \
-}                                                   \
-bool Class::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)\
-{ \
-    return pDlg->StartExecuteAsync( rCtx ); \
-} \
-std::vector<OString> Class::getAllPageUIXMLDescriptions() const \
-{                                                   \
-    return pDlg->getAllPageUIXMLDescriptions();     \
-}                                                   \
-bool Class::selectPageByUIXMLDescription(const OString& rUIXMLDescription) \
-{                                                   \
-   return pDlg->selectPageByUIXMLDescription(rUIXMLDescription);  \
-}                                                   \
-BitmapEx Class::createScreenshot() const            \
-{                                                   \
-    VclPtr<VirtualDevice> xDialogSurface(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT)); \
-    pDlg->createScreenshot(*xDialogSurface);        \
-    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel()); \
-}                                                   \
-OString Class::GetScreenshotId() const              \
-{                                                   \
-    return pDlg->GetScreenshotId();                 \
-}
-
 class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg
 {
     std::shared_ptr<ScImportAsciiDlg> m_xDlg;
