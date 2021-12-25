@@ -15,6 +15,7 @@ $(eval $(call gb_Library_set_componentfile,ucpexpand1,ucb/source/ucp/expand/ucpe
 $(eval $(call gb_Library_use_sdk_api,ucpexpand1))
 
 $(eval $(call gb_Library_use_libraries,ucpexpand1,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
