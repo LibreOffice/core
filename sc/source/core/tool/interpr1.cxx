@@ -1342,7 +1342,7 @@ void ScInterpreter::ScAnd()
                 }
                 break;
                 default:
-                    Pop();
+                    PopError();
                     SetError( FormulaError::IllegalParameter);
             }
         }
@@ -1441,7 +1441,7 @@ void ScInterpreter::ScOr()
                 }
                 break;
                 default:
-                    Pop();
+                    PopError();
                     SetError( FormulaError::IllegalParameter);
             }
         }
@@ -1543,7 +1543,7 @@ void ScInterpreter::ScXor()
                 }
                 break;
                 default:
-                    Pop();
+                    PopError();
                     SetError( FormulaError::IllegalParameter);
             }
         }
