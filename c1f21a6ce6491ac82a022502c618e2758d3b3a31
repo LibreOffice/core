@@ -16,6 +16,24 @@
       "message": "I\u0027d say, simple\n\n    bool m_bDisposed \u003d false;\n\nwould not require a functional ctor call.",
       "revId": "c1f21a6ce6491ac82a022502c618e2758d3b3a31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e95ccc45_6f5ea507",
+        "filename": "include/comphelper/compbase.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-25T11:38:47Z",
+      "side": 1,
+      "message": "Feel free to change that. I just hope the patch fixes the crashing TBs.",
+      "parentUuid": "2c5e620e_451cdc2e",
+      "revId": "c1f21a6ce6491ac82a022502c618e2758d3b3a31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
