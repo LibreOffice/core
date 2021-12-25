@@ -95,12 +95,6 @@ public:
         {}
     /// @endcond
 
-#ifdef _MSC_VER
-    /** Default Constructor.  Sets the reference count to zero.
-        Accidentally occurs in msvc mapfile = > had to be outlined.
-    */
-    OWeakObject();
-#else
     /** Default Constructor.  Sets the reference count to zero.
     */
     OWeakObject()
@@ -108,7 +102,7 @@ public:
         , m_pWeakConnectionPoint( NULL )
         , m_pReserved(NULL)
         {}
-#endif
+
     /** Dummy copy constructor.  Set the reference count to zero.
     */
     OWeakObject( const OWeakObject & )
