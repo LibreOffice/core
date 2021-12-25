@@ -28,8 +28,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
-#include <osl/mutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <tools/link.hxx>
 #include <memory>
 
@@ -45,7 +44,7 @@ namespace sfx2
     class FileDialogHelper;
 }
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::lang::XInitialization,
     css::frame::XTerminateListener,
     css::lang::XServiceInfo,
@@ -62,7 +61,6 @@ typedef ::cppu::WeakComponentImplHelper<
 
 class ShutdownIcon : public ShutdownIconServiceBase
 {
-        ::osl::Mutex            m_aMutex;
         bool                    m_bVeto;
         bool                    m_bListenForTermination;
         bool                    m_bSystemDialogs;
@@ -120,7 +118,7 @@ class ShutdownIcon : public ShutdownIconServiceBase
         static bool IsQuickstarterInstalled();
 
         // Component Helper - force override
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing(std::unique_lock<std::mutex>&) override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

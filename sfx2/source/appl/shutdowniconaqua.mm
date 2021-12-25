@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.h>
+#include <osl/diagnose.h>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/app.hxx>
 #include <sal/macros.h>
