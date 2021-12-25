@@ -11,6 +11,11 @@
 
 namespace comphelper
 {
+WeakComponentImplHelperBase::WeakComponentImplHelperBase()
+    : m_bDisposed(false)
+{
+}
+
 WeakComponentImplHelperBase::~WeakComponentImplHelperBase() {}
 
 // css::lang::XComponent
