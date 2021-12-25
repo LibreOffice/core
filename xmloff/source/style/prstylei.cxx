@@ -624,10 +624,10 @@ void XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToSt
     if(!rMapper.is())
         return;
 
-    static OUString s_FillGradientName("FillGradientName");
-    static OUString s_FillHatchName("FillHatchName");
-    static OUString s_FillBitmapName("FillBitmapName");
-    static OUString s_FillTransparenceGradientName("FillTransparenceGradientName");
+    static constexpr OUStringLiteral s_FillGradientName(u"FillGradientName");
+    static constexpr OUStringLiteral s_FillHatchName(u"FillHatchName");
+    static constexpr OUStringLiteral s_FillBitmapName(u"FillBitmapName");
+    static constexpr OUStringLiteral s_FillTransparenceGradientName(u"FillTransparenceGradientName");
 
     for(auto& a : maProperties)
     {
