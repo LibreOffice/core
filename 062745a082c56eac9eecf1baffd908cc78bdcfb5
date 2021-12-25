@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a87a7eb_d7e2f73d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-25T09:25:59Z",
+      "side": 1,
+      "message": "After amending a patch, one should cherry-pick the new commit…",
+      "revId": "062745a082c56eac9eecf1baffd908cc78bdcfb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
