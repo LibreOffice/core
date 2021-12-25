@@ -984,9 +984,7 @@ protected:
 
 private:
     SvXMLGraphicHelperMode              m_eGraphicHelperMode;
-    Reference< XGraphicObjectResolver > m_xGraphicObjectResolver;
-    Reference< XGraphicStorageHandler > m_xGraphicStorageHandler;
-    Reference< XBinaryStreamResolver >  m_xBinaryStreamResolver;
+    rtl::Reference<SvXMLGraphicHelper>  m_xXMLGraphicHelper;
 };
 
 SvXMLGraphicImportExportHelper::SvXMLGraphicImportExportHelper( SvXMLGraphicHelperMode eMode ) :
@@ -995,12 +993,11 @@ SvXMLGraphicImportExportHelper::SvXMLGraphicImportExportHelper( SvXMLGraphicHelp
 
 void SvXMLGraphicImportExportHelper::disposing(std::unique_lock<std::mutex>&)
 {
-    Reference< XComponent > xComp( m_xGraphicObjectResolver, UNO_QUERY );
-    OSL_ASSERT( xComp.is());
-    if( xComp.is())
-        xComp->dispose();
-    // m_xBinaryStreamResolver and m_xGraphicStorageHandler are a reference to the same object,
-    // don't call dispose() again
+    if (m_xXMLGraphicHelper)
+    {
+        m_xXMLGraphicHelper->dispose();
+        m_xXMLGraphicHelper.clear();
+    }
 }
 
 // ____ XInitialization ____
@@ -1011,57 +1008,54 @@ void SAL_CALL SvXMLGraphicImportExportHelper::initialize(
     if( aArguments.hasElements() )
         aArguments[0] >>= xStorage;
 
-    rtl::Reference<SvXMLGraphicHelper> pHelper( SvXMLGraphicHelper::Create( xStorage, m_eGraphicHelperMode ));
-    m_xGraphicObjectResolver = pHelper;
-    m_xGraphicStorageHandler = pHelper;
-    m_xBinaryStreamResolver = pHelper;
+    m_xXMLGraphicHelper = SvXMLGraphicHelper::Create( xStorage, m_eGraphicHelperMode );
 }
 
 // ____ XGraphicObjectResolver ____
 OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveGraphicObjectURL( const OUString& aURL )
 {
-    return m_xGraphicObjectResolver->resolveGraphicObjectURL( aURL );
+    return m_xXMLGraphicHelper->resolveGraphicObjectURL( aURL );
 }
 
 // ____ XGraphicStorageHandler ____
 uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicImportExportHelper::loadGraphic(OUString const & rURL)
 {
-    return m_xGraphicStorageHandler->loadGraphic(rURL);
+    return m_xXMLGraphicHelper->loadGraphic(rURL);
 }
 
 uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicImportExportHelper::loadGraphicFromOutputStream(uno::Reference<io::XOutputStream> const & rxOutputStream)
 {
-    return m_xGraphicStorageHandler->loadGraphicFromOutputStream(rxOutputStream);
+    return m_xXMLGraphicHelper->loadGraphicFromOutputStream(rxOutputStream);
 }
 
 OUString SAL_CALL SvXMLGraphicImportExportHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
 {
-    return m_xGraphicStorageHandler->saveGraphic(rxGraphic);
+    return m_xXMLGraphicHelper->saveGraphic(rxGraphic);
 }
 
 OUString SAL_CALL SvXMLGraphicImportExportHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                                                     OUString & rOutSavedMimeType, OUString const & rRequestName)
 {
-    return m_xGraphicStorageHandler->saveGraphicByName(rxGraphic, rOutSavedMimeType, rRequestName);
+    return m_xXMLGraphicHelper->saveGraphicByName(rxGraphic, rOutSavedMimeType, rRequestName);
 }
 
 uno::Reference<io::XInputStream> SAL_CALL SvXMLGraphicImportExportHelper::createInputStream(uno::Reference<graphic::XGraphic> const & rxGraphic)
 {
-    return m_xGraphicStorageHandler->createInputStream(rxGraphic);
+    return m_xXMLGraphicHelper->createInputStream(rxGraphic);
 }
 
 // ____ XBinaryStreamResolver ____
 Reference< io::XInputStream > SAL_CALL SvXMLGraphicImportExportHelper::getInputStream( const OUString& aURL )
 {
-    return m_xBinaryStreamResolver->getInputStream( aURL );
+    return m_xXMLGraphicHelper->getInputStream( aURL );
 }
 Reference< io::XOutputStream > SAL_CALL SvXMLGraphicImportExportHelper::createOutputStream()
 {
-    return m_xBinaryStreamResolver->createOutputStream();
+    return m_xXMLGraphicHelper->createOutputStream();
 }
 OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveOutputStream( const Reference< io::XOutputStream >& aBinaryStream )
 {
-    return m_xBinaryStreamResolver->resolveOutputStream( aBinaryStream );
+    return m_xXMLGraphicHelper->resolveOutputStream( aBinaryStream );
 }
 
 // ____ XServiceInfo ____
