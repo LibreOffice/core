@@ -47,7 +47,7 @@ public:
 protected:
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maEventListeners;
     mutable std::mutex m_aMutex;
-    bool m_bDisposed;
+    bool m_bDisposed = false;
 };
 
 template <typename... Ifc>
