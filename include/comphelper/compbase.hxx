@@ -31,7 +31,6 @@ class COMPHELPER_DLLPUBLIC WeakComponentImplHelperBase : public cppu::OWeakObjec
                                                          public css::lang::XComponent
 {
 public:
-    WeakComponentImplHelperBase();
     virtual ~WeakComponentImplHelperBase() override;
 
     // css::lang::XComponent
