@@ -42,6 +42,11 @@ fuzzer_externals = \
     hunspell \
     zlib \
 
+fuzzer_statics = \
+     findsofficepath \
+     fuzzerstubs \
+     ulingu \
+
 fuzzer_core_libraries = \
     avmedia \
     basegfx \

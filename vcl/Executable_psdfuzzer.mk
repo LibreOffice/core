@@ -31,9 +31,7 @@ $(eval $(call gb_Executable_use_libraries,psdfuzzer,\
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,psdfuzzer,\
-    findsofficepath \
-    ulingu \
-    fuzzerstubs \
+    $(fuzzer_statics) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,psdfuzzer,\

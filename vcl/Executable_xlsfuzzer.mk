@@ -33,10 +33,8 @@ $(eval $(call gb_Executable_use_libraries,xlsfuzzer,\
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,xlsfuzzer,\
-    findsofficepath \
-    ulingu \
+    $(fuzzer_statics) \
     fuzzer_calc \
-    fuzzerstubs \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,xlsfuzzer,\
