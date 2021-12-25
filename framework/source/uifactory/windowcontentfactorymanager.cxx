@@ -31,8 +31,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
@@ -42,12 +41,11 @@ using namespace framework;
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::lang::XServiceInfo,
     css::lang::XSingleComponentFactory > WindowContentFactoryManager_BASE;
 
-class WindowContentFactoryManager : private cppu::BaseMutex,
-                                    public WindowContentFactoryManager_BASE
+class WindowContentFactoryManager : public WindowContentFactoryManager_BASE
 {
 public:
     explicit WindowContentFactoryManager( const css::uno::Reference< css::uno::XComponentContext>& rxContext );
@@ -72,7 +70,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const css::uno::Sequence< css::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
 
 private:
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     css::uno::Reference< css::uno::XComponentContext >     m_xContext;
     bool                                               m_bConfigRead;
@@ -80,7 +78,6 @@ private:
 };
 
 WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< uno::XComponentContext >& rxContext ) :
-    WindowContentFactoryManager_BASE(m_aMutex),
     m_xContext( rxContext ),
     m_bConfigRead( false ),
     m_pConfigAccess(
@@ -89,7 +86,7 @@ WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< 
             "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories"))
 {}
 
-void SAL_CALL WindowContentFactoryManager::disposing()
+void WindowContentFactoryManager::disposing(std::unique_lock<std::mutex>&)
 {
     m_pConfigAccess.clear();
 }
@@ -147,17 +144,17 @@ uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createIn
         // Determine the implementation name of the window content factory dependent on the
         // module identifier, user interface element type and name
         { // SAFE
-        osl::MutexGuard g(rBHelper.rMutex);
-        if (rBHelper.bDisposed) {
-            throw css::lang::DisposedException(
-                "disposed", static_cast<OWeakObject *>(this));
-        }
-        if ( !m_bConfigRead )
-        {
-            m_bConfigRead = true;
-            m_pConfigAccess->readConfigurationData();
-        }
-        aImplementationName = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
+            std::unique_lock g(m_aMutex);
+            if (m_bDisposed) {
+                throw css::lang::DisposedException(
+                    "disposed", static_cast<OWeakObject *>(this));
+            }
+            if ( !m_bConfigRead )
+            {
+                m_bConfigRead = true;
+                m_pConfigAccess->readConfigurationData();
+            }
+            aImplementationName = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
         } // SAFE
 
         if ( !aImplementationName.isEmpty() )
