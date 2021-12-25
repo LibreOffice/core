@@ -1769,15 +1769,16 @@ void SdOOXMLExportTest3::testTdf96061_textHighlight()
     uno::Reference<text::XTextRange> const xParagraph1(getParagraphFromShape(0, xShape));
     uno::Reference<text::XTextRange> xRun1(getRunFromParagraph(0, xParagraph1));
     uno::Reference<beans::XPropertySet> xPropSet1(xRun1, uno::UNO_QUERY_THROW);
-    sal_Int32 aColor;
+
+    Color aColor;
     xPropSet1->getPropertyValue("CharBackColor") >>= aColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(16776960), aColor);
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aColor);
 
     uno::Reference<text::XTextRange> const xParagraph2(getParagraphFromShape(1, xShape));
     uno::Reference<text::XTextRange> xRun2(getRunFromParagraph(0, xParagraph2));
     uno::Reference<beans::XPropertySet> xPropSet2(xRun2, uno::UNO_QUERY_THROW);
     xPropSet2->getPropertyValue("CharBackColor") >>= aColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aColor);
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, aColor);
 
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
 
@@ -1786,13 +1787,13 @@ void SdOOXMLExportTest3::testTdf96061_textHighlight()
     uno::Reference<text::XTextRange> xRun3(getRunFromParagraph(0, xParagraph3));
     uno::Reference<beans::XPropertySet> xPropSet3(xRun3, uno::UNO_QUERY_THROW);
     xPropSet3->getPropertyValue("CharBackColor") >>= aColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(16776960), aColor);
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aColor);
 
     uno::Reference<text::XTextRange> const xParagraph4(getParagraphFromShape(1, xShape2));
     uno::Reference<text::XTextRange> xRun4(getRunFromParagraph(0, xParagraph4));
     uno::Reference<beans::XPropertySet> xPropSet4(xRun4, uno::UNO_QUERY_THROW);
     xPropSet4->getPropertyValue("CharBackColor") >>= aColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aColor);
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, aColor);
 }
 
 void SdOOXMLExportTest3::testTdf143222_embeddedWorksheet()
