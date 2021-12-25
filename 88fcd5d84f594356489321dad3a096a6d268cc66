@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2f3b893_2a9fbbca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2021-12-25T09:41:11Z",
+      "side": 1,
+      "message": "probably since about these welding\n\nhttps://opengrok.libreoffice.org/diff/core/sc/source/ui/attrdlg/scdlgfact.hxx?r1\u003d%2Fcore%2Fsc%2Fsource%2Fui%2Fattrdlg%2Fscdlgfact.hxx%40dc78b82d\u0026r2\u003d%2Fcore%2Fsc%2Fsource%2Fui%2Fattrdlg%2Fscdlgfact.hxx%401e97ca02\n\n",
+      "revId": "88fcd5d84f594356489321dad3a096a6d268cc66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
