@@ -125,12 +125,13 @@ define gb_LinkTarget__command_dynamiclink
 $(if $(call gb_LinkTarget__WantLock,$2),$(gb_LinkTarget__cmd_lockfile) -r -1 $(gb_LinkTarget__Lock))
 $(call gb_Helper_abbreviate_dirs,\
 	$(if $(call gb_LinkTarget__NeedsCxxLinker),$(or $(T_CXX),$(gb_CXX)) $(gb_CXX_LINKFLAGS),$(or $(T_CC),$(gb_CC))) \
+		$(USELD_CPPFLAGS) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(T_LTOFLAGS) \
 		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)--soname=$(notdir $(1)) \
 			-Wl$(COMMA)--version-script=$(SOVERSIONSCRIPT)) \
 		$(subst \d,$$,$(RPATH)) \
-		$(T_USE_LD) $(T_LDFLAGS) \
+		$(USELD_LDFLAGS) $(T_LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \

@@ -86,9 +86,10 @@ endef
 define gb_LinkTarget__command_dynamiclink
 	$(if $(filter Library CppunitTest,$(TARGETTYPE)),@echo No dynamic libraries should be built for iOS && exit 1, \
 	$(if $(CXXOBJECTS)$(OBJCXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
+		$(USELD_CPPFLAGS) \
 		$(gb_Executable_TARGETTYPEFLAGS) \
 		$(subst \d,$$,$(RPATH)) \
-		$(T_USE_LD) $(T_LDFLAGS) \
+		$(USELD_LDFLAGS) $(T_LDFLAGS) \
 		-dead_strip \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
