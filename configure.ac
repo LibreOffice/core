@@ -2133,11 +2133,6 @@ AC_ARG_WITH(system-jpeg,
         [Use jpeg already on system.]),,
     [with_system_jpeg="$with_system_libs"])
 
-AC_ARG_WITH(system-clucene,
-    AS_HELP_STRING([--with-system-clucene],
-        [Use clucene already on system.]),,
-    [with_system_clucene="$with_system_libs"])
-
 AC_ARG_WITH(system-expat,
     AS_HELP_STRING([--with-system-expat],
         [Use expat already on system.]),,
@@ -9309,18 +9304,8 @@ AC_SUBST(SYSTEM_LIBJPEG)
 dnl ===================================================================
 dnl Check for system clucene
 dnl ===================================================================
-dnl we should rather be using
-dnl libo_CHECK_SYSTEM_MODULE([clucence],[CLUCENE],[liblucence-core]) here
-dnl but the contribs-lib check seems tricky
-AC_MSG_CHECKING([which clucene to use])
-if test "$test_clucene" = yes; then
-if test "$with_system_clucene" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_CLUCENE=TRUE
-    PKG_CHECK_MODULES(CLUCENE, libclucene-core)
-    CLUCENE_CFLAGS=[$(printf '%s' "$CLUCENE_CFLAGS" | sed -e 's@-I[^ ]*/CLucene/ext@@' -e "s/-I/${ISYSTEM?}/g")]
-    FilterLibs "${CLUCENE_LIBS}"
-    CLUCENE_LIBS="${filteredlibs}"
+libo_CHECK_SYSTEM_MODULE([clucene],[CLUCENE],[liblucence-core])
+if test "$SYSTEM_CLUCENE" = TRUE; then
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     save_CPPFLAGS=$CPPFLAGS
@@ -9333,19 +9318,8 @@ if test "$with_system_clucene" = "yes"; then
     CXXFLAGS=$save_CXXFLAGS
     CPPFLAGS=$save_CPPFLAGS
     AC_LANG_POP([C++])
-
     CLUCENE_LIBS="$CLUCENE_LIBS -lclucene-contribs-lib"
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_CLUCENE=
-    BUILD_TYPE="$BUILD_TYPE CLUCENE"
 fi
-else
-    AC_MSG_RESULT([not needed])
-fi
-AC_SUBST(SYSTEM_CLUCENE)
-AC_SUBST(CLUCENE_CFLAGS)
-AC_SUBST(CLUCENE_LIBS)
 
 dnl ===================================================================
 dnl Check for system expat
