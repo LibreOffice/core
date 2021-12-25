@@ -47,7 +47,8 @@ ifeq ($(OS),ANDROID)
 liborcus_LIBS+=$(gb_STDLIBS)
 endif
 
-liborcus_CPPCLAGS=$(CPPFLAGS)
+liborcus_CPPFLAGS = $(CPPFLAGS) $(USELD_CPPFLAGS)
+
 ifeq ($(SYSTEM_ZLIB),)
 liborcus_CPPFLAGS+=$(ZLIB_CFLAGS)
 endif
@@ -61,7 +62,8 @@ endif
 liborcus_CPPFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 
 liborcus_CXXFLAGS=$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX) $(CXXFLAGS_CXX11) -DBOOST_SYSTEM_NO_DEPRECATED
-liborcus_LDFLAGS=$(LDFLAGS) $(gb_LTOFLAGS)
+liborcus_LDFLAGS = $(LDFLAGS) $(gb_LTOFLAGS) $(USELD_LDFLAGS)
+
 ifeq ($(COM),MSC)
 liborcus_CXXFLAGS+=$(BOOST_CXXFLAGS)
 endif
@@ -81,9 +83,6 @@ endif
 ifeq ($(ENABLE_GDB_INDEX),TRUE)
 liborcus_LDFLAGS+=-Wl,--gdb-index
 liborcus_CXXFLAGS+=-ggnu-pubnames
-ifneq ($(USE_LD),)
-liborcus_LDFLAGS += $(USE_LD)
-endif
 endif
 
 $(call gb_ExternalProject_get_state_target,liborcus,build) :

@@ -59,6 +59,8 @@
 /bin/bffvalidator.sh
 /bin/odfvalidator.sh
 /bin/officeotron.sh
+/gcc_linker/
+/gcc_linker_for_build/
 /hardened_runtime.xcent
 /vs-code.code-workspace.template
 /Makefile

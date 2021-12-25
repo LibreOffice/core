@@ -1007,7 +1007,6 @@ $(call gb_LinkTarget_get_target,$(1)) : T_SYMBOLS := $(if $(call gb_LinkTarget__
 $(call gb_LinkTarget_get_target,$(1)) : T_FORCE_COMPILE := $(if $(call gb_LinkTarget__force_compile,$(2)),$(true),$(false))
 $(call gb_LinkTarget_get_target,$(1)) : T_CC :=
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX :=
-$(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(USE_LD)
 $(call gb_LinkTarget_get_target,$(1)) : T_LTOFLAGS := $(gb_LTOFLAGS)
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -2085,7 +2084,6 @@ endef
 define gb_LinkTarget_use_clang
 $(call gb_LinkTarget_get_target,$(1)) : T_CC := $(LO_CLANG_CC)
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX := $(LO_CLANG_CXX)
-$(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(or $(CLANG_USE_LD),$(USE_LD))
 $(call gb_LinkTarget_get_target,$(1)) : T_LTOFLAGS := $(or $(gb_CLANG_LTOFLAGS),$(gb_LTOFLAGS))
 endef
 

@@ -1754,7 +1754,8 @@ AC_ARG_ENABLE(ld,
          By default tries to use the best linker possible, use --disable-ld to use the default linker.
          If <linker> contains any ':', the part before the first ':' is used as the value of
          -fuse-ld, while the part after the first ':' is used as the value of --ld-path (which is
-         needed for Clang 12).]),
+         needed for Clang 12). For gcc the ':' results in a symlinked ld in /gcc_linker/ + the -B<path>
+         option. Currently the mold linker should be mapped to lld for best compatibility.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(cups,
@@ -4491,39 +4492,55 @@ dnl All checks for linker features/options should come after this.
 dnl ===================================================================
 check_use_ld()
 {
-    use_ld=-fuse-ld=${1%%:*}
-    use_ld_path=${1#*:}
-    if test "$use_ld_path" != "$1"; then
-        use_ld="$use_ld --ld-path=$use_ld_path"
+    useld_type=${1%%:*}
+    useld_ldflags=-fuse-ld=${ld_type}
+    useld_path=${1#*:}
+    if test "$useld_path" != "$1"; then
+        if test "$COM_IS_CLANG" = TRUE; then
+            useld_ldflags="$useld_ldflags --ld-path=$useld_path"
+        else
+            GCC_BINDIR="${BUILDDIR}/gcc_linker"
+            mkdir -p "${GCC_BINDIR}"
+            rm -f "${GCC_BINDIR}"/ld.*
+            ln -sf "$useld_path" "${GCC_BINDIR}/ld.${useld_type}"
+            useld_cppflags="-B${GCC_BINDIR}"
+            # hack for automake / libtool, which filters -B from LDFLAGS,
+            # so we carry the -Bypath> twice.
+            useld_ldflags="${useld_cppflags} -fuse-ld=${useld_type}"
+        fi
     fi
-    use_ld_fail_if_error=$2
-    use_ld_ok=
-    AC_MSG_CHECKING([for $use_ld linker support])
-    use_ld_ldflags_save="$LDFLAGS"
-    LDFLAGS="$LDFLAGS $use_ld"
+    useld_fail_if_error=$2
+    useld_link_ok=
+    AC_MSG_CHECKING([for ${useld_cppflags} ${useld_ldflags} linker support])
+    CPPFLAGS_useld_save="$CPPFLAGS"
+    LDFLAGS_useld_save="$LDFLAGS"
+    CPPFLAGS="$CPPFLAGS $useld_cppflags"
+    LDFLAGS="$LDFLAGS $useld_ldflags"
     AC_LINK_IFELSE([AC_LANG_PROGRAM([
 #include <stdio.h>
         ],[
 printf ("hello world\n");
-        ])], USE_LD=$use_ld, [])
-    if test -n "$USE_LD"; then
+        ])], [ useld_link_ok=yes ], [])
+    if test "$useld_link_ok" = yes; then
         AC_MSG_RESULT( yes )
-        use_ld_ok=yes
+        USELD_CPPFLAGS="$useld_cppflags"
+        USELD_LDFLAGS="$useld_ldflags"
     else
-        if test -n "$use_ld_fail_if_error"; then
+        if test -n "$useld_fail_if_error"; then
             AC_MSG_ERROR( no )
         else
             AC_MSG_RESULT( no )
         fi
     fi
-    if test -n "$use_ld_ok"; then
+    if test "$useld_link_ok" = yes; then
         dnl keep the value of LDFLAGS
         return 0
     fi
-    LDFLAGS="$use_ld_ldflags_save"
+    LDFLAGS="$LDFLAGS_useld_save"
+    CPPFLAGS="$CPPFLAGS_useld_save"
     return 1
 }
-USE_LD=
+
 if test "$enable_ld" != "no"; then
     if test "$GCC" = "yes"; then
         if test -n "$enable_ld"; then
@@ -4563,7 +4580,8 @@ if test "$enable_ld" != "no"; then
         fi
     fi
 fi
-AC_SUBST(USE_LD)
+AC_SUBST(USELD_CPPFLAGS)
+AC_SUBST(USELD_LDFLAGS)
 
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
 if test "$GCC" = "yes" -a "$_os" != Emscripten ; then
@@ -5509,6 +5527,7 @@ if test "$cross_compiling" = "yes"; then
     test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no --disable-database-connectivity"
     test -n "$with_help" -a "$with_help" != "no" && sub_conf_opts="$sub_conf_opts --with-help=$with_help"
     test "$enable_extensions" = yes || sub_conf_opts="$sub_conf_opts --disable-extensions"
+    test "${enable_ld+set}" = set && sub_conf_opts="$sub_conf_opts --enable-ld=${enable_ld}"
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     test "${with_system_lockfile+set}" = set && sub_conf_opts="$sub_conf_opts --with-system-lockfile=${with_system_lockfile}"
 
@@ -5606,6 +5625,7 @@ if test "$cross_compiling" = "yes"; then
     mv config.log ../config.Build.log
     mkdir -p ../config_build
     mv config_host/*.h ../config_build
+    test -d gcc_linker && mv gcc_linker ../gcc_linker_for_build
     test -f "$WARNINGS_FILE" && mv "$WARNINGS_FILE" "../$WARNINGS_FILE_FOR_BUILD"
 
     # all these will get a _FOR_BUILD postfix
@@ -5687,7 +5707,7 @@ if test "$cross_compiling" = "yes"; then
     )
     test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([setup/configure for BUILD side failed, see CONF-FOR-BUILD/config.log])
     test -f config_build.mk || AC_MSG_ERROR([A file called config_build.mk was supposed to have been copied here, but it isn't found])
-    perl -pi -e 's,/(workdir|instdir)(/|$),/\1_for_build\2,g;' \
+    perl -pi -e 's,/(workdir|instdir|gcc_linker)(/|$),/\1_for_build\2,g;' \
              -e 's,/CONF-FOR-BUILD,,g;' config_build.mk
 
     eval `cat CONF-FOR-BUILD/build-config`
@@ -12365,7 +12385,6 @@ AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512F)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_F16C)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_FMA)
-AC_SUBST(CLANG_USE_LD)
 AC_SUBST([HAVE_LO_CLANG_DLLEXPORTINLINES])
 
 SYSTEM_GPGMEPP=
