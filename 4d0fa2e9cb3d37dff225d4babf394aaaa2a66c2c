@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af369b94_7f3a8257",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2021-12-25T06:14:29Z",
+      "side": 1,
+      "message": "A note for doc team: With this update, I hope the icons in help page will follow",
+      "revId": "4d0fa2e9cb3d37dff225d4babf394aaaa2a66c2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
