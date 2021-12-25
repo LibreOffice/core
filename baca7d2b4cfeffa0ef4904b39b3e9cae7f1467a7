@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39e1ee3f_0940a60d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-25T05:37:45Z",
+      "side": 1,
+      "message": "Thanks! Yes, the specifics of the library makes debugging it a nightmare - see discussion in comments of https://gerrit.libreoffice.org/c/core/+/127312 😊",
+      "parentUuid": "29cc4943_3037042b",
+      "revId": "baca7d2b4cfeffa0ef4904b39b3e9cae7f1467a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "241f4cc6_51ec170e",
@@ -49,6 +67,24 @@
       "writtenOn": "2021-12-24T22:45:16Z",
       "side": 1,
       "message": "Should we check only for !pInfo and assign a null value anyway? Is that faster?",
+      "revId": "baca7d2b4cfeffa0ef4904b39b3e9cae7f1467a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4627ad42_dc2a809b",
+        "filename": "basic/source/sbx/sbxvar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-25T05:37:45Z",
+      "side": 1,
+      "message": "I don\u0027t think it matters much either way. But I\u0027d suggest to add a comment why we exclude cases when own pInfo is already set - to explain that to people like myself.",
+      "parentUuid": "241f4cc6_51ec170e",
       "revId": "baca7d2b4cfeffa0ef4904b39b3e9cae7f1467a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
