@@ -140,7 +140,6 @@ void ShutdownIcon::deInitSystray()
 
 
 ShutdownIcon::ShutdownIcon( const css::uno::Reference< XComponentContext > & rxContext ) :
-    ShutdownIconServiceBase( m_aMutex ),
     m_bVeto ( false ),
     m_bListenForTermination ( false ),
     m_bSystemDialogs( false ),
@@ -466,12 +465,12 @@ ShutdownIcon* ShutdownIcon::createInstance()
 void ShutdownIcon::init()
 {
     css::uno::Reference < XDesktop2 > xDesktop = Desktop::create( m_xContext );
-    osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     m_xDesktop = xDesktop;
 }
 
 
-void SAL_CALL ShutdownIcon::disposing()
+void ShutdownIcon::disposing(std::unique_lock<std::mutex>&)
 {
     m_xContext.clear();
     m_xDesktop.clear();
@@ -490,7 +489,7 @@ void SAL_CALL ShutdownIcon::disposing( const css::lang::EventObject& )
 void SAL_CALL ShutdownIcon::queryTermination( const css::lang::EventObject& )
 {
     SAL_INFO("sfx.appl", "ShutdownIcon::queryTermination: veto is " << m_bVeto);
-    osl::MutexGuard  aGuard( m_aMutex );
+    std::unique_lock  aGuard( m_aMutex );
 
     if ( m_bVeto )
         throw css::frame::TerminationVetoException();
@@ -504,7 +503,7 @@ void SAL_CALL ShutdownIcon::notifyTermination( const css::lang::EventObject& )
 
 void SAL_CALL ShutdownIcon::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
 {
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // third argument only sets veto, everything else will be ignored!
     if (aArguments.getLength() > 2)
@@ -523,9 +522,9 @@ void SAL_CALL ShutdownIcon::initialize( const css::uno::Sequence< css::uno::Any>
                 bool bQuickstart = ::cppu::any2bool( aArguments[0] );
                 if( !bQuickstart && !GetAutostart() )
                     return;
-                aGuard.clear();
+                aGuard.unlock();
                 init ();
-                aGuard.reset();
+                aGuard.lock();
                 if ( !m_xDesktop.is() )
                     return;
 
