@@ -2843,9 +2843,16 @@ bool INetURLObject::parseHostOrNetBiosName(
     while (pBegin < pEnd)
     {
         EscapeType eEscapeType;
-        sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, eMechanism, eCharset, eEscapeType);
-        switch (nUTF32)
+        switch (sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, eMechanism, eCharset, eEscapeType))
         {
+            default:
+                if (INetMIME::isVisible(nUTF32))
+                {
+                    if (pCanonic)
+                        appendUCS4(*pCanonic, nUTF32, eEscapeType, PART_URIC, eCharset, true);
+                    break;
+                }
+                [[fallthrough]];
             case '"':
             case '*':
             case '+':
@@ -2865,16 +2872,7 @@ bool INetURLObject::parseHostOrNetBiosName(
                 if (pCanonic)
                     pCanonic->setLength(nOriginalCanonicLength);
                 return false;
-            default:
-                if (!INetMIME::isVisible(nUTF32))
-                {
-                    if (pCanonic)
-                        pCanonic->setLength(nOriginalCanonicLength);
-                    return false;
-                }
         }
-        if (pCanonic)
-            appendUCS4(*pCanonic, nUTF32, eEscapeType, PART_URIC, eCharset, true);
     }
     return true;
 }
