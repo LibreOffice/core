@@ -1754,7 +1754,8 @@ AC_ARG_ENABLE(ld,
          By default tries to use the best linker possible, use --disable-ld to use the default linker.
          If <linker> contains any ':', the part before the first ':' is used as the value of
          -fuse-ld, while the part after the first ':' is used as the value of --ld-path (which is
-         needed for Clang 12).]),
+         needed for Clang 12). For gcc the ':' results in a symlinked ld + -B in gcc_linker/.
+         Currently the mold linker should be mapped to lld for best compatibility.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(cups,
@@ -4491,10 +4492,19 @@ dnl All checks for linker features/options should come after this.
 dnl ===================================================================
 check_use_ld()
 {
-    use_ld=-fuse-ld=${1%%:*}
+    ld_type=${1%%:*}
+    use_ld=-fuse-ld=${ld_type}
     use_ld_path=${1#*:}
     if test "$use_ld_path" != "$1"; then
-        use_ld="$use_ld --ld-path=$use_ld_path"
+        if test "$COM_IS_CLANG" = TRUE; then
+            use_ld="$use_ld --ld-path=$use_ld_path"
+        else
+            GCC_BINDIR="${BUILDDIR}/gcc_linker"
+            mkdir -p "${GCC_BINDIR}"
+            rm -f "${GCC_BINDIR}"/ld.*
+            ln -sf "$use_ld_path" "${GCC_BINDIR}/ld.${ld_type}"
+            use_ld="-B${GCC_BINDIR} -fuse-ld=${ld_type}"
+        fi
     fi
     use_ld_fail_if_error=$2
     use_ld_ok=
@@ -4523,6 +4533,7 @@ printf ("hello world\n");
     LDFLAGS="$use_ld_ldflags_save"
     return 1
 }
+
 USE_LD=
 if test "$enable_ld" != "no"; then
     if test "$GCC" = "yes"; then
@@ -5509,6 +5520,7 @@ if test "$cross_compiling" = "yes"; then
     test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no --disable-database-connectivity"
     test -n "$with_help" -a "$with_help" != "no" && sub_conf_opts="$sub_conf_opts --with-help=$with_help"
     test "$enable_extensions" = yes || sub_conf_opts="$sub_conf_opts --disable-extensions"
+    test "${enable_ld+set}" = set && sub_conf_opts="$sub_conf_opts --enable-ld=${enable_ld}"
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     test "${with_system_lockfile+set}" = set && sub_conf_opts="$sub_conf_opts --with-system-lockfile=${with_system_lockfile}"
 
@@ -5606,6 +5618,7 @@ if test "$cross_compiling" = "yes"; then
     mv config.log ../config.Build.log
     mkdir -p ../config_build
     mv config_host/*.h ../config_build
+    test -d gcc_linker && mv gcc_linker ../gcc_linker_for_build
     test -f "$WARNINGS_FILE" && mv "$WARNINGS_FILE" "../$WARNINGS_FILE_FOR_BUILD"
 
     # all these will get a _FOR_BUILD postfix
@@ -5687,7 +5700,7 @@ if test "$cross_compiling" = "yes"; then
     )
     test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([setup/configure for BUILD side failed, see CONF-FOR-BUILD/config.log])
     test -f config_build.mk || AC_MSG_ERROR([A file called config_build.mk was supposed to have been copied here, but it isn't found])
-    perl -pi -e 's,/(workdir|instdir)(/|$),/\1_for_build\2,g;' \
+    perl -pi -e 's,/(workdir|instdir|gcc_linker)(/|$),/\1_for_build\2,g;' \
              -e 's,/CONF-FOR-BUILD,,g;' config_build.mk
 
     eval `cat CONF-FOR-BUILD/build-config`
