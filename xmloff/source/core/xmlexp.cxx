@@ -1084,8 +1084,8 @@ void SvXMLExport::ImplExportStyles()
     if( ( mnExportFlags & SvXMLExportFlags::CONTENT ) || !mxExportInfo.is() )
         return;
 
-    static OUString sStyleNames( "StyleNames" );
-    static OUString sStyleFamilies( "StyleFamilies" );
+    constexpr OUStringLiteral sStyleNames( u"StyleNames" );
+    constexpr OUStringLiteral sStyleFamilies( u"StyleFamilies" );
     uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxExportInfo->getPropertySetInfo();
     if ( xPropertySetInfo->hasPropertyByName( sStyleNames ) && xPropertySetInfo->hasPropertyByName( sStyleFamilies ) )
     {
