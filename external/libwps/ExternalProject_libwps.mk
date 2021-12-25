@@ -19,11 +19,10 @@ $(eval $(call gb_ExternalProject_use_externals,libwps,\
 	revenge \
 ))
 
-libwps_CPPFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
-
+libwps_CPPFLAGS = $(gb_COMPILERDEFS_STDLIB_DEBUG) $(USELD_CPPFLAGS)
 libwps_CXXFLAGS=$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))
+libwps_LDFLAGS = $(USELD_LDFLAGS)
 
-libwps_LDFLAGS=
 ifeq ($(OS),LINUX)
 ifeq ($(SYSTEM_REVENGE),)
 libwps_LDFLAGS+=-Wl,-z,origin -Wl,-rpath,\$$$$ORIGIN
@@ -33,9 +32,6 @@ endif
 ifeq ($(ENABLE_GDB_INDEX),TRUE)
 libwps_LDFLAGS+=-Wl,--gdb-index
 libwps_CXXFLAGS+=-ggnu-pubnames
-ifneq ($(USE_LD),)
-libwps_LDFLAGS += $(USE_LD)
-endif
 endif
 
 $(call gb_ExternalProject_get_state_target,libwps,build) :
