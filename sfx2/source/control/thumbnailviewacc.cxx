@@ -37,7 +37,6 @@
 using namespace ::com::sun::star;
 
 ThumbnailViewAcc::ThumbnailViewAcc( ThumbnailView* pParent ) :
-    ValueSetAccComponentBase (m_aMutex),
     mpParent( pParent )
 {
 }
@@ -207,7 +206,7 @@ lang::Locale SAL_CALL ThumbnailViewAcc::getLocale()
 void SAL_CALL ThumbnailViewAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
 {
     ThrowIfDisposed();
-    ::osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard (m_aMutex);
 
     if( !rxListener.is() )
         return;
@@ -230,7 +229,7 @@ void SAL_CALL ThumbnailViewAcc::addAccessibleEventListener( const uno::Reference
 void SAL_CALL ThumbnailViewAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
 {
     ThrowIfDisposed();
-    ::osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard (m_aMutex);
 
     if( rxListener.is() )
     {
@@ -442,20 +441,25 @@ sal_Int64 SAL_CALL ThumbnailViewAcc::getSomething( const uno::Sequence< sal_Int8
     return comphelper::getSomethingImpl(rId, this);
 }
 
-void SAL_CALL ThumbnailViewAcc::disposing()
+void ThumbnailViewAcc::disposing(std::unique_lock<std::mutex>& rGuard)
 {
     ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy;
 
+    // unlock because we need to take solar and the lock mutex in the correct order
+    rGuard.unlock();
     {
-        // Make a copy of the list and clear the original.
         const SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard (m_aMutex);
-        aListenerListCopy = mxEventListeners;
-        mxEventListeners.clear();
+        std::unique_lock aGuard (m_aMutex);
 
         // Reset the pointer to the parent.  It has to be the one who has
         // disposed us because he is dying.
         mpParent = nullptr;
+
+        if (mxEventListeners.empty())
+            return;
+
+        // Make a copy of the list and clear the original.
+        aListenerListCopy = std::move(mxEventListeners);
     }
 
     // Inform all listeners that this objects is disposing.
@@ -485,7 +489,7 @@ ThumbnailViewItem* ThumbnailViewAcc::getItem (sal_uInt16 nIndex) const
 
 void ThumbnailViewAcc::ThrowIfDisposed()
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         SAL_WARN("sfx", "Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
