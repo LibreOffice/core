@@ -22,6 +22,30 @@
       },
       "revId": "6720e9569d7ab6c20616ec6b97e5d4a56948908b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6909cc2f_a7656748",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2021-12-25T00:14:51Z",
+      "side": 1,
+      "message": "I didn\u0027t mean to do that. Thank you for fixing it!",
+      "parentUuid": "645bdccc_4c158319",
+      "range": {
+        "startLine": 99,
+        "startChar": 12,
+        "endLine": 99,
+        "endChar": 35
+      },
+      "revId": "6720e9569d7ab6c20616ec6b97e5d4a56948908b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
