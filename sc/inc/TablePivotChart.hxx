@@ -15,8 +15,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 #include <svl/lstner.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 #include "types.hxx"
 
@@ -25,14 +24,13 @@ class ScDocShell;
 namespace sc
 {
 
-typedef cppu::WeakComponentImplHelper<css::table::XTablePivotChart,
+typedef comphelper::WeakComponentImplHelper<css::table::XTablePivotChart,
                                       css::document::XEmbeddedObjectSupplier,
                                       css::container::XNamed,
                                       css::lang::XServiceInfo>
         TablePivotChart_Base;
 
-class TablePivotChart final : public cppu::BaseMutex,
-                        public TablePivotChart_Base,
+class TablePivotChart final : public TablePivotChart_Base,
                         public SfxListener
 {
 private:
