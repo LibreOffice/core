@@ -28,7 +28,7 @@
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -56,10 +56,9 @@ inline void closedialogs(SystemWindow& rTopLevel, bool bCloseRoot)
 // If there are dialog children open on exit then veto termination,
 // close the topmost dialog and retry termination.
 class WarningDialogsParent final :
-    public cppu::WeakComponentImplHelper<css::frame::XTerminateListener>
+    public comphelper::WeakComponentImplHelper<css::frame::XTerminateListener>
 {
 private:
-    osl::Mutex m_aLock;
     VclPtr<WorkWindow> m_xWin;
     css::uno::Reference<css::awt::XWindow> m_xInterface;
 
@@ -77,7 +76,7 @@ private:
 
 public:
 
-    using cppu::WeakComponentImplHelperBase::disposing;
+    using comphelper::WeakComponentImplHelperBase::disposing;
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override
     {
     }
@@ -96,7 +95,6 @@ public:
 
 public:
     WarningDialogsParent()
-        : cppu::WeakComponentImplHelper<css::frame::XTerminateListener>(m_aLock)
     {
         SolarMutexGuard aSolarGuard;
         m_xWin = VclPtr<WorkWindow>::Create(nullptr, WB_STDWORK);
