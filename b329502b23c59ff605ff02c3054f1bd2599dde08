@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8de9a24_afb3b3c3",
+        "filename": "vcl/source/outdev/gradient.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-12-25T02:47:36Z",
+      "side": 0,
+      "message": "so this is eventually drawn in DrawGradient ? this ping-pong of calls is confusing",
+      "revId": "b329502b23c59ff605ff02c3054f1bd2599dde08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
