@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "014b76d7_aa8aedfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-12-25T14:09:37Z",
+      "side": 1,
+      "message": "Hossein, no easy way to remove the second warning. Let\u0027s just let this one go for now, at least we now have a utility we can build upon.\n\nIf you can figure out how to clear out the ConfigManager easily, please let me know 😊\n",
+      "revId": "db2e7007a324af7c3ec2991ae03b6ce3df1e74bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
