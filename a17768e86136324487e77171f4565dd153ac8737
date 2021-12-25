@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cab57b8_bc991ed9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-25T22:33:50Z",
+      "side": 1,
+      "message": "That did build LO with gcc and mold here.",
+      "revId": "a17768e86136324487e77171f4565dd153ac8737",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
