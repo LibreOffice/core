@@ -34,7 +34,6 @@ SC_SIMPLE_SERVICE_INFO( ScChartRangeSelectionListener, "ScChartRangeSelectionLis
                         SC_SERVICENAME_CHRANGEHILIGHT )
 
 ScChartRangeSelectionListener::ScChartRangeSelectionListener( ScTabViewShell * pViewShell ) :
-        ScChartRangeSelectionListener_Base( m_aMutex ),
         m_pViewShell( pViewShell )
 {}
 
@@ -64,7 +63,7 @@ void SAL_CALL ScChartRangeSelectionListener::disposing( const lang::EventObject&
 }
 
 // ____ WeakComponentImplHelperBase ____
-void SAL_CALL ScChartRangeSelectionListener::disposing()
+void ScChartRangeSelectionListener::disposing(std::unique_lock<std::mutex>&)
 {
     m_pViewShell = nullptr;
 }

@@ -18,20 +18,18 @@
  */
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 class ScTabViewShell;
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
         css::view::XSelectionChangeListener,
         css::lang::XServiceInfo >
     ScChartRangeSelectionListener_Base;
 
 class ScChartRangeSelectionListener :
-    public cppu::BaseMutex,
     public ScChartRangeSelectionListener_Base
 {
 public:
@@ -49,7 +47,7 @@ protected:
 
     // ____ WeakComponentImplHelperBase ____
     // is called when dispose() is called at this component
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName() override;
