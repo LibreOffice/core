@@ -54,6 +54,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "371ac5b0_3ce67ca9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-25T17:05:06Z",
+      "side": 1,
+      "message": "Tried to add a test case but I can\u0027t recreate the error on a smaller scale. Somehow in the assignment (_CheckArgument \u003d False) the literal gets a pInfo and then it will overwrite the information about the parameters in _CheckArgument leading to that error.",
+      "parentUuid": "39e1ee3f_0940a60d",
+      "revId": "baca7d2b4cfeffa0ef4904b39b3e9cae7f1467a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "241f4cc6_51ec170e",
