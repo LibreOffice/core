@@ -16,6 +16,24 @@
       "message": "Other than those clang plugin problems, I get these warnings:\n\nwarn:i18nlangtag:80572:80572:i18nlangtag/source/isolang/mslangid.cxx:105: MsLangId::getConfiguredSystemLanguage() - not configured yet\nwarn:i18nlangtag:80572:80572:i18nlangtag/source/isolang/mslangid.cxx:105: MsLangId::getConfiguredSystemLanguage() - not configured yet\n...\nwarn:unotools.config:79699:79699:unotools/source/config/configmgr.cxx:147: ConfigManager not empty\n\nCan you fix it?",
       "revId": "bc5bdec1348f73f5247f6644d998d57b60c6c3ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91b7fc9f_8684befc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-12-25T13:44:37Z",
+      "side": 1,
+      "message": "The first mslang.cxx warning I have fixed, no way of \"fixing\" the second without modifying core code. If you look at our other demos, you\u0027ll notice they generate the same errors.",
+      "parentUuid": "11446bb7_f380d8bb",
+      "revId": "bc5bdec1348f73f5247f6644d998d57b60c6c3ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
