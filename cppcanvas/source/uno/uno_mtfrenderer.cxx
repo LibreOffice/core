@@ -13,17 +13,16 @@
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <vcl/gdimtf.hxx>
 
 using namespace ::com::sun::star;
 
-typedef cppu::WeakComponentImplHelper<css::rendering::XMtfRenderer, css::beans::XFastPropertySet> MtfRendererBase;
+typedef comphelper::WeakComponentImplHelper<css::rendering::XMtfRenderer, css::beans::XFastPropertySet> MtfRendererBase;
 
 namespace {
 
-class MtfRenderer : private cppu::BaseMutex, public MtfRendererBase
+class MtfRenderer : public MtfRendererBase
 {
 public:
     MtfRenderer (css::uno::Sequence<css::uno::Any> const& args,
@@ -67,7 +66,7 @@ void MtfRenderer::setFastPropertyValue( sal_Int32 nHandle, const uno::Any& aAny)
     }
 }
 
-MtfRenderer::MtfRenderer (uno::Sequence<uno::Any> const& aArgs, uno::Reference<uno::XComponentContext> const&) : MtfRendererBase (m_aMutex), mpMetafile (nullptr)
+MtfRenderer::MtfRenderer (uno::Sequence<uno::Any> const& aArgs, uno::Reference<uno::XComponentContext> const&) : mpMetafile (nullptr)
 {
     if( aArgs.getLength() == 1 ) {
         aArgs[0] >>= mxCanvas;
