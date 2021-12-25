@@ -32,12 +32,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <osl/mutex.hxx>
 
 #include <memory>
@@ -159,12 +158,12 @@ public:
  * Generic UNO wrapper for edit engine's field item in cells, headers, and
  * footers.
  */
-typedef cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
                             css::text::XTextField,
                             css::beans::XPropertySet,
                             css::lang::XUnoTunnel,
                             css::lang::XServiceInfo> ScEditFieldObj_Base;
-class ScEditFieldObj final : public cppu::BaseMutex, public ScEditFieldObj_Base
+class ScEditFieldObj final : public ScEditFieldObj_Base
 {
     ScEditFieldObj() = delete;
     ScEditFieldObj(const ScEditFieldObj&) = delete;
