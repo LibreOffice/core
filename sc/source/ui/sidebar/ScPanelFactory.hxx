@@ -18,20 +18,17 @@
  */
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
 namespace sc::sidebar {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::ui::XUIElementFactory, css::lang::XServiceInfo
     > PanelFactoryInterfaceBase;
 
-class ScPanelFactory
-    : private ::cppu::BaseMutex,
-      public PanelFactoryInterfaceBase
+class ScPanelFactory final : public PanelFactoryInterfaceBase
 {
 public:
     // noncopyable

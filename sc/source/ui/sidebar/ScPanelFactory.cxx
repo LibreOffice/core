@@ -38,7 +38,6 @@ using namespace css::uno;
 namespace sc::sidebar {
 
 ScPanelFactory::ScPanelFactory()
-    : PanelFactoryInterfaceBase(m_aMutex)
 {
 }
 
