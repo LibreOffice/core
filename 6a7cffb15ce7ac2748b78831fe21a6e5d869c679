@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e837fc4_940b9285",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-25T07:32:24Z",
+      "side": 1,
+      "message": "Passing Verified by Jenkins from patchset 1.",
+      "revId": "6a7cffb15ce7ac2748b78831fe21a6e5d869c679",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9a55bd6_905aaa49",
+        "filename": "idl/source/objects/types.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-25T07:32:24Z",
+      "side": 1,
+      "message": "Note that you may use C++11 delegating ctor feature, to avoid repetition:\n\n  SvMetaType::SvMetaType( const OString\u0026 rName )\n      : SvMetaType()\n  {\n      SetName( rName );\n  }\n\nThis provides even more compact code without any macro trickery 😊",
+      "revId": "6a7cffb15ce7ac2748b78831fe21a6e5d869c679",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
