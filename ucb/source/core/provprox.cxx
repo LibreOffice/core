@@ -37,7 +37,7 @@ using namespace com::sun::star::uno;
 
 UcbContentProviderProxyFactory::UcbContentProviderProxyFactory(
                         const Reference< XComponentContext >& rxContext )
-: UcbContentProviderProxyFactory_Base(m_aMutex), m_xContext( rxContext )
+: m_xContext( rxContext )
 {
 }
 
