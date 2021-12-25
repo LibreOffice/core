@@ -16,6 +16,23 @@
       "message": "Doc team: Please someone update the icons for the help page",
       "revId": "3f39b5aa8f187b79a38afdd349fdbe0fab93c55c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10885abb_4d9bdd3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-12-25T08:25:29Z",
+      "side": 1,
+      "message": "I think that’ll take care of itself once the site is rebuilt, but Olivier is the one who knows how to do it :)",
+      "revId": "3f39b5aa8f187b79a38afdd349fdbe0fab93c55c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
