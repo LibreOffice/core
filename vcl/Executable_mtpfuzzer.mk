@@ -32,9 +32,7 @@ $(eval $(call gb_Executable_use_libraries,mtpfuzzer,\
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,mtpfuzzer,\
-    findsofficepath \
-    ulingu \
-    fuzzerstubs \
+    $(fuzzer_statics) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,mtpfuzzer,\

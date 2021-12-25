@@ -33,10 +33,8 @@ $(eval $(call gb_Executable_use_libraries,fodpfuzzer,\
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,fodpfuzzer,\
-    findsofficepath \
-    ulingu \
+    $(fuzzer_statics) \
     fuzzer_draw \
-    fuzzerstubs \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,fodpfuzzer,\
