@@ -205,16 +205,6 @@ void SAL_CALL OWeakConnectionPoint::removeReference(const Reference< XReference 
 
 //-- OWeakObject -------------------------------------------------------
 
-
-#ifdef _MSC_VER
-// Accidentally occurs in msvc mapfile = > had to be outlined.
-OWeakObject::OWeakObject()
-    : m_refCount( 0 ),
-      m_pWeakConnectionPoint( nullptr )
-{
-}
-#endif
-
 // XInterface
 Any SAL_CALL OWeakObject::queryInterface( const Type & rType )
 {
