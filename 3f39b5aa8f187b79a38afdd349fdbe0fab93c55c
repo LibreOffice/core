@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37b61a1b_4694772e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2021-12-25T07:18:04Z",
+      "side": 1,
+      "message": "Doc team: Please someone update the icons for the help page",
+      "revId": "3f39b5aa8f187b79a38afdd349fdbe0fab93c55c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
