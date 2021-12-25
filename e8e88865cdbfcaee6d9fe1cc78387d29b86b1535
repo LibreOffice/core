@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83288372_3b61b1b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-25T10:11:19Z",
+      "side": 1,
+      "message": "I think that the previous patch of tdf#144353 was not entirely correct, since in the function _CheckArgument there is again such an assginment which deletes the pInfo (_CheckArgument \u003d False), and I think know I may provide a unit test because it fails when there is by value parameter (ByVal Optional pvValid As Variant) 😊",
+      "revId": "e8e88865cdbfcaee6d9fe1cc78387d29b86b1535",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
