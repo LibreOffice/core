@@ -1041,7 +1041,6 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
 ScEditFieldObj::ScEditFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
     std::unique_ptr<ScEditSource> pEditSrc, sal_Int32 eType, const ESelection& rSel) :
-    ScEditFieldObj_Base(m_aMutex),
     pPropSet(nullptr),
     mpEditSource(std::move(pEditSrc)),
     aSelection(rSel),
