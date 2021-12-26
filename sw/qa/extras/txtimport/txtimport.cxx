@@ -142,6 +142,34 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf92161_gb18030)
     CPPUNIT_ASSERT_EQUAL(OUString(u"盖闻天地之数，有十二万九千六百岁为一元。"), xPara->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf146429_EUC_KR)
+{
+    //ICU returned 100% confidence at time of writing
+    load(mpTestDocumentPath, "EUC-KR.txt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"행복한 크리스마스가 되길 빌어 요"), xPara->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf146429_ISO8859_7_below_confidence_threshold)
+{
+    //confidence below threshold so this should fail detection
+    load(mpTestDocumentPath, "ISO8859-7.txt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+
+    CPPUNIT_ASSERT(!OUString(u"αυτό είναι ένα καφέ σκυλί").equals(xPara->getString()));
+}
+
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithoutbom)
 {
     load(mpTestDocumentPath, "UTF16BEWITHOUTBOM.txt");

@@ -21,6 +21,7 @@
 #include <memory>
 #include <osl/endian.h>
 #include <osl/thread.h>
+#include <rtl/tencinfo.h>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -32,6 +33,8 @@
 #include <unicode/ucsdet.h>
 
 using namespace ::com::sun::star;
+
+const int CONFIDENCE_THRESHOLD = 90;
 
 static bool IsDocShellRegistered()
 {
@@ -315,6 +318,10 @@ bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
             else if (U_SUCCESS(uerr) && !strcmp("GB18030", pEncodingName))
             {
                 eCharSet = RTL_TEXTENCODING_GB_18030;
+            }
+            else if (U_SUCCESS(uerr) && ucsdet_getConfidence(match, &uerr) >= CONFIDENCE_THRESHOLD)
+            {
+                eCharSet = rtl_getTextEncodingFromMimeCharset(pEncodingName);
             }
         }
 
