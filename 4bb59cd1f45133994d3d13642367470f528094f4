@@ -22,6 +22,30 @@
       },
       "revId": "4bb59cd1f45133994d3d13642367470f528094f4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75616444_1ca08c9b",
+        "filename": "sw/source/uibase/docvw/AnnotationWin2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-12-26T18:04:52Z",
+      "side": 1,
+      "message": "Let me check if `mrView.GetWrtShell().LockView( true )` is required or not. I need to ensure that tdf#91519 shouldn\u0027t be affected by the change. After that, I\u0027ll test it on tdf#146191.",
+      "parentUuid": "08e6818d_6e1d0831",
+      "range": {
+        "startLine": 1174,
+        "startChar": 4,
+        "endLine": 1174,
+        "endChar": 42
+      },
+      "revId": "4bb59cd1f45133994d3d13642367470f528094f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

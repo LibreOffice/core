@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "867eb62f_7e9441c0",
         "filename": "sw/inc/AnnotationWin.hxx",
@@ -20,8 +21,31 @@
         "endChar": 63
       },
       "revId": "6ff574249e183f51c4332786174582ac0431ad3e",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e09e19ff_32b37cd4",
+        "filename": "sw/inc/AnnotationWin.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-12-26T18:04:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "867eb62f_7e9441c0",
+      "range": {
+        "startLine": 194,
+        "startChar": 8,
+        "endLine": 194,
+        "endChar": 63
+      },
+      "revId": "6ff574249e183f51c4332786174582ac0431ad3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
