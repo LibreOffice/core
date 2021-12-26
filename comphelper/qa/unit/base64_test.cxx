@@ -71,17 +71,17 @@ void Base64Test::testBase64Decode()
     uno::Sequence<sal_Int8> decodedSequence;
 
     uno::Sequence<sal_Int8> expectedSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
-    comphelper::Base64::decode(decodedSequence, "AAAAAAABAgM=");
+    comphelper::Base64::decode(decodedSequence, u"AAAAAAABAgM=");
     CPPUNIT_ASSERT(std::equal(std::cbegin(expectedSequence), std::cend(expectedSequence),
                               std::cbegin(decodedSequence)));
 
     expectedSequence = { 5, 2, 3, 0, 0, 1, 2, 3 };
-    comphelper::Base64::decode(decodedSequence, "BQIDAAABAgM=");
+    comphelper::Base64::decode(decodedSequence, u"BQIDAAABAgM=");
     CPPUNIT_ASSERT(std::equal(std::cbegin(expectedSequence), std::cend(expectedSequence),
                               std::cbegin(decodedSequence)));
 
     expectedSequence = { sal_Int8(sal_uInt8(200)), 31, 77, 111, 0, 1, 2, 3 };
-    comphelper::Base64::decode(decodedSequence, "yB9NbwABAgM=");
+    comphelper::Base64::decode(decodedSequence, u"yB9NbwABAgM=");
     CPPUNIT_ASSERT(std::equal(std::cbegin(expectedSequence), std::cend(expectedSequence),
                               std::cbegin(decodedSequence)));
 }

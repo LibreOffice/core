@@ -473,7 +473,7 @@ void XSecController::setX509CertDigest(
 }
 
 namespace {
-Reference<css::graphic::XGraphic> lcl_getGraphicFromString(const OUString& rImage)
+Reference<css::graphic::XGraphic> lcl_getGraphicFromString(std::u16string_view rImage)
 {
     Sequence<sal_Int8> seq;
     comphelper::Base64::decode(seq, rImage);
@@ -493,18 +493,18 @@ Reference<css::graphic::XGraphic> lcl_getGraphicFromString(const OUString& rImag
 }
 }
 
-void XSecController::setValidSignatureImage(const OUString& rValidSigImg)
+void XSecController::setValidSignatureImage(std::u16string_view rValidSigImg)
 {
-    if (m_vInternalSignatureInformations.empty() || rValidSigImg.isEmpty())
+    if (m_vInternalSignatureInformations.empty() || rValidSigImg.empty())
         return;
 
     InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
     rInformation.signatureInfor.aValidSignatureImage = lcl_getGraphicFromString(rValidSigImg);
 }
 
-void XSecController::setInvalidSignatureImage(const OUString& rInvalidSigImg)
+void XSecController::setInvalidSignatureImage(std::u16string_view rInvalidSigImg)
 {
-    if (m_vInternalSignatureInformations.empty() || rInvalidSigImg.isEmpty())
+    if (m_vInternalSignatureInformations.empty() || rInvalidSigImg.empty())
         return;
 
     InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();

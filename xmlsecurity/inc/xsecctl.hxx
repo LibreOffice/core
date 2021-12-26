@@ -277,8 +277,8 @@ private:
 
     void setDate(OUString const& rId, OUString const& ouDate);
     void setDescription(OUString const& rId, OUString const& rDescription);
-    void setValidSignatureImage(const OUString& rValidSigImg);
-    void setInvalidSignatureImage(const OUString& rInvalidSigImg);
+    void setValidSignatureImage(std::u16string_view rValidSigImg);
+    void setInvalidSignatureImage(std::u16string_view rInvalidSigImg);
     void setSignatureLineId(const OUString& rSignatureLineId);
 
 public:
