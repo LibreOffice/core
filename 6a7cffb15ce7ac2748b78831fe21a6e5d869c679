@@ -33,6 +33,24 @@
       "message": "Note that you may use C++11 delegating ctor feature, to avoid repetition:\n\n  SvMetaType::SvMetaType( const OString\u0026 rName )\n      : SvMetaType()\n  {\n      SetName( rName );\n  }\n\nThis provides even more compact code without any macro trickery 😊",
       "revId": "6a7cffb15ce7ac2748b78831fe21a6e5d869c679",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bf5338c_ec5ea651",
+        "filename": "idl/source/objects/types.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-12-26T16:43:53Z",
+      "side": 1,
+      "message": "Yes I know but tout much for just too much for just 2 attributes I think",
+      "parentUuid": "d9a55bd6_905aaa49",
+      "revId": "6a7cffb15ce7ac2748b78831fe21a6e5d869c679",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
