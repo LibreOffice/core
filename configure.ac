@@ -5511,6 +5511,7 @@ if test "$cross_compiling" = "yes"; then
     test "$enable_extensions" = yes || sub_conf_opts="$sub_conf_opts --disable-extensions"
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     test "${with_system_lockfile+set}" = set && sub_conf_opts="$sub_conf_opts --with-system-lockfile=${with_system_lockfile}"
+    test "${enable_fuzzers}" = yes && sub_conf_opts="$sub_conf_opts --without-system-libxml"
 
     # Don't bother having configure look for stuff not needed for the build platform anyway
     # WARNING: any option with an argument containing spaces must be handled separately (see --with-theme)
