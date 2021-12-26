@@ -109,6 +109,11 @@ public:
             rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd, bool *pBom);
 
     static OUString GetSubStorageName( const SfxFilter& rFltr );
+private:
+    static bool encodingSupported(const char* encodingString);
+
+    static rtl_TextEncoding getLoEncodingFromIcuEncoding(const char* icuEncoding);
+
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODT(SvStream &rStream);

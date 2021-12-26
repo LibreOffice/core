@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <iostream>
+
 #include <iodetect.hxx>
 #include <memory>
 #include <osl/endian.h>
@@ -238,6 +240,16 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
     return SwIoSystem::GetFilterOfFormat(FILTER_TEXT);
 }
 
+bool SwIoSystem::encodingSupported(const char* encodingString)
+{
+    return true;
+}
+
+rtl_TextEncoding SwIoSystem::getLoEncodingFromIcuEncoding(const char* icuEncoding)
+{
+    return RTL_TEXTENCODING_GB_18030;
+}
+
 bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
     rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd, bool *pBom)
 {
@@ -295,9 +307,14 @@ bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
             {
                 eCharSet = RTL_TEXTENCODING_UCS2; // UTF-16LE
             }
-            else if (U_SUCCESS(uerr) && !strcmp("GB18030", pEncodingName))
+      /*      else if (U_SUCCESS(uerr) && !strcmp("GB18030", pEncodingName))
             {
                 eCharSet = RTL_TEXTENCODING_GB_18030;
+            }*/ else if (U_SUCCESS(uerr)) {
+                std::cout << "confidence" << ucsdet_getConfidence(match, &uerr);
+                if (encodingSupported(pEncodingName) && ucsdet_getConfidence(match, &uerr) > 90) {
+                    eCharSet = getLoEncodingFromIcuEncoding(pEncodingName);
+                }
             }
         }
 
