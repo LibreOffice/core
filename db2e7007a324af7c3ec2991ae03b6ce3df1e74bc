@@ -16,6 +16,58 @@
       "message": "Hossein, no easy way to remove the second warning. Let\u0027s just let this one go for now, at least we now have a utility we can build upon.\n\nIf you can figure out how to clear out the ConfigManager easily, please let me know 😊\n",
       "revId": "db2e7007a324af7c3ec2991ae03b6ce3df1e74bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92288c00_2f605c9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-26T23:51:37Z",
+      "side": 1,
+      "message": "OK. It seems that this is not easy. Take a look:\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d145175",
+      "parentUuid": "014b76d7_aa8aedfa",
+      "revId": "db2e7007a324af7c3ec2991ae03b6ce3df1e74bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcddff03_e83a3ee0",
+        "filename": "vcl/workben/listfonts.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-26T23:51:37Z",
+      "side": 1,
+      "message": "Instead of putting the code that dumps the font information inside the ListFontsWin::Paint(), please put it inside the ListFonts::Main(). After you\u0027ve done dumping the info, you can exit the application. You don\u0027t even need to show the window.\nAlthough you are using WB_HIDE, right now I see that the window title is visible in the taskbar (it may depend on your system), and one may think that the terminal is not working because of the way the application is behaving while switching.\n\nI\u0027ve tested the above suggestion, and it seems to be much better.",
+      "revId": "db2e7007a324af7c3ec2991ae03b6ce3df1e74bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "646a3028_d6082bf8",
+        "filename": "vcl/workben/listfonts.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-26T23:51:37Z",
+      "side": 1,
+      "message": "Could you please dump into a file instead of printing it? The output is huge (several megabytes). I\u0027ve done the same in \u0027mtfdemo\u0027. A simple constant filename would be enough for now. You can print the name of the font to stdout.",
+      "revId": "db2e7007a324af7c3ec2991ae03b6ce3df1e74bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
