@@ -46,9 +46,10 @@ public:
     // return any chars left from conversion.
     // For text submitted through the SAX characters call, the later method
     // must be used!
-    static void decode(css::uno::Sequence<sal_Int8>& aPass, const OUString& sBuffer);
+    static void decode(css::uno::Sequence<sal_Int8>& aPass, std::u16string_view sBuffer);
 
-    static sal_Int32 decodeSomeChars(css::uno::Sequence<sal_Int8>& aPass, const OUString& sBuffer);
+    static sal_Int32 decodeSomeChars(css::uno::Sequence<sal_Int8>& aPass,
+                                     std::u16string_view sBuffer);
 };
 }
 

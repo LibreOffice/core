@@ -112,9 +112,9 @@ void ManifestImport::doEncryptedCipherValue()
     {
         aKeyInfoSequence[2].Name = "CipherValue";
         uno::Sequence < sal_Int8 > aDecodeBuffer;
-        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters.toString());
+        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
         aKeyInfoSequence[2].Value <<= aDecodeBuffer;
-        aCurrentCharacters = ""; // consumed
+        aCurrentCharacters.setLength(0); // consumed
     }
     else
         bIgnoreEncryptData = true;
@@ -126,9 +126,9 @@ void ManifestImport::doEncryptedKeyId()
     {
         aKeyInfoSequence[0].Name = "KeyId";
         uno::Sequence < sal_Int8 > aDecodeBuffer;
-        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters.toString());
+        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
         aKeyInfoSequence[0].Value <<= aDecodeBuffer;
-        aCurrentCharacters = ""; // consumed
+        aCurrentCharacters.setLength(0); // consumed
     }
     else
         bIgnoreEncryptData = true;
@@ -140,9 +140,9 @@ void ManifestImport::doEncryptedKeyPacket()
     {
         aKeyInfoSequence[1].Name = "KeyPacket";
         uno::Sequence < sal_Int8 > aDecodeBuffer;
-        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters.toString());
+        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
         aKeyInfoSequence[1].Value <<= aDecodeBuffer;
-        aCurrentCharacters = ""; // consumed
+        aCurrentCharacters.setLength(0); // consumed
     }
     else
         bIgnoreEncryptData = true;

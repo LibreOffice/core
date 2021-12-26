@@ -327,13 +327,13 @@ std::vector<unsigned char> DocPasswordHelper::GetOoxHashAsVector(
 
 css::uno::Sequence<sal_Int8> DocPasswordHelper::GetOoxHashAsSequence(
         const OUString& rPassword,
-        const OUString& rSaltValue,
+        std::u16string_view rSaltValue,
         sal_uInt32 nSpinCount,
         comphelper::Hash::IterCount eIterCount,
         std::u16string_view rAlgorithmName)
 {
     std::vector<unsigned char> aSaltVec;
-    if (!rSaltValue.isEmpty())
+    if (!rSaltValue.empty())
     {
         css::uno::Sequence<sal_Int8> aSaltSeq;
         comphelper::Base64::decode( aSaltSeq, rSaltValue);
@@ -347,7 +347,7 @@ css::uno::Sequence<sal_Int8> DocPasswordHelper::GetOoxHashAsSequence(
 
 OUString DocPasswordHelper::GetOoxHashAsBase64(
         const OUString& rPassword,
-        const OUString& rSaltValue,
+        std::u16string_view rSaltValue,
         sal_uInt32 nSpinCount,
         comphelper::Hash::IterCount eIterCount,
         std::u16string_view rAlgorithmName)
