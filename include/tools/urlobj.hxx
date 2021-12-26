@@ -445,7 +445,7 @@ public:
 
     sal_uInt32 GetPort() const;
 
-    bool SetHost(std::u16string_view rTheHost)
+    bool SetHost(const OUString& rTheHost)
     { return setHost(rTheHost, RTL_TEXTENCODING_UTF8); }
 
     bool SetPort(sal_uInt32 nThePort);
@@ -1045,7 +1045,7 @@ private:
         bool bNetBiosName, OUStringBuffer* pCanonic);
 
     bool setHost(
-        std::u16string_view rTheHost,
+        const OUString& rTheHost,
         rtl_TextEncoding eCharset);
 
     // Path:
