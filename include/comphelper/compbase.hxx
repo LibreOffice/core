@@ -15,6 +15,7 @@
 #include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <mutex>
@@ -39,6 +40,8 @@ public:
     addEventListener(css::uno::Reference<css::lang::XEventListener> const& rxListener) override;
     virtual void SAL_CALL
     removeEventListener(css::uno::Reference<css::lang::XEventListener> const& rxListener) override;
+
+    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const& rType) override;
 
     /**
         Called by dispose for subclasses to do dispose() work.
@@ -80,13 +83,7 @@ public:
 
     virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const& rType) override
     {
-        css::uno::Any aReturn = ::cppu::queryInterface(
-            rType, static_cast<css::uno::XWeak*>(this),
-            static_cast<css::lang::XComponent*>(static_cast<WeakComponentImplHelperBase*>(this)),
-            static_cast<css::lang::XTypeProvider*>(this), static_cast<Ifc*>(this)...);
-        if (aReturn.hasValue())
-            return aReturn;
-        return OWeakObject::queryInterface(rType);
+        return WeakComponentImplHelper_query(rType, class_data_get(), this);
     }
 
     // css::lang::XTypeProvider
@@ -102,7 +99,19 @@ public:
     {
         return css::uno::Sequence<sal_Int8>();
     }
+
+private:
+    static cppu::class_data* class_data_get()
+    {
+        return cppu::detail::ImplClassData<WeakComponentImplHelper, Ifc...>{}();
+    }
 };
+
+/** WeakComponentImplHelper
+*/
+COMPHELPER_DLLPUBLIC css::uno::Any
+WeakComponentImplHelper_query(css::uno::Type const& rType, cppu::class_data* cd,
+                              WeakComponentImplHelperBase* pBase);
 
 } //  namespace comphelper
 
