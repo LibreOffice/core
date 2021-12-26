@@ -21,6 +21,9 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#if OSL_DEBUG_LEVEL > 0
+#include <utility>
+#endif
 
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -123,23 +126,15 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
             {
 #if OSL_DEBUG_LEVEL > 0
                 {
-                    if (aTmp.toString() != rOrigWord)
+                    if (std::u16string_view(aTmp) != rOrigWord)
                     {
                         // both words should only differ by a having a trailing '.'
                         // character or not...
-                        OUString aShorter, aLonger;
-                        if (aTmp.getLength() <= rOrigWord.getLength())
-                        {
-                            aShorter = aTmp.toString();
-                            aLonger  = rOrigWord;
-                        }
-                        else
-                        {
-                            aShorter = rOrigWord;
-                            aLonger  = aTmp.toString();
-                        }
-                        sal_Int32 nS = aShorter.getLength();
-                        sal_Int32 nL = aLonger.getLength();
+                        std::u16string_view aShorter(aTmp), aLonger(rOrigWord);
+                        if (aTmp.getLength() > rOrigWord.getLength())
+                            std::swap(aShorter, aLonger);
+                        sal_Int32 nS = aShorter.size();
+                        sal_Int32 nL = aLonger.size();
                         if (nS > 0 && nL > 0)
                         {
                             assert( ((nS + 1 == nL) && aLonger[nL-1] == '.') && "HyphenatorDispatcher::buildHyphWord: unexpected difference between words!" );

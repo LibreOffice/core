@@ -546,8 +546,7 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
         //  the percent character in percentage styles must be left out of quoting
         //  (one occurrence is enough even if there are several percent characters in the string)
 
-        OUString aString( rContent.toString() );
-        sal_Int32 nPos = aString.indexOf( '%' );
+        sal_Int32 nPos = rContent.indexOf( '%' );
         if ( nPos >= 0 )
         {
             if ( nPos + 1 < nLength )
@@ -861,7 +860,7 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
     {
         case SvXMLStyleTokens::Text:
             if ( rParent.HasLongDoW() &&
-                 aContent.toString() == rParent.GetLocaleData().getLongDateDayOfWeekSep() )
+                 std::u16string_view(aContent) == rParent.GetLocaleData().getLongDateDayOfWeekSep() )
             {
                 //  skip separator constant after long day of week
                 //  (NF_KEY_NNNN contains the separator)
