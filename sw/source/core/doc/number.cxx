@@ -670,6 +670,21 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
     const SwNumFormat& rMyNFormat = Get( o3tl::narrowing<sal_uInt16>(nLevel) );
 
+    if (rMyNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
+    {
+        if (!rMyNFormat.HasListFormat())
+            return OUString();
+
+        // If numbering is disabled for this level we should emit just prefix/suffix
+        // Remove everything between first %1% and last %n% (including markers)
+        OUString sLevelFormat = rMyNFormat.GetListFormat(bInclStrings);
+        sal_Int32 nFirstPosition = sLevelFormat.indexOf("%");
+        sal_Int32 nLastPosition = sLevelFormat.lastIndexOf("%");
+        if (nFirstPosition >= 0 && nLastPosition >= nFirstPosition)
+            sLevelFormat = sLevelFormat.replaceAt(nFirstPosition, nLastPosition - nFirstPosition + 1, u"");
+        return sLevelFormat;
+    }
+
     css::lang::Locale aLocale( LanguageTag::convertToLocale(nLang));
 
     if (rMyNFormat.HasListFormat())
@@ -681,9 +696,19 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
         for (SwNumberTree::tNumberVector::size_type i=0; i <= nLevel; ++i)
         {
             OUString sReplacement;
-            if (rMyNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
+            const SwNumFormat& rNFormat = Get(i);
+            if (rNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
             {
                 // Numbering disabled - replacement is empty
+                // And we should skip all level string content until next level marker:
+                // so %1%.%2%.%3% with second level as NONE will result 1.1, not 1..1
+                OUString sFind("%" + OUString::number(i + 1) + "%");
+                sal_Int32 nPositionToken = sLevelFormat.indexOf(sFind);
+                sal_Int32 nPositionNextToken = sLevelFormat.indexOf('%', nPositionToken + sFind.getLength());
+                if (nPositionToken > 0 && nPositionNextToken >= nPositionToken)
+                {
+                    sLevelFormat = sLevelFormat.replaceAt(nPositionToken, nPositionNextToken - nPositionToken, u"");
+                }
             }
             else if (rNumVector[i])
             {
