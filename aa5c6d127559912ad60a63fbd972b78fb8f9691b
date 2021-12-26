@@ -22,6 +22,30 @@
       },
       "revId": "aa5c6d127559912ad60a63fbd972b78fb8f9691b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9857c9e4_32b6cdfd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-12-26T15:03:53Z",
+      "side": 1,
+      "message": "No compat options were introduced.\nAs I see from these tests it looks more like bug: previously in some cases suffixes were missing. Or such behavior is expected?",
+      "parentUuid": "b8d0c906_2186823c",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 61
+      },
+      "revId": "aa5c6d127559912ad60a63fbd972b78fb8f9691b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
