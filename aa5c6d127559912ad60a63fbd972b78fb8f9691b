@@ -46,6 +46,30 @@
       },
       "revId": "aa5c6d127559912ad60a63fbd972b78fb8f9691b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d84f49d8_04c58f4b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-26T15:15:32Z",
+      "side": 1,
+      "message": "https://forumooo.ru/index.php/topic,8966 seems to take that as a regression. I advised to file a report, and thought I asked here in the meanwhile 😊",
+      "parentUuid": "9857c9e4_32b6cdfd",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 61
+      },
+      "revId": "aa5c6d127559912ad60a63fbd972b78fb8f9691b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
