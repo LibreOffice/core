@@ -68,6 +68,24 @@
       "parentUuid": "83b76790_cc814f21",
       "revId": "be456d104e5bb15eccf1ea273fe5951b625fcc62",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5314056_eb5c5642",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-26T13:08:36Z",
+      "side": 1,
+      "message": "The easy answer for modifying would be that you keep working on your local branch and \u0027git commit --amend\u0027 the changes and resubmit as explained in https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Submitting_a_new_version\n\nIf you for some reason deleted your local branch already, you can always create a new one based on the patch in Gerrit:\nhttps://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Cherry_picking_yourself_out_of_trouble\n\nFor running a single test: https://wiki.documentfoundation.org/Development/Cpp_Unit_Tests#Run_a_single_test_at_a_time\n\nIn this case the command would be\n\nCPPUNIT_TEST_NAME\u003d\"SdOOXMLExportTest3::testTdf96061_textHighlight\" make CppunitTest_sd_export_tests-ooxml3\n\nFor running the whole test suite you use \u0027make check\u0027 as mentioned in the wiki articles and our discussions.\n\nThe problem with your patch here is that you are again blindly copying things without stopping to think how they should work.",
+      "parentUuid": "edebea04_bdd2583a",
+      "revId": "be456d104e5bb15eccf1ea273fe5951b625fcc62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
