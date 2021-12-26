@@ -670,6 +670,11 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
     const SwNumFormat& rMyNFormat = Get( o3tl::narrowing<sal_uInt16>(nLevel) );
 
+    if (rMyNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
+    {
+        return aStr.makeStringAndClear();
+    }
+
     css::lang::Locale aLocale( LanguageTag::convertToLocale(nLang));
 
     if (rMyNFormat.HasListFormat())
@@ -681,9 +686,19 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
         for (SwNumberTree::tNumberVector::size_type i=0; i <= nLevel; ++i)
         {
             OUString sReplacement;
-            if (rMyNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
+            const SwNumFormat& rNFormat = Get(i);
+            if (rNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
             {
                 // Numbering disabled - replacement is empty
+                // And we should skip all delimiters until next level marker:
+                // Should 1.1.1 --> 2. NoNum --> 1..1 or 1.1 ??
+                OUString sFind("%" + OUString::number(i + 1) + "%");
+                sal_Int32 nPositionToken = sLevelFormat.indexOf(sFind);
+                sal_Int32 nPositionNextToken = sLevelFormat.indexOf('%', nPositionToken + sFind.getLength());
+                if (nPositionNextToken > 0)
+                {
+                    sLevelFormat = sLevelFormat.replaceAt(nPositionToken, nPositionNextToken - nPositionToken, u"");
+                }
             }
             else if (rNumVector[i])
             {
