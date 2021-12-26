@@ -668,7 +668,6 @@ sal_Int64 SAL_CALL SwXAutoTextEntry::getSomething( const uno::Sequence< sal_Int8
 
 SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, const OUString& rGroupName,
                                             const OUString& rEntryName) :
-    WeakComponentImplHelper(m_aMutex),
     pGlossaries(pGlss),
     sGroupName(rGroupName),
     sEntryName(rEntryName)
@@ -744,7 +743,7 @@ void SwXAutoTextEntry::GetBodyText ()
     mxBodyText = new SwXBodyText ( xDocSh->GetDoc() );
 }
 
-void SwXAutoTextEntry::disposing()
+void SwXAutoTextEntry::disposing(std::unique_lock<std::mutex>&)
 {
     SolarMutexGuard g;
     implFlushDocument(true);
