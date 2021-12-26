@@ -216,7 +216,7 @@
 /* ERROR.TYPE( #DIV/0! ) == 2 */
 #define STR_LONG_ERR_DIV_ZERO                   NC_("STR_LONG_ERR_DIV_ZERO", "Error: Division by zero")
 /* ERROR.TYPE( #VALUE! ) == 3 */
-#define STR_LONG_ERR_NO_VALUE                   NC_("STR_LONG_ERR_NO_VALUE", "Error: Wrong data type")
+#define STR_LONG_ERR_NO_VALUE                   NC_("STR_LONG_ERR_NO_VALUE", "Error: No value")
 /* ERROR.TYPE( #REF! ) == 4 */
 #define STR_LONG_ERR_NO_REF                     NC_("STR_LONG_ERR_NO_REF", "Error: Not a valid reference")
 /* ERROR.TYPE( #NAME! ) == 5 */
