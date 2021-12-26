@@ -139,7 +139,7 @@ namespace dbaccess
         o_rValue.clear();
 
         // the characters building up th evalue
-        const OUString sValue = getAccumulatedCharacters().toString();
+        std::u16string_view sValue = getAccumulatedCharacters();
 
         const OUString& rItemType( getItemType() );
         ENSURE_OR_RETURN_VOID( !rItemType.isEmpty(), "no item type -> no item value" );
@@ -170,7 +170,7 @@ namespace dbaccess
         }
         else if ( ::xmloff::token::IsXMLToken( rItemType, ::xmloff::token::XML_STRING ) )
         {
-            o_rValue <<= sValue;
+            o_rValue <<= OUString(sValue);
         }
         else
         {

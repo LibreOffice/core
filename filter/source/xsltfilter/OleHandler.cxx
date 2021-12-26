@@ -127,7 +127,7 @@ namespace XSLT
         //return the base64 string of the uncompressed data
         OUStringBuffer buf(oleLength);
         ::comphelper::Base64::encode(buf, result);
-        return OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
+        return OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
     }
 
     void
@@ -160,7 +160,7 @@ namespace XSLT
             //return the base64 encoded string
             OUStringBuffer buf(oleLength);
             ::comphelper::Base64::encode(buf, oledata);
-            return OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
+            return OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
         }
         return encodeSubStorage(streamName);
     }

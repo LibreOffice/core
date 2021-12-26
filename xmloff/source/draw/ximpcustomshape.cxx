@@ -935,7 +935,7 @@ void XMLEnhancedCustomShapeContext::startFastElement(
                             rDepth.Value <<= fDepth;
                         }
                     }
-                    if ( rValue.matchIgnoreAsciiCase( aUnitStr.toString(), nIndex ) )
+                    if ( rValue.matchIgnoreAsciiCase( aUnitStr, nIndex ) )
                         nIndex += aUnitStr.getLength();
 
                     // skipping white spaces

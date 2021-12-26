@@ -2591,7 +2591,7 @@ void CodeCompleteWindow::SetMatchingEntries()
     for (sal_Int32 i = 0, nEntryCount = m_xListBox->n_children(); i< nEntryCount; ++i)
     {
         OUString sEntry = m_xListBox->get_text(i);
-        if (sEntry.startsWithIgnoreAsciiCase(aFuncBuffer.toString()))
+        if (sEntry.startsWithIgnoreAsciiCase(aFuncBuffer))
         {
             m_xListBox->select(i);
             break;
@@ -2657,8 +2657,8 @@ bool CodeCompleteWindow::HandleKeyInput( const KeyEvent& rKeyEvt )
                         for (sal_Int32 i = nInd; i != nEntryCount; ++i)
                         {
                             OUString sEntry = m_xListBox->get_text(i);
-                            if( sEntry.startsWithIgnoreAsciiCase( aFuncBuffer.toString() )
-                                && (aFuncBuffer.toString() != sTypedText) && (i != nInd) )
+                            if( sEntry.startsWithIgnoreAsciiCase( aFuncBuffer )
+                                && (std::u16string_view(aFuncBuffer) != sTypedText) && (i != nInd) )
                             {
                                 m_xListBox->select(i);
                                 bFound = true;
@@ -2688,7 +2688,7 @@ bool CodeCompleteWindow::HandleKeyInput( const KeyEvent& rKeyEvt )
                     OUString aTabInsertedStr( GetParentEditView()->GetSelected() );
                     GetParentEditView()->SetSelection( aSel );
 
-                    if( !aTabInsertedStr.isEmpty() && aTabInsertedStr != aFuncBuffer.toString() )
+                    if( !aTabInsertedStr.isEmpty() && aTabInsertedStr != std::u16string_view(aFuncBuffer) )
                     {
                         aFuncBuffer = aTabInsertedStr;
                     }

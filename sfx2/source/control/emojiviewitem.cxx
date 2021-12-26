@@ -74,10 +74,10 @@ void EmojiViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProcessor
                                                  0.0,
                                                  true));
 
-    OUStringBuffer sHexText = "";
-    sHexText.appendUtf32(maTitle.toUInt32(16));
+    sal_uInt32 nCodePoint = maTitle.toUInt32(16);
+    const OUString sHexText(&nCodePoint, 1);
 
-    addTextPrimitives(sHexText.toString(), pAttrs, maTextPos, aSeq);
+    addTextPrimitives(sHexText, pAttrs, maTextPos, aSeq);
 
     pProcessor->process(aSeq);
 }

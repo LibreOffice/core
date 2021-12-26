@@ -188,10 +188,9 @@ void ScHTMLImport::WriteToDocument(
         // insert table caption as name
         if (!pTable->GetTableCaption().isEmpty())
             aName.append(" - " + pTable->GetTableCaption());
-        if (!mpDoc->GetRangeName()->findByUpperName(
-                ScGlobal::getCharClass().uppercase(aName.toString())))
-            InsertRangeName(*mpDoc, aName.toString(), aNewRange);
-
+        const OUString sName(aName.makeStringAndClear());
+        if (!mpDoc->GetRangeName()->findByUpperName(ScGlobal::getCharClass().uppercase(sName)))
+            InsertRangeName(*mpDoc, sName, aNewRange);
     }
 }
 

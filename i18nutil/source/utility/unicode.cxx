@@ -1085,7 +1085,7 @@ OUString ToggleUnicodeCodepoint::ReplacementString()
             output.append( aTmp );
         }
     }
-    return output.toString();
+    return output.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
