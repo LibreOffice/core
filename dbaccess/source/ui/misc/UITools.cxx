@@ -1249,7 +1249,7 @@ Reference<XPropertySet> createView( const OUString& _rName, const Reference< XCo
     return createView( _rName, _rxConnection, sCommand );
 }
 
-bool insertHierachyElement(weld::Window* pParent, const Reference< XComponentContext >& _rxContext,
+bool insertHierarchyElement(weld::Window* pParent, const Reference< XComponentContext >& _rxContext,
                            const Reference<XHierarchicalNameContainer>& _xNames,
                            const OUString& _sParentFolder,
                            bool _bForm,
@@ -1257,7 +1257,7 @@ bool insertHierachyElement(weld::Window* pParent, const Reference< XComponentCon
                            const Reference<XContent>& _xContent,
                            bool _bMove)
 {
-    OSL_ENSURE( _xNames.is(), "insertHierachyElement: illegal name container!" );
+    OSL_ENSURE( _xNames.is(), "insertHierarchyElement: illegal name container!" );
     if ( !_xNames.is() )
         return false;
 
@@ -1270,7 +1270,7 @@ bool insertHierachyElement(weld::Window* pParent, const Reference< XComponentCon
             xNameAccess.set(xChild->getParent(),UNO_QUERY);
     }
 
-    OSL_ENSURE( xNameAccess.is(), "insertHierachyElement: could not find the proper name container!" );
+    OSL_ENSURE( xNameAccess.is(), "insertHierarchyElement: could not find the proper name container!" );
     if ( !xNameAccess.is() )
         return false;
 

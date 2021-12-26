@@ -786,7 +786,7 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
         {
             Reference<XContent> xContent;
             _rPasteData[DataAccessDescriptorProperty::Component] >>= xContent;
-            return insertHierachyElement(_eType,_sParentFolder,Reference<XNameAccess>(xContent,UNO_QUERY).is(),xContent,_bMove);
+            return insertHierarchyElement(_eType,_sParentFolder,Reference<XNameAccess>(xContent,UNO_QUERY).is(),xContent,_bMove);
         }
     }
     catch(const SQLException&) { showError( SQLExceptionInfo( ::cppu::getCaughtException() ) ); }

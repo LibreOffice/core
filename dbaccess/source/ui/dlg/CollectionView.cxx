@@ -177,7 +177,7 @@ IMPL_LINK_NOARG(OCollectionView, NewFolder_Click, weld::Button&, void)
     try
     {
         Reference<XHierarchicalNameContainer> xNameContainer(m_xContent,UNO_QUERY);
-        if ( dbaui::insertHierachyElement(m_xDialog.get(),m_xContext,xNameContainer,OUString(),m_bCreateForm) )
+        if ( dbaui::insertHierarchyElement(m_xDialog.get(),m_xContext,xNameContainer,OUString(),m_bCreateForm) )
             Initialize();
     }
     catch( const SQLException& )
