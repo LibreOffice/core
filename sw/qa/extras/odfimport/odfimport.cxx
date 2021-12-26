@@ -1296,5 +1296,37 @@ CPPUNIT_TEST_FIXTURE(Test, testPageAnchorZIndexSecondPage)
         sal_Int32(3), getProperty<sal_Int32>(getShapeByName(u"Shape2"), "ZOrder"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf146257)
+{
+    load(mpTestDocumentPath, "tdf146257.odt");
+
+    // First list should contain no labels
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(4), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    // For second list ensure second level empty and thord level should not contain extra dots
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(6), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(7), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(8), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("1.1"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
