@@ -1192,6 +1192,15 @@ AC_MSG_NOTICE([VCL platform uses headless plugin: $using_headless_plugin])
 AC_MSG_NOTICE([VCL platform uses vclplug: $using_vclplug])
 AC_MSG_NOTICE([VCL platform uses X11: $using_x11])
 
+# Check for a GNU backtrace implementation
+AC_CHECK_FUNC([backtrace],, [
+    PKG_CHECK_MODULES([BACKTRACE], [libexecinfo], [ac_cv_func_backtrace=yes], [:])
+])
+AS_IF([test "$ac_cv_func_backtrace" != xno ], [
+    AC_DEFINE([HAVE_BACKTRACE], [1], [Define if a (GNU) backtrace implementation is available.])
+])
+AC_SUBST([BACKTRACE_LIBS])
+
 # ===================================================================
 #
 # End initial platform setup

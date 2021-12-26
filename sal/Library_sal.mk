@@ -71,6 +71,7 @@ $(eval $(call gb_Library_add_libs,sal,\
 	$(if $(filter HAIKU,$(OS)), \
 		-lnetwork \
 	) \
+	$(BACKTRACE_LIBS) \
 ))
 
 ifeq ($(OS),MACOSX)
