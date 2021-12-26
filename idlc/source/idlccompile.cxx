@@ -35,12 +35,7 @@
 #ifdef  SAL_UNX
 #include <errno.h>
 #include <unistd.h>
-#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
-    defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY) || defined(HAIKU)
 #include <sys/wait.h>
-#else
-#include <wait.h>
-#endif
 #endif
 
 #include <string.h>
