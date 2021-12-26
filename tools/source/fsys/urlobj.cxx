@@ -2888,8 +2888,7 @@ bool INetURLObject::setHost(std::u16string_view rTheHost,
     {
         case INetProtocol::File:
             {
-                OUString sTemp(aSynHost.toString());
-                if (sTemp.equalsIgnoreAsciiCase("localhost"))
+                if (OUString::unacquired(aSynHost).equalsIgnoreAsciiCase("localhost"))
                 {
                     aSynHost.setLength(0);
                 }
@@ -3804,8 +3803,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             {
                 case INetProtocol::File:
                     {
-                        OUString sTemp(aSynHost.toString());
-                        if (sTemp.equalsIgnoreAsciiCase( "localhost" ))
+                        if (OUString::unacquired(aSynHost).equalsIgnoreAsciiCase( "localhost" ))
                         {
                             aSynHost.setLength(0);
                         }

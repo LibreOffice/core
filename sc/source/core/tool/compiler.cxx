@@ -666,7 +666,7 @@ static bool lcl_parseExternalName(
     if (aTmpName[nNameLen-1] == '!')
     {
         // Check against #REF!.
-        if (aTmpName.toString().equalsIgnoreAsciiCase("#REF!"))
+        if (OUString::unacquired(aTmpName).equalsIgnoreAsciiCase("#REF!"))
             return false;
     }
 
