@@ -86,6 +86,24 @@
       "parentUuid": "edebea04_bdd2583a",
       "revId": "be456d104e5bb15eccf1ea273fe5951b625fcc62",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65743fdc_ecad77fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-26T13:32:48Z",
+      "side": 1,
+      "message": "Thanks for helping me understand all this sir, I will give all these articles a read and this time: 1. commit the changes, 2. RUN THE TEST LOCALLY, 3. Make a local build, and then submit for review when everything is working, and without forgetting, I will also amend the previous patch.",
+      "parentUuid": "a5314056_eb5c5642",
+      "revId": "be456d104e5bb15eccf1ea273fe5951b625fcc62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
