@@ -30,8 +30,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <svtools/unoevent.hxx>
@@ -152,8 +151,7 @@ public:
 
 class SwXAutoTextEntry final
         :public SfxListener
-        ,public cppu::BaseMutex
-        ,public cppu::WeakComponentImplHelper
+        ,public comphelper::WeakComponentImplHelper
         <
             css::text::XAutoTextEntry,
             css::lang::XServiceInfo,
@@ -176,7 +174,7 @@ class SwXAutoTextEntry final
     }
     void GetBodyText ();
 
-    void SAL_CALL disposing() override;
+    void disposing(std::unique_lock<std::mutex>&) override;
 
     /** ensure that the current content (which may only be in-memory so far) is flushed to the auto text group file
 
