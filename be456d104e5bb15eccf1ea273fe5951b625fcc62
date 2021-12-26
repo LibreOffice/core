@@ -16,6 +16,23 @@
       "message": "Sir please review my patch and let me know if changes are required",
       "revId": "be456d104e5bb15eccf1ea273fe5951b625fcc62",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83b76790_cc814f21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-26T09:46:59Z",
+      "side": 1,
+      "message": "You were supposed to modify your earlier patch: https://gerrit.libreoffice.org/c/core/+/126656\n\nWhy didn\u0027t you do it? Now I would like you to modify it in addition to this patch, so we don\u0027t have to abandon it.\n\nYou forgot to refer to the bug with tdf#141908",
+      "revId": "be456d104e5bb15eccf1ea273fe5951b625fcc62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
