@@ -316,7 +316,7 @@ namespace dbaui
             @return
                 <TRUE/> if the insert operations was successful, otherwise <FALSE/>.
         */
-        bool insertHierachyElement(  ElementType _eType
+        bool insertHierarchyElement(  ElementType _eType
                                     ,const OUString& _sParentFolder
                                     ,bool _bCollection = true
                                     ,const css::uno::Reference< css::ucb::XContent>& _xContent = css::uno::Reference< css::ucb::XContent>()

@@ -580,10 +580,10 @@ void OApplicationController::onDocumentOpened( const OUString& _rName, const sal
     }
 }
 
-bool OApplicationController::insertHierachyElement(ElementType _eType, const OUString& _sParentFolder, bool _bCollection, const Reference<XContent>& _xContent, bool _bMove)
+bool OApplicationController::insertHierarchyElement(ElementType _eType, const OUString& _sParentFolder, bool _bCollection, const Reference<XContent>& _xContent, bool _bMove)
 {
     Reference<XHierarchicalNameContainer> xNames(getElements(_eType), UNO_QUERY);
-    return dbaui::insertHierachyElement(getFrameWeld()
+    return dbaui::insertHierarchyElement(getFrameWeld()
                            ,getORB()
                            ,xNames
                            ,_sParentFolder

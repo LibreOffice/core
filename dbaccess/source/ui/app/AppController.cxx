@@ -1197,7 +1197,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 {
                     ElementType eType = getContainer()->getElementType();
                     OUString sName = getContainer()->getQualifiedName( nullptr );
-                    insertHierachyElement(eType,sName);
+                    insertHierarchyElement(eType,sName);
                 }
                 break;
             case ID_NEW_VIEW_DESIGN:
