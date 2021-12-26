@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bb7e729_fd50531d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-26T23:39:51Z",
+      "side": 1,
+      "message": "The proper way to handle this would be to add a macro that collects the variables, then inserts them into the file, instead of relying on external scripting.",
+      "revId": "35b2a3a8cd439098e5a7d73c29afc37f20063f6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
