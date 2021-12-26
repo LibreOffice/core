@@ -2673,7 +2673,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
 
         if ( rInfo.nCntPre != 1 ) // rescale Exp
         {
-            sal_Int32 nExp = ExpStr.toString().toInt32() * nExpSign;
+            sal_Int32 nExp = OUString::unacquired(ExpStr).toInt32() * nExpSign;
             sal_Int32 nRescale = (rInfo.nCntPre != 0) ? nExp % static_cast<sal_Int32>(rInfo.nCntPre) : -1;
             if( nRescale < 0 && rInfo.nCntPre != 0 )
                 nRescale += static_cast<sal_Int32>(rInfo.nCntPre);

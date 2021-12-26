@@ -1765,6 +1765,11 @@ template<> struct ToStringHelper<OUStringBuffer> {
         else
             return internalAppend(str.pData);
     }
+
+    inline OUString const& OUString::unacquired(const OUStringBuffer& str)
+    {
+        return unacquired(&str.pData);
+    }
 #endif
 }
 

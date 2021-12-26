@@ -179,7 +179,7 @@ namespace pcr
         OUStringBuffer aText(m_xFtTitle->get_label());
 
         int n10DotsWidth = m_xFtTitle->get_pixel_size("..........").Width();
-        int nTextWidth = m_xFtTitle->get_pixel_size(aText.toString()).Width();
+        int nTextWidth = m_xFtTitle->get_pixel_size(OUString::unacquired(aText)).Width();
         int nDiff = m_nNameWidth - nTextWidth;
         int nExtraChars = (nDiff * 10) / n10DotsWidth;
         for (int i = 0; i < nExtraChars; ++i)
