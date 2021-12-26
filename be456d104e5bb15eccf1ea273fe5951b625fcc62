@@ -104,6 +104,24 @@
       "parentUuid": "a5314056_eb5c5642",
       "revId": "be456d104e5bb15eccf1ea273fe5951b625fcc62",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ed2e113_f3b285ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-26T14:04:48Z",
+      "side": 1,
+      "message": "In this case you can skip \"3. Make a local build\" as this is about a test and you run it in your step 2.",
+      "parentUuid": "65743fdc_ecad77fc",
+      "revId": "be456d104e5bb15eccf1ea273fe5951b625fcc62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
