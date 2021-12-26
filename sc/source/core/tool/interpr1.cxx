@@ -187,7 +187,13 @@ void ScInterpreter::ScIfJump()
         break;
         default:
         {
-            if ( GetBool() )
+            const bool bCondition = GetBool();
+            if (nGlobalError != FormulaError::NONE)
+            {   // Propagate error, not THEN- or ELSE-path, jump behind.
+                PushError(nGlobalError);
+                aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+            }
+            else if ( bCondition )
             {   // TRUE
                 if( nJumpCount >= 2 )
                 {   // THEN path
