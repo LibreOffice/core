@@ -541,6 +541,22 @@ public:
     static OUString const & unacquired( rtl_uString * const * ppHandle )
         { return * reinterpret_cast< OUString const * >( ppHandle ); }
 
+#if defined LIBO_INTERNAL_ONLY
+    /** Provides an OUString const & passing an OUStringBuffer const reference.
+        It is more convenient to use C++ OUString member functions when checking
+        current buffer content. Use this function instead of toString (that
+        allocates a new OUString from buffer data) when the result is used in
+        comparisons.
+
+        @param str
+               an OUStringBuffer
+        @return
+               OUString const & based on given storage
+        @since LibreOffice 7.4
+    */
+    static OUString const& unacquired(const OUStringBuffer& str);
+#endif
+
     /**
       Assign a new string.
 

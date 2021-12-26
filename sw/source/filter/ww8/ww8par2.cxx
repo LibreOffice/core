@@ -708,7 +708,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, int nLevel, WW8_ANLV con
                 if (rAV.cbTextBefore || rAV.cbTextAfter)
                 {
                     rNum.SetBulletChar(
-                        sText.toString().iterateCodePoints(&o3tl::temporary(sal_Int32(0))));
+                        OUString::unacquired(sText).iterateCodePoints(&o3tl::temporary(sal_Int32(0))));
                 }
                 else
                     rNum.SetBulletChar( 0x2190 );
