@@ -2877,22 +2877,19 @@ bool INetURLObject::parseHostOrNetBiosName(
     return true;
 }
 
-bool INetURLObject::setHost(std::u16string_view rTheHost,
+bool INetURLObject::setHost(const OUString& rTheHost,
                             rtl_TextEncoding eCharset)
 {
     if (!getSchemeInfo().m_bHost)
         return false;
-    OUStringBuffer aSynHost(rTheHost);
+    OUString aSynHost(rTheHost);
     bool bNetBiosName = false;
     switch (m_eScheme)
     {
         case INetProtocol::File:
             {
-                OUString sTemp(aSynHost.toString());
-                if (sTemp.equalsIgnoreAsciiCase("localhost"))
-                {
-                    aSynHost.setLength(0);
-                }
+                if (aSynHost.equalsIgnoreAsciiCase("localhost"))
+                    aSynHost.clear();
                 bNetBiosName = true;
             }
             break;
@@ -2906,11 +2903,12 @@ bool INetURLObject::setHost(std::u16string_view rTheHost,
                 return false;
             break;
     }
+    OUStringBuffer aSynHostBuf(aSynHost);
     if (!parseHostOrNetBiosName(
             aSynHost.getStr(), aSynHost.getStr() + aSynHost.getLength(),
-            EncodeMechanism::WasEncoded, eCharset, bNetBiosName, &aSynHost))
+            EncodeMechanism::WasEncoded, eCharset, bNetBiosName, &aSynHostBuf))
         return false;
-    sal_Int32 nDelta = m_aHost.set(m_aAbsURIRef, aSynHost.makeStringAndClear());
+    sal_Int32 nDelta = m_aHost.set(m_aAbsURIRef, aSynHostBuf.makeStringAndClear());
     m_aPort += nDelta;
     m_aPath += nDelta;
     m_aQuery += nDelta;
@@ -3798,17 +3796,14 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             m_aAbsURIRef.append('@');
         if (getSchemeInfo().m_bHost)
         {
-            OUStringBuffer aSynHost(rTheHost);
+            OUString aSynHost(rTheHost);
             bool bNetBiosName = false;
             switch (m_eScheme)
             {
                 case INetProtocol::File:
                     {
-                        OUString sTemp(aSynHost.toString());
-                        if (sTemp.equalsIgnoreAsciiCase( "localhost" ))
-                        {
-                            aSynHost.setLength(0);
-                        }
+                        if (aSynHost.equalsIgnoreAsciiCase( "localhost" ))
+                            aSynHost.clear();
                         bNetBiosName = true;
                     }
                     break;
@@ -3829,14 +3824,15 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                     }
                     break;
             }
+            OUStringBuffer aSynHostBuf(aSynHost);
             if (!parseHostOrNetBiosName(
                     aSynHost.getStr(), aSynHost.getStr() + aSynHost.getLength(),
-                    EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8, bNetBiosName, &aSynHost))
+                    EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8, bNetBiosName, &aSynHostBuf))
             {
                 setInvalid();
                 return false;
             }
-            m_aHost.set(m_aAbsURIRef, aSynHost.makeStringAndClear(),
+            m_aHost.set(m_aAbsURIRef, aSynHostBuf.makeStringAndClear(),
                 m_aAbsURIRef.getLength());
             if (nThePort != 0)
             {
