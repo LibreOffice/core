@@ -51,6 +51,24 @@
       "parentUuid": "d9a55bd6_905aaa49",
       "revId": "6a7cffb15ce7ac2748b78831fe21a6e5d869c679",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8cf3c55_7ab2dee2",
+        "filename": "idl/source/objects/types.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-26T19:38:48Z",
+      "side": 1,
+      "message": "I\u0027d do that even for just a single attribute. Delegating ctors allow for following changes, when you e.g. introduce another member, and need to only initialize if in one single ctor, and other ctors get it automatically.",
+      "parentUuid": "6bf5338c_ec5ea651",
+      "revId": "6a7cffb15ce7ac2748b78831fe21a6e5d869c679",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
