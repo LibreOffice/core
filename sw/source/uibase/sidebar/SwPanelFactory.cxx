@@ -36,8 +36,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 
@@ -46,13 +45,11 @@ using namespace css::uno;
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
         css::ui::XUIElementFactory, css::lang::XServiceInfo
         > PanelFactoryInterfaceBase;
 
-class SwPanelFactory
-    : private ::cppu::BaseMutex
-    , public PanelFactoryInterfaceBase
+class SwPanelFactory final : public PanelFactoryInterfaceBase
 {
 private:
     SwPanelFactory(SwPanelFactory const&) = delete;
@@ -77,7 +74,6 @@ public:
 };
 
 SwPanelFactory::SwPanelFactory()
-    : PanelFactoryInterfaceBase(m_aMutex)
 {
 }
 
