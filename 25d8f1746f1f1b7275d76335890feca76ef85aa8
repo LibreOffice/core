@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a40654ff_51555bdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-26T10:29:42Z",
+      "side": 1,
+      "message": "Please compare to https://gerrit.libreoffice.org/c/core/+/127478 . I don\u0027t know which would be better, but I\u0027m afraid that changing string view to OUString would limit possible input types?",
+      "revId": "25d8f1746f1f1b7275d76335890feca76ef85aa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71922d3e_83a949f8",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2893,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-26T10:29:42Z",
+      "side": 1,
+      "message": ".clear()?",
+      "revId": "25d8f1746f1f1b7275d76335890feca76ef85aa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
