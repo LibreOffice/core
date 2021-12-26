@@ -5428,7 +5428,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
                 pData->GetName(aName);
                 // adjust relative references to the left column in Excel-compliant way:
                 pData->UpdateSymbol(aContent, ScAddress( nStartCol, nOutRow, nTab ));
-                aFormula = "=" + aContent.toString();
+                aFormula = "=" + aContent;
                 ScSetStringParam aParam;
                 aParam.setTextInput();
                 rDoc.SetString(ScAddress(nStartCol,nOutRow,nTab), aName, &aParam);

@@ -202,7 +202,7 @@ OUString CrashReporter::getLoggedUnoCommands()
         aUnoCommandBuffer.append(unocommand);
         aCommandSeperator=",";
     }
-    return aUnoCommandBuffer.toString();
+    return aUnoCommandBuffer.makeStringAndClear();
 }
 
 namespace {

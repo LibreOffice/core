@@ -647,12 +647,13 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
                 }
             }
 
-            if ( aOldStr != aStr.toString() )
+            OUString sStr = aStr.makeStringAndClear();
+            if ( aOldStr != sStr )
             {
                 if ( bSameMask )
-                    aStr = ImplPatternReformat( aStr.toString(), rEditMask, rLiteralMask, nFormatFlags );
+                    sStr = ImplPatternReformat( sStr, rEditMask, rLiteralMask, nFormatFlags );
                 rbInKeyInput = true;
-                rEdit.SetText( aStr.toString(), Selection( nNewPos ) );
+                rEdit.SetText( sStr, Selection( nNewPos ) );
                 rEdit.SetModified();
                 rbInKeyInput = false;
             }
@@ -776,8 +777,9 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
         if ( !bError )
         {
             rbInKeyInput = true;
-            Selection aNewSel( ImplPatternRightPos( aStr.toString(), rEditMask, nFormatFlags, bSameMask, nNewPos ) );
-            rEdit.SetText( aStr.toString(), aNewSel );
+            const OUString sStr = aStr.makeStringAndClear();
+            Selection aNewSel( ImplPatternRightPos( sStr, rEditMask, nFormatFlags, bSameMask, nNewPos ) );
+            rEdit.SetText( sStr, aNewSel );
             rEdit.SetModified();
             rbInKeyInput = false;
         }

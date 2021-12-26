@@ -670,7 +670,7 @@ void MigrationImpl::copyConfig()
                     buf.append(enc);
                 } while (n >= 0);
                 buf.append(".xcu");
-                regFilePath = buf.toString();
+                regFilePath = buf.makeStringAndClear();
             }
             configuration::Update::get(
                 comphelper::getProcessComponentContext())->

@@ -114,7 +114,7 @@ DocPasswordHelper::GenerateNewModifyPasswordInfoOOXML(std::u16string_view aPassw
     uno::Sequence<sal_Int8> aSalt = GenerateRandomByteSequence(16);
     OUStringBuffer aBuffer;
     comphelper::Base64::encode(aBuffer, aSalt);
-    OUString sSalt = aBuffer.toString();
+    OUString sSalt = aBuffer.makeStringAndClear();
 
     sal_Int32 const nIterationCount = 100000;
     OUString sAlgorithm("SHA-512");

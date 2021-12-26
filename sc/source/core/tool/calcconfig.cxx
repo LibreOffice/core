@@ -199,7 +199,7 @@ OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
         result.append(pOpCodeMap->getSymbol(*i));
     }
 
-    return result.toString();
+    return result.makeStringAndClear();
 }
 
 ScCalcConfig::OpCodeSet ScStringToOpCodeSet(std::u16string_view rOpCodes)

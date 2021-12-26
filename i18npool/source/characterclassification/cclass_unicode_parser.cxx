@@ -1057,7 +1057,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             aSymbol.append(rText.subView(postSymbolIndex, nextCharIndex - postSymbolIndex - 1));
             r.TokenType |= KParseType::MISSING_QUOTE;
         }
-        r.DequotedNameOrString = aSymbol.toString();
+        r.DequotedNameOrString = aSymbol.makeStringAndClear();
     }
 }
 

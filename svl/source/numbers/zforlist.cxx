@@ -3910,10 +3910,10 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString
     const SvNumberformat* pFormat = GetFormatEntry(nFormat);
     if ( pFormat )
     {
-        OUStringBuffer sBuff(128); // guess-estimate of a value that will pretty much guarantee no re-alloc
         OUString aSymbol, aExtension;
         if ( pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
         {
+            OUStringBuffer sBuff(128); // guess-estimate of a value that will pretty much guarantee no re-alloc
             if ( ppEntry )
             {
                 bool bFoundBank = false;
@@ -3949,7 +3949,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString
                 }
                 sBuff.append(']');
             }
-            rStr = sBuff.toString();
+            rStr = sBuff.makeStringAndClear();
             return true;
         }
     }

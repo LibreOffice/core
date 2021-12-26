@@ -93,10 +93,10 @@ SfxEmojiControl::~SfxEmojiControl()
 
 void SfxEmojiControl::ConvertLabelToUnicode(weld::ToggleButton& rBtn)
 {
-    OUStringBuffer sHexText;
     OUString sLabel = rBtn.get_label();
-    sHexText.appendUtf32(sLabel.toUInt32(16));
-    rBtn.set_label(sHexText.toString());
+    sal_uInt32 nCodePoint = sLabel.toUInt32(16);
+    const OUString sHexText(&nCodePoint, 1);
+    rBtn.set_label(sHexText);
 }
 
 FILTER_CATEGORY SfxEmojiControl::getFilter(const weld::Toggleable& rCurPageId) const
