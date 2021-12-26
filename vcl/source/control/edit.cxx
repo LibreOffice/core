@@ -692,12 +692,13 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
         {
             if ( nMode == EDIT_DELMODE_RESTOFWORD )
             {
-                i18n::Boundary aBoundary = xBI->getWordBoundary( maText.toString(), aSelection.Min(),
+                const OUString sText = maText.toString();
+                i18n::Boundary aBoundary = xBI->getWordBoundary( sText, aSelection.Min(),
                         GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
                 auto startPos = aBoundary.startPos;
                 if ( startPos == aSelection.Min() )
                 {
-                    aBoundary = xBI->previousWord( maText.toString(), aSelection.Min(),
+                    aBoundary = xBI->previousWord( sText, aSelection.Min(),
                             GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
                     startPos = std::max(aBoundary.startPos, sal_Int32(0));
                 }
@@ -1561,10 +1562,11 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     {
                         if ( bWord )
                         {
-                            i18n::Boundary aBoundary = xBI->getWordBoundary( maText.toString(), aSel.Max(),
+                            const OUString sText = maText.toString();
+                            i18n::Boundary aBoundary = xBI->getWordBoundary( sText, aSel.Max(),
                                     GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
                             if ( aBoundary.startPos == aSel.Max() )
-                                aBoundary = xBI->previousWord( maText.toString(), aSel.Max(),
+                                aBoundary = xBI->previousWord( sText, aSel.Max(),
                                         GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
                             aSel.Max() = aBoundary.startPos;
                         }

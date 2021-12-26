@@ -3695,7 +3695,7 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
     if (m_eScheme != rObject.m_eScheme)
         return false;
     if (m_eScheme == INetProtocol::NotValid)
-        return m_aAbsURIRef.toString() == rObject.m_aAbsURIRef.toString();
+        return std::u16string_view(m_aAbsURIRef) == std::u16string_view(rObject.m_aAbsURIRef);
     if ((m_aScheme.compare(
              rObject.m_aScheme, m_aAbsURIRef, rObject.m_aAbsURIRef)
          != 0)
@@ -3904,7 +3904,7 @@ OUString INetURLObject::getExternalURL() const
 {
     OUString aTheExtURIRef;
     translateToExternal(
-        m_aAbsURIRef.toString(), aTheExtURIRef);
+        m_aAbsURIRef, aTheExtURIRef);
     return aTheExtURIRef;
 }
 

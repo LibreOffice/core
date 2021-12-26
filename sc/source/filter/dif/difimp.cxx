@@ -129,6 +129,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
 
         ScSetStringParam aStrParam; // used to set string value without number detection.
         aStrParam.setTextInput();
+        const OUString aData = rData.makeStringAndClear();
 
         while( eCurrent != D_EOD )
         {
@@ -136,8 +137,6 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
 
             aPrgrsBar.Progress();
             ScAddress aPos(nColCnt, nRowCnt, nBaseTab);
-
-            OUString aData = rData.toString();
 
             switch( eCurrent )
             {
@@ -391,7 +390,7 @@ static void lcl_DeEscapeQuotesDif(OUStringBuffer& rString)
     //  escape quotes in strings (and Excel doesn't when using the clipboard).
     //  The quotes around the string are removed before this function is called.
 
-    rString = rString.toString().replaceAll("\"\"", "\"");
+    rString = rString.makeStringAndClear().replaceAll("\"\"", "\"");
 }
 
 // Determine if passed in string is numeric data and set fVal/nNumFormat if so

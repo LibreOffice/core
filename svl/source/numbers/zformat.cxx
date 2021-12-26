@@ -5157,7 +5157,7 @@ static void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_In
     }
     aLCIDString.insert( 0, "[$-" );
     aLCIDString.append( "]" );
-    rFormatStr.insert( nPosInsertLCID, aLCIDString.toString() );
+    rFormatStr.insert( nPosInsertLCID, aLCIDString.makeStringAndClear() );
 }
 
 /** Increment nAlphabetID for CJK numerals

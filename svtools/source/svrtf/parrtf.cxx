@@ -125,7 +125,7 @@ int SvRTFParser::GetNextToken_()
                                 aNumber.append(static_cast<sal_Unicode>(nNextCh));
                                 nNextCh = GetNextChar();
                             } while( RTF_ISDIGIT( nNextCh ) );
-                            nTokenValue = aNumber.toString().toInt32();
+                            nTokenValue = OUString::unacquired(aNumber).toInt32();
                             if( bNegValue )
                                 nTokenValue = -nTokenValue;
                             bTokenHasValue=true;

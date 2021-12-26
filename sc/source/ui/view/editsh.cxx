@@ -483,9 +483,10 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         {
                             aBuffer.append(rName).append(' ');
                         }
-                        pTableView->InsertText(aBuffer.toString());
+                        const OUString s = aBuffer.makeStringAndClear();
+                        pTableView->InsertText(s);
                         if (pTopView)
-                            pTopView->InsertText(aBuffer.makeStringAndClear());
+                            pTopView->InsertText(s);
                     }
                 }
                 pDlg.disposeAndClear();
