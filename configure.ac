@@ -1192,6 +1192,12 @@ AC_MSG_NOTICE([VCL platform uses headless plugin: $using_headless_plugin])
 AC_MSG_NOTICE([VCL platform uses vclplug: $using_vclplug])
 AC_MSG_NOTICE([VCL platform uses X11: $using_x11])
 
+# Backtrace support
+AC_CHECK_FUNC([backtrace],, [
+    PKG_CHECK_MODULES([BACKTRACE], [libexecinfo])
+])
+AC_SUBST([BACKTRACE_LIBS])
+
 # ===================================================================
 #
 # End initial platform setup
