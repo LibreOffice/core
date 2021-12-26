@@ -223,7 +223,7 @@ public:
      */
     static css::uno::Sequence<sal_Int8> GetOoxHashAsSequence(
             const OUString& rPassword,
-            const OUString& rSaltValue,
+            std::u16string_view rSaltValue,
             sal_uInt32 nSpinCount,
             comphelper::Hash::IterCount eIterCount,
              std::u16string_view rAlgorithmName);
@@ -269,7 +269,7 @@ public:
      */
     static OUString GetOoxHashAsBase64(
             const OUString& rPassword,
-            const OUString& rSaltValue,
+            std::u16string_view rSaltValue,
             sal_uInt32 nSpinCount,
             comphelper::Hash::IterCount eIterCount,
             std::u16string_view rAlgorithmName);
