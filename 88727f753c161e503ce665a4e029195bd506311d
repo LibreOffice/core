@@ -16,6 +16,23 @@
       "message": "Just FYI: you need git mold from today with the version glob fix. But that will just link stuff. Unit tests still crash left and right with it, simple stuff like \n\nmake -C comphelper CppunitTest_comphelper_parallelsort_test  CPPUNITTRACE\u003d\"gdb --args\"\n\nresults in\n\nProgram received signal SIGSEGV, Segmentation fault.\n0x00007ffff7fdca80 in _dl_relocate_object (l\u003d0x5555555760c0, scope\u003d0x555555576428, reloc_mode\u003dreloc_mode@entry\u003d0, consider_profiling\u003dconsider_profiling@entry\u003d0) at dl-reloc.c:227\n227     dl-reloc.c: No such file or directory.\n(gdb) bt\n#0  0x00007ffff7fdca80 in _dl_relocate_object (l\u003d0x5555555760c0, scope\u003d0x555555576428, reloc_mode\u003dreloc_mode@entry\u003d0, consider_profiling\u003dconsider_profiling@entry\u003d0) at dl-reloc.c:227\n#1  0x00007ffff7fe4f5c in dl_open_worker (a\u003da@entry\u003d0x7fffffff0e30) at dl-open.c:688\n#2  0x00007ffff7a308b8 in __GI__dl_catch_exception (exception\u003d\u003coptimized out\u003e, operate\u003d\u003coptimized out\u003e, args\u003d\u003coptimized out\u003e) at dl-error-skeleton.c:208\n#3  0x00007ffff7fe45fa in _dl_open (file\u003d0x555555575700 \"/workdir/LinkTarget/CppunitTest/libtest_comphelper_parallelsort_test.so\", mode\u003d-2147483390, caller_dlopen\u003d\u003coptimized out\u003e, nsid\u003d-2, argc\u003d8, argv\u003d0x7fffffff1978, \n    env\u003d0x7fffffff19c0) at dl-open.c:837\n#4  0x00007ffff78c834c in dlopen_doit (a\u003da@entry\u003d0x7fffffff1050) at dlopen.c:66\n#5  0x00007ffff7a308b8 in __GI__dl_catch_exception (exception\u003dexception@entry\u003d0x7fffffff0ff0, operate\u003d\u003coptimized out\u003e, args\u003d\u003coptimized out\u003e) at dl-error-skeleton.c:208\n#6  0x00007ffff7a30983 in __GI__dl_catch_error (objname\u003d0x555555574e60, errstring\u003d0x555555574e68, mallocedp\u003d0x555555574e58, operate\u003d\u003coptimized out\u003e, args\u003d\u003coptimized out\u003e) at dl-error-skeleton.c:227\n#7  0x00007ffff78c8b59 in _dlerror_run (operate\u003doperate@entry\u003d0x7ffff78c82f0 \u003cdlopen_doit\u003e, args\u003dargs@entry\u003d0x7fffffff1050) at dlerror.c:170\n#8  0x00007ffff78c83da in __dlopen (file\u003d\u003coptimized out\u003e, mode\u003d\u003coptimized out\u003e) at dlopen.c:87\n#9  0x00007ffff7f9b7eb in CppUnit::DynamicLibraryManager::doLoadLibrary (this\u003d0x555555575f80, libraryName\u003d\"/workdir/LinkTarget/CppunitTest/libtest_comphelper_parallelsort_test.so\") at UnixDynamicLibraryManager.cpp:16\n#10 0x00007ffff7f74e5b in CppUnit::DynamicLibraryManager::loadLibrary (this\u003d0x555555575f80, libraryName\u003d\"/workdir/LinkTarget/CppunitTest/libtest_comphelper_parallelsort_test.so\") at DynamicLibraryManager.cpp:49\n#11 0x00007ffff7f74d04 in CppUnit::DynamicLibraryManager::DynamicLibraryManager (this\u003d0x555555575f80, libraryFileName\u003d\"/workdir/LinkTarget/CppunitTest/libtest_comphelper_parallelsort_test.so\")\n    at DynamicLibraryManager.cpp:13\n#12 0x00007ffff7f7ae93 in CppUnit::PlugInManager::load (this\u003d0x555555575430, libraryFileName\u003d\"/workdir/LinkTarget/CppunitTest/libtest_comphelper_parallelsort_test.so\", parameters\u003d...) at PlugInManager.cpp:34\n#13 0x00005555555599cf in (anonymous namespace)::ProtectedFixtureFunctor::run (this\u003d0x7fffffff14a0) at /sal/cppunittester/cppunittester.cxx:271\n#14 0x000055555555a5b5 in main2 () at /sal/cppunittester/cppunittester.cxx:478\n#15 sal_main () at /sal/cppunittester/cppunittester.cxx:614\n#16 0x0000555555558c00 in main (argc\u003d\u003coptimized out\u003e, argv\u003d\u003coptimized out\u003e) at /sal/cppunittester/cppunittester.cxx:609\n\nJust switching the linker for that dir to gold fixes the crash... ",
       "revId": "88727f753c161e503ce665a4e029195bd506311d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0addfd2_11afa0eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-26T17:57:47Z",
+      "side": 1,
+      "message": "mold issue: https://github.com/rui314/mold/issues/201",
+      "revId": "88727f753c161e503ce665a4e029195bd506311d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
