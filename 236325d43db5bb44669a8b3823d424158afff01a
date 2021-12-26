@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f61c2d_0cef5e13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-26T15:56:37Z",
+      "side": 1,
+      "message": "just reading the variable name, I agree with you but I suppose there must a good reason.\n\nEike: any thoughts here? I mean, if there\u0027s indeed a good reason, a comment in the code could be useful",
+      "revId": "236325d43db5bb44669a8b3823d424158afff01a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
