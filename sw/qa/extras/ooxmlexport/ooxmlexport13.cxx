@@ -58,11 +58,11 @@ DECLARE_SW_EXPORT_TEST(testFlyInFly, "ooo39250-1-min.rtf", nullptr, Test)
     // check that anchor of text frame is in other text frame
     uno::Reference<text::XTextContent> const xAnchored(getShape(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAnchored.is());
-    CPPUNIT_ASSERT_EQUAL(OUString(""), uno::Reference<container::XNamed>(xAnchored, uno::UNO_QUERY_THROW)->getName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame1")/*generated name*/, uno::Reference<container::XNamed>(xAnchored, uno::UNO_QUERY_THROW)->getName());
     uno::Reference<text::XText> const xAnchorText(xAnchored->getAnchor()->getText());
     uno::Reference<text::XTextFrame> const xAnchorFrame(xAnchorText, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAnchorFrame.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("Frame2"), uno::Reference<container::XNamed>(xAnchorFrame, uno::UNO_QUERY_THROW)->getName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame3"), uno::Reference<container::XNamed>(xAnchorFrame, uno::UNO_QUERY_THROW)->getName());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf125778_lostPageBreakTOX, "tdf125778_lostPageBreakTOX.docx")

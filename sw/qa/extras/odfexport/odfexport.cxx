@@ -941,7 +941,7 @@ DECLARE_ODFEXPORT_TEST(testTdf134987, "tdf134987.docx")
     OUString aMediaType;
     // checking first object (formula)
     {
-        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("1"), uno::UNO_QUERY);
+        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("Object1"), uno::UNO_QUERY);
         uno::Reference<lang::XComponent> xObj(xEOSupplier->getEmbeddedObject());
         CPPUNIT_ASSERT(xObj.is());
 
@@ -955,7 +955,7 @@ DECLARE_ODFEXPORT_TEST(testTdf134987, "tdf134987.docx")
     }
     // checking second object (chart)
     {
-        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("2"), uno::UNO_QUERY);
+        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("Object2"), uno::UNO_QUERY);
         uno::Reference<lang::XComponent> xObj(xEOSupplier->getEmbeddedObject());
         CPPUNIT_ASSERT(xObj.is());
 
@@ -969,7 +969,7 @@ DECLARE_ODFEXPORT_TEST(testTdf134987, "tdf134987.docx")
     }
     // checking third object (chart)
     {
-        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("3"), uno::UNO_QUERY);
+        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("Object3"), uno::UNO_QUERY);
         uno::Reference<lang::XComponent> xObj(xEOSupplier->getEmbeddedObject());
         CPPUNIT_ASSERT(xObj.is());
 
