@@ -59,7 +59,6 @@ public:
     bool Ready() const;
 
     void applyTextAntiAliasMode();
-    void changeTextAntiAliasMode(D2DTextAntiAliasMode eMode);
 
 private:
     // This is a singleton object disable copy ctor and assignment operator

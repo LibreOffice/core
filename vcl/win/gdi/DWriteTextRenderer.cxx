@@ -177,15 +177,6 @@ HRESULT D2DWriteTextOutRenderer::CreateRenderTarget()
     return hr;
 }
 
-void D2DWriteTextOutRenderer::changeTextAntiAliasMode(D2DTextAntiAliasMode eMode)
-{
-    if (meTextAntiAliasMode != eMode)
-    {
-        meTextAntiAliasMode = eMode;
-        applyTextAntiAliasMode();
-    }
-}
-
 bool D2DWriteTextOutRenderer::Ready() const
 {
     return mpGdiInterop && mpRT;
