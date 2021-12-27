@@ -155,7 +155,7 @@ struct ImplSVAppData
     SystemWindowFlags       mnSysWinMode = SystemWindowFlags(0); // Mode, when SystemWindows should be created
     bool                    mbInAppMain = false;            // is Application::Main() on stack
     bool                    mbInAppExecute = false;         // is Application::Execute() on stack
-    bool                    mbAppQuit = false;              // is Application::Quit() called
+    volatile bool           mbAppQuit = false;              // is Application::Quit() called, volatile because we read/write from different threads
     bool                    mbSettingsInit = false;         // true: Settings are initialized
     DialogCancelMode meDialogCancel = DialogCancelMode::Off; // true: All Dialog::Execute() calls will be terminated immediately with return false
     bool mbRenderToBitmaps = false; // set via svp / headless plugin
