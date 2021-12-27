@@ -262,6 +262,12 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
         setBoolean(nParameterIndex, boolValue);
         break;
     }
+    case SQL_NULL:
+    {
+        // See https://www.firebirdsql.org/file/documentation/html/en/refdocs/fblangref25/firebird-25-language-reference.html#fblangref25-datatypes-special-sqlnull
+        pVar->sqldata = nullptr;
+        break;
+    }
     default:
         ::dbtools::throwSQLException(
             "Incorrect type for setString",
