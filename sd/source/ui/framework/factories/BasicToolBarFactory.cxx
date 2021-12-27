@@ -38,7 +38,6 @@ namespace sd::framework {
 //===== BasicToolBarFactory ===================================================
 
 BasicToolBarFactory::BasicToolBarFactory ()
-    : BasicToolBarFactoryInterfaceBase(m_aMutex)
 {
 }
 
@@ -46,7 +45,7 @@ BasicToolBarFactory::~BasicToolBarFactory()
 {
 }
 
-void SAL_CALL BasicToolBarFactory::disposing()
+void BasicToolBarFactory::disposing(std::unique_lock<std::mutex>&)
 {
     Shutdown();
 }
@@ -142,7 +141,7 @@ void SAL_CALL BasicToolBarFactory::releaseResource (
 
 void BasicToolBarFactory::ThrowIfDisposed() const
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         throw lang::DisposedException ("BasicToolBarFactory object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
