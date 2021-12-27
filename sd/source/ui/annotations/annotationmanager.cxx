@@ -164,8 +164,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
 }
 
 AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
-: AnnotationManagerImplBase( m_aMutex )
-, mrBase( rViewShellBase )
+: mrBase( rViewShellBase )
 , mpDoc( rViewShellBase.GetDocument() )
 , mbShowAnnotations( true )
 , mnUpdateTagsEvent( nullptr )
@@ -200,7 +199,7 @@ void AnnotationManagerImpl::init()
 }
 
 // WeakComponentImplHelper
-void SAL_CALL AnnotationManagerImpl::disposing ()
+void AnnotationManagerImpl::disposing (std::unique_lock<std::mutex>&)
 {
     try
     {

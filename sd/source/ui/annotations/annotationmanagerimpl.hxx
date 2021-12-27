@@ -23,8 +23,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 #include "annotationtag.hxx"
 
@@ -45,11 +44,11 @@ namespace tools {
 class EventMultiplexerEvent;
 }
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::document::XEventListener
     > AnnotationManagerImplBase;
 
-class AnnotationManagerImpl : private ::cppu::BaseMutex, public AnnotationManagerImplBase
+class AnnotationManagerImpl : public AnnotationManagerImplBase
 {
 public:
     explicit AnnotationManagerImpl( ViewShellBase& rViewShellBase );
@@ -57,7 +56,7 @@ public:
     void init();
 
     // WeakComponentImplHelper
-    virtual void SAL_CALL disposing () override;
+    virtual void disposing (std::unique_lock<std::mutex>&) override;
 
     // XEventListener
     virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) override;
