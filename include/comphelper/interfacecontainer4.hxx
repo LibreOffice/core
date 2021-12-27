@@ -114,7 +114,8 @@ template <class ListenerT> void OInterfaceIteratorHelper4<ListenerT>::remove()
 template <class ListenerT> class OInterfaceContainerHelper4
 {
 public:
-    OInterfaceContainerHelper4() {}
+    OInterfaceContainerHelper4();
+
     /**
       Return the number of Elements in the container. Only useful if you have acquired
       the mutex.
@@ -205,6 +206,12 @@ private:
     OInterfaceContainerHelper4(const OInterfaceContainerHelper4&) = delete;
     OInterfaceContainerHelper4& operator=(const OInterfaceContainerHelper4&) = delete;
 
+    static o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>>& DEFAULT()
+    {
+        static o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>> SINGLETON;
+        return SINGLETON;
+    }
+
 private:
     template <typename EventT> class NotifySingleListener
     {
@@ -226,6 +233,12 @@ private:
         }
     };
 };
+
+template <class T>
+inline OInterfaceContainerHelper4<T>::OInterfaceContainerHelper4()
+    : maData(OInterfaceContainerHelper4<T>::DEFAULT())
+{
+}
 
 template <class T>
 template <typename FuncT>
