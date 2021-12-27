@@ -453,10 +453,8 @@ css::uno::Sequence<OUString> JSDropTarget::getSupportedServiceNames()
 
 void JSDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
 {
-    std::unique_lock aGuard(m_aMutex);
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
-        m_aListeners);
-    aGuard.unlock();
+        (std::unique_lock(m_aMutex), m_aListeners));
 
     for (auto const& listener : aListeners)
     {
@@ -466,10 +464,8 @@ void JSDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& 
 
 void JSDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
 {
-    std::unique_lock aGuard(m_aMutex);
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
-        m_aListeners);
-    aGuard.unlock();
+        (std::unique_lock(m_aMutex), m_aListeners));
 
     for (auto const& listener : aListeners)
     {
