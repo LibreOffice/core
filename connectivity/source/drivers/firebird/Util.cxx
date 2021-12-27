@@ -342,8 +342,9 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
         case SQL_BOOLEAN:
             pVar->sqldata = static_cast<char *>(malloc(sizeof(sal_Bool)));
             break;
+        // See https://www.firebirdsql.org/file/documentation/html/en/refdocs/fblangref25/firebird-25-language-reference.html#fblangref25-datatypes-special-sqlnull
         case SQL_NULL:
-            assert(false); // TODO: implement
+            pVar->sqldata = nullptr;
             break;
         case SQL_QUAD:
             assert(false); // TODO: implement
@@ -388,7 +389,8 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
             }
             break;
         case SQL_NULL:
-            assert(false); // TODO: implement
+            // See SQL_NULL case in mallocSQLVAR
+            assert(pVar->sqldata == nullptr);
             break;
         case SQL_QUAD:
             assert(false); // TODO: implement
