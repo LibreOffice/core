@@ -34,6 +34,24 @@
       "parentUuid": "d7bb9092_c89b9371",
       "revId": "37106f20bd5cc016a473fbdb2e9e37da096cff5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0736a579_c5c21325",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-27T20:29:08Z",
+      "side": 1,
+      "message": "lets try with the internal lockfile which seems to be possible to use now anyway post this change",
+      "parentUuid": "d70534b6_814c5d89",
+      "revId": "37106f20bd5cc016a473fbdb2e9e37da096cff5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
