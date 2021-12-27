@@ -1604,6 +1604,8 @@ SwXText::convertToTextFrame(
     }
     bool bParaAfterInserted = false;
     bool bParaBeforeInserted = false;
+    ::std::optional<SwPaM> oAnchorCheckPam;
+    oAnchorCheckPam.emplace(*pStartPam->Start(), *pEndPam->End());
     if (
         pStartStartNode && pEndStartNode &&
         (pStartStartNode != pEndStartNode || pStartStartNode != GetStartNode())
@@ -1684,6 +1686,7 @@ SwXText::convertToTextFrame(
         bParaAfterInserted = GetDoc()->getIDocumentContentOperations().AppendTextNode( aEnd );
         pEndPam->DeleteMark();
         *pEndPam->GetPoint() = aEnd;
+        *oAnchorCheckPam->End() = aEnd;
     }
     pStartPam->SetMark();
     *pStartPam->End() = *pEndPam->End();
@@ -1698,10 +1701,17 @@ SwXText::convertToTextFrame(
     {
         const SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-        if ( !isGraphicNode(pFrameFormat) &&
-                (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() || RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
-                pStartPam->Start()->nNode.GetIndex() <= rAnchor.GetContentAnchor()->nNode.GetIndex() &&
-                pStartPam->End()->nNode.GetIndex() >= rAnchor.GetContentAnchor()->nNode.GetIndex())
+        // note: Word can do at-char anchors in text frames - sometimes!
+        // see testFlyInFly for why this checks only the edges of the selection,
+        // and testFloatingTablesAnchor for why it excludes pre/post table
+        // added nodes
+        if (!isGraphicNode(pFrameFormat)
+            && (   (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()
+                    && (    oAnchorCheckPam->Start()->nNode.GetIndex() == rAnchor.GetContentAnchor()->nNode.GetIndex()
+                        ||  oAnchorCheckPam->End()->nNode.GetIndex() == rAnchor.GetContentAnchor()->nNode.GetIndex()))
+                || (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()
+                    && (    *oAnchorCheckPam->Start() == *rAnchor.GetContentAnchor()
+                        ||  *oAnchorCheckPam->End() == *rAnchor.GetContentAnchor()))))
         {
             if (pFrameFormat->GetName().isEmpty())
             {
@@ -1713,6 +1723,7 @@ SwXText::convertToTextFrame(
             }
         }
     }
+    oAnchorCheckPam.reset(); // clear SwIndex before deleting nodes
 
     const uno::Reference<text::XTextFrame> xNewFrame(
             SwXTextFrame::CreateXTextFrame(*m_pImpl->m_pDoc, nullptr));
@@ -1730,7 +1741,7 @@ SwXText::convertToTextFrame(
                 new SwXTextRange(*pStartPam, this);
             assert(rNewFrame.IsDescriptor());
             rNewFrame.attachToRange(xInsertTextRange, pStartPam.get());
-            rNewFrame.setName(m_pImpl->m_pDoc->GetUniqueFrameName());
+            assert(!rNewFrame.getName().isEmpty());
         }
 
         SwTextNode *const pTextNode(pStartPam->GetNode().GetTextNode());

@@ -4611,14 +4611,15 @@ void DomainMapper_Impl::ChainTextFrames()
         sal_Int32 nId;
         sal_Int32 nSeq;
         OUString s_mso_next_textbox;
-        bool bShapeNameSet;
-        TextFramesForChaining(): nId(0), nSeq(0), bShapeNameSet(false) {}
+        OUString shapeName;
+        TextFramesForChaining() : nId(0), nSeq(0) {}
     } ;
     typedef std::map <OUString, TextFramesForChaining> ChainMap;
 
     try
     {
         ChainMap aTextFramesForChainingHelper;
+        ::std::vector<TextFramesForChaining> chainingWPS;
         OUString sChainNextName("ChainNextName");
 
         //learn about ALL of the textboxes and their chaining values first - because frames are processed in no specific order.
@@ -4656,18 +4657,21 @@ void DomainMapper_Impl::ChainTextFrames()
 
             //Sometimes the shape names have not been imported.  If not, we may have a fallback name.
             //Set name later, only if required for linking.
-            if( sShapeName.isEmpty() )
-                aChainStruct.bShapeNameSet = false;
-            else
-            {
-                aChainStruct.bShapeNameSet = true;
-                sLinkChainName = sShapeName;
-            }
+            aChainStruct.shapeName = sShapeName;
 
-            if( !sLinkChainName.isEmpty() )
+            if (!sLinkChainName.isEmpty())
             {
                 aChainStruct.xShape = rTextFrame;
                 aTextFramesForChainingHelper[sLinkChainName] = aChainStruct;
+            }
+            if (aChainStruct.s_mso_next_textbox.isEmpty())
+            {   // no VML chaining => try to chain DrawingML via IDs
+                aChainStruct.xShape = rTextFrame;
+                if (!sLinkChainName.isEmpty())
+                {   // for member of group shapes, TestTdf73499
+                    aChainStruct.shapeName = sLinkChainName;
+                }
+                chainingWPS.emplace_back(aChainStruct);
             }
         }
 
@@ -4683,22 +4687,22 @@ void DomainMapper_Impl::ChainTextFrames()
                 if( nextFinder != aTextFramesForChainingHelper.end() )
                 {
                     //if the frames have no name yet, then set them.  LinkDisplayName / ChainName are read-only.
-                    if( !msoItem.second.bShapeNameSet )
+                    if (msoItem.second.shapeName.isEmpty())
                     {
                         uno::Reference< container::XNamed > xNamed( msoItem.second.xShape, uno::UNO_QUERY );
                         if ( xNamed.is() )
                         {
                             xNamed->setName( msoItem.first );
-                            msoItem.second.bShapeNameSet = true;
+                            msoItem.second.shapeName = msoItem.first;
                         }
                     }
-                    if( !nextFinder->second.bShapeNameSet )
+                    if (nextFinder->second.shapeName.isEmpty())
                     {
                         uno::Reference< container::XNamed > xNamed( nextFinder->second.xShape, uno::UNO_QUERY );
                         if ( xNamed.is() )
                         {
                             xNamed->setName( nextFinder->first );
-                            nextFinder->second.bShapeNameSet = true;
+                            nextFinder->second.shapeName = msoItem.first;
                         }
                     }
 
@@ -4706,7 +4710,7 @@ void DomainMapper_Impl::ChainTextFrames()
                     uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
 
                     //The reverse chaining happens automatically, so only one direction needs to be set
-                    xPropertySet->setPropertyValue(sChainNextName, uno::makeAny(nextFinder->first));
+                    xPropertySet->setPropertyValue(sChainNextName, uno::makeAny(nextFinder->second.shapeName));
 
                     //the last item in an mso-next-textbox chain is indistinguishable from id/seq items.  Now that it is handled, remove it.
                     if( nextFinder->second.s_mso_next_textbox.isEmpty() )
@@ -4719,26 +4723,23 @@ void DomainMapper_Impl::ChainTextFrames()
         const sal_Int32 nDirection = 1;
 
         //Finally - go through and attach the chains based on matching ID and incremented sequence number (dml-style).
-        for (const auto& rOuter : aTextFramesForChainingHelper)
+        for (const auto& rOuter : chainingWPS)
         {
-            if( rOuter.second.s_mso_next_textbox.isEmpty() )  //non-empty ones already handled earlier - so skipping them now.
-            {
-                for (const auto& rInner : aTextFramesForChainingHelper)
+                for (const auto& rInner : chainingWPS)
                 {
-                    if ( rInner.second.nId == rOuter.second.nId )
+                    if (rInner.nId == rOuter.nId)
                     {
-                        if ( rInner.second.nSeq == ( rOuter.second.nSeq + nDirection ) )
+                        if (rInner.nSeq == (rOuter.nSeq + nDirection))
                         {
-                            uno::Reference<text::XTextContent>  xTextContent(rOuter.second.xShape, uno::UNO_QUERY_THROW);
+                            uno::Reference<text::XTextContent> const xTextContent(rOuter.xShape, uno::UNO_QUERY_THROW);
                             uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
 
                             //The reverse chaining happens automatically, so only one direction needs to be set
-                            xPropertySet->setPropertyValue(sChainNextName, uno::makeAny(rInner.first));
+                            xPropertySet->setPropertyValue(sChainNextName, uno::makeAny(rInner.shapeName));
                             break ; //there cannot be more than one next frame
                         }
                     }
                 }
-            }
         }
         m_vTextFramesForChaining.clear(); //clear the vector
     }
