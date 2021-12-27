@@ -52,6 +52,24 @@
       "parentUuid": "d70534b6_814c5d89",
       "revId": "37106f20bd5cc016a473fbdb2e9e37da096cff5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "949992d6_2bfbacab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-27T21:04:42Z",
+      "side": 1,
+      "message": "FWIW, build time got a bit faster:\n\nStep #3 - \"compile-honggfuzz-address-x86_64\": start at Sat Dec 25 12:15:39 UTC 2021\nStep #12 - \"compile-libfuzzer-address-x86_64\": start at Sat Dec 25 14:05:57 UTC 2021\n\n~\u003d 110m\n\nStep #3 - \"compile-honggfuzz-address-x86_64\": start at Sun Dec 26 18:30:23 UTC 2021\nStep #12 - \"compile-libfuzzer-address-x86_64\": start at Sun Dec 26 19:52:29 UTC 2021\n\n~\u003d 82m\n\nAssuming the load of the box is identical. So this shouldn\u0027t hit any timeout you suspected in https://gerrit.libreoffice.org/c/core/+/120114.\n\nSince the build uses clang, is gold really faster?",
+      "parentUuid": "0736a579_c5c21325",
+      "revId": "37106f20bd5cc016a473fbdb2e9e37da096cff5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
