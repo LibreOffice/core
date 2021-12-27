@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf2344c5_7fd898d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-27T16:08:48Z",
+      "side": 1,
+      "message": "Since the patch is very straightforward, I thought it could be interesting to have it in 7.2 branch",
+      "revId": "b6c198a7e6cefe95f5b7c326fd2f59395f3dfd46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
