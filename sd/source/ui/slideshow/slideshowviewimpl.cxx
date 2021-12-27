@@ -160,7 +160,29 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
     mbFullScreen( bFullScreen ),
     mbMousePressedEaten( false )
 {
-    init();
+    mxWindow->addWindowListener( this );
+    mxWindow->addMouseListener( this );
+
+    mxPointer = awt::Pointer::create( ::comphelper::getProcessComponentContext() );
+
+    getTransformation();
+
+    // #i48939# only switch on kind of hacky scroll optimization, when
+    // running fullscreen. this minimizes the probability that other
+    // windows partially cover the show.
+    if( mbFullScreen )
+    {
+        try
+        {
+            Reference< beans::XPropertySet > xCanvasProps( getCanvas(),
+                                                           uno::UNO_QUERY_THROW );
+            xCanvasProps->setPropertyValue("UnsafeScrolling",
+                uno::makeAny( true ) );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
 
     mTranslationOffset.Width = 0;
     mTranslationOffset.Height = 0;
@@ -613,33 +635,6 @@ void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e )
 
     maMouseMotionListeners.notify( aEvent );
     updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
-}
-
-void SlideShowView::init()
-{
-    mxWindow->addWindowListener( this );
-    mxWindow->addMouseListener( this );
-
-    mxPointer = awt::Pointer::create( ::comphelper::getProcessComponentContext() );
-
-    getTransformation();
-
-    // #i48939# only switch on kind of hacky scroll optimization, when
-    // running fullscreen. this minimizes the probability that other
-    // windows partially cover the show.
-    if( !mbFullScreen )
-        return;
-
-    try
-    {
-        Reference< beans::XPropertySet > xCanvasProps( getCanvas(),
-                                                       uno::UNO_QUERY_THROW );
-        xCanvasProps->setPropertyValue("UnsafeScrolling",
-            uno::makeAny( true ) );
-    }
-    catch( uno::Exception& )
-    {
-    }
 }
 
 } // namespace ::sd
