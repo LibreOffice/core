@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7bb9092_c89b9371",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-27T15:19:45Z",
+      "side": 1,
+      "message": "https://oss-fuzz-build-logs.storage.googleapis.com/index.html#libreoffice seems to show maybe OOM killing the linking?\n\nThe lockfile thing should prevent parallel links, right? I wonder if it is still attempting parallel links. I used --with-system-lockfile in distro-configs/LibreOfficeOssFuzz.conf and installed lockfile-progs in https://github.com/google/oss-fuzz/blob/master/projects/libreoffice/Dockerfile FWIW",
+      "revId": "37106f20bd5cc016a473fbdb2e9e37da096cff5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
