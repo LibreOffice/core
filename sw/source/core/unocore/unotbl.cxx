@@ -1005,6 +1005,8 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
         if(pEntry->nWID != FN_UNO_CELL_ROW_SPAN)
         {
             SwFrameFormat* pBoxFormat = m_pBox->ClaimFrameFormat();
+            if (pBoxFormat->GetName().isEmpty())
+                pBoxFormat->SetName("TableBox_" + OUString::number(reinterpret_cast<sal_IntPtr>(pBoxFormat)));
             SwAttrSet aSet(pBoxFormat->GetAttrSet());
             m_pPropSet->setPropertyValue(rPropertyName, aValue, aSet);
             pBoxFormat->GetDoc()->SetAttr(aSet, *pBoxFormat);
