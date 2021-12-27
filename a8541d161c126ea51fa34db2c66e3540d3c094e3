@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ce73264_0964c614",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-27T12:32:23Z",
+      "side": 1,
+      "message": "please don\u0027t - I find it harder to read code where significant actions are hidden inside other, more normal actions",
+      "revId": "a8541d161c126ea51fa34db2c66e3540d3c094e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
