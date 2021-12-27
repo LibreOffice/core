@@ -132,7 +132,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::Any(text::WrapTextMode_THROUGH));
 
     uno::Reference<container::XNamed> xNamed(xTextFrame, uno::UNO_QUERY);
-    xNamed->setName(pShape->GetDoc()->GetUniqueFrameName());
+    assert(!xNamed->getName().isEmpty());
+    (void)xNamed;
 
     // Link its text range to the original shape.
     uno::Reference<text::XTextRange> xTextBox(xTextFrame, uno::UNO_QUERY_THROW);
@@ -240,7 +241,8 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
     xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::Any(text::WrapTextMode_THROUGH));
     // Add a new name to it
     uno::Reference<container::XNamed> xNamed(xNew, uno::UNO_QUERY);
-    xNamed->setName(pShapeFormat->GetDoc()->GetUniqueFrameName());
+    assert(!xNamed->getName().isEmpty());
+    (void)xNamed;
     // And sync. properties.
     uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
     syncProperty(pShapeFormat, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::Any(xShape->getSize()), pObj);
