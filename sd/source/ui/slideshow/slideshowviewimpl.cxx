@@ -51,15 +51,9 @@ namespace sd
 {
 
 // SlideShowViewListeners
-SlideShowViewListeners::SlideShowViewListeners( ::osl::Mutex& rMutex )
-:   mrMutex( rMutex )
-{
-}
 
 void SlideShowViewListeners::addListener( const Reference< util::XModifyListener >& _rxListener )
 {
-    ::osl::MutexGuard aGuard( mrMutex );
-
     WeakReference< util::XModifyListener > xWeak( _rxListener );
     if( std::find( maListeners.begin(), maListeners.end(), xWeak ) == maListeners.end() )
         maListeners.push_back( xWeak );
@@ -67,8 +61,6 @@ void SlideShowViewListeners::addListener( const Reference< util::XModifyListener
 
 void SlideShowViewListeners::removeListener( const Reference< util::XModifyListener >& _rxListener )
 {
-    ::osl::MutexGuard aGuard( mrMutex );
-
     WeakReference< util::XModifyListener > xWeak( _rxListener );
     ViewListenerVector::iterator aIter( std::find( maListeners.begin(), maListeners.end(), xWeak ) );
     if( aIter != maListeners.end() )
@@ -77,8 +69,6 @@ void SlideShowViewListeners::removeListener( const Reference< util::XModifyListe
 
 void SlideShowViewListeners::notify( const lang::EventObject& _rEvent )
 {
-    ::osl::MutexGuard aGuard( mrMutex );
-
     ViewListenerVector::iterator aIter( maListeners.begin() );
     while( aIter != maListeners.end() )
     {
@@ -97,8 +87,6 @@ void SlideShowViewListeners::notify( const lang::EventObject& _rEvent )
 
 void SlideShowViewListeners::disposing( const lang::EventObject& _rEventSource )
 {
-    ::osl::MutexGuard aGuard( mrMutex );
-
     for( const auto& rxListener : maListeners )
     {
         Reference< util::XModifyListener > xListener( rxListener );
@@ -160,16 +148,15 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
                               AnimationMode   eAnimationMode,
                               SlideshowImpl*  pSlideShow,
                               bool            bFullScreen )
-:   SlideShowView_Base( m_aMutex ),
-    mpCanvas( ::cppcanvas::VCLFactory::createSpriteCanvas( rOutputWindow ) ),
+:   mpCanvas( ::cppcanvas::VCLFactory::createSpriteCanvas( rOutputWindow ) ),
     mxWindow( VCLUnoHelper::GetInterface( &rOutputWindow ), uno::UNO_SET_THROW ),
     mxWindowPeer( mxWindow, uno::UNO_QUERY_THROW ),
     mpSlideShow( pSlideShow ),
     mrOutputWindow( rOutputWindow ),
-    mpViewListeners( new SlideShowViewListeners( m_aMutex ) ),
-    mpPaintListeners( new SlideShowViewPaintListeners( m_aMutex ) ),
-    mpMouseListeners( new SlideShowViewMouseListeners( m_aMutex ) ),
-    mpMouseMotionListeners( new SlideShowViewMouseMotionListeners( m_aMutex ) ),
+    mpViewListeners( new SlideShowViewListeners ),
+    mpPaintListeners( new SlideShowViewPaintListeners ),
+    mpMouseListeners( new SlideShowViewMouseListeners ),
+    mpMouseMotionListeners( new SlideShowViewMouseMotionListeners ),
     mpDoc( pDoc ),
     mbIsMouseMotionListener( false ),
     meAnimationMode( eAnimationMode ),
@@ -184,10 +171,8 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
 }
 
 // Dispose all internal references
-void SAL_CALL SlideShowView::dispose()
+void SlideShowView::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     mpSlideShow = nullptr;
 
     // deregister listeners
@@ -204,17 +189,20 @@ void SAL_CALL SlideShowView::dispose()
     mxWindow.clear();
 
     // clear all listener containers
-    disposing( lang::EventObject() );
-
-    // call base
-    WeakComponentImplHelperBase::dispose();
+    disposingImpl(rGuard);
 }
 
 // Disposing our broadcaster
 void SAL_CALL SlideShowView::disposing( const lang::EventObject& )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
+    disposingImpl(aGuard);
+}
+
+// Disposing our broadcaster
+void SlideShowView::disposingImpl(std::unique_lock<std::mutex>& rGuard)
+{
     // notify all listeners that _we_ are going down (send a disposing()),
     // then delete listener containers:
     lang::EventObject const evt( static_cast<OWeakObject *>(this) );
@@ -225,30 +213,33 @@ void SAL_CALL SlideShowView::disposing( const lang::EventObject& )
     }
     if (mpPaintListeners != nullptr)
     {
-        mpPaintListeners->disposeAndClear( evt );
+        mpPaintListeners->disposeAndClear( rGuard, evt );
+        rGuard.lock();
         mpPaintListeners.reset();
     }
     if (mpMouseListeners != nullptr)
     {
-        mpMouseListeners->disposeAndClear( evt );
+        mpMouseListeners->disposeAndClear( rGuard, evt );
+        rGuard.lock();
         mpMouseListeners.reset();
     }
     if (mpMouseMotionListeners != nullptr)
     {
-        mpMouseMotionListeners->disposeAndClear( evt );
+        mpMouseMotionListeners->disposeAndClear( rGuard, evt );
+        rGuard.lock();
         mpMouseMotionListeners.reset();
     }
 }
 
 void SlideShowView::paint( const awt::PaintEvent& e )
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if( mbFirstPaint )
     {
         mbFirstPaint = false;
         SlideshowImpl* pSlideShow = mpSlideShow;
-        aGuard.clear();
+        aGuard.unlock();
         if( pSlideShow )
             pSlideShow->onFirstPaint();
     }
@@ -266,7 +257,7 @@ void SlideShowView::paint( const awt::PaintEvent& e )
 // XSlideShowView methods
 Reference< rendering::XSpriteCanvas > SAL_CALL SlideShowView::getCanvas(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     return mpCanvas ? mpCanvas->getUNOSpriteCanvas() : Reference< rendering::XSpriteCanvas >();
 }
@@ -274,7 +265,7 @@ Reference< rendering::XSpriteCanvas > SAL_CALL SlideShowView::getCanvas(  )
 void SAL_CALL SlideShowView::clear()
 {
     // paint background in black
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     SolarMutexGuard aSolarGuard;
 
     // fill the bounds rectangle in black
@@ -302,7 +293,7 @@ geometry::IntegerSize2D SAL_CALL SlideShowView::getTranslationOffset( )
 
 geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     SolarMutexGuard aSolarGuard;
 
     const Size& rTmpSize( mrOutputWindow.GetSizePixel() );
@@ -360,7 +351,7 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  )
 
 void SAL_CALL SlideShowView::addTransformationChangedListener( const Reference< util::XModifyListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if (mpViewListeners)
         mpViewListeners->addListener( xListener );
@@ -368,7 +359,7 @@ void SAL_CALL SlideShowView::addTransformationChangedListener( const Reference< 
 
 void SAL_CALL SlideShowView::removeTransformationChangedListener( const Reference< util::XModifyListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if (mpViewListeners)
         mpViewListeners->removeListener( xListener );
@@ -376,7 +367,7 @@ void SAL_CALL SlideShowView::removeTransformationChangedListener( const Referenc
 
 void SAL_CALL SlideShowView::addPaintListener( const Reference< awt::XPaintListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if (mpPaintListeners)
         mpPaintListeners->addInterface( xListener );
@@ -384,7 +375,7 @@ void SAL_CALL SlideShowView::addPaintListener( const Reference< awt::XPaintListe
 
 void SAL_CALL SlideShowView::removePaintListener( const Reference< awt::XPaintListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if (mpPaintListeners)
         mpPaintListeners->removeInterface( xListener );
@@ -392,7 +383,7 @@ void SAL_CALL SlideShowView::removePaintListener( const Reference< awt::XPaintLi
 
 void SAL_CALL SlideShowView::addMouseListener( const Reference< awt::XMouseListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if (mpMouseListeners)
         mpMouseListeners->addInterface( xListener );
@@ -400,7 +391,7 @@ void SAL_CALL SlideShowView::addMouseListener( const Reference< awt::XMouseListe
 
 void SAL_CALL SlideShowView::removeMouseListener( const Reference< awt::XMouseListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if (mpMouseListeners)
         mpMouseListeners->removeInterface( xListener );
@@ -408,7 +399,7 @@ void SAL_CALL SlideShowView::removeMouseListener( const Reference< awt::XMouseLi
 
 void SAL_CALL SlideShowView::addMouseMotionListener( const Reference< awt::XMouseMotionListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if( !mbIsMouseMotionListener && mxWindow.is() )
     {
@@ -424,7 +415,7 @@ void SAL_CALL SlideShowView::addMouseMotionListener( const Reference< awt::XMous
 
 void SAL_CALL SlideShowView::removeMouseMotionListener( const Reference< awt::XMouseMotionListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if (mpMouseMotionListeners)
         mpMouseMotionListeners->removeInterface( xListener );
@@ -435,7 +426,7 @@ void SAL_CALL SlideShowView::removeMouseMotionListener( const Reference< awt::XM
 
 void SAL_CALL SlideShowView::setMouseCursor( sal_Int16 nPointerShape )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // forward to window
     if( mxPointer.is() )
@@ -457,7 +448,7 @@ awt::Rectangle SAL_CALL SlideShowView::getCanvasArea(  )
     return aRectangle;
 }
 
-void SlideShowView::updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow )
+void SlideShowView::updateimpl( std::unique_lock<std::mutex>& rGuard, SlideshowImpl* pSlideShow )
 {
     if( !pSlideShow )
         return;
@@ -468,11 +459,11 @@ void SlideShowView::updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImp
     {
         mbFirstPaint = false;
         SlideshowImpl* pTmpSlideShow = mpSlideShow;
-        rGuard.clear();
+        rGuard.unlock();
         if( pTmpSlideShow )
             pTmpSlideShow->onFirstPaint();
     } else
-        rGuard.clear();
+        rGuard.unlock();
 
     pSlideShow->startUpdateTimer();
 }
@@ -480,7 +471,7 @@ void SlideShowView::updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImp
 // XWindowListener methods
 void SAL_CALL SlideShowView::windowResized( const awt::WindowEvent& e )
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if (mpViewListeners)
     {
@@ -512,7 +503,7 @@ void SAL_CALL SlideShowView::windowHidden( const lang::EventObject& )
 // XMouseListener implementation
 void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e )
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if( mpSlideShow && mpSlideShow->isInputFreezed() )
     {
         mbMousePressedEaten = true;
@@ -536,7 +527,7 @@ void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e )
 
 void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e )
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if( mbMousePressedEaten )
     {
         // if mouse button down was ignored, also ignore mouse button up
@@ -559,7 +550,7 @@ void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e )
 
 void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e )
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Change event source, to enable listeners to match event
     // with view
@@ -575,7 +566,7 @@ void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e )
 
 void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e )
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Change event source, to enable listeners to match event
     // with view
@@ -592,7 +583,7 @@ void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e )
 // XMouseMotionListener implementation
 void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e )
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Change event source, to enable listeners to match event
     // with view
@@ -608,7 +599,7 @@ void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e )
 
 void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e )
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Change event source, to enable listeners to match event
     // with view
