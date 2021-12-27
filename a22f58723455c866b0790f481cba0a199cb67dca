@@ -16,6 +16,29 @@
       "message": "I have uploaded a patch for 139602 to add the other functions to the autosum menu. ",
       "revId": "a22f58723455c866b0790f481cba0a199cb67dca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b92c13c_b209d17d",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-27T23:55:32Z",
+      "side": 1,
+      "message": "This should be\n\n  eSum \u003c ScAutoSumEnd\n\nas ScAutoSumEnd is not an actual function value.",
+      "range": {
+        "startLine": 555,
+        "startChar": 42,
+        "endLine": 555,
+        "endChar": 62
+      },
+      "revId": "a22f58723455c866b0790f481cba0a199cb67dca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
