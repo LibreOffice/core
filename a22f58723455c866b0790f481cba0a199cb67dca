@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b12c4865_c6f0e6c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-27T20:00:02Z",
+      "side": 1,
+      "message": "I have uploaded a patch for 139602 to add the other functions to the autosum menu. ",
+      "revId": "a22f58723455c866b0790f481cba0a199cb67dca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
