@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7edfb66_a6ea89e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-27T11:30:13Z",
+      "side": 1,
+      "message": "Verified by Jenkins in patchset 2; commit message edits after that.",
+      "revId": "05e29361b4941c858f7bddd9a625671a8e81d992",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
