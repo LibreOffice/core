@@ -42,7 +42,6 @@ namespace sd::slidesorter {
 //===== SlideSorterService ==========================================================
 
 SlideSorterService::SlideSorterService()
-    : SlideSorterServiceInterfaceBase(m_aMutex)
 {
 }
 
@@ -50,7 +49,7 @@ SlideSorterService::~SlideSorterService()
 {
 }
 
-void SAL_CALL SlideSorterService::disposing()
+void SlideSorterService::disposing(std::unique_lock<std::mutex>&)
 {
     mpSlideSorter.reset();
 
@@ -392,7 +391,7 @@ void SlideSorterService::Resize()
 
 void SlideSorterService::ThrowIfDisposed()
 {
-    if (SlideSorterServiceInterfaceBase::rBHelper.bDisposed || SlideSorterServiceInterfaceBase::rBHelper.bInDispose)
+    if (SlideSorterServiceInterfaceBase::m_bDisposed)
     {
         throw lang::DisposedException ("SlideSorterService object has already been disposed",
             static_cast<drawing::XDrawView*>(this));
