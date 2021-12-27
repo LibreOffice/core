@@ -161,13 +161,12 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
         pFrameFormat = getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_FRAME );
 
     OUString sName;
-    if( !mbInReading )
-        switch( rNode.GetNodeType() )
-        {
+    switch( rNode.GetNodeType() )
+    {
         case SwNodeType::Grf:        sName = GetUniqueGrfName();     break;
         case SwNodeType::Ole:        sName = GetUniqueOLEName();     break;
         default:                sName = GetUniqueFrameName();   break;
-        }
+    }
     SwFlyFrameFormat* pFormat = MakeFlyFrameFormat( sName, pFrameFormat );
 
     // Create content and connect to the format.
