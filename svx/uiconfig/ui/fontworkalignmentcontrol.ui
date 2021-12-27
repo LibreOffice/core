@@ -42,7 +42,7 @@
         <property name="row_spacing">6</property>
         <child>
           <object class="GtkRadioButton" id="left">
-            <property name="label" translatable="yes" context="fontworkalignmentcontrol|RID_SVXSTR_ALIGN_LEFT">_Left Align</property>
+            <property name="label" translatable="yes" context="fontworkalignmentcontrol|RID_SVXSTR_ALIGN_LEFT">Align _Left</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -76,7 +76,7 @@
         </child>
         <child>
           <object class="GtkRadioButton" id="right">
-            <property name="label" translatable="yes" context="fontworkalignmentcontrol|RID_SVXSTR_ALIGN_RIGHT">_Right Align</property>
+            <property name="label" translatable="yes" context="fontworkalignmentcontrol|RID_SVXSTR_ALIGN_RIGHT">Align _Right</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
