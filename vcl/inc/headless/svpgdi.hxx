@@ -119,10 +119,6 @@ public:
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
 
-    virtual bool drawGradient(tools::PolyPolygon const & rPolyPolygon, Gradient const & rGradient) override;
-
-    virtual bool implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient) override;
-
     virtual void            copyArea( tools::Long nDestX,
                                       tools::Long nDestY,
                                       tools::Long nSrcX,
