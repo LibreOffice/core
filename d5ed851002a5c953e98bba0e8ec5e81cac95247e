@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55024d4e_c6cbcc61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-27T02:01:34Z",
+      "side": 1,
+      "message": "\u003e Patch Set 2: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/103983/ : FAILURE\n\u003e \n\u003e configure/autogen.sh failed ( https://ci.libreoffice.org/job/gerrit_windows/115237/ )\n\nSeems like the build host is misconfigured.",
+      "revId": "d5ed851002a5c953e98bba0e8ec5e81cac95247e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
