@@ -46,15 +46,10 @@ namespace sd::sidebar {
 //----- PanelFactory --------------------------------------------------------
 
 PanelFactory::PanelFactory()
-    : PanelFactoryInterfaceBase(m_aMutex)
 {
 }
 
 PanelFactory::~PanelFactory()
-{
-}
-
-void SAL_CALL PanelFactory::disposing()
 {
 }
 
