@@ -21,8 +21,7 @@
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
@@ -30,7 +29,7 @@ namespace com::sun::star::drawing::framework { class XConfigurationController; }
 
 namespace sd::framework {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XResourceFactory,
     css::lang::XInitialization,
     css::lang::XEventListener
@@ -40,14 +39,13 @@ typedef ::cppu::WeakComponentImplHelper <
         private:resource/toolbar/ViewTabBar
 */
 class BasicToolBarFactory
-    : protected ::cppu::BaseMutex,
-      public BasicToolBarFactoryInterfaceBase
+    : public BasicToolBarFactoryInterfaceBase
 {
 public:
     BasicToolBarFactory ();
     virtual ~BasicToolBarFactory() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // ToolBarFactory
 
