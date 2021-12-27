@@ -16,6 +16,23 @@
       "message": "Now the indices for figures should work as well. I have to make some additional tests and figure out how the pLayout and IsParaPropsNode work together.",
       "revId": "009c831df14577ad06c7511716aaf7320cd9504d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19da3f7f_978deebe",
+        "filename": "sw/source/core/doc/doctxm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-27T17:49:48Z",
+      "side": 1,
+      "message": "This one is missing some special cases. Is there another way how to determine whether a frame lies within another frame?",
+      "revId": "009c831df14577ad06c7511716aaf7320cd9504d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
