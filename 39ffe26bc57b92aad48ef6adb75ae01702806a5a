@@ -176,6 +176,24 @@
       "parentUuid": "cca29632_46245499",
       "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1552736_2e27cc33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-27T19:44:46Z",
+      "side": 1,
+      "message": "As said on 11 Dec, amend your commit, so you put the draw.cxx back like it was and work on some relevant file or test instead. Then submit and this patch will be updated as long as the change-id remains Ia3060a154c69be198ee12baf90cef9ef7db8e6c9",
+      "parentUuid": "58a04ae8_fa478766",
+      "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
