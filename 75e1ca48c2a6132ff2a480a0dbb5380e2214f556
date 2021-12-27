@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7023eb8_a7c69922",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-27T22:44:53Z",
+      "side": 1,
+      "message": "I\u0027m not sure, if libexecinfo should be handled like an any external. The current PKGCONFIG test won\u0027t fail configure, if it\u0027s missing, so this avoids the decision currently. No idea, if building that lib ourself is desirable in general.",
+      "revId": "75e1ca48c2a6132ff2a480a0dbb5380e2214f556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e50994e_aaf22807",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-27T22:44:53Z",
+      "side": 1,
+      "message": "Missing x, or just remove from xno.",
+      "range": {
+        "startLine": 1199,
+        "startChar": 12,
+        "endLine": 1199,
+        "endChar": 14
+      },
+      "revId": "75e1ca48c2a6132ff2a480a0dbb5380e2214f556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8f459aa_f6b7a24b",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-27T22:44:53Z",
+      "side": 1,
+      "message": "Just use one argument to AC_DEFINE. You must add a #define in a header instead, most probably config_host/config_features.h.in. You can add the comment there.\n\nAnd LO doesn\u0027t use defined / undefined preprocessor flags, but just 0 and 1 values, so your HAVE_BACKTRACE checks just need tests with #if.",
+      "revId": "75e1ca48c2a6132ff2a480a0dbb5380e2214f556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4359e2d3_49b948d7",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-27T22:44:53Z",
+      "side": 1,
+      "message": "There might also be BACKTRACE_CFLAGS.",
+      "revId": "75e1ca48c2a6132ff2a480a0dbb5380e2214f556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79c7ae8f_31e771a5",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 1209,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-27T22:44:53Z",
+      "side": 1,
+      "message": "Please move your test somewhere after the setup end comment. All the stuff above handles just various platform flags.",
+      "revId": "75e1ca48c2a6132ff2a480a0dbb5380e2214f556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
