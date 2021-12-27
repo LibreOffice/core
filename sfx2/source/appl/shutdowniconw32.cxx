@@ -30,6 +30,7 @@
 #include <sfx2/strings.hrc>
 #include <shlobj.h>
 #include <objidl.h>
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <systools/win32/qswin32.h>
 #include <comphelper/sequenceashashmap.hxx>
