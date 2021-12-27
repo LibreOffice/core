@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "914e4f98_eb049cd1",
+        "filename": "idlc/source/idlccompile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-27T16:25:19Z",
+      "side": 0,
+      "message": "I would probably go with inverting the logic to select the non-posix variant for some cases. I checked the large case-statement from configure.ac after HOST_PLATFORM and the only thing missing seems to be Solaris.\n\n$ git grep -i \"def.*solaris\"\nodk/settings/settings.mk:CC_DEFINES\u003d-DUNX -DSOLARIS -DSPARC -DCPPU_ENV\u003d$(CPP\n\nAPPLE is not in the list, but MacOS build succeeds. So is LINUX.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 76
+      },
+      "revId": "9c95415de877af1430ab5b7123e11dedd0ea622c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
