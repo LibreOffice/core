@@ -146,9 +146,12 @@ $(info $(gb_Output_BELL)$(gb_Output_ESCAPE)[A)
 endef
 endif
 
-define gb_Output_announce
-$(info $(call gb_Output__format_type,$(2),$(3),$(4)) $(call gb_Output__format_target,$(1)))
+define gb_Output_announce_str
+$(call gb_Output__format_type,$(2),$(3),$(4)) $(call gb_Output__format_target,$(1))
 endef
 
+define gb_Output_announce
+$(info $(call gb_Output_announce_str,$(1),$(2),$(3),$(4)))
+endef
 
 # vim: set noet sw=4:
