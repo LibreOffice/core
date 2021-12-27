@@ -21,14 +21,13 @@
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 namespace com::sun::star::drawing::framework { class XConfiguration; }
 
 namespace sd::framework {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
       css::drawing::framework::XConfigurationChangeRequest,
       css::container::XNamed
     > UpdateRequestInterfaceBase;
@@ -41,9 +40,8 @@ typedef ::cppu::WeakComponentImplHelper <
     really do anything.  This request just triggers the update of the
     configuration when it is removed as last request from the queue.
 */
-class UpdateRequest
-    : private cppu::BaseMutex,
-      public UpdateRequestInterfaceBase
+class UpdateRequest final
+    : public UpdateRequestInterfaceBase
 {
 public:
     UpdateRequest() noexcept;

@@ -25,10 +25,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sd::framework
 {
-UpdateRequest::UpdateRequest() noexcept
-    : UpdateRequestInterfaceBase(m_aMutex)
-{
-}
+UpdateRequest::UpdateRequest() noexcept {}
 
 UpdateRequest::~UpdateRequest() noexcept {}
 
