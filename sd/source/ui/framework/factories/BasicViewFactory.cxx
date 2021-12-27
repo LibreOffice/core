@@ -83,8 +83,7 @@ public:
 //===== ViewFactory ===========================================================
 
 BasicViewFactory::BasicViewFactory ()
-    : BasicViewFactoryInterfaceBase(m_aMutex),
-      mpViewShellContainer(new ViewShellContainer()),
+    : mpViewShellContainer(new ViewShellContainer()),
       mpBase(nullptr),
       mpFrameView(nullptr),
       mpWindow(VclPtr<WorkWindow>::Create(nullptr,WB_STDWORK)),
@@ -97,7 +96,7 @@ BasicViewFactory::~BasicViewFactory()
 {
 }
 
-void SAL_CALL BasicViewFactory::disposing()
+void BasicViewFactory::disposing(std::unique_lock<std::mutex>&)
 {
     // Disconnect from the frame view.
     if (mpFrameView != nullptr)
