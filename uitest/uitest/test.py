@@ -6,11 +6,14 @@
 #
 
 import time
+import functools
 import threading
 from contextlib import contextmanager
 from uitest.config import DEFAULT_SLEEP
 from uitest.config import MAX_WAIT
 from uitest.uihelper.common import get_state_as_dict
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+import org.libreoffice.unotest
 
 from com.sun.star.uno import RuntimeException
 
@@ -267,5 +270,22 @@ class UITest(object):
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
         raise Exception("Did not execute a dialog for a blocking action")
+
+    @contextmanager
+    def launch_HTTP_server(self):
+        # Spawns an http.server.HTTPServer in a separate thread
+        # Serve in TDOC directory
+        handler = functools.partial(SimpleHTTPRequestHandler,
+                directory=org.libreoffice.unotest.getTDOC())
+
+        with HTTPServer(("localhost", 0), handler) as httpd:
+            thread = threading.Thread(target=httpd.serve_forever)
+            try:
+                thread.start()
+                yield httpd
+            finally:
+                # Call shutdown in case the testcase fails
+                httpd.shutdown()
+                thread.join()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
