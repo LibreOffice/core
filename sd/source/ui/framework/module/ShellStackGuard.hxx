@@ -19,14 +19,12 @@
 
 #pragma once
 
-#include <cppuhelper/basemutex.hxx>
-
 #include <framework/ConfigurationController.hxx>
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 
 #include <vcl/idle.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <memory>
 
 namespace com::sun::star::drawing::framework
@@ -45,7 +43,7 @@ class ViewShellBase;
 
 namespace sd::framework
 {
-typedef ::cppu::WeakComponentImplHelper<css::drawing::framework::XConfigurationChangeListener>
+typedef comphelper::WeakComponentImplHelper<css::drawing::framework::XConfigurationChangeListener>
     ShellStackGuardInterfaceBase;
 
 /** This module locks updates of the current configuration in situations
@@ -58,13 +56,13 @@ typedef ::cppu::WeakComponentImplHelper<css::drawing::framework::XConfigurationC
     When in the future there are no resources left that use shells then this
     module can be removed.
 */
-class ShellStackGuard : private ::cppu::BaseMutex, public ShellStackGuardInterfaceBase
+class ShellStackGuard : public ShellStackGuardInterfaceBase
 {
 public:
     explicit ShellStackGuard(css::uno::Reference<css::frame::XController> const& rxController);
     virtual ~ShellStackGuard() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XConfigurationChangeListener
 
