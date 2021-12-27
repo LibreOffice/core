@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1836a9aa_1c94b810",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-27T10:55:34Z",
+      "side": 1,
+      "message": "Thank you for the feedback, I\u0027ve added the assert instruction + changed the comment",
+      "revId": "a34a9b5ed2764a934398066ef6a55a30c2afcae3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
