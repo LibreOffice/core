@@ -160,8 +160,8 @@ static HMENU createSystrayMenu( )
         SvtModuleOptions::EModule   eModuleIdentifier;
         UINT                        nMenuItemID;
         UINT                        nMenuIconID;
-        const char*                 pAsciiURLDescription;
-    }   aMenuItems[] =
+        rtl::OUStringConstExpr      sURLDescription;
+    } static const aMenuItems[] =
     {
         { SvtModuleOptions::EModule::WRITER,    IDM_WRITER, ICON_TEXT_DOCUMENT,         WRITER_URL },
         { SvtModuleOptions::EModule::CALC,      IDM_CALC,   ICON_SPREADSHEET_DOCUMENT,  CALC_URL },
@@ -172,20 +172,18 @@ static HMENU createSystrayMenu( )
     };
 
     // insert the menu entries for launching the applications
-    for ( size_t i = 0; i < SAL_N_ELEMENTS(aMenuItems); ++i )
+    for (const auto& [eModuleIdentifier, nMenuItemID, nMenuIconID, sURL] : aMenuItems)
     {
-        if ( !aModuleOptions.IsModuleInstalled( aMenuItems[i].eModuleIdentifier ) )
+        if ( !aModuleOptions.IsModuleInstalled( eModuleIdentifier ) )
             // the complete application is not even installed
             continue;
-
-        OUString sURL( OUString::createFromAscii( aMenuItems[i].pAsciiURLDescription ) );
 
         if ( aFileNewAppsAvailable.find( sURL ) == aFileNewAppsAvailable.end() )
             // the application is installed, but the entry has been configured to *not* appear in the File/New
             // menu => also let not appear it in the quickstarter
             continue;
 
-        addMenuItem( hMenu, aMenuItems[i].nMenuItemID, aMenuItems[i].nMenuIconID,
+        addMenuItem( hMenu, nMenuItemID, nMenuIconID,
             ShutdownIcon::GetUrlDescription( sURL ), pos, true, "" );
     }
 

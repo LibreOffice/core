@@ -50,14 +50,14 @@ typedef comphelper::WeakComponentImplHelper<
     css::lang::XServiceInfo,
     css::beans::XFastPropertySet > ShutdownIconServiceBase;
 
-#define WRITER_URL          "private:factory/swriter"
-#define CALC_URL            "private:factory/scalc"
-#define IMPRESS_URL         "private:factory/simpress"
-#define IMPRESS_WIZARD_URL  "private:factory/simpress?slot=6686"
-#define DRAW_URL            "private:factory/sdraw"
-#define MATH_URL            "private:factory/smath"
-#define BASE_URL            "private:factory/sdatabase?Interactive"
-#define STARTMODULE_URL     ".uno:ShowStartModule"
+inline constexpr OUStringLiteral WRITER_URL          = u"private:factory/swriter";
+inline constexpr OUStringLiteral CALC_URL            = u"private:factory/scalc";
+inline constexpr OUStringLiteral IMPRESS_URL         = u"private:factory/simpress";
+inline constexpr OUStringLiteral IMPRESS_WIZARD_URL  = u"private:factory/simpress?slot=6686";
+inline constexpr OUStringLiteral DRAW_URL            = u"private:factory/sdraw";
+inline constexpr OUStringLiteral MATH_URL            = u"private:factory/smath";
+inline constexpr OUStringLiteral BASE_URL            = u"private:factory/sdatabase?Interactive";
+inline constexpr OUStringLiteral STARTMODULE_URL     = u".uno:ShowStartModule";
 
 class ShutdownIcon : public ShutdownIconServiceBase
 {
