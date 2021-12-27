@@ -16,6 +16,24 @@
       "message": "https://oss-fuzz-build-logs.storage.googleapis.com/index.html#libreoffice seems to show maybe OOM killing the linking?\n\nThe lockfile thing should prevent parallel links, right? I wonder if it is still attempting parallel links. I used --with-system-lockfile in distro-configs/LibreOfficeOssFuzz.conf and installed lockfile-progs in https://github.com/google/oss-fuzz/blob/master/projects/libreoffice/Dockerfile FWIW",
       "revId": "37106f20bd5cc016a473fbdb2e9e37da096cff5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d70534b6_814c5d89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-27T16:04:32Z",
+      "side": 1,
+      "message": "\u003e https://oss-fuzz-build-logs.storage.googleapis.com/index.html#libreoffice seems to show maybe OOM killing the linking?\n\nCan be anything. It just says: \" linker command failed due to signal (use -v to see invocation)\" + \"unable to execute command: Killed\".\n\n\u003e The lockfile thing should prevent parallel links, right? I wonder if it is still attempting parallel links. I used --with-system-lockfile in distro-configs/LibreOfficeOssFuzz.conf and installed lockfile-progs in https://github.com/google/oss-fuzz/blob/master/projects/libreoffice/Dockerfile FWIW\n\nI see \n\n\u003e Step #3 - \"compile-honggfuzz-address-x86_64\":     checking which lockfile binary to use... external\n\u003e Step #3 - \"compile-honggfuzz-address-x86_64\":     checking for dotlockfile... /usr/bin/dotlockfile\n\nand\n\n\u003e Step #12 - \"compile-libfuzzer-address-x86_64\":     checking which lockfile binary to use... external\n\u003e Step #12 - \"compile-libfuzzer-address-x86_64\":     checking for dotlockfile... /usr/bin/dotlockfile\n\nSo the first time finishes successful. And I just tested my local --enable-fuzzers build with system and internal lockfile (and mold FWIW) and\n\n\u003e watch -n 0.5 \"ls workdir/LinkTarget/\"\n\nI see the $(WORKDIR)/LinkTarget/link.lock a few times to show up quickly. Mold is too fast. But with the system dotlockfile you really feel the delay from the 60s build-up poll time (it starts with 1s and the doubles until 60s max).\n\nI\u0027ve seen that and was wondering how to debug the problem, Maybe something kills the build, because at the end the timeout is too large and some watchdog thinks it\u0027s stuck?",
+      "parentUuid": "d7bb9092_c89b9371",
+      "revId": "37106f20bd5cc016a473fbdb2e9e37da096cff5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
