@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f8f4e14_93cadccf",
+        "filename": "sfx2/source/appl/shutdowniconaqua.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-27T16:19:41Z",
+      "side": 1,
+      "message": "Thank you!",
+      "parentUuid": "cee263ea_96d8b675",
+      "revId": "b590c1d510d724eac5cfbbb11eed1d3776764c14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29092b36_773a1f77",
