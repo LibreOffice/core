@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f409f6a_16f69412",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-27T08:30:05Z",
+      "side": 1,
+      "message": "write bug id as tdf#141908",
+      "revId": "7086eeaad3cc5becbf9af05d2166bc1c60d0fac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "23a73f1a_4fbe11a0",
@@ -14,6 +31,57 @@
       "writtenOn": "2021-12-27T08:25:32Z",
       "side": 1,
       "message": "The task is \"replace usage of sal_Int32 with colors\" while in your patch you are using sal_Int32. Also, you forgot to change the bug reference to the correct notation.",
+      "revId": "7086eeaad3cc5becbf9af05d2166bc1c60d0fac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "902eab1a_d8c1812c",
+        "filename": "sd/qa/unit/export-tests-ooxml3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-27T08:30:05Z",
+      "side": 1,
+      "message": "Change it to Color aColor;",
+      "revId": "7086eeaad3cc5becbf9af05d2166bc1c60d0fac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1ab6c53_53672445",
+        "filename": "sd/qa/unit/export-tests-ooxml3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-27T08:30:05Z",
+      "side": 1,
+      "message": "so there is no need to cast it to sal_Int32",
+      "revId": "7086eeaad3cc5becbf9af05d2166bc1c60d0fac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72f7f0ae_57402ddb",
+        "filename": "sd/qa/unit/export-tests-ooxml3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-27T08:30:05Z",
+      "side": 1,
+      "message": "nor here",
       "revId": "7086eeaad3cc5becbf9af05d2166bc1c60d0fac4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
