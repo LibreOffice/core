@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3525df42_39497714",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-27T09:10:49Z",
+      "side": 1,
+      "message": "Sir I was actually testing if Jenkins build the patch or it fails again, I am working on it and will re-submit a new followup patch as soon as I am done with the tests",
+      "parentUuid": "23a73f1a_4fbe11a0",
+      "revId": "7086eeaad3cc5becbf9af05d2166bc1c60d0fac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "902eab1a_d8c1812c",
