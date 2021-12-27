@@ -16,6 +16,24 @@
       "message": "The proper way to handle this would be to add a macro that collects the variables, then inserts them into the file, instead of relying on external scripting.",
       "revId": "35b2a3a8cd439098e5a7d73c29afc37f20063f6c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1103666a_6f64a5bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-27T18:09:01Z",
+      "side": 1,
+      "message": "How?\n\nI just tried to use variants of m4_rename and m4_defn and m4_define, to just \n\n* copy AC_SUBST to libo_AC_SUBST\n* redefine AC_SUBST to call libo_AC_SUBST($1)\n\nAll variants I tried produced a diversity of errors, either for configure or autoconf..\n\nBTW: our minimal autoconf version is still 2.59; for better or worse. Probably can be bumped.",
+      "parentUuid": "3bb7e729_fd50531d",
+      "revId": "35b2a3a8cd439098e5a7d73c29afc37f20063f6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
