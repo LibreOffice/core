@@ -8,6 +8,7 @@ if [ -z "${OUT}" ] || [ -z "${SRC}" ] || [ -z "${WORK}" ]; then
 fi
 
 echo start at `date -u`
+echo git: `git -C $SRC/libreoffice log -1 --pretty=reference`
 
 #shuffle CXXFLAGS -stdlib=libc++ arg into CXX as well because we use
 #the CXX as the linker and need to pass -stdlib=libc++ to build
