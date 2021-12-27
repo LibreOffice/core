@@ -32,8 +32,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <sfx2/viewfrm.hxx>
 
 using namespace ::com::sun::star;
@@ -53,7 +52,7 @@ const sal_Int32 ConfigurationUpdateEvent = 2;
 
 namespace sd::tools {
 
-typedef cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
       css::beans::XPropertyChangeListener,
       css::frame::XFrameActionListener,
       css::view::XSelectionChangeListener,
@@ -61,8 +60,7 @@ typedef cppu::WeakComponentImplHelper<
     > EventMultiplexerImplementationInterfaceBase;
 
 class EventMultiplexer::Implementation
-    : protected cppu::BaseMutex,
-      public EventMultiplexerImplementationInterfaceBase,
+    : public EventMultiplexerImplementationInterfaceBase,
       public SfxListener
 {
 public:
@@ -104,7 +102,7 @@ public:
         notifyConfigurationChange (
             const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
 protected:
     virtual void Notify (
@@ -186,8 +184,7 @@ void EventMultiplexer::MultiplexEvent(
 //===== EventMultiplexer::Implementation ======================================
 
 EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
-    : EventMultiplexerImplementationInterfaceBase(m_aMutex),
-      mrBase (rBase),
+    : mrBase (rBase),
       mbListeningToController (false),
       mbListeningToFrame (false),
       mxControllerWeak(nullptr),
@@ -437,7 +434,7 @@ void SAL_CALL EventMultiplexer::Implementation::disposing (
 void SAL_CALL EventMultiplexer::Implementation::propertyChange (
     const beans::PropertyChangeEvent& rEvent)
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         throw lang::DisposedException (
             "SlideSorterController object has already been disposed",
@@ -569,9 +566,18 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
 
 }
 
-void SAL_CALL EventMultiplexer::Implementation::disposing()
+void EventMultiplexer::Implementation::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    CallListeners (EventMultiplexerEventId::Disposing);
+    ListenerList aCopyListeners( maListeners );
+
+    rGuard.unlock();
+
+    EventMultiplexerEvent rEvent(EventMultiplexerEventId::Disposing, nullptr);
+    for (const auto& rListener : aCopyListeners)
+        rListener.Call(rEvent);
+
+    rGuard.lock();
+
     ReleaseListeners();
 }
 
