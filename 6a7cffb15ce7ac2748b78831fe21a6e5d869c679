@@ -87,6 +87,24 @@
       "parentUuid": "c8cf3c55_7ab2dee2",
       "revId": "6a7cffb15ce7ac2748b78831fe21a6e5d869c679",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd09a2df_21d46f6e",
+        "filename": "idl/source/objects/types.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-27T08:17:21Z",
+      "side": 1,
+      "message": "Thanks; but please do not feel obliged to do that - I only shared my own preference in the hope it could be useful, not as a kind of \"requirement\" 😊",
+      "parentUuid": "ce865e18_aa393127",
+      "revId": "6a7cffb15ce7ac2748b78831fe21a6e5d869c679",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
