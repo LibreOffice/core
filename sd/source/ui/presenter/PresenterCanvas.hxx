@@ -24,8 +24,7 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <memory>
 
 namespace sd::presenter { class CanvasUpdateRequester; }
@@ -34,7 +33,7 @@ namespace com::sun::star::geometry { struct AffineMatrix2D; }
 
 namespace sd::presenter {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::rendering::XSpriteCanvas,
     css::rendering::XBitmap,
     css::awt::XWindowListener
@@ -53,8 +52,7 @@ typedef ::cppu::WeakComponentImplHelper <
     construction.  This allows the shared canvas to be a canvas of sprite itself.
 */
 class PresenterCanvas
-    : private ::cppu::BaseMutex,
-      public PresenterCanvasInterfaceBase
+    : public PresenterCanvasInterfaceBase
 {
 public:
     /** This constructor is used when a PresenterCanvas object is created
@@ -94,7 +92,7 @@ public:
     PresenterCanvas(const PresenterCanvas&) = delete;
     PresenterCanvas& operator=(const PresenterCanvas&) = delete;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     css::awt::Point GetOffset (const css::uno::Reference<css::awt::XWindow>& rxBaseWindow);
 

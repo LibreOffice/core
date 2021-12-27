@@ -102,8 +102,7 @@ PresenterCanvas::PresenterCanvas (
     const Reference<rendering::XCanvas>& rxSharedCanvas,
     const Reference<awt::XWindow>& rxSharedWindow,
     const Reference<awt::XWindow>& rxWindow)
-    : PresenterCanvasInterfaceBase(m_aMutex),
-      mxUpdateCanvas(rxUpdateCanvas),
+    : mxUpdateCanvas(rxUpdateCanvas),
       mxUpdateWindow(rxUpdateWindow),
       mxSharedCanvas(rxSharedCanvas),
       mxSharedWindow(rxSharedWindow),
@@ -123,10 +122,13 @@ PresenterCanvas::~PresenterCanvas()
 {
 }
 
-void SAL_CALL PresenterCanvas::disposing()
+void PresenterCanvas::disposing(std::unique_lock<std::mutex>&)
 {
     if (mxWindow.is())
+    {
         mxWindow->removeWindowListener(this);
+        mxWindow.clear();
+    }
 }
 
 //----- XCanvas ---------------------------------------------------------------
@@ -680,7 +682,7 @@ Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
 
 void PresenterCanvas::ThrowIfDisposed()
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose || ! mxSharedCanvas.is())
+    if (m_bDisposed || ! mxSharedCanvas.is())
     {
         throw lang::DisposedException ("PresenterCanvas object has already been disposed",
             static_cast<uno::XWeak*>(this));
