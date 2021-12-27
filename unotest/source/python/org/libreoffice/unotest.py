@@ -282,8 +282,11 @@ def runConnectionTests(connection, invoker, tests):
     finally:
         connection.tearDown()
 
+def getTDOC():
+    return os.getenv("TDOC")
+
 def makeCopyFromTDOC(file):
-    src = os.getenv("TDOC")
+    src = getTDOC()
     assert(src is not None)
     src = os.path.join(src, file)
     dst = os.getenv("TestUserDir")
