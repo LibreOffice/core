@@ -158,6 +158,24 @@
       "parentUuid": "dbce2c74_44432d8c",
       "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58a04ae8_fa478766",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-27T18:03:19Z",
+      "side": 1,
+      "message": "Sir, this file does not contain any sal_Int32 variable that can be replaced by Color, so for the followup patch do I revert the changes which caused the build to fail and change the commit message or is there something else I should do? Like look for some other file which has the potential to get changed?",
+      "parentUuid": "cca29632_46245499",
+      "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
