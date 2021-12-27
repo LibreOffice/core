@@ -22,8 +22,8 @@
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <memory>
 
@@ -37,7 +37,7 @@ class ViewShellBase;
 
 namespace sd::framework {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::lang::XInitialization,
     css::drawing::framework::XResourceFactory,
     css::drawing::framework::XConfigurationChangeListener
@@ -52,15 +52,14 @@ typedef ::cppu::WeakComponentImplHelper <
     show different titles for the left pane in Draw and Impress.
 */
 class BasicPaneFactory
-    : private ::cppu::BaseMutex,
-      public BasicPaneFactoryInterfaceBase
+    : public BasicPaneFactoryInterfaceBase
 {
 public:
     explicit BasicPaneFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~BasicPaneFactory() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XInitialization
 
