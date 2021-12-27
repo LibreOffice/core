@@ -19,8 +19,7 @@
 
 #pragma once
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
@@ -31,14 +30,13 @@
 
 namespace basegfx::unotools
 {
-    typedef cppu::WeakComponentImplHelper<
+    typedef comphelper::WeakComponentImplHelper<
             css::rendering::XLinePolyPolygon2D,
             css::rendering::XBezierPolyPolygon2D,
             css::lang::XServiceInfo > UnoPolyPolygonBase;
 
     class BASEGFX_DLLPUBLIC UnoPolyPolygon
-        : private cppu::BaseMutex
-        , public UnoPolyPolygonBase
+        : public UnoPolyPolygonBase
     {
     public:
         explicit UnoPolyPolygon( const B2DPolyPolygon& );
