@@ -34,8 +34,7 @@ namespace sd::framework {
 GenericConfigurationChangeRequest::GenericConfigurationChangeRequest (
     const Reference<XResourceId>& rxResourceId,
     const Mode eMode)
-    : GenericConfigurationChangeRequestInterfaceBase(m_aMutex),
-      mxResourceId(rxResourceId),
+    : mxResourceId(rxResourceId),
       meMode(eMode)
 {
     if ( ! rxResourceId.is() || rxResourceId->getResourceURL().isEmpty())

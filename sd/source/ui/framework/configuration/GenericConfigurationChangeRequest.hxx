@@ -21,15 +21,14 @@
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 namespace com::sun::star::drawing::framework { class XConfiguration; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
 
 namespace sd::framework {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
       css::drawing::framework::XConfigurationChangeRequest,
       css::container::XNamed
     > GenericConfigurationChangeRequestInterfaceBase;
@@ -40,9 +39,8 @@ typedef ::cppu::WeakComponentImplHelper <
     example this is the case when the deactivation of a unique resource is
     requested: the resources linked to it have to be deactivated as well.
 */
-class GenericConfigurationChangeRequest
-    : private cppu::BaseMutex,
-      public GenericConfigurationChangeRequestInterfaceBase
+class GenericConfigurationChangeRequest final
+    : public GenericConfigurationChangeRequestInterfaceBase
 {
 public:
     /** This enum specified whether the activation or deactivation of a
