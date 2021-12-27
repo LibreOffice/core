@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <memory>
 #include <comphelper/compbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/awt/XWindowListener.hpp>
@@ -77,6 +76,7 @@ public:
     /// @throws css::uno::Exception
     void    notify( const css::lang::EventObject& _rEvent );
     void    disposing( const css::lang::EventObject& _rEventSource );
+    size_t  getLength() const { return maListeners.size(); }
 
 private:
     ViewListenerVector maListeners;
@@ -182,14 +182,10 @@ private:
     css::uno::Reference< css::awt::XPointer >             mxPointer;
     SlideshowImpl*                          mpSlideShow;
     ShowWindow&                             mrOutputWindow;
-    ::std::unique_ptr< SlideShowViewListeners >
-                                            mpViewListeners;
-    ::std::unique_ptr< SlideShowViewPaintListeners >
-                                            mpPaintListeners;
-    ::std::unique_ptr< SlideShowViewMouseListeners >
-                                            mpMouseListeners;
-    ::std::unique_ptr< SlideShowViewMouseMotionListeners >
-                                            mpMouseMotionListeners;
+    SlideShowViewListeners                  maViewListeners;
+    SlideShowViewPaintListeners             maPaintListeners;
+    SlideShowViewMouseListeners             maMouseListeners;
+    SlideShowViewMouseMotionListeners       maMouseMotionListeners;
     SdDrawDocument*                         mpDoc;
     bool                                    mbIsMouseMotionListener;
     AnimationMode                           meAnimationMode;
