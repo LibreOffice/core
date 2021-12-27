@@ -170,8 +170,6 @@ protected:
     virtual ~SlideShowView() override {}
 
 private:
-    void init();
-
     void updateimpl( std::unique_lock<std::mutex>& rGuard, SlideshowImpl* pSlideShow );
 
     void disposingImpl( std::unique_lock<std::mutex>& );
