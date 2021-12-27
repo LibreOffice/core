@@ -153,10 +153,6 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
     mxWindowPeer( mxWindow, uno::UNO_QUERY_THROW ),
     mpSlideShow( pSlideShow ),
     mrOutputWindow( rOutputWindow ),
-    mpViewListeners( new SlideShowViewListeners ),
-    mpPaintListeners( new SlideShowViewPaintListeners ),
-    mpMouseListeners( new SlideShowViewMouseListeners ),
-    mpMouseMotionListeners( new SlideShowViewMouseMotionListeners ),
     mpDoc( pDoc ),
     mbIsMouseMotionListener( false ),
     meAnimationMode( eAnimationMode ),
@@ -206,28 +202,24 @@ void SlideShowView::disposingImpl(std::unique_lock<std::mutex>& rGuard)
     // notify all listeners that _we_ are going down (send a disposing()),
     // then delete listener containers:
     lang::EventObject const evt( static_cast<OWeakObject *>(this) );
-    if (mpViewListeners != nullptr)
+    if (maViewListeners.getLength())
     {
-        mpViewListeners->disposing( evt );
-        mpViewListeners.reset();
+        maViewListeners.disposing( evt );
     }
-    if (mpPaintListeners != nullptr)
+    if (maPaintListeners.getLength())
     {
-        mpPaintListeners->disposeAndClear( rGuard, evt );
+        maPaintListeners.disposeAndClear( rGuard, evt );
         rGuard.lock();
-        mpPaintListeners.reset();
     }
-    if (mpMouseListeners != nullptr)
+    if (maMouseListeners.getLength())
     {
-        mpMouseListeners->disposeAndClear( rGuard, evt );
+        maMouseListeners.disposeAndClear( rGuard, evt );
         rGuard.lock();
-        mpMouseListeners.reset();
     }
-    if (mpMouseMotionListeners != nullptr)
+    if (maMouseMotionListeners.getLength())
     {
-        mpMouseMotionListeners->disposeAndClear( rGuard, evt );
+        maMouseMotionListeners.disposeAndClear( rGuard, evt );
         rGuard.lock();
-        mpMouseMotionListeners.reset();
     }
 }
 
@@ -249,7 +241,7 @@ void SlideShowView::paint( const awt::PaintEvent& e )
         // with view
         awt::PaintEvent aEvent( e );
         aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
-        mpPaintListeners->notifyEach( &css::awt::XPaintListener::windowPaint, aEvent );
+        maPaintListeners.notifyEach( &css::awt::XPaintListener::windowPaint, aEvent );
         updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
     }
 }
@@ -353,53 +345,56 @@ void SAL_CALL SlideShowView::addTransformationChangedListener( const Reference< 
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if (mpViewListeners)
-        mpViewListeners->addListener( xListener );
+    if (!m_bDisposed)
+        maViewListeners.addListener( xListener );
 }
 
 void SAL_CALL SlideShowView::removeTransformationChangedListener( const Reference< util::XModifyListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if (mpViewListeners)
-        mpViewListeners->removeListener( xListener );
+    if (!m_bDisposed)
+        maViewListeners.removeListener( xListener );
 }
 
 void SAL_CALL SlideShowView::addPaintListener( const Reference< awt::XPaintListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if (mpPaintListeners)
-        mpPaintListeners->addInterface( xListener );
+    if (!m_bDisposed)
+        maPaintListeners.addInterface( xListener );
 }
 
 void SAL_CALL SlideShowView::removePaintListener( const Reference< awt::XPaintListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if (mpPaintListeners)
-        mpPaintListeners->removeInterface( xListener );
+    if (!m_bDisposed)
+        maPaintListeners.removeInterface( xListener );
 }
 
 void SAL_CALL SlideShowView::addMouseListener( const Reference< awt::XMouseListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if (mpMouseListeners)
-        mpMouseListeners->addInterface( xListener );
+    if (!m_bDisposed)
+        maMouseListeners.addInterface( xListener );
 }
 
 void SAL_CALL SlideShowView::removeMouseListener( const Reference< awt::XMouseListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if (mpMouseListeners)
-        mpMouseListeners->removeInterface( xListener );
+    if (!m_bDisposed)
+        maMouseListeners.removeInterface( xListener );
 }
 
 void SAL_CALL SlideShowView::addMouseMotionListener( const Reference< awt::XMouseMotionListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
+
+    if (m_bDisposed)
+        return;
 
     if( !mbIsMouseMotionListener && mxWindow.is() )
     {
@@ -409,16 +404,15 @@ void SAL_CALL SlideShowView::addMouseMotionListener( const Reference< awt::XMous
         mxWindow->addMouseMotionListener( this );
     }
 
-    if (mpMouseMotionListeners)
-        mpMouseMotionListeners->addInterface( xListener );
+    maMouseMotionListeners.addInterface( xListener );
 }
 
 void SAL_CALL SlideShowView::removeMouseMotionListener( const Reference< awt::XMouseMotionListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if (mpMouseMotionListeners)
-        mpMouseMotionListeners->removeInterface( xListener );
+    if (!m_bDisposed)
+        maMouseMotionListeners.removeInterface( xListener );
 
     // TODO(P1): Might be nice to deregister for mouse motion
     // events, when the last listener is gone.
@@ -473,14 +467,14 @@ void SAL_CALL SlideShowView::windowResized( const awt::WindowEvent& e )
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if (mpViewListeners)
+    if (!m_bDisposed)
     {
         // Change event source, to enable listeners to match event
         // with view
         awt::WindowEvent aEvent( e );
         aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-        mpViewListeners->notify( aEvent );
+        maViewListeners.notify( aEvent );
         updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
     }
 }
@@ -504,6 +498,9 @@ void SAL_CALL SlideShowView::windowHidden( const lang::EventObject& )
 void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e )
 {
     std::unique_lock aGuard( m_aMutex );
+    if (m_bDisposed)
+        return;
+
     if( mpSlideShow && mpSlideShow->isInputFreezed() )
     {
         mbMousePressedEaten = true;
@@ -519,8 +516,7 @@ void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e )
         aEvent.maEvent = e;
         aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-        if (mpMouseListeners)
-            mpMouseListeners->notify( aEvent );
+        maMouseListeners.notify( aEvent );
         updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
     }
 }
@@ -528,6 +524,9 @@ void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e )
 void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e )
 {
     std::unique_lock aGuard( m_aMutex );
+    if (m_bDisposed)
+        return;
+
     if( mbMousePressedEaten )
     {
         // if mouse button down was ignored, also ignore mouse button up
@@ -542,8 +541,7 @@ void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e )
         aEvent.maEvent = e;
         aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-        if (mpMouseListeners)
-            mpMouseListeners->notify( aEvent );
+        maMouseListeners.notify( aEvent );
         updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
     }
 }
@@ -551,6 +549,8 @@ void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e )
 void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e )
 {
     std::unique_lock aGuard( m_aMutex );
+    if (m_bDisposed)
+        return;
 
     // Change event source, to enable listeners to match event
     // with view
@@ -559,14 +559,15 @@ void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e )
     aEvent.maEvent = e;
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-    if (mpMouseListeners)
-        mpMouseListeners->notify( aEvent );
+    maMouseListeners.notify( aEvent );
     updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
 
 void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e )
 {
     std::unique_lock aGuard( m_aMutex );
+    if (m_bDisposed)
+        return;
 
     // Change event source, to enable listeners to match event
     // with view
@@ -575,8 +576,7 @@ void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e )
     aEvent.maEvent = e;
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-    if (mpMouseListeners)
-        mpMouseListeners->notify( aEvent );
+    maMouseListeners.notify( aEvent );
     updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
 
@@ -584,6 +584,8 @@ void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e )
 void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e )
 {
     std::unique_lock aGuard( m_aMutex );
+    if (m_bDisposed)
+        return;
 
     // Change event source, to enable listeners to match event
     // with view
@@ -592,14 +594,15 @@ void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e )
     aEvent.maEvent = e;
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-    if (mpMouseMotionListeners)
-        mpMouseMotionListeners->notify( aEvent );
+    maMouseMotionListeners.notify( aEvent );
     updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
 
 void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e )
 {
     std::unique_lock aGuard( m_aMutex );
+    if (m_bDisposed)
+        return;
 
     // Change event source, to enable listeners to match event
     // with view
@@ -608,8 +611,7 @@ void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e )
     aEvent.maEvent = e;
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-    if (mpMouseMotionListeners)
-        mpMouseMotionListeners->notify( aEvent );
+    maMouseMotionListeners.notify( aEvent );
     updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
 
