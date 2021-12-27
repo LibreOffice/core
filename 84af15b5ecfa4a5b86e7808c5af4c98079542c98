@@ -16,6 +16,24 @@
       "message": "Just remembered https://gerrit.libreoffice.org/c/core/+/110838 - so while it will work for builddir!\u003dsrcdir, at least in February when the whole workspace support was still quite new the workspacefolder:builddir expansion didn\u0027t work properly if srcdir\u003dbuilddir",
       "revId": "84af15b5ecfa4a5b86e7808c5af4c98079542c98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73b0aae9_9924108b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-27T06:59:25Z",
+      "side": 1,
+      "message": "Yes you are right - it still doesn\u0027t work.",
+      "parentUuid": "6595ced3_64365267",
+      "revId": "84af15b5ecfa4a5b86e7808c5af4c98079542c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
