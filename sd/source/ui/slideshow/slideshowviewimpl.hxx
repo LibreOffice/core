@@ -20,9 +20,8 @@
 #pragma once
 
 #include <memory>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
@@ -72,7 +71,6 @@ typedef std::vector< css::uno::WeakReference< css::util::XModifyListener > > Vie
 class SlideShowViewListeners final
 {
 public:
-    SlideShowViewListeners( ::osl::Mutex& rMutex );
 
     void    addListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener );
     void    removeListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener );
@@ -82,33 +80,28 @@ public:
 
 private:
     ViewListenerVector maListeners;
-    ::osl::Mutex& mrMutex;
 };
 
 // SlideShowViewPaintListeners
-typedef ::comphelper::OInterfaceContainerHelper3< css::awt::XPaintListener >  SlideShowViewPaintListeners;
+typedef ::comphelper::OInterfaceContainerHelper4< css::awt::XPaintListener >  SlideShowViewPaintListeners;
 
 
 // SlideShowViewMouseListeners
-typedef ::comphelper::OInterfaceContainerHelper3< css::awt::XMouseListener > SlideShowViewMouseListeners_Base;
+typedef ::comphelper::OInterfaceContainerHelper4< css::awt::XMouseListener > SlideShowViewMouseListeners_Base;
 
 class SlideShowViewMouseListeners : public SlideShowViewMouseListeners_Base
 {
 public:
-    SlideShowViewMouseListeners( ::osl::Mutex& rMutex ) : SlideShowViewMouseListeners_Base(rMutex) {}
-
     void notify(const WrappedMouseEvent& rEvent);
 };
 
 
 // SlideShowViewMouseMotionListeners
-typedef ::comphelper::OInterfaceContainerHelper3< css::awt::XMouseMotionListener > SlideShowViewMouseMotionListeners_Base;
+typedef ::comphelper::OInterfaceContainerHelper4< css::awt::XMouseMotionListener > SlideShowViewMouseMotionListeners_Base;
 
 class SlideShowViewMouseMotionListeners : public SlideShowViewMouseMotionListeners_Base
 {
 public:
-    SlideShowViewMouseMotionListeners( ::osl::Mutex& rMutex ) : SlideShowViewMouseMotionListeners_Base(rMutex) {}
-
     void notify( const WrappedMouseMotionEvent& rEvent );
 };
 
@@ -116,13 +109,12 @@ public:
 class ShowWindow;
 class SlideshowImpl;
 
-typedef ::cppu::WeakComponentImplHelper< css::presentation::XSlideShowView,
+typedef comphelper::WeakComponentImplHelper< css::presentation::XSlideShowView,
                                             css::awt::XWindowListener,
                                             css::awt::XMouseListener,
                                             css::awt::XMouseMotionListener > SlideShowView_Base;
 
-class SlideShowView : public ::cppu::BaseMutex,
-                    public SlideShowView_Base
+class SlideShowView final : public SlideShowView_Base
 {
 public:
     SlideShowView( ShowWindow&     rOutputWindow,
@@ -134,7 +126,7 @@ public:
     void ignoreNextMouseReleased() { mbMousePressedEaten = true; }
 
     /// Dispose all internal references
-    virtual void SAL_CALL dispose() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     /// Disposing our broadcaster
     virtual void SAL_CALL disposing( const css::lang::EventObject& ) override;
@@ -174,15 +166,15 @@ public:
     virtual void SAL_CALL mouseDragged( const css::awt::MouseEvent& e ) override;
     virtual void SAL_CALL mouseMoved( const css::awt::MouseEvent& e ) override;
 
-    using cppu::WeakComponentImplHelperBase::disposing;
-
 protected:
     virtual ~SlideShowView() override {}
 
 private:
     void init();
 
-    void updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow );
+    void updateimpl( std::unique_lock<std::mutex>& rGuard, SlideshowImpl* pSlideShow );
+
+    void disposingImpl( std::unique_lock<std::mutex>& );
 
     ::cppcanvas::SpriteCanvasSharedPtr                    mpCanvas;
     css::uno::Reference< css::awt::XWindow >              mxWindow;
