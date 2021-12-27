@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a73f1a_4fbe11a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-27T08:25:32Z",
+      "side": 1,
+      "message": "The task is \"replace usage of sal_Int32 with colors\" while in your patch you are using sal_Int32. Also, you forgot to change the bug reference to the correct notation.",
+      "revId": "7086eeaad3cc5becbf9af05d2166bc1c60d0fac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
