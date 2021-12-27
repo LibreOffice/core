@@ -128,8 +128,7 @@ public:
 
 
 UcbStore::UcbStore( const Reference< XComponentContext >& xContext )
-: UcbStore_Base(m_aMutex),
-  m_xContext( xContext )
+: m_xContext( xContext )
 {
 }
 
@@ -174,7 +173,7 @@ UcbStore::createPropertySetRegistry( const OUString& )
 
     if ( !m_xTheRegistry.is() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         if ( !m_xTheRegistry.is() )
             m_xTheRegistry = new PropertySetRegistry( m_xContext, m_aInitArgs );
     }
@@ -189,7 +188,7 @@ UcbStore::createPropertySetRegistry( const OUString& )
 // virtual
 void SAL_CALL UcbStore::initialize( const Sequence< Any >& aArguments )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     m_aInitArgs = aArguments;
 }
 

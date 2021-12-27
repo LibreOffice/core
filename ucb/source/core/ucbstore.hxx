@@ -35,17 +35,16 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multiinterfacecontainer3.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <unordered_map>
 
 
-using UcbStore_Base = cppu::WeakComponentImplHelper <
+using UcbStore_Base = comphelper::WeakComponentImplHelper <
                         css::lang::XServiceInfo,
                         css::ucb::XPropertySetRegistryFactory,
                         css::lang::XInitialization >;
 
-class UcbStore : public cppu::BaseMutex, public UcbStore_Base
+class UcbStore : public UcbStore_Base
 {
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
     css::uno::Sequence< css::uno::Any >                   m_aInitArgs;
