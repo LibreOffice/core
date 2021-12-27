@@ -54,8 +54,7 @@ namespace sd::slidesorter::controller {
 
 Listener::Listener (
     SlideSorter& rSlideSorter)
-    : ListenerInterfaceBase(m_aMutex),
-      mrSlideSorter(rSlideSorter),
+    : mrSlideSorter(rSlideSorter),
       mrController(mrSlideSorter.GetController()),
       mpBase(mrSlideSorter.GetViewShellBase()),
       mbListeningToDocument (false),
@@ -415,7 +414,7 @@ void SAL_CALL Listener::notifyEvent (
 void SAL_CALL Listener::propertyChange (
     const PropertyChangeEvent& rEvent)
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         throw lang::DisposedException ("SlideSorterController object has already been disposed",
             static_cast<uno::XWeak*>(this));
@@ -489,7 +488,7 @@ void SAL_CALL Listener::notifyEvent (
 {
 }
 
-void SAL_CALL Listener::disposing()
+void Listener::disposing(std::unique_lock<std::mutex>&)
 {
     ReleaseListeners();
 }

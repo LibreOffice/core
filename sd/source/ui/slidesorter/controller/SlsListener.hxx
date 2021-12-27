@@ -24,8 +24,8 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <svl/lstner.hxx>
 #include <tools/link.hxx>
@@ -42,7 +42,7 @@ namespace sd::slidesorter { class SlideSorter; }
 
 namespace sd::slidesorter::controller {
 
-typedef cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::document::XEventListener,
     css::beans::XPropertyChangeListener,
     css::accessibility::XAccessibleEventListener,
@@ -58,8 +58,7 @@ typedef cppu::WeakComponentImplHelper<
     to the old controller and register as listener at the new one.
 */
 class Listener
-    : protected cppu::BaseMutex,
-      public ListenerInterfaceBase,
+    : public ListenerInterfaceBase,
       public SfxListener
 {
 public:
@@ -114,7 +113,7 @@ public:
     virtual void SAL_CALL
         frameAction (const css::frame::FrameActionEvent& rEvent) override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
 private:
     SlideSorter& mrSlideSorter;
