@@ -87,8 +87,6 @@ void AccessibleSlideSorterObject::FireAccessibleEvent (
 
 void AccessibleSlideSorterObject::disposing(std::unique_lock<std::mutex>&)
 {
-    const SolarMutexGuard aSolarGuard;
-
     // Send a disposing to all listeners.
     if (mnClientId != 0)
     {
