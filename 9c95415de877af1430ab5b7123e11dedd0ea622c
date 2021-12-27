@@ -22,6 +22,30 @@
       },
       "revId": "9c95415de877af1430ab5b7123e11dedd0ea622c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d9304f2_23a4324e",
+        "filename": "idlc/source/idlccompile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-27T17:08:06Z",
+      "side": 0,
+      "message": "AFAICT all supported systems provide sys/wait.h, at least back to 1995. Since it was standardized in 1988 it\u0027s safe to assume most systems had it long before, and wait.h isn\u0027t relevant.",
+      "parentUuid": "914e4f98_eb049cd1",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 76
+      },
+      "revId": "9c95415de877af1430ab5b7123e11dedd0ea622c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
