@@ -88,8 +88,6 @@ void AccessibleSlideSorterObject::FireAccessibleEvent (
 
 void SAL_CALL AccessibleSlideSorterObject::disposing()
 {
-    const SolarMutexGuard aSolarGuard;
-
     // Send a disposing to all listeners.
     if (mnClientId != 0)
     {
