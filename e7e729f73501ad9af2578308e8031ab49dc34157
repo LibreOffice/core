@@ -16,6 +16,24 @@
       "message": "Using basegfx::rad2deg causes Build failure.",
       "revId": "e7e729f73501ad9af2578308e8031ab49dc34157",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "562af87f_0a18640d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-27T16:03:59Z",
+      "side": 1,
+      "message": "It was not related to your patch.",
+      "parentUuid": "b547e6b8_c01180da",
+      "revId": "e7e729f73501ad9af2578308e8031ab49dc34157",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
