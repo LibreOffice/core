@@ -85,8 +85,7 @@ public:
 
 BasicPaneFactory::BasicPaneFactory (
     const Reference<XComponentContext>& rxContext)
-    : BasicPaneFactoryInterfaceBase(m_aMutex),
-      mxComponentContext(rxContext),
+    : mxComponentContext(rxContext),
       mpViewShellBase(nullptr),
       mpPaneContainer(new PaneContainer)
 {
@@ -96,7 +95,7 @@ BasicPaneFactory::~BasicPaneFactory()
 {
 }
 
-void SAL_CALL BasicPaneFactory::disposing()
+void BasicPaneFactory::disposing(std::unique_lock<std::mutex>&)
 {
     Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
     if (xCC.is())
@@ -412,7 +411,7 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
 
 void BasicPaneFactory::ThrowIfDisposed() const
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         throw lang::DisposedException ("BasicPaneFactory object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
