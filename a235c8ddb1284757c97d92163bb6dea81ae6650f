@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d8ea955_bbc6d0fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-27T10:53:11Z",
+      "side": 1,
+      "message": "Interesting; does \u0027volatile\u0027 somehow resolve data race? Should it be \u0027std::atomic\u003cbool\u003e\u0027 instead?",
+      "revId": "a235c8ddb1284757c97d92163bb6dea81ae6650f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
