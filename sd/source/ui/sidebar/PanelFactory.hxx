@@ -18,28 +18,24 @@
  */
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
 namespace sd::sidebar {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::ui::XUIElementFactory
     > PanelFactoryInterfaceBase;
 
-class PanelFactory
-    : private ::cppu::BaseMutex,
-      public PanelFactoryInterfaceBase
+class PanelFactory final
+    : public PanelFactoryInterfaceBase
 {
 public:
     explicit PanelFactory ();
     virtual ~PanelFactory() override;
     PanelFactory(const PanelFactory&) = delete;
     PanelFactory& operator=(const PanelFactory&) = delete;
-
-    virtual void SAL_CALL disposing() override;
 
     // XUIElementFactory
 
