@@ -407,8 +407,8 @@ void aqua_init_systray()
             {
                 SvtModuleOptions::EModule   eModuleIdentifier;
                 int                         nMenuTag;
-                const char*                 pAsciiURLDescription;
-            }   aMenuItems[] =
+                rtl::OUStringConstExpr      sURLDescription;
+            } static const aMenuItems[] =
             {
                 { SvtModuleOptions::EModule::WRITER,    MI_WRITER,  WRITER_URL },
                 { SvtModuleOptions::EModule::CALC,      MI_CALC,    CALC_URL },
@@ -436,7 +436,7 @@ void aqua_init_systray()
                     // the complete application is not even installed
                     continue;
 
-                OUString sURL( OUString::createFromAscii( aMenuItems[i].pAsciiURLDescription ) );
+                const OUString& sURL( aMenuItems[i].sURLDescription );
 
                 if ( aFileNewAppsAvailable.find( sURL ) == aFileNewAppsAvailable.end() )
                     // the application is installed, but the entry has been configured to *not* appear in the File/New
