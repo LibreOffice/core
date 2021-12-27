@@ -255,7 +255,14 @@ enum ScAutoSum
     ScAutoSumAverage,
     ScAutoSumMax,
     ScAutoSumMin,
-    ScAutoSumCount
+    ScAutoSumCount,
+    ScAutoSumCountA,
+    ScAutoSumProduct,
+    ScAutoSumStDev,
+    ScAutoSumStDevP,
+    ScAutoSumVar,
+    ScAutoSumVarP,
+    ScAutoSumEnd
 };
 
 }
@@ -283,6 +290,18 @@ static ScAutoSum lcl_IsAutoSumData( ScDocument& rDoc, SCCOL nCol, SCROW nRow,
                     case ocMin     : val = ScAutoSumMin;
                         break;
                     case ocCount   : val = ScAutoSumCount;
+                        break;
+                    case ocCount2  : val = ScAutoSumCountA;
+                        break;
+                    case ocProduct : val = ScAutoSumProduct;
+                        break;
+                    case ocStDev   : val = ScAutoSumStDev;
+                        break;
+                    case ocStDevP  : val = ScAutoSumStDevP;
+                        break;
+                    case ocVar     : val = ScAutoSumVar;
+                        break;
+                    case ocVarP    : val = ScAutoSumVarP;
                         break;
                     default        :
                         break;
@@ -469,6 +488,18 @@ static sal_Int8 GetSubTotal( const OpCode eCode )
             break;
         case ocCount   : val = 2;
             break;
+        case ocCount2  : val = 3;
+            break;
+        case ocProduct : val = 6;
+            break;
+        case ocStDev   : val = 7;
+            break;
+        case ocStDevP  : val = 8;
+            break;
+        case ocVar     : val = 10;
+            break;
+        case ocVarP    : val = 11;
+            break;
         default        : val = 9;
     }
 
@@ -521,7 +552,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
         if ( bRow )
         {
             nStartRow = nSeekRow;       // nSeekRow might be adjusted via reference
-            if ( eSum >= ScAutoSumSum  && eSum <= ScAutoSumCount )
+            if ( eSum >= ScAutoSumSum  && eSum < ScAutoSumEnd )
                 nEndRow = nStartRow;        // only sum sums
             else
                 nEndRow = nRow - 1;     // maybe extend data area at bottom
