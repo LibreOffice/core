@@ -39,8 +39,7 @@ namespace sd::framework {
 //===== CenterViewFocusModule ====================================================
 
 ShellStackGuard::ShellStackGuard (Reference<frame::XController> const & rxController)
-    : ShellStackGuardInterfaceBase(m_aMutex),
-      mpBase(nullptr),
+    : mpBase(nullptr),
       maPrinterPollingIdle("sd ShellStackGuard PrinterPollingIdle")
 {
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
@@ -72,12 +71,13 @@ ShellStackGuard::~ShellStackGuard()
 {
 }
 
-void SAL_CALL ShellStackGuard::disposing()
+void ShellStackGuard::disposing(std::unique_lock<std::mutex>&)
 {
-    if (mxConfigurationController.is())
+    if (mxConfigurationController)
+    {
         mxConfigurationController->removeConfigurationChangeListener(this);
-
-    mxConfigurationController = nullptr;
+        mxConfigurationController = nullptr;
+    }
     mpBase = nullptr;
 }
 
