@@ -22,15 +22,14 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/XSlideSorterBase.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <memory>
 
 namespace com::sun::star::awt { class XWindow; }
 
 namespace sd::slidesorter {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::drawing::XSlideSorterBase,
     css::lang::XInitialization,
     css::awt::XWindowListener
@@ -41,15 +40,14 @@ class SlideSorter;
 /** Implementation of the com.sun.star.drawing.SlideSorter service.
 */
 class SlideSorterService
-    : protected ::cppu::BaseMutex,
-      public SlideSorterServiceInterfaceBase
+    : public SlideSorterServiceInterfaceBase
 {
 public:
     explicit SlideSorterService();
     virtual ~SlideSorterService() override;
     SlideSorterService(const SlideSorterService&) = delete;
     SlideSorterService& operator=(const SlideSorterService&) = delete;
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XInitialization
 
