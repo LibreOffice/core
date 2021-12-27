@@ -16,6 +16,24 @@
       "message": "You should use basegfx::rad2deg() here instead of this statement.",
       "revId": "ea1da5940e540cd6191c21c6dd5f0f0aee4d0052",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "120a9860_18f95b5c",
+        "filename": "vcl/source/filter/idxf/dxfvec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2021-12-27T14:26:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ceb10e9_a4aefb72",
+      "revId": "ea1da5940e540cd6191c21c6dd5f0f0aee4d0052",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
