@@ -1039,6 +1039,30 @@ void ScInputWindow::MenuHdl(std::string_view command)
     {
         eCode = ocCount;
     }
+    else if ( command == "counta" )
+    {
+        eCode = ocCount2;
+    }
+    else if ( command == "product" )
+    {
+        eCode = ocProduct;
+    }
+    else if (command == "stdev")
+    {
+        eCode = ocStDev;
+    }
+    else if (command == "stdevp")
+    {
+        eCode = ocStDevP;
+    }
+    else if (command == "var")
+    {
+        eCode = ocVar;
+    }
+    else if (command == "varp")
+    {
+        eCode = ocVarP;
+    }
 
     AutoSum( bRangeFinder, bSubTotal, eCode );
 }
