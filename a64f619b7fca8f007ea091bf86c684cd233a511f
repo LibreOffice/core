@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3736a7a8_aa25aa2a",
+        "filename": "connectivity/source/drivers/firebird/Util.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-12-27T10:47:18Z",
+      "side": 1,
+      "message": "Then I would suggest that you assert that:\nassert(pVar-\u003esqldata \u003d\u003d nullptr);",
+      "range": {
+        "startLine": 392,
+        "startChar": 15,
+        "endLine": 392,
+        "endChar": 50
+      },
+      "revId": "a64f619b7fca8f007ea091bf86c684cd233a511f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
