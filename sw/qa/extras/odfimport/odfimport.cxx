@@ -1313,7 +1313,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146257)
         uno::Reference<beans::XPropertySet> xPara(getParagraph(4), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
     }
-    // For second list ensure second level empty and thord level should not contain extra dots
+    // For second list ensure second level empty and third level should not contain extra dots
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(6), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
