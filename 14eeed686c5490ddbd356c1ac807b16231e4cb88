@@ -88,6 +88,24 @@
       "parentUuid": "cfc0d430_30421d44",
       "revId": "14eeed686c5490ddbd356c1ac807b16231e4cb88",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5681f2d_74b4fa74",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-27T08:11:10Z",
+      "side": 1,
+      "message": "\u003e My qualms with gb_MKTEMP are that it makes it harder to debug build issues by obscuring the actual file names and easily fills TMPDIR with garbage if e.g. a recipe fails in the middle of a ... \u0026\u0026 ... \u0026\u0026 ... chain and thus never gets to the rm---which is less of an issue if the temporary file has a well-known name in WORKDIR, where it gets overwritten by the next build and/or removed by `make clean`.\n\nThat is actually some argument instead of my \"TEMP is for temporary files, so use it\". If you have well know names, you can easily remove them in a 2nd rule statement with \"rm -f\", with no need to worry about complex failing shell chains). Maybe that is even EasyHack-able, to get rid of gb_MKTEMP… hmmm. Our worktree is writable after all, and easy to clean. Not sure, if it\u0027s worth to have an additional \"make clean-temporary\" target, which you can toggle like \"make keep-temporary\u003dt\" for debugging. I don\u0027t think there is a way to remove all temporary file at then end of any rule, like some pattern rules do. And I\u0027m probably totally over-engineering this...",
+      "parentUuid": "0cd78758_ad81c9a0",
+      "revId": "14eeed686c5490ddbd356c1ac807b16231e4cb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
