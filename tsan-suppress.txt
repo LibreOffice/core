@@ -54,3 +54,4 @@ race:slab_allocator_alloc_chunk
 race:g_source_destroy_internal
 race:g_source_unref_internal
 race:g_task_finalize
+race:g_socket_send_message_with_timeout
