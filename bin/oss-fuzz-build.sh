@@ -8,6 +8,8 @@ if [ -z "${OUT}" ] || [ -z "${SRC}" ] || [ -z "${WORK}" ]; then
 fi
 
 echo start at `date -u`
+df -h $OUT $WORK
+echo git: `git -C $SRC/libreoffice log -1 --pretty=reference`
 
 #shuffle CXXFLAGS -stdlib=libc++ arg into CXX as well because we use
 #the CXX as the linker and need to pass -stdlib=libc++ to build
@@ -21,14 +23,20 @@ export LDFLAGS="$CFLAGS -Wl,--compress-debug-sections,zlib -lpthread"
 #build-time rsc tool leaks a titch
 export ASAN_OPTIONS="detect_leaks=0"
 
-df -h $OUT $WORK
-
 cd $WORK
+if test -f Makefile ; then
+    echo clean at `date -u`
+    make clean
+fi
+
+echo autogen.sh at `date -u`
 $SRC/libreoffice/autogen.sh --with-distro=LibreOfficeOssFuzz --with-external-tar=$SRC
 
-make clean
-
+echo make at `date -u`
 make
+
+echo prepare '$OUT' at `date -u`
+df -h $OUT $WORK
 
 pushd instdir/program
 head -c -14 services.rdb  > templateservices.rdb
@@ -52,15 +60,16 @@ EOF
 done
 popd
 
-df -h $OUT $WORK
-
 #starting corpuses
 for zip_file in $SRC/*_seed_corpus.zip; do
     cp $zip_file $OUT
 done
+
 #fuzzing dictionaries
 cp $SRC/*.dict $OUT
+
 #options files
 cp $SRC/libreoffice/vcl/workben/*.options $OUT
 
 echo end at `date -u`
+df -h $OUT $WORK
