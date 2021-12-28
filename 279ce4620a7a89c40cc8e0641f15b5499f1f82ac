@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f86a492e_0cf18e56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-28T21:58:30Z",
+      "side": 1,
+      "message": "Looks good to me.\nWith this patch, tdf#146257 is fixed. Without this fix, if 2nd level has disabled numbering, 3rd level is erroneously shown as \"1..1\", and not \"1.1\" as it should.",
+      "revId": "279ce4620a7a89c40cc8e0641f15b5499f1f82ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
