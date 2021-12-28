@@ -34,6 +34,23 @@
       "parentUuid": "6970481c_b6bafad2",
       "revId": "2f934a2442d2575e67fb848603a856097fe49564",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9e6e7e4_ee3b5a45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-28T17:19:49Z",
+      "side": 1,
+      "message": "Looks good to me.\nI\u0027ve compiled and tested this patch. With this fix in place, tdf#146295 is fixed. Without it, the problem appears.",
+      "revId": "2f934a2442d2575e67fb848603a856097fe49564",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
