@@ -21,8 +21,7 @@
 
 #include <com/sun/star/drawing/framework/XModuleController.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <memory>
 
@@ -31,7 +30,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace sd::framework {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XModuleController,
     css::lang::XInitialization
     > ModuleControllerInterfaceBase;
@@ -54,9 +53,8 @@ typedef ::cppu::WeakComponentImplHelper <
     can then register as listeners at the ConfigurationController or do
     whatever they like.
 */
-class ModuleController
-    : private cppu::BaseMutex,
-      public ModuleControllerInterfaceBase
+class ModuleController final
+    : public ModuleControllerInterfaceBase
 {
 public:
     static css::uno::Reference<
@@ -65,7 +63,7 @@ public:
             const css::uno::Reference<css::uno::XComponentContext>&
             rxContext);
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XModuleController
 
