@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAL_OSL_UNX_BACKTRACE_H
 #define INCLUDED_SAL_OSL_UNX_BACKTRACE_H
 
-#if defined (LINUX)
+#if HAVE_FEATURE_BACKTRACE /* GNU backtrace implementation available */
 
 #include <execinfo.h>
 
