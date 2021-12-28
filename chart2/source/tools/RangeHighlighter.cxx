@@ -69,7 +69,6 @@ namespace chart
 
 RangeHighlighter::RangeHighlighter(
     const Reference< view::XSelectionSupplier > & xSelectionSupplier ) :
-        impl::RangeHighlighter_Base( m_aMutex ),
         m_xSelectionSupplier( xSelectionSupplier ),
         m_nAddedListenerCount( 0 ),
         m_bIncludeHiddenCells(true)
@@ -307,7 +306,7 @@ void SAL_CALL RangeHighlighter::addSelectionChangeListener( const Reference< vie
 
     if( m_nAddedListenerCount == 0 )
         startListening();
-    rBHelper.addListener( cppu::UnoType<decltype(xListener)>::get(), xListener);
+    maSelectionChangeListeners.addInterface( xListener);
     ++m_nAddedListenerCount;
 
     //bring the new listener up to the current state
@@ -317,7 +316,7 @@ void SAL_CALL RangeHighlighter::addSelectionChangeListener( const Reference< vie
 
 void SAL_CALL RangeHighlighter::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener )
 {
-    rBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    maSelectionChangeListeners.removeInterface( xListener );
     --m_nAddedListenerCount;
     if( m_nAddedListenerCount == 0 )
         stopListening();
@@ -335,15 +334,13 @@ void SAL_CALL RangeHighlighter::selectionChanged( const lang::EventObject& /*aEv
 
 void RangeHighlighter::fireSelectionEvent()
 {
-    ::cppu::OInterfaceContainerHelper* pIC = rBHelper.getContainer(
-        cppu::UnoType< view::XSelectionChangeListener >::get() );
-    if( pIC )
+    if( maSelectionChangeListeners.getLength() )
     {
         lang::EventObject aEvent( static_cast< lang::XComponent* >( this ) );
-        ::cppu::OInterfaceIteratorHelper aIt( *pIC );
+        comphelper::OInterfaceIteratorHelper4 aIt( maSelectionChangeListeners );
         while( aIt.hasMoreElements() )
         {
-            static_cast< view::XSelectionChangeListener* >( aIt.next() )->selectionChanged( aEvent );
+            aIt.next()->selectionChanged( aEvent );
         }
     }
 }
@@ -382,7 +379,7 @@ void RangeHighlighter::stopListening()
 
 // ____ WeakComponentImplHelperBase ____
 // is called when dispose() is called at this component
-void SAL_CALL RangeHighlighter::disposing()
+void RangeHighlighter::disposing(std::unique_lock<std::mutex>&)
 {
     // @todo: remove listener. Currently the controller shows an assertion
     // because it is already disposed

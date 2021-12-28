@@ -18,8 +18,8 @@
  */
 #pragma once
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 
@@ -38,15 +38,14 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
         css::chart2::data::XRangeHighlighter,
         css::view::XSelectionChangeListener
     >
     RangeHighlighter_Base;
 }
 
-class RangeHighlighter :
-        public cppu::BaseMutex,
+class RangeHighlighter final :
         public impl::RangeHighlighter_Base
 {
 public:
@@ -72,7 +71,7 @@ protected:
 
     // ____ WeakComponentImplHelperBase ____
     // is called when dispose() is called at this component
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
 private:
     void fireSelectionEvent();
@@ -95,6 +94,7 @@ private:
         m_aSelectedRanges;
     sal_Int32 m_nAddedListenerCount;
     bool m_bIncludeHiddenCells;
+    comphelper::OInterfaceContainerHelper4<css::view::XSelectionChangeListener> maSelectionChangeListeners;
 };
 
 } //  namespace chart
