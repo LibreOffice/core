@@ -12443,7 +12443,7 @@ elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
 
         # C++ library doesn't come with fancy gpgmepp-config, check for headers the old-fashioned way
         AC_CHECK_HEADER(gpgme++/gpgmepp_version.h, [ GPGMEPP_CFLAGS=-I/usr/include/gpgme++ ],
-            [AC_MSG_ERROR([gpgmepp headers not found, install gpgmepp development package])], [])
+            [AC_MSG_ERROR([gpgmepp headers not found, install gpgmepp >= 1.14 development package])], [])
         # progress_callback is the only func with plain C linkage
         # checking for it also filters out older, KDE-dependent libgpgmepp versions
         AC_CHECK_LIB(gpgmepp, progress_callback, [ GPGMEPP_LIBS=-lgpgmepp ],
@@ -12453,7 +12453,6 @@ elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
     else
         AC_MSG_RESULT([internal])
         BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGMEPP"
-        AC_DEFINE([GPGME_CAN_EXPORT_MINIMAL_KEY])
 
         GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
         LIBASSUAN_CFLAGS="-I${WORKDIR}/UnpackedTarball/libassuan/src"

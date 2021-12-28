@@ -19,13 +19,11 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,gpgmepp,0))
 $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     external/gpgmepp/find-libgpg-error-libassuan.patch \
     external/gpgmepp/fix-autoconf-macros.patch \
-    external/gpgmepp/add-minimal-keyexport.patch \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-build-fixes.patch.1) \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-disable-docs.patch.1) \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-fix-win32-macro.patch.1) \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-fix-libtool.patch.1) \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-add-initializer.patch.1) \
-    external/gpgmepp/gpgme.git-fe2892618c20cd40c342cce26ffb6ac4644fd3c3.patch.1 \
     external/gpgmepp/w32-build-fixes-2.patch \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/asan.patch) \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/rpath.patch) \
