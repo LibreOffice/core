@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "506e3307_b56c20cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-12-28T18:06:29Z",
+      "side": 1,
+      "message": "see https://tests.reproducible-builds.org/debian/rbuild/unstable/amd64/libreoffice_7.2.4-3.rbuild.log.gz (which has the atch backported) which says (intentionally) I: Current time: Sun Jan 29 14:09:52 -12 2023 and now passes -\u003e Verified\n",
+      "revId": "32a8c12691f26e6f1822693c1381aaf7b20ba2af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
