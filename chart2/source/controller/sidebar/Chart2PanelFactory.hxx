@@ -18,21 +18,19 @@
  */
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
 
 namespace chart::sidebar {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::ui::XUIElementFactory, css::lang::XServiceInfo
     > PanelFactoryInterfaceBase;
 
-class ChartPanelFactory
-    : private ::cppu::BaseMutex,
-      public PanelFactoryInterfaceBase
+class ChartPanelFactory final
+    : public PanelFactoryInterfaceBase
 {
 public:
     ChartPanelFactory();
