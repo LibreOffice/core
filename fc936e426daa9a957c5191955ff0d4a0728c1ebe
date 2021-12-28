@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "840f75ca_3c7184a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-12-28T11:11:50Z",
+      "side": 1,
+      "message": "This should IMO be moved into l10n framework, with a public method somewhere \"hasHyphenationPatterns()\" or somesuch - Eike, could you suggest a suitable place?\n\nThen this (and other) places could simply call that function.\n\nThanks a lot btw for collecting all other patches \u0026 languages that have a need for this!",
+      "revId": "fc936e426daa9a957c5191955ff0d4a0728c1ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
