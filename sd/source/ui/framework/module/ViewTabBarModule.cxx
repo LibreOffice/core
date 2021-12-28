@@ -48,8 +48,7 @@ namespace sd::framework {
 ViewTabBarModule::ViewTabBarModule (
     const Reference<frame::XController>& rxController,
     const Reference<XResourceId>& rxViewTabBarId)
-    : ViewTabBarModuleInterfaceBase(m_aMutex),
-      mxViewTabBarId(rxViewTabBarId)
+    : mxViewTabBarId(rxViewTabBarId)
 {
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
 
@@ -80,12 +79,13 @@ ViewTabBarModule::~ViewTabBarModule()
 {
 }
 
-void SAL_CALL ViewTabBarModule::disposing()
+void ViewTabBarModule::disposing(std::unique_lock<std::mutex>&)
 {
     if (mxConfigurationController.is())
+    {
         mxConfigurationController->removeConfigurationChangeListener(this);
-
-    mxConfigurationController = nullptr;
+        mxConfigurationController = nullptr;
+    }
 }
 
 void SAL_CALL ViewTabBarModule::notifyConfigurationChange (
@@ -130,7 +130,7 @@ void SAL_CALL ViewTabBarModule::disposing (
     {
         // Without the configuration controller this class can do nothing.
         mxConfigurationController = nullptr;
-        disposing();
+        dispose();
     }
 }
 
