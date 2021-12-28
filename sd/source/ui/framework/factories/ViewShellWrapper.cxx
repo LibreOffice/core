@@ -48,8 +48,7 @@ ViewShellWrapper::ViewShellWrapper (
     const std::shared_ptr<ViewShell>& pViewShell,
     const Reference<XResourceId>& rxViewId,
     const Reference<awt::XWindow>& rxWindow)
-    : ViewShellWrapperInterfaceBase(m_aMutex),
-      mpViewShell(pViewShell),
+    : mpViewShell(pViewShell),
       mpSlideSorterViewShell(
           std::dynamic_pointer_cast< ::sd::slidesorter::SlideSorterViewShell >( pViewShell )),
       mxViewId(rxViewId),
@@ -61,10 +60,8 @@ ViewShellWrapper::~ViewShellWrapper()
 {
 }
 
-void SAL_CALL ViewShellWrapper::disposing()
+void ViewShellWrapper::disposing(std::unique_lock<std::mutex>&)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     SAL_INFO("sd.ui", "disposing ViewShellWrapper " << this);
     Reference<awt::XWindow> xWindow (mxWindow);
     if (xWindow.is())

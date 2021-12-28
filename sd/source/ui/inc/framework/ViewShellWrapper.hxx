@@ -24,8 +24,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <memory>
 
@@ -35,7 +34,7 @@ namespace com::sun::star::awt { class XWindow; }
 
 namespace sd::framework {
 
-typedef ::cppu::WeakComponentImplHelper    <   css::lang::XUnoTunnel
+typedef comphelper::WeakComponentImplHelper    <   css::lang::XUnoTunnel
                                             ,   css::awt::XWindowListener
                                             ,   css::view::XSelectionSupplier
                                             ,   css::drawing::framework::XRelocatableResource
@@ -46,8 +45,7 @@ typedef ::cppu::WeakComponentImplHelper    <   css::lang::XUnoTunnel
     Most importantly it provides a tunnel to the ViewShell implementation.
     Then it forwards size changes of the pane window to the view shell.
 */
-class ViewShellWrapper  :private cppu::BaseMutex
-                        ,public ViewShellWrapperInterfaceBase
+class ViewShellWrapper final : public ViewShellWrapperInterfaceBase
 {
 public:
     /** Create a new ViewShellWrapper object that wraps the given ViewShell
@@ -67,7 +65,7 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxWindow);
     virtual ~ViewShellWrapper() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
 
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
