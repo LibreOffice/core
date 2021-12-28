@@ -110,8 +110,7 @@ namespace {
 SidebarController::SidebarController (
     SidebarDockingWindow* pParentWindow,
     const SfxViewFrame* pViewFrame)
-    : SidebarControllerInterfaceBase(m_aMutex),
-      mpParentWindow(pParentWindow),
+    : mpParentWindow(pParentWindow),
       mpViewFrame(pViewFrame),
       mxFrame(pViewFrame->GetFrame().GetFrameInterface()),
       mpTabBar(VclPtr<TabBar>::Create(
@@ -273,7 +272,7 @@ namespace
     };
 }
 
-void SAL_CALL SidebarController::disposing()
+void SidebarController::disposing(std::unique_lock<std::mutex>&)
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -359,8 +358,6 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
 
 void SAL_CALL SidebarController::disposing (const css::lang::EventObject& )
 {
-    SolarMutexGuard aSolarMutexGuard;
-
     dispose();
 }
 
