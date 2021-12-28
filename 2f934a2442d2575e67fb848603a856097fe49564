@@ -16,6 +16,24 @@
       "message": "one more needed ( already counting Caolán\u0027s )",
       "revId": "2f934a2442d2575e67fb848603a856097fe49564",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18e92d44_e8e72939",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-28T08:25:00Z",
+      "side": 1,
+      "message": "Why \"already counting Caolán\u0027s\"? Any reviews on previous stages don\u0027t count in release branches - they need *additional* reviews.",
+      "parentUuid": "6970481c_b6bafad2",
+      "revId": "2f934a2442d2575e67fb848603a856097fe49564",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
