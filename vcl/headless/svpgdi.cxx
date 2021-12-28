@@ -59,19 +59,6 @@
 
 namespace
 {
-    void Toggle1BitTransparency(const BitmapBuffer& rBuf)
-    {
-        assert(rBuf.maPalette.GetBestIndex(BitmapColor(COL_BLACK)) == 0);
-        // TODO: make upper layers use standard alpha
-        if (getCairoFormat(rBuf) == CAIRO_FORMAT_A1)
-        {
-            const int nImageSize = rBuf.mnHeight * rBuf.mnScanlineSize;
-            unsigned char* pDst = rBuf.mpBits;
-            for (int i = nImageSize; --i >= 0; ++pDst)
-                *pDst = ~*pDst;
-        }
-    }
-
     // check for env var that decides for using downscale pattern
     const char* pDisableDownScale(getenv("SAL_DISABLE_CAIRO_DOWNSCALE"));
     bool bDisableDownScale(nullptr != pDisableDownScale);
