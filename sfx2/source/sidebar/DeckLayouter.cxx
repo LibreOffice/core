@@ -27,6 +27,7 @@
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/viewsh.hxx>
 #include <comphelper/lok.hxx>
+#include <osl/diagnose.h>
 
 #include <comphelper/processfactory.hxx>
 

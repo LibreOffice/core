@@ -31,6 +31,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/acceleratorexecute.hxx>
+#include <osl/diagnose.h>
 
 using namespace css;
 using namespace css::uno;
