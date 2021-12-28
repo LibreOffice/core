@@ -42,8 +42,7 @@ namespace sd::framework {
 
 ToolBarModule::ToolBarModule (
     const Reference<frame::XController>& rxController)
-    : ToolBarModuleInterfaceBase(m_aMutex),
-      mpBase(nullptr),
+    : mpBase(nullptr),
       mbMainViewSwitchUpdatePending(false)
 {
     // Tunnel through the controller to obtain a ViewShellBase.
@@ -81,12 +80,13 @@ ToolBarModule::~ToolBarModule()
 {
 }
 
-void SAL_CALL ToolBarModule::disposing()
+void ToolBarModule::disposing(std::unique_lock<std::mutex>&)
 {
     if (mxConfigurationController.is())
+    {
         mxConfigurationController->removeConfigurationChangeListener(this);
-
-    mxConfigurationController = nullptr;
+        mxConfigurationController = nullptr;
+    }
 }
 
 void SAL_CALL ToolBarModule::notifyConfigurationChange (
