@@ -16,6 +16,23 @@
       "message": "+1 from Jenkins",
       "revId": "f47f55da1eed53e0744ec23116ee320d0b724d71",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6a0c286_d18cbf96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-28T06:39:36Z",
+      "side": 1,
+      "message": "I don\u0027t think you can do this, because it changes the binary interface",
+      "revId": "f47f55da1eed53e0744ec23116ee320d0b724d71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
