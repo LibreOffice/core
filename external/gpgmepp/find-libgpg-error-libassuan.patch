@@ -40,35 +40,6 @@ index f28480b..92a3e85 100644
  if test "$have_libassuan" = "yes"; then
    AC_DEFINE_UNQUOTED(GPGME_LIBASSUAN_VERSION, "$libassuan_version",
                       [version of the libassuan library])
-diff --git a/src/Makefile.am b/src/Makefile.am
-index ce6f1d4..6b1d835 100644
---- src/Makefile.am
-+++ src/Makefile.am
-@@ -26,7 +26,7 @@
- m4data_DATA = gpgme.m4
- nodist_include_HEADERS = gpgme.h
- 
--bin_PROGRAMS = gpgme-tool gpgme-json
-+bin_PROGRAMS = gpgme-tool
- 
- if BUILD_W32_GLIB
- ltlib_gpgme_glib = libgpgme-glib.la
-@@ -97,13 +97,10 @@
- 
- # We use a global CFLAGS setting for all libraries
- # versions, because then every object file is only compiled once.
--AM_CFLAGS = @LIBASSUAN_CFLAGS@ @GLIB_CFLAGS@
-+AM_CFLAGS = @LIBASSUAN_CFLAGS@ @GPG_ERROR_CFLAGS@ @GLIB_CFLAGS@
- 
- gpgme_tool_SOURCES = gpgme-tool.c argparse.c argparse.h
--gpgme_tool_LDADD = libgpgme.la @LIBASSUAN_LIBS@
--
--gpgme_json_SOURCES = gpgme-json.c cJSON.c cJSON.h
--gpgme_json_LDADD = -lm libgpgme.la $(GPG_ERROR_LIBS)
-+gpgme_tool_LDADD = libgpgme.la @LIBASSUAN_LIBS@ @GPG_ERROR_LIBS@
- 
- 
- if HAVE_W32_SYSTEM
 --- lang/cpp/tests/Makefile.am	2020-06-20 00:43:49.213657887 +0200
 +++ lang/cpp/tests/Makefile.am~	2019-01-25 13:27:34.000000000 +0100
 @@ -21,7 +21,7 @@

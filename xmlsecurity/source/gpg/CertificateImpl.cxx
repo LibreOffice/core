@@ -215,10 +215,9 @@ void CertificateImpl::setCertificate(GpgME::Context* ctx, const GpgME::Key& key)
     ctx->setArmor(false); // caller will base64-encode anyway
     GpgME::Error err = ctx->exportPublicKeys(
         key.primaryFingerprint(),
-        data_out
-#if GPGME_CAN_EXPORT_MINIMAL_KEY
-        , officecfg::Office::Common::Security::OpenPGP::MinimalKeyExport::get()
-#endif
+        data_out,
+        officecfg::Office::Common::Security::OpenPGP::MinimalKeyExport::get()
+         ? GpgME::Context::ExportMinimal : 0
     );
 
     if (err)
