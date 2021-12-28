@@ -22,8 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <comphelper/compbase.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
 
 #include <memory>
 
@@ -38,11 +36,9 @@ class ChartModelClone;
 namespace impl
 {
 
-typedef ::cppu::BaseMutex                                                           UndoElement_MBase;
-typedef ::cppu::WeakComponentImplHelper< css::document::XUndoAction > UndoElement_TBase;
+typedef comphelper::WeakComponentImplHelper< css::document::XUndoAction > UndoElement_TBase;
 
-class UndoElement   :public UndoElement_MBase
-                    ,public UndoElement_TBase
+class UndoElement final : public UndoElement_TBase
 {
 public:
     /** creates a new undo action
@@ -59,6 +55,7 @@ public:
                  const css::uno::Reference< css::frame::XModel >& i_documentModel,
                  const std::shared_ptr< ChartModelClone >& i_modelClone
                );
+    virtual ~UndoElement() override;
 
     UndoElement(const UndoElement&) = delete;
     const UndoElement& operator=(const UndoElement&) = delete;
@@ -68,11 +65,8 @@ public:
     virtual void SAL_CALL undo(  ) override;
     virtual void SAL_CALL redo(  ) override;
 
-    // OComponentHelper
-    virtual void SAL_CALL disposing() override;
-
-protected:
-    virtual ~UndoElement() override;
+    // WeakComponentImplHelper
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
 private:
     void    impl_toggleModelState();
