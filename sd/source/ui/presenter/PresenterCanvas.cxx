@@ -27,8 +27,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
@@ -43,13 +42,12 @@ namespace sd::presenter {
 /** Wrapper around a sprite that is displayed on a PresenterCanvas.
 */
 namespace {
-    typedef ::cppu::WeakComponentImplHelper <
+    typedef comphelper::WeakComponentImplHelper <
         css::rendering::XCustomSprite
     > PresenterCustomSpriteInterfaceBase;
 
-class PresenterCustomSprite
-    : protected ::cppu::BaseMutex,
-      public PresenterCustomSpriteInterfaceBase
+class PresenterCustomSprite final
+    : public PresenterCustomSpriteInterfaceBase
 {
 public:
     PresenterCustomSprite (
@@ -58,7 +56,7 @@ public:
         const Reference<awt::XWindow>& rxBaseWindow);
     PresenterCustomSprite(const PresenterCustomSprite&) = delete;
     PresenterCustomSprite& operator=(const PresenterCustomSprite&) = delete;
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XSprite
 
@@ -695,15 +693,14 @@ PresenterCustomSprite::PresenterCustomSprite (
     const rtl::Reference<PresenterCanvas>& rpCanvas,
     const Reference<rendering::XCustomSprite>& rxSprite,
     const Reference<awt::XWindow>& rxBaseWindow)
-    : PresenterCustomSpriteInterfaceBase(m_aMutex),
-      mpCanvas(rpCanvas),
+    : mpCanvas(rpCanvas),
       mxSprite(rxSprite),
       mxBaseWindow(rxBaseWindow),
       maPosition(0,0)
 {
 }
 
-void SAL_CALL PresenterCustomSprite::disposing()
+void PresenterCustomSprite::disposing(std::unique_lock<std::mutex>&)
 {
     Reference<XComponent> xComponent (mxSprite, UNO_QUERY);
     mxSprite = nullptr;
@@ -781,7 +778,7 @@ Reference<rendering::XCanvas> PresenterCustomSprite::getContentCanvas()
 
 void PresenterCustomSprite::ThrowIfDisposed()
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose || ! mxSprite.is())
+    if (m_bDisposed || ! mxSprite.is())
     {
         throw lang::DisposedException ("PresenterCustomSprite object has already been disposed",
             static_cast<uno::XWeak*>(this));
