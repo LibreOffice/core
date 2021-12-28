@@ -19,8 +19,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart {
 
-ChartToolbarController::ChartToolbarController(const css::uno::Sequence<css::uno::Any>& rProperties):
-    ChartToolbarControllerBase(m_aMutex)
+ChartToolbarController::ChartToolbarController(const css::uno::Sequence<css::uno::Any>& rProperties)
 {
     css::uno::Reference<css::frame::XFrame> xFrame;
     sal_Int32 nLength = rProperties.getLength();
