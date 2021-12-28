@@ -20,21 +20,19 @@
 #pragma once
 
 #include <com/sun/star/view/XRenderable.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <memory>
 
 namespace sd { class ViewShellBase; }
 
 namespace sd {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::view::XRenderable
     > DocumentRendererInterfaceBase;
 
-class DocumentRenderer
-    : protected ::cppu::BaseMutex,
-      public DocumentRendererInterfaceBase
+class DocumentRenderer final
+    : public DocumentRendererInterfaceBase
 {
 public:
     DocumentRenderer (ViewShellBase& rBase);

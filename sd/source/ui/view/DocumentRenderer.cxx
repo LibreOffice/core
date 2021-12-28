@@ -2215,8 +2215,7 @@ bool CheckForFrontBackPages( sal_Int32 nPage )
 //===== DocumentRenderer ======================================================
 
 DocumentRenderer::DocumentRenderer (ViewShellBase& rBase)
-    : DocumentRendererInterfaceBase(m_aMutex),
-      mpImpl(new Implementation(rBase))
+    : mpImpl(new Implementation(rBase))
 {
 }
 
