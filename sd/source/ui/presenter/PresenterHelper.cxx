@@ -42,8 +42,7 @@ namespace sd::presenter {
 
 PresenterHelper::PresenterHelper (
     const Reference<XComponentContext>& rxContext)
-    : PresenterHelperInterfaceBase(m_aMutex),
-      mxComponentContext(rxContext)
+    : mxComponentContext(rxContext)
 {
 }
 
