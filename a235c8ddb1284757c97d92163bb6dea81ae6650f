@@ -16,6 +16,24 @@
       "message": "Interesting; does \u0027volatile\u0027 somehow resolve data race? Should it be \u0027std::atomic\u003cbool\u003e\u0027 instead?",
       "revId": "a235c8ddb1284757c97d92163bb6dea81ae6650f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04682ecf_ac234773",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-28T15:28:24Z",
+      "side": 1,
+      "message": "IMO, it should, since it prevents the compiler from caching it in a register. However, TSAN seems to disagree, so you\u0027re right, I\u0027ll have to switch this to std::atomic\u003cbool\u003e",
+      "parentUuid": "0d8ea955_bbc6d0fb",
+      "revId": "a235c8ddb1284757c97d92163bb6dea81ae6650f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
