@@ -12,8 +12,7 @@
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 
 #include <rtl/ref.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star::presentation { class XSlideShowController; }
@@ -26,8 +25,7 @@ namespace sd {
  * specific to the lifetime of one slideshow while a client is connected.
  */
 class Listener
-    : protected ::cppu::BaseMutex,
-      public ::cppu::WeakComponentImplHelper< css::presentation::XSlideShowListener >
+    : public comphelper::WeakComponentImplHelper< css::presentation::XSlideShowListener >
 {
 public:
     Listener( const ::rtl::Reference<Communicator>& rServer, sd::Transmitter *aTransmitter );
@@ -52,7 +50,7 @@ public:
     virtual void SAL_CALL hyperLinkClicked( const OUString& hyperLink ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override;
 
 private:
