@@ -836,6 +836,98 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
 
 namespace
 {
+basegfx::B2DRange renderWithOperator(cairo_t* cr, const SalTwoRect& rTR, cairo_surface_t* source,
+                                     cairo_operator_t eOperator = CAIRO_OPERATOR_SOURCE)
+{
+    cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
+
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
+
+    cairo_clip(cr);
+
+    cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
+    double fXScale = 1.0f;
+    double fYScale = 1.0f;
+    if (rTR.mnSrcWidth != 0 && rTR.mnSrcHeight != 0)
+    {
+        fXScale = static_cast<double>(rTR.mnDestWidth) / rTR.mnSrcWidth;
+        fYScale = static_cast<double>(rTR.mnDestHeight) / rTR.mnSrcHeight;
+        cairo_scale(cr, fXScale, fYScale);
+    }
+
+    cairo_save(cr);
+    cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
+    if ((fXScale != 1.0 && rTR.mnSrcWidth == 1) || (fYScale != 1.0 && rTR.mnSrcHeight == 1))
+    {
+        cairo_pattern_t* sourcepattern = cairo_get_source(cr);
+        cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
+        cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_NEAREST);
+    }
+    cairo_set_operator(cr, eOperator);
+    cairo_paint(cr);
+    cairo_restore(cr);
+
+    return extents;
+}
+
+} // end anonymous ns
+
+basegfx::B2DRange CairoCommon::renderSource(cairo_t* cr, const SalTwoRect& rTR,
+                                            cairo_surface_t* source)
+{
+    return renderWithOperator(cr, rTR, source, CAIRO_OPERATOR_SOURCE);
+}
+
+void CairoCommon::copyWithOperator(const SalTwoRect& rTR, cairo_surface_t* source,
+                                   cairo_operator_t eOp, bool bAntiAlias)
+{
+    cairo_t* cr = getCairoContext(false, bAntiAlias);
+    clipRegion(cr);
+
+    basegfx::B2DRange extents = renderWithOperator(cr, rTR, source, eOp);
+
+    releaseCairoContext(cr, false, extents);
+}
+
+void CairoCommon::copySource(const SalTwoRect& rTR, cairo_surface_t* source, bool bAntiAlias)
+{
+    copyWithOperator(rTR, source, CAIRO_OPERATOR_SOURCE, bAntiAlias);
+}
+
+void CairoCommon::copyBitsCairo(const SalTwoRect& rTR, cairo_surface_t* pSourceSurface,
+                                bool bAntiAlias)
+{
+    SalTwoRect aTR(rTR);
+
+    cairo_surface_t* pCopy = nullptr;
+
+    if (pSourceSurface == getSurface())
+    {
+        //self copy is a problem, so dup source in that case
+        pCopy
+            = cairo_surface_create_similar(pSourceSurface, cairo_surface_get_content(getSurface()),
+                                           aTR.mnSrcWidth * m_fScale, aTR.mnSrcHeight * m_fScale);
+        dl_cairo_surface_set_device_scale(pCopy, m_fScale, m_fScale);
+        cairo_t* cr = cairo_create(pCopy);
+        cairo_set_source_surface(cr, pSourceSurface, -aTR.mnSrcX, -aTR.mnSrcY);
+        cairo_rectangle(cr, 0, 0, aTR.mnSrcWidth, aTR.mnSrcHeight);
+        cairo_fill(cr);
+        cairo_destroy(cr);
+
+        pSourceSurface = pCopy;
+
+        aTR.mnSrcX = 0;
+        aTR.mnSrcY = 0;
+    }
+
+    copySource(aTR, pSourceSurface, bAntiAlias);
+
+    if (pCopy)
+        cairo_surface_destroy(pCopy);
+}
+
+namespace
+{
 cairo_pattern_t* create_stipple()
 {
     static unsigned char data[16] = { 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00,
@@ -847,7 +939,7 @@ cairo_pattern_t* create_stipple()
     cairo_pattern_set_filter(pattern, CAIRO_FILTER_NEAREST);
     return pattern;
 }
-}
+} // end anonymous ns
 
 void CairoCommon::invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias)
 {

@@ -852,110 +852,6 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = rDPIY = 96;
 }
 
-void SvpSalGraphics::copyArea( tools::Long nDestX,
-                               tools::Long nDestY,
-                               tools::Long nSrcX,
-                               tools::Long nSrcY,
-                               tools::Long nSrcWidth,
-                               tools::Long nSrcHeight,
-                               bool /*bWindowInvalidate*/ )
-{
-    SalTwoRect aTR(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
-    copyBits(aTR, this);
-}
-
-static basegfx::B2DRange renderWithOperator(cairo_t* cr, const SalTwoRect& rTR,
-                                          cairo_surface_t* source, cairo_operator_t eOperator = CAIRO_OPERATOR_SOURCE)
-{
-    cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
-
-    basegfx::B2DRange extents = getClippedFillDamage(cr);
-
-    cairo_clip(cr);
-
-    cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
-    double fXScale = 1.0f;
-    double fYScale = 1.0f;
-    if (rTR.mnSrcWidth != 0 && rTR.mnSrcHeight != 0) {
-        fXScale = static_cast<double>(rTR.mnDestWidth)/rTR.mnSrcWidth;
-        fYScale = static_cast<double>(rTR.mnDestHeight)/rTR.mnSrcHeight;
-        cairo_scale(cr, fXScale, fYScale);
-    }
-
-    cairo_save(cr);
-    cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
-    if ((fXScale != 1.0 && rTR.mnSrcWidth == 1) || (fYScale != 1.0 && rTR.mnSrcHeight == 1))
-    {
-        cairo_pattern_t* sourcepattern = cairo_get_source(cr);
-        cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
-        cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_NEAREST);
-    }
-    cairo_set_operator(cr, eOperator);
-    cairo_paint(cr);
-    cairo_restore(cr);
-
-    return extents;
-}
-
-static basegfx::B2DRange renderSource(cairo_t* cr, const SalTwoRect& rTR,
-                                          cairo_surface_t* source)
-{
-    return renderWithOperator(cr, rTR, source, CAIRO_OPERATOR_SOURCE);
-}
-
-void SvpSalGraphics::copyWithOperator( const SalTwoRect& rTR, cairo_surface_t* source,
-                                 cairo_operator_t eOp )
-{
-    cairo_t* cr = m_aCairoCommon.getCairoContext(false, getAntiAlias());
-    clipRegion(cr);
-
-    basegfx::B2DRange extents = renderWithOperator(cr, rTR, source, eOp);
-
-    m_aCairoCommon.releaseCairoContext(cr, false, extents);
-}
-
-void SvpSalGraphics::copySource( const SalTwoRect& rTR, cairo_surface_t* source )
-{
-   copyWithOperator(rTR, source, CAIRO_OPERATOR_SOURCE);
-}
-
-void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
-                               SalGraphics*      pSrcGraphics )
-{
-    SalTwoRect aTR(rTR);
-
-    SvpSalGraphics* pSrc = pSrcGraphics ?
-        static_cast<SvpSalGraphics*>(pSrcGraphics) : this;
-
-    cairo_surface_t* source = pSrc->m_aCairoCommon.m_pSurface;
-
-    cairo_surface_t *pCopy = nullptr;
-    if (pSrc == this)
-    {
-        //self copy is a problem, so dup source in that case
-        pCopy = cairo_surface_create_similar(source,
-                                            cairo_surface_get_content(m_aCairoCommon.m_pSurface),
-                                            aTR.mnSrcWidth * m_aCairoCommon.m_fScale,
-                                            aTR.mnSrcHeight * m_aCairoCommon.m_fScale);
-        dl_cairo_surface_set_device_scale(pCopy, m_aCairoCommon.m_fScale, m_aCairoCommon.m_fScale);
-        cairo_t* cr = cairo_create(pCopy);
-        cairo_set_source_surface(cr, source, -aTR.mnSrcX, -aTR.mnSrcY);
-        cairo_rectangle(cr, 0, 0, aTR.mnSrcWidth, aTR.mnSrcHeight);
-        cairo_fill(cr);
-        cairo_destroy(cr);
-
-        source = pCopy;
-
-        aTR.mnSrcX = 0;
-        aTR.mnSrcY = 0;
-    }
-
-    copySource(aTR, source);
-
-    if (pCopy)
-        cairo_surface_destroy(pCopy);
-}
-
 void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap)
 {
     // MM02 try to access buffered BitmapHelper
@@ -973,16 +869,16 @@ void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceB
 
 #if 0 // LO code is not yet bitmap32-ready.
       // if m_bSupportsBitmap32 becomes true for Svp revisit this
-    copyWithOperator(rTR, source, CAIRO_OPERATOR_OVER);
+    m_aCairoCommon.copyWithOperator(rTR, source, CAIRO_OPERATOR_OVER, getAntiAlias());
 #else
-    copyWithOperator(rTR, source, CAIRO_OPERATOR_SOURCE);
+    m_aCairoCommon.copyWithOperator(rTR, source, CAIRO_OPERATOR_SOURCE, getAntiAlias());
 #endif
 }
 
 void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const BitmapBuffer* pBuffer, cairo_operator_t eOp)
 {
     cairo_surface_t* source = createCairoSurface( pBuffer );
-    copyWithOperator(rTR, source, eOp);
+    m_aCairoCommon.copyWithOperator(rTR, source, eOp, getAntiAlias());
     cairo_surface_destroy(source);
 }
 
@@ -1098,7 +994,7 @@ std::shared_ptr<SalBitmap> SvpSalGraphics::getBitmap( tools::Long nX, tools::Lon
     cairo_t* cr = cairo_create(target);
 
     SalTwoRect aTR(nX, nY, nWidth, nHeight, 0, 0, nWidth, nHeight);
-    renderSource(cr, aTR, m_aCairoCommon.m_pSurface);
+    CairoCommon::renderSource(cr, aTR, m_aCairoCommon.m_pSurface);
 
     cairo_destroy(cr);
     cairo_surface_destroy(target);
