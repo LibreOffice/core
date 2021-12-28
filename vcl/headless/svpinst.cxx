@@ -27,7 +27,7 @@
 #include <fcntl.h>
 #include <pthread.h>
 #include <sys/time.h>
-#include <sys/poll.h>
+#include <poll.h>
 
 #include <sal/types.h>
 #include <sal/log.hxx>
