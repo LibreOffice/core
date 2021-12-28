@@ -40,7 +40,6 @@ using namespace css::uno;
 namespace chart::sidebar {
 
 ChartPanelFactory::ChartPanelFactory()
-    : PanelFactoryInterfaceBase(m_aMutex)
 {
 }
 
