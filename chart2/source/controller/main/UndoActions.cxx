@@ -35,9 +35,7 @@ namespace chart::impl
     using ::com::sun::star::lang::DisposedException;
 
 UndoElement::UndoElement( const OUString& i_actionString, const Reference< XModel >& i_documentModel, const std::shared_ptr< ChartModelClone >& i_modelClone )
-    :UndoElement_MBase()
-    ,UndoElement_TBase( m_aMutex )
-    ,m_sActionString( i_actionString )
+    :m_sActionString( i_actionString )
     ,m_xDocumentModel( i_documentModel )
     ,m_pModelClone( i_modelClone )
 {
@@ -47,7 +45,7 @@ UndoElement::~UndoElement()
 {
 }
 
-void SAL_CALL UndoElement::disposing()
+void UndoElement::disposing(std::unique_lock<std::mutex>&)
 {
     if ( m_pModelClone )
         m_pModelClone->dispose();
