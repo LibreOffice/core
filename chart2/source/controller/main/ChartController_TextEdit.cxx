@@ -29,6 +29,7 @@
 #include <AccessibleTextHelper.hxx>
 #include <strings.hrc>
 #include <chartview/DrawModelWrapper.hxx>
+#include <osl/diagnose.h>
 
 #include <svx/svdoutl.hxx>
 #include <svx/svxdlg.hxx>

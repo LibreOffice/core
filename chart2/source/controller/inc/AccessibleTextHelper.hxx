@@ -19,8 +19,7 @@
 #pragma once
 
 #include <memory>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
@@ -37,14 +36,13 @@ class DrawViewWrapper;
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
         css::lang::XInitialization,
         css::accessibility::XAccessibleContext >
     AccessibleTextHelper_Base;
 }
 
-class AccessibleTextHelper :
-        public cppu::BaseMutex,
+class AccessibleTextHelper final :
         public impl::AccessibleTextHelper_Base
 {
 public:
