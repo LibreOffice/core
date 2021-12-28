@@ -154,7 +154,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(std::u16string_view sql, 
                                 &m_aStatementHandle,
                                 0,
                                 OUStringToOString(sql, RTL_TEXTENCODING_UTF8).getStr(),
-                                FIREBIRD_SQL_DIALECT,
+                                SQL_DIALECT_CURRENT,
                                 pOutSqlda);
 
         if (aErr)
