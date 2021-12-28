@@ -19,6 +19,7 @@ $(eval $(call gb_Library_set_is_ure_library_or_dependency,sal))
 $(eval $(call gb_Library_set_include,sal,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/sal/inc \
+	$(BACKTRACE_CFLAGS) \
 ))
 
 $(eval $(call gb_Library_add_defs,sal,\
@@ -71,6 +72,7 @@ $(eval $(call gb_Library_add_libs,sal,\
 	$(if $(filter HAIKU,$(OS)), \
 		-lnetwork \
 	) \
+	$(BACKTRACE_LIBS) \
 ))
 
 ifeq ($(OS),MACOSX)
