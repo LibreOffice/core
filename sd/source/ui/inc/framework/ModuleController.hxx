@@ -22,8 +22,10 @@
 #include <com/sun/star/drawing/framework/XModuleController.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/compbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <memory>
+#include <unordered_map>
 
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::uno { class XComponentContext; }
@@ -78,10 +80,8 @@ private:
     css::uno::Reference<
         css::frame::XController> mxController;
 
-    class ResourceToFactoryMap;
-    std::unique_ptr<ResourceToFactoryMap> mpResourceToFactoryMap;
-    class LoadedFactoryContainer;
-    std::unique_ptr<LoadedFactoryContainer> mpLoadedFactories;
+    std::unordered_map<OUString, OUString> maResourceToFactoryMap;
+    std::unordered_map<OUString, css::uno::WeakReference<css::uno::XInterface>> maLoadedFactories;
 
     /// @throws std::exception
     ModuleController (
