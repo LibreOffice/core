@@ -16,6 +16,23 @@
       "message": "Not essential but thought it could allow us to stay up-to-date",
       "revId": "1310d81175bf5fbe07baa97df996cd5d651658e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99bfd8a6_461477f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-28T11:27:31Z",
+      "side": 1,
+      "message": "All Jenkins ok except Mac and this one is not related to the patch, let\u0027s push the patch.",
+      "revId": "1310d81175bf5fbe07baa97df996cd5d651658e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
