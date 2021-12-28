@@ -37,8 +37,7 @@ Theme& Theme::GetCurrentTheme()
 }
 
 Theme::Theme()
-    : ThemeInterfaceBase(m_aMutex),
-      mbIsHighContrastMode(Application::GetSettings().GetStyleSettings().GetHighContrastMode()),
+    : mbIsHighContrastMode(Application::GetSettings().GetStyleSettings().GetHighContrastMode()),
       mbIsHighContrastModeSetManually(false)
 {
     SetupPropertyMaps();
@@ -143,7 +142,7 @@ void Theme::UpdateTheme()
     }
 }
 
-void SAL_CALL Theme::disposing()
+void Theme::disposing(std::unique_lock<std::mutex>&)
 {
     SolarMutexGuard aGuard;
 
