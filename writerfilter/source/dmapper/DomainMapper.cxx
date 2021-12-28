@@ -187,7 +187,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     catch( const uno::Exception& ) {}
 }
 
-void DomainMapper::setDocumentReference(void* pDocument)
+void DomainMapper::setDocumentReference(writerfilter::ooxml::OOXMLDocument* pDocument)
 {
     m_pImpl->setDocumentReference(pDocument);
 }
