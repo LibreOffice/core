@@ -16,6 +16,23 @@
       "message": "One more needed",
       "revId": "d661b21386d9ffe3f7caeb0765b96130234d11f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cd9f547_b63d4af7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-28T22:54:01Z",
+      "side": 1,
+      "message": "Looks good to me.\nWith this patch, tdf#135061 is fixed. Without this fix, by opening the sample file, cutting all the contents and multiple pasting, LO hangs.",
+      "revId": "d661b21386d9ffe3f7caeb0765b96130234d11f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
