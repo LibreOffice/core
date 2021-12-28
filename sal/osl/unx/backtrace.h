@@ -20,7 +20,9 @@
 #ifndef INCLUDED_SAL_OSL_UNX_BACKTRACE_H
 #define INCLUDED_SAL_OSL_UNX_BACKTRACE_H
 
-#if defined (LINUX)
+#include <config_features.h>
+
+#if HAVE_FEATURE_BACKTRACE /* GNU backtrace implementation available */
 
 #include <execinfo.h>
 
@@ -37,15 +39,6 @@ int backtrace( void **buffer, int max_frames );
 char ** backtrace_symbols(void * const * buffer, int size);
 
 void backtrace_symbols_fd( void **buffer, int size, int fd );
-
-/* no frame.h on FreeBSD */
-#if defined (FREEBSD) || defined (NETBSD) || defined (OPENBSD) || \
-    defined (DRAGONFLY)
-struct frame {
-    struct frame *fr_savfp;
-    long    fr_savpc;
-};
-#endif
 
 #ifdef __cplusplus
 } /* extern "C" */
