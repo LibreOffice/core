@@ -148,7 +148,7 @@ void Communicator::disposeListener()
 {
     if ( mListener.is() )
     {
-        mListener->disposing();
+        mListener->dispose();
         mListener = nullptr;
     }
 }
