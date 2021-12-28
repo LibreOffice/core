@@ -22,7 +22,6 @@ using namespace ::com::sun::star::presentation;
 
 Listener::Listener( const ::rtl::Reference<Communicator>& rCommunicator,
                     sd::Transmitter *aTransmitter  ):
-      ::cppu::WeakComponentImplHelper< XSlideShowListener >( m_aMutex ),
       mCommunicator( rCommunicator ),
       pTransmitter( nullptr )
 {
@@ -115,7 +114,7 @@ void SAL_CALL Listener::slideAnimationsEnded()
 {
 }
 
-void SAL_CALL Listener::disposing()
+void Listener::disposing(std::unique_lock<std::mutex>&)
 {
     pTransmitter = nullptr;
     if ( mController.is() )
