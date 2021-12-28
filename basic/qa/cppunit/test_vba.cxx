@@ -67,6 +67,7 @@ void VBATest::testMiscVBAFunctions()
         "array.vb",
         "asc.vb",
         "atn.vb",
+        "booltypename.vb",
         "cbool.vb",
         "cdate.vb",
         "cdbl.vb",
