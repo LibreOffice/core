@@ -176,6 +176,16 @@ struct VCL_DLLPUBLIC CairoCommon
                              basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
                              double fMiterMinimumAngle, bool bPixelSnapHairline);
 
+    void copyWithOperator(const SalTwoRect& rTR, cairo_surface_t* source, cairo_operator_t eOp,
+                          bool bAntiAlias);
+
+    void copySource(const SalTwoRect& rTR, cairo_surface_t* source, bool bAntiAlias);
+
+    static basegfx::B2DRange renderSource(cairo_t* cr, const SalTwoRect& rTR,
+                                          cairo_surface_t* source);
+
+    void copyBitsCairo(const SalTwoRect& rTR, cairo_surface_t* pSourceSurface, bool bAntiAlias);
+
     void invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias);
 };
 

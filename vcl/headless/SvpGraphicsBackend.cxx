@@ -353,14 +353,32 @@ bool SvpGraphicsBackend::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32*, co
     return false;
 }
 
-void SvpGraphicsBackend::copyArea(tools::Long /*nDestX*/, tools::Long /*nDestY*/,
-                                  tools::Long /*nSrcX*/, tools::Long /*nSrcY*/,
-                                  tools::Long /*nSrcWidth*/, tools::Long /*nSrcHeight*/,
+void SvpGraphicsBackend::copyArea(tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX,
+                                  tools::Long nSrcY, tools::Long nSrcWidth, tools::Long nSrcHeight,
                                   bool /*bWindowInvalidate*/)
 {
+    SalTwoRect aTR(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
+
+    cairo_surface_t* source = m_rCairoCommon.m_pSurface;
+    m_rCairoCommon.copyBitsCairo(aTR, source, getAntiAlias());
 }
 
-void SvpGraphicsBackend::copyBits(const SalTwoRect& /*rTR*/, SalGraphics* /*pSrcGraphics*/) {}
+void SvpGraphicsBackend::copyBits(const SalTwoRect& rTR, SalGraphics* pSrcGraphics)
+{
+    cairo_surface_t* source = nullptr;
+
+    if (pSrcGraphics)
+    {
+        SvpGraphicsBackend* pSrc = static_cast<SvpGraphicsBackend*>(pSrcGraphics->GetImpl());
+        source = pSrc->m_rCairoCommon.m_pSurface;
+    }
+    else
+    {
+        source = m_rCairoCommon.m_pSurface;
+    }
+
+    m_rCairoCommon.copyBitsCairo(rTR, source, getAntiAlias());
+}
 
 void SvpGraphicsBackend::drawBitmap(const SalTwoRect& /*rPosAry*/, const SalBitmap& /*rSalBitmap*/)
 {
