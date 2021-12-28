@@ -27,27 +27,20 @@
 /* system headers */
 #include "system.hxx"
 
-#if defined( MACOSX )
+#if HAVE_FEATURE_BACKTRACE /* GNU backtrace implementation available */
 
-#if defined( INTEL )
-#include "backtrace.h"
-#define INCLUDE_BACKTRACE
-#endif /* INTEL */
-
-#endif /* MACOSX */
-
-#ifdef LINUX
 #include <execinfo.h>
 #include <link.h>
 #define INCLUDE_BACKTRACE
-#endif
 
-#ifdef __sun
+#elif (defined( MACOSX ) && defined( INTEL )) || defined ( __sun )
 
 #include "backtrace.h"
 #define INCLUDE_BACKTRACE
 
-#endif /* defined __sun */
+#endif /* (MACOSX && INTEL) || __sun */
+
+#endif /* ! HAVE_FEATURE_BACKTRACE */
 
 #if defined INCLUDE_BACKTRACE
 #define MAX_STACK_FRAMES 256

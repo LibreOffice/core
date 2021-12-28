@@ -19,7 +19,9 @@
 
 #include <sal/types.h>
 
-#ifdef __sun
+#if ! HAVE_FEATURE_BACKTRACE /* no GNU backtrace implementation available */
+
+#ifdef __sun /* Solaris */
 
 #include <dlfcn.h>
 #include <pthread.h>
@@ -212,7 +214,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
     }
 }
 
-#elif !defined LINUX && !defined MACOSX && !defined IOS
+#else /* not GNU/BSD/Solaris */
 
 int backtrace( void **buffer, int max_frames )
 {
@@ -231,6 +233,8 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
     (void)buffer; (void)size; (void)fd;
 }
 
-#endif
+#endif /* not GNU/BSD/Solaris */
+
+#endif /* ! HAVE_FEATURE_BACKTRACE */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
