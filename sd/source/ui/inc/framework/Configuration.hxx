@@ -22,8 +22,7 @@
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <memory>
 
@@ -32,7 +31,7 @@ namespace com::sun::star::drawing::framework { class XConfigurationControllerBro
 
 namespace sd::framework {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XConfiguration,
     css::container::XNamed,
     css::lang::XServiceInfo
@@ -57,9 +56,8 @@ typedef ::cppu::WeakComponentImplHelper <
     exception of the configuration controller and objects that implement the
     XConfigurationChangeOperation interface.
 */
-class Configuration
-    : private cppu::BaseMutex,
-      public ConfigurationInterfaceBase
+class Configuration final
+    : public ConfigurationInterfaceBase
 {
 public:
     /** Create a new configuration with a broadcaster that is used to send
@@ -78,7 +76,7 @@ public:
         bool bBroadcastRequestEvents);
     virtual ~Configuration() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XConfiguration
 
