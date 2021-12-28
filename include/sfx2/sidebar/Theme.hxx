@@ -21,8 +21,7 @@
 #include <sfx2/dllapi.h>
 
 #include <tools/color.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -32,7 +31,7 @@
 
 namespace sfx2::sidebar {
 
-typedef cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::beans::XPropertySet,
     css::beans::XPropertySetInfo
     > ThemeInterfaceBase;
@@ -41,8 +40,7 @@ typedef cppu::WeakComponentImplHelper <
     look of the sidebar and its controls.
 */
 class SFX2_DLLPUBLIC Theme final
-    : private ::cppu::BaseMutex,
-      public ThemeInterfaceBase
+    : public ThemeInterfaceBase
 {
 public:
     enum ThemeItem
@@ -94,7 +92,7 @@ public:
     Theme(const Theme&) = delete;
     Theme& operator=( const Theme& ) = delete;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     static css::uno::Reference<css::beans::XPropertySet> GetPropertySet();
 
