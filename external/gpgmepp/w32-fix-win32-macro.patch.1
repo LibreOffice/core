@@ -103,13 +103,14 @@ diff -ur gpgmepp.org/lang/cpp/src/interfaces/dataprovider.h gpgmepp/lang/cpp/src
 diff -ur gpgmepp.org/lang/cpp/src/key.cpp gpgmepp/lang/cpp/src/key.cpp
 --- gpgmepp.org/lang/cpp/src/key.cpp	2017-03-20 20:10:15.000000000 +0100
 +++ gpgmepp/lang/cpp/src/key.cpp	2017-11-20 17:44:50.321858800 +0100
-@@ -33,10 +33,16 @@
+@@ -33,11 +33,17 @@
  #include <gpgme.h>
  
  #include <string.h>
 +#if HAVE_STRINGS_H
  #include <strings.h>
 +#endif
+ #include <cassert>
  #include <istream>
  #include <iterator>
  
