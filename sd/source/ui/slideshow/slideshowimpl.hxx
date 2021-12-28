@@ -21,7 +21,7 @@
 
 #include <memory>
 #include <sal/config.h>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer3.hxx>
@@ -122,9 +122,9 @@ private:
     css::uno::Reference< css::presentation::XSlideShow > mxSlideShow;
 };
 
-typedef ::cppu::WeakComponentImplHelper< css::presentation::XSlideShowController, css::container::XIndexAccess > SlideshowImplBase;
+typedef comphelper::WeakComponentImplHelper< css::presentation::XSlideShowController, css::container::XIndexAccess > SlideshowImplBase;
 
-class SlideshowImpl final : private ::cppu::BaseMutex, public SlideshowImplBase
+class SlideshowImpl final : public SlideshowImplBase
 {
 friend class SlideShow;
 friend class SlideShowView;
@@ -207,7 +207,7 @@ private:
     // This function is called upon disposing the component,
     // if your component needs special work when it becomes
     // disposed, do it here.
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // internal
     bool startShow( PresentationSettingsEx const * pPresSettings );

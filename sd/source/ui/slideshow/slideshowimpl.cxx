@@ -487,8 +487,7 @@ constexpr OUStringLiteral gsBookmark( u"Bookmark" );
 constexpr OUStringLiteral gsVerb( u"Verb" );
 
 SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow )
-: SlideshowImplBase( m_aMutex )
-, mxModel(pDoc->getUnoModel(),UNO_QUERY_THROW)
+: mxModel(pDoc->getUnoModel(),UNO_QUERY_THROW)
 , maUpdateTimer("SlideShowImpl maUpdateTimer")
 , maInputFreezeTimer("SlideShowImpl maInputFreezeTimer")
 , maDeactivateTimer("SlideShowImpl maDeactivateTimer")
@@ -566,11 +565,12 @@ SlideshowImpl::~SlideshowImpl()
     if( !mbDisposed )
     {
         OSL_FAIL("SlideshowImpl::~SlideshowImpl(), component was not disposed!");
-        disposing();
+        std::unique_lock g(m_aMutex);
+        disposing(g);
     }
 }
 
-void SAL_CALL SlideshowImpl::disposing()
+void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
 {
 #ifdef ENABLE_SDREMOTE
     RemoteServer::presentationStopped();
