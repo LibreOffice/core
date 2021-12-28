@@ -54,10 +54,6 @@ public:
         return CairoCommon::getDamageKey();
     }
 
-    void copySource(const SalTwoRect& rTR, cairo_surface_t* source);
-    void copyWithOperator(const SalTwoRect& rTR, cairo_surface_t* source,
-                          cairo_operator_t eOp = CAIRO_OPERATOR_SOURCE);
-
 protected:
     SvpCairoTextRender                  m_aTextRenderImpl;
     std::unique_ptr<SvpGraphicsBackend> m_pBackend;
@@ -116,15 +112,6 @@ public:
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
 
-    virtual void            copyArea( tools::Long nDestX,
-                                      tools::Long nDestY,
-                                      tools::Long nSrcX,
-                                      tools::Long nSrcY,
-                                      tools::Long nSrcWidth,
-                                      tools::Long nSrcHeight,
-                                      bool bWindowInvalidate) override;
-    virtual void            copyBits( const SalTwoRect& rPosAry,
-                                      SalGraphics* pSrcGraphics ) override;
     virtual void            drawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap ) override;
     void                    drawBitmap( const SalTwoRect& rPosAry,
@@ -162,6 +149,10 @@ public:
     void clipRegion(cairo_t* cr)
     {
         m_aCairoCommon.clipRegion(cr);
+    }
+    void copySource(const SalTwoRect& rTR, cairo_surface_t* source)
+    {
+        m_aCairoCommon.copySource(rTR, source, getAntiAlias());
     }
 };
 
