@@ -18,20 +18,18 @@
  */
 
 #include <ModifyListenerCallBack.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
 namespace chart {
 
-typedef ::cppu::WeakComponentImplHelper< css::util::XModifyListener >
+typedef comphelper::WeakComponentImplHelper< css::util::XModifyListener >
     ModifyListenerCallBack_Base;
 
 class ModifyListenerCallBack_impl
-    : public cppu::BaseMutex
-    , public ModifyListenerCallBack_Base
+    : public ModifyListenerCallBack_Base
 {
 public:
     explicit ModifyListenerCallBack_impl( const Link<void*,void>& rCallBack );
@@ -45,7 +43,7 @@ public:
     //XEventListener
     virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
 
-    using ::cppu::WeakComponentImplHelperBase::disposing;
+    using ::comphelper::WeakComponentImplHelperBase::disposing;
 
 private:
     Link<void*,void> m_aLink;//will be called on modify
@@ -53,8 +51,7 @@ private:
 };
 
 ModifyListenerCallBack_impl::ModifyListenerCallBack_impl( const Link<void*,void>& rCallBack )
-                        : ModifyListenerCallBack_Base( m_aMutex )
-                        , m_aLink( rCallBack )
+                        : m_aLink( rCallBack )
 {
 }
 
