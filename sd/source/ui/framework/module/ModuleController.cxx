@@ -24,6 +24,7 @@
 
 #include <tools/ConfigurationAccess.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <unordered_map>
 
 #include <tools/diagnose_ex.h>
@@ -65,8 +66,7 @@ Reference<XModuleController> ModuleController::CreateInstance (
 }
 
 ModuleController::ModuleController (const Reference<XComponentContext>& rxContext)
-    : ModuleControllerInterfaceBase(m_aMutex),
-      mpResourceToFactoryMap(new ResourceToFactoryMap()),
+    : mpResourceToFactoryMap(new ResourceToFactoryMap()),
       mpLoadedFactories(new LoadedFactoryContainer())
 {
     /** Load a list of URL to service mappings from the
@@ -103,7 +103,7 @@ ModuleController::~ModuleController() noexcept
 {
 }
 
-void SAL_CALL ModuleController::disposing()
+void ModuleController::disposing(std::unique_lock<std::mutex>&)
 {
     // Break the cyclic reference back to DrawController object
     mpLoadedFactories.reset();
