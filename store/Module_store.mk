@@ -13,4 +13,8 @@ $(eval $(call gb_Module_add_targets,store,\
     Library_store \
 ))
 
+$(eval $(call gb_Module_add_check_targets,store,\
+    CppunitTest_store \
+))
+
 # vim:set noet sw=4 ts=4:
