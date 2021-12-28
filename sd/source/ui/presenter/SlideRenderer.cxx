@@ -32,15 +32,10 @@ namespace sd::presenter {
 //===== SlideRenderer ==========================================================
 
 SlideRenderer::SlideRenderer ()
-    : SlideRendererInterfaceBase(m_aMutex)
 {
 }
 
 SlideRenderer::~SlideRenderer()
-{
-}
-
-void SAL_CALL SlideRenderer::disposing()
 {
 }
 
@@ -185,7 +180,7 @@ BitmapEx SlideRenderer::CreatePreview (
 
 void SlideRenderer::ThrowIfDisposed()
 {
-    if (SlideRendererInterfaceBase::rBHelper.bDisposed || SlideRendererInterfaceBase::rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         throw lang::DisposedException ("SlideRenderer object has already been disposed",
             static_cast<uno::XWeak*>(this));

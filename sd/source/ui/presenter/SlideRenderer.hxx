@@ -24,14 +24,13 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 namespace com::sun::star::drawing { class XDrawPage; }
 
 namespace sd::presenter {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::drawing::XSlideRenderer,
     css::lang::XInitialization,
     css::lang::XServiceInfo
@@ -39,16 +38,14 @@ typedef ::cppu::WeakComponentImplHelper <
 
 /** Render single slides into bitmaps.
 */
-class SlideRenderer
-    : protected ::cppu::BaseMutex,
-      public SlideRendererInterfaceBase
+class SlideRenderer final
+    : public SlideRendererInterfaceBase
 {
 public:
     SlideRenderer ();
     virtual ~SlideRenderer() override;
     SlideRenderer(const SlideRenderer&) = delete;
     SlideRenderer& operator=(const SlideRenderer&) = delete;
-    virtual void SAL_CALL disposing() override;
 
     // XInitialization
 
