@@ -70,6 +70,24 @@
       "parentUuid": "0736a579_c5c21325",
       "revId": "37106f20bd5cc016a473fbdb2e9e37da096cff5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3ff733e_6e6c1df5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-28T05:38:16Z",
+      "side": 1,
+      "message": "Looking at the latest failure, it aborts again at linking, but without any visible kills. Times are\n\nstart at Sat Dec 25 12:15:39 UTC 2021\nstart at Sat Dec 25 14:05:57 UTC 2021\nstart at Sat Dec 25 16:02:15 UTC 2021\nstart at Sat Dec 25 18:17:14 UTC 2021\n\nvs\n\nstart at Mon Dec 27 06:42:36 UTC 2021\nstart at Mon Dec 27 08:03:40 UTC 2021\nstart at Mon Dec 27 09:35:43 UTC 2021\n\nThe builds are ~25% faster, so we might re-add more build features.\nThis doesn\u0027t look like a timeout but probably some \"is busy\" watchdog.",
+      "parentUuid": "949992d6_2bfbacab",
+      "revId": "37106f20bd5cc016a473fbdb2e9e37da096cff5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
