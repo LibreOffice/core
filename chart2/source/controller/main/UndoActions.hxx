@@ -21,6 +21,7 @@
 #include <com/sun/star/document/XUndoAction.hpp>
 
 #include <rtl/ustring.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
@@ -82,24 +83,17 @@ private:
     std::shared_ptr< ChartModelClone >            m_pModelClone;
 };
 
-typedef ::cppu::BaseMutex                                                           ShapeUndoElement_MBase;
-typedef ::cppu::WeakComponentImplHelper< css::document::XUndoAction > ShapeUndoElement_TBase;
-class ShapeUndoElement  :public ShapeUndoElement_MBase
-                        ,public ShapeUndoElement_TBase
+typedef comphelper::WeakComponentImplHelper< css::document::XUndoAction > ShapeUndoElement_TBase;
+class ShapeUndoElement final : public ShapeUndoElement_TBase
 {
 public:
     explicit ShapeUndoElement( std::unique_ptr<SdrUndoAction> xSdrUndoAction );
+    virtual ~ShapeUndoElement() override;
 
     // XUndoAction
     virtual OUString SAL_CALL getTitle() override;
     virtual void SAL_CALL undo(  ) override;
     virtual void SAL_CALL redo(  ) override;
-
-    // OComponentHelper
-    virtual void SAL_CALL disposing() override;
-
-protected:
-    virtual ~ShapeUndoElement() override;
 
 private:
     std::unique_ptr<SdrUndoAction> m_xAction;

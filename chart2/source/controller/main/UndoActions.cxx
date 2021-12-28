@@ -83,9 +83,7 @@ void SAL_CALL UndoElement::redo(  )
 // = ShapeUndoElement
 
 ShapeUndoElement::ShapeUndoElement( std::unique_ptr<SdrUndoAction> xSdrUndoAction )
-    :ShapeUndoElement_MBase()
-    ,ShapeUndoElement_TBase( m_aMutex )
-    ,m_xAction( std::move(xSdrUndoAction) )
+    :m_xAction( std::move(xSdrUndoAction) )
 {
 }
 
@@ -112,10 +110,6 @@ void SAL_CALL ShapeUndoElement::redo(  )
     if ( !m_xAction )
         throw DisposedException( OUString(), *this );
     m_xAction->Redo();
-}
-
-void SAL_CALL ShapeUndoElement::disposing()
-{
 }
 
 } //  namespace chart::impl
