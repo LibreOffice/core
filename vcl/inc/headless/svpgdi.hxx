@@ -137,7 +137,6 @@ public:
         return m_aCairoCommon.releaseCairoContext(cr, bXorModeAllowed, rExtents);
     }
 
-    static cairo_surface_t* createCairoSurface(const BitmapBuffer *pBuffer);
     void clipRegion(cairo_t* cr)
     {
         m_aCairoCommon.clipRegion(cr);
