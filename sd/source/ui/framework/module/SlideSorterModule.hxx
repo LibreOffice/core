@@ -20,8 +20,7 @@
 #pragma once
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <memory>
 #include <set>
 
@@ -32,7 +31,7 @@ namespace com::sun::star::frame { class XController; }
 
 namespace sd::framework {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
     > SlideSorterModuleBase;
 
@@ -45,9 +44,8 @@ typedef ::cppu::WeakComponentImplHelper <
     deactivated or activated manually by the user then the ResourceManager
     detects this and remembers it for the future.
 */
-class SlideSorterModule
-    : private cppu::BaseMutex,
-      public SlideSorterModuleBase
+class SlideSorterModule final
+    : public SlideSorterModuleBase
 {
 public:
     SlideSorterModule (
@@ -62,7 +60,7 @@ public:
     bool IsResourceActive (const OUString& rsMainViewURL);
     void SaveResourceState();
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XConfigurationChangeListener
     virtual void SAL_CALL notifyConfigurationChange (
