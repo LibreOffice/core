@@ -25,6 +25,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <sal/log.hxx>
 
 void dl_cairo_surface_set_device_scale(cairo_surface_t* surface, double x_scale, double y_scale)
 {
@@ -831,6 +832,90 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
     cairo_stroke(cr);
 
     return true;
+}
+
+namespace
+{
+cairo_pattern_t* create_stipple()
+{
+    static unsigned char data[16] = { 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00,
+                                      0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF };
+    cairo_surface_t* surface = cairo_image_surface_create_for_data(data, CAIRO_FORMAT_A8, 4, 4, 4);
+    cairo_pattern_t* pattern = cairo_pattern_create_for_surface(surface);
+    cairo_surface_destroy(surface);
+    cairo_pattern_set_extend(pattern, CAIRO_EXTEND_REPEAT);
+    cairo_pattern_set_filter(pattern, CAIRO_FILTER_NEAREST);
+    return pattern;
+}
+}
+
+void CairoCommon::invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias)
+{
+    cairo_t* cr = getCairoContext(false, bAntiAlias);
+    clipRegion(cr);
+
+    // To make releaseCairoContext work, use empty extents
+    basegfx::B2DRange extents;
+
+    AddPolygonToPath(cr, rPoly, basegfx::B2DHomMatrix(), !bAntiAlias, false);
+
+    cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
+
+    if (cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0))
+    {
+        cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
+    }
+    else
+    {
+        SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, archaic cairo");
+    }
+
+    if (nFlags & SalInvert::TrackFrame)
+    {
+        cairo_set_line_width(cr, 2.0);
+        const double dashLengths[2] = { 4.0, 4.0 };
+        cairo_set_dash(cr, dashLengths, 2, 0);
+
+        extents = getClippedStrokeDamage(cr);
+        //see tdf#106577 under wayland, some pixel droppings seen, maybe we're
+        //out by one somewhere, or cairo_stroke_extents is confused by
+        //dashes/line width
+        if (!extents.isEmpty())
+        {
+            extents.grow(1);
+        }
+
+        cairo_stroke(cr);
+    }
+    else
+    {
+        extents = getClippedFillDamage(cr);
+
+        cairo_clip(cr);
+
+        if (nFlags & SalInvert::N50)
+        {
+            cairo_pattern_t* pattern = create_stipple();
+            cairo_surface_t* surface = cairo_surface_create_similar(
+                m_pSurface, cairo_surface_get_content(m_pSurface), extents.getWidth() * m_fScale,
+                extents.getHeight() * m_fScale);
+
+            dl_cairo_surface_set_device_scale(surface, m_fScale, m_fScale);
+            cairo_t* stipple_cr = cairo_create(surface);
+            cairo_set_source_rgb(stipple_cr, 1.0, 1.0, 1.0);
+            cairo_mask(stipple_cr, pattern);
+            cairo_pattern_destroy(pattern);
+            cairo_destroy(stipple_cr);
+            cairo_mask_surface(cr, surface, extents.getMinX(), extents.getMinY());
+            cairo_surface_destroy(surface);
+        }
+        else
+        {
+            cairo_paint(cr);
+        }
+    }
+
+    releaseCairoContext(cr, false, extents);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

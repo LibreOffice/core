@@ -58,9 +58,6 @@ public:
     void copyWithOperator(const SalTwoRect& rTR, cairo_surface_t* source,
                           cairo_operator_t eOp = CAIRO_OPERATOR_SOURCE);
 
-private:
-    void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
-
 protected:
     SvpCairoTextRender                  m_aTextRenderImpl;
     std::unique_ptr<SvpGraphicsBackend> m_pBackend;
@@ -140,9 +137,6 @@ public:
                                       const SalBitmap& rSalBitmap,
                                       Color nMaskColor ) override;
     virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-
-    virtual void            invert( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, SalInvert nFlags ) override;
-    virtual void            invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags ) override;
 
     virtual bool        drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize ) override;
 
