@@ -843,7 +843,8 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                 if( GetType() == SbxSALUINT64 || GetType() == SbxSALINT64
                  || GetType() == SbxCURRENCY  || GetType() == SbxULONG )
                     aL.eType = aR.eType = GetType();
-                else if ( bVBAInterop && eOpType == SbxBOOL )
+                // tdf#145960 - return type of boolean operators should be of type boolean
+                else if ( eOpType == SbxBOOL && eOp != SbxMOD && eOp != SbxIDIV )
                     aL.eType = aR.eType = SbxBOOL;
                 else
                     aL.eType = aR.eType = SbxLONG;
