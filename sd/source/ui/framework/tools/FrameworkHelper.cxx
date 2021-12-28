@@ -107,7 +107,7 @@ private:
 
 //----- LifetimeController ----------------------------------------------------
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::lang::XEventListener
     > LifetimeControllerInterfaceBase;
 
@@ -117,19 +117,17 @@ typedef ::cppu::WeakComponentImplHelper <
     one of them and Release() when both of them are destroyed.
 */
 class LifetimeController
-    : public cppu::BaseMutex,
-      public LifetimeControllerInterfaceBase,
+    : public LifetimeControllerInterfaceBase,
       public SfxListener
 {
 public:
     explicit LifetimeController (::sd::ViewShellBase& rBase);
     virtual ~LifetimeController() override;
 
-    virtual void SAL_CALL disposing() override;
-
     /** XEventListener.  This method is called when the frame::XController
         is being destroyed.
     */
+    using WeakComponentImplHelperBase::disposing;
     virtual void SAL_CALL disposing (const lang::EventObject& rEvent) override;
 
     /** This method is called when the ViewShellBase is being destroyed.
@@ -889,8 +887,7 @@ void SAL_CALL CallbackCaller::notifyConfigurationChange (
 //----- LifetimeController -------------------------------------------------
 
 LifetimeController::LifetimeController (::sd::ViewShellBase& rBase)
-    : LifetimeControllerInterfaceBase(m_aMutex),
-      mrBase(rBase),
+    : mrBase(rBase),
       mbListeningToViewShellBase(false),
       mbListeningToController(false)
 {
@@ -914,10 +911,6 @@ LifetimeController::LifetimeController (::sd::ViewShellBase& rBase)
 LifetimeController::~LifetimeController()
 {
     OSL_ASSERT(!mbListeningToController && !mbListeningToViewShellBase);
-}
-
-void LifetimeController::disposing()
-{
 }
 
 void SAL_CALL LifetimeController::disposing (const lang::EventObject&)
