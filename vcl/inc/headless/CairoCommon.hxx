@@ -199,4 +199,29 @@ struct VCL_DLLPUBLIC CairoCommon
     static cairo_surface_t* createCairoSurface(const BitmapBuffer* pBuffer);
 };
 
+class SurfaceHelper
+{
+private:
+    cairo_surface_t* pSurface;
+    std::unordered_map<sal_uInt64, cairo_surface_t*> maDownscaled;
+
+    SurfaceHelper(const SurfaceHelper&) = delete;
+    SurfaceHelper& operator=(const SurfaceHelper&) = delete;
+
+    cairo_surface_t* implCreateOrReuseDownscale(unsigned long nTargetWidth,
+                                                unsigned long nTargetHeight);
+
+protected:
+    cairo_surface_t* implGetSurface() const { return pSurface; }
+    void implSetSurface(cairo_surface_t* pNew) { pSurface = pNew; }
+
+    bool isTrivial() const;
+
+public:
+    explicit SurfaceHelper();
+    ~SurfaceHelper();
+
+    cairo_surface_t* getSurface(unsigned long nTargetWidth = 0,
+                                unsigned long nTargetHeight = 0) const;
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
