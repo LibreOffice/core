@@ -140,7 +140,7 @@ public:
                                       const SalBitmap& rSalBitmap,
                                       Color nMaskColor ) override;
     virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-    virtual Color           getPixel( tools::Long nX, tools::Long nY ) override;
+
     virtual void            invert( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, SalInvert nFlags ) override;
     virtual void            invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags ) override;
 

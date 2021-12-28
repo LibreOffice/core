@@ -383,7 +383,34 @@ std::shared_ptr<SalBitmap> SvpGraphicsBackend::getBitmap(tools::Long /*nX*/, too
     return std::shared_ptr<SalBitmap>();
 }
 
-Color SvpGraphicsBackend::getPixel(tools::Long /*nX*/, tools::Long /*nY*/) { return Color(); }
+Color SvpGraphicsBackend::getPixel(tools::Long nX, tools::Long nY)
+{
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    cairo_surface_t* target
+        = cairo_surface_create_similar_image(m_rCairoCommon.m_pSurface, CAIRO_FORMAT_ARGB32, 1, 1);
+#else
+    cairo_surface_t* target = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
+#endif
+
+    cairo_t* cr = cairo_create(target);
+
+    cairo_rectangle(cr, 0, 0, 1, 1);
+    cairo_set_source_surface(cr, m_rCairoCommon.m_pSurface, -nX, -nY);
+    cairo_paint(cr);
+    cairo_destroy(cr);
+
+    cairo_surface_flush(target);
+    vcl::bitmap::lookup_table const& unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
+    unsigned char* data = cairo_image_surface_get_data(target);
+    sal_uInt8 a = data[SVP_CAIRO_ALPHA];
+    sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
+    sal_uInt8 g = unpremultiply_table[a][data[SVP_CAIRO_GREEN]];
+    sal_uInt8 r = unpremultiply_table[a][data[SVP_CAIRO_RED]];
+    Color aColor(ColorAlpha, a, r, g, b);
+    cairo_surface_destroy(target);
+
+    return aColor;
+}
 
 void SvpGraphicsBackend::invert(tools::Long /*nX*/, tools::Long /*nY*/, tools::Long /*nWidth*/,
                                 tools::Long /*nHeight*/, SalInvert /*nFlags*/)
