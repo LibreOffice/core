@@ -22,9 +22,8 @@
 #include <DrawController.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
-#include <cppuhelper/basemutex.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <tools/diagnose_ex.h>
 #include <slideshow.hxx>
 
@@ -40,16 +39,13 @@ namespace sd::framework {
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper <lang::XInitialization> PresentationFactoryProviderInterfaceBase;
+typedef comphelper::WeakComponentImplHelper<lang::XInitialization> PresentationFactoryProviderInterfaceBase;
 
 class PresentationFactoryProvider
-    : protected cppu::BaseMutex,
-      public PresentationFactoryProviderInterfaceBase
+    : public PresentationFactoryProviderInterfaceBase
 {
 public:
     PresentationFactoryProvider ();
-
-    virtual void SAL_CALL disposing() override;
 
     // XInitialization
 
@@ -57,19 +53,18 @@ public:
         const css::uno::Sequence<css::uno::Any>& aArguments) override;
 };
 
-typedef ::cppu::WeakComponentImplHelper <XView> PresentationViewInterfaceBase;
+typedef comphelper::WeakComponentImplHelper<XView> PresentationViewInterfaceBase;
 
 /** The PresentationView is not an actual view, it is a marker whose
     existence in a configuration indicates that a slideshow is running
     (in another application window).
 */
 class PresentationView
-    : protected cppu::BaseMutex,
-      public PresentationViewInterfaceBase
+    : public PresentationViewInterfaceBase
 {
 public:
     explicit PresentationView (const Reference<XResourceId>& rxViewId)
-        : PresentationViewInterfaceBase(m_aMutex),mxResourceId(rxViewId) {};
+        : mxResourceId(rxViewId) {};
 
     // XView
 
@@ -153,11 +148,6 @@ namespace {
 //===== PresentationFactoryProvider ===========================================
 
 PresentationFactoryProvider::PresentationFactoryProvider ()
-    : PresentationFactoryProviderInterfaceBase(m_aMutex)
-{
-}
-
-void PresentationFactoryProvider::disposing()
 {
 }
 
