@@ -16,6 +16,24 @@
       "message": "What is this?",
       "revId": "58e3d1a1f56a22b2918df4b464ebbbcafd86f9e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ad9a4c2_be4b1043",
+        "filename": "sw/qa/extras/globalfilter/globalfilter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-28T12:05:16Z",
+      "side": 1,
+      "message": "Sir when I uploaded the second patch for this issue, I noticed that this line was deleted, though I didn\u0027t do mean to delete it, this line must have got deleted by mistake, hence in this patch I have re-added this line",
+      "parentUuid": "421506ce_c79b7d23",
+      "revId": "58e3d1a1f56a22b2918df4b464ebbbcafd86f9e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
