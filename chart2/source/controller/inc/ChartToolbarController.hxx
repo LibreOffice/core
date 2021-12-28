@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -23,13 +22,12 @@ namespace com::sun::star::frame { class XFramesSupplier; }
 
 namespace chart {
 
-typedef cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::frame::XToolbarController, css::frame::XStatusListener,
     css::util::XUpdatable, css::lang::XInitialization,
     css::lang::XServiceInfo> ChartToolbarControllerBase;
 
-class ChartToolbarController : private cppu::BaseMutex,
-                               public ChartToolbarControllerBase
+class ChartToolbarController : public ChartToolbarControllerBase
 {
 public:
     ChartToolbarController(const css::uno::Sequence<css::uno::Any>& rProperties);
@@ -69,7 +67,7 @@ public:
     // XUpdatable
     virtual void SAL_CALL update() override;
 
-    using cppu::WeakComponentImplHelperBase::disposing;
+    using comphelper::WeakComponentImplHelperBase::disposing;
 
 private:
 
