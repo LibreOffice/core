@@ -91,16 +91,11 @@ constexpr OUStringLiteral gsPresentationViewURL = u"private:resource/view/Presen
 
 PresentationFactory::PresentationFactory (
     const Reference<frame::XController>& rxController)
-    : PresentationFactoryInterfaceBase(m_aMutex),
-      mxController(rxController)
+    : mxController(rxController)
 {
 }
 
 PresentationFactory::~PresentationFactory()
-{
-}
-
-void SAL_CALL PresentationFactory::disposing()
 {
 }
 
@@ -146,7 +141,7 @@ void SAL_CALL PresentationFactory::disposing (
 
 void PresentationFactory::ThrowIfDisposed() const
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         throw lang::DisposedException ("PresentationFactory object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
