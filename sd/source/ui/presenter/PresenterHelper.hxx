@@ -21,14 +21,13 @@
 
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace sd::presenter {
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::lang::XInitialization,
     css::drawing::XPresenterHelper
 > PresenterHelperInterfaceBase;
@@ -36,9 +35,8 @@ typedef ::cppu::WeakComponentImplHelper<
 /** Implementation of the XPresenterHelper interface: functionality that can
     not be implemented in an extension.
 */
-class PresenterHelper
-    : private ::cppu::BaseMutex,
-      public PresenterHelperInterfaceBase
+class PresenterHelper final
+    : public PresenterHelperInterfaceBase
 {
 public:
     explicit PresenterHelper (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
