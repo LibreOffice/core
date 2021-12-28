@@ -21,8 +21,7 @@
 
 #include <ToolBarManager.hxx>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <o3tl/deleter.hxx>
 #include <memory>
 
@@ -35,16 +34,15 @@ class ViewShellBase;
 
 namespace sd::framework {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
     > ToolBarModuleInterfaceBase;
 
 /** This module is responsible for locking the ToolBarManager during
     configuration updates and for triggering ToolBarManager updates.
 */
-class ToolBarModule
-    : private ::cppu::BaseMutex,
-      public ToolBarModuleInterfaceBase
+class ToolBarModule final
+    : public ToolBarModuleInterfaceBase
 {
 public:
     /** Create a new module.
@@ -55,7 +53,7 @@ public:
         const css::uno::Reference<css::frame::XController>& rxController);
     virtual ~ToolBarModule() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XConfigurationChangeListener
 
