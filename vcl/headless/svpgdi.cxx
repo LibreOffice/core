@@ -756,61 +756,6 @@ bool SvpSalGraphics::drawTransformedBitmap(
     return true;
 }
 
-bool SvpSalGraphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency)
-{
-    const bool bHasFill(m_aCairoCommon.m_aFillColor != SALCOLOR_NONE);
-    const bool bHasLine(m_aCairoCommon.m_aLineColor != SALCOLOR_NONE);
-
-    if(!(bHasFill || bHasLine))
-    {
-        return true;
-    }
-
-    cairo_t* cr = m_aCairoCommon.getCairoContext(false, getAntiAlias());
-    clipRegion(cr);
-
-    const double fTransparency = nTransparency * (1.0/100);
-
-    // To make releaseCairoContext work, use empty extents
-    basegfx::B2DRange extents;
-
-    if (bHasFill)
-    {
-        cairo_rectangle(cr, nX, nY, nWidth, nHeight);
-
-        m_aCairoCommon.applyColor(cr, m_aCairoCommon.m_aFillColor, fTransparency);
-
-        // set FillDamage
-        extents = getClippedFillDamage(cr);
-
-        cairo_fill(cr);
-    }
-
-    if (bHasLine)
-    {
-        // PixelOffset used: Set PixelOffset as linear transformation
-        // Note: Was missing here - probably not by purpose (?)
-        cairo_matrix_t aMatrix;
-        cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
-        cairo_set_matrix(cr, &aMatrix);
-
-        cairo_rectangle(cr, nX, nY, nWidth, nHeight);
-
-        m_aCairoCommon.applyColor(cr, m_aCairoCommon.m_aLineColor, fTransparency);
-
-        // expand with possible StrokeDamage
-        basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
-        stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
-        extents.expand(stroke_extents);
-
-        cairo_stroke(cr);
-    }
-
-    m_aCairoCommon.releaseCairoContext(cr, false, extents);
-
-    return true;
-}
-
 SvpSalGraphics::SvpSalGraphics()
     : m_aTextRenderImpl(*this)
     , m_pBackend(new SvpGraphicsBackend(m_aCairoCommon))
