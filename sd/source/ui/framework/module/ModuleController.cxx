@@ -24,8 +24,6 @@
 
 #include <tools/ConfigurationAccess.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/weakref.hxx>
-#include <unordered_map>
 
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -40,24 +38,6 @@ namespace sd::framework {
 const sal_uInt32 snFactoryPropertyCount (2);
 const sal_uInt32 snStartupPropertyCount (1);
 
-class ModuleController::ResourceToFactoryMap
-    : public std::unordered_map<
-    OUString,
-    OUString>
-{
-public:
-    ResourceToFactoryMap() {}
-};
-
-class ModuleController::LoadedFactoryContainer
-    : public std::unordered_map<
-    OUString,
-    WeakReference<XInterface>>
-{
-public:
-    LoadedFactoryContainer() {}
-};
-
 //===== ModuleController ======================================================
 Reference<XModuleController> ModuleController::CreateInstance (
     const Reference<XComponentContext>& rxContext)
@@ -66,8 +46,6 @@ Reference<XModuleController> ModuleController::CreateInstance (
 }
 
 ModuleController::ModuleController (const Reference<XComponentContext>& rxContext)
-    : mpResourceToFactoryMap(new ResourceToFactoryMap()),
-      mpLoadedFactories(new LoadedFactoryContainer())
 {
     /** Load a list of URL to service mappings from the
         /org.openoffice.Office.Impress/MultiPaneGUI/Framework/ResourceFactories
@@ -106,8 +84,8 @@ ModuleController::~ModuleController() noexcept
 void ModuleController::disposing(std::unique_lock<std::mutex>&)
 {
     // Break the cyclic reference back to DrawController object
-    mpLoadedFactories.reset();
-    mpResourceToFactoryMap.reset();
+    maLoadedFactories.clear();
+    maResourceToFactoryMap.clear();
     mxController.clear();
 }
 
@@ -132,7 +110,7 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
     // Add the resource URLs to the map.
     for (const auto& rResource : aURLs)
     {
-        (*mpResourceToFactoryMap)[rResource] = sServiceName;
+        maResourceToFactoryMap[rResource] = sServiceName;
         SAL_INFO("sd.fwk", __func__ << ":    " << rResource);
     }
 }
@@ -196,16 +174,15 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
 
 void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
 {
-    ResourceToFactoryMap::const_iterator iFactory (mpResourceToFactoryMap->find(rsResourceURL));
-    if (iFactory == mpResourceToFactoryMap->end())
+    auto iFactory = maResourceToFactoryMap.find(rsResourceURL);
+    if (iFactory == maResourceToFactoryMap.end())
         return;
 
     // Check that the factory has already been loaded and not been
     // destroyed in the meantime.
     Reference<XInterface> xFactory;
-    LoadedFactoryContainer::const_iterator iLoadedFactory (
-        mpLoadedFactories->find(iFactory->second));
-    if (iLoadedFactory != mpLoadedFactories->end())
+    auto iLoadedFactory = maLoadedFactories.find(iFactory->second);
+    if (iLoadedFactory != maLoadedFactories.end())
         xFactory.set(iLoadedFactory->second, UNO_QUERY);
     if (  xFactory.is())
         return;
@@ -229,7 +206,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
     }
 
     // Remember that this factory has been instanced.
-    (*mpLoadedFactories)[iFactory->second] = xFactory;
+    maLoadedFactories[iFactory->second] = xFactory;
 }
 
 //----- XInitialization -------------------------------------------------------
