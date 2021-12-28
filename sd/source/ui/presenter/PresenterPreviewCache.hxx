@@ -22,24 +22,22 @@
 #include <com/sun/star/drawing/XSlidePreviewCache.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <tools/gen.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <memory>
 
 namespace sd::slidesorter::cache { class PageCache; }
 
 namespace sd::presenter {
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::lang::XInitialization,
     css::drawing::XSlidePreviewCache
 > PresenterPreviewCacheInterfaceBase;
 
 /** Uno API wrapper around the slide preview cache.
 */
-class PresenterPreviewCache
-    : private ::cppu::BaseMutex,
-      public PresenterPreviewCacheInterfaceBase
+class PresenterPreviewCache final
+    : public PresenterPreviewCacheInterfaceBase
 {
 public:
     PresenterPreviewCache ();
