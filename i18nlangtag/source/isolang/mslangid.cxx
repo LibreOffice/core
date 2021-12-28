@@ -210,25 +210,20 @@ css::lang::Locale MsLangId::getFallbackLocale(
         return Conversion::lookupFallbackLocale( rLocale);
 }
 
-static constexpr bool equalsPrimary(LanguageType lhs, LanguageType rhs)
-{
-    return (sal_uInt16(lhs) & LANGUAGE_MASK_PRIMARY )
-        == (sal_uInt16(rhs) & LANGUAGE_MASK_PRIMARY );
-}
-
 // static
 bool MsLangId::isRightToLeft( LanguageType nLang )
 {
-    if( equalsPrimary(nLang, LANGUAGE_ARABIC_SAUDI_ARABIA)
-        || equalsPrimary(nLang, LANGUAGE_HEBREW)
-        || equalsPrimary(nLang, LANGUAGE_YIDDISH)
-        || equalsPrimary(nLang, LANGUAGE_URDU_PAKISTAN)
-        || equalsPrimary(nLang, LANGUAGE_FARSI)
-        || equalsPrimary(nLang, LANGUAGE_KASHMIRI)
-        || equalsPrimary(nLang, LANGUAGE_SINDHI)
-        || equalsPrimary(nLang, LANGUAGE_UIGHUR_CHINA)
-        || equalsPrimary(nLang, LANGUAGE_USER_KYRGYZ_CHINA)
-        || equalsPrimary(nLang, LANGUAGE_USER_NKO) )
+    if (primary(nLang).anyOf(
+                primary(LANGUAGE_ARABIC_SAUDI_ARABIA),
+                primary(LANGUAGE_HEBREW),
+                primary(LANGUAGE_YIDDISH),
+                primary(LANGUAGE_URDU_PAKISTAN),
+                primary(LANGUAGE_FARSI),
+                primary(LANGUAGE_KASHMIRI),
+                primary(LANGUAGE_SINDHI),
+                primary(LANGUAGE_UIGHUR_CHINA),
+                primary(LANGUAGE_USER_KYRGYZ_CHINA),
+                primary(LANGUAGE_USER_NKO)))
     {
         return true;
     }
