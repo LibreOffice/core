@@ -18,6 +18,41 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddf5f2eb_7ceae866",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-28T11:11:45Z",
+      "side": 1,
+      "message": "Fixed.",
+      "revId": "75e1ca48c2a6132ff2a480a0dbb5380e2214f556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "445d4bfd_57c311c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-28T11:11:45Z",
+      "side": 1,
+      "message": "Yes, long term it would be desirable, even to remove it entirely from SAL, but the library is special:\n\n1) there\u0027s no .pc file on NetBSD/FreeBSD, and I just noticed it requires -lexecinfo unlike Darwin.\n\n2) none of the BSD implementations support non-GCC toolchains (Clang \u003d\u003d GCC for what matters).\n\n3) the old standalone version is unmaintained, is different from the NetBSD version used in modern BSDs, and needs a new buildsystem.\n\nSo ideally we need an overlay package that is no-op for *BSD/GNU but produces a .pc file with the right flags (not sure how that\u0027s handled for externals), and otherwise provides an implementation/fallback. It would take some time to figure it out.",
+      "parentUuid": "a7023eb8_a7c69922",
+      "revId": "75e1ca48c2a6132ff2a480a0dbb5380e2214f556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e50994e_aaf22807",
@@ -31,6 +66,30 @@
       "writtenOn": "2021-12-27T22:44:53Z",
       "side": 1,
       "message": "Missing x, or just remove from xno.",
+      "range": {
+        "startLine": 1199,
+        "startChar": 12,
+        "endLine": 1199,
+        "endChar": 14
+      },
+      "revId": "75e1ca48c2a6132ff2a480a0dbb5380e2214f556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99624a95_6c20b3e0",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-28T11:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e50994e_aaf22807",
       "range": {
         "startLine": 1199,
         "startChar": 12,
@@ -58,6 +117,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "127ada75_321652ad",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-28T11:11:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c8f459aa_f6b7a24b",
+      "revId": "75e1ca48c2a6132ff2a480a0dbb5380e2214f556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4359e2d3_49b948d7",
@@ -75,6 +152,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c87225f_9b900505",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-28T11:11:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4359e2d3_49b948d7",
+      "revId": "75e1ca48c2a6132ff2a480a0dbb5380e2214f556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79c7ae8f_31e771a5",
@@ -88,6 +183,24 @@
       "writtenOn": "2021-12-27T22:44:53Z",
       "side": 1,
       "message": "Please move your test somewhere after the setup end comment. All the stuff above handles just various platform flags.",
+      "revId": "75e1ca48c2a6132ff2a480a0dbb5380e2214f556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33a49ad0_7aa4b61b",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 1209,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-28T11:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79c7ae8f_31e771a5",
       "revId": "75e1ca48c2a6132ff2a480a0dbb5380e2214f556",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
