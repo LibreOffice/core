@@ -248,19 +248,18 @@ public:
 //----- Framework::DisposeListener ---------------------------------------------
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper <
+    typedef comphelper::WeakComponentImplHelper <
         css::lang::XEventListener
         > FrameworkHelperDisposeListenerInterfaceBase;
 }
 
 class FrameworkHelper::DisposeListener
-    : public cppu::BaseMutex,
-      public FrameworkHelperDisposeListenerInterfaceBase
+    : public FrameworkHelperDisposeListenerInterfaceBase
 {
 public:
     explicit DisposeListener (const ::std::shared_ptr<FrameworkHelper>& rpHelper);
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     virtual void SAL_CALL disposing (const lang::EventObject& rEventObject) override;
 
@@ -764,15 +763,14 @@ Reference<XResourceId> FrameworkHelper::CreateResourceId (
 
 FrameworkHelper::DisposeListener::DisposeListener (
     const ::std::shared_ptr<FrameworkHelper>& rpHelper)
-    : FrameworkHelperDisposeListenerInterfaceBase(m_aMutex),
-      mpHelper(rpHelper)
+    : mpHelper(rpHelper)
 {
     Reference<XComponent> xComponent (mpHelper->mxConfigurationController, UNO_QUERY);
     if (xComponent.is())
         xComponent->addEventListener(this);
 }
 
-void SAL_CALL FrameworkHelper::DisposeListener::disposing()
+void FrameworkHelper::DisposeListener::disposing(std::unique_lock<std::mutex>&)
 {
     Reference<XComponent> xComponent (mpHelper->mxConfigurationController, UNO_QUERY);
     if (xComponent.is())
