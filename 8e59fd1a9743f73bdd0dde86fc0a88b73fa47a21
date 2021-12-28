@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ccdce6b_b4965f2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-28T19:05:05Z",
+      "side": 1,
+      "message": "Even if the multiline check is there twice, the performance of setDataArray should increase, if there are just plain string without new lines. Is there a way to test this performance in a unit test?",
+      "revId": "8e59fd1a9743f73bdd0dde86fc0a88b73fa47a21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
