@@ -99,6 +99,10 @@
  */
 #define HAVE_FEATURE_BREAKPAD 0
 
+/* BACKTRACE - whether a GNU backtrace implementation is available.
+ */
+#define HAVE_FEATURE_BACKTRACE 0
+
 /*
  *  Whether OpenGL is enabled
  */

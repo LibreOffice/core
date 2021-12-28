@@ -1343,6 +1343,20 @@ if test $_os != "WINNT"; then
 fi
 AC_SUBST(DLOPEN_LIBS)
 
+# Check for a (GNU) backtrace implementation
+AC_ARG_VAR([BACKTRACE_CFLAGS], [Compiler flags needed to use backtrace(3)])
+AC_ARG_VAR([BACKTRACE_LIBS], [Linker flags needed to use backtrace(3)])
+AS_IF([test "x$BACKTRACE_LIBS$BACKTRACE_CFLAGS" = x], [
+    save_LIBS="$LIBS"
+    AC_SEARCH_LIBS([backtrace], [libexecinfo],
+        [case "$ac_cv_search_backtrace" in -l*) BACKTRACE_LIBS="$ac_cv_search_backtrace";; esac],
+        [PKG_CHECK_MODULES([BACKTRACE], [libexecinfo], [ac_cv_search_backtrace=], [:])])
+    LIBS="$save_LIBS"
+])
+AS_IF([test "x$ac_cv_search_backtrace" != xno ], [
+    AC_DEFINE([HAVE_FEATURE_BACKTRACE])
+])
+
 dnl ===================================================================
 dnl Sanity checks for Emscripten SDK setup
 dnl ===================================================================

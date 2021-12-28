@@ -27,31 +27,9 @@
 /* system headers */
 #include "system.hxx"
 
-#if defined( MACOSX )
-
-#if defined( INTEL )
 #include "backtrace.h"
-#define INCLUDE_BACKTRACE
-#endif /* INTEL */
 
-#endif /* MACOSX */
-
-#ifdef LINUX
-#include <execinfo.h>
-#include <link.h>
-#define INCLUDE_BACKTRACE
-#endif
-
-#ifdef __sun
-
-#include "backtrace.h"
-#define INCLUDE_BACKTRACE
-
-#endif /* defined __sun */
-
-#if defined INCLUDE_BACKTRACE
 #define MAX_STACK_FRAMES 256
-#endif
 
 #include <osl/diagnose.h>
 #include <osl/signal.h>
@@ -304,24 +282,20 @@ namespace
 {
 void printStack(int sig)
 {
-#ifdef INCLUDE_BACKTRACE
     void *buffer[MAX_STACK_FRAMES];
     int size = backtrace( buffer, SAL_N_ELEMENTS(buffer) );
-#endif
 
     fprintf( stderr, "\n\nFatal exception: Signal %d\n", sig );
 
-#if defined( MACOSX ) && !defined( INCLUDE_BACKTRACE )
+#if ! HAVE_FEATURE_BACKTRACE && defined( MACOSX ) && !defined( INTEL )
     fprintf( stderr, "Please turn on Enable Crash Reporting and\nAutomatic Display of Crashlogs in the Console application\n" );
-#else
-#ifdef INCLUDE_BACKTRACE
+#endif
+
     if ( size > 0 )
     {
         fputs( "Stack:\n", stderr );
         backtrace_symbols_fd( buffer, size, fileno(stderr) );
     }
-#endif
-#endif
 }
 
 void callSystemHandler(int signal, siginfo_t * info, void * context)
