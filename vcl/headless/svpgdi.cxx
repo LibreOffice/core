@@ -59,26 +59,6 @@
 
 namespace
 {
-    cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer)
-    {
-        cairo_format_t nFormat;
-#ifdef HAVE_CAIRO_FORMAT_RGB24_888
-        assert(rBuffer.mnBitCount == 32 || rBuffer.mnBitCount == 24 || rBuffer.mnBitCount == 1);
-#else
-        assert(rBuffer.mnBitCount == 32 || rBuffer.mnBitCount == 1);
-#endif
-
-        if (rBuffer.mnBitCount == 32)
-            nFormat = CAIRO_FORMAT_ARGB32;
-#ifdef HAVE_CAIRO_FORMAT_RGB24_888
-        else if (rBuffer.mnBitCount == 24)
-            nFormat = CAIRO_FORMAT_RGB24_888;
-#endif
-        else
-            nFormat = CAIRO_FORMAT_A1;
-        return nFormat;
-    }
-
     void Toggle1BitTransparency(const BitmapBuffer& rBuf)
     {
         assert(rBuf.maPalette.GetBestIndex(BitmapColor(COL_BLACK)) == 0);
@@ -347,11 +327,11 @@ namespace
                 aTmpBmp.Create(std::move(pTmp));
 
                 assert(aTmpBmp.GetBitCount() == 32);
-                implSetSurface(SvpSalGraphics::createCairoSurface(aTmpBmp.GetBuffer()));
+                implSetSurface(CairoCommon::createCairoSurface(aTmpBmp.GetBuffer()));
             }
             else
             {
-                implSetSurface(SvpSalGraphics::createCairoSurface(rSrcBmp.GetBuffer()));
+                implSetSurface(CairoCommon::createCairoSurface(rSrcBmp.GetBuffer()));
             }
         }
         void mark_dirty()
@@ -807,7 +787,7 @@ void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceB
 
 void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const BitmapBuffer* pBuffer, cairo_operator_t eOp)
 {
-    cairo_surface_t* source = createCairoSurface( pBuffer );
+    cairo_surface_t* source = CairoCommon::createCairoSurface(pBuffer);
     m_aCairoCommon.copyWithOperator(rTR, source, eOp, getAntiAlias());
     cairo_surface_destroy(source);
 }
@@ -915,7 +895,7 @@ std::shared_ptr<SalBitmap> SvpSalGraphics::getBitmap( tools::Long nX, tools::Lon
         return nullptr;
     }
 
-    cairo_surface_t* target = SvpSalGraphics::createCairoSurface(pBitmap->GetBuffer());
+    cairo_surface_t* target = CairoCommon::createCairoSurface(pBitmap->GetBuffer());
     if (!target)
     {
         SAL_WARN("vcl.gdi", "SvpSalGraphics::getBitmap, cannot create cairo surface");
@@ -932,45 +912,6 @@ std::shared_ptr<SalBitmap> SvpSalGraphics::getBitmap( tools::Long nX, tools::Lon
     Toggle1BitTransparency(*pBitmap->GetBuffer());
 
     return pBitmap;
-}
-
-namespace
-{
-    bool isCairoCompatible(const BitmapBuffer* pBuffer)
-    {
-        if (!pBuffer)
-            return false;
-
-        // We use Cairo that supports 24-bit RGB.
-#ifdef HAVE_CAIRO_FORMAT_RGB24_888
-        if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 24 && pBuffer->mnBitCount != 1)
-#else
-        if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 1)
-#endif
-            return false;
-
-        cairo_format_t nFormat = getCairoFormat(*pBuffer);
-        return (cairo_format_stride_for_width(nFormat, pBuffer->mnWidth) == pBuffer->mnScanlineSize);
-    }
-}
-
-cairo_surface_t* SvpSalGraphics::createCairoSurface(const BitmapBuffer *pBuffer)
-{
-    if (!isCairoCompatible(pBuffer))
-        return nullptr;
-
-    cairo_format_t nFormat = getCairoFormat(*pBuffer);
-    cairo_surface_t *target =
-        cairo_image_surface_create_for_data(pBuffer->mpBits,
-                                        nFormat,
-                                        pBuffer->mnWidth, pBuffer->mnHeight,
-                                        pBuffer->mnScanlineSize);
-    if (cairo_surface_status(target) != CAIRO_STATUS_SUCCESS)
-    {
-        cairo_surface_destroy(target);
-        return nullptr;
-    }
-    return target;
 }
 
 #if ENABLE_CAIRO_CANVAS

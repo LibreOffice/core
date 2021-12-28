@@ -1010,4 +1010,60 @@ void CairoCommon::invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, boo
     releaseCairoContext(cr, false, extents);
 }
 
+cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer)
+{
+    cairo_format_t nFormat;
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
+    assert(rBuffer.mnBitCount == 32 || rBuffer.mnBitCount == 24 || rBuffer.mnBitCount == 1);
+#else
+    assert(rBuffer.mnBitCount == 32 || rBuffer.mnBitCount == 1);
+#endif
+
+    if (rBuffer.mnBitCount == 32)
+        nFormat = CAIRO_FORMAT_ARGB32;
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
+    else if (rBuffer.mnBitCount == 24)
+        nFormat = CAIRO_FORMAT_RGB24_888;
+#endif
+    else
+        nFormat = CAIRO_FORMAT_A1;
+    return nFormat;
+}
+
+namespace
+{
+bool isCairoCompatible(const BitmapBuffer* pBuffer)
+{
+    if (!pBuffer)
+        return false;
+
+        // We use Cairo that supports 24-bit RGB.
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
+    if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 24 && pBuffer->mnBitCount != 1)
+#else
+    if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 1)
+#endif
+        return false;
+
+    cairo_format_t nFormat = getCairoFormat(*pBuffer);
+    return (cairo_format_stride_for_width(nFormat, pBuffer->mnWidth) == pBuffer->mnScanlineSize);
+}
+}
+
+cairo_surface_t* CairoCommon::createCairoSurface(const BitmapBuffer* pBuffer)
+{
+    if (!isCairoCompatible(pBuffer))
+        return nullptr;
+
+    cairo_format_t nFormat = getCairoFormat(*pBuffer);
+    cairo_surface_t* target = cairo_image_surface_create_for_data(
+        pBuffer->mpBits, nFormat, pBuffer->mnWidth, pBuffer->mnHeight, pBuffer->mnScanlineSize);
+    if (cairo_surface_status(target) != CAIRO_STATUS_SUCCESS)
+    {
+        cairo_surface_destroy(target);
+        return nullptr;
+    }
+    return target;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
