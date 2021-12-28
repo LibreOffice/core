@@ -59,6 +59,7 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
+#include <osl/diagnose.h>
 
 #include <DrawViewShell.hxx>
 #include <slideshow.hxx>

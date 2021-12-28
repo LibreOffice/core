@@ -23,7 +23,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <framework/FrameworkHelper.hxx>
-
+#include <osl/diagnose.h>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/errinf.hxx>
