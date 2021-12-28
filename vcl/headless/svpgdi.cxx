@@ -1108,11 +1108,6 @@ std::shared_ptr<SalBitmap> SvpSalGraphics::getBitmap( tools::Long nX, tools::Lon
     return pBitmap;
 }
 
-bool SvpSalGraphics::drawEPS( tools::Long, tools::Long, tools::Long, tools::Long, void*, sal_uInt32 )
-{
-    return false;
-}
-
 namespace
 {
     bool isCairoCompatible(const BitmapBuffer* pBuffer)
