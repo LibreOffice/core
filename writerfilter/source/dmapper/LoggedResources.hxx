@@ -72,7 +72,7 @@ public:
     void startGlossaryEntry() override;
     void endGlossaryEntry() override;
 
-    virtual void setDocumentReference(void* /*pDocument*/) override{};
+    virtual void setDocumentReference(writerfilter::ooxml::OOXMLDocument* /*pDocument*/) override{};
 
 protected:
     virtual void lcl_startSectionGroup() = 0;
