@@ -34,11 +34,7 @@
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 
-#if defined(NETBSD) || defined (FREEBSD) || defined(OPENBSD)
-#include <sys/poll.h>
-#else
 #include <poll.h>
-#endif
 
 #include <sal/macros.h>
 
