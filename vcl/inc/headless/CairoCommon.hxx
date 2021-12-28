@@ -27,6 +27,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/region.hxx>
 #include <vcl/salgtype.hxx>
+#include <vcl/BitmapBuffer.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 
@@ -119,6 +120,8 @@ VCL_DLLPUBLIC basegfx::B2DPoint impPixelSnap(const basegfx::B2DPolygon& rPolygon
 VCL_DLLPUBLIC void add_polygon_path(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPolygon,
                                     const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap);
 
+VCL_DLLPUBLIC cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer);
+
 enum class PaintMode
 {
     Over,
@@ -187,6 +190,8 @@ struct VCL_DLLPUBLIC CairoCommon
     void copyBitsCairo(const SalTwoRect& rTR, cairo_surface_t* pSourceSurface, bool bAntiAlias);
 
     void invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias);
+
+    static cairo_surface_t* createCairoSurface(const BitmapBuffer* pBuffer);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
