@@ -1,3 +1,19 @@
+--- src/argparse.c	2021-11-03 13:44:56.000000000 +0100
++++ src/argparse.c~	2022-01-03 17:05:23.418077200 +0100
+@@ -33,8 +33,12 @@
+ #include <stdarg.h>
+ #include <limits.h>
+ #include <errno.h>
+-#include <unistd.h>
+ #include <time.h>
++#ifdef _WIN32
++# define R_OK 04
++# define strncasecmp _strnicmp
++# define strcasecmp _stricmp
++#endif
+ 
+ #include "gpgrt-int.h"
+ 
 --- src/gpg-error.c	2020-06-06 00:18:40.199791000 +0200
 +++ src/gpg-error.c~	2020-06-05 18:44:14.223182300 +0200
 @@ -61,6 +61,11 @@
@@ -12,6 +28,19 @@
  static void
  i18n_init (void)
  {
+
+--- src/spawn-w32.c~  2022-01-03 16:33:24.000000000 +0100
++++ src/spawn-w32.c	  2022-01-03 16:46:57.173841200 +0100
+@@ -56,7 +56,7 @@
+  * Previous versions interpreted X_OK as F_OK anyway, so we'll just
+  * use F_OK directly. */
+ #undef X_OK
++#define X_OK 0
+-#define X_OK F_OK
+ 
+ /* For HANDLE and the internal file descriptor (fd) of this module:
+  * HANDLE can be represented by an intptr_t which should be true for
+
 --- src/logging.c	2020-06-05 18:58:59.254413200 +0200
 +++ src/logging.c~	2019-12-12 15:23:37.000000000 +0100
 @@ -44,7 +44,11 @@
@@ -65,20 +94,6 @@
  gpg_error_SOURCES = strsource-sym.c strerror-sym.c gpg-error.c
  gpg_error_CPPFLAGS = -DPKGDATADIR=\"$(pkgdatadir)\" \
                       -DLOCALEDIR=\"$(localedir)\" $(extra_cppflags)
---- src/spawn-w32.c	2020-06-05 18:47:05.807099200 +0200
-+++ src/spawn-w32.c~	2020-06-05 18:44:14.114035900 +0200
-@@ -834,7 +834,11 @@
-   /* We don't use ENVP.  */
-   (void)envp;
- 
-+#ifdef _WIN32
-+  if (_access (pgmname, 04))
-+#else
-   if (access (pgmname, X_OK))
-+#endif
-     return _gpg_err_code_from_syserror ();
- 
-   /* Prepare security attributes.  */
 --- src/sysutils.c	2020-06-06 00:23:52.457265500 +0200
 +++ src/sysutils.c~	2019-12-12 15:23:37.000000000 +0100
 @@ -22,7 +22,11 @@
@@ -94,21 +109,6 @@
  #include <errno.h>
  #ifdef HAVE_W32_SYSTEM
  # include <windows.h>
-@@ -274,11 +270,12 @@
- gpg_err_code_t
- _gpgrt_mkdir (const char *name, const char *modestr)
- {
-+#ifdef _WIN32
--#ifdef HAVE_W32CE_SYSTEM
-   wchar_t *wname;
-   (void)modestr;
- 
-+  size_t size;
-+  wname = utf8_to_wchar (name, -1, &size);
--  wname = utf8_to_wchar (name);
-   if (!wname)
-     return _gpg_err_code_from_syserror ();
-   if (!CreateDirectoryW (wname, NULL))
 --- src/visibility.c	2020-06-05 18:54:56.410442900 +0200
 +++ src/visibility.c~	2019-01-04 12:56:54.000000000 +0100
 @@ -1067,11 +1067,7 @@
@@ -134,9 +134,9 @@
 --- src/w32-gettext.c	2020-06-06 00:33:24.680341900 +0200
 +++ src/w32-gettext.c~	2020-06-05 18:44:14.254481700 +0200
 @@ -1355,7 +1355,7 @@
-    string STRING.  Caller must free this value. On failure returns
-    NULL.  The result of calling this function with STRING set to NULL
-    is not defined. */
+    is not defined.  If LENGTH is zero and RETLEN NULL the fucntion
+    assumes that STRING is a nul-terminated string and returns a
+    (wchar_t)0-terminated string.  */
 +wchar_t *
 -static wchar_t *
  utf8_to_wchar (const char *string, size_t length, size_t *retlen)
