@@ -1159,7 +1159,18 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         rElement >>= aUStr;
                         if ( !aUStr.isEmpty() )
                         {
-                            rDocFunc.SetStringOrEditCell(aPos, aUStr, false);
+                            // tdf#146454 - check for a multiline string since setting an edit
+                            // or string cell is in magnitudes slower than setting a plain string
+                            if (ScStringUtil::isMultiline(aUStr))
+                            {
+                                rDocFunc.SetStringOrEditCell(aPos, aUStr, false);
+                            }
+                            else
+                            {
+                                ScSetStringParam aParam;
+                                aParam.setTextInput();
+                                rDoc.SetString(aPos, aUStr, &aParam);
+                            }
                         }
                     }
                     break;
