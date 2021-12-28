@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73b4edf8_2ecea813",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-28T18:26:44Z",
+      "side": 1,
+      "message": "\u003e Patch Set 5: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/104126/ : FAILURE\n\u003e \n\u003e seems like the buildslave lost the connection ( https://ci.libreoffice.org/job/gerrit_mac/109359/ )\nSir, can you please restart the build?",
+      "revId": "508ddaef17196901e85ff8e2ecf8a937a8d7fd63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
