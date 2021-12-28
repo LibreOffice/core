@@ -57,16 +57,6 @@
 #   endif
 #endif
 
-bool SvpSalGraphics::blendBitmap( const SalTwoRect&, const SalBitmap& /*rBitmap*/ )
-{
-    return false;
-}
-
-bool SvpSalGraphics::blendAlphaBitmap( const SalTwoRect&, const SalBitmap&, const SalBitmap&, const SalBitmap& )
-{
-    return false;
-}
-
 namespace
 {
     cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer)
@@ -766,11 +756,6 @@ bool SvpSalGraphics::drawTransformedBitmap(
     return true;
 }
 
-bool SvpSalGraphics::hasFastDrawTransformedBitmap() const
-{
-    return false;
-}
-
 bool SvpSalGraphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency)
 {
     const bool bHasFill(m_aCairoCommon.m_aFillColor != SALCOLOR_NONE);
@@ -1074,17 +1059,6 @@ css::uno::Any SvpSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*
 SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
 {
     return SystemGraphicsData();
-}
-
-bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
-{
-    switch (eType)
-    {
-        case OutDevSupportType::TransparentRect:
-        case OutDevSupportType::B2DDraw:
-            return true;
-    }
-    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
