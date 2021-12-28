@@ -1,0 +1,9 @@
+Verified+1: René Engelhard <rene@debian.org>
+Code-Review+1: Eike Rathke <erack@redhat.com>
+Code-Review+1: René Engelhard <rene@debian.org>
+Code-Review+2: Xisco Fauli <xiscofauli@libreoffice.org>
+Submitted-by: Xisco Fauli <xiscofauli@libreoffice.org>
+Submitted-at: Tue, 28 Dec 2021 19:10:57 +0100
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/127371
+Project: core
+Branch: refs/heads/libreoffice-7-2-5
