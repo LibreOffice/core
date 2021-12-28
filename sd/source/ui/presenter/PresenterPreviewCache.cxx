@@ -25,6 +25,7 @@
 #include <sdpage.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <osl/diagnose.h>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -72,8 +73,7 @@ private:
 //===== PresenterPreviewCache =================================================
 
 PresenterPreviewCache::PresenterPreviewCache ()
-    : PresenterPreviewCacheInterfaceBase(m_aMutex),
-      maPreviewSize(Size(200,200)),
+    : maPreviewSize(Size(200,200)),
       mpCacheContext(std::make_shared<PresenterCacheContext>()),
       mpCache(std::make_shared<PageCache>(maPreviewSize, Bitmap::HasFastScale(), mpCacheContext))
 {
@@ -149,7 +149,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
 void SAL_CALL PresenterPreviewCache::addPreviewCreationNotifyListener (
     const Reference<drawing::XSlidePreviewCacheListener>& rxListener)
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
         return;
     if (rxListener.is())
         mpCacheContext->AddPreviewCreationNotifyListener(rxListener);
@@ -178,7 +178,7 @@ void SAL_CALL PresenterPreviewCache::resume()
 
 void PresenterPreviewCache::ThrowIfDisposed()
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         throw lang::DisposedException ("PresenterPreviewCache object has already been disposed",
             static_cast<uno::XWeak*>(this));
