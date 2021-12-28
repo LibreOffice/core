@@ -1160,4 +1160,17 @@ std::unique_ptr<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer
     return pDst;
 }
 
+void Toggle1BitTransparency(const BitmapBuffer& rBuf)
+{
+    assert(rBuf.maPalette.GetBestIndex(BitmapColor(COL_BLACK)) == 0);
+    // TODO: make upper layers use standard alpha
+    if (getCairoFormat(rBuf) == CAIRO_FORMAT_A1)
+    {
+        const int nImageSize = rBuf.mnHeight * rBuf.mnScanlineSize;
+        unsigned char* pDst = rBuf.mpBits;
+        for (int i = nImageSize; --i >= 0; ++pDst)
+            *pDst = ~*pDst;
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
