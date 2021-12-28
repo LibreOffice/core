@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cc7114f_3d46ef57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-28T18:30:31Z",
+      "side": 1,
+      "message": "Looks good to me.\nWith this fix in place, tdf#138743 is fixed. Without this, an empty frame will be visible.",
+      "revId": "b3b7a36398f31cb7561010270364691d7c19e333",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
