@@ -132,8 +132,7 @@ static const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
 
 
 SlideShow::SlideShow( SdDrawDocument* pDoc )
-: SlideshowBase( m_aMutex )
-, maPropSet(ImplGetPresentationPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool())
+: maPropSet(ImplGetPresentationPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool())
 , mbIsInStartup(false)
 , mpDoc( pDoc )
 , mpCurrentViewShellBase( nullptr )
@@ -886,7 +885,7 @@ Reference< XSlideShowController > SAL_CALL SlideShow::getController(  )
 
 // XComponent
 
-void SAL_CALL SlideShow::disposing()
+void SlideShow::disposing(std::unique_lock<std::mutex>&)
 {
     SolarMutexGuard aGuard;
 

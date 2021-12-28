@@ -38,6 +38,7 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <editeng/editeng.hxx>
+#include <osl/diagnose.h>
 
 #include <sdmod.hxx>
 #include <drawdoc.hxx>

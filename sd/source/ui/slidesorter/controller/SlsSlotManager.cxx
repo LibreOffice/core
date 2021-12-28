@@ -72,7 +72,7 @@
 #include <svl/itempool.hxx>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
-
+#include <osl/diagnose.h>
 
 #include <memory>
 
