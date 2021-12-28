@@ -405,7 +405,7 @@ DomainMapper_Impl::~DomainMapper_Impl()
 
 writerfilter::ooxml::OOXMLDocument* DomainMapper_Impl::getDocumentReference() const
 {
-    return static_cast<writerfilter::ooxml::OOXMLDocument*>(m_pOOXMLDocument);
+    return m_pOOXMLDocument;
 }
 
 uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetPageStyles()
