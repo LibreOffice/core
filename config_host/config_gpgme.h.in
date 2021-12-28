@@ -26,9 +26,6 @@
 # include "config_lgpl.h"
 #endif
 
-// Defined if gpgme supports exporting minimal key.
-#define GPGME_CAN_EXPORT_MINIMAL_KEY 0
-
 #undef GPGME_GPGCONF
 
 #endif

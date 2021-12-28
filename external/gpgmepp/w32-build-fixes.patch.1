@@ -83,12 +83,12 @@ diff -ru gpgme.orig/src/Makefile.am gpgme/src/Makefile.am
  m4data_DATA = gpgme.m4
  nodist_include_HEADERS = gpgme.h
  
--bin_PROGRAMS = gpgme-tool
+-bin_PROGRAMS = gpgme-tool gpgme-json
 +bin_PROGRAMS =
  
  if BUILD_W32_GLIB
  ltlib_gpgme_glib = libgpgme-glib.la
-@@ -99,8 +99,8 @@
+@@ -99,11 +99,11 @@
  # versions, because then every object file is only compiled once.
  AM_CFLAGS = @LIBASSUAN_CFLAGS@ @GPG_ERROR_CFLAGS@ @GLIB_CFLAGS@
  
@@ -96,6 +96,11 @@ diff -ru gpgme.orig/src/Makefile.am gpgme/src/Makefile.am
 -gpgme_tool_LDADD = libgpgme.la @LIBASSUAN_LIBS@ @GPG_ERROR_LIBS@
 +gpgme_tool_SOURCES =
 +gpgme_tool_LDADD =
+ 
+-gpgme_json_SOURCES = gpgme-json.c cJSON.c cJSON.h
+-gpgme_json_LDADD = -lm libgpgme.la $(GPG_ERROR_LIBS)
++gpgme_json_SOURCES =
++gpgme_json_LDADD =
  
  
  if HAVE_W32_SYSTEM
