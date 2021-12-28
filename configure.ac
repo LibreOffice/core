@@ -5849,7 +5849,7 @@ fi
 
 AC_SUBST(ENABLE_CUPS)
 
-libo_CHECK_SYSTEM_MODULE([fontconfig],[FONTCONFIG],[fontconfig >= 2.4.1],,,TRUE)
+libo_CHECK_SYSTEM_MODULE([fontconfig],[FONTCONFIG],[fontconfig >= 2.4.1],TRUE)
 
 dnl whether to find & fetch external tarballs?
 dnl ===================================================================
@@ -7303,7 +7303,7 @@ AC_SUBST(GPERF)
 dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.2],,,,TRUE)
+libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.2],,TRUE)
 
 dnl ===================================================================
 dnl C++11
@@ -9376,21 +9376,25 @@ AC_SUBST([ENABLE_EOT])
 dnl ===================================================================
 dnl Check for DLP libs
 dnl ===================================================================
+REVENGE_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/librevenge/inc"
 AS_IF([test "$COM" = "MSC"],
       [librevenge_libdir="${WORKDIR}/LinkTarget/Library"],
       [librevenge_libdir="${WORKDIR}/UnpackedTarball/librevenge/src/lib/.libs"]
 )
-libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0 >= 0.0.1],["-I${WORKDIR}/UnpackedTarball/librevenge/inc"],["-L${librevenge_libdir} -lrevenge-0.0"])
+REVENGE_LIBS_internal="-L${librevenge_libdir} -lrevenge-0.0"
+libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0 >= 0.0.1])
 
 libo_CHECK_SYSTEM_MODULE([libodfgen],[ODFGEN],[libodfgen-0.1])
 
 libo_CHECK_SYSTEM_MODULE([libepubgen],[EPUBGEN],[libepubgen-0.1])
 
+WPD_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/libwpd/inc"
 AS_IF([test "$COM" = "MSC"],
       [libwpd_libdir="${WORKDIR}/LinkTarget/Library"],
       [libwpd_libdir="${WORKDIR}/UnpackedTarball/libwpd/src/lib/.libs"]
 )
-libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.10],["-I${WORKDIR}/UnpackedTarball/libwpd/inc"],["-L${libwpd_libdir} -lwpd-0.10"])
+WPD_LIBS_internal="-L${libwpd_libdir} -lwpd-0.10"
+libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.10])
 
 libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.3])
 
@@ -9431,7 +9435,9 @@ dnl ===================================================================
 if test "$with_system_lcms2" != "yes"; then
     SYSTEM_LCMS2=
 fi
-libo_CHECK_SYSTEM_MODULE([lcms2],[LCMS2],[lcms2],["-I${WORKDIR}/UnpackedTarball/lcms2/include"],["-L${WORKDIR}/UnpackedTarball/lcms2/src/.libs -llcms2"])
+LCMS2_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/lcms2/include"
+LCMS2_LIBS_internal="-L${WORKDIR}/UnpackedTarball/lcms2/src/.libs -llcms2"
+libo_CHECK_SYSTEM_MODULE([lcms2],[LCMS2],[lcms2])
 if test "$GCC" = "yes"; then
     LCMS2_CFLAGS="${LCMS2_CFLAGS} -Wno-long-long"
 fi
@@ -9458,15 +9464,13 @@ dnl
 dnl 9.9.3 is 2.2.0
 dnl When the minimal version is at least 2.8.1, remove Skia's check down below.
 dnl ===================================================================
-if test "$test_freetype" != no; then
-    if test "x$ac_config_site_64bit_host" = xYES; then
-        FREETYPE_LIBS_INTERNAL="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib64 -lfreetype"
-    else
-        FREETYPE_LIBS_INTERNAL="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
-    fi
+FREETYPE_CFLAGS_internal="${ISYSTEM}${WORKDIR}/UnpackedTarball/freetype/include"
+if test "x$ac_config_site_64bit_host" = xYES; then
+    FREETYPE_LIBS_internal="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib64 -lfreetype"
+else
+    FREETYPE_LIBS_internal="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
 fi
-libo_CHECK_SYSTEM_MODULE([freetype],[FREETYPE],[freetype2 >= 9.9.3],
-    ["${ISYSTEM}${WORKDIR}/UnpackedTarball/freetype/include"],["$FREETYPE_LIBS_INTERNAL"],TRUE)
+libo_CHECK_SYSTEM_MODULE([freetype],[FREETYPE],[freetype2 >= 9.9.3],TRUE)
 
 # ===================================================================
 # Check for system libxslt
@@ -10311,7 +10315,7 @@ AC_SUBST(LIBTOMMATH_LIBS)
 dnl ===================================================================
 dnl Check for system curl
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([curl],[CURL],[libcurl >= 7.68.0],,,,TRUE)
+libo_CHECK_SYSTEM_MODULE([curl],[CURL],[libcurl >= 7.68.0],,TRUE)
 
 dnl ===================================================================
 dnl Check for system boost
@@ -10353,7 +10357,8 @@ AC_SUBST(SYSTEM_BOOST)
 dnl ===================================================================
 dnl Check for system mdds
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds-2.0 >= 2.0.0], ["-I${WORKDIR}/UnpackedTarball/mdds/include"])
+MDDS_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/mdds/include"
+libo_CHECK_SYSTEM_MODULE([mdds],[MDDS],[mdds-2.0 >= 2.0.0])
 
 dnl ===================================================================
 dnl Check for system cuckoo
@@ -10697,13 +10702,14 @@ AC_SUBST(SYSTEM_LIBORCUS)
 dnl ===================================================================
 dnl HarfBuzz
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3],
-                         ["-I${WORKDIR}/UnpackedTarball/graphite/include -DGRAPHITE2_STATIC"],
-                         ["-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"])
 
-libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.42],
-                         ["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],
-                         ["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"])
+GRAPHITE_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/graphite/include -DGRAPHITE2_STATIC"
+GRAPHITE_LIBS_internal="-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"
+libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3])
+
+HARFBUZZ_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/harfbuzz/src"
+HARFBUZZ_LIBS_internal="-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"
+libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.42])
 
 if test "$COM" = "MSC"; then # override the above
     GRAPHITE_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/graphite.lib"
@@ -11477,7 +11483,8 @@ fi
 dnl ===================================================================
 dnl Check for system epoxy
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([epoxy], [EPOXY], [epoxy >= 1.2], ["-I${WORKDIR}/UnpackedTarball/epoxy/include"])
+EPOXY_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/epoxy/include"
+libo_CHECK_SYSTEM_MODULE([epoxy], [EPOXY], [epoxy >= 1.2])
 
 dnl ===================================================================
 dnl Set vcl option: coordinate device in double or sal_Int32
@@ -13427,7 +13434,9 @@ dnl ===================================================================
 dnl Test whether to build libpng or rely on the system version
 dnl ===================================================================
 
-libo_CHECK_SYSTEM_MODULE([libpng],[LIBPNG],[libpng],["-I${WORKDIR}/UnpackedTarball/libpng"],["-L${WORKDIR}/LinkTarget/StaticLibrary -llibpng"])
+LIBPNG_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/libpng"
+LIBPNG_LIBS_internal="-L${WORKDIR}/LinkTarget/StaticLibrary -llibpng"
+libo_CHECK_SYSTEM_MODULE([libpng],[LIBPNG],[libpng])
 
 dnl ===================================================================
 dnl Check for runtime JVM search path
