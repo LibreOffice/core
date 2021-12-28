@@ -6,7 +6,6 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String

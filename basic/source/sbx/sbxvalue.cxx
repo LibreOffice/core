@@ -687,40 +687,40 @@ bool SbxValue::SetType( SbxDataType t )
         }
         t = SbxEMPTY;
     }
-    if( ( t & 0x0FFF ) == ( aData.eType & 0x0FFF ) )
-        return true;
-
-    if( !CanWrite() || IsFixed() )
+    if( ( t & 0x0FFF ) != ( aData.eType & 0x0FFF ) )
     {
-        SetError( ERRCODE_BASIC_CONVERSION );
-        return false;
-    }
-    else
-    {
-        // De-allocate potential objects
-        switch( aData.eType )
+        if( !CanWrite() || IsFixed() )
         {
-            case SbxSTRING:
-                delete aData.pOUString;
-                break;
-            case SbxOBJECT:
-                if( aData.pObj && aData.pObj != this )
-                {
-                    SAL_WARN("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
-                    SbxVariable *pThisVar = dynamic_cast<SbxVariable*>( this );
-                    sal_uInt32 nSlotId = pThisVar
-                                ? pThisVar->GetUserData() & 0xFFFF
-                                : 0;
-                    DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName() == "Parent",
-                                "SID_PARENTOBJECT is not named 'Parent'" );
-                    bool bParentProp = nSlotId == 5345;
-                    if ( !bParentProp )
-                        aData.pObj->ReleaseRef();
-                }
-                break;
-            default: break;
+            SetError( ERRCODE_BASIC_CONVERSION );
+            return false;
         }
-        aData.clear(t);
+        else
+        {
+            // De-allocate potential objects
+            switch( aData.eType )
+            {
+                case SbxSTRING:
+                    delete aData.pOUString;
+                    break;
+                case SbxOBJECT:
+                    if( aData.pObj && aData.pObj != this )
+                    {
+                        SAL_WARN("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
+                        SbxVariable *pThisVar = dynamic_cast<SbxVariable*>( this );
+                        sal_uInt32 nSlotId = pThisVar
+                                    ? pThisVar->GetUserData() & 0xFFFF
+                                    : 0;
+                        DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName() == "Parent",
+                                    "SID_PARENTOBJECT is not named 'Parent'" );
+                        bool bParentProp = nSlotId == 5345;
+                        if ( !bParentProp )
+                            aData.pObj->ReleaseRef();
+                    }
+                    break;
+                default: break;
+            }
+            aData.clear(t);
+        }
     }
     return true;
 }
@@ -843,7 +843,8 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                 if( GetType() == SbxSALUINT64 || GetType() == SbxSALINT64
                  || GetType() == SbxCURRENCY  || GetType() == SbxULONG )
                     aL.eType = aR.eType = GetType();
-                else if ( bVBAInterop && eOpType == SbxBOOL )
+                // tdf#145960 - return type of boolean operators should be of type boolean
+                else if ( eOpType == SbxBOOL && eOp != SbxMOD && eOp != SbxIDIV )
                     aL.eType = aR.eType = SbxBOOL;
                 else
                     aL.eType = aR.eType = SbxLONG;
