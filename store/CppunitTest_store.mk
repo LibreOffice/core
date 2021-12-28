@@ -7,14 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,store))
+$(eval $(call gb_CppunitTest_CppunitTest,store))
 
-$(eval $(call gb_Module_add_targets,store,\
-    Library_store \
+$(eval $(call gb_CppunitTest_use_libraries,store,\
+    sal \
+    salhelper \
+    store \
 ))
 
-$(eval $(call gb_Module_add_check_targets,store,\
-    CppunitTest_store \
+$(eval $(call gb_CppunitTest_add_exception_objects,store,\
+    store/qa/store \
 ))
 
-# vim:set noet sw=4 ts=4:
+# vim: set noet sw=4 ts=4:
