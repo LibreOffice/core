@@ -33,8 +33,7 @@ SlotStateListener::SlotStateListener (
     Link<const OUString&,void> const & rCallback,
     const uno::Reference<frame::XDispatchProvider>& rxDispatchProvider,
     const OUString& rSlotName)
-    : SlotStateListenerInterfaceBase(m_aMutex),
-      mxDispatchProviderWeak(nullptr)
+    : mxDispatchProviderWeak(nullptr)
 {
     SetCallback(rCallback);
     ConnectToDispatchProvider(rxDispatchProvider);
@@ -83,10 +82,10 @@ void SlotStateListener::ObserveSlot (const OUString& rSlotName)
     }
 }
 
-void SlotStateListener::disposing()
+void SlotStateListener::disposing(std::unique_lock<std::mutex>&)
 {
     ReleaseListeners();
-    mxDispatchProviderWeak = uno::WeakReference<frame::XDispatchProvider>(nullptr);
+    mxDispatchProviderWeak.clear();
     maCallback = Link<const OUString&,void>();
 }
 
@@ -142,7 +141,7 @@ void SAL_CALL SlotStateListener::disposing (
 
 void SlotStateListener::ThrowIfDisposed()
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         throw lang::DisposedException ("SlideSorterController object has already been disposed",
             static_cast<uno::XWeak*>(this));

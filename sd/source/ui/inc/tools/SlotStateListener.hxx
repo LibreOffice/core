@@ -20,9 +20,9 @@
 #pragma once
 
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <tools/link.hxx>
+#include <cppuhelper/weakref.hxx>
 
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XDispatchProvider; }
@@ -31,7 +31,7 @@ namespace com::sun::star::frame { struct FeatureStateEvent; }
 
 namespace sd::tools {
 
-typedef cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::frame::XStatusListener
     > SlotStateListenerInterfaceBase;
 
@@ -40,8 +40,7 @@ typedef cppu::WeakComponentImplHelper<
     be used to relay state changes of other slots as well.
 */
 class SlotStateListener final
-    : protected cppu::BaseMutex,
-      public SlotStateListenerInterfaceBase
+    : public SlotStateListenerInterfaceBase
 {
 public:
     /** This convenience version of the constructor takes all parameters
@@ -103,7 +102,7 @@ private:
         reaction to a XComponent::dispose() call.  It releases all currently
         active listeners.
     */
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     Link<const OUString&,void> maCallback;
 
