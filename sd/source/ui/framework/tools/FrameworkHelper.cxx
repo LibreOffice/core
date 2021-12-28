@@ -31,8 +31,7 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <svl/lstner.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -53,7 +52,7 @@ namespace {
 
 //----- CallbackCaller --------------------------------------------------------
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
     > CallbackCallerInterfaceBase;
 
@@ -64,8 +63,7 @@ typedef ::cppu::WeakComponentImplHelper <
     actual callback object is called and the CallbackCaller destroys itself.
 */
 class CallbackCaller
-    : public cppu::BaseMutex,
-      public CallbackCallerInterfaceBase
+    : public CallbackCallerInterfaceBase
 {
 public:
     /** Create a new CallbackCaller object.  This object controls its own
@@ -92,7 +90,7 @@ public:
         const ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter& rFilter,
         const ::sd::framework::FrameworkHelper::Callback& rCallback);
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
     // XEventListener
     virtual void SAL_CALL disposing (const lang::EventObject& rEvent) override;
     // XConfigurationChangeListener
@@ -804,8 +802,7 @@ CallbackCaller::CallbackCaller (
     const OUString& rsEventType,
     const ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter& rFilter,
     const ::sd::framework::FrameworkHelper::Callback& rCallback)
-    : CallbackCallerInterfaceBase(m_aMutex),
-      msEventType(rsEventType),
+    : msEventType(rsEventType),
       maFilter(rFilter),
       maCallback(rCallback)
 {
@@ -836,7 +833,7 @@ CallbackCaller::CallbackCaller (
     }
 }
 
-void CallbackCaller::disposing()
+void CallbackCaller::disposing(std::unique_lock<std::mutex>&)
 {
     try
     {
