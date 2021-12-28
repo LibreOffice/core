@@ -40,8 +40,7 @@ namespace sd::framework {
 //===== CenterViewFocusModule ====================================================
 
 CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController> const & rxController)
-    : CenterViewFocusModuleInterfaceBase(m_aMutex),
-      mbValid(false),
+    : mbValid(false),
       mpBase(nullptr),
       mbNewViewCreated(false)
 {
@@ -79,7 +78,7 @@ CenterViewFocusModule::~CenterViewFocusModule()
 {
 }
 
-void SAL_CALL CenterViewFocusModule::disposing()
+void CenterViewFocusModule::disposing(std::unique_lock<std::mutex>&)
 {
     if (mxConfigurationController.is())
         mxConfigurationController->removeConfigurationChangeListener(this);
