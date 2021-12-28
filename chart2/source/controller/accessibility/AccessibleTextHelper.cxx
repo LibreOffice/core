@@ -33,6 +33,8 @@
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <osl/diagnose.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
@@ -44,7 +46,6 @@ namespace chart
 
 AccessibleTextHelper::AccessibleTextHelper(
     DrawViewWrapper * pDrawViewWrapper ) :
-        impl::AccessibleTextHelper_Base( m_aMutex ),
         m_pDrawViewWrapper( pDrawViewWrapper )
 {}
 
