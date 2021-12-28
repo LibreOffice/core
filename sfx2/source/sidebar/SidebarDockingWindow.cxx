@@ -33,6 +33,7 @@
 #include <vcl/event.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <osl/diagnose.h>
 
 #include <boost/property_tree/json_parser.hpp>
 

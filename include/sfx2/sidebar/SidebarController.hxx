@@ -37,14 +37,13 @@
 #include <com/sun/star/ui/XSidebar.hpp>
 
 #include <optional>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::ui { class XUIElement; }
 
-typedef cppu::WeakComponentImplHelper <
+typedef comphelper::WeakComponentImplHelper <
     css::ui::XContextChangeEventListener,
     css::beans::XPropertyChangeListener,
     css::ui::XSidebar,
@@ -61,8 +60,7 @@ class DeckDescriptor;
 class SidebarDockingWindow;
 
 class SFX2_DLLPUBLIC SidebarController final
-    : private ::cppu::BaseMutex,
-      public SidebarControllerInterfaceBase
+    : public SidebarControllerInterfaceBase
 {
 public:
     static rtl::Reference<SidebarController> create(SidebarDockingWindow* pParentWindow,
@@ -294,7 +292,7 @@ private:
     */
     void ShowPanel (const Panel& rPanel);
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     std::unique_ptr<ResourceManager> mpResourceManager;
 
