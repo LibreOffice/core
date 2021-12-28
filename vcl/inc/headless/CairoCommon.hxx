@@ -175,6 +175,8 @@ struct VCL_DLLPUBLIC CairoCommon
                              double fLineWidth, const std::vector<double>* pStroke,
                              basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
                              double fMiterMinimumAngle, bool bPixelSnapHairline);
+
+    void invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
