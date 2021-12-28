@@ -31,6 +31,7 @@ $(call gb_ExternalProject_get_state_target,libassuan,build): $(call gb_Executabl
 		--disable-shared \
 		--disable-doc \
 		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
+		CFLAGS="$(CFLAGS) -D__STDC__=1" \
 		CXXFLAGS="$(CXXFLAGS)" \
 		GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
