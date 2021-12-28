@@ -17,16 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
+#include "backtrace.h"
 
-#ifdef __sun
+#if ! HAVE_FEATURE_BACKTRACE /* no GNU backtrace implementation available */
+
+#ifdef __sun /* Solaris */
 
 #include <dlfcn.h>
 #include <pthread.h>
 #include <setjmp.h>
 #include <stdio.h>
 #include <sys/frame.h>
-#include "backtrace.h"
 
 #if defined(SPARC)
 
@@ -140,7 +141,12 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 #include <setjmp.h>
 #include <stddef.h>
 #include <stdio.h>
-#include "backtrace.h"
+
+/* no frame.h on FreeBSD */
+struct frame {
+    struct frame *fr_savfp;
+    long    fr_savpc;
+};
 
 #if defined(POWERPC) || defined(POWERPC64)
 
@@ -212,7 +218,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
     }
 }
 
-#elif !defined LINUX && !defined MACOSX && !defined IOS
+#else /* not GNU/BSD/Solaris */
 
 int backtrace( void **buffer, int max_frames )
 {
@@ -231,6 +237,8 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
     (void)buffer; (void)size; (void)fd;
 }
 
-#endif
+#endif /* not GNU/BSD/Solaris */
+
+#endif /* ! HAVE_FEATURE_BACKTRACE */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
