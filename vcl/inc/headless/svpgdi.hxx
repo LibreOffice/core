@@ -59,11 +59,6 @@ protected:
     std::unique_ptr<SvpGraphicsBackend> m_pBackend;
 
 protected:
-    virtual bool blendBitmap( const SalTwoRect&, const SalBitmap& rBitmap ) override;
-    virtual bool blendAlphaBitmap( const SalTwoRect&,
-                                   const SalBitmap& rSrcBitmap,
-                                   const SalBitmap& rMaskBitmap,
-                                   const SalBitmap& rAlphaBitmap ) override;
     virtual bool drawAlphaBitmap( const SalTwoRect&, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap ) override;
     virtual bool drawTransformedBitmap(
         const basegfx::B2DPoint& rNull,
@@ -72,7 +67,6 @@ protected:
         const SalBitmap& rSourceBitmap,
         const SalBitmap* pAlphaBitmap,
         double fAlpha) override;
-    virtual bool hasFastDrawTransformedBitmap() const override;
     virtual bool drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency ) override;
 
     cairo_t* createTmpCompatibleCairoContext() const;
@@ -110,7 +104,6 @@ public:
     virtual std::unique_ptr<GenericSalLayout>
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
-    virtual bool            supportsOperation( OutDevSupportType ) const override;
 
     virtual void            drawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap ) override;
