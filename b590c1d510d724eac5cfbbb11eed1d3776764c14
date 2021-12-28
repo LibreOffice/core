@@ -51,6 +51,24 @@
       "message": "and here",
       "revId": "b590c1d510d724eac5cfbbb11eed1d3776764c14",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52b8d0f6_32a8ff7f",
+        "filename": "sfx2/source/appl/shutdowniconw32.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-28T04:43:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29092b36_773a1f77",
+      "revId": "b590c1d510d724eac5cfbbb11eed1d3776764c14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
