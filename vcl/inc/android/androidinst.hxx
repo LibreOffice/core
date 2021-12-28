@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_ANDROID_ANDROIDINST_HXX
-#define INCLUDED_VCL_INC_ANDROID_ANDROIDINST_HXX
+#pragma once
 
 #include <jni.h>
 #include <android/input.h>
@@ -47,7 +46,5 @@ public:
     virtual void updateMainThread();
     virtual void releaseMainThread();
 };
-
-#endif // INCLUDED_VCL_INC_ANDROID_ANDROIDINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
