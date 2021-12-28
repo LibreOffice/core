@@ -11,18 +11,17 @@
 
 #include "charttoolsdllapi.hxx"
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <com/sun/star/awt/XRequestCallback.hpp>
 
 namespace chart
 {
 namespace impl
 {
-typedef cppu::WeakComponentImplHelper<css::awt::XRequestCallback> PopupRequest_Base;
+typedef comphelper::WeakComponentImplHelper<css::awt::XRequestCallback> PopupRequest_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS PopupRequest : public cppu::BaseMutex, public impl::PopupRequest_Base
+class OOO_DLLPUBLIC_CHARTTOOLS PopupRequest final : public impl::PopupRequest_Base
 {
 public:
     explicit PopupRequest();
@@ -30,14 +29,9 @@ public:
 
     css::uno::Reference<css::awt::XCallback> const& getCallback() const { return m_xCallback; }
 
-protected:
     // ____ XRequestCallback ____
     virtual void SAL_CALL addCallback(const css::uno::Reference<::css::awt::XCallback>& xCallback,
                                       const css::uno::Any& aData) override;
-
-    // ____ WeakComponentImplHelperBase ____
-    // is called when dispose() is called at this component
-    virtual void SAL_CALL disposing() override;
 
 private:
     css::uno::Reference<css::awt::XCallback> m_xCallback;
