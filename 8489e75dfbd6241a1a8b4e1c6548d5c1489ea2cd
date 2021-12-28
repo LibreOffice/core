@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efbf477f_8ffeaccc",
+        "filename": "vcl/inc/android/androidinst.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-28T17:01:46Z",
+      "side": 1,
+      "message": "Drop this line",
+      "revId": "8489e75dfbd6241a1a8b4e1c6548d5c1489ea2cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39661cbe_abc6ce57",
+        "filename": "vcl/ios/DataFlavorMapping.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-28T17:01:46Z",
+      "side": 1,
+      "message": "Drop this line",
+      "revId": "8489e75dfbd6241a1a8b4e1c6548d5c1489ea2cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f645187_00c0c118",
+        "filename": "vcl/ios/HtmlFmtFlt.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-28T17:01:46Z",
+      "side": 1,
+      "message": "Drop this line",
+      "revId": "8489e75dfbd6241a1a8b4e1c6548d5c1489ea2cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "010d6dae_28c1f556",
+        "filename": "vcl/ios/clipboard.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-28T17:01:46Z",
+      "side": 1,
+      "message": "Drop this line",
+      "revId": "8489e75dfbd6241a1a8b4e1c6548d5c1489ea2cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
