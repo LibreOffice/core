@@ -33,6 +33,24 @@
       "message": "I think backtrace just works for INTEL on MACOSX. Would be my interpretation of the dropped #ifdef code. We always define the function stubs, so no need for the #else branch. The code in backtraceapi.cxx is also not #ifdef\u0027ed. Just dropping all #ifdef and just #ifdef the extra MACOSX \u0026\u0026 !INTEL message should be sufficient.",
       "revId": "783b731fade649f4eed89293cba2c0f2a1863178",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52735cdb_399d8f80",
+        "filename": "sal/osl/unx/signal.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-29T15:04:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c3d7c8ac_7958d856",
+      "revId": "783b731fade649f4eed89293cba2c0f2a1863178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
