@@ -214,12 +214,12 @@ public:
                 const css::uno::Reference< css::beans::XPropertySet > & xTextProperties,
                 double nRotation, const OUString& aName, sal_Int32 nTextMaxWidth );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapeRect>
         createInvisibleRectangle(
             const css::uno::Reference< css::drawing::XShapes >& xTarget
           , const css::awt::Size& rSize );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapeRect>
         createRectangle(
             const css::uno::Reference< css::drawing::XShapes >& xTarget,
             const css::awt::Size& rSize,
@@ -228,11 +228,11 @@ public:
             const tAnySequence& rPropValues,
             StackPosition ePos = StackPosition::Top );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapeRect>
         createRectangle(
             const css::uno::Reference< css::drawing::XShapes >& xTarget );
 
-    css::uno::Reference< css::drawing::XShapes >
+    static css::uno::Reference< css::drawing::XShapes >
          getOrCreateChartRootShape( const css::uno::Reference<
             css::drawing::XDrawPage>& xPage );
 
