@@ -131,6 +131,9 @@ public:
                           SalGradient const& rGradient) override;
 
     bool supportsOperation(OutDevSupportType eType) const override;
+
+    void drawBitmapBuffer(const SalTwoRect& rPosAry, const BitmapBuffer* pBuffer,
+                          cairo_operator_t eOp);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
