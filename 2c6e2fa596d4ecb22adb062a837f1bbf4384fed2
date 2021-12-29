@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e3f1d09_1d821701",
+        "filename": "sw/qa/core/draw/draw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-29T03:42:42Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "0011a58d_5aaa244e",
+      "revId": "2c6e2fa596d4ecb22adb062a837f1bbf4384fed2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e6b7d27_36a9192e",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-12-11T11:31:16Z",
       "side": 0,
       "message": "This is also not a Color. GetOrdNum() returns order, not a color.",
+      "revId": "2c6e2fa596d4ecb22adb062a837f1bbf4384fed2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49eb63ce_82f13686",
+        "filename": "sw/qa/core/draw/draw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-29T03:42:42Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "8e6b7d27_36a9192e",
       "revId": "2c6e2fa596d4ecb22adb062a837f1bbf4384fed2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -52,6 +88,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1bbd5cb_4d006760",
+        "filename": "sw/qa/core/draw/draw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-29T03:42:42Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "89636be5_373be148",
+      "revId": "2c6e2fa596d4ecb22adb062a837f1bbf4384fed2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b9b2275_247b9099",
@@ -69,6 +123,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25adc24c_98459d69",
+        "filename": "sw/qa/core/draw/draw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-29T03:42:42Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "9b9b2275_247b9099",
+      "revId": "2c6e2fa596d4ecb22adb062a837f1bbf4384fed2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0bf4174b_fa015516",
@@ -82,6 +154,24 @@
       "writtenOn": "2021-12-11T11:31:16Z",
       "side": 0,
       "message": "The same as previous.",
+      "revId": "2c6e2fa596d4ecb22adb062a837f1bbf4384fed2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5ee9399_8c5fe4cc",
+        "filename": "sw/qa/core/draw/draw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-29T03:42:42Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "0bf4174b_fa015516",
       "revId": "2c6e2fa596d4ecb22adb062a837f1bbf4384fed2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
