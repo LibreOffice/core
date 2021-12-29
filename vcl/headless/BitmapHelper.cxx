@@ -1,0 +1,124 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <headless/BitmapHelper.hxx>
+
+BitmapHelper::BitmapHelper(const SalBitmap& rSourceBitmap, const bool bForceARGB32)
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
+    : m_bForceARGB32(bForceARGB32)
+#endif
+{
+    const SvpSalBitmap& rSrcBmp = static_cast<const SvpSalBitmap&>(rSourceBitmap);
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
+    if ((rSrcBmp.GetBitCount() != 32 && rSrcBmp.GetBitCount() != 24) || bForceARGB32)
+#else
+    (void)bForceARGB32;
+    if (rSrcBmp.GetBitCount() != 32)
+#endif
+    {
+        //big stupid copy here
+        const BitmapBuffer* pSrc = rSrcBmp.GetBuffer();
+        const SalTwoRect aTwoRect
+            = { 0, 0, pSrc->mnWidth, pSrc->mnHeight, 0, 0, pSrc->mnWidth, pSrc->mnHeight };
+        std::unique_ptr<BitmapBuffer> pTmp
+            = (pSrc->mnFormat == SVP_24BIT_FORMAT
+                   ? FastConvert24BitRgbTo32BitCairo(pSrc)
+                   : StretchAndConvert(*pSrc, aTwoRect, SVP_CAIRO_FORMAT));
+        aTmpBmp.Create(std::move(pTmp));
+
+        assert(aTmpBmp.GetBitCount() == 32);
+        implSetSurface(CairoCommon::createCairoSurface(aTmpBmp.GetBuffer()));
+    }
+    else
+    {
+        implSetSurface(CairoCommon::createCairoSurface(rSrcBmp.GetBuffer()));
+    }
+}
+
+void BitmapHelper::mark_dirty() { cairo_surface_mark_dirty(implGetSurface()); }
+
+unsigned char* BitmapHelper::getBits(sal_Int32& rStride)
+{
+    cairo_surface_flush(implGetSurface());
+
+    unsigned char* mask_data = cairo_image_surface_get_data(implGetSurface());
+
+    const cairo_format_t nFormat = cairo_image_surface_get_format(implGetSurface());
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
+    if (!m_bForceARGB32)
+        assert(nFormat == CAIRO_FORMAT_RGB24_888 && "Expected RGB24_888 image");
+    else
+#endif
+    {
+        assert(nFormat == CAIRO_FORMAT_ARGB32
+               && "need to implement CAIRO_FORMAT_A1 after all here");
+    }
+
+    rStride
+        = cairo_format_stride_for_width(nFormat, cairo_image_surface_get_width(implGetSurface()));
+
+    return mask_data;
+}
+
+MaskHelper::MaskHelper(const SalBitmap& rAlphaBitmap)
+{
+    const SvpSalBitmap& rMask = static_cast<const SvpSalBitmap&>(rAlphaBitmap);
+    const BitmapBuffer* pMaskBuf = rMask.GetBuffer();
+
+    if (rAlphaBitmap.GetBitCount() == 8)
+    {
+        // the alpha values need to be inverted for Cairo
+        // so big stupid copy and invert here
+        const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
+        pAlphaBits.reset(new unsigned char[nImageSize]);
+        memcpy(pAlphaBits.get(), pMaskBuf->mpBits, nImageSize);
+
+        // TODO: make upper layers use standard alpha
+        sal_uInt32* pLDst = reinterpret_cast<sal_uInt32*>(pAlphaBits.get());
+        for (int i = nImageSize / sizeof(sal_uInt32); --i >= 0; ++pLDst)
+            *pLDst = ~*pLDst;
+        assert(reinterpret_cast<unsigned char*>(pLDst) == pAlphaBits.get() + nImageSize);
+
+        implSetSurface(cairo_image_surface_create_for_data(pAlphaBits.get(), CAIRO_FORMAT_A8,
+                                                           pMaskBuf->mnWidth, pMaskBuf->mnHeight,
+                                                           pMaskBuf->mnScanlineSize));
+    }
+    else
+    {
+        // the alpha values need to be inverted for Cairo
+        // so big stupid copy and invert here
+        const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
+        pAlphaBits.reset(new unsigned char[nImageSize]);
+        memcpy(pAlphaBits.get(), pMaskBuf->mpBits, nImageSize);
+
+        const sal_Int32 nBlackIndex = pMaskBuf->maPalette.GetBestIndex(BitmapColor(COL_BLACK));
+        if (nBlackIndex == 0)
+        {
+            // TODO: make upper layers use standard alpha
+            unsigned char* pDst = pAlphaBits.get();
+            for (int i = nImageSize; --i >= 0; ++pDst)
+                *pDst = ~*pDst;
+        }
+
+        implSetSurface(cairo_image_surface_create_for_data(pAlphaBits.get(), CAIRO_FORMAT_A1,
+                                                           pMaskBuf->mnWidth, pMaskBuf->mnHeight,
+                                                           pMaskBuf->mnScanlineSize));
+    }
+}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
