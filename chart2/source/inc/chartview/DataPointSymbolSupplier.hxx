@@ -21,10 +21,11 @@
 
 #include <chartview/chartviewdllapi.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <rtl/ref.hxx>
+#include <svx/unoshape.hxx>
 
 namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::drawing { struct Direction3D; }
-namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 namespace chart
 {
@@ -32,9 +33,8 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTVIEW DataPointSymbolSupplier
 {
 public:
-    static css::uno::Reference< css::drawing::XShapes >
-        create2DSymbolList( const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory
-            , const css::uno::Reference< css::drawing::XShapes >& xTarget
+    static rtl::Reference< SvxShapeGroup >
+        create2DSymbolList( const css::uno::Reference< css::drawing::XShapes >& xTarget
             , const css::drawing::Direction3D& rSize );
 };
 

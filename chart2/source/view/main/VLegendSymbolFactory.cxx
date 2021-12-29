@@ -142,7 +142,7 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
                     // border of symbols always same as fill color
                     aSymbol.BorderColor = aSymbol.FillColor;
 
-                    xSymbol.set( pFactory->createSymbol2D(
+                    xSymbol.set( ShapeFactory::createSymbol2D(
                                      xResultGroup,
                                      aPos,
                                      aSymbolSize,

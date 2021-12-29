@@ -119,11 +119,11 @@ SdrObjList* ViewElementListProvider::GetSymbolList() const
 
         //create symbols via uno and convert to native sdr objects
         drawing::Direction3D aSymbolSize(220, 220, 0); // should be 250, but 250 -> 280 ??
-        uno::Reference<drawing::XShapes> xSymbols
-            = DataPointSymbolSupplier::create2DSymbolList(xShapeFactory, xTarget, aSymbolSize);
+        rtl::Reference< SvxShapeGroup > xSymbols
+            = DataPointSymbolSupplier::create2DSymbolList(xTarget, aSymbolSize);
 
         SdrObject* pSdrObject = DrawViewWrapper::getSdrObject(
-            uno::Reference<drawing::XShape>(xSymbols, uno::UNO_QUERY));
+            uno::Reference<drawing::XShape>(static_cast<cppu::OWeakObject*>(xSymbols.get()), uno::UNO_QUERY));
         if (pSdrObject)
             pSymbolList = pSdrObject->GetSubList();
     }
