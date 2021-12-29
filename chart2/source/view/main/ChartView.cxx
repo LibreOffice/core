@@ -1014,8 +1014,8 @@ struct CreateShapeParam2D
     std::shared_ptr<VTitle> mpVTitleSecondX;
     std::shared_ptr<VTitle> mpVTitleSecondY;
 
-    css::uno::Reference<css::drawing::XShape> mxMarkHandles;
-    css::uno::Reference<css::drawing::XShape> mxPlotAreaWithAxes;
+    rtl::Reference<SvxShapeRect> mxMarkHandles;
+    rtl::Reference<SvxShapeRect> mxPlotAreaWithAxes;
 
     css::uno::Reference<css::drawing::XShapes> mxDiagramWithAxesShapes;
 
@@ -2321,8 +2321,7 @@ void formatPage(
         tAnySequence aValues;
         PropertyMapper::getMultiPropertyListsFromValueMap( aNames, aValues, aNameValueMap );
 
-        ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
-        pShapeFactory->createRectangle(
+        ShapeFactory::createRectangle(
             xTarget, rPageSize, awt::Point(0, 0), aNames, aValues);
     }
     catch( const uno::Exception & )
@@ -2910,7 +2909,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes(
             ShapeFactory::createGroup2D(mxRootShape,aDiagramCID) );
 
-    aParam.mxMarkHandles = pShapeFactory->createInvisibleRectangle(
+    aParam.mxMarkHandles = ShapeFactory::createInvisibleRectangle(
         xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0));
     ShapeFactory::setShapeName(aParam.mxMarkHandles, "MarkHandles");
 
