@@ -79,12 +79,12 @@ static void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis);
 
 namespace {
 
-typedef struct tagMYITEM
+struct MYITEM
 {
     OUString text;
     OUString module;
     UINT iconId;
-} MYITEM;
+};
 
 }
 
@@ -95,35 +95,32 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
     mi.cbSize = sizeof( mi );
     if( id == static_cast<UINT>( -1 ) )
     {
-        mi.fMask=MIIM_TYPE;
+        mi.fMask=MIIM_FTYPE;
         mi.fType=MFT_SEPARATOR;
     }
     else
     {
         if( bOwnerdraw )
         {
-            mi.fMask=MIIM_TYPE | MIIM_STATE | MIIM_ID | MIIM_DATA;
+            mi.fMask=MIIM_FTYPE | MIIM_STATE | MIIM_ID | MIIM_DATA;
             mi.fType=MFT_OWNERDRAW;
-            mi.fState=MFS_ENABLED;
-            mi.wID = id;
 
             MYITEM *pMyItem = new MYITEM;
             pMyItem->text = text;
             pMyItem->iconId = iconId;
             pMyItem->module = module;
-            mi.dwItemData = reinterpret_cast<DWORD_PTR>(pMyItem);
+            mi.dwItemData = reinterpret_cast<ULONG_PTR>(pMyItem);
         }
         else
         {
-            mi.fMask=MIIM_TYPE | MIIM_STATE | MIIM_ID | MIIM_DATA;
-            mi.fType=MFT_STRING;
-            mi.fState=MFS_ENABLED;
-            mi.wID = id;
+            mi.fMask=MIIM_STRING | MIIM_STATE | MIIM_ID;
             mi.dwTypeData = o3tl::toW(
                 const_cast<sal_Unicode *>(text.getStr()));
             mi.cch = text.getLength();
         }
 
+        mi.fState = MFS_ENABLED;
+        mi.wID = id;
         if ( IDM_TEMPLATE == id )
             mi.fState |= MFS_DEFAULT;
     }
@@ -211,18 +208,13 @@ static void deleteSystrayMenu( HMENU hMenu )
         return;
 
     MENUITEMINFOW mi = {};
-    int pos=0;
     mi.cbSize = sizeof( mi );
     mi.fMask = MIIM_DATA;
 
-    while( GetMenuItemInfoW( hMenu, pos++, true, &mi ) )
+    for (UINT pos = 0; GetMenuItemInfoW(hMenu, pos, true, &mi); ++pos)
     {
-        MYITEM *pMyItem = reinterpret_cast<MYITEM*>(mi.dwItemData);
-        if( pMyItem )
-        {
-            pMyItem->text.clear();
+        if (MYITEM* pMyItem = reinterpret_cast<MYITEM*>(mi.dwItemData))
             delete pMyItem;
-        }
         mi.fMask = MIIM_DATA;
     }
 }
