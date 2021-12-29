@@ -73,4 +73,9 @@ public:
     virtual sal_Int64 estimateUsageInBytes() const override;
 };
 
+VCL_DLLPUBLIC void tryToUseSourceBuffer(const SalBitmap& rSourceBitmap,
+                                        std::shared_ptr<BitmapHelper>& rSurface);
+VCL_DLLPUBLIC void tryToUseMaskBuffer(const SalBitmap& rMaskBitmap,
+                                      std::shared_ptr<MaskHelper>& rMask);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
