@@ -34,6 +34,24 @@
       "parentUuid": "11a4316f_60c4ee93",
       "revId": "2a881af4e93f8744bc6bea43f3a06fa531626c22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24a3571e_e32efee6",
+        "filename": "sal/osl/unx/backtrace.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T18:46:51Z",
+      "side": 0,
+      "message": "That #include \u003csal/types.h\u003e definitely is in the patch base. Your patch removes it.",
+      "parentUuid": "7d79b510_ce8a8f56",
+      "revId": "2a881af4e93f8744bc6bea43f3a06fa531626c22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
