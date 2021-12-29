@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "564422ee_362ffef8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-29T09:39:41Z",
+      "side": 1,
+      "message": "Vaibhav can create a new patch addressing Mike\u0027s comments.",
+      "revId": "5fa0f02dace4538b0948bceddc23a9f55e1bf8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "327c3954_efed412c",
