@@ -415,7 +415,7 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SvxShapeGroup final : public SvxShape,
+class SVXCORE_DLLPUBLIC SvxShapeGroup final : public SvxShape,
                       public css::drawing::XShapeGroup,
                       public css::drawing::XShapes2,
                       public css::drawing::XShapes
@@ -622,7 +622,7 @@ class SvxShapePolyPolygon final : public SvxShapeText
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::beans::PropertyVetoException
-    SvxShapePolyPolygon( SdrObject* pObj );
+    SVXCORE_DLLPUBLIC SvxShapePolyPolygon( SdrObject* pObj );
     virtual ~SvxShapePolyPolygon() noexcept override;
 
     // Local support functions
