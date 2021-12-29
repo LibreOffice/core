@@ -292,7 +292,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
 
     drawing::Position3D aScenePosition3D( pPosHelper->
             transformScaledLogicToScene( fX, fY, fZ, true ) );
-    return LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory)
+    return LabelPositionHelper(m_nDimension,m_xLogicTarget)
         .transformSceneToScreenPosition( aScenePosition3D );
 }
 
@@ -334,7 +334,7 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
             break;
         case DataPointGeometry3D::CUBOID:
         default:
-            xShape = m_pShapeFactory->createCube( xTarget, rPosition, rSize
+            xShape = ShapeFactory::createCube( xTarget, rPosition, rSize
                     , nRotateZAngleHundredthDegree, xObjectProperties
                     , PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), bRoundedEdges );
             return xShape;

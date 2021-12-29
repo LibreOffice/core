@@ -504,7 +504,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     uno::Reference< drawing::XShape > xShape;
     if(m_nDimension==3)
     {
-        xShape = m_pShapeFactory->createArea3D( xSeriesGroupShape_Shapes
+        xShape = ShapeFactory::createArea3D( xSeriesGroupShape_Shapes
                 , aPoly, getTransformedDepth() );
     }
     else //m_nDimension!=3
@@ -953,7 +953,7 @@ void AreaChart::createShapes()
                             {
                                 if(eAlignment==LABEL_ALIGN_CENTER || m_nDimension == 3 )
                                     nOffset = 0;
-                                aScreenPosition2D = LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory)
+                                aScreenPosition2D = LabelPositionHelper(m_nDimension,m_xLogicTarget)
                                         .transformSceneToScreenPosition( aScenePosition3D );
                             }
 

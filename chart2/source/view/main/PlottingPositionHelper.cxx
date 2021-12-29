@@ -194,7 +194,6 @@ drawing::Position3D PlottingPositionHelper::transformScaledLogicToScene(
 
 awt::Point PlottingPositionHelper::transformSceneToScreenPosition( const drawing::Position3D& rScenePosition3D
                 , const uno::Reference< drawing::XShapes >& xSceneTarget
-                , ShapeFactory* pShapeFactory
                 , sal_Int32 nDimensionCount )
 {
     //@todo would like to have a cheaper method to do this transformation
@@ -205,7 +204,7 @@ awt::Point PlottingPositionHelper::transformSceneToScreenPosition( const drawing
     {
         //create 3D anchor shape
         tPropertyNameMap aDummyPropertyNameMap;
-        uno::Reference< drawing::XShape > xShape3DAnchor = pShapeFactory->createCube( xSceneTarget
+        rtl::Reference<Svx3DExtrudeObject> xShape3DAnchor = ShapeFactory::createCube( xSceneTarget
                 , rScenePosition3D,drawing::Direction3D(1,1,1)
                 , 0, nullptr, aDummyPropertyNameMap);
         //get 2D position from xShape3DAnchor

@@ -606,7 +606,7 @@ void NetChart::createShapes()
                                     = dynamic_cast<PolarPlottingPositionHelper*>(m_pPosHelper);
                                 if( pPolarPosHelper )
                                 {
-                                    PolarLabelPositionHelper aPolarLabelPositionHelper(pPolarPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory);
+                                    PolarLabelPositionHelper aPolarLabelPositionHelper(pPolarPosHelper,m_nDimension,m_xLogicTarget);
                                     aScreenPosition2D = aPolarLabelPositionHelper.getLabelScreenPositionAndAlignmentForLogicValues(
                                         eAlignment, fLogicX, fLogicY, fLogicZ, nOffset );
                                 }
@@ -615,7 +615,7 @@ void NetChart::createShapes()
                             {
                                 if(eAlignment==LABEL_ALIGN_CENTER )
                                     nOffset = 0;
-                                aScreenPosition2D = LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory)
+                                aScreenPosition2D = LabelPositionHelper(m_nDimension,m_xLogicTarget)
                                     .transformSceneToScreenPosition( aScenePosition3D );
                             }
 

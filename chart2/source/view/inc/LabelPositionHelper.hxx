@@ -31,16 +31,13 @@ namespace com::sun::star::drawing { class XShape; }
 namespace chart
 {
 
-class ShapeFactory;
-
 class LabelPositionHelper
 {
 public:
     LabelPositionHelper() = delete;
     LabelPositionHelper(
           sal_Int32 nDimensionCount
-        , const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
-        , ShapeFactory* pShapeFactory );
+        , const css::uno::Reference< css::drawing::XShapes >& xLogicTarget );
     virtual ~LabelPositionHelper();
 
     css::awt::Point transformSceneToScreenPosition(
@@ -60,7 +57,6 @@ protected:
 private:
     //these members are only necessary for transformation from 3D to 2D
     css::uno::Reference< css::drawing::XShapes >    m_xLogicTarget;
-    ShapeFactory* m_pShapeFactory;
 };
 
 } //namespace chart
