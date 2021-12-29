@@ -35,11 +35,9 @@ using namespace ::com::sun::star::chart2;
 
 LabelPositionHelper::LabelPositionHelper(
                       sal_Int32 nDimensionCount
-                    , const uno::Reference< drawing::XShapes >& xLogicTarget
-                    , ShapeFactory* pShapeFactory )
+                    , const uno::Reference< drawing::XShapes >& xLogicTarget)
                     : m_nDimensionCount(nDimensionCount)
                     , m_xLogicTarget(xLogicTarget)
-                    , m_pShapeFactory(pShapeFactory)
 {
 }
 
@@ -50,7 +48,7 @@ LabelPositionHelper::~LabelPositionHelper()
 awt::Point LabelPositionHelper::transformSceneToScreenPosition( const drawing::Position3D& rScenePosition3D ) const
 {
     return PlottingPositionHelper::transformSceneToScreenPosition(
-                  rScenePosition3D, m_xLogicTarget, m_pShapeFactory, m_nDimensionCount );
+                  rScenePosition3D, m_xLogicTarget, m_nDimensionCount );
 }
 
 void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const tNameSequence& rPropNames, LabelAlignment eAlignment)

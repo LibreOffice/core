@@ -90,7 +90,7 @@ public:
             const css::uno::Reference< css::drawing::XShapes >& xTarget
           , const OUString& aName = OUString() );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<Svx3DExtrudeObject>
             createCube(   const css::uno::Reference< css::drawing::XShapes >& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
@@ -127,7 +127,7 @@ public:
                     , const css::drawing::Direction3D& rOffset
                     , const css::drawing::HomogenMatrix& rUnitCircleToScene );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<Svx3DExtrudeObject>
         createPieSegment( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                     , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
@@ -144,7 +144,7 @@ public:
                     , short nRotatedTexture = 0 //0 to 7 are the different possibilities
                     , bool bFlatNormals=true );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<Svx3DExtrudeObject>
         createArea3D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::PolyPolygonShape3D& rPolyPolygon
                     , double fDepth);
@@ -278,7 +278,7 @@ public:
     static sal_Int32 getSymbolCount() { return Symbol_COUNT; }
 
 private:
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<Svx3DExtrudeObject>
         impl_createCube( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::Position3D& rPosition
                     , const css::drawing::Direction3D& rSize, sal_Int32 nRotateZAngleHundredthDegree
