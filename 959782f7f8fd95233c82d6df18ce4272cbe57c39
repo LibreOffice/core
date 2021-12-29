@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ac08dfb_3b237e22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T12:24:10Z",
+      "side": 1,
+      "message": "I\u0027m blocking this for now. Seems me seeing this pass was more wishful thinking then reality. The libtool call always filters the gcc -B option, maybe confusing it with some linker option? Guess it was some mixup, where I mapped mold to gold, so libtool call would find and use gold instead of mold. At least that is my explanation. The -B is visible in the orcus Makefile call, if you run it with V\u003d1, but not in the libtool output.",
+      "revId": "959782f7f8fd95233c82d6df18ce4272cbe57c39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
