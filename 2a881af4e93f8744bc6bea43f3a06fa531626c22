@@ -106,6 +106,24 @@
       "parentUuid": "29365cb9_a61932d8",
       "revId": "2a881af4e93f8744bc6bea43f3a06fa531626c22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83711db4_a37b8a12",
+        "filename": "sal/osl/unx/backtrace.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T21:14:08Z",
+      "side": 0,
+      "message": "Just mentioned this in #tdf-infra. Nothing I can fix. I just had a single successful build today. Windows CI is also in bad shape.",
+      "parentUuid": "f5e1a052_7d4973ef",
+      "revId": "2a881af4e93f8744bc6bea43f3a06fa531626c22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
