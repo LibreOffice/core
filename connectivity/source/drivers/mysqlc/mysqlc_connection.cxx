@@ -73,9 +73,6 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
     mysql_library_init(0, nullptr, nullptr);
     mysql_init(&m_mysql);
 
-    // use TCP as connection
-    mysql_protocol_type protocol = MYSQL_PROTOCOL_TCP;
-    mysql_options(&m_mysql, MYSQL_OPT_PROTOCOL, &protocol);
     OString charset_name{ "utf8mb4" };
     mysql_options(&m_mysql, MYSQL_SET_CHARSET_NAME, charset_name.getStr());
 
@@ -164,14 +161,21 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
     OString pass_str = OUStringToOString(aPass, m_settings.encoding);
     OString schema_str = OUStringToOString(aDbName, m_settings.encoding);
     OString socket_str;
+
+    // use TCP as connection by default
+    mysql_protocol_type protocol = MYSQL_PROTOCOL_TCP;
     if (unixSocketPassed)
     {
         socket_str = OUStringToOString(sUnixSocket, m_settings.encoding);
+        protocol = MYSQL_PROTOCOL_SOCKET;
     }
     else if (namedPipePassed)
     {
         socket_str = OUStringToOString(sNamedPipe, m_settings.encoding);
+        protocol = MYSQL_PROTOCOL_PIPE;
     }
+
+    mysql_options(&m_mysql, MYSQL_OPT_PROTOCOL, &protocol);
 
     // flags can also be passed as last parameter
     if (!mysql_real_connect(&m_mysql, host_str.getStr(), user_str.getStr(), pass_str.getStr(),
