@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ba7f512_f51973f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000928
+      },
+      "writtenOn": "2021-12-29T14:58:25Z",
+      "side": 1,
+      "message": "Not bad. Let me smooth the hack... \nBy reusing the existing variable stopAtFirstFrame :-)\nThat was still trying, too, perhaps I can wrap my head around it, but at least I might try to transform the ODF spec with and without the fix and see if there is something broken... :-)",
+      "revId": "48493ec67f9719203053d633900e8555fde0b125",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
