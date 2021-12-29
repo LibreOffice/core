@@ -21,6 +21,7 @@
 
 #include <headless/CairoCommon.hxx>
 #include <headless/svpbmp.hxx>
+#include <basegfx/utils/systemdependentdata.hxx>
 
 class BitmapHelper : public SurfaceHelper
 {
@@ -43,6 +44,33 @@ private:
 
 public:
     explicit MaskHelper(const SalBitmap& rAlphaBitmap);
+};
+
+class SystemDependentData_BitmapHelper : public basegfx::SystemDependentData
+{
+private:
+    std::shared_ptr<BitmapHelper> maBitmapHelper;
+
+public:
+    SystemDependentData_BitmapHelper(
+        basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+        const std::shared_ptr<BitmapHelper>& rBitmapHelper);
+
+    const std::shared_ptr<BitmapHelper>& getBitmapHelper() const { return maBitmapHelper; };
+    virtual sal_Int64 estimateUsageInBytes() const override;
+};
+
+class SystemDependentData_MaskHelper : public basegfx::SystemDependentData
+{
+private:
+    std::shared_ptr<MaskHelper> maMaskHelper;
+
+public:
+    SystemDependentData_MaskHelper(basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+                                   const std::shared_ptr<MaskHelper>& rMaskHelper);
+
+    const std::shared_ptr<MaskHelper>& getMaskHelper() const { return maMaskHelper; };
+    virtual sal_Int64 estimateUsageInBytes() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

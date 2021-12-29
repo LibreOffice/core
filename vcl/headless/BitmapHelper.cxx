@@ -121,4 +121,66 @@ MaskHelper::MaskHelper(const SalBitmap& rAlphaBitmap)
                                                            pMaskBuf->mnScanlineSize));
     }
 }
+
+namespace
+{
+// check for env var that decides for using downscale pattern
+const char* pDisableDownScale(getenv("SAL_DISABLE_CAIRO_DOWNSCALE"));
+bool bDisableDownScale(nullptr != pDisableDownScale);
+
+sal_Int64 estimateUsageInBytesForSurfaceHelper(const SurfaceHelper* pHelper)
+{
+    sal_Int64 nRetval(0);
+
+    if (nullptr != pHelper)
+    {
+        cairo_surface_t* pSurface(pHelper->getSurface());
+
+        if (pSurface)
+        {
+            const tools::Long nStride(cairo_image_surface_get_stride(pSurface));
+            const tools::Long nHeight(cairo_image_surface_get_height(pSurface));
+
+            nRetval = nStride * nHeight;
+
+            // if we do downscale, size will grow by 1/4 + 1/16 + 1/32 + ...,
+            // rough estimation just multiplies by 1.25, should be good enough
+            // for estimation of buffer survival time
+            if (!bDisableDownScale)
+            {
+                nRetval = (nRetval * 5) / 4;
+            }
+        }
+    }
+
+    return nRetval;
+}
+
+} // end anonymous namespace
+
+SystemDependentData_BitmapHelper::SystemDependentData_BitmapHelper(
+    basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+    const std::shared_ptr<BitmapHelper>& rBitmapHelper)
+    : basegfx::SystemDependentData(rSystemDependentDataManager)
+    , maBitmapHelper(rBitmapHelper)
+{
+}
+
+sal_Int64 SystemDependentData_BitmapHelper::estimateUsageInBytes() const
+{
+    return estimateUsageInBytesForSurfaceHelper(maBitmapHelper.get());
+}
+
+SystemDependentData_MaskHelper::SystemDependentData_MaskHelper(
+    basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+    const std::shared_ptr<MaskHelper>& rMaskHelper)
+    : basegfx::SystemDependentData(rSystemDependentDataManager)
+    , maMaskHelper(rMaskHelper)
+{
+}
+
+sal_Int64 SystemDependentData_MaskHelper::estimateUsageInBytes() const
+{
+    return estimateUsageInBytesForSurfaceHelper(maMaskHelper.get());
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
