@@ -95,8 +95,6 @@ public:
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
 
-    virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-
     virtual SystemGraphicsData GetGraphicsData() const override;
 
 #if ENABLE_CAIRO_CANVAS

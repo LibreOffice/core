@@ -83,48 +83,6 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = rDPIY = 96;
 }
 
-std::shared_ptr<SalBitmap> SvpSalGraphics::getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
-{
-    std::shared_ptr<SvpSalBitmap> pBitmap = std::make_shared<SvpSalBitmap>();
-    BitmapPalette aPal;
-    vcl::PixelFormat ePixelFormat = vcl::PixelFormat::INVALID;
-    if (GetBitCount() == 1)
-    {
-        ePixelFormat = vcl::PixelFormat::N1_BPP;
-        aPal.SetEntryCount(2);
-        aPal[0] = COL_BLACK;
-        aPal[1] = COL_WHITE;
-    }
-    else
-    {
-        ePixelFormat = vcl::PixelFormat::N32_BPP;
-    }
-
-    if (!pBitmap->Create(Size(nWidth, nHeight), ePixelFormat, aPal))
-    {
-        SAL_WARN("vcl.gdi", "SvpSalGraphics::getBitmap, cannot create bitmap");
-        return nullptr;
-    }
-
-    cairo_surface_t* target = CairoCommon::createCairoSurface(pBitmap->GetBuffer());
-    if (!target)
-    {
-        SAL_WARN("vcl.gdi", "SvpSalGraphics::getBitmap, cannot create cairo surface");
-        return nullptr;
-    }
-    cairo_t* cr = cairo_create(target);
-
-    SalTwoRect aTR(nX, nY, nWidth, nHeight, 0, 0, nWidth, nHeight);
-    CairoCommon::renderSource(cr, aTR, m_aCairoCommon.m_pSurface);
-
-    cairo_destroy(cr);
-    cairo_surface_destroy(target);
-
-    Toggle1BitTransparency(*pBitmap->GetBuffer());
-
-    return pBitmap;
-}
-
 #if ENABLE_CAIRO_CANVAS
 bool SvpSalGraphics::SupportsCairo() const
 {
