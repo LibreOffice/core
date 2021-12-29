@@ -29,6 +29,13 @@
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+
+//#define OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL
+#ifdef OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
+#endif
 
 namespace svx {
 namespace frame {
@@ -42,6 +49,9 @@ private:
     Style               maBottom;
     Style               maTLBR;
     Style               maBLTR;
+
+    basegfx::B2DHomMatrix HelperCreateB2DHomMatrixFromB2DRange(
+        const basegfx::B2DRange& rRange ) const;
 
 public:
     long                mnAddLeft;
@@ -78,53 +88,88 @@ public:
 
     void                MirrorSelfX();
 
-    basegfx::B2DHomMatrix CreateCoordinateSystem(const Array& rArray, size_t nCol, size_t nRow, bool bExpandMerged) const;
+    basegfx::B2DHomMatrix CreateCoordinateSystemSingleCell(
+        const Array& rArray, size_t nCol, size_t nRow ) const;
+    basegfx::B2DHomMatrix CreateCoordinateSystemMergedCell(
+        const Array& rArray, size_t nColLeft, size_t nRowTop, size_t nColRight, size_t nRowBottom ) const;
 };
 
 typedef std::vector< Cell >     CellVec;
 
-basegfx::B2DHomMatrix Cell::CreateCoordinateSystem(const Array& rArray, size_t nCol, size_t nRow, bool bExpandMerged) const
+basegfx::B2DHomMatrix Cell::HelperCreateB2DHomMatrixFromB2DRange(
+    const basegfx::B2DRange& rRange ) const
 {
-    basegfx::B2DHomMatrix aRetval;
-    const basegfx::B2DRange aRange(rArray.GetCellRange(nCol, nRow, bExpandMerged));
+    if( rRange.isEmpty() )
+        return basegfx::B2DHomMatrix();
 
-    if(!aRange.isEmpty())
+    basegfx::B2DPoint aOrigin(rRange.getMinimum());
+    basegfx::B2DVector aX(rRange.getWidth(), 0.0);
+    basegfx::B2DVector aY(0.0, rRange.getHeight());
+
+    if (IsRotated() && SvxRotateMode::SVX_ROTATE_MODE_STANDARD != meRotMode )
     {
-        basegfx::B2DPoint aOrigin(aRange.getMinimum());
-        basegfx::B2DVector aX(aRange.getWidth(), 0.0);
-        basegfx::B2DVector aY(0.0, aRange.getHeight());
+        // when rotated, adapt values. Get Skew (cos/sin == 1/tan)
+        const double fSkew(aY.getY() * (cos(mfOrientation) / sin(mfOrientation)));
 
-        if (IsRotated() && SvxRotateMode::SVX_ROTATE_MODE_STANDARD != meRotMode)
+        switch (meRotMode)
         {
-            // when rotated, adapt values. Get Skew (cos/sin == 1/tan)
-            const double fSkew(aY.getY() * (cos(mfOrientation) / sin(mfOrientation)));
-
-            switch (meRotMode)
-            {
-            case SvxRotateMode::SVX_ROTATE_MODE_TOP:
-                // shear Y-Axis
-                aY.setX(-fSkew);
-                break;
-            case SvxRotateMode::SVX_ROTATE_MODE_CENTER:
-                // shear origin half, Y full
-                aOrigin.setX(aOrigin.getX() + (fSkew * 0.5));
-                aY.setX(-fSkew);
-                break;
-            case SvxRotateMode::SVX_ROTATE_MODE_BOTTOM:
-                // shear origin full, Y full
-                aOrigin.setX(aOrigin.getX() + fSkew);
-                aY.setX(-fSkew);
-                break;
-            default: // SvxRotateMode::SVX_ROTATE_MODE_STANDARD, already excluded above
-                break;
-            }
+        case SvxRotateMode::SVX_ROTATE_MODE_TOP:
+            // shear Y-Axis
+            aY.setX(-fSkew);
+            break;
+        case SvxRotateMode::SVX_ROTATE_MODE_CENTER:
+            // shear origin half, Y full
+            aOrigin.setX(aOrigin.getX() + (fSkew * 0.5));
+            aY.setX(-fSkew);
+            break;
+        case SvxRotateMode::SVX_ROTATE_MODE_BOTTOM:
+            // shear origin full, Y full
+            aOrigin.setX(aOrigin.getX() + fSkew);
+            aY.setX(-fSkew);
+            break;
+        default: // SvxRotateMode::SVX_ROTATE_MODE_STANDARD, already excluded above
+            break;
         }
-
-        // use column vectors as coordinate axes, homogen column for translation
-        aRetval = basegfx::utils::createCoordinateSystemTransform(aOrigin, aX, aY);
     }
 
-    return aRetval;
+    // use column vectors as coordinate axes, homogen column for translation
+    return basegfx::utils::createCoordinateSystemTransform( aOrigin, aX, aY );
+}
+
+basegfx::B2DHomMatrix Cell::CreateCoordinateSystemSingleCell(
+    const Array& rArray, size_t nCol, size_t nRow) const
+{
+    const Point aPoint( rArray.GetColPosition( nCol ), rArray.GetRowPosition( nRow ) );
+    const Size aSize( rArray.GetColWidth( nCol, nCol ) + 1, rArray.GetRowHeight( nRow, nRow ) + 1 );
+    const basegfx::B2DRange aRange( vcl::unotools::b2DRectangleFromRectangle( tools::Rectangle( aPoint, aSize ) ) );
+
+    return HelperCreateB2DHomMatrixFromB2DRange( aRange );
+}
+
+basegfx::B2DHomMatrix Cell::CreateCoordinateSystemMergedCell(
+    const Array& rArray, size_t nColLeft, size_t nRowTop, size_t nColRight, size_t nRowBottom) const
+{
+    basegfx::B2DRange aRange( rArray.GetB2DRange(
+        nColLeft, nRowTop, nColRight, nRowBottom ) );
+
+    // adjust rectangle for partly visible merged cells
+    if( IsMerged() )
+    {
+        // not *sure* what exactly this is good for,
+        // it is just a hard set extension at merged cells,
+        // probably *should* be included in the above extended
+        // GetColPosition/GetColWidth already. This might be
+        // added due to GetColPosition/GetColWidth not working
+        // correctly over PageChanges (if used), but not sure.
+        aRange.expand(
+            basegfx::B2DRange(
+                aRange.getMinX() - mnAddLeft,
+                aRange.getMinY() - mnAddTop,
+                aRange.getMaxX() + mnAddRight,
+                aRange.getMaxY() + mnAddBottom ) );
+    }
+
+    return HelperCreateB2DHomMatrixFromB2DRange( aRange );
 }
 
 Cell::Cell() :
@@ -223,7 +268,7 @@ struct ArrayImpl
     bool                IsColInClipRange( size_t nCol ) const;
     bool                IsRowInClipRange( size_t nRow ) const;
 
-    bool                OverlapsClipRange(size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow) const;
+    bool                OverlapsClipRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow ) const;
 
     size_t       GetMirrorCol( size_t nCol ) const { return mnWidth - nCol - 1; }
 
@@ -328,7 +373,7 @@ bool ArrayImpl::IsRowInClipRange( size_t nRow ) const
     return (mnFirstClipRow <= nRow) && (nRow <= mnLastClipRow);
 }
 
-bool ArrayImpl::OverlapsClipRange(size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow) const
+bool ArrayImpl::OverlapsClipRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow ) const
 {
     if(nLastCol < mnFirstClipCol)
         return false;
@@ -904,6 +949,15 @@ basegfx::B2DRange Array::GetCellRange( size_t nCol, size_t nRow, bool bExpandMer
     }
 }
 
+// return output range of given row/col range in logical coordinates
+basegfx::B2DRange Array::GetB2DRange(sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow) const
+{
+    const Point aPoint( GetColPosition( nFirstCol ), GetRowPosition( nFirstRow ) );
+    const Size aSize( GetColWidth( nFirstCol, nLastCol ) + 1, GetRowHeight( nFirstRow, nLastRow ) + 1 );
+
+    return vcl::unotools::b2DRectangleFromRectangle(tools::Rectangle(aPoint, aSize));
+}
+
 // mirroring
 void Array::MirrorSelfX()
 {
@@ -1034,6 +1088,37 @@ static void HelperCreateVerticalEntry(
     rInstance.addSdrConnectStyleData(false, rEndFromTL, -rY - rX, true);
 }
 
+static void HelperClipLine(
+    basegfx::B2DPoint& rStart,
+    basegfx::B2DVector& rDirection,
+    const basegfx::B2DRange& rClipRange)
+{
+    basegfx::B2DPolygon aLine({rStart, rStart + rDirection});
+    const basegfx::B2DPolyPolygon aResultPP(
+        basegfx::utils::clipPolygonOnRange(
+            aLine,
+            rClipRange,
+            true, // bInside
+            true)); // bStroke
+
+    if(aResultPP.count() > 0)
+    {
+        const basegfx::B2DPolygon aResultP(aResultPP.getB2DPolygon(0));
+
+        if(aResultP.count() > 0)
+        {
+            const basegfx::B2DPoint aResultStart(aResultP.getB2DPoint(0));
+            const basegfx::B2DPoint aResultEnd(aResultP.getB2DPoint(aResultP.count() - 1));
+
+            if(aResultStart != aResultEnd)
+            {
+                rStart = aResultStart;
+                rDirection = aResultEnd - aResultStart;
+            }
+        }
+    }
+}
+
 static void HelperCreateTLBREntry(
     const Array& rArray,
     const Style& rStyle,
@@ -1045,14 +1130,25 @@ static void HelperCreateTLBREntry(
     sal_Int32 nColRight,
     sal_Int32 nRowTop,
     sal_Int32 nRowBottom,
-    const Color* pForceColor)
+    const Color* pForceColor,
+    const basegfx::B2DRange* pClipRange)
 {
     if(rStyle.IsUsed())
     {
+        /// prepare geometry line data
+        basegfx::B2DPoint aStart(rOrigin);
+        basegfx::B2DVector aDirection(rX + rY);
+
+        /// check if we need to clip geometry line data and do it
+        if(nullptr != pClipRange)
+        {
+            HelperClipLine(aStart, aDirection, *pClipRange);
+        }
+
         /// top-left and bottom-right Style Tables
         rData.emplace_back(
-            rOrigin,
-            rX + rY,
+            aStart,
+            aDirection,
             rStyle,
             pForceColor);
         drawinglayer::primitive2d::SdrFrameBorderData& rInstance(rData.back());
@@ -1084,14 +1180,25 @@ static void HelperCreateBLTREntry(
     sal_Int32 nColRight,
     sal_Int32 nRowTop,
     sal_Int32 nRowBottom,
-    const Color* pForceColor)
+    const Color* pForceColor,
+    const basegfx::B2DRange* pClipRange)
 {
     if(rStyle.IsUsed())
     {
+        /// prepare geometry line data
+        basegfx::B2DPoint aStart(rOrigin + rY);
+        basegfx::B2DVector aDirection(rX - rY);
+
+        /// check if we need to clip geometry line data and do it
+        if(nullptr != pClipRange)
+        {
+            HelperClipLine(aStart, aDirection, *pClipRange);
+        }
+
         /// bottom-left and top-right Style Tables
         rData.emplace_back(
-            rOrigin + rY,
-            rX - rY,
+            aStart,
+            aDirection,
             rStyle,
             pForceColor);
         drawinglayer::primitive2d::SdrFrameBorderData& rInstance(rData.back());
@@ -1118,6 +1225,10 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 {
     DBG_FRAME_CHECK_COLROW( nFirstCol, nFirstRow, "CreateB2DPrimitiveRange" );
     DBG_FRAME_CHECK_COLROW( nLastCol, nLastRow, "CreateB2DPrimitiveRange" );
+
+#ifdef OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL
+    std::vector<basegfx::B2DRange> aClipRanges;
+#endif
 
     // It may be necessary to extend the loop ranges by one cell to the outside,
     // when possible. This is needed e.g. when there is in Calc a Cell with an
@@ -1155,7 +1266,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
             // get Cell and CoordinateSystem (*only* for this Cell, do *not* expand for
             // merged cells (!)), check if used (non-empty vectors)
             const Cell& rCell(CELL(nCol, nRow));
-            basegfx::B2DHomMatrix aCoordinateSystem(rCell.CreateCoordinateSystem(*this, nCol, nRow, false));
+            basegfx::B2DHomMatrix aCoordinateSystem(rCell.CreateCoordinateSystemSingleCell(*this, nCol, nRow));
             basegfx::B2DVector aX(basegfx::utils::getColumn(aCoordinateSystem, 0));
             basegfx::B2DVector aY(basegfx::utils::getColumn(aCoordinateSystem, 1));
 
@@ -1242,43 +1353,87 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 {
                     // first check if this merged cell was already handled. To do so,
                     // calculate and use the index of the TopLeft cell
-                    size_t nColLeft(nCol);
-                    size_t nRowTop(nRow);
-                    size_t nColRight(nCol);
-                    size_t nRowBottom(nRow);
+                    size_t nColLeft(nCol), nRowTop(nRow), nColRight(nCol), nRowBottom(nRow);
                     GetMergedRange(nColLeft, nRowTop, nColRight, nRowBottom, nCol, nRow);
-                    const sal_Int32 nIndexOfMergedCell(mxImpl->GetIndex(nColLeft, nRowTop));
+                    const size_t nIndexOfMergedCell(mxImpl->GetIndex(nColLeft, nRowTop));
 
                     if(aMergedCells.end() == aMergedCells.find(nIndexOfMergedCell))
                     {
                         // not found, so not yet handled. Add now to mark as handled
                         aMergedCells.insert(nIndexOfMergedCell);
 
-                        // get and check if diagonal styles are used
+                        // Get and check if diagonal styles are used
+                        // Note: For GetCellStyleBLTR below I tried to use nRowBottom
+                        //       as Y-value what seemed more logical, but that
+                        //       is wrong. Despite defining a line starting at
+                        //       bottom-left, the Style is defined in the cell at top-left
                         const Style& rTLBR(GetCellStyleTLBR(nColLeft, nRowTop));
                         const Style& rBLTR(GetCellStyleBLTR(nColLeft, nRowTop));
 
                         if(rTLBR.IsUsed() || rBLTR.IsUsed())
                         {
-                            // test for in ClipRange for BottomRight corner of merged cell
+                            // test if merged cell overlaps ClipRange at all (needs visualization)
                             if(mxImpl->OverlapsClipRange(nColLeft, nRowTop, nColRight, nRowBottom))
                             {
                                 // when merged, get extended coordinate system and derived values
-                                // for the full range of this merged cell
-                                aCoordinateSystem = rCell.CreateCoordinateSystem(*this, nCol, nRow, true);
+                                // for the full range of this merged cell. Only work with rMergedCell
+                                // (which is the top-left single cell of the merged cell) from here on
+                                const Cell& rMergedCell(CELL(nColLeft, nRowTop));
+                                aCoordinateSystem = rMergedCell.CreateCoordinateSystemMergedCell(
+                                    *this, nColLeft, nRowTop, nColRight, nRowBottom);
                                 aX = basegfx::utils::getColumn(aCoordinateSystem, 0);
                                 aY = basegfx::utils::getColumn(aCoordinateSystem, 1);
                                 aOrigin = basegfx::utils::getColumn(aCoordinateSystem, 2);
 
-                                HelperCreateTLBREntry(*this, rTLBR, *aData, aOrigin, aX, aY, nColLeft, nRowTop, nColRight, nRowBottom, pForceColor);
-                                HelperCreateBLTREntry(*this, rBLTR, *aData, aOrigin, aX, aY, nColLeft, nRowTop, nColRight, nRowBottom, pForceColor);
+                                // check if clip is needed
+                                basegfx::B2DRange aClipRange;
+
+                                // first use row/col ClipTest for raw check
+                                bool bNeedToClip(
+                                    !mxImpl->IsColInClipRange(nColLeft) ||
+                                    !mxImpl->IsRowInClipRange(nRowTop) ||
+                                    !mxImpl->IsColInClipRange(nColRight) ||
+                                    !mxImpl->IsRowInClipRange(nRowBottom));
+
+                                if(bNeedToClip)
+                                {
+                                    // now get ClipRange and CellRange in logical coordinates
+                                    aClipRange = GetB2DRange(
+                                        mxImpl->mnFirstClipCol, mxImpl->mnFirstClipRow,
+                                        mxImpl->mnLastClipCol, mxImpl->mnLastClipRow);
+
+                                    basegfx::B2DRange aCellRange(
+                                        GetB2DRange(
+                                            nColLeft, nRowTop,
+                                            nColRight, nRowBottom));
+
+                                    // intersect these to get the target ClipRange, ensure
+                                    // that clip is needed
+                                    aClipRange.intersect(aCellRange);
+                                    bNeedToClip = !aClipRange.isEmpty();
+
+#ifdef OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL
+                                    aClipRanges.push_back(aClipRange);
+#endif
+                                }
+
+                                // create top-left to bottom-right geometry
+                                HelperCreateTLBREntry(*this, rTLBR, *aData, aOrigin, aX, aY,
+                                    nColLeft, nRowTop, nColRight, nRowBottom, pForceColor,
+                                    bNeedToClip ? &aClipRange : nullptr);
+
+                                // create bottom-left to top-right geometry
+                                HelperCreateBLTREntry(*this, rBLTR, *aData, aOrigin, aX, aY,
+                                    nColLeft, nRowTop, nColRight, nRowBottom, pForceColor,
+                                    bNeedToClip ? &aClipRange : nullptr);
                             }
                         }
                     }
                 }
                 else
                 {
-                    // must be in clipping range: else not visible
+                    // must be in clipping range: else not visible. This
+                    // already clips completely for non-merged cells
                     if( mxImpl->IsInClipRange( nCol, nRow ) )
                     {
                         // get and check if diagonal styles are used
@@ -1287,15 +1442,18 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                         if(rTLBR.IsUsed() || rBLTR.IsUsed())
                         {
-                            HelperCreateTLBREntry(*this, rTLBR, *aData, aOrigin, aX, aY, nCol, nRow, nCol, nRow, pForceColor);
-                            HelperCreateBLTREntry(*this, rBLTR, *aData, aOrigin, aX, aY, nCol, nRow, nCol, nRow, pForceColor);
+                            HelperCreateTLBREntry(*this, rTLBR, *aData, aOrigin, aX, aY,
+                                nCol, nRow, nCol, nRow, pForceColor, nullptr);
+
+                            HelperCreateBLTREntry(*this, rBLTR, *aData, aOrigin, aX, aY,
+                                nCol, nRow, nCol, nRow, pForceColor, nullptr);
                         }
                     }
                 }
             }
-            else
+            else if(!aY.equalZero())
             {
-                // create left line for this Cell
+                // cell has height, but no width. Create left vertical line for this Cell
                 if ((!bOverlapX         // true for first column in merged cells or cells
                     || bFirstCol)       // true for non_Calc usages of this tooling
                     && !bSupressLeft)   // true when left is not rotated, so edge is already handled (see bRotated)
@@ -1307,6 +1465,10 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                         HelperCreateVerticalEntry(*this, rLeft, nCol, nRow, aOrigin, aX, aY, *aData, true, pForceColor);
                     }
                 }
+            }
+            else
+            {
+                // Cell has *no* size, thus no visualization
             }
         }
     }
@@ -1324,6 +1486,18 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                     true,       // try to merge results to have less primitivbes
                     true)));    // force visualization to minimal one discrete unit (pixel)
     }
+
+#ifdef OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL
+    for(auto const& rClipRange : aClipRanges)
+    {
+        // draw ClipRange in yellow to allow simple interactive optical control in office
+        aSequence.append(
+            drawinglayer::primitive2d::Primitive2DReference(
+                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                    basegfx::utils::createPolygonFromRect(rClipRange),
+                    basegfx::BColor(1.0, 1.0, 0.0))));
+    }
+#endif
 
     return aSequence;
 }

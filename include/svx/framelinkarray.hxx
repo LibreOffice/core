@@ -294,6 +294,9 @@ public:
         Returns total output range of merged ranges, if bExpandMerged is true. */
     basegfx::B2DRange GetCellRange( size_t nCol, size_t nRow, bool bExpandMerged ) const;
 
+    // return output range of given row/col range in logical coordinates
+    basegfx::B2DRange GetB2DRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow ) const;
+
     // mirroring
 
     /** Mirrors the entire array horizontally. */
