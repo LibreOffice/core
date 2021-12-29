@@ -16,6 +16,24 @@
       "message": "I\u0027m running out of ideas. What we still can do is chain the fuzzing binaries with explicit dependencies. This way we wouldn\u0027t need the lock at all. Any other ideas left?",
       "revId": "c67705f2ffa23a02bdedcbb96178a0402eafa241",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc7a34b1_ea54dfef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T12:17:32Z",
+      "side": 1,
+      "message": "The link lock seems to work generally. Every link takes ~20-30s, at least until something breaks… I\u0027ve never seen that in all my WASM or --enable-fuzzers builds. Maybe the whole command then fails, because something cleans up $WORK? Really no idea what is happening :-(",
+      "parentUuid": "37a019da_a7972c9f",
+      "revId": "c67705f2ffa23a02bdedcbb96178a0402eafa241",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
