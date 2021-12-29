@@ -24,7 +24,9 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <svx/unoshape.hxx>
 
 namespace chart { struct VLineProperties; }
 namespace com::sun::star::beans { class XPropertySet; }
@@ -38,7 +40,6 @@ namespace com::sun::star::drawing { struct Position3D; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::drawing { struct Direction3D; }
-
 
 namespace chart
 {
@@ -78,7 +79,8 @@ public:
     static ShapeFactory* getOrCreateShapeFactory(const css::uno::Reference< css::lang::XMultiServiceFactory>& xFactory);
 
     ShapeFactory() = delete;
-    css::uno::Reference< css::drawing::XShapes >
+
+    static rtl::Reference< SvxShapeGroup >
         createGroup2D(
             const css::uno::Reference< css::drawing::XShapes >& xTarget
           , const OUString& aName = OUString() );
@@ -147,7 +149,7 @@ public:
                     , const css::drawing::PolyPolygonShape3D& rPolyPolygon
                     , double fDepth);
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapePolyPolygon>
         createArea2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::PolyPolygonShape3D& rPolyPolygon);
 
@@ -244,6 +246,7 @@ public:
 
     static void setShapeName( const css::uno::Reference< css::drawing::XShape >& xShape
             , const OUString& rName );
+    static void setShapeName( SvxShape& rShape, const OUString& rName );
 
     static OUString getShapeName( const css::uno::Reference< css::drawing::XShape >& xShape );
 

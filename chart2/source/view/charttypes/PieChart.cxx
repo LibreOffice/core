@@ -674,8 +674,7 @@ void PieChart::createShapes()
     ///displayed on top)
     uno::Reference< drawing::XShapes > xSeriesTarget(
         createGroupShape( m_xLogicTarget ));
-    uno::Reference< drawing::XShapes > xTextTarget(
-        m_pShapeFactory->createGroup2D( m_xFinalTarget ));
+    rtl::Reference<SvxShapeGroup> xTextTarget = ShapeFactory::createGroup2D( m_xFinalTarget );
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     ///pay attention that the `m_bSwapXAndY` parameter used by the polar

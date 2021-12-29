@@ -24,6 +24,8 @@
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
+#include <rtl/ref.hxx>
+#include <svx/unoshape.hxx>
 
 #include <memory>
 #include <map>
@@ -181,7 +183,7 @@ private: //methods
 
 public: //member
     css::uno::Reference<css::drawing::XShapes> m_xGroupShape;
-    css::uno::Reference<css::drawing::XShapes> m_xLabelsGroupShape;
+    rtl::Reference<SvxShapeGroup> m_xLabelsGroupShape;
     css::uno::Reference<css::drawing::XShapes> m_xErrorXBarsGroupShape;
     css::uno::Reference<css::drawing::XShapes> m_xErrorYBarsGroupShape;
 

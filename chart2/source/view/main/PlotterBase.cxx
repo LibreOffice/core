@@ -82,7 +82,7 @@ uno::Reference< drawing::XShapes > PlotterBase::createGroupShape(
     if(m_nDimension==2)
     {
         //create and add to target
-        return m_pShapeFactory->createGroup2D( xTarget, rName );
+        return ShapeFactory::createGroup2D( xTarget, rName );
     }
     else
     {

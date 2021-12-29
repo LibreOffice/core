@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		456E58CF277CB9C700FA12D2 /* unoshap2.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = unoshap2.cxx; path = ../svx/source/unodraw/unoshap2.cxx; sourceTree = "<group>"; };
 		BE017B8725AF2ABE00244ED8 /* autostyl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = autostyl.cxx; path = ../sc/source/ui/docshell/autostyl.cxx; sourceTree = "<group>"; };
 		BE017B8825AF2ABE00244ED8 /* servobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = servobj.cxx; path = ../sc/source/ui/docshell/servobj.cxx; sourceTree = "<group>"; };
 		BE017B8925AF2ABE00244ED8 /* docsh4.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docsh4.cxx; path = ../sc/source/ui/docshell/docsh4.cxx; sourceTree = "<group>"; };
@@ -959,6 +960,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		456E58D0277CB9DE00FA12D2 /* unodraw */ = {
+			isa = PBXGroup;
+			children = (
+				456E58CF277CB9C700FA12D2 /* unoshap2.cxx */,
+			);
+			name = unodraw;
+			sourceTree = "<group>";
+		};
 		BE017B8525AF2A5A00244ED8 /* ui */ = {
 			isa = PBXGroup;
 			children = (
@@ -1882,6 +1891,7 @@
 		BEACEEC5257FC7F5001BAABA /* svx */ = {
 			isa = PBXGroup;
 			children = (
+				456E58D0277CB9DE00FA12D2 /* unodraw */,
 				BEACEEC6257FC82A001BAABA /* tbxctrls */,
 			);
 			name = svx;

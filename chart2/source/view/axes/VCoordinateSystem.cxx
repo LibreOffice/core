@@ -97,9 +97,9 @@ void VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes 
     if(nDimensionCount==2)
     {
         //create and add to target
-        m_xLogicTargetForGrids = pShapeFactory->createGroup2D( xLogicTarget );
-        xLogicTargetForSeriesBehindAxis = pShapeFactory->createGroup2D( xLogicTarget );
-        m_xLogicTargetForAxes = pShapeFactory->createGroup2D( xLogicTarget );
+        m_xLogicTargetForGrids = ShapeFactory::createGroup2D( xLogicTarget );
+        xLogicTargetForSeriesBehindAxis = ShapeFactory::createGroup2D( xLogicTarget );
+        m_xLogicTargetForAxes = ShapeFactory::createGroup2D( xLogicTarget );
     }
     else
     {

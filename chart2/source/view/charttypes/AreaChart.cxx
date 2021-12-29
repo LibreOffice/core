@@ -629,8 +629,8 @@ void AreaChart::createShapes()
         m_xErrorBarTarget = createGroupShape( m_xLogicTarget );
     else
         m_xErrorBarTarget = m_xSeriesTarget;
-    m_xTextTarget     = m_pShapeFactory->createGroup2D( m_xFinalTarget );
-    m_xRegressionCurveEquationTarget = m_pShapeFactory->createGroup2D( m_xFinalTarget );
+    m_xTextTarget     = ShapeFactory::createGroup2D( m_xFinalTarget );
+    m_xRegressionCurveEquationTarget = ShapeFactory::createGroup2D( m_xFinalTarget );
 
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 

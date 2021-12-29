@@ -32,7 +32,7 @@ uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
 {
     ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
     uno::Reference< drawing::XShapes > xGroupShapes =
-        pShapeFactory->createGroup2D( xTarget );
+        ShapeFactory::createGroup2D( xTarget );
 
     drawing::Position3D  aPos(0,0,0);
     for(sal_Int32 nS=0;nS<ShapeFactory::getSymbolCount();nS++)
