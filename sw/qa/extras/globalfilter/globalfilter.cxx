@@ -514,40 +514,40 @@ void Test::testCharHighlightBody()
 
         const uno::Reference< text::XTextRange > xPara = getParagraph(1);
         // Both highlight and background
-        const sal_Int32 nBackColor(0x4F81BD);
+        const Color nBackColor(0x4F81BD);
         for( int nRun = 1; nRun <= 16; ++nRun )
         {
             const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,nRun), uno::UNO_QUERY);
-            sal_Int32 nHighlightColor = 0;
+            Color nHighlightColor;
             switch( nRun )
             {
-                case 1: nHighlightColor = 0x000000; break; //black
-                case 2: nHighlightColor = 0x0000ff; break; //blue
-                case 3: nHighlightColor = 0x00ffff; break; //cyan
-                case 4: nHighlightColor = 0x00ff00; break; //green
-                case 5: nHighlightColor = 0xff00ff; break; //magenta
-                case 6: nHighlightColor = 0xff0000; break; //red
-                case 7: nHighlightColor = 0xffff00; break; //yellow
-                case 8: nHighlightColor = 0xffffff; break; //white
-                case 9: nHighlightColor = 0x000080;  break;//dark blue
-                case 10: nHighlightColor = 0x008080; break; //dark cyan
-                case 11: nHighlightColor = 0x008000; break; //dark green
-                case 12: nHighlightColor = 0x800080; break; //dark magenta
-                case 13: nHighlightColor = 0x800000; break; //dark red
-                case 14: nHighlightColor = 0x808000; break; //dark yellow
-                case 15: nHighlightColor = 0x808080; break; //dark gray
-                case 16: nHighlightColor = 0xC0C0C0; break; //light gray
+                case 1: nHighlightColor = COL_BLACK; break; //black 0x000000
+                case 2: nHighlightColor = COL_LIGHTBLUE; break; //light blue 0x0000ff
+                case 3: nHighlightColor = COL_LIGHTCYAN; break; //light cyan 0x00ffff
+                case 4: nHighlightColor = COL_LIGHTGREEN; break; //light green 0x00ff00
+                case 5: nHighlightColor = COL_LIGHTMAGENTA; break; //light magenta 0xff00ff
+                case 6: nHighlightColor = COL_LIGHTRED; break; //light red 0xff0000
+                case 7: nHighlightColor = COL_YELLOW; break; //yellow 0xffff00
+                case 8: nHighlightColor = COL_WHITE; break; //white 0xffffff
+                case 9: nHighlightColor = COL_BLUE;  break;//blue 0x000080
+                case 10: nHighlightColor = COL_CYAN; break; //cyan 0x008080
+                case 11: nHighlightColor = COL_GREEN; break; //green 0x008000
+                case 12: nHighlightColor = COL_MAGENTA; break; //magenta 0x800080
+                case 13: nHighlightColor = COL_RED; break; //red 0x800000
+                case 14: nHighlightColor = COL_BROWN; break; //brown 0x808000
+                case 15: nHighlightColor = COL_GRAY; break; //dark gray 0x808080
+                case 16: nHighlightColor = COL_LIGHTGRAY; break; //light gray 0xC0C0C0
             }
 
             if (rFilterName == "writer8")
             {
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharHighlight"));
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nHighlightColor, getProperty<sal_Int32>(xRun,"CharBackColor"));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_TRANSPARENT, getProperty<Color>(xRun,"CharHighlight"));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nHighlightColor, getProperty<Color>(xRun,"CharBackColor"));
             }
             else // MS filters
             {
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nHighlightColor, getProperty<sal_Int32>(xRun,"CharHighlight"));
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nBackColor, getProperty<sal_Int32>(xRun,"CharBackColor"));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nHighlightColor, getProperty<Color>(xRun,"CharHighlight"));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nBackColor, getProperty<Color>(xRun,"CharBackColor"));
             }
         }
 
@@ -556,21 +556,21 @@ void Test::testCharHighlightBody()
             const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,18), uno::UNO_QUERY);
             if (rFilterName == "writer8")
             {
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharHighlight"));
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(0xff0000), getProperty<sal_Int32>(xRun,"CharBackColor"));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_TRANSPARENT, getProperty<Color>(xRun,"CharHighlight"));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_LIGHTRED, getProperty<Color>(xRun,"CharBackColor"));
             }
             else
             {
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(0xff0000), getProperty<sal_Int32>(xRun,"CharHighlight"));
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharBackColor"));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_LIGHTRED, getProperty<Color>(xRun,"CharHighlight"));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_TRANSPARENT, getProperty<Color>(xRun,"CharBackColor"));
             }
         }
 
         // Only background
         {
             const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,19), uno::UNO_QUERY);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharHighlight"));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(0x0000ff), getProperty<sal_Int32>(xRun,"CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_TRANSPARENT, getProperty<Color>(xRun,"CharHighlight"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_LIGHTBLUE, getProperty<Color>(xRun,"CharBackColor"));
         }
     }
 }
@@ -613,7 +613,7 @@ void Test::testCharStyleHighlight()
         const Color nBackColor(0xFFDBB6); //orange-y
 
         // Always export character style's background colour as shading, never as highlighting.
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xCharStyle,"CharHighlight"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_TRANSPARENT, getProperty<Color>(xCharStyle,"CharHighlight"));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nBackColor, getProperty<Color>(xCharStyle,"CharBackColor"));
     }
 }
@@ -736,20 +736,20 @@ void Test::testMSCharBackgroundEditing()
         uno::Reference< text::XTextRange > xPara = getParagraph(1);
         {
             uno::Reference<beans::XPropertySet> xRun(getRun(xPara,1), uno::UNO_QUERY);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharHighlight"));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(0xff0000), getProperty<sal_Int32>(xRun,"CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_TRANSPARENT, getProperty<Color>(xRun,"CharHighlight"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_LIGHTRED, getProperty<Color>(xRun,"CharBackColor"));
 
             xRun.set(getRun(xPara,2), uno::UNO_QUERY);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(0x0000ff), getProperty<sal_Int32>(xRun,"CharHighlight"));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_LIGHTBLUE, getProperty<Color>(xRun,"CharHighlight"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_TRANSPARENT, getProperty<Color>(xRun,"CharBackColor"));
 
             xRun.set(getRun(xPara,3), uno::UNO_QUERY);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(0x0000ff), getProperty<sal_Int32>(xRun,"CharHighlight"));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(0xff0000), getProperty<sal_Int32>(xRun,"CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_LIGHTBLUE, getProperty<Color>(xRun,"CharHighlight"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_LIGHTRED, getProperty<Color>(xRun,"CharBackColor"));
 
             xRun.set(getRun(xPara,4), uno::UNO_QUERY);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharHighlight"));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_TRANSPARENT, getProperty<Color>(xRun,"CharHighlight"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_TRANSPARENT, getProperty<Color>(xRun,"CharBackColor"));
         }
 
         // Simulate editing
@@ -757,13 +757,13 @@ void Test::testMSCharBackgroundEditing()
         {
             uno::Reference<beans::XPropertySet> xRun(getRun(xPara,i), uno::UNO_QUERY);
             // Change background
-            Color nBackColor = 0;
+            Color nBackColor;
             switch( i )
             {
                 case 1: nBackColor = COL_BLACK; break; //black 0x000000
-                case 2: nBackColor = COL_CYAN; break; //cyan 0x00ffff
-                case 3: nBackColor = COL_GREEN; break; //green 0x00ff00
-                case 4: nBackColor = COL_MAGENTA; break; //magenta 0xff00ff
+                case 2: nBackColor = COL_LIGHTCYAN; break; //cyan 0x00ffff
+                case 3: nBackColor = COL_LIGHTGREEN; break; //green 0x00ff00
+                case 4: nBackColor = COL_LIGHTMAGENTA; break; //magenta 0xff00ff
             }
             xRun->setPropertyValue("CharBackColor", uno::makeAny(nBackColor));
             // Remove highlighting
@@ -801,13 +801,13 @@ void Test::testMSCharBackgroundEditing()
         xPara.set(getParagraph(1));
         for( int i = 1; i <= 4; ++i )
         {
-            Color nBackColor = 0;
+            Color nBackColor;
             switch( i )
             {
                 case 1: nBackColor = COL_BLACK; break; //black 0x000000
-                case 2: nBackColor = COL_CYAN; break; //cyan 0x00ffff
-                case 3: nBackColor = COL_GREEN; break; //green 0x00ff00
-                case 4: nBackColor = COL_MAGENTA; break; //magenta 0xff00ff
+                case 2: nBackColor = COL_LIGHTCYAN; break; //light cyan 0x00ffff
+                case 3: nBackColor = COL_LIGHTGREEN; break; //light green 0x00ff00
+                case 4: nBackColor = COL_LIGHTMAGENTA; break; //light magenta 0xff00ff
             }
             const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,i), uno::UNO_QUERY);
             if (rFilterName == "writer8")
@@ -866,31 +866,31 @@ void Test::testCharBackgroundToHighlighting()
         for( int nRun = 1; nRun <= 19; ++nRun )
         {
             const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,nRun), uno::UNO_QUERY);
-            sal_Int32 nHighlightColor = 0;
+            Color nHighlightColor;
             switch( nRun )
             {
-                case 1: nHighlightColor = 0x000000; break; //black
-                case 2: nHighlightColor = 0xffff00; break; //yellow
-                case 3: nHighlightColor = 0xff00ff; break; //magenta
-                case 4: nHighlightColor = 0x00ffff; break; //cyan
-                case 5: nHighlightColor = 0xffff00; break; //yellow
-                case 6: nHighlightColor = 0xff0000; break; //red
-                case 7: nHighlightColor = 0x0000ff; break; //blue
-                case 8: nHighlightColor = 0x00ff00; break; //green
-                case 9: nHighlightColor = 0x008000; break; //dark green
-                case 10: nHighlightColor = 0x800080; break; //dark magenta
-                case 11: nHighlightColor = 0x000080; break; //dark blue
-                case 12: nHighlightColor = 0x808000; break; //dark yellow
-                case 13: nHighlightColor = 0x808080; break; //dark gray
-                case 14: nHighlightColor = 0x000000; break; //black
-                case 15: nHighlightColor = 0xff0000; break; //red
-                case 16: nHighlightColor = 0xC0C0C0; break; //light gray
-                case 17: nHighlightColor = 0x800000; break; //dark red
-                case 18: nHighlightColor = 0x808080; break; //dark gray
-                case 19: nHighlightColor = 0xffff00; break; //yellow
+                case 1: nHighlightColor = COL_BLACK; break; //black 0x000000
+                case 2: nHighlightColor = COL_YELLOW; break; //yellow 0xffff00
+                case 3: nHighlightColor = COL_LIGHTMAGENTA; break; //light magenta 0xff00ff
+                case 4: nHighlightColor = COL_LIGHTCYAN; break; //light cyan 0x00ffff
+                case 5: nHighlightColor = COL_YELLOW; break; //yellow 0xffff00
+                case 6: nHighlightColor = COL_LIGHTRED; break; //light red 0xff0000
+                case 7: nHighlightColor = COL_LIGHTBLUE; break; //light blue 0x0000ff
+                case 8: nHighlightColor = COL_LIGHTGREEN; break; //light green 0x00ff00
+                case 9: nHighlightColor = COL_GREEN; break; //dark green 0x008000
+                case 10: nHighlightColor = COL_MAGENTA; break; //dark magenta 0x800080
+                case 11: nHighlightColor = COL_BLUE; break; //dark blue 0x000080
+                case 12: nHighlightColor = COL_BROWN; break; //brown 0x808000
+                case 13: nHighlightColor = COL_GRAY; break; //dark gray 0x808080
+                case 14: nHighlightColor = COL_BLACK; break; //black 0x000000
+                case 15: nHighlightColor = COL_LIGHTRED; break; //light red 0xff0000
+                case 16: nHighlightColor = COL_LIGHTGRAY; break; //light gray 0xC0C0C0
+                case 17: nHighlightColor = COL_RED; break; //dark red 0x800000
+                case 18: nHighlightColor = COL_GRAY; break; //dark gray 0x808080
+                case 19: nHighlightColor = COL_YELLOW; break; //yellow 0xffff00
             }
             const OString sMessage = sFailedMessage +". Index of run with unmatched color: " + OString::number(nRun);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), nHighlightColor, getProperty<sal_Int32>(xRun,"CharHighlight"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), nHighlightColor, getProperty<Color>(xRun,"CharHighlight"));
         }
     }
 }
