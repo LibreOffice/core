@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e2a4097_922220fa",
+        "filename": "sal/osl/unx/backtrace.c",
+        "patchSetId": 11
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T16:38:26Z",
+      "side": 1,
+      "message": "This could be moved after the HAVE_FEATURE_BACKTRACE... totally missed the NULL definition.",
+      "revId": "eaecdd934e41af713845a3e2f5d32f7b1107d394",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
