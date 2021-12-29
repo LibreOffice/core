@@ -116,6 +116,7 @@ define gb_Helper_collect_knownlibs
 gb_Library_KNOWNLIBS := $$(foreach group,$$(gb_Library_VALIDGROUPS),$$(gb_Library_$$(group)))
 gb_Executable_KNOWN := $$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(gb_Executable_$$(group)))
 gb_Jar_KNOWN := $$(foreach group,$$(gb_Jar_VALIDGROUPS),$$(gb_Jar_$$(group)))
+gb_Fuzzers_KNOWN := $$(filter %fuzzer,$$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(gb_Executable_$$(group))))
 
 endef
 
