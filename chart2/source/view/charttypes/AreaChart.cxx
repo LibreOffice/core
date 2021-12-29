@@ -509,7 +509,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     }
     else //m_nDimension!=3
     {
-        xShape = m_pShapeFactory->createArea2D( xSeriesGroupShape_Shapes
+        xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes
                 , aPoly );
     }
     setMappedProperties( xShape
@@ -629,8 +629,8 @@ void AreaChart::createShapes()
         m_xErrorBarTarget = createGroupShape( m_xLogicTarget );
     else
         m_xErrorBarTarget = m_xSeriesTarget;
-    m_xTextTarget     = m_pShapeFactory->createGroup2D( m_xFinalTarget );
-    m_xRegressionCurveEquationTarget = m_pShapeFactory->createGroup2D( m_xFinalTarget );
+    m_xTextTarget     = ShapeFactory::createGroup2D( m_xFinalTarget );
+    m_xRegressionCurveEquationTarget = ShapeFactory::createGroup2D( m_xFinalTarget );
 
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 

@@ -467,10 +467,10 @@ void BarChart::createShapes()
     uno::Reference< drawing::XShapes > xRegressionCurveTarget(
         createGroupShape( m_xLogicTarget ));
     uno::Reference< drawing::XShapes > xTextTarget(
-        m_pShapeFactory->createGroup2D( m_xFinalTarget ));
+        ShapeFactory::createGroup2D( m_xFinalTarget ));
 
     uno::Reference< drawing::XShapes > xRegressionCurveEquationTarget(
-        m_pShapeFactory->createGroup2D( m_xFinalTarget ));
+        ShapeFactory::createGroup2D( m_xFinalTarget ));
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     double fLogicZ        = 1.0;//as defined
@@ -853,7 +853,7 @@ void BarChart::createShapes()
                                 AddPointToPoly( aPoly, aLeftUpperPoint );
                                 AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
                                 pPosHelper->transformScaledLogicToScene( aPoly );
-                                xShape = m_pShapeFactory->createArea2D( xSeriesGroupShape_Shapes, aPoly );
+                                xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes, aPoly );
                                 setMappedProperties( xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
                             }
 

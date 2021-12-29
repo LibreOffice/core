@@ -171,8 +171,7 @@ void BubbleChart::createShapes()
     //(because the text group is created after the series group the texts are displayed on top)
     uno::Reference< drawing::XShapes > xSeriesTarget(
         createGroupShape( m_xLogicTarget ));
-    uno::Reference< drawing::XShapes > xTextTarget(
-        m_pShapeFactory->createGroup2D( m_xFinalTarget ));
+    rtl::Reference< SvxShapeGroup > xTextTarget = ShapeFactory::createGroup2D( m_xFinalTarget );
 
     //update/create information for current group
     double fLogicZ = 1.0;//as defined

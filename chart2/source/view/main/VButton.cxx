@@ -100,13 +100,12 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
 
     PropertyMapper::getTextLabelMultiPropertyLists(xTextProp, aPropNames, aPropValues);
 
-    m_xShape.set(pShapeFactory->createGroup2D(m_xTarget, m_sCID), uno::UNO_QUERY);
+    m_xShape = ShapeFactory::createGroup2D(m_xTarget, m_sCID);
     m_xShape->setPosition(m_aPosition);
     m_xShape->setSize(m_aSize);
 
-    uno::Reference<drawing::XShapes> xContainer(m_xShape, uno::UNO_QUERY);
-    if (!xContainer.is())
-        return;
+    uno::Reference<drawing::XShapes> xContainer(static_cast<cppu::OWeakObject*>(m_xShape.get()),
+                                                uno::UNO_QUERY_THROW);
 
     tPropertyNameValueMap aTextValueMap;
     aTextValueMap["CharHeight"] <<= 10.0f;

@@ -1456,7 +1456,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     }
 
     uno::Reference< drawing::XShapes > xTextTargetShapes =
-        ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->createGroup2D(rParam.mxDiagramWithAxesShapes);
+        ShapeFactory::createGroup2D(rParam.mxDiagramWithAxesShapes);
 
     // - create axis and grids for all coordinate systems
 
@@ -2908,7 +2908,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
 
     OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) ) );//todo: other index if more than one diagram is possible
     uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes(
-            pShapeFactory->createGroup2D(mxRootShape,aDiagramCID) );
+            ShapeFactory::createGroup2D(mxRootShape,aDiagramCID) );
 
     aParam.mxMarkHandles = pShapeFactory->createInvisibleRectangle(
         xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0));
@@ -2918,7 +2918,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
         xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0, 0));
     ShapeFactory::setShapeName(aParam.mxPlotAreaWithAxes, "PlotAreaIncludingAxes");
 
-    aParam.mxDiagramWithAxesShapes = pShapeFactory->createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes);
+    aParam.mxDiagramWithAxesShapes = ShapeFactory::createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes);
 
     bool bAutoPositionDummy = true;
 
