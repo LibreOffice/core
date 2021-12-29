@@ -33,6 +33,23 @@
       "message": "That we have the same XSLT files in LibreOffice that are in the OASIS repository is not good at all. I assume the ones at OASIS are more authoritative and maintained by Svante (and others?) who actually understand the stuff? Presumably the people who have done (luckily minor) changes to the XSLT over the years have not been aware of that. No idea how to fix the situation, though.",
       "revId": "48493ec67f9719203053d633900e8555fde0b125",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2aeb7d30_d18697eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-29T16:43:44Z",
+      "side": 1,
+      "message": "There are multiple differences between the new body.xsl from Svante and the one in LibreOffice. Some are just pure typo fixes or similar cleanups. Others seem to be semantically meaningful. How can we resolve this situation?",
+      "revId": "48493ec67f9719203053d633900e8555fde0b125",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
