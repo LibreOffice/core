@@ -24,8 +24,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <functional>
 
@@ -34,13 +33,12 @@ class SdrMarkView;
 
 namespace svx::sidebar {
 
-typedef cppu::WeakComponentImplHelper<
+typedef comphelper::WeakComponentImplHelper<
     css::view::XSelectionChangeListener
     > SelectionChangeHandlerInterfaceBase;
 
 class SVX_DLLPUBLIC SelectionChangeHandler final
-    : private ::cppu::BaseMutex,
-      public SelectionChangeHandlerInterfaceBase
+    : public SelectionChangeHandlerInterfaceBase
 {
 public:
     SelectionChangeHandler (
@@ -53,7 +51,7 @@ public:
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     void Connect();
     void Disconnect();
