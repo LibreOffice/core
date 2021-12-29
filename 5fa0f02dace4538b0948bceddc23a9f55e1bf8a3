@@ -71,6 +71,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29ccdd9d_6db62dcf",
+        "filename": "sw/qa/extras/globalfilter/globalfilter.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-29T10:39:25Z",
+      "side": 1,
+      "message": "\u003e there are more tests in the same file in which Color can be used in place of sal_Int32, should I modify those as well?\n\nIt\u0027s impossible to answer unless you mention specific places you have in mind 😉 but generally, if there\u0027s a code that tests colors, and it converts them to integers for the checks, it would be nice to change those places - that\u0027s the idea of the easy hack you work on, right? 😊",
+      "parentUuid": "8210d4e5_c3a7c9bf",
+      "revId": "5fa0f02dace4538b0948bceddc23a9f55e1bf8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92f0241e_3f7241d4",
