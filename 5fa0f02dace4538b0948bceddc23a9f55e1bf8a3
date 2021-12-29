@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d8d564c3_b206a260",
+        "filename": "sw/qa/extras/globalfilter/globalfilter.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-29T10:55:16Z",
+      "side": 1,
+      "message": "I think that this test can be modified https://opengrok.libreoffice.org/xref/core/sw/qa/extras/globalfilter/globalfilter.cxx?r\u003da214369f#48, also I have one more query, while I was trying to run this test using the following command: CPPUNIT_TEST_NAME\u003d\"Test::testCharHighlightBody\" make CppunitTest_sw_globalfilter\nI am getting the error: Fatal error: CPPUNIT_TEST_NAME contains no valid tests, can you please help me with this issue?",
+      "parentUuid": "29ccdd9d_6db62dcf",
+      "revId": "5fa0f02dace4538b0948bceddc23a9f55e1bf8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92f0241e_3f7241d4",
         "filename": "sw/qa/extras/globalfilter/globalfilter.cxx",
         "patchSetId": 6
