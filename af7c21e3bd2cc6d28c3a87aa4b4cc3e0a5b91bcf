@@ -16,6 +16,23 @@
       "message": "Lionel: I don\u0027t know how to test this but it seems reasonable to me, any opinion?\n\nMichael: license statement is here https://bugs.documentfoundation.org/show_bug.cgi?id\u003d134982#c33\nis it ok or should I ask the author to send an email on dev LO list?",
       "revId": "af7c21e3bd2cc6d28c3a87aa4b4cc3e0a5b91bcf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18e21e0c_62cbdcc5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-12-29T11:00:41Z",
+      "side": 1,
+      "message": "I fully approve this patch on the technical side.\n+1 instead of +2 due to doubt on License Statement.",
+      "revId": "af7c21e3bd2cc6d28c3a87aa4b4cc3e0a5b91bcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
