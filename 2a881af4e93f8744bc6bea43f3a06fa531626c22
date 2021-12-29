@@ -70,6 +70,24 @@
       "parentUuid": "24a3571e_e32efee6",
       "revId": "2a881af4e93f8744bc6bea43f3a06fa531626c22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29365cb9_a61932d8",
+        "filename": "sal/osl/unx/backtrace.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T20:13:04Z",
+      "side": 0,
+      "message": "My deduction is simply based on the fact, that it\u0027s the only removed header and no mentioning of ANDROID in any preprocessor directives.",
+      "parentUuid": "e4a88bef_8624769a",
+      "revId": "2a881af4e93f8744bc6bea43f3a06fa531626c22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
