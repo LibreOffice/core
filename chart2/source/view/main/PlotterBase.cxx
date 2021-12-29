@@ -87,7 +87,7 @@ uno::Reference< drawing::XShapes > PlotterBase::createGroupShape(
     else
     {
         //create and added to target
-        return m_pShapeFactory->createGroup3D( xTarget, rName );
+        return ShapeFactory::createGroup3D( xTarget, rName );
     }
 }
 
