@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "677a816b_70fd8002",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T23:26:00Z",
+      "side": 1,
+      "message": "Just a ping, if anyone has a reason not to do this?",
+      "revId": "e946b47b050679f2eeef48770a02d866fc36c37b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
