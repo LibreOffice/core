@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11a4316f_60c4ee93",
+        "filename": "sal/osl/unx/backtrace.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T16:44:46Z",
+      "side": 0,
+      "message": "I guess NULL originally came via this header…",
+      "revId": "2a881af4e93f8744bc6bea43f3a06fa531626c22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
