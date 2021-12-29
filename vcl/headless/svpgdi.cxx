@@ -26,6 +26,7 @@
 #include <headless/svpbmp.hxx>
 #include <headless/svpframe.hxx>
 #include <headless/svpcairotextrender.hxx>
+#include <headless/BitmapHelper.hxx>
 #include <saldatabasic.hxx>
 
 #include <sal/log.hxx>
@@ -62,73 +63,6 @@ namespace
     // check for env var that decides for using downscale pattern
     const char* pDisableDownScale(getenv("SAL_DISABLE_CAIRO_DOWNSCALE"));
     bool bDisableDownScale(nullptr != pDisableDownScale);
-
-    class BitmapHelper : public SurfaceHelper
-    {
-    private:
-#ifdef HAVE_CAIRO_FORMAT_RGB24_888
-        const bool m_bForceARGB32;
-#endif
-        SvpSalBitmap aTmpBmp;
-
-    public:
-        explicit BitmapHelper(
-            const SalBitmap& rSourceBitmap,
-            const bool bForceARGB32 = false)
-#ifdef HAVE_CAIRO_FORMAT_RGB24_888
-            : m_bForceARGB32(bForceARGB32)
-#endif
-        {
-            const SvpSalBitmap& rSrcBmp = static_cast<const SvpSalBitmap&>(rSourceBitmap);
-#ifdef HAVE_CAIRO_FORMAT_RGB24_888
-            if ((rSrcBmp.GetBitCount() != 32 && rSrcBmp.GetBitCount() != 24) || bForceARGB32)
-#else
-            (void)bForceARGB32;
-            if (rSrcBmp.GetBitCount() != 32)
-#endif
-            {
-                //big stupid copy here
-                const BitmapBuffer* pSrc = rSrcBmp.GetBuffer();
-                const SalTwoRect aTwoRect = { 0, 0, pSrc->mnWidth, pSrc->mnHeight,
-                                              0, 0, pSrc->mnWidth, pSrc->mnHeight };
-                std::unique_ptr<BitmapBuffer> pTmp = (pSrc->mnFormat == SVP_24BIT_FORMAT
-                                   ? FastConvert24BitRgbTo32BitCairo(pSrc)
-                                   : StretchAndConvert(*pSrc, aTwoRect, SVP_CAIRO_FORMAT));
-                aTmpBmp.Create(std::move(pTmp));
-
-                assert(aTmpBmp.GetBitCount() == 32);
-                implSetSurface(CairoCommon::createCairoSurface(aTmpBmp.GetBuffer()));
-            }
-            else
-            {
-                implSetSurface(CairoCommon::createCairoSurface(rSrcBmp.GetBuffer()));
-            }
-        }
-        void mark_dirty()
-        {
-            cairo_surface_mark_dirty(implGetSurface());
-        }
-        unsigned char* getBits(sal_Int32 &rStride)
-        {
-            cairo_surface_flush(implGetSurface());
-
-            unsigned char *mask_data = cairo_image_surface_get_data(implGetSurface());
-
-            const cairo_format_t nFormat = cairo_image_surface_get_format(implGetSurface());
-#ifdef HAVE_CAIRO_FORMAT_RGB24_888
-            if (!m_bForceARGB32)
-                assert(nFormat == CAIRO_FORMAT_RGB24_888 && "Expected RGB24_888 image");
-            else
-#endif
-            {
-                assert(nFormat == CAIRO_FORMAT_ARGB32 && "need to implement CAIRO_FORMAT_A1 after all here");
-            }
-
-            rStride = cairo_format_stride_for_width(nFormat, cairo_image_surface_get_width(implGetSurface()));
-
-            return mask_data;
-        }
-    };
 
     sal_Int64 estimateUsageInBytesForSurfaceHelper(const SurfaceHelper* pHelper)
     {
@@ -180,67 +114,6 @@ namespace
     {
         return estimateUsageInBytesForSurfaceHelper(maBitmapHelper.get());
     }
-
-    class MaskHelper : public SurfaceHelper
-    {
-    private:
-        std::unique_ptr<unsigned char[]> pAlphaBits;
-
-    public:
-        explicit MaskHelper(const SalBitmap& rAlphaBitmap)
-        {
-            const SvpSalBitmap& rMask = static_cast<const SvpSalBitmap&>(rAlphaBitmap);
-            const BitmapBuffer* pMaskBuf = rMask.GetBuffer();
-
-            if (rAlphaBitmap.GetBitCount() == 8)
-            {
-                // the alpha values need to be inverted for Cairo
-                // so big stupid copy and invert here
-                const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
-                pAlphaBits.reset( new unsigned char[nImageSize] );
-                memcpy(pAlphaBits.get(), pMaskBuf->mpBits, nImageSize);
-
-                // TODO: make upper layers use standard alpha
-                sal_uInt32* pLDst = reinterpret_cast<sal_uInt32*>(pAlphaBits.get());
-                for( int i = nImageSize/sizeof(sal_uInt32); --i >= 0; ++pLDst )
-                    *pLDst = ~*pLDst;
-                assert(reinterpret_cast<unsigned char*>(pLDst) == pAlphaBits.get()+nImageSize);
-
-                implSetSurface(
-                    cairo_image_surface_create_for_data(
-                        pAlphaBits.get(),
-                        CAIRO_FORMAT_A8,
-                        pMaskBuf->mnWidth,
-                        pMaskBuf->mnHeight,
-                        pMaskBuf->mnScanlineSize));
-            }
-            else
-            {
-                // the alpha values need to be inverted for Cairo
-                // so big stupid copy and invert here
-                const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
-                pAlphaBits.reset( new unsigned char[nImageSize] );
-                memcpy(pAlphaBits.get(), pMaskBuf->mpBits, nImageSize);
-
-                const sal_Int32 nBlackIndex = pMaskBuf->maPalette.GetBestIndex(BitmapColor(COL_BLACK));
-                if (nBlackIndex == 0)
-                {
-                    // TODO: make upper layers use standard alpha
-                    unsigned char* pDst = pAlphaBits.get();
-                    for (int i = nImageSize; --i >= 0; ++pDst)
-                        *pDst = ~*pDst;
-                }
-
-                implSetSurface(
-                    cairo_image_surface_create_for_data(
-                        pAlphaBits.get(),
-                        CAIRO_FORMAT_A1,
-                        pMaskBuf->mnWidth,
-                        pMaskBuf->mnHeight,
-                        pMaskBuf->mnScanlineSize));
-            }
-        }
-    };
 
     class SystemDependentData_MaskHelper : public basegfx::SystemDependentData
     {

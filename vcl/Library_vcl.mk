@@ -528,6 +528,7 @@ vcl_headless_code= \
         vcl/headless/svpgdi \
         vcl/headless/SvpGraphicsBackend \
         vcl/headless/CairoCommon \
+        vcl/headless/BitmapHelper \
         $(if $(ENABLE_HEADLESS),vcl/headless/svpdata) \
     ) \
     vcl/headless/svpdummies \
