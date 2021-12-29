@@ -16,6 +16,24 @@
       "message": "Andreas/Mike: Windows is case insensitive but since it could be used in Mac and Linux, thought it could worth it to stick to the standard, what do you think?",
       "revId": "f1d6bd6222c40bce362611627a59c50128515203",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ad848ed_8a50e382",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-29T19:58:48Z",
+      "side": 1,
+      "message": "Windows vs Mac/Linux is unrelated - Basic language is explicitly case-insensitive. But I\u0027m all for consistency - so +1 from me :-)",
+      "parentUuid": "e819d428_98a8b8d8",
+      "revId": "f1d6bd6222c40bce362611627a59c50128515203",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
