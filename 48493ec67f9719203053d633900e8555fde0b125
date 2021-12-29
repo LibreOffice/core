@@ -50,6 +50,23 @@
       "message": "There are multiple differences between the new body.xsl from Svante and the one in LibreOffice. Some are just pure typo fixes or similar cleanups. Others seem to be semantically meaningful. How can we resolve this situation?",
       "revId": "48493ec67f9719203053d633900e8555fde0b125",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9253944b_5cfbeae3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-29T16:53:50Z",
+      "side": 1,
+      "message": "OK, so now I see that most (?) changes done at OASIS have been done to the file at LibreOffice, too, good. But there are some differences anyway.",
+      "revId": "48493ec67f9719203053d633900e8555fde0b125",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
