@@ -33,6 +33,23 @@
       "message": "sir please review this patch",
       "revId": "2f8fd71720e5667a42a4266acde50578adf9450c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88f7dde7_5bd0fad4",
+        "filename": "sw/qa/extras/globalfilter/globalfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-29T20:05:41Z",
+      "side": 1,
+      "message": "Good that you found and fixed this from last time.",
+      "revId": "2f8fd71720e5667a42a4266acde50578adf9450c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
