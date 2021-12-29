@@ -132,6 +132,8 @@
 #include <memory>
 #include <vector>
 
+#include <comphelper/lok.hxx>
+
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
@@ -1286,17 +1288,22 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     sc::SetFormulaDirtyContext aCxt;
                     m_aDocument.SetAllFormulasDirty(aCxt);
 
-                    // The same resulting name has to be handled in
-                    // ScExternalRefCache::initializeDoc() and related, hence
-                    // pass 'true' for RenameTab()'s bExternalDocument for a
-                    // composed name so ValidTabName() will not be checked,
-                    // which could veto the rename in case it contained
-                    // characters that Excel does not handle. If we wanted to
-                    // change that then it needed to be handled in all
-                    // corresponding places of the external references
-                    // manager/cache. Likely then we'd also need a method to
-                    // compose a name excluding such characters.
-                    m_aDocument.RenameTab( 0, INetURLObject( rMedium.GetName()).GetBase(), true/*bExternalDocument*/);
+                    bool bIsMobile = comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current()
+                        && SfxViewShell::Current()->isLOKMobilePhone();
+                    // for mobile case, we use a copy of the original document and give it a temporary name before editing
+                    // Therefore, the sheet name becomes ugly, long and nonsensical.
+                    if (!bIsMobile)
+                        // The same resulting name has to be handled in
+                        // ScExternalRefCache::initializeDoc() and related, hence
+                        // pass 'true' for RenameTab()'s bExternalDocument for a
+                        // composed name so ValidTabName() will not be checked,
+                        // which could veto the rename in case it contained
+                        // characters that Excel does not handle. If we wanted to
+                        // change that then it needed to be handled in all
+                        // corresponding places of the external references
+                        // manager/cache. Likely then we'd also need a method to
+                        // compose a name excluding such characters.
+                        m_aDocument.RenameTab( 0, INetURLObject( rMedium.GetName()).GetBase(), true/*bExternalDocument*/);
 
                     bOverflowRow = aImpEx.IsOverflowRow();
                     bOverflowCol = aImpEx.IsOverflowCol();
