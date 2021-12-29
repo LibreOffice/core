@@ -127,6 +127,7 @@ $(eval $(call gb_Library_use_system_win32_libs,vclplug_win,\
     shell32 \
     shlwapi \
     uuid \
+    uxtheme \
     version \
     winspool \
 ))
