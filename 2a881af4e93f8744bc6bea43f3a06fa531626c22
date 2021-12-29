@@ -88,6 +88,24 @@
       "parentUuid": "e4a88bef_8624769a",
       "revId": "2a881af4e93f8744bc6bea43f3a06fa531626c22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5e1a052_7d4973ef",
+        "filename": "sal/osl/unx/backtrace.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-29T21:08:20Z",
+      "side": 0,
+      "message": "Based on the last build, you were right :). BTW, the mac build is failing because the machine ran out of space.",
+      "parentUuid": "29365cb9_a61932d8",
+      "revId": "2a881af4e93f8744bc6bea43f3a06fa531626c22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
