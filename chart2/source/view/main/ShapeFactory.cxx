@@ -1654,7 +1654,7 @@ static drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Posi
     return aPP;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<SvxShapePolyPolygon>
         ShapeFactory::createSymbol2D(
                       const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::Position3D& rPosition
@@ -1667,37 +1667,31 @@ uno::Reference< drawing::XShape >
         return nullptr;
 
     //create shape
-    uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.PolyPolygonShape" ), uno::UNO_QUERY );
-    xTarget->add(xShape);
+    rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
+    xShape->setShapeKind(OBJ_POLY);
+    xTarget->add(uno::Reference<drawing::XShape>(xShape));
 
     //set properties
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
+    try
     {
-        try
-        {
-            drawing::PointSequenceSequence aPoints( PolyToPointSequence(
-                createPolyPolygon_Symbol( rPosition, rSize, nStandardSymbol ) ));
+        drawing::PointSequenceSequence aPoints( PolyToPointSequence(
+            createPolyPolygon_Symbol( rPosition, rSize, nStandardSymbol ) ));
 
-            //Polygon
-            xProp->setPropertyValue( UNO_NAME_POLYPOLYGON
-                , uno::Any( aPoints ) );
+        //Polygon
+        xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
+            , uno::Any( aPoints ) );
 
-            //LineColor
-            xProp->setPropertyValue( UNO_NAME_LINECOLOR
-                , uno::Any( nBorderColor ) );
+        //LineColor
+        xShape->SvxShape::setPropertyValue( UNO_NAME_LINECOLOR
+            , uno::Any( nBorderColor ) );
 
-            //FillColor
-            xProp->setPropertyValue( UNO_NAME_FILLCOLOR
-                , uno::Any( nFillColor ) );
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
+        //FillColor
+        xShape->SvxShape::setPropertyValue( UNO_NAME_FILLCOLOR
+            , uno::Any( nFillColor ) );
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return xShape;
 }

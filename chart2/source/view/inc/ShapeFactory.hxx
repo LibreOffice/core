@@ -153,7 +153,7 @@ public:
         createArea2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::PolyPolygonShape3D& rPolyPolygon);
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapePolyPolygon>
         createSymbol2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::Position3D& rPos
                     , const css::drawing::Direction3D& rSize
