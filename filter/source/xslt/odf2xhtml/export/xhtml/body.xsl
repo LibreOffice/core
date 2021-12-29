@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?> <!-- -*- fill-column: 130; nxml-child-indent: 4; tab-width: 4; indent-tabs-mode: nil -*- -->
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -798,6 +798,7 @@
         <xsl:param name="leftPosition" select="0" />
         <xsl:param name="parentMarginLeft" />
         <xsl:param name="stopAtFirstFrame" select="false()" />
+        <xsl:param name="tdf146264hack" select="false()" />
 
         <xsl:choose>
             <xsl:when test="name() = 'draw:frame' and not($stopAtFirstFrame)">
@@ -825,9 +826,14 @@
                                 <xsl:value-of select="$leftPosition"/>
                                 <xsl:text>cm;</xsl:text>
                             </xsl:attribute>
-                            <xsl:apply-templates select=".">
-                                <xsl:with-param name="globalData" select="$globalData"/>
-                            </xsl:apply-templates>
+                            <!-- This xsl:if is the meat of the extremely ugly "fix" to tdf#146264. It probably has unintended
+                                 bad side-effects.
+                            -->
+                            <xsl:if test="not($tdf146264hack)">
+                                <xsl:apply-templates select=".">
+                                    <xsl:with-param name="globalData" select="$globalData"/>
+                                </xsl:apply-templates>
+                            </xsl:if>
                             <!-- if it is a frame sibling it will be NOT encapsulated within the div (as already within one) -->
                             <xsl:if test="not($nextSiblingIsFrame)">
                                 <xsl:apply-templates select="following-sibling::node()[1]" mode="frameFloating">
@@ -898,11 +904,13 @@
         <xsl:param name="globalData"/>
         <xsl:param name="previousFrameWidths" select="0"/>
         <xsl:param name="previousFrameHeights" select="0" />
+        <xsl:param name="tdf146264hack" select="false()" />
 
         <xsl:call-template name="createDrawFrame">
             <xsl:with-param name="globalData" select="$globalData" />
             <xsl:with-param name="previousFrameWidths" select="$previousFrameWidths"/>
             <xsl:with-param name="previousFrameHeights" select="$previousFrameHeights"/>
+            <xsl:with-param name="tdf146264hack" select="$tdf146264hack"/>
         </xsl:call-template>
         <!-- after the last draw:frame sibling the CSS float is disabled -->
         <xsl:if test="@text:anchor-type!='as-char'">
@@ -946,6 +954,7 @@
         <xsl:param name="previousFrameHeights" select="0" />
         <xsl:param name="parentMarginLeft"/>
         <xsl:param name="stopAtFirstFrame" select="false()" />
+        <xsl:param name="tdf146264hack" select="false()" />
 
         <xsl:variable name="parentMarginLeftNew">
             <xsl:choose>
@@ -1030,6 +1039,7 @@
             <xsl:with-param name="parentMarginLeft" select="$parentMarginLeftNew"/>
             <xsl:with-param name="leftPosition" select="$leftPosition"/>
             <xsl:with-param name="stopAtFirstFrame" select="$stopAtFirstFrame" />
+            <xsl:with-param name="tdf146264hack" select="$tdf146264hack" />
         </xsl:apply-templates>
     </xsl:template>
 
@@ -2551,6 +2561,7 @@
             <xsl:apply-templates>
                 <xsl:with-param name="globalData" select="$globalData"/>
                 <xsl:with-param name="listIndent" select="$minLabelWidth"/>
+                <xsl:with-param name="tdf146264hack" select="true()"/>
             </xsl:apply-templates>
             <!-- this span disables the float necessary to bring two block elements on one line. It contains a space as IE6 bug workaround -->
             <span class="odfLiEnd"></span>
