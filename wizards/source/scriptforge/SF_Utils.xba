@@ -594,7 +594,7 @@ REM ----------------------------------------------------------------------------
 Public Function _SetPropertyValue(ByVal pvPropertyValue As Variant _
 									, ByVal psName As String _
 									, ByRef pvValue As Variant _
-									) As variant
+									) As Variant
 &apos;&apos;&apos;	Return the 1st argument (passed by reference), which is an array of property values
 &apos;&apos;&apos;	If the property psName exists, update it with pvValue, otherwise create it on top of the returned array
 

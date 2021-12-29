@@ -670,7 +670,7 @@ Private Function _GetColumnValue(ByRef poResultSet As Object _
 &apos;&apos;&apos;			as long as its length does not exceed a maximum length.
 &apos;&apos;&apos;			Default = False: binary fields are not returned, only their length
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		The variant value found in the column
+&apos;&apos;&apos;		The Variant value found in the column
 &apos;&apos;&apos;		Dates and times are returned as Basic dates
 &apos;&apos;&apos;		Null values are returned as Null
 &apos;&apos;&apos;		Errors or strange data types are returned as Null as well

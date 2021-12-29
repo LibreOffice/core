@@ -457,7 +457,7 @@ End Function	&apos;	ScriptForge.SF_Dictionary.GetProperty
 
 REM -----------------------------------------------------------------------------
 Public Function ImportFromJson(Optional ByVal InputStr As Variant _
-											, Optional Byval Overwrite As Variant _
+											, Optional ByVal Overwrite As Variant _
 											) As Boolean
 &apos;&apos;&apos;	Adds the content of a Json string into the current dictionary
 &apos;&apos;&apos;	JSON = JavaScript Object Notation: https://en.wikipedia.org/wiki/JSON
@@ -544,7 +544,7 @@ End Function	&apos;	ScriptForge.SF_Dictionary.ImportFromJson
 
 REM -----------------------------------------------------------------------------
 Public Function ImportFromPropertyValues(Optional ByVal PropertyValues As Variant _
-											, Optional Byval Overwrite As Variant _
+											, Optional ByVal Overwrite As Variant _
 											) As Boolean
 &apos;&apos;&apos;	Adds the content of an array of PropertyValues into the current dictionary
 &apos;&apos;&apos;	Names contain Keys, Values contain Items

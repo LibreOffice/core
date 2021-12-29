@@ -481,7 +481,7 @@ Error_RowDeleted:
 End Function		&apos;	Edit
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function Fields(ByVal Optional pvIndex As variant) As Object
+Public Function Fields(ByVal Optional pvIndex As Variant) As Object
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 Const cstThisSub = &quot;Recordset.Fields&quot;

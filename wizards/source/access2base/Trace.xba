@@ -234,7 +234,7 @@ Error_Sub:
 End Sub			&apos;	TraceLevel	V0.9.5
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Sub TraceLog(Byval psTraceLevel As String _
+Public Sub TraceLog(ByVal psTraceLevel As String _
 						, ByVal psText As String _
 						, ByVal Optional pbMsgBox As Boolean _
 						)

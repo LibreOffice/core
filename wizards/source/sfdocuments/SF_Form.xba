@@ -1325,7 +1325,7 @@ Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
 &apos;&apos;&apos;		psProperty: the name of the property
 
 Static oSession As Object		&apos;	Alias of SF_Session
-Dim vBookmark As variant		&apos;	Form bookmark
+Dim vBookmark As Variant		&apos;	Form bookmark
 Dim cstThisSub As String
 Const cstSubArgs = &quot;&quot;
 
