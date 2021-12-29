@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3526fc9a_25449f61",
+        "filename": "vcl/inc/android/androidinst.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2021-12-29T04:06:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efbf477f_8ffeaccc",
+      "revId": "8489e75dfbd6241a1a8b4e1c6548d5c1489ea2cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39661cbe_abc6ce57",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-12-28T17:01:46Z",
       "side": 1,
       "message": "Drop this line",
+      "revId": "8489e75dfbd6241a1a8b4e1c6548d5c1489ea2cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2c51f54_44522bb7",
+        "filename": "vcl/ios/DataFlavorMapping.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2021-12-29T04:06:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39661cbe_abc6ce57",
       "revId": "8489e75dfbd6241a1a8b4e1c6548d5c1489ea2cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -52,6 +88,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "575bdd6b_3d2e77f3",
+        "filename": "vcl/ios/HtmlFmtFlt.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2021-12-29T04:06:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f645187_00c0c118",
+      "revId": "8489e75dfbd6241a1a8b4e1c6548d5c1489ea2cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "010d6dae_28c1f556",
@@ -65,6 +119,24 @@
       "writtenOn": "2021-12-28T17:01:46Z",
       "side": 1,
       "message": "Drop this line",
+      "revId": "8489e75dfbd6241a1a8b4e1c6548d5c1489ea2cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16b2cd0a_3614149b",
+        "filename": "vcl/ios/clipboard.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2021-12-29T04:06:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "010d6dae_28c1f556",
       "revId": "8489e75dfbd6241a1a8b4e1c6548d5c1489ea2cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

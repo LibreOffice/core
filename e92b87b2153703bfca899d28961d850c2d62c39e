@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec0ee7a5_cf71cfca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2021-12-29T04:06:59Z",
+      "side": 1,
+      "message": "The requested lines/comments have been removed.",
+      "revId": "e92b87b2153703bfca899d28961d850c2d62c39e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
