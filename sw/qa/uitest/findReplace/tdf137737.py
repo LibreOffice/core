@@ -8,32 +8,26 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import type_text, get_state_as_dict
+from uitest.uihelper.common import type_text, get_url_for_data_file, get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
-class tdf144089(UITestCase):
+class tdf137737(UITestCase):
 
-    def test_tdf144089(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
+    def test_tdf137737(self):
+        with self.ui_test.load_file(get_url_for_data_file("tdf137737.odt")) as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-            type_text(xWriterEdit, "This is a test")
-            xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "10", "END_POS": "14"}))
-
-            self.assertEqual("test", document.CurrentSelection[0].String)
+            self.assertEqual(2, writer_doc.Endnotes.Count)
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 xSearchterm = xDialog.getChild("searchterm")
                 xSearchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 xSearchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                xSearchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"^."}))
+                xSearchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"[:control:]"}))
 
                 xReplaceterm = xDialog.getChild("replaceterm")
                 xReplaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
-
-                xSelectionOnly = xDialog.getChild("selection")
-                xSelectionOnly.executeAction("CLICK", tuple())
 
                 # Deselect similarity before selecting regex
                 xSimilarity = xDialog.getChild("similarity")
@@ -48,9 +42,7 @@ class tdf144089(UITestCase):
                 replaceall.executeAction("CLICK", tuple())
 
             # Without the fix in place, this test would have failed with
-            # AssertionError: 'This is a test' != 'This is a AAAA'
-            self.assertEqual("This is a test", document.Text.String)
-
-            self.assertEqual("test", document.CurrentSelection[0].String)
+            # AssertionError: 0 != 1
+            self.assertEqual(0, writer_doc.Endnotes.Count)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

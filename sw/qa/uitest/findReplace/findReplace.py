@@ -100,15 +100,19 @@ class findReplace(UITestCase):
                 searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"T(est|other)\\>"}))   #find
                 replaceterm = xDialog.getChild("replaceterm")
                 replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"replaced$1"})) #replace
+
+                # Deselect similarity before selecting regex
+                xSimilarity = xDialog.getChild("similarity")
+                if get_state_as_dict(xSimilarity)['Selected'] == 'true':
+                    xSimilarity.executeAction("CLICK", tuple())
+
                 regexp = xDialog.getChild("regexp")
-                regexp.executeAction("CLICK", tuple())   #regular expressions
+                if get_state_as_dict(regexp)['Selected'] == 'false':
+                    regexp.executeAction("CLICK", tuple())   #regular expressions
                 replaceall = xDialog.getChild("replaceall")
                 replaceall.executeAction("CLICK", tuple())
                 #verify
                 self.assertEqual(document.Text.String[0:27], "replacedest number1 testnot")
-                regexp.executeAction("CLICK", tuple())
-
-
 
         #tdf116242  ţ ț
     def test_tdf116242_replace_t_with_cedilla(self):
