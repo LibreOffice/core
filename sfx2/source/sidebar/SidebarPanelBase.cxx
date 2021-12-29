@@ -52,8 +52,7 @@ SidebarPanelBase::SidebarPanelBase (
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     std::unique_ptr<PanelLayout> xControl,
     const css::ui::LayoutSize& rLayoutSize)
-    : SidebarPanelBaseInterfaceBase(m_aMutex),
-      mxFrame(rxFrame),
+    : mxFrame(rxFrame),
       mxControl(std::move(xControl)),
       msResourceURL(rsResourceURL),
       maLayoutSize(rLayoutSize)
@@ -78,7 +77,7 @@ void SidebarPanelBase::SetParentPanel(sfx2::sidebar::Panel* pPanel)
     mxControl->SetPanel(pPanel);
 }
 
-void SAL_CALL SidebarPanelBase::disposing()
+void SidebarPanelBase::disposing(std::unique_lock<std::mutex>&)
 {
     SolarMutexGuard aGuard;
 

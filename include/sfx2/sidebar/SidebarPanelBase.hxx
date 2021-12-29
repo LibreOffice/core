@@ -24,8 +24,7 @@
 
 #include <sfx2/dllapi.h>
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
@@ -39,7 +38,7 @@ namespace sfx2::sidebar {
 
 class Panel;
 
-typedef cppu::WeakComponentImplHelper<css::ui::XContextChangeEventListener,
+typedef comphelper::WeakComponentImplHelper<css::ui::XContextChangeEventListener,
                                        css::ui::XUIElement,
                                        css::ui::XToolPanel,
                                        css::ui::XSidebarPanel,
@@ -49,8 +48,7 @@ typedef cppu::WeakComponentImplHelper<css::ui::XContextChangeEventListener,
 /** Base class for sidebar panels that provides some convenience
     functionality.
 */
-class SFX2_DLLPUBLIC SidebarPanelBase final : private ::cppu::BaseMutex,
-                                        public SidebarPanelBaseInterfaceBase
+class SFX2_DLLPUBLIC SidebarPanelBase final : public SidebarPanelBaseInterfaceBase
 {
 public:
     static css::uno::Reference<css::ui::XUIElement> Create(const OUString& rsResourceURL,
@@ -91,7 +89,7 @@ private:
     SidebarPanelBase(const SidebarPanelBase&) = delete;
     SidebarPanelBase& operator=( const SidebarPanelBase& ) = delete;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
     std::unique_ptr<PanelLayout> mxControl;
