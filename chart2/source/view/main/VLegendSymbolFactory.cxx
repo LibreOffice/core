@@ -91,7 +91,7 @@ void lcl_setPropertiesToShape(
 namespace chart
 {
 
-Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
+rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
     const awt::Size& rEntryKeyAspectRatio,
     const Reference< drawing::XShapes >& rSymbolContainer,
     LegendSymbolStyle eStyle,
@@ -99,17 +99,17 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     const Reference< beans::XPropertySet > & xLegendEntryProperties,
     PropertyType ePropertyType, const uno::Any& rExplicitSymbol )
 {
-    Reference< drawing::XShape > xResult;
+    rtl::Reference< SvxShapeGroup > xResult;
 
     if( ! (rSymbolContainer.is() && xShapeFactory.is()))
         return xResult;
 
     ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
-    xResult.set( pShapeFactory->createGroup2D( rSymbolContainer ), uno::UNO_QUERY );
-
-    Reference< drawing::XShapes > xResultGroup( xResult, uno::UNO_QUERY );
-    if( ! xResultGroup.is())
+    xResult = ShapeFactory::createGroup2D( rSymbolContainer );
+    if( ! xResult)
         return xResult;
+
+    Reference< drawing::XShapes > xResultGroup( static_cast<cppu::OWeakObject*>(xResult.get()), uno::UNO_QUERY_THROW );
 
     // add an invisible square box to maintain aspect ratio
     pShapeFactory->createInvisibleRectangle( xResultGroup, rEntryKeyAspectRatio );

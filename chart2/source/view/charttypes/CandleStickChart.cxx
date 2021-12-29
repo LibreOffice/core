@@ -94,8 +94,8 @@ void CandleStickChart::createShapes()
     uno::Reference< drawing::XShapes > xGainTarget(
         createGroupShape( m_xLogicTarget, ObjectIdentifier::createClassifiedIdentifier(
             OBJECTTYPE_DATA_STOCK_GAIN, u"" )));
-    uno::Reference< drawing::XShapes > xTextTarget(
-        m_pShapeFactory->createGroup2D( m_xFinalTarget ));
+    rtl::Reference< SvxShapeGroup > xTextTarget =
+        ShapeFactory::createGroup2D( m_xFinalTarget );
 
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 

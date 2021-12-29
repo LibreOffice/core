@@ -223,7 +223,7 @@ bool NetChart::impl_createArea( VDataSeries* pSeries
 
     //create area:
     uno::Reference< drawing::XShape >
-        xShape = m_pShapeFactory->createArea2D( xSeriesGroupShape_Shapes
+        xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes
                 , aPoly );
     setMappedProperties( xShape
                 , pSeries->getPropertiesOfSeries()
@@ -334,7 +334,7 @@ void NetChart::createShapes()
     //therefore create an own group for the texts and the error bars to move them to front
     //(because the text group is created after the series group the texts are displayed on top)
     m_xSeriesTarget   = createGroupShape( m_xLogicTarget );
-    m_xTextTarget     = m_pShapeFactory->createGroup2D( m_xFinalTarget );
+    m_xTextTarget     = ShapeFactory::createGroup2D( m_xFinalTarget );
 
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 

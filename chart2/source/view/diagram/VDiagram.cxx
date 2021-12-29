@@ -142,14 +142,14 @@ void VDiagram::createShapes_2d()
         return;
 
     //create group shape
-    uno::Reference< drawing::XShapes > xOuterGroup_Shapes = m_pShapeFactory->createGroup2D(m_xTarget);
+    uno::Reference< drawing::XShapes > xOuterGroup_Shapes = ShapeFactory::createGroup2D(m_xTarget);
     m_xOuterGroupShape.set( xOuterGroup_Shapes, uno::UNO_QUERY );
 
-    uno::Reference< drawing::XShapes > xGroupForWall( m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,"PlotAreaExcludingAxes") );
+    uno::Reference< drawing::XShapes > xGroupForWall( ShapeFactory::createGroup2D(xOuterGroup_Shapes,"PlotAreaExcludingAxes") );
 
     //create independent group shape as container for datapoints and such things
     {
-        uno::Reference< drawing::XShapes > xShapes = m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID");
+        uno::Reference< drawing::XShapes > xShapes = ShapeFactory::createGroup2D(xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID");
         m_xCoordinateRegionShape.set( xShapes, uno::UNO_QUERY );
     }
 

@@ -931,13 +931,12 @@ void VLegend::createShapes(
         //create shape and add to page
         ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
         OUString aLegendParticle( ObjectIdentifier::createParticleForLegend( mrModel ) );
-        m_xShape.set( pShapeFactory->createGroup2D( m_xTarget,
-                    ObjectIdentifier::createClassifiedIdentifierForParticle( aLegendParticle )),
-                uno::UNO_QUERY);
+        m_xShape = ShapeFactory::createGroup2D( m_xTarget,
+                    ObjectIdentifier::createClassifiedIdentifierForParticle( aLegendParticle ) );
 
         // create and insert sub-shapes
-        Reference< drawing::XShapes > xLegendContainer( m_xShape, uno::UNO_QUERY );
-        if( xLegendContainer.is())
+        Reference< drawing::XShapes > xLegendContainer = m_xShape;
+        if( xLegendContainer.is() )
         {
             // for quickly setting properties
             tPropertyValues aLineFillProperties;

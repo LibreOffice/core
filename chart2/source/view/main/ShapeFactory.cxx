@@ -1117,7 +1117,8 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
-uno::Reference< drawing::XShape >
+
+rtl::Reference<SvxShapePolyPolygon>
         ShapeFactory::createArea2D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::PolyPolygonShape3D& rPolyPolygon )
 {
@@ -1125,34 +1126,28 @@ uno::Reference< drawing::XShape >
         return nullptr;
 
     //create shape
-    uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.PolyPolygonShape" ), uno::UNO_QUERY );
-    xTarget->add(xShape);
+    rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
+    xShape->setShapeKind(OBJ_POLY);
+    xTarget->add(uno::Reference<drawing::XShape>(xShape));
 
     //set properties
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
+    try
     {
-        try
-        {
-            //UNO_NAME_POLYGON "Polygon" drawing::PointSequence*
-            drawing::PointSequenceSequence aPoints( PolyToPointSequence(rPolyPolygon) );
+        //UNO_NAME_POLYGON "Polygon" drawing::PointSequence*
+        drawing::PointSequenceSequence aPoints( PolyToPointSequence(rPolyPolygon) );
 
-            //Polygon
-            xProp->setPropertyValue( UNO_NAME_POLYPOLYGON
-                , uno::Any( aPoints ) );
+        //Polygon
+        xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
+            , uno::Any( aPoints ) );
 
-            //ZOrder
-            //an area should always be behind other shapes
-            xProp->setPropertyValue( UNO_NAME_MISC_OBJ_ZORDER
-                , uno::Any( sal_Int32(0) ) );
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
+        //ZOrder
+        //an area should always be behind other shapes
+        xShape->SvxShape::setPropertyValue( UNO_NAME_MISC_OBJ_ZORDER
+            , uno::Any( sal_Int32(0) ) );
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return xShape;
 }
@@ -1755,7 +1750,7 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
-uno::Reference< drawing::XShapes >
+rtl::Reference< SvxShapeGroup >
         ShapeFactory::createGroup2D( const uno::Reference< drawing::XShapes >& xTarget
         , const OUString& aName )
 {
@@ -1764,23 +1759,21 @@ uno::Reference< drawing::XShapes >
     try
     {
         //create and add to target
-        uno::Reference< drawing::XShape > xShape(
-                    m_xShapeFactory->createInstance(
-                    "com.sun.star.drawing.GroupShape" ), uno::UNO_QUERY );
+        rtl::Reference<SvxShapeGroup> xShapeGroup = new SvxShapeGroup(nullptr, nullptr);
+        xShapeGroup->setShapeKind(OBJ_GRUP);
+        uno::Reference< drawing::XShape > xShape(static_cast<cppu::OWeakObject*>(xShapeGroup.get()), uno::UNO_QUERY_THROW);
         xTarget->add(xShape);
 
         //set name
         if(!aName.isEmpty())
-            setShapeName( xShape , aName );
+            setShapeName( xShape, aName );
 
         {//workaround
             //need this null size as otherwise empty group shapes where painted with a gray border
-            xShape->setSize(awt::Size(0,0));
+            xShapeGroup->setSize(awt::Size(0,0));
         }
 
-        //return
-        uno::Reference< drawing::XShapes > xShapes( xShape, uno::UNO_QUERY );
-        return xShapes;
+        return xShapeGroup;
     }
     catch( const uno::Exception& )
     {
@@ -2487,6 +2480,20 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
         {
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }
+    }
+}
+
+// set a name/CID at a shape (is used for selection handling)
+
+void ShapeFactory::setShapeName( SvxShape& rShape, const OUString& rName )
+{
+    try
+    {
+        rShape.setPropertyValue( UNO_NAME_MISC_OBJ_NAME, uno::Any( rName ) );
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 

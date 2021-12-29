@@ -19,7 +19,8 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
-
+#include <rtl/ref.hxx>
+#include <svx/unoshape.hxx>
 #include <vector>
 
 namespace chart { class ChartModel; }
@@ -73,7 +74,7 @@ private:
     css::uno::Reference< css::drawing::XShapes >            m_xTarget;
     css::uno::Reference< css::lang::XMultiServiceFactory>   m_xShapeFactory;
     css::uno::Reference< css::chart2::XLegend >             m_xLegend;
-    css::uno::Reference< css::drawing::XShape >             m_xShape;
+    rtl::Reference< SvxShapeGroup >                         m_xShape;
 
     ChartModel& mrModel;
 

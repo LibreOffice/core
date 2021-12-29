@@ -26,6 +26,8 @@
 #include "LegendEntryProvider.hxx"
 #include <basegfx/range/b2irectangle.hxx>
 #include <com/sun/star/drawing/Direction3D.hpp>
+#include <rtl/ref.hxx>
+#include <svx/unoshape.hxx>
 
 namespace com::sun::star::awt { struct Point; }
 namespace com::sun::star::chart2 { class XChartType; }
@@ -195,13 +197,13 @@ public:
 
     virtual css::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex/*-1 for series symbol*/ );
 
-    css::uno::Reference< css::drawing::XShape > createLegendSymbolForSeries(
+    rtl::Reference<SvxShapeGroup> createLegendSymbolForSeries(
                   const css::awt::Size& rEntryKeyAspectRatio
                 , const VDataSeries& rSeries
                 , const css::uno::Reference< css::drawing::XShapes >& xTarget
                 , const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory );
 
-    css::uno::Reference< css::drawing::XShape > createLegendSymbolForPoint(
+    rtl::Reference< SvxShapeGroup > createLegendSymbolForPoint(
                   const css::awt::Size& rEntryKeyAspectRatio
                 , const VDataSeries& rSeries
                 , sal_Int32 nPointIndex
@@ -278,7 +280,7 @@ protected:
 
     /// This method creates a 2D group shape for containing all text shapes
     /// needed for this series; the group is added to the text target;
-    css::uno::Reference< css::drawing::XShapes >
+    static rtl::Reference<SvxShapeGroup>
         getLabelsGroupShape( VDataSeries& rDataSeries
             , const css:: uno::Reference< css::drawing::XShapes >& xTarget );
 

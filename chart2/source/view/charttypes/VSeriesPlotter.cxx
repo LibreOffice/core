@@ -316,19 +316,16 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getSeriesGroupShapeBackChild(
     return xShapes;
 }
 
-uno::Reference< drawing::XShapes > VSeriesPlotter::getLabelsGroupShape( VDataSeries& rDataSeries
+rtl::Reference<SvxShapeGroup> VSeriesPlotter::getLabelsGroupShape( VDataSeries& rDataSeries
                                         , const uno::Reference< drawing::XShapes >& xTextTarget )
 {
     //xTextTarget needs to be a 2D shape container always!
-
-    uno::Reference< drawing::XShapes > xShapes( rDataSeries.m_xLabelsGroupShape );
-    if(!xShapes.is())
+    if(!rDataSeries.m_xLabelsGroupShape)
     {
         //create a 2D group shape for texts of this series and add to text target:
-        xShapes = m_pShapeFactory->createGroup2D( xTextTarget, rDataSeries.getLabelsCID() );
-        rDataSeries.m_xLabelsGroupShape = xShapes;
+        rDataSeries.m_xLabelsGroupShape = ShapeFactory::createGroup2D( xTextTarget, rDataSeries.getLabelsCID() );
     }
-    return xShapes;
+    return rDataSeries.m_xLabelsGroupShape;
 }
 
 uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VDataSeries& rDataSeries
@@ -428,8 +425,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         else if(eAlignment==LABEL_ALIGN_BOTTOM)
             aScreenPosition2D.Y += nOffset;
 
-        uno::Reference< drawing::XShapes > xTarget_ =
-            m_pShapeFactory->createGroup2D(
+        rtl::Reference<SvxShapeGroup> xTarget_ =
+            ShapeFactory::createGroup2D(
                 getLabelsGroupShape(rDataSeries, xTarget),
                 ObjectIdentifier::createPointCID( rDataSeries.getLabelCID_Stub(), nPointIndex));
 
@@ -456,7 +453,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
         // the font height is used for computing the size of an optional legend
         // symbol to be prepended to the text label.
-        Reference< drawing::XShape > xSymbol;
+        rtl::Reference< SvxShapeGroup > xSymbol;
         if(pLabel->ShowLegendSymbol)
         {
             sal_Int32 nSymbolHeight = static_cast< sal_Int32 >( fViewFontSize * 0.6  );
@@ -469,9 +466,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             awt::Size aMaxSymbolExtent( nSymbolWidth, nSymbolHeight );
 
             if( rDataSeries.isVaryColorsByPoint() )
-                xSymbol.set( VSeriesPlotter::createLegendSymbolForPoint( aMaxSymbolExtent, rDataSeries, nPointIndex, xTarget_, m_xShapeFactory ) );
+                xSymbol = VSeriesPlotter::createLegendSymbolForPoint( aMaxSymbolExtent, rDataSeries, nPointIndex, xTarget_, m_xShapeFactory );
             else
-                xSymbol.set( VSeriesPlotter::createLegendSymbolForSeries( aMaxSymbolExtent, rDataSeries, xTarget_, m_xShapeFactory ) );
+                xSymbol = VSeriesPlotter::createLegendSymbolForSeries( aMaxSymbolExtent, rDataSeries, xTarget_, m_xShapeFactory );
         }
 
         //prepare text
@@ -2576,7 +2573,7 @@ uno::Any VSeriesPlotter::getExplicitSymbol( const VDataSeries& /*rSeries*/, sal_
     return uno::Any();
 }
 
-Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
+rtl::Reference<SvxShapeGroup> VSeriesPlotter::createLegendSymbolForSeries(
                   const awt::Size& rEntryKeyAspectRatio
                 , const VDataSeries& rSeries
                 , const Reference< drawing::XShapes >& xTarget
@@ -2599,14 +2596,14 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
         default:
             break;
     }
-    Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
+    rtl::Reference<SvxShapeGroup> xShape = VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
         xTarget, eLegendSymbolStyle, xShapeFactory
-            , rSeries.getPropertiesOfSeries(), ePropType, aExplicitSymbol ));
+            , rSeries.getPropertiesOfSeries(), ePropType, aExplicitSymbol );
 
     return xShape;
 }
 
-Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
+rtl::Reference< SvxShapeGroup > VSeriesPlotter::createLegendSymbolForPoint(
                   const awt::Size& rEntryKeyAspectRatio
                 , const VDataSeries& rSeries
                 , sal_Int32 nPointIndex
@@ -2655,8 +2652,8 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
         }
     }
 
-    Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
-        xTarget, eLegendSymbolStyle, xShapeFactory, xPointSet, ePropType, aExplicitSymbol ));
+    rtl::Reference< SvxShapeGroup > xShape = VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
+        xTarget, eLegendSymbolStyle, xShapeFactory, xPointSet, ePropType, aExplicitSymbol );
 
     return xShape;
 }
@@ -2723,11 +2720,11 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     continue;
 
                 // symbol
-                uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D( xTarget ));
+                uno::Reference< drawing::XShapes > xSymbolGroup(ShapeFactory::createGroup2D( xTarget ));
 
                 // create the symbol
-                Reference< drawing::XShape > xShape( createLegendSymbolForPoint( rEntryKeyAspectRatio,
-                    rSeries, nIdx, xSymbolGroup, xShapeFactory ) );
+                rtl::Reference< SvxShapeGroup > xShape = createLegendSymbolForPoint( rEntryKeyAspectRatio,
+                    rSeries, nIdx, xSymbolGroup, xShapeFactory );
 
                 // set CID to symbol for selection
                 if( xShape.is() )
@@ -2737,7 +2734,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_DATA_POINT, nIdx ) );
                     aChildParticle = ObjectIdentifier::addChildParticle( aChildParticle, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
                     OUString aCID = ObjectIdentifier::createClassifiedIdentifierForParticles( rSeries.getSeriesParticle(), aChildParticle );
-                    ShapeFactory::setShapeName( xShape, aCID );
+                    ShapeFactory::setShapeName( *xShape, aCID );
                 }
 
                 // label
@@ -2752,11 +2749,11 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
         else
         {
             // symbol
-            uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D( xTarget ));
+            uno::Reference< drawing::XShapes > xSymbolGroup(ShapeFactory::createGroup2D( xTarget ));
 
             // create the symbol
-            Reference< drawing::XShape > xShape( createLegendSymbolForSeries(
-                rEntryKeyAspectRatio, rSeries, xSymbolGroup, xShapeFactory ) );
+            rtl::Reference<SvxShapeGroup> xShape = createLegendSymbolForSeries(
+                rEntryKeyAspectRatio, rSeries, xSymbolGroup, xShapeFactory );
 
             // set CID to symbol for selection
             if( xShape.is())
@@ -2765,7 +2762,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
 
                 OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
                 OUString aCID = ObjectIdentifier::createClassifiedIdentifierForParticles( rSeries.getSeriesParticle(), aChildParticle );
-                ShapeFactory::setShapeName( xShape, aCID );
+                ShapeFactory::setShapeName( *xShape, aCID );
             }
 
             // label
@@ -2795,13 +2792,13 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( xContext, aResStr, xTextProperties );
 
                     // symbol
-                    uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D( xTarget ));
+                    uno::Reference< drawing::XShapes > xSymbolGroup(ShapeFactory::createGroup2D( xTarget ));
 
                     // create the symbol
-                    Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
+                    rtl::Reference<SvxShapeGroup> xShape = VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
                         xSymbolGroup, LegendSymbolStyle::Line, xShapeFactory,
                         Reference< beans::XPropertySet >( aCurves[i], uno::UNO_QUERY ),
-                        VLegendSymbolFactory::PropertyType::Line, uno::Any() ));
+                        VLegendSymbolFactory::PropertyType::Line, uno::Any() );
 
                     // set CID to symbol for selection
                     if( xShape.is())
@@ -2813,7 +2810,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                         OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( eObjectType, i ) );
                         aChildParticle = ObjectIdentifier::addChildParticle( aChildParticle, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
                         OUString aCID = ObjectIdentifier::createClassifiedIdentifierForParticles( rSeries.getSeriesParticle(), aChildParticle );
-                        ShapeFactory::setShapeName( xShape, aCID );
+                        ShapeFactory::setShapeName( *xShape, aCID );
                     }
 
                     aResult.push_back(aEntry);
