@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e819d428_98a8b8d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-29T17:50:27Z",
+      "side": 1,
+      "message": "Andreas/Mike: Windows is case insensitive but since it could be used in Mac and Linux, thought it could worth it to stick to the standard, what do you think?",
+      "revId": "f1d6bd6222c40bce362611627a59c50128515203",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
