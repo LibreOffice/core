@@ -28,6 +28,7 @@
 #include <vcl/transfer.hxx>
 #include <swevent.hxx>
 #include <swtypes.hxx>
+#include <txtfrm.hxx>
 
 class   SwWrtShell;
 class   SwView;
@@ -127,7 +128,7 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
 
     std::unique_ptr<SwFrameControlsManager> m_pFrameControlsManager;
 
-     SwFrame* m_pSavedOutlineFrame = nullptr;
+     SwTextFrame* m_pSavedOutlineFrame = nullptr;
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
@@ -291,8 +292,8 @@ public:
     /// Allows starting or ending a graphic move or resize action.
     void SetGraphicTwipPosition(bool bStart, const Point& rPosition);
 
-    const SwFrame* GetSavedOutlineFrame() const { return m_pSavedOutlineFrame; }
-    void SetSavedOutlineFrame(SwFrame* pFrame) { m_pSavedOutlineFrame = pFrame; }
+    const SwTextFrame* GetSavedOutlineFrame() const { return m_pSavedOutlineFrame; }
+    void SetSavedOutlineFrame(SwTextFrame* pFrame) { m_pSavedOutlineFrame = pFrame; }
     void ToggleOutlineContentVisibility(const size_t nOutlinePos, const bool bSubs);
 
     virtual FactoryFunction GetUITestFactory() const override;

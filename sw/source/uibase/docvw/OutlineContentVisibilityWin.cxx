@@ -211,7 +211,8 @@ IMPL_LINK(SwOutlineContentVisibilityWin, MouseMoveHdl, const MouseEvent&, rMEvt,
                     // for saved outline frame is now disposed.
                 }
             }
-            GetEditWin()->SetSavedOutlineFrame(const_cast<SwFrame*>(GetFrame()));
+            GetEditWin()->SetSavedOutlineFrame(
+                static_cast<SwTextFrame*>(const_cast<SwFrame*>(GetFrame())));
         }
         if (!m_bDestroyed && m_aDelayTimer.IsActive())
             m_aDelayTimer.Stop();
