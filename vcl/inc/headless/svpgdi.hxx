@@ -59,7 +59,6 @@ protected:
     std::unique_ptr<SvpGraphicsBackend> m_pBackend;
 
 protected:
-    virtual bool drawAlphaBitmap( const SalTwoRect&, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap ) override;
     virtual bool drawTransformedBitmap(
         const basegfx::B2DPoint& rNull,
         const basegfx::B2DPoint& rX,
@@ -75,6 +74,7 @@ public:
     virtual ~SvpSalGraphics() override;
 
     virtual SalGraphicsImpl* GetImpl() const override { return m_pBackend.get(); }
+    std::unique_ptr<SvpGraphicsBackend> const& getSvpBackend() { return m_pBackend; }
 
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
 
@@ -104,17 +104,6 @@ public:
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
 
-    virtual void            drawBitmap( const SalTwoRect& rPosAry,
-                                        const SalBitmap& rSalBitmap ) override;
-    void                    drawBitmap( const SalTwoRect& rPosAry,
-                                        const BitmapBuffer* pBuffer,
-                                        cairo_operator_t eOp );
-    virtual void            drawBitmap( const SalTwoRect& rPosAry,
-                                        const SalBitmap& rSalBitmap,
-                                        const SalBitmap& rTransparentBitmap ) override;
-    virtual void            drawMask( const SalTwoRect& rPosAry,
-                                      const SalBitmap& rSalBitmap,
-                                      Color nMaskColor ) override;
     virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
 
     virtual SystemGraphicsData GetGraphicsData() const override;

@@ -23,6 +23,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <headless/BitmapHelper.hxx>
 
 SvpGraphicsBackend::SvpGraphicsBackend(CairoCommon& rCairoCommon)
     : m_rCairoCommon(rCairoCommon)
@@ -380,18 +381,103 @@ void SvpGraphicsBackend::copyBits(const SalTwoRect& rTR, SalGraphics* pSrcGraphi
     m_rCairoCommon.copyBitsCairo(rTR, source, getAntiAlias());
 }
 
-void SvpGraphicsBackend::drawBitmap(const SalTwoRect& /*rPosAry*/, const SalBitmap& /*rSalBitmap*/)
+void SvpGraphicsBackend::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
+    // MM02 try to access buffered BitmapHelper
+    std::shared_ptr<BitmapHelper> aSurface;
+    tryToUseSourceBuffer(rSalBitmap, aSurface);
+    cairo_surface_t* source = aSurface->getSurface(rPosAry.mnDestWidth, rPosAry.mnDestHeight);
+
+    if (!source)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
+        return;
+    }
+
+#if 0 // LO code is not yet bitmap32-ready.                                                        \
+    // if m_bSupportsBitmap32 becomes true for Svp revisit this
+    m_rCairoCommon.copyWithOperator(rPosAry, source, CAIRO_OPERATOR_OVER, getAntiAlias());
+#else
+    m_rCairoCommon.copyWithOperator(rPosAry, source, CAIRO_OPERATOR_SOURCE, getAntiAlias());
+#endif
 }
 
-void SvpGraphicsBackend::drawBitmap(const SalTwoRect& /*rPosAry*/, const SalBitmap& /*rSalBitmap*/,
-                                    const SalBitmap& /*rMaskBitmap*/)
+void SvpGraphicsBackend::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
+                                    const SalBitmap& rTransparentBitmap)
 {
+    drawAlphaBitmap(rPosAry, rSalBitmap, rTransparentBitmap);
 }
 
-void SvpGraphicsBackend::drawMask(const SalTwoRect& /*rPosAry*/, const SalBitmap& /*rSalBitmap*/,
-                                  Color /*nMaskColor*/)
+void SvpGraphicsBackend::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBitmap,
+                                  Color nMaskColor)
 {
+    /** creates an image from the given rectangle, replacing all black pixels
+     *  with nMaskColor and make all other full transparent */
+    // MM02 here decided *against* using buffered BitmapHelper
+    // because the data gets somehow 'unmuliplied'. This may also be
+    // done just once, but I am not sure if this is safe to do.
+    // So for now dispense re-using data here.
+    BitmapHelper aSurface(rSalBitmap, true); // The mask is argb32
+    if (!aSurface.getSurface())
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawMask case");
+        return;
+    }
+    sal_Int32 nStride;
+    unsigned char* mask_data = aSurface.getBits(nStride);
+    vcl::bitmap::lookup_table const& unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
+    for (tools::Long y = rTR.mnSrcY; y < rTR.mnSrcY + rTR.mnSrcHeight; ++y)
+    {
+        unsigned char* row = mask_data + (nStride * y);
+        unsigned char* data = row + (rTR.mnSrcX * 4);
+        for (tools::Long x = rTR.mnSrcX; x < rTR.mnSrcX + rTR.mnSrcWidth; ++x)
+        {
+            sal_uInt8 a = data[SVP_CAIRO_ALPHA];
+            sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
+            sal_uInt8 g = unpremultiply_table[a][data[SVP_CAIRO_GREEN]];
+            sal_uInt8 r = unpremultiply_table[a][data[SVP_CAIRO_RED]];
+            if (r == 0 && g == 0 && b == 0)
+            {
+                data[0] = nMaskColor.GetBlue();
+                data[1] = nMaskColor.GetGreen();
+                data[2] = nMaskColor.GetRed();
+                data[3] = 0xff;
+            }
+            else
+            {
+                data[0] = 0;
+                data[1] = 0;
+                data[2] = 0;
+                data[3] = 0;
+            }
+            data += 4;
+        }
+    }
+    aSurface.mark_dirty();
+
+    cairo_t* cr = m_rCairoCommon.getCairoContext(false, getAntiAlias());
+    m_rCairoCommon.clipRegion(cr);
+
+    cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
+
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
+
+    cairo_clip(cr);
+
+    cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
+    double fXScale = static_cast<double>(rTR.mnDestWidth) / rTR.mnSrcWidth;
+    double fYScale = static_cast<double>(rTR.mnDestHeight) / rTR.mnSrcHeight;
+    cairo_scale(cr, fXScale, fYScale);
+    cairo_set_source_surface(cr, aSurface.getSurface(), -rTR.mnSrcX, -rTR.mnSrcY);
+    if ((fXScale != 1.0 && rTR.mnSrcWidth == 1) || (fYScale != 1.0 && rTR.mnSrcHeight == 1))
+    {
+        cairo_pattern_t* sourcepattern = cairo_get_source(cr);
+        cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
+        cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_NEAREST);
+    }
+    cairo_paint(cr);
+
+    m_rCairoCommon.releaseCairoContext(cr, false, extents);
 }
 
 std::shared_ptr<SalBitmap> SvpGraphicsBackend::getBitmap(tools::Long /*nX*/, tools::Long /*nY*/,
@@ -399,6 +485,14 @@ std::shared_ptr<SalBitmap> SvpGraphicsBackend::getBitmap(tools::Long /*nX*/, too
                                                          tools::Long /*nHeight*/)
 {
     return std::shared_ptr<SalBitmap>();
+}
+
+void SvpGraphicsBackend::drawBitmapBuffer(const SalTwoRect& rTR, const BitmapBuffer* pBuffer,
+                                          cairo_operator_t eOp)
+{
+    cairo_surface_t* source = CairoCommon::createCairoSurface(pBuffer);
+    m_rCairoCommon.copyWithOperator(rTR, source, eOp, getAntiAlias());
+    cairo_surface_destroy(source);
 }
 
 Color SvpGraphicsBackend::getPixel(tools::Long nX, tools::Long nY)
@@ -469,10 +563,77 @@ bool SvpGraphicsBackend::blendAlphaBitmap(const SalTwoRect& /*rPosAry*/,
     return false;
 }
 
-bool SvpGraphicsBackend::drawAlphaBitmap(const SalTwoRect&, const SalBitmap& /*rSourceBitmap*/,
-                                         const SalBitmap& /*rAlphaBitmap*/)
+bool SvpGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap,
+                                         const SalBitmap& rAlphaBitmap)
 {
-    return false;
+    if (rAlphaBitmap.GetBitCount() != 8 && rAlphaBitmap.GetBitCount() != 1)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap alpha depth case: "
+                                << rAlphaBitmap.GetBitCount());
+        return false;
+    }
+
+    // MM02 try to access buffered BitmapHelper
+    std::shared_ptr<BitmapHelper> aSurface;
+    tryToUseSourceBuffer(rSourceBitmap, aSurface);
+    cairo_surface_t* source = aSurface->getSurface(rTR.mnDestWidth, rTR.mnDestHeight);
+
+    if (!source)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
+        return false;
+    }
+
+    // MM02 try to access buffered MaskHelper
+    std::shared_ptr<MaskHelper> aMask;
+    tryToUseMaskBuffer(rAlphaBitmap, aMask);
+    cairo_surface_t* mask = aMask->getSurface(rTR.mnDestWidth, rTR.mnDestHeight);
+
+    if (!mask)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
+        return false;
+    }
+
+    cairo_t* cr = m_rCairoCommon.getCairoContext(false, getAntiAlias());
+    m_rCairoCommon.clipRegion(cr);
+
+    cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
+
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
+
+    cairo_clip(cr);
+
+    cairo_pattern_t* maskpattern = cairo_pattern_create_for_surface(mask);
+    cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
+    double fXScale = static_cast<double>(rTR.mnDestWidth) / rTR.mnSrcWidth;
+    double fYScale = static_cast<double>(rTR.mnDestHeight) / rTR.mnSrcHeight;
+    cairo_scale(cr, fXScale, fYScale);
+    cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
+
+    //tdf#114117 when stretching a single pixel width/height source to fit an area
+    //set extend and filter to stretch it with simplest expected interpolation
+    if ((fXScale != 1.0 && rTR.mnSrcWidth == 1) || (fYScale != 1.0 && rTR.mnSrcHeight == 1))
+    {
+        cairo_pattern_t* sourcepattern = cairo_get_source(cr);
+        cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
+        cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_NEAREST);
+        cairo_pattern_set_extend(maskpattern, CAIRO_EXTEND_REPEAT);
+        cairo_pattern_set_filter(maskpattern, CAIRO_FILTER_NEAREST);
+    }
+
+    //this block is just "cairo_mask_surface", but we have to make it explicit
+    //because of the cairo_pattern_set_filter etc we may want applied
+    cairo_matrix_t matrix;
+    cairo_matrix_init_translate(&matrix, rTR.mnSrcX, rTR.mnSrcY);
+    cairo_pattern_set_matrix(maskpattern, &matrix);
+    cairo_mask(cr, maskpattern);
+
+    cairo_pattern_destroy(maskpattern);
+
+    m_rCairoCommon.releaseCairoContext(cr, false, extents);
+
+    return true;
 }
 
 bool SvpGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& /*rNull*/,

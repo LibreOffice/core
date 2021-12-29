@@ -89,7 +89,8 @@ void QtSvpGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
     QImage2BitmapBuffer(*pImage, aBuffer);
     SalTwoRect aTR(0, 0, pImage->width(), pImage->height(), rDamagedRegion.Left(),
                    rDamagedRegion.Top(), rDamagedRegion.GetWidth(), rDamagedRegion.GetHeight());
-    drawBitmap(aTR, &aBuffer, CAIRO_OPERATOR_OVER);
+
+    getSvpBackend()->drawBitmapBuffer(aTR, &aBuffer, CAIRO_OPERATOR_OVER);
 }
 
 void QtSvpGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
