@@ -1,0 +1,164 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baf7b1e4_e362e63f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T11:39:41Z",
+      "side": 1,
+      "message": "Guess this needs an other round...",
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "427c2e91_97d34a9c",
+        "filename": "config_host.mk.in",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T11:39:41Z",
+      "side": 1,
+      "message": "Keep sorted.",
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aca5cd4_358c3ae3",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T11:39:41Z",
+      "side": 1,
+      "message": "Nice. Don\u0027t know how useful this is, but I\u0027ll probably add this to m4/libo_externals.m4 too.",
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d88a194c_1025e2e2",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T11:39:41Z",
+      "side": 1,
+      "message": "AC_SUBST?",
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eaf2cc1_eb5d6ce7",
+        "filename": "sal/osl/unx/backtrace.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T11:39:41Z",
+      "side": 1,
+      "message": "Can become:\n\n\u003e #include \"backtrace.h\"\n\u003e \n\u003e #if ! HAVE_FEATURE_BACKTRACE /* no GNU backtrace implementation available */\n\u003e \n\u003e #include \u003csal/types.h\u003e",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 76
+      },
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52211573_7e248a71",
+        "filename": "sal/osl/unx/backtrace.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T11:39:41Z",
+      "side": 1,
+      "message": "Move to backtrace.c *BSD block without #ifdef",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 6
+      },
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2cde192_cc5d0db4",
+        "filename": "sal/osl/unx/signal.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T11:39:41Z",
+      "side": 1,
+      "message": "Since you\u0027re already cleaning up this stuff, just \n\n\u003e #include \"backtrace.h\"\n\u003e #define MAX_STACK_FRAMES 256\n\nand drop the INCLUDE_BACKTRACE usage.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 6
+      },
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f4b15f2_670ddab4",
+        "filename": "sal/osl/unx/signal.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T11:39:41Z",
+      "side": 1,
+      "message": "Drop the INCLUDE_BACKTRACE - backtrace.c has the stubs for a reason. The only #ifdef left should be:\n\n\u003e #if defined(MACOSX) \u0026\u0026 !defined(INTEL)\n\u003e fprintf( stderr, \"Please turn on Enable Crash Reporting and\\nAutomatic Display of Crashlogs in the Console application\\n\" );\n\u003e #endif",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 5
+      },
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
