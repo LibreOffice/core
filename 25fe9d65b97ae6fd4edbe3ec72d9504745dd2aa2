@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6845670c_9a02b3fb",
+        "filename": "vcl/win/gdi/DWriteTextRenderer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-29T07:55:38Z",
+      "side": 1,
+      "message": "looks like this option is only available from Windows8 ? Are we bumping the system requirements?\n\nsee table here\n    https://docs.microsoft.com/en-us/windows/win32/api/dwrite/ne-dwrite-dwrite_rendering_mode\nfor options available before Windows8",
+      "revId": "25fe9d65b97ae6fd4edbe3ec72d9504745dd2aa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
