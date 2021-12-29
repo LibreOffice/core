@@ -1147,7 +1147,7 @@ Private Function _ListboxBound() As Boolean
 &apos;&apos;&apos;		If they are different, then there is a bound column
 
 Dim bListboxBound As Boolean		&apos;	Return value
-Dim vValue() As variant				&apos;	Alias of the control model ValueItemList
+Dim vValue() As Variant				&apos;	Alias of the control model ValueItemList
 Dim vString() As Variant			&apos;	Alias of the control model StringItemList
 Dim i As Long
 

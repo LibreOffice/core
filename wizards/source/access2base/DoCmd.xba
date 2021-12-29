@@ -820,7 +820,7 @@ Error_Function:
 End Function		&apos;	GetHiddenAttribute	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function GoToControl(Optional ByVal pvControlName As variant) As Boolean
+Public Function GoToControl(Optional ByVal pvControlName As Variant) As Boolean
 &apos;	Set the focus on the named control on the active form.
 &apos;	Return False if the control does not exist or is disabled,
 

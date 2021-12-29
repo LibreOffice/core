@@ -91,7 +91,7 @@ End Function	&apos;	CalledSub	V0.8.9
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _CheckArgument(pvItem As Variant _
 			, ByVal piArgNr As Integer _
-			, Byval pvType As Variant _
+			, ByVal pvType As Variant _
 			, ByVal Optional pvValid As Variant _
 			, ByVal Optional pvError As Boolean _
 			) As Variant
@@ -212,7 +212,7 @@ End Function	&apos;	CStr			V0.9.5
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _CVar(ByRef psArg As String, ByVal Optional pbStrDate As Boolean) As Variant
 &apos;	psArg is presumed an output of _CStr (stored in the meantime in a text file f.i.)
-&apos;	_CVar returns the corresponding original variant variable or Null/Nothing if not possible
+&apos;	_CVar returns the corresponding original Variant variable or Null/Nothing if not possible
 &apos;	Return values may of types Array, Long, Double, Date, Boolean, String, Null or Empty
 &apos;	pbStrDate = True keeps dates as strings
 
@@ -795,7 +795,7 @@ Exit_False:
 End Function	&apos;	IsPseudo		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Private Function _IsScalar(ByVal pvArg As Variant, Byval pvType As Variant, ByVal Optional pvValid As Variant) As Boolean
+Private Function _IsScalar(ByVal pvArg As Variant, ByVal pvType As Variant, ByVal Optional pvValid As Variant) As Boolean
 &apos;	Check type of pvArg and value in allowed pvValid list
 
 	_IsScalar = False
@@ -875,7 +875,7 @@ End Function	&apos;	_PercentEncode V1.4.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _ReadFileIntoArray(ByVal psFileName) As Variant
-&apos;	Loads all lines of a text file into a variant array
+&apos;	Loads all lines of a text file into a Variant array
 &apos;	Any error reduces output to an empty array
 &apos;	Input file name presumed in URL form
 

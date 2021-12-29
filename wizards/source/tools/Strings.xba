@@ -161,7 +161,7 @@ End Sub
 Function FieldInArray(LocArray(), MaxIndex as integer, LocField as String) As Boolean
 Dim i as integer
 	For i = Lbound(LocArray()) to MaxIndex
-		If Ucase(LocArray(i)) = Ucase(LocField) Then
+		If UCase(LocArray(i)) = UCase(LocField) Then
 			FieldInArray = True
 			Exit Function
 		End if
@@ -189,7 +189,7 @@ End Function
 Function IndexInArray(SearchString as String, LocList()) as Integer
 Dim i as integer
 	For i = Lbound(LocList(),1) to Ubound(LocList(),1)
-		If Ucase(LocList(i,0)) = Ucase(SearchString) Then
+		If UCase(LocList(i,0)) = UCase(SearchString) Then
 			IndexInArray = i
 			Exit Function
 		End if
@@ -224,7 +224,7 @@ Dim CurFieldString as String
 	End If
 	For i = Lbound(SearchList()) to MaxIndex
 		CurFieldString = SearchList(i,SearchIndex)
-		If  Ucase(CurFieldString) = Ucase(SearchString) Then
+		If  UCase(CurFieldString) = UCase(SearchString) Then
 			StringInMultiArray() = SearchList(i,ReturnIndex)
 			Exit Function
 		End if
@@ -293,7 +293,7 @@ End Function
 Function FindSecondValue(SearchString as String, TwoDimList() as String ) as String
 Dim i as Integer
 	For i = 0 To Ubound(TwoDimList,1)
-		If Ucase(SearchString) = Ucase(TwoDimList(i,0)) Then
+		If UCase(SearchString) = UCase(TwoDimList(i,0)) Then
 			FindSecondValue = TwoDimList(i,1)
 			Exit For
 		End If

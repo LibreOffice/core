@@ -95,7 +95,7 @@ REM ----------------------------------------------------------------------------
 Public Function CreateField(ByVal Optional pvFieldName As Variant _
 								, ByVal optional pvType As Variant _
 								, ByVal optional pvSize As Variant _
-								, ByVal optional pvAttributes As variant _
+								, ByVal optional pvAttributes As Variant _
 								) As Object
 &apos;Return a Field object
 Const cstThisSub = &quot;TableDef.CreateField&quot;
@@ -262,7 +262,7 @@ Error_Function:
 End Function		&apos;	Execute V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function Fields(ByVal Optional pvIndex As variant) As Object
+Public Function Fields(ByVal Optional pvIndex As Variant) As Object
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 Dim cstThisSub As String

@@ -113,17 +113,17 @@ Dim NullValue
 End Function
 
 
-Function TwipToCM(BYVAL nValue as long) as String
+Function TwipToCM(ByVal nValue as long) as String
 	TwipToCM = trim(str(nValue / 567)) + &quot;cm&quot;
 End function
 
 
-Function TwipTo100telMM(BYVAL nValue as long) as long
+Function TwipTo100telMM(ByVal nValue as long) as long
 	 TwipTo100telMM = nValue / 0.567
 End function
 
 
-Function TwipToPixel(BYVAL nValue as long) as long &apos; not an exact calculation
+Function TwipToPixel(ByVal nValue as long) as long &apos; not an exact calculation
 	TwipToPixel = nValue / 15
 End function
 
@@ -276,7 +276,7 @@ Dim oControl as Object
 End Sub
 
 
-Function CalcUniqueContentName(BYVAL oContainer as Object, sBaseName as String) as String
+Function CalcUniqueContentName(ByVal oContainer as Object, sBaseName as String) as String
 
 Dim nPostfix as Integer
 Dim sReturn as String

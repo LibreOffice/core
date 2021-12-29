@@ -1372,7 +1372,7 @@ Private Function _OutputBooleanToHTML(ByVal pbBool As Boolean) As String
 End Function	&apos;	_OutputBooleanToHTML	V1.4.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Private Function _OutputClassToHTML(ByVal pvArray As variant) As String
+Private Function _OutputClassToHTML(ByVal pvArray As Variant) As String
 &apos;	Formats classes attribute of &lt;tr&gt; and &lt;td&gt; tags
 
 	If Not IsArray(pvArray) Then

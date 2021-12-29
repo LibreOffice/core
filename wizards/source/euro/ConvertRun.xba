@@ -288,9 +288,9 @@ End Sub
 &apos; Returns &apos;True&apos; or &apos;False&apos;
 Function FieldInList(LocList(), MaxIndex as integer, ByVal LocField ) As Boolean
 Dim i as integer
-	LocField = Ucase(LocField)
+	LocField = UCase(LocField)
 	For i = Lbound(LocList()) to MaxIndex
-		If Ucase(LocList(i)) = LocField  then
+		If UCase(LocList(i)) = LocField  then
 			FieldInList = True
 			Exit Function
 		End if

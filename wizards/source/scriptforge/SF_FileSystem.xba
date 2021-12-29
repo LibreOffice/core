@@ -1517,7 +1517,7 @@ Catch:
 End Function    &apos;   ScriptForge.SF_FileSystem.PickFile
 
 REM -----------------------------------------------------------------------------
-Public Function PickFolder(Optional ByVal DefaultFolder As variant _
+Public Function PickFolder(Optional ByVal DefaultFolder As Variant _
 							, Optional ByVal FreeText As Variant _
 							) As String
 &apos;&apos;&apos;	Display a FolderPicker dialog box

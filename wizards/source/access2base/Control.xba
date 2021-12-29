@@ -650,7 +650,7 @@ Property Get Text() As Variant
 	Text = _PropertyGet(&quot;Text&quot;)
 End Property		&apos;	Text (get)
 
-Public Function pText() As variant
+Public Function pText() As Variant
 	pText = _PropertyGet(&quot;Text&quot;)
 End Function		&apos;	pText (get)
 
