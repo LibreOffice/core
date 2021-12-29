@@ -224,4 +224,5 @@ public:
     cairo_surface_t* getSurface(unsigned long nTargetWidth = 0,
                                 unsigned long nTargetHeight = 0) const;
 };
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
