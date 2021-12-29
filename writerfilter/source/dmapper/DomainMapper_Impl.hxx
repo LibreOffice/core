@@ -634,7 +634,7 @@ public:
             utl::MediaDescriptor const & rMediaDesc);
     ~DomainMapper_Impl();
 
-    void setDocumentReference(void* pDocument) { m_pOOXMLDocument = pDocument; };
+    void setDocumentReference(void* pDocument) { if (!m_pOOXMLDocument) m_pOOXMLDocument = pDocument; };
     writerfilter::ooxml::OOXMLDocument* getDocumentReference() const;
 
     SectionPropertyMap* GetLastSectionContext( )
