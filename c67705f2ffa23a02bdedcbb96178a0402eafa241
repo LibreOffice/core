@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37a019da_a7972c9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T12:09:23Z",
+      "side": 1,
+      "message": "I\u0027m running out of ideas. What we still can do is chain the fuzzing binaries with explicit dependencies. This way we wouldn\u0027t need the lock at all. Any other ideas left?",
+      "revId": "c67705f2ffa23a02bdedcbb96178a0402eafa241",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
