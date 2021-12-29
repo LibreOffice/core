@@ -39,6 +39,30 @@
       },
       "revId": "3e110e22d4cf62e3896dddf63ae6bf09bbea6d8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d98bcf8_19ba585c",
+        "filename": "sal/osl/unx/signal.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-29T16:41:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3ea38e46_60c16ec0",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 292,
+        "endChar": 59
+      },
+      "revId": "3e110e22d4cf62e3896dddf63ae6bf09bbea6d8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
