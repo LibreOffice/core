@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e2a5a22_076e20f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-29T16:38:37Z",
+      "side": 1,
+      "message": "\u003e Patch Set 10: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/104254/ : ABORTED\n\nSeems on Android stddef.h fails to define NULL. Fixed.\n\nAm I looking at it wrong or does this mean the code wasn\u0027t previously compiled on Android? if so, probably nothing was linking against this...",
+      "revId": "eaecdd934e41af713845a3e2f5d32f7b1107d394",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e2a4097_922220fa",
