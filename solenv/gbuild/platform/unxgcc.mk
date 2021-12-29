@@ -107,7 +107,7 @@ define gb_LinkTarget__WantLock
 $(if $(strip $(and \
     $(call gb_CondBuildLockfile,$(true)), \
     $(filter-out Executable/lockfile,$(1)), \
-    $(DISABLE_DYNLOADING), \
+    $(if $(filter FUZZERS,$(BUILD_TYPE)),,$(DISABLE_DYNLOADING)), \
     $(filter CppunitTest Executable,$(TARGETTYPE)) \
     )),$(true))
 endef
@@ -123,8 +123,9 @@ gb_LinkTarget__NeedsCxxLinker = $(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTL
 # contains .c sources:
 define gb_LinkTarget__command_dynamiclink
 $(if $(call gb_LinkTarget__WantLock,$2), \
+   echo "$(call gb_Output_announce_str,$(2): wait for lock at $$(date -u),$(true),LNK,5)" ; \
    $(gb_LinkTarget__cmd_lockfile) -r -1 $(gb_LinkTarget__Lock) ;  \
-   echo "$(call gb_Output_announce_str,$(2): got link lock at $$(date -u),$(true),LNK,5)" \
+   echo "$(call gb_Output_announce_str,$(2): got link lock at $$(date -u),$(true),LNK,5)" ; \
 )
 $(call gb_Helper_abbreviate_dirs,\
 	$(if $(call gb_LinkTarget__NeedsCxxLinker),$(or $(T_CXX),$(gb_CXX)) $(gb_CXX_LINKFLAGS),$(or $(T_CC),$(gb_CC))) \
