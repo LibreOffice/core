@@ -16,6 +16,23 @@
       "message": "Not bad. Let me smooth the hack... \nBy reusing the existing variable stopAtFirstFrame :-)\nThat was still trying, too, perhaps I can wrap my head around it, but at least I might try to transform the ODF spec with and without the fix and see if there is something broken... :-)",
       "revId": "48493ec67f9719203053d633900e8555fde0b125",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52b21a17_e786324e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-29T16:38:05Z",
+      "side": 1,
+      "message": "That we have the same XSLT files in LibreOffice that are in the OASIS repository is not good at all. I assume the ones at OASIS are more authoritative and maintained by Svante (and others?) who actually understand the stuff? Presumably the people who have done (luckily minor) changes to the XSLT over the years have not been aware of that. No idea how to fix the situation, though.",
+      "revId": "48493ec67f9719203053d633900e8555fde0b125",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
