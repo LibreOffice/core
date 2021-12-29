@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42e2cc32_c3a5725b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-29T11:02:10Z",
+      "side": 1,
+      "message": "Thank you Thorsten, I confirm your patch works perfectly!\nIndeed, here what I did:\n- updated autoconf on Cygwin package manager\n- make libassuan.clean \u0026\u0026 make libassuan.build\n\u003d\u003e pb reproduced\n- updated local sources\n- make libassuan.build\n\u003d\u003e build ok",
+      "revId": "d951f3d60b11d95168fbb0b4dc8f7cc22b5b7689",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
