@@ -25,9 +25,18 @@ class findSimilarities(UITestCase):
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"seco"}))  #seco
                 # check similarities, button similarities, set values = 1; close dialog with OK
+
+                # Deselect regex before selecting similarity
+                xRegexp = xDialog.getChild("regexp")
+                if get_state_as_dict(xRegexp)['Selected'] == 'true':
+                    xRegexp.executeAction("CLICK", tuple())
+
                 similarity = xDialog.getChild("similarity")
+                if get_state_as_dict(similarity)['Selected'] == 'false':
+                    similarity.executeAction("CLICK", tuple())
+
                 similaritybtn = xDialog.getChild("similaritybtn")
-                similarity.executeAction("CLICK", tuple())
+
                 with self.ui_test.execute_blocking_action(similaritybtn.executeAction, args=('CLICK', ())) as dialog:
                     otherfld = dialog.getChild("otherfld")
                     longerfld = dialog.getChild("longerfld")
