@@ -3892,40 +3892,56 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         SwContentAtPos aSwContentAtPos(IsAttrAtPos::Outline);
         if (rSh.GetContentAtPos(PixelToLogic(rMEvt.GetPosPixel()), aSwContentAtPos))
         {
+            // mouse pointer is on an outline paragraph node
             if(aSwContentAtPos.aFnd.pNode && aSwContentAtPos.aFnd.pNode->IsTextNode())
             {
-                SwContentFrame* pContentFrame = aSwContentAtPos.aFnd.pNode->GetTextNode()->getLayoutFrame(nullptr);
+                // Get the outline paragraph frame and compare it to the saved ouline frame. If they
+                // are not the same, remove the fold button from the saved outline frame, if not
+                // already removed, and then add a fold button to the mouse over outline frame if
+                // the content is not folded.
+                SwContentFrame* pContentFrame =
+                        aSwContentAtPos.aFnd.pNode->GetTextNode()->getLayoutFrame(rSh.GetLayout());
                 if (pContentFrame != m_pSavedOutlineFrame)
                 {
-                    if (m_pSavedOutlineFrame && !m_pSavedOutlineFrame->IsInDtor())
+                    if (m_pSavedOutlineFrame)
                     {
-                        SwTextNode* pTextNode =
-                                static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst();
-                        if (pTextNode && rNds.GetOutLineNds().Seek_Entry(pTextNode, &nPos) &&
-                                rSh.GetAttrOutlineContentVisible(nPos))
-                            GetFrameControlsManager().RemoveControlsByType(
-                                        FrameControlType::Outline, m_pSavedOutlineFrame);
+                        if (m_pSavedOutlineFrame->isFrameAreaDefinitionValid())
+                        {
+                            SwTextNode* pTextNode = m_pSavedOutlineFrame->GetTextNodeFirst();
+                            if (pTextNode && rNds.GetOutLineNds().Seek_Entry(pTextNode, &nPos) &&
+                                    rSh.GetAttrOutlineContentVisible(nPos))
+                            {
+                                GetFrameControlsManager().RemoveControlsByType(
+                                            FrameControlType::Outline, m_pSavedOutlineFrame);
+                            }
+                        }
                     }
-                    m_pSavedOutlineFrame = pContentFrame;
+                    m_pSavedOutlineFrame = static_cast<SwTextFrame*>(pContentFrame);
                 }
-                // show button
+                // show fold button if outline content is visible
                 if (rNds.GetOutLineNds().Seek_Entry(aSwContentAtPos.aFnd.pNode->GetTextNode(), &nPos) &&
                         rSh.GetAttrOutlineContentVisible(nPos))
                     GetFrameControlsManager().SetOutlineContentVisibilityButton(pContentFrame);
             }
         }
-        else if (m_pSavedOutlineFrame && !m_pSavedOutlineFrame->IsInDtor())
+        else if (m_pSavedOutlineFrame)
         {
-            // current pointer pos is not over an outline frame
-            // previous pointer pos was over an outline frame
-            // remove outline content visibility button if showing
-            if (m_pSavedOutlineFrame->isFrameAreaDefinitionValid() &&
-                    m_pSavedOutlineFrame->IsTextFrame() &&
-                    rNds.GetOutLineNds().Seek_Entry(
-                        static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos)
-                    && rSh.GetAttrOutlineContentVisible(nPos))
-                GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline,
-                                                               m_pSavedOutlineFrame);
+            // The saved frame may not still be in the document, e.g., when an outline paragraph
+            // is deleted. This causes the call to GetTextNodeFirst to behave badly. Use
+            // isFrameAreaDefinitionValid to check if the frame is still in the document.
+            if (m_pSavedOutlineFrame->isFrameAreaDefinitionValid())
+            {
+                // current pointer pos is not over an outline frame
+                // previous pointer pos was over an outline frame
+                // remove outline content visibility button if showing
+                SwTextNode* pTextNode = m_pSavedOutlineFrame->GetTextNodeFirst();
+                if (pTextNode && rNds.GetOutLineNds().Seek_Entry(pTextNode, &nPos) &&
+                        rSh.GetAttrOutlineContentVisible(nPos))
+                {
+                    GetFrameControlsManager().RemoveControlsByType(
+                                FrameControlType::Outline, m_pSavedOutlineFrame);
+                }
+            }
             m_pSavedOutlineFrame = nullptr;
         }
     }
@@ -3968,13 +3984,20 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     {
         if (m_pSavedOutlineFrame && !bInsWin)
         {
-            // the mouse pointer has left the building
+            // the mouse pointer has left the building (edit window)
             // remove the outline content visibility button if showing
-            const SwNodes& rNds = rSh.GetDoc()->GetNodes();
-            SwOutlineNodes::size_type nPos;
-            if (rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos) &&
-                    rSh.GetAttrOutlineContentVisible(nPos))
-                GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+            if (m_pSavedOutlineFrame->isFrameAreaDefinitionValid())
+            {
+                const SwNodes& rNds = rSh.GetDoc()->GetNodes();
+                SwOutlineNodes::size_type nPos;
+                SwTextNode* pTextNode = m_pSavedOutlineFrame->GetTextNodeFirst();
+                if (pTextNode && rNds.GetOutLineNds().Seek_Entry(pTextNode, &nPos) &&
+                        rSh.GetAttrOutlineContentVisible(nPos))
+                {
+                    GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline,
+                                                                   m_pSavedOutlineFrame);
+                }
+            }
             m_pSavedOutlineFrame = nullptr;
         }
     }
