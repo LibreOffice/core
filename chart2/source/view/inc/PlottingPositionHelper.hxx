@@ -86,7 +86,7 @@ public:
     static css::awt::Point transformSceneToScreenPosition(
                   const css::drawing::Position3D& rScenePosition3D
                 , const css::uno::Reference< css::drawing::XShapes >& xSceneTarget
-                , ShapeFactory* pShapeFactory, sal_Int32 nDimensionCount );
+                , sal_Int32 nDimensionCount );
 
     inline double getLogicMinX() const;
     inline double getLogicMinY() const;

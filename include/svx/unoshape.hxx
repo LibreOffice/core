@@ -757,7 +757,7 @@ public:
 class Svx3DExtrudeObject final : public SvxShape
 {
 public:
-    Svx3DExtrudeObject(SdrObject* pObj);
+    SVXCORE_DLLPUBLIC Svx3DExtrudeObject(SdrObject* pObj);
 private:
     // override these for special property handling in subcasses. Return true if property is handled
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;

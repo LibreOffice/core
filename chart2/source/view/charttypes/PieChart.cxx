@@ -268,7 +268,7 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint(
     uno::Reference< drawing::XShape > xShape;
     if(m_nDimension==3)
     {
-        xShape = m_pShapeFactory->createPieSegment( xTarget
+        xShape = ShapeFactory::createPieSegment( xTarget
             , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
             , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius
             , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() )
@@ -338,7 +338,7 @@ void PieChart::createTextLabelShape(
     ///the scene position of the label anchor point is calculated (see notes for
     ///`PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCircleValues`),
     ///and immediately transformed into the screen position.
-    PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper.get(),m_nDimension,m_xLogicTarget,m_pShapeFactory);
+    PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper.get(),m_nDimension,m_xLogicTarget);
     awt::Point aScreenPosition2D(
         aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, nLabelPlacement
         , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
@@ -365,7 +365,7 @@ void PieChart::createTextLabelShape(
                     0,
                     rParam.mfUnitCircleOuterRadius,
                     0 ),
-            m_xLogicTarget, m_pShapeFactory, m_nDimension );
+            m_xLogicTarget, m_nDimension );
     basegfx::B2IVector aRadiusVector(
             aOuterCirclePoint.X - aPieLabelInfo.aOrigin.getX(),
             aOuterCirclePoint.Y - aPieLabelInfo.aOrigin.getY() );
@@ -380,7 +380,7 @@ void PieChart::createTextLabelShape(
 
     awt::Point aOuterPosition = PlottingPositionHelper::transformSceneToScreenPosition(
         m_pPosHelper->transformUnitCircleToScene(fAngleDegree, rParam.mfUnitCircleOuterRadius, 0),
-        m_xLogicTarget, m_pShapeFactory, m_nDimension);
+        m_xLogicTarget, m_nDimension);
     aPieLabelInfo.aOuterPosition = basegfx::B2IVector(aOuterPosition.X, aOuterPosition.Y);
 
     // set the maximum text width to be used when text wrapping is enabled
@@ -862,9 +862,9 @@ void PieChart::createShapes()
                     sal_Int32 nOffsetPercent( static_cast<sal_Int32>(aParam.mfExplodePercentage * 100.0) );
 
                     awt::Point aMinimumPosition( PlottingPositionHelper::transformSceneToScreenPosition(
-                        aOrigin, m_xLogicTarget, m_pShapeFactory, m_nDimension ) );
+                        aOrigin, m_xLogicTarget, m_nDimension ) );
                     awt::Point aMaximumPosition( PlottingPositionHelper::transformSceneToScreenPosition(
-                        aNewOrigin, m_xLogicTarget, m_pShapeFactory, m_nDimension ) );
+                        aNewOrigin, m_xLogicTarget, m_nDimension ) );
 
                     //enable dragging of piesegments
                     OUString aPointCIDStub( ObjectIdentifier::createSeriesSubObjectStub( OBJECTTYPE_DATA_POINT
@@ -1402,7 +1402,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
                     fBisectingRayAngleDeg,
                     rShapeParam.mfUnitCircleOuterRadius,
                     fLogicZ ),
-            m_xLogicTarget, m_pShapeFactory, m_nDimension );
+            m_xLogicTarget, m_nDimension );
 
     // compute the pie radius
     basegfx::B2IVector aPieCenter = rPieLabelInfo.aOrigin;

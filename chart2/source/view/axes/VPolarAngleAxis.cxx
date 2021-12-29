@@ -115,7 +115,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
             double fLogicAngle = pTickInfo->getUnscaledTickValue();
 
             LabelAlignment eLabelAlignment(LABEL_ALIGN_CENTER);
-            PolarLabelPositionHelper aPolarLabelPositionHelper(m_pPosHelper.get(), 2/*nDimensionCount*/, xTarget, pShapeFactory);
+            PolarLabelPositionHelper aPolarLabelPositionHelper(m_pPosHelper.get(), 2/*nDimensionCount*/, xTarget);
             sal_Int32 nScreenValueOffsetInRadiusDirection = m_aAxisLabelProperties.m_aMaximumSpaceForLabels.Height/15;
             awt::Point aAnchorScreenPosition2D( aPolarLabelPositionHelper.getLabelScreenPositionAndAlignmentForLogicValues(
                     eLabelAlignment, fLogicAngle, fLogicRadius, fLogicZ, nScreenValueOffsetInRadiusDirection ));
