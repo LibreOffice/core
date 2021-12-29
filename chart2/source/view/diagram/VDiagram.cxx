@@ -449,12 +449,13 @@ void VDiagram::createShapes_3d()
         return;
 
     //create shape
-    m_xOuterGroupShape.set( m_pShapeFactory->createGroup3D( m_xTarget, "PlotAreaExcludingAxes" ), uno::UNO_QUERY);
+    rtl::Reference<Svx3DSceneObject> xShapes = ShapeFactory::createGroup3D( m_xTarget, "PlotAreaExcludingAxes" );
+    m_xOuterGroupShape.set( static_cast<cppu::OWeakObject*>(xShapes.get()), uno::UNO_QUERY);
 
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes( m_xOuterGroupShape, uno::UNO_QUERY );
 
     //create additional group to manipulate the aspect ratio of the whole diagram:
-    xOuterGroup_Shapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes );
+    xOuterGroup_Shapes = ShapeFactory::createGroup3D( xOuterGroup_Shapes );
 
     m_xAspectRatio3D.set( xOuterGroup_Shapes, uno::UNO_QUERY );
 
@@ -471,7 +472,7 @@ void VDiagram::createShapes_3d()
         OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, u"" ) );//@todo read CID from model
         if( !bAddFloorAndWall )
             aWallCID.clear();
-        uno::Reference< drawing::XShapes > xWallGroup_Shapes( m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, aWallCID ) );
+        rtl::Reference<Svx3DSceneObject> xWallGroup_Shapes = ShapeFactory::createGroup3D( xOuterGroup_Shapes, aWallCID );
 
         CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
         CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
@@ -617,31 +618,26 @@ void VDiagram::createShapes_3d()
 
     //create an additional scene for the smaller inner coordinate region:
     {
-        uno::Reference< drawing::XShapes > xShapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID" );
-        m_xCoordinateRegionShape.set( xShapes, uno::UNO_QUERY );
+        rtl::Reference<Svx3DSceneObject> xShapes2 = ShapeFactory::createGroup3D( xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID" );
+        m_xCoordinateRegionShape.set( static_cast<cppu::OWeakObject*>(xShapes2.get()), uno::UNO_QUERY );
 
-        uno::Reference< beans::XPropertySet > xShapeProp( m_xCoordinateRegionShape, uno::UNO_QUERY );
-        OSL_ENSURE(xShapeProp.is(), "created shape offers no XPropertySet");
-        if( xShapeProp.is())
+        try
         {
-            try
-            {
-                double fXScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
-                double fYScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
-                double fZScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
+            double fXScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
+            double fYScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
+            double fZScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
 
-                ::basegfx::B3DHomMatrix aM;
-                aM.translate(GRID_TO_WALL_DISTANCE/fXScale, GRID_TO_WALL_DISTANCE/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
-                aM.scale( fXScale, fYScale, fZScale );
-                E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene(m_xOuterGroupShape));
+            ::basegfx::B3DHomMatrix aM;
+            aM.translate(GRID_TO_WALL_DISTANCE/fXScale, GRID_TO_WALL_DISTANCE/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
+            aM.scale( fXScale, fYScale, fZScale );
+            E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene(m_xOuterGroupShape));
 
-                xShapeProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
-                    , uno::Any(BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aM)) );
-            }
-            catch( const uno::Exception& )
-            {
-                TOOLS_WARN_EXCEPTION("chart2", "" );
-            }
+            xShapes2->SvxShape::setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
+                , uno::Any(BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aM)) );
+        }
+        catch( const uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION("chart2", "" );
         }
     }
 

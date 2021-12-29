@@ -662,7 +662,7 @@ protected:
     using SvxShape::getPropertyValue;
 
 public:
-    Svx3DSceneObject(SdrObject* pObj, SvxDrawPage* pDrawPage);
+    SVXCORE_DLLPUBLIC Svx3DSceneObject(SdrObject* pObj, SvxDrawPage* pDrawPage);
     // override these for special property handling in subcasses. Return true if property is handled
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
     virtual bool getPropertyValueImpl(const OUString& rName, const SfxItemPropertyMapEntry* pProperty,

@@ -93,7 +93,6 @@ void VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes 
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     //create group shape for grids first thus axes are always painted above grids
-    ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
     if(nDimensionCount==2)
     {
         //create and add to target
@@ -104,9 +103,9 @@ void VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes 
     else
     {
         //create and added to target
-        m_xLogicTargetForGrids = pShapeFactory->createGroup3D( xLogicTarget );
-        xLogicTargetForSeriesBehindAxis = pShapeFactory->createGroup3D( xLogicTarget );
-        m_xLogicTargetForAxes = pShapeFactory->createGroup3D( xLogicTarget );
+        m_xLogicTargetForGrids = ShapeFactory::createGroup3D( xLogicTarget );
+        xLogicTargetForSeriesBehindAxis = ShapeFactory::createGroup3D( xLogicTarget );
+        m_xLogicTargetForAxes = ShapeFactory::createGroup3D( xLogicTarget );
     }
     m_xFinalTarget  = xFinalTarget;
     m_xShapeFactory = xShapeFactory;
