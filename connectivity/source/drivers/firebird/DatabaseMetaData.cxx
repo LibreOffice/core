@@ -1339,8 +1339,10 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // TODO: GLOBAL TEMPORARY, LOCAL TEMPORARY, ALIAS, SYNONYM
     if (!types.hasElements() || (types.getLength() == 1 && types[0].match(wld)))
     {
+        // from Firebird: src/jrd/constants.h
+        // rel_persistent = 0, rel_view = 1, rel_external = 2
         // All table types? I.e. includes system tables.
-        queryBuf.append("(RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1) ");
+        queryBuf.append("(RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1 OR RDB$RELATION_TYPE = 2) ");
     }
     else
     {
@@ -1406,7 +1408,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             }
             else
             {
-                if (nTableType == 0)
+                // see above about src/jrd/constants.h
+                if (nTableType == 0 || nTableType == 2)
                     sTableType = "TABLE";
             }
 
