@@ -58,15 +58,6 @@ protected:
     SvpCairoTextRender                  m_aTextRenderImpl;
     std::unique_ptr<SvpGraphicsBackend> m_pBackend;
 
-protected:
-    virtual bool drawTransformedBitmap(
-        const basegfx::B2DPoint& rNull,
-        const basegfx::B2DPoint& rX,
-        const basegfx::B2DPoint& rY,
-        const SalBitmap& rSourceBitmap,
-        const SalBitmap* pAlphaBitmap,
-        double fAlpha) override;
-
     cairo_t* createTmpCompatibleCairoContext() const;
 
 public:
