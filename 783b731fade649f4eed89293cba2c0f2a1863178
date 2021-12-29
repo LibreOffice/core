@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b560786_081c3f5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T14:32:05Z",
+      "side": 1,
+      "message": "No looks good; minor nitpick for code readability.",
+      "revId": "783b731fade649f4eed89293cba2c0f2a1863178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3d7c8ac_7958d856",
+        "filename": "sal/osl/unx/signal.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-29T14:32:05Z",
+      "side": 1,
+      "message": "I think backtrace just works for INTEL on MACOSX. Would be my interpretation of the dropped #ifdef code. We always define the function stubs, so no need for the #else branch. The code in backtraceapi.cxx is also not #ifdef\u0027ed. Just dropping all #ifdef and just #ifdef the extra MACOSX \u0026\u0026 !INTEL message should be sufficient.",
+      "revId": "783b731fade649f4eed89293cba2c0f2a1863178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
