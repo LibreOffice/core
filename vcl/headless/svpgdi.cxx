@@ -23,33 +23,8 @@
 #include <numeric>
 
 #include <headless/svpgdi.hxx>
-#include <headless/svpbmp.hxx>
-#include <headless/svpframe.hxx>
-#include <headless/svpcairotextrender.hxx>
-#include <headless/BitmapHelper.hxx>
-#include <saldatabasic.hxx>
-
-#include <sal/log.hxx>
-#include <tools/helpers.hxx>
-#include <o3tl/safeint.hxx>
-#include <vcl/BitmapTools.hxx>
-#include <vcl/sysdata.hxx>
-#include <vcl/gradient.hxx>
-#include <config_cairo_canvas.h>
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2ibox.hxx>
-#include <basegfx/range/b2irange.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/utils/canvastools.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/lok.hxx>
-#include <unx/gendata.hxx>
-#include <dlfcn.h>
+
 
 #if ENABLE_CAIRO_CANVAS
 #   if defined CAIRO_VERSION && CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
@@ -75,7 +50,7 @@ void SvpSalGraphics::setSurface(cairo_surface_t* pSurface, const basegfx::B2IVec
     m_aCairoCommon.m_pSurface = pSurface;
     m_aCairoCommon.m_aFrameSize = rSize;
     dl_cairo_surface_get_device_scale(pSurface, &m_aCairoCommon.m_fScale, nullptr);
-    ResetClipRegion();
+    GetImpl()->ResetClipRegion();
 }
 
 void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
