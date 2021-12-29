@@ -239,19 +239,16 @@ void CandleStickChart::createShapes()
                         tNameSequence aNames;
                         tAnySequence aValues;
 
-                        uno::Reference< drawing::XShape > xShape =
-                            m_pShapeFactory->createRectangle( xLossGainTarget,
+                        rtl::Reference<SvxShapeRect> xShape =
+                            ShapeFactory::createRectangle( xLossGainTarget,
                                     aAWTSize, Position3DToAWTPoint( aPosLeftFirst ),
                                     aNames, aValues);
 
-                        uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-                        if(xProp.is())
-                        {
-                            if(bBlack)
-                                PropertyMapper::setMultiProperties( aBlackBox_Names, aBlackBox_Values, xProp );
-                            else
-                                PropertyMapper::setMultiProperties( aWhiteBox_Names, aWhiteBox_Values, xProp );
-                        }
+                        uno::Reference< beans::XPropertySet > xProp( static_cast<cppu::OWeakObject*>(xShape.get()), uno::UNO_QUERY_THROW );
+                        if(bBlack)
+                            PropertyMapper::setMultiProperties( aBlackBox_Names, aBlackBox_Values, xProp );
+                        else
+                            PropertyMapper::setMultiProperties( aWhiteBox_Names, aWhiteBox_Values, xProp );
                     }
                     else
                     {
