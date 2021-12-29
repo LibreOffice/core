@@ -227,6 +227,4 @@ public:
                                 unsigned long nTargetHeight = 0) const;
 };
 
-VCL_DLLPUBLIC sal_Int64 estimateUsageInBytesForSurfaceHelper(const SurfaceHelper* pHelper);
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

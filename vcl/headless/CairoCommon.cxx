@@ -1180,34 +1180,6 @@ const char* pDisableDownScale(getenv("SAL_DISABLE_CAIRO_DOWNSCALE"));
 bool bDisableDownScale(nullptr != pDisableDownScale);
 }
 
-sal_Int64 estimateUsageInBytesForSurfaceHelper(const SurfaceHelper* pHelper)
-{
-    sal_Int64 nRetval(0);
-
-    if (nullptr != pHelper)
-    {
-        cairo_surface_t* pSurface(pHelper->getSurface());
-
-        if (pSurface)
-        {
-            const tools::Long nStride(cairo_image_surface_get_stride(pSurface));
-            const tools::Long nHeight(cairo_image_surface_get_height(pSurface));
-
-            nRetval = nStride * nHeight;
-
-            // if we do downscale, size will grow by 1/4 + 1/16 + 1/32 + ...,
-            // rough estimation just multiplies by 1.25, should be good enough
-            // for estimation of buffer survival time
-            if (!bDisableDownScale)
-            {
-                nRetval = (nRetval * 5) / 4;
-            }
-        }
-    }
-
-    return nRetval;
-}
-
 cairo_surface_t* SurfaceHelper::implCreateOrReuseDownscale(unsigned long nTargetWidth,
                                                            unsigned long nTargetHeight)
 {
