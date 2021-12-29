@@ -16,6 +16,23 @@
       "message": "Hi Stephan, Cloph,\nI need help with this patch. locally make sc.uicheck passes but in jenkins it always fails. I tried different thing but it always fails ( that\u0027s why the number of patches )\nAny idea why the behaviour is different in Jenkins ? ",
       "revId": "d775b80ef8ba1027b794f8c22fa04a7fb186fc19",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b04e72e_add2d200",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-29T19:12:06Z",
+      "side": 1,
+      "message": "Hi Stephan, Cloph,\nI need help with this patch. locally make sc.uicheck passes but in jenkins it always fails. I tried different thing but it always fails ( that\u0027s why the number of patches )\nAny idea why the behaviour is different in Jenkins ?",
+      "revId": "d775b80ef8ba1027b794f8c22fa04a7fb186fc19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
