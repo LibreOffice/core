@@ -863,7 +863,7 @@ void AreaChart::createShapes()
                                 if (pSymbolProperties->Style == SymbolStyle_STANDARD)
                                 {
                                     sal_Int32 nSymbol = pSymbolProperties->StandardSymbol;
-                                    m_pShapeFactory->createSymbol2D(
+                                    ShapeFactory::createSymbol2D(
                                         xPointGroupShape_Shapes, aScenePosition, aSymbolSize,
                                         nSymbol, pSymbolProperties->BorderColor,
                                         pSymbolProperties->FillColor);

@@ -25,19 +25,16 @@ namespace chart
 {
 using namespace ::com::sun::star;
 
-uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
-            const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
-            , const uno::Reference< drawing::XShapes >& xTarget
+rtl::Reference< SvxShapeGroup > DataPointSymbolSupplier::create2DSymbolList(
+            const uno::Reference< drawing::XShapes >& xTarget
             , const drawing::Direction3D& rSize )
 {
-    ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
-    uno::Reference< drawing::XShapes > xGroupShapes =
-        ShapeFactory::createGroup2D( xTarget );
+    rtl::Reference< SvxShapeGroup > xGroupShapes = ShapeFactory::createGroup2D( xTarget );
 
     drawing::Position3D  aPos(0,0,0);
     for(sal_Int32 nS=0;nS<ShapeFactory::getSymbolCount();nS++)
     {
-        pShapeFactory->createSymbol2D( xGroupShapes, aPos, rSize, nS, 0, 0 );
+        ShapeFactory::createSymbol2D( xGroupShapes, aPos, rSize, nS, 0, 0 );
     }
     return xGroupShapes;
 }
