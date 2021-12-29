@@ -16,6 +16,40 @@
       "message": "It\u0027s strange that this line got no cleanup?",
       "revId": "5fa0f02dace4538b0948bceddc23a9f55e1bf8a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92f0241e_3f7241d4",
+        "filename": "sw/qa/extras/globalfilter/globalfilter.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-29T08:33:27Z",
+      "side": 1,
+      "message": "the initializer \u0027 \u003d 0\u0027 here is redundant, since Color class has its default ctor, which incidentally initializes its value to 0 (unlike previous simple integer type, which would indeed need an initializer to avoid garbage).",
+      "revId": "5fa0f02dace4538b0948bceddc23a9f55e1bf8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6babb197_1c56e326",
+        "filename": "sw/qa/extras/globalfilter/globalfilter.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-29T08:33:27Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "5fa0f02dace4538b0948bceddc23a9f55e1bf8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
