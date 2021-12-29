@@ -929,7 +929,6 @@ void VLegend::createShapes(
     try
     {
         //create shape and add to page
-        ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
         OUString aLegendParticle( ObjectIdentifier::createParticleForLegend( mrModel ) );
         m_xShape = ShapeFactory::createGroup2D( m_xTarget,
                     ObjectIdentifier::createClassifiedIdentifierForParticle( aLegendParticle ) );
@@ -1040,7 +1039,7 @@ void VLegend::createShapes(
                     pButton->createShapes(xModelPage);
                 }
 
-                Reference<drawing::XShape> xBorder = pShapeFactory->createRectangle(
+                rtl::Reference<SvxShapeRect> xBorder = ShapeFactory::createRectangle(
                     xLegendContainer, aLegendSize, awt::Point(0, 0), aLineFillProperties.first,
                     aLineFillProperties.second, ShapeFactory::StackPosition::Bottom);
 

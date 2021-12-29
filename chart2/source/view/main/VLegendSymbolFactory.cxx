@@ -112,7 +112,7 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
     Reference< drawing::XShapes > xResultGroup( static_cast<cppu::OWeakObject*>(xResult.get()), uno::UNO_QUERY_THROW );
 
     // add an invisible square box to maintain aspect ratio
-    pShapeFactory->createInvisibleRectangle( xResultGroup, rEntryKeyAspectRatio );
+    ShapeFactory::createInvisibleRectangle( xResultGroup, rEntryKeyAspectRatio );
 
     // create symbol
     try
@@ -183,7 +183,7 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
             getPropNamesAndValues( xLegendEntryProperties, aPropNames, aPropValues,
                     ePropertyType, awt::Size(0,0) );// PropertyType::FilledSeries
 
-            pShapeFactory->createRectangle( xResultGroup,
+            ShapeFactory::createRectangle( xResultGroup,
                         rEntryKeyAspectRatio, awt::Point( 0, 0 ),
                         aPropNames, aPropValues );
         }

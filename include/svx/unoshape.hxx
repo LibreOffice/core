@@ -397,7 +397,7 @@ public:
 class SvxShapeRect final : public SvxShapeText
 {
 public:
-    SvxShapeRect(SdrObject* pObj);
+    SVXCORE_DLLPUBLIC SvxShapeRect(SdrObject* pObj);
     virtual ~SvxShapeRect() noexcept override;
 
     // XInterface

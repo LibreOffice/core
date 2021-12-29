@@ -157,41 +157,35 @@ void VDiagram::createShapes_2d()
 
     //add back wall
     {
-        ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
-        m_xWall2D = pShapeFactory->createRectangle(
-                xGroupForWall );
+        m_xWall2D = ShapeFactory::createRectangle( xGroupForWall );
 
-        uno::Reference< beans::XPropertySet > xProp( m_xWall2D, uno::UNO_QUERY );
-        if( xProp.is())
+        uno::Reference< beans::XPropertySet > xProp( static_cast<cppu::OWeakObject*>(m_xWall2D.get()), uno::UNO_QUERY_THROW );
+        try
         {
-            try
+            OSL_ENSURE( m_xDiagram.is(), "Invalid Diagram model" );
+            if( m_xDiagram.is() )
             {
-                OSL_ENSURE( m_xDiagram.is(), "Invalid Diagram model" );
-                if( m_xDiagram.is() )
-                {
-                    uno::Reference< beans::XPropertySet > xWallProp( m_xDiagram->getWall());
-                    if( xWallProp.is())
-                        PropertyMapper::setMappedProperties( xProp, xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
-                }
-                if( !bAddFloorAndWall )
-                {
-                    //we always need this object as dummy object for correct scene dimensions
-                    //but it should not be visible in this case:
-                    ShapeFactory::makeShapeInvisible( m_xWall2D );
-                }
-                else
-                {
-                    //CID for selection handling
-                    OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, u"" ) );//@todo read CID from model
-                    xProp->setPropertyValue( UNO_NAME_MISC_OBJ_NAME, uno::Any( aWallCID ) );
-                }
+                uno::Reference< beans::XPropertySet > xWallProp( m_xDiagram->getWall());
+                if( xWallProp.is())
+                    PropertyMapper::setMappedProperties( xProp, xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
             }
-            catch( const uno::Exception& )
+            if( !bAddFloorAndWall )
             {
-                TOOLS_WARN_EXCEPTION("chart2", "" );
+                //we always need this object as dummy object for correct scene dimensions
+                //but it should not be visible in this case:
+                ShapeFactory::makeShapeInvisible( m_xWall2D );
+            }
+            else
+            {
+                //CID for selection handling
+                OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, u"" ) );//@todo read CID from model
+                m_xWall2D->SvxShape::setPropertyValue( UNO_NAME_MISC_OBJ_NAME, uno::Any( aWallCID ) );
             }
         }
-
+        catch( const uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION("chart2", "" );
+        }
     }
 
     //position and size for diagram

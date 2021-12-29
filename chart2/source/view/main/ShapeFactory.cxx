@@ -91,8 +91,9 @@ uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
 
     // Create a new root shape and set it to the bottom of the page.  The root
     // shape is identified by having the name com.sun.star.chart2.shapes.
-    uno::Reference<drawing::XShape> xShape(
-        m_xShapeFactory->createInstance("com.sun.star.drawing.GroupShape"), uno::UNO_QUERY);
+    rtl::Reference<SvxShapeGroup> xShapeGroup = new SvxShapeGroup(nullptr, nullptr);
+    xShapeGroup->setShapeKind(OBJ_GRUP);
+    uno::Reference<drawing::XShape> xShape(static_cast<cppu::OWeakObject*>(xShapeGroup.get()), uno::UNO_QUERY);
     uno::Reference<drawing::XShapes2> xShapes2(xDrawPage, uno::UNO_QUERY_THROW);
     xShapes2->addBottom(xShape);
 
@@ -2053,7 +2054,7 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
-uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
+rtl::Reference<SvxShapeRect> ShapeFactory::createInvisibleRectangle(
             const uno::Reference< drawing::XShapes >& xTarget
             , const awt::Size& rSize )
 {
@@ -2062,14 +2063,11 @@ uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
         if(!xTarget.is())
             return nullptr;
 
-        uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance(
-                "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
-        if( xShape.is())
-        {
-            xTarget->add( xShape );
-            ShapeFactory::makeShapeInvisible( xShape );
-            xShape->setSize( rSize );
-        }
+        rtl::Reference<SvxShapeRect> xShape = new SvxShapeRect(nullptr);
+        xShape->setShapeKind(OBJ_RECT);
+        xTarget->add( xShape );
+        ShapeFactory::makeShapeInvisible( xShape );
+        xShape->setSize( rSize );
         return xShape;
     }
     catch( const uno::Exception & )
@@ -2079,7 +2077,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
     return nullptr;
 }
 
-uno::Reference< drawing::XShape > ShapeFactory::createRectangle(
+rtl::Reference<SvxShapeRect> ShapeFactory::createRectangle(
     const uno::Reference< drawing::XShapes >& xTarget,
     const awt::Size& rSize,
     const awt::Point& rPosition,
@@ -2087,35 +2085,31 @@ uno::Reference< drawing::XShape > ShapeFactory::createRectangle(
     const tAnySequence& rPropValues,
     StackPosition ePos )
 {
-    uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance(
-                "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
-    if( xShape.is())
+    rtl::Reference<SvxShapeRect> xShape = new SvxShapeRect(nullptr);
+    xShape->setShapeKind(OBJ_RECT);
+    if (ePos == StackPosition::Bottom)
     {
-        if (ePos == StackPosition::Bottom)
-        {
-            uno::Reference<drawing::XShapes2> xTarget2(xTarget, uno::UNO_QUERY);
-            if (xTarget2.is())
-                xTarget2->addBottom(xShape);
-        }
-        else
-            xTarget->add(xShape);
-
-        xShape->setPosition( rPosition );
-        xShape->setSize( rSize );
-        uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY_THROW );
-        PropertyMapper::setMultiProperties( rPropNames, rPropValues, xPropSet );
+        uno::Reference<drawing::XShapes2> xTarget2(xTarget, uno::UNO_QUERY);
+        if (xTarget2.is())
+            xTarget2->addBottom(xShape);
     }
+    else
+        xTarget->add(xShape);
+
+    xShape->setPosition( rPosition );
+    xShape->setSize( rSize );
+    uno::Reference< beans::XPropertySet > xPropSet( static_cast<cppu::OWeakObject*>(xShape.get()), uno::UNO_QUERY_THROW );
+    PropertyMapper::setMultiProperties( rPropNames, rPropValues, xPropSet );
 
     return xShape;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<SvxShapeRect>
     ShapeFactory::createRectangle(
-            const uno::Reference<
-            drawing::XShapes >& xTarget )
+            const uno::Reference< drawing::XShapes >& xTarget )
 {
-    uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance(
-                "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
+    rtl::Reference<SvxShapeRect> xShape = new SvxShapeRect(nullptr);
+    xShape->setShapeKind(OBJ_RECT);
     xTarget->add( xShape );
 
     return xShape;

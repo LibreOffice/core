@@ -23,6 +23,7 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
+#include <svx/unoshape.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XDiagram; }
@@ -93,7 +94,7 @@ private: //members
     css::uno::Reference< css::drawing::XShape >   m_xOuterGroupShape;
     // this is an additional inner shape that represents the coordinate region -  that is - where to place data points
     css::uno::Reference< css::drawing::XShape >   m_xCoordinateRegionShape;
-    css::uno::Reference< css::drawing::XShape >   m_xWall2D;
+    rtl::Reference<SvxShapeRect> m_xWall2D;
 
     sal_Int32                                                               m_nDimensionCount;
     css::uno::Reference< css::chart2::XDiagram >                                m_xDiagram;
