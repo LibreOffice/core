@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "327c3954_efed412c",
+        "filename": "sw/qa/extras/globalfilter/globalfilter.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-29T08:28:37Z",
+      "side": 1,
+      "message": "It\u0027s strange that this line got no cleanup?",
+      "revId": "5fa0f02dace4538b0948bceddc23a9f55e1bf8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
