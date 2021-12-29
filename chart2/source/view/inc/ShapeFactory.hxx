@@ -85,7 +85,7 @@ public:
             const css::uno::Reference< css::drawing::XShapes >& xTarget
           , const OUString& aName = OUString() );
 
-    css::uno::Reference< css::drawing::XShapes >
+    static rtl::Reference<Svx3DSceneObject>
         createGroup3D(
             const css::uno::Reference< css::drawing::XShapes >& xTarget
           , const OUString& aName = OUString() );

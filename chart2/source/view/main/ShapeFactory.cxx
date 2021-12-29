@@ -1759,7 +1759,7 @@ rtl::Reference< SvxShapeGroup >
     return nullptr;
 }
 
-uno::Reference< drawing::XShapes >
+rtl::Reference<Svx3DSceneObject>
         ShapeFactory::createGroup3D( const uno::Reference< drawing::XShapes >& xTarget
         , const OUString& aName )
 {
@@ -1768,32 +1768,23 @@ uno::Reference< drawing::XShapes >
     try
     {
         //create shape
-        uno::Reference< drawing::XShape > xShape(
-                m_xShapeFactory->createInstance(
-                "com.sun.star.drawing.Shape3DSceneObject" ), uno::UNO_QUERY );
-
+        rtl::Reference<Svx3DSceneObject> xShape = new Svx3DSceneObject(nullptr, nullptr);
+        xShape->setShapeKind(E3D_SCENE_ID | E3D_INVENTOR_FLAG);
         xTarget->add(xShape);
 
         //it is necessary to set the transform matrix to initialize the scene properly
         //otherwise all objects which are placed into this Group will not be visible
         //the following should be unnecessary after the bug is fixed
+        //set properties
+        try
         {
-            //set properties
-            uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-            OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
-            if( xProp.is())
-            {
-                try
-                {
-                    ::basegfx::B3DHomMatrix aM;
-                    xProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
-                        , uno::Any(B3DHomMatrixToHomogenMatrix(aM)) );
-                }
-                catch( const uno::Exception& )
-                {
-                    TOOLS_WARN_EXCEPTION("chart2", "" );
-                }
-            }
+            ::basegfx::B3DHomMatrix aM;
+            xShape->SvxShape::setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
+                , uno::Any(B3DHomMatrixToHomogenMatrix(aM)) );
+        }
+        catch( const uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION("chart2", "" );
         }
 
         //set name
@@ -1801,8 +1792,7 @@ uno::Reference< drawing::XShapes >
             setShapeName( xShape , aName );
 
         //return
-        uno::Reference< drawing::XShapes > xShapes( xShape, uno::UNO_QUERY );
-        return xShapes;
+        return xShape;
     }
     catch( const uno::Exception& )
     {
