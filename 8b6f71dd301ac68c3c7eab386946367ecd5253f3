@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71f5fdcc_3e206693",
+        "filename": "config_host.mk.in",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-29T14:06:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "427c2e91_97d34a9c",
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0aca5cd4_358c3ae3",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-12-29T11:39:41Z",
       "side": 1,
       "message": "Nice. Don\u0027t know how useful this is, but I\u0027ll probably add this to m4/libo_externals.m4 too.",
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f122fb7_fd59a913",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-29T14:06:41Z",
+      "side": 1,
+      "message": "It is very desirable because it handles saving/caching and consistency between runs, besides adding the help text.",
+      "parentUuid": "0aca5cd4_358c3ae3",
       "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -69,6 +105,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbe029dd_0a0300b6",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-29T14:06:41Z",
+      "side": 1,
+      "message": "AC_ARG_VAR implies AC_SUBST.",
+      "parentUuid": "d88a194c_1025e2e2",
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4eaf2cc1_eb5d6ce7",
@@ -82,6 +136,30 @@
       "writtenOn": "2021-12-29T11:39:41Z",
       "side": 1,
       "message": "Can become:\n\n\u003e #include \"backtrace.h\"\n\u003e \n\u003e #if ! HAVE_FEATURE_BACKTRACE /* no GNU backtrace implementation available */\n\u003e \n\u003e #include \u003csal/types.h\u003e",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 76
+      },
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "438d5445_70860752",
+        "filename": "sal/osl/unx/backtrace.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-29T14:06:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4eaf2cc1_eb5d6ce7",
       "range": {
         "startLine": 20,
         "startChar": 0,
@@ -115,6 +193,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44506aae_7b987e6d",
+        "filename": "sal/osl/unx/backtrace.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-29T14:06:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52211573_7e248a71",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 6
+      },
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2cde192_cc5d0db4",
@@ -138,6 +240,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19ab7c55_7265c19d",
+        "filename": "sal/osl/unx/signal.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-29T14:06:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2cde192_cc5d0db4",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 6
+      },
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f4b15f2_670ddab4",
@@ -151,6 +277,30 @@
       "writtenOn": "2021-12-29T11:39:41Z",
       "side": 1,
       "message": "Drop the INCLUDE_BACKTRACE - backtrace.c has the stubs for a reason. The only #ifdef left should be:\n\n\u003e #if defined(MACOSX) \u0026\u0026 !defined(INTEL)\n\u003e fprintf( stderr, \"Please turn on Enable Crash Reporting and\\nAutomatic Display of Crashlogs in the Console application\\n\" );\n\u003e #endif",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 5
+      },
+      "revId": "8b6f71dd301ac68c3c7eab386946367ecd5253f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f31f4318_6670f83e",
+        "filename": "sal/osl/unx/signal.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-12-29T14:06:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f4b15f2_670ddab4",
       "range": {
         "startLine": 304,
         "startChar": 0,
