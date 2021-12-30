@@ -779,7 +779,7 @@ class Svx3DPolygonObject final : public SvxShape
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
-    Svx3DPolygonObject(SdrObject* pObj);
+    SVXCORE_DLLPUBLIC Svx3DPolygonObject(SdrObject* pObj);
     virtual ~Svx3DPolygonObject() noexcept override;
 
     // XServiceInfo
