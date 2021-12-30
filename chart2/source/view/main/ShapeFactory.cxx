@@ -851,7 +851,7 @@ static drawing::PolyPolygonBezierCoords getRingBezierCoords(
     return aReturn;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<SvxShapePolyPolygon>
         ShapeFactory::createPieSegment2D(
                     const uno::Reference< drawing::XShapes >& xTarget
                     , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
@@ -869,35 +869,29 @@ uno::Reference< drawing::XShape >
         fUnitCircleWidthAngleDegree += 360.0;
 
     //create shape
-    uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance(
-                "com.sun.star.drawing.ClosedBezierShape" ), uno::UNO_QUERY );
+    rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
+    xShape->setShapeKind(OBJ_PATHFILL); // aka ClosedBezierShape
     xTarget->add(xShape); //need to add the shape before setting of properties
 
     //set properties
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
+    try
     {
-        try
-        {
-            ::basegfx::B2DHomMatrix aTransformationFromUnitCircle( IgnoreZ( HomogenMatrixToB3DHomMatrix(rUnitCircleToScene) ) );
-            aTransformationFromUnitCircle.translate(rOffset.DirectionX,rOffset.DirectionY);
+        ::basegfx::B2DHomMatrix aTransformationFromUnitCircle( IgnoreZ( HomogenMatrixToB3DHomMatrix(rUnitCircleToScene) ) );
+        aTransformationFromUnitCircle.translate(rOffset.DirectionX,rOffset.DirectionY);
 
-            const double fAngleSubdivisionRadian = M_PI/10.0;
+        const double fAngleSubdivisionRadian = M_PI/10.0;
 
-            drawing::PolyPolygonBezierCoords aCoords
-                = getRingBezierCoords(fUnitCircleInnerRadius, fUnitCircleOuterRadius,
-                                      basegfx::deg2rad(fUnitCircleStartAngleDegree),
-                                      basegfx::deg2rad(fUnitCircleWidthAngleDegree),
-                                      aTransformationFromUnitCircle, fAngleSubdivisionRadian);
+        drawing::PolyPolygonBezierCoords aCoords
+            = getRingBezierCoords(fUnitCircleInnerRadius, fUnitCircleOuterRadius,
+                                  basegfx::deg2rad(fUnitCircleStartAngleDegree),
+                                  basegfx::deg2rad(fUnitCircleWidthAngleDegree),
+                                  aTransformationFromUnitCircle, fAngleSubdivisionRadian);
 
-            xProp->setPropertyValue( "PolyPolygonBezier", uno::Any( aCoords ) );
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
+        xShape->SvxShape::setPropertyValue( "PolyPolygonBezier", uno::Any( aCoords ) );
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 
     return xShape;

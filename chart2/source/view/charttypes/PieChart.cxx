@@ -276,7 +276,7 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint(
     }
     else
     {
-        xShape = m_pShapeFactory->createPieSegment2D( xTarget
+        xShape = ShapeFactory::createPieSegment2D( xTarget
             , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
             , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius
             , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() ) );
