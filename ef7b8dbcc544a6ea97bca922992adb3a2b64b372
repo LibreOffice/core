@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9086c66c_d20fec9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-30T12:23:17Z",
+      "side": 1,
+      "message": "I thought about cherry-picking just on 7.3 branch. Not useful for 7.2 branch since Firebird is experimental (at least when creating a odb file) and external table is less common",
+      "revId": "ef7b8dbcc544a6ea97bca922992adb3a2b64b372",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
