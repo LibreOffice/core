@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6406390b_333de950",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-30T00:47:29Z",
+      "side": 1,
+      "message": "I think this call to rDocFunc.SetEditCell() that still has unnecessary overhead of height adjustment (which is done below anyway) and paint and modification handling, could even be eliminated by simply calling\n\n    rDoc.SetEditText( aPos, rEngine.CreateTextObject());\n\nPlease try.",
+      "range": {
+        "startLine": 1168,
+        "startChar": 32,
+        "endLine": 1168,
+        "endChar": 97
+      },
+      "revId": "9dc4572562b91bbcd516212481a47b9b6ebf2b24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
