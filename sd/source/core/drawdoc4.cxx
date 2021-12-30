@@ -882,7 +882,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage const * pPage)
             // Found a text object
             mpOnlineSpellingList->addShape(*pObj);
         }
-        else if (pObj->GetObjIdentifier() == OBJ_GRUP)
+        else if (pObj->GetObjIdentifier() == SdrObjKind::OBJ_GRUP)
         {
             // Found a group object
             SdrObjListIter aGroupIter(static_cast< SdrObjGroup* >(pObj)->GetSubList(), SdrIterMode::DeepNoGroups);
@@ -922,7 +922,7 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl, Timer *, void)
                 // Spell text object
                 SpellObject(static_cast<SdrTextObj*>(pObj));
             }
-            else if (pObj->GetObjIdentifier() == OBJ_GRUP)
+            else if (pObj->GetObjIdentifier() == SdrObjKind::OBJ_GRUP)
             {
                 // Found a group object
                 SdrObjListIter aGroupIter(static_cast< SdrObjGroup* >(pObj)->GetSubList(), SdrIterMode::DeepNoGroups);
@@ -970,7 +970,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
     OutlinerMode nOldOutlMode = pOutl->GetOutlinerMode();
     OutlinerMode nOutlMode = OutlinerMode::TextObject;
     if (pObj->GetObjInventor() == SdrInventor::Default &&
-        pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
+        pObj->GetObjIdentifier() == SdrObjKind::OBJ_OUTLINETEXT)
     {
         nOutlMode = OutlinerMode::OutlineObject;
     }
@@ -1013,7 +1013,7 @@ void SdDrawDocument::InsertObject(SdrObject* pObj)
 {
     if(mpOnlineSpellingList && pObj)
     {
-        if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == OBJ_GRUP))
+        if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == SdrObjKind::OBJ_GRUP))
         {
             // Add object to OnlineSpelling list
             mpOnlineSpellingList->addShape(*pObj);
@@ -1026,7 +1026,7 @@ void SdDrawDocument::RemoveObject(SdrObject* pObj)
 {
     if(mpOnlineSpellingList && pObj)
     {
-        if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == OBJ_GRUP))
+        if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == SdrObjKind::OBJ_GRUP))
         {
             // Replace object in OnlineSpelling list by 0 pointer
             mpOnlineSpellingList->removeShape(*pObj);
@@ -1166,9 +1166,9 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
                 {
                     switch( pObj->GetObjIdentifier() )
                     {
-                        case OBJ_TEXT:
-                        case OBJ_OUTLINETEXT:
-                        case OBJ_TITLETEXT:
+                        case SdrObjKind::OBJ_TEXT:
+                        case SdrObjKind::OBJ_OUTLINETEXT:
+                        case SdrObjKind::OBJ_TITLETEXT:
                         {
                             OutlinerParaObject* pOPO = static_cast<SdrTextObj*>(pObj)->GetOutlinerParaObject();
 
@@ -1208,9 +1208,9 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
                 {
                     switch(pObj->GetObjIdentifier())
                     {
-                        case OBJ_TEXT:
-                        case OBJ_OUTLINETEXT:
-                        case OBJ_TITLETEXT:
+                        case SdrObjKind::OBJ_TEXT:
+                        case SdrObjKind::OBJ_OUTLINETEXT:
+                        case SdrObjKind::OBJ_TITLETEXT:
                         {
                             OutlinerParaObject* pOPO = static_cast<SdrTextObj*>(pObj)->GetOutlinerParaObject();
 

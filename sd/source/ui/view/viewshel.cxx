@@ -824,10 +824,10 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
                     {
                         switch(pObj->GetObjIdentifier())
                         {
-                        case OBJ_TITLETEXT:
+                        case SdrObjKind::OBJ_TITLETEXT:
                             bTitle = true;
                             break;
-                        case OBJ_OUTLINETEXT:
+                        case SdrObjKind::OBJ_OUTLINETEXT:
                             bOutliner = true;
                             break;
                         default:

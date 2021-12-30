@@ -75,16 +75,16 @@ void ConstArc::Activate(const sal_uInt16 nSlotId)
     switch (nSlotId)
     {
         case SID_DRAW_ARC:
-            m_pWin->SetSdrDrawMode(OBJ_CARC);
+            m_pWin->SetSdrDrawMode(SdrObjKind::OBJ_CARC);
             break;
         case SID_DRAW_PIE:
-            m_pWin->SetSdrDrawMode(OBJ_SECT);
+            m_pWin->SetSdrDrawMode(SdrObjKind::OBJ_SECT);
             break;
         case SID_DRAW_CIRCLECUT:
-            m_pWin->SetSdrDrawMode(OBJ_CCUT);
+            m_pWin->SetSdrDrawMode(SdrObjKind::OBJ_CCUT);
             break;
         default:
-            m_pWin->SetSdrDrawMode(OBJ_NONE);
+            m_pWin->SetSdrDrawMode(SdrObjKind::OBJ_NONE);
             break;
     }
 

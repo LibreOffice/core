@@ -77,8 +77,8 @@ SdrRectObj::SdrRectObj(
     SdrObjKind eNewTextKind)
 :   SdrTextObj(rSdrModel, eNewTextKind)
 {
-    DBG_ASSERT(meTextKind == OBJ_TEXT ||
-               meTextKind == OBJ_OUTLINETEXT || meTextKind == OBJ_TITLETEXT,
+    DBG_ASSERT(meTextKind == SdrObjKind::OBJ_TEXT ||
+               meTextKind == SdrObjKind::OBJ_OUTLINETEXT || meTextKind == SdrObjKind::OBJ_TITLETEXT,
                "SdrRectObj::SdrRectObj(SdrObjKind) can only be applied to text frames.");
     m_bClosedObj=true;
 }
@@ -89,8 +89,8 @@ SdrRectObj::SdrRectObj(
     const tools::Rectangle& rRect)
 :   SdrTextObj(rSdrModel, eNewTextKind, rRect)
 {
-    DBG_ASSERT(meTextKind == OBJ_TEXT ||
-               meTextKind == OBJ_OUTLINETEXT || meTextKind == OBJ_TITLETEXT,
+    DBG_ASSERT(meTextKind == SdrObjKind::OBJ_TEXT ||
+               meTextKind == SdrObjKind::OBJ_OUTLINETEXT || meTextKind == SdrObjKind::OBJ_TITLETEXT,
                "SdrRectObj::SdrRectObj(SdrObjKind,...) can only be applied to text frames.");
     m_bClosedObj=true;
 }
@@ -173,7 +173,7 @@ SdrObjKind SdrRectObj::GetObjIdentifier() const
 {
     if (IsTextFrame())
         return meTextKind;
-    else return OBJ_RECT;
+    else return SdrObjKind::OBJ_RECT;
 }
 
 void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const

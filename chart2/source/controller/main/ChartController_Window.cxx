@@ -637,7 +637,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
             }
             if ( !pDrawViewWrapper->IsAction() )
             {
-                if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_CAPTION )
+                if ( pDrawViewWrapper->GetCurrentObjIdentifier() == SdrObjKind::OBJ_CAPTION )
                 {
                     Size aCaptionSize( 2268, 1134 );
                     pDrawViewWrapper->BegCreateCaptionObj( aMPos, aCaptionSize );
@@ -786,7 +786,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             }
             if ( pDrawViewWrapper->AreObjectsMarked() )
             {
-                if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT )
+                if ( pDrawViewWrapper->GetCurrentObjIdentifier() == SdrObjKind::OBJ_TEXT )
                 {
                     executeDispatch_EditText();
                 }
@@ -1988,33 +1988,33 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         SdrObjKind eKind = m_pDrawViewWrapper->GetCurrentObjIdentifier();
         switch ( eKind )
         {
-            case OBJ_LINE:
+            case SdrObjKind::OBJ_LINE:
                 {
                     ePointerStyle = PointerStyle::DrawLine;
                 }
                 break;
-            case OBJ_RECT:
-            case OBJ_CUSTOMSHAPE:
+            case SdrObjKind::OBJ_RECT:
+            case SdrObjKind::OBJ_CUSTOMSHAPE:
                 {
                     ePointerStyle = PointerStyle::DrawRect;
                 }
                 break;
-            case OBJ_CIRC:
+            case SdrObjKind::OBJ_CIRC:
                 {
                     ePointerStyle = PointerStyle::DrawEllipse;
                 }
                 break;
-            case OBJ_FREELINE:
+            case SdrObjKind::OBJ_FREELINE:
                 {
                     ePointerStyle = PointerStyle::DrawPolygon;
                 }
                 break;
-            case OBJ_TEXT:
+            case SdrObjKind::OBJ_TEXT:
                 {
                     ePointerStyle = PointerStyle::DrawText;
                 }
                 break;
-            case OBJ_CAPTION:
+            case SdrObjKind::OBJ_CAPTION:
                 {
                     ePointerStyle = PointerStyle::DrawCaption;
                 }

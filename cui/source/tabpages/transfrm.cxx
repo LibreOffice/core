@@ -846,7 +846,7 @@ void SvxPositionSizeTabPage::Construct()
         const SdrObjKind eKind(pObj->GetObjIdentifier());
 
         if((pObj->GetObjInventor() == SdrInventor::Default) &&
-            (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind) &&
+            (SdrObjKind::OBJ_TEXT == eKind || SdrObjKind::OBJ_TITLETEXT == eKind || SdrObjKind::OBJ_OUTLINETEXT == eKind) &&
             pObj->HasText())
         {
             mbAdjustDisabled = false;

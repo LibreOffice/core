@@ -211,10 +211,10 @@ bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                     if(auto pSdrTextObj = dynamic_cast<SdrTextObj *>( pObj ))
                     {
                         SdrInventor nInv(pObj->GetObjInventor());
-                        sal_uInt16  nKnd(pObj->GetObjIdentifier());
+                        SdrObjKind  nKnd(pObj->GetObjIdentifier());
 
                         if(SdrInventor::Default == nInv &&
-                            (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd)
+                            (SdrObjKind::OBJ_TITLETEXT == nKnd || SdrObjKind::OBJ_OUTLINETEXT == nKnd || SdrObjKind::OBJ_TEXT == nKnd)
                             && bDidVisitOldObject)
                         {
                             pCandidate = pSdrTextObj;
@@ -680,7 +680,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                             }
                             else
                             {
-                                if( (pObj->GetObjInventor() == SdrInventor::Default) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+                                if( (pObj->GetObjInventor() == SdrInventor::Default) && (pObj->GetObjIdentifier() == SdrObjKind::OBJ_TABLE) )
                                 {
                                     aPopupId = "table";
                                 }
@@ -694,71 +694,72 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     else
                     {
                         SdrInventor nInv = pObj->GetObjInventor();
-                        sal_uInt16  nId  = pObj->GetObjIdentifier();
+                        SdrObjKind  nId  = pObj->GetObjIdentifier();
 
                         if (nInv == SdrInventor::Default)
                         {
                             switch ( nId )
                             {
-                                case OBJ_OUTLINETEXT:
-                                case OBJ_CAPTION:
-                                case OBJ_TITLETEXT:
-                                case OBJ_TEXT:
+                                case SdrObjKind::OBJ_OUTLINETEXT:
+                                case SdrObjKind::OBJ_CAPTION:
+                                case SdrObjKind::OBJ_TITLETEXT:
+                                case SdrObjKind::OBJ_TEXT:
                                     aPopupId = "textbox";
                                     break;
 
-                                case OBJ_PATHLINE:
-                                case OBJ_PLIN:
+                                case SdrObjKind::OBJ_PATHLINE:
+                                case SdrObjKind::OBJ_PLIN:
                                     aPopupId = "curve";
                                     break;
 
-                                case OBJ_FREELINE:
-                                case OBJ_EDGE:
+                                case SdrObjKind::OBJ_FREELINE:
+                                case SdrObjKind::OBJ_EDGE:
                                     aPopupId = "connector";
                                     break;
 
-                                case OBJ_LINE:
+                                case SdrObjKind::OBJ_LINE:
                                     aPopupId = "line";
                                     break;
 
-                                case OBJ_MEASURE:
+                                case SdrObjKind::OBJ_MEASURE:
                                     aPopupId = "measure";
                                     break;
 
-                                case OBJ_RECT:
-                                case OBJ_CIRC:
-                                case OBJ_FREEFILL:
-                                case OBJ_PATHFILL:
-                                case OBJ_POLY:
-                                case OBJ_SECT:
-                                case OBJ_CARC:
-                                case OBJ_CCUT:
-                                case OBJ_CUSTOMSHAPE:
+                                case SdrObjKind::OBJ_RECT:
+                                case SdrObjKind::OBJ_CIRC:
+                                case SdrObjKind::OBJ_FREEFILL:
+                                case SdrObjKind::OBJ_PATHFILL:
+                                case SdrObjKind::OBJ_POLY:
+                                case SdrObjKind::OBJ_SECT:
+                                case SdrObjKind::OBJ_CARC:
+                                case SdrObjKind::OBJ_CCUT:
+                                case SdrObjKind::OBJ_CUSTOMSHAPE:
                                     aPopupId = "draw";
                                     break;
 
-                                case OBJ_GRUP:
+                                case SdrObjKind::OBJ_GRUP:
                                     aPopupId = "group";
                                     break;
 
-                                case OBJ_GRAF:
+                                case SdrObjKind::OBJ_GRAF:
                                     aPopupId = "graphic";
                                     break;
 
-                                case OBJ_OLE2:
+                                case SdrObjKind::OBJ_OLE2:
                                     aPopupId = "oleobject";
                                     break;
-                                case OBJ_MEDIA:
+                                case SdrObjKind::OBJ_MEDIA:
                                     aPopupId = "media";
                                     break;
-                                case OBJ_TABLE:
+                                case SdrObjKind::OBJ_TABLE:
                                     aPopupId = "table";
                                     break;
+                                default: ;
                             }
                         }
                         else if( nInv == SdrInventor::E3d )
                         {
-                            if( nId == E3D_SCENE_ID )
+                            if( nId == SdrObjKind::E3D_SCENE_ID )
                             {
                                 if( !mpDrawView->IsGroupEntered() )
                                     aPopupId = "3dscene";

@@ -1575,7 +1575,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                     && pTEObj->GetObjInventor() == SdrInventor::Default && !bDontDeleteReally)
                 {
                     SdrObjKind eIdent = pTEObj->GetObjIdentifier();
-                    if (eIdent == OBJ_TEXT)
+                    if (eIdent == SdrObjKind::OBJ_TEXT)
                     {
                         pDelUndo = GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pTEObj);
                     }
@@ -2529,7 +2529,7 @@ void SdrObjEditView::MarkListHasChanged()
 
     // check for table
     if (pObj && pView && (pObj->GetObjInventor() == SdrInventor::Default)
-        && (pObj->GetObjIdentifier() == OBJ_TABLE))
+        && (pObj->GetObjIdentifier() == SdrObjKind::OBJ_TABLE))
     {
         mxSelectionController = sdr::table::CreateTableController(
             *pView, static_cast<const sdr::table::SdrTableObj&>(*pObj), mxLastSelectionController);
@@ -2598,48 +2598,48 @@ sal_uInt16 SdrObjEditView::GetSelectionLevel() const
 }
 
 bool SdrObjEditView::SupportsFormatPaintbrush(SdrInventor nObjectInventor,
-                                              sal_uInt16 nObjectIdentifier)
+                                              SdrObjKind nObjectIdentifier)
 {
     if (nObjectInventor != SdrInventor::Default && nObjectInventor != SdrInventor::E3d)
         return false;
     switch (nObjectIdentifier)
     {
-        case OBJ_NONE:
-        case OBJ_GRUP:
+        case SdrObjKind::OBJ_NONE:
+        case SdrObjKind::OBJ_GRUP:
             return false;
-        case OBJ_LINE:
-        case OBJ_RECT:
-        case OBJ_CIRC:
-        case OBJ_SECT:
-        case OBJ_CARC:
-        case OBJ_CCUT:
-        case OBJ_POLY:
-        case OBJ_PLIN:
-        case OBJ_PATHLINE:
-        case OBJ_PATHFILL:
-        case OBJ_FREELINE:
-        case OBJ_FREEFILL:
-        case OBJ_SPLNLINE:
-        case OBJ_SPLNFILL:
-        case OBJ_TEXT:
-        case OBJ_TITLETEXT:
-        case OBJ_OUTLINETEXT:
-        case OBJ_GRAF:
-        case OBJ_OLE2:
-        case OBJ_TABLE:
+        case SdrObjKind::OBJ_LINE:
+        case SdrObjKind::OBJ_RECT:
+        case SdrObjKind::OBJ_CIRC:
+        case SdrObjKind::OBJ_SECT:
+        case SdrObjKind::OBJ_CARC:
+        case SdrObjKind::OBJ_CCUT:
+        case SdrObjKind::OBJ_POLY:
+        case SdrObjKind::OBJ_PLIN:
+        case SdrObjKind::OBJ_PATHLINE:
+        case SdrObjKind::OBJ_PATHFILL:
+        case SdrObjKind::OBJ_FREELINE:
+        case SdrObjKind::OBJ_FREEFILL:
+        case SdrObjKind::OBJ_SPLNLINE:
+        case SdrObjKind::OBJ_SPLNFILL:
+        case SdrObjKind::OBJ_TEXT:
+        case SdrObjKind::OBJ_TITLETEXT:
+        case SdrObjKind::OBJ_OUTLINETEXT:
+        case SdrObjKind::OBJ_GRAF:
+        case SdrObjKind::OBJ_OLE2:
+        case SdrObjKind::OBJ_TABLE:
             return true;
-        case OBJ_EDGE:
-        case OBJ_CAPTION:
+        case SdrObjKind::OBJ_EDGE:
+        case SdrObjKind::OBJ_CAPTION:
             return false;
-        case OBJ_PATHPOLY:
-        case OBJ_PATHPLIN:
+        case SdrObjKind::OBJ_PATHPOLY:
+        case SdrObjKind::OBJ_PATHPLIN:
             return true;
-        case OBJ_PAGE:
-        case OBJ_MEASURE:
-        case OBJ_FRAME:
-        case OBJ_UNO:
+        case SdrObjKind::OBJ_PAGE:
+        case SdrObjKind::OBJ_MEASURE:
+        case SdrObjKind::OBJ_FRAME:
+        case SdrObjKind::OBJ_UNO:
             return false;
-        case OBJ_CUSTOMSHAPE:
+        case SdrObjKind::OBJ_CUSTOMSHAPE:
             return true;
         default:
             return false;
@@ -2685,7 +2685,7 @@ void SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFormatSe
     // check for cloning from table cell, in which case we need to copy cell-specific formatting attributes
     const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     if (pObj && (pObj->GetObjInventor() == SdrInventor::Default)
-        && (pObj->GetObjIdentifier() == OBJ_TABLE))
+        && (pObj->GetObjIdentifier() == SdrObjKind::OBJ_TABLE))
     {
         auto pTable = static_cast<const sdr::table::SdrTableObj*>(pObj);
         if (mxSelectionController.is() && pTable->getActiveCell().is())
@@ -2854,7 +2854,7 @@ void SdrObjEditView::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, bool bNoChara
     // check for cloning to table cell, in which case we need to copy cell-specific formatting attributes
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     if (pObj && (pObj->GetObjInventor() == SdrInventor::Default)
-        && (pObj->GetObjIdentifier() == OBJ_TABLE))
+        && (pObj->GetObjIdentifier() == SdrObjKind::OBJ_TABLE))
     {
         auto pTable = static_cast<sdr::table::SdrTableObj*>(pObj);
         if (pTable->getActiveCell().is() && mxSelectionController.is())

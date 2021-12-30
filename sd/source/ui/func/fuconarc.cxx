@@ -165,7 +165,7 @@ void FuConstructArc::Activate()
         case SID_DRAW_ARC      :
         case SID_DRAW_CIRCLEARC:
         {
-            aObjKind = OBJ_CARC;
+            aObjKind = SdrObjKind::OBJ_CARC;
         }
         break;
 
@@ -174,7 +174,7 @@ void FuConstructArc::Activate()
         case SID_DRAW_CIRCLEPIE       :
         case SID_DRAW_CIRCLEPIE_NOFILL:
         {
-            aObjKind = OBJ_SECT;
+            aObjKind = SdrObjKind::OBJ_SECT;
         }
         break;
 
@@ -183,13 +183,13 @@ void FuConstructArc::Activate()
         case SID_DRAW_CIRCLECUT        :
         case SID_DRAW_CIRCLECUT_NOFILL :
         {
-            aObjKind = OBJ_CCUT;
+            aObjKind = SdrObjKind::OBJ_CCUT;
         }
         break;
 
         default:
         {
-            aObjKind = OBJ_CARC;
+            aObjKind = SdrObjKind::OBJ_CARC;
         }
         break;
     }

@@ -69,10 +69,10 @@ OutlineBulletDlg::OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAtt
             {
                 switch(pObj->GetObjIdentifier())
                 {
-                case OBJ_TITLETEXT:
+                case SdrObjKind::OBJ_TITLETEXT:
                     m_bTitle = true;
                     break;
-                case OBJ_OUTLINETEXT:
+                case SdrObjKind::OBJ_OUTLINETEXT:
                     bOutliner = true;
                     break;
                 default:

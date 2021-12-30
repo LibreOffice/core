@@ -658,7 +658,7 @@ SdrInventor SdrObject::GetObjInventor()   const
 
 SdrObjKind SdrObject::GetObjIdentifier() const
 {
-    return OBJ_NONE;
+    return SdrObjKind::OBJ_NONE;
 }
 
 void SdrObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
@@ -2428,7 +2428,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
                 // create SdrObject for filled line geometry
                 aLinePolygonPart = new SdrPathObj(
                     getSdrModelFromSdrObject(),
-                    OBJ_PATHFILL,
+                    SdrObjKind::OBJ_PATHFILL,
                     aMergedLineFillPolyPolygon);
 
                 // correct item properties
@@ -2451,7 +2451,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
                 // the correct closed state.
                 aLineHairlinePart = new SdrPathObj(
                     getSdrModelFromSdrObject(),
-                    OBJ_PATHLINE,
+                    SdrObjKind::OBJ_PATHLINE,
                     aMergedHairlinePolyPolygon);
 
                 aSet.Put(XLineWidthItem(0));
@@ -3174,7 +3174,7 @@ SdrObject* SdrObjFactory::MakeNewObject(
     {
         switch (nIdentifier)
         {
-            case OBJ_MEASURE:
+            case SdrObjKind::OBJ_MEASURE:
             {
                 if(nullptr != pSnapRect)
                 {
@@ -3189,7 +3189,7 @@ SdrObject* SdrObjFactory::MakeNewObject(
                 }
             }
             break;
-            case OBJ_LINE:
+            case SdrObjKind::OBJ_LINE:
             {
                 if(nullptr != pSnapRect)
                 {
@@ -3205,20 +3205,20 @@ SdrObject* SdrObjFactory::MakeNewObject(
                             pSnapRect->Bottom()));
                     pObj = new SdrPathObj(
                         rSdrModel,
-                        OBJ_LINE,
+                        SdrObjKind::OBJ_LINE,
                         basegfx::B2DPolyPolygon(aPoly));
                 }
                 else
                 {
                     pObj = new SdrPathObj(
                         rSdrModel,
-                        OBJ_LINE);
+                        SdrObjKind::OBJ_LINE);
                 }
             }
             break;
-            case OBJ_TEXT:
-            case OBJ_TITLETEXT:
-            case OBJ_OUTLINETEXT:
+            case SdrObjKind::OBJ_TEXT:
+            case SdrObjKind::OBJ_TITLETEXT:
+            case SdrObjKind::OBJ_OUTLINETEXT:
             {
                 if(nullptr != pSnapRect)
                 {
@@ -3236,10 +3236,10 @@ SdrObject* SdrObjFactory::MakeNewObject(
                 }
             }
             break;
-            case OBJ_CIRC:
-            case OBJ_SECT:
-            case OBJ_CARC:
-            case OBJ_CCUT:
+            case SdrObjKind::OBJ_CIRC:
+            case SdrObjKind::OBJ_SECT:
+            case SdrObjKind::OBJ_CARC:
+            case SdrObjKind::OBJ_CCUT:
             {
                 SdrCircKind eCircKind = ToSdrCircKind(nIdentifier);
                 if(nullptr != pSnapRect)
@@ -3253,29 +3253,29 @@ SdrObject* SdrObjFactory::MakeNewObject(
                 }
             }
             break;
-            case OBJ_NONE       : pObj=new SdrObject(rSdrModel);                   break;
-            case OBJ_GRUP       : pObj=new SdrObjGroup(rSdrModel);                 break;
-            case OBJ_POLY       : pObj=new SdrPathObj(rSdrModel, OBJ_POLY       ); break;
-            case OBJ_PLIN       : pObj=new SdrPathObj(rSdrModel, OBJ_PLIN       ); break;
-            case OBJ_PATHLINE   : pObj=new SdrPathObj(rSdrModel, OBJ_PATHLINE   ); break;
-            case OBJ_PATHFILL   : pObj=new SdrPathObj(rSdrModel, OBJ_PATHFILL   ); break;
-            case OBJ_FREELINE   : pObj=new SdrPathObj(rSdrModel, OBJ_FREELINE   ); break;
-            case OBJ_FREEFILL   : pObj=new SdrPathObj(rSdrModel, OBJ_FREEFILL   ); break;
-            case OBJ_PATHPOLY   : pObj=new SdrPathObj(rSdrModel, OBJ_POLY       ); break;
-            case OBJ_PATHPLIN   : pObj=new SdrPathObj(rSdrModel, OBJ_PLIN       ); break;
-            case OBJ_EDGE       : pObj=new SdrEdgeObj(rSdrModel);                  break;
-            case OBJ_RECT       : pObj=new SdrRectObj(rSdrModel);                  break;
-            case OBJ_GRAF       : pObj=new SdrGrafObj(rSdrModel);                  break;
-            case OBJ_OLE2       : pObj=new SdrOle2Obj(rSdrModel);                  break;
-            case OBJ_FRAME      : pObj=new SdrOle2Obj(rSdrModel, true);            break;
-            case OBJ_CAPTION    : pObj=new SdrCaptionObj(rSdrModel);               break;
-            case OBJ_PAGE       : pObj=new SdrPageObj(rSdrModel);                  break;
-            case OBJ_UNO        : pObj=new SdrUnoObj(rSdrModel, OUString());       break;
-            case OBJ_CUSTOMSHAPE: pObj=new SdrObjCustomShape(rSdrModel);       break;
+            case SdrObjKind::OBJ_NONE       : pObj=new SdrObject(rSdrModel);                   break;
+            case SdrObjKind::OBJ_GRUP       : pObj=new SdrObjGroup(rSdrModel);                 break;
+            case SdrObjKind::OBJ_POLY       : pObj=new SdrPathObj(rSdrModel, SdrObjKind::OBJ_POLY       ); break;
+            case SdrObjKind::OBJ_PLIN       : pObj=new SdrPathObj(rSdrModel, SdrObjKind::OBJ_PLIN       ); break;
+            case SdrObjKind::OBJ_PATHLINE   : pObj=new SdrPathObj(rSdrModel, SdrObjKind::OBJ_PATHLINE   ); break;
+            case SdrObjKind::OBJ_PATHFILL   : pObj=new SdrPathObj(rSdrModel, SdrObjKind::OBJ_PATHFILL   ); break;
+            case SdrObjKind::OBJ_FREELINE   : pObj=new SdrPathObj(rSdrModel, SdrObjKind::OBJ_FREELINE   ); break;
+            case SdrObjKind::OBJ_FREEFILL   : pObj=new SdrPathObj(rSdrModel, SdrObjKind::OBJ_FREEFILL   ); break;
+            case SdrObjKind::OBJ_PATHPOLY   : pObj=new SdrPathObj(rSdrModel, SdrObjKind::OBJ_POLY       ); break;
+            case SdrObjKind::OBJ_PATHPLIN   : pObj=new SdrPathObj(rSdrModel, SdrObjKind::OBJ_PLIN       ); break;
+            case SdrObjKind::OBJ_EDGE       : pObj=new SdrEdgeObj(rSdrModel);                  break;
+            case SdrObjKind::OBJ_RECT       : pObj=new SdrRectObj(rSdrModel);                  break;
+            case SdrObjKind::OBJ_GRAF       : pObj=new SdrGrafObj(rSdrModel);                  break;
+            case SdrObjKind::OBJ_OLE2       : pObj=new SdrOle2Obj(rSdrModel);                  break;
+            case SdrObjKind::OBJ_FRAME      : pObj=new SdrOle2Obj(rSdrModel, true);            break;
+            case SdrObjKind::OBJ_CAPTION    : pObj=new SdrCaptionObj(rSdrModel);               break;
+            case SdrObjKind::OBJ_PAGE       : pObj=new SdrPageObj(rSdrModel);                  break;
+            case SdrObjKind::OBJ_UNO        : pObj=new SdrUnoObj(rSdrModel, OUString());       break;
+            case SdrObjKind::OBJ_CUSTOMSHAPE: pObj=new SdrObjCustomShape(rSdrModel);       break;
 #if HAVE_FEATURE_AVMEDIA
-            case OBJ_MEDIA      : pObj=new SdrMediaObj(rSdrModel);               break;
+            case SdrObjKind::OBJ_MEDIA      : pObj=new SdrMediaObj(rSdrModel);               break;
 #endif
-            case OBJ_TABLE      : pObj=new sdr::table::SdrTableObj(rSdrModel);   break;
+            case SdrObjKind::OBJ_TABLE      : pObj=new sdr::table::SdrTableObj(rSdrModel);   break;
             default: break;
         }
     }

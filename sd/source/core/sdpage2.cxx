@@ -146,7 +146,7 @@ void SdPage::SetPresentationLayout(std::u16string_view rLayoutName,
         auto pObj = GetObj(nObj);
 
         if (pObj->GetObjInventor() == SdrInventor::Default &&
-            pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
+            pObj->GetObjIdentifier() == SdrObjKind::OBJ_OUTLINETEXT)
         {
             if (!bListsFilled || !bReplaceStyleSheets)
             {
@@ -221,7 +221,7 @@ void SdPage::SetPresentationLayout(std::u16string_view rLayoutName,
             }
         }
         else if (pObj->GetObjInventor() == SdrInventor::Default &&
-                 pObj->GetObjIdentifier() == OBJ_TITLETEXT)
+                 pObj->GetObjIdentifier() == SdrObjKind::OBJ_TITLETEXT)
         {
             // We do not get PresObjKind via GetPresObjKind() since there are
             // only PresObjListe considered. But we want to consider all "Title

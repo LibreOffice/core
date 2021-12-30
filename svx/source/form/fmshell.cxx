@@ -354,71 +354,71 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
 
     // set the Identifier and Inventor of the Uno control
-    SdrObjKind nIdentifier = OBJ_NONE;
+    SdrObjKind nIdentifier = SdrObjKind::OBJ_NONE;
     switch( nSlot )
     {
         case SID_FM_CHECKBOX:
-            nIdentifier = OBJ_FM_CHECKBOX;
+            nIdentifier = SdrObjKind::OBJ_FM_CHECKBOX;
             break;
         case SID_FM_PUSHBUTTON:
-            nIdentifier = OBJ_FM_BUTTON;
+            nIdentifier = SdrObjKind::OBJ_FM_BUTTON;
             break;
         case SID_FM_FIXEDTEXT:
-            nIdentifier = OBJ_FM_FIXEDTEXT;
+            nIdentifier = SdrObjKind::OBJ_FM_FIXEDTEXT;
             break;
         case SID_FM_LISTBOX:
-            nIdentifier = OBJ_FM_LISTBOX;
+            nIdentifier = SdrObjKind::OBJ_FM_LISTBOX;
             break;
         case SID_FM_EDIT:
-            nIdentifier = OBJ_FM_EDIT;
+            nIdentifier = SdrObjKind::OBJ_FM_EDIT;
             break;
         case SID_FM_RADIOBUTTON:
-            nIdentifier = OBJ_FM_RADIOBUTTON;
+            nIdentifier = SdrObjKind::OBJ_FM_RADIOBUTTON;
             break;
         case SID_FM_GROUPBOX:
-            nIdentifier = OBJ_FM_GROUPBOX;
+            nIdentifier = SdrObjKind::OBJ_FM_GROUPBOX;
             break;
         case SID_FM_COMBOBOX:
-            nIdentifier = OBJ_FM_COMBOBOX;
+            nIdentifier = SdrObjKind::OBJ_FM_COMBOBOX;
             break;
         case SID_FM_NAVIGATIONBAR:
-            nIdentifier = OBJ_FM_NAVIGATIONBAR;
+            nIdentifier = SdrObjKind::OBJ_FM_NAVIGATIONBAR;
             break;
         case SID_FM_DBGRID:
-            nIdentifier = OBJ_FM_GRID;
+            nIdentifier = SdrObjKind::OBJ_FM_GRID;
             break;
         case SID_FM_IMAGEBUTTON:
-            nIdentifier = OBJ_FM_IMAGEBUTTON;
+            nIdentifier = SdrObjKind::OBJ_FM_IMAGEBUTTON;
             break;
         case SID_FM_IMAGECONTROL:
-            nIdentifier = OBJ_FM_IMAGECONTROL;
+            nIdentifier = SdrObjKind::OBJ_FM_IMAGECONTROL;
             break;
         case SID_FM_FILECONTROL:
-            nIdentifier = OBJ_FM_FILECONTROL;
+            nIdentifier = SdrObjKind::OBJ_FM_FILECONTROL;
             break;
         case SID_FM_DATEFIELD:
-            nIdentifier = OBJ_FM_DATEFIELD;
+            nIdentifier = SdrObjKind::OBJ_FM_DATEFIELD;
             break;
         case SID_FM_TIMEFIELD:
-            nIdentifier = OBJ_FM_TIMEFIELD;
+            nIdentifier = SdrObjKind::OBJ_FM_TIMEFIELD;
             break;
         case SID_FM_NUMERICFIELD:
-            nIdentifier = OBJ_FM_NUMERICFIELD;
+            nIdentifier = SdrObjKind::OBJ_FM_NUMERICFIELD;
             break;
         case SID_FM_CURRENCYFIELD:
-            nIdentifier = OBJ_FM_CURRENCYFIELD;
+            nIdentifier = SdrObjKind::OBJ_FM_CURRENCYFIELD;
             break;
         case SID_FM_PATTERNFIELD:
-            nIdentifier = OBJ_FM_PATTERNFIELD;
+            nIdentifier = SdrObjKind::OBJ_FM_PATTERNFIELD;
             break;
         case SID_FM_FORMATTEDFIELD:
-            nIdentifier = OBJ_FM_FORMATTEDFIELD;
+            nIdentifier = SdrObjKind::OBJ_FM_FORMATTEDFIELD;
             break;
         case SID_FM_SCROLLBAR:
-            nIdentifier = OBJ_FM_SCROLLBAR;
+            nIdentifier = SdrObjKind::OBJ_FM_SCROLLBAR;
             break;
         case SID_FM_SPINBUTTON:
-            nIdentifier = OBJ_FM_SPINBUTTON;
+            nIdentifier = SdrObjKind::OBJ_FM_SPINBUTTON;
             break;
     }
 
@@ -456,7 +456,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 break;
             }
 
-            SfxUInt16Item aIdentifierItem( SID_FM_CONTROL_IDENTIFIER, nIdentifier );
+            SfxUInt16Item aIdentifierItem( SID_FM_CONTROL_IDENTIFIER, static_cast<sal_uInt16>(nIdentifier) );
             SfxUInt32Item aInventorItem( SID_FM_CONTROL_INVENTOR, sal_uInt32(SdrInventor::FmForm) );
             const SfxPoolItem* pArgs[] =
             {

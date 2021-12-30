@@ -292,22 +292,22 @@ IMPL_LINK(SvxIMapDlg, TbxClickHdl, const OString&, rNewItemId, void)
     else if (rNewItemId == "TBI_RECT")
     {
         SetActiveTool( rNewItemId );
-        m_xIMapWnd->SetObjKind( OBJ_RECT );
+        m_xIMapWnd->SetObjKind( SdrObjKind::OBJ_RECT );
     }
     else if (rNewItemId == "TBI_CIRCLE")
     {
         SetActiveTool( rNewItemId );
-        m_xIMapWnd->SetObjKind( OBJ_CIRC );
+        m_xIMapWnd->SetObjKind( SdrObjKind::OBJ_CIRC );
     }
     else if (rNewItemId == "TBI_POLY")
     {
         SetActiveTool( rNewItemId );
-        m_xIMapWnd->SetObjKind( OBJ_POLY );
+        m_xIMapWnd->SetObjKind( SdrObjKind::OBJ_POLY );
     }
     else if (rNewItemId == "TBI_FREEPOLY")
     {
         SetActiveTool( rNewItemId );
-        m_xIMapWnd->SetObjKind( OBJ_FREEFILL );
+        m_xIMapWnd->SetObjKind( SdrObjKind::OBJ_FREEFILL );
     }
     else if (rNewItemId == "TBI_ACTIVE")
     {

@@ -109,44 +109,44 @@ void FuConstPolygon::Activate()
         case SID_DRAW_POLYGON_NOFILL:
         case SID_DRAW_XPOLYGON_NOFILL:
         {
-            eKind = OBJ_PLIN;
+            eKind = SdrObjKind::OBJ_PLIN;
         }
         break;
 
         case SID_DRAW_POLYGON:
         case SID_DRAW_XPOLYGON:
         {
-            eKind = OBJ_POLY;
+            eKind = SdrObjKind::OBJ_POLY;
         }
         break;
 
         case SID_DRAW_BEZIER_NOFILL:
         {
-            eKind = OBJ_PATHLINE;
+            eKind = SdrObjKind::OBJ_PATHLINE;
         }
         break;
 
         case SID_DRAW_BEZIER_FILL:
         {
-            eKind = OBJ_PATHFILL;
+            eKind = SdrObjKind::OBJ_PATHFILL;
         }
         break;
 
         case SID_DRAW_FREELINE_NOFILL:
         {
-            eKind = OBJ_FREELINE;
+            eKind = SdrObjKind::OBJ_FREELINE;
         }
         break;
 
         case SID_DRAW_FREELINE:
         {
-            eKind = OBJ_FREEFILL;
+            eKind = SdrObjKind::OBJ_FREEFILL;
         }
         break;
 
         default:
         {
-            eKind = OBJ_PATHLINE;
+            eKind = SdrObjKind::OBJ_PATHLINE;
         }
         break;
     }

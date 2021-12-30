@@ -112,7 +112,7 @@ struct SvxShapeImpl
 {
     SvxShape&       mrAntiImpl;
     std::optional<SfxItemSet> mxItemSet;
-    sal_uInt32      mnObjId;
+    SdrObjKind      mnObjId;
     SvxShapeMaster* mpMaster;
     bool            mbHasSdrObjectOwnership;
     bool            mbDisposing;
@@ -130,7 +130,7 @@ struct SvxShapeImpl
 
     SvxShapeImpl( SvxShape& _rAntiImpl, ::osl::Mutex& _rMutex )
         :mrAntiImpl( _rAntiImpl )
-        ,mnObjId( 0 )
+        ,mnObjId( SdrObjKind::OBJ_NONE )
         ,mpMaster( nullptr )
         ,mbHasSdrObjectOwnership( false )
         ,mbDisposing( false )
@@ -274,13 +274,13 @@ bool SvxShape::HasSdrObjectOwnership() const
 }
 
 
-void SvxShape::setShapeKind( sal_uInt32 nKind )
+void SvxShape::setShapeKind( SdrObjKind nKind )
 {
     mpImpl->mnObjId = nKind;
 }
 
 
-sal_uInt32 SvxShape::getShapeKind() const
+SdrObjKind SvxShape::getShapeKind() const
 {
     return mpImpl->mnObjId;
 }
@@ -361,22 +361,21 @@ void SvxShape::impl_initFromSdrObject()
 
     if(nInventor == SdrInventor::FmForm)
     {
-        mpImpl->mnObjId = OBJ_UNO;
+        mpImpl->mnObjId = SdrObjKind::OBJ_UNO;
     }
     else
     {
         mpImpl->mnObjId = GetSdrObject()->GetObjIdentifier();
-        if( nInventor == SdrInventor::E3d )
-            mpImpl->mnObjId |= E3D_INVENTOR_FLAG;
     }
 
     switch(mpImpl->mnObjId)
     {
-    case OBJ_CCUT:          // segment of circle
-    case OBJ_CARC:          // arc of circle
-    case OBJ_SECT:          // sector
-        mpImpl->mnObjId = OBJ_CIRC;
+    case SdrObjKind::OBJ_CCUT:          // segment of circle
+    case SdrObjKind::OBJ_CARC:          // arc of circle
+    case SdrObjKind::OBJ_SECT:          // sector
+        mpImpl->mnObjId = SdrObjKind::OBJ_CIRC;
         break;
+    default: ;
     }
 }
 
@@ -785,17 +784,17 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     switch( mpImpl->mnObjId )
     {
     // shapes without text
-    case OBJ_PAGE:
-    case OBJ_FRAME:
-    case OBJ_OLE2_PLUGIN:
-    case OBJ_OLE2_APPLET:
-    case E3D_CUBEOBJ_ID|E3D_INVENTOR_FLAG:
-    case E3D_SPHEREOBJ_ID|E3D_INVENTOR_FLAG:
-    case E3D_LATHEOBJ_ID|E3D_INVENTOR_FLAG:
-    case E3D_EXTRUDEOBJ_ID|E3D_INVENTOR_FLAG:
-    case E3D_POLYGONOBJ_ID|E3D_INVENTOR_FLAG:
-    case OBJ_MEDIA:
-    case OBJ_TABLE:
+    case SdrObjKind::OBJ_PAGE:
+    case SdrObjKind::OBJ_FRAME:
+    case SdrObjKind::OBJ_OLE2_PLUGIN:
+    case SdrObjKind::OBJ_OLE2_APPLET:
+    case SdrObjKind::E3D_CUBEOBJ_ID:
+    case SdrObjKind::E3D_SPHEREOBJ_ID:
+    case SdrObjKind::E3D_LATHEOBJ_ID:
+    case SdrObjKind::E3D_EXTRUDEOBJ_ID:
+    case SdrObjKind::E3D_POLYGONOBJ_ID:
+    case SdrObjKind::OBJ_MEDIA:
+    case SdrObjKind::OBJ_TABLE:
         {
             static uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
@@ -815,7 +814,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
             return aTypeSequence;
         }
     // group shape
-    case OBJ_GRUP:
+    case SdrObjKind::OBJ_GRUP:
         {
             static uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
@@ -837,7 +836,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
             return aTypeSequence;
         }
     // connector shape
-    case OBJ_EDGE:
+    case SdrObjKind::OBJ_EDGE:
         {
             static uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
@@ -863,7 +862,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
             return aTypeSequence;
         }
     // control shape
-    case OBJ_UNO:
+    case SdrObjKind::OBJ_UNO:
         {
             static uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
@@ -884,7 +883,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
             return aTypeSequence;
         }
     // 3d scene shape
-    case E3D_SCENE_ID|E3D_INVENTOR_FLAG:
+    case SdrObjKind::E3D_SCENE_ID:
         {
             static uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
@@ -904,7 +903,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
 
             return aTypeSequence;
         }
-    case OBJ_CUSTOMSHAPE:
+    case SdrObjKind::OBJ_CUSTOMSHAPE:
         {
             static uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
@@ -929,22 +928,22 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
             return aTypeSequence;
         }
     // shapes with text
-    case OBJ_RECT:
-    case OBJ_CIRC:
-    case OBJ_MEASURE:
-    case OBJ_LINE:
-    case OBJ_POLY:
-    case OBJ_PLIN:
-    case OBJ_PATHLINE:
-    case OBJ_PATHFILL:
-    case OBJ_FREELINE:
-    case OBJ_FREEFILL:
-    case OBJ_PATHPOLY:
-    case OBJ_PATHPLIN:
-    case OBJ_GRAF:
-    case OBJ_TEXT:
-    case OBJ_CAPTION:
-    case OBJ_OLE2: // #i118485# Moved to shapes with text
+    case SdrObjKind::OBJ_RECT:
+    case SdrObjKind::OBJ_CIRC:
+    case SdrObjKind::OBJ_MEASURE:
+    case SdrObjKind::OBJ_LINE:
+    case SdrObjKind::OBJ_POLY:
+    case SdrObjKind::OBJ_PLIN:
+    case SdrObjKind::OBJ_PATHLINE:
+    case SdrObjKind::OBJ_PATHFILL:
+    case SdrObjKind::OBJ_FREELINE:
+    case SdrObjKind::OBJ_FREEFILL:
+    case SdrObjKind::OBJ_PATHPOLY:
+    case SdrObjKind::OBJ_PATHPLIN:
+    case SdrObjKind::OBJ_GRAF:
+    case SdrObjKind::OBJ_TEXT:
+    case SdrObjKind::OBJ_CAPTION:
+    case SdrObjKind::OBJ_OLE2: // #i118485# Moved to shapes with text
     default:
         {
             static uno::Sequence<uno::Type> aTypeSequence{
@@ -1062,20 +1061,20 @@ static bool svx_needLogicRectHack( SdrObject const * pObj )
     {
         switch(pObj->GetObjIdentifier())
         {
-        case OBJ_GRUP:
-        case OBJ_LINE:
-        case OBJ_POLY:
-        case OBJ_PLIN:
-        case OBJ_PATHLINE:
-        case OBJ_PATHFILL:
-        case OBJ_FREELINE:
-        case OBJ_FREEFILL:
-        case OBJ_SPLNLINE:
-        case OBJ_SPLNFILL:
-        case OBJ_EDGE:
-        case OBJ_PATHPOLY:
-        case OBJ_PATHPLIN:
-        case OBJ_MEASURE:
+        case SdrObjKind::OBJ_GRUP:
+        case SdrObjKind::OBJ_LINE:
+        case SdrObjKind::OBJ_POLY:
+        case SdrObjKind::OBJ_PLIN:
+        case SdrObjKind::OBJ_PATHLINE:
+        case SdrObjKind::OBJ_PATHFILL:
+        case SdrObjKind::OBJ_FREELINE:
+        case SdrObjKind::OBJ_FREEFILL:
+        case SdrObjKind::OBJ_SPLNLINE:
+        case SdrObjKind::OBJ_SPLNFILL:
+        case SdrObjKind::OBJ_EDGE:
+        case SdrObjKind::OBJ_PATHPOLY:
+        case SdrObjKind::OBJ_PATHPLIN:
+        case SdrObjKind::OBJ_MEASURE:
             return true;
         default:
             break;
@@ -1190,7 +1189,7 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
         Size aLocalSize( rSize.Width, rSize.Height );
         ForceMetricToItemPoolMetric(aLocalSize);
 
-        if(GetSdrObject()->GetObjInventor() == SdrInventor::Default && GetSdrObject()->GetObjIdentifier() == OBJ_MEASURE )
+        if(GetSdrObject()->GetObjInventor() == SdrInventor::Default && GetSdrObject()->GetObjIdentifier() == SdrObjKind::OBJ_MEASURE )
         {
             Fraction aWdt(aLocalSize.Width(),aRect.Right()-aRect.Left());
             Fraction aHgt(aLocalSize.Height(),aRect.Bottom()-aRect.Top());
@@ -1923,16 +1922,16 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemProperty
             drawing::CircleKind eKind;
             switch(GetSdrObject()->GetObjIdentifier())
             {
-            case OBJ_CIRC:          // circle, ellipse
+            case SdrObjKind::OBJ_CIRC:          // circle, ellipse
                 eKind = drawing::CircleKind_FULL;
                 break;
-            case OBJ_CCUT:          // segment of circle
+            case SdrObjKind::OBJ_CCUT:          // segment of circle
                 eKind = drawing::CircleKind_CUT;
                 break;
-            case OBJ_CARC:          // arc of circle
+            case SdrObjKind::OBJ_CARC:          // arc of circle
                 eKind = drawing::CircleKind_ARC;
                 break;
-            case OBJ_SECT:          // sector
+            case SdrObjKind::OBJ_SECT:          // sector
                 eKind = drawing::CircleKind_SECTION;
                 break;
             default:
@@ -2661,11 +2660,11 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
     case OWN_ATTR_LDBITMAP:
     {
         OUString sId;
-        if( GetSdrObject()->GetObjInventor() == SdrInventor::Default && GetSdrObject()->GetObjIdentifier() == OBJ_OLE2 )
+        if( GetSdrObject()->GetObjInventor() == SdrInventor::Default && GetSdrObject()->GetObjIdentifier() == SdrObjKind::OBJ_OLE2 )
         {
             sId = RID_UNODRAW_OLE2;
         }
-        else if( GetSdrObject()->GetObjInventor() == SdrInventor::Default && GetSdrObject()->GetObjIdentifier() == OBJ_GRAF )
+        else if( GetSdrObject()->GetObjInventor() == SdrInventor::Default && GetSdrObject()->GetObjIdentifier() == SdrObjKind::OBJ_GRAF )
         {
             sId = RID_UNODRAW_GRAPHICS;
         }
@@ -3209,18 +3208,18 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
     if( HasSdrObject() && GetSdrObject()->GetObjInventor() == SdrInventor::Default)
     {
-        const sal_uInt16 nIdent = GetSdrObject()->GetObjIdentifier();
+        const SdrObjKind nIdent = GetSdrObject()->GetObjIdentifier();
 
         switch(nIdent)
         {
-        case OBJ_GRUP:
+        case SdrObjKind::OBJ_GRUP:
             {
                 static const uno::Sequence<OUString> aSvxShape_GroupServices
                         = { sUNO_service_drawing_GroupShape,
                             sUNO_service_drawing_Shape };
                 return aSvxShape_GroupServices;
             }
-        case OBJ_CUSTOMSHAPE:
+        case SdrObjKind::OBJ_CUSTOMSHAPE:
             {
                 static const uno::Sequence<OUString> aSvxShape_CustomShapeServices
                         = { sUNO_service_drawing_CustomShape,
@@ -3240,7 +3239,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_CustomShapeServices;
             }
-        case OBJ_LINE:
+        case SdrObjKind::OBJ_LINE:
             {
                 static const uno::Sequence<OUString> aSvxShape_LineServices
                         = { sUNO_service_drawing_LineShape,
@@ -3263,7 +3262,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_LineServices;
             }
 
-        case OBJ_RECT:
+        case SdrObjKind::OBJ_RECT:
             {
                 static const uno::Sequence<OUString> aSvxShape_RectServices
                         = { sUNO_service_drawing_RectangleShape,
@@ -3285,10 +3284,10 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_RectServices;
             }
 
-        case OBJ_CIRC:
-        case OBJ_SECT:
-        case OBJ_CARC:
-        case OBJ_CCUT:
+        case SdrObjKind::OBJ_CIRC:
+        case SdrObjKind::OBJ_SECT:
+        case SdrObjKind::OBJ_CARC:
+        case SdrObjKind::OBJ_CCUT:
             {
                 static const uno::Sequence<OUString> aSvxShape_CircServices
                         = { sUNO_service_drawing_EllipseShape,
@@ -3311,8 +3310,8 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_CircServices;
             }
 
-        case OBJ_PATHPLIN:
-        case OBJ_PLIN:
+        case SdrObjKind::OBJ_PATHPLIN:
+        case SdrObjKind::OBJ_PLIN:
             {
                 static const uno::Sequence<OUString> aSvxShape_PathServices
                         = { sUNO_service_drawing_PolyLineShape,
@@ -3336,8 +3335,8 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_PathServices;
             }
 
-        case OBJ_PATHPOLY:
-        case OBJ_POLY:
+        case SdrObjKind::OBJ_PATHPOLY:
+        case SdrObjKind::OBJ_POLY:
             {
                 static const uno::Sequence<OUString> aSvxShape_PolyServices
                         = { sUNO_service_drawing_PolyPolygonShape,
@@ -3362,8 +3361,8 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_PolyServices;
             }
 
-        case OBJ_FREELINE:
-        case OBJ_PATHLINE:
+        case SdrObjKind::OBJ_FREELINE:
+        case SdrObjKind::OBJ_PATHLINE:
             {
                 static const uno::Sequence<OUString> aSvxShape_FreeLineServices
                         = { sUNO_service_drawing_OpenBezierShape,
@@ -3388,8 +3387,8 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_FreeLineServices;
             }
 
-        case OBJ_FREEFILL:
-        case OBJ_PATHFILL:
+        case SdrObjKind::OBJ_FREEFILL:
+        case SdrObjKind::OBJ_PATHFILL:
             {
                 static const uno::Sequence<OUString> aSvxShape_FreeFillServices
                         = { sUNO_service_drawing_ClosedBezierShape,
@@ -3414,9 +3413,9 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_FreeFillServices;
             }
 
-        case OBJ_OUTLINETEXT:
-        case OBJ_TITLETEXT:
-        case OBJ_TEXT:
+        case SdrObjKind::OBJ_OUTLINETEXT:
+        case SdrObjKind::OBJ_TITLETEXT:
+        case SdrObjKind::OBJ_TEXT:
             {
                 static const uno::Sequence<OUString> aSvxShape_TextServices
                         = { sUNO_service_drawing_TextShape,
@@ -3439,7 +3438,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_TextServices;
             }
 
-        case OBJ_GRAF:
+        case SdrObjKind::OBJ_GRAF:
             {
                 static const uno::Sequence<OUString> aSvxShape_GrafServices
                         = { sUNO_service_drawing_GraphicObjectShape,
@@ -3460,7 +3459,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_GrafServices;
             }
 
-        case OBJ_OLE2:
+        case SdrObjKind::OBJ_OLE2:
             {
                 static const uno::Sequence<OUString> aSvxShape_Ole2Services
                         = { sUNO_service_drawing_OLE2Shape,
@@ -3481,7 +3480,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_Ole2Services;
             }
 
-        case OBJ_CAPTION:
+        case SdrObjKind::OBJ_CAPTION:
             {
                 static const uno::Sequence<OUString> aSvxShape_CaptionServices
                         = { sUNO_service_drawing_CaptionShape,
@@ -3504,7 +3503,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_CaptionServices;
             }
 
-        case OBJ_PAGE:
+        case SdrObjKind::OBJ_PAGE:
             {
                 static const uno::Sequence<OUString> aSvxShape_PageServices
                         = { sUNO_service_drawing_PageShape,
@@ -3512,7 +3511,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_PageServices;
             }
 
-        case OBJ_MEASURE:
+        case SdrObjKind::OBJ_MEASURE:
             {
                 static const uno::Sequence<OUString> aSvxShape_MeasureServices
                         = { sUNO_service_drawing_MeasureShape,
@@ -3537,7 +3536,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_MeasureServices;
             }
 
-        case OBJ_FRAME:
+        case SdrObjKind::OBJ_FRAME:
             {
                 static const uno::Sequence<OUString> aSvxShape_FrameServices
                         = { sUNO_service_drawing_FrameShape,
@@ -3545,7 +3544,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_FrameServices;
             }
 
-        case OBJ_UNO:
+        case SdrObjKind::OBJ_UNO:
             {
                 static const uno::Sequence<OUString> aSvxShape_UnoServices
                         = { sUNO_service_drawing_ControlShape,
@@ -3553,7 +3552,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                 return aSvxShape_UnoServices;
             }
 
-        case OBJ_EDGE:
+        case SdrObjKind::OBJ_EDGE:
             {
                 static const uno::Sequence<OUString> aSvxShape_EdgeServices
                         = { sUNO_service_drawing_ConnectorShape,
@@ -3576,20 +3575,21 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_EdgeServices;
             }
-        case OBJ_MEDIA:
+        case SdrObjKind::OBJ_MEDIA:
             {
                 static const uno::Sequence<OUString> aSvxShape_MediaServices
                         = { sUNO_service_drawing_MediaShape,
                             sUNO_service_drawing_Shape };
                 return aSvxShape_MediaServices;
             }
+        default: ;
         }
     }
     else if( HasSdrObject() && GetSdrObject()->GetObjInventor() == SdrInventor::FmForm)
     {
 #if OSL_DEBUG_LEVEL > 0
-        const sal_uInt16 nIdent = GetSdrObject()->GetObjIdentifier();
-        OSL_ENSURE( nIdent == OBJ_UNO, "SvxShape::_getSupportedServiceNames: SdrInventor::FmForm, but no UNO object?" );
+        const SdrObjKind nIdent = GetSdrObject()->GetObjIdentifier();
+        OSL_ENSURE( nIdent == SdrObjKind::OBJ_UNO, "SvxShape::_getSupportedServiceNames: SdrInventor::FmForm, but no UNO object?" );
 #endif
         static const uno::Sequence<OUString> aSvxShape_UnoServices
                 = { sUNO_service_drawing_ControlShape,
@@ -3757,17 +3757,17 @@ void SvxShape::updateShapeKind()
 {
     switch( mpImpl->mnObjId )
     {
-        case OBJ_LINE:
-        case OBJ_POLY:
-        case OBJ_PLIN:
-        case OBJ_PATHLINE:
-        case OBJ_PATHFILL:
-        case OBJ_FREELINE:
-        case OBJ_FREEFILL:
-        case OBJ_PATHPOLY:
-        case OBJ_PATHPLIN:
+        case SdrObjKind::OBJ_LINE:
+        case SdrObjKind::OBJ_POLY:
+        case SdrObjKind::OBJ_PLIN:
+        case SdrObjKind::OBJ_PATHLINE:
+        case SdrObjKind::OBJ_PATHFILL:
+        case SdrObjKind::OBJ_FREELINE:
+        case SdrObjKind::OBJ_FREEFILL:
+        case SdrObjKind::OBJ_PATHPOLY:
+        case SdrObjKind::OBJ_PATHPLIN:
         {
-            const sal_uInt32 nId = GetSdrObject()->GetObjIdentifier();
+            const SdrObjKind nId = GetSdrObject()->GetObjIdentifier();
 
             if( nId != mpImpl->mnObjId )
             {
@@ -3776,6 +3776,7 @@ void SvxShape::updateShapeKind()
             }
             break;
         }
+        default: ;
     }
 }
 

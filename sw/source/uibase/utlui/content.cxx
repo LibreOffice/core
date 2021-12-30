@@ -4220,24 +4220,24 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
                             bool bMark = pDrawView->IsObjMarked(pTemp);
                             switch( pTemp->GetObjIdentifier() )
                             {
-                                case OBJ_GRUP:
-                                case OBJ_TEXT:
-                                case OBJ_LINE:
-                                case OBJ_RECT:
-                                case OBJ_CIRC:
-                                case OBJ_SECT:
-                                case OBJ_CARC:
-                                case OBJ_CCUT:
-                                case OBJ_POLY:
-                                case OBJ_PLIN:
-                                case OBJ_PATHLINE:
-                                case OBJ_PATHFILL:
-                                case OBJ_FREELINE:
-                                case OBJ_FREEFILL:
-                                case OBJ_PATHPOLY:
-                                case OBJ_PATHPLIN:
-                                case OBJ_CAPTION:
-                                case OBJ_CUSTOMSHAPE:
+                                case SdrObjKind::OBJ_GRUP:
+                                case SdrObjKind::OBJ_TEXT:
+                                case SdrObjKind::OBJ_LINE:
+                                case SdrObjKind::OBJ_RECT:
+                                case SdrObjKind::OBJ_CIRC:
+                                case SdrObjKind::OBJ_SECT:
+                                case SdrObjKind::OBJ_CARC:
+                                case SdrObjKind::OBJ_CCUT:
+                                case SdrObjKind::OBJ_POLY:
+                                case SdrObjKind::OBJ_PLIN:
+                                case SdrObjKind::OBJ_PATHLINE:
+                                case SdrObjKind::OBJ_PATHFILL:
+                                case SdrObjKind::OBJ_FREELINE:
+                                case SdrObjKind::OBJ_FREEFILL:
+                                case SdrObjKind::OBJ_PATHPOLY:
+                                case SdrObjKind::OBJ_PATHPLIN:
+                                case SdrObjKind::OBJ_CAPTION:
+                                case SdrObjKind::OBJ_CUSTOMSHAPE:
                                     if( bMark )
                                         hasObjectMarked = true;
                                     break;

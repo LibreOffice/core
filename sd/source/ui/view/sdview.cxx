@@ -191,7 +191,7 @@ void ViewRedirector::createRedirectedPrimitive2DSequence(
     const bool bDoCreateGeometry(pSdrPage->checkVisibility( rOriginal, rDisplayInfo, true ));
 
     if(!bDoCreateGeometry &&
-        (( pObject->GetObjInventor() != SdrInventor::Default ) || ( pObject->GetObjIdentifier() != OBJ_PAGE )) )
+        (( pObject->GetObjInventor() != SdrInventor::Default ) || ( pObject->GetObjIdentifier() != SdrObjKind::OBJ_PAGE )) )
         return;
 
     PresObjKind eKind(PresObjKind::NONE);
@@ -217,7 +217,7 @@ void ViewRedirector::createRedirectedPrimitive2DSequence(
                 bCreateOutline = true;
             }
         }
-        else if( ( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == OBJ_TEXT ) )
+        else if( ( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == SdrObjKind::OBJ_TEXT ) )
         {
             if( pObjectsSdPage )
             {
@@ -233,7 +233,7 @@ void ViewRedirector::createRedirectedPrimitive2DSequence(
                 }
             }
         }
-        else if( ( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == OBJ_PAGE ) )
+        else if( ( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == SdrObjKind::OBJ_PAGE ) )
         {
             // only for handout page, else this frame will be created for each
             // page preview object in SlideSorter and PagePane
@@ -682,7 +682,7 @@ bool View::SdrBeginTextEdit(
     {
         mpViewSh->GetViewShellBase().GetDrawController().FireSelectionChangeListener();
 
-        if (pObj && pObj->GetObjIdentifier() == OBJ_TABLE)
+        if (pObj && pObj->GetObjIdentifier() == SdrObjKind::OBJ_TABLE)
             mpViewSh->UpdateScrollBars();
 
         if (comphelper::LibreOfficeKit::isActive())
@@ -704,7 +704,7 @@ bool View::SdrBeginTextEdit(
     {
         if (pObj)
         {
-            if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_TABLE )
+            if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == SdrObjKind::OBJ_TABLE )
             {
                 Color aBackground = GetTextEditBackgroundColor(*this);
                 pOL->SetBackgroundColor( aBackground  );
@@ -840,7 +840,7 @@ void View::SetMarkedOriginalSize()
 
         if( pObj->GetObjInventor() == SdrInventor::Default )
         {
-            if( pObj->GetObjIdentifier() == OBJ_OLE2 )
+            if( pObj->GetObjIdentifier() == SdrObjKind::OBJ_OLE2 )
             {
                 uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(pObj)->GetObjRef();
                 if( xObj.is() )
@@ -879,7 +879,7 @@ void View::SetMarkedOriginalSize()
                     }
                 }
             }
-            else if( pObj->GetObjIdentifier() == OBJ_GRAF )
+            else if( pObj->GetObjIdentifier() == SdrObjKind::OBJ_GRAF )
             {
                 const SdrGrafObj* pSdrGrafObj = static_cast< const SdrGrafObj* >(pObj);
                 const Size aSize = pSdrGrafObj->getOriginalSize( );
@@ -947,23 +947,23 @@ bool View::IsMorphingAllowed() const
     {
         const SdrObject*    pObj1 = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         const SdrObject*    pObj2 = rMarkList.GetMark( 1 )->GetMarkedSdrObj();
-        const sal_uInt16        nKind1 = pObj1->GetObjIdentifier();
-        const sal_uInt16        nKind2 = pObj2->GetObjIdentifier();
+        const SdrObjKind    nKind1 = pObj1->GetObjIdentifier();
+        const SdrObjKind    nKind2 = pObj2->GetObjIdentifier();
 
-        if ( ( nKind1 != OBJ_TEXT && nKind2 != OBJ_TEXT ) &&
-             ( nKind1 != OBJ_TITLETEXT && nKind2 != OBJ_TITLETEXT ) &&
-             ( nKind1 != OBJ_OUTLINETEXT && nKind2 != OBJ_OUTLINETEXT ) &&
-             ( nKind1 != OBJ_GRUP && nKind2 != OBJ_GRUP ) &&
-             ( nKind1 != OBJ_LINE && nKind2 != OBJ_LINE ) &&
-             ( nKind1 != OBJ_PLIN && nKind2 != OBJ_PLIN ) &&
-             ( nKind1 != OBJ_PATHLINE && nKind2 != OBJ_PATHLINE ) &&
-             ( nKind1 != OBJ_FREELINE && nKind2 != OBJ_FREELINE ) &&
-             ( nKind1 != OBJ_PATHPLIN && nKind2 != OBJ_PATHPLIN ) &&
-             ( nKind1 != OBJ_MEASURE && nKind2 != OBJ_MEASURE ) &&
-             ( nKind1 != OBJ_EDGE && nKind2 != OBJ_EDGE ) &&
-             ( nKind1 != OBJ_GRAF && nKind2 != OBJ_GRAF ) &&
-             ( nKind1 != OBJ_OLE2 && nKind2 != OBJ_OLE2 ) &&
-             ( nKind1 != OBJ_CAPTION && nKind2 !=  OBJ_CAPTION ) &&
+        if ( ( nKind1 != SdrObjKind::OBJ_TEXT && nKind2 != SdrObjKind::OBJ_TEXT ) &&
+             ( nKind1 != SdrObjKind::OBJ_TITLETEXT && nKind2 != SdrObjKind::OBJ_TITLETEXT ) &&
+             ( nKind1 != SdrObjKind::OBJ_OUTLINETEXT && nKind2 != SdrObjKind::OBJ_OUTLINETEXT ) &&
+             ( nKind1 != SdrObjKind::OBJ_GRUP && nKind2 != SdrObjKind::OBJ_GRUP ) &&
+             ( nKind1 != SdrObjKind::OBJ_LINE && nKind2 != SdrObjKind::OBJ_LINE ) &&
+             ( nKind1 != SdrObjKind::OBJ_PLIN && nKind2 != SdrObjKind::OBJ_PLIN ) &&
+             ( nKind1 != SdrObjKind::OBJ_PATHLINE && nKind2 != SdrObjKind::OBJ_PATHLINE ) &&
+             ( nKind1 != SdrObjKind::OBJ_FREELINE && nKind2 != SdrObjKind::OBJ_FREELINE ) &&
+             ( nKind1 != SdrObjKind::OBJ_PATHPLIN && nKind2 != SdrObjKind::OBJ_PATHPLIN ) &&
+             ( nKind1 != SdrObjKind::OBJ_MEASURE && nKind2 != SdrObjKind::OBJ_MEASURE ) &&
+             ( nKind1 != SdrObjKind::OBJ_EDGE && nKind2 != SdrObjKind::OBJ_EDGE ) &&
+             ( nKind1 != SdrObjKind::OBJ_GRAF && nKind2 != SdrObjKind::OBJ_GRAF ) &&
+             ( nKind1 != SdrObjKind::OBJ_OLE2 && nKind2 != SdrObjKind::OBJ_OLE2 ) &&
+             ( nKind1 != SdrObjKind::OBJ_CAPTION && nKind2 !=  SdrObjKind::OBJ_CAPTION ) &&
              dynamic_cast< const E3dObject *>( pObj1 ) == nullptr && dynamic_cast< const E3dObject *>( pObj2 ) ==  nullptr )
         {
             SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLSTYLE> aSet1( mrDoc.GetPool() );

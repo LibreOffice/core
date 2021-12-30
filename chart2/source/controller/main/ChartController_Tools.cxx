@@ -578,7 +578,7 @@ bool ChartController::isShapeContext() const
 {
     return m_aSelection.isAdditionalShapeSelected() ||
          ( m_pDrawViewWrapper && m_pDrawViewWrapper->AreObjectsMarked() &&
-           ( m_pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT ) );
+           ( m_pDrawViewWrapper->GetCurrentObjIdentifier() == SdrObjKind::OBJ_TEXT ) );
 }
 
 void ChartController::impl_ClearSelection()
