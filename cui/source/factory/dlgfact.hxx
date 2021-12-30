@@ -408,7 +408,7 @@ DECL_ABSTDLG_CLASS(AbstractSignSignatureLineDialog,SignSignatureLineDialog)
 };
 
 // AbstractAdditionsDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractAdditionsDialog,AdditionsDialog)
+DECL_ABSTDLG_CLASS(AbstractAdditionsDialog,weld::GenericDialogController)
 };
 
 // AbstractDiagramDialog_Impl
