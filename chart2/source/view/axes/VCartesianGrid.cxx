@@ -304,7 +304,7 @@ void VCartesianGrid::createShapes()
             aPoints.SequenceX.realloc(nRealPointCount);
             aPoints.SequenceY.realloc(nRealPointCount);
             aPoints.SequenceZ.realloc(nRealPointCount);
-            m_pShapeFactory->createLine3D( xTarget, aPoints, aLinePropertiesList[nDepth] );
+            ShapeFactory::createLine3D( xTarget, aPoints, aLinePropertiesList[nDepth] );
         }
     }
 }

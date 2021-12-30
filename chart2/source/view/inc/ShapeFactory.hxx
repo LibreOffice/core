@@ -176,7 +176,7 @@ public:
         createLine ( const css::uno::Reference< css::drawing::XShapes >& xTarget,
                 const css::awt::Size& rSize, const css::awt::Point& rPosition );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<Svx3DPolygonObject>
         createLine3D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::PolyPolygonShape3D& rPoints
                     , const VLineProperties& rLineProperties );

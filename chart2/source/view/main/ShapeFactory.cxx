@@ -1836,7 +1836,7 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<Svx3DPolygonObject>
         ShapeFactory::createLine3D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::PolyPolygonShape3D& rPoints
                     , const VLineProperties& rLineProperties )
@@ -1848,65 +1848,59 @@ uno::Reference< drawing::XShape >
         return nullptr;
 
     //create shape
-    uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.Shape3DPolygonObject" ), uno::UNO_QUERY );
+    rtl::Reference<Svx3DPolygonObject> xShape = new Svx3DPolygonObject(nullptr);
+    xShape->setShapeKind(E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG);
     xTarget->add(xShape);
 
     //set properties
-    uno::Reference<beans::XMultiPropertySet> xMultiPropertySet(xShape, uno::UNO_QUERY);
-    OSL_ENSURE(xMultiPropertySet.is(), "created shape offers no XMultiPropertySet");
-    if (xMultiPropertySet.is())
+    try
     {
-        try
+        uno::Sequence<OUString> aPropertyNames {
+            UNO_NAME_3D_POLYPOLYGON3D,
+            UNO_NAME_3D_LINEONLY
+        };
+
+        uno::Sequence<uno::Any> aPropertyValues {
+            uno::Any(rPoints),  // Polygon
+            uno::Any(true)      // LineOnly
+        };
+
+        //Transparency
+        if(rLineProperties.Transparence.hasValue())
         {
-            uno::Sequence<OUString> aPropertyNames {
-                UNO_NAME_3D_POLYPOLYGON3D,
-                UNO_NAME_3D_LINEONLY
-            };
-
-            uno::Sequence<uno::Any> aPropertyValues {
-                uno::Any(rPoints),  // Polygon
-                uno::Any(true)      // LineOnly
-            };
-
-            //Transparency
-            if(rLineProperties.Transparence.hasValue())
-            {
-                lcl_addProperty(aPropertyNames, aPropertyValues,
-                                UNO_NAME_LINETRANSPARENCE,
-                                rLineProperties.Transparence);
-            }
-
-            //LineStyle
-            if(rLineProperties.LineStyle.hasValue())
-            {
-                lcl_addProperty(aPropertyNames, aPropertyValues,
-                                UNO_NAME_LINESTYLE,
-                                rLineProperties.LineStyle);
-            }
-
-            //LineWidth
-            if(rLineProperties.Width.hasValue())
-            {
-                lcl_addProperty(aPropertyNames, aPropertyValues,
-                                UNO_NAME_LINEWIDTH,
-                                rLineProperties.Width);
-            }
-
-            //LineColor
-            if(rLineProperties.Color.hasValue())
-            {
-                lcl_addProperty(aPropertyNames, aPropertyValues,
-                                UNO_NAME_LINECOLOR,
-                                rLineProperties.Color);
-            }
-            xMultiPropertySet->setPropertyValues(aPropertyNames, aPropertyValues);
+            lcl_addProperty(aPropertyNames, aPropertyValues,
+                            UNO_NAME_LINETRANSPARENCE,
+                            rLineProperties.Transparence);
         }
-        catch( const uno::Exception& )
+
+        //LineStyle
+        if(rLineProperties.LineStyle.hasValue())
         {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
+            lcl_addProperty(aPropertyNames, aPropertyValues,
+                            UNO_NAME_LINESTYLE,
+                            rLineProperties.LineStyle);
         }
+
+        //LineWidth
+        if(rLineProperties.Width.hasValue())
+        {
+            lcl_addProperty(aPropertyNames, aPropertyValues,
+                            UNO_NAME_LINEWIDTH,
+                            rLineProperties.Width);
+        }
+
+        //LineColor
+        if(rLineProperties.Color.hasValue())
+        {
+            lcl_addProperty(aPropertyNames, aPropertyValues,
+                            UNO_NAME_LINECOLOR,
+                            rLineProperties.Color);
+        }
+        xShape->setPropertyValues(aPropertyNames, aPropertyValues);
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return xShape;
 }
