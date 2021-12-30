@@ -29,6 +29,7 @@ skia_patches := \
     windows-typeface-directwrite.patch.0 \
     windows-raster-surface-no-copies.patch.1 \
     fix-windows-dwrite.patch.1 \
+    allow-windows-kslight.patch.1 \
     swap-buffers-rect.patch.1 \
     ubsan.patch.0 \
     fast-png-write.patch.1 \
