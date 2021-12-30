@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f3a94d5_a66bb56d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2021-12-30T10:11:43Z",
+      "side": 1,
+      "message": "The correct commit hash for the regressing commit seems to be ce54ba96f38b4af3aab1a7064078ee406eb021c6 instead.",
+      "revId": "1ebae5b1c0f4a8c5edc1a50e37f8896946ad57b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
