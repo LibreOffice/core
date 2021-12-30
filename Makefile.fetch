@@ -232,6 +232,12 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,ODFVALIDATOR,ODFVALIDATOR_JAR) \
 		$(call fetch_Optional,OFFICEOTRON,OFFICEOTRON_JAR) \
 	,$(call fetch_Download_item,https://dev-www.libreoffice.org/extern,$(item)))
+	$(foreach item, \
+		$(call fetch_Optional,CLN,CLN_TARBALL) \
+	,$(call fetch_Download_item,https://www.ginac.de/CLN,$(item)))
+	$(foreach item, \
+		$(call fetch_Optional,GINAC,GINAC_TARBALL) \
+	,$(call fetch_Download_item,https://www.ginac.de,$(item)))
 	@mkdir -p $(dir $@) && touch $@
 	@mkdir -p $(dir $@)/Executable
 

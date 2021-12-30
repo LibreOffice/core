@@ -1,0 +1,11 @@
+--- ginac/container.h	2021-02-02 19:07:48.000000000 +0100
++++ ginac/container.h	2021-11-04 11:35:29.058088887 +0100
+@@ -47,6 +47,8 @@
+ 	container_storage() {}
+ 	container_storage(size_t n, const ex & e) : seq(n, e) {}
+ 	container_storage(std::initializer_list<ex> il) : seq(il) {}
++	container_storage(const container_storage&) = default;
++	container_storage& operator=(const container_storage&) = default;
+ 
+ 	template <class In>
+ 	container_storage(In b, In e) : seq(b, e) {}

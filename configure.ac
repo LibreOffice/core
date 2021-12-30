@@ -2556,6 +2556,11 @@ AC_ARG_WITH(locales,
     ],
 ,)
 
+AC_ARG_WITH(system-ginac,
+    AS_HELP_STRING([--with-system-ginac],
+        [Use GiNaC and CLN already on system.]),,
+    [with_system_ginac="$with_system_libs"])
+
 # Kerberos and GSSAPI used only by PostgreSQL as of LibO 3.5
 libo_FUZZ_ARG_WITH(krb5,
     AS_HELP_STRING([--with-krb5],
@@ -11111,6 +11116,52 @@ fi
 AC_SUBST(SYSTEM_BOX2D)
 AC_SUBST(BOX2D_CFLAGS)
 AC_SUBST(BOX2D_LIBS)
+
+dnl ===================================================================
+dnl Check for system ginac (note that system ginac implies system cln)
+dnl ===================================================================
+AC_MSG_CHECKING([which GiNaC and CLN to use])
+if test "$with_system_ginac" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_CLN=TRUE
+    SYSTEM_GINAC=TRUE
+    AC_LANG_PUSH([C++])
+    PKG_CHECK_MODULES(CLN, cln, CLN_PC="TRUE", CLN_PC="" )
+    PKG_CHECK_MODULES(GINAC, ginac, GINAC_PC="TRUE", GINAC_PC="" )
+    if test "$GINAC_PC" != "TRUE"; then
+        AC_CHECK_HEADER(ginac.h, [],
+            [
+            AC_CHECK_HEADER(ginac/ginac.h, [ GINAC_CFLAGS=-I/usr/include ],
+            [AC_MSG_ERROR(ginac headers not found.)], [])
+            ], [])
+        AC_CHECK_LIB([ginac], [main], [:],
+           [ AC_MSG_ERROR(ginac library not found.) ], [])
+        GINAC_LIBS=-lginac
+    fi
+    AC_LANG_POP([C++])
+    CLN_CFLAGS=$(printf '%s' "$CLN_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    GINAC_CFLAGS=$(printf '%s' "$GINAC_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${CLN_LIBS}"
+    CLN_LIBS="${filteredlibs}"
+    FilterLibs "${GINAC_LIBS}"
+    GINAC_LIBS="${filteredlibs}"
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_CLN=
+    SYSTEM_GINAC=
+    CLN_CFLAGS="-I${WORKDIR}/UnpackedTarball/cln/include/"
+    GINAC_CFLAGS="-I${WORKDIR}/UnpackedTarball/ginac/install/include/"
+    CLN_LIBS="-L${WORKDIR}/UnpackedTarball/cln/install/lib -lcln"
+    GINAC_LIBS="-L${WORKDIR}/UnpackedTarball/ginac/install/lib -lginac"
+    BUILD_TYPE="$BUILD_TYPE CLN GINAC"
+fi
+AC_SUBST(SYSTEM_CLN)
+AC_SUBST(SYSTEM_GINAC)
+AC_SUBST(CLN_CFLAGS)
+AC_SUBST(GINAC_CFLAGS)
+AC_SUBST(CLN_LIBS)
+AC_SUBST(GINAC_LIBS)
+
 
 dnl ===================================================================
 dnl Checking for altlinuxhyph

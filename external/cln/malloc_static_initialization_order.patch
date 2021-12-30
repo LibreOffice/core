@@ -1,0 +1,44 @@
+--- include/cln/malloc.h
++++ include/cln/malloc.h
+@@ -7,10 +7,13 @@
+ 
+ namespace cln {
+ 
++// Avoid a static initialization fiasco when static variables of GiNaC are initialized (e.g. integral::relative_integration_error)
++extern void* malloc_hook (size_t size);
++
++extern "C" void free (void* ptr);
++inline void free_hook (void* ptr) {
++       free(ptr);
++}
+-// Function like malloc() which returns aligned memory of size (> 0) bytes.
+-extern void* (*malloc_hook) (size_t size);
+-// Function like free() which makes available for reuse such memory.
+-extern void (*free_hook) (void* ptr);
+ 
+ }  // namespace cln
+ 
+--- src/base/cl_malloc.cc	2009-05-10 22:32:30.000000000 +0200
++++ src/base/cl_malloc.cc	2021-10-22 21:28:07.951528186 +0200
+@@ -22,16 +22,11 @@
+ 
+ namespace cln {
+ 
+-// Just like malloc() but never return NULL pointers.
+-static void* xmalloc (size_t size)
+-{
+-	void* ptr = malloc(size);
+-	if (ptr)
+-		return ptr;
+-	throw runtime_exception("Out of virtual memory.");
++void* malloc_hook (size_t size) {
++        void* ptr = malloc(size);
++        if (ptr)
++                return ptr;
++        throw runtime_exception("Out of virtual memory.");
+ }
+ 
+-void* (*malloc_hook) (size_t size) = xmalloc;
+-void (*free_hook) (void* ptr)      = free;
+-
+ }  // namespace cln

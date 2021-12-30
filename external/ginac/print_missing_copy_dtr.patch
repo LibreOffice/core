@@ -1,0 +1,23 @@
+--- ginac/print.h	2021-01-01 19:11:37.000000000 +0100
++++ ginac/print.h	2021-11-04 11:35:42.398099162 +0100
+@@ -104,7 +104,8 @@
+ 	GINAC_DECLARE_PRINT_CONTEXT_BASE(print_context)
+ public:
+ 	print_context(std::ostream &, unsigned options = 0);
+-	virtual ~print_context() {}
++	print_context(const print_context& other) = default;
++	virtual ~print_context() {}
+ 
+ 	std::ostream & s; /**< stream to output to */
+ 	unsigned options; /**< option flags */
+@@ -196,7 +197,9 @@
+ /** Base class for print_functor handlers */
+ class print_functor_impl {
+ public:
+-	virtual ~print_functor_impl() {}
++	virtual ~print_functor_impl() {}
++	print_functor_impl() = default;
++	print_functor_impl(const print_functor_impl& other) = default;
+ 	virtual print_functor_impl *duplicate() const = 0;
+ 	virtual void operator()(const basic & obj, const print_context & c, unsigned level) const = 0;
+ };

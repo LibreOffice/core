@@ -1,0 +1,11 @@
+--- ginac/numeric.h	2021-11-04 11:55:16.383003812 +0100
++++ ginac/numeric.h	2021-11-04 11:55:27.519012393 +0100
+@@ -123,7 +123,7 @@
+ protected:
+ 	/** Implementation of ex::diff for a numeric always returns 0.
+ 	 *  @see ex::diff */
+-	ex derivative(const symbol &s) const override { return 0; }
++	ex derivative(const symbol &) const override { return 0; }
+ 	bool is_equal_same_type(const basic &other) const override;
+ 	unsigned calchash() const override;
+ 	

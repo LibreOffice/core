@@ -1,0 +1,33 @@
+index eeff9143..79244a99 100644
+--- ginac/numeric.cpp
++++ ginac/numeric.cpp
+@@ -2518,6 +2518,7 @@ _numeric_digits::_numeric_digits()
+ 	// It initializes to 17 digits, because in CLN float_format(17) turns out
+ 	// to be 61 (<64) while float_format(18)=65.  The reason is we want to
+ 	// have a cl_LF instead of cl_SF, cl_FF or cl_DF.
++	static bool too_late = false;               ///< Already one object present
+ 	if (too_late)
+ 		throw(std::runtime_error("I told you not to do instantiate me!"));
+ 	too_late = true;
+@@ -2578,9 +2579,6 @@ std::ostream& operator<<(std::ostream &os, const _numeric_digits &e)
+ 
+ // private
+ 
+-bool _numeric_digits::too_late = false;
+-
+-
+ /** Accuracy in decimal digits.  Only object of this type!  Can be set using
+  *  assignment from C++ unsigned ints and evaluated like any built-in type. */
+ _numeric_digits Digits;
+diff --git a/ginac/numeric.h b/ginac/numeric.h
+index b825f874..130c5cba 100644
+--- ginac/numeric.h
++++ ginac/numeric.h
+@@ -60,7 +60,6 @@ public:
+ // member variables
+ private:
+ 	long digits;                        ///< Number of decimal digits
+-	static bool too_late;               ///< Already one object present
+ 	// Holds a list of functions that get called when digits is changed.
+ 	std::vector<digits_changed_callback> callbacklist;
+ };
