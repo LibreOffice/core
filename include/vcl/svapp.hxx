@@ -901,6 +901,13 @@ public:
     */
     static OUString             GetAppName();
 
+    /**
+     * Get the OS version based on the OS specific implementation.
+     *
+     * @return OUString version string or "-" in case of problems
+     */
+    static OUString             GetOSVersion();
+
     /** Get useful OS, Hardware and configuration information,
      * cf. Help->About, and User-Agent
      * bSelection = 0 to return all info, 1 for environment only,
