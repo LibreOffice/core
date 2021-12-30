@@ -259,7 +259,7 @@ void VCartesianGrid::createShapes()
                 nRealPointCount++;
             }
             aPoints.realloc(nRealPointCount);
-            m_pShapeFactory->createLine2D( xTarget, aPoints, &aLinePropertiesList[nDepth] );
+            ShapeFactory::createLine2D( xTarget, aPoints, &aLinePropertiesList[nDepth] );
 
             //prepare polygon for handle shape:
             drawing::PointSequenceSequence aHandlesPoints(1);
@@ -272,8 +272,8 @@ void VCartesianGrid::createShapes()
             //create handle shape:
             VLineProperties aHandleLineProperties;
             aHandleLineProperties.LineStyle    <<= drawing::LineStyle_NONE;
-            Reference< drawing::XShape > xHandleShape =
-                m_pShapeFactory->createLine2D( xTarget, aHandlesPoints, &aHandleLineProperties );
+            rtl::Reference<SvxShapePolyPolygon> xHandleShape =
+                ShapeFactory::createLine2D( xTarget, aHandlesPoints, &aHandleLineProperties );
             ::chart::ShapeFactory::setShapeName( xHandleShape, "HandlesOnly" );
         }
         else //if(2!=m_nDimension)

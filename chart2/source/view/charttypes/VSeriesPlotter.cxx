@@ -739,7 +739,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                         drawing::PointSequenceSequence aPoints{ { {nX1, nY1}, {nX2, nY2} } };
 
                         VLineProperties aVLineProperties;
-                        m_pShapeFactory->createLine2D(xTarget, aPoints, &aVLineProperties);
+                        ShapeFactory::createLine2D(xTarget, aPoints, &aVLineProperties);
                     }
                 }
             }
@@ -1088,7 +1088,7 @@ void VSeriesPlotter::createErrorBar(
             lcl_AddErrorBottomLine( aPositive, aMainDirection, aPoly, nSequenceIndex );
         }
 
-        uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D( xTarget, PolyToPointSequence( aPoly) );
+        rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D( xTarget, PolyToPointSequence( aPoly) );
         setMappedProperties( xShape, xErrorBarProperties, PropertyMapper::getPropertyNameMapForLineProperties() );
     }
     catch( const uno::Exception & )
@@ -1108,7 +1108,7 @@ void VSeriesPlotter::addErrorBorder(
     sal_Int32 nSequenceIndex = 0;
     AddPointToPoly( aPoly, rPos0, nSequenceIndex );
     AddPointToPoly( aPoly, rPos1, nSequenceIndex );
-    uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+    rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
                     rTarget, PolyToPointSequence( aPoly) );
     setMappedProperties( xShape, rErrorBorderProp,
                     PropertyMapper::getPropertyNameMapForLineProperties() );
@@ -1442,7 +1442,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
             //create an extra group shape for each curve for selection handling
             uno::Reference< drawing::XShapes > xRegressionGroupShapes =
                 createGroupShape( xTarget, rVDataSeries.getDataCurveCID( nN, bAverageLine ) );
-            uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+            rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
                 xRegressionGroupShapes, PolyToPointSequence( aRegressionPoly ), &aVLineProperties );
             ShapeFactory::setShapeName( xShape, "MarkHandles" );
             aDefaultPos = xShape->getPosition();

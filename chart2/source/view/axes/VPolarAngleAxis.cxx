@@ -193,7 +193,7 @@ void VPolarAngleAxis::createShapes()
     //create axis main lines
     drawing::PointSequenceSequence aPoints(1);
     VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, m_aAllTickInfos, m_aIncrement, m_aScale, m_pPosHelper.get(), fLogicRadius, fLogicZ );
-    uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+    rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
             m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
     //because of this name this line will be used for marking the axis
     ::chart::ShapeFactory::setShapeName( xShape, "MarkHandles" );

@@ -119,13 +119,10 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
     {
         if( eStyle == LegendSymbolStyle::Line )
         {
-            Reference< drawing::XShape > xLine =
-                pShapeFactory->createLine( xResultGroup, awt::Size( rEntryKeyAspectRatio.Width, 0 ),
+            rtl::Reference<SvxShapePolyPolygon> xLine =
+                ShapeFactory::createLine( xResultGroup, awt::Size( rEntryKeyAspectRatio.Width, 0 ),
                         awt::Point( 0, rEntryKeyAspectRatio.Height/2 ));
-            if( xLine.is())
-            {
-                lcl_setPropertiesToShape( xLegendEntryProperties, xLine, ePropertyType, rEntryKeyAspectRatio );
-            }
+            lcl_setPropertiesToShape( xLegendEntryProperties, xLine, ePropertyType, rEntryKeyAspectRatio );
 
             Reference< drawing::XShape > xSymbol;
             const sal_Int32 nSize = std::min(rEntryKeyAspectRatio.Width,rEntryKeyAspectRatio.Height);

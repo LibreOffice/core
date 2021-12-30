@@ -531,7 +531,7 @@ void PieChart::createTextLabelShape(
                         if (nColor != -1)
                             aVLineProperties.Color <<= nColor;
                     }
-                    m_pShapeFactory->createLine2D(xTextTarget, aPoints, &aVLineProperties);
+                    ShapeFactory::createLine2D(xTextTarget, aPoints, &aVLineProperties);
                 }
             }
         }
@@ -1303,7 +1303,7 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
                 if( nColor != -1 )//automatic font color does not work for lines -> fallback to black
                     aVLineProperties.Color <<= nColor;
             }
-            m_pShapeFactory->createLine2D( labelInfo.xTextTarget, aPoints, &aVLineProperties );
+            ShapeFactory::createLine2D( labelInfo.xTextTarget, aPoints, &aVLineProperties );
         }
     }
 }
