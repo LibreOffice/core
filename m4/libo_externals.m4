@@ -104,7 +104,7 @@ else
         if test "$test_$1" != no -a "$enable_$1" = no; then
             AC_MSG_RESULT([disabled])
         else
-            AC_MSG_RESULT([ignored / not supported by OS])
+            AC_MSG_RESULT([not tested])
         fi
     fi
 fi
