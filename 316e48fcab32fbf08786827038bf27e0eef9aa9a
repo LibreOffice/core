@@ -51,6 +51,24 @@
       "message": "I doubt that unconditionally adjusting the row height here is the correct thing to do if it\u0027s not done via SetStringCell()/SetEditCell() either. I didn\u0027t look up all places where those are used and if or how it differs from manual input.",
       "revId": "316e48fcab32fbf08786827038bf27e0eef9aa9a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d1c0429_58a2fef0",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-30T21:33:38Z",
+      "side": 1,
+      "message": "Manual input is done in editeng/source/editeng/editeng.cxx with aCurSel \u003d pImpEditEngine-\u003eInsertParaBreak( aCurSel ); I will add an adjustment if there the string includes a new line like in sc/source/ui/unoobj/cellsuno.cxx at the end of the function lcl_PutDataArray.",
+      "parentUuid": "5c0ccaa8_7eeb2c23",
+      "revId": "316e48fcab32fbf08786827038bf27e0eef9aa9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
