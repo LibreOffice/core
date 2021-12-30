@@ -24,6 +24,7 @@
 
 #include <comphelper/fileformat.h>
 #include <comphelper/accessibletexthelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -94,6 +95,23 @@ using namespace ::com::sun::star::uno;
 #define ShellClass_SmDocShell
 #include <smslots.hxx>
 
+#include <config_folders.h>
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
+
+#include <smim.hrc>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <imath/msgdriver.hxx>
+#include <imath/settingsmanager.hxx>
+#include <imath/alignblock.hxx>
+class iMathDoc;
+class documentObject;
+#define FORMULAOBJECT SmDocShell
+#define DOCUMENTOBJECT documentObject
+#include <imath/smathparser.hxx>
+
+#include <iostream>
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SmDocShell, SfxObjectShell)
 
@@ -129,6 +147,10 @@ void SmDocShell::Notify(SfxBroadcaster&, const SfxHint& rHint)
 
         Repaint();
     }
+}
+
+Reference<XComponentContext> SmDocShell::GetContext() const {
+    return comphelper::getProcessComponentContext();
 }
 
 void SmDocShell::LoadSymbols()
@@ -255,6 +277,184 @@ void SmDocShell::Parse()
     maUsedSymbols = maParser->GetUsedSymbols();
 }
 
+void SmDocShell::ImInitialize() {
+    Reference<XComponentContext> xContext(GetContext());
+
+    // TODO: Handle case when ImInitialize() is called after options were changed through the UI
+    initialOptions = std::make_shared<GiNaC::optionmap>();
+    initialCompiler = std::make_shared<eqc>();
+
+    // Get access to the registry that contains the global options
+    Reference< XHierarchicalPropertySet > xProperties = getRegistryAccess(xContext, OU("/org.openoffice.Office.iMath/"));
+    // Get access to the RDF graph that contains the document-specific options. Create one if it doesn't exist
+    Reference<XModel> xModel(GetBaseModel());
+    Reference<XNamedGraph> xGraph = getGraph(xContext, xModel);
+    if (!xGraph.is()) xGraph = createGraph(xContext, xModel);
+
+    // Get/Set document-specific options
+    // 1. If the document contains document-specific options in an RDF graph, these are used
+    // 2. Otherwise, the values from the registry are used and also copied to the RDF graph
+    //    In other words, only a new document before the first recalc() will use the registry values, to ensure
+    //    document display consistency
+    // References. These are always document specific
+    OUString references = getTextProperty(xContext, xModel, xGraph, xProperties, OU("includes_txt_references"), OU("Includes/txt_References"));
+    OUString include1 = getTextProperty(xContext, xModel, xGraph, xProperties, OU("includes_txt_include1"), OU("Includes/txt_Include1"));
+    OUString include2 = getTextProperty(xContext, xModel, xGraph, xProperties, OU("includes_txt_include1"), OU("Includes/txt_Include2"));
+    OUString include3 = getTextProperty(xContext, xModel, xGraph, xProperties, OU("includes_txt_include1"), OU("Includes/txt_Include3"));
+
+    // Formatting
+    // TODO: This will copy all the options from the registry into the local document graph, which is not what we want for multi-formula documents in Writer or Presentation
+    // Note: We could mis-use the master document flag to avoid the copying
+    Settingsmanager::initializeOptionmap(xContext, xModel, xGraph, xProperties, &*initialOptions, false);
+
+    // Path to iMath's own include files (references)
+    OUString shareFolder;
+    OUString shareURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/imath/references/");
+    rtl::Bootstrap::expandMacros(shareURL);
+    osl::FileBase::getSystemPathFromFileURL(shareURL, shareFolder);
+
+    try {
+        // Read referenced files
+        auto files = splitString(references, ' ');
+        files.unique();
+        rawtext = OU("");
+
+        for (const auto& f : files) {
+            if (f.getLength() > 2)
+                rawtext += OU("%%ii READFILE {\"") + shareFolder + f.copy(2) + OU(".imath") + OU("\"}\n");
+        }
+
+        if (!rawtext.equalsAscii("")) {
+            MSG_INFO(0, "Reading referenced files\n" << STR(rawtext));
+            imath::smathparser parser(*this, nullptr, initialCompiler, initialOptions);
+            smathlexer::scan_begin(STR(rawtext));
+            parser.parse(); // we discard the return value
+            smathlexer::scan_end();
+            if (lines.size() > 0) initialOptions = lines.back()->getGlobalOptions(); // Options might have been changed by the OPTIONS keyword
+        }
+
+        // units must be set AFTER units.imath is read, because the preferred units list might use user-defined units
+        // Note that this will delete any preferred units declared in the previous include files (there shouldn't be any!)
+        OUString units = OUS8(*(*initialOptions)[o_unitstr].value.str); // This was populated in initializeOptionmap()
+        (*initialOptions)[o_units] = option(GiNaC::exvector()); // All keys are expected to exist in global_options
+        (*initialOptions).at(o_unitstr).value.str->clear(); // Clear o_unitstr, because it will be populated again
+
+        if (units.getLength() > 0) {
+            // Recreate the global units expression vector, since this cannot be stored in the registry
+            MSG_INFO(0, "Parsing default units\n" << STR(rawtext));
+            rawtext = OU("%%ii OPTIONS {units={") + units + OU("}}\n");
+            imath::smathparser parser(*this, nullptr, initialCompiler, initialOptions);
+            smathlexer::scan_begin(STR(rawtext));
+            parser.parse(); // we discard the return value
+            smathlexer::scan_end(); // Result is stored in initialOptions map under the keys o_unit and o_unitstr
+            if (lines.size() > 0) initialOptions = lines.back()->getGlobalOptions();
+        }
+
+        // Read user include files
+        // Note: READFILE converts include[1-3] to a system path if necessary
+        rawtext = OU("");
+        if (!include1.equalsAscii("") && (std::find(files.begin(), files.end(), include1) == files.end())) {
+            rawtext = OU("%%ii READFILE {\"") + include1 + OU("\"}\n");
+            files.emplace_back(include1);
+        }
+        if (!include2.equalsAscii("") && (std::find(files.begin(), files.end(), include2) == files.end())) {
+            rawtext += OU("%%ii READFILE {\"") + include2 + OU("\"}\n");
+            files.emplace_back(include2);
+        }
+        if (!include3.equalsAscii("") && (std::find(files.begin(), files.end(), include3) == files.end())) {
+            rawtext += OU("%%ii READFILE {\"") + include3 + OU("\"}\n");
+            files.emplace_back(include3);
+        }
+
+        if (!rawtext.equalsAscii("")) {
+            MSG_INFO(0, "Reading user include files\n" << STR(rawtext));
+            imath::smathparser parser(*this, nullptr, initialCompiler, initialOptions);
+            smathlexer::scan_begin(STR(rawtext));
+            parser.parse();
+            smathlexer::scan_end();
+            if (lines.size() > 0) initialOptions = lines.back()->getGlobalOptions();
+        }
+    } catch (Exception &e) {
+        // TODO: Show error message to user
+        SAL_WARN("starmath.imath", "Recalculation error in iMath include files\n" << e.Message);
+        return;
+    } catch (std::exception &e) {
+        // TODO: Show error message to user
+        SAL_WARN("starmath.imath", "Recalculation error in iMath include files\n" << OUS8(e.what()));
+        return;
+    }
+}
+
+void SmDocShell::Compile()
+{
+    SAL_INFO("starmath.imath", "SmDocShell::Compile()");
+
+    if (initialOptions == nullptr || initialCompiler == nullptr)
+        ImInitialize();
+
+    // Important settings for the compiler. Note: Initialization must do without them, since no initialOptions are available before initialization...
+    GiNaC::imathprint::decimalpoint = decimalSeparator;
+    setlocale(LC_NUMERIC, "C"); // Ensure printf() always uses decimal points! TODO Why is that important?
+    // Inhibit floating point underflow exceptions?
+    cln::cl_inhibit_floating_point_underflow = (initialOptions->at(o_underflow).value.boolean);
+    MSG_INFO(3, "Inhibit floating point underflow exception: " << (cln::cl_inhibit_floating_point_underflow ? "true" : "false") << endline);
+    // Evaluate odd negative roots to the positive real value?
+    GiNaC::expression::evalf_real_roots_flag = (initialOptions->at(o_evalf_real_roots).value.boolean);
+
+    // Prepare options and compiler. Note: Since currentCompiler is a shared_ptr, the old data will automatically get cleaned up when the last reference is released
+    currentCompiler = initialCompiler->clone(); // Takes a deep copy TODO: Reduce the amount of data copied, e.g. by copy-on-write semantics in the eqc private data structures
+
+    try {
+        if (maImText.equalsAscii("")) return; // empty iFormula
+
+        // Add %%ii in front of every line
+        // TODO: Change parser to make this unnecessary
+        sal_Int32 idx = 0;
+        rawtext = OU("");
+
+        do {
+            OUString line = maImText.getToken(0, '\n', idx);
+            if (line.getLength() > 0)
+                rawtext += "%%ii " + line + OU("\n");
+        } while (idx >= 0);
+
+        lines.clear();
+        imath::smathparser parser(*this, nullptr, currentCompiler, initialOptions); // initialOptions are not modified, copy is taken when OPTIONS keyword is encountered
+        smathlexer::scan_begin(STR(rawtext));
+        parser.parse(); // we discard the return value
+        smathlexer::scan_end();
+
+        if (lines.size() > 0) {
+            currentOptions = lines.back()->getGlobalOptions();
+
+            MSG_INFO(0, "Printing " << lines.size() << " lines");
+            for (const auto& i : lines)
+                MSG_INFO(0, i->printFormula());
+
+            addResultLines();
+            OUString result;
+
+            for (const auto& i : lines)
+                if (i->getSelectionType() == formulaTypeResult)
+                    result += i->print() + OU("\n");
+
+            SetText(result);
+        }
+    } catch (Exception &e) {
+        // TODO: Show error message to user
+        MSG_ERROR(0, "ERROR1: " << STR(e.Message) << endline);
+    } catch (duplication_error &e) {
+        // TODO: Show error message and dialog to user
+        MSG_ERROR(0, "Caught duplication error" << endline);
+    } catch (std::exception &e) {
+        // TODO: Show error message to user
+        MSG_ERROR(0, "ERROR3: " << e.what() << endline);
+    }
+
+    setlocale(LC_NUMERIC, ""); // Reset to system locale
+    MSG_INFO(0, "Recalculation finished" << endline);
+}
+
 
 void SmDocShell::ArrangeFormula()
 {
@@ -303,6 +503,120 @@ void SmDocShell::ArrangeFormula()
     // invalidate accessible text
     maAccText.clear();
 }
+
+// Note: Mostly copied from iFormula.cxx
+bool SmDocShell::align_makes_sense() const {
+  // If there are at least two operator signs in two different lines, aligning makes sense
+  bool have_operator = false;
+  unsigned count = 0;
+
+  for (const auto& i : lines) {
+    iExpression_ptr p_expr = std::dynamic_pointer_cast<iFormulaNodeExpression>(i);
+    if ((p_expr != nullptr) && !p_expr->getHide())
+      count += p_expr->countLinesWithOperators(have_operator);
+    if (count > 1) return true; // Avoid unnecessary iterations
+  }
+
+  if (have_operator) count++; // Final line does not need newline
+  return count > 1;
+} // align_makes_sense()
+
+void SmDocShell::addResultLines() {
+  MSG_INFO(2, "SmDocShell::addResultLines" << endline);
+  // Don't try to align one-line iFormulas!
+  bool do_not_align = !align_makes_sense();
+  MSG_INFO(3,  "do_not_align = " << (do_not_align ? "true" : "false") << endline);
+
+  // Collects all the lines that should be aligned to one another
+  alignblock a;
+
+  // Insert result lines where appropriate
+  bool hasResult = false;
+  OUString resultText;
+  OUString prev_lhs = OU(""); // LHS of previous equation, for chaining
+  unsigned basefontheight = sal_Int16(SmRoundFraction(Sm100th_mmToPts(GetFormat().GetBaseSize().Height()))); // TODO: getFormulaUnsignedProperty(fModel, OU("BaseFontHeight"))
+
+  // Note: Using _cit here breaks debian trusty build on i = emplace(i, ...)
+  for (iFormulaLine_it i = lines.begin(); i != lines.end();) {
+    MSG_INFO(3, "Line type = " << (*i)->getSelectionType() << endline);
+    // Echo iFormula text
+    if ((*i)->getOption(o_echoformula).value.boolean == true) {
+      if ((*i)->getSelectionType() != formulaTypeComment && (*i)->getSelectionType() != formulaTypeEmptyLine && (*i)->getSelectionType() != formulaTypeResult) {
+        OUString rtext = (*i)->print();
+        rtext = replaceString(rtext, OU("\""), OU("\\\""));
+        rtext = replaceString(rtext, OU("\n%%ii+"), OU("\" newline\"%%ii+"));
+        rtext = OU("\"") + rtext + OU("\" newline{}");
+
+        if (i != lines.begin()) {
+          iFormulaLine_it prev_it = i;
+          --prev_it;
+          if (prev_it != lines.begin()) --prev_it;
+          if ((*prev_it)->getFormula().lastIndexOf(OU("\" newline{}")) < 0)
+            rtext = OU("{} newline ") + rtext;
+        }
+
+        i = lines.emplace(i, std::make_shared<iFormulaNodeResult>(rtext));
+        MSG_INFO(3, "Created echo line" << endline);
+        ++i;
+      }
+    }
+
+    // Display the result of the line
+    (*i)->setBasefontHeight(basefontheight);
+    if ((*i)->isDisplayable()) {
+      // Note: A valid xModel is only required for the CHART statement
+      (*i)->display(GetModel(), resultText, prev_lhs, a, do_not_align);
+      hasResult = (*i)->getSelectionType() != formulaTypeChart; // CHART is displayable but has no textual result
+      iExpression_ptr p_expr = std::dynamic_pointer_cast<iFormulaNodeExpression>(*i);
+      if (p_expr != nullptr && !(p_expr->getHide() && p_expr->getDisplayedLhs().getLength() == 0))
+        prev_lhs = p_expr->getDisplayedLhs();
+      MSG_INFO(3, "Line is displayable and has " << (hasResult ? "a" : "no") << " textual result" << endline);
+    }
+
+    // Point iterator to next element because emplace moves everything backwards
+    ++i;
+
+    // The following possibilities exist
+    // 1. We are not aligning (alignblock is empty). Insert the resultLine
+    // 2. We started a new alignblock. Neither block nor resultLine is inserted
+    // 3. We continued an existing alignblock. Neither block nor resultLine is inserted
+    // 4. We finished an alignblock. Insert the alignblock, and the resultLine, too
+    // 5. We have processed the last line. Insert the alignblock
+    // After emplacing lines, ensure that the iterator points to the line after the newly created line
+    if (a.isEmpty()) { // Case 1.
+      MSG_INFO(3, "Not aligning this line. There is " << (hasResult ? "a" : "no") << " textual result" << endline);
+      if (hasResult) {
+        i = lines.emplace(i, std::make_shared<iFormulaNodeResult>(resultText));
+        ++i;
+        resultText = OU("");
+        hasResult = false;
+      }
+    } else if (a.isFinished()) { // Case 4.
+      MSG_INFO(3, "Finishing alignblock with a result line" << endline);
+      i = lines.emplace(i, std::make_shared<iFormulaNodeResult>(a.print()));
+      ++i;
+      if (hasResult) {
+        MSG_INFO(3, "... and inserting new result line" << endline);
+        i = lines.emplace(i, std::make_shared<iFormulaNodeResult>(resultText));
+        ++i;
+        resultText = OU("");
+        hasResult = false;
+      }
+      a.clear();
+    } else if (i == lines.end()) { // Case 5.
+      MSG_INFO(3, "Reached last line, inserting alignblock in a result line" << endline);
+      a.finish();
+      lines.emplace_back(std::make_shared<iFormulaNodeResult>(a.print()));
+      i = lines.end();
+      a.clear();
+    }
+  }
+}
+
+void SmDocShell::setOption(const option_name oname, const option& value) {
+  for (auto& i : lines)
+    i->setOption(oname, value);
+} // setOption()
 
 void SmDocShell::UpdateEditEngineDefaultFonts()
 {
@@ -595,7 +909,12 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
     , mnModifyCount(0)
     , mbFormulaArranged(false)
     , mnSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
+    , initialOptions(nullptr)
+    , initialCompiler(nullptr)
+    , currentOptions(nullptr)
+    , currentCompiler(nullptr)
 {
+    MSG_INFO(0, "SmDocShell::SmDocShell with iMath version=" << SM_MOD()->GetConfig()->GetDefaultImSyntaxVersion());
     SvtLinguConfig().GetOptions(maLinguOptions);
 
     SetPool(&SfxGetpApp()->GetPool());
@@ -608,6 +927,25 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
 
     SetBaseModel(new SmModel(this));
     SetSmSyntaxVersion(mnSmSyntaxVersion);
+
+    // // Find decimal separator character from the Office locale and store it for iMath compilation
+    Reference<XComponentContext> xContext = GetContext();
+    Reference<lang::XMultiComponentFactory> xMCF = xContext->getServiceManager();
+    OUString ooLocale = getLocaleName(xContext);
+    Reference<i18n::XLocaleData> xld(xMCF->createInstanceWithContext(OU("com.sun.star.i18n.LocaleData"), xContext), UNO_QUERY_THROW);
+    // TODO: Can't we pass the ooLocale string directly somehow?
+    int dashpos = ooLocale.indexOfAsciiL("-",1);
+    OUString ooLocale1, ooLocale2;
+    if (dashpos > 0) {
+        ooLocale1 = ooLocale.copy(0, dashpos);
+        ooLocale2 = ooLocale.copy(dashpos + 1);
+    } else {
+        // Not all locales appear to return a full string, e.g. just "de" is returned on my German installation
+        ooLocale1 = ooLocale;
+        ooLocale2 = OU("");
+    }
+
+    decimalSeparator = STR(xld->getLocaleItem(lang::Locale(ooLocale1, ooLocale2, OU(""))).decimalSeparator);
 }
 
 SmDocShell::~SmDocShell()

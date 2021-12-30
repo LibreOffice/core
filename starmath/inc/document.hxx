@@ -34,6 +34,10 @@
 #include "smdllapi.hxx"
 #include "mathml/iterator.hxx"
 
+#include <imath/eqc.hxx>
+#include <imath/iFormulaLine.hxx>
+typedef std::list<iFormulaLine_ptr>::iterator iFormulaLine_it;
+
 class SfxPrinter;
 class Printer;
 class SmCursor;
@@ -42,6 +46,22 @@ namespace oox::formulaimport { class XmlStream; }
 
 #define STAROFFICE_XML  "StarOffice XML (Math)"
 #define MATHML_XML      "MathML XML (Math)"
+
+namespace imath { class smathparser; }
+
+// Announce to Flex the prototype we want for lexing function. This must match the declaration of lex_param at the top of smathparser.yxx
+# define YY_DECL imath::smathparser::token::yytokentype imathlex (imath::smathparser::semantic_type* yylval, \
+              imath::smathparser::location_type* yylloc, std::shared_ptr<eqc> compiler, \
+              unsigned include_level)
+
+namespace smathlexer {
+  /// Parser/lexer handling routines
+  void scan_begin(const std::string& input);
+  void scan_end();
+  bool begin_include(const std::string &fname);
+  bool finish_include();
+  void begindiff();
+};
 
 /* Access to printer should happen through this class only
  * ==========================================================================
@@ -70,6 +90,17 @@ public:
     ~SmPrinterAccess();
     Printer* GetPrinter()  { return pPrinter.get(); }
     OutputDevice* GetRefDev()  { return pRefDev.get(); }
+};
+
+// Exception subclass to handle duplicate equation labels properly
+class duplication_error : public std::runtime_error {
+public:
+    duplication_error(const std::string& message, const std::string& label) : runtime_error(message), duplicateLabel(label) {}
+    ~duplication_error() throw() {} // Necessary to avoid compiler error about a "looser throw specification"
+
+    inline const std::string& getLabel() { return duplicateLabel; }
+private:
+    std::string duplicateLabel; // Stores the name of the duplicate label, so that it can be replaced
 };
 
 
@@ -181,6 +212,8 @@ public:
     sal_uInt16      GetSmSyntaxVersion() const { return mnSmSyntaxVersion; }
     void            SetSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion);
 
+    void            Compile(); // run iCompiler on the maImText
+
     const std::set< OUString > &    GetUsedSymbols() const  { return maUsedSymbols; }
 
     OUString const & GetAccessibleText();
@@ -226,6 +259,59 @@ public:
         mathml::SmMlIteratorFree(m_pMlElementTree);
         m_pMlElementTree = pMlElementTree;
     }
+
+// iMath ==========================================================================================
+public:
+    ::com::sun::star::uno::Reference<::com::sun::star::uno::XComponentContext> GetContext() const;
+
+    /// Set an option on the formula (all lines of it) if its value is different from the global option
+    void setOption(const option_name oname, const option& value);
+
+private:
+    /**
+     * Initial options for this formula.
+     * Stand-alone (Math) mode: Initialized on first call to Compile() from document options and registry
+     * OLE (Writer/Impress) mode: Set to currentOptions of previous formula by the parent document
+     * OLE mode: This is a chain of pointers, unless a formula with the OPTIONS keyword is processed. In this
+     * case the options are copied and modified. The modified pointer is passed to the following formulas
+     **/
+    std::shared_ptr<GiNaC::optionmap> initialOptions;
+    /**
+     * Initial compiler for this formula.
+     * Stand-alone (Math) mode: Initialized on first call to Compile() by reading include files and processing default options
+     * OLE (Writer/Impress) mode: Set to currentCompiler of previous formula by the parent document
+     * OLE mode: Before compilation, a copy is taken into the formula's currentCompiler
+     **/
+    std::shared_ptr<eqc> initialCompiler;
+    /// Modified options of this formula after compilation. If nothing is modified, remains same pointer as initialOptions
+    std::shared_ptr<GiNaC::optionmap> currentOptions;
+    /// Modified compiler of ths formula after compilation
+    std::shared_ptr<eqc> currentCompiler;
+
+    /// Initialize options and compiler from document options and registry. Must be repeated whenever document options are changed throught the UI
+    // TODO: Update on UI changes not implemented yet
+    void ImInitialize();
+
+    /// Decimal separator character(s)
+    std::string decimalSeparator;
+
+    /// Allow others to access the following private data
+    friend class imath::smathparser;
+    /// The raw text split into lines
+    std::list<iFormulaLine_ptr> lines;
+    /// the raw formula text from the UI
+    OUString rawtext;
+    /// The compiled equations of the iFormula are cacheable (saving time on re-compilation)
+    bool cacheable;
+
+    /// The results of the last compilation (for cacheable iFormulas only)
+    // TODO: Caching is not implemented yet
+    std::vector<std::pair<std::string, GiNaC::expression> > cached_results;
+
+    /// Add result lines to the list of iFormulaLines
+    void addResultLines();
+    /// Count the number of lines of a certain type
+    bool align_makes_sense() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

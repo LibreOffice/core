@@ -34,6 +34,20 @@
 #include <svx/modctrl.hxx>
 #include <svtools/colorcfg.hxx>
 
+#include <comphelper/processfactory.hxx>
+
+#include <officecfg/Office/iMath.hxx>
+#include <com/sun/star/deployment/XExtensionManager.hpp>
+#include <com/sun/star/deployment/XPackage.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
+
+#include <ginac/ginac.h>
+
+#include <imath/msgdriver.hxx>
+#include <imath/utils.hxx>
+#include <imath/func.hxx>
+#include <imath/printing.hxx>
+#include <imath/imathutils.hxx>
 
 #define ShellClass_SmModule
 #include <smslots.hxx>
@@ -121,6 +135,20 @@ SmModule::SmModule(SfxObjectFactory* pObjFact)
 {
     SetName("StarMath");
 
+    // Get debuglevel from registry
+    sal_Int32 debuglevel = officecfg::Office::iMath::Miscellaneous::I_Debuglevel::get();
+    msg::info().setlevel(debuglevel);
+    MSG_INFO(-1, "Set debug level to " << debuglevel);
+
+        // Init iMath compiler
+        GiNaC::Digits = 17;
+        GiNaC::init_utils();
+        GiNaC::func::init();
+        GiNaC::imathprint::init();
+
+        // Note: To enable logging, set compiler flags SAL_LOG_INFO and SAL_LOG_WARN in Library_sm.mk and
+        // start the office with SAL_LOG="+INFO+WARN" instdir/program/soffice
+        MSG_INFO(0, "Initialized imath within starmath");
     SvxModifyControl::RegisterControl(SID_DOC_MODIFIED, this);
 }
 

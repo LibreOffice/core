@@ -14,6 +14,7 @@ $(eval $(call gb_Module_add_targets,starmath,\
     Library_sm \
     Library_smd \
     UIConfig_smath \
+    Package_res_imath \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,starmath,\
