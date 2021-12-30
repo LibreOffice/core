@@ -1268,6 +1268,8 @@ bool ScDocFunc::SetCellText(
     else if (!rText.isEmpty())
     {
         bSet = SetStringOrEditCell(rPos, rText, !bApi);
+        if (ScStringUtil::isMultiline(rText))
+            AdjustRowHeight(rPos, true, bApi);
     }
 
     if (!bSet)
