@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <officecfg/Office/Math.hxx>
+#include <officecfg/Office/iMath.hxx>
 #include <cfgitem.hxx>
 
 #include <starmath.hrc>
@@ -123,6 +124,7 @@ struct SmCfgOther
     sal_uInt16      nPrintZoomFactor;
     sal_uInt16      nSmEditWindowZoomFactor;
     sal_uInt16      nSmSyntaxVersion;
+    sal_uInt32      nImSyntaxVersion;
     bool            bPrintTitle;
     bool            bPrintFormulaText;
     bool            bPrintFrame;
@@ -137,6 +139,7 @@ struct SmCfgOther
 };
 
 constexpr sal_uInt16 nDefaultSmSyntaxVersion(5);
+constexpr sal_uInt32 nDefaultImSyntaxVersion(20301); // corresponds with iMath extension version 2.3.1 (note that leading 0 would imply an octal number)
 
 SmCfgOther::SmCfgOther()
     : ePrintSize(PRINT_SIZE_NORMAL)
@@ -144,6 +147,7 @@ SmCfgOther::SmCfgOther()
     , nSmEditWindowZoomFactor(100)
     // Defaulted as 5 so I have time to code the parser 6
     , nSmSyntaxVersion(nDefaultSmSyntaxVersion)
+    , nImSyntaxVersion(nDefaultImSyntaxVersion)
     , bPrintTitle(true)
     , bPrintFormulaText(true)
     , bPrintFrame(true)
@@ -750,6 +754,7 @@ void SmMathConfig::LoadOther()
     pOther->bIsSaveOnlyUsedSymbols = officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::get();
     pOther->bIsAutoCloseBrackets = officecfg::Office::Math::Misc::AutoCloseBrackets::get();
     pOther->nSmSyntaxVersion = officecfg::Office::Math::Misc::DefaultSmSyntaxVersion::get();
+    pOther->nImSyntaxVersion = officecfg::Office::iMath::Miscellaneous::DefaultImSyntaxVersion::get();
     pOther->bIgnoreSpacesRight = officecfg::Office::Math::Misc::IgnoreSpacesRight::get();
     pOther->bToolboxVisible = officecfg::Office::Math::View::ToolboxVisible::get();
     pOther->bAutoRedraw = officecfg::Office::Math::View::AutoRedraw::get();
@@ -774,6 +779,7 @@ void SmMathConfig::SaveOther()
     officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::set(pOther->bIsSaveOnlyUsedSymbols, batch);
     officecfg::Office::Math::Misc::AutoCloseBrackets::set(pOther->bIsAutoCloseBrackets, batch);
     officecfg::Office::Math::Misc::DefaultSmSyntaxVersion::set(pOther->nSmSyntaxVersion, batch);
+    officecfg::Office::iMath::Miscellaneous::DefaultImSyntaxVersion::set(pOther->nImSyntaxVersion, batch);
     officecfg::Office::Math::Misc::IgnoreSpacesRight::set(pOther->bIgnoreSpacesRight, batch);
     officecfg::Office::Math::View::ToolboxVisible::set(pOther->bToolboxVisible, batch);
     officecfg::Office::Math::View::AutoRedraw::set(pOther->bAutoRedraw, batch);
@@ -1145,6 +1151,15 @@ sal_uInt16 SmMathConfig::GetDefaultSmSyntaxVersion() const
     return pOther->nSmSyntaxVersion;
 }
 
+sal_uInt32 SmMathConfig::GetDefaultImSyntaxVersion() const
+{
+    if (utl::ConfigManager::IsFuzzing())
+        return nDefaultImSyntaxVersion;
+    if (!pOther)
+        const_cast<SmMathConfig*>(this)->LoadOther();
+    return pOther->nImSyntaxVersion;
+}
+
 bool SmMathConfig::IsPrintFrame() const
 {
     if (!pOther)
@@ -1183,6 +1198,17 @@ void SmMathConfig::SetDefaultSmSyntaxVersion( sal_uInt16 nVal )
     if (nVal != pOther->nSmSyntaxVersion)
     {
         pOther->nSmSyntaxVersion = nVal;
+        SetOtherModified( true );
+    }
+}
+
+void SmMathConfig::SetDefaultImSyntaxVersion( sal_uInt32 nVal )
+{
+    if (!pOther)
+        LoadOther();
+    if (nVal != pOther->nImSyntaxVersion)
+    {
+        pOther->nImSyntaxVersion = nVal;
         SetOtherModified( true );
     }
 }

@@ -76,7 +76,9 @@ class SmXMLImport final : public SvXMLImport
     bool bSuccess;
     int nParseDepth;
     OUString aText;
+    OUString aImText;
     sal_uInt16 mnSmSyntaxVersion;
+    sal_uInt16 mnImSyntaxVersion;
 
 public:
     SmXMLImport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
@@ -97,7 +99,9 @@ public:
 
     bool GetSuccess() const { return bSuccess; }
     [[nodiscard]] const OUString& GetText() const { return aText; }
+    [[nodiscard]] const OUString& GetImText() const { return aImText; }
     void SetText(const OUString& rStr) { aText = rStr; }
+    void SetImText(const OUString& rStr) { aImText = rStr; }
 
     virtual void
     SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
@@ -108,7 +112,9 @@ public:
     bool TooDeep() const { return nParseDepth >= 2048; }
     void DecParseDepth() { --nParseDepth; }
     void SetSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion) { mnSmSyntaxVersion = nSmSyntaxVersion; }
+    void SetImSyntaxVersion(sal_uInt16 nImSyntaxVersion) { mnImSyntaxVersion = nImSyntaxVersion; }
     sal_uInt16 GetSmSyntaxVersion() const { return mnSmSyntaxVersion; }
+    sal_uInt16 GetImSyntaxVersion() const { return mnImSyntaxVersion; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
