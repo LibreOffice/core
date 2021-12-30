@@ -18,17 +18,27 @@ $(eval $(call gb_Library_set_precompiled_header,sm,starmath/inc/pch/precompiled_
 $(eval $(call gb_Library_set_include,sm,\
         -I$(SRCDIR)/starmath/inc \
         -I$(SRCDIR)/starmath/inc/mathml \
+        -I$(SRCDIR)/starmath/inc/imath \
         -I$(WORKDIR)/SdiTarget/starmath/sdi \
+        -I$(WORKDIR)/YaccTarget/starmath/source \
         $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_defs,sm,\
 	-DSM_DLLIMPLEMENTATION \
+	-DINSIDE_SM \
+	-DOO_IS_AOO=0 \
+	-DOO_MAJOR_VERSION=$(LIBO_VERSION_MAJOR) \
+	-DOO_MINOR_VERSION=$(LIBO_VERSION_MINOR) \
+	-DSAL_LOG_INFO=1 \
+	-DSAL_LOG_WARN=1 \
 ))
 
 $(eval $(call gb_Library_use_externals,sm, \
     boost_headers \
     icu_headers \
+    cln \
+    ginac \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,sm,\
@@ -62,6 +72,18 @@ $(eval $(call gb_Library_use_libraries,sm,\
         vcl \
         xo \
 ))
+
+$(eval $(call gb_Library_add_grammars,sm,\
+        starmath/source/imath/smathparser \
+))
+
+$(call gb_YaccTarget_get_target,starmath/source/imath/smathparser) : T_YACCFLAGS := -d -osmathparser.cxx
+
+$(eval $(call gb_Library_add_scanners,sm,\
+	starmath/source/imath/smathlexer \
+))
+
+$(call gb_LexTarget_get_scanner_target,starmath/source/imath/smathlexer) : T_LEXFLAGS := -o smathlexer.cxx
 
 $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/AccessibleSmElement \
@@ -111,8 +133,29 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/mathml/element \
         starmath/source/mathml/def \
         starmath/source/mathml/starmathdatabase \
+        starmath/source/imath/alignblock \
+        starmath/source/imath/differential \
+        starmath/source/imath/eqc \
+        starmath/source/imath/equation \
+        starmath/source/imath/exderivative \
+        starmath/source/imath/expression \
+        starmath/source/imath/extintegral \
+        starmath/source/imath/extsymbol \
+        starmath/source/imath/func \
+        starmath/source/imath/imathutils \
+        starmath/source/imath/msgdriver \
+        starmath/source/imath/operands \
+        starmath/source/imath/option \
+        starmath/source/imath/printing \
+        starmath/source/imath/settingsmanager \
+        starmath/source/imath/stringex \
+        starmath/source/imath/unit \
+        starmath/source/imath/unitmgr \
+        starmath/source/imath/utils \
+        starmath/source/imath/iFormulaLine \
+        starmath/source/imath/iIterator \
 ))
-
+	
 
 $(eval $(call gb_SdiTarget_SdiTarget,starmath/sdi/smslots,starmath/sdi/smath))
 
