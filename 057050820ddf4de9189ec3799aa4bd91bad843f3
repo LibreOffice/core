@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b81bdf30_d2253251",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-30T12:04:37Z",
+      "side": 1,
+      "message": "ooh nice, I have always wondered why those looked weird on my PC",
+      "revId": "057050820ddf4de9189ec3799aa4bd91bad843f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
