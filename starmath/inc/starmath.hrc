@@ -70,4 +70,6 @@
 #define SID_SMEDITWINDOWZOOM        (SID_SMA_START + 129)
 #define SID_DEFAULT_SM_SYNTAX_VERSION (SID_SMA_START + 130)
 
+#define SID_ITEXT                   (SID_SMA_START + 200)
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

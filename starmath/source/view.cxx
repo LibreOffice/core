@@ -350,7 +350,7 @@ bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
     if (!pNode)
         return true;
 
-    SmEditWindow* pEdit = mrViewShell.GetEditWindow();
+    AbstractEditWindow* pEdit = mrViewShell.GetEditWindow();
     if (!pEdit)
         return true;
     const SmToken  aToken (pNode->GetToken());
@@ -557,7 +557,7 @@ void SmGraphicWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     {
         SetIsCursorVisible(false);  // (old) cursor must be drawn again
 
-        const SmEditWindow* pEdit = mrViewShell.GetEditWindow();
+        const AbstractEditWindow* pEdit = mrViewShell.GetEditWindow();
         if (pEdit)
         {   // get new position for formula-cursor (for possible altered formula)
             sal_Int32  nRow;
@@ -793,7 +793,7 @@ void SmGraphicController::StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemS
 }
 
 /**************************************************************************/
-SmEditController::SmEditController(SmEditWindow &rSmEdit,
+SmEditController::SmEditController(AbstractEditWindow &rSmEdit,
                      sal_uInt16       nId_,
                      SfxBindings  &rBindings) :
     SfxControllerItem(nId_, rBindings),
@@ -815,7 +815,9 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
                                vcl::Window *pParent)
     : SfxDockingWindow(pBindings_, pChildWindow, pParent, "EditWindow", "modules/smath/ui/editwindow.ui")
     , m_xEdit(new SmEditWindow(*this, *m_xBuilder))
+    , m_xImEdit(new ImEditWindow(*this, *m_xBuilder))
     , aController(*m_xEdit, SID_TEXT, *pBindings_)
+    , aImController(*m_xImEdit, SID_ITEXT, *pBindings_)
     , bExiting(false)
     , aInitialFocusTimer("SmCmdBoxWindow aInitialFocusTimer")
 {
@@ -856,7 +858,9 @@ void SmCmdBoxWindow::dispose()
     aInitialFocusTimer.Stop();
     bExiting = true;
     aController.dispose();
+    aImController.dispose();
     m_xEdit.reset();
+    m_xImEdit.reset();
     SfxDockingWindow::dispose();
 }
 
@@ -965,6 +969,22 @@ void SmCmdBoxWindow::AdjustPosition()
     if (aPos.Y() < 0)
         aPos.setY( 0 );
     SetPosPixel( aPos );
+}
+
+AbstractEditWindow& SmCmdBoxWindow::GetEditWindow()
+{
+    if (m_xEdit && m_xEdit->HasFocus())
+        return *m_xEdit;
+    if (m_xImEdit && m_xImEdit->HasFocus())
+        return *m_xImEdit;
+
+    // If a popup menu or docked window is active, then neither SmWindow nor ImWindow has the focus
+    if (m_xEdit && m_xEdit->IsCurrent())
+        return *m_xEdit;
+    if (m_xImEdit && m_xImEdit->IsCurrent())
+        return *m_xImEdit;
+
+    return *m_xEdit;
 }
 
 void SmCmdBoxWindow::ToggleFloatingMode()
@@ -1289,7 +1309,8 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
         // get size
         rOutDev.SetFont(aFont);
 
-        Size aSize (GetTextSize(rOutDev, GetDoc()->GetText(), aOutRect.GetWidth() - 200));
+        OUString docText = GetEditWindow()->IsImWindow() ? GetDoc()->GetImText() : GetDoc()->GetText();
+        Size aSize(GetTextSize(rOutDev, docText, aOutRect.GetWidth() - 200));
 
         aOutRect.AdjustBottom( -(aSize.Height() + 600) );
 
@@ -1299,7 +1320,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
 
         Point aPoint (aOutRect.Left() + (aOutRect.GetWidth()  - aSize.Width())  / 2,
                       aOutRect.Bottom() + 300);
-        DrawText(rOutDev, aPoint, GetDoc()->GetText(),
+        DrawText(rOutDev, aPoint, docText,
                  sal::static_int_cast< sal_uInt16 >(aOutRect.GetWidth() - 200));
         aOutRect.AdjustBottom( -200 );
     }
@@ -1405,14 +1426,14 @@ std::unique_ptr<SfxTabPage> SmViewShell::CreatePrintOptionsPage(weld::Container*
     return SmPrintOptionsTabPage::Create(pPage, pController, rOptions);
 }
 
-SmEditWindow *SmViewShell::GetEditWindow()
+AbstractEditWindow *SmViewShell::GetEditWindow()
 {
     SmCmdBoxWrapper* pWrapper = static_cast<SmCmdBoxWrapper*>(
                                     GetViewFrame()->GetChildWindow(SmCmdBoxWrapper::GetChildWindowId()));
 
     if (pWrapper != nullptr)
     {
-        SmEditWindow& rEditWin = pWrapper->GetEditWindow();
+        AbstractEditWindow& rEditWin = pWrapper->GetEditWindow();
         return &rEditWin;
     }
 
@@ -1483,8 +1504,8 @@ void SmViewShell::Insert( SfxMedium& rMedium )
     if (!bRet)
         return;
 
-    OUString aText = pDoc->GetText();
-    SmEditWindow *pEditWin = GetEditWindow();
+    AbstractEditWindow *pEditWin = GetEditWindow();
+    OUString aText = GetEditWindow()->IsImWindow() ? pDoc->GetImText() : pDoc->GetText();
     if (pEditWin)
         pEditWin->InsertText( aText );
     else
@@ -1492,7 +1513,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
         SAL_WARN( "starmath", "EditWindow missing" );
     }
 
-    pDoc->Parse();
+    if (!GetEditWindow()->IsImWindow()) pDoc->Parse();
     pDoc->SetModified();
 
     SfxBindings &rBnd = GetViewFrame()->GetBindings();
@@ -1520,14 +1541,14 @@ void SmViewShell::InsertFrom(SfxMedium &rMedium)
     if (!bSuccess)
         return;
 
-    OUString aText = pDoc->GetText();
-    SmEditWindow *pEditWin = GetEditWindow();
+    AbstractEditWindow *pEditWin = GetEditWindow();
+    OUString aText = pEditWin->IsImWindow() ? pDoc->GetImText() : pDoc->GetText();
     if (pEditWin)
         pEditWin->InsertText(aText);
     else
         SAL_WARN( "starmath", "EditWindow missing" );
 
-    pDoc->Parse();
+    if (!pEditWin->IsImWindow()) pDoc->Parse();
     pDoc->SetModified();
 
     SfxBindings& rBnd = GetViewFrame()->GetBindings();
@@ -1537,7 +1558,7 @@ void SmViewShell::InsertFrom(SfxMedium &rMedium)
 
 void SmViewShell::Execute(SfxRequest& rReq)
 {
-    SmEditWindow *pWin = GetEditWindow();
+    AbstractEditWindow *pWin = GetEditWindow();
 
     switch (rReq.GetSlot())
     {
@@ -1563,7 +1584,10 @@ void SmViewShell::Execute(SfxRequest& rReq)
         case SID_DRAW:
             if (pWin)
             {
-                GetDoc()->SetText( pWin->GetText() );
+                if (pWin->IsImWindow())
+                    GetDoc()->SetImText( pWin->GetText() );
+                else
+                    GetDoc()->SetText( pWin->GetText() );
                 SetStatusText(OUString());
                 ShowError( nullptr );
                 GetDoc()->Repaint();
@@ -1592,7 +1616,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 auto pTrans = comphelper::getFromUnoTunnel<TransferableHelper>(xTrans);
                 if (pTrans)
                 {
-                    SmEditWindow *pEditWin = GetEditWindow();
+                    AbstractEditWindow *pEditWin = GetEditWindow();
                     pTrans->CopyToClipboard(pEditWin->GetClipboard());
                 }
             }
@@ -1601,7 +1625,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_PASTEOBJECT:
         {
-            SmEditWindow *pEditWin = GetEditWindow();
+            AbstractEditWindow *pEditWin = GetEditWindow();
             TransferableDataHelper aData(TransferableDataHelper::CreateFromClipboard(pEditWin->GetClipboard()));
             uno::Reference < io::XInputStream > xStrm;
             SotClipboardFormatId nId;
@@ -1652,9 +1676,9 @@ void SmViewShell::Execute(SfxRequest& rReq)
         case SID_PASTE:
             {
                 bool bCallExec = nullptr == pWin;
-                if( !bCallExec )
+                if( !bCallExec)
                 {
-                    SmEditWindow *pEditWin = GetEditWindow();
+                    AbstractEditWindow *pEditWin = GetEditWindow();
                     TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromClipboard(
                                                     pEditWin->GetClipboard()));
@@ -1692,7 +1716,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             {
                 pWin->InsertText(rItem.GetValue());
             }
-            if (IsInlineEditEnabled() && (GetDoc() && !mbInsertIntoEditWindow))
+            if (IsInlineEditEnabled() && (GetDoc() && !mbInsertIntoEditWindow) && !pWin->IsImWindow())
             {
                 GetDoc()->GetCursor().InsertCommandText(rItem.GetValue());
                 GetGraphicWidget().GrabFocus();
@@ -1724,7 +1748,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_IMPORT_MATHML_CLIPBOARD:
         {
-            SmEditWindow *pEditWin = GetEditWindow();
+            AbstractEditWindow *pEditWin = GetEditWindow();
             TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromClipboard(pEditWin->GetClipboard()));
             uno::Reference < io::XInputStream > xStrm;
             if  ( aDataHelper.GetTransferable().is() )
@@ -1841,8 +1865,12 @@ void SmViewShell::Execute(SfxRequest& rReq)
         }
 
         case SID_GETEDITTEXT:
-            if (pWin && !pWin->GetText().isEmpty())
-                GetDoc()->SetText( pWin->GetText() );
+            if (pWin && !pWin->GetText().isEmpty()) {
+                if (pWin->IsImWindow())
+                    GetDoc()->SetImText( pWin->GetText() );
+                else
+                    GetDoc()->SetText( pWin->GetText() );
+            }
             break;
 
         case SID_ATTR_ZOOM:
@@ -1959,7 +1987,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
 
-    SmEditWindow *pEditWin = GetEditWindow();
+    AbstractEditWindow *pEditWin = GetEditWindow();
     for (sal_uInt16 nWh = aIter.FirstWhich(); nWh != 0; nWh = aIter.NextWhich())
     {
         switch (nWh)
@@ -2061,7 +2089,7 @@ SmViewShell::~SmViewShell()
     //!! this view shell is not active anymore !!
     // Thus 'SmGetActiveView' will give a 0 pointer.
     // Thus we need to supply this view as argument
-    SmEditWindow *pEditWin = GetEditWindow();
+    AbstractEditWindow *pEditWin = GetEditWindow();
     if (pEditWin)
         pEditWin->DeleteEditView();
     mxGraphicWindow.disposeAndClear();
@@ -2069,7 +2097,7 @@ SmViewShell::~SmViewShell()
 
 void SmViewShell::Deactivate( bool bIsMDIActivate )
 {
-    SmEditWindow *pEdit = GetEditWindow();
+    AbstractEditWindow *pEdit = GetEditWindow();
     if ( pEdit )
         pEdit->Flush();
 
@@ -2080,7 +2108,7 @@ void SmViewShell::Activate( bool bIsMDIActivate )
 {
     SfxViewShell::Activate( bIsMDIActivate );
 
-    SmEditWindow *pEdit = GetEditWindow();
+    AbstractEditWindow *pEdit = GetEditWindow();
     if ( pEdit )
     {
         //! Since there is no way to be informed if a "drag and drop"
@@ -2088,7 +2116,10 @@ void SmViewShell::Activate( bool bIsMDIActivate )
         //! synchronize the GraphicWindow display with the text in the
         //! EditEngine.
         SmDocShell *pDoc = GetDoc();
-        pDoc->SetText( pDoc->GetEditEngine().GetText() );
+        if (pEdit->IsImWindow())
+            pDoc->SetImText( pDoc->GetImEditEngine().GetText() );
+        else
+            pDoc->SetText( pDoc->GetEditEngine().GetText() );
 
         if ( bIsMDIActivate )
             pEdit->GrabFocus();
@@ -2113,9 +2144,13 @@ IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, voi
             pMedium.reset();
 
             SmDocShell* pDoc = GetDoc();
-            pDoc->UpdateText();
-            pDoc->ArrangeFormula();
-            pDoc->Repaint();
+            if (GetEditWindow()->IsImWindow()) {
+                pDoc->UpdateImText();
+            } else {
+                pDoc->UpdateText();
+                pDoc->ArrangeFormula();
+                pDoc->Repaint();
+            }
             // adjust window, repaint, increment ModifyCount,...
             GetViewFrame()->GetBindings().Invalidate(SID_GRAPHIC_SM);
         }

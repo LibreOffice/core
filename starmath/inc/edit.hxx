@@ -40,12 +40,12 @@ class ColorConfig;
 
 void SmGetLeftSelectionPart(const ESelection& rSelection, sal_Int32& nPara, sal_uInt16& nPos);
 
-class SmEditWindow;
+class AbstractEditWindow;
 
-class SmEditTextWindow : public WeldEditView
+class AbstractEditTextWindow : public WeldEditView
 {
-private:
-    SmEditWindow& mrEditWindow;
+protected:
+    AbstractEditWindow& mrEditWindow;
 
     Idle aModifyIdle;
     Idle aCursorMoveIdle;
@@ -57,10 +57,10 @@ private:
     DECL_LINK(EditStatusHdl, EditStatus&, void);
 
 public:
-    SmEditTextWindow(SmEditWindow& rEditWindow);
-    virtual ~SmEditTextWindow() override;
+    AbstractEditTextWindow(AbstractEditWindow& rEditWindow);
+    virtual ~AbstractEditTextWindow() override;
 
-    virtual EditEngine* GetEditEngine() const override;
+    virtual EditEngine* GetEditEngine() const override = 0;
 
     virtual void EditViewScrollStateChange() override;
 
@@ -78,38 +78,65 @@ public:
     void SelNextMark();
     ESelection GetSelection() const;
     void UserPossiblyChangedText();
-    void Flush();
+    void Flush(const sal_uInt16 sid);
+    virtual void Flush() = 0;
     void UpdateStatus(bool bSetDocModified);
     void StartCursorMove();
 };
 
-class SmEditWindow final
+class SmEditTextWindow : public AbstractEditTextWindow
 {
+public:
+    SmEditTextWindow(AbstractEditWindow& rEditWindow);
+    virtual ~SmEditTextWindow() override;
+
+    EditEngine* GetEditEngine() const override;
+
+    void Flush() override;
+};
+
+class ImEditTextWindow : public AbstractEditTextWindow
+{
+public:
+    ImEditTextWindow(AbstractEditWindow& rEditWindow);
+    virtual ~ImEditTextWindow() override;
+
+    EditEngine* GetEditEngine() const override;
+
+    void Flush() override;
+};
+
+class AbstractEditWindow
+{
+protected:
     SmCmdBoxWindow& rCmdBox;
+    std::unique_ptr<weld::Notebook> mxNotebook;
     std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
-    std::unique_ptr<SmEditTextWindow> mxTextControl;
+    std::unique_ptr<AbstractEditTextWindow> mxTextControl;
     std::unique_ptr<weld::CustomWeld> mxTextControlWin;
 
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
-
-    void CreateEditView(weld::Builder& rBuilder);
+    virtual void CreateEditView(weld::Builder& rBuilder) = 0;
 
 public:
-    SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin, weld::Builder& rBuilder);
-    ~SmEditWindow() COVERITY_NOEXCEPT_FALSE;
+    AbstractEditWindow(SmCmdBoxWindow& rMyCmdBoxWin, weld::Builder& rBuilder, const OString& id);
+    virtual ~AbstractEditWindow() COVERITY_NOEXCEPT_FALSE;
 
     weld::Window* GetFrameWeld() const;
 
     SmDocShell* GetDoc();
     SmViewShell* GetView();
     EditView* GetEditView() const;
-    EditEngine* GetEditEngine();
+    virtual EditEngine* GetEditEngine() = 0;
     SmCmdBoxWindow& GetCmdBox() const { return rCmdBox; }
 
     void SetText(const OUString& rText);
     OUString GetText() const;
     void Flush();
     void GrabFocus();
+    bool HasFocus() const;
+    // Is the page of this view current in the notebook?
+    virtual bool IsCurrent() const = 0;
 
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const
     {
@@ -137,6 +164,39 @@ public:
     void SelPrevMark();
 
     void DeleteEditView();
+
+    // Allow distinguishing window types. Not good style, but required because we have only one document to handle Starmath and iMath texts
+    virtual bool IsImWindow() const = 0;
+};
+
+class SmEditWindow : public AbstractEditWindow
+{
+private:
+    void CreateEditView(weld::Builder& rBuilder) override;
+
+public:
+    SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin, weld::Builder& rBuilder);
+    virtual ~SmEditWindow() COVERITY_NOEXCEPT_FALSE override;
+
+    EditEngine* GetEditEngine() override;
+
+    bool IsImWindow() const override { return false; }
+    bool IsCurrent() const override { return mxNotebook ? (mxNotebook->get_current_page() == 0) : true; }
+};
+
+class ImEditWindow : public AbstractEditWindow
+{
+private:
+    void CreateEditView(weld::Builder& rBuilder) override;
+
+public:
+    ImEditWindow(SmCmdBoxWindow& rMyCmdBoxWin, weld::Builder& rBuilder);
+    virtual ~ImEditWindow() COVERITY_NOEXCEPT_FALSE override;
+
+    EditEngine* GetEditEngine() override;
+
+    bool IsImWindow() const override { return true; }
+    bool IsCurrent() const override { return mxNotebook ? (mxNotebook->get_current_page() == 1) : false; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

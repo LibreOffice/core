@@ -143,6 +143,25 @@ SfxStringItem ConfigName SID_TEXT
 ]
 
 
+SfxStringItem ConfigImName SID_ITEXT
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::View;
+]
+
+
 SfxVoidItem CopyObject SID_COPYOBJECT
 ()
 [
