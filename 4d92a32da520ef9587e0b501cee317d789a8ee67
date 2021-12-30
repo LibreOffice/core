@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1db217d7_7c293567",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-12-30T15:59:14Z",
+      "side": 1,
+      "message": "This fix allows to compile with --enable-pch\u003dfull. However, I\u0027m not an expert in PCH.\nI\u0027ve created a patch as you have suggested in the issue.",
+      "revId": "4d92a32da520ef9587e0b501cee317d789a8ee67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
