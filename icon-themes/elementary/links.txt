@@ -2640,7 +2640,7 @@ cmd/sc_badcellstyle.png cmd/sc_badcellstyles.png
 cmd/sc_goodcellstyle.png cmd/sc_goodcellstyles.png
 cmd/sc_neutralcellstyle.png cmd/sc_neutralcellstyles.png
 
-#LibreLogo
+# LibreLogo
 cmd/32/librelogo-stop.png cmd/32/basicstop.png
 cmd/32/librelogo-translate.png cmd/32/editglossary.png
 
