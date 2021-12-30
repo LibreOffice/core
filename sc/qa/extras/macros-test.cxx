@@ -44,6 +44,7 @@ public:
     void testPasswordProtectedStarBasic();
     void testTdf114427();
     void testRowColumn();
+    void testTdf104902();
     void testTdf142033();
     void testPasswordProtectedUnicodeString();
     void testPasswordProtectedArrayInUserType();
@@ -70,6 +71,7 @@ public:
     CPPUNIT_TEST(testPasswordProtectedStarBasic);
     CPPUNIT_TEST(testTdf114427);
     CPPUNIT_TEST(testRowColumn);
+    CPPUNIT_TEST(testTdf104902);
     CPPUNIT_TEST(testTdf142033);
     CPPUNIT_TEST(testPasswordProtectedUnicodeString);
     CPPUNIT_TEST(testPasswordProtectedArrayInUserType);
@@ -320,6 +322,44 @@ void ScMacrosTest::testMacroButtonFormControlXlsxExport()
     xmlDocUniquePtr pWorkbookDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "xl/workbook.xml");
     CPPUNIT_ASSERT(pWorkbookDoc);
     assertXPath(pWorkbookDoc, "//x:workbook/definedNames", 0);
+}
+
+void ScMacrosTest::testTdf104902()
+{
+    OUString aFileName;
+    createFileURL(u"tdf104902.ods", aFileName);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    Any aRet;
+    Sequence<sal_Int16> aOutParamIndex;
+    Sequence<Any> aOutParam;
+    Sequence<uno::Any> aParams;
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.display_bug?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    // Export to ODS
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("string no newlines"), rDoc.GetString(ScAddress(0, 0, 0)));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: string with
+    // newlines
+    // - Actual  : string withnewlines
+    CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(0, 1, 0)));
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf142033()
