@@ -16,6 +16,41 @@
       "message": "Hi! ScDocFunc::SetEditCell doesn\u0027t adjust the row height since rDoc.HasAttrib(rPos, HasAttrFlags::NeedHeight) returns false. Is there a way to set this flag for the specified ScAddress? I could not find any place where such flags are going to be set. Thank you for your help.",
       "revId": "316e48fcab32fbf08786827038bf27e0eef9aa9a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21512f62_a1381cd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-30T20:09:14Z",
+      "side": 1,
+      "message": "HasAttrFlags::* are never set, they are only used to query for attributes, see\nsc/source/core/data/attarray.cxx ScAttrArray::HasAttrib_Impl()",
+      "parentUuid": "4320eed2_c47a894e",
+      "revId": "316e48fcab32fbf08786827038bf27e0eef9aa9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c0ccaa8_7eeb2c23",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-30T20:09:14Z",
+      "side": 1,
+      "message": "I doubt that unconditionally adjusting the row height here is the correct thing to do if it\u0027s not done via SetStringCell()/SetEditCell() either. I didn\u0027t look up all places where those are used and if or how it differs from manual input.",
+      "revId": "316e48fcab32fbf08786827038bf27e0eef9aa9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
