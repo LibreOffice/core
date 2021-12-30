@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "391a8c80_f0a8ec96",
+        "filename": "sal/osl/unx/backtrace.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-30T02:18:46Z",
+      "side": 1,
+      "message": "You can move the \u003csal/types.h\u003e into the !HAVE_FEATURE_BACKTRACE block.",
+      "revId": "95721783553e0062cda89d7e26f9a5c004a7574f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
