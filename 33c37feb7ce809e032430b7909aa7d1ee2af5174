@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "438ee776_591596ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-30T20:48:48Z",
+      "side": 1,
+      "message": "It it enough to remove the underline from \"page_count\" and keep it for \"page_label\"? Because page_label is set as label for \"page\" (the spin button) so alt+p (or whatever is used) has some functionality to set focus into the spinbutton if the focus is somewhere else (e.g. tab to cancel)",
+      "revId": "33c37feb7ce809e032430b7909aa7d1ee2af5174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
