@@ -77,6 +77,7 @@
 #include <comphelper/lok.hxx>
 #include <conditio.hxx>
 #include <columnspanset.hxx>
+#include <stringutil.hxx>
 
 #include <memory>
 
@@ -560,10 +561,24 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     }
     else
     {
+        ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
         for (const auto& rTab : rMark)
         {
             bool bNumFmtSet = false;
-            rFunc.SetNormalString( bNumFmtSet, ScAddress( nCol, nRow, rTab ), rString, false );
+            const ScAddress aScAddress(nCol, nRow, rTab);
+
+            // tdf#104902 - handle embedded newline
+            if (ScStringUtil::isMultiline(rString))
+            {
+                rEngine.SetTextCurrentDefaults(rString);
+                rDoc.SetEditText(aScAddress, rEngine.CreateTextObject());
+                AdjustRowHeight(nRow, nRow, false);
+            }
+            else
+            {
+                rFunc.SetNormalString(bNumFmtSet, aScAddress, rString, false);
+            }
+
             if (bNumFmtSet)
             {
                 /* FIXME: if set on any sheet results in changed only on
