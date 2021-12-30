@@ -2105,7 +2105,7 @@ void SvxTableController::StopTextEdit()
     if(mrView.IsTextEdit())
     {
         mrView.SdrEndTextEdit();
-        mrView.SetCurrentObj(OBJ_TABLE);
+        mrView.SetCurrentObj(SdrObjKind::Table);
         mrView.SetEditMode(SdrViewEditMode::Edit);
     }
 }
@@ -3320,7 +3320,7 @@ bool SvxTableController::isColumnHeader()
 
 bool SvxTableController::setCursorLogicPosition(const Point& rPosition, bool bPoint)
 {
-    if (mxTableObj->GetObjIdentifier() != OBJ_TABLE)
+    if (mxTableObj->GetObjIdentifier() != SdrObjKind::Table)
         return false;
 
     SdrTableObj* pTableObj = mxTableObj.get();

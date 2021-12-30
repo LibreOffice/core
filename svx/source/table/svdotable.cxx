@@ -1479,7 +1479,7 @@ void SdrTableObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 SdrObjKind SdrTableObj::GetObjIdentifier() const
 {
-    return OBJ_TABLE;
+    return SdrObjKind::Table;
 }
 
 void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText, tools::Rectangle* pAnchorRect, bool /*bLineWidth*/ ) const

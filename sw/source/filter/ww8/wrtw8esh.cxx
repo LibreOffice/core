@@ -680,7 +680,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
 
                 // rotating to vertical means swapping height and width as seen in SvxMSDffManager::ImportShape
                 const Degree100 nAngle = NormAngle36000( pObj->GetRotateAngle() );
-                const bool bAllowSwap = pObj->GetObjIdentifier() != OBJ_LINE && pObj->GetObjIdentifier() != OBJ_GRUP;
+                const bool bAllowSwap = pObj->GetObjIdentifier() != SdrObjKind::Line && pObj->GetObjIdentifier() != SdrObjKind::Group;
                 if ( bAllowSwap && (( nAngle > 4500_deg100 && nAngle <= 13500_deg100 ) || ( nAngle > 22500_deg100 && nAngle <= 31500_deg100 )) )
                 {
                     const tools::Long nWidth  = aRect.getWidth();

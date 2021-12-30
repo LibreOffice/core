@@ -173,7 +173,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
     {
         mpGraphic.reset( new Graphic( static_cast< SdrGrafObj* >( pObj )->GetTransformedGraphic() ) );
     }
-    else if( pObj->IsUnoObj() && SdrInventor::FmForm == pObj->GetObjInventor() && ( pObj->GetObjIdentifier() == sal_uInt16(OBJ_FM_BUTTON) ) )
+    else if( pObj->IsUnoObj() && SdrInventor::FmForm == pObj->GetObjInventor() && ( pObj->GetObjIdentifier() == SdrObjKind::FormButton ) )
     {
         SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >( pObj );
 

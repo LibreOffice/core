@@ -82,7 +82,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
     if(pArgs && SfxItemState::SET == pArgs->GetItemState(GetPool().GetWhich(nSlotId), false, &pItem))
         pStringItem = dynamic_cast< const SfxStringItem*>(pItem);
 
-    SdrObjKind eNewFormObjKind = OBJ_NONE;
+    SdrObjKind eNewFormObjKind = SdrObjKind::NONE;
     if (nSlotId == SID_FM_CREATE_CONTROL)
     {
         const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
@@ -96,7 +96,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
     }
     else if (nSlotId == SID_FM_CREATE_CONTROL)
     {
-        if (eNewFormObjKind == m_eFormObjKind || eNewFormObjKind == OBJ_NONE)
+        if (eNewFormObjKind == m_eFormObjKind || eNewFormObjKind == SdrObjKind::NONE)
         {
             bDeselect = true;
             GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  // Button should popping out

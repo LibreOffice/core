@@ -351,7 +351,7 @@ void ShapeController::executeDispatch_TransformDialog()
         return;
 
     SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
-    if ( pSelectedObj && pSelectedObj->GetObjIdentifier() == OBJ_CAPTION )
+    if ( pSelectedObj && pSelectedObj->GetObjIdentifier() == SdrObjKind::Caption )
     {
         // item set for caption
         SfxItemSet aAttr( pDrawViewWrapper->GetModel()->GetItemPool() );

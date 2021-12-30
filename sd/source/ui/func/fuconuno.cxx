@@ -45,7 +45,7 @@ FuConstructUnoControl::FuConstructUnoControl (
     SfxRequest&     rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
     , nInventor(SdrInventor::Unknown)
-    , nIdentifier(OBJ_NONE)
+    , nIdentifier(SdrObjKind::NONE)
 {
 }
 

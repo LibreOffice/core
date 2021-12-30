@@ -185,7 +185,7 @@ namespace
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             const SdrObjKind eKind(pObj->GetObjIdentifier());
 
-            if((pObj->GetObjInventor() == SdrInventor::Default) && (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind))
+            if((pObj->GetObjInventor() == SdrInventor::Default) && (SdrObjKind::Text == eKind || SdrObjKind::TitleText == eKind || SdrObjKind::OutlineText == eKind))
             {
                 const SdrTextObj* pSdrTextObj = dynamic_cast< const SdrTextObj* >(pObj);
 
@@ -708,8 +708,8 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
             if(((nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::Draw)
                || nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::TextObject)
-                 ) && OBJ_EDGE == eKind)
-               || OBJ_CAPTION == eKind)
+                 ) && SdrObjKind::Edge == eKind)
+               || SdrObjKind::Caption == eKind)
             {
                 mxFtAngle->set_sensitive(false);
                 mxMtrAngle->set_sensitive(false);
@@ -732,8 +732,8 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(((nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::Draw)
                   || nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::TextObject)
-                     ) && OBJ_EDGE == eKind)
-                  || OBJ_CAPTION == eKind)
+                     ) && SdrObjKind::Edge == eKind)
+                  || SdrObjKind::Caption == eKind)
                 {
                     isNoEdge = false;
                     break;

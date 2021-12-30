@@ -78,7 +78,7 @@ SdrOle2Obj* ChartIterator::next()
     SdrObject* pObject = m_pIterator->Next();
     while (pObject)
     {
-        if (pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart(pObject))
+        if (pObject->GetObjIdentifier() == SdrObjKind::OLE2 && ScDocument::IsChart(pObject))
         {
             SdrOle2Obj* pOleObject = static_cast<SdrOle2Obj*>(pObject);
 

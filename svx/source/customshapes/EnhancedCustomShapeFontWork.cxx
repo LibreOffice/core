@@ -877,7 +877,7 @@ static SdrObject* CreateSdrObjectFromParagraphOutlines(
 
         pRet = new SdrPathObj(
             rSdrObjCustomShape.getSdrModelFromSdrObject(),
-            OBJ_POLY,
+            SdrObjKind::Polygon,
             aPolyPoly);
 
         SfxItemSet aSet(rSdrObjCustomShape.GetMergedItemSet());

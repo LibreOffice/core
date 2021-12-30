@@ -50,12 +50,12 @@ SvxLineTabDialog::SvxLineTabDialog(weld::Window* pParent, const SfxItemSet* pAtt
     {
         switch( pObj->GetObjIdentifier() )
         {
-        case OBJ_LINE:
-        case OBJ_PLIN:
-        case OBJ_PATHLINE:
-        case OBJ_FREELINE:
-        case OBJ_MEASURE:
-        case OBJ_EDGE:
+        case SdrObjKind::Line:
+        case SdrObjKind::PolyLine:
+        case SdrObjKind::PathLine:
+        case SdrObjKind::FreehandLine:
+        case SdrObjKind::Measure:
+        case SdrObjKind::Edge:
             bLineOnly = true;
             break;
 

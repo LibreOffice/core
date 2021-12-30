@@ -74,7 +74,7 @@ typedef std::map<OUString, TPropertyConverter> TPropertyNamePair;
 /** returns the property name map for the given property id
     @param  _nObjectId  the object id
 */
-REPORTDESIGN_DLLPUBLIC const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId);
+REPORTDESIGN_DLLPUBLIC const TPropertyNamePair& getPropertyNameMap(SdrObjKind _nObjectId);
 REPORTDESIGN_DLLPUBLIC css::uno::Reference< css::style::XStyle> getUsedStyle(const css::uno::Reference< css::report::XReportDefinition>& _xReport);
 
 template < typename T> T getStyleProperty(const css::uno::Reference< css::report::XReportDefinition>& _xReport,const OUString& _sPropertyName)

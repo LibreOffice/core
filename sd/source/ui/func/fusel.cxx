@@ -247,12 +247,12 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else if ( bTextEdit )
             {
-                sal_uInt16 nSdrObjKind = aVEvt.mpObj->GetObjIdentifier();
+                SdrObjKind nSdrObjKind = aVEvt.mpObj->GetObjIdentifier();
 
                 if (aVEvt.mpObj->GetObjInventor() == SdrInventor::Default &&
-                    (nSdrObjKind == OBJ_TEXT ||
-                     nSdrObjKind == OBJ_TITLETEXT ||
-                     nSdrObjKind == OBJ_OUTLINETEXT ||
+                    (nSdrObjKind == SdrObjKind::Text ||
+                     nSdrObjKind == SdrObjKind::TitleText ||
+                     nSdrObjKind == SdrObjKind::OutlineText ||
                      !aVEvt.mpObj->IsEmptyPresObj()))
                 {
                     // Seamless Editing: branch to text input
@@ -841,7 +841,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
               !mpView->IsShearAllowed() && !mpView->IsDistortAllowed() ) ||
              ( nSlotId==SID_CONVERT_TO_3D_LATHE && pSingleObj &&
               (pSingleObj->GetObjInventor() != SdrInventor::Default         ||
-               pSingleObj->GetObjIdentifier() == OBJ_MEASURE) ) )
+               pSingleObj->GetObjIdentifier() == SdrObjKind::Measure) ) )
         {
             bReturn = true;
             ForcePointer(&rMEvt);

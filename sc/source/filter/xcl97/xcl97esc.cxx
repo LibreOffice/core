@@ -166,7 +166,7 @@ namespace {
 bool lcl_IsFontwork( const SdrObject* pObj )
 {
     bool bIsFontwork = false;
-    if( pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE )
+    if( pObj->GetObjIdentifier() == SdrObjKind::CustomShape )
     {
         static const OUStringLiteral aTextPath = u"TextPath";
         const SdrCustomShapeGeometryItem& rGeometryItem =
@@ -202,9 +202,9 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     else
     {
         pCurrXclObj = nullptr;
-        sal_uInt16 nObjType = pObj->GetObjIdentifier();
+        SdrObjKind nObjType = pObj->GetObjIdentifier();
 
-        if( nObjType == OBJ_OLE2 )
+        if( nObjType == SdrObjKind::OLE2 )
         {
             // no OLE objects in embedded drawings (chart shapes)
             if( mbIsRootDff )
@@ -228,7 +228,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             else
                 pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDoc() );
         }
-        else if( nObjType == OBJ_UNO )
+        else if( nObjType == SdrObjKind::UNO )
         {
             //added for exporting OCX control
             Reference< XPropertySet > xPropSet( rxShape, UNO_QUERY );
@@ -280,7 +280,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                         pCurrAppData->SetClientAnchor( pAnchor );
                     }
                     const SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pObj  );
-                    if( pTextObj && !lcl_IsFontwork( pTextObj ) && (pObj->GetObjIdentifier() != OBJ_CAPTION) )
+                    if( pTextObj && !lcl_IsFontwork( pTextObj ) && (pObj->GetObjIdentifier() != SdrObjKind::Caption) )
                     {
                         const OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
                         if( pParaObj )
@@ -310,8 +310,8 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         //for OCX control import from MS office file,we need keep the id value as MS office file.
         //GetOldRoot().pObjRecs->Add( pCurrXclObj ) statement has generated the id value as obj id rule;
         //but we trick it here.
-        sal_uInt16 nObjType = pObj->GetObjIdentifier();
-        if( nObjType == OBJ_UNO && pCurrXclObj )
+        SdrObjKind nObjType = pObj->GetObjIdentifier();
+        if( nObjType == SdrObjKind::UNO && pCurrXclObj )
         {
             Reference< XPropertySet > xPropSet( rxShape, UNO_QUERY );
             Any aAny;

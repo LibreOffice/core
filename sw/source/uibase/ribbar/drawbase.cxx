@@ -248,12 +248,12 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
     {
         const SdrObjKind nDrawMode = m_pWin->GetSdrDrawMode();
         //objects with multiple point may end at the start position
-        bool bMultiPoint = OBJ_PLIN     == nDrawMode ||
-                           OBJ_POLY     == nDrawMode ||
-                           OBJ_PATHLINE == nDrawMode ||
-                           OBJ_PATHFILL == nDrawMode ||
-                           OBJ_FREELINE == nDrawMode ||
-                           OBJ_FREEFILL == nDrawMode;
+        bool bMultiPoint = SdrObjKind::PolyLine     == nDrawMode ||
+                           SdrObjKind::Polygon     == nDrawMode ||
+                           SdrObjKind::PathLine == nDrawMode ||
+                           SdrObjKind::PathFill == nDrawMode ||
+                           SdrObjKind::FreehandLine == nDrawMode ||
+                           SdrObjKind::FreehandFill == nDrawMode;
         if(rMEvt.IsRight() || (aPnt == m_aStartPos && !bMultiPoint))
         {
             m_pSh->BreakCreate();
@@ -261,7 +261,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else
         {
-            if (OBJ_NONE == nDrawMode)
+            if (SdrObjKind::NONE == nDrawMode)
             {
                 SwRewriter aRewriter;
 
@@ -270,7 +270,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
             }
 
             m_pSh->EndCreate(SdrCreateCmd::ForceEnd);
-            if (OBJ_NONE == nDrawMode)   // Text border inserted
+            if (SdrObjKind::NONE == nDrawMode)   // Text border inserted
             {
                 uno::Reference< frame::XDispatchRecorder > xRecorder =
                     m_pSh->GetView().GetViewFrame()->GetBindings().GetRecorder();
@@ -298,7 +298,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                         m_pSh->SetFlyFrameAttr( aSet );
                 }
             }
-            if (m_pWin->GetSdrDrawMode() == OBJ_NONE)
+            if (m_pWin->GetSdrDrawMode() == SdrObjKind::NONE)
             {
                 m_pSh->EndUndo();
             }

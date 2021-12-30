@@ -258,7 +258,7 @@ bool OScrollWindowHelper::IsPasteAllowed() const
     return m_aReportWindow->IsPasteAllowed();
 }
 
-void OScrollWindowHelper::SelectAll(const sal_uInt16 _nObjectType)
+void OScrollWindowHelper::SelectAll(const SdrObjKind _nObjectType)
 {
     m_aReportWindow->SelectAll(_nObjectType);
 }

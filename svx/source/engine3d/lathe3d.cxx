@@ -114,7 +114,7 @@ void E3dLatheObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 
 SdrObjKind E3dLatheObj::GetObjIdentifier() const
 {
-    return E3D_LATHEOBJ_ID;
+    return SdrObjKind::E3D_Lathe;
 }
 
 E3dLatheObj* E3dLatheObj::CloneSdrObject(SdrModel& rTargetModel) const
@@ -186,7 +186,7 @@ std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> E3dLatheObj::GetBreakObj()
     // create PathObj
     basegfx::B3DPolyPolygon aLathePoly3D(basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(maPolyPoly2D));
     basegfx::B2DPolyPolygon aTransPoly(TransformToScreenCoor(aLathePoly3D));
-    std::unique_ptr<SdrPathObj,SdrObjectFreeOp> pPathObj(new SdrPathObj(getSdrModelFromSdrObject(), OBJ_PLIN, aTransPoly));
+    std::unique_ptr<SdrPathObj,SdrObjectFreeOp> pPathObj(new SdrPathObj(getSdrModelFromSdrObject(), SdrObjKind::PolyLine, aTransPoly));
 
     // Set Attribute
     SfxItemSet aSet(GetObjectItemSet());

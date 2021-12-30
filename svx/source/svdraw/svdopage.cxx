@@ -132,7 +132,7 @@ void SdrPageObj::SetBoundRectDirty()
 
 SdrObjKind SdrPageObj::GetObjIdentifier() const
 {
-    return OBJ_PAGE;
+    return SdrObjKind::Page;
 }
 
 void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const

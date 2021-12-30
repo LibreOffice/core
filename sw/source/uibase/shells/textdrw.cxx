@@ -50,14 +50,14 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
 
     // OBJ_FM_BUTTON
     pSdrView->SetDesignMode();
-    pSdrView->SetCurrentObj(OBJ_FM_BUTTON);
+    pSdrView->SetCurrentObj(SdrObjKind::FormButton);
     pSdrView->SetEditMode(false);
 
     Point aStartPos(rSh.GetCharRect().Pos() + Point(0, 1));
 
     rSh.StartAction();
     rSh.StartUndo( SwUndoId::UI_INSERT_URLBTN );
-    if (rSh.BeginCreate(OBJ_FM_BUTTON, SdrInventor::FmForm, aStartPos))
+    if (rSh.BeginCreate(SdrObjKind::FormButton, SdrInventor::FmForm, aStartPos))
     {
         pSdrView->SetOrtho(false);
         Size aSz(GetView().GetEditWin().PixelToLogic(Size(140, 20)));

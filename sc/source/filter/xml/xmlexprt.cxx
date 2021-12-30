@@ -3571,7 +3571,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                 aPoint.X = aSnapRect.Left() + aSnapRect.Right() - aPoint.X;
             }
             else if (pObj && (pNRObjData = ScDrawLayer::GetNonRotatedObjData(pObj))
-                     && ((rShape.bResizeWithCell && pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE
+                     && ((rShape.bResizeWithCell && pObj->GetObjIdentifier() == SdrObjKind::CustomShape
                           && static_cast<SdrObjCustomShape*>(pObj)->IsMirroredX())
                          || bNegativePage))
             {

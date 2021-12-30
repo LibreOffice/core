@@ -181,7 +181,7 @@ std::unique_ptr<sdr::contact::ViewContact> SdrCaptionObj::CreateObjectSpecificVi
 
 
 SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel)
-:   SdrRectObj(rSdrModel, OBJ_TEXT),
+:   SdrRectObj(rSdrModel, SdrObjKind::Text),
     aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
     mbFixedTail(false),
@@ -203,7 +203,7 @@ SdrCaptionObj::SdrCaptionObj(
     SdrModel& rSdrModel,
     const tools::Rectangle& rRect,
     const Point& rTail)
-:   SdrRectObj(rSdrModel, OBJ_TEXT,rRect),
+:   SdrRectObj(rSdrModel, SdrObjKind::Text,rRect),
     aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
     mbFixedTail(false),
@@ -235,7 +235,7 @@ void SdrCaptionObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 SdrObjKind SdrCaptionObj::GetObjIdentifier() const
 {
-    return OBJ_CAPTION;
+    return SdrObjKind::Caption;
 }
 
 SdrCaptionObj* SdrCaptionObj::CloneSdrObject(SdrModel& rTargetModel) const
