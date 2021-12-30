@@ -787,7 +787,7 @@ void SdrObjList::ReformatAllEdgeObjects()
     while(aIter.IsMore())
     {
         SdrObject* pObj = aIter.Next();
-        if (pObj->GetObjIdentifier() != OBJ_EDGE)
+        if (pObj->GetObjIdentifier() != SdrObjKind::OBJ_EDGE)
             continue;
 
         SdrEdgeObj* pSdrEdgeObj = static_cast< SdrEdgeObj* >(pObj);

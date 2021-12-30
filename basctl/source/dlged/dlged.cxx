@@ -195,7 +195,7 @@ DlgEditor::DlgEditor (
     ,pFunc(new DlgEdFuncSelect(*this))
     ,rLayout(rLayout_)
     ,eMode( DlgEditor::SELECT )
-    ,eActObj( OBJ_DLG_PUSHBUTTON )
+    ,eActObj( SdrObjKind::OBJ_DLG_PUSHBUTTON )
     ,bFirstDraw(false)
     ,bCreateOK(true)
     ,bDialogModelChanged(false)

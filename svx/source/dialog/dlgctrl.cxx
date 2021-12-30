@@ -1109,9 +1109,9 @@ void SvxXLinePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     SvxPreviewBase::SetDrawingArea(pDrawingArea);
 
-    mpLineObjA = new SdrPathObj(getModel(), OBJ_LINE);
-    mpLineObjB = new SdrPathObj(getModel(), OBJ_PLIN);
-    mpLineObjC = new SdrPathObj(getModel(), OBJ_PLIN);
+    mpLineObjA = new SdrPathObj(getModel(), SdrObjKind::OBJ_LINE);
+    mpLineObjB = new SdrPathObj(getModel(), SdrObjKind::OBJ_PLIN);
+    mpLineObjC = new SdrPathObj(getModel(), SdrObjKind::OBJ_PLIN);
 
     Resize();
     Invalidate();

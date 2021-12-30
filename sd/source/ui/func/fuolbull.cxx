@@ -143,7 +143,7 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
     if ( bInMasterView )
     {
         SdrObject* pObj = mpView->GetTextEditObject();
-        if( pObj && pObj->GetObjIdentifier() == OBJ_OUTLINETEXT )
+        if( pObj && pObj->GetObjIdentifier() == SdrObjKind::OBJ_OUTLINETEXT )
         {
             const sal_uInt16 nLevel = mpView->GetSelectionLevel();
             if( nLevel != 0xFFFF )
@@ -296,10 +296,10 @@ const SfxPoolItem* FuBulletAndPosition::GetNumBulletItem(SfxItemSet& aNewAttr, s
                     {
                         switch(pObj->GetObjIdentifier())
                         {
-                        case OBJ_TITLETEXT:
+                        case SdrObjKind::OBJ_TITLETEXT:
                             bTitle = true;
                             break;
-                        case OBJ_OUTLINETEXT:
+                        case SdrObjKind::OBJ_OUTLINETEXT:
                             bOutliner = true;
                             break;
                         default:

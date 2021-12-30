@@ -280,7 +280,7 @@ namespace sdr::properties
 
                             if(GetStyleSheet())
                             {
-                                if((OBJ_OUTLINETEXT == rObj.GetTextKind()) && (SdrInventor::Default == rObj.GetObjInventor()))
+                                if((SdrObjKind::OBJ_OUTLINETEXT == rObj.GetTextKind()) && (SdrInventor::Default == rObj.GetObjInventor()))
                                 {
                                     OUString aNewStyleSheetName(GetStyleSheet()->GetName());
                                     aNewStyleSheetName = aNewStyleSheetName.copy(0, aNewStyleSheetName.getLength() - 1);
@@ -361,9 +361,9 @@ namespace sdr::properties
 
             if( rObj.GetObjInventor() == SdrInventor::Default )
             {
-                const sal_uInt16 nSdrObjKind = rObj.GetObjIdentifier();
+                const SdrObjKind nSdrObjKind = rObj.GetObjIdentifier();
 
-                if( nSdrObjKind == OBJ_TITLETEXT || nSdrObjKind == OBJ_OUTLINETEXT )
+                if( nSdrObjKind == SdrObjKind::OBJ_TITLETEXT || nSdrObjKind == SdrObjKind::OBJ_OUTLINETEXT )
                     return; // no defaults for presentation objects
             }
 

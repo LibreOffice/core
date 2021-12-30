@@ -1568,7 +1568,7 @@ bool CustomAnimationEffect::getStopAudio() const
 
 SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath(SdrModel& rTargetModel)
 {
-    SdrPathObj * pPathObj = new SdrPathObj(rTargetModel, OBJ_PATHLINE);
+    SdrPathObj * pPathObj = new SdrPathObj(rTargetModel, SdrObjKind::OBJ_PATHLINE);
     updateSdrPathObjFromPath( *pPathObj );
     return pPathObj;
 }

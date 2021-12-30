@@ -955,75 +955,75 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         const OUString aType( aServiceSpecifier.copy(26) );
         rtl::Reference<SvxShape> pShape;
 
-        sal_uInt16 nType = OBJ_TEXT;
+        SdrObjKind nType = SdrObjKind::OBJ_TEXT;
         // create a shape wrapper
         if( aType.startsWith( "TitleTextShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::OBJ_TEXT;
         }
         else if( aType.startsWith( "OutlinerShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::OBJ_TEXT;
         }
         else if( aType.startsWith( "SubtitleShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::OBJ_TEXT;
         }
         else if( aType.startsWith( "GraphicObjectShape" ) )
         {
-            nType = OBJ_GRAF;
+            nType = SdrObjKind::OBJ_GRAF;
         }
         else if( aType.startsWith( "PageShape" ) )
         {
-            nType = OBJ_PAGE;
+            nType = SdrObjKind::OBJ_PAGE;
         }
         else if( aType.startsWith( "OLE2Shape" ) )
         {
-            nType = OBJ_OLE2;
+            nType = SdrObjKind::OBJ_OLE2;
         }
         else if( aType.startsWith( "ChartShape" ) )
         {
-            nType = OBJ_OLE2;
+            nType = SdrObjKind::OBJ_OLE2;
         }
         else if( aType.startsWith( "CalcShape" ) )
         {
-            nType = OBJ_OLE2;
+            nType = SdrObjKind::OBJ_OLE2;
         }
         else if( aType.startsWith( "TableShape" ) )
         {
-            nType = OBJ_TABLE;
+            nType = SdrObjKind::OBJ_TABLE;
         }
         else if( aType.startsWith( "OrgChartShape" ) )
         {
-            nType = OBJ_OLE2;
+            nType = SdrObjKind::OBJ_OLE2;
         }
         else if( aType.startsWith( "NotesShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::OBJ_TEXT;
         }
         else if( aType.startsWith( "HandoutShape" ) )
         {
-            nType = OBJ_PAGE;
+            nType = SdrObjKind::OBJ_PAGE;
         }
         else if( aType.startsWith( "FooterShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::OBJ_TEXT;
         }
         else if( aType.startsWith( "HeaderShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::OBJ_TEXT;
         }
         else if( aType.startsWith( "SlideNumberShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::OBJ_TEXT;
         }
         else if( aType.startsWith( "DateTimeShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::OBJ_TEXT;
         }
         else if( aType.startsWith( "MediaShape" ) )
         {
-            nType = OBJ_MEDIA;
+            nType = SdrObjKind::OBJ_MEDIA;
         }
         else
         {

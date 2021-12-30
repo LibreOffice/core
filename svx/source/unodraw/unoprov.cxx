@@ -808,7 +808,7 @@ static comphelper::PropertyMapEntry const * ImplGetAdditionalWriterDrawingDefaul
     return aSvxAdditionalDefaultsPropertyMap_Impl;
 }
 
-typedef std::unordered_map< OUString, sal_uInt32 > UHashMapImpl;
+typedef std::unordered_map< OUString, SdrObjKind > UHashMapImpl;
 
 namespace {
 
@@ -816,38 +816,38 @@ const UHashMapImpl& GetUHashImpl()
 {
     static UHashMapImpl const aImpl
     {
-            { "com.sun.star.drawing.RectangleShape",       OBJ_RECT },
-            { "com.sun.star.drawing.EllipseShape",         OBJ_CIRC },
-            { "com.sun.star.drawing.ControlShape",         OBJ_UNO  },
-            { "com.sun.star.drawing.ConnectorShape",       OBJ_EDGE },
-            { "com.sun.star.drawing.MeasureShape",         OBJ_MEASURE },
-            { "com.sun.star.drawing.LineShape",            OBJ_LINE },
-            { "com.sun.star.drawing.PolyPolygonShape",     OBJ_POLY },
-            { "com.sun.star.drawing.PolyLineShape",        OBJ_PLIN },
-            { "com.sun.star.drawing.OpenBezierShape",      OBJ_PATHLINE },
-            { "com.sun.star.drawing.ClosedBezierShape",    OBJ_PATHFILL },
-            { "com.sun.star.drawing.OpenFreeHandShape",    OBJ_FREELINE },
-            { "com.sun.star.drawing.ClosedFreeHandShape",  OBJ_FREEFILL },
-            { "com.sun.star.drawing.PolyPolygonPathShape", OBJ_PATHPOLY },
-            { "com.sun.star.drawing.PolyLinePathShape",    OBJ_PATHPLIN },
-            { "com.sun.star.drawing.GraphicObjectShape",   OBJ_GRAF },
-            { "com.sun.star.drawing.GroupShape",           OBJ_GRUP },
-            { "com.sun.star.drawing.TextShape",            OBJ_TEXT },
-            { "com.sun.star.drawing.OLE2Shape",            OBJ_OLE2 },
-            { "com.sun.star.drawing.PageShape",            OBJ_PAGE },
-            { "com.sun.star.drawing.CaptionShape",         OBJ_CAPTION },
-            { "com.sun.star.drawing.FrameShape",           OBJ_FRAME },
-            { "com.sun.star.drawing.PluginShape",          OBJ_OLE2_PLUGIN },
-            { "com.sun.star.drawing.AppletShape",          OBJ_OLE2_APPLET },
-            { "com.sun.star.drawing.CustomShape",          OBJ_CUSTOMSHAPE },
-            { "com.sun.star.drawing.MediaShape",           OBJ_MEDIA },
+            { "com.sun.star.drawing.RectangleShape",       SdrObjKind::OBJ_RECT },
+            { "com.sun.star.drawing.EllipseShape",         SdrObjKind::OBJ_CIRC },
+            { "com.sun.star.drawing.ControlShape",         SdrObjKind::OBJ_UNO  },
+            { "com.sun.star.drawing.ConnectorShape",       SdrObjKind::OBJ_EDGE },
+            { "com.sun.star.drawing.MeasureShape",         SdrObjKind::OBJ_MEASURE },
+            { "com.sun.star.drawing.LineShape",            SdrObjKind::OBJ_LINE },
+            { "com.sun.star.drawing.PolyPolygonShape",     SdrObjKind::OBJ_POLY },
+            { "com.sun.star.drawing.PolyLineShape",        SdrObjKind::OBJ_PLIN },
+            { "com.sun.star.drawing.OpenBezierShape",      SdrObjKind::OBJ_PATHLINE },
+            { "com.sun.star.drawing.ClosedBezierShape",    SdrObjKind::OBJ_PATHFILL },
+            { "com.sun.star.drawing.OpenFreeHandShape",    SdrObjKind::OBJ_FREELINE },
+            { "com.sun.star.drawing.ClosedFreeHandShape",  SdrObjKind::OBJ_FREEFILL },
+            { "com.sun.star.drawing.PolyPolygonPathShape", SdrObjKind::OBJ_PATHPOLY },
+            { "com.sun.star.drawing.PolyLinePathShape",    SdrObjKind::OBJ_PATHPLIN },
+            { "com.sun.star.drawing.GraphicObjectShape",   SdrObjKind::OBJ_GRAF },
+            { "com.sun.star.drawing.GroupShape",           SdrObjKind::OBJ_GRUP },
+            { "com.sun.star.drawing.TextShape",            SdrObjKind::OBJ_TEXT },
+            { "com.sun.star.drawing.OLE2Shape",            SdrObjKind::OBJ_OLE2 },
+            { "com.sun.star.drawing.PageShape",            SdrObjKind::OBJ_PAGE },
+            { "com.sun.star.drawing.CaptionShape",         SdrObjKind::OBJ_CAPTION },
+            { "com.sun.star.drawing.FrameShape",           SdrObjKind::OBJ_FRAME },
+            { "com.sun.star.drawing.PluginShape",          SdrObjKind::OBJ_OLE2_PLUGIN },
+            { "com.sun.star.drawing.AppletShape",          SdrObjKind::OBJ_OLE2_APPLET },
+            { "com.sun.star.drawing.CustomShape",          SdrObjKind::OBJ_CUSTOMSHAPE },
+            { "com.sun.star.drawing.MediaShape",           SdrObjKind::OBJ_MEDIA },
 
-            { "com.sun.star.drawing.Shape3DSceneObject",   E3D_SCENE_ID  | E3D_INVENTOR_FLAG },
-            { "com.sun.star.drawing.Shape3DCubeObject",    E3D_CUBEOBJ_ID    | E3D_INVENTOR_FLAG },
-            { "com.sun.star.drawing.Shape3DSphereObject",  E3D_SPHEREOBJ_ID  | E3D_INVENTOR_FLAG },
-            { "com.sun.star.drawing.Shape3DLatheObject",   E3D_LATHEOBJ_ID   | E3D_INVENTOR_FLAG },
-            { "com.sun.star.drawing.Shape3DExtrudeObject", E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG },
-            { "com.sun.star.drawing.Shape3DPolygonObject", E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG },
+            { "com.sun.star.drawing.Shape3DSceneObject",   SdrObjKind::E3D_SCENE_ID },
+            { "com.sun.star.drawing.Shape3DCubeObject",    SdrObjKind::E3D_CUBEOBJ_ID },
+            { "com.sun.star.drawing.Shape3DSphereObject",  SdrObjKind::E3D_SPHEREOBJ_ID },
+            { "com.sun.star.drawing.Shape3DLatheObject",   SdrObjKind::E3D_LATHEOBJ_ID },
+            { "com.sun.star.drawing.Shape3DExtrudeObject", SdrObjKind::E3D_EXTRUDEOBJ_ID },
+            { "com.sun.star.drawing.Shape3DPolygonObject", SdrObjKind::E3D_POLYGONOBJ_ID },
     };
 
     return aImpl;
@@ -856,7 +856,7 @@ const UHashMapImpl& GetUHashImpl()
 }
 
 
-OUString UHashMap::getNameFromId(sal_uInt32 nId)
+OUString UHashMap::getNameFromId(SdrObjKind nId)
 {
     const UHashMapImpl &rMap = GetUHashImpl();
 
@@ -873,12 +873,12 @@ uno::Sequence< OUString > UHashMap::getServiceNames()
     return comphelper::mapKeysToSequence( GetUHashImpl() );
 }
 
-sal_uInt32 UHashMap::getId( const OUString& rCompareString )
+std::optional<SdrObjKind> UHashMap::getId( const OUString& rCompareString )
 {
     const UHashMapImpl &rMap = GetUHashImpl();
     UHashMapImpl::const_iterator it = rMap.find( rCompareString );
     if( it == rMap.end() )
-        return UHASHMAP_NOTFOUND;
+        return {};
     else
         return it->second;
 }

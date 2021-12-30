@@ -21,7 +21,7 @@
 
 #include <com/sun/star/form/FormComponentType.hpp>
 
-enum SdrObjKind
+enum class SdrObjKind : sal_uInt16
 {
     OBJ_NONE = 0, /// abstract object (SdrObject)
     OBJ_GRUP = 1, /// object group
@@ -69,6 +69,8 @@ enum SdrObjKind
     E3D_LATHEOBJ_ID = 207,
     E3D_COMPOUNDOBJ_ID = 208,
     E3D_POLYGONOBJ_ID = 209,
+    E3D_INVENTOR_FIRST = E3D_SCENE_ID,
+    E3D_INVENTOR_LAST = E3D_POLYGONOBJ_ID,
 
     // for form components, arbitrarily place at 300
     OBJ_FM_CONTROL = 300 + css::form::FormComponentType::CONTROL,
@@ -143,5 +145,10 @@ enum SdrObjKind
     // writer, arbitrarily place at 600
     SwFlyDrawObjIdentifier = 601
 };
+
+inline constexpr bool IsInventorE3D(SdrObjKind e)
+{
+    return e >= SdrObjKind::E3D_INVENTOR_FIRST && e <= SdrObjKind::E3D_INVENTOR_LAST;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
