@@ -16,6 +16,24 @@
       "message": "\u003e Patch Set 3: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/104359/ : FAILURE\n\u003e \n\u003e the test UITest_calc_tests8 failed ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/104486/ )\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nFAIL: test_tdf134390 (navigator.navigator)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/sc/qa/uitest/calc_tests8/navigator.py\", line 143, in test_tdf134390\n    self.assertEqual(get_state_as_dict(xColumn)[\u0027Value\u0027], \u00272\u0027)\nAssertionError: \u00271\u0027 !\u003d \u00272\u0027\n- 1\n+ 2\n\n----\nChecked in local unix build, works without problems (?)\nMay have to do a clang build (?)",
       "revId": "e5bf8fb71661806ea62af0c6aa9ee8cb625f4f5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6ae5708_32f38cb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-30T10:47:26Z",
+      "side": 1,
+      "message": "What I see in the log is:\n--\nwarn:desktop.app:11306:11306:unotools/source/ucbhelper/localfilehelper.cxx:87: error removing directory file:///home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UITest/calc_tests8/user/user/extensions\n--\nMaybe related...?",
+      "parentUuid": "a95d3563_255023e5",
+      "revId": "e5bf8fb71661806ea62af0c6aa9ee8cb625f4f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
