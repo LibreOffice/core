@@ -16,6 +16,24 @@
       "message": "The correct commit hash for the regressing commit seems to be ce54ba96f38b4af3aab1a7064078ee406eb021c6 instead.",
       "revId": "1ebae5b1c0f4a8c5edc1a50e37f8896946ad57b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efff2ca9_b220e632",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-30T10:19:11Z",
+      "side": 1,
+      "message": "That happens, if you take the git log from a non-master rebased branch, still containing the unpushed commit and are in a hurry... (other possible bugs not included)",
+      "parentUuid": "0f3a94d5_a66bb56d",
+      "revId": "1ebae5b1c0f4a8c5edc1a50e37f8896946ad57b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
