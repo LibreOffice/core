@@ -750,8 +750,9 @@ class XclExpDxfs : public XclExpRecordBase, protected XclExpRoot
 public:
     XclExpDxfs( const XclExpRoot& rRoot );
 
-    sal_Int32 GetDxfId(const OUString& rName);
-    sal_Int32 GetDxfByColor(Color& aColor);
+    sal_Int32 GetDxfId(const OUString& rName) const;
+    sal_Int32 GetDxfByColor(const Color& aColor) const;
+    void AddColor(Color aColor);
 
     virtual void SaveXml( XclExpXmlStream& rStrm) override;
 private:
