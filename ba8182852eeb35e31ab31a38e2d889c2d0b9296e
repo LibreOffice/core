@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df12d0e1_c378c5d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-12-30T20:36:52Z",
+      "side": 1,
+      "message": "I\u0027ve implemented the Linux part.",
+      "revId": "ba8182852eeb35e31ab31a38e2d889c2d0b9296e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
