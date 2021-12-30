@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "954a15fd_263b7ca5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-30T17:54:52Z",
+      "side": 1,
+      "message": "I put you in cc just for information, I didn\u0027t know a space was necessary.",
+      "revId": "73b2d7ada7539b89d10d6739374cc1a1a6a2c888",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
