@@ -1268,6 +1268,7 @@ bool ScDocFunc::SetCellText(
     else if (!rText.isEmpty())
     {
         bSet = SetStringOrEditCell(rPos, rText, !bApi);
+        AdjustRowHeight(rPos, true, bApi);
     }
 
     if (!bSet)
