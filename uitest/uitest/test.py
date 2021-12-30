@@ -6,14 +6,11 @@
 #
 
 import time
-import functools
 import threading
 from contextlib import contextmanager
 from uitest.config import DEFAULT_SLEEP
 from uitest.config import MAX_WAIT
 from uitest.uihelper.common import get_state_as_dict
-from http.server import HTTPServer, SimpleHTTPRequestHandler
-import os
 
 from com.sun.star.uno import RuntimeException
 
@@ -270,28 +267,5 @@ class UITest(object):
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
         raise Exception("Did not execute a dialog for a blocking action")
-
-    @contextmanager
-    def launch_HTTP_server(self, file_name):
-        # Spawns an http.server.HTTPServer in a separate thread
-
-        tdoc = os.getenv("TDOC")
-
-        if not os.path.exists(os.path.join(tdoc, file_name)):
-            raise Exception("File doesn't exists: " + file_name)
-
-        # Serve in TDOC directory
-        handler = functools.partial(SimpleHTTPRequestHandler, directory=tdoc)
-
-        with HTTPServer(("localhost", 0), handler) as httpd:
-            try:
-                thread = threading.Thread(target=httpd.serve_forever)
-                thread.start()
-                url = "http://%s:%d/%s" % (httpd.server_name, httpd.server_port, file_name)
-                yield url
-            finally:
-                # Call shutdown in case the testcase fails
-                httpd.shutdown()
-                thread.join()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
