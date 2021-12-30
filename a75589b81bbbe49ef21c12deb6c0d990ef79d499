@@ -33,6 +33,24 @@
       "message": "I could test it on my second local build (enable-symbols not enable-dbgutil for retrieving perf graph/Flamegraph), I had the pb too and after having cherry-picked this patch, it was ok.\nThank you! :-)",
       "revId": "a75589b81bbbe49ef21c12deb6c0d990ef79d499",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "758061e0_5c8381c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-30T14:30:23Z",
+      "side": 1,
+      "message": "The right test would have been:\n\n\u003e make libeot.clean \u0026\u0026 make\n\nIf you build a module, it ignores dependencies and doesn\u0027t parse the other *.mk files, except solenv/gbuild, Repository*.mk and config_host.mk. That\u0027s the reason makes \"start\" much faster to build single modules, then the whole tree. Your problem is dependency based, so a \"make libeot\" can\u0027t show the problem. FWIW you can often build unneeded dependencies by building the modules directly.",
+      "parentUuid": "32478b0f_2c33fabe",
+      "revId": "a75589b81bbbe49ef21c12deb6c0d990ef79d499",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
