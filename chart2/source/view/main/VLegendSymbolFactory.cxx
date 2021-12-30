@@ -134,7 +134,6 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
             {
                 drawing::Direction3D aSymbolSize( nSize, nSize, 0 );
                 drawing::Position3D aPos( rEntryKeyAspectRatio.Width/2.0, rEntryKeyAspectRatio.Height/2.0, 0 );
-                ShapeFactory* pFactory = ShapeFactory::getOrCreateShapeFactory( xShapeFactory );
                 if( aSymbol.Style == chart2::SymbolStyle_STANDARD )
                 {
                     // take series color as fill color
@@ -152,7 +151,7 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
                 }
                 else if( aSymbol.Style == chart2::SymbolStyle_GRAPHIC )
                 {
-                    xSymbol.set( pFactory->createGraphic2D(
+                    xSymbol.set( ShapeFactory::createGraphic2D(
                                      xResultGroup,
                                      aPos,
                                      aSymbolSize,

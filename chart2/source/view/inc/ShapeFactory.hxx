@@ -161,7 +161,7 @@ public:
                     , sal_Int32 nBorderColor
                     , sal_Int32 nFillColor );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxGraphicObject>
         createGraphic2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::Position3D& rPos
                     , const css::drawing::Direction3D& rSize

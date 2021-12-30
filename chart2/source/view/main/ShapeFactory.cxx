@@ -1659,7 +1659,7 @@ rtl::Reference<SvxShapePolyPolygon>
     return xShape;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<SvxGraphicObject>
         ShapeFactory::createGraphic2D(
                       const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::Position3D& rPosition
@@ -1673,9 +1673,8 @@ uno::Reference< drawing::XShape >
     // performance reasons (ask AW, said CL)
 
     //create shape
-    uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.GraphicObjectShape" ), uno::UNO_QUERY );
+    rtl::Reference<SvxGraphicObject> xShape = new SvxGraphicObject(nullptr);
+    xShape->setShapeKind(OBJ_GRAF);
     xTarget->add(xShape);
 
     try
@@ -1692,18 +1691,13 @@ uno::Reference< drawing::XShape >
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
+    try
     {
-        try
-        {
-            xProp->setPropertyValue( "Graphic", uno::Any( xGraphic ));
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
+        xShape->SvxShape::setPropertyValue( "Graphic", uno::Any( xGraphic ));
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return xShape;
 }
