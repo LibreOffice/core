@@ -1,0 +1,34 @@
+--- a/src/ports/SkFontHost_win.cpp	2021-12-30 20:32:03.085329487 +0000
++++ b/src/ports/SkFontHost_win.cpp	2021-12-30 20:32:21.859465715 +0000
+@@ -2117,13 +2117,7 @@
+     SkFontHinting h = rec->getHinting();
+     switch (h) {
+         case SkFontHinting::kNone:
+-            break;
+         case SkFontHinting::kSlight:
+-            // Only do slight hinting when axis aligned.
+-            // TODO: re-enable slight hinting when FontHostTest can pass.
+-            //if (!isAxisAligned(*rec)) {
+-                h = SkFontHinting::kNone;
+-            //}
+             break;
+         case SkFontHinting::kNormal:
+         case SkFontHinting::kFull:
+--- a/src/ports/SkScalerContext_win_dw.cpp	2021-12-31 20:33:39.297651060 +0000
++++ b/src/ports/SkScalerContext_win_dw.cpp	2021-12-31 20:42:47.861423139 +0000
+@@ -418,6 +418,15 @@
+             fMeasuringMode = DWRITE_MEASURING_MODE_NATURAL;
+         }
+     }
++
++    if (fRec.getHinting() == SkFontHinting::kSlight) {
++        fAntiAliasMode = DWRITE_TEXT_ANTIALIAS_MODE_CLEARTYPE;
++        fTextSizeRender = realTextSize;
++        fRenderingMode = DWRITE_RENDERING_MODE_CLEARTYPE_NATURAL;
++        fTextureType = DWRITE_TEXTURE_CLEARTYPE_3x1;
++        fTextSizeMeasure = realTextSize;
++        fMeasuringMode = DWRITE_MEASURING_MODE_NATURAL;
++    }
+ }
+ 
+ SkScalerContext_DW::~SkScalerContext_DW() {
