@@ -203,7 +203,7 @@ void ScDocument::SetDrawPageSize(SCTAB nTab)
 bool ScDocument::IsChart( const SdrObject* pObject )
 {
     // IsChart() implementation moved to svx drawinglayer
-    if(pObject && OBJ_OLE2 == pObject->GetObjIdentifier())
+    if(pObject && SdrObjKind::OLE2 == pObject->GetObjIdentifier())
     {
         return static_cast<const SdrOle2Obj*>(pObject)->IsChart();
     }
@@ -303,7 +303,7 @@ bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
-                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
+                    if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 &&
                             aMMRect.Contains( pObject->GetCurrentBoundRect() ) )
                         return true;
 

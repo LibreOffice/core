@@ -108,7 +108,7 @@ bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, OUString& rName
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
+            if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 &&
                  pObject->GetCurrentBoundRect().Contains(rPos) )
             {
                 // also Chart-Objects that are not in the Collection
@@ -152,7 +152,7 @@ uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( std::u16str
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
-                if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
+                if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 &&
                         static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == rChartName )
                 {
                     xReturn.set( ScChartHelper::GetChartFromSdrObject( pObject ) );
@@ -219,7 +219,7 @@ void ScDocument::GetOldChartParameters( std::u16string_view rName,
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
+            if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 &&
                     static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == rName )
             {
                 uno::Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pObject ) );
@@ -266,7 +266,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
+            if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 &&
                     static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == rChartName )
             {
                 uno::Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pObject ) );
@@ -496,7 +496,7 @@ void ScDocument::SetChartRangeList( std::u16string_view rChartName,
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
+            if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 &&
                     static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == rChartName )
             {
                 uno::Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pObject ) );
@@ -551,7 +551,7 @@ uno::Reference< embed::XEmbeddedObject >
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
+            if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 )
             {
                 SdrOle2Obj * pOleObject ( dynamic_cast< SdrOle2Obj * >( pObject ));
                 if( pOleObject &&
@@ -592,7 +592,7 @@ void ScDocument::UpdateChartListenerCollection()
 
         for (SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next())
         {
-            if ( pObject->GetObjIdentifier() != OBJ_OLE2 )
+            if ( pObject->GetObjIdentifier() != SdrObjKind::OLE2 )
                 continue;
 
             OUString aObjName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();

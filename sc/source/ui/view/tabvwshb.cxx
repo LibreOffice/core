@@ -272,7 +272,7 @@ ErrCode ScTabViewShell::DoVerb(sal_Int32 nVerb)
     if (rMarkList.GetMarkCount() == 1)
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        if (pObj->GetObjIdentifier() == OBJ_OLE2)
+        if (pObj->GetObjIdentifier() == SdrObjKind::OLE2)
             pOle2Obj = static_cast<SdrOle2Obj*>(pObj);
     }
 
@@ -450,9 +450,9 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                             SdrMark* pMark = rMarkList.GetMark(0);
                             SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+                            SdrObjKind nSdrObjKind = pObj->GetObjIdentifier();
 
-                            if (nSdrObjKind == OBJ_OLE2)
+                            if (nSdrObjKind == SdrObjKind::OLE2)
                             {
                                 if ( static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )
                                 {

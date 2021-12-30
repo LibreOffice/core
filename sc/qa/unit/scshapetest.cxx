@@ -335,7 +335,8 @@ void ScShapeTest::testTdf140252_DragCreateFormControl()
     ScTabViewShell* pTabViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
 
     // drag-create a push button as example of form control
-    SfxUInt16Item aIdentifierItem(SID_FM_CONTROL_IDENTIFIER, OBJ_FM_BUTTON);
+    SfxUInt16Item aIdentifierItem(SID_FM_CONTROL_IDENTIFIER,
+                                  static_cast<sal_uInt16>(SdrObjKind::FormButton));
     SfxUInt32Item aInventorItem(SID_FM_CONTROL_INVENTOR, sal_uInt32(SdrInventor::FmForm));
     const SfxPoolItem* pArgs[] = { &aIdentifierItem, &aInventorItem, nullptr };
     pTabViewShell->GetViewData().GetDispatcher().Execute(SID_FM_CREATE_CONTROL,
@@ -428,7 +429,8 @@ void ScShapeTest::testTdf140252_LayerOfControl()
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
 
     // Create default push button
-    SfxUInt16Item aIdentifierItem(SID_FM_CONTROL_IDENTIFIER, OBJ_FM_BUTTON);
+    SfxUInt16Item aIdentifierItem(SID_FM_CONTROL_IDENTIFIER,
+                                  static_cast<sal_uInt16>(SdrObjKind::FormButton));
     SfxUInt32Item aInventorItem(SID_FM_CONTROL_INVENTOR, sal_uInt32(SdrInventor::FmForm));
     const SfxPoolItem* pArgs[] = { &aIdentifierItem, &aInventorItem, nullptr };
     const SfxPoolItem* pInternalArgs[] = { nullptr };

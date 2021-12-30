@@ -288,7 +288,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
     {
         case PresObjKind::Title:
         {
-            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), OBJ_TITLETEXT);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), SdrObjKind::TitleText);
 
             if (mbMaster)
             {
@@ -299,7 +299,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         case PresObjKind::Outline:
         {
-            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), OBJ_OUTLINETEXT);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), SdrObjKind::OutlineText);
 
             if (mbMaster)
             {
@@ -310,7 +310,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         case PresObjKind::Notes:
         {
-            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), OBJ_TEXT);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), SdrObjKind::Text);
 
             if (mbMaster)
             {
@@ -321,7 +321,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         case PresObjKind::Text:
         {
-            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), OBJ_TEXT);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), SdrObjKind::Text);
         }
         break;
 
@@ -423,7 +423,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         case PresObjKind::DateTime:
         case PresObjKind::SlideNumber:
         {
-            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), OBJ_TEXT);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), SdrObjKind::Text);
             bEmptyPresObj = false;
             bForceText = true;
         }
@@ -1512,24 +1512,24 @@ static void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDe
             switch( eKind )
             {
             case PresObjKind::Title:
-                bFound = eSdrObjKind == OBJ_TITLETEXT;
+                bFound = eSdrObjKind == SdrObjKind::TitleText;
                 break;
             case PresObjKind::Table:
-                bFound = eSdrObjKind == OBJ_TABLE;
+                bFound = eSdrObjKind == SdrObjKind::Table;
                 break;
             case PresObjKind::Media:
-                bFound = eSdrObjKind == OBJ_MEDIA;
+                bFound = eSdrObjKind == SdrObjKind::Media;
                 break;
             case PresObjKind::Outline:
-                bFound = (eSdrObjKind == OBJ_OUTLINETEXT) ||
-                         ((eSdrObjKind == OBJ_TEXT) && bPresStyle) ||
-                         (eSdrObjKind == OBJ_TABLE) || (eSdrObjKind == OBJ_MEDIA) || (eSdrObjKind == OBJ_GRAF) || (eSdrObjKind == OBJ_OLE2);
+                bFound = (eSdrObjKind == SdrObjKind::OutlineText) ||
+                         ((eSdrObjKind == SdrObjKind::Text) && bPresStyle) ||
+                         (eSdrObjKind == SdrObjKind::Table) || (eSdrObjKind == SdrObjKind::Media) || (eSdrObjKind == SdrObjKind::Graphic) || (eSdrObjKind == SdrObjKind::OLE2);
                 break;
             case PresObjKind::Graphic:
-                bFound = eSdrObjKind == OBJ_GRAF;
+                bFound = eSdrObjKind == SdrObjKind::Graphic;
                 break;
             case PresObjKind::Object:
-                if( eSdrObjKind == OBJ_OLE2 )
+                if( eSdrObjKind == SdrObjKind::OLE2 )
                 {
                     SdrOle2Obj* pOle2 = dynamic_cast< SdrOle2Obj* >( pObj );
                     if( pOle2 )
@@ -1566,7 +1566,7 @@ static void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDe
                 break;
             case PresObjKind::Chart:
             case PresObjKind::Calc:
-                if( eSdrObjKind == OBJ_OLE2 )
+                if( eSdrObjKind == SdrObjKind::OLE2 )
                 {
                     SdrOle2Obj* pOle2 = dynamic_cast< SdrOle2Obj* >( pObj );
                     if( pOle2 )
@@ -1583,18 +1583,18 @@ static void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDe
                     }
                     break;
                 }
-                else if( eSdrObjKind == OBJ_TABLE )
+                else if( eSdrObjKind == SdrObjKind::Table )
                 {
                     bFound = true;
                 }
                 break;
             case PresObjKind::Page:
             case PresObjKind::Handout:
-                bFound = eSdrObjKind == OBJ_PAGE;
+                bFound = eSdrObjKind == SdrObjKind::Page;
                 break;
             case PresObjKind::Notes:
             case PresObjKind::Text:
-                bFound = (bPresStyle && (eSdrObjKind == OBJ_TEXT)) || (eSdrObjKind == OBJ_OUTLINETEXT);
+                bFound = (bPresStyle && (eSdrObjKind == SdrObjKind::Text)) || (eSdrObjKind == SdrObjKind::OutlineText);
                 break;
             default:
                 break;
@@ -2011,8 +2011,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                             }
                         }
                     }
-                    else if ( eObjKind != OBJ_TITLETEXT   &&
-                              eObjKind != OBJ_OUTLINETEXT &&
+                    else if ( eObjKind != SdrObjKind::TitleText   &&
+                              eObjKind != SdrObjKind::OutlineText &&
                               dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr       &&
                               pObj->GetOutlinerParaObject() )
                     {
@@ -2071,7 +2071,7 @@ static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourc
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && rPage.IsInserted();
 
     SdrObject* pNewObj = pSourceObj;
-    if((eObjKind == PresObjKind::Outline) && (pSourceObj->GetObjIdentifier() == OBJ_TEXT) )
+    if((eObjKind == PresObjKind::Outline) && (pSourceObj->GetObjIdentifier() == SdrObjKind::Text) )
     {
         pNewObj = rPage.CreatePresObj(PresObjKind::Outline, bVertical, rRect);
 
@@ -2123,7 +2123,7 @@ static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourc
                 SdrObject::Free( pSourceObj );
         }
     }
-    else if((eObjKind == PresObjKind::Text) && (pSourceObj->GetObjIdentifier() == OBJ_OUTLINETEXT) )
+    else if((eObjKind == PresObjKind::Text) && (pSourceObj->GetObjIdentifier() == SdrObjKind::OutlineText) )
     {
         // is there an outline shape we can use to replace empty subtitle shape?
         pNewObj = rPage.CreatePresObj(PresObjKind::Text, bVertical, rRect);
@@ -2167,14 +2167,14 @@ static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourc
                 SdrObject::Free( pSourceObj );
         }
     }
-    else if((eObjKind == PresObjKind::Outline) && (pSourceObj->GetObjIdentifier() != OBJ_OUTLINETEXT) )
+    else if((eObjKind == PresObjKind::Outline) && (pSourceObj->GetObjIdentifier() != SdrObjKind::OutlineText) )
     {
         switch( pSourceObj->GetObjIdentifier() )
         {
-        case OBJ_TABLE: eObjKind = PresObjKind::Table; break;
-        case OBJ_MEDIA: eObjKind = PresObjKind::Media; break;
-        case OBJ_GRAF: eObjKind = PresObjKind::Graphic; break;
-        case OBJ_OLE2: eObjKind = PresObjKind::Object; break;
+        case SdrObjKind::Table: eObjKind = PresObjKind::Table; break;
+        case SdrObjKind::Media: eObjKind = PresObjKind::Media; break;
+        case SdrObjKind::Graphic: eObjKind = PresObjKind::Graphic; break;
+        case SdrObjKind::OLE2: eObjKind = PresObjKind::Object; break;
         default: break;
         }
     }
@@ -2237,7 +2237,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
                     pTextObject->SetMergedItem(SdrTextHorzAdjustItem( bVertical ? SDRTEXTHORZADJUST_RIGHT : SDRTEXTHORZADJUST_BLOCK ));
             }
 
-            if( !mbMaster && (pTextObject->GetObjIdentifier() != OBJ_TABLE) )
+            if( !mbMaster && (pTextObject->GetObjIdentifier() != SdrObjKind::Table) )
             {
                 if ( pTextObject->IsAutoGrowHeight() )
                 {
@@ -2809,11 +2809,11 @@ bool SdPage::checkVisibility(
     // empty presentation objects only visible during edit mode
     if( (bIsPrinting || !bEdit || bIsInsidePageObj ) && pObj->IsEmptyPresObj() )
     {
-        if( (pObj->GetObjInventor() != SdrInventor::Default) || ( (pObj->GetObjIdentifier() != OBJ_RECT) && (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
+        if( (pObj->GetObjInventor() != SdrInventor::Default) || ( (pObj->GetObjIdentifier() != SdrObjKind::Rectangle) && (pObj->GetObjIdentifier() != SdrObjKind::Page) ) )
             return false;
     }
 
-    if( ( pObj->GetObjInventor() == SdrInventor::Default ) && ( pObj->GetObjIdentifier() == OBJ_TEXT ) )
+    if( ( pObj->GetObjInventor() == SdrInventor::Default ) && ( pObj->GetObjIdentifier() == SdrObjKind::Text ) )
     {
         const SdPage* pCheckPage = dynamic_cast< const SdPage* >(pObj->getSdrPageFromSdrObject());
 
@@ -2860,7 +2860,7 @@ bool SdPage::checkVisibility(
     }
 
     // i63977, do not print SdrpageObjs from master pages
-    if( ( pObj->GetObjInventor() == SdrInventor::Default ) && ( pObj->GetObjIdentifier() == OBJ_PAGE ) )
+    if( ( pObj->GetObjInventor() == SdrInventor::Default ) && ( pObj->GetObjIdentifier() == SdrObjKind::Page ) )
     {
         if( pObj->getSdrPageFromSdrObject() && pObj->getSdrPageFromSdrObject()->IsMasterPage() )
             return false;

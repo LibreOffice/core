@@ -652,7 +652,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                     ReplaceObj(*pTextObj, *pObject);
                 else
                 {
-                    if (sal_uInt16(OBJ_OLE2) == pObject->GetObjIdentifier())
+                    if (SdrObjKind::OLE2 == pObject->GetObjIdentifier())
                     {
                         // the size from BLIP, if there is any, should be already set
                         pRet = InsertOle(*static_cast<SdrOle2Obj*>(pObject), aAttrSet, &aGrSet);

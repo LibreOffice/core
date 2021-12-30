@@ -392,7 +392,7 @@ void FuMorph::ImpInsertPolygons(
         const ::basegfx::B2DPolyPolygon& rPolyPoly3D = rPolyPolyList3D[ i ];
         SdrPathObj* pNewObj = new SdrPathObj(
             mpView->getSdrModelFromSdrView(),
-            OBJ_POLY,
+            SdrObjKind::Polygon,
             rPolyPoly3D);
 
         // line color

@@ -89,8 +89,8 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
 
             //  OLE object
 
-            sal_uInt16 nSdrObjKind = pObject->GetObjIdentifier();
-            if (nSdrObjKind == OBJ_OLE2)
+            SdrObjKind nSdrObjKind = pObject->GetObjIdentifier();
+            if (nSdrObjKind == SdrObjKind::OLE2)
             {
                 // if object has no persistence it must be copied as a part of document
                 try
@@ -106,7 +106,7 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
 
             //  Graphic object
 
-            if (nSdrObjKind == OBJ_GRAF)
+            if (nSdrObjKind == SdrObjKind::Graphic)
             {
                 m_bGraphic = true;
                 if ( static_cast<SdrGrafObj*>(pObject)->GetGraphic().GetType() == GraphicType::Bitmap )
@@ -383,7 +383,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
             {
                 SdrObjListIter aIter( pPage, SdrIterMode::Flat );
                 SdrObject* pObject = aIter.Next();
-                if (pObject && pObject->GetObjIdentifier() == OBJ_GRAF)
+                if (pObject && pObject->GetObjIdentifier() == SdrObjKind::Graphic)
                 {
                     SdrGrafObj* pGraphObj = static_cast<SdrGrafObj*>(pObject);
                     bOK = SetGraphic( pGraphObj->GetGraphic() );
@@ -637,7 +637,7 @@ SdrOle2Obj* ScDrawTransferObj::GetSingleObject()
     {
         SdrObjListIter aIter( pPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
-        if (pObject && pObject->GetObjIdentifier() == OBJ_OLE2)
+        if (pObject && pObject->GetObjIdentifier() == SdrObjKind::OLE2)
         {
             return static_cast<SdrOle2Obj*>(pObject);
         }

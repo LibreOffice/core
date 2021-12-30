@@ -1546,7 +1546,7 @@ private:
 
                 SdrPathObj* pPathObj = new SdrPathObj(
                     rModel,
-                    OBJ_PATHLINE,
+                    SdrObjKind::PathLine,
                     aPathPoly);
                 pPathObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
                 pPathObj->SetMergedItem(XLineColorItem(OUString(), COL_BLACK));
@@ -1643,7 +1643,7 @@ private:
                 {
                     SdrObject* pObj = pPage->GetObj(nObj++);
                     if (pObj->GetObjInventor() == SdrInventor::Default
-                        && pObj->GetObjIdentifier() == OBJ_TITLETEXT)
+                        && pObj->GetObjIdentifier() == SdrObjKind::TitleText)
                     {
                         pTextObj = dynamic_cast<SdrTextObj*>(pObj);
                     }
@@ -1667,7 +1667,7 @@ private:
                 {
                     SdrObject* pObj = pPage->GetObj(nObj++);
                     if (pObj->GetObjInventor() == SdrInventor::Default
-                        && pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
+                        && pObj->GetObjIdentifier() == SdrObjKind::OutlineText)
                     {
                         pTextObj = dynamic_cast<SdrTextObj*>(pObj);
                     }

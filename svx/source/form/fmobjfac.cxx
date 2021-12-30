@@ -117,93 +117,93 @@ IMPL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, Sdr
 
         switch ( aParams.nObjIdentifier )
         {
-            case OBJ_FM_EDIT:
+            case SdrObjKind::FormEdit:
                 sServiceSpecifier = FM_COMPONENT_EDIT;
                 break;
 
-            case OBJ_FM_BUTTON:
+            case SdrObjKind::FormButton:
                 sServiceSpecifier = FM_COMPONENT_COMMANDBUTTON;
                 break;
 
-            case OBJ_FM_FIXEDTEXT:
+            case SdrObjKind::FormFixedText:
                 sServiceSpecifier = FM_COMPONENT_FIXEDTEXT;
                 break;
 
-            case OBJ_FM_LISTBOX:
+            case SdrObjKind::FormListbox:
                 sServiceSpecifier = FM_COMPONENT_LISTBOX;
                 break;
 
-            case OBJ_FM_CHECKBOX:
+            case SdrObjKind::FormCheckbox:
                 sServiceSpecifier = FM_COMPONENT_CHECKBOX;
                 break;
 
-            case OBJ_FM_RADIOBUTTON:
+            case SdrObjKind::FormRadioButton:
                 sServiceSpecifier = FM_COMPONENT_RADIOBUTTON;
                 break;
 
-            case OBJ_FM_GROUPBOX:
+            case SdrObjKind::FormGroupBox:
                 sServiceSpecifier = FM_COMPONENT_GROUPBOX;
                 break;
 
-            case OBJ_FM_COMBOBOX:
+            case SdrObjKind::FormCombobox:
                 sServiceSpecifier = FM_COMPONENT_COMBOBOX;
                 break;
 
-            case OBJ_FM_GRID:
+            case SdrObjKind::FormGrid:
                 sServiceSpecifier = FM_COMPONENT_GRID;
                 break;
 
-            case OBJ_FM_IMAGEBUTTON:
+            case SdrObjKind::FormImageButton:
                 sServiceSpecifier = FM_COMPONENT_IMAGEBUTTON;
                 break;
 
-            case OBJ_FM_FILECONTROL:
+            case SdrObjKind::FormFileControl:
                 sServiceSpecifier = FM_COMPONENT_FILECONTROL;
                 break;
 
-            case OBJ_FM_DATEFIELD:
+            case SdrObjKind::FormDateField:
                 sServiceSpecifier = FM_COMPONENT_DATEFIELD;
                 break;
 
-            case OBJ_FM_TIMEFIELD:
+            case SdrObjKind::FormTimeField:
                 sServiceSpecifier = FM_COMPONENT_TIMEFIELD;
                 aInitialProperties.emplace_back( FM_PROP_TIMEMAX, makeAny( tools::Time( 23, 59, 59, 999999999 ).GetUNOTime() ) );
                 break;
 
-            case OBJ_FM_NUMERICFIELD:
+            case SdrObjKind::FormNumericField:
                 sServiceSpecifier = FM_COMPONENT_NUMERICFIELD;
                 break;
 
-            case OBJ_FM_CURRENCYFIELD:
+            case SdrObjKind::FormCurrencyField:
                 sServiceSpecifier = FM_COMPONENT_CURRENCYFIELD;
                 break;
 
-            case OBJ_FM_PATTERNFIELD:
+            case SdrObjKind::FormPatternField:
                 sServiceSpecifier = FM_COMPONENT_PATTERNFIELD;
                 break;
 
-            case OBJ_FM_HIDDEN:
+            case SdrObjKind::FormHidden:
                 sServiceSpecifier = FM_COMPONENT_HIDDEN;
                 break;
 
-            case OBJ_FM_IMAGECONTROL:
+            case SdrObjKind::FormImageControl:
                 sServiceSpecifier = FM_COMPONENT_IMAGECONTROL;
                 break;
 
-            case OBJ_FM_FORMATTEDFIELD:
+            case SdrObjKind::FormFormattedField:
                 sServiceSpecifier = FM_COMPONENT_FORMATTEDFIELD;
                 break;
 
-            case OBJ_FM_NAVIGATIONBAR:
+            case SdrObjKind::FormNavigationBar:
                 sServiceSpecifier = FM_SUN_COMPONENT_NAVIGATIONBAR;
                 break;
 
-            case OBJ_FM_SCROLLBAR:
+            case SdrObjKind::FormScrollbar:
                 sServiceSpecifier = FM_SUN_COMPONENT_SCROLLBAR;
                 aInitialProperties.emplace_back( FM_PROP_BORDER, makeAny( sal_Int16(0) ) );
                 break;
 
-            case OBJ_FM_SPINBUTTON:
+            case SdrObjKind::FormSpinButton:
                 sServiceSpecifier = FM_SUN_COMPONENT_SPINBUTTON;
                 aInitialProperties.emplace_back( FM_PROP_BORDER, makeAny( sal_Int16(0) ) );
                 break;

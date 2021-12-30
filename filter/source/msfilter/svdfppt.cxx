@@ -987,18 +987,18 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                     nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
                 }
 
-                SdrObjKind eTextKind = OBJ_RECT;
+                SdrObjKind eTextKind = SdrObjKind::Rectangle;
                 if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESSLIDEIMAGE )
                     || ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::MASTERNOTESSLIDEIMAGE ) )
                 {
                     aTextObj.SetInstance( TSS_Type::Notes );
-                    eTextKind = OBJ_TITLETEXT;
+                    eTextKind = SdrObjKind::TitleText;
                 }
                 else if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::MASTERNOTESBODYIMAGE )
                     || ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESBODY ) )
                 {
                     aTextObj.SetInstance( TSS_Type::Notes );
-                    eTextKind = OBJ_TEXT;
+                    eTextKind = SdrObjKind::Text;
                 }
 
                 TSS_Type nDestinationInstance = aTextObj.GetInstance();
@@ -1036,11 +1036,11 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                 switch ( aTextObj.GetInstance() )
                 {
                     case TSS_Type::PageTitle :
-                    case TSS_Type::Title : eTextKind = OBJ_TITLETEXT; break;
-                    case TSS_Type::Subtitle : eTextKind = OBJ_TEXT; break;
+                    case TSS_Type::Title : eTextKind = SdrObjKind::TitleText; break;
+                    case TSS_Type::Subtitle : eTextKind = SdrObjKind::Text; break;
                     case TSS_Type::Body :
                     case TSS_Type::HalfBody :
-                    case TSS_Type::QuarterBody : eTextKind = OBJ_OUTLINETEXT; bAutoFit = true; break;
+                    case TSS_Type::QuarterBody : eTextKind = SdrObjKind::OutlineText; bAutoFit = true; break;
                     default: break;
                 }
                 if ( aTextObj.GetDestinationInstance() != TSS_Type::TextInShape )
@@ -1048,14 +1048,14 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                     if ( !aTextObj.GetOEPlaceHolderAtom() || aTextObj.GetOEPlaceHolderAtom()->nPlaceholderId == PptPlaceholder::NONE )
                     {
                         aTextObj.SetDestinationInstance( TSS_Type::TextInShape );
-                        eTextKind = OBJ_RECT;
+                        eTextKind = SdrObjKind::Rectangle;
                     }
                 }
                 SdrObject* pTObj = nullptr;
                 bool bWordWrap = GetPropertyValue(DFF_Prop_WrapText, mso_wrapSquare) != mso_wrapNone;
                 bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape, 0 ) & 2 ) != 0;
 
-                if ( dynamic_cast<const SdrObjCustomShape* >(pRet) !=  nullptr && ( eTextKind == OBJ_RECT ) )
+                if ( dynamic_cast<const SdrObjCustomShape* >(pRet) !=  nullptr && ( eTextKind == SdrObjKind::Rectangle ) )
                 {
                     bAutoGrowHeight = bFitShapeToText;
                     bAutoGrowWidth = !bWordWrap;
@@ -1071,7 +1071,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                     }
                     pTObj = new SdrRectObj(
                         *pSdrModel,
-                        eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT);
+                        eTextKind != SdrObjKind::Rectangle ? eTextKind : SdrObjKind::Text);
                     SfxItemSet aSet( pSdrModel->GetItemPool() );
                     if ( !pRet )
                         ApplyAttributes( rSt, aSet, rObjData );
@@ -2258,7 +2258,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
         bool bUndoEnabled = rOutliner.IsUndoEnabled();
         rOutliner.EnableUndo(false);
 
-        if ( ( pText->GetObjInventor() == SdrInventor::Default ) && ( pText->GetObjIdentifier() == OBJ_TITLETEXT ) ) // Outliner-Style for Title-Text object?!? (->of DL)
+        if ( ( pText->GetObjInventor() == SdrInventor::Default ) && ( pText->GetObjIdentifier() == SdrObjKind::TitleText ) ) // Outliner-Style for Title-Text object?!? (->of DL)
             rOutliner.Init( OutlinerMode::TitleObject );             // Outliner reset
 
         bool bOldUpdateMode = rOutliner.SetUpdateLayout( false );

@@ -92,7 +92,7 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     ,m_pCurrentView(nullptr)
     ,m_aMarkIdle("reportdesign ODesignView Mark Idle")
     ,m_eMode( DlgEdMode::Select )
-    ,m_eActObj( OBJ_NONE )
+    ,m_eActObj( SdrObjKind::NONE )
     ,m_aGridSizeCoarse( 1000, 1000 )    // #i93595# 100TH_MM changed to grid using coarse 1 cm grid
     ,m_aGridSizeFine( 250, 250 )        // and a 0,25 cm subdivision for better visualisation
     ,m_bDeleted( false )
@@ -287,7 +287,7 @@ void ODesignView::SetMode( DlgEdMode _eNewMode )
 {
     m_eMode = _eNewMode;
     if ( m_eMode == DlgEdMode::Select )
-        m_eActObj = OBJ_NONE;
+        m_eActObj = SdrObjKind::NONE;
 
     m_aScrollWindow->SetMode(_eNewMode);
 }
@@ -413,7 +413,7 @@ IMPL_LINK_NOARG( ODesignView, SplitHdl, SplitWindow*, void )
     }
 }
 
-void ODesignView::SelectAll(const sal_uInt16 _nObjectType)
+void ODesignView::SelectAll(const SdrObjKind _nObjectType)
 {
      m_aScrollWindow->SelectAll(_nObjectType);
 }

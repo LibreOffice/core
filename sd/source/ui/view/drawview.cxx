@@ -66,7 +66,7 @@ DrawView::DrawView(
     ,mpDrawViewShell(pShell)
     ,mnPOCHSmph(0)
 {
-    SetCurrentObj(OBJ_RECT);
+    SetCurrentObj(SdrObjKind::Rectangle);
 }
 
 DrawView::~DrawView()
@@ -153,7 +153,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
             if (nInv == SdrInventor::Default)
             {
-                sal_uInt16 eObjKind = pEditObject->GetObjIdentifier();
+                SdrObjKind eObjKind = pEditObject->GetObjIdentifier();
                 PresObjKind ePresObjKind = rPage.GetPresObjKind(pEditObject);
 
                 if ( ePresObjKind == PresObjKind::Title ||
@@ -175,7 +175,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                     bOk = true;
                 }
-                else if (eObjKind == OBJ_OUTLINETEXT)
+                else if (eObjKind == SdrObjKind::OutlineText)
                 {
                     // Presentation object outline
                     OutlinerView* pOV   = GetTextEditOutlinerView();
@@ -298,9 +298,9 @@ void DrawView::SetMasterAttributes( SdrObject* pObject, const SdPage& rPage, Sfx
     if (nInv != SdrInventor::Default)
         return;
 
-    sal_uInt16 eObjKind = pObject->GetObjIdentifier();
+    SdrObjKind eObjKind = pObject->GetObjIdentifier();
     PresObjKind ePresObjKind = rPage.GetPresObjKind(pObject);
-    if (bSlide && eObjKind == OBJ_TEXT)
+    if (bSlide && eObjKind == SdrObjKind::Text)
     {
         // Presentation object (except outline)
         SfxStyleSheet* pSheet = rPage.GetTextStyleSheetForObject(pObject);
@@ -339,7 +339,7 @@ void DrawView::SetMasterAttributes( SdrObject* pObject, const SdPage& rPage, Sfx
         pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
         bOk = true;
     }
-    else if (eObjKind == OBJ_OUTLINETEXT)
+    else if (eObjKind == SdrObjKind::OutlineText)
     {
         // tdf#127900: do not forget to apply master style to placeholders
         if (!rSet.HasItem(EE_PARA_NUMBULLET) || bMaster)

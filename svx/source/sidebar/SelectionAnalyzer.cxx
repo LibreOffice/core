@@ -54,7 +54,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC(const SdrMarkL
             else
             {
                 const SdrInventor nInv = pObj->GetObjInventor();
-                const sal_uInt16 nObjId = pObj->GetObjIdentifier();
+                const SdrObjKind nObjId = pObj->GetObjIdentifier();
                 if (nInv == SdrInventor::Default)
                     eContext = GetContextForObjectId_SC(nObjId);
                 else if (nInv == SdrInventor::FmForm)
@@ -70,8 +70,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC(const SdrMarkL
             {
                 case SdrInventor::Default:
                 {
-                    const sal_uInt16 nObjId(GetObjectTypeFromMark(rMarkList));
-                    if (nObjId == 0)
+                    const SdrObjKind nObjId(GetObjectTypeFromMark(rMarkList));
+                    if (nObjId == SdrObjKind::NONE)
                         eContext = EnumContext::Context::MultiObject;
                     else
                         eContext = GetContextForObjectId_SC(nObjId);
@@ -128,7 +128,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD(const SdrMarkL
             auto pTextObj = dynamic_cast<SdrTextObj*>(pObj);
             if (pTextObj && pTextObj->IsInEditMode())
             {
-                if (pObj->GetObjIdentifier() == OBJ_TABLE)
+                if (pObj->GetObjIdentifier() == SdrObjKind::Table)
                 {
                     // Let a table object take precedence over text
                     // edit mode.  The panels for text editing are
@@ -145,14 +145,14 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD(const SdrMarkL
             else
             {
                 const SdrInventor nInv = pObj->GetObjInventor();
-                sal_uInt16 nObjId = pObj->GetObjIdentifier();
+                SdrObjKind nObjId = pObj->GetObjIdentifier();
                 if (nInv == SdrInventor::Default)
                 {
-                    if (nObjId == OBJ_GRUP)
+                    if (nObjId == SdrObjKind::Group)
                     {
                         nObjId = GetObjectTypeFromGroup(pObj);
-                        if (nObjId == 0)
-                            nObjId = OBJ_GRUP;
+                        if (nObjId == SdrObjKind::NONE)
+                            nObjId = SdrObjKind::Group;
                     }
                     eContext = GetContextForObjectId_SD(nObjId, eViewType);
                 }
@@ -174,8 +174,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD(const SdrMarkL
             {
                 case SdrInventor::Default:
                 {
-                    const sal_uInt16 nObjId = GetObjectTypeFromMark(rMarkList);
-                    if (nObjId == 0)
+                    const SdrObjKind nObjId = GetObjectTypeFromMark(rMarkList);
+                    if (nObjId == SdrObjKind::NONE)
                         eContext = EnumContext::Context::MultiObject;
                     else
                         eContext = GetContextForObjectId_SD(nObjId, eViewType);
@@ -204,41 +204,41 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD(const SdrMarkL
     return eContext;
 }
 
-EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC(const sal_uInt16 nObjectId)
+EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC(const SdrObjKind nObjectId)
 {
     switch (nObjectId)
     {
-        case OBJ_CAPTION:
-        case OBJ_TITLETEXT:
-        case OBJ_OUTLINETEXT:
-        case OBJ_TEXT:
-        case OBJ_MEASURE:
-        case OBJ_RECT:
-        case OBJ_CIRC:
-        case OBJ_FREEFILL:
-        case OBJ_PATHFILL:
-        case OBJ_POLY:
-        case OBJ_SECT:
-        case OBJ_CARC:
-        case OBJ_CCUT:
-        case OBJ_CUSTOMSHAPE:
-        case OBJ_GRUP:
+        case SdrObjKind::Caption:
+        case SdrObjKind::TitleText:
+        case SdrObjKind::OutlineText:
+        case SdrObjKind::Text:
+        case SdrObjKind::Measure:
+        case SdrObjKind::Rectangle:
+        case SdrObjKind::CircleOrEllipse:
+        case SdrObjKind::FreehandFill:
+        case SdrObjKind::PathFill:
+        case SdrObjKind::Polygon:
+        case SdrObjKind::CircleSection:
+        case SdrObjKind::CircleArc:
+        case SdrObjKind::CircleCut:
+        case SdrObjKind::CustomShape:
+        case SdrObjKind::Group:
             return EnumContext::Context::Draw;
 
-        case OBJ_PLIN:
-        case OBJ_PATHLINE:
-        case OBJ_FREELINE:
-        case OBJ_LINE:
-        case OBJ_EDGE:
+        case SdrObjKind::PolyLine:
+        case SdrObjKind::PathLine:
+        case SdrObjKind::FreehandLine:
+        case SdrObjKind::Line:
+        case SdrObjKind::Edge:
             return EnumContext::Context::DrawLine;
 
-        case OBJ_GRAF:
+        case SdrObjKind::Graphic:
             return EnumContext::Context::Graphic;
 
-        case OBJ_OLE2:
+        case SdrObjKind::OLE2:
             return EnumContext::Context::OLE;
 
-        case OBJ_MEDIA:
+        case SdrObjKind::Media:
             return EnumContext::Context::Media;
 
         default:
@@ -246,50 +246,50 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC(const sal_uInt1
     }
 }
 
-EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD(const sal_uInt16 nObjectId,
+EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD(const SdrObjKind nObjectId,
                                                                  const ViewType eViewType)
 {
     switch (nObjectId)
     {
-        case OBJ_CAPTION:
-        case OBJ_MEASURE:
-        case OBJ_RECT:
-        case OBJ_CIRC:
-        case OBJ_FREEFILL:
-        case OBJ_PATHFILL:
-        case OBJ_POLY:
-        case OBJ_SECT:
-        case OBJ_CARC:
-        case OBJ_CCUT:
-        case OBJ_CUSTOMSHAPE:
-        case OBJ_GRUP:
+        case SdrObjKind::Caption:
+        case SdrObjKind::Measure:
+        case SdrObjKind::Rectangle:
+        case SdrObjKind::CircleOrEllipse:
+        case SdrObjKind::FreehandFill:
+        case SdrObjKind::PathFill:
+        case SdrObjKind::Polygon:
+        case SdrObjKind::CircleSection:
+        case SdrObjKind::CircleArc:
+        case SdrObjKind::CircleCut:
+        case SdrObjKind::CustomShape:
+        case SdrObjKind::Group:
             return EnumContext::Context::Draw;
 
-        case OBJ_EDGE:
-        case OBJ_PATHLINE:
-        case OBJ_FREELINE:
-        case OBJ_PLIN:
-        case OBJ_LINE:
+        case SdrObjKind::Edge:
+        case SdrObjKind::PathLine:
+        case SdrObjKind::FreehandLine:
+        case SdrObjKind::PolyLine:
+        case SdrObjKind::Line:
             return EnumContext::Context::DrawLine;
 
-        case OBJ_TITLETEXT:
-        case OBJ_OUTLINETEXT:
-        case OBJ_TEXT:
+        case SdrObjKind::TitleText:
+        case SdrObjKind::OutlineText:
+        case SdrObjKind::Text:
             return EnumContext::Context::TextObject;
 
-        case OBJ_GRAF:
+        case SdrObjKind::Graphic:
             return EnumContext::Context::Graphic;
 
-        case OBJ_OLE2:
+        case SdrObjKind::OLE2:
             return EnumContext::Context::OLE;
 
-        case OBJ_MEDIA:
+        case SdrObjKind::Media:
             return EnumContext::Context::Media;
 
-        case OBJ_TABLE:
+        case SdrObjKind::Table:
             return EnumContext::Context::Table;
 
-        case OBJ_PAGE:
+        case SdrObjKind::Page:
             switch (eViewType)
             {
                 case ViewType::Handout:
@@ -329,7 +329,7 @@ SdrInventor SelectionAnalyzer::GetInventorTypeFromMark(const SdrMarkList& rMarkL
     return nFirstInv;
 }
 
-sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup(const SdrObject* pObj)
+SdrObjKind SelectionAnalyzer::GetObjectTypeFromGroup(const SdrObject* pObj)
 {
     SdrObjList* pObjList = pObj->GetSubList();
     if (pObjList)
@@ -339,120 +339,120 @@ sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup(const SdrObject* pObj)
         if (nSubObjCount > 0)
         {
             SdrObject* pSubObj = pObjList->GetObj(0);
-            sal_uInt16 nResultType = pSubObj->GetObjIdentifier();
+            SdrObjKind nResultType = pSubObj->GetObjIdentifier();
 
-            if (nResultType == OBJ_GRUP)
+            if (nResultType == SdrObjKind::Group)
                 nResultType = GetObjectTypeFromGroup(pSubObj);
 
             if (IsShapeType(nResultType))
-                nResultType = OBJ_CUSTOMSHAPE;
+                nResultType = SdrObjKind::CustomShape;
 
             if (IsTextObjType(nResultType))
-                nResultType = OBJ_TEXT;
+                nResultType = SdrObjKind::Text;
 
             for (size_t nIndex = 1; nIndex < nSubObjCount; ++nIndex)
             {
                 pSubObj = pObjList->GetObj(nIndex);
-                sal_uInt16 nType(pSubObj->GetObjIdentifier());
+                SdrObjKind nType(pSubObj->GetObjIdentifier());
 
-                if (nType == OBJ_GRUP)
+                if (nType == SdrObjKind::Group)
                     nType = GetObjectTypeFromGroup(pSubObj);
 
                 if (IsShapeType(nType))
-                    nType = OBJ_CUSTOMSHAPE;
+                    nType = SdrObjKind::CustomShape;
 
-                if ((nType == OBJ_CUSTOMSHAPE) && (nResultType == OBJ_TEXT))
-                    nType = OBJ_TEXT;
+                if ((nType == SdrObjKind::CustomShape) && (nResultType == SdrObjKind::Text))
+                    nType = SdrObjKind::Text;
 
                 if (IsTextObjType(nType))
-                    nType = OBJ_TEXT;
+                    nType = SdrObjKind::Text;
 
-                if ((nType == OBJ_TEXT) && (nResultType == OBJ_CUSTOMSHAPE))
-                    nResultType = OBJ_TEXT;
+                if ((nType == SdrObjKind::Text) && (nResultType == SdrObjKind::CustomShape))
+                    nResultType = SdrObjKind::Text;
 
                 if (nType != nResultType)
-                    return 0;
+                    return SdrObjKind::NONE;
             }
 
             return nResultType;
         }
     }
 
-    return 0;
+    return SdrObjKind::NONE;
 }
 
-sal_uInt16 SelectionAnalyzer::GetObjectTypeFromMark(const SdrMarkList& rMarkList)
+SdrObjKind SelectionAnalyzer::GetObjectTypeFromMark(const SdrMarkList& rMarkList)
 {
     const size_t nMarkCount(rMarkList.GetMarkCount());
 
     if (nMarkCount < 1)
-        return 0;
+        return SdrObjKind::NONE;
 
     SdrMark* pMark = rMarkList.GetMark(0);
     SdrObject* pObj = pMark->GetMarkedSdrObj();
-    sal_uInt16 nResultType = pObj->GetObjIdentifier();
+    SdrObjKind nResultType = pObj->GetObjIdentifier();
 
-    if (nResultType == OBJ_GRUP)
+    if (nResultType == SdrObjKind::Group)
         nResultType = GetObjectTypeFromGroup(pObj);
 
     if (IsShapeType(nResultType))
-        nResultType = OBJ_CUSTOMSHAPE;
+        nResultType = SdrObjKind::CustomShape;
 
     if (IsTextObjType(nResultType))
-        nResultType = OBJ_TEXT;
+        nResultType = SdrObjKind::Text;
 
     for (size_t nIndex = 1; nIndex < nMarkCount; ++nIndex)
     {
         pMark = rMarkList.GetMark(nIndex);
         pObj = pMark->GetMarkedSdrObj();
-        sal_uInt16 nType = pObj->GetObjIdentifier();
+        SdrObjKind nType = pObj->GetObjIdentifier();
 
-        if (nType == OBJ_GRUP)
+        if (nType == SdrObjKind::Group)
             nType = GetObjectTypeFromGroup(pObj);
 
         if (IsShapeType(nType))
-            nType = OBJ_CUSTOMSHAPE;
+            nType = SdrObjKind::CustomShape;
 
-        if ((nType == OBJ_CUSTOMSHAPE) && (nResultType == OBJ_TEXT))
-            nType = OBJ_TEXT;
+        if ((nType == SdrObjKind::CustomShape) && (nResultType == SdrObjKind::Text))
+            nType = SdrObjKind::Text;
 
         if (IsTextObjType(nType))
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
 
-        if ((nType == OBJ_TEXT) && (nResultType == OBJ_CUSTOMSHAPE))
-            nResultType = OBJ_TEXT;
+        if ((nType == SdrObjKind::Text) && (nResultType == SdrObjKind::CustomShape))
+            nResultType = SdrObjKind::Text;
 
         if (nType != nResultType)
-            return 0;
+            return SdrObjKind::NONE;
     }
 
     return nResultType;
 }
 
-bool SelectionAnalyzer::IsShapeType(const sal_uInt16 nType)
+bool SelectionAnalyzer::IsShapeType(const SdrObjKind nType)
 {
     switch (nType)
     {
-        case OBJ_LINE:
-        case OBJ_CARC:
-        case OBJ_PLIN:
-        case OBJ_PATHLINE:
-        case OBJ_RECT:
-        case OBJ_CIRC:
-        case OBJ_SECT:
-        case OBJ_CCUT:
-        case OBJ_PATHFILL:
-        case OBJ_CUSTOMSHAPE:
-        case OBJ_CAPTION:
-        case OBJ_MEASURE:
-        case OBJ_EDGE:
-        case OBJ_POLY:
-        case OBJ_FREELINE:
-        case OBJ_FREEFILL:
+        case SdrObjKind::Line:
+        case SdrObjKind::CircleArc:
+        case SdrObjKind::PolyLine:
+        case SdrObjKind::PathLine:
+        case SdrObjKind::Rectangle:
+        case SdrObjKind::CircleOrEllipse:
+        case SdrObjKind::CircleSection:
+        case SdrObjKind::CircleCut:
+        case SdrObjKind::PathFill:
+        case SdrObjKind::CustomShape:
+        case SdrObjKind::Caption:
+        case SdrObjKind::Measure:
+        case SdrObjKind::Edge:
+        case SdrObjKind::Polygon:
+        case SdrObjKind::FreehandLine:
+        case SdrObjKind::FreehandFill:
 
-        // #122145# adding OBJ_OLE2 since these also allow line/fill style and may
+        // #122145# adding SdrObjKind::OLE2 since these also allow line/fill style and may
         // be multiselected/grouped with normal draw objects, e.g. math OLE objects
-        case OBJ_OLE2:
+        case SdrObjKind::OLE2:
             return true;
 
         default:
@@ -460,13 +460,13 @@ bool SelectionAnalyzer::IsShapeType(const sal_uInt16 nType)
     }
 }
 
-bool SelectionAnalyzer::IsTextObjType(const sal_uInt16 nType)
+bool SelectionAnalyzer::IsTextObjType(const SdrObjKind nType)
 {
     switch (nType)
     {
-        case OBJ_TEXT:
-        case OBJ_TITLETEXT:
-        case OBJ_OUTLINETEXT:
+        case SdrObjKind::Text:
+        case SdrObjKind::TitleText:
+        case SdrObjKind::OutlineText:
             return true;
 
         default:

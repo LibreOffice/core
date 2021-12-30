@@ -34,6 +34,7 @@ class SdrPage;
 class SvxNumBulletItem;
 class SfxItemPool;
 enum class SdrInventor : sal_uInt32;
+enum class SdrObjKind  : sal_uInt16;
 
 /**
  * Creates a StarOffice API wrapper with the given type and inventor
@@ -41,7 +42,7 @@ enum class SdrInventor : sal_uInt32;
  *
  * @throws css::uno::RuntimeException
  */
-SVXCORE_DLLPUBLIC rtl::Reference<SvxShape> CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrInventor nInventor, OUString const & referer);
+SVXCORE_DLLPUBLIC rtl::Reference<SvxShape> CreateSvxShapeByTypeAndInventor(SdrObjKind nType, SdrInventor nInventor, OUString const & referer);
 
 /** Returns a StarOffice API wrapper for the given SdrObject */
 SVXCORE_DLLPUBLIC css::uno::Reference< css::drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) noexcept;

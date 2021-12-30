@@ -1598,7 +1598,7 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
 css::uno::Reference<css::chart::XChartDocument> XclExpChartObj::GetChartDoc() const
 {
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape);
-    if (!pObj || pObj->GetObjIdentifier() != OBJ_OLE2)
+    if (!pObj || pObj->GetObjIdentifier() != SdrObjKind::OLE2)
         return {};
     // May load here - makes sure that we are working with actually loaded OLE object
     return css::uno::Reference<css::chart::XChartDocument>(

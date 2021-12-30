@@ -402,7 +402,7 @@ void ScDrawView::MarkListHasChanged()
     if (nMarkCount == 1)
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        if (pObj->GetObjIdentifier() == OBJ_OLE2)
+        if (pObj->GetObjIdentifier() == SdrObjKind::OLE2)
         {
             pOle2Obj = static_cast<SdrOle2Obj*>(pObj);
             if (!ScDocument::IsChart(pObj) )
@@ -411,18 +411,18 @@ void ScDrawView::MarkListHasChanged()
                 pViewSh->SetChartShell(true);
             bSubShellSet = true;
         }
-        else if (pObj->GetObjIdentifier() == OBJ_GRAF)
+        else if (pObj->GetObjIdentifier() == SdrObjKind::Graphic)
         {
             pGrafObj = static_cast<SdrGrafObj*>(pObj);
             pViewSh->SetGraphicShell(true);
             bSubShellSet = true;
         }
-        else if (pObj->GetObjIdentifier() == OBJ_MEDIA)
+        else if (pObj->GetObjIdentifier() == SdrObjKind::Media)
         {
             pViewSh->SetMediaShell(true);
             bSubShellSet = true;
         }
-        else if (pObj->GetObjIdentifier() != OBJ_TEXT   // prevent switching to the drawing shell
+        else if (pObj->GetObjIdentifier() != SdrObjKind::Text   // prevent switching to the drawing shell
                     || !pViewSh->IsDrawTextShell())     // when creating a text object @#70206#
         {
             pViewSh->SetDrawShell(true);
@@ -453,7 +453,7 @@ void ScDrawView::MarkListHasChanged()
 
                     if (dynamic_cast<const SdrUnoObj*>( pSubObj) ==  nullptr)
                         bOnlyControls = false;
-                    if (pSubObj->GetObjIdentifier() != OBJ_GRAF)
+                    if (pSubObj->GetObjIdentifier() != SdrObjKind::Graphic)
                         bOnlyGraf = false;
 
                     if ( !bOnlyControls && !bOnlyGraf ) break;
@@ -463,7 +463,7 @@ void ScDrawView::MarkListHasChanged()
             {
                 if (dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr)
                     bOnlyControls = false;
-                if (pObj->GetObjIdentifier() != OBJ_GRAF)
+                if (pObj->GetObjIdentifier() != SdrObjKind::Graphic)
                     bOnlyGraf = false;
             }
 

@@ -497,7 +497,7 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
     SdrPathObj* pArrow = new SdrPathObj(
         *pModel,
-        OBJ_LINE,
+        SdrObjKind::Line,
         basegfx::B2DPolyPolygon(aTempPoly));
     pArrow->NbcSetLogicRect(tools::Rectangle::Justify(aStartPos,aEndPos));  //TODO: needed ???
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
@@ -566,7 +566,7 @@ void ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
     SdrPathObj* pArrow = new SdrPathObj(
         *pModel,
-        OBJ_LINE,
+        SdrObjKind::Line,
         basegfx::B2DPolyPolygon(aTempPoly));
     pArrow->NbcSetLogicRect(tools::Rectangle::Justify(aStartPos,aEndPos));  //TODO: needed ???
 

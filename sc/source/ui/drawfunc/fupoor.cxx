@@ -257,10 +257,10 @@ bool FuPoor::doConstructOrthogonal() const
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
         {
-            sal_uInt16 aObjIdentifier = rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier();
-            bool bIsMediaSelected = aObjIdentifier == OBJ_GRAF ||
-                                    aObjIdentifier == OBJ_MEDIA ||
-                                    aObjIdentifier == OBJ_OLE2;
+            SdrObjKind aObjIdentifier = rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier();
+            bool bIsMediaSelected = aObjIdentifier == SdrObjKind::Graphic ||
+                                    aObjIdentifier == SdrObjKind::Media ||
+                                    aObjIdentifier == SdrObjKind::OLE2;
 
             SdrHdl* pHdl = pView->PickHandle(aMDPos);
             // Resize proportionally when media is selected and the user drags on a corner

@@ -899,7 +899,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         case SdrEventKind::BeginDragHelpline: bRet = BegDragHelpLine(rVEvt.mnHlplIdx,rVEvt.mpPV); break;
         case SdrEventKind::BeginDragObj: bRet=BegDragObj(aLogicPos, nullptr, rVEvt.mpHdl, mnMinMovLog); break;
         case SdrEventKind::BeginCreateObj: {
-            if (mnCurrentInvent==SdrInventor::Default && mnCurrentIdent==OBJ_CAPTION) {
+            if (mnCurrentInvent==SdrInventor::Default && mnCurrentIdent==SdrObjKind::Caption) {
                 tools::Long nHgt=SdrEngineDefaults::GetFontHeight();
                 bRet=BegCreateCaptionObj(aLogicPos,Size(5*nHgt,2*nHgt));
             } else bRet=BegCreateObj(aLogicPos);
@@ -1360,7 +1360,7 @@ void SdrView::MarkAll()
             const SdrObject* pObj(rMarkList.GetMark(0)->GetMarkedSdrObj());
             SdrView* pView = this;
             if (pObj && pView && (pObj->GetObjInventor() == SdrInventor::Default)
-                && (pObj->GetObjIdentifier() == OBJ_TABLE))
+                && (pObj->GetObjIdentifier() == SdrObjKind::Table))
             {
                 mxSelectionController.clear();
                 mxSelectionController = sdr::table::CreateTableController(

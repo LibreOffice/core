@@ -90,7 +90,7 @@ void E3dSphereObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 
 SdrObjKind E3dSphereObj::GetObjIdentifier() const
 {
-    return E3D_SPHEREOBJ_ID;
+    return SdrObjKind::E3D_Sphere;
 }
 
 // Convert the object into a group object consisting of n polygons

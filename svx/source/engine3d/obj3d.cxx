@@ -108,7 +108,7 @@ SdrInventor E3dObject::GetObjInventor() const
 
 SdrObjKind E3dObject::GetObjIdentifier() const
 {
-    return E3D_OBJECT_ID;
+    return SdrObjKind::E3D_Object;
 }
 
 // Determine the capabilities of the object
@@ -545,7 +545,7 @@ void E3dCompoundObject::AddToHdlList(SdrHdlList& rHdlList) const
 
 SdrObjKind E3dCompoundObject::GetObjIdentifier() const
 {
-    return E3D_COMPOUNDOBJ_ID;
+    return SdrObjKind::E3D_CompoundObject;
 }
 
 void E3dCompoundObject::RecalcSnapRect()

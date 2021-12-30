@@ -332,7 +332,7 @@ public:
     virtual bool NbcAdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
     virtual bool AdjustTextFrameWidthAndHeight();
     bool IsTextFrame() const { return mbTextFrame; }
-    bool IsOutlText() const { return mbTextFrame && (meTextKind==OBJ_OUTLINETEXT || meTextKind==OBJ_TITLETEXT); }
+    bool IsOutlText() const { return mbTextFrame && (meTextKind==SdrObjKind::OutlineText || meTextKind==SdrObjKind::TitleText); }
     /// returns true if the PPT autofit of text into shape bounds is enabled. implies IsFitToSize()==false!
     bool IsAutoFit() const;
     /// returns true if the old feature for fitting shape content should into shape is enabled. implies IsAutoFit()==false!

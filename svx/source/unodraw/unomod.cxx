@@ -168,13 +168,12 @@ css::uno::Reference<css::uno::XInterface> create(
 {
     if( rServiceSpecifier.startsWith("com.sun.star.drawing.") )
     {
-        sal_uInt32 nType = UHashMap::getId( rServiceSpecifier );
-        if( nType != UHASHMAP_NOTFOUND )
+        std::optional<SdrObjKind> nType = UHashMap::getId( rServiceSpecifier );
+        if( nType )
         {
-            sal_uInt16 nT = static_cast<sal_uInt16>(nType & ~E3D_INVENTOR_FLAG);
-            SdrInventor nI = (nType & E3D_INVENTOR_FLAG) ? SdrInventor::E3d : SdrInventor::Default;
+            SdrInventor nI = IsInventorE3D(*nType) ? SdrInventor::E3d : SdrInventor::Default;
 
-            return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI, nullptr, nullptr, referer ).get()) );
+            return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SvxDrawPage::CreateShapeByTypeAndInventor( *nType, nI, nullptr, nullptr, referer ).get()) );
         }
     }
     else if (rServiceSpecifier == "com.sun.star.document.ImportGraphicStorageHandler")
@@ -379,68 +378,68 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
     {
         SvxShape* pShape = nullptr;
 
-        sal_uInt16 nType = OBJ_TEXT;
+        SdrObjKind nType = SdrObjKind::Text;
         OUString aTypeName = aServiceSpecifier.copy( aPackagePrefix.getLength() );
         // create a shape wrapper
         if( aTypeName.startsWith("TitleTextShape") )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aTypeName.startsWith( "OutlinerShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aTypeName.startsWith( "SubtitleShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aTypeName.startsWith( "GraphicObjectShape" ) )
         {
-            nType = OBJ_GRAF;
+            nType = SdrObjKind::Graphic;
         }
         else if( aTypeName.startsWith( "PageShape" ) )
         {
-            nType = OBJ_PAGE;
+            nType = SdrObjKind::Page;
         }
         else if( aTypeName.startsWith( "OLE2Shape" ) )
         {
-            nType = OBJ_OLE2;
+            nType = SdrObjKind::OLE2;
         }
         else if( aTypeName.startsWith( "ChartShape" ) )
         {
-            nType = OBJ_OLE2;
+            nType = SdrObjKind::OLE2;
         }
         else if( aTypeName.startsWith( "OrgChartShape" ) )
         {
-            nType = OBJ_OLE2;
+            nType = SdrObjKind::OLE2;
         }
         else if( aTypeName.startsWith( "NotesShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aTypeName.startsWith( "HandoutShape" ) )
         {
-            nType = OBJ_PAGE;
+            nType = SdrObjKind::Page;
         }
         else if( aTypeName.startsWith( "FooterShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aTypeName.startsWith( "HeaderShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aTypeName.startsWith( "SlideNumberShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aTypeName.startsWith( "DateTimeShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aTypeName.startsWith( "TableShape" ) )
         {
-            nType = OBJ_TABLE;
+            nType = SdrObjKind::Table;
         }
         else
         {
