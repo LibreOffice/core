@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbf7690f_62f802d0",
+        "filename": "sc/inc/dbdata.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-30T20:36:41Z",
+      "side": 1,
+      "message": "I\u0027d rather introduce a copy-ctor accepting a new name than making the name modifiable.",
+      "revId": "ea5dc381e3058a86a6e72d60a5dfdd77ec99e214",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb5dff12_775ea313",
+        "filename": "sc/source/core/data/documen2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-30T20:36:41Z",
+      "side": 1,
+      "message": "This CopyToTable() should be done before the ScTable::CopyToTable() call so later copying the formula cells can be adjusted to use the copied dbrange.\nThe CopyToDocContext could be augmented to contain a mapping from/to old/new dbrange indices and be filled in CopyToTable() to be used by formula adjustments.",
+      "revId": "ea5dc381e3058a86a6e72d60a5dfdd77ec99e214",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "083cf4a5_2dcf86ec",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-30T20:36:41Z",
+      "side": 1,
+      "message": "See comment in header about copy-ctor taking name.",
+      "revId": "ea5dc381e3058a86a6e72d60a5dfdd77ec99e214",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
