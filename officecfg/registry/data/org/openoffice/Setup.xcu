@@ -952,7 +952,10 @@
           </node>
           <node oor:name="Math" oor:op="replace">
             <prop oor:name="IncludedNodes">
-              <value>/org.openoffice.Office.Math</value>
+              <value>
+                <it>/org.openoffice.Office.Math</it>
+                <it>/org.openoffice.Office.iMath</it>
+              </value>
             </prop>
           </node>
           <node oor:name="Security" oor:op="replace">

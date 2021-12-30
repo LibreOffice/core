@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="iMath" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains settings for iMath.</desc>
+  </info>
+  <component>
+    <group oor:name="Includes">
+      <info>
+        <desc>Names of include files (references).</desc>
+      </info>
+      <prop oor:name="txt_Include1" oor:type="xs:string">
+        <info>
+          <desc>Name of a user-defined include file (1)</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="txt_Include2" oor:type="xs:string">
+        <info>
+          <desc>Name of a user-defined include file (2)</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="txt_Include3" oor:type="xs:string">
+        <info>
+          <desc>Name of a user-defined include file (3)</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="txt_References" oor:type="xs:string">
+        <info>
+          <desc>Default include files</desc>
+        </info>
+        <value>00init</value>
+      </prop>
+    </group>
+    <group oor:name="Internal">
+      <info>
+        <desc>iMath internal settings.</desc>
+      </info>
+      <prop oor:name="O_Vecautosize" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Default vector size</desc>
+        </info>
+        <value>20</value>
+      </prop>
+      <prop oor:name="O_Underflow" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Inhibit floating point underflow exception</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="O_Evalf_Real_Roots" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Evaluate odd negative roots to the positive real value</desc>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
+    <group oor:name="Formatting">
+      <info>
+        <desc>iFormula formatting settings.</desc>
+      </info>
+      <prop oor:name="O_Autoalign" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Automatically align multi-line formulas at the first equals sign</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="O_Autochain" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Automatically omit identical left-hand sides of multi-line formulas</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="O_Autoformat" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Turn on automatic formatting for user input lines in formulas</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="O_Autofraction" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Automatically reduce the font size of nested fractions</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="O_Autotextmode" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Automatically recognize formulas that are not on a line by themselves and set the text mode flag on them</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="O_Difftype" oor:type="xs:string">
+        <info>
+          <desc>Default representation of differentials</desc>
+        </info>
+        <value>dfdt</value>
+      </prop>
+      <prop oor:name="I_Eqsplitpoint" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Where to split a long equation into a second line</desc>
+        </info>
+        <value>0</value>
+      </prop>
+      <prop oor:name="txt_Eqsplittext" oor:type="xs:string">
+        <info>
+          <desc>Text to interject when splitting equations</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="I_Exponent" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Print all numbers with a fixed exponent</desc>
+        </info>
+        <value>0</value>
+      </prop>
+      <prop oor:name="O_Fixedpoint" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Print floating point numbers with a fixed number of digits after the decimal marker (true) or with a fixed number of significant digits (false)</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="txt_FormulaFont" oor:type="xs:string">
+        <info>
+          <desc>Name of the default formula font</desc>
+        </info>
+        <value>Liberation Serif</value>
+      </prop>
+      <prop oor:name="I_Highsclimit" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Print floating point numbers in scientific format if the exponent is larger than this value</desc>
+        </info>
+        <value>4</value>
+      </prop>
+      <prop oor:name="O_Implicitmul" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Assume implicit multiplication</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="I_Lowsclimit" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Print floating point numbers in scientific format if the exponent is less than this value</desc>
+        </info>
+        <value>4</value>
+      </prop>
+      <prop oor:name="I_Minimumtextsize" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Minimum text size when reducing nested fraction font size</desc>
+        </info>
+        <value>5</value>
+      </prop>
+      <prop oor:name="I_Precision" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Default precision of floating point numbers</desc>
+        </info>
+        <value>4</value>
+      </prop>
+      <prop oor:name="txt_PreferredUnits" oor:type="xs:string">
+        <info>
+          <desc>Default units</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="O_ShowLabels" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Show equation labels in formulas</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="O_Suppress_Units" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Ignore all units</desc>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
+    <group oor:name="Editing">
+      <info>
+        <desc>iMath editing settings.</desc>
+      </info>
+      <prop oor:name="txt_Externaleditor" oor:type="xs:string">
+        <info>
+          <desc>External editor to use for editing formulas</desc>
+        </info>
+        <value></value>
+      </prop>
+    </group>
+    <group oor:name="Miscellaneous">
+      <info>
+        <desc>iMath miscellaneous settings.</desc>
+      </info>
+      <prop oor:name="DefaultImSyntaxVersion" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies iMath parser version of Math</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="020000">
+            <info>
+              <desc>Specifies the minimum value allowed</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="020301">
+            <info>
+              <desc>Specifies the maximum value allowed.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>020301</value>
+      </prop>
+      <prop oor:name="I_Debuglevel" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Amount of debugging output</desc>
+        </info>
+        <value>-1</value>
+      </prop>
+      <prop oor:name="O_Echoformula" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Show raw formula tet in formulas</desc>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
+  </component>
+</oor:component-schema>
