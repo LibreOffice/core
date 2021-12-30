@@ -495,8 +495,8 @@ void VDiagram::createShapes_3d()
             }
             aStripe.InvertNormal(true);
 
-            uno::Reference< drawing::XShape > xShape =
-                m_pShapeFactory->createStripe( xWallGroup_Shapes, aStripe
+            rtl::Reference<Svx3DPolygonObject> xShape =
+                ShapeFactory::createStripe( xWallGroup_Shapes, aStripe
                     , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture );
             if( !bAddFloorAndWall )
             {
@@ -523,8 +523,8 @@ void VDiagram::createShapes_3d()
             }
             aStripe.InvertNormal(true);
 
-            uno::Reference< drawing::XShape > xShape =
-                m_pShapeFactory->createStripe(xWallGroup_Shapes, aStripe
+            rtl::Reference<Svx3DPolygonObject> xShape =
+                ShapeFactory::createStripe(xWallGroup_Shapes, aStripe
                     , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture );
             if( !bAddFloorAndWall )
             {
@@ -598,8 +598,8 @@ void VDiagram::createShapes_3d()
             , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0) );
         aStripe.InvertNormal(true);
 
-        uno::Reference< drawing::XShape > xShape =
-            m_pShapeFactory->createStripe(xOuterGroup_Shapes, aStripe
+        rtl::Reference<Svx3DPolygonObject> xShape =
+            ShapeFactory::createStripe(xOuterGroup_Shapes, aStripe
                 , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided );
 
         CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );

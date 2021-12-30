@@ -42,7 +42,7 @@ public:
     virtual css::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
 
 private: //methods
-    css::uno::Reference< css::drawing::XShape >
+    static css::uno::Reference< css::drawing::XShape >
         createDataPoint3D_Bar(
                           const css::uno::Reference< css::drawing::XShapes >& xTarget
                         , const css::drawing::Position3D& rPosition

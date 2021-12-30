@@ -105,7 +105,7 @@ public:
                         , const css::drawing::Direction3D& rSize
                         , sal_Int32 nRotateZAngleHundredthDegree );
 
-    rtl::Reference<Svx3DSceneObject>
+    static rtl::Reference<Svx3DSceneObject>
         createPyramid(    const css::uno::Reference< css::drawing::XShapes >& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
@@ -135,7 +135,7 @@ public:
                     , const css::drawing::HomogenMatrix& rUnitCircleToScene
                     , double fDepth );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<Svx3DPolygonObject>
         createStripe( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const Stripe& rStripe
                     , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp

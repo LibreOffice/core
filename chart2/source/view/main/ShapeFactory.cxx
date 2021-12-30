@@ -973,7 +973,7 @@ rtl::Reference<Svx3DExtrudeObject>
     return xShape;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<Svx3DPolygonObject>
         ShapeFactory::createStripe( const uno::Reference< drawing::XShapes >& xTarget
                     , const Stripe& rStripe
                     , const uno::Reference< beans::XPropertySet >& xSourceProp
@@ -986,51 +986,44 @@ uno::Reference< drawing::XShape >
         return nullptr;
 
     //create shape
-    uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.Shape3DPolygonObject" ), uno::UNO_QUERY );
+    rtl::Reference<Svx3DPolygonObject> xShape = new Svx3DPolygonObject(nullptr);
+    xShape->setShapeKind(E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG);
     xTarget->add(xShape);
 
     //set properties
-    uno::Reference<beans::XMultiPropertySet> xMultiPropertySet(xShape, uno::UNO_QUERY);
-    OSL_ENSURE(xMultiPropertySet.is(), "created shape offers no XMultiPropertySet");
-    if (xMultiPropertySet.is())
+    try
     {
-        try
+        uno::Sequence<OUString> aPropertyNames{
+            UNO_NAME_3D_POLYPOLYGON3D,
+            UNO_NAME_3D_TEXTUREPOLYGON3D,
+            UNO_NAME_3D_NORMALSPOLYGON3D,
+            UNO_NAME_3D_LINEONLY,
+            UNO_NAME_3D_DOUBLE_SIDED
+        };
+
+        uno::Sequence<uno::Any> aPropertyValues {
+            rStripe.getPolyPolygonShape3D(),            // Polygon
+            Stripe::getTexturePolygon(nRotatedTexture), // TexturePolygon
+            rStripe.getNormalsPolygon(),                // Normals Polygon
+            uno::Any(false),        // LineOnly
+            uno::Any(bDoubleSided)  // DoubleSided
+        };
+
+        //NormalsKind
+        if (bFlatNormals)
+            lcl_addProperty(aPropertyNames, aPropertyValues,
+                            UNO_NAME_3D_NORMALS_KIND, uno::Any(drawing::NormalsKind_FLAT));
+
+        xShape->setPropertyValues(aPropertyNames, aPropertyValues);
+
+        if (xSourceProp)
         {
-            uno::Sequence<OUString> aPropertyNames{
-                UNO_NAME_3D_POLYPOLYGON3D,
-                UNO_NAME_3D_TEXTUREPOLYGON3D,
-                UNO_NAME_3D_NORMALSPOLYGON3D,
-                UNO_NAME_3D_LINEONLY,
-                UNO_NAME_3D_DOUBLE_SIDED
-            };
-
-            uno::Sequence<uno::Any> aPropertyValues {
-                rStripe.getPolyPolygonShape3D(),            // Polygon
-                Stripe::getTexturePolygon(nRotatedTexture), // TexturePolygon
-                rStripe.getNormalsPolygon(),                // Normals Polygon
-                uno::Any(false),        // LineOnly
-                uno::Any(bDoubleSided)  // DoubleSided
-            };
-
-            //NormalsKind
-            if (bFlatNormals)
-                lcl_addProperty(aPropertyNames, aPropertyValues,
-                                UNO_NAME_3D_NORMALS_KIND, uno::Any(drawing::NormalsKind_FLAT));
-
-            xMultiPropertySet->setPropertyValues(aPropertyNames, aPropertyValues);
-
-            uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-            if (xSourceProp.is() && xPropertySet.is())
-            {
-                PropertyMapper::setMappedProperties(xPropertySet, xSourceProp, rPropertyNameMap);
-            }
+            PropertyMapper::setMappedProperties(xShape, xSourceProp, rPropertyNameMap);
         }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return xShape;
 }

@@ -329,7 +329,7 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
             xShape = ShapeFactory::createCone( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree );
             break;
         case DataPointGeometry3D::PYRAMID:
-            xShape = m_pShapeFactory->createPyramid( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree>0
+            xShape = ShapeFactory::createPyramid( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree>0
                 , xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
             break;
         case DataPointGeometry3D::CUBOID:
