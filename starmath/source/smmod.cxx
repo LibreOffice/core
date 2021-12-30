@@ -140,6 +140,44 @@ SmModule::SmModule(SfxObjectFactory* pObjFact)
     msg::info().setlevel(debuglevel);
     MSG_INFO(-1, "Set debug level to " << debuglevel);
 
+    // Check for existing iMath extension
+    // TODO: Fix .deb package dependencies so that iMath gets uninstalled by the package manager
+    // TODO: If CLN and GiNaC are dynamically linked, the Office crashes before this code is ever reached (reason is duplicate initialization of some part of CLN or GiNaC)
+    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+    Any aExtMgr = xContext->getValueByName("/singletons/com.sun.star.deployment.ExtensionManager");
+    Reference<css::deployment::XExtensionManager> extMgr;
+    aExtMgr >>= extMgr;
+    bool iMathFound = false;
+
+    try {
+        Sequence<Sequence<Reference<css::deployment::XPackage>>> packages = extMgr->getAllExtensions(Reference<css::task::XAbortChannel>(), Reference<css::ucb::XCommandEnvironment>());
+
+        for (int r_idx = 0; r_idx < packages.getLength(); ++r_idx) {
+            for (int p_idx = 0; p_idx < packages[r_idx].getLength(); ++p_idx) {
+                Reference<css::deployment::XPackage> package = packages[r_idx][p_idx];
+                css::beans::Optional<OUString> pkgIdentifier = package->getIdentifier();
+                if (package->getRepositoryName() != "user") continue;
+
+                if (pkgIdentifier.IsPresent && pkgIdentifier.Value == "de.gmx.rheinlaender.jan.imath" && !package->isRemoved()) {
+                    // TODO: Migrate all settings from the extension first!
+                    MSG_INFO(-1, "iMath extension was found ...");
+                    // TODO: This throws a RuntimeException which is not caught below - why?
+                    //extMgr->removeExtension(pkgIdentifier.Value, package->getName(), package->getRepositoryName(), Reference<css::task::XAbortChannel>(), Reference<css::ucb::XCommandEnvironment>());
+                    //MSG_INFO(-1, "... and removed");
+                    iMathFound = true;
+                    break;
+                }
+            }
+
+            if (iMathFound) break;
+        }
+    } catch(const css::uno::DeploymentException&) {
+        // Do nothing
+    } catch(const css::uno::RuntimeException&) {
+        // Do nothing
+    }
+
+    if (!iMathFound) {
         // Init iMath compiler
         GiNaC::Digits = 17;
         GiNaC::init_utils();
@@ -149,6 +187,8 @@ SmModule::SmModule(SfxObjectFactory* pObjFact)
         // Note: To enable logging, set compiler flags SAL_LOG_INFO and SAL_LOG_WARN in Library_sm.mk and
         // start the office with SAL_LOG="+INFO+WARN" instdir/program/soffice
         MSG_INFO(0, "Initialized imath within starmath");
+    }
+
     SvxModifyControl::RegisterControl(SID_DOC_MODIFIED, this);
 }
 

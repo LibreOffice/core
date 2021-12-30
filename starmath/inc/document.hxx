@@ -291,6 +291,8 @@ private:
     /// Initialize options and compiler from document options and registry. Must be repeated whenever document options are changed throught the UI
     // TODO: Update on UI changes not implemented yet
     void ImInitialize();
+    /// Internal iMath is blocked because an iMath extension is still installed
+    bool iMathBlocked;
 
     /// Decimal separator character(s)
     std::string decimalSeparator;

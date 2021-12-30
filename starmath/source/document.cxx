@@ -387,6 +387,10 @@ void SmDocShell::ImInitialize() {
 
 void SmDocShell::Compile()
 {
+    if (iMathBlocked) {
+        SAL_WARN("starmath.imath", "iMath cannot be used because an iMath extension is still installed");
+        return;
+    }
     SAL_INFO("starmath.imath", "SmDocShell::Compile()");
 
     if (initialOptions == nullptr || initialCompiler == nullptr)
@@ -913,7 +917,18 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
     , initialCompiler(nullptr)
     , currentOptions(nullptr)
     , currentCompiler(nullptr)
+    , iMathBlocked(false)
 {
+    // Ensure iMath extension is not installed
+    // TODO: Put this in SmModule::SmModule() but how to get the MessageDialog to appear?!
+    OUString iMathExtLocation = getPackageLocation(GetContext(), "de.gmx.rheinlaender.jan.imath");
+    if (iMathExtLocation.getLength() > 0) {
+        MSG_INFO(-1, "ERROR: iMath extension found");
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr, VclMessageType::Error, VclButtonsType::Ok, SmResId(RID_STR_IMATHEXTENSIONFOUND)));
+        xInfoBox->run();
+        iMathBlocked = true; // This will block execution of ::Compile() to avoid problems with CLN and GiNaC
+    }
+
     MSG_INFO(0, "SmDocShell::SmDocShell with iMath version=" << SM_MOD()->GetConfig()->GetDefaultImSyntaxVersion());
     SvtLinguConfig().GetOptions(maLinguOptions);
 
