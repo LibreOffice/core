@@ -138,6 +138,9 @@ public:
     /** Whether locale is a chinese locale */
     static bool isChinese( LanguageType nLang );
 
+    /** Whether locale is a chinese locale */
+    static bool isChineseLanguage( LanguageType nLang );
+
     /** Whether locale is a simplified chinese locale */
     static bool isSimplifiedChinese( LanguageType nLang );
 
@@ -147,6 +150,15 @@ public:
     /** Whether locale is a korean locale */
     static bool isKorean( LanguageType nLang );
 
+    /** Whether locale is a korean locale */
+    static bool isKoreanLanguage( LanguageType nLang );
+
+    /** Whether locale is a Pashto locale */
+    static bool isPashto( LanguageType nLang );
+
+    /** Whether locale is a Farsi locale */
+    static bool isFarsi( LanguageType nLang );
+
     /** Whether locale is a simplified chinese locale */
     static bool isSimplifiedChinese( const css::lang::Locale & rLocale );
 
@@ -155,6 +167,12 @@ public:
 
     /** Whether locale is one where family name comes first, e.g. Japan, Hungary, Samoa */
     static bool isFamilyNameFirst( LanguageType nLang );
+
+    /** Whether locale is a Arabic locale*/
+    static bool isArabic(LanguageType nLang);
+
+    /***/
+    static bool useHyphenation(LanguageType nLang);
 
     /** Whether there are "forbidden characters at start or end of line" in
         this locale. CJK locales.
