@@ -32,6 +32,9 @@ class tdf95217(UITestCase):
 
                 # tdf#142600: Without the fix in place, this test would have failed with
                 # AssertionError: 'HTML_all' != 'HTML_1'
+                self.assertEqual("HTML_all", get_state_as_dict(xRanges.getChild("0"))["Text"])
+                self.assertEqual("HTML_tables", get_state_as_dict(xRanges.getChild("1"))["Text"])
+                self.assertEqual("HTML_1", get_state_as_dict(xRanges.getChild("2"))["Text"])
 
                 # FIXME: close_dialog_through_button fails here
                 xOkBtn = xDialog.getChild("ok")
