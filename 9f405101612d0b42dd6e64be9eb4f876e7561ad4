@@ -67,6 +67,23 @@
       "message": "I\u0027m afraid I don\u0027t see the issue with the code. We can convert this to ranges::for_each when we move to C++20 - currently this is getting in the way of a listfonts utlity. It seems to fix the issue, perfect is the enemy of good here.\n\nJulien, I really think you should reactivate this one - the solution is acceptable and can be tweaked later on.",
       "revId": "9f405101612d0b42dd6e64be9eb4f876e7561ad4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a91c3f2d_a57d9628",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-30T17:34:16Z",
+      "side": 1,
+      "message": "Chris: don\u0027t worry I can understand Eyal doesn\u0027t like this patch.\nLet\u0027s wait C++20 then.",
+      "revId": "9f405101612d0b42dd6e64be9eb4f876e7561ad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
