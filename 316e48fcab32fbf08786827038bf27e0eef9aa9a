@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4320eed2_c47a894e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-30T11:22:22Z",
+      "side": 1,
+      "message": "Hi! ScDocFunc::SetEditCell doesn\u0027t adjust the row height since rDoc.HasAttrib(rPos, HasAttrFlags::NeedHeight) returns false. Is there a way to set this flag for the specified ScAddress? I could not find any place where such flags are going to be set. Thank you for your help.",
+      "revId": "316e48fcab32fbf08786827038bf27e0eef9aa9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
