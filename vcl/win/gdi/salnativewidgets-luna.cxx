@@ -49,6 +49,12 @@
 #include <uxtheme.h>
 #include <vssym32.h>
 
+#ifdef DBG_UTIL
+#include <prewin.h>
+#include <Gdiplus.h>
+#include <postwin.h>
+#endif
+
 #include <map>
 #include <string>
 #include <optional>
@@ -213,6 +219,59 @@ bool WinSalGraphics::hitTestNativeControl( ControlType,
     return false;
 }
 
+#ifdef DBG_UTIL
+
+static CLSID GetEncoderClsid(const WCHAR* format)
+{
+    UINT num = 0; // number of image encoders
+    UINT size = 0; // size of the image encoder array in bytes
+
+    Gdiplus::GetImageEncodersSize(&num, &size);
+    if (size == 0)
+        std::abort(); // Failure
+
+    auto pImageCodecInfo(std::make_unique<Gdiplus::ImageCodecInfo[]>(size));
+    if (!pImageCodecInfo)
+        std::abort(); // Failure
+
+    Gdiplus::GetImageEncoders(num, size, pImageCodecInfo.get());
+
+    for (UINT j = 0; j < num; ++j)
+    {
+        if (wcscmp(pImageCodecInfo[j].MimeType, format) == 0)
+            return pImageCodecInfo[j].Clsid; // Success
+    }
+
+    std::abort(); // Failure
+}
+
+void DumpHBITMAP(HBITMAP hbmp)
+{
+    static const CLSID aClsidPng(GetEncoderClsid(L"image/png"));
+    static int i = 0;
+
+    const OUString png("dump_" + OUString::number(i++) + ".png");
+
+    std::unique_ptr<Gdiplus::Bitmap> bmp(Gdiplus::Bitmap::FromHBITMAP(hbmp, nullptr));
+    bmp->Save(o3tl::toW(png.getStr()), &aClsidPng, nullptr);
+}
+
+void DumpHDC(HDC hdc, RECT rc)
+{
+    const int w = rc.right - rc.left, h = rc.bottom - rc.top;
+    HDC hCaptureDC = CreateCompatibleDC(hdc);
+    HBITMAP hCaptureBitmap = CreateCompatibleBitmap(hdc, w, h);
+    SelectObject(hCaptureDC, hCaptureBitmap);
+    BitBlt(hCaptureDC, 0, 0, w, h, hdc, rc.left, rc.top, SRCCOPY);
+
+    DumpHBITMAP(hCaptureBitmap);
+
+    DeleteObject(hCaptureBitmap);
+    DeleteDC(hCaptureDC);
+}
+
+#endif
+
 static bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, const OUString& aStr)
 {
     HRESULT hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
@@ -226,6 +285,16 @@ static bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT r
             DT_CENTER | DT_VCENTER | DT_SINGLELINE,
             0, &rcContent);
     }
+
+#ifdef DBG_UTIL
+    static volatile bool bDump = false;
+    if (bDump) // Set to true in debugger to dump specific image
+    {
+        DumpHDC(hDC, rc);
+        bDump = false;
+    }
+#endif
+
     return (hr == S_OK);
 }
 
@@ -974,22 +1043,35 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             {
                 if( nState & ControlState::PRESSED )
                 {
-                    RECT aBGRect = rc;
                     if( aValue.getType() == ControlType::MenuPopup )
                     {
                         tools::Rectangle aRectangle = GetMenuPopupMarkRegion(aValue);
-                        aBGRect.top = aRectangle.Top();
-                        aBGRect.left = aRectangle.Left();
-                        aBGRect.bottom = aRectangle.Bottom();
-                        aBGRect.right = aRectangle.Right();
-                        rc = aBGRect;
+                        rc.top = aRectangle.Top();
+                        rc.left = aRectangle.Left();
+                        rc.bottom = aRectangle.Bottom();
+                        rc.right = aRectangle.Right();
                     }
                     iState = (nState & ControlState::ENABLED) ? MCB_NORMAL : MCB_DISABLED;
-                    ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECKBACKGROUND, iState, aBGRect, aCaption );
+                    ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECKBACKGROUND, iState, rc, aCaption );
                     if( nPart == ControlPart::MenuItemCheckMark )
                         iState = (nState & ControlState::ENABLED) ? MC_CHECKMARKNORMAL : MC_CHECKMARKDISABLED;
                     else
                         iState = (nState & ControlState::ENABLED) ? MC_BULLETNORMAL : MC_BULLETDISABLED;
+                    // tdf#133697: Get true size of checkmark/bullet, to avoid stretching
+                    const auto cx = rc.right - rc.left, cy = rc.bottom - rc.top;
+                    SIZE sz{cx, cy};
+                    GetThemePartSize(hTheme, hDC, MENU_POPUPCHECK, iState, &rc, THEMESIZE::TS_TRUE, &sz);
+                    const auto dx = (cx - sz.cx) / 2, dy = (cy - sz.cy) / 2;
+                    if (dx > 0)
+                    {
+                        rc.left += dx;
+                        rc.right = rc.left + sz.cx;
+                    }
+                    if (dy > 0)
+                    {
+                        rc.top += dy;
+                        rc.bottom = rc.top + sz.cy;
+                    }
                     return ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECK, iState, rc, aCaption );
                 }
                 else
