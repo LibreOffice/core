@@ -21,6 +21,7 @@
 
 #define HID_SMA_WIN_DOCUMENT                              "STARMATH_HID_SMA_WIN_DOCUMENT"
 #define HID_SMA_COMMAND_WIN_EDIT                          "STARMATH_HID_SMA_COMMAND_WIN_EDIT"
+#define HID_IMA_COMMAND_WIN_EDIT                          "STARMATH_HID_IMA_COMMAND_WIN_EDIT"
 
 #define HID_SMA_COMMAND_WIN                               "STARMATH_HID_SMA_COMMAND_WIN"
 
