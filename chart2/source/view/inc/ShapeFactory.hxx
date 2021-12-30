@@ -167,12 +167,12 @@ public:
                     , const css::drawing::Direction3D& rSize
                     , const css::uno::Reference< css::graphic::XGraphic >& xGraphic );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapePolyPolygon>
         createLine2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::PointSequenceSequence& rPoints
                     , const VLineProperties* pLineProperties = nullptr );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapePolyPolygon>
         createLine ( const css::uno::Reference< css::drawing::XShapes >& xTarget,
                 const css::awt::Size& rSize, const css::awt::Point& rPosition );
 

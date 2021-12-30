@@ -367,7 +367,7 @@ protected:
         , bool bUseYErrorData
     );
 
-    void addErrorBorder(
+    static void addErrorBorder(
           const css::drawing::Position3D& rPos0
         , const css::drawing::Position3D& rPos1
         , const css::uno::Reference< css::drawing::XShapes >& rTarget

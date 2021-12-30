@@ -434,7 +434,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     }
     else //m_nDimension!=3
     {
-        xShape = m_pShapeFactory->createLine2D( xSeriesGroupShape_Shapes
+        xShape = ShapeFactory::createLine2D( xSeriesGroupShape_Shapes
                 , PolyToPointSequence( aPoly ) );
         setMappedProperties( xShape
                 , pSeries->getPropertiesOfSeries()

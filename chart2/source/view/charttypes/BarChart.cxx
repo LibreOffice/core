@@ -955,7 +955,7 @@ void BarChart::createShapes()
 
                     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes(
                         getSeriesGroupShape(pSeries.get(), xSeriesTarget) );
-                    uno::Reference< drawing::XShape > xShape( m_pShapeFactory->createLine2D(
+                    rtl::Reference<SvxShapePolyPolygon> xShape( ShapeFactory::createLine2D(
                         xSeriesGroupShape_Shapes, PolyToPointSequence( aPoly ) ) );
                     setMappedProperties( xShape, pSeries->getPropertiesOfSeries()
                         , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
