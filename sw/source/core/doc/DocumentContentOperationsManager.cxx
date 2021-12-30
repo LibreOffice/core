@@ -3389,6 +3389,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
                     else
                     {
                         m_rDoc.getIDocumentRedlineAccess().SplitRedline(aPam);
+                        m_rDoc.getIDocumentRedlineAccess().UpdateRedlineAttr();
                     }
                 }
             }
