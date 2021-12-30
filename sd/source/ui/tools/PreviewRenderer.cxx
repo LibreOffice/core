@@ -511,7 +511,7 @@ void ViewRedirector::createRedirectedPrimitive2DSequence(
     const bool bDoCreateGeometry (pObject->getSdrPageFromSdrObject()->checkVisibility( rOriginal, rDisplayInfo, true));
 
     if ( ! bDoCreateGeometry
-        && (pObject->GetObjInventor() != SdrInventor::Default || pObject->GetObjIdentifier() != OBJ_PAGE))
+        && (pObject->GetObjInventor() != SdrInventor::Default || pObject->GetObjIdentifier() != SdrObjKind::Page))
     {
         return;
     }

@@ -184,9 +184,9 @@ protected:
     SdrOutliner* mpEditingOutliner;
 
     // Possible values for eTextKind are:
-    //     OBJ_TEXT         regular text frame
-    //     OBJ_TITLETEXT    TitleText for presentations
-    //     OBJ_OUTLINETEXT  OutlineText for presentations
+    //     SdrObjKind::Text         regular text frame
+    //     SdrObjKind::TitleText    TitleText for presentations
+    //     SdrObjKind::OutlineText  OutlineText for presentations
     // eTextKind only has meaning when bTextFrame=sal_True, since otherwise
     // we're dealing with a labeled graphical object
     SdrObjKind meTextKind;
@@ -332,7 +332,7 @@ public:
     virtual bool NbcAdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
     virtual bool AdjustTextFrameWidthAndHeight();
     bool IsTextFrame() const { return mbTextFrame; }
-    bool IsOutlText() const { return mbTextFrame && (meTextKind==OBJ_OUTLINETEXT || meTextKind==OBJ_TITLETEXT); }
+    bool IsOutlText() const { return mbTextFrame && (meTextKind==SdrObjKind::OutlineText || meTextKind==SdrObjKind::TitleText); }
     /// returns true if the PPT autofit of text into shape bounds is enabled. implies IsFitToSize()==false!
     bool IsAutoFit() const;
     /// returns true if the old feature for fitting shape content should into shape is enabled. implies IsAutoFit()==false!

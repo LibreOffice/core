@@ -490,9 +490,9 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             if (aName != pSelected->GetName())
                             {
                                 // handle name change
-                                const sal_uInt16 nObjType(pSelected->GetObjIdentifier());
+                                const SdrObjKind nObjType(pSelected->GetObjIdentifier());
 
-                                if (OBJ_GRAF == nObjType && aName.isEmpty())
+                                if (SdrObjKind::Graphic == nObjType && aName.isEmpty())
                                 {
                                     //  graphics objects must have names
                                     //  (all graphics are supposed to be in the navigator)
@@ -507,7 +507,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                 //  An undo action for renaming is missing in svdraw (99363).
                                 //  For OLE objects (which can be identified using the persist name),
                                 //  ScUndoRenameObject can be used until there is a common action for all objects.
-                                if(OBJ_OLE2 == nObjType)
+                                if(SdrObjKind::OLE2 == nObjType)
                                 {
                                     const OUString aPersistName = static_cast<SdrOle2Obj*>(pSelected)->GetPersistName();
 
@@ -616,7 +616,7 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bo
     if ( !aName.isEmpty() && pModel )
     {
         SCTAB nDummyTab;
-        if ( pModel->GetNamedObject( aName, 0, nDummyTab ) )
+        if ( pModel->GetNamedObject( aName, SdrObjKind::NONE, nDummyTab ) )
         {
             // existing object found -> name invalid
             return false;

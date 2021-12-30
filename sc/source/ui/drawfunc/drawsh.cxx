@@ -372,7 +372,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             std::shared_ptr<SfxRequest> pRequest = std::make_shared<SfxRequest>(rReq);
 
-                            if( pObj->GetObjIdentifier() == OBJ_CAPTION )
+                            if( pObj->GetObjIdentifier() == SdrObjKind::Caption )
                             {
                                 // Caption Itemset
                                 SfxItemSet aNewAttr(pDoc->GetItemPool());

@@ -63,26 +63,26 @@ SdrObjKind OObjectBase::getObjectType(const uno::Reference< report::XReportCompo
     uno::Reference< lang::XServiceInfo > xServiceInfo( _xComponent , uno::UNO_QUERY );
     OSL_ENSURE(xServiceInfo.is(),"Who deletes the XServiceInfo interface!");
     if ( !xServiceInfo )
-        return OBJ_NONE;
+        return SdrObjKind::NONE;
 
     if ( xServiceInfo->supportsService( SERVICE_FIXEDTEXT ))
-        return OBJ_RD_FIXEDTEXT;
+        return SdrObjKind::ReportDesignFixedText;
     if ( xServiceInfo->supportsService( SERVICE_FIXEDLINE ))
     {
         uno::Reference< report::XFixedLine> xFixedLine(_xComponent,uno::UNO_QUERY);
-        return xFixedLine->getOrientation() ? OBJ_RD_HFIXEDLINE : OBJ_RD_VFIXEDLINE;
+        return xFixedLine->getOrientation() ? SdrObjKind::ReportDesignHorizontalFixedLine : SdrObjKind::ReportDesignVerticalFixedLine;
     }
     if ( xServiceInfo->supportsService( SERVICE_IMAGECONTROL))
-        return OBJ_RD_IMAGECONTROL;
+        return SdrObjKind::ReportDesignImageControl;
     if ( xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD ))
-        return OBJ_RD_FORMATTEDFIELD;
+        return SdrObjKind::ReportDesignFormattedField;
     if ( xServiceInfo->supportsService("com.sun.star.drawing.OLE2Shape") )
-        return OBJ_OLE2;
+        return SdrObjKind::OLE2;
     if ( xServiceInfo->supportsService( SERVICE_SHAPE ))
-        return OBJ_CUSTOMSHAPE;
+        return SdrObjKind::CustomShape;
     if ( xServiceInfo->supportsService( SERVICE_REPORTDEFINITION ) )
-        return OBJ_RD_SUBREPORT;
-    return OBJ_OLE2;
+        return SdrObjKind::ReportDesignSubReport;
+    return SdrObjKind::OLE2;
 }
 
 SdrObject* OObjectBase::createObject(
@@ -93,13 +93,13 @@ SdrObject* OObjectBase::createObject(
     SdrObjKind nType = OObjectBase::getObjectType(_xComponent);
     switch( nType )
     {
-        case OBJ_RD_FIXEDTEXT:
+        case SdrObjKind::ReportDesignFixedText:
             {
                 OUnoObject* pUnoObj = new OUnoObject(
                     rTargetModel,
                     _xComponent,
                     OUString("com.sun.star.form.component.FixedText"),
-                    OBJ_RD_FIXEDTEXT);
+                    SdrObjKind::ReportDesignFixedText);
                 pNewObj = pUnoObj;
 
                 uno::Reference<beans::XPropertySet> xControlModel(pUnoObj->GetUnoControlModel(),uno::UNO_QUERY);
@@ -107,29 +107,29 @@ SdrObject* OObjectBase::createObject(
                     xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(true));
             }
             break;
-        case OBJ_RD_IMAGECONTROL:
+        case SdrObjKind::ReportDesignImageControl:
             pNewObj = new OUnoObject(
                 rTargetModel,
                 _xComponent,
                 OUString("com.sun.star.form.component.DatabaseImageControl"),
-                OBJ_RD_IMAGECONTROL);
+                SdrObjKind::ReportDesignImageControl);
             break;
-        case OBJ_RD_FORMATTEDFIELD:
+        case SdrObjKind::ReportDesignFormattedField:
             pNewObj = new OUnoObject(
                 rTargetModel,
                 _xComponent,
                 OUString("com.sun.star.form.component.FormattedField"),
-                OBJ_RD_FORMATTEDFIELD);
+                SdrObjKind::ReportDesignFormattedField);
             break;
-        case OBJ_RD_HFIXEDLINE:
-        case OBJ_RD_VFIXEDLINE:
+        case SdrObjKind::ReportDesignHorizontalFixedLine:
+        case SdrObjKind::ReportDesignVerticalFixedLine:
             pNewObj = new OUnoObject(
                 rTargetModel,
                 _xComponent,
                 OUString("com.sun.star.awt.UnoControlFixedLineModel"),
                 nType);
             break;
-        case OBJ_CUSTOMSHAPE:
+        case SdrObjKind::CustomShape:
             pNewObj = OCustomShape::Create(
                 rTargetModel,
                 _xComponent);
@@ -144,8 +144,8 @@ SdrObject* OObjectBase::createObject(
                 DBG_UNHANDLED_EXCEPTION("reportdesign");
             }
             break;
-        case OBJ_RD_SUBREPORT:
-        case OBJ_OLE2:
+        case SdrObjKind::ReportDesignSubReport:
+        case SdrObjKind::OLE2:
             pNewObj = OOle2Obj::Create(
                 rTargetModel,
                 _xComponent,
@@ -222,11 +222,11 @@ namespace
     };
 }
 
-const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
+const TPropertyNamePair& getPropertyNameMap(SdrObjKind _nObjectId)
 {
     switch(_nObjectId)
     {
-        case OBJ_RD_IMAGECONTROL:
+        case SdrObjKind::ReportDesignImageControl:
             {
                 static TPropertyNamePair s_aNameMap = []()
                 {
@@ -240,7 +240,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 return s_aNameMap;
             }
 
-        case OBJ_RD_FIXEDTEXT:
+        case SdrObjKind::ReportDesignFixedText:
             {
                 static TPropertyNamePair s_aNameMap = []()
                 {
@@ -262,7 +262,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 }();
                 return s_aNameMap;
             }
-        case OBJ_RD_FORMATTEDFIELD:
+        case SdrObjKind::ReportDesignFormattedField:
             {
                 static TPropertyNamePair s_aNameMap = []()
                 {
@@ -284,7 +284,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 return s_aNameMap;
             }
 
-        case OBJ_CUSTOMSHAPE:
+        case SdrObjKind::CustomShape:
             {
                 static TPropertyNamePair s_aNameMap = []()
                 {
@@ -477,7 +477,7 @@ OCustomShape::~OCustomShape()
 
 SdrObjKind OCustomShape::GetObjIdentifier() const
 {
-    return OBJ_CUSTOMSHAPE;
+    return SdrObjKind::CustomShape;
 }
 
 SdrInventor OCustomShape::GetObjInventor() const

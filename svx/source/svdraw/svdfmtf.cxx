@@ -554,7 +554,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
                 {
                     pObj = new SdrPathObj(
                         *mpModel,
-                        aNewPoly.isClosed() ? OBJ_POLY : OBJ_PLIN,
+                        aNewPoly.isClosed() ? SdrObjKind::Polygon : SdrObjKind::PolyLine,
                         aNewPoly);
 
                     pObj->SetLayer(aOldLayer);
@@ -687,7 +687,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction const & rAct)
 
     SdrPathObj* pPath = new SdrPathObj(
         *mpModel,
-        OBJ_LINE,
+        SdrObjKind::Line,
         basegfx::B2DPolyPolygon(aLine));
     mnLineWidth = nNewLineWidth;
     maLineJoin = rLineInfo.GetLineJoin();
@@ -933,7 +933,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction const & rAct )
 
     SdrPathObj* pPath = new SdrPathObj(
         *mpModel,
-        aSource.isClosed() ? OBJ_POLY : OBJ_PLIN,
+        aSource.isClosed() ? SdrObjKind::Polygon : SdrObjKind::PolyLine,
         basegfx::B2DPolyPolygon(aSource));
     mnLineWidth = nNewLineWidth;
     maLineJoin = rLineInfo.GetLineJoin();
@@ -966,7 +966,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolygonAction const & rAct )
         aSource.setClosed(true);
         SdrPathObj* pPath = new SdrPathObj(
             *mpModel,
-            OBJ_POLY,
+            SdrObjKind::Polygon,
             basegfx::B2DPolyPolygon(aSource));
         SetAttributes(pPath);
         InsertObj(pPath, false);
@@ -990,7 +990,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction const & rAct)
         aSource.setClosed(true);
         SdrPathObj* pPath = new SdrPathObj(
             *mpModel,
-            OBJ_POLY,
+            SdrObjKind::Polygon,
             aSource);
         SetAttributes(pPath);
         InsertObj(pPath, false);
@@ -1019,7 +1019,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     tools::Rectangle aTextRect( aPos, aSize );
     SdrRectObj* pText = new SdrRectObj(
         *mpModel,
-        OBJ_TEXT,
+        SdrObjKind::Text,
         aTextRect);
 
     pText->SetMergedItem ( makeSdrTextUpperDistItem (0));
@@ -1156,7 +1156,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction const & rAct )
     const Hatch& rHatch = rAct.GetHatch();
     SdrPathObj* pPath = new SdrPathObj(
         *mpModel,
-        OBJ_POLY,
+        SdrObjKind::Polygon,
         aSource);
     // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
     SfxItemSet aHatchAttr(mpModel->GetItemPool(), pPath->GetMergedItemSet().GetRanges());
@@ -1247,7 +1247,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction const & rAct, GDIMetaF
                     const Gradient& rGrad = pAct->GetGradient();
                     SdrPathObj* pPath = new SdrPathObj(
                         *mpModel,
-                        OBJ_POLY,
+                        SdrObjKind::Polygon,
                         aSource);
                     // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
                     SfxItemSet aGradAttr(mpModel->GetItemPool(), pPath->GetMergedItemSet().GetRanges());
@@ -1480,7 +1480,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaTransparentAction const & rAct)
 
     SdrPathObj* pPath = new SdrPathObj(
         *mpModel,
-        OBJ_POLY,
+        SdrObjKind::Polygon,
         aSource);
     SetAttributes(pPath);
     pPath->SetMergedItem(XFillTransparenceItem(rAct.GetTransparence()));
@@ -1503,7 +1503,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction const & rAct)
     const Gradient& rGradient = rAct.GetGradient();
     SdrPathObj* pPath = new SdrPathObj(
         *mpModel,
-        OBJ_POLY,
+        SdrObjKind::Polygon,
         aSource);
     // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
     SfxItemSet aGradientAttr(mpModel->GetItemPool(), pPath->GetMergedItemSet().GetRanges());

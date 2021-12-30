@@ -61,12 +61,12 @@ namespace sdr::contact
                     aObjectRange.getMinX(), aObjectRange.getMinY()));
 
             // create primitive data
-            const sal_uInt16 nIdentifier(GetCircObj().GetObjIdentifier());
+            const SdrObjKind nIdentifier(GetCircObj().GetObjIdentifier());
 
             // always create primitives to allow the decomposition of SdrEllipsePrimitive2D
             // or SdrEllipseSegmentPrimitive2D to create needed invisible elements for HitTest
             // and/or BoundRect
-            if(OBJ_CIRC == nIdentifier)
+            if(SdrObjKind::CircleOrEllipse == nIdentifier)
             {
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     new drawinglayer::primitive2d::SdrEllipsePrimitive2D(
@@ -81,8 +81,8 @@ namespace sdr::contact
                 const auto nNewEnd(rItemSet.Get(SDRATTR_CIRCENDANGLE).GetValue());
                 const double fStart(toRadians((36000_deg100 - nNewEnd) % 36000_deg100));
                 const double fEnd(toRadians((36000_deg100 - nNewStart) % 36000_deg100));
-                const bool bCloseSegment(OBJ_CARC != nIdentifier);
-                const bool bCloseUsingCenter(OBJ_SECT == nIdentifier);
+                const bool bCloseSegment(SdrObjKind::CircleArc != nIdentifier);
+                const bool bCloseUsingCenter(SdrObjKind::CircleSection == nIdentifier);
 
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     new drawinglayer::primitive2d::SdrEllipseSegmentPrimitive2D(

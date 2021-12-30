@@ -99,7 +99,7 @@ rtl::Reference<ScChartObj> ScChartsObj::GetObjectByIndex_Impl(tools::Long nIndex
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
-                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart(pObject) )
+                    if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 && ScDocument::IsChart(pObject) )
                     {
                         if ( nPos == nIndex )
                         {
@@ -153,7 +153,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
 
     OUString aName = rName;
     SCTAB nDummy;
-    if ( !aName.isEmpty() && pModel->GetNamedObject( aName, OBJ_OLE2, nDummy ) )
+    if ( !aName.isEmpty() && pModel->GetNamedObject( aName, SdrObjKind::OLE2, nDummy ) )
     {
         //  object exists - only RuntimeException is specified
         throw uno::RuntimeException();
@@ -309,7 +309,7 @@ sal_Int32 SAL_CALL ScChartsObj::getCount()
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
-                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart(pObject) )
+                    if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 && ScDocument::IsChart(pObject) )
                         ++nCount;
                     pObject = aIter.Next();
                 }
@@ -374,7 +374,7 @@ uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames()
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
-                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart(pObject) )
+                    if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 && ScDocument::IsChart(pObject) )
                     {
                         OUString aName;
                         uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(pObject)->GetObjRef();

@@ -97,7 +97,7 @@ bool ViewObjectContactOfSdrObj::isPrimitiveVisible(const DisplayInfo& rDisplayIn
 
         if(bHideOle || bHideChart || bHideDraw || bHideFormControl)
         {
-            if(OBJ_OLE2 == rObject.GetObjIdentifier())
+            if(SdrObjKind::OLE2 == rObject.GetObjIdentifier())
             {
                 if(static_cast<const SdrOle2Obj&>(rObject).IsChart())
                 {
@@ -116,7 +116,7 @@ bool ViewObjectContactOfSdrObj::isPrimitiveVisible(const DisplayInfo& rDisplayIn
                     }
                 }
             }
-            else if(OBJ_GRAF == rObject.GetObjIdentifier())
+            else if(SdrObjKind::Graphic == rObject.GetObjIdentifier())
             {
                 // graphic handled like OLE
                 if(bHideOle)

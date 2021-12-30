@@ -91,7 +91,7 @@ bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 
 void ConstCustomShape::Activate(const sal_uInt16 nSlotId)
 {
-    m_pWin->SetSdrDrawMode( OBJ_CUSTOMSHAPE );
+    m_pWin->SetSdrDrawMode( SdrObjKind::CustomShape );
 
     SwDrawBase::Activate(nSlotId);
 }

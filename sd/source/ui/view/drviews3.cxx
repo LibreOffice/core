@@ -984,7 +984,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     aPointItem.SetValue( aPos );
 
                     ::tools::Rectangle aParaRect(maMarkRect);
-                    if (pObj->GetObjIdentifier() == OBJ_TABLE)
+                    if (pObj->GetObjIdentifier() == SdrObjKind::Table)
                     {
                         sdr::table::SdrTableObj* pTable = static_cast<sdr::table::SdrTableObj*>(pObj);
                         sdr::table::CellPos cellpos;

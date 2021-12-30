@@ -391,12 +391,12 @@ void OReportSection::SetGridVisible(bool _bVisible)
     m_pView->SetGridVisible( _bVisible );
 }
 
-void OReportSection::SelectAll(const sal_uInt16 _nObjectType)
+void OReportSection::SelectAll(const SdrObjKind _nObjectType)
 {
     if ( !m_pView )
         return;
 
-    if ( _nObjectType == OBJ_NONE )
+    if ( _nObjectType == SdrObjKind::NONE )
         m_pView->MarkAllObj();
     else
     {

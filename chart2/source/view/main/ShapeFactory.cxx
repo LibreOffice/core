@@ -95,7 +95,7 @@ rtl::Reference<SvxShapeGroupAnyD> ShapeFactory::getOrCreateChartRootShape(
     // Create a new root shape and set it to the bottom of the page.  The root
     // shape is identified by having the name com.sun.star.chart2.shapes.
     rtl::Reference<SvxShapeGroup> xShapeGroup = new SvxShapeGroup(nullptr, nullptr);
-    xShapeGroup->setShapeKind(OBJ_GRUP);
+    xShapeGroup->setShapeKind(SdrObjKind::Group);
     uno::Reference<drawing::XShape> xShape(static_cast<cppu::OWeakObject*>(xShapeGroup.get()), uno::UNO_QUERY);
     xDrawPage->addBottom(xShape);
 
@@ -405,7 +405,7 @@ rtl::Reference<Svx3DExtrudeObject>
 
     //create shape
     rtl::Reference<Svx3DExtrudeObject> xShape = new Svx3DExtrudeObject(nullptr);
-    xShape->setShapeKind(E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG);
+    xShape->setShapeKind(SdrObjKind::E3D_Extrusion);
     xTarget->add(xShape);
 
     //set properties
@@ -640,7 +640,7 @@ rtl::Reference<Svx3DLatheObject>
 
     //create shape
     rtl::Reference<Svx3DLatheObject> xShape = new Svx3DLatheObject(nullptr);
-    xShape->setShapeKind(E3D_LATHEOBJ_ID | E3D_INVENTOR_FLAG);
+    xShape->setShapeKind(SdrObjKind::E3D_Lathe);
     xTarget->add(xShape);
 
     double fWidth      = rSize.DirectionX/2.0; //The depth will be corrected within Matrix
@@ -870,7 +870,7 @@ rtl::Reference<SvxShapePolyPolygon>
 
     //create shape
     rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
-    xShape->setShapeKind(OBJ_PATHFILL); // aka ClosedBezierShape
+    xShape->setShapeKind(SdrObjKind::PathFill); // aka ClosedBezierShape
     xTarget->add(xShape); //need to add the shape before setting of properties
 
     //set properties
@@ -917,7 +917,7 @@ rtl::Reference<Svx3DExtrudeObject>
 
     //create shape
     rtl::Reference<Svx3DExtrudeObject> xShape = new Svx3DExtrudeObject(nullptr);
-    xShape->setShapeKind(E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG);
+    xShape->setShapeKind(SdrObjKind::E3D_Extrusion);
     xTarget->add(xShape); //need to add the shape before setting of properties
 
     //set properties
@@ -987,7 +987,7 @@ rtl::Reference<Svx3DPolygonObject>
 
     //create shape
     rtl::Reference<Svx3DPolygonObject> xShape = new Svx3DPolygonObject(nullptr);
-    xShape->setShapeKind(E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG);
+    xShape->setShapeKind(SdrObjKind::E3D_Polygon);
     xTarget->add(xShape);
 
     //set properties
@@ -1041,7 +1041,7 @@ rtl::Reference<Svx3DExtrudeObject>
 
     //create shape
     rtl::Reference<Svx3DExtrudeObject> xShape = new Svx3DExtrudeObject(nullptr);
-    xShape->setShapeKind(E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG);
+    xShape->setShapeKind(SdrObjKind::E3D_Extrusion);
     xTarget->add(xShape);
 
     //set properties
@@ -1090,7 +1090,7 @@ SdrPathObj*
         return nullptr;
 
     //create shape
-    SdrPathObj* pPath = new SdrPathObj(xTarget->GetSdrObject()->getSdrModelFromSdrObject(), OBJ_POLY);
+    SdrPathObj* pPath = new SdrPathObj(xTarget->GetSdrObject()->getSdrModelFromSdrObject(), SdrObjKind::Polygon);
     if (bSetZOrderToZero)
         // insert at ZOrder 0, an area should always be behind other shapes
         xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath, 0);
@@ -1628,7 +1628,7 @@ rtl::Reference<SvxShapePolyPolygon>
 
     //create shape
     rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
-    xShape->setShapeKind(OBJ_POLY);
+    xShape->setShapeKind(SdrObjKind::Polygon);
     xTarget->add(uno::Reference<drawing::XShape>(xShape));
 
     //set properties
@@ -1671,7 +1671,7 @@ rtl::Reference<SvxGraphicObject>
 
     //create shape
     rtl::Reference<SvxGraphicObject> xShape = new SvxGraphicObject(nullptr);
-    xShape->setShapeKind(OBJ_GRAF);
+    xShape->setShapeKind(SdrObjKind::Graphic);
     xTarget->add(xShape);
 
     try
@@ -1709,7 +1709,7 @@ rtl::Reference< SvxShapeGroup >
     {
         //create and add to target
         rtl::Reference<SvxShapeGroup> xShapeGroup = new SvxShapeGroup(nullptr, nullptr);
-        xShapeGroup->setShapeKind(OBJ_GRUP);
+        xShapeGroup->setShapeKind(SdrObjKind::Group);
         uno::Reference< drawing::XShape > xShape(static_cast<cppu::OWeakObject*>(xShapeGroup.get()), uno::UNO_QUERY_THROW);
         xTarget->add(xShape);
 
@@ -1741,7 +1741,7 @@ rtl::Reference< SvxShapeGroup >
     {
         //create and add to target
         rtl::Reference<SvxShapeGroup> xShapeGroup = new SvxShapeGroup(nullptr, nullptr);
-        xShapeGroup->setShapeKind(OBJ_GRUP);
+        xShapeGroup->setShapeKind(SdrObjKind::Group);
         uno::Reference< drawing::XShape > xShape(static_cast<cppu::OWeakObject*>(xShapeGroup.get()), uno::UNO_QUERY_THROW);
         xTarget->add(xShape);
 
@@ -1773,7 +1773,7 @@ rtl::Reference<Svx3DSceneObject>
     {
         //create shape
         rtl::Reference<Svx3DSceneObject> xShape = new Svx3DSceneObject(nullptr, nullptr);
-        xShape->setShapeKind(E3D_SCENE_ID | E3D_INVENTOR_FLAG);
+        xShape->setShapeKind(SdrObjKind::E3D_Scene);
         xTarget->add(xShape);
 
         //it is necessary to set the transform matrix to initialize the scene properly
@@ -1815,7 +1815,7 @@ rtl::Reference<SvxShapeCircle>
 
     //create shape
     rtl::Reference<SvxShapeCircle> xShape = new SvxShapeCircle(nullptr);
-    xShape->setShapeKind(OBJ_CIRC);
+    xShape->setShapeKind(SdrObjKind::CircleOrEllipse);
     xTarget->add(xShape);
 
     try
@@ -1850,7 +1850,7 @@ rtl::Reference<SvxShapeCircle>
                     , const awt::Point& rPosition )
 {
     rtl::Reference<SvxShapeCircle> xShape = new SvxShapeCircle(nullptr);
-    xShape->setShapeKind(OBJ_CIRC);
+    xShape->setShapeKind(SdrObjKind::CircleOrEllipse);
     xTarget->add(xShape);
     xShape->setSize( rSize );
     xShape->setPosition( rPosition );
@@ -1871,7 +1871,7 @@ rtl::Reference<Svx3DPolygonObject>
 
     //create shape
     rtl::Reference<Svx3DPolygonObject> xShape = new Svx3DPolygonObject(nullptr);
-    xShape->setShapeKind(E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG);
+    xShape->setShapeKind(SdrObjKind::E3D_Polygon);
     xTarget->add(xShape);
 
     //set properties
@@ -1940,7 +1940,7 @@ rtl::Reference<SvxShapePolyPolygon>
 
     //create shape
     rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
-    xShape->setShapeKind(OBJ_PLIN);
+    xShape->setShapeKind(SdrObjKind::PolyLine);
     xTarget->add(xShape);
 
     //set properties
@@ -1996,7 +1996,7 @@ rtl::Reference<SvxShapePolyPolygon>
 {
     //create shape
     rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
-    xShape->setShapeKind(OBJ_LINE);
+    xShape->setShapeKind(SdrObjKind::Line);
     xTarget->add(xShape);
     xShape->setSize( rSize );
     xShape->setPosition( rPosition );
@@ -2014,7 +2014,7 @@ rtl::Reference<SvxShapeRect> ShapeFactory::createInvisibleRectangle(
             return nullptr;
 
         rtl::Reference<SvxShapeRect> xShape = new SvxShapeRect(nullptr);
-        xShape->setShapeKind(OBJ_RECT);
+        xShape->setShapeKind(SdrObjKind::Rectangle);
         xTarget->add( xShape );
         ShapeFactory::makeShapeInvisible( xShape );
         xShape->setSize( rSize );
@@ -2036,7 +2036,7 @@ rtl::Reference<SvxShapeRect> ShapeFactory::createRectangle(
     StackPosition ePos )
 {
     rtl::Reference<SvxShapeRect> xShape = new SvxShapeRect(nullptr);
-    xShape->setShapeKind(OBJ_RECT);
+    xShape->setShapeKind(SdrObjKind::Rectangle);
     if (ePos == StackPosition::Bottom)
     {
         uno::Reference<drawing::XShapes2> xTarget2(static_cast<cppu::OWeakObject*>(xTarget.get()), uno::UNO_QUERY);
@@ -2058,7 +2058,7 @@ rtl::Reference<SvxShapeRect>
             const rtl::Reference<SvxShapeGroupAnyD>& xTarget )
 {
     rtl::Reference<SvxShapeRect> xShape = new SvxShapeRect(nullptr);
-    xShape->setShapeKind(OBJ_RECT);
+    xShape->setShapeKind(SdrObjKind::Rectangle);
     xTarget->add( xShape );
 
     return xShape;
@@ -2079,7 +2079,7 @@ rtl::Reference<SvxShapeText>
 
     //create shape and add to page
     rtl::Reference<SvxShapeText> xShape = new SvxShapeText(nullptr);
-    xShape->setShapeKind(OBJ_TEXT);
+    xShape->setShapeKind(SdrObjKind::Text);
     xTarget->add(xShape);
 
     //set text
@@ -2134,7 +2134,7 @@ rtl::Reference<SvxShapeText>
 
     //create shape and add to page
     rtl::Reference<SvxShapeText> xShape = new SvxShapeText(nullptr);
-    xShape->setShapeKind(OBJ_TEXT);
+    xShape->setShapeKind(SdrObjKind::Text);
     xTarget->add(xShape);
 
     //set paragraph properties
@@ -2201,7 +2201,7 @@ rtl::Reference<SvxShapeText>
 {
     //create shape and add to page
     rtl::Reference<SvxShapeText> xShape = new SvxShapeText(nullptr);
-    xShape->setShapeKind(OBJ_TEXT);
+    xShape->setShapeKind(SdrObjKind::Text);
     try
     {
         xTarget->add(xShape);

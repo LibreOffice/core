@@ -86,7 +86,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     if( rMarkList.GetMarkCount() == 1 &&
         pObj->GetObjInventor() == SdrInventor::Default &&
-        pObj->GetObjIdentifier() == OBJ_CAPTION )
+        pObj->GetObjIdentifier() == SdrObjKind::Caption )
     {
         // --------- itemset for caption --------
         SfxItemSet aNewAttr( mpDoc->GetPool() );

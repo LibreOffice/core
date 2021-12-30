@@ -382,17 +382,17 @@ IMPL_LINK(SvxSuperContourDlg, Tbx1ClickHdl, const OString&, rId, void)
     else if (rId == "TBI_RECT")
     {
         SetActiveTool(rId);
-        m_xContourWnd->SetObjKind( OBJ_RECT );
+        m_xContourWnd->SetObjKind( SdrObjKind::Rectangle );
     }
     else if (rId == "TBI_CIRCLE")
     {
         SetActiveTool(rId);
-        m_xContourWnd->SetObjKind( OBJ_CIRC );
+        m_xContourWnd->SetObjKind( SdrObjKind::CircleOrEllipse );
     }
     else if (rId == "TBI_POLY")
     {
         SetActiveTool(rId);
-        m_xContourWnd->SetObjKind( OBJ_POLY );
+        m_xContourWnd->SetObjKind( SdrObjKind::Polygon );
     }
     else if (rId == "TBI_POLYEDIT")
     {

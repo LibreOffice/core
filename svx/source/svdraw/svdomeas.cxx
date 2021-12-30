@@ -257,7 +257,7 @@ void SdrMeasureObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 SdrObjKind SdrMeasureObj::GetObjIdentifier() const
 {
-    return OBJ_MEASURE;
+    return SdrObjKind::Measure;
 }
 
 struct ImpMeasureRec : public SdrDragStatUserData
@@ -1151,7 +1151,7 @@ SdrObjectUniquePtr SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText
 
         pPath = new SdrPathObj(
             getSdrModelFromSdrObject(),
-            OBJ_PATHLINE,
+            SdrObjKind::PathLine,
             aPolyPoly);
 
         pPath->SetMergedItemSet(aSet);
@@ -1172,7 +1172,7 @@ SdrObjectUniquePtr SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText
         aPolyPoly.append(aTmpPolyPolygon[0].getB2DPolygon());
         pPath = new SdrPathObj(
             getSdrModelFromSdrObject(),
-            OBJ_PATHLINE,
+            SdrObjKind::PathLine,
             aPolyPoly);
 
         pPath->SetMergedItemSet(aSet);
@@ -1187,7 +1187,7 @@ SdrObjectUniquePtr SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText
         aPolyPoly.append(aTmpPolyPolygon[1].getB2DPolygon());
         pPath = new SdrPathObj(
             getSdrModelFromSdrObject(),
-            OBJ_PATHLINE,
+            SdrObjKind::PathLine,
             aPolyPoly);
 
         pPath->SetMergedItemSet(aSet);
@@ -1209,7 +1209,7 @@ SdrObjectUniquePtr SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText
         aPolyPoly.append(aTmpPolyPolygon[0].getB2DPolygon());
         pPath = new SdrPathObj(
             getSdrModelFromSdrObject(),
-            OBJ_PATHLINE,
+            SdrObjKind::PathLine,
             aPolyPoly);
 
         pPath->SetMergedItemSet(aSet);
@@ -1224,7 +1224,7 @@ SdrObjectUniquePtr SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText
         aPolyPoly.append(aTmpPolyPolygon[1].getB2DPolygon());
         pPath = new SdrPathObj(
             getSdrModelFromSdrObject(),
-            OBJ_PATHLINE,
+            SdrObjKind::PathLine,
             aPolyPoly);
 
         pPath->SetMergedItemSet(aSet);
@@ -1242,7 +1242,7 @@ SdrObjectUniquePtr SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText
         aPolyPoly.append(aTmpPolyPolygon[nLoopStart].getB2DPolygon());
         pPath = new SdrPathObj(
             getSdrModelFromSdrObject(),
-            OBJ_PATHLINE,
+            SdrObjKind::PathLine,
             aPolyPoly);
 
         pPath->SetMergedItemSet(aSet);

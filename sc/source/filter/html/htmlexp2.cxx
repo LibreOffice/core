@@ -129,7 +129,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
     OString aOpt = aBuf.makeStringAndClear();
     switch ( pObject->GetObjIdentifier() )
     {
-        case OBJ_GRAF:
+        case SdrObjKind::Graphic:
         {
             const SdrGrafObj* pSGO = static_cast<SdrGrafObj*>(pObject);
             std::unique_ptr<SdrGrafObjGeoData> pGeo(static_cast<SdrGrafObjGeoData*>(pSGO->GetGeoData().release()));
@@ -149,7 +149,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
             pE->bWritten = true;
         }
         break;
-        case OBJ_OLE2:
+        case SdrObjKind::OLE2:
         {
             const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pObject)->GetGraphic();
             if ( pGraphic )

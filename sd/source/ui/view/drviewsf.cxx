@@ -689,7 +689,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(rMarkList.GetMark(nIndex)->GetMarkedSdrObj());
                     if (pTextObj && pTextObj->GetObjInventor() == SdrInventor::Default)
                     {
-                        if (pTextObj->GetObjIdentifier() != OBJ_OLE2)
+                        if (pTextObj->GetObjIdentifier() != SdrObjKind::OLE2)
                         {
                             bEnable = true;
                             break;

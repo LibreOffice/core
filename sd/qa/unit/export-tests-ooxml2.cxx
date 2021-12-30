@@ -294,7 +294,7 @@ void SdOOXMLExportTest2::testBnc822341()
 
         const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
-        CPPUNIT_ASSERT_EQUAL( OBJ_OLE2, pObj->GetObjIdentifier() );
+        CPPUNIT_ASSERT_EQUAL( SdrObjKind::OLE2, pObj->GetObjIdentifier() );
     }
 
     utl::TempFile tempFile2;
@@ -327,7 +327,7 @@ void SdOOXMLExportTest2::testBnc822341()
 
         const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
-        CPPUNIT_ASSERT_EQUAL( OBJ_OLE2, pObj->GetObjIdentifier() );
+        CPPUNIT_ASSERT_EQUAL( SdrObjKind::OLE2, pObj->GetObjIdentifier() );
     }
 
     xDocShRef->DoClose();
@@ -354,7 +354,7 @@ void SdOOXMLExportTest2::testMathObject()
         const SdrPage *pPage = GetPage(1, xDocShRef);
         const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
-        CPPUNIT_ASSERT_EQUAL(OBJ_OLE2, pObj->GetObjIdentifier());
+        CPPUNIT_ASSERT_EQUAL(SdrObjKind::OLE2, pObj->GetObjIdentifier());
     }
 
     utl::TempFile tempFile2;
@@ -374,7 +374,7 @@ void SdOOXMLExportTest2::testMathObject()
         const SdrPage *pPage = GetPage(1, xDocShRef);
         const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
-        CPPUNIT_ASSERT_EQUAL(OBJ_OLE2, pObj->GetObjIdentifier());
+        CPPUNIT_ASSERT_EQUAL(SdrObjKind::OLE2, pObj->GetObjIdentifier());
     }
 
     xDocShRef->DoClose();
@@ -401,7 +401,7 @@ void SdOOXMLExportTest2::testMathObjectPPT2010()
         const SdrPage *pPage = GetPage(1, xDocShRef);
         const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
-        CPPUNIT_ASSERT_EQUAL(OBJ_OLE2, pObj->GetObjIdentifier());
+        CPPUNIT_ASSERT_EQUAL(SdrObjKind::OLE2, pObj->GetObjIdentifier());
     }
 
     xDocShRef->DoClose();

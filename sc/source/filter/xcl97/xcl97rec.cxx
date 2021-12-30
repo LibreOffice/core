@@ -1106,9 +1106,9 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
     // Do not adjust objects, which have rotation incorporated into their points
     // but report a rotation angle nevertheless.
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape);
-    if (pObj && pObj->GetObjIdentifier() != OBJ_LINE && pObj->GetObjIdentifier() != OBJ_PLIN
-        && pObj->GetObjIdentifier() != OBJ_PATHLINE && pObj->GetObjIdentifier() != OBJ_FREELINE
-        && pObj->GetObjIdentifier() != OBJ_PATHPLIN)
+    if (pObj && pObj->GetObjIdentifier() != SdrObjKind::Line && pObj->GetObjIdentifier() != SdrObjKind::PolyLine
+        && pObj->GetObjIdentifier() != SdrObjKind::PathLine && pObj->GetObjIdentifier() != SdrObjKind::FreehandLine
+        && pObj->GetObjIdentifier() != SdrObjKind::PathPolyLine)
     {
         Degree100 nRotation = NormAngle36000(pObj->GetRotateAngle());
         if (nRotation)

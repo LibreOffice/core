@@ -352,7 +352,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     m_pMarquee = SdrObjFactory::MakeNewObject(
         *pModel,
         SdrInventor::Default,
-        OBJ_TEXT);
+        SdrObjKind::Text);
 
     if( !m_pMarquee )
         return;
@@ -525,7 +525,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
 void SwHTMLParser::EndMarquee()
 {
-    OSL_ENSURE( m_pMarquee && OBJ_TEXT==m_pMarquee->GetObjIdentifier(),
+    OSL_ENSURE( m_pMarquee && SdrObjKind::Text==m_pMarquee->GetObjIdentifier(),
             "no marquee or wrong type" );
 
     if( m_bFixMarqueeWidth )
@@ -553,7 +553,7 @@ void SwHTMLParser::EndMarquee()
 
 void SwHTMLParser::InsertMarqueeText()
 {
-    OSL_ENSURE( m_pMarquee && OBJ_TEXT==m_pMarquee->GetObjIdentifier(),
+    OSL_ENSURE( m_pMarquee && SdrObjKind::Text==m_pMarquee->GetObjIdentifier(),
             "no marquee or wrong type" );
 
     // append the current text part to the text
@@ -562,10 +562,10 @@ void SwHTMLParser::InsertMarqueeText()
 
 void SwHTMLParser::ResizeDrawObject( SdrObject* pObj, SwTwips nWidth )
 {
-    OSL_ENSURE( OBJ_TEXT==pObj->GetObjIdentifier(),
+    OSL_ENSURE( SdrObjKind::Text==pObj->GetObjIdentifier(),
             "no marquee or wrong type" );
 
-    if( OBJ_TEXT!=pObj->GetObjIdentifier() )
+    if( SdrObjKind::Text!=pObj->GetObjIdentifier() )
         return;
 
     // the old size

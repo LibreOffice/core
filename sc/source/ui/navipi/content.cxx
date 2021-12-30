@@ -793,19 +793,19 @@ void ScContentTree::GetDbNames()
     }
 }
 
-bool ScContentTree::IsPartOfType( ScContentId nContentType, sal_uInt16 nObjIdentifier )
+bool ScContentTree::IsPartOfType( ScContentId nContentType, SdrObjKind nObjIdentifier )
 {
     bool bRet = false;
     switch ( nContentType )
     {
         case ScContentId::GRAPHIC:
-            bRet = ( nObjIdentifier == OBJ_GRAF );
+            bRet = ( nObjIdentifier == SdrObjKind::Graphic );
             break;
         case ScContentId::OLEOBJECT:
-            bRet = ( nObjIdentifier == OBJ_OLE2 );
+            bRet = ( nObjIdentifier == SdrObjKind::OLE2 );
             break;
         case ScContentId::DRAWING:
-            bRet = ( nObjIdentifier != OBJ_GRAF && nObjIdentifier != OBJ_OLE2 );    // everything else
+            bRet = ( nObjIdentifier != SdrObjKind::Graphic && nObjIdentifier != SdrObjKind::OLE2 );    // everything else
             break;
         default:
             OSL_FAIL("unknown content type");
@@ -1108,7 +1108,7 @@ static bool lcl_DoDragObject( ScDocShell* pSrcShell, std::u16string_view rName, 
     {
         bool bOle = ( nType == ScContentId::OLEOBJECT );
         bool bGraf = ( nType == ScContentId::GRAPHIC );
-        sal_uInt16 nDrawId = sal::static_int_cast<sal_uInt16>( bOle ? OBJ_OLE2 : ( bGraf ? OBJ_GRAF : OBJ_GRUP ) );
+        SdrObjKind nDrawId = bOle ? SdrObjKind::OLE2 : ( bGraf ? SdrObjKind::Graphic : SdrObjKind::Group );
         SCTAB nTab = 0;
         SdrObject* pObject = pModel->GetNamedObject( rName, nDrawId, nTab );
         if (pObject)
@@ -1124,7 +1124,7 @@ static bool lcl_DoDragObject( ScDocShell* pSrcShell, std::u16string_view rName, 
             // that the EmbeddedObjectContainer gets copied. We need no CheckOle
             // here, test is simpler.
             ScDocShellRef aDragShellRef;
-            if(OBJ_OLE2 == pObject->GetObjIdentifier())
+            if(SdrObjKind::OLE2 == pObject->GetObjIdentifier())
             {
                 aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
                 aDragShellRef->DoInitNew();

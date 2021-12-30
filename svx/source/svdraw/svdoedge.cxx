@@ -392,7 +392,7 @@ void SdrEdgeObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 SdrObjKind SdrEdgeObj::GetObjIdentifier() const
 {
-    return OBJ_EDGE;
+    return SdrObjKind::Edge;
 }
 
 const tools::Rectangle& SdrEdgeObj::GetCurrentBoundRect() const

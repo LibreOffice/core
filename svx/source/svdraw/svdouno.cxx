@@ -249,7 +249,7 @@ void SdrUnoObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 SdrObjKind SdrUnoObj::GetObjIdentifier() const
 {
-    return OBJ_UNO;
+    return SdrObjKind::UNO;
 }
 
 void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )

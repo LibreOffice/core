@@ -70,8 +70,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SfxItemState::DEFAULT == rSet.GetItemState( SID_CHANGEBEZIER ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_CHANGEPOLYGON ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_LINEEND_POLYGON ) ||
-            SfxItemState::DEFAULT == rSet.GetItemState( OBJ_TITLETEXT ) ||
-            SfxItemState::DEFAULT == rSet.GetItemState( OBJ_OUTLINETEXT ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_MEASURE_DLG ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_CONNECTION_DLG ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_CONNECTION_NEW_ROUTING ) ||
@@ -103,7 +101,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             const SdAnimationInfo* pAnimationInfo
                 = SdDrawDocument::GetAnimationInfo(rMarkList.GetMark(0)->GetMarkedSdrObj());
             SdrInventor nInv = pObj->GetObjInventor();
-            sal_uInt16  nId  = pObj->GetObjIdentifier();
+            SdrObjKind  nId  = pObj->GetObjIdentifier();
             SdrObjTransformInfoRec aInfoRec;
             pObj->TakeObjInfo( aInfoRec );
 
@@ -147,10 +145,10 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             }
 
             if( nInv == SdrInventor::Default &&
-               (nId == OBJ_LINE ||
-                nId == OBJ_PLIN ||
-                nId == OBJ_PATHLINE ||
-                nId == OBJ_FREELINE ))
+               (nId == SdrObjKind::Line ||
+                nId == SdrObjKind::PolyLine ||
+                nId == SdrObjKind::PathLine ||
+                nId == SdrObjKind::FreehandLine ))
             {
                 //rSet.DisableItem( SID_ATTRIBUTES_AREA ); // remove again!
                 rSet.DisableItem( SID_ATTR_FILL_STYLE );
@@ -162,25 +160,25 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem( SID_LINEEND_POLYGON );
             }
             if(nInv == SdrInventor::Default &&
-               (nId == OBJ_PATHFILL || nId == OBJ_PATHLINE || !aInfoRec.bCanConvToPath))
+               (nId == SdrObjKind::PathFill || nId == SdrObjKind::PathLine || !aInfoRec.bCanConvToPath))
                 rSet.DisableItem( SID_CHANGEBEZIER );
 
             if( nInv == SdrInventor::Default &&
-                ( nId == OBJ_POLY || nId == OBJ_PLIN || !aInfoRec.bCanConvToPoly ) &&
+                ( nId == SdrObjKind::Polygon || nId == SdrObjKind::PolyLine || !aInfoRec.bCanConvToPoly ) &&
                 !GetView()->IsVectorizeAllowed() )
             {
                 rSet.DisableItem( SID_CHANGEPOLYGON );
             }
 
-            if(nInv == SdrInventor::Default && nId == OBJ_TABLE )
+            if(nInv == SdrInventor::Default && nId == SdrObjKind::Table )
             {
                 rSet.DisableItem( SID_TEXTATTR_DLG );
             }
 
-            if( nInv != SdrInventor::Default || nId != OBJ_MEASURE )
+            if( nInv != SdrInventor::Default || nId != SdrObjKind::Measure )
                 rSet.DisableItem( SID_MEASURE_DLG );
 
-            if( nInv != SdrInventor::Default || nId != OBJ_EDGE )
+            if( nInv != SdrInventor::Default || nId != SdrObjKind::Edge )
                 rSet.DisableItem( SID_CONNECTION_DLG );
             else
             {
@@ -333,35 +331,36 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                 SdrInventor nInv = pObj->GetObjInventor();
-                sal_uInt16  nId  = pObj->GetObjIdentifier();
+                SdrObjKind  nId  = pObj->GetObjIdentifier();
 
                 if (nInv == SdrInventor::Default)
                 {
                     switch (nId)
                     {
-                        case OBJ_TEXT: bText = true; break;
+                        case SdrObjKind::Text: bText = true; break;
 
-                        case OBJ_LINE: bLine = true; break;
+                        case SdrObjKind::Line: bLine = true; break;
 
-                        case OBJ_EDGE: bEdgeObj = true; break;
+                        case SdrObjKind::Edge: bEdgeObj = true; break;
 
-                        case OBJ_MEASURE: bMeasureObj = true; break;
+                        case SdrObjKind::Measure: bMeasureObj = true; break;
 
-                        case OBJ_RECT:
-                        case OBJ_CIRC:
-                        case OBJ_FREELINE:
-                        case OBJ_FREEFILL:
-                        case OBJ_PATHFILL:
-                        case OBJ_PATHLINE:
-                        case OBJ_SECT:
-                        case OBJ_CARC:
-                        case OBJ_CCUT: bDrawObj = true; break;
+                        case SdrObjKind::Rectangle:
+                        case SdrObjKind::CircleOrEllipse:
+                        case SdrObjKind::FreehandLine:
+                        case SdrObjKind::FreehandFill:
+                        case SdrObjKind::PathFill:
+                        case SdrObjKind::PathLine:
+                        case SdrObjKind::CircleSection:
+                        case SdrObjKind::CircleArc:
+                        case SdrObjKind::CircleCut: bDrawObj = true; break;
 
-                        case OBJ_GRUP: bGroup = true; break;
+                        case SdrObjKind::Group: bGroup = true; break;
 
-                        case OBJ_GRAF: break;
+                        case SdrObjKind::Graphic: break;
 
-                        case OBJ_TABLE: bTable = true; break;
+                        case SdrObjKind::Table: bTable = true; break;
+                        default: ;
                     }
                 }
                 else if (nInv == SdrInventor::E3d)

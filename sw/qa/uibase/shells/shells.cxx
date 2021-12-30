@@ -78,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testShapeTextAlignment)
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     Point aStartPos(1000, 1000);
-    pWrtShell->BeginCreate(OBJ_RECT, aStartPos);
+    pWrtShell->BeginCreate(SdrObjKind::Rectangle, aStartPos);
     Point aMovePos(2000, 2000);
     pWrtShell->MoveCreate(aMovePos);
     pWrtShell->EndCreate(SdrCreateCmd::ForceEnd);

@@ -109,7 +109,7 @@ void E3dExtrudeObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 
 SdrObjKind E3dExtrudeObj::GetObjIdentifier() const
 {
-    return E3D_EXTRUDEOBJ_ID;
+    return SdrObjKind::E3D_Extrusion;
 }
 
 E3dExtrudeObj* E3dExtrudeObj::CloneSdrObject(SdrModel& rTargetModel) const
@@ -205,7 +205,7 @@ std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> E3dExtrudeObj::GetBreakObj()
     {
     // create PathObj
         basegfx::B2DPolyPolygon aPoly = TransformToScreenCoor(aBackSide);
-        std::unique_ptr<SdrPathObj,SdrObjectFreeOp> pPathObj(new SdrPathObj(getSdrModelFromSdrObject(), OBJ_PLIN, aPoly));
+        std::unique_ptr<SdrPathObj,SdrObjectFreeOp> pPathObj(new SdrPathObj(getSdrModelFromSdrObject(), SdrObjKind::PolyLine, aPoly));
 
         SfxItemSet aSet(GetObjectItemSet());
         aSet.Put(XLineStyleItem(css::drawing::LineStyle_SOLID));

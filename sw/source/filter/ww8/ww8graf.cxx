@@ -332,7 +332,7 @@ SdrObject* SwWW8ImplReader::ReadLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet
     aPolygon.append(::basegfx::B2DPoint(aP[1].X(), aP[1].Y()));
     SdrObject* pObj = new SdrPathObj(
         *m_pDrawModel,
-        OBJ_LINE,
+        SdrObjKind::Line,
         ::basegfx::B2DPolyPolygon(aPolygon));
 
     SetStdAttr( rSet, aLine.aLnt, aLine.aShd );
@@ -454,7 +454,7 @@ SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD const * pHd, SfxAllItemSet &
 
     SdrObject* pObj = new SdrPathObj(
         *m_pDrawModel,
-        (SVBT16ToUInt16(aPoly.aBits1) & 0x1) ? OBJ_POLY : OBJ_PLIN,
+        (SVBT16ToUInt16(aPoly.aBits1) & 0x1) ? SdrObjKind::Polygon : SdrObjKind::PolyLine,
         ::basegfx::B2DPolyPolygon(aP.getB2DPolygon()));
 
     SetStdAttr( rSet, aPoly.aLnt, aPoly.aShd );
@@ -1255,7 +1255,7 @@ SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD const * pHd, SfxAllItemSet &r
 
     SdrRectObj* pObj = new SdrRectObj(
         *m_pDrawModel,
-        OBJ_TEXT,
+        SdrObjKind::Text,
         tools::Rectangle(aP0, aP1));
 
     pObj->NbcSetSnapRect(tools::Rectangle(aP0, aP1));
@@ -2605,11 +2605,11 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
 
     switch (pObject->GetObjIdentifier())
     {
-        case OBJ_GRAF:
+        case SdrObjKind::Graphic:
             bReplaceable = true;
             bDone = true;
             break;
-        case OBJ_OLE2:
+        case SdrObjKind::OLE2:
             bReplaceable = true;
             break;
         default:
@@ -2886,7 +2886,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec& rRecord,
         // the group for holding the text.
         pSdrTextObj = new SdrRectObj(
             *m_pDrawModel,
-            OBJ_TEXT,
+            SdrObjKind::Text,
             pThisGroup->GetCurrentBoundRect());
 
         SfxItemSet aSet(m_pDrawModel->GetItemPool());
@@ -3120,7 +3120,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables(SdrObject* &rpObje
     MatchEscherMirrorIntoFlySet(rRecord, aGrSet);
 
     OUString aObjectName(rpObject->GetName());
-    if (OBJ_OLE2 == rpObject->GetObjIdentifier())
+    if (SdrObjKind::OLE2 == rpObject->GetObjIdentifier())
         pRetFrameFormat = InsertOle(*static_cast<SdrOle2Obj*>(rpObject), rFlySet, &aGrSet);
     else
     {
@@ -3155,7 +3155,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables(SdrObject* &rpObje
 
     if (pRetFrameFormat)
     {
-        if (OBJ_OLE2 != rpObject->GetObjIdentifier())
+        if (SdrObjKind::OLE2 != rpObject->GetObjIdentifier())
             SetAttributesAtGrfNode(rRecord, *pRetFrameFormat, &rF);
         // avoid multiple occurrences of the same graphic name
         m_aGrfNameGenerator.SetUniqueGraphName(pRetFrameFormat, aObjectName);

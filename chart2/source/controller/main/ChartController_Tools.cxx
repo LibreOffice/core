@@ -352,7 +352,7 @@ void ChartController::impl_PasteGraphic(
     if( ! (xGraphic.is() && xModelProp.is()))
         return;
     rtl::Reference<SvxGraphicObject> xGraphicShape = new SvxGraphicObject(nullptr);
-    xGraphicShape->setShapeKind(OBJ_GRAF);
+    xGraphicShape->setShapeKind(SdrObjKind::Graphic);
 
     uno::Reference< drawing::XShapes > xPage = pDrawModelWrapper->getMainDrawPage();
     if( xPage.is())
@@ -454,7 +454,7 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
     try
     {
         rtl::Reference<SvxShapeText> xTextShape = new SvxShapeText(nullptr);
-        xTextShape->setShapeKind(OBJ_TEXT);
+        xTextShape->setShapeKind(SdrObjKind::Text);
         xDrawPage->add( xTextShape );
 
         xTextShape->setString( rString );
@@ -571,7 +571,7 @@ bool ChartController::isShapeContext() const
 {
     return m_aSelection.isAdditionalShapeSelected() ||
          ( m_pDrawViewWrapper && m_pDrawViewWrapper->AreObjectsMarked() &&
-           ( m_pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT ) );
+           ( m_pDrawViewWrapper->GetCurrentObjIdentifier() == SdrObjKind::Text ) );
 }
 
 void ChartController::impl_ClearSelection()

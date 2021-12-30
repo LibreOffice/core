@@ -293,18 +293,18 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         pInfo  = nullptr;
 
         if (pObject1->GetObjInventor() == SdrInventor::Default &&
-            ((eKind1 == OBJ_LINE) ||                        // 2 point line
-             (eKind1 == OBJ_PLIN) ||                        // Polygon
-             (eKind1 == OBJ_PATHLINE))                &&    // Bezier curve
+            ((eKind1 == SdrObjKind::Line) ||                        // 2 point line
+             (eKind1 == SdrObjKind::PolyLine) ||                        // Polygon
+             (eKind1 == SdrObjKind::PathLine))                &&    // Bezier curve
              (pInfo2 && pInfo2->meEffect == presentation::AnimationEffect_PATH))
         {
             pInfo = pInfo2;
         }
 
         if (pObject2->GetObjInventor() == SdrInventor::Default &&
-            ((eKind2 == OBJ_LINE) ||                        // 2 point line
-             (eKind2 == OBJ_PLIN) ||                        // Polygon
-             (eKind2 == OBJ_PATHLINE))                &&    // Bezier curve
+            ((eKind2 == SdrObjKind::Line) ||                        // 2 point line
+             (eKind2 == SdrObjKind::PolyLine) ||                        // Polygon
+             (eKind2 == SdrObjKind::PathLine))                &&    // Bezier curve
             (pInfo1 && pInfo1->meEffect == presentation::AnimationEffect_PATH))
         {
             pInfo = pInfo1;
@@ -633,18 +633,18 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         SdrObject* pRunningObj = nullptr;
 
         if (pObject1->GetObjInventor() == SdrInventor::Default &&
-            ((eKind1 == OBJ_LINE) ||        // 2 point line
-             (eKind1 == OBJ_PLIN) ||        // Polygon
-             (eKind1 == OBJ_PATHLINE)))     // Bezier curve
+            ((eKind1 == SdrObjKind::Line) ||        // 2 point line
+             (eKind1 == SdrObjKind::PolyLine) ||        // Polygon
+             (eKind1 == SdrObjKind::PathLine)))     // Bezier curve
         {
             pPath = static_cast<SdrPathObj*>(pObject1);
             pRunningObj = pObject2;
         }
 
         if (pObject2->GetObjInventor() == SdrInventor::Default &&
-            ((eKind2 == OBJ_LINE) ||        // 2 point line
-             (eKind2 == OBJ_PLIN) ||        // Polygon
-             (eKind2 == OBJ_PATHLINE)))     // Bezier curve
+            ((eKind2 == SdrObjKind::Line) ||        // 2 point line
+             (eKind2 == SdrObjKind::PolyLine) ||        // Polygon
+             (eKind2 == SdrObjKind::PathLine)))     // Bezier curve
         {
             pPath = static_cast<SdrPathObj*>(pObject2);
             pRunningObj = pObject1;

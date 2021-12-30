@@ -506,8 +506,9 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj, bool bScale)
 
                 if (!aNewRange.isEmpty())
                 {
-                    pObj = new SdrPathObj(*mpModel, aNewPoly.isClosed() ? OBJ_POLY : OBJ_PLIN,
-                                          aNewPoly);
+                    pObj = new SdrPathObj(
+                        *mpModel, aNewPoly.isClosed() ? SdrObjKind::Polygon : SdrObjKind::PolyLine,
+                        aNewPoly);
 
                     pObj->SetLayer(aOldLayer);
                     pObj->SetMergedItemSet(aOldItemSet);
@@ -803,7 +804,7 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
         aPosition.AdjustY(-nTextHeight);
 
     tools::Rectangle aTextRect(aPosition, aSize);
-    SdrRectObj* pText = new SdrRectObj(*mpModel, OBJ_TEXT, aTextRect);
+    SdrRectObj* pText = new SdrRectObj(*mpModel, SdrObjKind::Text, aTextRect);
 
     pText->SetMergedItem(makeSdrTextUpperDistItem(0));
     pText->SetMergedItem(makeSdrTextLowerDistItem(0));
@@ -1027,7 +1028,7 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
 
     if (!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aPolyPoly))
     {
-        SdrPathObj* pPath = new SdrPathObj(*mpModel, OBJ_POLY, aPolyPoly);
+        SdrPathObj* pPath = new SdrPathObj(*mpModel, SdrObjKind::Polygon, aPolyPoly);
         SetAttributes(pPath);
         InsertObj(pPath, false);
     }

@@ -1123,7 +1123,7 @@ SdrObjectUniquePtr XclImpLineObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, 
     SdrObjectUniquePtr xSdrObj(
         new SdrPathObj(
             *GetDoc().GetDrawLayer(),
-            OBJ_LINE,
+            SdrObjKind::Line,
             ::basegfx::B2DPolyPolygon(aB2DPolygon)));
     ConvertLineStyle( *xSdrObj, maLineData );
 
@@ -1415,7 +1415,7 @@ SdrObjectUniquePtr XclImpPolygonObj::DoCreateSdrObj( XclImpDffConverter& rDffCon
         if( ::get_flag( mnPolyFlags, EXC_OBJ_POLY_CLOSED ) && (maCoords.front() != maCoords.back()) )
             aB2DPolygon.append( lclGetPolyPoint( rAnchorRect, maCoords.front() ) );
         // create the SdrObject
-        SdrObjKind eObjKind = maFillData.IsFilled() ? OBJ_PATHPOLY : OBJ_PATHPLIN;
+        SdrObjKind eObjKind = maFillData.IsFilled() ? SdrObjKind::PathPoly : SdrObjKind::PathPolyLine;
         xSdrObj.reset(
             new SdrPathObj(
                 *GetDoc().GetDrawLayer(),

@@ -955,75 +955,75 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         const OUString aType( aServiceSpecifier.copy(26) );
         rtl::Reference<SvxShape> pShape;
 
-        sal_uInt16 nType = OBJ_TEXT;
+        SdrObjKind nType = SdrObjKind::Text;
         // create a shape wrapper
         if( aType.startsWith( "TitleTextShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aType.startsWith( "OutlinerShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aType.startsWith( "SubtitleShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aType.startsWith( "GraphicObjectShape" ) )
         {
-            nType = OBJ_GRAF;
+            nType = SdrObjKind::Graphic;
         }
         else if( aType.startsWith( "PageShape" ) )
         {
-            nType = OBJ_PAGE;
+            nType = SdrObjKind::Page;
         }
         else if( aType.startsWith( "OLE2Shape" ) )
         {
-            nType = OBJ_OLE2;
+            nType = SdrObjKind::OLE2;
         }
         else if( aType.startsWith( "ChartShape" ) )
         {
-            nType = OBJ_OLE2;
+            nType = SdrObjKind::OLE2;
         }
         else if( aType.startsWith( "CalcShape" ) )
         {
-            nType = OBJ_OLE2;
+            nType = SdrObjKind::OLE2;
         }
         else if( aType.startsWith( "TableShape" ) )
         {
-            nType = OBJ_TABLE;
+            nType = SdrObjKind::Table;
         }
         else if( aType.startsWith( "OrgChartShape" ) )
         {
-            nType = OBJ_OLE2;
+            nType = SdrObjKind::OLE2;
         }
         else if( aType.startsWith( "NotesShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aType.startsWith( "HandoutShape" ) )
         {
-            nType = OBJ_PAGE;
+            nType = SdrObjKind::Page;
         }
         else if( aType.startsWith( "FooterShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aType.startsWith( "HeaderShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aType.startsWith( "SlideNumberShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aType.startsWith( "DateTimeShape" ) )
         {
-            nType = OBJ_TEXT;
+            nType = SdrObjKind::Text;
         }
         else if( aType.startsWith( "MediaShape" ) )
         {
-            nType = OBJ_MEDIA;
+            nType = SdrObjKind::Media;
         }
         else
         {
@@ -1041,7 +1041,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     }
     else if ( aServiceSpecifier == "com.sun.star.drawing.TableShape" )
     {
-        rtl::Reference<SvxShape> pShape = CreateSvxShapeByTypeAndInventor( OBJ_TABLE, SdrInventor::Default, referer );
+        rtl::Reference<SvxShape> pShape = CreateSvxShapeByTypeAndInventor( SdrObjKind::Table, SdrInventor::Default, referer );
         if( pShape && !mbClipBoard )
             pShape->SetShapeType(aServiceSpecifier);
 
@@ -1734,16 +1734,16 @@ vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( const Sd
     if ( pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF() )
     {
         SdrInventor nInventor   = rObject.GetObjInventor();
-        sal_uInt16  nIdentifier = rObject.GetObjIdentifier();
+        SdrObjKind  nIdentifier = rObject.GetObjIdentifier();
         bool        bIsTextObj  = dynamic_cast< const SdrTextObj *>( &rObject ) !=  nullptr;
 
         if ( nInventor == SdrInventor::Default )
         {
-            if ( nIdentifier == OBJ_GRUP )
+            if ( nIdentifier == SdrObjKind::Group )
                 eElement = vcl::PDFWriter::Section;
-            else if ( nIdentifier == OBJ_TITLETEXT )
+            else if ( nIdentifier == SdrObjKind::TitleText )
                 eElement = vcl::PDFWriter::Heading;
-            else if ( nIdentifier == OBJ_OUTLINETEXT )
+            else if ( nIdentifier == SdrObjKind::OutlineText )
                 eElement = vcl::PDFWriter::Division;
             else if ( !bIsTextObj || !static_cast<const SdrTextObj&>(rObject).HasText() )
                 eElement = vcl::PDFWriter::Figure;
@@ -1785,7 +1785,7 @@ void ImplRenderPaintProc::createRedirectedPrimitive2DSequence(
         // exactly this purpose (StructureTagPrimitive2D)
 
         const bool bBackground(pSdrPage->IsMasterPage());
-        const bool bImage(pObject->GetObjIdentifier() == OBJ_GRAF);
+        const bool bImage(pObject->GetObjIdentifier() == SdrObjKind::Graphic);
 
         drawinglayer::primitive2d::Primitive2DReference xReference(
             new drawinglayer::primitive2d::StructureTagPrimitive2D(

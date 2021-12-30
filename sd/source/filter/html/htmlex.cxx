@@ -1028,7 +1028,7 @@ SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage const * pPage)
     {
         SdrObject* pObject = pPage->GetObj(nObject);
         if (pObject->GetObjInventor() == SdrInventor::Default &&
-            pObject->GetObjIdentifier() == OBJ_OUTLINETEXT)
+            pObject->GetObjIdentifier() == SdrObjKind::OutlineText)
         {
             pResult = static_cast<SdrTextObj*>(pObject);
             break;
@@ -1207,12 +1207,12 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pP
         {
             case PresObjKind::NONE:
             {
-                if (pObject->GetObjIdentifier() == OBJ_GRUP)
+                if (pObject->GetObjIdentifier() == SdrObjKind::Group)
                 {
                     SdrObjGroup* pObjectGroup = static_cast<SdrObjGroup*>(pObject);
                     WriteObjectGroup(aStr, pObjectGroup, pOutliner, rBackgroundColor, false);
                 }
-                else if (pObject->GetObjIdentifier() == OBJ_TABLE)
+                else if (pObject->GetObjIdentifier() == SdrObjKind::Table)
                 {
                     SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject);
                     WriteTable(aStr, pTableObject, pOutliner, rBackgroundColor);
@@ -1286,7 +1286,7 @@ void HtmlExport::WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup const * pObj
     while (aGroupIterator.IsMore())
     {
         SdrObject* pCurrentObject = aGroupIterator.Next();
-        if (pCurrentObject->GetObjIdentifier() == OBJ_GRUP)
+        if (pCurrentObject->GetObjIdentifier() == SdrObjKind::Group)
         {
             SdrObjGroup* pCurrentGroupObject = static_cast<SdrObjGroup*>(pCurrentObject);
             WriteObjectGroup(aStr, pCurrentGroupObject, pOutliner, rBackgroundColor, bHeadLine);
@@ -1850,7 +1850,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                     {
                         // a circle?
                         if (pObject->GetObjInventor() == SdrInventor::Default &&
-                            pObject->GetObjIdentifier() == OBJ_CIRC  &&
+                            pObject->GetObjIdentifier() == SdrObjKind::CircleOrEllipse  &&
                             bIsSquare )
                         {
                             aStr.append(CreateHTMLCircleArea(aRect.GetWidth() / 2,
@@ -1860,9 +1860,9 @@ bool HtmlExport::CreateHtmlForPresPages()
                         }
                         // a polygon?
                         else if (pObject->GetObjInventor() == SdrInventor::Default &&
-                                 (pObject->GetObjIdentifier() == OBJ_PATHLINE ||
-                                  pObject->GetObjIdentifier() == OBJ_PLIN ||
-                                  pObject->GetObjIdentifier() == OBJ_POLY))
+                                 (pObject->GetObjIdentifier() == SdrObjKind::PathLine ||
+                                  pObject->GetObjIdentifier() == SdrObjKind::PolyLine ||
+                                  pObject->GetObjIdentifier() == SdrObjKind::Polygon))
                         {
                             aStr.append(CreateHTMLPolygonArea(static_cast<SdrPathObj*>(pObject)->GetPathPoly(), Size(-pPage->GetLeftBorder(), -pPage->GetUpperBorder()), fLogicToPixel, aHRef));
                         }

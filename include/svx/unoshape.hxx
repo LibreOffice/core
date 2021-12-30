@@ -210,8 +210,8 @@ public:
 
     svx::PropertyChangeNotifier& getShapePropertyChangeNotifier();
 
-    void setShapeKind( sal_uInt32 nKind );
-    sal_uInt32 getShapeKind() const;
+    void setShapeKind( SdrObjKind nKind );
+    SdrObjKind getShapeKind() const;
 
     // styles need this
     static bool SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel const * pModel );

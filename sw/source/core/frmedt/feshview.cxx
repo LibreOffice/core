@@ -1782,7 +1782,7 @@ bool SwFEShell::BeginCreate( SdrObjKind eSdrObjectKind, const Point &rPos )
     if ( GetPageNumber( rPos ) )
     {
         Imp()->GetDrawView()->SetCurrentObj( eSdrObjectKind );
-        if ( eSdrObjectKind == OBJ_CAPTION )
+        if ( eSdrObjectKind == SdrObjKind::Caption )
             bRet = Imp()->GetDrawView()->BegCreateCaptionObj(
                         rPos, Size( lMinBorder - MINFLY, lMinBorder - MINFLY ),
                         GetOut() );
@@ -1886,12 +1886,6 @@ bool SwFEShell::ImpEndCreate()
     const tools::Rectangle &rBound = rSdrObj.GetSnapRect();
     Point aPt( rBound.TopRight() );
 
-    // alien identifier should end up on defaults
-    // duplications possible!!
-    sal_uInt16 nIdent = SdrInventor::Default == rSdrObj.GetObjInventor()
-                        ? rSdrObj.GetObjIdentifier()
-                        : 0xFFFF;
-
     // default for controls character bound, otherwise paragraph bound.
     SwFormatAnchor aAnch;
     const SwFrame *pAnch = nullptr;
@@ -1943,7 +1937,7 @@ bool SwFEShell::ImpEndCreate()
         // of <nIdent> - value <0xFFFF> indicates control objects, which aren't
         // allowed in header/footer.
         //bool bBodyOnly = OBJ_NONE != nIdent;
-        bool bBodyOnly = 0xFFFF == nIdent;
+        bool bBodyOnly = SdrInventor::Default != rSdrObj.GetObjInventor();
         bool bAtPage = false;
         const SwFrame* pPage = nullptr;
         SwCursorMoveState aState( CursorMoveState::SetOnlyText );
@@ -2065,7 +2059,7 @@ bool SwFEShell::ImpEndCreate()
         }
     }
 
-    if( OBJ_NONE == nIdent )
+    if( SdrInventor::Default == rSdrObj.GetObjInventor() && rSdrObj.GetObjIdentifier() == SdrObjKind::NONE )
     {
         // For OBJ_NONE a fly is inserted.
         const tools::Long nWidth = rBound.Right()  - rBound.Left();
@@ -3034,7 +3028,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
     if(pObj)
     {
         tools::Rectangle aRect(rRect);
-        if(OBJ_CARC == eSdrObjectKind || OBJ_CCUT == eSdrObjectKind)
+        if(SdrObjKind::CircleArc == eSdrObjectKind || SdrObjKind::CircleCut == eSdrObjectKind)
         {
             // force quadratic
             if(aRect.GetWidth() > aRect.GetHeight())
@@ -3068,8 +3062,8 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
 
             switch(eSdrObjectKind)
             {
-                case OBJ_PATHLINE:
-                case OBJ_PATHFILL:
+                case SdrObjKind::PathLine:
+                case SdrObjKind::PathFill:
                 {
                     basegfx::B2DPolygon aInnerPoly;
 
@@ -3091,8 +3085,8 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
                     aPoly.append(aInnerPoly);
                 }
                 break;
-                case OBJ_FREELINE:
-                case OBJ_FREEFILL:
+                case SdrObjKind::FreehandLine:
+                case SdrObjKind::FreehandFill:
                 {
                     basegfx::B2DPolygon aInnerPoly;
 
@@ -3113,8 +3107,8 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
                     aPoly.append(aInnerPoly);
                 }
                 break;
-                case OBJ_POLY:
-                case OBJ_PLIN:
+                case SdrObjKind::Polygon:
+                case SdrObjKind::PolyLine:
                 {
                     basegfx::B2DPolygon aInnerPoly;
                     sal_Int32 nWdt(aRect.GetWidth());
@@ -3129,7 +3123,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
                     aInnerPoly.append(basegfx::B2DPoint(aRect.Left() + (nWdt * 80) / 100, aRect.Top() + (nHgt * 75) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(aRect.Bottom(), aRect.Right()));
 
-                    if(OBJ_PLIN == eSdrObjectKind)
+                    if(SdrObjKind::PolyLine == eSdrObjectKind)
                     {
                         aInnerPoly.append(basegfx::B2DPoint(aRect.Center().getX(), aRect.Bottom()));
                     }
@@ -3141,7 +3135,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
                     aPoly.append(aInnerPoly);
                 }
                 break;
-                case OBJ_LINE :
+                case SdrObjKind::Line :
                 {
                     sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
                     basegfx::B2DPolygon aTempPoly;

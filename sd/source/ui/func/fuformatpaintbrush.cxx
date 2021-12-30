@@ -219,7 +219,7 @@ void FuFormatPaintBrush::Deactivate()
     }
 }
 
-bool FuFormatPaintBrush::HasContentForThisType( SdrInventor nObjectInventor, sal_uInt16 nObjectIdentifier ) const
+bool FuFormatPaintBrush::HasContentForThisType( SdrInventor nObjectInventor, SdrObjKind nObjectIdentifier ) const
 {
     if (mxItemSet == nullptr)
         return false;

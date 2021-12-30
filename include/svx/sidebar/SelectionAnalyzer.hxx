@@ -25,6 +25,7 @@
 class SdrMarkList;
 class SdrObject;
 enum class SdrInventor : sal_uInt32;
+enum class SdrObjKind : sal_uInt16;
 
 namespace svx::sidebar {
 
@@ -52,20 +53,20 @@ public:
 
 private:
     static vcl::EnumContext::Context GetContextForObjectId_SC (
-        const sal_uInt16 nObjectId);
+        const SdrObjKind nObjectId);
     static vcl::EnumContext::Context GetContextForObjectId_SD (
-        const sal_uInt16 nObjectId,
+        const SdrObjKind nObjectId,
         const ViewType eViewType);
     static SdrInventor GetInventorTypeFromMark (
         const SdrMarkList& rMarkList);
-    static sal_uInt16 GetObjectTypeFromMark (
+    static SdrObjKind GetObjectTypeFromMark (
         const SdrMarkList& rMarkList);
-    static sal_uInt16 GetObjectTypeFromGroup (
+    static SdrObjKind GetObjectTypeFromGroup (
         const SdrObject* pObj);
     static bool IsShapeType (
-        const sal_uInt16 nType);
+        const SdrObjKind nType);
     static bool IsTextObjType (
-        const sal_uInt16 nType);
+        const SdrObjKind nType);
 };
 
 } // end of namespace svx::sidebar

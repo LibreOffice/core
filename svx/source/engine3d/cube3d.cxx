@@ -86,7 +86,7 @@ void E3dCubeObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 
 SdrObjKind E3dCubeObj::GetObjIdentifier() const
 {
-    return E3D_CUBEOBJ_ID;
+    return SdrObjKind::E3D_Cube;
 }
 
 // Convert the object into a group object consisting of 6 polygons

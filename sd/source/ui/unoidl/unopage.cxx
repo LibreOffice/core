@@ -1395,10 +1395,10 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
 
         if(pObj->GetObjInventor() == SdrInventor::Default)
         {
-            sal_uInt32 nInventor = pObj->GetObjIdentifier();
+            SdrObjKind nInventor = pObj->GetObjIdentifier();
             switch( nInventor )
             {
-            case OBJ_TITLETEXT:
+            case SdrObjKind::TitleText:
                 pShape = new SvxShapeText( pObj );
                 if( GetPage()->GetPageKind() == PageKind::Notes && GetPage()->IsMasterPage() )
                 {
@@ -1411,11 +1411,12 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
                 }
                 eKind = PresObjKind::NONE;
                 break;
-            case OBJ_OUTLINETEXT:
+            case SdrObjKind::OutlineText:
                 pShape = new SvxShapeText( pObj );
                 pShape->SetShapeType("com.sun.star.presentation.OutlinerShape");
                 eKind = PresObjKind::NONE;
                 break;
+            default: ;
             }
         }
 

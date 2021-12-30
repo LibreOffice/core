@@ -251,7 +251,7 @@ bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
         mpWindow->CaptureMouse();
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-        if (mpView->GetCurrentObjIdentifier() == OBJ_CAPTION)
+        if (mpView->GetCurrentObjIdentifier() == SdrObjKind::Caption)
         {
             Size aCaptionSize(846, 846);    // (4x2)cm
             bReturn = mpView->BegCreateCaptionObj(aPnt, aCaptionSize,
@@ -341,12 +341,12 @@ void FuConstructRectangle::Activate()
             [[fallthrough]];
         case SID_DRAW_LINE :
         case SID_DRAW_XLINE:
-            aObjKind = OBJ_LINE;
+            aObjKind = SdrObjKind::Line;
             break;
 
         case SID_DRAW_MEASURELINE:
         {
-            aObjKind = OBJ_MEASURE;
+            aObjKind = SdrObjKind::Measure;
         }
         break;
 
@@ -359,7 +359,7 @@ void FuConstructRectangle::Activate()
         case SID_DRAW_SQUARE_ROUND     :
         case SID_DRAW_SQUARE_ROUND_NOFILL:
         {
-            aObjKind = OBJ_RECT;
+            aObjKind = SdrObjKind::Rectangle;
         }
         break;
 
@@ -368,14 +368,14 @@ void FuConstructRectangle::Activate()
         case SID_DRAW_CIRCLE        :
         case SID_DRAW_CIRCLE_NOFILL :
         {
-            aObjKind = OBJ_CIRC;
+            aObjKind = SdrObjKind::CircleOrEllipse;
         }
         break;
 
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
         {
-            aObjKind = OBJ_CAPTION;
+            aObjKind = SdrObjKind::Caption;
         }
         break;
 
@@ -408,19 +408,19 @@ void FuConstructRectangle::Activate()
         case SID_CONNECTOR_LINES_CIRCLE_END:
         case SID_CONNECTOR_LINES_CIRCLES:
         {
-            aObjKind = OBJ_EDGE;
+            aObjKind = SdrObjKind::Edge;
             mpView->SetGlueVisible();
         }
         break;
         case SID_INSERT_SIGNATURELINE:
         {
-            aObjKind = OBJ_GRAF;
+            aObjKind = SdrObjKind::Graphic;
         }
         break;
 
         default:
         {
-            aObjKind = OBJ_RECT;
+            aObjKind = SdrObjKind::Rectangle;
         }
         break;
     }
@@ -674,7 +674,7 @@ static ::basegfx::B2DPolyPolygon getPolygon(TranslateId pResId, const SdrModel& 
 
 void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj)
 {
-    if ( !((rObj.GetObjIdentifier() == OBJ_EDGE &&
+    if ( !((rObj.GetObjIdentifier() == SdrObjKind::Edge &&
           nSlotId != SID_TOOL_CONNECTOR        &&
           nSlotId != SID_CONNECTOR_LINE        &&
           nSlotId != SID_CONNECTOR_LINES       &&

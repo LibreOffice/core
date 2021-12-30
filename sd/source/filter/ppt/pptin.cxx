@@ -883,7 +883,7 @@ bool ImplSdPPTImport::Import()
 
                 // background object
                 pObj = pMPage->GetObj( 0 );
-                if ( pObj && pObj->GetObjIdentifier() == OBJ_RECT )
+                if ( pObj && pObj->GetObjIdentifier() == SdrObjKind::Rectangle )
                 {
                     if ( pMPage->GetPageKind() == PageKind::Standard )
                     {
