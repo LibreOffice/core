@@ -132,9 +132,9 @@ namespace drawinglayer::primitive2d
             const sal_uInt32 nCount(rmMatrixStack.size());
             maMatrixStack.reserve(nCount);
 
-            for(sal_uInt32 a(0); a < nCount; a++)
+            for(const auto& a : rmMatrixStack)
             {
-                maMatrixStack.emplace_back(rmMatrixStack[a]);
+                maMatrixStack.emplace_back(a);
             }
         }
 
