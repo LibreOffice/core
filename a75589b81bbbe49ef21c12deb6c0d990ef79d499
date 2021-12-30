@@ -16,6 +16,23 @@
       "message": "I had reverted locally your patch to be able to build and it worked.\nSince you made a patch to fix this, I wanted to reproduce the pb first to be able to test your patch, but I can\u0027t reproduce this :-(\nI did \"make libeot.clean \u0026\u0026 make libeot.build\", no pb.\n\nIdeally, I\u0027d like to avoid to run a \"make clean\"",
       "revId": "a75589b81bbbe49ef21c12deb6c0d990ef79d499",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6d6ce6c_041ab69a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-30T12:25:33Z",
+      "side": 1,
+      "message": "I could test it on my second local build (enable-symbols not enable-dbgutil for retrieving perf graph/Flamegraph), I had the pb too and after having cherry-picked this patch, it was ok.\nThank you! :-)",
+      "revId": "a75589b81bbbe49ef21c12deb6c0d990ef79d499",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
