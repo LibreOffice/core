@@ -9345,7 +9345,7 @@ dnl Check for system xmlsec
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([xmlsec], [XMLSEC], [xmlsec1-nss >= 1.2.28])
 
-libo_CHECK_SYSTEM_MODULE([eot],[EOT],[libeot >= 0.01],disabled)
+libo_CHECK_SYSTEM_MODULE([eot],[LIBEOT],[libeot >= 0.01],disabled)
 
 dnl ===================================================================
 dnl Check for DLP libs

@@ -85,7 +85,7 @@
 
 #include <config_eot.h>
 
-#if ENABLE_EOT
+#if ENABLE_LIBEOT
 #include <libeot/libeot.h>
 #endif
 

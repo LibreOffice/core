@@ -3251,7 +3251,7 @@ endif # MSC
 endif # SYSTEM_LIBORCUS
 
 
-ifeq ($(ENABLE_EOT),TRUE)
+ifeq ($(ENABLE_LIBEOT),TRUE)
 ifeq ($(SYSTEM_LIBEOT),TRUE)
 
 define gb_LinkTarget__use_libeot
@@ -3285,12 +3285,12 @@ $(call gb_ExternalProject_use_external_project,$(1),libeot)
 endef
 
 endif # !SYSTEM_LIBEOT
-else # !ENABLE_EOT
+else # !ENABLE_LIBEOT
 
 gb_LinkTarget__use_libeot :=
 gb_ExternalProject__use_libeot :=
 
-endif # !ENABLE_EOT
+endif # !ENABLE_LIBEOT
 
 
 ifeq ($(USING_X11), TRUE)
