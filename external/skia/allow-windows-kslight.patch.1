@@ -1,0 +1,16 @@
+--- a/src/ports/SkFontHost_win.cpp	2021-12-30 20:32:03.085329487 +0000
++++ b/src/ports/SkFontHost_win.cpp	2021-12-30 20:32:21.859465715 +0000
+@@ -2117,13 +2117,7 @@
+     SkFontHinting h = rec->getHinting();
+     switch (h) {
+         case SkFontHinting::kNone:
+-            break;
+         case SkFontHinting::kSlight:
+-            // Only do slight hinting when axis aligned.
+-            // TODO: re-enable slight hinting when FontHostTest can pass.
+-            //if (!isAxisAligned(*rec)) {
+-                h = SkFontHinting::kNone;
+-            //}
+             break;
+         case SkFontHinting::kNormal:
+         case SkFontHinting::kFull:
