@@ -323,10 +323,10 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
     switch( nGeometry3D )
     {
         case DataPointGeometry3D::CYLINDER:
-            xShape = m_pShapeFactory->createCylinder( xTarget, rPosition, rSize, nRotateZAngleHundredthDegree );
+            xShape = ShapeFactory::createCylinder( xTarget, rPosition, rSize, nRotateZAngleHundredthDegree );
             break;
         case DataPointGeometry3D::CONE:
-            xShape = m_pShapeFactory->createCone( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree );
+            xShape = ShapeFactory::createCone( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree );
             break;
         case DataPointGeometry3D::PYRAMID:
             xShape = m_pShapeFactory->createPyramid( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree>0

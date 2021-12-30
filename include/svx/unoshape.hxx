@@ -744,7 +744,7 @@ class Svx3DLatheObject final : public SvxShape
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
-    Svx3DLatheObject(SdrObject* pObj);
+    SVXCORE_DLLPUBLIC Svx3DLatheObject(SdrObject* pObj);
     virtual ~Svx3DLatheObject() noexcept override;
 
     // XServiceInfo
