@@ -788,6 +788,10 @@ void XclExpAutofilter::AddColorEntry(const ScQueryEntry& rEntry)
     {
         maColorValues.push_back(
             std::make_pair(rItem.maColor, rItem.meType == ScQueryEntry::ByBackgroundColor));
+        // Ensure that selected color(s) will be added to dxf: selection can be not in list
+        // of already added to dfx colors taken from filter range
+        if (GetDxfs().GetDxfByColor(rItem.maColor) == -1)
+            GetDxfs().AddColor(rItem.maColor);
     }
 }
 

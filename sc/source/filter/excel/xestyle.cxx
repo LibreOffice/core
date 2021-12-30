@@ -3159,20 +3159,28 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     }
 }
 
-sal_Int32 XclExpDxfs::GetDxfId( const OUString& rStyleName )
+sal_Int32 XclExpDxfs::GetDxfId( const OUString& rStyleName ) const
 {
-    std::map<OUString, sal_Int32>::iterator itr = maStyleNameToDxfId.find(rStyleName);
+    std::map<OUString, sal_Int32>::const_iterator itr = maStyleNameToDxfId.find(rStyleName);
     if(itr!= maStyleNameToDxfId.end())
         return itr->second;
     return -1;
 }
 
-sal_Int32 XclExpDxfs::GetDxfByColor(Color& aColor)
+sal_Int32 XclExpDxfs::GetDxfByColor(const Color& aColor) const
 {
-    std::map<Color, sal_Int32>::iterator itr = maColorToDxfId.find(aColor);
+    std::map<Color, sal_Int32>::const_iterator itr = maColorToDxfId.find(aColor);
     if (itr != maColorToDxfId.end())
         return itr->second;
     return -1;
+}
+
+void XclExpDxfs::AddColor(Color aColor)
+{
+    maColorToDxfId.emplace(aColor, maDxf.size());
+
+    std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(aColor, 0));
+    maDxf.push_back(std::make_unique<XclExpDxf>(GetRoot(), std::move(pExpCellArea)));
 }
 
 void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
