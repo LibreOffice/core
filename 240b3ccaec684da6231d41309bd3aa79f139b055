@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "659b62ce_5b87151f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2021-12-30T10:05:09Z",
+      "side": 1,
+      "message": "... pushed before I could comment ...\n\nI\u0027m totally in favor of having Basic code written with correctly written reserved words (that\u0027s why the VBA IDE corrects them automatically while editing the code ...). Otherwise you would have found many more cases 😊\n\n2 remarks, however:\n- there are tenths of reserved words. What about the others ?\n- the Basic IDE - at least in Linux - does not add a final linefeed. This makes that a next commit done on one of the examined libraries will declare as modified all the modules impacted by this commit while probably not related with the new commit. Can we avoid that ?",
+      "revId": "240b3ccaec684da6231d41309bd3aa79f139b055",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
