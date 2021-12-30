@@ -144,11 +144,11 @@ bool lcl_IsRotateAngleValid(const SdrObject& rObj)
     // have been incorporated.
     switch (rObj.GetObjIdentifier())
     {
-        case OBJ_GRUP:
-        case OBJ_LINE:
-        case OBJ_PLIN:
-        case OBJ_PATHLINE:
-        case OBJ_PATHFILL:
+        case SdrObjKind::Group:
+        case SdrObjKind::Line:
+        case SdrObjKind::PolyLine:
+        case SdrObjKind::PathLine:
+        case SdrObjKind::PathFill:
             return false;
         default:
             return true;
@@ -302,7 +302,7 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
     basegfx::B2DPolyPolygon aPolyPolygon;
     switch (pSdrObj->GetObjIdentifier())
     {
-        case OBJ_CUSTOMSHAPE:
+        case SdrObjKind::CustomShape:
         {
             // EnhancedCustomShapeEngine::GetLineGeometry() is not directly usable, because the wrap
             // polygon acts on the untransformed shape in Word. We do here similar as in
@@ -371,19 +371,19 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
             aPolyPolygon.transform(aTranslateToCenter);
             break;
         } // end case OBJ_CUSTOMSHAPE
-        case OBJ_LINE:
+        case SdrObjKind::Line:
         {
             aContour.Insert(0, Point(0, 0));
             aContour.Insert(1, Point(21600, 21600));
             aContour.Insert(2, Point(0, 0));
             return aContour;
         }
-        case OBJ_PATHFILL:
-        case OBJ_PATHLINE:
-        case OBJ_FREEFILL:
-        case OBJ_FREELINE:
-        case OBJ_PATHPOLY:
-        case OBJ_PATHPLIN:
+        case SdrObjKind::PathFill:
+        case SdrObjKind::PathLine:
+        case SdrObjKind::FreehandFill:
+        case SdrObjKind::FreehandLine:
+        case SdrObjKind::PathPoly:
+        case SdrObjKind::PathPolyLine:
             // case OBJ_POLY: FixMe: Creating wrap polygon would work, but export to DML is currently
             // case OBJ_PLIN: disabled for unknown reason; related bug 75254.
             {
@@ -424,7 +424,7 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
                 aPolyPolygon.transform(aTranslateToCenter);
                 break;
             }
-        case OBJ_NONE:
+        case SdrObjKind::NONE:
         default:
             break;
     }
@@ -736,7 +736,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     sal_Int32 nTopExt(0);
     sal_Int32 nBottomExt(0);
 
-    if ((!pObj) || (pObj && (pObj->GetObjIdentifier() == SwFlyDrawObjIdentifier)))
+    if ((!pObj) || (pObj && (pObj->GetObjIdentifier() == SdrObjKind::SwFlyDrawObjIdentifier)))
     {
         // Frame objects have a restricted shadow and no further effects. They have border instead of
         // stroke. LO includes shadow and border in the object size, but Word not.
@@ -804,7 +804,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     {
         // Word 2007 makes no width-height-swap for images. Detect this situation.
         sal_Int32 nMode = m_pImpl->getExport().getWordCompatibilityModeFromGrabBag();
-        bool bIsWord2007Image(nMode > 0 && nMode < 14 && pObj->GetObjIdentifier() == OBJ_GRAF);
+        bool bIsWord2007Image(nMode > 0 && nMode < 14
+                              && pObj->GetObjIdentifier() == SdrObjKind::Graphic);
 
         // Word cannot handle negative EffectExtent although allowed in OOXML, the 'dist' attributes
         // may not be negative. Take care of that.
@@ -926,7 +927,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         aPos.X += nPosXDiff; // Make the postponed position move of frames.
         aPos.Y += nPosYDiff;
         if (pObj && lcl_IsRotateAngleValid(*pObj)
-            && pObj->GetObjIdentifier() != SwFlyDrawObjIdentifier)
+            && pObj->GetObjIdentifier() != SdrObjKind::SwFlyDrawObjIdentifier)
             lclMovePositionWithRotation(aPos, rSize, pObj->GetRotateAngle());
 
         const char* relativeFromH;

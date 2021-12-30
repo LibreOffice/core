@@ -44,6 +44,7 @@ class SfxFrame;
 struct SfxItemPropertyMapEntry;
 class VclSimpleEvent;
 namespace svtools { class ColorConfig; }
+enum class SdrObjKind : sal_uInt16;
 
 namespace com::sun::star::frame {
     class XFrame;
@@ -56,7 +57,7 @@ enum class SdOptionStreamMode
 };
 
 typedef std::map< SfxItemPropertyMapEntry const * , css::uno::Reference<css::beans::XPropertySetInfo> > SdExtPropertySetInfoCache;
-typedef std::map< sal_uInt32, css::uno::Sequence< css::uno::Type> > SdTypesCache;
+typedef std::map< SdrObjKind, css::uno::Sequence< css::uno::Type> > SdTypesCache;
 
 /*
 

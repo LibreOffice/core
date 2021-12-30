@@ -810,99 +810,99 @@ SdrObjKind DlgEdObj::GetObjIdentifier() const
 {
     if ( supportsService( "com.sun.star.awt.UnoControlDialogModel" ))
     {
-        return OBJ_DLG_DIALOG;
+        return SdrObjKind::BasicDialogDialog;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlButtonModel" ))
     {
-        return OBJ_DLG_PUSHBUTTON;
+        return SdrObjKind::BasicDialogPushButton;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ))
     {
-        return OBJ_DLG_RADIOBUTTON;
+        return SdrObjKind::BasicDialogRadioButton;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ))
     {
-        return OBJ_DLG_CHECKBOX;
+        return SdrObjKind::BasicDialogCheckbox;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlListBoxModel" ))
     {
-        return OBJ_DLG_LISTBOX;
+        return SdrObjKind::BasicDialogListbox;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlComboBoxModel" ))
     {
-        return OBJ_DLG_COMBOBOX;
+        return SdrObjKind::BasicDialogCombobox;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ))
     {
-        return OBJ_DLG_GROUPBOX;
+        return SdrObjKind::BasicDialogGroupBox;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlEditModel" ))
     {
-        return OBJ_DLG_EDIT;
+        return SdrObjKind::BasicDialogEdit;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ))
     {
-        return OBJ_DLG_FIXEDTEXT;
+        return SdrObjKind::BasicDialogFixedText;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlImageControlModel" ))
     {
-        return OBJ_DLG_IMAGECONTROL;
+        return SdrObjKind::BasicDialogImageControl;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlProgressBarModel" ))
     {
-        return OBJ_DLG_PROGRESSBAR;
+        return SdrObjKind::BasicDialogProgressbar;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlScrollBarModel" ))
     {
-        return OBJ_DLG_HSCROLLBAR;
+        return SdrObjKind::BasicDialogHorizontalScrollbar;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFixedLineModel" ))
     {
-        return OBJ_DLG_HFIXEDLINE;
+        return SdrObjKind::BasicDialogHorizontalFixedLine;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlDateFieldModel" ))
     {
-        return OBJ_DLG_DATEFIELD;
+        return SdrObjKind::BasicDialogDateField;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlTimeFieldModel" ))
     {
-        return OBJ_DLG_TIMEFIELD;
+        return SdrObjKind::BasicDialogTimeField;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlNumericFieldModel" ))
     {
-        return OBJ_DLG_NUMERICFIELD;
+        return SdrObjKind::BasicDialogNumericField;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlCurrencyFieldModel" ))
     {
-        return OBJ_DLG_CURRENCYFIELD;
+        return SdrObjKind::BasicDialogCurencyField;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ))
     {
-        return OBJ_DLG_FORMATTEDFIELD;
+        return SdrObjKind::BasicDialogFormattedField;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlPatternFieldModel" ))
     {
-        return OBJ_DLG_PATTERNFIELD;
+        return SdrObjKind::BasicDialogPatternField;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFileControlModel" ))
     {
-        return OBJ_DLG_FILECONTROL;
+        return SdrObjKind::BasicDialogFileControl;
     }
     else if ( supportsService( "com.sun.star.awt.tree.TreeControlModel" ))
     {
-        return OBJ_DLG_TREECONTROL;
+        return SdrObjKind::BasicDialogTreeControl;
     }
     else if ( supportsService( "com.sun.star.awt.grid.UnoControlGridModel" ))
     {
-        return OBJ_DLG_GRIDCONTROL;
+        return SdrObjKind::BasicDialogGridControl;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFixedHyperlinkModel" ))
     {
-        return OBJ_DLG_HYPERLINKCONTROL;
+        return SdrObjKind::BasicDialogHyperlinkControl;
     }
     else
     {
-        return OBJ_DLG_CONTROL;
+        return SdrObjKind::BasicDialogControl;
     }
 }
 

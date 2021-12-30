@@ -175,11 +175,11 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         SdrInventor nInv = pObj->GetObjInventor();
-        sal_uInt16  nId  = pObj->GetObjIdentifier();
+        SdrObjKind  nId  = pObj->GetObjIdentifier();
         // 1 selected group object
-        if( nInv == SdrInventor::Default && nId == OBJ_GRUP )
+        if( nInv == SdrInventor::Default && nId == SdrObjKind::Group )
             nValue = 3;
-        else if( nInv == SdrInventor::Default && nId == OBJ_GRAF ) // Animated GIF ?
+        else if( nInv == SdrInventor::Default && nId == SdrObjKind::Graphic ) // Animated GIF ?
         {
             sal_uInt16 nCount = 0;
 

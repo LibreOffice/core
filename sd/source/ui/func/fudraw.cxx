@@ -535,11 +535,11 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             }
             else if (eHit == SdrHitKind::TextEditObj && dynamic_cast< const FuSelection *>( this ) !=  nullptr)
             {
-                sal_uInt16 nSdrObjKind = aVEvt.mpObj->GetObjIdentifier();
+                SdrObjKind nSdrObjKind = aVEvt.mpObj->GetObjIdentifier();
 
-                if ( nSdrObjKind != OBJ_TEXT        &&
-                     nSdrObjKind != OBJ_TITLETEXT   &&
-                     nSdrObjKind != OBJ_OUTLINETEXT &&
+                if ( nSdrObjKind != SdrObjKind::Text        &&
+                     nSdrObjKind != SdrObjKind::TitleText   &&
+                     nSdrObjKind != SdrObjKind::OutlineText &&
                      aVEvt.mpObj->IsEmptyPresObj() )
                 {
                     pObj = nullptr;
@@ -638,9 +638,9 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
             SdrObject* pObj = pMark->GetMarkedSdrObj();
 
             SdrInventor nInv = pObj->GetObjInventor();
-            sal_uInt16  nSdrObjKind = pObj->GetObjIdentifier();
+            SdrObjKind  nSdrObjKind = pObj->GetObjIdentifier();
 
-            if (nInv == SdrInventor::Default && nSdrObjKind == OBJ_OLE2)
+            if (nInv == SdrInventor::Default && nSdrObjKind == SdrObjKind::OLE2)
             {
                 // activate OLE-object
                 SfxInt16Item aItem(SID_OBJECT, 0);
@@ -649,7 +649,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                                                  SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                                  { &aItem });
             }
-            else if (nInv == SdrInventor::Default &&  nSdrObjKind == OBJ_GRAF && pObj->IsEmptyPresObj() )
+            else if (nInv == SdrInventor::Default &&  nSdrObjKind == SdrObjKind::Graphic && pObj->IsEmptyPresObj() )
             {
                 mpViewShell->GetViewFrame()->
                     GetDispatcher()->Execute( SID_INSERT_GRAPHIC,
@@ -666,7 +666,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                         SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                         { &aItem });
             }
-            else if (nInv == SdrInventor::Default &&  nSdrObjKind == OBJ_GRUP)
+            else if (nInv == SdrInventor::Default &&  nSdrObjKind == SdrObjKind::Group)
             {
                 // hit group -> select subobject
                 mpView->UnMarkAll();

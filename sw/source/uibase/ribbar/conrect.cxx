@@ -50,7 +50,7 @@ bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (bReturn)
     {
-        if (m_pWin->GetSdrDrawMode() == OBJ_CAPTION)
+        if (m_pWin->GetSdrDrawMode() == SdrObjKind::Caption)
         {
             m_pView->NoRotate();
             if (m_pView->IsDrawSelMode())
@@ -85,7 +85,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                                                : nullptr;
         switch( m_pWin->GetSdrDrawMode() )
         {
-        case OBJ_TEXT:
+        case SdrObjKind::Text:
             if( bMarquee )
             {
                 m_pSh->ChgAnchor(RndStdIds::FLY_AS_CHAR);
@@ -133,7 +133,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
             break;
 
-        case OBJ_CAPTION:
+        case SdrObjKind::Caption:
         {
             SdrCaptionObj* pCaptObj = dynamic_cast<SdrCaptionObj*>(pObj);
             if( bCapVertical && pCaptObj )
@@ -167,44 +167,44 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
     case SID_LINE_ARROWS:
     case SID_DRAW_LINE:
     case SID_DRAW_XLINE:
-        m_pWin->SetSdrDrawMode(OBJ_LINE);
+        m_pWin->SetSdrDrawMode(SdrObjKind::Line);
         break;
 
     case SID_DRAW_MEASURELINE:
-        m_pWin->SetSdrDrawMode(OBJ_MEASURE);
+        m_pWin->SetSdrDrawMode(SdrObjKind::Measure);
         break;
 
     case SID_DRAW_RECT:
-        m_pWin->SetSdrDrawMode(OBJ_RECT);
+        m_pWin->SetSdrDrawMode(SdrObjKind::Rectangle);
         break;
 
     case SID_DRAW_ELLIPSE:
-        m_pWin->SetSdrDrawMode(OBJ_CIRC);
+        m_pWin->SetSdrDrawMode(SdrObjKind::CircleOrEllipse);
         break;
 
     case SID_DRAW_TEXT_MARQUEE:
         bMarquee = true;
-        m_pWin->SetSdrDrawMode(OBJ_TEXT);
+        m_pWin->SetSdrDrawMode(SdrObjKind::Text);
         break;
 
     case SID_DRAW_TEXT_VERTICAL:
         mbVertical = true;
-        m_pWin->SetSdrDrawMode(OBJ_TEXT);
+        m_pWin->SetSdrDrawMode(SdrObjKind::Text);
         break;
 
     case SID_DRAW_TEXT:
-        m_pWin->SetSdrDrawMode(OBJ_TEXT);
+        m_pWin->SetSdrDrawMode(SdrObjKind::Text);
         break;
 
     case SID_DRAW_CAPTION_VERTICAL:
         bCapVertical = true;
         [[fallthrough]];
     case SID_DRAW_CAPTION:
-        m_pWin->SetSdrDrawMode(OBJ_CAPTION);
+        m_pWin->SetSdrDrawMode(SdrObjKind::Caption);
         break;
 
     default:
-        m_pWin->SetSdrDrawMode(OBJ_NONE);
+        m_pWin->SetSdrDrawMode(SdrObjKind::NONE);
         break;
     }
 

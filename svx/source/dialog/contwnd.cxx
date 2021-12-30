@@ -61,7 +61,7 @@ void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
         aPolyPolygon.append(aPolyPoly[ i ].getB2DPolygon());
         SdrPathObj* pPathObj = new SdrPathObj(
             *pModel,
-            OBJ_PATHFILL,
+            SdrObjKind::PathFill,
             aPolyPolygon);
 
         SfxItemSet aSet(pModel->GetItemPool());

@@ -500,7 +500,7 @@ bool ViewOverlayManager::CreateTags()
 
         for( SdrObject* pShape : rShapes )
         {
-            if( pShape->IsEmptyPresObj() && (pShape->GetObjIdentifier() == OBJ_OUTLINETEXT) && (mrBase.GetDrawView()->GetTextEditObject() != pShape) )
+            if( pShape->IsEmptyPresObj() && (pShape->GetObjIdentifier() == SdrObjKind::OutlineText) && (mrBase.GetDrawView()->GetTextEditObject() != pShape) )
             {
                 rtl::Reference< SmartTag > xTag( new ChangePlaceholderTag( *mrBase.GetMainViewShell()->GetView(), *pShape ) );
                 maTagVector.push_back(xTag);

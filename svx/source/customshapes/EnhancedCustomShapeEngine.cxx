@@ -178,7 +178,7 @@ std::unique_ptr<SdrObject, SdrObjectFreeOp> EnhancedCustomShapeEngine::ImplForce
             std::unique_ptr<SdrObject, SdrObjectFreeOp> pTextObj( SdrObjFactory::MakeNewObject(
                 rSdrObjCustomShape.getSdrModelFromSdrObject(),
                 rSdrObjCustomShape.GetObjInventor(),
-                OBJ_TEXT) );
+                SdrObjKind::Text) );
 
             // Copy text content
             OutlinerParaObject* pParaObj(rSdrObjCustomShape.GetOutlinerParaObject());

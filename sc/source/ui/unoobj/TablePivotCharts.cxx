@@ -86,7 +86,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
 
     OUString aName = rName;
     SCTAB nDummy;
-    if (!aName.isEmpty() && pModel->GetNamedObject(aName, OBJ_OLE2, nDummy))
+    if (!aName.isEmpty() && pModel->GetNamedObject(aName, SdrObjKind::OLE2, nDummy))
     {
         //  object exists - only RuntimeException is specified
         throw uno::RuntimeException();

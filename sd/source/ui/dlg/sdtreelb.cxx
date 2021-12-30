@@ -897,13 +897,13 @@ IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, const weld::TreeIter&, rFileEntr
                         OUString aStr( GetObjectName( pObj ) );
                         if( !aStr.isEmpty() )
                         {
-                            if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_OLE2 )
+                            if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == SdrObjKind::OLE2 )
                             {
                                 m_xTreeView->insert(xPageEntry.get(), -1, &aStr, nullptr,
                                                     nullptr, nullptr, false, m_xScratchIter.get());
                                 m_xTreeView->set_image(*m_xScratchIter, sImgOle);
                             }
-                            else if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_GRAF )
+                            else if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == SdrObjKind::Graphic )
                             {
                                 m_xTreeView->insert(xPageEntry.get(), -1, &aStr, nullptr,
                                                     nullptr, nullptr, false, m_xScratchIter.get());
@@ -1043,11 +1043,11 @@ void SdPageObjsTLV::AddShapeList (
 
         if( !aStr.isEmpty() )
         {
-            if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_OLE2 )
+            if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == SdrObjKind::OLE2 )
             {
                 InsertEntry(xEntry.get(), sId, aStr, BMP_OLE);
             }
-            else if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_GRAF )
+            else if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == SdrObjKind::Graphic )
             {
                 InsertEntry(xEntry.get(), sId, aStr, BMP_GRAPHIC);
             }

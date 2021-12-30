@@ -2585,7 +2585,7 @@ void EnhancedCustomShape2d::CreateSubPath(
             aClosedPolyPolygon.setClosed(true);
             SdrPathObjUniquePtr pFill(new SdrPathObj(
                 mrSdrObjCustomShape.getSdrModelFromSdrObject(),
-                OBJ_POLY,
+                SdrObjKind::Polygon,
                 aClosedPolyPolygon));
             SfxItemSet aTempSet(*this);
             aTempSet.Put(makeSdrShadowItem(false));
@@ -2602,7 +2602,7 @@ void EnhancedCustomShape2d::CreateSubPath(
             // Thus, use a type that fits the polygon
             SdrPathObjUniquePtr pStroke(new SdrPathObj(
                 mrSdrObjCustomShape.getSdrModelFromSdrObject(),
-                aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
+                aNewB2DPolyPolygon.isClosed() ? SdrObjKind::Polygon : SdrObjKind::PolyLine,
                 aNewB2DPolyPolygon));
             SfxItemSet aTempSet(*this);
             aTempSet.Put(makeSdrShadowItem(false));
@@ -2622,7 +2622,7 @@ void EnhancedCustomShape2d::CreateSubPath(
             // see comment above about OBJ_PLIN
             pObj.reset(new SdrPathObj(
                 mrSdrObjCustomShape.getSdrModelFromSdrObject(),
-                aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
+                aNewB2DPolyPolygon.isClosed() ? SdrObjKind::Polygon : SdrObjKind::PolyLine,
                 aNewB2DPolyPolygon));
             aTempSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         }
@@ -2631,7 +2631,7 @@ void EnhancedCustomShape2d::CreateSubPath(
             aNewB2DPolyPolygon.setClosed(true);
             pObj.reset(new SdrPathObj(
                 mrSdrObjCustomShape.getSdrModelFromSdrObject(),
-                OBJ_POLY,
+                SdrObjKind::Polygon,
                 aNewB2DPolyPolygon));
         }
 

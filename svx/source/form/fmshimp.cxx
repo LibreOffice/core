@@ -227,28 +227,28 @@ constexpr rtl::OUStringConstExpr aImgIds[] =
     RID_SVXBMP_NAVIGATIONBAR
 };
 
-const sal_Int16 nObjectTypes[] =
+const SdrObjKind nObjectTypes[] =
 {
-    OBJ_FM_EDIT,
-    OBJ_FM_BUTTON,
-    OBJ_FM_FIXEDTEXT,
-    OBJ_FM_LISTBOX,
-    OBJ_FM_CHECKBOX,
-    OBJ_FM_RADIOBUTTON,
-    OBJ_FM_GROUPBOX,
-    OBJ_FM_COMBOBOX,
-    OBJ_FM_IMAGEBUTTON,
-    OBJ_FM_FILECONTROL,
-    OBJ_FM_DATEFIELD,
-    OBJ_FM_TIMEFIELD,
-    OBJ_FM_NUMERICFIELD,
-    OBJ_FM_CURRENCYFIELD,
-    OBJ_FM_PATTERNFIELD,
-    OBJ_FM_IMAGECONTROL,
-    OBJ_FM_FORMATTEDFIELD,
-    OBJ_FM_SCROLLBAR,
-    OBJ_FM_SPINBUTTON,
-    OBJ_FM_NAVIGATIONBAR
+    SdrObjKind::FormEdit,
+    SdrObjKind::FormButton,
+    SdrObjKind::FormFixedText,
+    SdrObjKind::FormListbox,
+    SdrObjKind::FormCheckbox,
+    SdrObjKind::FormRadioButton,
+    SdrObjKind::FormGroupBox,
+    SdrObjKind::FormCombobox,
+    SdrObjKind::FormImageButton,
+    SdrObjKind::FormFileControl,
+    SdrObjKind::FormDateField,
+    SdrObjKind::FormTimeField,
+    SdrObjKind::FormNumericField,
+    SdrObjKind::FormCurrencyField,
+    SdrObjKind::FormPatternField,
+    SdrObjKind::FormImageControl,
+    SdrObjKind::FormFormattedField,
+    SdrObjKind::FormScrollbar,
+    SdrObjKind::FormSpinButton,
+    SdrObjKind::FormNavigationBar
 };
 
 using namespace ::com::sun::star;
@@ -429,32 +429,33 @@ namespace
     }
 
 
-    OUString getServiceNameByControlType(sal_Int16 nType)
+    OUString getServiceNameByControlType(SdrObjKind nType)
     {
         switch (nType)
         {
-            case OBJ_FM_EDIT            : return FM_COMPONENT_TEXTFIELD;
-            case OBJ_FM_BUTTON          : return FM_COMPONENT_COMMANDBUTTON;
-            case OBJ_FM_FIXEDTEXT       : return FM_COMPONENT_FIXEDTEXT;
-            case OBJ_FM_LISTBOX         : return FM_COMPONENT_LISTBOX;
-            case OBJ_FM_CHECKBOX        : return FM_COMPONENT_CHECKBOX;
-            case OBJ_FM_RADIOBUTTON     : return FM_COMPONENT_RADIOBUTTON;
-            case OBJ_FM_GROUPBOX        : return FM_COMPONENT_GROUPBOX;
-            case OBJ_FM_COMBOBOX        : return FM_COMPONENT_COMBOBOX;
-            case OBJ_FM_GRID            : return FM_COMPONENT_GRIDCONTROL;
-            case OBJ_FM_IMAGEBUTTON     : return FM_COMPONENT_IMAGEBUTTON;
-            case OBJ_FM_FILECONTROL     : return FM_COMPONENT_FILECONTROL;
-            case OBJ_FM_DATEFIELD       : return FM_COMPONENT_DATEFIELD;
-            case OBJ_FM_TIMEFIELD       : return FM_COMPONENT_TIMEFIELD;
-            case OBJ_FM_NUMERICFIELD    : return FM_COMPONENT_NUMERICFIELD;
-            case OBJ_FM_CURRENCYFIELD   : return FM_COMPONENT_CURRENCYFIELD;
-            case OBJ_FM_PATTERNFIELD    : return FM_COMPONENT_PATTERNFIELD;
-            case OBJ_FM_HIDDEN          : return FM_COMPONENT_HIDDENCONTROL;
-            case OBJ_FM_IMAGECONTROL    : return FM_COMPONENT_IMAGECONTROL;
-            case OBJ_FM_FORMATTEDFIELD  : return FM_COMPONENT_FORMATTEDFIELD;
-            case OBJ_FM_SCROLLBAR       : return FM_SUN_COMPONENT_SCROLLBAR;
-            case OBJ_FM_SPINBUTTON      : return FM_SUN_COMPONENT_SPINBUTTON;
-            case OBJ_FM_NAVIGATIONBAR   : return FM_SUN_COMPONENT_NAVIGATIONBAR;
+            case SdrObjKind::FormEdit            : return FM_COMPONENT_TEXTFIELD;
+            case SdrObjKind::FormButton          : return FM_COMPONENT_COMMANDBUTTON;
+            case SdrObjKind::FormFixedText       : return FM_COMPONENT_FIXEDTEXT;
+            case SdrObjKind::FormListbox         : return FM_COMPONENT_LISTBOX;
+            case SdrObjKind::FormCheckbox        : return FM_COMPONENT_CHECKBOX;
+            case SdrObjKind::FormRadioButton     : return FM_COMPONENT_RADIOBUTTON;
+            case SdrObjKind::FormGroupBox        : return FM_COMPONENT_GROUPBOX;
+            case SdrObjKind::FormCombobox        : return FM_COMPONENT_COMBOBOX;
+            case SdrObjKind::FormGrid            : return FM_COMPONENT_GRIDCONTROL;
+            case SdrObjKind::FormImageButton     : return FM_COMPONENT_IMAGEBUTTON;
+            case SdrObjKind::FormFileControl     : return FM_COMPONENT_FILECONTROL;
+            case SdrObjKind::FormDateField       : return FM_COMPONENT_DATEFIELD;
+            case SdrObjKind::FormTimeField       : return FM_COMPONENT_TIMEFIELD;
+            case SdrObjKind::FormNumericField    : return FM_COMPONENT_NUMERICFIELD;
+            case SdrObjKind::FormCurrencyField   : return FM_COMPONENT_CURRENCYFIELD;
+            case SdrObjKind::FormPatternField    : return FM_COMPONENT_PATTERNFIELD;
+            case SdrObjKind::FormHidden          : return FM_COMPONENT_HIDDENCONTROL;
+            case SdrObjKind::FormImageControl    : return FM_COMPONENT_IMAGECONTROL;
+            case SdrObjKind::FormFormattedField  : return FM_COMPONENT_FORMATTEDFIELD;
+            case SdrObjKind::FormScrollbar       : return FM_SUN_COMPONENT_SCROLLBAR;
+            case SdrObjKind::FormSpinButton      : return FM_SUN_COMPONENT_SPINBUTTON;
+            case SdrObjKind::FormNavigationBar   : return FM_SUN_COMPONENT_NAVIGATIONBAR;
+            default:;
         }
         return OUString();
     }
@@ -1268,11 +1269,11 @@ bool FmXFormShell::canConvertCurrentSelectionToControl_Lock(std::string_view rId
         // it's a form
         return false;
 
-    sal_Int16 nObjectType = getControlTypeByObject( xElementInfo );
+    SdrObjKind nObjectType = getControlTypeByObject( xElementInfo );
 
-    if (  ( OBJ_FM_HIDDEN == nObjectType )
-       || ( OBJ_FM_CONTROL == nObjectType )
-       || ( OBJ_FM_GRID == nObjectType )
+    if (  ( SdrObjKind::FormHidden == nObjectType )
+       || ( SdrObjKind::FormControl == nObjectType )
+       || ( SdrObjKind::FormGrid == nObjectType )
        )
         return false;   // those types cannot be converted
 
@@ -3283,8 +3284,8 @@ void FmXFormShell::CreateExternalView_Lock()
                             Reference< lang::XServiceInfo> xInfo(xCurrentModelSet, UNO_QUERY);
                             if (xInfo.is())
                             {
-                                sal_Int16 nObjectType = getControlTypeByObject(xInfo);
-                                if (OBJ_FM_FORMATTEDFIELD == nObjectType)
+                                SdrObjKind nObjectType = getControlTypeByObject(xInfo);
+                                if (SdrObjKind::FormFormattedField == nObjectType)
                                     sColumnType = FM_COL_FORMATTEDFIELD;
                             }
                         }

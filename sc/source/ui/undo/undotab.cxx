@@ -1454,7 +1454,7 @@ SdrObject* ScUndoRenameObject::GetObject()
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
-                if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
+                if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 &&
                         static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == aPersistName )
                 {
                     return pObject;

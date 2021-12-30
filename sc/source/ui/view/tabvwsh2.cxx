@@ -97,7 +97,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( nNewId == SID_DRAW_SELECT )
         nNewId = SID_OBJECT_SELECT;
 
-    SdrObjKind eNewFormObjKind = OBJ_NONE;
+    SdrObjKind eNewFormObjKind = SdrObjKind::NONE;
     if (nNewId == SID_FM_CREATE_CONTROL)
     {
         const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
@@ -132,7 +132,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         bEx = true;
     }
     else if ( nNewId == nDrawSfxId && ( nNewId != SID_FM_CREATE_CONTROL ||
-                                    eNewFormObjKind == eFormObjKind || eNewFormObjKind == OBJ_NONE ) && !bSwitchCustom )
+                                    eNewFormObjKind == eFormObjKind || eNewFormObjKind == SdrObjKind::NONE ) && !bSwitchCustom )
     {
         // #i52871# if a different custom shape is selected, the slot id can be the same,
         // so the custom shape type string has to be compared, too.

@@ -243,7 +243,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
                 aPolygon.append(aDrawPoly.getB2DPolygon());
                 pSdrObj = new SdrPathObj(
                         *pModel,
-                        OBJ_POLY,
+                        SdrObjKind::Polygon,
                         basegfx::B2DPolyPolygon(aPolygon));
             }
 
@@ -298,7 +298,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
 {
     switch( rObj.GetObjIdentifier() )
     {
-        case OBJ_RECT:
+        case SdrObjKind::Rectangle:
         {
             SdrRectObj*    pRectObj = const_cast<SdrRectObj*>(static_cast<const SdrRectObj*>(&rObj));
             auto pObj = std::make_shared<IMapRectangleObject>( pRectObj->GetLogicRect(), "", "", "", "", "", true, false );
@@ -307,7 +307,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         }
         break;
 
-        case OBJ_CIRC:
+        case SdrObjKind::CircleOrEllipse:
         {
             SdrCircObj* pCircObj = const_cast<SdrCircObj*>( static_cast<const SdrCircObj*>(&rObj) );
             SdrPathObj* pPathObj = static_cast<SdrPathObj*>( pCircObj->ConvertToPolyObj( false, false ).release() );
@@ -323,10 +323,10 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         }
         break;
 
-        case OBJ_POLY:
-        case OBJ_FREEFILL:
-        case OBJ_PATHPOLY:
-        case OBJ_PATHFILL:
+        case SdrObjKind::Polygon:
+        case SdrObjKind::FreehandFill:
+        case SdrObjKind::PathPoly:
+        case SdrObjKind::PathFill:
         {
             SdrPathObj* pPathObj = const_cast<SdrPathObj*>( static_cast<const SdrPathObj*>(&rObj) );
             const basegfx::B2DPolyPolygon& rXPolyPoly = pPathObj->GetPathPoly();
@@ -370,14 +370,14 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
 
     switch( rObj.GetObjIdentifier() )
     {
-        case OBJ_RECT:
+        case SdrObjKind::Rectangle:
         {
             pUserData->ReplaceObject( std::make_shared<IMapRectangleObject>( static_cast<const SdrRectObj&>(rObj).GetLogicRect(),
                       aURL, aAltText, aDesc, aTarget, "", bActive, false ) );
         }
         break;
 
-        case OBJ_CIRC:
+        case SdrObjKind::CircleOrEllipse:
         {
             const SdrCircObj& rCircObj = static_cast<const SdrCircObj&>(rObj);
             SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rCircObj.ConvertToPolyObj( false, false ).release() );
@@ -395,10 +395,10 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
         }
         break;
 
-        case OBJ_POLY:
-        case OBJ_FREEFILL:
-        case OBJ_PATHPOLY:
-        case OBJ_PATHFILL:
+        case SdrObjKind::Polygon:
+        case SdrObjKind::FreehandFill:
+        case SdrObjKind::PathPoly:
+        case SdrObjKind::PathFill:
         {
             const SdrPathObj& rPathObj = static_cast<const SdrPathObj&>(rObj);
             const basegfx::B2DPolyPolygon& rXPolyPoly = rPathObj.GetPathPoly();
