@@ -38,6 +38,7 @@
 #include <scresid.hxx>
 #include <cellkeytranslator.hxx>
 #include <formulagroup.hxx>
+#include <vcl/svapp.hxx> //Application::
 
 #include <vector>
 
@@ -3320,7 +3321,15 @@ void ScInterpreter::ScInfo()
     if( aStr == "SYSTEM" )
         PushString( SC_INFO_OSVERSION );
     else if( aStr == "OSVERSION" )
+#if (defined LINUX || defined __FreeBSD__)
+        PushString(Application::GetOSVersion());
+#elif defined MACOSX
+        // TODO tdf#140286 handle MACOSX version to get result compatible to Excel
+        PushString("Windows (32-bit) NT 5.01");
+#else // handle Windows (WNT, WIN_NT, WIN32, _WIN32)
+        // TODO tdf#140286 handle Windows version to get a result compatible to Excel
         PushString( "Windows (32-bit) NT 5.01" );
+#endif
     else if( aStr == "RELEASE" )
         PushString( ::utl::Bootstrap::getBuildIdData( OUString() ) );
     else if( aStr == "NUMFILE" )
