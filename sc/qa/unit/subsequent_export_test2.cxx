@@ -214,6 +214,7 @@ public:
     void testTdf142264ManyChartsToXLSX();
     void testTdf143929MultiColumnToODS();
     void testTdf142578();
+    void testTdf145059();
     void testTdf130104_XLSXIndent();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
@@ -328,6 +329,7 @@ public:
     CPPUNIT_TEST(testTdf142264ManyChartsToXLSX);
     CPPUNIT_TEST(testTdf143929MultiColumnToODS);
     CPPUNIT_TEST(testTdf142578);
+    CPPUNIT_TEST(testTdf145059);
     CPPUNIT_TEST(testTdf130104_XLSXIndent);
 
     CPPUNIT_TEST_SUITE_END();
@@ -2989,6 +2991,35 @@ void ScExportTest2::testTdf142578()
     OString sDxfCondFormatXPath("/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nDxfIdCondFormat)
                                 + "]/x:fill/x:patternFill/x:bgColor");
     assertXPath(pStyles, sDxfCondFormatXPath, "rgb", "FFFFCCCC");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf145059()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf145059.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh);
+
+    // Export to xlsx.
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pSheet
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+    xmlDocUniquePtr pStyle = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+    CPPUNIT_ASSERT(pStyle);
+
+    sal_Int32 nColorFilterDxdId
+        = getXPath(pSheet, "/x:worksheet/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId")
+              .toInt32();
+
+    // Ensure that dxf id is not -1
+    CPPUNIT_ASSERT(nColorFilterDxdId >= 0);
+
+    // Find color by this dxfid
+    OString sDxfIdPath = "/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nColorFilterDxdId + 1)
+                         + "]/x:fill/x:patternFill/x:fgColor";
+    assertXPath(pStyle, sDxfIdPath, "rgb", "FF4472C4");
 
     xDocSh->DoClose();
 }
