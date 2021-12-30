@@ -31,13 +31,15 @@ $(eval $(call gb_Executable_set_include,vcldemo,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,vcldemo,\
-	basegfx \
+    basegfx \
     comphelper \
     cppu \
     cppuhelper \
     tl \
     sal \
-	salhelper \
+    salhelper \
+    fwk \
+    i18nlangtag \
 ))
 
 $(eval $(call gb_Executable_use_vclmain,vcldemo))
