@@ -551,7 +551,7 @@ void NetChart::createShapes()
                             }
                             else if (pSymbolProperties->Style == SymbolStyle_GRAPHIC)
                             {
-                                m_pShapeFactory->createGraphic2D(xPointGroupShape_Shapes,
+                                ShapeFactory::createGraphic2D(xPointGroupShape_Shapes,
                                                                  aScenePosition, aSymbolSize,
                                                                  pSymbolProperties->Graphic);
                             }

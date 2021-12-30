@@ -645,7 +645,7 @@ class SvxGraphicObject final : public SvxShapeText
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
-    SvxGraphicObject(SdrObject* pObj);
+    SVXCORE_DLLPUBLIC SvxGraphicObject(SdrObject* pObj);
     virtual ~SvxGraphicObject() noexcept override;
 };
 
