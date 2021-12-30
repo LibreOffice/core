@@ -275,7 +275,7 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
         nPoints=OptPointsPerCircle;
         tools::Polygon aPoly(nPoints);
         for (i=0; i<nPoints; i++) {
-            fAng=2*3.14159265359/static_cast<double>(nPoints-1)*static_cast<double>(i);
+            fAng=2*M_PI/static_cast<double>(nPoints-1)*static_cast<double>(i);
             rTransform.Transform(
                 rE.aP0+DXFVector(rE.fRadius*cos(fAng),rE.fRadius*sin(fAng),0),
                 aPoly[i]
@@ -285,7 +285,7 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
         if (rE.fThickness!=0) {
             tools::Polygon aPoly2(nPoints);
             for (i=0; i<nPoints; i++) {
-                fAng=2*3.14159265359/static_cast<double>(nPoints-1)*static_cast<double>(i);
+                fAng=2*M_PI/static_cast<double>(nPoints-1)*static_cast<double>(i);
                 rTransform.Transform(
                     rE.aP0+DXFVector(rE.fRadius*cos(fAng),rE.fRadius*sin(fAng),rE.fThickness),
                     aPoly2[i]
@@ -322,10 +322,10 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
     if (fdA<=0) fdA+=360.0;
     rTransform.Transform(rE.aP0,aC);
     if (rE.fThickness==0 && fdA>5.0 && rTransform.TransCircleToEllipse(rE.fRadius,frx,fry)) {
-        DXFVector aVS(cos(fA1/180.0*3.14159265359),sin(fA1/180.0*3.14159265359),0.0);
+        DXFVector aVS(cos(basegfx::deg2rad(fA1)),sin(basegfx::deg2rad(fA1)),0.0);
         aVS*=rE.fRadius;
         aVS+=rE.aP0;
-        DXFVector aVE(cos((fA1+fdA)/180.0*3.14159265359),sin((fA1+fdA)/180.0*3.14159265359),0.0);
+        DXFVector aVE(cos(basegfx::deg2rad(fA1+fdA)),sin(basegfx::deg2rad(fA1+fdA)),0.0);
         aVE*=rE.fRadius;
         aVE+=rE.aP0;
         Point aPS,aPE;
@@ -349,7 +349,7 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
         if (nPoints<2) nPoints=2;
         tools::Polygon aPoly(nPoints);
         for (i=0; i<nPoints; i++) {
-            fAng=3.14159265359/180.0 * ( fA1 + fdA/static_cast<double>(nPoints-1)*static_cast<double>(i) );
+            fAng=basegfx::deg2rad( fA1 + fdA/static_cast<double>(nPoints-1)*static_cast<double>(i) );
             rTransform.Transform(
                 rE.aP0+DXFVector(rE.fRadius*cos(fAng),rE.fRadius*sin(fAng),0),
                 aPoly[i]
@@ -359,7 +359,7 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
         if (rE.fThickness!=0) {
             tools::Polygon aPoly2(nPoints);
             for (i=0; i<nPoints; i++) {
-                fAng=3.14159265359/180.0 * ( fA1 + fdA/static_cast<double>(nPoints-1)*static_cast<double>(i) );
+                fAng=basegfx::deg2rad( fA1 + fdA/static_cast<double>(nPoints-1)*static_cast<double>(i) );
                 rTransform.Transform(
                     rE.aP0+DXFVector(rE.fRadius*cos(fAng),rE.fRadius*sin(fAng),rE.fThickness),
                     aPoly2[i]
