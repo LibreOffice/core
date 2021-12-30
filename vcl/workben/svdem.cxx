@@ -21,9 +21,10 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/extendapplicationenvironment.hxx>
-
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -52,6 +53,8 @@ SAL_IMPLEMENT_MAIN()
             Application::Abort( "Failed to bootstrap" );
 
         comphelper::setProcessServiceFactory( xServiceManager );
+
+        LanguageTag::setConfiguredSystemLanguage(MsLangId::getSystemLanguage());
 
         InitVCL();
         ::Main();
