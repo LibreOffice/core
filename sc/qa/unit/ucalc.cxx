@@ -3132,7 +3132,7 @@ void Test::testGraphicsInGroup()
         tools::Rectangle aOrigRect(10,200,110,300); // 100 x 100
         aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
         aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
-        SdrPathObj* pObj = new SdrPathObj(*pDrawLayer, OBJ_LINE, basegfx::B2DPolyPolygon(aTempPoly));
+        SdrPathObj* pObj = new SdrPathObj(*pDrawLayer, SdrObjKind::Line, basegfx::B2DPolyPolygon(aTempPoly));
         pObj->NbcSetLogicRect(aOrigRect);
         pPage->InsertObject(pObj);
         const tools::Rectangle& rNewRect = pObj->GetLogicRect();

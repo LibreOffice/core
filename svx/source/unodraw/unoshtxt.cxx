@@ -487,7 +487,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         {
             SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
             OutlinerMode nOutlMode = OutlinerMode::TextObject;
-            if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
+            if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == SdrObjKind::OutlineText )
                 nOutlMode = OutlinerMode::OutlineObject;
 
             mpOutliner = mpModel->createOutliner( nOutlMode );
@@ -522,7 +522,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         }
 
 
-        mpTextForwarder.reset(new SvxOutlinerForwarder( *mpOutliner, (mpObject->GetObjInventor() == SdrInventor::Default) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) ));
+        mpTextForwarder.reset(new SvxOutlinerForwarder( *mpOutliner, (mpObject->GetObjInventor() == SdrInventor::Default) && (mpObject->GetObjIdentifier() == SdrObjKind::OutlineText) ));
         // delay listener subscription and UAA initialization until Outliner is fully setup
         bCreated = true;
 
@@ -624,7 +624,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
 
         if( pEditOutliner )
         {
-            mpTextForwarder.reset(new SvxOutlinerForwarder( *pEditOutliner, (mpObject->GetObjInventor() == SdrInventor::Default) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) ));
+            mpTextForwarder.reset(new SvxOutlinerForwarder( *pEditOutliner, (mpObject->GetObjInventor() == SdrInventor::Default) && (mpObject->GetObjIdentifier() == SdrObjKind::OutlineText) ));
             mbForwarderIsEditMode = true;
         }
     }

@@ -372,7 +372,7 @@ bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
 
 void FuConstruct3dObject::Activate()
 {
-    mpView->SetCurrentObj(OBJ_NONE);
+    mpView->SetCurrentObj(SdrObjKind::NONE);
 
     FuConstruct::Activate();
 }

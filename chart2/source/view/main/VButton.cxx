@@ -43,7 +43,7 @@ void VButton::init(const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage)
 rtl::Reference<SvxShapePolyPolygon> VButton::createTriangle(awt::Size aSize)
 {
     rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
-    xShape->setShapeKind(OBJ_POLY);
+    xShape->setShapeKind(SdrObjKind::Polygon);
 
     drawing::PolyPolygonShape3D aPolyPolygon;
     aPolyPolygon.SequenceX.realloc(1);

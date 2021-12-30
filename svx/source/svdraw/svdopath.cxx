@@ -258,7 +258,7 @@ struct ImpPathCreateUser  : public SdrDragStatUserData
 public:
     ImpPathCreateUser(): nCircRadius(0),nCircStAngle(0),nCircRelAngle(0),
         bBezier(false),bBezHasCtrl0(false),bCircle(false),bAngleSnap(false),bLine(false),bLine90(false),bRect(false),
-        bMixedCreate(false),nBezierStartPoint(0),eStartKind(OBJ_NONE),eCurrentKind(OBJ_NONE) { }
+        bMixedCreate(false),nBezierStartPoint(0),eStartKind(SdrObjKind::NONE),eCurrentKind(SdrObjKind::NONE) { }
 
     void ResetFormFlags() { bBezier=false; bCircle=false; bLine=false; bRect=false; }
     bool IsFormFlag() const { return bBezier || bCircle || bLine || bRect; }
@@ -522,9 +522,9 @@ public:
     PointerStyle GetCreatePointer() const;
 
     // helping stuff
-    static bool IsClosed(SdrObjKind eKind) { return eKind==OBJ_POLY || eKind==OBJ_PATHPOLY || eKind==OBJ_PATHFILL || eKind==OBJ_FREEFILL || eKind==OBJ_SPLNFILL; }
-    static bool IsFreeHand(SdrObjKind eKind) { return eKind==OBJ_FREELINE || eKind==OBJ_FREEFILL; }
-    static bool IsBezier(SdrObjKind eKind) { return eKind==OBJ_PATHLINE || eKind==OBJ_PATHFILL; }
+    static bool IsClosed(SdrObjKind eKind) { return eKind==SdrObjKind::Polygon || eKind==SdrObjKind::PathPoly || eKind==SdrObjKind::PathFill || eKind==SdrObjKind::FreehandFill || eKind==SdrObjKind::SplineFill; }
+    static bool IsFreeHand(SdrObjKind eKind) { return eKind==SdrObjKind::FreehandLine || eKind==SdrObjKind::FreehandFill; }
+    static bool IsBezier(SdrObjKind eKind) { return eKind==SdrObjKind::PathLine || eKind==SdrObjKind::PathFill; }
     bool IsCreating() const { return mbCreating; }
 
     // get the polygon
@@ -823,7 +823,7 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat const & rDrag)
 {
     Point aLinePt1;
     Point aLinePt2;
-    bool bLineGlueMirror(OBJ_LINE == meObjectKind);
+    bool bLineGlueMirror(SdrObjKind::Line == meObjectKind);
     if (bLineGlueMirror) {
         XPolygon& rXP=aPathPolygon[0];
         aLinePt1=rXP[0];
@@ -1229,7 +1229,7 @@ void ImpPathForDragAndCreate::BegCreate(SdrDragStat& rStat)
     bool bMakeStartPoint = true;
     SdrView* pView=rStat.GetView();
     if (pView!=nullptr && pView->IsUseIncompatiblePathCreateInterface() &&
-        (meObjectKind==OBJ_POLY || meObjectKind==OBJ_PLIN || meObjectKind==OBJ_PATHLINE || meObjectKind==OBJ_PATHFILL)) {
+        (meObjectKind==SdrObjKind::Polygon || meObjectKind==SdrObjKind::PolyLine || meObjectKind==SdrObjKind::PathLine || meObjectKind==SdrObjKind::PathFill)) {
         bMakeStartPoint = false;
     }
     aPathPolygon.Insert(XPolygon());
@@ -1256,22 +1256,22 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
         if (nInvent==SdrInventor::Default && pU->eCurrentKind != nIdent) {
             SdrObjKind eNewKind = nIdent;
             switch (eNewKind) {
-                case OBJ_CARC:
-                case OBJ_CIRC:
-                case OBJ_CCUT:
-                case OBJ_SECT:
-                    eNewKind=OBJ_CARC;
+                case SdrObjKind::CircleArc:
+                case SdrObjKind::CircleOrEllipse:
+                case SdrObjKind::CircleCut:
+                case SdrObjKind::CircleSection:
+                    eNewKind=SdrObjKind::CircleArc;
                     [[fallthrough]];
-                case OBJ_RECT:
-                case OBJ_LINE:
-                case OBJ_PLIN:
-                case OBJ_POLY:
-                case OBJ_PATHLINE:
-                case OBJ_PATHFILL:
-                case OBJ_FREELINE:
-                case OBJ_FREEFILL:
-                case OBJ_SPLNLINE:
-                case OBJ_SPLNFILL: {
+                case SdrObjKind::Rectangle:
+                case SdrObjKind::Line:
+                case SdrObjKind::PolyLine:
+                case SdrObjKind::Polygon:
+                case SdrObjKind::PathLine:
+                case SdrObjKind::PathFill:
+                case SdrObjKind::FreehandLine:
+                case SdrObjKind::FreehandFill:
+                case SdrObjKind::SplineLine:
+                case SdrObjKind::SplineFill: {
                     pU->eCurrentKind=eNewKind;
                     pU->bMixedCreate=true;
                     pU->nBezierStartPoint=rXPoly.GetPointCount();
@@ -1292,9 +1292,9 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
     } else nCurrentPoint--;
     bool bFreeHand=IsFreeHand(pU->eCurrentKind);
     rStat.SetNoSnap(bFreeHand);
-    rStat.SetOrtho8Possible(pU->eCurrentKind!=OBJ_CARC && pU->eCurrentKind!=OBJ_RECT && (!pU->bMixedCreate || pU->eCurrentKind!=OBJ_LINE));
+    rStat.SetOrtho8Possible(pU->eCurrentKind!=SdrObjKind::CircleArc && pU->eCurrentKind!=SdrObjKind::Rectangle && (!pU->bMixedCreate || pU->eCurrentKind!=SdrObjKind::Line));
     rXPoly[nCurrentPoint]=rStat.GetNow();
-    if (!pU->bMixedCreate && pU->eStartKind==OBJ_LINE && rXPoly.GetPointCount()>=1) {
+    if (!pU->bMixedCreate && pU->eStartKind==SdrObjKind::Line && rXPoly.GetPointCount()>=1) {
         Point aPt(rStat.GetStart());
         if (pView!=nullptr && pView->IsCreate1stPointAsCenter()) {
             aPt+=aPt;
@@ -1346,13 +1346,13 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
             pU->CalcBezier(rXPoly[nCurrentPoint-1],rXPoly[nCurrentPoint],pU->aBezControl0-rXPoly[nCurrentPoint-1],rStat.IsMouseDown());
         }
     }
-    if (pU->eCurrentKind==OBJ_CARC && nCurrentPoint>=2) {
+    if (pU->eCurrentKind==SdrObjKind::CircleArc && nCurrentPoint>=2) {
         pU->CalcCircle(rXPoly[nCurrentPoint-1],rXPoly[nCurrentPoint],rXPoly[nCurrentPoint-1]-rXPoly[nCurrentPoint-2],pView);
     }
-    if (pU->eCurrentKind==OBJ_LINE && nCurrentPoint>=2) {
+    if (pU->eCurrentKind==SdrObjKind::Line && nCurrentPoint>=2) {
         pU->CalcLine(rXPoly[nCurrentPoint-1],rXPoly[nCurrentPoint],rXPoly[nCurrentPoint-1]-rXPoly[nCurrentPoint-2],pView);
     }
-    if (pU->eCurrentKind==OBJ_RECT && nCurrentPoint>=2) {
+    if (pU->eCurrentKind==SdrObjKind::Rectangle && nCurrentPoint>=2) {
         pU->CalcRect(rXPoly[nCurrentPoint-1],rXPoly[nCurrentPoint],rXPoly[nCurrentPoint-1]-rXPoly[nCurrentPoint-2],pView);
     }
 
@@ -1368,7 +1368,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     XPolygon& rXPoly=aPathPolygon[aPathPolygon.Count()-1];
     sal_uInt16 nCurrentPoint=rXPoly.GetPointCount()-1;
     rXPoly[nCurrentPoint]=rStat.GetNow();
-    if (!pU->bMixedCreate && pU->eStartKind==OBJ_LINE) {
+    if (!pU->bMixedCreate && pU->eStartKind==SdrObjKind::Line) {
         if (rStat.GetPointCount()>=2) eCmd=SdrCreateCmd::ForceEnd;
         bRet = eCmd==SdrCreateCmd::ForceEnd;
         if (bRet) {
@@ -1585,24 +1585,24 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeDragPolyPolygon(const SdrDr
 PointerStyle ImpPathForDragAndCreate::GetCreatePointer() const
 {
     switch (meObjectKind) {
-        case OBJ_LINE    : return PointerStyle::DrawLine;
-        case OBJ_POLY    : return PointerStyle::DrawPolygon;
-        case OBJ_PLIN    : return PointerStyle::DrawPolygon;
-        case OBJ_PATHLINE: return PointerStyle::DrawBezier;
-        case OBJ_PATHFILL: return PointerStyle::DrawBezier;
-        case OBJ_FREELINE: return PointerStyle::DrawFreehand;
-        case OBJ_FREEFILL: return PointerStyle::DrawFreehand;
-        case OBJ_SPLNLINE: return PointerStyle::DrawFreehand;
-        case OBJ_SPLNFILL: return PointerStyle::DrawFreehand;
-        case OBJ_PATHPOLY: return PointerStyle::DrawPolygon;
-        case OBJ_PATHPLIN: return PointerStyle::DrawPolygon;
+        case SdrObjKind::Line    : return PointerStyle::DrawLine;
+        case SdrObjKind::Polygon    : return PointerStyle::DrawPolygon;
+        case SdrObjKind::PolyLine    : return PointerStyle::DrawPolygon;
+        case SdrObjKind::PathLine: return PointerStyle::DrawBezier;
+        case SdrObjKind::PathFill: return PointerStyle::DrawBezier;
+        case SdrObjKind::FreehandLine: return PointerStyle::DrawFreehand;
+        case SdrObjKind::FreehandFill: return PointerStyle::DrawFreehand;
+        case SdrObjKind::SplineLine: return PointerStyle::DrawFreehand;
+        case SdrObjKind::SplineFill: return PointerStyle::DrawFreehand;
+        case SdrObjKind::PathPoly: return PointerStyle::DrawPolygon;
+        case SdrObjKind::PathPolyLine: return PointerStyle::DrawPolygon;
         default: break;
     } // switch
     return PointerStyle::Cross;
 }
 
 SdrPathObjGeoData::SdrPathObjGeoData()
-    : meKind(OBJ_NONE)
+    : meKind(SdrObjKind::NONE)
 {
 }
 
@@ -1668,7 +1668,7 @@ static tools::Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPoly
 
 void SdrPathObj::ImpForceLineAngle()
 {
-    if(OBJ_LINE != meKind || !lcl_ImpIsLine(GetPathPoly()))
+    if(SdrObjKind::Line != meKind || !lcl_ImpIsLine(GetPathPoly()))
         return;
 
     const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0));
@@ -1690,16 +1690,16 @@ void SdrPathObj::ImpForceLineAngle()
 
 void SdrPathObj::ImpForceKind()
 {
-    if (meKind==OBJ_PATHPLIN) meKind=OBJ_PLIN;
-    if (meKind==OBJ_PATHPOLY) meKind=OBJ_POLY;
+    if (meKind==SdrObjKind::PathPolyLine) meKind=SdrObjKind::PolyLine;
+    if (meKind==SdrObjKind::PathPoly) meKind=SdrObjKind::Polygon;
 
     if(GetPathPoly().areControlPointsUsed())
     {
         switch (meKind)
         {
-            case OBJ_LINE: meKind=OBJ_PATHLINE; break;
-            case OBJ_PLIN: meKind=OBJ_PATHLINE; break;
-            case OBJ_POLY: meKind=OBJ_PATHFILL; break;
+            case SdrObjKind::Line: meKind=SdrObjKind::PathLine; break;
+            case SdrObjKind::PolyLine: meKind=SdrObjKind::PathLine; break;
+            case SdrObjKind::Polygon: meKind=SdrObjKind::PathFill; break;
             default: break;
         }
     }
@@ -1707,20 +1707,20 @@ void SdrPathObj::ImpForceKind()
     {
         switch (meKind)
         {
-            case OBJ_PATHLINE: meKind=OBJ_PLIN; break;
-            case OBJ_FREELINE: meKind=OBJ_PLIN; break;
-            case OBJ_PATHFILL: meKind=OBJ_POLY; break;
-            case OBJ_FREEFILL: meKind=OBJ_POLY; break;
+            case SdrObjKind::PathLine: meKind=SdrObjKind::PolyLine; break;
+            case SdrObjKind::FreehandLine: meKind=SdrObjKind::PolyLine; break;
+            case SdrObjKind::PathFill: meKind=SdrObjKind::Polygon; break;
+            case SdrObjKind::FreehandFill: meKind=SdrObjKind::Polygon; break;
             default: break;
         }
     }
 
-    if (meKind==OBJ_LINE && !lcl_ImpIsLine(GetPathPoly())) meKind=OBJ_PLIN;
-    if (meKind==OBJ_PLIN && lcl_ImpIsLine(GetPathPoly())) meKind=OBJ_LINE;
+    if (meKind==SdrObjKind::Line && !lcl_ImpIsLine(GetPathPoly())) meKind=SdrObjKind::PolyLine;
+    if (meKind==SdrObjKind::PolyLine && lcl_ImpIsLine(GetPathPoly())) meKind=SdrObjKind::Line;
 
     m_bClosedObj=IsClosed();
 
-    if (meKind==OBJ_LINE)
+    if (meKind==SdrObjKind::Line)
     {
         ImpForceLineAngle();
     }
@@ -1780,11 +1780,11 @@ void SdrPathObj::ImpSetClosed(bool bClose)
     {
         switch (meKind)
         {
-            case OBJ_LINE    : meKind=OBJ_POLY;     break;
-            case OBJ_PLIN    : meKind=OBJ_POLY;     break;
-            case OBJ_PATHLINE: meKind=OBJ_PATHFILL; break;
-            case OBJ_FREELINE: meKind=OBJ_FREEFILL; break;
-            case OBJ_SPLNLINE: meKind=OBJ_SPLNFILL; break;
+            case SdrObjKind::Line    : meKind=SdrObjKind::Polygon;     break;
+            case SdrObjKind::PolyLine    : meKind=SdrObjKind::Polygon;     break;
+            case SdrObjKind::PathLine: meKind=SdrObjKind::PathFill; break;
+            case SdrObjKind::FreehandLine: meKind=SdrObjKind::FreehandFill; break;
+            case SdrObjKind::SplineLine: meKind=SdrObjKind::SplineFill; break;
             default: break;
         }
 
@@ -1794,10 +1794,10 @@ void SdrPathObj::ImpSetClosed(bool bClose)
     {
         switch (meKind)
         {
-            case OBJ_POLY    : meKind=OBJ_PLIN;     break;
-            case OBJ_PATHFILL: meKind=OBJ_PATHLINE; break;
-            case OBJ_FREEFILL: meKind=OBJ_FREELINE; break;
-            case OBJ_SPLNFILL: meKind=OBJ_SPLNLINE; break;
+            case SdrObjKind::Polygon    : meKind=SdrObjKind::PolyLine;     break;
+            case SdrObjKind::PathFill: meKind=SdrObjKind::PathLine; break;
+            case SdrObjKind::FreehandFill: meKind=SdrObjKind::FreehandLine; break;
+            case SdrObjKind::SplineFill: meKind=SdrObjKind::SplineLine; break;
             default: break;
         }
 
@@ -1834,7 +1834,7 @@ OUString SdrPathObj::TakeObjNameSingul() const
 {
     OUString sName;
 
-    if(OBJ_LINE == meKind)
+    if(SdrObjKind::Line == meKind)
     {
         TranslateId pId(STR_ObjNameSingulLINE);
 
@@ -1869,9 +1869,9 @@ OUString SdrPathObj::TakeObjNameSingul() const
 
         sName = SvxResId(pId);
     }
-    else if(OBJ_PLIN == meKind || OBJ_POLY == meKind)
+    else if(SdrObjKind::PolyLine == meKind || SdrObjKind::Polygon == meKind)
     {
-        const bool bClosed(OBJ_POLY == meKind);
+        const bool bClosed(SdrObjKind::Polygon == meKind);
         TranslateId pId;
 
         if(mpDAC && mpDAC->IsCreating())
@@ -1914,12 +1914,12 @@ OUString SdrPathObj::TakeObjNameSingul() const
     {
         switch (meKind)
         {
-            case OBJ_PATHLINE: sName = SvxResId(STR_ObjNameSingulPATHLINE); break;
-            case OBJ_FREELINE: sName = SvxResId(STR_ObjNameSingulFREELINE); break;
-            case OBJ_SPLNLINE: sName = SvxResId(STR_ObjNameSingulNATSPLN); break;
-            case OBJ_PATHFILL: sName = SvxResId(STR_ObjNameSingulPATHFILL); break;
-            case OBJ_FREEFILL: sName = SvxResId(STR_ObjNameSingulFREEFILL); break;
-            case OBJ_SPLNFILL: sName = SvxResId(STR_ObjNameSingulPERSPLN); break;
+            case SdrObjKind::PathLine: sName = SvxResId(STR_ObjNameSingulPATHLINE); break;
+            case SdrObjKind::FreehandLine: sName = SvxResId(STR_ObjNameSingulFREELINE); break;
+            case SdrObjKind::SplineLine: sName = SvxResId(STR_ObjNameSingulNATSPLN); break;
+            case SdrObjKind::PathFill: sName = SvxResId(STR_ObjNameSingulPATHFILL); break;
+            case SdrObjKind::FreehandFill: sName = SvxResId(STR_ObjNameSingulFREEFILL); break;
+            case SdrObjKind::SplineFill: sName = SvxResId(STR_ObjNameSingulPERSPLN); break;
             default: break;
         }
     }
@@ -1936,15 +1936,15 @@ OUString SdrPathObj::TakeObjNamePlural() const
     OUString sName;
     switch(meKind)
     {
-        case OBJ_LINE    : sName=SvxResId(STR_ObjNamePluralLINE    ); break;
-        case OBJ_PLIN    : sName=SvxResId(STR_ObjNamePluralPLIN    ); break;
-        case OBJ_POLY    : sName=SvxResId(STR_ObjNamePluralPOLY    ); break;
-        case OBJ_PATHLINE: sName=SvxResId(STR_ObjNamePluralPATHLINE); break;
-        case OBJ_FREELINE: sName=SvxResId(STR_ObjNamePluralFREELINE); break;
-        case OBJ_SPLNLINE: sName=SvxResId(STR_ObjNamePluralNATSPLN); break;
-        case OBJ_PATHFILL: sName=SvxResId(STR_ObjNamePluralPATHFILL); break;
-        case OBJ_FREEFILL: sName=SvxResId(STR_ObjNamePluralFREEFILL); break;
-        case OBJ_SPLNFILL: sName=SvxResId(STR_ObjNamePluralPERSPLN); break;
+        case SdrObjKind::Line    : sName=SvxResId(STR_ObjNamePluralLINE    ); break;
+        case SdrObjKind::PolyLine    : sName=SvxResId(STR_ObjNamePluralPLIN    ); break;
+        case SdrObjKind::Polygon    : sName=SvxResId(STR_ObjNamePluralPOLY    ); break;
+        case SdrObjKind::PathLine: sName=SvxResId(STR_ObjNamePluralPATHLINE); break;
+        case SdrObjKind::FreehandLine: sName=SvxResId(STR_ObjNamePluralFREELINE); break;
+        case SdrObjKind::SplineLine: sName=SvxResId(STR_ObjNamePluralNATSPLN); break;
+        case SdrObjKind::PathFill: sName=SvxResId(STR_ObjNamePluralPATHFILL); break;
+        case SdrObjKind::FreehandFill: sName=SvxResId(STR_ObjNamePluralFREEFILL); break;
+        case SdrObjKind::SplineFill: sName=SvxResId(STR_ObjNamePluralPERSPLN); break;
         default: break;
     }
     return sName;
@@ -2469,7 +2469,7 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
     aNewPolygon.setB2DPoint(nPnt, basegfx::B2DPoint(rPnt.X(), rPnt.Y()));
     maPathPolygon.setB2DPolygon(nPoly, aNewPolygon);
 
-    if(meKind==OBJ_LINE)
+    if(meKind==SdrObjKind::Line)
     {
         ImpForceLineAngle();
     }
@@ -2800,7 +2800,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
         basegfx::B2DHomMatrix aMoveToZeroMatrix;
         rPolyPolygon = GetPathPoly();
 
-        if(OBJ_LINE == meKind)
+        if(SdrObjKind::Line == meKind)
         {
             // ignore shear and rotate, just use scale and translate
             OSL_ENSURE(GetPathPoly().count() > 0 && GetPathPoly().getB2DPolygon(0).count() > 1, "OBJ_LINE with too few polygons (!)");

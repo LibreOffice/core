@@ -27,22 +27,21 @@
 #include <editeng/unoipset.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
-
+#include <optional>
 
 class SvxItemPropertySet;
 class SfxItemPool;
+enum class SdrObjKind : sal_uInt16;
 
 /**
  * class UHashMap
  */
-
-#define UHASHMAP_NOTFOUND sal::static_int_cast< sal_uInt32 >(~0)
 class UHashMap
 {
     UHashMap() = delete;
 public:
-    static sal_uInt32 getId( const OUString& rCompareString );
-    static OUString getNameFromId (sal_uInt32 nId);
+    static std::optional<SdrObjKind> getId( const OUString& rCompareString );
+    static OUString getNameFromId (SdrObjKind nId);
     static css::uno::Sequence< OUString > getServiceNames();
 };
 
@@ -91,12 +90,6 @@ public:
     const SfxItemPropertyMapEntry* GetMap(sal_uInt16 nPropertyId);
     const SvxItemPropertySet* GetPropertySet(sal_uInt16 nPropertyId, SfxItemPool& rPool);
 };
-
-/**
- * Globals
- */
-
-#define E3D_INVENTOR_FLAG           (0x80000000)
 
 /**
  * class SvxPropertySetInfoPool

@@ -58,7 +58,7 @@ void SvxTextTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
     if (rId != "RID_SVXPAGE_TEXTATTR")
         return;
 
-    SdrObjKind eKind = OBJ_NONE;
+    SdrObjKind eKind = SdrObjKind::NONE;
     if (pView)
     {
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();

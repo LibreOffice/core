@@ -878,7 +878,7 @@ SdrObject* isOver(const tools::Rectangle& _rRect, SdrPage const & _rPage, SdrVie
             && (_bAllObjects || !_rView.IsObjMarked(pObjIter))
             && (dynamic_cast<OUnoObject*>(pObjIter) != nullptr || dynamic_cast<OOle2Obj*>(pObjIter) != nullptr))
         {
-            if (_nIgnoreType == ISOVER_IGNORE_CUSTOMSHAPES && pObjIter->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
+            if (_nIgnoreType == ISOVER_IGNORE_CUSTOMSHAPES && pObjIter->GetObjIdentifier() == SdrObjKind::CustomShape)
             {
                 continue;
             }

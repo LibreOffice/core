@@ -2360,7 +2360,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122942)
     // Start creating a custom shape that overlaps with the rounded rectangle
     // already present in the document.
     Point aStartPos(8000, 3000);
-    pWrtShell->BeginCreate(OBJ_CUSTOMSHAPE, aStartPos);
+    pWrtShell->BeginCreate(SdrObjKind::CustomShape, aStartPos);
 
     // Set its size.
     Point aMovePos(10000, 5000);

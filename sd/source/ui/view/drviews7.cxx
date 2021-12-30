@@ -932,7 +932,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
             if( pObj->GetObjInventor() == SdrInventor::Default )
             {
-                if( pObj->GetObjIdentifier() == OBJ_OUTLINETEXT )
+                if( pObj->GetObjIdentifier() == SdrObjKind::OutlineText )
                 {
                     bHasOutliner = true;
                     if(bHasOther)
@@ -1381,7 +1381,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         for (size_t i=0; i < nMarkCount && !bFoundAny; ++i)
         {
             SdrObject*  pObj = aMarkList.GetMark(i)->GetMarkedSdrObj();
-            sal_uInt16  nId  = pObj->GetObjIdentifier();
+            SdrObjKind  nId  = pObj->GetObjIdentifier();
             SdrInventor nInv = pObj->GetObjInventor();
 
             if(nInv == SdrInventor::Default)
@@ -1389,22 +1389,22 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                 // 2D objects
                 switch( nId )
                 {
-                    case OBJ_PATHLINE :
-                    case OBJ_PLIN :
-                    case OBJ_LINE:
-                    case OBJ_FREELINE :
-                    case OBJ_EDGE:
-                    case OBJ_CARC :
+                    case SdrObjKind::PathLine :
+                    case SdrObjKind::PolyLine :
+                    case SdrObjKind::Line:
+                    case SdrObjKind::FreehandLine :
+                    case SdrObjKind::Edge:
+                    case SdrObjKind::CircleArc :
                         bFoundObjNoArea      = true;
                         bFoundNoGraphicObj = true;
                         break;
-                    case OBJ_OLE2 :
+                    case SdrObjKind::OLE2 :
                         // #i118485# #i118525# Allow Line, Area and Graphic (Metafile, Bitmap)
                         bSingleGraphicSelected = nMarkCount == 1;
                         bFoundBitmap = true;
                         bFoundMetafile = true;
                         break;
-                    case OBJ_GRAF :
+                    case SdrObjKind::Graphic :
                     {
                         bSingleGraphicSelected = nMarkCount == 1;
                         const SdrGrafObj* pSdrGrafObj = static_cast< const SdrGrafObj* >(pObj);
@@ -1436,7 +1436,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         }
                         break;
                     }
-                    case OBJ_TABLE:
+                    case SdrObjKind::Table:
                         bFoundTable = true;
                         break;
                     default :

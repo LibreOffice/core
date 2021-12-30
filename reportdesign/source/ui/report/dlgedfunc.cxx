@@ -375,11 +375,11 @@ void DlgEdFunc::activateOle(SdrObject* _pObj)
     if ( !_pObj )
         return;
 
-    const sal_uInt16 nSdrObjKind = _pObj->GetObjIdentifier();
+    const SdrObjKind nSdrObjKind = _pObj->GetObjIdentifier();
 
     //  OLE: activate
 
-    if (nSdrObjKind != OBJ_OLE2)
+    if (nSdrObjKind != SdrObjKind::OLE2)
         return;
 
     SdrOle2Obj* pOleObj = dynamic_cast<SdrOle2Obj*>(_pObj);
@@ -537,7 +537,7 @@ bool DlgEdFunc::isOnlyCustomShapeMarked() const
     {
         SdrMark* pMark = rMarkList.GetMark(i);
         SdrObject* pObj = pMark->GetMarkedSdrObj();
-        if (pObj->GetObjIdentifier() != OBJ_CUSTOMSHAPE)
+        if (pObj->GetObjIdentifier() != SdrObjKind::CustomShape)
         {
             // we found an object in the marked objects, which is not a custom shape.
             bReturn = false;
@@ -597,7 +597,7 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
             }
         }
     }
-    else if (aVEvt.mpObj && (aVEvt.mpObj->GetObjIdentifier() != OBJ_CUSTOMSHAPE) && !m_bSelectionMode)
+    else if (aVEvt.mpObj && (aVEvt.mpObj->GetObjIdentifier() != SdrObjKind::CustomShape) && !m_bSelectionMode)
     {
         colorizeOverlappedObject(aVEvt.mpObj);
     }
@@ -643,11 +643,11 @@ bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
         return true;
 
     SdrViewEvent aVEvt;
-    sal_Int16 nId = m_rView.GetCurrentObjIdentifier();
+    SdrObjKind nId = m_rView.GetCurrentObjIdentifier();
 
     const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-    if (eHit == SdrHitKind::UnmarkedObject && nId != OBJ_CUSTOMSHAPE)
+    if (eHit == SdrHitKind::UnmarkedObject && nId != SdrObjKind::CustomShape)
     {
         // there is an object under the mouse cursor, but not a customshape
         m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();

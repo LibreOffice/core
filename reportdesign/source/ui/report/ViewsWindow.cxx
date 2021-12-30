@@ -479,7 +479,7 @@ bool OViewsWindow::IsPasteAllowed() const
     return aTransferData.HasFormat(OReportExchange::getDescriptorFormatId());
 }
 
-void OViewsWindow::SelectAll(const sal_uInt16 _nObjectType)
+void OViewsWindow::SelectAll(const SdrObjKind _nObjectType)
 {
     m_bInUnmark = true;
     ::std::for_each(m_aSections.begin(),m_aSections.end(),

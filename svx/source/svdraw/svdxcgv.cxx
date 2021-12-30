@@ -143,7 +143,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     }
     SdrRectObj* pObj = new SdrRectObj(
         getSdrModelFromSdrView(),
-        OBJ_TEXT,
+        SdrObjKind::Text,
         aTextRect);
 
     pObj->SetLayer(nLayer);
@@ -183,7 +183,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
     }
     SdrRectObj* pObj = new SdrRectObj(
         getSdrModelFromSdrView(),
-        OBJ_TEXT,
+        SdrObjKind::Text,
         aTextRect);
 
     pObj->SetLayer(nLayer);
@@ -750,7 +750,7 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
         if(nullptr == pNewObj)
         {
             // not cloned yet
-            if(pObj->GetObjIdentifier() == OBJ_OLE2 && nullptr == mpModel->GetPersist())
+            if(pObj->GetObjIdentifier() == SdrObjKind::OLE2 && nullptr == mpModel->GetPersist())
             {
                 // tdf#125520 - former fix was wrong, the SdrModel
                 // has to have a GetPersist() already, see task.

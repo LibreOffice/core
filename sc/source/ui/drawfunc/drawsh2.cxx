@@ -241,8 +241,8 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
             bCanRename = true;                          // #i51351# anything except internal objects can be renamed
 
         // #91929#; don't show original size entry if not possible
-        sal_uInt16 nObjType = pObj->GetObjIdentifier();
-        if ( nObjType == OBJ_OLE2 )
+        SdrObjKind nObjType = pObj->GetObjIdentifier();
+        if ( nObjType == SdrObjKind::OLE2 )
         {
             SdrOle2Obj* pOleObj = static_cast<SdrOle2Obj*>(rMarkList.GetMark( 0 )->GetMarkedSdrObj());
             if (pOleObj->GetObjRef().is() &&
@@ -250,7 +250,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
                 //TODO/LATER: why different slots in Draw and Calc?
                 rSet.DisableItem(SID_ORIGINALSIZE);
         }
-        else if ( nObjType == OBJ_CAPTION )
+        else if ( nObjType == SdrObjKind::Caption )
         {
             if ( nLayerID == SC_LAYER_INTERN )
             {
@@ -473,18 +473,18 @@ void ScDrawShell::GetAttrFuncState(SfxItemSet &rSet)
     for ( size_t i = 0; i < nMarkCount && i < 50; ++i )
     {
         SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-        sal_uInt16 nObjType = pObj->GetObjIdentifier();
+        SdrObjKind nObjType = pObj->GetObjIdentifier();
 
-        if ( nObjType != OBJ_MEASURE )
+        if ( nObjType != SdrObjKind::Measure )
             bShowMeasure = false;
 
         // If marked object is 2D, disable format area command.
-        if ( nObjType == OBJ_PLIN     ||
-             nObjType == OBJ_LINE     ||
-             nObjType == OBJ_PATHLINE ||
-             nObjType == OBJ_FREELINE ||
-             nObjType == OBJ_EDGE     ||
-             nObjType == OBJ_CARC     ||
+        if ( nObjType == SdrObjKind::PolyLine     ||
+             nObjType == SdrObjKind::Line     ||
+             nObjType == SdrObjKind::PathLine ||
+             nObjType == SdrObjKind::FreehandLine ||
+             nObjType == SdrObjKind::Edge     ||
+             nObjType == SdrObjKind::CircleArc     ||
              bShowMeasure )
             bShowArea = false;
 

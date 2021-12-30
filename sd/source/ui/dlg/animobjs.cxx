@@ -707,10 +707,10 @@ void AnimationWindow::AddObj (::sd::View& rView )
         SdrObject*          pObject = pMark->GetMarkedSdrObj();
         SdAnimationInfo*    pAnimInfo = SdDrawDocument::GetAnimationInfo( pObject );
         SdrInventor         nInv = pObject->GetObjInventor();
-        sal_uInt16          nId = pObject->GetObjIdentifier();
+        SdrObjKind          nId = pObject->GetObjIdentifier();
 
         // Animated Bitmap (GIF)
-        if( nInv == SdrInventor::Default && nId == OBJ_GRAF && static_cast<SdrGrafObj*>( pObject )->IsAnimated() )
+        if( nInv == SdrInventor::Default && nId == SdrObjKind::Graphic && static_cast<SdrGrafObj*>( pObject )->IsAnimated() )
         {
             const SdrGrafObj*   pGrafObj = static_cast<SdrGrafObj*>(pObject);
             Graphic             aGraphic( pGrafObj->GetTransformedGraphic() );

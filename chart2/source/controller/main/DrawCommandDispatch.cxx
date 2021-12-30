@@ -101,7 +101,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
 
     DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
     DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-    if ( !(pDrawModelWrapper && pDrawViewWrapper && pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_CUSTOMSHAPE) )
+    if ( !(pDrawModelWrapper && pDrawViewWrapper && pDrawViewWrapper->GetCurrentObjIdentifier() == SdrObjKind::CustomShape) )
         return;
 
     bool bAttributesAppliedFromGallery = false;
@@ -257,7 +257,7 @@ FeatureState DrawCommandDispatch::getState( const OUString& rCommand )
 void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< beans::PropertyValue>& rArgs )
 {
     ChartDrawMode eDrawMode = CHARTDRAW_SELECT;
-    SdrObjKind eKind = OBJ_NONE;
+    SdrObjKind eKind = SdrObjKind::NONE;
 
     sal_uInt16 nFeatureId = 0;
     OUString aBaseCommand;
@@ -274,45 +274,45 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
         case COMMAND_ID_OBJECT_SELECT:
             {
                 eDrawMode = CHARTDRAW_SELECT;
-                eKind = OBJ_NONE;
+                eKind = SdrObjKind::NONE;
             }
             break;
         case COMMAND_ID_DRAW_LINE:
         case COMMAND_ID_LINE_ARROW_END:
             {
                 eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_LINE;
+                eKind = SdrObjKind::Line;
             }
             break;
         case COMMAND_ID_DRAW_RECT:
             {
                 eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_RECT;
+                eKind = SdrObjKind::Rectangle;
             }
             break;
         case COMMAND_ID_DRAW_ELLIPSE:
             {
                 eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_CIRC;
+                eKind = SdrObjKind::CircleOrEllipse;
             }
             break;
         case COMMAND_ID_DRAW_FREELINE_NOFILL:
             {
                 eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_FREELINE;
+                eKind = SdrObjKind::FreehandLine;
             }
             break;
         case COMMAND_ID_DRAW_TEXT:
             {
                 eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_TEXT;
+                eKind = SdrObjKind::Text;
                 bCreate = true;
             }
             break;
         case COMMAND_ID_DRAW_CAPTION:
             {
                 eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_CAPTION;
+                eKind = SdrObjKind::Caption;
             }
             break;
         case COMMAND_ID_DRAWTBX_CS_BASIC:
@@ -323,13 +323,13 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
         case COMMAND_ID_DRAWTBX_CS_STAR:
             {
                 eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_CUSTOMSHAPE;
+                eKind = SdrObjKind::CustomShape;
             }
             break;
         default:
             {
                 eDrawMode = CHARTDRAW_SELECT;
-                eKind = OBJ_NONE;
+                eKind = SdrObjKind::NONE;
             }
             break;
     }

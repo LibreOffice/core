@@ -1242,7 +1242,7 @@ SdrObjectUniquePtr FmXFormView::implCreateFieldControl( const svx::ODataAccessDe
 
 
         // determine the control type by examining the data type of the bound column
-        SdrObjKind nOBJID = OBJ_NONE;
+        SdrObjKind nOBJID = SdrObjKind::NONE;
         bool bDateNTimeField = false;
 
         bool bIsCurrency = false;
@@ -1250,53 +1250,53 @@ SdrObjectUniquePtr FmXFormView::implCreateFieldControl( const svx::ODataAccessDe
             bIsCurrency = ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY));
 
         if (bIsCurrency)
-            nOBJID = OBJ_FM_CURRENCYFIELD;
+            nOBJID = SdrObjKind::FormCurrencyField;
         else
             switch (nDataType)
             {
                 case DataType::BLOB:
                 case DataType::LONGVARBINARY:
-                    nOBJID = OBJ_FM_IMAGECONTROL;
+                    nOBJID = SdrObjKind::FormImageControl;
                     break;
                 case DataType::LONGVARCHAR:
                 case DataType::CLOB:
-                    nOBJID = OBJ_FM_EDIT;
+                    nOBJID = SdrObjKind::FormEdit;
                     break;
                 case DataType::BINARY:
                 case DataType::VARBINARY:
                     return nullptr;
                 case DataType::BIT:
                 case DataType::BOOLEAN:
-                    nOBJID = OBJ_FM_CHECKBOX;
+                    nOBJID = SdrObjKind::FormCheckbox;
                     break;
                 case DataType::TINYINT:
                 case DataType::SMALLINT:
                 case DataType::INTEGER:
-                    nOBJID = OBJ_FM_NUMERICFIELD;
+                    nOBJID = SdrObjKind::FormNumericField;
                     break;
                 case DataType::REAL:
                 case DataType::DOUBLE:
                 case DataType::NUMERIC:
                 case DataType::DECIMAL:
-                    nOBJID = OBJ_FM_FORMATTEDFIELD;
+                    nOBJID = SdrObjKind::FormFormattedField;
                     break;
                 case DataType::TIMESTAMP:
                     bDateNTimeField = true;
                     sLabelPostfix = SvxResId(RID_STR_POSTFIX_DATE);
                     [[fallthrough]];
                 case DataType::DATE:
-                    nOBJID = OBJ_FM_DATEFIELD;
+                    nOBJID = SdrObjKind::FormDateField;
                     break;
                 case DataType::TIME:
-                    nOBJID = OBJ_FM_TIMEFIELD;
+                    nOBJID = SdrObjKind::FormTimeField;
                     break;
                 case DataType::CHAR:
                 case DataType::VARCHAR:
                 default:
-                    nOBJID = OBJ_FM_EDIT;
+                    nOBJID = SdrObjKind::FormEdit;
                     break;
             }
-        if (!nOBJID)
+        if (nOBJID == SdrObjKind::NONE)
             return nullptr;
 
         std::unique_ptr<SdrUnoObj, SdrObjectFreeOp> pLabel;
@@ -1310,7 +1310,7 @@ SdrObjectUniquePtr FmXFormView::implCreateFieldControl( const svx::ODataAccessDe
 
 
         // group objects
-        bool bCheckbox = ( OBJ_FM_CHECKBOX == nOBJID );
+        bool bCheckbox = ( SdrObjKind::FormCheckbox == nOBJID );
         OSL_ENSURE( !bCheckbox || !pLabel, "FmXFormView::implCreateFieldControl: why was there a label created for a check box?" );
         if ( bCheckbox )
             return SdrObjectUniquePtr(pControl.release());
@@ -1322,7 +1322,7 @@ SdrObjectUniquePtr FmXFormView::implCreateFieldControl( const svx::ODataAccessDe
 
         if ( bDateNTimeField )
         {   // so far we created a date field only, but we also need a time field
-            if  (   createControlLabelPair( *pOutDev, 0, 1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
+            if  (   createControlLabelPair( *pOutDev, 0, 1000, xField, xNumberFormats, SdrObjKind::FormTimeField,
                         SvxResId(RID_STR_POSTFIX_TIME), pLabel, pControl,
                         xDataSource, sDataSource, sCommand, nCommandType )
                 )
@@ -1387,13 +1387,13 @@ SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescr
 
 
         // The service name decides which control should be created
-        SdrObjKind nOBJID = OBJ_FM_EDIT;
+        SdrObjKind nOBJID = SdrObjKind::FormEdit;
         if(_rDesc.szServiceName == FM_SUN_COMPONENT_NUMERICFIELD)
-            nOBJID = OBJ_FM_NUMERICFIELD;
+            nOBJID = SdrObjKind::FormNumericField;
         if(_rDesc.szServiceName == FM_SUN_COMPONENT_CHECKBOX)
-            nOBJID = OBJ_FM_CHECKBOX;
+            nOBJID = SdrObjKind::FormCheckbox;
         if(_rDesc.szServiceName == FM_COMPONENT_COMMANDBUTTON)
-            nOBJID = OBJ_FM_BUTTON;
+            nOBJID = SdrObjKind::FormButton;
 
         Reference< css::form::submission::XSubmission > xSubmission(_rDesc.xPropSet, UNO_QUERY);
 
@@ -1418,7 +1418,7 @@ SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescr
             if ( xBindableValue.is() )
                 xBindableValue->setValueBinding(xValueBinding);
 
-            bool bCheckbox = ( OBJ_FM_CHECKBOX == nOBJID );
+            bool bCheckbox = ( SdrObjKind::FormCheckbox == nOBJID );
             OSL_ENSURE( !bCheckbox || !pLabel, "FmXFormView::implCreateXFormsControl: why was there a label created for a check box?" );
             if ( bCheckbox )
                 return SdrObjectUniquePtr(pControl.release());
@@ -1437,7 +1437,7 @@ SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescr
             // create a button control
             const MapMode& eTargetMode( pOutDev->GetMapMode() );
             const MapMode eSourceMode(MapUnit::Map100thMM);
-            const SdrObjKind nObjID = OBJ_FM_BUTTON;
+            const SdrObjKind nObjID = SdrObjKind::FormButton;
             ::Size controlSize(4000, 500);
             FmFormObj *pControl = static_cast<FmFormObj*>(
                 SdrObjFactory::MakeNewObject(
@@ -1489,7 +1489,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
         _nControlObjectID,
         _rFieldPostfix,
         SdrInventor::FmForm,
-        OBJ_FM_FIXEDTEXT,
+        SdrObjKind::FormFixedText,
 
         // tdf#118963 Hand over a SdrModel to SdrObject-creation. It uses the local m_pView
         // and already returning false when nullptr == getView() could be done, but m_pView
@@ -1555,7 +1555,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     aRealSize.setHeight( tools::Long(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY()) );
 
     // for boolean fields, we do not create a label, but just a checkbox
-    bool bNeedLabel = ( _nControlObjectID != OBJ_FM_CHECKBOX );
+    bool bNeedLabel = ( _nControlObjectID != SdrObjKind::FormCheckbox );
 
     // the label
     ::std::unique_ptr< SdrUnoObj, SdrObjectFreeOp > pLabel;
@@ -1626,7 +1626,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
         break;
     }
 
-    if ( OBJ_FM_IMAGECONTROL == _nControlObjectID )
+    if ( SdrObjKind::FormImageControl == _nControlObjectID )
         aControlSize = aDefImageSize;
 
     aControlSize.setWidth( tools::Long(Fraction(aControlSize.Width(), 1) * eTargetMode.GetScaleX()) );

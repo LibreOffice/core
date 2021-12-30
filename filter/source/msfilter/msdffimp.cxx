@@ -481,16 +481,16 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                     if( nInventor == SdrInventor::Default )
                     {
                         bool bValidGluePoint = false;
-                        sal_uInt32 nObjId = pO->GetObjIdentifier();
+                        SdrObjKind nObjId = pO->GetObjIdentifier();
                         switch( nObjId )
                         {
-                            case OBJ_GRUP :
-                            case OBJ_GRAF :
-                            case OBJ_RECT :
-                            case OBJ_TEXT :
-                            case OBJ_PAGE :
-                            case OBJ_TITLETEXT :
-                            case OBJ_OUTLINETEXT :
+                            case SdrObjKind::Group :
+                            case SdrObjKind::Graphic :
+                            case SdrObjKind::Rectangle :
+                            case SdrObjKind::Text :
+                            case SdrObjKind::Page :
+                            case SdrObjKind::TitleText :
+                            case SdrObjKind::OutlineText :
                             {
                                 if ( nC & 1 )
                                 {
@@ -521,17 +521,17 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     bValidGluePoint = true;
                             }
                             break;
-                            case OBJ_POLY :
-                            case OBJ_PLIN :
-                            case OBJ_LINE :
-                            case OBJ_PATHLINE :
-                            case OBJ_PATHFILL :
-                            case OBJ_FREELINE :
-                            case OBJ_FREEFILL :
-                            case OBJ_SPLNLINE :
-                            case OBJ_SPLNFILL :
-                            case OBJ_PATHPOLY :
-                            case OBJ_PATHPLIN :
+                            case SdrObjKind::Polygon :
+                            case SdrObjKind::PolyLine :
+                            case SdrObjKind::Line :
+                            case SdrObjKind::PathLine :
+                            case SdrObjKind::PathFill :
+                            case SdrObjKind::FreehandLine :
+                            case SdrObjKind::FreehandFill :
+                            case SdrObjKind::SplineLine :
+                            case SdrObjKind::SplineFill :
+                            case SdrObjKind::PathPoly :
+                            case SdrObjKind::PathPolyLine :
                             {
                                 if (pList)
                                 {
@@ -597,7 +597,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             }
                             break;
 
-                            case OBJ_CUSTOMSHAPE :
+                            case SdrObjKind::CustomShape :
                             {
                                 const SfxPoolItem& aCustomShape =  static_cast<SdrObjCustomShape*>(pO)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
                                 SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(aCustomShape) );
@@ -748,6 +748,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 }
                             }
                             break;
+                            default: ;
                         }
                         if ( bValidGluePoint )
                         {
@@ -4340,7 +4341,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                 aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Right(), aObjData.aBoundRect.Bottom()));
                 pRet = new SdrPathObj(
                     *pSdrModel,
-                    OBJ_LINE,
+                    SdrObjKind::Line,
                     basegfx::B2DPolyPolygon(aPoly));
                 ApplyAttributes( rSt, aSet, aObjData );
                 pRet->SetMergedItemSet(aSet);
@@ -5293,7 +5294,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             pTextObj = new SdrRectObj(
                 *pSdrModel,
-                OBJ_TEXT,
+                SdrObjKind::Text,
                 rTextRect);
             pTextImpRec = new SvxMSDffImportRec(*pImpRec);
             bDeleteTextImpRec = true;

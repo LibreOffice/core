@@ -719,7 +719,7 @@ inline void SwEditWin::EnterArea()
  */
 void SwEditWin::InsFrame(sal_uInt16 nCols)
 {
-    StdDrawMode( OBJ_NONE, false );
+    StdDrawMode( SdrObjKind::NONE, false );
     m_bInsFrame = true;
     m_nInsFrameColCount = nCols;
 }
@@ -4537,7 +4537,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 rSh.EnterSelFrameMode();
                 if (!m_rView.GetDrawFuncPtr())
-                    StdDrawMode( OBJ_NONE, true );
+                    StdDrawMode( SdrObjKind::NONE, true );
             }
             else if ( rSh.IsFrameSelected() )
             {
@@ -5157,7 +5157,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
 
     m_eBezierMode(SID_BEZIER_INSERT),
     m_nInsFrameColCount( 1 ),
-    m_eDrawMode(OBJ_NONE),
+    m_eDrawMode(SdrObjKind::NONE),
 
     m_bMBPressed(false),
     m_bInsDraw(false),

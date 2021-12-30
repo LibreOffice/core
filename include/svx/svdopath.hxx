@@ -143,10 +143,10 @@ public:
     void NbcSetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly);
 
     // special functions for Bezier-polygon handling
-    bool IsClosed() const { return meKind==OBJ_POLY || meKind==OBJ_PATHPOLY || meKind==OBJ_PATHFILL || meKind==OBJ_FREEFILL || meKind==OBJ_SPLNFILL; }
-    bool IsLine() const { return meKind==OBJ_PLIN || meKind==OBJ_PATHPLIN || meKind==OBJ_PATHLINE || meKind==OBJ_FREELINE || meKind==OBJ_SPLNLINE || meKind==OBJ_LINE; }
-    bool IsBezier() const { return meKind==OBJ_PATHLINE || meKind==OBJ_PATHFILL; }
-    bool IsSpline() const { return meKind==OBJ_SPLNLINE || meKind==OBJ_SPLNFILL; }
+    bool IsClosed() const { return meKind==SdrObjKind::Polygon || meKind==SdrObjKind::PathPoly || meKind==SdrObjKind::PathFill || meKind==SdrObjKind::FreehandFill || meKind==SdrObjKind::SplineFill; }
+    bool IsLine() const { return meKind==SdrObjKind::PolyLine || meKind==SdrObjKind::PathPolyLine || meKind==SdrObjKind::PathLine || meKind==SdrObjKind::FreehandLine || meKind==SdrObjKind::SplineLine || meKind==SdrObjKind::Line; }
+    bool IsBezier() const { return meKind==SdrObjKind::PathLine || meKind==SdrObjKind::PathFill; }
+    bool IsSpline() const { return meKind==SdrObjKind::SplineLine || meKind==SdrObjKind::SplineFill; }
 
     // close/open path
     // if opening, move end point by "nOpenDistance"

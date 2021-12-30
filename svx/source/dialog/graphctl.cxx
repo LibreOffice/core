@@ -51,7 +51,7 @@ void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, c
 GraphCtrl::GraphCtrl(weld::Dialog* pDialog)
     : aUpdateIdle("svx GraphCtrl Update")
     , aMap100(MapUnit::Map100thMM)
-    , eObjKind(OBJ_NONE)
+    , eObjKind(SdrObjKind::NONE)
     , nPolyEdit(0)
     , bEditMode(false)
     , mbSdrMode(false)
@@ -701,7 +701,7 @@ void GraphCtrl::SetEditMode( const bool _bEditMode )
     {
         bEditMode = _bEditMode;
         pView->SetEditMode( bEditMode );
-        eObjKind = OBJ_NONE;
+        eObjKind = SdrObjKind::NONE;
         pView->SetCurrentObj(eObjKind);
     }
     else
@@ -733,7 +733,7 @@ void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
         pView->SetCurrentObj(eObjKind);
     }
     else
-        eObjKind = OBJ_NONE;
+        eObjKind = SdrObjKind::NONE;
 
     QueueIdleUpdate();
 }

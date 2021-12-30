@@ -34,7 +34,7 @@ DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView*
 
 void DrawSelection::Activate(const sal_uInt16 nSlotId)
 {
-    m_pWin->SetSdrDrawMode(OBJ_NONE);
+    m_pWin->SetSdrDrawMode(SdrObjKind::NONE);
     m_pWin->SetObjectSelect(true);
     SwDrawBase::Activate(nSlotId);
 

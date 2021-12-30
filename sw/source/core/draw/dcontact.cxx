@@ -182,7 +182,7 @@ SwContact* GetUserCall( const SdrObject* pObj )
 bool IsMarqueeTextObj( const SdrObject& rObj )
 {
     if (SdrInventor::Default != rObj.GetObjInventor() ||
-        OBJ_TEXT != rObj.GetObjIdentifier())
+        SdrObjKind::Text != rObj.GetObjIdentifier())
         return false;
     SdrTextAniKind eTKind = static_cast<const SdrTextObj&>(rObj).GetTextAniKind();
     return ( SdrTextAniKind::Scroll == eTKind

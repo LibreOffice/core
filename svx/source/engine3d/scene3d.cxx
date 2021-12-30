@@ -295,7 +295,7 @@ sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
 
 SdrObjKind E3dScene::GetObjIdentifier() const
 {
-    return E3D_SCENE_ID;
+    return SdrObjKind::E3D_Scene;
 }
 
 void E3dScene::SetBoundRectDirty()

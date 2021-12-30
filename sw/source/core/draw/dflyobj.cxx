@@ -141,7 +141,7 @@ SdrInventor SwFlyDrawObj::GetObjInventor() const
 
 SdrObjKind SwFlyDrawObj::GetObjIdentifier() const
 {
-    return SwFlyDrawObjIdentifier;
+    return SdrObjKind::SwFlyDrawObjIdentifier;
 }
 
 // TODO: Need own primitive to get the FlyFrame paint working

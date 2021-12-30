@@ -78,14 +78,14 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
         if (dynamic_cast< const OUnoObject* >(pObj) != nullptr)
         {
             OUnoObject& rUnoObj = dynamic_cast<OUnoObject&>(*pObj);
-            if (rUnoObj.GetObjIdentifier() == OBJ_RD_FIXEDTEXT)
+            if (rUnoObj.GetObjIdentifier() == SdrObjKind::ReportDesignFixedText)
             {
                 uno::Reference<beans::XPropertySet> xControlModel(rUnoObj.GetUnoControlModel(),uno::UNO_QUERY);
                 if ( xControlModel.is() )
                     xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(true));
             }
             else
-                bChangeOrientation = rUnoObj.GetObjIdentifier() == OBJ_RD_HFIXEDLINE;
+                bChangeOrientation = rUnoObj.GetObjIdentifier() == SdrObjKind::ReportDesignHorizontalFixedLine;
             rtl::Reference<SvxShapeControl> pShape = new SvxShapeControl( pObj );
             xShape = static_cast<SvxShape_UnoImplHelper *>(pShape.get());
             pShape->setShapeKind(pObj->GetObjIdentifier());

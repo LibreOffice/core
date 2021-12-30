@@ -84,7 +84,7 @@ SdrObject* SdDrawDocument::GetObj(std::u16string_view rObjName) const
 
             if( ( pObj->GetName() == rObjName ) ||
                 ( SdrInventor::Default == pObj->GetObjInventor() &&
-                  OBJ_OLE2 == pObj->GetObjIdentifier() &&
+                  SdrObjKind::OLE2 == pObj->GetObjIdentifier() &&
                   rObjName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) )
             {
                 pObjFound = pObj;
@@ -109,7 +109,7 @@ SdrObject* SdDrawDocument::GetObj(std::u16string_view rObjName) const
 
             if( ( pObj->GetName() == rObjName ) ||
                 ( SdrInventor::Default == pObj->GetObjInventor() &&
-                  OBJ_OLE2 == pObj->GetObjIdentifier() &&
+                  SdrObjKind::OLE2 == pObj->GetObjIdentifier() &&
                   rObjName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) )
             {
                 pObjFound = pObj;
@@ -248,7 +248,7 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
             for (size_t nObj = 0; nObj < nObjCount; ++nObj)
             {
                 SdrObject* pObj = pPage->GetObj(nObj);
-                if (pObj->GetObjIdentifier() == OBJ_PAGE &&
+                if (pObj->GetObjIdentifier() == SdrObjKind::Page &&
                     pObj->GetObjInventor() == SdrInventor::Default)
                 {
                     // The page object is the preceding page (drawing page)

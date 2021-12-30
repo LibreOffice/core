@@ -357,7 +357,7 @@ SdrInventor FmFormObj::GetObjInventor()   const
 
 SdrObjKind FmFormObj::GetObjIdentifier() const
 {
-    return OBJ_UNO;
+    return SdrObjKind::UNO;
 }
 
 FmFormObj* FmFormObj::CloneSdrObject(SdrModel& rTargetModel) const

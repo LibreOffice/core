@@ -994,7 +994,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
             {
                 // Found an object
                 if (pObj->GetObjInventor() == SdrInventor::Default &&
-                    pObj->GetObjIdentifier() == OBJ_OLE2)
+                    pObj->GetObjIdentifier() == SdrObjKind::OLE2)
                 {
                     bOLEObjFound = true;
                 }

@@ -272,7 +272,7 @@ bool OReportWindow::IsPasteAllowed() const
     return m_aViewsWindow->IsPasteAllowed();
 }
 
-void OReportWindow::SelectAll(const sal_uInt16 _nObjectType)
+void OReportWindow::SelectAll(const SdrObjKind _nObjectType)
 {
 
     m_aViewsWindow->SelectAll(_nObjectType);

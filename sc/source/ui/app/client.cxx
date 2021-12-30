@@ -60,7 +60,7 @@ SdrOle2Obj* ScClient::GetDrawObj()
         SdrObject* pObject = aIter.Next();
         while (pObject && !pOle2Obj)
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
+            if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 )
             {
                 // name from InfoObject is PersistName
                 if ( static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == aName )

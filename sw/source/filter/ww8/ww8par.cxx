@@ -784,7 +784,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 SdrObject::Free( pObj );
                 pObj = new SdrRectObj(
                     *pSdrModel,
-                    OBJ_TEXT,
+                    SdrObjKind::Text,
                     rTextRect);
             }
 

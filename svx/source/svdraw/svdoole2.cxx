@@ -1386,7 +1386,7 @@ void SdrOle2Obj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 SdrObjKind SdrOle2Obj::GetObjIdentifier() const
 {
-    return mpImpl->mbFrame ? OBJ_FRAME : OBJ_OLE2;
+    return mpImpl->mbFrame ? SdrObjKind::OLEPluginFrame : SdrObjKind::OLE2;
 }
 
 OUString SdrOle2Obj::TakeObjNameSingul() const

@@ -601,8 +601,8 @@ bool SdrMarkView::ImpIsFrameHandles() const
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
         if (pObj && pObj->GetObjInventor()==SdrInventor::Default)
         {
-            sal_uInt16 nIdent=pObj->GetObjIdentifier();
-            if (nIdent==OBJ_LINE || nIdent==OBJ_EDGE || nIdent==OBJ_CAPTION || nIdent==OBJ_MEASURE || nIdent==OBJ_CUSTOMSHAPE || nIdent==OBJ_TABLE )
+            SdrObjKind nIdent=pObj->GetObjIdentifier();
+            if (nIdent==SdrObjKind::Line || nIdent==SdrObjKind::Edge || nIdent==SdrObjKind::Caption || nIdent==SdrObjKind::Measure || nIdent==SdrObjKind::CustomShape || nIdent==SdrObjKind::Table )
             {
                 bFrmHdl=false;
             }
@@ -812,12 +812,12 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         bool bTableSelection = false;
         bool bConnectorSelection = false;
 
-        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
+        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == SdrObjKind::Table)
         {
             auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
             bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
         }
-        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_EDGE)
+        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == SdrObjKind::Edge)
         {
             bConnectorSelection = dumpGluePointsToJSON(aGluePointsTree);
         }
@@ -933,7 +933,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                 aExtraInfo.append("]");
 
                                 // polygon approximating the pie segment or donut segment
-                                if (pO->GetObjIdentifier() == OBJ_PATHFILL)
+                                if (pO->GetObjIdentifier() == SdrObjKind::PathFill)
                                 {
                                     const basegfx::B2DPolyPolygon aPolyPolygon(pO->TakeXorPoly());
                                     if (aPolyPolygon.count() == 1)
@@ -2667,8 +2667,7 @@ void SdrMarkView::MarkListHasChanged()
     if (GetMarkedObjectCount()==1) {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
         if (pObj->GetObjInventor()==SdrInventor::Default) {
-            sal_uInt16 nIdent=pObj->GetObjIdentifier();
-            bOneEdgeMarked=nIdent==OBJ_EDGE;
+            bOneEdgeMarked = pObj->GetObjIdentifier() == SdrObjKind::Edge;
         }
     }
     ImpSetGlueVisible4(bOneEdgeMarked);

@@ -592,7 +592,7 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 SdrObjKind SdrGrafObj::GetObjIdentifier() const
 {
-    return OBJ_GRAF;
+    return SdrObjKind::Graphic;
 }
 
 void SdrGrafObj::ImpSetLinkedGraphic( const Graphic& rGraphic )

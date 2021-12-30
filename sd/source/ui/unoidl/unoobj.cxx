@@ -257,10 +257,10 @@ const SvEventDescription* ImplGetSupportedMacroItems()
 SdXShape::SdXShape(SvxShape* pShape, SdXImpressDocument* pModel)
 :   mpShape( pShape ),
     mpPropSet( pModel?
-                    lcl_ImplGetShapePropertySet(pModel->IsImpressDocument(), pShape->getShapeKind() == OBJ_GRAF )
+                    lcl_ImplGetShapePropertySet(pModel->IsImpressDocument(), pShape->getShapeKind() == SdrObjKind::Graphic )
                 :   lcl_GetEmpty_SdXShapePropertySet_Impl() ),
     mpMap( pModel?
-                    lcl_ImplGetShapePropertyMap(pModel->IsImpressDocument(), pShape->getShapeKind() == OBJ_GRAF )
+                    lcl_ImplGetShapePropertyMap(pModel->IsImpressDocument(), pShape->getShapeKind() == SdrObjKind::Graphic )
                 :   lcl_GetEmpty_SdXShapePropertyMap_Impl() ),
     mpModel(pModel)
 {
@@ -315,7 +315,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
     }
     else
     {
-        sal_uInt32 nObjId = mpShape->getShapeKind();
+        SdrObjKind nObjId = mpShape->getShapeKind();
         uno::Sequence< uno::Type > aTypes;
         SdTypesCache& gImplTypesCache = SD_MOD()->gImplTypesCache;
         SdTypesCache::iterator aIter( gImplTypesCache.find( nObjId ) );
@@ -812,15 +812,16 @@ uno::Sequence< OUString > SAL_CALL SdXShape::getSupportedServiceNames()
     SdrObject* pObj = mpShape->GetSdrObject();
     if(pObj && pObj->GetObjInventor() == SdrInventor::Default )
     {
-        sal_uInt32 nInventor = pObj->GetObjIdentifier();
+        SdrObjKind nInventor = pObj->GetObjIdentifier();
         switch( nInventor )
         {
-        case OBJ_TITLETEXT:
+        case SdrObjKind::TitleText:
             aAdd.emplace_back(u"com.sun.star.presentation.TitleTextShape");
             break;
-        case OBJ_OUTLINETEXT:
+        case SdrObjKind::OutlineText:
             aAdd.emplace_back(u"com.sun.star.presentation.OutlinerShape");
             break;
+        default: ;
         }
     }
     return comphelper::concatSequences(mpShape->_getSupportedServiceNames(), aAdd);

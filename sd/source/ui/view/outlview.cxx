@@ -865,7 +865,7 @@ SdrTextObj* OutlineView::GetTitleTextObject(SdrPage const * pPage)
     {
         SdrObject* pObject = pPage->GetObj(nObject);
         if (pObject->GetObjInventor() == SdrInventor::Default &&
-            pObject->GetObjIdentifier() == OBJ_TITLETEXT)
+            pObject->GetObjIdentifier() == SdrObjKind::TitleText)
         {
             pResult = static_cast<SdrTextObj*>(pObject);
             break;
@@ -886,7 +886,7 @@ SdrTextObj* OutlineView::GetOutlineTextObject(SdrPage const * pPage)
     {
         SdrObject* pObject = pPage->GetObj(nObject);
         if (pObject->GetObjInventor() == SdrInventor::Default &&
-            pObject->GetObjIdentifier() == OBJ_OUTLINETEXT)
+            pObject->GetObjIdentifier() == SdrObjKind::OutlineText)
         {
             pResult = static_cast<SdrTextObj*>(pObject);
             break;

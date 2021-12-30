@@ -857,9 +857,9 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         if (pObj->GetObjInventor() == SdrInventor::Default)
         {
             OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-            sal_uInt16 nId = pObj->GetObjIdentifier();
+            SdrObjKind nId = pObj->GetObjIdentifier();
 
-            if (nId == OBJ_TITLETEXT)
+            if (nId == SdrObjKind::TitleText)
             {
                 if( pOPO && pOPO->GetOutlinerMode() == OutlinerMode::DontKnow )
                     pOPO->SetOutlinerMode( OutlinerMode::TitleObject );
@@ -868,7 +868,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                 if (pTitleSheet)
                     pObj->SetStyleSheet(pTitleSheet, true);
             }
-            else if (nId == OBJ_OUTLINETEXT)
+            else if (nId == SdrObjKind::OutlineText)
             {
                 if( pOPO && pOPO->GetOutlinerMode() == OutlinerMode::DontKnow )
                     pOPO->SetOutlinerMode( OutlinerMode::OutlineObject );

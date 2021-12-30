@@ -457,7 +457,7 @@ void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::X
 SvxShapeControl::SvxShapeControl(SdrObject* pObj)
     : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CONTROL), getSvxMapProvider().GetPropertySet(SVXMAP_CONTROL, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
-    setShapeKind( OBJ_UNO );
+    setShapeKind( SdrObjKind::UNO );
 }
 
 
@@ -1116,14 +1116,14 @@ drawing::PolygonKind SvxShapePolyPolygon::GetPolygonKind() const
     {
         switch(GetSdrObject()->GetObjIdentifier())
         {
-            case OBJ_POLY:      aRetval = drawing::PolygonKind_POLY; break;
-            case OBJ_PLIN:      aRetval = drawing::PolygonKind_PLIN; break;
-            case OBJ_SPLNLINE:
-            case OBJ_PATHLINE:  aRetval = drawing::PolygonKind_PATHLINE; break;
-            case OBJ_SPLNFILL:
-            case OBJ_PATHFILL:  aRetval = drawing::PolygonKind_PATHFILL; break;
-            case OBJ_FREELINE:  aRetval = drawing::PolygonKind_FREELINE; break;
-            case OBJ_FREEFILL:  aRetval = drawing::PolygonKind_FREEFILL; break;
+            case SdrObjKind::Polygon:      aRetval = drawing::PolygonKind_POLY; break;
+            case SdrObjKind::PolyLine:      aRetval = drawing::PolygonKind_PLIN; break;
+            case SdrObjKind::SplineLine:
+            case SdrObjKind::PathLine:  aRetval = drawing::PolygonKind_PATHLINE; break;
+            case SdrObjKind::SplineFill:
+            case SdrObjKind::PathFill:  aRetval = drawing::PolygonKind_PATHFILL; break;
+            case SdrObjKind::FreehandLine:  aRetval = drawing::PolygonKind_FREELINE; break;
+            case SdrObjKind::FreehandFill:  aRetval = drawing::PolygonKind_FREEFILL; break;
             default: break;
         }
     }

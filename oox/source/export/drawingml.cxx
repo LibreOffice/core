@@ -5410,7 +5410,7 @@ void DrawingML::WriteFromTo(const uno::Reference<css::drawing::XShape>& rXShape,
             sal_Int16 nHalfWidth = aSize.Width / 2;
             sal_Int16 nHalfHeight = aSize.Height / 2;
             // aTopLeft needs correction for rotated customshapes
-            if (pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
+            if (pObj->GetObjIdentifier() == SdrObjKind::CustomShape)
             {
                 // Center of bounding box of the rotated shape
                 const auto aSnapRectCenter(pObj->GetSnapRect().Center());
