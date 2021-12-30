@@ -229,12 +229,18 @@ static bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT r
     return (hr == S_OK);
 }
 
+// TS_TRUE returns optimal size
+static std::optional<Size> ImplGetThemeSize(HTHEME hTheme, HDC hDC, int iPart, int iState, LPCRECT pRect, THEMESIZE eTS = TS_TRUE)
+{
+    if (SIZE aSz; SUCCEEDED(GetThemePartSize(hTheme, hDC, iPart, iState, pRect, eTS, &aSz)))
+        return Size(aSz.cx, aSz.cy);
+    return {};
+}
+
 static tools::Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const tools::Rectangle& /* aRect */, THEMESIZE eTS = TS_TRUE )
 {
-    SIZE aSz;
-    HRESULT hr = GetThemePartSize( hTheme, hDC, iPart, iState, nullptr, eTS, &aSz ); // TS_TRUE returns optimal size
-    if( hr == S_OK )
-        return tools::Rectangle( 0, 0, aSz.cx, aSz.cy );
+    if (const std::optional<Size> oSz = ImplGetThemeSize(hTheme, hDC, iPart, iState, nullptr, eTS))
+        return tools::Rectangle( 0, 0, oSz->Width(), oSz->Height() );
     else
         return tools::Rectangle();
 }
@@ -974,22 +980,35 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             {
                 if( nState & ControlState::PRESSED )
                 {
-                    RECT aBGRect = rc;
                     if( aValue.getType() == ControlType::MenuPopup )
                     {
                         tools::Rectangle aRectangle = GetMenuPopupMarkRegion(aValue);
-                        aBGRect.top = aRectangle.Top();
-                        aBGRect.left = aRectangle.Left();
-                        aBGRect.bottom = aRectangle.Bottom();
-                        aBGRect.right = aRectangle.Right();
-                        rc = aBGRect;
+                        rc.top = aRectangle.Top();
+                        rc.left = aRectangle.Left();
+                        rc.bottom = aRectangle.Bottom();
+                        rc.right = aRectangle.Right();
                     }
                     iState = (nState & ControlState::ENABLED) ? MCB_NORMAL : MCB_DISABLED;
-                    ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECKBACKGROUND, iState, aBGRect, aCaption );
+                    ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECKBACKGROUND, iState, rc, aCaption );
                     if( nPart == ControlPart::MenuItemCheckMark )
                         iState = (nState & ControlState::ENABLED) ? MC_CHECKMARKNORMAL : MC_CHECKMARKDISABLED;
                     else
                         iState = (nState & ControlState::ENABLED) ? MC_BULLETNORMAL : MC_BULLETDISABLED;
+                    // tdf#133697: Get true size of mark, to avoid stretching
+                    if (auto oSize = ImplGetThemeSize(hTheme, hDC, MENU_POPUPCHECK, iState, &rc))
+                    {
+                        // center the mark inside the passed rectangle
+                        if (const auto dx = (rc.right - rc.left - oSize->Width() + 1) / 2; dx > 0)
+                        {
+                            rc.left += dx;
+                            rc.right = rc.left + oSize->Width();
+                        }
+                        if (const auto dy = (rc.bottom - rc.top - oSize->Height() + 1) / 2; dy > 0)
+                        {
+                            rc.top += dy;
+                            rc.bottom = rc.top + oSize->Height();
+                        }
+                    }
                     return ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECK, iState, rc, aCaption );
                 }
                 else
