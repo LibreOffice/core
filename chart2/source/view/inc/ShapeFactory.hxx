@@ -120,7 +120,7 @@ public:
                         , const css::drawing::Direction3D& rSize
                         , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapePolyPolygon>
         createPieSegment2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                     , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
