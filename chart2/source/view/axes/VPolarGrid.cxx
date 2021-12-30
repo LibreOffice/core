@@ -146,7 +146,7 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
             appendPointSequence( aAllPoints, aPoints );
         }
 
-        Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+        rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
                 xMainTarget, aAllPoints, &rLinePropertiesList[nDepth] );
         //because of this name this line will be used for marking
         m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
@@ -208,7 +208,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
                 appendPointSequence( aAllPoints, aPoints );
         }
 
-        Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+        rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
                 xTarget, aAllPoints, &rLinePropertiesList[nDepth] );
         //because of this name this line will be used for marking
         ::chart::ShapeFactory::setShapeName( xShape, "MarkHandles" );

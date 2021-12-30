@@ -150,9 +150,9 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
     pPosHelper->transformScaledLogicToScene( aPoly );
 
     //create line:
-    uno::Reference< drawing::XShape > xShape;
+    rtl::Reference<SvxShapePolyPolygon> xShape;
     {
-        xShape = m_pShapeFactory->createLine2D( xSeriesGroupShape_Shapes
+        xShape = ShapeFactory::createLine2D( xSeriesGroupShape_Shapes
                 , PolyToPointSequence( aPoly ) );
         setMappedProperties( xShape
                 , pSeries->getPropertiesOfSeries()

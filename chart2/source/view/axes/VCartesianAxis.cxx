@@ -1849,7 +1849,7 @@ void VCartesianAxis::createTickMarkLineShapes( TickInfoArrayType& rTickInfos, co
                 , m_aAxisProperties.maLabelAlignment.mfInnerTickDirection, rTickmarkProperties, !bTicksAtLabels );
     }
     aPoints.realloc(nN);
-    m_pShapeFactory->createLine2D( m_xGroupShape_Shapes, aPoints
+    ShapeFactory::createLine2D( m_xGroupShape_Shapes, aPoints
                                 , &rTickmarkProperties.aLineProperties );
 }
 
@@ -1939,7 +1939,7 @@ void VCartesianAxis::createShapes()
         {
             drawing::PointSequenceSequence aPoints(1);
             apTickFactory2D->createPointSequenceForAxisMainLine( aPoints );
-            Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+            rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
                     m_xGroupShape_Shapes, aPoints
                     , &m_aAxisProperties.m_aLineProperties );
             //because of this name this line will be used for marking the axis
@@ -1958,7 +1958,7 @@ void VCartesianAxis::createShapes()
                 drawing::PointSequenceSequence aPoints{{
                         {static_cast<sal_Int32>(aStart.getX()), static_cast<sal_Int32>(aStart.getY())},
                         {static_cast<sal_Int32>(aEnd.getX()), static_cast<sal_Int32>(aEnd.getY())} }};
-                m_pShapeFactory->createLine2D(
+                ShapeFactory::createLine2D(
                         m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
             }
         }

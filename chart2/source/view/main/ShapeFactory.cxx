@@ -1911,7 +1911,7 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<SvxShapePolyPolygon>
         ShapeFactory::createLine2D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::PointSequenceSequence& rPoints
                     , const VLineProperties* pLineProperties )
@@ -1923,71 +1923,64 @@ uno::Reference< drawing::XShape >
         return nullptr;
 
     //create shape
-    uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.PolyLineShape" ), uno::UNO_QUERY );
+    rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
+    xShape->setShapeKind(OBJ_PLIN);
     xTarget->add(xShape);
 
     //set properties
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
+    try
     {
-        try
+        //Polygon
+        xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
+            , uno::Any( rPoints ) );
+
+        if(pLineProperties)
         {
-            //Polygon
-            xProp->setPropertyValue( UNO_NAME_POLYPOLYGON
-                , uno::Any( rPoints ) );
+            //Transparency
+            if(pLineProperties->Transparence.hasValue())
+                xShape->SvxShape::setPropertyValue( UNO_NAME_LINETRANSPARENCE
+                    , pLineProperties->Transparence );
 
-            if(pLineProperties)
-            {
-                //Transparency
-                if(pLineProperties->Transparence.hasValue())
-                    xProp->setPropertyValue( UNO_NAME_LINETRANSPARENCE
-                        , pLineProperties->Transparence );
+            //LineStyle
+            if(pLineProperties->LineStyle.hasValue())
+                xShape->SvxShape::setPropertyValue( UNO_NAME_LINESTYLE
+                    , pLineProperties->LineStyle );
 
-                //LineStyle
-                if(pLineProperties->LineStyle.hasValue())
-                    xProp->setPropertyValue( UNO_NAME_LINESTYLE
-                        , pLineProperties->LineStyle );
+            //LineWidth
+            if(pLineProperties->Width.hasValue())
+                xShape->SvxShape::setPropertyValue( UNO_NAME_LINEWIDTH
+                    , pLineProperties->Width );
 
-                //LineWidth
-                if(pLineProperties->Width.hasValue())
-                    xProp->setPropertyValue( UNO_NAME_LINEWIDTH
-                        , pLineProperties->Width );
+            //LineColor
+            if(pLineProperties->Color.hasValue())
+                xShape->SvxShape::setPropertyValue( UNO_NAME_LINECOLOR
+                    , pLineProperties->Color );
 
-                //LineColor
-                if(pLineProperties->Color.hasValue())
-                    xProp->setPropertyValue( UNO_NAME_LINECOLOR
-                        , pLineProperties->Color );
+            //LineDashName
+            if(pLineProperties->DashName.hasValue())
+                xShape->SvxShape::setPropertyValue( "LineDashName"
+                    , pLineProperties->DashName );
 
-                //LineDashName
-                if(pLineProperties->DashName.hasValue())
-                    xProp->setPropertyValue( "LineDashName"
-                        , pLineProperties->DashName );
-
-                //LineCap
-                if(pLineProperties->LineCap.hasValue())
-                    xProp->setPropertyValue( UNO_NAME_LINECAP
-                        , pLineProperties->LineCap );
-            }
+            //LineCap
+            if(pLineProperties->LineCap.hasValue())
+                xShape->SvxShape::setPropertyValue( UNO_NAME_LINECAP
+                    , pLineProperties->LineCap );
         }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return xShape;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<SvxShapePolyPolygon>
     ShapeFactory::createLine ( const uno::Reference< drawing::XShapes >& xTarget,
             const awt::Size& rSize, const awt::Point& rPosition )
 {
     //create shape
-    uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.LineShape" ), uno::UNO_QUERY );
+    rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
+    xShape->setShapeKind(OBJ_LINE);
     xTarget->add(xShape);
     xShape->setSize( rSize );
     xShape->setPosition( rPosition );
