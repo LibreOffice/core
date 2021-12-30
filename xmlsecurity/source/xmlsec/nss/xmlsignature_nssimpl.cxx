@@ -20,6 +20,8 @@
 #include <sal/config.h>
 #include <xmlsec-wrapper.h>
 
+#include <xmlsec/nss/x509.h>
+
 #include <xmlelementwrapper_xmlsecimpl.hxx>
 #include <xmlsec/xmlstreamio.hxx>
 #include <xmlsec/errorcallback.hxx>
