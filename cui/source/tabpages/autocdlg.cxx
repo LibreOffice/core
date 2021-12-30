@@ -620,12 +620,6 @@ IMPL_LINK(OfaSwAutoFmtOptionsPage, SelectHdl, weld::TreeView&, rBox, void)
     m_xEditPB->set_sensitive(rBox.get_selected_id().toInt64() != 0);
 }
 
-IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, DoubleClickEditHdl, weld::TreeView&, bool)
-{
-    EditHdl(*m_xEditPB);
-    return true;
-}
-
 IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, weld::Button&, void)
 {
     int nSelEntryPos = m_xCheckLB->get_selected_index();
