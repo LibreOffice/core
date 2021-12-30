@@ -22,6 +22,8 @@
 #include <rtl/uuid.h>
 #include <xmlsec-wrapper.h>
 
+#include <xmlsec/mscng/x509.h>
+
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 
