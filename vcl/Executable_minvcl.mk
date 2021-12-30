@@ -28,6 +28,7 @@ $(eval $(call gb_Executable_use_libraries,minvcl,\
     cppuhelper \
     comphelper \
     i18nlangtag \
+    fwk \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,minvcl,\

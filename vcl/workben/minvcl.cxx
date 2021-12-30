@@ -13,6 +13,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <framework/desktop.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>

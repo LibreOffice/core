@@ -27,6 +27,8 @@ $(eval $(call gb_Executable_use_libraries,svdemo,\
     cppu \
     cppuhelper \
     comphelper \
+    i18nlangtag \
+    fwk \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,svdemo,\

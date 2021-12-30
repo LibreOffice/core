@@ -30,6 +30,9 @@
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
+#include <framework/desktop.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #include <iostream>
 
@@ -124,6 +127,8 @@ private:
     uno::Reference<lang::XMultiServiceFactory> xMSF;
     void Init() override
     {
+        LanguageTag::setConfiguredSystemLanguage(MsLangId::getSystemLanguage());
+
         try
         {
             const sal_uInt16 nCmdParams = GetCommandLineParamCount();
@@ -208,6 +213,8 @@ private:
 
                 aMtf.dumpAsXml(rtl::OUStringToOString(sAbsoluteDumpUrl, RTL_TEXTENCODING_UTF8).getStr());
                 std::cout << "Dumped metaactions as metadump.xml" << std::endl;
+                framework::getDesktop(::comphelper::getProcessComponentContext())->terminate();
+                framework::getDesktop(::comphelper::getProcessComponentContext())->disposing();
                 std::exit(0);
             }
 
@@ -220,6 +227,9 @@ private:
 
     void DeInit() override
     {
+        framework::getDesktop(::comphelper::getProcessComponentContext())->terminate();
+        framework::getDesktop(::comphelper::getProcessComponentContext())->disposing();
+
         uno::Reference< lang::XComponent >(
             comphelper::getProcessComponentContext(),
         uno::UNO_QUERY_THROW)-> dispose();

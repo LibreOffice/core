@@ -21,12 +21,16 @@ $(eval $(call gb_Executable_set_include,mtfdemo,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,mtfdemo,\
-	basegfx \
+    basegfx \
     tl \
     sal \
     cppu \
     cppuhelper \
     comphelper \
+    fwk \
+    drawinglayer \
+    emfio \
+    i18nlangtag \
 ))
 
 $(eval $(call gb_Executable_use_vclmain,mtfdemo))
