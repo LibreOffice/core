@@ -449,7 +449,7 @@ rtl::Reference<Svx3DExtrudeObject>
     return xShape;
 }
 
-uno::Reference<drawing::XShape>
+rtl::Reference<Svx3DLatheObject>
         ShapeFactory::createCylinder(
             const uno::Reference<drawing::XShapes>& xTarget
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
@@ -459,7 +459,7 @@ uno::Reference<drawing::XShape>
               xTarget, rPosition, rSize, 0.0, nRotateZAngleHundredthDegree, true );
 }
 
-uno::Reference<drawing::XShape>
+rtl::Reference<Svx3DSceneObject>
         ShapeFactory::createPyramid(
             const uno::Reference<drawing::XShapes>& xTarget
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
@@ -470,7 +470,7 @@ uno::Reference<drawing::XShape>
     if( !xTarget.is() )
         return nullptr;
 
-    Reference< drawing::XShapes > xGroup( ShapeFactory::createGroup3D( xTarget ) );
+    rtl::Reference<Svx3DSceneObject> xGroup( ShapeFactory::createGroup3D( xTarget ) );
 
     bool bDoubleSided = false;
     short nRotatedTexture = 0;
@@ -616,10 +616,10 @@ uno::Reference<drawing::XShape>
     ShapeFactory::createStripe( xGroup, aStripe4, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
     ShapeFactory::createStripe( xGroup, aStripeBottom, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
 
-    return Reference< drawing::XShape >( xGroup, uno::UNO_QUERY );
+    return xGroup;
 }
 
-uno::Reference<drawing::XShape>
+rtl::Reference<Svx3DLatheObject>
         ShapeFactory::createCone(
             const uno::Reference<drawing::XShapes>& xTarget
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
@@ -628,7 +628,7 @@ uno::Reference<drawing::XShape>
     return impl_createConeOrCylinder( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree, false );
 }
 
-uno::Reference<drawing::XShape>
+rtl::Reference<Svx3DLatheObject>
         ShapeFactory::impl_createConeOrCylinder(
               const uno::Reference<drawing::XShapes>& xTarget
             , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
@@ -639,9 +639,8 @@ uno::Reference<drawing::XShape>
         return nullptr;
 
     //create shape
-    uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.Shape3DLatheObject" ), uno::UNO_QUERY );
+    rtl::Reference<Svx3DLatheObject> xShape = new Svx3DLatheObject(nullptr);
+    xShape->setShapeKind(E3D_LATHEOBJ_ID | E3D_INVENTOR_FLAG);
     xTarget->add(xShape);
 
     double fWidth      = rSize.DirectionX/2.0; //The depth will be corrected within Matrix
@@ -649,50 +648,45 @@ uno::Reference<drawing::XShape>
     double fHeight     = rSize.DirectionY;
 
     //set properties
-    uno::Reference<beans::XMultiPropertySet> xMultiPropertySet(xShape, uno::UNO_QUERY);
-    OSL_ENSURE(xMultiPropertySet.is(), "created shape offers no XMultiPropertySet");
-    if (xMultiPropertySet.is())
+    try
     {
-        try
-        {
-            //Polygon
-            sal_Int32 nVerticalSegmentCount = 0;
-            uno::Any aPPolygon = bCylinder
-                ? createPolyPolygon_Cylinder(fHeight, fRadius, nVerticalSegmentCount)
-                : createPolyPolygon_Cone(fHeight, fRadius, fTopHeight, nVerticalSegmentCount);
+        //Polygon
+        sal_Int32 nVerticalSegmentCount = 0;
+        uno::Any aPPolygon = bCylinder
+            ? createPolyPolygon_Cylinder(fHeight, fRadius, nVerticalSegmentCount)
+            : createPolyPolygon_Cone(fHeight, fRadius, fTopHeight, nVerticalSegmentCount);
 
-            //Matrix for position
-            basegfx::B3DHomMatrix aHomMatrix;
-            if (nRotateZAngleHundredthDegree != 0)
-                aHomMatrix.rotate(0.0,0.0,-basegfx::deg2rad<100>(nRotateZAngleHundredthDegree));
-            //stretch the symmetric objects to given depth
-            aHomMatrix.scale(1.0,1.0,rSize.DirectionZ/rSize.DirectionX);
-            aHomMatrix.translate(rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ);
+        //Matrix for position
+        basegfx::B3DHomMatrix aHomMatrix;
+        if (nRotateZAngleHundredthDegree != 0)
+            aHomMatrix.rotate(0.0,0.0,-basegfx::deg2rad<100>(nRotateZAngleHundredthDegree));
+        //stretch the symmetric objects to given depth
+        aHomMatrix.scale(1.0,1.0,rSize.DirectionZ/rSize.DirectionX);
+        aHomMatrix.translate(rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ);
 
-            uno::Sequence<OUString> aPropertyNames{
-                UNO_NAME_3D_PERCENT_DIAGONAL,
-                UNO_NAME_3D_POLYPOLYGON3D,
-                UNO_NAME_3D_TRANSFORM_MATRIX,
-                UNO_NAME_3D_HORZ_SEGS,
-                UNO_NAME_3D_VERT_SEGS,
-                UNO_NAME_3D_REDUCED_LINE_GEOMETRY
-            };
+        uno::Sequence<OUString> aPropertyNames{
+            UNO_NAME_3D_PERCENT_DIAGONAL,
+            UNO_NAME_3D_POLYPOLYGON3D,
+            UNO_NAME_3D_TRANSFORM_MATRIX,
+            UNO_NAME_3D_HORZ_SEGS,
+            UNO_NAME_3D_VERT_SEGS,
+            UNO_NAME_3D_REDUCED_LINE_GEOMETRY
+        };
 
-            uno::Sequence<uno::Any> aPropertyValues {
-                uno::Any(sal_Int16(5)),  // PercentDiagonal
-                aPPolygon,               // Polygon
-                uno::Any(B3DHomMatrixToHomogenMatrix(aHomMatrix)), // Matrix
-                uno::Any(CHART_3DOBJECT_SEGMENTCOUNT), // Horizontal Segments
-                uno::Any(nVerticalSegmentCount),       // Vertical Segments
-                uno::Any(true)                         // Reduced lines
-            };
+        uno::Sequence<uno::Any> aPropertyValues {
+            uno::Any(sal_Int16(5)),  // PercentDiagonal
+            aPPolygon,               // Polygon
+            uno::Any(B3DHomMatrixToHomogenMatrix(aHomMatrix)), // Matrix
+            uno::Any(CHART_3DOBJECT_SEGMENTCOUNT), // Horizontal Segments
+            uno::Any(nVerticalSegmentCount),       // Vertical Segments
+            uno::Any(true)                         // Reduced lines
+        };
 
-            xMultiPropertySet->setPropertyValues(aPropertyNames, aPropertyValues);
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
+        xShape->setPropertyValues(aPropertyNames, aPropertyValues);
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return xShape;
 }
