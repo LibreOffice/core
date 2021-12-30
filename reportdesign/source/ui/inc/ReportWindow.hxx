@@ -100,7 +100,7 @@ namespace rptui
 
         /** All objects will be marked.
         */
-        void SelectAll(const sal_uInt16 _nObjectType);
+        void SelectAll(const SdrObjKind _nObjectType);
 
         /** returns <TRUE/> when an object is marked
         */

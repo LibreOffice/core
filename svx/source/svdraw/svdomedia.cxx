@@ -117,7 +117,7 @@ void SdrMediaObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 
 SdrObjKind SdrMediaObj::GetObjIdentifier() const
 {
-    return OBJ_MEDIA;
+    return SdrObjKind::Media;
 }
 
 OUString SdrMediaObj::TakeObjNameSingul() const

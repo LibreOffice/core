@@ -83,7 +83,7 @@ SwDrawBaseShell::SwDrawBaseShell(SwView &_rView)
     rWin.SetBezierMode(SID_BEZIER_MOVE);
 
     if ( !_rView.GetDrawFuncPtr() )
-        _rView.GetEditWin().StdDrawMode( OBJ_NONE, true );
+        _rView.GetEditWin().StdDrawMode( SdrObjKind::NONE, true );
 
     SwTransferable::CreateSelection( GetShell() );
 }
@@ -184,7 +184,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         if ( pSh->IsFlyInFly() )
                             nAllowedAnchors |= SvxAnchorIds::Fly;
 
-                        if (pObj->GetObjIdentifier() == OBJ_CAPTION )
+                        if (pObj->GetObjIdentifier() == SdrObjKind::Caption )
                             bCaption = true;
 
                         if (bCaption)
@@ -861,23 +861,23 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
 
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                sal_uInt16 nObjType = pObj->GetObjIdentifier();
+                SdrObjKind nObjType = pObj->GetObjIdentifier();
 
                 // Only enable hyperlink for the following types
                 switch (nObjType)
                 {
-                    case OBJ_PATHFILL:
-                    case OBJ_SECT:
-                    case OBJ_LINE:
-                    case OBJ_CUSTOMSHAPE:
-                    case OBJ_TEXT:
-                    case OBJ_RECT:
-                    case OBJ_CAPTION:
-                    case OBJ_POLY:
-                    case OBJ_PLIN:
-                    case E3D_SCENE_ID:
-                    case OBJ_MEASURE:
-                    case OBJ_EDGE:
+                    case SdrObjKind::PathFill:
+                    case SdrObjKind::CircleSection:
+                    case SdrObjKind::Line:
+                    case SdrObjKind::CustomShape:
+                    case SdrObjKind::Text:
+                    case SdrObjKind::Rectangle:
+                    case SdrObjKind::Caption:
+                    case SdrObjKind::Polygon:
+                    case SdrObjKind::PolyLine:
+                    case SdrObjKind::E3D_Scene:
+                    case SdrObjKind::Measure:
+                    case SdrObjKind::Edge:
                         break;
                     default:
                         rSet.DisableItem(nWhich);
@@ -954,18 +954,18 @@ void SwDrawBaseShell::DisableState( SfxItemSet& rSet )
     for (size_t i = 0; i < nMarkCount && i < 50; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        sal_uInt16 nObjType = pObj->GetObjIdentifier();
+        SdrObjKind nObjType = pObj->GetObjIdentifier();
 
-        if ( nObjType != OBJ_MEASURE )
+        if ( nObjType != SdrObjKind::Measure )
             bShowMeasure = false;
 
         // If marked object is 2D, disable format area command.
-        if ( nObjType == OBJ_PLIN     ||
-             nObjType == OBJ_LINE     ||
-             nObjType == OBJ_PATHLINE ||
-             nObjType == OBJ_FREELINE ||
-             nObjType == OBJ_EDGE     ||
-             nObjType == OBJ_CARC     ||
+        if ( nObjType == SdrObjKind::PolyLine     ||
+             nObjType == SdrObjKind::Line     ||
+             nObjType == SdrObjKind::PathLine ||
+             nObjType == SdrObjKind::FreehandLine ||
+             nObjType == SdrObjKind::Edge     ||
+             nObjType == SdrObjKind::CircleArc     ||
              bShowMeasure )
             bShowArea = false;
 

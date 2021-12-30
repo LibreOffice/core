@@ -71,7 +71,7 @@ std::unique_ptr<sdr::contact::ViewContact> SdrTextObj::CreateObjectSpecificViewC
 SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
 :   SdrAttrObj(rSdrModel),
     mpEditingOutliner(nullptr),
-    meTextKind(OBJ_TEXT)
+    meTextKind(SdrObjKind::Text)
 {
     mbTextSizeDirty = false;
     mbTextFrame = false;
@@ -142,7 +142,7 @@ SdrTextObj::SdrTextObj(
 :   SdrAttrObj(rSdrModel),
     maRect(rNewRect),
     mpEditingOutliner(nullptr),
-    meTextKind(OBJ_TEXT)
+    meTextKind(SdrObjKind::Text)
 {
     mbTextSizeDirty = false;
     mbTextFrame = false;
@@ -997,13 +997,13 @@ OUString SdrTextObj::TakeObjNameSingul() const
 
     switch(meTextKind)
     {
-        case OBJ_OUTLINETEXT:
+        case SdrObjKind::OutlineText:
         {
             aStr = SvxResId(STR_ObjNameSingulOUTLINETEXT);
             break;
         }
 
-        case OBJ_TITLETEXT  :
+        case SdrObjKind::TitleText  :
         {
             aStr = SvxResId(STR_ObjNameSingulTITLETEXT);
             break;
@@ -1020,7 +1020,7 @@ OUString SdrTextObj::TakeObjNameSingul() const
     }
 
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-    if(pOutlinerParaObject && meTextKind != OBJ_OUTLINETEXT)
+    if(pOutlinerParaObject && meTextKind != SdrObjKind::OutlineText)
     {
         // shouldn't currently cause any problems at OUTLINETEXT
         OUString aStr2(comphelper::string::stripStart(pOutlinerParaObject->GetTextObject().GetText(0), ' '));
@@ -1055,8 +1055,8 @@ OUString SdrTextObj::TakeObjNamePlural() const
     OUString sName;
     switch (meTextKind)
     {
-        case OBJ_OUTLINETEXT: sName=SvxResId(STR_ObjNamePluralOUTLINETEXT); break;
-        case OBJ_TITLETEXT  : sName=SvxResId(STR_ObjNamePluralTITLETEXT);   break;
+        case SdrObjKind::OutlineText: sName=SvxResId(STR_ObjNamePluralOUTLINETEXT); break;
+        case SdrObjKind::TitleText  : sName=SvxResId(STR_ObjNamePluralTITLETEXT);   break;
         default: {
             if (IsLinkedText()) {
                 sName=SvxResId(STR_ObjNamePluralTEXTLNK);
@@ -1452,7 +1452,7 @@ void SdrTextObj::ForceOutlinerParaObject()
     if( pText && (pText->GetOutlinerParaObject() == nullptr) )
     {
         OutlinerMode nOutlMode = OutlinerMode::TextObject;
-        if( IsTextFrame() && meTextKind == OBJ_OUTLINETEXT )
+        if( IsTextFrame() && meTextKind == SdrObjKind::OutlineText )
             nOutlMode = OutlinerMode::OutlineObject;
 
         pText->ForceOutlinerParaObject( nOutlMode );

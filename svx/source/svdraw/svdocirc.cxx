@@ -105,10 +105,10 @@ SdrCircKind ToSdrCircKind(SdrObjKind eKind)
 {
     switch (eKind)
     {
-        case OBJ_CIRC: return SdrCircKind::Full;
-        case OBJ_SECT: return SdrCircKind::Section;
-        case OBJ_CARC: return SdrCircKind::Arc;
-        case OBJ_CCUT: return SdrCircKind::Cut;
+        case SdrObjKind::CircleOrEllipse: return SdrCircKind::Full;
+        case SdrObjKind::CircleSection: return SdrCircKind::Section;
+        case SdrObjKind::CircleArc: return SdrCircKind::Arc;
+        case SdrObjKind::CircleCut: return SdrCircKind::Cut;
         default: assert(false);
     }
     return SdrCircKind::Full;
@@ -179,13 +179,13 @@ SdrObjKind SdrCircObj::GetObjIdentifier() const
 {
     switch (meCircleKind)
     {
-    case SdrCircKind::Full: return OBJ_CIRC;
-    case SdrCircKind::Section: return OBJ_SECT;
-    case SdrCircKind::Cut: return OBJ_CCUT;
-    case SdrCircKind::Arc: return OBJ_CARC;
+    case SdrCircKind::Full: return SdrObjKind::CircleOrEllipse;
+    case SdrCircKind::Section: return SdrObjKind::CircleSection;
+    case SdrCircKind::Cut: return SdrObjKind::CircleCut;
+    case SdrCircKind::Arc: return SdrObjKind::CircleArc;
     default: assert(false);
     }
-    return OBJ_CIRC;
+    return SdrObjKind::CircleOrEllipse;
 }
 
 bool SdrCircObj::PaintNeedsXPolyCirc() const

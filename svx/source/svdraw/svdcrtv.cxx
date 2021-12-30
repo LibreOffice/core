@@ -187,7 +187,7 @@ SdrCreateView::SdrCreateView(SdrModel& rSdrModel, OutputDevice* pOut)
     , mnAutoCloseDistPix(5)
     , mnFreeHandMinDistPix(10)
     , mnCurrentInvent(SdrInventor::Default)
-    , mnCurrentIdent(OBJ_NONE)
+    , mnCurrentIdent(SdrObjKind::NONE)
     , mb1stPointAsCenter(false)
     , mbUseIncompatiblePathCreateInterface(false)
 {
@@ -252,10 +252,10 @@ bool SdrCreateView::CheckEdgeMode()
     if (mpCurrentCreate != nullptr)
     {
         // is managed by EdgeObj
-        if (mnCurrentInvent==SdrInventor::Default && mnCurrentIdent==OBJ_EDGE) return false;
+        if (mnCurrentInvent==SdrInventor::Default && mnCurrentIdent==SdrObjKind::Edge) return false;
     }
 
-    if (!IsCreateMode() || mnCurrentInvent!=SdrInventor::Default || mnCurrentIdent!=OBJ_EDGE)
+    if (!IsCreateMode() || mnCurrentInvent!=SdrInventor::Default || mnCurrentIdent!=SdrObjKind::Edge)
     {
         ImpClearConnectMarker();
         return false;
@@ -316,17 +316,21 @@ bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, OutputDevice* pWin)
 
 bool SdrCreateView::IsTextTool() const
 {
-    return meEditMode==SdrViewEditMode::Create && mnCurrentInvent==SdrInventor::Default && (mnCurrentIdent==OBJ_TEXT || mnCurrentIdent==OBJ_TITLETEXT || mnCurrentIdent==OBJ_OUTLINETEXT);
+    return meEditMode==SdrViewEditMode::Create
+        && mnCurrentInvent==SdrInventor::Default
+        && (mnCurrentIdent==SdrObjKind::Text
+            || mnCurrentIdent==SdrObjKind::TitleText
+            || mnCurrentIdent==SdrObjKind::OutlineText);
 }
 
 bool SdrCreateView::IsEdgeTool() const
 {
-    return meEditMode==SdrViewEditMode::Create && mnCurrentInvent==SdrInventor::Default && (mnCurrentIdent==OBJ_EDGE);
+    return meEditMode==SdrViewEditMode::Create && mnCurrentInvent==SdrInventor::Default && (mnCurrentIdent==SdrObjKind::Edge);
 }
 
 bool SdrCreateView::IsMeasureTool() const
 {
-    return meEditMode==SdrViewEditMode::Create && mnCurrentInvent==SdrInventor::Default && (mnCurrentIdent==OBJ_MEASURE);
+    return meEditMode==SdrViewEditMode::Create && mnCurrentInvent==SdrInventor::Default && (mnCurrentIdent==SdrObjKind::Measure);
 }
 
 void SdrCreateView::SetCurrentObj(SdrObjKind nIdent, SdrInventor nInvent)
@@ -335,7 +339,7 @@ void SdrCreateView::SetCurrentObj(SdrObjKind nIdent, SdrInventor nInvent)
     {
         mnCurrentInvent=nInvent;
         mnCurrentIdent=nIdent;
-        SdrObject * pObj = (nIdent == OBJ_NONE) ? nullptr :
+        SdrObject * pObj = (nIdent == SdrObjKind::NONE) ? nullptr :
             SdrObjFactory::MakeNewObject(
                 *GetModel(),
                 nInvent,
@@ -381,7 +385,7 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, SdrObjKind nIdent, cons
     { // otherwise no side registered!
         OUString aLay(maActualLayer);
 
-        if(nInvent == SdrInventor::Default && nIdent == OBJ_MEASURE && !maMeasureLayer.isEmpty())
+        if(nInvent == SdrInventor::Default && nIdent == SdrObjKind::Measure && !maMeasureLayer.isEmpty())
         {
             aLay = maMeasureLayer;
         }
@@ -403,9 +407,9 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, SdrObjKind nIdent, cons
             }
 
             Point aPnt(rPnt);
-            if (mnCurrentInvent!=SdrInventor::Default || (mnCurrentIdent!=sal_uInt16(OBJ_EDGE) &&
-                                            mnCurrentIdent!=sal_uInt16(OBJ_FREELINE) &&
-                                            mnCurrentIdent!=sal_uInt16(OBJ_FREEFILL) )) { // no snapping for Edge and Freehand
+            if (mnCurrentInvent != SdrInventor::Default || (mnCurrentIdent != SdrObjKind::Edge &&
+                                            mnCurrentIdent != SdrObjKind::FreehandLine &&
+                                            mnCurrentIdent != SdrObjKind::FreehandFill )) { // no snapping for Edge and Freehand
                 aPnt=GetSnapPos(aPnt, mpCreatePV);
             }
             if (mpCurrentCreate!=nullptr)
@@ -416,7 +420,7 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, SdrObjKind nIdent, cons
                 // object should not be created. Since it is possible to use it as a helper
                 // object (e.g. in letting the user define an area with the interactive
                 // construction) at least no items should be set at that object.
-                if(nInvent != SdrInventor::Default || nIdent != OBJ_NONE)
+                if(nInvent != SdrInventor::Default || nIdent != SdrObjKind::NONE)
                 {
                     mpCurrentCreate->SetMergedItemSet(maDefaultAttr);
                 }
@@ -429,8 +433,8 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, SdrObjKind nIdent, cons
 
                     mpCurrentCreate->SetMergedItemSet(aSet);
                 }
-                if (mpModel && nInvent==SdrInventor::Default && (nIdent==OBJ_TEXT ||
-                    nIdent==OBJ_TITLETEXT || nIdent==OBJ_OUTLINETEXT))
+                if (mpModel && nInvent==SdrInventor::Default && (nIdent==SdrObjKind::Text ||
+                    nIdent==SdrObjKind::TitleText || nIdent==SdrObjKind::OutlineText))
                 {
                     // default for all text frames: no background, no border
                     SfxItemSet aSet(mpModel->GetItemPool());
@@ -513,7 +517,7 @@ bool SdrCreateView::BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov
 bool SdrCreateView::BegCreateCaptionObj(const Point& rPnt, const Size& rObjSiz,
     OutputDevice* pOut, short nMinMov)
 {
-    return ImpBegCreateObj(SdrInventor::Default,OBJ_CAPTION,rPnt,pOut,nMinMov,
+    return ImpBegCreateObj(SdrInventor::Default,SdrObjKind::Caption,rPnt,pOut,nMinMov,
         tools::Rectangle(rPnt,Size(rObjSiz.Width()+1,rObjSiz.Height()+1)), nullptr);
 }
 
@@ -746,7 +750,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
         // a derivation). This is e.g. used in SW Frame construction
         // as placeholder. Do not use SolidDragging for naked SdrObjects,
         // they cannot have a valid optical representation
-        if(bUseSolidDragging && OBJ_NONE == mpCurrentCreate->GetObjIdentifier())
+        if(bUseSolidDragging && SdrObjKind::NONE == mpCurrentCreate->GetObjIdentifier())
         {
             bUseSolidDragging = false;
         }
@@ -778,7 +782,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
         {
             SdrCircObj* pCircObj = dynamic_cast<SdrCircObj*>(mpCurrentCreate);
 
-            if(pCircObj && OBJ_CIRC != pCircObj->GetObjIdentifier())
+            if(pCircObj && SdrObjKind::CircleOrEllipse != pCircObj->GetObjIdentifier())
             {
                 // #i103058# Allow SolidDragging with four points
                 if(maDragStat.GetPointCount() < 4)

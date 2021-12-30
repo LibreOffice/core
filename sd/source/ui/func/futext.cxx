@@ -183,7 +183,7 @@ void FuText::DoExecute( SfxRequest& )
         ToolBarManager::ToolBarGroup::Function,
         ToolbarId::Draw_Text_Toolbox_Sd);
 
-    mpView->SetCurrentObj(OBJ_TEXT);
+    mpView->SetCurrentObj(SdrObjKind::Text);
     mpView->SetEditMode(SdrViewEditMode::Edit);
 
     MouseEvent aMEvt(mpWindow->GetPointerPosPixel());
@@ -217,7 +217,7 @@ void FuText::DoExecute( SfxRequest& )
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if( pObj && (pObj->GetObjInventor() == SdrInventor::Default ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+            if( pObj && (pObj->GetObjInventor() == SdrInventor::Default ) && (pObj->GetObjIdentifier() == SdrObjKind::Table) )
             {
                 mpViewShell->GetViewShellBase().GetToolBarManager()->AddToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Draw_Table_Toolbox);
             }
@@ -301,7 +301,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
             }
 
-            mpView->SetCurrentObj(OBJ_TEXT);
+            mpView->SetCurrentObj(SdrObjKind::Text);
             mpView->SetEditMode(SdrViewEditMode::Edit);
         }
 
@@ -447,7 +447,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                           (bPermanent || !bFirstObjCreated) )
                 {
                     // create object
-                    mpView->SetCurrentObj(OBJ_TEXT);
+                    mpView->SetCurrentObj(SdrObjKind::Text);
                     mpView->SetEditMode(SdrViewEditMode::Create);
                     sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
                     mpView->BegCreateObj(aMDPos, nullptr, nDrgLog);
@@ -669,7 +669,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         mpView->SetDragWithCopy(bDragWithCopy);
         mpView->EndDragObj( mpView->IsDragWithCopy() );
         mpView->ForceMarkedToAnotherPage();
-        mpView->SetCurrentObj(OBJ_TEXT);
+        mpView->SetCurrentObj(SdrObjKind::Text);
 
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
@@ -789,7 +789,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
               nSlotId != SID_TEXTEDIT )
         {
             // text body (left-justified AutoGrow)
-            mpView->SetCurrentObj(OBJ_TEXT);
+            mpView->SetCurrentObj(SdrObjKind::Text);
             mpView->SetEditMode(SdrViewEditMode::Create);
             sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
             mpView->BegCreateObj(aMDPos, nullptr, nDrgLog);
@@ -949,7 +949,7 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
         }
     }
 
-    if ( mxTextObj.is() && mxTextObj->GetObjInventor() == SdrInventor::Default && mxTextObj->GetObjIdentifier() == OBJ_TITLETEXT && rKEvt.GetKeyCode().GetCode() == KEY_RETURN )
+    if ( mxTextObj.is() && mxTextObj->GetObjInventor() == SdrInventor::Default && mxTextObj->GetObjIdentifier() == SdrObjKind::TitleText && rKEvt.GetKeyCode().GetCode() == KEY_RETURN )
     {
         // title text object: always soft breaks
         bShift = true;
@@ -984,7 +984,7 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
 
     if( bPermanent )
     {
-        mpView->SetCurrentObj(OBJ_TEXT);
+        mpView->SetCurrentObj(SdrObjKind::Text);
         mpView->SetEditMode(SdrViewEditMode::Create);
     }
 
@@ -1035,7 +1035,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
     SdrPageView* pPV = mpView->GetSdrPageView();
     if( mxTextObj.is() && (mxTextObj->getSdrPageFromSdrObject() == pPV->GetPage()) )
     {
-        mpView->SetCurrentObj(OBJ_TEXT);
+        mpView->SetCurrentObj(SdrObjKind::Text);
 
         if( bPermanent )
             mpView->SetEditMode(SdrViewEditMode::Create);
@@ -1063,12 +1063,12 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
         if (GetTextObj() != mpView->GetTextEditObject() || bEmptyOutliner)
         {
             SdrInventor nInv = mxTextObj->GetObjInventor();
-            sal_uInt16  nSdrObjKind = mxTextObj->GetObjIdentifier();
+            SdrObjKind  nSdrObjKind = mxTextObj->GetObjIdentifier();
 
             if (nInv == SdrInventor::Default && GetTextObj()->HasTextEdit() &&
-                (nSdrObjKind == OBJ_TEXT ||
-                 nSdrObjKind == OBJ_TITLETEXT ||
-                 nSdrObjKind == OBJ_OUTLINETEXT || !mxTextObj->IsEmptyPresObj() ) )
+                (nSdrObjKind == SdrObjKind::Text ||
+                 nSdrObjKind == SdrObjKind::TitleText ||
+                 nSdrObjKind == SdrObjKind::OutlineText || !mxTextObj->IsEmptyPresObj() ) )
             {
                 // create new outliner (owned by SdrObjEditView)
                 std::unique_ptr<SdrOutliner> pOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *mpDoc);
@@ -1123,10 +1123,10 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                         if (eHit == SdrHitKind::TextEdit)
                         {
                             // hit text
-                            if (nSdrObjKind == OBJ_TEXT ||
-                                nSdrObjKind == OBJ_TITLETEXT ||
-                                nSdrObjKind == OBJ_OUTLINETEXT ||
-                                nSdrObjKind == OBJ_TABLE ||
+                            if (nSdrObjKind == SdrObjKind::Text ||
+                                nSdrObjKind == SdrObjKind::TitleText ||
+                                nSdrObjKind == SdrObjKind::OutlineText ||
+                                nSdrObjKind == SdrObjKind::Table ||
                                 nSlotId == SID_TEXTEDIT ||
                                 !bQuickDrag)
                             {
@@ -1380,7 +1380,7 @@ bool FuText::cancel()
         if(mpView->SdrEndTextEdit() == SdrEndTextEditKind::Deleted)
             mxTextObj.reset(nullptr);
 
-        mpView->SetCurrentObj(OBJ_TEXT);
+        mpView->SetCurrentObj(SdrObjKind::Text);
         mpView->SetEditMode(SdrViewEditMode::Edit);
         return true;
     }

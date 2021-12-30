@@ -258,7 +258,7 @@ void SdPresLayoutTemplateDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     }
     else if (rId == "RID_SVXPAGE_TEXTATTR")
     {
-        aSet.Put(CntUInt16Item(SID_SVXTEXTATTRPAGE_OBJKIND, OBJ_TEXT));
+        aSet.Put(CntUInt16Item(SID_SVXTEXTATTRPAGE_OBJKIND, static_cast<sal_uInt16>(SdrObjKind::Text)));
         rPage.PageCreated(aSet);
     }
     else if (rId == "RID_SVXPAGE_BKG")

@@ -30,6 +30,7 @@ class ScDocument;
 class ScDocShell;
 class ScNavigatorDlg;
 struct ImplSVEvent;
+enum class SdrObjKind : sal_uInt16;
 
 enum class ScContentId {
     ROOT, TABLE, RANGENAME, DBAREA,
@@ -75,7 +76,7 @@ class ScContentTree
     void    GetDrawingNames();
     void    GetNoteStrings();
 
-    static bool IsPartOfType( ScContentId nContentType, sal_uInt16 nObjIdentifier );
+    static bool IsPartOfType( ScContentId nContentType, SdrObjKind nObjIdentifier );
 
     bool    DrawNamesChanged( ScContentId nType );
     bool    NoteStringsChanged();

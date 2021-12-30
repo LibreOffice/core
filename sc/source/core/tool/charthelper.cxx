@@ -60,7 +60,7 @@ sal_uInt16 lcl_DoUpdateCharts( ScDocument& rDoc )
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart( pObject ) )
+            if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 && ScDocument::IsChart( pObject ) )
             {
                 OUString aName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
                 rDoc.UpdateChart( aName );
@@ -125,7 +125,7 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( const ScDocument& rSr
     SdrObject* pObject = aIter.Next();
     while( pObject )
     {
-        if( pObject->GetObjIdentifier() == OBJ_OLE2 && static_cast<SdrOle2Obj*>(pObject)->IsChart() )
+        if( pObject->GetObjIdentifier() == SdrObjKind::OLE2 && static_cast<SdrOle2Obj*>(pObject)->IsChart() )
         {
             OUString aChartName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
 
@@ -161,7 +161,7 @@ void ScChartHelper::UpdateChartsOnDestinationPage( ScDocument& rDestDoc, const S
     SdrObject* pObject = aIter.Next();
     while( pObject )
     {
-        if( pObject->GetObjIdentifier() == OBJ_OLE2 && static_cast<SdrOle2Obj*>(pObject)->IsChart() )
+        if( pObject->GetObjIdentifier() == SdrObjKind::OLE2 && static_cast<SdrOle2Obj*>(pObject)->IsChart() )
         {
             OUString aChartName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
             Reference< chart2::XChartDocument > xChartDoc( rDestDoc.GetChartByName( aChartName ) );
@@ -177,7 +177,7 @@ uno::Reference< chart2::XChartDocument > ScChartHelper::GetChartFromSdrObject( c
     uno::Reference< chart2::XChartDocument > xReturn;
     if( pObject )
     {
-        if( pObject->GetObjIdentifier() == OBJ_OLE2 && static_cast<const SdrOle2Obj*>(pObject)->IsChart() )
+        if( pObject->GetObjIdentifier() == SdrObjKind::OLE2 && static_cast<const SdrOle2Obj*>(pObject)->IsChart() )
         {
             uno::Reference< embed::XEmbeddedObject > xIPObj = static_cast<const SdrOle2Obj*>(pObject)->GetObjRef();
             if( xIPObj.is() )
@@ -281,7 +281,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
 
 void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, const ScDocument& rDocument, SdrObject* pObject )
 {
-    if ( !(pObject && ( pObject->GetObjIdentifier() == OBJ_OLE2 )) )
+    if ( !(pObject && ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 )) )
         return;
 
     SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >( pObject );
@@ -344,7 +344,7 @@ void ScChartHelper::GetChartNames( ::std::vector< OUString >& rChartNames, const
     SdrObject* pObject = aIter.Next();
     while ( pObject )
     {
-        if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
+        if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 )
         {
             SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >( pObject );
             if ( pSdrOle2Obj && pSdrOle2Obj->IsChart() )
@@ -368,7 +368,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
     SdrObject* pObject = aIter.Next();
     while ( pObject )
     {
-        if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
+        if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 )
         {
             SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >( pObject );
             if ( pSdrOle2Obj && pSdrOle2Obj->IsChart() )

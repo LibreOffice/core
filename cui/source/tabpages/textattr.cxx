@@ -49,7 +49,7 @@ const WhichRangesContainer SvxTextAttrPage::pRanges(
 SvxTextAttrPage::SvxTextAttrPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SvxTabPage(pPage, pController, "cui/ui/textattrtabpage.ui", "TextAttributesPage", rInAttrs)
     , rOutAttrs(rInAttrs)
-    , m_eObjKind(OBJ_NONE)
+    , m_eObjKind(SdrObjKind::NONE)
     , bAutoGrowSizeEnabled(false)
     , bContourEnabled(false)
     , bAutoGrowWidthEnabled(false)
@@ -431,17 +431,17 @@ void SvxTextAttrPage::Construct()
 {
     switch (m_eObjKind)
     {
-        case OBJ_NONE:
+        case SdrObjKind::NONE:
             // indeterminate, show them all
             bFitToSizeEnabled = bContourEnabled = bWordWrapTextEnabled =
             bAutoGrowSizeEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = true;
             m_xCustomShapeText->show();
             m_xDrawingText->show();
             break;
-        case OBJ_TEXT:
-        case OBJ_TITLETEXT:
-        case OBJ_OUTLINETEXT:
-        case OBJ_CAPTION:
+        case SdrObjKind::Text:
+        case SdrObjKind::TitleText:
+        case SdrObjKind::OutlineText:
+        case SdrObjKind::Caption:
             // contour NOT possible for pure text objects
             bContourEnabled = bWordWrapTextEnabled = bAutoGrowSizeEnabled = false;
 
@@ -450,7 +450,7 @@ void SvxTextAttrPage::Construct()
             m_xCustomShapeText->hide();
             m_xDrawingText->show();
             break;
-        case OBJ_CUSTOMSHAPE:
+        case SdrObjKind::CustomShape:
             bFitToSizeEnabled = bContourEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = false;
             bWordWrapTextEnabled = bAutoGrowSizeEnabled = true;
             m_xDrawingText->hide();

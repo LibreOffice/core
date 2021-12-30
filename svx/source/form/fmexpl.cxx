@@ -312,96 +312,98 @@ OUString FmControlData::GetImage() const
 
 
     // Spezielle Control-Images
-    sal_Int16 nObjectType = getControlTypeByObject(xInfo);
+    SdrObjKind nObjectType = getControlTypeByObject(xInfo);
     switch (nObjectType)
     {
-    case OBJ_FM_BUTTON:
+    case SdrObjKind::FormButton:
         aImage = RID_SVXBMP_BUTTON;
         break;
 
-    case OBJ_FM_FIXEDTEXT:
+    case SdrObjKind::FormFixedText:
         aImage = RID_SVXBMP_FIXEDTEXT;
         break;
 
-    case OBJ_FM_EDIT:
+    case SdrObjKind::FormEdit:
         aImage = RID_SVXBMP_EDITBOX;
         break;
 
-    case OBJ_FM_RADIOBUTTON:
+    case SdrObjKind::FormRadioButton:
         aImage = RID_SVXBMP_RADIOBUTTON;
         break;
 
-    case OBJ_FM_CHECKBOX:
+    case SdrObjKind::FormCheckbox:
         aImage = RID_SVXBMP_CHECKBOX;
         break;
 
-    case OBJ_FM_LISTBOX:
+    case SdrObjKind::FormListbox:
         aImage = RID_SVXBMP_LISTBOX;
         break;
 
-    case OBJ_FM_COMBOBOX:
+    case SdrObjKind::FormCombobox:
         aImage = RID_SVXBMP_COMBOBOX;
         break;
 
-    case OBJ_FM_NAVIGATIONBAR:
+    case SdrObjKind::FormNavigationBar:
         aImage = RID_SVXBMP_NAVIGATIONBAR;
         break;
 
-    case OBJ_FM_GROUPBOX:
+    case SdrObjKind::FormGroupBox:
         aImage = RID_SVXBMP_GROUPBOX;
         break;
 
-    case OBJ_FM_IMAGEBUTTON:
+    case SdrObjKind::FormImageButton:
         aImage = RID_SVXBMP_IMAGEBUTTON;
         break;
 
-    case OBJ_FM_FILECONTROL:
+    case SdrObjKind::FormFileControl:
         aImage = RID_SVXBMP_FILECONTROL;
         break;
 
-    case OBJ_FM_HIDDEN:
+    case SdrObjKind::FormHidden:
         aImage = RID_SVXBMP_HIDDEN;
         break;
 
-    case OBJ_FM_DATEFIELD:
+    case SdrObjKind::FormDateField:
         aImage = RID_SVXBMP_DATEFIELD;
         break;
 
-    case OBJ_FM_TIMEFIELD:
+    case SdrObjKind::FormTimeField:
         aImage = RID_SVXBMP_TIMEFIELD;
         break;
 
-    case OBJ_FM_NUMERICFIELD:
+    case SdrObjKind::FormNumericField:
         aImage = RID_SVXBMP_NUMERICFIELD;
         break;
 
-    case OBJ_FM_CURRENCYFIELD:
+    case SdrObjKind::FormCurrencyField:
         aImage = RID_SVXBMP_CURRENCYFIELD;
         break;
 
-    case OBJ_FM_PATTERNFIELD:
+    case SdrObjKind::FormPatternField:
         aImage = RID_SVXBMP_PATTERNFIELD;
         break;
 
-    case OBJ_FM_IMAGECONTROL:
+    case SdrObjKind::FormImageControl:
         aImage = RID_SVXBMP_IMAGECONTROL;
         break;
 
-    case OBJ_FM_FORMATTEDFIELD:
+    case SdrObjKind::FormFormattedField:
         aImage = RID_SVXBMP_FORMATTEDFIELD;
         break;
 
-    case OBJ_FM_GRID:
+    case SdrObjKind::FormGrid:
         aImage = RID_SVXBMP_GRID;
         break;
 
-    case OBJ_FM_SCROLLBAR:
+    case SdrObjKind::FormScrollbar:
         aImage = RID_SVXBMP_SCROLLBAR;
         break;
 
-    case OBJ_FM_SPINBUTTON:
+    case SdrObjKind::FormSpinButton:
         aImage = RID_SVXBMP_SPINBUTTON;
         break;
+
+    default:;
     }
 
     return aImage;

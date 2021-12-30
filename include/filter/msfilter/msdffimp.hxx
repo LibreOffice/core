@@ -537,7 +537,7 @@ protected:
                                     ) const;
 
     /** Prevent that (rounded) rectangles with wrapped text will always be
-        converted into SdrRectObj( OBJ_TEXT ).
+        converted into SdrRectObj( SdrObjKind::Text ).
 
         @return true means "conversion".
     */

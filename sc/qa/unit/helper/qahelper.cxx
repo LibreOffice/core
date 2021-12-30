@@ -338,7 +338,7 @@ const SdrOle2Obj* getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage)
         return nullptr;
     }
 
-    if (pObj->GetObjIdentifier() != OBJ_OLE2)
+    if (pObj->GetObjIdentifier() != SdrObjKind::OLE2)
     {
         cout << "This is not an OLE2 object." << endl;
         return nullptr;

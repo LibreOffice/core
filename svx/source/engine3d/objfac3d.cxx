@@ -50,19 +50,19 @@ IMPL_STATIC_LINK( E3dObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrOb
     {
         switch ( aParams.nObjIdentifier )
         {
-            case E3D_SCENE_ID:
+            case SdrObjKind::E3D_Scene:
                 return new E3dScene(aParams.rSdrModel);
-            case E3D_POLYGONOBJ_ID  :
+            case SdrObjKind::E3D_Polygon  :
                 return new E3dPolygonObj(aParams.rSdrModel);
-            case E3D_CUBEOBJ_ID :
+            case SdrObjKind::E3D_Cube :
                 return new E3dCubeObj(aParams.rSdrModel);
-            case E3D_SPHEREOBJ_ID:
+            case SdrObjKind::E3D_Sphere:
                 return new E3dSphereObj(aParams.rSdrModel);
-            case E3D_EXTRUDEOBJ_ID:
+            case SdrObjKind::E3D_Extrusion:
                 return new E3dExtrudeObj(aParams.rSdrModel);
-            case E3D_LATHEOBJ_ID:
+            case SdrObjKind::E3D_Lathe:
                 return new E3dLatheObj(aParams.rSdrModel);
-            case E3D_COMPOUNDOBJ_ID:
+            case SdrObjKind::E3D_CompoundObject:
                 return new E3dCompoundObject(aParams.rSdrModel);
             default:
                 break;

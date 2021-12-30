@@ -139,8 +139,8 @@ void SvxXConnectionPreview::Construct()
         {
             const SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
             SdrInventor nInv = pObj->GetObjInventor();
-            sal_uInt16 nId = pObj->GetObjIdentifier();
-            if( nInv == SdrInventor::Default && nId == OBJ_EDGE )
+            SdrObjKind nId = pObj->GetObjIdentifier();
+            if( nInv == SdrInventor::Default && nId == SdrObjKind::Edge )
             {
                 bFound = true;
 

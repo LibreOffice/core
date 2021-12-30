@@ -893,7 +893,8 @@ void AccessibilityCheck::checkObject(SdrObject* pObject)
         && FindFrameFormat(pObject)->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
         lclAddIssue(m_aIssueCollection, SwResId(STR_FLOATING_TEXT));
 
-    if (pObject->GetObjIdentifier() == OBJ_CUSTOMSHAPE || pObject->GetObjIdentifier() == OBJ_TEXT)
+    if (pObject->GetObjIdentifier() == SdrObjKind::CustomShape
+        || pObject->GetObjIdentifier() == SdrObjKind::Text)
     {
         OUString sAlternative = pObject->GetTitle();
         if (sAlternative.isEmpty())

@@ -207,8 +207,8 @@ void ScGridWinUIObject::execute(const OUString& rAction,
         {
             SdrMark* pMark = rMarkList.GetMark(0);
             SdrObject* pObj = pMark->GetMarkedSdrObj();
-            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
-            if (nSdrObjKind == OBJ_OLE2)
+            SdrObjKind nSdrObjKind = pObj->GetObjIdentifier();
+            if (nSdrObjKind == SdrObjKind::OLE2)
             {
                 ScTabViewShell* pViewShell = getViewShell();
                 pViewShell->ActivateObject(static_cast<SdrOle2Obj*>(pObj), css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
@@ -373,7 +373,7 @@ std::set<OUString> collect_charts(VclPtr<ScGridWindow> const & xGridWindow)
     SdrObject* pObject = aIter.Next();
     while (pObject)
     {
-        if (pObject->GetObjIdentifier() == OBJ_OLE2)
+        if (pObject->GetObjIdentifier() == SdrObjKind::OLE2)
         {
             aRet.insert(static_cast<SdrOle2Obj*>(pObject)->GetPersistName());
         }

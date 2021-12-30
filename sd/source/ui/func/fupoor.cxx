@@ -200,10 +200,10 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                             if(auto pTextObj = dynamic_cast<SdrTextObj *>( pObj ))
                             {
                                 SdrInventor nInv(pObj->GetObjInventor());
-                                sal_uInt16 nKnd(pObj->GetObjIdentifier());
+                                SdrObjKind nKnd(pObj->GetObjIdentifier());
 
                                 if(SdrInventor::Default == nInv &&
-                                    (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd))
+                                    (SdrObjKind::TitleText == nKnd || SdrObjKind::OutlineText == nKnd || SdrObjKind::Text == nKnd))
                                 {
                                     pCandidate = pTextObj;
                                 }
@@ -827,9 +827,9 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                             if(auto pTextObj = dynamic_cast< SdrTextObj *>( pObj ))
                             {
                                 SdrInventor nInv(pObj->GetObjInventor());
-                                sal_uInt16 nKnd(pObj->GetObjIdentifier());
+                                SdrObjKind nKnd(pObj->GetObjIdentifier());
 
-                                if(SdrInventor::Default == nInv && OBJ_TITLETEXT == nKnd)
+                                if(SdrInventor::Default == nInv && SdrObjKind::TitleText == nKnd)
                                 {
                                     pCandidate = pTextObj;
                                 }
@@ -1089,10 +1089,10 @@ bool FuPoor::doConstructOrthogonal() const
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
         {
-            sal_uInt16 aObjIdentifier = rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier();
-            bResizeKeepRatio = aObjIdentifier == OBJ_GRAF ||
-                               aObjIdentifier == OBJ_MEDIA ||
-                               aObjIdentifier == OBJ_OLE2;
+            SdrObjKind aObjIdentifier = rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier();
+            bResizeKeepRatio = aObjIdentifier == SdrObjKind::Graphic ||
+                               aObjIdentifier == SdrObjKind::Media ||
+                               aObjIdentifier == SdrObjKind::OLE2;
         }
     }
     SdrHdl* pHdl = mpView->PickHandle(aMDPos);

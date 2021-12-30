@@ -1120,7 +1120,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
     // #i73441# check insert list before taking actions
     if(pInsOL)
     {
-        SdrPathObj* pPath = new SdrPathObj(pAttrObj->getSdrModelFromSdrObject(), OBJ_PATHFILL, aMergePolyPolygonA);
+        SdrPathObj* pPath = new SdrPathObj(pAttrObj->getSdrModelFromSdrObject(), SdrObjKind::PathFill, aMergePolyPolygonA);
         ImpCopyAttributes(pAttrObj, pPath);
         pInsOL->InsertObject(pPath, nInsPos);
         if( bUndo )
@@ -1240,7 +1240,7 @@ void SdrEditView::CombineMarkedTextObjects()
         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pObj );
         const OutlinerParaObject* pOPO = pTextObj ? pTextObj->GetOutlinerParaObject() : nullptr;
         if ( pOPO && pTextObj->IsTextFrame()
-             &&  pTextObj->GetObjIdentifier() == OBJ_TEXT   // not callouts (OBJ_CAPTION)
+             &&  pTextObj->GetObjIdentifier() == SdrObjKind::Text   // not callouts (OBJ_CAPTION)
              && !pTextObj->IsOutlText()                     // not impress presentation objects
              &&  pTextObj->GetMergedItem(XATTR_FORMTXTSTYLE).GetValue() == XFormTextStyle::NONE // not Fontwork
            )
@@ -1268,7 +1268,7 @@ void SdrEditView::CombineMarkedTextObjects()
 
     if ( GetMarkedObjectCount() > 1 )
     {
-        SdrRectObj* pReplacement = new SdrRectObj( getSdrModelFromSdrView(), OBJ_TEXT );
+        SdrRectObj* pReplacement = new SdrRectObj( getSdrModelFromSdrView(), SdrObjKind::Text );
         pReplacement->SetOutlinerParaObject( rDrawOutliner.CreateParaObject() );
         pReplacement->SetSnapRect( GetMarkedObjRect() );
 
@@ -1376,7 +1376,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
 
     if (nPolyCount && pAttrObj)
     {
-        SdrObjKind eKind = OBJ_PATHFILL;
+        SdrObjKind eKind = SdrObjKind::PathFill;
 
         if(nPolyCount > 1)
         {
@@ -1390,7 +1390,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
 
             if(nPointCount <= 2)
             {
-                eKind = OBJ_PATHLINE;
+                eKind = SdrObjKind::PathLine;
             }
             else
             {
@@ -1407,7 +1407,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
                     }
                     else
                     {
-                        eKind = OBJ_PATHLINE;
+                        eKind = SdrObjKind::PathLine;
                     }
                 }
             }
@@ -1601,7 +1601,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
                 for(sal_uInt32 b(0); b < nLoopCount; b++)
                 {
-                    SdrObjKind eKind(OBJ_PLIN);
+                    SdrObjKind eKind(SdrObjKind::PolyLine);
                     basegfx::B2DPolygon aNewPolygon;
                     const sal_uInt32 nNextIndex((b + 1) % nPointCount);
 
@@ -1613,7 +1613,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                             rCandidate.getNextControlPoint(b),
                             rCandidate.getPrevControlPoint(nNextIndex),
                             rCandidate.getB2DPoint(nNextIndex));
-                        eKind = OBJ_PATHLINE;
+                        eKind = SdrObjKind::PathLine;
                     }
                     else
                     {
@@ -1671,7 +1671,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                     SdrObject* pTextObj = SdrObjFactory::MakeNewObject(
                         pCustomShape->getSdrModelFromSdrObject(),
                         pCustomShape->GetObjInventor(),
-                        OBJ_TEXT);
+                        SdrObjKind::Text);
 
                     // Copy text content
                     OutlinerParaObject* pParaObj = pCustomShape->GetOutlinerParaObject();
