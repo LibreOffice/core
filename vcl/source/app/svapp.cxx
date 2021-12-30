@@ -1152,9 +1152,19 @@ static OUString Localize(TranslateId aId, const bool bLocalize)
         return Translate::get(aId, Translate::Create("vcl", LanguageTag("en-US")));
 }
 
-OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize)
+OUString Application::GetOSVersion()
 {
     ImplSVData* pSVData = ImplGetSVData();
+    OUString aVersion;
+    if (pSVData && pSVData->mpDefInst)
+        aVersion = pSVData->mpDefInst->getOSVersion();
+    else
+        aVersion = "-";
+    return aVersion;
+}
+
+OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize)
+{
     OUStringBuffer aDetails;
 
     const auto appendDetails = [&aDetails](std::u16string_view sep, auto&& val) {
@@ -1167,11 +1177,7 @@ OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize
         appendDetails(u"; ", Localize(SV_APP_CPUTHREADS, bLocalize)
                                 + OUString::number(std::thread::hardware_concurrency()));
 
-        OUString aVersion;
-        if ( pSVData && pSVData->mpDefInst )
-            aVersion = pSVData->mpDefInst->getOSVersion();
-        else
-            aVersion = "-";
+        OUString aVersion = GetOSVersion();
 
         appendDetails(u"; ", Localize(SV_APP_OSVERSION, bLocalize) + aVersion);
     }
