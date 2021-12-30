@@ -810,99 +810,99 @@ SdrObjKind DlgEdObj::GetObjIdentifier() const
 {
     if ( supportsService( "com.sun.star.awt.UnoControlDialogModel" ))
     {
-        return OBJ_DLG_DIALOG;
+        return SdrObjKind::OBJ_DLG_DIALOG;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlButtonModel" ))
     {
-        return OBJ_DLG_PUSHBUTTON;
+        return SdrObjKind::OBJ_DLG_PUSHBUTTON;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ))
     {
-        return OBJ_DLG_RADIOBUTTON;
+        return SdrObjKind::OBJ_DLG_RADIOBUTTON;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ))
     {
-        return OBJ_DLG_CHECKBOX;
+        return SdrObjKind::OBJ_DLG_CHECKBOX;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlListBoxModel" ))
     {
-        return OBJ_DLG_LISTBOX;
+        return SdrObjKind::OBJ_DLG_LISTBOX;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlComboBoxModel" ))
     {
-        return OBJ_DLG_COMBOBOX;
+        return SdrObjKind::OBJ_DLG_COMBOBOX;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ))
     {
-        return OBJ_DLG_GROUPBOX;
+        return SdrObjKind::OBJ_DLG_GROUPBOX;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlEditModel" ))
     {
-        return OBJ_DLG_EDIT;
+        return SdrObjKind::OBJ_DLG_EDIT;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ))
     {
-        return OBJ_DLG_FIXEDTEXT;
+        return SdrObjKind::OBJ_DLG_FIXEDTEXT;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlImageControlModel" ))
     {
-        return OBJ_DLG_IMAGECONTROL;
+        return SdrObjKind::OBJ_DLG_IMAGECONTROL;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlProgressBarModel" ))
     {
-        return OBJ_DLG_PROGRESSBAR;
+        return SdrObjKind::OBJ_DLG_PROGRESSBAR;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlScrollBarModel" ))
     {
-        return OBJ_DLG_HSCROLLBAR;
+        return SdrObjKind::OBJ_DLG_HSCROLLBAR;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFixedLineModel" ))
     {
-        return OBJ_DLG_HFIXEDLINE;
+        return SdrObjKind::OBJ_DLG_HFIXEDLINE;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlDateFieldModel" ))
     {
-        return OBJ_DLG_DATEFIELD;
+        return SdrObjKind::OBJ_DLG_DATEFIELD;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlTimeFieldModel" ))
     {
-        return OBJ_DLG_TIMEFIELD;
+        return SdrObjKind::OBJ_DLG_TIMEFIELD;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlNumericFieldModel" ))
     {
-        return OBJ_DLG_NUMERICFIELD;
+        return SdrObjKind::OBJ_DLG_NUMERICFIELD;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlCurrencyFieldModel" ))
     {
-        return OBJ_DLG_CURRENCYFIELD;
+        return SdrObjKind::OBJ_DLG_CURRENCYFIELD;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ))
     {
-        return OBJ_DLG_FORMATTEDFIELD;
+        return SdrObjKind::OBJ_DLG_FORMATTEDFIELD;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlPatternFieldModel" ))
     {
-        return OBJ_DLG_PATTERNFIELD;
+        return SdrObjKind::OBJ_DLG_PATTERNFIELD;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFileControlModel" ))
     {
-        return OBJ_DLG_FILECONTROL;
+        return SdrObjKind::OBJ_DLG_FILECONTROL;
     }
     else if ( supportsService( "com.sun.star.awt.tree.TreeControlModel" ))
     {
-        return OBJ_DLG_TREECONTROL;
+        return SdrObjKind::OBJ_DLG_TREECONTROL;
     }
     else if ( supportsService( "com.sun.star.awt.grid.UnoControlGridModel" ))
     {
-        return OBJ_DLG_GRIDCONTROL;
+        return SdrObjKind::OBJ_DLG_GRIDCONTROL;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFixedHyperlinkModel" ))
     {
-        return OBJ_DLG_HYPERLINKCONTROL;
+        return SdrObjKind::OBJ_DLG_HYPERLINKCONTROL;
     }
     else
     {
-        return OBJ_DLG_CONTROL;
+        return SdrObjKind::OBJ_DLG_CONTROL;
     }
 }
 

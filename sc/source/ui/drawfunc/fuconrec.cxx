@@ -94,7 +94,7 @@ bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
         Point aPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pWindow->CaptureMouse();
 
-        if ( pView->GetCurrentObjIdentifier() == OBJ_CAPTION )
+        if ( pView->GetCurrentObjIdentifier() == SdrObjKind::Caption )
         {
             Size aCaptionSize ( 2268, 1134 ); // 4x2cm
 
@@ -166,33 +166,33 @@ void FuConstRectangle::Activate()
         case SID_LINE_SQUARE_ARROW:
         case SID_LINE_ARROWS:
             aNewPointer = PointerStyle::DrawLine;
-            aObjKind = OBJ_LINE;
+            aObjKind = SdrObjKind::Line;
             break;
 
         case SID_DRAW_MEASURELINE:
             aNewPointer = PointerStyle::DrawLine;
-            aObjKind = OBJ_MEASURE;
+            aObjKind = SdrObjKind::Measure;
             break;
 
         case SID_DRAW_RECT:
             aNewPointer = PointerStyle::DrawRect;
-            aObjKind = OBJ_RECT;
+            aObjKind = SdrObjKind::Rectangle;
             break;
 
         case SID_DRAW_ELLIPSE:
             aNewPointer = PointerStyle::DrawEllipse;
-            aObjKind = OBJ_CIRC;
+            aObjKind = SdrObjKind::CircleOrEllipse;
             break;
 
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
             aNewPointer = PointerStyle::DrawCaption;
-            aObjKind = OBJ_CAPTION;
+            aObjKind = SdrObjKind::Caption;
             break;
 
         default:
             aNewPointer = PointerStyle::Cross;
-            aObjKind = OBJ_RECT;
+            aObjKind = SdrObjKind::Rectangle;
             break;
     }
 

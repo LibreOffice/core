@@ -43,7 +43,7 @@ namespace com::sun::star::sdbc { class SQLException; }
 namespace com::sun::star::sdbc { class XRowSet; }
 namespace com::sun::star::sdb { class SQLContext; }
 namespace com::sun::star::sdb { struct SQLErrorEvent; }
-
+enum class SdrObjKind : sal_uInt16;
 
 // common types
 
@@ -160,7 +160,7 @@ public:
     void dispose();
 };
 
-sal_Int16       getControlTypeByObject(const css::uno::Reference< css::lang::XServiceInfo>& _rxObject);
+SdrObjKind getControlTypeByObject(const css::uno::Reference< css::lang::XServiceInfo>& _rxObject);
     // get the object type (OBJ_FM_...) from the services the object supports
 
 

@@ -335,7 +335,7 @@ public:
             {
                 SdrObject* pObject = pMasterPage->GetObj(nObject);
                 SdrRectObj* pRectObject = dynamic_cast<SdrRectObj*>(pObject);
-                if (pRectObject && pRectObject->GetTextKind() == OBJ_TEXT)
+                if (pRectObject && pRectObject->GetTextKind() == SdrObjKind::Text)
                 {
                     OutlinerParaObject* pOutlinerParagraphObject = pRectObject->GetOutlinerParaObject();
                     if (pOutlinerParagraphObject)
@@ -374,7 +374,7 @@ private:
             {
                 SdrObject* pObject = pMasterPage->GetObj(nObject);
                 SdrRectObj* pRectObject = dynamic_cast<SdrRectObj*>(pObject);
-                if (pRectObject && pRectObject->GetTextKind() == OBJ_TEXT)
+                if (pRectObject && pRectObject->GetTextKind() == SdrObjKind::Text)
                 {
                     OutlinerParaObject* pOutlinerParagraphObject = pRectObject->GetOutlinerParaObject();
                     if (pOutlinerParagraphObject)
@@ -525,7 +525,7 @@ public:
 
             SdrRectObj* pObject = new SdrRectObj(
                 *m_rDrawViewShell.GetDoc(), // TTTT should be reference
-                OBJ_TEXT);
+                SdrObjKind::Text);
             pObject->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
             pObject->SetOutlinerParaObject(pOutliner->CreateParaObject());
             pMasterPage->InsertObject(pObject);
@@ -1280,13 +1280,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     SfxStyleSheet* pSheet = nullptr;
                     SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
-                    if (pObj->GetObjIdentifier() == OBJ_TITLETEXT)
+                    if (pObj->GetObjIdentifier() == SdrObjKind::TitleText)
                     {
                         pSheet = mpActualPage->GetStyleSheetForPresObj(PresObjKind::Title);
                         if (pSheet)
                             pObj->SetStyleSheet(pSheet, false);
                     }
-                    else if(pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
+                    else if(pObj->GetObjIdentifier() == SdrObjKind::OutlineText)
                     {
                         for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
                         {
@@ -2506,7 +2506,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SdrRectObj* pRectObj = new SdrRectObj(
                     *GetDoc(),
-                    OBJ_TEXT);
+                    SdrObjKind::Text);
                 pRectObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
 
                 pOutl->UpdateFields();

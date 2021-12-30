@@ -139,7 +139,7 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
                 SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                if (pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_GRAF)
+                if (pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == SdrObjKind::Graphic)
                 {
                     pGrafObj = static_cast<SdrGrafObj*>(pObj);
 

@@ -284,77 +284,77 @@ void FmXDisposeMultiplexer::dispose()
 }
 
 
-sal_Int16 getControlTypeByObject(const Reference< css::lang::XServiceInfo>& _rxObject)
+SdrObjKind getControlTypeByObject(const Reference< css::lang::XServiceInfo>& _rxObject)
 {
     // ask for the persistent service name
     Reference< css::io::XPersistObject> xPersistence(_rxObject, UNO_QUERY);
     DBG_ASSERT(xPersistence.is(), "::getControlTypeByObject : argument should be a css::io::XPersistObject !");
     if (!xPersistence.is())
-        return OBJ_FM_CONTROL;
+        return SdrObjKind::FormControl;
 
     OUString sPersistentServiceName = xPersistence->getServiceName();
     if (sPersistentServiceName == FM_COMPONENT_EDIT)   // 5.0-Name
     {
         // may be a simple edit field or a formatted field, dependent of the supported services
         if (_rxObject->supportsService(FM_SUN_COMPONENT_FORMATTEDFIELD))
-            return OBJ_FM_FORMATTEDFIELD;
-        return OBJ_FM_EDIT;
+            return SdrObjKind::OBJ_FM_FORMATTEDFIELD;
+        return SdrObjKind::FormEdit;
     }
     if (sPersistentServiceName == FM_COMPONENT_TEXTFIELD)
-        return OBJ_FM_EDIT;
+        return SdrObjKind::FormEdit;
     if (sPersistentServiceName == FM_COMPONENT_COMMANDBUTTON)
-        return OBJ_FM_BUTTON;
+        return SdrObjKind::FormButton;
     if (sPersistentServiceName == FM_COMPONENT_FIXEDTEXT)
-        return OBJ_FM_FIXEDTEXT;
+        return SdrObjKind::FormFixedText;
     if (sPersistentServiceName == FM_COMPONENT_LISTBOX)
-        return OBJ_FM_LISTBOX;
+        return SdrObjKind::OBJ_FM_LISTBOX;
     if (sPersistentServiceName == FM_COMPONENT_CHECKBOX)
-        return OBJ_FM_CHECKBOX;
+        return SdrObjKind::FormCheckbox;
     if (sPersistentServiceName == FM_COMPONENT_RADIOBUTTON)
-        return OBJ_FM_RADIOBUTTON;
+        return SdrObjKind::OBJ_FM_RADIOBUTTON;
     if (sPersistentServiceName == FM_COMPONENT_GROUPBOX)
-        return OBJ_FM_GROUPBOX;
+        return SdrObjKind::OBJ_FM_GROUPBOX;
     if (sPersistentServiceName == FM_COMPONENT_COMBOBOX)
-        return OBJ_FM_COMBOBOX;
+        return SdrObjKind::OBJ_FM_COMBOBOX;
     if (sPersistentServiceName == FM_COMPONENT_GRID)   // 5.0-Name
-        return OBJ_FM_GRID;
+        return SdrObjKind::OBJ_FM_GRID;
     if (sPersistentServiceName == FM_COMPONENT_GRIDCONTROL)
-        return OBJ_FM_GRID;
+        return SdrObjKind::OBJ_FM_GRID;
     if (sPersistentServiceName == FM_COMPONENT_IMAGEBUTTON)
-        return OBJ_FM_IMAGEBUTTON;
+        return SdrObjKind::OBJ_FM_IMAGEBUTTON;
     if (sPersistentServiceName == FM_COMPONENT_FILECONTROL)
-        return OBJ_FM_FILECONTROL;
+        return SdrObjKind::OBJ_FM_FILECONTROL;
     if (sPersistentServiceName == FM_COMPONENT_DATEFIELD)
-        return OBJ_FM_DATEFIELD;
+        return SdrObjKind::OBJ_FM_DATEFIELD;
     if (sPersistentServiceName == FM_COMPONENT_TIMEFIELD)
-        return OBJ_FM_TIMEFIELD;
+        return SdrObjKind::OBJ_FM_TIMEFIELD;
     if (sPersistentServiceName == FM_COMPONENT_NUMERICFIELD)
-        return OBJ_FM_NUMERICFIELD;
+        return SdrObjKind::OBJ_FM_NUMERICFIELD;
     if (sPersistentServiceName == FM_COMPONENT_CURRENCYFIELD)
-        return OBJ_FM_CURRENCYFIELD;
+        return SdrObjKind::OBJ_FM_CURRENCYFIELD;
     if (sPersistentServiceName == FM_COMPONENT_PATTERNFIELD)
-        return OBJ_FM_PATTERNFIELD;
+        return SdrObjKind::OBJ_FM_PATTERNFIELD;
     if (sPersistentServiceName == FM_COMPONENT_HIDDEN) // 5.0-Name
-        return OBJ_FM_HIDDEN;
+        return SdrObjKind::OBJ_FM_HIDDEN;
     if (sPersistentServiceName == FM_COMPONENT_HIDDENCONTROL)
-        return OBJ_FM_HIDDEN;
+        return SdrObjKind::OBJ_FM_HIDDEN;
     if (sPersistentServiceName == FM_COMPONENT_IMAGECONTROL)
-        return OBJ_FM_IMAGECONTROL;
+        return SdrObjKind::OBJ_FM_IMAGECONTROL;
     if (sPersistentServiceName == FM_COMPONENT_FORMATTEDFIELD)
     {
         OSL_FAIL("::getControlTypeByObject : suspicious persistent service name (formatted field) !");
             // objects with that service name should exist as they aren't compatible with older versions
-        return OBJ_FM_FORMATTEDFIELD;
+        return SdrObjKind::OBJ_FM_FORMATTEDFIELD;
     }
     if ( sPersistentServiceName == FM_SUN_COMPONENT_SCROLLBAR )
-        return OBJ_FM_SCROLLBAR;
+        return SdrObjKind::OBJ_FM_SCROLLBAR;
     if ( sPersistentServiceName == FM_SUN_COMPONENT_SPINBUTTON )
-        return OBJ_FM_SPINBUTTON;
+        return SdrObjKind::OBJ_FM_SPINBUTTON;
     if ( sPersistentServiceName == FM_SUN_COMPONENT_NAVIGATIONBAR )
-        return OBJ_FM_NAVIGATIONBAR;
+        return SdrObjKind::OBJ_FM_NAVIGATIONBAR;
 
     OSL_FAIL("::getControlTypeByObject : unknown object type !");
-    return OBJ_FM_CONTROL;
+    return SdrObjKind::FormControl;
 }
 
 

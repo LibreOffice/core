@@ -77,22 +77,22 @@ void FuConstArc::Activate()
     {
         case SID_DRAW_ARC:
             aNewPointer = PointerStyle::DrawArc;
-            aObjKind = OBJ_CARC;
+            aObjKind = SdrObjKind::CircleArc;
             break;
 
         case SID_DRAW_PIE:
             aNewPointer = PointerStyle::DrawPie;
-            aObjKind = OBJ_SECT;
+            aObjKind = SdrObjKind::CircleSection;
             break;
 
         case SID_DRAW_CIRCLECUT:
             aNewPointer = PointerStyle::DrawCircleCut;
-            aObjKind = OBJ_CCUT;
+            aObjKind = SdrObjKind::CircleCut;
             break;
 
         default:
             aNewPointer = PointerStyle::Cross;
-            aObjKind = OBJ_CARC;
+            aObjKind = SdrObjKind::CircleArc;
             break;
     }
 

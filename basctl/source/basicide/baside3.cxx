@@ -392,7 +392,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
 void DialogWindow::ExecuteCommand( SfxRequest& rReq )
 {
     const sal_uInt16 nSlotId(rReq.GetSlot());
-    SdrObjKind nInsertObj(OBJ_NONE);
+    SdrObjKind nInsertObj(SdrObjKind::NONE);
 
     switch ( nSlotId )
     {
@@ -425,100 +425,100 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
             break;
 
         case SID_INSERT_FORM_RADIO:
-            nInsertObj = OBJ_DLG_FORMRADIO;
+            nInsertObj = SdrObjKind::OBJ_DLG_FORMRADIO;
             break;
         case SID_INSERT_FORM_CHECK:
-            nInsertObj = OBJ_DLG_FORMCHECK;
+            nInsertObj = SdrObjKind::OBJ_DLG_FORMCHECK;
             break;
         case SID_INSERT_FORM_LIST:
-            nInsertObj = OBJ_DLG_FORMLIST;
+            nInsertObj = SdrObjKind::OBJ_DLG_FORMLIST;
             break;
         case SID_INSERT_FORM_COMBO:
-            nInsertObj = OBJ_DLG_FORMCOMBO;
+            nInsertObj = SdrObjKind::OBJ_DLG_FORMCOMBO;
             break;
         case SID_INSERT_FORM_SPIN:
-            nInsertObj = OBJ_DLG_FORMSPIN;
+            nInsertObj = SdrObjKind::OBJ_DLG_FORMSPIN;
             break;
         case SID_INSERT_FORM_VSCROLL:
-            nInsertObj = OBJ_DLG_FORMVSCROLL;
+            nInsertObj = SdrObjKind::OBJ_DLG_FORMVSCROLL;
             break;
         case SID_INSERT_FORM_HSCROLL:
-            nInsertObj = OBJ_DLG_FORMHSCROLL;
+            nInsertObj = SdrObjKind::OBJ_DLG_FORMHSCROLL;
             break;
         case SID_INSERT_PUSHBUTTON:
-            nInsertObj = OBJ_DLG_PUSHBUTTON;
+            nInsertObj = SdrObjKind::OBJ_DLG_PUSHBUTTON;
             break;
         case SID_INSERT_RADIOBUTTON:
-            nInsertObj = OBJ_DLG_RADIOBUTTON;
+            nInsertObj = SdrObjKind::OBJ_DLG_RADIOBUTTON;
             break;
         case SID_INSERT_CHECKBOX:
-            nInsertObj = OBJ_DLG_CHECKBOX;
+            nInsertObj = SdrObjKind::OBJ_DLG_CHECKBOX;
             break;
         case SID_INSERT_LISTBOX:
-            nInsertObj = OBJ_DLG_LISTBOX;
+            nInsertObj = SdrObjKind::OBJ_DLG_LISTBOX;
             break;
         case SID_INSERT_COMBOBOX:
-            nInsertObj = OBJ_DLG_COMBOBOX;
+            nInsertObj = SdrObjKind::OBJ_DLG_COMBOBOX;
             break;
         case SID_INSERT_GROUPBOX:
-            nInsertObj = OBJ_DLG_GROUPBOX;
+            nInsertObj = SdrObjKind::OBJ_DLG_GROUPBOX;
             break;
         case SID_INSERT_EDIT:
-            nInsertObj = OBJ_DLG_EDIT;
+            nInsertObj = SdrObjKind::OBJ_DLG_EDIT;
             break;
         case SID_INSERT_FIXEDTEXT:
-            nInsertObj = OBJ_DLG_FIXEDTEXT;
+            nInsertObj = SdrObjKind::OBJ_DLG_FIXEDTEXT;
             break;
         case SID_INSERT_IMAGECONTROL:
-            nInsertObj = OBJ_DLG_IMAGECONTROL;
+            nInsertObj = SdrObjKind::OBJ_DLG_IMAGECONTROL;
             break;
         case SID_INSERT_PROGRESSBAR:
-            nInsertObj = OBJ_DLG_PROGRESSBAR;
+            nInsertObj = SdrObjKind::OBJ_DLG_PROGRESSBAR;
             break;
         case SID_INSERT_HSCROLLBAR:
-            nInsertObj = OBJ_DLG_HSCROLLBAR;
+            nInsertObj = SdrObjKind::OBJ_DLG_HSCROLLBAR;
             break;
         case SID_INSERT_VSCROLLBAR:
-            nInsertObj = OBJ_DLG_VSCROLLBAR;
+            nInsertObj = SdrObjKind::OBJ_DLG_VSCROLLBAR;
             break;
         case SID_INSERT_HFIXEDLINE:
-            nInsertObj = OBJ_DLG_HFIXEDLINE;
+            nInsertObj = SdrObjKind::OBJ_DLG_HFIXEDLINE;
             break;
         case SID_INSERT_VFIXEDLINE:
-            nInsertObj = OBJ_DLG_VFIXEDLINE;
+            nInsertObj = SdrObjKind::OBJ_DLG_VFIXEDLINE;
             break;
         case SID_INSERT_DATEFIELD:
-            nInsertObj = OBJ_DLG_DATEFIELD;
+            nInsertObj = SdrObjKind::OBJ_DLG_DATEFIELD;
             break;
         case SID_INSERT_TIMEFIELD:
-            nInsertObj = OBJ_DLG_TIMEFIELD;
+            nInsertObj = SdrObjKind::OBJ_DLG_TIMEFIELD;
             break;
         case SID_INSERT_NUMERICFIELD:
-            nInsertObj = OBJ_DLG_NUMERICFIELD;
+            nInsertObj = SdrObjKind::OBJ_DLG_NUMERICFIELD;
             break;
         case SID_INSERT_CURRENCYFIELD:
-            nInsertObj = OBJ_DLG_CURRENCYFIELD;
+            nInsertObj = SdrObjKind::OBJ_DLG_CURRENCYFIELD;
             break;
         case SID_INSERT_FORMATTEDFIELD:
-            nInsertObj = OBJ_DLG_FORMATTEDFIELD;
+            nInsertObj = SdrObjKind::OBJ_DLG_FORMATTEDFIELD;
             break;
         case SID_INSERT_PATTERNFIELD:
-            nInsertObj = OBJ_DLG_PATTERNFIELD;
+            nInsertObj = SdrObjKind::OBJ_DLG_PATTERNFIELD;
             break;
         case SID_INSERT_FILECONTROL:
-            nInsertObj = OBJ_DLG_FILECONTROL;
+            nInsertObj = SdrObjKind::OBJ_DLG_FILECONTROL;
             break;
         case SID_INSERT_SPINBUTTON:
-            nInsertObj = OBJ_DLG_SPINBUTTON;
+            nInsertObj = SdrObjKind::OBJ_DLG_SPINBUTTON;
             break;
         case SID_INSERT_GRIDCONTROL:
-            nInsertObj = OBJ_DLG_GRIDCONTROL;
+            nInsertObj = SdrObjKind::OBJ_DLG_GRIDCONTROL;
             break;
         case SID_INSERT_HYPERLINKCONTROL:
-            nInsertObj = OBJ_DLG_HYPERLINKCONTROL;
+            nInsertObj = SdrObjKind::OBJ_DLG_HYPERLINKCONTROL;
             break;
         case SID_INSERT_TREECONTROL:
-            nInsertObj = OBJ_DLG_TREECONTROL;
+            nInsertObj = SdrObjKind::OBJ_DLG_TREECONTROL;
             break;
         case SID_INSERT_SELECT:
             m_nControlSlotId = nSlotId;
@@ -556,7 +556,7 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
             break;
     }
 
-    if ( nInsertObj )
+    if ( nInsertObj != SdrObjKind::NONE )
     {
         m_nControlSlotId = nSlotId;
         GetEditor().SetMode( DlgEditor::INSERT );

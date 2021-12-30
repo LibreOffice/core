@@ -21,61 +21,63 @@
 
 #include <com/sun/star/form/FormComponentType.hpp>
 
-enum SdrObjKind
+enum class SdrObjKind : sal_uInt16
 {
-    OBJ_NONE = 0, /// abstract object (SdrObject)
-    OBJ_GRUP = 1, /// object group
-    OBJ_LINE = 2, /// line
-    OBJ_RECT = 3, /// rectangle (round corners optional)
-    OBJ_CIRC = 4, /// circle, ellipse
-    OBJ_SECT = 5, /// circle section
-    OBJ_CARC = 6, /// circle arc
-    OBJ_CCUT = 7, /// circle cut
-    OBJ_POLY = 8, /// polygon, PolyPolygon
-    OBJ_PLIN = 9, /// PolyLine
-    OBJ_PATHLINE = 10, /// open Bezier-curve
-    OBJ_PATHFILL = 11, /// closed Bezier-curve
-    OBJ_FREELINE = 12, /// open free-hand line
-    OBJ_FREEFILL = 13, /// closed free-hand line
-    OBJ_SPLNLINE = 14, /// natural cubic Spline                  (ni)
-    OBJ_SPLNFILL = 15, /// periodic cubic Spline                 (ni)
-    OBJ_TEXT = 16, /// text object
-    OBJ_TITLETEXT = 20, /// TitleText, special text object for StarDraw
-    OBJ_OUTLINETEXT = 21, /// OutlineText, special text object for StarDraw
-    OBJ_GRAF = 22, /// foreign graphic (StarView Graphic)
-    OBJ_OLE2 = 23, /// OLE object
-    OBJ_EDGE = 24, /// connector object
-    OBJ_CAPTION = 25, /// caption object
-    OBJ_PATHPOLY = 26, /// Polygon/PolyPolygon represented by SdrPathObj
-    OBJ_PATHPLIN = 27, /// Polyline represented by SdrPathObj
-    OBJ_PAGE = 28, /// object that represents a SdrPage
-    OBJ_MEASURE = 29, /// measurement object
-    OBJ_FRAME = 31, /// continuously activated OLE (PlugIn-Frame or similar)
-    OBJ_UNO = 32, /// Universal Network Object packed into SvDraw object
-    OBJ_CUSTOMSHAPE = 33, /// custom shape
-    OBJ_MEDIA = 34, /// media shape
-    OBJ_TABLE = 35, /// table
+    NONE = 0, /// abstract object (SdrObject)
+    Group = 1, /// object group
+    Line = 2, /// line
+    Rectangle = 3, /// rectangle (round corners optional)
+    CircleOrEllipse = 4, /// circle, ellipse
+    CircleSection = 5, /// circle section
+    CircleArc = 6, /// circle arc
+    CircleCut = 7, /// circle cut
+    Polygon = 8, /// polygon, PolyPolygon
+    PolyLine = 9, /// PolyLine
+    PathLine = 10, /// open Bezier-curve
+    PathFill = 11, /// closed Bezier-curve
+    FreehandLine = 12, /// open free-hand line
+    FreehandFill = 13, /// closed free-hand line
+    SplineLine = 14, /// natural cubic Spline                  (ni)
+    SplineFill = 15, /// periodic cubic Spline                 (ni)
+    Text = 16, /// text object
+    TitleText = 20, /// TitleText, special text object for StarDraw
+    OutlineText = 21, /// OutlineText, special text object for StarDraw
+    Graphic = 22, /// foreign graphic (StarView Graphic)
+    OLE2 = 23, /// OLE object
+    Edge = 24, /// connector object
+    Caption = 25, /// caption object
+    PathPoly = 26, /// Polygon/PolyPolygon represented by SdrPathObj
+    PathPolyLine = 27, /// Polyline represented by SdrPathObj
+    Page = 28, /// object that represents a SdrPage
+    Measure = 29, /// measurement object
+    OLEPluginFrame = 31, /// continuously activated OLE (PlugIn-Frame or similar)
+    UNO = 32, /// Universal Network Object packed into SvDraw object
+    CustomShape = 33, /// custom shape
+    Media = 34, /// media shape
+    Table = 35, /// table
 
-    OBJ_OLE2_APPLET = 100,
-    OBJ_OLE2_PLUGIN = 101,
+    OLE2Applet = 100,
+    OLE2Plugin = 101,
 
     // engine3d, arbitrarily place at 200
-    E3D_SCENE_ID = 202,
+    E3D_Scene = 202,
     // E3D_OBJECT_ID should not be used, it's only a helper class for E3DScene and E3DCompoundObject
-    E3D_OBJECT_ID = 203,
-    E3D_CUBEOBJ_ID = 204,
-    E3D_SPHEREOBJ_ID = 205,
-    E3D_EXTRUDEOBJ_ID = 206,
-    E3D_LATHEOBJ_ID = 207,
-    E3D_COMPOUNDOBJ_ID = 208,
-    E3D_POLYGONOBJ_ID = 209,
+    E3D_Object = 203,
+    E3D_Cube = 204,
+    E3D_Sphere = 205,
+    E3D_Extrusion = 206,
+    E3D_Lathe = 207,
+    E3D_CompoundObject = 208,
+    E3D_Polygon = 209,
+    E3D_INVENTOR_FIRST = E3D_Scene,
+    E3D_INVENTOR_LAST = E3D_Polygon,
 
     // for form components, arbitrarily place at 300
-    OBJ_FM_CONTROL = 300 + css::form::FormComponentType::CONTROL,
-    OBJ_FM_EDIT = 300 + css::form::FormComponentType::TEXTFIELD,
-    OBJ_FM_BUTTON = 300 + css::form::FormComponentType::COMMANDBUTTON,
-    OBJ_FM_FIXEDTEXT = 300 + css::form::FormComponentType::FIXEDTEXT,
-    OBJ_FM_LISTBOX = 300 + css::form::FormComponentType::LISTBOX,
+    FormControl = 300 + css::form::FormComponentType::CONTROL,
+    FormEdit = 300 + css::form::FormComponentType::TEXTFIELD,
+    FormButton = 300 + css::form::FormComponentType::COMMANDBUTTON,
+    FormFixedText = 300 + css::form::FormComponentType::FIXEDTEXT,
+    FormListbox = 300 + css::form::FormComponentType::LISTBOX,
     OBJ_FM_CHECKBOX = 300 + css::form::FormComponentType::CHECKBOX,
     OBJ_FM_COMBOBOX = 300 + css::form::FormComponentType::COMBOBOX,
     OBJ_FM_RADIOBUTTON = 300 + css::form::FormComponentType::RADIOBUTTON,
@@ -143,5 +145,10 @@ enum SdrObjKind
     // writer, arbitrarily place at 600
     SwFlyDrawObjIdentifier = 601
 };
+
+inline constexpr bool IsInventorE3D(SdrObjKind e)
+{
+    return e >= SdrObjKind::E3D_INVENTOR_FIRST && e <= SdrObjKind::E3D_INVENTOR_LAST;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

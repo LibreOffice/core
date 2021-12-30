@@ -97,7 +97,7 @@ bool FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 
 void FuConstCustomShape::Activate()
 {
-    pView->SetCurrentObj( OBJ_CUSTOMSHAPE );
+    pView->SetCurrentObj( SdrObjKind::CustomShape );
 
     aNewPointer = PointerStyle::DrawRect;
     aOldPointer = pWindow->GetPointer();

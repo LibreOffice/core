@@ -509,7 +509,7 @@ void FuText::Activate()
     {
         // no text object in EditMode, therefore set CreateMode
 
-        pView->SetCurrentObj(OBJ_TEXT);
+        pView->SetCurrentObj(SdrObjKind::Text);
 
         pView->SetCreateMode();
     }
@@ -552,11 +552,11 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
     if ( !pObj )
         return;
 
-    sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+    SdrObjKind nSdrObjKind = pObj->GetObjIdentifier();
 
-    if (!(nSdrObjKind == OBJ_TEXT ||
-        nSdrObjKind == OBJ_TITLETEXT ||
-        nSdrObjKind == OBJ_OUTLINETEXT ||
+    if (!(nSdrObjKind == SdrObjKind::Text ||
+        nSdrObjKind == SdrObjKind::TitleText ||
+        nSdrObjKind == SdrObjKind::OutlineText ||
         dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr))
         return;
 

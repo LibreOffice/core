@@ -1530,7 +1530,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                 pObj->ImpSetAnchorPos( aNull );
             }
 
-            pView->SetCurrentObj( OBJ_GRUP );
+            pView->SetCurrentObj( SdrObjKind::Group );
             if ( nCnt > 1 )
                 pView->GroupMarked();
             SdrObject *pObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();

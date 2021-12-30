@@ -177,7 +177,7 @@ void E3dPolygonObj::CreateDefaultTexture()
 
 E3dPolygonObj::~E3dPolygonObj() {}
 
-SdrObjKind E3dPolygonObj::GetObjIdentifier() const { return E3D_POLYGONOBJ_ID; }
+SdrObjKind E3dPolygonObj::GetObjIdentifier() const { return SdrObjKind::E3D_Polygon; }
 
 void E3dPolygonObj::SetPolyPolygon3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D)
 {

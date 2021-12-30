@@ -689,7 +689,7 @@ bool lcl_AreRectanglesApproxEqual(const tools::Rectangle& rRectA, const tools::R
 
 bool lcl_NeedsMirrorYCorrection(const SdrObject* pObj)
 {
-    return pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE
+    return pObj->GetObjIdentifier() == SdrObjKind::CustomShape
            && static_cast<const SdrObjCustomShape*>(pObj)->IsMirroredY();
 }
 
@@ -942,7 +942,7 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
     const ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObj);
     if (aAnchorType == SCA_CELL_RESIZE)
     {
-        if (pObj->GetObjIdentifier() == OBJ_LINE)
+        if (pObj->GetObjIdentifier() == SdrObjKind::Line)
         {
             // Horizontal lines might have wrong start and end anchor because of erroneously applied
             // 180deg rotation (tdf#137446). Other lines have wrong end anchor. Coordinates in
@@ -959,7 +959,7 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
             GetCellAnchorFromPosition(aObjRect, rNoRotatedAnchor, *pDoc, nTab1,
                                       false /*bHiddenAsZero*/);
         }
-        else if (pObj->GetObjIdentifier() == OBJ_MEASURE)
+        else if (pObj->GetObjIdentifier() == SdrObjKind::Measure)
         {
             // Measure lines might have got wrong start and end anchor from XML import. Recreate
             // anchor from start and end point.
@@ -1209,7 +1209,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 }
 
                 rData.setShapeRect(GetDocument(), lcl_makeSafeRectangle(rData.getShapeRect()), pObj->IsVisible());
-                if (pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
+                if (pObj->GetObjIdentifier() == SdrObjKind::CustomShape)
                     pObj->AdjustToMaxRect(rData.getShapeRect());
                 else
                     pObj->SetSnapRect(rData.getShapeRect());
@@ -1917,7 +1917,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
             //#i110034# handle chart data references (after InsertObject)
 
-            if ( pNewObject->GetObjIdentifier() == OBJ_OLE2 )
+            if ( pNewObject->GetObjIdentifier() == SdrObjKind::OLE2 )
             {
                 uno::Reference< embed::XEmbeddedObject > xIPObj = static_cast<SdrOle2Obj*>(pNewObject)->GetObjRef();
                 uno::Reference< embed::XClassifiedObject > xClassified = xIPObj;
@@ -1996,11 +1996,11 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
     if( !pDoc )
         return;
 
-    sal_uInt16 nIdent = pObj->GetObjIdentifier();
+    SdrObjKind nIdent = pObj->GetObjIdentifier();
 
     //  don't mirror OLE or graphics, otherwise ask the object
     //  if it can be mirrored
-    bool bCanMirror = ( nIdent != OBJ_GRAF && nIdent != OBJ_OLE2 );
+    bool bCanMirror = ( nIdent != SdrObjKind::Graphic && nIdent != SdrObjKind::OLE2 );
     if (bCanMirror)
     {
         SdrObjTransformInfoRec aInfo;
@@ -2145,7 +2145,7 @@ tools::Rectangle ScDrawLayer::GetCellRect( const ScDocument& rDoc, const ScAddre
 OUString ScDrawLayer::GetVisibleName( const SdrObject* pObj )
 {
     OUString aName = pObj->GetName();
-    if ( pObj->GetObjIdentifier() == OBJ_OLE2 )
+    if ( pObj->GetObjIdentifier() == SdrObjKind::OLE2 )
     {
         //  For OLE, the user defined name (GetName) is used
         //  if it's not empty (accepting possibly duplicate names),
@@ -2164,11 +2164,11 @@ static bool IsNamedObject( const SdrObject* pObj, std::u16string_view rName )
     //  (used to find a named object)
 
     return ( pObj->GetName() == rName ||
-            ( pObj->GetObjIdentifier() == OBJ_OLE2 &&
+            ( pObj->GetObjIdentifier() == SdrObjKind::OLE2 &&
               static_cast<const SdrOle2Obj*>(pObj)->GetPersistName() == rName ) );
 }
 
-SdrObject* ScDrawLayer::GetNamedObject( std::u16string_view rName, sal_uInt16 nId, SCTAB& rFoundTab ) const
+SdrObject* ScDrawLayer::GetNamedObject( std::u16string_view rName, SdrObjKind nId, SCTAB& rFoundTab ) const
 {
     sal_uInt16 nTabCount = GetPageCount();
     for (sal_uInt16 nTab=0; nTab<nTabCount; nTab++)
@@ -2181,7 +2181,7 @@ SdrObject* ScDrawLayer::GetNamedObject( std::u16string_view rName, sal_uInt16 nI
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
-                if ( nId == 0 || pObject->GetObjIdentifier() == nId )
+                if ( nId == SdrObjKind::NONE || pObject->GetObjIdentifier() == nId )
                     if ( IsNamedObject( pObject, rName ) )
                     {
                         rFoundTab = static_cast<SCTAB>(nTab);
@@ -2208,7 +2208,7 @@ OUString ScDrawLayer::GetNewGraphicName( tools::Long* pnCounter ) const
     {
         ++nId;
         aGraphicName = aBase + OUString::number( nId );
-        bThere = ( GetNamedObject( aGraphicName, 0, nDummy ) != nullptr );
+        bThere = ( GetNamedObject( aGraphicName, SdrObjKind::NONE, nDummy ) != nullptr );
     }
 
     if ( pnCounter )
@@ -2238,7 +2238,7 @@ void ScDrawLayer::EnsureGraphicNames()
 
             while (pObject)
             {
-                if ( pObject->GetObjIdentifier() == OBJ_GRAF && pObject->GetName().isEmpty())
+                if ( pObject->GetObjIdentifier() == SdrObjKind::Graphic && pObject->GetName().isEmpty())
                     pObject->SetName( GetNewGraphicName( &nCounter ) );
 
                 pObject = aIter.Next();
@@ -2332,7 +2332,7 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
         aObjRect2 = rObj.GetLogicRect();
         rObj.NbcMirror(aLeft, aRight);
     }
-    else if (rObj.GetObjIdentifier() == OBJ_MEASURE)
+    else if (rObj.GetObjIdentifier() == SdrObjKind::Measure)
     {
         // tdf#137576. A SdrMeasureObj might have a wrong logic rect here. TakeUnrotatedSnapRect
         // calculates the current unrotated snap rectangle, sets logic rectangle and returns it.

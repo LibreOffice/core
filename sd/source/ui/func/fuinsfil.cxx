@@ -466,7 +466,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
             SdrObject* pObj = mpView->GetTextEditObject();
             if( pObj &&
                 pObj->GetObjInventor()   == SdrInventor::Default &&
-                pObj->GetObjIdentifier() == OBJ_TITLETEXT &&
+                pObj->GetObjIdentifier() == SdrObjKind::TitleText &&
                 aOutliner.GetParagraphCount() > 1 )
             {
                 // in title objects, only one paragraph is allowed
@@ -490,7 +490,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         {
             SdrRectObj* pTO = new SdrRectObj(
                 mpView->getSdrModelFromSdrView(),
-                OBJ_TEXT);
+                SdrObjKind::Text);
             pTO->SetOutlinerParaObject(std::move(pOPO));
 
             const bool bUndo = mpView->IsUndoEnabled();

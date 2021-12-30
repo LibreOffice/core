@@ -135,7 +135,7 @@ bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 
 void FuConstructCustomShape::Activate()
 {
-    mpView->SetCurrentObj( OBJ_CUSTOMSHAPE );
+    mpView->SetCurrentObj( SdrObjKind::CustomShape );
     FuConstruct::Activate();
 }
 

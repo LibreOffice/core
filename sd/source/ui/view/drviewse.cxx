@@ -1495,7 +1495,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
 
         SdrRectObj* pRectObj = new SdrRectObj(
             GetView()->getSdrModelFromSdrView(),
-            OBJ_TEXT);
+            SdrObjKind::Text);
 
         pOutl->UpdateFields();
         pOutl->SetUpdateLayout( true );
@@ -1534,7 +1534,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
         if( pMarkedObj ) try
         {
             // change first marked object
-            if( SdrInventor::FmForm == pMarkedObj->GetObjInventor() && pMarkedObj->GetObjIdentifier() == OBJ_FM_BUTTON )
+            if( SdrInventor::FmForm == pMarkedObj->GetObjInventor() && pMarkedObj->GetObjIdentifier() == SdrObjKind::FormButton )
             {
                 bNewObj = false;
 
@@ -1581,7 +1581,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
             SdrObjFactory::MakeNewObject(
                 GetView()->getSdrModelFromSdrView(),
                 SdrInventor::FmForm,
-                OBJ_FM_BUTTON)); //,
+                SdrObjKind::FormButton)); //,
                 //mpDrawView->GetSdrPageView()->GetPage()));
 
         Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_SET_THROW );
