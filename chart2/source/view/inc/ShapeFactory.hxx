@@ -99,13 +99,13 @@ public:
                         , const tPropertyNameMap& rPropertyNameMap
                         , bool bRounded = false);
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<Svx3DLatheObject>
         createCylinder(   const css::uno::Reference< css::drawing::XShapes >& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
                         , sal_Int32 nRotateZAngleHundredthDegree );
 
-    css::uno::Reference< css::drawing::XShape >
+    rtl::Reference<Svx3DSceneObject>
         createPyramid(    const css::uno::Reference< css::drawing::XShapes >& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
@@ -114,7 +114,7 @@ public:
                         , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
                         , const tPropertyNameMap& rPropertyNameMap);
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<Svx3DLatheObject>
         createCone(       const css::uno::Reference< css::drawing::XShapes >& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
@@ -284,7 +284,7 @@ private:
                     , const css::drawing::Direction3D& rSize, sal_Int32 nRotateZAngleHundredthDegree
                     , bool bRounded );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<Svx3DLatheObject>
         impl_createConeOrCylinder( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::Position3D& rPosition
                     , const css::drawing::Direction3D& rSize
