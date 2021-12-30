@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5efb002d_36277523",
+        "filename": "drawinglayer/source/primitive2d/markerarrayprimitive2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-30T14:23:15Z",
+      "side": 1,
+      "message": "You have a \u0027const basegfx::B2DPoint\u0026 a\u0027, and you create another reference to the same object - \u0027rPosition\u0027.\n\nIt would be simpler to change the loop like this:\n\n            for(const auto\u0026 rPosition : rPositions)\n            {\n                ...\n\nand drop redundant line 56.",
+      "revId": "7886b6a56a51cb699fb2a18d8a8dff0e224bdfb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
