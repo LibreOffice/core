@@ -65,6 +65,7 @@ define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
+	$(if $(and $(gb_COMPILERDEPFLAGS),$(T_USE_CLANG)), export SHOWINCLUDES_PREFIX="${LO_CLANG_SHOWINCLUDES_PREFIX}" &&) \
 	$(gb_COMPILER_SETUP) \
 	$(call gb_CObject__compiler,$(2),$(3),$(6)) \
 		$(call gb_Helper_remove_overridden_flags, \
@@ -108,6 +109,7 @@ $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(6))) && \
 	unset INCLUDE && \
+	$(if $(and $(gb_COMPILERDEPFLAGS),$(T_USE_CLANG)), export SHOWINCLUDES_PREFIX="${LO_CLANG_SHOWINCLUDES_PREFIX}" &&) \
 	CCACHE_DISABLE=1 $(gb_COMPILER_SETUP) \
 	$(call gb_CObject__compiler,$(4),$(3),$(7)) \
 		$(call gb_Helper_remove_overridden_flags, \
