@@ -20,16 +20,6 @@
 
 #include <vcl/weld.hxx>
 
-// define ----------------------------------------------------------------
-
-// different delimiter for Unix (:) and Windows (;)
-
-#ifdef UNX
-#define CLASSPATH_DELIMITER ':'
-#else
-#define CLASSPATH_DELIMITER ';'
-#endif
-
 class SvxMultiPathDialog : public weld::GenericDialogController
 {
 private:
