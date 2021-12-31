@@ -33,6 +33,24 @@
       "message": "This is not a technical question, but rather what ESC/developers at large want(s).\n\nEspecially the reason stated in the commit message is a reason not to do it. Doing it just to hide another build failure is the wrong approach, the callgrind build needs to be fixed independently, depending on the type of failure erroring out in configure or fixing it for the callgrind build.\n\nThe tinderbox daily builds already build with the corresponding release-options distro-config that has mergelibs enabled, so it is not just the callgrind build but the daily tinderbox jobs that should hit a problem.\nThat being said: This is not an objection against changing it either, just the reason given is only a halfbaked one...",
       "revId": "e946b47b050679f2eeef48770a02d866fc36c37b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b72ce36_5cd71d2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-31T12:05:27Z",
+      "side": 1,
+      "message": "\u003e This is not a technical question, but rather what ESC/developers at large want(s).\n\nI disagree. CI should cover many common configuration. At least for Windows mergelib is AFAIK used for releases, or not? I just selected Linux, because it\u0027s the same platform the callgrind Jenkins TB uses. But no problem to let ESC decide.\n \n\u003e Especially the reason stated in the commit message is a reason not to do it. Doing it just to hide another build failure is the wrong approach, the callgrind build needs to be fixed independently, depending on the type of failure erroring out in configure or fixing it for the callgrind build.\n\nI don\u0027t see how you come to this conclusion. The mergelib release 64bit Gerrit / Jenkins build just fails like the callgrind build. This doesn\u0027t hide an error, but exposes it earlier. Quoting myself:\n\n\u003e Currently mergelibs errors just fails the later callgrind build,\nnot early in Gerrit.\n\nI actually used this patch to test my mergelib fix in https://gerrit.libreoffice.org/c/core/+/127429. With this patch the build failed and my later fix passed.\n\n\u003e The tinderbox daily builds already build with the corresponding release-options distro-config that has mergelibs enabled, so it is not just the callgrind build but the daily tinderbox jobs that should hit a problem.\n\nAt least the only failure was Jenkins_Callgrind when https://gerrit.libreoffice.org/c/core/+/127286 was merged, later fixed by commit 9d0460ae7210367c9aee6788378758c59b1b0c42 (\"add drawinglayercore to merged libs\"). Same for https://gerrit.libreoffice.org/c/core/+/127304, breaking mergelibs at the same time, needing two separate solutions.\n\n\u003e That being said: This is not an objection against changing it either, just the reason given is only a halfbaked one...\n\nGuess I need to rewrite the commit message. Or I\u0027m misunderstanding you...",
+      "parentUuid": "615756c1_c8e75fd8",
+      "revId": "e946b47b050679f2eeef48770a02d866fc36c37b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
