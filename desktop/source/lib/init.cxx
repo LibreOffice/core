@@ -3607,6 +3607,24 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     }
 }
 
+static char* getDocProps(LibreOfficeKitDocument* pThis)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    uno::Reference< frame::XModel > xModel(pDocument->mxComponent, uno::UNO_QUERY);
+
+    if (!xModel.is())
+        return nullptr;
+
+    OStringBuffer sProps;
+    ::comphelper::SequenceAsHashMap aSeq(xModel->getArgs());
+    bool bTemplate = aSeq.getUnpackedValueOrDefault("AsTemplate", false);
+
+    sProps.append("{\"AsTemplate\":");
+    sProps.append(bTemplate ? "true" : "false");
+    sProps.append("}");
+    return strdup(sProps.getStr());
+}
+
 /// Returns the JSON representation of all the comments in the document
 static char* getPostIts(LibreOfficeKitDocument* pThis)
 {
@@ -5187,6 +5205,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (aCommand == ".uno:ViewAnnotationsPosition")
     {
         return getPostItsPos(pThis);
+    }
+    else if (aCommand == ".uno:DocProps")
+    {
+        return getDocProps(pThis);
     }
     else if (aCommand == ".uno:RulerState")
     {
