@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
 #include <unotools/securityoptions.hxx>
 #include "securityoptions.hxx"
 

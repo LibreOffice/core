@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_AREA
     = u"com.sun.star.chart2.AreaChartType";
 inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_BAR

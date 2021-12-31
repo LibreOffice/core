@@ -22,6 +22,7 @@
 #include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/renderer.hxx>
+#include <o3tl/span.hxx>
 
 class VirtualDevice;
 class Point;

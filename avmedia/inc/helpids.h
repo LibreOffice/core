@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <rtl/string.hxx>
+
 inline constexpr OStringLiteral HID_AVMEDIA_TOOLBOXITEM_PLAY                       = "AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_PLAY";
 inline constexpr OStringLiteral HID_AVMEDIA_TOOLBOXITEM_PAUSE                      = "AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_PAUSE";
 inline constexpr OStringLiteral HID_AVMEDIA_TOOLBOXITEM_STOP                       = "AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_STOP";

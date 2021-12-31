@@ -19,10 +19,8 @@
 
 #pragma once
 
+#include <basic/sbxcore.hxx>
 #include <rtl/ustring.hxx>
-
-class SbxBase;
-class SbxObject;
 
 class SbxFactory
 {

@@ -21,7 +21,6 @@
 #include <chartview/ChartSfxItemIds.hxx>
 
 #include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
 #include <svx/sdangitm.hxx>
 #include <officecfg/Office/Compatibility.hxx>
 

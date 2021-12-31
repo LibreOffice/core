@@ -24,6 +24,7 @@
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <com/sun/star/sdbc/XStatement.hpp>
+#include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>

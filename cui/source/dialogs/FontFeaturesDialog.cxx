@@ -12,7 +12,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font/FeatureParser.hxx>
 #include <FontFeatures.hxx>
-#include <svtools/colorcfg.hxx>
 #include <unordered_set>
 
 using namespace css;

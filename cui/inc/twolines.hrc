@@ -10,6 +10,7 @@
 #pragma once
 
 #include <sal/types.h>
+#include <unotools/resmgr.hxx>
 
 #include <utility>
 

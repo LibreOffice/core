@@ -18,6 +18,7 @@
  */
 
 #include <buffer.hxx>
+#include <basic/sberrors.hxx>
 
 namespace
 {
