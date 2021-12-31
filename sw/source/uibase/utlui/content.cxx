@@ -412,14 +412,11 @@ void SwContentType::Init(bool* pbInvalidateWindow)
             for (size_t i = 0; i < nSize; ++i)
             {
                 const SwFieldType* pFieldType = rFieldTypes[i].get();
+                if (pFieldType->Which() == SwFieldIds::Postit)
+                    continue;
                 std::vector<SwFormatField*> vFields;
                 pFieldType->GatherFields(vFields);
-                for (SwFormatField* pFormatField: vFields)
-                {
-                    SwField* pField = pFormatField->GetField();
-                    if (pField && pField->GetTypeId() != SwFieldTypesEnum::Postit)
-                        m_nMemberCount++;
-                }
+                m_nMemberCount += vFields.size();
             }
         }
         break;
@@ -791,82 +788,75 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         break;
         case ContentTypeId::TEXTFIELD:
         {
-            // sorted list of all fields - meaning in the order they are in the document model
-            SetGetExpFields aSrtLst;
             const SwFieldTypes& rFieldTypes =
                     *m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
             const size_t nSize = rFieldTypes.size();
             for (size_t i = 0; i < nSize; ++i)
             {
                 const SwFieldType* pFieldType = rFieldTypes[i].get();
+                if (pFieldType->Which() == SwFieldIds::Postit)
+                    continue;
                 std::vector<SwFormatField*> vFields;
                 pFieldType->GatherFields(vFields);
+                std::vector<OUString> aSubTypesList;
+                if (pFieldType->Which() == SwFieldIds::DocStat && !vFields.empty())
+                {
+                    SwFieldMgr(m_pWrtShell).GetSubTypes(SwFieldTypesEnum::DocumentStatistics,
+                                                        aSubTypesList);
+                }
                 for (SwFormatField* pFormatField: vFields)
                 {
-                    SwTextField* pTextField = pFormatField->GetTextField();
-                    SwField* pField = pFormatField->GetField();
-                    if (pTextField && pField && pField->GetTypeId() != SwFieldTypesEnum::Postit)
+                    if (SwTextField* pTextField = pFormatField->GetTextField())
                     {
-                        const SwTextNode& rTextNode = pTextField->GetTextNode();
-                        std::unique_ptr<SetGetExpField>
-                                pNew(new SetGetExpField(SwNodeIndex(rTextNode), pTextField));
-                        aSrtLst.insert(std::move(pNew));
-                    }
-                }
-            }
-            for (size_t i = 0; i < aSrtLst.size(); ++i)
-            {
-                const SwTextField* pTextField = aSrtLst[i]->GetTextField();
-                const SwFormatField& rFormatField = pTextField->GetFormatField();
-                const SwField* pField = rFormatField.GetField();
-                OUString sExpandedField(pField->ExpandField(true, m_pWrtShell->GetLayout()));
-                if (!sExpandedField.isEmpty())
-                    sExpandedField = u" - " + sExpandedField;
-                OUString sText = pField->GetDescription() + u" - " + pField->GetFieldName()
-                        + sExpandedField;
-                if (pField->GetTypeId() == SwFieldTypesEnum::DocumentStatistics)
-                {
-                    SwFieldMgr aFieldMgr(m_pWrtShell);
-                    std::vector<OUString> aLst;
-                    aFieldMgr.GetSubTypes(SwFieldTypesEnum::DocumentStatistics, aLst);
-                    OUString sSubType;
-                    if (pField->GetSubType() < aLst.size())
-                        sSubType = u" - " + aLst[pField->GetSubType()];
-                    sText = pField->GetDescription() + u" - " + pField->GetFieldName() + sSubType
-                            + sExpandedField;
-                }
-                else if (pField->GetTypeId() == SwFieldTypesEnum::GetRef)
-                {
-                    OUString sExpandedTextOfReferencedTextNode;
-                    if (const SwGetRefField* pRefField(dynamic_cast<const SwGetRefField*>(pField));
-                            pRefField)
-                    {
-                        if (pRefField->IsRefToHeadingCrossRefBookmark() ||
-                                pRefField->IsRefToNumItemCrossRefBookmark())
+                        const SwField* pField = pFormatField->GetField();
+                        OUString sExpandField(pField->ExpandField(true, m_pWrtShell->GetLayout()));
+                        if (!sExpandField.isEmpty())
+                            sExpandField = u" - " + sExpandField;
+                        OUString sText = pField->GetDescription() + u" - " + pField->GetFieldName()
+                                + sExpandField;
+                        if (pField->GetTypeId() == SwFieldTypesEnum::DocumentStatistics)
                         {
-                            sExpandedTextOfReferencedTextNode = u" - " +
-                                    pRefField->GetExpandedTextOfReferencedTextNode(*m_pWrtShell->
-                                                                                   GetLayout());
-                            if (sExpandedTextOfReferencedTextNode.getLength() > 80)
+                            OUString sSubType;
+                            if (pField->GetSubType() < aSubTypesList.size())
+                                sSubType = u" - " + aSubTypesList[pField->GetSubType()];
+                            sText = pField->GetDescription() + u" - " + pField->GetFieldName()
+                                    + sSubType + sExpandField;
+                        }
+                        else if (pField->GetTypeId() == SwFieldTypesEnum::GetRef)
+                        {
+                            OUString sExpandedTextOfReferencedTextNode;
+                            if (const SwGetRefField* pRefField(
+                                        dynamic_cast<const SwGetRefField*>(pField)); pRefField)
                             {
-                                sExpandedTextOfReferencedTextNode =
-                                        OUString::Concat(
-                                            sExpandedTextOfReferencedTextNode.subView(0, 80)) +
-                                        u"...";
+                                if (pRefField->IsRefToHeadingCrossRefBookmark() ||
+                                        pRefField->IsRefToNumItemCrossRefBookmark())
+                                {
+                                    sExpandedTextOfReferencedTextNode = u" - " +
+                                            pRefField->GetExpandedTextOfReferencedTextNode(
+                                                *m_pWrtShell->GetLayout());
+                                    if (sExpandedTextOfReferencedTextNode.getLength() > 80)
+                                    {
+                                        sExpandedTextOfReferencedTextNode =
+                                                OUString::Concat(
+                                                    sExpandedTextOfReferencedTextNode.subView(
+                                                        0, 80)) + u"...";
+                                    }
+                                }
+                                else
+                                {
+                                    sExpandedTextOfReferencedTextNode = u" - " +
+                                            pRefField->GetSetRefName();
+                                }
                             }
+                            sText = pField->GetDescription() + sExpandedTextOfReferencedTextNode;
                         }
-                        else
-                        {
-                            sExpandedTextOfReferencedTextNode = u" - " + pRefField->GetSetRefName();
-                        }
+                        auto pCnt(std::make_unique<SwTextFieldContent>(this, sText, pFormatField,
+                                      pTextField->GetTextNode().GetIndex().get()));
+                        if (!pTextField->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
+                            pCnt->SetInvisible();
+                        m_pMember->insert(std::move(pCnt));
                     }
-                    sText = pField->GetDescription() + sExpandedTextOfReferencedTextNode;
                 }
-                std::unique_ptr<SwTextFieldContent> pCnt(new SwTextFieldContent(this, sText,
-                                                                                &rFormatField, i));
-                if (!pTextField->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
-                    pCnt->SetInvisible();
-                m_pMember->insert(std::move(pCnt));
             }
             m_nMemberCount = m_pMember->size();
         }
