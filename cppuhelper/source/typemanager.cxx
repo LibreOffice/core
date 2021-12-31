@@ -47,7 +47,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>

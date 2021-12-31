@@ -25,8 +25,6 @@
 #include <svl/stritem.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -37,7 +35,7 @@
 #include <unotools/ucbhelper.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <cuihyperdlg.hxx>

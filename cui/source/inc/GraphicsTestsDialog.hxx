@@ -8,13 +8,9 @@
  */
 #pragma once
 
-#include <vcl/bitmapex.hxx>
-#include <vcl/svapp.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/weld.hxx>
 #include <tools/link.hxx>
-#include <svx/FileExportedDialog.hxx>
-
-#include "ImageViewerDialog.hxx"
 
 #include <vector>
 

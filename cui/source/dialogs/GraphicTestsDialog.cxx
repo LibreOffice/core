@@ -11,9 +11,13 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/DirectoryHelper.hxx>
 #include <osl/file.hxx>
+#include <svx/FileExportedDialog.hxx>
 #include <unotools/ZipPackageHelper.hxx>
 #include <GraphicsTestsDialog.hxx>
 #include <vcl/test/GraphicsRenderTests.hxx>
+#include <vcl/svapp.hxx>
+
+#include <ImageViewerDialog.hxx>
 
 GraphicTestEntry::GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDialog,
                                    OUString aTestName, OUString aTestStatus, Bitmap aTestBitmap)

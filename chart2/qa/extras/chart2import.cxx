@@ -12,7 +12,6 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
-#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -29,9 +28,7 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
-#include <com/sun/star/chart/XDateCategories.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/util/NumberFormatter.hpp>
 #include <iterator>
 
 #include <com/sun/star/util/Color.hpp>

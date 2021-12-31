@@ -20,7 +20,6 @@
 
 #include <sfx2/signaturestate.hxx>
 #include <vcl/weld.hxx>
-#include <memory>
 
 class SfxObjectShell;
 

@@ -21,7 +21,6 @@
 #include <sal/log.hxx>
 
 #include <math.h>
-#include <memory>
 
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <canvas/canvastools.hxx>

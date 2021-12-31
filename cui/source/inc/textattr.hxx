@@ -19,7 +19,7 @@
 #pragma once
 
 #include <svx/dlgctrl.hxx>
-#include <svx/svdobj.hxx>
+#include <svx/svdobjkind.hxx>
 
 class SdrView;
 

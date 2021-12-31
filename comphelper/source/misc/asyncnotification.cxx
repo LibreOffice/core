@@ -21,7 +21,6 @@
 #include <comphelper/scopeguard.hxx>
 #include <mutex>
 #include <condition_variable>
-#include <osl/mutex.hxx>
 
 #include <cassert>
 #include <stdexcept>

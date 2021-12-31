@@ -33,7 +33,6 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
-#include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 

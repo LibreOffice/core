@@ -17,7 +17,6 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <editeng/unoprnms.hxx>
-#include <test/xmltesttools.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 

@@ -36,13 +36,7 @@
 
 #pragma once
 
-#include <cppuhelper/component.hxx>
-#include <cppuhelper/propshlp.hxx>
-
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 
 #include "pq_xbase.hxx"
 

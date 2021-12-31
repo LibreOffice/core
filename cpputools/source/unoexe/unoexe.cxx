@@ -28,9 +28,6 @@
 #include <osl/conditn.hxx>
 
 #include <rtl/process.h>
-#include <rtl/string.h>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 
 #include <cppuhelper/bootstrap.hxx>

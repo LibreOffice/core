@@ -31,7 +31,6 @@
 #include <vcl/GraphicLoader.hxx>
 
 #include <vcl/graph.hxx>
-#include <vcl/outdev.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

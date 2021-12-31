@@ -23,6 +23,7 @@
 #include <sfx2/pageids.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
+#include <unotools/resmgr.hxx>
 
 #include <utility>
 

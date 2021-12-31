@@ -22,7 +22,6 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <svtools/sfxecode.hxx>
-#include <unotools/saveopt.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/documentconstants.hxx>

@@ -24,6 +24,7 @@
 #include <vcl/textdata.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
+#include <vcl/window.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>

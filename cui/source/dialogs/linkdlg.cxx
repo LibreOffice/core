@@ -37,7 +37,7 @@
 #include <sfx2/objsh.hxx>
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <dialmgr.hxx>

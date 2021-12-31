@@ -10,10 +10,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/basrdll.hxx>
-#include <cppunit/TestSuite.h>
-#include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <iostream>
 
 namespace
 {

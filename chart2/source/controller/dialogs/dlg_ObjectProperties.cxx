@@ -47,7 +47,6 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <svl/intitem.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/ctloptions.hxx>
 
 #include <svx/svxids.hrc>

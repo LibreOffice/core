@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <rtl/string.hxx>
+
 inline constexpr OStringLiteral HID_SCH_WIN_DOCUMENT = "CHART2_HID_SCH_WIN_DOCUMENT";
 inline constexpr OStringLiteral HID_SCH_ERROR_BARS_FROM_DATA = "CHART2_SCH_ERROR_BARS_FROM_DATA";
 

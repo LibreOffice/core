@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/float_int_conversion.hxx>
 #include <vcl/errcode.hxx>
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"

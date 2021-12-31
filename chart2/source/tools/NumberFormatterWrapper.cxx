@@ -20,7 +20,6 @@
 #include <NumberFormatterWrapper.hxx>
 #include <svl/numformat.hxx>
 #include <svl/numuno.hxx>
-#include <svl/zforlist.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <osl/diagnose.h>

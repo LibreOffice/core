@@ -29,7 +29,6 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
-#include <unotools/resmgr.hxx>
 
 #include <treeopt.hrc>
 #include <helpids.h>
@@ -90,7 +89,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/flagitem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svx/databaseregistrationui.hxx>

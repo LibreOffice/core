@@ -19,7 +19,6 @@
 
 #include <showcols.hxx>
 
-#include <osl/diagnose.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/types.hxx>
 #include <tools/debug.hxx>

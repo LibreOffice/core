@@ -24,7 +24,6 @@
 #include <string_view>
 
 #include <bastype2.hxx>
-#include <tools/solar.h>
 #include <vcl/weld.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 

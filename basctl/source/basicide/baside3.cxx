@@ -39,7 +39,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>

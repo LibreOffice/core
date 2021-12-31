@@ -12,7 +12,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <string_view>
 
 #include <config_folders.h>
 

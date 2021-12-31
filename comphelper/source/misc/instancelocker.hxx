@@ -28,7 +28,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
-#include <memory>
 #include <mutex>
 
 namespace com::sun::star::embed { class XActionsApproval; }

@@ -20,8 +20,6 @@
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/servicehelper.hxx>
 
-#include <string.h>
-
 
 namespace comphelper
 {

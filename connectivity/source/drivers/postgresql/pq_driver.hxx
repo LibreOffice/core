@@ -36,7 +36,6 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
 #include <sal/macros.h>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>

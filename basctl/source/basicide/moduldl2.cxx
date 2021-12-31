@@ -44,7 +44,7 @@
 
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
@@ -65,7 +65,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <cassert>
-#include <string_view>
 
 namespace basctl
 {

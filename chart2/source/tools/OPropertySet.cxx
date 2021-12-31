@@ -24,7 +24,6 @@
 #include <com/sun/star/style/XStyle.hpp>
 
 #include <algorithm>
-#include <vector>
 #include <memory>
 
 using namespace ::com::sun::star;

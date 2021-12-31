@@ -21,7 +21,6 @@
 #include <sal/config.h>
 
 #include <tools/diagnose_ex.h>
-#include <tools/long.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/utils/canvastools.hxx>

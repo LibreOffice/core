@@ -37,6 +37,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 
+#include "pq_statics.hxx"
 #include "pq_tools.hxx"
 #include "pq_xbase.hxx"
 

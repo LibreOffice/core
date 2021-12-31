@@ -28,13 +28,13 @@
 #include <Clipping.hxx>
 #include <DateHelper.hxx>
 #include <svx/scene3d.hxx>
-#include <svx/unoshape.hxx>
 #include <comphelper/scopeguard.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
 #include <com/sun/star/chart2/XTransformation.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>

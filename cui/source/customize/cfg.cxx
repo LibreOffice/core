@@ -90,7 +90,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/processfactory.hxx>
-#include <officecfg/Office/Common.hxx>
 
 namespace uno = com::sun::star::uno;
 namespace frame = com::sun::star::frame;

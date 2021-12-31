@@ -41,7 +41,6 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 

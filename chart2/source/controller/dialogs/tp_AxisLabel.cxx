@@ -24,7 +24,6 @@
 
 #include <svx/chrtitem.hxx>
 #include <svx/sdangitm.hxx>
-#include <svl/intitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 

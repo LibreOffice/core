@@ -36,19 +36,14 @@
 
 #pragma once
 
-#include <cppuhelper/component.hxx>
-#include <cppuhelper/propshlp.hxx>
-
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <com/sun/star/sdbcx/XAlterTable.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 
 #include "pq_xbase.hxx"
+#include "pq_xcolumns.hxx"
 
 namespace pq_sdbc_driver
 {

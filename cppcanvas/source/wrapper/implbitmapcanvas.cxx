@@ -18,8 +18,6 @@
  */
 
 
-#include <com/sun/star/rendering/XCanvas.hpp>
-
 #include <basegfx/utils/canvastools.hxx>
 #include <osl/diagnose.h>
 

@@ -20,7 +20,6 @@
 
 #include "charttoolsdllapi.hxx"
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <tools/solar.h>
 #include <tools/date.hxx>
 
 class SvNumberFormatter;

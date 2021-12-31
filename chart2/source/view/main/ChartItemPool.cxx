@@ -21,7 +21,6 @@
 #include <chartview/ChartSfxItemIds.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/sdangitm.hxx>
-#include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svl/intitem.hxx>

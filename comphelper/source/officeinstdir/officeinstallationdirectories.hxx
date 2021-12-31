@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 

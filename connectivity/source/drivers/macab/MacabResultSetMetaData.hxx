@@ -23,7 +23,6 @@
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <connectivity/dbexception.hxx>
 #include <rtl/ref.hxx>
 
 namespace connectivity::macab

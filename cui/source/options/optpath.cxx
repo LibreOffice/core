@@ -36,8 +36,8 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
-#include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <tools/diagnose_ex.h>

@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 // Dialog Controls ---------------------------------------------------------------
 
 inline constexpr OUStringLiteral RID_STR_CLASS_CONTROL = u"Control";

@@ -20,8 +20,9 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/util/TriState.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
 #include <memory>
+#include <vector>
 
 namespace Gdiplus { class Graphics; }
 

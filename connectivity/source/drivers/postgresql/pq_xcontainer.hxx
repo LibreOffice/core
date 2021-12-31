@@ -53,8 +53,6 @@
 
 #include <unordered_map>
 
-#include "pq_statics.hxx"
-
 namespace pq_sdbc_driver
 {
 

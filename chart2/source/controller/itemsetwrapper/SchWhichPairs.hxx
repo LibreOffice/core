@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <svl/whichranges.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xdef.hxx>
 #include <svx/svddef.hxx>

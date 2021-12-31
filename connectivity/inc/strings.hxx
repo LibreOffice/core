@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 // = log messages for the JDBC driver
 
 #define STR_LOG_DRIVER_CONNECTING_URL           "jdbcBridge: connecting to URL '$1$'"

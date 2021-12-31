@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <vcl/outdev.hxx>
 
 #include "outdevprovider.hxx"

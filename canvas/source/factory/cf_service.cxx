@@ -36,7 +36,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/functional.hxx>
-#include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <unotools/configmgr.hxx>
 

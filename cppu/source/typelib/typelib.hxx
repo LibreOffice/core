@@ -19,6 +19,11 @@
 
 #pragma once
 
+#include <rtl/ustring.h>
+#include <sal/types.h>
+#include <typelib/typeclass.h>
+#include <typelib/typedescription.h>
+
 extern "C" sal_Int32 typelib_typedescription_getAlignedUnoSize(
     const typelib_TypeDescription * pTypeDescription,
     sal_Int32 nOffset,

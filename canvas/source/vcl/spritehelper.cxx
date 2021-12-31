@@ -31,13 +31,9 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/BitmapMonochromeFilter.hxx>
-#include <vcl/skia/SkiaHelper.hxx>
 
 #include <canvas/canvastools.hxx>
-#include <config_features.h>
 
-#include "impltools.hxx"
 #include "spritehelper.hxx"
 
 using namespace ::com::sun::star;
