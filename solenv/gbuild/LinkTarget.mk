@@ -1123,7 +1123,7 @@ endef
 define gb_LinkTarget_add_libs
 $(call gb_LinkTarget_get_target,$(1)) : T_LIBS += $(2)
 $(if $(call gb_LinkTarget__is_merged,$(1)),\
-  $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,merged)) : T_LIBS += $(2))
+  $(call gb_Library_get_linktarget_target,merged) : T_LIBS += $(2))
 
 endef
 
@@ -1322,7 +1322,7 @@ endef
 define gb_LinkTarget_use_static_libraries
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $$(if $$(filter-out StaticLibrary,$$(TARGETTYPE)),$(2))
 $(if $(call gb_LinkTarget__is_merged,$(1)),\
-	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,merged)) : \
+	$(call gb_Library_get_linktarget_target,merged) : \
 		LINKED_STATIC_LIBS += $$(if $$(filter-out StaticLibrary,$$(TARGETTYPE)),$(2)))
 
 # depend on the static libraries, but only if the target actually links to it

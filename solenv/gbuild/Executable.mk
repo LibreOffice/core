@@ -82,7 +82,7 @@ $(call gb_Helper_make_userfriendly_targets,$(1),Executable)
 endef
 
 define gb_Executable_set_targettype_gui
-$(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$(1))) : TARGETGUI := $(2)
+$(call gb_Executable_get_linktarget_target,$(1)) : TARGETGUI := $(2)
 endef
 
 # forward the call to the gb_LinkTarget implementation

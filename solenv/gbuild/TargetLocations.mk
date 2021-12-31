@@ -404,6 +404,7 @@ endif # CROSS_COMPILING
 define gb_Executable_get_linktarget
 $(call gb_Executable__get_workdir_linktargetname,$(1))<>$(call gb_Executable_get_target,$(1))
 endef
+gb_Executable_get_linktarget_target = $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$(1)))
 
 define gb_Library__get_workdir_linktargetname
 Library/$(call gb_Library_get_filename,$(1))
@@ -422,6 +423,7 @@ endif # CROSS_COMPILING
 define gb_Library_get_linktarget
 $(call gb_Library__get_workdir_linktargetname,$(1))<>$(call gb_Library_get_target,$(1))
 endef
+gb_Library_get_linktarget_target = $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1)))
 
 define gb_StaticLibrary__get_workdir_linktargetname
 StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
@@ -433,6 +435,7 @@ endef
 define gb_StaticLibrary_get_linktarget
 $(call gb_StaticLibrary__get_workdir_linktargetname,$(1))<>$(call gb_StaticLibrary_get_target,$(1))
 endef
+gb_StaticLibrary_get_linktarget_target = $(call gb_LinkTarget_get_target,$(call gb_StaticLibrary_get_linktarget,$(1)))
 
 define gb_CppunitTest__get_workdir_linktargetname
 CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
@@ -444,6 +447,7 @@ endef
 define gb_CppunitTest_get_linktarget
 $(call gb_CppunitTest__get_workdir_linktargetname,$(1))<>$(call gb_CppunitTest__get_linktarget_target,$(1))
 endef
+gb_CppunitTest_get_linktarget_target = $(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktarget,$(1)))
 
 define gb_CompilerTest__get_workdir_linktargetname
 CompilerTest/$(1)
