@@ -28,7 +28,6 @@
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weldutils.hxx>
 #include <unotools/lingucfg.hxx>

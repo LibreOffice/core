@@ -20,7 +20,6 @@
 #pragma once
 
 #include <chartview/chartviewdllapi.hxx>
-#include <com/sun/star/uno/Reference.h>
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>
 

@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <rtl/string.hxx>
+
 inline constexpr OStringLiteral HID_OPTIONS_COLORCONFIG_SAVE_SCHEME
     = "CUI_HID_OPTIONS_COLORCONFIG_SAVE_SCHEME";
 inline constexpr OStringLiteral HID_OFA_FONT_SUBST_CLB = "CUI_HID_OFA_FONT_SUBST_CLB";

@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
 #include "officerestartmanager.hxx"
 
 using namespace ::com::sun::star;

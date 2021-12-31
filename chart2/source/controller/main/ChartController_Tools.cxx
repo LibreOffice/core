@@ -44,7 +44,6 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -71,7 +70,6 @@
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xgrad.hxx>
-#include <svx/xflgrit.hxx>
 #include <PropertyHelper.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
