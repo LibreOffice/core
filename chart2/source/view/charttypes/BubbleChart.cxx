@@ -26,8 +26,6 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <limits>
 

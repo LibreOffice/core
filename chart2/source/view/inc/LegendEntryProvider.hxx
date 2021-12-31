@@ -19,6 +19,7 @@
 #pragma once
 
 #include <com/sun/star/chart2/LegendPosition.hpp>
+#include <com/sun/star/chart2/XFormattedString2.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
@@ -28,7 +29,6 @@
 
 namespace chart { class ChartModel; }
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::chart2 { class XFormattedString2; }
 namespace com::sun::star::drawing { class XShape; }
 namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }

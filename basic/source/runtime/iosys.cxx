@@ -20,7 +20,6 @@
 #include <string.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/window.hxx>
 #include <osl/file.hxx>
 
 #include <runtime.hxx>

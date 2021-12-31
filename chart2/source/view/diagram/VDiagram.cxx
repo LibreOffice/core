@@ -29,8 +29,6 @@
 #include <ThreeDHelper.hxx>
 #include <defines.hxx>
 #include <editeng/unoprnms.hxx>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <svx/unoshape.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <tools/diagnose_ex.h>

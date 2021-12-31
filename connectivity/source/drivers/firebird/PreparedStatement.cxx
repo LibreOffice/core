@@ -20,8 +20,6 @@
 #include <sal/config.h>
 #include <cmath>
 
-#include <string_view>
-
 #include "Connection.hxx"
 #include "PreparedStatement.hxx"
 #include "ResultSet.hxx"

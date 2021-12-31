@@ -71,8 +71,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 
-#include <com/sun/star/drawing/XShapes.hpp>
-
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>

@@ -28,7 +28,6 @@
 #include <Clipping.hxx>
 #include <DateHelper.hxx>
 #include <svx/scene3d.hxx>
-#include <svx/unoshape.hxx>
 #include <comphelper/scopeguard.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>

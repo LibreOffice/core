@@ -11,7 +11,6 @@
 
 #include <atomic>
 #include <iostream>
-#include <string_view>
 
 #include <comphelper/profilezone.hxx>
 #include <comphelper/sequence.hxx>

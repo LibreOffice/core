@@ -21,7 +21,6 @@
 #include <runtime.hxx>
 #include <rtlproto.hxx>
 #include <errobject.hxx>
-#include <basegfx/numeric/ftools.hxx>
 
 
 // Properties and methods lay the return value down at Get (bWrite = sal_False)

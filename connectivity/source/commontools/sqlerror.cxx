@@ -25,7 +25,6 @@
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <unotools/resmgr.hxx>
 #include <osl/diagnose.h>
 

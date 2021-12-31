@@ -690,6 +690,9 @@ excludelist:
     chart2/source/controller/main/ChartModelClone.hxx:
     # Needed for implicit dtor
     - com/sun/star/uno/Any.hxx
+    chart2/source/controller/main/ChartController.cxx:
+    # Needed for implicit dtor
+    - com/sun/star/awt/XWindowPeer.hpp
     chart2/source/controller/main/ChartFrameloader.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XSynchronousFrameLoader.hpp

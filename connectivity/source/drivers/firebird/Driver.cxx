@@ -31,7 +31,6 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
-#include <unotools/localfilehelper.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

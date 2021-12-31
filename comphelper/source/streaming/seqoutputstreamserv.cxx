@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/seqstream.hxx>

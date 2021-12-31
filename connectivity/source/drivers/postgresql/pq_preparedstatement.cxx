@@ -40,7 +40,6 @@
 #include "pq_statics.hxx"
 #include "pq_statement.hxx"
 
-#include <o3tl/deleter.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 

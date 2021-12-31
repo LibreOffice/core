@@ -26,8 +26,9 @@
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
+#include <com/sun/star/rendering/ViewState.hpp>
+#include <com/sun/star/rendering/RenderState.hpp>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2isize.hxx>
 
 namespace com::sun::star::rendering { class XCanvasFont; }

@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUStringLiteral CHART_UNONAME_SORT_BY_XVALUES = u"SortByXValues";
 inline constexpr OUStringLiteral CHART_UNONAME_SPLINE_TYPE = u"SplineType";
 inline constexpr OUStringLiteral CHART_UNONAME_SPLINE_ORDER = u"SplineOrder";

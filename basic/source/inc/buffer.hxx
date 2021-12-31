@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include <basic/sberrors.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <vcl/errcode.hxx>
 #include <vector>
 
 // Stores all numbers big endian

@@ -24,7 +24,6 @@
 #include <basic/sbuno.hxx>
 #include <osl/process.h>
 #include <vcl/dibtools.hxx>
-#include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sound.hxx>
@@ -68,7 +67,6 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 
 // include search util
-#include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <i18nutil/searchopt.hxx>
 #include <unotools/textsearch.hxx>
@@ -109,8 +107,6 @@ using namespace com::sun::star::uno;
 #include <unistd.h>
 #endif
 
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <vcl/unohelp.hxx>
 #include <vcl/TypeSerializer.hxx>
 
 #if HAVE_FEATURE_SCRIPTING

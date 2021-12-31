@@ -39,6 +39,9 @@ excludelist:
     - com/sun/star/form/XDatabaseParameterListener.hpp
     - com/sun/star/sdbc/XParameters.hpp
     - com/sun/star/task/XInteractionHandler.hpp
+    connectivity/source/commontools/DriversConfig.cxx:
+    # Needed for ENABLE_FUZZERS
+    - o3tl/string_view.hxx
     connectivity/source/cpool/ZPoolCollection.cxx:
     # Actually used
     - com/sun/star/beans/PropertyValue.hpp
@@ -71,5 +74,8 @@ excludelist:
     connectivity/source/drivers/odbc/OTools.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
+    connectivity/source/drivers/postgresql/pq_connection.cxx:
+    # Needed for using deleter_from_fn
+    - pq_tools.hxx
     connectivity/source/drivers/writer/WDatabaseMetaData.cxx:
     - com/sun/star/text/XTextDocument.hpp

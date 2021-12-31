@@ -29,8 +29,6 @@
 #include <comphelper/logging.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <memory>
-
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
