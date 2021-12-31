@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edbd32c5_7fce82d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-31T12:52:01Z",
+      "side": 1,
+      "message": "tagging some people who might want to suggest better names for the enum constants I am renaming here",
+      "revId": "f64591a2c49d4c6af358681b6b8afa042de95be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
