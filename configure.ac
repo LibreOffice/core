@@ -12041,6 +12041,17 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
             else
                 AC_MSG_RESULT([no])
             fi
+
+            AC_MSG_CHECKING([the dependency generation prefix (clang.exe -showIncludes)])
+            echo "#include <stdlib.h>" > conftest.c
+            LO_CLANG_SHOWINCLUDES_PREFIX=`$LO_CLANG_CC $CFLAGS -c -showIncludes conftest.c 2>/dev/null | \
+                grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
+            rm -f conftest.c conftest.obj
+            if test -z "$LO_CLANG_SHOWINCLUDES_PREFIX"; then
+                AC_MSG_ERROR([cannot determine the -showIncludes prefix])
+            else
+                AC_MSG_RESULT(["$LO_CLANG_SHOWINCLUDES_PREFIX"])
+            fi
         else
             AC_CHECK_PROG(LO_CLANG_CC,clang,clang,[])
             AC_CHECK_PROG(LO_CLANG_CXX,clang++,clang++,[])
@@ -12348,6 +12359,7 @@ AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512F)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_F16C)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_FMA)
+AC_SUBST(LO_CLANG_SHOWINCLUDES_PREFIX)
 AC_SUBST(CLANG_USE_LD)
 AC_SUBST([HAVE_LO_CLANG_DLLEXPORTINLINES])
 
