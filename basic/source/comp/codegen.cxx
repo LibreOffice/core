@@ -29,7 +29,6 @@
 #include <cstddef>
 #include <limits>
 #include <algorithm>
-#include <string_view>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/script/ModuleType.hpp>

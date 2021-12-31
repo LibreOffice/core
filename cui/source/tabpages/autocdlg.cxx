@@ -29,11 +29,9 @@
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/module.hxx>
 #include <svl/eitem.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svx/SmartTagMgr.hxx>

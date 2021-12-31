@@ -22,7 +22,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svtools/unitconv.hxx>

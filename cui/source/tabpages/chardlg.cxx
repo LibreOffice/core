@@ -23,7 +23,6 @@
 #include <sfx2/objsh.hxx>
 #include <svx/svxids.hrc>
 #include <svtools/unitconv.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <chardlg.hxx>

@@ -68,9 +68,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/unopage.hxx>
 #include <svx/xgrad.hxx>
-#include <svx/xflgrit.hxx>
 #include <PropertyHelper.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
