@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a740a172_c648463a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-31T12:27:50Z",
+      "side": 1,
+      "message": "You forgot to add your changes! Did you create this with the web UI of gerrit?",
+      "revId": "c13e7d2f474e8381ea7f1f0aa501ddfbaf917ac9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
