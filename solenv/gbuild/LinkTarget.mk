@@ -1234,7 +1234,7 @@ else # DISABLE_DYNLOADING
 # depend on the now-static libraries themself, but only if the target actually links to it
 ifneq (,$(call gb_LinkTarget_does_real_link,$(1)))
 $(foreach lib,$(3),$(if $(filter $(lib),$(gb_Library_KNOWNLIBS)), \
-    $(eval $(call gb_LinkTarget_get_target,$(1)) : $(call gb_Library_get_target,$(lib))) \
+    $(eval $(call gb_LinkTarget_get_target,$(1)) : $(call gb_Library_get_linktarget_target,$(lib))) \
 ))
 endif
 endif # DISABLE_DYNLOADING
@@ -1330,7 +1330,7 @@ ifneq (,$(call gb_LinkTarget_does_real_link,$(1)))
 # make has a size limit for the prerequisites string, which will be exceeded for some larger static links,
 # like soffice.bin, but there seems to be no limit for makefile lines...
 $(foreach lib,$(2), \
-    $$(eval $(call gb_LinkTarget_get_target,$(1)): $(call gb_StaticLibrary_get_target,$(lib))))
+    $$(eval $(call gb_LinkTarget_get_target,$(1)): $(call gb_StaticLibrary_get_linktarget_target,$(lib))))
 endif
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_StaticLibrary_get_headers_target,$(lib)))
