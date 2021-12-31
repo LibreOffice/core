@@ -26,7 +26,6 @@
 #include <svl/intitem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
-#include <svl/zforlist.hxx>
 #include <vcl/formatter.hxx>
 #include <vcl/weld.hxx>
 
