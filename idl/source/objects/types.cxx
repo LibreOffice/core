@@ -126,8 +126,7 @@ SvMetaType::SvMetaType()
 }
 
 SvMetaType::SvMetaType( const OString& rName )
-    : nType( MetaTypeType::Base )
-    , bIsItem( false )
+    : SvMetaType()
 {
     SetName( rName );
 }
