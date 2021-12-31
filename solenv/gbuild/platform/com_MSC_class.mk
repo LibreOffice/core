@@ -390,7 +390,7 @@ gb_Library_FILENAMES :=\
 # An assembly is a special kind of library for CLI
 define gb_Library_Assembly
 $(call gb_Library_Library,$(1))
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1))) : NATIVERES :=
+$(call gb_Library_get_linktarget_target,$(1)) : NATIVERES :=
 
 endef
 

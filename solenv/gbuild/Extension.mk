@@ -189,7 +189,7 @@ endef
 # add a library from workdir; DO NOT use gb_Library_get_target
 define gb_Extension_add_library
 $(call gb_Extension_add_file,$(1),$(call gb_Library_get_runtime_filename,$(2)),\
-	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(2))))
+	$(call gb_Library_get_linktarget_target,$(2)))
 
 endef
 

@@ -52,7 +52,7 @@ endef
 
 # this is a crude hack to "build" header files with include-what-you-use
 define gb_StaticLibrary__add_iwyu_header
-$(call gb_LinkTarget_get_target,$(call gb_StaticLibrary_get_linktarget,$(1))) : $(call gb_GenCxxObject_get_target,$(basename $(2)))
+$(call gb_StaticLibrary_get_linktarget_target,$(1)) : $(call gb_GenCxxObject_get_target,$(basename $(2)))
 $(call gb_GenCxxObject_get_target,$(basename $(2))) : $(SRCDIR)/$(2)
 $(call gb_GenCxxObject_get_target,$(basename $(2))) : WARNINGS_NOT_ERRORS := $(true)
 $(call gb_GenCxxObject_get_target,$(basename $(2))) : GEN_CXX_SOURCE := $(SRCDIR)/$(2)

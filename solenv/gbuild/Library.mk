@@ -205,7 +205,7 @@ $$(eval $$(call gb_Output_info,currently known plugins are: $(sort $(gb_Library_
 $$(eval $$(call gb_Output_error,Unknown plugin(s) '$$(filter-out $(gb_Library_KNOWNPLUGINS),$(1)))'. Plugins must be registered in Repository.mk or RepositoryExternal.mk))
 endif
 
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(2))) : PLUGINS += $(1)
+$(call gb_Library_get_linktarget_target,$(2)) : PLUGINS += $(1)
 $(eval $(call gb_LinkTarget__add_plugin,$(call gb_Library_get_linktarget,$(2)),$(1)))
 $(eval $(call gb_LinkTarget__set_plugin_for,$(call gb_Library_get_linktarget,$(1)),$(2),$(3),Library_$(1)))
 endef
