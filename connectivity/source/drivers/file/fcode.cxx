@@ -20,7 +20,7 @@
 #include <file/fcode.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <connectivity/sqlparse.hxx>
+#include <connectivity/sqlnode.hxx>
 #include <sqlbison.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 

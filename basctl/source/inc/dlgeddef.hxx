@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <svx/svdobjkind.hxx>
+#include <rtl/ustring.hxx>
 
 namespace basctl
 {

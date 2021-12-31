@@ -22,9 +22,6 @@
 #include <connectivity/sqlparse.hxx>
 #include <file/fanalyzer.hxx>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>

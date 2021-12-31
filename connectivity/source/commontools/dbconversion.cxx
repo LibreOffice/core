@@ -18,13 +18,11 @@
  */
 
 #include <connectivity/dbconversion.hxx>
-#include <osl/diagnose.h>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <rtl/character.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <unotools/datetime.hxx>

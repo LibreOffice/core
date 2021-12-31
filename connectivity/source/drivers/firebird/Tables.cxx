@@ -10,7 +10,6 @@
 #include "Table.hxx"
 #include "Tables.hxx"
 #include "Catalog.hxx"
-#include "Util.hxx"
 
 #include <TConnection.hxx>
 

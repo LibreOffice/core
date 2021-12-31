@@ -58,7 +58,6 @@
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>

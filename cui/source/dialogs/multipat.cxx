@@ -30,7 +30,7 @@
 
 #include <strings.hrc>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <unotools/pathoptions.hxx>

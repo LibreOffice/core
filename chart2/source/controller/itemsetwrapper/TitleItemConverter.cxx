@@ -23,7 +23,6 @@
 #include <GraphicPropertyItemConverter.hxx>
 #include <CharacterPropertyItemConverter.hxx>
 #include <MultipleItemConverter.hxx>
-#include <svl/intitem.hxx>
 #include <svx/sdangitm.hxx>
 #include <rtl/math.hxx>
 

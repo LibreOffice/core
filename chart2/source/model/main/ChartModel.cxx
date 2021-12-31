@@ -55,7 +55,6 @@
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 
 #include <sal/log.hxx>
-#include <svl/zforlist.hxx>
 #include <tools/diagnose_ex.h>
 #include <libxml/xmlwriter.h>
 

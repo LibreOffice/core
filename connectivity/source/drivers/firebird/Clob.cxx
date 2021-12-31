@@ -9,8 +9,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include "Clob.hxx"
 #include "Blob.hxx"
 

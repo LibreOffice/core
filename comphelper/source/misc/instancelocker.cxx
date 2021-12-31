@@ -19,7 +19,6 @@
 
 
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/interfacecontainer2.hxx>
 
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>

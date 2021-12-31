@@ -16,9 +16,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
 
-#include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>

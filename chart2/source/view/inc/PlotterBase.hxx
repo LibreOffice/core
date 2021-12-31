@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
 #include <svx/unoshape.hxx>
 #include <vector>

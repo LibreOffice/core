@@ -30,7 +30,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>
 #include <svx/svdopath.hxx>

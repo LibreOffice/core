@@ -22,7 +22,6 @@
 #include "Clob.hxx"
 #include "Connection.hxx"
 #include "DatabaseMetaData.hxx"
-#include "Driver.hxx"
 #include "PreparedStatement.hxx"
 #include "Statement.hxx"
 #include "Util.hxx"
@@ -48,7 +47,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/localfilehelper.hxx>
 
 #include <osl/file.hxx>
 #include <rtl/strbuf.hxx>

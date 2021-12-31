@@ -27,7 +27,6 @@
 
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 

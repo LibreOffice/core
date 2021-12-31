@@ -27,7 +27,6 @@
 #include <o3tl/safeint.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
-#include <tools/solar.h>
 #include <tools/urlobj.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/numbers.hxx>

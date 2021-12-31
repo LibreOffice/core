@@ -26,7 +26,6 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/sysdata.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
-#include <vcl/window.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "cairo_canvas.hxx"

@@ -35,7 +35,6 @@
  ************************************************************************/
 
 #include "pq_statics.hxx"
-#include "pq_updateableresultset.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

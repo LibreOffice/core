@@ -20,7 +20,6 @@
 #include <memory>
 #include <map>
 #include <optasian.hxx>
-#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <o3tl/any.hxx>

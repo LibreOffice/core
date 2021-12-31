@@ -21,6 +21,7 @@
 
 #include <memory>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/rendering/FontRequest.hpp>
