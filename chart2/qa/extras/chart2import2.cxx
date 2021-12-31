@@ -8,33 +8,16 @@
  */
 
 #include "charttest.hxx"
-#include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <com/sun/star/chart/ErrorBarStyle.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
-#include <com/sun/star/chart/XChartDataArray.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart/XAxisXSupplier.hpp>
-#include <com/sun/star/chart/XAxisYSupplier.hpp>
-#include <com/sun/star/chart/MissingValueTreatment.hpp>
-#include <com/sun/star/chart2/TickmarkStyle.hpp>
-#include <com/sun/star/chart2/SymbolStyle.hpp>
-#include <com/sun/star/chart2/Symbol.hpp>
-#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <iterator>
-
-#include <com/sun/star/util/Color.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/text/XText.hpp>
 
 class Chart2ImportTest2 : public ChartTest
 {

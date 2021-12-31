@@ -23,6 +23,7 @@
 #include "MacabRecords.hxx"
 #include "MacabAddressBook.hxx"
 #include "macabutilities.hxx"
+#include <connectivity/dbexception.hxx>
 #include <strings.hrc>
 
 using namespace connectivity::macab;

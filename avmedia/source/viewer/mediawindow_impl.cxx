@@ -33,7 +33,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/securityoptions.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
