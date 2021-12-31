@@ -50,6 +50,23 @@
       "message": "Bugzilla is a valid place to send these, and it also provides permalinks that you can add to the wiki.",
       "revId": "af7c21e3bd2cc6d28c3a87aa4b4cc3e0a5b91bcf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e892e18e_06c17566",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-31T16:23:31Z",
+      "side": 1,
+      "message": "If Jenkins is ok, Lionel is ok for the code and license is ok for Adolfo, no need to wait more to push this one then! :-)",
+      "revId": "af7c21e3bd2cc6d28c3a87aa4b4cc3e0a5b91bcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
