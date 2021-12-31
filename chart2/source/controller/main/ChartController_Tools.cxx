@@ -71,7 +71,6 @@
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xgrad.hxx>
-#include <svx/xflgrit.hxx>
 #include <PropertyHelper.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

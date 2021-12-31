@@ -30,7 +30,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
-#include <unotools/saveopt.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/settings.hxx>
 

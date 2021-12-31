@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <sal/types.h>
+#include <o3tl/span.hxx>
 #include <tools/stream.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <cppcanvas/renderer.hxx>

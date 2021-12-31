@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <o3tl/float_int_conversion.hxx>
 #include <vcl/errcode.hxx>
 #include "sbxconv.hxx"
 #include <rtlproto.hxx>
