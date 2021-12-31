@@ -165,8 +165,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 # etc., try to prevent linking these in parallel by adding artificial build
 # order dependencies here.
 define repositorymodule_serialize1
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1))) \
-	:| $(foreach lib,$(2),$(call gb_Library_get_target,$(lib)))
+$(call gb_Library_get_linktarget_target,$(1)) :| $(foreach lib,$(2),$(call gb_Library_get_target,$(lib)))
 endef
 
 define repositorymodule_serialize

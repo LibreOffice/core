@@ -11,7 +11,7 @@
 $(foreach fuzzer,$(gb_Fuzzers_KNOWN), \
     $(eval gb_Fuzzers_KNOWN = $(filter-out $(fuzzer),$(gb_Fuzzers_KNOWN))) \
     $(if $(firstword $(gb_Fuzzers_KNOWN)), \
-        $(eval $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$(firstword $(gb_Fuzzers_KNOWN)))) : \
-            $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$(fuzzer))))))
+        $(eval $(call gb_Executable_get_linktarget_target,$(firstword $(gb_Fuzzers_KNOWN)))) : \
+            $(call gb_Executable_linktarget_target,$(fuzzer))))
 
 # vim: set noet sw=4 ts=4:
