@@ -16,6 +16,23 @@
       "message": "Just a ping, if anyone has a reason not to do this?",
       "revId": "e946b47b050679f2eeef48770a02d866fc36c37b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "615756c1_c8e75fd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-31T10:56:33Z",
+      "side": 1,
+      "message": "This is not a technical question, but rather what ESC/developers at large want(s).\n\nEspecially the reason stated in the commit message is a reason not to do it. Doing it just to hide another build failure is the wrong approach, the callgrind build needs to be fixed independently, depending on the type of failure erroring out in configure or fixing it for the callgrind build.\n\nThe tinderbox daily builds already build with the corresponding release-options distro-config that has mergelibs enabled, so it is not just the callgrind build but the daily tinderbox jobs that should hit a problem.\nThat being said: This is not an objection against changing it either, just the reason given is only a halfbaked one...",
+      "revId": "e946b47b050679f2eeef48770a02d866fc36c37b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
