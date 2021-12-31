@@ -17,6 +17,9 @@ excludelist:
     - com/sun/star/awt/XTopWindow.hpp
     # Complete type needed for return type
     - basegfx/range/b2irange.hxx
+    canvas/source/opengl/ogl_canvascustomsprite.cxx:
+    # Complete type needed for B2DPolyPolygon return type
+    - basegfx/polygon/b2dpolypolygon.hxx
     canvas/source/cairo/cairo_spritecanvashelper.cxx:
     # Needed for boost/polymorphic_cast.hpp
     - boost/cast.hpp

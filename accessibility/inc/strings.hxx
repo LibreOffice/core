@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUStringLiteral RID_STR_ACC_ACTION_CLICK = u"press";
 inline constexpr OUStringLiteral RID_STR_ACC_ACTION_TOGGLEPOPUP = u"togglePopup";
 inline constexpr OUStringLiteral RID_STR_ACC_ACTION_SELECT = u"select";
