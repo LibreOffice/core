@@ -33,6 +33,23 @@
       "message": "I fully approve this patch on the technical side.\n+1 instead of +2 due to doubt on License Statement.",
       "revId": "af7c21e3bd2cc6d28c3a87aa4b4cc3e0a5b91bcf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c29d430_0257ba52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-12-31T11:54:22Z",
+      "side": 1,
+      "message": "Bugzilla is a valid place to send these, and it also provides permalinks that you can add to the wiki.",
+      "revId": "af7c21e3bd2cc6d28c3a87aa4b4cc3e0a5b91bcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
