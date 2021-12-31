@@ -19,6 +19,12 @@
 
 #pragma once
 
+#include <basic/sberrors.hxx>
+#include <unotools/resmgr.hxx>
+#include <vcl/errcode.hxx>
+
+#include <utility>
+
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 std::pair<TranslateId, ErrCode> const RID_BASIC_START[] =

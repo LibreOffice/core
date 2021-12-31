@@ -20,6 +20,9 @@ excludelist:
     # Actually used
     - com/sun/star/graphic/XGraphic.hpp
     - com/sun/star/security/XCertificate.hpp
+    cui/source/factory/dlgfact.cxx:
+    # Needed on WIN
+    - fileextcheckdlg.hxx
     cui/source/dialogs/thesdlg.cxx:
     # Actually used
     - com/sun/star/linguistic2/XMeaning.hpp
@@ -36,3 +39,6 @@ excludelist:
     cui/source/customize/cfg.cxx:
     # Actually used
     - com/sun/star/ui/dialogs/XFilePicker3.hpp
+    cui/source/dialogs/AdditionsDialog.cxx:
+    # Actually needed for orcus::json::parse_error
+    - orcus/json_parser.hpp

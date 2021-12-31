@@ -36,7 +36,6 @@
 
 #pragma once
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/component.hxx>
 #include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>

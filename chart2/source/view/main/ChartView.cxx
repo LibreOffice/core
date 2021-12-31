@@ -49,6 +49,7 @@
 #include <defines.hxx>
 #include <unonames.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/propertyvalue.hxx>
@@ -59,7 +60,6 @@
 #include <unotools/streamwrap.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>
-#include <svx/unoshape.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svx/unofill.hxx>
@@ -93,7 +93,6 @@
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <svl/itempool.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <comphelper/classids.hxx>
 #include <servicenames_charttypes.hxx>

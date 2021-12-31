@@ -1,6 +1,11 @@
 ---
 assumeFilename: basctl/source/basicide/baside2b.cxx
 excludelist:
+    basctl/sdi/basslots.hrc:
+    # Needed for basctl/sdi/basslots.sdi
+    - svx/svxids.hrc
+    - svx/unomid.hxx
+    - editeng/memberids.h
     basctl/source/basicide/basidesh.cxx:
     # Needed for TypedWhichId defines is basslots.hxx
     - sfx2/dinfdlg.hxx

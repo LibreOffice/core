@@ -19,8 +19,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <memory>
-
 #include <CommonConverters.hxx>
 #include <editeng/unoprnms.hxx>
 
