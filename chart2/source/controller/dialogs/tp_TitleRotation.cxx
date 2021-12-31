@@ -24,7 +24,6 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <svl/intitem.hxx>
 #include <svx/sdangitm.hxx>
 
 namespace chart

@@ -25,7 +25,6 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
 
 #include "outdevholder.hxx"
 

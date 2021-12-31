@@ -28,7 +28,6 @@
 #include "sbxconv.hxx"
 #include <rtlproto.hxx>
 #include <sbunoobj.hxx>
-#include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 

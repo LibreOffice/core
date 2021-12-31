@@ -23,9 +23,6 @@
 #include <ObjectIdentifier.hxx>
 #include <svx/unomodel.hxx>
 #include <svl/itempool.hxx>
-#include <svl/eitem.hxx>
-#include <editeng/eeitem.hxx>
-#include <svx/svx3ditems.hxx>
 #include <svx/objfac3d.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xtable.hxx>
@@ -35,8 +32,6 @@
 #include <vcl/virdev.hxx>
 #include <libxml/xmlwriter.h>
 #include <osl/diagnose.h>
-
-#include <com/sun/star/container/XChild.hpp>
 
 namespace com::sun::star::linguistic2 { class XHyphenator; }
 namespace com::sun::star::linguistic2 { class XSpellChecker1; }

@@ -22,6 +22,7 @@
 #include <ConfigurationAccess.hxx>
 
 #include <unotools/lingucfg.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
@@ -31,10 +32,11 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svxids.hrc>
-#include <svx/unoshape.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <svx/helperhittest3d.hxx>

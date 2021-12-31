@@ -51,7 +51,6 @@
 #include <rtl/ref.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
-#include <comphelper/interfacecontainer3.hxx>
 
 class BasicManager;
 

@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <basegfx/range/b2irectangle.hxx>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/awt/Size.hpp>

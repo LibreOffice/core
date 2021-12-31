@@ -20,7 +20,6 @@
 
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequence.hxx>
-#include <vector>
 
 
 using namespace ::comphelper;
