@@ -5515,6 +5515,7 @@ if test "$cross_compiling" = "yes"; then
     test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no --disable-database-connectivity"
     test -n "$with_help" -a "$with_help" != "no" && sub_conf_opts="$sub_conf_opts --with-help=$with_help"
     test "$enable_extensions" = yes || sub_conf_opts="$sub_conf_opts --disable-extensions"
+    test "${enable_pch+set}" = set && sub_conf_opts="$sub_conf_opts --enable-pch=${enable_pch}"
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     test "${with_system_lockfile+set}" = set && sub_conf_opts="$sub_conf_opts --with-system-lockfile=${with_system_lockfile}"
     test "${enable_fuzzers}" = yes && sub_conf_opts="$sub_conf_opts --without-system-libxml"
