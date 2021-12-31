@@ -27,7 +27,6 @@
 #include <vcl/help.hxx>
 #include <vcl/window.hxx>
 
-#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URL.hpp>

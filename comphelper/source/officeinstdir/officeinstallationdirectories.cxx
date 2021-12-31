@@ -28,7 +28,6 @@
  *************************************************************************/
 
 #include <osl/file.hxx>
-#include <rtl/ref.hxx>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <comphelper/fileurl.hxx>
 

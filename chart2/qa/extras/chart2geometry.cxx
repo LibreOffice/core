@@ -15,14 +15,9 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
-#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/saveopt.hxx>
 
-#include <libxml/xpathInternals.h>
-
-#include <algorithm>
 #include <string_view>
 
 using uno::Reference;

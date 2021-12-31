@@ -24,7 +24,6 @@
 #include <svx/sdtaitm.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdtcfitm.hxx>
-#include <svx/svdobj.hxx>
 #include <svx/svxids.hrc>
 
 #include <textattr.hxx>

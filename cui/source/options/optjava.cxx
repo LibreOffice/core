@@ -50,8 +50,6 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 #if HAVE_FEATURE_JAVA
 #include <jvmfwk/framework.hxx>
 #endif

@@ -38,6 +38,7 @@
 
 #include <rtl/ref.hxx>
 
+#include "pq_statics.hxx"
 #include "pq_xkeycolumn.hxx"
 
 using com::sun::star::uno::Reference;
