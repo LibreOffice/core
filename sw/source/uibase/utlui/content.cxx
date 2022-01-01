@@ -307,9 +307,8 @@ namespace
 
         return false;
     }
-
-// Gets "YPos" for SwRegionContent or SwOutlineContent, i.e. a number used to sort sections in Navigator's list
-sal_Int32 getYPosForSectionOrOutline(const SwNodeIndex& rNodeIndex)
+// Gets "YPos" for content, i.e. a number used to sort content members in Navigator's list
+sal_Int32 getYPos(const SwNodeIndex& rNodeIndex)
 {
     SwNodeOffset nIndex = rNodeIndex.GetIndex();
     if (rNodeIndex.GetNodes().GetEndOfExtras().GetIndex() >= nIndex)
@@ -321,7 +320,7 @@ sal_Int32 getYPosForSectionOrOutline(const SwNodeIndex& rNodeIndex)
             // Get node index of anchor
             if (auto pSwPosition = pFlyFormat->GetAnchor().GetContentAnchor())
             {
-                return getYPosForSectionOrOutline(pSwPosition->nNode);
+                return getYPos(pSwPosition->nNode);
             }
         }
     }
@@ -475,7 +474,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                     }
 
                     std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, rSectionName,
-                            nLevel, getYPosForSectionOrOutline(*pNodeIndex)));
+                            nLevel, getYPos(*pNodeIndex)));
 
                     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, nullptr );
                     if( !pFormat->GetInfo( aAskItem ) &&
@@ -654,7 +653,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         --m_nMemberCount;
                         continue; // don't hide it, just skip it
                     }
-                    tools::Long nYPos = getYPosForSectionOrOutline(
+                    tools::Long nYPos = getYPos(
                                 *m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(i));
                     OUString aEntry(comphelper::string::stripStart(
                         m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
@@ -678,7 +677,6 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         {
             const size_t nCount = m_pWrtShell->GetTableFrameFormatCount(true);
             OSL_ENSURE(m_nMemberCount == nCount, "MemberCount differs");
-            Point aNullPt;
             m_nMemberCount = nCount;
             const SwFrameFormats* pFrameFormats = m_pWrtShell->GetDoc()->GetTableFrameFormats();
             SwAutoFormatGetDocNode aGetHt(&m_pWrtShell->GetNodes());
@@ -691,15 +689,14 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     n++;
                     continue;
                 }
-                const OUString& sTableName( rTableFormat.GetName() );
-
-                SwContent* pCnt = new SwContent(this, sTableName,
-                        rTableFormat.FindLayoutRect(false, &aNullPt).Top() );
+                tools::Long nYPos = 0;
+                if (SwTable* pTable = SwTable::FindTable(&rTableFormat))
+                    nYPos = getYPos(*pTable->GetTableNode());
+                auto pCnt = make_unique<SwContent>(this, rTableFormat.GetName(), nYPos);
                 if( !rTableFormat.GetInfo( aAskItem ) &&
-                    !aAskItem.pObject )     // not visible
+                        !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
-
-                m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
+                m_pMember->insert(std::move(pCnt));
             }
 
             if (nullptr != pbLevelOrVisibilityChanged)
@@ -931,7 +928,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     }
 
                     std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, sSectionName,
-                            nLevel, getYPosForSectionOrOutline(*pNodeIndex)));
+                            nLevel, getYPos(*pNodeIndex)));
                     if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
