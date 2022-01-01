@@ -574,7 +574,7 @@ public:
 class SvxShapeCircle final : public SvxShapeText
 {
 public:
-    SvxShapeCircle(SdrObject* pObj);
+    SVXCORE_DLLPUBLIC SvxShapeCircle(SdrObject* pObj);
     virtual ~SvxShapeCircle() noexcept override;
 };
 
