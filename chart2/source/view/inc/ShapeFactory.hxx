@@ -27,11 +27,11 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/unoshape.hxx>
+#include <svx/unopage.hxx>
 
 namespace chart { struct VLineProperties; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XFormattedString; }
-namespace com::sun::star::drawing { class XDrawPage; }
 namespace com::sun::star::drawing { class XShape; }
 namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::drawing { struct HomogenMatrix; }
@@ -233,14 +233,13 @@ public:
             const css::uno::Reference< css::drawing::XShapes >& xTarget );
 
     static css::uno::Reference< css::drawing::XShapes >
-         getOrCreateChartRootShape( const css::uno::Reference<
-            css::drawing::XDrawPage>& xPage );
+         getOrCreateChartRootShape( const rtl::Reference<SvxDrawPage>& xPage );
 
     static void setPageSize(const css::uno::Reference<css::drawing::XShapes>& xChartShapes,
                      const css::awt::Size& rSize);
 
     static css::uno::Reference< css::drawing::XShapes >
-         getChartRootShape( const css::uno::Reference< css::drawing::XDrawPage>& xPage );
+         getChartRootShape( const rtl::Reference<SvxDrawPage>& xPage );
 
     static void makeShapeInvisible( const css::uno::Reference< css::drawing::XShape >& xShape );
 

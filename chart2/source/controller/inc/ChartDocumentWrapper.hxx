@@ -26,7 +26,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/eventlisteneradapter.hxx>
-
+#include <rtl/ref.hxx>
+#include <svx/unopage.hxx>
 #include <memory>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -72,7 +73,7 @@ public:
     css::uno::Reference< css::drawing::XShapes > getAdditionalShapes() const;
 
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::drawing::XDrawPage > impl_getDrawPage() const;
+    rtl::Reference<SvxDrawPage> impl_getDrawPage() const;
 
 protected:
 

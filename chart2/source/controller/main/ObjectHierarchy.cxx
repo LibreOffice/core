@@ -449,14 +449,13 @@ void ObjectHierarchy::createAdditionalShapesTree( ObjectHierarchy::tChildContain
     {
         if ( m_pExplicitValueProvider )
         {
-            Reference< drawing::XDrawPage > xDrawPage( m_pExplicitValueProvider->getDrawModelWrapper()->getMainDrawPage() );
-            Reference< drawing::XShapes > xDrawPageShapes( xDrawPage, uno::UNO_QUERY_THROW );
+            rtl::Reference<SvxDrawPage> xDrawPage( m_pExplicitValueProvider->getDrawModelWrapper()->getMainDrawPage() );
             Reference< drawing::XShapes > xChartRoot( DrawModelWrapper::getChartRootShape( xDrawPage ) );
-            sal_Int32 nCount = xDrawPageShapes->getCount();
+            sal_Int32 nCount = xDrawPage->getCount();
             for ( sal_Int32 i = 0; i < nCount; ++i )
             {
                 Reference< drawing::XShape > xShape;
-                if ( xDrawPageShapes->getByIndex( i ) >>= xShape )
+                if ( xDrawPage->getByIndex( i ) >>= xShape )
                 {
                     if ( xShape.is() && xShape != xChartRoot )
                     {

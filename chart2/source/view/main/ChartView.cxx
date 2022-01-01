@@ -1129,7 +1129,7 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
         comphelper::makePropertyValue("ExportOnlyBackground", false),
         comphelper::makePropertyValue("HighContrast", bUseHighContrast),
         comphelper::makePropertyValue("Version", sal_Int32(SOFFICE_FILEFORMAT_50)),
-        comphelper::makePropertyValue("CurrentPage", uno::Reference< uno::XInterface >( m_xDrawPage, uno::UNO_QUERY )),
+        comphelper::makePropertyValue("CurrentPage", uno::Reference< uno::XInterface >( static_cast<cppu::OWeakObject*>(m_xDrawPage.get()), uno::UNO_QUERY )),
         //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
         comphelper::makePropertyValue("ScaleXNumerator", m_nScaleXNumerator),
         comphelper::makePropertyValue("ScaleXDenominator", m_nScaleXDenominator),
@@ -1143,7 +1143,7 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
         comphelper::makePropertyValue("FilterData", aFilterData)
     };
 
-    xExporter->setSourceDocument( uno::Reference< lang::XComponent >( m_xDrawPage, uno::UNO_QUERY) );
+    xExporter->setSourceDocument( m_xDrawPage );
     if( xExporter->filter( aProps ) )
     {
         xOutStream->flush();
@@ -1720,9 +1720,8 @@ bool ChartView::getExplicitValuesForAxis(
 
 SdrPage* ChartView::getSdrPage()
 {
-    auto pSvxDrawPage = comphelper::getFromUnoTunnel<SvxDrawPage>(m_xDrawPage);
-    if(pSvxDrawPage)
-        return pSvxDrawPage->GetSdrPage();
+    if(m_xDrawPage)
+        return m_xDrawPage->GetSdrPage();
 
     return nullptr;
 }
@@ -2830,12 +2829,11 @@ OUString ChartView::dump()
     // Used for unit tests and in chartcontroller only, no need to drag in this when cross-compiling
     // for non-desktop
     impl_updateView();
-    uno::Reference< drawing::XShapes > xShapes( m_xDrawPage, uno::UNO_QUERY_THROW );
-    sal_Int32 n = xShapes->getCount();
+    sal_Int32 n = m_xDrawPage->getCount();
     OUStringBuffer aBuffer;
     for(sal_Int32 i = 0; i < n; ++i)
     {
-        uno::Reference< drawing::XShapes > xShape(xShapes->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference< drawing::XShapes > xShape(m_xDrawPage->getByIndex(i), uno::UNO_QUERY);
         if(xShape.is())
         {
             OUString aString = XShapeDumper::dump(mxRootShape);
@@ -2843,7 +2841,7 @@ OUString ChartView::dump()
         }
         else
         {
-            uno::Reference< drawing::XShape > xSingleShape(xShapes->getByIndex(i), uno::UNO_QUERY);
+            uno::Reference< drawing::XShape > xSingleShape(m_xDrawPage->getByIndex(i), uno::UNO_QUERY);
             if(!xSingleShape.is())
                 continue;
             OUString aString = XShapeDumper::dump(xSingleShape);
