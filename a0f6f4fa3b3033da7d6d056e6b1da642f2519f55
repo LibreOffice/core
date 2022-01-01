@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cac3b44f_7d62aa1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2022-01-01T18:00:09Z",
+      "side": 1,
+      "message": "OK Noël and happy new year !",
+      "revId": "a0f6f4fa3b3033da7d6d056e6b1da642f2519f55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

@@ -16,6 +16,24 @@
       "message": "we prefer using std::unique_lock/scoped_lock for this now",
       "revId": "0e88896ee04e5e6a2d11f55a08b1ee75c8aa109c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15bf660c_53f28161",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2022-01-01T18:00:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa942cf1_b654a2fe",
+      "revId": "0e88896ee04e5e6a2d11f55a08b1ee75c8aa109c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
