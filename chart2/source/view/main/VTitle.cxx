@@ -75,9 +75,6 @@ void VTitle::changePosition( const awt::Point& rPos )
 {
     if(!m_xShape.is())
         return;
-    uno::Reference< beans::XPropertySet > xShapeProp( m_xShape, uno::UNO_QUERY );
-    if(!xShapeProp.is())
-        return;
     try
     {
         m_nXPos = rPos.X;
@@ -88,7 +85,7 @@ void VTitle::changePosition( const awt::Point& rPos )
         ::basegfx::B2DHomMatrix aM;
         aM.rotate( basegfx::deg2rad(-m_fRotationAngleDegree) );//#i78696#->#i80521#
         aM.translate( m_nXPos, m_nYPos);
-        xShapeProp->setPropertyValue( "Transformation", uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
+        m_xShape->SvxShape::setPropertyValue( "Transformation", uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
     catch( const uno::Exception& )
     {
@@ -155,8 +152,7 @@ void VTitle::createShapes(
     else
         nTextMaxWidth = rTextMaxWidth.Height;
 
-    ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
-    m_xShape =pShapeFactory->createText( m_xTarget, rReferenceSize, rPos, aStringList, xTitleProperties,
+    m_xShape = ShapeFactory::createText( m_xTarget, rReferenceSize, rPos, aStringList, xTitleProperties,
                                     m_fRotationAngleDegree, m_aCID, nTextMaxWidth );
 }
 

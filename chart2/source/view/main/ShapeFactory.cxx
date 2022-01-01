@@ -2036,7 +2036,7 @@ rtl::Reference<SvxShapeRect>
     return xShape;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<SvxShapeText>
         ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget
                     , const OUString& rText
                     , const tNameSequence& rPropNames
@@ -2050,41 +2050,34 @@ uno::Reference< drawing::XShape >
         return nullptr;
 
     //create shape and add to page
-    uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.TextShape" ), uno::UNO_QUERY );
+    rtl::Reference<SvxShapeText> xShape = new SvxShapeText(nullptr);
+    xShape->setShapeKind(OBJ_TEXT);
     xTarget->add(xShape);
 
     //set text
-    uno::Reference< text::XTextRange > xTextRange( xShape, uno::UNO_QUERY );
-    if( xTextRange.is() )
-        xTextRange->setString( rText );
+    xShape->setString( rText );
 
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    if( xProp.is() )
+    //set properties
+    PropertyMapper::setMultiProperties( rPropNames, rPropValues, *xShape );
+
+    //set position matrix
+    //the matrix needs to be set at the end behind autogrow and such position influencing properties
+    try
     {
-        //set properties
-        PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
+        if (rATransformation.hasValue())
+            xShape->SvxShape::setPropertyValue( "Transformation", rATransformation );
+        else
+            SAL_INFO("chart2", "No rATransformation value is given to ShapeFactory::createText()");
 
-        //set position matrix
-        //the matrix needs to be set at the end behind autogrow and such position influencing properties
-        try
-        {
-            if (rATransformation.hasValue())
-                xProp->setPropertyValue( "Transformation", rATransformation );
-            else
-                SAL_INFO("chart2", "No rATransformation value is given to ShapeFactory::createText()");
-
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return xShape;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<SvxShapeText>
     ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget
                 , uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString
                 , const tNameSequence& rPropNames
@@ -2112,41 +2105,36 @@ uno::Reference< drawing::XShape >
         return nullptr;
 
     //create shape and add to page
-    uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.TextShape" ), uno::UNO_QUERY );
+    rtl::Reference<SvxShapeText> xShape = new SvxShapeText(nullptr);
+    xShape->setShapeKind(OBJ_TEXT);
     xTarget->add(xShape);
 
     //set paragraph properties
     bNotEmpty = false;
-    Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-    if( xText.is() )
+    // the first cursor is used for appending the next paragraph,
+    // after a new string has been inserted the cursor is moved at the end
+    // of the inserted string
+    // the second cursor is used for selecting the paragraph and apply the
+    // passed text properties
+    Reference< text::XTextCursor > xInsertCursor = xShape->createTextCursor();
+    Reference< text::XTextCursor > xSelectionCursor = xShape->createTextCursor();
+    if( xInsertCursor.is() && xSelectionCursor.is() )
     {
-        // the first cursor is used for appending the next paragraph,
-        // after a new string has been inserted the cursor is moved at the end
-        // of the inserted string
-        // the second cursor is used for selecting the paragraph and apply the
-        // passed text properties
-        Reference< text::XTextCursor > xInsertCursor = xText->createTextCursor();
-        Reference< text::XTextCursor > xSelectionCursor = xText->createTextCursor();
-        if( xInsertCursor.is() && xSelectionCursor.is() )
+        uno::Reference< beans::XPropertySet > xSelectionProp( xSelectionCursor, uno::UNO_QUERY );
+        if( xSelectionProp.is() )
         {
-            uno::Reference< beans::XPropertySet > xSelectionProp( xSelectionCursor, uno::UNO_QUERY );
-            if( xSelectionProp.is() )
+            for( sal_Int32 nN = 0; nN < nNumberOfParagraphs; ++nN )
             {
-                for( sal_Int32 nN = 0; nN < nNumberOfParagraphs; ++nN )
+                if( !xFormattedString[nN]->getString().isEmpty() )
                 {
-                    if( !xFormattedString[nN]->getString().isEmpty() )
-                    {
-                        xInsertCursor->gotoEnd( false );
-                        xSelectionCursor->gotoEnd( false );
-                        xText->insertString( xInsertCursor, xFormattedString[nN]->getString(), false );
-                        bNotEmpty = true;
-                        xSelectionCursor->gotoEnd( true ); // select current paragraph
-                        uno::Reference< beans::XPropertySet > xStringProperties( xFormattedString[nN], uno::UNO_QUERY );
-                        PropertyMapper::setMappedProperties( xSelectionProp, xStringProperties,
-                            PropertyMapper::getPropertyNameMapForTextShapeProperties() );
-                    }
+                    xInsertCursor->gotoEnd( false );
+                    xSelectionCursor->gotoEnd( false );
+                    xShape->insertString( xInsertCursor, xFormattedString[nN]->getString(), false );
+                    bNotEmpty = true;
+                    xSelectionCursor->gotoEnd( true ); // select current paragraph
+                    uno::Reference< beans::XPropertySet > xStringProperties( xFormattedString[nN], uno::UNO_QUERY );
+                    PropertyMapper::setMappedProperties( xSelectionProp, xStringProperties,
+                        PropertyMapper::getPropertyNameMapForTextShapeProperties() );
                 }
             }
         }
@@ -2155,30 +2143,26 @@ uno::Reference< drawing::XShape >
     if( !bNotEmpty )
         return nullptr;
 
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    if( xProp.is() )
-    {
-        //set whole text shape properties
-        PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
+    //set whole text shape properties
+    PropertyMapper::setMultiProperties( rPropNames, rPropValues, *xShape );
 
-        if( rATransformation.hasValue() )
+    if( rATransformation.hasValue() )
+    {
+        //set position matrix
+        //the matrix needs to be set at the end behind autogrow and such position influencing properties
+        try
         {
-            //set position matrix
-            //the matrix needs to be set at the end behind autogrow and such position influencing properties
-            try
-            {
-                xProp->setPropertyValue( "Transformation", rATransformation );
-            }
-            catch( const uno::Exception& )
-            {
-                TOOLS_WARN_EXCEPTION("chart2", "" );
-            }
+            xShape->SvxShape::setPropertyValue( "Transformation", rATransformation );
+        }
+        catch( const uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION("chart2", "" );
         }
     }
     return xShape;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<SvxShapeText>
         ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget,
                 const awt::Size& rSize,
                 const awt::Point& rPos,
@@ -2188,18 +2172,15 @@ uno::Reference< drawing::XShape >
                 double nRotation, const OUString& aName, sal_Int32 nTextMaxWidth )
 {
     //create shape and add to page
-    uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance(
-                "com.sun.star.drawing.TextShape" ), uno::UNO_QUERY );
+    rtl::Reference<SvxShapeText> xShape = new SvxShapeText(nullptr);
+    xShape->setShapeKind(OBJ_TEXT);
     try
     {
         xTarget->add(xShape);
 
         //set text and text properties
-        uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-        uno::Reference< text::XTextCursor > xTextCursor( xText->createTextCursor() );
-        uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-        if( !xText.is() || !xTextCursor.is() || !xShapeProp.is() || !xTextProperties.is() )
+        uno::Reference< text::XTextCursor > xTextCursor( xShape->createTextCursor() );
+        if( !xTextCursor.is() )
             return xShape;
 
         tPropertyNameValueMap aValueMap;
@@ -2230,7 +2211,7 @@ uno::Reference< drawing::XShape >
             tNameSequence aPropNames;
             tAnySequence aPropValues;
             PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
-            PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShapeProp );
+            PropertyMapper::setMultiProperties( aPropNames, aPropValues, *xShape );
         }
 
         bool bStackCharacters(false);
@@ -2254,19 +2235,18 @@ uno::Reference< drawing::XShape >
                 aLabel = ShapeFactory::getStackedString( aLabel, bStackCharacters );
 
                 xTextCursor->gotoEnd(false);
-                xText->insertString( xTextCursor, aLabel, false );
+                xShape->insertString( xTextCursor, aLabel, false );
                 xTextCursor->gotoEnd(true);
-                uno::Reference< beans::XPropertySet > xTargetProps( xShape, uno::UNO_QUERY );
                 uno::Reference< beans::XPropertySet > xSourceProps( xFormattedString[0], uno::UNO_QUERY );
 
-                PropertyMapper::setMappedProperties( xTargetProps, xSourceProps
+                PropertyMapper::setMappedProperties( *xShape, xSourceProps
                         , PropertyMapper::getPropertyNameMapForCharacterProperties() );
 
                 // adapt font size according to page size
                 awt::Size aOldRefSize;
                 if( xTextProperties->getPropertyValue( "ReferencePageSize") >>= aOldRefSize )
                 {
-                    RelativeSizeHelper::adaptFontSizes( xTargetProps, aOldRefSize, rSize );
+                    RelativeSizeHelper::adaptFontSizes( *xShape, aOldRefSize, rSize );
                 }
             }
         }
@@ -2275,7 +2255,7 @@ uno::Reference< drawing::XShape >
             for( const uno::Reference< chart2::XFormattedString >& rxFS : std::as_const(xFormattedString) )
             {
                 xTextCursor->gotoEnd(false);
-                xText->insertString( xTextCursor, rxFS->getString(), false );
+                xShape->insertString( xTextCursor, rxFS->getString(), false );
                 xTextCursor->gotoEnd(true);
             }
             awt::Size aOldRefSize;
@@ -2284,29 +2264,28 @@ uno::Reference< drawing::XShape >
 
             if( xFormattedString.hasElements() )
             {
-                uno::Reference< beans::XPropertySet > xTargetProps( xShape, uno::UNO_QUERY );
                 uno::Reference< beans::XPropertySet > xSourceProps( xFormattedString[0], uno::UNO_QUERY );
-                PropertyMapper::setMappedProperties( xTargetProps, xSourceProps, PropertyMapper::getPropertyNameMapForCharacterProperties() );
+                PropertyMapper::setMappedProperties( *xShape, xSourceProps, PropertyMapper::getPropertyNameMapForCharacterProperties() );
 
                 // adapt font size according to page size
                 if( bHasRefPageSize )
                 {
-                    RelativeSizeHelper::adaptFontSizes( xTargetProps, aOldRefSize, rSize );
+                    RelativeSizeHelper::adaptFontSizes( *xShape, aOldRefSize, rSize );
                 }
             }
         }
 
         // #i109336# Improve auto positioning in chart
         float fFontHeight = 0.0;
-        if ( xShapeProp.is() && ( xShapeProp->getPropertyValue( "CharHeight" ) >>= fFontHeight ) )
+        if ( xShape->SvxShape::getPropertyValue( "CharHeight" ) >>= fFontHeight )
         {
             fFontHeight = convertPointToMm100(fFontHeight);
             sal_Int32 nXDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * 0.18f ) );
             sal_Int32 nYDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * 0.30f ) );
-            xShapeProp->setPropertyValue( "TextLeftDistance", uno::Any( nXDistance ) );
-            xShapeProp->setPropertyValue( "TextRightDistance", uno::Any( nXDistance ) );
-            xShapeProp->setPropertyValue( "TextUpperDistance", uno::Any( nYDistance ) );
-            xShapeProp->setPropertyValue( "TextLowerDistance", uno::Any( nYDistance ) );
+            xShape->SvxShape::setPropertyValue( "TextLeftDistance", uno::Any( nXDistance ) );
+            xShape->SvxShape::setPropertyValue( "TextRightDistance", uno::Any( nXDistance ) );
+            xShape->SvxShape::setPropertyValue( "TextUpperDistance", uno::Any( nYDistance ) );
+            xShape->SvxShape::setPropertyValue( "TextLowerDistance", uno::Any( nYDistance ) );
         }
         sal_Int32 nXPos = rPos.X;
         sal_Int32 nYPos = rPos.Y;
@@ -2316,9 +2295,9 @@ uno::Reference< drawing::XShape >
         ::basegfx::B2DHomMatrix aM;
         aM.rotate( -basegfx::deg2rad(nRotation) );//#i78696#->#i80521#
         aM.translate( nXPos, nYPos );
-        xShapeProp->setPropertyValue( "Transformation", uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
+        xShape->SvxShape::setPropertyValue( "Transformation", uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
 
-        xShapeProp->setPropertyValue( "ParaAdjust", uno::Any( style::ParagraphAdjust_CENTER ) );
+        xShape->SvxShape::setPropertyValue( "ParaAdjust", uno::Any( style::ParagraphAdjust_CENTER ) );
     }
     catch( const uno::Exception& )
     {

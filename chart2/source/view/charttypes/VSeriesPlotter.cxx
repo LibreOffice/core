@@ -389,7 +389,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries const & rDataSeries
     return aNumber;
 }
 
-uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& xTarget
+rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& xTarget
                     , VDataSeries& rDataSeries
                     , sal_Int32 nPointIndex
                     , double fValue
@@ -399,7 +399,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                     , sal_Int32 nOffset
                     , sal_Int32 nTextWidth )
 {
-    uno::Reference< drawing::XShape > xTextShape;
+    rtl::Reference<SvxShapeText> xTextShape;
     Sequence<uno::Reference<XDataPointCustomLabelField>> aCustomLabels;
 
     try
@@ -631,7 +631,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 comphelper::containerToSequence<uno::Reference<XFormattedString>>(aCustomLabels));
 
             // create text shape
-            xTextShape = ShapeFactory::getOrCreateShapeFactory( m_xShapeFactory )->
+            xTextShape = ShapeFactory::
                 createText( xTarget_, aFormattedLabels, *pPropNames, *pPropValues,
                     ShapeFactory::makeTransformation( aScreenPosition2D ) );
         }
@@ -652,7 +652,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             }
 
             //create text shape
-            xTextShape = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->
+            xTextShape = ShapeFactory::
                 createText( xTarget_, aText.makeStringAndClear(), *pPropNames, *pPropValues,
                     ShapeFactory::makeTransformation( aScreenPosition2D ) );
         }
@@ -674,25 +674,21 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         // for the text shape
         if( nTextWidth != 0 && bTextWrap )
         {
-            uno::Reference< beans::XPropertySet > xProp( xTextShape, uno::UNO_QUERY );
-            if( xProp.is() )
+            // compute the height of a line of text
+            if( !bMultiLineLabel || nLineCountForSymbolsize <= 0 )
             {
-                // compute the height of a line of text
-                if( !bMultiLineLabel || nLineCountForSymbolsize <= 0 )
-                {
-                    nLineCountForSymbolsize = 1;
-                }
-                awt::Size aTextSize = xTextShape->getSize();
-                sal_Int32 aTextLineHeight =  aTextSize.Height / nLineCountForSymbolsize;
-
-                // set maximum text width
-                uno::Any aTextMaximumFrameWidth( nTextWidth );
-                xProp->setPropertyValue( "TextMaximumFrameWidth", aTextMaximumFrameWidth );
-
-                // compute the total lines of text
-                aTextSize = xTextShape->getSize();
-                nLineCountForSymbolsize = aTextSize.Height / aTextLineHeight;
+                nLineCountForSymbolsize = 1;
             }
+            awt::Size aTextSize = xTextShape->getSize();
+            sal_Int32 aTextLineHeight =  aTextSize.Height / nLineCountForSymbolsize;
+
+            // set maximum text width
+            uno::Any aTextMaximumFrameWidth( nTextWidth );
+            xTextShape->SvxShape::setPropertyValue( "TextMaximumFrameWidth", aTextMaximumFrameWidth );
+
+            // compute the total lines of text
+            aTextSize = xTextShape->getSize();
+            nLineCountForSymbolsize = aTextSize.Height / aTextLineHeight;
         }
 
         // in case text is rotated, the transformation property of the text
@@ -700,9 +696,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         if( fRotationDegrees != 0.0 )
         {
             const double fDegreesPi( -basegfx::deg2rad(fRotationDegrees) );
-            uno::Reference< beans::XPropertySet > xProp( xTextShape, uno::UNO_QUERY );
-            if( xProp.is() )
-                xProp->setPropertyValue( "Transformation", ShapeFactory::makeTransformation( aScreenPosition2D, fDegreesPi ) );
+            xTextShape->SvxShape::setPropertyValue( "Transformation", ShapeFactory::makeTransformation( aScreenPosition2D, fDegreesPi ) );
             LabelPositionHelper::correctPositionForRotation( xTextShape, eAlignment, fRotationDegrees, true /*bRotateAroundCenter*/ );
         }
 
@@ -1581,41 +1575,37 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
             tAnySequence  aValues;
             PropertyMapper::getPreparedTextShapePropertyLists( xEquationProperties, aNames, aValues );
 
-            uno::Reference< drawing::XShape > xTextShape = m_pShapeFactory->createText(
+            rtl::Reference<SvxShapeText> xTextShape = ShapeFactory::createText(
                 xEquationTarget, aFormula.makeStringAndClear(),
                 aNames, aValues, ShapeFactory::makeTransformation( aScreenPosition2D ));
 
-            OSL_ASSERT( xTextShape.is());
-            if( xTextShape.is())
+            ShapeFactory::setShapeName( xTextShape, rEquationCID );
+            awt::Size aSize( xTextShape->getSize() );
+            awt::Point aPos( RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
+                aScreenPosition2D, aSize, aRelativePosition.Anchor ) );
+            //ensure that the equation is fully placed within the page (if possible)
+            if( (aPos.X + aSize.Width) > m_aPageReferenceSize.Width )
+                aPos.X = m_aPageReferenceSize.Width - aSize.Width;
+            if( aPos.X < 0 )
             {
-                ShapeFactory::setShapeName( xTextShape, rEquationCID );
-                awt::Size aSize( xTextShape->getSize() );
-                awt::Point aPos( RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
-                    aScreenPosition2D, aSize, aRelativePosition.Anchor ) );
-                //ensure that the equation is fully placed within the page (if possible)
-                if( (aPos.X + aSize.Width) > m_aPageReferenceSize.Width )
-                    aPos.X = m_aPageReferenceSize.Width - aSize.Width;
-                if( aPos.X < 0 )
+                aPos.X = 0;
+                if ( nFormulaWidth > 0 )
                 {
-                    aPos.X = 0;
-                    if ( nFormulaWidth > 0 )
-                    {
-                        bResizeEquation = true;
-                        if ( nCountIteration < nMaxIteration-1 )
-                            xEquationTarget->remove( xTextShape );  // remove equation
-                        nFormulaWidth *= m_aPageReferenceSize.Width / static_cast< double >(aSize.Width);
-                        nFormulaWidth -= nCountIteration;
-                        if ( nFormulaWidth < 0 )
-                            nFormulaWidth = 0;
-                    }
+                    bResizeEquation = true;
+                    if ( nCountIteration < nMaxIteration-1 )
+                        xEquationTarget->remove( xTextShape );  // remove equation
+                    nFormulaWidth *= m_aPageReferenceSize.Width / static_cast< double >(aSize.Width);
+                    nFormulaWidth -= nCountIteration;
+                    if ( nFormulaWidth < 0 )
+                        nFormulaWidth = 0;
                 }
-                if( (aPos.Y + aSize.Height) > m_aPageReferenceSize.Height )
-                    aPos.Y = m_aPageReferenceSize.Height - aSize.Height;
-                if( aPos.Y < 0 )
-                    aPos.Y = 0;
-                if ( !bResizeEquation || nCountIteration == nMaxIteration-1 )
-                    xTextShape->setPosition(aPos);  // if equation was not removed
             }
+            if( (aPos.Y + aSize.Height) > m_aPageReferenceSize.Height )
+                aPos.Y = m_aPageReferenceSize.Height - aSize.Height;
+            if( aPos.Y < 0 )
+                aPos.Y = 0;
+            if ( !bResizeEquation || nCountIteration == nMaxIteration-1 )
+                xTextShape->setPosition(aPos);  // if equation was not removed
         }
     }
 }

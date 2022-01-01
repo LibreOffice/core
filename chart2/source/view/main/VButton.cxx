@@ -93,8 +93,6 @@ uno::Reference<drawing::XShape> VButton::createTriangle(awt::Size aSize)
 
 void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
 {
-    ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
-
     tNameSequence aPropNames;
     tAnySequence aPropValues;
 
@@ -125,8 +123,8 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
 
     PropertyMapper::getMultiPropertyListsFromValueMap(aPropNames, aPropValues, aTextValueMap);
 
-    uno::Reference<drawing::XShape> xEntry
-        = pShapeFactory->createText(xContainer, m_sLabel, aPropNames, aPropValues, uno::Any());
+    rtl::Reference<SvxShapeText> xEntry
+        = ShapeFactory::createText(xContainer, m_sLabel, aPropNames, aPropValues, uno::Any());
 
     if (xEntry.is())
     {

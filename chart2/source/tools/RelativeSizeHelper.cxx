@@ -21,7 +21,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/diagnose_ex.h>
-
+#include <svx/unoshape.hxx>
 #include <vector>
 #include <algorithm>
 
@@ -49,6 +49,37 @@ double RelativeSizeHelper::calculate(
         static_cast< double >( rNewReferenceSize.Width )  / static_cast< double >( rOldReferenceSize.Width ),
         static_cast< double >( rNewReferenceSize.Height ) / static_cast< double >( rOldReferenceSize.Height ))
         * fValue;
+}
+
+void RelativeSizeHelper::adaptFontSizes(
+    SvxShapeText& xTargetProperties,
+    const awt::Size & rOldReferenceSize,
+    const awt::Size & rNewReferenceSize )
+{
+    float fFontHeight = 0;
+
+    vector< OUString > aProperties;
+    aProperties.emplace_back("CharHeight" );
+    aProperties.emplace_back("CharHeightAsian" );
+    aProperties.emplace_back("CharHeightComplex" );
+
+    for (auto const& property : aProperties)
+    {
+        try
+        {
+            if( xTargetProperties.SvxShape::getPropertyValue(property) >>= fFontHeight )
+            {
+                xTargetProperties.SvxShape::setPropertyValue(
+                    property,
+                    Any( static_cast< float >(
+                                 calculate( fFontHeight, rOldReferenceSize, rNewReferenceSize ))));
+            }
+        }
+        catch( const Exception & )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+    }
 }
 
 void RelativeSizeHelper::adaptFontSizes(
