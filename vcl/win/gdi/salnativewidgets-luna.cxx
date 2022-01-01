@@ -393,6 +393,42 @@ static tools::Rectangle GetMenuPopupMarkRegion(const ImplControlValue& rValue)
     return aRet;
 }
 
+static bool implDrawNativeMenuMark(HDC hDC, HTHEME hTheme, RECT rc, ControlPart nPart,
+                                   ControlState nState, const ImplControlValue& aValue,
+                                   OUString const& aCaption)
+{
+    if (aValue.getType() == ControlType::MenuPopup)
+    {
+        tools::Rectangle aRectangle = GetMenuPopupMarkRegion(aValue);
+        rc.top = aRectangle.Top();
+        rc.left = aRectangle.Left();
+        rc.bottom = aRectangle.Bottom();
+        rc.right = aRectangle.Right();
+    }
+    int iState = (nState & ControlState::ENABLED) ? MCB_NORMAL : MCB_DISABLED;
+    ImplDrawTheme(hTheme, hDC, MENU_POPUPCHECKBACKGROUND, iState, rc, aCaption);
+    if (nPart == ControlPart::MenuItemCheckMark)
+        iState = (nState & ControlState::ENABLED) ? MC_CHECKMARKNORMAL : MC_CHECKMARKDISABLED;
+    else
+        iState = (nState & ControlState::ENABLED) ? MC_BULLETNORMAL : MC_BULLETDISABLED;
+    // tdf#133697: Get true size of mark, to avoid stretching
+    if (auto oSize = ImplGetThemeSize(hTheme, hDC, MENU_POPUPCHECK, iState, &rc))
+    {
+        // center the mark inside the passed rectangle
+        if (const auto dx = (rc.right - rc.left - oSize->Width() + 1) / 2; dx > 0)
+        {
+            rc.left += dx;
+            rc.right = rc.left + oSize->Width();
+        }
+        if (const auto dy = (rc.bottom - rc.top - oSize->Height() + 1) / 2; dy > 0)
+        {
+            rc.top += dy;
+            rc.bottom = rc.top + oSize->Height();
+        }
+    }
+    return ImplDrawTheme(hTheme, hDC, MENU_POPUPCHECK, iState, rc, aCaption);
+}
+
 static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlType nType,
                             ControlPart nPart,
@@ -978,39 +1014,8 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             }
             else if( nPart == ControlPart::MenuItemCheckMark || nPart == ControlPart::MenuItemRadioMark )
             {
-                if( nState & ControlState::PRESSED )
-                {
-                    if( aValue.getType() == ControlType::MenuPopup )
-                    {
-                        tools::Rectangle aRectangle = GetMenuPopupMarkRegion(aValue);
-                        rc.top = aRectangle.Top();
-                        rc.left = aRectangle.Left();
-                        rc.bottom = aRectangle.Bottom();
-                        rc.right = aRectangle.Right();
-                    }
-                    iState = (nState & ControlState::ENABLED) ? MCB_NORMAL : MCB_DISABLED;
-                    ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECKBACKGROUND, iState, rc, aCaption );
-                    if( nPart == ControlPart::MenuItemCheckMark )
-                        iState = (nState & ControlState::ENABLED) ? MC_CHECKMARKNORMAL : MC_CHECKMARKDISABLED;
-                    else
-                        iState = (nState & ControlState::ENABLED) ? MC_BULLETNORMAL : MC_BULLETDISABLED;
-                    // tdf#133697: Get true size of mark, to avoid stretching
-                    if (auto oSize = ImplGetThemeSize(hTheme, hDC, MENU_POPUPCHECK, iState, &rc))
-                    {
-                        // center the mark inside the passed rectangle
-                        if (const auto dx = (rc.right - rc.left - oSize->Width() + 1) / 2; dx > 0)
-                        {
-                            rc.left += dx;
-                            rc.right = rc.left + oSize->Width();
-                        }
-                        if (const auto dy = (rc.bottom - rc.top - oSize->Height() + 1) / 2; dy > 0)
-                        {
-                            rc.top += dy;
-                            rc.bottom = rc.top + oSize->Height();
-                        }
-                    }
-                    return ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECK, iState, rc, aCaption );
-                }
+                if (nState & ControlState::PRESSED)
+                    return implDrawNativeMenuMark(hDC, hTheme, rc, nPart, nState, aValue, aCaption);
                 else
                     return true; // unchecked: do nothing
             }
