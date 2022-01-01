@@ -20,6 +20,7 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 struct DRAWINGLAYER_DLLPUBLIC XShapeDumper
 {
     XShapeDumper() = delete;
+    static OUString dump(SvxShapeGroup& xPageShapes, bool bDumpInteropProperties=false);
     static OUString dump(const css::uno::Reference<css::drawing::XShapes>& xPageShapes, bool bDumpInteropProperties=false);
     static OUString dump(const css::uno::Reference<css::drawing::XShape>& xPageShapes, bool bDumpInteropProperties=false);
 };

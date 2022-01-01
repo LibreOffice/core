@@ -34,6 +34,8 @@
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XUpdatable2.hpp>
+#include <rtl/ref.hxx>
+#include <svx/unopage.hxx>
 
 #include <vector>
 #include <memory>
@@ -213,7 +215,7 @@ private: //member
 
     css::uno::Reference< css::lang::XMultiServiceFactory>
             m_xShapeFactory;
-    css::uno::Reference< css::drawing::XDrawPage>
+    rtl::Reference<SvxDrawPage>
             m_xDrawPage;
     css::uno::Reference< css::drawing::XShapes >
             mxRootShape;

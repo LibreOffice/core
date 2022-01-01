@@ -117,13 +117,15 @@ ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
     return comphelper::getFromUnoTunnel<ExplicitValueProvider>(m_xChartView);
 }
 
-uno::Reference< drawing::XDrawPage > Chart2ModelContact::getDrawPage() const
+rtl::Reference<SvxDrawPage> Chart2ModelContact::getDrawPage() const
 {
-    uno::Reference< drawing::XDrawPage > xResult;
+    rtl::Reference<SvxDrawPage> xResult;
     ExplicitValueProvider* pProvider( getExplicitValueProvider() );
     if( pProvider )
     {
-        xResult.set( pProvider->getDrawModelWrapper()->getMainDrawPage() );
+        auto xTmp = pProvider->getDrawModelWrapper()->getMainDrawPage();
+        xResult = dynamic_cast<SvxDrawPage*>(xTmp.get());
+        assert((xResult && xTmp) || (!xResult && !xTmp));
     }
     return xResult;
 }
