@@ -148,11 +148,11 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD(const SdrMarkL
                 sal_uInt16 nObjId = pObj->GetObjIdentifier();
                 if (nInv == SdrInventor::Default)
                 {
-                    if (nObjId == OBJ_GRUP)
+                    if (nObjId == OBJ_GROUP)
                     {
                         nObjId = GetObjectTypeFromGroup(pObj);
                         if (nObjId == 0)
-                            nObjId = OBJ_GRUP;
+                            nObjId = OBJ_GROUP;
                     }
                     eContext = GetContextForObjectId_SD(nObjId, eViewType);
                 }
@@ -222,7 +222,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC(const sal_uInt1
         case OBJ_CARC:
         case OBJ_CCUT:
         case OBJ_CUSTOMSHAPE:
-        case OBJ_GRUP:
+        case OBJ_GROUP:
             return EnumContext::Context::Draw;
 
         case OBJ_PLIN:
@@ -262,7 +262,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD(const sal_uInt1
         case OBJ_CARC:
         case OBJ_CCUT:
         case OBJ_CUSTOMSHAPE:
-        case OBJ_GRUP:
+        case OBJ_GROUP:
             return EnumContext::Context::Draw;
 
         case OBJ_EDGE:
@@ -341,7 +341,7 @@ sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup(const SdrObject* pObj)
             SdrObject* pSubObj = pObjList->GetObj(0);
             sal_uInt16 nResultType = pSubObj->GetObjIdentifier();
 
-            if (nResultType == OBJ_GRUP)
+            if (nResultType == OBJ_GROUP)
                 nResultType = GetObjectTypeFromGroup(pSubObj);
 
             if (IsShapeType(nResultType))
@@ -355,7 +355,7 @@ sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup(const SdrObject* pObj)
                 pSubObj = pObjList->GetObj(nIndex);
                 sal_uInt16 nType(pSubObj->GetObjIdentifier());
 
-                if (nType == OBJ_GRUP)
+                if (nType == OBJ_GROUP)
                     nType = GetObjectTypeFromGroup(pSubObj);
 
                 if (IsShapeType(nType))
@@ -392,7 +392,7 @@ sal_uInt16 SelectionAnalyzer::GetObjectTypeFromMark(const SdrMarkList& rMarkList
     SdrObject* pObj = pMark->GetMarkedSdrObj();
     sal_uInt16 nResultType = pObj->GetObjIdentifier();
 
-    if (nResultType == OBJ_GRUP)
+    if (nResultType == OBJ_GROUP)
         nResultType = GetObjectTypeFromGroup(pObj);
 
     if (IsShapeType(nResultType))
@@ -407,7 +407,7 @@ sal_uInt16 SelectionAnalyzer::GetObjectTypeFromMark(const SdrMarkList& rMarkList
         pObj = pMark->GetMarkedSdrObj();
         sal_uInt16 nType = pObj->GetObjIdentifier();
 
-        if (nType == OBJ_GRUP)
+        if (nType == OBJ_GROUP)
             nType = GetObjectTypeFromGroup(pObj);
 
         if (IsShapeType(nType))

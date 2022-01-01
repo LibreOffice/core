@@ -151,7 +151,7 @@ void SdrObjGroup::SetBoundRectDirty()
 
 SdrObjKind SdrObjGroup::GetObjIdentifier() const
 {
-    return OBJ_GRUP;
+    return OBJ_GROUP;
 }
 
 SdrLayerID SdrObjGroup::GetLayer() const

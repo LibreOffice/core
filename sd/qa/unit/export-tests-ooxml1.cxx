@@ -1152,7 +1152,7 @@ void SdOOXMLExportTest1::testTdf111884()
     CPPUNIT_ASSERT_MESSAGE("no shape", pShape != nullptr);
 
     // must be a group shape
-    CPPUNIT_ASSERT_EQUAL(OBJ_GRUP, pShape->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(OBJ_GROUP, pShape->GetObjIdentifier());
 
     xDocShRef->DoClose();
 }

@@ -93,7 +93,7 @@ uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
     // Create a new root shape and set it to the bottom of the page.  The root
     // shape is identified by having the name com.sun.star.chart2.shapes.
     rtl::Reference<SvxShapeGroup> xShapeGroup = new SvxShapeGroup(nullptr, nullptr);
-    xShapeGroup->setShapeKind(OBJ_GRUP);
+    xShapeGroup->setShapeKind(OBJ_GROUP);
     uno::Reference<drawing::XShape> xShape(static_cast<cppu::OWeakObject*>(xShapeGroup.get()), uno::UNO_QUERY);
     uno::Reference<drawing::XShapes2> xShapes2(xDrawPage, uno::UNO_QUERY_THROW);
     xShapes2->addBottom(xShape);
@@ -1712,7 +1712,7 @@ rtl::Reference< SvxShapeGroup >
     {
         //create and add to target
         rtl::Reference<SvxShapeGroup> xShapeGroup = new SvxShapeGroup(nullptr, nullptr);
-        xShapeGroup->setShapeKind(OBJ_GRUP);
+        xShapeGroup->setShapeKind(OBJ_GROUP);
         uno::Reference< drawing::XShape > xShape(static_cast<cppu::OWeakObject*>(xShapeGroup.get()), uno::UNO_QUERY_THROW);
         xTarget->add(xShape);
 

@@ -642,7 +642,7 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 n
         {
             switch( nType )
             {
-                case OBJ_GRUP:
+                case OBJ_GROUP:
                     pRet = new SvxShapeGroup( pObj, mpPage );
                     break;
                 case OBJ_LINE:

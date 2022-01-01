@@ -177,7 +177,7 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
         SdrInventor nInv = pObj->GetObjInventor();
         sal_uInt16  nId  = pObj->GetObjIdentifier();
         // 1 selected group object
-        if( nInv == SdrInventor::Default && nId == OBJ_GRUP )
+        if( nInv == SdrInventor::Default && nId == OBJ_GROUP )
             nValue = 3;
         else if( nInv == SdrInventor::Default && nId == OBJ_GRAF ) // Animated GIF ?
         {

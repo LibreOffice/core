@@ -815,7 +815,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
             return aTypeSequence;
         }
     // group shape
-    case OBJ_GRUP:
+    case OBJ_GROUP:
         {
             static uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
@@ -1062,7 +1062,7 @@ static bool svx_needLogicRectHack( SdrObject const * pObj )
     {
         switch(pObj->GetObjIdentifier())
         {
-        case OBJ_GRUP:
+        case OBJ_GROUP:
         case OBJ_LINE:
         case OBJ_POLY:
         case OBJ_PLIN:
@@ -3213,7 +3213,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
         switch(nIdent)
         {
-        case OBJ_GRUP:
+        case OBJ_GROUP:
             {
                 static const uno::Sequence<OUString> aSvxShape_GroupServices
                         = { sUNO_service_drawing_GroupShape,

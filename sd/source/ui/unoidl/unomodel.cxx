@@ -1739,7 +1739,7 @@ vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( const Sd
 
         if ( nInventor == SdrInventor::Default )
         {
-            if ( nIdentifier == OBJ_GRUP )
+            if ( nIdentifier == OBJ_GROUP )
                 eElement = vcl::PDFWriter::Section;
             else if ( nIdentifier == OBJ_TITLETEXT )
                 eElement = vcl::PDFWriter::Heading;

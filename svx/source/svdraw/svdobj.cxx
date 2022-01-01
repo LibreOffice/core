@@ -3254,7 +3254,7 @@ SdrObject* SdrObjFactory::MakeNewObject(
             }
             break;
             case OBJ_NONE       : pObj=new SdrObject(rSdrModel);                   break;
-            case OBJ_GRUP       : pObj=new SdrObjGroup(rSdrModel);                 break;
+            case OBJ_GROUP       : pObj=new SdrObjGroup(rSdrModel);                 break;
             case OBJ_POLY       : pObj=new SdrPathObj(rSdrModel, OBJ_POLY       ); break;
             case OBJ_PLIN       : pObj=new SdrPathObj(rSdrModel, OBJ_PLIN       ); break;
             case OBJ_PATHLINE   : pObj=new SdrPathObj(rSdrModel, OBJ_PATHLINE   ); break;

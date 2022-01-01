@@ -737,7 +737,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                     aPopupId = "draw";
                                     break;
 
-                                case OBJ_GRUP:
+                                case OBJ_GROUP:
                                     aPopupId = "group";
                                     break;
 
