@@ -1256,12 +1256,14 @@ public:
 
     void testDrawingText()
     {
+#ifndef _WIN32
         vcl::test::OutputDeviceTestText aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupTextBitmap();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkTextLocation(aBitmap);
         exportImage("17-01_test_text_Drawing.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+#endif
     }
 
     void testEvenOddRuleInIntersectionRectangles()
