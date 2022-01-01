@@ -181,12 +181,12 @@ public:
                     , const css::drawing::PolyPolygonShape3D& rPoints
                     , const VLineProperties& rLineProperties );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapeCircle>
         createCircle2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::drawing::Position3D& rPos
                     , const css::drawing::Direction3D& rSize );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapeCircle>
         createCircle( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const css::awt::Size& rSize
                     , const css::awt::Point& rPosition );

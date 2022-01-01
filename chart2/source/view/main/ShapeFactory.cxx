@@ -1776,7 +1776,7 @@ rtl::Reference<Svx3DSceneObject>
     return nullptr;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<SvxShapeCircle>
         ShapeFactory::createCircle2D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::Position3D& rPosition
                     , const drawing::Direction3D& rSize )
@@ -1785,9 +1785,8 @@ uno::Reference< drawing::XShape >
         return nullptr;
 
     //create shape
-    uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.EllipseShape" ), uno::UNO_QUERY );
+    rtl::Reference<SvxShapeCircle> xShape = new SvxShapeCircle(nullptr);
+    xShape->setShapeKind(OBJ_CIRC);
     xTarget->add(xShape);
 
     try
@@ -1805,30 +1804,24 @@ uno::Reference< drawing::XShape >
     }
 
     //set properties
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
+    try
     {
-        try
-        {
-            xProp->setPropertyValue( UNO_NAME_CIRCKIND, uno::Any( drawing::CircleKind_FULL ) );
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
+        xShape->SvxShape::setPropertyValue( UNO_NAME_CIRCKIND, uno::Any( drawing::CircleKind_FULL ) );
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return xShape;
 }
 
-uno::Reference< drawing::XShape >
+rtl::Reference<SvxShapeCircle>
     ShapeFactory::createCircle( const uno::Reference< drawing::XShapes >& xTarget
                     , const awt::Size& rSize
                     , const awt::Point& rPosition )
 {
-    uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.EllipseShape" ), uno::UNO_QUERY );
+    rtl::Reference<SvxShapeCircle> xShape = new SvxShapeCircle(nullptr);
+    xShape->setShapeKind(OBJ_CIRC);
     xTarget->add(xShape);
     xShape->setSize( rSize );
     xShape->setPosition( rPosition );

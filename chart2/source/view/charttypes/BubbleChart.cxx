@@ -271,7 +271,7 @@ void BubbleChart::createShapes()
 
                         //create data point
                         drawing::Direction3D aSymbolSize = transformToScreenBubbleSize( fBubbleSize );
-                        uno::Reference<drawing::XShape> xShape = m_pShapeFactory->createCircle2D( xPointGroupShape_Shapes
+                        rtl::Reference<SvxShapeCircle> xShape = ShapeFactory::createCircle2D( xPointGroupShape_Shapes
                                 , aScenePosition, aSymbolSize );
 
                         setMappedProperties( xShape
@@ -283,8 +283,7 @@ void BubbleChart::createShapes()
                             double nPropVal = pSeries->getValueByProperty(nIndex, "FillColor");
                             if(!std::isnan(nPropVal))
                             {
-                                uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
-                                xProps->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>(nPropVal)));
+                                xShape->SvxShape::setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>(nPropVal)));
                             }
                         }
                         if(bHasBorderColorMapping)
@@ -292,8 +291,7 @@ void BubbleChart::createShapes()
                             double nPropVal = pSeries->getValueByProperty(nIndex, "LineColor");
                             if(!std::isnan(nPropVal))
                             {
-                                uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
-                                xProps->setPropertyValue("LineColor", uno::Any(static_cast<sal_Int32>(nPropVal)));
+                                xShape->SvxShape::setPropertyValue("LineColor", uno::Any(static_cast<sal_Int32>(nPropVal)));
                             }
                         }
 

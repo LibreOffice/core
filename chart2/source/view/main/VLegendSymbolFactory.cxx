@@ -104,7 +104,6 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
     if( ! (rSymbolContainer.is() && xShapeFactory.is()))
         return xResult;
 
-    ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
     xResult = ShapeFactory::createGroup2D( rSymbolContainer );
     if( ! xResult)
         return xResult;
@@ -163,13 +162,10 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
         else if( eStyle == LegendSymbolStyle::Circle )
         {
             sal_Int32 nSize = std::min( rEntryKeyAspectRatio.Width, rEntryKeyAspectRatio.Height );
-            Reference< drawing::XShape > xShape =
-                pShapeFactory->createCircle( xResultGroup, awt::Size( nSize, nSize ),
+            rtl::Reference<SvxShapeCircle> xShape =
+                ShapeFactory::createCircle( xResultGroup, awt::Size( nSize, nSize ),
                         awt::Point( rEntryKeyAspectRatio.Width/2-nSize/2, rEntryKeyAspectRatio.Height/2-nSize/2 ));
-            if( xShape.is() )
-            {
-                lcl_setPropertiesToShape( xLegendEntryProperties, xShape, ePropertyType, awt::Size(0,0) ); // PropertyType::FilledSeries );
-            }
+            lcl_setPropertiesToShape( xLegendEntryProperties, xShape, ePropertyType, awt::Size(0,0) ); // PropertyType::FilledSeries );
         }
         else // eStyle == LegendSymbolStyle::Box
         {
