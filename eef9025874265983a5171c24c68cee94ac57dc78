@@ -16,6 +16,24 @@
       "message": "Next time say your remarks before pushing ;-)",
       "revId": "eef9025874265983a5171c24c68cee94ac57dc78",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f09b191_2d0e50ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-01T07:40:52Z",
+      "side": 1,
+      "message": ":-) I try whenever I see them before they are pushed - please excuse me :-)\n\nHappy new year! 🎄",
+      "parentUuid": "9e9a49a5_9a9d9b57",
+      "revId": "eef9025874265983a5171c24c68cee94ac57dc78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
