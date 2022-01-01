@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 namespace com::sun::star::beans { class XPropertySet; }
+class SvxShape;
 
 namespace chart
 {
@@ -46,6 +47,12 @@ class PropertyMapper
 public:
     static void setMappedProperties(
           const css::uno::Reference< css::beans::XPropertySet >& xTarget
+        , const css::uno::Reference< css::beans::XPropertySet >& xSource
+        , const tPropertyNameMap& rMap
+        , tPropertyNameValueMap const * pOverwriteMap=nullptr );
+
+    static void setMappedProperties(
+          SvxShape& xTarget
         , const css::uno::Reference< css::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap
         , tPropertyNameValueMap const * pOverwriteMap=nullptr );
@@ -93,6 +100,11 @@ public:
                   const tNameSequence& rNames
                 , const tAnySequence&  rValues
                 , const css::uno::Reference< css::beans::XPropertySet >& xTarget );
+
+    static void setMultiProperties(
+                  const tNameSequence& rNames
+                , const tAnySequence&  rValues
+                , SvxShape& xTarget );
 
     static const tPropertyNameMap& getPropertyNameMapForCharacterProperties();
     static const tPropertyNameMap& getPropertyNameMapForParagraphProperties();

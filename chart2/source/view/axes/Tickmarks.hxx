@@ -21,7 +21,8 @@
 #include <chartview/ExplicitScaleValues.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-
+#include <rtl/ref.hxx>
+#include <svx/unoshape.hxx>
 #include <vector>
 
 namespace chart { struct AxisProperties; }
@@ -35,7 +36,7 @@ struct TickInfo
 {
     double      fScaledTickValue;
     css::uno::Reference<css::chart2::XScaling> xInverseScaling;
-    css::uno::Reference<css::drawing::XShape> xTextShape;
+    rtl::Reference<SvxShapeText> xTextShape;
     OUString aText;//used only for complex categories so far
     ::basegfx::B2DVector  aTickScreenPosition;
     sal_Int32 nFactorForLimitedTextWidth;//categories in higher levels of complex categories can have more place than a single simple category

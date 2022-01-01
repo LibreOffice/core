@@ -21,6 +21,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <sal/types.h>
 
 namespace com::sun::star::awt { struct Point; }
@@ -28,6 +29,7 @@ namespace com::sun::star::chart2 { class XTitle; }
 namespace com::sun::star::drawing { class XShape; }
 namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
+class SvxShapeText;
 
 namespace chart
 {
@@ -58,7 +60,7 @@ private:
     css::uno::Reference< css::drawing::XShapes >            m_xTarget;
     css::uno::Reference< css::lang::XMultiServiceFactory>   m_xShapeFactory;
     css::uno::Reference< css::chart2::XTitle >              m_xTitle;
-    css::uno::Reference< css::drawing::XShape >             m_xShape;
+    rtl::Reference<SvxShapeText>                            m_xShape;
     OUString   m_aCID;
 
     double      m_fRotationAngleDegree;

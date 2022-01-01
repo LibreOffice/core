@@ -191,7 +191,7 @@ public:
                     , const css::awt::Size& rSize
                     , const css::awt::Point& rPosition );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapeText>
         createText( const css::uno::Reference< css::drawing::XShapes >& xTarget2D
                     , const OUString& rText
                     , const tNameSequence& rPropNames
@@ -199,14 +199,14 @@ public:
                     , const css::uno::Any& rATransformation
                      );
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapeText>
         createText(const css::uno::Reference< css::drawing::XShapes >& xTarget
             , css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString
             , const tNameSequence& rPropNames
             , const tAnySequence& rPropValues
             , const css::uno::Any& rATransformation);
 
-    css::uno::Reference< css::drawing::XShape >
+    static rtl::Reference<SvxShapeText>
         createText( const css::uno::Reference< css::drawing::XShapes >& xTarget2D,
                 const css::awt::Size& rSize,
                 const css::awt::Point& rPosition,

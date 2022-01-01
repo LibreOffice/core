@@ -28,6 +28,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
+#include <svx/unoshape.hxx>
 
 namespace chart
 {
@@ -44,6 +45,31 @@ void lcl_overwriteOrAppendValues(
 }
 
 } // anonymous namespace
+
+void PropertyMapper::setMappedProperties(
+          SvxShape& xTarget
+        , const uno::Reference< beans::XPropertySet >& xSource
+        , const tPropertyNameMap& rMap
+        , tPropertyNameValueMap const * pOverwriteMap )
+{
+    if( !xSource.is() )
+        return;
+
+    tNameSequence aNames;
+    tAnySequence  aValues;
+    getMultiPropertyLists(aNames, aValues, xSource, rMap );
+    if(pOverwriteMap && (aNames.getLength() == aValues.getLength()))
+    {
+        tPropertyNameValueMap aNewMap;
+        for( sal_Int32 nI=0; nI<aNames.getLength(); ++nI )
+            aNewMap[ aNames[nI] ] = aValues[nI];
+        lcl_overwriteOrAppendValues( aNewMap, *pOverwriteMap );
+        aNames = comphelper::mapKeysToSequence( aNewMap );
+        aValues = comphelper::mapValuesToSequence( aNewMap );
+    }
+
+    PropertyMapper::setMultiProperties( aNames, aValues, xTarget );
+}
 
 void PropertyMapper::setMappedProperties(
           const uno::Reference< beans::XPropertySet >& xTarget
@@ -394,6 +420,21 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPropert
         {"LineWidth",                    "BorderWidth"},
         {"LineCap",                      "LineCap"}};
     return s_aShapePropertyMapForFilledSeriesProperties;
+}
+
+void PropertyMapper::setMultiProperties(
+                  const tNameSequence& rNames
+                , const tAnySequence&  rValues
+                , SvxShape& xTarget )
+{
+    try
+    {
+        xTarget.setPropertyValues( rNames, rValues );
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
+    }
 }
 
 void PropertyMapper::setMultiProperties(
