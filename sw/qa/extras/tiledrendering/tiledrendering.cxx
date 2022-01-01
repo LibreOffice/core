@@ -1968,7 +1968,7 @@ void SwTiledRenderingTest::testCursorPosition()
     SwXTextDocument* pXTextDocument = createDoc();
     ViewCallback aView1;
 
-    // Crete a second view, so the first view gets a collaborative cursor.
+    // Create a second view, so the first view gets a collaborative cursor.
     SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering({});
     ViewCallback aView2;
