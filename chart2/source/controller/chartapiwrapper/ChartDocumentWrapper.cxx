@@ -976,7 +976,7 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
 {
     // get additional non-chart shapes for XML export
     uno::Reference< drawing::XShapes > xFoundShapes;
-    uno::Reference< drawing::XDrawPage > xDrawPage( impl_getDrawPage() );
+    rtl::Reference<SvxDrawPage> xDrawPage( impl_getDrawPage() );
 
     if( !xDrawPage.is() )
         return xFoundShapes;
@@ -1034,7 +1034,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL ChartDocumentWrapper::getDrawPage(
     return impl_getDrawPage();
 }
 
-uno::Reference< drawing::XDrawPage > ChartDocumentWrapper::impl_getDrawPage() const
+rtl::Reference<SvxDrawPage> ChartDocumentWrapper::impl_getDrawPage() const
 {
     return m_spChart2ModelContact->getDrawPage();
 }
