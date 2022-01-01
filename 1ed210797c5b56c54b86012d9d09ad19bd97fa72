@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92bb6a7b_dee54454",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-01-01T15:25:15Z",
+      "side": 1,
+      "message": "not sure if needed/wanted to release branches",
+      "revId": "1ed210797c5b56c54b86012d9d09ad19bd97fa72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
