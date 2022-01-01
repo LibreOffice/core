@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2beb53fe_0e228242",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-01T14:50:18Z",
+      "side": 1,
+      "message": "I have tested the first patchset, and the *new.cxx sequence takes about 2.5 times less than previous .cxx (with the new patch it\u0027s around 11 s, without it\u0027s around 25 s).\n\nWill soon test the second patchset. :-)",
+      "revId": "c8392b3eed241e247520a24b16c0122c2811c2de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
