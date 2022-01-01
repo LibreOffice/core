@@ -123,7 +123,7 @@ uno::Reference< lang::XMultiServiceFactory > DrawModelWrapper::getShapeFactory()
     return xShapeFactory;
 }
 
-uno::Reference< drawing::XDrawPage > const & DrawModelWrapper::getMainDrawPage()
+const rtl::Reference<SvxDrawPage> & DrawModelWrapper::getMainDrawPage()
 {
     if (m_xMainDrawPage.is())
         return m_xMainDrawPage;
@@ -138,12 +138,16 @@ uno::Reference< drawing::XDrawPage > const & DrawModelWrapper::getMainDrawPage()
     {
         // Take the first page in case of multiple pages.
         uno::Any aPage = xDrawPages->getByIndex(0);
-        aPage >>= m_xMainDrawPage;
+        uno::Reference<drawing::XDrawPage> xTmp;
+        aPage >>= xTmp;
+        m_xMainDrawPage = dynamic_cast<SvxDrawPage*>(xTmp.get());
+        assert(m_xMainDrawPage);
     }
 
     if (!m_xMainDrawPage.is())
     {
-        m_xMainDrawPage = xDrawPages->insertNewByIndex(0);
+        m_xMainDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPages->insertNewByIndex(0).get());
+        assert(m_xMainDrawPage);
     }
 
     //ensure that additional shapes are in front of the chart objects so create the chart root before
@@ -152,7 +156,8 @@ uno::Reference< drawing::XDrawPage > const & DrawModelWrapper::getMainDrawPage()
     // ShapeFactory::getOrCreateShapeFactory(getShapeFactory())->getOrCreateChartRootShape( m_xMainDrawPage );
     return m_xMainDrawPage;
 }
-uno::Reference< drawing::XDrawPage > const & DrawModelWrapper::getHiddenDrawPage()
+
+const rtl::Reference<SvxDrawPage> & DrawModelWrapper::getHiddenDrawPage()
 {
     if( !m_xHiddenDrawPage.is() )
     {
@@ -163,14 +168,21 @@ uno::Reference< drawing::XDrawPage > const & DrawModelWrapper::getHiddenDrawPage
             if( xDrawPages->getCount()>1 )
             {
                 uno::Any aPage = xDrawPages->getByIndex( 1 ) ;
-                aPage >>= m_xHiddenDrawPage;
+                uno::Reference<drawing::XDrawPage> xTmp;
+                aPage >>= xTmp;
+                m_xHiddenDrawPage = dynamic_cast<SvxDrawPage*>(xTmp.get());
+                assert(m_xHiddenDrawPage);
             }
 
             if(!m_xHiddenDrawPage.is())
             {
                 if( xDrawPages->getCount()==0 )
-                    m_xMainDrawPage = xDrawPages->insertNewByIndex( 0 );
-                m_xHiddenDrawPage = xDrawPages->insertNewByIndex( 1 );
+                {
+                    m_xMainDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPages->insertNewByIndex( 0 ).get());
+                    assert(m_xMainDrawPage);
+                }
+                m_xHiddenDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPages->insertNewByIndex( 1 ).get());
+                assert(m_xHiddenDrawPage);
             }
         }
     }
@@ -192,8 +204,7 @@ void DrawModelWrapper::clearMainDrawPage()
     }
 }
 
-uno::Reference< drawing::XShapes > DrawModelWrapper::getChartRootShape(
-    const uno::Reference< drawing::XDrawPage>& xDrawPage )
+uno::Reference< drawing::XShapes > DrawModelWrapper::getChartRootShape( const rtl::Reference<SvxDrawPage>& xDrawPage )
 {
     return ShapeFactory::getChartRootShape( xDrawPage );
 }

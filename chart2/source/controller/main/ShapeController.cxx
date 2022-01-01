@@ -561,14 +561,13 @@ SdrObject* ShapeController::getFirstAdditionalShape()
         if ( pDrawModelWrapper )
         {
             Reference< drawing::XShape > xFirstShape;
-            Reference< drawing::XDrawPage > xDrawPage( pDrawModelWrapper->getMainDrawPage() );
-            Reference< drawing::XShapes > xDrawPageShapes( xDrawPage, uno::UNO_QUERY_THROW );
+            rtl::Reference<SvxDrawPage> xDrawPage( pDrawModelWrapper->getMainDrawPage() );
             Reference< drawing::XShapes > xChartRoot( DrawModelWrapper::getChartRootShape( xDrawPage ) );
-            sal_Int32 nCount = xDrawPageShapes->getCount();
+            sal_Int32 nCount = xDrawPage->getCount();
             for ( sal_Int32 i = 0; i < nCount; ++i )
             {
                 Reference< drawing::XShape > xShape;
-                if ( xDrawPageShapes->getByIndex( i ) >>= xShape )
+                if ( xDrawPage->getByIndex( i ) >>= xShape )
                 {
                     if ( xShape.is() && xShape != xChartRoot )
                     {
@@ -601,14 +600,13 @@ SdrObject* ShapeController::getLastAdditionalShape()
         if ( pDrawModelWrapper )
         {
             Reference< drawing::XShape > xLastShape;
-            Reference< drawing::XDrawPage > xDrawPage( pDrawModelWrapper->getMainDrawPage() );
-            Reference< drawing::XShapes > xDrawPageShapes( xDrawPage, uno::UNO_QUERY_THROW );
+            rtl::Reference<SvxDrawPage> xDrawPage( pDrawModelWrapper->getMainDrawPage() );
             Reference< drawing::XShapes > xChartRoot( DrawModelWrapper::getChartRootShape( xDrawPage ) );
-            sal_Int32 nCount = xDrawPageShapes->getCount();
+            sal_Int32 nCount = xDrawPage->getCount();
             for ( sal_Int32 i = nCount - 1; i >= 0; --i )
             {
                 Reference< drawing::XShape > xShape;
-                if ( xDrawPageShapes->getByIndex( i ) >>= xShape )
+                if ( xDrawPage->getByIndex( i ) >>= xShape )
                 {
                     if ( xShape.is() && xShape != xChartRoot )
                     {
