@@ -149,13 +149,11 @@ void lcl_getProperties(
 
 awt::Size lcl_createTextShapes(
     const std::vector<ViewLegendEntry> & rEntries,
-    const Reference< lang::XMultiServiceFactory > & xShapeFactory,
     const Reference< drawing::XShapes > & xTarget,
-    std::vector< Reference< drawing::XShape > > & rOutTextShapes,
+    std::vector< rtl::Reference<SvxShapeText> > & rOutTextShapes,
     const tPropertyValues & rTextProperties )
 {
     awt::Size aResult;
-    ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
 
     for (ViewLegendEntry const & rEntry : rEntries)
     {
@@ -175,8 +173,8 @@ awt::Size lcl_createTextShapes(
                     aLabelString = " ";
             }
 
-            Reference< drawing::XShape > xEntry =
-                pShapeFactory->createText( xTarget, aLabelString,
+            rtl::Reference<SvxShapeText> xEntry =
+                ShapeFactory::createText( xTarget, aLabelString,
                         rTextProperties.first, rTextProperties.second, uno::Any() );
 
             // adapt max-extent
@@ -196,7 +194,7 @@ awt::Size lcl_createTextShapes(
 }
 
 void lcl_collectColumnWidths( std::vector< sal_Int32 >& rColumnWidths, const sal_Int32 nNumberOfRows, const sal_Int32 nNumberOfColumns,
-                              const std::vector< Reference< drawing::XShape > >& rTextShapes, sal_Int32 nSymbolPlusDistanceWidth )
+                              const std::vector< rtl::Reference<SvxShapeText> >& rTextShapes, sal_Int32 nSymbolPlusDistanceWidth )
 {
     rColumnWidths.clear();
     sal_Int32 nNumberOfEntries = rTextShapes.size();
@@ -219,7 +217,7 @@ void lcl_collectColumnWidths( std::vector< sal_Int32 >& rColumnWidths, const sal
 }
 
 void lcl_collectRowHeighs( std::vector< sal_Int32 >& rRowHeights, const sal_Int32 nNumberOfRows, const sal_Int32 nNumberOfColumns,
-                           const std::vector< Reference< drawing::XShape > >& rTextShapes )
+                           const std::vector< rtl::Reference<SvxShapeText> >& rTextShapes )
 {
     // calculate maximum height for each row
     // and collect column widths
@@ -268,7 +266,6 @@ awt::Size lcl_placeLegendEntries(
     const awt::Size& rMaxSymbolExtent,
     tPropertyValues & rTextProperties,
     const Reference< drawing::XShapes > & xTarget,
-    const Reference< lang::XMultiServiceFactory > & xShapeFactory,
     const awt::Size& rRemainingSpace,
     sal_Int32 nYStartPosition,
     const awt::Size& rPageSize,
@@ -304,8 +301,8 @@ awt::Size lcl_placeLegendEntries(
         *pFrameWidthAny <<= nMaxTextWidth;
     }
 
-    std::vector< Reference< drawing::XShape > > aTextShapes;
-    awt::Size aMaxEntryExtent = lcl_createTextShapes( rEntries, xShapeFactory, xTarget, aTextShapes, rTextProperties );
+    std::vector< rtl::Reference<SvxShapeText> > aTextShapes;
+    awt::Size aMaxEntryExtent = lcl_createTextShapes( rEntries, xTarget, aTextShapes, rTextProperties );
     OSL_ASSERT( aTextShapes.size() == rEntries.size());
 
     sal_Int32 nMaxEntryWidth = nXOffset + nSymbolPlusDistanceWidth + aMaxEntryExtent.Width;
@@ -421,11 +418,10 @@ awt::Size lcl_placeLegendEntries(
                     {
                         OUString aLabelString = rEntries[0].aLabel[0]->getString();
                         static const OUStringLiteral sDots = u"...";
-                        ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
                         for (sal_Int32 nNewLen = aLabelString.getLength() - sDots.getLength(); nNewLen > 0; nNewLen--)
                         {
                             OUString aNewLabel = aLabelString.subView(0, nNewLen) + sDots;
-                            Reference<drawing::XShape> xEntry = pShapeFactory->createText(
+                            rtl::Reference<SvxShapeText> xEntry = ShapeFactory::createText(
                                 xTarget, aNewLabel, rTextProperties.first, rTextProperties.second, uno::Any());
                             nSumHeight = xEntry->getSize().Height;
                             nRemainingSpace = rRemainingSpace.Height - nSumHeight;
@@ -1025,7 +1021,7 @@ void VLegend::createShapes(
                 // place the legend entries
                 aLegendSize = lcl_placeLegendEntries(aViewEntries, eExpansion, bSymbolsLeftSide, fViewFontSize,
                                                      aMaxSymbolExtent, aTextProperties, xLegendContainer,
-                                                     m_xShapeFactory, aLegendSize, nUsedButtonHeight, rPageSize, bIsPivotChart, rDefaultLegendSize);
+                                                     aLegendSize, nUsedButtonHeight, rPageSize, bIsPivotChart, rDefaultLegendSize);
 
                 uno::Reference<beans::XPropertySet> xModelPage(mrModel.getPageBackground());
 

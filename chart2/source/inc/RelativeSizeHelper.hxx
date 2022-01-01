@@ -23,6 +23,7 @@
 namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
+class SvxShapeText;
 
 namespace chart
 {
@@ -38,6 +39,11 @@ public:
     static void adaptFontSizes(
         const css::uno::Reference<
             css::beans::XPropertySet > & xTargetProperties,
+        const css::awt::Size & rOldReferenceSize,
+        const css::awt::Size & rNewReferenceSize );
+
+    static void adaptFontSizes(
+        SvxShapeText& xTargetProperties,
         const css::awt::Size & rOldReferenceSize,
         const css::awt::Size & rNewReferenceSize );
 

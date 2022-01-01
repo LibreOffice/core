@@ -313,7 +313,7 @@ protected:
      *  @return
      *      a reference to the created text shape.
      */
-    css::uno::Reference< css::drawing::XShape >
+    rtl::Reference<SvxShapeText>
         createDataLabel( const css::uno::Reference< css::drawing::XShapes >& xTarget
                 , VDataSeries& rDataSeries
                 , sal_Int32 nPointIndex

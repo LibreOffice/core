@@ -121,9 +121,8 @@ static void lcl_ResizeTextShapeToFitAvailableSpace( Reference< drawing::XShape >
     }
 }
 
-static Reference< drawing::XShape > createSingleLabel(
-            const Reference< lang::XMultiServiceFactory>& xShapeFactory
-          , const Reference< drawing::XShapes >& xTarget
+static rtl::Reference<SvxShapeText> createSingleLabel(
+            const Reference< drawing::XShapes >& xTarget
           , const awt::Point& rAnchorScreenPosition2D
           , const OUString& rLabel
           , const AxisLabelProperties& rAxisLabelProperties
@@ -141,8 +140,8 @@ static Reference< drawing::XShape > createSingleLabel(
     uno::Any aATransformation = ShapeFactory::makeTransformation( rAnchorScreenPosition2D, fRotationAnglePi );
     OUString aLabel = ShapeFactory::getStackedString( rLabel, rAxisLabelProperties.bStackCharacters );
 
-    Reference< drawing::XShape > xShape2DText = ShapeFactory::getOrCreateShapeFactory(xShapeFactory)
-                    ->createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
+    rtl::Reference<SvxShapeText> xShape2DText =
+                    ShapeFactory::createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
 
     if( rAxisProperties.m_bLimitSpaceForLabels )
         lcl_ResizeTextShapeToFitAvailableSpace(xShape2DText, rAxisLabelProperties, aLabel, rPropNames, rPropValues, bIsHorizontalAxis);
@@ -875,7 +874,7 @@ bool VCartesianAxis::createTextShapes(
 
         //create single label
         if(!pTickInfo->xTextShape.is())
-            pTickInfo->xTextShape = createSingleLabel( m_xShapeFactory, xTarget
+            pTickInfo->xTextShape = createSingleLabel( xTarget
                                     , aAnchorScreenPosition2D, aLabel
                                     , rAxisLabelProperties, m_aAxisProperties
                                     , aPropNames, aPropValues, bIsHorizontalAxis );
@@ -1044,7 +1043,7 @@ bool VCartesianAxis::createTextShapesSimple(
 
         //create single label
         if(!pTickInfo->xTextShape.is())
-            pTickInfo->xTextShape = createSingleLabel( m_xShapeFactory, xTarget
+            pTickInfo->xTextShape = createSingleLabel( xTarget
                                     , aAnchorScreenPosition2D, aLabel
                                     , rAxisLabelProperties, m_aAxisProperties
                                     , aPropNames, aPropValues, bIsHorizontalAxis );

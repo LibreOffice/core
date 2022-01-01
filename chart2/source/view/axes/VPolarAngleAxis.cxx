@@ -53,8 +53,6 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
                      , double fLogicRadius
                      , double fLogicZ )
 {
-    ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
-
     FixedNumberFormatter aFixedNumberFormatter(
         m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
 
@@ -127,7 +125,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
             uno::Any aATransformation = ShapeFactory::makeTransformation( aAnchorScreenPosition2D, fRotationAnglePi );
             OUString aStackedLabel = ShapeFactory::getStackedString( aLabel, rAxisLabelProperties.bStackCharacters );
 
-            pTickInfo->xTextShape = pShapeFactory->createText( xTarget, aStackedLabel, aPropNames, aPropValues, aATransformation );
+            pTickInfo->xTextShape = ShapeFactory::createText( xTarget, aStackedLabel, aPropNames, aPropValues, aATransformation );
         }
 
         //if NO OVERLAP -> remove overlapping shapes
