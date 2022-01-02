@@ -58,17 +58,8 @@ public:
         : deque(std::move(other))
     {
     }
-    Primitive2DContainer(const std::deque<Primitive2DReference>& other)
-        : deque(other)
-    {
-    }
     Primitive2DContainer(std::initializer_list<Primitive2DReference> init)
         : deque(init)
-    {
-    }
-    template <class Iter>
-    Primitive2DContainer(Iter first, Iter last)
-        : deque(first, last)
     {
     }
     Primitive2DContainer(
@@ -82,7 +73,6 @@ public:
     void append(const Primitive2DReference&);
     void append(const Primitive2DContainer& rSource);
     void append(Primitive2DContainer&& rSource);
-    void append(const Primitive2DSequence& rSource);
     Primitive2DContainer& operator=(const Primitive2DContainer& r)
     {
         deque::operator=(r);

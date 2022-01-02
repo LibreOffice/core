@@ -140,29 +140,7 @@ void Primitive2DContainer::append(Primitive2DContainer&& rSource)
                  std::make_move_iterator(rSource.end()));
 }
 
-void Primitive2DContainer::append(const Primitive2DSequence& rSource)
-{
-    for (const auto& rPrimitive : rSource)
-        append(static_cast<const UnoPrimitive2D*>(rPrimitive.get())->getBasePrimitive2D());
-}
-
 UnoPrimitive2D::~UnoPrimitive2D() {}
-
-basegfx::B2DRange
-UnoPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
-{
-    std::unique_lock aGuard(m_aMutex);
-    return mxPrimitive->getB2DRange(rViewInformation);
-}
-
-sal_uInt32 UnoPrimitive2D::getPrimitive2DID() const { return mxPrimitive->getPrimitive2DID(); }
-
-void UnoPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
-                                        const geometry::ViewInformation2D& rViewInformation) const
-{
-    std::unique_lock aGuard(m_aMutex);
-    mxPrimitive->get2DDecomposition(rVisitor, rViewInformation);
-}
 
 css::uno::Sequence<::css::uno::Reference<::css::graphic::XPrimitive2D>>
     SAL_CALL UnoPrimitive2D::getDecomposition(
