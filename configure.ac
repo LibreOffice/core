@@ -4500,7 +4500,15 @@ check_use_ld()
     use_ld=-fuse-ld=${1%%:*}
     use_ld_path=${1#*:}
     if test "$use_ld_path" != "$1"; then
-        use_ld="$use_ld --ld-path=$use_ld_path"
+        if test "$COM_IS_CLANG" = TRUE; then
+            use_ld="${use_ld} --ld-path=${use_ld_path}"
+        else
+            # I tried to use gcc -B and a directory + symlink setup in $BUILDDIR,
+            # but whatever I tried, libtool filtered the -B value, so gcc wouldn't
+            # pickup the alternative linker from that path....
+            # For mold, one can use LD_PRELOAD=/usr/lib/mold/mold-wrapper.so instead.
+	    AC_MSG_ERROR([A linker path is just supported with clang, because of libtool's -B filtering!])
+        fi
     fi
     use_ld_fail_if_error=$2
     use_ld_ok=
