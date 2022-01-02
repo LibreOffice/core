@@ -41,7 +41,7 @@
 #endif
 
 #include <hb-ot.h>
-#include <dwrite.h>
+#include <dwrite_3.h>
 
 namespace vcl::font
 {

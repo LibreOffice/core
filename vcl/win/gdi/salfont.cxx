@@ -1039,12 +1039,6 @@ static int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
     return 1;
 }
 
-struct TempFontItem
-{
-    OUString maFontResourcePath;
-    TempFontItem* mpNextItem;
-};
-
 static int lcl_AddFontResource(SalData& rSalData, const OUString& rFontFileURL, bool bShared)
 {
     OUString aFontSystemPath;
@@ -1066,6 +1060,7 @@ static int lcl_AddFontResource(SalData& rSalData, const OUString& rFontFileURL, 
             pNewItem->mpNextItem = rSalData.mpOtherTempFontItem;
             rSalData.mpOtherTempFontItem = pNewItem;
         }
+        rSalData.mbSkiaPrivateFontSetInvalid = true;
     }
     return nRet;
 }
@@ -1077,6 +1072,7 @@ void ImplReleaseTempFonts(SalData& rSalData, bool bAll)
         RemoveFontResourceExW(o3tl::toW(p->maFontResourcePath.getStr()), FR_PRIVATE, nullptr);
         rSalData.mpOtherTempFontItem = p->mpNextItem;
         delete p;
+        rSalData.mbSkiaPrivateFontSetInvalid = true;
     }
 
     if (!bAll)
@@ -1087,6 +1083,7 @@ void ImplReleaseTempFonts(SalData& rSalData, bool bAll)
         RemoveFontResourceExW(o3tl::toW(p->maFontResourcePath.getStr()), FR_PRIVATE, nullptr);
         rSalData.mpSharedTempFontItem = p->mpNextItem;
         delete p;
+        rSalData.mbSkiaPrivateFontSetInvalid = true;
     }
 }
 
