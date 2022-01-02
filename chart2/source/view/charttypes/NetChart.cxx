@@ -222,7 +222,7 @@ bool NetChart::impl_createArea( VDataSeries* pSeries
     pPosHelper->transformScaledLogicToScene( aPoly );
 
     //create area:
-    uno::Reference< drawing::XShape >
+    rtl::Reference<SvxShapePolyPolygon>
         xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes
                 , aPoly );
     setMappedProperties( xShape

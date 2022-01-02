@@ -243,9 +243,8 @@ public:
 
     static void makeShapeInvisible( const rtl::Reference< SvxShape >& rShape );
 
-    static void setShapeName( const css::uno::Reference< css::drawing::XShape >& xShape
+    static void setShapeName( const rtl::Reference< SvxShape >& xShape
             , const OUString& rName );
-    static void setShapeName( SvxShape& rShape, const OUString& rName );
 
     static OUString getShapeName( const css::uno::Reference< css::drawing::XShape >& xShape );
 

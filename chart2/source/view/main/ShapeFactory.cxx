@@ -97,7 +97,7 @@ uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
     uno::Reference<drawing::XShape> xShape(static_cast<cppu::OWeakObject*>(xShapeGroup.get()), uno::UNO_QUERY);
     xDrawPage->addBottom(xShape);
 
-    setShapeName(xShape, "com.sun.star.chart2.shapes");
+    setShapeName(xShapeGroup, "com.sun.star.chart2.shapes");
     xShape->setSize(awt::Size(0,0));
 
     xRet.set(xShape, uno::UNO_QUERY);
@@ -1717,7 +1717,7 @@ rtl::Reference< SvxShapeGroup >
 
         //set name
         if(!aName.isEmpty())
-            setShapeName( xShape, aName );
+            setShapeName( xShapeGroup, aName );
 
         {//workaround
             //need this null size as otherwise empty group shapes where painted with a gray border
@@ -2350,34 +2350,15 @@ void ShapeFactory::makeShapeInvisible( const rtl::Reference< SvxShape >& xShape 
 
 // set a name/CID at a shape (is used for selection handling)
 
-void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
+void ShapeFactory::setShapeName( const rtl::Reference< SvxShape >& xShape
                                , const OUString& rName )
 {
     if(!xShape.is())
         return;
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "shape offers no XPropertySet");
-    if( xProp.is())
-    {
-        try
-        {
-            xProp->setPropertyValue( UNO_NAME_MISC_OBJ_NAME
-                , uno::Any( rName ) );
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
-    }
-}
-
-// set a name/CID at a shape (is used for selection handling)
-
-void ShapeFactory::setShapeName( SvxShape& rShape, const OUString& rName )
-{
     try
     {
-        rShape.setPropertyValue( UNO_NAME_MISC_OBJ_NAME, uno::Any( rName ) );
+        xShape->setPropertyValue( UNO_NAME_MISC_OBJ_NAME
+            , uno::Any( rName ) );
     }
     catch( const uno::Exception& )
     {
