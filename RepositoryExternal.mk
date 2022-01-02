@@ -418,7 +418,6 @@ gb_ExternalProject__use_libjpeg :=
 else
 
 define gb_LinkTarget__use_libjpeg
-$(call gb_LinkTarget_use_external_project,$(1),libjpeg-turbo,full)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,libjpeg-turbo) \
 	$$(INCLUDE) \
@@ -428,7 +427,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),libjpeg-turbo)
 endef
 
 define gb_ExternalProject__use_libjpeg
-$(call gb_ExternalProject_use_external_project,$(1),libjpeg-turbo)
+$(call gb_ExternalProject_use_static_libraries,$(1),libjpeg-turbo)
 
 endef
 
