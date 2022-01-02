@@ -248,7 +248,7 @@ bool PieChart::shouldSnapRectToUsedArea()
 }
 
 rtl::Reference<SvxShape> PieChart::createDataPoint(
-    const uno::Reference<drawing::XShapes>& xTarget,
+    const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
     const uno::Reference<beans::XPropertySet>& xObjectProperties,
     tPropertyNameValueMap const * pOverwritePropertiesMap,
     const ShapeParam& rParam )
@@ -286,7 +286,7 @@ rtl::Reference<SvxShape> PieChart::createDataPoint(
 }
 
 void PieChart::createTextLabelShape(
-    const uno::Reference<drawing::XShapes>& xTextTarget,
+    const rtl::Reference<SvxShapeGroupAnyD>& xTextTarget,
     VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam )
 {
     if (!rSeries.getDataPointLabelIfLabel(nPointIndex))
@@ -672,8 +672,7 @@ void PieChart::createShapes()
     ///therefore create an own group for the texts to move them to front
     ///(because the text group is created after the series group the texts are
     ///displayed on top)
-    uno::Reference< drawing::XShapes > xSeriesTarget(
-        createGroupShape( m_xLogicTarget ));
+    rtl::Reference<SvxShapeGroupAnyD> xSeriesTarget = createGroupShape( m_xLogicTarget );
     rtl::Reference<SvxShapeGroup> xTextTarget = ShapeFactory::createGroup2D( m_xFinalTarget );
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
@@ -778,7 +777,7 @@ void PieChart::createShapes()
 
             aParam.mfDepth  = getTransformedDepth() * (n3DRelativeHeight / 100.0);
 
-            uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
+            rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
             ///collect data point information (logic coordinates, style ):
             double fLogicYValue = fabs(pSeries->getYValue( nPointIndex ));
             if( std::isnan(fLogicYValue) )

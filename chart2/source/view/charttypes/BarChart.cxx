@@ -297,7 +297,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
 }
 
 rtl::Reference< SvxShape > BarChart::createDataPoint3D_Bar(
-          const uno::Reference< drawing::XShapes >& xTarget
+          const rtl::Reference<SvxShapeGroupAnyD>& xTarget
         , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
         , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree
         , const uno::Reference< beans::XPropertySet >& xObjectProperties
@@ -462,15 +462,12 @@ void BarChart::createShapes()
     //the regression curves should always be on top of the bars but beneath the text labels
     //to achieve this the regression curve target is created after the series target and before the text target
 
-    uno::Reference< drawing::XShapes > xSeriesTarget(
-        createGroupShape( m_xLogicTarget ));
-    uno::Reference< drawing::XShapes > xRegressionCurveTarget(
-        createGroupShape( m_xLogicTarget ));
-    uno::Reference< drawing::XShapes > xTextTarget(
-        ShapeFactory::createGroup2D( m_xFinalTarget ));
+    rtl::Reference<SvxShapeGroupAnyD> xSeriesTarget = createGroupShape( m_xLogicTarget );
+    rtl::Reference<SvxShapeGroupAnyD> xRegressionCurveTarget = createGroupShape( m_xLogicTarget );
+    rtl::Reference<SvxShapeGroupAnyD> xTextTarget = ShapeFactory::createGroup2D( m_xFinalTarget );
 
-    uno::Reference< drawing::XShapes > xRegressionCurveEquationTarget(
-        ShapeFactory::createGroup2D( m_xFinalTarget ));
+    rtl::Reference<SvxShapeGroupAnyD> xRegressionCurveEquationTarget =
+        ShapeFactory::createGroup2D( m_xFinalTarget );
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     double fLogicZ        = 1.0;//as defined
@@ -628,8 +625,8 @@ void BarChart::createShapes()
                         bDrawConnectionLinesInited = true;
                     }
 
-                    uno::Reference<drawing::XShapes> xSeriesGroupShape_Shapes(getSeriesGroupShape(pSeries.get(), xSeriesTarget));
-                    uno::Reference<drawing::XShape>  xSeriesGroupShape(xSeriesGroupShape_Shapes, uno::UNO_QUERY);
+                    rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes(getSeriesGroupShape(pSeries.get(), xSeriesTarget));
+                    uno::Reference<drawing::XShape>  xSeriesGroupShape(static_cast<cppu::OWeakObject*>(xSeriesGroupShape_Shapes.get()), uno::UNO_QUERY);
                     // Suspend setting rects dirty for the duration of this call
                     aShapeSet.insert(xSeriesGroupShape);
                     E3dScene* pScene = lcl_getE3dScene(xSeriesGroupShape);
@@ -952,7 +949,7 @@ void BarChart::createShapes()
                     //transformation 3) -> 4)
                     pPosHelper->transformScaledLogicToScene( aPoly );
 
-                    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes(
+                    rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes(
                         getSeriesGroupShape(pSeries.get(), xSeriesTarget) );
                     rtl::Reference<SvxShapePolyPolygon> xShape( ShapeFactory::createLine2D(
                         xSeriesGroupShape_Shapes, PolyToPointSequence( aPoly ) ) );

@@ -42,9 +42,8 @@ namespace chart::VLegendSymbolFactory
     rtl::Reference< SvxShapeGroup >
         createSymbol(
             const css::awt::Size& rEntryKeyAspectRatio,
-            const css::uno::Reference< css::drawing::XShapes >& rSymbolContainer,
+            const rtl::Reference<SvxShapeGroupAnyD>& rSymbolContainer,
             LegendSymbolStyle eStyle,
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & xShapeFactory,
             const css::uno::Reference< css::beans::XPropertySet > & xLegendEntryProperties,
             PropertyType ePropertyType,
             const css::uno::Any& rExplicitSymbol /*should contain a css::chart2::Symbol without automatic symbol if the charttype does support symbols else empty*/);

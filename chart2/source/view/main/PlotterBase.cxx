@@ -34,8 +34,8 @@ PlotterBase::PlotterBase( sal_Int32 nDimensionCount )
 {
 }
 
-void PlotterBase::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
-       , const uno::Reference< drawing::XShapes >& xFinalTarget
+void PlotterBase::initPlotter(  const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget
+       , const rtl::Reference<SvxShapeGroupAnyD>& xFinalTarget
        , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
        , const OUString& rCID )
 {
@@ -72,8 +72,8 @@ void PlotterBase::setTransformationSceneToScreen( const drawing::HomogenMatrix& 
     m_pPosHelper->setTransformationSceneToScreen( rMatrix );
 }
 
-uno::Reference< drawing::XShapes > PlotterBase::createGroupShape(
-            const uno::Reference< drawing::XShapes >& xTarget
+rtl::Reference<SvxShapeGroupAnyD> PlotterBase::createGroupShape(
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget
             , const OUString& rName )
 {
     if(!m_xShapeFactory.is())

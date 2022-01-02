@@ -1440,8 +1440,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     drawing::Direction3D aPreferredAspectRatio =
         rParam.mpSeriesPlotterContainer->getPreferredAspectRatio();
 
-    uno::Reference< drawing::XShapes > xSeriesTargetInFrontOfAxis;
-    uno::Reference< drawing::XShapes > xSeriesTargetBehindAxis;
+    rtl::Reference<SvxShapeGroupAnyD> xSeriesTargetInFrontOfAxis;
+    rtl::Reference<SvxShapeGroupAnyD> xSeriesTargetBehindAxis;
     VDiagram aVDiagram(xDiagram, aPreferredAspectRatio, nDimensionCount);
     {//create diagram
         aVDiagram.init(rParam.mxDiagramWithAxesShapes, m_xShapeFactory);
@@ -1536,7 +1536,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     for( const std::unique_ptr<VSeriesPlotter>& aPlotter : rSeriesPlotterList )
     {
         VSeriesPlotter* pSeriesPlotter = aPlotter.get();
-        uno::Reference< drawing::XShapes > xSeriesTarget;
+        rtl::Reference<SvxShapeGroupAnyD> xSeriesTarget;
         if( pSeriesPlotter->WantToPlotInFrontOfAxisLine() )
             xSeriesTarget = xSeriesTargetInFrontOfAxis;
         else
@@ -2066,7 +2066,7 @@ void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
 }
 
 std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
-                , const uno::Reference< drawing::XShapes>& xPageShapes
+                , const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes
                 , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
                 , ChartModel& rModel
                 , awt::Rectangle& rRemainingSpace
@@ -2200,7 +2200,7 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
 }
 
 bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
-                   , const uno::Reference< drawing::XShapes>& xPageShapes
+                   , const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes
                    , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
                    , const uno::Reference< uno::XComponentContext > & xContext
                    , awt::Rectangle & rRemainingSpace
@@ -2222,7 +2222,7 @@ bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
     return true;
 }
 
-void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
+void lcl_createButtons(const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes,
                        const uno::Reference<lang::XMultiServiceFactory>& xShapeFactory,
                        ChartModel& rModel,
                        awt::Rectangle& rRemainingSpace)
@@ -2296,17 +2296,13 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
 void formatPage(
       ChartModel& rChartModel
     , const awt::Size& rPageSize
-    , const uno::Reference< drawing::XShapes >& xTarget
-    , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
+    , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
     )
 {
     try
     {
         uno::Reference< beans::XPropertySet > xModelPage( rChartModel.getPageBackground());
         if( ! xModelPage.is())
-            return;
-
-        if( !xShapeFactory.is() )
             return;
 
         //format page
@@ -2836,7 +2832,7 @@ OUString ChartView::dump()
         uno::Reference< drawing::XShapes > xShape(m_xDrawPage->getByIndex(i), uno::UNO_QUERY);
         if(xShape.is())
         {
-            OUString aString = XShapeDumper::dump(mxRootShape);
+            OUString aString = XShapeDumper::dump(uno::Reference<drawing::XShapes>(mxRootShape));
             aBuffer.append(aString);
         }
         else
@@ -2885,7 +2881,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
 {
     // todo: it would be nicer to just pass the page m_xDrawPage and format it,
     // but the draw page does not support XPropertySet
-    formatPage( mrChartModel, rPageSize, mxRootShape, m_xShapeFactory );
+    formatPage( mrChartModel, rPageSize, mxRootShape );
 
     CreateShapeParam2D aParam;
     aParam.maRemainingSpace.X = 0;

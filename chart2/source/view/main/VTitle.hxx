@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
+#include <svx/unoshape.hxx>
 
 namespace com::sun::star::awt { struct Point; }
 namespace com::sun::star::chart2 { class XTitle; }
@@ -40,7 +41,7 @@ public:
     explicit VTitle( const css::uno::Reference< css::chart2::XTitle > & xTitle );
     ~VTitle();
 
-    void    init( const css::uno::Reference< css::drawing::XShapes >& xTargetPage
+    void    init( const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage
              , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
              , const OUString& rCID );
 
@@ -57,7 +58,7 @@ public:
             const css::uno::Reference< css::chart2::XTitle > & xTitle);
 
 private:
-    css::uno::Reference< css::drawing::XShapes >            m_xTarget;
+    rtl::Reference<SvxShapeGroupAnyD>            m_xTarget;
     css::uno::Reference< css::lang::XMultiServiceFactory>   m_xShapeFactory;
     css::uno::Reference< css::chart2::XTitle >              m_xTitle;
     rtl::Reference<SvxShapeText>                            m_xShape;

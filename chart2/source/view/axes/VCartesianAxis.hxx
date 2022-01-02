@@ -117,7 +117,7 @@ private: //methods
      *         method once again to get the text shapes created.
      */
     bool createTextShapes(
-        const css::uno::Reference<css::drawing::XShapes >& xTarget,
+        const rtl::Reference< SvxShapeGroupAnyD >& xTarget,
         TickIter& rTickIter, AxisLabelProperties& rAxisLabelProperties,
         TickFactory2D const * pTickFactory, sal_Int32 nScreenDistanceBetweenTicks );
 
@@ -127,7 +127,7 @@ private: //methods
      * are to be resolved only by adjusting the label tick interval.
      */
     bool createTextShapesSimple(
-        const css::uno::Reference<css::drawing::XShapes >& xTarget,
+        const rtl::Reference< SvxShapeGroupAnyD >& xTarget,
         TickIter& rTickIter, AxisLabelProperties& rAxisLabelProperties,
         TickFactory2D const * pTickFactory );
 

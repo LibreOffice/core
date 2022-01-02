@@ -32,7 +32,7 @@ using namespace ::com::sun::star::chart2;
 PolarLabelPositionHelper::PolarLabelPositionHelper(
                     PolarPlottingPositionHelper* pPosHelper
                     , sal_Int32 nDimensionCount
-                    , const uno::Reference< drawing::XShapes >& xLogicTarget )
+                    , const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget )
                     : LabelPositionHelper( nDimensionCount, xLogicTarget )
                     , m_pPosHelper(pPosHelper)
 {

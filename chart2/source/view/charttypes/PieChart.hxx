@@ -65,7 +65,7 @@ public:
 private: //methods
     rtl::Reference<SvxShape>
         createDataPoint(
-            const css::uno::Reference<css::drawing::XShapes>& xTarget,
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
             const css::uno::Reference<css::beans::XPropertySet>& xObjectProperties,
             tPropertyNameValueMap const * pOverWritePropertiesMap,
             const ShapeParam& rParam );
@@ -82,7 +82,7 @@ private: //methods
      *      ShapeParam object.
      */
     void createTextLabelShape(
-        const css::uno::Reference<css::drawing::XShapes>& xTextTarget,
+        const rtl::Reference<SvxShapeGroupAnyD>& xTextTarget,
         VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam );
 
     /** This method sets `m_fMaxOffset` to the maximum `Offset` property and
@@ -129,7 +129,7 @@ private: //member
         bool bMovementAllowed;
         bool bMoved;
         bool bShowLeaderLine;
-        css::uno::Reference< css::drawing::XShapes > xTextTarget;
+        rtl::Reference<SvxShapeGroupAnyD> xTextTarget;
         PieLabelInfo* pPrevious;
         PieLabelInfo* pNext;
         css::awt::Point aPreviousPosition;

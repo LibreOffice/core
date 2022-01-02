@@ -82,16 +82,21 @@ public:
 
     static rtl::Reference< SvxShapeGroup >
         createGroup2D(
-            const css::uno::Reference< css::drawing::XShapes >& xTarget
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+          , const OUString& aName = OUString() );
+
+    static rtl::Reference< SvxShapeGroup >
+        createGroup2D(
+            const rtl::Reference<SvxDrawPage>& xTarget
           , const OUString& aName = OUString() );
 
     static rtl::Reference<Svx3DSceneObject>
         createGroup3D(
-            const css::uno::Reference< css::drawing::XShapes >& xTarget
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget
           , const OUString& aName = OUString() );
 
     static rtl::Reference<Svx3DExtrudeObject>
-            createCube(   const css::uno::Reference< css::drawing::XShapes >& xTarget
+            createCube(   const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
                         , sal_Int32 nRotateZAngleHundredthDegree
@@ -100,13 +105,13 @@ public:
                         , bool bRounded = false);
 
     static rtl::Reference<Svx3DLatheObject>
-        createCylinder(   const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createCylinder(   const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
                         , sal_Int32 nRotateZAngleHundredthDegree );
 
     static rtl::Reference<Svx3DSceneObject>
-        createPyramid(    const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createPyramid(    const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
                         , double fTopHeight
@@ -115,20 +120,20 @@ public:
                         , const tPropertyNameMap& rPropertyNameMap);
 
     static rtl::Reference<Svx3DLatheObject>
-        createCone(       const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createCone(       const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
                         , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree );
 
     static rtl::Reference<SvxShapePolyPolygon>
-        createPieSegment2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createPieSegment2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                     , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
                     , const css::drawing::Direction3D& rOffset
                     , const css::drawing::HomogenMatrix& rUnitCircleToScene );
 
     static rtl::Reference<Svx3DExtrudeObject>
-        createPieSegment( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createPieSegment( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                     , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
                     , const css::drawing::Direction3D& rOffset
@@ -136,7 +141,7 @@ public:
                     , double fDepth );
 
     static rtl::Reference<Svx3DPolygonObject>
-        createStripe( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createStripe( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const Stripe& rStripe
                     , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
@@ -145,16 +150,16 @@ public:
                     , bool bFlatNormals=true );
 
     static rtl::Reference<Svx3DExtrudeObject>
-        createArea3D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createArea3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::PolyPolygonShape3D& rPolyPolygon
                     , double fDepth);
 
     static rtl::Reference<SvxShapePolyPolygon>
-        createArea2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::PolyPolygonShape3D& rPolyPolygon);
 
     static rtl::Reference<SvxShapePolyPolygon>
-        createSymbol2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createSymbol2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::Position3D& rPos
                     , const css::drawing::Direction3D& rSize
                     , sal_Int32 nStandardSymbol
@@ -162,37 +167,37 @@ public:
                     , sal_Int32 nFillColor );
 
     static rtl::Reference<SvxGraphicObject>
-        createGraphic2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createGraphic2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::Position3D& rPos
                     , const css::drawing::Direction3D& rSize
                     , const css::uno::Reference< css::graphic::XGraphic >& xGraphic );
 
     static rtl::Reference<SvxShapePolyPolygon>
-        createLine2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createLine2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::PointSequenceSequence& rPoints
                     , const VLineProperties* pLineProperties = nullptr );
 
     static rtl::Reference<SvxShapePolyPolygon>
-        createLine ( const css::uno::Reference< css::drawing::XShapes >& xTarget,
+        createLine ( const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
                 const css::awt::Size& rSize, const css::awt::Point& rPosition );
 
     static rtl::Reference<Svx3DPolygonObject>
-        createLine3D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createLine3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::PolyPolygonShape3D& rPoints
                     , const VLineProperties& rLineProperties );
 
     static rtl::Reference<SvxShapeCircle>
-        createCircle2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createCircle2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::Position3D& rPos
                     , const css::drawing::Direction3D& rSize );
 
     static rtl::Reference<SvxShapeCircle>
-        createCircle( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createCircle( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::awt::Size& rSize
                     , const css::awt::Point& rPosition );
 
     static rtl::Reference<SvxShapeText>
-        createText( const css::uno::Reference< css::drawing::XShapes >& xTarget2D
+        createText( const rtl::Reference<SvxShapeGroupAnyD>& xTarget2D
                     , const OUString& rText
                     , const tNameSequence& rPropNames
                     , const tAnySequence& rPropValues
@@ -200,14 +205,14 @@ public:
                      );
 
     static rtl::Reference<SvxShapeText>
-        createText(const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createText(const rtl::Reference<SvxShapeGroupAnyD>& xTarget
             , css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString
             , const tNameSequence& rPropNames
             , const tAnySequence& rPropValues
             , const css::uno::Any& rATransformation);
 
     static rtl::Reference<SvxShapeText>
-        createText( const css::uno::Reference< css::drawing::XShapes >& xTarget2D,
+        createText( const rtl::Reference<SvxShapeGroupAnyD>& xTarget2D,
                 const css::awt::Size& rSize,
                 const css::awt::Point& rPosition,
                 css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString,
@@ -216,12 +221,12 @@ public:
 
     static rtl::Reference<SvxShapeRect>
         createInvisibleRectangle(
-            const css::uno::Reference< css::drawing::XShapes >& xTarget
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget
           , const css::awt::Size& rSize );
 
     static rtl::Reference<SvxShapeRect>
         createRectangle(
-            const css::uno::Reference< css::drawing::XShapes >& xTarget,
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
             const css::awt::Size& rSize,
             const css::awt::Point& rPosition,
             const tNameSequence& rPropNames,
@@ -230,15 +235,15 @@ public:
 
     static rtl::Reference<SvxShapeRect>
         createRectangle(
-            const css::uno::Reference< css::drawing::XShapes >& xTarget );
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget );
 
-    static css::uno::Reference< css::drawing::XShapes >
+    static rtl::Reference<SvxShapeGroupAnyD>
          getOrCreateChartRootShape( const rtl::Reference<SvxDrawPage>& xPage );
 
-    static void setPageSize(const css::uno::Reference<css::drawing::XShapes>& xChartShapes,
+    static void setPageSize(const rtl::Reference<SvxShapeGroupAnyD>& xChartShapes,
                      const css::awt::Size& rSize);
 
-    static css::uno::Reference< css::drawing::XShapes >
+    static rtl::Reference<SvxShapeGroupAnyD>
          getChartRootShape( const rtl::Reference<SvxDrawPage>& xPage );
 
     static void makeShapeInvisible( const rtl::Reference< SvxShape >& rShape );
@@ -270,19 +275,19 @@ public:
     static css::awt::Size getSizeAfterRotation(
             SvxShape& rShape, double fRotationAngleDegree );
 
-    static void removeSubShapes( const css::uno::Reference< css::drawing::XShapes >& xShapes );
+    static void removeSubShapes( const rtl::Reference<SvxShapeGroupAnyD>& xShapes );
 
     static sal_Int32 getSymbolCount() { return Symbol_COUNT; }
 
 private:
     static rtl::Reference<Svx3DExtrudeObject>
-        impl_createCube( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        impl_createCube( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::Position3D& rPosition
                     , const css::drawing::Direction3D& rSize, sal_Int32 nRotateZAngleHundredthDegree
                     , bool bRounded );
 
     static rtl::Reference<Svx3DLatheObject>
-        impl_createConeOrCylinder( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        impl_createConeOrCylinder( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::Position3D& rPosition
                     , const css::drawing::Direction3D& rSize
                     , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree

@@ -79,7 +79,7 @@ using namespace ::com::sun::star::container;
         aAny <<= Reference< xint >(this)
 
 SvxShapeGroup::SvxShapeGroup(SdrObject* pObj, SvxDrawPage* pDrawPage)
-    : SvxShape(pObj, getSvxMapProvider().GetMap(SVXMAP_GROUP), getSvxMapProvider().GetPropertySet(SVXMAP_GROUP, SdrObject::GetGlobalDrawObjectItemPool()))
+    : SvxShapeGroupAnyD(pObj, getSvxMapProvider().GetMap(SVXMAP_GROUP), getSvxMapProvider().GetPropertySet(SVXMAP_GROUP, SdrObject::GetGlobalDrawObjectItemPool()))
     , mxPage(pDrawPage)
 {
 }
@@ -1777,5 +1777,16 @@ void SvxCustomShape::createCustomShapeDefaults( const OUString& rValueType )
 
     static_cast<SdrObjCustomShape*>(GetSdrObject())->MergeDefaultAttributes( &rValueType );
 }
+
+SvxShapeGroupAnyD::SvxShapeGroupAnyD(SdrObject* pObj)
+    : SvxShape(pObj)
+{}
+
+SvxShapeGroupAnyD::SvxShapeGroupAnyD( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet )
+    : SvxShape(pObject, pEntries, pPropertySet)
+{}
+
+SvxShapeGroupAnyD::~SvxShapeGroupAnyD() noexcept
+{}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

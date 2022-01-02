@@ -186,7 +186,7 @@ public:
             const css::awt::Size& rEntryKeyAspectRatio,
             css::chart2::LegendPosition eLegendPosition,
             const css::uno::Reference< css::beans::XPropertySet >& xTextProperties,
-            const css::uno::Reference< css::drawing::XShapes >& xTarget,
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory,
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
             ChartModel& rModel
@@ -200,21 +200,19 @@ public:
     rtl::Reference<SvxShapeGroup> createLegendSymbolForSeries(
                   const css::awt::Size& rEntryKeyAspectRatio
                 , const VDataSeries& rSeries
-                , const css::uno::Reference< css::drawing::XShapes >& xTarget
-                , const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory );
+                , const rtl::Reference<SvxShapeGroupAnyD>& xTarget );
 
     rtl::Reference< SvxShapeGroup > createLegendSymbolForPoint(
                   const css::awt::Size& rEntryKeyAspectRatio
                 , const VDataSeries& rSeries
                 , sal_Int32 nPointIndex
-                , const css::uno::Reference< css::drawing::XShapes >& xTarget
-                , const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory );
+                , const rtl::Reference<SvxShapeGroupAnyD>& xTarget );
 
     std::vector< ViewLegendEntry > createLegendEntriesForSeries(
             const css::awt::Size& rEntryKeyAspectRatio,
             const VDataSeries& rSeries,
             const css::uno::Reference< css::beans::XPropertySet >& xTextProperties,
-            const css::uno::Reference< css::drawing::XShapes >& xTarget,
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory,
             const css::uno::Reference< css::uno::XComponentContext >& xContext
                 );
@@ -264,29 +262,29 @@ protected:
 
     // Methods for group shapes.
 
-    css::uno::Reference< css::drawing::XShapes >
+    rtl::Reference<SvxShapeGroupAnyD>
         getSeriesGroupShape( VDataSeries* pDataSeries
-            , const css:: uno::Reference< css::drawing::XShapes >& xTarget );
+            , const rtl::Reference<SvxShapeGroupAnyD>& xTarget );
 
     //the following group shapes will be created as children of SeriesGroupShape on demand
     //they can be used to assure that some parts of a series shape are always in front of others (e.g. symbols in front of lines)
     //parameter xTarget will be used as parent for the series group shape
-    css::uno::Reference< css::drawing::XShapes >
+    rtl::Reference<SvxShapeGroupAnyD>
         getSeriesGroupShapeFrontChild( VDataSeries* pDataSeries
-            , const css:: uno::Reference< css::drawing::XShapes >& xTarget );
-    css::uno::Reference< css::drawing::XShapes >
+            , const rtl::Reference<SvxShapeGroupAnyD>& xTarget );
+    rtl::Reference<SvxShapeGroupAnyD>
         getSeriesGroupShapeBackChild( VDataSeries* pDataSeries
-            , const css:: uno::Reference< css::drawing::XShapes >& xTarget );
+            , const rtl::Reference<SvxShapeGroupAnyD>& xTarget );
 
     /// This method creates a 2D group shape for containing all text shapes
     /// needed for this series; the group is added to the text target;
     static rtl::Reference<SvxShapeGroup>
         getLabelsGroupShape( VDataSeries& rDataSeries
-            , const css:: uno::Reference< css::drawing::XShapes >& xTarget );
+            , const rtl::Reference<SvxShapeGroupAnyD>& xTarget );
 
-    css::uno::Reference< css::drawing::XShapes >
+    rtl::Reference<SvxShapeGroupAnyD>
         getErrorBarsGroupShape( VDataSeries& rDataSeries
-            , const css:: uno::Reference< css::drawing::XShapes >& xTarget, bool bYError );
+            , const rtl::Reference<SvxShapeGroupAnyD>& xTarget, bool bYError );
 
     /** This method creates a text shape for a label related to a data point
      *  and append it to the root text shape group (xTarget).
@@ -314,7 +312,7 @@ protected:
      *      a reference to the created text shape.
      */
     rtl::Reference<SvxShapeText>
-        createDataLabel( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        createDataLabel( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                 , VDataSeries& rDataSeries
                 , sal_Int32 nPointIndex
                 , double fValue
@@ -349,7 +347,7 @@ protected:
             for y-error bars this is true, for x-error-bars it is false.
      */
     void createErrorBar(
-          const css::uno::Reference< css::drawing::XShapes >& xTarget
+          const rtl::Reference<SvxShapeGroupAnyD>& xTarget
         , const css::drawing::Position3D & rPos
         , const css::uno::Reference< css::beans::XPropertySet > & xErrorBarProperties
         , const VDataSeries& rVDataSeries
@@ -362,7 +360,7 @@ protected:
           const css::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries
         , sal_Int32 nIndex
-        , const css::uno::Reference< css::drawing::XShapes >& rTarget
+        , const rtl::Reference<SvxShapeGroupAnyD>& rTarget
         , bool bUseXErrorData
         , bool bUseYErrorData
     );
@@ -370,26 +368,26 @@ protected:
     static void addErrorBorder(
           const css::drawing::Position3D& rPos0
         , const css::drawing::Position3D& rPos1
-        , const css::uno::Reference< css::drawing::XShapes >& rTarget
+        , const rtl::Reference<SvxShapeGroupAnyD>& rTarget
         , const css::uno::Reference< css::beans::XPropertySet >& rErrorBorderProp );
 
     void createErrorBar_X( const css::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
-        , const css::uno::Reference< css::drawing::XShapes >& xTarget );
+        , const rtl::Reference<SvxShapeGroupAnyD>& xTarget );
 
     void createErrorBar_Y( const css::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
-        , const css::uno::Reference< css::drawing::XShapes >& xTarget
+        , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
         , double const * pfScaledLogicX );
 
     void createRegressionCurvesShapes( VDataSeries const & rVDataSeries
-        , const css::uno::Reference< css::drawing::XShapes >& xTarget
-        , const css::uno::Reference< css::drawing::XShapes >& xEquationTarget
+        , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+        , const rtl::Reference<SvxShapeGroupAnyD>& xEquationTarget
         , bool bMaySkipPointsInRegressionCalculation );
 
     void createRegressionCurveEquationShapes( const OUString & rEquationCID
         , const css::uno::Reference< css::beans::XPropertySet > & xEquationProperties
-        , const css::uno::Reference< css::drawing::XShapes >& xEquationTarget
+        , const rtl::Reference<SvxShapeGroupAnyD>& xEquationTarget
         , const css::uno::Reference< css::chart2::XRegressionCurveCalculator > & xRegressionCurveCalculator
         , css::awt::Point aDefaultPos );
 

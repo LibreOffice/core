@@ -154,13 +154,13 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
 }
 #endif
 
-void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogicTarget
+void VPolarGrid::create2DRadiusGrid( const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget
         , TickInfoArraysType& rRadiusTickInfos
         , TickInfoArraysType& rAngleTickInfos
         , const std::vector<VLineProperties>& rLinePropertiesList )
 {
-    Reference< drawing::XShapes > xMainTarget(
-        createGroupShape( xLogicTarget, m_aCID ) );
+    rtl::Reference<SvxShapeGroupAnyD> xMainTarget =
+        createGroupShape( xLogicTarget, m_aCID );
 
     const std::vector<ExplicitScaleData>& rScales = m_pPosHelper->getScales();
     const ExplicitScaleData&     rRadiusScale = rScales[1];
@@ -180,14 +180,14 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
         if( !rLinePropertiesList[nDepth].isLineVisible() )
             continue;
 
-        Reference< drawing::XShapes > xTarget( xMainTarget );
+        rtl::Reference<SvxShapeGroupAnyD> xTarget( xMainTarget );
         if( nDepth > 0 )
         {
-            xTarget.set( createGroupShape( xLogicTarget
+            xTarget = createGroupShape( xLogicTarget
                 , ObjectIdentifier::addChildParticle( m_aCID, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_SUBGRID, nDepth-1 ) )
-                ) );
+                );
             if(!xTarget.is())
-                xTarget.set( xMainTarget );
+                xTarget = xMainTarget;
         }
 
         //create axis main lines

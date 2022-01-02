@@ -23,6 +23,8 @@
 #include <chartview/ExplicitScaleValues.hxx>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/uno/Sequence.h>
+#include <rtl/ref.hxx>
+#include <svx/unoshape.hxx>
 
 #include <map>
 #include <memory>
@@ -55,10 +57,10 @@ public:
 
     /// @throws css::uno::RuntimeException
     void initPlottingTargets(
-                  const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
-                , const css::uno::Reference< css::drawing::XShapes >& xFinalTarget
+                  const rtl::Reference< SvxShapeGroupAnyD >& xLogicTarget
+                , const rtl::Reference< SvxShapeGroupAnyD >& xFinalTarget
                 , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
-                , css::uno::Reference< css::drawing::XShapes >& xLogicTargetForSeriesBehindAxis );
+                , rtl::Reference<SvxShapeGroupAnyD>& xLogicTargetForSeriesBehindAxis );
 
     void setParticle( const OUString& rCooSysParticle );
 
@@ -165,9 +167,9 @@ protected: //member
 
     typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates whether this is a main or secondary axis
 
-    css::uno::Reference< css::drawing::XShapes >                m_xLogicTargetForGrids;
-    css::uno::Reference< css::drawing::XShapes >                m_xLogicTargetForAxes;
-    css::uno::Reference< css::drawing::XShapes >                m_xFinalTarget;
+    rtl::Reference<SvxShapeGroupAnyD>                m_xLogicTargetForGrids;
+    rtl::Reference<SvxShapeGroupAnyD>                m_xLogicTargetForAxes;
+    rtl::Reference<SvxShapeGroupAnyD>                m_xFinalTarget;
     css::uno::Reference< css::lang::XMultiServiceFactory>       m_xShapeFactory;
     css::drawing::HomogenMatrix                            m_aMatrixSceneToScreen;
 

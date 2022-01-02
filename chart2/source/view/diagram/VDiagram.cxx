@@ -75,7 +75,7 @@ VDiagram::~VDiagram()
 }
 
 void VDiagram::init(
-    const uno::Reference< drawing::XShapes >& xTarget, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+    const rtl::Reference<SvxShapeGroupAnyD>& xTarget, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 {
     OSL_PRECOND(xFactory.is(), "no proper initialization parameters");
 
@@ -142,16 +142,13 @@ void VDiagram::createShapes_2d()
         return;
 
     //create group shape
-    uno::Reference< drawing::XShapes > xOuterGroup_Shapes = ShapeFactory::createGroup2D(m_xTarget);
-    m_xOuterGroupShape.set( xOuterGroup_Shapes, uno::UNO_QUERY );
+    rtl::Reference<SvxShapeGroupAnyD> xOuterGroup_Shapes = ShapeFactory::createGroup2D(m_xTarget);
+    m_xOuterGroupShape = xOuterGroup_Shapes;
 
-    uno::Reference< drawing::XShapes > xGroupForWall( ShapeFactory::createGroup2D(xOuterGroup_Shapes,"PlotAreaExcludingAxes") );
+    rtl::Reference<SvxShapeGroupAnyD> xGroupForWall( ShapeFactory::createGroup2D(xOuterGroup_Shapes,"PlotAreaExcludingAxes") );
 
     //create independent group shape as container for datapoints and such things
-    {
-        uno::Reference< drawing::XShapes > xShapes = ShapeFactory::createGroup2D(xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID");
-        m_xCoordinateRegionShape.set( xShapes, uno::UNO_QUERY );
-    }
+    m_xCoordinateRegionShape = ShapeFactory::createGroup2D(xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID");
 
     bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
 
@@ -449,14 +446,14 @@ void VDiagram::createShapes_3d()
 
     //create shape
     rtl::Reference<Svx3DSceneObject> xShapes = ShapeFactory::createGroup3D( m_xTarget, "PlotAreaExcludingAxes" );
-    m_xOuterGroupShape.set( static_cast<cppu::OWeakObject*>(xShapes.get()), uno::UNO_QUERY);
+    m_xOuterGroupShape = xShapes;
 
-    uno::Reference< drawing::XShapes > xOuterGroup_Shapes( m_xOuterGroupShape, uno::UNO_QUERY );
+    rtl::Reference<SvxShapeGroupAnyD> xOuterGroup_Shapes = m_xOuterGroupShape;
 
     //create additional group to manipulate the aspect ratio of the whole diagram:
     xOuterGroup_Shapes = ShapeFactory::createGroup3D( xOuterGroup_Shapes );
 
-    m_xAspectRatio3D.set( xOuterGroup_Shapes, uno::UNO_QUERY );
+    m_xAspectRatio3D = xOuterGroup_Shapes;
 
     bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
 
@@ -537,27 +534,26 @@ void VDiagram::createShapes_3d()
     try
     {
         uno::Reference< beans::XPropertySet > xSourceProp( m_xDiagram, uno::UNO_QUERY_THROW );
-        uno::Reference< beans::XPropertySet > xDestProp( m_xOuterGroupShape, uno::UNO_QUERY_THROW );
 
         //perspective
         {
             //ignore distance and focal length from file format and model completely
             //use vrp only to indicate the distance of the camera and thus influence the perspective
-            xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_DISTANCE, uno::Any(
+            m_xOuterGroupShape->setPropertyValue( UNO_NAME_3D_SCENE_DISTANCE, uno::Any(
                                         static_cast<sal_Int32>(ThreeDHelper::getCameraDistance( xSourceProp ))));
-            xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE,
+            m_xOuterGroupShape->setPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE,
                                         xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE));
         }
 
         //light
         {
-            xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_SHADE_MODE,
+            m_xOuterGroupShape->setPropertyValue( UNO_NAME_3D_SCENE_SHADE_MODE,
                                         xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_SHADE_MODE));
-            xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_AMBIENTCOLOR,
+            m_xOuterGroupShape->setPropertyValue( UNO_NAME_3D_SCENE_AMBIENTCOLOR,
                                         xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_AMBIENTCOLOR));
-            xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING,
+            m_xOuterGroupShape->setPropertyValue( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING,
                                         xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING));
-            lcl_setLightSources( xSourceProp, xDestProp );
+            lcl_setLightSources( xSourceProp, m_xOuterGroupShape );
         }
 
         //rotation
@@ -577,7 +573,7 @@ void VDiagram::createShapes_3d()
             //#i98497# 3D charts are rendered with wrong size
             E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene(m_xOuterGroupShape));
 
-            xDestProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX,
+            m_xOuterGroupShape->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX,
                     uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTransformation ) ) );
         }
     }
@@ -618,7 +614,7 @@ void VDiagram::createShapes_3d()
     //create an additional scene for the smaller inner coordinate region:
     {
         rtl::Reference<Svx3DSceneObject> xShapes2 = ShapeFactory::createGroup3D( xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID" );
-        m_xCoordinateRegionShape.set( static_cast<cppu::OWeakObject*>(xShapes2.get()), uno::UNO_QUERY );
+        m_xCoordinateRegionShape = xShapes2;
 
         try
         {

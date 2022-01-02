@@ -34,7 +34,7 @@ class OOO_DLLPUBLIC_CHARTVIEW DataPointSymbolSupplier
 {
 public:
     static rtl::Reference< SvxShapeGroup >
-        create2DSymbolList( const css::uno::Reference< css::drawing::XShapes >& xTarget
+        create2DSymbolList( const rtl::Reference<SvxDrawPage>& xTarget
             , const css::drawing::Direction3D& rSize );
 };
 

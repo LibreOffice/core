@@ -83,10 +83,10 @@ void lcl_addProperty(uno::Sequence<OUString> & rPropertyNames, uno::Sequence<uno
 
 } // end anonymous namespace
 
-uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
+rtl::Reference<SvxShapeGroupAnyD> ShapeFactory::getOrCreateChartRootShape(
     const rtl::Reference<SvxDrawPage>& xDrawPage )
 {
-    uno::Reference<drawing::XShapes> xRet = ShapeFactory::getChartRootShape(xDrawPage);
+    rtl::Reference<SvxShapeGroupAnyD> xRet = ShapeFactory::getChartRootShape(xDrawPage);
     if (xRet.is())
         return xRet;
 
@@ -98,13 +98,12 @@ uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
     xDrawPage->addBottom(xShape);
 
     setShapeName(xShapeGroup, "com.sun.star.chart2.shapes");
-    xShape->setSize(awt::Size(0,0));
+    xShapeGroup->setSize(awt::Size(0,0));
 
-    xRet.set(xShape, uno::UNO_QUERY);
-    return xRet;
+    return xShapeGroup;
 }
 
-void ShapeFactory::setPageSize(const uno::Reference<drawing::XShapes>&, const awt::Size&) {}
+void ShapeFactory::setPageSize(const rtl::Reference<SvxShapeGroupAnyD>&, const awt::Size&) {}
 
 //  diverse tools::PolyPolygon create methods
 
@@ -360,7 +359,7 @@ static uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double f
 
 rtl::Reference<Svx3DExtrudeObject>
         ShapeFactory::createCube(
-            const uno::Reference<drawing::XShapes>& xTarget
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget
             , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
             , sal_Int32 nRotateZAngleHundredthDegree
             , const uno::Reference< beans::XPropertySet >& xSourceProp
@@ -394,7 +393,7 @@ rtl::Reference<Svx3DExtrudeObject>
 
 rtl::Reference<Svx3DExtrudeObject>
         ShapeFactory::impl_createCube(
-              const uno::Reference<drawing::XShapes>& xTarget
+              const rtl::Reference<SvxShapeGroupAnyD>& xTarget
             , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
             , sal_Int32 nRotateZAngleHundredthDegree
             , bool bRounded )
@@ -450,7 +449,7 @@ rtl::Reference<Svx3DExtrudeObject>
 
 rtl::Reference<Svx3DLatheObject>
         ShapeFactory::createCylinder(
-            const uno::Reference<drawing::XShapes>& xTarget
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
           , sal_Int32 nRotateZAngleHundredthDegree )
 {
@@ -460,7 +459,7 @@ rtl::Reference<Svx3DLatheObject>
 
 rtl::Reference<Svx3DSceneObject>
         ShapeFactory::createPyramid(
-            const uno::Reference<drawing::XShapes>& xTarget
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
           , double fTopHeight, bool bRotateZ
           , const uno::Reference< beans::XPropertySet >& xSourceProp
@@ -620,7 +619,7 @@ rtl::Reference<Svx3DSceneObject>
 
 rtl::Reference<Svx3DLatheObject>
         ShapeFactory::createCone(
-            const uno::Reference<drawing::XShapes>& xTarget
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
           , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree )
 {
@@ -629,7 +628,7 @@ rtl::Reference<Svx3DLatheObject>
 
 rtl::Reference<Svx3DLatheObject>
         ShapeFactory::impl_createConeOrCylinder(
-              const uno::Reference<drawing::XShapes>& xTarget
+              const rtl::Reference<SvxShapeGroupAnyD>& xTarget
             , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
             , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree
             , bool bCylinder )
@@ -852,7 +851,7 @@ static drawing::PolyPolygonBezierCoords getRingBezierCoords(
 
 rtl::Reference<SvxShapePolyPolygon>
         ShapeFactory::createPieSegment2D(
-                    const uno::Reference< drawing::XShapes >& xTarget
+                    const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                     , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
                     , const drawing::Direction3D& rOffset
@@ -898,7 +897,7 @@ rtl::Reference<SvxShapePolyPolygon>
 
 rtl::Reference<Svx3DExtrudeObject>
         ShapeFactory::createPieSegment(
-                    const uno::Reference< drawing::XShapes >& xTarget
+                    const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                     , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
                     , const drawing::Direction3D& rOffset
@@ -973,7 +972,7 @@ rtl::Reference<Svx3DExtrudeObject>
 }
 
 rtl::Reference<Svx3DPolygonObject>
-        ShapeFactory::createStripe( const uno::Reference< drawing::XShapes >& xTarget
+        ShapeFactory::createStripe( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const Stripe& rStripe
                     , const uno::Reference< beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
@@ -1028,7 +1027,7 @@ rtl::Reference<Svx3DPolygonObject>
 }
 
 rtl::Reference<Svx3DExtrudeObject>
-        ShapeFactory::createArea3D( const uno::Reference< drawing::XShapes >& xTarget
+        ShapeFactory::createArea3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const drawing::PolyPolygonShape3D& rPolyPolygon
                     , double fDepth )
 {
@@ -1082,7 +1081,7 @@ rtl::Reference<Svx3DExtrudeObject>
 
 
 rtl::Reference<SvxShapePolyPolygon>
-        ShapeFactory::createArea2D( const uno::Reference< drawing::XShapes >& xTarget
+        ShapeFactory::createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const drawing::PolyPolygonShape3D& rPolyPolygon )
 {
     if( !xTarget.is() )
@@ -1618,7 +1617,7 @@ static drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Posi
 
 rtl::Reference<SvxShapePolyPolygon>
         ShapeFactory::createSymbol2D(
-                      const uno::Reference< drawing::XShapes >& xTarget
+                      const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const drawing::Position3D& rPosition
                     , const drawing::Direction3D& rSize
                     , sal_Int32 nStandardSymbol
@@ -1660,7 +1659,7 @@ rtl::Reference<SvxShapePolyPolygon>
 
 rtl::Reference<SvxGraphicObject>
         ShapeFactory::createGraphic2D(
-                      const uno::Reference< drawing::XShapes >& xTarget
+                      const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const drawing::Position3D& rPosition
                     , const drawing::Direction3D& rSize
                     , const uno::Reference< graphic::XGraphic >& xGraphic )
@@ -1702,7 +1701,39 @@ rtl::Reference<SvxGraphicObject>
 }
 
 rtl::Reference< SvxShapeGroup >
-        ShapeFactory::createGroup2D( const uno::Reference< drawing::XShapes >& xTarget
+        ShapeFactory::createGroup2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+        , const OUString& aName )
+{
+    if( !xTarget.is() )
+        return nullptr;
+    try
+    {
+        //create and add to target
+        rtl::Reference<SvxShapeGroup> xShapeGroup = new SvxShapeGroup(nullptr, nullptr);
+        xShapeGroup->setShapeKind(OBJ_GRUP);
+        uno::Reference< drawing::XShape > xShape(static_cast<cppu::OWeakObject*>(xShapeGroup.get()), uno::UNO_QUERY_THROW);
+        xTarget->add(xShape);
+
+        //set name
+        if(!aName.isEmpty())
+            setShapeName( xShapeGroup, aName );
+
+        {//workaround
+            //need this null size as otherwise empty group shapes where painted with a gray border
+            xShapeGroup->setSize(awt::Size(0,0));
+        }
+
+        return xShapeGroup;
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+    return nullptr;
+}
+
+rtl::Reference< SvxShapeGroup >
+        ShapeFactory::createGroup2D( const rtl::Reference<SvxDrawPage>& xTarget
         , const OUString& aName )
 {
     if( !xTarget.is() )
@@ -1734,7 +1765,7 @@ rtl::Reference< SvxShapeGroup >
 }
 
 rtl::Reference<Svx3DSceneObject>
-        ShapeFactory::createGroup3D( const uno::Reference< drawing::XShapes >& xTarget
+        ShapeFactory::createGroup3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
         , const OUString& aName )
 {
     if( !xTarget.is() )
@@ -1776,7 +1807,7 @@ rtl::Reference<Svx3DSceneObject>
 }
 
 rtl::Reference<SvxShapeCircle>
-        ShapeFactory::createCircle2D( const uno::Reference< drawing::XShapes >& xTarget
+        ShapeFactory::createCircle2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const drawing::Position3D& rPosition
                     , const drawing::Direction3D& rSize )
 {
@@ -1815,7 +1846,7 @@ rtl::Reference<SvxShapeCircle>
 }
 
 rtl::Reference<SvxShapeCircle>
-    ShapeFactory::createCircle( const uno::Reference< drawing::XShapes >& xTarget
+    ShapeFactory::createCircle( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const awt::Size& rSize
                     , const awt::Point& rPosition )
 {
@@ -1829,7 +1860,7 @@ rtl::Reference<SvxShapeCircle>
 }
 
 rtl::Reference<Svx3DPolygonObject>
-        ShapeFactory::createLine3D( const uno::Reference< drawing::XShapes >& xTarget
+        ShapeFactory::createLine3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const drawing::PolyPolygonShape3D& rPoints
                     , const VLineProperties& rLineProperties )
 {
@@ -1898,7 +1929,7 @@ rtl::Reference<Svx3DPolygonObject>
 }
 
 rtl::Reference<SvxShapePolyPolygon>
-        ShapeFactory::createLine2D( const uno::Reference< drawing::XShapes >& xTarget
+        ShapeFactory::createLine2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const drawing::PointSequenceSequence& rPoints
                     , const VLineProperties* pLineProperties )
 {
@@ -1961,7 +1992,7 @@ rtl::Reference<SvxShapePolyPolygon>
 }
 
 rtl::Reference<SvxShapePolyPolygon>
-    ShapeFactory::createLine ( const uno::Reference< drawing::XShapes >& xTarget,
+    ShapeFactory::createLine ( const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
             const awt::Size& rSize, const awt::Point& rPosition )
 {
     //create shape
@@ -1975,7 +2006,7 @@ rtl::Reference<SvxShapePolyPolygon>
 }
 
 rtl::Reference<SvxShapeRect> ShapeFactory::createInvisibleRectangle(
-            const uno::Reference< drawing::XShapes >& xTarget
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget
             , const awt::Size& rSize )
 {
     try
@@ -1998,7 +2029,7 @@ rtl::Reference<SvxShapeRect> ShapeFactory::createInvisibleRectangle(
 }
 
 rtl::Reference<SvxShapeRect> ShapeFactory::createRectangle(
-    const uno::Reference< drawing::XShapes >& xTarget,
+    const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
     const awt::Size& rSize,
     const awt::Point& rPosition,
     const tNameSequence& rPropNames,
@@ -2009,7 +2040,7 @@ rtl::Reference<SvxShapeRect> ShapeFactory::createRectangle(
     xShape->setShapeKind(OBJ_RECT);
     if (ePos == StackPosition::Bottom)
     {
-        uno::Reference<drawing::XShapes2> xTarget2(xTarget, uno::UNO_QUERY);
+        uno::Reference<drawing::XShapes2> xTarget2(static_cast<cppu::OWeakObject*>(xTarget.get()), uno::UNO_QUERY);
         if (xTarget2.is())
             xTarget2->addBottom(xShape);
     }
@@ -2025,7 +2056,7 @@ rtl::Reference<SvxShapeRect> ShapeFactory::createRectangle(
 
 rtl::Reference<SvxShapeRect>
     ShapeFactory::createRectangle(
-            const uno::Reference< drawing::XShapes >& xTarget )
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget )
 {
     rtl::Reference<SvxShapeRect> xShape = new SvxShapeRect(nullptr);
     xShape->setShapeKind(OBJ_RECT);
@@ -2035,7 +2066,7 @@ rtl::Reference<SvxShapeRect>
 }
 
 rtl::Reference<SvxShapeText>
-        ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget
+        ShapeFactory::createText( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const OUString& rText
                     , const tNameSequence& rPropNames
                     , const tAnySequence& rPropValues
@@ -2076,7 +2107,7 @@ rtl::Reference<SvxShapeText>
 }
 
 rtl::Reference<SvxShapeText>
-    ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget
+    ShapeFactory::createText( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                 , uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString
                 , const tNameSequence& rPropNames
                 , const tAnySequence& rPropValues
@@ -2161,7 +2192,7 @@ rtl::Reference<SvxShapeText>
 }
 
 rtl::Reference<SvxShapeText>
-        ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget,
+        ShapeFactory::createText( const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
                 const awt::Size& rSize,
                 const awt::Point& rPos,
                 uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString,
@@ -2310,10 +2341,10 @@ ShapeFactory* ShapeFactory::getOrCreateShapeFactory(const uno::Reference< lang::
     return pShapeFactory;
 }
 
-uno::Reference< drawing::XShapes > ShapeFactory::getChartRootShape(
+rtl::Reference<SvxShapeGroupAnyD> ShapeFactory::getChartRootShape(
     const rtl::Reference<SvxDrawPage>& xDrawPage )
 {
-    uno::Reference< drawing::XShapes > xRet;
+    rtl::Reference<SvxShapeGroupAnyD> xRet;
     const uno::Reference< drawing::XShapes > xShapes = xDrawPage;
     if( xShapes.is() )
     {
@@ -2325,7 +2356,8 @@ uno::Reference< drawing::XShapes > ShapeFactory::getChartRootShape(
             {
                 if( ShapeFactory::getShapeName( xShape ) == "com.sun.star.chart2.shapes" )
                 {
-                    xRet.set( xShape, uno::UNO_QUERY );
+                    xRet = dynamic_cast<SvxShapeGroupAnyD*>(xShape.get());
+                    assert(xRet);
                     break;
                 }
             }
@@ -2510,7 +2542,7 @@ awt::Size ShapeFactory::getSizeAfterRotation(
     return aRet;
 }
 
-void ShapeFactory::removeSubShapes( const uno::Reference< drawing::XShapes >& xShapes )
+void ShapeFactory::removeSubShapes( const rtl::Reference<SvxShapeGroupAnyD>& xShapes )
 {
     if( xShapes.is() )
     {
