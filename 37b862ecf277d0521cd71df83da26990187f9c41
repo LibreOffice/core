@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57d0377c_53134dbf",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 9335,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-02T08:42:11Z",
+      "side": 1,
+      "message": "isn\u0027t it \"libclucene-core\" instead of \"libclucence-core\" ?",
+      "range": {
+        "startLine": 9335,
+        "startChar": 46,
+        "endLine": 9335,
+        "endChar": 57
+      },
+      "revId": "37b862ecf277d0521cd71df83da26990187f9c41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
