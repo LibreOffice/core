@@ -44,7 +44,11 @@ class WinSalVirtualDevice;
 class WinSalPrinter;
 namespace vcl { class Font; }
 struct HDCCache;
-struct TempFontItem;
+struct TempFontItem
+{
+    OUString maFontResourcePath;
+    TempFontItem* mpNextItem;
+};
 class TextOutRenderer;
 #if HAVE_FEATURE_SKIA
 class SkiaControlsCache;
@@ -116,6 +120,7 @@ public:
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpSharedTempFontItem;   // LibreOffice shared fonts
     TempFontItem*           mpOtherTempFontItem;    // other temporary fonts (embedded?)
+    bool                    mbSkiaPrivateFontSetInvalid; // true when skia needs to rebuild its dwrite font set from the changed libreoffice private fonts
     bool                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
     bool                    mbThemeMenuSupport;
 
