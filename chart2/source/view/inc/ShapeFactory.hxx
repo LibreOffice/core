@@ -266,8 +266,7 @@ public:
             , const css::awt::Size& rTargetAreaSize
             , const css::awt::Size& rObjectSize );
 
-    static ::basegfx::B2IRectangle getRectangleOfShape(
-            const css::uno::Reference< css::drawing::XShape >& xShape );
+    static ::basegfx::B2IRectangle getRectangleOfShape( SvxShape& xShape );
 
     static css::awt::Size getSizeAfterRotation(
             const css::uno::Reference< css::drawing::XShape >& xShape, double fRotationAngleDegree );

@@ -302,6 +302,17 @@ bool DrawModelWrapper::removeShape( const uno::Reference< drawing::XShape >& xSh
     return false;
 }
 
+bool DrawModelWrapper::removeShape( SvxShape& rShape )
+{
+    uno::Reference<drawing::XShapes> xShapes( rShape.getParent(), uno::UNO_QUERY );
+    if( xShapes.is() )
+    {
+        xShapes->remove(&rShape);
+        return true;
+    }
+    return false;
+}
+
 void DrawModelWrapper::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("DrawModelWrapper"));

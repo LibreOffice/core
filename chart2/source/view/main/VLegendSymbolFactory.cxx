@@ -73,7 +73,7 @@ void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
 
 void lcl_setPropertiesToShape(
     const Reference< beans::XPropertySet > & xProp,
-    const Reference< drawing::XShape > & xShape,
+    const rtl::Reference< SvxShape > & xShape,
     ::chart::VLegendSymbolFactory::PropertyType ePropertyType,
     const awt::Size& aMaxSymbolExtent)
 {
@@ -82,8 +82,7 @@ void lcl_setPropertiesToShape(
     getPropNamesAndValues( xProp, aPropNames, aPropValues,
             ePropertyType, aMaxSymbolExtent );
 
-    Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-    ::chart::PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShapeProp );
+    ::chart::PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShape );
 }
 
 } // anonymous namespace
@@ -123,7 +122,6 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
                         awt::Point( 0, rEntryKeyAspectRatio.Height/2 ));
             lcl_setPropertiesToShape( xLegendEntryProperties, xLine, ePropertyType, rEntryKeyAspectRatio );
 
-            Reference< drawing::XShape > xSymbol;
             const sal_Int32 nSize = std::min(rEntryKeyAspectRatio.Width,rEntryKeyAspectRatio.Height);
             chart2::Symbol aSymbol;
             if( rExplicitSymbol >>= aSymbol )
@@ -137,21 +135,21 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
                     // border of symbols always same as fill color
                     aSymbol.BorderColor = aSymbol.FillColor;
 
-                    xSymbol.set( ShapeFactory::createSymbol2D(
+                    ShapeFactory::createSymbol2D(
                                      xResultGroup,
                                      aPos,
                                      aSymbolSize,
                                      aSymbol.StandardSymbol,
                                      aSymbol.BorderColor,
-                                     aSymbol.FillColor ));
+                                     aSymbol.FillColor );
                 }
                 else if( aSymbol.Style == chart2::SymbolStyle_GRAPHIC )
                 {
-                    xSymbol.set( ShapeFactory::createGraphic2D(
+                    ShapeFactory::createGraphic2D(
                                      xResultGroup,
                                      aPos,
                                      aSymbolSize,
-                                     aSymbol.Graphic ));
+                                     aSymbol.Graphic );
                 }
                 else if( aSymbol.Style == chart2::SymbolStyle_AUTO )
                 {

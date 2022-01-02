@@ -22,6 +22,8 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
+#include <rtl/ref.hxx>
+#include <svx/unoshape.hxx>
 #include <vector>
 
 namespace chart { class ChartModel; }
@@ -56,7 +58,7 @@ struct ViewLegendEntry
     /** The legend symbol that represents a data series or other
         information contained in the legend
      */
-    css::uno::Reference< css::drawing::XShape > aSymbol;
+    rtl::Reference< SvxShapeGroup > xSymbol;
 
     /** The descriptive text for a legend entry.
      */
