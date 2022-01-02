@@ -271,53 +271,45 @@ void VSeriesPlotter::releaseShapes()
     }
 }
 
-uno::Reference< drawing::XShapes > VSeriesPlotter::getSeriesGroupShape( VDataSeries* pDataSeries
-                                        , const uno::Reference< drawing::XShapes >& xTarget )
+rtl::Reference<SvxShapeGroupAnyD> VSeriesPlotter::getSeriesGroupShape( VDataSeries* pDataSeries
+                                        , const rtl::Reference<SvxShapeGroupAnyD>& xTarget )
 {
-    uno::Reference< drawing::XShapes > xShapes( pDataSeries->m_xGroupShape );
-    if( !xShapes.is() )
-    {
+    if( !pDataSeries->m_xGroupShape )
         //create a group shape for this series and add to logic target:
-        xShapes = createGroupShape( xTarget,pDataSeries->getCID() );
-        pDataSeries->m_xGroupShape = xShapes;
-    }
-    return xShapes;
+        pDataSeries->m_xGroupShape = createGroupShape( xTarget,pDataSeries->getCID() );
+    return pDataSeries->m_xGroupShape;
 }
 
-uno::Reference< drawing::XShapes > VSeriesPlotter::getSeriesGroupShapeFrontChild( VDataSeries* pDataSeries
-                                        , const uno::Reference< drawing::XShapes >& xTarget )
+rtl::Reference<SvxShapeGroupAnyD> VSeriesPlotter::getSeriesGroupShapeFrontChild( VDataSeries* pDataSeries
+                                        , const rtl::Reference<SvxShapeGroupAnyD>& xTarget )
 {
-    uno::Reference< drawing::XShapes > xShapes( pDataSeries->m_xFrontSubGroupShape );
-    if(!xShapes.is())
+    if(!pDataSeries->m_xFrontSubGroupShape)
     {
         //ensure that the series group shape is already created
-        uno::Reference< drawing::XShapes > xSeriesShapes( getSeriesGroupShape( pDataSeries, xTarget ) );
+        rtl::Reference<SvxShapeGroupAnyD> xSeriesShapes( getSeriesGroupShape( pDataSeries, xTarget ) );
         //ensure that the back child is created first
         getSeriesGroupShapeBackChild( pDataSeries, xTarget );
         //use series group shape as parent for the new created front group shape
-        xShapes = createGroupShape( xSeriesShapes );
-        pDataSeries->m_xFrontSubGroupShape = xShapes;
+        pDataSeries->m_xFrontSubGroupShape = createGroupShape( xSeriesShapes );
     }
-    return xShapes;
+    return pDataSeries->m_xFrontSubGroupShape;
 }
 
-uno::Reference< drawing::XShapes > VSeriesPlotter::getSeriesGroupShapeBackChild( VDataSeries* pDataSeries
-                                        , const uno::Reference< drawing::XShapes >& xTarget )
+rtl::Reference<SvxShapeGroupAnyD> VSeriesPlotter::getSeriesGroupShapeBackChild( VDataSeries* pDataSeries
+                                        , const rtl::Reference<SvxShapeGroupAnyD>& xTarget )
 {
-    uno::Reference< drawing::XShapes > xShapes( pDataSeries->m_xBackSubGroupShape );
-    if(!xShapes.is())
+    if(!pDataSeries->m_xBackSubGroupShape)
     {
         //ensure that the series group shape is already created
-        uno::Reference< drawing::XShapes > xSeriesShapes( getSeriesGroupShape( pDataSeries, xTarget ) );
+        rtl::Reference<SvxShapeGroupAnyD> xSeriesShapes( getSeriesGroupShape( pDataSeries, xTarget ) );
         //use series group shape as parent for the new created back group shape
-        xShapes = createGroupShape( xSeriesShapes );
-        pDataSeries->m_xBackSubGroupShape = xShapes;
+        pDataSeries->m_xBackSubGroupShape = createGroupShape( xSeriesShapes );
     }
-    return xShapes;
+    return pDataSeries->m_xBackSubGroupShape;
 }
 
 rtl::Reference<SvxShapeGroup> VSeriesPlotter::getLabelsGroupShape( VDataSeries& rDataSeries
-                                        , const uno::Reference< drawing::XShapes >& xTextTarget )
+                                        , const rtl::Reference<SvxShapeGroupAnyD>& xTextTarget )
 {
     //xTextTarget needs to be a 2D shape container always!
     if(!rDataSeries.m_xLabelsGroupShape)
@@ -328,21 +320,19 @@ rtl::Reference<SvxShapeGroup> VSeriesPlotter::getLabelsGroupShape( VDataSeries& 
     return rDataSeries.m_xLabelsGroupShape;
 }
 
-uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VDataSeries& rDataSeries
-                                        , const uno::Reference< drawing::XShapes >& xTarget
+rtl::Reference<SvxShapeGroupAnyD> VSeriesPlotter::getErrorBarsGroupShape( VDataSeries& rDataSeries
+                                        , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                                         , bool bYError )
 {
-    uno::Reference< css::drawing::XShapes > &rShapeGroup =
+    rtl::Reference<SvxShapeGroupAnyD> &rShapeGroup =
             bYError ? rDataSeries.m_xErrorYBarsGroupShape : rDataSeries.m_xErrorXBarsGroupShape;
 
-    uno::Reference< drawing::XShapes > xShapes( rShapeGroup );
-    if(!xShapes.is())
+    if(!rShapeGroup)
     {
         //create a group shape for this series and add to logic target:
-        xShapes = createGroupShape( xTarget,rDataSeries.getErrorBarsCID(bYError) );
-        rShapeGroup = xShapes;
+        rShapeGroup = createGroupShape( xTarget,rDataSeries.getErrorBarsCID(bYError) );
     }
-    return xShapes;
+    return rShapeGroup;
 
 }
 
@@ -389,7 +379,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries const & rDataSeries
     return aNumber;
 }
 
-rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& xTarget
+rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , VDataSeries& rDataSeries
                     , sal_Int32 nPointIndex
                     , double fValue
@@ -466,9 +456,9 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const uno::Referen
             awt::Size aMaxSymbolExtent( nSymbolWidth, nSymbolHeight );
 
             if( rDataSeries.isVaryColorsByPoint() )
-                xSymbol = VSeriesPlotter::createLegendSymbolForPoint( aMaxSymbolExtent, rDataSeries, nPointIndex, xTarget_, m_xShapeFactory );
+                xSymbol = VSeriesPlotter::createLegendSymbolForPoint( aMaxSymbolExtent, rDataSeries, nPointIndex, xTarget_ );
             else
-                xSymbol = VSeriesPlotter::createLegendSymbolForSeries( aMaxSymbolExtent, rDataSeries, xTarget_, m_xShapeFactory );
+                xSymbol = VSeriesPlotter::createLegendSymbolForSeries( aMaxSymbolExtent, rDataSeries, xTarget_ );
         }
 
         //prepare text
@@ -949,7 +939,7 @@ drawing::Position3D lcl_transformMixedToScene( PlottingPositionHelper const * pP
 } // anonymous namespace
 
 void VSeriesPlotter::createErrorBar(
-      const uno::Reference< drawing::XShapes >& xTarget
+      const rtl::Reference<SvxShapeGroupAnyD>& xTarget
     , const drawing::Position3D& rUnscaledLogicPosition
     , const uno::Reference< beans::XPropertySet > & xErrorBarProperties
     , const VDataSeries& rVDataSeries
@@ -1095,7 +1085,7 @@ void VSeriesPlotter::createErrorBar(
 void VSeriesPlotter::addErrorBorder(
       const drawing::Position3D& rPos0
      ,const drawing::Position3D& rPos1
-     ,const uno::Reference< drawing::XShapes >& rTarget
+     ,const rtl::Reference<SvxShapeGroupAnyD>& rTarget
      ,const uno::Reference< beans::XPropertySet >& rErrorBorderProp )
 {
     drawing::PolyPolygonShape3D aPoly;
@@ -1112,7 +1102,7 @@ void VSeriesPlotter::createErrorRectangle(
       const drawing::Position3D& rUnscaledLogicPosition
      ,VDataSeries& rVDataSeries
      ,sal_Int32 nIndex
-     ,const uno::Reference< drawing::XShapes >& rTarget
+     ,const rtl::Reference<SvxShapeGroupAnyD>& rTarget
      ,bool bUseXErrorData
      ,bool bUseYErrorData )
 {
@@ -1127,8 +1117,8 @@ void VSeriesPlotter::createErrorRectangle(
         if ( !xErrorBorderPropX.is() )
             return;
     }
-    uno::Reference< drawing::XShapes > xErrorBorder_ShapesX(
-        getErrorBarsGroupShape( rVDataSeries, rTarget, false ) );
+    rtl::Reference<SvxShapeGroupAnyD> xErrorBorder_ShapesX =
+        getErrorBarsGroupShape( rVDataSeries, rTarget, false );
 
     if ( bUseYErrorData )
     {
@@ -1136,8 +1126,8 @@ void VSeriesPlotter::createErrorRectangle(
         if ( !xErrorBorderPropY.is() )
             return;
     }
-    uno::Reference< drawing::XShapes > xErrorBorder_ShapesY(
-        getErrorBarsGroupShape( rVDataSeries, rTarget, true ) );
+    rtl::Reference<SvxShapeGroupAnyD> xErrorBorder_ShapesY =
+        getErrorBarsGroupShape( rVDataSeries, rTarget, true );
 
     if( !ChartTypeHelper::isSupportingStatisticProperties( m_xChartTypeModel, m_nDimension ) )
         return;
@@ -1255,7 +1245,7 @@ void VSeriesPlotter::createErrorRectangle(
 
 void VSeriesPlotter::createErrorBar_X( const drawing::Position3D& rUnscaledLogicPosition
                             , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
-                            , const uno::Reference< drawing::XShapes >& xTarget )
+                            , const rtl::Reference<SvxShapeGroupAnyD>& xTarget )
 {
     if(m_nDimension!=2)
         return;
@@ -1263,8 +1253,8 @@ void VSeriesPlotter::createErrorBar_X( const drawing::Position3D& rUnscaledLogic
     uno::Reference< beans::XPropertySet > xErrorBarProp(rVDataSeries.getXErrorBarProperties(nPointIndex));
     if( xErrorBarProp.is())
     {
-        uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
-            getErrorBarsGroupShape(rVDataSeries, xTarget, false) );
+        rtl::Reference<SvxShapeGroupAnyD> xErrorBarsGroup_Shapes =
+            getErrorBarsGroupShape(rVDataSeries, xTarget, false);
 
         createErrorBar( xErrorBarsGroup_Shapes
             , rUnscaledLogicPosition, xErrorBarProp
@@ -1276,7 +1266,7 @@ void VSeriesPlotter::createErrorBar_X( const drawing::Position3D& rUnscaledLogic
 
 void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogicPosition
                             , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
-                            , const uno::Reference< drawing::XShapes >& xTarget
+                            , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                             , double const * pfScaledLogicX )
 {
     if(m_nDimension!=2)
@@ -1285,8 +1275,8 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
     uno::Reference< beans::XPropertySet > xErrorBarProp(rVDataSeries.getYErrorBarProperties(nPointIndex));
     if( xErrorBarProp.is())
     {
-        uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
-            getErrorBarsGroupShape(rVDataSeries, xTarget, true) );
+        rtl::Reference<SvxShapeGroupAnyD> xErrorBarsGroup_Shapes =
+            getErrorBarsGroupShape(rVDataSeries, xTarget, true);
 
         createErrorBar( xErrorBarsGroup_Shapes
             , rUnscaledLogicPosition, xErrorBarProp
@@ -1297,8 +1287,8 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
 }
 
 void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSeries,
-                            const uno::Reference< drawing::XShapes >& xTarget,
-                            const uno::Reference< drawing::XShapes >& xEquationTarget,
+                            const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
+                            const rtl::Reference<SvxShapeGroupAnyD>& xEquationTarget,
                             bool bMaySkipPoints )
 {
     if(m_nDimension!=2)
@@ -1434,7 +1424,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
             aVLineProperties.initFromPropertySet( xProperties );
 
             //create an extra group shape for each curve for selection handling
-            uno::Reference< drawing::XShapes > xRegressionGroupShapes =
+            rtl::Reference<SvxShapeGroupAnyD> xRegressionGroupShapes =
                 createGroupShape( xTarget, rVDataSeries.getDataCurveCID( nN, bAverageLine ) );
             rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
                 xRegressionGroupShapes, PolyToPointSequence( aRegressionPoly ), &aVLineProperties );
@@ -1476,7 +1466,7 @@ static sal_Int32 lcl_getOUStringMaxLineLength ( OUStringBuffer const & aString )
 void VSeriesPlotter::createRegressionCurveEquationShapes(
     const OUString & rEquationCID,
     const uno::Reference< beans::XPropertySet > & xEquationProperties,
-    const uno::Reference< drawing::XShapes >& xEquationTarget,
+    const rtl::Reference<SvxShapeGroupAnyD>& xEquationTarget,
     const uno::Reference< chart2::XRegressionCurveCalculator > & xRegressionCurveCalculator,
     awt::Point aDefaultPos )
 {
@@ -2372,7 +2362,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
               const awt::Size& rEntryKeyAspectRatio
             , LegendPosition eLegendPosition
             , const Reference< beans::XPropertySet >& xTextProperties
-            , const Reference< drawing::XShapes >& xTarget
+            , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
             , const Reference< lang::XMultiServiceFactory >& xShapeFactory
             , const Reference< uno::XComponentContext >& xContext
             , ChartModel& rModel
@@ -2565,8 +2555,7 @@ uno::Any VSeriesPlotter::getExplicitSymbol( const VDataSeries& /*rSeries*/, sal_
 rtl::Reference<SvxShapeGroup> VSeriesPlotter::createLegendSymbolForSeries(
                   const awt::Size& rEntryKeyAspectRatio
                 , const VDataSeries& rSeries
-                , const Reference< drawing::XShapes >& xTarget
-                , const Reference< lang::XMultiServiceFactory >& xShapeFactory )
+                , const rtl::Reference<SvxShapeGroupAnyD>& xTarget )
 {
 
     LegendSymbolStyle eLegendSymbolStyle = getLegendSymbolStyle();
@@ -2586,8 +2575,8 @@ rtl::Reference<SvxShapeGroup> VSeriesPlotter::createLegendSymbolForSeries(
             break;
     }
     rtl::Reference<SvxShapeGroup> xShape = VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
-        xTarget, eLegendSymbolStyle, xShapeFactory
-            , rSeries.getPropertiesOfSeries(), ePropType, aExplicitSymbol );
+        xTarget, eLegendSymbolStyle,
+        rSeries.getPropertiesOfSeries(), ePropType, aExplicitSymbol );
 
     return xShape;
 }
@@ -2596,8 +2585,7 @@ rtl::Reference< SvxShapeGroup > VSeriesPlotter::createLegendSymbolForPoint(
                   const awt::Size& rEntryKeyAspectRatio
                 , const VDataSeries& rSeries
                 , sal_Int32 nPointIndex
-                , const Reference< drawing::XShapes >& xTarget
-                , const Reference< lang::XMultiServiceFactory >& xShapeFactory )
+                , const rtl::Reference<SvxShapeGroupAnyD>& xTarget )
 {
 
     LegendSymbolStyle eLegendSymbolStyle = getLegendSymbolStyle();
@@ -2642,7 +2630,7 @@ rtl::Reference< SvxShapeGroup > VSeriesPlotter::createLegendSymbolForPoint(
     }
 
     rtl::Reference< SvxShapeGroup > xShape = VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
-        xTarget, eLegendSymbolStyle, xShapeFactory, xPointSet, ePropType, aExplicitSymbol );
+        xTarget, eLegendSymbolStyle, xPointSet, ePropType, aExplicitSymbol );
 
     return xShape;
 }
@@ -2651,7 +2639,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
               const awt::Size& rEntryKeyAspectRatio
             , const VDataSeries& rSeries
             , const Reference< beans::XPropertySet >& xTextProperties
-            , const Reference< drawing::XShapes >& xTarget
+            , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
             , const Reference< lang::XMultiServiceFactory >& xShapeFactory
             , const Reference< uno::XComponentContext >& xContext
             )
@@ -2713,7 +2701,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
 
                 // create the symbol
                 rtl::Reference< SvxShapeGroup > xShape = createLegendSymbolForPoint( rEntryKeyAspectRatio,
-                    rSeries, nIdx, xSymbolGroup, xShapeFactory );
+                    rSeries, nIdx, xSymbolGroup );
 
                 // set CID to symbol for selection
                 if( xShape.is() )
@@ -2742,7 +2730,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
 
             // create the symbol
             rtl::Reference<SvxShapeGroup> xShape = createLegendSymbolForSeries(
-                rEntryKeyAspectRatio, rSeries, xSymbolGroup, xShapeFactory );
+                rEntryKeyAspectRatio, rSeries, xSymbolGroup );
 
             // set CID to symbol for selection
             if( xShape.is())
@@ -2785,7 +2773,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
 
                     // create the symbol
                     rtl::Reference<SvxShapeGroup> xShape = VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
-                        xSymbolGroup, LegendSymbolStyle::Line, xShapeFactory,
+                        xSymbolGroup, LegendSymbolStyle::Line,
                         Reference< beans::XPropertySet >( aCurves[i], uno::UNO_QUERY ),
                         VLegendSymbolFactory::PropertyType::Line, uno::Any() );
 

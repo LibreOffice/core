@@ -86,14 +86,14 @@ void CandleStickChart::createShapes()
     //therefore create an own group for the texts to move them to front
     //(because the text group is created after the series group the texts are displayed on top)
 
-    uno::Reference< drawing::XShapes > xSeriesTarget(
-        createGroupShape( m_xLogicTarget ));
-    uno::Reference< drawing::XShapes > xLossTarget(
+    rtl::Reference<SvxShapeGroupAnyD> xSeriesTarget =
+        createGroupShape( m_xLogicTarget );
+    rtl::Reference<SvxShapeGroupAnyD> xLossTarget =
         createGroupShape( m_xLogicTarget, ObjectIdentifier::createClassifiedIdentifier(
-            OBJECTTYPE_DATA_STOCK_LOSS, u"" )));
-    uno::Reference< drawing::XShapes > xGainTarget(
+            OBJECTTYPE_DATA_STOCK_LOSS, u"" ));
+    rtl::Reference<SvxShapeGroupAnyD> xGainTarget =
         createGroupShape( m_xLogicTarget, ObjectIdentifier::createClassifiedIdentifier(
-            OBJECTTYPE_DATA_STOCK_GAIN, u"" )));
+            OBJECTTYPE_DATA_STOCK_GAIN, u"" ));
     rtl::Reference< SvxShapeGroup > xTextTarget =
         ShapeFactory::createGroup2D( m_xFinalTarget );
 
@@ -201,15 +201,15 @@ void CandleStickChart::createShapes()
                     drawing::Position3D aPosMiddleMinimum( pPosHelper->transformScaledLogicToScene( fScaledX, fScaledY_Min ,0 ,true ) );
                     drawing::Position3D aPosMiddleMaximum( pPosHelper->transformScaledLogicToScene( fScaledX, fScaledY_Max ,0 ,true ) );
 
-                    uno::Reference< drawing::XShapes > xLossGainTarget( xGainTarget );
+                    rtl::Reference<SvxShapeGroupAnyD> xLossGainTarget( xGainTarget );
                     if(bBlack)
                         xLossGainTarget = xLossTarget;
 
                     uno::Reference< beans::XPropertySet > xPointProp( pSeries->getPropertiesOfPoint( nIndex ));
-                    uno::Reference< drawing::XShapes > xPointGroupShape_Shapes;
+                    rtl::Reference<SvxShapeGroupAnyD> xPointGroupShape_Shapes;
                     {
                         OUString aPointCID = ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(), nIndex );
-                        uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes( getSeriesGroupShape(pSeries.get(), xSeriesTarget) );
+                        rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes( getSeriesGroupShape(pSeries.get(), xSeriesTarget) );
                         xPointGroupShape_Shapes = createGroupShape(xSeriesGroupShape_Shapes,aPointCID);
                     }
 

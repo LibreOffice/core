@@ -75,7 +75,7 @@ public:
             const css::awt::Size& rEntryKeyAspectRatio,
             css::chart2::LegendPosition eLegendPosition,
             const css::uno::Reference< css::beans::XPropertySet >& xTextProperties,
-            const css::uno::Reference< css::drawing::XShapes >& xTarget,
+            const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory,
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
             ChartModel& rModel

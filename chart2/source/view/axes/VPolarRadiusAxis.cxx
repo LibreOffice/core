@@ -62,8 +62,8 @@ void VPolarRadiusAxis::setExplicitScaleAndIncrement(
     m_apAxisWithLabels->setExplicitScaleAndIncrement( rScale, rIncrement );
 }
 
-void VPolarRadiusAxis::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
-       , const uno::Reference< drawing::XShapes >& xFinalTarget
+void VPolarRadiusAxis::initPlotter(  const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget
+       , const rtl::Reference<SvxShapeGroupAnyD>& xFinalTarget
        , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
        , const OUString& rCID )
 {

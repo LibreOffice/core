@@ -26,7 +26,7 @@ namespace chart
 using namespace ::com::sun::star;
 
 rtl::Reference< SvxShapeGroup > DataPointSymbolSupplier::create2DSymbolList(
-            const uno::Reference< drawing::XShapes >& xTarget
+            const rtl::Reference<SvxDrawPage>& xTarget
             , const drawing::Direction3D& rSize )
 {
     rtl::Reference< SvxShapeGroup > xGroupShapes = ShapeFactory::createGroup2D( xTarget );

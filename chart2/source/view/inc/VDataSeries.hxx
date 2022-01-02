@@ -182,15 +182,15 @@ private: //methods
     VDataSeries();
 
 public: //member
-    css::uno::Reference<css::drawing::XShapes> m_xGroupShape;
+    rtl::Reference<SvxShapeGroupAnyD> m_xGroupShape;
     rtl::Reference<SvxShapeGroup> m_xLabelsGroupShape;
-    css::uno::Reference<css::drawing::XShapes> m_xErrorXBarsGroupShape;
-    css::uno::Reference<css::drawing::XShapes> m_xErrorYBarsGroupShape;
+    rtl::Reference<SvxShapeGroupAnyD> m_xErrorXBarsGroupShape;
+    rtl::Reference<SvxShapeGroupAnyD> m_xErrorYBarsGroupShape;
 
     //the following group shapes will be created as children of m_xGroupShape on demand
     //they can be used to assure that some parts of a series shape are always in front of others (e.g. symbols in front of lines)
-    css::uno::Reference<css::drawing::XShapes> m_xFrontSubGroupShape;
-    css::uno::Reference<css::drawing::XShapes> m_xBackSubGroupShape;
+    rtl::Reference<SvxShapeGroupAnyD> m_xFrontSubGroupShape;
+    rtl::Reference<SvxShapeGroupAnyD> m_xBackSubGroupShape;
 
 private: //member
     css::uno::Reference<css::chart2::XDataSeries> m_xDataSeries;

@@ -31,6 +31,8 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ref.hxx>
+#include <svx/unoshape.hxx>
 
 namespace com::sun::star::chart2 { class XTransformation; }
 namespace com::sun::star::drawing { class XShapes; }
@@ -85,7 +87,7 @@ public:
 
     static css::awt::Point transformSceneToScreenPosition(
                   const css::drawing::Position3D& rScenePosition3D
-                , const css::uno::Reference< css::drawing::XShapes >& xSceneTarget
+                , const rtl::Reference<SvxShapeGroupAnyD>& xSceneTarget
                 , sal_Int32 nDimensionCount );
 
     inline double getLogicMinX() const;

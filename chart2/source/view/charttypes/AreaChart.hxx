@@ -76,10 +76,10 @@ private: //member
     sal_Int32                           m_nCurveResolution;
     sal_Int32                           m_nSplineOrder;
 
-    css::uno::Reference< css::drawing::XShapes > m_xSeriesTarget;
-    css::uno::Reference< css::drawing::XShapes > m_xErrorBarTarget;
-    css::uno::Reference< css::drawing::XShapes > m_xTextTarget;
-    css::uno::Reference< css::drawing::XShapes > m_xRegressionCurveEquationTarget;
+    rtl::Reference<SvxShapeGroupAnyD> m_xSeriesTarget;
+    rtl::Reference<SvxShapeGroupAnyD> m_xErrorBarTarget;
+    rtl::Reference<SvxShapeGroupAnyD> m_xTextTarget;
+    rtl::Reference<SvxShapeGroupAnyD> m_xRegressionCurveEquationTarget;
 };
 } //namespace chart
 

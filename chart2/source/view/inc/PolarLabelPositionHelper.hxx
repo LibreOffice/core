@@ -33,7 +33,7 @@ public:
     PolarLabelPositionHelper(
         PolarPlottingPositionHelper* pPosHelper
         , sal_Int32 nDimensionCount
-        , const css::uno::Reference< css::drawing::XShapes >& xLogicTarget );
+        , const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget );
     virtual ~PolarLabelPositionHelper() override;
 
     css::awt::Point getLabelScreenPositionAndAlignmentForLogicValues(

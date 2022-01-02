@@ -35,8 +35,8 @@ public:
     virtual ~VPolarRadiusAxis() override;
 
     virtual void initPlotter(
-          const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
-        , const css::uno::Reference< css::drawing::XShapes >& xFinalTarget
+          const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget
+        , const rtl::Reference<SvxShapeGroupAnyD>& xFinalTarget
         , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
         , const OUString& rCID
                 ) override;

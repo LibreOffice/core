@@ -36,6 +36,7 @@
 #include <com/sun/star/util/XUpdatable2.hpp>
 #include <rtl/ref.hxx>
 #include <svx/unopage.hxx>
+#include <svx/unoshape.hxx>
 
 #include <vector>
 #include <memory>
@@ -217,7 +218,7 @@ private: //member
             m_xShapeFactory;
     rtl::Reference<SvxDrawPage>
             m_xDrawPage;
-    css::uno::Reference< css::drawing::XShapes >
+    rtl::Reference<SvxShapeGroupAnyD>
             mxRootShape;
 
     css::uno::Reference< css::uno::XInterface > m_xDashTable;

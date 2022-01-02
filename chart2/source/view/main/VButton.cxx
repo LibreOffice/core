@@ -35,7 +35,7 @@ VButton::VButton()
 {
 }
 
-void VButton::init(const uno::Reference<drawing::XShapes>& xTargetPage,
+void VButton::init(const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
                    const uno::Reference<lang::XMultiServiceFactory>& xFactory)
 {
     m_xTarget = xTargetPage;
@@ -102,8 +102,7 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
     m_xShape->setPosition(m_aPosition);
     m_xShape->setSize(m_aSize);
 
-    uno::Reference<drawing::XShapes> xContainer(static_cast<cppu::OWeakObject*>(m_xShape.get()),
-                                                uno::UNO_QUERY_THROW);
+    rtl::Reference<SvxShapeGroupAnyD> xContainer = m_xShape;
 
     tPropertyNameValueMap aTextValueMap;
     aTextValueMap["CharHeight"] <<= 10.0f;

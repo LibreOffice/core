@@ -149,7 +149,7 @@ void lcl_getProperties(
 
 awt::Size lcl_createTextShapes(
     const std::vector<ViewLegendEntry> & rEntries,
-    const Reference< drawing::XShapes > & xTarget,
+    const rtl::Reference<SvxShapeGroupAnyD> & xTarget,
     std::vector< rtl::Reference<SvxShapeText> > & rOutTextShapes,
     const tPropertyValues & rTextProperties )
 {
@@ -265,7 +265,7 @@ awt::Size lcl_placeLegendEntries(
     double fViewFontSize,
     const awt::Size& rMaxSymbolExtent,
     tPropertyValues & rTextProperties,
-    const Reference< drawing::XShapes > & xTarget,
+    const rtl::Reference<SvxShapeGroupAnyD> & xTarget,
     const awt::Size& rRemainingSpace,
     sal_Int32 nYStartPosition,
     const awt::Size& rPageSize,
@@ -820,7 +820,7 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
 }
 
 std::vector<std::shared_ptr<VButton>> lcl_createButtons(
-                       uno::Reference<drawing::XShapes> const & xLegendContainer,
+                       rtl::Reference<SvxShapeGroupAnyD> const & xLegendContainer,
                        uno::Reference<lang::XMultiServiceFactory> const & xShapeFactory,
                        ChartModel& rModel, bool bPlaceButtonsVertically, tools::Long & nUsedHeight)
 {
@@ -875,7 +875,7 @@ VLegend::VLegend(
     const Reference< XLegend > & xLegend,
     const Reference< uno::XComponentContext > & xContext,
     std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
-    const Reference< drawing::XShapes >& xTargetPage,
+    const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
     const Reference< lang::XMultiServiceFactory >& xFactory,
     ChartModel& rModel )
         : m_xTarget(xTargetPage)
@@ -930,7 +930,7 @@ void VLegend::createShapes(
                     ObjectIdentifier::createClassifiedIdentifierForParticle( aLegendParticle ) );
 
         // create and insert sub-shapes
-        Reference< drawing::XShapes > xLegendContainer = m_xShape;
+        rtl::Reference<SvxShapeGroupAnyD> xLegendContainer = m_xShape;
         if( xLegendContainer.is() )
         {
             // for quickly setting properties

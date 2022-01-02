@@ -43,7 +43,7 @@ public:
     VLegend( const css::uno::Reference< css::chart2::XLegend > & xLegend,
              const css::uno::Reference< css::uno::XComponentContext > & xContext,
              std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
-             const css::uno::Reference< css::drawing::XShapes >& xTargetPage,
+             const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
              const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
              ChartModel& rModel  );
 
@@ -71,7 +71,7 @@ public:
         const css::uno::Reference< css::chart2::XLegend > & xLegend );
 
 private:
-    css::uno::Reference< css::drawing::XShapes >            m_xTarget;
+    rtl::Reference<SvxShapeGroupAnyD>            m_xTarget;
     css::uno::Reference< css::lang::XMultiServiceFactory>   m_xShapeFactory;
     css::uno::Reference< css::chart2::XLegend >             m_xLegend;
     rtl::Reference< SvxShapeGroup >                         m_xShape;

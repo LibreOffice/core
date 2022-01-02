@@ -193,7 +193,7 @@ drawing::Position3D PlottingPositionHelper::transformScaledLogicToScene(
 }
 
 awt::Point PlottingPositionHelper::transformSceneToScreenPosition( const drawing::Position3D& rScenePosition3D
-                , const uno::Reference< drawing::XShapes >& xSceneTarget
+                , const rtl::Reference<SvxShapeGroupAnyD>& xSceneTarget
                 , sal_Int32 nDimensionCount )
 {
     //@todo would like to have a cheaper method to do this transformation

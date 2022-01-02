@@ -77,8 +77,8 @@ protected: //member
     css::uno::Sequence< OUString >                            m_aTextLabels;
     bool                                                      m_bUseTextLabels;
 
-    css::uno::Reference< css::drawing::XShapes > m_xGroupShape_Shapes;
-    css::uno::Reference< css::drawing::XShapes > m_xTextTarget;
+    rtl::Reference< SvxShapeGroupAnyD > m_xGroupShape_Shapes;
+    rtl::Reference< SvxShapeGroupAnyD > m_xTextTarget;
 
     /**
      * This typically consists of 2 TickInfo vectors (i.e. the outer vector

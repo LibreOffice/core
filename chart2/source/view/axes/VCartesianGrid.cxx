@@ -200,7 +200,7 @@ void VCartesianGrid::createShapes()
     //somehow equal to axis tickmarks
 
     //create named group shape
-    Reference< drawing::XShapes > xGroupShape_Shapes(
+    rtl::Reference< SvxShapeGroupAnyD > xGroupShape_Shapes(
         createGroupShape( m_xLogicTarget, m_aCID ) );
 
     if(!xGroupShape_Shapes.is())
@@ -231,14 +231,14 @@ void VCartesianGrid::createShapes()
         if( !aLinePropertiesList[nDepth].isLineVisible() )
             continue;
 
-        Reference< drawing::XShapes > xTarget( xGroupShape_Shapes );
+        rtl::Reference< SvxShapeGroupAnyD > xTarget( xGroupShape_Shapes );
         if( nDepth > 0 )
         {
-            xTarget.set( createGroupShape( m_xLogicTarget
+            xTarget = createGroupShape( m_xLogicTarget
                 , ObjectIdentifier::addChildParticle( m_aCID, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_SUBGRID, nDepth-1 ) )
-                ) );
+                );
             if(!xTarget.is())
-                xTarget.set( xGroupShape_Shapes );
+                xTarget = xGroupShape_Shapes;
         }
 
         if(m_nDimension==2)

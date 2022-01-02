@@ -43,7 +43,7 @@ VTitle::~VTitle()
 }
 
 void VTitle::init(
-              const uno::Reference< drawing::XShapes >& xTargetPage
+              const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage
             , const uno::Reference< lang::XMultiServiceFactory >& xFactory
             , const OUString& rCID )
 {

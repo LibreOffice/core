@@ -66,8 +66,8 @@ private: //member
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;
 
-    css::uno::Reference< css::drawing::XShapes > m_xSeriesTarget;
-    css::uno::Reference< css::drawing::XShapes > m_xTextTarget;
+    rtl::Reference<SvxShapeGroupAnyD> m_xSeriesTarget;
+    rtl::Reference<SvxShapeGroupAnyD> m_xTextTarget;
 };
 } //namespace chart
 

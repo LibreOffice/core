@@ -51,14 +51,14 @@ public: //methods
     ~VDiagram();
 
     void init(
-        const css::uno::Reference<css::drawing::XShapes>& xTarget,
+        const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
         const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory );
 
     void    createShapes( const css::awt::Point& rPos
                         , const css::awt::Size& rSize );
 
-    css::uno::Reference< css::drawing::XShapes >
-            getCoordinateRegion() const { return css::uno::Reference<css::drawing::XShapes>( m_xCoordinateRegionShape, css::uno::UNO_QUERY );}
+    const rtl::Reference<SvxShapeGroupAnyD> &
+            getCoordinateRegion() const { return m_xCoordinateRegionShape; }
 
     /**
      * Get current bounding rectangle for the diagram without axes.
@@ -86,14 +86,14 @@ private: //methods
 private: //members
     VDiagram(const VDiagram& rD) = delete;
 
-    css::uno::Reference< css::drawing::XShapes >                    m_xTarget;
+    rtl::Reference<SvxShapeGroupAnyD>                    m_xTarget;
     css::uno::Reference< css::lang::XMultiServiceFactory>           m_xShapeFactory;
     ShapeFactory* m_pShapeFactory;
 
     // this is the surrounding shape which contains floor, wall and coordinate
-    css::uno::Reference< css::drawing::XShape >   m_xOuterGroupShape;
+    rtl::Reference<SvxShapeGroupAnyD>   m_xOuterGroupShape;
     // this is an additional inner shape that represents the coordinate region -  that is - where to place data points
-    css::uno::Reference< css::drawing::XShape >   m_xCoordinateRegionShape;
+    rtl::Reference<SvxShapeGroupAnyD>   m_xCoordinateRegionShape;
     rtl::Reference<SvxShapeRect> m_xWall2D;
 
     sal_Int32                                                               m_nDimensionCount;
