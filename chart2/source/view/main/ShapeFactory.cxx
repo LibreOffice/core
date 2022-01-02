@@ -2335,21 +2335,16 @@ uno::Reference< drawing::XShapes > ShapeFactory::getChartRootShape(
     return xRet;
 }
 
-void ShapeFactory::makeShapeInvisible( const uno::Reference< drawing::XShape >& xShape )
+void ShapeFactory::makeShapeInvisible( const rtl::Reference< SvxShape >& xShape )
 {
-    uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xShapeProp.is(), "created shape offers no XPropertySet");
-    if( xShapeProp.is())
+    try
     {
-        try
-        {
-            xShapeProp->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ));
-            xShapeProp->setPropertyValue( "FillStyle", uno::Any( drawing::FillStyle_NONE ));
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
+        xShape->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ));
+        xShape->setPropertyValue( "FillStyle", uno::Any( drawing::FillStyle_NONE ));
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 

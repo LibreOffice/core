@@ -241,7 +241,7 @@ public:
     static css::uno::Reference< css::drawing::XShapes >
          getChartRootShape( const rtl::Reference<SvxDrawPage>& xPage );
 
-    static void makeShapeInvisible( const css::uno::Reference< css::drawing::XShape >& xShape );
+    static void makeShapeInvisible( const rtl::Reference< SvxShape >& rShape );
 
     static void setShapeName( const css::uno::Reference< css::drawing::XShape >& xShape
             , const OUString& rName );
