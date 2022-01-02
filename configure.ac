@@ -1146,6 +1146,7 @@ test "${test_xrender+set}" = set || test_xrender="$using_x11"
 test "${using_headless_plugin+set}" = set || using_headless_plugin="$using_freetype_fontconfig"
 
 test "${test_gtk3_kde5+set}" != set -a "$test_kf5" = yes -a "$test_gtk3" = yes && test_gtk3_kde5="yes"
+# Make sure fontconfig and freetype test both either system or not
 test "${test_system_fontconfig+set}" != set -a "${test_system_freetype+set}" = set && test_system_fontconfig="$test_system_freetype"
 test "${test_system_freetype+set}" != set -a "${test_system_fontconfig+set}" = set && test_system_freetype="$test_system_fontconfig"
 
@@ -5869,7 +5870,7 @@ fi
 
 AC_SUBST(ENABLE_CUPS)
 
-libo_CHECK_SYSTEM_MODULE([fontconfig],[FONTCONFIG],[fontconfig >= 2.4.1],,system)
+libo_CHECK_SYSTEM_MODULE([fontconfig],[FONTCONFIG],[fontconfig >= 2.4.1],,system,TRUE)
 
 dnl whether to find & fetch external tarballs?
 dnl ===================================================================
@@ -9458,7 +9459,7 @@ if test "x$ac_config_site_64bit_host" = xYES; then
 else
     FREETYPE_LIBS_internal="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
 fi
-libo_CHECK_SYSTEM_MODULE([freetype],[FREETYPE],[freetype2 >= 9.9.3],,system)
+libo_CHECK_SYSTEM_MODULE([freetype],[FREETYPE],[freetype2 >= 9.9.3],,system,TRUE)
 
 # ===================================================================
 # Check for system libxslt

@@ -10,9 +10,11 @@ dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*
 # <$2 uppercase variable part - used for configure.ac and make variables>
 # <$3 pkg-config query string>
 # [$4 if optional, default to: enabled, disabled or fixed (default: fixed)]
-# [$5 which is preferred: system, fixed-system, internal or fixed-internal (default: internal)]
+# [$5 which is preferred: (fixed-|test-)system or (fixed-)internal (default: internal)]
+# [$6 ignore $with_system_libs: TRUE or blank (default: blank/false)]
 #
-# fixed == fixed-enabled, as fixed-disabled makes no sense.
+# $4 fixed: fixed-enabled, as fixed-disabled makes no sense.
+# $5 test-system: follows $test_system_$1, ignors $with_system_libs; no configure switch
 #
 # Used configure.ac variables:
 #  - $2_(CFLAGS|LIBS)_internal: must be filled to match the internal build
@@ -26,7 +28,7 @@ dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*
 #
 
 m4_define([csm_default_with], [
-    if test "${with_system_$1+set}" != set -a "${with_system_libs+set}" = set; then
+    if test "${with_system_$1+set}" != set -a "${with_system_libs+set}" = set -a "$3" != TRUE; then
         with_system_$1="$with_system_libs";
     else
         with_system_$1="$2"
@@ -43,6 +45,7 @@ AC_DEFUN([libo_CHECK_SYSTEM_MODULE], [
 csm_check_required([1],[$1],m4_tolower([$1]),[lowercase])
 csm_check_required([2],[$2],m4_toupper([$2]),[uppercase])
 m4_ifblank([$3],[m4_fatal([$][3 is the pkg-config query and must not be blank])])
+m4_if([$6],[TRUE],[],[m4_ifnblank([$6],[m4_fatal([$][6 must be TRUE or blank])])])
 m4_if(
     [$4],[enabled],[
         AC_ARG_ENABLE([$1],
@@ -61,17 +64,19 @@ m4_if(
     [$5],[system],[
         AC_ARG_WITH(system-$1,
             AS_HELP_STRING([--without-system-$1],[Build and bundle the internal $1.]),
-        ,[csm_default_with($1,yes)])
+        ,[csm_default_with($1,yes,$6)])
+    ],[$5],[test-system],[
+        with_system_$1="$test_system_$1"
     ],[$5],[fixed-system],[
         with_system_$1=yes
     ],[$5],[fixed-internal],[
         with_system_$1=no
     ],[
         m4_if([$5],[internal],,[m4_ifnblank([$5],
-              [m4_fatal([$$5 ($5) must be "(fixed-)system", "(fixed-)internal" or empty (=internal)])])])
+              [m4_fatal([$$5 ($5) must be "(fixed-|test-)system", "(fixed-)internal" or empty (=internal)])])])
         AC_ARG_WITH(system-$1,
             AS_HELP_STRING([--with-system-$1],[Use $1 from the operating system.]),
-        ,[csm_default_with($1,no)])
+        ,[csm_default_with($1,no,$6)])
 ])
 
 AC_MSG_CHECKING([which $1 to use])
