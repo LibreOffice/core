@@ -152,13 +152,13 @@ public:
     /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
         will construct a ViewInformation2D from the ViewParameters for that purpose
      */
-    virtual Primitive2DContainer
+    Primitive2DContainer
     getDecomposition(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
 
     /** The getRange implementation for UNO API will use getRange from this implementation. It
         will construct a ViewInformation2D from the ViewParameters for that purpose
      */
-    virtual css::geometry::RealRectangle2D
+    css::geometry::RealRectangle2D
     getRange(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
 
     // XAccounting
