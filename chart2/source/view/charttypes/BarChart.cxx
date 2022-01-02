@@ -340,7 +340,7 @@ rtl::Reference< SvxShape > BarChart::createDataPoint3D_Bar(
             return xShape;
     }
     if( nGeometry3D != DataPointGeometry3D::PYRAMID )
-        setMappedProperties( xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+        setMappedProperties( *xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     return xShape;
 }
 
@@ -854,7 +854,7 @@ void BarChart::createShapes()
                                 AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
                                 pPosHelper->transformScaledLogicToScene( aPoly );
                                 xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes, aPoly );
-                                setMappedProperties( xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+                                setMappedProperties( *xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
                             }
 
                             if(bHasFillColorMapping)
@@ -956,7 +956,7 @@ void BarChart::createShapes()
                         getSeriesGroupShape(pSeries.get(), xSeriesTarget) );
                     rtl::Reference<SvxShapePolyPolygon> xShape( ShapeFactory::createLine2D(
                         xSeriesGroupShape_Shapes, PolyToPointSequence( aPoly ) ) );
-                    setMappedProperties( xShape, pSeries->getPropertiesOfSeries()
+                    setMappedProperties( *xShape, pSeries->getPropertiesOfSeries()
                         , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
                 }
             }

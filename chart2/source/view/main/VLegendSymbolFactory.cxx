@@ -82,7 +82,7 @@ void lcl_setPropertiesToShape(
     getPropNamesAndValues( xProp, aPropNames, aPropValues,
             ePropertyType, aMaxSymbolExtent );
 
-    ::chart::PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShape );
+    ::chart::PropertyMapper::setMultiProperties( aPropNames, aPropValues, *xShape );
 }
 
 } // anonymous namespace

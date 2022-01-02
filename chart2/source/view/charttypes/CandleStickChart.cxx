@@ -224,7 +224,7 @@ void CandleStickChart::createShapes()
                         rtl::Reference<SvxShapePolyPolygon> xShape =
                             ShapeFactory::createLine2D( xPointGroupShape_Shapes,
                                     PolyToPointSequence(aPoly));
-                        setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
+                        setMappedProperties( *xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                     }
 
                     //create first-last shape
@@ -244,11 +244,10 @@ void CandleStickChart::createShapes()
                                     aAWTSize, Position3DToAWTPoint( aPosLeftFirst ),
                                     aNames, aValues);
 
-                        uno::Reference< beans::XPropertySet > xProp( static_cast<cppu::OWeakObject*>(xShape.get()), uno::UNO_QUERY_THROW );
                         if(bBlack)
-                            PropertyMapper::setMultiProperties( aBlackBox_Names, aBlackBox_Values, xProp );
+                            PropertyMapper::setMultiProperties( aBlackBox_Names, aBlackBox_Values, *xShape );
                         else
-                            PropertyMapper::setMultiProperties( aWhiteBox_Names, aWhiteBox_Values, xProp );
+                            PropertyMapper::setMultiProperties( aWhiteBox_Names, aWhiteBox_Values, *xShape );
                     }
                     else
                     {
@@ -273,7 +272,7 @@ void CandleStickChart::createShapes()
                             rtl::Reference<SvxShapePolyPolygon> xShape =
                                 ShapeFactory::createLine2D( xPointGroupShape_Shapes,
                                         PolyToPointSequence(aPoly) );
-                            setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
+                            setMappedProperties( *xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                         }
                     }
 

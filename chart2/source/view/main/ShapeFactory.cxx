@@ -388,7 +388,7 @@ rtl::Reference<Svx3DExtrudeObject>
     }
     rtl::Reference<Svx3DExtrudeObject> xShape = impl_createCube( xTarget, rPosition, rSize, nRotateZAngleHundredthDegree, bRounded );
     if( xSourceProp.is())
-        PropertyMapper::setMappedProperties( xShape, xSourceProp, rPropertyNameMap );
+        PropertyMapper::setMappedProperties( *xShape, xSourceProp, rPropertyNameMap );
     return xShape;
 }
 
@@ -1017,7 +1017,7 @@ rtl::Reference<Svx3DPolygonObject>
 
         if (xSourceProp)
         {
-            PropertyMapper::setMappedProperties(xShape, xSourceProp, rPropertyNameMap);
+            PropertyMapper::setMappedProperties(*xShape, xSourceProp, rPropertyNameMap);
         }
     }
     catch( const uno::Exception& )
@@ -2018,8 +2018,7 @@ rtl::Reference<SvxShapeRect> ShapeFactory::createRectangle(
 
     xShape->setPosition( rPosition );
     xShape->setSize( rSize );
-    uno::Reference< beans::XPropertySet > xPropSet( static_cast<cppu::OWeakObject*>(xShape.get()), uno::UNO_QUERY_THROW );
-    PropertyMapper::setMultiProperties( rPropNames, rPropValues, xPropSet );
+    PropertyMapper::setMultiProperties( rPropNames, rPropValues, *xShape );
 
     return xShape;
 }
