@@ -157,17 +157,23 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
     if (!dwriteFontMgr)
         return nullptr;
 
+    SalData* data = GetSalData();
+    if (data->mbSkiaPrivateFontSetInvalid)
+    {
+        // throw away the private collection if there was a change to the
+        // FR_PRIVATE fonts
+        dwriteFontSetBuilder.clear();
+        dwritePrivateCollection.clear();
+        data->mbSkiaPrivateFontSetInvalid = false;
+    }
+
     // tdf#137122: We need to get the exact same font as HFONT refers to,
     // since VCL core computes things like glyph ids based on that, and getting
     // a different font could lead to mismatches (e.g. if there's a slightly
     // different version of the same font installed system-wide).
     // For that CreateFromFaceFromHdc() is necessary. The simpler
     // CreateFontFromLOGFONT() seems to search for the best matching font,
-    // which may not be the exact font. Our private fonts are installed
-    // using AddFontResourceExW( FR_PRIVATE ) and that apparently does
-    // not make them available to DirectWrite (at least, they are not
-    // included the DWrite system font collection). For such cases, we'll
-    // need to fall back to Skia's GDI-based font rendering.
+    // which may not be the exact font.
     HFONT oldFont = SelectFont(hdc, hfont);
     sal::systools::COMReference<IDWriteFontFace> fontFace;
     if (FAILED(CHECKHR(dwriteGdiInterop->CreateFontFaceFromHdc(hdc, &fontFace))))
@@ -175,6 +181,7 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
         SelectFont(hdc, oldFont);
         return nullptr;
     }
+
     SelectFont(hdc, oldFont);
     sal::systools::COMReference<IDWriteFontCollection> collection;
     if (FAILED(CHECKHR(dwriteFactory->GetSystemFontCollection(&collection))))
@@ -182,7 +189,66 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
     sal::systools::COMReference<IDWriteFont> font;
     // Do not use CHECKHR() here, as said above, this fails for our fonts.
     if (FAILED(collection->GetFontFromFontFace(fontFace.get(), &font)))
-        return nullptr;
+    {
+        // If not found in system collection, try our private font collection.
+        // If that's not possible we'll fall back to Skia's GDI-based font rendering.
+        if (!dwritePrivateCollection
+            || FAILED(dwritePrivateCollection->GetFontFromFontFace(fontFace.get(), &font)))
+        {
+            // Our private fonts are installed using AddFontResourceExW( FR_PRIVATE )
+            // and that does not make them available to the DWrite system font
+            // collection. For such cases attempt to update a collection of
+            // private fonts with this newly used font.
+
+            sal::systools::COMReference<IDWriteFactory3> dwriteFactory3;
+            if (FAILED(dwriteFactory->QueryInterface<IDWriteFactory3>(&dwriteFactory3)))
+                return nullptr;
+
+            if (!dwriteFontSetBuilder
+                && FAILED(dwriteFactory3->CreateFontSetBuilder(&dwriteFontSetBuilder)))
+                return nullptr;
+
+            UINT32 numberOfFiles;
+            if (FAILED(fontFace->GetFiles(&numberOfFiles, nullptr)) || numberOfFiles != 1)
+                return nullptr;
+
+            sal::systools::COMReference<IDWriteFontFile> fontFile;
+            if (FAILED(fontFace->GetFiles(&numberOfFiles, &fontFile)))
+                return nullptr;
+
+            BOOL isSupported;
+            DWRITE_FONT_FILE_TYPE fileType;
+            UINT32 numberOfFonts;
+            if (FAILED(fontFile->Analyze(&isSupported, &fileType, nullptr, &numberOfFonts))
+                || !isSupported)
+                return nullptr;
+
+            // For each font within the font file, get a font face reference and add to the builder.
+            for (UINT32 fontIndex = 0; fontIndex < numberOfFonts; ++fontIndex)
+            {
+                sal::systools::COMReference<IDWriteFontFaceReference> fontFaceReference;
+                if (FAILED(dwriteFactory3->CreateFontFaceReference(fontFile.get(), fontIndex,
+                                                                   DWRITE_FONT_SIMULATIONS_NONE,
+                                                                   &fontFaceReference)))
+                    continue;
+
+                // Leave it to DirectWrite to read properties directly out of the font files
+                dwriteFontSetBuilder->AddFontFaceReference(fontFaceReference.get());
+            }
+
+            dwritePrivateCollection.clear();
+            sal::systools::COMReference<IDWriteFontSet> fontSet;
+            if (SUCCEEDED(CHECKHR(dwriteFontSetBuilder->CreateFontSet(&fontSet))))
+                dwriteFactory3->CreateFontCollectionFromFontSet(fontSet.get(),
+                                                                &dwritePrivateCollection);
+        }
+
+        if (!dwritePrivateCollection)
+            return nullptr;
+        // CHECKHR because we expect to succeed here
+        if (FAILED(CHECKHR(dwritePrivateCollection->GetFontFromFontFace(fontFace.get(), &font))))
+            return nullptr;
+    }
     sal::systools::COMReference<IDWriteFontFamily> fontFamily;
     if (FAILED(CHECKHR(font->GetFontFamily(&fontFamily))))
         return nullptr;
@@ -296,6 +362,8 @@ void WinSkiaSalGraphicsImpl::initFontInfo()
 void WinSkiaSalGraphicsImpl::ClearDevFontCache()
 {
     dwriteFontMgr.reset();
+    dwriteFontSetBuilder.clear();
+    dwritePrivateCollection.clear();
     dwriteFactory.clear();
     dwriteGdiInterop.clear();
     dwriteDone = false;

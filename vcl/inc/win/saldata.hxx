@@ -116,6 +116,8 @@ public:
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpSharedTempFontItem;   // LibreOffice shared fonts
     TempFontItem*           mpOtherTempFontItem;    // other temporary fonts (embedded?)
+    bool                    mbSkiaPrivateFontSetInvalid; // true when the libreoffice private fonts were changed and
+                                                         // the skia private font collection should be discarded
     bool                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
     bool                    mbThemeMenuSupport;
 
