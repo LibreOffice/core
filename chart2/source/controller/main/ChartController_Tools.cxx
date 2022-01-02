@@ -69,6 +69,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unopage.hxx>
+#include <svx/unoshape.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
 #include <PropertyHelper.hxx>
@@ -351,11 +352,8 @@ void ChartController::impl_PasteGraphic(
     if( ! (xGraphic.is() && xModelProp.is()))
         return;
     uno::Reference< lang::XMultiServiceFactory > xFact( pDrawModelWrapper->getShapeFactory());
-    uno::Reference< drawing::XShape > xGraphicShape(
-        xFact->createInstance( "com.sun.star.drawing.GraphicObjectShape" ), uno::UNO_QUERY );
-    uno::Reference< beans::XPropertySet > xGraphicShapeProp( xGraphicShape, uno::UNO_QUERY );
-    if( !(xGraphicShapeProp.is() && xGraphicShape.is()))
-        return;
+    rtl::Reference< SvxGraphicObject > xGraphicShape = new SvxGraphicObject(nullptr);
+    xGraphicShape->setShapeKind(OBJ_GRAF);
 
     uno::Reference< drawing::XShapes > xPage = pDrawModelWrapper->getMainDrawPage();
     if( xPage.is())
@@ -371,7 +369,7 @@ void ChartController::impl_PasteGraphic(
         m_aSelection.setSelection( xGraphicShape );
         m_aSelection.applySelection( m_pDrawViewWrapper.get() );
     }
-    xGraphicShapeProp->setPropertyValue( "Graphic", uno::Any( xGraphic ));
+    xGraphicShape->SvxShape::setPropertyValue( "Graphic", uno::Any( xGraphic ));
     uno::Reference< beans::XPropertySet > xGraphicProp( xGraphic, uno::UNO_QUERY );
 
     awt::Size aGraphicSize( 1000, 1000 );
@@ -399,7 +397,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
     if ( !pDestPage )
         return;
 
-    Reference< drawing::XShape > xSelShape;
+    rtl::Reference< SvxShape > xSelShape;
     m_pDrawViewWrapper->BegUndo( SvxResId( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
     sal_uInt16 nCount = pModel->GetPageCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
@@ -415,11 +413,9 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
             if ( pNewObj )
             {
                 // set position
-                Reference< drawing::XShape > xShape( pNewObj->getUnoShape(), uno::UNO_QUERY );
-                if ( xShape.is() )
-                {
-                    xShape->setPosition( awt::Point( 0, 0 ) );
-                }
+                rtl::Reference< SvxShape > xShape = dynamic_cast<SvxShape*>(pNewObj->getUnoShape().get());
+                assert(xShape);
+                xShape->setPosition( awt::Point( 0, 0 ) );
 
                 pDestPage->InsertObject( pNewObj );
                 m_pDrawViewWrapper->AddUndo( std::make_unique<SdrUndoInsertObj>( *pNewObj ) );
@@ -458,23 +454,20 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
 
     try
     {
-        Reference< drawing::XShape > xTextShape(
-            xShapeFactory->createInstance( "com.sun.star.drawing.TextShape" ), uno::UNO_QUERY_THROW );
+        rtl::Reference<SvxShapeText> xTextShape = new SvxShapeText(nullptr);
         xDrawPage->add( xTextShape );
 
-        Reference< text::XTextRange > xRange( xTextShape, uno::UNO_QUERY_THROW );
-        xRange->setString( rString );
+        xTextShape->setString( rString );
 
         float fCharHeight = 10.0;
-        Reference< beans::XPropertySet > xProperties( xTextShape, uno::UNO_QUERY_THROW );
-        xProperties->setPropertyValue( "TextAutoGrowHeight", uno::Any( true ) );
-        xProperties->setPropertyValue( "TextAutoGrowWidth", uno::Any( true ) );
-        xProperties->setPropertyValue( "CharHeight", uno::Any( fCharHeight ) );
-        xProperties->setPropertyValue( "CharHeightAsian", uno::Any( fCharHeight ) );
-        xProperties->setPropertyValue( "CharHeightComplex", uno::Any( fCharHeight ) );
-        xProperties->setPropertyValue( "TextVerticalAdjust", uno::Any( drawing::TextVerticalAdjust_CENTER ) );
-        xProperties->setPropertyValue( "TextHorizontalAdjust", uno::Any( drawing::TextHorizontalAdjust_CENTER ) );
-        xProperties->setPropertyValue( "CharFontName", uno::Any( OUString("Albany") ) );
+        xTextShape->SvxShape::setPropertyValue( "TextAutoGrowHeight", uno::Any( true ) );
+        xTextShape->SvxShape::setPropertyValue( "TextAutoGrowWidth", uno::Any( true ) );
+        xTextShape->SvxShape::setPropertyValue( "CharHeight", uno::Any( fCharHeight ) );
+        xTextShape->SvxShape::setPropertyValue( "CharHeightAsian", uno::Any( fCharHeight ) );
+        xTextShape->SvxShape::setPropertyValue( "CharHeightComplex", uno::Any( fCharHeight ) );
+        xTextShape->SvxShape::setPropertyValue( "TextVerticalAdjust", uno::Any( drawing::TextVerticalAdjust_CENTER ) );
+        xTextShape->SvxShape::setPropertyValue( "TextHorizontalAdjust", uno::Any( drawing::TextHorizontalAdjust_CENTER ) );
+        xTextShape->SvxShape::setPropertyValue( "CharFontName", uno::Any( OUString("Albany") ) );
 
         xTextShape->setPosition( rPosition );
 

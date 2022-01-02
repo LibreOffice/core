@@ -329,7 +329,7 @@ public:
     ChartWindow* GetChartWindow() const;
     weld::Window* GetChartFrame();
     bool isAdditionalShapeSelected() const;
-    void SetAndApplySelection(const css::uno::Reference<css::drawing::XShape>& rxShape);
+    void SetAndApplySelection(const rtl::Reference<SvxShape>& rxShape);
     void StartTextEdit( const Point* pMousePixel = nullptr );
 
     void NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> );

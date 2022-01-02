@@ -122,8 +122,7 @@ SdrObjList* ViewElementListProvider::GetSymbolList() const
         rtl::Reference< SvxShapeGroup > xSymbols
             = DataPointSymbolSupplier::create2DSymbolList(xTarget, aSymbolSize);
 
-        SdrObject* pSdrObject = DrawViewWrapper::getSdrObject(
-            uno::Reference<drawing::XShape>(static_cast<cppu::OWeakObject*>(xSymbols.get()), uno::UNO_QUERY));
+        SdrObject* pSdrObject = DrawViewWrapper::getSdrObject(xSymbols);
         if (pSdrObject)
             pSymbolList = pSdrObject->GetSubList();
     }

@@ -338,16 +338,9 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
 }
 
-SdrObject* DrawViewWrapper::getSdrObject( const uno::Reference<
-                    drawing::XShape >& xShape )
+SdrObject* DrawViewWrapper::getSdrObject( const rtl::Reference< SvxShape >& xShape )
 {
-    SdrObject* pRet = nullptr;
-    uno::Reference< lang::XTypeProvider > xTypeProvider( xShape, uno::UNO_QUERY );
-    if(xTypeProvider.is())
-    {
-        pRet = SdrObject::getSdrObjectFromXShape(xShape);
-    }
-    return pRet;
+    return xShape->GetSdrObject();
 }
 
 } //namespace chart

@@ -1533,7 +1533,7 @@ bool ChartController::isAdditionalShapeSelected() const
     return m_aSelection.isAdditionalShapeSelected();
 }
 
-void ChartController::SetAndApplySelection(const Reference<drawing::XShape>& rxShape)
+void ChartController::SetAndApplySelection(const rtl::Reference<SvxShape>& rxShape)
 {
     if(rxShape.is())
     {

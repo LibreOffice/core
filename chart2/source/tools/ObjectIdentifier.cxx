@@ -250,7 +250,7 @@ ObjectIdentifier::ObjectIdentifier( const OUString& rObjectCID )
 {
 }
 
-ObjectIdentifier::ObjectIdentifier( const Reference< drawing::XShape >& rxShape )
+ObjectIdentifier::ObjectIdentifier( const rtl::Reference< SvxShape >& rxShape )
     : m_xAdditionalShape( rxShape )
 {
 }
@@ -264,7 +264,10 @@ ObjectIdentifier::ObjectIdentifier( const Any& rAny )
     }
     else if ( rType == cppu::UnoType< drawing::XShape >::get() )
     {
-        rAny >>= m_xAdditionalShape;
+        uno::Reference<drawing::XShape> xTmp;
+        rAny >>= xTmp;
+        m_xAdditionalShape = dynamic_cast<SvxShape*>(xTmp.get());
+        assert(m_xAdditionalShape);
     }
 }
 
@@ -1463,7 +1466,7 @@ Any ObjectIdentifier::getAny() const
     }
     else if ( isAdditionalShape() )
     {
-        aAny <<= getAdditionalShape();
+        aAny <<= uno::Reference<drawing::XShape>(m_xAdditionalShape.get());
     }
     return aAny;
 }

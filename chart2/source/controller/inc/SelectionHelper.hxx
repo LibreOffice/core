@@ -34,7 +34,7 @@ public: //methods
     bool hasSelection() const;
 
     OUString const & getSelectedCID() const;
-    css::uno::Reference< css::drawing::XShape > const & getSelectedAdditionalShape() const;
+    rtl::Reference< SvxShape > const & getSelectedAdditionalShape() const;
     const ObjectIdentifier& getSelectedOID() const { return m_aSelectedOID;}
 
     bool isResizeableObjectSelected() const;
@@ -45,7 +45,7 @@ public: //methods
 
     //returns true if selection has changed
     bool setSelection( const OUString& rCID );
-    bool setSelection( const css::uno::Reference< css::drawing::XShape >& xShape );
+    bool setSelection( const rtl::Reference<SvxShape>& xShape );
 
     void clearSelection();
 

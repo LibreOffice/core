@@ -83,7 +83,7 @@ public:
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
-    static SdrObject* getSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape );
+    static SdrObject* getSdrObject( const rtl::Reference< SvxShape >& xShape );
 
 private:
     mutable MarkHandleProvider*     m_pMarkHandleProvider;
