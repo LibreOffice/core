@@ -407,7 +407,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     pPosHelper->transformScaledLogicToScene( aPoly );
 
     //create line:
-    uno::Reference< drawing::XShape > xShape;
+    rtl::Reference< SvxShape > xShape;
     if(m_nDimension==3)
     {
         double fDepth = getTransformedDepth();
@@ -501,7 +501,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     pPosHelper->transformScaledLogicToScene( aPoly );
 
     //create area:
-    uno::Reference< drawing::XShape > xShape;
+    rtl::Reference< SvxShape > xShape;
     if(m_nDimension==3)
     {
         xShape = ShapeFactory::createArea3D( xSeriesGroupShape_Shapes

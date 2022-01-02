@@ -296,7 +296,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
         .transformSceneToScreenPosition( aScenePosition3D );
 }
 
-uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
+rtl::Reference< SvxShape > BarChart::createDataPoint3D_Bar(
           const uno::Reference< drawing::XShapes >& xTarget
         , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
         , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree
@@ -319,7 +319,7 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 
-    uno::Reference< drawing::XShape > xShape;
+    rtl::Reference< SvxShape > xShape;
     switch( nGeometry3D )
     {
         case DataPointGeometry3D::CYLINDER:
@@ -797,7 +797,7 @@ void BarChart::createShapes()
                         //create partial point
                         if( !approxEqual(fLowerYValue,fUpperYValue) )
                         {
-                            uno::Reference< drawing::XShape >  xShape;
+                            rtl::Reference< SvxShape >  xShape;
                             if( m_nDimension==3 )
                             {
                                 drawing::Position3D aLogicBottom            (fLogicX,fLogicYStart,fLogicZ);
@@ -862,8 +862,7 @@ void BarChart::createShapes()
                                 double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
                                 if(!std::isnan(nPropVal))
                                 {
-                                    uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
-                                    xProps->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>(nPropVal)));
+                                    xShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>(nPropVal)));
                                 }
                             }
                             //set name/classified ObjectID (CID)

@@ -828,7 +828,7 @@ void PieChart::createShapes()
 
                 ///create data point
                 aParam.mfLogicZ = -1.0; // For 3D pie chart label position
-                uno::Reference<drawing::XShape> xPointShape =
+                rtl::Reference<SvxShape> xPointShape =
                     createDataPoint(
                         xSeriesGroupShape_Shapes, xPointProperties, apOverwritePropertiesMap.get(), aParam);
 
@@ -837,8 +837,7 @@ void PieChart::createShapes()
                     double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
                     if(!std::isnan(nPropVal))
                     {
-                        uno::Reference< beans::XPropertySet > xProps( xPointShape, uno::UNO_QUERY_THROW );
-                        xProps->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>( nPropVal)));
+                        xPointShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>( nPropVal)));
                     }
                 }
 
