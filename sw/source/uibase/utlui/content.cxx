@@ -186,23 +186,30 @@ namespace
     {
         SwGetINetAttrs aArr;
         pWrtShell->GetINetAttrs( aArr );
-        const SwGetINetAttrs::size_type nCount {aArr.size()};
-        for( SwGetINetAttrs::size_type n = 0; n < nCount; ++n )
+
+        // use stable sort array to list hyperlinks in document order
+        std::vector<SwGetINetAttr*> aStableSortINetAttrsArray;
+        for (SwGetINetAttr& r : aArr)
+            aStableSortINetAttrsArray.emplace_back(&r);
+        std::stable_sort(aStableSortINetAttrsArray.begin(), aStableSortINetAttrsArray.end(),
+                         [](const SwGetINetAttr* a, const SwGetINetAttr* b){
+            SwPosition aSwPos(const_cast<SwTextNode&>(a->rINetAttr.GetTextNode()),
+                              a->rINetAttr.GetStart());
+            SwPosition bSwPos(const_cast<SwTextNode&>(b->rINetAttr.GetTextNode()),
+                              b->rINetAttr.GetStart());
+            return aSwPos < bSwPos;});
+
+        SwGetINetAttrs::size_type n = 0;
+        for (auto p : aStableSortINetAttrsArray)
         {
-            SwGetINetAttr* p = &aArr[ n ];
-            tools::Long nYPos = p->rINetAttr.GetTextNode().FindLayoutRect().Top()
-                    + p->rINetAttr.GetStart();
-            std::unique_ptr<SwURLFieldContent> pCnt(new SwURLFieldContent(
-                                pCntType,
-                                p->sText,
-                                INetURLObject::decode(
-                                    p->rINetAttr.GetINetFormat().GetValue(),
-                                    INetURLObject::DecodeMechanism::Unambiguous ),
-                                &p->rINetAttr,
-                                nYPos));
-            pMember->insert( std::move(pCnt) );
+            auto pCnt = make_unique<SwURLFieldContent>(
+                        pCntType, p->sText,
+                        INetURLObject::decode(p->rINetAttr.GetINetFormat().GetValue(),
+                                              INetURLObject::DecodeMechanism::Unambiguous),
+                        &p->rINetAttr, ++n);
+            pMember->insert(std::move(pCnt));
         }
-        return nCount;
+        return pMember->size();
     }
 }
 
