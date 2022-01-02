@@ -143,9 +143,18 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
 {
     if (!dwriteDone)
     {
-        if (SUCCEEDED(
-                CHECKHR(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
-                                            reinterpret_cast<IUnknown**>(&dwriteFactory)))))
+        bool bSuccess = SUCCEEDED(
+            CHECKHR(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory3),
+                                        reinterpret_cast<IUnknown**>(&dwriteFactory3))));
+        if (bSuccess)
+            dwriteFactory = dwriteFactory3;
+        else
+            dwriteFactory3.clear();
+
+        if (bSuccess
+            || SUCCEEDED(
+                   CHECKHR(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
+                                               reinterpret_cast<IUnknown**>(&dwriteFactory)))))
         {
             if (SUCCEEDED(CHECKHR(dwriteFactory->GetGdiInterop(&dwriteGdiInterop))))
                 dwriteFontMgr = SkFontMgr_New_DirectWrite(dwriteFactory.get());
@@ -157,17 +166,34 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
     if (!dwriteFontMgr)
         return nullptr;
 
+    SalData* data = GetSalData();
+    if (dwriteFactory3 && data->mbSkiaPrivateFontSetInvalid)
+    {
+        dwritePrivateCollection.clear();
+
+        // Our private fonts are installed using AddFontResourceExW( FR_PRIVATE ) and
+        // that does not make them available to the DWrite system font collection).
+        // For such cases, build our own collection of private fonts if possible.
+        // If that's not possible we'll fall back to Skia's GDI-based font rendering.
+        sal::systools::COMReference<IDWriteFontSetBuilder> fontSetBuilder;
+        if (SUCCEEDED(CHECKHR(dwriteFactory3->CreateFontSetBuilder(&fontSetBuilder))))
+        {
+            // TODO: loop over fonts like https://github.com/microsoft/Windows-classic-samples/blob/main/Samples/DirectWriteCustomFontSets/cpp/CustomFontSetManager.cpp
+            sal::systools::COMReference<IDWriteFontSet> fontSet;
+            fontSetBuilder->CreateFontSet(&fontSet);
+            dwriteFactory3->CreateFontCollectionFromFontSet(fontSet.get(),
+                                                            &dwritePrivateCollection);
+        }
+        data->mbSkiaPrivateFontSetInvalid = false;
+    }
+
     // tdf#137122: We need to get the exact same font as HFONT refers to,
     // since VCL core computes things like glyph ids based on that, and getting
     // a different font could lead to mismatches (e.g. if there's a slightly
     // different version of the same font installed system-wide).
     // For that CreateFromFaceFromHdc() is necessary. The simpler
     // CreateFontFromLOGFONT() seems to search for the best matching font,
-    // which may not be the exact font. Our private fonts are installed
-    // using AddFontResourceExW( FR_PRIVATE ) and that apparently does
-    // not make them available to DirectWrite (at least, they are not
-    // included the DWrite system font collection). For such cases, we'll
-    // need to fall back to Skia's GDI-based font rendering.
+    // which may not be the exact font.
     HFONT oldFont = SelectFont(hdc, hfont);
     sal::systools::COMReference<IDWriteFontFace> fontFace;
     if (FAILED(CHECKHR(dwriteGdiInterop->CreateFontFaceFromHdc(hdc, &fontFace))))
@@ -182,7 +208,12 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
     sal::systools::COMReference<IDWriteFont> font;
     // Do not use CHECKHR() here, as said above, this fails for our fonts.
     if (FAILED(collection->GetFontFromFontFace(fontFace.get(), &font)))
-        return nullptr;
+    {
+        // if not found in system collection, try our private font collection
+        if (!dwritePrivateCollection
+            || FAILED(dwritePrivateCollection->GetFontFromFontFace(fontFace.get(), &font)))
+            return nullptr;
+    }
     sal::systools::COMReference<IDWriteFontFamily> fontFamily;
     if (FAILED(CHECKHR(font->GetFontFamily(&fontFamily))))
         return nullptr;
@@ -296,7 +327,9 @@ void WinSkiaSalGraphicsImpl::initFontInfo()
 void WinSkiaSalGraphicsImpl::ClearDevFontCache()
 {
     dwriteFontMgr.reset();
+    dwritePrivateCollection.clear();
     dwriteFactory.clear();
+    dwriteFactory3.clear();
     dwriteGdiInterop.clear();
     dwriteDone = false;
     initFontInfo(); // get font info again, just in case
