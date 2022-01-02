@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2770cdc_4394adad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001692
+      },
+      "writtenOn": "2022-01-02T21:59:10Z",
+      "side": 1,
+      "message": "I accept your proposal. on the other hand, I wonder what is the best solution for it.\nI think that cui modules should usually access cui.mo, not svx.mo.",
+      "revId": "969237d41d15ad0c66af7a2dd86b173380f67e5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
