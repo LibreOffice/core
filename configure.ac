@@ -9332,7 +9332,7 @@ AC_SUBST(SYSTEM_LIBJPEG)
 dnl ===================================================================
 dnl Check for system clucene
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([clucene],[CLUCENE],[liblucence-core])
+libo_CHECK_SYSTEM_MODULE([clucene],[CLUCENE],[libclucene-core])
 if test "$SYSTEM_CLUCENE" = TRUE; then
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
