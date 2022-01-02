@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7ef9888_95166b2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-02T20:12:38Z",
+      "side": 1,
+      "message": "I think this went awry with\n\ncommit 0cbd8a5d4571cdf3601ca8deb64d734d35e234f9\nDate:   Wed Mar 3 11:03:42 2021 +0100\n\n    tdf#140762  Move RIDs related to borders to include/svx\n    \n    They\u0027ll be reused for the items in the \"Borders\" dropdown\n    button in Calc\u0027s formatting toolbar in a subsequent step.\n    \n    Change-Id: I895d787d185a69f7aa7d3db3c490271184152ddb\n    Reviewed-on: https://gerrit.libreoffice.org/c/core/+/111870\n\nwhere they were moved into svx.mo but the old use in cui continued to be accessed with CuiResId which looks in cui.mo. This is a problem also in 7.3 then (I assume) and needs a fix in 7.3 too. But the string freeze for 7.3 has passed so backporting this fix would add strings to 7.3 :-(\n\nDo we get the desired results if we instead just change the CuiResId at cui/source/tabpages/border.cxx:1377 to SvxResId ? If that was enough then that alternative change could be easily backported to 7.3 without affecting the string freeze.",
+      "revId": "c2999d0c330064a301b935124c9d4151249a1dbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
