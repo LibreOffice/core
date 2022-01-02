@@ -1172,12 +1172,39 @@ void SdXMLEllipseShapeContext::startFastElement (sal_Int32 nElement,
         maPosition.X = mnCX - mnRX;
         maPosition.Y = mnCY - mnRY;
     }
-
     // set pos, size, shear and rotate
     SetTransformation();
 
     if( meKind != drawing::CircleKind_FULL )
     {
+        // calculate the correct start and end angle
+
+        sal_Int32 mnOldStartAngle = mnStartAngle;
+        sal_Int32 mnOldEndAngle = mnEndAngle;
+        basegfx::B2DTuple aScale;
+        basegfx::B2DTuple aTranslate;
+        double fRotate;
+        double fShearX;
+        maUsedTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+        double fX = aScale.getX();
+        double fY = aScale.getY();
+        if ( fX < 0 || fY < 0 )
+        {
+            // The angle for a horizontal flip is the same as the angle for a
+            // vertical flip because a vertical flip is treated as a horizontal
+            // flip plus a rotation
+
+            // To perform the flip, the start and end angle are switched and we
+            // use the fact performing a horizontal flip on a shape will change
+            // the angle that a radius makes with the origin to 180 degrees
+            // minus that angle (we use 54000 hundredths of a degree to get the
+            // modulus operation to give a value between 0 and 36000)
+
+            mnStartAngle = (54000 - mnOldEndAngle) % 36000;
+            mnEndAngle = (54000 - mnOldStartAngle) % 36000;
+        }
+
+
         uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
         if( xPropSet.is() )
         {
@@ -1186,6 +1213,7 @@ void SdXMLEllipseShapeContext::startFastElement (sal_Int32 nElement,
             xPropSet->setPropertyValue("CircleEndAngle", Any(mnEndAngle) );
         }
     }
+
 
     SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
