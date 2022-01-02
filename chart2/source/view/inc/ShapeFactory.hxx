@@ -266,10 +266,10 @@ public:
             , const css::awt::Size& rTargetAreaSize
             , const css::awt::Size& rObjectSize );
 
-    static ::basegfx::B2IRectangle getRectangleOfShape( SvxShape& xShape );
+    static ::basegfx::B2IRectangle getRectangleOfShape( SvxShape& rShape );
 
     static css::awt::Size getSizeAfterRotation(
-            const css::uno::Reference< css::drawing::XShape >& xShape, double fRotationAngleDegree );
+            SvxShape& rShape, double fRotationAngleDegree );
 
     static void removeSubShapes( const css::uno::Reference< css::drawing::XShapes >& xShapes );
 

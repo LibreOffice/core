@@ -2506,34 +2506,31 @@ awt::Point ShapeFactory::calculateTopLeftPositionToCenterObject(
 }
 
 awt::Size ShapeFactory::getSizeAfterRotation(
-         const uno::Reference< drawing::XShape >& xShape, double fRotationAngleDegree )
+         SvxShape& rShape, double fRotationAngleDegree )
 {
     awt::Size aRet(0,0);
-    if(xShape.is())
+    const awt::Size aSize( rShape.getSize() );
+
+    if( fRotationAngleDegree == 0.0 )
+        aRet = aSize;
+    else
     {
-        const awt::Size aSize( xShape->getSize() );
+        fRotationAngleDegree = NormAngle360(fRotationAngleDegree);
+        if(fRotationAngleDegree>270.0)
+            fRotationAngleDegree=360.0-fRotationAngleDegree;
+        else if(fRotationAngleDegree>180.0)
+            fRotationAngleDegree=fRotationAngleDegree-180.0;
+        else if(fRotationAngleDegree>90.0)
+            fRotationAngleDegree=180.0-fRotationAngleDegree;
 
-        if( fRotationAngleDegree == 0.0 )
-            aRet = aSize;
-        else
-        {
-            fRotationAngleDegree = NormAngle360(fRotationAngleDegree);
-            if(fRotationAngleDegree>270.0)
-                fRotationAngleDegree=360.0-fRotationAngleDegree;
-            else if(fRotationAngleDegree>180.0)
-                fRotationAngleDegree=fRotationAngleDegree-180.0;
-            else if(fRotationAngleDegree>90.0)
-                fRotationAngleDegree=180.0-fRotationAngleDegree;
+        const double fAnglePi = basegfx::deg2rad(fRotationAngleDegree);
 
-            const double fAnglePi = basegfx::deg2rad(fRotationAngleDegree);
-
-            aRet.Height = static_cast<sal_Int32>(
-                aSize.Width*std::sin( fAnglePi )
-                + aSize.Height*std::cos( fAnglePi ));
-            aRet.Width = static_cast<sal_Int32>(
-                aSize.Width*std::cos( fAnglePi )
-                + aSize.Height*std::sin( fAnglePi ));
-        }
+        aRet.Height = static_cast<sal_Int32>(
+            aSize.Width*std::sin( fAnglePi )
+            + aSize.Height*std::cos( fAnglePi ));
+        aRet.Width = static_cast<sal_Int32>(
+            aSize.Width*std::cos( fAnglePi )
+            + aSize.Height*std::sin( fAnglePi ));
     }
     return aRet;
 }

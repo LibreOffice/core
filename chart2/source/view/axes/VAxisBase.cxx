@@ -100,9 +100,9 @@ bool VAxisBase::isComplexCategoryAxis() const
     return m_aAxisProperties.m_bComplexCategories && m_bUseTextLabels;
 }
 
-void VAxisBase::recordMaximumTextSize( const Reference< drawing::XShape >& xShape, double fRotationAngleDegree )
+void VAxisBase::recordMaximumTextSize( SvxShape& xShape, double fRotationAngleDegree )
 {
-    if( m_bRecordMaximumTextSize && xShape.is() )
+    if( m_bRecordMaximumTextSize )
     {
         awt::Size aSize( ShapeFactory::getSizeAfterRotation(
                             xShape, fRotationAngleDegree ) );

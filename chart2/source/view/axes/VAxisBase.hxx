@@ -65,8 +65,7 @@ protected: //methods
     void updateUnscaledValuesAtTicks( TickIter& rIter );
 
     virtual bool prepareShapeCreation();
-    void recordMaximumTextSize( const css::uno::Reference< css::drawing::XShape >& xShape
-                    , double fRotationAngleDegree );
+    void recordMaximumTextSize( SvxShape& xShape, double fRotationAngleDegree );
 
     bool isDateAxis() const;
     bool isComplexCategoryAxis() const;

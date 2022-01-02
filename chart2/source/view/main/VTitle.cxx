@@ -68,7 +68,7 @@ awt::Size VTitle::getUnrotatedSize() const //size before rotation
 awt::Size VTitle::getFinalSize() const //size after rotation
 {
     return ShapeFactory::getSizeAfterRotation(
-         m_xShape, m_fRotationAngleDegree );
+         *m_xShape, m_fRotationAngleDegree );
 }
 
 void VTitle::changePosition( const awt::Point& rPos )
