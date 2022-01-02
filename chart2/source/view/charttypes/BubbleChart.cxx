@@ -274,7 +274,7 @@ void BubbleChart::createShapes()
                         rtl::Reference<SvxShapeCircle> xShape = ShapeFactory::createCircle2D( xPointGroupShape_Shapes
                                 , aScenePosition, aSymbolSize );
 
-                        setMappedProperties( xShape
+                        setMappedProperties( *xShape
                                 , pSeries->getPropertiesOfPoint( nIndex )
                                 , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
 

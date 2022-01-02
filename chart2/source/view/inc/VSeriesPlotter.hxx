@@ -394,7 +394,7 @@ protected:
         , css::awt::Point aDefaultPos );
 
     static void setMappedProperties(
-          const css::uno::Reference< css::drawing::XShape >& xTarget
+          SvxShape& rTarget
         , const css::uno::Reference< css::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap
         , tPropertyNameValueMap const * pOverwriteMap=nullptr );

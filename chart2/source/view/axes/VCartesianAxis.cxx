@@ -73,27 +73,22 @@ VCartesianAxis::~VCartesianAxis()
     m_pPosHelper = nullptr;
 }
 
-static void lcl_ResizeTextShapeToFitAvailableSpace( SvxShape& xShape2DText,
+static void lcl_ResizeTextShapeToFitAvailableSpace( SvxShapeText& rShape2DText,
                                              const AxisLabelProperties& rAxisLabelProperties,
                                              const OUString& rLabel,
                                              const tNameSequence& rPropNames,
                                              const tAnySequence& rPropValues,
                                              const bool bIsHorizontalAxis )
 {
-    uno::Reference< text::XTextRange > xTextRange( xShape2DText, uno::UNO_QUERY );
-
-    if( !xTextRange.is() )
-        return;
-
     const sal_Int32 nFullSize = bIsHorizontalAxis ? rAxisLabelProperties.m_aFontReferenceSize.Height : rAxisLabelProperties.m_aFontReferenceSize.Width;
 
     if( !nFullSize || !rLabel.getLength() )
         return;
 
     sal_Int32 nMaxLabelsSize = bIsHorizontalAxis ? rAxisLabelProperties.m_aMaximumSpaceForLabels.Height : rAxisLabelProperties.m_aMaximumSpaceForLabels.Width;
-    const sal_Int32 nAvgCharWidth = xShape2DText.getSize().Width / rLabel.getLength();
-    const sal_Int32 nTextSize = bIsHorizontalAxis ? ShapeFactory::getSizeAfterRotation(xShape2DText, rAxisLabelProperties.fRotationAngleDegree).Height :
-                                                    ShapeFactory::getSizeAfterRotation(xShape2DText, rAxisLabelProperties.fRotationAngleDegree).Width;
+    const sal_Int32 nAvgCharWidth = rShape2DText.getSize().Width / rLabel.getLength();
+    const sal_Int32 nTextSize = bIsHorizontalAxis ? ShapeFactory::getSizeAfterRotation(rShape2DText, rAxisLabelProperties.fRotationAngleDegree).Height :
+                                                    ShapeFactory::getSizeAfterRotation(rShape2DText, rAxisLabelProperties.fRotationAngleDegree).Width;
 
     if( !nAvgCharWidth )
         return;
@@ -112,13 +107,9 @@ static void lcl_ResizeTextShapeToFitAvailableSpace( SvxShape& xShape2DText,
     OUString aNewLabel = rLabel.copy( 0, nNewLen );
     if( nNewLen > sDots.getLength() )
         aNewLabel += sDots;
-    xTextRange->setString( aNewLabel );
+    rShape2DText.setString( aNewLabel );
 
-    uno::Reference< beans::XPropertySet > xProp( xTextRange, uno::UNO_QUERY );
-    if( xProp.is() )
-    {
-        PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
-    }
+    PropertyMapper::setMultiProperties( rPropNames, rPropValues, rShape2DText );
 }
 
 static rtl::Reference<SvxShapeText> createSingleLabel(

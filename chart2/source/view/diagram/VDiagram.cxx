@@ -159,7 +159,6 @@ void VDiagram::createShapes_2d()
     {
         m_xWall2D = ShapeFactory::createRectangle( xGroupForWall );
 
-        uno::Reference< beans::XPropertySet > xProp( static_cast<cppu::OWeakObject*>(m_xWall2D.get()), uno::UNO_QUERY_THROW );
         try
         {
             OSL_ENSURE( m_xDiagram.is(), "Invalid Diagram model" );
@@ -167,7 +166,7 @@ void VDiagram::createShapes_2d()
             {
                 uno::Reference< beans::XPropertySet > xWallProp( m_xDiagram->getWall());
                 if( xWallProp.is())
-                    PropertyMapper::setMappedProperties( xProp, xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
+                    PropertyMapper::setMappedProperties( *m_xWall2D, xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
             }
             if( !bAddFloorAndWall )
             {
