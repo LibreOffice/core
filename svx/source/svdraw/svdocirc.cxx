@@ -1038,7 +1038,7 @@ void SdrCircObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     if (maGeo.nRotationAngle || maGeo.nShearAngle || meCircleKind != SdrCircKind::Full)
     {
-        tools::Rectangle aSR0(GetSnapRect());
+        tools::Rectangle aSR0(maRect);
         tools::Long nWdt0=aSR0.Right()-aSR0.Left();
         tools::Long nHgt0=aSR0.Bottom()-aSR0.Top();
         tools::Long nWdt1=rRect.Right()-rRect.Left();
