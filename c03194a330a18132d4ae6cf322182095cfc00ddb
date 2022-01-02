@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "232940fc_ed76b7be",
+        "filename": "vcl/workben/listfonts.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-02T11:48:11Z",
+      "side": 1,
+      "message": "Do you neeed/use sFileUrl? It causes clang plugin error.",
+      "revId": "c03194a330a18132d4ae6cf322182095cfc00ddb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
