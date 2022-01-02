@@ -232,13 +232,13 @@ public:
         createRectangle(
             const css::uno::Reference< css::drawing::XShapes >& xTarget );
 
-    static css::uno::Reference< css::drawing::XShapes >
+    static rtl::Reference<SvxShapeGroup>
          getOrCreateChartRootShape( const rtl::Reference<SvxDrawPage>& xPage );
 
     static void setPageSize(const css::uno::Reference<css::drawing::XShapes>& xChartShapes,
                      const css::awt::Size& rSize);
 
-    static css::uno::Reference< css::drawing::XShapes >
+    static rtl::Reference<SvxShapeGroup>
          getChartRootShape( const rtl::Reference<SvxDrawPage>& xPage );
 
     static void makeShapeInvisible( const rtl::Reference< SvxShape >& rShape );

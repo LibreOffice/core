@@ -83,10 +83,10 @@ void lcl_addProperty(uno::Sequence<OUString> & rPropertyNames, uno::Sequence<uno
 
 } // end anonymous namespace
 
-uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
+rtl::Reference<SvxShapeGroup> ShapeFactory::getOrCreateChartRootShape(
     const rtl::Reference<SvxDrawPage>& xDrawPage )
 {
-    uno::Reference<drawing::XShapes> xRet = ShapeFactory::getChartRootShape(xDrawPage);
+    rtl::Reference<SvxShapeGroup> xRet = ShapeFactory::getChartRootShape(xDrawPage);
     if (xRet.is())
         return xRet;
 
@@ -100,8 +100,7 @@ uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
     setShapeName(xShapeGroup, "com.sun.star.chart2.shapes");
     xShape->setSize(awt::Size(0,0));
 
-    xRet.set(xShape, uno::UNO_QUERY);
-    return xRet;
+    return xShapeGroup;
 }
 
 void ShapeFactory::setPageSize(const uno::Reference<drawing::XShapes>&, const awt::Size&) {}
@@ -2311,10 +2310,10 @@ ShapeFactory* ShapeFactory::getOrCreateShapeFactory(const uno::Reference< lang::
     return pShapeFactory;
 }
 
-uno::Reference< drawing::XShapes > ShapeFactory::getChartRootShape(
+rtl::Reference<SvxShapeGroup> ShapeFactory::getChartRootShape(
     const rtl::Reference<SvxDrawPage>& xDrawPage )
 {
-    uno::Reference< drawing::XShapes > xRet;
+    rtl::Reference<SvxShapeGroup> xRet;
     const uno::Reference< drawing::XShapes > xShapes = xDrawPage;
     if( xShapes.is() )
     {
@@ -2326,7 +2325,8 @@ uno::Reference< drawing::XShapes > ShapeFactory::getChartRootShape(
             {
                 if( ShapeFactory::getShapeName( xShape ) == "com.sun.star.chart2.shapes" )
                 {
-                    xRet.set( xShape, uno::UNO_QUERY );
+                    xRet = dynamic_cast<SvxShapeGroup*>(xShape.get());
+                    assert(xRet);
                     break;
                 }
             }

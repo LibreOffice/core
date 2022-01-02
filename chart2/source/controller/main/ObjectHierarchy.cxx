@@ -29,6 +29,7 @@
 #include <LegendHelper.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <unonames.hxx>
+#include <svx/unoshape.hxx>
 
 #include <map>
 #include <algorithm>
@@ -450,14 +451,15 @@ void ObjectHierarchy::createAdditionalShapesTree( ObjectHierarchy::tChildContain
         if ( m_pExplicitValueProvider )
         {
             rtl::Reference<SvxDrawPage> xDrawPage( m_pExplicitValueProvider->getDrawModelWrapper()->getMainDrawPage() );
-            Reference< drawing::XShapes > xChartRoot( DrawModelWrapper::getChartRootShape( xDrawPage ) );
+            rtl::Reference<SvxShapeGroup> xChartRoot( DrawModelWrapper::getChartRootShape( xDrawPage ) );
+            uno::Reference<drawing::XShape> xChartRootShape(static_cast<cppu::OWeakObject*>(xChartRoot.get()), uno::UNO_QUERY_THROW);
             sal_Int32 nCount = xDrawPage->getCount();
             for ( sal_Int32 i = 0; i < nCount; ++i )
             {
                 Reference< drawing::XShape > xShape;
                 if ( xDrawPage->getByIndex( i ) >>= xShape )
                 {
-                    if ( xShape.is() && xShape != xChartRoot )
+                    if ( xShape.is() && xShape != xChartRootShape )
                     {
                         rContainer.emplace_back( xShape );
                     }

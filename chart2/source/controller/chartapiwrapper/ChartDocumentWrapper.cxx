@@ -56,6 +56,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <tools/diagnose_ex.h>
+#include <svx/unoshape.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -981,7 +982,8 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
     if( !xDrawPage.is() )
         return xFoundShapes;
 
-    uno::Reference<drawing::XShapes> xChartRoot( DrawModelWrapper::getChartRootShape( xDrawPage ) );
+    rtl::Reference<SvxShapeGroup> xChartRoot( DrawModelWrapper::getChartRootShape( xDrawPage ) );
+    uno::Reference<drawing::XShape> xChartRootShape(static_cast<cppu::OWeakObject*>(xChartRoot.get()), uno::UNO_QUERY_THROW);
 
     // iterate 'flat' over all top-level objects
     // and determine all that are no chart objects
@@ -992,7 +994,7 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
     {
         if( xDrawPage->getByIndex( nS ) >>= xShape )
         {
-            if( xShape.is() && xChartRoot!=xShape )
+            if( xShape.is() && xChartRootShape!=xShape )
                 aShapeVector.push_back( xShape );
         }
     }

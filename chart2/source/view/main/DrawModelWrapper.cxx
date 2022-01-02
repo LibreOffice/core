@@ -204,7 +204,7 @@ void DrawModelWrapper::clearMainDrawPage()
     }
 }
 
-uno::Reference< drawing::XShapes > DrawModelWrapper::getChartRootShape( const rtl::Reference<SvxDrawPage>& xDrawPage )
+rtl::Reference<SvxShapeGroup> DrawModelWrapper::getChartRootShape( const rtl::Reference<SvxDrawPage>& xDrawPage )
 {
     return ShapeFactory::getChartRootShape( xDrawPage );
 }

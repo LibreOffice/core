@@ -37,6 +37,7 @@
 #include <editeng/orphitem.hxx>
 #include <editeng/spltitem.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/unoshape.hxx>
 #include <editeng/widwitem.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -562,14 +563,15 @@ SdrObject* ShapeController::getFirstAdditionalShape()
         {
             Reference< drawing::XShape > xFirstShape;
             rtl::Reference<SvxDrawPage> xDrawPage( pDrawModelWrapper->getMainDrawPage() );
-            Reference< drawing::XShapes > xChartRoot( DrawModelWrapper::getChartRootShape( xDrawPage ) );
+            rtl::Reference<SvxShapeGroup> xChartRoot( DrawModelWrapper::getChartRootShape( xDrawPage ) );
+            uno::Reference<drawing::XShape> xChartRootShape(static_cast<cppu::OWeakObject*>(xChartRoot.get()), uno::UNO_QUERY_THROW);
             sal_Int32 nCount = xDrawPage->getCount();
             for ( sal_Int32 i = 0; i < nCount; ++i )
             {
                 Reference< drawing::XShape > xShape;
                 if ( xDrawPage->getByIndex( i ) >>= xShape )
                 {
-                    if ( xShape.is() && xShape != xChartRoot )
+                    if ( xShape.is() && xShape != xChartRootShape )
                     {
                         xFirstShape = xShape;
                         break;

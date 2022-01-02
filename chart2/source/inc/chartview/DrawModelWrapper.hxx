@@ -55,7 +55,7 @@ public:
     // the extra page is not visible, but contains some extras like the symbols for data points
     const rtl::Reference<SvxDrawPage> & getHiddenDrawPage();
 
-    static css::uno::Reference< css::drawing::XShapes >
+    static rtl::Reference<SvxShapeGroup>
          getChartRootShape( const rtl::Reference<SvxDrawPage>& xPage );
 
     SAL_DLLPRIVATE void lockControllers();
