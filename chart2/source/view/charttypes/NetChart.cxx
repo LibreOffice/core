@@ -115,7 +115,7 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
                 , PlottingPositionHelper const * pPosHelper )
 {
     //return true if a line was created successfully
-    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
+    rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
 
     drawing::PolyPolygonShape3D aPoly;
     {
@@ -170,7 +170,7 @@ bool NetChart::impl_createArea( VDataSeries* pSeries
 {
     //return true if an area was created successfully
 
-    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
+    rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
     double zValue = pSeries->m_fLogicZPos;
 
     drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
@@ -400,7 +400,7 @@ void NetChart::createShapes()
                     if( m_bArea && (rXSlot.m_aSeriesVector.size() == 1) && (nIndex >= pSeries->getTotalPointCount()) )
                         continue;
 
-                    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(pSeries.get(), m_xSeriesTarget);
+                    rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(pSeries.get(), m_xSeriesTarget);
 
                     sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                     m_pPosHelper = &getPlottingPositionHelper(nAttachedAxisIndex);
@@ -527,9 +527,9 @@ void NetChart::createShapes()
                     //create a group shape for this point and add to the series shape:
                     OUString aPointCID = ObjectIdentifier::createPointCID(
                         pSeries->getPointCID_Stub(), nIndex );
-                    uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(
+                    rtl::Reference<SvxShapeGroupAnyD> xPointGroupShape_Shapes(
                         createGroupShape(xSeriesGroupShape_Shapes,aPointCID) );
-                    uno::Reference<drawing::XShape> xPointGroupShape_Shape( xPointGroupShape_Shapes, uno::UNO_QUERY );
+                    uno::Reference<drawing::XShape> xPointGroupShape_Shape( xPointGroupShape_Shapes );
 
                     {
                         //create data point

@@ -113,7 +113,7 @@ static void lcl_ResizeTextShapeToFitAvailableSpace( SvxShapeText& rShape2DText,
 }
 
 static rtl::Reference<SvxShapeText> createSingleLabel(
-            const Reference< drawing::XShapes >& xTarget
+            const rtl::Reference< SvxShapeGroupAnyD >& xTarget
           , const awt::Point& rAnchorScreenPosition2D
           , const OUString& rLabel
           , const AxisLabelProperties& rAxisLabelProperties
@@ -699,7 +699,7 @@ sal_Int32 VCartesianAxis::getTextLevelCount() const
 }
 
 bool VCartesianAxis::createTextShapes(
-    const Reference<drawing::XShapes>& xTarget, TickIter& rTickIter,
+    const rtl::Reference< SvxShapeGroupAnyD >& xTarget, TickIter& rTickIter,
     AxisLabelProperties& rAxisLabelProperties, TickFactory2D const * pTickFactory,
     sal_Int32 nScreenDistanceBetweenTicks )
 {
@@ -946,7 +946,7 @@ bool VCartesianAxis::createTextShapes(
 }
 
 bool VCartesianAxis::createTextShapesSimple(
-    const Reference<drawing::XShapes>& xTarget, TickIter& rTickIter,
+    const rtl::Reference< SvxShapeGroupAnyD >& xTarget, TickIter& rTickIter,
     AxisLabelProperties& rAxisLabelProperties, TickFactory2D const * pTickFactory )
 {
     FixedNumberFormatter aFixedNumberFormatter(

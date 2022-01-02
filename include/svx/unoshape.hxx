@@ -412,13 +412,27 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
+/// This only exists so I have a common base class for SvxShapeGroup and Svx3DSceneObject
+class SVXCORE_DLLPUBLIC SvxShapeGroupAnyD : public SvxShape,
+                      public css::drawing::XShapes
+{
+public:
+    SvxShapeGroupAnyD( SdrObject* pObj );
+    SvxShapeGroupAnyD( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet );
+    virtual ~SvxShapeGroupAnyD() noexcept override;
+
+    virtual void SAL_CALL acquire() noexcept override
+    { SvxShape::acquire(); }
+    virtual void SAL_CALL release() noexcept override
+    { SvxShape::release(); }
+};
+
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SVXCORE_DLLPUBLIC SvxShapeGroup final : public SvxShape,
+class SVXCORE_DLLPUBLIC SvxShapeGroup final : public SvxShapeGroupAnyD,
                       public css::drawing::XShapeGroup,
-                      public css::drawing::XShapes2,
-                      public css::drawing::XShapes
+                      public css::drawing::XShapes2
 {
 private:
     rtl::Reference< SvxDrawPage> mxPage;
@@ -652,7 +666,7 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class Svx3DSceneObject final : public css::drawing::XShapes, public SvxShape
+class Svx3DSceneObject final : public SvxShapeGroupAnyD
 {
 private:
     rtl::Reference< SvxDrawPage > mxPage;

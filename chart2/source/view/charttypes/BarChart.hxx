@@ -44,7 +44,7 @@ public:
 private: //methods
     static rtl::Reference< SvxShape >
         createDataPoint3D_Bar(
-                          const css::uno::Reference< css::drawing::XShapes >& xTarget
+                          const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
                         , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree

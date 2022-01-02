@@ -115,7 +115,7 @@ SdrObjList* ViewElementListProvider::GetSymbolList() const
             m_pDrawModelWrapper->getShapeFactory());
 
         //get hidden draw page (target):
-        uno::Reference<drawing::XShapes> xTarget = m_pDrawModelWrapper->getHiddenDrawPage();
+        rtl::Reference<SvxDrawPage> xTarget = m_pDrawModelWrapper->getHiddenDrawPage();
 
         //create symbols via uno and convert to native sdr objects
         drawing::Direction3D aSymbolSize(220, 220, 0); // should be 250, but 250 -> 280 ??

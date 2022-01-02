@@ -28,7 +28,7 @@ class VButton final
 {
 private:
     css::uno::Reference<css::lang::XMultiServiceFactory> m_xShapeFactory;
-    css::uno::Reference<css::drawing::XShapes> m_xTarget;
+    rtl::Reference<SvxShapeGroupAnyD> m_xTarget;
     rtl::Reference<SvxShapeGroup> m_xShape;
     OUString m_sLabel;
     OUString m_sCID;
@@ -44,7 +44,7 @@ private:
 public:
     VButton();
 
-    void init(const css::uno::Reference<css::drawing::XShapes>& xTargetPage,
+    void init(const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
               const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory);
 
     void createShapes(const css::uno::Reference<css::beans::XPropertySet>& xTextProp);

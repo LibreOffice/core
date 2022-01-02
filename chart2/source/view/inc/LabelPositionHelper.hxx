@@ -22,6 +22,8 @@
 #include "LabelAlignment.hxx"
 #include "PropertyMapper.hxx"
 #include <com/sun/star/awt/Point.hpp>
+#include <rtl/ref.hxx>
+#include <svx/unoshape.hxx>
 
 namespace com::sun::star::drawing { struct Position3D; }
 namespace com::sun::star::drawing { class XShapes; }
@@ -37,7 +39,7 @@ public:
     LabelPositionHelper() = delete;
     LabelPositionHelper(
           sal_Int32 nDimensionCount
-        , const css::uno::Reference< css::drawing::XShapes >& xLogicTarget );
+        , const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget );
     virtual ~LabelPositionHelper();
 
     css::awt::Point transformSceneToScreenPosition(
@@ -56,7 +58,7 @@ protected:
 
 private:
     //these members are only necessary for transformation from 3D to 2D
-    css::uno::Reference< css::drawing::XShapes >    m_xLogicTarget;
+    rtl::Reference<SvxShapeGroupAnyD>    m_xLogicTarget;
 };
 
 } //namespace chart

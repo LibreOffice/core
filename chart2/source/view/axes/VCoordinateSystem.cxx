@@ -83,10 +83,10 @@ VCoordinateSystem::~VCoordinateSystem()
 {
 }
 
-void VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes >& xLogicTarget
-       , const Reference< drawing::XShapes >& xFinalTarget
+void VCoordinateSystem::initPlottingTargets(  const rtl::Reference< SvxShapeGroupAnyD >& xLogicTarget
+       , const rtl::Reference< SvxShapeGroupAnyD >& xFinalTarget
        , const Reference< lang::XMultiServiceFactory >& xShapeFactory
-       , Reference< drawing::XShapes >& xLogicTargetForSeriesBehindAxis )
+       , rtl::Reference<SvxShapeGroupAnyD>& xLogicTargetForSeriesBehindAxis )
 {
     OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
     //is only allowed to be called once

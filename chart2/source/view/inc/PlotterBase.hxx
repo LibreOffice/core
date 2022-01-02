@@ -20,6 +20,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
+#include <svx/unoshape.hxx>
 #include <vector>
 
 namespace com::sun::star::drawing { struct HomogenMatrix; }
@@ -47,8 +48,8 @@ public:
 
     /// @throws css::uno::RuntimeException
     virtual void initPlotter(
-          const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
-        , const css::uno::Reference< css::drawing::XShapes >& xFinalTarget
+          const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget
+        , const rtl::Reference<SvxShapeGroupAnyD>& xFinalTarget
         , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
         , const OUString& rCID
                 );
@@ -62,14 +63,13 @@ public:
     static bool isValidPosition( const css::drawing::Position3D& rPos );
 
 protected: //methods
-    css::uno::Reference< css::drawing::XShapes >
-        createGroupShape( const css::uno::Reference<
-                css::drawing::XShapes >& xTarget
+    rtl::Reference< SvxShapeGroupAnyD >
+        createGroupShape( const rtl::Reference< SvxShapeGroupAnyD >& xTarget
                 , const OUString& rName=OUString() );
 
 protected: //member
-    css::uno::Reference< css::drawing::XShapes >                m_xLogicTarget;
-    css::uno::Reference< css::drawing::XShapes >                m_xFinalTarget;
+    rtl::Reference< SvxShapeGroupAnyD >                         m_xLogicTarget;
+    rtl::Reference< SvxShapeGroupAnyD >                         m_xFinalTarget;
     css::uno::Reference< css::lang::XMultiServiceFactory>       m_xShapeFactory;
     ShapeFactory* m_pShapeFactory;
     OUString   m_aCID;

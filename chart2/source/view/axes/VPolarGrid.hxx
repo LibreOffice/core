@@ -60,7 +60,7 @@ private: //member
 
     void getAllTickInfos( sal_Int32 nDimensionIndex, TickInfoArraysType& rAllTickInfos ) const;
 
-    void create2DRadiusGrid( const css::uno::Reference<css::drawing::XShapes>& xLogicTarget
+    void create2DRadiusGrid( const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget
                     , TickInfoArraysType& rRadiusTickInfos
                     , TickInfoArraysType& rAngleTickInfos
                     , const std::vector<VLineProperties>& rLinePropertiesList );

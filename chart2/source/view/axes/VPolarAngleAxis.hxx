@@ -40,7 +40,7 @@ public:
 
 private: //methods
     void createTextShapes_ForAngleAxis(
-                       const css::uno::Reference< css::drawing::XShapes >& xTarget
+                       const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                      , EquidistantTickIter& rTickIter
                      , AxisLabelProperties const & rAxisLabelProperties
                      , double fLogicRadius, double fLogicZ );

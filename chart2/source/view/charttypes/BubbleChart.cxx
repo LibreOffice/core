@@ -169,8 +169,7 @@ void BubbleChart::createShapes()
 
     //therefore create an own group for the texts and the error bars to move them to front
     //(because the text group is created after the series group the texts are displayed on top)
-    uno::Reference< drawing::XShapes > xSeriesTarget(
-        createGroupShape( m_xLogicTarget ));
+    rtl::Reference<SvxShapeGroupAnyD> xSeriesTarget = createGroupShape( m_xLogicTarget );
     rtl::Reference< SvxShapeGroup > xTextTarget = ShapeFactory::createGroup2D( m_xFinalTarget );
 
     //update/create information for current group
@@ -208,7 +207,7 @@ void BubbleChart::createShapes()
                     bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
                     bool bHasBorderColorMapping = pSeries->hasPropertyMapping("LineColor");
 
-                    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries.get(), xSeriesTarget);
+                    rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries.get(), xSeriesTarget);
 
                     sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                     PlottingPositionHelper& rPosHelper
@@ -262,9 +261,9 @@ void BubbleChart::createShapes()
                     //create a group shape for this point and add to the series shape:
                     OUString aPointCID = ObjectIdentifier::createPointCID(
                         pSeries->getPointCID_Stub(), nIndex );
-                    uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(
+                    rtl::Reference<SvxShapeGroupAnyD> xPointGroupShape_Shapes(
                         createGroupShape(xSeriesGroupShape_Shapes,aPointCID) );
-                    uno::Reference<drawing::XShape> xPointGroupShape_Shape( xPointGroupShape_Shapes, uno::UNO_QUERY );
+                    uno::Reference<drawing::XShape> xPointGroupShape_Shape = xPointGroupShape_Shapes;
 
                     {
                         nCreatedPoints++;
