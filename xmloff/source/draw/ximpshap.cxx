@@ -1173,9 +1173,6 @@ void SdXMLEllipseShapeContext::startFastElement (sal_Int32 nElement,
         maPosition.Y = mnCY - mnRY;
     }
 
-    // set pos, size, shear and rotate
-    SetTransformation();
-
     if( meKind != drawing::CircleKind_FULL )
     {
         uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
@@ -1186,6 +1183,9 @@ void SdXMLEllipseShapeContext::startFastElement (sal_Int32 nElement,
             xPropSet->setPropertyValue("CircleEndAngle", Any(mnEndAngle) );
         }
     }
+
+    // set pos, size, shear and rotate
+    SetTransformation();
 
     SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
