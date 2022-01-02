@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d70c3e12_482ff90a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-02T11:38:56Z",
+      "side": 1,
+      "message": "Sorry that I only reply now, but I was mostly offline.\n\nThat the declaration and definition of the function are split across ustring.hxx and ustrbuf.hxx is rather ugly IMO.  Can\u0027t we make it a non-member function somewhere in include/o3tl, say?",
+      "revId": "9f4aad493c7087256d03b01ca3fb18d96f461526",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
