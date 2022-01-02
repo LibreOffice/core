@@ -247,7 +247,7 @@ bool PieChart::shouldSnapRectToUsedArea()
     return true;
 }
 
-uno::Reference< drawing::XShape > PieChart::createDataPoint(
+rtl::Reference<SvxShape> PieChart::createDataPoint(
     const uno::Reference<drawing::XShapes>& xTarget,
     const uno::Reference<beans::XPropertySet>& xObjectProperties,
     tPropertyNameValueMap const * pOverwritePropertiesMap,
@@ -265,7 +265,7 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint(
     }
 
     //create point
-    uno::Reference< drawing::XShape > xShape;
+    rtl::Reference<SvxShape> xShape;
     if(m_nDimension==3)
     {
         xShape = ShapeFactory::createPieSegment( xTarget

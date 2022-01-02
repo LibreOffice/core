@@ -2494,19 +2494,15 @@ awt::Point ShapeFactory::calculateTopLeftPositionToCenterObject(
     return aNewPosition;
 }
 
-::basegfx::B2IRectangle ShapeFactory::getRectangleOfShape(
-        const uno::Reference< drawing::XShape >& xShape )
+::basegfx::B2IRectangle ShapeFactory::getRectangleOfShape( SvxShape& rShape )
 {
     ::basegfx::B2IRectangle aRet;
 
-    if( xShape.is() )
-    {
-        awt::Point aPos = xShape->getPosition();
-        awt::Size aSize = xShape->getSize();
-        aRet = BaseGFXHelper::makeRectangle(aPos,aSize);
-    }
-    return aRet;
+    awt::Point aPos = rShape.getPosition();
+    awt::Size aSize = rShape.getSize();
+    aRet = BaseGFXHelper::makeRectangle(aPos,aSize);
 
+    return aRet;
 }
 
 awt::Size ShapeFactory::getSizeAfterRotation(

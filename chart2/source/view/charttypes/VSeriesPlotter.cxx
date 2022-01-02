@@ -2710,7 +2710,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     continue;
 
                 // symbol
-                uno::Reference< drawing::XShapes > xSymbolGroup(ShapeFactory::createGroup2D( xTarget ));
+                rtl::Reference< SvxShapeGroup > xSymbolGroup(ShapeFactory::createGroup2D( xTarget ));
 
                 // create the symbol
                 rtl::Reference< SvxShapeGroup > xShape = createLegendSymbolForPoint( rEntryKeyAspectRatio,
@@ -2719,7 +2719,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                 // set CID to symbol for selection
                 if( xShape.is() )
                 {
-                    aEntry.aSymbol.set( xSymbolGroup, uno::UNO_QUERY );
+                    aEntry.xSymbol = xSymbolGroup;
 
                     OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_DATA_POINT, nIdx ) );
                     aChildParticle = ObjectIdentifier::addChildParticle( aChildParticle, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
@@ -2739,7 +2739,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
         else
         {
             // symbol
-            uno::Reference< drawing::XShapes > xSymbolGroup(ShapeFactory::createGroup2D( xTarget ));
+            rtl::Reference< SvxShapeGroup > xSymbolGroup(ShapeFactory::createGroup2D( xTarget ));
 
             // create the symbol
             rtl::Reference<SvxShapeGroup> xShape = createLegendSymbolForSeries(
@@ -2748,7 +2748,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             // set CID to symbol for selection
             if( xShape.is())
             {
-                aEntry.aSymbol.set( xSymbolGroup, uno::UNO_QUERY );
+                aEntry.xSymbol = xSymbolGroup;
 
                 OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
                 OUString aCID = ObjectIdentifier::createClassifiedIdentifierForParticles( rSeries.getSeriesParticle(), aChildParticle );
@@ -2782,7 +2782,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( xContext, aResStr, xTextProperties );
 
                     // symbol
-                    uno::Reference< drawing::XShapes > xSymbolGroup(ShapeFactory::createGroup2D( xTarget ));
+                    rtl::Reference<SvxShapeGroup> xSymbolGroup(ShapeFactory::createGroup2D( xTarget ));
 
                     // create the symbol
                     rtl::Reference<SvxShapeGroup> xShape = VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
@@ -2793,7 +2793,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     // set CID to symbol for selection
                     if( xShape.is())
                     {
-                        aEntry.aSymbol.set( xSymbolGroup, uno::UNO_QUERY );
+                        aEntry.xSymbol = xSymbolGroup;
 
                         bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurves[i] );
                         ObjectType eObjectType = bAverageLine ? OBJECTTYPE_DATA_AVERAGE_LINE : OBJECTTYPE_DATA_CURVE;

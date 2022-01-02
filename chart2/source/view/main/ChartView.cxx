@@ -1017,7 +1017,7 @@ struct CreateShapeParam2D
     rtl::Reference<SvxShapeRect> mxMarkHandles;
     rtl::Reference<SvxShapeRect> mxPlotAreaWithAxes;
 
-    css::uno::Reference<css::drawing::XShapes> mxDiagramWithAxesShapes;
+    rtl::Reference<SvxShapeGroup> mxDiagramWithAxesShapes;
 
     bool mbAutoPosTitleX;
     bool mbAutoPosTitleY;
@@ -1455,7 +1455,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
             aVDiagram.reduceToMinimumSize();
     }
 
-    uno::Reference< drawing::XShapes > xTextTargetShapes =
+    rtl::Reference<SvxShapeGroup> xTextTargetShapes =
         ShapeFactory::createGroup2D(rParam.mxDiagramWithAxesShapes);
 
     // - create axis and grids for all coordinate systems
@@ -1474,7 +1474,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
 
     //calculate resulting size respecting axis label layout and fontscaling
 
-    uno::Reference< drawing::XShape > xBoundingShape(rParam.mxDiagramWithAxesShapes, uno::UNO_QUERY);
+    rtl::Reference<SvxShapeGroup> xBoundingShape(rParam.mxDiagramWithAxesShapes);
     ::basegfx::B2IRectangle aConsumedOuterRect;
 
     //use first coosys only so far; todo: calculate for more than one coosys if we have more in future
@@ -1485,7 +1485,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         VCoordinateSystem* pVCooSys = rVCooSysList[0].get();
         pVCooSys->createMaximumAxesLabels();
 
-        aConsumedOuterRect = ShapeFactory::getRectangleOfShape(xBoundingShape);
+        aConsumedOuterRect = ShapeFactory::getRectangleOfShape(*xBoundingShape);
         ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.getCurrentRectangle() );
         if (!rParam.mbUseFixedInnerSize)
             aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
@@ -1502,7 +1502,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
 
         bool bLessSpaceConsumedThanExpected = false;
         {
-            aConsumedOuterRect = ShapeFactory::getRectangleOfShape(xBoundingShape);
+            aConsumedOuterRect = ShapeFactory::getRectangleOfShape(*xBoundingShape);
             if( aConsumedOuterRect.getMinX() > aAvailableOuterRect.getMinX()
                 || aConsumedOuterRect.getMaxX() < aAvailableOuterRect.getMaxX()
                 || aConsumedOuterRect.getMinY() > aAvailableOuterRect.getMinY()
@@ -1571,7 +1571,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     {
         m_bPointsWereSkipped = false;
 
-        aConsumedOuterRect = ShapeFactory::getRectangleOfShape(xBoundingShape);
+        aConsumedOuterRect = ShapeFactory::getRectangleOfShape(*xBoundingShape);
         ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.getCurrentRectangle() );
         if (!rParam.mbUseFixedInnerSize)
             aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
@@ -2901,8 +2901,8 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
         bHasRelativeSize = true;
 
     OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) ) );//todo: other index if more than one diagram is possible
-    uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes(
-            ShapeFactory::createGroup2D(mxRootShape,aDiagramCID) );
+    rtl::Reference<SvxShapeGroup> xDiagramPlusAxesPlusMarkHandlesGroup_Shapes =
+            ShapeFactory::createGroup2D(mxRootShape,aDiagramCID);
 
     aParam.mxMarkHandles = ShapeFactory::createInvisibleRectangle(
         xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0));

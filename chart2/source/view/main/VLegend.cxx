@@ -326,7 +326,7 @@ awt::Size lcl_placeLegendEntries(
         sal_Int32 nMaxColumnCount=-1;
         for( sal_Int32 nN=0; nN<static_cast<sal_Int32>(aTextShapes.size()); nN++ )
         {
-            Reference< drawing::XShape > xShape( aTextShapes[nN] );
+            rtl::Reference<SvxShapeText> xShape( aTextShapes[nN] );
             if( !xShape.is() )
                 continue;
             awt::Size aSize( xShape->getSize() );
@@ -407,7 +407,7 @@ awt::Size lcl_placeLegendEntries(
                     }
                     if( nEntry < nNumberOfEntries && ( nEntry != 0 || nNumberOfColumns != 1 ) )
                     {
-                        DrawModelWrapper::removeShape( rEntries[ nEntry ].aSymbol );
+                        DrawModelWrapper::removeShape( *rEntries[ nEntry ].xSymbol );
                         rEntries.pop_back();
                         nNumberOfEntries--;
                     }
@@ -441,7 +441,7 @@ awt::Size lcl_placeLegendEntries(
                         }
                         if (aTextShapes.size() == 0)
                         {
-                            DrawModelWrapper::removeShape(rEntries[0].aSymbol);
+                            DrawModelWrapper::removeShape(*rEntries[0].xSymbol);
                             rEntries.pop_back();
                             nNumberOfEntries--;
                             aRowHeights.pop_back();
@@ -576,7 +576,7 @@ awt::Size lcl_placeLegendEntries(
                 break;
 
             // text shape
-            Reference< drawing::XShape > xTextShape( aTextShapes[nEntry] );
+            rtl::Reference<SvxShapeText> xTextShape( aTextShapes[nEntry] );
             if( xTextShape.is() )
             {
                 awt::Size aTextSize( xTextShape->getSize() );
@@ -587,7 +587,7 @@ awt::Size lcl_placeLegendEntries(
             }
 
             // symbol
-            Reference< drawing::XShape > xSymbol( rEntries[ nEntry ].aSymbol );
+            rtl::Reference<SvxShapeGroup> & xSymbol( rEntries[ nEntry ].xSymbol );
             if( xSymbol.is() )
             {
                 awt::Size aSymbolSize( rMaxSymbolExtent );
@@ -635,11 +635,11 @@ awt::Size lcl_placeLegendEntries(
         awt::Point aPos(0,0);
         for( sal_Int32 nEntry=0; nEntry<nNumberOfEntries; nEntry++ )
         {
-            Reference< drawing::XShape > xSymbol( rEntries[ nEntry ].aSymbol );
+            rtl::Reference<SvxShapeGroup> & xSymbol( rEntries[ nEntry ].xSymbol );
             aPos = xSymbol->getPosition();
             aPos.X += nLegendWidth;
             xSymbol->setPosition( aPos );
-            Reference< drawing::XShape > xText( aTextShapes[ nEntry ] );
+            rtl::Reference<SvxShapeText> & xText( aTextShapes[ nEntry ] );
             aPos = xText->getPosition();
             aPos.X += nLegendWidth;
             xText->setPosition( aPos );

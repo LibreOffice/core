@@ -63,7 +63,7 @@ public:
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) override;
 
 private: //methods
-    css::uno::Reference<css::drawing::XShape>
+    rtl::Reference<SvxShape>
         createDataPoint(
             const css::uno::Reference<css::drawing::XShapes>& xTarget,
             const css::uno::Reference<css::beans::XPropertySet>& xObjectProperties,
