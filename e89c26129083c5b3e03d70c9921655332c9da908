@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf0b0be2_7702d56a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-01-02T23:05:50Z",
+      "side": 1,
+      "message": "Patch set 3 is the same as patch set 1 with code format cleaning. Patch set 2 included a not good way of working around field bugginess in header/footer. ",
+      "revId": "e89c26129083c5b3e03d70c9921655332c9da908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
