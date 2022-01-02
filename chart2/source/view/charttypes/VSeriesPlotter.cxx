@@ -1083,7 +1083,7 @@ void VSeriesPlotter::createErrorBar(
         }
 
         rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D( xTarget, PolyToPointSequence( aPoly) );
-        setMappedProperties( xShape, xErrorBarProperties, PropertyMapper::getPropertyNameMapForLineProperties() );
+        setMappedProperties( *xShape, xErrorBarProperties, PropertyMapper::getPropertyNameMapForLineProperties() );
     }
     catch( const uno::Exception & )
     {
@@ -1104,7 +1104,7 @@ void VSeriesPlotter::addErrorBorder(
     AddPointToPoly( aPoly, rPos1, nSequenceIndex );
     rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
                     rTarget, PolyToPointSequence( aPoly) );
-    setMappedProperties( xShape, rErrorBorderProp,
+    setMappedProperties( *xShape, rErrorBorderProp,
                     PropertyMapper::getPropertyNameMapForLineProperties() );
 }
 
@@ -1611,13 +1611,12 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
 }
 
 void VSeriesPlotter::setMappedProperties(
-          const uno::Reference< drawing::XShape >& xTargetShape
+          SvxShape& rTargetShape
         , const uno::Reference< beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap
         , tPropertyNameValueMap const * pOverwriteMap )
 {
-    uno::Reference< beans::XPropertySet > xTargetProp( xTargetShape, uno::UNO_QUERY );
-    PropertyMapper::setMappedProperties(xTargetProp,xSource,rMap,pOverwriteMap);
+    PropertyMapper::setMappedProperties(rTargetShape,xSource,rMap,pOverwriteMap);
 }
 
 void VSeriesPlotter::setTimeResolutionOnXAxis( tools::Long TimeResolution, const Date& rNullDate )

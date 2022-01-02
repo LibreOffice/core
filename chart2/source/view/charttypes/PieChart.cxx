@@ -281,7 +281,7 @@ rtl::Reference<SvxShape> PieChart::createDataPoint(
             , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius
             , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() ) );
     }
-    setMappedProperties( xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), pOverwritePropertiesMap );
+    setMappedProperties( *xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), pOverwritePropertiesMap );
     return xShape;
 }
 

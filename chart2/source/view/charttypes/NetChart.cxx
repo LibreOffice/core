@@ -154,7 +154,7 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
     {
         xShape = ShapeFactory::createLine2D( xSeriesGroupShape_Shapes
                 , PolyToPointSequence( aPoly ) );
-        setMappedProperties( xShape
+        setMappedProperties( *xShape
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
         //because of this name this line will be used for marking
@@ -225,7 +225,7 @@ bool NetChart::impl_createArea( VDataSeries* pSeries
     rtl::Reference<SvxShapePolyPolygon>
         xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes
                 , aPoly );
-    setMappedProperties( xShape
+    setMappedProperties( *xShape
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     //because of this name this line will be used for marking
