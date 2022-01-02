@@ -40,7 +40,9 @@ include/basegfx/vector/b3dvector.hxx:169
     class basegfx::B3DVector & basegfx::B3DVector::normalize()
 include/comphelper/backupfilehelper.hxx:205
     _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(class std::basic_string_view<char16_t>)
-include/editeng/editview.hxx:265
+include/comphelper/multiinterfacecontainer4.hxx:94
+    int comphelper::OMultiTypeInterfaceContainerHelperVar4::addInterface(const type-parameter-?-? &,const Reference<type-parameter-?-?> &)
+include/editeng/editview.hxx:264
     class ErrCode EditView::Read(class SvStream &,enum EETextFormat,class SvKeyValueIterator *)
 include/editeng/outliner.hxx:279
     _Bool OutlinerView::Command(const class CommandEvent &)
@@ -164,15 +166,15 @@ include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
 include/tools/urlobj.hxx:739
     _Bool INetURLObject::SetParam(class std::basic_string_view<char16_t>,enum INetURLObject::EncodeMechanism,unsigned short)
-include/unotools/localedatawrapper.hxx:160
+include/unotools/localedatawrapper.hxx:159
     const class com::sun::star::uno::Sequence<struct com::sun::star::lang::Locale> & LocaleDataWrapper::getAllInstalledLocaleNames() const
-include/vcl/bitmapex.hxx:227
+include/vcl/bitmapex.hxx:226
     _Bool BitmapEx::Rotate(struct o3tl::strong_int<short, struct FractionTag<10> >,const class Color &)
 include/vcl/filter/PngImageReader.hxx:42
     _Bool vcl::PngImageReader::read(class BitmapEx &)
-include/vcl/filter/SvmReader.hxx:37
+include/vcl/filter/SvmReader.hxx:36
     class SvStream & SvmReader::Read(class GDIMetaFile &,struct ImplMetaReadData *)
-include/vcl/filter/SvmWriter.hxx:38
+include/vcl/filter/SvmWriter.hxx:37
     class SvStream & SvmWriter::Write(const class GDIMetaFile &)
 include/vcl/formatter.hxx:218
     _Bool Formatter::SetFormat(const class rtl::OUString &,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>)
@@ -184,9 +186,9 @@ include/vcl/GraphicNativeTransform.hxx:33
     _Bool GraphicNativeTransform::rotateBitmapOnly(struct o3tl::strong_int<short, struct FractionTag<10> >)
 include/vcl/GraphicNativeTransform.hxx:35
     _Bool GraphicNativeTransform::rotateGeneric(struct o3tl::strong_int<short, struct FractionTag<10> >,class std::basic_string_view<char16_t>)
-include/vcl/menu.hxx:388
+include/vcl/menu.hxx:385
     _Bool Menu::HandleMenuActivateEvent(class Menu *) const
-include/vcl/menu.hxx:389
+include/vcl/menu.hxx:386
     _Bool Menu::HandleMenuDeActivateEvent(class Menu *) const
 include/vcl/texteng.hxx:271
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)

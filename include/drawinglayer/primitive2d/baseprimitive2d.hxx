@@ -183,18 +183,6 @@ public:
     }
     virtual ~UnoPrimitive2D() override;
 
-    /// The default implementation will use getDecomposition results to create the range
-    basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
-
-    /** provide unique ID for fast identifying of known primitive implementations in renderers. These use
-        the defines from drawinglayer_primitivetypes2d.hxx to define unique IDs.
-     */
-    sal_uInt32 getPrimitive2DID() const;
-
-    /// The default implementation will return an empty sequence
-    void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
-                            const geometry::ViewInformation2D& rViewInformation) const;
-
     // Methods from XPrimitive2D
 
     /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
