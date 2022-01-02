@@ -181,6 +181,46 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98583ShearHorizontal)
 
     CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
 }
-}
 
+CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf130076Flip)
+{
+    // The document contains sections of a circle, one of which is scaled
+    // (1, -1), one of which is scaled (-1,1), one of which is transformed
+    // by a matrix equivalent to a vertical flip, and another which is
+    // transformed by a matrix equivalent to a horizontal flip. Error was
+    // that the transformation was made before the CircleKind was set,
+    // resulting in the flip being performed incorrectly.
+    const OUString sURL(m_directories.getURLFromSrc(sDataDirectory)
+                        + "tdf130076_FlipOnSectorSection.odg");
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+
+    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
+
+    for (sal_uInt8 nPageIndex = 0; nPageIndex < 2; ++nPageIndex)
+    {
+        sal_Int32 angle1, angle2;
+        const sal_Int32 goodAngle1 = 26000;
+        const sal_Int32 goodAngle2 = 26000;
+        uno::Reference<drawing::XShape> xShape(getShape(1, nPageIndex));
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape2(getShape(2, nPageIndex));
+        uno::Reference<beans::XPropertySet> xShapeProps2(xShape2, uno::UNO_QUERY);
+        xShapeProps->getPropertyValue("CircleStartAngle") >>= angle1;
+        xShapeProps2->getPropertyValue("CircleStartAngle") >>= angle2;
+        if (angle1 != goodAngle1)
+        {
+            sErrors += "page " + OUString::number(nPageIndex)
+                       + " expected vertical flip starting angle " + OUString::number(goodAngle1)
+                       + " actual " + OUString::number(angle1) + "\n";
+        }
+        if (angle2 != goodAngle2)
+        {
+            sErrors += "page " + OUString::number(nPageIndex)
+                       + " expected horizontal flip starting angle " + OUString::number(goodAngle2)
+                       + " actual " + OUString::number(angle2) + "\n";
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
+}
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
