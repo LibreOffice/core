@@ -112,54 +112,60 @@ comphelper/source/misc/asyncnotification.cxx:70
     comphelper::EventNotifierImpl pKeepThisAlive std::shared_ptr<AsyncEventNotifierAutoJoin>
 configmgr/source/components.cxx:162
     configmgr::Components::WriteThread reference_ rtl::Reference<WriteThread> *
-connectivity/source/drivers/postgresql/pq_statics.hxx:104
-    pq_sdbc_driver::ImplementationStatics types css::uno::Sequence<css::uno::Type>
-connectivity/source/drivers/postgresql/pq_statics.hxx:126
-    pq_sdbc_driver::ReflectionImplementations updateableResultSet struct ImplementationStatics
-connectivity/source/drivers/postgresql/pq_statics.hxx:127
-    pq_sdbc_driver::ReflectionImplementations resultSet struct ImplementationStatics
+connectivity/source/drivers/postgresql/pq_statics.hxx:141
+    pq_sdbc_driver::Statics NO_NULLS rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:142
+    pq_sdbc_driver::Statics NULABLE rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:143
+    pq_sdbc_driver::Statics NULLABLE_UNKNOWN rtl::OUString
 connectivity/source/drivers/postgresql/pq_statics.hxx:144
-    pq_sdbc_driver::Statics NO_NULLS class rtl::OUString
+    pq_sdbc_driver::Statics SELECT rtl::OUString
 connectivity/source/drivers/postgresql/pq_statics.hxx:145
-    pq_sdbc_driver::Statics NULABLE class rtl::OUString
+    pq_sdbc_driver::Statics UPDATE rtl::OUString
 connectivity/source/drivers/postgresql/pq_statics.hxx:146
-    pq_sdbc_driver::Statics NULLABLE_UNKNOWN class rtl::OUString
+    pq_sdbc_driver::Statics INSERT rtl::OUString
 connectivity/source/drivers/postgresql/pq_statics.hxx:147
-    pq_sdbc_driver::Statics SELECT class rtl::OUString
+    pq_sdbc_driver::Statics DELETE rtl::OUString
 connectivity/source/drivers/postgresql/pq_statics.hxx:148
-    pq_sdbc_driver::Statics UPDATE class rtl::OUString
+    pq_sdbc_driver::Statics RULE rtl::OUString
 connectivity/source/drivers/postgresql/pq_statics.hxx:149
-    pq_sdbc_driver::Statics INSERT class rtl::OUString
+    pq_sdbc_driver::Statics REFERENCES rtl::OUString
 connectivity/source/drivers/postgresql/pq_statics.hxx:150
-    pq_sdbc_driver::Statics DELETE class rtl::OUString
+    pq_sdbc_driver::Statics TRIGGER rtl::OUString
 connectivity/source/drivers/postgresql/pq_statics.hxx:151
-    pq_sdbc_driver::Statics RULE class rtl::OUString
+    pq_sdbc_driver::Statics EXECUTE rtl::OUString
 connectivity/source/drivers/postgresql/pq_statics.hxx:152
-    pq_sdbc_driver::Statics REFERENCES class rtl::OUString
+    pq_sdbc_driver::Statics USAGE rtl::OUString
 connectivity/source/drivers/postgresql/pq_statics.hxx:153
-    pq_sdbc_driver::Statics TRIGGER class rtl::OUString
+    pq_sdbc_driver::Statics CREATE rtl::OUString
 connectivity/source/drivers/postgresql/pq_statics.hxx:154
-    pq_sdbc_driver::Statics EXECUTE class rtl::OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:155
-    pq_sdbc_driver::Statics USAGE class rtl::OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:156
-    pq_sdbc_driver::Statics CREATE class rtl::OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:157
-    pq_sdbc_driver::Statics TEMPORARY class rtl::OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:190
-    pq_sdbc_driver::Statics KEY_COLUMN class rtl::OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:214
-    pq_sdbc_driver::Statics HELP_TEXT class rtl::OUString
+    pq_sdbc_driver::Statics TEMPORARY rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:187
+    pq_sdbc_driver::Statics KEY_COLUMN rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:193
+    pq_sdbc_driver::Statics CURSOR_NAME rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:194
+    pq_sdbc_driver::Statics ESCAPE_PROCESSING rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:195
+    pq_sdbc_driver::Statics FETCH_DIRECTION rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:196
+    pq_sdbc_driver::Statics FETCH_SIZE rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:197
+    pq_sdbc_driver::Statics IS_BOOKMARKABLE rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:199
+    pq_sdbc_driver::Statics RESULT_SET_TYPE rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:211
+    pq_sdbc_driver::Statics HELP_TEXT rtl::OUString
 connectivity/source/inc/calc/CConnection.hxx:51
     connectivity::calc::OCalcConnection::CloseVetoButTerminateListener m_pCloseListener std::unique_ptr<utl::CloseVeto>
 connectivity/source/inc/odbc/OConnection.hxx:53
-    connectivity::odbc::OConnection m_sUser class rtl::OUString
+    connectivity::odbc::OConnection m_sUser rtl::OUString
 connectivity/source/inc/odbc/ODatabaseMetaDataResultSet.hxx:70
     connectivity::odbc::ODatabaseMetaDataResultSet m_aStatement css::uno::WeakReferenceHelper
 connectivity/source/inc/OTypeInfo.hxx:30
-    connectivity::OTypeInfo aTypeName class rtl::OUString
+    connectivity::OTypeInfo aTypeName rtl::OUString
 connectivity/source/inc/OTypeInfo.hxx:31
-    connectivity::OTypeInfo aLocalTypeName class rtl::OUString
+    connectivity::OTypeInfo aLocalTypeName rtl::OUString
 connectivity/source/inc/OTypeInfo.hxx:33
     connectivity::OTypeInfo nPrecision sal_Int32
 connectivity/source/inc/OTypeInfo.hxx:35
@@ -328,8 +334,6 @@ framework/source/layoutmanager/toolbarlayoutmanager.hxx:271
     framework::ToolbarLayoutManager m_pGlobalSettings std::unique_ptr<GlobalSettings>
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:275
     framework::ToolbarLayoutManager m_bGlobalSettings _Bool
-framework/source/uielement/toolbarsmenucontroller.cxx:89
-    framework::(anonymous namespace)::ToolBarEntry bContextSensitive _Bool
 i18nutil/source/utility/paper.cxx:315
     paperword string char *
 include/basegfx/DrawCommands.hxx:81
@@ -349,7 +353,7 @@ include/comphelper/unique_disposing_ptr.hxx:30
 include/drawinglayer/attribute/sdrallattribute3d.hxx:42
     drawinglayer::attribute::SdrLineFillShadowAttribute3D maLineStartEnd const class drawinglayer::attribute::SdrLineStartEndAttribute
 include/drawinglayer/primitive2d/mediaprimitive2d.hxx:48
-    drawinglayer::primitive2d::MediaPrimitive2D maURL class rtl::OUString
+    drawinglayer::primitive2d::MediaPrimitive2D maURL rtl::OUString
 include/editeng/adjustitem.hxx:37
     SvxAdjustItem bLeft _Bool
 include/editeng/outlobj.hxx:44
@@ -359,15 +363,15 @@ include/editeng/unotext.hxx:420
 include/editeng/unotext.hxx:589
     SvxUnoTextContentEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/framework/addonsoptions.hxx:75
-    framework::MergeNotebookBarInstruction aMergePoint class rtl::OUString
+    framework::MergeNotebookBarInstruction aMergePoint rtl::OUString
 include/framework/addonsoptions.hxx:76
-    framework::MergeNotebookBarInstruction aMergeCommand class rtl::OUString
+    framework::MergeNotebookBarInstruction aMergeCommand rtl::OUString
 include/framework/addonsoptions.hxx:77
-    framework::MergeNotebookBarInstruction aMergeCommandParameter class rtl::OUString
+    framework::MergeNotebookBarInstruction aMergeCommandParameter rtl::OUString
 include/framework/addonsoptions.hxx:78
-    framework::MergeNotebookBarInstruction aMergeFallback class rtl::OUString
+    framework::MergeNotebookBarInstruction aMergeFallback rtl::OUString
 include/framework/addonsoptions.hxx:79
-    framework::MergeNotebookBarInstruction aMergeContext class rtl::OUString
+    framework::MergeNotebookBarInstruction aMergeContext rtl::OUString
 include/framework/dispatchhelper.hxx:73
     framework::DispatchHelper m_xBroadcaster css::uno::Reference<css::uno::XInterface>
 include/framework/framelistanalyzer.hxx:122
@@ -387,7 +391,7 @@ include/opencl/platforminfo.hxx:30
 include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
 include/sfx2/minfitem.hxx:38
-    SfxMacroInfoItem aCommentText class rtl::OUString
+    SfxMacroInfoItem aCommentText rtl::OUString
 include/svl/sigstruct.hxx:127
     SignatureInformation hasInconsistentSigningTime _Bool
 include/svtools/brwbox.hxx:326
@@ -404,7 +408,7 @@ include/svx/AccessibilityCheckDialog.hxx:44
     svx::AccessibilityCheckDialog m_aAccessibilityCheckEntries std::vector<std::unique_ptr<AccessibilityCheckEntry> >
 include/svx/bmpmask.hxx:127
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
-include/svx/fillctrl.hxx:84
+include/svx/fillctrl.hxx:83
     FillControl mxColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
 include/svx/float3d.hxx:202
     Svx3DWin pControllerItem std::unique_ptr<Svx3DCtrlItem>
@@ -414,6 +418,8 @@ include/svx/galctrl.hxx:38
     GalleryPreview mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
 include/svx/galctrl.hxx:91
     GalleryIconView mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
+include/svx/GenericCheckDialog.hxx:69
+    svx::GenericCheckDialog m_aCheckEntries std::vector<std::unique_ptr<GenericCheckEntry> >
 include/svx/gridctrl.hxx:258
     DbGridControl m_pCursorDisposeListener std::unique_ptr<DisposeListenerGridBridge>
 include/svx/ofaitem.hxx:44
@@ -435,11 +441,11 @@ include/test/beans/xpropertyset.hxx:56
 include/unotools/fontcfg.hxx:158
     utl::FontSubstConfiguration maSubstHash utl::FontSubstConfiguration::UniqueSubstHash
 include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:43
-    AddonNotebookBarItem sTarget class rtl::OUString
+    AddonNotebookBarItem sTarget rtl::OUString
 include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:44
-    AddonNotebookBarItem sContext class rtl::OUString
+    AddonNotebookBarItem sContext rtl::OUString
 include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:45
-    AddonNotebookBarItem sControlType class rtl::OUString
+    AddonNotebookBarItem sControlType rtl::OUString
 include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:46
     AddonNotebookBarItem nWidth sal_uInt16
 include/vcl/opengl/OpenGLContext.hxx:27
@@ -471,7 +477,7 @@ io/source/stm/odata.cxx:243
 io/source/stm/odata.cxx:243
     io_stm::(anonymous namespace)::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n2 sal_uInt32
 jvmfwk/inc/vendorbase.hxx:171
-    jfw_plugin::VendorBase m_sArch class rtl::OUString
+    jfw_plugin::VendorBase m_sArch rtl::OUString
 l10ntools/inc/common.hxx:33
     common::HandledArgs m_bUTF8BOM _Bool
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:28
@@ -532,11 +538,11 @@ sc/inc/tabopparams.hxx:37
     ScInterpreterTableOpParams bValid _Bool
 sc/source/core/data/column4.cxx:1343
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
-sc/source/core/data/column.cxx:1410
-    (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
 sc/source/core/data/column.cxx:1411
+    (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
+sc/source/core/data/column.cxx:1412
     (anonymous namespace)::CopyByCloneHandler mnFormulaCellCloneFlags enum ScCloneFlags
-sc/source/core/data/table2.cxx:3883
+sc/source/core/data/table2.cxx:3876
     (anonymous namespace)::OutlineArrayFinder mpArray class ScOutlineArray *
 sc/source/filter/excel/xltoolbar.hxx:24
     TBCCmd A _Bool
@@ -557,14 +563,14 @@ sc/source/filter/inc/exp_op.hxx:47
 sc/source/filter/inc/imp_op.hxx:83
     ImportExcel::LastFormula mpCell class ScFormulaCell *
 sc/source/filter/inc/namebuff.hxx:36
-    StringHashEntry aString class rtl::OUString
+    StringHashEntry aString rtl::OUString
 sc/source/filter/inc/namebuff.hxx:37
     StringHashEntry nHash sal_uInt32
-sc/source/filter/inc/orcusinterface.hxx:385
-    ScOrcusStyles::fill maBgColor class Color
-sc/source/filter/inc/orcusinterface.hxx:455
+sc/source/filter/inc/orcusinterface.hxx:377
+    ScOrcusStyles::fill maBgColor std::optional<Color>
+sc/source/filter/inc/orcusinterface.hxx:432
     ScOrcusStyles::xf mnStyleXf size_t
-sc/source/filter/inc/orcusinterface.hxx:475
+sc/source/filter/inc/orcusinterface.hxx:452
     ScOrcusStyles::cell_style mnBuiltInId size_t
 sc/source/filter/inc/tokstack.hxx:141
     TokenPool pP_Err TokenPoolPool<sal_uInt16, 8>
@@ -630,19 +636,19 @@ sc/source/ui/vba/vbachartobject.hxx:43
     ScVbaChartObject oShapeHelper std::unique_ptr<ov::ShapeHelper>
 sd/inc/sdmod.hxx:133
     SdModule mpErrorHdl std::unique_ptr<SfxErrorHandler>
-sd/qa/unit/tiledrendering/tiledrendering.cxx:215
-    SdTiledRenderingTest m_bFound _Bool
 sd/qa/unit/tiledrendering/tiledrendering.cxx:216
+    SdTiledRenderingTest m_bFound _Bool
+sd/qa/unit/tiledrendering/tiledrendering.cxx:217
     SdTiledRenderingTest m_nPart sal_Int32
-sd/qa/unit/tiledrendering/tiledrendering.cxx:218
-    SdTiledRenderingTest m_aSearchResultPart std::vector<int>
 sd/qa/unit/tiledrendering/tiledrendering.cxx:219
-    SdTiledRenderingTest m_nSelectionBeforeSearchResult int
+    SdTiledRenderingTest m_aSearchResultPart std::vector<int>
 sd/qa/unit/tiledrendering/tiledrendering.cxx:220
+    SdTiledRenderingTest m_nSelectionBeforeSearchResult int
+sd/qa/unit/tiledrendering/tiledrendering.cxx:221
     SdTiledRenderingTest m_nSelectionAfterSearchResult int
 sd/source/ui/dlg/RemoteDialogClientBox.hxx:66
     sd::ClientBox m_vEntries std::vector<TClientBoxEntry>
-sd/source/ui/framework/module/ToolBarModule.hxx:74
+sd/source/ui/framework/module/ToolBarModule.hxx:72
     sd::framework::ToolBarModule mpToolBarManagerLock std::unique_ptr<ToolBarManager::UpdateLock, o3tl::default_delete<ToolBarManager::UpdateLock> >
 sd/source/ui/inc/animobjs.hxx:122
     sd::AnimationWindow pControllerItem std::unique_ptr<AnimationControllerItem>
@@ -665,12 +671,12 @@ sd/source/ui/inc/ViewShellImplementation.hxx:89
 sd/source/ui/remotecontrol/Receiver.hxx:34
     sd::Receiver pTransmitter class sd::Transmitter *
 sd/source/ui/sidebar/MasterPageContainerProviders.hxx:144
-    sd::sidebar::TemplatePreviewProvider msURL class rtl::OUString
+    sd::sidebar::TemplatePreviewProvider msURL rtl::OUString
 sd/source/ui/slideshow/slideshowimpl.hxx:331
     sd::SlideshowImpl mpPaneHider ::std::unique_ptr<PaneHider>
 sd/source/ui/slideshow/SlideShowRestarter.hxx:73
     sd::SlideShowRestarter mpSelf ::std::shared_ptr<SlideShowRestarter>
-sd/source/ui/slidesorter/controller/SlsListener.hxx:141
+sd/source/ui/slidesorter/controller/SlsListener.hxx:140
     sd::slidesorter::controller::Listener mpModelChangeLock std::shared_ptr<SlideSorterController::ModelChangeLock>
 sd/source/ui/slidesorter/inc/controller/SlsClipboard.hxx:114
     sd::slidesorter::controller::Clipboard mxUndoContext std::unique_ptr<UndoContext>
@@ -702,11 +708,9 @@ sfx2/source/inc/appdata.hxx:85
     SfxAppData_Impl mxAppPickList std::optional<SfxPickList>
 sfx2/source/inc/splitwin.hxx:52
     SfxSplitWindow pActive VclPtr<class SfxDockingWindow>
-sfx2/source/inc/StyleList.hxx:171
-    StyleList m_aUpdateStyleDependents Link<void *, void>
-sfx2/source/inc/StyleList.hxx:219
+sfx2/source/inc/StyleList.hxx:217
     StyleList m_xTreeView1DropTargetHelper std::unique_ptr<TreeViewDropTarget>
-sfx2/source/inc/StyleList.hxx:220
+sfx2/source/inc/StyleList.hxx:218
     StyleList m_xTreeView2DropTargetHelper std::unique_ptr<TreeViewDropTarget>
 sfx2/source/inc/templdgi.hxx:213
     SfxTemplateDialog_Impl m_xToolbarDropTargetHelper std::unique_ptr<ToolbarDropTarget>
@@ -728,7 +732,7 @@ starmath/inc/mathml/mathmlimport.hxx:45
     SmXMLImportWrapper m_bUseHTMLMLEntities _Bool
 starmath/inc/view.hxx:187
     SmCmdBoxWindow aController class SmEditController
-stoc/source/servicemanager/servicemanager.cxx:392
+stoc/source/servicemanager/servicemanager.cxx:389
     (anonymous namespace)::OServiceManager m_SetLoadedFactories (anonymous namespace)::HashSet_Ref
 store/source/storbios.cxx:58
     (anonymous namespace)::OStoreSuperBlock m_nMarked sal_uInt32
@@ -787,7 +791,7 @@ svx/source/form/formcontroller.cxx:208
 svx/source/inc/datanavi.hxx:319
     svxform::DataNavigator m_xDataWin std::unique_ptr<DataNavigatorWindow>
 svx/source/inc/docrecovery.hxx:131
-    svx::DocRecovery::TURLInfo Module class rtl::OUString
+    svx::DocRecovery::TURLInfo Module rtl::OUString
 svx/source/inc/StylesPreviewToolBoxControl.hxx:33
     StylesPreviewToolBoxControl m_xWeldBox std::unique_ptr<StylesPreviewWindow_Base>
 svx/source/inc/StylesPreviewWindow.hxx:87
@@ -904,7 +908,7 @@ sw/source/core/inc/unoflatpara.hxx:136
     SwXFlatParagraphIterator m_aFlatParaList std::set<css::uno::Reference<css::text::XFlatParagraph> >
 sw/source/core/layout/dbg_lay.cxx:133
     SwImplProtocol m_aVars std::vector<tools::Long>
-sw/source/core/table/swtable.cxx:2697
+sw/source/core/table/swtable.cxx:2786
     SwTableCellInfo::Impl m_HandledTableBoxes SwTableCellInfo::Impl::TableBoxes_t
 sw/source/core/text/porfld.hxx:65
     SwFieldPortion m_nAttrFieldType sal_uInt16
@@ -917,7 +921,7 @@ sw/source/filter/inc/rtf.hxx:30
 sw/source/filter/inc/rtf.hxx:31
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:32
-    RTFSurround::(anonymous) Flags struct (unnamed struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (unnamed struct at /home/noel/libo2/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/uibase/inc/glossary.hxx:63
     SwGlossaryDlg m_xGroupData std::vector<std::unique_ptr<GroupUserData> >
 sw/source/uibase/inc/maildispatcher.hxx:143
@@ -960,6 +964,8 @@ ucb/source/ucp/gio/gio_mount.hxx:78
     OOoMountOperationClass _gtk_reserved3 void (*)(void)
 ucb/source/ucp/gio/gio_mount.hxx:79
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
+ucb/source/ucp/webdav-curl/SerfLockStore.hxx:63
+    http_dav_ucp::SerfLockStore m_bFinishing _Bool
 unoidl/source/unoidl.cxx:83
     unoidl::(anonymous namespace)::AggregatingCursor seen_ std::set<OUString>
 unoxml/source/rdf/librdf_repository.cxx:470
@@ -973,7 +979,7 @@ vbahelper/source/vbahelper/vbafillformat.hxx:36
 vcl/inc/accel.hxx:39
     ImplAccelEntry mpAutoAccel class Accelerator *
 vcl/inc/driverblocklist.hxx:114
-    DriverBlocklist::DriverInfo maMsg class rtl::OUString
+    DriverBlocklist::DriverInfo maMsg rtl::OUString
 vcl/inc/font/FontSelectPattern.hxx:65
     vcl::font::FontSelectPattern mfExactHeight float
 vcl/inc/pdf/BitmapID.hxx:23
@@ -985,7 +991,7 @@ vcl/inc/qt5/QtFilePicker.hxx:76
 vcl/inc/salmenu.hxx:33
     SalItemParams pMenu VclPtr<class Menu>
 vcl/inc/salmenu.hxx:34
-    SalItemParams aText class rtl::OUString
+    SalItemParams aText rtl::OUString
 vcl/inc/salmenu.hxx:37
     SalItemParams nBits enum MenuItemBits
 vcl/inc/salwtype.hxx:206
@@ -1046,7 +1052,7 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:79
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:19675
+vcl/unx/gtk3/gtkinst.cxx:19703
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection gpointer
@@ -1055,17 +1061,13 @@ vcl/unx/gtk3/hudawareness.cxx:21
 vcl/workben/vcldemo.cxx:1736
     (anonymous namespace)::DemoWin mxThread rtl::Reference<RenderThread>
 writerfilter/source/dmapper/DocumentProtection.hxx:50
-    writerfilter::dmapper::DocumentProtection m_sRedlineProtectionKey class rtl::OUString
+    writerfilter::dmapper::DocumentProtection m_sRedlineProtectionKey rtl::OUString
 writerfilter/source/dmapper/DomainMapperTableHandler.cxx:240
     writerfilter::dmapper::TableInfo aTablePropertyIds std::vector<PropertyIds>
 writerfilter/source/dmapper/PropertyMap.hxx:219
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
-writerfilter/source/dmapper/SdtHelper.hxx:59
-    writerfilter::dmapper::SdtHelper m_sDataBindingPrefixMapping class rtl::OUString
-writerfilter/source/dmapper/SdtHelper.hxx:61
-    writerfilter::dmapper::SdtHelper m_sDataBindingXPath class rtl::OUString
-writerfilter/source/dmapper/SdtHelper.hxx:63
-    writerfilter::dmapper::SdtHelper m_sDataBindingStoreItemID class rtl::OUString
+writerfilter/source/dmapper/SdtHelper.hxx:76
+    writerfilter::dmapper::SdtHelper m_sDataBindingStoreItemID rtl::OUString
 writerfilter/source/dmapper/WriteProtection.hxx:36
     writerfilter::dmapper::WriteProtection m_nCryptProviderType sal_Int32
 xmlhelp/source/cxxhelp/provider/databases.hxx:249
