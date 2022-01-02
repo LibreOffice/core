@@ -248,7 +248,7 @@ forms/source/xforms/namedcollection.hxx:100
     class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
 forms/source/xforms/namedcollection.hxx:105
     unsigned char NamedCollection::hasByName(const class rtl::OUString &,)
-include/basegfx/utils/unopolypolygon.hxx:94
+include/basegfx/utils/unopolypolygon.hxx:92
     void basegfx::unotools::UnoPolyPolygon::modifying()const
 include/comphelper/interaction.hxx:53
     void comphelper::OInteraction::select()
@@ -260,6 +260,10 @@ include/comphelper/unique_disposing_ptr.hxx:169
     void comphelper::unique_disposing_solar_mutex_reset_ptr::reset(type-parameter-0-0 *,)
 include/comphelper/weakeventlistener.hxx:120
     void comphelper::OWeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
+include/drawinglayer/primitive2d/baseprimitive2d.hxx:156
+    class drawinglayer::primitive2d::Primitive2DContainer drawinglayer::primitive2d::BasePrimitive2D::getDecomposition(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
+include/drawinglayer/primitive2d/baseprimitive2d.hxx:162
+    struct com::sun::star::geometry::RealRectangle2D drawinglayer::primitive2d::BasePrimitive2D::getRange(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
 include/svl/svdde.hxx:236
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
 include/svl/svdde.hxx:237
@@ -272,8 +276,8 @@ include/svl/svdde.hxx:243
     _Bool DdeTopic::StartAdviseLoop()
 include/svl/svdde.hxx:300
     void DdeService::~DdeService()
-include/svx/svdundo.hxx:753
-    class std::unique_ptr<class SdrUndoAction> SdrUndoFactory::CreateUndoSort(class SdrPage &,const class std::vector<int> &,)
+include/svtools/acceleratorexecute.hxx:115
+    void svt::AcceleratorExecute::~AcceleratorExecute()
 include/vbahelper/vbacollectionimpl.hxx:289
     int ScVbaCollectionBase::getCount()
 include/vbahelper/vbacollectionimpl.hxx:294
@@ -300,8 +304,6 @@ include/vcl/customweld.hxx:45
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
 include/vcl/weld.hxx:104
     void weld::Widget::set_visible(_Bool,)
-jvmfwk/inc/vendorbase.hxx:157
-    _Bool jfw_plugin::VendorBase::initialize(const class std::vector<struct std::pair<class rtl::OUString, class rtl::OUString> > &,)
 sc/source/core/opencl/formulagroupcl.cxx:1062
     _Bool sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::NeedParallelReduction()const
 sc/source/core/opencl/formulagroupcl.cxx:1070
@@ -402,8 +404,6 @@ sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
 toolkit/inc/controls/geometrycontrolmodel.hxx:185
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
-ucb/source/ucp/webdav-curl/DAVTypes.hxx:96
-    void http_dav_ucp::DAVOptions::~DAVOptions()
 vcl/inc/jsdialog/jsdialogbuilder.hxx:151
     void JSDialogSender::sendFullUpdate(_Bool,)
 vcl/inc/jsdialog/jsdialogbuilder.hxx:154
@@ -424,6 +424,8 @@ vcl/inc/jsdialog/jsdialogbuilder.hxx:382
     void JSWidget::freeze()
 vcl/inc/jsdialog/jsdialogbuilder.hxx:388
     void JSWidget::thaw()
+vcl/inc/jsdialog/jsdialogbuilder.hxx:493
+    void JSComboBox::set_entry_text_without_notify(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:147
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:196
@@ -456,13 +458,13 @@ vcl/inc/unx/salframe.h:208
     void X11SalFrame::updateGraphics(_Bool,)
 vcl/inc/unx/salinst.h:41
     class SalX11Display * X11SalInstance::CreateDisplay()const
-workdir/../vcl/inc/qt5/QtFrame.hxx:158
-    void QtFrame::registerDragSource(class QtDragSource *,)
 workdir/../vcl/inc/qt5/QtFrame.hxx:159
-    void QtFrame::deregisterDragSource(const class QtDragSource *,)
+    void QtFrame::registerDragSource(class QtDragSource *,)
 workdir/../vcl/inc/qt5/QtFrame.hxx:160
-    void QtFrame::registerDropTarget(class QtDropTarget *,)
+    void QtFrame::deregisterDragSource(const class QtDragSource *,)
 workdir/../vcl/inc/qt5/QtFrame.hxx:161
+    void QtFrame::registerDropTarget(class QtDropTarget *,)
+workdir/../vcl/inc/qt5/QtFrame.hxx:162
     void QtFrame::deregisterDropTarget(const class QtDropTarget *,)
 writerfilter/source/dmapper/TableManager.hxx:492
     void writerfilter::dmapper::TableManager::tableExceptionProps(const class tools::SvRef<class writerfilter::dmapper::TablePropertyMap> &,)

@@ -112,7 +112,7 @@ class SVT_DLLPUBLIC AcceleratorExecute final
 
 
         /** @short  fight against inlining ... */
-        virtual ~AcceleratorExecute();
+        ~AcceleratorExecute();
 
 
         /** @short  init this instance.
