@@ -24,7 +24,7 @@ usage()
 {
     git
     echo
-    echo "Usage: g [options] [git (checkout|clone|fetch|grep|pull|push|reset) [git options/args..]]"
+    echo "Usage: g [options] [git (checkout|clone|fetch|gc|grep|pull|push|reset) [git options/args..]]"
     echo ""
     echo " -z restore the git hooks and do other sanity checks"
 }
@@ -361,6 +361,9 @@ case "$COMMAND" in
     fetch)
         (git fetch "$@" && git submodule foreach git fetch "$@" ) && git submodule update --progress
 
+        ;;
+    gc)
+         (git gc "$@" && git submodule foreach git gc "$@" )
         ;;
     grep)
         KEEP_GOING="||:"
