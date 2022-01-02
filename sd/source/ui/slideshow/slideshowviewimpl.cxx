@@ -157,7 +157,6 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
     mbIsMouseMotionListener( false ),
     meAnimationMode( eAnimationMode ),
     mbFirstPaint( true ),
-    mbFullScreen( bFullScreen ),
     mbMousePressedEaten( false )
 {
     mxWindow->addWindowListener( this );
@@ -170,7 +169,7 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
     // #i48939# only switch on kind of hacky scroll optimization, when
     // running fullscreen. this minimizes the probability that other
     // windows partially cover the show.
-    if( mbFullScreen )
+    if( bFullScreen )
     {
         try
         {

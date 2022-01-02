@@ -60,7 +60,6 @@ class SerfLockStore
 {
     std::mutex         m_aMutex;
     rtl::Reference< TickerThread > m_pTickerThread;
-    bool               m_bFinishing;
     LockInfoMap        m_aLockInfoMap;
 
 public:

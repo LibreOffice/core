@@ -189,7 +189,6 @@ private:
     bool                                    mbIsMouseMotionListener;
     AnimationMode                           meAnimationMode;
     bool                                    mbFirstPaint;
-    bool                                    mbFullScreen;
     bool                                    mbMousePressedEaten;
     css::geometry::IntegerSize2D            mTranslationOffset;
 };

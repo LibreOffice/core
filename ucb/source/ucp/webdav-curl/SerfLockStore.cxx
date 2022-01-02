@@ -82,7 +82,6 @@ void TickerThread::execute()
 
 
 SerfLockStore::SerfLockStore()
-    : m_bFinishing( false )
 {
 }
 
@@ -92,7 +91,6 @@ SerfLockStore::~SerfLockStore()
     std::unique_lock aGuard(m_aMutex);
     stopTicker(aGuard);
     aGuard.lock(); // actually no threads should even try to access members now
-    m_bFinishing = true;
 
     // release active locks, if any.
     SAL_WARN_IF( !m_aLockInfoMap.empty(), "ucb.ucp.webdav",
