@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dd20e4c_53d63c15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-02T02:53:05Z",
+      "side": 1,
+      "message": "@caolan: Thanks for helping me fixing the oss-fuzz fallout. That took longer then expected. Not sure it\u0027s worth enabling some disabled features, especially looking at the PDF import? An extra fuzzer for PDF?\n\nFWIW we could drop almost all of the build-dependency downloads, as we build almost everything internal…",
+      "revId": "bd2a93bb64214451d726172985d400d3ed27b42d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
