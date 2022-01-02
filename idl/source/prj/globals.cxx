@@ -23,15 +23,10 @@
 #include <globals.hxx>
 #include <database.hxx>
 
-namespace {
-
-struct TheIdlDll: public rtl::Static<IdlDll, TheIdlDll> {};
-
-}
-
 IdlDll & GetIdlApp()
 {
-    return TheIdlDll::get();
+    static IdlDll aIdlDll;
+    return aIdlDll;
 }
 
 IdlDll::IdlDll()
