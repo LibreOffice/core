@@ -25,6 +25,8 @@
 #include <SkFont.h>
 #include <SkFontMgr.h>
 
+#include <dwrite_3.h>
+
 class SkTypeface;
 class ControlCacheKey;
 
@@ -64,6 +66,8 @@ protected:
     static void initFontInfo();
     inline static sal::systools::COMReference<IDWriteFactory> dwriteFactory;
     inline static sal::systools::COMReference<IDWriteGdiInterop> dwriteGdiInterop;
+    inline static sal::systools::COMReference<IDWriteFontSetBuilder> dwriteFontSetBuilder;
+    inline static sal::systools::COMReference<IDWriteFontCollection1> dwritePrivateCollection;
     inline static sk_sp<SkFontMgr> dwriteFontMgr;
     inline static bool dwriteDone = false;
     static SkFont::Edging fontEdging;
