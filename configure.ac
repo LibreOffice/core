@@ -4501,7 +4501,11 @@ check_use_ld()
     use_ld_path=${1#*:}
     if test "$use_ld_path" != "$1"; then
         if test "$COM_IS_CLANG" = TRUE; then
-            use_ld="${use_ld} --ld-path=${use_ld_path}"
+            if test "$CLANGVER" -ge 120000; then
+                use_ld="${use_ld} --ld-path=${use_ld_path}"
+            else
+                use_ld="-fuse-ld=${use_ld_path}"
+            fi
         else
             # I tried to use gcc's '-B<path>' and a directory + symlink setup in
 	    # $BUILDDIR, but libtool always filtered-out that option, so gcc wouldn't
@@ -5523,6 +5527,7 @@ if test "$cross_compiling" = "yes"; then
     test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no --disable-database-connectivity"
     test -n "$with_help" -a "$with_help" != "no" && sub_conf_opts="$sub_conf_opts --with-help=$with_help"
     test "$enable_extensions" = yes || sub_conf_opts="$sub_conf_opts --disable-extensions"
+    test "${enable_ld+set}" = set -a "$build_cpu" = "$host_cpu" && sub_conf_opts="$sub_conf_opts --enable-ld=${enable_ld}"
     test "${enable_pch+set}" = set && sub_conf_opts="$sub_conf_opts --enable-pch=${enable_pch}"
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     test "${with_system_lockfile+set}" = set && sub_conf_opts="$sub_conf_opts --with-system-lockfile=${with_system_lockfile}"
