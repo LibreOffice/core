@@ -2189,11 +2189,6 @@ AC_ARG_WITH(system-libxml,
         [Use libxml/libxslt already on system.]),,
     [with_system_libxml=auto])
 
-AC_ARG_WITH(system-icu,
-    AS_HELP_STRING([--with-system-icu],
-        [Use icu already on system.]),,
-    [with_system_icu="$with_system_libs"])
-
 AC_ARG_WITH(system-ucpp,
     AS_HELP_STRING([--with-system-ucpp],
         [Use ucpp already on system.]),,
@@ -2834,17 +2829,6 @@ AC_ARG_WITH(macosx-version-min-required,
                           e. g.: --with-macosx-version-min-required=10.13
     ],
 ,)
-
-
-dnl ===================================================================
-dnl options for stuff used during cross-compilation build
-dnl Not quite superseded by --with-build-platform-configure-options.
-dnl TODO: check, if the "force" option is still needed anywhere.
-dnl ===================================================================
-
-AC_ARG_WITH(system-icu-for-build,
-    AS_HELP_STRING([--with-system-icu-for-build=yes/no/force],
-        [Use icu already on system for build tools (cross-compilation only).]))
 
 dnl ===================================================================
 dnl Check for incompatible options set by fuzzing, and reset those
@@ -5599,7 +5583,6 @@ if test "$cross_compiling" = "yes"; then
         sub_conf_opts="$sub_conf_opts --disable-scripting"
     fi
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
-    test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
     test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no --disable-database-connectivity"
     test -n "$with_help" -a "$with_help" != "no" && sub_conf_opts="$sub_conf_opts --with-help=$with_help"
     test "$enable_extensions" = yes || sub_conf_opts="$sub_conf_opts --disable-extensions"
@@ -5741,6 +5724,9 @@ if test "$cross_compiling" = "yes"; then
         JAVADOC
         JAVADOCISGJDOC
         LOCKFILE
+        SYSTEM_GENBRK
+        SYSTEM_GENCCODE
+        SYSTEM_GENCMN
 "
     # these need some special handling
     EXTRA_HANDLED_SETTINGS="
@@ -10633,48 +10619,30 @@ fi
 dnl ===================================================================
 dnl Check for system icu
 dnl ===================================================================
-SYSTEM_GENBRK=
-SYSTEM_GENCCODE=
-SYSTEM_GENCMN=
-
 ICU_MAJOR=70
 ICU_MINOR=1
 ICU_RECLASSIFIED_PREPEND_SET_EMPTY="TRUE"
 ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER="TRUE"
 ICU_RECLASSIFIED_HEBREW_LETTER="TRUE"
-AC_MSG_CHECKING([which icu to use])
-if test "$with_system_icu" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_ICU=TRUE
+ICU_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
+ICU_LIBS_internal="-L${WORKDIR}/UnpackedTarball/icu/source/lib"
+libo_CHECK_SYSTEM_MODULE([icu],[ICU],[icu-i18n >= 4.6])
+if test "$SYSTEM_ICU" = TRUE; then
     AC_LANG_PUSH([C++])
     AC_MSG_CHECKING([for unicode/rbbi.h])
     AC_PREPROC_IFELSE([AC_LANG_SOURCE([[unicode/rbbi.h]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([icu headers not found])])
     AC_LANG_POP([C++])
 
-    if test "$cross_compiling" != "yes"; then
-        PKG_CHECK_MODULES(ICU, icu-i18n >= 4.6)
-        ICU_VERSION=`$PKG_CONFIG --modversion icu-i18n 2>/dev/null`
-        ICU_MAJOR=`echo $ICU_VERSION | cut -d"." -f1`
-        ICU_MINOR=`echo $ICU_VERSION | cut -d"." -f2`
+    ICU_VERSION=`$PKG_CONFIG --modversion icu-i18n 2>/dev/null`
+    ICU_MAJOR=`echo $ICU_VERSION | cut -d"." -f1`
+    ICU_MINOR=`echo $ICU_VERSION | cut -d"." -f2`
+
+    if test "$ICU_MAJOR" -ge 50; then
+        AC_MSG_NOTICE([Ignore ICU_MINOR as obviously the libraries don't include the minor version in their names any more])
+        ICU_MINOR=
     fi
 
-    if test "$cross_compiling" = "yes" -a \( "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" \); then
-        ICU_VERSION_FOR_BUILD=`$PKG_CONFIG --modversion icu-i18n 2>/dev/null`
-        ICU_MAJOR_FOR_BUILD=`echo $ICU_VERSION_FOR_BUILD | cut -d"." -f1`
-        ICU_MINOR_FOR_BUILD=`echo $ICU_VERSION_FOR_BUILD | cut -d"." -f2`
-        AC_MSG_CHECKING([if MinGW and system versions of ICU are compatible])
-        if test "$ICU_MAJOR" -eq "$ICU_MAJOR_FOR_BUILD" -a "$ICU_MINOR" -eq "$ICU_MINOR_FOR_BUILD"; then
-            AC_MSG_RESULT([yes])
-        else
-            AC_MSG_RESULT([no])
-            if test "$with_system_icu_for_build" != "force"; then
-                AC_MSG_ERROR([System ICU is not version-compatible with MinGW ICU.
-You can use --with-system-icu-for-build=force to use it anyway.])
-            fi
-        fi
-    fi
-
-    if test "$cross_compiling" != "yes" -o "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force"; then
+    if test "$CROSS_COMPILING" != TRUE; then
         # using the system icu tools can lead to version confusion, use the
         # ones from the build environment when cross-compiling
         AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin])
@@ -10689,32 +10657,12 @@ You can use --with-system-icu-for-build=force to use it anyway.])
         if test -z "$SYSTEM_GENCMN"; then
             AC_MSG_ERROR([\'gencmn\' not found in \$PATH, install the icu development tool \'gencmn\'])
         fi
-        if test "$ICU_MAJOR" -ge "49"; then
-            ICU_RECLASSIFIED_PREPEND_SET_EMPTY="TRUE"
-            ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER="TRUE"
-            ICU_RECLASSIFIED_HEBREW_LETTER="TRUE"
-        else
+        if test "$ICU_MAJOR" -lt 49; then
             ICU_RECLASSIFIED_PREPEND_SET_EMPTY=
             ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER=
             ICU_RECLASSIFIED_HEBREW_LETTER=
         fi
     fi
-
-    if test "$cross_compiling" = "yes"; then
-        if test "$ICU_MAJOR" -ge "50"; then
-            AC_MSG_RESULT([Ignore ICU_MINOR as obviously the libraries don't include the minor version in their names any more])
-            ICU_MINOR=""
-        fi
-    fi
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_ICU=
-    BUILD_TYPE="$BUILD_TYPE ICU"
-    # surprisingly set these only for "internal" (to be used by various other
-    # external libs): the system icu-config is quite unhelpful and spits out
-    # dozens of weird flags and also default path -I/usr/include
-    ICU_CFLAGS="-I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
-    ICU_LIBS="-L${WORKDIR}/UnpackedTarball/icu/source/lib"
 fi
 if test "$ICU_MAJOR" -ge "59"; then
     # As of ICU 59 it defaults to typedef char16_t UChar; which is available
@@ -10725,7 +10673,6 @@ if test "$ICU_MAJOR" -ge "59"; then
 else
     ICU_UCHAR_TYPE=""
 fi
-AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
 AC_SUBST(SYSTEM_GENCCODE)
 AC_SUBST(SYSTEM_GENCMN)
@@ -10734,8 +10681,6 @@ AC_SUBST(ICU_MINOR)
 AC_SUBST(ICU_RECLASSIFIED_PREPEND_SET_EMPTY)
 AC_SUBST(ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER)
 AC_SUBST(ICU_RECLASSIFIED_HEBREW_LETTER)
-AC_SUBST(ICU_CFLAGS)
-AC_SUBST(ICU_LIBS)
 AC_SUBST(ICU_UCHAR_TYPE)
 
 dnl ==================================================================
