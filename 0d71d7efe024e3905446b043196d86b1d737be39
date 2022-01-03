@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d325c65f_58d28006",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-03T23:46:01Z",
+      "side": 1,
+      "message": "Hi Xisco. This patch makes a minor change to the Chart Wizard dialog. Can you take a look at it, please?",
+      "revId": "0d71d7efe024e3905446b043196d86b1d737be39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
