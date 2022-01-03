@@ -887,7 +887,7 @@ OUString AquaSalInstance::getOSVersion()
     if ( sysVersionDict )
         versionString = [ sysVersionDict valueForKey: @"ProductVersion" ];
 
-    OUString aVersion = "Mac OS X ";
+    OUString aVersion = "MacOS ";
     if ( versionString )
         aVersion += OUString::fromUtf8( [ versionString UTF8String ] );
     else
