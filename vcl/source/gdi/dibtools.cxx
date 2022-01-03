@@ -533,10 +533,9 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     }
     else
     {
-        // Read color mask
-        if(bTCMask && BITFIELDS == rHeader.nCompression)
+        // Read color mask. An additional 12 bytes of color bitfields follow the info header (WinBMPv3-NT)
+        if(bTCMask && BITFIELDS == rHeader.nCompression && DIBINFOHEADERSIZE == rHeader.nSize)
         {
-            rIStm.SeekRel( -12 );
             rIStm.ReadUInt32( nRMask );
             rIStm.ReadUInt32( nGMask );
             rIStm.ReadUInt32( nBMask );
