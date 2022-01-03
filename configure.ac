@@ -1094,6 +1094,7 @@ linux-android*)
 haiku*)
     using_freetype_fontconfig=yes
     using_x11=no
+    test_gtk3=no
     test_gtk3_kde5=no
     test_kf5=yes
     enable_odk=no
@@ -1638,7 +1639,7 @@ AC_ARG_ENABLE(python,
 libo_FUZZ_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
-,test "${enable_gtk3+set}" = set || enable_gtk3=yes)
+,test "${test_gtk3}" = no -o "${enable_gtk3+set}" = set || enable_gtk3=yes)
 
 AC_ARG_ENABLE(gtk4,
     AS_HELP_STRING([--enable-gtk4],
