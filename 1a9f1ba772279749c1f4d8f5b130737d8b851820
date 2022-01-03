@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "416cedf5_deb88af4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-03T11:44:21Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix! I\u0027ve solved the merge conflicts to speed up the merge.\n\nNote: This patch doesn\u0027t handle transparency issues, and the buggy outline handling of LO (e.g. 1% font color (line) transparency results 100% fill transparency of the outline text). Likely a good idea to keep the original outline fill color and transparencies by grab-bagging them (issue 1) before implementing MSO-like font outlines (issue 2). See the test document and screenshots about the remaining problems attached to the bug report. I suggest to file new bug reports for issue 1 and issue 2.",
+      "revId": "1a9f1ba772279749c1f4d8f5b130737d8b851820",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
