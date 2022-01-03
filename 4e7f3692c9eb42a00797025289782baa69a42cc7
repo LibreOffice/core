@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc958912_2842a212",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-03T00:36:52Z",
+      "side": 1,
+      "message": "\u003e presumably since 8677e994d37329a28ca8278358a99d18b9cada69 \"Simplify\nFONTCONFIG and FREETYPE tests\" no longer implicitly forces use of system\nfreetype on Linux\n\nIs this a --without-system-libs configuration?\n\nPer default configure picks up the system freetype/fontconfig here, but it doesn\u0027t ignore --with-system-libs anymore.\n\nThere is now https://gerrit.libreoffice.org/c/core/+/127878 to fix that.",
+      "revId": "4e7f3692c9eb42a00797025289782baa69a42cc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
