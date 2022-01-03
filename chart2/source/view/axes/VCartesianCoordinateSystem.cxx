@@ -87,7 +87,7 @@ void VCartesianCoordinateSystem::createGridShapes()
                             , getExplicitIncrement(nDimensionIndex,nAxisIndex) );
         aGrid.set3DWallPositions( m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
 
-        aGrid.initPlotter(m_xLogicTargetForGrids,m_xFinalTarget,m_xShapeFactory
+        aGrid.initPlotter(m_xLogicTargetForGrids,m_xFinalTarget
             , createCIDForGrid( nDimensionIndex,nAxisIndex ) );
         if(nDimensionCount==2)
             aGrid.setTransformationSceneToScreen( m_aMatrixSceneToScreen );
@@ -182,7 +182,7 @@ void VCartesianCoordinateSystem::initVAxisInList()
             sal_Int32 nDimensionIndex = elem.first.first;
             sal_Int32 nAxisIndex = elem.first.second;
             pVAxis->setExplicitScaleAndIncrement( getExplicitScale( nDimensionIndex, nAxisIndex ), getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
-            pVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory
+            pVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget
                 , createCIDForAxis( nDimensionIndex, nAxisIndex ) );
             if(nDimensionCount==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );

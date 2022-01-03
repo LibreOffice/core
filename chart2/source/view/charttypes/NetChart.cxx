@@ -324,8 +324,8 @@ void NetChart::createShapes()
     if (officecfg::Office::Compatibility::View::ReverseSeriesOrderAreaAndNetChart::get() && m_bArea)
         lcl_reorderSeries( m_aZSlots );
 
-    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"NetChart is not proper initialized");
-    if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
+    OSL_ENSURE(m_xLogicTarget.is()&&m_xFinalTarget.is(),"NetChart is not proper initialized");
+    if(!(m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
     //the text labels should be always on top of the other series shapes

@@ -51,8 +51,7 @@ public: //methods
     ~VDiagram();
 
     void init(
-        const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
-        const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory );
+        const rtl::Reference<SvxShapeGroupAnyD>& xTarget );
 
     void    createShapes( const css::awt::Point& rPos
                         , const css::awt::Size& rSize );
@@ -87,8 +86,6 @@ private: //members
     VDiagram(const VDiagram& rD) = delete;
 
     rtl::Reference<SvxShapeGroupAnyD>                    m_xTarget;
-    css::uno::Reference< css::lang::XMultiServiceFactory>           m_xShapeFactory;
-    ShapeFactory* m_pShapeFactory;
 
     // this is the surrounding shape which contains floor, wall and coordinate
     rtl::Reference<SvxShapeGroupAnyD>   m_xOuterGroupShape;

@@ -119,7 +119,7 @@ void VPolarCoordinateSystem::initVAxisInList()
             sal_Int32 nDimensionIndex = elem.first.first;
             sal_Int32 nAxisIndex = elem.first.second;
             pVAxis->setExplicitScaleAndIncrement( getExplicitScale( nDimensionIndex, nAxisIndex ), getExplicitIncrement(nDimensionIndex, nAxisIndex) );
-            pVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory
+            pVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget
                 , createCIDForAxis( nDimensionIndex, nAxisIndex ) );
             VPolarAxis* pVPolarAxis = dynamic_cast< VPolarAxis* >( pVAxis );
             if( pVPolarAxis )
@@ -175,7 +175,7 @@ void VPolarCoordinateSystem::createGridShapes()
 
         VPolarGrid aGrid(nDimensionIndex,nDimensionCount,getGridListFromAxis( xAxis ));
         aGrid.setIncrements( getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
-        aGrid.initPlotter(m_xLogicTargetForGrids,m_xFinalTarget,m_xShapeFactory
+        aGrid.initPlotter(m_xLogicTargetForGrids,m_xFinalTarget
             , createCIDForGrid( nDimensionIndex, nAxisIndex ) );
         if(nDimensionCount==2)
             aGrid.setTransformationSceneToScreen( m_aMatrixSceneToScreen );

@@ -664,8 +664,8 @@ void PieChart::createShapes()
     ///( a member of a VDiagram object); this initialization occurs in
     ///`ChartView::impl_createDiagramAndContent`.
 
-    OSL_ENSURE(m_pShapeFactory && m_xLogicTarget.is() && m_xFinalTarget.is(), "PieChart is not properly initialized.");
-    if (!m_pShapeFactory || !m_xLogicTarget.is() || !m_xFinalTarget.is())
+    OSL_ENSURE(m_xLogicTarget.is() && m_xFinalTarget.is(), "PieChart is not properly initialized.");
+    if (!m_xLogicTarget.is() || !m_xFinalTarget.is())
         return;
 
     ///the text labels should be always on top of the other series shapes

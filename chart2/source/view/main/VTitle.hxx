@@ -42,7 +42,6 @@ public:
     ~VTitle();
 
     void    init( const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage
-             , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
              , const OUString& rCID );
 
     void    createShapes( const css::awt::Point& rPos
@@ -59,7 +58,6 @@ public:
 
 private:
     rtl::Reference<SvxShapeGroupAnyD>            m_xTarget;
-    css::uno::Reference< css::lang::XMultiServiceFactory>   m_xShapeFactory;
     css::uno::Reference< css::chart2::XTitle >              m_xTitle;
     rtl::Reference<SvxShapeText>                            m_xShape;
     OUString   m_aCID;

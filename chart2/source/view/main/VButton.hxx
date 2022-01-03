@@ -27,7 +27,6 @@ namespace chart
 class VButton final
 {
 private:
-    css::uno::Reference<css::lang::XMultiServiceFactory> m_xShapeFactory;
     rtl::Reference<SvxShapeGroupAnyD> m_xTarget;
     rtl::Reference<SvxShapeGroup> m_xShape;
     OUString m_sLabel;
@@ -44,8 +43,7 @@ private:
 public:
     VButton();
 
-    void init(const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
-              const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory);
+    void init(const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage);
 
     void createShapes(const css::uno::Reference<css::beans::XPropertySet>& xTextProp);
 

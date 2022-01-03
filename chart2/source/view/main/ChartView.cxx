@@ -1444,7 +1444,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     rtl::Reference<SvxShapeGroupAnyD> xSeriesTargetBehindAxis;
     VDiagram aVDiagram(xDiagram, aPreferredAspectRatio, nDimensionCount);
     {//create diagram
-        aVDiagram.init(rParam.mxDiagramWithAxesShapes, m_xShapeFactory);
+        aVDiagram.init(rParam.mxDiagramWithAxesShapes);
         aVDiagram.createShapes(
             awt::Point(rParam.maRemainingSpace.X, rParam.maRemainingSpace.Y),
             awt::Size(rParam.maRemainingSpace.Width, rParam.maRemainingSpace.Height));
@@ -1464,7 +1464,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     for( nC=0; nC < rVCooSysList.size(); nC++)
     {
         VCoordinateSystem* pVCooSys = rVCooSysList[nC].get();
-        pVCooSys->initPlottingTargets(xSeriesTargetInFrontOfAxis,xTextTargetShapes,m_xShapeFactory,xSeriesTargetBehindAxis);
+        pVCooSys->initPlottingTargets(xSeriesTargetInFrontOfAxis,xTextTargetShapes,xSeriesTargetBehindAxis);
 
         pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
             createTransformationSceneToScreen( aVDiagram.getCurrentRectangle() ) ));
@@ -1544,7 +1544,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
             xSeriesTarget = xSeriesTargetBehindAxis;
             OSL_ENSURE( !bIsPieOrDonut, "not implemented yet! - during a complete recreation this shape is destroyed so no series can be created anymore" );
         }
-        pSeriesPlotter->initPlotter( xSeriesTarget,xTextTargetShapes,m_xShapeFactory,OUString() );
+        pSeriesPlotter->initPlotter( xSeriesTarget,xTextTargetShapes,OUString() );
         pSeriesPlotter->setPageReferenceSize( rPageSize );
         VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( rVCooSysList, pSeriesPlotter );
         if(nDimensionCount==2)
@@ -2067,7 +2067,6 @@ void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
 
 std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
                 , const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes
-                , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
                 , ChartModel& rModel
                 , awt::Rectangle& rRemainingSpace
                 , const awt::Size & rPageSize
@@ -2121,7 +2120,7 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     }
     apVTitle = std::make_shared<VTitle>(xTitle);
     OUString aCID = ObjectIdentifier::createClassifiedIdentifierForObject(xTitle, rModel);
-    apVTitle->init(xPageShapes, xShapeFactory, aCID);
+    apVTitle->init(xPageShapes, aCID);
     apVTitle->createShapes(awt::Point(0, 0), rPageSize, aTextMaxWidth, bYAxisTitle);
     awt::Size aTitleUnrotatedSize = apVTitle->getUnrotatedSize();
     awt::Size aTitleSize = apVTitle->getFinalSize();
@@ -2201,7 +2200,6 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
 
 bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
                    , const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes
-                   , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
                    , const uno::Reference< uno::XComponentContext > & xContext
                    , awt::Rectangle & rRemainingSpace
                    , const awt::Size & rPageSize
@@ -2214,7 +2212,7 @@ bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
 
     awt::Size rDefaultLegendSize;
     VLegend aVLegend( xLegend, xContext, std::move(rLegendEntryProviderList),
-            xPageShapes, xShapeFactory, rModel);
+            xPageShapes, rModel);
     aVLegend.setDefaultWritingMode( nDefaultWritingMode );
     aVLegend.createShapes( awt::Size( rRemainingSpace.Width, rRemainingSpace.Height ),
                            rPageSize, rDefaultLegendSize );
@@ -2223,7 +2221,6 @@ bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
 }
 
 void lcl_createButtons(const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes,
-                       const uno::Reference<lang::XMultiServiceFactory>& xShapeFactory,
                        ChartModel& rModel,
                        awt::Rectangle& rRemainingSpace)
 {
@@ -2245,7 +2242,7 @@ void lcl_createButtons(const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes,
         for (css::chart2::data::PivotTableFieldEntry const & rPageFieldEntry : aPivotFieldEntries)
         {
             VButton aButton;
-            aButton.init(xPageShapes, xShapeFactory);
+            aButton.init(xPageShapes);
             awt::Point aNewPosition(rRemainingSpace.X + x + 100, rRemainingSpace.Y + 100);
             sal_Int32 nDimensionIndex = rPageFieldEntry.DimensionIndex;
             OUString aFieldOutputDescription = xPivotTableDataProvider->getFieldOutputDescription(nDimensionIndex);
@@ -2273,7 +2270,7 @@ void lcl_createButtons(const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes,
     for (css::chart2::data::PivotTableFieldEntry const & rRowFieldEntry : aPivotFieldEntries)
     {
         VButton aButton;
-        aButton.init(xPageShapes, xShapeFactory);
+        aButton.init(xPageShapes);
         awt::Point aNewPosition(rRemainingSpace.X + x + 100,
                                 rRemainingSpace.Y + rRemainingSpace.Height - aSize.Height - 100);
         aButton.setLabel(rRowFieldEntry.Name);
@@ -2913,16 +2910,16 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     bool bAutoPositionDummy = true;
 
     // create buttons
-    lcl_createButtons(mxRootShape, m_xShapeFactory, mrChartModel, aParam.maRemainingSpace);
+    lcl_createButtons(mxRootShape, mrChartModel, aParam.maRemainingSpace);
 
     lcl_createTitle(
-        TitleHelper::MAIN_TITLE, mxRootShape, m_xShapeFactory, mrChartModel,
+        TitleHelper::MAIN_TITLE, mxRootShape, mrChartModel,
         aParam.maRemainingSpace, rPageSize, ALIGN_TOP, bAutoPositionDummy);
     if (!bHasRelativeSize && (aParam.maRemainingSpace.Width <= 0 || aParam.maRemainingSpace.Height <= 0))
         return;
 
     lcl_createTitle(
-        TitleHelper::SUB_TITLE, mxRootShape, m_xShapeFactory, mrChartModel,
+        TitleHelper::SUB_TITLE, mxRootShape, mrChartModel,
         aParam.maRemainingSpace, rPageSize, ALIGN_TOP, bAutoPositionDummy );
     if (!bHasRelativeSize && (aParam.maRemainingSpace.Width <= 0 || aParam.maRemainingSpace.Height <= 0))
         return;
@@ -2948,7 +2945,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     }
 
     lcl_createLegend(
-        LegendHelper::getLegend( mrChartModel ), mxRootShape, m_xShapeFactory, m_xCC,
+        LegendHelper::getLegend( mrChartModel ), mxRootShape, m_xCC,
         aParam.maRemainingSpace, rPageSize, mrChartModel, aParam.mpSeriesPlotterContainer->getLegendEntryProviderList(),
         lcl_getDefaultWritingModeFromPool( m_pDrawModelWrapper ) );
 
@@ -3026,19 +3023,19 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
     sal_Int32 nDimension = DiagramHelper::getDimension( xDiagram );
 
     if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
-        rParam.mpVTitleX = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, mxRootShape, m_xShapeFactory, mrChartModel
+        rParam.mpVTitleX = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, mxRootShape, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, ALIGN_BOTTOM, rParam.mbAutoPosTitleX );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
     if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 1 ) )
-        rParam.mpVTitleY = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, mxRootShape, m_xShapeFactory, mrChartModel
+        rParam.mpVTitleY = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, mxRootShape, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, ALIGN_LEFT, rParam.mbAutoPosTitleY );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
     if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 2 ) )
-        rParam.mpVTitleZ = lcl_createTitle( TitleHelper::Z_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
+        rParam.mpVTitleZ = lcl_createTitle( TitleHelper::Z_AXIS_TITLE, mxRootShape, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, ALIGN_RIGHT, rParam.mbAutoPosTitleZ );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
@@ -3047,13 +3044,13 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
     bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
 
     if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension ) )
-        rParam.mpVTitleSecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
+        rParam.mpVTitleSecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, mxRootShape, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, bIsVertical? ALIGN_RIGHT : ALIGN_TOP, rParam.mbAutoPosSecondTitleX );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
     if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension ) )
-        rParam.mpVTitleSecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
+        rParam.mpVTitleSecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, mxRootShape, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, bIsVertical? ALIGN_TOP : ALIGN_RIGHT, rParam.mbAutoPosSecondTitleY );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;

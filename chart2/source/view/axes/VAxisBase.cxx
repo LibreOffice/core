@@ -132,8 +132,8 @@ bool VAxisBase::isAnythingToDraw()
     if( !m_aAxisProperties.m_xAxisModel.is() )
         return false;
 
-    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
-    if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
+    OSL_ENSURE(m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
+    if(!(m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return false;
 
     uno::Reference< beans::XPropertySet > xProps( m_aAxisProperties.m_xAxisModel, uno::UNO_QUERY );
