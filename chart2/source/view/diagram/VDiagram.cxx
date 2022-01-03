@@ -43,8 +43,7 @@ using namespace ::com::sun::star::chart2;
 VDiagram::VDiagram(
     const uno::Reference<XDiagram> & xDiagram, const drawing::Direction3D& rPreferredAspectRatio,
     sal_Int32 nDimension )
-    : m_pShapeFactory(nullptr)
-    , m_nDimensionCount(nDimension)
+    : m_nDimensionCount(nDimension)
     , m_xDiagram(xDiagram)
     , m_aPreferredAspectRatio(rPreferredAspectRatio)
     , m_fXAnglePi(0)
@@ -74,14 +73,9 @@ VDiagram::~VDiagram()
 {
 }
 
-void VDiagram::init(
-    const rtl::Reference<SvxShapeGroupAnyD>& xTarget, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+void VDiagram::init( const rtl::Reference<SvxShapeGroupAnyD>& xTarget )
 {
-    OSL_PRECOND(xFactory.is(), "no proper initialization parameters");
-
     m_xTarget  = xTarget;
-    m_xShapeFactory = xFactory;
-    m_pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xFactory);
 }
 
 void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
@@ -137,8 +131,8 @@ void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
 
 void VDiagram::createShapes_2d()
 {
-    OSL_PRECOND(m_pShapeFactory && m_xTarget.is() && m_xShapeFactory.is(), "is not proper initialized");
-    if (!m_pShapeFactory || !m_xTarget.is() || !m_xShapeFactory.is())
+    OSL_PRECOND(m_xTarget.is(), "is not proper initialized");
+    if (!m_xTarget.is())
         return;
 
     //create group shape
@@ -440,8 +434,8 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
 
 void VDiagram::createShapes_3d()
 {
-    OSL_PRECOND(m_pShapeFactory && m_xTarget.is() && m_xShapeFactory.is(), "is not proper initialized");
-    if (!m_pShapeFactory || !m_xTarget.is() || !m_xShapeFactory.is())
+    OSL_PRECOND(m_xTarget.is(), "is not proper initialized");
+    if (!m_xTarget.is())
         return;
 
     //create shape

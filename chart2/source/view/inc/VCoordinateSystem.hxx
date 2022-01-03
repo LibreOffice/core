@@ -59,7 +59,6 @@ public:
     void initPlottingTargets(
                   const rtl::Reference< SvxShapeGroupAnyD >& xLogicTarget
                 , const rtl::Reference< SvxShapeGroupAnyD >& xFinalTarget
-                , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
                 , rtl::Reference<SvxShapeGroupAnyD>& xLogicTargetForSeriesBehindAxis );
 
     void setParticle( const OUString& rCooSysParticle );
@@ -170,7 +169,6 @@ protected: //member
     rtl::Reference<SvxShapeGroupAnyD>                m_xLogicTargetForGrids;
     rtl::Reference<SvxShapeGroupAnyD>                m_xLogicTargetForAxes;
     rtl::Reference<SvxShapeGroupAnyD>                m_xFinalTarget;
-    css::uno::Reference< css::lang::XMultiServiceFactory>       m_xShapeFactory;
     css::drawing::HomogenMatrix                            m_aMatrixSceneToScreen;
 
     CuboidPlanePosition m_eLeftWallPos;

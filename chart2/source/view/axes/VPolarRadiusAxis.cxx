@@ -64,11 +64,10 @@ void VPolarRadiusAxis::setExplicitScaleAndIncrement(
 
 void VPolarRadiusAxis::initPlotter(  const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget
        , const rtl::Reference<SvxShapeGroupAnyD>& xFinalTarget
-       , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
        , const OUString& rCID )
 {
-    VPolarAxis::initPlotter(  xLogicTarget, xFinalTarget, xShapeFactory, rCID );
-    m_apAxisWithLabels->initPlotter(  xLogicTarget, xFinalTarget, xShapeFactory, rCID );
+    VPolarAxis::initPlotter(  xLogicTarget, xFinalTarget, rCID );
+    m_apAxisWithLabels->initPlotter(  xLogicTarget, xFinalTarget, rCID );
 }
 
 void VPolarRadiusAxis::setScales( std::vector< ExplicitScaleData >&& rScales, bool bSwapXAndYAxis )
@@ -152,7 +151,7 @@ void VPolarRadiusAxis::createShapes()
         VCartesianAxis aAxis(aAxisProperties,m_xNumberFormatsSupplier
             ,1,2,new PolarPlottingPositionHelper());
         aAxis.setExplicitScaleAndIncrement( m_aScale, m_aIncrement );
-        aAxis.initPlotter(m_xLogicTarget,m_xFinalTarget,m_xShapeFactory, m_aCID );
+        aAxis.initPlotter(m_xLogicTarget,m_xFinalTarget, m_aCID );
         aAxis.setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix( m_aMatrixScreenToScene ) );
         aAxis.setScales( std::vector(m_pPosHelper->getScales()), false );
         aAxis.initAxisLabelProperties(m_aAxisLabelProperties.m_aFontReferenceSize,m_aAxisLabelProperties.m_aMaximumSpaceForLabels);

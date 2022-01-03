@@ -163,8 +163,8 @@ void BubbleChart::createShapes()
     if( m_aZSlots.empty() ) //no series
         return;
 
-    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"BubbleChart is not proper initialized");
-    if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
+    OSL_ENSURE(m_xLogicTarget.is()&&m_xFinalTarget.is(),"BubbleChart is not proper initialized");
+    if(!(m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
     //therefore create an own group for the texts and the error bars to move them to front

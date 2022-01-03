@@ -44,11 +44,9 @@ VTitle::~VTitle()
 
 void VTitle::init(
               const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage
-            , const uno::Reference< lang::XMultiServiceFactory >& xFactory
             , const OUString& rCID )
 {
     m_xTarget = xTargetPage;
-    m_xShapeFactory = xFactory;
     m_aCID = rCID;
 }
 

@@ -44,7 +44,6 @@ public:
              const css::uno::Reference< css::uno::XComponentContext > & xContext,
              std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
              const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
-             const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
              ChartModel& rModel  );
 
     void setDefaultWritingMode( sal_Int16 nDefaultWritingMode );
@@ -72,7 +71,6 @@ public:
 
 private:
     rtl::Reference<SvxShapeGroupAnyD>            m_xTarget;
-    css::uno::Reference< css::lang::XMultiServiceFactory>   m_xShapeFactory;
     css::uno::Reference< css::chart2::XLegend >             m_xLegend;
     rtl::Reference< SvxShapeGroup >                         m_xShape;
 

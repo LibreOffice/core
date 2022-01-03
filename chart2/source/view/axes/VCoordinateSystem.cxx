@@ -85,10 +85,9 @@ VCoordinateSystem::~VCoordinateSystem()
 
 void VCoordinateSystem::initPlottingTargets(  const rtl::Reference< SvxShapeGroupAnyD >& xLogicTarget
        , const rtl::Reference< SvxShapeGroupAnyD >& xFinalTarget
-       , const Reference< lang::XMultiServiceFactory >& xShapeFactory
        , rtl::Reference<SvxShapeGroupAnyD>& xLogicTargetForSeriesBehindAxis )
 {
-    OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
+    OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is(),"no proper initialization parameters");
     //is only allowed to be called once
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
@@ -108,7 +107,6 @@ void VCoordinateSystem::initPlottingTargets(  const rtl::Reference< SvxShapeGrou
         m_xLogicTargetForAxes = ShapeFactory::createGroup3D( xLogicTarget );
     }
     m_xFinalTarget  = xFinalTarget;
-    m_xShapeFactory = xShapeFactory;
 }
 
 void VCoordinateSystem::setParticle( const OUString& rCooSysParticle )

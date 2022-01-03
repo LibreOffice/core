@@ -35,11 +35,9 @@ VButton::VButton()
 {
 }
 
-void VButton::init(const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
-                   const uno::Reference<lang::XMultiServiceFactory>& xFactory)
+void VButton::init(const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage)
 {
     m_xTarget = xTargetPage;
-    m_xShapeFactory = xFactory;
 }
 
 rtl::Reference<SvxShapePolyPolygon> VButton::createTriangle(awt::Size aSize)
