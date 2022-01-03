@@ -825,9 +825,13 @@
                                 <xsl:value-of select="$leftPosition"/>
                                 <xsl:text>cm;</xsl:text>
                             </xsl:attribute>
-                            <xsl:apply-templates select=".">
+
+                            <xsl:if test="not($stopAtFirstFrame)">
+                              <xsl:apply-templates select=".">
                                 <xsl:with-param name="globalData" select="$globalData"/>
-                            </xsl:apply-templates>
+                              </xsl:apply-templates>
+                            </xsl:if>
+
                             <!-- if it is a frame sibling it will be NOT encapsulated within the div (as already within one) -->
                             <xsl:if test="not($nextSiblingIsFrame)">
                                 <xsl:apply-templates select="following-sibling::node()[1]" mode="frameFloating">
@@ -898,11 +902,13 @@
         <xsl:param name="globalData"/>
         <xsl:param name="previousFrameWidths" select="0"/>
         <xsl:param name="previousFrameHeights" select="0" />
+        <xsl:param name="stopAtFirstFrame" select="false()" />
 
         <xsl:call-template name="createDrawFrame">
             <xsl:with-param name="globalData" select="$globalData" />
             <xsl:with-param name="previousFrameWidths" select="$previousFrameWidths"/>
             <xsl:with-param name="previousFrameHeights" select="$previousFrameHeights"/>
+             <xsl:with-param name="stopAtFirstFrame" select="$stopAtFirstFrame" />
         </xsl:call-template>
         <!-- after the last draw:frame sibling the CSS float is disabled -->
         <xsl:if test="@text:anchor-type!='as-char'">
@@ -2551,6 +2557,7 @@
             <xsl:apply-templates>
                 <xsl:with-param name="globalData" select="$globalData"/>
                 <xsl:with-param name="listIndent" select="$minLabelWidth"/>
+                <xsl:with-param name="stopAtFirstFrame" select="true()" />
             </xsl:apply-templates>
             <!-- this span disables the float necessary to bring two block elements on one line. It contains a space as IE6 bug workaround -->
             <span class="odfLiEnd"></span>
