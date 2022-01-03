@@ -30,7 +30,7 @@ class SfxRequest;
 class ConstCustomShape final : public SwDrawBase
 {
 
-    OUString aCustomShape;
+    OUString m_aCustomShape;
 
     void SetAttributes( SdrObject* pObj );
 
