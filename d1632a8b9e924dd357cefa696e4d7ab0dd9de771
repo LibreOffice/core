@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4f38b9c_6dd1beda",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 12
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-03T07:22:26Z",
+      "side": 1,
+      "message": "you introduce a TAB here",
+      "revId": "d1632a8b9e924dd357cefa696e4d7ab0dd9de771",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0f2cbb9_8389d9f5",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/WriterWeb.xcs",
+        "patchSetId": 12
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-03T07:22:26Z",
+      "side": 1,
+      "message": "you introduce a TAB here",
+      "revId": "d1632a8b9e924dd357cefa696e4d7ab0dd9de771",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
