@@ -66,6 +66,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Package_fontunxppds \
     Package_fontunxpsprint \
 ))
+endif
 
 ifneq ($(ENABLE_GTK3),)
 $(eval $(call gb_Module_add_targets,vcl,\
@@ -107,7 +108,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_lo_kde5filepicker \
 ))
 endif
-endif
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,vcl,\
@@ -121,28 +121,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
     WinResTarget_vcl \
     Library_vclplug_win \
 ))
-endif
-
-ifeq ($(OS),HAIKU)
-ifneq ($(ENABLE_QT5),)
-$(eval $(call gb_Module_add_targets,vcl,\
-    CustomTarget_qt5_moc \
-    Library_vclplug_qt5 \
-))
-endif
-ifneq ($(ENABLE_QT6),)
-$(eval $(call gb_Module_add_targets,vcl,\
-    CustomTarget_qt6_moc \
-    Library_vclplug_qt6 \
-))
-endif
-
-ifneq ($(ENABLE_KF5),)
-$(eval $(call gb_Module_add_targets,vcl,\
-    CustomTarget_kf5_moc \
-    Library_vclplug_kf5 \
-))
-endif
 endif
 
 ifneq (,$(filter FUZZERS,$(BUILD_TYPE)))
