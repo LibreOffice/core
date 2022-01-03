@@ -441,11 +441,6 @@ void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
     }
 }
 
-static E3dScene* lcl_getE3dScene(uno::Reference<uno::XInterface> const & xInterface)
-{
-    return dynamic_cast<E3dScene*>(SdrObject::getSdrObjectFromXShape(xInterface));
-}
-
 void BarChart::createShapes()
 {
     if( m_aZSlots.empty() ) //no series
@@ -476,15 +471,15 @@ void BarChart::createShapes()
     bool bDrawConnectionLinesInited = false;
     bool bOnlyConnectionLinesForThisPoint = false;
 
-    std::unordered_set<uno::Reference<drawing::XShape>> aShapeSet;
+    std::unordered_set<rtl::Reference<SvxShape>> aShapeSet;
 
     const comphelper::ScopeGuard aGuard([aShapeSet]() {
 
         std::unordered_set<E3dScene*> aSceneSet;
 
-        for (uno::Reference<drawing::XShape> const & rShape : aShapeSet)
+        for (rtl::Reference<SvxShape> const & rShape : aShapeSet)
         {
-            E3dScene* pScene = lcl_getE3dScene(rShape);
+            E3dScene* pScene = dynamic_cast<E3dScene*>(rShape->GetSdrObject());
             if(nullptr != pScene)
             {
                 aSceneSet.insert(pScene->getRootE3dSceneFromE3dObject());
@@ -626,10 +621,9 @@ void BarChart::createShapes()
                     }
 
                     rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes(getSeriesGroupShape(pSeries.get(), xSeriesTarget));
-                    uno::Reference<drawing::XShape>  xSeriesGroupShape(static_cast<cppu::OWeakObject*>(xSeriesGroupShape_Shapes.get()), uno::UNO_QUERY);
                     // Suspend setting rects dirty for the duration of this call
-                    aShapeSet.insert(xSeriesGroupShape);
-                    E3dScene* pScene = lcl_getE3dScene(xSeriesGroupShape);
+                    aShapeSet.insert(xSeriesGroupShape_Shapes);
+                    E3dScene* pScene = dynamic_cast<E3dScene*>(xSeriesGroupShape_Shapes->GetSdrObject());
                     if (pScene)
                         pScene->SuspendReportingDirtyRects();
 

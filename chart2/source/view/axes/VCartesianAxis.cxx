@@ -175,8 +175,8 @@ static void lcl_getRotatedPolygon( B2DPolygon &aPoly, const ::basegfx::B2DRectan
     aPoly.transform( aMatrix );
 }
 
-static bool doesOverlap( const Reference< drawing::XShape >& xShape1
-                , const Reference< drawing::XShape >& xShape2
+static bool doesOverlap( const rtl::Reference<SvxShapeText>& xShape1
+                , const rtl::Reference<SvxShapeText>& xShape2
                 , double fRotationAngleDegree )
 {
     if( !xShape1.is() || !xShape2.is() )
@@ -343,12 +343,11 @@ static void lcl_shiftLabels( TickIter& rIter, const B2DVector& rStaggerDistance 
 {
     if(rStaggerDistance.getLength()==0.0)
         return;
-    Reference< drawing::XShape >  xShape2DText;
     for( TickInfo* pTickInfo = rIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = rIter.nextInfo() )
     {
-        xShape2DText = pTickInfo->xTextShape;
+        const rtl::Reference<SvxShapeText>& xShape2DText = pTickInfo->xTextShape;
         if( xShape2DText.is() )
         {
             awt::Point aPos  = xShape2DText->getPosition();
@@ -359,17 +358,12 @@ static void lcl_shiftLabels( TickIter& rIter, const B2DVector& rStaggerDistance 
     }
 }
 
-static bool lcl_hasWordBreak( const Reference<drawing::XShape>& xShape )
+static bool lcl_hasWordBreak( const rtl::Reference<SvxShapeText>& xShape )
 {
     if (!xShape.is())
         return false;
 
-    SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>(xShape);
-    SvxShapeText* pShapeText = dynamic_cast<SvxShapeText*>(pShape);
-    if (!pShapeText)
-        return false;
-
-    SvxTextEditSource* pTextEditSource = dynamic_cast<SvxTextEditSource*>(pShapeText->GetEditSource());
+    SvxTextEditSource* pTextEditSource = dynamic_cast<SvxTextEditSource*>(xShape->GetEditSource());
     if (!pTextEditSource)
         return false;
 
