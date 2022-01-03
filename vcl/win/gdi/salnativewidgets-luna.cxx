@@ -1077,8 +1077,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         tools::Rectangle aRectangle = GetMenuPopupMarkRegion(aValue);
         if (!aRectangle.IsEmpty())
         {
-            cacheRect = GetMenuPopupMarkRegion(aValue);
-            buttonRect = cacheRect;
+            cacheRect = buttonRect = aRectangle;
             keySize = cacheRect.GetSize();
         }
     }
