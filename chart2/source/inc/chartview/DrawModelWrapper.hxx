@@ -20,6 +20,7 @@
 
 #include <svx/svdmodel.hxx>
 #include <svx/unopage.hxx>
+#include <svx/unoshape.hxx>
 #include <chartview/chartviewdllapi.hxx>
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
@@ -55,7 +56,7 @@ public:
     // the extra page is not visible, but contains some extras like the symbols for data points
     const rtl::Reference<SvxDrawPage> & getHiddenDrawPage();
 
-    static css::uno::Reference< css::drawing::XShapes >
+    static rtl::Reference<SvxShapeGroupAnyD>
          getChartRootShape( const rtl::Reference<SvxDrawPage>& xPage );
 
     SAL_DLLPRIVATE void lockControllers();
@@ -82,8 +83,7 @@ public:
     SdrObject* getNamedSdrObject( const OUString& rName );
     static SdrObject* getNamedSdrObject( const OUString& rName, SdrObjList const * pObjList );
 
-    static bool removeShape( const css::uno::Reference< css::drawing::XShape >& xShape );
-    static bool removeShape( SvxShape& rShape );
+    static bool removeShape( const rtl::Reference<SvxShape>& xShape );
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

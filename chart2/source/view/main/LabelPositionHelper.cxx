@@ -412,7 +412,7 @@ void lcl_correctRotation_Right_Bottom( double& rfXCorrection, double& rfYCorrect
 
 }//end anonymous namespace
 
-void LabelPositionHelper::correctPositionForRotation( const uno::Reference< drawing::XShape >& xShape2DText
+void LabelPositionHelper::correctPositionForRotation( const rtl::Reference<SvxShapeText>& xShape2DText
                      , LabelAlignment eLabelAlignment, const double fRotationAngle, bool bRotateAroundCenter )
 {
     if( !xShape2DText.is() )

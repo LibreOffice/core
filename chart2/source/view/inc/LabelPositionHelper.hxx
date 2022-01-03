@@ -50,7 +50,7 @@ public:
                     , const css::uno::Reference< css::beans::XPropertySet >& xAxisModelProps
                     , const css::awt::Size& rNewReferenceSize );
 
-    static void correctPositionForRotation( const css::uno::Reference< css::drawing::XShape >& xShape2DText
+    static void correctPositionForRotation( const rtl::Reference<SvxShapeText>& xShape2DText
                     , LabelAlignment eLabelAlignment, const double fRotationAngle, bool bRotateAroundCenter );
 
 protected:
