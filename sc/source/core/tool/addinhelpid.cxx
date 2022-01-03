@@ -145,6 +145,15 @@ const ScUnoAddInHelpId pDateFuncHelpIds[] =
     { "getWeeksInYear"              , HID_DAI_FUNC_WEEKSINYEAR      }
 };
 
+// Help IDs for Pricing AddIn. MUST BE SORTED for binary search.
+const ScUnoAddInHelpId pPricingFuncHelpIds[] =
+{
+    { "getOptBarrier"               , HID_PAI_FUNC_OPT_BARRIER      },
+    { "getOptProbHit"               , HID_PAI_FUNC_OPT_PROB_HIT     },
+    { "getOptProbInMoney"           , HID_PAI_FUNC_OPT_PROB_INMONEY },
+    { "getOptTouch"                 , HID_PAI_FUNC_OPT_TOUCH        }
+};
+
 ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator( std::u16string_view rServiceName )
 {
     SetServiceName( rServiceName );
@@ -164,6 +173,11 @@ void ScUnoAddInHelpIdGenerator::SetServiceName( std::u16string_view rServiceName
     {
         pCurrHelpIds = pDateFuncHelpIds;
         nSize = sizeof( pDateFuncHelpIds );
+    }
+    else if ( rServiceName == u"com.sun.star.sheet.addin.PricingFunctions")
+    {
+        pCurrHelpIds = pPricingFuncHelpIds;
+        nSize = sizeof( pPricingFuncHelpIds);
     }
 
     nArrayCount = nSize / sizeof( ScUnoAddInHelpId );

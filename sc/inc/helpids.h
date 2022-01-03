@@ -175,6 +175,13 @@ inline constexpr OStringLiteral HID_SELECTTABLES = "SC_HID_SELECTTABLES";
 #define HID_DAI_FUNC_DIFFYEARS                                  "SC_HID_DAI_FUNC_DIFFYEARS"
 #define HID_DAI_FUNC_ROT13                                      "SC_HID_DAI_FUNC_ROT13"
 
+// PricingFunc Addin Functions  -----------------------------------------
+
+#define HID_PAI_FUNC_OPT_BARRIER                                "SC_HID_PAI_FUNC_OPT_BARRIER"
+#define HID_PAI_FUNC_OPT_TOUCH                                  "SC_HID_PAI_FUNC_OPT_TOUCH"
+#define HID_PAI_FUNC_OPT_PROB_HIT                               "SC_HID_PAI_FUNC_OPT_PROB_HIT"
+#define HID_PAI_FUNC_OPT_PROB_INMONEY                           "SC_HID_PAI_FUNC_OPT_PROB_INMONEY"
+
 // End help IDs ------------------------------------------------------------
 
 #define HID_FUNC_DBANZAHL                                       "SC_HID_FUNC_DBANZAHL"
