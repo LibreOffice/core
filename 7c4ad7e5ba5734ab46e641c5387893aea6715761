@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd796a63_32cd17bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-03T09:04:31Z",
+      "side": 1,
+      "message": "@Tibi: very nice fix! I\u0027ve replaced the huge and likely proprietary images in the test document.",
+      "revId": "7c4ad7e5ba5734ab46e641c5387893aea6715761",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
