@@ -313,7 +313,11 @@ public:
     void WriteShapeStyle( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffect( const OUString& sName, const css::uno::Sequence< css::beans::PropertyValue >& aEffectProps );
-    void WriteShape3DEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    /** Populates scene3d tag
+        @param rXPropSet Prop set
+        @param bIsText True if the 3D effects are for a text body, false if it is for a shape
+     */
+    void Write3DEffects(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet, bool bIsText);
     void WriteArtisticEffect( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
     void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId);
