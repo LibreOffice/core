@@ -182,15 +182,9 @@ void VDiagram::createShapes_2d()
     adjustPosAndSize_2d( m_aAvailablePosIncludingAxes, m_aAvailableSizeIncludingAxes );
 }
 
-static E3dScene* lcl_getE3dScene( const uno::Reference< drawing::XShape >& xShape )
+static E3dScene* lcl_getE3dScene( const rtl::Reference<SvxShapeGroupAnyD>& xShape )
 {
-    E3dScene* pRet=nullptr;
-    uno::Reference< lang::XTypeProvider > xTypeProvider( xShape, uno::UNO_QUERY );
-    if(xTypeProvider.is())
-    {
-        pRet = dynamic_cast< E3dScene* >(SdrObject::getSdrObjectFromXShape(xShape));
-    }
-    return pRet;
+    return dynamic_cast< E3dScene* >(xShape->GetSdrObject());
 }
 
 static void lcl_setLightSources(
