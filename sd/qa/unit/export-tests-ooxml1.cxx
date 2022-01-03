@@ -48,6 +48,7 @@ using namespace css;
 class SdOOXMLExportTest1 : public SdModelTestBaseXML
 {
 public:
+    void testTdf130165();
     void testTdf124781();
     void testTdf144914();
     void testTdf124232();
@@ -115,6 +116,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
+    CPPUNIT_TEST(testTdf130165);
     CPPUNIT_TEST(testTdf124781);
     CPPUNIT_TEST(testTdf144914);
     CPPUNIT_TEST(testTdf124232);
@@ -207,6 +209,18 @@ void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId
     }
 }
 
+}
+
+void SdOOXMLExportTest1::testTdf130165()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf146223.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc, "/p:sld", "showMasterSp", "0");
 }
 
 void SdOOXMLExportTest1::testTdf124781()

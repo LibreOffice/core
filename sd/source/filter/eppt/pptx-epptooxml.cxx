@@ -1361,6 +1361,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
     mpSlidesFSArray[ nPageNum ] = pFS;
 
     const char* pShow = nullptr;
+    const char* pShowMasterShape = nullptr;
 
     if (ImplGetPropertyValue(mXPagePropSet, "Visible"))
     {
@@ -1369,7 +1370,14 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
             pShow = "0";
     }
 
-    pFS->startElementNS(XML_p, XML_sld, PNMSS, XML_show, pShow);
+    if (ImplGetPropertyValue(mXPagePropSet, "IsBackgroundObjectsVisible"))
+    {
+        bool bShowMasterShape(false);
+        if ((mAny >>= bShowMasterShape) && !bShowMasterShape)
+            pShowMasterShape = "0";
+    }
+
+    pFS->startElementNS(XML_p, XML_sld, PNMSS, XML_show, pShow, XML_showMasterSp, pShowMasterShape);
 
     pFS->startElementNS(XML_p, XML_cSld);
 
