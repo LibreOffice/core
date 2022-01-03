@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14ecb095_6f47772e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-03T12:44:08Z",
+      "side": 1,
+      "message": "Looks good to me in general, just please cover the fix with a test. Quite possibly you can cover the import side in oox/qa/unit/drawingml.cxx and the export side in oox/qa/unit/export.cxx. See inline comments for 2 nits. Could you please address those? Thanks!",
+      "revId": "80ab6678b9f8bcb40f8e5bfad1f8d15c7a1998de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cbcebf4_3eaf6c79",
+        "filename": "include/oox/export/drawingml.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-03T12:44:08Z",
+      "side": 1,
+      "message": "Care to add a one-liner comment here to explain the relation between Text3D, Shape3D and 3D effects?",
+      "revId": "80ab6678b9f8bcb40f8e5bfad1f8d15c7a1998de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86dd56e0_f0a0471e",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-03T12:44:08Z",
+      "side": 1,
+      "message": "Is this really a hack? Sounds more like you\u0027re mapping a DrawingML concept to our shape model. If so, I would adjust the comment accordingly.",
+      "revId": "80ab6678b9f8bcb40f8e5bfad1f8d15c7a1998de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
