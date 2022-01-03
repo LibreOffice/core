@@ -11496,53 +11496,12 @@ if test "$USING_X11" != TRUE; then
     enable_gtk3=no
 fi
 
-ENABLE_GTK3=""
-if test "x$enable_gtk3" = "xyes"; then
-    ENABLE_GTK3="TRUE"
-    AC_DEFINE(ENABLE_GTK3)
-    R="$R gtk3"
-fi
-AC_SUBST(ENABLE_GTK3)
-
-ENABLE_GTK3_KDE5=""
-if test "x$enable_gtk3_kde5" = "xyes"; then
-    ENABLE_GTK3_KDE5="TRUE"
-    AC_DEFINE(ENABLE_GTK3_KDE5)
-    R="$R gtk3_kde5"
-fi
-AC_SUBST(ENABLE_GTK3_KDE5)
-
-ENABLE_GTK4=""
-if test "x$enable_gtk4" = "xyes"; then
-    ENABLE_GTK4="TRUE"
-    AC_DEFINE(ENABLE_GTK4)
-    R="$R gtk4"
-fi
-AC_SUBST(ENABLE_GTK4)
-
-ENABLE_QT5=""
-if test "x$enable_qt5" = "xyes"; then
-    ENABLE_QT5="TRUE"
-    AC_DEFINE(ENABLE_QT5)
-    R="$R qt5"
-fi
-AC_SUBST(ENABLE_QT5)
-
-ENABLE_QT6=""
-if test "x$enable_qt6" = "xyes"; then
-    ENABLE_QT6="TRUE"
-    AC_DEFINE(ENABLE_QT6)
-    R="$R qt6"
-fi
-AC_SUBST(ENABLE_QT6)
-
-ENABLE_KF5=""
-if test "x$enable_kf5" = "xyes"; then
-    ENABLE_KF5="TRUE"
-    AC_DEFINE(ENABLE_KF5)
-    R="$R kf5"
-fi
-AC_SUBST(ENABLE_KF5)
+libo_ENABLE_VCLPLUG([gtk3])
+libo_ENABLE_VCLPLUG([gtk3_kde5])
+libo_ENABLE_VCLPLUG([gtk4])
+libo_ENABLE_VCLPLUG([qt5])
+libo_ENABLE_VCLPLUG([qt6])
+libo_ENABLE_VCLPLUG([kf5])
 
 if test "x$USING_X11" = "xyes"; then
     R="$R gen"
