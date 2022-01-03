@@ -53,7 +53,7 @@ class SwXAutoTextContainer final : public cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 {
-    SwGlossaries *pGlossaries;
+    SwGlossaries *m_pGlossaries;
 
     virtual ~SwXAutoTextContainer() override;    // ref-counted objects are not to be deleted from outside -> protected dtor
 
@@ -94,9 +94,9 @@ class SwXAutoTextGroup final : public cppu::WeakImplHelper
     css::lang::XUnoTunnel
 >
 {
-    const SfxItemPropertySet* pPropSet;
-    SwGlossaries*           pGlossaries;
-    OUString                sName;
+    const SfxItemPropertySet* m_pPropSet;
+    SwGlossaries*           m_pGlossaries;
+    OUString                m_sName;
     OUString                m_sGroupName;   // prefix m_ to disambiguate from some local vars in the implementation
 
     virtual ~SwXAutoTextGroup() override;    // ref-counted objects are not to be deleted from outside -> protected dtor
@@ -160,10 +160,10 @@ class SwXAutoTextEntry final
             css::document::XEventsSupplier
         >
 {
-    SwGlossaries*   pGlossaries;
-    OUString        sGroupName;
-    OUString        sEntryName;
-    SwDocShellRef   xDocSh;
+    SwGlossaries*   m_pGlossaries;
+    OUString        m_sGroupName;
+    OUString        m_sEntryName;
+    SwDocShellRef   m_xDocSh;
     rtl::Reference<SwXBodyText>
                     mxBodyText;
 
@@ -228,10 +228,10 @@ public:
     // XEventsSupplier
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
 
-    void    Invalidate() {pGlossaries = nullptr;}
-    const SwGlossaries* GetGlossaries() const { return pGlossaries; }
-    const OUString&   GetGroupName() const {return sGroupName;}
-    const OUString&   GetEntryName() const {return sEntryName;}
+    void    Invalidate() {m_pGlossaries = nullptr;}
+    const SwGlossaries* GetGlossaries() const { return m_pGlossaries; }
+    const OUString&   GetGroupName() const {return m_sGroupName;}
+    const OUString&   GetEntryName() const {return m_sEntryName;}
 };
 
 /** Implement the XNameAccess for the AutoText events */

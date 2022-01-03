@@ -43,12 +43,12 @@ using namespace com::sun::star;
 ConstCustomShape::ConstCustomShape( SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView, SfxRequest const & rReq )
     : SwDrawBase( pWrtShell, pEditWin, pSwView )
 {
-    aCustomShape = ConstCustomShape::GetShapeTypeFromRequest( rReq );
+    m_aCustomShape = ConstCustomShape::GetShapeTypeFromRequest( rReq );
 }
 
 const OUString& ConstCustomShape::GetShapeType() const
 {
-    return aCustomShape;
+    return m_aCustomShape;
 }
 
 OUString ConstCustomShape::GetShapeTypeFromRequest( SfxRequest const & rReq )
@@ -109,7 +109,7 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
         {
             for ( std::vector<OUString>::size_type i = 0; i < aObjList.size(); i++ )
             {
-                if ( aObjList[ i ].equalsIgnoreAsciiCase( aCustomShape ) )
+                if ( aObjList[ i ].equalsIgnoreAsciiCase( m_aCustomShape ) )
                 {
                     FmFormModel aFormModel;
                     SfxItemPool& rPool(aFormModel.GetItemPool());
@@ -153,7 +153,7 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
         pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
-        static_cast<SdrObjCustomShape*>(pObj)->MergeDefaultAttributes( &aCustomShape );
+        static_cast<SdrObjCustomShape*>(pObj)->MergeDefaultAttributes( &m_aCustomShape );
     }
 }
 
@@ -176,7 +176,7 @@ void ConstCustomShape::CreateDefaultObject()
 // #i33136#
 bool ConstCustomShape::doConstructOrthogonal() const
 {
-    return SdrObjCustomShape::doConstructOrthogonal(aCustomShape);
+    return SdrObjCustomShape::doConstructOrthogonal(m_aCustomShape);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
