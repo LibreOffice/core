@@ -204,4 +204,17 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_V2)
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, aBitmap.GetPixelColor(2, 2));
 }
 
+CPPUNIT_TEST_FIXTURE(BmpFilterTest, testTdf73523)
+{
+    SvFileStream aFileStream(getFullUrl(u"tdf73523.bmp"), StreamMode::READ);
+    Graphic aGraphic;
+    CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
+    auto aBitmap = aGraphic.GetBitmapEx();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: c[80000000]
+    // - Actual  : c[00000000]
+    // i.e. the pixel is red not black
+    CPPUNIT_ASSERT_EQUAL(COL_RED, aBitmap.GetPixelColor(0, 0));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
