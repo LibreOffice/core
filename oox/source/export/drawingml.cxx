@@ -3473,7 +3473,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             }
         }
 
-        WriteShape3DEffects( rXPropSet );
+        Write3DEffects( rXPropSet, /*bIsText=*/true );
 
         mpFS->endElementNS((nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr);
     }
@@ -4655,7 +4655,7 @@ bool DrawingML::HasEnhancedCustomShapeSegmentCommand(
     return false;
 }
 
-void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
+void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool bIsText )
 {
     // check existence of the grab bag
     if( !GetProperty( xPropSet, "InteropGrabBag" ) )
@@ -4664,30 +4664,14 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
     // extract the relevant properties from the grab bag
     Sequence< PropertyValue > aGrabBag, aEffectProps, aLightRigProps, aShape3DProps;
     mAny >>= aGrabBag;
-    auto pShapeProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
-        [](const PropertyValue& rProp) { return rProp.Name == "3DEffectProperties"; });
+
+    auto pShapeProp = std::find_if( std::cbegin(aGrabBag), std::cend(aGrabBag),
+        [bIsText](const PropertyValue& rProp)
+        { return rProp.Name == (bIsText ? u"Text3DEffectProperties" : u"3DEffectProperties"); });
     if (pShapeProp != std::cend(aGrabBag))
     {
         Sequence< PropertyValue > a3DEffectProps;
         pShapeProp->Value >>= a3DEffectProps;
-        for( const auto& r3DEffectProp : std::as_const(a3DEffectProps) )
-        {
-            if( r3DEffectProp.Name == "Camera" )
-                r3DEffectProp.Value >>= aEffectProps;
-            else if( r3DEffectProp.Name == "LightRig" )
-                r3DEffectProp.Value >>= aLightRigProps;
-            else if( r3DEffectProp.Name == "Shape3D" )
-                r3DEffectProp.Value >>= aShape3DProps;
-        }
-    }
-
-    auto pTextProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
-        [](const PropertyValue& rProp) { return rProp.Name == "Text3DEffectProperties"; });
-
-    if (pTextProp != std::cend(aGrabBag))
-    {
-        Sequence< PropertyValue > a3DEffectProps;
-        pTextProp->Value >>= a3DEffectProps;
         for( const auto& r3DEffectProp : std::as_const(a3DEffectProps) )
         {
             if( r3DEffectProp.Name == "Camera" )
