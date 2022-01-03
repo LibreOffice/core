@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d0730c8_6f8d2775",
+        "filename": "sfx2/source/view/lokhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-03T17:09:56Z",
+      "side": 1,
+      "message": "possibly we just need to take the SolarMutex during this method?",
+      "revId": "62b6849adcda460660b27093a02ca228454990ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
