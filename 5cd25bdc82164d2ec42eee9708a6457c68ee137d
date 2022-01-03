@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d5d3e7b_decb2f14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-01-03T14:04:35Z",
+      "side": 1,
+      "message": "The change to SdrCircObj::NbcSetSnapRect is a heavy change to the semantic of that method and will break behavior in other places. I have attached a file to tdf#130076 to show an example of the problem. The shape there is anchored to cell with resize. Drag the column E wider. Compare the behavior in normal LO and in your patched LO.\n\nYou should keep SetTransformation() in its place and instead correct the angles themselves before they are written into the properties. You can decompose a transformation matrix and then investigate its scale component to see whether a flip is involved.",
+      "revId": "5cd25bdc82164d2ec42eee9708a6457c68ee137d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
