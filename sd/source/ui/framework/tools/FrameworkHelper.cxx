@@ -206,7 +206,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION("sd");
+            TOOLS_FIXME_EXCEPTION("sd", "");
         }
         return pViewShell;
     }

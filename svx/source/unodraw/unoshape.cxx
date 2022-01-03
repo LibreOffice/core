@@ -21,6 +21,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
@@ -1608,7 +1609,7 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
     if (!pMap)
     {
         // reduce log noise by ignoring two properties that higher level code queries for on all objects
-        SAL_WARN_IF(rPropertyName != "FromWordArt" && rPropertyName != "GraphicColorMode",
+        SAL_FIXME_IF(rPropertyName != "FromWordArt" && rPropertyName != "GraphicColorMode",
             "svx.uno", "Unknown Property: " << rPropertyName);
         throw beans::UnknownPropertyException( rPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
@@ -1789,7 +1790,11 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
             }
             catch (beans::UnknownPropertyException&)
             {
-                DBG_UNHANDLED_EXCEPTION("svx");
+                TOOLS_FIXME_EXCEPTION("svx", "");
+            }
+            catch (lang::IllegalArgumentException&)
+            {
+                TOOLS_FIXME_EXCEPTION("svx", "");
             }
             catch (uno::Exception&)
             {
@@ -3596,7 +3601,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                     sUNO_service_drawing_Shape };
         return aSvxShape_UnoServices;
     }
-    OSL_FAIL( "SvxShape::_getSupportedServiceNames: could not determine object type!" );
+    SAL_FIXME("legacy", "SvxShape::_getSupportedServiceNames: could not determine object type!");
     uno::Sequence< OUString > aSeq;
     return aSeq;
 }

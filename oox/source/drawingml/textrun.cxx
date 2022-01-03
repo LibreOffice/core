@@ -87,7 +87,7 @@ sal_Int32 TextRun::insertAt(
         {
             if( mbIsLineBreak )
             {
-                SAL_WARN("oox",  "OOX: TextRun::insertAt() insert line break" );
+                SAL_INFO("oox",  "OOX: TextRun::insertAt() insert line break");
                 xText->insertControlCharacter( xStart, ControlCharacter::LINE_BREAK, false );
             }
             else if (!getText().isEmpty())
@@ -139,7 +139,6 @@ sal_Int32 TextRun::insertAt(
         }
         else
         {
-            SAL_WARN("oox",  "OOX: URL field" );
             Reference< XMultiServiceFactory > xFactory( rFilterBase.getModel(), UNO_QUERY );
             Reference< XTextField > xField( xFactory->createInstance( "com.sun.star.text.TextField.URL" ), UNO_QUERY );
             if( xField.is() )

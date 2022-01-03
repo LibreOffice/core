@@ -218,7 +218,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
         sal_Int32 nIndex = aContentOUString.lastIndexOf("Grand total of errors in submitted package: ");
         if(nIndex == -1)
         {
-            SAL_WARN("test", "no summary line");
+            SAL_FIXME("test", "no summary line");
         }
         else
         {

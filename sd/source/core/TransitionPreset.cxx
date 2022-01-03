@@ -295,7 +295,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                             SAL_WARN("sd.transitions", "set node " << sSet << " not found");
                     }
                     else
-                        SAL_WARN("sd.transitions", "transition node " << aPresetId << " not found");
+                        SAL_FIXME("sd.transitions", "transition node " << aPresetId << " not found");
                 }
             }
             else

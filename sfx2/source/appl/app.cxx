@@ -175,7 +175,7 @@ SfxApplication::SfxApplication()
 
 SfxApplication::~SfxApplication()
 {
-    SAL_WARN_IF(GetObjectShells_Impl().size() != 0, "sfx.appl", "Memory leak: some object shells were not removed!");
+    SAL_FIXME_IF(GetObjectShells_Impl().size() != 0, "sfx.appl", "Memory leak: some object shells were not removed!");
 
     Broadcast( SfxHint(SfxHintId::Dying) );
 

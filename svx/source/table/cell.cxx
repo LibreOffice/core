@@ -993,7 +993,7 @@ Any Cell::GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry*
         }
         else
         {
-            OSL_FAIL("GetAnyForItem() Returnvalue has wrong Type!" );
+            SAL_FIXME("legacy", "GetAnyForItem() Returnvalue has wrong Type!");
         }
     }
 

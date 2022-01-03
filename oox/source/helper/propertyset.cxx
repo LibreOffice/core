@@ -132,7 +132,7 @@ bool PropertySet::implSetPropertyValue( const OUString& rPropName, const Any& rV
     }
     catch( const Exception&)
     {
-        TOOLS_WARN_EXCEPTION( "oox", "PropertySet::implSetPropertyValue - cannot set property \"" <<
+        TOOLS_FIXME_EXCEPTION( "oox", "PropertySet::implSetPropertyValue - cannot set property \"" <<
                   rPropName << "\"");
     }
     return false;

@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/whiter.hxx>
@@ -768,6 +769,10 @@ SdrModel::GetDocumentStream( OUString const& rURL,
     catch (container::NoSuchElementException const&)
     {
         SAL_INFO("svx", "not found");
+    }
+    catch (io::IOException const&)
+    {
+        TOOLS_FIXME_EXCEPTION("svx", "");
     }
     catch (uno::Exception const&)
     {

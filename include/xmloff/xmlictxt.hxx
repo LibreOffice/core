@@ -112,13 +112,13 @@ public:
 };
 
 #define XMLOFF_WARN_UNKNOWN(area, rIter) \
-    SAL_WARN(area, "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(rIter.getToken()) << " value=" << rIter.toString());
+    SAL_FIXME(area, "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(rIter.getToken()) << " value=" << rIter.toString());
 
 #define XMLOFF_WARN_UNKNOWN_ATTR(area, token, value) \
-    SAL_WARN(area, "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(token) << "=" << value);
+    SAL_FIXME(area, "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(token) << "=" << value);
 
 #define XMLOFF_WARN_UNKNOWN_ELEMENT(area, token) \
-    SAL_WARN(area, "unknown element " << SvXMLImport::getPrefixAndNameFromToken(token));
+    SAL_FIXME(area, "unknown element " << SvXMLImport::getPrefixAndNameFromToken(token));
 
 #endif // INCLUDED_XMLOFF_XMLICTXT_HXX
 

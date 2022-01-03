@@ -246,11 +246,11 @@ namespace emfplushelper
 
             case UnitTypeWorld:
             case UnitTypeDisplay:
-                SAL_WARN("drawinglayer.emf", "EMF+\t Converting to World/Display.");
+                SAL_INFO("drawinglayer.emf", "EMF+\t Converting to World/Display.");
                 return 1.0f;
 
             default:
-                SAL_WARN("drawinglayer.emf", "EMF+\tTODO Unimplemented support of Unit Type: 0x" << std::hex << aUnitType);
+                SAL_FIXME("drawinglayer.emf", "EMF+\tTODO Unimplemented support of Unit Type: 0x" << std::hex << aUnitType);
                 return 1.0f;
         }
     }
@@ -341,12 +341,12 @@ namespace emfplushelper
             }
             case EmfPlusObjectTypeCustomLineCap:
             {
-                SAL_WARN("drawinglayer.emf", "EMF+\t TODO Object type 'custom line cap' not yet implemented");
+                SAL_FIXME("drawinglayer.emf", "EMF+\t TODO Object type 'custom line cap' not yet implemented");
                 break;
             }
             default:
             {
-                SAL_WARN("drawinglayer.emf", "EMF+\t TODO Object unhandled flags: 0x" << std::hex << (flags & 0xff00) << std::dec);
+                SAL_FIXME("drawinglayer.emf", "EMF+\t TODO Object unhandled flags: 0x" << std::hex << (flags & 0xff00) << std::dec);
             }
         }
     }
@@ -358,7 +358,7 @@ namespace emfplushelper
             // specifies a location in the coordinate space that is relative to
             // the location specified by the previous element in the array. In the case of the first element in
             // PointData, a previous location at coordinates (0,0) is assumed.
-            SAL_WARN("drawinglayer.emf", "EMF+\t\t TODO Relative coordinates bit detected. Implement parse EMFPlusPointR");
+            SAL_FIXME("drawinglayer.emf", "EMF+\t\t TODO Relative coordinates bit detected. Implement parse EMFPlusPointR");
         }
 
         if (flags & 0x4000)
@@ -464,7 +464,7 @@ namespace emfplushelper
             {
                 color = brush->GetColor();
                 if (brush->type != BrushTypeSolidColor)
-                    SAL_WARN("drawinglayer.emf", "EMF+\t\t TODO Brush other than solid color is not supported");
+                    SAL_FIXME("drawinglayer.emf", "EMF+\t\t TODO Brush other than solid color is not supported");
             }
         }
         return color;
@@ -795,14 +795,14 @@ namespace emfplushelper
             }
             else if (brush->type == BrushTypeTextureFill)
             {
-                SAL_WARN("drawinglayer.emf", "EMF+\tTODO: implement BrushTypeTextureFill brush");
+                SAL_FIXME("drawinglayer.emf", "EMF+\tTODO: implement BrushTypeTextureFill brush");
             }
             else if (brush->type == BrushTypePathGradient || brush->type == BrushTypeLinearGradient)
 
             {
                 if (brush->type == BrushTypePathGradient && !(brush->additionalFlags & 0x1))
                 {
-                    SAL_WARN("drawinglayer.emf", "EMF+\t TODO Implement displaying BrushTypePathGradient with Boundary: ");
+                    SAL_FIXME("drawinglayer.emf", "EMF+\t TODO Implement displaying BrushTypePathGradient with Boundary: ");
                 }
                 ::basegfx::B2DHomMatrix aTextureTransformation;
 
@@ -1432,7 +1432,7 @@ namespace emfplushelper
                                                                                 : "DrawImagePoints")
                                         << " image attributes Id: " << imageAttributesId
                                         << " source unit: " << sourceUnit);
-                        SAL_INFO("drawinglayer.emf", "EMF+\t TODO: use image attributes");
+                        SAL_FIXME("drawinglayer.emf", "EMF+\t TODO: use image attributes");
 
                         // Source unit of measurement type must be 1 pixel
                         if (sourceUnit == UnitTypePixel && maEMFPObjects[flags & 0xff])
@@ -1519,7 +1519,7 @@ namespace emfplushelper
                                     dh = ((aSize.Height() - sy) / sh) * dh;
                             }
                             else
-                                SAL_INFO(
+                                SAL_FIXME(
                                     "drawinglayer.emf",
                                     "EMF+\t TODO: Add support for SrcRect to ImageDataTypeMetafile");
                             ::basegfx::B2DPoint aDstPoint(dx, dy);
@@ -1769,7 +1769,7 @@ namespace emfplushelper
                     {
                         sal_uInt8 nTextRenderingHint = (flags & 0xFF) >> 1;
                         SAL_INFO("drawinglayer.emf", "EMF+\t Text rendering hint: " << TextRenderingHintToString(nTextRenderingHint));
-                        SAL_WARN("drawinglayer.emf", "EMF+\t TODO SetTextRenderingHint");
+                        SAL_FIXME("drawinglayer.emf", "EMF+\t TODO SetTextRenderingHint");
                         break;
                     }
                     case EmfPlusRecordTypeSetAntiAliasMode:
@@ -1778,25 +1778,25 @@ namespace emfplushelper
                         sal_uInt8 nSmoothingMode = (flags & 0xFE00) >> 1;
                         SAL_INFO("drawinglayer.emf", "EMF+\t Antialiasing: " << (bUseAntiAlias ? "enabled" : "disabled"));
                         SAL_INFO("drawinglayer.emf", "EMF+\t Smoothing mode: " << SmoothingModeToString(nSmoothingMode));
-                        SAL_WARN("drawinglayer.emf", "EMF+\t TODO SetAntiAliasMode");
+                        SAL_FIXME("drawinglayer.emf", "EMF+\t TODO SetAntiAliasMode");
                         break;
                     }
                     case EmfPlusRecordTypeSetInterpolationMode:
                     {
                         sal_uInt16 nInterpolationMode = flags & 0xFF;
                         SAL_INFO("drawinglayer.emf", "EMF+\t Interpolation mode: " << InterpolationModeToString(nInterpolationMode));
-                        SAL_WARN("drawinglayer.emf", "EMF+\t TODO InterpolationMode");
+                        SAL_FIXME("drawinglayer.emf", "EMF+\t TODO InterpolationMode");
                         break;
                     }
                     case EmfPlusRecordTypeSetPixelOffsetMode:
                     {
                         SAL_INFO("drawinglayer.emf", "EMF+\t Pixel offset mode: " << PixelOffsetModeToString(flags));
-                        SAL_WARN("drawinglayer.emf", "EMF+\t TODO SetPixelOffsetMode");
+                        SAL_FIXME("drawinglayer.emf", "EMF+\t TODO SetPixelOffsetMode");
                         break;
                     }
                     case EmfPlusRecordTypeSetCompositingQuality:
                     {
-                        SAL_INFO("drawinglayer.emf", "EMF+\t TODO SetCompositingQuality");
+                        SAL_FIXME("drawinglayer.emf", "EMF+\t TODO SetCompositingQuality");
                         break;
                     }
                     case EmfPlusRecordTypeSave:
@@ -2211,13 +2211,13 @@ namespace emfplushelper
                         }
                         else
                         {
-                            SAL_WARN("drawinglayer.emf", "EMF+\tTODO: fonts (non-unicode glyphs chars)");
+                            SAL_FIXME("drawinglayer.emf", "EMF+\tTODO: fonts (non-unicode glyphs chars)");
                         }
                         break;
                     }
                     default:
                     {
-                        SAL_WARN("drawinglayer.emf", "EMF+ TODO unhandled record type: 0x" << std::hex << type << std::dec);
+                        SAL_FIXME("drawinglayer.emf", "EMF+ TODO unhandled record type: 0x" << std::hex << type << std::dec);
                     }
                 }
             }

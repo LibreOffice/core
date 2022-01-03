@@ -307,7 +307,7 @@ static bool lcl_HandlePackageURL(
     }
     if (!xInStream.is())
     {
-        SAL_WARN("svx", "no stream?");
+        SAL_FIXME("svx", "no stream?");
         return false;
     }
     // Make sure the temporary copy has the same file name extension as the original media file

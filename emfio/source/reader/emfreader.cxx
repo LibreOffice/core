@@ -2201,7 +2201,7 @@ namespace emfio
                     case EMR_ALPHADIBBLEND :
                     case EMR_SETTEXTJUSTIFICATION :
                     {
-                        SAL_WARN("emfio", "TODO: EMF record not implemented: " << record_type_name(nRecType));
+                        SAL_FIXME("emfio", "TODO: EMF record not implemented: " << record_type_name(nRecType));
                     }
                     break;
 
@@ -2209,7 +2209,9 @@ namespace emfio
                     case EMR_HEADER :               // has already been read at ReadHeader()
                     break;
 
-                    default :                           SAL_INFO("emfio", "Unknown Meta Action");                                     break;
+                    default:
+                        SAL_FIXME("emfio", "Unknown Meta Action");
+                        break;
                 }
             }
             mpInputStream->Seek( nNextPos );

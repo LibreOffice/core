@@ -231,7 +231,7 @@ ContextHandlerRef OleObjectGraphicDataContext::onCreateContext( sal_Int32 nEleme
             mrOleObjectInfo.mbHasPicture = true; // Set true if ole object has picture element.
             return new GraphicShapeContext( *this, mpMasterShapePtr, mpShapePtr );
     }
-    SAL_WARN("oox", "OleObjectGraphicDataContext::onCreateContext: unhandled element: "
+    SAL_FIXME("oox", "OleObjectGraphicDataContext::onCreateContext: unhandled element: "
                         << getBaseToken(nElement));
     return nullptr;
 }

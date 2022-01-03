@@ -165,7 +165,7 @@ bool PowerPointImport::exportDocument() noexcept
         }
         else
         {
-            SAL_WARN("oox", "OOX: PowerPointImport::mpThemePtr is NULL");
+            SAL_FIXME("oox", "OOX: PowerPointImport::mpThemePtr is NULL");
         }
     }
     return nColor;

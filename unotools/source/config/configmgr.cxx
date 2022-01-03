@@ -144,7 +144,7 @@ utl::ConfigManager::acquireTree(std::u16string_view rSubTreeName) {
 utl::ConfigManager::ConfigManager() {}
 
 utl::ConfigManager::~ConfigManager() {
-    SAL_WARN_IF(!items_.empty(), "unotools.config", "ConfigManager not empty");
+    SAL_FIXME_IF(!items_.empty(), "unotools.config", "ConfigManager not empty");
 }
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >

@@ -215,10 +215,10 @@ const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Refer
         mozilla::MozillaProductType_Mozilla };
 
     uno::Reference<uno::XInterface> xInstance = rxContext->getServiceManager()->createInstanceWithContext("com.sun.star.mozilla.MozillaBootstrap", rxContext);
-    OSL_ENSURE( xInstance.is(), "failed to create instance" );
+    SAL_FIXME_IF(!xInstance.is(), "xmlsecurity.xmlsec", "failed to create instance");
 
     uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap(xInstance,uno::UNO_QUERY);
-    OSL_ENSURE( xMozillaBootstrap.is(), "failed to create instance" );
+    SAL_FIXME_IF(!xMozillaBootstrap.is(), "xmlsecurity.xmlsec", "failed to create instance");
 
     if (xMozillaBootstrap.is())
     {

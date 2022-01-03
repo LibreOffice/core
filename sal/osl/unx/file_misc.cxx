@@ -410,7 +410,7 @@ oslFileError osl_createDirectoryWithFlags(
     char path[PATH_MAX];
     oslFileError eRet;
 
-    SAL_WARN_IF((!ustrDirectoryURL) || (ustrDirectoryURL->length == 0),
+    SAL_FIXME_IF((!ustrDirectoryURL) || (ustrDirectoryURL->length == 0),
                 "sal.file", "Invalid directory URL");
 
     /* convert directory url to system path */

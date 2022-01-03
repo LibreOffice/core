@@ -34,6 +34,7 @@
 #include <list>
 #include <map>
 #include <o3tl/sorted_vector.hxx>
+#include <sal/log.hxx>
 
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -902,8 +903,8 @@ void SvXMLExportPropertyMapper::_exportXML(
         {
             sal_uInt32 nEFlags = mpImpl->mxPropMapper->GetEntryFlags(nPropMapIdx);
             sal_uInt16 nEPType = GET_PROP_TYPE(nEFlags);
-            OSL_ENSURE(nEPType >= (XML_TYPE_PROP_START >> XML_TYPE_PROP_SHIFT),
-                       "no prop type specified");
+            SAL_FIXME_IF(nEPType < (XML_TYPE_PROP_START >> XML_TYPE_PROP_SHIFT),
+                         "legacy", "no prop type specified");
             rPropTypeFlags |= (1 << nEPType);
             if( nEPType == nPropType )
             {

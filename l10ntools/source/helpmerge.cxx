@@ -245,7 +245,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
     }
     else
     {
-        SAL_WARN(
+        SAL_FIXME(
             "l10ntools",
             "Can't find GID=" << pResData->sGId << " TYP=" << pResData->sResTyp);
     }

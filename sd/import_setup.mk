@@ -120,6 +120,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests$(1),\
     xmlscript/util/xmlscript \
     xmloff/util/xo \
     xmlsecurity/util/xmlsecurity \
+    xmlsecurity/util/xsec_xmlsec \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_import_tests$(1)))

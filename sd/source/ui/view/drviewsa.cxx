@@ -327,10 +327,14 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
         mxScannerListener = new ScannerEventListener( this );
     }
+    // Eat the exceptions and log them.
+    // We can still continue if scanner manager is not available.
+    catch (uno::DeploymentException const&)
+    {
+        TOOLS_INFO_EXCEPTION("sd", "");
+    }
     catch (Exception const &)
     {
-        // Eat the exception and log it
-        // We can still continue if scanner manager is not available.
         DBG_UNHANDLED_EXCEPTION("sd");
     }
 

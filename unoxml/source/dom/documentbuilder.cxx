@@ -283,7 +283,7 @@ namespace DOM
         try
         {
             xmlParserCtxtPtr const pctx = static_cast<xmlParserCtxtPtr>(ctx);
-            SAL_WARN(
+            SAL_FIXME(
                 "unoxml",
                 "libxml2 error: "
                 << make_error_message(pctx));

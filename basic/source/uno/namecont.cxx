@@ -947,7 +947,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         catch(const uno::Exception& )
         {
             // TODO: error handling?
-            SAL_WARN("basic", "Cannot access extensions!");
+            SAL_FIXME("basic", "Cannot access extensions!");
         }
     }
 

@@ -3887,7 +3887,7 @@ void PPTCharSheet::Read( SvStream& rIn, sal_uInt32 nLevel)
     {
         if ( nCMask & 1 )
         {
-            OSL_FAIL( "PPTCharSheet::Read - unknown attribute, send me this document (SJ)" );
+            SAL_FIXME("filter.ms", "PPTCharSheet::Read - unknown attribute, send me this document (SJ)");
             rIn.ReadUInt16( nVal16 );
         }
         nCMask >>= 1;

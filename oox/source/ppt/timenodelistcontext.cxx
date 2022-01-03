@@ -1026,12 +1026,12 @@ namespace oox::ppt {
             break;
         case PPT_TOKEN( video ):
             nNodeType = AnimationNodeType::AUDIO;
-            SAL_WARN("oox.ppt", "OOX: video requested, gave Audio instead" );
+            SAL_FIXME("oox.ppt", "OOX: video requested, gave Audio instead");
             break;
 
         default:
             nNodeType = AnimationNodeType::CUSTOM;
-            SAL_INFO("oox.ppt", "unhandled token " << aElementToken);
+            SAL_FIXME("oox.ppt", "unhandled token " << aElementToken);
             break;
         }
 
