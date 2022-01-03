@@ -4645,10 +4645,16 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             const ContentTypeId eTypeId = pCnt->GetParent()->GetType();
             if (eTypeId == ContentTypeId::OUTLINE)
             {
+                SwOutlineNodes::size_type nActPos = reinterpret_cast<SwOutlineContent*>(
+                            m_xTreeView->get_id(*xFirst).toInt64())->GetOutlinePos();
+                m_pActiveShell->GotoOutline(nActPos);
                 m_xTreeView->selected_foreach([this](weld::TreeIter& rEntry){
+                    SwOutlineNodes::size_type nPos = reinterpret_cast<SwOutlineContent*>(
+                                m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos();
                     m_pActiveShell->SttSelect();
-                    SwOutlineNodes::size_type nActPos = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos();
-                    m_pActiveShell->MakeOutlineSel(nActPos, nActPos, !m_xTreeView->get_row_expanded(rEntry), false); // select children if not expanded
+                    // select children if not expanded and don't kill PaMs
+                    m_pActiveShell->MakeOutlineSel(nPos, nPos,
+                                                   !m_xTreeView->get_row_expanded(rEntry), false);
                     m_pActiveShell->EndSelect();
                     return false;
                 });
