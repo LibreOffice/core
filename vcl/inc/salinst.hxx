@@ -202,6 +202,7 @@ public:
 
     /// get information about underlying versions
     virtual OUString        getOSVersion() { return "-"; }
+    virtual OUString        getOSPlatform() { return "-"; }
 
     virtual const cairo_font_options_t* GetCairoFontOptions() { return nullptr; }
 

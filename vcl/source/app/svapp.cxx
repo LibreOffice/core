@@ -1163,6 +1163,18 @@ OUString Application::GetOSVersion()
     return aVersion;
 }
 
+OUString Application::GetOSPlatform()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    OUString aPlatform;
+    if (pSVData && pSVData->mpDefInst)
+        aPlatform = pSVData->mpDefInst->getOSPlatform();
+    else
+        aPlatform = "-";
+
+    return aPlatform;
+}
+
 OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize)
 {
     OUStringBuffer aDetails;

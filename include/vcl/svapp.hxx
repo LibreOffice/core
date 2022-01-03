@@ -908,6 +908,13 @@ public:
      */
     static OUString             GetOSVersion();
 
+    /**
+     * Gets the OS Vendor, OS Version, CPU platform, version and build (likely kernel version)
+     *
+     * @return OUString version string or "-" in case of problems
+     */
+    static OUString             GetOSPlatform();
+
     /** Get useful OS, Hardware and configuration information,
      * cf. Help->About, and User-Agent
      * bSelection = 0 to return all info, 1 for environment only,

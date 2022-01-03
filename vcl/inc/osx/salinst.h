@@ -124,6 +124,7 @@ public:
                                                     const OUString& rDocumentService) override;
 
     virtual OUString        getOSVersion() override;
+    virtual OUString        getOSPlatform() override;
 
     // dtrans implementation
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard(
