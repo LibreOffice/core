@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d61a1045_a9c04d3b",
+        "filename": "vcl/workben/minvcl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-03T11:02:37Z",
+      "side": 1,
+      "message": "an application that uses UNO (cf. cppu::defaultBootstrap_InitialComponentContext() et al below) is only guaranteed to work correctly if it uses SAL_IMPLEMENT_MAIN (include/sal/main.h) instead of plain main",
+      "revId": "dd1b0471b70f9b5c5db6b681c1fceacfe17c9349",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
