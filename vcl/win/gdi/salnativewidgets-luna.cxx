@@ -365,46 +365,9 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
     }
 }
 
-/**
- * Gives the actual rectangle used for rendering by ControlType::MenuPopup's
- * ControlPart::MenuItemCheckMark or ControlPart::MenuItemRadioMark.
- */
-static tools::Rectangle GetMenuPopupMarkRegion(const ImplControlValue& rValue)
-{
-    tools::Rectangle aRet;
-
-    auto pMVal = dynamic_cast<const MenupopupValue*>(&rValue);
-    if (!pMVal)
-        return aRet;
-
-    aRet.SetTop(pMVal->maItemRect.Top());
-    aRet.SetBottom(pMVal->maItemRect.Bottom() + 1); // see below in drawNativeControl
-    if (AllSettings::GetLayoutRTL())
-    {
-        aRet.SetRight(pMVal->maItemRect.Right() + 1);
-        aRet.SetLeft(aRet.Right() - (pMVal->getNumericVal() - pMVal->maItemRect.Left()));
-    }
-    else
-    {
-        aRet.SetRight(pMVal->getNumericVal());
-        aRet.SetLeft(pMVal->maItemRect.Left());
-    }
-
-    return aRet;
-}
-
 static bool implDrawNativeMenuMark(HDC hDC, HTHEME hTheme, RECT rc, ControlPart nPart,
-                                   ControlState nState, const ImplControlValue& aValue,
-                                   OUString const& aCaption)
+                                   ControlState nState, OUString const& aCaption)
 {
-    if (aValue.getType() == ControlType::MenuPopup)
-    {
-        tools::Rectangle aRectangle = GetMenuPopupMarkRegion(aValue);
-        rc.top = aRectangle.Top();
-        rc.left = aRectangle.Left();
-        rc.bottom = aRectangle.Bottom();
-        rc.right = aRectangle.Right();
-    }
     int iState = (nState & ControlState::ENABLED) ? MCB_NORMAL : MCB_DISABLED;
     ImplDrawTheme(hTheme, hDC, MENU_POPUPCHECKBACKGROUND, iState, rc, aCaption);
     if (nPart == ControlPart::MenuItemCheckMark)
@@ -1015,7 +978,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             else if( nPart == ControlPart::MenuItemCheckMark || nPart == ControlPart::MenuItemRadioMark )
             {
                 if (nState & ControlState::PRESSED)
-                    return implDrawNativeMenuMark(hDC, hTheme, rc, nPart, nState, aValue, aCaption);
+                    return implDrawNativeMenuMark(hDC, hTheme, rc, nPart, nState, aCaption);
                 else
                     return true; // unchecked: do nothing
             }
@@ -1069,16 +1032,6 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         {
             cacheRect = rNativeBoundingRegion;
             keySize = rNativeBoundingRegion.GetSize();
-        }
-    }
-
-    if (pImpl && nType == ControlType::MenuPopup && (nPart == ControlPart::MenuItemCheckMark || nPart == ControlPart::MenuItemRadioMark))
-    {
-        tools::Rectangle aRectangle = GetMenuPopupMarkRegion(aValue);
-        if (!aRectangle.IsEmpty())
-        {
-            cacheRect = buttonRect = aRectangle;
-            keySize = cacheRect.GetSize();
         }
     }
 
@@ -1348,10 +1301,18 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                     MENU_POPUPCHECK,
                     MC_CHECKMARKNORMAL,
                     aBoxRect ) );
-                if( aBoxRect.GetWidth() && aBoxRect.GetHeight() )
+                if (!aRect.IsEmpty())
                 {
-                    rNativeContentRegion = aRect;
-                    rNativeBoundingRegion = rNativeContentRegion;
+                    if (MARGINS mg;
+                        SUCCEEDED(GetThemeMargins(hTheme, hDC, MENU_POPUPCHECK, MC_CHECKMARKNORMAL,
+                                                  TMT_CONTENTMARGINS, nullptr, &mg)))
+                    {
+                        aRect.AdjustLeft(-mg.cxLeftWidth);
+                        aRect.AdjustRight(mg.cxRightWidth);
+                        aRect.AdjustTop(-mg.cyTopHeight);
+                        aRect.AdjustBottom(mg.cyBottomHeight);
+                    }
+                    rNativeContentRegion = rNativeBoundingRegion = aRect;
                     bRet = true;
                 }
             }
