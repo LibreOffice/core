@@ -407,7 +407,7 @@ awt::Size lcl_placeLegendEntries(
                     }
                     if( nEntry < nNumberOfEntries && ( nEntry != 0 || nNumberOfColumns != 1 ) )
                     {
-                        DrawModelWrapper::removeShape( *rEntries[ nEntry ].xSymbol );
+                        DrawModelWrapper::removeShape( rEntries[ nEntry ].xSymbol );
                         rEntries.pop_back();
                         nNumberOfEntries--;
                     }
@@ -441,7 +441,7 @@ awt::Size lcl_placeLegendEntries(
                         }
                         if (aTextShapes.size() == 0)
                         {
-                            DrawModelWrapper::removeShape(*rEntries[0].xSymbol);
+                            DrawModelWrapper::removeShape(rEntries[0].xSymbol);
                             rEntries.pop_back();
                             nNumberOfEntries--;
                             aRowHeights.pop_back();

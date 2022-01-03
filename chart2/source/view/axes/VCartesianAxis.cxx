@@ -1762,7 +1762,7 @@ void VCartesianAxis::updatePositions()
     {
         for (auto const& tickInfo : tickInfos)
         {
-            Reference< drawing::XShape > xShape2DText(tickInfo.xTextShape);
+            const rtl::Reference<SvxShapeText> & xShape2DText(tickInfo.xTextShape);
             if( xShape2DText.is() )
             {
                 B2DVector aTextToTickDistance( pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties, true ) );
@@ -1787,17 +1787,13 @@ void VCartesianAxis::updatePositions()
                 uno::Any aATransformation = ShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
 
                 //set new position
-                uno::Reference< beans::XPropertySet > xProp( xShape2DText, uno::UNO_QUERY );
-                if( xProp.is() )
+                try
                 {
-                    try
-                    {
-                        xProp->setPropertyValue( "Transformation", aATransformation );
-                    }
-                    catch( const uno::Exception& )
-                    {
-                        TOOLS_WARN_EXCEPTION("chart2", "" );
-                    }
+                    xShape2DText->SvxShape::setPropertyValue( "Transformation", aATransformation );
+                }
+                catch( const uno::Exception& )
+                {
+                    TOOLS_WARN_EXCEPTION("chart2", "" );
                 }
 
                 //correctPositionForRotation

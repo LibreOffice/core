@@ -191,7 +191,7 @@ const rtl::Reference<SvxDrawPage> & DrawModelWrapper::getHiddenDrawPage()
 void DrawModelWrapper::clearMainDrawPage()
 {
     //uno::Reference<drawing::XShapes> xChartRoot( m_xMainDrawPage, uno::UNO_QUERY );
-    uno::Reference<drawing::XShapes> xChartRoot( ShapeFactory::getChartRootShape( m_xMainDrawPage ) );
+    rtl::Reference<SvxShapeGroupAnyD> xChartRoot( ShapeFactory::getChartRootShape( m_xMainDrawPage ) );
     if( xChartRoot.is() )
     {
         sal_Int32 nSubCount = xChartRoot->getCount();
@@ -204,7 +204,7 @@ void DrawModelWrapper::clearMainDrawPage()
     }
 }
 
-uno::Reference< drawing::XShapes > DrawModelWrapper::getChartRootShape( const rtl::Reference<SvxDrawPage>& xDrawPage )
+rtl::Reference<SvxShapeGroupAnyD> DrawModelWrapper::getChartRootShape( const rtl::Reference<SvxDrawPage>& xDrawPage )
 {
     return ShapeFactory::getChartRootShape( xDrawPage );
 }
@@ -287,27 +287,12 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rObjectCID, SdrO
     return nullptr;
 }
 
-bool DrawModelWrapper::removeShape( const uno::Reference< drawing::XShape >& xShape )
+bool DrawModelWrapper::removeShape( const rtl::Reference<SvxShape>& xShape )
 {
-    uno::Reference< container::XChild > xChild( xShape, uno::UNO_QUERY );
-    if( xChild.is() )
-    {
-        uno::Reference<drawing::XShapes> xShapes( xChild->getParent(), uno::UNO_QUERY );
-        if( xShapes.is() )
-        {
-            xShapes->remove(xShape);
-            return true;
-        }
-    }
-    return false;
-}
-
-bool DrawModelWrapper::removeShape( SvxShape& rShape )
-{
-    uno::Reference<drawing::XShapes> xShapes( rShape.getParent(), uno::UNO_QUERY );
+    uno::Reference<drawing::XShapes> xShapes( xShape->getParent(), uno::UNO_QUERY );
     if( xShapes.is() )
     {
-        xShapes->remove(&rShape);
+        xShapes->remove(xShape);
         return true;
     }
     return false;
