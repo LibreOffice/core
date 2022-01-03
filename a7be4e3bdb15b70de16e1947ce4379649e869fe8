@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbf4fcca_f4f88504",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-01-03T23:30:12Z",
+      "side": 1,
+      "message": "Patchset 4 uses forward declaration of class instead of include file",
+      "revId": "a7be4e3bdb15b70de16e1947ce4379649e869fe8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
