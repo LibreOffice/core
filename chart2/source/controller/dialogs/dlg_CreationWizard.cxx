@@ -72,7 +72,8 @@ CreationWizard::CreationWizard(weld::Window* pParent, const uno::Reference<frame
 
     declarePath(PATH_FULL, aPath);
 
-    SetRoadmapHelpId(HID_SCH_WIZARD_ROADMAP);
+    // tdf#135935 ensure help ID is set when no element is clicked in the dialog
+    m_xAssistant->set_help_id(HID_SCH_WIZARD_ROADMAP);
 
     if (!m_pDialogModel->getModel().isDataFromSpreadsheet())
     {
