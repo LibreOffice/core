@@ -21,6 +21,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/stritem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svxids.hrc>
@@ -1366,14 +1367,14 @@ void ScFiltersTest2::testTdf126116()
 
     rDoc.SetString(ScAddress(0, 0, 0), "03/03");
 
-    // Get the current year from B1 with format YY
-    OUString aYear = rDoc.GetString(ScAddress(1, 0, 0));
+    sal_uInt32 nNumberFormat = rDoc.GetNumberFormat(0, 0, 0);
+    const SvNumberformat* pNumberFormat = rDoc.GetFormatTable()->GetEntry(nNumberFormat);
+    const OUString& rFormatStr = pNumberFormat->GetFormatstring();
 
     // Without the fix in place, this test would have failed with
-    // - Expected: 03/03/21
-    // - Actual  : 03/03/2021
-    (void)
-        aYear; //CPPUNIT_ASSERT_EQUAL(OUString("03/03/" + aYear), rDoc.GetString(ScAddress(0, 0, 0)));
+    // - Expected: MM/DD/YY
+    // - Actual  : MM/DD/YYYY
+    CPPUNIT_ASSERT_EQUAL(OUString("MM/DD/YY"), rFormatStr);
 
     xDocSh->DoClose();
 }
