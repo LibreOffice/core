@@ -16,6 +16,23 @@
       "message": "@Tünde: very nice workaround! For the complete fix, I suggest to check the working ODF import of MSO on OOXML level (filing also a new issue for it).",
       "revId": "0edcbd53b4c0ac2ecd3c2fd09535e4b18ca20b88",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c1c53ff_bfaccaf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-03T12:36:03Z",
+      "side": 1,
+      "message": "Note: I wasn\u0027t able to reproduce the interoperability issue with MSO 2016, so I\u0027ve removed that from the commit description.",
+      "revId": "0edcbd53b4c0ac2ecd3c2fd09535e4b18ca20b88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
