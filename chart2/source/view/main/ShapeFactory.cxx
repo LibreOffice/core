@@ -2354,9 +2354,11 @@ rtl::Reference<SvxShapeGroupAnyD> ShapeFactory::getChartRootShape(
         {
             if( xShapes->getByIndex( nN ) >>= xShape )
             {
-                if( ShapeFactory::getShapeName( xShape ) == "com.sun.star.chart2.shapes" )
+                rtl::Reference<SvxShape> xSvxShape(dynamic_cast<SvxShape*>(xShape.get()));
+                assert(xSvxShape.get());
+                if( ShapeFactory::getShapeName( xSvxShape ) == "com.sun.star.chart2.shapes" )
                 {
-                    xRet = dynamic_cast<SvxShapeGroupAnyD*>(xShape.get());
+                    xRet = static_cast<SvxShapeGroupAnyD*>(xSvxShape.get());
                     assert(xRet);
                     break;
                 }
@@ -2397,22 +2399,17 @@ void ShapeFactory::setShapeName( const rtl::Reference< SvxShape >& xShape
     }
 }
 
-OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape >& xShape )
+OUString ShapeFactory::getShapeName( const rtl::Reference<SvxShape>& xShape )
 {
     OUString aRet;
 
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    OSL_ENSURE(xProp.is(), "shape offers no XPropertySet");
-    if( xProp.is())
+    try
     {
-        try
-        {
-            xProp->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
+        xShape->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 
     return aRet;

@@ -251,7 +251,7 @@ public:
     static void setShapeName( const rtl::Reference< SvxShape >& xShape
             , const OUString& rName );
 
-    static OUString getShapeName( const css::uno::Reference< css::drawing::XShape >& xShape );
+    static OUString getShapeName( const rtl::Reference<SvxShape>& xShape );
 
     static css::uno::Any makeTransformation( const css::awt::Point& rScreenPosition2D, double fRotationAnglePi=0.0 );
 
