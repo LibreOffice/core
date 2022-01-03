@@ -16,6 +16,24 @@
       "message": "hossein, what do you think of the latest patch?",
       "revId": "87efdf440961e7f09ef768c06258b1c927258bb2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d087b4f_0dbb5ff2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-03T12:27:48Z",
+      "side": 1,
+      "message": "Thanks, it is now looking good.\n\nStephan Bergmann said in another patch:\n\"an application that uses UNO (cf. cppu::defaultBootstrap_InitialComponentContext() et al below) is only guaranteed to work correctly if it uses SAL_IMPLEMENT_MAIN (include/sal/main.h) instead of plain main\".\n\nCan you please use SAL_IMPLEMENT_MAIN_WITH_ARGS?",
+      "parentUuid": "f9b3e1eb_11353867",
+      "revId": "87efdf440961e7f09ef768c06258b1c927258bb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
