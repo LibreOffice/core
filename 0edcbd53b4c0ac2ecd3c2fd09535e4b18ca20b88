@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00dc626d_5403be06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-03T12:35:20Z",
+      "side": 1,
+      "message": "@Tünde: very nice workaround! For the complete fix, I suggest to check the working ODF import of MSO on OOXML level (filing also a new issue for it).",
+      "revId": "0edcbd53b4c0ac2ecd3c2fd09535e4b18ca20b88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
