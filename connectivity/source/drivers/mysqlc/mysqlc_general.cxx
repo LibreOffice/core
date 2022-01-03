@@ -163,6 +163,9 @@ sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept
             return css::sdbc::DataType::VARCHAR;
 
         case MYSQL_TYPE_BLOB:
+        case MYSQL_TYPE_TINY_BLOB:
+        case MYSQL_TYPE_MEDIUM_BLOB:
+        case MYSQL_TYPE_LONG_BLOB:
             if (charsetnr == 63)
                 return css::sdbc::DataType::LONGVARBINARY;
             return css::sdbc::DataType::LONGVARCHAR;
