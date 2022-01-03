@@ -12346,7 +12346,8 @@ elif test "$enable_mpl_subset" = "yes"; then
     AC_MSG_RESULT([no (MPL only])
 elif test "$enable_fuzzers" = "yes"; then
     AC_MSG_RESULT([no (oss-fuzz)])
-elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
+elif test \( \( "$_os" = "Linux" -o "$_os" = "Darwin" \) -a "$ENABLE_NSS" = TRUE \) -o "$_os" = "WINNT" ; then
+    AC_MSG_RESULT([yes])
     dnl ===================================================================
     dnl Check for system gpgme
     dnl ===================================================================
@@ -12422,7 +12423,7 @@ elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
      fi
    fi
 else
-    AC_MSG_RESULT([no (unsupported OS)])
+    AC_MSG_RESULT([no (unsupported OS or missing NSS)])
 fi
 AC_SUBST(ENABLE_GPGMEPP)
 AC_SUBST(SYSTEM_GPGMEPP)
