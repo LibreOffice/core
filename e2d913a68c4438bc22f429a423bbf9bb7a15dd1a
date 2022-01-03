@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a6b416c_491e20dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-03T13:27:51Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! Because I haven\u0027t found a new OOXML export/import issue, I filed this fix for the the main issue.",
+      "revId": "e2d913a68c4438bc22f429a423bbf9bb7a15dd1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
