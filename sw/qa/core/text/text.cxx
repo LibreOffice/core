@@ -185,12 +185,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testChineseAutoFirstLineIndent)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    // Get the line width of the first line for the 1st paragrapsh.
+    // Get the line width of the first line for the 1st paragraph.
     sal_Int32 nFirstLineWidth
         = getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwLinePortion[1]",
                    "width")
               .toInt32();
-    // Get the line width of the first line for the 2nd paragrapsh.
+    // Get the line width of the first line for the 2nd paragraph.
     sal_Int32 nSecondLineWidth
         = getXPath(pXmlDoc, "//body/txt[2]/SwParaPortion[1]/SwLineLayout[1]/SwLinePortion[1]",
                    "width")

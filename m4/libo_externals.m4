@@ -11,10 +11,10 @@ dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*
 # <$3 pkg-config query string>
 # [$4 if optional, default to: enabled, disabled or fixed (default: fixed)]
 # [$5 which is preferred: (fixed-|test-)system or (fixed-)internal (default: internal)]
-# [$6 ignore $with_system_libs: TRUE or blank (default: blank/false)]
+# [$6 ignores $with_system_libs: TRUE or blank (default: blank/false)]
 #
 # $4 fixed: fixed-enabled, as fixed-disabled makes no sense.
-# $5 test-system: follows $test_system_$1, ignors $with_system_libs; no configure switch
+# $5 test-system: follows $test_system_$1, ignores $with_system_libs; no configure switch
 #
 # Used configure.ac variables:
 #  - $2_(CFLAGS|LIBS)_internal: must be filled to match the internal build
