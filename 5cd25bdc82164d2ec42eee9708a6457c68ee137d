@@ -34,6 +34,24 @@
       "parentUuid": "6d5d3e7b_decb2f14",
       "revId": "5cd25bdc82164d2ec42eee9708a6457c68ee137d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b1d6f18_4cc1c0ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-01-03T15:03:39Z",
+      "side": 1,
+      "message": "Start- and end-angle in legacy shapes are given in relationship to a unit circle. Their values are not affected by rotation or shearing. You can observe the values as CircleStartAngle and CircleEndAngle in the Development Tools (which shows the API values).",
+      "parentUuid": "cf7fa95f_7ccff15e",
+      "revId": "5cd25bdc82164d2ec42eee9708a6457c68ee137d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
