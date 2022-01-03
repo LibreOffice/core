@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6c4838e_106e351b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-03T14:38:03Z",
+      "side": 1,
+      "message": "Maybe I\u0027m getting blind... probably just too many builds with all the gbuild changes.",
+      "revId": "f49b8e6d9a48be228897d5fad593f500d9281d83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
