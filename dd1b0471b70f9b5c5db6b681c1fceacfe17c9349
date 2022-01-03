@@ -16,6 +16,24 @@
       "message": "an application that uses UNO (cf. cppu::defaultBootstrap_InitialComponentContext() et al below) is only guaranteed to work correctly if it uses SAL_IMPLEMENT_MAIN (include/sal/main.h) instead of plain main",
       "revId": "dd1b0471b70f9b5c5db6b681c1fceacfe17c9349",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71c021c3_8fccae73",
+        "filename": "vcl/workben/minvcl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-03T12:53:50Z",
+      "side": 1,
+      "message": "I thought I could simplify the code using main(), but now that I saw Coverity Scan report, I will send a follow-up to use SAL_IMPLEMENT_MAIN.",
+      "parentUuid": "d61a1045_a9c04d3b",
+      "revId": "dd1b0471b70f9b5c5db6b681c1fceacfe17c9349",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
