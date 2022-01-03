@@ -294,6 +294,32 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testCameraRotationRevolution)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(27000), nRotateAngle1);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf146534_CameraRotationRevolutionNonWpsShapes)
+{
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "camera-rotation-revolution-nonwps.pptx";
+    load(aURL);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xShape0(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xShape1(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps0(xShape0, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
+    sal_Int32 nRotateAngle0;
+    sal_Int32 nRotateAngle1;
+    xShapeProps0->getPropertyValue("RotateAngle") >>= nRotateAngle0;
+    xShapeProps1->getPropertyValue("RotateAngle") >>= nRotateAngle1;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 9000
+    // - Actual  : 0
+    // so the camera rotation would not have been factored into how the shape is displayed
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9000), nRotateAngle0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(30500), nRotateAngle1);
+}
+
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
 {
     auto verify = [](const uno::Reference<lang::XComponent>& xComponent) {

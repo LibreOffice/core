@@ -1733,7 +1733,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
                 bHas3DEffectinShape = true;
 
         if( bHas3DEffectinShape)
-            WriteShape3DEffects( xProps );
+            Write3DEffects( xProps, /*bIsText=*/false );
     }
     mpFS->endElementNS(XML_p, XML_spPr);
 
