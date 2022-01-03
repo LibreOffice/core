@@ -1331,8 +1331,8 @@ Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderCont
                                               aCtrlRegion, ControlState::ENABLED, aVal,
                                               aNativeBounds, aNativeContent))
             {
-                rCheckHeight = aNativeBounds.GetHeight();
-                nCheckWidth = aNativeContent.GetWidth();
+                rCheckHeight = aNativeBounds.GetHeight() - 1;
+                nCheckWidth = aNativeContent.GetWidth() - 1;
             }
         }
         if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::MenuItemRadioMark))
@@ -1341,8 +1341,8 @@ Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderCont
                                                       aCtrlRegion, ControlState::ENABLED, aVal,
                                                       aNativeBounds, aNativeContent))
             {
-                rRadioHeight = aNativeBounds.GetHeight();
-                nRadioWidth = aNativeContent.GetWidth();
+                rRadioHeight = aNativeBounds.GetHeight() - 1;
+                nRadioWidth = aNativeContent.GetWidth() - 1;
             }
         }
     }
@@ -1410,11 +1410,11 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
 
     tools::Long nMinMenuItemHeight = nFontHeight;
     tools::Long nCheckHeight = 0, nRadioHeight = 0;
-    Size aMaxSize = ImplGetNativeCheckAndRadioSize(*pWin->GetOutDev(), nCheckHeight, nRadioHeight); // FIXME
-    if( aMaxSize.Height() > nMinMenuItemHeight )
-        nMinMenuItemHeight = aMaxSize.Height();
+    Size aMarkSize = ImplGetNativeCheckAndRadioSize(*pWin->GetOutDev(), nCheckHeight, nRadioHeight);
+    if( aMarkSize.Height() > nMinMenuItemHeight )
+        nMinMenuItemHeight = aMarkSize.Height();
 
-    Size aMaxImgSz;
+    tools::Long aMaxImgWidth = 0;
 
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
     if ( rSettings.GetUseImagesInMenus() )
@@ -1431,8 +1431,8 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
                )
             {
                 Size aImgSz = pData->aImage.GetSizePixel();
-                if ( aImgSz.Height() > aMaxImgSz.Height() )
-                    aMaxImgSz.setHeight( aImgSz.Height() );
+                if ( aImgSz.Width() > aMaxImgWidth )
+                    aMaxImgWidth = aImgSz.Width();
                 if ( aImgSz.Height() > nMinMenuItemHeight )
                     nMinMenuItemHeight = aImgSz.Height();
                 break;
@@ -1441,7 +1441,6 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
     }
 
     Size aSz;
-    tools::Long nCheckWidth = 0;
     tools::Long nMaxWidth = 0;
 
     for ( size_t n = pItemList->size(); n; )
@@ -1464,25 +1463,23 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             // Image:
             if (!IsMenuBar() && ((pData->eType == MenuItemType::IMAGE) || (pData->eType == MenuItemType::STRINGIMAGE)))
             {
-                Size aImgSz = pData->aImage.GetSizePixel();
+                tools::Long aImgHeight = pData->aImage.GetSizePixel().Height();
 
-                aImgSz.AdjustHeight(4 ); // add a border for native marks
-                aImgSz.AdjustWidth(4 ); // add a border for native marks
-                if ( aImgSz.Width() > aMaxImgSz.Width() )
-                    aMaxImgSz.setWidth( aImgSz.Width() );
-                if ( aImgSz.Height() > aMaxImgSz.Height() )
-                    aMaxImgSz.setHeight( aImgSz.Height() );
-                if ( aImgSz.Height() > pData->aSz.Height() )
-                    pData->aSz.setHeight( aImgSz.Height() );
+                aImgHeight += 4; // add a border for native marks
+                if (aImgHeight > pData->aSz.Height())
+                    pData->aSz.setHeight(aImgHeight);
             }
 
             // Check Buttons:
             if (!IsMenuBar() && pData->HasCheck())
             {
-                nCheckWidth = aMaxSize.Width();
                 // checks / images take the same place
                 if( ( pData->eType != MenuItemType::IMAGE ) && ( pData->eType != MenuItemType::STRINGIMAGE ) )
-                    nWidth += nCheckWidth + nExtra * 2;
+                {
+                    nWidth += aMarkSize.Width() + nExtra * 2;
+                    if (aMarkSize.Height() > pData->aSz.Height())
+                        pData->aSz.setHeight(aMarkSize.Height());
+                }
             }
 
             // Text:
@@ -1490,7 +1487,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             {
                 const SalLayoutGlyphs* pGlyphs = pData->GetTextGlyphs(pWin->GetOutDev());
                 tools::Long nTextWidth = pWin->GetOutDev()->GetCtrlTextWidth(pData->aText, pGlyphs);
-                tools::Long nTextHeight = pWin->GetTextHeight();
+                tools::Long nTextHeight = pWin->GetTextHeight() + EXTRAITEMHEIGHT;
 
                 if (IsMenuBar())
                 {
@@ -1523,8 +1520,6 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
 
                 pData->aSz.setHeight( std::max( std::max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight ) );
             }
-
-            pData->aSz.AdjustHeight(EXTRAITEMHEIGHT ); // little bit more distance
 
             if (!IsMenuBar())
                 aSz.AdjustHeight(pData->aSz.Height() );
@@ -1573,11 +1568,11 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
         sal_uInt16 gfxExtra = static_cast<sal_uInt16>(std::max( nExtra, tools::Long(7) )); // #107710# increase space between checkmarks/images/text
         nImgOrChkPos = static_cast<sal_uInt16>(nExtra);
         tools::Long nImgOrChkWidth = 0;
-        if( aMaxSize.Height() > 0 ) // NWF case
-            nImgOrChkWidth = aMaxSize.Height() + nExtra;
+        if( aMarkSize.Height() > 0 ) // NWF case
+            nImgOrChkWidth = aMarkSize.Height() + nExtra;
         else // non NWF case
             nImgOrChkWidth = nFontHeight/2 + gfxExtra;
-        nImgOrChkWidth = std::max( nImgOrChkWidth, aMaxImgSz.Width() + gfxExtra );
+        nImgOrChkWidth = std::max( nImgOrChkWidth, aMaxImgWidth + gfxExtra );
         nTextPos = static_cast<sal_uInt16>(nImgOrChkPos + nImgOrChkWidth);
         nTextPos = nTextPos + gfxExtra;
 
@@ -1632,9 +1627,11 @@ static void ImplPaintCheckBackground(vcl::RenderContext & rRenderContext, vcl::W
     {
         ImplControlValue    aControlValue;
         aControlValue.setTristateVal(ButtonValue::On);
+        tools::Rectangle r = i_rRect;
+        r.AdjustTop(1);
 
         bNativeOk = rRenderContext.DrawNativeControl(ControlType::Toolbar, ControlPart::Button,
-                                                     i_rRect,
+                                                     r,
                                                      ControlState::PRESSED | ControlState::ENABLED,
                                                      aControlValue,
                                                      OUString());
@@ -1824,10 +1821,6 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
 
                 tools::Rectangle aOuterCheckRect(Point(aPos.X()+nImgOrChkPos, aPos.Y()),
                                           Size(pData->aSz.Height(), pData->aSz.Height()));
-                aOuterCheckRect.AdjustLeft(1 );
-                aOuterCheckRect.AdjustRight( -1 );
-                aOuterCheckRect.AdjustTop(1 );
-                aOuterCheckRect.AdjustBottom( -1 );
 
                 // CheckMark
                 if (!bLayout && !IsMenuBar() && pData->HasCheck())
