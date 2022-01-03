@@ -105,6 +105,8 @@ void Test::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("urn:schemas-microsoft-com:office:office"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w10"),
                        BAD_CAST("urn:schemas-microsoft-com:office:word"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("p"),
+                       BAD_CAST("http://schemas.openxmlformats.org/presentationml/2006/main"));
 }
 
 void Test::loadAndSave(const OUString& rURL, const OUString& rFilterName)
@@ -143,6 +145,33 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
     // not written.
     assertXPath(pXmlDoc, "//wpg:grpSpPr/a:xfrm/a:chExt", "cx", "5328360");
     assertXPath(pXmlDoc, "//wps:spPr/a:xfrm/a:ext", "cx", "5328360");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCameraRevolutionGrabBag)
+{
+    // Given a PPTX file that contains camera revolution (rotation around z axis) applied shapes
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "camera-rotation-revolution-nonwps.pptx";
+
+    // When saving that document:
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Then make sure the revolution is exported without a problem:
+    // First shape textbox:
+    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:scene3d/a:camera/a:rot", "rev", "5400000");
+
+    // Second shape rectangle:
+    assertXPath(pXmlDoc, "//p:sp[2]/p:spPr/a:scene3d/a:camera/a:rot", "rev", "18300000");
+
+    // Make sure Shape3DProperties don't leak under txBody
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // - In <>, XPath '//p:sp[1]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot' number of nodes is incorrect
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", 0);
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", 0);
 }
 }
 
