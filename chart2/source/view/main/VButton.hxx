@@ -38,7 +38,7 @@ private:
     Color m_nArrowColor;
     Color m_nBGColor;
 
-    css::uno::Reference<css::drawing::XShape>
+    rtl::Reference<SvxShapePolyPolygon>
         createTriangle(css::awt::Size aSize);
 
 public:

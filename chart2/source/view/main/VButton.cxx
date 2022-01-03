@@ -42,16 +42,10 @@ void VButton::init(const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
     m_xShapeFactory = xFactory;
 }
 
-uno::Reference<drawing::XShape> VButton::createTriangle(awt::Size aSize)
+rtl::Reference<SvxShapePolyPolygon> VButton::createTriangle(awt::Size aSize)
 {
-    uno::Reference<drawing::XShape> xShape;
-    xShape.set(m_xShapeFactory->createInstance("com.sun.star.drawing.PolyPolygonShape"),
-               uno::UNO_QUERY);
-
-    if (!xShape.is())
-        return xShape;
-
-    uno::Reference<beans::XPropertySet> xproperties(xShape, uno::UNO_QUERY);
+    rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
+    xShape->setShapeKind(OBJ_POLY);
 
     drawing::PolyPolygonShape3D aPolyPolygon;
     aPolyPolygon.SequenceX.realloc(1);
@@ -82,11 +76,11 @@ uno::Reference<drawing::XShape> VButton::createTriangle(awt::Size aSize)
     pInnerSequenceY[2] = 0.0;
     pInnerSequenceZ[2] = 0.0;
 
-    xproperties->setPropertyValue("Name", uno::makeAny(m_sCID));
-    xproperties->setPropertyValue(UNO_NAME_POLYPOLYGON,
-                                  uno::Any(PolyToPointSequence(aPolyPolygon)));
-    xproperties->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
-    xproperties->setPropertyValue("FillColor", uno::makeAny(m_nArrowColor));
+    xShape->SvxShape::setPropertyValue("Name", uno::makeAny(m_sCID));
+    xShape->SvxShape::setPropertyValue(UNO_NAME_POLYPOLYGON,
+                                       uno::Any(PolyToPointSequence(aPolyPolygon)));
+    xShape->SvxShape::setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
+    xShape->SvxShape::setPropertyValue("FillColor", uno::makeAny(m_nArrowColor));
 
     return xShape;
 }
@@ -136,15 +130,12 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
 
     awt::Size aPolySize{ 280, 180 };
 
-    uno::Reference<drawing::XShape> xPoly = createTriangle(aPolySize);
-    if (xPoly.is())
-    {
-        xPoly->setSize(aPolySize);
-        xPoly->setPosition(
-            { sal_Int32(m_aPosition.X + m_aSize.Width - aPolySize.Width - 100),
-              sal_Int32(m_aPosition.Y + (m_aSize.Height / 2.0) - (aPolySize.Height / 2.0)) });
-        xContainer->add(xPoly);
-    }
+    rtl::Reference<SvxShapePolyPolygon> xPoly = createTriangle(aPolySize);
+    xPoly->setSize(aPolySize);
+    xPoly->setPosition(
+        { sal_Int32(m_aPosition.X + m_aSize.Width - aPolySize.Width - 100),
+          sal_Int32(m_aPosition.Y + (m_aSize.Height / 2.0) - (aPolySize.Height / 2.0)) });
+    xContainer->add(xPoly);
 }
 
 } //namespace chart
