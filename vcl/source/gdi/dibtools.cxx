@@ -537,7 +537,6 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
         // Read color mask
         if(bTCMask && BITFIELDS == rHeader.nCompression)
         {
-            rIStm.SeekRel( -12 );
             rIStm.ReadUInt32( nRMask );
             rIStm.ReadUInt32( nGMask );
             rIStm.ReadUInt32( nBMask );
