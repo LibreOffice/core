@@ -871,8 +871,11 @@ Reference< XShape > const & Shape::createAndInsert(
     // The flip contained in aParentScale will affect orientation of object rotation angle.
     sal_Int16 nOrientation = ((aParentScale.getX() < 0) != (aParentScale.getY() < 0)) ? -1 : 1;
     // ToDo: Not sure about the restrictions given by bUseRotationTransform.
-    if (bUseRotationTransform && mnRotation != 0)
-        lcl_RotateAtCenter(aTransformation, nOrientation * mnRotation);
+    // Since LibreOffice doesn't have 3D camera options for 2D shapes, rotate the shape opposite of
+    // the camera Z axis rotation, in order to produce the same visual result from MSO
+    const sal_Int32 nCameraRotation = get3DProperties().maCameraRotation.mnRevolution.get(0);
+    if (bUseRotationTransform && (mnRotation != 0 || nCameraRotation != 0))
+        lcl_RotateAtCenter(aTransformation, nOrientation * (mnRotation - nCameraRotation));
 
     if (fParentRotate != 0.0)
         aTransformation.rotate(fParentRotate);
@@ -1596,8 +1599,6 @@ Reference< XShape > const & Shape::createAndInsert(
             getTextBody()->getTextProperties().pushVertSimulation();
 
         // tdf#133037: a bit hackish: force Shape to rotate in the opposite direction the camera would rotate
-        const sal_Int32 nCameraRotation = get3DProperties().maCameraRotation.mnRevolution.get(0);
-
         PropertySet aPropertySet(mxShape);
         if ( !bUseRotationTransform && (mnRotation != 0 || nCameraRotation != 0) )
         {
