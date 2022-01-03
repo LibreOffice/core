@@ -13,6 +13,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <o3tl/deleter.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -55,7 +56,7 @@ int TheApplication::Main()
     return 0;
 }
 
-int main()
+static int main_impl()
 {
     auto xContext = cppu::defaultBootstrap_InitialComponentContext();
     css::uno::Reference<css::lang::XMultiServiceFactory> xServiceManager(
@@ -71,6 +72,13 @@ int main()
     css::uno::Reference<css::lang::XComponent>(xContext, css::uno::UNO_QUERY_THROW)->dispose();
     comphelper::setProcessServiceFactory(nullptr);
 
+    return ret;
+}
+
+int main()
+{
+    int ret;
+    suppress_fun_call_w_exception(ret = main_impl());
     return ret;
 }
 
