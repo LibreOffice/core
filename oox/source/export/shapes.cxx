@@ -1005,7 +1005,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                 bHas3DEffectinShape = true;
 
         if( bHas3DEffectinShape)
-            WriteShape3DEffects( rXPropSet );
+            Write3DEffects( rXPropSet, /*bIsText=*/false );
     }
 
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
@@ -1255,7 +1255,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     WriteOutline( xShapeProps );
 
     WriteShapeEffects( xShapeProps );
-    WriteShape3DEffects( xShapeProps );
+    Write3DEffects( xShapeProps, /*bIsText=*/false );
 
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
