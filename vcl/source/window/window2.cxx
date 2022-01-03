@@ -338,9 +338,9 @@ void Window::EndTracking( TrackingEventFlags nFlags )
 
 bool Window::IsTracking() const
 {
-    return (mpWindowImpl->mbUseFrameData ?
-            mpWindowImpl->mpFrameData->mpTrackWin == this :
-            ImplGetSVData()->mpWinData->mpTrackWin == this);
+    return mpWindowImpl && (mpWindowImpl->mbUseFrameData ?
+                            mpWindowImpl->mpFrameData->mpTrackWin == this :
+                            ImplGetSVData()->mpWinData->mpTrackWin == this);
 }
 
 void Window::StartAutoScroll( StartAutoScrollFlags nFlags )
