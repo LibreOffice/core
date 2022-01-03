@@ -210,12 +210,17 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
     SAL_INFO(char const * area, expr),
     SAL_INFO_IF(bool condition, char const * area, expr),
+    SAL_FIXME(char const * area, expr),
+    SAL_FIXME_IF(bool condition, char const * area, expr),
     SAL_WARN(char const * area, expr),
-    SAL_WARN_IF(bool condition, char const * area, expr), and SAL_DEBUG(expr)
+    SAL_WARN_IF(bool condition, char const * area, expr),
+    SAL_DEBUG(expr) and
+    SAL_DEBUG_IF(bool condition, expr)
     produce an info, warning, or debug log entry with a message produced by
     piping items into a C++ std::ostringstream.  The given expr must be so that
-    the full expression "stream << expr" is valid, where stream is a variable of
-    type std::ostringstream.
+    the full expression "stream << expr" is valid, where stream is a variable
+    of type std::ostringstream. FIXME is handled as INFO and just produces a
+    "fixme" instead of an "info" message prefix.
 
       SAL_INFO("foo", "string " << s << " of length " << n)
 
@@ -374,6 +379,26 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     SAL_DETAIL_LOG_STREAM( \
         SAL_DETAIL_ENABLE_LOG_WARN && (condition), \
         ::SAL_DETAIL_LOG_LEVEL_WARN, area, SAL_WHERE, stream)
+
+/**
+  Produce a fixme entry from stream in the given log area.
+
+  See @ref sal_log "basic logging functionality" for details.
+*/
+#define SAL_FIXME(area, stream) \
+    SAL_DETAIL_LOG_STREAM( \
+        SAL_DETAIL_ENABLE_LOG_INFO, ::SAL_DETAIL_LOG_LEVEL_FIXME, area, \
+        SAL_WHERE, stream)
+
+/**
+  Produce a fixme entry from stream in the given log area if condition is true.
+
+  See @ref sal_log "basic logging functionality" for details.
+*/
+#define SAL_FIXME_IF(condition, area, stream)   \
+    SAL_DETAIL_LOG_STREAM( \
+        SAL_DETAIL_ENABLE_LOG_INFO && (condition), \
+        ::SAL_DETAIL_LOG_LEVEL_FIXME, area, SAL_WHERE, stream)
 
 /**
   Produce temporary debugging output from stream.  This macro is meant to be

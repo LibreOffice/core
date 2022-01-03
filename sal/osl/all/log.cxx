@@ -78,6 +78,8 @@ char const * toString(sal_detail_LogLevel level) {
     switch (level) {
     case SAL_DETAIL_LOG_LEVEL_INFO:
         return "info";
+    case SAL_DETAIL_LOG_LEVEL_FIXME:
+        return "fixme";
     case SAL_DETAIL_LOG_LEVEL_WARN:
         return "warn";
     case SAL_DETAIL_LOG_LEVEL_DEBUG:
@@ -291,6 +293,8 @@ void sal_detail_log(
     int android_log_level;
     switch (level) {
     case SAL_DETAIL_LOG_LEVEL_INFO:
+        [[fallthrough]];
+    case SAL_DETAIL_LOG_LEVEL_FIXME:
         android_log_level = ANDROID_LOG_INFO;
         break;
     case SAL_DETAIL_LOG_LEVEL_WARN:
@@ -312,6 +316,8 @@ void sal_detail_log(
         int prio;
         switch (level) {
         case SAL_DETAIL_LOG_LEVEL_INFO:
+            [[fallthrough]];
+        case SAL_DETAIL_LOG_LEVEL_FIXME:
             prio = LOG_INFO;
             break;
         case SAL_DETAIL_LOG_LEVEL_WARN:
@@ -431,7 +437,7 @@ unsigned char sal_detail_log_report(sal_detail_LogLevel level, char const * area
         }
         bool match;
         if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("INFO"))) {
-            match = level == SAL_DETAIL_LOG_LEVEL_INFO;
+            match = (level == SAL_DETAIL_LOG_LEVEL_INFO) || (level == SAL_DETAIL_LOG_LEVEL_FIXME);
         } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("WARN")))
         {
             match = level == SAL_DETAIL_LOG_LEVEL_WARN;
