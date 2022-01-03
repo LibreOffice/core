@@ -29,6 +29,7 @@ $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_%_new.cxx : \
 	rm $@.sax
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),SAX)
 
+.PRECIOUS: $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_%_new.cxx
 $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_%.cxx : \
 		$(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_%_new.cxx
 	$(call gb_Helper_copy_if_different_and_touch,$<,$@)
