@@ -627,7 +627,7 @@ namespace
 
     void LOKPostAsyncEvent(void* pEv, void*)
     {
-        LOKAsyncEventData* pLOKEv = static_cast<LOKAsyncEventData*>(pEv);
+        std::unique_ptr<LOKAsyncEventData> pLOKEv(static_cast<LOKAsyncEventData*>(pEv));
         if (pLOKEv->mpWindow->IsDisposed())
             return;
 
@@ -648,6 +648,9 @@ namespace
         if (!pFocusWindow)
             pFocusWindow = pLOKEv->mpWindow;
 
+        if (pLOKEv->mpWindow->IsDisposed())
+            return;
+
         switch (pLOKEv->mnEvent)
         {
         case VclEventId::WindowKeyInput:
@@ -656,11 +659,13 @@ namespace
             KeyEvent singlePress(pLOKEv->maKeyEvent.GetCharCode(),
                                  pLOKEv->maKeyEvent.GetKeyCode());
             for (sal_uInt16 i = 0; i <= nRepeat; ++i)
-                pFocusWindow->KeyInput(singlePress);
+                if (!pFocusWindow->IsDisposed())
+                    pFocusWindow->KeyInput(singlePress);
             break;
         }
         case VclEventId::WindowKeyUp:
-            pFocusWindow->KeyUp(pLOKEv->maKeyEvent);
+            if (!pFocusWindow->IsDisposed())
+                pFocusWindow->KeyUp(pLOKEv->maKeyEvent);
             break;
         case VclEventId::WindowMouseButtonDown:
             pLOKEv->mpWindow->LogicMouseButtonDown(pLOKEv->maMouseEvent);
@@ -691,8 +696,6 @@ namespace
             assert(false);
             break;
         }
-
-        delete pLOKEv;
     }
 
     void postEventAsync(LOKAsyncEventData *pEvent)

@@ -312,7 +312,7 @@ void Window::EndTracking( TrackingEventFlags nFlags )
 
 bool Window::IsTracking() const
 {
-    return (ImplGetSVData()->mpWinData->mpTrackWin == this);
+    return mpWindowImpl && (ImplGetSVData()->mpWinData->mpTrackWin == this);
 }
 
 void Window::StartAutoScroll( StartAutoScrollFlags nFlags )
