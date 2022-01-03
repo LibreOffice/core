@@ -27,6 +27,7 @@ class SdrView;
 class SwView;
 class SwWrtShell;
 
+/// SfxShell subclass that is used while interacting with the editeng-based text of a shape.
 class SwDrawTextShell final : public SfxShell
 {
     SwView      &m_rView;
