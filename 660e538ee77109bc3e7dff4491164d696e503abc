@@ -16,6 +16,23 @@
       "message": "Likely the formula id not recalculated in the test?\nBut anyway, the test is already over-engineered. It would be better to test the assigned cell\u0027s format string, which would be independent on the current date.",
       "revId": "660e538ee77109bc3e7dff4491164d696e503abc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d928013_c3ec5122",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-03T08:25:09Z",
+      "side": 1,
+      "message": "f4ab9cf69c3b1e9f17fc3873f160ddebd5f812fb was supposed to address this, will try to change the test to check the format instead",
+      "revId": "660e538ee77109bc3e7dff4491164d696e503abc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
