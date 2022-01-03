@@ -338,6 +338,33 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
                 "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
                 "fmla", "val 66660");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testCameraRevolutionGrabBag)
+{
+    // Given a PPTX file that contains camera revolution (rotation around z axis) applied shapes
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "camera-rotation-revolution-nonwps.pptx";
+
+    // When saving that document:
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Then make sure the revolution is exported without a problem:
+    // First shape textbox:
+    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:scene3d/a:camera/a:rot", "rev", "5400000");
+
+    // Second shape rectangle:
+    assertXPath(pXmlDoc, "//p:sp[2]/p:spPr/a:scene3d/a:camera/a:rot", "rev", "18300000");
+
+    // Make sure Shape3DProperties don't leak under txBody
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // - In <>, XPath '//p:sp[1]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot' number of nodes is incorrect
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", 0);
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", 0);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
