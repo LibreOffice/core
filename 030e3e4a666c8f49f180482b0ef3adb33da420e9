@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cb263d2_223659d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-01-03T10:18:32Z",
+      "side": 1,
+      "message": "Hmm, except that Svante\u0027s version seems to break CppunitTest_sw_xhtmlexport.",
+      "revId": "030e3e4a666c8f49f180482b0ef3adb33da420e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
