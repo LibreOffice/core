@@ -763,7 +763,8 @@ Reference< XShape > const & Shape::createAndInsert(
     }
 
     bool bNoTranslation = !aParentTransformation.isIdentity();
-    if( mbFlipH || mbFlipV || mnRotation != 0 || bNoTranslation )
+    const sal_Int32 nCameraRotation = get3DProperties().maCameraRotation.mnRevolution.get(0);
+    if( mbFlipH || mbFlipV || mnRotation != 0 || nCameraRotation != 0 || bNoTranslation )
     {
         // calculate object's center
         basegfx::B2DPoint aCenter(0.5, 0.5);
@@ -799,7 +800,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 }
             }
             // rotate around object's center
-            aTransformation.rotate(basegfx::deg2rad(static_cast<double>(mnRotation) / 60000.0));
+            aTransformation.rotate(basegfx::deg2rad(static_cast<double>(mnRotation - nCameraRotation) / 60000.0));
         }
 
         // move object back from center
@@ -1458,8 +1459,6 @@ Reference< XShape > const & Shape::createAndInsert(
             getTextBody()->getTextProperties().pushVertSimulation();
 
         // tdf#133037: a bit hackish: force Shape to rotate in the opposite direction the camera would rotate
-        const sal_Int32 nCameraRotation = get3DProperties().maCameraRotation.mnRevolution.get(0);
-
         PropertySet aPropertySet(mxShape);
         if ( !bUseRotationTransform && (mnRotation != 0 || nCameraRotation != 0) )
         {
