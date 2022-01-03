@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69c97b8a_39f3ca53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-03T07:05:46Z",
+      "side": 1,
+      "message": "Likely the formula id not recalculated in the test?\nBut anyway, the test is already over-engineered. It would be better to test the assigned cell\u0027s format string, which would be independent on the current date.",
+      "revId": "660e538ee77109bc3e7dff4491164d696e503abc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
