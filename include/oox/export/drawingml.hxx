@@ -323,7 +323,9 @@ public:
     void WriteShapeStyle( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffect( std::u16string_view sName, const css::uno::Sequence< css::beans::PropertyValue >& aEffectProps );
-    void WriteShape3DEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    void WriteText3DEffects(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+    void WriteShape3DEffects(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+    void Write3DEffects(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet, std::u16string_view s3DEffectPropsName);
     void WriteArtisticEffect( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
     void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId);
