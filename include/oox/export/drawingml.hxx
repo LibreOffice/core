@@ -312,8 +312,17 @@ public:
     void WriteFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
     void WriteShapeStyle( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+<<<<<<< HEAD   (5f25ea Set the original size in crop dialog to preferred DPI calc. )
     void WriteShapeEffect( const OUString& sName, const css::uno::Sequence< css::beans::PropertyValue >& aEffectProps );
     void WriteShape3DEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+=======
+    void WriteShapeEffect( std::u16string_view sName, const css::uno::Sequence< css::beans::PropertyValue >& aEffectProps );
+    /** Populates scene3d tag
+        @param rXPropSet Prop set
+        @param bIsText True if the 3D effects are for a text body, false if it is for a shape
+     */
+    void Write3DEffects(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet, bool bIsText);
+>>>>>>> CHANGE (8bdd13 tdf#146534 pptx import: make Z rotation work with rotation t)
     void WriteArtisticEffect( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
     void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId);

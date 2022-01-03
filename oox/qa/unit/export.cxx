@@ -150,6 +150,264 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
     assertXPath(pXmlDoc, "//wpg:grpSpPr/a:xfrm/a:chExt", "cx", "5328360");
     assertXPath(pXmlDoc, "//wps:spPr/a:xfrm/a:ext", "cx", "5328360");
 }
+<<<<<<< HEAD   (5f25ea Set the original size in crop dialog to preferred DPI calc. )
+=======
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
+{
+    // Given a document with a few different kinds of arrow shapes in it:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf142602_CustomShapeArrows.odt";
+    // When saving that to DOCX:
+    loadAndSave(aURL, "Office Open XML Text");
+
+    // Then the shapes should retain their correct control values.
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+
+    // Without the fix the output OOXML would have no <a:prstGeom> tags in it.
+
+    // Right arrow
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "rightArrow");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 50000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 46321");
+
+    // Left arrow
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "leftArrow");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 50000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 52939");
+
+    // Down arrow
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "downArrow");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 50000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 59399");
+
+    // Up arrow
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "upArrow");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 50000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 63885");
+
+    // Left-right arrow
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "leftRightArrow");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 50000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 53522");
+
+    // Up-down arrow
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "upDownArrow");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 50000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 62743");
+
+    // Right arrow callout
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "rightArrowCallout");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 25002");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 25000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]",
+                "fmla", "val 25052");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
+                "fmla", "val 66667");
+
+    // Left arrow callout
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "leftArrowCallout");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 25002");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 25000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]",
+                "fmla", "val 25057");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
+                "fmla", "val 66673");
+
+    // Down arrow callout
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "downArrowCallout");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 29415");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 29413");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]",
+                "fmla", "val 16667");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
+                "fmla", "val 66667");
+
+    // Up arrow callout
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "upArrowCallout");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 31033");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 31030");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]",
+                "fmla", "val 16667");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
+                "fmla", "val 66660");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCameraRevolutionGrabBag)
+{
+    // Given a PPTX file that contains camera revolution (rotation around z axis) applied shapes
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "camera-rotation-revolution-nonwps.pptx";
+
+    // When saving that document:
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Then make sure the revolution is exported without a problem:
+    // First shape textbox:
+    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:scene3d/a:camera/a:rot", "rev", "5400000");
+
+    // Second shape rectangle:
+    assertXPath(pXmlDoc, "//p:sp[2]/p:spPr/a:scene3d/a:camera/a:rot", "rev", "18300000");
+
+    // Make sure Shape3DProperties don't leak under txBody
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // - In <>, XPath '//p:sp[1]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot' number of nodes is incorrect
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", 0);
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
+{
+    // Given a PPTX file that contains references to a theme:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "refer-to-theme.pptx";
+
+    // When saving that document:
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Then make sure the shape text color is a scheme color:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr' number of nodes is incorrect
+    // i.e. the <a:schemeClr> element was not written.
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr", "val",
+                "accent1");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumMod", 0);
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumOff", 0);
+
+    // Second shape: lighter color:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr' number of nodes is incorrect
+    // i.e. the effects case did not write scheme colors.
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr", "val",
+                "accent1");
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumMod", "val",
+                "40000");
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumOff", "val",
+                "60000");
+
+    // Third shape, darker color:
+    assertXPath(pXmlDoc, "//p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr", "val",
+                "accent1");
+    assertXPath(pXmlDoc, "//p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumMod", "val",
+                "75000");
+    assertXPath(pXmlDoc, "//p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumOff", 0);
+}
+>>>>>>> CHANGE (8bdd13 tdf#146534 pptx import: make Z rotation work with rotation t)
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
