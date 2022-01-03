@@ -78,8 +78,8 @@ void CandleStickChart::createShapes()
     if( m_nDimension!=2 )
         return;
 
-    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"CandleStickChart is not proper initialized");
-    if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
+    OSL_ENSURE(m_xLogicTarget.is()&&m_xFinalTarget.is(),"CandleStickChart is not proper initialized");
+    if(!(m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
     //the text labels should be always on top of the other series shapes

@@ -28,23 +28,19 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 PlotterBase::PlotterBase( sal_Int32 nDimensionCount )
-        : m_pShapeFactory(nullptr)
-        , m_nDimension(nDimensionCount)
+        : m_nDimension(nDimensionCount)
         , m_pPosHelper(nullptr)
 {
 }
 
 void PlotterBase::initPlotter(  const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget
        , const rtl::Reference<SvxShapeGroupAnyD>& xFinalTarget
-       , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
        , const OUString& rCID )
 {
-    OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
+    OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is(),"no proper initialization parameters");
     //is only allowed to be called once
     m_xLogicTarget  = xLogicTarget;
     m_xFinalTarget  = xFinalTarget;
-    m_xShapeFactory = xShapeFactory;
-    m_pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
     m_aCID = rCID;
 }
 
@@ -76,9 +72,6 @@ rtl::Reference<SvxShapeGroupAnyD> PlotterBase::createGroupShape(
             const rtl::Reference<SvxShapeGroupAnyD>& xTarget
             , const OUString& rName )
 {
-    if(!m_xShapeFactory.is())
-        return nullptr;
-
     if(m_nDimension==2)
     {
         //create and add to target

@@ -821,7 +821,6 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
 
 std::vector<std::shared_ptr<VButton>> lcl_createButtons(
                        rtl::Reference<SvxShapeGroupAnyD> const & xLegendContainer,
-                       uno::Reference<lang::XMultiServiceFactory> const & xShapeFactory,
                        ChartModel& rModel, bool bPlaceButtonsVertically, tools::Long & nUsedHeight)
 {
     std::vector<std::shared_ptr<VButton>> aButtons;
@@ -842,7 +841,7 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
     {
         auto pButton = std::make_shared<VButton>();
         aButtons.push_back(pButton);
-        pButton->init(xLegendContainer, xShapeFactory);
+        pButton->init(xLegendContainer);
         awt::Point aNewPosition(x, y);
         pButton->setLabel(sColumnFieldEntry.Name);
         pButton->setCID("FieldButton.Column." + OUString::number(sColumnFieldEntry.DimensionIndex));
@@ -876,10 +875,8 @@ VLegend::VLegend(
     const Reference< uno::XComponentContext > & xContext,
     std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
     const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
-    const Reference< lang::XMultiServiceFactory >& xFactory,
     ChartModel& rModel )
         : m_xTarget(xTargetPage)
-        , m_xShapeFactory(xFactory)
         , m_xLegend(xLegend)
         , mrModel(rModel)
         , m_xContext(xContext)
@@ -917,9 +914,7 @@ void VLegend::createShapes(
     const awt::Size & rPageSize,
     awt::Size & rDefaultLegendSize )
 {
-    if(! (m_xLegend.is() &&
-          m_xShapeFactory.is() &&
-          m_xTarget.is()))
+    if(! (m_xLegend.is() && m_xTarget.is()))
         return;
 
     try
@@ -993,7 +988,7 @@ void VLegend::createShapes(
                 {
                     std::vector<ViewLegendEntry> aNewEntries = pLegendEntryProvider->createLegendEntries(
                                                                     aMaxSymbolExtent, eLegendPosition, xLegendProp,
-                                                                    xLegendContainer, m_xShapeFactory, m_xContext, mrModel);
+                                                                    xLegendContainer, m_xContext, mrModel);
                     aViewEntries.insert( aViewEntries.end(), aNewEntries.begin(), aNewEntries.end() );
                 }
             }
@@ -1011,7 +1006,7 @@ void VLegend::createShapes(
                                                 eLegendPosition != LegendPosition_PAGE_END &&
                                                 eExpansion != css::chart::ChartLegendExpansion_WIDE);
 
-                std::vector<std::shared_ptr<VButton>> aButtons = lcl_createButtons(xLegendContainer, m_xShapeFactory, mrModel, bPlaceButtonsVertically, nUsedButtonHeight);
+                std::vector<std::shared_ptr<VButton>> aButtons = lcl_createButtons(xLegendContainer, mrModel, bPlaceButtonsVertically, nUsedButtonHeight);
 
                 // A custom size includes the size we used for buttons already, so we need to
                 // subtract that from the size that is available for the legend

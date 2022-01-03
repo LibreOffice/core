@@ -217,8 +217,8 @@ void VPolarGrid::create2DRadiusGrid( const rtl::Reference<SvxShapeGroupAnyD>& xL
 
 void VPolarGrid::createShapes()
 {
-    OSL_PRECOND(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
-    if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
+    OSL_PRECOND(m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
+    if(!(m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
     if(!m_aGridPropertiesList.hasElements())
         return;

@@ -2363,7 +2363,6 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
             , LegendPosition eLegendPosition
             , const Reference< beans::XPropertySet >& xTextProperties
             , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-            , const Reference< lang::XMultiServiceFactory >& xShapeFactory
             , const Reference< uno::XComponentContext >& xContext
             , ChartModel& rModel
             )
@@ -2407,7 +2406,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
                     std::vector<ViewLegendEntry> aSeriesEntries(
                             createLegendEntriesForSeries(
                                         rEntryKeyAspectRatio, *pSeries, xTextProperties,
-                                        xTarget, xShapeFactory, xContext));
+                                        xTarget, xContext));
 
                     //add series entries to the result now
 
@@ -2640,13 +2639,12 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             , const VDataSeries& rSeries
             , const Reference< beans::XPropertySet >& xTextProperties
             , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-            , const Reference< lang::XMultiServiceFactory >& xShapeFactory
             , const Reference< uno::XComponentContext >& xContext
             )
 {
     std::vector< ViewLegendEntry > aResult;
 
-    if( ! ( xShapeFactory.is() && xTarget.is() && xContext.is() ) )
+    if( ! ( xTarget.is() && xContext.is() ) )
         return aResult;
 
     try
