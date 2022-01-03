@@ -51,6 +51,24 @@
       "parentUuid": "b6a0c286_d18cbf96",
       "revId": "f47f55da1eed53e0744ec23116ee320d0b724d71",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cea3fdb_116e1f68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-03T08:21:07Z",
+      "side": 1,
+      "message": "The question is whether old 3rd-party code that expected the non-inline ctor to be provided by the cppuhelper DLL continues to find an implementation of it.  Given that the MSVC ABI makes sure (I think) to export implementations also of inline functions, there might be a chance that the cppuhelper DLL is guaranteed to continue to emit it (esp. since the non-inline, virtual dtor is implemented in an object file in that DLL, so might be the trigger to emit implementations of all the class\u0027s inline functions in the same object file, too).  But I\u0027m not too familiar with that ABI, so can\u0027t tell for sure.",
+      "parentUuid": "40932a4e_3898c9e1",
+      "revId": "f47f55da1eed53e0744ec23116ee320d0b724d71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
