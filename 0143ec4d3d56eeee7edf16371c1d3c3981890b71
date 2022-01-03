@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f8a46d6_d9bdfd78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-01-03T11:21:07Z",
+      "side": 1,
+      "message": "License statement is fine - if we could get an E-mail notification out of bugzilla with his message in it and forward it to the dev list with a helpful License: header on it so Christian can find and archive it easily that would be most helpful.\n\nThanks to all for shepherding this in.",
+      "revId": "0143ec4d3d56eeee7edf16371c1d3c3981890b71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
