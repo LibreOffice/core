@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ccd7dbb_88592e33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-01-03T15:00:58Z",
+      "side": 1,
+      "message": "Unless somebody screams loudly, I will commit my patch once it passes CI. This is the master branch after all.",
+      "revId": "6e54ea6cd505760da65c71b44579f96b611fc2af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
