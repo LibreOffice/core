@@ -101,6 +101,23 @@
       "message": "It seems that for instance when commit 36c3db0ab81187830adf2443dd6b9d8efef6faee in LibreOffice was applied, part of the changes in the corresponding commit in odf-tc, 4779c4ff21ceb8bdae5a9883d69f1b174c67065c, were left out for some reason.\n",
       "revId": "48493ec67f9719203053d633900e8555fde0b125",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0bebf83_99284909",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-01-03T09:33:23Z",
+      "side": 1,
+      "message": "And on the other hand, commit 0777abafe01eb6c9ba6ed7412e44002c8018d972 in LibreOffice was not back/forward/side-ported to odf-tc. Should it have been?",
+      "revId": "48493ec67f9719203053d633900e8555fde0b125",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
