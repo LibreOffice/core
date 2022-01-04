@@ -58,8 +58,6 @@
 
 using namespace ::com::sun::star;
 
-const sal_Int32 InitialObjectContainerCapacity (64);
-
 //////////////////////////////////////////////////////////////////////////////
 
 SdrObjList::SdrObjList()
@@ -67,7 +65,6 @@ SdrObjList::SdrObjList()
     mbRectsDirty(false),
     mbIsNavigationOrderDirty(false)
 {
-    maList.reserve(InitialObjectContainerCapacity);
 }
 
 void SdrObjList::impClearSdrObjList(bool bBroadcast)
@@ -641,7 +638,7 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
     // example maList [T T S T T] ( T T = shape with textbox, S = just a shape )
     // (shapes at positions 0 and 2 have a textbox)
 
-    std::vector<SdrObject*> aNewList(maList.size());
+    std::deque<SdrObject*> aNewList(maList.size());
     std::set<sal_Int32> aShapesWithTextbox;
     std::vector<sal_Int32> aIncrements;
     std::vector<sal_Int32> aDuplicates;
