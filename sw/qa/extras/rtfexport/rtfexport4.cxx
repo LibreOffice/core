@@ -218,6 +218,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTabStopFillChars)
     CPPUNIT_ASSERT_EQUAL(u' ', aTabstops[0].FillChar);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf146489, "tdf146489.rtf")
+{
+    // a hand-edited minimized document. Acts a bit strange in Word 2016, but shows desired result
+    uno::Reference<text::XTextRange> xPara = getParagraph(3, "unnumbered");
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
 DECLARE_RTFEXPORT_TEST(testCjklist38, "cjklist38.rtf")
 {
     sal_Int16 numFormat = getNumberingTypeOfParagraph(1);
