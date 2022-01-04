@@ -1207,7 +1207,7 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pP
         {
             case PresObjKind::NONE:
             {
-                if (pObject->GetObjIdentifier() == OBJ_GRUP)
+                if (pObject->GetObjIdentifier() == OBJ_GROUP)
                 {
                     SdrObjGroup* pObjectGroup = static_cast<SdrObjGroup*>(pObject);
                     WriteObjectGroup(aStr, pObjectGroup, pOutliner, rBackgroundColor, false);
@@ -1286,7 +1286,7 @@ void HtmlExport::WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup const * pObj
     while (aGroupIterator.IsMore())
     {
         SdrObject* pCurrentObject = aGroupIterator.Next();
-        if (pCurrentObject->GetObjIdentifier() == OBJ_GRUP)
+        if (pCurrentObject->GetObjIdentifier() == OBJ_GROUP)
         {
             SdrObjGroup* pCurrentGroupObject = static_cast<SdrObjGroup*>(pCurrentObject);
             WriteObjectGroup(aStr, pCurrentGroupObject, pOutliner, rBackgroundColor, bHeadLine);

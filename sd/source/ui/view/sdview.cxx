@@ -953,7 +953,7 @@ bool View::IsMorphingAllowed() const
         if ( ( nKind1 != OBJ_TEXT && nKind2 != OBJ_TEXT ) &&
              ( nKind1 != OBJ_TITLETEXT && nKind2 != OBJ_TITLETEXT ) &&
              ( nKind1 != OBJ_OUTLINETEXT && nKind2 != OBJ_OUTLINETEXT ) &&
-             ( nKind1 != OBJ_GRUP && nKind2 != OBJ_GRUP ) &&
+             ( nKind1 != OBJ_GROUP && nKind2 != OBJ_GROUP ) &&
              ( nKind1 != OBJ_LINE && nKind2 != OBJ_LINE ) &&
              ( nKind1 != OBJ_PLIN && nKind2 != OBJ_PLIN ) &&
              ( nKind1 != OBJ_PATHLINE && nKind2 != OBJ_PATHLINE ) &&

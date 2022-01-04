@@ -484,7 +484,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                         sal_uInt32 nObjId = pO->GetObjIdentifier();
                         switch( nObjId )
                         {
-                            case OBJ_GRUP :
+                            case OBJ_GROUP :
                             case OBJ_GRAF :
                             case OBJ_RECT :
                             case OBJ_TEXT :

@@ -357,7 +357,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                         case OBJ_CARC:
                         case OBJ_CCUT: bDrawObj = true; break;
 
-                        case OBJ_GRUP: bGroup = true; break;
+                        case OBJ_GROUP: bGroup = true; break;
 
                         case OBJ_GRAF: break;
 

@@ -24,7 +24,7 @@
 enum SdrObjKind
 {
     OBJ_NONE = 0, /// abstract object (SdrObject)
-    OBJ_GRUP = 1, /// object group
+    OBJ_GROUP = 1, /// object group
     OBJ_LINE = 2, /// line
     OBJ_RECT = 3, /// rectangle (round corners optional)
     OBJ_CIRC = 4, /// circle, ellipse

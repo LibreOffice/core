@@ -831,7 +831,7 @@ const UHashMapImpl& GetUHashImpl()
             { "com.sun.star.drawing.PolyPolygonPathShape", OBJ_PATHPOLY },
             { "com.sun.star.drawing.PolyLinePathShape",    OBJ_PATHPLIN },
             { "com.sun.star.drawing.GraphicObjectShape",   OBJ_GRAF },
-            { "com.sun.star.drawing.GroupShape",           OBJ_GRUP },
+            { "com.sun.star.drawing.GroupShape",           OBJ_GROUP },
             { "com.sun.star.drawing.TextShape",            OBJ_TEXT },
             { "com.sun.star.drawing.OLE2Shape",            OBJ_OLE2 },
             { "com.sun.star.drawing.PageShape",            OBJ_PAGE },

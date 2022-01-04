@@ -882,7 +882,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage const * pPage)
             // Found a text object
             mpOnlineSpellingList->addShape(*pObj);
         }
-        else if (pObj->GetObjIdentifier() == OBJ_GRUP)
+        else if (pObj->GetObjIdentifier() == OBJ_GROUP)
         {
             // Found a group object
             SdrObjListIter aGroupIter(static_cast< SdrObjGroup* >(pObj)->GetSubList(), SdrIterMode::DeepNoGroups);
@@ -922,7 +922,7 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl, Timer *, void)
                 // Spell text object
                 SpellObject(static_cast<SdrTextObj*>(pObj));
             }
-            else if (pObj->GetObjIdentifier() == OBJ_GRUP)
+            else if (pObj->GetObjIdentifier() == OBJ_GROUP)
             {
                 // Found a group object
                 SdrObjListIter aGroupIter(static_cast< SdrObjGroup* >(pObj)->GetSubList(), SdrIterMode::DeepNoGroups);
@@ -1013,7 +1013,7 @@ void SdDrawDocument::InsertObject(SdrObject* pObj)
 {
     if(mpOnlineSpellingList && pObj)
     {
-        if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == OBJ_GRUP))
+        if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == OBJ_GROUP))
         {
             // Add object to OnlineSpelling list
             mpOnlineSpellingList->addShape(*pObj);
@@ -1026,7 +1026,7 @@ void SdDrawDocument::RemoveObject(SdrObject* pObj)
 {
     if(mpOnlineSpellingList && pObj)
     {
-        if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == OBJ_GRUP))
+        if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == OBJ_GROUP))
         {
             // Replace object in OnlineSpelling list by 0 pointer
             mpOnlineSpellingList->removeShape(*pObj);

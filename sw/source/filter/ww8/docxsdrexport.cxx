@@ -144,7 +144,7 @@ bool lcl_IsRotateAngleValid(const SdrObject& rObj)
     // have been incorporated.
     switch (rObj.GetObjIdentifier())
     {
-        case OBJ_GRUP:
+        case OBJ_GROUP:
         case OBJ_LINE:
         case OBJ_PLIN:
         case OBJ_PATHLINE:

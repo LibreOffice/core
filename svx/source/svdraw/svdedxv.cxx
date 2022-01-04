@@ -2605,7 +2605,7 @@ bool SdrObjEditView::SupportsFormatPaintbrush(SdrInventor nObjectInventor,
     switch (nObjectIdentifier)
     {
         case OBJ_NONE:
-        case OBJ_GRUP:
+        case OBJ_GROUP:
             return false;
         case OBJ_LINE:
         case OBJ_RECT:

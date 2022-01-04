@@ -4220,7 +4220,7 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
                             bool bMark = pDrawView->IsObjMarked(pTemp);
                             switch( pTemp->GetObjIdentifier() )
                             {
-                                case OBJ_GRUP:
+                                case OBJ_GROUP:
                                 case OBJ_TEXT:
                                 case OBJ_LINE:
                                 case OBJ_RECT:

@@ -666,7 +666,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                         SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                         { &aItem });
             }
-            else if (nInv == SdrInventor::Default &&  nSdrObjKind == OBJ_GRUP)
+            else if (nInv == SdrInventor::Default &&  nSdrObjKind == OBJ_GROUP)
             {
                 // hit group -> select subobject
                 mpView->UnMarkAll();
