@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2de2bba_38ef8da4",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_general.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-01-04T08:38:50Z",
+      "side": 1,
+      "message": "And MYSQL_TYPE_(TINY|MEDIUM)_BLOB?",
+      "revId": "05a0eab476f1ba28b1f94bcedbf5b5ffd37f9bbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
