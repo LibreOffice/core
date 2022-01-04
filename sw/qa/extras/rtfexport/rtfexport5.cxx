@@ -69,14 +69,6 @@ public:
     }
 
 protected:
-    /// Denylist handling.
-    bool mustTestImportOf(const char* filename) const override
-    {
-        // If the testcase is stored in some other format, it's pointless to
-        // test.
-        return OString(filename).endsWith(".rtf");
-    }
-
     AllSettings m_aSavedSettings;
 };
 
@@ -1172,8 +1164,9 @@ DECLARE_RTFEXPORT_TEST(testTdf106950, "tdf106950.rtf")
         static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf116371, "tdf116371.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf116371)
 {
+    loadAndReload("tdf116371.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto xShape(getShape(1));
@@ -1218,8 +1211,9 @@ DECLARE_RTFEXPORT_TEST(testTdf133437, "tdf133437.rtf")
     }
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf128320, "tdf128320.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf128320)
 {
+    loadAndReload("tdf128320.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Shape does exist in RTF output
@@ -1264,8 +1258,9 @@ DECLARE_RTFEXPORT_TEST(testTdf138210, "tdf138210.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf137894, "tdf137894.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf137894)
 {
+    loadAndReload("tdf137894.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     lang::Locale locale1(getProperty<lang::Locale>(getRun(getParagraph(1), 1), "CharLocaleAsian"));
     CPPUNIT_ASSERT_EQUAL(OUString("ja"), locale1.Language);
@@ -1281,14 +1276,16 @@ DECLARE_RTFEXPORT_TEST(testTdf137894, "tdf137894.odt")
     CPPUNIT_ASSERT_EQUAL(32.f, getProperty<float>(getRun(getParagraph(2), 1), "CharHeightComplex"));
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf138779, "tdf138779.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf138779)
 {
+    loadAndReload("tdf138779.docx");
     // The text "2. Kozuka Mincho Pro, 8 pt Ruby ..." has font size 11pt ( was 20pt ).
     CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(getRun(getParagraph(2), 14), "CharHeight"));
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf144437, "tdf144437.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf144437)
 {
+    loadAndReload("tdf144437.odt");
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     OString aRtfContent(read_uInt8s_ToOString(*pStream, pStream->TellEnd()));
