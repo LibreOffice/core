@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "977a01c2_27799f67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-01-04T12:40:35Z",
+      "side": 1,
+      "message": "Some bogus Jenkins failures seem to be coming, let\u0027s ignore those.",
+      "revId": "46c821bb6240f5e083b96cdb07801a35a5abf6c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
