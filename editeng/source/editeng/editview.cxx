@@ -195,20 +195,30 @@ tools::Rectangle EditView::GetInvalidateRect() const
     }
 }
 
+namespace {
+
+tools::Rectangle lcl_negateRectX(const tools::Rectangle& rRect)
+{
+    return tools::Rectangle(-rRect.Right(), rRect.Top(), -rRect.Left(), rRect.Bottom());
+}
+
+}
+
 void EditView::InvalidateWindow(const tools::Rectangle& rClipRect)
 {
+    bool bNegativeX = IsNegativeX();
     if (EditViewCallbacks* pEditViewCallbacks = pImpEditView->getEditViewCallbacks())
     {
         // do not invalidate and trigger a global repaint, but forward
         // the need for change to the applied EditViewCallback, can e.g.
         // be used to visualize the active edit text in an OverlayObject
-        pEditViewCallbacks->EditViewInvalidate(rClipRect);
+        pEditViewCallbacks->EditViewInvalidate(bNegativeX ? lcl_negateRectX(rClipRect) : rClipRect);
     }
     else
     {
         // classic mode: invalidate and trigger full repaint
         // of the changed area
-        GetWindow()->Invalidate(rClipRect);
+        GetWindow()->Invalidate(bNegativeX ? lcl_negateRectX(rClipRect) : rClipRect);
     }
 }
 
@@ -216,10 +226,11 @@ void EditView::InvalidateOtherViewWindows( const tools::Rectangle& rInvRect )
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
+        bool bNegativeX = IsNegativeX();
         for (auto& pWin : pImpEditView->aOutWindowSet)
         {
             if (pWin)
-                pWin->Invalidate( rInvRect );
+                pWin->Invalidate( bNegativeX ? lcl_negateRectX(rInvRect) : rInvRect );
         }
     }
 }
@@ -1676,6 +1687,16 @@ void EditView::SuppressLOKMessages(bool bSet)
 bool EditView::IsSuppressLOKMessages() const
 {
     return pImpEditView->IsSuppressLOKMessages();
+}
+
+void EditView::SetNegativeX(bool bSet)
+{
+    pImpEditView->SetNegativeX(bSet);
+}
+
+bool EditView::IsNegativeX() const
+{
+    return pImpEditView->IsNegativeX();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
