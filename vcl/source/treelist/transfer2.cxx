@@ -486,11 +486,16 @@ Reference<XClipboard> GetSystemClipboard()
     Reference<XClipboard> xClipboard;
     try
     {
+#ifdef IOS
+        if (false)
+            ;
+#else
         if (comphelper::LibreOfficeKit::isActive())
         {
             xClipboard = css::datatransfer::clipboard::LokClipboard::create(
                     comphelper::getProcessComponentContext());
         }
+#endif
         else
         {
             xClipboard = css::datatransfer::clipboard::SystemClipboard::create(
