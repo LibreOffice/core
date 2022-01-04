@@ -33,6 +33,23 @@
       "message": "GCC is 11.1.0 and Clang is 13.0.0",
       "revId": "be446d81e07b5499152efeca6ca23034e51ea5ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9122f042_ec841fec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-04T11:02:38Z",
+      "side": 1,
+      "message": "you have --enable-pch\u003dfull which is probably the problem. See https://gerrit.libreoffice.org/c/core/+/127744",
+      "revId": "be446d81e07b5499152efeca6ca23034e51ea5ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
