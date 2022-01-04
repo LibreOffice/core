@@ -137,8 +137,15 @@ void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
         if( dynamic_cast<const SdrOle2Obj*>( pObject) )
         {
             vcl::Window* pWin = GetViewData().GetActiveWin();
+            css::uno::Reference<css::lang::XComponent> xComponent;
+            const SfxObjectShell* pShell = GetObjectShell();
+            if (pShell)
+            {
+                xComponent = pShell->GetModel();
+            }
             Reference< drawing::XShape > xSourceDoc( pObject->getUnoShape() );
-            GraphicHelper::SaveShapeAsGraphic(pWin ? pWin->GetFrameWeld() : nullptr, xSourceDoc);
+            GraphicHelper::SaveShapeAsGraphic(pWin ? pWin->GetFrameWeld() : nullptr, xComponent,
+                                              xSourceDoc);
         }
     }
 

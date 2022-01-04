@@ -47,8 +47,12 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 
 #include <map>
+
+#include <sfx2/objsh.hxx>
+#include <unotools/streamwrap.hxx>
 
 using namespace css::uno;
 using namespace css::lang;
@@ -365,7 +369,60 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
     return OUString();
 }
 
-void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,  const Reference< drawing::XShape >& xShape)
+void GraphicHelper::SaveShapeAsGraphicToPath(
+    const css::uno::Reference<css::lang::XComponent>& xComponent,
+    const css::uno::Reference<css::drawing::XShape>& xShape, const OUString& aExportMimeType,
+    const OUString& sPath)
+{
+    Reference<XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    Reference<XInputStream> xGraphStream;
+
+    if (xGraphStream.is())
+    {
+        Reference<XSimpleFileAccess3> xFileAccess = SimpleFileAccess::create(xContext);
+        xFileAccess->writeFile(sPath, xGraphStream);
+    }
+    else if (xComponent.is() && aExportMimeType == "application/pdf")
+    {
+        css::uno::Reference<css::lang::XMultiServiceFactory> xMSF(xContext->getServiceManager(),
+                                                                  css::uno::UNO_QUERY);
+        css::uno::Reference<css::document::XExporter> xExporter(
+            xMSF->createInstance("com.sun.star.comp.PDF.PDFFilter"), css::uno::UNO_QUERY);
+        xExporter->setSourceDocument(xComponent);
+
+        css::uno::Reference<css::drawing::XShapes> xShapes
+            = css::drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
+        xShapes->add(xShape);
+        css::uno::Sequence<PropertyValue> aFilterData{
+            comphelper::makePropertyValue("Selection", xShapes),
+        };
+        SvFileStream aStream(sPath, StreamMode::READWRITE | StreamMode::TRUNC);
+        css::uno::Reference<css::io::XOutputStream> xStream(new utl::OStreamWrapper(aStream));
+        css::uno::Sequence<PropertyValue> aDescriptor{
+            comphelper::makePropertyValue("FilterData", aFilterData),
+            comphelper::makePropertyValue("OutputStream", xStream)
+        };
+        css::uno::Reference<css::document::XFilter> xFilter(xExporter, css::uno::UNO_QUERY);
+        xFilter->filter(aDescriptor);
+    }
+    else
+    {
+        Reference<css::drawing::XGraphicExportFilter> xGraphicExporter
+            = css::drawing::GraphicExportFilter::create(xContext);
+
+        Sequence<PropertyValue> aDescriptor{ comphelper::makePropertyValue("MediaType",
+                                                                           aExportMimeType),
+                                             comphelper::makePropertyValue("URL", sPath) };
+
+        Reference<XComponent> xSourceDocument(xShape, UNO_QUERY_THROW);
+        xGraphicExporter->setSourceDocument(xSourceDocument);
+        xGraphicExporter->filter(aDescriptor);
+    }
+}
+
+void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,
+                                       const css::uno::Reference<css::lang::XComponent>& xComponent,
+                                       const Reference<drawing::XShape>& xShape)
 {
     try
     {
@@ -406,26 +463,7 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,  const Reference< 
             OUString sPath( xFilePicker->getFiles().getConstArray()[0] );
             OUString aExportMimeType( aMimeTypeMap[xFilePicker->getCurrentFilter()] );
 
-            Reference< XInputStream > xGraphStream;
-
-            if( xGraphStream.is() )
-            {
-                Reference<XSimpleFileAccess3> xFileAccess = SimpleFileAccess::create( xContext );
-                xFileAccess->writeFile( sPath, xGraphStream );
-            }
-            else
-            {
-                Reference<css::drawing::XGraphicExportFilter> xGraphicExporter = css::drawing::GraphicExportFilter::create( xContext );
-
-                Sequence<PropertyValue> aDescriptor{
-                    comphelper::makePropertyValue("MediaType", aExportMimeType),
-                    comphelper::makePropertyValue("URL", sPath)
-                };
-
-                Reference< XComponent > xSourceDocument( xShape, UNO_QUERY_THROW );
-                xGraphicExporter->setSourceDocument( xSourceDocument );
-                xGraphicExporter->filter( aDescriptor );
-            }
+            GraphicHelper::SaveShapeAsGraphicToPath(xComponent, xShape, aExportMimeType, sPath);
         }
     }
     catch( Exception& )

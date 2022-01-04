@@ -24,6 +24,10 @@
 #include <svx/svxdllapi.h>
 
 namespace com::sun::star::drawing { class XShape; }
+namespace com::sun::star::lang
+{
+class XComponent;
+}
 namespace weld { class Widget; }
 namespace weld { class Window; }
 
@@ -34,7 +38,13 @@ public:
     static void GetPreferredExtension( OUString& rExtension, const Graphic& rGraphic );
     static OUString GetImageType(const Graphic& rGraphic);
     static OUString ExportGraphic(weld::Window* pWin, const Graphic& rGraphic, const OUString& rGraphicName);
-    static void SaveShapeAsGraphic(weld::Window* pWin, const css::uno::Reference< css::drawing::XShape >& xShape);
+    static void
+    SaveShapeAsGraphicToPath(const css::uno::Reference<css::lang::XComponent>& xComponent,
+                             const css::uno::Reference<css::drawing::XShape>& xShape,
+                             const OUString& rMimeType, const OUString& rPath);
+    static void SaveShapeAsGraphic(weld::Window* pWin,
+                                   const css::uno::Reference<css::lang::XComponent>& xComponent,
+                                   const css::uno::Reference<css::drawing::XShape>& xShape);
     static short HasToSaveTransformedImage(weld::Widget* pWin);
 };
 
