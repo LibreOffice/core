@@ -16,6 +16,24 @@
       "message": "Bisecting shows that this broke PythonTest_solenv_python (which is part of `make check`) for Linux --enable-mergelibs builds, in that executing that test (its solenv/qa/python/gbuildtojson.py part, which programmatically calls some `make gbuildtojson ...`) overwrites instdir/program/libmergedlo.so with instdir/program/libepoxy.so.  (A useful debugging aid is to apply\n\n  diff --git a/solenv/qa/python/gbuildtojson.py b/solenv/qa/python/gbuildtojson.py\n  index b54c901e9974..a7aa37d0f667 100644\n  --- a/solenv/qa/python/gbuildtojson.py\n  +++ b/solenv/qa/python/gbuildtojson.py\n  @@ -128,7 +128,7 @@ class CheckGbuildToJsonModules(unittest.TestCase):\n           if os.environ[\u0027OS\u0027] \u003d\u003d \u0027WNT\u0027:\n               # for now, use a limited subset for testing on windows as it is so annoyingly slow on this\n               modules \u003d [\u0027chart2\u0027, \u0027cui\u0027, \u0027dbaccess\u0027, \u0027framework\u0027, \u0027oox\u0027, \u0027sfx2\u0027, \u0027svl\u0027, \u0027svtools\u0027, \u0027svx\u0027, \u0027toolkit\u0027, \u0027vcl\u0027, \u0027xmloff\u0027]\n  -        for module in modules:\n  +        for module in [\u0027avmedia\u0027]:\n               shutil.rmtree(self.tempwork)\n               os.makedirs(os.path.join(self.tempwork, \u0027LinkTarget\u0027, \u0027Executable\u0027))\n               shutil.copy(self.gbuildtojson, os.path.join(self.tempwork, \u0027LinkTarget\u0027, \u0027Executable\u0027))\n  @@ -138,9 +138,9 @@ class CheckGbuildToJsonModules(unittest.TestCase):\n                                       # ignore Emacs lock (.#*), auto-save (#*), and backup (*~) files\n               (bashscripthandle, bashscriptname) \u003d tempfile.mkstemp(prefix\u003d\u0027gbuild\u0027)\n               bashscript \u003d os.fdopen(bashscripthandle, \u0027w\u0027, newline\u003d\u0027\\n\u0027)\n  -            bashscript.write(\"set -e\\n\")\n  +            bashscript.write(\"set -ex\\n\")\n               bashscript.write(\"cd %s/%s\\n\" % (self.tempsrc.replace(\u0027\\\\\u0027,\u0027/\u0027), module))\n  -            bashscript.write(\"%s gbuildtojson WORKDIR\u003d%s SRCDIR\u003d%s\\n\" % (self.make, self.tempwork.replace(\u0027\\\\\u0027, \u0027/\u0027), self.tempsrc.replace(\u0027\\\\\u0027,\u0027/\u0027)))\n  +            bashscript.write(\"%s -d gbuildtojson WORKDIR\u003d%s SRCDIR\u003d%s\\n\" % (self.make, self.tempwork.replace(\u0027\\\\\u0027, \u0027/\u0027), self.tempsrc.replace(\u0027\\\\\u0027,\u0027/\u0027)))\n               bashscript.close()\n               subprocess.check_call([self.bash, bashscriptname.replace(\u0027\\\\\u0027, \u0027/\u0027)])\n               os.remove(bashscriptname)\n\nrun `(cd solenv \u0026\u0026 make -r PythonTest_solenv_python)` and inspect workdir/PythonTest/solenv_python/done.log.)",
       "revId": "ecc50f56b3282ec3b0364101d860f22fe8da9042",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fd14c1c_a7081cd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-04T15:51:51Z",
+      "side": 1,
+      "message": "(and the overwriting happens via gb_Deliver_deliver defined in solenv/gbuild/Deliver.mk)",
+      "parentUuid": "cc7b1969_c25ae2e1",
+      "revId": "ecc50f56b3282ec3b0364101d860f22fe8da9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
