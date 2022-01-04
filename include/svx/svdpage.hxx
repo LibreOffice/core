@@ -34,6 +34,7 @@
 #include <memory>
 #include <optional>
 #include <vector>
+#include <deque>
 
 
 // predefines
@@ -225,7 +226,7 @@ public:
 private:
     tools::Rectangle    maSdrObjListOutRect;
     tools::Rectangle    maSdrObjListSnapRect;
-    std::vector<SdrObject*> maList;
+    std::deque<SdrObject*> maList;
     /// This list, if it exists, defines the navigation order. If it does
     /// not exist then maList defines the navigation order.
     std::optional<std::vector<tools::WeakReference<SdrObject>>> mxNavigationOrder;
