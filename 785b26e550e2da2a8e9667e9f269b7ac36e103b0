@@ -1,0 +1,455 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d134f7ce_01fd2ca7",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "This function is unnecessary, we already have MsLangId::isChinese(). That additionally also handles LANGUAGE_YUE_CHINESE_HONGKONG.",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ce9a95d_82e5c6b4",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "Also, when comparing primary values, comparing with all individual IDs\u0027 primary values is superfluous; any primary(LANGUAGE_CHINESE_...) results in the same primary value.\n\nPlease read the documentation in include/i18nlangtag/lang.h",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5cf88fc_f14134e1",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "I don\u0027t think this needs to be an extra function, a simple\n\n    primary(nLang).anyOf(\n        primary(LANGUAGE_KOREAN),\n        primary(LANGUAGE_USER_KOREAN_NORTH))\n\nwould do.",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "464effbe_9f69b7e6",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "Same here, just add primary(LANGUAGE_PASHTO) to an anyOf().",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08876593_50df29a7",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "And also for this.",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "541e248d_e50818ab",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "Also this function is unnecessary,\n\n    primary(nLang).anyOf(\n        ...\n        primary(LANGUAGE_ARABIC_SAUDI_ARABIA),\n        ...)\n\nwill match all Arabic locales.",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3048daa_426d0679",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "The function is called useHyphenation() but returns the opposite, true for to not use hyphenation and false for to use hyphenation. That should be logically negated.",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f63bed91_290e0585",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "Please have one blank between keywords (here if) and an opening parenthesis.\nAlso, separate operators like || with blanks from operands.",
+      "range": {
+        "startLine": 370,
+        "startChar": 4,
+        "endLine": 370,
+        "endChar": 7
+      },
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efa07bd8_6be267c8",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "isChineseLanguage(nLang) is unnecessary, it is already covered by isCJK(nLang).",
+      "range": {
+        "startLine": 370,
+        "startChar": 7,
+        "endLine": 370,
+        "endChar": 24
+      },
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e0c4b12_a19c8300",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "The extra isArabic() should be replaced with the anyOf() mentioned there.",
+      "range": {
+        "startLine": 371,
+        "startChar": 7,
+        "endLine": 371,
+        "endChar": 15
+      },
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a380cca8_2f9fbf78",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "isKorean() is superfluous, it\u0027s covered by isCJK().\nWe may want to add primary(LANGUAGE_USER_KOREAN_HONGKONG) there.",
+      "range": {
+        "startLine": 373,
+        "startChar": 7,
+        "endLine": 373,
+        "endChar": 15
+      },
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc69fab0_a66f9a06",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "See above, does not need extra functions.",
+      "range": {
+        "startLine": 374,
+        "startChar": 7,
+        "endLine": 375,
+        "endChar": 14
+      },
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02e62a93_4622c25b",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "return false instead.",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e31844b_3cec8255",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "return true instead.",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09f45fd5_924fd185",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "So to summarize, useHyphenation() should be\n\n    if (isCJK(nLang) ||\n        primary(nLang).anyOf(\n            primary(LANGUAGE_ARABIC_SAUDI_ARABIA),\n            primary(LANGUAGE_PASHTO),\n            primary(LANGUAGE_FARSI)))\n    {\n        return false;\n    }\n\n    return true;",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31fe933b_9807187d",
+        "filename": "include/i18nlangtag/mslangid.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "A function with an almost similar name and identical description is not really helpful.. but anyway, it is superfluous, see comments in mslangid.cxx",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e51a325_5b063adc",
+        "filename": "include/i18nlangtag/mslangid.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "All superfluous, see comments in mslangid.cxx",
+      "range": {
+        "startLine": 153,
+        "startChar": 4,
+        "endLine": 163,
+        "endChar": 45
+      },
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d594a32a_97b54ee1",
+        "filename": "include/i18nlangtag/mslangid.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "A function description would be helpful here.",
+      "range": {
+        "startLine": 165,
+        "startChar": 4,
+        "endLine": 165,
+        "endChar": 9
+      },
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e631fa51_24fc40d1",
+        "filename": "sw/source/core/text/inftxt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "Please remove this remnant of the previous implementation.",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "215b8682_ef41e874",
+        "filename": "sw/source/core/text/inftxt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "Please remove this remnant of the previous implementation.",
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9afd0fde_c083f19c",
+        "filename": "sw/source/core/text/inftxt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "Please do not remove the blank between if and ( opening parenthesis.",
+      "range": {
+        "startLine": 1451,
+        "startChar": 4,
+        "endLine": 1451,
+        "endChar": 7
+      },
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c4453b0_4c2b2945",
+        "filename": "sw/source/core/text/inftxt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "The return value here then should be negated (see comment in mslangid.cxx) to make things less confusing.",
+      "range": {
+        "startLine": 1451,
+        "startChar": 46,
+        "endLine": 1451,
+        "endChar": 76
+      },
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "248da2a2_f629c978",
+        "filename": "sw/source/core/text/inftxt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:45:19Z",
+      "side": 1,
+      "message": "Indentation should be kept at 4 spaces per level.",
+      "range": {
+        "startLine": 1452,
+        "startChar": 8,
+        "endLine": 1452,
+        "endChar": 9
+      },
+      "revId": "785b26e550e2da2a8e9667e9f269b7ac36e103b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
