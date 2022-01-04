@@ -50,6 +50,24 @@
       "message": "Works like a charm. And I think a test is not needed. But the commit message should not be used for communication.",
       "revId": "da60d04319970d7eb8906116d4a595ed1f6317ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4341d1a2_2a7c1f57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2022-01-04T15:55:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbd4aaf3_e5d50d71",
+      "revId": "da60d04319970d7eb8906116d4a595ed1f6317ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
