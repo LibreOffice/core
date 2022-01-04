@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95cc449e_73dca045",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-01-04T16:08:24Z",
+      "side": 1,
+      "message": "CI failure of this test:\n(cd cypress_test \u0026\u0026 make check-mobile spec\u003dcalc/number_format_spec.js)\nfails locally for me both before and after the change - assumed un-reliable.",
+      "revId": "cb845c5c2059f53e4d91bd1015f1acbd41301490",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
