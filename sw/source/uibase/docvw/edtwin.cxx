@@ -3895,7 +3895,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             // mouse pointer is on an outline paragraph node
             if(aSwContentAtPos.aFnd.pNode && aSwContentAtPos.aFnd.pNode->IsTextNode())
             {
-                // Get the outline paragraph frame and compare it to the saved ouline frame. If they
+                // Get the outline paragraph frame and compare it to the saved outline frame. If they
                 // are not the same, remove the fold button from the saved outline frame, if not
                 // already removed, and then add a fold button to the mouse over outline frame if
                 // the content is not folded.
