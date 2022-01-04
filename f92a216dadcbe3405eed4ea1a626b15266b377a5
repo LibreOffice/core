@@ -34,6 +34,23 @@
       "parentUuid": "873d04dc_c3e02dcc",
       "revId": "f92a216dadcbe3405eed4ea1a626b15266b377a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f4e35f4_998868a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-04T17:56:57Z",
+      "side": 1,
+      "message": "Just rethinking about this, don\u0027t bother. I just noticed there\u0027s the if/else style below.",
+      "revId": "f92a216dadcbe3405eed4ea1a626b15266b377a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
