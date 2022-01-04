@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51c48b3c_57cc0137",
+        "filename": "include/oox/export/drawingml.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2022-01-04T13:00:38Z",
+      "side": 1,
+      "message": "Changed the approach here, instead of introducing 2 new functions - went with using a bool flag that differentiates between whether it is for a text body or a shape.\n\nAlso added some explanation to it.",
+      "parentUuid": "0cbcebf4_3eaf6c79",
+      "revId": "80ab6678b9f8bcb40f8e5bfad1f8d15c7a1998de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "86dd56e0_f0a0471e",
         "filename": "oox/source/drawingml/shape.cxx",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2022-01-03T12:44:08Z",
       "side": 1,
       "message": "Is this really a hack? Sounds more like you\u0027re mapping a DrawingML concept to our shape model. If so, I would adjust the comment accordingly.",
+      "revId": "80ab6678b9f8bcb40f8e5bfad1f8d15c7a1998de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1967b0ac_88415046",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2022-01-04T13:00:38Z",
+      "side": 1,
+      "message": "Since it is a partial map that only works correctly if there\u0027s only Z axis rotation on the 3D camera, I felt like it was hackish - tried to explain the situation clearly instead of calling it a hack.",
+      "parentUuid": "86dd56e0_f0a0471e",
       "revId": "80ab6678b9f8bcb40f8e5bfad1f8d15c7a1998de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
