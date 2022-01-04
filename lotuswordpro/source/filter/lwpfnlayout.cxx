@@ -244,20 +244,18 @@ LwpVirtualLayout* LwpEnSuperTableLayout::GetMainTableLayout()
 {
     LwpObjectID* pID = &GetChildTail();
 
-    LwpVirtualLayout* pPrevLayout = nullptr;
+    o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
     while (!pID->IsNull())
     {
         LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(pID->obj().get());
-        if (!pLayout || pLayout == pPrevLayout)
-        {
+        if (!pLayout)
             break;
-        }
+        bool bAlreadySeen = !aSeen.insert(pLayout).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
         if (pLayout->GetLayoutType() == LWP_ENDNOTE_LAYOUT)
-        {
             return pLayout;
-        }
         pID = &pLayout->GetPrevious();
-        pPrevLayout = pLayout;
     }
 
     return nullptr;
