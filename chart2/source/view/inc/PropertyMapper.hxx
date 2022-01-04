@@ -48,14 +48,12 @@ public:
     static void setMappedProperties(
           const css::uno::Reference< css::beans::XPropertySet >& xTarget
         , const css::uno::Reference< css::beans::XPropertySet >& xSource
-        , const tPropertyNameMap& rMap
-        , tPropertyNameValueMap const * pOverwriteMap=nullptr );
+        , const tPropertyNameMap& rMap );
 
     static void setMappedProperties(
           SvxShape& xTarget
         , const css::uno::Reference< css::beans::XPropertySet >& xSource
-        , const tPropertyNameMap& rMap
-        , tPropertyNameValueMap const * pOverwriteMap=nullptr );
+        , const tPropertyNameMap& rMap );
 
     /**
      * Fetch property values from the source object and map it to the

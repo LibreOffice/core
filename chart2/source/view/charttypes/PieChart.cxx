@@ -250,7 +250,6 @@ bool PieChart::shouldSnapRectToUsedArea()
 rtl::Reference<SvxShape> PieChart::createDataPoint(
     const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
     const uno::Reference<beans::XPropertySet>& xObjectProperties,
-    tPropertyNameValueMap const * pOverwritePropertiesMap,
     const ShapeParam& rParam )
 {
     //transform position:
@@ -281,7 +280,7 @@ rtl::Reference<SvxShape> PieChart::createDataPoint(
             , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius
             , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() ) );
     }
-    setMappedProperties( *xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), pOverwritePropertiesMap );
+    PropertyMapper::setMappedProperties( *xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     return xShape;
 }
 
@@ -816,20 +815,19 @@ void PieChart::createShapes()
                 aParam.mfUnitCircleInnerRadius = m_pPosHelper->transformToRadius( fLogicInnerRadius );
                 aParam.mfUnitCircleOuterRadius = m_pPosHelper->transformToRadius( fLogicOuterRadius );
 
-                ///point color:
-                std::unique_ptr< tPropertyNameValueMap > apOverwritePropertiesMap;
-                if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
-                {
-                    apOverwritePropertiesMap.reset( new tPropertyNameValueMap );
-                    (*apOverwritePropertiesMap)["FillColor"] <<=
-                        m_xColorScheme->getColorByIndex( nPointIndex );
-                }
-
                 ///create data point
                 aParam.mfLogicZ = -1.0; // For 3D pie chart label position
                 rtl::Reference<SvxShape> xPointShape =
                     createDataPoint(
-                        xSeriesGroupShape_Shapes, xPointProperties, apOverwritePropertiesMap.get(), aParam);
+                        xSeriesGroupShape_Shapes, xPointProperties, aParam);
+
+                ///point color:
+                if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
+                {
+                    xPointShape->setPropertyValue("FillColor",
+                        uno::Any(m_xColorScheme->getColorByIndex( nPointIndex )));
+                }
+
 
                 if(bHasFillColorMapping)
                 {

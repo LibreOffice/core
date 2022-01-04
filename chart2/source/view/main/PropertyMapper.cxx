@@ -34,23 +34,10 @@ namespace chart
 {
 using namespace ::com::sun::star;
 
-namespace
-{
-
-void lcl_overwriteOrAppendValues(
-    tPropertyNameValueMap &rMap, const tPropertyNameValueMap& rOverwriteMap )
-{
-    for (auto const& elem : rOverwriteMap)
-        rMap[ elem.first ] = elem.second;
-}
-
-} // anonymous namespace
-
 void PropertyMapper::setMappedProperties(
           SvxShape& xTarget
         , const uno::Reference< beans::XPropertySet >& xSource
-        , const tPropertyNameMap& rMap
-        , tPropertyNameValueMap const * pOverwriteMap )
+        , const tPropertyNameMap& rMap )
 {
     if( !xSource.is() )
         return;
@@ -58,24 +45,13 @@ void PropertyMapper::setMappedProperties(
     tNameSequence aNames;
     tAnySequence  aValues;
     getMultiPropertyLists(aNames, aValues, xSource, rMap );
-    if(pOverwriteMap && (aNames.getLength() == aValues.getLength()))
-    {
-        tPropertyNameValueMap aNewMap;
-        for( sal_Int32 nI=0; nI<aNames.getLength(); ++nI )
-            aNewMap[ aNames[nI] ] = aValues[nI];
-        lcl_overwriteOrAppendValues( aNewMap, *pOverwriteMap );
-        aNames = comphelper::mapKeysToSequence( aNewMap );
-        aValues = comphelper::mapValuesToSequence( aNewMap );
-    }
-
     PropertyMapper::setMultiProperties( aNames, aValues, xTarget );
 }
 
 void PropertyMapper::setMappedProperties(
           const uno::Reference< beans::XPropertySet >& xTarget
         , const uno::Reference< beans::XPropertySet >& xSource
-        , const tPropertyNameMap& rMap
-        , tPropertyNameValueMap const * pOverwriteMap )
+        , const tPropertyNameMap& rMap )
 {
     if( !xTarget.is() || !xSource.is() )
         return;
@@ -83,16 +59,6 @@ void PropertyMapper::setMappedProperties(
     tNameSequence aNames;
     tAnySequence  aValues;
     getMultiPropertyLists(aNames, aValues, xSource, rMap );
-    if(pOverwriteMap && (aNames.getLength() == aValues.getLength()))
-    {
-        tPropertyNameValueMap aNewMap;
-        for( sal_Int32 nI=0; nI<aNames.getLength(); ++nI )
-            aNewMap[ aNames[nI] ] = aValues[nI];
-        lcl_overwriteOrAppendValues( aNewMap, *pOverwriteMap );
-        aNames = comphelper::mapKeysToSequence( aNewMap );
-        aValues = comphelper::mapValuesToSequence( aNewMap );
-    }
-
     PropertyMapper::setMultiProperties( aNames, aValues, xTarget );
 }
 

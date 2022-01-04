@@ -389,12 +389,6 @@ protected:
         , const css::uno::Reference< css::chart2::XRegressionCurveCalculator > & xRegressionCurveCalculator
         , css::awt::Point aDefaultPos );
 
-    static void setMappedProperties(
-          SvxShape& rTarget
-        , const css::uno::Reference< css::beans::XPropertySet >& xSource
-        , const tPropertyNameMap& rMap
-        , tPropertyNameValueMap const * pOverwriteMap=nullptr );
-
     virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates whether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
 
     VDataSeries* getFirstSeries() const;

@@ -224,7 +224,7 @@ void CandleStickChart::createShapes()
                         rtl::Reference<SvxShapePolyPolygon> xShape =
                             ShapeFactory::createLine2D( xPointGroupShape_Shapes,
                                     PolyToPointSequence(aPoly));
-                        setMappedProperties( *xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
+                        PropertyMapper::setMappedProperties( *xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                     }
 
                     //create first-last shape
@@ -272,7 +272,7 @@ void CandleStickChart::createShapes()
                             rtl::Reference<SvxShapePolyPolygon> xShape =
                                 ShapeFactory::createLine2D( xPointGroupShape_Shapes,
                                         PolyToPointSequence(aPoly) );
-                            setMappedProperties( *xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
+                            PropertyMapper::setMappedProperties( *xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                         }
                     }
 
