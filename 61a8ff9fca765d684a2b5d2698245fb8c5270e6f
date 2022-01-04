@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1dfc9ae_c6a2475a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-04T16:24:30Z",
+      "side": 1,
+      "message": "tb72 fails with:\n\n\u003e rm: cannot remove \u0027C:/cygwin/home/tdf/lode/jenkins/workspace/gerrit_windows@2/workdir/UnpackedTarball/cuckoo/.git/objects/37\u0027: Directory not empty",
+      "revId": "61a8ff9fca765d684a2b5d2698245fb8c5270e6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
