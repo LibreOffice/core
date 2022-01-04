@@ -789,6 +789,13 @@ IMPL_LINK_NOARG(SwTableColumnPage, SizeHdl, void*, void)
             break;
         }
     }
+
+    // tdf#143142 m_nMetFields has been updated and we need to re-check whether to show right button or not.
+    if (m_nNoOfVisibleCols > m_nMetFields)
+    {
+        m_xUpBtn->set_sensitive(true);
+    }
+
 }
 
 SwTableColumnPage::~SwTableColumnPage()
