@@ -22,28 +22,21 @@
 bool ReadDffRecordHeader(SvStream& rIn, DffRecordHeader& rRec)
 {
     rRec.nFilePos = rIn.Tell();
-    if (rIn.remainingSize() >= 8)
-    {
-        sal_uInt16 nTmp(0);
-        rIn.ReadUInt16(nTmp);
-        rRec.nImpVerInst = nTmp;
-        rRec.nRecVer = sal::static_int_cast<sal_uInt8>(nTmp & 0x000F);
-        rRec.nRecInstance = nTmp >> 4;
-        rIn.ReadUInt16(rRec.nRecType);
-        rIn.ReadUInt32(rRec.nRecLen);
+    sal_uInt16 nTmp(0);
+    rIn.ReadUInt16(nTmp);
+    rRec.nImpVerInst = nTmp;
+    rRec.nRecVer = sal::static_int_cast<sal_uInt8>(nTmp & 0x000F);
+    rRec.nRecInstance = nTmp >> 4;
+    rRec.nRecType = 0;
+    rIn.ReadUInt16(rRec.nRecType);
+    rRec.nRecLen = 0;
+    rIn.ReadUInt32(rRec.nRecLen);
 
-        // preserving overflow, optimally we would check
-        // the record size against the parent header
-        if (rRec.nRecLen > (SAL_MAX_UINT32 - rRec.nFilePos))
-            rIn.SetError(SVSTREAM_FILEFORMAT_ERROR);
-    }
-    else
-    {
-        rRec.nImpVerInst = 0;
-        rRec.nRecVer = 0;
-        rRec.nRecInstance = 0;
-        rIn.Seek(STREAM_SEEK_TO_END);
-    }
+    // preserving overflow, optimally we would check
+    // the record size against the parent header
+    if (rRec.nRecLen > (SAL_MAX_UINT32 - rRec.nFilePos))
+        rIn.SetError(SVSTREAM_FILEFORMAT_ERROR);
+
     return rIn.good();
 }
 
