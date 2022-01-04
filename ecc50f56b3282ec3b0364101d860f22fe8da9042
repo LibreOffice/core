@@ -52,6 +52,24 @@
       "parentUuid": "8fd14c1c_a7081cd7",
       "revId": "ecc50f56b3282ec3b0364101d860f22fe8da9042",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cbca9e2_8f94d701",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-04T21:24:53Z",
+      "side": 1,
+      "message": "I tested the following on top of a branch with more gbuild patches. For me the delivery of epoxy completely fails earlier when trying to copy its exports list also over . I still don\u0027t know why . But still adding a \n\n\u003e gb_Deliver__deliver \u003d\n\nto the long list of \"disabled\" functionality in\n\n\u003e gbuild in solenv/gbuild/extensions/post_GbuildToJson.mk\n\nfixes my problem. From my POV that test shouldn\u0027t copy all the stuff again, so it also seems a sensible thing to do.\n\nNow, out of curiosity I wanted to see, if I\u0027m missing additional stuff and changed it to:\n\n\u003e define gb_Deliver__deliver \u003d\n\u003e $(info cp $1 $2)\n\u003e endef\n\nThe result is five entries, four epoxy, one clew:\n\u003e cp /tmp/.../libepoxy.so.exports .../instdir/program/libmergedlo.so                                                                    \n\u003e cp /tmp/.../libclewlo.so.exports .../instdir/program/libmergedlo.so\n\nI have no idea what makes these externals special, compared to anything else. OTOH this seems to prove, that nothing is lost by overriding the gb_Deliver__deliver.",
+      "parentUuid": "cc155fbf_62cca276",
+      "revId": "ecc50f56b3282ec3b0364101d860f22fe8da9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
