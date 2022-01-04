@@ -2043,6 +2043,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuTools-DevTools">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:DevelopmentToolsDockingWindow</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="MenuTools-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
