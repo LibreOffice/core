@@ -16,6 +16,24 @@
       "message": "Your solution works now. Nice to see how you have solved tricky parts on your own.\n\nOnly a few cosmetics:\nWe do not change whole, old files to clang-format. But new added parts should be in clang-format. In your code do not use double empty lines but only single empty line (#1207, #1221), and change \u0027if ( foo )\u0027 to \u0027if (foo)\u0027 (#1191).\nYou can consider to move the angle calculation to inside \u0027if (xPropSet.is()){}\u0027.\nYou can consider to omit fX and fY and use the values from aScale directly in the condition.\nThe two CPPUNIT_ASSERT_MESSAGE are useless in that place, because in case there is no xShapeProps it will break before in \u0027xShapeProps-\u003e\u0027. You can simple delete them.\n",
       "revId": "b4dae91c8552bec151374c333ad3f61e0625c2f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f864277d_c37f0a52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2022-01-04T18:11:04Z",
+      "side": 1,
+      "message": "Submitted.",
+      "parentUuid": "e94d795f_cd289aa0",
+      "revId": "b4dae91c8552bec151374c333ad3f61e0625c2f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
