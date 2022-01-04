@@ -400,7 +400,6 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( XmlStyleFamily nFamily, const OUStr
     XMLAutoStyleFamily aTemp(nFamily);
     auto const iter = m_FamilySet.find(aTemp);
     assert(iter != m_FamilySet.end()); // family must be known
-    // SAL_DEBUG("SvXMLAutoStylePoolP_Impl::RegisterName: " << nFamily << ", '" << rName << "'");
     (*iter)->maNameSet.insert(rName);
 }
 
@@ -621,7 +620,6 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
             OUString oldName = aExpStyles[i].mpProperties->GetName();
             sal_Int32 dashIx = oldName.indexOf('-');
             OUString newName = (dashIx > 0 ? oldName.copy(0, dashIx) : oldName) + OUString::number(i);
-            // SAL_DEBUG("renaming '" << oldName << "' -> '" << newName << "'");
             aExpStyles[i].mpProperties->SetName(newName);
         }
     }

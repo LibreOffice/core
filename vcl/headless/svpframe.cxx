@@ -55,7 +55,6 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_nMaxWidth( 0 ),
     m_nMaxHeight( 0 )
 {
-    // SAL_DEBUG("SvpSalFrame::SvpSalFrame: " << this);
 #ifdef IOS
     // Nothing
 #elif defined ANDROID
@@ -86,7 +85,6 @@ SvpSalFrame::~SvpSalFrame()
 
     if( s_pFocusFrame == this )
     {
-        // SAL_DEBUG("SvpSalFrame::~SvpSalFrame: losing focus: " << this);
         s_pFocusFrame = nullptr;
         // call directly here, else an event for a destroyed frame would be dispatched
         CallCallback( SalEvent::LoseFocus, nullptr );
@@ -129,7 +127,6 @@ void SvpSalFrame::GetFocus()
     {
         if( s_pFocusFrame )
             s_pFocusFrame->LoseFocus();
-        // SAL_DEBUG("SvpSalFrame::GetFocus(): " << this);
         s_pFocusFrame = this;
         m_pInstance->PostEvent( this, nullptr, SalEvent::GetFocus );
     }
@@ -139,7 +136,6 @@ void SvpSalFrame::LoseFocus()
 {
     if( s_pFocusFrame == this )
     {
-        // SAL_DEBUG("SvpSalFrame::LoseFocus: " << this);
         m_pInstance->PostEvent( this, nullptr, SalEvent::LoseFocus );
         s_pFocusFrame = nullptr;
     }
@@ -225,7 +221,6 @@ void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
 
     if (bVisible)
     {
-        // SAL_DEBUG("SvpSalFrame::Show: showing: " << this);
         m_bVisible = true;
         m_pInstance->PostEvent( this, nullptr, SalEvent::Resize );
         if( ! bNoActivate )
@@ -233,7 +228,6 @@ void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
     }
     else
     {
-        // SAL_DEBUG("SvpSalFrame::Show: hiding: " << this);
         m_bVisible = false;
         LoseFocus();
     }

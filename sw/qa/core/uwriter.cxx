@@ -1552,12 +1552,6 @@ namespace
             { return GetPrevInRing(); }
         bool lonely() const
             { return unique(); }
-#if 0
-        void debug()
-        {
-            SAL_DEBUG("TestRing at: " << this << " prev: " << GetPrev() << " next: " << GetNext());
-        }
-#endif
     };
 }
 
@@ -1603,7 +1597,6 @@ void SwDocTest::testIntrusiveRing()
     {
         TestRing* pRing = &r;
         CPPUNIT_ASSERT(pRing);
-        //pRing->debug();
     }
     const TestRing* pConstRing = &aRing1;
     for(const TestRing& r: pConstRing->GetRingContainer()) // this should fail without r being const
