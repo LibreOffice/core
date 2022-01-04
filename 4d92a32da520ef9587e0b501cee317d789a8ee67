@@ -34,6 +34,23 @@
       "parentUuid": "1db217d7_7c293567",
       "revId": "4d92a32da520ef9587e0b501cee317d789a8ee67",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54d85f16_c4dfe800",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-04T12:12:33Z",
+      "side": 1,
+      "message": "So now x509.h includes cert.h. But that doesn\u0027t know of LO using xmlsecurity/source/xmlsec/nss/nssrenam.h, which has a \"#define CERT_DecodeDERCertificate __CERT_DecodeDERCertificate\". So the PCH doesn\u0027t know of this rename and the compiler fails.\n\nWhy does LO use an internal symbol, if there is now a public one in cert.h? Well, that symbol is not exported by libnss, so eventually still private … somehow. It\u0027s not listed in the current nss.def, just __CERT_DecodeDERCertificate (which just calls CERT_DecodeDERCertificate).",
+      "revId": "4d92a32da520ef9587e0b501cee317d789a8ee67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
