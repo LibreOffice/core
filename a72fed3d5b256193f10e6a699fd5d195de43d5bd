@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e3d80f98_87ba9688",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-04T08:52:50Z",
+      "side": 1,
+      "message": "[this comment was marked \"Resolved\" in error]",
+      "parentUuid": "e1ac743f_f142ac68",
+      "revId": "a72fed3d5b256193f10e6a699fd5d195de43d5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8bb1a2fa_c124ac0a",
         "filename": "sal/osl/all/log.cxx",
         "patchSetId": 1
