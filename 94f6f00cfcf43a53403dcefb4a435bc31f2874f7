@@ -16,6 +16,40 @@
       "message": "the commit message is pretty clear what the output will be. And I have tested this on my own Mac. output will be the same as Excel for Mac.",
       "revId": "94f6f00cfcf43a53403dcefb4a435bc31f2874f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "976ddcc4_ea4ecd34",
+        "filename": "vcl/osx/salinst.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T15:10:50Z",
+      "side": 1,
+      "message": "Why does this need a new getOSPlatform() platform function? We already have getOSVersion() that is only used via Application::GetOSVersion() in Application::GetHWOSConfInfo() for the About dialog. Don\u0027t we want the detailed info there as well?\n\nWith only getOSVersion() we then wouldn\u0027t need to differentiate by #ifdef in sc/source/core/tool/interpr5.cxx",
+      "revId": "94f6f00cfcf43a53403dcefb4a435bc31f2874f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74bae9c6_d24cedfb",
+        "filename": "vcl/osx/salinst.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T15:10:50Z",
+      "side": 1,
+      "message": "I wouldn\u0027t mix this unrelated change in if separating getOSPlatform() is needed for a reason.",
+      "revId": "94f6f00cfcf43a53403dcefb4a435bc31f2874f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
