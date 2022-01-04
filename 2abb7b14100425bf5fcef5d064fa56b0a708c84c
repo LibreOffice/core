@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "221b8e04_29d33262",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-04T14:46:49Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! I suggest some minor changes, see the next comments.",
+      "revId": "2abb7b14100425bf5fcef5d064fa56b0a708c84c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81109c5c_71b96f66",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-04T14:46:49Z",
+      "side": 1,
+      "message": "Track Changes is imported correctly now, so we must fix only the unit test :)\n\nCPPUNIT_ASSERT_EQUAL(OUString(\"Deleted Inserted\"), xShape-\u003egetString());\n\nuno::Reference\u003ctext::XText\u003e xText \u003d uno::Reference\u003ctext::XTextRange\u003e(xShape, uno::UNO_QUERY_THROW)-\u003egetText();\nuno::Reference\u003ctext::XTextRange\u003e xParagraph \u003d getParagraphOfText(1, xText);\n\nCPPUNIT_ASSERT(hasProperty(getRun( xParagraph, 1), \"RedlineType\"));\nCPPUNIT_ASSERT_EQUAL(OUString(\"Delete\"),getProperty\u003cOUString\u003e(getRun(xParagraph, 1), \"RedlineType\"));\nCPPUNIT_ASSERT_EQUAL( OUString( \"Deleted\" ), getRun( xParagraph, 2 )-\u003egetString());\nCPPUNIT_ASSERT(hasProperty(getRun( xParagraph, 3), \"RedlineType\"));\nCPPUNIT_ASSERT_EQUAL(OUString(\"Insert\"),getProperty\u003cOUString\u003e(getRun(xParagraph, 3), \"RedlineType\"));\nCPPUNIT_ASSERT_EQUAL( OUString( \"Inserted\" ), getRun( xParagraph, 4 )-\u003egetString());",
+      "revId": "2abb7b14100425bf5fcef5d064fa56b0a708c84c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ae15657_45375fea",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-04T14:46:49Z",
+      "side": 1,
+      "message": "or:\n\n    uno::Reference\u003ctext::XTextTablesSupplier\u003e xTablesSupplier(mxComponent, uno::UNO_QUERY);\n    uno::Reference\u003ccontainer::XIndexAccess\u003e xTables(xTablesSupplier-\u003egetTextTables(), uno::UNO_QUERY);\n    // This was 0\n    CPPUNIT_ASSERT_EQUAL(static_cast\u003csal_Int32\u003e(2), xTables-\u003egetCount());",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 247,
+        "endChar": 5
+      },
+      "revId": "2abb7b14100425bf5fcef5d064fa56b0a708c84c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3da1df0a_48ca6435",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-04T14:46:49Z",
+      "side": 1,
+      "message": "This is the correct number according to the original document.",
+      "range": {
+        "startLine": 1383,
+        "startChar": 8,
+        "endLine": 1383,
+        "endChar": 116
+      },
+      "revId": "2abb7b14100425bf5fcef5d064fa56b0a708c84c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd63361f_3ad8d0a6",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport6.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-04T14:46:49Z",
+      "side": 1,
+      "message": "This is a regression according to the previous comment, so\n\n    // FIXME\n    // CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty\u003csal_Int32\u003e(xRun, \"ParaTopMargin\"));\n    // CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty\u003csal_Int32\u003e(xRun, \"ParaBottomMargin\"));",
+      "range": {
+        "startLine": 463,
+        "startChar": 35,
+        "endLine": 464,
+        "endChar": 38
+      },
+      "revId": "2abb7b14100425bf5fcef5d064fa56b0a708c84c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80fdc7aa_b901bf40",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport2.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-04T14:46:49Z",
+      "side": 1,
+      "message": "I haven\u0027t seen any layout difference, so maybe this is ok.",
+      "range": {
+        "startLine": 664,
+        "startChar": 48,
+        "endLine": 664,
+        "endChar": 53
+      },
+      "revId": "2abb7b14100425bf5fcef5d064fa56b0a708c84c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
