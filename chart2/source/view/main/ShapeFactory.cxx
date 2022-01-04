@@ -55,6 +55,8 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <svx/unoprov.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdopath.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
 #include <tools/UnitConversion.hxx>
@@ -1080,7 +1082,7 @@ rtl::Reference<Svx3DExtrudeObject>
 }
 
 
-rtl::Reference<SvxShapePolyPolygon>
+SdrPathObj*
         ShapeFactory::createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const drawing::PolyPolygonShape3D& rPolyPolygon )
 {
@@ -1088,30 +1090,24 @@ rtl::Reference<SvxShapePolyPolygon>
         return nullptr;
 
     //create shape
-    rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
-    xShape->setShapeKind(OBJ_POLY);
-    xTarget->add(uno::Reference<drawing::XShape>(xShape));
+    SdrPathObj* pPath = new SdrPathObj(xTarget->GetSdrObject()->getSdrModelFromSdrObject(), OBJ_POLY);
+    // insert at ZOrder 0, an area should always be behind other shapes
+    xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath, 0);
 
     //set properties
     try
     {
-        //UNO_NAME_POLYGON "Polygon" drawing::PointSequence*
-        drawing::PointSequenceSequence aPoints( PolyToPointSequence(rPolyPolygon) );
-
-        //Polygon
-        xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
-            , uno::Any( aPoints ) );
-
-        //ZOrder
-        //an area should always be behind other shapes
-        xShape->SvxShape::setPropertyValue( UNO_NAME_MISC_OBJ_ZORDER
-            , uno::Any( sal_Int32(0) ) );
+        // Polygon
+        basegfx::B2DPolyPolygon aNewPolyPolygon( PolyToB2DPolyPolygon(rPolyPolygon) );
+        // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
+        pPath->ForceMetricToItemPoolMetric(aNewPolyPolygon);
+        pPath->SetPathPoly(aNewPolyPolygon);
     }
     catch( const uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
-    return xShape;
+    return pPath;
 }
 
 static drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D& rPos
@@ -2380,6 +2376,14 @@ void ShapeFactory::makeShapeInvisible( const rtl::Reference< SvxShape >& xShape 
 }
 
 // set a name/CID at a shape (is used for selection handling)
+
+void ShapeFactory::setShapeName( SdrPathObj* pShape
+                               , const OUString& rName )
+{
+    if(!pShape)
+        return;
+    pShape->SetName(rName);
+}
 
 void ShapeFactory::setShapeName( const rtl::Reference< SvxShape >& xShape
                                , const OUString& rName )

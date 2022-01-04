@@ -501,22 +501,26 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     pPosHelper->transformScaledLogicToScene( aPoly );
 
     //create area:
-    rtl::Reference< SvxShape > xShape;
     if(m_nDimension==3)
     {
-        xShape = ShapeFactory::createArea3D( xSeriesGroupShape_Shapes
+        rtl::Reference< SvxShape > xShape = ShapeFactory::createArea3D( xSeriesGroupShape_Shapes
                 , aPoly, getTransformedDepth() );
+        PropertyMapper::setMappedProperties( *xShape
+                    , pSeries->getPropertiesOfSeries()
+                    , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+        //because of this name this line will be used for marking
+        ShapeFactory::setShapeName(xShape, "MarkHandles");
     }
     else //m_nDimension!=3
     {
-        xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes
+        SdrPathObj* pShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes
                 , aPoly );
+        PropertyMapper::setPropertyNameMapForFilledSeriesProperties(
+                    pShape
+                    , pSeries->getPropertiesOfSeries());
+        //because of this name this line will be used for marking
+        ShapeFactory::setShapeName(pShape, "MarkHandles");
     }
-    PropertyMapper::setMappedProperties( *xShape
-                , pSeries->getPropertiesOfSeries()
-                , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
-    //because of this name this line will be used for marking
-    ::chart::ShapeFactory::setShapeName(xShape, "MarkHandles");
     return true;
 }
 
