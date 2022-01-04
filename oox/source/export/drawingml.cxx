@@ -3796,9 +3796,14 @@ bool DrawingML::WriteCustomGeometry(
                                       XML_r, "r", XML_b, "b");
                 mpFS->startElementNS(XML_a, XML_pathLst);
 
+                std::optional<OString> sFill;
+                if (HasEnhancedCustomShapeSegmentCommand(rXShape, css::drawing::EnhancedCustomShapeSegmentCommand::NOFILL))
+                    sFill = "none"; // for possible values see ST_PathFillMode in OOXML standard
+
                 if ( aPathSize.hasElements() )
                 {
                     mpFS->startElementNS( XML_a, XML_path,
+                          XML_fill, sFill,
                           XML_w, OString::number(aPathSize[0].Width),
                           XML_h, OString::number(aPathSize[0].Height) );
                 }
@@ -3825,6 +3830,7 @@ bool DrawingML::WriteCustomGeometry(
                             nYMax = nY;
                     }
                     mpFS->startElementNS( XML_a, XML_path,
+                          XML_fill, sFill,
                           XML_w, OString::number(nXMax - nXMin),
                           XML_h, OString::number(nYMax - nYMin) );
                 }

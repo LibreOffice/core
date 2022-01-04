@@ -113,6 +113,7 @@ public:
     void testTdf143126();
     void testTdf143129();
     void testTdf118045();
+    void testTdf137675();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -181,6 +182,7 @@ public:
     CPPUNIT_TEST(testTdf143126);
     CPPUNIT_TEST(testTdf143129);
     CPPUNIT_TEST(testTdf118045);
+    CPPUNIT_TEST(testTdf137675);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1747,6 +1749,18 @@ void SdOOXMLExportTest1::testTdf118045()
     xmlDocUniquePtr pXmlDoc1 = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:lnSpc/a:spcPct", "val",
                 "110000");
+}
+
+void SdOOXMLExportTest1::testTdf137675()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf137675.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", "fill", "none");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
