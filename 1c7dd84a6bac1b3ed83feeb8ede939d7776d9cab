@@ -16,6 +16,24 @@
       "message": "Hi Tomaž, I realised that the new unit test should be in vcl/qa/cppunit/BmpFilterTest.cxx. However, currently two tests fail there. How did you generate BMP_A8R8G8B8.bmp and BMP_R5G6B5.bmp? They look invalid to me, e.g. offset to pixel data and size of DIB header are incorrect.",
       "revId": "1c7dd84a6bac1b3ed83feeb8ede939d7776d9cab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec8c4b30_275932cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-04T11:41:13Z",
+      "side": 1,
+      "message": "If I recall correctly - Gimp.",
+      "parentUuid": "192e7a3a_34305fac",
+      "revId": "1c7dd84a6bac1b3ed83feeb8ede939d7776d9cab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
