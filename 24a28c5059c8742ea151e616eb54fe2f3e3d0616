@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d342f633_4b76dedb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-01-04T01:09:47Z",
+      "side": 1,
+      "message": "This should show macOS \u003cversion\u003e for Macs.",
+      "revId": "24a28c5059c8742ea151e616eb54fe2f3e3d0616",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
