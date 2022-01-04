@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1ac743f_f142ac68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-04T08:52:10Z",
+      "side": 1,
+      "message": "what is the purpose of this change?",
+      "revId": "a72fed3d5b256193f10e6a699fd5d195de43d5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bb1a2fa_c124ac0a",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-04T08:52:10Z",
+      "side": 1,
+      "message": "IMO it is unidiomatic clutter to add an explicit `[[fallthrough]];` between adjacent `case` labels",
+      "revId": "a72fed3d5b256193f10e6a699fd5d195de43d5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d868dbb_73bae9e6",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-04T08:52:10Z",
+      "side": 1,
+      "message": "IMO it is unidiomatic clutter to add an explicit `[[fallthrough]];` between adjacent `case` labels",
+      "revId": "a72fed3d5b256193f10e6a699fd5d195de43d5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
