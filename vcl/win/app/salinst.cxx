@@ -873,14 +873,14 @@ constexpr NTSTATUS STATUS_SUCCESS = 0x00000000;
 
 OUString WinSalInstance::getOSVersion()
 {
-    OUStringBuffer aVer(50); // capacity for string like "Windows 6.1 Service Pack 1 build 7601"
-    aVer.append("Windows ");
+    OUStringBuffer aVer(52); // capacity for string like "Windows NT 6.1 Service Pack 1 build 7601"
+    aVer.append("Windows NT ");
     // GetVersion(Ex) and VersionHelpers (based on VerifyVersionInfo) API are
     // subject to manifest-based behavior since Windows 8.1, so give wrong results.
     // Another approach would be to use NetWkstaGetInfo, but that has some small
     // reported delays (some milliseconds), and might get slower in domains with
     // poor network connections.
-    // So go with a solution described at https://msdn.microsoft.com/en-us/library/ms724429
+    // So go with a solution described at https://web.archive.org/web/20090228100958/http://msdn.microsoft.com/en-us/library/ms724429.aspx
     bool bHaveVerFromKernel32 = false;
     if (HMODULE h_kernel32 = GetModuleHandleW(L"kernel32.dll"))
     {

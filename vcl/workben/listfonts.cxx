@@ -497,6 +497,18 @@ void ListFonts::Init()
         }
     }
 
+    if (!mbStdOut)
+    {
+        maFilename = aArg;
+
+        osl::File aFile(maFilename);
+
+        if (!aFile.open(osl_File_OpenFlag_Create))
+            throw css::uno::RuntimeException("Can not create file: " + aArg);
+
+        aFile.close();
+    }
+
     auto xContext = cppu::defaultBootstrap_InitialComponentContext();
     xServiceManager.set(xContext->getServiceManager(), css::uno::UNO_QUERY);
 
