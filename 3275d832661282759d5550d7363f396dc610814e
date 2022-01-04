@@ -34,6 +34,23 @@
       "parentUuid": "e7459a24_7cfe0978",
       "revId": "3275d832661282759d5550d7363f396dc610814e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c702e6b1_4d02eb30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-04T17:54:25Z",
+      "side": 1,
+      "message": "I must recognize I trust Jenkins in this kind of change.\nIndeed, the probability is rather low that there\u0027s a remaining \"OBJGRUP\" if all Jenkins are ok.\nIn case there are, I suppose it must be a corner case which can be quickly fixed.",
+      "revId": "3275d832661282759d5550d7363f396dc610814e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
