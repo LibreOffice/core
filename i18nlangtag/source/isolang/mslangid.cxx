@@ -165,6 +165,28 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
     return nLang;
 }
 
+// static
+bool MsLangId::usesHyphenation(LanguageType nLang)
+{
+    if (primary(nLang).anyOf(
+            primary(LANGUAGE_ARABIC_PRIMARY_ONLY),
+            primary(LANGUAGE_FARSI),
+            primary(LANGUAGE_KASHMIRI),
+            primary(LANGUAGE_KURDISH_ARABIC_IRAQ),
+            primary(LANGUAGE_PUNJABI),
+            primary(LANGUAGE_SINDHI),
+            primary(LANGUAGE_USER_MALAY_ARABIC_MALAYSIA),
+            primary(LANGUAGE_SOMALI),
+            primary(LANGUAGE_SWAHILI),
+            primary(LANGUAGE_URDU_PAKISTAN),
+            primary(LANGUAGE_VIETNAMESE))
+        || isCJK(nLang))
+    {
+        return false;
+    }
+    return true;
+}
+
 
 // static
 css::lang::Locale MsLangId::Conversion::convertLanguageToLocale(
