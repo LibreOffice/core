@@ -73,6 +73,9 @@
 #include <apple_remote/RemoteControl.h>
 #include <postmac.h>
 
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
 #if HAVE_FEATURE_SKIA
 #include <vcl/skia/SkiaHelper.hxx>
 #include <skia/salbmp.hxx>
@@ -83,6 +86,8 @@
 extern "C" {
 #include <crt_externs.h>
 }
+
+#include <cstring>
 
 using namespace ::com::sun::star;
 
@@ -882,18 +887,38 @@ std::shared_ptr<SalBitmap> AquaSalInstance::CreateSalBitmap()
 
 OUString AquaSalInstance::getOSVersion()
 {
-    NSString * versionString = nullptr;
-    NSDictionary * sysVersionDict = [ NSDictionary dictionaryWithContentsOfFile: @"/System/Library/CoreServices/SystemVersion.plist" ];
-    if ( sysVersionDict )
-        versionString = [ sysVersionDict valueForKey: @"ProductVersion" ];
+    OUString aVersion("Macintosh (");
 
-    OUString aVersion = "Mac OS X ";
-    if ( versionString )
+    const unsigned int BUFFERLEN = 128;
+    char buffer[BUFFERLEN];
+    size_t bufferlen = BUFFERLEN;
+    sysctlbyname("machdep.cpu.vendor", &buffer, &bufferlen, nullptr, 0);
+
+    aVersion += OUString(buffer, strlen(buffer), RTL_TEXTENCODING_ASCII_US);
+
+    NSString * versionString = nullptr;
+    NSString * productBuildVersion = nullptr;
+    NSDictionary * sysVersionDict = [ NSDictionary dictionaryWithContentsOfFile: @"/System/Library/CoreServices/SystemVersion.plist" ];
+
+    if (sysVersionDict)
+    {
+        versionString = [ sysVersionDict valueForKey: @"ProductVersion" ];
+        productBuildVersion = [ sysVersionDict valueForKey: @"ProductBuildVersion" ];
+    }
+
+    aVersion += ") Version ";
+
+    if (versionString)
         aVersion += OUString::fromUtf8( [ versionString UTF8String ] );
     else
-        aVersion += "(unknown)";
+        aVersion += "unknown";
+
+    if (productBuildVersion)
+        aVersion += " (Build " + OUString::fromUtf8( [ productBuildVersion UTF8String ] ) + ")";
 
     return aVersion;
+}
+
 }
 
 CGImageRef CreateCGImage( const Image& rImage )
