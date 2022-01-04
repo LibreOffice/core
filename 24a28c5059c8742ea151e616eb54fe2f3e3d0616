@@ -16,6 +16,24 @@
       "message": "This should show macOS \u003cversion\u003e for Macs.",
       "revId": "24a28c5059c8742ea151e616eb54fe2f3e3d0616",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24ac9168_c49ace3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-04T09:34:34Z",
+      "side": 1,
+      "message": "Unfortunately I don\u0027t have mac to test this. But shouldn\u0027t this (macOS \u003cversion\u003e) be also in the commit message?",
+      "parentUuid": "d342f633_4b76dedb",
+      "revId": "24a28c5059c8742ea151e616eb54fe2f3e3d0616",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
