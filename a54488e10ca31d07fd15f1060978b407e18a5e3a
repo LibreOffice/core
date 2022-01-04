@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f98a1364_e215c27e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-04T14:45:06Z",
+      "side": 1,
+      "message": "Noel: this deadlock typically happens right after rendering the first slide of a document (after opening it), so I would like to submit this revert, unless you are interested in refactoring AccessibleSlideSorterView to not deadlock with a non-recursive mutex.\n\nPlease let me know if submitting the revert is not OK for you. Thanks!",
+      "revId": "a54488e10ca31d07fd15f1060978b407e18a5e3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
