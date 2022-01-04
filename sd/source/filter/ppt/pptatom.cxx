@@ -39,13 +39,11 @@ Atom::Atom( const DffRecordHeader& rRecordHeader, SvStream& rStream )
             // retrieve file size (to allow sanity checks)
             sal_uInt64 const nStreamSize = mrStream.TellEnd();
 
-            while( (mrStream.GetError() == ERRCODE_NONE )
+            while( mrStream.good()
                 && ( mrStream.Tell() < nStreamSize )
                 && ( mrStream.Tell() < maRecordHeader.GetRecEndFilePos() ) )
             {
-                ReadDffRecordHeader( mrStream, aChildHeader );
-
-                if( mrStream.GetError() == ERRCODE_NONE )
+                if (ReadDffRecordHeader(mrStream, aChildHeader))
                 {
                     Atom* pAtom = new Atom( aChildHeader, mrStream );
 
