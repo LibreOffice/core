@@ -2375,9 +2375,7 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
                         aDispParams.rgvarg[j].vt |= VT_BYREF;
                         break;
                     case VT_BOOL:
-                        // SAL_ DEBUG("===> VT_BOOL is initially " << (int)aDispParams.rgvarg[j].boolVal);
                         aDispParams.rgvarg[j].byref = new VARIANT_BOOL(aDispParams.rgvarg[j].boolVal);
-                        // SAL_ DEBUG("     byref=" << aDispParams.rgvarg[j].byref);
                         aDispParams.rgvarg[j].vt |= VT_BYREF;
                         break;
                     default:
@@ -2443,7 +2441,6 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
                     case VT_BYREF|VT_BOOL:
                         {
                             VARIANT_BOOL *pBool = static_cast<VARIANT_BOOL*>(aDispParams.rgvarg[j].byref);
-                            // SAL_ DEBUG("===> VT_BOOL: byref is now " << aDispParams.rgvarg[j].byref << ", " << (int)*pBool);
                             ArgumentsRange[nIncomingArgIndex] <<= (*pBool != VARIANT_FALSE);
                             delete pBool;
                         }

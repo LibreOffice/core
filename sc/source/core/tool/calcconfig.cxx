@@ -95,8 +95,6 @@ ScCalcConfig::ScCalcConfig() :
     mbHasStringRefSyntax(false)
 {
     setOpenCLConfigToDefault();
-
-    // SAL _DEBUG(__FILE__ ":" << __LINE__ << ": ScCalcConfig::ScCalcConfig(): " << *this);
 }
 
 void ScCalcConfig::setOpenCLConfigToDefault()
