@@ -416,6 +416,9 @@ Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arg
         throw css::lang::IllegalArgumentException(
             "non-empty SalInstance::CreateClipboard arguments", {}, -1);
     }
+#ifdef IOS
+    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new vcl::GenericClipboard()) );
+#else
     if (comphelper::LibreOfficeKit::isActive()) {
         // In LOK, each document view shall have its own clipboard instance, and the way that
         // (happens to?) work is that apparently this function is called at most once for each such
@@ -425,6 +428,7 @@ Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arg
         // SAL_USE_VCLPLUGIN=svp and the clipboard"):
         return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new vcl::GenericClipboard()) );
     }
+#endif
     DBG_TESTSOLARMUTEX();
     if (!m_clipboard.is()) {
         m_clipboard = static_cast<cppu::OWeakObject *>(new vcl::GenericClipboard());

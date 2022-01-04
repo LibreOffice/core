@@ -2352,7 +2352,9 @@ static void doc_destroy(LibreOfficeKitDocument *pThis)
 
     SolarMutexGuard aGuard;
 
+#ifndef IOS
     LOKClipboardFactory::releaseClipboardForView(-1);
+#endif
 
     LibLODocument_Impl *pDocument = static_cast<LibLODocument_Impl*>(pThis);
     delete pDocument;
@@ -4706,6 +4708,18 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
                             size_t     **pOutSizes,
                             char      ***pOutStreams)
 {
+#ifdef IOS
+    (void) pThis;
+    (void) pMimeTypes;
+    (void) pOutCount;
+    (void) pOutMimeTypes;
+    (void) pOutSizes;
+    (void) pOutStreams;
+
+    assert(!"doc_getClipboard should not be called on iOS");
+
+    return 0;
+#else
     comphelper::ProfileZone aZone("doc_getClipboard");
 
     SolarMutexGuard aGuard;
@@ -4782,6 +4796,7 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
     }
 
     return 1;
+#endif
 }
 
 static int doc_setClipboard(LibreOfficeKitDocument* pThis,
@@ -5529,7 +5544,9 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
+#ifndef IOS
     LOKClipboardFactory::releaseClipboardForView(nId);
+#endif
 
     SfxLokHelper::destroyView(nId);
 
@@ -5796,6 +5813,7 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
     }
     else if (nAction == LOK_WINDOW_PASTE)
     {
+#ifndef IOS
         OUString aMimeType;
         css::uno::Sequence<sal_Int8> aData;
         std::vector<beans::PropertyValue> aArgs(jsonToPropertyValuesVector(pData));
@@ -5817,6 +5835,10 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
         }
         else
             SetLastExceptionMsg("Window command 'paste': wrong parameters.");
+#else
+        (void) pData;
+        assert(!"doc_postWindow() with LOK_WINDOW_PASTE should not be called on iOS");
+#endif
     }
 }
 
