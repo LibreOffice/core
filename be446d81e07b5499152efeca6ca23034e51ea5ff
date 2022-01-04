@@ -16,6 +16,23 @@
       "message": "This causes a build failure for me both with GCC and Clang under Arch Linux, with clean build:\n\n    In file included from /home/user/libreoffice/xmlsecurity/source/xmlsec/nss/x509certificate_nssimpl.cxx:20:\n    /home/user/libreoffice/xmlsecurity/source/xmlsec/nss/x509certificate_nssimpl.cxx: In member function \u0027void X509Certificate_NssImpl::setRawCert(const com::sun::star::uno::Sequence\u003csigned char\u003e\u0026)\u0027:\n    /home/user/libreoffice/xmlsecurity/source/xmlsec/nss/nssrenam.h:39:35: error: \u0027__CERT_DecodeDERCertificate\u0027 was not declared in this scope; did you mean \u0027CERT_DecodeDERCertificate\u0027?\n    39 | #define CERT_DecodeDERCertificate __CERT_DecodeDERCertificate\n        |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n    /home/user/libreoffice/xmlsecurity/source/xmlsec/nss/x509certificate_nssimpl.cxx:311:12: note: in expansion of macro \u0027CERT_DecodeDERCertificate\u0027\n    311 |     cert \u003d CERT_DecodeDERCertificate( \u0026certItem, PR_TRUE, nullptr ) ;\n        |            ^~~~~~~~~~~~~~~~~~~~~~~~~\n    make[1]: *** [/home/user/libreoffice/solenv/gbuild/LinkTarget.mk:332: /home/user/libreoffice/workdir/CxxObject/xmlsecurity/source/xmlsec/nss/x509certificate_nssimpl.o] Error 1\n    make[1]: *** Waiting for unfinished jobs....\n    [DEP] LNK:Library/libdatelo.so\n    [LNK] Library/libdatelo.so\n    [CXX] canvas/source/opengl/ogl_spritecanvas.cxx\n    [CXX] xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl.cxx\n    In file included from /home/user/libreoffice/xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl.cxx:20:\n    /home/user/libreoffice/xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl.cxx: In member function \u0027virtual sal_Int32 SecurityEnvironment_NssImpl::verifyCertificate(const com::sun::star::uno::Reference\u003ccom::sun::star::security::XCertificate\u003e\u0026, const com::sun::star::uno::Sequence\u003ccom::sun::star::uno::Reference\u003ccom::sun::star::security::XCertificate\u003e \u003e\u0026)\u0027:\n    /home/user/libreoffice/xmlsecurity/source/xmlsec/nss/nssrenam.h:37:33: error: \u0027__CERT_NewTempCertificate\u0027 was not declared in this scope; did you mean \u0027CERT_NewTempCertificate\u0027?\n    37 | #define CERT_NewTempCertificate __CERT_NewTempCertificate\n        |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~\n    /home/user/libreoffice/xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl.cxx:524:36: note: in expansion of macro \u0027CERT_NewTempCertificate\u0027\n    524 |         CERTCertificate* certTmp \u003d CERT_NewTempCertificate(certDb, \u0026item,\n        |                                    ^~~~~~~~~~~~~~~~~~~~~~~\n    make[1]: *** [/home/user/libreoffice/solenv/gbuild/LinkTarget.mk:329: /home/user/libreoffice/workdir/CxxObject/xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl.o] Error 1\n\nautogen.input:\n    --enable-dbgutil\n    --enable-kf5\n    --enable-pch\u003dfull\n    --with-jdk-home\u003d/usr/lib/jvm/java-17-openjdk\n    --without-myspell-dicts\n    --with-theme\u003dcolibre\n    --enable-gdb-index\n    --enable-ld\u003dlld\n    --enable-split-debug\n    --disable-ccache\n    --disable-epm\n    --disable-online-update",
       "revId": "be446d81e07b5499152efeca6ca23034e51ea5ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf9ab8ab_fcd2314c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-01-04T10:59:42Z",
+      "side": 1,
+      "message": "GCC is 11.1.0 and Clang is 13.0.0",
+      "revId": "be446d81e07b5499152efeca6ca23034e51ea5ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
