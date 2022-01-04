@@ -1027,7 +1027,11 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             if (bIsTiledRendering)
             {
                 Point aOrigin = aOriginalMode.GetOrigin();
-                aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + aOutputData.nScrX);
+                if (bLayoutRTL)
+                    aOrigin.setX(-aOrigin.getX() / TWIPS_PER_PIXEL + aOutputData.nScrX + aOutputData.GetScrW());
+                else
+                    aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + aOutputData.nScrX);
+
                 aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + aOutputData.nScrY);
                 const double twipFactor = 15 * 1.76388889; // 26.45833335
                 aOrigin = Point(aOrigin.getX() * twipFactor,

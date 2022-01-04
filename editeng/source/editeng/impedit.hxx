@@ -301,6 +301,7 @@ private:
     std::unique_ptr<LOKSpecialPositioning> mpLOKSpecialPositioning;
     bool mbBroadcastLOKViewCursor:1;
     bool mbSuppressLOKMessages:1;
+    bool mbNegativeX:1;
 
     EditViewCallbacks* getEditViewCallbacks() const
     {
@@ -469,6 +470,9 @@ public:
 
     void SuppressLOKMessages(bool bSet) { mbSuppressLOKMessages = bSet; }
     bool IsSuppressLOKMessages() const { return mbSuppressLOKMessages; }
+
+    void SetNegativeX(bool bSet) { mbNegativeX = bSet; }
+    bool IsNegativeX() const { return mbNegativeX; }
 };
 
 
