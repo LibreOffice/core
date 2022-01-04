@@ -198,7 +198,8 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     eAnchorMode(EEAnchorMode::TopLeft),
     mpEditViewCallbacks(nullptr),
     mbBroadcastLOKViewCursor(comphelper::LibreOfficeKit::isActive()),
-    mbSuppressLOKMessages(false)
+    mbSuppressLOKMessages(false),
+    mbNegativeX(false)
 {
     aEditSelection.Min() = pEng->GetEditDoc().GetStartPaM();
     aEditSelection.Max() = pEng->GetEditDoc().GetEndPaM();
@@ -875,6 +876,15 @@ void ImpEditView::SetOutputArea( const tools::Rectangle& rRect )
     SetScrollDiffX( static_cast<sal_uInt16>(aOutArea.GetWidth()) * 2 / 10 );
 }
 
+namespace {
+
+tools::Rectangle lcl_negateRectX(const tools::Rectangle& rRect)
+{
+    return tools::Rectangle(-rRect.Right(), rRect.Top(), -rRect.Left(), rRect.Bottom());
+}
+
+}
+
 void ImpEditView::InvalidateAtWindow(const tools::Rectangle& rRect)
 {
     if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
@@ -882,13 +892,13 @@ void ImpEditView::InvalidateAtWindow(const tools::Rectangle& rRect)
         // do not invalidate and trigger a global repaint, but forward
         // the need for change to the applied EditViewCallback, can e.g.
         // be used to visualize the active edit text in an OverlayObject
-        pCallbacks->EditViewInvalidate(rRect);
+        pCallbacks->EditViewInvalidate(mbNegativeX ? lcl_negateRectX(rRect) : rRect);
     }
     else
     {
         // classic mode: invalidate and trigger full repaint
         // of the changed area
-        GetWindow()->Invalidate(rRect);
+        GetWindow()->Invalidate(mbNegativeX ? lcl_negateRectX(rRect) : rRect);
     }
 }
 
