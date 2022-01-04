@@ -54,6 +54,22 @@ DECLARE_HTMLEXPORT_TEST(testTdf131812, "tdf131812.odt")
         != -1);
 }
 
+DECLARE_HTMLEXPORT_TEST(testTdf146264, "tdf146264.odt")
+{
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    sal_uInt64 nLength = pStream->TellEnd();
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    sal_Int32 nFirstHello = aStream.indexOf("Hello");
+    CPPUNIT_ASSERT(nFirstHello > 0);
+    if (nFirstHello > 0)
+    {
+        sal_Int32 nSecondHello = aStream.indexOf("Hello", nFirstHello + 1);
+        constexpr sal_Int32 nMinusOne = -1;
+        CPPUNIT_ASSERT_EQUAL(nMinusOne, nSecondHello);
+    }
+}
+
 DECLARE_HTMLEXPORT_TEST(testTdf118637, "tdf118637.odt")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
