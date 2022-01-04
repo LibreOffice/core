@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22be8b0b_c6f737da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2022-01-04T09:13:28Z",
+      "side": 1,
+      "message": "Thanks for the patch - should improve the situation indeed :-)  A small question though to double-check a detail:",
+      "revId": "b3d5ec693bf5075f67406a6ff6b6785fe888a0b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "360c3bd8_ed59a770",
+        "filename": "vcl/source/window/window2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2022-01-04T09:13:28Z",
+      "side": 1,
+      "message": "Just want to double-check: Is it really the intention to have return x \u0026\u0026 x-\u003ea? A: \nB;, or should it rather have been a return x \u0026\u0026 (x-\u003ea? A: B);\n\nAsking because in StartTracking() and EndTracking(), there is an early return when mpWindowImpl is nullptr, so it never gets to doing anything with the ImplGetSVData() in that case.",
+      "range": {
+        "startLine": 341,
+        "startChar": 11,
+        "endLine": 343,
+        "endChar": 55
+      },
+      "revId": "b3d5ec693bf5075f67406a6ff6b6785fe888a0b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
