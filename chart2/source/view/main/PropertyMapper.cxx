@@ -44,8 +44,48 @@ void PropertyMapper::setMappedProperties(
 
     tNameSequence aNames;
     tAnySequence  aValues;
-    getMultiPropertyLists(aNames, aValues, xSource, rMap );
-    PropertyMapper::setMultiProperties( aNames, aValues, xTarget );
+    sal_Int32 nN=0;
+    sal_Int32 nPropertyCount = rMap.size();
+    aNames.realloc(nPropertyCount);
+    auto pNames = aNames.getArray();
+    aValues.realloc(nPropertyCount);
+    auto pValues = aValues.getArray();
+
+    for (auto const& elem : rMap)
+    {
+        const OUString & rTarget = elem.first;
+        const OUString & rSource = elem.second;
+        try
+        {
+            uno::Any aAny( xSource->getPropertyValue(rSource) );
+            if( aAny.hasValue() )
+            {
+                //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
+                pNames[nN]  = rTarget;
+                pValues[nN] = aAny;
+                ++nN;
+            }
+        }
+        catch( const uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION("chart2", "" );
+        }
+    }
+    if (nN == 0)
+        return;
+    //reduce to real property count
+    aNames.realloc(nN);
+    aValues.realloc(nN);
+
+    uno::Reference< beans::XMultiPropertySet > xShapeMultiProp( xTarget, uno::UNO_QUERY_THROW );
+    try
+    {
+        xShapeMultiProp->setPropertyValues( aNames, aValues );
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
+    }
 }
 
 void PropertyMapper::setMappedProperties(
@@ -58,8 +98,70 @@ void PropertyMapper::setMappedProperties(
 
     tNameSequence aNames;
     tAnySequence  aValues;
-    getMultiPropertyLists(aNames, aValues, xSource, rMap );
-    PropertyMapper::setMultiProperties( aNames, aValues, xTarget );
+    sal_Int32 nN=0;
+    sal_Int32 nPropertyCount = rMap.size();
+    aNames.realloc(nPropertyCount);
+    auto pNames = aNames.getArray();
+    aValues.realloc(nPropertyCount);
+    auto pValues = aValues.getArray();
+
+    for (auto const& elem : rMap)
+    {
+        const OUString & rTarget = elem.first;
+        const OUString & rSource = elem.second;
+        try
+        {
+            uno::Any aAny( xSource->getPropertyValue(rSource) );
+            if( aAny.hasValue() )
+            {
+                //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
+                pNames[nN]  = rTarget;
+                pValues[nN] = aAny;
+                ++nN;
+            }
+        }
+        catch( const uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION("chart2", "" );
+        }
+    }
+    if (nN == 0)
+        return;
+
+    uno::Reference< beans::XMultiPropertySet > xShapeMultiProp( xTarget, uno::UNO_QUERY );
+    if (xShapeMultiProp)
+        try
+        {
+            //reduce to real property count
+            aNames.realloc(nN);
+            aValues.realloc(nN);
+            xShapeMultiProp->setPropertyValues( aNames, aValues );
+            return; // successful
+        }
+        catch( const uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION("chart2", "" ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
+        }
+
+    // fall back to one at a time
+    try
+    {
+        for( sal_Int32 i = 0; i < nN; i++ )
+        {
+            try
+            {
+                xTarget->setPropertyValue( aNames[i], aValues[i] );
+            }
+            catch( const uno::Exception& )
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "" );
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
 }
 
 void PropertyMapper::getValueMap(
@@ -109,18 +211,6 @@ void PropertyMapper::getValueMap(
             }
         }
     }
-}
-
-void PropertyMapper::getMultiPropertyLists(
-                  tNameSequence& rNames
-                , tAnySequence&  rValues
-                , const uno::Reference< beans::XPropertySet >& xSourceProp
-                , const tPropertyNameMap& rNameMap
-                )
-{
-    tPropertyNameValueMap aValueMap;
-    getValueMap( aValueMap, rNameMap, xSourceProp );
-    getMultiPropertyListsFromValueMap( rNames, rValues, aValueMap );
 }
 
 void PropertyMapper::getMultiPropertyListsFromValueMap(
