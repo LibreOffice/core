@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7c06caa_19b717e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-04T07:41:31Z",
+      "side": 1,
+      "message": "I don\u0027t see anything obviously problematic with this. Sadly there doesn\u0027t seem to be a spec for this, but it has a test, which is promising.",
+      "revId": "c5be6ddd6cbf9b3d1fd8d08446088466164437c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
