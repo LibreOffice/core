@@ -3016,7 +3016,9 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
             uno::UNO_QUERY_THROW );
         uno::Reference< text::XFootnote > xFootnote( xFootnoteText, uno::UNO_QUERY_THROW );
         pTopContext->SetFootnote(xFootnote, sFootnoteCharStyleName);
-        uno::Sequence< beans::PropertyValue > aFontProperties = pTopContext->GetPropertyValues();
+        uno::Sequence< beans::PropertyValue > aFontProperties;
+        if (GetTopContextType() == CONTEXT_CHARACTER)
+            aFontProperties = pTopContext->GetPropertyValues();
         appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFootnoteText, uno::UNO_QUERY_THROW ),
                     xFootnoteText->createTextCursorByRange(xFootnoteText->getStart())));
