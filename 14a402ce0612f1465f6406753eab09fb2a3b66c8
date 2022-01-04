@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b1c0b54_c3b880e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2022-01-04T21:33:55Z",
+      "side": 1,
+      "message": "Look good to me, can you add it also to other notebookbar implementations. Thanks",
+      "revId": "14a402ce0612f1465f6406753eab09fb2a3b66c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
