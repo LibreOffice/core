@@ -71,13 +71,6 @@ public:
         , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
         );
 
-    static void getMultiPropertyLists(
-                  tNameSequence& rNames
-                , tAnySequence&  rValues
-                , const css::uno::Reference< css::beans::XPropertySet >& xProp
-                , const tPropertyNameMap& rMap
-                );
-
     static void getMultiPropertyListsFromValueMap(
                   tNameSequence& rNames
                 , tAnySequence&  rValues
