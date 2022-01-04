@@ -423,6 +423,9 @@ Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arg
         throw css::lang::IllegalArgumentException(
             "non-empty SalInstance::CreateClipboard arguments", {}, -1);
     }
+#ifdef IOS
+    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new vcl::GenericClipboard()) );
+#else
     if (comphelper::LibreOfficeKit::isActive()) {
         // In LOK, each document view shall have its own clipboard instance (whereas
         // in non-LOK below we keep handing out one single instance; see also
@@ -433,6 +436,7 @@ Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arg
                 comphelper::getProcessComponentContext());
         return xClipboard;
     }
+#endif
     DBG_TESTSOLARMUTEX();
     if (!m_clipboard.is()) {
         m_clipboard = static_cast<cppu::OWeakObject *>(new vcl::GenericClipboard());
