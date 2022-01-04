@@ -165,19 +165,13 @@ static bool enabled = false;
             id parent = [aWrapper accessibilityAttributeValue:NSAccessibilityParentAttribute];
             if (parent) {
                 if ([parent isKindOfClass:[NSView class]]) {
-                    // SAL_DEBUG("Wrapper INIT: " << [[aWrapper description] UTF8String] << " ==> " << [[parent description] UTF8String]);
                     NSView *parentView = static_cast<NSView *>(parent);
                     [parentView addSubview:aWrapper positioned:NSWindowBelow relativeTo:nil];
                 } else if ([parent isKindOfClass:NSClassFromString(@"SalFrameWindow")]) {
                     NSWindow *window = static_cast<NSWindow *>(parent);
                     NSView *salView = [window contentView];
-                    // SAL_DEBUG("Wrapper INIT SAL: " << [[aWrapper description] UTF8String] << " ==> " << [[salView description] UTF8String]);
                     [salView addSubview:aWrapper positioned:NSWindowBelow relativeTo:nil];
-                } else {
-                    // SAL_DEBUG("Wrapper INIT: !! " << [[aWrapper description] UTF8String] << " !==>! " << [[parent description] UTF8String] << "!!");
                 }
-            } else {
-                // SAL_DEBUG("Wrapper INIT: " << [[aWrapper description] UTF8String] << " ==> NO PARENT");
             }
         }
     }
