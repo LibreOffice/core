@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0454c226_ca6a6790",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-01-04T23:17:10Z",
+      "side": 1,
+      "message": "Eike, is this new change more like you envisioned?",
+      "revId": "94f6f00cfcf43a53403dcefb4a435bc31f2874f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "976ddcc4_ea4ecd34",
@@ -35,6 +52,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59d46e41_0295464f",
+        "filename": "vcl/osx/salinst.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-01-04T23:17:10Z",
+      "side": 1,
+      "message": "I have updated it to just use Application::GetOSVersion() and updated AquaSalInstance::getOSVersion() to output the new string.",
+      "parentUuid": "976ddcc4_ea4ecd34",
+      "revId": "94f6f00cfcf43a53403dcefb4a435bc31f2874f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74bae9c6_d24cedfb",
@@ -48,6 +83,24 @@
       "writtenOn": "2022-01-04T15:10:50Z",
       "side": 1,
       "message": "I wouldn\u0027t mix this unrelated change in if separating getOSPlatform() is needed for a reason.",
+      "revId": "94f6f00cfcf43a53403dcefb4a435bc31f2874f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc859387_559ebad2",
+        "filename": "vcl/osx/salinst.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-01-04T23:17:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74bae9c6_d24cedfb",
       "revId": "94f6f00cfcf43a53403dcefb4a435bc31f2874f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
