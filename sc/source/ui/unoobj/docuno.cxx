@@ -735,8 +735,14 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
 
     // check if user hit a chart which is being edited by him
     ScTabViewShell * pTabViewShell = pViewData->GetViewShell();
+    SCTAB nTab = pViewData->GetTabNo();
     LokChartHelper aChartHelper(pTabViewShell);
-    if (aChartHelper.postMouseEvent(nType, nX, nY,
+    const ScDocument& rDoc = pDocShell->GetDocument();
+    // In LOK RTL mode draw/svx operates in negative X coordinates
+    // But the coordinates from client is always positive, so negate nX for draw.
+    bool bDrawNegativeX = rDoc.IsNegativePage(nTab);
+    int nDrawX = bDrawNegativeX ? -nX : nX;
+    if (aChartHelper.postMouseEvent(nType, nDrawX, nY,
                                     nCount, nButtons, nModifier,
                                     pViewData->GetPPTX(), pViewData->GetPPTY()))
     {
@@ -744,21 +750,23 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     }
 
     Point aPointTwip(nX, nY);
+    Point aPointTwipDraw(nDrawX, nY);
 
     // check if the user hit a chart which is being edited by someone else
     // and, if so, skip current mouse event
     if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
     {
-        if (LokChartHelper::HitAny(aPointTwip))
+        if (LokChartHelper::HitAny(aPointTwipDraw))
             return;
     }
 
     // Check if a control is hit
     Point aPointHMM = LokControlHandler::convertTwipToMm100(aPointTwip);
+    Point aPointHMMDraw(bDrawNegativeX ? -aPointHMM.X() : aPointHMM.X(), aPointHMM.Y());
     ScDrawLayer* pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
-    SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(pViewData->GetTabNo()));
+    SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(nTab));
     SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView();
-    if (LokControlHandler::postMouseEvent(pPage, pDrawView, *pGridWindow, nType, aPointHMM, nCount, nButtons, nModifier))
+    if (LokControlHandler::postMouseEvent(pPage, pDrawView, *pGridWindow, nType, aPointHMMDraw, nCount, nButtons, nModifier))
         return;
 
     if (!pGridWindow->HasChildPathFocus(true))
