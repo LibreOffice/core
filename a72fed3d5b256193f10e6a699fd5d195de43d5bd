@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7709ba0_0c6407e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-04T10:23:22Z",
+      "side": 1,
+      "message": "The main idea is to have actionable items marked differently. Like all the non-implemented XML elements, so that they would stick out from all the other INFO log bloat, especially a lot of the warnings I lowered in the follow-up patch. Since I abandoned that, there is IMHO no need for this either.",
+      "parentUuid": "e3d80f98_87ba9688",
+      "revId": "a72fed3d5b256193f10e6a699fd5d195de43d5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bb1a2fa_c124ac0a",
@@ -53,6 +71,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09d2b80c_854d50d9",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-04T10:23:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8bb1a2fa_c124ac0a",
+      "revId": "a72fed3d5b256193f10e6a699fd5d195de43d5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d868dbb_73bae9e6",
@@ -66,6 +102,24 @@
       "writtenOn": "2022-01-04T08:52:10Z",
       "side": 1,
       "message": "IMO it is unidiomatic clutter to add an explicit `[[fallthrough]];` between adjacent `case` labels",
+      "revId": "a72fed3d5b256193f10e6a699fd5d195de43d5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d35a31b7_bd3ffbd5",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-04T10:23:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d868dbb_73bae9e6",
       "revId": "a72fed3d5b256193f10e6a699fd5d195de43d5bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
