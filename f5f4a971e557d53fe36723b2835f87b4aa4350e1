@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b51b5a34_d6f30dc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-04T18:12:38Z",
+      "side": 1,
+      "message": "Oups! I thought you had seen another place with \"OBJGRUP\".\nI think a separate patch could be useful for this last change.",
+      "revId": "f5f4a971e557d53fe36723b2835f87b4aa4350e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
