@@ -216,6 +216,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTabStopFillChars)
     CPPUNIT_ASSERT_EQUAL(u' ', aTabstops[0].FillChar);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf146489, "tdf146489.rtf")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(2, "unnumbered");
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
 DECLARE_RTFEXPORT_TEST(testCjklist38, "cjklist38.rtf")
 {
     sal_Int16 numFormat = getNumberingTypeOfParagraph(1);
