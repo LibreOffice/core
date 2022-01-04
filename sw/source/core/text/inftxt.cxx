@@ -66,6 +66,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gradient.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -1446,7 +1447,8 @@ bool SwTextFormatInfo::IsHyphenate() const
 
     LanguageType eTmp = GetFont()->GetLanguage();
     // TODO: check for more ideographic langs w/o hyphenation as a concept
-    if ( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp || LANGUAGE_JAPANESE == eTmp )
+    if ( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp
+            || !MsLangId::usesHyphenation(eTmp) )
         return false;
 
     uno::Reference< XHyphenator > xHyph = ::GetHyphenator();

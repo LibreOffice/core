@@ -126,6 +126,9 @@ public:
     static LanguageType resolveSystemLanguageByScriptType( LanguageType nLang, sal_Int16 nType );
 
 
+    /** Whether the language uses hyphenation. */
+    static bool usesHyphenation( LanguageType nLang );
+
     /** Whether locale has a Right-To-Left orientation for text. */
     static bool isRightToLeft( LanguageType nLang );
 
