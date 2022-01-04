@@ -872,6 +872,9 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, OutlinerVie
         pOutlView->SetWindow(pWin);
     }
 
+    if (mbNegativeX)
+        pOutlView->GetEditView().SetNegativeX(mbNegativeX);
+
     // disallow scrolling
     EVControlBits nStat = pOutlView->GetControlWord();
     nStat &= ~EVControlBits::AUTOSCROLL;
