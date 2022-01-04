@@ -1182,7 +1182,7 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
     {
         case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
         {
-            // ouline level: set Level property
+            // outline level: set Level property
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber( nTmp, aIter.toView() )
                 && nTmp >= 1
@@ -1239,7 +1239,7 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
             break;
         case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
         {
-            // ouline level: set Level property
+            // outline level: set Level property
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber(
                 nTmp, aIter.toView(), 0,
