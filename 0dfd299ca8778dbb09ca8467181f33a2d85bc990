@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e879d93_a8e98a95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-01-04T14:44:32Z",
+      "side": 1,
+      "message": "Bogus windows CI failure around stale lock file it seems.",
+      "revId": "0dfd299ca8778dbb09ca8467181f33a2d85bc990",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
