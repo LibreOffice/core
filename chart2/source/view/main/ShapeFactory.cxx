@@ -55,6 +55,8 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <svx/unoprov.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdopath.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
 #include <tools/UnitConversion.hxx>
@@ -1095,17 +1097,18 @@ rtl::Reference<SvxShapePolyPolygon>
     //set properties
     try
     {
-        //UNO_NAME_POLYGON "Polygon" drawing::PointSequence*
-        drawing::PointSequenceSequence aPoints( PolyToPointSequence(rPolyPolygon) );
+        // Polygon
+        basegfx::B2DPolyPolygon aNewPolyPolygon( PolyToB2DPolyPolygon(rPolyPolygon) );
+        // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
+        SdrPathObj* pPath = static_cast<SdrPathObj*>(xShape->GetSdrObject());
+        pPath->ForceMetricToItemPoolMetric(aNewPolyPolygon);
+        pPath->SetPathPoly(aNewPolyPolygon);
 
-        //Polygon
-        xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
-            , uno::Any( aPoints ) );
-
-        //ZOrder
-        //an area should always be behind other shapes
-        xShape->SvxShape::setPropertyValue( UNO_NAME_MISC_OBJ_ZORDER
-            , uno::Any( sal_Int32(0) ) );
+        // ZOrder
+        // an area should always be behind other shapes
+        SdrObjList* pObjList = pPath->getParentSdrObjListFromSdrObject();
+        if( pObjList )
+            pObjList->SetExistingObjectOrdNum( xShape->GetSdrObject(), 0 );
     }
     catch( const uno::Exception& )
     {

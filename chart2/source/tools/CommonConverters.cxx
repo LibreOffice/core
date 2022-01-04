@@ -26,6 +26,7 @@
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <osl/diagnose.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <limits>
 
@@ -343,6 +344,33 @@ drawing::PointSequenceSequence PolyToPointSequence(
         }
     }
     return aRet;
+}
+
+basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
+                const drawing::PolyPolygonShape3D& rPolyPolygon )
+{
+    basegfx::B2DPolyPolygon aRetval;
+
+    for(sal_Int32 nN = 0; nN < rPolyPolygon.SequenceX.getLength(); nN++)
+    {
+        basegfx::B2DPolygon aNewPolygon;
+        sal_Int32 nInnerLength = rPolyPolygon.SequenceX[nN].getLength();
+        if(nInnerLength)
+        {
+            aNewPolygon.reserve(nInnerLength);
+            for( sal_Int32 nM = 0; nM < nInnerLength; nM++)
+            {
+                auto X = static_cast<sal_Int32>(rPolyPolygon.SequenceX[nN][nM]);
+                auto Y = static_cast<sal_Int32>(rPolyPolygon.SequenceY[nN][nM]);
+                aNewPolygon.append(basegfx::B2DPoint(X, Y));
+            }
+            // check for closed state flag
+            basegfx::utils::checkClosed(aNewPolygon);
+        }
+        aRetval.append(std::move(aNewPolygon));
+    }
+
+    return aRetval;
 }
 
 void appendPointSequence( drawing::PointSequenceSequence& rTarget
