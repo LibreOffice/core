@@ -40,6 +40,7 @@ namespace com::sun::star::drawing { struct Position3D; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::drawing { struct Direction3D; }
+class SdrPathObj;
 
 namespace chart
 {
@@ -154,7 +155,7 @@ public:
                     , const css::drawing::PolyPolygonShape3D& rPolyPolygon
                     , double fDepth);
 
-    static rtl::Reference<SvxShapePolyPolygon>
+    static SdrPathObj*
         createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::PolyPolygonShape3D& rPolyPolygon);
 
@@ -249,6 +250,8 @@ public:
     static void makeShapeInvisible( const rtl::Reference< SvxShape >& rShape );
 
     static void setShapeName( const rtl::Reference< SvxShape >& xShape
+            , const OUString& rName );
+    static void setShapeName( SdrPathObj* pPath
             , const OUString& rName );
 
     static OUString getShapeName( const css::uno::Reference< css::drawing::XShape >& xShape );

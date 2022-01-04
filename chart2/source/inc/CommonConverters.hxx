@@ -29,6 +29,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::awt { struct Rectangle; }
@@ -110,6 +111,12 @@ css::drawing::PolyPolygonShape3D BezierToPoly(
 */
 OOO_DLLPUBLIC_CHARTTOOLS
 css::drawing::PointSequenceSequence PolyToPointSequence(
+                const css::drawing::PolyPolygonShape3D& rPolyPolygon );
+
+/** PolyPolygonShape3D ->  basegfx::B2DPolyPolygon (2D)
+*/
+OOO_DLLPUBLIC_CHARTTOOLS
+basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
                 const css::drawing::PolyPolygonShape3D& rPolyPolygon );
 
 /** drawing::PointSequenceSequence + drawing::PointSequenceSequence

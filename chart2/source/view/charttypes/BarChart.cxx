@@ -788,7 +788,6 @@ void BarChart::createShapes()
                         //create partial point
                         if( !approxEqual(fLowerYValue,fUpperYValue) )
                         {
-                            rtl::Reference< SvxShape >  xShape;
                             if( m_nDimension==3 )
                             {
                                 drawing::Position3D aLogicBottom            (fLogicX,fLogicYStart,fLogicZ);
@@ -823,9 +822,22 @@ void BarChart::createShapes()
                                 if( fTopHeight < 0 )
                                     fTopHeight *= -1.0;
 
-                                xShape = createDataPoint3D_Bar(
+                                rtl::Reference< SvxShape > xShape = createDataPoint3D_Bar(
                                     xSeriesGroupShape_Shapes, aTransformedBottom, aSize, fTopHeight, nRotateZAngleHundredthDegree
                                     , xDataPointProperties, nGeometry3D );
+
+                                if(bHasFillColorMapping)
+                                {
+                                    double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
+                                    if(!std::isnan(nPropVal))
+                                    {
+                                        xShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>(nPropVal)));
+                                    }
+                                }
+                                //set name/classified ObjectID (CID)
+                                ShapeFactory::setShapeName(xShape
+                                    , ObjectIdentifier::createPointCID(
+                                        pSeries->getPointCID_Stub(),nPointIndex) );
                             }
                             else //m_nDimension!=3
                             {
@@ -844,22 +856,22 @@ void BarChart::createShapes()
                                 AddPointToPoly( aPoly, aLeftUpperPoint );
                                 AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
                                 pPosHelper->transformScaledLogicToScene( aPoly );
-                                xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes, aPoly );
-                                PropertyMapper::setMappedProperties( *xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+                                std::optional<sal_Int32> xFillColor;
+                                if(bHasFillColorMapping)
+                                {
+                                    double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
+                                    if(!std::isnan(nPropVal))
+                                        xFillColor = static_cast<sal_Int32>(nPropVal);
+                                }
+                                SdrPathObj* pShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes, aPoly );
+                                PropertyMapper::setPropertyNameMapForFilledSeriesProperties(pShape, xDataPointProperties, xFillColor);
+
+                                //set name/classified ObjectID (CID)
+                                ShapeFactory::setShapeName(pShape
+                                    , ObjectIdentifier::createPointCID(
+                                        pSeries->getPointCID_Stub(),nPointIndex) );
                             }
 
-                            if(bHasFillColorMapping)
-                            {
-                                double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
-                                if(!std::isnan(nPropVal))
-                                {
-                                    xShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>(nPropVal)));
-                                }
-                            }
-                            //set name/classified ObjectID (CID)
-                            ShapeFactory::setShapeName(xShape
-                                , ObjectIdentifier::createPointCID(
-                                    pSeries->getPointCID_Stub(),nPointIndex) );
                         }
 
                         //create error bar

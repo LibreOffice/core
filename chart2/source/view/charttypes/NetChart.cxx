@@ -222,14 +222,12 @@ bool NetChart::impl_createArea( VDataSeries* pSeries
     pPosHelper->transformScaledLogicToScene( aPoly );
 
     //create area:
-    rtl::Reference<SvxShapePolyPolygon>
-        xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes
-                , aPoly );
-    PropertyMapper::setMappedProperties( *xShape
-                , pSeries->getPropertiesOfSeries()
-                , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+    SdrPathObj* pShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes
+                            , aPoly );
+    PropertyMapper::setPropertyNameMapForFilledSeriesProperties(pShape
+                , pSeries->getPropertiesOfSeries() );
     //because of this name this line will be used for marking
-    ::chart::ShapeFactory::setShapeName(xShape, "MarkHandles");
+    ::chart::ShapeFactory::setShapeName(pShape, "MarkHandles");
     return true;
 }
 

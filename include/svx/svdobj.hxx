@@ -880,6 +880,8 @@ public:
     const OUString& getHyperlink() const { return msHyperlink; }
     void setHyperlink(const OUString& sHyperlink) { msHyperlink = sHyperlink; }
 
+    void ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const noexcept;
+
 protected:
     mutable tools::Rectangle    m_aOutRect;     // surrounding rectangle for Paint (incl. LineWidth, ...)
     Point                       m_aAnchor;      // anchor position (Writer)
