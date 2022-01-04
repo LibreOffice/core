@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f1f7630_4051dd94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-01-04T11:24:41Z",
+      "side": 1,
+      "message": "the commit message is pretty clear what the output will be. And I have tested this on my own Mac. output will be the same as Excel for Mac.",
+      "revId": "94f6f00cfcf43a53403dcefb4a435bc31f2874f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
