@@ -436,7 +436,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     {
         xShape = ShapeFactory::createLine2D( xSeriesGroupShape_Shapes
                 , PolyToPointSequence( aPoly ) );
-        setMappedProperties( *xShape
+        PropertyMapper::setMappedProperties( *xShape
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
         //because of this name this line will be used for marking
@@ -512,7 +512,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
         xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes
                 , aPoly );
     }
-    setMappedProperties( *xShape
+    PropertyMapper::setMappedProperties( *xShape
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     //because of this name this line will be used for marking

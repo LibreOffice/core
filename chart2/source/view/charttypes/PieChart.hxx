@@ -67,7 +67,6 @@ private: //methods
         createDataPoint(
             const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
             const css::uno::Reference<css::beans::XPropertySet>& xObjectProperties,
-            tPropertyNameValueMap const * pOverWritePropertiesMap,
             const ShapeParam& rParam );
 
     /** This method creates a text shape for a label of a data point.
