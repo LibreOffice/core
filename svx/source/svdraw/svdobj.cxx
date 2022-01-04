@@ -123,6 +123,7 @@
 
 #include <svx/scene3d.hxx>
 #include <rtl/character.hxx>
+#include <tools/UnitConversion.hxx>
 
 using namespace ::com::sun::star;
 
@@ -3147,6 +3148,23 @@ void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
     rNameSet.insert(sName);
 
     SetName(sName);
+}
+
+void SdrObject::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const noexcept
+{
+    MapUnit eMapUnit(getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
+    if(eMapUnit == MapUnit::Map100thMM)
+        return;
+
+    if (const auto eTo = MapToO3tlLength(eMapUnit); eTo != o3tl::Length::invalid)
+    {
+        const double fConvert(o3tl::convert(1.0, o3tl::Length::mm100, eTo));
+        rPolyPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(fConvert, fConvert));
+    }
+    else
+    {
+        OSL_FAIL("Missing unit translation to PoolMetric!");
+    }
 }
 
 SdrObject* SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, SdrObjKind nObjIdentifier)
