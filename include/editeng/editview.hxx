@@ -372,6 +372,10 @@ public:
 
     void SuppressLOKMessages(bool bSet);
     bool IsSuppressLOKMessages() const;
+
+    /// To inform editeng that negated x document coordinates are in use.
+    void SetNegativeX(bool bSet);
+    bool IsNegativeX() const;
 };
 
 #endif // INCLUDED_EDITENG_EDITVIEW_HXX
