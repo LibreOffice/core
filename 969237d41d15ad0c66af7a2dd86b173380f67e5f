@@ -16,6 +16,24 @@
       "message": "I accept your proposal. on the other hand, I wonder what is the best solution for it.\nI think that cui modules should usually access cui.mo, not svx.mo.",
       "revId": "969237d41d15ad0c66af7a2dd86b173380f67e5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76ed978a_bc496404",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-01-04T10:53:33Z",
+      "side": 1,
+      "message": "My personal opinion would be that it\u0027s generally desirable to avoid duplication (e.g. because both places would have to be updated + translated when the text changes later on,...), which was also why I had moved the strings in \n\ncommit 0cbd8a5d4571cdf3601ca8deb64d734d35e234f9\nAuthor: Michael Weghorn \u003cm.weghorn@posteo.de\u003e\nDate:   Wed Mar 3 11:03:42 2021 +0100\n\n    tdf#140762  Move RIDs related to borders to include/svx\n    \n    They\u0027ll be reused for the items in the \"Borders\" dropdown\n    button in Calc\u0027s formatting toolbar in a subsequent step.\n\nafter asking on IRC, but I don\u0027t know whether there\u0027s a canonical way to handle this.\n\nNot updating \u0027SvxResId\u0027 -\u003e \u0027CuiResId\u0027 was definitely an oversight, thanks for taking care of this!\n\n(IRC #libreoffice-dev:\n\n\u003e [Tuesday, 2 March 2021] [14.40.27 CET] \u003cmichaelweghorn\u003e\tis it OK to move specific RID_SVXSTR_* defines from cui/inc/strings.hrc to include/svx/strings.hrc for reuse in svx?\n\u003e [Tuesday, 2 March 2021] [14.45.52 CET] \u003cerAck\u003e\tmichaelweghorn: single/selected strings? should be ok; some dialogs in cui already include svx/strings.hrc\n\u003e [Tuesday, 2 March 2021] [14.47.55 CET] \u003cmichaelweghorn\u003e\terAck: thanks! yes, that\u0027s only about border types for reuse in the \"Borders\" item in the Calc formatting toolbar\n)",
+      "parentUuid": "a2770cdc_4394adad",
+      "revId": "969237d41d15ad0c66af7a2dd86b173380f67e5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
