@@ -86,6 +86,24 @@
       "message": "This should be abandoned in favour of https://gerrit.libreoffice.org/c/core/+/127204 (once that\u0027s ready shaped).",
       "revId": "a1917bce4fb9ffb7af87d5334a940dac21557c94",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "872d13aa_8699da70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-04T20:17:05Z",
+      "side": 1,
+      "message": "I\u0027ve already created a new patch set with more languages. Please take a look.",
+      "parentUuid": "960021f3_44e1736e",
+      "revId": "a1917bce4fb9ffb7af87d5334a940dac21557c94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
