@@ -43,6 +43,7 @@ bool ReadDffRecordHeader(SvStream& rIn, DffRecordHeader& rRec)
         rRec.nRecVer = 0;
         rRec.nRecInstance = 0;
         rIn.Seek(STREAM_SEEK_TO_END);
+        rIn.SetError(SVSTREAM_FILEFORMAT_ERROR);
     }
     return rIn.good();
 }
