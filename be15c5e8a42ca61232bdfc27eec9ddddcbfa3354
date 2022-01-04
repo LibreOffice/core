@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2943312e_c9640eed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-04T17:01:45Z",
+      "side": 1,
+      "message": "Good thing :-)\nIn aw080 I even had this completely removed - so it\u0027s possible :-)\nAs an in-bewteen step I moved the vairous circle [OBJ_CIRC .. OBJ_CCUT] to OBJ_CIRC \u0026 bools in SdrCircObj\nSame for [OBJ_POLY..OBJ_SPLNFILL, plus OBJ_PATHPOLY..OBJ_PATHPLIN].\nSame for [OBJ_TEXT..OBJ_OUTLINETEXT].\nRest was done with RTTI, as soon as you just have one ID per SdrObject type.\nMost of the IDs e.g. for circle just decide filled/non-filled with same geometry.",
+      "revId": "be15c5e8a42ca61232bdfc27eec9ddddcbfa3354",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
