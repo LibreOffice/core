@@ -34,6 +34,24 @@
       "parentUuid": "cc7b1969_c25ae2e1",
       "revId": "ecc50f56b3282ec3b0364101d860f22fe8da9042",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc155fbf_62cca276",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-04T16:31:54Z",
+      "side": 1,
+      "message": "gbuildtojson redefines a lot of gbuild in solenv/gbuild/extensions/post_GbuildToJson.mk, so it\u0027s just supposed to do dummy work to generate the json. I\u0027m not aware that this should actually do something in the build; very strage. There is a minimal self-test gbuild example in the qa folder, but that\u0027s also self-contained.\n\nI don\u0027t see how a few additional dependencies for a static build, which this patch is about, will result in actual changes to instdir. Oh well.",
+      "parentUuid": "8fd14c1c_a7081cd7",
+      "revId": "ecc50f56b3282ec3b0364101d860f22fe8da9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
