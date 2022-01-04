@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5a4bb6b_fb8e5ac9",
+        "filename": "chart2/source/view/main/PropertyMapper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-04T22:25:16Z",
+      "side": 1,
+      "message": "The default sequence ctors here look redundant, followed by realloc below - the ctor taking size can be used instead.",
+      "revId": "e951937950e68be7b93093879e943211ae7f1601",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
