@@ -69,6 +69,23 @@
       "message": "reflecting review feedback in code review status",
       "revId": "a1917bce4fb9ffb7af87d5334a940dac21557c94",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "960021f3_44e1736e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-04T14:48:27Z",
+      "side": 1,
+      "message": "This should be abandoned in favour of https://gerrit.libreoffice.org/c/core/+/127204 (once that\u0027s ready shaped).",
+      "revId": "a1917bce4fb9ffb7af87d5334a940dac21557c94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
