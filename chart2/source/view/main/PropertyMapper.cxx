@@ -63,14 +63,12 @@ void PropertyMapper::setMappedProperties(
     if( !xSource.is() )
         return;
 
-    tNameSequence aNames;
-    tAnySequence  aValues;
-    sal_Int32 nN=0;
     sal_Int32 nPropertyCount = rMap.size();
-    aNames.realloc(nPropertyCount);
+    tNameSequence aNames(nPropertyCount);
+    tAnySequence  aValues(nPropertyCount);
     auto pNames = aNames.getArray();
-    aValues.realloc(nPropertyCount);
     auto pValues = aValues.getArray();
+    sal_Int32 nN=0;
 
     for (auto const& elem : rMap)
     {
