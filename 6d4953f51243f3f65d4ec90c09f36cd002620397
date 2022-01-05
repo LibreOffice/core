@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab973e15_3484e5a9",
+        "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-05T08:45:13Z",
+      "side": 1,
+      "message": "The UI has four buttons: first, last, previous, next. Don\u0027t see how to show them in the running application, though. But \"first\" seems to be correct here.",
+      "range": {
+        "startLine": 584,
+        "startChar": 155,
+        "endLine": 584,
+        "endChar": 163
+      },
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a29225c_f611ada3",
+        "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-05T08:45:13Z",
+      "side": 1,
+      "message": "Stumbled over this. The dialog has Index, Entry and keys. I cannot follow the tip on same type and name.",
+      "range": {
+        "startLine": 584,
+        "startChar": 193,
+        "endLine": 584,
+        "endChar": 215
+      },
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1321b354_a3371f0f",
+        "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-05T08:45:13Z",
+      "side": 1,
+      "message": "And this is surely last.",
+      "range": {
+        "startLine": 605,
+        "startChar": 154,
+        "endLine": 605,
+        "endChar": 158
+      },
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
