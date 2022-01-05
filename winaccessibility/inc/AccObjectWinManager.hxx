@@ -122,8 +122,6 @@ public:
     void  SetAccName( css::accessibility::XAccessible* pXAcc, css::uno::Any newName);
     void  UpdateAccName( css::accessibility::XAccessible* pXAcc );
 
-    void  SetRole( css::accessibility::XAccessible* pXAcc, long Role );
-
     void  UpdateAccFocus( css::accessibility::XAccessible* newFocus );
     void  UpdateAction( css::accessibility::XAccessible* pXAcc );
 
