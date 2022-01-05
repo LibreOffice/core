@@ -16,6 +16,24 @@
       "message": "To make the UI nice, we should move the action buttons into the \"List\" tab (so it would be hidden when filtering) and have Help left-hand (as secondary element) and Close right-hand of the dialog footer.\n\nKeep also in mind that another button enlarges the dialog for no good reason.\n\nAnd I don\u0027t see a reason to split the patch into (non-working) UI and HID-backend.",
       "revId": "a8ea92457236759749986bf58f5fc233cf507178",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43f9300d_15cbe7c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-05T13:10:17Z",
+      "side": 1,
+      "message": "\u003e To make the UI nice, we should move the action buttons into the \"List\" tab...\n\nI agree with you, it would look nicer. I\u0027m just concerned this will make the patch too complicated for me to handle. I\u0027ll try it anyways \u003d)\n\n\u003e And I don\u0027t see a reason to split the patch into (non-working) UI and HID-backend\n\nI have to split the patch because the HID target goes into an XHP file which is in the \"help\" repository (it is not in the \"core\"). The Help patch that complement this patch is at:\nChange-ID: Ic48fd22c1886cf1d671052149c5d500d62b20ba1",
+      "parentUuid": "9e077810_a4de0c27",
+      "revId": "a8ea92457236759749986bf58f5fc233cf507178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
