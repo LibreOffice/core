@@ -182,6 +182,7 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
             if (xDocProps.is()) {
                 xDocProps->setAuthor( SvtUserOptions().GetFullName() );
                 ::DateTime now( ::DateTime::SYSTEM );
+                now.ConvertToUTC();
                 xDocProps->setCreationDate( now.GetUNODateTime() );
             }
 

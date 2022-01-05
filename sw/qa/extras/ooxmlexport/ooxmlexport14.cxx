@@ -32,6 +32,21 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <unotools/fltrcfg.hxx>
 
+#include <tools/datetime.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
+#include <sfx2/strings.hrc>
+#include <sfx2/dialoghelper.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/dispatch.hxx>
+
+#include <sfx2/sfxuno.hxx>
+
 using namespace com::sun::star;
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
@@ -436,6 +451,21 @@ CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
     // XPath '/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt' number of nodes is incorrect
     // because the exporter had no idea what markup to use for ARABIC_ZERO.
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt", "val", "decimalZero");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDocxTimeIsUTC0)
+{
+    //Create a document
+    loadURL("private:factory/swriter", nullptr);
+    //Output as .Docx
+    save("Office Open XML Text", maTempFile);
+    //access core.xml?
+    xmlDocUniquePtr pXmlDoc = parseExport("docProps/core.xml");
+    //get the DateTime from dcterms:created
+    OUString DocumentTime = getXPath(pXmlDoc, "/cp:coreProperties/dcterms:created", "created");
+    ::DateTime now( ::DateTime::SYSTEM );
+    now.ConvertToUTC();
+    //CPPUNIT_ASSERT_EQUAL_MESSAGE("Message",OUString(formatTime(now, Application::GetSettings().GetLocaleDataWrapper())), DocumentTime);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
