@@ -362,10 +362,8 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
                 || parentRole == AccessibleRole::PANEL) // sidebar
                 pAgent->NotifyAccEvent(UM_EVENT_STATE_FOCUSED, m_xAccessible.get());
         }
-        //to update ComboBox's description
         else if (role == AccessibleRole::COMBO_BOX )
         {
-            pAgent->UpdateDescription(m_xAccessible.get());
             //for editable combobox, send focus event on only edit control,
             bool bSendFocusOnCombobox = true;
             //send focused event to the first text child

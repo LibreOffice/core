@@ -76,9 +76,6 @@ public:
     void  UpdateAccName( css::accessibility::XAccessible* pXAcc, css::uno::Any newName);
     void  UpdateAccName( css::accessibility::XAccessible* pXAcc);
 
-    void  UpdateDescription( css::accessibility::XAccessible* pXAcc, css::uno::Any newDesc );
-    void  UpdateDescription( css::accessibility::XAccessible* pXAcc );
-
     void NotifyDestroy(css::accessibility::XAccessible* pXAcc);
 
     css::accessibility::XAccessible* GetParentXAccessible( css::accessibility::XAccessible* pXAcc );
