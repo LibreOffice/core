@@ -16,6 +16,23 @@
       "message": "Is there a reason to keep them?",
       "revId": "51957068317650aada266df38792e051b7269dcd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ae13f24_e6b8bc8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-05T16:46:51Z",
+      "side": 1,
+      "message": "Stephan had submitted https://gerrit.libreoffice.org/c/core/+/127986 and waits for some review.",
+      "revId": "51957068317650aada266df38792e051b7269dcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
