@@ -303,7 +303,7 @@ STDAPI DllRegisterServer()
     WCHAR ModuleFileName[MAX_PATH];
 
     GetModuleFileNameW(
-        GetModuleHandleW(MODULE_NAME),
+        GetCurrentModuleHandle(),
         ModuleFileName,
         sizeof(ModuleFileName)/sizeof(ModuleFileName[0]));
 

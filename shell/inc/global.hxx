@@ -25,6 +25,8 @@
 #endif
 #include <windows.h>
 
+HMODULE GetCurrentModuleHandle();
+
 extern LONG g_DllRefCnt;
 
 #endif

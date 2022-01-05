@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <config.hxx>
+#include <global.hxx>
 #include <utilities.hxx>
 
 // constants
@@ -81,7 +82,7 @@ std::wstring GetResString(int ResId)
 {
     wchar_t szResStr[MAX_RES_STRING];
 
-    int rc = LoadStringW( GetModuleHandleW(MODULE_NAME), ResId, szResStr, sizeof(szResStr) );
+    int rc = LoadStringW( GetCurrentModuleHandle(), ResId, szResStr, sizeof(szResStr) );
 
     OutputDebugStringFormatW( L"GetResString: read %d chars\n", rc );
     // OSL_ENSURE(rc, "String resource not found");
@@ -542,6 +543,23 @@ LCID LocaleSetToLCID( const LocaleSet_t & Locale )
         return GetSystemDefaultLCID();                    //System Default Locale
 
     return MAKELCID( MAKELANGID( usPrimaryLang, usSubLang ), SORT_DEFAULT );
+}
+
+// The function is defined in the static library, and thus its address is local to current module
+HMODULE GetCurrentModuleHandle()
+{
+    HMODULE h{};
+
+    if (GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
+                               | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                           reinterpret_cast<LPCWSTR>(&GetCurrentModuleHandle), &h)
+        == 0)
+    {
+        const DWORD dwError = GetLastError();
+        OutputDebugStringFormatW(
+            L"GetCurrentModuleHandle: GetModuleHandleExW failed, error is 0x%X", dwError);
+    }
+    return h;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
