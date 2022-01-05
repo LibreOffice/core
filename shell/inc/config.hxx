@@ -20,12 +20,6 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_CONFIG_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_CONFIG_HXX
 
-#ifdef _AMD64_
-#define MODULE_NAME L"shlxthdl_x64.dll"
-#else
-#define MODULE_NAME L"shlxthdl.dll"
-#endif
-
 #define COLUMN_HANDLER_DESCRIPTIVE_NAME    L"LibreOffice Column Handler"
 #define INFOTIP_HANDLER_DESCRIPTIVE_NAME   L"LibreOffice Infotip Handler"
 #define PROPSHEET_HANDLER_DESCRIPTIVE_NAME L"LibreOffice Property Sheet Handler"

@@ -22,6 +22,7 @@
 #include "document_statistic.hxx"
 #include <utilities.hxx>
 #include <config.hxx>
+#include <global.hxx>
 
 #include <commctrl.h>
 #include <resource.h>
@@ -87,7 +88,7 @@ void list_view_builder::build(statistic_group_list_t& gl)
 void list_view_builder::setup_list_view()
 {
     HIMAGELIST h_ils = ImageList_Create(16,15,ILC_MASK, 7, 0);
-    HBITMAP    h_bmp = LoadBitmapW(GetModuleHandleW(MODULE_NAME), MAKEINTRESOURCEW(IDB_PROPERTY_IMAGES));
+    HBITMAP    h_bmp = LoadBitmapW(GetCurrentModuleHandle(), MAKEINTRESOURCEW(IDB_PROPERTY_IMAGES));
     ImageList_AddMasked(h_ils, h_bmp, RGB(255, 0, 255));
 
     (void) ListView_SetImageList(hwnd_list_view_, h_ils, LVSIL_SMALL);
