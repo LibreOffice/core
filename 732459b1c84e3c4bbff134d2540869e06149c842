@@ -69,6 +69,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f53bfa1_20aa6126",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-05T15:03:20Z",
+      "side": 1,
+      "message": "Sorry Laszlo, because i have not noticed it in time, i hope there is no more typo in the patch.",
+      "parentUuid": "86fa6577_3d906d96",
+      "revId": "732459b1c84e3c4bbff134d2540869e06149c842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8850bd51_81acd491",
