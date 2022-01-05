@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e17768ee_cf385791",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-05T18:10:58Z",
+      "side": 1,
+      "message": "I always forget if typos in license part can be fixed or not, so can\u0027t tell.",
+      "revId": "3e3d9a80b13c9468ba7aa2f09feb1b5714bb7c4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
