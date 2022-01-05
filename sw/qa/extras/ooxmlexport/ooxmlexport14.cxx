@@ -33,6 +33,21 @@
 #include <unotools/fltrcfg.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <tools/datetime.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
+#include <sfx2/strings.hrc>
+#include <sfx2/dialoghelper.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/dispatch.hxx>
+
+#include <sfx2/sfxuno.hxx>
+
 using namespace com::sun::star;
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
@@ -437,6 +452,14 @@ CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
     // XPath '/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt' number of nodes is incorrect
     // because the exporter had no idea what markup to use for ARABIC_ZERO.
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt", "val", "decimalZero");
+}
+DECLARE_OOXMLEXPORT_TEST(testTdf134589, "tdf134589.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("docProps/core.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    OUString DocumentTime = getXPathContent(pXmlDoc, "/cp:coreProperties/dcterms:created");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Message:Time is not equal",OUString("2022-04-21T06:32:12Z"), DocumentTime);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
