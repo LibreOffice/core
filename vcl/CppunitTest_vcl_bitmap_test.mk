@@ -22,13 +22,9 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_bitmap_test, \
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,\
 	boost_headers \
+    epoxy \
 	glm_headers \
 ))
-ifeq ($(DISABLE_GUI),)
-$(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,\
-     epoxy \
- ))
-endif
 
 $(eval $(call gb_CppunitTest_set_include,vcl_bitmap_test,\
     $$(INCLUDE) \

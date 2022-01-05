@@ -81,15 +81,11 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
 
 $(eval $(call gb_Library_use_externals,svxcore,\
 	boost_headers \
+    epoxy \
 	icuuc \
 	icu_headers \
 	libxml2 \
 ))
-ifeq ($(DISABLE_GUI),)
-$(eval $(call gb_Library_use_externals,svxcore,\
-     epoxy \
- ))
-endif
 
 ifeq ($(OS),MACOSX)
 

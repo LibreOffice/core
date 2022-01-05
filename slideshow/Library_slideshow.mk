@@ -25,12 +25,8 @@ $(eval $(call gb_Library_set_precompiled_header,slideshow,slideshow/inc/pch/prec
 $(eval $(call gb_Library_use_externals,slideshow,\
 	boost_headers \
 	box2d \
+    epoxy \
 ))
-ifeq ($(DISABLE_GUI),)
-$(eval $(call gb_Library_use_externals,slideshow,\
-     epoxy \
- ))
-endif
 
 $(eval $(call gb_Library_use_sdk_api,slideshow))
 
