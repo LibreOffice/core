@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5003dec4_66967c62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003507
+      },
+      "writtenOn": "2022-01-05T10:03:34Z",
+      "side": 1,
+      "message": "Hi Heiko",
+      "revId": "f3bdf7dc243d89dd56564d14a8acda17676ac1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea5ce4c3_26fa1e26",
@@ -14,6 +31,30 @@
       "writtenOn": "2022-01-05T09:41:26Z",
       "side": 1,
       "message": "This is the size handler and I don\u0027t see need to adjust the sensitivity here. The AutoClickHdl() updates this and with Verne-Lai\u0027s patch I see no problem anymore. Don\u0027t understand what s/he means with \"the position of the components in windows is slightly obscured\" at BZ and would resolve it as fixed. And abandon this patch. Do you agree or am I missing something?",
+      "range": {
+        "startLine": 793,
+        "startChar": 18,
+        "endLine": 793,
+        "endChar": 47
+      },
+      "revId": "f3bdf7dc243d89dd56564d14a8acda17676ac1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdae41a2_c4beb614",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1003507
+      },
+      "writtenOn": "2022-01-05T10:03:34Z",
+      "side": 1,
+      "message": "Unfortunately Verne-Lai\u0027s patch does not work for me and I don\u0027t really understand how that patch could fix anything, it just adjusts maximum displayed column widths to lower value, that\u0027s it. On my desktop I have only 4 column properties displayed and when I create table with 5 columns I can\u0027t scroll setting to adjust 5th column width. If I create table with 6 or 7 columns everything works fine. I\u0027ve added some debug messages to code and see such behaviour:\n1) method call: \nvoid  SwTableColumnPage::Reset( const SfxItemSet* ) on line 815\nat this time m_nMetFields default to 5 and code on line 851 (if (m_nNoOfVisibleCols \u003e m_nMetFields)) return false.\n2) method call:\nIMPL_LINK_NOARG(SwTableColumnPage, SizeHdl, void*, void) on line 771\nhere m_nMetFields got changed to 4 and it\u0027s a good time to check for m_nNoOfVisibleCols \u003e m_nMetFields again and change button sensitive state.",
+      "parentUuid": "ea5ce4c3_26fa1e26",
       "range": {
         "startLine": 793,
         "startChar": 18,
