@@ -5252,6 +5252,7 @@ if test "$enable_gui" = "no"; then
     fi
     USING_X11=
     DISABLE_GUI=TRUE
+    test_epoxy=no
 else
     AC_DEFINE(HAVE_FEATURE_UI)
 fi

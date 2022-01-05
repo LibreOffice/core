@@ -224,7 +224,9 @@ endef
 
 endif # SYSTEM_CPPUNIT
 
-ifneq ($(SYSTEM_EPOXY),)
+
+ifeq ($(ENABLE_EPOXY),TRUE)
+ifeq ($(SYSTEM_EPOXY),TRUE)
 
 define gb_LinkTarget__use_epoxy
 $(call gb_LinkTarget_set_include,$(1),\
@@ -260,7 +262,14 @@ $(call gb_ExternalProject_use_external_project,$(1),epoxy)
 
 endef
 
-endif # SYSTEM_EPOXY
+endif # !SYSTEM_EPOXY
+else # !ENABLE_EPOXY
+
+gb_LinkTarget__use_epoxy :=
+gb_ExternalProject__use_epoxy :=
+
+endif # !ENABLE_EPOXY
+
 
 define gb_LinkTarget__use_iconv
 ifeq ($(COM),MSC)

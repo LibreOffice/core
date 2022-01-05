@@ -15,14 +15,9 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_svm_test, \
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_svm_test,\
 	boost_headers \
+    epoxy \
     libxml2 \
 ))
-ifeq ($(DISABLE_GUI),)
-$(eval $(call gb_CppunitTest_use_externals,vcl_svm_test,\
-     epoxy \
- ))
-endif
-
 
 $(eval $(call gb_CppunitTest_set_include,vcl_svm_test,\
     $$(INCLUDE) \

@@ -69,6 +69,7 @@ $(eval $(call gb_Library_use_externals,cui,\
 	boost_headers \
 	$(call gb_Helper_optional,OPENCL,\
 		clew) \
+    epoxy \
     icuuc \
     icu_headers \
     libxml2 \
@@ -76,11 +77,6 @@ $(eval $(call gb_Library_use_externals,cui,\
     orcus \
     zxing \
 ))
-ifeq ($(DISABLE_GUI),)
-$(eval $(call gb_Library_use_externals,cui,\
-     epoxy \
- ))
-endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,cui,\

@@ -41,11 +41,9 @@ $(eval $(call gb_Library_add_exception_objects,avmedia,\
 
 ifneq (,$(filter AVMEDIA,$(BUILD_TYPE)))
 
-ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,avmedia,\
     epoxy \
 ))
-endif
 
 $(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia,services))
 

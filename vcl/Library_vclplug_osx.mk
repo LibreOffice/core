@@ -57,17 +57,12 @@ $(eval $(call gb_Library_use_libraries,vclplug_osx,\
 
 $(eval $(call gb_Library_use_externals,vclplug_osx,\
     boost_headers \
+    epoxy \
     harfbuzz \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         skia \
     ) \
 ))
-
-ifeq ($(DISABLE_GUI),)
-$(eval $(call gb_Library_use_externals,vclplug_osx,\
-    epoxy \
-))
-endif
 
 $(eval $(call gb_Library_add_defs,vclplug_osx,\
     -DMACOSX_BUNDLE_IDENTIFIER=\"$(MACOSX_BUNDLE_IDENTIFIER)\" \

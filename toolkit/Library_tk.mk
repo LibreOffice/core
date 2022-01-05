@@ -23,13 +23,9 @@ $(eval $(call gb_Library_set_componentfile,tk,toolkit/util/tk,services))
 
 $(eval $(call gb_Library_use_externals,tk,\
     boost_headers \
-))
-
-ifeq ($(DISABLE_GUI),)
-$(eval $(call gb_Library_use_externals,tk,\
     epoxy \
 ))
-endif
+
 $(eval $(call gb_Library_set_include,tk,\
     $$(INCLUDE) \
     -I$(SRCDIR)/toolkit/inc \
