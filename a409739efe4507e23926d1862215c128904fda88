@@ -16,6 +16,24 @@
       "message": "Alexander, did you send your license statement?",
       "revId": "a409739efe4507e23926d1862215c128904fda88",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a2301af_745881a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003507
+      },
+      "writtenOn": "2022-01-05T14:31:25Z",
+      "side": 1,
+      "message": "Hi Roman, I forget to do it in-time but I did it for now.",
+      "parentUuid": "f5cf1414_54ab82f1",
+      "revId": "a409739efe4507e23926d1862215c128904fda88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
