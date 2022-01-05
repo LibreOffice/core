@@ -70,6 +70,24 @@
       "parentUuid": "cc155fbf_62cca276",
       "revId": "ecc50f56b3282ec3b0364101d860f22fe8da9042",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f9d0ffa_ce5e4569",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-05T21:25:45Z",
+      "side": 1,
+      "message": "Should be fixed by https://gerrit.libreoffice.org/c/core/+/127995\n\nMaybe there was some magic dependency on some rules sequence, if that worked before... no idea.",
+      "parentUuid": "7cbca9e2_8f94d701",
+      "revId": "ecc50f56b3282ec3b0364101d860f22fe8da9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
