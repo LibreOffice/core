@@ -200,7 +200,6 @@ m_pszValue(nullptr),
 m_pszActionDescription(nullptr),
 m_iRole(0x00),
 m_dState(0x00),
-m_pszDescription(nullptr),
 m_pIParent(nullptr),
 m_dChildID(0x00),
 m_dFocusChildID(UACC_NO_FOCUS),
@@ -226,10 +225,6 @@ CMAccessible::~CMAccessible()
     if(m_pszValue!=nullptr)
     {
         SAFE_SYSFREESTRING(m_pszValue);
-    }
-    if(m_pszDescription!=nullptr)
-    {
-        SAFE_SYSFREESTRING(m_pszDescription);
     }
 
     if(m_pszActionDescription!=nullptr)
@@ -462,8 +457,16 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accDescription(VARIANT varCh
         {
             if(varChild.lVal==CHILDID_SELF)
             {
+                if (!m_xAccessible.is())
+                    return S_FALSE;
+
+                Reference<XAccessibleContext> xContext = m_xAccessible->getAccessibleContext();
+                if (!xContext.is())
+                    return S_FALSE;
+
+                const OUString sDescription = xContext->getAccessibleDescription();
                 SAFE_SYSFREESTRING(*pszDescription);
-                *pszDescription = SysAllocString(m_pszDescription);
+                *pszDescription = SysAllocString(o3tl::toW(sDescription.getStr()));
                 return S_OK;
             }
 
@@ -1197,34 +1200,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::SetState(DWORD pXSate)
 
     m_dState = pXSate;
     return S_OK;
-}
-
-
-/**
-* Set the accessible description of the current COM object self from UNO.
-* @param    pszDescription, the name used to set the description of the current object.
-* @return   S_OK if successful and E_FAIL if failure.
-*/
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccDescription(const OLECHAR __RPC_FAR *pszDescription)
-{
-    // internal IMAccessible - no mutex meeded
-
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
-        // #CHECK#
-        if(pszDescription == nullptr)
-        {
-            return E_INVALIDARG;
-        }
-
-        SAFE_SYSFREESTRING(m_pszDescription);
-        m_pszDescription = SysAllocString(pszDescription);
-
-        if(m_pszDescription==nullptr)
-            return E_FAIL;
-        return S_OK;
-
-        LEAVE_PROTECTED_BLOCK
 }
 
 /**

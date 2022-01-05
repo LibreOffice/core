@@ -285,22 +285,6 @@ void  AccObject::UpdateName( )
 
     return ;
 }
-/**
-   * Update description property to com object.
-   * no content for update description
-   * @param
-   * @return
-   */
-void AccObject::UpdateDescription()
-{
-    if (!m_pIMAcc)
-    {
-        return;
-    }
-
-    m_pIMAcc->Put_XAccDescription(o3tl::toW(m_xAccContextRef->getAccessibleDescription().getStr()));
-    return ;
-}
 
 /**
    * Update default action property to com object.
@@ -499,18 +483,6 @@ void  AccObject::SetName( Any pAny)
 
     m_pIMAcc->Put_XAccName( o3tl::toW(GetMAccessibleValueFromAny(pAny).getStr()) );
 
-}
-
-/**
-   * Set description property via pAny.
-   * @param pAny New accessible description.
-   * @return
-   */
-void  AccObject::SetDescription( Any pAny )
-{
-    if( nullptr == m_pIMAcc )
-        return ;
-    m_pIMAcc->Put_XAccDescription( o3tl::toW(GetMAccessibleValueFromAny(pAny).getStr()) );
 }
 
 /**
@@ -1022,8 +994,6 @@ bool AccObject:: UpdateAccessibleInfoFromUnoToMSAA ( )
     UpdateName();
 
     UpdateValue();
-
-    UpdateDescription();
 
     UpdateActionDesc();
 
