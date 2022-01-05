@@ -99,7 +99,6 @@ void AccEventListener::HandleNameChangedEvent(Any name)
  */
 void AccEventListener::HandleDescriptionChangedEvent(Any desc)
 {
-    pAgent->UpdateDescription(m_xAccessible.get(), desc);
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_DESCRIPTIONCHANGE, m_xAccessible.get());
 }
 

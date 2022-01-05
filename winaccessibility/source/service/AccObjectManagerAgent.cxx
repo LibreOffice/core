@@ -123,18 +123,6 @@ void  AccObjectManagerAgent::UpdateLocation( XAccessible* /* pXAcc */, long /*to
 }
 
 /**
-   * Interface of updating MSAA name when UNO description_changed event occurs.
-   * @param pXAcc Uno XAccessible interface of control.
-   * @param newDesc New UNO accessible description.
-   * @return
-   */
-void  AccObjectManagerAgent::UpdateDescription( XAccessible* pXAcc, Any newDesc )
-{
-    if( pWinManager )
-        pWinManager->SetDescription( pXAcc, newDesc );
-}
-
-/**
    * When a new UNO XAccessible object is found by listener, we create a corresponding
    * com object and insert it to our manager list.
    * @param pXAcc Uno XAccessible interface of control.
@@ -331,12 +319,6 @@ short AccObjectManagerAgent::GetParentRole( XAccessible* pXAcc )
         return pWinManager->GetParentRole( pXAcc );
 
     return -1;
-}
-
-void AccObjectManagerAgent::UpdateDescription( XAccessible* pXAcc )
-{
-    if(pWinManager)
-        pWinManager->UpdateDescription( pXAcc );
 }
 
 void AccObjectManagerAgent::UpdateChildState(XAccessible* pXAcc)
