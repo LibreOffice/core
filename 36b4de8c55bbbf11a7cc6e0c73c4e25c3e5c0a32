@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ab68001_0c6345d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-05T09:52:56Z",
+      "side": 1,
+      "message": "Nice work. But there is an issue: the label \"Text Orientation\" becomes now separated from the control itself. I would just fill the space (and align the indent spinner). The Text Extension buttons below should just come after Vertically Stacked but I\u0027d appreciate a label as it is some orthogonal attribute. (Or just remove all these less-frequently used settings from the sidebar.)\n\nI wonder if \"Merge Cells\" isn\u0027t better suited at Cell Appearance. But this would be rather another patch.",
+      "revId": "36b4de8c55bbbf11a7cc6e0c73c4e25c3e5c0a32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
