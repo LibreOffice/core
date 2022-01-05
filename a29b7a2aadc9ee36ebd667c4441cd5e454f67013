@@ -33,6 +33,24 @@
       "message": "-2 to avoid accidental merge due to Heiko\u0027s +2",
       "revId": "a29b7a2aadc9ee36ebd667c4441cd5e454f67013",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ccc06df_1c6ea26e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-05T08:09:48Z",
+      "side": 1,
+      "message": "It\u0027s a workspace setting to me (and I would also not save the zoom level with the document). And most of the document level settings need (or rather \"are requested to have\") another option for the initial value anyway.\n\nBut no hard feelings if we go the document way.",
+      "parentUuid": "d9dbc1ec_04ba705f",
+      "revId": "a29b7a2aadc9ee36ebd667c4441cd5e454f67013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
