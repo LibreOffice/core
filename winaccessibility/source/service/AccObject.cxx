@@ -786,28 +786,25 @@ void AccObject::UpdateState()
         return;
     }
 
-    Sequence<short> pStates = pRState->getStates();
-    int count = pStates.getLength();
-
     bool isEnable = false;
     bool isShowing = false;
     bool isEditable = false;
     bool isVisible = false;
     bool isFocusable = false;
 
-    for( int iIndex = 0;iIndex < count;iIndex++ )
+    for (const sal_Int16 nState : pRState->getStates())
     {
-        if( pStates[iIndex] == ENABLED )
+        if (nState == ENABLED)
             isEnable = true;
-        else if( pStates[iIndex] == SHOWING)
+        else if (nState == SHOWING)
             isShowing = true;
-        else if( pStates[iIndex] == VISIBLE)
+        else if (nState == VISIBLE)
             isVisible = true;
-        else if( pStates[iIndex] == EDITABLE )
+        else if (nState == EDITABLE)
             isEditable = true;
-        else if (pStates[iIndex] == FOCUSABLE)
+        else if (nState == FOCUSABLE)
             isFocusable = true;
-        IncreaseState( pStates[iIndex]);
+        IncreaseState(nState);
     }
     bool bIsMenuItem = m_accRole == MENU_ITEM || m_accRole == RADIO_MENU_ITEM || m_accRole == CHECK_MENU_ITEM;
 
