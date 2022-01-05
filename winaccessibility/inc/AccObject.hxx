@@ -114,7 +114,6 @@ public:
 
     void  SetName( css::uno::Any newName);
     void  SetValue( css::uno::Any pAny );
-    void  SetDescription( css::uno::Any newDesc );
     void  SetRole( short Role );
 
     short GetRole() const;
@@ -123,7 +122,6 @@ public:
     void  UpdateName();
     void  UpdateValue();
     void  UpdateAction();
-    void  UpdateDescription();
     void  UpdateValidWindow();
     void  UpdateLocation();
 

@@ -52,7 +52,6 @@ void AccObjectContainerEventListener::HandleStateChangedEvent(Any oldValue, Any 
         if (newV == AccessibleStateType::FOCUSED)
         {
             pAgent->UpdateAccName(m_xAccessible.get());
-            pAgent->UpdateDescription(m_xAccessible.get());
         }
     }
     AccContainerEventListener::HandleStateChangedEvent(oldValue, newValue);
