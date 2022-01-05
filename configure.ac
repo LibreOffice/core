@@ -2420,10 +2420,8 @@ AC_ARG_WITH(system-lockfile,
         [Detect a system lockfile program or use the \$file argument.]))
 
 AC_ARG_WITH(webdav,
-    AS_HELP_STRING([--with-webdav],
-        [Specify which library to use for webdav implementation.
-         Possible values: "curl", "no". The default value is "curl".
-         Example: --with-webdav="curl"]))
+    AS_HELP_STRING([--without-webdav],
+        [Disable WebDAV support in the UCB.]))
 
 AC_ARG_WITH(linker-hash-style,
     AS_HELP_STRING([--with-linker-hash-style],
@@ -10812,26 +10810,23 @@ AC_SUBST(XRANDR_CFLAGS)
 AC_SUBST(XRANDR_LIBS)
 AC_SUBST(ENABLE_RANDR)
 
-if test "$test_webdav" = yes; then
-    if test -z "$with_webdav"; then
-        WITH_WEBDAV=curl
-    else
-        WITH_WEBDAV="$with_webdav"
-    fi
+if test -z "$with_webdav"; then
+    with_webdav=$test_webdav
 fi
 
-AC_MSG_CHECKING([for webdav library])
-case "$WITH_WEBDAV" in
-curl)
-    AC_MSG_RESULT([curl])
-    # curl is already mandatory (almost) and checked elsewhere
-    if test "$enable_curl" = "no"; then
-        AC_MSG_ERROR(["--with-webdav=curl conflicts with --disable-curl"])
-    fi
+AC_MSG_CHECKING([for WebDAV support])
+case "$with_webdav" in
+no)
+    AC_MSG_RESULT([no])
+    WITH_WEBDAV=""
     ;;
 *)
-    AC_MSG_RESULT([none, disabled])
-    WITH_WEBDAV=""
+    AC_MSG_RESULT([yes])
+    # curl is already mandatory (almost) and checked elsewhere
+    if test "$enable_curl" = "no"; then
+        AC_MSG_ERROR(["--with-webdav conflicts with --disable-curl"])
+    fi
+    WITH_WEBDAV=TRUE
     ;;
 esac
 AC_SUBST(WITH_WEBDAV)
