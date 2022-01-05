@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9cf9c31_e9898603",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-05T11:47:59Z",
+      "side": 1,
+      "message": "Hi Andreas. I\u0027ll do it in a subsequent patch.",
+      "parentUuid": "2b1c0b54_c3b880e4",
+      "revId": "14a402ce0612f1465f6406753eab09fb2a3b66c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa4cafdc_44265aa4",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-01-05T09:25:08Z",
       "side": 1,
       "message": "Among all these unrelated changes I cannot see the actual patch. Please clean up .",
+      "range": {
+        "startLine": 2152,
+        "startChar": 48,
+        "endLine": 2152,
+        "endChar": 64
+      },
+      "revId": "14a402ce0612f1465f6406753eab09fb2a3b66c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36cf8461_4be02114",
+        "filename": "sc/uiconfig/scalc/ui/notebookbar.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 2152,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-05T11:47:59Z",
+      "side": 1,
+      "message": "I don\u0027t know why but Glade is now adding this everywhere.\n\u003cproperty name\u003d\"can_focus\"\u003eFalse\u003c/property\u003e\n\nI\u0027ll clean it up.",
+      "parentUuid": "aa4cafdc_44265aa4",
       "range": {
         "startLine": 2152,
         "startChar": 48,
