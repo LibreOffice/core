@@ -34,6 +34,23 @@
       "parentUuid": "b51b5a34_d6f30dc6",
       "revId": "f5f4a971e557d53fe36723b2835f87b4aa4350e1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "297a6900_63bcd091",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-05T18:09:09Z",
+      "side": 1,
+      "message": "No I just meant this patch should be named:\n\"Rename of variable name OBJGRUP to OBJGROUP\"\n\nand so revert the last changes which concern another variable.\n\nIndeed, these other changes (I didn\u0027t check if it was for the same variable) should be in a distinct patch.",
+      "revId": "f5f4a971e557d53fe36723b2835f87b4aa4350e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
