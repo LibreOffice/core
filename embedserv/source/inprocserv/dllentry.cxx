@@ -203,7 +203,10 @@ STDAPI DllCanUnloadNow()
 
 STDAPI DllRegisterServer()
 {
-    HMODULE aCurModule = GetModuleHandleW( L"inprocserv.dll" );
+    HMODULE aCurModule{};
+    GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
+                           | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                       reinterpret_cast<LPCWSTR>(&DllRegisterServer), &aCurModule);
     if( aCurModule )
     {
         wchar_t aLibPath[1024];
