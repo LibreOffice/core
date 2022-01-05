@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7bfe459_cb8094db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-05T06:39:04Z",
+      "side": 1,
+      "message": "Just for interest sake - noting that the problem here is that we are firing a listener event while holding the mutex, which is almost always asking for trouble :-)",
+      "revId": "18444c2822e6561aa302f28f8166042b8dad0fe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
