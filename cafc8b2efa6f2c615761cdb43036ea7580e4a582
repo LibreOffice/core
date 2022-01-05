@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65ccaaa1_4379322c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-05T12:08:00Z",
+      "side": 1,
+      "message": "Looks good so far. But notebookbar_single.ui and notebookbar_compact.ui in sd/uiconfig/simpress/ui/ and sd/uiconfig/sdraw/ui/ give also access to this dialog, which is in fact only available in Writer. So please also remove the command from these files.",
+      "revId": "cafc8b2efa6f2c615761cdb43036ea7580e4a582",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
