@@ -1246,7 +1246,8 @@ $(foreach lib,$(2),$(call gb_LinkTarget__lib_dummy_depend,$(lib)))
 endef
 
 # libraries which are merged but need to be built for gb_BUILD_HELPER_TOOLS
-gb_BUILD_HELPER_LIBS := basegfx \
+gb_BUILD_HELPER_LIBS := $(foreach lib, \
+    basegfx \
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -1260,6 +1261,7 @@ gb_BUILD_HELPER_LIBS := basegfx \
 	ucbhelper \
 	unoidl \
 	xmlreader \
+    , $(call gb_Library__get_workdir_linktargetname,$(lib)))
 
 # tools libmerged depends on, so they link against gb_BUILD_HELPER_LIBS
 gb_BUILD_HELPER_TOOLS := $(foreach exe,\
@@ -1271,12 +1273,12 @@ gb_BUILD_HELPER_TOOLS := $(foreach exe,\
 
 # call gb_LinkTarget__is_build_lib,linktargetname
 define gb_LinkTarget__is_build_lib
-$(if $(filter $(call gb_LinkTarget__get_workdir_linktargetname,$(1)),$(foreach lib,$(gb_BUILD_HELPER_LIBS),$(call gb_Library__get_workdir_linktargetname,$(lib)))),$(true),$(false))
+$(if $(filter $(call gb_LinkTarget__get_workdir_linktargetname,$(1)),$(call gb_BUILD_HELPER_LIBS)),$(true))
 endef
 
 # call gb_LinkTarget__is_build_tool,linktargetname
 define gb_LinkTarget__is_build_tool
-$(if $(filter $(call gb_LinkTarget__get_workdir_linktargetname,$(1)),$(call gb_BUILD_HELPER_TOOLS)),$(true),$(false))
+$(if $(filter $(call gb_LinkTarget__get_workdir_linktargetname,$(1)),$(call gb_BUILD_HELPER_TOOLS)),$(true))
 endef
 
 define gb_LinkTarget__is_merged
@@ -1295,15 +1297,14 @@ $$(eval $$(call gb_Output_error,Cannot link against plugin library/libraries '$$
 endif
 endif
 
-ifeq ($(call gb_LinkTarget__is_build_tool,$(1)),$(true))
+ifeq ($(call gb_LinkTarget__is_build_tool,$(1))$(call gb_LinkTarget__is_build_lib,$(1)),$(true))
 $(call gb_LinkTarget__use_libraries,$(1),$(2),$(2),$(4))
 else
+# $$(3) = Always just depend on non-merged libs. If any dependency is merged, but you aren't, also depend on "merged".
 $(call gb_LinkTarget__use_libraries,$(1),$(2),$(strip \
-	$(if $(filter $(gb_MERGEDLIBS),$(2)), \
-		$(if $(call gb_LinkTarget__is_merged,$(1)), \
-			$(filter $(gb_MERGEDLIBS),$(2)), merged)) \
-	$(filter-out $(gb_MERGEDLIBS),$(2)) \
-	),$(4))
+        $(filter-out $(gb_MERGEDLIBS),$(2)) \
+        $(if $(filter $(gb_MERGEDLIBS),$(2)),$(if $(call gb_LinkTarget__is_merged,$(1)),,merged)) \
+    ),$(4))
 endif
 
 endef
