@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c47b0f2c_2d38afa2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-05T21:26:43Z",
+      "side": 1,
+      "message": "Do you consider this wrong, not wrong but overkill or ok?\n\nIn the comment I suggested we could also add a boolean value to fillString functions (which would have false by default) to indicate if a trim is necessary.",
+      "revId": "fb7415f7b8025bad0bb9291593b09d45c0cf540b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
