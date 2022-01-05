@@ -139,7 +139,6 @@ public:
     STDMETHOD(DecreaseState)(DWORD pXSate) override;
     STDMETHOD(IncreaseState)(DWORD pXSate) override;
     STDMETHOD(SetState)(DWORD pXSate) override;
-    STDMETHOD(Put_XAccDescription)(const OLECHAR __RPC_FAR *pszDescription) override;
     STDMETHOD(Put_XAccValue)(const OLECHAR __RPC_FAR *pszAccValue) override;
     STDMETHOD(Put_XAccLocation)(const Location sLocation) override;
     STDMETHOD(Put_XAccFocus)(long dChildID) override;
@@ -159,7 +158,6 @@ private:
     BSTR m_pszActionDescription;
     unsigned short m_iRole;
     DWORD   m_dState;
-    BSTR m_pszDescription;
     IMAccessible* m_pIParent;
     Location m_sLocation;
 

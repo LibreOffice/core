@@ -924,13 +924,6 @@ void  AccObjectWinManager::UpdateAction( XAccessible* pXAcc )
         pAccObj->UpdateAction();
 }
 
-void AccObjectWinManager::UpdateDescription( XAccessible* pXAcc )
-{
-    AccObject* pAccObj = GetAccObjByXAcc( pXAcc );
-    if ( pAccObj )
-        pAccObj->UpdateDescription();
-}
-
 /**
    * Set corresponding com object's accessible location via XAccessible interface and new
    * location.
@@ -982,19 +975,6 @@ void  AccObjectWinManager::SetAccName( XAccessible* pXAcc, Any newName)
     AccObject* pAccObj = GetAccObjByXAcc( pXAcc );
     if( pAccObj )
         pAccObj->SetName( newName );
-}
-
-/**
-   * Set corresponding com object's description via XAccessible interface and new description.
-   * @param pXAcc XAccessible interface.
-   * @param newDesc new description
-   * @return
-   */
-void  AccObjectWinManager::SetDescription( XAccessible* pXAcc, Any newDesc )
-{
-    AccObject* pAccObj = GetAccObjByXAcc( pXAcc );
-    if( pAccObj )
-        pAccObj->SetDescription( newDesc );
 }
 
 /**
