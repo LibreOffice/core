@@ -1904,7 +1904,7 @@ AC_ARG_ENABLE(bogus-pkg-config,
 AC_ARG_ENABLE(openssl,
     AS_HELP_STRING([--disable-openssl],
         [Disable using libssl/libcrypto from OpenSSL. If disabled,
-         components will either use GNUTLS or NSS. Work in progress,
+         components will use NSS. Work in progress,
          use only if you are hacking on it.]),
 ,enable_openssl=yes)
 
@@ -1916,7 +1916,7 @@ libo_FUZZ_ARG_ENABLE(cipher-openssl-backend,
 AC_ARG_ENABLE(nss,
     AS_HELP_STRING([--disable-nss],
         [Disable using NSS. If disabled,
-         components will either use GNUTLS or openssl. Work in progress,
+         components will use openssl. Work in progress,
          use only if you are hacking on it.]),
 ,enable_nss=yes)
 
@@ -10486,8 +10486,8 @@ if test -n "$with_tls"; then
         fi
 
         # warn that OpenSSL has been selected but not all TLS code has this option
-        AC_MSG_WARN([TLS/SSL implementation to use is OpenSSL but some code may still depend on NSS or GNUTLS])
-        add_warning "TLS/SSL implementation to use is OpenSSL but some code may still depend on NSS or GNUTLS"
+        AC_MSG_WARN([TLS/SSL implementation to use is OpenSSL but some code may still depend on NSS])
+        add_warning "TLS/SSL implementation to use is OpenSSL but some code may still depend on NSS"
         ;;
     nss)
         AC_DEFINE(USE_TLS_NSS)
@@ -10947,25 +10947,6 @@ if test "$build_crypto" = yes; then
         AC_DEFINE([USE_CRYPTO_NSS])
     fi
 fi
-
-dnl ===================================================================
-dnl Check for building gnutls
-dnl ===================================================================
-AC_MSG_CHECKING([whether to use gnutls])
-if test "$WITH_WEBDAV" = "neon" -a "$with_system_neon" = no -a "$enable_openssl" = "no"; then
-    AC_MSG_RESULT([yes])
-    AM_PATH_LIBGCRYPT()
-    PKG_CHECK_MODULES(GNUTLS, [gnutls],,
-        AC_MSG_ERROR([[Disabling OpenSSL was requested, but GNUTLS is not
-                      available in the system to use as replacement.]]))
-    FilterLibs "${LIBGCRYPT_LIBS}"
-    LIBGCRYPT_LIBS="${filteredlibs}"
-else
-    AC_MSG_RESULT([no])
-fi
-
-AC_SUBST([LIBGCRYPT_CFLAGS])
-AC_SUBST([LIBGCRYPT_LIBS])
 
 dnl ===================================================================
 dnl Check for system redland
