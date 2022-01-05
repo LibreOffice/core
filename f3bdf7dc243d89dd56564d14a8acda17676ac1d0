@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea5ce4c3_26fa1e26",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-05T09:41:26Z",
+      "side": 1,
+      "message": "This is the size handler and I don\u0027t see need to adjust the sensitivity here. The AutoClickHdl() updates this and with Verne-Lai\u0027s patch I see no problem anymore. Don\u0027t understand what s/he means with \"the position of the components in windows is slightly obscured\" at BZ and would resolve it as fixed. And abandon this patch. Do you agree or am I missing something?",
+      "range": {
+        "startLine": 793,
+        "startChar": 18,
+        "endLine": 793,
+        "endChar": 47
+      },
+      "revId": "f3bdf7dc243d89dd56564d14a8acda17676ac1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
