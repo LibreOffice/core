@@ -486,18 +486,6 @@ void  AccObject::SetName( Any pAny)
 }
 
 /**
-   * Set role property via pAny
-   * @param Role New accessible role.
-   * @return
-   */
-void  AccObject::SetRole( short Role )
-{
-    if( nullptr == m_pIMAcc )
-        return ;
-    m_pIMAcc->Put_XAccRole( Role );
-}
-
-/**
 * Get role property via pAny
 * @param
 * @return accessible role
