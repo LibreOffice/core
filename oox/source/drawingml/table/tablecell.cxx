@@ -33,6 +33,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <sal/log.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -152,7 +153,12 @@ static void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
                           oox::drawingml::LineProperties& rBottomBorder,
                           oox::drawingml::LineProperties& rTopLeftToBottomRightBorder,
                           oox::drawingml::LineProperties& rBottomLeftToTopRightBorder,
-                          TableStylePart& rTableStylePart )
+                          TableStylePart& rTableStylePart,
+                          sal_Int32 nPartId,
+                          sal_Int32 nCol,
+                          sal_Int32 nMaxCol,
+                          sal_Int32 nRow,
+                          sal_Int32 nMaxRow)
 {
     ::oox::drawingml::FillPropertiesPtr& rPartFillPropertiesPtr( rTableStylePart.getFillProperties() );
     if ( rPartFillPropertiesPtr )
@@ -169,12 +175,35 @@ static void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
         }
     }
 
+    // Handle only whole table
+    if (nPartId == 0)
+    {
+        if (nCol == 0)
+        {
+            applyBorder( rFilterBase, rTableStylePart, XML_left, rLeftBorder );
+        }
+        if (nCol == nMaxCol)
+        {
+            applyBorder( rFilterBase, rTableStylePart, XML_right, rRightBorder );
+        }
+        if (nRow == 0)
+        {
+            applyBorder( rFilterBase, rTableStylePart, XML_top, rTopBorder );
+        }
+        if (nRow == nMaxRow)
+        {
+            applyBorder( rFilterBase, rTableStylePart, XML_bottom, rBottomBorder );
+        }
+    }
+
+/*
     applyBorder( rFilterBase, rTableStylePart, XML_left, rLeftBorder );
     applyBorder( rFilterBase, rTableStylePart, XML_right, rRightBorder );
     applyBorder( rFilterBase, rTableStylePart, XML_top, rTopBorder );
     applyBorder( rFilterBase, rTableStylePart, XML_bottom, rBottomBorder );
     applyBorder( rFilterBase, rTableStylePart, XML_tl2br, rTopLeftToBottomRightBorder );
     applyBorder( rFilterBase, rTableStylePart, XML_tr2bl, rBottomLeftToTopRightBorder );
+*/
 
     aTextCharProps.maLatinFont = rTableStylePart.getLatinFont();
     aTextCharProps.maAsianFont = rTableStylePart.getAsianFont();
@@ -236,6 +265,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     oox::drawingml::LineProperties aLinePropertiesTopLeftToBottomRight;
     oox::drawingml::LineProperties aLinePropertiesBottomLeftToTopRight;
 
+
     applyTableStylePart( rFilterBase, aFillProperties, aTextStyleProps,
         aLinePropertiesLeft,
         aLinePropertiesRight,
@@ -243,7 +273,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
         aLinePropertiesBottom,
         aLinePropertiesTopLeftToBottomRight,
         aLinePropertiesBottomLeftToTopRight,
-        rTable.getWholeTbl() );
+        rTable.getWholeTbl(),
+        0,
+        nColumn,
+        nMaxColumn,
+        nRow,
+        nMaxRow );
 
     if ( rProperties.isFirstRow() && ( nRow == 0 ) )
     {
@@ -254,7 +289,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesBottom,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
-            rTable.getFirstRow() );
+            rTable.getFirstRow(),
+            1,
+            nColumn,
+            nMaxColumn,
+            nRow,
+            nMaxRow );
     }
     if ( rProperties.isLastRow() && ( nRow == nMaxRow ) )
     {
@@ -265,7 +305,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesBottom,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
-            rTable.getLastRow() );
+            rTable.getLastRow(),
+            2,
+            nColumn,
+            nMaxColumn,
+            nRow,
+            nMaxRow );
     }
     if ( rProperties.isFirstCol() && ( nColumn == 0 ) )
     {
@@ -276,7 +321,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesBottom,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
-            rTable.getFirstCol() );
+            rTable.getFirstCol(),
+            3,
+            nColumn,
+            nMaxColumn,
+            nRow,
+            nMaxRow );
     }
     if ( rProperties.isLastCol() && ( nColumn == nMaxColumn ) )
     {
@@ -287,7 +337,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesBottom,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
-            rTable.getLastCol() );
+            rTable.getLastCol(),
+            4,
+            nColumn,
+            nMaxColumn,
+            nRow,
+            nMaxRow );
     }
     if ( rProperties.isBandRow() )
     {
@@ -308,7 +363,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
                     aLinePropertiesBottom,
                     aLinePropertiesTopLeftToBottomRight,
                     aLinePropertiesBottomLeftToTopRight,
-                    rTable.getBand2H() );
+                    rTable.getBand2H(),
+                    5,
+                    nColumn,
+                    nMaxColumn,
+                    nRow,
+                    nMaxRow );
             }
             else
             {
@@ -319,7 +379,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
                     aLinePropertiesBottom,
                     aLinePropertiesTopLeftToBottomRight,
                     aLinePropertiesBottomLeftToTopRight,
-                    rTable.getBand1H() );
+                    rTable.getBand1H(),
+                    6,
+                    nColumn,
+                    nMaxColumn,
+                    nRow,
+                    nMaxRow );
             }
         }
     }
@@ -332,7 +397,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesBottom,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
-            rTable.getNwCell() );
+            rTable.getNwCell(),
+            7,
+            nColumn,
+            nMaxColumn,
+            nRow,
+            nMaxRow );
     }
     if ( ( nRow == nMaxRow ) && ( nColumn == 0 ) )
     {
@@ -343,7 +413,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesBottom,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
-            rTable.getSwCell() );
+            rTable.getSwCell(),
+            8,
+            nColumn,
+            nMaxColumn,
+            nRow,
+            nMaxRow );
     }
     if ( ( nRow == 0 ) && ( nColumn == nMaxColumn ) )
     {
@@ -354,7 +429,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesBottom,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
-            rTable.getNeCell() );
+            rTable.getNeCell(),
+            9,
+            nColumn,
+            nMaxColumn,
+            nRow,
+            nMaxRow );
     }
     if ( ( nRow == nMaxRow ) && ( nColumn == nMaxColumn ) )
     {
@@ -365,7 +445,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesBottom,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
-            rTable.getSeCell() );
+            rTable.getSeCell(),
+            10,
+            nColumn,
+            nMaxColumn,
+            nRow,
+            nMaxRow );
     }
     if ( rProperties.isBandCol() )
     {
@@ -386,7 +471,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
                     aLinePropertiesBottom,
                     aLinePropertiesTopLeftToBottomRight,
                     aLinePropertiesBottomLeftToTopRight,
-                    rTable.getBand2V() );
+                    rTable.getBand2V(),
+                    11,
+                    nColumn,
+                    nMaxColumn,
+                    nRow,
+                    nMaxRow );
             }
             else
             {
@@ -397,7 +487,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
                     aLinePropertiesBottom,
                     aLinePropertiesTopLeftToBottomRight,
                     aLinePropertiesBottomLeftToTopRight,
-                    rTable.getBand1V() );
+                    rTable.getBand1V(),
+                    12,
+                    nColumn,
+                    nMaxColumn,
+                    nRow,
+                    nMaxRow );
             }
         }
     }
