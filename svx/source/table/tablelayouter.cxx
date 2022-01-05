@@ -205,10 +205,9 @@ sal_Int32 TableLayouter::calcPreferredColumnWidth( sal_Int32 nColumn, Size aSize
     return nRet;
 }
 
-
-bool TableLayouter::isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal ) const
+bool TableLayouter::isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, char sSide ) const
 {
-    const BorderLineMap& rMap = bHorizontal ? maHorizontalBorders : maVerticalBorders;
+    const BorderLineMap& rMap = sSide == 'l'? maLeftBorders: sSide == 'r'? maRightBorders: sSide == 't'? maTopBorders: maBottomBorders;
 
     if( (nEdgeX >= 0) && (nEdgeX < sal::static_int_cast<sal_Int32>(rMap.size())) &&
         (nEdgeY >= 0) && (nEdgeY < sal::static_int_cast<sal_Int32>(rMap[nEdgeX].size())) )
@@ -225,11 +224,10 @@ bool TableLayouter::isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHor
 
 
 /** returns the requested borderline in rpBorderLine or a null pointer if there is no border at this edge */
-SvxBorderLine* TableLayouter::getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal )const
+SvxBorderLine* TableLayouter::getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY, char sSide ) const
 {
     SvxBorderLine* pLine = nullptr;
-
-    const BorderLineMap& rMap = bHorizontal ? maHorizontalBorders : maVerticalBorders;
+    const BorderLineMap& rMap = sSide == 'l'? maLeftBorders: sSide == 'r'? maRightBorders: sSide == 't'? maTopBorders: maBottomBorders;
 
     if( (nEdgeX >= 0) && (nEdgeX < sal::static_int_cast<sal_Int32>(rMap.size())) &&
         (nEdgeY >= 0) && (nEdgeY < sal::static_int_cast<sal_Int32>(rMap[nEdgeX].size())) )
@@ -1008,12 +1006,12 @@ bool TableLayouter::HasPriority( const SvxBorderLine* pThis, const SvxBorderLine
     }
 }
 
-void TableLayouter::SetBorder( sal_Int32 nCol, sal_Int32 nRow, bool bHorizontal, const SvxBorderLine* pLine )
+void TableLayouter::SetBorder( sal_Int32 nCol, sal_Int32 nRow, char sSide, const SvxBorderLine* pLine )
 {
     if (!pLine)
         pLine = &gEmptyBorder;
 
-    BorderLineMap& rMap = bHorizontal ? maHorizontalBorders : maVerticalBorders;
+    BorderLineMap& rMap = sSide == 'l'? maLeftBorders: sSide == 'r'? maRightBorders: sSide == 't'? maTopBorders: maBottomBorders;
 
     if( (nCol >= 0) && (nCol < sal::static_int_cast<sal_Int32>(rMap.size())) &&
         (nRow >= 0) && (nRow < sal::static_int_cast<sal_Int32>(rMap[nCol].size())) )
@@ -1038,8 +1036,10 @@ void TableLayouter::SetBorder( sal_Int32 nCol, sal_Int32 nRow, bool bHorizontal,
 
 void TableLayouter::ClearBorderLayout()
 {
-    ClearBorderLayout(maHorizontalBorders);
-    ClearBorderLayout(maVerticalBorders);
+    ClearBorderLayout(maLeftBorders);
+    ClearBorderLayout(maRightBorders);
+    ClearBorderLayout(maTopBorders);
+    ClearBorderLayout(maBottomBorders);
 }
 
 void TableLayouter::ClearBorderLayout(BorderLineMap& rMap)
@@ -1066,8 +1066,10 @@ void TableLayouter::ClearBorderLayout(BorderLineMap& rMap)
 void TableLayouter::ResizeBorderLayout()
 {
     ClearBorderLayout();
-    ResizeBorderLayout(maHorizontalBorders);
-    ResizeBorderLayout(maVerticalBorders);
+    ResizeBorderLayout(maLeftBorders);
+    ResizeBorderLayout(maRightBorders);
+    ResizeBorderLayout(maTopBorders);
+    ResizeBorderLayout(maBottomBorders);
 }
 
 
@@ -1115,14 +1117,14 @@ void TableLayouter::UpdateBorderLayout()
 
             for( sal_Int32 nRow = aPos.mnRow; nRow < nLastRow; nRow++ )
             {
-                SetBorder( aPos.mnCol, nRow, false, pThisAttr->GetLeft() );
-                SetBorder( nLastCol, nRow, false, pThisAttr->GetRight() );
+                SetBorder( aPos.mnCol, nRow, 'l', pThisAttr->GetLeft() );
+                SetBorder( nLastCol, nRow, 'r', pThisAttr->GetRight() );
             }
 
             for( sal_Int32 nCol = aPos.mnCol; nCol < nLastCol; nCol++ )
             {
-                SetBorder( nCol, aPos.mnRow, true, pThisAttr->GetTop() );
-                SetBorder( nCol, nLastRow, true, pThisAttr->GetBottom() );
+                SetBorder( nCol, aPos.mnRow, 't', pThisAttr->GetTop() );
+                SetBorder( nCol, nLastRow, 'b', pThisAttr->GetBottom() );
             }
         }
     }
