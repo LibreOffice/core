@@ -666,7 +666,7 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class Svx3DSceneObject final : public SvxShapeGroupAnyD
+class SAL_DLLPUBLIC_RTTI Svx3DSceneObject final : public SvxShapeGroupAnyD
 {
 private:
     rtl::Reference< SvxDrawPage > mxPage;
