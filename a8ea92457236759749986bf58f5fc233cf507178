@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e077810_a4de0c27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-05T08:36:48Z",
+      "side": 1,
+      "message": "To make the UI nice, we should move the action buttons into the \"List\" tab (so it would be hidden when filtering) and have Help left-hand (as secondary element) and Close right-hand of the dialog footer.\n\nKeep also in mind that another button enlarges the dialog for no good reason.\n\nAnd I don\u0027t see a reason to split the patch into (non-working) UI and HID-backend.",
+      "revId": "a8ea92457236759749986bf58f5fc233cf507178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
