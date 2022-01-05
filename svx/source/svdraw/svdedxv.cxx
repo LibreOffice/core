@@ -1240,10 +1240,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
 
                 const Color aHilightColor(SvtOptionsDrawinglayer::getHilightColor());
                 const SdrTextObj* pText = GetTextEditObject();
-                const bool bTextFrame(pText && pText->IsTextFrame());
-                const bool bFitToSize(mpTextEditOutliner->GetControlWord()
-                                      & EEControlBits::STRETCHING);
-                const bool bVisualizeSurroundingFrame(bTextFrame && !bFitToSize);
+                const bool bVisualizeSurroundingFrame(pText != nullptr);
                 SdrPageView* pPageView = GetSdrPageView();
 
                 if (pPageView)
