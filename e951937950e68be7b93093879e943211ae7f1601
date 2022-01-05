@@ -16,6 +16,24 @@
       "message": "The default sequence ctors here look redundant, followed by realloc below - the ctor taking size can be used instead.",
       "revId": "e951937950e68be7b93093879e943211ae7f1601",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc425ee4_58a1ff77",
+        "filename": "chart2/source/view/main/PropertyMapper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-05T18:42:59Z",
+      "side": 1,
+      "message": "thanks! done here https://gerrit.libreoffice.org/c/core/+/128022",
+      "parentUuid": "c5a4bb6b_fb8e5ac9",
+      "revId": "e951937950e68be7b93093879e943211ae7f1601",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
