@@ -16,6 +16,29 @@
       "message": "Look good to me, can you add it also to other notebookbar implementations. Thanks",
       "revId": "14a402ce0612f1465f6406753eab09fb2a3b66c8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa4cafdc_44265aa4",
+        "filename": "sc/uiconfig/scalc/ui/notebookbar.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 2152,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-05T09:25:08Z",
+      "side": 1,
+      "message": "Among all these unrelated changes I cannot see the actual patch. Please clean up .",
+      "range": {
+        "startLine": 2152,
+        "startChar": 48,
+        "endLine": 2152,
+        "endChar": 64
+      },
+      "revId": "14a402ce0612f1465f6406753eab09fb2a3b66c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
