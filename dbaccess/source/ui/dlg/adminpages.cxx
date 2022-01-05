@@ -220,7 +220,7 @@ namespace dbaui
     {
         if (pEdit && pEdit->get_value_changed_from_saved())
         {
-            _rSet.Put(SfxStringItem(_nID, pEdit->get_text()));
+            _rSet.Put(SfxStringItem(_nID, pEdit->get_text().trim()));
             _bChangedSomething = true;
         }
     }
@@ -228,7 +228,7 @@ namespace dbaui
     {
         if (pEdit && pEdit->get_value_changed_from_saved())
         {
-            _rSet.Put(SfxStringItem(_nID, pEdit->GetText()));
+            _rSet.Put(SfxStringItem(_nID, pEdit->GetText().trim()));
             _bChangedSomething = true;
         }
     }
