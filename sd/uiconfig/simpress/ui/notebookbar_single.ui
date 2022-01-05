@@ -3731,43 +3731,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Graphic-Section-GraphicDialog">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="Graphic">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="show_arrow">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="Graphic-GraphicDialog">
-                                <property name="visible">True</property>
-                                <property name="visible_horizontal">False</property>
-                                <property name="action_name">.uno:GraphicDialog</property>
-                                <property name="icon_name">sfx2/res/symphony/open_more.png</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">25</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="VclOptionalBox" id="Graphic-Section-GraphicFilterToolbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
