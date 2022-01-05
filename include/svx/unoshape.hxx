@@ -394,7 +394,7 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 };
 
-class SvxShapeRect final : public SvxShapeText
+class SAL_DLLPUBLIC_RTTI SvxShapeRect final : public SvxShapeText
 {
 public:
     SVXCORE_DLLPUBLIC SvxShapeRect(SdrObject* pObj);
