@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5cf1414_54ab82f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001965
+      },
+      "writtenOn": "2022-01-05T14:24:58Z",
+      "side": 1,
+      "message": "Alexander, did you send your license statement?",
+      "revId": "a409739efe4507e23926d1862215c128904fda88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
