@@ -968,7 +968,7 @@ void AccObject::UpdateLocation()
    * @param
    * @return If the method is correctly processed.
    */
-bool AccObject:: UpdateAccessibleInfoFromUnoToMSAA ( )
+bool AccObject::UpdateAccessibleInfoFromUnoToMSAA()
 {
     if( nullptr == m_pIMAcc || !m_xAccContextRef.is()  )
     {
