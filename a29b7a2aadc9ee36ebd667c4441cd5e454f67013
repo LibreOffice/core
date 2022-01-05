@@ -16,6 +16,23 @@
       "message": "This option must be per-document, not per-application.",
       "revId": "a29b7a2aadc9ee36ebd667c4441cd5e454f67013",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f8a0106_030ef988",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-05T07:49:27Z",
+      "side": 1,
+      "message": "-2 to avoid accidental merge due to Heiko\u0027s +2",
+      "revId": "a29b7a2aadc9ee36ebd667c4441cd5e454f67013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
