@@ -16,6 +16,23 @@
       "message": "I always forget if typos in license part can be fixed or not, so can\u0027t tell.",
       "revId": "3e3d9a80b13c9468ba7aa2f09feb1b5714bb7c4b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1cd7792_7c2ccbf6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-01-05T20:08:27Z",
+      "side": 1,
+      "message": "Not sure about line 14, the other fixes LGTM",
+      "revId": "3e3d9a80b13c9468ba7aa2f09feb1b5714bb7c4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
