@@ -34,6 +34,24 @@
       "parentUuid": "f5cf1414_54ab82f1",
       "revId": "a409739efe4507e23926d1862215c128904fda88",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc117efc_adb7ad3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001965
+      },
+      "writtenOn": "2022-01-05T15:22:32Z",
+      "side": 1,
+      "message": "Thank you so much. Just for the record:\n\nhttps://lists.freedesktop.org/archives/libreoffice/2022-January/088260.html",
+      "parentUuid": "9a2301af_745881a8",
+      "revId": "a409739efe4507e23926d1862215c128904fda88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
