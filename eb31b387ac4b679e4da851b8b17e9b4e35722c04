@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c58d8b83_7b81e8bd",
+        "filename": "basic/qa/basic_coverage/test_cint_method.bas",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-05T16:40:56Z",
+      "side": 0,
+      "message": "But now you do not test conversion from string?!",
+      "revId": "eb31b387ac4b679e4da851b8b17e9b4e35722c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
