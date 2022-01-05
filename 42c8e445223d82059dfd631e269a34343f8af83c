@@ -16,6 +16,41 @@
       "message": "Change made, is this OK?",
       "revId": "42c8e445223d82059dfd631e269a34343f8af83c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9c0031c_60f68953",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-05T00:05:17Z",
+      "side": 1,
+      "message": "Thanks for the great improvements!\nUnfortunately, after the latest changes it no longer creates the output file for me on Linux:\n\n    ./bin/run listfonts out.txt\n\nBefore changing to address clang plugin errors, it was working fine for me.",
+      "parentUuid": "2c83cdc5_79317737",
+      "revId": "42c8e445223d82059dfd631e269a34343f8af83c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45fcd412_63cf6fc1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-05T00:05:17Z",
+      "side": 1,
+      "message": "Looks good t",
+      "revId": "42c8e445223d82059dfd631e269a34343f8af83c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
