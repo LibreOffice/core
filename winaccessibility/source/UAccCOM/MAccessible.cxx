@@ -505,18 +505,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VA
 
             if(varChild.lVal == CHILDID_SELF)
             {
-                if( m_iRole < IA2_ROLE_CAPTION )
-                {
-                    VariantInit(pvarRole);
-                    pvarRole->vt = VT_I4;
+                VariantInit(pvarRole);
+                pvarRole->vt = VT_I4;
+
+                if (m_iRole < IA2_ROLE_CAPTION)
                     pvarRole->lVal = m_iRole;
-                }
                 else
-                {
-                    VariantInit(pvarRole);
-                    pvarRole->vt = VT_I4;
                     pvarRole->lVal = ROLE_SYSTEM_CLIENT;
-                }
+
                 return S_OK;
             }
 
