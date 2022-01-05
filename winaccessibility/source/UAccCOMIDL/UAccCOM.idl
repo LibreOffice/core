@@ -36,7 +36,6 @@ import "defines.idl";
         [id(2), helpstring("method Put_XAccRole")] HRESULT Put_XAccRole(unsigned short pRole);
         [id(3), helpstring("method DecreaseState")] HRESULT DecreaseState(DWORD pXSate);
         [id(4), helpstring("method IncreaseState")] HRESULT IncreaseState(DWORD pXSate);
-        [id(5), helpstring("method Put_XDescription")] HRESULT Put_XAccDescription(const OLECHAR* pszDescription);
         [id(6), helpstring("method Put_XAccValue")] HRESULT Put_XAccValue(const OLECHAR* pszAccValue);
         [id(7), helpstring("method SetState")] HRESULT SetState(DWORD pXSate);
         [id(8), helpstring("method Put_XAccLocation")] HRESULT Put_XAccLocation(const Location sLocation);
