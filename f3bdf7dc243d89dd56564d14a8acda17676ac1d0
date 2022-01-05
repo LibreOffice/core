@@ -80,6 +80,30 @@
       },
       "revId": "f3bdf7dc243d89dd56564d14a8acda17676ac1d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3df45964_4e09493d",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-05T12:22:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bdae41a2_c4beb614",
+      "range": {
+        "startLine": 793,
+        "startChar": 18,
+        "endLine": 793,
+        "endChar": 47
+      },
+      "revId": "f3bdf7dc243d89dd56564d14a8acda17676ac1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
