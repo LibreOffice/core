@@ -1802,7 +1802,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::role(long __RPC_FAR *role)
 }
 
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_nActions(long __RPC_FAR *nActions)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_nActions(long __RPC_FAR *nActions)
 {
     SolarMutexGuard g;
 
@@ -1833,12 +1833,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_nActions(long __RPC_FAR *nA
 }
 
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: scrollToPoint(enum IA2CoordinateType, long, long)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::scrollToPoint(enum IA2CoordinateType, long, long)
 {
     return E_NOTIMPL;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: scrollTo(enum IA2ScrollType)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::scrollTo(enum IA2ScrollType)
 {
     return E_NOTIMPL;
 }
@@ -1865,7 +1865,7 @@ static XAccessible* getTheParentOfMember(XAccessible* pXAcc)
     return nullptr;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __RPC_FAR *similarItemsInGroup,long __RPC_FAR *positionInGroup)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR *groupLevel,long __RPC_FAR *similarItemsInGroup,long __RPC_FAR *positionInGroup)
 {
     SolarMutexGuard g;
 
@@ -2041,13 +2041,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FA
     LEAVE_PROTECTED_BLOCK
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_extendedStates( long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_extendedStates(long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
 {
     return E_NOTIMPL;
 }
 
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_uniqueID(long __RPC_FAR *uniqueID)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_uniqueID(long __RPC_FAR *uniqueID)
 {
     SolarMutexGuard g;
 
@@ -2064,7 +2064,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_uniqueID(long __RPC_FAR *un
         LEAVE_PROTECTED_BLOCK
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_windowHandle(HWND __RPC_FAR *windowHandle)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_windowHandle(HWND __RPC_FAR *windowHandle)
 {
     SolarMutexGuard g;
 
@@ -3001,7 +3001,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Get_XAccChildID(long* childID)
     return S_OK;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_states(AccessibleStates __RPC_FAR *states )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_states(AccessibleStates __RPC_FAR *states)
 {
     SolarMutexGuard g;
 
@@ -3040,29 +3040,29 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_states(AccessibleStates __R
 }
 
 // return the UNO roles
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_extendedRole( BSTR __RPC_FAR *  )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_extendedRole(BSTR __RPC_FAR *)
 {
     return E_NOTIMPL;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_localizedExtendedRole( BSTR __RPC_FAR *  )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_localizedExtendedRole(BSTR __RPC_FAR *)
 {
     return E_NOTIMPL;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_nExtendedStates( long __RPC_FAR * )
-{
-    return E_NOTIMPL;
-}
-
-
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_localizedExtendedStates( long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_nExtendedStates(long __RPC_FAR *)
 {
     return E_NOTIMPL;
 }
 
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_indexInParent( long __RPC_FAR *accParentIndex)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_localizedExtendedStates(long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
+{
+    return E_NOTIMPL;
+}
+
+
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_indexInParent(long __RPC_FAR *accParentIndex)
 {
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -3079,7 +3079,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_indexInParent( long __RPC_F
 
     LEAVE_PROTECTED_BLOCK
 }
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR *locale  )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_locale( IA2Locale __RPC_FAR *locale  )
 {
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -3099,7 +3099,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR
     LEAVE_PROTECTED_BLOCK
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_appName( BSTR __RPC_FAR *name)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_appName(BSTR __RPC_FAR *name)
 {
     SolarMutexGuard g;
 
@@ -3112,7 +3112,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_appName( BSTR __RPC_FAR *na
         return S_OK;
     LEAVE_PROTECTED_BLOCK
 }
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_appVersion(BSTR __RPC_FAR *version)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_appVersion(BSTR __RPC_FAR *version)
 {
     SolarMutexGuard g;
 
@@ -3124,7 +3124,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_appVersion(BSTR __RPC_FAR *
         return S_OK;
     LEAVE_PROTECTED_BLOCK
 }
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_toolkitName(BSTR __RPC_FAR *name)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_toolkitName(BSTR __RPC_FAR *name)
 {
     SolarMutexGuard g;
 
@@ -3136,7 +3136,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_toolkitName(BSTR __RPC_FAR 
         return S_OK;
     LEAVE_PROTECTED_BLOCK
 }
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_toolkitVersion(BSTR __RPC_FAR *version)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_toolkitVersion(BSTR __RPC_FAR *version)
 {
     SolarMutexGuard g;
 
