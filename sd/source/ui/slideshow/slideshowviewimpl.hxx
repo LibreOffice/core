@@ -66,23 +66,6 @@ struct WrappedMouseMotionEvent : public css::lang::EventObject
     css::awt::MouseEvent   maEvent;
 };
 
-// SlideShowViewListeners
-typedef std::vector< css::uno::WeakReference< css::util::XModifyListener > > ViewListenerVector;
-class SlideShowViewListeners final
-{
-public:
-
-    void    addListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener );
-    void    removeListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener );
-    /// @throws css::uno::Exception
-    void    notify( const css::lang::EventObject& _rEvent );
-    void    disposing( const css::lang::EventObject& _rEventSource );
-    size_t  getLength() const { return maListeners.size(); }
-
-private:
-    ViewListenerVector maListeners;
-};
-
 // SlideShowViewPaintListeners
 typedef ::comphelper::OInterfaceContainerHelper4< css::awt::XPaintListener >  SlideShowViewPaintListeners;
 
@@ -181,7 +164,8 @@ private:
     css::uno::Reference< css::awt::XPointer >             mxPointer;
     SlideshowImpl*                          mpSlideShow;
     ShowWindow&                             mrOutputWindow;
-    SlideShowViewListeners                  maViewListeners;
+    std::vector< css::uno::WeakReference< css::util::XModifyListener > >
+                                            maViewListeners;
     SlideShowViewPaintListeners             maPaintListeners;
     SlideShowViewMouseListeners             maMouseListeners;
     SlideShowViewMouseMotionListeners       maMouseMotionListeners;

@@ -50,53 +50,6 @@ using namespace ::com::sun::star;
 namespace sd
 {
 
-// SlideShowViewListeners
-
-void SlideShowViewListeners::addListener( const Reference< util::XModifyListener >& _rxListener )
-{
-    WeakReference< util::XModifyListener > xWeak( _rxListener );
-    if( std::find( maListeners.begin(), maListeners.end(), xWeak ) == maListeners.end() )
-        maListeners.push_back( xWeak );
-}
-
-void SlideShowViewListeners::removeListener( const Reference< util::XModifyListener >& _rxListener )
-{
-    WeakReference< util::XModifyListener > xWeak( _rxListener );
-    ViewListenerVector::iterator aIter( std::find( maListeners.begin(), maListeners.end(), xWeak ) );
-    if( aIter != maListeners.end() )
-        maListeners.erase( aIter );
-}
-
-void SlideShowViewListeners::notify( const lang::EventObject& _rEvent )
-{
-    ViewListenerVector::iterator aIter( maListeners.begin() );
-    while( aIter != maListeners.end() )
-    {
-        Reference< util::XModifyListener > xListener( *aIter );
-        if( xListener.is() )
-        {
-            xListener->modified( _rEvent );
-            ++aIter;
-        }
-        else
-        {
-            aIter = maListeners.erase( aIter );
-        }
-    }
-}
-
-void SlideShowViewListeners::disposing( const lang::EventObject& _rEventSource )
-{
-    for( const auto& rxListener : maListeners )
-    {
-        Reference< util::XModifyListener > xListener( rxListener );
-        if( xListener.is() )
-            xListener->disposing( _rEventSource );
-    }
-
-    maListeners.clear();
-}
-
 void SlideShowViewMouseListeners::notify( const WrappedMouseEvent& rEvent )
 {
     forEach(
@@ -223,9 +176,17 @@ void SlideShowView::disposingImpl(std::unique_lock<std::mutex>& rGuard)
     // notify all listeners that _we_ are going down (send a disposing()),
     // then delete listener containers:
     lang::EventObject const evt( static_cast<OWeakObject *>(this) );
-    if (maViewListeners.getLength())
+    if (!maViewListeners.empty())
     {
-        maViewListeners.disposing( evt );
+        auto tmp = std::move(maViewListeners);
+        rGuard.unlock();
+        for( const auto& rxListener : tmp )
+        {
+            Reference< util::XModifyListener > xListener( rxListener );
+            if( xListener.is() )
+                xListener->disposing( evt );
+        }
+        rGuard.lock();
     }
     if (maPaintListeners.getLength())
     {
@@ -366,16 +327,23 @@ void SAL_CALL SlideShowView::addTransformationChangedListener( const Reference< 
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if (!m_bDisposed)
-        maViewListeners.addListener( xListener );
+    if (m_bDisposed)
+        return;
+    WeakReference< util::XModifyListener > xWeak( xListener );
+    if( std::find( maViewListeners.begin(), maViewListeners.end(), xWeak ) == maViewListeners.end() )
+        maViewListeners.push_back( xWeak );
 }
 
 void SAL_CALL SlideShowView::removeTransformationChangedListener( const Reference< util::XModifyListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if (!m_bDisposed)
-        maViewListeners.removeListener( xListener );
+    if (m_bDisposed)
+        return;
+    WeakReference< util::XModifyListener > xWeak( xListener );
+    auto aIter( std::find( maViewListeners.begin(), maViewListeners.end(), xWeak ) );
+    if( aIter != maViewListeners.end() )
+        maViewListeners.erase( aIter );
 }
 
 void SAL_CALL SlideShowView::addPaintListener( const Reference< awt::XPaintListener >& xListener )
@@ -488,16 +456,34 @@ void SAL_CALL SlideShowView::windowResized( const awt::WindowEvent& e )
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if (!m_bDisposed)
+    if (m_bDisposed)
+        return;
+
+    if (!maViewListeners.empty())
     {
         // Change event source, to enable listeners to match event
         // with view
         awt::WindowEvent aEvent( e );
         aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
-
-        maViewListeners.notify( aEvent );
-        updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+        auto aIter( maViewListeners.begin() );
+        while( aIter != maViewListeners.end() )
+        {
+            Reference< util::XModifyListener > xListener( *aIter );
+            if( xListener.is() )
+            {
+                aGuard.unlock();
+                xListener->modified( aEvent );
+                aGuard.lock();
+                ++aIter;
+            }
+            else
+            {
+                aIter = maViewListeners.erase( aIter );
+            }
+        }
     }
+
+    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
 
 void SAL_CALL SlideShowView::windowMoved( const awt::WindowEvent& )
