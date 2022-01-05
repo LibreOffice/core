@@ -10,7 +10,8 @@ Option Explicit
 
 Function doUnitTest as String
     ' CINT
-    If (CInt("100") <> 100) Then
+    If (CInt(-258.0427e+2 + 133*2 + &h64 -&o220) <> -25582) Or _
+       (CInt(expression := #1990-10-27) <> 1953) Then
         doUnitTest = "FAIL"
     Else
         doUnitTest = "OK"
