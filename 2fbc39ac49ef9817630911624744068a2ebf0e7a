@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d18a429_4b3e4402",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-05T08:43:50Z",
+      "side": 1,
+      "message": "Actually, this is not quite true. In MS Word 2016, the footnote marker is just normal, not big and red. (Although it is big/red when in read-only, non-edit mode - imagine that). Documented in the bug report for bug 146489.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "2fbc39ac49ef9817630911624744068a2ebf0e7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
