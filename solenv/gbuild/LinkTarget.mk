@@ -2031,8 +2031,10 @@ endef
 # call gb_LinkTarget_use_external,linktarget,external
 define gb_LinkTarget_use_external
 $(if $(filter undefined,$(origin gb_LinkTarget__use_$(2))),\
-  $(error gb_LinkTarget_use_external: unknown external: $(2)),\
-  $(if $(call gb_LinkTarget__is_merged,$(1)),$(call gb_LinkTarget__use_$(2),$(call gb_Library_get_linktarget,merged))) \
+    $(error gb_LinkTarget_use_external: unknown external: $(2)) \
+, \
+    $(if $(gb_PARTIAL_BUILD),,$(if $(call gb_LinkTarget__is_merged,$(1)), \
+        $(call gb_LinkTarget__use_$(2),$(call gb_Library_get_linktarget,merged)))) \
     $(call gb_LinkTarget__use_$(2),$(1)) \
 )
 endef
