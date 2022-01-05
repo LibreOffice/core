@@ -9,6 +9,10 @@
 
 $(eval $(call gb_Module_Module,registry))
 
+$(eval $(call gb_Module_add_check_targets,registry,\
+    CppunitTest_registry \
+))
+
 $(eval $(call gb_Module_add_targets,registry,\
 	Library_reg \
     $(call gb_CondExeRegistryTools, \
