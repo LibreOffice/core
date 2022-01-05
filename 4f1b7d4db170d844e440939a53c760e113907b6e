@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09789e9a_fd2b3423",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:13:56Z",
+      "side": 1,
+      "message": "See inline comment for a nit, could be done on master, but not a hard requirement. Looks good otherwise.",
+      "revId": "4f1b7d4db170d844e440939a53c760e113907b6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9aa08d2e_ef85c81e",
+        "filename": "cui/source/tabpages/grfpage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:13:56Z",
+      "side": 1,
+      "message": "Nit: you can avoid the double lookup if you do:\n\n auto it \u003d container.find();\n if (it !\u003d container.end())\n     ... use \u0027it\u0027 ...",
+      "revId": "4f1b7d4db170d844e440939a53c760e113907b6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
