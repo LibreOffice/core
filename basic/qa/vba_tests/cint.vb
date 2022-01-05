@@ -36,6 +36,15 @@ REM    TestUtil.AssertEqual(CInt(2.5), 2, "CInt(2.5)")
     TestUtil.AssertEqual(CInt("&H754"),   1876, "CInt(""&H754"")")
     TestUtil.AssertEqual(CInt("+21"),       21, "CInt(""+21"")")
 
+    TestUtil.AssertEqual(CInt(-258.0427e+2 + "133"*2 + &h64 -&o220), -25582, "CInt(-258.0427e+2 + ""133""*2 + &h64 -&o220)")
+    TestUtil.AssertEqual(CInt(expression := #1989-09-16#),            32767, "CInt(expression := #1989-09-16#)")
+    TestUtil.AssertEqual(CInt(#9/16/1989#),                           32767, "CInt(#9/16/1989#)")
+
+    REM   Dates missing closing dash sign provide unpredictable results
+    REM   Dates missing closing dash sign should raise error #13 , as date notation requires it
+
+    TestUtil.AssertEqual(CInt(#1989-09-16),        1964, "CInt(#1989-09-16)")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testCInt", Err, Error$, Erl)
