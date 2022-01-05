@@ -26,6 +26,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/file.h>
+#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <vector>
@@ -182,15 +183,11 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL 
         return false;
 
     ::osl::LongPathBuffer<sal_Unicode> aBuffer(MAX_LONG_PATH);
-    rtl_uString* ustrSysPath = nullptr;
 
-    GetModuleFileNameW(hModule, o3tl::toW(aBuffer), aBuffer.getBufSizeInSymbols());
+    DWORD nch = GetModuleFileNameW(hModule, o3tl::toW(aBuffer), aBuffer.getBufSizeInSymbols());
 
-    rtl_uString_newFromStr(&ustrSysPath, aBuffer);
-    osl_getFileURLFromSystemPath(ustrSysPath, pustrURL);
-    rtl_uString_release(ustrSysPath);
-
-    return true;
+    OUString ustrSysPath(aBuffer, nch);
+    return osl_getFileURLFromSystemPath(ustrSysPath.pData, pustrURL) == osl_File_E_None;
 }
 
 sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, rtl_uString ** ppLibraryUrl )
