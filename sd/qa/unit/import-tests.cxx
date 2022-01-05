@@ -187,6 +187,7 @@ public:
     void testTdf93124();
     void testTdf99729();
     void testTdf89927();
+    void testTdf135843();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -255,6 +256,7 @@ public:
     CPPUNIT_TEST(testTdf93124);
     CPPUNIT_TEST(testTdf99729);
     CPPUNIT_TEST(testTdf89927);
+    CPPUNIT_TEST(testTdf135843);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1954,6 +1956,28 @@ void SdImportTest::testTdf89927()
     Color nCharColor;
     xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
     CPPUNIT_ASSERT_EQUAL( COL_WHITE, nCharColor );
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf135843()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf135843.pptx"), PPTX );
+
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+    sdr::table::SdrTableObj *pTableObj;
+    uno::Reference< table::XCellRange > xTable;
+    uno::Reference< beans::XPropertySet > xCell;
+    table::BorderLine2 aBorderLine;
+
+    pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT( pTableObj );
+
+    xTable.set(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("RightBorder") >>= aBorderLine;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(17), sal_Int32(aBorderLine.LineWidth));
 
     xDocShRef->DoClose();
 }
