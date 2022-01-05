@@ -1267,10 +1267,10 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
 
     // rnY is now the edge number above the pointer, if it was hit bVrtHit is also true
 
-    if( bVrtHit && mpImpl->mpLayouter->isEdgeVisible( rnX, rnY, false ) )
+    if( bVrtHit && (mpImpl->mpLayouter->isEdgeVisible( rnX, rnY, 'l' ) || mpImpl->mpLayouter->isEdgeVisible( rnX, rnY, 'r' )) )
         return TableHitKind::VerticallBorder;
 
-    if( bHrzHit && mpImpl->mpLayouter->isEdgeVisible( rnX, rnY, true ) )
+    if( bHrzHit && (mpImpl->mpLayouter->isEdgeVisible( rnX, rnY, 't' ) || mpImpl->mpLayouter->isEdgeVisible( rnX, rnY, 'b' )) )
         return TableHitKind::HorizontalBorder;
 
     CellRef xCell( mpImpl->getCell( CellPos( rnX, rnY ) ) );
@@ -2127,14 +2127,20 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
 
                 if( nRowHeight > 0 )
                 {
-                    if( rLayouter.isEdgeVisible( nCol, nRow, false ) )
-                        aColEdges[nCol]->SetEdge( nRow, nY, nY + nRowHeight, (rLayouter.getBorderLine( nCol, nRow, false ) == nullptr) ? Visible : Invisible);
+                    if( rLayouter.isEdgeVisible( nCol, nRow, 'l' ) )
+                        aColEdges[nCol]->SetEdge( nRow, nY, nY + nRowHeight, (rLayouter.getBorderLine( nCol, nRow, 'l' ) == nullptr) ? Visible : Invisible);
+
+                    if( rLayouter.isEdgeVisible( nCol, nRow, 'r' ) )
+                        aColEdges[nCol]->SetEdge( nRow, nY, nY + nRowHeight, (rLayouter.getBorderLine( nCol, nRow, 'r' ) == nullptr) ? Visible : Invisible);
                 }
 
                 if( nColWidth > 0 )
                 {
-                    if( rLayouter.isEdgeVisible( nCol, nRow, true ) )
-                        aRowEdges[nRow]->SetEdge( nCol, nX, nX + nColWidth, (rLayouter.getBorderLine( nCol, nRow, true ) == nullptr) ? Visible : Invisible);
+                    if( rLayouter.isEdgeVisible( nCol, nRow, 't' ))
+                        aRowEdges[nRow]->SetEdge( nCol, nX, nX + nColWidth, (rLayouter.getBorderLine( nCol, nRow, 't' ) == nullptr) ? Visible : Invisible);
+
+                    if( rLayouter.isEdgeVisible( nCol, nRow, 'b' ) )
+                        aRowEdges[nRow]->SetEdge( nCol, nX, nX + nColWidth, (rLayouter.getBorderLine( nCol, nRow, 'b' ) == nullptr) ? Visible : Invisible);
                 }
 
                 nX += nColWidth;

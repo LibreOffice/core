@@ -96,10 +96,10 @@ public:
     /** checks if the given edge is visible.
         Edges between merged cells are not visible.
     */
-    bool isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal ) const;
+    bool isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, char sSide ) const;
 
     /** returns the requested borderline in rpBorderLine or a null pointer if there is no border at this edge */
-    editeng::SvxBorderLine* getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal )const;
+    editeng::SvxBorderLine* getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY, char sSide ) const;
 
     void updateCells( ::tools::Rectangle const & rRectangle );
 
@@ -138,7 +138,7 @@ private:
     void ResizeBorderLayout();
     void ResizeBorderLayout( BorderLineMap& rMap );
 
-    void SetBorder( sal_Int32 nCol, sal_Int32 nRow, bool bHorizontal, const editeng::SvxBorderLine* pLine );
+    void SetBorder( sal_Int32 nCol, sal_Int32 nRow, char sSide, const editeng::SvxBorderLine* pLine );
 
     static bool HasPriority( const editeng::SvxBorderLine* pThis, const editeng::SvxBorderLine* pOther );
 
@@ -152,6 +152,7 @@ private:
         void clear() { mnPos = 0; mnSize = 0; mnMinSize = 0; }
         void dumpAsXml(xmlTextWriterPtr pWriter) const;
     };
+
     typedef std::vector< Layout > LayoutVector;
 
     static sal_Int32 distribute( LayoutVector& rLayouts, sal_Int32 nDistribute );
@@ -160,8 +161,10 @@ private:
     LayoutVector maRows;
     LayoutVector maColumns;
 
-    BorderLineMap maHorizontalBorders;
-    BorderLineMap maVerticalBorders;
+    BorderLineMap maLeftBorders;
+    BorderLineMap maRightBorders;
+    BorderLineMap maTopBorders;
+    BorderLineMap maBottomBorders;
 };
 
 }

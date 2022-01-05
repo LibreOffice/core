@@ -38,6 +38,7 @@
 #include <svx/framelink.hxx>
 #include <svx/framelinkarray.hxx>
 #include <svx/sdooitm.hxx>
+#include <svx/svdotable.hxx>
 #include <vcl/canvastools.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <svx/xfltrit.hxx>
@@ -48,7 +49,6 @@
 
 using editeng::SvxBorderLine;
 using namespace com::sun::star;
-
 
 namespace drawinglayer::primitive2d
 {
@@ -154,14 +154,14 @@ namespace sdr::contact
             const sdr::table::TableLayouter& rLayouter,
             sal_Int32 nX,
             sal_Int32 nY,
-            bool bHorizontal,
+            char sSide,
             sal_Int32 nColCount,
             sal_Int32 nRowCount,
             bool bIsRTL)
         {
             if(nX >= 0 && nX <= nColCount && nY >= 0 && nY <= nRowCount)
             {
-                const SvxBorderLine* pLine = rLayouter.getBorderLine(nX, nY, bHorizontal);
+                const SvxBorderLine* pLine = rLayouter.getBorderLine(nX, nY, sSide);
 
                 if(pLine)
                 {
@@ -174,7 +174,7 @@ namespace sdr::contact
 
                     if(bMirror)
                     {
-                        if(bHorizontal)
+                        if(sSide == 't' || sSide == 'b')
                         {
                             // mirror all bottom lines
                             bMirror = (0 != nY);
@@ -258,10 +258,10 @@ namespace sdr::contact
                             if(xCurrentCell.is())
                             {
                                 // copy styles for current cell to CellBorderArray for primitive creation
-                                aArray.SetCellStyleLeft(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, false, nColCount, nRowCount, bIsRTL));
-                                aArray.SetCellStyleRight(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, false, nColCount, nRowCount, bIsRTL));
-                                aArray.SetCellStyleTop(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, true, nColCount, nRowCount, bIsRTL));
-                                aArray.SetCellStyleBottom(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, true, nColCount, nRowCount, bIsRTL));
+                                aArray.SetCellStyleLeft(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, 'l', nColCount, nRowCount, bIsRTL));
+                                aArray.SetCellStyleRight(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, 'r', nColCount, nRowCount, bIsRTL));
+                                aArray.SetCellStyleTop(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, 't', nColCount, nRowCount, bIsRTL));
+                                aArray.SetCellStyleBottom(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, 'b', nColCount, nRowCount, bIsRTL));
 
                                 // ignore merged cells (all except the top-left of a merged cell)
                                 if(!xCurrentCell->isMerged())
