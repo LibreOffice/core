@@ -16,6 +16,24 @@
       "message": "I cannot review your personal preference. With a ticket requesting something like \"improve arrangement of controls in Calc\u0027s alignment sidebar because...\" it would be a please to compare the patch against this request.\n\nBut anyway, the code fails for gtk3 with vcl/unx/gtk3/gtkinst.cxx:22343: void (anonymous namespace)::load_ui_file(GtkBuilder *, const rtl::OUString \u0026): Assertion `rc \u0026\u0026 \"could not load UI file\" (gen works).",
       "revId": "adba40b8919499311959ef914a1066c337de1f46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9678309_aa6bcf0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2022-01-05T00:19:58Z",
+      "side": 1,
+      "message": "Did the gtk3 backend load the UI file? Should be solved now.",
+      "parentUuid": "c50832ba_0d4deb0b",
+      "revId": "adba40b8919499311959ef914a1066c337de1f46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
