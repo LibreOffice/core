@@ -69,17 +69,6 @@ END_OBJECT_MAP()
 #define X64_LIB_NAME L"so_activex_x64.dll"
 #define X32_LIB_NAME L"so_activex.dll"
 
-// to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
-// in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
-// Also defined in setup_native\source\win32\customactions\reg64\reg64.cxx,source\win32\customactions\shellextensions\shellextensions.cxx and
-// extensions\source\activex\main\so_activex.cpp
-#ifndef KEY_WOW64_64KEY
-    #define KEY_WOW64_64KEY (0x0100)
-#endif
-#ifndef KEY_WOW64_32KEY
-    #define KEY_WOW64_32KEY (0x0200)
-#endif
-
 const REGSAM n64KeyAccess = KEY_ALL_ACCESS | KEY_WOW64_64KEY;
 const REGSAM n32KeyAccess = KEY_ALL_ACCESS;
 
@@ -742,17 +731,20 @@ STDAPI DllRegisterServer()
 {
     HRESULT aResult = E_FAIL;
 
-    HMODULE aCurModule = GetModuleHandleW( bX64 ? X64_LIB_NAME : X32_LIB_NAME );
-    DWORD nLibNameLen = sal::static_int_cast<DWORD>(
-            wcslen(bX64 ? X64_LIB_NAME : X32_LIB_NAME));
-
+    HMODULE aCurModule{};
+    GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
+                           | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                       reinterpret_cast<LPCWSTR>(&DllRegisterServer), &aCurModule);
     if( aCurModule )
     {
         wchar_t pProgramPath[1024];
-        DWORD nLen = GetModuleFileNameW( aCurModule, pProgramPath, 1024 );
-        if ( nLen && nLen > nLibNameLen + 1 )
+        wchar_t* pPathEnd = nullptr;
+        DWORD nLen = GetModuleFileNameW( aCurModule, pProgramPath, SAL_N_ELEMENTS(pProgramPath) );
+        if ( nLen && nLen < SAL_N_ELEMENTS(pProgramPath) )
+            pPathEnd = wcsrchr(pProgramPath, '\\');
+        if (pPathEnd)
         {
-            pProgramPath[ nLen - nLibNameLen - 1 ] = 0;
+            *pPathEnd = 0;
             aResult = DllRegisterServerNative( 31, TRUE, bX64, pProgramPath );
             if( SUCCEEDED( aResult ) )
                 aResult = DllRegisterServerDoc( 31, TRUE, bX64 );
