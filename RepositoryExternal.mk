@@ -1520,40 +1520,6 @@ endif # SYSTEM_OPENSSL
 endif # ENABLE_OPENSSL
 
 
-ifneq ($(ENABLE_OPENSSL),TRUE)
-
-define gb_LinkTarget__use_gnutls
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(GNUTLS_CFLAGS) \
-)
-
-$(call gb_LinkTarget_add_defs,$(1),\
-    -DDISABLE_OPENSSL \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),$(GNUTLS_LIBS))
-
-endef
-
-define gb_LinkTarget__use_libgcrypt
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(LIBGCRYPT_CFLAGS) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),$(LIBGCRYPT_LIBS))
-
-endef
-
-else # ENABLE_OPENSSL
-
-gb_LinkTarget__use_gnutls:=
-gb_LinkTarget__use_libgcrypt:=
-
-endif # ENABLE_OPENSSL
-
-
 ifneq ($(SYSTEM_CDR),)
 
 define gb_LinkTarget__use_cdr
