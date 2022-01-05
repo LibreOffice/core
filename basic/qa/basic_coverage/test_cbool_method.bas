@@ -8,11 +8,21 @@
 
 Option Explicit
 
-Function doUnitTest as String
-    ' CBOOL
-    If (CBool(3) <> True) Then
-        doUnitTest = "FAIL"
-    Else
-        doUnitTest = "OK"
-    End If
+Function doUnitTest() As String
+    TestUtil.TestInit
+    verify_CBool
+    doUnitTest = TestUtil.GetResult()
 End Function
+
+Sub verify_CBool()
+    On Error GoTo errorHandler
+
+    TestUtil.AssertEqual(CBool(3),  True,  "CBool(3)")
+
+    TestUtil.AssertEqual(CBool(1>2 Xor 44),              True, "CBool(1>2 Xor 44)")
+    TestUtil.AssertEqual(CBool(expression:=15 /2 -7.5), False, "CBool(expression:=15 /2 -7.5)")
+
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("verify_CBool", Err, Error$, Erl)
+End Sub
