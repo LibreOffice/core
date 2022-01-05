@@ -22,6 +22,30 @@
       },
       "revId": "526a3d1eefdcc3acb425f36cd99f83a3474344ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74ef2296_633a9fee",
+        "filename": "sd/source/ui/slideshow/slideshowviewimpl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-05T15:04:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "658cc6d3_56d08bfd",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 4
+      },
+      "revId": "526a3d1eefdcc3acb425f36cd99f83a3474344ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
