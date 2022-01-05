@@ -60,7 +60,6 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ColorSettings"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GraphicDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:visible="false"/>
 </toolbar:toolbar>
