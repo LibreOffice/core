@@ -978,19 +978,6 @@ void  AccObjectWinManager::SetAccName( XAccessible* pXAcc, Any newName)
 }
 
 /**
-   * Set corresponding com object's role via XAccessible interface and new role.
-   * @param pXAcc XAccessible interface.
-   * @param Role new role
-   * @return
-   */
-void  AccObjectWinManager::SetRole( XAccessible* pXAcc, long Role )
-{
-    AccObject* pAccObj = GetAccObjByXAcc( pXAcc );
-    if( pAccObj )
-        pAccObj->SetRole( static_cast<short>(Role) );
-}
-
-/**
    * Judge if a XAccessible object is a container object.
    * @param pAccessible XAccessible interface.
    * @return If XAccessible object is container.
