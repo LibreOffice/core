@@ -34,6 +34,9 @@ Sub verify_testCBool()
     a1 = 10: a2 = 10
     TestUtil.AssertEqual(CBool(a1 = a2), True,  "CBool(a1 = a2)")
 
+    TestUtil.AssertEqual(Cbool(1>2 Xor 44),                  True, "CBool(1>2 Xor 44)")
+    TestUtil.AssertEqual(Cbool(expression := "15" /2 -7.5), False, "CBool(expression := ""15"" /2 -7.5)")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testCBool", Err, Error$, Erl)
