@@ -2322,33 +2322,27 @@ void formatPage(
     }
 }
 
-void lcl_removeEmptyGroupShapes( const Reference< drawing::XShapes>& xParent )
+void lcl_removeEmptyGroupShapes( SdrObject& rParent )
 {
-    if(!xParent.is())
+    SdrObjList* pObjList = rParent.getChildrenOfSdrObject();
+    if (!pObjList || pObjList->GetObjCount() == 0)
         return;
-    Reference< drawing::XShapeGroup > xParentGroup( xParent, uno::UNO_QUERY );
-    if( !xParentGroup.is() )
-    {
-        Reference< drawing::XDrawPage > xPage( xParent, uno::UNO_QUERY );
-        if( !xPage.is() )
-            return;
-    }
 
     //iterate from back!
-    for( sal_Int32 nN = xParent->getCount(); nN--; )
+    for(auto nIdx = static_cast<sal_Int32>(pObjList->GetObjCount() - 1); nIdx >= 0; --nIdx)
     {
-        uno::Any aAny = xParent->getByIndex( nN );
-        Reference< drawing::XShapes> xShapes;
-        if( aAny >>= xShapes )
-            lcl_removeEmptyGroupShapes( xShapes );
-        if( xShapes.is() && xShapes->getCount()==0 )
+        SdrObject* pChildSdrObject = pObjList->GetObj(nIdx);
+        SdrObjList* pChildObjList = pChildSdrObject->getChildrenOfSdrObject();
+        if (!pChildObjList)
+            continue;
+        if (pChildObjList->GetObjCount() == 0)
         {
             //remove empty group shape
-            Reference< drawing::XShapeGroup > xGroup( xShapes, uno::UNO_QUERY );
-            Reference< drawing::XShape > xShape( xShapes, uno::UNO_QUERY );
-            if( xGroup.is() )
-                xParent->remove( xShape );
+            SdrObject* pRemoved = pObjList->NbcRemoveObject(nIdx);
+            SdrObject::Free( pRemoved );
         }
+        else
+            lcl_removeEmptyGroupShapes(*pChildSdrObject);
     }
 }
 
@@ -2983,7 +2977,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     }
 
     //cleanup: remove all empty group shapes to avoid grey border lines:
-    lcl_removeEmptyGroupShapes( mxRootShape );
+    lcl_removeEmptyGroupShapes( *mxRootShape->GetSdrObject() );
 
     if(maTimeBased.bTimeBased && maTimeBased.nFrame % 60 == 0)
     {
