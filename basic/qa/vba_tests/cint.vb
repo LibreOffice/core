@@ -36,6 +36,11 @@ REM    TestUtil.AssertEqual(CInt(2.5), 2, "CInt(2.5)")
     TestUtil.AssertEqual(CInt("&H754"),   1876, "CInt(""&H754"")")
     TestUtil.AssertEqual(CInt("+21"),       21, "CInt(""+21"")")
 
+REM   Dates between 2 dashes throw exceptions, although date notation requires such
+
+    TestUtil.AssertEqual(CInt(-258.0427e+2 + "133"*2 + &h64 -&o220), -25582, "CInt(-258.0427e+2 + ""133""*2 + &h64 -&o220)")
+    TestUtil.AssertEqual(Cint(expression := #1990-10-27),            1953, "Cint(expression := #1990-10-27#)")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testCInt", Err, Error$, Erl)
