@@ -1527,16 +1527,16 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const Sdr
 }
 
 void SwTextBoxHelper::synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*, SdrObject*),
-                                                      SwFrameFormat* pShape, SdrObject* pObj)
+                                                      SwFrameFormat* pFormat, SdrObject* pObj)
 {
     if (auto pChildren = pObj->getChildrenOfSdrObject())
     {
         for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
-            synchronizeGroupTextBoxProperty(pFunc, pShape, pChildren->GetObj(i));
+            synchronizeGroupTextBoxProperty(pFunc, pFormat, pChildren->GetObj(i));
     }
     else
     {
-        (*pFunc)(pShape, pObj);
+        (*pFunc)(pFormat, pObj);
     }
 }
 
