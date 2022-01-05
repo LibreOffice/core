@@ -49,6 +49,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5bac2f4_f4e800df",
+        "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-05T12:50:32Z",
+      "side": 1,
+      "message": "Hi Heiko... these buttons only appear when you select an Index entry that appears multiple times in the document. I created a sample file in the bug report to better explain the problem.",
+      "parentUuid": "0a29225c_f611ada3",
+      "range": {
+        "startLine": 584,
+        "startChar": 193,
+        "endLine": 584,
+        "endChar": 215
+      },
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "623f39bf_6291446c",
+        "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-05T12:50:32Z",
+      "side": 1,
+      "message": "Although the icon looks like a \"first\" button, it actually is a \"previous\" command, going to the previous entry with the same name (see my recent comment in the bug report).",
+      "parentUuid": "ab973e15_3484e5a9",
+      "range": {
+        "startLine": 584,
+        "startChar": 155,
+        "endLine": 584,
+        "endChar": 163
+      },
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1321b354_a3371f0f",
         "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
         "patchSetId": 2
@@ -60,6 +108,30 @@
       "writtenOn": "2022-01-05T08:45:13Z",
       "side": 1,
       "message": "And this is surely last.",
+      "range": {
+        "startLine": 605,
+        "startChar": 154,
+        "endLine": 605,
+        "endChar": 158
+      },
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d02ae2b_1d1c20fd",
+        "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-05T12:50:32Z",
+      "side": 1,
+      "message": "Same here.",
+      "parentUuid": "1321b354_a3371f0f",
       "range": {
         "startLine": 605,
         "startChar": 154,
