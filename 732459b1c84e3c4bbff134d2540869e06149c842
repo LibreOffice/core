@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e550b94_2ba69cf7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-05T08:55:50Z",
+      "side": 1,
+      "message": "@Laszlo: I think now this is ready, if Mr Jenkins thinks that so, that can be merged.",
+      "revId": "732459b1c84e3c4bbff134d2540869e06149c842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8850bd51_81acd491",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+        "patchSetId": 26
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-05T08:55:50Z",
+      "side": 1,
+      "message": "Sorry Laszlo, but i had to replace the index values, because only this way not fail the test.",
+      "range": {
+        "startLine": 760,
+        "startChar": 50,
+        "endLine": 763,
+        "endChar": 71
+      },
+      "revId": "732459b1c84e3c4bbff134d2540869e06149c842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
