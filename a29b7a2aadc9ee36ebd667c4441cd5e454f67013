@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9dbc1ec_04ba705f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-05T07:47:45Z",
+      "side": 1,
+      "message": "This option must be per-document, not per-application.",
+      "revId": "a29b7a2aadc9ee36ebd667c4441cd5e454f67013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
