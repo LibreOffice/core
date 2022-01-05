@@ -747,12 +747,8 @@ AccObject* AccObject::NextChild()
 void AccObject::UpdateActionDesc()
 {
     if (!m_pIMAcc)
-    {
         return;
-    }
 
-    OUString pXString = m_xAccContextRef->getAccessibleDescription();
-    m_pIMAcc->Put_XAccDescription(o3tl::toW(pXString.getStr()));
     long Role = m_accRole;
 
     if(  Role == PUSH_BUTTON || Role == RADIO_BUTTON || Role == MENU_ITEM ||
@@ -1026,6 +1022,8 @@ bool AccObject:: UpdateAccessibleInfoFromUnoToMSAA ( )
     UpdateName();
 
     UpdateValue();
+
+    UpdateDescription();
 
     UpdateActionDesc();
 
