@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b619def8_ff1d1dd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-01-05T10:39:06Z",
+      "side": 1,
+      "message": "Can you review this one? Got some basic unit tests into store.",
+      "revId": "56611b74056dc5add034bd4d463e6e593f764b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
