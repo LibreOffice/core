@@ -101,6 +101,7 @@
 #include <vcl/dibtools.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/gdimtf.hxx>
 
 using namespace ::com::sun::star;
 
@@ -117,7 +118,7 @@ static std::ostream& operator<<(std::ostream& rStrm, const uno::Reference<T>& xR
 
 
 /// Impress import filters tests.
-class SdImportTest : public SdModelTestBase
+class SdImportTest : public SdModelTestBaseXML
 {
 public:
     virtual void setUp() override;
@@ -187,6 +188,7 @@ public:
     void testTdf93124();
     void testTdf99729();
     void testTdf89927();
+    void testTdf135843();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -255,6 +257,7 @@ public:
     CPPUNIT_TEST(testTdf93124);
     CPPUNIT_TEST(testTdf99729);
     CPPUNIT_TEST(testTdf89927);
+    CPPUNIT_TEST(testTdf135843);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1954,6 +1957,28 @@ void SdImportTest::testTdf89927()
     Color nCharColor;
     xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
     CPPUNIT_ASSERT_EQUAL( COL_WHITE, nCharColor );
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf135843()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf135843.pptx"), PPTX );
+
+    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix, the test fails with:
+    // - Expected: 21165
+    // - Actual  : 4218
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]", "x", "21165");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]", "y", "3866");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "x", "21165");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "y", "5956");
 
     xDocShRef->DoClose();
 }
