@@ -1298,12 +1298,11 @@ endif
 ifeq ($(call gb_LinkTarget__is_build_tool,$(1)),$(true))
 $(call gb_LinkTarget__use_libraries,$(1),$(2),$(2),$(4))
 else
+# $$(3) = Always just depend on non-merged libs. If any dependency is merged, but you aren't, also depend on "merged".
 $(call gb_LinkTarget__use_libraries,$(1),$(2),$(strip \
-	$(if $(filter $(gb_MERGEDLIBS),$(2)), \
-		$(if $(call gb_LinkTarget__is_merged,$(1)), \
-			$(filter $(gb_MERGEDLIBS),$(2)), merged)) \
-	$(filter-out $(gb_MERGEDLIBS),$(2)) \
-	),$(4))
+        $(filter-out $(gb_MERGEDLIBS),$(2)) \
+        $(if $(filter $(gb_MERGEDLIBS),$(2)),$(if $(call gb_LinkTarget__is_merged,$(1)),,merged)) \
+    ),$(4))
 endif
 
 endef
