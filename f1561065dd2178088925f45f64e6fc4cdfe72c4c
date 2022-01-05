@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11dc7f64_a5c9d06e",
+        "filename": "svx/uiconfig/ui/fontworkalignmentcontrol.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-05T08:28:01Z",
+      "side": 0,
+      "message": "This is not going to fly. The radio button itself would remain on the UI but without label, and our a11y checker will report this as an error.\nEither you remove the control completely (also in the c++ functions and the headers) or switch the visibility to false. Not sure how well this works.\n\nAlso: please test locally. If the code builds check whether the result does what you want.",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 135
+      },
+      "revId": "f1561065dd2178088925f45f64e6fc4cdfe72c4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
