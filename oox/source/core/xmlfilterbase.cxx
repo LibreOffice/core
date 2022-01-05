@@ -68,6 +68,7 @@
 #include <oox/token/namespacemap.hxx>
 #include <editeng/unoprnms.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <tools/datetime.hxx>
 
 using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
@@ -666,7 +667,14 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
         if (it->second >>= aValue)
             writeElement( pCoreProps, FSNS( XML_cp, XML_contentType ), aValue );
     }
-    writeElement( pCoreProps, FSNS( XML_dcterms, XML_created ),     xProperties->getCreationDate() );
+
+    DateTime cTime( xProperties->getCreationDate() );
+    cTime.ConvertToUTC();
+
+    util::DateTime aDateTime;
+    aDateTime = util::DateTime( 0, cTime.GetSec() , cTime.GetMin(), cTime.GetHour(), cTime.GetDay(), cTime.GetMonth(), cTime.GetYear(), true );
+
+    writeElement( pCoreProps, FSNS( XML_dcterms, XML_created ),     aDateTime );
     writeElement( pCoreProps, FSNS( XML_dc, XML_creator ),          xProperties->getAuthor() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_description ),      xProperties->getDescription() );
 
