@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "396d68a4_940486fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:04:17Z",
+      "side": 1,
+      "message": "Looks good, please see the inline comment for a nit, that would be nice to fix on master.",
+      "revId": "f401572e041223b7f2daebf57c954ade0b2151c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea6be9fe_e311ca7b",
+        "filename": "sc/inc/document.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:04:17Z",
+      "side": 1,
+      "message": "Nit: should be Image probably.",
+      "range": {
+        "startLine": 560,
+        "startChar": 16,
+        "endLine": 560,
+        "endChar": 22
+      },
+      "revId": "f401572e041223b7f2daebf57c954ade0b2151c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b782feb_2c628047",
+        "filename": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:04:17Z",
+      "side": 1,
+      "message": "I see you don\u0027t have this hardcoded on master, then this is fine.",
+      "revId": "f401572e041223b7f2daebf57c954ade0b2151c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
