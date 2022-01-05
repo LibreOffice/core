@@ -91,6 +91,7 @@
 #include <sal/log.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/datetime.hxx>
 
 using namespace sax_fastparser;
 using namespace ::comphelper;
@@ -912,6 +913,12 @@ void DocxExport::WriteProperties( )
         bSecurityOptOpenReadOnly = pDocShell->IsSecurityOptOpenReadOnly();
     }
 
+    DateTime cTime( xDocProps->getCreationDate() );
+    cTime.ConvertToUTC();
+
+    util::DateTime aDateTime;
+    aDateTime = util::DateTime( 0, cTime.GetSec() , cTime.GetMin(), cTime.GetHour(), cTime.GetDay(), cTime.GetMonth(), cTime.GetYear(), true );
+    xDocProps->setCreationDate(aDateTime);
     m_rFilter.exportDocumentProperties( xDocProps, bSecurityOptOpenReadOnly );
 }
 

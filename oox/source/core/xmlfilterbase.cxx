@@ -666,6 +666,7 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
         if (it->second >>= aValue)
             writeElement( pCoreProps, FSNS( XML_cp, XML_contentType ), aValue );
     }
+
     writeElement( pCoreProps, FSNS( XML_dcterms, XML_created ),     xProperties->getCreationDate() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_creator ),          xProperties->getAuthor() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_description ),      xProperties->getDescription() );

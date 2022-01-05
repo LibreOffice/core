@@ -45,7 +45,6 @@
 #include <com/sun/star/office/XAnnotationEnumeration.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -72,6 +71,8 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <utility>
+#include <tools/datetime.hxx>
+
 #if OSL_DEBUG_LEVEL > 1
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #endif
@@ -414,6 +415,13 @@ void PowerPointExport::writeDocumentProperties()
         catch( Exception& )
         {
         }
+
+        SAL_DLLPUBLIC_RTTI::DateTime cTime( xDocProps->getCreationDate() );
+        cTime.ConvertToUTC();
+
+        util::DateTime aDateTime;
+        aDateTime = util::DateTime( 0, cTime.GetSec() , cTime.GetMin(), cTime.GetHour(), cTime.GetDay(), cTime.GetMonth(), cTime.GetYear(), true );
+        xDocProps->setCreationDate(aDateTime);
         exportDocumentProperties(xDocProps, bSecurityOptOpenReadOnly);
     }
 
