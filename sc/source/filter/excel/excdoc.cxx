@@ -53,6 +53,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <memory>
+#include <tools/datetime.hxx>
 
 using namespace oox;
 
@@ -825,6 +826,15 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     }
     bool bHasPasswordInfo
         = sAlgorithm != "PBKDF2" && !sSalt.isEmpty() && !sHash.isEmpty() && !sUserName.isEmpty();
+
+    DateTime cTime( xDocProps->getCreationDate() );
+    cTime.ConvertToUTC();
+
+    util::DateTime aDateTime;
+    aDateTime = util::DateTime( 0,
+                cTime.GetSec() , cTime.GetMin(), cTime.GetHour(),
+                cTime.GetDay(), cTime.GetMonth(), cTime.GetYear(), true );
+    xDocProps->setCreationDate(aDateTime);
     rStrm.exportDocumentProperties(xDocProps, pDocShell->IsSecurityOptOpenReadOnly()
                                                   && !bHasPasswordHash && !bHasPasswordInfo);
     rStrm.exportCustomFragments();
