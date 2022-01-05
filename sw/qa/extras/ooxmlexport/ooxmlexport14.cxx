@@ -438,6 +438,14 @@ CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
     // because the exporter had no idea what markup to use for ARABIC_ZERO.
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt", "val", "decimalZero");
 }
+DECLARE_OOXMLEXPORT_TEST(testTdf134589, "tdf134589.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("docProps/core.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    OUString DocumentTime = getXPathContent(pXmlDoc, "/cp:coreProperties/dcterms:created");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Message:Time is not equal",OUString("2022-04-21T06:32:12Z"), DocumentTime);
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
 {
