@@ -1,0 +1,293 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84c9c36d_944b8980",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "I like how you break up the functionality into readable pieces, but please make sure you always add a one-liner mission statement for all new classes (16 in total in this commit). Doing that just on master is good enough. Thanks!",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f33bcffa_e5add40e",
+        "filename": "include/svx/GenericCheckDialog.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Could you please document this class? Just a one-liner doxygen comment would be enough.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aaed9aba_a34f1e9f",
+        "filename": "include/svx/GenericCheckDialog.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18da7385_ff0162cd",
+        "filename": "include/svx/GenericCheckDialog.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d97d385b_08076d53",
+        "filename": "include/svx/GenericCheckDialog.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "140b403d_684d4af7",
+        "filename": "sd/source/ui/inc/tools/GraphicSizeCheck.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20f19dfe_37755605",
+        "filename": "sd/source/ui/inc/tools/GraphicSizeCheck.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d983a8bc_67640a94",
+        "filename": "sd/source/ui/inc/tools/GraphicSizeCheck.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1de7d610_b5e9e822",
+        "filename": "sd/source/ui/inc/tools/GraphicSizeCheck.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "001f8ed9_96b9072c",
+        "filename": "sd/source/ui/tools/GraphicSizeCheck.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c45b415d_5d59cfa1",
+        "filename": "sd/source/ui/tools/GraphicSizeCheck.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0df9bcbc_e80aa110",
+        "filename": "sd/source/ui/tools/GraphicSizeCheck.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8a27902_4cfb22ac",
+        "filename": "sw/source/core/graphic/GraphicSizeCheck.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20ba7072_a9f7b4f3",
+        "filename": "sw/source/core/inc/GraphicSizeCheck.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fe0b8be_e12197a3",
+        "filename": "sw/source/core/inc/GraphicSizeCheck.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e852295_a10ce349",
+        "filename": "sw/source/core/inc/GraphicSizeCheck.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e733e0fc_09a9d768",
+        "filename": "sw/source/core/inc/GraphicSizeCheck.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-05T09:10:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4d985095e605928f9f6200d99656b607fe029235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
