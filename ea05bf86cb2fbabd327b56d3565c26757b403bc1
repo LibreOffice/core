@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7862f77_60ea1a80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-05T16:51:03Z",
+      "side": 1,
+      "message": "It seems dup of https://gerrit.libreoffice.org/c/core/+/128003 submitted by Miklos",
+      "revId": "ea05bf86cb2fbabd327b56d3565c26757b403bc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
