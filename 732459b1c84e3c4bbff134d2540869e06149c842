@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c2fd769_0d4c526f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-05T11:24:54Z",
+      "side": 1,
+      "message": "I think this is ready. :)",
+      "revId": "732459b1c84e3c4bbff134d2540869e06149c842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8850bd51_81acd491",
@@ -72,6 +89,30 @@
       "side": 1,
       "message": "No problem. Sorry, I thought that I mentioned that I haven\u0027t checked the code, and likely the indices could have a problem. Thanks for fixing that.",
       "parentUuid": "8850bd51_81acd491",
+      "range": {
+        "startLine": 760,
+        "startChar": 50,
+        "endLine": 763,
+        "endChar": 71
+      },
+      "revId": "732459b1c84e3c4bbff134d2540869e06149c842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66a720e4_14932fe0",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+        "patchSetId": 26
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-05T11:24:54Z",
+      "side": 1,
+      "message": "No problem. You are welcome! :)",
+      "parentUuid": "fcd98411_623a909d",
       "range": {
         "startLine": 760,
         "startChar": 50,
