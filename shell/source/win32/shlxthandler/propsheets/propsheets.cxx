@@ -171,7 +171,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNSVADDPROPSHEETPAGE lpfnAd
     // add the summary property page
     psp.dwSize      = sizeof(psp);
     psp.dwFlags     = PSP_DEFAULT | PSP_USETITLE | PSP_USECALLBACK;
-    psp.hInstance   = GetModuleHandleW(MODULE_NAME);
+    psp.hInstance   = GetCurrentModuleHandle();
     psp.lParam      = reinterpret_cast<LPARAM>(this);
     psp.pfnCallback = reinterpret_cast<LPFNPSPCALLBACKW>(CPropertySheet::PropPageSummaryCallback);
 
