@@ -68,6 +68,7 @@
 #include <oox/token/namespacemap.hxx>
 #include <editeng/unoprnms.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <tools/datetime.hxx>
 
 using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
@@ -581,10 +582,15 @@ writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const util::DateTi
     else
         pDoc->startElement(nXmlElement, FSNS(XML_xsi, XML_type), "dcterms:W3CDTF");
 
+    DateTime aTime(rTime);
+    if ( !(nXmlElement == XML_dcterms) ) {// Only for created and modified time
+        printf("is in to \n");
+        aTime.ConvertToUTC();
+    }
     char pStr[200];
     snprintf( pStr, sizeof( pStr ), "%d-%02d-%02dT%02d:%02d:%02dZ",
-            rTime.Year, rTime.Month, rTime.Day,
-            rTime.Hours, rTime.Minutes, rTime.Seconds );
+            aTime.GetYear(), aTime.GetMonth(), aTime.GetDay(),
+            aTime.GetHour(), aTime.GetMin(), aTime.GetSec() );
 
     pDoc->write( pStr );
 
