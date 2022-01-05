@@ -771,10 +771,10 @@ void AccObject::UpdateActionDesc()
                 if (!(Role == SPIN_BOX || Role == COMBO_BOX || Role == DATE_EDITOR ||
                       Role == EDIT_BAR || Role == PASSWORD_TEXT || Role == TEXT))
                 {
-                    pXString = m_xAccActionRef->getAccessibleActionDescription( 0 );
-                    //Solution: if string length is more than zero, action is set.
-                    if( pXString.getLength() > 0)
-                        m_pIMAcc->Put_ActionDescription( o3tl::toW(pXString.getStr()) );
+                    const OUString sActionDesc = m_xAccActionRef->getAccessibleActionDescription(0);
+                    // if string is non-empty, action is set.
+                    if (!sActionDesc.isEmpty())
+                        m_pIMAcc->Put_ActionDescription(o3tl::toW(sActionDesc.getStr()));
                 }
             }
         }
