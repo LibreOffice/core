@@ -4451,6 +4451,8 @@ void DomainMapper_Impl::PopTextBoxContent()
             getTableManager().endLevel();
             popTableManager();
         }
+        RemoveLastParagraph();
+
         m_aTextAppendStack.pop();
         m_bIsInTextBox = false;
     }
