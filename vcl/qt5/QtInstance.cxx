@@ -46,6 +46,8 @@
 #include <vclpluginapi.h>
 #include <tools/debug.hxx>
 #include <comphelper/flagguard.hxx>
+#include <dndhelper.hxx>
+#include <vcl/sysdata.hxx>
 #include <sal/log.hxx>
 #include <osl/process.h>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && ENABLE_GSTREAMER_1_0 && QT5_HAVE_GOBJECT
@@ -531,16 +533,16 @@ QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
     return xClipboard;
 }
 
-css::uno::Reference<css::uno::XInterface> QtInstance::CreateDragSource()
+css::uno::Reference<css::uno::XInterface>
+QtInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    return css::uno::Reference<css::uno::XInterface>(
-        static_cast<cppu::OWeakObject*>(new QtDragSource()));
+    return vcl::X11DnDHelper(new QtDragSource(), pSysEnv->aShellWindow);
 }
 
-css::uno::Reference<css::uno::XInterface> QtInstance::CreateDropTarget()
+css::uno::Reference<css::uno::XInterface>
+QtInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    return css::uno::Reference<css::uno::XInterface>(
-        static_cast<cppu::OWeakObject*>(new QtDropTarget()));
+    return vcl::X11DnDHelper(new QtDropTarget(), pSysEnv->aShellWindow);
 }
 
 IMPL_LINK_NOARG(QtInstance, updateStyleHdl, Timer*, void)
