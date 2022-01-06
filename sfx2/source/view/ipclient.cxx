@@ -91,6 +91,15 @@ public:
     }
 };
 
+tools::Rectangle lcl_negateRectX(const tools::Rectangle& rRect)
+{
+    return tools::Rectangle(
+        std::max(0l, -rRect.Right()),
+        rRect.Top(),
+        std::max(0l, -rRect.Left()),
+        rRect.Bottom());
+}
+
 }
 
 // SfxInPlaceClient_Impl
@@ -112,6 +121,7 @@ public:
     bool                            m_bStoreObject;
     bool                            m_bUIActive;            // set and cleared when notification for UI (de)activation is sent
     bool                            m_bResizeNoScale;
+    bool                            m_bNegativeX;
 
     uno::Reference < embed::XEmbeddedObject > m_xObject;
 
@@ -122,6 +132,7 @@ public:
     , m_bStoreObject( true )
     , m_bUIActive( false )
     , m_bResizeNoScale( false )
+    , m_bNegativeX( false )
     {}
 
     void SizeHasChanged();
@@ -347,7 +358,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
                 aRect = o3tl::convert(aRect, o3tl::Length::mm100, o3tl::Length::twip);
         }
 
-        OString str = aRect.toString() + ", \"INPLACE\"";
+        OString str = (m_bNegativeX ? lcl_negateRectX(aRect) : aRect).toString() + ", \"INPLACE\"";
         pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, str.getStr() );
     }
 
@@ -823,7 +834,8 @@ void SfxInPlaceClient::Invalidate()
     tools::Rectangle aRealObjArea( m_xImp->m_aObjArea );
     aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth()  * m_xImp->m_aScaleWidth ),
                                 tools::Long( aRealObjArea.GetHeight() * m_xImp->m_aScaleHeight ) ) );
-    m_pEditWin->Invalidate( aRealObjArea );
+
+    m_pEditWin->Invalidate( IsNegativeX() ? lcl_negateRectX(aRealObjArea) : aRealObjArea );
 
     ViewChanged();
 }
@@ -1120,6 +1132,16 @@ void SfxInPlaceClient::ResetObject()
 bool SfxInPlaceClient::IsUIActive() const
 {
     return m_xImp->m_bUIActive;
+}
+
+void SfxInPlaceClient::SetNegativeX(bool bSet)
+{
+    m_xImp->m_bNegativeX = bSet;
+}
+
+bool SfxInPlaceClient::IsNegativeX() const
+{
+    return m_xImp->m_bNegativeX;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

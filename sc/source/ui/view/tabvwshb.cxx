@@ -80,6 +80,13 @@ void ScTabViewShell::ConnectObject( const SdrOle2Obj* pObj )
         return;
 
     pClient = new ScClient( this, pWin, GetScDrawView()->GetModel(), pObj );
+    ScViewData& rViewData = GetViewData();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    bool bNegativeX = comphelper::LibreOfficeKit::isActive() && rDoc.IsNegativePage(rViewData.GetTabNo());
+    if (bNegativeX)
+        pClient->SetNegativeX(true);
+
     tools::Rectangle aRect = pObj->GetLogicRect();
     Size aDrawSize = aRect.GetSize();
 
@@ -153,9 +160,16 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
     bool bErrorShown = false;
 
     {
+        ScViewData& rViewData = GetViewData();
+        ScDocShell* pDocSh = rViewData.GetDocShell();
+        ScDocument& rDoc = pDocSh->GetDocument();
+        bool bNegativeX = comphelper::LibreOfficeKit::isActive() && rDoc.IsNegativePage(rViewData.GetTabNo());
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
         if ( !pClient )
             pClient = new ScClient( this, pWin, GetScDrawView()->GetModel(), pObj );
+
+        if (bNegativeX)
+            pClient->SetNegativeX(true);
 
         if ( (sal_uInt32(nErr) & ERRCODE_ERROR_MASK) == 0 && xObj.is() )
         {
