@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57c04a64_761a4e21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-06T12:35:15Z",
+      "side": 1,
+      "message": "I was able to reproduce now and this variant built ok",
+      "revId": "a61a4cb56b3f099d1cede172c8cf47dfa8ac8696",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
