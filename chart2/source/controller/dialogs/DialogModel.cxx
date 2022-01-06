@@ -241,12 +241,14 @@ namespace std
     {
         typedef std::output_iterator_tag iterator_category;
         typedef Reference< XDataSeriesContainer > value_type;
+        typedef value_type& reference;
     };
 
     template<> struct iterator_traits<lcl_RolesWithRangeAppend>
     {
         typedef std::output_iterator_tag iterator_category;
         typedef Reference< data::XLabeledDataSequence > value_type;
+        typedef value_type& reference;
     };
 }
 
