@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbbb4e0c_b6859eb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-06T10:26:58Z",
+      "side": 1,
+      "message": "Hi Mike! I tried to rename the file test_chr_method.bas using git mv to test_chr_overflow_method.bas, but online it shows it as added and not as moved. Did I anything wrong or should this be done in two separate commits?",
+      "revId": "5912c09747f47baa0eab6ae246678e40d4f74dbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
