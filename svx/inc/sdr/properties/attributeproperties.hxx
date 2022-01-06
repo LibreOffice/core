@@ -51,6 +51,9 @@ namespace sdr::properties
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet*) override;
 
+            // apply the correct SfyStyleSheet from SdrObject's SdrModel
+            virtual void applyDefaultStyleSheetFromSdrModel();
+
         public:
             // basic constructor
             explicit AttributeProperties(SdrObject& rObj);

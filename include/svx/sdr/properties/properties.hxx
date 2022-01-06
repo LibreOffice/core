@@ -80,9 +80,6 @@ namespace sdr::properties
             SdrObject&                                      mrObject;
 
         protected:
-            // apply the correct SfyStyleSheet from SdrObject's SdrModel
-            virtual void applyDefaultStyleSheetFromSdrModel();
-
             // internal access to SdrObject
             const SdrObject& GetSdrObject() const;
 
