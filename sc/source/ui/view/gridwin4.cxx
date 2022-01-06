@@ -1673,6 +1673,15 @@ void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
         pResultRectangle = &aRectangle;
     }
 
+    // Trim invalidation rectangle overlapping negative X region in RTL mode.
+    if (pResultRectangle && pResultRectangle->Left() < 0
+        && mrViewData.GetDocument().IsLayoutRTL(mrViewData.GetTabNo()))
+    {
+        pResultRectangle->SetLeft(0);
+        if (pResultRectangle->Right() < 0)
+            pResultRectangle->SetRight(0);
+    }
+
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
     SfxLokHelper::notifyInvalidation(pViewShell, pResultRectangle);
 }
