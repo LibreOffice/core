@@ -165,6 +165,13 @@ void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
             *mPos = 'n';
             ++mPos;
         }
+        else if (ch == '\t')
+        {
+            *mPos = '\\';
+            ++mPos;
+            *mPos = 't';
+            ++mPos;
+        }
         else if (ch == '\r')
         {
             *mPos = '\\';
