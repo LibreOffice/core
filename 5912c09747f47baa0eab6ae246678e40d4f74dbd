@@ -52,6 +52,24 @@
       "parentUuid": "6c350d85_daca2f7a",
       "revId": "5912c09747f47baa0eab6ae246678e40d4f74dbd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af52689f_36cd8745",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-06T11:20:22Z",
+      "side": 1,
+      "message": "\u003e and added a new test_chr_method.bas\n\nDo that in two different commits to have the move in git history.",
+      "parentUuid": "9564f190_8163253f",
+      "revId": "5912c09747f47baa0eab6ae246678e40d4f74dbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
