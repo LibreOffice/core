@@ -86,6 +86,10 @@ public:
     void                ResetObject();
     bool                IsUIActive() const;
 
+    /// To indicate that negated document X coordinates are used
+    void                SetNegativeX(bool bSet);
+    bool                IsNegativeX() const;
+
     virtual void        FormatChanged(); // object format was changed (used for StarMath formulas aligning)
 };
 

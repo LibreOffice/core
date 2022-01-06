@@ -568,9 +568,6 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     pGridWindow->PaintTile( rDevice, nOutputWidth, nOutputHeight,
                             nTilePosX, nTilePosY, nTileWidth, nTileHeight );
 
-    LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
-                                         nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-
     // Draw Form controls
     ScDrawLayer* pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
     SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(pViewData->GetTabNo()));
