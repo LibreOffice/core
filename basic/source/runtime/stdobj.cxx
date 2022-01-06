@@ -200,10 +200,10 @@ constexpr Method aMethods[] = {
     arg(u"Expression", SbxVARIANT),
 
 { u"Chr",                           SbxSTRING,   1 | FUNCTION_,        SbRtl_Chr                  },
-    arg(u"string", SbxINTEGER),
+    arg(u"charcode", SbxINTEGER),
 
 { u"ChrW",                          SbxSTRING,   1 | FUNCTION_ | COMPATONLY_, SbRtl_ChrW          },
-    arg(u"string", SbxINTEGER),
+    arg(u"charcode", SbxINTEGER),
 
 { u"CInt",                          SbxINTEGER,  1 | FUNCTION_,        SbRtl_CInt                 },
     arg(u"expression", SbxVARIANT),
