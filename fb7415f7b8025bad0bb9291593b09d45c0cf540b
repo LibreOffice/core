@@ -16,6 +16,24 @@
       "message": "Do you consider this wrong, not wrong but overkill or ok?\n\nIn the comment I suggested we could also add a boolean value to fillString functions (which would have false by default) to indicate if a trim is necessary.",
       "revId": "fb7415f7b8025bad0bb9291593b09d45c0cf540b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "203d1bc5_b405081d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-01-06T07:33:44Z",
+      "side": 1,
+      "message": "I have no particular opinion. Probably doesn\u0027t hurt, but I don\u0027t quite immediately understand the added value.",
+      "parentUuid": "c47b0f2c_2d38afa2",
+      "revId": "fb7415f7b8025bad0bb9291593b09d45c0cf540b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
