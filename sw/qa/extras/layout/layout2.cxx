@@ -657,11 +657,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf133005)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    {
-        SvFileStream aStream("/home/noel/libo/noel1.dump", StreamMode::WRITE | StreamMode::TRUNC);
-        dumper.dump(*xMetaFile, aStream);
-        aStream.Close();
-    }
     sal_Int32 nXChartWall = getXPath(pXmlDoc,
                                      "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
                                      "push[1]/push[1]/polyline[1]/point[2]",
