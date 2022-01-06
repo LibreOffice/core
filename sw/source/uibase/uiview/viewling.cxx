@@ -713,7 +713,8 @@ bool SwView::ExecSpellPopup(const Point& rPt)
 
                 OUString sMenuName = bUseGrammarContext ?
                     OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
-                if (TryContextMenuInterception(xPopup->CreateMenuInterface(), sMenuName, xMenu, aEvent))
+                auto xMenuInterface = xPopup->CreateMenuInterface();
+                if (TryContextMenuInterception(xMenuInterface, sMenuName, xMenu, aEvent))
                 {
                     //! happy hacking for context menu modifying extensions of this
                     //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)

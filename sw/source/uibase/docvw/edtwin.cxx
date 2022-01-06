@@ -5405,7 +5405,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         aEvent.ExecutePosition.X = aPixPos.X();
                         aEvent.ExecutePosition.Y = aPixPos.Y();
                         css::uno::Reference<css::awt::XPopupMenu> xMenu;
-                        if (GetView().TryContextMenuInterception(aROPopup.CreateMenuInterface(), "private:resource/ReadonlyContextMenu", xMenu, aEvent))
+                        auto xMenuInterface = aROPopup.CreateMenuInterface();
+                        if (GetView().TryContextMenuInterception(xMenuInterface, "private:resource/ReadonlyContextMenu", xMenu, aEvent))
                         {
                             if (xMenu.is())
                             {
