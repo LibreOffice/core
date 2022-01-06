@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baf2777f_3fcdd889",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-06T12:49:43Z",
+      "side": 1,
+      "message": "Unfortunately this change clashes with another one on the same topic,\nhttps://gerrit.libreoffice.org/c/core/+/126435\n\nSeeing that the author of that assigned the corresponding bug\nhttps://bugs.documentfoundation.org/show_activity.cgi?id\u003d146084\nto himself already on 2021-12-06 (before this change here came into existence) and the list of language exceptions is now more complete in that change, I suggest we abandon this change here in favour of the other one.\n\nSorry, but there can be only one :) ",
+      "revId": "003d46b9d5a898557cbc70cc54862ad09cf5068b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
