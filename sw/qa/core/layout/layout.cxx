@@ -525,6 +525,59 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testLinkedBullet)
     assertXPath(pXmlDoc, "//bmpexscale", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testInnerCellBorderIntersect)
+{
+    // Given a table with both outer and inner borders:
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "inner-border.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // When rendering table borders:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+
+    // Then make sure that that inner and outer borders don't overlap in Word compatibility mode,
+    // and inner borders are reduced to prevent an overlap:
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    // Collect start/end (vertical) positions of horizontal borders.
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    std::vector<std::pair<sal_Int32, sal_Int32>> aBorderStartEnds;
+    for (int i = 0; i < xmlXPathNodeSetGetLength(pXmlNodes); i += 2)
+    {
+        xmlNodePtr pStart = pXmlNodes->nodeTab[i];
+        xmlNodePtr pEnd = pXmlNodes->nodeTab[i + 1];
+        xmlChar* pStartY = xmlGetProp(pStart, BAD_CAST("y"));
+        xmlChar* pEndY = xmlGetProp(pEnd, BAD_CAST("y"));
+        sal_Int32 nStartY = OString(reinterpret_cast<char const*>(pStartY)).toInt32();
+        sal_Int32 nEndY = OString(reinterpret_cast<char const*>(pEndY)).toInt32();
+        if (nStartY != nEndY)
+        {
+            // Vertical border.
+            continue;
+        }
+        xmlChar* pStartX = xmlGetProp(pStart, BAD_CAST("x"));
+        xmlChar* pEndX = xmlGetProp(pEnd, BAD_CAST("x"));
+        sal_Int32 nStartX = OString(reinterpret_cast<char const*>(pStartX)).toInt32();
+        sal_Int32 nEndX = OString(reinterpret_cast<char const*>(pEndX)).toInt32();
+        aBorderStartEnds.emplace_back(nStartX, nEndX);
+    }
+    xmlXPathFreeObject(pXmlObj);
+    // We have 3 lines: top, middle and bottom. The top and the bottom one is a full line, since
+    // it's an outer border. The middle one has increased start and decreased end to avoid an
+    // overlap.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aBorderStartEnds.size());
+    CPPUNIT_ASSERT_EQUAL(aBorderStartEnds[0].first, aBorderStartEnds[2].first);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 1724
+    // - Actual  : 1724
+    // i.e. the middle line's start was the same as the top line start, while what we want is a
+    // larger X position, so the start of the middle line doesn't overlap with the thick vertical
+    // outer border on the left of the table.
+    CPPUNIT_ASSERT_GREATER(aBorderStartEnds[0].first, aBorderStartEnds[1].first);
+    CPPUNIT_ASSERT_EQUAL(aBorderStartEnds[0].second, aBorderStartEnds[2].second);
+    CPPUNIT_ASSERT_LESS(aBorderStartEnds[0].second, aBorderStartEnds[1].second);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2242,6 +2242,7 @@ struct SwLineEntry
     SwTwips mnStartPos;
     SwTwips mnEndPos;
     SwTwips mnLimitedEndPos;
+    bool mbOuter;
 
     svx::frame::Style maAttribute;
 
@@ -2253,6 +2254,7 @@ public:
     SwLineEntry( SwTwips nKey,
                  SwTwips nStartPos,
                  SwTwips nEndPos,
+                 bool bOuter,
                  const svx::frame::Style& rAttribute );
 
     OverlapType Overlaps( const SwLineEntry& rComp ) const;
@@ -2269,11 +2271,13 @@ public:
 SwLineEntry::SwLineEntry( SwTwips nKey,
                           SwTwips nStartPos,
                           SwTwips nEndPos,
+                          bool bOuter,
                           const svx::frame::Style& rAttribute )
     :   mnKey( nKey ),
         mnStartPos( nStartPos ),
         mnEndPos( nEndPos ),
         mnLimitedEndPos(0),
+        mbOuter(bOuter),
         maAttribute( rAttribute )
 {
 }
@@ -2384,10 +2388,11 @@ class SwTabFramePainter
     void Insert( SwLineEntry&, bool bHori );
     void Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem, const SwRect &rPaintArea);
     void HandleFrame(const SwLayoutFrame& rFrame, const SwRect& rPaintArea);
-    void FindStylesForLine( const Point&,
-                            const Point&,
+    void FindStylesForLine( Point&,
+                            Point&,
                             svx::frame::Style*,
-                            bool bHori ) const;
+                            bool bHori,
+                            bool bOuter ) const;
 
 public:
     explicit SwTabFramePainter( const SwTabFrame& rTabFrame );
@@ -2501,7 +2506,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
 
             svx::frame::Style aStyles[ 7 ];
             aStyles[ 0 ] = rEntryStyle;
-            FindStylesForLine( aStart, aEnd, aStyles, bHori );
+            FindStylesForLine(aStart, aEnd, aStyles, bHori, rEntry.mbOuter);
 
             if (!bHori && rEntry.mnLimitedEndPos)
             {
@@ -2675,10 +2680,10 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
  * StartPoint or Endpoint. The styles of these lines are required for DR's magic
  * line painting functions
  */
-void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
-                                         const Point& rEndPoint,
+void SwTabFramePainter::FindStylesForLine( Point& rStartPoint,
+                                         Point& rEndPoint,
                                          svx::frame::Style* pStyles,
-                                         bool bHori ) const
+                                         bool bHori, bool bOuter ) const
 {
     // For example, aLFromB means: this vertical line intersects my horizontal line at its left end,
     // from bottom.
@@ -2688,6 +2693,14 @@ void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
     // pStyles[ 4 ] = bHori ? aRFromT : BFromL,
     // pStyles[ 5 ] = bHori ? aRFromR : BFromB,
     // pStyles[ 6 ] = bHori ? aRFromB : BFromR,
+
+    bool bWordTableCell = false;
+    SwViewShell* pShell = mrTabFrame.getRootFrame()->GetCurrShell();
+    if (pShell)
+    {
+        const IDocumentSettingAccess& rIDSA = pShell->GetDoc()->getIDocumentSettingAccess();
+        bWordTableCell = rIDSA.get(DocumentSettingId::TABLE_ROW_KEEP);
+    }
 
     SwLineEntryMap::const_iterator aMapIter = maVertLines.find( rStartPoint.X() );
     OSL_ENSURE( aMapIter != maVertLines.end(), "FindStylesForLine: Error" );
@@ -2701,6 +2714,11 @@ void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
                 pStyles[ 3 ] = rEntry.maAttribute;
             else if ( rStartPoint.Y() == rEntry.mnEndPos )
                 pStyles[ 1 ] = rEntry.maAttribute;
+
+            if (bWordTableCell && rStartPoint.X() == rEntry.mnKey && !bOuter && rEntry.mbOuter)
+            {
+                rStartPoint.AdjustX(rEntry.maAttribute.GetWidth());
+            }
         }
         else
         {
@@ -2730,6 +2748,11 @@ void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
                 pStyles[ 1 ] = rEntry.maAttribute;
             else if ( rStartPoint.X() == rEntry.mnStartPos )
                 pStyles[ 3 ] = rEntry.maAttribute;
+
+            if (bWordTableCell && rStartPoint.Y() == rEntry.mnKey && !bOuter && rEntry.mbOuter)
+            {
+                rStartPoint.AdjustY(rEntry.maAttribute.GetWidth());
+            }
         }
     }
 
@@ -2745,6 +2768,11 @@ void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
                 pStyles[ 6 ] = rEntry.maAttribute;
             else if ( rEndPoint.Y() == rEntry.mnEndPos )
                 pStyles[ 4 ] = rEntry.maAttribute;
+
+            if (bWordTableCell && rEndPoint.X() == rEntry.mnKey && !bOuter && rEntry.mbOuter)
+            {
+                rEndPoint.AdjustX(-rEntry.maAttribute.GetWidth());
+            }
         }
     }
     else
@@ -2759,6 +2787,11 @@ void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
                 pStyles[ 4 ] = rEntry.maAttribute;
             else if ( rEndPoint.X() == rEntry.mnStartPos )
                 pStyles[ 6 ] = rEntry.maAttribute;
+
+            if (bWordTableCell && rEndPoint.Y() == rEntry.mnKey && !bOuter && rEntry.mbOuter)
+            {
+                rEndPoint.AdjustY(-rEntry.maAttribute.GetWidth());
+            }
         }
     }
 }
@@ -2826,22 +2859,32 @@ void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem
     aT.SetRefMode( !bVert ? svx::frame::RefMode::Begin : svx::frame::RefMode::End );
     aB.SetRefMode( !bVert ? svx::frame::RefMode::Begin : svx::frame::RefMode::End );
 
-    SwLineEntry aLeft  (nLeft,   nTop,  nBottom,
+    // First cell in a row.
+    bool bOuter = rFrame.IsCellFrame() && rFrame.GetUpper()->GetLower() == &rFrame;
+    SwLineEntry aLeft  (nLeft,   nTop,  nBottom, bOuter,
             bVert ? aB                         : (bR2L ? aR : aL));
     if (bWordTableCell && rBoxItem.GetLeft())
     {
         aLeft.LimitVerticalEndPos(rFrame, SwLineEntry::VerticalType::LEFT);
     }
 
-    SwLineEntry aRight (nRight,  nTop,  nBottom,
+    // Last cell in a row.
+    bOuter = rFrame.IsCellFrame() && rFrame.GetNext() == nullptr;
+    SwLineEntry aRight (nRight,  nTop,  nBottom, bOuter,
             bVert ? (bBottomAsTop ? aB : aT) : (bR2L ? aL : aR));
     if (bWordTableCell && rBoxItem.GetRight())
     {
         aRight.LimitVerticalEndPos(rFrame, SwLineEntry::VerticalType::RIGHT);
     }
-    SwLineEntry aTop   (nTop,    nLeft, nRight,
+
+    // First row in a table.
+    bOuter = rFrame.IsCellFrame() && rFrame.GetUpper()->GetUpper()->GetLower() == rFrame.GetUpper();
+    SwLineEntry aTop   (nTop,    nLeft, nRight, bOuter,
             bVert ? aL                         : (bBottomAsTop ? aB : aT));
-    SwLineEntry aBottom(nBottom, nLeft, nRight,
+
+    // Last row in a table.
+    bOuter = rFrame.IsCellFrame() && rFrame.GetUpper()->GetNext() == nullptr;
+    SwLineEntry aBottom(nBottom, nLeft, nRight, bOuter,
             bVert ? aR                         : aB);
 
     Insert( aLeft, false );
@@ -2870,7 +2913,7 @@ void SwTabFramePainter::Insert( SwLineEntry& rNew, bool bHori )
     {
         const SwLineEntry& rOld = *aIter;
 
-        if (rOld.mnLimitedEndPos)
+        if (rOld.mnLimitedEndPos || rOld.mbOuter != rNew.mbOuter)
         {
             // Don't merge with this line entry as it ends sooner than mnEndPos.
             ++aIter;
@@ -2888,10 +2931,10 @@ void SwTabFramePainter::Insert( SwLineEntry& rNew, bool bHori )
             OSL_ENSURE( rNew.mnStartPos >= rOld.mnStartPos, "Overlap type 3? How this?" );
 
             // new left segment
-            const SwLineEntry aLeft( nKey, rOld.mnStartPos, rNew.mnStartPos, rOldAttr );
+            const SwLineEntry aLeft(nKey, rOld.mnStartPos, rNew.mnStartPos, rOld.mbOuter, rOldAttr);
 
             // new middle segment
-            const SwLineEntry aMiddle( nKey, rNew.mnStartPos, rOld.mnEndPos, rCmpAttr );
+            const SwLineEntry aMiddle(nKey, rNew.mnStartPos, rOld.mnEndPos, rOld.mbOuter, rCmpAttr);
 
             // new right segment
             rNew.mnStartPos = rOld.mnEndPos;
@@ -2908,13 +2951,13 @@ void SwTabFramePainter::Insert( SwLineEntry& rNew, bool bHori )
         else if ( SwLineEntry::OVERLAP2 == nOverlapType )
         {
             // new left segment
-            const SwLineEntry aLeft( nKey, rOld.mnStartPos, rNew.mnStartPos, rOldAttr );
+            const SwLineEntry aLeft(nKey, rOld.mnStartPos, rNew.mnStartPos, rOld.mbOuter, rOldAttr);
 
             // new middle segment
-            const SwLineEntry aMiddle( nKey, rNew.mnStartPos, rNew.mnEndPos, rCmpAttr );
+            const SwLineEntry aMiddle(nKey, rNew.mnStartPos, rNew.mnEndPos, rOld.mbOuter, rCmpAttr);
 
             // new right segment
-            const SwLineEntry aRight( nKey, rNew.mnEndPos, rOld.mnEndPos, rOldAttr );
+            const SwLineEntry aRight(nKey, rNew.mnEndPos, rOld.mnEndPos, rOld.mbOuter, rOldAttr);
 
             // update current lines set
             pLineSet->erase( aIter );
@@ -2929,13 +2972,13 @@ void SwTabFramePainter::Insert( SwLineEntry& rNew, bool bHori )
         else if ( SwLineEntry::OVERLAP3 == nOverlapType )
         {
             // new left segment
-            const SwLineEntry aLeft( nKey, rNew.mnStartPos, rOld.mnStartPos, rNewAttr );
+            const SwLineEntry aLeft(nKey, rNew.mnStartPos, rOld.mnStartPos, rOld.mbOuter, rNewAttr);
 
             // new middle segment
-            const SwLineEntry aMiddle( nKey, rOld.mnStartPos, rNew.mnEndPos, rCmpAttr );
+            const SwLineEntry aMiddle(nKey, rOld.mnStartPos, rNew.mnEndPos, rOld.mbOuter, rCmpAttr);
 
             // new right segment
-            const SwLineEntry aRight( nKey, rNew.mnEndPos, rOld.mnEndPos, rOldAttr );
+            const SwLineEntry aRight(nKey, rNew.mnEndPos, rOld.mnEndPos, rOld.mbOuter, rOldAttr);
 
             // update current lines set
             pLineSet->erase( aIter );
