@@ -75,6 +75,7 @@ public:
     void testTdfCustomShapePos();
     void testTdf121281();
     void testTdf139658();
+    void testTdf146066();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest2);
 
@@ -114,6 +115,7 @@ public:
     CPPUNIT_TEST(testTdfCustomShapePos);
     CPPUNIT_TEST(testTdf121281);
     CPPUNIT_TEST(testTdf139658);
+    CPPUNIT_TEST(testTdf146066);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -872,6 +874,52 @@ void Chart2ImportTest2::testTdf139658()
     CPPUNIT_ASSERT_EQUAL(OUString("category1"), aCategories[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("\"category2\""), aCategories[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("category\"3"), aCategories[2]);
+}
+
+void Chart2ImportTest2::testTdf146066()
+{
+    load(u"/chart2/qa/extras/data/ods/", "tdf146066.ods");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+                                               UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShapes.is());
+
+    uno::Reference<drawing::XShape> xYAxisShape = getShapeByName(
+        xShapes, "CID/D=0:CS=0:Axis=1,0", // Y Axis
+        // Axis occurs twice in chart xshape representation so need to get the one related to labels
+        [](const uno::Reference<drawing::XShape>& rXShape) -> bool {
+            uno::Reference<drawing::XShapes> xAxisShapes(rXShape, uno::UNO_QUERY);
+            CPPUNIT_ASSERT(xAxisShapes.is());
+            uno::Reference<drawing::XShape> xChildShape(xAxisShapes->getByIndex(0), uno::UNO_QUERY);
+            uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xChildShape,
+                                                                       uno::UNO_QUERY_THROW);
+            return (xShapeDescriptor->getShapeType() == "com.sun.star.drawing.TextShape");
+        });
+    CPPUNIT_ASSERT(xYAxisShape.is());
+
+    // Check label count
+    uno::Reference<container::XIndexAccess> xIndexAccess(xYAxisShape, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8), xIndexAccess->getCount());
+
+    // Check text
+    uno::Reference<text::XTextRange> xLabel0(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), xLabel0->getString());
+    uno::Reference<text::XTextRange> xLabel1(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), xLabel1->getString());
+    uno::Reference<text::XTextRange> xLabel2(xIndexAccess->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("10"), xLabel2->getString());
+    uno::Reference<text::XTextRange> xLabel3(xIndexAccess->getByIndex(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("15"), xLabel3->getString());
+    uno::Reference<text::XTextRange> xLabel4(xIndexAccess->getByIndex(4), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("20"), xLabel4->getString());
+    uno::Reference<text::XTextRange> xLabel5(xIndexAccess->getByIndex(5), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("25"), xLabel5->getString());
+    uno::Reference<text::XTextRange> xLabel6(xIndexAccess->getByIndex(6), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("30"), xLabel6->getString());
+    uno::Reference<text::XTextRange> xLabel7(xIndexAccess->getByIndex(7), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("35"), xLabel7->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest2);
