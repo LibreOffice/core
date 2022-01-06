@@ -18,7 +18,9 @@
  */
 
 #include <memory>
+#include <optional>
 #include <comphelper/anycompare.hxx>
+#include <typelib/typedescription.hxx>
 
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -160,7 +162,233 @@ namespace comphelper
         }
     };
 
+    bool anyLess( void const * lhs, typelib_TypeDescriptionReference * lhsType,
+                  void const * rhs, typelib_TypeDescriptionReference * rhsType );
+
+    // For compound types we need to compare them member by member until we've
+    // checked them all or found a member that differs. For inequality checks
+    // we need to call anyLess() twice in both directions, this function does that.
+    std::optional<bool> anyCompare( void const * lhs, typelib_TypeDescriptionReference * lhsType,
+              void const * rhs, typelib_TypeDescriptionReference * rhsType )
+    {
+        if( anyLess( lhs, lhsType, rhs, rhsType ))
+            return std::optional( true );
+        if( anyLess( rhs, rhsType, lhs, lhsType ))
+            return std::optional( false );
+        return std::nullopt; // equal, so can't yet tell if anyLess() should return
     }
+
+    using com::sun::star::uno::TypeDescription;
+
+    // This is like com::sun::star::uno::TypeDescription, but it uses TYPELIB_DANGER_GET
+    // (which the code used originally, but it's easier to have a class to handle ownership).
+    class TypeDescriptionRef
+    {
+    public:
+        TypeDescriptionRef( typelib_TypeDescriptionReference* typeDef )
+        {
+            TYPELIB_DANGER_GET( &typeDescr, typeDef );
+        }
+        ~TypeDescriptionRef()
+        {
+            TYPELIB_DANGER_RELEASE( typeDescr );
+        }
+        typelib_TypeDescription* get()
+        {
+            return typeDescr;
+        }
+        typelib_TypeDescription* operator->()
+        {
+            return typeDescr;
+        }
+        bool is()
+        {
+            return typeDescr != nullptr;
+        }
+        bool equals( const TypeDescriptionRef& other ) const
+        {
+            return typeDescr && other.typeDescr && typelib_typedescription_equals( typeDescr, other.typeDescr );
+        }
+    private:
+        typelib_TypeDescription* typeDescr = nullptr;
+    };
+
+    bool anyLess( void const * lhs, typelib_TypeDescriptionReference * lhsType,
+                  void const * rhs, typelib_TypeDescriptionReference * rhsType )
+    {
+        if (lhsType->eTypeClass != rhsType->eTypeClass)
+            return lhsType->eTypeClass < rhsType->eTypeClass;
+
+        if (lhsType->eTypeClass == typelib_TypeClass_VOID) {
+            return false;
+        }
+        assert(lhs != nullptr);
+        assert(rhs != nullptr);
+
+        switch (lhsType->eTypeClass) {
+        case typelib_TypeClass_INTERFACE:
+            return lhs < rhs;
+        case typelib_TypeClass_STRUCT:
+        case typelib_TypeClass_EXCEPTION: {
+            TypeDescription lhsTypeDescr( lhsType );
+            if (!lhsTypeDescr.is())
+                lhsTypeDescr.makeComplete();
+            if (!lhsTypeDescr.is())
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+            TypeDescription rhsTypeDescr( rhsType );
+            if (!rhsTypeDescr.is())
+                rhsTypeDescr.makeComplete();
+            if (!rhsTypeDescr.is())
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+            if( !lhsTypeDescr.equals( rhsTypeDescr ))
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+
+            typelib_CompoundTypeDescription * compType =
+                reinterpret_cast< typelib_CompoundTypeDescription * >(
+                    lhsTypeDescr.get() );
+            sal_Int32 nDescr = compType->nMembers;
+
+            if (compType->pBaseTypeDescription) {
+                std::optional<bool> subLess = anyCompare(
+                    lhs, reinterpret_cast<
+                    typelib_TypeDescription * >(
+                        compType->pBaseTypeDescription)->pWeakRef,
+                    rhs, reinterpret_cast<
+                    typelib_TypeDescription * >(
+                        compType->pBaseTypeDescription)->pWeakRef);
+                if(subLess.has_value())
+                    return *subLess;
+            }
+
+            typelib_TypeDescriptionReference ** ppTypeRefs =
+                compType->ppTypeRefs;
+            sal_Int32 * memberOffsets = compType->pMemberOffsets;
+
+            for ( sal_Int32 nPos = 0; nPos < nDescr; ++nPos )
+            {
+                TypeDescriptionRef memberType( ppTypeRefs[ nPos ] );
+                if (!memberType.is())
+                    throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+                std::optional<bool> subLess = anyCompare(
+                     static_cast< char const * >(
+                         lhs ) + memberOffsets[ nPos ],
+                     memberType->pWeakRef,
+                     static_cast< char const * >(
+                         rhs ) + memberOffsets[ nPos ],
+                     memberType->pWeakRef);
+                if(subLess.has_value())
+                    return *subLess;
+            }
+            return false; // equal
+        }
+        case typelib_TypeClass_SEQUENCE: {
+            uno_Sequence * lhsSeq = *static_cast< uno_Sequence * const * >(lhs);
+            uno_Sequence * rhsSeq = *static_cast< uno_Sequence * const * >(rhs);
+            if( lhsSeq->nElements != rhsSeq->nElements)
+                return lhsSeq->nElements < rhsSeq->nElements;
+            sal_Int32 nElements = lhsSeq->nElements;
+
+            TypeDescriptionRef lhsTypeDescr( lhsType );
+            if (!lhsTypeDescr.is())
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+            TypeDescriptionRef rhsTypeDescr( rhsType );
+            if (!rhsTypeDescr.is())
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+            if( !lhsTypeDescr.equals( rhsTypeDescr ))
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+
+            typelib_TypeDescriptionReference * elementTypeRef =
+                reinterpret_cast< typelib_IndirectTypeDescription * >(lhsTypeDescr.get())->pType;
+            TypeDescriptionRef elementTypeDescr( elementTypeRef );
+            if (!elementTypeDescr.is())
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+            assert( elementTypeDescr.equals( TypeDescriptionRef(
+                        reinterpret_cast< typelib_IndirectTypeDescription * >(lhsTypeDescr.get())->pType )));
+
+            sal_Int32 nElementSize = elementTypeDescr->nSize;
+            if (nElements > 0)
+            {
+                char const * lhsElements = lhsSeq->elements;
+                char const * rhsElements = rhsSeq->elements;
+                for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
+                {
+                    std::optional<bool> subLess = anyCompare(
+                        lhsElements + (nElementSize * nPos),
+                        elementTypeDescr->pWeakRef,
+                        rhsElements + (nElementSize * nPos),
+                        elementTypeDescr->pWeakRef );
+                    if(subLess.has_value())
+                        return *subLess;
+                }
+            }
+            return false; // equal
+        }
+        case typelib_TypeClass_ANY: {
+            uno_Any const * lhsAny = static_cast< uno_Any const * >(lhs);
+            uno_Any const * rhsAny = static_cast< uno_Any const * >(rhs);
+            return anyLess( lhsAny->pData, lhsAny->pType, rhsAny->pData, rhsAny->pType );
+        }
+        case typelib_TypeClass_TYPE: {
+            OUString const & lhsTypeName = OUString::unacquired(
+                &(*static_cast< typelib_TypeDescriptionReference * const * >(lhs))->pTypeName);
+            OUString const & rhsTypeName = OUString::unacquired(
+                &(*static_cast< typelib_TypeDescriptionReference * const * >(rhs))->pTypeName);
+            return lhsTypeName < rhsTypeName;
+        }
+        case typelib_TypeClass_STRING: {
+            OUString const & lhsStr = OUString::unacquired(
+                static_cast< rtl_uString * const * >(lhs) );
+            OUString const & rhsStr = OUString::unacquired(
+                static_cast< rtl_uString * const * >(rhs) );
+            return lhsStr < rhsStr;
+        }
+        case typelib_TypeClass_ENUM: {
+            TypeDescription lhsTypeDescr( lhsType );
+            if (!lhsTypeDescr.is())
+                lhsTypeDescr.makeComplete();
+            if (!lhsTypeDescr.is())
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+            TypeDescription rhsTypeDescr( rhsType );
+            if (!rhsTypeDescr.is())
+                rhsTypeDescr.makeComplete();
+            if (!rhsTypeDescr.is())
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+            if( !lhsTypeDescr.equals( rhsTypeDescr ))
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
+
+            return *static_cast< int const * >(lhs) < *static_cast< int const * >(rhs);
+        }
+        case typelib_TypeClass_BOOLEAN:
+            return *static_cast< sal_Bool const * >(lhs) < *static_cast< sal_Bool const * >(rhs);
+        case typelib_TypeClass_CHAR:
+            return *static_cast< sal_Unicode const * >(lhs) < *static_cast< sal_Unicode const * >(rhs);
+        case typelib_TypeClass_FLOAT:
+            return *static_cast< float const * >(lhs) < *static_cast< float const * >(rhs);
+        case typelib_TypeClass_DOUBLE:
+            return *static_cast< double const * >(lhs) < *static_cast< double const * >(rhs);
+        case typelib_TypeClass_BYTE:
+            return *static_cast< sal_Int8 const * >(lhs) < *static_cast< sal_Int8 const * >(rhs);
+        case typelib_TypeClass_SHORT:
+            return *static_cast< sal_Int16 const * >(lhs) < *static_cast< sal_Int16 const * >(rhs);
+        case typelib_TypeClass_UNSIGNED_SHORT:
+            return *static_cast< sal_uInt16 const * >(lhs) < *static_cast< sal_uInt16 const * >(rhs);
+        case typelib_TypeClass_LONG:
+            return *static_cast< sal_Int32 const * >(lhs) < *static_cast< sal_Int32 const * >(rhs);
+        case typelib_TypeClass_UNSIGNED_LONG:
+            return *static_cast< sal_uInt32 const * >(lhs) < *static_cast< sal_uInt32 const * >(rhs);
+        case typelib_TypeClass_HYPER:
+            return *static_cast< sal_Int64 const * >(lhs) < *static_cast< sal_Int64 const * >(rhs);
+        case typelib_TypeClass_UNSIGNED_HYPER:
+            return *static_cast< sal_uInt64 const * >(lhs) < *static_cast< sal_uInt64 const * >(rhs);
+    //     case typelib_TypeClass_UNKNOWN:
+    //     case typelib_TypeClass_SERVICE:
+    //     case typelib_TypeClass_MODULE:
+        default:
+            return false;
+        }
+    }
+
+    } // namespace
 
     std::unique_ptr< IKeyPredicateLess > getStandardLessPredicate( Type const & i_type, Reference< XCollator > const & i_collator )
     {
@@ -231,56 +459,7 @@ namespace comphelper
 
     bool anyLess( css::uno::Any const & lhs, css::uno::Any const & rhs)
     {
-        auto lhsTypeClass = lhs.getValueType().getTypeClass();
-        auto rhsTypeClass = rhs.getValueType().getTypeClass();
-        if (lhsTypeClass != rhsTypeClass)
-            return lhsTypeClass < rhsTypeClass;
-
-        switch ( lhsTypeClass )
-        {
-        case TypeClass_CHAR:
-            return ScalarPredicateLess< sal_Unicode >().isLess(lhs, rhs);
-        case TypeClass_BOOLEAN:
-            return ScalarPredicateLess< bool >().isLess(lhs, rhs);
-        case TypeClass_BYTE:
-            return ScalarPredicateLess< sal_Int8 >().isLess(lhs, rhs);
-        case TypeClass_SHORT:
-            return ScalarPredicateLess< sal_Int16 >().isLess(lhs, rhs);
-        case TypeClass_UNSIGNED_SHORT:
-            return ScalarPredicateLess< sal_uInt16 >().isLess(lhs, rhs);
-        case TypeClass_LONG:
-            return ScalarPredicateLess< sal_Int32 >().isLess(lhs, rhs);
-        case TypeClass_UNSIGNED_LONG:
-            return ScalarPredicateLess< sal_uInt32 >().isLess(lhs, rhs);
-        case TypeClass_HYPER:
-            return ScalarPredicateLess< sal_Int64 >().isLess(lhs, rhs);
-        case TypeClass_UNSIGNED_HYPER:
-            return ScalarPredicateLess< sal_uInt64 >().isLess(lhs, rhs);
-        case TypeClass_FLOAT:
-            return ScalarPredicateLess< float >().isLess(lhs, rhs);
-        case TypeClass_DOUBLE:
-            return ScalarPredicateLess< double >().isLess(lhs, rhs);
-        case TypeClass_STRING:
-            return StringPredicateLess().isLess(lhs, rhs);
-        case TypeClass_TYPE:
-            return TypePredicateLess().isLess(lhs, rhs);
-        case TypeClass_ENUM:
-            return EnumPredicateLess( lhs.getValueType() ).isLess(lhs, rhs);
-        case TypeClass_INTERFACE:
-            return InterfacePredicateLess().isLess(lhs, rhs);
-        case TypeClass_STRUCT:
-            if ( lhs.getValueType().equals( ::cppu::UnoType< Date >::get() ) )
-                return DatePredicateLess().isLess(lhs, rhs);
-            else if ( lhs.getValueType().equals( ::cppu::UnoType< Time >::get() ) )
-                return TimePredicateLess().isLess(lhs, rhs);
-            else if ( lhs.getValueType().equals( ::cppu::UnoType< DateTime >::get() ) )
-                return DateTimePredicateLess().isLess(lhs, rhs);
-            break;
-        default: ;
-        }
-
-        // type==VOID
-        return false;
+        return anyLess( lhs.getValue(), lhs.getValueTypeRef(), rhs.getValue(), rhs.getValueTypeRef());
     }
 
 } // namespace comphelper
