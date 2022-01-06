@@ -1621,14 +1621,14 @@ std::unique_ptr<sdr::contact::ViewContact> SdrPathObj::CreateObjectSpecificViewC
 SdrPathObj::SdrPathObj(
     SdrModel& rSdrModel,
     SdrObjKind eNewKind)
-:   SdrTextObj(rSdrModel),
+:   SdrAttrObj(rSdrModel),
     meKind(eNewKind)
 {
     m_bClosedObj = IsClosed();
 }
 
 SdrPathObj::SdrPathObj(SdrModel& rSdrModel, SdrPathObj const & rSource)
-:   SdrTextObj(rSdrModel, rSource),
+:   SdrAttrObj(rSdrModel, rSource),
     meKind(rSource.meKind)
 {
     m_bClosedObj = IsClosed();
@@ -1639,7 +1639,7 @@ SdrPathObj::SdrPathObj(
     SdrModel& rSdrModel,
     SdrObjKind eNewKind,
     const basegfx::B2DPolyPolygon& rPathPoly)
-:   SdrTextObj(rSdrModel),
+:   SdrAttrObj(rSdrModel),
     maPathPolygon(rPathPoly),
     meKind(eNewKind)
 {
@@ -1674,8 +1674,8 @@ void SdrPathObj::ImpForceLineAngle()
     const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0));
     const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0));
     const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1));
-    const Point aPoint0(FRound(aB2DPoint0.getX()), FRound(aB2DPoint0.getY()));
-    const Point aPoint1(FRound(aB2DPoint1.getX()), FRound(aB2DPoint1.getY()));
+//    const Point aPoint0(FRound(aB2DPoint0.getX()), FRound(aB2DPoint0.getY()));
+//    const Point aPoint1(FRound(aB2DPoint1.getX()), FRound(aB2DPoint1.getY()));
     const basegfx::B2DPoint aB2DDelt(aB2DPoint1 - aB2DPoint0);
     const Point aDelt(FRound(aB2DDelt.getX()), FRound(aB2DDelt.getY()));
 
@@ -1685,7 +1685,7 @@ void SdrPathObj::ImpForceLineAngle()
     maGeo.RecalcTan();
 
     // for SdrTextObj, keep aRect up to date
-    maRect = tools::Rectangle::Justify(aPoint0, aPoint1);
+//    maRect = tools::Rectangle::Justify(aPoint0, aPoint1);
 }
 
 void SdrPathObj::ImpForceKind()
@@ -1749,7 +1749,7 @@ void SdrPathObj::ImpForceKind()
         // #i10659# for SdrTextObj, keep aRect up to date
         if(GetPathPoly().count())
         {
-            maRect = lcl_ImpGetBoundRect(GetPathPoly());
+//            maRect = lcl_ImpGetBoundRect(GetPathPoly());
         }
     }
 
@@ -1811,13 +1811,12 @@ void SdrPathObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     rInfo.bNoContortion=false;
 
-    bool bCanConv = !HasText() || ImpCanConvTextToCurve();
     bool bIsPath = IsBezier() || IsSpline();
 
     rInfo.bEdgeRadiusAllowed    = false;
-    rInfo.bCanConvToPath = bCanConv && !bIsPath;
-    rInfo.bCanConvToPoly = bCanConv && bIsPath;
-    rInfo.bCanConvToContour = !IsFontwork() && (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
+    rInfo.bCanConvToPath = !bIsPath;
+    rInfo.bCanConvToPoly = bIsPath;
+    rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
 SdrObjKind SdrPathObj::GetObjIdentifier() const
@@ -2273,7 +2272,7 @@ void SdrPathObj::NbcMove(const Size& rSiz)
     maPathPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(rSiz.Width(), rSiz.Height()));
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
-    SdrTextObj::NbcMove(rSiz);
+    SdrAttrObj::NbcMove(rSiz);
 }
 
 void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -2298,7 +2297,7 @@ void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     maPathPolygon.transform(aTrans);
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
-    SdrTextObj::NbcResize(rRef,xFact,yFact);
+    SdrAttrObj::NbcResize(rRef,xFact,yFact);
 }
 
 void SdrPathObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
@@ -2309,7 +2308,7 @@ void SdrPathObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, doubl
     maPathPolygon.transform(aTrans);
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
-    SdrTextObj::NbcRotate(rRef,nAngle,sn,cs);
+    SdrAttrObj::NbcRotate(rRef,nAngle,sn,cs);
 }
 
 void SdrPathObj::NbcShear(const Point& rRefPnt, Degree100 nAngle, double fTan, bool bVShear)
@@ -2330,7 +2329,7 @@ void SdrPathObj::NbcShear(const Point& rRefPnt, Degree100 nAngle, double fTan, b
     maPathPolygon.transform(aTrans);
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
-    SdrTextObj::NbcShear(rRefPnt,nAngle,fTan,bVShear);
+    SdrAttrObj::NbcShear(rRefPnt,nAngle,fTan,bVShear);
 }
 
 void SdrPathObj::NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2)
@@ -2349,26 +2348,26 @@ void SdrPathObj::NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2)
     ImpForceKind();
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
-    SdrTextObj::NbcMirror(rRefPnt1,rRefPnt2);
+    SdrAttrObj::NbcMirror(rRefPnt1,rRefPnt2);
 }
 
-void SdrPathObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
-{
-    if(!maGeo.nRotationAngle)
-    {
-        rRect = GetSnapRect();
-    }
-    else
-    {
-        XPolyPolygon aXPP(GetPathPoly());
-        RotateXPoly(aXPP,Point(),-maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
-        rRect=aXPP.GetBoundRect();
-        Point aTmp(rRect.TopLeft());
-        RotatePoint(aTmp,Point(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
-        aTmp-=rRect.TopLeft();
-        rRect.Move(aTmp.X(),aTmp.Y());
-    }
-}
+//void SdrPathObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
+//{
+//    if(!maGeo.nRotationAngle)
+//    {
+//        rRect = GetSnapRect();
+//    }
+//    else
+//    {
+//        XPolyPolygon aXPP(GetPathPoly());
+//        RotateXPoly(aXPP,Point(),-maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
+//        rRect=aXPP.GetBoundRect();
+//        Point aTmp(rRect.TopLeft());
+//        RotatePoint(aTmp,Point(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
+//        aTmp-=rRect.TopLeft();
+//        rRect.Move(aTmp.X(),aTmp.Y());
+//    }
+//}
 
 void SdrPathObj::RecalcSnapRect()
 {
@@ -2478,7 +2477,7 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
         if(GetPathPoly().count())
         {
             // #i10659# for SdrTextObj, keep aRect up to date
-            maRect = lcl_ImpGetBoundRect(GetPathPoly());
+//            maRect = lcl_ImpGetBoundRect(GetPathPoly());
         }
     }
 
@@ -2673,35 +2672,28 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
 SdrObjectUniquePtr SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // #i89784# check for FontWork with activated HideContour
-    const drawinglayer::attribute::SdrTextAttribute aText(
-        drawinglayer::primitive2d::createNewSdrTextAttribute(GetObjectItemSet(), *getText(0)));
-    const bool bHideContour(
-        !aText.isDefault() && !aText.getSdrFormTextAttribute().isDefault() && aText.isHideContour());
 
     SdrObjectUniquePtr pRet;
 
-    if(!bHideContour)
-    {
-        SdrPathObjUniquePtr pPath = ImpConvertMakeObj(GetPathPoly(), IsClosed(), bBezier);
+    SdrPathObjUniquePtr pPath = ImpConvertMakeObj(GetPathPoly(), IsClosed(), bBezier);
 
-        if(pPath->GetPathPoly().areControlPointsUsed())
+    if(pPath->GetPathPoly().areControlPointsUsed())
+    {
+        if(!bBezier)
         {
-            if(!bBezier)
-            {
-                // reduce all bezier curves
-                pPath->SetPathPoly(basegfx::utils::adaptiveSubdivideByAngle(pPath->GetPathPoly()));
-            }
+            // reduce all bezier curves
+            pPath->SetPathPoly(basegfx::utils::adaptiveSubdivideByAngle(pPath->GetPathPoly()));
         }
-        else
-        {
-            if(bBezier)
-            {
-                // create bezier curves
-                pPath->SetPathPoly(basegfx::utils::expandToCurve(pPath->GetPathPoly()));
-            }
-        }
-        pRet = std::move(pPath);
     }
+    else
+    {
+        if(bBezier)
+        {
+            // create bezier curves
+            pPath->SetPathPoly(basegfx::utils::expandToCurve(pPath->GetPathPoly()));
+        }
+    }
+    pRet = std::move(pPath);
 
     if(bAddText)
     {
@@ -2718,7 +2710,7 @@ std::unique_ptr<SdrObjGeoData> SdrPathObj::NewGeoData() const
 
 void SdrPathObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
-    SdrTextObj::SaveGeoData(rGeo);
+    SdrAttrObj::SaveGeoData(rGeo);
     SdrPathObjGeoData& rPGeo = static_cast<SdrPathObjGeoData&>( rGeo );
     rPGeo.maPathPolygon=GetPathPoly();
     rPGeo.meKind=meKind;
@@ -2726,7 +2718,7 @@ void SdrPathObj::SaveGeoData(SdrObjGeoData& rGeo) const
 
 void SdrPathObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
-    SdrTextObj::RestoreGeoData(rGeo);
+    SdrAttrObj::RestoreGeoData(rGeo);
     const SdrPathObjGeoData& rPGeo=static_cast<const SdrPathObjGeoData&>(rGeo);
     maPathPolygon=rPGeo.maPathPolygon;
     meKind=rPGeo.meKind;

@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFSDRPATHOBJ_HXX
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFSDRPATHOBJ_HXX
 
-#include <sdr/contact/viewcontactoftextobj.hxx>
+#include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/svdopath.hxx>
 
 
 namespace sdr::contact
     {
-        class ViewContactOfSdrPathObj final : public ViewContactOfTextObj
+        class ViewContactOfSdrPathObj final : public ViewContactOfSdrObj
         {
         public:
             // basic constructor, used from SdrObject.

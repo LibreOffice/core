@@ -19,8 +19,9 @@
 
 #pragma once
 
-#include <svx/svdotext.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/svdoattr.hxx>
+#include <svx/svdtrans.hxx>
 #include <memory>
 
 class ImpPathForDragAndCreate;
@@ -28,7 +29,7 @@ class ImpPathForDragAndCreate;
 // Helper class SdrPathObjGeoData
 // used for undo/redo
 
-class SdrPathObjGeoData final : public SdrTextObjGeoData
+class SdrPathObjGeoData final : public SdrObjGeoData
 {
 public:
     basegfx::B2DPolyPolygon maPathPolygon;
@@ -39,7 +40,7 @@ public:
 };
 
 
-class SVXCORE_DLLPUBLIC SdrPathObj final : public SdrTextObj
+class SVXCORE_DLLPUBLIC SdrPathObj final : public SdrAttrObj
 {
 private:
     friend class ImpPathForDragAndCreate;
@@ -52,6 +53,9 @@ private:
 
     // for isolation of old Drag/Create code
     std::unique_ptr<ImpPathForDragAndCreate> mpDAC;
+
+    // The GeoStat contains the rotation and shear angles
+    GeoStat maGeo;
 
     // helper functions for GET, SET, INS etc. PNT
     void ImpSetClosed(bool bClose);
@@ -76,7 +80,7 @@ public:
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrObjKind GetObjIdentifier() const override;
-    virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
+//    virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
     virtual SdrPathObj* CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual OUString TakeObjNameSingul() const override;
@@ -128,6 +132,8 @@ public:
 
     // rip at given point
     SdrObject* RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index);
+
+    const GeoStat& GetGeoStat() const { return maGeo; }
 
 private:
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;

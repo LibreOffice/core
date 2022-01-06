@@ -35,7 +35,7 @@
 namespace sdr::contact
 {
         ViewContactOfSdrPathObj::ViewContactOfSdrPathObj(SdrPathObj& rPathObj)
-        :   ViewContactOfTextObj(rPathObj)
+        :   ViewContactOfSdrObj(rPathObj)
         {
         }
 
@@ -73,7 +73,7 @@ namespace sdr::contact
             const drawinglayer::attribute::SdrLineFillEffectsTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillEffectsTextAttribute(
                     rItemSet,
-                    GetPathObj().getText(0),
+                    nullptr,
                     false));
             basegfx::B2DPolyPolygon aUnitPolyPolygon(GetPathObj().GetPathPoly());
             sal_uInt32 nPolyCount(ensureGeometry(aUnitPolyPolygon));
