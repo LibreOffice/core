@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db7d2700_330af185",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-01-06T09:14:36Z",
+      "side": 1,
+      "message": "Now working on forward-porting this (and the related earlier change) to the master branch.",
+      "revId": "cde6577dcb9c94aca7605790d34c83a5ff62edad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
