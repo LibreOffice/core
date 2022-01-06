@@ -34,6 +34,24 @@
       "parentUuid": "68ef2ff5_0fe1b846",
       "revId": "e40cd808ecb832d689adf0b6373e200440a77f4d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ced44f4a_d306d23f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-06T17:00:18Z",
+      "side": 1,
+      "message": "Ah, checked :) Create Textbox in draw by using \u0027insert textbox\u0027, draw it to some size. Add e.g. \u0027Hello\u0027. Then contextmenu, edit_style, in dlg tab \u0027Text\u0027 deactivate \u0027fit height...\u0027, activate \u0027Fit to Frame\u0027.\nWhen activating TextEdit, nothing seems to happen, but as soon as you press a key (e.g. arrow-key to not change anything) display \u0027snaps\u0027 to unstretched text - probably to make it better readable during edit.\nSo I guess switching off frame is by purpose. The error is more that activated TextEdit in that case does not switch to hat mode immediately...",
+      "parentUuid": "120a9412_c9d3d01b",
+      "revId": "e40cd808ecb832d689adf0b6373e200440a77f4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
