@@ -20,10 +20,14 @@
 
 #include <comphelper/anytostring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <typelib/typedescription.h>
+#include <typelib/typedescription.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include "typedescriptionref.hxx"
+
 using namespace ::com::sun::star;
+using ::com::sun::star::uno::TypeDescription;
+using ::comphelper::detail::TypeDescriptionRef;
 
 namespace comphelper {
 namespace {
@@ -90,15 +94,16 @@ void appendValue( OUStringBuffer & buf,
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION: {
         buf.append( "{ " );
-        typelib_TypeDescription * typeDescr = nullptr;
-        typelib_typedescriptionreference_getDescription( &typeDescr, typeRef );
-        if (typeDescr == nullptr || !typelib_typedescription_complete( &typeDescr )) {
+        TypeDescription typeDescr( typeRef );
+        if (!typeDescr.is())
+            typeDescr.makeComplete();
+        if (!typeDescr.is()) {
             appendTypeError( buf, typeRef );
         }
         else {
             typelib_CompoundTypeDescription * compType =
                 reinterpret_cast< typelib_CompoundTypeDescription * >(
-                    typeDescr );
+                    typeDescr.get() );
             sal_Int32 nDescr = compType->nMembers;
 
             if (compType->pBaseTypeDescription) {
@@ -119,9 +124,8 @@ void appendValue( OUStringBuffer & buf,
             {
                 buf.append( ppMemberNames[ nPos ] );
                 buf.append( " = " );
-                typelib_TypeDescription * memberType = nullptr;
-                TYPELIB_DANGER_GET( &memberType, ppTypeRefs[ nPos ] );
-                if (memberType == nullptr) {
+                TypeDescriptionRef memberType( ppTypeRefs[ nPos ] );
+                if (!memberType.is()) {
                     appendTypeError( buf, ppTypeRefs[ nPos ] );
                 }
                 else {
@@ -129,30 +133,25 @@ void appendValue( OUStringBuffer & buf,
                                  static_cast< char const * >(
                                      val ) + memberOffsets[ nPos ],
                                  memberType->pWeakRef, true );
-                    TYPELIB_DANGER_RELEASE( memberType );
                 }
                 if (nPos < (nDescr - 1))
                     buf.append( ", " );
             }
         }
         buf.append( " }" );
-        if (typeDescr != nullptr)
-            typelib_typedescription_release( typeDescr );
         break;
     }
     case typelib_TypeClass_SEQUENCE: {
-        typelib_TypeDescription * typeDescr = nullptr;
-        TYPELIB_DANGER_GET( &typeDescr, typeRef );
-        if (typeDescr == nullptr) {
+        TypeDescriptionRef typeDescr( typeRef );
+        if (!typeDescr.is()) {
             appendTypeError( buf,typeRef );
         }
         else {
             typelib_TypeDescriptionReference * elementTypeRef =
                 reinterpret_cast<
-                typelib_IndirectTypeDescription * >(typeDescr)->pType;
-            typelib_TypeDescription * elementTypeDescr = nullptr;
-            TYPELIB_DANGER_GET( &elementTypeDescr, elementTypeRef );
-            if (elementTypeDescr == nullptr)
+                typelib_IndirectTypeDescription * >(typeDescr.get())->pType;
+            TypeDescriptionRef elementTypeDescr( elementTypeRef );
+            if (!elementTypeDescr.is())
             {
                 appendTypeError( buf, elementTypeRef );
             }
@@ -181,9 +180,7 @@ void appendValue( OUStringBuffer & buf,
                 {
                     buf.append( "{}" );
                 }
-                TYPELIB_DANGER_RELEASE( elementTypeDescr );
             }
-            TYPELIB_DANGER_RELEASE( typeDescr );
         }
         break;
     }
@@ -218,18 +215,19 @@ void appendValue( OUStringBuffer & buf,
         break;
     }
     case typelib_TypeClass_ENUM: {
-        typelib_TypeDescription * typeDescr = nullptr;
-        typelib_typedescriptionreference_getDescription( &typeDescr, typeRef );
-        if (typeDescr == nullptr || !typelib_typedescription_complete( &typeDescr )) {
+        TypeDescription typeDescr( typeRef );
+        if (!typeDescr.is())
+            typeDescr.makeComplete();
+        if (!typeDescr.is()) {
             appendTypeError( buf, typeRef );
         }
         else
         {
             sal_Int32 * pValues =
                 reinterpret_cast< typelib_EnumTypeDescription * >(
-                    typeDescr )->pEnumValues;
+                    typeDescr.get() )->pEnumValues;
             sal_Int32 nPos = reinterpret_cast< typelib_EnumTypeDescription * >(
-                typeDescr )->nEnumValues;
+                typeDescr.get() )->nEnumValues;
             while (nPos--)
             {
                 if (pValues[ nPos ] == *static_cast< int const * >(val))
@@ -238,15 +236,13 @@ void appendValue( OUStringBuffer & buf,
             if (nPos >= 0)
             {
                 buf.append( reinterpret_cast< typelib_EnumTypeDescription * >(
-                                typeDescr )->ppEnumNames[ nPos ] );
+                                typeDescr.get() )->ppEnumNames[ nPos ] );
             }
             else
             {
                 buf.append( "?unknown enum value?" );
             }
         }
-        if (typeDescr != nullptr)
-            typelib_typedescription_release( typeDescr );
         break;
     }
     case typelib_TypeClass_BOOLEAN:
