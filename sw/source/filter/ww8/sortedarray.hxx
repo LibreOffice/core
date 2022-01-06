@@ -57,47 +57,6 @@ namespace ww
         {
             OSL_ENSURE(mnNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
             std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
-#if OSL_DEBUG_LEVEL > 1
-            bool bBroken=false;
-            OUString sError;
-            const C *pIter = mpWwSprmTab;
-            const C *pBeforeEnd = mpWwSprmTab + mnNoElems - 1;
-            while (pIter < pBeforeEnd)
-            {
-                if (pIter->nId == (pIter+1)->nId)
-                {
-                    if (!bBroken)
-                    {
-                        sError =
-                            "WW8: Duplicate in list, almost certainly don't "
-                            "want that!\n"
-                            "(You will not see this message again unless you "
-                            "restart)\n"
-                            "Extra entries are...\n";
-                        bBroken=true;
-                    }
-
-                    size_t nSize = sizeof(C);
-                    const sal_uInt8 *pHack =
-                        reinterpret_cast<const sal_uInt8 *>(&(*pIter));
-                    for (size_t i=0; i < nSize; ++i)
-                    {
-                        sError += OUString::number(
-                            static_cast<sal_Int32>(pHack[i]), 16);
-                        sError += OUString(' ');
-                    }
-                    sError += OUString('\n');
-                    while (pIter->nId == (pIter+1)->nId && pIter < pBeforeEnd)
-                        ++pIter;
-                }
-                else
-                    ++pIter;
-            }
-            if (bBroken)
-            {
-               SAL_WARN( "sw", sError );
-            }
-#endif
         }
     };
 }
