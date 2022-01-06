@@ -155,18 +155,20 @@ Function TestOptStringByRefByVal(Optional ByRef A As String, Optional ByVal B As
     TestOptStringByRefByVal = OptStringConcat(IsMissing(A), A, IsMissing(B), B)
 End Function
 
-Function TestOptObject(Optional A As Collection, Optional B As Collection)
+Function TestOptObject(Optional A As Variant, Optional B As Variant)
     ' TODO - isMissing returns false even though the collection is null and is missing?
+    ' tdf#146112 In VBA isMissing will only return True if the argument is a Variant
     TestOptObject = 0
-    If Not IsNull(A) Then TestOptObject = CollectionSum(A)
-    If Not IsNull(B) Then TestOptObject = TestOptObject + CollectionSum(B)
+    If Not isMissing(A) Then TestOptObject = CollectionSum(A)
+    If Not isMissing(B) Then TestOptObject = TestOptObject + CollectionSum(B)
 End Function
 
-Function TestOptObjectByRefByVal(Optional ByRef A As Collection, Optional ByVal B As Collection)
+Function TestOptObjectByRefByVal(Optional ByRef A As Variant, Optional ByVal B As Variant)
     ' TODO - isMissing returns false even though the collection is null and is missing?
+    ' tdf#146112 In VBA isMissing will only return True if the argument is a Variant
     TestOptObjectByRefByVal = 0
-    If Not IsNull(A) Then TestOptObjectByRefByVal = CollectionSum(A)
-    If Not IsNull(B) Then TestOptObjectByRefByVal = TestOptObjectByRefByVal + CollectionSum(B)
+    If Not isMissing(A) Then TestOptObjectByRefByVal = CollectionSum(A)
+    If Not isMissing(B) Then TestOptObjectByRefByVal = TestOptObjectByRefByVal + CollectionSum(B)
 End Function
 
 Function TestOptArray(Optional A() As Integer, Optional B() As Variant)

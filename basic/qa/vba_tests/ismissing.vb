@@ -84,15 +84,19 @@ Sub verify_testIsMissingVba()
     Dim cB As New Collection
     cB.Add (123.4)
     cB.Add (567.8)
-    TestUtil.AssertEqual(TestOptObject(), IsMissingAB, "TestOptObject()")
-    TestUtil.AssertEqual(TestOptObject(cA), IsMissingB, "TestOptObject(A)")
-    TestUtil.AssertEqual(TestOptObject(, cB), IsMissingA, "TestOptObject(, B)")
+    ' In VBA Collection objects missing are not detected by the IsNull function
+    ' Hence all the following tests return IsMissingNone
+    TestUtil.AssertEqual(TestOptObject(), IsMissingNone, "TestOptObject()")
+    TestUtil.AssertEqual(TestOptObject(cA), IsMissingNone, "TestOptObject(A)")
+    TestUtil.AssertEqual(TestOptObject(, cB), IsMissingNone, "TestOptObject(, B)")
     TestUtil.AssertEqual(TestOptObject(cA, cB), IsMissingNone, "TestOptObject(A, B)")
 
     ' optionals with object datatypes (ByRef and ByVal)
-    TestUtil.AssertEqual(TestOptObjectByRefByVal(), IsMissingAB, "TestOptObjectByRefByVal()")
-    TestUtil.AssertEqual(TestOptObjectByRefByVal(cA), IsMissingB, "TestOptObjectByRefByVal(A)")
-    TestUtil.AssertEqual(TestOptObjectByRefByVal(, cB), IsMissingA, "TestOptObjectByRefByVal(, B)")
+    ' In VBA Collection objects missing are not detected by the IsNull function
+    ' Hence all the following tests return IsMissingNone
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(), IsMissingNone, "TestOptObjectByRefByVal()")
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(cA), IsMissingNone, "TestOptObjectByRefByVal(A)")
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(, cB), IsMissingNone, "TestOptObjectByRefByVal(, B)")
     TestUtil.AssertEqual(TestOptObjectByRefByVal(cA, cB), IsMissingNone, "TestOptObjectByRefByVal(A, B)")
 
     ' optionals with array datatypes

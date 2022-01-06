@@ -8,13 +8,25 @@
 
 Option Explicit
 
-Function doUnitTest as String
-    dim aVariant as Variant
-    aVariant = Null
-    ' ISNULL
-    If ( IsNull( aVariant ) = False ) Then
-        doUnitTest = "FAIL"
-    Else
-        doUnitTest = "OK"
-    End If
+Function doUnitTest() As String
+    TestUtil.TestInit
+    verify_testIsNull
+    doUnitTest = TestUtil.GetResult()
 End Function
+
+Sub verify_testIsNull()
+    On Error GoTo errorHandler
+
+    Dim aVariant as Variant
+    TestUtil.Assert(Not IsNull(aVariant), "Not IsNull(aVariant)")
+
+    ' tdf#146112 In Basic IsNull returns True for empty objects
+    ' The type name is "Object" in this case
+    Dim aEmptyObj As object
+    TestUtil.Assert(IsNull(aEmptyObj), "IsNull(aEmptyObj)")
+    TestUtil.AssertEqual(TypeName(aEmptyObj), "Object", "TypeName(aEmptyObj)")
+
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("verify_testDateAdd", Err, Error$, Erl)
+End Sub
