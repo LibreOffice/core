@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5e20224_86520095",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-06T11:34:31Z",
+      "side": 1,
+      "message": "I wonder if this change is related to the comment at https://bugs.documentfoundation.org/show_bug.cgi?id\u003d146592#c5",
+      "revId": "131759a3db51140c21594308ed99c71aa7aba43a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
