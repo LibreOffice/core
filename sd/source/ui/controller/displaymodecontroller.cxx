@@ -70,7 +70,7 @@ private:
     DECL_LINK(SelectValueSetHdl, ValueSet*, void);
 };
 
-struct snewfoil_value_info
+struct snew_slide_value_info
 {
     sal_uInt16 mnId;
     OUString msBmpResId;
@@ -80,7 +80,7 @@ struct snewfoil_value_info
 
 }
 
-const snewfoil_value_info editmodes[] =
+const snew_slide_value_info editmodes[] =
 {
     {1,
         BMP_DISPLAYMODE_SLIDE,
@@ -101,7 +101,7 @@ const snewfoil_value_info editmodes[] =
     {0, "", {}, "" }
 };
 
-const snewfoil_value_info mastermodes[] =
+const snew_slide_value_info mastermodes[] =
 {
     {5,
         BMP_DISPLAYMODE_SLIDE_MASTER,
@@ -119,7 +119,7 @@ const snewfoil_value_info mastermodes[] =
 };
 
 
-static void fillLayoutValueSet(ValueSet* pValue, const snewfoil_value_info* pInfo)
+static void fillLayoutValueSet(ValueSet* pValue, const snew_slide_value_info* pInfo)
 {
     Size aLayoutItemSize;
     for( ; pInfo->mnId; pInfo++ )
