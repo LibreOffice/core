@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "341266a8_4640c97c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-06T16:50:16Z",
+      "side": 1,
+      "message": "Thanks for the feedback. New patchset ready for review.",
+      "revId": "4ca01cb48fbb12a5cf639a392c5778879b5332e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c258fc6_6daa95a7",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-01-06T14:39:54Z",
       "side": 1,
       "message": "Here and in the next two lines, the leading whitespace is tabs, but in the rest lines, they are usual spaces - a consistency nitpick ;)",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 1
+      },
+      "revId": "4ca01cb48fbb12a5cf639a392c5778879b5332e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8696486c_1e9ef63b",
+        "filename": "basic/qa/basic_coverage/test_isnull_method.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-06T16:50:16Z",
+      "side": 1,
+      "message": "I\u0027m picky about this too... thanks for pointing it out.",
+      "parentUuid": "9c258fc6_6daa95a7",
       "range": {
         "startLine": 25,
         "startChar": 0,
@@ -64,6 +105,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd4363b5_344141de",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2491,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-06T16:50:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdb27135_06630379",
+      "range": {
+        "startLine": 2491,
+        "startChar": 14,
+        "endLine": 2491,
+        "endChar": 16
+      },
+      "revId": "4ca01cb48fbb12a5cf639a392c5778879b5332e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26eca26e_83952671",
@@ -77,6 +142,24 @@
       "writtenOn": "2022-01-06T14:39:54Z",
       "side": 1,
       "message": "These two lines are *only* relevant in case \u0027!bIsNull \u0026\u0026 pArg-\u003eGetType() \u003d\u003d SbxOBJECT\u0027, so better moved inside the if() below.\n\nAnd it would be even better to move them inside the \u0027if( !pObj )\u0027, so that only then additional CPU cycles are spent, so that there will be three (ah, even four) nested ifs.",
+      "revId": "4ca01cb48fbb12a5cf639a392c5778879b5332e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2343d6b_d95a209e",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2494,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-06T16:50:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26eca26e_83952671",
       "revId": "4ca01cb48fbb12a5cf639a392c5778879b5332e5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
