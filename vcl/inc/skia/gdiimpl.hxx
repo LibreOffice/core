@@ -368,7 +368,7 @@ protected:
         double transparency;
     };
     LastPolyPolygonInfo mLastPolyPolygonInfo;
-    int mPendingOperationsToFlush;
+    inline static int pendingOperationsToFlush = 0;
     int mScaling; // The scale factor for HiDPI screens.
 };
 
