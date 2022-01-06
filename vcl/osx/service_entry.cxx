@@ -19,6 +19,8 @@
 
 
 #include <vcl/svapp.hxx>
+#include <dndhelper.hxx>
+#include <vcl/sysdata.hxx>
 
 #include <osx/saldata.hxx>
 #include <osx/salinst.h>
@@ -34,11 +36,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
-// We run unit tests in parallel, which is a problem when touching a shared resource
-// the system clipboard, so rather use the dummy GenericClipboard.
-// Note, cannot make this a global variable, because it might be initialised BEFORE the putenv() call in cppunittester.
-static bool IsRunningUnitTest() { return getenv("LO_TESTNAME") != nullptr; }
-
 uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< Any >& i_rArguments )
 {
     if ( Application::IsHeadlessModeEnabled() || IsRunningUnitTest() )
@@ -50,20 +47,16 @@ uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< A
     return pSalData->mxClipboard;
 }
 
-uno::Reference<XInterface> AquaSalInstance::CreateDragSource()
+uno::Reference<XInterface> AquaSalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    if ( Application::IsHeadlessModeEnabled() || IsRunningUnitTest() )
-        return SalInstance::CreateDragSource();
-
-    return uno::Reference<XInterface>(static_cast< XInitialization* >(new DragSource()), UNO_QUERY);
+    return vcl::OleDnDHelper(new DragSource(), reinterpret_cast<sal_IntPtr>(pSysEnv->mpNSView),
+                             vcl::DragOrDrop::Drag);
 }
 
-uno::Reference<XInterface> AquaSalInstance::CreateDropTarget()
+uno::Reference<XInterface> AquaSalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    if ( Application::IsHeadlessModeEnabled() || IsRunningUnitTest() )
-        return SalInstance::CreateDropTarget();
-
-    return uno::Reference<XInterface>(static_cast< XInitialization* >(new DropTarget()), UNO_QUERY);
+    return vcl::OleDnDHelper(new DropTarget(), reinterpret_cast<sal_IntPtr>(pSysEnv->mpNSView),
+                             vcl::DragOrDrop::Drop);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
