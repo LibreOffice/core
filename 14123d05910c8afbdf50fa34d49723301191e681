@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dc7747b_bf2ebc5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-01-06T16:17:52Z",
+      "side": 1,
+      "message": "With this patch, the dialog width grows forever even there is no mouse move.",
+      "revId": "14123d05910c8afbdf50fa34d49723301191e681",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
