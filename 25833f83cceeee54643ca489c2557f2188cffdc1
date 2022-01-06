@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b2c5091_b0298b5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-06T08:18:37Z",
+      "side": 1,
+      "message": "Looks good to me, https://gerrit.libreoffice.org/c/core/+/127239 has some more comments.",
+      "revId": "25833f83cceeee54643ca489c2557f2188cffdc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
