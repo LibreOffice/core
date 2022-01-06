@@ -27,15 +27,20 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/windowserrorstring.hxx>
+#include <com/sun/star/uno/Reference.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <vcl/inputtypes.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/sysdata.hxx>
 #include <vclpluginapi.h>
 
+#include <win/dnd_source.hxx>
+#include <win/dnd_target.hxx>
 #include <win/wincomp.hxx>
 #include <win/salids.hrc>
 #include <win/saldata.hxx>
@@ -932,6 +937,24 @@ OUString WinSalInstance::getOSVersion()
 void WinSalInstance::BeforeAbort(const OUString&, bool)
 {
     ImplFreeSalGDI();
+}
+
+css::uno::Reference<css::uno::XInterface> WinSalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
+{
+    using css::uno::Any;
+    css::uno::Reference<css::lang::XInitialization> pDnD = new DragSource(comphelper::getProcessComponentContext());
+    if (pDnD && pSysEnv)
+        pDnD->initialize({ Any(), Any(static_cast<sal_uInt64>(reinterpret_cast<sal_IntPtr>(pSysEnv->hWnd))) });
+    return css::uno::Reference<css::uno::XInterface>(pDnD);
+}
+
+css::uno::Reference<css::uno::XInterface> WinSalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
+{
+    using css::uno::Any;
+    css::uno::Reference<css::lang::XInitialization> pDnD = new DropTarget(comphelper::getProcessComponentContext());
+    if (pDnD && pSysEnv)
+        pDnD->initialize({ Any(static_cast<sal_uInt64>(reinterpret_cast<sal_IntPtr>(pSysEnv->hWnd))), Any() });
+    return css::uno::Reference<css::uno::XInterface>(pDnD);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

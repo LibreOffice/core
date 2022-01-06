@@ -286,8 +286,8 @@ public:
         createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
 
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments ) override;
-    virtual css::uno::Reference< css::uno::XInterface > CreateDragSource() override;
-    virtual css::uno::Reference< css::uno::XInterface > CreateDropTarget() override;
+    virtual css::uno::Reference< css::uno::XInterface > ImplCreateDragSource(const SystemEnvData*) override;
+    virtual css::uno::Reference< css::uno::XInterface > ImplCreateDropTarget(const SystemEnvData*) override;
     virtual OpenGLContext* CreateOpenGLContext() override;
     virtual std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile) override;
     virtual std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,

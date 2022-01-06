@@ -63,6 +63,7 @@ class SalSystem;
 class SalBitmap;
 struct SalItemParams;
 class SalSession;
+struct SystemEnvData;
 struct SystemGraphicsData;
 struct SystemWindowData;
 class Menu;
@@ -179,8 +180,10 @@ public:
 
     // dtrans implementation
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments );
-    virtual css::uno::Reference< css::uno::XInterface > CreateDragSource();
-    virtual css::uno::Reference< css::uno::XInterface > CreateDropTarget();
+    virtual css::uno::Reference<css::uno::XInterface> ImplCreateDragSource(const SystemEnvData*);
+    virtual css::uno::Reference<css::uno::XInterface> ImplCreateDropTarget(const SystemEnvData*);
+    css::uno::Reference<css::uno::XInterface> CreateDragSource(const SystemEnvData* = nullptr);
+    css::uno::Reference<css::uno::XInterface> CreateDropTarget(const SystemEnvData* = nullptr);
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) = 0;
 
     virtual bool            hasNativeFileSelection() const { return false; }
@@ -208,6 +211,9 @@ public:
     virtual void* CreateGStreamerSink(const SystemChildWindow*) { return nullptr; }
 
     virtual void BeforeAbort(const OUString& /* rErrorText */, bool /* bDumpCore */) {}
+
+    // Note, cannot make this a global variable, because it might be initialised BEFORE the putenv() call in cppunittester.
+    static bool IsRunningUnitTest() { return getenv("LO_TESTNAME") != nullptr; }
 };
 
 // called from SVMain

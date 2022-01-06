@@ -23,7 +23,8 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 
-#include "target.hxx"
+#include <win/dnd_target.hxx>
+
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::cppu;

@@ -18,6 +18,7 @@
  */
 
 #include <unx/salinst.h>
+#include <vcl/sysdata.hxx>
 
 #include "X11_clipboard.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -43,11 +44,6 @@ Sequence< OUString > x11::Xdnd_dropTarget_getSupportedServiceNames()
 {
     return { "com.sun.star.datatransfer.dnd.X11DropTarget" };
 }
-
-// We run unit tests in parallel, which is a problem when touching a shared resource
-// the system clipboard, so rather use the dummy GenericClipboard.
-// Note, cannot make this a global variable, because it might be initialised BEFORE the putenv() call in cppunittester.
-static bool IsRunningUnitTest() { return getenv("LO_TESTNAME") != nullptr; }
 
 css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
@@ -78,20 +74,20 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
     return pClipboard;
 }
 
-css::uno::Reference< XInterface > X11SalInstance::CreateDragSource()
+css::uno::Reference<XInterface> X11SalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    if ( IsRunningUnitTest() )
-        return SalInstance::CreateDragSource();
-
-    return css::uno::Reference < XInterface >( static_cast<OWeakObject *>(new SelectionManagerHolder()) );
+    css::uno::Reference<css::lang::XInitialization> pDnD = new SelectionManagerHolder();
+    if (pDnD && pSysEnv)
+        pDnD->initialize({ Any(Application::GetDisplayConnection()), Any(pSysEnv->aShellWindow) });
+    return css::uno::Reference<XInterface>(pDnD);
 }
 
-css::uno::Reference< XInterface > X11SalInstance::CreateDropTarget()
+css::uno::Reference<XInterface> X11SalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    if ( IsRunningUnitTest() )
-        return SalInstance::CreateDropTarget();
-
-    return css::uno::Reference < XInterface >( static_cast<OWeakObject *>(new DropTarget()) );
+    css::uno::Reference<css::lang::XInitialization> pDnD = new DropTarget();
+    if (pDnD && pSysEnv)
+        pDnD->initialize({ Any(Application::GetDisplayConnection()), Any(pSysEnv->aShellWindow) });
+    return css::uno::Reference<XInterface>(pDnD);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

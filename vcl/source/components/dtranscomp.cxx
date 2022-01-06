@@ -432,14 +432,31 @@ Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arg
     return m_clipboard;
 }
 
-Reference< XInterface > SalInstance::CreateDragSource()
+uno::Reference<uno::XInterface> SalInstance::ImplCreateDragSource(const SystemEnvData*)
 {
-    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new vcl::GenericDragSource()) );
+    return css::uno::Reference<css::uno::XInterface>();
 }
 
-Reference< XInterface > SalInstance::CreateDropTarget()
+Reference< XInterface > SalInstance::CreateDragSource(const SystemEnvData* pSysEnv)
 {
-    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new vcl::GenericDropTarget()) );
+    // We run unit tests in parallel, which is a problem when touching a shared resource
+    // the system clipboard, so rather use the dummy GenericClipboard.
+    if (Application::IsHeadlessModeEnabled() || IsRunningUnitTest())
+        return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new vcl::GenericDragSource()));
+    return ImplCreateDragSource(pSysEnv);
+}
+
+uno::Reference<uno::XInterface> SalInstance::ImplCreateDropTarget(const SystemEnvData*)
+{
+    return css::uno::Reference<css::uno::XInterface>();
+}
+
+Reference< XInterface > SalInstance::CreateDropTarget(const SystemEnvData* pSysEnv)
+{
+    // see SalInstance::CreateDragSource
+    if (Application::IsHeadlessModeEnabled() || IsRunningUnitTest())
+        return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new vcl::GenericDropTarget()));
+    return ImplCreateDropTarget(pSysEnv);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

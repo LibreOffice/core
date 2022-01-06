@@ -531,16 +531,24 @@ QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
     return xClipboard;
 }
 
-css::uno::Reference<css::uno::XInterface> QtInstance::CreateDragSource()
+css::uno::Reference<css::uno::XInterface>
+QtInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    return css::uno::Reference<css::uno::XInterface>(
-        static_cast<cppu::OWeakObject*>(new QtDragSource()));
+    using css::uno::Any;
+    css::uno::Reference<css::lang::XInitialization> pDnD = new QtDragSource();
+    if (pDnD && pSysEnv)
+        pDnD->initialize({ Any(), Any(static_cast<sal_uInt64>(pSysEnv->aShellWindow)) });
+    return css::uno::Reference<css::uno::XInterface>(pDnD);
 }
 
-css::uno::Reference<css::uno::XInterface> QtInstance::CreateDropTarget()
+css::uno::Reference<css::uno::XInterface>
+QtInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    return css::uno::Reference<css::uno::XInterface>(
-        static_cast<cppu::OWeakObject*>(new QtDropTarget()));
+    using css::uno::Any;
+    css::uno::Reference<css::lang::XInitialization> pDnD = new QtDropTarget();
+    if (pDnD && pSysEnv)
+        pDnD->initialize({ Any(), Any(static_cast<sal_uInt64>(pSysEnv->aShellWindow)) });
+    return css::uno::Reference<css::uno::XInterface>(pDnD);
 }
 
 IMPL_LINK_NOARG(QtInstance, updateStyleHdl, Timer*, void)

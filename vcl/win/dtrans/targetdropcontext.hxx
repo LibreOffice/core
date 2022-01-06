@@ -22,7 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
 
-#include "target.hxx"
+#include <win/dnd_target.hxx>
 
 using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::cppu;
