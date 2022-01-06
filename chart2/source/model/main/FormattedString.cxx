@@ -22,6 +22,7 @@
 #include <CharacterProperties.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <comphelper/propshlp2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -50,45 +51,24 @@ struct StaticFormattedStringDefaults : public rtl::StaticAggregate< ::chart::tPr
 {
 };
 
-struct StaticFormattedStringInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticFormattedStringInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+            return aProperties;
+        }());
+    return aPropHelper;
+}
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticFormattedStringInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticFormattedStringInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticFormattedStringInfo()
 {
-};
-
-struct StaticFormattedStringInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticFormattedStringInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticFormattedStringInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticFormattedStringInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticFormattedStringInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -270,13 +250,13 @@ void FormattedString::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL FormattedString::getInfoHelper()
 {
-    return *StaticFormattedStringInfoHelper::get();
+    return StaticFormattedStringInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL FormattedString::getPropertySetInfo()
 {
-    return *StaticFormattedStringInfo::get();
+    return StaticFormattedStringInfo();
 }
 
 using impl::FormattedString_Base;
