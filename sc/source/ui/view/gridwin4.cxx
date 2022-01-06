@@ -33,6 +33,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/lokcharthelper.hxx>
 
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
@@ -1579,6 +1580,12 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     // draw the content
     DrawContent(rDevice, aTabInfo, aOutputData, true);
+    rDevice.SetMapMode(aOriginalMode);
+
+    // Paint the chart(s) in edit mode.
+    LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
+        nTilePosX, nTilePosY, nTileWidth, nTileHeight, bLayoutRTL);
+
     rDevice.SetMapMode(aOriginalMode);
 
     // Flag drawn formula cells "unchanged".

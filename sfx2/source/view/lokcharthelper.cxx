@@ -236,7 +236,8 @@ void LokChartHelper::PaintTile(VirtualDevice& rRenderContext, const tools::Recta
 void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
                                           int nOutputWidth, int nOutputHeight,
                                           int nTilePosX, int nTilePosY,
-                                          tools::Long nTileWidth, tools::Long nTileHeight)
+                                          tools::Long nTileWidth, tools::Long nTileHeight,
+                                          bool bNegativeX)
 {
     if (comphelper::LibreOfficeKit::isTiledAnnotations())
         return;
@@ -257,7 +258,8 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
 
     SfxViewShell* pCurView = SfxViewShell::Current();
     int nPartForCurView = pCurView ? pCurView->getPart() : -1;
-    tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
+    tools::Long nTileRectLeft = bNegativeX ? -nTilePosX - nTileWidth : nTilePosX;
+    tools::Rectangle aTileRect(Point(nTileRectLeft, nTilePosY), Size(nTileWidth, nTileHeight));
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
