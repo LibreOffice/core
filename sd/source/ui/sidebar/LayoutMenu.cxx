@@ -72,7 +72,7 @@ namespace sd::sidebar {
 
 namespace {
 
-struct snewfoil_value_info
+struct snew_slide_value_info
 {
     rtl::OUStringConstExpr msBmpResId;
     TranslateId mpStrResId;
@@ -84,31 +84,31 @@ struct snewfoil_value_info
 
 constexpr OUStringLiteral EMPTY = u"";
 
-const snewfoil_value_info notes[] =
+const snew_slide_value_info notes[] =
 {
-    {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
+    {BMP_SLIDEN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
      AUTOLAYOUT_NOTES},
     {EMPTY, {}, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
-const snewfoil_value_info handout[] =
+const snew_slide_value_info handout[] =
 {
-    {BMP_FOILH_01, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB,
+    {BMP_SLIDEH_01, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT1},
-    {BMP_FOILH_02, STR_AUTOLAYOUT_HANDOUT2, WritingMode_LR_TB,
+    {BMP_SLIDEH_02, STR_AUTOLAYOUT_HANDOUT2, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT2},
-    {BMP_FOILH_03, STR_AUTOLAYOUT_HANDOUT3, WritingMode_LR_TB,
+    {BMP_SLIDEH_03, STR_AUTOLAYOUT_HANDOUT3, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT3},
-    {BMP_FOILH_04, STR_AUTOLAYOUT_HANDOUT4, WritingMode_LR_TB,
+    {BMP_SLIDEH_04, STR_AUTOLAYOUT_HANDOUT4, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT4},
-    {BMP_FOILH_06, STR_AUTOLAYOUT_HANDOUT6, WritingMode_LR_TB,
+    {BMP_SLIDEH_06, STR_AUTOLAYOUT_HANDOUT6, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT6},
-    {BMP_FOILH_09, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
+    {BMP_SLIDEH_09, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT9},
     {EMPTY, {}, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
-const snewfoil_value_info standard[] =
+const snew_slide_value_info standard[] =
 {
     {BMP_LAYOUT_EMPTY, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
     {BMP_LAYOUT_HEAD03, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,       AUTOLAYOUT_TITLE},
@@ -520,7 +520,7 @@ void LayoutMenu::Fill()
     catch (RuntimeException&)
     {}
 
-    const snewfoil_value_info* pInfo = nullptr;
+    const snew_slide_value_info* pInfo = nullptr;
     if (sCenterPaneViewName == framework::FrameworkHelper::msNotesViewURL)
     {
         pInfo = notes;

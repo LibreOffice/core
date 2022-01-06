@@ -77,7 +77,7 @@ private:
     std::unique_ptr<weld::Button> mxMoreButton;
 };
 
-struct snewfoil_value_info_layout
+struct snew_slide_value_info_layout
 {
     rtl::OUStringConstExpr msBmpResId;
     TranslateId mpStrResId;
@@ -88,24 +88,24 @@ struct snewfoil_value_info_layout
 
 constexpr OUStringLiteral EMPTY = u"";
 
-const snewfoil_value_info_layout notes[] =
+const snew_slide_value_info_layout notes[] =
 {
-    {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, AUTOLAYOUT_NOTES},
+    {BMP_SLIDEN_01, STR_AUTOLAYOUT_NOTES, AUTOLAYOUT_NOTES},
     {EMPTY, {}, AUTOLAYOUT_NONE},
 };
 
-const snewfoil_value_info_layout handout[] =
+const snew_slide_value_info_layout handout[] =
 {
-    {BMP_FOILH_01, STR_AUTOLAYOUT_HANDOUT1, AUTOLAYOUT_HANDOUT1},
-    {BMP_FOILH_02, STR_AUTOLAYOUT_HANDOUT2, AUTOLAYOUT_HANDOUT2},
-    {BMP_FOILH_03, STR_AUTOLAYOUT_HANDOUT3, AUTOLAYOUT_HANDOUT3},
-    {BMP_FOILH_04, STR_AUTOLAYOUT_HANDOUT4, AUTOLAYOUT_HANDOUT4},
-    {BMP_FOILH_06, STR_AUTOLAYOUT_HANDOUT6, AUTOLAYOUT_HANDOUT6},
-    {BMP_FOILH_09, STR_AUTOLAYOUT_HANDOUT9, AUTOLAYOUT_HANDOUT9},
+    {BMP_SLIDEH_01, STR_AUTOLAYOUT_HANDOUT1, AUTOLAYOUT_HANDOUT1},
+    {BMP_SLIDEH_02, STR_AUTOLAYOUT_HANDOUT2, AUTOLAYOUT_HANDOUT2},
+    {BMP_SLIDEH_03, STR_AUTOLAYOUT_HANDOUT3, AUTOLAYOUT_HANDOUT3},
+    {BMP_SLIDEH_04, STR_AUTOLAYOUT_HANDOUT4, AUTOLAYOUT_HANDOUT4},
+    {BMP_SLIDEH_06, STR_AUTOLAYOUT_HANDOUT6, AUTOLAYOUT_HANDOUT6},
+    {BMP_SLIDEH_09, STR_AUTOLAYOUT_HANDOUT9, AUTOLAYOUT_HANDOUT9},
     {EMPTY, {}, AUTOLAYOUT_NONE},
 };
 
-const snewfoil_value_info_layout standard[] =
+const snew_slide_value_info_layout standard[] =
 {
     {BMP_LAYOUT_EMPTY,    STR_AUTOLAYOUT_NONE,                 AUTOLAYOUT_NONE         },
     {BMP_LAYOUT_HEAD03,   STR_AUTOLAYOUT_TITLE,                AUTOLAYOUT_TITLE        },
@@ -122,7 +122,7 @@ const snewfoil_value_info_layout standard[] =
     {EMPTY, {}, AUTOLAYOUT_NONE}
 };
 
-const snewfoil_value_info_layout v_standard[] =
+const snew_slide_value_info_layout v_standard[] =
 {
     // vertical
     {BMP_LAYOUT_VERTICAL02, STR_AL_VERT_TITLE_TEXT_CHART,      AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT   },
@@ -132,7 +132,7 @@ const snewfoil_value_info_layout v_standard[] =
     {EMPTY, {}, AUTOLAYOUT_NONE}
 };
 
-static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info_layout* pInfo )
+static void fillLayoutValueSet( ValueSet* pValue, const snew_slide_value_info_layout* pInfo )
 {
     Size aLayoutItemSize;
     for( ; pInfo->mpStrResId; pInfo++ )
@@ -188,7 +188,7 @@ LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widg
 
     mxLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectValueSetHdl ) );
 
-    const snewfoil_value_info_layout* pInfo = nullptr;
+    const snew_slide_value_info_layout* pInfo = nullptr;
     sal_Int16 nColCount = 4;
     switch( eMode )
     {
