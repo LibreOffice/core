@@ -52,6 +52,24 @@
       "parentUuid": "754be48e_f1ec58dc",
       "revId": "eb31b387ac4b679e4da851b8b17e9b4e35722c04",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad0a5f09_ab9de87b",
+        "filename": "basic/qa/basic_coverage/test_cint_method.bas",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-01-06T08:23:14Z",
+      "side": 0,
+      "message": "This is my intent",
+      "parentUuid": "a6dc1996_191a68ce",
+      "revId": "eb31b387ac4b679e4da851b8b17e9b4e35722c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

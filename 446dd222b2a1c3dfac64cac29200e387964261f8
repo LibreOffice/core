@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e1429cf_74a5c78e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-01-06T08:23:14Z",
+      "side": 1,
+      "message": "I\u0027ll file two bug reports:\n- strings not handled in complex expressions\n- incomplete date literal format in expressions for libO Basic",
+      "revId": "446dd222b2a1c3dfac64cac29200e387964261f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31647eda_48435b75",
@@ -31,6 +48,24 @@
       "writtenOn": "2022-01-05T20:26:00Z",
       "side": 1,
       "message": "You may change Cint to CInt 😊",
+      "revId": "446dd222b2a1c3dfac64cac29200e387964261f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "507f2bd4_17aba85f",
+        "filename": "basic/qa/vba_tests/cint.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-01-06T08:23:14Z",
+      "side": 1,
+      "message": "my pleasure",
+      "parentUuid": "31647eda_48435b75",
       "revId": "446dd222b2a1c3dfac64cac29200e387964261f8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
