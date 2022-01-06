@@ -265,7 +265,6 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
     , mFillColor(SALCOLOR_NONE)
     , mXorMode(XorMode::None)
     , mFlush(new SkiaFlushIdle(this))
-    , mPendingOperationsToFlush(0)
     , mScaling(1)
 {
 }
@@ -362,15 +361,6 @@ void SkiaSalGraphicsImpl::destroySurface()
         // if this fails, something forgot to use SkAutoCanvasRestore
         assert(mSurface->getCanvas()->getTotalMatrix() == SkMatrix::Scale(mScaling, mScaling));
     }
-    // If we use e.g. Vulkan, we must destroy the surface before the context,
-    // otherwise destroying the surface will reference the context. This is
-    // handled by calling destroySurface() before destroying the context.
-    // However we also need to flush the surface before destroying it,
-    // otherwise when destroying the context later there still could be queued
-    // commands referring to the surface data. This is probably a Skia bug,
-    // but work around it here.
-    if (mSurface)
-        mSurface->flushAndSubmit();
     mSurface.reset();
     mWindowContext.reset();
     mIsGPU = false;
@@ -439,10 +429,12 @@ void SkiaSalGraphicsImpl::postDraw()
     // But tdf#136369 leads to creating and queueing many tiny bitmaps, which makes
     // Skia slow, and may make it even run out of memory. So force a flush if such
     // a problematic operation has been performed too many times without a flush.
-    if (mPendingOperationsToFlush > 1000)
+    // Note that the counter is a static variable, as all drawing shares the same Skia drawing
+    // context (and so the flush here will also flush all drawing).
+    if (pendingOperationsToFlush > 1000)
     {
         mSurface->flushAndSubmit();
-        mPendingOperationsToFlush = 0;
+        pendingOperationsToFlush = 0;
     }
     SkiaZone::leave(); // matched in preDraw()
     // If there's a problem with the GPU context, abort.
@@ -540,8 +532,7 @@ void SkiaSalGraphicsImpl::flushDrawing()
     if (!mSurface)
         return;
     checkPendingDrawing();
-    mSurface->flushAndSubmit();
-    mPendingOperationsToFlush = 0;
+    ++pendingOperationsToFlush;
 }
 
 void SkiaSalGraphicsImpl::setCanvasScalingAndClipping()
@@ -901,13 +892,6 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
         getDrawCanvas()->drawPath(polygonPath, aPaint);
     }
     postDraw();
-#if defined LINUX
-    // WORKAROUND: The logo in the about dialog has drawing errors. This seems to happen
-    // only on Linux (not Windows on the same machine), with both AMDGPU and Mesa,
-    // and only when antialiasing is enabled. Flushing seems to avoid the problem.
-    if (useAA && getVendor() == DriverBlocklist::VendorAMD)
-        mSurface->flushAndSubmit();
-#endif
 }
 
 namespace
@@ -1786,7 +1770,7 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
     getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect,
                                    makeSamplingOptions(rPosAry, mScaling, srcScaling), &aPaint,
                                    SkCanvas::kFast_SrcRectConstraint);
-    ++mPendingOperationsToFlush; // tdf#136369
+    ++pendingOperationsToFlush; // tdf#136369
     postDraw();
 }
 
