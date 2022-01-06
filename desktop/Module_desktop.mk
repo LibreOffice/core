@@ -39,17 +39,14 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_migrationoo3 \
     Library_unopkgapp \
     Package_scripts \
-))
-
-ifneq ($(OS),MACOSX)
-ifneq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,desktop,\
-    Pagein_calc \
-    Pagein_common \
-    Pagein_draw \
-    Pagein_impress \
-    Pagein_writer \
-    CustomTarget_soffice \
+    $(if $(ENABLE_PAGEIN), \
+        Pagein_calc \
+        Pagein_common \
+        Pagein_draw \
+        Pagein_impress \
+        Pagein_writer \
+    ) \
+    $(if $(filter-out MACOSX WNT,$(OS)),CustomTarget_soffice) \
 ))
 
 ifeq ($(USING_X11),TRUE)
@@ -62,8 +59,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Package_swriter_sh \
     Package_soffice_sh \
 ))
-endif
-endif
 endif
 endif
 
