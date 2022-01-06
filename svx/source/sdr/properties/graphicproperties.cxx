@@ -45,7 +45,7 @@ namespace sdr::properties
             if(pStyleSheet)
             {
                 // do not delete hard attributes when setting dsefault Style
-                SetStyleSheet(pStyleSheet, true);
+                SetStyleSheet(pStyleSheet, true, true);
             }
             else
             {
@@ -112,10 +112,11 @@ namespace sdr::properties
             RectangleProperties::ItemSetChanged(pSet);
         }
 
-        void GraphicProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
+        void GraphicProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
+                bool bBroadcast)
         {
             // call parent (always first thing to do, may create the SfxItemSet)
-            RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+            RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast);
 
             // local changes
             SdrGrafObj& rObj = static_cast<SdrGrafObj&>(GetSdrObject());

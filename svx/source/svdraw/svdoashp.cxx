@@ -2851,11 +2851,11 @@ SdrObjectUniquePtr SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAdd
     return pRetval;
 }
 
-void SdrObjCustomShape::NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr )
+void SdrObjCustomShape::InternalSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bBroadcast )
 {
     // #i40944#
     InvalidateRenderGeometry();
-    SdrObject::NbcSetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
+    SdrObject::InternalSetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr, bBroadcast );
 }
 
 void SdrObjCustomShape::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)

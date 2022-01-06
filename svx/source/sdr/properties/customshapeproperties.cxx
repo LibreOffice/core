@@ -162,10 +162,11 @@ namespace sdr::properties
             UpdateTextFrameStatus(true);
         }
 
-        void CustomShapeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
+        void CustomShapeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
+                bool bBroadcast)
         {
             // call parent (always first thing to do, may create the SfxItemSet)
-            TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
+            TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr, bBroadcast );
 
             // update bTextFrame and RenderGeometry
             UpdateTextFrameStatus(true);

@@ -32,7 +32,7 @@ namespace sdr::properties
             if(pStyleSheet)
             {
                 // do not delete hard attributes when setting dsefault Style
-                SetStyleSheet(pStyleSheet, true);
+                SetStyleSheet(pStyleSheet, true, true);
             }
             else
             {

@@ -243,7 +243,8 @@ namespace sdr::properties
                 CleanupFillProperties(*mxItemSet);
         }
 
-        void DefaultProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/)
+        void DefaultProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/,
+                bool /*bBroadcast*/)
         {
             // no StyleSheet in DefaultProperties
         }
