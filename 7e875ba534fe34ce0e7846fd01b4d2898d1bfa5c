@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cb8d321_b7657287",
+        "filename": "sc/uiconfig/scalc/ui/notebookbar.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 16466,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-06T12:07:08Z",
+      "side": 1,
+      "message": "Don\u0027t see any UI element in Calc. Probably my fault.",
+      "range": {
+        "startLine": 16466,
+        "startChar": 37,
+        "endLine": 16466,
+        "endChar": 51
+      },
+      "revId": "7e875ba534fe34ce0e7846fd01b4d2898d1bfa5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f42d5195_a653389f",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 19094,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-06T12:07:08Z",
+      "side": 1,
+      "message": "The buttons are very large drawing a lot attention to a less relevant feature. We should implement it as just an icon or icon with text. And perhaps at the very end of the section. Another option is to provide access with the Tools menu, guess this would be the easiest way.",
+      "range": {
+        "startLine": 19094,
+        "startChar": 59,
+        "endLine": 19094,
+        "endChar": 63
+      },
+      "revId": "7e875ba534fe34ce0e7846fd01b4d2898d1bfa5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
