@@ -30,9 +30,8 @@
 
 namespace sdr::properties
     {
-        class EmptyProperties : public BaseProperties
+        class EmptyProperties final : public BaseProperties
         {
-        protected:
             // the to be used ItemSet
             mutable std::optional<SfxItemSet> mxEmptyItemSet;
 

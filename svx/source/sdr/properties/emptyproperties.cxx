@@ -27,11 +27,11 @@
 namespace sdr::properties
 {
         // create a new itemset
-        SfxItemSet EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool& )
         {
             // Basic implementation; Basic object has NO attributes
             assert(!"EmptyProperties::CreateObjectSpecificItemSet() should never be called");
-            return SfxItemSet(rPool);
+            abort();
         }
 
         EmptyProperties::EmptyProperties(SdrObject& rObj)
@@ -46,15 +46,8 @@ namespace sdr::properties
 
         const SfxItemSet& EmptyProperties::GetObjectItemSet() const
         {
-            if(!mxEmptyItemSet)
-            {
-                mxEmptyItemSet.emplace(const_cast<EmptyProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
-            }
-
-            assert(mxEmptyItemSet);
             assert(!"EmptyProperties::GetObjectItemSet() should never be called");
-
-            return *mxEmptyItemSet;
+            abort();
         }
 
         void EmptyProperties::SetObjectItem(const SfxPoolItem& /*rItem*/)
