@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3b25efe_b75d1d60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-06T22:08:25Z",
+      "side": 1,
+      "message": "Olivier, could you give your take on this matter?",
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab973e15_3484e5a9",
@@ -126,6 +143,30 @@
       "side": 1,
       "message": "Thanks for the test document. I guess the buttons are supposed to do first/next and it\u0027s an implementation error. You get access to \u0027Next with different name\u0027 when \u0027same name\u0027 exists. So alternatively we could just remove two buttons.",
       "parentUuid": "e5bac2f4_f4e800df",
+      "range": {
+        "startLine": 584,
+        "startChar": 193,
+        "endLine": 584,
+        "endChar": 215
+      },
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ced46e8_ba302eb0",
+        "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-06T22:08:25Z",
+      "side": 1,
+      "message": "I guess these buttons do something useful. For example, when you have an \"Alphabetical Index\" with multiple entries with the same name spread over a 100-page book. It is useful for the user to iterate over these entries with equal names that are spread throughout a long document. So my opinion is: we should keep the buttons.\n\nMaybe we can get some input from @Olivier on this matter.",
+      "parentUuid": "f48ada72_0465f72d",
       "range": {
         "startLine": 584,
         "startChar": 193,
