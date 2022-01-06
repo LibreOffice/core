@@ -545,16 +545,16 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
         uno::Reference< uno::XInterface > xSource(xView, uno::UNO_QUERY);
         aEvent.Source = xSource;
         aEvent.ActiveSheet = new ScTableSheetObj(pDocSh, rViewData.GetTabNo());
-        for (auto it = aActivationListeners.begin(); it != aActivationListeners.end(); )
+        // Listener's handler may remove it from the listeners list
+        for (size_t i = aActivationListeners.size(); i > 0; --i)
         {
             try
             {
-                (*it)->activeSpreadsheetChanged( aEvent );
-                ++it;
+                aActivationListeners[i - 1]->activeSpreadsheetChanged( aEvent );
             }
             catch( uno::Exception& )
             {
-                it = aActivationListeners.erase( it);
+                aActivationListeners.erase(aActivationListeners.begin() + (i - 1));
             }
         }
     }
@@ -1150,17 +1150,17 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
         aMouseEvent.Target = xTarget;
         aMouseEvent.Modifiers = e.Modifiers;
 
-        for (auto it = aMouseClickHandlers.begin(); it != aMouseClickHandlers.end(); )
+        // Listener's handler may remove it from the listeners list
+        for (size_t i = aMouseClickHandlers.size(); i > 0; --i)
         {
             try
             {
-                if (!(*it)->mousePressed( aMouseEvent ))
+                if (!aMouseClickHandlers[i - 1]->mousePressed(aMouseEvent))
                     bReturn = true;
-                ++it;
             }
             catch ( uno::Exception& )
             {
-                it = aMouseClickHandlers.erase(it);
+                aMouseClickHandlers.erase(aMouseClickHandlers.begin() + (i - 1));
             }
         }
     }
@@ -1260,17 +1260,17 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
             aMouseEvent.Target = xTarget;
             aMouseEvent.Modifiers = e.Modifiers;
 
-            for (auto it = aMouseClickHandlers.begin(); it != aMouseClickHandlers.end(); )
+            // Listener's handler may remove it from the listeners list
+            for (size_t i = aMouseClickHandlers.size(); i > 0; --i)
             {
                 try
                 {
-                    if (!(*it)->mouseReleased( aMouseEvent ))
+                    if (!aMouseClickHandlers[i - 1]->mouseReleased( aMouseEvent ))
                         bReturn = true;
-                    ++it;
                 }
                 catch ( uno::Exception& )
                 {
-                    it = aMouseClickHandlers.erase(it);
+                    aMouseClickHandlers.erase(aMouseClickHandlers.begin() + (i - 1));
                 }
             }
         }
