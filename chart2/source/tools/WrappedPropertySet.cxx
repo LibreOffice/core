@@ -381,16 +381,13 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
 
 ::cppu::IPropertyArrayHelper& WrappedPropertySet::getInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* p = m_pPropertyArrayHelper.get();
-    if(!p)
+    if(!m_pPropertyArrayHelper)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
-        p = m_pPropertyArrayHelper.get();
-        if(!p)
+        if(!m_pPropertyArrayHelper)
         {
-            p = new ::cppu::OPropertyArrayHelper( getPropertySequence(), true );
+            m_pPropertyArrayHelper.emplace( getPropertySequence() );
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            m_pPropertyArrayHelper.reset(p);
         }
     }
     else

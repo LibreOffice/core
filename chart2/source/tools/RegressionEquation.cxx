@@ -25,6 +25,7 @@
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <unonames.hxx>
+#include <comphelper/propshlp2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -133,9 +134,9 @@ void lcl_AddPropertiesToVector(
     return aStaticDefaults;
 };
 
-::cppu::OPropertyArrayHelper& GetStaticRegressionEquationInfoHelper()
+::comphelper::OPropertyArrayHelper2& GetStaticRegressionEquationInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper aPropHelper =
+    static ::comphelper::OPropertyArrayHelper2 aPropHelper =
         [](){
             std::vector< css::beans::Property > aProperties;
             lcl_AddPropertiesToVector( aProperties );
@@ -143,11 +144,7 @@ void lcl_AddPropertiesToVector(
             ::chart::FillProperties::AddPropertiesToVector( aProperties );
             ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
             ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-
-            std::sort( aProperties.begin(), aProperties.end(),
-                         ::chart::PropertyNameLess() );
-
-            return comphelper::containerToSequence( aProperties );
+            return aProperties;
         }();
     return aPropHelper;
 };

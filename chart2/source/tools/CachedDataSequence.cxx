@@ -24,6 +24,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/propshlp2.hxx>
 
 #include <algorithm>
 
@@ -237,8 +238,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL CachedDataSequence::getPropertySet
     Sequence< beans::Property > aProps;
     // describes all properties which have been registered in the ctor
     describeProperties( aProps );
-
-    return new ::cppu::OPropertyArrayHelper( aProps );
+    return new ::comphelper::OPropertyArrayHelper2( aProps );
 }
 
 OUString SAL_CALL CachedDataSequence::getImplementationName()

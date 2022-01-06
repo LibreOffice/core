@@ -25,6 +25,7 @@
 #include <PropertyHelper.hxx>
 #include <unonames.hxx>
 
+#include <comphelper/propshlp2.hxx>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -97,44 +98,23 @@ struct StaticScatterChartTypeTemplateDefaults : public rtl::StaticAggregate< ::c
 {
 };
 
-struct StaticScatterChartTypeTemplateInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticScatterChartTypeTemplateInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static ::comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            return aProperties;
+        }());
+    return aPropHelper;
+}
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticScatterChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticScatterChartTypeTemplateInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticScatterChartTypeTemplateInfo()
 {
-};
-
-struct StaticScatterChartTypeTemplateInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticScatterChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticScatterChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticScatterChartTypeTemplateInfo_Initializer >
-{
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticScatterChartTypeTemplateInfoHelper() ) );
+    return xPropertySetInfo;
 };
 
 } // anonymous namespace
@@ -175,13 +155,13 @@ void ScatterChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAn
 
 ::cppu::IPropertyArrayHelper & SAL_CALL ScatterChartTypeTemplate::getInfoHelper()
 {
-    return *StaticScatterChartTypeTemplateInfoHelper::get();
+    return StaticScatterChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartTypeTemplate::getPropertySetInfo()
 {
-    return *StaticScatterChartTypeTemplateInfo::get();
+    return StaticScatterChartTypeTemplateInfo();
 }
 
 sal_Int32 ScatterChartTypeTemplate::getDimension() const

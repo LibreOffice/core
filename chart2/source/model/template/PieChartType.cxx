@@ -26,6 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <comphelper/propshlp2.hxx>
 
 using namespace ::com::sun::star;
 
@@ -76,45 +77,24 @@ struct StaticPieChartTypeDefaults : public rtl::StaticAggregate< ::chart::tPrope
 {
 };
 
-struct StaticPieChartTypeInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticPieChartTypeInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            return aProperties;
+        }());
+    return aPropHelper;
+}
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticPieChartTypeInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticPieChartTypeInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticPieChartTypeInfo()
 {
-};
-
-struct StaticPieChartTypeInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticPieChartTypeInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticPieChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticPieChartTypeInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticPieChartTypeInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -199,13 +179,13 @@ void PieChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL PieChartType::getInfoHelper()
 {
-    return *StaticPieChartTypeInfoHelper::get();
+    return StaticPieChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartType::getPropertySetInfo()
 {
-    return *StaticPieChartTypeInfo::get();
+    return StaticPieChartTypeInfo();
 }
 
 OUString SAL_CALL PieChartType::getImplementationName()
