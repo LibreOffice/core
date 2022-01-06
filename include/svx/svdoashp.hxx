@@ -131,6 +131,8 @@ protected:
     // protected destructor
     virtual ~SdrObjCustomShape() override;
 
+    virtual void InternalSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bBroadcast ) override;
+
 public:
     bool UseNoFillStyle() const;
 
@@ -182,8 +184,6 @@ public:
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
 
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const override;
-
-    virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr ) override;
 
     // special drag methods
     virtual bool hasSpecialDrag() const override;

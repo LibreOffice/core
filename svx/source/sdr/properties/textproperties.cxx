@@ -246,10 +246,11 @@ namespace sdr::properties
             return static_cast<const SdrTextObj&>(GetSdrObject());
         }
 
-        void TextProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
+        void TextProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
+                bool bBroadcast)
         {
             // call parent (always first thing to do, may create the SfxItemSet)
-            AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+            AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast);
 
             // #i101556# StyleSheet has changed -> new version
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());

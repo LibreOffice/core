@@ -633,7 +633,7 @@ void Cell::SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr )
 
     if( mpProperties && (mpProperties->GetStyleSheet() != pStyleSheet) )
     {
-        mpProperties->SetStyleSheet( pStyleSheet, bDontRemoveHardAttr );
+        mpProperties->SetStyleSheet( pStyleSheet, bDontRemoveHardAttr, true );
     }
 }
 

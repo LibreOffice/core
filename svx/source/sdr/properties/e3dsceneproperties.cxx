@@ -230,7 +230,8 @@ namespace sdr::properties
             }
         }
 
-        void E3dSceneProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
+        void E3dSceneProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
+                bool bBroadcast)
         {
             const SdrObjList* pSub(static_cast<const E3dScene&>(GetSdrObject()).GetSubList());
             OSL_ENSURE(nullptr != pSub, "Children of SdrObject expected (!)");
@@ -238,7 +239,10 @@ namespace sdr::properties
 
             for(size_t a = 0; a < nCount; ++a)
             {
-                pSub->GetObj(a)->SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+                if(bBroadcast)
+                    pSub->GetObj(a)->SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+                else
+                    pSub->GetObj(a)->NbcSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
             }
         }
 

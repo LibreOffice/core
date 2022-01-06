@@ -625,7 +625,7 @@ public:
     // if bDontRemoveHardAttr is false, set all attributes, which were set in the style sheet, to their default value
     // if true, all hard attributes keep their values
     void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
-    virtual void NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
+    void NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
     SfxStyleSheet* GetStyleSheet() const;
 
     virtual bool HasTextEdit() const;
@@ -946,6 +946,8 @@ protected:
     }
 
     const SfxItemSet* getBackgroundFillSet() const;
+
+    virtual void InternalSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bBroadcast);
 
 private:
     struct Impl;
