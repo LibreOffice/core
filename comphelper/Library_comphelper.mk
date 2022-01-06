@@ -85,6 +85,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/accessiblewrapper \
     comphelper/source/misc/accimplaccess \
     comphelper/source/misc/AccessibleImplementationHelper \
+    comphelper/source/misc/anycompare \
     comphelper/source/misc/anytostring \
     comphelper/source/misc/asyncnotification \
     comphelper/source/misc/asyncquithandler \
@@ -126,7 +127,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/simplefileaccessinteraction \
     comphelper/source/misc/solarmutex \
     comphelper/source/misc/stillreadwriteinteraction \
-    comphelper/source/misc/anycompare \
     comphelper/source/misc/storagehelper \
     comphelper/source/misc/string \
     comphelper/source/misc/synchronousdispatch \
