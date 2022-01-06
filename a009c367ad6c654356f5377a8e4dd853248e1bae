@@ -16,6 +16,24 @@
       "message": "Typo \u0027Weather\u0027",
       "revId": "a009c367ad6c654356f5377a8e4dd853248e1bae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed1830bb_09f977bf",
+        "filename": "include/i18nlangtag/mslangid.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-06T14:06:29Z",
+      "side": 1,
+      "message": "Thanks for checking. It should be fixed with patch set 3.",
+      "parentUuid": "363ad508_374d9920",
+      "revId": "a009c367ad6c654356f5377a8e4dd853248e1bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
