@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "363ad508_374d9920",
+        "filename": "include/i18nlangtag/mslangid.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-01-06T13:04:11Z",
+      "side": 1,
+      "message": "Typo \u0027Weather\u0027",
+      "revId": "a009c367ad6c654356f5377a8e4dd853248e1bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
