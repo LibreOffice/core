@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
+#include <comphelper/anycompare.hxx>
 #include <svx/sdasitm.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -216,12 +217,35 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
 SdrCustomShapeGeometryItem::~SdrCustomShapeGeometryItem()
 {
 }
+
 bool SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    bool bRet = SfxPoolItem::operator==( rCmp );
-    if ( bRet )
-        bRet = static_cast<const SdrCustomShapeGeometryItem&>(rCmp).aPropSeq == aPropSeq;
-    return bRet;
+    if( !SfxPoolItem::operator==( rCmp ))
+        return false;
+    const SdrCustomShapeGeometryItem& other = static_cast<const SdrCustomShapeGeometryItem&>(rCmp);
+    // This is called often by SfxItemPool, and comparing uno sequences is relatively slow.
+    // Optimize by checking the list of properties that this class keeps for the sequence,
+    // if the sizes are different, the sequences are different too, which should allow a cheap
+    // return for many cases.
+    if( aPropHashMap.size() != other.aPropHashMap.size())
+        return false;
+    if( aPropPairHashMap.size() != other.aPropPairHashMap.size())
+        return false;
+    return aPropSeq == other.aPropSeq;
+}
+
+bool SdrCustomShapeGeometryItem::operator<( const SfxPoolItem& rCmp ) const
+{
+    assert(dynamic_cast<const SdrCustomShapeGeometryItem*>( &rCmp ));
+    const SdrCustomShapeGeometryItem& other = static_cast<const SdrCustomShapeGeometryItem&>(rCmp);
+    // Again, optimize by checking the list of properties and compare by their count if different
+    // (this is operator< for sorting purposes, so the ordering can be somewhat arbitrary).
+    if( aPropHashMap.size() != other.aPropHashMap.size())
+        return aPropHashMap.size() < other.aPropHashMap.size();
+    if( aPropPairHashMap.size() != other.aPropPairHashMap.size())
+        return aPropPairHashMap.size() < other.aPropPairHashMap.size();
+    return comphelper::anyLess( css::uno::makeAny( aPropSeq ),
+        css::uno::makeAny( other.aPropSeq ));
 }
 
 bool SdrCustomShapeGeometryItem::GetPresentation(
