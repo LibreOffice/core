@@ -48,7 +48,8 @@ public:
     static void PaintAllChartsOnTile(VirtualDevice& rDevice,
                                      int nOutputWidth, int nOutputHeight,
                                      int nTilePosX, int nTilePosY,
-                                     tools::Long nTileWidth, tools::Long nTileHeight);
+                                     tools::Long nTileWidth, tools::Long nTileHeight,
+                                     bool bNegativeX = false);
     bool postMouseEvent(int nType, int nX, int nY,
                         int nCount, int nButtons, int nModifier,
                         double fScaleX = 1.0, double fScaleY = 1.0);
