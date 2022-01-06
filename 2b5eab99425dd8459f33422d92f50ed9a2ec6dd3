@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9453f5fb_5c47d064",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-06T09:29:46Z",
+      "side": 1,
+      "message": "I think cherry-picking into 7.3 branch would allow more people to test early version of 7.3.\nIf there\u0027s a pb, this patch can be reverted at worst.\n\nIMHO it doesn\u0027t worth it to cherry-pick it for 7.2 branch.",
+      "revId": "2b5eab99425dd8459f33422d92f50ed9a2ec6dd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
