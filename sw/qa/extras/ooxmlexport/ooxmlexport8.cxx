@@ -708,17 +708,17 @@ DECLARE_OOXMLEXPORT_TEST(testN792778, "n792778.docx")
     xInnerShape.set(xInnerGroupShape->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11684), xInnerShape->getPosition().Y);
 }
-//FIXME:
-//DECLARE_OOXMLEXPORT_TEST(testGroupshapeSmarttag, "groupshape-smarttag.docx")
-//{
-//    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
-//    uno::Reference<text::XTextRange> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
-//    // First run of shape text was missing due to the w:smartTag wrapper around it.
-//    CPPUNIT_ASSERT_EQUAL(OUString("Box 2"), xShape->getString());
-//
-//    // Font size of the shape text was 10.
-//    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(getParagraphOfText(1, xShape->getText()), "CharHeight"));
-//}
+
+DECLARE_OOXMLEXPORT_TEST(testGroupshapeSmarttag, "groupshape-smarttag.docx")
+{
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    // First run of shape text was missing due to the w:smartTag wrapper around it.
+    CPPUNIT_ASSERT_EQUAL(OUString("Box 2"), xShape->getString());
+
+    // Font size of the shape text was 10.
+    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(getParagraphOfText(1, xShape->getText()), "CharHeight"));
+}
 
 DECLARE_OOXMLEXPORT_TEST(testN793262, "n793262.docx")
 {
@@ -1056,35 +1056,82 @@ DECLARE_OOXMLEXPORT_TEST(testTableAutoColumnFixedSize2, "table-auto-column-fixed
     // This was 17907, i.e. the sum of the width of the 3 cells (10152 twips each), which is too wide.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16891), getProperty<sal_Int32>(xTextTable, "Width"));
 }
-#if 0
-// FIXME:
+
 DECLARE_OOXMLEXPORT_TEST(testFdo46361, "fdo46361.docx")
 {
     uno::Reference<container::XIndexAccess> xGroupShape(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
-    // This was CENTER.
-    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xShape, "TextVerticalAdjust"));
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
-    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
-    // This was LEFT.
-    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
-    // This was black, not green.
-    CPPUNIT_ASSERT_EQUAL(Color(0x008000), Color(ColorTransparency, getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor")));
-    // \n char was missing due to unhandled w:br.
-    uno::Reference<text::XText> xShapeText(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("text\ntext"), xShapeText->getString());
-    // \n chars were missing, due to unhandled multiple w:p tags.
-    xShapeText.set(xGroupShape->getByIndex(2), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("text\ntext\n"), xShapeText->getString());
+    uno::Reference<text::XTextRange> xTextBox;
 
-    // tdf#128153 The first and second lines are directly specified as centered. Make sure that doesn't change.
-    xParagraph.set(getParagraphOfText(2, xShapeText->getText(), "text"));
-    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
-    // The last paragraph should be left aligned.
-    xParagraph.set(getParagraphOfText(3, xShapeText->getText(), ""));
-    CPPUNIT_ASSERT_MESSAGE("You FIXED me!", style::ParagraphAdjust_LEFT != static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
+    // FIXME:
+    // uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    // CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xShape, "TextVerticalAdjust"));
+
+    // This was CENTER
+    xTextBox.set(xGroupShape->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER,
+                         static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(
+                             getParagraphOfText(1, xTextBox->getText()), "ParaAdjust")));
+    // This was BLACK
+    CPPUNIT_ASSERT_EQUAL(
+        Color(0x008000),
+        Color(ColorTransparency,
+              getProperty<sal_Int32>(getRun(getParagraphOfText(1, xTextBox->getText()), 1),
+                                     "CharColor")));
+    // Count the paragraphs
+    xTextBox.set(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW);
+    const auto& sText1 = xTextBox->getString();
+
+    xTextBox.set(xGroupShape->getByIndex(2), uno::UNO_QUERY_THROW);
+    const auto& sText2 = xTextBox->getString();
+
+    sal_Int32 nCount1 = 0;
+    sal_Int32 nCount2 = 0;
+
+    for (sal_Int32 i = 0; i < sText1.getLength(); i++)
+        if (sText1[i] == '\n')
+            nCount1++;
+    for (sal_Int32 i = 0; i < sText2.getLength(); i++)
+        if (sText2[i] == '\n')
+            nCount2++;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nCount1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nCount2);
+
+    // This was CENTER
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER,
+                         static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(
+                             getParagraphOfText(2, xTextBox->getText(), "text"), "ParaAdjust")));
+
+    // This must not be left.
+    CPPUNIT_ASSERT_MESSAGE("You FIXED me!", style::ParagraphAdjust_LEFT !=
+                         static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(
+                             getParagraphOfText(3, xTextBox->getText(), ""), "ParaAdjust")));
+
+    //FIXME: the original test what will not work in this way because of the assimetry of the VML/DML import:
+    // uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    // // This was CENTER.
+    // CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xShape, "TextVerticalAdjust"));
+    // uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
+    // uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
+    // // This was LEFT.
+    // CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
+    // // This was black, not green.
+    // CPPUNIT_ASSERT_EQUAL(Color(0x008000), Color(ColorTransparency, getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor")));
+    // // \n char was missing due to unhandled w:br.
+    // uno::Reference<text::XText> xShapeText(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW);
+    // CPPUNIT_ASSERT_EQUAL(OUString("text\ntext"), xShapeText->getString());
+    // // \n chars were missing, due to unhandled multiple w:p tags.
+    // xShapeText.set(xGroupShape->getByIndex(2), uno::UNO_QUERY_THROW);
+    // CPPUNIT_ASSERT_EQUAL(OUString("text\ntext\n"), xShapeText->getString());
+    //
+    // // tdf#128153 The first and second lines are directly specified as centered. Make sure that doesn't change.
+    // xParagraph.set(getParagraphOfText(2, xShapeText->getText(), "text"));
+    // CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
+    // // The last paragraph should be left aligned.
+    // xParagraph.set(getParagraphOfText(3, xShapeText->getText(), ""));
+    // CPPUNIT_ASSERT_MESSAGE("You FIXED me!", style::ParagraphAdjust_LEFT != static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
 }
-#endif
+
 DECLARE_OOXMLEXPORT_TEST(testFdo65632, "fdo65632.docx")
 {
     // The problem was that the footnote text had fake redline: only the body
