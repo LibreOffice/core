@@ -523,6 +523,22 @@ namespace sdr::properties
             }
             return false;
         }
+
+        void AttributeProperties::applyDefaultStyleSheetFromSdrModel()
+        {
+            SfxStyleSheet* pDefaultStyleSheet(GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheet());
+
+            // tdf#118139 Only do this when StyleSheet really differs. It may e.g.
+            // be the case that nullptr == pDefaultStyleSheet and there is none set yet,
+            // so indeed no need to set it (needed for some strange old MSWord2003
+            // documents with CustomShape-'Group' and added Text-Frames, see task description)
+            if(pDefaultStyleSheet != GetStyleSheet())
+            {
+                // do not delete hard attributes when setting dsefault Style
+                SetStyleSheet(pDefaultStyleSheet, true);
+            }
+        }
+
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
