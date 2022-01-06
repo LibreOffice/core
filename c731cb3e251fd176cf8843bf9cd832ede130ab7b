@@ -33,6 +33,23 @@
       "message": "Checking, but I get \"error: unknown type name \u0027ImplSVEvent\u0027\" when building.",
       "revId": "c731cb3e251fd176cf8843bf9cd832ede130ab7b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67d4e32e_8ec82aee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-01-06T15:28:13Z",
+      "side": 1,
+      "message": "I added a line:\n```\nstruct ImplSVEvent;\n```\n\nin cui/source/options/optcolor.hxx, the build passes, but now if I open that dialog, the width grows for ever, even there is no mouse move.\n\nAlso, as stated in the bug report, this does not happen in another system (both are Fedora 34), but does happen in my current system even with fresh lo profile.",
+      "revId": "c731cb3e251fd176cf8843bf9cd832ede130ab7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
