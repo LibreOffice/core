@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "939a870b_5599d2a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-06T09:39:11Z",
+      "side": 1,
+      "message": "@Attila: thanks for the quick clean-up and for the very nice fix!",
+      "revId": "ec230ad6498f1edfc1f0e206b96ed58832045c2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
