@@ -30,6 +30,7 @@
 #include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vector>
@@ -92,17 +93,13 @@ void lcl_AddPropertiesToVector(
     return aStaticDefaults;
 };
 
-::cppu::OPropertyArrayHelper& GetStaticStockChartTypeTemplateInfoHelper()
+::comphelper::OPropertyArrayHelper2& GetStaticStockChartTypeTemplateInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper aPropHelper =
+    static ::comphelper::OPropertyArrayHelper2 aPropHelper =
         [](){
             std::vector< css::beans::Property > aProperties;
             lcl_AddPropertiesToVector( aProperties );
-
-            std::sort( aProperties.begin(), aProperties.end(),
-                         ::chart::PropertyNameLess() );
-
-            return comphelper::containerToSequence( aProperties );
+            return aProperties;
         }();
     return aPropHelper;
 };

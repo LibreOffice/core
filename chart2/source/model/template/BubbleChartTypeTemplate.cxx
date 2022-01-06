@@ -25,6 +25,7 @@
 #include <PropertyHelper.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
@@ -51,44 +52,18 @@ struct StaticBubbleChartTypeTemplateDefaults : public rtl::StaticAggregate< ::ch
 {
 };
 
-struct StaticBubbleChartTypeTemplateInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticBubbleChartTypeTemplateInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper( std::vector< css::beans::Property >{} );
+    return aPropHelper;
+}
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticBubbleChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticBubbleChartTypeTemplateInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticBubbleChartTypeTemplateInfo()
 {
-};
-
-struct StaticBubbleChartTypeTemplateInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticBubbleChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticBubbleChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticBubbleChartTypeTemplateInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticBubbleChartTypeTemplateInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -120,13 +95,13 @@ void BubbleChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny
 
 ::cppu::IPropertyArrayHelper & SAL_CALL BubbleChartTypeTemplate::getInfoHelper()
 {
-    return *StaticBubbleChartTypeTemplateInfoHelper::get();
+    return StaticBubbleChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL BubbleChartTypeTemplate::getPropertySetInfo()
 {
-    return *StaticBubbleChartTypeTemplateInfo::get();
+    return StaticBubbleChartTypeTemplateInfo();
 }
 
 sal_Int32 BubbleChartTypeTemplate::getDimension() const

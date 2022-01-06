@@ -24,6 +24,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <com/sun/star/chart2/XChartType.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <LinePropertiesHelper.hxx>
@@ -42,60 +43,38 @@ using ::com::sun::star::uno::Any;
 namespace
 {
 
-struct StaticUpDownBarWrapperPropertyArray_Initializer
+Sequence< Property >& StaticUpDownBarWrapperPropertyArray()
 {
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
-        return &aPropSeq;
-    }
+    static Sequence< Property > aPropSeq =
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::FillProperties::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropSeq;
+}
 
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticUpDownBarWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticUpDownBarWrapperPropertyArray_Initializer >
+comphelper::OPropertyArrayHelper2& StaticUpDownBarWrapperInfoHelper()
 {
-};
+    static comphelper::OPropertyArrayHelper2 aPropHelper( StaticUpDownBarWrapperPropertyArray() );
+    return aPropHelper;
+}
 
-struct StaticUpDownBarWrapperInfoHelper_Initializer
+uno::Reference< beans::XPropertySetInfo >& StaticUpDownBarWrapperInfo()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( *StaticUpDownBarWrapperPropertyArray::get() );
-        return &aPropHelper;
-    }
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticUpDownBarWrapperInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
-struct StaticUpDownBarWrapperInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticUpDownBarWrapperInfoHelper_Initializer >
-{
-};
-
-struct StaticUpDownBarWrapperInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticUpDownBarWrapperInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticUpDownBarWrapperInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticUpDownBarWrapperInfo_Initializer >
-{
-};
 
 struct StaticUpDownBarWrapperDefaults_Initializer
 {
@@ -156,7 +135,7 @@ void SAL_CALL UpDownBarWrapper::removeEventListener(
 //XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL UpDownBarWrapper::getPropertySetInfo()
 {
-    return *StaticUpDownBarWrapperInfo::get();
+    return StaticUpDownBarWrapperInfo();
 }
 void SAL_CALL UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName, const uno::Any& rValue )
 {
@@ -300,7 +279,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyToDefault( const OUString& rPropertyN
 uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
     const tPropertyValueMap& rStaticDefaults = *StaticUpDownBarWrapperDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( StaticUpDownBarWrapperInfoHelper::get()->getHandleByName( rPropertyName ) ) );
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( StaticUpDownBarWrapperInfoHelper().getHandleByName( rPropertyName ) ) );
     if( aFound == rStaticDefaults.end() )
         return uno::Any();
     return (*aFound).second;
@@ -310,7 +289,7 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const OUString& rPropert
 //getPropertyStates() already declared in XPropertyState
 void SAL_CALL UpDownBarWrapper::setAllPropertiesToDefault(  )
 {
-    const Sequence< beans::Property >& rPropSeq = *StaticUpDownBarWrapperPropertyArray::get();
+    const Sequence< beans::Property >& rPropSeq = StaticUpDownBarWrapperPropertyArray();
     for(beans::Property const & prop : rPropSeq)
     {
         setPropertyToDefault( prop.Name );

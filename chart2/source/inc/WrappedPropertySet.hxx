@@ -24,10 +24,12 @@
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <memory>
+#include <optional>
 #include <vector>
 
 namespace cppu { class IPropertyArrayHelper; }
@@ -106,7 +108,7 @@ protected: //methods
 protected: //member
     css::uno::Reference< css::beans::XPropertySetInfo >     m_xInfo;//outer PropertySetInfo
 
-    std::unique_ptr<::cppu::OPropertyArrayHelper>       m_pPropertyArrayHelper;//holds all possible outer properties
+    std::optional<::comphelper::OPropertyArrayHelper2>       m_pPropertyArrayHelper;//holds all possible outer properties
 
     std::unique_ptr<tWrappedPropertyMap>                m_pWrappedPropertyMap;//holds all wrapped properties (containing the special mapping from inner to outer properties)
 

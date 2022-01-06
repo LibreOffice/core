@@ -23,6 +23,7 @@
 #include <AxisIndexDefines.hxx>
 #include <AxisHelper.hxx>
 
+#include <comphelper/propshlp2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 
@@ -89,45 +90,31 @@ void NetChartType_Base::GetDefaultValue( sal_Int32 /*nHandle*/, uno::Any& rAny )
 namespace
 {
 
-struct StaticNetChartTypeInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticNetChartTypeInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper(Sequence< beans::Property >{});
-        return &aPropHelper;
-    }
-};
+    static comphelper::OPropertyArrayHelper2 aPropHelper(std::vector< beans::Property >{});
+    return aPropHelper;
+}
 
-struct StaticNetChartTypeInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticNetChartTypeInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticNetChartTypeInfo()
 {
-};
-
-struct StaticNetChartTypeInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticNetChartTypeInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticNetChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticNetChartTypeInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticNetChartTypeInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 }
 
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL NetChartType_Base::getInfoHelper()
 {
-    return *StaticNetChartTypeInfoHelper::get();
+    return StaticNetChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL NetChartType_Base::getPropertySetInfo()
 {
-    return *StaticNetChartTypeInfo::get();
+    return StaticNetChartTypeInfo();
 }
 
 NetChartType::NetChartType()

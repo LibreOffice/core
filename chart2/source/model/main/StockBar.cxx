@@ -24,6 +24,7 @@
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/propshlp2.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
@@ -38,47 +39,27 @@ using ::com::sun::star::beans::Property;
 namespace
 {
 
-struct StaticStockBarInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticStockBarInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::FillProperties::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+            return aProperties;
+        }());
+    return aPropHelper;
+}
 
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticStockBarInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticStockBarInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticStockBarInfo()
 {
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticStockBarInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
-struct StaticStockBarInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticStockBarInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticStockBarInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticStockBarInfo_Initializer >
-{
-};
 
 struct StaticStockBarDefaults_Initializer
 {
@@ -151,13 +132,13 @@ void StockBar::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL StockBar::getInfoHelper()
 {
-    return *StaticStockBarInfoHelper::get();
+    return StaticStockBarInfoHelper();
 }
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL StockBar::getPropertySetInfo()
 {
-    return *StaticStockBarInfo::get();
+    return StaticStockBarInfo();
 }
 
 // ____ XModifyBroadcaster ____

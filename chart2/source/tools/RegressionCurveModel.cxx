@@ -24,6 +24,7 @@
 #include <CloneHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <comphelper/propshlp2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <tools/diagnose_ex.h>
@@ -110,18 +111,14 @@ void lcl_AddPropertiesToVector(
     return aStaticDefaults;
 };
 
-::cppu::OPropertyArrayHelper& GetStaticRegressionCurveInfoHelper()
+::comphelper::OPropertyArrayHelper2& GetStaticRegressionCurveInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper aPropHelper =
+    static ::comphelper::OPropertyArrayHelper2 aPropHelper =
     [](){
         std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
+        return aProperties;
     }();
     return aPropHelper;
 };

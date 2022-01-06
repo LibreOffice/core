@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/propshlp2.hxx>
 
 #include <LinePropertiesHelper.hxx>
 #include <UserDefinedProperties.hxx>
@@ -57,59 +58,37 @@ struct StaticMinMaxLineWrapperDefaults : public rtl::StaticAggregate< ::chart::t
 {
 };
 
-struct StaticMinMaxLineWrapperPropertyArray_Initializer
+Sequence< Property >& StaticMinMaxLineWrapperPropertyArray()
 {
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
-        return &aPropSeq;
-    }
+    static Sequence< Property > aPropSeq =
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropSeq;
+}
 
-        return comphelper::containerToSequence( aProperties );
-    }
-};
 
-struct StaticMinMaxLineWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticMinMaxLineWrapperPropertyArray_Initializer >
+comphelper::OPropertyArrayHelper2& StaticMinMaxLineWrapperInfoHelper()
 {
-};
+    static comphelper::OPropertyArrayHelper2 aPropHelper( StaticMinMaxLineWrapperPropertyArray() );
+    return aPropHelper;
+}
 
-struct StaticMinMaxLineWrapperInfoHelper_Initializer
+uno::Reference< beans::XPropertySetInfo >& StaticMinMaxLineWrapperInfo()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( *StaticMinMaxLineWrapperPropertyArray::get() );
-        return &aPropHelper;
-    }
-};
-
-struct StaticMinMaxLineWrapperInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticMinMaxLineWrapperInfoHelper_Initializer >
-{
-};
-
-struct StaticMinMaxLineWrapperInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticMinMaxLineWrapperInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticMinMaxLineWrapperInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticMinMaxLineWrapperInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticMinMaxLineWrapperInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -149,7 +128,7 @@ void SAL_CALL MinMaxLineWrapper::removeEventListener(
 //XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL MinMaxLineWrapper::getPropertySetInfo()
 {
-    return *StaticMinMaxLineWrapperInfo::get();
+    return StaticMinMaxLineWrapperInfo();
 }
 
 void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName, const uno::Any& rValue )
@@ -333,7 +312,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyToDefault( const OUString& rProperty
 uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
     const tPropertyValueMap& rStaticDefaults = *StaticMinMaxLineWrapperDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( StaticMinMaxLineWrapperInfoHelper::get()->getHandleByName( rPropertyName ) ) );
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( StaticMinMaxLineWrapperInfoHelper().getHandleByName( rPropertyName ) ) );
     if( aFound == rStaticDefaults.end() )
         return uno::Any();
     return (*aFound).second;
@@ -343,7 +322,7 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const OUString& rProper
 //getPropertyStates() already declared in XPropertyState
 void SAL_CALL MinMaxLineWrapper::setAllPropertiesToDefault(  )
 {
-    const Sequence< beans::Property >& rPropSeq = *StaticMinMaxLineWrapperPropertyArray::get();
+    const Sequence< beans::Property >& rPropSeq = StaticMinMaxLineWrapperPropertyArray();
     for(beans::Property const & prop : rPropSeq)
     {
         setPropertyToDefault( prop.Name );

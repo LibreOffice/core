@@ -23,6 +23,7 @@
 #include <ModifyListenerHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -101,45 +102,25 @@ struct StaticCandleStickChartTypeDefaults : public rtl::StaticAggregate< ::chart
 {
 };
 
-struct StaticCandleStickChartTypeInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticCandleStickChartTypeInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
+            return comphelper::containerToSequence( aProperties );
+        }());
+    return aPropHelper;
+}
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticCandleStickChartTypeInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticCandleStickChartTypeInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticCandleStickChartTypeInfo()
 {
-};
-
-struct StaticCandleStickChartTypeInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticCandleStickChartTypeInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticCandleStickChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticCandleStickChartTypeInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticCandleStickChartTypeInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -276,13 +257,13 @@ void CandleStickChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) 
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL CandleStickChartType::getInfoHelper()
 {
-    return *StaticCandleStickChartTypeInfoHelper::get();
+    return StaticCandleStickChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL CandleStickChartType::getPropertySetInfo()
 {
-    return *StaticCandleStickChartTypeInfo::get();
+    return StaticCandleStickChartTypeInfo();
 }
 
 void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(
