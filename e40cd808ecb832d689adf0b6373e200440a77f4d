@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68ef2ff5_0fe1b846",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-06T12:07:54Z",
+      "side": 1,
+      "message": "I wonder if anyone knows why we have have this special condition (apparently since initial import in 2000) to not draw an \"active text object\" frame for fit-to-text frames, and not to draw it for shapes with text edit objects.",
+      "revId": "e40cd808ecb832d689adf0b6373e200440a77f4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
