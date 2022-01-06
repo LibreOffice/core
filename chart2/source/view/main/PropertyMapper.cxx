@@ -597,7 +597,7 @@ void PropertyMapper::setPropertyNameMapForFilledSeriesProperties(SdrPathObj* pSh
         xOptionSet->Put(XFillColorItem(OUString(), Color(ColorTransparency, *xFillColor)));
     }
     if (xOptionSet)
-        pShape->SetMergedItemSet(*xOptionSet);
+        pShape->GetProperties().SetObjectItemSet(*xOptionSet);
 
 }
 
