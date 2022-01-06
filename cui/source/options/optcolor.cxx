@@ -188,7 +188,10 @@ public:
         return *m_xBox;
     }
 
-    void AdjustExtraWidths(int nTextWidth);
+    int GetLabelIndent() const
+    {
+        return m_nCheckBoxLabelOffset;
+    }
 
 private:
     // Chapter -- horizontal group separator stripe with text
@@ -207,10 +210,9 @@ private:
     {
     public:
         Entry(weld::Window* pTopLevel, weld::Builder& rBuilder, const char* pTextWidget, const char* pColorWidget,
-              const Color& rColor, tools::Long nCheckBoxLabelOffset, bool bCheckBox, bool bShow);
+              const Color& rColor, int nCheckBoxLabelOffset, bool bCheckBox, bool bShow);
     public:
         void SetText(const OUString& rLabel) { dynamic_cast<weld::Label&>(*m_xText).set_label(rLabel); }
-        void set_width_request(int nTextWidth) { m_xText->set_size_request(nTextWidth, -1); }
         int get_height_request() const
         {
             return std::max(m_xText->get_preferred_size().Height(),
@@ -239,6 +241,7 @@ private:
 
 private:
     weld::Window* m_pTopLevel;
+    int m_nCheckBoxLabelOffset;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Box> m_xBox;
     std::unique_ptr<weld::Widget> m_xWidget1;
@@ -280,7 +283,7 @@ ColorConfigWindow_Impl::Chapter::Chapter(weld::Builder& rBuilder, const char* pL
 ColorConfigWindow_Impl::Entry::Entry(weld::Window* pTopLevel, weld::Builder& rBuilder,
                                      const char* pTextWidget, const char* pColorWidget,
                                      const Color& rColor,
-                                     tools::Long nCheckBoxLabelOffset, bool bCheckBox, bool bShow)
+                                     int nCheckBoxLabelOffset, bool bCheckBox, bool bShow)
     : m_xColorList(new ColorListBox(rBuilder.weld_menu_button(pColorWidget), [pTopLevel]{ return pTopLevel; }))
     , m_aDefaultColor(rColor)
 {
@@ -365,8 +368,8 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(weld::Window* pTopLevel, weld::Co
     : m_pTopLevel(pTopLevel)
     , m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/colorconfigwin.ui"))
     , m_xBox(m_xBuilder->weld_box("ColorConfigWindow"))
-    , m_xWidget1(m_xBuilder->weld_widget("doccolor"))
-    , m_xWidget2(m_xBuilder->weld_widget("doccolor_lb"))
+    , m_xWidget1(m_xBuilder->weld_widget("docboundaries"))
+    , m_xWidget2(m_xBuilder->weld_widget("docboundaries_lb"))
 {
     CreateEntries();
 }
@@ -384,9 +387,8 @@ void ColorConfigWindow_Impl::CreateEntries()
 
     // Here we want to get the amount to add to the position of a FixedText to
     // get it to align its contents with that of a CheckBox
-    tools::Long nCheckBoxLabelOffset = 0;
     {
-        OUString sSampleText("X");
+        OUString sSampleText("XXXXXX");
         std::unique_ptr<weld::CheckButton> xCheckBox(m_xBuilder->weld_check_button("docboundaries"));
         std::unique_ptr<weld::Label> xFixedText(m_xBuilder->weld_label("doccolor"));
         OUString sOrigCheck(xCheckBox->get_label());
@@ -397,7 +399,7 @@ void ColorConfigWindow_Impl::CreateEntries()
         Size aFixedSize(xFixedText->get_preferred_size());
         xCheckBox->set_label(sOrigCheck);
         xFixedText->set_label(sOrigFixed);
-        nCheckBoxLabelOffset = aCheckSize.Width() - aFixedSize.Width();
+        m_nCheckBoxLabelOffset = aCheckSize.Width() - aFixedSize.Width();
     }
 
     // creating entries
@@ -407,7 +409,7 @@ void ColorConfigWindow_Impl::CreateEntries()
         vEntries.push_back(std::make_shared<Entry>(m_pTopLevel, *m_xBuilder,
             vEntryInfo[i].pText, vEntryInfo[i].pColor,
             ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(i)),
-            nCheckBoxLabelOffset,
+            m_nCheckBoxLabelOffset,
             vEntryInfo[i].bCheckBox,
             aModulesInstalled[vEntryInfo[i].eGroup]));
     }
@@ -441,16 +443,10 @@ void ColorConfigWindow_Impl::CreateEntries()
                 aExtConfig.GetComponentColorConfigValue(sComponentName, i);
             vEntries.push_back(std::make_shared<Entry>(m_pTopLevel, *vExtBuilders.back(),
                 "label", "button", aColorEntry.getDefaultColor(),
-                nCheckBoxLabelOffset, false, true));
+                m_nCheckBoxLabelOffset, false, true));
             vEntries.back()->SetText(aColorEntry.getDisplayName());
         }
     }
-}
-
-void ColorConfigWindow_Impl::AdjustExtraWidths(int nTextWidth)
-{
-    for (size_t i = SAL_N_ELEMENTS(vEntryInfo); i < vEntries.size(); ++i)
-        vEntries[i]->set_width_request(nTextWidth);
 }
 
 // SetLinks()
@@ -591,7 +587,6 @@ class ColorConfigCtrl_Impl
 public:
     explicit ColorConfigCtrl_Impl(weld::Window* pTopLevel, weld::Builder& rbuilder);
 
-    void AdjustExtraWidths(int nTextWidth) { m_xScrollWindow->AdjustExtraWidths(nTextWidth); }
     void SetConfig (EditableColorConfig& rConfig) { pColorConfig = &rConfig; }
     void SetExtendedConfig (EditableExtendedColorConfig& rConfig) { pExtColorConfig = &rConfig; }
     void Update();
@@ -610,6 +605,10 @@ public:
     weld::Widget& GetWidget2()
     {
         return m_xScrollWindow->GetWidget2();
+    }
+    int GetLabelIndent() const
+    {
+        return m_xScrollWindow->GetLabelIndent();
     }
 };
 
@@ -689,6 +688,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, weld::Widget&, rCtrl, void)
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage(pPage, pController, "cui/ui/optappearancepage.ui", "OptAppearancePage", &rCoreSet)
     , bFillItemSetCalled(false)
+    , m_nSizeAllocEventId(nullptr)
     , m_xColorSchemeLB(m_xBuilder->weld_combo_box("colorschemelb"))
     , m_xSaveSchemePB(m_xBuilder->weld_button("save"))
     , m_xDeleteSchemePB(m_xBuilder->weld_button("delete"))
@@ -734,6 +734,8 @@ SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
         pExtColorConfig.reset();
     }
     m_xColorConfigCT.reset();
+    if (m_nSizeAllocEventId)
+        Application::RemoveUserEvent(m_nSizeAllocEventId);
 }
 
 std::unique_ptr<SfxTabPage> SvxColorOptionsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
@@ -865,17 +867,26 @@ void SvxColorOptionsTabPage::FillUserData()
 
 IMPL_LINK_NOARG(SvxColorOptionsTabPage, AdjustHeaderBar, const Size&, void)
 {
+    if (m_nSizeAllocEventId)
+        return;
+    m_nSizeAllocEventId = Application::PostUserEvent(LINK(this, SvxColorOptionsTabPage, PostAdjustHeaderBar));
+}
+
+IMPL_LINK_NOARG(SvxColorOptionsTabPage, PostAdjustHeaderBar, void*, void)
+{
+    m_nSizeAllocEventId = nullptr;
+
     // horizontal positions
-    int nX0 = 0, nX1, nX2, y, width, height;
+    int nX1, nX2, y, width, height;
     if (!m_rWidget1.get_extents_relative_to(*m_xTable, nX1, y, width, height))
         return;
     if (!m_rWidget2.get_extents_relative_to(*m_xTable, nX2, y, width, height))
         return;
-    auto nTextWidth1 = nX1 - nX0;
-    auto nTextWidth2 = nX2 - nX1;
+    // 6 is the column-spacing of the parent grid of these labels
+    auto nTextWidth1 = nX1 + m_xColorConfigCT->GetLabelIndent() - 6;
+    auto nTextWidth2 = nX2 - nTextWidth1 - 12;
     m_xOnFT->set_size_request(nTextWidth1, -1);
     m_xElementFT->set_size_request(nTextWidth2, -1);
-    m_xColorConfigCT->AdjustExtraWidths(nTextWidth2 - 12);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
