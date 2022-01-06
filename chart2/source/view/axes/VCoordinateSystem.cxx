@@ -18,6 +18,7 @@
  */
 
 #include <BaseGFXHelper.hxx>
+#include <DateHelper.hxx>
 #include <VCoordinateSystem.hxx>
 #include "VCartesianCoordinateSystem.hxx"
 #include "VPolarCoordinateSystem.hxx"
@@ -33,6 +34,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <comphelper/sequence.hxx>
+#include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
@@ -363,8 +365,26 @@ void VCoordinateSystem::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAuto
     {
         // y dimension
         ExplicitScaleData aScale = getExplicitScale( 0, 0 );
+        double fMaximum = aScale.Maximum;
+        if (!aScale.m_bShiftedCategoryPosition && aScale.AxisType == AxisType::DATE)
+        {
+            // tdf#146066 Increase maximum date value by one month/year,
+            //            because the automatic scaling of the Y axis was incorrect when the last Y value was the highest value.
+            Date aMaxDate(aScale.NullDate);
+            aMaxDate.AddDays(::rtl::math::approxFloor(fMaximum));
+            switch (aScale.TimeResolution)
+            {
+                case css::chart::TimeUnit::MONTH:
+                    aMaxDate = DateHelper::GetDateSomeMonthsAway(aMaxDate, 1);
+                    break;
+                case css::chart::TimeUnit::YEAR:
+                    aMaxDate = DateHelper::GetDateSomeYearsAway(aMaxDate, 1);
+                    break;
+            }
+            fMaximum = aMaxDate - aScale.NullDate;
+        }
         fMin = m_aMergedMinMaxSupplier.getMinimumYInRange(aScale.Minimum,aScale.Maximum, nAxisIndex);
-        fMax = m_aMergedMinMaxSupplier.getMaximumYInRange(aScale.Minimum,aScale.Maximum, nAxisIndex);
+        fMax = m_aMergedMinMaxSupplier.getMaximumYInRange(aScale.Minimum, fMaximum, nAxisIndex);
     }
     else if( nDimIndex == 2 )
     {
