@@ -51,6 +51,24 @@
       "parentUuid": "f1cd7792_7c2ccbf6",
       "revId": "3e3d9a80b13c9468ba7aa2f09feb1b5714bb7c4b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5afc0e6_a8a9afb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-06T08:04:07Z",
+      "side": 1,
+      "message": "I think the the \u0027s\u0027 is ambiguous in this context. The flags description is not self-referring, so it says \"[triggers to] ignore xxx\". After the \":\" it explains what the flag does, referring to itself, like in line 17. Now wasted 10m on this, why that \u0027s\u0027 actually felt wrong. Not sure I found the right words, but please drop that.",
+      "parentUuid": "529b4c4b_3f10e040",
+      "revId": "3e3d9a80b13c9468ba7aa2f09feb1b5714bb7c4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
