@@ -250,8 +250,18 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         readUInt32( rHeader.nV5ProfileSize );
         readUInt32( rHeader.nV5Reserved );
 
+        // Read color mask. An additional 12 bytes of color bitfields follow the info header (WinBMPv3-NT)
+        sal_uInt32 nColorMask = 0;
+        if (BITFIELDS == rHeader.nCompression && DIBINFOHEADERSIZE == rHeader.nSize)
+        {
+            rIStm.ReadUInt32( rHeader.nV5RedMask );
+            rIStm.ReadUInt32( rHeader.nV5GreenMask );
+            rIStm.ReadUInt32( rHeader.nV5BlueMask );
+            nColorMask = 12;
+        }
+
         // seek to EndPos
-        if (!checkSeek(rIStm, aStartPos + rHeader.nSize))
+        if (!checkSeek(rIStm, aStartPos + rHeader.nSize + nColorMask))
             return false;
     }
 
@@ -534,13 +544,12 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     }
     else
     {
-        // Read color mask
-        if(bTCMask && BITFIELDS == rHeader.nCompression)
-        {
-            rIStm.ReadUInt32( nRMask );
-            rIStm.ReadUInt32( nGMask );
-            rIStm.ReadUInt32( nBMask );
-        }
+        if (rHeader.nV5RedMask > 0)
+            nRMask = rHeader.nV5RedMask;
+        if (rHeader.nV5GreenMask > 0)
+            nGMask = rHeader.nV5GreenMask;
+        if (rHeader.nV5BlueMask > 0)
+            nBMask = rHeader.nV5BlueMask;
 
         const tools::Long nWidth(rHeader.nWidth);
         const tools::Long nHeight(rHeader.nHeight);
@@ -911,7 +920,13 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
 
     if (nOffset)
     {
-        pIStm->SeekRel(nOffset - (pIStm->Tell() - nStmPos));
+        // It is problematic to seek backwards. We are at the
+        // end of BITMAPINFOHEADER or 12 bytes further in case
+        // of WinBMPv3-NT format. It is possible to seek forward
+        // though because a gap may be there.
+        sal_Int32 nSeekRel = nOffset - (pIStm->Tell() - nStmPos);
+        if (nSeekRel > 0)
+            pIStm->SeekRel(nSeekRel);
     }
 
     const sal_Int64 nBitsPerLine (static_cast<sal_Int64>(aHeader.nWidth) * static_cast<sal_Int64>(aHeader.nBitCount));
