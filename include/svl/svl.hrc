@@ -26,6 +26,12 @@
 #define STR_SVT_MIMETYPE_CNT_FSYSBOX            NC_("STR_SVT_MIMETYPE_CNT_FSYSBOX", "Workplace")
 #define STR_FILECTRL_BUTTONTEXT                 NC_("STR_FILECTRL_BUTTONTEXT", "Browse...")
 
+// tdf#145919 localizable strings to be shared in vcl and cui modules
+#define GRTSTR_PASSED                               NC_("GRTSTR_PASSED", "PASSED")
+#define GRTSTR_QUIRKY                               NC_("GRTSTR_QUIRKY", "QUIRKY")
+#define GRTSTR_FAILED                               NC_("GRTSTR_FAILED", "FAILED")
+#define GRTSTR_SKIPPED                              NC_("GRTSTR_SKIPPED", "SKIPPED")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

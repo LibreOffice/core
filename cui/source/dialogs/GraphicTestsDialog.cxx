@@ -14,6 +14,11 @@
 #include <unotools/ZipPackageHelper.hxx>
 #include <GraphicsTestsDialog.hxx>
 #include <vcl/test/GraphicsRenderTests.hxx>
+#include <svl/svlresid.hxx>
+#include <svl/svl.hrc>
+
+#include <dialmgr.hxx>
+#include <strings.hrc>
 
 GraphicTestEntry::GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDialog,
                                    OUString aTestName, OUString aTestStatus, Bitmap aTestBitmap)
@@ -28,17 +33,18 @@ GraphicTestEntry::GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDial
     m_xTestButton->set_label(aTestStatus);
     m_xTestButton->set_tooltip_text(aTestName);
     m_xTestButton->set_background(
-        aTestStatus == "PASSED"
+        aTestStatus == SvlResId(GRTSTR_PASSED)
             ? COL_LIGHTGREEN
-            : aTestStatus == "QUIRKY" ? COL_YELLOW
-                                      : aTestStatus == "FAILED" ? COL_LIGHTRED : COL_LIGHTGRAY);
+            : aTestStatus == SvlResId(GRTSTR_QUIRKY)
+                  ? COL_YELLOW
+                  : aTestStatus == SvlResId(GRTSTR_FAILED) ? COL_LIGHTRED : COL_LIGHTGRAY);
     m_xTestButton->connect_clicked(LINK(this, GraphicTestEntry, HandleResultViewRequest));
     m_xContainer->show();
 }
 
 IMPL_LINK(GraphicTestEntry, HandleResultViewRequest, weld::Button&, rButton, void)
 {
-    if (rButton.get_label() == "SKIPPED")
+    if (rButton.get_label() == SvlResId(GRTSTR_SKIPPED))
     {
         return;
     }
@@ -64,14 +70,14 @@ short GraphicsTestsDialog::run()
 {
     GraphicsRenderTests aTestObject;
     aTestObject.run(true);
-    OUString aResultLog = aTestObject.getResultString()
-                          + "\n(Click on any test to view its resultant bitmap image)";
+    OUString aResultLog
+        = aTestObject.getResultString(true) + "\n" + CuiResId(RID_CUISTR_CLICK_RESULT);
     m_xResultLog->set_text(aResultLog);
     sal_Int32 nTestNumber = 0;
-    for (const VclTestResult& test : aTestObject.getTestResults())
+    for (VclTestResult& test : aTestObject.getTestResults())
     {
         auto xGpTest = std::make_unique<GraphicTestEntry>(m_xContainerBox.get(), m_xDialog.get(),
-                                                          test.getTestName(), test.getStatus(),
+                                                          test.getTestName(), test.getStatus(true),
                                                           test.getBitmap());
         m_xContainerBox->reorder_child(xGpTest->get_widget(), nTestNumber++);
         m_xGraphicTestEntries.push_back(std::move(xGpTest));
@@ -92,13 +98,11 @@ IMPL_LINK_NOARG(GraphicsTestsDialog, HandleDownloadRequest, weld::Button&, void)
     {
         std::unique_ptr<weld::MessageDialog> xBox(
             Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Warning,
-                                             VclButtonsType::Ok, "Creation of Zip file failed!"));
+                                             VclButtonsType::Ok, CuiResId(RID_CUISTR_ZIPFAIL)));
         xBox->run();
         return;
     }
-    FileExportedDialog aDialog(
-        m_xDialog.get(),
-        "The results have been successfully saved in the file 'GraphicTestResults.zip' !");
+    FileExportedDialog aDialog(m_xDialog.get(), CuiResId(RID_CUISTR_SAVED));
     aDialog.run();
 }
 
