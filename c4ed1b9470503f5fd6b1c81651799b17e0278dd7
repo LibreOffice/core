@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "629a7101_08f5daaf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-06T20:02:44Z",
+      "side": 1,
+      "message": "Robert/Alex: put you in cc to also have your opinion functionnally speaking.\n\nBy testing Mysql/MariaDB bugs, I thought it was a bit tedious to close folders about system schemas.\nAlso I don\u0027t think manipulating these from LO is a good idea since you may break something.",
+      "revId": "c4ed1b9470503f5fd6b1c81651799b17e0278dd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
