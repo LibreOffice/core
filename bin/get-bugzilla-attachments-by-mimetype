@@ -547,11 +547,12 @@ class manage_threads(threading.Thread):
                 break
 
 def generate_multi_threading():
-    for (prefix, uri) in rss_bugzillas:
 
-        # Initialize threads
-        for i in range(max_threads):
-            manage_threads().start()
+    # Initialize threads
+    for i in range(max_threads):
+        manage_threads().start()
+
+    for (prefix, uri) in rss_bugzillas:
 
         # Create a job for every mimetype for a bugzilla
         for (mimetype,extension) in mimetypes.items():
@@ -565,8 +566,9 @@ def generate_multi_threading():
             print("successfully placed a job in the queue searching for " + mimetype + " in bugtracker " + prefix)
 
         # Continue when all mimetypes are done for a bugzilla
-        jobs.join()
-        print("DONE with bugtracker " + prefix)
+        print("STARTED all bugtracker " + prefix)
+
+    jobs.join()
 
 max_threads = 20 # Number of threads to create, (1 = without multi-threading)
 jobs = queue.Queue()
