@@ -83,10 +83,11 @@ namespace sdr::properties
             rObj.SetTextDirty();
         }
 
-        void MeasureProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
+        void MeasureProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
+                bool bBroadcast)
         {
             // call parent (always first thing to do, may create the SfxItemSet)
-            TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+            TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast);
 
             // local changes
             // get access to dimension line object

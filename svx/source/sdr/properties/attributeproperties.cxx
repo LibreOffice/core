@@ -268,8 +268,7 @@ namespace sdr::properties
                     // problem with constructors and virtual functions in C++),
                     // thus DontRemoveHardAttr is not needed.
                     const_cast< AttributeProperties* >(this)->SetStyleSheet(
-                        mpStyleSheet,
-                        true);
+                        mpStyleSheet, true, true);
                 }
             }
 
@@ -360,7 +359,8 @@ namespace sdr::properties
             }
         }
 
-        void AttributeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
+        void AttributeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
+                bool /*bBroadcast*/)
         {
             // guarantee SfxItemSet existence
             GetObjectItemSet();
@@ -535,7 +535,7 @@ namespace sdr::properties
             if(pDefaultStyleSheet != GetStyleSheet())
             {
                 // do not delete hard attributes when setting dsefault Style
-                SetStyleSheet(pDefaultStyleSheet, true);
+                SetStyleSheet(pDefaultStyleSheet, true, true);
             }
         }
 

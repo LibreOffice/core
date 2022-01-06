@@ -67,7 +67,8 @@ namespace sdr::properties
             assert(!"EmptyProperties::SetObjectItemSet() should never be called");
         }
 
-        void EmptyProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/)
+        void EmptyProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/,
+                bool /*bBroadcast*/)
         {
             assert(!"EmptyProperties::SetStyleSheet() should never be called");
         }

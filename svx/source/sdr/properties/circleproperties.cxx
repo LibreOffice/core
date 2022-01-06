@@ -77,10 +77,11 @@ namespace sdr::properties
             rObj.ImpSetAttrToCircInfo();
         }
 
-        void CircleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
+        void CircleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
+                bool bBroadcast)
         {
             // call parent (always first thing to do, may create the SfxItemSet)
-            RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+            RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast);
 
             // local changes
             SdrCircObj& rObj = static_cast<SdrCircObj&>(GetSdrObject());

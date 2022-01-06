@@ -50,7 +50,8 @@ namespace sdr::properties
             virtual SfxStyleSheet* GetStyleSheet() const override;
 
             // set the installed StyleSheet
-            virtual void SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr) override;
+            virtual void SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr,
+                bool bBroadcast) override;
 
             // clear single item
             virtual void ClearObjectItem(const sal_uInt16 nWhich = 0) override;
