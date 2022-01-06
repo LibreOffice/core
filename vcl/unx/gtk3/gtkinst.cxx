@@ -14,6 +14,7 @@
 #include <string.h>
 #include <string_view>
 
+#include <dndhelper.hxx>
 #include <osl/process.h>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
@@ -1572,11 +1573,6 @@ void VclGtkClipboard::removeClipboardListener( const Reference< datatransfer::cl
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end());
 }
 
-// We run unit tests in parallel, which is a problem when touching a shared resource
-// the system clipboard, so rather use the dummy GenericClipboard.
-// Note, cannot make this a global variable, because it might be initialised BEFORE the putenv() call in cppunittester.
-static bool IsRunningUnitTest() { return getenv("LO_TESTNAME") != nullptr; }
-
 Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& arguments)
 {
     if ( IsRunningUnitTest() )
@@ -1745,12 +1741,9 @@ void GtkInstDropTarget::setDefaultActions(sal_Int8 nDefaultActions)
     m_nDefaultActions = nDefaultActions;
 }
 
-Reference< XInterface > GtkInstance::CreateDropTarget()
+Reference<XInterface> GtkInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    if ( IsRunningUnitTest() )
-        return SalInstance::CreateDropTarget();
-
-    return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new GtkInstDropTarget));
+    return vcl::X11DnDHelper(new GtkInstDropTarget(), pSysEnv);
 }
 
 GtkInstDragSource::~GtkInstDragSource()
@@ -1817,12 +1810,9 @@ css::uno::Sequence<OUString> SAL_CALL GtkInstDragSource::getSupportedServiceName
     return aRet;
 }
 
-Reference< XInterface > GtkInstance::CreateDragSource()
+Reference<XInterface> GtkInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    if ( IsRunningUnitTest() )
-        return SalInstance::CreateDragSource();
-
-    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new GtkInstDragSource()) );
+    return vcl::X11DnDHelper(new GtkInstDragSource(), pSysEnv);
 }
 
 namespace {
