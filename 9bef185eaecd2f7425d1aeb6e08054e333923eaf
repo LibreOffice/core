@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce8a6d72_74dd2624",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-06T07:29:55Z",
+      "side": 1,
+      "message": "Looks good to me. Nice to have: you could add a test for this, see filter/qa/unit/textfilterdetect.cxx, which already has similar tests. Thanks!",
+      "revId": "9bef185eaecd2f7425d1aeb6e08054e333923eaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
