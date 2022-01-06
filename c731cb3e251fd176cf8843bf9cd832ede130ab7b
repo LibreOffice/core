@@ -16,6 +16,23 @@
       "message": "are you able to check if this solves, or changes, the reported problem in tdf#146423",
       "revId": "c731cb3e251fd176cf8843bf9cd832ede130ab7b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61e926d1_263f4621",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-01-06T15:12:15Z",
+      "side": 1,
+      "message": "Checking, but I get \"error: unknown type name \u0027ImplSVEvent\u0027\" when building.",
+      "revId": "c731cb3e251fd176cf8843bf9cd832ede130ab7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
