@@ -34,6 +34,24 @@
       "parentUuid": "9e077810_a4de0c27",
       "revId": "a8ea92457236759749986bf58f5fc233cf507178",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e15774e_d7cf7c8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-06T12:09:13Z",
+      "side": 1,
+      "message": "In case I can be of service... just ping me.",
+      "parentUuid": "43f9300d_15cbe7c4",
+      "revId": "a8ea92457236759749986bf58f5fc233cf507178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
