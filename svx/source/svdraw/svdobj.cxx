@@ -2232,6 +2232,9 @@ SfxStyleSheet* SdrObject::GetStyleSheet() const
 
 void SdrObject::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
 {
+    if( pNewStyleSheet == GetStyleSheet())
+        return;
+
     tools::Rectangle aBoundRect0;
 
     if(m_pUserCall)
