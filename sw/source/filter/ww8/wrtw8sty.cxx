@@ -1639,7 +1639,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         */
     sal_uInt8 nBreakCode = 2;            // default start new page
     bool bOutPgDscSet = true, bLeftRightPgChain = false, bOutputStyleItemSet = false;
-    bool bEnsureHeaderFooterWritten = rSepInfo.pSectionFormat && rSepInfo.bIsFirstParagraph;
     const SwFrameFormat* pPdFormat = &pPd->GetMaster();
     bool bUsePrevSectionNextStyle = false;
     if ( rSepInfo.pSectionFormat )
@@ -1657,9 +1656,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             }
         }
 
-        if ( reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1)) == rSepInfo.pSectionFormat )
-            bEnsureHeaderFooterWritten |= !rSepInfo.pPDNd && GetExportFormat() != ExportFormat::RTF;
-        else
+        if (reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1)) != rSepInfo.pSectionFormat)
         {
             if ( nBreakCode == 0 )
                 bOutPgDscSet = false;
@@ -1893,7 +1890,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     }
 
     // Ensure that headers are written if section is first paragraph
-    if ( nBreakCode != 0 || bEnsureHeaderFooterWritten )
+    if (nBreakCode != 0 || (rSepInfo.pSectionFormat && rSepInfo.bIsFirstParagraph))
     {
         if ( titlePage )
         {

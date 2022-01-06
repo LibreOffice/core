@@ -1280,7 +1280,16 @@ DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
     {
         // this test must not be zero
-        assertXPath(pXmlDoc, "//w:headerReference", 2);
+        assertXPath(pXmlDoc, "//w:headerReference", 1);
+    }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf146491, "tdf146491.odt")
+{
+    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // This was 12 - a page style was unnecessarily created for every section.
+        assertXPath(pXmlDoc, "//w:footerReference", 1);
     }
 }
 
