@@ -16,6 +16,23 @@
       "message": "Now working on forward-porting this (and the related earlier change) to the master branch.",
       "revId": "cde6577dcb9c94aca7605790d34c83a5ff62edad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6d54e6b_db21ce88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-01-06T09:52:00Z",
+      "side": 1,
+      "message": "But sadly it seems that some earlier LOKClipboard work has not been forward-ported to master yet. Oh well, I will do my thing and let somebody else take care of that.",
+      "revId": "cde6577dcb9c94aca7605790d34c83a5ff62edad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
