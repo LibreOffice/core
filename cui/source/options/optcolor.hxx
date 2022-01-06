@@ -23,9 +23,13 @@
 namespace svtools {class EditableColorConfig;class EditableExtendedColorConfig;}
 class ColorConfigCtrl_Impl;
 class AbstractSvxNameDialog;
+struct ImplSVEvent;
+
 class SvxColorOptionsTabPage : public SfxTabPage
 {
     bool bFillItemSetCalled;
+
+    ImplSVEvent* m_nSizeAllocEventId;
 
     std::unique_ptr<weld::ComboBox> m_xColorSchemeLB;
     std::unique_ptr<weld::Button> m_xSaveSchemePB;
@@ -45,6 +49,7 @@ class SvxColorOptionsTabPage : public SfxTabPage
     DECL_LINK(SaveDeleteHdl_Impl, weld::Button&, void);
     DECL_LINK(CheckNameHdl_Impl, AbstractSvxNameDialog&, bool);
     DECL_LINK(AdjustHeaderBar, const Size&, void);
+    DECL_LINK(PostAdjustHeaderBar, void *, void);
     void UpdateColorConfig();
 
 public:

@@ -689,6 +689,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, weld::Widget&, rCtrl, void)
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage(pPage, pController, "cui/ui/optappearancepage.ui", "OptAppearancePage", &rCoreSet)
     , bFillItemSetCalled(false)
+    , m_nSizeAllocEventId(nullptr)
     , m_xColorSchemeLB(m_xBuilder->weld_combo_box("colorschemelb"))
     , m_xSaveSchemePB(m_xBuilder->weld_button("save"))
     , m_xDeleteSchemePB(m_xBuilder->weld_button("delete"))
@@ -734,6 +735,8 @@ SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
         pExtColorConfig.reset();
     }
     m_xColorConfigCT.reset();
+    if (m_nSizeAllocEventId)
+        Application::RemoveUserEvent(m_nSizeAllocEventId);
 }
 
 std::unique_ptr<SfxTabPage> SvxColorOptionsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
@@ -865,6 +868,15 @@ void SvxColorOptionsTabPage::FillUserData()
 
 IMPL_LINK_NOARG(SvxColorOptionsTabPage, AdjustHeaderBar, const Size&, void)
 {
+    if (m_nSizeAllocEventId)
+        return;
+    m_nSizeAllocEventId = Application::PostUserEvent(LINK(this, SvxColorOptionsTabPage, PostAdjustHeaderBar));
+}
+
+IMPL_LINK_NOARG(SvxColorOptionsTabPage, PostAdjustHeaderBar, void*, void)
+{
+    m_nSizeAllocEventId = nullptr;
+
     // horizontal positions
     int nX0 = 0, nX1, nX2, y, width, height;
     if (!m_rWidget1.get_extents_relative_to(*m_xTable, nX1, y, width, height))
