@@ -36,12 +36,12 @@ namespace sdr::properties
         }
 
         PageProperties::PageProperties(SdrObject& rObj)
-        :   EmptyProperties(rObj)
+        :   BaseProperties(rObj)
         {
         }
 
         PageProperties::PageProperties(const PageProperties& /*rProps*/, SdrObject& rObj)
-        :   EmptyProperties(rObj)
+        :   BaseProperties(rObj)
         {
         }
 
@@ -93,6 +93,37 @@ namespace sdr::properties
         void PageProperties::ClearObjectItem(const sal_uInt16 /*nWhich*/)
         {
             // simply ignore item clearing on page objects
+        }
+
+        bool PageProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
+        {
+            assert(!"PageProperties::AllowItemChange() should never be called");
+            return true;
+        }
+
+        void PageProperties::ItemSetChanged(const SfxItemSet* /*pSet*/)
+        {
+            assert(!"PageProperties::ItemSetChanged() should never be called");
+        }
+
+        void PageProperties::SetObjectItem(const SfxPoolItem& /*rItem*/)
+        {
+            assert(!"PageProperties::SetObjectItem() should never be called");
+        }
+
+        void PageProperties::SetObjectItemDirect(const SfxPoolItem& /*rItem*/)
+        {
+            assert(!"PageProperties::SetObjectItemDirect() should never be called");
+        }
+
+        void PageProperties::ClearObjectItemDirect(const sal_uInt16 /*nWhich*/)
+        {
+            assert(!"PageProperties::ClearObjectItemDirect() should never be called");
+        }
+
+        void PageProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/)
+        {
+            assert(!"PageProperties::SetObjectItemSet() should never be called");
         }
 } // end of namespace
 
