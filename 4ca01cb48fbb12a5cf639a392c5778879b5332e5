@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07c1d37b_0f6d1674",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-06T14:39:54Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "4ca01cb48fbb12a5cf639a392c5778879b5332e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c258fc6_6daa95a7",
+        "filename": "basic/qa/basic_coverage/test_isnull_method.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-06T14:39:54Z",
+      "side": 1,
+      "message": "Here and in the next two lines, the leading whitespace is tabs, but in the rest lines, they are usual spaces - a consistency nitpick ;)",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 1
+      },
+      "revId": "4ca01cb48fbb12a5cf639a392c5778879b5332e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdb27135_06630379",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2491,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-06T14:39:54Z",
+      "side": 1,
+      "message": "Please avoid this rename (bNull-\u003ebIsNull), because that way, your patch will be as clean as possible, with only the actually changed lines appearing in the diff.",
+      "range": {
+        "startLine": 2491,
+        "startChar": 14,
+        "endLine": 2491,
+        "endChar": 16
+      },
+      "revId": "4ca01cb48fbb12a5cf639a392c5778879b5332e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26eca26e_83952671",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2494,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-06T14:39:54Z",
+      "side": 1,
+      "message": "These two lines are *only* relevant in case \u0027!bIsNull \u0026\u0026 pArg-\u003eGetType() \u003d\u003d SbxOBJECT\u0027, so better moved inside the if() below.\n\nAnd it would be even better to move them inside the \u0027if( !pObj )\u0027, so that only then additional CPU cycles are spent, so that there will be three (ah, even four) nested ifs.",
+      "revId": "4ca01cb48fbb12a5cf639a392c5778879b5332e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
