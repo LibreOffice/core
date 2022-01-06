@@ -419,13 +419,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf59274)
     // This was 3674: too wide last cell in first row
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[4]/w:tcPr/w:tcW", "w", "1695");
 }
-//FIXME:
-//DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
-//{
-//    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
-//    // The text in the groupshape was missing due to the w:sdt and w:sdtContent wrapper around it.
-//    CPPUNIT_ASSERT_EQUAL(OUString("sdt and sdtContent inside groupshape"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW)->getString());
-//}
+
+DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
+{
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
+    // The text in the groupshape was missing due to the w:sdt and w:sdtContent wrapper around it.
+    CPPUNIT_ASSERT_EQUAL(OUString("sdt and sdtContent inside groupshape"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW)->getString());
+}
 
 DECLARE_OOXMLEXPORT_TEST(testDmlCharheightDefault, "dml-charheight-default.docx")
 {
