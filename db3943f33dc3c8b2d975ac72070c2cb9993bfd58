@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6952d891_4fd705b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-06T18:08:33Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1 was rebased\n\nto check against \u003chttps://git.libreoffice.org/core/+/72dfa7ec4c3cae074c9769cc99fe1b7eb029de43%5E!\u003e \"upgrade freetype to latest release\"",
+      "revId": "db3943f33dc3c8b2d975ac72070c2cb9993bfd58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
