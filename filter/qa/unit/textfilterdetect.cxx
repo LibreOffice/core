@@ -103,6 +103,15 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextDocument"));
     getComponent()->dispose();
 
+    // ... and ODS
+    aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "empty.ods";
+    getComponent() = loadFromDesktop(aURL);
+    xServiceInfo.set(getComponent(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo.is());
+    // Make sure it opens in Calc.
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"));
+    getComponent()->dispose();
+
     // ... and ODP
     aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "empty.odp";
     getComponent() = loadFromDesktop(aURL);
