@@ -26,7 +26,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include "globals.hxx"
 #include <oleidl.h>
 
 #include <systools/win32/comtools.hxx>

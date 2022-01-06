@@ -39,6 +39,7 @@
 #include <salobj.hxx>
 #include <salgdi.hxx>
 #include <salframe.hxx>
+#include <salinst.hxx>
 
 #include <dndlistenercontainer.hxx>
 #include <dndeventdispatcher.hxx>
@@ -724,70 +725,20 @@ Reference< css::datatransfer::dnd::XDropTarget > Window::GetDropTarget()
 
 Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()
 {
-
 #if HAVE_FEATURE_DESKTOP
-
-    if( mpWindowImpl->mpFrameData )
-    {
-        if( ! mpWindowImpl->mpFrameData->mxDragSource.is() )
-        {
-            try
-            {
-                Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-                const SystemEnvData * pEnvData = GetSystemData();
-
-                if( pEnvData )
-                {
-                    Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
-                    auto pDragSourceAL = aDragSourceAL.getArray();
-                    auto pDropTargetAL = aDropTargetAL.getArray();
-                    OUString aDragSourceSN, aDropTargetSN;
-#if defined(_WIN32)
-                    aDragSourceSN = "com.sun.star.datatransfer.dnd.OleDragSource";
-                    aDropTargetSN = "com.sun.star.datatransfer.dnd.OleDropTarget";
-                    pDragSourceAL[ 1 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->hWnd) );
-                    pDropTargetAL[ 0 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->hWnd) );
-#elif defined MACOSX
-            /* FIXME: macOS specific dnd interface does not exist! *
-             * Using Windows based dnd as a temporary solution        */
-                    aDragSourceSN = "com.sun.star.datatransfer.dnd.OleDragSource";
-                    aDropTargetSN = "com.sun.star.datatransfer.dnd.OleDropTarget";
-                    pDragSourceAL[ 1 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->mpNSView) );
-                    pDropTargetAL[ 0 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->mpNSView) );
-#elif USING_X11
-                    aDragSourceSN = "com.sun.star.datatransfer.dnd.X11DragSource";
-                    aDropTargetSN = "com.sun.star.datatransfer.dnd.X11DropTarget";
-
-                    pDragSourceAL[ 0 ] <<= Application::GetDisplayConnection();
-                    pDragSourceAL[ 1 ] <<= pEnvData->aShellWindow;
-                    pDropTargetAL[ 0 ] <<= Application::GetDisplayConnection();
-                    pDropTargetAL[ 1 ] <<= pEnvData->aShellWindow;
-#endif
-                    if( !aDragSourceSN.isEmpty() )
-                        mpWindowImpl->mpFrameData->mxDragSource.set(
-                            xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aDragSourceSN, aDragSourceAL, xContext ),
-                            UNO_QUERY );
-
-                    if( !aDropTargetSN.isEmpty() )
-                        mpWindowImpl->mpFrameData->mxDropTarget.set(
-                           xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aDropTargetSN, aDropTargetAL, xContext ),
-                           UNO_QUERY );
-                }
-            }
-
-            // createInstance can throw any exception
-            catch (const Exception&)
-            {
-                // release all instances
-                mpWindowImpl->mpFrameData->mxDropTarget.clear();
-                mpWindowImpl->mpFrameData->mxDragSource.clear();
-            }
-        }
-
+    const SystemEnvData* pEnvData = GetSystemData();
+    if (!mpWindowImpl->mpFrameData || !pEnvData)
+        return Reference<css::datatransfer::dnd::XDragSource>();
+    if (mpWindowImpl->mpFrameData->mxDragSource.is())
         return mpWindowImpl->mpFrameData->mxDragSource;
-    }
-#endif
+
+    SalInstance* pInst = ImplGetSVData()->mpDefInst;
+    mpWindowImpl->mpFrameData->mxDragSource.set(pInst->CreateDragSource(pEnvData), UNO_QUERY);
+    mpWindowImpl->mpFrameData->mxDropTarget.set(pInst->CreateDropTarget(pEnvData), UNO_QUERY);
+    return mpWindowImpl->mpFrameData->mxDragSource;
+#else
     return Reference< css::datatransfer::dnd::XDragSource > ();
+#endif
 }
 
 Reference< css::datatransfer::dnd::XDragGestureRecognizer > Window::GetDragGestureRecognizer()

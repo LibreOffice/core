@@ -14612,6 +14612,7 @@ vcl/inc/unx/x11_cursors/vshear_curs.h
 vcl/inc/unx/x11_cursors/vshear_mask.h
 vcl/inc/vclstatuslistener.hxx
 vcl/inc/wall2.hxx
+vcl/inc/win/dnd_source.hxx
 vcl/inc/win/DWriteTextRenderer.hxx
 vcl/inc/win/salbmp.h
 vcl/inc/win/saldata.hxx
@@ -15194,7 +15195,6 @@ vcl/win/dtrans/MtaOleClipb.cxx
 vcl/win/dtrans/MtaOleClipb.hxx
 vcl/win/dtrans/sourcecontext.cxx
 vcl/win/dtrans/source.cxx
-vcl/win/dtrans/source.hxx
 vcl/win/dtrans/target.cxx
 vcl/win/dtrans/TxtCnvtHlp.cxx
 vcl/win/dtrans/TxtCnvtHlp.hxx

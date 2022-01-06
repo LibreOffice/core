@@ -29,7 +29,6 @@
 #include <osl/mutex.hxx>
 
 #include <oleidl.h>
-#include "globals.hxx"
 
 namespace com::sun::star::uno
 {

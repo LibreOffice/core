@@ -28,7 +28,7 @@
 #include <process.h>
 #include <memory>
 
-#include "source.hxx"
+#include <win/dnd_source.hxx>
 #include "globals.hxx"
 #include "sourcecontext.hxx"
 #include "DtObjFactory.hxx"

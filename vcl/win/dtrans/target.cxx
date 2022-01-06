@@ -23,7 +23,7 @@
 #include <o3tl/any.hxx>
 
 #include <stdio.h>
-#include "target.hxx"
+#include <win/dnd_target.hxx>
 #include "idroptarget.hxx"
 #include "globals.hxx"
 #include "targetdropcontext.hxx"
