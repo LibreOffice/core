@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc722315_e990934e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-01-06T17:37:49Z",
+      "side": 1,
+      "message": "Can you please explain your ideas a little bit? \u003ctext:p\u003e, \u003ctext:list\u003e and - coming in ODF 1.4 - \u003ctable:table\u003e are child elements of nearly all shape kinds, including \u003cdraw:polygon\u003e and \u003cdraw:path\u003e.",
+      "revId": "fb9babe592ac83846032273063b50d57f6b01539",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
