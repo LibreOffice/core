@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f528ef0c_24507f87",
+        "filename": "vcl/source/filter/idxf/dxf2mtf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-06T11:06:06Z",
+      "side": 0,
+      "message": "You should use M_PI here instead of 3.14159265359.",
+      "revId": "d951a054445ad3741d678f422a5b605feae06a6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d08296b_bb66b056",
+        "filename": "vcl/source/filter/idxf/dxf2mtf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-06T11:06:06Z",
+      "side": 0,
+      "message": "The same as above.",
+      "revId": "d951a054445ad3741d678f422a5b605feae06a6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
