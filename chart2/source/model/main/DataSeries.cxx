@@ -32,6 +32,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/ref.hxx>
+#include <comphelper/propshlp.hxx>
 
 #include <algorithm>
 
@@ -62,29 +63,29 @@ struct StaticDataSeriesDefaults : public rtl::StaticWithInit< ::chart::tProperty
     }
 };
 
-struct StaticDataSeriesInfoHelper : public rtl::StaticWithInit< ::cppu::OPropertyArrayHelper, StaticDataSeriesInfoHelper, StaticDataSeriesInfoHelper, uno::Sequence< Property > >
+::comphelper::OPropertyArrayHelper& StaticDataSeriesInfoHelper()
 {
-    uno::Sequence< Property > operator()()
-    {
+    static ::comphelper::OPropertyArrayHelper aPropHelper(
+        []()
+        {
         std::vector< css::beans::Property > aProperties;
         ::chart::DataSeriesProperties::AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
+            return aProperties;
+        }());
+    return aPropHelper;
+}
 
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticDataSeriesInfo : public rtl::StaticWithInit< uno::Reference< beans::XPropertySetInfo >, StaticDataSeriesInfo >
+uno::Reference< beans::XPropertySetInfo >& StaticDataSeriesInfo()
 {
-    uno::Reference< beans::XPropertySetInfo > operator()()
-    {
-        return ::cppu::OPropertySetHelper::createPropertySetInfo(StaticDataSeriesInfoHelper::get() );
-    }
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticDataSeriesInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 void lcl_SetParent(
     const uno::Reference< uno::XInterface > & xChildInterface,
@@ -243,13 +244,13 @@ void DataSeries::GetDefaultValue( sal_Int32 nHandle, uno::Any& rDest ) const
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL DataSeries::getInfoHelper()
 {
-    return StaticDataSeriesInfoHelper::get();
+    return StaticDataSeriesInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL DataSeries::getPropertySetInfo()
 {
-    return StaticDataSeriesInfo::get();
+    return StaticDataSeriesInfo();
 }
 
 void SAL_CALL DataSeries::getFastPropertyValue
