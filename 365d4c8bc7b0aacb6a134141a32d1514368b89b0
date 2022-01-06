@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cdaddd9_9a421a86",
+        "filename": "vcl/unx/generic/dtrans/X11_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-06T15:06:24Z",
+      "side": 1,
+      "message": "IIUC the CnP you mention is these ImplCreate*Target code?\n\nThey seem to follow the pattern:\n\n    Reference\u003cXInitialization\u003e p \u003d AClass();\n    if (p \u0026\u0026 pSysEnv)\n        p-\u003einitialize(APluginSpecificSequence\u003cAny\u003e);\n    return p;\n\nso maybe just create two virtual functions returning AClass, and have a third virtual function returning APluginSpecificSequence\u003cAny\u003e?",
+      "revId": "365d4c8bc7b0aacb6a134141a32d1514368b89b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
