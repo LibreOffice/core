@@ -140,6 +140,11 @@
 
 #define KEY_VERSION_CHECK                            NC_("KEY_VERSION_CHECK", "Warning: Not all of the imported EPS graphics could be saved at level1\nas some are at a higher level!")
 
+#define STR_GBU                                     NC_("STR_GBU", "Graphics Backend used: %1")
+#define STR_PASSED                                  NC_("STR_PASSED", "Passed Tests: %1")
+#define STR_QUIRKY                                  NC_("STR_QUIRKY", "Quirky Tests: %1")
+#define STR_FAILED                                  NC_("STR_FAILED", "Failed Tests: %1")
+#define STR_SKIPPED                                 NC_("STR_SKIPPED", "Skipped Tests: %1")
 #endif // INCLUDED_VCL_INC_STRINGS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
