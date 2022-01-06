@@ -21,6 +21,12 @@ Sub verify_testIsNull()
     TestUtil.Assert(IsNull(Null),   "IsNull(Null)")
     TestUtil.Assert(Not IsNull(""), "Not IsNull("""")")
 
+    ' tdf#146112 In VBA IsNull returns False for empty objects
+    ' The name of the object type is "Nothing" in this case
+    Dim aEmptyObj As object
+    TestUtil.Assert(Not IsNull(aEmptyObj), "Not IsNull(aEmptyObj)")
+    TestUtil.AssertEqual(TypeName(aEmptyObj), "Nothing", "TypeName(aEmptyObj)")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testIsNull", Err, Error$, Erl)
