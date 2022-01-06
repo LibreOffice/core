@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bfc8428_926f6881",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-06T11:54:49Z",
+      "side": 1,
+      "message": "Nice work. Last bit world be to clean-up officecfg/registry/data/org/openoffice/Office/Accelerators.xcu where F4 is assigned to this dialog in all modules. But feel free to leave this for another patch, if you want to get finished.",
+      "revId": "0253925cbdb944c17482db87d64a3acb4eaa5663",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
