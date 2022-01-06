@@ -31,21 +31,6 @@ namespace sdr::properties
             // the to be used ItemSet
             mutable std::optional<SfxItemSet> mxEmptyItemSet;
 
-            // create a new object specific itemset with object specific ranges.
-            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& pPool) override;
-
-            // Do the ItemChange, may do special handling
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
-
-            // Called after ItemChange() is done for all items.
-            virtual void PostItemChange(const sal_uInt16 nWhich) override;
-
-            // test changeability for a single item
-            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) const override;
-
-            // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet*) override;
-
         public:
             // basic constructor
             explicit PageProperties(SdrObject& rObj);
