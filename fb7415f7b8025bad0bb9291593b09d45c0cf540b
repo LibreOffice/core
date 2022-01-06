@@ -34,6 +34,23 @@
       "parentUuid": "c47b0f2c_2d38afa2",
       "revId": "fb7415f7b8025bad0bb9291593b09d45c0cf540b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83398659_54b06d73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-06T08:07:42Z",
+      "side": 1,
+      "message": "It\u0027s following your last comment on this one (ok it\u0027s from 2014 ! :-))\n\"While the committed patch is good progress on this bug, I disagree that it is fully fixed. The spaces are trimmed only when one presses the \"Test\" button. If one does not press the \"test\" button, but only the \"next\" button, the class name is not space-trimmed.\"\n\nNow the bugtracker sum-up is \"pilot class for MySQL should ignore spaces at begining and and of the class name\"\nPersonally, I would have set it as NOTABUG, INVALID or WONTFIX, after all, the user should just check the values he provides.",
+      "revId": "fb7415f7b8025bad0bb9291593b09d45c0cf540b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
