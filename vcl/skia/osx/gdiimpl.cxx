@@ -255,7 +255,7 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
                                            boundingRegion.GetWidth(), boundingRegion.GetHeight());
         assert(drawRect.width() * mScaling == bitmap.width()); // no scaling should be needed
         getDrawCanvas()->drawImageRect(bitmap.asImage(), drawRect, SkSamplingOptions());
-        ++mPendingOperationsToFlush; // tdf#136369
+        ++pendingOperationsToFlush; // tdf#136369
         postDraw();
     }
     return bOK;
