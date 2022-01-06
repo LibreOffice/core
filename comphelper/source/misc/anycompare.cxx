@@ -25,10 +25,13 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
+#include "typedescriptionref.hxx"
+
 namespace comphelper
 {
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::TypeDescription;
     using ::com::sun::star::uno::TypeClass_CHAR;
     using ::com::sun::star::uno::TypeClass_BOOLEAN;
     using ::com::sun::star::uno::TypeClass_BYTE;
@@ -49,6 +52,7 @@ namespace comphelper
     using ::com::sun::star::util::Date;
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;
+    using ::comphelper::detail::TypeDescriptionRef;
 
     namespace {
 
@@ -176,41 +180,6 @@ namespace comphelper
             return false;
         return std::nullopt; // equal, so can't yet tell if anyLess() should return
     }
-
-    using com::sun::star::uno::TypeDescription;
-
-    // This is like com::sun::star::uno::TypeDescription, but it uses TYPELIB_DANGER_GET
-    // (which the code used originally, but it's easier to have a class to handle ownership).
-    class TypeDescriptionRef
-    {
-    public:
-        TypeDescriptionRef( typelib_TypeDescriptionReference* typeDef )
-        {
-            TYPELIB_DANGER_GET( &typeDescr, typeDef );
-        }
-        ~TypeDescriptionRef()
-        {
-            TYPELIB_DANGER_RELEASE( typeDescr );
-        }
-        typelib_TypeDescription* get()
-        {
-            return typeDescr;
-        }
-        typelib_TypeDescription* operator->()
-        {
-            return typeDescr;
-        }
-        bool is()
-        {
-            return typeDescr != nullptr;
-        }
-        bool equals( const TypeDescriptionRef& other ) const
-        {
-            return typeDescr && other.typeDescr && typelib_typedescription_equals( typeDescr, other.typeDescr );
-        }
-    private:
-        typelib_TypeDescription* typeDescr = nullptr;
-    };
 
     bool anyLess( void const * lhs, typelib_TypeDescriptionReference * lhsType,
                   void const * rhs, typelib_TypeDescriptionReference * rhsType )
