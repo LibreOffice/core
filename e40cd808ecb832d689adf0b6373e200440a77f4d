@@ -16,6 +16,24 @@
       "message": "I wonder if anyone knows why we have have this special condition (apparently since initial import in 2000) to not draw an \"active text object\" frame for fit-to-text frames, and not to draw it for shapes with text edit objects.",
       "revId": "e40cd808ecb832d689adf0b6373e200440a77f4d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "120a9412_c9d3d01b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-06T16:36:40Z",
+      "side": 1,
+      "message": "Not sure, but these are the ones where text gets stretched for available space AFAIK, so single chars getting taller the more you type - maybe there was some special case to not make it look bad, stretch over the frame \u0026 therefore not show it?\nI would just interactively test TextEdit with stretched text, and if it works and does not look weird - go for it.",
+      "parentUuid": "68ef2ff5_0fe1b846",
+      "revId": "e40cd808ecb832d689adf0b6373e200440a77f4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
