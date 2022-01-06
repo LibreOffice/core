@@ -215,10 +215,10 @@
                 <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="uielements">
-                    <property name="width_request">250</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="optappearancepage|uielements">User interface elements</property>
                     <property name="xalign">0</property>
                   </object>
@@ -229,11 +229,9 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="colorsetting">
-                    <property name="width_request">150</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="optappearancepage|colorsetting">Color setting</property>
                     <property name="xalign">0</property>
                   </object>
