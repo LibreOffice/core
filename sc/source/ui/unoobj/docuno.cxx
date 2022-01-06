@@ -1028,7 +1028,11 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     const Fraction newZoomX(nTilePixelWidth_ * TWIPS_PER_PIXEL, nTileTwipWidth_);
     const Fraction newZoomY(nTilePixelHeight_ * TWIPS_PER_PIXEL, nTileTwipHeight_);
 
-    if (pViewData->GetZoomX() == newZoomX && pViewData->GetZoomY() == newZoomY)
+    double fDeltaPPTX = std::abs(ScGlobal::nScreenPPTX * static_cast<double>(newZoomX) - pViewData->GetPPTX());
+    double fDeltaPPTY = std::abs(ScGlobal::nScreenPPTY * static_cast<double>(newZoomY) - pViewData->GetPPTY());
+    constexpr double fEps = 1E-08;
+
+    if (pViewData->GetZoomX() == newZoomX && pViewData->GetZoomY() == newZoomY && fDeltaPPTX < fEps && fDeltaPPTY < fEps)
         return;
 
     pViewData->SetZoom(newZoomX, newZoomY, true);
