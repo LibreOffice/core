@@ -254,7 +254,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, weld::Button&, void)
             // empty layout
             maLayoutNames.push_back(maStrNone);
             m_xVS->InsertItem( static_cast<sal_uInt16>(maLayoutNames.size()),
-                    Image(BMP_FOIL_NONE), maStrNone );
+                    Image(BMP_SLIDE_NONE), maStrNone );
         }
 
         if (!bCancel)
