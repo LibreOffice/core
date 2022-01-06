@@ -79,7 +79,8 @@ namespace sdr::properties
             virtual void SetObjectItemSet(const SfxItemSet& rSet) override;
 
             // set a new StyleSheet
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) override;
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
+                bool bBroadcast) override;
 
             // get the local StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const override;

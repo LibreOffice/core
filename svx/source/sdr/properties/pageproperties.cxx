@@ -67,7 +67,8 @@ namespace sdr::properties
             return nullptr;
         }
 
-        void PageProperties::SetStyleSheet(SfxStyleSheet* /*pStyleSheet*/, bool /*bDontRemoveHardAttr*/)
+        void PageProperties::SetStyleSheet(SfxStyleSheet* /*pStyleSheet*/, bool /*bDontRemoveHardAttr*/,
+                bool /*bBroadcast*/)
         {
             // override to legally ignore the StyleSheet here
         }

@@ -211,7 +211,8 @@ namespace sdr::properties
             return pRetval;
         }
 
-        void GroupProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
+        void GroupProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
+                bool bBroadcast)
         {
             const SdrObjList* pSub(static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList());
             OSL_ENSURE(nullptr != pSub, "Children of SdrObject expected (!)");
@@ -219,7 +220,10 @@ namespace sdr::properties
 
             for(size_t a = 0; a < nCount; ++a)
             {
-                pSub->GetObj(a)->SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+                if(bBroadcast)
+                    pSub->GetObj(a)->SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+                else
+                    pSub->GetObj(a)->NbcSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
             }
         }
 
