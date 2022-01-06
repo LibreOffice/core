@@ -118,6 +118,24 @@
       "message": "And on the other hand, commit 0777abafe01eb6c9ba6ed7412e44002c8018d972 in LibreOffice was not back/forward/side-ported to odf-tc. Should it have been?",
       "revId": "48493ec67f9719203053d633900e8555fde0b125",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a898f582_6e6daa5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-06T17:57:18Z",
+      "side": 1,
+      "message": "it is in commit a23ebf8089027c90360747a8ecc3fd718a50e738\n\nSvante forgot that there is both an old version without recent LO changes in\n\n  src/test/resources/odf1.3/tools/odf2html/export/xhtml/body.xsl\n\nand a new version that should have only 1 difference from LO (MathJax) in\n\n  src/test/resources/odf1.4/tools/odf2html/export/xhtml/body.xsl\n\nthe old version was used for ODF 1.3 and we didn\u0027t want to risk to change anything at the end of the process, also maybe there will be \"errata\" (something like a patch release of ODF).",
+      "parentUuid": "c0bebf83_99284909",
+      "revId": "48493ec67f9719203053d633900e8555fde0b125",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
