@@ -618,14 +618,11 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getSchemas()
                                      UNO_QUERY);
     std::vector<std::vector<Any>> rRows;
 
-    OUString sSql
-        = m_rConnection.getMysqlVersion() > 49999
-              ? OUString{ "SELECT SCHEMA_NAME AS TABLE_SCHEM, CATALOG_NAME AS TABLE_CATALOG "
-                          "FROM INFORMATION_SCHEMA.SCHEMATA ORDER BY SCHEMA_NAME" }
-              : OUString{ "SHOW DATABASES" };
-
     Reference<XStatement> statement = m_rConnection.createStatement();
-    Reference<XInterface> executed = statement->executeQuery(sSql);
+    Reference<XInterface> executed = statement->executeQuery(
+        u"SELECT SCHEMA_NAME AS TABLE_SCHEM, CATALOG_NAME AS TABLE_CATALOG FROM INFORMATION_SCHEMA.SCHEMATA \
+       WHERE SCHEMA_NAME NOT IN ('information_schema', 'mysql', 'performance_schema') \
+       ORDER BY SCHEMA_NAME");
     Reference<XResultSet> rs(executed, UNO_QUERY_THROW);
     Reference<XResultSetMetaDataSupplier> supp(executed, UNO_QUERY_THROW);
     Reference<XResultSetMetaData> rs_meta = supp->getMetaData();
@@ -635,20 +632,12 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getSchemas()
     while (rs->next())
     {
         std::vector<Any> aRow{ Any() };
-        bool informationSchema = false;
         for (sal_uInt32 i = 1; i <= columns; i++)
         {
             OUString columnStringValue = xRow->getString(i);
-            if (i == 1)
-            { // TABLE_SCHEM
-                informationSchema = columnStringValue.equalsIgnoreAsciiCase("information_schema");
-            }
             aRow.push_back(makeAny(columnStringValue));
         }
-        if (!informationSchema)
-        {
-            rRows.push_back(aRow);
-        }
+        rRows.push_back(aRow);
     }
 
     lcl_setRows_throw(xResultSet, 1, rRows);
@@ -816,7 +805,8 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTables(const Any& /*catalog
         "SELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA AS TABLE_SCHEM, TABLE_NAME,"
         "IF(STRCMP(TABLE_TYPE,'BASE TABLE'), TABLE_TYPE, 'TABLE') AS TABLE_TYPE, TABLE_COMMENT AS "
         "REMARKS "
-        "FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA  LIKE '?' AND TABLE_NAME LIKE '?' "
+        "FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA NOT IN ('information_schema', 'mysql', "
+        "'performance_schema') AND TABLE_SCHEMA LIKE '?' AND TABLE_NAME LIKE '?' "
     };
 
     if (types.getLength() == 1)
