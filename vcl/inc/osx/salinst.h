@@ -128,8 +128,8 @@ public:
     // dtrans implementation
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard(
             const css::uno::Sequence< css::uno::Any >& i_rArguments ) override;
-    virtual css::uno::Reference< css::uno::XInterface > CreateDragSource() override;
-    virtual css::uno::Reference< css::uno::XInterface > CreateDropTarget() override;
+    virtual css::uno::Reference<css::uno::XInterface> ImplCreateDragSource(const SystemEnvData*) override;
+    virtual css::uno::Reference<css::uno::XInterface> ImplCreateDropTarget(const SystemEnvData*) override;
 
     static void handleAppDefinedEvent( NSEvent* pEvent );
 

@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include "target.hxx"
+#include <win/dnd_target.hxx>
 
 class IDropTargetImpl: public IDropTarget
 {
