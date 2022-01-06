@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "910d9548_4019fc9e",
+        "filename": "sc/uiconfig/scalc/ui/notebookbar.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 16466,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-06T21:16:39Z",
+      "side": 1,
+      "message": "Sometimes I have to reset the user profile to get the updated UI.",
+      "parentUuid": "3cb8d321_b7657287",
+      "range": {
+        "startLine": 16466,
+        "startChar": 37,
+        "endLine": 16466,
+        "endChar": 51
+      },
+      "revId": "7e875ba534fe34ce0e7846fd01b4d2898d1bfa5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f42d5195_a653389f",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-06T12:07:08Z",
       "side": 1,
       "message": "The buttons are very large drawing a lot attention to a less relevant feature. We should implement it as just an icon or icon with text. And perhaps at the very end of the section. Another option is to provide access with the Tools menu, guess this would be the easiest way.",
+      "range": {
+        "startLine": 19094,
+        "startChar": 59,
+        "endLine": 19094,
+        "endChar": 63
+      },
+      "revId": "7e875ba534fe34ce0e7846fd01b4d2898d1bfa5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cce46a9_5e2593f1",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 19094,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-06T21:16:39Z",
+      "side": 1,
+      "message": "I created a new version (see the newly attached file in the bug report). It stacks DevTools and DesignMode. This way no additional space is used. Let me know if this is OK so I can proceed with the fix for the other components (sc, simpres, sdraw).",
+      "parentUuid": "f42d5195_a653389f",
       "range": {
         "startLine": 19094,
         "startChar": 59,
