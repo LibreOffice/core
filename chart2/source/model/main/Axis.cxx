@@ -35,6 +35,7 @@
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/ref.hxx>
@@ -247,47 +248,28 @@ struct StaticAxisDefaults : public rtl::StaticAggregate< ::chart::tPropertyValue
 {
 };
 
-struct StaticAxisInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticAxisInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+            return aProperties;
+        }());
+    return aPropHelper;
+}
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticAxisInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticAxisInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticAxisInfo()
 {
-};
-
-struct StaticAxisInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticAxisInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticAxisInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticAxisInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticAxisInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 typedef uno::Reference< beans::XPropertySet > lcl_tSubGridType;
 
@@ -587,13 +569,13 @@ void Axis::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Axis::getInfoHelper()
 {
-    return *StaticAxisInfoHelper::get();
+    return StaticAxisInfoHelper();
 }
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL Axis::getPropertySetInfo()
 {
-    return *StaticAxisInfo::get();
+    return StaticAxisInfo();
 }
 
 using impl::Axis_Base;

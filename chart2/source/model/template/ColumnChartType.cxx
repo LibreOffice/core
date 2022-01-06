@@ -21,6 +21,7 @@
 #include <servicenames_charttypes.hxx>
 #include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -77,45 +78,24 @@ struct StaticColumnChartTypeDefaults : public rtl::StaticAggregate< ::chart::tPr
 {
 };
 
-struct StaticColumnChartTypeInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticColumnChartTypeInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            return aProperties ;
+        }());
+    return aPropHelper;
+}
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticColumnChartTypeInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticColumnChartTypeInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticColumnChartTypeInfo()
 {
-};
-
-struct StaticColumnChartTypeInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticColumnChartTypeInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticColumnChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticColumnChartTypeInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticColumnChartTypeInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -163,13 +143,13 @@ void ColumnChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL ColumnChartType::getInfoHelper()
 {
-    return *StaticColumnChartTypeInfoHelper::get();
+    return StaticColumnChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnChartType::getPropertySetInfo()
 {
-    return *StaticColumnChartTypeInfo::get();
+    return StaticColumnChartTypeInfo();
 }
 
 OUString SAL_CALL ColumnChartType::getImplementationName()

@@ -26,6 +26,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
@@ -44,16 +45,6 @@ enum
     PROP_AREA_TEMPLATE_DIMENSION
 };
 
-void lcl_AddPropertiesToVector(
-    std::vector< Property > & rOutProperties )
-{
-    rOutProperties.emplace_back( "Dimension",
-                  PROP_AREA_TEMPLATE_DIMENSION,
-                  cppu::UnoType<sal_Int32>::get(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
-}
-
 struct StaticAreaChartTypeTemplateDefaults_Initializer
 {
     ::chart::tPropertyValueMap* operator()()
@@ -68,45 +59,28 @@ struct StaticAreaChartTypeTemplateDefaults : public rtl::StaticAggregate< ::char
 {
 };
 
-struct StaticAreaChartTypeTemplateInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticAreaChartTypeTemplateInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            aProperties.emplace_back( "Dimension",
+                          PROP_AREA_TEMPLATE_DIMENSION,
+                          cppu::UnoType<sal_Int32>::get(),
+                          beans::PropertyAttribute::BOUND
+                          | beans::PropertyAttribute::MAYBEDEFAULT );
+            return aProperties;
+        }());
+    return aPropHelper;
+}
 
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticAreaChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticAreaChartTypeTemplateInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticAreaChartTypeTemplateInfo()
 {
-};
-
-struct StaticAreaChartTypeTemplateInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticAreaChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticAreaChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticAreaChartTypeTemplateInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticAreaChartTypeTemplateInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -142,13 +116,13 @@ void AreaChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny )
 
 ::cppu::IPropertyArrayHelper & SAL_CALL AreaChartTypeTemplate::getInfoHelper()
 {
-    return *StaticAreaChartTypeTemplateInfoHelper::get();
+    return StaticAreaChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL AreaChartTypeTemplate::getPropertySetInfo()
 {
-    return *StaticAreaChartTypeTemplateInfo::get();
+    return StaticAreaChartTypeTemplateInfo();
 }
 
 sal_Int32 AreaChartTypeTemplate::getDimension() const

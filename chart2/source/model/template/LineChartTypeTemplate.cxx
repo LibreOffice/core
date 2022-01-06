@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
@@ -96,45 +97,24 @@ struct StaticLineChartTypeTemplateDefaults : public rtl::StaticAggregate< ::char
 {
 };
 
-struct StaticLineChartTypeTemplateInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticLineChartTypeTemplateInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            return aProperties;
+        }());
+    return aPropHelper;
+}
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticLineChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticLineChartTypeTemplateInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticLineChartTypeTemplateInfo()
 {
-};
-
-struct StaticLineChartTypeTemplateInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticLineChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticLineChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticLineChartTypeTemplateInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticLineChartTypeTemplateInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -176,13 +156,13 @@ void LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny )
 
 ::cppu::IPropertyArrayHelper & SAL_CALL LineChartTypeTemplate::getInfoHelper()
 {
-    return *StaticLineChartTypeTemplateInfoHelper::get();
+    return StaticLineChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL LineChartTypeTemplate::getPropertySetInfo()
 {
-    return *StaticLineChartTypeTemplateInfo::get();
+    return StaticLineChartTypeTemplateInfo();
 }
 
 sal_Int32 LineChartTypeTemplate::getDimension() const

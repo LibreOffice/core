@@ -24,6 +24,7 @@
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vector>
@@ -59,47 +60,26 @@ struct StaticWallDefaults : public rtl::StaticAggregate< ::chart::tPropertyValue
 {
 };
 
-struct StaticWallInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticWallInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::FillProperties::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+            return aProperties;
+        }());
+    return aPropHelper;
+}
 
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticWallInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticWallInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticWallInfo()
 {
-};
-
-struct StaticWallInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticWallInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticWallInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticWallInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticWallInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -139,13 +119,13 @@ void Wall::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Wall::getInfoHelper()
 {
-    return *StaticWallInfoHelper::get();
+    return StaticWallInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL Wall::getPropertySetInfo()
 {
-    return *StaticWallInfo::get();
+    return StaticWallInfo();
 }
 
 // ____ XModifyBroadcaster ____

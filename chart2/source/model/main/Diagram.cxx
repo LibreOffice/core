@@ -37,6 +37,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <comphelper/propshlp2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -200,19 +201,15 @@ const ::chart::tPropertyValueMap& StaticDiagramDefaults()
     return aStaticDefaults;
 };
 
-::cppu::OPropertyArrayHelper& StaticDiagramInfoHelper()
+comphelper::OPropertyArrayHelper2& StaticDiagramInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper aPropHelper = []()
+    static comphelper::OPropertyArrayHelper2 aPropHelper = []()
     {
         std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::SceneProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return ::cppu::OPropertyArrayHelper( aProperties.data(), aProperties.size() );
+        return comphelper::OPropertyArrayHelper2( aProperties );
     }();
     return aPropHelper;
 };

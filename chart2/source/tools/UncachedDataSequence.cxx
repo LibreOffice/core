@@ -21,6 +21,7 @@
 #include <CommonFunctors.hxx>
 #include <ModifyListenerHelper.hxx>
 
+#include <comphelper/propshlp2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
 #include <strings.hrc>
@@ -140,7 +141,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL UncachedDataSequence::getPropertyS
     // describes all properties which have been registered in the ctor
     describeProperties( aProps );
 
-    return new ::cppu::OPropertyArrayHelper( aProps );
+    return new ::comphelper::OPropertyArrayHelper2( aProps );
 }
 
 OUString SAL_CALL UncachedDataSequence::getImplementationName()

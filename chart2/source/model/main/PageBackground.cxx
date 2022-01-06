@@ -25,6 +25,7 @@
 #include <ModifyListenerHelper.hxx>
 
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -64,47 +65,27 @@ struct StaticPageBackgroundDefaults : public rtl::StaticAggregate< ::chart::tPro
 {
 };
 
-struct StaticPageBackgroundInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticPageBackgroundInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::FillProperties::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+            return aProperties;
+        }());
+    return aPropHelper;
+}
 
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticPageBackgroundInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticPageBackgroundInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticPageBackgroundInfo()
 {
-};
-
-struct StaticPageBackgroundInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticPageBackgroundInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticPageBackgroundInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticPageBackgroundInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticPageBackgroundInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -144,13 +125,13 @@ void PageBackground::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL PageBackground::getInfoHelper()
 {
-    return *StaticPageBackgroundInfoHelper::get();
+    return StaticPageBackgroundInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL PageBackground::getPropertySetInfo()
 {
-    return *StaticPageBackgroundInfo::get();
+    return StaticPageBackgroundInfo();
 }
 
 // ____ XModifyBroadcaster ____

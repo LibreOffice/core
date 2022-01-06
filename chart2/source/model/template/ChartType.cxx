@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -196,45 +197,32 @@ void ChartType::GetDefaultValue( sal_Int32 /* nHandle */, uno::Any& rAny ) const
 namespace
 {
 
-struct StaticChartTypeInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticChartTypeInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( Sequence< beans::Property >{} );
-        return &aPropHelper;
-    }
-};
+    static comphelper::OPropertyArrayHelper2 aPropHelper( std::vector< beans::Property >{} );
+    return aPropHelper;
+}
 
-struct StaticChartTypeInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticChartTypeInfoHelper_Initializer >
-{
-};
 
-struct StaticChartTypeInfo_Initializer
+uno::Reference< beans::XPropertySetInfo >& StaticChartTypeInfo()
 {
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticChartTypeInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticChartTypeInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticChartTypeInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 }
 
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL ChartType::getInfoHelper()
 {
-    return *StaticChartTypeInfoHelper::get();
+    return StaticChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ChartType::getPropertySetInfo()
 {
-    return *StaticChartTypeInfo::get();
+    return StaticChartTypeInfo();
 }
 
 // ____ XModifyBroadcaster ____

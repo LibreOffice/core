@@ -28,6 +28,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
@@ -82,45 +83,26 @@ struct StaticBarChartTypeTemplateDefaults : public rtl::StaticAggregate< ::chart
 {
 };
 
-struct StaticBarChartTypeTemplateInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticBarChartTypeTemplateInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            return aProperties;
+        }());
+    return aPropHelper;
+}
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticBarChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticBarChartTypeTemplateInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticBarChartTypeTemplateInfo()
 {
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticBarChartTypeTemplateInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
-struct StaticBarChartTypeTemplateInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticBarChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticBarChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticBarChartTypeTemplateInfo_Initializer >
-{
-};
 
 } // anonymous namespace
 
@@ -236,13 +218,13 @@ void BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) 
 
 ::cppu::IPropertyArrayHelper & SAL_CALL BarChartTypeTemplate::getInfoHelper()
 {
-    return *StaticBarChartTypeTemplateInfoHelper::get();
+    return StaticBarChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL BarChartTypeTemplate::getPropertySetInfo()
 {
-    return *StaticBarChartTypeTemplateInfo::get();
+    return StaticBarChartTypeTemplateInfo();
 }
 
 void SAL_CALL BarChartTypeTemplate::applyStyle(

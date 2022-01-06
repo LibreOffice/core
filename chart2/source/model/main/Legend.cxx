@@ -30,6 +30,7 @@
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
+#include <comphelper/propshlp2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -137,48 +138,29 @@ struct StaticLegendDefaults : public rtl::StaticAggregate< ::chart::tPropertyVal
 {
 };
 
-struct StaticLegendInfoHelper_Initializer
+comphelper::OPropertyArrayHelper2& StaticLegendInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static comphelper::OPropertyArrayHelper2 aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::FillProperties::AddPropertiesToVector( aProperties );
+            ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+            return aProperties;
+        }());
+    return aPropHelper;
+}
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticLegendInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticLegendInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& StaticLegendInfo()
 {
-};
-
-struct StaticLegendInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticLegendInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticLegendInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticLegendInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticLegendInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -266,13 +248,13 @@ void Legend::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Legend::getInfoHelper()
 {
-    return *StaticLegendInfoHelper::get();
+    return StaticLegendInfoHelper();
 }
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
 {
-    return *StaticLegendInfo::get();
+    return StaticLegendInfo();
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
