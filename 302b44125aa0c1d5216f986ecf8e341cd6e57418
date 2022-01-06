@@ -16,6 +16,24 @@
       "message": "Debug leftover?",
       "revId": "302b44125aa0c1d5216f986ecf8e341cd6e57418",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6b2a784_ca146570",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-06T16:53:20Z",
+      "side": 1,
+      "message": "thanks for spotting! removing with https://gerrit.libreoffice.org/c/core/+/128057",
+      "parentUuid": "c1e23c2d_45a9e2c1",
+      "revId": "302b44125aa0c1d5216f986ecf8e341cd6e57418",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
