@@ -198,15 +198,15 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf130076Flip)
 
     for (sal_uInt8 nPageIndex = 0; nPageIndex < 2; ++nPageIndex)
     {
-        sal_Int32 angle1, angle2;
+        sal_Int32 angle1 = {}, angle2 = {};
         const sal_Int32 goodAngle1 = 26000;
         const sal_Int32 goodAngle2 = 26000;
         uno::Reference<drawing::XShape> xShape(getShape(1, nPageIndex));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         uno::Reference<drawing::XShape> xShape2(getShape(2, nPageIndex));
         uno::Reference<beans::XPropertySet> xShapeProps2(xShape2, uno::UNO_QUERY);
-        xShapeProps->getPropertyValue("CircleStartAngle") >>= angle1;
-        xShapeProps2->getPropertyValue("CircleStartAngle") >>= angle2;
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue("CircleStartAngle") >>= angle1);
+        CPPUNIT_ASSERT(xShapeProps2->getPropertyValue("CircleStartAngle") >>= angle2);
         if (angle1 != goodAngle1)
         {
             sErrors += "page " + OUString::number(nPageIndex)
