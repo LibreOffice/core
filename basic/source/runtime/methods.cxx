@@ -2487,16 +2487,24 @@ void SbRtl_IsNull(StarBASIC *, SbxArray & rPar, bool)
     }
     else
     {
-        // #51475 because of Uno-objects return true
-        // even if the pObj value is NULL
         SbxVariableRef pArg = rPar.Get(1);
-        bool bNull = rPar.Get(1)->IsNull();
+        bool bNull = pArg->IsNull();
+
         if( !bNull && pArg->GetType() == SbxOBJECT )
         {
+            // #51475 because of Uno-objects return true
+            // even if the pObj value is NULL
+            // tdf#146112 Check compatibility because in VBA IsNull
+            // returns False for empty objects
             SbxBase* pObj = pArg->GetObject();
             if( !pObj )
             {
-                bNull = true;
+                SbiInstance* pInst = GetSbData()->pInst;
+                bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+                if ( !bCompatibility )
+                {
+                    bNull = true;
+                }
             }
         }
         rPar.Get(0)->PutBool(bNull);
