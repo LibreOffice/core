@@ -9,6 +9,8 @@
  */
 
 #include <test/outputdevice.hxx>
+#include <svl/svlresid.hxx>
+#include <svl/svl.hrc>
 #include <unotools/bootstrap.hxx>
 #include <vcl/test/GraphicsRenderTests.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -16,6 +18,7 @@
 
 #include <svdata.hxx>
 #include <salinst.hxx>
+#include <strings.hrc>
 
 #include <unordered_map>
 
@@ -26,6 +29,31 @@
      && aOutDevTest.getRenderBackendName() != "gen"                                                \
      && aOutDevTest.getRenderBackendName() != "genpsp"                                             \
      && aOutDevTest.getRenderBackendName() != "win")
+
+OUString VclTestResult::getStatus(bool bLocalize)
+{ // tdf#145919 localize for UI but not in the log file
+    if (bLocalize)
+    {
+        if (m_aTestStatus == "PASSED")
+        {
+            return SvlResId(GRTSTR_PASSED);
+        }
+        else if (m_aTestStatus == "QUIRKY")
+        {
+            return SvlResId(GRTSTR_QUIRKY);
+        }
+        else if (m_aTestStatus == "FAILED")
+        {
+            return SvlResId(GRTSTR_FAILED);
+        }
+        else
+        {
+            return SvlResId(GRTSTR_SKIPPED);
+        }
+    }
+    else
+        return m_aTestStatus;
+}
 
 namespace
 {
@@ -2336,10 +2364,10 @@ void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestSta
 
 std::vector<VclTestResult>& GraphicsRenderTests::getTestResults() { return m_aTestResult; }
 
-OUString GraphicsRenderTests::getResultString()
+OUString GraphicsRenderTests::getResultString(bool bLocalize)
 {
     std::vector<int> testResults(4);
-    for (const VclTestResult& test : m_aTestResult)
+    for (VclTestResult& test : m_aTestResult)
     {
         if (test.getStatus() == "PASSED")
         {
@@ -2358,11 +2386,25 @@ OUString GraphicsRenderTests::getResultString()
             testResults[3]++;
         }
     }
-    OUString resultString = "Graphics Backend used: " + m_aCurGraphicsBackend
-                            + "\nPassed Tests : " + OUString::number(testResults[0])
-                            + "\nQuirky Tests : " + OUString::number(testResults[1])
-                            + "\nFailed Tests : " + OUString::number(testResults[2])
-                            + "\nSkipped Tests : " + OUString::number(testResults[3]) + "\n";
+    // tdf#145919 localize for UI but not in the log file
+    OUString resultString;
+    if (bLocalize)
+    {
+        resultString
+            = VclResId(STR_GBU).replaceFirst("%1", m_aCurGraphicsBackend) + "\n"
+              + VclResId(STR_PASSED).replaceFirst("%1", OUString::number(testResults[0])) + "\n"
+              + VclResId(STR_QUIRKY).replaceFirst("%1", OUString::number(testResults[1])) + "\n"
+              + VclResId(STR_FAILED).replaceFirst("%1", OUString::number(testResults[2])) + "\n"
+              + VclResId(STR_SKIPPED).replaceFirst("%1", OUString::number(testResults[3])) + "\n";
+    }
+    else
+    {
+        resultString = "Graphics Backend used: " + m_aCurGraphicsBackend
+                       + "\nPassed Tests: " + OUString::number(testResults[0])
+                       + "\nQuirky Tests: " + OUString::number(testResults[1])
+                       + "\nFailed Tests: " + OUString::number(testResults[2])
+                       + "\nSkipped Tests: " + OUString::number(testResults[3]) + "\n";
+    }
     return resultString;
 }
 
