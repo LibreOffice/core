@@ -28,13 +28,6 @@
 
 namespace sdr::properties
 {
-        // create a new itemset
-        SfxItemSet PageProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
-        {
-            // override to legally return a valid ItemSet
-            return SfxItemSet(rPool);
-        }
-
         PageProperties::PageProperties(SdrObject& rObj)
         :   BaseProperties(rObj)
         {
@@ -60,17 +53,12 @@ namespace sdr::properties
         {
             if(!mxEmptyItemSet)
             {
-                mxEmptyItemSet.emplace(const_cast<PageProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
+                mxEmptyItemSet.emplace(GetSdrObject().GetObjectItemPool());
             }
 
             DBG_ASSERT(mxEmptyItemSet, "Could not create an SfxItemSet(!)");
 
             return *mxEmptyItemSet;
-        }
-
-        void PageProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
-        {
-            // #86481# simply ignore item setting on page objects
         }
 
         SfxStyleSheet* PageProperties::GetStyleSheet() const
@@ -84,26 +72,9 @@ namespace sdr::properties
             // override to legally ignore the StyleSheet here
         }
 
-        void PageProperties::PostItemChange(const sal_uInt16 nWhich )
-        {
-            if( (nWhich == XATTR_FILLSTYLE) && mxEmptyItemSet )
-                CleanupFillProperties(*mxEmptyItemSet);
-        }
-
         void PageProperties::ClearObjectItem(const sal_uInt16 /*nWhich*/)
         {
             // simply ignore item clearing on page objects
-        }
-
-        bool PageProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
-        {
-            assert(!"PageProperties::AllowItemChange() should never be called");
-            return true;
-        }
-
-        void PageProperties::ItemSetChanged(const SfxItemSet* /*pSet*/)
-        {
-            assert(!"PageProperties::ItemSetChanged() should never be called");
         }
 
         void PageProperties::SetObjectItem(const SfxPoolItem& /*rItem*/)

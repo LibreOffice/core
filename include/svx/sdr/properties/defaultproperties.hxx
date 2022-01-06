@@ -39,20 +39,27 @@ namespace sdr::properties
             // the to be used ItemSet
             mutable std::optional<SfxItemSet> mxItemSet;
 
-            // create a new itemset
-            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
+            // create a new object specific itemset with object specific ranges.
+            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& pPool);
 
-            // test changeability for a single item
-            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) const override;
+            // Test changeability for a single item. If an implementation wants to prevent
+            // changing an item it should override this method.
+            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) const;
 
-            // Do the ItemChange, may do special handling
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
+            // Do the internal ItemChange. If only nWhich is given, the item needs to be cleared.
+            // Also needs to handle if nWhich and pNewItem is 0, which means to clear all items.
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr);
 
-            // Called after ItemChange() is done for all items.
-            virtual void PostItemChange(const sal_uInt16 nWhich) override;
+            // Called after ItemChange() is done for all items. Allows local reactions on
+            // specific item changes
+            virtual void PostItemChange(const sal_uInt16 nWhich);
 
-            // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet*) override;
+            // Internally react on ItemSet changes. The given ItemSet contains all changed items, the new ones.
+            virtual void ItemSetChanged(const SfxItemSet*);
+
+            // Subclasses need to return true if they want the ItemSetChanged() callback to actually have a non-zero pointer.
+            // We do this because creating the temporary item set is expensive and seldom used.
+            virtual bool WantItemSetInItemSetChanged() const { return false; }
 
             // check if SfxItemSet exists
             bool HasSfxItemSet() const { return bool(mxItemSet); }

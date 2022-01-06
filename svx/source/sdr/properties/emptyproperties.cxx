@@ -26,14 +26,6 @@
 
 namespace sdr::properties
 {
-        // create a new itemset
-        SfxItemSet EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool& )
-        {
-            // Basic implementation; Basic object has NO attributes
-            assert(!"EmptyProperties::CreateObjectSpecificItemSet() should never be called");
-            abort();
-        }
-
         EmptyProperties::EmptyProperties(SdrObject& rObj)
         :   BaseProperties(rObj)
         {
@@ -73,27 +65,6 @@ namespace sdr::properties
         void EmptyProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/)
         {
             assert(!"EmptyProperties::SetObjectItemSet() should never be called");
-        }
-
-        void EmptyProperties::ItemSetChanged(const SfxItemSet* /*pSet*/)
-        {
-            assert(!"EmptyProperties::ItemSetChanged() should never be called");
-        }
-
-        bool EmptyProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
-        {
-            assert(!"EmptyProperties::AllowItemChange() should never be called");
-            return true;
-        }
-
-        void EmptyProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
-        {
-            assert(!"EmptyProperties::ItemChange() should never be called");
-        }
-
-        void EmptyProperties::PostItemChange(const sal_uInt16 /*nWhich*/)
-        {
-            assert(!"EmptyProperties::PostItemChange() should never be called");
         }
 
         void EmptyProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/)
