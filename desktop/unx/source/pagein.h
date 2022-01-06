@@ -19,8 +19,12 @@
 
 #pragma once
 
-#include <sal/config.h>
+#include <config_features.h>
 
+#if HAFE_FEATURE_PAGIN
 void pagein_execute(char const* path, char const* file);
+#else
+inline void pagein_execute(char const* path, char const* file) {}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

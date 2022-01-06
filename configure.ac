@@ -912,6 +912,7 @@ cygwin*|wsl*)
     using_x11=no
     test_openldap=no
     test_eot=no
+    enable_pagein=no
     build_skia=yes
     _os=WINNT
 
@@ -930,6 +931,7 @@ darwin*|macos*) # macOS
     using_freetype_fontconfig=no
     using_x11=no
     build_skia=yes
+    enable_pagein=no
     test_eot=no
     if test -n "$LODE_HOME" ; then
         mac_sanitize_path
@@ -1977,6 +1979,12 @@ AC_ARG_ENABLE(customtarget-components,
     AS_HELP_STRING([--enable-customtarget-components],
         [This is WIP and probably just works together with --enable-wasm-strip.]))
 
+AC_ARG_ENABLE(pagein,
+    AS_HELP_STRING([--disable-pagein],
+        [Disable preloading of libraries by oosplash. Automatically disabled for
+	 --disable-dynamic-loading. Normally pre-selected by architectures,
+	 not implemented for all.]),
+,test "${enable_pagein+set}" = set || enable_pagein=yes)
 
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
@@ -5848,6 +5856,16 @@ if test "$test_kf5" = "yes" -a "$enable_kf5" = "yes"; then
         enable_qt5=yes
     fi
 fi
+
+AC_MSG_CHECKING([whether to build the pagein binaries for oosplash])
+if test "${enable_pagein}" = yes -a -z "$DISABLE_DYNLOADING"; then
+    AC_MSG_RESULT([yes])
+    ENABLE_PAGEIN=TRUE
+    AC_DEFINE(HAVE_FEATURE_PAGEIN)
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_PAGEIN)
 
 dnl ===================================================================
 dnl check for cups support

@@ -153,7 +153,12 @@
  *
  * Can be turned off with --without-xmlhelp
  */
-
 #define HAVE_FEATURE_XMLHELP 0
+
+/*
+ * Whether oosplash calls pagein binaries to speed up library loading.
+ * Probably not useful nowadays with SSD based systems.
+ */
+#define HAVE_FEATURE_PAGEIN 0
 
 #endif

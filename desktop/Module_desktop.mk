@@ -44,11 +44,13 @@ $(eval $(call gb_Module_add_targets,desktop,\
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,desktop,\
-    Pagein_calc \
-    Pagein_common \
-    Pagein_draw \
-    Pagein_impress \
-    Pagein_writer \
+    $(if $(ENABLE_PAGEIN), \
+        Pagein_calc \
+        Pagein_common \
+        Pagein_draw \
+        Pagein_impress \
+        Pagein_writer \
+    ) \
     CustomTarget_soffice \
 ))
 
