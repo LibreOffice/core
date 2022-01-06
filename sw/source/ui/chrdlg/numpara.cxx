@@ -200,7 +200,8 @@ void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
         m_xNumberStyleLB->set_active(-1);
     }
 
-    EditNumStyleSelectHdl_Impl(*m_xNumberStyleLB);
+    if (m_xNumberStyleBX->get_sensitive())
+        EditNumStyleSelectHdl_Impl(*m_xNumberStyleLB);
 
     m_xNumberStyleLB->save_value();
 
