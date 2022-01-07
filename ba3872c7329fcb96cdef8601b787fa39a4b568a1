@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1edfac6_5748801f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003180
+      },
+      "writtenOn": "2022-01-07T09:08:13Z",
+      "side": 1,
+      "message": "Just remove related-accelerators in this request.",
+      "revId": "ba3872c7329fcb96cdef8601b787fa39a4b568a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
