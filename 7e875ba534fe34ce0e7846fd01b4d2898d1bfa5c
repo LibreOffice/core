@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28c968d0_32cfa2f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-07T13:39:39Z",
+      "side": 1,
+      "message": "Hi Heiko, I had not uploaded this new version as code in Gerrit... I just created the mock-up in Bugzilla first to get feedback from you and Andreas.\n\nThe reason why I was reluctant to include it in the Tools context menu is because it would require an additional click to access the DevTools feature. But I agree that this is not a frequently used feature and adding it to the Tools menu makes sense.",
+      "parentUuid": "ae99c74c_51880acc",
+      "revId": "7e875ba534fe34ce0e7846fd01b4d2898d1bfa5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3cb8d321_b7657287",
