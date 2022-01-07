@@ -179,6 +179,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5290d7fb_4b4d2f33",
+        "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-01-07T13:06:29Z",
+      "side": 1,
+      "message": "I think the tip is valid and work as indicated by the tip on sample file. I also agree with revisiting the UI for better UX.",
+      "parentUuid": "1ced46e8_ba302eb0",
+      "range": {
+        "startLine": 584,
+        "startChar": 193,
+        "endLine": 584,
+        "endChar": 215
+      },
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1321b354_a3371f0f",
         "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
         "patchSetId": 2
