@@ -81,6 +81,14 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new TextProperties(*this, rObj));
         }
 
+        bool TextProperties::WantItemSetInItemSetChanged() const
+        {
+            // The itemset construction is fairly expensive, and we only need it
+            // if this text (or sub-type of text, eg. rectangle) actually has text.
+            const svx::ITextProvider& rTextProvider(getTextProvider());
+            return rTextProvider.getTextCount() != 0;
+        }
+
         void TextProperties::ItemSetChanged(const SfxItemSet* pSet)
         {
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
@@ -145,7 +153,7 @@ namespace sdr::properties
             }
 
             // Extra-Repaint for radical layout changes (#43139#)
-            if(SfxItemState::SET == pSet->GetItemState(SDRATTR_TEXT_CONTOURFRAME))
+            if(pSet && SfxItemState::SET == pSet->GetItemState(SDRATTR_TEXT_CONTOURFRAME))
             {
                 // Here only repaint wanted
                 rObj.ActionChanged();
