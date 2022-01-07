@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46e8bb56_6aa3173d",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-07T21:00:21Z",
+      "side": 1,
+      "message": "The commit message mentions VIETNAMESE are not using hyphenation, but it\u0027s not included in this list? Is that intentional?",
+      "revId": "c735b390447ea712547af964e016e0582585df96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
