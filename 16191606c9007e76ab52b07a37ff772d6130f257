@@ -16,6 +16,24 @@
       "message": "do we really need yet another configure flag for this?",
       "revId": "16191606c9007e76ab52b07a37ff772d6130f257",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22fb16b0_f03dc207",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 1983,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-07T14:19:25Z",
+      "side": 1,
+      "message": "\u003e do we really need yet another configure flag for this?\n\nI have no hard feelings just to handle this autoconf internally.",
+      "parentUuid": "d1568e2d_60fc0875",
+      "revId": "16191606c9007e76ab52b07a37ff772d6130f257",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
