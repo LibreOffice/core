@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "285599b9_66f64944",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-07T05:11:54Z",
+      "side": 1,
+      "message": "It actually fixes a bug in my Qt static build, which doesn\u0027t set USING_X11, so had no DnD. Any platform specific code in vcl/source should be moved into the plugins, IMHO.",
+      "parentUuid": "b5806eaa_542eba6a",
+      "revId": "031576105c21b2e0c2585a1236092487d5d193e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f4e9e90_17ff02a8",
