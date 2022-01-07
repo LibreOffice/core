@@ -22,23 +22,30 @@
 #include <vcl/outdev.hxx>
 #include <sbstdobj.hxx>
 
-#define ATTR_IMP_TYPE           1
-#define ATTR_IMP_WIDTH          2
-#define ATTR_IMP_HEIGHT         3
-#define ATTR_IMP_BOLD           4
-#define ATTR_IMP_ITALIC         5
-#define ATTR_IMP_STRIKETHROUGH  6
-#define ATTR_IMP_UNDERLINE      7
-#define ATTR_IMP_SIZE           9
-#define ATTR_IMP_NAME           10
+namespace {
+    enum class ATTR_IMP
+    {
+        TYPE           = 1,
+        WIDTH          = 2,
+        HEIGHT         = 3,
+        BOLD           = 4,
+        ITALIC         = 5,
+        STRIKETHROUGH  = 6,
+        UNDERLINE      = 7,
+        SIZE           = 9,
+        NAME           = 10
+    };
 
-#define METH_CLEAR              20
-#define METH_GETDATA            21
-#define METH_GETFORMAT          22
-#define METH_GETTEXT            23
-#define METH_SETDATA            24
-#define METH_SETTEXT            25
-
+    enum class METH
+    {
+        CLEAR     = 20,
+        GETDATA   = 21,
+        GETFORMAT = 22,
+        GETTEXT   = 23,
+        SETDATA   = 24,
+        SETTEXT   = 25
+    };
+}
 
 SbStdFactory::SbStdFactory()
 {
@@ -106,13 +113,13 @@ SbStdPicture::SbStdPicture() :
     // Properties
     SbxVariable* p = Make( "Type", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::Read | SbxFlagBits::DontStore );
-    p->SetUserData( ATTR_IMP_TYPE );
+    p->SetUserData( static_cast<sal_uInt32>(ATTR_IMP::TYPE) );
     p = Make( "Width", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::Read | SbxFlagBits::DontStore );
-    p->SetUserData( ATTR_IMP_WIDTH );
+    p->SetUserData( static_cast<sal_uInt32>(ATTR_IMP::WIDTH) );
     p = Make( "Height", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::Read | SbxFlagBits::DontStore );
-    p->SetUserData( ATTR_IMP_HEIGHT );
+    p->SetUserData( static_cast<sal_uInt32>(ATTR_IMP::HEIGHT) );
 }
 
 SbStdPicture::~SbStdPicture()
@@ -141,9 +148,9 @@ void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     // Properties
     switch( nWhich )
     {
-        case ATTR_IMP_TYPE:     PropType( pVar, bWrite ); return;
-        case ATTR_IMP_WIDTH:    PropWidth( pVar, bWrite ); return;
-        case ATTR_IMP_HEIGHT:   PropHeight( pVar, bWrite ); return;
+        case static_cast<sal_uInt32>(ATTR_IMP::TYPE):     PropType( pVar, bWrite ); return;
+        case static_cast<sal_uInt32>(ATTR_IMP::WIDTH):    PropWidth( pVar, bWrite ); return;
+        case static_cast<sal_uInt32>(ATTR_IMP::HEIGHT):   PropHeight( pVar, bWrite ); return;
     }
 
     SbxObject::Notify( rBC, rHint );
@@ -214,24 +221,24 @@ SbStdFont::SbStdFont()
     // Properties
     SbxVariable* p = Make( "Bold", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::ReadWrite | SbxFlagBits::DontStore );
-    p->SetUserData( ATTR_IMP_BOLD );
+    p->SetUserData( static_cast<sal_uInt32>(ATTR_IMP::BOLD) );
     p = Make( "Italic", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::ReadWrite | SbxFlagBits::DontStore );
-    p->SetUserData( ATTR_IMP_ITALIC );
+    p->SetUserData( static_cast<sal_uInt32>(ATTR_IMP::ITALIC) );
     p = Make( "StrikeThrough", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::ReadWrite | SbxFlagBits::DontStore );
-    p->SetUserData( ATTR_IMP_STRIKETHROUGH );
+    p->SetUserData( static_cast<sal_uInt32>(ATTR_IMP::STRIKETHROUGH) );
     p = Make( "Underline", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::ReadWrite | SbxFlagBits::DontStore );
-    p->SetUserData( ATTR_IMP_UNDERLINE );
+    p->SetUserData( static_cast<sal_uInt32>(ATTR_IMP::UNDERLINE) );
     p = Make( "Size", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::ReadWrite | SbxFlagBits::DontStore );
-    p->SetUserData( ATTR_IMP_SIZE );
+    p->SetUserData( static_cast<sal_uInt32>(ATTR_IMP::SIZE) );
 
     // handle name property yourself
     p = Find( "Name", SbxClassType::Property );
     assert(p && "No Name Property");
-    p->SetUserData( ATTR_IMP_NAME );
+    p->SetUserData( static_cast<sal_uInt32>(ATTR_IMP::NAME) );
 }
 
 SbStdFont::~SbStdFont()
@@ -258,12 +265,12 @@ void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     // Properties
     switch( nWhich )
     {
-        case ATTR_IMP_BOLD:         PropBold( pVar, bWrite ); return;
-        case ATTR_IMP_ITALIC:       PropItalic( pVar, bWrite ); return;
-        case ATTR_IMP_STRIKETHROUGH:PropStrikeThrough(  pVar, bWrite ); return;
-        case ATTR_IMP_UNDERLINE:    PropUnderline( pVar, bWrite ); return;
-        case ATTR_IMP_SIZE:         PropSize( pVar, bWrite ); return;
-        case ATTR_IMP_NAME:         PropName( pVar, bWrite ); return;
+        case static_cast<sal_uInt32>(ATTR_IMP::BOLD):         PropBold( pVar, bWrite ); return;
+        case static_cast<sal_uInt32>(ATTR_IMP::ITALIC):       PropItalic( pVar, bWrite ); return;
+        case static_cast<sal_uInt32>(ATTR_IMP::STRIKETHROUGH):PropStrikeThrough(  pVar, bWrite ); return;
+        case static_cast<sal_uInt32>(ATTR_IMP::UNDERLINE):    PropUnderline( pVar, bWrite ); return;
+        case static_cast<sal_uInt32>(ATTR_IMP::SIZE):         PropSize( pVar, bWrite ); return;
+        case static_cast<sal_uInt32>(ATTR_IMP::NAME):         PropName( pVar, bWrite ); return;
     }
 
     SbxObject::Notify( rBC, rHint );
@@ -359,27 +366,27 @@ SbStdClipboard::SbStdClipboard() :
 {
     SbxVariable* p = Find( "Name", SbxClassType::Property );
     assert(p && "No Name Property");
-    p->SetUserData( ATTR_IMP_NAME );
+    p->SetUserData( static_cast<sal_uInt32>(ATTR_IMP::NAME) );
 
     // register methods
     p = Make( "Clear", SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
-    p->SetUserData( METH_CLEAR );
+    p->SetUserData( static_cast<sal_uInt32>(METH::CLEAR) );
     p = Make( "GetData", SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
-    p->SetUserData( METH_GETDATA );
+    p->SetUserData( static_cast<sal_uInt32>(METH::GETDATA) );
     p = Make( "GetFormat", SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
-    p->SetUserData( METH_GETFORMAT );
+    p->SetUserData( static_cast<sal_uInt32>(METH::GETFORMAT) );
     p = Make( "GetText", SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
-    p->SetUserData( METH_GETTEXT );
+    p->SetUserData( static_cast<sal_uInt32>(METH::GETTEXT) );
     p = Make( "SetData", SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
-    p->SetUserData( METH_SETDATA );
+    p->SetUserData( static_cast<sal_uInt32>(METH::SETDATA) );
     p = Make( "SetText", SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
-    p->SetUserData( METH_SETTEXT );
+    p->SetUserData( static_cast<sal_uInt32>(METH::SETTEXT) );
 }
 
 SbStdClipboard::~SbStdClipboard()
@@ -406,12 +413,12 @@ void SbStdClipboard::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     // Methods
     switch( nWhich )
     {
-        case METH_CLEAR:            MethClear( pPar_ ); return;
-        case METH_GETDATA:          MethGetData( pPar_ ); return;
-        case METH_GETFORMAT:        MethGetFormat( pVar, pPar_ ); return;
-        case METH_GETTEXT:          MethGetText( pVar, pPar_ ); return;
-        case METH_SETDATA:          MethSetData( pPar_ ); return;
-        case METH_SETTEXT:          MethSetText( pPar_ ); return;
+        case static_cast<sal_uInt32>(METH::CLEAR):            MethClear( pPar_ ); return;
+        case static_cast<sal_uInt32>(METH::GETDATA):          MethGetData( pPar_ ); return;
+        case static_cast<sal_uInt32>(METH::GETFORMAT):        MethGetFormat( pVar, pPar_ ); return;
+        case static_cast<sal_uInt32>(METH::GETTEXT):          MethGetText( pVar, pPar_ ); return;
+        case static_cast<sal_uInt32>(METH::SETDATA):          MethSetData( pPar_ ); return;
+        case static_cast<sal_uInt32>(METH::SETTEXT):          MethSetText( pPar_ ); return;
     }
 
     SbxObject::Notify( rBC, rHint );
