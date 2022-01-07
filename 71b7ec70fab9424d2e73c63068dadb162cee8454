@@ -16,6 +16,80 @@
       "message": "Hello\nI want to continue to complete this issue\nI have tried to change it under any function other than WriterElement\nBut it will cause the Unit test test to fail\nDo I need to activate the Unit test in this situation?",
       "revId": "71b7ec70fab9424d2e73c63068dadb162cee8454",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02c82eff_a84e3b56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-07T12:29:22Z",
+      "side": 1,
+      "message": "I\u0027m afraid that this patch does not handle the passed UTC data in the writeElement (as indicated in https://gerrit.libreoffice.org/c/core/+/120561). So the code there should check if it\u0027s UTC, and then write the information.",
+      "revId": "71b7ec70fab9424d2e73c63068dadb162cee8454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47dbc29c_ec048cc2",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-07T12:29:22Z",
+      "side": 1,
+      "message": "Please don\u0027t add unrelated whitespace edits. This file is functionally unchanged for this patch, so this newline should be removed.",
+      "revId": "71b7ec70fab9424d2e73c63068dadb162cee8454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3bff456_bcc5a9fd",
+        "filename": "sc/source/filter/excel/excdoc.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-07T12:29:22Z",
+      "side": 1,
+      "message": "Please don\u0027t default-create variables, just to assign a value in the following lines. Instead, initialize it with the correct value from the start:\n\n    util::DateTime aDateTime( 0,\n                cTime.GetSec() , cTime.GetMin(), cTime.GetHour(),\n                cTime.GetDay(), cTime.GetMonth(), cTime.GetYear(), true );",
+      "revId": "71b7ec70fab9424d2e73c63068dadb162cee8454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a2dede5_7f5c24ee",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-07T12:29:22Z",
+      "side": 1,
+      "message": "Why do you use SAL_DLLPUBLIC_RTTI here?",
+      "range": {
+        "startLine": 419,
+        "startChar": 8,
+        "endLine": 419,
+        "endChar": 26
+      },
+      "revId": "71b7ec70fab9424d2e73c63068dadb162cee8454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
