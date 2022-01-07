@@ -33,6 +33,23 @@
       "message": "This has merge conflicts with https://gerrit.libreoffice.org/c/core/+/127921 and may have been intended as its amendment, see my comment there.",
       "revId": "b88769356f053dd6fed05d9aaa8a86b198a9679f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "639f5995_347911fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-07T20:28:44Z",
+      "side": 1,
+      "message": "Regarding the Jenkins error: please build and test your changes before submitting to Gerrit. Thanks.",
+      "revId": "b88769356f053dd6fed05d9aaa8a86b198a9679f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
