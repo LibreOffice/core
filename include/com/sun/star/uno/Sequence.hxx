@@ -146,6 +146,8 @@ inline bool Sequence< E >::operator == ( const Sequence & rSeq ) const
 {
     if (_pSequence == rSeq._pSequence)
         return true;
+    if (_pSequence->nElements != rSeq._pSequence->nElements)
+        return false;
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     return ::uno_type_equalData(
         const_cast< Sequence * >( this ), rType.getTypeLibType(),
