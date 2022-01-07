@@ -800,6 +800,16 @@ public:
         mpDoc->pClass->setFreemiumView(nViewId, isFreemium);
     }
 
+    void setRestrictedCommandList(const char* restrictedCommandList)
+    {
+        mpDoc->pClass->setRestrictedCommandList(mpDoc, restrictedCommandList);
+    }
+
+    void setRestrictedView(int nViewId, bool isRestricted)
+    {
+        mpDoc->pClass->setRestrictedView(mpDoc, nViewId, isRestricted);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
