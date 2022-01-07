@@ -20,32 +20,62 @@
 #include <sal/config.h>
 
 #include <sdr/properties/groupproperties.hxx>
+#include <sdr/properties/itemsettools.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdmodel.hxx>
 #include <osl/diagnose.h>
 
 
 namespace sdr::properties
 {
-        // create a new itemset
-        SfxItemSet GroupProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
-        {
-            // Groups have in principle no ItemSet. To support methods like
-            // GetMergedItemSet() the local one is used. Thus, all items in the pool
-            // may be used and a pool itemset is created.
-            return SfxItemSet(rPool);
-        }
-
         GroupProperties::GroupProperties(SdrObject& rObj)
-        :   DefaultProperties(rObj)
+        :   BaseProperties(rObj)
         {
         }
 
         GroupProperties::GroupProperties(const GroupProperties& rProps, SdrObject& rObj)
-        :   DefaultProperties(rProps, rObj)
+        :   BaseProperties(rObj)
         {
+            if(!rProps.mxItemSet)
+                return;
+
+            // Clone may be to another model and thus another ItemPool.
+            // SfxItemSet supports that thus we are able to Clone all
+            // SfxItemState::SET items to the target pool.
+            mxItemSet.emplace(rProps.mxItemSet->CloneAsValue(
+                true,
+                &rObj.getSdrModelFromSdrObject().GetItemPool()));
+
+            // React on ModelChange: If metric has changed, scale items.
+            // As seen above, clone is supported, but scale is not included,
+            // thus: TTTT maybe add scale to SfxItemSet::Clone() (?)
+            // tdf#117707 correct ModelChange detection
+            const bool bModelChange(&rObj.getSdrModelFromSdrObject() != &rProps.GetSdrObject().getSdrModelFromSdrObject());
+
+            if(bModelChange)
+            {
+                const MapUnit aOldUnit(rProps.GetSdrObject().getSdrModelFromSdrObject().GetScaleUnit());
+                const MapUnit aNewUnit(rObj.getSdrModelFromSdrObject().GetScaleUnit());
+                const bool bScaleUnitChanged(aNewUnit != aOldUnit);
+
+                if(bScaleUnitChanged)
+                {
+                    const Fraction aMetricFactor(GetMapFactor(aOldUnit, aNewUnit).X());
+
+                    ScaleItemSet(*mxItemSet, aMetricFactor);
+                }
+            }
+
+            // do not keep parent info, this may be changed by later constructors.
+            // This class just copies the ItemSet, ignore parent.
+            if(mxItemSet && mxItemSet->GetParent())
+            {
+                mxItemSet->SetParent(nullptr);
+            }
         }
 
         GroupProperties::~GroupProperties()
@@ -60,7 +90,7 @@ namespace sdr::properties
         const SfxItemSet& GroupProperties::GetObjectItemSet() const
         {
             assert(!"GroupProperties::GetObjectItemSet() should never be called");
-            return DefaultProperties::GetObjectItemSet();
+            return BaseProperties::GetObjectItemSet();
         }
 
         const SfxItemSet& GroupProperties::GetMergedItemSet() const
@@ -74,7 +104,8 @@ namespace sdr::properties
             else
             {
                 // force local itemset
-                DefaultProperties::GetObjectItemSet();
+                if(!mxItemSet)
+                    mxItemSet.emplace(GetSdrObject().GetObjectItemPool());
             }
 
             // collect all ItemSets in mpItemSet
@@ -128,7 +159,6 @@ namespace sdr::properties
 
             // Do not call parent here. Group objects do not have local ItemSets
             // where items need to be set.
-            // DefaultProperties::SetMergedItemSet(rSet, bClearAllItems);
         }
 
         void GroupProperties::SetObjectItem(const SfxPoolItem& /*rItem*/)
@@ -193,27 +223,6 @@ namespace sdr::properties
             assert(!"GroupProperties::SetObjectItemSet() should never be called");
         }
 
-        void GroupProperties::ItemSetChanged(const SfxItemSet* /*pSet*/)
-        {
-            assert(!"GroupProperties::ItemSetChanged() should never be called");
-        }
-
-        bool GroupProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
-        {
-            assert(!"GroupProperties::AllowItemChange() should never be called");
-            return false;
-        }
-
-        void GroupProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
-        {
-            assert(!"GroupProperties::ItemChange() should never be called");
-        }
-
-        void GroupProperties::PostItemChange(const sal_uInt16 /*nWhich*/)
-        {
-            assert(!"GroupProperties::PostItemChange() should never be called");
-        }
-
         SfxStyleSheet* GroupProperties::GetStyleSheet() const
         {
             SfxStyleSheet* pRetval = nullptr;
@@ -253,11 +262,6 @@ namespace sdr::properties
             {
                 pSub->GetObj(a)->SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
             }
-        }
-
-        void GroupProperties::ForceDefaultAttributes()
-        {
-            // nothing to do here, groups have no items and thus no default items, too.
         }
 
         void GroupProperties::ForceStyleToHardAttributes()
