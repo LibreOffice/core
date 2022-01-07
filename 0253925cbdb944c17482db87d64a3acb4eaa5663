@@ -33,6 +33,24 @@
       "message": "@Heiko Tietze Should I just push clean-up to this request, or just open another request using same issue number?",
       "revId": "0253925cbdb944c17482db87d64a3acb4eaa5663",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "579aad01_ab3ef91b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-07T08:54:27Z",
+      "side": 1,
+      "message": "As you like. I presume the accelerators are just dead code. So leaving is okay and cleaning up too, of course.",
+      "parentUuid": "304ad631_3328dc41",
+      "revId": "0253925cbdb944c17482db87d64a3acb4eaa5663",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
