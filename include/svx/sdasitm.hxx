@@ -48,7 +48,15 @@ private:
 
     css::uno::Sequence< css::beans::PropertyValue > aPropSeq;
 
+    // For fast comparisons keep a hash of the content, computed on demand
+    // (unusable state is if anyToHash() returns no hash).
+    enum HashState { Unknown, Valid, Unusable };
+    mutable HashState aHashState = HashState::Unknown;
+    mutable size_t aHash;
+
     void SetPropSeq( const css::uno::Sequence< css::beans::PropertyValue >& rPropSeq );
+    inline void UpdateHash() const;
+    inline void InvalidateHash();
 
     public:
 
