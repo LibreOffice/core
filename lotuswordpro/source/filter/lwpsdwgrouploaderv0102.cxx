@@ -373,8 +373,11 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
 
         pRetObjct = CreateDrawGroupObject();
 
-        // set anchor type
-        pRetObjct->SetAnchorType(enumXFAnchorFrame);
+        if (pRetObjct)
+        {
+            // set anchor type
+            pRetObjct->SetAnchorType(enumXFAnchorFrame);
+        }
         break;
     }
     case OT_CHART://fall-through
