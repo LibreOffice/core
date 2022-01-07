@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "782c9e23_647c2007",
+        "filename": "basic/source/runtime/stdobj1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-07T11:03:06Z",
+      "side": 1,
+      "message": "You should no longer use ATTR_IMP_ prefix. Rename it to TYPE. When you want to use it, you will use ATTR_IMP::TYPE.\nDo the same for the rest.",
+      "revId": "8210b6880dd55b02c9f480d2c6c3bcae9cfa588d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad6beffb_f28bb2c9",
+        "filename": "basic/source/runtime/stdobj1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-07T11:03:06Z",
+      "side": 1,
+      "message": "The same for here. Remove METH_ prefix for all of these.",
+      "revId": "8210b6880dd55b02c9f480d2c6c3bcae9cfa588d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
