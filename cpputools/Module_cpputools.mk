@@ -12,7 +12,7 @@ $(eval $(call gb_Module_Module,cpputools))
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,cpputools,\
-    Executable_sp2bv \
+    $(call gb_CondExeSp2bv,Executable_sp2bv) \
 ))
 
 $(eval $(call gb_Module_add_targets,cpputools,\

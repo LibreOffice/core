@@ -326,11 +326,9 @@ define gb_Helper_optionals_or
 $(call gb_Helper_optional,$(1),$(2),$(3))
 endef
 
-gb_Helper_optionals_and_token = $(subst $(gb_SPACE),_,gb $(sort $(1)))
-
 # call gb_Helper_optionals_and,build_types,if-true,if-false
 define gb_Helper_optionals_and
-$(if $(filter $(call gb_Helper_optionals_and_token,$(1)),$(call gb_Helper_optionals_and_token,$(filter $(1),$(BUILD_TYPE)))),$(2),$(3))
+$(if $(strip $(filter-out $(filter $(1),$(BUILD_TYPE)),$(1))),$(3),$(2))
 endef
 
 ifeq ($(WITH_LOCALES),)
