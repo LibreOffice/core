@@ -464,6 +464,15 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::setFreemiumView
     void (*setFreemiumView) (int nViewId, bool isFreemium);
 
+    /// @see lok::Document::setRestrictedCommandList
+    void (*setRestrictedCommandList) (LibreOfficeKitDocument* pThis,
+                                const char* restrictedCommandList);
+
+    /// @see lok::Document::setRestrictedView
+    void (*setRestrictedView) (LibreOfficeKitDocument* pThis,
+                            int nViewId,
+                            bool isRestricted);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

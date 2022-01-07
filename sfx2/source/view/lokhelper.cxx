@@ -747,6 +747,13 @@ void SfxLokHelper::setFreemiumView(int nViewId, bool isFreemium)
         pViewShell->setFreemiumView(isFreemium);
 }
 
+void SfxLokHelper::setRestrictedView(int nViewId, bool isRestricted)
+{
+    SfxViewShell* pViewShell = SfxLokHelper::getViewOfId(nViewId);
+
+    if(pViewShell)
+        pViewShell->setRestrictedView(isRestricted);
+}
 void SfxLokHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
                                          int nType, const OUString &rText)
 {
