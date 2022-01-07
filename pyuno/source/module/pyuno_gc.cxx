@@ -111,11 +111,20 @@ void decreaseRefCount( PyInterpreterState *interpreter, PyObject *object )
     // to be a method, which tells, whether the global
     // interpreter lock is held or not
     // TODO: Look for a more efficient solution
-    rtl::Reference< GCThread >(new GCThread(interpreter, object))->launch();
+    try
+    {
+        rtl::Reference< GCThread >(new GCThread(interpreter, object))->launch();
         //TODO: a protocol is missing how to join with the launched thread
         // before exit(3), to ensure the thread is no longer relying on any
         // infrastructure while that infrastructure is being shut down in
         // atexit handlers
+    }
+    catch (std::runtime_error&)
+    {
+        // tdf#146621: Thread creation will fail on Windows with ERROR_ACCESS_DENIED
+        // when called at ExitProcess time; unhandled exception would hang the process
+        abort();
+    }
 }
 
 }
