@@ -1862,13 +1862,13 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
                 case RTFParserState::RunType::HICH:
                 case RTFParserState::RunType::RTLCH_LTRCH_1:
                 case RTFParserState::RunType::LTRCH_RTLCH_2:
-                case RTFParserState::RunType::DBCH:
                     nSprm = NS_ooxml::LN_EG_RPrBase_bCs;
                     break;
                 case RTFParserState::RunType::NONE:
                 case RTFParserState::RunType::LOCH:
                 case RTFParserState::RunType::LTRCH_RTLCH_1:
                 case RTFParserState::RunType::RTLCH_LTRCH_2:
+                case RTFParserState::RunType::DBCH:
                 default:
                     nSprm = NS_ooxml::LN_EG_RPrBase_b;
                     break;
@@ -1881,13 +1881,13 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
                 case RTFParserState::RunType::HICH:
                 case RTFParserState::RunType::RTLCH_LTRCH_1:
                 case RTFParserState::RunType::LTRCH_RTLCH_2:
-                case RTFParserState::RunType::DBCH:
                     nSprm = NS_ooxml::LN_EG_RPrBase_iCs;
                     break;
                 case RTFParserState::RunType::NONE:
                 case RTFParserState::RunType::LOCH:
                 case RTFParserState::RunType::LTRCH_RTLCH_1:
                 case RTFParserState::RunType::RTLCH_LTRCH_2:
+                case RTFParserState::RunType::DBCH:
                 default:
                     nSprm = NS_ooxml::LN_EG_RPrBase_i;
                     break;
