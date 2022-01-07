@@ -103,6 +103,29 @@
       "message": "The problem looks to be here and in the next method.",
       "revId": "2c3c10c68024eb8b3cfdcf167a65925f811d5fd4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "603bc1a1_4ec37084",
+        "filename": "basic/qa/vba_tests/ismissing.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-07T13:10:51Z",
+      "side": 1,
+      "message": "Mike and Andreas, it seems that this unit test was built using the wrong idea of what IsNull actually does in MS VBA. For example, running the following code in MS Office:\n\nFunction TestA(Optional A As Collection, Optional B As Collection)\n    MsgBox IsNull(A) \u0027 Prints False\n    MsgBox IsNull(B) \u0027 Prints False\nEnd Function\n\nSub CallTestA()\n    Dim cA As New Collection\n    cA.Add (123)\n    cA.Add (456)\n    Dim cB As New Collection\n    cB.Add (123.4)\n    cB.Add (456.7)\n    \u0027 Calling TestA without arguments\n    TestA\nEnd Sub\n\n... will print False for both parameters. Hence, calling the Function without arguments and test for the existence of these arguments inside the function using IsNull returns False in MS Office.\n\nHowever, this test assumes that IsNull will return True if an argument is missing, which is not what VBA does.\n\nThe weird thing is that replacing IsNull for IsMissing in MS VBA still returns False.",
+      "range": {
+        "startLine": 156,
+        "startChar": 34,
+        "endLine": 156,
+        "endChar": 54
+      },
+      "revId": "2c3c10c68024eb8b3cfdcf167a65925f811d5fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
