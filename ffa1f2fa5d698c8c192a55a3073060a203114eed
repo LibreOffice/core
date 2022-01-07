@@ -16,6 +16,24 @@
       "message": "two suggestions for what might be going wrong\n(a) somehow after a clone, the cloned object is not \u003d\u003d to the original\n(b) for an SfxPoolItem to behave well, it has to be immutable, and these things are mutable, which means we might end up modifying something that is already in the pool\n\nHonestly, I don\u0027t see how an SfxPoolItem can be both POOLABLE and mutable, it should be one or the other.",
       "revId": "ffa1f2fa5d698c8c192a55a3073060a203114eed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cfe7a7d_7d2e6426",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-01-07T12:08:09Z",
+      "side": 1,
+      "message": "\u003e (a) somehow after a clone, the cloned object is not \u003d\u003d to the original\n\nYes, I have already figured that one out: #128104\n\n\u003e (b) for an SfxPoolItem to behave well, it has to be immutable, and these things are mutable, which means we might end up modifying something that is already in the pool\n\u003e \n\u003e Honestly, I don\u0027t see how an SfxPoolItem can be both POOLABLE and mutable, it should be one or the other.\n\nI actually don\u0027t understand this stuff that much, I\u0027m just trying to improve performance for a specific bugreport. Do I understand it correctly that this is a problem of the code and not of my change?",
+      "parentUuid": "b2f94737_89c257d8",
+      "revId": "ffa1f2fa5d698c8c192a55a3073060a203114eed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
