@@ -55,7 +55,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	propex \
 	regsvrex \
 	saxparser \
-	sp2bv \
 	svidl \
 	$(if $(ENABLE_ONLINE_UPDATE_MAR),\
 		test_updater_dialog \
@@ -872,6 +871,7 @@ $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	odk_settings \
 	odk_settings_generated \
 	offapi_idl \
+    $(call gb_CondBuildSp2bv,sp2bv) \
 	udkapi_idl \
 	$(if $(ENABLE_JAVA), \
 		odk_javadoc \
