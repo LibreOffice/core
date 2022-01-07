@@ -16,6 +16,23 @@
       "message": "Just remove related-accelerators in this request.",
       "revId": "ba3872c7329fcb96cdef8601b787fa39a4b568a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "044e3354_1ccd2a07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-07T09:20:19Z",
+      "side": 1,
+      "message": "The four places are PrimaryKeys \u003e Modules \u003e GlobalDocument, WebDocument, TextDocument and XMLFormDocument and what I meant is to keep only for TextDocument. Actually I haven\u0027t checked before (awkward digging through the 10k XML hierarchy) and expected the four to be Writer, Calc, Draw, Impress. If you test locally the shortcut F4 should be assigned to \"Image Properties\". Looking into what we have in 7.1, Calc does Cycle Cell Reference, Draw/Impress open Position \u0026 Size. So we can leave the accelerators as it was.\n\nSorry for the confusion.",
+      "revId": "ba3872c7329fcb96cdef8601b787fa39a4b568a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
