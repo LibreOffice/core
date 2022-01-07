@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8bb0eee_af0fc3be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-07T20:24:58Z",
+      "side": 1,
+      "message": "May it be that you erroneously created a separate change https://gerrit.libreoffice.org/c/core/+/127976 that has merge conflicts with this one, instead of amending this?",
+      "revId": "94f6f00cfcf43a53403dcefb4a435bc31f2874f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "976ddcc4_ea4ecd34",
