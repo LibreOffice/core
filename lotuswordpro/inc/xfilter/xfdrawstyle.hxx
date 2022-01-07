@@ -131,6 +131,8 @@ private:
     double m_fArrowEndSize;
     bool m_bArrowStartCenter;
     bool m_bArrowEndCenter;
+    bool m_bLineStyleRegistered;
+    bool m_bAreaStyleRegistered;
 };
 
 inline void XFDrawStyle::SetArrowStart(const OUString& start, double size)

@@ -71,11 +71,18 @@ XFDrawStyle::XFDrawStyle()
     , m_fArrowEndSize(0.3)
     , m_bArrowStartCenter(false)
     , m_bArrowEndCenter(false)
+    , m_bLineStyleRegistered(false)
+    , m_bAreaStyleRegistered(false)
 {}
 
 XFDrawStyle::~XFDrawStyle()
 {
-    //don't delete m_pLineStyle, it was managed by XFStyleManager.
+    // normally don't delete m_pLineStyle, it was managed by XFStyleManager.
+    if (!m_bLineStyleRegistered)
+        delete m_pLineStyle;
+    // normally don't delete m_pAreaStyle, it was managed by XFStyleManager.
+    if (!m_bAreaStyleRegistered)
+        delete m_pAreaStyle;
 }
 
 void    XFDrawStyle::SetLineStyle(double width, XFColor color)
@@ -104,6 +111,7 @@ void    XFDrawStyle::SetLineDashStyle(enumXFLineStyle style, double len1, double
     m_pLineStyle->SetDot2Length(len2);
     m_pLineStyle->SetSpace(space);
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
+    m_bLineStyleRegistered = true;
     pXFStyleManager->AddStyle(std::unique_ptr<IXFStyle>(m_pLineStyle));
 }
 
@@ -143,6 +151,7 @@ void    XFDrawStyle::SetAreaLineStyle(enumXFAreaLineStyle style, sal_Int32 angle
     m_pAreaStyle->SetLineSpace(space);
     m_pAreaStyle->SetLineColor(lineColor);
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
+    m_bAreaStyleRegistered = true;
     pXFStyleManager->AddStyle(std::unique_ptr<IXFStyle>(m_pAreaStyle));
 }
 
