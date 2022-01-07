@@ -33,6 +33,24 @@
       "message": "charcode datatype is expected to be \u0027Long\u0027 for both functions as per M$ documentation:\nhttps://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/chr-function",
       "revId": "71da2142442256ece176df74c3c10245fe897cb2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35c9a16d_c6794c2b",
+        "filename": "basic/source/runtime/stdobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-07T19:00:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac11d71e_e64cd152",
+      "revId": "71da2142442256ece176df74c3c10245fe897cb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
