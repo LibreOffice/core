@@ -55,7 +55,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	propex \
 	regsvrex \
 	saxparser \
-	sp2bv \
 	svidl \
 	$(if $(ENABLE_ONLINE_UPDATE_MAR),\
 		test_updater_dialog \
@@ -85,6 +84,7 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 	cppumaker \
 	idlc \
 	javamaker \
+    $(call gb_CondBuildSp2bv,sp2bv) \
 	$(if $(filter UCPP,$(BUILD_TYPE)),ucpp) \
 	$(if $(filter ODK,$(BUILD_TYPE)),unoapploader) \
 	unoidl-check \

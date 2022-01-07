@@ -19,6 +19,10 @@ define gb_CondBuildRegistryTools
 $(if $(or $(DISABLE_DYNLOADING),$(ENABLE_MACOSX_SANDBOX)),$(2),$(1))
 endef
 
+define gb_CondBuildSp2bv
+$(if $(filter WNT,$(OS)),$(call gb_Helper_optionals_and,DESKTOP ODK,$(1),$(2)))
+endef
+
 define gb_CondSalTextEncodingLibrary
 $(if $(filter ANDROID,$(OS)),,$(if $(DISABLE_DYNLOADING),$(2),$(1)))
 endef
