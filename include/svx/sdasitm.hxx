@@ -48,6 +48,8 @@ private:
 
     css::uno::Sequence< css::beans::PropertyValue > aPropSeq;
 
+    void SetPropSeq( const css::uno::Sequence< css::beans::PropertyValue >& rPropSeq );
+
     public:
 
             SdrCustomShapeGeometryItem();
