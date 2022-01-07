@@ -151,6 +151,26 @@ namespace drawinglayer::primitive2d
             return PRIMITIVE2D_ID_SDRPATHPRIMITIVE2D;
         }
 
+
+        basegfx::B2DRange SdrPathPrimitive2D::getB2DRange( const ::drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/ ) const
+        {
+            basegfx::B2DRange aRange;
+
+            // OperationSmiley: Check if a UnitDefinitionPolyPolygon is set
+            if(maUnitDefinitionPolyPolygon.count()
+                && maUnitDefinitionPolyPolygon != maUnitPolyPolygon)
+            {
+                // if yes, use the B2DRange of it's transformed form
+                aRange = maUnitDefinitionPolyPolygon.getB2DRange();
+            }
+            else
+            {
+                aRange = maUnitPolyPolygon.getB2DRange();
+            }
+
+            aRange.transform( maTransform );
+            return aRange;
+        }
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
