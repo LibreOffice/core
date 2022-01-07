@@ -41,7 +41,7 @@ namespace sdr::properties
 
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet*) override;
-            virtual bool WantItemSetInItemSetChanged() const override final { return true; }
+            virtual bool WantItemSetInItemSetChanged() const override final;
 
             /// Get the TextProvider related to our SdrObject
             virtual const svx::ITextProvider& getTextProvider() const;
