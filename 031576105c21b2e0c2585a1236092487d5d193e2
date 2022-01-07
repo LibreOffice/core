@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74791884_d285f8d8",
+        "filename": "vcl/source/app/dndhelp.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-07T05:08:43Z",
+      "side": 1,
+      "message": "Ack. Feel free to fix that ;-)",
+      "parentUuid": "5f4e9e90_17ff02a8",
+      "revId": "031576105c21b2e0c2585a1236092487d5d193e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "01099313_10cd50a5",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-01-07T04:59:32Z",
       "side": 1,
       "message": "It looks these both could be combined, if eDoD could use a third value like \"Both\" or \"X11\" :-)",
+      "revId": "031576105c21b2e0c2585a1236092487d5d193e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bd9fe08_86e48825",
+        "filename": "vcl/source/app/dndhelp.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-07T05:08:43Z",
+      "side": 1,
+      "message": "\u003e It looks these both could be combined, if eDoD could use a third value like \"Both\" or \"X11\" :-)\n\nI thought about merging the, or some lcl_ function too, but then decided against it, because they handle different interfaces, which I wanted to keep more explicit separate. The functions are so short, that it doesn\u0027t really matter to merge them IMHO. YMMV.",
+      "parentUuid": "01099313_10cd50a5",
       "revId": "031576105c21b2e0c2585a1236092487d5d193e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
