@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "188d7acf_54cb0922",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-01-07T14:56:23Z",
+      "side": 1,
+      "message": "I have updated the function to return whatever GetOSVersion returns, and fixed the OS version string for MacOS to be somewhat more detailed. ",
+      "revId": "b88769356f053dd6fed05d9aaa8a86b198a9679f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
