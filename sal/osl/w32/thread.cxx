@@ -20,6 +20,7 @@
 #include "system.h"
 #include "thread.hxx"
 
+#include <comphelper/windowserrorstring.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -27,6 +28,7 @@
 #include <osl/time.h>
 #include <osl/interlck.h>
 #include <rtl/tencinfo.h>
+#include <sal/log.hxx>
 #include <systools/win32/comtools.hxx>
 
 #include <errno.h>
@@ -39,7 +41,7 @@ namespace {
 typedef struct
 {
     HANDLE              m_hThread;      /* OS-handle used for all thread-functions */
-    unsigned            m_ThreadId;     /* identifier for this thread */
+    DWORD               m_ThreadId;     /* identifier for this thread */
     sal_Int32           m_nTerminationRequested;
     oslWorkerFunction   m_WorkerFunction;
     void*               m_pData;
@@ -50,7 +52,7 @@ typedef struct
 
 static oslThread oslCreateThread(oslWorkerFunction pWorker, void* pThreadData, sal_uInt32 nFlags);
 
-static unsigned __stdcall oslWorkerWrapperFunction(void* pData)
+static DWORD WINAPI oslWorkerWrapperFunction(_In_ LPVOID pData)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(pData);
 
@@ -85,34 +87,17 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
     pThreadImpl->m_pData= pThreadData;
     pThreadImpl->m_nTerminationRequested= 0;
 
-    pThreadImpl->m_hThread=
-        reinterpret_cast<HANDLE>(_beginthreadex(nullptr,                        /* no security */
+    pThreadImpl->m_hThread= CreateThread(
+                               nullptr,                     /* no security */
                                0,                           /* default stack-size */
                                oslWorkerWrapperFunction,    /* worker-function */
                                pThreadImpl,                 /* provide worker-function with data */
                                nFlags,                      /* start thread immediately or suspended */
-                               &pThreadImpl->m_ThreadId));
+                               &pThreadImpl->m_ThreadId);
 
     if(pThreadImpl->m_hThread == nullptr)
     {
-        switch (errno)
-        {
-            case EAGAIN:
-                fprintf(stderr, "_beginthreadex errno EAGAIN\n");
-            break;
-            case EINVAL:
-                fprintf(stderr, "_beginthreadex errno EINVAL\n");
-            break;
-            case EACCES:
-                fprintf(stderr, "_beginthreadex errno EACCES\n");
-            break;
-            case ENOMEM:
-                fprintf(stderr, "_beginthreadex undocumented errno ENOMEM - this means not enough VM for stack\n");
-            break;
-            default:
-                fprintf(stderr, "_beginthreadex unexpected errno %d\n", errno);
-            break;
-        }
+        SAL_WARN("sal.osl", "CreateThread failed:" << WindowsErrorString(GetLastError()));
 
         /* create failed */
         free(pThreadImpl);
