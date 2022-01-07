@@ -20,28 +20,16 @@
 #ifndef INCLUDED_SVX_INC_SDR_PROPERTIES_GROUPPROPERTIES_HXX
 #define INCLUDED_SVX_INC_SDR_PROPERTIES_GROUPPROPERTIES_HXX
 
-#include <svx/sdr/properties/defaultproperties.hxx>
-
+#include <svx/sdr/properties/properties.hxx>
+#include <svl/itemset.hxx>
+#include <optional>
 
 namespace sdr::properties
     {
-        class GroupProperties final : public DefaultProperties
+        class GroupProperties final : public BaseProperties
         {
-            // create a new itemset
-            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
-
-            // test changeability for a single item
-            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) const override;
-
-            // Do the ItemChange, may do special handling
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
-
-            // Called after ItemChange() is done for all items.
-            virtual void PostItemChange(const sal_uInt16 nWhich) override;
-
-            // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet*) override;
-
+            // the to be used ItemSet
+            mutable std::optional<SfxItemSet> mxItemSet;
         public:
             // basic constructor
             explicit GroupProperties(SdrObject& rObj);
@@ -95,10 +83,6 @@ namespace sdr::properties
 
             // get the local StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const override;
-
-            // force default attributes for a specific object type, called from
-            // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
-            virtual void ForceDefaultAttributes() override;
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.
