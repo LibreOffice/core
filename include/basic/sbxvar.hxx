@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBXVAR_HXX
-#define INCLUDED_BASIC_SBXVAR_HXX
+#pragma once
 
 #include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
@@ -253,7 +252,7 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
 
 protected:
     SbxInfoRef  pInfo;              // Probably called information
-    sal_uInt32 nUserData= 0;        // User data for Call()
+    sal_uInt32 nUserData = 0;       // User data for Call()
     SbxObject* pParent = nullptr;   // Currently attached object
     virtual ~SbxVariable() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
@@ -329,7 +328,5 @@ public:
     SbxEnsureParentVariable(const SbxVariable& r);
     virtual void SetParent(SbxObject* p) override;
 };
-
-#endif // INCLUDED_BASIC_SBXVAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
