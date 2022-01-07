@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "473dccce_44b8f685",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-07T16:43:14Z",
+      "side": 1,
+      "message": "this solution looks like overkill to me - it will invalidate all text frames in the whole document that contain a redline - also it won\u0027t handle the ones that are hidden by fieldmarks.\n\ni think the problem is that SwTextNode::SplitContentNode() should have invalidated part of the SwTextFrame, but somehow it did not, and the stale portions that reference invalid indexes stay.\n\n(rr) frame\n#0  SwTextFrame::RegisterToNode (this\u003d0x6ec4c40, rNode\u003d..., isForceNodeAsFirst\u003dfalse) at sw/source/core/layout/ssfrm.cxx:476\n(rr) p GetPara()-\u003eGetReformat()\n$33 \u003d (SwCharRange \u0026) @0x36f4080: {\n  m_nStart \u003d {\n    m_value \u003d 0\n  },\n  m_nLen \u003d {\n    m_value \u003d 0\n  }\n}\n\n\nhmmm... the problem is that this early return is taken in CutImpl():\n\n│     2396      if( !nLen )                                                                                                                                                         \n│     2397      {                                                                                                                                                                   \n│     2398          // if no length is given, copy attributes at position rStart                                                                                                    \n│  \u003e  2399          CopyAttr( pDest, rStart.GetIndex(), rDestStart.GetIndex() );                                                                                                    \n│     2400          return;                                                                                                                                                         \n│     2401      }\n\nof course that doesn\u0027t invalidate anything... see also this comment:\n\n│      656                  if (pFrame-\u003eGetText().isEmpty())                                                                                                                       \n│      657                  {                                                                                                                                                       \n│      658                      // turns out it\u0027s empty - in this case, it was not                                                                                                  \n│      659                      // invalidated because Cut didn\u0027t sent it any hints,                                                                                                \n│      660                      // so we have to invalidate it here!                                                                                                                \n│      661                      pFrame-\u003ePrepare(PrepareHint::Clear, nullptr, false);                                                                                                \n│      662                  }\n\nso a situation where the result is a frame without any text is handled here - but not this situation, where the frame does contain text, but it was all not from the paragraph in CutImpl() with node index 80, but from a previous one with node index 79.\n",
+      "revId": "f64f5f10de9d797f9805a6d251b1c5ab30f12b20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
