@@ -309,7 +309,7 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
     m_pStream->ReadUChar(recType);
 
     std::unique_ptr<LwpDrawObj> pDrawObj;
-    XFFrame* pRetObjct = nullptr;
+    XFFrame* pRetObject = nullptr;
 
     switch(recType)
     {
@@ -371,12 +371,12 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
         // read out the object header
         pDrawObj.reset(new LwpDrawGroup(m_pStream));
 
-        pRetObjct = CreateDrawGroupObject();
+        pRetObject = CreateDrawGroupObject();
 
-        if (pRetObjct)
+        if (pRetObject)
         {
             // set anchor type
-            pRetObjct->SetAnchorType(enumXFAnchorFrame);
+            pRetObject->SetAnchorType(enumXFAnchorFrame);
         }
         break;
     }
@@ -396,10 +396,10 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
     // we don't need create the corresponding XF-object of a group object.
     if (pDrawObj && recType != OT_GROUP)
     {
-        pRetObjct = pDrawObj->CreateXFDrawObject();
+        pRetObject = pDrawObj->CreateXFDrawObject();
     }
 
-    return pRetObjct;
+    return pRetObject;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

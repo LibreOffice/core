@@ -55,7 +55,7 @@
  ************************************************************************/
 /**
  * @file
-  * The file declares the LwpDrawObjcts and associated class like LwpDrawGroup, LwpDrawRectangle
+  * The file declares the LwpDrawObjects and associated class like LwpDrawGroup, LwpDrawRectangle
  *  and so on.
  */
 
