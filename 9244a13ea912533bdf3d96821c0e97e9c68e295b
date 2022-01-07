@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d4ba69d_ea97ecb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-07T12:34:43Z",
+      "side": 1,
+      "message": "Looks good, I see now there is also a testcase for this in a separate change. Thanks!",
+      "revId": "9244a13ea912533bdf3d96821c0e97e9c68e295b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
