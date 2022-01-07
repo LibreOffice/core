@@ -66,9 +66,9 @@ namespace sdr::properties
 //                      OleProperties
 //                  CellProperties
 //                  TableProperties
-//          GroupProperties
+//      GroupProperties
 //      EmptyProperties
-//          PageProperties
+//      PageProperties
 
 namespace sdr::properties
     {
