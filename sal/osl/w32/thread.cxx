@@ -48,7 +48,6 @@ typedef struct
 
 }
 
-static unsigned __stdcall oslWorkerWrapperFunction(void* pData);
 static oslThread oslCreateThread(oslWorkerFunction pWorker, void* pThreadData, sal_uInt32 nFlags);
 
 static unsigned __stdcall oslWorkerWrapperFunction(void* pData)
