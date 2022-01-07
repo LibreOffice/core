@@ -628,7 +628,7 @@ struct WorkerThreadData
 
 #ifdef _WIN32
 static HANDLE hThreadID = nullptr;
-static unsigned __stdcall threadmain( void *pArgs )
+static DWORD WINAPI threadmain( _In_ LPVOID pArgs )
 {
     OleInitialize( nullptr );
     static_cast<WorkerThreadData*>(pArgs)->pWorker( static_cast<WorkerThreadData*>(pArgs)->pThreadData );
@@ -655,14 +655,14 @@ void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData )
 #ifdef _WIN32
     // sal thread always call CoInitializeEx, so a system dependent implementation is necessary
 
-    unsigned uThreadID;
-    hThreadID = reinterpret_cast<HANDLE>(_beginthreadex(
+    DWORD uThreadID;
+    hThreadID = CreateThread(
         nullptr,       // no security handle
         0,          // stacksize 0 means default
         threadmain,    // thread worker function
         new WorkerThreadData( pWorker, pThreadData ),       // arguments for worker function
         0,          // 0 means: create immediately otherwise use CREATE_SUSPENDED
-        &uThreadID ));   // thread id to fill
+        &uThreadID );   // thread id to fill
 #else
     hThreadID = osl_createThread( MainWorkerFunction, new WorkerThreadData( pWorker, pThreadData ) );
 #endif
