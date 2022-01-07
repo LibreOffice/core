@@ -16,6 +16,23 @@
       "message": "I wonder if this makes a difference?",
       "revId": "772d1c9e78fdbeb5bb828327ea39b66654fb9078",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "240a3fc1_88f5dafd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-01-07T05:27:34Z",
+      "side": 1,
+      "message": "It works now, but one small issue: \n\nwhen I drag the right-side border of the window to the right, the window can properly be enlarged, but when I then drag it to the left to make it smaller, the resizing process is quite slow. \n\nSee the screencast attached to the bug report.",
+      "revId": "772d1c9e78fdbeb5bb828327ea39b66654fb9078",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
