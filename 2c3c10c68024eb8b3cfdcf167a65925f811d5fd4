@@ -55,6 +55,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5f01a12b_26369b61",
+        "filename": "basic/qa/vba_tests/ismissing.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-07T09:40:11Z",
+      "side": 1,
+      "message": "\u0027 will be initialized to their respective default value of its datatype.\ntherefore we have an object with the value NULL (set in\nhttps://opengrok.libreoffice.org/xref/core/basic/source/runtime/runtime.cxx?r\u003d26f46b86#4264), and since this change targets the IsNull function it fails.\n\nWe could add the pInfo of a missing parameter, if the parameter is of type object and replace the method calls with IsMissing instead of IsNull like in https://opengrok.libreoffice.org/xref/core/basic/qa/basic_coverage/test_ismissing_basic.bas?r\u003d0ad1810a#142",
+      "revId": "2c3c10c68024eb8b3cfdcf167a65925f811d5fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3c85bcdd_c4e4cc78",
         "filename": "basic/qa/vba_tests/ismissing.vb",
         "patchSetId": 3
