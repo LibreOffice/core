@@ -41,6 +41,7 @@
               <object class="GtkEntry" id="themeName">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="truncate-multiline">True</property>
                 <accessibility>
                   <relation type="labelled-by" target="lbThemeName"/>
                 </accessibility>
@@ -103,6 +104,7 @@
               <object class="GtkEntry" id="colorSetName">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="truncate-multiline">True</property>
                 <accessibility>
                   <relation type="labelled-by" target="lbColorSetName"/>
                 </accessibility>
