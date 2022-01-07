@@ -178,7 +178,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL 
     HMODULE hModule{};
     GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
                            | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                       reinterpret_cast<LPCWSTR>(pv), &hModule);
+                       static_cast<LPCWSTR>(pv), &hModule);
     if (!hModule)
         return false;
 
