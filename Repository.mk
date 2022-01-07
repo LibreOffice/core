@@ -147,14 +147,18 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(call gb_Helper_optional,FUZZERS,dbffuzzer) \
 	$(if $(filter-out ANDROID HAIKU iOS MACOSX WNT,$(OS)),oosplash) \
 	soffice_bin \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
+    $(call gb_CondBuildUnopkg, \
+        unopkg_bin \
+        $(if $(filter WNT,$(OS)), \
+            unopkg \
+            unopkg_com \
+        ) \
+    ) \
 	$(if $(filter WNT,$(OS)), \
 		soffice_exe \
 		soffice_com \
 		soffice_safe \
 		unoinfo \
-		unopkg \
-		unopkg_com \
 		$(if $(filter-out AARCH64,$(CPUNAME)),twain32shim) \
 	) \
 ))
@@ -634,7 +638,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
     $(call gb_Helper_optional,XMLHELP,ucpchelp1) \
 	ucphier1 \
 	ucppkg1 \
-	unopkgapp \
+    $(call gb_CondBuildUnopkg,unopkgapp) \
 	xmlsecurity \
 	xsec_xmlsec \
 	xstor \
