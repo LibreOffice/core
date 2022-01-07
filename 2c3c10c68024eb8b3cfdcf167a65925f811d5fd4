@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "321633ca_54443418",
+        "filename": "basic/qa/vba_tests/ismissing.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-07T09:51:14Z",
+      "side": 1,
+      "message": "After some tests, it does not work to set just the ismissing, since the method checks for an error state (448) which will be set in StepParam before the optional check",
+      "parentUuid": "5f01a12b_26369b61",
+      "revId": "2c3c10c68024eb8b3cfdcf167a65925f811d5fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3c85bcdd_c4e4cc78",
         "filename": "basic/qa/vba_tests/ismissing.vb",
         "patchSetId": 3
