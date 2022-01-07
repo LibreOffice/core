@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5954743_288ac630",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-07T13:03:01Z",
+      "side": 1,
+      "message": "Jenkins approved - just a commit message change.",
+      "revId": "f1c1dc02243861b74e19e0a3bcf94c289b75ee9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
