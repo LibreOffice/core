@@ -70,6 +70,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d98edcc_10afbc88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-07T14:51:29Z",
+      "side": 1,
+      "message": "Should we do this in this patch? Or in a separate one?",
+      "parentUuid": "ff0f6428_03186243",
+      "revId": "2c3c10c68024eb8b3cfdcf167a65925f811d5fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f01a12b_26369b61",
