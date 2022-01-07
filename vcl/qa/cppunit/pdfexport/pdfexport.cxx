@@ -2858,6 +2858,24 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145873)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.49, pObject->getBounds().getHeight(), 0.1);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageHyperlink)
+{
+    // Given a Draw file, containing a PDF image, which has a hyperlink in it:
+    aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
+
+    // When saving to PDF:
+    saveAsPDF(u"pdf-image-hyperlink.odg");
+
+    // Then make sure that link is preserved:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    // Without the accompanying fix in place, this test would have failed, the hyperlink of the PDF
+    // image was lost.
+    CPPUNIT_ASSERT(pPdfPage->hasLinks());
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
