@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae99c74c_51880acc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-07T09:05:05Z",
+      "side": 1,
+      "message": "Tested the new patch again and realized you haven\u0027t uploaded it ;-).\nBut I can confirm having the dev tools in Calc too after starting in safe mode.\n\"Stacked\" still sounds wrong to me like providing access to the About dialog in the main UI. I\u0027d prefer the Tools context menu. But it\u0027s now up to you and Andreas and I\u0027ll also accept other solutions.",
+      "revId": "7e875ba534fe34ce0e7846fd01b4d2898d1bfa5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3cb8d321_b7657287",
