@@ -10,6 +10,7 @@
 #include <prewin.h>
 #include <postwin.h>
 
+#include <comphelper/windowserrorstring.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <osl/file.hxx>
@@ -132,20 +133,12 @@ DWORD LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath)
     if (!CreateProcessW(nullptr, pCmdLine, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi))
     {
         DWORD dwError = GetLastError();
-        wchar_t* sMsgBuf = nullptr;
-        FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
-                           | FORMAT_MESSAGE_IGNORE_INSERTS,
-                       nullptr, dwError, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                       reinterpret_cast<LPWSTR>(&sMsgBuf), 0, nullptr);
-
-        size_t nBufSize = wcslen(sMsgBuf) + 100;
-        std::vector<wchar_t> sDisplayBuf(nBufSize);
-        swprintf(sDisplayBuf.data(), nBufSize,
-                 L"Could not start LibreOffice. Error is 0x%08X:\n\n%s", dwError, sMsgBuf);
-        HeapFree(GetProcessHeap(), 0, sMsgBuf);
+        const OUString sErrorMsg = "Could not start LibreOffice. Error is 0x"
+                                   + OUString::number(dwError, 16) + ":\n\n"
+                                   + WindowsErrorString(dwError);
 
         // Report the error to user and return error
-        MessageBoxW(nullptr, sDisplayBuf.data(), nullptr, MB_ICONERROR);
+        MessageBoxW(nullptr, o3tl::toW(sErrorMsg.getStr()), nullptr, MB_ICONERROR);
         return dwError;
     }
     CloseHandle(pi.hProcess);
