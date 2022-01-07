@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d0f6eded_1d96f95d",
+        "filename": "basic/qa/vba_tests/ismissing.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-07T14:41:21Z",
+      "side": 1,
+      "message": "According to MS documentation at:\nhttps://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/ismissing-function\n\nIt seems that IsMissing works only with Variant types.\n\nFor example, run this code in MS Office and see that IsMissing works only in TestVariant, not in TestCollection.\n\nFunction TestCollection(Optional A As Collection)\n    MsgBox IsNull(A)\n    MsgBox IsMissing(A)\nEnd Function\n\nFunction TestVariant(Optional A As Variant)\n    MsgBox IsNull(A)\n    MsgBox IsMissing(A)\nEnd Function\n\nSub CallTest()\n    Dim cA As Collection\n    TestCollection\n    TestCollection cA\n    TestVariant\n    TestVariant cA\nEnd Sub\n\nNote also that it does not work with String types.\n\nFunction TestString(Optional S As String)\n    MsgBox IsNull(S)\n    MsgBox IsMissing(S)\nEnd Function\n\nSub CallTest2()\n    TestString\n    TestString (\"123\")\nEnd Sub",
+      "parentUuid": "321633ca_54443418",
+      "revId": "2c3c10c68024eb8b3cfdcf167a65925f811d5fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3c85bcdd_c4e4cc78",
         "filename": "basic/qa/vba_tests/ismissing.vb",
         "patchSetId": 3
