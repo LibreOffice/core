@@ -147,6 +147,7 @@ public:
     void testDefaultVersion();
     void testMultiPagePDF();
     void testPdfImageRotate180();
+    void testPdfImageHyperlink();
 
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -191,6 +192,7 @@ public:
     CPPUNIT_TEST(testDefaultVersion);
     CPPUNIT_TEST(testMultiPagePDF);
     CPPUNIT_TEST(testPdfImageRotate180);
+    CPPUNIT_TEST(testPdfImageHyperlink);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -2250,6 +2252,36 @@ void PdfExportTest::testPdfImageRotate180()
     // i.e. the 180 degrees rotation didn't happen (via a combination of horizontal + vertical
     // flip).
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, aScale.getX(), 0.01);
+}
+
+void PdfExportTest::testPdfImageHyperlink()
+{
+    // Given a Draw file, containing a PDF image, which has a hyperlink in it:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf-image-hyperlink.odg";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    // When saving to PDF:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Then make sure that link is preserved:
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    int nStartPos = 0;
+    FPDF_LINK pLinkAnnot = nullptr;
+    // Without the accompanying fix in place, this test would have failed, the hyperlink of the PDF
+    // image was lost.
+    CPPUNIT_ASSERT(FPDFLink_Enumerate(pPdfPage->getPointer(), &nStartPos, &pLinkAnnot));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
