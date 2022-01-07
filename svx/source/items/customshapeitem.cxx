@@ -21,6 +21,7 @@
 
 #include <o3tl/any.hxx>
 #include <comphelper/anycompare.hxx>
+#include <comphelper/anytohash.hxx>
 #include <svx/sdasitm.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -128,6 +129,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const css::beans::PropertyVal
 
         aPropHashMap[ rPropVal.Name ] = nIndex;
     }
+    InvalidateHash();
 }
 
 void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName, const css::beans::PropertyValue& rPropVal )
@@ -176,6 +178,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
             }
         }
     }
+    InvalidateHash();
 }
 
 void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
@@ -212,6 +215,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
         aPropSeq.realloc( nLength - 1 );
     }
     aPropHashMap.erase( aHashIter );                            // removing property from hashmap
+    InvalidateHash();
 }
 
 SdrCustomShapeGeometryItem::~SdrCustomShapeGeometryItem()
@@ -224,13 +228,15 @@ bool SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
         return false;
     const SdrCustomShapeGeometryItem& other = static_cast<const SdrCustomShapeGeometryItem&>(rCmp);
     // This is called often by SfxItemPool, and comparing uno sequences is relatively slow.
-    // Optimize by checking the list of properties that this class keeps for the sequence,
-    // if the sizes are different, the sequences are different too, which should allow a cheap
-    // return for many cases.
-    if( aPropHashMap.size() != other.aPropHashMap.size())
+    // So keep a hash of the sequence and if either of the sequences has a usable hash,
+    // compare using that.
+    UpdateHash();
+    other.UpdateHash();
+    if( aHashState != other.aHashState )
         return false;
-    if( aPropPairHashMap.size() != other.aPropPairHashMap.size())
+    if( aHashState == HashState::Valid && aHash != other.aHash )
         return false;
+
     return aPropSeq == other.aPropSeq;
 }
 
@@ -238,14 +244,36 @@ bool SdrCustomShapeGeometryItem::operator<( const SfxPoolItem& rCmp ) const
 {
     assert(dynamic_cast<const SdrCustomShapeGeometryItem*>( &rCmp ));
     const SdrCustomShapeGeometryItem& other = static_cast<const SdrCustomShapeGeometryItem&>(rCmp);
-    // Again, optimize by checking the list of properties and compare by their count if different
-    // (this is operator< for sorting purposes, so the ordering can be somewhat arbitrary).
-    if( aPropHashMap.size() != other.aPropHashMap.size())
-        return aPropHashMap.size() < other.aPropHashMap.size();
-    if( aPropPairHashMap.size() != other.aPropPairHashMap.size())
-        return aPropPairHashMap.size() < other.aPropPairHashMap.size();
+    // Again, try to optimize by checking hashes first (this is operator< for sorting purposes,
+    // so the ordering can be somewhat arbitrary).
+    UpdateHash();
+    other.UpdateHash();
+    if( aHashState != other.aHashState )
+        return aHashState < other.aHashState;
+    if( aHashState == HashState::Valid )
+        return aHash < other.aHash;
+
     return comphelper::anyLess( css::uno::makeAny( aPropSeq ),
         css::uno::makeAny( other.aPropSeq ));
+}
+
+void SdrCustomShapeGeometryItem::UpdateHash() const
+{
+    if( aHashState != HashState::Unknown )
+        return;
+    std::optional< size_t > hash = comphelper::anyToHash( css::uno::makeAny( aPropSeq ));
+    if( hash.has_value())
+    {
+        aHash = *hash;
+        aHashState = HashState::Valid;
+    }
+    else
+        aHashState = HashState::Unusable;
+}
+
+void SdrCustomShapeGeometryItem::InvalidateHash()
+{
+    aHashState = HashState::Unknown;
 }
 
 bool SdrCustomShapeGeometryItem::GetPresentation(
@@ -313,6 +341,7 @@ void SdrCustomShapeGeometryItem::SetPropSeq( const css::uno::Sequence< css::bean
             }
         }
     }
+    InvalidateHash();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
