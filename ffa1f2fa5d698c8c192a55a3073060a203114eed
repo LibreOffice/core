@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2f94737_89c257d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-07T06:06:05Z",
+      "side": 1,
+      "message": "two suggestions for what might be going wrong\n(a) somehow after a clone, the cloned object is not \u003d\u003d to the original\n(b) for an SfxPoolItem to behave well, it has to be immutable, and these things are mutable, which means we might end up modifying something that is already in the pool\n\nHonestly, I don\u0027t see how an SfxPoolItem can be both POOLABLE and mutable, it should be one or the other.",
+      "revId": "ffa1f2fa5d698c8c192a55a3073060a203114eed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
