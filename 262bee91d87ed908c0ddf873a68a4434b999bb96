@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04b87c66_948eb3eb",
+        "filename": "sfx2/source/doc/autoredactdialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-07T20:44:14Z",
+      "side": 1,
+      "message": "Looks like this doesn\u0027t need a return value (always returning true), so that could be void instead and a simple return; without value.",
+      "range": {
+        "startLine": 320,
+        "startChar": 74,
+        "endLine": 320,
+        "endChar": 78
+      },
+      "revId": "262bee91d87ed908c0ddf873a68a4434b999bb96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
