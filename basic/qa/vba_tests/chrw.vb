@@ -11,21 +11,21 @@ Option Explicit
 
 Function doUnitTest() As String
     TestUtil.TestInit
-    verify_testCHR
+    verify_testCHRW
     doUnitTest = TestUtil.GetResult()
 End Function
 
-Sub verify_testCHR()
+Sub verify_testCHRW()
     On Error GoTo errorHandler
 
-    TestUtil.AssertEqual(Chr(87),  "W", "Chr(87)")
-    TestUtil.AssertEqual(Chr(105), "i", "Chr(105)")
-    TestUtil.AssertEqual(Chr(35),  "#", "Chr(35)")
-    
+    TestUtil.AssertEqual(ChrW(87),  "W", "ChrW(87)")
+    TestUtil.AssertEqual(ChrW(105), "i", "ChrW(105)")
+    TestUtil.AssertEqual(ChrW(35),  "#", "ChrW(35)")
+
     ' tdf#145693 - argument name should be 'charcode' instead of 'string'
-    TestUtil.AssertEqual(Chr(charcode:=35),  "#", "Chr(charcode:=35)")
+    TestUtil.AssertEqual(ChrW(charcode:=35),  "#", "ChrW(charcode:=35)")
 
     Exit Sub
 errorHandler:
-    TestUtil.ReportErrorHandler("verify_testCHR", Err, Error$, Erl)
+    TestUtil.ReportErrorHandler("verify_testCHRW", Err, Error$, Erl)
 End Sub

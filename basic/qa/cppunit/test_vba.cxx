@@ -63,6 +63,7 @@ void VBATest::testMiscVBAFunctions()
         "replace.vb",
         "stringplusdouble.vb",
         "chr.vb",
+        "chrw.vb",
         "abs.vb",
         "array.vb",
         "asc.vb",
