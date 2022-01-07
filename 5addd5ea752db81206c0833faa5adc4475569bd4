@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0c2aab0_e87feb72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-07T11:16:04Z",
+      "side": 1,
+      "message": "Caolan, this is what I had in mind. The dialog has a minimum size defined by controls and the treeview in this case but remembers the last width/height and restores it. It works only for gtk3 yet. I would appreciate a more generic implementation with all/most WindowStateData where the dialog itself just calls \u003cweld\u003eSaveWindowState() and \u003cweld\u003eRestoreWindowState(). We have requests to remember the dialog size for the print, hyperlink and bookmark dialog, at least. Going the opposite way and make it non-resizable was not accepted.",
+      "revId": "5addd5ea752db81206c0833faa5adc4475569bd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
