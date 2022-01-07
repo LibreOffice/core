@@ -86,6 +86,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/accimplaccess \
     comphelper/source/misc/AccessibleImplementationHelper \
     comphelper/source/misc/anycompare \
+    comphelper/source/misc/anytohash \
     comphelper/source/misc/anytostring \
     comphelper/source/misc/asyncnotification \
     comphelper/source/misc/asyncquithandler \

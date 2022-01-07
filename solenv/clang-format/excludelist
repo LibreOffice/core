@@ -1380,6 +1380,7 @@ comphelper/source/misc/accessibletexthelper.cxx
 comphelper/source/misc/accessiblewrapper.cxx
 comphelper/source/misc/accimplaccess.cxx
 comphelper/source/misc/anycompare.cxx
+comphelper/source/misc/anytohash.cxx
 comphelper/source/misc/anytostring.cxx
 comphelper/source/misc/asyncnotification.cxx
 comphelper/source/misc/backupfilehelper.cxx
