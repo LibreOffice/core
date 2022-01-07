@@ -60,7 +60,7 @@ HANDLE  g_hEvtThreadWakeup;
 
 // a thread in another apartment to test apartment transparency
 
-unsigned int _stdcall ThreadProc(LPVOID pParam)
+DWORD WINAPI ThreadProc(_In_ LPVOID pParam)
 {
     // setup another apartment
     HRESULT hr = OleInitialize( NULL );
@@ -116,11 +116,10 @@ int SAL_CALL main( int nArgc, char* Argv[] )
                                       EVT_INIT_NONSIGNALED,
                                       EVT_NONAME );
 
-    unsigned uThreadId;
-    HANDLE   hThread;
+    DWORD uThreadId;
 
     // create a thread in another apartment
-    hThread = (void*)_beginthreadex( NULL, 0, ThreadProc, NULL, 0, &uThreadId );
+    HANDLE hThread = CreateThread( NULL, 0, ThreadProc, NULL, 0, &uThreadId );
 
     IDataObject* pIDo = new CXTDataObject( );
 
