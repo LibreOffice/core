@@ -22,23 +22,26 @@
 #include <vcl/outdev.hxx>
 #include <sbstdobj.hxx>
 
-#define ATTR_IMP_TYPE           1
-#define ATTR_IMP_WIDTH          2
-#define ATTR_IMP_HEIGHT         3
-#define ATTR_IMP_BOLD           4
-#define ATTR_IMP_ITALIC         5
-#define ATTR_IMP_STRIKETHROUGH  6
-#define ATTR_IMP_UNDERLINE      7
-#define ATTR_IMP_SIZE           9
-#define ATTR_IMP_NAME           10
-
-#define METH_CLEAR              20
-#define METH_GETDATA            21
-#define METH_GETFORMAT          22
-#define METH_GETTEXT            23
-#define METH_SETDATA            24
-#define METH_SETTEXT            25
-
+namespace {
+    enum UserData
+    {
+        ATTR_IMP_TYPE           = 1,
+        ATTR_IMP_WIDTH          = 2,
+        ATTR_IMP_HEIGHT         = 3,
+        ATTR_IMP_BOLD           = 4,
+        ATTR_IMP_ITALIC         = 5,
+        ATTR_IMP_STRIKETHROUGH  = 6,
+        ATTR_IMP_UNDERLINE      = 7,
+        ATTR_IMP_SIZE           = 9,
+        ATTR_IMP_NAME           = 10,
+        METH_CLEAR              = 20,
+        METH_GETDATA            = 21,
+        METH_GETFORMAT          = 22,
+        METH_GETTEXT            = 23,
+        METH_SETDATA            = 24,
+        METH_SETTEXT            = 25
+    };
+}
 
 SbStdFactory::SbStdFactory()
 {
@@ -144,6 +147,7 @@ void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         case ATTR_IMP_TYPE:     PropType( pVar, bWrite ); return;
         case ATTR_IMP_WIDTH:    PropWidth( pVar, bWrite ); return;
         case ATTR_IMP_HEIGHT:   PropHeight( pVar, bWrite ); return;
+        default: break;
     }
 
     SbxObject::Notify( rBC, rHint );
@@ -264,6 +268,7 @@ void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         case ATTR_IMP_UNDERLINE:    PropUnderline( pVar, bWrite ); return;
         case ATTR_IMP_SIZE:         PropSize( pVar, bWrite ); return;
         case ATTR_IMP_NAME:         PropName( pVar, bWrite ); return;
+        default: break;
     }
 
     SbxObject::Notify( rBC, rHint );
@@ -412,6 +417,7 @@ void SbStdClipboard::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         case METH_GETTEXT:          MethGetText( pVar, pPar_ ); return;
         case METH_SETDATA:          MethSetData( pPar_ ); return;
         case METH_SETTEXT:          MethSetText( pPar_ ); return;
+        default: break;
     }
 
     SbxObject::Notify( rBC, rHint );
