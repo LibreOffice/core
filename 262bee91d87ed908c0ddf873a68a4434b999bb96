@@ -22,6 +22,30 @@
       },
       "revId": "262bee91d87ed908c0ddf873a68a4434b999bb96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0433d7d4_ce1183ac",
+        "filename": "sfx2/source/doc/autoredactdialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-07T20:45:13Z",
+      "side": 1,
+      "message": "Or rather no return; at all as it\u0027s the function end anyway.",
+      "parentUuid": "04b87c66_948eb3eb",
+      "range": {
+        "startLine": 320,
+        "startChar": 74,
+        "endLine": 320,
+        "endChar": 78
+      },
+      "revId": "262bee91d87ed908c0ddf873a68a4434b999bb96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
