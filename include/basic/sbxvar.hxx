@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBXVAR_HXX
-#define INCLUDED_BASIC_SBXVAR_HXX
+#pragma once
 
 #include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
@@ -34,6 +33,25 @@
 
 
 namespace com::sun::star::bridge::oleautomation { struct Decimal; }
+
+enum UserData
+{
+    ATTR_IMP_TYPE           = 1,
+    ATTR_IMP_WIDTH          = 2,
+    ATTR_IMP_HEIGHT         = 3,
+    ATTR_IMP_BOLD           = 4,
+    ATTR_IMP_ITALIC         = 5,
+    ATTR_IMP_STRIKETHROUGH  = 6,
+    ATTR_IMP_UNDERLINE      = 7,
+    ATTR_IMP_SIZE           = 9,
+    ATTR_IMP_NAME           = 10,
+    METH_CLEAR              = 20,
+    METH_GETDATA            = 21,
+    METH_GETFORMAT          = 22,
+    METH_GETTEXT            = 23,
+    METH_SETDATA            = 24,
+    METH_SETTEXT            = 25
+};
 
 class SbxDecimal;
 enum class SfxHintId;
@@ -253,11 +271,12 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
 
 protected:
     SbxInfoRef  pInfo;              // Probably called information
-    sal_uInt32 nUserData= 0;        // User data for Call()
+    sal_uInt32 nUserData = 0;       // User data for Call()
     SbxObject* pParent = nullptr;   // Currently attached object
     virtual ~SbxVariable() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
+
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_VARIABLE,2);
     SbxVariable();
@@ -329,7 +348,5 @@ public:
     SbxEnsureParentVariable(const SbxVariable& r);
     virtual void SetParent(SbxObject* p) override;
 };
-
-#endif // INCLUDED_BASIC_SBXVAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
