@@ -496,7 +496,12 @@ void GtkSalObjectWidgetClip::Show( bool bVisible )
     if (bVisible == bCurrentVis)
         return;
     if( bVisible )
+    {
         gtk_widget_show(m_pScrolledWindow);
+        // tdf#146641 allocations attempted while hidden are discarded by gtk,
+        // so on transition to visible ApplyClipRegion needs to be called
+        ApplyClipRegion();
+    }
     else
     {
         // on hiding the widget, if a child has focus gtk will want to move the focus out of the widget
