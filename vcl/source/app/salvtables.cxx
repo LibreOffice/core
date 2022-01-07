@@ -1427,7 +1427,10 @@ SalInstanceWindow::SalInstanceWindow(vcl::Window* pWindow, SalInstanceBuilder* p
     : SalInstanceContainer(pWindow, pBuilder, bTakeOwnership)
     , m_xWindow(pWindow)
 {
-    override_child_help(m_xWindow);
+    // tdf#129745 only override child help for the normal case, not for
+    // m_pBuilder of null which is the toplevel application frame case.
+    if (m_pBuilder)
+        override_child_help(m_xWindow);
 }
 
 void SalInstanceWindow::set_title(const OUString& rTitle) { m_xWindow->SetText(rTitle); }
@@ -1533,7 +1536,13 @@ weld::ScreenShotCollection SalInstanceWindow::collect_screenshot_data()
     return aRet;
 }
 
-SalInstanceWindow::~SalInstanceWindow() { clear_child_help(m_xWindow); }
+SalInstanceWindow::~SalInstanceWindow()
+{
+    // tdf#129745 only undo overriding child help for the normal case, not for
+    // m_pBuilder of null which is the toplevel application frame case.
+    if (m_pBuilder)
+        clear_child_help(m_xWindow);
+}
 
 IMPL_LINK_NOARG(SalInstanceWindow, HelpHdl, vcl::Window&, bool)
 {
