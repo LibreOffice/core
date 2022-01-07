@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
@@ -272,6 +273,14 @@ DECLARE_RTFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
     // - Actual  : 0
     // i.e. custom writing mode was lost.
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, nActual);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf129578_lostBI, "tdf129578_lostBI.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(150.f, getProperty<float>(getRun(getParagraph(1), 1), "CharWeightAsian"));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontSlant_ITALIC,
+        getProperty<awt::FontSlant>(getRun(getParagraph(2), 1), "CharPostureAsian"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf129631_lostBorders, "tdf129631_lostBorders.rtf")
