@@ -23,7 +23,7 @@
 #include <tools/gen.hxx>
 #include "swrect.hxx"
 
-#include <optional>
+#include <memory>
 
 enum class SwFillMode
 {
@@ -132,7 +132,7 @@ enum class CursorMoveState
 struct SwCursorMoveState
 {
     SwFillCursorPos   *m_pFill;     ///< for automatic filling with tabs etc
-    std::optional<Sw2LinesPos> m_x2Lines;   ///< for selections inside/around 2line portions
+    std::unique_ptr<Sw2LinesPos> m_p2Lines;   ///< for selections inside/around 2line portions
     SwSpecialPos*   m_pSpecialPos; ///< for positions inside fields
     Point m_aRealHeight;          ///< contains then the position/height of the cursor
     CursorMoveState m_eState;
