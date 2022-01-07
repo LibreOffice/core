@@ -34,6 +34,24 @@
       "parentUuid": "b2f94737_89c257d8",
       "revId": "ffa1f2fa5d698c8c192a55a3073060a203114eed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0243cf6c_311eff3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-07T13:26:04Z",
+      "side": 1,
+      "message": "\u003e \n\u003e I actually don\u0027t understand this stuff that much, I\u0027m just trying to improve performance for a specific bugreport. Do I understand it correctly that this is a problem of the code and not of my change?\n\nCorrect. A big part of the *PoolItem* stuff is to provide a flyweight pattern, so multiple places can share pointers to a common object and save memory. But for that to work, the common object has to be immutable.\n\nOf course, the *PoolItem* stuff also does several other things, so we often have mutable PoolItem subclasses, sigh.",
+      "parentUuid": "3cfe7a7d_7d2e6426",
+      "revId": "ffa1f2fa5d698c8c192a55a3073060a203114eed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
