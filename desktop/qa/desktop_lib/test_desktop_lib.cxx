@@ -3309,10 +3309,12 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(61), offsetof(struct _LibreOfficeKitDocumentClass, sendFormFieldEvent));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(62), offsetof(struct _LibreOfficeKitDocumentClass, setFreemiumDenyList));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(63), offsetof(struct _LibreOfficeKitDocumentClass, setFreemiumView));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(64), offsetof(struct _LibreOfficeKitDocumentClass, setRestrictedCommandList));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(65), offsetof(struct _LibreOfficeKitDocumentClass, setRestrictedView));
 
     // Extending is fine, update this, and add new assert for the offsetof the
     // new method
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(64), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(66), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
