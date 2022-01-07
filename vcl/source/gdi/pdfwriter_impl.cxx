@@ -8434,6 +8434,41 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
             return;
         }
 
+        // Merge page annotations (links, etc) from pPage to our page.
+        std::vector<filter::PDFObjectElement*> aAnnots;
+        if (auto pArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("Annots")))
+        {
+            for (const auto pElement : pArray->GetElements())
+            {
+                auto pReference = dynamic_cast<filter::PDFReferenceElement*>(pElement);
+                if (!pReference)
+                {
+                    continue;
+                }
+
+                filter::PDFObjectElement* pObject = pReference->LookupObject();
+                if (!pObject)
+                {
+                    continue;
+                }
+
+                // Annotation refers to an object, remember it.
+                aAnnots.push_back(pObject);
+            }
+        }
+        if (!aAnnots.empty())
+        {
+            PDFObjectCopier aCopier(*this);
+            SvMemoryStream& rDocBuffer = pPage->GetDocument().GetEditBuffer();
+            std::map<sal_Int32, sal_Int32> aMap;
+            for (const auto& pAnnot : aAnnots)
+            {
+                // Copy over the annotation and refer to its new id.
+                sal_Int32 nNewId = aCopier.copyExternalResource(rDocBuffer, *pAnnot, aMap);
+                m_aPages.back().m_aAnnotations.push_back(nNewId);
+            }
+        }
+
         nWrappedFormObject = createObject();
         // Write the form XObject wrapped below. This is a separate object from
         // the wrapper, this way there is no need to alter the stream contents.
