@@ -713,7 +713,7 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
         MsgWaitForMultipleObjects(2, pInst->m_hClipboardChangedNotifierEvents, false, INFINITE,
                                   QS_ALLINPUT | QS_ALLPOSTMESSAGE);
 
-        ClearableMutexGuard aGuard( pInst->m_ClipboardChangedEventCountMutex );
+        ClearableMutexGuard aGuard2( pInst->m_ClipboardChangedEventCountMutex );
 
         if ( pInst->m_ClipboardChangedEventCount > 0 )
         {
@@ -721,7 +721,7 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
             if ( 0 == pInst->m_ClipboardChangedEventCount )
                 ResetEvent( pInst->m_hClipboardChangedEvent );
 
-            aGuard.clear( );
+            aGuard2.clear( );
 
             // nobody should touch m_pfncClipViewerCallback while we do
             MutexGuard aClipViewerGuard( pInst->m_pfncClipViewerCallbackMutex );
@@ -731,7 +731,7 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
                 pInst->m_pfncClipViewerCallback( );
         }
         else
-            aGuard.clear( );
+            aGuard2.clear( );
     }
 
     return 0;
