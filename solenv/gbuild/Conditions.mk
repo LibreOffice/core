@@ -7,6 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+define gb_CondBuildUnopkg
+$(if $(and $(filter DESKTOP,$(BUILD_TYPE)),$(if $(DISABLE_DYNLOADING),,$(true))),$(1),$(2))
+endef
+
 define gb_CondBuildLockfile
 $(if $(and $(filter-out ANDROID MACOSX iOS WNT,$(OS))),$(1),$(2))
 endef
