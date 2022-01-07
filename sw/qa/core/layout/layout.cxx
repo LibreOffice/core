@@ -534,7 +534,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testInnerCellBorderIntersect)
     // When rendering table borders:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
 
-    // Then make sure that that inner and outer borders don't overlap in Word compatibility mode,
+    // Then make sure that inner and outer borders don't overlap in Word compatibility mode,
     // and inner borders are reduced to prevent an overlap:
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
