@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "105d2487_a0f7f288",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-07T13:35:01Z",
+      "side": 1,
+      "message": "Sarper: does the test you propose here pass for you locally? I think either you need to also backport the parseExportStream() infrastructure here or just don\u0027t backport the test, only your fix.",
+      "revId": "00f9250cdd1045beee615643dc2201e7c70eab66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
