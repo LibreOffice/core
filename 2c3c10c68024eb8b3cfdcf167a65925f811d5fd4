@@ -16,6 +16,41 @@
       "message": "Mike, this patch is breaking an existing QA test: basic/qa/vba_tests/ismissing.vb\n\nI am now trying to figure out what is causing it. It seems the test uses IsNull in the way it previously worked.",
       "revId": "2c3c10c68024eb8b3cfdcf167a65925f811d5fd4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbfac0a8_46ea7aad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-07T04:44:59Z",
+      "side": 1,
+      "message": "Andreas: please could you take a look at the failing tests - are they misusing previous buggy behavior?",
+      "parentUuid": "464603df_e0d70361",
+      "revId": "2c3c10c68024eb8b3cfdcf167a65925f811d5fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c85bcdd_c4e4cc78",
+        "filename": "basic/qa/vba_tests/ismissing.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-07T04:44:59Z",
+      "side": 1,
+      "message": "The problem looks to be here and in the next method.",
+      "revId": "2c3c10c68024eb8b3cfdcf167a65925f811d5fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
