@@ -75,15 +75,15 @@ private:
     LRESULT onClipboardUpdate();
 
     static LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-    static unsigned int WINAPI oleThreadProc( LPVOID pParam );
+    static DWORD WINAPI oleThreadProc( _In_ LPVOID pParam );
 
-    static unsigned int WINAPI clipboardChangedNotifierThreadProc( LPVOID pParam );
+    static DWORD WINAPI clipboardChangedNotifierThreadProc( _In_ LPVOID pParam );
 
     bool WaitForThreadReady( ) const;
 
 private:
     HANDLE                      m_hOleThread;
-    unsigned                    m_uOleThreadId;
+    DWORD                       m_uOleThreadId;
     HANDLE                      m_hEvtThrdReady;
     HWND                        m_hwndMtaOleReqWnd;
     HANDLE                      m_hEvtWndDisposed;
@@ -103,12 +103,8 @@ private:
 
     static CMtaOleClipboard*    s_theMtaOleClipboardInst;
 
-// not allowed
-private:
-    CMtaOleClipboard( const CMtaOleClipboard& );
-    CMtaOleClipboard& operator=( const CMtaOleClipboard& );
-
-    friend LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+    CMtaOleClipboard( const CMtaOleClipboard& ) = delete;
+    CMtaOleClipboard& operator=( const CMtaOleClipboard& ) = delete;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
