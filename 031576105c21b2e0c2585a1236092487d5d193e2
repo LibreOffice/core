@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5806eaa_542eba6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-07T04:59:32Z",
+      "side": 1,
+      "message": "Nice cleanup!",
+      "revId": "031576105c21b2e0c2585a1236092487d5d193e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f4e9e90_17ff02a8",
+        "filename": "vcl/source/app/dndhelp.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-07T04:59:32Z",
+      "side": 1,
+      "message": "There\u0027s no need to explicitly cast a reference to its parent class reference. Just return pDnD :-)\n\nBy the way, it\u0027s not \u0027p\u0027: by convention, references to UNO interfaces should be \u0027x\u0027.",
+      "revId": "031576105c21b2e0c2585a1236092487d5d193e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01099313_10cd50a5",
+        "filename": "vcl/source/app/dndhelp.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-07T04:59:32Z",
+      "side": 1,
+      "message": "It looks these both could be combined, if eDoD could use a third value like \"Both\" or \"X11\" :-)",
+      "revId": "031576105c21b2e0c2585a1236092487d5d193e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
