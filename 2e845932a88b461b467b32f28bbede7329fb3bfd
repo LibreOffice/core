@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f05a0b1f_1df15a96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-07T09:17:49Z",
+      "side": 1,
+      "message": "It seems to me every test what can be fixed is fixed.\nIf i remember well 5 test were commented, and 4of them is fixed by this change and the parent of this one. Only left about 3 test to have to be fixed but it is neccessary to make the v:group import too to fix them, so i think this will be later.",
+      "revId": "2e845932a88b461b467b32f28bbede7329fb3bfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9525d13e_669ff76b",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-07T09:17:49Z",
+      "side": 1,
+      "message": "Should this one to be deleted?",
+      "range": {
+        "startLine": 1110,
+        "startChar": 4,
+        "endLine": 1132,
+        "endChar": 165
+      },
+      "revId": "2e845932a88b461b467b32f28bbede7329fb3bfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
