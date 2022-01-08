@@ -271,6 +271,18 @@ struct SdwTextBoxRecord
     sal_Int16 nTextRotation;
     sal_Int16 nTextExtraSpacing;
     sal_uInt8* pTextString;
+    SdwTextBoxRecord()
+        : nTextWidth(0)
+        , nTextHeight(0)
+        , nTextSize(0)
+        , tmpTextFaceName{}
+        , nTextAttrs(0)
+        , nTextCharacterSet(0)
+        , nTextRotation(0)
+        , nTextExtraSpacing(0)
+        , pTextString(nullptr)
+    {
+    }
 };
 
 struct SdwFMPATH
