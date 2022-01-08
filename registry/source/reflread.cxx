@@ -44,16 +44,11 @@ const sal_uInt32    magic = 0x12345678;
 const sal_uInt16 minorVersion = 0x0000;
 const sal_uInt16 majorVersion = 0x0001;
 
-/**************************************************************************
-
-    class BlopObject
-
-    holds any data in a flat memory buffer
-
-**************************************************************************/
-
 namespace {
 
+/**
+   Holds any data in a flat memory buffer
+ */
 class BlopObject
 {
 public:
@@ -158,12 +153,6 @@ BlopObject::BlopObject(const sal_uInt8* buffer, sal_uInt32 len)
     m_pBuffer = buffer;
 }
 
-/**************************************************************************
-
-    class StringCache
-
-**************************************************************************/
-
 namespace {
 
 class StringCache
@@ -209,12 +198,6 @@ sal_uInt16 StringCache::createString(const sal_uInt8* buffer)
     else
         return 0;
 }
-
-/**************************************************************************
-
-    class ConstantPool
-
-**************************************************************************/
 
 namespace {
 
@@ -530,12 +513,6 @@ const sal_Unicode* ConstantPool::readStringConstant(sal_uInt16 index) const
     return aString;
 }
 
-/**************************************************************************
-
-    class FieldList
-
-**************************************************************************/
-
 namespace {
 
 class FieldList : public BlopObject
@@ -717,12 +694,6 @@ const char* FieldList::getFieldFileName(sal_uInt16 index) const
     return aFileName;
 }
 
-/**************************************************************************
-
-    class ReferenceList
-
-**************************************************************************/
-
 namespace {
 
 class ReferenceList : public BlopObject
@@ -819,12 +790,6 @@ RTFieldAccess ReferenceList::getReferenceAccess(sal_uInt16 index) const
 
     return aAccess;
 }
-
-/**************************************************************************
-
-    class MethodList
-
-**************************************************************************/
 
 namespace {
 
@@ -1085,12 +1050,6 @@ const char* MethodList::getMethodDoku(sal_uInt16 index) const
     return aDoku;
 }
 
-/**************************************************************************
-
-    class TypeRegistryEntry
-
-**************************************************************************/
-
 namespace {
 
 class TypeRegistryEntry: public BlopObject {
@@ -1172,12 +1131,6 @@ typereg_Version TypeRegistryEntry::getVersion() const {
     // Assumes two's complement arithmetic with modulo-semantics:
     return static_cast< typereg_Version >(readUINT32(OFFSET_MAGIC) - magic);
 }
-
-/**************************************************************************
-
-    C-API
-
-**************************************************************************/
 
 bool TYPEREG_CALLTYPE typereg_reader_create(
     void const * buffer, sal_uInt32 length,
