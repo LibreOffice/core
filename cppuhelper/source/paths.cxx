@@ -20,12 +20,14 @@
 #include <config_folders.h>
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <cassert>
 
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
+#include <osl/thread.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <o3tl/string_view.hxx>
@@ -64,7 +66,16 @@ OUString cppu::getUnoIniUri() {
 #elif defined(EMSCRIPTEN)
     OUString uri("file:///instdir/program");
 #else
-    OUString uri(get_this_libpath());
+
+    OUString uri;
+#ifdef DISABLE_DYNLOADING
+    static const char* uno_home = getenv("STATIC_UNO_HOME");
+    if (uno_home)
+        uri = OStringToOUString(uno_home, osl_getThreadTextEncoding());
+    else
+#endif
+        uri = get_this_libpath();
+
 #ifdef MACOSX
     // We keep the URE dylibs directly in "Frameworks" (that is, LIBO_LIB_FOLDER) and unorc in
     // "Resources/ure/etc" (LIBO_URE_ETC_FOLDER).
@@ -74,7 +85,9 @@ OUString cppu::getUnoIniUri() {
     }
 #endif
 #endif
-    return uri + "/" SAL_CONFIGFILE("uno");
+    uri += "/" SAL_CONFIGFILE("uno");
+    SAL_INFO("cppuhelper", "expected uno config: " << uri);
+    return uri;
 }
 
 bool cppu::nextDirectoryItem(osl::Directory & directory, OUString * url) {
