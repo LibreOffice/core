@@ -822,7 +822,7 @@ VCLXMenu::getItemImage(
 void VCLXMenu::setUserValue(sal_uInt16 nItemId, void* nUserValue, MenuUserDataReleaseFunction aFunc)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard(maMutex);
 
     mpMenu->SetUserValue(nItemId, nUserValue, aFunc);
 }
@@ -830,7 +830,7 @@ void VCLXMenu::setUserValue(sal_uInt16 nItemId, void* nUserValue, MenuUserDataRe
 void* VCLXMenu::getUserValue(sal_uInt16 nItemId)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard(maMutex);
 
     return mpMenu->GetUserValue(nItemId);
 }
