@@ -158,19 +158,9 @@ sal_uInt32 writeDouble(sal_uInt8* buffer, double v)
     return (sizeof(sal_uInt32) + sizeof(sal_uInt32));
 }
 
-/**************************************************************************
-
-    buffer write functions
-
-**************************************************************************/
+// buffer write functions
 
 namespace {
-
-/**************************************************************************
-
-    struct CPInfo
-
-**************************************************************************/
 
 struct CPInfo
 {
@@ -305,13 +295,6 @@ sal_uInt32 CPInfo::toBlop(sal_uInt8* buffer)
     return (buff - buffer);
 }
 
-
-/**************************************************************************
-
-    class FieldEntry
-
-**************************************************************************/
-
 class FieldEntry
 {
 
@@ -403,12 +386,6 @@ void FieldEntry::setData(const OString&    name,
     }
 }
 
-/**************************************************************************
-
-    class ParamEntry
-
-**************************************************************************/
-
 class ParamEntry
 {
 public:
@@ -437,12 +414,6 @@ void ParamEntry::setData(const OString& typeName,
     m_typeName = typeName;
     m_mode = mode;
 }
-
-/**************************************************************************
-
-    class ReferenceEntry
-
-**************************************************************************/
 
 class ReferenceEntry
 {
@@ -477,12 +448,6 @@ void ReferenceEntry::setData(const OString&    name,
     m_type = refType;
     m_access = access;
 }
-
-/**************************************************************************
-
-    class MethodEntry
-
-**************************************************************************/
 
 class MethodEntry
 {
@@ -592,13 +557,6 @@ void MethodEntry::reallocExcs(sal_uInt16 size)
     m_excCount = size;
     m_excNames.reset( newExcNames );
 }
-
-
-/**************************************************************************
-
-    class TypeRegistryEntry
-
-**************************************************************************/
 
 class TypeWriter
 {
@@ -1088,12 +1046,6 @@ void TypeWriter::createBlop()
 }
 
 } // unnamed namespace
-
-/**************************************************************************
-
-    C-API
-
-**************************************************************************/
 
 extern "C" {
 
