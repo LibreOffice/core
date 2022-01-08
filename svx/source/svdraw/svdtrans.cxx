@@ -406,13 +406,11 @@ Degree100 NormAngle18000(Degree100 a)
     return a;
 }
 
-Degree100 NormAngle36000(Degree100 deg100)
+Degree100 NormAngle36000(Degree100 a)
 {
-    // do an add because we want -90 to end up as 270
-    int a = 36000 + deg100.get();
-    a %= 36000;
-    a = std::abs(a);
-    return Degree100(a);
+    while (a < 0_deg100) a += 36000_deg100;
+    while (a >= 36000_deg100) a -= 36000_deg100;
+    return a;
 }
 
 sal_uInt16 GetAngleSector(Degree100 nAngle)
