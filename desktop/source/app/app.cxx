@@ -499,7 +499,7 @@ void Desktop::Init()
     RequestHandler::Status aStatus = RequestHandler::Enable(true);
     if ( aStatus == RequestHandler::IPC_STATUS_PIPE_ERROR )
     {
-#if defined ANDROID
+#if defined(ANDROID) || defined(EMSCRIPTEN)
         // Ignore crack pipe errors on Android
 #else
         // Keep using this oddly named BE_PATHINFO_MISSING value
@@ -1273,7 +1273,7 @@ int Desktop::Main()
     userinstall::Status inst_fin = userinstall::finalize();
     if (inst_fin != userinstall::EXISTED && inst_fin != userinstall::CREATED)
     {
-        SAL_WARN( "desktop.app", "userinstall failed");
+        SAL_WARN( "desktop.app", "userinstall failed: " << inst_fin);
         if ( inst_fin == userinstall::ERROR_NO_SPACE )
             HandleBootstrapErrors(
                 BE_USERINSTALL_NOTENOUGHDISKSPACE, OUString() );
@@ -1297,7 +1297,7 @@ int Desktop::Main()
 
     SetSplashScreenProgress(25);
 
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP && !defined(EMSCRIPTEN)
     // check user installation directory for lockfile so we can be sure
     // there is no other instance using our data files from a remote host
 
