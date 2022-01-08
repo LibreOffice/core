@@ -61,6 +61,8 @@ OUString cppu::getUnoIniUri() {
     // and since rtlBootstrapHandle is not ref-counted doing anything
     // clean here is hardish.
     OUString uri("file:///assets/program");
+#elif defined(EMSCRIPTEN)
+    OUString uri("file:///instdir/program");
 #else
     OUString uri(get_this_libpath());
 #ifdef MACOSX
