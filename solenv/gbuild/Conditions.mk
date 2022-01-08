@@ -23,6 +23,10 @@ define gb_CondExeSp2bv
 $(if $(and $(filter WNT,$(OS)),$(call gb_Helper_optionals_and,DESKTOP ODK,$(true))),$(1),$(2))
 endef
 
+define gb_CondExeUno
+$(if $(and $(filter DESKTOP,$(BUILD_TYPE)),$(if $(DISABLE_DYNLOADING),,$(true))),$(1),$(2))
+endef
+
 define gb_CondSalTextEncodingLibrary
 $(if $(filter ANDROID,$(OS)),,$(if $(DISABLE_DYNLOADING),$(2),$(1)))
 endef

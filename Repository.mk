@@ -238,7 +238,7 @@ $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
         regmerge \
         regview \
     ) \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
+    $(call gb_CondExeUno,uno) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,base, \
