@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a104eecc_b7433f00",
+        "filename": "toolkit/source/awt/vclxmenu.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-08T16:22:05Z",
+      "side": 1,
+      "message": "Very strange: my Windows build fails with\n\n  C:/lo/src/core/toolkit/source/awt/vclxmenu.cxx(825): error C3861: \u0027GetMutex\u0027: identifier not found\n  C:/lo/src/core/toolkit/source/awt/vclxmenu.cxx(833): error C3861: \u0027GetMutex\u0027: identifier not found\n\nHow can that pass Jenkins? There\u0027s no GetMutex in VCLXMenu.",
+      "range": {
+        "startLine": 833,
+        "startChar": 41,
+        "endLine": 833,
+        "endChar": 51
+      },
+      "revId": "326351e2b342eae5ca0154b2ba303b937a696577",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
