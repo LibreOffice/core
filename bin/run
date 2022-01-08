@@ -67,6 +67,8 @@ else
 
 fi
 
+test "${STATIC_UNO_HOME+set}" = set || export STATIC_UNO_HOME="file://${dir}/instdir/program"
+
 # echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
 # echo "setting search path to: ${SEARCH_PATH}"
 # echo "execing: ${exedir}/$1"
