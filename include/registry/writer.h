@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_WRITER_H
-#define INCLUDED_REGISTRY_WRITER_H
+#pragma once
 
 #include <registry/regdllapi.h>
 #include <registry/types.hxx>
@@ -255,8 +254,6 @@ REG_DLLPUBLIC void const * typereg_writer_getBlob(void * handle, sal_uInt32 * si
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
