@@ -22,6 +22,30 @@
       },
       "revId": "326351e2b342eae5ca0154b2ba303b937a696577",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03c8d7cb_1481a8d3",
+        "filename": "toolkit/source/awt/vclxmenu.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-08T16:33:21Z",
+      "side": 1,
+      "message": "Ah, crossed with commit b37f9fbf05e16eb58eae40c6d900a4b9da2972db.\n\nAddressed in https://gerrit.libreoffice.org/c/core/+/128142.",
+      "parentUuid": "a104eecc_b7433f00",
+      "range": {
+        "startLine": 833,
+        "startChar": 41,
+        "endLine": 833,
+        "endChar": 51
+      },
+      "revId": "326351e2b342eae5ca0154b2ba303b937a696577",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
