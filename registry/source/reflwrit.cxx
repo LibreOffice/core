@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <new>
 #include <memory>
 #include <algorithm>
@@ -26,13 +25,13 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 
-#include "reflwrit.hxx"
 #include <registry/refltype.hxx>
 #include <registry/version.h>
 #include <registry/writer.h>
 
 #include "reflcnst.hxx"
 
+typedef void* TypeWriterImpl;
 
 namespace {
 
@@ -1109,17 +1108,6 @@ void TypeWriter::createBlop()
 
 extern "C" {
 
-static void TYPEREG_CALLTYPE release(TypeWriterImpl hEntry)
-{
-    TypeWriter* pEntry = static_cast<TypeWriter*>(hEntry);
-
-    if (pEntry != nullptr)
-    {
-        if (--pEntry->m_refCount == 0)
-            delete pEntry;
-    }
-}
-
 sal_Bool TYPEREG_CALLTYPE typereg_writer_setFieldData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
     rtl_uString const * fileName, RTFieldAccess flags, rtl_uString const * name,
@@ -1136,21 +1124,6 @@ sal_Bool TYPEREG_CALLTYPE typereg_writer_setFieldData(
         return false;
     }
     return true;
-}
-
-static void TYPEREG_CALLTYPE setFieldData(TypeWriterImpl    hEntry,
-                                          sal_uInt16        index,
-                                          rtl_uString const * name,
-                                          rtl_uString const * typeName,
-                                          rtl_uString const * doku,
-                                          rtl_uString const * fileName,
-                                          RTFieldAccess     access,
-                                          RTValueType       valueType,
-                                          RTConstValueUnion constValue)
-{
-    typereg_writer_setFieldData(
-        hEntry, index, doku, fileName, access, name, typeName, valueType,
-        constValue);
 }
 
 sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodData(
@@ -1215,20 +1188,6 @@ void const * TYPEREG_CALLTYPE typereg_writer_getBlob(void * handle, sal_uInt32 *
     return writer->m_blop.get();
 }
 
-static const sal_uInt8* TYPEREG_CALLTYPE getBlop(TypeWriterImpl hEntry)
-{
-    sal_uInt32 size;
-    return static_cast< sal_uInt8 const * >(
-        typereg_writer_getBlob(hEntry, &size));
-}
-
-static sal_uInt32 TYPEREG_CALLTYPE getBlopSize(TypeWriterImpl hEntry)
-{
-    sal_uInt32 size;
-    typereg_writer_getBlob(hEntry, &size);
-    return size;
-}
-
 sal_Bool TYPEREG_CALLTYPE typereg_writer_setReferenceData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
     RTReferenceType sort, RTFieldAccess flags, rtl_uString const * typeName)
@@ -1277,60 +1236,6 @@ sal_Bool TYPEREG_CALLTYPE typereg_writer_setSuperTypeName(
     return true;
 }
 
-static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
-    RTTypeClass typeClass, rtl_uString const * typeName, rtl_uString const * superTypeName,
-    sal_uInt16 fieldCount)
-{
-    OUString empty;
-    sal_uInt16 superTypeCount = rtl_uString_getLength(superTypeName) == 0
-        ? 0 : 1;
-    TypeWriterImpl t = typereg_writer_create(
-        TYPEREG_VERSION_0, empty.pData, empty.pData, typeClass, false, typeName,
-        superTypeCount, fieldCount, 0/*methodCount*/, 0/*referenceCount*/);
-    if (superTypeCount > 0) {
-        typereg_writer_setSuperTypeName(t, 0, superTypeName);
-    }
-    return t;
-}
-
-}
-
-RegistryTypeWriter::RegistryTypeWriter(RTTypeClass               RTTypeClass,
-                                              const OUString&    typeName,
-                                              const OUString&    superTypeName,
-                                              sal_uInt16                fieldCount)
-    : m_hImpl(nullptr)
-{
-    m_hImpl = createEntry(RTTypeClass,
-                                  typeName.pData,
-                                  superTypeName.pData,
-                                  fieldCount);
-}
-
-RegistryTypeWriter::~RegistryTypeWriter()
-{
-    release(m_hImpl);
-}
-
-void RegistryTypeWriter::setFieldData( sal_uInt16              index,
-                                              const OUString&    name,
-                                              const OUString&    typeName,
-                                              const OUString&    doku,
-                                              const OUString&    fileName,
-                                              RTFieldAccess           access,
-                                              const RTConstValue&     constValue)
-{
-    ::setFieldData(m_hImpl, index, name.pData, typeName.pData, doku.pData, fileName.pData, access, constValue.m_type, constValue.m_value);
-}
-
-const sal_uInt8* RegistryTypeWriter::getBlop()
-{
-    return ::getBlop(m_hImpl);
-}
-
-sal_uInt32 RegistryTypeWriter::getBlopSize()
-{
-    return ::getBlopSize(m_hImpl);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
