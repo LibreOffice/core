@@ -775,13 +775,8 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     if (m_xMenuIconsLB->get_value_changed_from_saved())
     {
-        TriState eMenuIcons = m_xMenuIconsLB->get_active() == 0 ?
-            TRISTATE_INDET :
-            static_cast<TriState>(m_xMenuIconsLB->get_active() - 1);
-        // Output cache of current setting as possibly modified by System Theme for older version
-        bool bMenuIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
-        officecfg::Office::Common::View::Menu::IsSystemIconsInMenus::set(eMenuIcons == TRISTATE_INDET, xChanges);
-        officecfg::Office::Common::View::Menu::ShowIconsInMenues::set(bMenuIcons, xChanges);
+        officecfg::Office::Common::View::Menu::IsSystemIconsInMenus::set(m_xMenuIconsLB->get_active() == 0, xChanges);
+        officecfg::Office::Common::View::Menu::ShowIconsInMenues::set(m_xMenuIconsLB->get_active() == 2, xChanges);
         bModified = true;
         bMenuOptModified = true;
         bAppearanceChanged = true;
@@ -931,10 +926,9 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 
     // WorkingSet
     m_xFontShowCB->set_active(officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::get());
-    bool bMenuIcons = officecfg::Office::Common::View::Menu::ShowIconsInMenues::get();
     bool bSystemMenuIcons = officecfg::Office::Common::View::Menu::IsSystemIconsInMenus::get();
-    TriState eMenuIcons = bSystemMenuIcons ? TRISTATE_INDET : static_cast<TriState>(bMenuIcons);
-    m_xMenuIconsLB->set_active(eMenuIcons == 2 ? 0 : eMenuIcons + 1);
+    bool bMenuIcons = officecfg::Office::Common::View::Menu::ShowIconsInMenues::get();
+    m_xMenuIconsLB->set_active(bSystemMenuIcons ? 0 : (bMenuIcons ? 2 : 1));
     m_xMenuIconsLB->save_value();
 
     TriState eContextMenuShortcuts = static_cast<TriState>(officecfg::Office::Common::View::Menu::ShortcutsInContextMenus::get());
