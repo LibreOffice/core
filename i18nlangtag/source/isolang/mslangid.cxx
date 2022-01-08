@@ -178,7 +178,8 @@ bool MsLangId::usesHyphenation(LanguageType nLang)
             primary(LANGUAGE_USER_MALAY_ARABIC_MALAYSIA),
             primary(LANGUAGE_SOMALI),
             primary(LANGUAGE_SWAHILI),
-            primary(LANGUAGE_URDU_PAKISTAN))
+            primary(LANGUAGE_URDU_PAKISTAN),
+            primary(LANGUAGE_VIETNAMESE))
         || isCJK(nLang))
     {
         return false;
