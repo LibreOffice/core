@@ -132,7 +132,7 @@ $(eval $(call gb_Library_add_cxxflags,sal,\
 ))
 endif
 
-ifeq (,$(call gb_CondSalTextEncodingLibrary,$(true)))
+ifeq (,$(call gb_CondLibSalTextEncoding,$(true)))
 $(eval $(call gb_Library_add_exception_objects,sal,\
     sal/textenc/context \
     sal/textenc/convertbig5hkscs \

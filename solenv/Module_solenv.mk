@@ -16,7 +16,7 @@ $(eval $(call gb_Module_add_targets_for_build,solenv,\
 
 ifeq (,$(LOCKFILE))
 $(eval $(call gb_Module_add_targets_for_build,solenv,\
-    $(call gb_CondBuildLockfile,Executable_lockfile) \
+    $(call gb_CondExeLockfile,Executable_lockfile) \
 ))
 endif
 

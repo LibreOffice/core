@@ -44,7 +44,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	$(if $(filter iOS,$(OS)),LibreOffice) \
 	lngconvex \
 	localize \
-    $(call gb_CondBuildLockfile,lockfile) \
+    $(call gb_CondExeLockfile,lockfile) \
 	makedepend \
 	mbsdiff \
 	osl_process_child \
@@ -146,7 +146,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(call gb_Helper_optional,FUZZERS,dbffuzzer) \
 	$(if $(filter-out ANDROID HAIKU iOS MACOSX WNT,$(OS)),oosplash) \
 	soffice_bin \
-    $(call gb_CondBuildUnopkg, \
+    $(call gb_CondExeUnopkg, \
         unopkg_bin \
         $(if $(filter WNT,$(OS)), \
             unopkg \
@@ -234,7 +234,7 @@ endif
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(and $(ENABLE_JAVA),$(filter-out HAIKU MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
-    $(call gb_CondBuildRegistryTools, \
+    $(call gb_CondExeRegistryTools, \
         regmerge \
         regview \
     ) \
@@ -602,7 +602,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
 ))
 
 $(eval $(call gb_Helper_register_plugins_for_install,PRIVATELIBS_URE,ure, \
-    $(call gb_CondSalTextEncodingLibrary,sal_textenc) \
+    $(call gb_CondLibSalTextEncoding,sal_textenc) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
@@ -637,7 +637,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
     $(call gb_Helper_optional,XMLHELP,ucpchelp1) \
 	ucphier1 \
 	ucppkg1 \
-    $(call gb_CondBuildUnopkg,unopkgapp) \
+    $(call gb_CondExeUnopkg,unopkgapp) \
 	xmlsecurity \
 	xsec_xmlsec \
 	xstor \

@@ -33,11 +33,11 @@ $(eval $(call gb_Module_add_l10n_targets,desktop,\
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_soffice_bin \
-    $(call gb_CondBuildUnopkg,Executable_unopkg_bin) \
+    $(call gb_CondExeUnopkg,Executable_unopkg_bin) \
     $(if $(ENABLE_BREAKPAD),Executable_minidump_upload) \
     Library_migrationoo2 \
     Library_migrationoo3 \
-    $(call gb_CondBuildUnopkg,Library_unopkgapp) \
+    $(call gb_CondExeUnopkg,Library_unopkgapp) \
     Package_scripts \
     $(if $(ENABLE_PAGEIN), \
         Pagein_calc \
@@ -79,7 +79,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Executable_sweb \
     Executable_swriter \
     Executable_unoinfo \
-    $(call gb_CondBuildUnopkg, \
+    $(call gb_CondExeUnopkg, \
         Executable_unopkg \
         Executable_unopkg_com \
     ) \
