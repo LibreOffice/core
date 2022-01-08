@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STORE_SOURCE_STORBASE_HXX
-#define INCLUDED_STORE_SOURCE_STORBASE_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <salhelper/simplereferenceobject.hxx>
@@ -604,7 +603,5 @@ inline sal_uInt32 OStorePageObject::location() const
 }
 
 } // namespace store
-
-#endif // INCLUDED_STORE_SOURCE_STORBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
