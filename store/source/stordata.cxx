@@ -28,34 +28,18 @@
 
 using namespace store;
 
-/*========================================================================
- *
- * OStoreDataPageObject implementation.
- *
- *======================================================================*/
-/*
- * guard.
- */
 storeError OStoreDataPageObject::guard (sal_uInt32 nAddr)
 {
     return PageHolderObject< page >::guard (m_xPage, nAddr);
 }
 
-/*
- * verify.
- */
 storeError OStoreDataPageObject::verify (sal_uInt32 nAddr) const
 {
     return PageHolderObject< page >::verify (m_xPage, nAddr);
 }
 
-/*========================================================================
- *
- * OStoreIndirectionPageObject implementation.
- *
- *======================================================================*/
-/*
-  * store_truncate_Impl (single indirect page).
+/**
+    store_truncate_Impl (single indirect page).
   */
 static storeError store_truncate_Impl (
     sal_uInt32      nAddr,
@@ -166,9 +150,6 @@ static storeError store_truncate_Impl (
     return store_E_None;
 }
 
-/*
- * loadOrCreate.
- */
 storeError OStoreIndirectionPageObject::loadOrCreate (
     sal_uInt32       nAddr,
     OStorePageBIOS & rBIOS)
@@ -189,25 +170,16 @@ storeError OStoreIndirectionPageObject::loadOrCreate (
     return rBIOS.loadObjectAt (*this, nAddr);
 }
 
-/*
- * guard.
- */
 storeError OStoreIndirectionPageObject::guard (sal_uInt32 nAddr)
 {
     return PageHolderObject< page >::guard (m_xPage, nAddr);
 }
 
-/*
- * verify.
- */
 storeError OStoreIndirectionPageObject::verify (sal_uInt32 nAddr) const
 {
     return PageHolderObject< page >::verify (m_xPage, nAddr);
 }
 
-/*
- * read (single indirect).
- */
 storeError OStoreIndirectionPageObject::read (
     sal_uInt16             nSingle,
     OStoreDataPageObject  &rData,
@@ -558,31 +530,16 @@ storeError OStoreIndirectionPageObject::truncate (
     return eErrCode;
 }
 
-/*========================================================================
- *
- * OStoreDirectoryPageObject implementation.
- *
- *======================================================================*/
-/*
- * guard.
- */
 storeError OStoreDirectoryPageObject::guard (sal_uInt32 nAddr)
 {
     return PageHolderObject< page >::guard (m_xPage, nAddr);
 }
 
-/*
- * verify.
- */
 storeError OStoreDirectoryPageObject::verify (sal_uInt32 nAddr) const
 {
     return PageHolderObject< page >::verify (m_xPage, nAddr);
-    // OLD: m_rPage.verifyVersion (STORE_MAGIC_DIRECTORYPAGE);
 }
 
-/*
- * scope (external data page; private).
- */
 OStoreDirectoryPageData::ChunkScope
 OStoreDirectoryPageObject::scope (
     sal_uInt32                       nPage,
@@ -717,9 +674,6 @@ OStoreDirectoryPageObject::scope (
     return page::SCOPE_UNREACHABLE;
 }
 
-/*
- * read (external data page).
- */
 storeError OStoreDirectoryPageObject::read (
     sal_uInt32             nPage,
     OStoreDataPageObject  &rData,
@@ -793,9 +747,6 @@ storeError OStoreDirectoryPageObject::read (
     return eErrCode;
 }
 
-/*
- * write (external data page).
- */
 storeError OStoreDirectoryPageObject::write (
     sal_uInt32             nPage,
     OStoreDataPageObject  &rData,
@@ -880,9 +831,6 @@ storeError OStoreDirectoryPageObject::write (
     return eErrCode;
 }
 
-/*
- * truncate (external data page).
- */
 storeError OStoreDirectoryPageObject::truncate (
     sal_uInt32             nPage,
     OStorePageBIOS        &rBIOS)

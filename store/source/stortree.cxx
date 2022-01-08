@@ -35,14 +35,6 @@
 
 using namespace store;
 
-/*========================================================================
- *
- * OStoreBTreeNodeData implementation.
- *
- *======================================================================*/
-/*
- * OStoreBTreeNodeData.
- */
 OStoreBTreeNodeData::OStoreBTreeNodeData (sal_uInt16 nPageSize)
     : PageData (nPageSize)
 {
@@ -87,9 +79,6 @@ sal_uInt16 OStoreBTreeNodeData::find (const T& t) const
         return k;
 }
 
-/*
- * insert.
- */
 void OStoreBTreeNodeData::insert (sal_uInt16 i, const T& t)
 {
     sal_uInt16 const n = usageCount();
@@ -105,9 +94,6 @@ void OStoreBTreeNodeData::insert (sal_uInt16 i, const T& t)
     }
 }
 
-/*
- * remove.
- */
 void OStoreBTreeNodeData::remove (sal_uInt16 i)
 {
     sal_uInt16 const n = usageCount();
@@ -132,9 +118,6 @@ void OStoreBTreeNodeData::split (const self& rPageL)
     truncate (h);
 }
 
-/*
- * truncate.
- */
 void OStoreBTreeNodeData::truncate (sal_uInt16 n)
 {
     sal_uInt16 const m = capacityCount();
@@ -145,30 +128,16 @@ void OStoreBTreeNodeData::truncate (sal_uInt16 n)
     usageCount (n);
 }
 
-/*========================================================================
- *
- * OStoreBTreeNodeObject implementation.
- *
- *======================================================================*/
-/*
- * guard.
- */
 storeError OStoreBTreeNodeObject::guard (sal_uInt32 nAddr)
 {
     return PageHolderObject< page >::guard (m_xPage, nAddr);
 }
 
-/*
- * verify.
- */
 storeError OStoreBTreeNodeObject::verify (sal_uInt32 nAddr) const
 {
     return PageHolderObject< page >::verify (m_xPage, nAddr);
 }
 
-/*
- * split.
- */
 storeError OStoreBTreeNodeObject::split (
     sal_uInt16                 nIndexL,
     PageHolderObject< page > & rxPageL,
@@ -293,11 +262,6 @@ storeError OStoreBTreeNodeObject::remove (
     return eErrCode;
 }
 
-/*========================================================================
- *
- * OStoreBTreeRootObject implementation.
- *
- *======================================================================*/
 /*
  * testInvariant.
  * Precond: root node page loaded.
@@ -308,9 +272,6 @@ void OStoreBTreeRootObject::testInvariant (char const * message) const
     SAL_WARN_IF( (m_xPage->location() - m_xPage->size()) != 0, "store", message);
 }
 
-/*
- * loadOrCreate.
- */
 storeError OStoreBTreeRootObject::loadOrCreate (
     sal_uInt32       nAddr,
     OStorePageBIOS & rBIOS)
@@ -332,9 +293,6 @@ storeError OStoreBTreeRootObject::loadOrCreate (
     return store_E_Pending;
 }
 
-/*
- * change.
- */
 storeError OStoreBTreeRootObject::change (
     PageHolderObject< page > & rxPageL,
     OStorePageBIOS &           rBIOS)

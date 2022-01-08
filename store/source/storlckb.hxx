@@ -37,8 +37,6 @@ struct OStoreDirectoryPageData;
 class OStoreLockBytes : public store::OStoreObject
 {
 public:
-    /** Construction.
-     */
     OStoreLockBytes();
 
     /** create (two-phase construction).
@@ -91,8 +89,6 @@ public:
     virtual bool isKindOf (sal_uInt32 nMagic) override;
 
 protected:
-    /** Destruction (OReference).
-     */
     virtual ~OStoreLockBytes() override;
 
 private:
@@ -105,8 +101,6 @@ private:
     friend OStoreLockBytes*
     SAL_CALL query<> (OStoreObject *pHandle, OStoreLockBytes*);
 
-    /** Representation.
-     */
     rtl::Reference<OStorePageManager> m_xManager;
 
     typedef OStoreDataPageData        data;

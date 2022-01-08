@@ -34,12 +34,6 @@
 
 using namespace store;
 
-/*========================================================================
- *
- * ILockBytes (non-virtual interface) implementation.
- *
- *======================================================================*/
-
 storeError ILockBytes::initialize (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize)
 {
     OSL_PRECOND((STORE_MINIMUM_PAGESIZE <= nPageSize) && (nPageSize <= STORE_MAXIMUM_PAGESIZE), "invalid PageSize");
@@ -135,11 +129,6 @@ storeError ILockBytes::flush()
     return flush_Impl();
 }
 
-/*========================================================================
- *
- * FileLockBytes implementation.
- *
- *======================================================================*/
 namespace store
 {
 
@@ -641,11 +630,6 @@ storeError MappedLockBytes::flush_Impl()
     return store_E_None;
 }
 
-/*========================================================================
- *
- * MemoryLockBytes implementation.
- *
- *======================================================================*/
 namespace store
 {
 
@@ -685,8 +669,6 @@ public:
     MemoryLockBytes& operator=(const MemoryLockBytes&) = delete;
 
 protected:
-    /** Destruction.
-     */
     virtual ~MemoryLockBytes() override;
 };
 
@@ -808,11 +790,8 @@ storeError MemoryLockBytes::flush_Impl()
     return store_E_None;
 }
 
-/*========================================================================
- *
- * ILockBytes factory implementations.
- *
- *======================================================================*/
+// ILockBytes factory implementations.
+
 namespace store
 {
 

@@ -28,8 +28,6 @@ namespace store
 class OStoreObject : public virtual salhelper::SimpleReferenceObject
 {
 public:
-    /** Construction.
-     */
     OStoreObject() {}
 
     /** Replaces dynamic_cast type checking.
@@ -37,8 +35,6 @@ public:
     virtual bool isKindOf(sal_uInt32 nTypeId);
 
 protected:
-    /** Destruction.
-     */
     virtual ~OStoreObject() override {}
 
 private:

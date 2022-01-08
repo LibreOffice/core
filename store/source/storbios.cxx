@@ -36,11 +36,6 @@
 
 using namespace store;
 
-/*========================================================================
- *
- * OStoreSuperBlock.
- *
- *======================================================================*/
 constexpr sal_uInt32 STORE_MAGIC_SUPERBLOCK = 0x484D5343;
 
 namespace {
@@ -51,8 +46,6 @@ struct OStoreSuperBlock
     typedef OStorePageDescriptor D;
     typedef OStorePageLink       L;
 
-    /** Representation.
-     */
     G          m_aGuard;
     D          m_aDescr;
     sal_uInt32 m_nMarked;
@@ -60,12 +53,8 @@ struct OStoreSuperBlock
     sal_uInt32 m_nUnused;
     L          m_aUnused;
 
-    /** theSize.
-     */
     static const size_t theSize = sizeof(G) + sizeof(D) + 2 * (sizeof(L) + sizeof(sal_uInt32));
 
-    /** Construction.
-     */
     explicit OStoreSuperBlock (sal_uInt16 nPageSize)
         : m_aGuard  (STORE_MAGIC_SUPERBLOCK),
           m_aDescr  (nPageSize, nPageSize, STORE_MINIMUM_PAGESIZE),
@@ -75,8 +64,6 @@ struct OStoreSuperBlock
           m_aUnused (0)
     {}
 
-    /** Comparison.
-     */
     bool operator== (const OStoreSuperBlock & rhs) const
     {
         return ((m_aGuard  == rhs.m_aGuard ) &&
@@ -87,36 +74,36 @@ struct OStoreSuperBlock
                 (m_aUnused == rhs.m_aUnused)    );
     }
 
-    /** unused(Count|Head|Insert|Remove|Reset).
-     */
     sal_uInt32 unusedCount() const
     {
         return store::ntohl(m_nUnused);
     }
+
     const L& unusedHead() const
     {
         return m_aUnused;
     }
+
     void unusedInsert (const L& rLink)
     {
         sal_uInt32 nUnused = unusedCount();
         m_nUnused = store::htonl(nUnused + 1);
         m_aUnused = rLink;
     }
+
     void unusedRemove (const L& rLink)
     {
         sal_uInt32 nUnused = unusedCount();
         m_nUnused = store::htonl(nUnused - 1);
         m_aUnused = rLink;
     }
+
     void unusedReset()
     {
         m_nUnused = store::htonl(0);
         m_aUnused = L(0);
     }
 
-    /** guard (external representation).
-     */
     void guard()
     {
         sal_uInt32 nCRC32 = rtl_crc32 (0, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
@@ -124,8 +111,6 @@ struct OStoreSuperBlock
         m_aGuard.m_nCRC32 = store::htonl(nCRC32);
     }
 
-    /** verify (external representation).
-     */
     storeError verify() const
     {
         sal_uInt32 nMagic = store::ntohl(m_aGuard.m_nMagic);
@@ -143,11 +128,6 @@ struct OStoreSuperBlock
 
 }
 
-/*========================================================================
- *
- * SuperBlockPage interface.
- *
- *======================================================================*/
 namespace store
 {
 
@@ -155,23 +135,18 @@ struct SuperBlockPage
 {
     typedef OStoreSuperBlock SuperBlock;
 
-    /** Representation.
-     */
     SuperBlock m_aSuperOne;
     SuperBlock m_aSuperTwo;
 
-    /** theSize.
-     */
     static const size_t     theSize     = 2 * SuperBlock::theSize;
     static const sal_uInt16 thePageSize = theSize;
     static_assert(STORE_MINIMUM_PAGESIZE >= thePageSize, "must be at least thePageSize");
 
-    /** Allocation.
-     */
     static void * operator new (size_t n)
     {
         return std::malloc(sal::static_int_cast<sal_Size>(n));
     }
+
     static void operator delete (void * p)
     {
         std::free (p);
@@ -181,20 +156,17 @@ struct SuperBlockPage
     {
         return rtl_allocateZeroMemory (sal::static_int_cast<sal_Size>(nPageSize));
     }
+
     static void operator delete (void * p, SAL_UNUSED_PARAMETER sal_uInt16)
     {
         std::free (p);
     }
 
-    /** Construction.
-     */
     explicit SuperBlockPage (sal_uInt16 nPageSize = thePageSize)
         : m_aSuperOne(nPageSize),
           m_aSuperTwo(nPageSize)
     {}
 
-    /** save.
-     */
     storeError save (OStorePageBIOS const & rBIOS, sal_uInt32 nSize = theSize)
     {
         m_aSuperOne.guard();
@@ -216,20 +188,13 @@ struct SuperBlockPage
         OStorePageBIOS const & rBIOS,
         sal_uInt32       nAddr);
 
-    /** verify (with repair).
-     */
     storeError verify (OStorePageBIOS const & rBIOS);
 };
 
 } // namespace store
 
-/*========================================================================
- *
- * SuperBlockPage implementation.
- *
- *======================================================================*/
-/*
- * unusedHead(): get freelist head (alloc page, step 1).
+/**
+   Get freelist head (alloc page, step 1).
  */
 storeError SuperBlockPage::unusedHead (OStorePageBIOS const & rBIOS, PageData & rPageHead)
 {
@@ -271,8 +236,8 @@ storeError SuperBlockPage::unusedHead (OStorePageBIOS const & rBIOS, PageData & 
     return eErrCode;
 }
 
-/*
- * unusedPop(): pop freelist head (alloc page, step 2).
+/**
+   Pop freelist head (alloc page, step 2).
  */
 storeError SuperBlockPage::unusedPop (OStorePageBIOS const & rBIOS, PageData const & rPageHead)
 {
@@ -287,8 +252,8 @@ storeError SuperBlockPage::unusedPop (OStorePageBIOS const & rBIOS, PageData con
     return save (rBIOS);
 }
 
-/*
- * unusedPush(): push new freelist head.
+/**
+   Push new freelist head.
  */
 storeError SuperBlockPage::unusedPush (OStorePageBIOS const & rBIOS, sal_uInt32 nAddr)
 {
@@ -317,8 +282,8 @@ storeError SuperBlockPage::unusedPush (OStorePageBIOS const & rBIOS, sal_uInt32 
     return save (rBIOS);
 }
 
-/*
- * verify (with repair).
+/**
+   Verify (with repair).
  */
 storeError SuperBlockPage::verify (OStorePageBIOS const & rBIOS)
 {
@@ -381,11 +346,6 @@ storeError SuperBlockPage::verify (OStorePageBIOS const & rBIOS)
     return eErrCode;
 }
 
-/*========================================================================
- *
- * OStorePageBIOS::Ace implementation.
- *
- *======================================================================*/
 OStorePageBIOS::Ace::Ace()
   : m_next (this), m_prev (this), m_addr (STORE_PAGE_NULL), m_used (0)
 {}
@@ -398,7 +358,7 @@ OStorePageBIOS::Ace::~Ace()
 
 int
 SAL_CALL OStorePageBIOS::Ace::constructor (
-    void * obj, SAL_UNUSED_PARAMETER void * /* arg */)
+    void * obj, SAL_UNUSED_PARAMETER void*)
 {
   Ace * ace = static_cast<Ace*>(obj);
   ace->m_next = ace->m_prev = ace;
@@ -427,11 +387,6 @@ OStorePageBIOS::Ace::insert (OStorePageBIOS::Ace * head, OStorePageBIOS::Ace * e
   entry->m_prev->m_next = entry;
 }
 
-/*========================================================================
- *
- * OStorePageBIOS::AceCache interface.
- *
- *======================================================================*/
 namespace store
 {
 
@@ -454,12 +409,6 @@ protected:
 };
 
 } // namespace store
-
-/*========================================================================
- *
- * OStorePageBIOS::AceCache implementation.
- *
- *======================================================================*/
 
 OStorePageBIOS::AceCache &
 OStorePageBIOS::AceCache::get()
@@ -522,31 +471,16 @@ OStorePageBIOS::AceCache::destroy (OStorePageBIOS::Ace * ace)
   }
 }
 
-/*========================================================================
- *
- * OStorePageBIOS implementation.
- *
- *======================================================================*/
-/*
- * OStorePageBIOS.
- */
 OStorePageBIOS::OStorePageBIOS()
     : m_bWriteable (false)
 {
 }
 
-/*
- * ~OStorePageBIOS.
- */
 OStorePageBIOS::~OStorePageBIOS()
 {
     cleanup_Impl();
 }
 
-/*
- * initialize.
- * Precond: none.
- */
 storeError OStorePageBIOS::initialize (
     ILockBytes *    pLockBytes,
     storeAccessMode eAccessMode,
@@ -565,9 +499,9 @@ storeError OStorePageBIOS::initialize (
     return eErrCode;
 }
 
-/*
- * initialize_Impl.
- * Internal: Precond: exclusive access.
+/**
+   initialize_Impl.
+   @pre exclusive access
  */
 storeError OStorePageBIOS::initialize_Impl (
     ILockBytes *    pLockBytes,
@@ -646,8 +580,7 @@ storeError OStorePageBIOS::initialize_Impl (
 }
 
 /*
- * cleanup_Impl.
- * Internal: Precond: exclusive access.
+  @pre exclusive access.
  */
 void OStorePageBIOS::cleanup_Impl()
 {
@@ -677,9 +610,8 @@ void OStorePageBIOS::cleanup_Impl()
     m_xLockBytes.clear();
 }
 
-/*
- * read.
- * Low Level: Precond: initialized, exclusive access.
+/**
+    @pre initialized, exclusive access.
  */
 storeError OStorePageBIOS::read (
     sal_uInt32 nAddr, void *pData, sal_uInt32 nSize) const
@@ -692,9 +624,8 @@ storeError OStorePageBIOS::read (
     return m_xLockBytes->readAt (nAddr, pData, nSize);
 }
 
-/*
- * write.
- * Low Level: Precond: initialized, writeable, exclusive access.
+/**
+   @pre initialized, writeable, exclusive access.
  */
 storeError OStorePageBIOS::write (
     sal_uInt32 nAddr, const void *pData, sal_uInt32 nSize) const
@@ -709,9 +640,8 @@ storeError OStorePageBIOS::write (
     return m_xLockBytes->writeAt (nAddr, pData, nSize);
 }
 
-/*
- * acquirePage.
- * Precond: initialized.
+/**
+   @pre initialized.
  */
 storeError OStorePageBIOS::acquirePage (
     const OStorePageDescriptor& rDescr, storeAccessMode eMode)
@@ -751,9 +681,8 @@ storeError OStorePageBIOS::acquirePage (
     return store_E_None;
 }
 
-/*
- * releasePage.
- * Precond: initialized.
+/**
+   @pre initialized.
  */
 storeError OStorePageBIOS::releasePage (const OStorePageDescriptor& rDescr)
 {
@@ -780,9 +709,8 @@ storeError OStorePageBIOS::releasePage (const OStorePageDescriptor& rDescr)
     return store_E_None;
 }
 
-/*
- * allocate.
- * Precond: initialized, writeable.
+/**
+   @pre initialized, writeable.
  */
 storeError OStorePageBIOS::allocate (
     OStorePageObject& rPage)
@@ -826,9 +754,8 @@ storeError OStorePageBIOS::allocate (
     return saveObjectAt_Impl (rPage, nSize);
 }
 
-/*
- * free.
- * Precond: initialized, writeable.
+/**
+   @pre initialized, writeable.
  */
 storeError OStorePageBIOS::free (sal_uInt32 nAddr)
 {
@@ -848,9 +775,8 @@ storeError OStorePageBIOS::free (sal_uInt32 nAddr)
     return m_pSuper->unusedPush (*this, nAddr);
 }
 
-/*
- * loadObjectAt.
- * Precond: initialized, readable.
+/**
+   @pre initialized, readable.
  */
 storeError OStorePageBIOS::loadObjectAt (OStorePageObject & rPage, sal_uInt32 nAddr)
 {
@@ -864,9 +790,8 @@ storeError OStorePageBIOS::loadObjectAt (OStorePageObject & rPage, sal_uInt32 nA
     return loadObjectAt_Impl (rPage, nAddr);
 }
 
-/*
- * loadObjectAt_Impl.
- * Internal: Precond: initialized, readable, exclusive access.
+/**
+   @pre initialized, readable, exclusive access.
  */
 storeError OStorePageBIOS::loadObjectAt_Impl (OStorePageObject & rPage, sal_uInt32 nAddr) const
 {
@@ -891,9 +816,8 @@ storeError OStorePageBIOS::loadObjectAt_Impl (OStorePageObject & rPage, sal_uInt
     return m_xCache->insertPageAt (rPage.get(), nAddr);
 }
 
-/*
- * saveObjectAt.
- * Precond: initialized, writeable.
+/**
+   @pre initialized, writeable.
  */
 storeError OStorePageBIOS::saveObjectAt (OStorePageObject & rPage, sal_uInt32 nAddr)
 {
@@ -910,9 +834,8 @@ storeError OStorePageBIOS::saveObjectAt (OStorePageObject & rPage, sal_uInt32 nA
     return saveObjectAt_Impl (rPage, nAddr);
 }
 
-/*
- * saveObjectAt_Impl.
- * Internal: Precond: initialized, writeable, exclusive access.
+/**
+   @pre initialized, writeable, exclusive access.
  */
 storeError OStorePageBIOS::saveObjectAt_Impl (OStorePageObject & rPage, sal_uInt32 nAddr) const
 {
@@ -933,9 +856,8 @@ storeError OStorePageBIOS::saveObjectAt_Impl (OStorePageObject & rPage, sal_uInt
     return m_xCache->updatePageAt (rPage.get(), nAddr);
 }
 
-/*
- * close.
- * Precond: none.
+/**
+   @pre none.
  */
 storeError OStorePageBIOS::close()
 {
@@ -949,9 +871,8 @@ storeError OStorePageBIOS::close()
     return store_E_None;
 }
 
-/*
- * flush.
- * Precond: initialized.
+/**
+   @pre initialized.
  */
 storeError OStorePageBIOS::flush()
 {

@@ -32,24 +32,13 @@
 
 using namespace store;
 
-/*========================================================================
- *
- * OStoreLockBytes implementation.
- *
- *======================================================================*/
 const sal_uInt32 OStoreLockBytes::m_nTypeId(0x94190310);
 
-/*
- * OStoreLockBytes.
- */
 OStoreLockBytes::OStoreLockBytes()
     : m_bWriteable (false)
 {
 }
 
-/*
- * ~OStoreLockBytes.
- */
 OStoreLockBytes::~OStoreLockBytes()
 {
     if (m_xManager.is() && m_xNode.is())
@@ -58,17 +47,11 @@ OStoreLockBytes::~OStoreLockBytes()
     }
 }
 
-/*
- * isKindOf.
- */
 bool OStoreLockBytes::isKindOf (sal_uInt32 nTypeId)
 {
     return (nTypeId == m_nTypeId);
 }
 
-/*
- * create.
- */
 storeError OStoreLockBytes::create (
     OStorePageManager *pManager,
     rtl_String const  *pPath,
@@ -117,9 +100,6 @@ storeError OStoreLockBytes::create (
     return eErrCode;
 }
 
-/*
- * readAt.
- */
 storeError OStoreLockBytes::readAt (
     sal_uInt32  nOffset,
     void       *pBuffer,
@@ -217,9 +197,6 @@ storeError OStoreLockBytes::readAt (
     return store_E_None;
 }
 
-/*
- * writeAt.
- */
 storeError OStoreLockBytes::writeAt (
     sal_uInt32  nOffset,
     const void *pBuffer,
@@ -290,7 +267,6 @@ storeError OStoreLockBytes::writeAt (
             if ((aDescr.m_nOffset > 0) || (nBytes < nLength))
             {
                 // Unaligned. Need to load/create data page.
-// @@@ loadOrCreate()
                 eErrCode = aPage.read (aDescr.m_nPage, aData, *m_xManager);
                 if (eErrCode != store_E_None)
                 {
@@ -344,9 +320,6 @@ storeError OStoreLockBytes::writeAt (
         return store_E_None;
 }
 
-/*
- * setSize.
- */
 storeError OStoreLockBytes::setSize (sal_uInt32 nSize)
 {
     if (!m_xManager.is())

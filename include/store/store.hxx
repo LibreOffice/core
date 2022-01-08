@@ -30,22 +30,16 @@ namespace store
 class OStoreStream
 {
 public:
-    /** Construction.
-     */
     OStoreStream()
         : m_hImpl (nullptr)
     {}
 
-    /** Destruction.
-     */
     ~OStoreStream()
     {
         if (m_hImpl)
             (void) store_releaseHandle (m_hImpl);
     }
 
-    /** Copy construction.
-     */
     OStoreStream (OStoreStream const & rhs)
         : m_hImpl (rhs.m_hImpl)
     {
@@ -53,8 +47,6 @@ public:
             (void) store_acquireHandle (m_hImpl);
     }
 
-    /** Assignment.
-     */
     OStoreStream & operator= (OStoreStream const & rhs)
     {
         if (rhs.m_hImpl)
@@ -113,30 +105,22 @@ public:
     }
 
 private:
-    /** Representation.
-     */
     storeStreamHandle m_hImpl;
 };
 
 class OStoreDirectory
 {
 public:
-    /** Construction.
-     */
     OStoreDirectory()
         : m_hImpl (nullptr)
     {}
 
-    /** Destruction.
-     */
     ~OStoreDirectory()
     {
         if (m_hImpl)
             (void) store_releaseHandle (m_hImpl);
     }
 
-    /** Copy construction.
-     */
     OStoreDirectory (OStoreDirectory const & rhs)
         : m_hImpl (rhs.m_hImpl)
     {
@@ -144,16 +128,12 @@ public:
             (void) store_acquireHandle (m_hImpl);
     }
 
-    /** Move construction.
-     */
     OStoreDirectory (OStoreDirectory && rhs) noexcept
         : m_hImpl (rhs.m_hImpl)
     {
         rhs.m_hImpl = nullptr;
     }
 
-    /** Assignment.
-     */
     OStoreDirectory & operator= (OStoreDirectory const & rhs)
     {
         if (rhs.m_hImpl)
@@ -164,8 +144,6 @@ public:
         return *this;
     }
 
-    /** Move assignment.
-     */
     OStoreDirectory & operator= (OStoreDirectory && rhs) noexcept
     {
         if (m_hImpl)
@@ -221,30 +199,22 @@ public:
     }
 
 private:
-    /** Representation.
-     */
     storeDirectoryHandle m_hImpl;
 };
 
 class OStoreFile
 {
 public:
-    /** Construction.
-     */
     OStoreFile()
         : m_hImpl (nullptr)
     {}
 
-    /** Destruction.
-     */
     ~OStoreFile()
     {
         if (m_hImpl)
             (void) store_releaseHandle (m_hImpl);
     }
 
-    /** Copy construction.
-     */
     OStoreFile (OStoreFile const & rhs)
         : m_hImpl (rhs.m_hImpl)
     {
@@ -252,8 +222,6 @@ public:
             (void) store_acquireHandle (m_hImpl);
     }
 
-    /** Assignment.
-     */
     OStoreFile & operator= (OStoreFile const & rhs)
     {
         if (rhs.m_hImpl)
@@ -264,8 +232,6 @@ public:
         return *this;
     }
 
-    /** Conversion into File Handle.
-     */
     operator storeFileHandle() const
     {
         return m_hImpl;
@@ -343,8 +309,6 @@ public:
     }
 
 private:
-    /** Representation.
-     */
     storeFileHandle m_hImpl;
 };
 
