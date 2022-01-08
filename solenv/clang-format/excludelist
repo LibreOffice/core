@@ -7420,7 +7420,6 @@ registry/source/keyimpl.cxx
 registry/source/keyimpl.hxx
 registry/source/reflcnst.hxx
 registry/source/reflread.cxx
-registry/source/reflread.hxx
 registry/source/reflwrit.cxx
 registry/source/regimpl.cxx
 registry/source/regimpl.hxx
