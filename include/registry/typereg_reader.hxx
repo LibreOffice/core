@@ -139,7 +139,7 @@ REG_DLLPUBLIC RTTypeClass typereg_reader_getTypeClass(void * handle);
    @param handle a handle on a type reader; may be null
 
    @return whether the type reader is published; if <code>handle</code> is null,
-   <code>sal_False</code> is returned
+   false is returned
 
    @since UDK 3.2.0
  */
