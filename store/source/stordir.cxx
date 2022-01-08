@@ -35,14 +35,6 @@
 
 using namespace store;
 
-/*========================================================================
- *
- * OStore... internals.
- *
- *======================================================================*/
-/*
- * convertTextToUnicode.
- */
 static sal_Size convertTextToUnicode (
     rtl_TextToUnicodeConverter  hConverter,
     const char *pSrcBuffer, sal_Size nSrcLength,
@@ -58,25 +50,14 @@ static sal_Size convertTextToUnicode (
         &nCvtInfo, &nCvtBytes);
 }
 
-/*========================================================================
- *
- * OStoreDirectory_Impl implementation.
- *
- *======================================================================*/
 const sal_uInt32 OStoreDirectory_Impl::m_nTypeId(0x89191107);
 
-/*
- * OStoreDirectory_Impl.
- */
 OStoreDirectory_Impl::OStoreDirectory_Impl()
     : m_aDescr   (0, 0, 0),
       m_nPath    (0),
       m_hTextCvt (nullptr)
 {}
 
-/*
- * ~OStoreDirectory_Impl.
- */
 OStoreDirectory_Impl::~OStoreDirectory_Impl()
 {
     if (m_xManager.is())
@@ -87,17 +68,11 @@ OStoreDirectory_Impl::~OStoreDirectory_Impl()
     rtl_destroyTextToUnicodeConverter (m_hTextCvt);
 }
 
-/*
- * isKindOf.
- */
 bool OStoreDirectory_Impl::isKindOf (sal_uInt32 nTypeId)
 {
     return (nTypeId == m_nTypeId);
 }
 
-/*
- * create.
- */
 storeError OStoreDirectory_Impl::create (
     OStorePageManager *pManager,
     rtl_String const  *pPath,
@@ -137,9 +112,6 @@ storeError OStoreDirectory_Impl::create (
     return store_E_None;
 }
 
-/*
- * iterate.
- */
 storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
 {
     if (!m_xManager.is())

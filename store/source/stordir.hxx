@@ -37,8 +37,6 @@ struct OStoreDirectoryPageData;
 class OStoreDirectory_Impl : public store::OStoreObject
 {
 public:
-    /** Construction.
-     */
     OStoreDirectory_Impl();
 
     /** create (two-phase construction).
@@ -62,13 +60,9 @@ public:
     storeError iterate (
         storeFindData &rFindData);
 
-    /** IStoreHandle.
-     */
     virtual bool isKindOf (sal_uInt32 nTypeId) override;
 
 protected:
-    /** Destruction.
-     */
     virtual ~OStoreDirectory_Impl() override;
 
 private:
@@ -81,8 +75,6 @@ private:
     friend OStoreDirectory_Impl*
     SAL_CALL query<> (OStoreObject *pHandle, OStoreDirectory_Impl*);
 
-    /** Representation.
-     */
     typedef OStoreDirectoryPageData   inode;
     typedef PageHolderObject< inode > inode_holder_type;
 

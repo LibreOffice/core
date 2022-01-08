@@ -32,30 +32,16 @@
 
 using namespace store;
 
-/*========================================================================
- *
- * OStorePageManager implementation.
- *
- *======================================================================*/
 const sal_uInt32 OStorePageManager::m_nTypeId = sal_uInt32(0x62190120);
 
-/*
- * OStorePageManager.
- */
 OStorePageManager::OStorePageManager()
 {
 }
 
-/*
- * ~OStorePageManager.
- */
 OStorePageManager::~OStorePageManager()
 {
 }
 
-/*
- * isKindOf.
- */
 bool OStorePageManager::isKindOf (sal_uInt32 nTypeId)
 {
     return (nTypeId == m_nTypeId);
@@ -504,6 +490,5 @@ storeError OStorePageManager::remove (const OStorePageKey &rKey)
     // Remove entry.
     return remove_Impl (e);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

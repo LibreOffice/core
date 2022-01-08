@@ -40,14 +40,10 @@ struct OStoreBTreeEntry
     typedef OStorePageKey  K;
     typedef OStorePageLink L;
 
-    /** Representation.
-    */
     K          m_aKey;
     L          m_aLink;
     sal_uInt32 m_nAttrib;
 
-    /** Construction.
-    */
     explicit OStoreBTreeEntry (
         K const &  rKey    = K(),
         L const &  rLink   = L())
@@ -56,8 +52,6 @@ struct OStoreBTreeEntry
           m_nAttrib (store::htonl(0))
     {}
 
-    /** Comparison.
-    */
     enum CompareResult
     {
         COMPARE_LESS    = -1,
@@ -86,23 +80,15 @@ struct OStoreBTreeNodeData : public store::PageData
     typedef OStorePageGuard     G;
     typedef OStoreBTreeEntry    T;
 
-    /** Representation.
-     */
     G m_aGuard;
     T m_pData[1];
 
-    /** type.
-     */
     static const sal_uInt32 theTypeId = STORE_MAGIC_BTREENODE;
 
-    /** theSize.
-     */
     static const size_t     theSize     = sizeof(G);
     static const sal_uInt16 thePageSize = base::theSize + self::theSize;
     static_assert(STORE_MINIMUM_PAGESIZE >= self::thePageSize, "got to be at least equal in size");
 
-    /** capacity.
-    */
     sal_uInt16 capacity() const
     {
         return static_cast<sal_uInt16>(store::ntohs(base::m_aDescr.m_nSize) - self::thePageSize);
@@ -115,15 +101,11 @@ struct OStoreBTreeNodeData : public store::PageData
         return sal_uInt16(capacity() / sizeof(T));
     }
 
-    /** usage.
-    */
     sal_uInt16 usage() const
     {
         return static_cast<sal_uInt16>(store::ntohs(base::m_aDescr.m_nUsed) - self::thePageSize);
     }
 
-    /** usageCount.
-    */
     sal_uInt16 usageCount() const
     {
         return sal_uInt16(usage() / sizeof(T));
@@ -134,12 +116,8 @@ struct OStoreBTreeNodeData : public store::PageData
         base::m_aDescr.m_nUsed = store::htons(sal::static_int_cast< sal_uInt16 >(nBytes));
     }
 
-    /** Construction.
-    */
     explicit OStoreBTreeNodeData (sal_uInt16 nPageSize);
 
-    /** guard (external representation).
-    */
     void guard()
     {
         sal_uInt32 nCRC32 = rtl_crc32 (0, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
@@ -147,8 +125,6 @@ struct OStoreBTreeNodeData : public store::PageData
         m_aGuard.m_nCRC32 = store::htonl(nCRC32);
     }
 
-    /** verify (external representation).
-    */
     storeError verify() const
     {
         sal_uInt32 nCRC32 = rtl_crc32 (0, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
@@ -159,8 +135,6 @@ struct OStoreBTreeNodeData : public store::PageData
             return store_E_None;
     }
 
-    /** depth.
-    */
     sal_uInt32 depth() const
     {
         return store::ntohl(self::m_aGuard.m_nMagic);
@@ -170,15 +144,11 @@ struct OStoreBTreeNodeData : public store::PageData
         self::m_aGuard.m_nMagic = store::htonl(nDepth);
     }
 
-    /** querySplit.
-    */
     bool querySplit() const
     {
         return usageCount() >= capacityCount();
     }
 
-    /** Operation.
-    */
     sal_uInt16 find   (const T& t) const;
     void       insert (sal_uInt16 i, const T& t);
     void       remove (sal_uInt16 i);
@@ -201,14 +171,10 @@ class OStoreBTreeNodeObject : public store::OStorePageObject
     typedef OStoreBTreeEntry      T;
 
 public:
-    /** Construction.
-    */
     explicit OStoreBTreeNodeObject (std::shared_ptr<PageData> const & rxPage = std::shared_ptr<PageData>())
         : OStorePageObject (rxPage)
     {}
 
-    /** External representation.
-    */
     virtual storeError guard  (sal_uInt32 nAddr) override;
     virtual storeError verify (sal_uInt32 nAddr) const override;
 
@@ -237,8 +203,6 @@ class OStoreBTreeRootObject : public store::OStoreBTreeNodeObject
     typedef OStoreBTreeEntry      T;
 
 public:
-    /** Construction.
-     */
     explicit OStoreBTreeRootObject (std::shared_ptr<PageData> const & rxPage = std::shared_ptr<PageData>())
         : OStoreBTreeNodeObject (rxPage)
     {}
