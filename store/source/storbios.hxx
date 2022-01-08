@@ -37,8 +37,6 @@ struct SuperBlockPage;
 class OStorePageBIOS : public store::OStoreObject
 {
 public:
-    /** Construction.
-     */
     OStorePageBIOS();
 
     /** Conversion into Mutex&
@@ -61,26 +59,16 @@ public:
         return m_xAllocator;
     }
 
-    /** read.
-     */
     storeError read (
         sal_uInt32 nAddr, void *pData, sal_uInt32 nSize) const;
 
-    /** write.
-     */
     storeError write (
         sal_uInt32 nAddr, const void *pData, sal_uInt32 nSize) const;
 
-    /** isWriteable.
-     */
     inline bool isWriteable() const;
 
-    /** isValid.
-     */
     inline bool isValid() const;
 
-    /** Page Access.
-     */
     storeError acquirePage (
         const OStorePageDescriptor& rDescr, storeAccessMode eMode);
 
@@ -99,23 +87,19 @@ public:
         OStorePageObject& rPage, sal_uInt32 nAddr);
 
     /** close.
-     *  @return store_E_None upon success.
+        @return store_E_None upon success.
      */
     storeError close();
 
     /** flush.
-     *  @return store_E_None upon success.
+        @return store_E_None upon success.
      */
     storeError flush();
 
 protected:
-    /** Destruction (OReference).
-     */
     virtual ~OStorePageBIOS() override;
 
 private:
-    /** Representation.
-     */
     rtl::Reference<ILockBytes>    m_xLockBytes;
     osl::Mutex                    m_aMutex;
 
@@ -126,9 +110,9 @@ private:
     rtl::Reference< PageData::Allocator > m_xAllocator;
     rtl::Reference< PageCache >   m_xCache;
 
+public:
     /** Page Access (control).
      */
-public:
     struct Ace
     {
         Ace *      m_next;
@@ -151,16 +135,12 @@ private:
 
     class AceCache;
 
-    /** Initialization.
-     */
     storeError initialize_Impl (
         ILockBytes *    pLockBytes,
         storeAccessMode eAccessMode,
         sal_uInt16 &    rnPageSize);
     void cleanup_Impl();
 
-    /** Page Maintenance.
-     */
     storeError loadObjectAt_Impl (
         OStorePageObject & rPage, sal_uInt32 nAddr) const;
     storeError saveObjectAt_Impl (
@@ -174,10 +154,12 @@ inline OStorePageBIOS::operator osl::Mutex& (void) const
 {
     return const_cast<osl::Mutex&>(m_aMutex);
 }
+
 inline bool OStorePageBIOS::isWriteable() const
 {
     return m_bWriteable;
 }
+
 inline bool OStorePageBIOS::isValid() const
 {
     return m_xLockBytes.is();
