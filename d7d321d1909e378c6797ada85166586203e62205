@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1994e88_8a3390f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-08T11:56:21Z",
+      "side": 1,
+      "message": "Thanks for adding this utility. 👍\nLooks good to me.",
+      "revId": "d7d321d1909e378c6797ada85166586203e62205",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
