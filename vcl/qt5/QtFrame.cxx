@@ -176,8 +176,8 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
-        QWindow* pParentWindow = pParent->GetQWidget()->window()->windowHandle();
-        QWindow* pChildWindow = asChild()->window()->windowHandle();
+        QWindow* pParentWindow = pParent->windowHandle();
+        QWindow* pChildWindow = windowHandle();
         if (pParentWindow && pChildWindow && (pParentWindow != pChildWindow))
             pChildWindow->setTransientParent(pParentWindow);
     }
@@ -349,6 +349,7 @@ QWindow* QtFrame::windowHandle() const
 {
     // set attribute 'Qt::WA_NativeWindow' first to make sure a window handle actually exists
     QWidget* pChild = asChild();
+    assert(pChild->window() == pChild);
     pChild->setAttribute(Qt::WA_NativeWindow);
     return pChild->windowHandle();
 }
@@ -428,21 +429,25 @@ void QtFrame::modalReparent(bool bVisible)
 
     if (!bVisible)
     {
-        m_pQWidget->setParent(m_pParent ? m_pParent->asChild() : nullptr,
-                              m_pQWidget->windowFlags());
+        QWidget* pNewParent = m_pParent ? m_pParent->asChild() : nullptr;
+        if (pNewParent != m_pQWidget->parent())
+            m_pQWidget->setParent(pNewParent, m_pQWidget->windowFlags());
         return;
     }
 
-    if (!QGuiApplication::modalWindow())
+    const QWindow* pModalWin = QGuiApplication::modalWindow();
+    if (!pModalWin || m_pParent->windowHandle() == pModalWin)
         return;
 
     QtInstance* pInst = static_cast<QtInstance*>(GetSalData()->m_pInstance);
     for (auto* pFrame : pInst->getFrames())
     {
-        QWidget* pQWidget = static_cast<QtFrame*>(pFrame)->asChild();
-        if (pQWidget->windowHandle() == QGuiApplication::modalWindow())
+        QtFrame* pQtFrame = static_cast<QtFrame*>(pFrame);
+        if (pQtFrame->windowHandle() == pModalWin)
         {
-            m_pQWidget->setParent(pQWidget, m_pQWidget->windowFlags());
+            QWidget* pNewParent = pQtFrame->asChild();
+            if (pNewParent != m_pQWidget->parent())
+                m_pQWidget->setParent(pNewParent, m_pQWidget->windowFlags());
             break;
         }
     }
