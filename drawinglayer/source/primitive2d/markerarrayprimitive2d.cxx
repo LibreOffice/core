@@ -51,9 +51,8 @@ namespace drawinglayer::primitive2d
             // use half size for expand
             aLogicHalfSize *= 0.5;
 
-            for(const auto& a : rPositions)
+            for(const auto& rPosition : rPositions)
             {
-                const basegfx::B2DPoint& rPosition(a);
                 const basegfx::B2DRange aRange(rPosition - aLogicHalfSize, rPosition + aLogicHalfSize);
                 basegfx::B2DHomMatrix aTransform;
 
