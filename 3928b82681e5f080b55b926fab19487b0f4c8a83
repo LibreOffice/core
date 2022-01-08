@@ -16,6 +16,24 @@
       "message": "Could you please build locally before submitting a patch?\nIndeed, you added an extra \"}\"",
       "revId": "3928b82681e5f080b55b926fab19487b0f4c8a83",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "535fd813_f00a73d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2022-01-08T12:49:35Z",
+      "side": 1,
+      "message": "I wonder how that extra \u0027}\u0027 was there. It was just copy-paste task.So, I was perhaps not paying enough heed to it. I uploaded the patchset 2 without staging the change and commiting.... Sorry for that ...:(",
+      "parentUuid": "d0dc9fd5_7b4406b1",
+      "revId": "3928b82681e5f080b55b926fab19487b0f4c8a83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
