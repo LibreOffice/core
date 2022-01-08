@@ -62,14 +62,6 @@ public:
 
 using namespace store;
 
-/*========================================================================
- *
- * storeHandle implementation.
- *
- *======================================================================*/
-/*
- * store_acquireHandle.
- */
 storeError store_acquireHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C()
@@ -82,9 +74,6 @@ storeError store_acquireHandle (
     return store_E_None;
 }
 
-/*
- * store_releaseHandle.
- */
 storeError store_releaseHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C()
@@ -97,14 +86,6 @@ storeError store_releaseHandle (
     return store_E_None;
 }
 
-/*========================================================================
- *
- * storeFileHandle implementation.
- *
- *======================================================================*/
-/*
- * store_createMemoryFile.
- */
 storeError store_createMemoryFile (
     sal_uInt16       nPageSize,
     storeFileHandle *phFile
@@ -136,9 +117,6 @@ storeError store_createMemoryFile (
     return store_E_None;
 }
 
-/*
- * store_openFile.
- */
 storeError store_openFile (
     rtl_uString     *pFilename,
     storeAccessMode  eAccessMode,
@@ -191,9 +169,6 @@ storeError store_closeFile (
     return eErrCode;
 }
 
-/*
- * store_flushFile.
- */
 storeError store_flushFile (
     storeFileHandle Handle
 ) SAL_THROW_EXTERN_C()
@@ -206,14 +181,6 @@ storeError store_flushFile (
     return xManager->flush();
 }
 
-/*========================================================================
- *
- * storeDirectoryHandle implementation.
- *
- *======================================================================*/
-/*
- * store_openDirectory.
- */
 storeError store_openDirectory (
     storeFileHandle       hFile,
     rtl_uString const    *pPath,
@@ -251,9 +218,6 @@ storeError store_openDirectory (
     return store_E_None;
 }
 
-/*
- * store_findFirst.
- */
 storeError store_findFirst (
     storeDirectoryHandle  Handle,
     storeFindData        *pFindData
@@ -275,9 +239,6 @@ storeError store_findFirst (
     return xDirectory->iterate (*pFindData);
 }
 
-/*
- * store_findNext.
- */
 storeError store_findNext (
     storeDirectoryHandle  Handle,
     storeFindData        *pFindData
@@ -300,14 +261,6 @@ storeError store_findNext (
     return xDirectory->iterate (*pFindData);
 }
 
-/*========================================================================
- *
- * storeStreamHandle implementation.
- *
- *======================================================================*/
-/*
- * store_openStream
- */
 storeError store_openStream (
     storeFileHandle    hFile,
     rtl_uString const *pPath,
@@ -367,9 +320,6 @@ storeError store_readStream (
     return xLockBytes->readAt (nOffset, pBuffer, nBytes, *pnDone);
 }
 
-/*
- * store_writeStream.
- */
 storeError store_writeStream (
     storeStreamHandle  Handle,
     sal_uInt32         nOffset,
@@ -389,9 +339,6 @@ storeError store_writeStream (
     return xLockBytes->writeAt (nOffset, pBuffer, nBytes, *pnDone);
 }
 
-/*
- * store_remove.
- */
 storeError store_remove (
     storeFileHandle Handle,
     rtl_uString const *pPath,

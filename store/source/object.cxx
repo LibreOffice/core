@@ -23,16 +23,8 @@
 
 namespace store
 {
-/*========================================================================
- *
- * OStoreObject implementation.
- *
- *======================================================================*/
 const sal_uInt32 OStoreObject::m_nTypeId = sal_uInt32(0x58190322);
 
-/*
- * isKindOf.
- */
 bool OStoreObject::isKindOf(sal_uInt32 nTypeId) { return (nTypeId == m_nTypeId); }
 
 } // namespace store
