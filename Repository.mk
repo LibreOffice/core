@@ -849,6 +849,7 @@ $(eval $(call gb_Helper_register_packages_for_install,libreofficekit,\
 
 $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	instsetoo_native_setup_ure \
+    $(call gb_CondExeUno,uno_sh) \
 	ure_install \
 	$(if $(ENABLE_JAVA),\
 		jvmfwk_jvmfwk3_ini \

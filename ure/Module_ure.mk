@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,ure))
 
 $(eval $(call gb_Module_add_targets,ure,\
-	Package_install \
+	Package_ure_install \
 	Rdb_ure \
 ))
 
