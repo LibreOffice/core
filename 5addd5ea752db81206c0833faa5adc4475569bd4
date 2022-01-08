@@ -16,6 +16,23 @@
       "message": "Caolan, this is what I had in mind. The dialog has a minimum size defined by controls and the treeview in this case but remembers the last width/height and restores it. It works only for gtk3 yet. I would appreciate a more generic implementation with all/most WindowStateData where the dialog itself just calls \u003cweld\u003eSaveWindowState() and \u003cweld\u003eRestoreWindowState(). We have requests to remember the dialog size for the print, hyperlink and bookmark dialog, at least. Going the opposite way and make it non-resizable was not accepted.",
       "revId": "5addd5ea752db81206c0833faa5adc4475569bd4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edf178a8_af50b73c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-08T15:08:53Z",
+      "side": 1,
+      "message": "a) If you want to go down this road then there isn\u0027t a need to add something to Common.xcs for every dialog. There is some existing generic functionality as used in fpicker/source/office/iodlg.cxx where \n\nSvtViewOptions aDlgOpt( EViewType::Dialog, m_xImpl-\u003em_aIniKey );\nif ( aDlgOpt.Exists() )\n    m_xDialog-\u003eset_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_UTF8));\n\nis used to restore a saved size/state\n\nand...\n\nif (!m_xImpl-\u003em_aIniKey.isEmpty())\n{\n    // save window state\n    SvtViewOptions aDlgOpt( EViewType::Dialog, m_xImpl-\u003em_aIniKey );\n    aDlgOpt.SetWindowState(OStringToOUString(m_xDialog-\u003eget_window_state(WindowStateMask::All)...\n}\n\nis used to save size/state.\n\nb) its always seemed very unsatisfactory to me that there\u0027s no consideration as to what happens if the user changes e.g. the size of their font after the dialog size was saved and then the dialog is restored at the old size which is now too small. Or if the setting was saved in an old version of LibreOffice and then the dialog is redesigned in a new version.\n\nas an aside, in this insertbookmark.ui its hard to see what the changes are, because of the glade -/_ change. Be neater to make that two commits, one just \"resaved with glade\" where no real change is intended and then the \"real\" follow up change.",
+      "revId": "5addd5ea752db81206c0833faa5adc4475569bd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
