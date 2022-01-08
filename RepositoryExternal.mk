@@ -3772,7 +3772,7 @@ endif # SYSTEM_JFREEREPORT
 
 define gb_Executable__register_bestreversemap
 $(call gb_Executable_add_runtime_dependencies,bestreversemap,\
-    $(call gb_CondSalTextEncodingLibrary,$(call gb_Library_get_target_for_build,sal_textenc)) \
+    $(call gb_CondLibSalTextenc,$(call gb_Library_get_target_for_build,sal_textenc)) \
 )
 endef
 
@@ -3789,7 +3789,7 @@ endef
 
 define gb_Executable__register_cppumaker
 $(call gb_Executable_add_runtime_dependencies,cppumaker,\
-    $(call gb_CondSalTextEncodingLibrary,$(call gb_Library_get_target,sal_textenc)) \
+    $(call gb_CondLibSalTextenc,$(call gb_Library_get_target,sal_textenc)) \
 )
 endef
 

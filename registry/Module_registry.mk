@@ -11,7 +11,7 @@ $(eval $(call gb_Module_Module,registry))
 
 $(eval $(call gb_Module_add_targets,registry,\
 	Library_reg \
-    $(call gb_CondBuildRegistryTools, \
+    $(call gb_CondExeRegistryTools, \
         Executable_regmerge \
         Executable_regview \
         StaticLibrary_registry_helper \

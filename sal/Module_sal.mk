@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets,sal,\
 	$(if $(filter $(OS),ANDROID), \
 		Library_lo-bootstrap) \
 	Library_sal \
-    $(call gb_CondSalTextEncodingLibrary,Library_sal_textenc) \
+    $(call gb_CondLibSalTextenc,Library_sal_textenc) \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
