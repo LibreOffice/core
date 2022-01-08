@@ -80,6 +80,9 @@ public:
                 version, documentation.pData, fileName.pData, typeClass,
                 published, typeName.pData, superTypeCount, fieldCount,
                 methodCount, referenceCount))
+        , mnFieldCount(fieldCount)
+        , mnMethodCount(methodCount)
+        , mnReferenceCount(referenceCount)
     {
         if (m_handle == nullptr) {
             throw std::bad_alloc();
@@ -133,7 +136,7 @@ public:
         OUString const & fileName, RTFieldAccess flags, OUString const & name,
         OUString const & typeName, RTConstValue const & value)
     {
-        if (!typereg_writer_setFieldData(
+        if ((mnFieldCount == 0) || !typereg_writer_setFieldData(
                 m_handle, index, documentation.pData, fileName.pData, flags,
                 name.pData, typeName.pData, value.m_type, value.m_value))
         {
@@ -166,7 +169,7 @@ public:
         OUString const & returnTypeName, sal_uInt16 parameterCount,
         sal_uInt16 exceptionCount)
     {
-        if (!typereg_writer_setMethodData(
+        if ((mnMethodCount == 0) || !typereg_writer_setMethodData(
                 m_handle, index, documentation.pData, flags, name.pData,
                 returnTypeName.pData, parameterCount, exceptionCount))
         {
@@ -249,7 +252,7 @@ public:
         RTReferenceType sort, RTFieldAccess flags,
         OUString const & typeName)
     {
-        if (!typereg_writer_setReferenceData(
+        if ((mnReferenceCount == 0) || !typereg_writer_setReferenceData(
                 m_handle, index, documentation.pData, sort, flags,
                 typeName.pData))
         {
@@ -282,6 +285,10 @@ private:
     Writer& operator =(Writer const &) = delete;
 
     void * m_handle;
+
+    sal_uInt16 mnFieldCount;
+    sal_uInt16 mnMethodCount;
+    sal_uInt16 mnReferenceCount;
 };
 
 }
