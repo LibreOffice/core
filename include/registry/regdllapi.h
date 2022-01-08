@@ -28,6 +28,8 @@
 #define REG_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
+#define TYPEREG_CALLTYPE SAL_CALL
+
 #endif // INCLUDED_REGISTRY_REGDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

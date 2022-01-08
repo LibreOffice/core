@@ -40,7 +40,7 @@
     osl::Guard< osl::Mutex > aGuard( mutex );
 
 class ORegKey;
-class RegistryTypeReader;
+namespace typereg { class Reader; }
 
 class ORegistry
 {
@@ -120,8 +120,8 @@ private:
                           bool bReport);
 
     static RegError mergeModuleValue(store::OStoreStream& rTargetValue,
-                                 RegistryTypeReader const & reader,
-                                 RegistryTypeReader const & reader2);
+                                 typereg::Reader const & reader,
+                                 typereg::Reader const & reader2);
 
     RegError    loadAndSaveKeys(ORegKey* pTargetKey,
                                 ORegKey* pSourceKey,
