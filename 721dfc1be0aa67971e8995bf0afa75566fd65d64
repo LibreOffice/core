@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e586c496_1042a231",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-08T21:34:35Z",
+      "side": 1,
+      "message": "For the moment, I can\u0027t add these on Library_mysqlc.mk because there are still other new files to add: column/columns/table/tables.\n\nI just took files from Firebird part, I don\u0027t know if they\u0027re the best knowing the bugs there are but they seemed to me the most recent.\n",
+      "revId": "721dfc1be0aa67971e8995bf0afa75566fd65d64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
