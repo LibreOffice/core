@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_VERSION_H
-#define INCLUDED_REGISTRY_VERSION_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -62,8 +61,6 @@ enum typereg_Version {
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

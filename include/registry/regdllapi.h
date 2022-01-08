@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_REGDLLAPI_H
-#define INCLUDED_REGISTRY_REGDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -27,7 +26,5 @@
 #else
 #define REG_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
-
-#endif // INCLUDED_REGISTRY_REGDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

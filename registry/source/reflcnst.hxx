@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_SOURCE_REFLCNST_HXX
-#define INCLUDED_REGISTRY_SOURCE_REFLCNST_HXX
+#pragma once
 
 #include <registry/types.hxx>
 
@@ -185,8 +184,5 @@ sal_uInt32 writeString(sal_uInt8* buffer, const sal_Unicode* v);
 sal_uInt32 readString(const sal_uInt8* buffer, sal_Unicode* v, sal_uInt32 maxSize);
 
 sal_uInt32 UINT16StringLen(const sal_uInt8* wstring);
-
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_REFLTYPE_HXX
-#define INCLUDED_REGISTRY_REFLTYPE_HXX
+#pragma once
 
 #include <registry/types.hxx>
 #include <sal/types.h>
@@ -46,7 +45,5 @@ public:
 
 /// specifies the calling convention for type reader/writer api
 #define TYPEREG_CALLTYPE SAL_CALL
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

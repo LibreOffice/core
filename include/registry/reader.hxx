@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_READER_HXX
-#define INCLUDED_REGISTRY_READER_HXX
+#pragma once
 
 #include <registry/typereg_reader.hxx>
 #include <registry/refltype.hxx>
@@ -600,7 +599,5 @@ private:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
