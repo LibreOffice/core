@@ -16,6 +16,24 @@
       "message": "You have a \u0027const basegfx::B2DPoint\u0026 a\u0027, and you create another reference to the same object - \u0027rPosition\u0027.\n\nIt would be simpler to change the loop like this:\n\n            for(const auto\u0026 rPosition : rPositions)\n            {\n                ...\n\nand drop redundant line 56.",
       "revId": "7886b6a56a51cb699fb2a18d8a8dff0e224bdfb5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "394126db_07269483",
+        "filename": "drawinglayer/source/primitive2d/markerarrayprimitive2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2022-01-08T12:53:01Z",
+      "side": 1,
+      "message": "This has been resolved as said in new patch https://gerrit.libreoffice.org/c/core/+/128134",
+      "parentUuid": "5efb002d_36277523",
+      "revId": "7886b6a56a51cb699fb2a18d8a8dff0e224bdfb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
