@@ -31,11 +31,8 @@
 
 using namespace store;
 
-/*========================================================================
- *
- * PageData::Allocator_Impl (default allocator).
- *
- *======================================================================*/
+// PageData::Allocator_Impl (default allocator).
+
 namespace store
 {
 
@@ -54,13 +51,9 @@ public:
     storeError initialize (sal_uInt16 nPageSize);
 
 protected:
-    /** Destruction.
-     */
     virtual ~Allocator_Impl() override;
 
 private:
-    /** Representation.
-     */
     rtl_cache_type * m_page_cache;
     sal_uInt16       m_page_size;
 
@@ -113,12 +106,6 @@ void PageData::Allocator_Impl::deallocate_Impl (void * pPage)
     rtl_cache_free(m_page_cache, pPage);
 }
 
-/*========================================================================
- *
- * PageData::Allocator factory.
- *
- *======================================================================*/
-
 storeError
 PageData::Allocator::createInstance (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize)
 {
@@ -130,14 +117,6 @@ PageData::Allocator::createInstance (rtl::Reference< PageData::Allocator > & rxA
     return xAllocator->initialize (nPageSize);
 }
 
-/*========================================================================
- *
- * OStorePageObject.
- *
- *======================================================================*/
-/*
- * ~OStorePageObject.
- */
 OStorePageObject::~OStorePageObject()
 {
 }

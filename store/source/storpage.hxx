@@ -53,7 +53,8 @@ public:
      */
     inline bool isValid() const;
 
-    /** DirectoryPage I/O (managed).
+    /**
+        DirectoryPage I/O (managed).
      */
     static storeError namei (
         const rtl_String *pPath,

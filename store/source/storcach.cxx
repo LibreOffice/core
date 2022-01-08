@@ -35,28 +35,22 @@
 
 using namespace store;
 
-// Entry
-
 namespace store {
 struct Entry
 {
-    // Representation
     std::shared_ptr<PageData> m_xPage;
     sal_uInt32 m_nOffset;
     Entry *    m_pNext;
 
-    // Allocation
     static void * operator new (size_t, void * p) { return p; }
     static void   operator delete (void *, void *) {}
 
-    // Construction
     explicit Entry (std::shared_ptr<PageData> const & rxPage, sal_uInt32 nOffset)
         : m_xPage(rxPage), m_nOffset(nOffset), m_pNext(nullptr)
     {}
 };
 };
 
-// EntryCache interface
 namespace
 {
 
@@ -78,7 +72,6 @@ protected:
 
 } // namespace
 
-// EntryCache implementation
 EntryCache & EntryCache::get()
 {
     static EntryCache g_entry_cache;
@@ -394,20 +387,14 @@ storeError PageCache::removePageAt (sal_uInt32 nOffset)
     return store_E_NotExists;
 }
 
-/*
- *
- * Old OStorePageCache implementation.
- *
- * (two-way association (sorted address array, LRU chain)).
- * (external PageData representation).
- *
+/**
+ 
+   Old OStorePageCache implementation.
+
+   (two-way association (sorted address array, LRU chain)).
+   (external PageData representation).
  */
 
-/*
- *
- * PageCache factory implementation.
- *
- */
 namespace store {
 
 storeError

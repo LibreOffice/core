@@ -39,7 +39,6 @@ struct Entry;
 class PageCache :
     public store::OStoreObject
 {
-    // Representation
     static size_t const theTableSize = 32;
     static_assert((theTableSize & (theTableSize-1)) == 0, "table size should be a power of 2");
 
@@ -71,26 +70,18 @@ public:
     PageCache(const PageCache&) = delete;
     PageCache& operator=(const PageCache&) = delete;
 
-    /** load.
-     */
     storeError lookupPageAt (
         std::shared_ptr<PageData> & rxPage,
         sal_uInt32   nOffset);
 
-    /** insert.
-     */
     storeError insertPageAt (
         std::shared_ptr<PageData> const & rxPage,
         sal_uInt32         nOffset);
 
-    /** update, or insert.
-     */
     storeError updatePageAt (
         std::shared_ptr<PageData> const & rxPage,
         sal_uInt32         nOffset);
 
-    /** remove (invalidate).
-     */
     storeError removePageAt (
         sal_uInt32 nOffset);
 
