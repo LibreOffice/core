@@ -143,25 +143,25 @@ void vcl::unohelper::DragAndDropWrapper::dropActionChanged( const css::datatrans
 }
 
 css::uno::Reference<css::uno::XInterface>
-vcl::OleDnDHelper(const css::uno::Reference<css::lang::XInitialization>& pDnD, const sal_IntPtr pWin, DragOrDrop eDoD)
+vcl::OleDnDHelper(const css::uno::Reference<css::lang::XInitialization>& xDnD, const sal_IntPtr pWin, DragOrDrop eDoD)
 {
-    if (pWin && pDnD)
+    if (pWin && xDnD)
     {
         if (eDoD == vcl::DragOrDrop::Drag)
-            pDnD->initialize({ uno::Any(), uno::Any(static_cast<sal_uInt64>(pWin)) });
+            xDnD->initialize({ uno::Any(), uno::Any(static_cast<sal_uInt64>(pWin)) });
         else
-            pDnD->initialize({ uno::Any(static_cast<sal_uInt64>(pWin)), uno::Any() });
+            xDnD->initialize({ uno::Any(static_cast<sal_uInt64>(pWin)), uno::Any() });
     }
-    return css::uno::Reference<css::uno::XInterface>(pDnD);
+    return xDnD;
 }
 
 css::uno::Reference<css::uno::XInterface>
-vcl::X11DnDHelper(const css::uno::Reference<css::lang::XInitialization>& pDnD, const sal_IntPtr pWin)
+vcl::X11DnDHelper(const css::uno::Reference<css::lang::XInitialization>& xDnD, const sal_IntPtr pWin)
 {
-    if (pWin && pDnD)
-        pDnD->initialize({ uno::Any(Application::GetDisplayConnection()),
+    if (pWin && xDnD)
+        xDnD->initialize({ uno::Any(Application::GetDisplayConnection()),
                            uno::Any(static_cast<sal_uInt64>(pWin)) });
-    return css::uno::Reference<css::uno::XInterface>(pDnD);
+    return xDnD;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
