@@ -298,10 +298,10 @@ std::vector<FontSet> initFontSets()
     }
     {
         FontSet aFontSet;
-        aFontSet.maName = "Open Sans";
-        aFontSet.msHeadingFont = "Open Sans";
-        aFontSet.msBaseFont = "Open Sans";
-        aFontSet.msMonoFont = "Droid Sans Mono";
+        aFontSet.maName = "Noto Sans";
+        aFontSet.msHeadingFont = "Noto Sans";
+        aFontSet.msBaseFont = "Noto Sans";
+        aFontSet.msMonoFont = "Noto Mono";
         aFontSets.push_back(aFontSet);
     }
     {
