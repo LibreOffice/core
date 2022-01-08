@@ -34,8 +34,7 @@
 
 #include "reflread.hxx"
 
-#include "reflwrit.hxx"
-
+#include <registry/writer.hxx>
 #include <registry/reader.hxx>
 #include <registry/refltype.hxx>
 #include <registry/types.hxx>
@@ -1127,20 +1126,21 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
 
     sal_uInt16 index = 0;
 
-    RegistryTypeWriter writer(reader.getTypeClass(),
-                              reader.getTypeName(),
-                              reader.getSuperTypeName(),
-                              static_cast<sal_uInt16>(count));
+    bool bHasSuperType = reader.getSuperTypeName().isEmpty() ? 0 : 1;
+    typereg::Writer writer(TYPEREG_VERSION_1, "", "", reader.getTypeClass(), true, reader.getTypeName(), 0, static_cast<sal_uInt16>(count), bHasSuperType ? 0 : 1, 0);
+
+    if (bHasSuperType)
+        writer.setSuperTypeName(0, reader.getSuperTypeName());
 
     for (sal_uInt32 i=0 ; i < reader.getFieldCount(); i++)
     {
         writer.setFieldData(index,
-                           reader.getFieldName(i),
-                           reader.getFieldType(i),
-                           reader.getFieldDoku(i),
-                           reader.getFieldFileName(i),
-                           reader.getFieldAccess(i),
-                           reader.getFieldConstValue(i));
+                            reader.getFieldDoku(i),
+                            reader.getFieldFileName(i),
+                            reader.getFieldAccess(i),
+                            reader.getFieldName(i),
+                            reader.getFieldType(i),
+                            reader.getFieldConstValue(i));
         index++;
     }
     for (sal_uInt32 i=0 ; i < reader2.getFieldCount(); i++)
@@ -1148,18 +1148,18 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
         if (nameSet.find(reader2.getFieldName(i)) == nameSet.end())
         {
             writer.setFieldData(index,
-                               reader2.getFieldName(i),
-                               reader2.getFieldType(i),
-                               reader2.getFieldDoku(i),
-                               reader2.getFieldFileName(i),
-                               reader2.getFieldAccess(i),
-                               reader2.getFieldConstValue(i));
+                                reader2.getFieldDoku(i),
+                                reader2.getFieldFileName(i),
+                                reader2.getFieldAccess(i),
+                                reader2.getFieldName(i),
+                                reader2.getFieldType(i),
+                                reader2.getFieldConstValue(i));
             index++;
         }
     }
 
-    const sal_uInt8*    pBlop = writer.getBlop();
-    sal_uInt32          aBlopSize = writer.getBlopSize();
+    sal_uInt32 aBlopSize;
+    void const* pBlop = writer.getBlob(&aBlopSize);
 
     sal_uInt8   type = sal_uInt8(RegValueType::BINARY);
     std::vector<sal_uInt8> aBuffer(VALUE_HEADERSIZE + aBlopSize);
