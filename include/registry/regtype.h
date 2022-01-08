@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_REGTYPE_H
-#define INCLUDED_REGISTRY_REGTYPE_H
+#pragma once
 
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -135,7 +134,5 @@ enum class SAL_DLLPUBLIC_RTTI RegError
 
 /// specify the calling convention for the registry API
 #define REGISTRY_CALLTYPE SAL_CALL
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

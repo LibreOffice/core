@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_TYPES_H
-#define INCLUDED_REGISTRY_TYPES_H
+#pragma once
 
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -333,7 +332,5 @@ enum class RTReferenceType
      */
     TYPE_PARAMETER
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
