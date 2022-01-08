@@ -351,7 +351,7 @@ ImplTextEncodingData const aImplJavaUtf8TextEncodingData
 
 namespace {
 
-#if defined DISABLE_DYNLOADING || defined ANDROID
+#ifndef COND_LIB_SAL_TEXTENC
 
 extern "C" ImplTextEncodingData const * sal_getFullTextEncodingData(
     rtl_TextEncoding); // from tables.cxx in sal_textenc library

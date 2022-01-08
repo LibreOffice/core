@@ -75,7 +75,7 @@ $(eval $(call gb_Executable_add_exception_objects,idlc,\
 # to something other than listed in Impl_getTextEncodingData, because osl_getThreadTextEncoding()
 # returns Windows ACP, calling FullTextEncodingData ctor which loads the not-yet-built library
 $(call gb_Executable_add_runtime_dependencies,idlc, \
-    $(call gb_Library_get_target,sal_textenc) \
+    $(call gb_CondLibSalTextenc,$(call gb_Library_get_target,sal_textenc)) \
 )
 
 # vim:set noet sw=4 ts=4:

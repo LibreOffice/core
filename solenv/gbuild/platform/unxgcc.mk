@@ -105,7 +105,7 @@ gb_LinkTarget__Lock := $(WORKDIR)/LinkTarget/link.lock
 # No newline or space before endef!
 define gb_LinkTarget__WantLock
 $(if $(strip $(and \
-    $(call gb_CondBuildLockfile,$(true)), \
+    $(call gb_CondExeLockfile,$(true)), \
     $(filter-out Executable/lockfile,$(1)), \
     $(if $(filter FUZZERS,$(BUILD_TYPE)),,$(DISABLE_DYNLOADING)), \
     $(filter CppunitTest Executable,$(TARGETTYPE)) \
