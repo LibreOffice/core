@@ -7,14 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,cpputools))
+$(eval $(call gb_Package_Package,ure_install,$(SRCDIR)/ure/source))
 
-$(eval $(call gb_Module_add_targets,cpputools,\
-    $(call gb_CondExeSp2bv,Executable_sp2bv) \
-    $(call gb_CondExeUno, \
-        Executable_uno \
-        Package_uno_sh \
-    ) \
-))
+ifeq (MACOSX,$(OS))
+ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
+$(eval $(call gb_Package_add_symbolic_link,ure_install,MacOS/urelibs,../Frameworks))
+endif
+endif
 
 # vim:set noet sw=4 ts=4:

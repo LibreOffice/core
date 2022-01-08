@@ -7,16 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,ure_install,$(SRCDIR)/ure/source))
+$(eval $(call gb_Package_Package,uno_sh,$(SRCDIR)/cpputools/scripts))
 
 ifneq (,$(filter-out MACOSX WNT,$(OS)))
-$(eval $(call gb_Package_add_file,ure_install,$(LIBO_URE_BIN_FOLDER)/uno,uno))
-endif
-
-ifeq (MACOSX,$(OS))
-ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
-$(eval $(call gb_Package_add_symbolic_link,ure_install,MacOS/urelibs,../Frameworks))
-endif
+$(eval $(call gb_Package_add_file,uno_sh,$(LIBO_URE_BIN_FOLDER)/uno,uno.sh))
 endif
 
 # vim:set noet sw=4 ts=4:
