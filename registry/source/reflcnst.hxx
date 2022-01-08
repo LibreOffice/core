@@ -95,7 +95,6 @@ enum CPInfoTag
     CP_TAG_CONST_DOUBLE = RT_TYPE_DOUBLE,
     CP_TAG_CONST_STRING = RT_TYPE_STRING,
     CP_TAG_UTF8_NAME,
-    CP_TAG_UIK
 };
 
 inline sal_uInt32 writeBYTE(sal_uInt8* buffer, sal_uInt8 v)
