@@ -32,8 +32,6 @@
 #include <unistd.h>
 #endif
 
-#include "reflread.hxx"
-
 #include <registry/writer.hxx>
 #include <registry/reader.hxx>
 #include <registry/refltype.hxx>
@@ -1009,7 +1007,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
                               sal_uInt8 const * pSrcBuffer,
                               bool bReport)
 {
-    RegistryTypeReader reader(pSrcBuffer, srcValueSize);
+    typereg::Reader reader(pSrcBuffer, srcValueSize);
 
     if (reader.getTypeClass() == RT_TYPE_INVALID)
     {
@@ -1034,7 +1032,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
             if (!rValue.readAt(VALUE_HEADEROFFSET, aBuffer.data(), valueSize, rwBytes) &&
                 (rwBytes == valueSize))
             {
-                RegistryTypeReader reader2(aBuffer.data(), valueSize);
+                typereg::Reader reader2(aBuffer.data(), valueSize);
 
                 if ((reader.getTypeClass() != reader2.getTypeClass())
                     || reader2.getTypeClass() == RT_TYPE_INVALID)
@@ -1096,8 +1094,8 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
     }
 }
 
-static sal_uInt32 checkTypeReaders(RegistryTypeReader const & reader1,
-                                   RegistryTypeReader const & reader2,
+static sal_uInt32 checkTypeReaders(typereg::Reader const & reader1,
+                                   typereg::Reader const & reader2,
                                    std::set< OUString >& nameSet)
 {
     sal_uInt32 count=0;
@@ -1115,8 +1113,8 @@ static sal_uInt32 checkTypeReaders(RegistryTypeReader const & reader1,
 }
 
 RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
-                                     RegistryTypeReader const & reader,
-                                     RegistryTypeReader const & reader2)
+                                     typereg::Reader const & reader,
+                                     typereg::Reader const & reader2)
 {
     std::set< OUString > nameSet;
     sal_uInt32 count = checkTypeReaders(reader, reader2, nameSet);
@@ -1126,21 +1124,22 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
 
     sal_uInt16 index = 0;
 
-    bool bHasSuperType = reader.getSuperTypeName().isEmpty() ? 0 : 1;
-    typereg::Writer writer(TYPEREG_VERSION_1, "", "", reader.getTypeClass(), true, reader.getTypeName(), 0, static_cast<sal_uInt16>(count), bHasSuperType ? 0 : 1, 0);
+    typereg::Writer writer(TYPEREG_VERSION_0, "", "", reader.getTypeClass(), true, reader.getTypeName(), 0, static_cast<sal_uInt16>(count), reader.getSuperTypeCount(), 0);
 
-    if (bHasSuperType)
-        writer.setSuperTypeName(0, reader.getSuperTypeName());
+    for (sal_uInt16 i=0; i < reader.getSuperTypeCount(); i++)
+    {
+        writer.setSuperTypeName(i, reader.getSuperTypeName(i));
+    }
 
     for (sal_uInt32 i=0 ; i < reader.getFieldCount(); i++)
     {
         writer.setFieldData(index,
-                            reader.getFieldDoku(i),
+                            reader.getFieldDocumentation(i),
                             reader.getFieldFileName(i),
-                            reader.getFieldAccess(i),
+                            reader.getFieldFlags(i),
                             reader.getFieldName(i),
-                            reader.getFieldType(i),
-                            reader.getFieldConstValue(i));
+                            reader.getFieldTypeName(i),
+                            reader.getFieldValue(i));
         index++;
     }
     for (sal_uInt32 i=0 ; i < reader2.getFieldCount(); i++)
@@ -1148,12 +1147,12 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
         if (nameSet.find(reader2.getFieldName(i)) == nameSet.end())
         {
             writer.setFieldData(index,
-                                reader2.getFieldDoku(i),
+                                reader2.getFieldDocumentation(i),
                                 reader2.getFieldFileName(i),
-                                reader2.getFieldAccess(i),
+                                reader2.getFieldFlags(i),
                                 reader2.getFieldName(i),
-                                reader2.getFieldType(i),
-                                reader2.getFieldConstValue(i));
+                                reader2.getFieldTypeName(i),
+                                reader2.getFieldValue(i));
             index++;
         }
     }
