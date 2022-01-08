@@ -177,7 +177,6 @@ struct CPInfo
     union
     {
         const char*         aUtf8;
-        RTUik*              aUik;
         RTConstValueUnion   aConst;
     } m_value;
     struct CPInfo*  m_next;
@@ -245,9 +244,6 @@ sal_uInt32 CPInfo::getBlopSize() const
         case CP_TAG_UTF8_NAME:
             size += strlen(m_value.aUtf8) + 1;
             break;
-        case CP_TAG_UIK:
-            size += sizeof(sal_uInt32) + sizeof(sal_uInt16) + sizeof(sal_uInt16) + sizeof(sal_uInt32) + sizeof(sal_uInt32);
-            break;
         default:
             break;
     }
@@ -301,13 +297,6 @@ sal_uInt32 CPInfo::toBlop(sal_uInt8* buffer)
             break;
         case CP_TAG_UTF8_NAME:
             buff += writeUtf8(buff, m_value.aUtf8);
-            break;
-        case CP_TAG_UIK:
-            buff += writeUINT32(buff, m_value.aUik->m_Data1);
-            buff += writeUINT16(buff, m_value.aUik->m_Data2);
-            buff += writeUINT16(buff, m_value.aUik->m_Data3);
-            buff += writeUINT32(buff, m_value.aUik->m_Data4);
-            buff += writeUINT32(buff, m_value.aUik->m_Data5);
             break;
         default:
             break;
