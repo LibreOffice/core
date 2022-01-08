@@ -34,6 +34,24 @@
       "parentUuid": "b5e20224_86520095",
       "revId": "131759a3db51140c21594308ed99c71aa7aba43a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "621df547_e406c173",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-08T18:50:55Z",
+      "side": 1,
+      "message": "fix at https://gerrit.libreoffice.org/c/core/+/128137",
+      "parentUuid": "35a54321_9d52c673",
+      "revId": "131759a3db51140c21594308ed99c71aa7aba43a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
