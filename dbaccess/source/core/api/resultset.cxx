@@ -20,7 +20,8 @@
 #include "resultset.hxx"
 #include <sal/log.hxx>
 #include <stringconstants.hxx>
-#include <apitools.hxx>
+#include <strings.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <cppuhelper/supportsservice.hxx>

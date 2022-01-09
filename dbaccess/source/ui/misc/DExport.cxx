@@ -45,7 +45,6 @@
 #include <WCopyTable.hxx>
 #include <unotools/syslocale.hxx>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/FValue.hxx>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>

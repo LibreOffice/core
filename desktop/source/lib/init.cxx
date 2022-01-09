@@ -50,7 +50,6 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
-#include <svl/zforlist.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -131,7 +130,6 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 #include <vcl/fontcharmap.hxx>
-#include <vcl/graphicfilter.hxx>
 #ifdef IOS
 #include <vcl/sysdata.hxx>
 #endif
@@ -141,7 +139,6 @@
 #include <vcl/dialoghelper.hxx>
 #include <unicode/uchar.h>
 #include <unotools/securityoptions.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>

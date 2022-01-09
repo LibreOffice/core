@@ -24,8 +24,6 @@
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/utils/canvastools.hxx>
-#include <comphelper/sequence.hxx>
-#include <cppuhelper/queryinterface.hxx>
 
 using namespace css;
 

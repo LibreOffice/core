@@ -22,6 +22,7 @@
 #include <config_extensions.h>
 
 #include <sal/config.h>
+#include <rtl/ustring.hxx>
 
 #include <utility>
 #include <vector>

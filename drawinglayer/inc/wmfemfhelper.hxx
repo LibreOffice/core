@@ -26,7 +26,6 @@
 #include <vcl/rendercontext/State.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <memory>
 
 // predefines
 namespace drawinglayer::geometry { class ViewInformation2D; }

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <dp_misc.h>
 #include <dp_shared.hxx>
 #include <dp_interact.h>
 #include <rtl/ref.hxx>
@@ -29,6 +28,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <unordered_map>
 #include <strings.hrc>
 

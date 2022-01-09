@@ -18,7 +18,6 @@
  */
 
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
-#include <comphelper/sequence.hxx>
 
 
 using namespace com::sun::star;

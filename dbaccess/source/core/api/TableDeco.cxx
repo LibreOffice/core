@@ -18,9 +18,9 @@
  */
 
 #include <TableDeco.hxx>
-#include <apitools.hxx>
 #include <definitioncolumn.hxx>
 #include <stringconstants.hxx>
+#include <strings.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <osl/diagnose.h>

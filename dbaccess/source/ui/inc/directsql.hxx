@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <sal/log.hxx>
 #include <vcl/weld.hxx>
 #include <deque>
 #include <string_view>

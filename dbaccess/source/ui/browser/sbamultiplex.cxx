@@ -18,6 +18,8 @@
  */
 
 #include <sbamultiplex.hxx>
+#include <cppuhelper/queryinterface.hxx>
+
 using namespace dbaui;
 
 // the listener multiplexers

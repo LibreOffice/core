@@ -28,6 +28,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <preparedstatement.hxx>
+#include <strings.hxx>
 #include "resultcolumn.hxx"
 #include "resultset.hxx"
 #include <tools/diagnose_ex.h>

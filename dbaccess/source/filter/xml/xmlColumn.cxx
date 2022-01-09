@@ -25,7 +25,6 @@
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include "xmlStyleImport.hxx"
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 
 namespace dbaxml
 {

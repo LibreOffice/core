@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <comphelper/sequence.hxx>
@@ -26,6 +27,7 @@
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <querycomposer.hxx>
+#include <strings.hxx>
 #include <composertools.hxx>
 #include <algorithm>
 

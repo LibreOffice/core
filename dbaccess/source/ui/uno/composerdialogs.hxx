@@ -27,7 +27,6 @@
 #include <comphelper/proparrhlp.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <svtools/genericunodialog.hxx>
-#include <apitools.hxx>
 
 namespace dbaui
 {

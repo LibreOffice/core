@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <stringconstants.hxx>
+#include <strings.hxx>
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dbu_OColumnControlModel_get_implementation(
