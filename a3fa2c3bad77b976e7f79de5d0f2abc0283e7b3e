@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7190cd0_8e52ad53",
+        "filename": "comphelper/source/misc/backupfilehelper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-09T19:22:23Z",
+      "side": 1,
+      "message": "This variable seems to be unused now - will it be detected by some plugin, or will the side effects of reference disable the detection?",
+      "revId": "a3fa2c3bad77b976e7f79de5d0f2abc0283e7b3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a3e51c7_5f54b9e2",
+        "filename": "embeddedobj/source/msole/oleembed.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-09T19:22:23Z",
+      "side": 1,
+      "message": "Interesting, that here the result of io::TempFile::create is checked, unlike the code above :-) (of course, it\u0027s pre-existing difference, just noting)",
+      "revId": "a3fa2c3bad77b976e7f79de5d0f2abc0283e7b3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3d806d6_bdb3cc98",
+        "filename": "embeddedobj/source/msole/olepersist.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-09T19:22:23Z",
+      "side": 1,
+      "message": "Interesting, why do we allow uno::UNO_QUERY in this case? It should be redundant, assigning to own reference type.\n\nBut really, explicitly allowing null here, and then dereferencing it unconditionally at line 173 looks odd :-) (this time, the uno::UNO_QUERY_THROW from old code would previously take care of this)",
+      "range": {
+        "startLine": 167,
+        "startChar": 16,
+        "endLine": 167,
+        "endChar": 30
+      },
+      "revId": "a3fa2c3bad77b976e7f79de5d0f2abc0283e7b3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95a0b6d5_1b458c60",
+        "filename": "embeddedobj/source/msole/olepersist.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-09T19:22:23Z",
+      "side": 1,
+      "message": "This variable looks redundant now - xTempFile likely may be used in copyStreamElementData directly?",
+      "revId": "a3fa2c3bad77b976e7f79de5d0f2abc0283e7b3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
