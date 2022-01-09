@@ -250,17 +250,12 @@ ZipOutputEntryInThread::ZipOutputEntryInThread(
 
 void ZipOutputEntryInThread::createBufferFile()
 {
-    assert(!m_xOutStream.is() && m_aTempURL.isEmpty() &&
+    assert(!m_xOutStream && !m_xTempFile &&
            "should only be called in the threaded mode where there is no existing stream yet");
-    uno::Reference < io::XTempFile > xTempFile(
+    m_xTempFile.set(
             io::TempFile::create(m_xContext),
             uno::UNO_SET_THROW );
-    xTempFile->setRemoveFile(false);
-    m_aTempURL = xTempFile->getUri();
-    assert(!m_aTempURL.isEmpty());
-
-    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
-    m_xOutStream = xTempAccess->openFileWrite(m_aTempURL);
+    m_xOutStream = m_xTempFile->getOutputStream();
 }
 
 void ZipOutputEntryInThread::closeBufferFile()
@@ -271,15 +266,13 @@ void ZipOutputEntryInThread::closeBufferFile()
 
 void ZipOutputEntryInThread::deleteBufferFile()
 {
-    assert(!m_xOutStream.is() && !m_aTempURL.isEmpty());
-    uno::Reference < ucb::XSimpleFileAccess3 > xAccess(ucb::SimpleFileAccess::create(m_xContext));
-    xAccess->kill(m_aTempURL);
+    assert(!m_xOutStream.is() && m_xTempFile);
+    m_xTempFile.clear();
 }
 
 uno::Reference< io::XInputStream > ZipOutputEntryInThread::getData() const
 {
-    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
-    return xTempAccess->openFileRead(m_aTempURL);
+    return m_xTempFile->getInputStream();
 }
 
 class ZipOutputEntryInThread::Task : public comphelper::ThreadTask
@@ -313,7 +306,7 @@ private:
             {
                 if (mpEntry->m_xOutStream.is())
                     mpEntry->closeBufferFile();
-                if (!mpEntry->m_aTempURL.isEmpty())
+                if (mpEntry->m_xTempFile)
                     mpEntry->deleteBufferFile();
             }
             catch (uno::Exception const&)
