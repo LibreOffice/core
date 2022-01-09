@@ -35,7 +35,6 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
 
 namespace
 {

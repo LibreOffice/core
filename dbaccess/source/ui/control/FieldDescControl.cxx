@@ -24,7 +24,6 @@
 #include <TableDesignHelpBar.hxx>
 #include <vcl/svapp.hxx>
 #include <FieldDescriptions.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/numuno.hxx>
 #include <vcl/transfer.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>

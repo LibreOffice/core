@@ -18,7 +18,6 @@
  */
 
 #include <textconnectionsettings.hxx>
-#include <apitools.hxx>
 #include <unoadmin.hxx>
 #include <stringconstants.hxx>
 #include <propertystorage.hxx>
@@ -32,7 +31,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 namespace dbaui
 {

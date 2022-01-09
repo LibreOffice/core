@@ -18,7 +18,6 @@
  */
 
 #include "dbinteraction.hxx"
-#include <apitools.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <connectivity/dbexception.hxx>

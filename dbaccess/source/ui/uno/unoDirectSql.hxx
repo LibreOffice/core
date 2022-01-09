@@ -20,7 +20,6 @@
 #pragma once
 
 #include <svtools/genericunodialog.hxx>
-#include <apitools.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <connectivity/CommonTools.hxx>

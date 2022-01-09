@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 #include <composertools.hxx>
 #include <strings.hrc>
+#include <strings.hxx>
 #include <core_resource.hxx>
 #include <stringconstants.hxx>
 #include "HelperCollections.hxx"

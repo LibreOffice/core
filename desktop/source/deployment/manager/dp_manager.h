@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <dp_misc.h>
 #include "dp_activepackages.hxx"
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>

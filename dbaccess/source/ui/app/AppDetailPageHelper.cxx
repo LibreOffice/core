@@ -52,7 +52,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <tools/stream.hxx>
-#include <rtl/ustrbuf.hxx>
 #include "AppController.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>

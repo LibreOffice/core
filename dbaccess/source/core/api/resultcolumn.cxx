@@ -18,13 +18,14 @@
  */
 
 #include "resultcolumn.hxx"
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <tools/diagnose_ex.h>
 #include <stringconstants.hxx>
-#include <apitools.hxx>
+#include <strings.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;

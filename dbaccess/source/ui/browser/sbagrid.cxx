@@ -18,7 +18,6 @@
  */
 
 #include <core_resource.hxx>
-#include <helpids.h>
 
 #include <sot/exchange.hxx>
 
@@ -41,19 +40,15 @@
 
 #include <vcl/svapp.hxx>
 
-#include <svl/zforlist.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <browserids.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <dbexchange.hxx>
-#include <TableRowExchange.hxx>
-#include <TableRow.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <UITools.hxx>
 #include <TokenWriter.hxx>

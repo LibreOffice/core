@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -76,6 +77,7 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <core_resource.hxx>
 #include <strings.hrc>
+#include <strings.hxx>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>

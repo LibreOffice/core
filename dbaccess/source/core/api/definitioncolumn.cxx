@@ -19,8 +19,8 @@
 
 #include <bitset>
 
-#include <apitools.hxx>
 #include <stringconstants.hxx>
+#include <strings.hxx>
 #include <definitioncolumn.hxx>
 #include <sdbcoretools.hxx>
 

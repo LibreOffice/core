@@ -22,6 +22,7 @@
 
 #include <strings.hrc>
 #include <dp_backend.h>
+#include <dp_misc.h>
 #include "dp_helpbackenddb.hxx"
 #include <dp_ucb.h>
 #include <rtl/uri.hxx>
