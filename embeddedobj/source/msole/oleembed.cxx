@@ -681,10 +681,10 @@ namespace
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::io::XStream >& xObjectStream )
     {
-        uno::Reference <beans::XPropertySet> xNativeTempFile(
+        uno::Reference <io::XTempFile> xNativeTempFile(
             io::TempFile::create(xContext),
-            uno::UNO_QUERY_THROW);
-        uno::Reference < io::XStream > xStream(xNativeTempFile, uno::UNO_QUERY_THROW);
+            uno::UNO_SET_THROW);
+        uno::Reference < io::XStream > xStream(xNativeTempFile);
 
         uno::Sequence< uno::Any > aArgs{ uno::Any(xObjectStream),
                                          uno::Any(true) }; // do not create copy
@@ -775,10 +775,8 @@ namespace
 
         if (bCopied)
         {
-            xNativeTempFile->setPropertyValue("RemoveFile",
-                uno::makeAny(false));
-            uno::Any aUrl = xNativeTempFile->getPropertyValue("Uri");
-            aUrl >>= rUrl;
+            xNativeTempFile->setRemoveFile(false);
+            rUrl = xNativeTempFile->getUri();
 
             xNativeTempFile.clear();
 
@@ -789,8 +787,7 @@ namespace
         }
         else
         {
-            xNativeTempFile->setPropertyValue("RemoveFile",
-                uno::makeAny(true));
+            xNativeTempFile->setRemoveFile(true);
         }
 
         return xStream;
