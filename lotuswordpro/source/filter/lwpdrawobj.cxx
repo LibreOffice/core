@@ -1047,6 +1047,8 @@ void LwpDrawTextBox::Read()
 
     // the 71 is the fixed length before text content in textbox record
     sal_Int16 TextLength = m_aObjHeader.nRecLen - 71;
+    if (TextLength < 0)
+        throw BadRead();
     m_aTextRec.pTextString = new sal_uInt8 [TextLength];
 
     m_pStream->ReadBytes(m_aTextRec.pTextString, TextLength);
