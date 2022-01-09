@@ -16,6 +16,24 @@
       "message": "The commit message mentions VIETNAMESE are not using hyphenation, but it\u0027s not included in this list? Is that intentional?",
       "revId": "c735b390447ea712547af964e016e0582585df96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b57acfa_58876a83",
+        "filename": "i18nlangtag/source/isolang/mslangid.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-09T11:19:14Z",
+      "side": 1,
+      "message": "It wasn\u0027t intentional, it was forgotten. I\u0027ve added Vietnamese language to this list in a follow-up patch 7650d164a1e9c34ce99bf30bf4198e7ceb21fb5d, and also here. It should be OK now.",
+      "parentUuid": "46e8bb56_6aa3173d",
+      "revId": "c735b390447ea712547af964e016e0582585df96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
