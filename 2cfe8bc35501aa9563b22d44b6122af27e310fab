@@ -51,6 +51,24 @@
       "parentUuid": "8d986c11_93933e7e",
       "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0562dd9f_3754d894",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-09T21:11:48Z",
+      "side": 1,
+      "message": "Hmm, maybe I overlook something - but even if they are always written in UTF-8, they would never be usable on the same system that way; so *if* someone ever uses them on Windows, they must have converted them to local encoding - which gives the same end result, with existing ACP-encoded files requiring special handling :-)",
+      "parentUuid": "822d6d59_81cf82cf",
+      "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
