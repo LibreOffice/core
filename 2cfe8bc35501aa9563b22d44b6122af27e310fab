@@ -86,6 +86,23 @@
       "message": "If I\u0027m not mistaken, current code uses hardcoded Greek codepage???\n\nhttps://opengrok.libreoffice.org/xref/core/sw/source/ui/index/cnttab.cxx?r\u003d252dd254#3913\n\nBut I may be completely confused.",
       "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d54efa9a_831b61f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-09T21:38:44Z",
+      "side": 1,
+      "message": "Very strange indeed. Nonetheless, I will add a new method to SvStream to detect the charset using either thread or file encoding.",
+      "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
