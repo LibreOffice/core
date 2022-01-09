@@ -19,6 +19,7 @@
 
 
 #include <strings.hrc>
+#include <dp_misc.h>
 #include <dp_shared.hxx>
 #include <dp_backend.h>
 #include <dp_platform.hxx>

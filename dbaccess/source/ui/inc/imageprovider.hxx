@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <vcl/image.hxx>
-
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 

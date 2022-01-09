@@ -46,8 +46,6 @@
 #include <framework/desktop.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
-#include <svl/languageoptions.hxx>
-#include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svtools/javacontext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

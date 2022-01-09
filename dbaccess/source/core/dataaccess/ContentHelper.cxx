@@ -31,12 +31,11 @@
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/contentidentifier.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <tools/diagnose_ex.h>
-#include <apitools.hxx>
 #include <sdbcoretools.hxx>
 #include <stringconstants.hxx>
+#include <strings.hxx>
 
 #include <map>
 

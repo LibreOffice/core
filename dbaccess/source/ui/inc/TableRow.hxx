@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/long.hxx>
 #include "TypeInfo.hxx"
 

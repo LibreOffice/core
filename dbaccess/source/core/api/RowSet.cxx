@@ -31,11 +31,13 @@
 #include "CRowSetDataColumn.hxx"
 #include "RowSetCache.hxx"
 #include <strings.hrc>
+#include <strings.hxx>
 #include <core_resource.hxx>
 #include <tablecontainer.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>

@@ -18,8 +18,8 @@
  */
 
 #include "commanddefinition.hxx"
-#include <apitools.hxx>
 #include <stringconstants.hxx>
+#include <strings.hxx>
 
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

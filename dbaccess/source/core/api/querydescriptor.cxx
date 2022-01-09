@@ -18,8 +18,8 @@
  */
 
 #include "querydescriptor.hxx"
-#include <apitools.hxx>
 #include <stringconstants.hxx>
+#include <strings.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

@@ -31,10 +31,8 @@
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multiinterfacecontainer3.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 
 namespace dbaui

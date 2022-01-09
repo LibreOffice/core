@@ -25,7 +25,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 
 using namespace com::sun::star;
 

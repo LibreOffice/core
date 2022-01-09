@@ -20,6 +20,7 @@
 #ifndef INCLUDED_DBACCESS_INC_HELPIDS_H
 #define INCLUDED_DBACCESS_INC_HELPIDS_H
 
+#include <rtl/string.hxx>
 
 inline constexpr OStringLiteral HID_DATABROWSE_HEADER = "DBACCESS_HID_DATABROWSE_HEADER";
 inline constexpr OStringLiteral HID_CTL_TABBROWSER = "DBACCESS_HID_CTL_TABBROWSER";

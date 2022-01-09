@@ -44,6 +44,7 @@
 #include <xmlscript/xml_helper.hxx>
 #include <osl/diagnose.h>
 #include <dp_interact.h>
+#include <dp_misc.h>
 #include <dp_ucb.h>
 #include <dp_identifier.hxx>
 #include <dp_descriptioninfoset.hxx>

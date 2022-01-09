@@ -25,7 +25,6 @@
 
 #include <svx/dialogs.hrc>
 #include <svl/itemset.hxx>
-#include <svl/zforlist.hxx>
 #include <svx/svxids.hrc>
 
 using namespace dbaui;

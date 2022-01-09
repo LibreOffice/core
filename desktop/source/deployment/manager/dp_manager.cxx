@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <dp_interact.h>
+#include <dp_misc.h>
 #include <dp_registry.hxx>
 #include <dp_shared.hxx>
 #include <strings.hrc>

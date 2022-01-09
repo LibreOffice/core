@@ -19,8 +19,6 @@
 
 #include "lokinteractionhandler.hxx"
 
-#include <boost/property_tree/json_parser.hpp>
-
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
