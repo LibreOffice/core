@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27a8aafb_b69830f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001300
+      },
+      "writtenOn": "2022-01-09T22:58:14Z",
+      "side": 1,
+      "message": "Here is 43 new words for the pt-PT autocorrect.\n",
+      "revId": "14a8ef8b3134c1ef9ada5bfafd2087402536e8d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
