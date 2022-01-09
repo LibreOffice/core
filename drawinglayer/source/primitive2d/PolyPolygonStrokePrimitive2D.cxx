@@ -21,7 +21,7 @@
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 
 using namespace com::sun::star;
 

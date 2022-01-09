@@ -22,6 +22,7 @@
 #include <stringconstants.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
+#include <strings.hxx>
 #include "connection.hxx"
 #include "SharedConnection.hxx"
 #include "databasedocument.hxx"

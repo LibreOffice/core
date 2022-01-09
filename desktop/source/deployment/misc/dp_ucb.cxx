@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <dp_misc.h>
 #include <dp_ucb.h>
 #include <rtl/uri.hxx>

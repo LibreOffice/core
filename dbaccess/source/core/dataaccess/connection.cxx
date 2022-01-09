@@ -24,6 +24,7 @@
 #include "connection.hxx"
 #include "datasource.hxx"
 #include <strings.hrc>
+#include <strings.hxx>
 #include <core_resource.hxx>
 #include <statement.hxx>
 #include <preparedstatement.hxx>

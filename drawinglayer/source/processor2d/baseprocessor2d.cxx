@@ -19,7 +19,6 @@
 
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <comphelper/sequence.hxx>
 
 
 using namespace com::sun::star;

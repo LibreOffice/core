@@ -19,6 +19,7 @@
 
 #include <querycontainer.hxx>
 #include "query.hxx"
+#include <strings.hxx>
 #include <objectnameapproval.hxx>
 #include <veto.hxx>
 

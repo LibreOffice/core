@@ -22,7 +22,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <strings.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <sal/log.hxx>
 
 namespace dbaxml
 {

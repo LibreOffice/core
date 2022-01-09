@@ -43,7 +43,6 @@
 #include <com/sun/star/sdbc/ConnectionPool.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 
 #include <comphelper/interaction.hxx>

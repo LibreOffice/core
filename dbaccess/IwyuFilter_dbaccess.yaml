@@ -13,18 +13,12 @@ excludelist:
     - com/sun/star/lang/XMultiServiceFactory.hpp
     - rtl/ustring.hxx
     - cppuhelper/factory.hxx
-    dbaccess/source/inc/apitools.hxx:
-    # Needed for macros to work
-    - com/sun/star/beans/PropertyAttribute.hpp
-    - com/sun/star/lang/XMultiServiceFactory.hpp
-    - comphelper/sequence.hxx
-    - strings.hxx
+    dbaccess/inc/strings.hrc:
+    # Needed for TranslateId macro to work
+    - unotools/resmgr.hxx
     dbaccess/source/filter/xml/xmlExport.hxx:
     # Needed for implicit dtor
     - xmloff/txtprmap.hxx
-    dbaccess/source/ui/inc/sbamultiplex.hxx:
-    # Needed for macros
-    - cppuhelper/queryinterface.hxx
     dbaccess/source/ui/dlg/odbcconfig.hxx:
     # Needed on WIN32
     - tools/link.hxx
@@ -45,17 +39,9 @@ excludelist:
     dbaccess/source/core/api/query.cxx:
     # Actually used
     - com/sun/star/sdbc/XConnection.hpp
-    # Needed for inline OMultiTypeInterfaceContainerHelperVar
-    - cppuhelper/interfacecontainer.hxx
     dbaccess/source/core/api/querycontainer.cxx:
     # Actually used
     - com/sun/star/sdbc/XConnection.hpp
-    dbaccess/source/core/dataaccess/ComponentDefinition.cxx:
-    # Needed for inline OMultiTypeInterfaceContainerHelperVar
-    - cppuhelper/interfacecontainer.hxx
-    dbaccess/source/core/dataaccess/definitioncontainer.cxx:
-    # Needed for inline OMultiTypeInterfaceContainerHelperVar
-    - cppuhelper/interfacecontainer.hxx
     dbaccess/source/core/dataaccess/databasedocument.cxx:
     # Actually used
     - com/sun/star/script/XStorageBasedLibraryContainer.hpp

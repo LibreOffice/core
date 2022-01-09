@@ -26,6 +26,7 @@
 #if HAVE_FEATURE_EXTENSIONS
 #include <dp_persmap.h>
 #endif
+#include <dp_misc.h>
 #include <dp_ucb.h>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>

@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <strings.hrc>
+#include <strings.hxx>
 #include <core_resource.hxx>
 #include <databasecontext.hxx>
 #include "databaseregistrations.hxx"

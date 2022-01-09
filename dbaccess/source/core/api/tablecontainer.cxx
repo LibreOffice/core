@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <apitools.hxx>
 #include <tablecontainer.hxx>
 #include <table.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
+#include <strings.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>

@@ -26,7 +26,6 @@
 
 #include <optional>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

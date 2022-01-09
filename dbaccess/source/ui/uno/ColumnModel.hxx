@@ -29,7 +29,6 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/compbase4.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <apitools.hxx>
 
 namespace dbaui
 {

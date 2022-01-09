@@ -19,7 +19,7 @@
 
 #include "ColumnControl.hxx"
 #include "ColumnPeer.hxx"
-#include <apitools.hxx>
+#include <strings.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 

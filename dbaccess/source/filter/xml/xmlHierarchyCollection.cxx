@@ -27,8 +27,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/propertysequence.hxx>
-#include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace dbaxml

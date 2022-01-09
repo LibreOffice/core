@@ -24,7 +24,6 @@
 #include <ucbhelper/content.hxx>
 
 #include <dp_ucb.h>
-#include <rtl/ustrbuf.hxx>
 #include "dp_properties.hxx"
 
 namespace lang  = com::sun::star::lang;

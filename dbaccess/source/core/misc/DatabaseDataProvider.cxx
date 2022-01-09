@@ -23,7 +23,6 @@
 #include <comphelper/types.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/FValue.hxx>
-#include <rtl/math.hxx>
 #include <sal/macros.h>
 #include <tools/diagnose_ex.h>
 
