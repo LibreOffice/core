@@ -465,7 +465,7 @@ void QtFrame::Show(bool bVisible, bool bNoActivate)
     if (!bVisible) // hide
     {
         pSalInst->RunInMainThread([this]() {
-            asChild()->hide();
+            asChild()->setVisible(false);
             if (m_pQWidget->isModal())
                 modalReparent(false);
         });
@@ -479,7 +479,7 @@ void QtFrame::Show(bool bVisible, bool bNoActivate)
         QWidget* const pChild = asChild();
         if (m_pQWidget->isModal())
             modalReparent(true);
-        pChild->show();
+        pChild->setVisible(true);
         pChild->raise();
         if (!bNoActivate && !isPopup())
         {
