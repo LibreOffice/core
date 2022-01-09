@@ -295,7 +295,6 @@ void SwEditShell::ApplyAutoMark()
         SfxMedium aMedium( sAutoMarkURL, StreamMode::STD_READ );
         SvStream& rStrm = *aMedium.GetInStream();
         Push();
-        rtl_TextEncoding eChrSet = ::osl_getThreadTextEncoding();
 
         // SearchOptions to be used in loop below
         sal_Int32 const nLEV_Other    = 2;    //  -> changedChars;
@@ -323,7 +322,8 @@ void SwEditShell::ApplyAutoMark()
             // Leading and trailing blanks are ignored
             if( !aRdLine.isEmpty() && '#' != aRdLine[0] )
             {
-                OUString sLine(OStringToOUString(aRdLine, eChrSet));
+                // tdf#106899 - import tox concordance file using utf-8
+                OUString sLine(OStringToOUString(aRdLine, RTL_TEXTENCODING_UTF8));
 
                 sal_Int32 nTokenPos = 0;
                 OUString sToSelect( sLine.getToken(0, ';', nTokenPos ) );
