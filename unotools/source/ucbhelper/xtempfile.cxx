@@ -219,11 +219,21 @@ void SAL_CALL OTempFileService::closeOutput(  )
 
     mbOutClosed = true;
 
-    if ( mbInClosed )
+    // So... because of the older implementation of this class, there is code that expects
+    // to be able to (a) write data (b) close the output stream (c) open the input stream
+    // and read the data that was written.
+    // However, if I actually close and re-open the underlying stream, that will kill a nice
+    // optimisation on windows that makes temporary files a lot faster.
+    // So just ignore close and let the underlying resource be dealt with by the destructor.
+
+    // Also call FlushBuffer() and not Flush() because Flush() will mess with the aforementioned
+    // windows optimisation.
+    if (mpStream)
     {
-        // stream will be deleted by TempFile implementation
-        mpStream = nullptr;
-        mpTempFile.reset();
+        if (mbRemoveFile)
+            mpStream->FlushBuffer();
+        else
+            mpStream->Flush();
     }
 }
 
