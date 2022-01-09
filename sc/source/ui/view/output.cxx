@@ -38,6 +38,7 @@
 #include <svx/unoapi.hxx>
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <output.hxx>
 #include <document.hxx>
@@ -909,12 +910,23 @@ const BitmapEx& getIcon(sc::IconSetBitmapMap & rIconSetBitmapMap, ScIconSetType 
 void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldIconSetInfo, const tools::Rectangle& rRect, tools::Long nOneX, tools::Long nOneY,
         sc::IconSetBitmapMap & rIconSetBitmapMap)
 {
-    //long nSize = 16;
     ScIconSetType eType = pOldIconSetInfo->eIconSetType;
     sal_Int32 nIndex = pOldIconSetInfo->nIconIndex;
     const BitmapEx& rIcon = getIcon(rIconSetBitmapMap, eType, nIndex);
-    tools::Long aOrigSize = std::max<tools::Long>(0,std::min(rRect.GetSize().getWidth() - 4 * nOneX, rRect.GetSize().getHeight() -4 * nOneY));
-    rRenderContext.DrawBitmapEx( Point( rRect.Left() + 2 * nOneX, rRect.Top() + 2 * nOneY), Size(aOrigSize, aOrigSize), rIcon );
+
+    tools::Long aHeight = o3tl::convert(10, o3tl::Length::pt, o3tl::Length::mm100);
+
+    if (pOldIconSetInfo->mnHeight)
+        aHeight = o3tl::convert(pOldIconSetInfo->mnHeight, o3tl::Length::twip, o3tl::Length::mm100);
+
+    Size aSize = rIcon.GetSizePixel();
+    double fRatio = aSize.Width() / aSize.Height();
+    tools::Long aWidth = fRatio * aHeight;
+
+    rRenderContext.Push();
+    rRenderContext.SetClipRegion(vcl::Region(rRect));
+    rRenderContext.DrawBitmapEx(Point(rRect.Left() + 2 * nOneX, rRect.Bottom() - 2 * nOneY - aHeight), Size(aWidth, aHeight), rIcon);
+    rRenderContext.Pop();
 }
 
 void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & pColor, const SvxBrushItem* pBackground, std::optional<Color>& pOldColor, const SvxBrushItem*& pOldBackground,
