@@ -10,6 +10,7 @@
 #include <memory>
 #include <string_view>
 #include <config_features.h>
+#include <config_fonts.h>
 
 #ifdef MACOSX
 #define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0

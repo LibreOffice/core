@@ -39,6 +39,7 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 
 #include <config_features.h>
+#include <config_fonts.h>
 #include <editeng/ulspitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>

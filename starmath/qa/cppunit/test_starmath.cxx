@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <config_features.h>
+#include <config_fonts.h>
 #include <vcl/print.hxx>
 
 #include <test/bootstrapfixture.hxx>

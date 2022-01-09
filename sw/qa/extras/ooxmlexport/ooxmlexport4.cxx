@@ -31,6 +31,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 
 #include <config_features.h>
+#include <config_fonts.h>
 #include <unotools/tempfile.hxx>
 #include <comphelper/configuration.hxx>
 #include <officecfg/Office/Writer.hxx>
