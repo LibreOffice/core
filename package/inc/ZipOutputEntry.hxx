@@ -110,7 +110,7 @@ protected:
 class ZipOutputEntryInThread final : public ZipOutputEntry
 {
     class Task;
-    OUString m_aTempURL;
+    css::uno::Reference<css::io::XTempFile> m_xTempFile;
     std::exception_ptr m_aParallelDeflateException;
     std::atomic<bool>   m_bFinished;
 
