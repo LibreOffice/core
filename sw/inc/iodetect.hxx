@@ -28,6 +28,8 @@
 #include <tools/solar.h>
 #include "swdllapi.h"
 
+#define DETECT_ENCODING_BUFFER_SIZE 4096
+
 inline constexpr OUStringLiteral FILTER_RTF = u"RTF";       ///< RTF filter
 inline constexpr OUStringLiteral sRtfWH = u"WH_RTF";
 inline constexpr OUStringLiteral FILTER_TEXT = u"TEXT"; ///< text filter with default codeset
@@ -105,6 +107,8 @@ public:
     static bool IsValidStgFilter( SotStorage& , const SfxFilter& );
     static bool IsValidStgFilter( const css::uno::Reference < css::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
+    // tdf#106899 - wrapper around IsDetectableText to retrieve the text encoding for a given stream
+    static rtl_TextEncoding GetTextEncoding(SvStream&);
     static bool IsDetectableText( const char* pBuf, sal_uLong &rLen,
             rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd, bool *pBom);
 
