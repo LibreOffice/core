@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5be17df5_0c0c3f5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-09T08:42:28Z",
+      "side": 1,
+      "message": "Haven\u0027t tested but looks like a nice compromise storing for both documents and new files.",
+      "revId": "d984e35b56b7c7ff94e5a5377275b36c62084239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
