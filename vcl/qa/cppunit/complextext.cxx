@@ -8,6 +8,7 @@
  */
 
 #include <config_features.h>
+#include <config_fonts.h>
 
 #include <ostream>
 #include <vector>

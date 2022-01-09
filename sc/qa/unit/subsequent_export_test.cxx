@@ -13,6 +13,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <config_features.h>
+#include <config_fonts.h>
 
 #include <sfx2/sfxmodelfactory.hxx>
 

@@ -1,0 +1,9 @@
+#ifndef CONFIG_FONTS_H
+#define CONFIG_FONTS_H
+
+/*
+ * Whether extra fonts are available
+ */
+#define HAVE_MORE_FONTS 0
+
+#endif

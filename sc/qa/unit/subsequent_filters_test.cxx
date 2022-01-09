@@ -16,6 +16,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <osl/file.hxx>
 #include <config_features.h>
+#include <config_fonts.h>
 
 #include <vcl/svapp.hxx>
 #include <sfx2/docfilt.hxx>

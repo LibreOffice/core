@@ -52,6 +52,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <cairo.h>
 #include <config_features.h>
+#include <config_fonts.h>
 #include <config_mpl.h>
 #include <tools/json_writer.hxx>
 #include <o3tl/unit_conversion.hxx>

@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 #include <config_features.h>
+#include <config_fonts.h>
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>

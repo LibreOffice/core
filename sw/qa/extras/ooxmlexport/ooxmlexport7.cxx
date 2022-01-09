@@ -16,6 +16,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 
 #include <config_features.h>
+#include <config_fonts.h>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
 

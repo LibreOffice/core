@@ -125,6 +125,7 @@
 #include <editeng/unolingu.hxx>
 #include <vcl/scheduler.hxx>
 #include <config_features.h>
+#include <config_fonts.h>
 #include <sfx2/watermarkitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>

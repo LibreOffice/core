@@ -31,6 +31,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <config_features.h>
+#include <config_fonts.h>
 #include <vcl/skia/SkiaHelper.hxx>
 
 using namespace css;
