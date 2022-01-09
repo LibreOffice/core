@@ -39,6 +39,7 @@
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <tools/UnitConversion.hxx>
 
 #include <output.hxx>
 #include <document.hxx>
@@ -907,12 +908,23 @@ const BitmapEx& getIcon(sc::IconSetBitmapMap & rIconSetBitmapMap, ScIconSetType 
 void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldIconSetInfo, const tools::Rectangle& rRect, long nOneX, long nOneY,
         sc::IconSetBitmapMap & rIconSetBitmapMap)
 {
-    //long nSize = 16;
     ScIconSetType eType = pOldIconSetInfo->eIconSetType;
     sal_Int32 nIndex = pOldIconSetInfo->nIconIndex;
     const BitmapEx& rIcon = getIcon(rIconSetBitmapMap, eType, nIndex);
-    long aOrigSize = std::max<long>(0,std::min(rRect.GetSize().getWidth() - 4 * nOneX, rRect.GetSize().getHeight() -4 * nOneY));
-    rRenderContext.DrawBitmapEx( Point( rRect.Left() + 2 * nOneX, rRect.Top() + 2 * nOneY), Size(aOrigSize, aOrigSize), rIcon );
+
+    tools::Long aHeight = 300;
+
+    if (pOldIconSetInfo->mnHeight)
+        aHeight = convertTwipToMm100(pOldIconSetInfo->mnHeight);
+
+    Size aSize = rIcon.GetSizePixel();
+    double fRatio = aSize.Width() / aSize.Height();
+    tools::Long aWidth = fRatio * aHeight;
+
+    rRenderContext.Push();
+    rRenderContext.SetClipRegion(vcl::Region(rRect));
+    rRenderContext.DrawBitmapEx(Point(rRect.Left() + 2 * nOneX, rRect.Bottom() - 2 * nOneY - aHeight), Size(aWidth, aHeight), rIcon);
+    rRenderContext.Pop();
 }
 
 void drawCells(vcl::RenderContext& rRenderContext, boost::optional<Color> const & pColor, const SvxBrushItem* pBackground, boost::optional<Color>& pOldColor, const SvxBrushItem*& pOldBackground,
