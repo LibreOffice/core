@@ -34,6 +34,24 @@
       "parentUuid": "a3101e50_39ee7a0f",
       "revId": "4c4ce3dc2133199f0d804a686a1e0cd0c9124914",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16b18d04_f69d913c",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-01-09T12:48:25Z",
+      "side": 1,
+      "message": "Since C++11 that should work. \u0027drag-mirror\u0027 works with that solution.",
+      "parentUuid": "131fe031_4815468a",
+      "revId": "4c4ce3dc2133199f0d804a686a1e0cd0c9124914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
