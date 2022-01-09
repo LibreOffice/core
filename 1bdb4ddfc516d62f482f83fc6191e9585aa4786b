@@ -16,6 +16,24 @@
       "message": "Why not do this function at the same time?",
       "revId": "1bdb4ddfc516d62f482f83fc6191e9585aa4786b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09848456_6f124ad8",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-09T16:30:18Z",
+      "side": 1,
+      "message": "Because you can\u0027t easily do the same for [-18000,18000) case :-) - at least I can\u0027t see how I can make sure that I get -18000, but not +18000.",
+      "parentUuid": "c41b8d51_8bd09eb0",
+      "revId": "1bdb4ddfc516d62f482f83fc6191e9585aa4786b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
