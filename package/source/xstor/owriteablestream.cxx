@@ -222,14 +222,13 @@ OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext >& rCon
 {
     OUString aTempURL;
 
-    uno::Reference < beans::XPropertySet > xTempFile(
+    uno::Reference < io::XTempFile > xTempFile(
             io::TempFile::create(rContext),
             uno::UNO_QUERY_THROW );
 
     try {
-        xTempFile->setPropertyValue( "RemoveFile", uno::makeAny( false ) );
-        uno::Any aUrl = xTempFile->getPropertyValue( "Uri" );
-        aUrl >>= aTempURL;
+        xTempFile->setRemoveFile( false );
+        aTempURL = xTempFile->getUri();
     }
     catch ( const uno::Exception& )
     {
