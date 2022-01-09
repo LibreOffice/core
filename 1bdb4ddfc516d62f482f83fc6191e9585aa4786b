@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c41b8d51_8bd09eb0",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1002782
+      },
+      "writtenOn": "2022-01-09T14:37:25Z",
+      "side": 1,
+      "message": "Why not do this function at the same time?",
+      "revId": "1bdb4ddfc516d62f482f83fc6191e9585aa4786b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
