@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3143b4e3_daf9ecaf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-09T18:36:25Z",
+      "side": 1,
+      "message": "sberg, vmiklos, is there a reason I cannot simply bypass UCB and write this XML out directly?\n\nWe seem to have the required path here already, it seems like using UCB is actually more work then necessary?",
+      "revId": "af41918d77bbeeec4a9642a79fbe9f316beb7eaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
