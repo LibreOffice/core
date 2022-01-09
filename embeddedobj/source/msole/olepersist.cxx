@@ -89,14 +89,13 @@ OUString GetNewTempFileURL_Impl( const uno::Reference< uno::XComponentContext >&
 
     OUString aResult;
 
-    uno::Reference < beans::XPropertySet > xTempFile(
+    uno::Reference < io::XTempFile > xTempFile(
             io::TempFile::create(xContext),
-            uno::UNO_QUERY_THROW );
+            uno::UNO_SET_THROW );
 
     try {
-        xTempFile->setPropertyValue("RemoveFile", uno::makeAny( false ) );
-        uno::Any aUrl = xTempFile->getPropertyValue("Uri");
-        aUrl >>= aResult;
+        xTempFile->setRemoveFile( false );
+        aResult = xTempFile->getUri();
     }
     catch ( const uno::Exception& )
     {
@@ -163,16 +162,15 @@ static OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimiz
 
     try
     {
-        uno::Reference < beans::XPropertySet > xTempFile(
+        uno::Reference < io::XTempFile > xTempFile(
                 io::TempFile::create(xContext),
                 uno::UNO_QUERY );
-        uno::Reference < io::XStream > xTempStream( xTempFile, uno::UNO_QUERY_THROW );
+        uno::Reference < io::XStream > xTempStream = xTempFile;
 
         xParentStorage->copyStreamElementData( aEntryName, xTempStream );
 
-        xTempFile->setPropertyValue("RemoveFile", uno::makeAny( false ) );
-        uno::Any aUrl = xTempFile->getPropertyValue("Uri");
-        aUrl >>= aResult;
+        xTempFile->setRemoveFile( false );
+        aResult = xTempFile->getUri();
     }
     catch( const uno::RuntimeException& )
     {

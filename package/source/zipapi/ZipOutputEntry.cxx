@@ -252,12 +252,11 @@ void ZipOutputEntryInThread::createBufferFile()
 {
     assert(!m_xOutStream.is() && m_aTempURL.isEmpty() &&
            "should only be called in the threaded mode where there is no existing stream yet");
-    uno::Reference < beans::XPropertySet > xTempFileProps(
+    uno::Reference < io::XTempFile > xTempFile(
             io::TempFile::create(m_xContext),
             uno::UNO_QUERY_THROW );
-    xTempFileProps->setPropertyValue("RemoveFile", uno::makeAny(false));
-    uno::Any aUrl = xTempFileProps->getPropertyValue( "Uri" );
-    aUrl >>= m_aTempURL;
+    xTempFile->setRemoveFile(false);
+    m_aTempURL = xTempFile->getUri();
     assert(!m_aTempURL.isEmpty());
 
     uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
