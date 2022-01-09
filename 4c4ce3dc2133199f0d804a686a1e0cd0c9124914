@@ -16,6 +16,24 @@
       "message": "Would this give correct result?\n\n  a %\u003d 36000_deg100;\n  if (a \u003c 0_deg100)\n    a +\u003d 36000_deg100;\n\nOnly one \u0027if\u0027 check; max two arithmetic operations; no loops; no abs()",
       "revId": "4c4ce3dc2133199f0d804a686a1e0cd0c9124914",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "131fe031_4815468a",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-09T12:05:16Z",
+      "side": 1,
+      "message": "LGTM",
+      "parentUuid": "a3101e50_39ee7a0f",
+      "revId": "4c4ce3dc2133199f0d804a686a1e0cd0c9124914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
