@@ -44,6 +44,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,boost,3))
 $(eval $(call gb_UnpackedTarball_add_patches,boost,\
 	$(foreach patch,$(boost_patches),external/boost/$(patch)) \
     external/boost/boost-emscripten-noshm.patch.0 \
+    external/boost/boost-emscripten-nowasm.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:

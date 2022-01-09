@@ -1,0 +1,11 @@
+--- boost/config/detail/select_platform_config.hpp.orig	2021-11-13 18:32:09.446182220 +0100
++++ boost/config/detail/select_platform_config.hpp	2021-11-13 18:32:57.734041110 +0100
+@@ -89,7 +89,7 @@
+ // Nuxi CloudABI:
+ #  define BOOST_PLATFORM_CONFIG "boost/config/platform/cloudabi.hpp"
+ 
+-#elif defined (__wasm__)
++#elif defined (__wasm__) && !defined (__EMSCRIPTEN__)
+ // Web assembly:
+ #  define BOOST_PLATFORM_CONFIG "boost/config/platform/wasm.hpp"
+ 
