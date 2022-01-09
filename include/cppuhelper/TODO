@@ -1,0 +1,2 @@
+compbase1.hxx, compbase2.hxx, ... are just there because they are part of the published API.
+In LO internals, we could just use compbase.hxx so it would allow us to make the compase<number>.hxx deprecated
