@@ -34,6 +34,24 @@
       "parentUuid": "c41b8d51_8bd09eb0",
       "revId": "1bdb4ddfc516d62f482f83fc6191e9585aa4786b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2eaeec4_2ca31344",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1002782
+      },
+      "writtenOn": "2022-01-09T21:45:27Z",
+      "side": 1,
+      "message": "Why not something like that? It\u0027s the same logic as the current function, but the modulo allows to replace the while by an if. Like what you did on NormAngle36000, except that for NormAngle36000 one of the if could be removed completely:\n    a %\u003d 36000_deg100;\n    if (a \u003c -18000_deg100)\n        a +\u003d 36000_deg100;\n    if (a \u003e\u003d 18000_deg100)\n        a -\u003d 36000_deg100;\n    return a;\n\nI\u0027m just curious, is the modulo really a significant optimization? Do we get huge angles sometimes?",
+      "parentUuid": "09848456_6f124ad8",
+      "revId": "1bdb4ddfc516d62f482f83fc6191e9585aa4786b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
