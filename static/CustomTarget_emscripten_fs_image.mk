@@ -1408,6 +1408,7 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_RESOURCE_FOLDER)/common/fonts/opens___.ttf \
     $(INSTROOT)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno) \
     $(INSTROOT)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
+    $(SRCDIR)/android/default-document/example_larger.odt \
     $(SRCDIR)/android/default-document/example.odt \
 	$(SRCDIR)/android/default-document/example_test.ods \
 
