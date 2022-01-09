@@ -42,6 +42,7 @@
 #include <docary.hxx>
 #include <mdiexp.hxx>
 #include <strings.hrc>
+#include <iodetect.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -295,7 +296,8 @@ void SwEditShell::ApplyAutoMark()
         SfxMedium aMedium( sAutoMarkURL, StreamMode::STD_READ );
         SvStream& rStrm = *aMedium.GetInStream();
         Push();
-        rtl_TextEncoding eChrSet = ::osl_getThreadTextEncoding();
+        // tdf#106899 - import tox concordance file using the appropriate character set
+        const rtl_TextEncoding eChrSet = SwIoSystem::GetTextEncoding(rStrm);
 
         // SearchOptions to be used in loop below
         sal_Int32 const nLEV_Other    = 2;    //  -> changedChars;
