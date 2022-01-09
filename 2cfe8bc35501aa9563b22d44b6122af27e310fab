@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee3a0ff0_86fdee49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-09T17:49:15Z",
+      "side": 1,
+      "message": "Hi Mike! These concordance files are written in LO using utf8. Should we just assume they are always in the utf8 charset or should we detect it using SwIoSystem::IsDetectableText? Thx for your help.",
+      "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
