@@ -18,6 +18,8 @@ $(eval $(call gb_Module_add_targets,static,\
 ifeq (EMSCRIPTEN,$(OS))
 $(eval $(call gb_Module_add_targets,static,\
     CustomTarget_emscripten_fs_image \
+    CustomTarget_wasm-qt5-mandelbrot_moc \
+    Executable_wasm-qt5-mandelbrot \
 ))
 endif
 
