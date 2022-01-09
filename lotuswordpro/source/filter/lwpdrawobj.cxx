@@ -1344,6 +1344,22 @@ LwpDrawBitmap::~LwpDrawBitmap()
 {
 }
 
+static bool IsValid(const BmpInfoHeader2& rHeader)
+{
+    if (rHeader.nPlanes != 1)
+        return false;
+
+    if (rHeader.nBitCount != 0 && rHeader.nBitCount != 1 &&
+        rHeader.nBitCount != 4 && rHeader.nBitCount != 8 &&
+        rHeader.nBitCount != 16 && rHeader.nBitCount != 24 &&
+        rHeader.nBitCount != 32)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 /**
  * @descr   reading function of class LwpDrawBitmap
  */
@@ -1370,6 +1386,9 @@ void LwpDrawBitmap::Read()
         m_pStream->ReadUInt16( aInfoHeader2.nPlanes );
         m_pStream->ReadUInt16( aInfoHeader2.nBitCount );
 
+        if (!IsValid(aInfoHeader2))
+            throw BadRead();
+
         N = aInfoHeader2.nPlanes * aInfoHeader2.nBitCount;
         if (N == 24)
         {
@@ -1386,6 +1405,10 @@ void LwpDrawBitmap::Read()
         m_pStream->ReadUInt32( aInfoHeader2.nHeight );
         m_pStream->ReadUInt16( aInfoHeader2.nPlanes );
         m_pStream->ReadUInt16( aInfoHeader2.nBitCount );
+
+        if (!IsValid(aInfoHeader2))
+            throw BadRead();
+
         N = aInfoHeader2.nPlanes * aInfoHeader2.nBitCount;
         if (N == 24)
         {
