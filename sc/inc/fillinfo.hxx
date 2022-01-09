@@ -93,6 +93,7 @@ struct ScIconSetInfo
 {
     sal_Int32 nIconIndex;
     ScIconSetType eIconSetType;
+    long mnHeight = 0;
     bool mbShowValue;
 };
 
