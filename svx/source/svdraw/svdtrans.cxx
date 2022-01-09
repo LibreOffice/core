@@ -407,19 +407,13 @@ Degree100 NormAngle18000(Degree100 a)
 
 Degree100 NormAngle36000(Degree100 a)
 {
-    while (a < 0_deg100) a += 36000_deg100;
-    while (a >= 36000_deg100) a -= 36000_deg100;
+    a %= 36000_deg100;
+    if (a < 0_deg100)
+        a += 36000_deg100;
     return a;
 }
 
-sal_uInt16 GetAngleSector(Degree100 nAngle)
-{
-    nAngle = NormAngle36000(nAngle);
-    if (nAngle< 9000_deg100) return 0;
-    if (nAngle<18000_deg100) return 1;
-    if (nAngle<27000_deg100) return 2;
-    return 3;
-}
+sal_uInt16 GetAngleSector(Degree100 nAngle) { return (NormAngle36000(nAngle) / 9000_deg100).get(); }
 
 tools::Long GetLen(const Point& rPnt)
 {
