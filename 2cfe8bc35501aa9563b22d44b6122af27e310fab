@@ -69,6 +69,23 @@
       "parentUuid": "822d6d59_81cf82cf",
       "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b37caf09_798cc475",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-09T21:18:33Z",
+      "side": 1,
+      "message": "If I\u0027m not mistaken, current code uses hardcoded Greek codepage???\n\nhttps://opengrok.libreoffice.org/xref/core/sw/source/ui/index/cnttab.cxx?r\u003d252dd254#3913\n\nBut I may be completely confused.",
+      "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
