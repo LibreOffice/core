@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39538d9d_1145fa10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-09T10:41:34Z",
+      "side": 1,
+      "message": "So I found the testcase of \"\u003cform\u003e\" in https://bugs.chromium.org/p/oss-fuzz/issues/detail?id\u003d39303.\n\nDo you have a setup, where you can easily test this patch? I removed mine...",
+      "revId": "e461b6162f827cc557b73a5efeba767a0cf09cba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
