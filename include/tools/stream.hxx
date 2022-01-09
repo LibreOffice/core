@@ -186,7 +186,6 @@ protected:
     virtual void    FlushData();
     virtual void    SetSize(sal_uInt64 nSize);
 
-    void            FlushBuffer();
     SAL_DLLPRIVATE void ClearError();
     SAL_DLLPRIVATE void ClearBuffer();
 
@@ -273,6 +272,9 @@ public:
     virtual sal_uInt64 TellEnd();
     // length between current (Tell()) pos and end of stream
     sal_uInt64      remainingSize();
+    /// If we have data in our internal buffers, write them out
+    void            FlushBuffer();
+    /// Call FlushBuffer() and then call flush on the underlying OS stream
     void            Flush();
     // next Tell() <= nSize
     bool            SetStreamSize( sal_uInt64 nSize );

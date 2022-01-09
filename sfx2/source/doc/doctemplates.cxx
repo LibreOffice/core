@@ -1274,6 +1274,9 @@ bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString& aUs
                 uno::UNO_SET_THROW );
 
         OUString aTempURL = xTempFile->getUri();
+        // This is acting as a flag to the TempFile implementation to call Flush() on the underlying
+        // OS file
+        xTempFile->serRemoveFile(false);
 
         uno::Reference< io::XStream > xStream( xTempFile );
         uno::Reference< io::XOutputStream > xOutStream = xStream->getOutputStream();
@@ -1294,6 +1297,8 @@ bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString& aUs
                                         "groupuinames.xml",
                                         ucb::NameClash::OVERWRITE,
                                         "text/xml" );
+
+        xTempFile->serRemoveFile(true);
         bResult = true;
     }
     catch ( uno::Exception& )
