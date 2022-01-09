@@ -1269,15 +1269,13 @@ bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString& aUs
 {
     bool bResult = false;
     try {
-        uno::Reference< beans::XPropertySet > xTempFile(
+        uno::Reference< io::XTempFile > xTempFile(
                 io::TempFile::create(mxContext),
-                uno::UNO_QUERY_THROW );
+                uno::UNO_SET_THROW );
 
-        OUString aTempURL;
-        uno::Any aUrl = xTempFile->getPropertyValue("Uri");
-        aUrl >>= aTempURL;
+        OUString aTempURL = xTempFile->getUri();
 
-        uno::Reference< io::XStream > xStream( xTempFile, uno::UNO_QUERY_THROW );
+        uno::Reference< io::XStream > xStream( xTempFile );
         uno::Reference< io::XOutputStream > xOutStream = xStream->getOutputStream();
         if ( !xOutStream.is() )
             throw uno::RuntimeException();
