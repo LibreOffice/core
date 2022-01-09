@@ -629,7 +629,7 @@ namespace
 
             // create a SAXWriter
             uno::Reference< xml::sax::XWriter > const xSaxWriter = xml::sax::Writer::create(xContext);
-            uno::Reference< io::XStream > xTempFile = io::TempFile::create(xContext);
+            uno::Reference< io::XTempFile > xTempFile = io::TempFile::create(xContext);
             uno::Reference< io::XOutputStream > xOutStrm = xTempFile->getOutputStream();
 
             // set output stream and do the serialization
@@ -638,9 +638,7 @@ namespace
 
             // get URL from temp file
             uno::Reference < beans::XPropertySet > xTempFileProps(xTempFile, uno::UNO_QUERY);
-            uno::Any aUrl = xTempFileProps->getPropertyValue("Uri");
-            OUString aTempURL;
-            aUrl >>= aTempURL;
+            OUString aTempURL = xTempFile->getUri();
 
             // copy back file
             if (aTempURL.isEmpty() || !DirectoryHelper::fileExists(aTempURL))
@@ -1923,9 +1921,7 @@ namespace comphelper
             xSerializer->serialize(xSaxWriter, uno::Sequence< beans::StringPair >());
 
             // get URL from temp file
-            uno::Reference < beans::XPropertySet > xTempFileProps(xTempFile, uno::UNO_QUERY);
-            uno::Any aUrl = xTempFileProps->getPropertyValue("Uri");
-            aUrl >>= aTempURL;
+            aTempURL = xTempFile->getUri();
         }
 
         // copy back file
