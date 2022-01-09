@@ -16,6 +16,8 @@
 #include <tokenarray.hxx>
 #include <refupdatecontext.hxx>
 #include <refdata.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <scitems.hxx>
 
 #include <formula/token.hxx>
 #include <vcl/bitmapex.hxx>
@@ -1054,6 +1056,10 @@ std::unique_ptr<ScIconSetInfo> ScIconSetFormat::GetIconSetInfo(const ScAddress& 
         ++nIndex;
 
     std::unique_ptr<ScIconSetInfo> pInfo(new ScIconSetInfo);
+
+    const SfxPoolItem& rPoolItem = mpDoc->GetPattern(rAddr)->GetItem(ATTR_FONT_HEIGHT);
+    tools::Long aFontHeight = static_cast<const SvxFontHeightItem&>(rPoolItem).GetHeight();
+    pInfo->mnHeight = aFontHeight;
 
     if(mpFormatData->mbReverse)
     {
