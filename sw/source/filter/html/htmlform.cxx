@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-#include <config_fuzzers.h>
-
 #include <sal/config.h>
 
 #include <string_view>
@@ -30,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/UnitConversion.hxx>
 
+#include <tools/diagnose_ex.h>
 #include <vcl/unohelp.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
@@ -1298,25 +1296,28 @@ void SwHTMLParser::NewForm( bool bAppend )
         }
     }
 
-#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     const uno::Reference< XMultiServiceFactory > & rSrvcMgr =
         m_pFormImpl->GetServiceFactory();
     if( !rSrvcMgr.is() )
         return;
 
     uno::Reference< XInterface > xInt;
+    uno::Reference<XForm> xForm;
     try
     {
         xInt = rSrvcMgr->createInstance("com.sun.star.form.component.Form");
+        if (!xInt.is())
+            return;
+        xForm.set(xInt, UNO_QUERY);
+        SAL_WARN_IF(!xForm.is(), "sw", "no XForm for com.sun.star.form.component.Form?");
+        if (!xForm.is())
+            return;
     }
-    catch (const css::lang::ServiceNotRegisteredException&)
+    catch (...)
     {
-    }
-    if( !xInt.is() )
+        TOOLS_WARN_EXCEPTION("sw", "");
         return;
-
-    uno::Reference< XForm >  xForm( xInt, UNO_QUERY );
-    OSL_ENSURE( xForm.is(), "no Form?" );
+    }
 
     uno::Reference< container::XIndexContainer > xFormComps( xForm, UNO_QUERY );
     m_pFormImpl->SetFormComps( xFormComps );
@@ -1367,7 +1368,6 @@ void SwHTMLParser::NewForm( bool bAppend )
         if (bHasEvents)
             NotifyMacroEventRead();
     }
-#endif
 }
 
 void SwHTMLParser::EndForm( bool bAppend )
