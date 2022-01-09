@@ -16,6 +16,23 @@
       "message": "Hi Mike! These concordance files are written in LO using utf8. Should we just assume they are always in the utf8 charset or should we detect it using SwIoSystem::IsDetectableText? Thx for your help.",
       "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d986c11_93933e7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-09T18:47:07Z",
+      "side": 1,
+      "message": "It is obvious that the concordance files are expected to be encoded using system encoding. On Linux, it\u0027s *usually* (not always!) UTF-8; but on Windows, it\u0027s never UTF-8 (it\u0027s ACP, e.g. win-1251 on Russian localized Windows). If implemented as you do that, all Windows-specific concordance files will be broken.\n\nIt would be definitely be useful to detect encoding if possible. The stream has the StartReadingUnicodeText method (for BOM case); and maybe it makes sense to add another method to SvStream to detect encoding using ICU detector, to avoid multiplication of similar code.",
+      "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
