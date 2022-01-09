@@ -148,20 +148,12 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
                     HtmlTokenId nToken = ::GetHTMLToken(sToken);
                     if(nToken != HtmlTokenId::NONE)
                     {
-                        // Token was found
                         eFoundType = svtools::HTMLKEYWORD;
                         nPortEnd = nSrchPos;
                         nPortStart = nActPos;
                     }
                     else
-                    {
-                        // what was that?
-                        SAL_WARN(
-                            "sw.level2",
-                            "Token " << sToken
-                                << " not recognised!");
-                    }
-
+                        SAL_WARN("sw", "HTML token " << sToken << " not recognised!");
                 }
             }
             // now we still have to look for '>'
