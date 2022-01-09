@@ -14,6 +14,7 @@ $(call gb_CustomTarget_get_target,desktop/soffice) : \
 
 $(call gb_CustomTarget_get_workdir,desktop/soffice)/soffice.sh : \
 		$(SRCDIR)/desktop/scripts/soffice.sh \
+		$(BUILDDIR)/config_host.mk \
 		| $(call gb_CustomTarget_get_workdir,desktop/soffice)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),SED)
