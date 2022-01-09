@@ -20,7 +20,7 @@
 
 #include "CRowSetDataColumn.hxx"
 #include <stringconstants.hxx>
-#include <apitools.hxx>
+#include <strings.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>

@@ -19,6 +19,8 @@
 #ifndef INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
 #define INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
 
+#include <unotools/resmgr.hxx>
+
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 const TranslateId RSC_QUERY_OBJECT_TYPE[] =

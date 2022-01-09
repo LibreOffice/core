@@ -24,6 +24,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <queryfilter.hxx>
 #include <queryorder.hxx>
+#include <strings.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>

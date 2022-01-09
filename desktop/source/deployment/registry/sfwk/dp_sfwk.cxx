@@ -21,6 +21,7 @@
 
 #include <strings.hrc>
 #include <dp_backend.h>
+#include <dp_misc.h>
 #include <dp_ucb.h>
 #include "dp_parceldesc.hxx"
 #include <rtl/uri.hxx>

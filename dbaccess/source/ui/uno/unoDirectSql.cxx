@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <directsql.hxx>
 #include <datasourceconnector.hxx>
+#include <strings.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 

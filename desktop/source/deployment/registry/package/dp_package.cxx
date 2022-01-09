@@ -21,6 +21,7 @@
 #include <strings.hrc>
 #include <dp_package.hxx>
 #include <dp_backend.h>
+#include <dp_misc.h>
 #include <dp_ucb.h>
 #include <dp_interact.h>
 #include <dp_dependencies.hxx>

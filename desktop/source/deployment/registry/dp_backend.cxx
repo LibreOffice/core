@@ -22,6 +22,7 @@
 #include <cassert>
 
 #include <dp_backend.h>
+#include <dp_misc.h>
 #include <dp_ucb.h>
 #include <rtl/ustring.hxx>
 #include <rtl/bootstrap.hxx>

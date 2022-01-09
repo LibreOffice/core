@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <apitools.hxx>
+#include <strings.hxx>
 #include <viewcontainer.hxx>
 #include <View.hxx>
 

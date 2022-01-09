@@ -36,7 +36,7 @@
 #include "dsselect.hxx"
 #include <svl/filenotation.hxx>
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/mozilla/MozillaBootstrap.hpp>

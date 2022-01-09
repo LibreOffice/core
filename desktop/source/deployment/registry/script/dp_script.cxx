@@ -21,6 +21,7 @@
 #include <strings.hrc>
 #include "dp_lib_container.h"
 #include <dp_backend.h>
+#include <dp_misc.h>>
 #include <dp_ucb.h>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase.hxx>

@@ -18,7 +18,6 @@
  */
 
 
-#include <dp_misc.h>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>

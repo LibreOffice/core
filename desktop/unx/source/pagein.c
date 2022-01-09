@@ -20,7 +20,6 @@
 #include "file_image.h"
 #include "pagein.h"
 
-#include <unistd.h>
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
@@ -28,7 +27,6 @@
 #ifdef LINUX
 #include <sys/sysmacros.h>
 #endif
-#include <sys/types.h>
 
 /* do_pagein */
 static void do_pagein (const char * filename)

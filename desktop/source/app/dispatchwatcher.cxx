@@ -30,7 +30,6 @@
 #include "officeipcthread.hxx"
 #include <rtl/ustring.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/synchronousdispatch.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

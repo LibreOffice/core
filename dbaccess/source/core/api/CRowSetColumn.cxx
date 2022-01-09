@@ -19,8 +19,10 @@
 
 
 #include <stringconstants.hxx>
-#include <apitools.hxx>
+#include <strings.hxx>
 #include "CRowSetColumn.hxx"
+
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;

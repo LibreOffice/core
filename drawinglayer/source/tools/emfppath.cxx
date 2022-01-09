@@ -20,7 +20,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include "emfppath.hxx"
 

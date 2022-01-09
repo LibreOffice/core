@@ -23,7 +23,6 @@
 
 #include <string_view>
 
-#include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

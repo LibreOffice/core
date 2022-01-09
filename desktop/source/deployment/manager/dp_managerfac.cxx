@@ -19,6 +19,7 @@
 
 
 #include "dp_manager.h"
+#include <dp_misc.h>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/deployment/XPackageManagerFactory.hpp>

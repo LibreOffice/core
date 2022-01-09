@@ -30,7 +30,6 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/interaction.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
 
 namespace dbaccess
 {

@@ -24,9 +24,11 @@
 #include <databasecontext.hxx>
 #include "documentcontainer.hxx"
 #include <sdbcoretools.hxx>
+#include <strings.hxx>
 #include <recovery/dbdocrecovery.hxx>
 
 #include <officecfg/Office/Common.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>

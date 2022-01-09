@@ -12,7 +12,6 @@
 
 #include <vcl/virdev.hxx>
 #include <vcl/BitmapReadAccess.hxx>
-#include <vcl/canvastools.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
@@ -23,10 +22,7 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <cppcanvas/vclfactory.hxx>
 
-#include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
 
 using namespace drawinglayer;
 using namespace com::sun::star;
