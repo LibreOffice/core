@@ -1704,9 +1704,12 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         ActivatePart( eUsedPart );
 
         //  get the visible rectangle in logic units
-
+        bool bLOKActive = comphelper::LibreOfficeKit::isActive();
         MapMode aDrawMode = pWin->GetDrawMapMode();
-        tools::Rectangle aVisible( pWin->PixelToLogic( tools::Rectangle( Point(0,0), pWin->GetOutputSizePixel() ), aDrawMode ) );
+        tools::Rectangle aVisible(
+            bLOKActive ?
+            OutputDevice::LogicToLogic( aViewData.getLOKVisibleArea(), MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM) )
+            : pWin->PixelToLogic( tools::Rectangle( Point(0,0), pWin->GetOutputSizePixel() ), aDrawMode ) );
 
         ScDocument& rDoc = aViewData.GetDocument();
         SCTAB nTab = aViewData.GetTabNo();
@@ -1729,6 +1732,14 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
 
         tools::Rectangle aSelection = rDoc.GetMMRect( rCellRange.aStart.Col(), rCellRange.aStart.Row(),
                                                 rCellRange.aEnd.Col(), rCellRange.aEnd.Row(), nTab );
+
+        if (bLOKActive && bLayoutRTL)
+        {
+            // In this case we operate in negative X coordinates. The rectangle aSelection already
+            // has negative X coordinates. So the x coordinates in the rectangle aVisible(from getLOKVisibleArea)
+            // need be negated to match.
+            aVisible = tools::Rectangle(-aVisible.Right(), aVisible.Top(), -aVisible.Left(), aVisible.Bottom());
+        }
 
         tools::Long nLeftSpace = aSelection.Left() - aVisible.Left();
         tools::Long nRightSpace = aVisible.Right() - aSelection.Right();
@@ -1756,7 +1767,6 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         else if ( nTopSpace >= nNeededHeight || nBottomSpace >= nNeededHeight )
         {
             // second preference: completely above or below the selection
-
             if ( nBottomSpace > nNeededHeight )             // bottom is preferred
                 aInsertPos.setY( aSelection.Bottom() + 1 );
             else
