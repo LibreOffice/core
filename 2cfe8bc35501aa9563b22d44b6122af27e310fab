@@ -103,6 +103,23 @@
       "message": "Very strange indeed. Nonetheless, I will add a new method to SvStream to detect the charset using either thread or file encoding.",
       "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "440b4b31_c44e9c74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-10T06:49:37Z",
+      "side": 1,
+      "message": "Altough the stream encoding is set to Greek, it will be changed in https://opengrok.libreoffice.org/xref/core/sw/source/ui/index/cnttab.cxx?r\u003d252dd254#3824 🙈",
+      "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
