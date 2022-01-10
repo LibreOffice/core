@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c91ef5c0_a4c79a66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-10T12:03:48Z",
+      "side": 1,
+      "message": "This was a meaningless bug report, and the known implications are mostly meta. So I don\u0027t really see the need to backport this after all the major beta testing has finished.",
+      "revId": "c2ec4a529c8ba7c0b050998e037a72074dc1119a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
