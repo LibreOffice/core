@@ -4731,7 +4731,12 @@ void SwContentTree::DeleteOutlineSelections()
         SwOutlineNodes::size_type nActPos = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos();
         m_pActiveShell->SttSelect();
         m_pActiveShell->MakeOutlineSel(nActPos, nActPos, !m_xTreeView->get_row_expanded(rEntry), false); // select children if not expanded
-        m_pActiveShell->Right(CRSR_SKIP_CHARS, true, 1, false);
+        // The outline selection may already be to the start of the following outline paragraph,
+        // as happens when a table is the last content of the to be deleted outline followed by an
+        // outline paragraph. In this case do not extend the to be deleted selection right or the
+        // first character of the following outline paragraph will be removed.
+        if (!m_pActiveShell->IsSttPara())
+            m_pActiveShell->Right(CRSR_SKIP_CHARS, true, 1, false);
         m_pActiveShell->EndSelect();
         return false;
     });
