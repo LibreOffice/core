@@ -1486,7 +1486,10 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             TextPortion& rTP = pParaPortion->GetTextPortions()[pLine->GetEndPortion()];
             sal_Int32 nPosInArray = pLine->GetEnd()-1-pLine->GetStart();
             tools::Long nNewValue = ( nPosInArray ? pLine->GetCharPosArray()[ nPosInArray-1 ] : 0 ) + n;
-            pLine->GetCharPosArray()[ nPosInArray ] = nNewValue;
+            if (o3tl::make_unsigned(nPosInArray) < pLine->GetCharPosArray().size())
+            {
+                pLine->GetCharPosArray()[ nPosInArray ] = nNewValue;
+            }
             rTP.GetSize().AdjustWidth(n );
         }
 
@@ -2041,7 +2044,10 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         DBG_ASSERT( nBreakPos > pLine->GetStart(), "SplitTextPortion at the beginning of the line?" );
         sal_Int32 nPosInArray = nBreakPos - 1 - pLine->GetStart();
         rTP.GetSize().setWidth( ( nPosInArray && ( rTP.GetLen() > 1 ) ) ? pLine->GetCharPosArray()[ nPosInArray-1 ] : 0 );
-        pLine->GetCharPosArray()[ nPosInArray ] = rTP.GetSize().Width();
+        if (o3tl::make_unsigned(nPosInArray) < pLine->GetCharPosArray().size())
+        {
+            pLine->GetCharPosArray()[ nPosInArray ] = rTP.GetSize().Width();
+        }
     }
     else if ( bHyphenated )
     {
