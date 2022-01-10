@@ -52,6 +52,24 @@
       "parentUuid": "ddef4859_770144ae",
       "revId": "c783ab8a66bacedba2f0d218402198dbe9276490",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7afe5159_de2b6573",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-10T14:25:48Z",
+      "side": 1,
+      "message": "Hi Michael,\nThanks for the clarification.\nI\u0027ve just backported them as separated commits. See relation chain",
+      "parentUuid": "5ed842f8_1e9227d9",
+      "revId": "c783ab8a66bacedba2f0d218402198dbe9276490",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
