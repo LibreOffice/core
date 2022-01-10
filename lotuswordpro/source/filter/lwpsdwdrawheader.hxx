@@ -64,6 +64,7 @@
 
 #include <config_lgpl.h>
 #include <sal/types.h>
+#include <vector>
 
 const sal_uInt8 DRAW_FACESIZE = 32;
 const double THRESHOLD = 0.0001;
@@ -288,10 +289,9 @@ struct SdwTextBoxRecord
 struct SdwFMPATH
 {
     sal_uInt16 n;
-    SdwPoint* pPts;
+    std::vector<SdwPoint> aPts;
     SdwFMPATH()
         : n(0)
-        , pPts(nullptr)
     {
     }
 };
