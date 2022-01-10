@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69492b17_061c978c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-10T07:44:13Z",
+      "side": 1,
+      "message": "My expectation is that you can assume we only work with file:// URLs here, and if so, you don\u0027t need to go via UCB.",
+      "revId": "2e5ab9ffe5b3dc6e1387bb5ea50b2593186fed10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
