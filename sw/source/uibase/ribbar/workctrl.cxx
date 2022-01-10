@@ -308,8 +308,8 @@ namespace {
 class SwZoomBox_Impl final : public InterimItemWindow
 {
     std::unique_ptr<weld::ComboBox> m_xWidget;
-    sal_uInt16       nSlotId;
-    bool             bRelease;
+    sal_uInt16       m_nSlotId;
+    bool             m_bRelease;
 
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
@@ -350,8 +350,8 @@ public:
 SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
     : InterimItemWindow(pParent, "modules/swriter/ui/zoombox.ui", "ZoomBox")
     , m_xWidget(m_xBuilder->weld_combo_box("zoom"))
-    , nSlotId(nSlot)
-    , bRelease(true)
+    , m_nSlotId(nSlot)
+    , m_bRelease(true)
 {
     InitControlBase(m_xWidget.get());
 
@@ -394,7 +394,7 @@ IMPL_LINK_NOARG(SwZoomBox_Impl, ActivateHdl, weld::ComboBox&, bool)
 
 void SwZoomBox_Impl::Select()
 {
-    if( FN_PREVIEW_ZOOM == nSlotId )
+    if( FN_PREVIEW_ZOOM == m_nSlotId )
     {
         bool bNonNumeric = true;
 
@@ -443,7 +443,7 @@ IMPL_LINK(SwZoomBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     switch (nCode)
     {
         case KEY_TAB:
-            bRelease = false;
+            m_bRelease = false;
             Select();
             break;
 
@@ -465,9 +465,9 @@ IMPL_LINK_NOARG(SwZoomBox_Impl, FocusOutHdl, weld::Widget&, void)
 
 void SwZoomBox_Impl::ReleaseFocus()
 {
-    if ( !bRelease )
+    if ( !m_bRelease )
     {
-        bRelease = true;
+        m_bRelease = true;
         return;
     }
     SfxViewShell* pCurSh = SfxViewShell::Current();
@@ -523,7 +523,7 @@ class SwJumpToSpecificBox_Impl final : public InterimItemWindow
 {
     std::unique_ptr<weld::Entry> m_xWidget;
 
-    sal_uInt16 nSlotId;
+    sal_uInt16 m_nSlotId;
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(SelectHdl, weld::Entry&, bool);
@@ -550,7 +550,7 @@ IMPL_LINK(SwJumpToSpecificBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
     : InterimItemWindow(pParent, "modules/swriter/ui/jumpposbox.ui", "JumpPosBox")
     , m_xWidget(m_xBuilder->weld_entry("jumppos"))
-    , nSlotId(nSlot)
+    , m_nSlotId(nSlot)
 {
     InitControlBase(m_xWidget.get());
 
@@ -563,10 +563,10 @@ SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(vcl::Window* pParent, sal_uIn
 IMPL_LINK_NOARG(SwJumpToSpecificBox_Impl, SelectHdl, weld::Entry&, bool)
 {
     OUString sEntry(m_xWidget->get_text());
-    SfxUInt16Item aPageNum(nSlotId);
+    SfxUInt16Item aPageNum(m_nSlotId);
     aPageNum.SetValue(o3tl::narrowing<sal_uInt16>(sEntry.toInt32()));
     SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
-    pCurrentShell->GetDispatcher()->ExecuteList(nSlotId, SfxCallMode::ASYNCHRON,
+    pCurrentShell->GetDispatcher()->ExecuteList(m_nSlotId, SfxCallMode::ASYNCHRON,
             { &aPageNum });
     return true;
 }
