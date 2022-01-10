@@ -34,6 +34,24 @@
       "parentUuid": "bcfbc045_58d55c38",
       "revId": "c783ab8a66bacedba2f0d218402198dbe9276490",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ed842f8_1e9227d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-01-10T14:17:32Z",
+      "side": 1,
+      "message": "Hi Xisco, thanks for backporting!\n\nI can\u0027t speak for Noel, but unless I\u0027m completely missing something, this change does not affect gtk3 at all (only covers Win-specific code), so I\u0027d have read Noel\u0027s comment mostly as something like \"There are similar situations in gtk3 as well. (So it might make sense to take a look whether similar optimizations are possible there, too.)\"\n\nUnrelated to Noel\u0027s comment: With only this change as is, there are still the 2 lines actually causing the slowness, at the beginning of \u0027AccObject::UpdateActionDesc\u0027 (generates accessible description as the a11y objects are initially created):\n\n    OUString pXString \u003d m_xAccContextRef-\u003egetAccessibleDescription();\n    m_pIMAcc-\u003ePut_XAccDescription(o3tl::toW(pXString.getStr()));\n\nOn master, there were preparatory changes https://gerrit.libreoffice.org/c/core/+/128004 and https://gerrit.libreoffice.org/c/core/+/128005 , so I\u0027d suggest cherry-picking those in addition or squashing all of the three into one commit.\n\n(Just let me know in case you want me to do that.)",
+      "parentUuid": "ddef4859_770144ae",
+      "revId": "c783ab8a66bacedba2f0d218402198dbe9276490",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
