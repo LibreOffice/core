@@ -74,7 +74,7 @@ private:
     /// may have different value than format attribute:
     /// format attr has value for this section, while flag is
     /// effectively ORed with parent sections!
-    bool m_bProtectFlag         : 1;
+    bool m_bProtectFlag         : 1; ///< protect flag is no longer inherited
     // Edit in readonly sections.
     bool m_bEditInReadonlyFlag  : 1;
 
