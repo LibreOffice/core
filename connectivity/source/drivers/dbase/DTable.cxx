@@ -1004,9 +1004,6 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
 void ODbaseTable::FileClose()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    // if not everything has been written yet
-    if (m_pMemoStream && m_pMemoStream->IsWritable())
-        m_pMemoStream->Flush();
 
     m_pMemoStream.reset();
 
@@ -1415,7 +1412,6 @@ bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     m_pMemoStream->Seek(0);
     (*m_pMemoStream).WriteUInt32( 1 );                  // pointer to the first free block
 
-    m_pMemoStream->Flush();
     m_pMemoStream.reset();
     return true;
 }

@@ -61,7 +61,7 @@ void SwChapterNumRules::Save()
     {
         sw::ExportStoredChapterNumberingRules(*this, *pStream,CHAPTER_FILENAME);
 
-        pStream->Flush();
+        pStream->FlushBuffer();
 
         aMedium.Commit();
     }

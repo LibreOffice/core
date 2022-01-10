@@ -208,7 +208,7 @@ void SAL_CALL OTempFileService::flush(  )
         throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
     checkConnected();
-    mpStream->Flush();
+    mpStream->FlushBuffer();
     checkError();
 }
 void SAL_CALL OTempFileService::closeOutput(  )

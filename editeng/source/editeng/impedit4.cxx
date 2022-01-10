@@ -641,7 +641,6 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     }
     // RTF-trailer ...
     rOutput.WriteCharPtr( "}}" );    // 1xparentheses paragraphs, 1xparentheses RTF document
-    rOutput.Flush();
 
     aFontTable.clear();
 

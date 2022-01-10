@@ -1347,7 +1347,7 @@ bool ImpGraphic::swapOut()
 
             if (!xOutputStream->GetError() && swapOutContent(*xOutputStream))
             {
-                xOutputStream->Flush();
+                xOutputStream->FlushBuffer();
                 bResult = !xOutputStream->GetError();
             }
         }

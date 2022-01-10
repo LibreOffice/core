@@ -378,7 +378,7 @@ void SvStream::SetBufferSize( sal_uInt16 nBufferSize )
     bool bDontSeek = (m_pRWBuf == nullptr);
 
     if (m_isDirty && m_isWritable)  // due to Windows NT: Access denied
-        Flush();
+        FlushBuffer();
 
     if (m_nBufSize)
     {
@@ -1546,7 +1546,7 @@ SvMemoryStream::~SvMemoryStream()
         if( bOwnsData )
             FreeMemory();
         else
-            Flush();
+            FlushBuffer();
     }
 }
 
@@ -1754,7 +1754,7 @@ void SvMemoryStream::FreeMemory()
 
 void* SvMemoryStream::SwitchBuffer()
 {
-    Flush();
+    FlushBuffer();
     if( !bOwnsData )
         return nullptr;
     Seek( STREAM_SEEK_TO_BEGIN );

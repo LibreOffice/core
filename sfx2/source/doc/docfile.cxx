@@ -829,9 +829,9 @@ bool SfxMedium::Commit()
     if( pImpl->xStorage.is() )
         StorageCommit_Impl();
     else if( pImpl->m_pOutStream  )
-        pImpl->m_pOutStream->Flush();
+        pImpl->m_pOutStream->FlushBuffer();
     else if( pImpl->m_pInStream  )
-        pImpl->m_pInStream->Flush();
+        pImpl->m_pInStream->FlushBuffer();
 
     if ( GetError() == ERRCODE_NONE )
     {

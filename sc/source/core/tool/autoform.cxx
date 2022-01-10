@@ -923,7 +923,7 @@ bool ScAutoFormat::Save()
             }
         }
 
-        rStream.Flush();
+        rStream.FlushBuffer();
 
         aMedium.Commit();
     }

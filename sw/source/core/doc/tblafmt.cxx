@@ -1150,7 +1150,7 @@ bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
             bRet = rFormat.Save(rStream, AUTOFORMAT_FILE_VERSION);
         }
     }
-    rStream.Flush();
+    rStream.FlushBuffer();
     return bRet;
 }
 
