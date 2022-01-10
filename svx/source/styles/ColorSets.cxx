@@ -74,6 +74,12 @@ void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)
     }
 
     uno::Reference<text::XTextRange> xShape(pObject->getUnoShape(), uno::UNO_QUERY);
+    if (!xShape.is())
+    {
+        // E.g. group shapes have no text.
+        return;
+    }
+
     uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
     while (xParagraphs->hasMoreElements())
