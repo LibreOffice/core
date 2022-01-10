@@ -16,20 +16,34 @@
 
 namespace svx
 {
+/**
+ * Interface for the data of a check, which must be extended by the
+ * check itself, to show the data in the GenericCheckDialog.
+ */
 class CheckData
 {
 public:
     virtual ~CheckData() {}
 
+    /// check entry text
     virtual OUString getText() = 0;
 
+    /// true, if we can show the "Mark" button
     virtual bool canMarkObject() = 0;
+    /// executed, when the "Mark" button is hit
     virtual void markObject() = 0;
 
+    /// true, if we can show the "Properties" button
     virtual bool hasProperties() = 0;
+    /// executed, when the "Properties" button is hit
     virtual void runProperties() = 0;
 };
 
+/**
+ * Check data collection contains all the checks in one data structure,
+ * and also serves to define additional attributes that are used by the
+ * GenericCheckDialog (the title of the check dialog).
+ */
 class CheckDataCollection
 {
 protected:
@@ -43,6 +57,10 @@ public:
     virtual OUString getTitle() = 0;
 };
 
+/**
+ * A UI piece to show check result text and other widgets, which are
+ * relevant for the check (various buttons to act on the check result).
+ */
 class GenericCheckEntry final
 {
 private:
@@ -63,13 +81,16 @@ public:
     DECL_LINK(PropertiesButtonClicked, weld::Button&, void);
 };
 
+/**
+ * This is a generic dialog, which is used to display results of a
+ * document checks, like for example image size check.
+ */
 class SVX_DLLPUBLIC GenericCheckDialog final : public weld::GenericDialogController
 {
 private:
     std::vector<std::unique_ptr<GenericCheckEntry>> m_aCheckEntries;
     CheckDataCollection& m_rCheckDataCollection;
 
-    // Controls
     std::unique_ptr<weld::Box> m_xCheckBox;
 
 public:

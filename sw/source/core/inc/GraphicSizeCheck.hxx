@@ -16,6 +16,10 @@
 
 namespace sw
 {
+/**
+ * Class resposible to check if a graphic object violates the size
+ * constraints and store the results.
+ */
 class GraphicSizeViolation final
 {
 private:
@@ -42,6 +46,10 @@ public:
     sal_Int32 getDPIY() { return m_nDPIY; }
 };
 
+/**
+ * Run the graphic size checks for all the graphic objects in the DOM
+ * and store a list of violations.
+ */
 class GraphicSizeCheck final
 {
 private:
@@ -62,6 +70,7 @@ public:
     }
 };
 
+/** The UI part of the GraphicSizeViolation used by GenericCheckDialog */
 class GraphicSizeCheckGUIEntry : public svx::CheckData
 {
 private:
@@ -86,6 +95,10 @@ public:
     void runProperties() override;
 };
 
+/**
+ * The UI part presenting the graphic size check results, which is
+ * used by GenericCheckDialog
+ */
 class GraphicSizeCheckGUIResult : public svx::CheckDataCollection
 {
 public:
