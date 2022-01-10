@@ -16,6 +16,46 @@
       "message": "This is a follow-up to Ie9aed62f4564c5ce97d1d30f081b316e10c7d4d7. I don\u0027t see a difference in scrolling to v7.2.4",
       "revId": "86063ff4f38f754daaf9dd60fc2a2eb30c126858",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c20f193_d61c5a15",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6477,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-10T12:44:25Z",
+      "side": 1,
+      "message": "These two lines can be moved outside the loop, they don\u0027t need to be recalculated in each iteration.\n\nAlso, can we have an explanatory comment here what the constant does and why the factor was chosen, and the intention behind the calculation?",
+      "range": {
+        "startLine": 6476,
+        "startChar": 20,
+        "endLine": 6477,
+        "endChar": 62
+      },
+      "revId": "86063ff4f38f754daaf9dd60fc2a2eb30c126858",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80da267a_8bdbe000",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6635,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-10T12:44:25Z",
+      "side": 1,
+      "message": "Also here, a comment why things are done this way would be welcome.\nJust think of the poor next soul coming across this trying to grok things.",
+      "revId": "86063ff4f38f754daaf9dd60fc2a2eb30c126858",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
