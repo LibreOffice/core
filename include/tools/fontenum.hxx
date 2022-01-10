@@ -275,7 +275,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
         case LINESTYLE_LONGDASH:
             return stream << "long dash";
-            break;
 
         case LINESTYLE_DASHDOT:
             return stream << "dash dot";
