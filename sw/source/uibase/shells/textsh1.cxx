@@ -1469,7 +1469,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
             pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
         }
 
-        if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN )
+        if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN
+             && pFieldBM->IsModifyLocked() )
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateDropDownFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), pFieldBM));
