@@ -154,6 +154,32 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
     assertXPath(pXmlDoc, "//wpg:grpSpPr/a:xfrm/a:chExt", "cx", "5328360");
     assertXPath(pXmlDoc, "//wps:spPr/a:xfrm/a:ext", "cx", "5328360");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSize)
+{
+    // Given a PPTX file that contains references to a theme:
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "endParaRPr-newline-textsize.pptx";
+
+    // When saving that document:
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, getTempFile().GetURL());
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("ppt/slides/slide1.xml"),
+                                                  uno::UNO_QUERY);
+
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Then make sure the shape text color is a scheme color:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 500
+    // - Actual  : 1800
+    // i.e. the endParaRPr 'size' wasn't exported correctly
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[1]/a:endParaRPr", "sz", "500");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[2]/a:endParaRPr", "sz", "500");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[3]/a:endParaRPr", "sz", "500");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
