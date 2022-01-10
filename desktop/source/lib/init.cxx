@@ -179,6 +179,23 @@
 #include "lokclipboard.hxx"
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
+#include <unotools/optionsdlg.hxx>
+#include <svl/ctloptions.hxx>
+#include <svtools/accessibilityoptions.hxx>
+#include <svtools/colorcfg.hxx>
+#include <svtools/miscopt.hxx>
+#include <svtools/slidesorterbaropt.hxx>
+#include <unotools/cmdoptions.hxx>
+#include <unotools/compatibility.hxx>
+#include <unotools/fltrcfg.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/searchopt.hxx>
+#include <unotools/syslocaleoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/viewoptions.hxx>
+#include <vcl/settings.hxx>
 
 using namespace css;
 using namespace vcl;
@@ -6411,6 +6428,36 @@ static void preloadData()
         nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), COMPLEX);
         OutputDevice::GetDefaultFont(DefaultFontType::CTL_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
     }
+
+    std::cerr << "Preload config\n";
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#endif
+    static SvtOptionsDialogOptions aDialogOptions;
+    static SvtCTLOptions aSvtCTLOptions;
+    static SvtAccessibilityOptions aSvtAccessibilityOptions;
+    static svtools::ColorConfig aColorConfig;
+    static SvtMiscOptions aSvtMiscOptions;
+    static SvtSlideSorterBarOptions aSvtSlideSorterBarOptions;
+    static SvtCommandOptions aSvtCommandOptions;
+    static SvtCompatibilityOptions aSvtCompatibilityOptions;
+    static SvtFilterOptions aSvtFilterOptions;
+    static SvtLinguConfig aSvtLinguConfig;
+    static SvtModuleOptions aSvtModuleOptions;
+    static SvtPathOptions aSvtPathOptions;
+    static SvtSearchOptions aSvtSearchOptions;
+    static SvtSysLocaleOptions aSvtSysLocaleOptions;
+    static SvtUserOptions aSvtUserOptions;
+    //static SvtViewOptions aSvtViewOptions;
+    static MouseSettings aMouseSettings;
+    static StyleSettings aStyleSettings;
+    static MiscSettings aMiscSettings;
+    static HelpSettings aHelpSettings;
+    static AllSettings aAllSettings;
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
     // Set user profile's path back to the original one
     rtl::Bootstrap::set("UserInstallation", sUserPath);
