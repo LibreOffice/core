@@ -16,6 +16,29 @@
       "message": "Hi Armin - any idea what I\u0027m doing wrong here, it seems like such a simple improvement, but I\u0027m clearly doing something a little silly?",
       "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3c77af3_043f3032",
+        "filename": "svx/source/sdr/primitive2d/sdrpathprimitive2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-10T09:26:20Z",
+      "side": 1,
+      "message": "This is there to allow a fill-area to be defined for the PolyPolygon that differs from the PolyPoygon itself. This is needed e.g. in SW when multiple areas span over the same gradient, so we have gradient parts far off from the defining PolyPolygon, but using the geometry of the defining one to reference the identical fill (in that case gradient).\nThat means that the local geometry of SdrPathPrimitive2D is only the part in the else-path. Or the other way around: maUnitDefinitionPolyPolygon is no geometry definition, only fill-style definition and thus no part of the geometry, but of the style.\nSo just leave maUnitDefinitionPolyPolygon out here, use only the else-path.\n\nNote: You may get many other errors depending on what geometry gets created in decomposition. That\u0027s the reason there is no ::getB2DRange here. E.g. when SdrPathPrimitive2D defines a shadow (did not check that concrete case) or anything else that expands the pure PolyPolygon geometry, the result of this mehod will be wrong.\nTo guarantee it\u0027s correctness you would have to do the same what all possible decompositions do, thus doubling that code \u0026 making it much harder to change the decompositions without knowing about that there are places where his also needs to be changed.\nThat *is* the reason it is done by decompositions - it guarantees correctness. Please think twice before changing that, it will influence/water the concept/principle behind that stuff.",
+      "range": {
+        "startLine": 164,
+        "startChar": 25,
+        "endLine": 164,
+        "endChar": 52
+      },
+      "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
