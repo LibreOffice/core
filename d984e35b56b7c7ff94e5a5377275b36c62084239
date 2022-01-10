@@ -124,6 +124,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdd55770_fa2ccf1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-10T15:40:16Z",
+      "side": 1,
+      "message": "But that line is handled by code in svx/source/items/viewlayoutitem.cxx, which does the reading from and writing to registry.\n\nI suggest to limit this change to the settings.xml-related change. If you want to also store it to registry (which may be reasonable), please create a separate commit with the schema change and corresponding code to read and write it.",
+      "parentUuid": "e2be891d_cb9ba6cb",
+      "revId": "d984e35b56b7c7ff94e5a5377275b36c62084239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae3682e5_a89b8c1d",
