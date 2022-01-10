@@ -74,6 +74,8 @@ SwSectionFrame::SwSectionFrame( SwSection &rSect, SwFrame* pSib )
     , m_bOwnFootnoteNum(false)
     , m_bFootnoteLock(false)
 {
+    StartListening(rSect.GetFormat()->GetNotifier());
+
     mnFrameType = SwFrameType::Section;
 
     CalcFootnoteAtEndFlag();
@@ -90,6 +92,8 @@ SwSectionFrame::SwSectionFrame( SwSectionFrame &rSect, bool bMaster ) :
     m_bOwnFootnoteNum( false ),
     m_bFootnoteLock( false )
 {
+    StartListening(rSect.GetFormat()->GetNotifier());
+
     mnFrameType = SwFrameType::Section;
 
     PROTOCOL( this, PROT::Section, bMaster ? DbgAction::CreateMaster : DbgAction::CreateFollow, &rSect )
@@ -2565,6 +2569,13 @@ void SwSectionFrame::CalcEndAtEndFlag()
             break;
         m_bEndnAtEnd = pFormat->GetEndAtTextEnd( false ).IsAtEnd();
     }
+}
+
+void SwSectionFrame::Notify(SfxHint const& rHint)
+{
+    SwSectionFormat *const pFormat(GetSection()->GetFormat());
+    assert(pFormat);
+    SwClientNotify(*pFormat, rHint);
 }
 
 void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
