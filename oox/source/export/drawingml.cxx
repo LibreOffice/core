@@ -2930,7 +2930,12 @@ void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
                 Reference< XPropertySet > xFirstRunPropSet (run, UNO_QUERY);
                 Reference< XPropertySetInfo > xFirstRunPropSetInfo = xFirstRunPropSet->getPropertySetInfo();
                 if( xFirstRunPropSetInfo->hasPropertyByName("CharHeight") )
+                {
                     fFirstCharHeight = xFirstRunPropSet->getPropertyValue("CharHeight").get<float>();
+                    // store the char height to export later into XML_endParaRPr
+                    rnCharHeight = static_cast<sal_Int32>(100 * fFirstCharHeight); // get the OOXML char height equivalent
+                    rbOverridingCharHeight = true;
+                }
                 WriteParagraphProperties( rParagraph, fFirstCharHeight );
                 bPropertiesWritten = true;
             }

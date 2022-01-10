@@ -173,6 +173,28 @@ CPPUNIT_TEST_FIXTURE(Test, testCameraRevolutionGrabBag)
     assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", 0);
     assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", 0);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSize)
+{
+    // Given PPTX file contains a shape with a textbody populated with new lines
+    // and the text size isn't the default size.
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "endParaRPr-newline-textsize.pptx";
+
+    // When saving that document:
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Then make sure the endParaRPr has the correct values exported for 'sz'
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 500
+    // - Actual  : 1800
+    // i.e. the endParaRPr 'size' wasn't exported correctly
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[1]/a:endParaRPr", "sz", "500");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[2]/a:endParaRPr", "sz", "500");
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[3]/a:endParaRPr", "sz", "500");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
