@@ -73,7 +73,7 @@ template <typename NumType> NumType absval( NumType x )
 Polygon2D convexHull( const Polygon2D& rPoly );
 
 // TODO: find proper epsilon here (try std::numeric_limits<NumType>::epsilon()?)!
-#define DBL_EPSILON 1.0e-100
+constexpr auto DBL_EPSILON = 1.0e-100;
 
 /* little approximate comparisons */
 template <typename NumType> bool tolZero( NumType n ) { return fabs(n) < DBL_EPSILON; }

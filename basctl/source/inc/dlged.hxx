@@ -48,9 +48,8 @@ namespace basctl
 
 class DialogWindowLayout;
 
-#define DLGED_PAGE_WIDTH_MIN    1280
-#define DLGED_PAGE_HEIGHT_MIN   1024
-
+constexpr auto DLGED_PAGE_WIDTH_MIN = 1280;
+constexpr auto DLGED_PAGE_HEIGHT_MIN = 1024;
 
 // DlgEdHint
 
