@@ -16,6 +16,40 @@
       "message": "Haven\u0027t tested but looks like a nice compromise storing for both documents and new files.",
       "revId": "d984e35b56b7c7ff94e5a5377275b36c62084239",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c28bfdb_943ec0e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-10T09:44:59Z",
+      "side": 1,
+      "message": "Do we still need the changes in Writer.xcs?",
+      "revId": "d984e35b56b7c7ff94e5a5377275b36c62084239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae3682e5_a89b8c1d",
+        "filename": "sw/source/uibase/config/usrpref.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-10T09:44:59Z",
+      "side": 1,
+      "message": "A nitpick: please put a comma after the \"ViewLayout/HideWhitespace\", too: this allows to avoid touching that line the next time we need to add another setting there. The line will be self-contained.",
+      "revId": "d984e35b56b7c7ff94e5a5377275b36c62084239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
