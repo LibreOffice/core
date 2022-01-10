@@ -16,6 +16,23 @@
       "message": "Please review this patch",
       "revId": "d154c40aa5fe46a4327b207f966a4967e8a86717",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70e449b5_3a890fb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-01-10T17:15:18Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/105309/ : FAILURE\n\u003e \n\u003e the cppunit test CppunitTest_sd_misc_tests failed ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/105330/ )\n\nI couldn\u0027t understand the reason for the failure of this unit test, because \u0027make check\u0027 was succesful on my laptop, and I uploaded the patch only after the build was success :(.",
+      "revId": "d154c40aa5fe46a4327b207f966a4967e8a86717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
