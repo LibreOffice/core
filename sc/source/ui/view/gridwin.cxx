@@ -6473,7 +6473,10 @@ void ScGridWindow::UpdateCursorOverlay()
 
                 for(const tools::Rectangle & rRA : aPixelRects)
                 {
-                    basegfx::B2DRange aRB(rRA.Left(), rRA.Top(), rRA.Right() + 1, rRA.Bottom() + 1);
+                    const double MinSize = 0.25 * GetDPIScaleFactor();
+                    double fZoom(mrViewData.GetZoomX() * 0.5);
+                    basegfx::B2DRange aRB(rRA.Left() - MinSize - fZoom, rRA.Top() - MinSize - fZoom,
+                                          rRA.Right() + MinSize + fZoom, rRA.Bottom() + MinSize + fZoom);
                     aRB.transform(aTransform);
                     aRanges.push_back(aRB);
                 }
@@ -6628,9 +6631,10 @@ void ScGridWindow::UpdateAutoFillOverlay()
     ScDocument& rDoc = mrViewData.GetDocument();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
-    float fScaleFactor = GetDPIScaleFactor();
+    const float fScaleFactor = 3 * GetDPIScaleFactor();
+    const double fZoom(3 * mrViewData.GetZoomX());
     // Size should be even
-    Size aFillHandleSize(6 * fScaleFactor, 6 * fScaleFactor);
+    Size aFillHandleSize(fZoom + fScaleFactor, fZoom + fScaleFactor);
 
     Point aFillPos = mrViewData.GetScrPos( nX, nY, eWhich, true );
     tools::Long nSizeXPix;
