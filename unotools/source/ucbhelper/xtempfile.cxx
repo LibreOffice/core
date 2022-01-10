@@ -218,6 +218,11 @@ void SAL_CALL OTempFileService::closeOutput(  )
         throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
     mbOutClosed = true;
+    if (mpStream)
+    {
+        mpStream->FlushBuffer();
+        mpStream->Seek(0);
+    }
 
     if ( mbInClosed )
     {
