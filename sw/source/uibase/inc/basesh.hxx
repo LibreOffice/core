@@ -41,7 +41,7 @@ class SW_DLLPUBLIC SwBaseShell: public SfxShell
     SwView      &m_rView;
 
     // DragMode
-    static FlyMode eFrameMode;
+    static FlyMode s_eFrameMode;
 
     // Bug 75078 - if in GetState the async call of GetGraphic returns
     //              synch, the set the state directly into the itemset
@@ -110,8 +110,8 @@ public:
     void        ExecField(SfxRequest const & rReq);
 
     static void    SetFrameMode( FlyMode eMode, SwWrtShell *pShell );  // with update!
-    static void   SetFrameMode_( FlyMode eMode )   { eFrameMode = eMode; }
-    static FlyMode  GetFrameMode()                 { return eFrameMode;  }
+    static void   SetFrameMode_( FlyMode eMode )   { s_eFrameMode = eMode; }
+    static FlyMode  GetFrameMode()                 { return s_eFrameMode;  }
 
     // duplicate rOrig and rOrig's multi-selection Ring so the first element of the returned
     // vector can be used equivalently to rOrig to affect the same selections

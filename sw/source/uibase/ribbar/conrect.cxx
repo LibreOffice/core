@@ -38,8 +38,8 @@
 ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
                                 SwView* pSwView )
     : SwDrawBase( pWrtShell, pEditWin, pSwView )
-    , bMarquee(false)
-    , bCapVertical(false)
+    , m_bMarquee(false)
+    , m_bCapVertical(false)
     , mbVertical(false)
 {
 }
@@ -86,7 +86,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
         switch( m_pWin->GetSdrDrawMode() )
         {
         case SdrObjKind::Text:
-            if( bMarquee )
+            if( m_bMarquee )
             {
                 m_pSh->ChgAnchor(RndStdIds::FLY_AS_CHAR);
 
@@ -136,7 +136,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
         case SdrObjKind::Caption:
         {
             SdrCaptionObj* pCaptObj = dynamic_cast<SdrCaptionObj*>(pObj);
-            if( bCapVertical && pCaptObj )
+            if( m_bCapVertical && pCaptObj )
             {
                 pCaptObj->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pCaptObj->GetOutlinerParaObject();
@@ -153,7 +153,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 
 void ConstRectangle::Activate(const sal_uInt16 nSlotId)
 {
-    bMarquee = bCapVertical = false;
+    m_bMarquee = m_bCapVertical = false;
     mbVertical = false;
 
     switch (nSlotId)
@@ -183,7 +183,7 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
         break;
 
     case SID_DRAW_TEXT_MARQUEE:
-        bMarquee = true;
+        m_bMarquee = true;
         m_pWin->SetSdrDrawMode(SdrObjKind::Text);
         break;
 
@@ -197,7 +197,7 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
         break;
 
     case SID_DRAW_CAPTION_VERTICAL:
-        bCapVertical = true;
+        m_bCapVertical = true;
         [[fallthrough]];
     case SID_DRAW_CAPTION:
         m_pWin->SetSdrDrawMode(SdrObjKind::Caption);

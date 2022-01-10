@@ -104,7 +104,7 @@
 #include <ndtxt.hxx>
 #include <UndoManager.hxx>
 
-FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
+FlyMode SwBaseShell::s_eFrameMode = FLY_DRAG_END;
 
 // These variables keep the state of Gallery (slot SID_GALLERY_BG_BRUSH)
 // detected by GetGalleryState() for the subsequent ExecuteGallery() call.
@@ -2127,7 +2127,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
 
 void SwBaseShell::SetFrameMode(FlyMode eMode, SwWrtShell *pSh )
 {
-    eFrameMode = eMode;
+    s_eFrameMode = eMode;
     SfxBindings &rBnd = pSh->GetView().GetViewFrame()->GetBindings();
 
     if( eMode == FLY_DRAG || pSh->IsFrameSelected() || pSh->IsObjSelected() )

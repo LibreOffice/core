@@ -25,8 +25,8 @@
 // draw rectangle
 class ConstRectangle final : public SwDrawBase
 {
-    bool bMarquee;
-    bool bCapVertical;
+    bool m_bMarquee;
+    bool m_bCapVertical;
 
     bool mbVertical;
 
