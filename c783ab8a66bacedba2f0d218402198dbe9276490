@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcfbc045_58d55c38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-10T12:52:28Z",
+      "side": 1,
+      "message": "ooh very nice, this is a major source of slowness on gtk as well, for all sources of stuff",
+      "revId": "c783ab8a66bacedba2f0d218402198dbe9276490",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
