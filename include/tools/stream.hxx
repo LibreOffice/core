@@ -186,7 +186,6 @@ protected:
     virtual void    FlushData();
     virtual void    SetSize(sal_uInt64 nSize);
 
-    void            FlushBuffer();
     SAL_DLLPRIVATE void ClearError();
     SAL_DLLPRIVATE void ClearBuffer();
 
@@ -273,6 +272,9 @@ public:
     virtual sal_uInt64 TellEnd();
     // length between current (Tell()) pos and end of stream
     sal_uInt64      remainingSize();
+    /// If we have data in our internal buffers, write them out
+    void            FlushBuffer();
+    /// Call FlushBuffer() and then call flush on the underlying OS stream
     void            Flush();
     // next Tell() <= nSize
     bool            SetStreamSize( sal_uInt64 nSize );
@@ -590,7 +592,6 @@ private:
     sal_uInt16      nLockCounter;
 #endif
     bool            bIsOpen;
-    bool            mbDontFlushOnClose; ///< used to avoid flushing when closing temporary files
 
     SvFileStream (const SvFileStream&) = delete;
     SvFileStream & operator= (const SvFileStream&) = delete;
@@ -617,7 +618,6 @@ public:
     bool            IsOpen() const { return bIsOpen; }
 
     const OUString& GetFileName() const { return aFilename; }
-    void            SetDontFlushOnClose(bool b) { mbDontFlushOnClose = b; }
 };
 
 // MemoryStream
@@ -666,7 +666,7 @@ public:
 
     sal_uInt64      GetSize() { return TellEnd(); }
     std::size_t     GetEndOfData() const { return nEndOfData; }
-    const void*     GetData() { Flush(); return pBuf; }
+    const void*     GetData() { FlushBuffer(); return pBuf; }
 
     // return the buffer currently in use, and allocate a new buffer internally
     void*           SwitchBuffer();

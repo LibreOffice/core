@@ -388,9 +388,6 @@ TempFile::~TempFile()
     if ( !bKillingFileEnabled )
         return;
 
-    // if we're going to delete this file, no point in flushing it when closing
-    if (pStream && !aName.isEmpty())
-        static_cast<SvFileStream*>(pStream.get())->SetDontFlushOnClose(true);
     pStream.reset();
     if ( bIsDirectory )
     {
