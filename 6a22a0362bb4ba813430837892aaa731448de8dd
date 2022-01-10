@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13de4e94_f4d9aabb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-10T18:13:53Z",
+      "side": 1,
+      "message": "Andreas, I am now having a problem with CppunitTest_sc_macros_test from the Calc module. Basically it is failing to run the macros in the test file:\nsc/qa/extras/testdocuments/Ranges-2.xls\n\nIn short, with this patch the following statement stops working:\nDim oRange as Range\nSet oRange \u003d Range(\"A1\")\n\nThe \"Range\" object no longer appears to be defined. I did a lot of search but was not able to find the reason why. Do you have any idea where this might be coming from?\n\nMy best guesses were the following, but could not figure out what was happening:\nhttps://opengrok.libreoffice.org/xref/core/basic/source/comp/dim.cxx?r\u003d27d96bfa#464\nhttps://opengrok.libreoffice.org/xref/core/basic/source/runtime/runtime.cxx?r\u003d26f46b86#3022",
+      "revId": "6a22a0362bb4ba813430837892aaa731448de8dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
