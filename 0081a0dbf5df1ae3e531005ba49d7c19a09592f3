@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84d86551_b9c87fc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-10T12:00:47Z",
+      "side": 1,
+      "message": "I wouldn\u0027t recommend backporting any RTF patch to a stable release. RTF code is too convoluted to ever be sure of what you are doing - and not knowing what I am doing is certainly true of me.",
+      "revId": "0081a0dbf5df1ae3e531005ba49d7c19a09592f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
