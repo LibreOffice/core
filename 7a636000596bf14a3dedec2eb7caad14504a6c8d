@@ -111,6 +111,30 @@
       },
       "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e6a9d31_30bfc3a9",
+        "filename": "svx/source/sdr/primitive2d/sdrpathprimitive2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-10T11:11:55Z",
+      "side": 1,
+      "message": "\u003e Ok, got you now.\nWe really need to discuss more these concepts - how could we do that...?\n\n\u003e I tried to improve it, but had to revert with\n\u003e     https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d5e6d6be86bf29896e030af5c0f770f2b389d7e8a\nNeed o take a look at that...\nJust took a look, central point to re-use decompose/existing primitives or use new ones is ViewContact::getViewIndependentPrimitive2DContainer\n\n\u003e Maybe will try again later, but it needs lots of fiddling in writer to invalidate stuff correctly, and finding the correct place in writer to fix this kind of stuff is really painful.\n\nYes, but that is *exactly* because SW is not completely adapted to use primitives for paint. Draw/Impress is -\u003e all works. SW, SC is not - I always argued for doing this urgently. SdrObjects there and Graphics are, so these work.\n\nThe conversion to primitives is done ca.40%, Next steps (next 30%) would be\n- change SW, SC to use primitives (would allow multi-threaded \u0026 reliable repaints)\n- change PDF export to use primitives (instead of metafile, no pdfExtOutDev)\n- make invalidates safe in apps, remove operator\u003d\u003d at primitives\n- system-dependent primitive renderers (including 3D :-)\n- ...\n\nUnfortunately since the transition o opensource there are simply no longer the ressources - argh - as long as it\u0027s not a shiny feature, you get no support. I could/would/want to continue that - suggesting parts of next steps all the time as tenders - but no chance. So we are on hold for 10 years now - sigh...",
+      "parentUuid": "9d1a427b_5c59ffe6",
+      "range": {
+        "startLine": 164,
+        "startChar": 25,
+        "endLine": 164,
+        "endChar": 52
+      },
+      "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
