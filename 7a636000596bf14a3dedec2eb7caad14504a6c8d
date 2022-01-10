@@ -63,6 +63,30 @@
       },
       "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a177dad_64f7f106",
+        "filename": "svx/source/sdr/primitive2d/sdrpathprimitive2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-10T10:35:21Z",
+      "side": 1,
+      "message": "To make it very clear: Your impl of ::getB2DRange at SdrPathPrimitive will *not* return the same as using the decomposition, so is wrong by definiion.\n\nThe whole self-containing definition of SdrPathPrimitive - containing the settings for shadow and/or other stuff e.g. text reaching out over the polygon bounds - has to be taken into account. A correct implementation of SdrPathPrimitive::getB2DRange has to always return the full possible expanded range with all shadow/tex/FaLines creaed.\n\nThat is exactly what the primitive concept \u0026 decomposition guarantee. You may have no idea how erraneous repaints of all graphic stuff was in he office before primitives, exactly because of wrong bounds.\n\nFor (a):\n\n- VOC concept is here to make those decompositions reusable, so to exactly solve the problem you describe. It worked as I did it, if it needs to be decomposed now at every repaint, an error may have been introduced to that system that may need to be fixed.\n\n- Trust invalidation: That is exactly what was much worse before primitives \u0026 what they solve - getB2DRange is reliable for primitives exactly *because* they use the *same* geometry creation/decompose for paint as for getB2DRange. Since we have them, invalidates can be trusted (for the 1st time ever). T%his should not be risked.\n\n- VOC *for security reasons* currently does the following: It creates a new SdrPathPrimitive and compares it with the existing one. If it did not change, the existing one - and it\u0027s decompositions - will be reused. That new one is mainly created for comparison, should be deleted again in most cases. It gets used only *if* the definition did change, and thus the old one - and it\u0027s buffered decompositions - gets deleted.\n\n- This is BTW the *only* reason for operator\u003d\u003d in B2DPrimitive. I already had a version in AW080 where this was removed, as alternative to the mechanism described above it is possible to make the graphical invalidations in the apps more reliable, \nwhat I did there with sucess. It will never be as reliable as comparing to the temp new created instance, but was pretty good. This is also he reason that operator\u003d\u003d is not part of UNO API, it is/was not planned to stay forever.\n\nFor (b):\nThis is exactly why buffering/VOC is there. There are concepts to improve that, there may be more to be introduced. E.g. I am not sure if it already is buffered, but the B2DRange returned by getB2DRange does need to be collected by iterating over the decomposition only once due to B2DPrimitive being defined as read-only, so by definition the associated B2DRange cannot change.\n\nBTW: Any alternative to do that different will/would *also* have to go over all local definitions of the object to calculate a correct B2DRange, so the effort will be the same, just less logical/highly organized/forced_by_concept then now. In such a hand-made calculation that takes all that local stuff into account you also risk to diverge from what you paint later and have *no* central concept where you can add buffering - in principle that\u0027s where we came from, it was hell :-)\n\nMaybe meeting would be good, seems more talking about the concepts is needed. I always tried to do that in my talks, added many comments to the B2DPrimitive def/impl stuff to make clear what is going on. It\u0027s so bad that we can currently not have more direct meetings - sigh :-( Typing is just too much work longterm.",
+      "parentUuid": "1506b383_9626266e",
+      "range": {
+        "startLine": 164,
+        "startChar": 25,
+        "endLine": 164,
+        "endChar": 52
+      },
+      "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
