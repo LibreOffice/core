@@ -128,6 +128,30 @@
       },
       "revId": "7e875ba534fe34ce0e7846fd01b4d2898d1bfa5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1e5c3db_884b2626",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 19094,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-10T12:40:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cce46a9_5e2593f1",
+      "range": {
+        "startLine": 19094,
+        "startChar": 59,
+        "endLine": 19094,
+        "endChar": 63
+      },
+      "revId": "7e875ba534fe34ce0e7846fd01b4d2898d1bfa5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
