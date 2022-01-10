@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c03a38a_0e96c0d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-10T12:12:56Z",
+      "side": 1,
+      "message": "This is a follow-up to Ie9aed62f4564c5ce97d1d30f081b316e10c7d4d7. I don\u0027t see a difference in scrolling to v7.2.4",
+      "revId": "86063ff4f38f754daaf9dd60fc2a2eb30c126858",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
