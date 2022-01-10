@@ -198,6 +198,8 @@ SwSection::SwSection(
     : SwClient(& rFormat)
     , m_Data(eType, rName)
 {
+    StartListening(rFormat.GetNotifier());
+
     SwSection *const pParentSect = GetParent();
     if( pParentSect )
     {
@@ -230,6 +232,7 @@ SwSection::~SwSection()
     else
     {
         pFormat->Remove( this ); // remove
+        SvtListener::EndListeningAll();
 
         if (SectionType::Content != m_Data.GetType())
         {
@@ -400,6 +403,11 @@ void SwSection::SetEditInReadonly(bool const bFlag)
 }
 
 void SwSection::SwClientNotify(const SwModify&, const SfxHint& rHint)
+{
+    Notify(rHint);
+}
+
+void SwSection::Notify(SfxHint const& rHint)
 {
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
