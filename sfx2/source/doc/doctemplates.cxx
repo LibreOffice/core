@@ -40,6 +40,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -1273,10 +1274,7 @@ bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString& aUs
                 io::TempFile::create(mxContext),
                 uno::UNO_SET_THROW );
 
-        OUString aTempURL = xTempFile->getUri();
-
-        uno::Reference< io::XStream > xStream( xTempFile );
-        uno::Reference< io::XOutputStream > xOutStream = xStream->getOutputStream();
+        uno::Reference< io::XOutputStream > xOutStream = xTempFile->getOutputStream();
         if ( !xOutStream.is() )
             throw uno::RuntimeException();
 
@@ -1287,17 +1285,14 @@ bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString& aUs
         } catch( uno::Exception& )
         {}
 
-        Content aTargetContent( aUserPath, maCmdEnv, comphelper::getProcessComponentContext() );
-        Content aSourceContent( aTempURL, maCmdEnv, comphelper::getProcessComponentContext() );
-        aTargetContent.transferContent( aSourceContent,
-                                        InsertOperation::Copy,
-                                        "groupuinames.xml",
-                                        ucb::NameClash::OVERWRITE,
-                                        "text/xml" );
+        uno::Reference < ucb::XSimpleFileAccess3 > xAccess(ucb::SimpleFileAccess::create(mxContext));
+        xAccess->writeFile(aUserPath + "/groupuinames.xml", xTempFile->getInputStream());
+
         bResult = true;
     }
     catch ( uno::Exception& )
     {
+        TOOLS_WARN_EXCEPTION("sfx.doc", "");
     }
 
     return bResult;
