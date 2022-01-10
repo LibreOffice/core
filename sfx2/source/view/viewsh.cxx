@@ -1447,6 +1447,7 @@ static bool ignoreLibreOfficeKitViewCallback(int nType, const SfxViewShell_Impl*
         {
         case LOK_CALLBACK_FORM_FIELD_BUTTON:
         case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_COMMENT:
             break;
         default:
             // Reject e.g. invalidate during paint.
