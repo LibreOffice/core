@@ -70,6 +70,24 @@
       "parentUuid": "a2eaeec4_2ca31344",
       "revId": "1bdb4ddfc516d62f482f83fc6191e9585aa4786b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e25c6a0_e371faf1",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1002782
+      },
+      "writtenOn": "2022-01-10T16:26:51Z",
+      "side": 1,
+      "message": "ok thanks for the explanations!",
+      "parentUuid": "bea811de_7117ff3b",
+      "revId": "1bdb4ddfc516d62f482f83fc6191e9585aa4786b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
