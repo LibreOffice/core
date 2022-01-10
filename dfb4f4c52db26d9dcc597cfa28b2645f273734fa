@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d43f815_9838bd99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-10T14:34:16Z",
+      "side": 1,
+      "message": "calc/sheet_operation_spec.js failed, resume.",
+      "revId": "dfb4f4c52db26d9dcc597cfa28b2645f273734fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
