@@ -50,6 +50,24 @@
       "message": "Crash might be unrelated.\n\nOne question: why did you remove the comments in the files?",
       "revId": "d154c40aa5fe46a4327b207f966a4967e8a86717",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b610f5c7_0b9c6290",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-01-10T18:09:32Z",
+      "side": 1,
+      "message": "Okay.\nSorry for that it was not my intention to remove the comments, initially, I used COL_LIGHTGRAY, COL_WHITE, and COL_BLACK so I thought that these are self-explanatory hence I removed the comments, but later during \u0027make check\u0027 I encountered some scope errors with COL_WHITE and other Color names, I had to replace them back with their respective hex codes and I forgot to add comments back into the place. To cover this, I am resubmitting another patch with the comments that I removed",
+      "parentUuid": "6d90ab66_99edcc04",
+      "revId": "d154c40aa5fe46a4327b207f966a4967e8a86717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
