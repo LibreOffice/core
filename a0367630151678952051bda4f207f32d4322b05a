@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0fb712d_095e21ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-10T15:26:17Z",
+      "side": 1,
+      "message": "Can we possibly rename it from \u0027HideWhitespace\u0027 to \u0027ViewLayoutHideWhitespace\u0027, so that it\u0027s aligned with \u0027ViewLayoutColumns\u0027 and \u0027ViewLayoutBookMode\u0027 in settings.xml?",
+      "revId": "a0367630151678952051bda4f207f32d4322b05a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
