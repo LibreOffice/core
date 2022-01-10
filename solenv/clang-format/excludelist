@@ -2773,7 +2773,6 @@ dbaccess/source/sdbtools/connection/tablename.cxx
 dbaccess/source/sdbtools/connection/tablename.hxx
 dbaccess/source/sdbtools/inc/connectiondependent.hxx
 dbaccess/source/sdbtools/inc/connectiontools.hxx
-dbaccess/source/shared/registrationhelper.cxx
 dbaccess/source/ui/app/AppController.cxx
 dbaccess/source/ui/app/AppController.hxx
 dbaccess/source/ui/app/AppControllerDnD.cxx
