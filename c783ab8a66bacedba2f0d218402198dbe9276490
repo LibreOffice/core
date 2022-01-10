@@ -16,6 +16,24 @@
       "message": "ooh very nice, this is a major source of slowness on gtk as well, for all sources of stuff",
       "revId": "c783ab8a66bacedba2f0d218402198dbe9276490",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddef4859_770144ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-10T14:01:46Z",
+      "side": 1,
+      "message": "Hi Noel,\nDoes it mean this patch causes slowness on gtk or it also addresses slowness on gtk? Sorry for the question but I just want to make sure I understand you properly.",
+      "parentUuid": "bcfbc045_58d55c38",
+      "revId": "c783ab8a66bacedba2f0d218402198dbe9276490",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
