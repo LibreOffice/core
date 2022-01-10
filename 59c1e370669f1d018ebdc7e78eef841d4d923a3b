@@ -34,6 +34,24 @@
       "parentUuid": "4feebffa_8369b77e",
       "revId": "59c1e370669f1d018ebdc7e78eef841d4d923a3b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "382517dd_abe3e03f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-10T16:50:26Z",
+      "side": 1,
+      "message": "I see the new layout - great!\n\nThe numeric ids may be useful for debugging - but my idea is to discourage their use in macros and extensions, so whatever you might consider doable (e.g., a note) would be fine.\n\n\u003e HXX files are referenced by their index and line numbers\n\nI suggest to link to corresponding places on the wiki page: I had difficulty understanding what those numbers are; when I read the description, I still didn\u0027t easily understand that \"index\" refers to the sources list at the bottom. (I\u0027m not a native English speaker, that\u0027s why :-))",
+      "parentUuid": "912abd08_97339e4d",
+      "revId": "59c1e370669f1d018ebdc7e78eef841d4d923a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
