@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "adfdf37e_8338b1dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-10T15:18:14Z",
+      "side": 1,
+      "message": "You didn\u0027t consider this question - but it is important :-)\n\nThe original change that you did to \u0027officecfg/registry/schema/org/openoffice/Office/Writer.xcs\u0027 was because you needed to add a setting to configuration schema. But now, when you do not write to registryconfiguration.xcu, and instead add a value to application-specific part of settings.xml, the change to \u0027officecfg/registry/schema/org/openoffice/Office/Writer.xcs\u0027 is just a leftover from earlier patchsets, right?",
+      "parentUuid": "9c28bfdb_943ec0e9",
+      "revId": "d984e35b56b7c7ff94e5a5377275b36c62084239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae3682e5_a89b8c1d",
         "filename": "sw/source/uibase/config/usrpref.cxx",
         "patchSetId": 7
@@ -65,6 +83,24 @@
       "writtenOn": "2022-01-10T09:44:59Z",
       "side": 1,
       "message": "A nitpick: please put a comma after the \"ViewLayout/HideWhitespace\", too: this allows to avoid touching that line the next time we need to add another setting there. The line will be self-contained.",
+      "revId": "d984e35b56b7c7ff94e5a5377275b36c62084239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ae2fadd_baf24a89",
+        "filename": "sw/source/uibase/config/usrpref.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-10T15:18:14Z",
+      "side": 1,
+      "message": "Thanks; this is fixed.",
+      "parentUuid": "ae3682e5_a89b8c1d",
       "revId": "d984e35b56b7c7ff94e5a5377275b36c62084239",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
