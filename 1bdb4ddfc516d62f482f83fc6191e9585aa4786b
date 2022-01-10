@@ -52,6 +52,24 @@
       "parentUuid": "09848456_6f124ad8",
       "revId": "1bdb4ddfc516d62f482f83fc6191e9585aa4786b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bea811de_7117ff3b",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-10T05:18:17Z",
+      "side": 1,
+      "message": "Yes this would work, but it would be a pessimization for the most important case - when the value is already in the -36000..+36000 case. If we try to optimize the calculation, it is necessary to consider the most frequent case, otherwise, it\u0027s not an optimization. Here it would replace two existing comparisons with one division and two comparisons (even if you put the second \u0027if\u0027 into the first one\u0027s \u0027else\u0027 branch). This is unlike the code in NormAngle36000, where we replaced two comparisons with a division and a comparison.\n\nAnd yes, we get huge angles sometimes.",
+      "parentUuid": "a2eaeec4_2ca31344",
+      "revId": "1bdb4ddfc516d62f482f83fc6191e9585aa4786b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
