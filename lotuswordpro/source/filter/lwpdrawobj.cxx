@@ -1126,16 +1126,8 @@ LwpDrawTextArt::LwpDrawTextArt(SvStream* pStream, DrawingOffsetAndScale* pTransD
 
 LwpDrawTextArt::~LwpDrawTextArt()
 {
-    if (m_aTextArtRec.aPath[0].pPts)
-    {
-        delete [] m_aTextArtRec.aPath[0].pPts;
-        m_aTextArtRec.aPath[0].pPts = nullptr;
-    }
-    if (m_aTextArtRec.aPath[1].pPts)
-    {
-        delete [] m_aTextArtRec.aPath[1].pPts;
-        m_aTextArtRec.aPath[1].pPts = nullptr;
-    }
+    m_aTextArtRec.aPath[0].aPts.clear();
+    m_aTextArtRec.aPath[1].aPts.clear();
     if (m_aTextArtRec.pTextString)
     {
         delete [] m_aTextArtRec.pTextString;
@@ -1147,8 +1139,8 @@ LwpDrawTextArt::~LwpDrawTextArt()
 void LwpDrawTextArt::CreateFWPath(XFDrawPath* pPath)
 {
     sal_Int16 nX, nY;
-    nX = (m_aTextArtRec.aPath[0].pPts[0].x + m_aTextArtRec.aPath[1].pPts[0].x) / 2;
-    nY = (m_aTextArtRec.aPath[0].pPts[0].y + m_aTextArtRec.aPath[1].pPts[0].y) / 2;
+    nX = (m_aTextArtRec.aPath[0].aPts[0].x + m_aTextArtRec.aPath[1].aPts[0].x) / 2;
+    nY = (m_aTextArtRec.aPath[0].aPts[0].y + m_aTextArtRec.aPath[1].aPts[0].y) / 2;
     XFPoint aStart(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
         static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
     pPath->MoveTo(aStart);
@@ -1156,20 +1148,20 @@ void LwpDrawTextArt::CreateFWPath(XFDrawPath* pPath)
     sal_uInt8 nPtIndex = 1;
     for (sal_uInt16 nC = 1; nC <= m_aTextArtRec.aPath[0].n; nC++)
     {
-        nX = (m_aTextArtRec.aPath[0].pPts[nPtIndex].x + m_aTextArtRec.aPath[1].pPts[nPtIndex].x) / 2;
-        nY = (m_aTextArtRec.aPath[0].pPts[nPtIndex].y + m_aTextArtRec.aPath[1].pPts[nPtIndex].y) / 2;
+        nX = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).x + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).x) / 2;
+        nY = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).y + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).y) / 2;
         XFPoint aCtrl1(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
             static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
 
         nPtIndex++;
-        nX = (m_aTextArtRec.aPath[0].pPts[nPtIndex].x + m_aTextArtRec.aPath[1].pPts[nPtIndex].x) / 2;
-        nY = (m_aTextArtRec.aPath[0].pPts[nPtIndex].y + m_aTextArtRec.aPath[1].pPts[nPtIndex].y) / 2;
+        nX = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).x + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).x) / 2;
+        nY = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).y + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).y) / 2;
         XFPoint aCtrl2(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
             static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
 
         nPtIndex++;
-        nX = (m_aTextArtRec.aPath[0].pPts[nPtIndex].x + m_aTextArtRec.aPath[1].pPts[nPtIndex].x) / 2;
-        nY = (m_aTextArtRec.aPath[0].pPts[nPtIndex].y + m_aTextArtRec.aPath[1].pPts[nPtIndex].y) / 2;
+        nX = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).x + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).x) / 2;
+        nY = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).y + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).y) / 2;
         XFPoint aDest(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
             static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
 
@@ -1200,13 +1192,13 @@ void LwpDrawTextArt::Read()
         throw BadRead();
 
     m_aTextArtRec.aPath[0].n = nPointNumber;
-    m_aTextArtRec.aPath[0].pPts = new SdwPoint[nPoints];
+    m_aTextArtRec.aPath[0].aPts.resize(nPoints);
     for (size_t nPt = 0; nPt < nPoints; ++nPt)
     {
         m_pStream->ReadInt16( nX );
         m_pStream->ReadInt16( nY );
-        m_aTextArtRec.aPath[0].pPts[nPt].x = nX;
-        m_aTextArtRec.aPath[0].pPts[nPt].y = nY;
+        m_aTextArtRec.aPath[0].aPts[nPt].x = nX;
+        m_aTextArtRec.aPath[0].aPts[nPt].y = nY;
     }
 
     m_pStream->ReadUInt16( nPointNumber );
@@ -1216,13 +1208,13 @@ void LwpDrawTextArt::Read()
         throw BadRead();
 
     m_aTextArtRec.aPath[1].n = nPointNumber;
-    m_aTextArtRec.aPath[1].pPts = new SdwPoint[nPoints];
+    m_aTextArtRec.aPath[1].aPts.resize(nPoints);
     for (size_t nPt = 0; nPt < nPoints; ++nPt)
     {
         m_pStream->ReadInt16( nX );
         m_pStream->ReadInt16( nY );
-        m_aTextArtRec.aPath[1].pPts[nPt].x = nX;
-        m_aTextArtRec.aPath[1].pPts[nPt].y = nY;
+        m_aTextArtRec.aPath[1].aPts[nPt].x = nX;
+        m_aTextArtRec.aPath[1].aPts[nPt].y = nY;
     }
 
     m_pStream->SeekRel(1);
