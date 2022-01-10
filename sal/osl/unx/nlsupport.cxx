@@ -848,10 +848,10 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
     /* No locale environment variables on Android, so why even bother
      * with getenv().
      */
-   char const * locale = "en-US.UTF-8";
+    const char* locale = "en-US.UTF-8";
 #else
     /* simulate behavior off setlocale */
-    char * locale = getenv( "LC_ALL" );
+    const char* locale = getenv("LC_ALL");
 
     if( NULL == locale )
         locale = getenv( "LC_CTYPE" );
