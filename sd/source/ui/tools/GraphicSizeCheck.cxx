@@ -24,6 +24,10 @@ namespace sd
 {
 namespace
 {
+/**
+ * Intefece for the visitor class, which handles each visited SdrObject
+ * in the DOM.
+ */
 class ModelTraverseHandler
 {
 public:
@@ -32,6 +36,10 @@ public:
     virtual void handleSdrObject(SdrObject* pObject) = 0;
 };
 
+/**
+ * Traverses the DOM and calls a handler for each object (SdrObject) it
+ * encounters.
+ */
 class ModelTraverser
 {
 private:
