@@ -40,6 +40,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -231,7 +232,7 @@ class SfxDocTplService_Impl
                                                                   const OUString& aNewGroupName );
     void                    RemoveUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                   std::u16string_view aGroupName );
-    bool                    WriteUINamesForTemplateDir_Impl( const OUString& aUserPath,
+    bool                    WriteUINamesForTemplateDir_Impl( std::u16string_view aUserPath,
                                                                 const std::vector< beans::StringPair >& aUINames );
 
     OUString                CreateNewGroupFsys( const OUString& rGroupName, Content& aGroup );
@@ -1264,21 +1265,16 @@ void SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aU
 }
 
 
-bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString& aUserPath,
+bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( std::u16string_view aUserPath,
                                                              const std::vector< beans::StringPair >& aUINames )
 {
     bool bResult = false;
     try {
-        uno::Reference< beans::XPropertySet > xTempFile(
+        uno::Reference< io::XTempFile > xTempFile(
                 io::TempFile::create(mxContext),
-                uno::UNO_QUERY_THROW );
+                uno::UNO_SET_THROW );
 
-        OUString aTempURL;
-        uno::Any aUrl = xTempFile->getPropertyValue("Uri");
-        aUrl >>= aTempURL;
-
-        uno::Reference< io::XStream > xStream( xTempFile, uno::UNO_QUERY_THROW );
-        uno::Reference< io::XOutputStream > xOutStream = xStream->getOutputStream();
+        uno::Reference< io::XOutputStream > xOutStream = xTempFile->getOutputStream();
         if ( !xOutStream.is() )
             throw uno::RuntimeException();
 
@@ -1289,17 +1285,14 @@ bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString& aUs
         } catch( uno::Exception& )
         {}
 
-        Content aTargetContent( aUserPath, maCmdEnv, comphelper::getProcessComponentContext() );
-        Content aSourceContent( aTempURL, maCmdEnv, comphelper::getProcessComponentContext() );
-        aTargetContent.transferContent( aSourceContent,
-                                        InsertOperation::Copy,
-                                        "groupuinames.xml",
-                                        ucb::NameClash::OVERWRITE,
-                                        "text/xml" );
+        uno::Reference < ucb::XSimpleFileAccess3 > xAccess(ucb::SimpleFileAccess::create(mxContext));
+        xAccess->writeFile(OUString::Concat(aUserPath) + "groupuinames.xml", xTempFile->getInputStream());
+
         bResult = true;
     }
     catch ( uno::Exception& )
     {
+        TOOLS_WARN_EXCEPTION("sfx.doc", "");
     }
 
     return bResult;
