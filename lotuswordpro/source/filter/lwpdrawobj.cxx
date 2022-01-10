@@ -1049,9 +1049,9 @@ void LwpDrawTextBox::Read()
     sal_Int16 TextLength = m_aObjHeader.nRecLen - 71;
     if (TextLength < 0)
         throw BadRead();
-    m_aTextRec.pTextString = new sal_uInt8 [TextLength];
-
-    m_pStream->ReadBytes(m_aTextRec.pTextString, TextLength);
+    m_aTextRec.pTextString = new sal_uInt8[TextLength];
+    if (m_pStream->ReadBytes(m_aTextRec.pTextString, TextLength) != o3tl::make_unsigned(TextLength))
+        throw BadRead();
 }
 
 OUString LwpDrawTextBox::RegisterStyle()
