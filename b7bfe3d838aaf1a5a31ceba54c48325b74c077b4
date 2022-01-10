@@ -16,6 +16,24 @@
       "message": "Interesting; I thought we forced all the config xml in during the preload \u003d) but perhaps this helps populate some shared wrapper classes (?)",
       "revId": "b7bfe3d838aaf1a5a31ceba54c48325b74c077b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1277754f_bc69ca30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-10T15:53:20Z",
+      "side": 1,
+      "message": "exactly, this preloads all of the objects that the officecfg:: code needs",
+      "parentUuid": "ec1b7ff4_370ea90b",
+      "revId": "b7bfe3d838aaf1a5a31ceba54c48325b74c077b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
