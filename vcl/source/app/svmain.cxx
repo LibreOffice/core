@@ -583,7 +583,8 @@ void DeInitVCL()
 
     pSVData->maGDIData.mxScreenFontList.reset();
     pSVData->maGDIData.mxScreenFontCache.reset();
-    pSVData->maGDIData.maScaleCache.clear();
+    pSVData->maGDIData.maScaleCache.remove_if([](const lru_scale_cache::key_value_pair_t&)
+                                                { return true; });
 
     pSVData->maGDIData.maThemeDrawCommandsCache.clear();
     pSVData->maGDIData.maThemeImageCache.clear();
