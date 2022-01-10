@@ -42,7 +42,7 @@ class CommandEvent;
 class SvtAccessibilityOptions;
 class SwPagePreviewLayout;
 
-// Delete member <mnVirtPage> and its accessor
+/// Provides the VCL widget that is used for the main area of the File -> Print Preview window.
 class SAL_DLLPUBLIC_RTTI SwPagePreviewWin final : public vcl::Window
 {
     SwViewShell* mpViewShell;
