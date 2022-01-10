@@ -4,23 +4,20 @@ This module provides support for emscripten cross build
 
 ## Status
 
-    $ make
+The build generates a Writer-only LO build. You should be able to run either
 
-You can run the WASM mandelbrot Qt example, if you copy its HTML
-and the qtloader.js from the Qt's example folder after build with:
-
-    $ emrun --serve_after_close workdir/LinkTarget/Executable/mandelbrot.html
+    $ emrun --serve_after_close instdir/program/qt_soffice.html
+    $ emrun --serve_after_close workdir/LinkTarget/Executable/qt_vcldemo.html
+    $ emrun --serve_after_close workdir/LinkTarget/Executable/qt_wasm-qt5-mandelbrot.html
 
 REMINDER: Always start new tabs in the browser, reload might fail / cache!
-
+INFO: latest browser won't work anymore with 0.0.0.0 and need 127.0.0.1.
 
 ## Setup for the LO WASM build (with Qt)
 
-We're using Qt 5.15 with the officially supported emscripten v1.39.8.
-But there are several potential problems with threads and exceptions, so this will likely
-change later to a newer emscripten.
-
-Qt WASM is not yet used with LO, just if you're wondering!
+We're using Qt 5.15.2 with Emscripten 2.0.31. There are a bunch of Qt patches
+to fix the most grave bugs. Also newer Emscripten versions have various bugs
+with the FS image support.
 
 - See below under Docker build for another build option
 
@@ -29,8 +26,8 @@ Qt WASM is not yet used with LO, just if you're wondering!
 <https://emscripten.org/docs/getting_started/index.html>
 
     git clone https://github.com/emscripten-core/emsdk.git
-    ./emsdk install 1.39.8
-    ./emsdk activate --embedded 1.39.8
+    ./emsdk install 2.0.31
+    ./emsdk activate --embedded 2.0.31
 
 Example `bashrc` scriptlet:
 
@@ -41,41 +38,54 @@ Example `bashrc` scriptlet:
 
 <https://doc.qt.io/qt-5/wasm.html>
 
-I originally build the Qt 5.15 branch, but probably better to build a tag like v5.15.2.
+Most of the information from <https://doc.qt.io/qt-6/wasm.html> is still valid for Qt5;
+generally the Qt6 WASM documentation is much better, because it incorporated many
+information from the Qt Wiki.
 
-So:
+FWIW: Qt 5.15 LTS is not maintained publically and Qt WASM has quite a few bugs. Most
+WASM fixes from Qt 6 are needed for Qt 5.15 too. They can mainly be cherry-picked from:
+- git log origin/dev src/plugins/platforms/wasm/
+- git log --grep wasm origin/dev
+
+We will probably offer our own Qt repository clone at some point.
+
+But even the public Qt 5.15 branch is still broken, so better start with the v5.15.2 tag.
 
     git clone https://github.com/qt/qt5.git
     cd qt5
     git checkout v5.15.2
-    ./init-repository
-    ./configure -xplatform wasm-emscripten -feature-thread -compile-examples -prefix $PWD/qtbase
-    make -j<CORES> module-qtbase module-qtdeclarative
+    ./init-repository --module-subset=qtbase
+    ./configure -xplatform wasm-emscripten -feature-thread -prefix $PWD/install-5.15.2
+    make -j<CORES> module-qtbase
 
+Optionally you can add the configure flag "-compile-examples". But then you also have to
+patch at least mkspecs/wasm-emscripten/qmake.conf with EXIT_RUNTIME=0, otherwise they will
+fail to run. In addition, building with examples will break with some of them, but at that
+point Qt already works and also most examples.
 Building with examples will break with some of them, but at that point Qt already works.
+Or just skip them. Other interesting flags might be "-nomake tests -no-pch -ccache".
 
-At some point Qt configure failed for me with:
+Linking takes quite a long time, because emscripten-finalize rewrites the whole WASM files
+with some options. This way the LO WASM needs at least 64GB RAM. For faster link times add
+"-s WASM_BIGINT=1", change to ASSERTIONS=1 nd use -g3 to prevent rewriting the WASM file
+and generating source maps (see emscripten.py, finalize_wasm, and avoid modify_wasm = True).
+This is just needed for Qt examples, as LO already uses the correct flags!
 
-"Checking for target architecture... Project ERROR: target architecture detection binary not found."
+The install is not really needed, as LO currently just uses qtbase on it's own. You can do
 
-What seems to have fixed this was to run "emsdk activate 1.39.8" again.
+    make -j<CORES> install
+or
+    make -j8 -C qtbase/src install_subtargets
 
 Current Qt fails to start the demo webserver: <https://bugreports.qt.io/browse/QTCREATORBUG-24072>
 
-Use `emrun --serve_after_close` to run Qt WASM demos
-
-Enabling multi-thread support in Firefox is a bit of work with older versions:
-
-- <https://bugzilla.mozilla.org/show_bug.cgi?id=1477743#c7>
-- <https://wiki.qt.io/Qt_for_WebAssembly#Multithreading_Support>
-- <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer>
-
+Use `emrun --serve_after_close` to run Qt WASM demos.
 
 ### Setup LO
 
-`autogen.sh` is patched to use emconfigure. That basically sets various environment vars,
-especially `EMMAKEN_JUST_CONFIGURE`, which will create the correct output file names, checked by
-`configure` (`a.out`).
+`autogen.sh` is patched to use emconfigure. That basically sets various
+environment vars, especially `EMMAKEN_JUST_CONFIGURE`, which will create the
+correct output file names, checked by `configure` (`a.out`).
 
 There's a distro config for WASM (work in progress), that gets your
 defaults right (and currently disables a ton of 3rd party stuff which
@@ -93,6 +103,35 @@ Recommended configure setup is thusly:
     `--with-build-platform-configure-options=--enable-ccache`
     `--enable-ccache`
 
+FWIW: it's also possible to build an almost static Linux LibreOffice by just using
+--disable-dynloading --enable-customtarget-components. System externals are still
+linked dynamically, but everything else is static.
+
+### "Deploying" soffice.wasm
+
+    tar -chf wasm.tar --xform 's/.*program/lo-wasm/' instdir/program/soffice.* \
+        instdir/program/qt*
+
+Your HTTP server needs to provide aditional headers:
+* add_header Cross-Origin-Opener-Policy same-origin
+* add_header Cross-Origin-Embedder-Policy require-corp
+
+The default html to use should be qt_soffice.html
+
+### Debugging setup
+
+Since a few months you can use DWARF information embedded by LLVM into the WASM
+to debug WASM in Chrome. You need to enable an experimental feature and install
+an additional extension. The whole setup is described in:
+
+https://developer.chrome.com/blog/wasm-debugging-2020/
+
+This way you don't need source maps (much faster linking!) and can resolve local
+WASM variables to C++ names!
+
+Per default, the WASM debug build splits the DWARF information into an additional
+WASM file, postfixed '.debug.wasm'.
+
 ### Using Docker to cross-build with emscripten
 
 If you prefer a controlled environment (sadly emsdk install/activate
@@ -109,7 +148,8 @@ Run
 
 in the lode/docker dir to get the container prepared. Run
 
-    PARALLELISM=4 BUILD_OPTIONS= BUILD_TARGET=build docker-compose run --rm -e PARALLELISM -e BUILD_TARGET -e BUILD_OPTIONS builder
+    PARALLELISM=4 BUILD_OPTIONS= BUILD_TARGET=build docker-compose run --rm \
+        -e PARALLELISM -e BUILD_TARGET -e BUILD_OPTIONS builder
 
 to perform an actual `srcdir != builddir` build; the container mounts
 checked-out git repo and output dir via `docker-compose.yml` (so make
@@ -152,27 +192,6 @@ WASM dynamic dispatch:
 
 - <https://fitzgeraldnick.com/2018/04/26/how-does-dynamic-dispatch-work-in-wasm.html>
 
-
-## Workaround for eventual clang WASM compiler bug
-
-````
-sc/source/core/data/attarray.cxx:378:44: error: call to member function 'erase' is ambiguous
-                        aNewCondFormatData.erase(nIndex);
-                        ~~~~~~~~~~~~~~~~~~~^~~~~
-include/o3tl/sorted_vector.hxx:86:15: note: candidate function
-    size_type erase( const Value& x )
-              ^
-include/o3tl/sorted_vector.hxx:97:10: note: candidate function
-    void erase( size_t index )
-````
-
-This is currently patched by using `x.erase` (`x.begin() + nIndex`).
-
-There shouldn't be an ambiguity, because of "[WebAssembly] Change size_t to `unsigned long`."
-<https://reviews.llvm.org/rGdf07a35912d78781ed6a62a7c032bfef5085a4f5#change-IrS9f6jH6PFq>,
-from "Jul 23 2018" which pre-dates the emscripten tag 1.39.8 from 02/14/2020 by ~1.5y.
-
-
 ## Tools for problem diagnosis
 
 * `nm -s` should list the symbols in the archive, based on the index generated by ranlib.
@@ -184,7 +203,6 @@ from "Jul 23 2018" which pre-dates the emscripten tag 1.39.8 from 02/14/2020 by 
 This is closed, but not really fixed IMHO:
 
 - <https://github.com/emscripten-core/emscripten/issues/3922>
-
 
 ## Dynamic libraries `/` modules in emscripten
 
