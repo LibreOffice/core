@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71e4596e_ee6238cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-10T08:47:36Z",
+      "side": 1,
+      "message": "I suspect it doesn\u0027t work because the PRIVATE fonts might not be stored as file paths, only as anonymous blobs and something like the wine implementation of CreateFontFaceFromHdc happens https://github.com/wine-mirror/wine/blob/86eaf7eeb2603d1b13d18e3fe71a615e1ee14cee/dlls/dwrite/gdiinterop.c#L810 so the lookup in the collection searches by filename and can\u0027t find it",
+      "revId": "19cf80a9d7687484cea1fab4888d2a3bfff4ac37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
