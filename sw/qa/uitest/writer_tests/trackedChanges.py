@@ -23,7 +23,7 @@ class trackedchanges(UITestCase):
 
             self.xUITest.executeCommand(".uno:TrackChanges")
 
-            selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+            self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
             self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close"):

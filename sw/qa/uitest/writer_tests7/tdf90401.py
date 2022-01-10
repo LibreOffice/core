@@ -31,7 +31,7 @@ class tdf90401(UITestCase):
                 xWriterDoc = self.xUITest.getTopFocusWindow()
                 xWriterEdit = xWriterDoc.getChild('writer_edit')
 
-                selection = self.xUITest.executeCommand('.uno:SelectAll')
+                self.xUITest.executeCommand('.uno:SelectAll')
                 self.xUITest.executeCommand('.uno:InsertAnnotation')
 
                 # enable remove personal info security option
@@ -97,7 +97,7 @@ class tdf90401(UITestCase):
                 xWriterDoc = self.xUITest.getTopFocusWindow()
                 xWriterEdit = xWriterDoc.getChild('writer_edit')
 
-                selection = self.xUITest.executeCommand('.uno:SelectAll')
+                self.xUITest.executeCommand('.uno:SelectAll')
                 self.xUITest.executeCommand('.uno:InsertAnnotation')
 
                 # enable remove personal info security option

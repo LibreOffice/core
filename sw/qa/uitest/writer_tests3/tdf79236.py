@@ -22,7 +22,7 @@ class tdf79236(UITestCase):
             type_text(xWriterEdit, "Test for tdf79236")
 
 
-            selection = self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:SelectAll")
 
             self.assertEqual(document.CurrentSelection.getByIndex(0).ParaLeftMargin, 0)
             self.assertEqual(document.CurrentSelection.getByIndex(0).ParaRightMargin, 0)

@@ -25,7 +25,7 @@ class WriterSort(UITestCase):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
             type_text(xWriterEdit, "v")
 
-            selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+            self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
             #Tools - Sort
             with self.ui_test.execute_dialog_through_command(".uno:SortDialog") as xDialog:
                 xDown = xDialog.getChild("down1")
@@ -43,7 +43,7 @@ class WriterSort(UITestCase):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
             type_text(xWriterEdit, "2;8;3")
 
-            selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+            self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
             #Tools - Sort
             with self.ui_test.execute_dialog_through_command(".uno:SortDialog") as xDialog:
                 xDown = xDialog.getChild("down1")
