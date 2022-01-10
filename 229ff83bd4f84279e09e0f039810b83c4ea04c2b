@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eea3a73_3eadae53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003180
+      },
+      "writtenOn": "2022-01-10T01:08:13Z",
+      "side": 1,
+      "message": "\u003e Patch Set 5: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/105060/ : FAILURE\n\u003e \n\u003e the cppunit test CppunitTest_sd_export_tests failed ( https://ci.libreoffice.org/job/gerrit_windows/116322/ )\n\nhmmm... have no idea why this unit test failed and only on Windows...",
+      "revId": "229ff83bd4f84279e09e0f039810b83c4ea04c2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
