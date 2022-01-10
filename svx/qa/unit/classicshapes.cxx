@@ -76,15 +76,7 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98584ShearVertical)
     const OUString sURL(m_directories.getURLFromSrc(sDataDirectory) + "tdf98584_ShearVertical.odg");
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
 
-    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
-    // All tests have a small tolerance for to avoid failing because of rounding errors.
-
     // Tests skewY
-    sal_Int32 nShearE = -5313; // expected angle for horizontal shear
-    sal_Int32 nRotE = 30687; // = -5313 expected angle for generated rotation
-    // expected width of shape, should not change on vertical shearing
-    sal_Int32 nWidthE = 5001;
-
     for (sal_uInt8 nPageIndex = 0; nPageIndex < 3; ++nPageIndex)
     {
         awt::Rectangle aFrameRect;
@@ -92,27 +84,28 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98584ShearVertical)
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
         xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
-        const sal_Int32 nWidthA(aFrameRect.Width);
-        if (abs(nWidthE - nWidthA) > 2)
-            sErrors += "skewY page " + OUString::number(nPageIndex) + " width expected "
-                       + OUString::number(nWidthE) + ", actual " + OUString::number(nWidthA) + "\n";
-        sal_Int32 nShearA(0);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            OUString("Incorrect Width on skewY page " + OUString::number(nPageIndex))
+                .toUtf8()
+                .getStr(),
+            5001.0, aFrameRect.Width, 2.0);
+        double nShearA(0);
         xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_SHEARANGLE) >>= nShearA;
-        if (abs(nShearE - nShearA) > 2)
-            sErrors += "skewY page" + OUString::number(nPageIndex) + " shear angle expected "
-                       + OUString::number(nShearE) + ", actual " + OUString::number(nShearA) + "\n";
-        sal_Int32 nRotA(0);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            OUString("Incorrect Share angle on skewY page " + OUString::number(nPageIndex))
+                .toUtf8()
+                .getStr(),
+            -5313.0, nShearA, 2.0);
+        double nRotA(0);
         xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nRotA;
-        if (abs(nRotE - nRotA) > 2)
-            sErrors += "skewY page" + OUString::number(nPageIndex) + " rotate angle expected "
-                       + OUString::number(nRotE) + ", actual " + OUString::number(nRotA) + "\n";
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            OUString("Incorrect Rotate angle on skewY page " + OUString::number(nPageIndex))
+                .toUtf8()
+                .getStr(),
+            30687.0, nRotA, 2.0);
     }
 
     // Tests matrix
-    nShearE = -6343;
-    nRotE = 29657;
-    nWidthE = 5001;
-
     for (sal_uInt8 nPageIndex = 3; nPageIndex < 6; ++nPageIndex)
     {
         awt::Rectangle aFrameRect;
@@ -120,23 +113,26 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98584ShearVertical)
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
         xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
-        const sal_Int32 nWidthA(aFrameRect.Width);
-        if (abs(nWidthE - nWidthA) > 2)
-            sErrors += "matrix page " + OUString::number(nPageIndex) + " width expected "
-                       + OUString::number(nWidthE) + ", actual " + OUString::number(nWidthA) + "\n";
-        sal_Int32 nShearA(0);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            OUString("Incorrect Width on matrix page " + OUString::number(nPageIndex))
+                .toUtf8()
+                .getStr(),
+            5001.0, aFrameRect.Width, 2.0);
+        double nShearA(0.0);
         xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_SHEARANGLE) >>= nShearA;
-        if (abs(nShearE - nShearA) > 2)
-            sErrors += "matrix page" + OUString::number(nPageIndex) + " shear angle expected "
-                       + OUString::number(nShearE) + ", actual " + OUString::number(nShearA) + "\n";
-        sal_Int32 nRotA(0);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            OUString("Incorrect Share angle on matrix page " + OUString::number(nPageIndex))
+                .toUtf8()
+                .getStr(),
+            -6343.0, nShearA, 2.0);
+        double nRotA(0.0);
         xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nRotA;
-        if (abs(nRotE - nRotA) > 2)
-            sErrors += "matrix page" + OUString::number(nPageIndex) + " rotate angle expected "
-                       + OUString::number(nRotE) + ", actual " + OUString::number(nRotA) + "\n";
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            OUString("Incorrect Rotate angle on matrix page " + OUString::number(nPageIndex))
+                .toUtf8()
+                .getStr(),
+            29657.0, nRotA, 2.0);
     }
-
-    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
 }
 
 CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98583ShearHorizontal)
@@ -151,12 +147,6 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98583ShearHorizontal)
                         + "tdf98583_ShearHorizontal.odp");
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
 
-    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
-    // All tests have a small tolerance for to avoid failing because of rounding errors.
-    const sal_Int32 nLeftE(8000); // expected values
-    const sal_Int32 nTopE(5000);
-    const sal_Int32 nWidthE(6001);
-    const sal_Int32 nHeightE(4001);
     for (sal_uInt8 nPageIndex = 0; nPageIndex < 2; ++nPageIndex)
     {
         awt::Rectangle aFrameRect;
@@ -164,22 +154,24 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98583ShearHorizontal)
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
         xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
-        const sal_Int32 nLeftA(aFrameRect.X);
-        const sal_Int32 nTopA(aFrameRect.Y);
-        const sal_Int32 nWidthA(aFrameRect.Width);
-        const sal_Int32 nHeightA(aFrameRect.Height);
-        if (abs(nLeftE - nLeftA) > 2 || abs(nTopE - nTopA) > 2)
-            sErrors += "page " + OUString::number(nPageIndex) + " LT expected "
-                       + OUString::number(nLeftE) + " | " + OUString::number(nTopE) + ", actual "
-                       + OUString::number(nLeftA) + " | " + OUString::number(nTopA) + "\n";
-        if (abs(nWidthE - nWidthA) > 2 || abs(nHeightE - nHeightA) > 2)
-            sErrors += "page " + OUString::number(nPageIndex) + " width x height expected "
-                       + OUString::number(nWidthE) + " x " + OUString::number(nHeightE)
-                       + ", actual " + OUString::number(nWidthA) + " x "
-                       + OUString::number(nHeightA) + "\n";
-    }
 
-    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            OUString("Incorrect Left Position on page " + OUString::number(nPageIndex))
+                .toUtf8()
+                .getStr(),
+            8000.0, aFrameRect.X, 2.0);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            OUString("Incorrect Top Position on page " + OUString::number(nPageIndex))
+                .toUtf8()
+                .getStr(),
+            5000.0, aFrameRect.Y, 2.0);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            OUString("Incorrect Width on page " + OUString::number(nPageIndex)).toUtf8().getStr(),
+            6001.0, aFrameRect.Width, 2.0);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            OUString("Incorrect Height on page " + OUString::number(nPageIndex)).toUtf8().getStr(),
+            4001.0, aFrameRect.Height, 2.0);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf130076Flip)
@@ -194,33 +186,26 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf130076Flip)
                         + "tdf130076_FlipOnSectorSection.odg");
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
 
-    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
-
     for (sal_uInt8 nPageIndex = 0; nPageIndex < 2; ++nPageIndex)
     {
-        sal_Int32 angle1 = {}, angle2 = {};
-        const sal_Int32 goodAngle1 = 26000;
-        const sal_Int32 goodAngle2 = 26000;
+        sal_Int32 nAngle1, nAngle2;
         uno::Reference<drawing::XShape> xShape(getShape(1, nPageIndex));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         uno::Reference<drawing::XShape> xShape2(getShape(2, nPageIndex));
         uno::Reference<beans::XPropertySet> xShapeProps2(xShape2, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xShapeProps->getPropertyValue("CircleStartAngle") >>= angle1);
-        CPPUNIT_ASSERT(xShapeProps2->getPropertyValue("CircleStartAngle") >>= angle2);
-        if (angle1 != goodAngle1)
-        {
-            sErrors += "page " + OUString::number(nPageIndex)
-                       + " expected vertical flip starting angle " + OUString::number(goodAngle1)
-                       + " actual " + OUString::number(angle1) + "\n";
-        }
-        if (angle2 != goodAngle2)
-        {
-            sErrors += "page " + OUString::number(nPageIndex)
-                       + " expected horizontal flip starting angle " + OUString::number(goodAngle2)
-                       + " actual " + OUString::number(angle2) + "\n";
-        }
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue("CircleStartAngle") >>= nAngle1);
+        CPPUNIT_ASSERT(xShapeProps2->getPropertyValue("CircleStartAngle") >>= nAngle2);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString("Incorrect vertical flip starting angle on page "
+                                              + OUString::number(nPageIndex))
+                                         .toUtf8()
+                                         .getStr(),
+                                     26000, nAngle1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString("Incorrect horizontal flip starting angle on page "
+                                              + OUString::number(nPageIndex))
+                                         .toUtf8()
+                                         .getStr(),
+                                     26000, nAngle2);
     }
-    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
 }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
