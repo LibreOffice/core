@@ -637,7 +637,6 @@ namespace
             xSerializer->serialize(xSaxWriter, uno::Sequence< beans::StringPair >());
 
             // get URL from temp file
-            uno::Reference < beans::XPropertySet > xTempFileProps(xTempFile, uno::UNO_QUERY);
             OUString aTempURL = xTempFile->getUri();
 
             // copy back file

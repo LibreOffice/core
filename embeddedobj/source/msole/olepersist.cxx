@@ -164,10 +164,9 @@ static OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimiz
     {
         uno::Reference < io::XTempFile > xTempFile(
                 io::TempFile::create(xContext),
-                uno::UNO_QUERY );
-        uno::Reference < io::XStream > xTempStream = xTempFile;
+                uno::UNO_SET_THROW );
 
-        xParentStorage->copyStreamElementData( aEntryName, xTempStream );
+        xParentStorage->copyStreamElementData( aEntryName, xTempFile );
 
         xTempFile->setRemoveFile( false );
         aResult = xTempFile->getUri();
