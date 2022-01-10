@@ -20,7 +20,7 @@ namespace
 OString extractFromStream(SvMemoryStream& rStream)
 {
     rStream.WriteChar('\0');
-    rStream.Flush();
+    rStream.FlushBuffer();
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
     return static_cast<const char*>(rStream.GetData());
 }

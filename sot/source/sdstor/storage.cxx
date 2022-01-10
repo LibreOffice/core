@@ -69,12 +69,12 @@ SotTempStream::SotTempStream( const OUString & rName, StreamMode nMode )
 
 SotTempStream::~SotTempStream()
 {
-    Flush();
+    FlushBuffer();
 }
 
 void SotTempStream::CopyTo( SotTempStream * pDestStm )
 {
-    Flush(); // write all data
+    FlushBuffer(); // write all data
 
     sal_uInt64 nPos = Tell();    // save position
     Seek( 0 );

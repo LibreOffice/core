@@ -188,7 +188,7 @@ bool GraphicHelper::getThumbnailFormatFromBitmap_Impl(const BitmapEx& rBitmap, c
     if (rFilter.compressAsPNG(bitmap, *pStream) != ERRCODE_NONE)
         return false;
 
-    pStream->Flush();
+    pStream->FlushBuffer();
 
     return !pStream->GetError();
 }

@@ -107,7 +107,6 @@ SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nMode )
     bIsOpen             = false;
     nLockCounter        = 0;
     m_isWritable        = false;
-    mbDontFlushOnClose  = false;
     pInstanceData.reset( new StreamData );
 
     SetBufferSize( 8192 );
@@ -124,7 +123,6 @@ SvFileStream::SvFileStream()
     bIsOpen             = false;
     nLockCounter        = 0;
     m_isWritable        = false;
-    mbDontFlushOnClose  = false;
     pInstanceData.reset( new StreamData );
 
     SetBufferSize( 8192 );
@@ -379,8 +377,7 @@ void SvFileStream::Close()
             nLockCounter = 1;
             UnlockFile();
         }
-        if ( !mbDontFlushOnClose )
-            Flush();
+        FlushBuffer();
         CloseHandle( pInstanceData->hFile );
     }
     bIsOpen     = false;
