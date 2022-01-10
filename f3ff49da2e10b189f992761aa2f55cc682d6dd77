@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5afe58fc_57f0eb94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-10T12:27:14Z",
+      "side": 1,
+      "message": "Heiko, I moved the DevTools to the context menu in the Tools tab.",
+      "revId": "f3ff49da2e10b189f992761aa2f55cc682d6dd77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
