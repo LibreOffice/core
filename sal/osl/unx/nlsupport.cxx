@@ -31,19 +31,20 @@
 
 #include "nlsupport.hxx"
 
-#if defined(LINUX) || defined(__sun) || defined(NETBSD) || \
-    defined(FREEBSD) || defined(MACOSX)  || defined(IOS) || defined(OPENBSD) || \
-    defined(DRAGONFLY)
-#if !defined(MACOSX) && !defined(IOS)
+// these share a lot, so use one define
+#if defined(LINUX) || defined(__sun) || \
+    defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY) || defined(NETBSD)
+#define LO_COMMON_NLS_ARCHS 1
+#else
+#define LO_COMMON_NLS_ARCHS 0
+#endif
+
+#if LO_COMMON_NLS_ARCHS
 #include <locale.h>
 #include <langinfo.h>
-#else
+#elif defined(MACOSX) || defined(IOS)
 #include <osl/module.h>
 #include <osl/thread.h>
-#endif  /* !MACOSX && !IOS */
-#endif  /* LINUX || __sun || NETBSD || MACOSX || IOS */
-
-#if defined(MACOSX) || defined(IOS)
 #include "system.hxx"
 #endif
 
@@ -226,23 +227,14 @@ static rtl_Locale * parse_locale( const char * locale )
     return ret;
 }
 
-#if defined(LINUX) || defined(__sun) || defined(NETBSD) || \
-    defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY)
+#if LO_COMMON_NLS_ARCHS
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
  * from nl_langinfo_l(CODESET) to rtl_textencoding defines.
  * nl_langinfo() is supported only on Linux, Solaris,
  * >= NetBSD 1.6 and >= FreeBSD 4.4
- */
-
-#ifdef LINUX
-#if !defined(CODESET)
-#define CODESET _NL_CTYPE_CODESET_NAME
-#endif
-#endif
-
-/*
+ *
  * _nl_language_list[] is an array list of supported encodings. Because
  * we are using a binary search, the list has to be in ascending order.
  * We are comparing the encodings case insensitive, so the list has
@@ -293,6 +285,10 @@ static const Pair nl_language_list[] = {
  * really equivalent */
 
 #elif defined(LINUX)
+
+#if !defined(CODESET)
+#define CODESET _NL_CTYPE_CODESET_NAME
+#endif
 
 const Pair nl_language_list[] = {
     { "ANSI_X3.110-1983",           RTL_TEXTENCODING_DONTKNOW   },  /* ISO-IR-99 NAPLPS */
@@ -557,7 +553,7 @@ static const Pair nl_language_list[] = {
     { "UTF-8",         RTL_TEXTENCODING_UTF8           }  /* ISO-10646/UTF-8 */
 };
 
-#endif /* ifdef __sun LINUX FREEBSD NETBSD OPENBSD */
+#endif // individual common NLS archs
 
 /*****************************************************************************
  return the text encoding corresponding to the given locale
@@ -643,7 +639,7 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
     *ppLocale = parse_locale(locale);
 }
 
-#else /* ifdef LINUX || __sun || MACOSX || NETBSD */
+#else // !LO_COMMON_NLS_ARCHS
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
@@ -837,7 +833,9 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
     /* return the locale */
     *ppLocale = parse_locale( locale.getStr() );
 }
-#else
+
+#else // !MACOSX && !IOS
+
 /*****************************************************************************
  return the current process locale
  *****************************************************************************/
@@ -865,8 +863,8 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
 #endif
     *ppLocale = parse_locale( locale );
 }
-#endif
 
-#endif /* ifdef LINUX || __sun || MACOSX || NETBSD || AIX */
+#endif // !MACOSX && !IOS
+#endif // !LO_COMMON_NLS_ARCHS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
