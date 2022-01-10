@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4feebffa_8369b77e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-10T16:07:26Z",
+      "side": 1,
+      "message": "The description looks really encouraging - nice! (I must admit that I didn\u0027t review the code. If possible, could you please point to a screenshot/sample of the new layout?)\n\nThanks! (and my suggestion would be to hide numeric ids, and only show them as e.g. tooltips, maybe with a warning to avoid using those.)",
+      "revId": "59c1e370669f1d018ebdc7e78eef841d4d923a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
