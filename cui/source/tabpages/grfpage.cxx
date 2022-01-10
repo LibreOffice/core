@@ -290,8 +290,9 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 #endif
 
     auto& aProperties = getAdditionalProperties();
-    if (aProperties.find("PreferredDPI") != aProperties.end())
-        m_aPreferredDPI = aProperties.at("PreferredDPI").get<sal_Int32>();
+    auto aIterator = aProperties.find("PreferredDPI");
+    if (aIterator != aProperties.end())
+        m_aPreferredDPI = aIterator->second.get<sal_Int32>();
 
     bSetOrigSize = false;
 
