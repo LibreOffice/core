@@ -68,6 +68,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "theme.pptx";
     getComponent() = loadFromDesktop(aURL);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    // The draw page also contains a group shape to make sure we don't crash on group shapes.
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xDrawPageShapes(xDrawPage, uno::UNO_QUERY);
