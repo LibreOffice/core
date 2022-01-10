@@ -39,6 +39,30 @@
       },
       "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1506b383_9626266e",
+        "filename": "svx/source/sdr/primitive2d/sdrpathprimitive2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-10T09:36:40Z",
+      "side": 1,
+      "message": "Thank you very much for the explanation.\n\nThe problem is that\n(a) the caching at the VOC is ineffective becuase we have to decompose for every paint because we can\u0027t trust invalidation\n(b) for lots of primitives, decomposing rapidly becomes a bottlneck\n\n\n\u003e Note: You may get many other errors depending on what geometry gets created in decomposition. \n\nAh, so what you are saying is that ideally every single primitive needs to define getB2DRange so that the ranges of the child objects is correctly translated/transformed up through the hierarchy.",
+      "parentUuid": "b3c77af3_043f3032",
+      "range": {
+        "startLine": 164,
+        "startChar": 25,
+        "endLine": 164,
+        "endChar": 52
+      },
+      "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
