@@ -106,6 +106,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2be891d_cb9ba6cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2022-01-10T15:31:44Z",
+      "side": 1,
+      "message": "See line 1613 of Writer.xcs, group ViewLayout, prop BookMode.",
+      "parentUuid": "e64893f2_4edc044c",
+      "revId": "d984e35b56b7c7ff94e5a5377275b36c62084239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae3682e5_a89b8c1d",
