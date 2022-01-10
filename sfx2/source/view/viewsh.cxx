@@ -1480,6 +1480,7 @@ void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) c
         {
         case LOK_CALLBACK_FORM_FIELD_BUTTON:
         case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_COMMENT:
             break;
         default:
             // Reject e.g. invalidate during paint.

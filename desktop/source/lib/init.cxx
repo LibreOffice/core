@@ -1477,13 +1477,18 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     SAL_INFO("lok", "Queue: [" << type << "]: [" << payload << "] on " << m_queue1.size() << " entries.");
 
     bool bIsChartActive = false;
+    bool bIsComment = false;
     if (type == LOK_CALLBACK_GRAPHIC_SELECTION)
     {
         LokChartHelper aChartHelper(SfxViewShell::Current());
         bIsChartActive = aChartHelper.GetWindow() != nullptr;
     }
+    else if (type == LOK_CALLBACK_COMMENT)
+    {
+        bIsComment = true;
+    }
 
-    if (callbacksDisabled() && !bIsChartActive)
+    if (callbacksDisabled() && !bIsChartActive && !bIsComment)
     {
         // We drop notifications when this is set, except for important ones.
         // When we issue a complex command (such as .uno:InsertAnnotation)
