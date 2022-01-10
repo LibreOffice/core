@@ -104,7 +104,7 @@ XclExpStream::XclExpStream( SvStream& rOutStrm, const XclExpRoot& rRoot, sal_uIn
 
 XclExpStream::~XclExpStream()
 {
-    mrStrm.Flush();
+    mrStrm.FlushBuffer();
 }
 
 void XclExpStream::StartRecord( sal_uInt16 nRecId, std::size_t nRecSize )

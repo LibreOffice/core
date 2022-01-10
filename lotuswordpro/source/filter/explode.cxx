@@ -307,7 +307,7 @@ sal_Int32 Decompression::explode()
         if (distance > nOutputPos)
             return -3; // format error
 
-        m_pOutStream->Flush();
+        m_pOutStream->FlushBuffer();
         // point back to copy position and read bytes
         m_pOutStream->SeekRel(-static_cast<tools::Long>(distance));
         sal_uInt8 sTemp[MAXWIN];

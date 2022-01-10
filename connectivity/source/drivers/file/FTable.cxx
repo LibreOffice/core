@@ -136,9 +136,6 @@ void OFileTable::FileClose()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if (m_pFileStream && m_pFileStream->IsWritable())
-        m_pFileStream->Flush();
-
     m_pFileStream.reset();
     m_pBuffer.reset();
 }

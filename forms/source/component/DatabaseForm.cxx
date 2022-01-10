@@ -496,7 +496,7 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
     }
     pBuf.reset();
 
-    aMemStream.Flush();
+    aMemStream.FlushBuffer();
     aMemStream.Seek( 0 );
     void const * pData = aMemStream.GetData();
     sal_Int32 nLen = aMemStream.TellEnd();
@@ -940,7 +940,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, std::u16string_vie
     // Body
     SvMemoryStream* pStream = new SvMemoryStream;
     pStream->WriteLine( OUStringToOString(rData, rtl_getTextEncodingFromMimeCharset(pBestMatchingEncoding)) );
-    pStream->Flush();
+    pStream->FlushBuffer();
     pStream->Seek( 0 );
     pChild->SetDocumentLB( new SvLockBytes(pStream, true) );
     rParent.AttachChild( std::move(pChild) );

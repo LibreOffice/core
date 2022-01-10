@@ -208,7 +208,7 @@ void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int
 
 void SAL_CALL OOutputStreamWrapper::flush()
 {
-    rStream.Flush();
+    rStream.FlushBuffer();
     checkError();
 }
 
@@ -298,7 +298,7 @@ void SAL_CALL OStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& a
 
 void SAL_CALL OStreamWrapper::flush()
 {
-    m_pSvStream->Flush();
+    m_pSvStream->FlushBuffer();
     if (m_pSvStream->GetError() != ERRCODE_NONE)
         throw css::io::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
 }
