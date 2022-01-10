@@ -288,10 +288,9 @@ struct SdwTextBoxRecord
 struct SdwFMPATH
 {
     sal_uInt16 n;
-    SdwPoint* pPts;
+    std::vector<SdwPoint> aPts;
     SdwFMPATH()
         : n(0)
-        , pPts(nullptr)
     {
     }
 };
