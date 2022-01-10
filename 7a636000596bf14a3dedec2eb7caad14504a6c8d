@@ -87,6 +87,30 @@
       },
       "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d1a427b_5c59ffe6",
+        "filename": "svx/source/sdr/primitive2d/sdrpathprimitive2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-10T10:50:55Z",
+      "side": 1,
+      "message": "\u003e To make it very clear: Your impl of ::getB2DRange at SdrPathPrimitive will *not* return the same as using the decomposition, so is wrong by definiion.\n\nOk, got you now.\n\n\u003e \n\u003e - VOC *for security reasons* currently does the following: It creates a new SdrPathPrimitive and compares it with the existing one. If it did not change, the existing one - and it\u0027s decompositions - will be reused. That new one is mainly created for comparison, should be deleted again in most cases. It gets used only *if* the definition did change, and thus the old one - and it\u0027s buffered decompositions - gets deleted.\n\u003e \n\nUnfortunately, with the complex data we are now seeing people use, this is becoming a bottleneck.\n\nI tried to improve it, but had to revert with\n    https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d5e6d6be86bf29896e030af5c0f770f2b389d7e8a\n\nMaybe will try again later, but it needs lots of fiddling in writer to invalidate stuff correctly, and finding the correct place in writer to fix this kind of stuff is really painful.",
+      "parentUuid": "6a177dad_64f7f106",
+      "range": {
+        "startLine": 164,
+        "startChar": 25,
+        "endLine": 164,
+        "endChar": 52
+      },
+      "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
