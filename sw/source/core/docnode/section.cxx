@@ -201,15 +201,11 @@ SwSection::SwSection(
     SwSection *const pParentSect = GetParent();
     if( pParentSect )
     {
-        m_Data.SetProtectFlag( pParentSect->IsProtectFlag() );
         // edit in readonly sections
         m_Data.SetEditInReadonlyFlag( pParentSect->IsEditInReadonlyFlag() );
     }
 
-    if (!m_Data.IsProtectFlag())
-    {
-        m_Data.SetProtectFlag( rFormat.GetProtect().IsContentProtected() );
-    }
+    m_Data.SetProtectFlag( rFormat.GetProtect().IsContentProtected() );
 
     if (!m_Data.IsEditInReadonlyFlag()) // edit in readonly sections
     {
@@ -457,21 +453,8 @@ void SwSection::SwClientNotify(const SwModify&, const SfxHint& rHint)
         {
             bool bNewFlag =
                 static_cast<const SvxProtectItem*>(pNew)->IsContentProtected();
-            if( !bNewFlag )
-            {
-                // Switching off: See if there is protection transferred
-                // by the Parents
-                const SwSection* pSect = this;
-                do {
-                    if( pSect->IsProtect() )
-                    {
-                        bNewFlag = true;
-                        break;
-                    }
-                    pSect = pSect->GetParent();
-                } while (pSect);
-            }
-
+            // this used to inherit the flag from the parent, but then there is
+            // no way to turn it off in an inner section
             m_Data.SetProtectFlag( bNewFlag );
         }
         return;
