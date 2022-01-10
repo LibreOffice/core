@@ -138,6 +138,24 @@
       "parentUuid": "440b4b31_c44e9c74",
       "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1f227a7_f223023a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-10T09:13:10Z",
+      "side": 1,
+      "message": "I have tested locally. As long as I only edit some non-English entries, the resulting file may be detected as utf-8 by e.g. Notepad++, because some entries still contain original byte sequence, and that\u0027s UTF-8. But when I changed all the entries, the file is detected as ANSI (again, Notepad++ terminology).\n\nSo indeed, the export should be changed together with import, likely UTF-8 would be a reasonable encoding - but then the concordance file will be unusable on older versions (and AOO)... or keep it, and only make sure to import it correctly, so that it would be usable until one exports? It\u0027s up to you to decide how to fix that bug ;-)",
+      "parentUuid": "c796f9cb_8c160ff9",
+      "revId": "2cfe8bc35501aa9563b22d44b6122af27e310fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
