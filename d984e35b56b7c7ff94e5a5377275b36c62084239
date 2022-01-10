@@ -88,6 +88,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e64893f2_4edc044c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-10T15:28:16Z",
+      "side": 1,
+      "message": "Hm, but I don\u0027t see where e.g. ViewLayoutBookMode is mentioned in xcs files?",
+      "parentUuid": "2fee5621_e8809ef3",
+      "revId": "d984e35b56b7c7ff94e5a5377275b36c62084239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae3682e5_a89b8c1d",
