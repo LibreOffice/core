@@ -18,7 +18,7 @@ class tdf133348(UITestCase):
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
 
-            selection = self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:SelectAll")
             xArgs = mkPropertyValues({"Text": "C1"})
             self.xUITest.executeCommandWithParameters(".uno:InsertAnnotation", xArgs)
 

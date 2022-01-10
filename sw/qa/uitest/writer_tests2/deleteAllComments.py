@@ -23,7 +23,7 @@ class DeleteAllComments(UITestCase):
             type_text(xWriterEdit, "Test LibreOffice")
 
 
-            selection = self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:SelectAll")
             self.xUITest.executeCommand(".uno:InsertAnnotation")
             cursor = document.getCurrentController().getViewCursor()
             type_text(xWriterEdit, "EEEEE")
@@ -42,7 +42,7 @@ class DeleteAllComments(UITestCase):
             type_text(xWriterEdit, "foo")
 
 
-            selection = self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:SelectAll")
             self.xUITest.executeCommand(".uno:InsertAnnotation")
             self.xUITest.executeCommand(".uno:TrackChanges")
             self.xUITest.executeCommand(".uno:DeleteAllNotes")
