@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8bcc6d3_81901779",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-01-11T18:53:37Z",
+      "side": 1,
+      "message": "As promised in https://wiki.documentfoundation.org/ReleaseNotes/7.4#Platform_Compatibility",
+      "revId": "2ca6ad481211dc899ea7d6bb72b173732a9094b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
