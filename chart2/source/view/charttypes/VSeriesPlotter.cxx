@@ -866,7 +866,7 @@ double lcl_getErrorBarLogicLength(
 }
 
 void lcl_AddErrorBottomLine( const drawing::Position3D& rPosition, ::basegfx::B2DVector aMainDirection
-                , drawing::PolyPolygonShape3D& rPoly, sal_Int32 nSequenceIndex )
+                , std::vector<std::vector<css::drawing::Position3D>>& rPoly, sal_Int32 nSequenceIndex )
 {
     double fFixedWidth = 200.0;
 
@@ -1050,7 +1050,7 @@ void VSeriesPlotter::createErrorBar(
         if(!bShowPositive && !bShowNegative)
             return;
 
-        drawing::PolyPolygonShape3D aPoly;
+        std::vector<std::vector<css::drawing::Position3D>> aPoly;
 
         sal_Int32 nSequenceIndex=0;
         if( bShowNegative )
@@ -1072,7 +1072,7 @@ void VSeriesPlotter::createErrorBar(
             lcl_AddErrorBottomLine( aPositive, aMainDirection, aPoly, nSequenceIndex );
         }
 
-        rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D( xTarget, PolyToPointSequence( aPoly) );
+        rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D( xTarget, aPoly );
         PropertyMapper::setMappedProperties( *xShape, xErrorBarProperties, PropertyMapper::getPropertyNameMapForLineProperties() );
     }
     catch( const uno::Exception & )
@@ -1088,12 +1088,12 @@ void VSeriesPlotter::addErrorBorder(
      ,const rtl::Reference<SvxShapeGroupAnyD>& rTarget
      ,const uno::Reference< beans::XPropertySet >& rErrorBorderProp )
 {
-    drawing::PolyPolygonShape3D aPoly;
+    std::vector<std::vector<css::drawing::Position3D>> aPoly;
     sal_Int32 nSequenceIndex = 0;
     AddPointToPoly( aPoly, rPos0, nSequenceIndex );
     AddPointToPoly( aPoly, rPos1, nSequenceIndex );
     rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
-                    rTarget, PolyToPointSequence( aPoly) );
+                    rTarget, aPoly );
     PropertyMapper::setMappedProperties( *xShape, rErrorBorderProp,
                     PropertyMapper::getPropertyNameMapForLineProperties() );
 }

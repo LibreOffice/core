@@ -53,11 +53,11 @@ public:
 private: //methods
     void impl_createSeriesShapes();
     bool impl_createArea( VDataSeries* pSeries
-                , css::drawing::PolyPolygonShape3D* pSeriesPoly
-                , css::drawing::PolyPolygonShape3D const * pPreviousSeriesPoly
+                , std::vector<std::vector<css::drawing::Position3D>>* pSeriesPoly
+                , std::vector<std::vector<css::drawing::Position3D>> const * pPreviousSeriesPoly
                 , PlottingPositionHelper const * pPosHelper );
     bool impl_createLine( VDataSeries* pSeries
-                , css::drawing::PolyPolygonShape3D* pSeriesPoly
+                , std::vector<std::vector<css::drawing::Position3D>>* pSeriesPoly
                 , PlottingPositionHelper const * pPosHelper );
 
 private: //member

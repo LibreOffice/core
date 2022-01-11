@@ -111,13 +111,13 @@ drawing::Direction3D NetChart::getPreferredDiagramAspectRatio() const
 }
 
 bool NetChart::impl_createLine( VDataSeries* pSeries
-                , drawing::PolyPolygonShape3D* pSeriesPoly
+                , std::vector<std::vector<css::drawing::Position3D>>* pSeriesPoly
                 , PlottingPositionHelper const * pPosHelper )
 {
     //return true if a line was created successfully
     rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
 
-    drawing::PolyPolygonShape3D aPoly;
+    std::vector<std::vector<css::drawing::Position3D>> aPoly;
     {
         bool bIsClipped = false;
         if( !ShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
@@ -130,10 +130,10 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
             {
                 // connect last point in last polygon with first point in first polygon
                 ::basegfx::B2DRectangle aScaledLogicClipDoubleRect( pPosHelper->getScaledLogicClipDoubleRect() );
-                drawing::PolyPolygonShape3D aTmpPoly(*pSeriesPoly);
-                drawing::Position3D aLast(aScaledLogicClipDoubleRect.getMaxX(),aTmpPoly.SequenceY[0][0],aTmpPoly.SequenceZ[0][0]);
+                std::vector<std::vector<css::drawing::Position3D>> aTmpPoly(*pSeriesPoly);
+                drawing::Position3D aLast(aScaledLogicClipDoubleRect.getMaxX(),aTmpPoly[0][0].PositionY,aTmpPoly[0][0].PositionZ);
                 // add connector line to last polygon
-                AddPointToPoly( aTmpPoly, aLast, pSeriesPoly->SequenceX.getLength() - 1 );
+                AddPointToPoly( aTmpPoly, aLast, pSeriesPoly->size() - 1 );
                 Clipping::clipPolygonAtRectangle( aTmpPoly, aScaledLogicClipDoubleRect, aPoly );
                 bIsClipped = true;
             }
@@ -152,8 +152,7 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
     //create line:
     rtl::Reference<SvxShapePolyPolygon> xShape;
     {
-        xShape = ShapeFactory::createLine2D( xSeriesGroupShape_Shapes
-                , PolyToPointSequence( aPoly ) );
+        xShape = ShapeFactory::createLine2D( xSeriesGroupShape_Shapes, aPoly );
         PropertyMapper::setMappedProperties( *xShape
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
@@ -164,8 +163,8 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
 }
 
 bool NetChart::impl_createArea( VDataSeries* pSeries
-                , drawing::PolyPolygonShape3D* pSeriesPoly
-                , drawing::PolyPolygonShape3D const * pPreviousSeriesPoly
+                , std::vector<std::vector<css::drawing::Position3D>>* pSeriesPoly
+                , std::vector<std::vector<css::drawing::Position3D>> const * pPreviousSeriesPoly
                 , PlottingPositionHelper const * pPosHelper )
 {
     //return true if an area was created successfully
@@ -173,7 +172,7 @@ bool NetChart::impl_createArea( VDataSeries* pSeries
     rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
     double zValue = pSeries->m_fLogicZPos;
 
-    drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
+    std::vector<std::vector<css::drawing::Position3D>> aPoly( *pSeriesPoly );
     //add second part to the polygon (grounding points or previous series points)
     if( !ShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
     {
@@ -209,7 +208,7 @@ bool NetChart::impl_createArea( VDataSeries* pSeries
 
     //apply clipping
     {
-        drawing::PolyPolygonShape3D aClippedPoly;
+        std::vector<std::vector<css::drawing::Position3D>> aClippedPoly;
         Clipping::clipPolygonAtRectangle( aPoly, pPosHelper->getScaledLogicClipDoubleRect(), aClippedPoly, false );
         ShapeFactory::closePolygon(aClippedPoly); //again necessary after clipping
         aPoly = aClippedPoly;
@@ -240,8 +239,8 @@ void NetChart::impl_createSeriesShapes()
     {
         for( auto const& rXSlot : rZSlot )
         {
-            std::map< sal_Int32, drawing::PolyPolygonShape3D* > aPreviousSeriesPolyMap;//a PreviousSeriesPoly for each different nAttachedAxisIndex
-            drawing::PolyPolygonShape3D* pSeriesPoly = nullptr;
+            std::map< sal_Int32, std::vector<std::vector<css::drawing::Position3D>>* > aPreviousSeriesPolyMap;//a PreviousSeriesPoly for each different nAttachedAxisIndex
+            std::vector<std::vector<css::drawing::Position3D>>* pSeriesPoly = nullptr;
 
             //iterate through all series
             for( std::unique_ptr<VDataSeries> const & pSeries : rXSlot.m_aSeriesVector )
@@ -437,11 +436,11 @@ void NetChart::createShapes()
                     {
                         if( pSeries->getMissingValueTreatment() == css::chart::MissingValueTreatment::LEAVE_GAP )
                         {
-                            drawing::PolyPolygonShape3D& rPolygon = pSeries->m_aPolyPolygonShape3D;
+                            std::vector<std::vector<css::drawing::Position3D>>& rPolygon = pSeries->m_aPolyPolygonShape3D;
                             sal_Int32& rIndex = pSeries->m_nPolygonIndex;
-                            if( 0<= rIndex && rIndex < rPolygon.SequenceX.getLength() )
+                            if( 0<= rIndex && rIndex < static_cast<sal_Int32>(rPolygon.size()) )
                             {
-                                if( rPolygon.SequenceX[ rIndex ].hasElements() )
+                                if( !rPolygon[ rIndex ].empty() )
                                     rIndex++; //start a new polygon for the next point if the current poly is not empty
                             }
                         }

@@ -154,10 +154,18 @@ public:
         createArea3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::PolyPolygonShape3D& rPolyPolygon
                     , double fDepth);
+    static rtl::Reference<Svx3DExtrudeObject>
+        createArea3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+                    , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
+                    , double fDepth);
 
     static SdrPathObj*
         createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::PolyPolygonShape3D& rPolyPolygon
+                    , bool bSetZOrderToZero = true);
+    static SdrPathObj*
+        createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+                    , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
                     , bool bSetZOrderToZero = true);
 
     static rtl::Reference<SvxShapePolyPolygon>
@@ -178,6 +186,10 @@ public:
         createLine2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::PointSequenceSequence& rPoints
                     , const VLineProperties* pLineProperties = nullptr );
+    static rtl::Reference<SvxShapePolyPolygon>
+        createLine2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+                    , const std::vector<std::vector<css::drawing::Position3D>>& rPoints
+                    , const VLineProperties* pLineProperties = nullptr );
 
     static rtl::Reference<SvxShapePolyPolygon>
         createLine ( const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
@@ -185,7 +197,7 @@ public:
 
     static rtl::Reference<Svx3DPolygonObject>
         createLine3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const css::drawing::PolyPolygonShape3D& rPoints
+                    , const std::vector<std::vector<css::drawing::Position3D>>& rPoints
                     , const VLineProperties& rLineProperties );
 
     static rtl::Reference<SvxShapeCircle>
@@ -262,8 +274,11 @@ public:
     static OUString getStackedString( const OUString& rString, bool bStacked );
 
     static bool hasPolygonAnyLines( css::drawing::PolyPolygonShape3D& rPoly );
+    static bool hasPolygonAnyLines( const std::vector<std::vector<css::drawing::Position3D>>& rPoly );
     static bool isPolygonEmptyOrSinglePoint( css::drawing::PolyPolygonShape3D& rPoly );
+    static bool isPolygonEmptyOrSinglePoint( const std::vector<std::vector<css::drawing::Position3D>>& rPoly );
     static void closePolygon( css::drawing::PolyPolygonShape3D& rPoly );
+    static void closePolygon( std::vector<std::vector<css::drawing::Position3D>>& rPoly );
 
     static css::awt::Size calculateNewSizeRespectingAspectRatio(
             const css::awt::Size& rTargetSize

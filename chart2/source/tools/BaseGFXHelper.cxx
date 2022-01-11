@@ -60,6 +60,38 @@ namespace chart::BaseGFXHelper
     return aRet;
 }
 
+::basegfx::B3DRange getBoundVolume( const std::vector<std::vector<css::drawing::Position3D>>& rPolyPoly )
+{
+    ::basegfx::B3DRange aRet;
+
+    bool bInited = false;
+    sal_Int32 nPolyCount = rPolyPoly.size();
+    for(sal_Int32 nPoly = 0; nPoly < nPolyCount; nPoly++)
+    {
+        sal_Int32 nPointCount = rPolyPoly[nPoly].size();
+        for( sal_Int32 nPoint = 0; nPoint < nPointCount; nPoint++)
+        {
+            if(!bInited)
+            {
+                aRet = ::basegfx::B3DRange(::basegfx::B3DTuple(
+                          rPolyPoly[nPoly][nPoint].PositionX
+                        , rPolyPoly[nPoly][nPoint].PositionY
+                        , rPolyPoly[nPoly][nPoint].PositionZ));
+                bInited = true;
+            }
+            else
+            {
+                aRet.expand( ::basegfx::B3DTuple(
+                          rPolyPoly[nPoly][nPoint].PositionX
+                        , rPolyPoly[nPoly][nPoint].PositionY
+                        , rPolyPoly[nPoly][nPoint].PositionZ));
+            }
+        }
+    }
+
+    return aRet;
+}
+
 B2IRectangle makeRectangle( const awt::Point& rPos, const awt::Size& rSize )
 {
     return B2IRectangle(rPos.X,rPos.Y,rPos.X+rSize.Width,rPos.Y+rSize.Height);
