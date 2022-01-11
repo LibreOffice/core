@@ -180,8 +180,6 @@ void SAL_CALL OReadToolBoxDocumentHandler::startDocument()
 
 void SAL_CALL OReadToolBoxDocumentHandler::endDocument()
 {
-    SolarMutexGuard g;
-
     if ( m_bToolBarStartFound )
     {
         OUString aErrorMessage = getErrorLineString() + "No matching start or end element 'toolbar' found!";
@@ -192,8 +190,6 @@ void SAL_CALL OReadToolBoxDocumentHandler::endDocument()
 void SAL_CALL OReadToolBoxDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 {
-    SolarMutexGuard g;
-
     ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName );
     if ( pToolBoxEntry == m_aToolBoxMap.end() )
         return;
@@ -461,8 +457,6 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
 
 void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
 {
-    SolarMutexGuard g;
-
     ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName );
     if ( pToolBoxEntry == m_aToolBoxMap.end() )
         return;
@@ -549,15 +543,11 @@ void SAL_CALL OReadToolBoxDocumentHandler::processingInstruction(
 void SAL_CALL OReadToolBoxDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 {
-    SolarMutexGuard g;
-
     m_xLocator = xLocator;
 }
 
 OUString OReadToolBoxDocumentHandler::getErrorLineString()
 {
-    SolarMutexGuard g;
-
     if ( m_xLocator.is() )
         return "Line: " + OUString::number( m_xLocator->getLineNumber() ) + " - ";
     else
@@ -584,8 +574,6 @@ OWriteToolBoxDocumentHandler::~OWriteToolBoxDocumentHandler()
 
 void OWriteToolBoxDocumentHandler::WriteToolBoxDocument()
 {
-    SolarMutexGuard g;
-
     m_xWriteDocumentHandler->startDocument();
 
     // write DOCTYPE line!
