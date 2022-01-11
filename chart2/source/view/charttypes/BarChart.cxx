@@ -802,13 +802,13 @@ void BarChart::createShapes()
                                 drawing::Position3D aLogicRightDeepTop      (fLogicX-fLogicBarWidth/2.0,fLogicYStart+fMiddleHeight,fLogicZ+fLogicBarDepth/2.0);
                                 drawing::Position3D aLogicTopTop            (fLogicX,fLogicYStart+fMiddleHeight+fTopHeight,fLogicZ);
 
-                                uno::Reference< XTransformation > xTransformation = pSubPosHelper->getTransformationScaledLogicToScene();
+                                ::chart::XTransformation2* pTransformation = pSubPosHelper->getTransformationScaledLogicToScene();
 
                                 //transformation 3) -> 4)
-                                drawing::Position3D aTransformedBottom          ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicBottom) ) ) );
-                                drawing::Position3D aTransformedLeftBottomFront ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicLeftBottomFront) ) ) );
-                                drawing::Position3D aTransformedRightDeepTop    ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicRightDeepTop) ) ) );
-                                drawing::Position3D aTransformedTopTop          ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicTopTop) ) ) );
+                                drawing::Position3D aTransformedBottom          ( pTransformation->transform( aLogicBottom ) );
+                                drawing::Position3D aTransformedLeftBottomFront ( pTransformation->transform( aLogicLeftBottomFront ) );
+                                drawing::Position3D aTransformedRightDeepTop    ( pTransformation->transform( aLogicRightDeepTop ) );
+                                drawing::Position3D aTransformedTopTop          ( pTransformation->transform( aLogicTopTop ) );
 
                                 drawing::Direction3D aSize = aTransformedRightDeepTop - aTransformedLeftBottomFront;
                                 drawing::Direction3D aTopSize( aTransformedTopTop - aTransformedRightDeepTop );

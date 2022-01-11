@@ -44,6 +44,45 @@ namespace chart
 
 class ShapeFactory;
 
+/** allows the transformation of numeric values from one
+     coordinate-system into another.  Values may be transformed using
+     any mapping.
+     This is a non-UNO variant of the css::chart2::XTransformation interface,
+     but using more efficient calling and returning types.
+  */
+class XTransformation2
+{
+public:
+    virtual ~XTransformation2();
+     /** transforms the given input data tuple, given in the source
+         coordinate system, according to the internal transformation
+         rules, into a tuple of transformed coordinates in the
+         destination coordinate system.
+
+         <p>Note that both coordinate systems may have different
+         dimensions, e.g., if a transformation does simply a projection
+         into a lower-dimensional space.</p>
+
+         @param aValues a source tuple of data that is to be
+                transformed.  The length of this sequence must be
+                equivalent to the dimension of the source coordinate
+                system.
+
+         @return the transformed data tuple.  The length of this
+                 sequence is equal to the dimension of the output
+                 coordinate system.
+
+         @throws ::com::sun::star::lang::IllegalArgumentException
+                if the dimension of the input vector is not equal to the
+                dimension given in getSourceDimension().
+      */
+    virtual css::drawing::Position3D transform(
+        const css::drawing::Position3D& rSourceValues ) const = 0;
+    virtual css::drawing::Position3D transform(
+        const css::uno::Sequence< double >& rSourceValues ) const = 0;
+};
+
+
 class PlottingPositionHelper
 {
 public:
@@ -74,7 +113,7 @@ public:
 
     inline void   doLogicScaling( css::drawing::Position3D& rPos ) const;
 
-    virtual css::uno::Reference< css::chart2::XTransformation >
+    virtual ::chart::XTransformation2*
                   getTransformationScaledLogicToScene() const;
 
     virtual css::drawing::Position3D
@@ -123,7 +162,7 @@ protected: //member
     ::basegfx::B3DHomMatrix             m_aMatrixScreenToScene;
 
     //this is calculated based on m_aScales and m_aMatrixScreenToScene
-    mutable css::uno::Reference< css::chart2::XTransformation >  m_xTransformationLogicToScene;
+    mutable std::unique_ptr< ::chart::XTransformation2 >  m_xTransformationLogicToScene;
 
     bool    m_bSwapXAndY;//e.g. true for bar chart and false for column chart
 
@@ -156,7 +195,7 @@ public:
 
     const ::basegfx::B3DHomMatrix& getUnitCartesianToScene() const { return m_aUnitCartesianToScene;}
 
-    virtual css::uno::Reference< css::chart2::XTransformation >
+    virtual ::chart::XTransformation2*
                   getTransformationScaledLogicToScene() const override;
 
     //the resulting values provided by the following 3 methods should be used

@@ -38,6 +38,8 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
+XTransformation2::~XTransformation2() {}
+
 PlottingPositionHelper::PlottingPositionHelper()
         : m_bSwapXAndY( false )
         , m_nXResolution( 1000 )
@@ -100,7 +102,7 @@ void PlottingPositionHelper::setScales( std::vector< ExplicitScaleData >&& rScal
     m_xTransformationLogicToScene = nullptr;
 }
 
-uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScaledLogicToScene() const
+::chart::XTransformation2* PlottingPositionHelper::getTransformationScaledLogicToScene() const
 {
     //this is a standard transformation for a cartesian coordinate system
 
@@ -108,7 +110,7 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
 
     //we need to apply this transformation to each geometric object because of a bug/problem
     //of the old drawing layer (the UNO_NAME_3D_EXTRUDE_DEPTH is an integer value instead of a double )
-    if(!m_xTransformationLogicToScene.is())
+    if(!m_xTransformationLogicToScene)
     {
         ::basegfx::B3DHomMatrix aMatrix;
         double MinX = getLogicMinX();
@@ -162,9 +164,9 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
 
         aMatrix = m_aMatrixScreenToScene*aMatrix;
 
-        m_xTransformationLogicToScene = new Linear3DTransformation(B3DHomMatrixToHomogenMatrix( aMatrix ),m_bSwapXAndY);
+        m_xTransformationLogicToScene.reset(new Linear3DTransformation(B3DHomMatrixToHomogenMatrix( aMatrix ), m_bSwapXAndY));
     }
-    return m_xTransformationLogicToScene;
+    return m_xTransformationLogicToScene.get();
 }
 
 drawing::Position3D PlottingPositionHelper::transformLogicToScene(
@@ -185,11 +187,9 @@ drawing::Position3D PlottingPositionHelper::transformScaledLogicToScene(
 
     drawing::Position3D aPos( fX, fY, fZ);
 
-    uno::Reference< XTransformation > xTransformation =
+    ::chart::XTransformation2* pTransformation =
         getTransformationScaledLogicToScene();
-    uno::Sequence< double > aSeq =
-        xTransformation->transform( Position3DToSequence(aPos) );
-    return SequenceToPosition3D(aSeq);
+    return pTransformation->transform( aPos );
 }
 
 awt::Point PlottingPositionHelper::transformSceneToScreenPosition( const drawing::Position3D& rScenePosition3D
@@ -409,11 +409,11 @@ void PolarPlottingPositionHelper::setScales( std::vector< ExplicitScaleData >&& 
     return aRet;
 }
 
-uno::Reference< XTransformation > PolarPlottingPositionHelper::getTransformationScaledLogicToScene() const
+::chart::XTransformation2* PolarPlottingPositionHelper::getTransformationScaledLogicToScene() const
 {
-    if( !m_xTransformationLogicToScene.is() )
-        m_xTransformationLogicToScene = new VPolarTransformation(*this);
-    return m_xTransformationLogicToScene;
+    if( !m_xTransformationLogicToScene )
+        m_xTransformationLogicToScene.reset(new VPolarTransformation(*this));
+    return m_xTransformationLogicToScene.get();
 }
 
 double PolarPlottingPositionHelper::getWidthAngleDegree( double& fStartLogicValueOnAngleAxis, double& fEndLogicValueOnAngleAxis ) const

@@ -37,9 +37,9 @@ VPolarTransformation::~VPolarTransformation()
 {
 }
 
-// ____ XTransformation ____
-Sequence< double > SAL_CALL VPolarTransformation::transform(
-                        const Sequence< double >& rSourceValues )
+// ____ XTransformation2 ____
+css::drawing::Position3D VPolarTransformation::transform(
+                        const Sequence< double >& rSourceValues ) const
 {
     double fScaledLogicAngle  = rSourceValues[0];
     double fScaledLogicRadius = rSourceValues[1];
@@ -58,17 +58,30 @@ Sequence< double > SAL_CALL VPolarTransformation::transform(
     //!! applying matrix to vector does ignore translation, so it is important to use a B3DPoint here instead of B3DVector
     ::basegfx::B3DPoint aPoint(fX,fY,fZ);
     ::basegfx::B3DPoint aRet = m_aUnitCartesianToScene * aPoint;
-    return B3DPointToSequence(aRet);
+    return css::drawing::Position3D(aRet.getX(), aRet.getY(), aRet.getZ());
 }
 
-sal_Int32 SAL_CALL VPolarTransformation::getSourceDimension()
+css::drawing::Position3D VPolarTransformation::transform(
+                        const css::drawing::Position3D& rSourceValues ) const
 {
-    return 3;
-}
+    double fScaledLogicAngle  = rSourceValues.PositionX;
+    double fScaledLogicRadius = rSourceValues.PositionY;
 
-sal_Int32 SAL_CALL VPolarTransformation::getTargetDimension()
-{
-    return 3;
+    if( m_aPositionHelper.isSwapXAndY() )
+        std::swap(fScaledLogicAngle,fScaledLogicRadius);
+
+    double fAngleDegree = m_aPositionHelper.transformToAngleDegree( fScaledLogicAngle, false );
+    double fAnglePi     = basegfx::deg2rad(fAngleDegree);
+    double fRadius      = m_aPositionHelper.transformToRadius( fScaledLogicRadius, false);
+
+    double fX=fRadius*cos(fAnglePi);
+    double fY=fRadius*sin(fAnglePi);
+    double fZ=rSourceValues.PositionZ;
+
+    //!! applying matrix to vector does ignore translation, so it is important to use a B3DPoint here instead of B3DVector
+    ::basegfx::B3DPoint aPoint(fX,fY,fZ);
+    ::basegfx::B3DPoint aRet = m_aUnitCartesianToScene * aPoint;
+    return css::drawing::Position3D(aRet.getX(), aRet.getY(), aRet.getZ());
 }
 
 }  // namespace chart
