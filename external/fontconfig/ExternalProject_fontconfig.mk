@@ -25,6 +25,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 		$(gb_RUN_CONFIGURE) ./configure \
 			--disable-shared \
 			--disable-silent-rules \
+			--with-pic \
 			$(if $(filter ANDROID,$(OS)),--with-arch=arm) \
 			--with-expat-includes=$(call gb_UnpackedTarball_get_dir,expat)/lib \
 			--with-expat-lib=$(gb_StaticLibrary_WORKDIR) \
