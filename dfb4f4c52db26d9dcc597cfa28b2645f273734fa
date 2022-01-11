@@ -67,6 +67,40 @@
       "message": "Mike: could you please review this? This makes the bugdoc open (see the crashreport mail), so I think it\u0027s useful to have this in.\n\nOTOH no doubt there is some deeper problem here that we could investigate, given infinite time (which I don\u0027t have).",
       "revId": "dfb4f4c52db26d9dcc597cfa28b2645f273734fa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d0a1c28_d9257b7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-11T11:16:51Z",
+      "side": 1,
+      "message": "Let\u0027s have this workaround merged :-)",
+      "revId": "dfb4f4c52db26d9dcc597cfa28b2645f273734fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4af1bbcd_66f66646",
+        "filename": "editeng/source/editeng/impedit3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-11T11:16:51Z",
+      "side": 1,
+      "message": "This line accesses the preceding array element, just to assign the result to the next one in conditionally disabled block. So it would be logical to move it inside the block (and have a safer workaround - but it seems we didn\u0027t find a case when nPosInArray \u003e pLine-\u003eGetCharPosArray().size() yet, only where they are equal...)",
+      "revId": "dfb4f4c52db26d9dcc597cfa28b2645f273734fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
