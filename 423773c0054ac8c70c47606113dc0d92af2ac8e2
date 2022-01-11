@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7d286c5_b3585131",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-11T14:32:17Z",
+      "side": 1,
+      "message": "Hi ",
+      "revId": "423773c0054ac8c70c47606113dc0d92af2ac8e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af7e740c_f229e259",
+        "filename": "sw/inc/iodetect.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-11T14:32:17Z",
+      "side": 1,
+      "message": "I added the nullptr since it makes the function easier to read, or should it be done by passing false/nullptr without changing the signature of the function?",
+      "revId": "423773c0054ac8c70c47606113dc0d92af2ac8e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
