@@ -81,7 +81,7 @@ bool ExTextOutRenderer::operator()(GenericSalLayout const& rLayout, SalGraphics&
                                    HDC hDC)
 {
     int nStart = 0;
-    Point aPos(0, 0);
+    DevicePoint aPos;
     const GlyphItem* pGlyph;
     const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
     UINT nTextAlign = GetTextAlign(hDC);
@@ -105,8 +105,8 @@ bool ExTextOutRenderer::operator()(GenericSalLayout const& rLayout, SalGraphics&
         if (nCurTextAlign != nNewTextAlign)
             SetTextAlign(hDC, nNewTextAlign);
 
-        ExtTextOutW(hDC, aPos.X(), aPos.Y() + nYOffset, ETO_GLYPH_INDEX, nullptr, &glyphWStr, 1,
-                    nullptr);
+        ExtTextOutW(hDC, aPos.getX(), aPos.getY() + nYOffset, ETO_GLYPH_INDEX, nullptr, &glyphWStr,
+                    1, nullptr);
 
         nCurTextAlign = nNewTextAlign;
     }
