@@ -65,6 +65,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5f64ade_ade969da",
+        "filename": "solenv/gbuild/LinkTarget.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-11T14:30:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fda13614_06cedd4e",
+      "range": {
+        "startLine": 39,
+        "startChar": 10,
+        "endLine": 39,
+        "endChar": 33
+      },
+      "revId": "af33cd0cf8a1f4d2a855ab3c295f779bc52c4cbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49eccaea_844e7e8b",
@@ -78,6 +102,30 @@
       "writtenOn": "2022-01-11T11:16:41Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 13,
+        "startChar": 32,
+        "endLine": 13,
+        "endChar": 39
+      },
+      "revId": "af33cd0cf8a1f4d2a855ab3c295f779bc52c4cbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f1d552e_1816a0f2",
+        "filename": "solenv/gbuild/static.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-11T14:30:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49eccaea_844e7e8b",
       "range": {
         "startLine": 13,
         "startChar": 32,
@@ -135,6 +183,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3942a949_81625260",
+        "filename": "solenv/gbuild/static.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-11T14:30:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "568848c2_56621c7f",
+      "range": {
+        "startLine": 184,
+        "startChar": 14,
+        "endLine": 184,
+        "endChar": 21
+      },
+      "revId": "af33cd0cf8a1f4d2a855ab3c295f779bc52c4cbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08b4aea4_1a6918e2",
@@ -148,6 +220,24 @@
       "writtenOn": "2022-01-11T11:16:41Z",
       "side": 1,
       "message": "maybe this should depend on the python executable?\n$(call gb_ExternalExecutable_get_dependencies,python)",
+      "revId": "af33cd0cf8a1f4d2a855ab3c295f779bc52c4cbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c264489_fde43f02",
+        "filename": "static/CustomTarget_components.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-11T14:30:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08b4aea4_1a6918e2",
       "revId": "af33cd0cf8a1f4d2a855ab3c295f779bc52c4cbc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
