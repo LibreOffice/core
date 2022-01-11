@@ -190,9 +190,7 @@
 #include <unotools/fltrcfg.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/searchopt.hxx>
-#include <unotools/syslocaleoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/settings.hxx>
