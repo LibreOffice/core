@@ -33,6 +33,24 @@
       "message": "I would expect ClearDevFontCache() would get called on changes like this, is that not the case?",
       "revId": "41bf41a3578bad3ef9effd1690115ec4d3591fef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5518d10c_87def048",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-11T13:54:20Z",
+      "side": 1,
+      "message": "This seems to be called from just two places, ImplFreeSalGDI and WinSalGraphics::ClearDevFontCache, the second one definitely calls ClearDevFontCache, and the first one seems only to be called on exit or abort so I suppose I can presume that is indeed the case",
+      "parentUuid": "7a150a0f_07d9562d",
+      "revId": "41bf41a3578bad3ef9effd1690115ec4d3591fef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
