@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "954033a8_81b33d29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-11T13:39:13Z",
+      "side": 1,
+      "message": "Looks like you managed to conflict with yourself in cui/source/dialogs/GraphicTestsDialog.cxx ;-)",
+      "revId": "50a62f75b0f5125756a014452e8e129a7988f379",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
