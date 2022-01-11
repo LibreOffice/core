@@ -16,6 +16,23 @@
       "message": "calc/sheet_operation_spec.js failed, resume.",
       "revId": "dfb4f4c52db26d9dcc597cfa28b2645f273734fa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "857533bb_ebb1622a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-11T07:48:40Z",
+      "side": 1,
+      "message": "online.git calc/row_column_operation_spec.js failed, resume.",
+      "revId": "dfb4f4c52db26d9dcc597cfa28b2645f273734fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
