@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9df0a92e_0810ca83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-11T07:47:52Z",
+      "side": 1,
+      "message": "online.git impress/delete_objects_spec.js failed, resume.",
+      "revId": "7fe9e246c5030aebff4155ab387325cbf2e135a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
