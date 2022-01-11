@@ -17,7 +17,7 @@
 namespace sw
 {
 /**
- * Class resposible to check if a graphic object violates the size
+ * Class responsible to check if a graphic object violates the size
  * constraints and store the results.
  */
 class GraphicSizeViolation final

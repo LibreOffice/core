@@ -25,7 +25,7 @@ namespace sd
 namespace
 {
 /**
- * Intefece for the visitor class, which handles each visited SdrObject
+ * Interfece for the visitor class, which handles each visited SdrObject
  * in the DOM.
  */
 class ModelTraverseHandler
