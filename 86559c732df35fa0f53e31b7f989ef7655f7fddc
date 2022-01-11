@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21ed7105_6179a810",
+        "filename": "lotuswordpro/source/filter/lwpsdwdrawheader.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-11T06:28:12Z",
+      "side": 1,
+      "message": "the n field here is related to the size of the aPts array by something like\n  size \u003d n * 3 + 1\nso technically that could get folded into the std::vector too",
+      "revId": "86559c732df35fa0f53e31b7f989ef7655f7fddc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
