@@ -76,29 +76,38 @@ void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
         cairo_surface_destroy(m_pSurface);
     }
 
+    double fXScale, fYScale;
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Force scaling of the painting
+        fXScale = fYScale = comphelper::LibreOfficeKit::getDPIScale();
+    }
+    else
+    {
+        dl_cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
+        nNewDX *= fXScale;
+        nNewDY *= fYScale;
+    }
+
     if (pBuffer)
     {
-        double fXScale, fYScale;
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            // Force scaling of the painting
-            fXScale = fYScale = comphelper::LibreOfficeKit::getDPIScale();
-        }
-        else
-        {
-            dl_cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
-            nNewDX *= fXScale;
-            nNewDY *= fYScale;
-        }
-
         m_pSurface = cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
                             nNewDX, nNewDY, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nNewDX));
-
+        dl_cairo_surface_set_device_scale(m_pSurface, fXScale, fYScale);
+    }
+    else if(nNewDX <= 32 && nNewDY <= 32)
+    {
+        // Force image-based surface if small. Small VirtualDevice instances are often used for small
+        // temporary bitmaps that will eventually have GetBitmap() called on them, which would cause
+        // X Server roundtrip with Xlib-based surface, which may be way more costly than doing the drawing
+        // in software (which should be fairly cheap for small surfaces anyway).
+        m_pSurface = cairo_surface_create_similar_image(m_pRefSurface, CAIRO_FORMAT_ARGB32, nNewDX, nNewDY);
         dl_cairo_surface_set_device_scale(m_pSurface, fXScale, fYScale);
     }
     else
     {
         m_pSurface = cairo_surface_create_similar(m_pRefSurface, CAIRO_CONTENT_COLOR_ALPHA, nNewDX, nNewDY);
+        // Device scale is inherited in this case.
     }
 }
 

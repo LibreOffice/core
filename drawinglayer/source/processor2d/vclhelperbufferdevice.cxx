@@ -63,6 +63,8 @@ private:
     // virtualdevice because that isn't safe to do at least for Gtk2
     std::map<VclPtr<VirtualDevice>, VclPtr<OutputDevice>> maDeviceTemplates;
 
+    static bool isSizeSuitable(const VclPtr<VirtualDevice>& device, const Size& size);
+
 public:
     VDevBuffer();
     virtual ~VDevBuffer() override;
@@ -98,6 +100,28 @@ VDevBuffer::~VDevBuffer()
     }
 }
 
+bool VDevBuffer::isSizeSuitable(const VclPtr<VirtualDevice>& device, const Size& rSizePixel)
+{
+    if (device->GetOutputWidthPixel() >= rSizePixel.getWidth()
+        && device->GetOutputHeightPixel() >= rSizePixel.getHeight())
+    {
+#if defined(UNX)
+        // HACK: See the small size handling in SvpSalVirtualDevice::CreateSurface().
+        // Make sure to not reuse a larger device when a small one should be preferred.
+        if (device->GetRenderBackendName() == "svp")
+        {
+            if (rSizePixel.getWidth() <= 32 && rSizePixel.getHeight() <= 32
+                && (device->GetOutputWidthPixel() > 32 || device->GetOutputHeightPixel() > 32))
+            {
+                return false;
+            }
+        }
+#endif
+        return true;
+    }
+    return false;
+}
+
 VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel,
                                         bool bTransparent)
 {
@@ -124,9 +148,7 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
                     if (bOkay)
                     {
                         // found is valid
-                        const bool bCandidateOkay(
-                            a->buf->GetOutputWidthPixel() >= rSizePixel.getWidth()
-                            && a->buf->GetOutputHeightPixel() >= rSizePixel.getHeight());
+                        const bool bCandidateOkay = isSizeSuitable(a->buf, rSizePixel);
 
                         if (bCandidateOkay)
                         {
@@ -151,16 +173,14 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
                     {
                         // found is invalid, use candidate
                         aFound = a;
-                        bOkay = aFound->buf->GetOutputWidthPixel() >= rSizePixel.getWidth()
-                                && aFound->buf->GetOutputHeightPixel() >= rSizePixel.getHeight();
+                        bOkay = isSizeSuitable(aFound->buf, rSizePixel);
                     }
                 }
                 else
                 {
                     // none yet, use candidate
                     aFound = a;
-                    bOkay = aFound->buf->GetOutputWidthPixel() >= rSizePixel.getWidth()
-                            && aFound->buf->GetOutputHeightPixel() >= rSizePixel.getHeight();
+                    bOkay = isSizeSuitable(aFound->buf, rSizePixel);
                 }
             }
         }

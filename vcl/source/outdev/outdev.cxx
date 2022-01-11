@@ -230,6 +230,15 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
     return mpGraphics->GetGraphicsData();
 }
 
+OUString OutputDevice::GetRenderBackendName() const
+{
+    if (!mpGraphics && !AcquireGraphics())
+        return {};
+    assert(mpGraphics);
+
+    return mpGraphics->getRenderBackendName();
+}
+
 #if ENABLE_CAIRO_CANVAS
 
 bool OutputDevice::SupportsCairo() const
