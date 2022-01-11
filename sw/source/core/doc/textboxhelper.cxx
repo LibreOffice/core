@@ -1432,15 +1432,20 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const Sdr
 {
     // TODO: do this with group shape textboxes.
     SdrObject* pShpObj = nullptr;
-    //if (pObj)
-    //    pShpObj = pObj;
-    //else
+
     pShpObj = pShape->FindRealSdrObject();
 
     if (pShpObj)
     {
-        if (SdrObject* pFrmObj
-            = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj)->FindRealSdrObject())
+        auto pTextBox = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj);
+        SdrObject* pFrmObj = pTextBox->FindRealSdrObject();
+        if (!pFrmObj)
+        {
+            // During doc-loading there is no ready SdrObj for z-ordering, so create one here and cache it.
+            pFrmObj
+                = SwXTextFrame::GetOrCreateSdrObject(*dynamic_cast<SwFlyFrameFormat*>(pTextBox));
+        }
+        if (pFrmObj)
         {
             // Get the draw model from the doc
             SwDrawModel* pDrawModel
