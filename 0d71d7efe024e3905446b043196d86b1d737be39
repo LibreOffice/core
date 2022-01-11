@@ -16,6 +16,23 @@
       "message": "Hi Xisco. This patch makes a minor change to the Chart Wizard dialog. Can you take a look at it, please?",
       "revId": "0d71d7efe024e3905446b043196d86b1d737be39",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dacec13_6b1c36f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-11T18:06:40Z",
+      "side": 1,
+      "message": "Hi Caolan, could you please take a look at this patch?",
+      "revId": "0d71d7efe024e3905446b043196d86b1d737be39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
