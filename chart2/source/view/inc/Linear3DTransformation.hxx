@@ -18,29 +18,23 @@
  */
 #pragma once
 
-#include <cppuhelper/implbase.hxx>
-#include <com/sun/star/chart2/XTransformation.hpp>
+#include "PlottingPositionHelper.hxx"
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 
 namespace chart
 {
 
-class Linear3DTransformation : public ::cppu::WeakImplHelper<
-    css::chart2::XTransformation
-    >
+class Linear3DTransformation : public XTransformation2
 {
 public:
     Linear3DTransformation( const css::drawing::HomogenMatrix& rHomMatrix, bool bSwapXAndY  );
     virtual ~Linear3DTransformation() override;
 
-    // ____ XTransformation ____
-    /// @see css::chart2::XTransformation
-    virtual css::uno::Sequence< double > SAL_CALL transform(
-        const css::uno::Sequence< double >& rSourceValues ) override;
-    /// @see css::chart2::XTransformation
-    virtual sal_Int32 SAL_CALL getSourceDimension() override;
-    /// @see css::chart2::XTransformation
-    virtual sal_Int32 SAL_CALL getTargetDimension() override;
+    // ____ XTransformation2 ____
+    virtual css::drawing::Position3D transform(
+        const css::drawing::Position3D& rSourceValues ) const override;
+    virtual css::drawing::Position3D transform(
+        const css::uno::Sequence< double >& rSourceValues ) const override;
 
 private:
     css::drawing::HomogenMatrix    m_Matrix;

@@ -34,36 +34,35 @@ namespace chart
 Linear3DTransformation::~Linear3DTransformation()
 {}
 
-// ____ XTransformation ____
-Sequence< double > SAL_CALL Linear3DTransformation::transform(
-                        const Sequence< double >& rSourceValues )
+// ____ XTransformation2 ____
+css::drawing::Position3D Linear3DTransformation::transform(
+                        const Sequence< double >& rSourceValues ) const
 {
     double fX = rSourceValues[0];
     double fY = rSourceValues[1];
     double fZ = rSourceValues[2];
     if(m_bSwapXAndY)
         std::swap(fX,fY);
-    Sequence< double > aNewVec(3);
-    auto pNewVec = aNewVec.getArray();
+    css::drawing::Position3D aNewVec;
     double fZwi;
 
     fZwi = m_Matrix.Line1.Column1 * fX
          + m_Matrix.Line1.Column2 * fY
          + m_Matrix.Line1.Column3 * fZ
          + m_Matrix.Line1.Column4;
-    pNewVec[0] = fZwi;
+    aNewVec.PositionX = fZwi;
 
     fZwi = m_Matrix.Line2.Column1 * fX
          + m_Matrix.Line2.Column2 * fY
          + m_Matrix.Line2.Column3 * fZ
          + m_Matrix.Line2.Column4;
-    pNewVec[1] = fZwi;
+    aNewVec.PositionY = fZwi;
 
     fZwi = m_Matrix.Line3.Column1 * fX
          + m_Matrix.Line3.Column2 * fY
          + m_Matrix.Line3.Column3 * fZ
          + m_Matrix.Line3.Column4;
-    pNewVec[2] = fZwi;
+    aNewVec.PositionZ = fZwi;
 
     fZwi = m_Matrix.Line4.Column1 * fX
          + m_Matrix.Line4.Column2 * fY
@@ -71,21 +70,53 @@ Sequence< double > SAL_CALL Linear3DTransformation::transform(
          + m_Matrix.Line4.Column4;
     if(fZwi != 1.0 && fZwi != 0.0)
     {
-        pNewVec[0] /= fZwi;
-        pNewVec[1] /= fZwi;
-        pNewVec[2] /= fZwi;
+        aNewVec.PositionX /= fZwi;
+        aNewVec.PositionY /= fZwi;
+        aNewVec.PositionZ /= fZwi;
     }
     return aNewVec;
 }
 
-sal_Int32 SAL_CALL Linear3DTransformation::getSourceDimension()
+css::drawing::Position3D Linear3DTransformation::transform(
+                        const css::drawing::Position3D& rSourceValues ) const
 {
-    return 3;
-}
+    double fX = rSourceValues.PositionX;
+    double fY = rSourceValues.PositionY;
+    double fZ = rSourceValues.PositionZ;
+    if(m_bSwapXAndY)
+        std::swap(fX,fY);
+    css::drawing::Position3D aNewVec;
+    double fZwi;
 
-sal_Int32 SAL_CALL Linear3DTransformation::getTargetDimension()
-{
-    return 3;
+    fZwi = m_Matrix.Line1.Column1 * fX
+         + m_Matrix.Line1.Column2 * fY
+         + m_Matrix.Line1.Column3 * fZ
+         + m_Matrix.Line1.Column4;
+    aNewVec.PositionX = fZwi;
+
+    fZwi = m_Matrix.Line2.Column1 * fX
+         + m_Matrix.Line2.Column2 * fY
+         + m_Matrix.Line2.Column3 * fZ
+         + m_Matrix.Line2.Column4;
+    aNewVec.PositionY = fZwi;
+
+    fZwi = m_Matrix.Line3.Column1 * fX
+         + m_Matrix.Line3.Column2 * fY
+         + m_Matrix.Line3.Column3 * fZ
+         + m_Matrix.Line3.Column4;
+    aNewVec.PositionZ = fZwi;
+
+    fZwi = m_Matrix.Line4.Column1 * fX
+         + m_Matrix.Line4.Column2 * fY
+         + m_Matrix.Line4.Column3 * fZ
+         + m_Matrix.Line4.Column4;
+    if(fZwi != 1.0 && fZwi != 0.0)
+    {
+        aNewVec.PositionX /= fZwi;
+        aNewVec.PositionY /= fZwi;
+        aNewVec.PositionZ /= fZwi;
+    }
+    return aNewVec;
 }
 
 }  // namespace chart

@@ -138,11 +138,11 @@ void GridLinePoints::update( double fScaledTickValue )
 
 static void addLine2D( drawing::PointSequenceSequence& rPoints, sal_Int32 nIndex
              , const GridLinePoints& rScaledLogicPoints
-             , const Reference< XTransformation > & xTransformation
+             , const XTransformation2& rTransformation
               )
 {
-    drawing::Position3D aPA = SequenceToPosition3D( xTransformation->transform( rScaledLogicPoints.P0 ) );
-    drawing::Position3D aPB = SequenceToPosition3D( xTransformation->transform( rScaledLogicPoints.P1 ) );
+    drawing::Position3D aPA = rTransformation.transform( SequenceToPosition3D(rScaledLogicPoints.P0) );
+    drawing::Position3D aPB = rTransformation.transform( SequenceToPosition3D(rScaledLogicPoints.P1) );
 
     rPoints.getArray()[nIndex]
         = { { static_cast<sal_Int32>(aPA.PositionX), static_cast<sal_Int32>(aPA.PositionY) },
@@ -151,13 +151,13 @@ static void addLine2D( drawing::PointSequenceSequence& rPoints, sal_Int32 nIndex
 
 static void addLine3D( std::vector<std::vector<css::drawing::Position3D>>& rPoints, sal_Int32 nIndex
             , const GridLinePoints& rBasePoints
-            , const Reference< XTransformation > & xTransformation )
+            , const XTransformation2 & rTransformation )
 {
-    drawing::Position3D aPoint = SequenceToPosition3D( xTransformation->transform( rBasePoints.P0 ) );
+    drawing::Position3D aPoint =rTransformation.transform( rBasePoints.P0 );
     AddPointToPoly( rPoints, aPoint, nIndex );
-    aPoint = SequenceToPosition3D( xTransformation->transform( rBasePoints.P1 ) );
+    aPoint = rTransformation.transform( rBasePoints.P1 );
     AddPointToPoly( rPoints, aPoint, nIndex );
-    aPoint = SequenceToPosition3D( xTransformation->transform( rBasePoints.P2 ) );
+    aPoint = rTransformation.transform( rBasePoints.P2 );
     AddPointToPoly( rPoints, aPoint, nIndex );
 }
 
@@ -255,7 +255,7 @@ void VCartesianGrid::createShapes()
                 if( !tick.bPaintIt )
                     continue;
                 aGridLinePoints.update( tick.fScaledTickValue );
-                addLine2D( aPoints, nRealPointCount, aGridLinePoints, m_pPosHelper->getTransformationScaledLogicToScene() );
+                addLine2D( aPoints, nRealPointCount, aGridLinePoints, *m_pPosHelper->getTransformationScaledLogicToScene() );
                 nRealPointCount++;
             }
             aPoints.realloc(nRealPointCount);
@@ -295,7 +295,7 @@ void VCartesianGrid::createShapes()
                 }
 
                 aGridLinePoints.update( tick.fScaledTickValue );
-                addLine3D( aPoints, nPolyIndex, aGridLinePoints, m_pPosHelper->getTransformationScaledLogicToScene() );
+                addLine3D( aPoints, nPolyIndex, aGridLinePoints, *m_pPosHelper->getTransformationScaledLogicToScene() );
                 nRealPointCount+=3;
                 ++nPolyIndex;
             }
