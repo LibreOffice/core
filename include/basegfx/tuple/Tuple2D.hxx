@@ -71,6 +71,12 @@ public:
     /// Set Y-Coordinate of 2D Tuple
     void setY(TYPE fY) { mnY = fY; }
 
+    /// Adjust X-Coordinate of 2D Tuple
+    void adjustX(TYPE fX) { mnX += fX; }
+
+    /// Adjust Y-Coordinate of 2D Tuple
+    void adjustY(TYPE fY) { mnY += fY; }
+
     // comparators with tolerance
 
     template <typename T = TYPE, std::enable_if_t<std::is_integral_v<T>, int> = 0>
