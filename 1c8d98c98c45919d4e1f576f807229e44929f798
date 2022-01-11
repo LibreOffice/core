@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d337bb80_5c0b9793",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-11T21:14:03Z",
+      "side": 1,
+      "message": "Second and last prerequisite part (which will need some fixes) before changes on the existing.",
+      "revId": "1c8d98c98c45919d4e1f576f807229e44929f798",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
