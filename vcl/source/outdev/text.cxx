@@ -187,9 +187,9 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
 
 tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout ) const
 {
-    Point aPoint = rSalLayout.GetDrawPosition();
-    tools::Long nX = aPoint.X();
-    tools::Long nY = aPoint.Y();
+    DevicePoint aPoint = rSalLayout.GetDrawPosition();
+    tools::Long nX = aPoint.getX();
+    tools::Long nY = aPoint.getY();
 
     tools::Long nWidth = rSalLayout.GetTextWidth();
     tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
@@ -2366,7 +2366,8 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
             }
 
             Point aRotatedOfs( mnTextOffX, mnTextOffY );
-            aRotatedOfs -= pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
+            DevicePoint aPos = pSalLayout->GetDrawPosition(DevicePoint(nXOffset, 0));
+            aRotatedOfs -= Point(aPos.getX(), aPos.getY());
             aPixelRect += aRotatedOfs;
             rRect = PixelToLogic( aPixelRect );
             if( mbMap )
@@ -2433,9 +2434,9 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
             int nWidthFactor = pSalLayout->GetUnitsPerPixel();
             if( nXOffset | mnTextOffX | mnTextOffY )
             {
-                Point aRotatedOfs( mnTextOffX*nWidthFactor, mnTextOffY*nWidthFactor );
-                aRotatedOfs -= pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
-                aMatrix.translate( aRotatedOfs.X(), aRotatedOfs.Y() );
+                DevicePoint aRotatedOfs( mnTextOffX*nWidthFactor, mnTextOffY*nWidthFactor );
+                aRotatedOfs -= pSalLayout->GetDrawPosition(DevicePoint(nXOffset, 0));
+                aMatrix.translate( aRotatedOfs.getX(), aRotatedOfs.getY() );
             }
 
             if( nWidthFactor > 1 )

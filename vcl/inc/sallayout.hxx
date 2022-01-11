@@ -64,7 +64,7 @@ public:
     sal_Int32       GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
     DeviceCoordinate FillDXArray(std::vector<DeviceCoordinate>* pDXArray) const override;
     void            GetCaretPositions(int nArraySize, sal_Int32* pCaretXArray) const override;
-    bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
+    bool            GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr,
                                  const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const override;
     bool            GetOutline(basegfx::B2DPolyPolygonVector&) const override;
@@ -121,7 +121,7 @@ public:
     LogicalFontInstance& GetFont() const
         { return *m_GlyphItems.GetFont(); }
 
-    bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
+    bool            GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr,
                                  const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const override;
 
