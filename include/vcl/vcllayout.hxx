@@ -72,7 +72,7 @@ public:
     const Point&    DrawBase() const                        { return maDrawBase; }
     Point&          DrawOffset()                            { return maDrawOffset; }
     const Point&    DrawOffset() const                      { return maDrawOffset; }
-    Point           GetDrawPosition( const Point& rRelative = Point(0,0) ) const;
+    DevicePoint     GetDrawPosition( const DevicePoint& rRelative = DevicePoint(0,0) ) const;
 
     virtual bool    LayoutText( vcl::text::ImplLayoutArgs&, const SalLayoutGlyphsImpl* ) = 0;  // first step of layouting
     virtual void    AdjustLayout( vcl::text::ImplLayoutArgs& );    // adjusting after fallback etc.
@@ -90,7 +90,7 @@ public:
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
-    virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
+    virtual bool    GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr,
                                  const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const = 0;
     virtual bool GetOutline(basegfx::B2DPolyPolygonVector&) const;

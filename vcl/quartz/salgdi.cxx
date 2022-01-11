@@ -386,7 +386,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
     CTFontRef pFont = static_cast<CTFontRef>(CFDictionaryGetValue(rStyle.GetStyleDict(), kCTFontAttributeName));
     CGAffineTransform aRotMatrix = CGAffineTransformMakeRotation(-rStyle.mfFontRotation);
 
-    Point aPos;
+    DevicePoint aPos;
     const GlyphItem* pGlyph;
     std::vector<CGGlyph> aGlyphIds;
     std::vector<CGPoint> aGlyphPos;
@@ -394,7 +394,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
-        CGPoint aGCPos = CGPointMake(aPos.X(), -aPos.Y());
+        CGPoint aGCPos = CGPointMake(aPos.getX(), -aPos.getY());
 
         // Whether the glyph should be upright in vertical mode or not
         bool bUprightGlyph = false;
