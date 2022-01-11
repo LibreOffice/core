@@ -123,7 +123,7 @@ void WmfTest::testTdf88163NonPlaceableWmf()
     // Mac:     With fix: 3230, without fix: ~ 8000
     // Windows: With fix: 3303, without fix: ~ 8000
     auto x = getXPath(pDoc, "/metafile/push[2]/font[1]", "height");
-    CPPUNIT_ASSERT_GREATER(sal_Int32(3000), x.toInt32());
+    CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(3000), x.toInt32());
     CPPUNIT_ASSERT_LESS(sal_Int32(3500), x.toInt32());
 
     // Fails without the fix: Expected: 7359, Actual: 7336
@@ -161,7 +161,7 @@ void WmfTest::testTdf88163PlaceableWmf()
     // The fix does not affect the font size
     // Linux: 300 - Mac: 309 - Windows: 316
     auto x = getXPath(pDoc, "/metafile/push[2]/font[1]", "height");
-    CPPUNIT_ASSERT_GREATER(sal_Int32(290), x.toInt32());
+    CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(287), x.toInt32());
     CPPUNIT_ASSERT_LESS(sal_Int32(320), x.toInt32());
 
     // Fails without the fix: Expected: 1900, Actual: 19818
