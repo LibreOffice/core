@@ -12,11 +12,13 @@
 #include <string_view>
 
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 
 #include <comphelper/configuration.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <queue>
 #include <swmodeltestbase.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
@@ -106,6 +108,53 @@ CPPUNIT_TEST_FIXTURE(Test, testDontAddNewStyles)
     // - Actual  : 1
     // i.e. builtin styles were added to the export result, even if we opted out.
     assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Caption']", 0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(TestWPGZOrder, "testWPGZOrder.docx")
+{
+    // Check if the load failed.
+    CPPUNIT_ASSERT(mxComponent);
+
+    // Get the WPG
+    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xGroupProperties(xGroup, uno::UNO_QUERY_THROW);
+
+    // Initialize a queue for subgroups
+    std::queue<uno::Reference<drawing::XShapes>> xGroupList;
+    xGroupList.push(xGroup);
+
+    // Every textbox shall be visble.
+    while (xGroupList.size())
+    {
+        // Get the first group
+        xGroup = xGroupList.front();
+        xGroupList.pop();
+        for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
+        {
+            // Get the child shape
+            uno::Reference<beans::XPropertySet> xChildShapeProperties(xGroup->getByIndex(i),
+                uno::UNO_QUERY_THROW);
+            // Check for textbox
+            if (!xChildShapeProperties->getPropertyValue("TextBox").get<bool>())
+            {
+                // Is this a Group Shape? Put it into the queue.
+                uno::Reference<drawing::XShapes> xInnerGroup(xGroup->getByIndex(i), uno::UNO_QUERY);
+                if (xInnerGroup)
+                    xGroupList.push(xInnerGroup);
+                continue;
+            }
+
+            // Get the textbox properties
+            uno::Reference<beans::XPropertySet> xTextBoxFrameProperties(
+                xChildShapeProperties->getPropertyValue("TextBoxContent"), uno::UNO_QUERY_THROW);
+
+            // Assert that the textbox ZOrder greater than the groupshape
+            CPPUNIT_ASSERT_GREATER(xGroupProperties->getPropertyValue("ZOrder").get<long>(),
+                xTextBoxFrameProperties->getPropertyValue("ZOrder").get<long>());
+            // Before the fix, this failed because that was less, and the textboxes were covered.
+        }
+
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
