@@ -986,12 +986,13 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
     }
 
 #if VCL_FLOAT_DEVICE_PIXEL
-    std::unique_ptr<DeviceCoordinate[]> pDXPixelArray;
+    std::unique_ptr<std::vector<DeviceCoordinate>> xDXPixelArray;
     if(pDXAry)
     {
-        pDXPixelArray.reset(new DeviceCoordinate[nLen]);
+        xDXPixelArray.reset(new std::vector<DeviceCoordinate>(nLen));
     }
-    DeviceCoordinate nWidth = pSalLayout->FillDXArray( pDXPixelArray.get() );
+    std::vector<DeviceCoordinate>* pDXPixelArray = xDXPixelArray.get();
+    DeviceCoordinate nWidth = pSalLayout->FillDXArray(pDXPixelArray);
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
 
     // convert virtual char widths to virtual absolute positions
@@ -999,7 +1000,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
     {
         for( int i = 1; i < nLen; ++i )
         {
-            pDXPixelArray[ i ] += pDXPixelArray[ i-1 ];
+            (*pDXPixelArray)[i] += (*pDXPixelArray)[i - 1];
         }
     }
     if( mbMap )
@@ -1008,7 +1009,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
         {
             for( int i = 0; i < nLen; ++i )
             {
-                pDXPixelArray[i] = ImplDevicePixelToLogicWidth( pDXPixelArray[i] );
+                (*pDXPixelArray)[i] = ImplDevicePixelToLogicWidth((*pDXPixelArray)[i]);
             }
         }
         nWidth = ImplDevicePixelToLogicWidth( nWidth );
@@ -1019,7 +1020,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
         {
             for( int i = 0; i < nLen; ++i )
             {
-                pDXPixelArray[i] /= nWidthFactor;
+                (*pDXPixelArray)[i] /= nWidthFactor;
             }
         }
         nWidth /= nWidthFactor;
@@ -1029,7 +1030,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
         pDXAry->resize(nLen);
         for( int i = 0; i < nLen; ++i )
         {
-            (*pDXAry)[i] = basegfx::fround(pDXPixelArray[i]);
+            (*pDXAry)[i] = basegfx::fround((*pDXPixelArray)[i]);
         }
     }
     return basegfx::fround(nWidth);
@@ -1361,7 +1362,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
             pDXPixelArray = xDXPixelArray.get();
             for( int i = 0; i < nLen; ++i )
             {
-                pDXPixelArray[i] = (*pDXArray)[i];
+                pDXPixelArray[i] = pDXArray[i];
             }
 #else /* !VCL_FLOAT_DEVICE_PIXEL */
             pDXPixelArray = const_cast<DeviceCoordinate*>(pDXArray.data());

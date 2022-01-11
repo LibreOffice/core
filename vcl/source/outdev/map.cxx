@@ -1824,9 +1824,8 @@ DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( tools::Long nWidth 
         return static_cast<DeviceCoordinate>(nWidth);
 
 #if VCL_FLOAT_DEVICE_PIXEL
-    return (double)nWidth * maMapRes.mfScaleX * mnDPIX;
+    return ImplLogicToPixel(static_cast<double>(nWidth), mnDPIX, maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
 #else
-
     return ImplLogicToPixel(nWidth, mnDPIX, maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
 #endif
 }
