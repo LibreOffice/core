@@ -16,6 +16,23 @@
       "message": "Just found this little gem for the WASM build...",
       "revId": "738498460d4a18d7a6bcb47d11b570019ed8be1a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeb9dcd0_b3ae60e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-11T06:23:24Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "738498460d4a18d7a6bcb47d11b570019ed8be1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
