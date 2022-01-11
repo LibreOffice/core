@@ -2861,6 +2861,13 @@ void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem
 
     // First cell in a row.
     bool bOuter = rFrame.IsCellFrame() && rFrame.GetUpper()->GetLower() == &rFrame;
+
+    if (bWordTableCell && bOuter)
+    {
+        // First vs secondary and inner vs outer is the other way around in Word.
+        aL.MirrorSelf();
+    }
+
     SwLineEntry aLeft  (nLeft,   nTop,  nBottom, bOuter,
             bVert ? aB                         : (bR2L ? aR : aL));
     if (bWordTableCell && rBoxItem.GetLeft())
