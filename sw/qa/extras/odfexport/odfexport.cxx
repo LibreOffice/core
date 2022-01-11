@@ -51,6 +51,7 @@
 #include <svl/PasswordHelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <docufld.hxx> // for SwHiddenTextField::ParseIfFieldDefinition() method call
 #include <unoprnms.hxx>
@@ -80,47 +81,24 @@ public:
     {
         return true;
     }
-
-    virtual std::unique_ptr<Resetter> preTest(const char* pFilename) override
-    {
-        if (pFilename == std::string_view("fdo58949.docx"))
-        {
-            std::unique_ptr<Resetter> pResetter(new Resetter(
-                [] () {
-                    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                            comphelper::ConfigurationChanges::create());
-                    officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::set(true, pBatch);
-                    return pBatch->commit();
-                }));
-
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::set(false, pBatch);
-            pBatch->commit();
-            return pResetter;
-        }
-        if (pFilename == std::string_view("2_MathType3.docx"))
-        {
-            std::unique_ptr<Resetter> pResetter(new Resetter(
-                [this] () {
-                    mpFilter = "writer8";
-                    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                            comphelper::ConfigurationChanges::create());
-                    officecfg::Office::Common::Cache::Writer::OLE_Objects::set(20, pBatch);
-                    return pBatch->commit();
-                }));
-            mpFilter = "OpenDocument Text Flat XML"; // doesn't happen with ODF package
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                    comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Cache::Writer::OLE_Objects::set(1, pBatch);
-            pBatch->commit();
-            return pResetter;
-        }
-        return nullptr;
-    }
 };
 
-DECLARE_ODFEXPORT_TEST(testMathObjectFlatExport, "2_MathType3.docx")
+CPPUNIT_TEST_FIXTURE(Test, testMathObjectFlatExport)
 {
+    comphelper::ScopeGuard g([this]() {
+        mpFilter = "writer8";
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Cache::Writer::OLE_Objects::set(20, pBatch);
+        return pBatch->commit();
+    });
+    mpFilter = "OpenDocument Text Flat XML"; // doesn't happen with ODF package
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Cache::Writer::OLE_Objects::set(1, pBatch);
+    pBatch->commit();
+    loadAndReload("2_MathType3.docx");
+
     uno::Reference<util::XModifiable> xModifiable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(!xModifiable->isModified());
     // see preTest(), set the OLE cache to 1 for this test
@@ -901,8 +879,21 @@ DECLARE_ODFEXPORT_TEST(testTdf115815, "tdf115815.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("Lorem "), sTextBeforeAnnotation);
 }
 
-DECLARE_ODFEXPORT_TEST(testFdo58949, "fdo58949.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo58949)
 {
+    comphelper::ScopeGuard g([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::set(true, pBatch);
+        pBatch->commit();
+    });
+
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::set(false, pBatch);
+    pBatch->commit();
+    loadAndReload("fdo58949.docx");
+
     /*
      * The problem was that the exporter didn't insert "Obj102" to the
      * resulting zip file. No idea how to check for "broken" (missing OLE data
