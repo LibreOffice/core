@@ -149,7 +149,7 @@ static void addLine2D( drawing::PointSequenceSequence& rPoints, sal_Int32 nIndex
             { static_cast<sal_Int32>(aPB.PositionX), static_cast<sal_Int32>(aPB.PositionY) } };
 }
 
-static void addLine3D( drawing::PolyPolygonShape3D& rPoints, sal_Int32 nIndex
+static void addLine3D( std::vector<std::vector<css::drawing::Position3D>>& rPoints, sal_Int32 nIndex
             , const GridLinePoints& rBasePoints
             , const Reference< XTransformation > & xTransformation )
 {
@@ -281,10 +281,8 @@ void VCartesianGrid::createShapes()
             GridLinePoints aGridLinePoints( m_pPosHelper, m_nDimensionIndex, m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
 
             sal_Int32 nPointCount = (*aDepthIter).size();
-            drawing::PolyPolygonShape3D aPoints;
-            aPoints.SequenceX.realloc(nPointCount);
-            aPoints.SequenceY.realloc(nPointCount);
-            aPoints.SequenceZ.realloc(nPointCount);
+            std::vector<std::vector<css::drawing::Position3D>> aPoints;
+            aPoints.resize(nPointCount);
 
             sal_Int32 nRealPointCount = 0;
             sal_Int32 nPolyIndex = 0;
@@ -301,9 +299,7 @@ void VCartesianGrid::createShapes()
                 nRealPointCount+=3;
                 ++nPolyIndex;
             }
-            aPoints.SequenceX.realloc(nRealPointCount);
-            aPoints.SequenceY.realloc(nRealPointCount);
-            aPoints.SequenceZ.realloc(nRealPointCount);
+            aPoints.resize(nRealPointCount);
             ShapeFactory::createLine3D( xTarget, aPoints, aLinePropertiesList[nDepth] );
         }
     }

@@ -294,9 +294,7 @@ void VDataSeries::releaseShapes()
     m_xFrontSubGroupShape.set(nullptr);
     m_xBackSubGroupShape.set(nullptr);
 
-    m_aPolyPolygonShape3D.SequenceX.realloc(0);
-    m_aPolyPolygonShape3D.SequenceY.realloc(0);
-    m_aPolyPolygonShape3D.SequenceZ.realloc(0);
+    m_aPolyPolygonShape3D.clear();
     m_nPolygonIndex = 0;
 }
 

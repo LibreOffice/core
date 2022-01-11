@@ -85,9 +85,16 @@ OOO_DLLPUBLIC_CHARTTOOLS
 void AddPointToPoly( css::drawing::PolyPolygonShape3D& rPoly
                 , const css::drawing::Position3D& rPos
                 , sal_Int32 nSequenceIndex=0 );
+OOO_DLLPUBLIC_CHARTTOOLS
+void AddPointToPoly( std::vector<std::vector<css::drawing::Position3D>>& rPoly
+                , const css::drawing::Position3D& rPos
+                , sal_Int32 nSequenceIndex=0 );
 
 /** get a single Point from a Polygon
 */
+OOO_DLLPUBLIC_CHARTTOOLS css::drawing::Position3D getPointFromPoly(
+                  const std::vector<std::vector<css::drawing::Position3D>>& rPolygon
+                , sal_Int32 nPointIndex, sal_Int32 nPolyIndex );
 OOO_DLLPUBLIC_CHARTTOOLS css::drawing::Position3D getPointFromPoly(
                   const css::drawing::PolyPolygonShape3D& rPolygon
                 , sal_Int32 nPointIndex, sal_Int32 nPolyIndex );
@@ -95,11 +102,14 @@ OOO_DLLPUBLIC_CHARTTOOLS css::drawing::Position3D getPointFromPoly(
 OOO_DLLPUBLIC_CHARTTOOLS
 void addPolygon( css::drawing::PolyPolygonShape3D& rRet
                 , const css::drawing::PolyPolygonShape3D& rAdd );
+OOO_DLLPUBLIC_CHARTTOOLS
+void addPolygon( std::vector<std::vector<css::drawing::Position3D>>& rRet
+                , const std::vector<std::vector<css::drawing::Position3D>>& rAdd );
 /** PolyPolygonShape3D + PolyPolygonShape3D -> PolyPolygonShape3D
 */
 OOO_DLLPUBLIC_CHARTTOOLS
-void appendPoly( css::drawing::PolyPolygonShape3D& rRet
-                , const css::drawing::PolyPolygonShape3D& rAdd );
+void appendPoly( std::vector<std::vector<css::drawing::Position3D>>& rRet
+                , const std::vector<std::vector<css::drawing::Position3D>>& rAdd );
 
 /** PolyPolygonBezierCoords -> PolyPolygonShape3D
 */
@@ -112,12 +122,18 @@ css::drawing::PolyPolygonShape3D BezierToPoly(
 OOO_DLLPUBLIC_CHARTTOOLS
 css::drawing::PointSequenceSequence PolyToPointSequence(
                 const css::drawing::PolyPolygonShape3D& rPolyPolygon );
+OOO_DLLPUBLIC_CHARTTOOLS
+css::drawing::PointSequenceSequence PolyToPointSequence(
+                const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon );
 
 /** PolyPolygonShape3D ->  basegfx::B2DPolyPolygon (2D)
 */
 OOO_DLLPUBLIC_CHARTTOOLS
 basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
                 const css::drawing::PolyPolygonShape3D& rPolyPolygon );
+OOO_DLLPUBLIC_CHARTTOOLS
+basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
+                const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon );
 
 /** drawing::PointSequenceSequence + drawing::PointSequenceSequence
 */

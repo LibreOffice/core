@@ -22,6 +22,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 
 namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
+namespace com::sun::star::drawing { struct Position3D; }
 
 namespace chart
 {
@@ -47,6 +48,11 @@ public:
                                 const css::drawing::PolyPolygonShape3D& rPolygon
                                 , const ::basegfx::B2DRectangle& rRectangle
                                 , css::drawing::PolyPolygonShape3D& aResult
+                                , bool bSplitPiecesToDifferentPolygons = true );
+    static void clipPolygonAtRectangle(
+                                const std::vector<std::vector<css::drawing::Position3D>>& rPolygon
+                                , const ::basegfx::B2DRectangle& rRectangle
+                                , std::vector<std::vector<css::drawing::Position3D>>& aResult
                                 , bool bSplitPiecesToDifferentPolygons = true );
 };
 

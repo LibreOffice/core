@@ -20,8 +20,10 @@
 #pragma once
 
 #include <sal/types.h>
+#include <vector>
 
 namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
+namespace com::sun::star::drawing { struct Position3D; }
 
 namespace chart
 {
@@ -33,10 +35,19 @@ public:
             const css::drawing::PolyPolygonShape3D& rPoints
             , css::drawing::PolyPolygonShape3D& rResult
             , sal_uInt32 nGranularity );
+    static void CalculateCubicSplines(
+            const std::vector<std::vector<css::drawing::Position3D>>& rPoints
+            , std::vector<std::vector<css::drawing::Position3D>>& rResult
+            , sal_uInt32 nGranularity );
 
     static void CalculateBSplines(
             const css::drawing::PolyPolygonShape3D& rPoints
             , css::drawing::PolyPolygonShape3D& rResult
+            , sal_uInt32 nGranularity
+            , sal_uInt32 nSplineDepth );
+    static void CalculateBSplines(
+            const std::vector<std::vector<css::drawing::Position3D>>& rPoints
+            , std::vector<std::vector<css::drawing::Position3D>>& rResult
             , sal_uInt32 nGranularity
             , sal_uInt32 nSplineDepth );
 };

@@ -154,126 +154,95 @@ void AreaChart::addSeries( std::unique_ptr<VDataSeries> pSeries, sal_Int32 zSlot
     VSeriesPlotter::addSeries( std::move(pSeries), zSlot, xSlot, ySlot );
 }
 
-static void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, PlottingPositionHelper& rPosHelper )
+static void lcl_removeDuplicatePoints( std::vector<std::vector<css::drawing::Position3D>>& rPolyPoly, PlottingPositionHelper& rPosHelper )
 {
-    sal_Int32 nPolyCount = rPolyPoly.SequenceX.getLength();
+    sal_Int32 nPolyCount = rPolyPoly.size();
     if(!nPolyCount)
         return;
 
-    drawing::PolyPolygonShape3D aTmp;
-    aTmp.SequenceX.realloc(nPolyCount);
-    aTmp.SequenceY.realloc(nPolyCount);
-    aTmp.SequenceZ.realloc(nPolyCount);
+    // TODO we could do with without a temporary array
+    std::vector<std::vector<css::drawing::Position3D>> aTmp;
+    aTmp.resize(nPolyCount);
 
     for( sal_Int32 nPolygonIndex = 0; nPolygonIndex<nPolyCount; nPolygonIndex++ )
     {
-        drawing::DoubleSequence* pOuterSourceX = &rPolyPoly.SequenceX.getArray()[nPolygonIndex];
-        drawing::DoubleSequence* pOuterSourceY = &rPolyPoly.SequenceY.getArray()[nPolygonIndex];
-        drawing::DoubleSequence* pOuterSourceZ = &rPolyPoly.SequenceZ.getArray()[nPolygonIndex];
+        std::vector<css::drawing::Position3D>* pOuterSource = &rPolyPoly[nPolygonIndex];
+        std::vector<css::drawing::Position3D>* pOuterTarget = &aTmp[nPolygonIndex];
 
-        drawing::DoubleSequence* pOuterTargetX = &aTmp.SequenceX.getArray()[nPolygonIndex];
-        drawing::DoubleSequence* pOuterTargetY = &aTmp.SequenceY.getArray()[nPolygonIndex];
-        drawing::DoubleSequence* pOuterTargetZ = &aTmp.SequenceZ.getArray()[nPolygonIndex];
-
-        sal_Int32 nPointCount = pOuterSourceX->getLength();
+        sal_Int32 nPointCount = pOuterSource->size();
         if( !nPointCount )
             continue;
 
-        pOuterTargetX->realloc(nPointCount);
-        pOuterTargetY->realloc(nPointCount);
-        pOuterTargetZ->realloc(nPointCount);
+        pOuterTarget->resize(nPointCount);
 
-        double* pSourceX = pOuterSourceX->getArray();
-        double* pSourceY = pOuterSourceY->getArray();
-        double* pSourceZ = pOuterSourceZ->getArray();
-
-        double* pTargetX = pOuterTargetX->getArray();
-        double* pTargetY = pOuterTargetY->getArray();
-        double* pTargetZ = pOuterTargetZ->getArray();
+        css::drawing::Position3D* pSource = pOuterSource->data();
+        css::drawing::Position3D* pTarget = pOuterTarget->data();
 
         //copy first point
-        *pTargetX=*pSourceX++;
-        *pTargetY=*pSourceY++;
-        *pTargetZ=*pSourceZ++;
+        *pTarget=*pSource++;
         sal_Int32 nTargetPointCount=1;
 
         for( sal_Int32 nSource=1; nSource<nPointCount; nSource++ )
         {
-            if( !rPosHelper.isSameForGivenResolution( *pTargetX, *pTargetY, *pTargetZ
-                                                   , *pSourceX, *pSourceY, *pSourceZ ) )
+            if( !rPosHelper.isSameForGivenResolution( pTarget->PositionX, pTarget->PositionY, pTarget->PositionZ
+                                                   , pSource->PositionX, pSource->PositionY, pSource->PositionZ ) )
             {
-                pTargetX++; pTargetY++; pTargetZ++;
-                *pTargetX=*pSourceX;
-                *pTargetY=*pSourceY;
-                *pTargetZ=*pSourceZ;
+                pTarget++;
+                *pTarget=*pSource;
                 nTargetPointCount++;
             }
-            pSourceX++; pSourceY++; pSourceZ++;
+            pSource++;
         }
 
         //free unused space
         if( nTargetPointCount<nPointCount )
         {
-            pOuterTargetX->realloc(nTargetPointCount);
-            pOuterTargetY->realloc(nTargetPointCount);
-            pOuterTargetZ->realloc(nTargetPointCount);
+            pOuterTarget->resize(nTargetPointCount);
         }
 
-        pOuterSourceX->realloc(0);
-        pOuterSourceY->realloc(0);
-        pOuterSourceZ->realloc(0);
+        pOuterSource->clear();
     }
 
     //free space
-    rPolyPoly.SequenceX.realloc(nPolyCount);
-    rPolyPoly.SequenceY.realloc(nPolyCount);
-    rPolyPoly.SequenceZ.realloc(nPolyCount);
+    rPolyPoly.resize(nPolyCount);
 
-    rPolyPoly=aTmp;
+    rPolyPoly = std::move(aTmp);
 }
 
-bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, chart2::CurveStyle eCurveStyle, PlottingPositionHelper const * pPosHelper, drawing::PolyPolygonShape3D &aPoly )
+bool AreaChart::create_stepped_line(
+        std::vector<std::vector<css::drawing::Position3D>> aStartPoly,
+        chart2::CurveStyle eCurveStyle,
+        PlottingPositionHelper const * pPosHelper,
+        std::vector<std::vector<css::drawing::Position3D>> &aPoly )
 {
-    sal_uInt32 nOuterCount = aStartPoly.SequenceX.getLength();
+    sal_uInt32 nOuterCount = aStartPoly.size();
     if ( !nOuterCount )
         return false;
 
-    drawing::PolyPolygonShape3D aSteppedPoly;
-    aSteppedPoly.SequenceX.realloc(nOuterCount);
-    aSteppedPoly.SequenceY.realloc(nOuterCount);
-    aSteppedPoly.SequenceZ.realloc(nOuterCount);
+    std::vector<std::vector<css::drawing::Position3D>> aSteppedPoly;
+    aSteppedPoly.resize(nOuterCount);
 
-    auto pSequenceX = aSteppedPoly.SequenceX.getArray();
-    auto pSequenceY = aSteppedPoly.SequenceY.getArray();
-    auto pSequenceZ = aSteppedPoly.SequenceZ.getArray();
+    auto pSequence = aSteppedPoly.data();
 
     for( sal_uInt32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
     {
-        if( aStartPoly.SequenceX[nOuter].getLength() <= 1 )
+        if( aStartPoly[nOuter].size() <= 1 )
             continue; //we need at least two points
 
-        sal_uInt32 nMaxIndexPoints = aStartPoly.SequenceX[nOuter].getLength()-1; // is >1
+        sal_uInt32 nMaxIndexPoints = aStartPoly[nOuter].size()-1; // is >1
         sal_uInt32 nNewIndexPoints = 0;
         if ( eCurveStyle==CurveStyle_STEP_START || eCurveStyle==CurveStyle_STEP_END)
             nNewIndexPoints = nMaxIndexPoints * 2 + 1;
         else
             nNewIndexPoints = nMaxIndexPoints * 3 + 1;
 
-        const double* pOldX = aStartPoly.SequenceX[nOuter].getConstArray();
-        const double* pOldY = aStartPoly.SequenceY[nOuter].getConstArray();
-        const double* pOldZ = aStartPoly.SequenceZ[nOuter].getConstArray();
+        const css::drawing::Position3D* pOld = aStartPoly[nOuter].data();
 
-        pSequenceX[nOuter].realloc( nNewIndexPoints );
-        pSequenceY[nOuter].realloc( nNewIndexPoints );
-        pSequenceZ[nOuter].realloc( nNewIndexPoints );
+        pSequence[nOuter].resize( nNewIndexPoints );
 
-        double* pNewX = pSequenceX[nOuter].getArray();
-        double* pNewY = pSequenceY[nOuter].getArray();
-        double* pNewZ = pSequenceZ[nOuter].getArray();
+        css::drawing::Position3D* pNew = pSequence[nOuter].data();
 
-        pNewX[0] = pOldX[0];
-        pNewY[0] = pOldY[0];
-        pNewZ[0] = pOldZ[0];
+        pNew[0] = pOld[0];
         for( sal_uInt32 oi = 0; oi < nMaxIndexPoints; oi++ )
         {
             switch ( eCurveStyle )
@@ -286,13 +255,11 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
                              O-----+
                      */
                     // create the intermediate point
-                    pNewX[1+oi*2] = pOldX[oi+1];
-                    pNewY[1+oi*2] = pOldY[oi];
-                    pNewZ[1+oi*2] = pOldZ[oi];
+                    pNew[1+oi*2].PositionX = pOld[oi+1].PositionX;
+                    pNew[1+oi*2].PositionY = pOld[oi].PositionY;
+                    pNew[1+oi*2].PositionZ = pOld[oi].PositionZ;
                     // and now the normal one
-                    pNewX[1+oi*2+1] = pOldX[oi+1];
-                    pNewY[1+oi*2+1] = pOldY[oi+1];
-                    pNewZ[1+oi*2+1] = pOldZ[oi+1];
+                    pNew[1+oi*2+1] = pOld[oi+1];
                     break;
                 case CurveStyle_STEP_END:
                      /**    +------O
@@ -302,13 +269,11 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
                             O
                      */
                     // create the intermediate point
-                    pNewX[1+oi*2] = pOldX[oi];
-                    pNewY[1+oi*2] = pOldY[oi+1];
-                    pNewZ[1+oi*2] = pOldZ[oi];
+                    pNew[1+oi*2].PositionX = pOld[oi].PositionX;
+                    pNew[1+oi*2].PositionY = pOld[oi+1].PositionY;
+                    pNew[1+oi*2].PositionZ = pOld[oi].PositionZ;
                     // and now the normal one
-                    pNewX[1+oi*2+1] = pOldX[oi+1];
-                    pNewY[1+oi*2+1] = pOldY[oi+1];
-                    pNewZ[1+oi*2+1] = pOldZ[oi+1];
+                    pNew[1+oi*2+1] = pOld[oi+1];
                     break;
                 case CurveStyle_STEP_CENTER_X:
                      /**        +--O
@@ -318,17 +283,15 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
                              O--+
                      */
                     // create the first intermediate point
-                    pNewX[1+oi*3] = (pOldX[oi]+pOldX[oi+1])/2;
-                    pNewY[1+oi*3] = pOldY[oi];
-                    pNewZ[1+oi*3] = pOldZ[oi];
+                    pNew[1+oi*3].PositionX = (pOld[oi].PositionX + pOld[oi+1].PositionX) / 2;
+                    pNew[1+oi*3].PositionY = pOld[oi].PositionY;
+                    pNew[1+oi*3].PositionZ = pOld[oi].PositionZ;
                     // create the second intermediate point
-                    pNewX[1+oi*3+1] = (pOldX[oi]+pOldX[oi+1])/2;
-                    pNewY[1+oi*3+1] = pOldY[oi+1];
-                    pNewZ[1+oi*3+1] = pOldZ[oi];
+                    pNew[1+oi*3+1].PositionX = (pOld[oi].PositionX + pOld[oi+1].PositionX) / 2;
+                    pNew[1+oi*3+1].PositionY = pOld[oi+1].PositionY;
+                    pNew[1+oi*3+1].PositionZ = pOld[oi].PositionZ;
                     // and now the normal one
-                    pNewX[1+oi*3+2] = pOldX[oi+1];
-                    pNewY[1+oi*3+2] = pOldY[oi+1];
-                    pNewZ[1+oi*3+2] = pOldZ[oi+1];
+                    pNew[1+oi*3+2] = pOld[oi+1];
                     break;
                 case CurveStyle_STEP_CENTER_Y:
                      /**           O
@@ -338,17 +301,15 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
                              O
                      */
                     // create the first intermediate point
-                    pNewX[1+oi*3] = pOldX[oi];
-                    pNewY[1+oi*3] = (pOldY[oi]+pOldY[oi+1])/2;
-                    pNewZ[1+oi*3] = pOldZ[oi];
+                    pNew[1+oi*3].PositionX = pOld[oi].PositionX;
+                    pNew[1+oi*3].PositionY = (pOld[oi].PositionY + pOld[oi+1].PositionY) / 2;
+                    pNew[1+oi*3].PositionZ = pOld[oi].PositionZ;
                     // create the second intermediate point
-                    pNewX[1+oi*3+1] = pOldX[oi+1];
-                    pNewY[1+oi*3+1] = (pOldY[oi]+pOldY[oi+1])/2;
-                    pNewZ[1+oi*3+1] = pOldZ[oi];
+                    pNew[1+oi*3+1].PositionX = pOld[oi+1].PositionX;
+                    pNew[1+oi*3+1].PositionY = (pOld[oi].PositionY + pOld[oi+1].PositionY) / 2;
+                    pNew[1+oi*3+1].PositionZ = pOld[oi].PositionZ;
                     // and now the normal one
-                    pNewX[1+oi*3+2] = pOldX[oi+1];
-                    pNewY[1+oi*3+2] = pOldY[oi+1];
-                    pNewZ[1+oi*3+2] = pOldZ[oi+1];
+                    pNew[1+oi*3+2] = pOld[oi+1];
                     break;
                 default:
                     // this should never be executed
@@ -362,23 +323,23 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
 }
 
 bool AreaChart::impl_createLine( VDataSeries* pSeries
-                , drawing::PolyPolygonShape3D const * pSeriesPoly
+                , std::vector<std::vector<css::drawing::Position3D>> const * pSeriesPoly
                 , PlottingPositionHelper* pPosHelper )
 {
     //return true if a line was created successfully
     rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
 
-    drawing::PolyPolygonShape3D aPoly;
+    std::vector<std::vector<css::drawing::Position3D>> aPoly;
     if(m_eCurveStyle==CurveStyle_CUBIC_SPLINES)
     {
-        drawing::PolyPolygonShape3D aSplinePoly;
+        std::vector<std::vector<css::drawing::Position3D>> aSplinePoly;
         SplineCalculater::CalculateCubicSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution );
         lcl_removeDuplicatePoints( aSplinePoly, *pPosHelper );
         Clipping::clipPolygonAtRectangle( aSplinePoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
     else if(m_eCurveStyle==CurveStyle_B_SPLINES)
     {
-        drawing::PolyPolygonShape3D aSplinePoly;
+        std::vector<std::vector<css::drawing::Position3D>> aSplinePoly;
         SplineCalculater::CalculateBSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution, m_nSplineOrder );
         lcl_removeDuplicatePoints( aSplinePoly, *pPosHelper );
         Clipping::clipPolygonAtRectangle( aSplinePoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
@@ -411,20 +372,15 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     if(m_nDimension==3)
     {
         double fDepth = getTransformedDepth();
-        sal_Int32 nPolyCount = aPoly.SequenceX.getLength();
+        sal_Int32 nPolyCount = aPoly.size();
         for(sal_Int32 nPoly=0;nPoly<nPolyCount;nPoly++)
         {
-            sal_Int32 nPointCount = aPoly.SequenceX[nPoly].getLength();
+            sal_Int32 nPointCount = aPoly[nPoly].size();
             for(sal_Int32 nPoint=0;nPoint<nPointCount-1;nPoint++)
             {
                 drawing::Position3D aPoint1, aPoint2;
-                aPoint1.PositionX = aPoly.SequenceX[nPoly][nPoint+1];
-                aPoint1.PositionY = aPoly.SequenceY[nPoly][nPoint+1];
-                aPoint1.PositionZ = aPoly.SequenceZ[nPoly][nPoint+1];
-
-                aPoint2.PositionX = aPoly.SequenceX[nPoly][nPoint];
-                aPoint2.PositionY = aPoly.SequenceY[nPoly][nPoint];
-                aPoint2.PositionZ = aPoly.SequenceZ[nPoly][nPoint];
+                aPoint1 = aPoly[nPoly][nPoint+1];
+                aPoint2 = aPoly[nPoly][nPoint];
 
                 ShapeFactory::createStripe(xSeriesGroupShape_Shapes
                     , Stripe( aPoint1, aPoint2, fDepth )
@@ -434,8 +390,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     }
     else //m_nDimension!=3
     {
-        xShape = ShapeFactory::createLine2D( xSeriesGroupShape_Shapes
-                , PolyToPointSequence( aPoly ) );
+        xShape = ShapeFactory::createLine2D( xSeriesGroupShape_Shapes, aPoly );
         PropertyMapper::setMappedProperties( *xShape
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
@@ -446,8 +401,8 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
 }
 
 bool AreaChart::impl_createArea( VDataSeries* pSeries
-                , drawing::PolyPolygonShape3D const * pSeriesPoly
-                , drawing::PolyPolygonShape3D const * pPreviousSeriesPoly
+                , std::vector<std::vector<css::drawing::Position3D>> const * pSeriesPoly
+                , std::vector<std::vector<css::drawing::Position3D>> const * pPreviousSeriesPoly
                 , PlottingPositionHelper const * pPosHelper )
 {
     //return true if an area was created successfully
@@ -455,7 +410,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
     double zValue = pSeries->m_fLogicZPos;
 
-    drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
+    std::vector<std::vector<css::drawing::Position3D>> aPoly( *pSeriesPoly );
     //add second part to the polygon (grounding points or previous series points)
     if(!pPreviousSeriesPoly)
     {
@@ -488,7 +443,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
 
     //apply clipping
     {
-        drawing::PolyPolygonShape3D aClippedPoly;
+        std::vector<std::vector<css::drawing::Position3D>> aClippedPoly;
         Clipping::clipPolygonAtRectangle( aPoly, pPosHelper->getScaledLogicClipDoubleRect(), aClippedPoly, false );
         ShapeFactory::closePolygon(aClippedPoly); //again necessary after clipping
         aPoly = aClippedPoly;
@@ -533,8 +488,8 @@ void AreaChart::impl_createSeriesShapes()
     {
         for( auto const& rXSlot : rZSlot )
         {
-            std::map< sal_Int32, drawing::PolyPolygonShape3D* > aPreviousSeriesPolyMap;//a PreviousSeriesPoly for each different nAttachedAxisIndex
-            drawing::PolyPolygonShape3D* pSeriesPoly = nullptr;
+            std::map< sal_Int32, std::vector<std::vector<css::drawing::Position3D>>* > aPreviousSeriesPolyMap;//a PreviousSeriesPoly for each different nAttachedAxisIndex
+            std::vector<std::vector<css::drawing::Position3D>>* pSeriesPoly = nullptr;
 
             //iterate through all series
             for( std::unique_ptr<VDataSeries> const & pSeries : rXSlot.m_aSeriesVector )
@@ -746,11 +701,11 @@ void AreaChart::createShapes()
                     {
                         if( pSeries->getMissingValueTreatment() == css::chart::MissingValueTreatment::LEAVE_GAP )
                         {
-                            drawing::PolyPolygonShape3D& rPolygon = pSeries->m_aPolyPolygonShape3D;
+                            std::vector<std::vector<css::drawing::Position3D>>& rPolygon = pSeries->m_aPolyPolygonShape3D;
                             sal_Int32& rIndex = pSeries->m_nPolygonIndex;
-                            if( 0<= rIndex && rIndex < rPolygon.SequenceX.getLength() )
+                            if( 0<= rIndex && rIndex < static_cast<sal_Int32>(rPolygon.size()) )
                             {
-                                if( rPolygon.SequenceX[ rIndex ].hasElements() )
+                                if( !rPolygon[ rIndex ].empty() )
                                     rIndex++; //start a new polygon for the next point if the current poly is not empty
                             }
                         }

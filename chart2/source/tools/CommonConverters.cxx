@@ -181,6 +181,24 @@ void AddPointToPoly( drawing::PolyPolygonShape3D& rPoly, const drawing::Position
     pInnerSequenceZ[nOldPointCount] = rPos.PositionZ;
 }
 
+void AddPointToPoly( std::vector<std::vector<css::drawing::Position3D>>& rPoly, const drawing::Position3D& rPos, sal_Int32 nPolygonIndex )
+{
+    if(nPolygonIndex<0)
+    {
+        OSL_FAIL( "The polygon index needs to be > 0");
+        nPolygonIndex=0;
+    }
+
+    //make sure that we have enough polygons
+    if(nPolygonIndex >= static_cast<sal_Int32>(rPoly.size()) )
+    {
+        rPoly.resize(nPolygonIndex+1);
+    }
+
+    std::vector<css::drawing::Position3D>* pOuterSequence = &rPoly[nPolygonIndex];
+    pOuterSequence->push_back(rPos);
+}
+
 drawing::Position3D getPointFromPoly( const drawing::PolyPolygonShape3D& rPolygon, sal_Int32 nPointIndex, sal_Int32 nPolyIndex )
 {
     drawing::Position3D aRet(0.0,0.0,0.0);
@@ -192,6 +210,28 @@ drawing::Position3D getPointFromPoly( const drawing::PolyPolygonShape3D& rPolygo
             aRet.PositionX = rPolygon.SequenceX[nPolyIndex][nPointIndex];
             aRet.PositionY = rPolygon.SequenceY[nPolyIndex][nPointIndex];
             aRet.PositionZ = rPolygon.SequenceZ[nPolyIndex][nPointIndex];
+        }
+        else
+        {
+            OSL_FAIL("polygon was accessed with a wrong index");
+        }
+    }
+    else
+    {
+        OSL_FAIL("polygon was accessed with a wrong index");
+    }
+    return aRet;
+}
+
+drawing::Position3D getPointFromPoly( const std::vector<std::vector<css::drawing::Position3D>>& rPolygon, sal_Int32 nPointIndex, sal_Int32 nPolyIndex )
+{
+    drawing::Position3D aRet(0.0,0.0,0.0);
+
+    if( nPolyIndex>=0 && nPolyIndex<static_cast<sal_Int32>(rPolygon.size()))
+    {
+        if(nPointIndex<static_cast<sal_Int32>(rPolygon[nPolyIndex].size()))
+        {
+            aRet = rPolygon[nPolyIndex][nPointIndex];
         }
         else
         {
@@ -231,41 +271,51 @@ void addPolygon( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonSh
     }
 }
 
-void appendPoly( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonShape3D& rAdd )
+void addPolygon( std::vector<std::vector<css::drawing::Position3D>>& rRet, const std::vector<std::vector<css::drawing::Position3D>>& rAdd )
 {
-    sal_Int32 nOuterCount = std::max( rRet.SequenceX.getLength(), rAdd.SequenceX.getLength() );
-    rRet.SequenceX.realloc(nOuterCount);
-    auto pSequenceX = rRet.SequenceX.getArray();
-    rRet.SequenceY.realloc(nOuterCount);
-    auto pSequenceY = rRet.SequenceY.getArray();
-    rRet.SequenceZ.realloc(nOuterCount);
-    auto pSequenceZ =rRet.SequenceZ.getArray();
+    sal_Int32 nAddOuterCount = rAdd.size();
+    sal_Int32 nOuterCount = rRet.size() + nAddOuterCount;
+    rRet.resize( nOuterCount );
+    auto pSequence = rRet.data();
+
+    sal_Int32 nIndex = 0;
+    sal_Int32 nOuter = nOuterCount - nAddOuterCount;
+    for( ; nOuter < nOuterCount; nOuter++ )
+    {
+        if( nIndex >= nAddOuterCount )
+            break;
+
+        pSequence[nOuter] = rAdd[nIndex];
+
+        nIndex++;
+    }
+}
+
+void appendPoly( std::vector<std::vector<css::drawing::Position3D>>& rRet, const std::vector<std::vector<css::drawing::Position3D>>& rAdd )
+{
+    sal_Int32 nOuterCount = std::max( rRet.size(), rAdd.size() );
+    rRet.resize(nOuterCount);
+    auto pSequence = rRet.data();
 
     for( sal_Int32 nOuter=0;nOuter<nOuterCount;nOuter++ )
     {
-        sal_Int32 nOldPointCount = rRet.SequenceX[nOuter].getLength();
+        sal_Int32 nOldPointCount = rRet[nOuter].size();
         sal_Int32 nAddPointCount = 0;
-        if(nOuter<rAdd.SequenceX.getLength())
-            nAddPointCount = rAdd.SequenceX[nOuter].getLength();
+        if(nOuter<static_cast<sal_Int32>(rAdd.size()))
+            nAddPointCount = rAdd[nOuter].size();
         if(!nAddPointCount)
             continue;
 
         sal_Int32 nNewPointCount = nOldPointCount + nAddPointCount;
 
-        pSequenceX[nOuter].realloc(nNewPointCount);
-        auto pSequenceX_nOuter = pSequenceX[nOuter].getArray();
-        pSequenceY[nOuter].realloc(nNewPointCount);
-        auto pSequenceY_nOuter = pSequenceY[nOuter].getArray();
-        pSequenceZ[nOuter].realloc(nNewPointCount);
-        auto pSequenceZ_nOuter = pSequenceZ[nOuter].getArray();
+        pSequence[nOuter].resize(nNewPointCount);
+        auto pSequence_nOuter = pSequence[nOuter].data();
 
         sal_Int32 nPointTarget=nOldPointCount;
         sal_Int32 nPointSource=nAddPointCount;
         for( ; nPointSource-- ; nPointTarget++ )
         {
-            pSequenceX_nOuter[nPointTarget] = rAdd.SequenceX[nOuter][nPointSource];
-            pSequenceY_nOuter[nPointTarget] = rAdd.SequenceY[nOuter][nPointSource];
-            pSequenceZ_nOuter[nPointTarget] = rAdd.SequenceZ[nOuter][nPointSource];
+            pSequence_nOuter[nPointTarget] = rAdd[nOuter][nPointSource];
         }
     }
 }
@@ -346,6 +396,27 @@ drawing::PointSequenceSequence PolyToPointSequence(
     return aRet;
 }
 
+drawing::PointSequenceSequence PolyToPointSequence(
+                const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon )
+{
+    drawing::PointSequenceSequence aRet;
+    aRet.realloc( rPolyPolygon.size() );
+    auto pRet = aRet.getArray();
+
+    for(sal_Int32 nN = 0; nN < static_cast<sal_Int32>(rPolyPolygon.size()); nN++)
+    {
+        sal_Int32 nInnerLength = rPolyPolygon[nN].size();
+        pRet[nN].realloc( nInnerLength );
+        auto pRet_nN = pRet[nN].getArray();
+        for( sal_Int32 nM = 0; nM < nInnerLength; nM++)
+        {
+            pRet_nN[nM].X = static_cast<sal_Int32>(rPolyPolygon[nN][nM].PositionX);
+            pRet_nN[nM].Y = static_cast<sal_Int32>(rPolyPolygon[nN][nM].PositionY);
+        }
+    }
+    return aRet;
+}
+
 basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
                 const drawing::PolyPolygonShape3D& rPolyPolygon )
 {
@@ -362,6 +433,33 @@ basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
             {
                 auto X = static_cast<sal_Int32>(rPolyPolygon.SequenceX[nN][nM]);
                 auto Y = static_cast<sal_Int32>(rPolyPolygon.SequenceY[nN][nM]);
+                aNewPolygon.append(basegfx::B2DPoint(X, Y));
+            }
+            // check for closed state flag
+            basegfx::utils::checkClosed(aNewPolygon);
+        }
+        aRetval.append(std::move(aNewPolygon));
+    }
+
+    return aRetval;
+}
+
+basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
+                const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon )
+{
+    basegfx::B2DPolyPolygon aRetval;
+
+    for(sal_Int32 nN = 0; nN < static_cast<sal_Int32>(rPolyPolygon.size()); nN++)
+    {
+        basegfx::B2DPolygon aNewPolygon;
+        sal_Int32 nInnerLength = rPolyPolygon[nN].size();
+        if(nInnerLength)
+        {
+            aNewPolygon.reserve(nInnerLength);
+            for( sal_Int32 nM = 0; nM < nInnerLength; nM++)
+            {
+                auto X = static_cast<sal_Int32>(rPolyPolygon[nN][nM].PositionX);
+                auto Y = static_cast<sal_Int32>(rPolyPolygon[nN][nM].PositionY);
                 aNewPolygon.append(basegfx::B2DPoint(X, Y));
             }
             // check for closed state flag

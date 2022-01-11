@@ -84,6 +84,7 @@ public:
             transformScaledLogicToScene( double fX, double fY, double fZ, bool bClip ) const;
 
     void    transformScaledLogicToScene( css::drawing::PolyPolygonShape3D& rPoly ) const;
+    void    transformScaledLogicToScene( std::vector<std::vector<css::drawing::Position3D>>& rPoly ) const;
 
     static css::awt::Point transformSceneToScreenPosition(
                   const css::drawing::Position3D& rScenePosition3D
