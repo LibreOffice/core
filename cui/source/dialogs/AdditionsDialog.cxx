@@ -450,8 +450,29 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
 
     OUString titlePrefix = CuiResId(RID_CUISTR_ADDITIONS_DIALOG_TITLE_PREFIX);
     if (!m_sTag.isEmpty())
-    {
-        this->set_title(titlePrefix + ": " + sAdditionsTag);
+    { // tdf#142564 localize extension category names
+        OUString sDialogTitle = "";
+        if (sAdditionsTag == "Templates")
+        {
+            sDialogTitle = CuiResId(RID_CUISTR_ADDITIONS_TEMPLATES);
+        }
+        else if (sAdditionsTag == "Dictionary")
+        {
+            sDialogTitle = CuiResId(RID_CUISTR_ADDITIONS_DICTIONARY);
+        }
+        else if (sAdditionsTag == "Gallery")
+        {
+            sDialogTitle = CuiResId(RID_CUISTR_ADDITIONS_GALLERY);
+        }
+        else if (sAdditionsTag == "Icons")
+        {
+            sDialogTitle = CuiResId(RID_CUISTR_ADDITIONS_ICONS);
+        }
+        else if (sAdditionsTag == "Color Palette")
+        {
+            sDialogTitle = CuiResId(RID_CUISTR_ADDITIONS_PALETTES);
+        }
+        this->set_title(sDialogTitle);
     }
     else
     {
