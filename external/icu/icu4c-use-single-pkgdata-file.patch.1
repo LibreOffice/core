@@ -1,0 +1,12 @@
+--- icu/source/tools/toolutil/pkg_genc.h.orig	2022-01-11 06:02:29.694678787 +0100
++++ icu/source/tools/toolutil/pkg_genc.h	2022-01-11 06:02:41.602640965 +0100
+@@ -48,9 +48,7 @@
+  * the data to generate the final data library. This can
+  * increase the performance of the pkdata tool.
+  */
+-#if U_PLATFORM == U_PF_OS400
+ #define USE_SINGLE_CCODE_FILE
+-#endif
+ 
+ /* Need to fix the file seperator character when using MinGW. */
+ #if defined(WINDOWS_WITH_GNUC) || defined(USING_CYGWIN)
