@@ -2802,7 +2802,7 @@ AC_ARG_WITH(macosx-version-min-required,
     AS_HELP_STRING([--with-macosx-version-min-required=<version>],
         [set the minimum OS version needed to run the built LibreOffice])
     [
-                          e. g.: --with-macosx-version-min-required=10.12
+                          e. g.: --with-macosx-version-min-required=10.13
     ],
 ,)
 
@@ -3312,7 +3312,7 @@ if test $_os = Darwin; then
 
     if test "$with_macosx_version_min_required" = "" ; then
         if test "$host_cpu" = x86_64; then
-            with_macosx_version_min_required="10.12";
+            with_macosx_version_min_required="10.13";
         else
             with_macosx_version_min_required="11.0";
         fi
@@ -3340,9 +3340,6 @@ if test $_os = Darwin; then
     fi
 
     case "$with_macosx_version_min_required" in
-    10.12)
-        MAC_OS_X_VERSION_MIN_REQUIRED="101200"
-        ;;
     10.13)
         MAC_OS_X_VERSION_MIN_REQUIRED="101300"
         ;;
@@ -3371,7 +3368,7 @@ if test $_os = Darwin; then
         MAC_OS_X_VERSION_MIN_REQUIRED="120100"
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.12--12.1])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.13--12.1])
         ;;
     esac
 
@@ -3411,9 +3408,6 @@ if test $_os = Darwin; then
     fi
 
     case "$with_macosx_version_max_allowed" in
-    10.12)
-        MAC_OS_X_VERSION_MAX_ALLOWED="101200"
-        ;;
     10.13)
         MAC_OS_X_VERSION_MAX_ALLOWED="101300"
         ;;
@@ -3439,7 +3433,7 @@ if test $_os = Darwin; then
         MAC_OS_X_VERSION_MAX_ALLOWED="120100"
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.12--12.1])
+        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.13--12.1])
         ;;
     esac
 
