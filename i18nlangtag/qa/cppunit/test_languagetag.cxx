@@ -915,7 +915,7 @@ void TestLanguageTag::testLanguagesWithoutHyphenation()
     CPPUNIT_ASSERT(!MsLangId::usesHyphenation(LANGUAGE_KURDISH_ARABIC_IRAQ));
     CPPUNIT_ASSERT(!MsLangId::usesHyphenation(LANGUAGE_KURDISH_ARABIC_LSO));
 
-    // Northern Kurdish (Kurmanji) -> uses Latin scrit, has hyphenation
+    // Northern Kurdish (Kurmanji) -> uses Latin script, has hyphenation
     CPPUNIT_ASSERT(MsLangId::usesHyphenation(LANGUAGE_USER_KURDISH_SYRIA));
     CPPUNIT_ASSERT(MsLangId::usesHyphenation(LANGUAGE_USER_KURDISH_TURKEY));
 
