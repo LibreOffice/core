@@ -16,6 +16,24 @@
       "message": "Andreas, I am now having a problem with CppunitTest_sc_macros_test from the Calc module. Basically it is failing to run the macros in the test file:\nsc/qa/extras/testdocuments/Ranges-2.xls\n\nIn short, with this patch the following statement stops working:\nDim oRange as Range\nSet oRange \u003d Range(\"A1\")\n\nThe \"Range\" object no longer appears to be defined. I did a lot of search but was not able to find the reason why. Do you have any idea where this might be coming from?\n\nMy best guesses were the following, but could not figure out what was happening:\nhttps://opengrok.libreoffice.org/xref/core/basic/source/comp/dim.cxx?r\u003d27d96bfa#464\nhttps://opengrok.libreoffice.org/xref/core/basic/source/runtime/runtime.cxx?r\u003d26f46b86#3022",
       "revId": "6a22a0362bb4ba813430837892aaa731448de8dd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31835d0f_b1e17062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-11T20:25:13Z",
+      "side": 1,
+      "message": "Hi Rafael! Isn\u0027t that related to the same problem as in ismissing.vb? For instance, in Sub verify_WrapText() there is the check for IsNull(oRange.WrapText) and according to the new implementation that object is not null. The same goes in verify_Orientation and verify_VerticalAlignment.\n\nHowever, I could not reproduce the error you faced with Dim oRange as Range Set oRange \u003d Range(\"A1\") when I opened the fresh file from the repo.",
+      "parentUuid": "13de4e94_f4d9aabb",
+      "revId": "6a22a0362bb4ba813430837892aaa731448de8dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
