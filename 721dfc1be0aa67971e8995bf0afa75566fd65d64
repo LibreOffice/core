@@ -16,6 +16,23 @@
       "message": "For the moment, I can\u0027t add these on Library_mysqlc.mk because there are still other new files to add: column/columns/table/tables.\n\nI just took files from Firebird part, I don\u0027t know if they\u0027re the best knowing the bugs there are but they seemed to me the most recent.\n",
       "revId": "721dfc1be0aa67971e8995bf0afa75566fd65d64",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05d32e69_df6b732c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-11T19:53:39Z",
+      "side": 1,
+      "message": "Let\u0027s give it a try for this first patch, at worst it can be reverted.\nI\u0027ll prefix the others with \"Mysql/MariaDB\" too.",
+      "revId": "721dfc1be0aa67971e8995bf0afa75566fd65d64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
