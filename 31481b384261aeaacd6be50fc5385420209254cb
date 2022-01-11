@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5fe9074_425bbcd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-01-11T08:14:59Z",
+      "side": 1,
+      "message": "Patchset 3 fixes a problem that an empty outline paragraph is deleted along with the to be deleted outline when it follows table content being the last content of the to be deleted outline. ",
+      "revId": "31481b384261aeaacd6be50fc5385420209254cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
