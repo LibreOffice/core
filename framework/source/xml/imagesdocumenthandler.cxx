@@ -300,8 +300,6 @@ OWriteImagesDocumentHandler::~OWriteImagesDocumentHandler()
 
 void OWriteImagesDocumentHandler::WriteImagesDocument()
 {
-    SolarMutexGuard g;
-
     m_xWriteDocumentHandler->startDocument();
 
     // write DOCTYPE line!
