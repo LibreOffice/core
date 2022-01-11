@@ -920,7 +920,7 @@ void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldI
         aHeight = o3tl::convert(pOldIconSetInfo->mnHeight, o3tl::Length::twip, o3tl::Length::mm100);
 
     Size aSize = rIcon.GetSizePixel();
-    double fRatio = aSize.Width() / aSize.Height();
+    double fRatio = static_cast<double>(aSize.Width()) / aSize.Height();
     tools::Long aWidth = fRatio * aHeight;
 
     rRenderContext.Push();
