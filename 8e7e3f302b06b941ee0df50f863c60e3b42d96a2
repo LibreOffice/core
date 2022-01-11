@@ -16,6 +16,24 @@
       "message": "This is not a false positive from Jenkins, but something that actually needs to be fixed in the code.",
       "revId": "8e7e3f302b06b941ee0df50f863c60e3b42d96a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2fd6452_005d9377",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2022-01-11T11:59:38Z",
+      "side": 1,
+      "message": "merging https://github.com/CollaboraOnline/online/pull/3960 will solve the problem",
+      "parentUuid": "be0ffcb3_2042239f",
+      "revId": "8e7e3f302b06b941ee0df50f863c60e3b42d96a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
