@@ -148,10 +148,11 @@ void SalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
     mnOrientation = rArgs.mnOrientation;
 }
 
-Point SalLayout::GetDrawPosition( const Point& rRelative ) const
+DevicePoint SalLayout::GetDrawPosition(const DevicePoint& rRelative) const
 {
-    Point aPos = maDrawBase;
-    Point aOfs = rRelative + maDrawOffset;
+    DevicePoint aPos(maDrawBase.X(), maDrawBase.Y());
+    DevicePoint aOfs(rRelative.getX() + maDrawOffset.X(),
+                     rRelative.getY() + maDrawOffset.Y());
 
     if( mnOrientation == 0_deg10 )
         aPos += aOfs;
@@ -168,11 +169,11 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
             fSin = sin( fRad );
         }
 
-        double fX = aOfs.X();
-        double fY = aOfs.Y();
+        double fX = aOfs.getX();
+        double fY = aOfs.getY();
         tools::Long nX = static_cast<tools::Long>( +fCos * fX + fSin * fY );
         tools::Long nY = static_cast<tools::Long>( +fCos * fY - fSin * fX );
-        aPos += Point( nX, nY );
+        aPos += DevicePoint(nX, nY);
     }
 
     return aPos;
@@ -185,7 +186,7 @@ bool SalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rVector) const
 
     basegfx::B2DPolyPolygon aGlyphOutline;
 
-    Point aPos;
+    DevicePoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     const LogicalFontInstance* pGlyphFont;
@@ -198,9 +199,9 @@ bool SalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rVector) const
         // only add non-empty outlines
         if( bSuccess && (aGlyphOutline.count() > 0) )
         {
-            if( aPos.X() || aPos.Y() )
+            if( aPos.getX() || aPos.getY() )
             {
-                aGlyphOutline.transform(basegfx::utils::createTranslateB2DHomMatrix(aPos.X(), aPos.Y()));
+                aGlyphOutline.transform(basegfx::utils::createTranslateB2DHomMatrix(aPos.getX(), aPos.getY()));
             }
 
             // insert outline at correct position
@@ -218,7 +219,7 @@ bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
 
     tools::Rectangle aRectangle;
 
-    Point aPos;
+    DevicePoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     const LogicalFontInstance* pGlyphFont;
@@ -228,7 +229,7 @@ bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
         if (pGlyph->GetGlyphBoundRect(pGlyphFont, aRectangle))
         {
             // merge rectangle
-            aRectangle += aPos;
+            aRectangle += Point(aPos.getX(), aPos.getY());
             if (rRect.IsEmpty())
                 rRect = aRectangle;
             else
@@ -322,7 +323,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
         for( pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
         {
             // move glyph to justified position
-            pGlyphIter->m_aLinearPos.AdjustX(nDeltaSum );
+            pGlyphIter->m_aLinearPos.adjustX(nDeltaSum);
 
             // do not stretch non-stretchable glyphs
             if( pGlyphIter->IsDiacritic() || (nStretchable <= 0) )
@@ -438,7 +439,7 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
 
         // adjust the glyph positions to the new glyph widths
         if( pGlyphIter+1 != pGlyphIterEnd )
-            pGlyphIter->m_aLinearPos.AdjustX(nOffset);
+            pGlyphIter->m_aLinearPos.adjustX(nOffset);
     }
 }
 
@@ -491,7 +492,7 @@ sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoor
 }
 
 bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
-                                    Point& rPos, int& nStart,
+                                    DevicePoint& rPos, int& nStart,
                                     const LogicalFontInstance** ppGlyphFont,
                                     const vcl::font::PhysicalFontFace**) const
 {
@@ -521,10 +522,10 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
         *ppGlyphFont = m_GlyphItems.GetFont().get();
 
     // calculate absolute position in pixel units
-    Point aRelativePos = pGlyphIter->m_aLinearPos;
+    DevicePoint aRelativePos = pGlyphIter->m_aLinearPos;
 
-    aRelativePos.setX( aRelativePos.X() / mnUnitsPerPixel );
-    aRelativePos.setY( aRelativePos.Y() / mnUnitsPerPixel );
+    aRelativePos.setX( aRelativePos.getX() / mnUnitsPerPixel );
+    aRelativePos.setY( aRelativePos.getY() / mnUnitsPerPixel );
     rPos = GetDrawPosition( aRelativePos );
 
     return true;
@@ -550,7 +551,7 @@ void GenericSalLayout::MoveGlyph( int nStart, tools::Long nNewXPos )
     {
         for( std::vector<GlyphItem>::iterator pGlyphIterEnd = m_GlyphItems.end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
         {
-            pGlyphIter->m_aLinearPos.AdjustX(nXDelta );
+            pGlyphIter->m_aLinearPos.adjustX(nXDelta);
         }
     }
 }
@@ -721,7 +722,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
     const GlyphItem* pGlyphs[MAX_FALLBACK];
     bool bValid[MAX_FALLBACK] = { false };
 
-    Point aPos;
+    DevicePoint aPos;
     int nLevel = 0, n;
     for( n = 0; n < mnLevel; ++n )
     {
@@ -1105,7 +1106,7 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray )
 }
 
 bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
-                                  Point& rPos, int& nStart,
+                                  DevicePoint& rPos, int& nStart,
                                   const LogicalFontInstance** ppGlyphFont,
                                   const vcl::font::PhysicalFontFace** pFallbackFont) const
 {
@@ -1123,8 +1124,8 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
             nStart |= nFontTag;
             if (pFallbackFont)
                 *pFallbackFont = pFontFace;
-            rPos += maDrawBase;
-            rPos += maDrawOffset;
+            rPos.adjustX(maDrawBase.X() + maDrawOffset.X());
+            rPos.adjustY(maDrawBase.Y() + maDrawOffset.Y());
             return true;
         }
     }

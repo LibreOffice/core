@@ -311,13 +311,13 @@ void QtGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     if (nOrientation)
         pQtLayout->SetOrientation(0_deg10);
 
-    Point aPos;
+    DevicePoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         glyphIndexes.push_back(pGlyph->glyphId());
-        positions.push_back(QPointF(aPos.X(), aPos.Y()));
+        positions.push_back(QPointF(aPos.getX(), aPos.getY()));
     }
 
     // seems to be common to try to layout an empty string...
