@@ -52,7 +52,7 @@ private:
     // (unusable state is if anyToHash() returns no hash).
     enum HashState { Unknown, Valid, Unusable };
     mutable HashState aHashState = HashState::Unknown;
-    mutable size_t aHash;
+    mutable size_t aHash = 0xdeadbeef;
 
     void SetPropSeq( const css::uno::Sequence< css::beans::PropertyValue >& rPropSeq );
     inline void UpdateHash() const;
