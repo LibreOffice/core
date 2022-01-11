@@ -186,8 +186,6 @@ void SAL_CALL OReadStatusBarDocumentHandler::startDocument()
 
 void SAL_CALL OReadStatusBarDocumentHandler::endDocument()
 {
-    SolarMutexGuard g;
-
     if ( m_bStatusBarStartFound )
     {
         OUString aErrorMessage = getErrorLineString() + "No matching start or end element 'statusbar' found!";
@@ -198,8 +196,6 @@ void SAL_CALL OReadStatusBarDocumentHandler::endDocument()
 void SAL_CALL OReadStatusBarDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 {
-    SolarMutexGuard g;
-
     StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName );
     if ( pStatusBarEntry == m_aStatusBarMap.end() )
         return;
@@ -396,8 +392,6 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
 
 void SAL_CALL OReadStatusBarDocumentHandler::endElement(const OUString& aName)
 {
-    SolarMutexGuard g;
-
     StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName );
     if ( pStatusBarEntry == m_aStatusBarMap.end() )
         return;
@@ -448,15 +442,11 @@ void SAL_CALL OReadStatusBarDocumentHandler::processingInstruction(
 void SAL_CALL OReadStatusBarDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 {
-    SolarMutexGuard g;
-
     m_xLocator = xLocator;
 }
 
 OUString OReadStatusBarDocumentHandler::getErrorLineString()
 {
-    SolarMutexGuard g;
-
     if ( m_xLocator.is() )
         return "Line: " + OUString::number( m_xLocator->getLineNumber() ) + " - ";
     else
@@ -483,8 +473,6 @@ OWriteStatusBarDocumentHandler::~OWriteStatusBarDocumentHandler()
 
 void OWriteStatusBarDocumentHandler::WriteStatusBarDocument()
 {
-    SolarMutexGuard g;
-
     m_xWriteDocumentHandler->startDocument();
 
     // write DOCTYPE line!
