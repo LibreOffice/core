@@ -129,8 +129,6 @@ void SAL_CALL OReadImagesDocumentHandler::startDocument()
 
 void SAL_CALL OReadImagesDocumentHandler::endDocument()
 {
-    SolarMutexGuard g;
-
     if (m_bImageContainerStartFound != m_bImageContainerEndFound)
     {
         OUString aErrorMessage = getErrorLineString() + "No matching start or end element 'image:imagecontainer' found!";
@@ -141,8 +139,6 @@ void SAL_CALL OReadImagesDocumentHandler::endDocument()
 void SAL_CALL OReadImagesDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 {
-    SolarMutexGuard g;
-
     ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName );
     if ( pImageEntry == m_aImageMap.end() )
         return;
@@ -230,8 +226,6 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 
 void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
 {
-    SolarMutexGuard g;
-
     ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName );
     if ( pImageEntry == m_aImageMap.end() )
         return;
@@ -270,13 +264,11 @@ void SAL_CALL OReadImagesDocumentHandler::processingInstruction(
 void SAL_CALL OReadImagesDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 {
-    SolarMutexGuard g;
     m_xLocator = xLocator;
 }
 
 OUString OReadImagesDocumentHandler::getErrorLineString()
 {
-    SolarMutexGuard g;
     if ( m_xLocator.is() )
     {
         return "Line: " +
