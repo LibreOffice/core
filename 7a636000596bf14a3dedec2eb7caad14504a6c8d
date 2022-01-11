@@ -135,6 +135,30 @@
       },
       "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62fb9999_e1a038cc",
+        "filename": "svx/source/sdr/primitive2d/sdrpathprimitive2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-11T06:52:16Z",
+      "side": 1,
+      "message": "\u003e \u003e Ok, got you now.\n\u003e We really need to discuss more these concepts - how could we do that...?\n\nI\u0027m open to suggestions - Skype / Jitsi / Google Meet / cellphone / Whatsapp audio / what works for you ?\n\n:-)",
+      "parentUuid": "6e6a9d31_30bfc3a9",
+      "range": {
+        "startLine": 164,
+        "startChar": 25,
+        "endLine": 164,
+        "endChar": 52
+      },
+      "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
