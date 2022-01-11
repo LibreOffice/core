@@ -16,6 +16,24 @@
       "message": "Hi Michael,\nThanks for your patch. No idea why that chunk of code wasn\u0027t backported...",
       "revId": "f1fb66b02d72d4b2e6f3321fa5426c9f7c04c48c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7db4270f_1308b8bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-01-11T09:33:02Z",
+      "side": 1,
+      "message": "Hi Xisco, thanks for merging.\nFor some reason, the change to `AccObject:: UpdateAccessibleInfoFromUnoToMSAA` (dropping call to `UpdateDescription();`)  was missing in the previous patch set.",
+      "parentUuid": "be2cb907_68b6ce88",
+      "revId": "f1fb66b02d72d4b2e6f3321fa5426c9f7c04c48c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
