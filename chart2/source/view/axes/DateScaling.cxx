@@ -58,36 +58,35 @@ double SAL_CALL DateScaling::doScaling( double value )
     double fResult(value);
     if( std::isnan( value ) || std::isinf( value ) )
         return std::numeric_limits<double>::quiet_NaN();
-    else
+    switch( m_nTimeUnit )
     {
-        Date aDate(m_aNullDate);
-        aDate.AddDays(::rtl::math::approxFloor(value));
-        switch( m_nTimeUnit )
+        case DAY:
+            fResult = value;
+            if(m_bShifted)
+                fResult+=0.5;
+            break;
+        case YEAR:
+        case MONTH:
+        default:
         {
-            case DAY:
-                fResult = value;
-                if(m_bShifted)
-                    fResult+=0.5;
-                break;
-            case YEAR:
-            case MONTH:
-            default:
-                fResult = aDate.GetYear();
-                fResult *= lcl_fNumberOfMonths;//assuming equal count of months in each year
-                fResult += aDate.GetMonth();
+            Date aDate(m_aNullDate);
+            aDate.AddDays(::rtl::math::approxFloor(value));
+            fResult = aDate.GetYear();
+            fResult *= lcl_fNumberOfMonths;//assuming equal count of months in each year
+            fResult += aDate.GetMonth();
 
-                double fDayOfMonth = aDate.GetDay();
-                fDayOfMonth -= 1.0;
-                double fDaysInMonth = aDate.GetDaysInMonth();
-                fResult += fDayOfMonth/fDaysInMonth;
-                if(m_bShifted)
-                {
-                    if( m_nTimeUnit==YEAR )
-                        fResult += 0.5*lcl_fNumberOfMonths;
-                    else
-                        fResult += 0.5;
-                }
-                break;
+            double fDayOfMonth = aDate.GetDay();
+            fDayOfMonth -= 1.0;
+            double fDaysInMonth = aDate.GetDaysInMonth();
+            fResult += fDayOfMonth/fDaysInMonth;
+            if(m_bShifted)
+            {
+                if( m_nTimeUnit==YEAR )
+                    fResult += 0.5*lcl_fNumberOfMonths;
+                else
+                    fResult += 0.5;
+            }
+            break;
         }
     }
     return fResult;
