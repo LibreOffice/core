@@ -80,7 +80,9 @@ std::string ucbGet(const OUString& rURL)
 {
     try
     {
-        auto const s = utl::UcbStreamHelper::CreateStream(rURL, StreamMode::STD_READ);
+        OUString sEncodedUrl = INetURLObject::encode(rURL, INetURLObject::PART_FPATH,
+                                                     INetURLObject::EncodeMechanism::All);
+        auto const s = utl::UcbStreamHelper::CreateStream(sEncodedUrl, StreamMode::STD_READ);
         if (!s)
         {
             SAL_WARN("cui.dialogs", "CreateStream <" << rURL << "> failed");
