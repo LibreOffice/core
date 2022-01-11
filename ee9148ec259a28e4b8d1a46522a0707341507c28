@@ -16,6 +16,24 @@
       "message": "Hey Xisco! I would need your help in order to fix the test cases for this test. Is there a possibility to find the exact failure test case and debug it? Thx for your help.",
       "revId": "ee9148ec259a28e4b8d1a46522a0707341507c28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79a09865_4bf22e35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-11T20:41:22Z",
+      "side": 1,
+      "message": "it seems it fails when building JunitTest_sw_unoapi_1.\nDoes \u0027make JunitTest_sw_unoapi_1\u0027 passes for you locally ?",
+      "parentUuid": "a2e2a761_1797ddb9",
+      "revId": "ee9148ec259a28e4b8d1a46522a0707341507c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
