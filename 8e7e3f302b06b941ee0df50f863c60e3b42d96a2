@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be0ffcb3_2042239f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-01-11T10:32:17Z",
+      "side": 1,
+      "message": "This is not a false positive from Jenkins, but something that actually needs to be fixed in the code.",
+      "revId": "8e7e3f302b06b941ee0df50f863c60e3b42d96a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
