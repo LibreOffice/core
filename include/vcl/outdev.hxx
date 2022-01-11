@@ -294,6 +294,9 @@ public:
     const AllSettings&          GetSettings() const { return *mxSettings; }
 
     SystemGraphicsData          GetSystemGfxData() const;
+    OUString                    GetRenderBackendName() const;
+
+    // Used by the canvas module. Despite the name it does not always return true if Cairo is supported.
     bool                        SupportsCairo() const;
     /// Create Surface from given cairo surface
     cairo::SurfaceSharedPtr     CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const;
