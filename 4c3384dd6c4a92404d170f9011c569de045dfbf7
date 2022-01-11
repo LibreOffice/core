@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18742824_812dd61b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-11T20:46:02Z",
+      "side": 1,
+      "message": "hi Luboš Luňák,\nthis is the first time I hear about bsc#1183308, is it a public bugtracker ?\nOTOH, would it be possible to have a unittest for this fix ?",
+      "revId": "4c3384dd6c4a92404d170f9011c569de045dfbf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
