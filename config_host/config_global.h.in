@@ -35,7 +35,7 @@ Any change in this header will cause a rebuild of almost everything.
    <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87150> "move ctor wrongly chosen in return stmt
    (derived vs. base)"; MSVC++ 14.24 started to implement it, see <https://
    developercommunity.visualstudio.com/content/problem/852827/
-   msvc-1424-started-to-chose-move-ctor-in-return-der.html> "MSVC++ 14.24 started to chose move ctor
+   msvc-1424-started-to-chose-move-ctor-in-return-der.html> "MSVC++ 14.24 started to choose move ctor
    in return derived vs. base".  At least Clang 9, which does not implement it, emits
    -Werror,-Wreturn-std-move when it therefore considers a std::move to be missing.  On the other
    hand, at least some versions of GCC would emit -Werror=redundant-move in places where such a

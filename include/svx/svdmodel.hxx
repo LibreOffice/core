@@ -278,7 +278,7 @@ public:
     // If you do use a custom Pool, make sure you inherit from SdrItemPool,
     // if you want to use symbol objects inherited from SdrAttrObj.
     // If, however, you use objects inheriting from SdrObject you are free
-    // to chose a pool of your liking.
+    // to choose a pool of your liking.
     //
     // tdf#118731 a bDisablePropertyFiles of true will disable ability to load
     // XPropertyFiles describing defaults. Useful for UI preview widgets

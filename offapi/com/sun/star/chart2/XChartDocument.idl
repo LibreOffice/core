@@ -42,7 +42,7 @@ interface XChartDocument : ::com::sun::star::frame::XModel
 
         <p>Notes: this is preliminary, we need an API that supports
         more than one diagram. The method name getDiagram exists in
-        the css.chart API, so there is would be no way to chose either
+        the css.chart API, so there is would be no way to choose either
         this or the other method from Basic (it would chose one or the
         other by random).</p>
      */
@@ -52,7 +52,7 @@ interface XChartDocument : ::com::sun::star::frame::XModel
 
         <p>Notes: this is preliminary, we need an API that supports
         more than one diagram. The method name setDiagram exists in
-        the css.chart API, so there is would be no way to chose either
+        the css.chart API, so there is would be no way to choose either
         this or the other method from Basic (it would chose one or the
         other by random).</p>
      */
