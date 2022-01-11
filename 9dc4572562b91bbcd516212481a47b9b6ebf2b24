@@ -22,6 +22,30 @@
       },
       "revId": "9dc4572562b91bbcd516212481a47b9b6ebf2b24",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b07daa84_5ec853e1",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-11T18:15:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6406390b_333de950",
+      "range": {
+        "startLine": 1168,
+        "startChar": 32,
+        "endLine": 1168,
+        "endChar": 97
+      },
+      "revId": "9dc4572562b91bbcd516212481a47b9b6ebf2b24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
