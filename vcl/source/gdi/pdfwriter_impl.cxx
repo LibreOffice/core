@@ -3895,7 +3895,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     // make sure OpenSymbol is embedded, and includes our checkmark
     const sal_Unicode cMark=0x2713;
     const GlyphItem aItem(0, 0, pMap->GetGlyphIndex(cMark),
-                          Point(), GlyphItemFlags::NONE, 0, 0);
+                          DevicePoint(), GlyphItemFlags::NONE, 0, 0);
     const std::vector<sal_Ucs> aCodeUnits={ cMark };
     sal_uInt8 nMappedGlyph;
     sal_Int32 nMappedFontObject;
@@ -6129,7 +6129,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     std::vector< PDFGlyph > aGlyphs;
     aGlyphs.reserve( nMaxGlyphs );
     // first get all the glyphs and register them; coordinates still in Pixel
-    Point aPos;
+    DevicePoint aPos;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex, nullptr, &pFallbackFont))
     {
         const auto* pFont = pFallbackFont ? pFallbackFont : pDevFont;
@@ -6202,7 +6202,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         if (bUseActualText || pGlyph->IsInCluster())
             nCharPos = pGlyph->charPos();
 
-        aGlyphs.emplace_back(aPos,
+        aGlyphs.emplace_back(Point(aPos.getX(), aPos.getY()),
                              pGlyph,
                              nGlyphWidth,
                              nMappedFontObject,
@@ -6225,7 +6225,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // The rectangle is the bounding box of the text, but also includes
         // ascent / descent to match the on-screen rendering.
         // This is the top left of the text without ascent / descent.
-        tools::Rectangle aRectangle(PixelToLogic(rLayout.GetDrawPosition()),
+        DevicePoint aDrawPosition(rLayout.GetDrawPosition());
+        tools::Rectangle aRectangle(PixelToLogic(Point(aDrawPosition.getX(), aDrawPosition.getY())),
                                     Size(ImplDevicePixelToLogicWidth(rLayout.GetTextWidth()), 0));
         aRectangle.AdjustTop(-aRefDevFontMetric.GetAscent());
         // This includes ascent / descent.
@@ -6236,7 +6237,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             // Adapt rectangle for rotated text.
             tools::Polygon aPolygon(aRectangle);
-            aPolygon.Rotate(PixelToLogic(rLayout.GetDrawPosition()), pFontInstance->mnOrientation);
+            aPolygon.Rotate(PixelToLogic(Point(aDrawPosition.getX(), aDrawPosition.getY())), pFontInstance->mnOrientation);
             drawPolygon(aPolygon);
         }
         else
@@ -6333,7 +6334,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                 if (!pGlyph->IsSpacing())
                 {
                     if( !nWidth )
-                        aStartPt = aPos;
+                        aStartPt = Point(aPos.getX(), aPos.getY());
 
                     nWidth += pGlyph->m_nNewWidth;
                 }
@@ -6355,9 +6356,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         }
         else
         {
-            Point aStartPt = rLayout.GetDrawPosition();
+            DevicePoint aStartPt = rLayout.GetDrawPosition();
             int nWidth = rLayout.GetTextWidth() / rLayout.GetUnitsPerPixel();
-            drawTextLine( PixelToLogic( aStartPt ),
+            drawTextLine( PixelToLogic(Point(aStartPt.getX(), aStartPt.getY()) ),
                           ImplDevicePixelToLogicWidth( nWidth ),
                           eStrikeout, eUnderline, eOverline, bUnderlineAbove );
         }
@@ -6433,9 +6434,10 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
             aAdjOffset -= Point( nEmphWidth2, nEmphHeight2 );
 
-            aPos += aAdjOffset;
-            aPos = PixelToLogic( aPos );
-            drawEmphasisMark( aPos.X(), aPos.Y(),
+            Point aMarkPos(aPos.getX(), aPos.getY());
+            aMarkPos += aAdjOffset;
+            aMarkPos = PixelToLogic(aMarkPos);
+            drawEmphasisMark( aMarkPos.X(), aMarkPos.Y(),
                               aEmphPoly, bEmphPolyLine,
                               aEmphRect1, aEmphRect2 );
         }

@@ -1117,7 +1117,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     tools::Long nEmphasisHeight2 = nEmphasisHeight / 2;
     aOffset += Point( nEmphasisWidth2, nEmphasisHeight2 );
 
-    Point aOutPoint;
+    DevicePoint aOutPoint;
     tools::Rectangle aRectangle;
     const GlyphItem* pGlyph;
     const LogicalFontInstance* pGlyphFont;
@@ -1136,10 +1136,10 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
                 Point aOriginPt(0, 0);
                 aOriginPt.RotateAround( aAdjPoint, mpFontInstance->mnOrientation );
             }
-            aOutPoint += aAdjPoint;
-            aOutPoint -= Point( nEmphasisWidth2, nEmphasisHeight2 );
+            aOutPoint.adjustX(aAdjPoint.X() - nEmphasisWidth2);
+            aOutPoint.adjustY(aAdjPoint.Y() - nEmphasisHeight2);
             ImplDrawEmphasisMark( rSalLayout.DrawBase().X(),
-                                  aOutPoint.X(), aOutPoint.Y(),
+                                  aOutPoint.getX(), aOutPoint.getY(),
                                   aPolyPoly, bPolyLine, aRect1, aRect2 );
         }
     }

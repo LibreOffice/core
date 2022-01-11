@@ -2121,7 +2121,7 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
     glyphIds.reserve(256);
     glyphForms.reserve(256);
     verticals.reserve(256);
-    Point aPos;
+    DevicePoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     while (layout.GetNextGlyph(&pGlyph, aPos, nStart))
@@ -2130,7 +2130,7 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
         Degree10 angle = layout.GetOrientation();
         if (pGlyph->IsVertical())
             angle += 900_deg10;
-        SkRSXform form = SkRSXform::Make(toCos(angle), toSin(angle), aPos.X(), aPos.Y());
+        SkRSXform form = SkRSXform::Make(toCos(angle), toSin(angle), aPos.getX(), aPos.getY());
         glyphForms.emplace_back(std::move(form));
         verticals.emplace_back(pGlyph->IsVertical());
     }

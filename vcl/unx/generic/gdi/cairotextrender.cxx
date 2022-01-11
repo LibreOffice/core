@@ -125,15 +125,15 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     std::vector<int> glyph_extrarotation;
     cairo_glyphs.reserve( 256 );
 
-    Point aPos;
+    DevicePoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         cairo_glyph_t aGlyph;
         aGlyph.index = pGlyph->glyphId();
-        aGlyph.x = aPos.X();
-        aGlyph.y = aPos.Y();
+        aGlyph.x = aPos.getX();
+        aGlyph.y = aPos.getY();
         cairo_glyphs.push_back(aGlyph);
 
         if (pGlyph->IsVertical())

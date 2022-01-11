@@ -58,10 +58,10 @@ class VCL_DLLPUBLIC GlyphItem
     GlyphItemFlags m_nFlags;
 
 public:
-    Point m_aLinearPos; // absolute position of non rotated string
+    DevicePoint m_aLinearPos; // absolute position of non rotated string
     sal_Int32 m_nNewWidth; // width after adjustments
 
-    GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const Point& rLinearPos,
+    GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const DevicePoint& rLinearPos,
               GlyphItemFlags nFlags, int nOrigWidth, int nXOffset)
         : m_nOrigWidth(nOrigWidth)
         , m_nCharPos(nCharPos)
