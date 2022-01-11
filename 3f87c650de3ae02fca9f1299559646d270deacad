@@ -16,6 +16,24 @@
       "message": "Interesting - so - I would expect (and I thought we did this but I can\u0027t find it now ;-) that implementing a:\n\ngit grep -10 lok_preload_hook\n\nin the configmgr component - that forced everything into memory \u0026 staticized it might be more generic; but (I guess) as soon as we fetch a single key ~everything is loaded anyway - so perhaps this is enough (though we will need something to staticize stuff).\n\nThanks !",
       "revId": "3f87c650de3ae02fca9f1299559646d270deacad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee5bc13d_bc1ca5fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-11T06:18:36Z",
+      "side": 1,
+      "message": "There is a cache here:\n   https://opengrok.libreoffice.org/xref/core/comphelper/source/misc/configuration.cxx?r\u003d97b7511a#116\n\nwhich this code is effectively trying to pre-load.\n\nOnce that is loaded, there should be much less touching of pages (for ref-counting).",
+      "parentUuid": "a91a7657_2fa866c0",
+      "revId": "3f87c650de3ae02fca9f1299559646d270deacad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
