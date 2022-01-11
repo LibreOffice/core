@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "990fdd96_f7090e62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-11T11:57:49Z",
+      "side": 1,
+      "message": "I ran into the problem under windows that skia wasn\u0027t using directwrite to render any fonts in my development instdir/share/fonts because they weren\u0027t part of the \"SystemFontCollection\" and was falling back to gdi.\n\nThis approach to make our own collection and update it when there\u0027s a miss from the SystemFontCollection seems to work and the rendering goes down the directwrite path in skia like I hoped to see.",
+      "revId": "41bf41a3578bad3ef9effd1690115ec4d3591fef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
