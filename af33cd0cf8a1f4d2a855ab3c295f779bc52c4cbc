@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fda13614_06cedd4e",
+        "filename": "solenv/gbuild/LinkTarget.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-11T14:11:13Z",
+      "side": 1,
+      "message": "gb_Library_use_system_win32_libs actually calls gb_LinkTarget_add_libs. We need to track these, which is described in the other sentences. I\u0027ll move the Windows info to the end of the whole commend, as it\u0027s just a special detail for Windows.",
+      "parentUuid": "3dd5ef35_601f286b",
+      "range": {
+        "startLine": 39,
+        "startChar": 10,
+        "endLine": 39,
+        "endChar": 33
+      },
+      "revId": "af33cd0cf8a1f4d2a855ab3c295f779bc52c4cbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "49eccaea_844e7e8b",
         "filename": "solenv/gbuild/static.mk",
         "patchSetId": 13
@@ -77,6 +101,30 @@
       "writtenOn": "2022-01-11T11:16:41Z",
       "side": 1,
       "message": "this does nothing as it is a typo of \"icui18n\" so is it really needed?",
+      "range": {
+        "startLine": 184,
+        "startChar": 14,
+        "endLine": 184,
+        "endChar": 21
+      },
+      "revId": "af33cd0cf8a1f4d2a855ab3c295f779bc52c4cbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "568848c2_56621c7f",
+        "filename": "solenv/gbuild/static.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-11T14:11:13Z",
+      "side": 1,
+      "message": "Nice catch. I guess there is no real separation between icui18n and icuuc usage in LO. We need to link the static data library, if they are used. RepositoryExternal defines separate use macros for icui18n and icuuc. Both libraries link to icudata for a dynamic build. Maybe the only real user of icu* are components, so these suck in almost everything anyway.",
+      "parentUuid": "580f51cf_61f6b755",
       "range": {
         "startLine": 184,
         "startChar": 14,
