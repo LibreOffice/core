@@ -22,6 +22,7 @@
 
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
+#include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <rtl/ref.hxx>
@@ -142,7 +143,7 @@ public:
     void setRoleOfSequenceForDataLabelNumberFormatDetection( std::u16string_view rRole );
 
     //this is only temporarily here for area chart:
-    css::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;
+    std::vector<std::vector<css::drawing::Position3D>> m_aPolyPolygonShape3D;
     sal_Int32   m_nPolygonIndex;
     double m_fLogicMinX;
     double m_fLogicMaxX;

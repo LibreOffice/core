@@ -83,6 +83,34 @@ void lcl_addProperty(uno::Sequence<OUString> & rPropertyNames, uno::Sequence<uno
     rPropertyValues.getArray()[rPropertyValues.getLength() - 1] = rAny;
 }
 
+css::drawing::PolyPolygonShape3D toPolyPolygonShape3D(const std::vector<std::vector<css::drawing::Position3D>>& rPoints)
+{
+    css::drawing::PolyPolygonShape3D aUnoPoly;
+    aUnoPoly.SequenceX.realloc(rPoints.size());
+    aUnoPoly.SequenceY.realloc(rPoints.size());
+    aUnoPoly.SequenceZ.realloc(rPoints.size());
+    for (sal_Int32 nPolygonIndex=0; nPolygonIndex<static_cast<sal_Int32>(rPoints.size()); ++nPolygonIndex)
+    {
+        drawing::DoubleSequence* pOuterSequenceX = &aUnoPoly.SequenceX.getArray()[nPolygonIndex];
+        drawing::DoubleSequence* pOuterSequenceY = &aUnoPoly.SequenceY.getArray()[nPolygonIndex];
+        drawing::DoubleSequence* pOuterSequenceZ = &aUnoPoly.SequenceZ.getArray()[nPolygonIndex];
+        pOuterSequenceX->realloc(rPoints[nPolygonIndex].size());
+        pOuterSequenceY->realloc(rPoints[nPolygonIndex].size());
+        pOuterSequenceZ->realloc(rPoints[nPolygonIndex].size());
+        double* pInnerSequenceX = pOuterSequenceX->getArray();
+        double* pInnerSequenceY = pOuterSequenceY->getArray();
+        double* pInnerSequenceZ = pOuterSequenceZ->getArray();
+        for (sal_Int32 nPointIndex=0; nPointIndex<static_cast<sal_Int32>(rPoints[nPolygonIndex].size()); ++nPointIndex)
+        {
+            auto& rPos = rPoints[nPolygonIndex][nPointIndex];
+            pInnerSequenceX[nPointIndex] = rPos.PositionX;
+            pInnerSequenceY[nPointIndex] = rPos.PositionY;
+            pInnerSequenceZ[nPointIndex] = rPos.PositionZ;
+        }
+    }
+    return aUnoPoly;
+}
+
 } // end anonymous namespace
 
 rtl::Reference<SvxShapeGroupAnyD> ShapeFactory::getOrCreateChartRootShape(
@@ -1081,9 +1109,96 @@ rtl::Reference<Svx3DExtrudeObject>
     return xShape;
 }
 
+rtl::Reference<Svx3DExtrudeObject>
+        ShapeFactory::createArea3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+                    , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
+                    , double fDepth )
+{
+    if( !xTarget.is() )
+        return nullptr;
+
+    if( rPolyPolygon.empty() )
+        return nullptr;
+
+    //create shape
+    rtl::Reference<Svx3DExtrudeObject> xShape = new Svx3DExtrudeObject(nullptr);
+    xShape->setShapeKind(SdrObjKind::E3D_Extrusion);
+    xTarget->add(xShape);
+
+    css::drawing::PolyPolygonShape3D aUnoPolyPolygon = toPolyPolygonShape3D(rPolyPolygon);
+
+    //set properties
+    try
+    {
+        uno::Sequence<OUString> aPropertyNames{
+            UNO_NAME_3D_EXTRUDE_DEPTH,
+            UNO_NAME_3D_PERCENT_DIAGONAL,
+            UNO_NAME_3D_POLYPOLYGON3D,
+            UNO_NAME_3D_DOUBLE_SIDED,
+        };
+
+        uno::Sequence<uno::Any> aPropertyValues {
+            uno::Any(sal_Int32(fDepth)), // depth
+            uno::Any(sal_Int16(0)),      // PercentDiagonal
+            uno::Any(aUnoPolyPolygon),      // Polygon
+            uno::Any(true)               // DoubleSided
+        };
+
+        //the z component of the polygon is now ignored by the drawing layer,
+        //so we need to translate the object via transformation matrix
+
+        //Matrix for position
+        if (!rPolyPolygon.empty() && !rPolyPolygon[0].empty())
+        {
+            basegfx::B3DHomMatrix aM;
+            aM.translate(0, 0, rPolyPolygon[0][0].PositionZ);
+            drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
+            lcl_addProperty(aPropertyNames, aPropertyValues, UNO_NAME_3D_TRANSFORM_MATRIX, uno::Any(aHM));
+        }
+        xShape->setPropertyValues(aPropertyNames, aPropertyValues);
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+    return xShape;
+}
+
 SdrPathObj*
         ShapeFactory::createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const drawing::PolyPolygonShape3D& rPolyPolygon
+                    , bool bSetZOrderToZero )
+{
+    if( !xTarget.is() )
+        return nullptr;
+
+    //create shape
+    SdrPathObj* pPath = new SdrPathObj(xTarget->GetSdrObject()->getSdrModelFromSdrObject(), SdrObjKind::Polygon);
+    if (bSetZOrderToZero)
+        // insert at ZOrder 0, an area should always be behind other shapes
+        xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath, 0);
+    else
+        xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath);
+
+    //set properties
+    try
+    {
+        // Polygon
+        basegfx::B2DPolyPolygon aNewPolyPolygon( PolyToB2DPolyPolygon(rPolyPolygon) );
+        // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
+        pPath->ForceMetricToItemPoolMetric(aNewPolyPolygon);
+        pPath->SetPathPoly(aNewPolyPolygon);
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+    return pPath;
+}
+
+SdrPathObj*
+        ShapeFactory::createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+                    , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
                     , bool bSetZOrderToZero )
 {
     if( !xTarget.is() )
@@ -1860,19 +1975,21 @@ rtl::Reference<SvxShapeCircle>
 
 rtl::Reference<Svx3DPolygonObject>
         ShapeFactory::createLine3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const drawing::PolyPolygonShape3D& rPoints
+                    , const std::vector<std::vector<css::drawing::Position3D>>& rPoints
                     , const VLineProperties& rLineProperties )
 {
     if( !xTarget.is() )
         return nullptr;
 
-    if(!rPoints.SequenceX.hasElements())
+    if(rPoints.empty())
         return nullptr;
 
     //create shape
     rtl::Reference<Svx3DPolygonObject> xShape = new Svx3DPolygonObject(nullptr);
     xShape->setShapeKind(SdrObjKind::E3D_Polygon);
     xTarget->add(xShape);
+
+    css::drawing::PolyPolygonShape3D aUnoPoly = toPolyPolygonShape3D(rPoints);
 
     //set properties
     try
@@ -1883,7 +2000,7 @@ rtl::Reference<Svx3DPolygonObject>
         };
 
         uno::Sequence<uno::Any> aPropertyValues {
-            uno::Any(rPoints),  // Polygon
+            uno::Any(aUnoPoly),  // Polygon
             uno::Any(true)      // LineOnly
         };
 
@@ -1949,6 +2066,71 @@ rtl::Reference<SvxShapePolyPolygon>
         //Polygon
         xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
             , uno::Any( rPoints ) );
+
+        if(pLineProperties)
+        {
+            //Transparency
+            if(pLineProperties->Transparence.hasValue())
+                xShape->SvxShape::setPropertyValue( UNO_NAME_LINETRANSPARENCE
+                    , pLineProperties->Transparence );
+
+            //LineStyle
+            if(pLineProperties->LineStyle.hasValue())
+                xShape->SvxShape::setPropertyValue( UNO_NAME_LINESTYLE
+                    , pLineProperties->LineStyle );
+
+            //LineWidth
+            if(pLineProperties->Width.hasValue())
+                xShape->SvxShape::setPropertyValue( UNO_NAME_LINEWIDTH
+                    , pLineProperties->Width );
+
+            //LineColor
+            if(pLineProperties->Color.hasValue())
+                xShape->SvxShape::setPropertyValue( UNO_NAME_LINECOLOR
+                    , pLineProperties->Color );
+
+            //LineDashName
+            if(pLineProperties->DashName.hasValue())
+                xShape->SvxShape::setPropertyValue( "LineDashName"
+                    , pLineProperties->DashName );
+
+            //LineCap
+            if(pLineProperties->LineCap.hasValue())
+                xShape->SvxShape::setPropertyValue( UNO_NAME_LINECAP
+                    , pLineProperties->LineCap );
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+    return xShape;
+}
+
+rtl::Reference<SvxShapePolyPolygon>
+        ShapeFactory::createLine2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+                    , const std::vector<std::vector<css::drawing::Position3D>>& rPoints
+                    , const VLineProperties* pLineProperties )
+{
+    if( !xTarget.is() )
+        return nullptr;
+
+    if(rPoints.empty())
+        return nullptr;
+
+    //create shape
+    rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
+    xShape->setShapeKind(SdrObjKind::PolyLine);
+    xTarget->add(xShape);
+
+    drawing::PointSequenceSequence aAnyPoints = PolyToPointSequence(rPoints);
+
+    //set properties
+    try
+    {
+        //Polygon
+        xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
+            , uno::Any( aAnyPoints ) );
 
         if(pLineProperties)
         {
@@ -2465,11 +2647,26 @@ bool ShapeFactory::hasPolygonAnyLines( drawing::PolyPolygonShape3D& rPoly)
     return false;
 }
 
+bool ShapeFactory::hasPolygonAnyLines( const std::vector<std::vector<css::drawing::Position3D>>& rPoly)
+{
+    // #i67757# check all contained polygons, if at least one polygon contains 2 or more points, return true
+    for( auto const & i : rPoly )
+        if( i.size() > 1 )
+            return true;
+    return false;
+}
+
 bool ShapeFactory::isPolygonEmptyOrSinglePoint( drawing::PolyPolygonShape3D& rPoly)
 {
     // true, if empty polypolygon or one polygon with one point
     return !rPoly.SequenceX.hasElements() ||
         ((rPoly.SequenceX.getLength() == 1) && (rPoly.SequenceX[0].getLength() <= 1));
+}
+
+bool ShapeFactory::isPolygonEmptyOrSinglePoint( const std::vector<std::vector<css::drawing::Position3D>>& rPoly)
+{
+    // true, if empty polypolygon or one polygon with one point
+    return rPoly.empty() || ((rPoly.size() == 1) && (rPoly[0].size() <= 1));
 }
 
 void ShapeFactory::closePolygon( drawing::PolyPolygonShape3D& rPoly)
@@ -2479,6 +2676,16 @@ void ShapeFactory::closePolygon( drawing::PolyPolygonShape3D& rPoly)
     if(isPolygonEmptyOrSinglePoint(rPoly))
         return;
     drawing::Position3D aFirst(rPoly.SequenceX[0][0],rPoly.SequenceY[0][0],rPoly.SequenceZ[0][0]);
+    AddPointToPoly( rPoly, aFirst );
+}
+
+void ShapeFactory::closePolygon( std::vector<std::vector<css::drawing::Position3D>>& rPoly)
+{
+    OSL_ENSURE( rPoly.size() <= 1, "ShapeFactory::closePolygon - single polygon expected" );
+    //add a last point == first point
+    if(isPolygonEmptyOrSinglePoint(rPoly))
+        return;
+    drawing::Position3D aFirst(rPoly[0][0]);
     AddPointToPoly( rPoly, aFirst );
 }
 

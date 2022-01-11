@@ -20,6 +20,7 @@
 #include "Splines.hxx"
 #include <osl/diagnose.h>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
+#include <com/sun/star/drawing/Position3D.hpp>
 
 #include <vector>
 #include <algorithm>
@@ -648,6 +649,114 @@ void SplineCalculater::CalculateCubicSplines(
     }
 }
 
+// Calculates uniform parametric splines with subinterval length 1,
+// according ODF1.2 part 1, chapter 'chart interpolation'.
+void SplineCalculater::CalculateCubicSplines(
+    const std::vector<std::vector<css::drawing::Position3D>>& rInput
+    , std::vector<std::vector<css::drawing::Position3D>>& rResult
+    , sal_uInt32 nGranularity )
+{
+    OSL_PRECOND( nGranularity > 0, "Granularity is invalid" );
+
+    sal_uInt32 nOuterCount = rInput.size();
+
+    rResult.resize(nOuterCount);
+
+    auto pSequence = rResult.data();
+
+    if( !nOuterCount )
+        return;
+
+    for( sal_uInt32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
+    {
+        if( rInput[nOuter].size() <= 1 )
+            continue; //we need at least two points
+
+        sal_uInt32 nMaxIndexPoints = rInput[nOuter].size()-1; // is >=1
+        const css::drawing::Position3D* pOld = rInput[nOuter].data();
+
+        std::vector < double > aParameter(nMaxIndexPoints+1);
+        aParameter[0]=0.0;
+        for( sal_uInt32 nIndex=1; nIndex<=nMaxIndexPoints; nIndex++ )
+        {
+            aParameter[nIndex]=aParameter[nIndex-1]+1;
+        }
+
+        // Split the calculation to X, Y and Z coordinate
+        tPointVecType aInputX;
+        aInputX.resize(nMaxIndexPoints+1);
+        tPointVecType aInputY;
+        aInputY.resize(nMaxIndexPoints+1);
+        tPointVecType aInputZ;
+        aInputZ.resize(nMaxIndexPoints+1);
+        for (sal_uInt32 nN=0;nN<=nMaxIndexPoints; nN++ )
+        {
+          aInputX[ nN ].first=aParameter[nN];
+          aInputX[ nN ].second=pOld[ nN ].PositionX;
+          aInputY[ nN ].first=aParameter[nN];
+          aInputY[ nN ].second=pOld[ nN ].PositionY;
+          aInputZ[ nN ].first=aParameter[nN];
+          aInputZ[ nN ].second=pOld[ nN ].PositionZ;
+        }
+
+        // generate a spline for each coordinate. It holds the complete
+        // information to calculate each point of the curve
+        std::unique_ptr<lcl_SplineCalculation> aSplineX;
+        std::unique_ptr<lcl_SplineCalculation> aSplineY;
+        // lcl_SplineCalculation* aSplineZ; the z-coordinates of all points in
+        // a data series are equal. No spline calculation needed, but copy
+        // coordinate to output
+
+        if( pOld[ 0 ].PositionX == pOld[nMaxIndexPoints].PositionX &&
+            pOld[ 0 ].PositionY == pOld[nMaxIndexPoints].PositionY &&
+            pOld[ 0 ].PositionZ == pOld[nMaxIndexPoints].PositionZ &&
+            nMaxIndexPoints >=2 )
+        {   // periodic spline
+            aSplineX.reset(new lcl_SplineCalculation( std::move(aInputX)));
+            aSplineY.reset(new lcl_SplineCalculation( std::move(aInputY)));
+            // aSplineZ = new lcl_SplineCalculation( aInputZ) ;
+        }
+        else // generate the kind "natural spline"
+        {
+            double fXDerivation = std::numeric_limits<double>::infinity();
+            double fYDerivation = std::numeric_limits<double>::infinity();
+            aSplineX.reset(new lcl_SplineCalculation( std::move(aInputX), fXDerivation, fXDerivation ));
+            aSplineY.reset(new lcl_SplineCalculation( std::move(aInputY), fYDerivation, fYDerivation ));
+        }
+
+        // fill result polygon with calculated values
+        pSequence[nOuter].resize( nMaxIndexPoints*nGranularity + 1);
+
+        css::drawing::Position3D* pNew = pSequence[nOuter].data();
+
+        sal_uInt32 nNewPointIndex = 0; // Index in result points
+
+        for( sal_uInt32 ni = 0; ni < nMaxIndexPoints; ni++ )
+        {
+            // given point is surely a curve point
+            pNew[nNewPointIndex].PositionX = pOld[ni].PositionX;
+            pNew[nNewPointIndex].PositionY = pOld[ni].PositionY;
+            pNew[nNewPointIndex].PositionZ = pOld[ni].PositionZ;
+            nNewPointIndex++;
+
+            // calculate intermediate points
+            double fInc = ( aParameter[ ni+1 ] - aParameter[ni] ) / static_cast< double >( nGranularity );
+            for(sal_uInt32 nj = 1; nj < nGranularity; nj++)
+            {
+                double fParam = aParameter[ni] + ( fInc * static_cast< double >( nj ) );
+
+                pNew[nNewPointIndex].PositionX = aSplineX->GetInterpolatedValue( fParam );
+                pNew[nNewPointIndex].PositionY = aSplineY->GetInterpolatedValue( fParam );
+                // pNewZ[nNewPointIndex]=aSplineZ->GetInterpolatedValue( fParam );
+                pNew[nNewPointIndex].PositionZ = pOld[ni].PositionZ;
+                nNewPointIndex++;
+            }
+        }
+        // add last point
+        pNew[nNewPointIndex] = pOld[nMaxIndexPoints];
+    }
+}
+
 // The implementation follows closely ODF1.2 spec, chapter chart:interpolation
 // using the same names as in spec as far as possible, without prefix.
 // More details can be found on
@@ -921,6 +1030,271 @@ void SplineCalculater::CalculateBSplines(
                     }
                     pNewY[nNewIndex] = aP[nLow];
                     pNewZ[nNewIndex] = fZCoordinate;
+                }
+            }
+        }
+        for (lcl_tSizeType row = 0; row <=n; ++row)
+        {
+            delete[] aMatN[row];
+        }
+    } // next piece of the series
+}
+
+void SplineCalculater::CalculateBSplines(
+            const std::vector<std::vector<css::drawing::Position3D>>& rInput
+            , std::vector<std::vector<css::drawing::Position3D>>& rResult
+            , sal_uInt32 nResolution
+            , sal_uInt32 nDegree )
+{
+    // nResolution is ODF1.2 file format attribute chart:spline-resolution and
+    // ODF1.2 spec variable k. Causion, k is used as index in the spec in addition.
+    // nDegree is ODF1.2 file format attribute chart:spline-order and
+    // ODF1.2 spec variable p
+    OSL_ASSERT( nResolution > 1 );
+    OSL_ASSERT( nDegree >= 1 );
+
+    // limit the b-spline degree at 15 to prevent insanely large sets of points
+    sal_uInt32 p = std::min<sal_uInt32>(nDegree, 15);
+
+    sal_Int32 nOuterCount = rInput.size();
+
+    rResult.resize(nOuterCount);
+
+    auto pSequence = rResult.data();
+
+    if( !nOuterCount )
+        return; // no input
+
+    for( sal_Int32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
+    {
+        if( rInput[nOuter].size() <= 1 )
+            continue; // need at least 2 points, next piece of the series
+
+        // Copy input to vector of points and remove adjacent double points. The
+        // Z-coordinate is equal for all points in a series and holds the depth
+        // in 3D mode, simple copying is enough.
+        lcl_tSizeType nMaxIndexPoints = rInput[nOuter].size()-1; // is >=1
+        const css::drawing::Position3D* pOld = rInput[nOuter].data();
+        double fZCoordinate = pOld[0].PositionZ;
+        tPointVecType aPointsIn;
+        aPointsIn.resize(nMaxIndexPoints+1);
+        for (lcl_tSizeType i = 0; i <= nMaxIndexPoints; ++i )
+        {
+          aPointsIn[ i ].first = pOld[i].PositionX;
+          aPointsIn[ i ].second = pOld[i].PositionY;
+        }
+        aPointsIn.erase( std::unique( aPointsIn.begin(), aPointsIn.end()),
+                     aPointsIn.end() );
+
+        // n is the last valid index to the reduced aPointsIn
+        // There are n+1 valid data points.
+        const lcl_tSizeType n = aPointsIn.size() - 1;
+        if (n < 1 || p > n)
+            continue; // need at least 2 points, degree p needs at least n+1 points
+                      // next piece of series
+
+        std::unique_ptr<double[]> t(new double [n+1]);
+        if (!createParameterT(aPointsIn, t.get()))
+        {
+            continue; // next piece of series
+        }
+
+        lcl_tSizeType m = n + p + 1;
+        std::unique_ptr<double[]> u(new double [m+1]);
+        createKnotVector(n, p, t.get(), u.get());
+
+        // The matrix N contains the B-spline basis functions applied to parameters.
+        // In each row only p+1 adjacent elements are non-zero. The starting
+        // column in a higher row is equal or greater than in the lower row.
+        // To store this matrix the non-zero elements are shifted to column 0
+        // and the amount of shifting is remembered in an array.
+        std::unique_ptr<double*[]> aMatN(new double*[n+1]);
+        for (lcl_tSizeType row = 0; row <=n; ++row)
+        {
+            aMatN[row] = new double[p+1];
+            for (sal_uInt32 col = 0; col <= p; ++col)
+            aMatN[row][col] = 0.0;
+        }
+        std::unique_ptr<lcl_tSizeType[]> aShift(new lcl_tSizeType[n+1]);
+        aMatN[0][0] = 1.0; //all others are zero
+        aShift[0] = 0;
+        aMatN[n][0] = 1.0;
+        aShift[n] = n;
+        for (lcl_tSizeType k = 1; k<=n-1; ++k)
+        { // all basis functions are applied to t_k,
+            // results are elements in row k in matrix N
+
+            // find the one interval with u_i <= t_k < u_(i+1)
+            // remember u_0 = ... = u_p = 0.0 and u_(m-p) = ... u_m = 1.0 and 0<t_k<1
+            lcl_tSizeType i = p;
+            while (u[i] > t[k] || t[k] >= u[i+1])
+            {
+                ++i;
+            }
+
+            // index in reduced matrix aMatN = (index in full matrix N) - (i-p)
+            aShift[k] = i - p;
+
+            applyNtoParameterT(i, t[k], p, u.get(), aMatN[k]);
+        } // next row k
+
+        // Get matrix C of control points from the matrix equation aMatN * C = aPointsIn
+        // aPointsIn is overwritten with C.
+        // Gaussian elimination is possible without pivoting, see reference
+        lcl_tSizeType r = 0; // true row index
+        lcl_tSizeType c = 0; // true column index
+        double fDivisor = 1.0; // used for diagonal element
+        double fEliminate = 1.0; // used for the element, that will become zero
+        double fHelp;
+        tPointType aHelp;
+        lcl_tSizeType nHelp; // used in triangle change
+        bool bIsSuccessful = true;
+        for (c = 0 ; c <= n && bIsSuccessful; ++c)
+        {
+            // search for first non-zero downwards
+            r = c;
+            while ( r < n && aMatN[r][c-aShift[r]] == 0 )
+            {
+                ++r;
+            }
+            if (aMatN[r][c-aShift[r]] == 0.0)
+            {
+                // Matrix N is singular, although this is mathematically impossible
+                bIsSuccessful = false;
+            }
+            else
+            {
+                // exchange total row r with total row c if necessary
+                if (r != c)
+                {
+                    for ( sal_uInt32 i = 0; i <= p ; ++i)
+                    {
+                        fHelp = aMatN[r][i];
+                        aMatN[r][i] = aMatN[c][i];
+                        aMatN[c][i] = fHelp;
+                    }
+                    aHelp = aPointsIn[r];
+                    aPointsIn[r] = aPointsIn[c];
+                    aPointsIn[c] = aHelp;
+                    nHelp = aShift[r];
+                    aShift[r] = aShift[c];
+                    aShift[c] = nHelp;
+                }
+
+                // divide row c, so that element(c,c) becomes 1
+                fDivisor = aMatN[c][c-aShift[c]]; // not zero, see above
+                for (sal_uInt32 i = 0; i <= p; ++i)
+                {
+                    aMatN[c][i] /= fDivisor;
+                }
+                aPointsIn[c].first /= fDivisor;
+                aPointsIn[c].second /= fDivisor;
+
+                // eliminate forward, examine row c+1 to n-1 (worst case)
+                // stop if first non-zero element in row has an higher column as c
+                // look at nShift for that, elements in nShift are equal or increasing
+                for ( r = c+1; r < n && aShift[r]<=c ; ++r)
+                {
+                    fEliminate = aMatN[r][0];
+                    if (fEliminate != 0.0) // else accidentally zero, nothing to do
+                    {
+                        for (sal_uInt32 i = 1; i <= p; ++i)
+                        {
+                            aMatN[r][i-1] = aMatN[r][i] - fEliminate * aMatN[c][i];
+                        }
+                        aMatN[r][p]=0;
+                        aPointsIn[r].first -= fEliminate * aPointsIn[c].first;
+                        aPointsIn[r].second -= fEliminate * aPointsIn[c].second;
+                        ++aShift[r];
+                    }
+                }
+            }
+        }// upper triangle form is reached
+        if( bIsSuccessful)
+        {
+            // eliminate backwards, begin with last column
+            for (lcl_tSizeType cc = n; cc >= 1; --cc )
+            {
+                // In row cc the diagonal element(cc,cc) == 1 and all elements left from
+                // diagonal are zero and do not influence other rows.
+                // Full matrix N has semibandwidth < p, therefore element(r,c) is
+                // zero, if abs(r-cc)>=p.  abs(r-cc)=cc-r, because r<cc.
+                r = cc - 1;
+                while ( r !=0 && cc-r < p )
+                {
+                    fEliminate = aMatN[r][ cc - aShift[r] ];
+                    if ( fEliminate != 0.0) // else element is accidentally zero, no action needed
+                    {
+                        // row r -= fEliminate * row cc only relevant for right side
+                        aMatN[r][cc - aShift[r]] = 0.0;
+                        aPointsIn[r].first -= fEliminate * aPointsIn[cc].first;
+                        aPointsIn[r].second -= fEliminate * aPointsIn[cc].second;
+                    }
+                    --r;
+                }
+            }
+            // aPointsIn contains the control points now.
+
+            // calculate the intermediate points according given resolution
+            // using deBoor-Cox algorithm
+            lcl_tSizeType nNewSize = nResolution * n + 1;
+            pSequence[nOuter].resize(nNewSize);
+            css::drawing::Position3D* pNew = pSequence[nOuter].data();
+            pNew[0].PositionX = aPointsIn[0].first;
+            pNew[0].PositionY = aPointsIn[0].second;
+            pNew[0].PositionZ = fZCoordinate; // Precondition: z-coordinates of all points of a series are equal
+            pNew[nNewSize -1 ].PositionX = aPointsIn[n].first;
+            pNew[nNewSize -1 ].PositionY = aPointsIn[n].second;
+            pNew[nNewSize -1 ].PositionZ = fZCoordinate;
+            std::unique_ptr<double[]> aP(new double[m+1]);
+            lcl_tSizeType nLow = 0;
+            for ( lcl_tSizeType nTIndex = 0; nTIndex <= n-1; ++nTIndex)
+            {
+                for (sal_uInt32 nResolutionStep = 1;
+                     nResolutionStep <= nResolution && ( nTIndex != n-1 || nResolutionStep != nResolution);
+                     ++nResolutionStep)
+                {
+                    lcl_tSizeType nNewIndex = nTIndex * nResolution + nResolutionStep;
+                    double ux = t[nTIndex] + nResolutionStep * ( t[nTIndex+1] - t[nTIndex]) /nResolution;
+
+                    // get index nLow, so that u[nLow]<= ux < u[nLow +1]
+                    // continue from previous nLow
+                    while ( u[nLow] <= ux)
+                    {
+                        ++nLow;
+                    }
+                    --nLow;
+
+                    // x-coordinate
+                    for (lcl_tSizeType i = nLow-p; i <= nLow; ++i)
+                    {
+                        aP[i] = aPointsIn[i].first;
+                    }
+                    for (sal_uInt32 lcl_Degree = 1; lcl_Degree <= p; ++lcl_Degree)
+                    {
+                        for (lcl_tSizeType i = nLow; i >= nLow + lcl_Degree - p; --i)
+                        {
+                            double fFactor = ( ux - u[i] ) / ( u[i+p+1-lcl_Degree] - u[i]);
+                            aP[i] = (1 - fFactor)* aP[i-1] + fFactor * aP[i];
+                        }
+                    }
+                    pNew[nNewIndex].PositionX = aP[nLow];
+
+                    // y-coordinate
+                    for (lcl_tSizeType i = nLow - p; i <= nLow; ++i)
+                    {
+                        aP[i] = aPointsIn[i].second;
+                    }
+                    for (sal_uInt32 lcl_Degree = 1; lcl_Degree <= p; ++lcl_Degree)
+                    {
+                        for (lcl_tSizeType i = nLow; i >= nLow +lcl_Degree - p; --i)
+                        {
+                            double fFactor = ( ux - u[i] ) / ( u[i+p+1-lcl_Degree] - u[i]);
+                            aP[i] = (1 - fFactor)* aP[i-1] + fFactor * aP[i];
+                        }
+                    }
+                    pNew[nNewIndex].PositionY = aP[nLow];
+                    pNew[nNewIndex].PositionZ = fZCoordinate;
                 }
             }
         }

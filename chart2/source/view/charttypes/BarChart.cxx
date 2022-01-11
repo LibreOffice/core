@@ -850,10 +850,8 @@ void BarChart::createShapes()
                             {
                                 // performance improvement: alloc the sequence before the rendering
                                 // otherwise we have 2 realloc calls
-                                drawing::PolyPolygonShape3D aPoly;
-                                aPoly.SequenceX.realloc(1);
-                                aPoly.SequenceY.realloc(1);
-                                aPoly.SequenceZ.realloc(1);
+                                std::vector<std::vector<css::drawing::Position3D>> aPoly;
+                                aPoly.resize(1);
                                 drawing::Position3D aLeftUpperPoint( fLogicX-fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
                                 drawing::Position3D aRightUpperPoint( fLogicX+fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
 
@@ -949,11 +947,11 @@ void BarChart::createShapes()
                 {
                     if(!pSeries)
                         continue;
-                    drawing::PolyPolygonShape3D* pSeriesPoly = &pSeries->m_aPolyPolygonShape3D;
+                    std::vector<std::vector<css::drawing::Position3D>>* pSeriesPoly = &pSeries->m_aPolyPolygonShape3D;
                     if(!ShapeFactory::hasPolygonAnyLines(*pSeriesPoly))
                         continue;
 
-                    drawing::PolyPolygonShape3D aPoly;
+                    std::vector<std::vector<css::drawing::Position3D>> aPoly;
                     Clipping::clipPolygonAtRectangle( *pSeriesPoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
 
                     if(!ShapeFactory::hasPolygonAnyLines(aPoly))
@@ -965,7 +963,7 @@ void BarChart::createShapes()
                     rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes(
                         getSeriesGroupShape(pSeries.get(), xSeriesTarget) );
                     rtl::Reference<SvxShapePolyPolygon> xShape( ShapeFactory::createLine2D(
-                        xSeriesGroupShape_Shapes, PolyToPointSequence( aPoly ) ) );
+                        xSeriesGroupShape_Shapes, aPoly ) );
                     PropertyMapper::setMappedProperties( *xShape, pSeries->getPropertiesOfSeries()
                         , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
                 }

@@ -204,6 +204,47 @@ void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
     rResultPointCount[nPolygonIndex]=nNewResultPointCount;
 }
 
+void lcl_addPointToPoly( std::vector<std::vector<css::drawing::Position3D>>& rPoly
+        , const drawing::Position3D& rPos
+        , sal_Int32 nPolygonIndex
+        , std::vector< sal_Int32 >& rResultPointCount
+        , sal_Int32 nReservePointCount )
+{
+    if(nPolygonIndex<0)
+    {
+        OSL_FAIL( "The polygon index needs to be > 0");
+        nPolygonIndex=0;
+    }
+
+    //make sure that we have enough polygons
+    if(nPolygonIndex >= static_cast<sal_Int32>(rPoly.size()) )
+    {
+        rPoly.resize(nPolygonIndex+1);
+        rResultPointCount.resize(nPolygonIndex+1,0);
+    }
+
+    std::vector<css::drawing::Position3D>* pOuterSequence = &rPoly[nPolygonIndex];
+
+    sal_Int32 nNewResultPointCount = rResultPointCount[nPolygonIndex]+1;
+    sal_Int32 nSeqLength = pOuterSequence->size();
+
+    if( nSeqLength <= nNewResultPointCount )
+    {
+        sal_Int32 nReallocLength = nReservePointCount > SAL_MAX_INT16 ? round_up_nearest_pow2(nNewResultPointCount) * 2 : nReservePointCount;
+        if( nNewResultPointCount > nReallocLength )
+        {
+            nReallocLength = nNewResultPointCount;
+            OSL_FAIL("this should not be the case to avoid performance problems");
+        }
+        pOuterSequence->resize(nReallocLength);
+    }
+
+    css::drawing::Position3D* pInnerSequence = pOuterSequence->data();
+
+    pInnerSequence[nNewResultPointCount-1] = rPos;
+    rResultPointCount[nPolygonIndex]=nNewResultPointCount;
+}
+
 }//end anonymous namespace
 
 void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolygon
@@ -292,6 +333,89 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
         pOuterSequenceX->realloc(nUsedPointCount);
         pOuterSequenceY->realloc(nUsedPointCount);
         pOuterSequenceZ->realloc(nUsedPointCount);
+    }
+}
+
+void Clipping::clipPolygonAtRectangle( const std::vector<std::vector<css::drawing::Position3D>>& rPolygon
+                                      , const B2DRectangle& rRectangle
+                                      , std::vector<std::vector<css::drawing::Position3D>>& aResult
+                                      , bool bSplitPiecesToDifferentPolygons )
+{
+    aResult.clear();
+
+    if(rPolygon.empty())
+        return;
+
+    //need clipping?:
+    {
+        ::basegfx::B3DRange a3DRange( BaseGFXHelper::getBoundVolume( rPolygon ) );
+        ::basegfx::B2DRange a2DRange( a3DRange.getMinX(), a3DRange.getMinY(), a3DRange.getMaxX(), a3DRange.getMaxY() );
+        if( rRectangle.isInside( a2DRange ) )
+        {
+            aResult = rPolygon;
+            return;
+        }
+        else
+        {
+            a2DRange.intersect( rRectangle );
+            if( a2DRange.isEmpty() )
+                return;
+        }
+    }
+
+    std::vector< sal_Int32 > aResultPointCount;//per polygon index
+
+    //apply clipping:
+    drawing::Position3D aFrom;
+    drawing::Position3D aTo;
+
+    sal_Int32 nNewPolyIndex = 0;
+    sal_Int32 nOldPolyCount = rPolygon.size();
+    for(sal_Int32 nOldPolyIndex=0; nOldPolyIndex<nOldPolyCount; nOldPolyIndex++, nNewPolyIndex++ )
+    {
+        sal_Int32 nOldPointCount = rPolygon[nOldPolyIndex].size();
+
+        // set last point to a position outside the rectangle, such that the first
+        // time lcl_clip2d returns true, the comparison to last will always yield false
+        drawing::Position3D aLast(rRectangle.getMinX()-1.0,rRectangle.getMinY()-1.0, 0.0 );
+
+        for(sal_Int32 nOldPoint=1; nOldPoint<nOldPointCount; nOldPoint++)
+        {
+            aFrom = getPointFromPoly(rPolygon,nOldPoint-1,nOldPolyIndex);
+            aTo = getPointFromPoly(rPolygon,nOldPoint,nOldPolyIndex);
+            if( lcl_clip2d_(aFrom, aTo, rRectangle) )
+            {
+                // compose a Polygon of as many consecutive points as possible
+                if(aFrom == aLast)
+                {
+                    if( aTo != aFrom )
+                    {
+                        lcl_addPointToPoly( aResult, aTo, nNewPolyIndex, aResultPointCount, nOldPointCount );
+                    }
+                }
+                else
+                {
+                    if( bSplitPiecesToDifferentPolygons && nOldPoint!=1 )
+                    {
+                        if( nNewPolyIndex < static_cast<sal_Int32>(aResult.size())
+                                && aResultPointCount[nNewPolyIndex]>0 )
+                            nNewPolyIndex++;
+                    }
+                    lcl_addPointToPoly( aResult, aFrom, nNewPolyIndex, aResultPointCount, nOldPointCount );
+                    if( aTo != aFrom )
+                        lcl_addPointToPoly( aResult, aTo, nNewPolyIndex, aResultPointCount, nOldPointCount );
+                }
+                aLast = aTo;
+            }
+        }
+    }
+    //free unused space
+    for( sal_Int32 nPolygonIndex = aResultPointCount.size(); nPolygonIndex--; )
+    {
+        std::vector<css::drawing::Position3D>* pOuterSequence = &aResult[nPolygonIndex];
+
+        sal_Int32 nUsedPointCount = aResultPointCount[nPolygonIndex];
+        pOuterSequence->resize(nUsedPointCount);
     }
 }
 

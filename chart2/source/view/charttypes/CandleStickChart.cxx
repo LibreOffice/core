@@ -216,14 +216,13 @@ void CandleStickChart::createShapes()
                     //create min-max line
                     if( isValidPosition(aPosMiddleMinimum) && isValidPosition(aPosMiddleMaximum) )
                     {
-                        drawing::PolyPolygonShape3D aPoly;
+                        std::vector<std::vector<css::drawing::Position3D>> aPoly;
                         sal_Int32 nLineIndex =0;
                         AddPointToPoly( aPoly, aPosMiddleMinimum, nLineIndex);
                         AddPointToPoly( aPoly, aPosMiddleMaximum, nLineIndex);
 
                         rtl::Reference<SvxShapePolyPolygon> xShape =
-                            ShapeFactory::createLine2D( xPointGroupShape_Shapes,
-                                    PolyToPointSequence(aPoly));
+                            ShapeFactory::createLine2D( xPointGroupShape_Shapes, aPoly);
                         PropertyMapper::setMappedProperties( *xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                     }
 
@@ -251,7 +250,7 @@ void CandleStickChart::createShapes()
                     }
                     else
                     {
-                        drawing::PolyPolygonShape3D aPoly;
+                        std::vector<std::vector<css::drawing::Position3D>> aPoly;
 
                         sal_Int32 nLineIndex = 0;
                         if( bShowFirst &&  pPosHelper->isLogicVisible( fUnscaledX, fUnscaledY_First ,fLogicZ )
@@ -267,11 +266,10 @@ void CandleStickChart::createShapes()
                             AddPointToPoly( aPoly, aPosRightLast, nLineIndex );
                         }
 
-                        if( aPoly.SequenceX.hasElements() )
+                        if( !aPoly.empty() )
                         {
                             rtl::Reference<SvxShapePolyPolygon> xShape =
-                                ShapeFactory::createLine2D( xPointGroupShape_Shapes,
-                                        PolyToPointSequence(aPoly) );
+                                ShapeFactory::createLine2D( xPointGroupShape_Shapes, aPoly );
                             PropertyMapper::setMappedProperties( *xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                         }
                     }

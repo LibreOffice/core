@@ -238,6 +238,25 @@ void PlottingPositionHelper::transformScaledLogicToScene( drawing::PolyPolygonSh
     }
 }
 
+void PlottingPositionHelper::transformScaledLogicToScene( std::vector<std::vector<css::drawing::Position3D>>& rPolygon ) const
+{
+    drawing::Position3D aScenePosition;
+    for( sal_Int32 nS = static_cast<sal_Int32>(rPolygon.size()); nS--;)
+    {
+        auto valuesRange = rPolygon[nS].data();
+        for( sal_Int32 nP = rPolygon[nS].size(); nP--; )
+        {
+            double& fX = valuesRange[nP].PositionX;
+            double& fY = valuesRange[nP].PositionY;
+            double& fZ = valuesRange[nP].PositionZ;
+            aScenePosition = transformScaledLogicToScene( fX,fY,fZ,true );
+            fX = aScenePosition.PositionX;
+            fY = aScenePosition.PositionY;
+            fZ = aScenePosition.PositionZ;
+        }
+    }
+}
+
 void PlottingPositionHelper::clipScaledLogicValues( double* pX, double* pY, double* pZ ) const
 {
     //get logic clip values:
