@@ -116,9 +116,9 @@ protected:
 
 DECLARE_OOXMLEXPORT_TEST(testWPGtextboxes, "testWPGtextboxes.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    auto MyShape = getShape(1);
+    auto MyShape = getShape(2);
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), MyShape->getShapeType());
 
     uno::Reference<drawing::XShapes> xGroup(MyShape, uno::UNO_QUERY_THROW);
