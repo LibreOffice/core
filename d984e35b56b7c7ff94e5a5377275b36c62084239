@@ -160,6 +160,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf247451_9f85adcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-11T05:48:00Z",
+      "side": 1,
+      "message": "\u003e I will revert the changes to ... userpref.cxx\n\nOh. I should have checked everything carefully before writing.\nIt looks like I was wrong thinking that the code handling the reads/writes was in viewlayoutitem.cxx.\n\nSo your patchset 8 was perfect. I am sorry to create the confusion. What do you think: should I push your current change as is, and you create a follow-up with Writer.xcs and userpref.cxx, or you re-add these two to the current change, and I merge it all together?",
+      "parentUuid": "d48c3906_23b6be7e",
+      "revId": "d984e35b56b7c7ff94e5a5377275b36c62084239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae3682e5_a89b8c1d",
