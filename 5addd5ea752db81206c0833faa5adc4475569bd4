@@ -51,6 +51,24 @@
       "parentUuid": "edf178a8_af50b73c",
       "revId": "5addd5ea752db81206c0833faa5adc4475569bd4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dfcd29c_fbd3b549",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-11T22:41:27Z",
+      "side": 1,
+      "message": "Windows and macOS restore the position but not the size. What\u0027s your advice?",
+      "parentUuid": "558f8b48_8f2e04a8",
+      "revId": "5addd5ea752db81206c0833faa5adc4475569bd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
