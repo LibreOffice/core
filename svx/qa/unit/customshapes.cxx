@@ -686,7 +686,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf115813_OOXML_XY_handle)
                     + "tdf115813_HandleMovementOOXMLPresetShapes.pptx";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
 
-    OUString sErrors;
     // values in vector InteractionsHandles are in 1/100 mm and refer to page
     for (sal_uInt8 i = 0; i < countShapes(); i++)
     {
@@ -722,16 +721,14 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf115813_OOXML_XY_handle)
                   || (abs(nDesiredX - nObservedX) == 100 && abs(nDesiredY - nObservedY) <= 1)
                   || (abs(nDesiredX - nObservedX) <= 1 && abs(nDesiredY - nObservedY) <= 1)))
             {
-                sErrors += "\n" +
-                           //sErrors += OUString(sal_Unicode(10));
-                           OUString::number(i) + " " + sShapeType + ": " + OUString::number(j)
-                           + " X " + OUString::number(nDesiredX) + "|"
-                           + OUString::number(nObservedX) + " Y " + OUString::number(nDesiredY)
-                           + "|" + OUString::number(nObservedY);
+                OUString sError
+                    = OUString::number(i) + " " + sShapeType + ": " + OUString::number(j) + " X "
+                      + OUString::number(nDesiredX) + "|" + OUString::number(nObservedX) + " Y "
+                      + OUString::number(nDesiredY) + "|" + OUString::number(nObservedY);
+                CPPUNIT_FAIL(sError.toUtf8().getStr());
             }
         }
     }
-    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testQuadraticCurveTo)
@@ -764,7 +761,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126512_OOXML_handle_in_ODP)
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf126512_OOXMLHandleMovementInODF.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
 
-    OUString sErrors; // sErrors collects shape type and handle index for failing cases
     for (sal_uInt8 i = 0; i < countShapes(); i++)
     {
         uno::Reference<drawing::XShape> xShape(getShape(i));
@@ -791,12 +787,12 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126512_OOXML_handle_in_ODP)
             if (aInitialPosition.X == aObservedPosition.X
                 && aInitialPosition.Y == aObservedPosition.Y)
             {
-                sErrors
-                    += "\n" + OUString::number(i) + " " + sShapeType + "  " + OUString::number(j);
+                OUString sError
+                    = OUString::number(i) + " " + sShapeType + "  " + OUString::number(j);
+                CPPUNIT_FAIL(sError.toUtf8().getStr());
             }
         }
     }
-    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Mirror)
@@ -809,37 +805,34 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Mirror)
     // text frame but the frame rectangle for their text.
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf127785_Mirror.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
 
     uno::Reference<drawing::XShape> xShapeV(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeVProps(xShapeV, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeVProps.is());
     awt::Rectangle aBoundRectV;
     xShapeVProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectV;
-    const sal_Int32 nHeightV = aBoundRectV.Height;
-    const sal_Int32 nWidthV = aBoundRectV.Width;
-    const sal_Int32 nLeftV = aBoundRectV.X;
-    const sal_Int32 nTopV = aBoundRectV.Y;
-    if (abs(nHeightV - 8000) > 10 || abs(nWidthV - 8000) > 10)
-        sErrors += "Flip vertical wrong size.";
-    if (abs(nLeftV - 1000) > 10 || abs(nTopV - 2000) > 10)
-        sErrors += " Flip vertical wrong position.";
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Flip vertical wrong size.", 8000.0, aBoundRectV.Height,
+                                         10.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Flip vertical wrong size.", 8000.0, aBoundRectV.Width,
+                                         10.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Flip vertical wrong position.", 1000.0, aBoundRectV.X,
+                                         10.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Flip vertical wrong position.", 2000.0, aBoundRectV.Y,
+                                         10.0);
 
     uno::Reference<drawing::XShape> xShapeH(getShape(1));
     uno::Reference<beans::XPropertySet> xShapeHProps(xShapeH, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeHProps.is());
     awt::Rectangle aBoundRectH;
     xShapeHProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectH;
-    const sal_Int32 nHeightH = aBoundRectH.Height;
-    const sal_Int32 nWidthH = aBoundRectH.Width;
-    const sal_Int32 nLeftH = aBoundRectH.X;
-    const sal_Int32 nTopH = aBoundRectH.Y;
-    if (abs(nHeightH - 8000) > 10 || abs(nWidthH - 8000) > 10)
-        sErrors += " Flip horizontal wrong size.";
-    if (abs(nLeftH - 13000) > 10 || abs(nTopH - 2000) > 10)
-        sErrors += " Flip horizontal wrong position.";
-
-    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Flip horizontal wrong size.", 8000.0, aBoundRectH.Height,
+                                         10.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Flip horizontal wrong size.", 8000.0, aBoundRectH.Width,
+                                         10.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Flip horizontal wrong position.", 13000.0, aBoundRectH.X,
+                                         10.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Flip horizontal wrong position.", 2000.0, aBoundRectH.Y,
+                                         10.0);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126060_3D_Z_Rotation)
@@ -886,27 +879,19 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Asymmetric)
     OUString sURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf127785_asymmetricTextBoxFlipV.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
 
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
     awt::Rectangle aBoundRect;
     xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
-    const sal_Int32 nLeft = aBoundRect.X;
-    const sal_Int32 nTop = aBoundRect.Y;
-    const sal_Int32 nRight = aBoundRect.X + aBoundRect.Width - 1;
-    const sal_Int32 nBottom = aBoundRect.Y + aBoundRect.Height - 1;
-    if (abs(nLeft - 9000) > 10)
-        sErrors += "wrong left";
-    if (abs(nRight - 19000) > 10)
-        sErrors += " wrong right";
-    if (abs(nTop - 3000) > 10)
-        sErrors += " wrong top";
-    if (abs(nBottom - 18000) > 10)
-        sErrors += " wrong bottom";
 
-    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("wrong left", 9000.0, aBoundRect.X, 10.0);
+    const double nRight = aBoundRect.X + aBoundRect.Width - 1;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("wrong right", 19000.0, nRight, 10.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("wrong top", 3000.0, aBoundRect.Y, 10.0);
+    const double nBottom = aBoundRect.Y + aBoundRect.Height - 1;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("wrong bottom", 18000.0, nBottom, 10.0);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_TextRotateAngle)
@@ -918,27 +903,19 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_TextRotateAngle)
     // flip were not made to the text box position but to the text matrix.
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf127785_TextRotateAngle.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
 
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
     awt::Rectangle aBoundRect;
     xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
-    const sal_Int32 nLeft = aBoundRect.X;
-    const sal_Int32 nTop = aBoundRect.Y;
-    const sal_Int32 nRight = aBoundRect.X + aBoundRect.Width - 1;
-    const sal_Int32 nBottom = aBoundRect.Y + aBoundRect.Height - 1;
-    if (abs(nLeft - 2000) > 10)
-        sErrors += "wrong left";
-    if (abs(nRight - 14000) > 10)
-        sErrors += " wrong right";
-    if (abs(nTop - 3000) > 10)
-        sErrors += " wrong top";
-    if (abs(nBottom - 9000) > 10)
-        sErrors += " wrong bottom";
 
-    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("wrong left", 2000.0, aBoundRect.X, 10.0);
+    const double nRight = aBoundRect.X + aBoundRect.Width - 1;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("wrong right", 14000.0, nRight, 10.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("wrong top", 3000.0, aBoundRect.Y, 10.0);
+    const double nBottom = aBoundRect.Y + aBoundRect.Height - 1;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("wrong bottom", 9000.0, nBottom, 10.0);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf128413_tbrlOnOff)
@@ -976,7 +953,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf129532_MatrixFlipV)
     // The rectangle was only shifted.
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf129532_MatrixFlipV.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
 
     uno::Reference<drawing::XShape> xShape0(getShape(0));
     uno::Reference<beans::XPropertySet> xShape0Props(xShape0, uno::UNO_QUERY);
@@ -992,17 +968,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf129532_MatrixFlipV)
 
     // The size of the two BoundRect rectangles are the same in case of correct
     // vertical mirroring.
-    if (aBoundRect0.Width != aBoundRect1.Width)
-    {
-        sErrors += "\n Width expected: " + OUString::number(aBoundRect1.Width)
-                   + " actual: " + OUString::number(aBoundRect0.Width);
-    }
-    if (aBoundRect0.Height != aBoundRect1.Height)
-    {
-        sErrors += "\n Height expected: " + OUString::number(aBoundRect1.Height)
-                   + " actual: " + OUString::number(aBoundRect0.Height);
-    }
-    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect width", aBoundRect0.Width, aBoundRect1.Width);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect height", aBoundRect0.Height, aBoundRect1.Height);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandT_CaseZeroHeight)
