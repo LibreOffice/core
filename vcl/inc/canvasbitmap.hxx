@@ -38,8 +38,10 @@ namespace vcl::unotools
         BitmapEx                                       m_aBmpEx;
         ::Bitmap                                       m_aBitmap;
         ::Bitmap                                       m_aAlpha;
-        Bitmap::ScopedReadAccess                       m_pBmpAcc;
-        Bitmap::ScopedReadAccess                       m_pAlphaAcc;
+        Bitmap::ScopedInfoAccess                       m_pBmpAcc;
+        Bitmap::ScopedInfoAccess                       m_pAlphaAcc;
+        std::optional<Bitmap::ScopedReadAccess>        m_pBmpReadAcc;
+        std::optional<Bitmap::ScopedReadAccess>        m_pAlphaReadAcc;
         css::uno::Sequence<sal_Int8>                   m_aComponentTags;
         css::uno::Sequence<sal_Int32>                  m_aComponentBitCounts;
         css::rendering::IntegerBitmapLayout            m_aLayout;
@@ -53,6 +55,8 @@ namespace vcl::unotools
         bool                                           m_bPalette;
 
         SAL_DLLPRIVATE void setComponentInfo( sal_uInt32 redShift, sal_uInt32 greenShift, sal_uInt32 blueShift );
+        Bitmap::ScopedReadAccess& getBitmapReadAccess();
+        Bitmap::ScopedReadAccess& getAlphaReadAccess();
 
         virtual ~VclCanvasBitmap() override;
 
