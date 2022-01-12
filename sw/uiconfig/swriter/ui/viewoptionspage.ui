@@ -399,6 +399,9 @@
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
                             <property name="draw-indicator">True</property>
+                            <accessibility>
+                              <relation type="label-for" target="vrulercombobox"/>
+                            </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="vruler-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|vruler">Displays the vertical ruler. Select the desired measurement unit from the corresponding list.</property>
@@ -431,6 +434,9 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="vruler"/>
+                            </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="vrulercombobox-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|vrulercombobox">Displays the vertical ruler. Select the desired measurement unit from the corresponding list.</property>
@@ -586,6 +592,8 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="viewoptionspage|measureunitlabel">Measurement unit:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">measureunit</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
