@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5359ba80_739282d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-12T12:20:19Z",
+      "side": 1,
+      "message": "I guess this is mostly a convenience. You need to link the soffice.bin in desktop for almost any changes anyway.",
+      "revId": "2278f12130f92bd540ea3789b15d033603e03eb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
