@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c670b1ba_4c24bf59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-12T20:01:27Z",
+      "side": 1,
+      "message": "For the moment I just succeeded making the tables editable but when changing something it crashes very quickly.\nI\u0027m not sure too what is useful, what is useless.",
+      "revId": "62b2e2a67f98813833fe3f81e58288652b4c9f2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
