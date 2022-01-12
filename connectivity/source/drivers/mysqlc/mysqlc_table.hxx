@@ -70,9 +70,6 @@ public:
 
     //XInterface
     virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
-
-    //XTypeProvider
-    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
 };
 
 } // namespace connectivity::mysqlc

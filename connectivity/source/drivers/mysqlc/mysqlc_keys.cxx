@@ -25,14 +25,12 @@ using namespace ::com::sun::star::uno;
 
 Keys::Keys(Table* pTable, Mutex& rMutex, const ::std::vector<OUString>& rNames)
     : OKeysHelper(pTable, rMutex, rNames)
-    , m_pTable(pTable)
-{
-}
+/* , m_pTable(pTable) */ {}
 
 //----- XDrop ----------------------------------------------------------------
-void Keys::dropObject(sal_Int32 nPosition, const OUString& sName)
+void Keys::dropObject(sal_Int32 /* nPosition */, const OUString& /* sName */)
 {
-    // TODO IMPLEMENT ME (should we just copy from Firebird LO code below?)
+    // TODO: implement (should we just copy from Firebird LO code below?)
     /*
     if (m_pTable->isNew())
         return;

@@ -18,7 +18,8 @@ class Table;
 class Keys : public ::connectivity::OKeysHelper
 {
 private:
-    Table* m_pTable;
+    // TODO useful?
+    //Table* m_pTable;
 
 public:
     Keys(Table* pTable, ::osl::Mutex& rMutex, const ::std::vector<OUString>& rNames);

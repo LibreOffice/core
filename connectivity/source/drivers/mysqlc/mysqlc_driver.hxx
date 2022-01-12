@@ -23,7 +23,8 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
+#include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <osl/module.h>
 
@@ -38,7 +39,9 @@ using css::uno::Sequence;
 Reference<css::uno::XInterface>
 MysqlCDriver_CreateInstance(const Reference<css::lang::XMultiServiceFactory>& _rxFactory);
 
-typedef ::cppu::WeakComponentImplHelper2<css::sdbc::XDriver, css::lang::XServiceInfo> ODriver_BASE;
+typedef ::cppu::WeakComponentImplHelper<css::sdbc::XDriver, css::sdbcx::XDataDefinitionSupplier,
+                                        css::lang::XServiceInfo>
+    ODriver_BASE;
 
 typedef void* (*OMysqlCConnection_CreateInstanceFunction)(void* _pDriver);
 
@@ -82,6 +85,12 @@ public:
     const Reference<css::lang::XMultiServiceFactory>& getFactory() const { return m_xFactory; }
 
     static rtl_TextEncoding getDefaultEncoding() { return RTL_TEXTENCODING_UTF8; }
+
+    // XDataDefinitionSupplier
+    virtual css::uno::Reference<css::sdbcx::XTablesSupplier> SAL_CALL getDataDefinitionByConnection(
+        const css::uno::Reference<css::sdbc::XConnection>& rxConnection) override;
+    virtual css::uno::Reference<css::sdbcx::XTablesSupplier> SAL_CALL getDataDefinitionByURL(
+        const OUString& rsURL, const css::uno::Sequence<css::beans::PropertyValue>& rInfo) override;
 };
 
 } /* connectivity::mysqlc */

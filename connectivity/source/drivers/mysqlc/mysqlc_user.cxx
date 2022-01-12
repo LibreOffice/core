@@ -29,7 +29,7 @@ User::User(const css::uno::Reference<css::sdbc::XConnection>& rConnection, const
 {
 }
 
-void User::changePassword(const OUString&, const OUString& newPassword)
+void User::changePassword(const OUString&, const OUString& /* newPassword */)
 {
     // TODO: implement
 }

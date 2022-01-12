@@ -83,8 +83,8 @@ OCollection* Table::createIndexes(const ::std::vector<OUString>& rNames)
 }
 
 //----- XAlterTable -----------------------------------------------------------
-void SAL_CALL Table::alterColumnByName(const OUString& /* rColName */,
-                                       const uno::Reference<XPropertySet>& /* rDescriptor */)
+void SAL_CALL Table::alterColumnByName(const OUString& rColName,
+                                       const uno::Reference<XPropertySet>& rDescriptor)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(WeakComponentImplHelperBase::rBHelper.bDisposed);
@@ -114,13 +114,13 @@ void SAL_CALL Table::alterColumnByName(const OUString& /* rColName */,
                            != rDescriptor->getPropertyValue("DefaultValue");
 
     // TODO: tests to do
-    if (bTypeChanged || bTypeNameChanged || bPrecisionChanged || bScaleChanged || bIsNullableChanged
-        || bIsAutoIncrementChanged || bDefaultChanged)
+    if (bTypeChanged || bTypeNameChanged || bPrecisionChanged || bScaleChanged || bIsNullableChanged
+        || bIsAutoIncrementChanged || bDefaultChanged)
     {
         // If bPrecisionChanged this will only succeed if we have increased the
         // precision, otherwise an exception is thrown -- however the base
         // gui then offers to delete and recreate the column.
-        OUString sSql(getAlterTableColumn(rColName) + "TYPE "
+        OUString sSql(getAlterTableColumn(rColName) + " "
                       + ::dbtools::createStandardTypePart(rDescriptor, getConnection()));
         getConnection()->createStatement()->execute(sSql);
         // TODO: could cause errors e.g. if incompatible types, deal with them here as appropriate.
@@ -163,13 +163,10 @@ Any SAL_CALL Table::queryInterface(const Type& rType)
     return OTableHelper::queryInterface(rType);
 }
 
-// ----- XTypeProvider --------------------------------------------------------
-uno::Sequence<Type> SAL_CALL Table::getTypes() { return OTableHelper::getTypes(); }
-
 OUString Table::getAlterTableColumn(std::u16string_view rColumn)
 {
     // TODO: test
-    return ("ALTER TABLE \"" + getName() + "\" ALTER COLUMN \"" + rColumn + "\" ");
+    return ("ALTER TABLE " + getName() + " MODIFY COLUMN " + rColumn + " ");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

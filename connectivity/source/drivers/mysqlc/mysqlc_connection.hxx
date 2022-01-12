@@ -35,8 +35,10 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ref.hxx>
@@ -61,8 +63,8 @@ using ::com::sun::star::sdbc::SQLException;
 using ::com::sun::star::sdbc::SQLWarning;
 using ::com::sun::star::uno::RuntimeException;
 
-typedef ::cppu::WeakComponentImplHelper3<css::sdbc::XConnection, css::sdbc::XWarningsSupplier,
-                                         css::lang::XServiceInfo>
+typedef ::cppu::WeakComponentImplHelper<css::sdbc::XConnection, css::sdbc::XWarningsSupplier,
+                                        css::lang::XUnoTunnel, css::lang::XServiceInfo>
     OMetaConnection_BASE;
 
 struct ConnectionSettings
@@ -93,6 +95,7 @@ private:
 
     // Data attributes
 
+    css::uno::WeakReference<css::sdbcx::XTablesSupplier> m_xCatalog;
     css::uno::WeakReference<css::sdbc::XDatabaseMetaData> m_xMetaData;
 
     OWeakRefArray m_aStatements; // vector containing a list
@@ -115,6 +118,12 @@ public:
 
     rtl_TextEncoding getConnectionEncoding() const { return m_settings.encoding; }
 
+    /**
+     * Create and/or connect to the sdbcx Catalog. This is completely
+     * unrelated to the SQL "Catalog".
+     */
+    css::uno::Reference<css::sdbcx::XTablesSupplier> createCatalog();
+
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
 
@@ -124,6 +133,10 @@ public:
     virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& rId) override;
+    static css::uno::Sequence<sal_Int8> getUnoTunnelId();
 
     // XConnection
     css::uno::Reference<css::sdbc::XStatement> SAL_CALL createStatement() override;
