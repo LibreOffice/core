@@ -34,6 +34,24 @@
       "parentUuid": "0b0c82a9_75eb7ec1",
       "revId": "d71c9913e19f1be13f1d38a24393a910ba574834",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caa34c3f_19cd31d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-12T18:30:27Z",
+      "side": 1,
+      "message": "\u003e \u003e So, in principle, for small targets, go back to state before buffering. Should do it. May also get a #define SMALL_SIZE_ALLOC_FREE_DIRECTLY that could easily be adapted or even put to config if needed.\n\u003e \n\u003e That\u0027s a possible solution too, but I don\u0027t think it\u0027s better. AFAICT the only other backend affected is Skia/Vulkan, so the workaround doesn\u0027t need to be generic, and in some cases always allocating may be less efficient. Moreover whenever we get rid of the separate alpha we may also stop using GetBitmap(), which again may change the situation here. So I think I prefer keeping it this simple.\n\nWould you not prefer generic, if it\u0027s easier readable and understandable? I do not think that it currently is \"this simple\", I think it would be \"more simple\" and less code to just use directly allocated buffers.\nIt is correct that \u0027in some cases always allocating may be less efficient\u0027, but I think it would be worth a try here. I see that you try to be very careful and do things only in special cases for one backend to not change anything, but that does not make the code easier or better readable/understandable in the long term.\nHaving a fallback for very small VDevs is missing anyways/I oversaw that when adding the buffer. Or better: I did not think that using just 32x32 of a 1000x1000 already existing buffer would do harm here, but as can be seen, you never know.\n\n\u003e \u003e Just one question (not related): At impBufferDevice::paint in the \u0027if(mpAlpha)\u0027 case you use \"aAlphaMask.BlendWith(aContent.GetAlpha())\". Shouldn\u0027t that now use your added parameter fAlpha and instead of DrawBimapEx try DrawTransformBitmapExDirect now...?\n\u003e \n\u003e GetAlpha() is AlphaMask, not float.\n\nYes, but since aContent.GetAlpha() gets from aContent and aContent was created one line above from mpContent-\u003eGetBitmapEx and mpContent/mpAlpha is separated, aContent.GetAlpha() will always be empty, so no need to blend it (?). I guess \nGetBitmapEx \u0026\u0026 BitmapEx for aContent is somehow left over from something, it should be GetBitmap \u0026\u0026 Bitmap here.\nOutputDevice::GetBitmapEx will only return a non-empty GetAlpha if that mechanism used in Slideshow that holds an extra-alpha-VDev a OutDev (what always was a hack and will vanish hopefully when slideshow uses primitives one day). Slideshow does not use impBufferDevice, and VCL-PrimitiveRenderer is not used in slideshow, so that can be excluded.\nSo you are right with it\u0027s not being fAlpha, but still BlendWith can be avoided, maybe - for security - by using aContent.IsAlpha() to check if it is used. Just my 2ct \u0026 all the best!",
+      "parentUuid": "cfb66247_ae2ce83b",
+      "revId": "d71c9913e19f1be13f1d38a24393a910ba574834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
