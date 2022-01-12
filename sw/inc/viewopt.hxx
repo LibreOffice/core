@@ -128,9 +128,8 @@ namespace o3tl {
 
 enum class GlyphPositioningMode {
     Classic,
-    ClassicInspired,
-    PreferLayout,
-    PreferReadability
+    Layout,
+    LayoutAndMatchRender
 };
 
 class SW_DLLPUBLIC SwViewOption
