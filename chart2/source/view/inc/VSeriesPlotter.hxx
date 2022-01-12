@@ -90,7 +90,7 @@ public:
 
     void calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
                                             , bool bSeparateStackingForDifferentSigns
-                                            , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex );
+                                            , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex ) const;
     void calculateYMinAndMaxForCategoryRange( sal_Int32 nStartCategoryIndex, sal_Int32 nEndCategoryIndex
                                                 , bool bSeparateStackingForDifferentSigns
                                                 , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex );

@@ -61,6 +61,53 @@ private: //methods
 
     void adaptOverlapAndGapwidthForGroupBarsPerAxis();
 
+    //better performance for big data
+    struct FormerBarPoint
+    {
+        FormerBarPoint( double fX, double fUpperY, double fLowerY, double fZ )
+            : m_fX(fX), m_fUpperY(fUpperY), m_fLowerY(fLowerY), m_fZ(fZ)
+            {}
+        FormerBarPoint()
+            : m_fX(std::numeric_limits<double>::quiet_NaN())
+            , m_fUpperY(std::numeric_limits<double>::quiet_NaN())
+            , m_fLowerY(std::numeric_limits<double>::quiet_NaN())
+            , m_fZ(std::numeric_limits<double>::quiet_NaN())
+        {
+        }
+
+        double m_fX;
+        double m_fUpperY;
+        double m_fLowerY;
+        double m_fZ;
+    };
+
+    void doZSlot(
+            bool& bDrawConnectionLines, bool& bDrawConnectionLinesInited, const std::vector< VDataSeriesGroup >& rZSlot,
+            sal_Int32 nZ, sal_Int32 nPointIndex, sal_Int32 nStartIndex,
+            rtl::Reference<SvxShapeGroupAnyD>& xSeriesTarget,
+            rtl::Reference<SvxShapeGroupAnyD>& xRegressionCurveTarget,
+            rtl::Reference<SvxShapeGroupAnyD>& xRegressionCurveEquationTarget,
+            rtl::Reference<SvxShapeGroupAnyD>& xTextTarget,
+            std::unordered_set<rtl::Reference<SvxShape>>& aShapeSet,
+            std::map< VDataSeries*, FormerBarPoint >& aSeriesFormerPointMap,
+            std::map< sal_Int32,  double >& aLogicYSumMap);
+
+    void doXSlot(
+            const VDataSeriesGroup& rXSlot,
+            bool& bDrawConnectionLines, bool& bDrawConnectionLinesInited,
+            sal_Int32 nZ, sal_Int32 nPointIndex, sal_Int32 nStartIndex,
+            rtl::Reference<SvxShapeGroupAnyD>& xSeriesTarget,
+            rtl::Reference<SvxShapeGroupAnyD>& xRegressionCurveTarget,
+            rtl::Reference<SvxShapeGroupAnyD>& xRegressionCurveEquationTarget,
+            rtl::Reference<SvxShapeGroupAnyD>& xTextTarget,
+            std::unordered_set<rtl::Reference<SvxShape>>& aShapeSet,
+            std::map< VDataSeries*, FormerBarPoint >& aSeriesFormerPointMap,
+            std::map< sal_Int32,  double >& aLogicYSumMap,
+            double fLogicBaseWidth, double fSlotX,
+            BarPositionHelper* const pPosHelper,
+            double fLogicPositiveYSum, double fLogicNegativeYSum,
+            sal_Int32 nAttachedAxisIndex);
+
 private: //member
     std::unique_ptr<BarPositionHelper>   m_pMainPosHelper;
     css::uno::Sequence< sal_Int32 >      m_aOverlapSequence;
