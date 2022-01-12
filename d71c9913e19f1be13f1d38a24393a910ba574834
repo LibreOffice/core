@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b0c82a9_75eb7ec1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-12T16:24:36Z",
+      "side": 1,
+      "message": "Hiho,\n\nThat conversion in mpContent-\u003eGetBitmapEx gets as input the pos \u0026 target size, so does in principle not need to convert the whole bitmap and may use that requested size. Maybe not possible, though.\n\nThat whole cache of BitmapBuffers was added for performance reasons - to no always alloc a new vdev. Before, just a VDev of needed size was allocated and freed. Also, hat argument for small Bitmaps/Buffers may also hit other backends, so why not\n\n- In VDevBuffer::alloc/free even before incarnating the mutex, if squareSize is smaller than \u0027small size\u0027 (which is defined here as 32x32), just alloc a new \u0027small\u0027 VDev of that size\n- Do not add to buffer at all\n- detect at free same way, just free before mutex, do no use buffer at all\n\nSo, in principle, for small targets, go back to state before buffering. Should do it. May also get a #define SMALL_SIZE_ALLOC_FREE_DIRECTLY that could easily be adapted or even put to config if needed.\n\nAnyways, your solution is also okay for me, just more specific than needed from my POV. That whole VDevBuffer is used in vcl-renderer anyways, in system-dependent renderers it will be better/easier/possible to use system-specific buffers.\n\nJust one question (not related): At impBufferDevice::paint in the \u0027if(mpAlpha)\u0027 case you use \"aAlphaMask.BlendWith(aContent.GetAlpha())\". Shouldn\u0027t that now use your added parameter fAlpha and instead of DrawBimapEx try DrawTransformBitmapExDirect now...? It will (not yet) work for cairo, but we should make it work ASAP...",
+      "revId": "d71c9913e19f1be13f1d38a24393a910ba574834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
