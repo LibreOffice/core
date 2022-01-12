@@ -16,6 +16,24 @@
       "message": "hi Luboš Luňák,\nthis is the first time I hear about bsc#1183308, is it a public bugtracker ?\nOTOH, would it be possible to have a unittest for this fix ?",
       "revId": "4c3384dd6c4a92404d170f9011c569de045dfbf7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b840b830_400f0ccd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-01-12T11:45:53Z",
+      "side": 1,
+      "message": "bsc is bugzilla.suse.com, so it is a public bugtracker, although this specific bugreport is restricted (I\u0027ve asked if it can be made public, but I don\u0027t know if they\u0027ll do it).\nAnd this is a performance improvement, so I can\u0027t do a unittest for performance.",
+      "parentUuid": "18742824_812dd61b",
+      "revId": "4c3384dd6c4a92404d170f9011c569de045dfbf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
