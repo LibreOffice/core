@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a95fd482_979c4313",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-12T08:19:00Z",
+      "side": 1,
+      "message": "I\u0027m afraid it\u0027s too late to backport this patch. Hard English string was on week 51 \u003c https://wiki.documentfoundation.org/ReleasePlan/7.3 \u003e",
+      "revId": "fe87d49f3440aa7dee41559cbf24399d5d74bfcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
