@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e86c1cf9_2c78ee60",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-12T06:10:31Z",
+      "side": 1,
+      "message": "this one should be DevicePoint?",
+      "revId": "48427c72f796c714e8c39b6c8b98ed9e1890c239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
