@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d039bc3_63b8a42d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-01-12T10:31:36Z",
+      "side": 1,
+      "message": "Not objecting the bump, but as always with things like that it would be nice to have a short summary as to why the bump was done.",
+      "revId": "3e94991d7fd3a085549c3a5d4c991688042d2cb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
