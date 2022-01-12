@@ -84,7 +84,7 @@ public:
 public:
     void BeginDrawObjects(std::vector<rtl::Reference<XFFrame>>* pDrawObjVector);
     XFDrawGroup* CreateDrawGroupObject();
-    XFFrame* CreateDrawObject();
+    rtl::Reference<XFFrame> CreateDrawObject();
 };
 
 #endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX

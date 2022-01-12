@@ -59,8 +59,7 @@
  *  and so on.
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDRAWOBJ_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDRAWOBJ_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -121,21 +120,21 @@ protected:
      * @param   style name.
      * @return  pointer of the created XF-draw object.
      */
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) = 0;
+    virtual rtl::Reference<XFFrame> CreateDrawObj(const OUString& rStyleName) = 0;
 
     /**
      * @descr   create XF-draw object and assign the style name to it.
      * @param   style name.
      * @return  pointer of the created XF-draw object.
      */
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) = 0;
+    virtual rtl::Reference<XFFrame> CreateStandardDrawObj(const OUString& rStyleName) = 0;
 
 public:
     /**
      * @descr   create a completed XF-draw object(read data, register styles and create XF-draw object)
      * @return  pointer of the created completed XF-draw object.
      */
-    XFFrame* CreateXFDrawObject();
+    rtl::Reference<XFFrame> CreateXFDrawObject();
 
     /**
      * @param   type of the object.
@@ -159,8 +158,8 @@ protected:
     {
         return OUString();
     }
-    virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/) override { return nullptr; }
-    virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/) override { return nullptr; }
+    virtual rtl::Reference<XFFrame> CreateDrawObj(const OUString& /*rStyleName*/) override { return nullptr; }
+    virtual rtl::Reference<XFFrame> CreateStandardDrawObj(const OUString& /*rStyleName*/) override { return nullptr; }
 };
 
 /**
@@ -178,8 +177,8 @@ public:
 protected:
     virtual void Read() override;
     virtual OUString RegisterStyle() override;
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) override;
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateStandardDrawObj(const OUString& rStyleName) override;
 };
 
 /**
@@ -199,8 +198,8 @@ public:
 protected:
     virtual void Read() override;
     virtual OUString RegisterStyle() override;
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) override;
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateStandardDrawObj(const OUString& rStyleName) override;
 };
 
  /**
@@ -220,8 +219,8 @@ public:
 protected:
     virtual void Read() override;
     virtual OUString RegisterStyle() override;
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) override;
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateStandardDrawObj(const OUString& rStyleName) override;
 };
 
 /**
@@ -239,8 +238,8 @@ public:
 protected:
     virtual void Read() override;
     virtual OUString RegisterStyle() override;
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) override;
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateStandardDrawObj(const OUString& rStyleName) override;
 
 private:
     XFFrame* CreateRoundedRect(const OUString& rStyleName);
@@ -261,8 +260,8 @@ public:
 protected:
     virtual void Read() override;
     virtual OUString RegisterStyle() override;
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) override;
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateStandardDrawObj(const OUString& rStyleName) override;
 };
 
 /**
@@ -281,8 +280,8 @@ public:
 protected:
     virtual void Read() override;
     virtual OUString RegisterStyle() override;
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) override;
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateStandardDrawObj(const OUString& rStyleName) override;
 };
 
 /**
@@ -304,8 +303,8 @@ public:
 protected:
     virtual void Read() override;
     virtual OUString RegisterStyle() override;
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) override;
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateStandardDrawObj(const OUString& rStyleName) override;
 };
 
 /**
@@ -329,8 +328,8 @@ public:
 protected:
     virtual void Read() override;
     virtual OUString RegisterStyle() override;
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) override;
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateStandardDrawObj(const OUString& rStyleName) override;
 };
 
 /**
@@ -348,8 +347,8 @@ protected:
     {
         return OUString();
     }
-    virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/) override {return nullptr;}
-    virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/) override {return nullptr;}
+    virtual rtl::Reference<XFFrame> CreateDrawObj(const OUString& /*rStyleName*/) override {return nullptr;}
+    virtual rtl::Reference<XFFrame> CreateStandardDrawObj(const OUString& /*rStyleName*/) override {return nullptr;}
 };
 
 /**
@@ -368,9 +367,8 @@ public:
 protected:
     virtual void Read() override;
     virtual OUString RegisterStyle() override;
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) override;
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateDrawObj(const OUString& rStyleName) override;
+    virtual rtl::Reference<XFFrame> CreateStandardDrawObj(const OUString& rStyleName) override;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
