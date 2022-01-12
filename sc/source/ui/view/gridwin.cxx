@@ -5597,6 +5597,18 @@ void ScGridWindow::notifyKitCellCursor() const
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, getCellCursor().getStr());
     if (bListValButton && aListValPos == mrViewData.GetCurPos())
         updateLOKValListButton(true, aListValPos);
+    std::vector<tools::Rectangle> aRects;
+    if (comphelper::LibreOfficeKit::isActive() &&
+            comphelper::LibreOfficeKit::isCompatFlagSet(
+                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+        GetSelectionRectsPrintTwips(aRects);
+    else
+        GetSelectionRects(aRects);
+    if (aRects.empty() || !mrViewData.IsActive())
+    {
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
+        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY");
+    }
 }
 
 void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
