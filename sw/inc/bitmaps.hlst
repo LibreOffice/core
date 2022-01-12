@@ -28,6 +28,8 @@
 #define BMP_REDLINE_FMTCOLLSET                  "sw/res/redline_fmtcollset.png"
 #define BMP_REDLINE_MOVED_INSERTION             "cmd/sc_paste.png"
 #define BMP_REDLINE_MOVED_DELETION              "cmd/sc_cut.png"
+#define BMP_REDLINE_ROW_INSERTION               "cmd/sc_insertrows.png"
+#define BMP_REDLINE_ROW_DELETION                "cmd/sc_deleterows.png"
 
 #define RID_BMP_COLLAPSE                        "res/sx18002.png"
 #define RID_BMP_EXPAND                          "res/sx18003.png"
