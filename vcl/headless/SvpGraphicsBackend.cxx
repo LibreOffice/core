@@ -247,6 +247,12 @@ bool SvpGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToD
         return true;
     }
 
+    // don't bother trying to draw stuff which is effectively invisible
+    basegfx::B2DRange aPolygonRange = rPolyPolygon.getB2DRange();
+    aPolygonRange.transform(rObjectToDevice);
+    if (aPolygonRange.getWidth() < 0.1 || aPolygonRange.getHeight() < 0.1)
+        return true;
+
     cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
     m_rCairoCommon.clipRegion(cr);
 
