@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c52f296_71d768a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-12T18:11:17Z",
+      "side": 1,
+      "message": "Xisco: many thanks for reviewing! I\u0027ll extend the Release notes soon with this improvement.",
+      "revId": "dabf1516e83963b24cf4c54c42b02354053a2199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
