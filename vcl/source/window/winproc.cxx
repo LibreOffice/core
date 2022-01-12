@@ -275,6 +275,14 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     ImplFrameData* pWinFrameData = xWindow->ImplGetFrameData();
     sal_uInt16      nOldCode = pWinFrameData->mnMouseCode;
 
+    if (comphelper::LibreOfficeKit::isActive() && AllSettings::GetLayoutRTL()
+        && xWindow->GetOutDev() && !xWindow->ImplIsAntiparallel())
+    {
+        xWindow->GetOutDev()->ReMirror(aMousePos);
+        nX = aMousePos.X();
+        nY = aMousePos.Y();
+    }
+
     // we need a mousemove event, before we get a mousebuttondown or a
     // mousebuttonup event
     if ( (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) || (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
