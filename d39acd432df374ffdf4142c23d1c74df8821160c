@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2770d51_30208049",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-12T14:02:05Z",
+      "side": 1,
+      "message": "this causes issues for macOS buildbots, \u003chttps://ci.libreoffice.org//job/lo_tb_master_mac/40238/consoleFull#12789358502a810015-1db5-427c-9ce2-83b5f06a5284\u003e \"error: \u0027value\u0027 is unavailable: introduced in macOS 10.14\"",
+      "revId": "d39acd432df374ffdf4142c23d1c74df8821160c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
