@@ -33,6 +33,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 // buffered VDev usage
 
@@ -105,10 +106,17 @@ bool VDevBuffer::isSizeSuitable(const VclPtr<VirtualDevice>& device, const Size&
     if (device->GetOutputWidthPixel() >= rSizePixel.getWidth()
         && device->GetOutputHeightPixel() >= rSizePixel.getHeight())
     {
+        bool requireSmall = false;
 #if defined(UNX)
         // HACK: See the small size handling in SvpSalVirtualDevice::CreateSurface().
         // Make sure to not reuse a larger device when a small one should be preferred.
         if (device->GetRenderBackendName() == "svp")
+            requireSmall = true;
+#endif
+        // The same for Skia, see renderMethodToUseForSize().
+        if (SkiaHelper::isVCLSkiaEnabled())
+            requireSmall = true;
+        if (requireSmall)
         {
             if (rSizePixel.getWidth() <= 32 && rSizePixel.getHeight() <= 32
                 && (device->GetOutputWidthPixel() > 32 || device->GetOutputHeightPixel() > 32))
@@ -116,7 +124,6 @@ bool VDevBuffer::isSizeSuitable(const VclPtr<VirtualDevice>& device, const Size&
                 return false;
             }
         }
-#endif
         return true;
     }
     return false;

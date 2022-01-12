@@ -467,12 +467,25 @@ static std::unique_ptr<sk_app::WindowContext> getTemporaryWindowContext()
 }
 #endif
 
+static RenderMethod renderMethodToUseForSize(const SkISize& size)
+{
+    // Do not use GPU for small surfaces. The problem is that due to the separate alpha hack
+    // we quite often may call GetBitmap() on VirtualDevice, which is relatively slow
+    // when the pixels need to be fetched from the GPU. And there are documents that use
+    // many tiny surfaces (bsc#1183308 for example), where this slowness adds up too much.
+    // This should be re-evaluated once the separate alpha hack is removed (SKIA_USE_BITMAP32)
+    // and we no longer (hopefully) fetch pixels that often.
+    if (size.width() <= 32 && size.height() <= 32)
+        return RenderRaster;
+    return renderMethodToUse();
+}
+
 sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type, SkAlphaType alpha)
 {
     SkiaZone zone;
     assert(type == kN32_SkColorType || type == kAlpha_8_SkColorType);
     sk_sp<SkSurface> surface;
-    switch (renderMethodToUse())
+    switch (renderMethodToUseForSize({ width, height }))
     {
         case RenderVulkan:
         case RenderMetal:
@@ -518,7 +531,7 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
 {
     SkiaZone zone;
     assert(bitmap.colorType() == kN32_SkColorType || bitmap.colorType() == kAlpha_8_SkColorType);
-    switch (renderMethodToUse())
+    switch (renderMethodToUseForSize(bitmap.dimensions()))
     {
         case RenderVulkan:
         case RenderMetal:
