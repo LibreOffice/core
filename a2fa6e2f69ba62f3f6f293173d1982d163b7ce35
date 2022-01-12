@@ -16,6 +16,103 @@
       "message": "Any better idea?",
       "revId": "a2fa6e2f69ba62f3f6f293173d1982d163b7ce35",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0d3fcc5_7cfde27d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-12T12:54:08Z",
+      "side": 1,
+      "message": "\"UNO tries hard to find the path of the executable to look at that place for its unorc / uno.ini. All these approaches don\u0027t work for static binaries\":  What exactly does not work?  Does get_this_libpath in cppuhelper/source/paths.cxx return a wrong result (which one) or throw an exception (which one), or...?",
+      "revId": "a2fa6e2f69ba62f3f6f293173d1982d163b7ce35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17438e87_d97c3726",
+        "filename": "Makefile.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-12T12:54:08Z",
+      "side": 1,
+      "message": "what is this good for?",
+      "revId": "a2fa6e2f69ba62f3f6f293173d1982d163b7ce35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a53fb42_1162dafa",
+        "filename": "bin/run",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-12T12:54:08Z",
+      "side": 1,
+      "message": "constructing a file URL from a pathname that way is brittle",
+      "range": {
+        "startLine": 70,
+        "startChar": 63,
+        "endLine": 70,
+        "endChar": 92
+      },
+      "revId": "a2fa6e2f69ba62f3f6f293173d1982d163b7ce35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0253a28b_d5bcfcb4",
+        "filename": "cppuhelper/source/paths.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-12T12:54:08Z",
+      "side": 1,
+      "message": "this should better go to the block of includes from the include/ dir below",
+      "revId": "a2fa6e2f69ba62f3f6f293173d1982d163b7ce35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2540c6b_2993e210",
+        "filename": "desktop/scripts/soffice.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-12T12:54:08Z",
+      "side": 1,
+      "message": "constructing a file URL from a pathname that way is brittle (note that there is Executable_uri_encode, though)",
+      "range": {
+        "startLine": 179,
+        "startChar": 63,
+        "endLine": 179,
+        "endChar": 80
+      },
+      "revId": "a2fa6e2f69ba62f3f6f293173d1982d163b7ce35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
