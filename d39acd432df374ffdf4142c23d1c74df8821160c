@@ -52,6 +52,24 @@
       "parentUuid": "b9e6363c_9d3a6f99",
       "revId": "d39acd432df374ffdf4142c23d1c74df8821160c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e9a0cf0_f154f7a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-12T14:41:01Z",
+      "side": 1,
+      "message": "and this also causes some Gerrit Jenkins jobs to fail (e.g., \u003chttps://ci.libreoffice.org/job/gerrit_mac/110609/consoleFull#973140912a810015-1db5-427c-9ce2-83b5f06a5284\u003e), so please get a fix in ASAP",
+      "parentUuid": "503b922d_5028370f",
+      "revId": "d39acd432df374ffdf4142c23d1c74df8821160c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
