@@ -21,17 +21,16 @@ namespace chart {
 
 ChartToolbarController::ChartToolbarController(const css::uno::Sequence<css::uno::Any>& rProperties)
 {
-    css::uno::Reference<css::frame::XFrame> xFrame;
     for (const auto& rProperty : rProperties)
     {
         css::beans::PropertyValue aPropValue;
         rProperty >>= aPropValue;
         if (aPropValue.Name == "Frame")
-            aPropValue.Value >>= xFrame;
+        {
+            mxFramesSupplier.set(aPropValue.Value, css::uno::UNO_QUERY);
+            break;
+        }
     }
-
-    css::uno::Reference<css::frame::XFramesSupplier> xFramesSupplier(xFrame, css::uno::UNO_QUERY);
-    mxFramesSupplier = xFramesSupplier;
 }
 
 ChartToolbarController::~ChartToolbarController()
