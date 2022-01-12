@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf48fcc3_5cab71bb",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6477,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-12T09:05:41Z",
+      "side": 1,
+      "message": "Picking good values is not easy. Since the border should be drawn _over_ the rectangle a size of 2 x 0.5 would be the best for 100%. But then we get a faint line on 90% so I decided to make it a bit larger at 2 x 0.75 (and wait for user complaints). On my setup values below 1 are hard to distinguish, that\u0027s why I aimed for 1 at 50%.",
+      "parentUuid": "4c20f193_d61c5a15",
+      "range": {
+        "startLine": 6476,
+        "startChar": 20,
+        "endLine": 6477,
+        "endChar": 62
+      },
+      "revId": "86063ff4f38f754daaf9dd60fc2a2eb30c126858",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80da267a_8bdbe000",
