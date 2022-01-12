@@ -43,7 +43,8 @@ namespace sdr::contact
         {
         }
 
-        static sal_uInt32 ensureGeometry(basegfx::B2DPolyPolygon& rUnitPolyPolygon)
+        /// return true if polycount == 1
+        static bool ensureGeometry(basegfx::B2DPolyPolygon& rUnitPolyPolygon)
         {
             sal_uInt32 nPolyCount(rUnitPolyPolygon.count());
             sal_uInt32 nPointCount(0);
@@ -51,6 +52,8 @@ namespace sdr::contact
             for(auto const& rPolygon : std::as_const(rUnitPolyPolygon))
             {
                 nPointCount += rPolygon.count();
+                if (nPointCount > 1)
+                    return false;
             }
 
             if(!nPointCount)
@@ -64,7 +67,7 @@ namespace sdr::contact
                 nPolyCount = 1;
             }
 
-            return nPolyCount;
+            return nPolyCount == 1;
         }
 
         void ViewContactOfSdrPathObj::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
@@ -76,14 +79,14 @@ namespace sdr::contact
                     GetPathObj().getText(0),
                     false));
             basegfx::B2DPolyPolygon aUnitPolyPolygon(GetPathObj().GetPathPoly());
-            sal_uInt32 nPolyCount(ensureGeometry(aUnitPolyPolygon));
+            bool bPolyCountIsOne(ensureGeometry(aUnitPolyPolygon));
 
             // prepare object transformation and unit polygon (direct model data)
             basegfx::B2DHomMatrix aObjectMatrix;
             basegfx::B2DPolyPolygon aUnitDefinitionPolyPolygon;
             bool bIsLine(
                 !aUnitPolyPolygon.areControlPointsUsed()
-                && 1 == nPolyCount
+                && bPolyCountIsOne
                 && 2 == aUnitPolyPolygon.getB2DPolygon(0).count());
 
             if(bIsLine)
@@ -113,12 +116,12 @@ namespace sdr::contact
 
                     aUnitPolyPolygon = basegfx::utils::clipPolyPolygonOnRange(aUnitPolyPolygon,
                                                                        aClipRange, true, true);
-                    nPolyCount = ensureGeometry(aUnitPolyPolygon);
+                    bPolyCountIsOne = ensureGeometry(aUnitPolyPolygon);
 
                     // re-check that we have't been clipped out to oblivion
                     bIsLine =
                         !aUnitPolyPolygon.areControlPointsUsed()
-                        && 1 == nPolyCount
+                        && bPolyCountIsOne
                         && 2 == aUnitPolyPolygon.getB2DPolygon(0).count();
                 }
             }
