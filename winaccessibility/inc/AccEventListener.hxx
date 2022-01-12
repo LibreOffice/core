@@ -54,7 +54,7 @@ public:
     virtual void HandleNameChangedEvent(css::uno::Any name);
 
     //for description changed event
-    virtual void HandleDescriptionChangedEvent(css::uno::Any desc);
+    virtual void HandleDescriptionChangedEvent();
 
     //for state changed event
     virtual void HandleStateChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
