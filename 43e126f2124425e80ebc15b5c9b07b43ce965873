@@ -160,6 +160,24 @@
       "parentUuid": "bea12c30_867df9ae",
       "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9029a9a_759e8036",
+        "filename": "vcl/backendtest/benchmark/outputdevice/Benchmarks.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-01-12T11:56:15Z",
+      "side": 1,
+      "message": "\u003e Okay, um... so how should I go on about implementing the Flush method for the  OutputDevice class(just some know-hows so that I could search the code accordingly)? Thanks!\n\nOpen the document from tdf#104878, set a breakpoint on WindowOutputDevice::Flush() and start the presentation. If you run with Skia backend, it\u0027ll end up calling X11SkiaSalGraphicsImpl::Flush() (or the Windows or Mac version of the function). I expect if you change OutputDevice::Flush() to call SalGraphics::Flush() it should do a similar thing.",
+      "parentUuid": "c98abee6_f363f791",
+      "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
