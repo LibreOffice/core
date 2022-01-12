@@ -1058,59 +1058,6 @@ rtl::Reference<Svx3DPolygonObject>
 
 rtl::Reference<Svx3DExtrudeObject>
         ShapeFactory::createArea3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const drawing::PolyPolygonShape3D& rPolyPolygon
-                    , double fDepth )
-{
-    if( !xTarget.is() )
-        return nullptr;
-
-    if( !rPolyPolygon.SequenceX.hasElements())
-        return nullptr;
-
-    //create shape
-    rtl::Reference<Svx3DExtrudeObject> xShape = new Svx3DExtrudeObject(nullptr);
-    xShape->setShapeKind(SdrObjKind::E3D_Extrusion);
-    xTarget->add(xShape);
-
-    //set properties
-    try
-    {
-        uno::Sequence<OUString> aPropertyNames{
-            UNO_NAME_3D_EXTRUDE_DEPTH,
-            UNO_NAME_3D_PERCENT_DIAGONAL,
-            UNO_NAME_3D_POLYPOLYGON3D,
-            UNO_NAME_3D_DOUBLE_SIDED,
-        };
-
-        uno::Sequence<uno::Any> aPropertyValues {
-            uno::Any(sal_Int32(fDepth)), // depth
-            uno::Any(sal_Int16(0)),      // PercentDiagonal
-            uno::Any(rPolyPolygon),      // Polygon
-            uno::Any(true)               // DoubleSided
-        };
-
-        //the z component of the polygon is now ignored by the drawing layer,
-        //so we need to translate the object via transformation matrix
-
-        //Matrix for position
-        if (rPolyPolygon.SequenceZ.hasElements()&& rPolyPolygon.SequenceZ[0].hasElements())
-        {
-            basegfx::B3DHomMatrix aM;
-            aM.translate(0, 0, rPolyPolygon.SequenceZ[0][0]);
-            drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
-            lcl_addProperty(aPropertyNames, aPropertyValues, UNO_NAME_3D_TRANSFORM_MATRIX, uno::Any(aHM));
-        }
-        xShape->setPropertyValues(aPropertyNames, aPropertyValues);
-    }
-    catch( const uno::Exception& )
-    {
-        TOOLS_WARN_EXCEPTION("chart2", "" );
-    }
-    return xShape;
-}
-
-rtl::Reference<Svx3DExtrudeObject>
-        ShapeFactory::createArea3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
                     , double fDepth )
 {
@@ -1162,38 +1109,6 @@ rtl::Reference<Svx3DExtrudeObject>
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return xShape;
-}
-
-SdrPathObj*
-        ShapeFactory::createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const drawing::PolyPolygonShape3D& rPolyPolygon
-                    , bool bSetZOrderToZero )
-{
-    if( !xTarget.is() )
-        return nullptr;
-
-    //create shape
-    SdrPathObj* pPath = new SdrPathObj(xTarget->GetSdrObject()->getSdrModelFromSdrObject(), SdrObjKind::Polygon);
-    if (bSetZOrderToZero)
-        // insert at ZOrder 0, an area should always be behind other shapes
-        xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath, 0);
-    else
-        xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath);
-
-    //set properties
-    try
-    {
-        // Polygon
-        basegfx::B2DPolyPolygon aNewPolyPolygon( PolyToB2DPolyPolygon(rPolyPolygon) );
-        // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
-        pPath->ForceMetricToItemPoolMetric(aNewPolyPolygon);
-        pPath->SetPathPoly(aNewPolyPolygon);
-    }
-    catch( const uno::Exception& )
-    {
-        TOOLS_WARN_EXCEPTION("chart2", "" );
-    }
-    return pPath;
 }
 
 SdrPathObj*
@@ -2516,12 +2431,6 @@ rtl::Reference<SvxShapeText>
     return xShape;
 }
 
-ShapeFactory* ShapeFactory::getOrCreateShapeFactory(const uno::Reference< lang::XMultiServiceFactory>& xFactory)
-{
-    static ShapeFactory* pShapeFactory = new ShapeFactory(xFactory);
-    return pShapeFactory;
-}
-
 rtl::Reference<SvxShapeGroupAnyD> ShapeFactory::getChartRootShape(
     const rtl::Reference<SvxDrawPage>& xDrawPage )
 {
@@ -2636,15 +2545,6 @@ OUString ShapeFactory::getStackedString( const OUString& rString, bool bStacked 
         aStackStr.append(rString[nPosSrc]);
     }
     return aStackStr.makeStringAndClear();
-}
-
-bool ShapeFactory::hasPolygonAnyLines( drawing::PolyPolygonShape3D& rPoly)
-{
-    // #i67757# check all contained polygons, if at least one polygon contains 2 or more points, return true
-    for( auto const & i : std::as_const(rPoly.SequenceX) )
-        if( i.getLength() > 1 )
-            return true;
-    return false;
 }
 
 bool ShapeFactory::hasPolygonAnyLines( const std::vector<std::vector<css::drawing::Position3D>>& rPoly)
