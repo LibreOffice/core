@@ -159,6 +159,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , mpOldSeries(nullptr)
     , mnPercent(0.0)
 {
+    m_xDataSeriesProps.set(m_xDataSeries, css::uno::UNO_QUERY);
     uno::Reference<data::XDataSource> xDataSource( xDataSeries, uno::UNO_QUERY );
 
     uno::Sequence< uno::Reference<
@@ -913,7 +914,7 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfPoint( sal_Int
 
 uno::Reference<beans::XPropertySet> VDataSeries::getPropertiesOfSeries() const
 {
-    return uno::Reference<css::beans::XPropertySet>(m_xDataSeries, css::uno::UNO_QUERY);
+    return m_xDataSeriesProps;
 }
 
 static std::unique_ptr<DataPointLabel> getDataPointLabelFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
