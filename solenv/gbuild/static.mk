@@ -16,7 +16,7 @@
 #
 # "Generic" comment from the author:
 # My thought was: the dependency info is already there. Can't be too hard to use it for
-# correct static linkage... well it took more then two weeks to hopefully identify all
+# correct static linkage... well it took more than two weeks to hopefully identify all
 # problems / edge cases. Now I can appreciate the usage bin/lo-all-static-libs even more.
 #
 # This code moved a few times to the various gbuild / make phases: Makefile / module
