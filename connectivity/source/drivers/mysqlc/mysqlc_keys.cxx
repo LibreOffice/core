@@ -32,8 +32,7 @@ Keys::Keys(Table* pTable, Mutex& rMutex, const ::std::vector<OUString>& rNames)
 //----- XDrop ----------------------------------------------------------------
 void Keys::dropObject(sal_Int32 nPosition, const OUString& sName)
 {
-    // TODO IMPLEMENT ME (should we just copy from Firebird LO code below?)
-    /*
+    // TODO: implement (should we just copy from Firebird LO code below?)
     if (m_pTable->isNew())
         return;
 
@@ -44,12 +43,11 @@ void Keys::dropObject(sal_Int32 nPosition, const OUString& sName)
         const OUString sQuote
             = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
 
-        OUString sSql("ALTER TABLE " + quoteName(sQuote, m_pTable->getName()) + " DROP CONSTRAINT "
-                      + quoteName(sQuote, sName));
+        OUString sSql("ALTER TABLE " + quoteName(sQuote, m_pTable->getTableName())
+                      + " DROP CONSTRAINT " + quoteName(sQuote, sName));
 
         m_pTable->getConnection()->createStatement()->execute(sSql);
     }
-*/
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

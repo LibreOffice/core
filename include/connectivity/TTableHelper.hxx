@@ -148,6 +148,9 @@ namespace connectivity
         // XNamed
         virtual OUString SAL_CALL getName() override;
 
+        // To retrieve the table name only without the schema
+        OUString getTableName();
+
         // helper method to get key properties
         std::shared_ptr<sdbcx::KeyProperties> getKeyProperties(const OUString& _sName) const;
         void addKey(const OUString& _sName,const std::shared_ptr<sdbcx::KeyProperties>& _aKeyProperties);

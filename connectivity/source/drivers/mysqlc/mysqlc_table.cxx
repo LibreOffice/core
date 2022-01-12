@@ -16,6 +16,7 @@
 
 #include <sal/log.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -44,8 +45,9 @@ Table::Table(Tables* pTables, Mutex& rMutex, const uno::Reference<XConnection>& 
 }
 
 Table::Table(Tables* pTables, Mutex& rMutex, const uno::Reference<XConnection>& rConnection,
-             const OUString& rName, const OUString& rType, const OUString& rDescription)
-    : OTableHelper(pTables, rConnection, true, rName, rType, rDescription, "", "")
+             const OUString& rCatalog, const OUString& rSchema, const OUString& rName,
+             const OUString& rType, const OUString& rDescription)
+    : OTableHelper(pTables, rConnection, true, rName, rType, rDescription, rSchema, rCatalog)
     , m_rMutex(rMutex)
     , m_nPrivileges(0)
 {
@@ -83,8 +85,8 @@ OCollection* Table::createIndexes(const ::std::vector<OUString>& rNames)
 }
 
 //----- XAlterTable -----------------------------------------------------------
-void SAL_CALL Table::alterColumnByName(const OUString& /* rColName */,
-                                       const uno::Reference<XPropertySet>& /* rDescriptor */)
+void SAL_CALL Table::alterColumnByName(const OUString& rColName,
+                                       const uno::Reference<XPropertySet>& rDescriptor)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(WeakComponentImplHelperBase::rBHelper.bDisposed);
@@ -97,43 +99,53 @@ void SAL_CALL Table::alterColumnByName(const OUString& /* rColName */,
     // sdbcx::ColumnDescriptor
     const bool bTypeChanged
         = xColumn->getPropertyValue("Type") != rDescriptor->getPropertyValue("Type");
-    const bool bTypeNameChanged
-        = xColumn->getPropertyValue("TypeName") != rDescriptor->getPropertyValue("TypeName");
+    const bool bTypeNameChanged = !comphelper::getString(xColumn->getPropertyValue("TypeName"))
+                                       .equalsIgnoreAsciiCase(comphelper::getString(
+                                           rDescriptor->getPropertyValue("TypeName")));
     const bool bPrecisionChanged
         = xColumn->getPropertyValue("Precision") != rDescriptor->getPropertyValue("Precision");
     const bool bScaleChanged
         = xColumn->getPropertyValue("Scale") != rDescriptor->getPropertyValue("Scale");
+
     const bool bIsNullableChanged
         = xColumn->getPropertyValue("IsNullable") != rDescriptor->getPropertyValue("IsNullable");
+
     const bool bIsAutoIncrementChanged = xColumn->getPropertyValue("IsAutoIncrement")
                                          != rDescriptor->getPropertyValue("IsAutoIncrement");
 
+    // there's also DefaultValue but not related to database directly, it seems completely internal to LO
+    // so no need to test it
     // TODO: remainder -- these are all "optional" so have to detect presence and change.
-
-    bool bDefaultChanged = xColumn->getPropertyValue("DefaultValue")
-                           != rDescriptor->getPropertyValue("DefaultValue");
-
-    // TODO: tests to do
-    if (bTypeChanged || bTypeNameChanged || bPrecisionChanged || bScaleChanged || bIsNullableChanged
-        || bIsAutoIncrementChanged || bDefaultChanged)
+    if (bTypeChanged || bTypeNameChanged || bPrecisionChanged || bScaleChanged || bIsNullableChanged
+        || bIsAutoIncrementChanged)
     {
         // If bPrecisionChanged this will only succeed if we have increased the
         // precision, otherwise an exception is thrown -- however the base
         // gui then offers to delete and recreate the column.
-        OUString sSql(getAlterTableColumn(rColName) + "TYPE "
-                      + ::dbtools::createStandardTypePart(rDescriptor, getConnection()));
-        getConnection()->createStatement()->execute(sSql);
+        OUStringBuffer sSql(300);
+        sSql.append("ALTER TABLE `" + getTableName() + "` MODIFY COLUMN `" + rColName + "` "
+                    + ::dbtools::createStandardTypePart(rDescriptor, getConnection()));
+
+        if (comphelper::getBOOL(rDescriptor->getPropertyValue("IsAutoIncrement")))
+            sSql.append(" auto_increment");
+
+        // see ColumnValue: NO_NULLS = 0, NULLABLE = 1, NULLABLE_UNKNOWN
+        // so entry required = yes corresponds to NO_NULLS = 0 and only in this case
+        // NOT NULL
+        if (comphelper::getINT32(rDescriptor->getPropertyValue("IsNullable")) == 0)
+            sSql.append(" NOT NULL");
+
+        getConnection()->createStatement()->execute(sSql.makeStringAndClear());
         // TODO: could cause errors e.g. if incompatible types, deal with them here as appropriate.
         // possibly we have to wrap things in Util::evaluateStatusVector.
     }
 
-    // TODO: tests to do
-    // TODO: quote identifiers as needed.
     if (bNameChanged)
     {
         OUString sNewColName;
         rDescriptor->getPropertyValue("Name") >>= sNewColName;
-        OUString sSql(getAlterTableColumn(rColName) + " TO \"" + sNewColName + "\"");
+        OUString sSql("ALTER TABLE `" + getName() + "` RENAME COLUMN `" + rColName + "` TO `"
+                      + sNewColName + "`");
 
         getConnection()->createStatement()->execute(sSql);
     }
@@ -142,10 +154,13 @@ void SAL_CALL Table::alterColumnByName(const OUString& /* rColName */,
 }
 
 void SAL_CALL Table::alterColumnByIndex(
-    sal_Int32 /* index */, const css::uno::Reference<css::beans::XPropertySet>& /* descriptor */)
+    sal_Int32 index, const css::uno::Reference<css::beans::XPropertySet>& descriptor)
 {
     MutexGuard aGuard(m_rMutex);
-    // TODO: implement
+    uno::Reference<XPropertySet> xColumn(m_xColumns->getByIndex(index), UNO_QUERY_THROW);
+    alterColumnByName(comphelper::getString(xColumn->getPropertyValue(
+                          OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),
+                      descriptor);
 }
 
 // ----- XRename --------------------------------------------------------------
@@ -161,15 +176,6 @@ Any SAL_CALL Table::queryInterface(const Type& rType)
     if (rType.getTypeName() == "com.sun.star.sdbcx.XRename")
         return Any();
     return OTableHelper::queryInterface(rType);
-}
-
-// ----- XTypeProvider --------------------------------------------------------
-uno::Sequence<Type> SAL_CALL Table::getTypes() { return OTableHelper::getTypes(); }
-
-OUString Table::getAlterTableColumn(std::u16string_view rColumn)
-{
-    // TODO: test
-    return ("ALTER TABLE \"" + getName() + "\" ALTER COLUMN \"" + rColumn + "\" ");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

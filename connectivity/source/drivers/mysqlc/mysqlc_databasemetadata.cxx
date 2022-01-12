@@ -160,7 +160,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns() { return true;
 
 OUString SAL_CALL ODatabaseMetaData::getCatalogTerm() { return "n/a"; }
 
-OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString() { return "\""; }
+OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString() { return "`"; }
 
 OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters() { return "#@"; }
 
@@ -806,7 +806,8 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTables(const Any& /*catalog
         "IF(STRCMP(TABLE_TYPE,'BASE TABLE'), TABLE_TYPE, 'TABLE') AS TABLE_TYPE, TABLE_COMMENT AS "
         "REMARKS "
         "FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA NOT IN ('information_schema', 'mysql', "
-        "'performance_schema') AND TABLE_SCHEMA LIKE '?' AND TABLE_NAME LIKE '?' "
+        "'performance_schema') AND TABLE_SCHEMA LIKE '?' AND CONCAT(TABLE_SCHEMA, '.', TABLE_NAME) "
+        "LIKE '?' "
     };
 
     if (types.getLength() == 1)

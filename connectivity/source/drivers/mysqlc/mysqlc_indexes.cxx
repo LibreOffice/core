@@ -20,14 +20,12 @@ using namespace ::com::sun::star::sdbc;
 
 Indexes::Indexes(Table* pTable, Mutex& rMutex, const vector<OUString>& rVector)
     : OIndexesHelper(pTable, rMutex, rVector)
-    , m_pTable(pTable)
-{
-}
+/* , m_pTable(pTable) */ {}
 
 // XDrop
-void Indexes::dropObject(sal_Int32 /*nPosition*/, const OUString& sIndexName)
+void Indexes::dropObject(sal_Int32 /*nPosition*/, const OUString& /* sIndexName */)
 {
-    // TODO IMPLEMENT ME
+    // TODO: implement
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

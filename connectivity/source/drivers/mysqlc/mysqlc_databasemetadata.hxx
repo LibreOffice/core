@@ -177,7 +177,7 @@ public:
     css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getSchemas() override;
     css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getCatalogs() override;
     css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getTableTypes() override;
-    css::uno::Reference<css::sdbc::XResultSet>
+    virtual css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getColumns(const Any& catalog, const OUString& schemaPattern,
                             const OUString& tableNamePattern,
                             const OUString& columnNamePattern) override;
