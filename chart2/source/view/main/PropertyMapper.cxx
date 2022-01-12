@@ -616,56 +616,6 @@ void PropertyMapper::setMultiProperties(
     }
 }
 
-void PropertyMapper::setMultiProperties(
-                  const tNameSequence& rNames
-                , const tAnySequence&  rValues
-                , const css::uno::Reference<
-                  css::beans::XPropertySet >& xTarget )
-{
-    bool bSuccess = false;
-    try
-    {
-        uno::Reference< beans::XMultiPropertySet > xShapeMultiProp( xTarget, uno::UNO_QUERY );
-        if( xShapeMultiProp.is() )
-        {
-            xShapeMultiProp->setPropertyValues( rNames, rValues );
-            bSuccess = true;
-        }
-    }
-    catch( const uno::Exception& )
-    {
-        TOOLS_WARN_EXCEPTION("chart2", "" ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
-    }
-
-    if(bSuccess)
-        return;
-
-    try
-    {
-        sal_Int32 nCount = std::max( rNames.getLength(), rValues.getLength() );
-        OUString aPropName;
-        uno::Any aValue;
-        for( sal_Int32 nN = 0; nN < nCount; nN++ )
-        {
-            aPropName = rNames[nN];
-            aValue = rValues[nN];
-
-            try
-            {
-                xTarget->setPropertyValue( aPropName, aValue );
-            }
-            catch( const uno::Exception& )
-            {
-                TOOLS_WARN_EXCEPTION("chart2", "" );
-            }
-        }
-    }
-    catch( const uno::Exception& )
-    {
-        TOOLS_WARN_EXCEPTION("chart2", "" );
-    }
-}
-
 void PropertyMapper::getTextLabelMultiPropertyLists(
     const uno::Reference< beans::XPropertySet >& xSourceProp
     , tNameSequence& rPropNames, tAnySequence& rPropValues

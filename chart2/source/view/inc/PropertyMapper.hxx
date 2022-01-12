@@ -92,11 +92,6 @@ public:
     static void setMultiProperties(
                   const tNameSequence& rNames
                 , const tAnySequence&  rValues
-                , const css::uno::Reference< css::beans::XPropertySet >& xTarget );
-
-    static void setMultiProperties(
-                  const tNameSequence& rNames
-                , const tAnySequence&  rValues
                 , SvxShape& xTarget );
 
     static const tPropertyNameMap& getPropertyNameMapForCharacterProperties();

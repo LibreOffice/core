@@ -69,15 +69,8 @@ enum SymbolEnum { Symbol_Square=0
 
 class ShapeFactory
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory>   m_xShapeFactory;
-
-    ShapeFactory(css::uno::Reference< css::lang::XMultiServiceFactory> const & xFactory)
-        {m_xShapeFactory = xFactory;}
-
 public:
     enum class StackPosition { Top, Bottom };
-
-    static ShapeFactory* getOrCreateShapeFactory(const css::uno::Reference< css::lang::XMultiServiceFactory>& xFactory);
 
     ShapeFactory() = delete;
 
@@ -152,17 +145,9 @@ public:
 
     static rtl::Reference<Svx3DExtrudeObject>
         createArea3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const css::drawing::PolyPolygonShape3D& rPolyPolygon
-                    , double fDepth);
-    static rtl::Reference<Svx3DExtrudeObject>
-        createArea3D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
                     , double fDepth);
 
-    static SdrPathObj*
-        createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const css::drawing::PolyPolygonShape3D& rPolyPolygon
-                    , bool bSetZOrderToZero = true);
     static SdrPathObj*
         createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
@@ -273,7 +258,6 @@ public:
 
     static OUString getStackedString( const OUString& rString, bool bStacked );
 
-    static bool hasPolygonAnyLines( css::drawing::PolyPolygonShape3D& rPoly );
     static bool hasPolygonAnyLines( const std::vector<std::vector<css::drawing::Position3D>>& rPoly );
     static bool isPolygonEmptyOrSinglePoint( css::drawing::PolyPolygonShape3D& rPoly );
     static bool isPolygonEmptyOrSinglePoint( const std::vector<std::vector<css::drawing::Position3D>>& rPoly );

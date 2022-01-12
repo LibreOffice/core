@@ -100,9 +100,6 @@ OOO_DLLPUBLIC_CHARTTOOLS css::drawing::Position3D getPointFromPoly(
                 , sal_Int32 nPointIndex, sal_Int32 nPolyIndex );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-void addPolygon( css::drawing::PolyPolygonShape3D& rRet
-                , const css::drawing::PolyPolygonShape3D& rAdd );
-OOO_DLLPUBLIC_CHARTTOOLS
 void addPolygon( std::vector<std::vector<css::drawing::Position3D>>& rRet
                 , const std::vector<std::vector<css::drawing::Position3D>>& rAdd );
 /** PolyPolygonShape3D + PolyPolygonShape3D -> PolyPolygonShape3D
@@ -128,9 +125,6 @@ css::drawing::PointSequenceSequence PolyToPointSequence(
 
 /** PolyPolygonShape3D ->  basegfx::B2DPolyPolygon (2D)
 */
-OOO_DLLPUBLIC_CHARTTOOLS
-basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
-                const css::drawing::PolyPolygonShape3D& rPolyPolygon );
 OOO_DLLPUBLIC_CHARTTOOLS
 basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
                 const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon );
@@ -169,20 +163,10 @@ OOO_DLLPUBLIC_CHARTTOOLS css::awt::Point Position3DToAWTPoint( const css::drawin
 */
 OOO_DLLPUBLIC_CHARTTOOLS css::awt::Size Direction3DToAWTSize( const css::drawing::Direction3D& rDirection );
 
-/** B3DPoint -> Sequence<double>
-*/
-OOO_DLLPUBLIC_CHARTTOOLS css::uno::Sequence< double > B3DPointToSequence( const ::basegfx::B3DPoint& rPoint );
-
 /** Sequence<double> -> drawing::Position3D
 */
 OOO_DLLPUBLIC_CHARTTOOLS css::drawing::Position3D
                 SequenceToPosition3D( const css::uno::Sequence< double >& rSeq );
-
-/** drawing::Position3D -> Sequence<double>
-*/
-
-OOO_DLLPUBLIC_CHARTTOOLS css::uno::Sequence< double >
-                Position3DToSequence( const css::drawing::Position3D& rPosition );
 
 /** chart2::XDataSequence -> uno::Sequence< double >
 */

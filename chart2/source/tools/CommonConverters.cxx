@@ -245,32 +245,6 @@ drawing::Position3D getPointFromPoly( const std::vector<std::vector<css::drawing
     return aRet;
 }
 
-void addPolygon( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonShape3D& rAdd )
-{
-    sal_Int32 nAddOuterCount = rAdd.SequenceX.getLength();
-    sal_Int32 nOuterCount = rRet.SequenceX.getLength() + nAddOuterCount;
-    rRet.SequenceX.realloc( nOuterCount );
-    auto pSequenceX = rRet.SequenceX.getArray();
-    rRet.SequenceY.realloc( nOuterCount );
-    auto pSequenceY = rRet.SequenceY.getArray();
-    rRet.SequenceZ.realloc( nOuterCount );
-    auto pSequenceZ = rRet.SequenceZ.getArray();
-
-    sal_Int32 nIndex = 0;
-    sal_Int32 nOuter = nOuterCount - nAddOuterCount;
-    for( ; nOuter < nOuterCount; nOuter++ )
-    {
-        if( nIndex >= nAddOuterCount )
-            break;
-
-        pSequenceX[nOuter] = rAdd.SequenceX[nIndex];
-        pSequenceY[nOuter] = rAdd.SequenceY[nIndex];
-        pSequenceZ[nOuter] = rAdd.SequenceZ[nIndex];
-
-        nIndex++;
-    }
-}
-
 void addPolygon( std::vector<std::vector<css::drawing::Position3D>>& rRet, const std::vector<std::vector<css::drawing::Position3D>>& rAdd )
 {
     sal_Int32 nAddOuterCount = rAdd.size();
@@ -418,33 +392,6 @@ drawing::PointSequenceSequence PolyToPointSequence(
 }
 
 basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
-                const drawing::PolyPolygonShape3D& rPolyPolygon )
-{
-    basegfx::B2DPolyPolygon aRetval;
-
-    for(sal_Int32 nN = 0; nN < rPolyPolygon.SequenceX.getLength(); nN++)
-    {
-        basegfx::B2DPolygon aNewPolygon;
-        sal_Int32 nInnerLength = rPolyPolygon.SequenceX[nN].getLength();
-        if(nInnerLength)
-        {
-            aNewPolygon.reserve(nInnerLength);
-            for( sal_Int32 nM = 0; nM < nInnerLength; nM++)
-            {
-                auto X = static_cast<sal_Int32>(rPolyPolygon.SequenceX[nN][nM]);
-                auto Y = static_cast<sal_Int32>(rPolyPolygon.SequenceY[nN][nM]);
-                aNewPolygon.append(basegfx::B2DPoint(X, Y));
-            }
-            // check for closed state flag
-            basegfx::utils::checkClosed(aNewPolygon);
-        }
-        aRetval.append(std::move(aNewPolygon));
-    }
-
-    return aRetval;
-}
-
-basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
                 const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon )
 {
     basegfx::B2DPolyPolygon aRetval;
@@ -531,11 +478,6 @@ awt::Size Direction3DToAWTSize( const drawing::Direction3D& rDirection )
     return aRet;
 }
 
-uno::Sequence< double > B3DPointToSequence( const ::basegfx::B3DPoint& rPoint )
-{
-    return { rPoint.getX(), rPoint.getY(), rPoint.getZ() };
-}
-
 drawing::Position3D SequenceToPosition3D( const uno::Sequence< double >& rSeq )
 {
     OSL_ENSURE(rSeq.getLength()==3,"The sequence needs to have length 3 for conversion into vector");
@@ -545,11 +487,6 @@ drawing::Position3D SequenceToPosition3D( const uno::Sequence< double >& rSeq )
     aRet.PositionY = rSeq.getLength()>1?rSeq[1]:0.0;
     aRet.PositionZ = rSeq.getLength()>2?rSeq[2]:0.0;
     return aRet;
-}
-
-uno::Sequence< double > Position3DToSequence( const drawing::Position3D& rPosition )
-{
-    return { rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ };
 }
 
 using namespace ::com::sun::star::chart2;
