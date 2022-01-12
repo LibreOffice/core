@@ -2092,7 +2092,7 @@ void VDataSeriesGroup::getMinimumAndMaximumYInContinuousXRange(
 
 void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
         , bool bSeparateStackingForDifferentSigns
-        , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex )
+        , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex ) const
 {
     assert(nCategoryIndex >= 0);
     assert(nCategoryIndex < getPointCount());
