@@ -3440,10 +3440,9 @@ void ScInterpreter::ScNumberValue()
     PushNoValue();
 }
 
-//2do: this should be a proper unicode string method
 static bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
 {
-    return 0x20 <= c && c != 0x7f;
+    return ( c > 0x1f && c < 0x7f ) || ( c > 0x9f );
 }
 
 void ScInterpreter::ScClean()
