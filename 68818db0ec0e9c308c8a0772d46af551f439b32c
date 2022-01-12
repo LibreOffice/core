@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5a9a03f_71d1110b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-01-12T11:47:38Z",
+      "side": 1,
+      "message": "I\u0027m confused by the removal of that flag I asked about. Does that mean the flag is actually not needed, or is there some other commit that makes it no longer needed?\n",
+      "revId": "68818db0ec0e9c308c8a0772d46af551f439b32c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
