@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd260da4_d7d2e64f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-01-12T16:08:47Z",
+      "side": 1,
+      "message": "Previous patches by Taylor Leebiz have been submitted to gerrit #41271 (which was abandoned).\n\nThis patch has been tested with Excel 2019 (both ods and xlsx, import and export) and Excel 365 (xlsx exported from Calc only).\n\nAs the actual results from CLEAN differ significantly from the documentation (support.microsoft.com) and the actual results are almost fully compliant with ODFF v1.3, I removed the new CLEAN_EXCEL function.",
+      "revId": "35934f8be66a896e4699b9fceafc2fa53b913643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
