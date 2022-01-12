@@ -34,6 +34,24 @@
       "parentUuid": "f2770d51_30208049",
       "revId": "d39acd432df374ffdf4142c23d1c74df8821160c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "503b922d_5028370f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-12T14:38:26Z",
+      "side": 1,
+      "message": "\u003e So what is the thing I should use instead, operator* ?\n\nyes",
+      "parentUuid": "b9e6363c_9d3a6f99",
+      "revId": "d39acd432df374ffdf4142c23d1c74df8821160c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
