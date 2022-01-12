@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d0a3167_4a70a7d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-01-12T19:13:17Z",
+      "side": 1,
+      "message": "Let\u0027s merge as this has Thorsten\u0027s blessing.",
+      "revId": "3d48b38beccce38b55fc4c899954bd8a893f4646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
