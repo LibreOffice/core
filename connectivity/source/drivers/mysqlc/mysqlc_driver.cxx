@@ -23,9 +23,11 @@ using namespace css::uno;
 using namespace css::lang;
 using namespace css::beans;
 using namespace css::sdbc;
+using namespace css::sdbcx;
 using namespace connectivity::mysqlc;
 
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/servicehelper.hxx>
 
 MysqlCDriver::MysqlCDriver(const Reference<XMultiServiceFactory>& _rxFactory)
     : ODriver_BASE(m_aMutex)
@@ -59,7 +61,7 @@ OUString MysqlCDriver::getImplementationName_Static()
 
 Sequence<OUString> MysqlCDriver::getSupportedServiceNames_Static()
 {
-    return { "com.sun.star.sdbc.Driver" };
+    return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
 }
 
 OUString SAL_CALL MysqlCDriver::getImplementationName() { return getImplementationName_Static(); }
@@ -112,6 +114,21 @@ MysqlCDriver::getPropertyInfo(const OUString& url, const Sequence<PropertyValue>
 sal_Int32 SAL_CALL MysqlCDriver::getMajorVersion() { return MARIADBC_VERSION_MAJOR; }
 
 sal_Int32 SAL_CALL MysqlCDriver::getMinorVersion() { return MARIADBC_VERSION_MINOR; }
+
+Reference<XTablesSupplier>
+    SAL_CALL MysqlCDriver::getDataDefinitionByConnection(const Reference<XConnection>& rConnection)
+{
+    if (OConnection* pConnection = comphelper::getFromUnoTunnel<OConnection>(rConnection))
+        return pConnection->createCatalog();
+    return {};
+}
+
+Reference<XTablesSupplier> SAL_CALL
+MysqlCDriver::getDataDefinitionByURL(const OUString& rURL, const Sequence<PropertyValue>& rInfo)
+{
+    Reference<XConnection> xConnection = connect(rURL, rInfo);
+    return getDataDefinitionByConnection(xConnection);
+}
 
 namespace connectivity::mysqlc
 {

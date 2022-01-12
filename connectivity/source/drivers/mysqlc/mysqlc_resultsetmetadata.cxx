@@ -21,6 +21,7 @@
 #include "mysqlc_general.hxx"
 
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <rtl/ustrbuf.hxx>
 
 using namespace connectivity::mysqlc;

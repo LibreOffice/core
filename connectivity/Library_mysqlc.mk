@@ -31,12 +31,12 @@ $(eval $(call gb_Library_add_libs,mysqlc,\
 $(eval $(call gb_Library_use_sdk_api,mysqlc))
 
 $(eval $(call gb_Library_use_libraries,mysqlc,\
+	comphelper \
 	cppu \
-    dbtools \
+	cppuhelper \
+	dbtools \
 	sal \
 	salhelper \
-	comphelper \
-	cppuhelper \
 ))
 
 $(eval $(call gb_Library_add_defs,mysqlc,\
@@ -49,17 +49,26 @@ $(eval $(call gb_Library_add_defs,mysqlc,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,mysqlc,\
+	connectivity/source/drivers/mysqlc/mysqlc_catalog \
+	connectivity/source/drivers/mysqlc/mysqlc_column \
+	connectivity/source/drivers/mysqlc/mysqlc_columns \
 	connectivity/source/drivers/mysqlc/mysqlc_connection \
 	connectivity/source/drivers/mysqlc/mysqlc_databasemetadata \
 	connectivity/source/drivers/mysqlc/mysqlc_driver \
 	connectivity/source/drivers/mysqlc/mysqlc_general \
+	connectivity/source/drivers/mysqlc/mysqlc_indexes \
+	connectivity/source/drivers/mysqlc/mysqlc_keys \
 	connectivity/source/drivers/mysqlc/mysqlc_prepared_resultset \
 	connectivity/source/drivers/mysqlc/mysqlc_preparedstatement \
 	connectivity/source/drivers/mysqlc/mysqlc_resultset \
 	connectivity/source/drivers/mysqlc/mysqlc_resultsetmetadata \
 	connectivity/source/drivers/mysqlc/mysqlc_services \
 	connectivity/source/drivers/mysqlc/mysqlc_statement \
+	connectivity/source/drivers/mysqlc/mysqlc_table \
+	connectivity/source/drivers/mysqlc/mysqlc_tables \
 	connectivity/source/drivers/mysqlc/mysqlc_types \
+	connectivity/source/drivers/mysqlc/mysqlc_user \
+	connectivity/source/drivers/mysqlc/mysqlc_users \
 ))
 
 $(eval $(call gb_Library_set_componentfile,mysqlc,connectivity/source/drivers/mysqlc/mysqlc,services))
