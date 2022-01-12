@@ -105,8 +105,14 @@ $(1).build $(1).check $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(tar
 $(1).clean $(1).showdeliverables:
 	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
-$(1).all: bootstrap fetch
+$(1).allbuild: bootstrap fetch
+	$$(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1)
+
+$(1).allcheck: bootstrap fetch
 	$$(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)
+
+$(1).all: $(1).allbuild
+	echo "Using 'make <module>.all' is deprecated, use 'make <module>.allcheck' (or 'make <module>.allbuild')"
 
 endef
 
