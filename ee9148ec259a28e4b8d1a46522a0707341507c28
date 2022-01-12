@@ -51,6 +51,24 @@
       "message": "Unfortunately not, it just hangs there.",
       "revId": "ee9148ec259a28e4b8d1a46522a0707341507c28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7b14792_fb963d99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-12T08:08:42Z",
+      "side": 1,
+      "message": "Checking https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/105256/consoleFull#-456117582b3c3940-aa94-44b1-926f-2d1e7de0f995\nthis is the test failing:\n\nLOG\u003e Log started 09.00.2022 - 10:41:16\nchecking: [sw.SwXDocumentIndex::com::sun::star::text::XDocumentIndex] is iface: [com.sun.star.text.XDocumentIndex] testcode: [ifc.text._XDocumentIndex]\nLOG\u003e Execute: getServiceName()\nMethod getServiceName() finished with state OK\nLOG\u003e getServiceName(): COMPLETED.OK\n\nLOG\u003e Execute: update()\nLOG\u003e Content before: \u0027\u0027\nLOG\u003e Content after: \u0027Alphabetical IndexNew\u0027\nMethod update() finished with state FAILED\nLOG\u003e update(): COMPLETED.FAILED\n***** State for sw.SwXDocumentIndex::com::sun::star::text::XDocumentIndex ******\n[sw.SwXDocumentIndex::com::sun::star::text::XDocumentIndex::update()] is testcode: [update()] - COMPLETED.FAILED\n\nWhole interface: COMPLETED.FAILED",
+      "parentUuid": "fe4c8794_eed7c055",
+      "revId": "ee9148ec259a28e4b8d1a46522a0707341507c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
