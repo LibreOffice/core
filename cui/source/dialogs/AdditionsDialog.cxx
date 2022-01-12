@@ -80,9 +80,7 @@ std::string ucbGet(const OUString& rURL)
 {
     try
     {
-        OUString sEncodedUrl = INetURLObject::encode(rURL, INetURLObject::PART_FPATH,
-                                                     INetURLObject::EncodeMechanism::All);
-        auto const s = utl::UcbStreamHelper::CreateStream(sEncodedUrl, StreamMode::STD_READ);
+        auto const s = utl::UcbStreamHelper::CreateStream(rURL, StreamMode::STD_READ);
         if (!s)
         {
             SAL_WARN("cui.dialogs", "CreateStream <" << rURL << "> failed");
@@ -481,6 +479,10 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
         this->set_title(titlePrefix);
         m_sTag = "allextensions"; // Means empty parameter
     }
+
+    m_sTag = INetURLObject::encode(m_sTag, INetURLObject::PART_FPATH,
+                                   INetURLObject::EncodeMechanism::All);
+
     //FIXME: Temporary URL - v0 is not using actual api
     OUString rURL = "https://extensions.libreoffice.org/api/v0/" + m_sTag + ".json";
     m_sURL = rURL;
