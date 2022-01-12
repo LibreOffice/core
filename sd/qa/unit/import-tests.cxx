@@ -1704,7 +1704,12 @@ void SdImportTest::testRowHeight()
     uno::Reference< css::table::XTable > xTable2(pTableObj2->getTable(), uno::UNO_SET_THROW);
     uno::Reference< css::table::XTableRows > xRows2( xTable2->getRows(), uno::UNO_SET_THROW);
 
-    for(sal_Int32 nRow = 0; nRow < 7; ++nRow)
+    // All 7 rows should be the same height, but LO is missing the endParaRPr 11pt font setting
+    // on empty cells and so uses the default style's 18pt font, producing too large of a cell size
+    // which is taller than the specified row height of 800 (and thus overrides that setting).
+
+    // The first two rows should "grow" to the requested height (from 6xx to 800)
+    for(sal_Int32 nRow = 0; nRow < 2; ++nRow)
     {
         uno::Reference< beans::XPropertySet > xRefRow2( xRows2->getByIndex(nRow), uno::UNO_QUERY_THROW );
         xRefRow2->getPropertyValue( "Height" ) >>= nHeight;
@@ -1712,6 +1717,22 @@ void SdImportTest::testRowHeight()
     }
 
     xDocShRef2->DoClose();
+
+    sd::DrawDocShellRef xDocShRef3 = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf144092.pptx"), PPTX);
+    pPage = GetPage(1, xDocShRef3);
+    pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj);
+    xTable.set(pTableObj->getTable(), uno::UNO_SET_THROW);
+    xRows.set(xTable->getRows(), uno::UNO_SET_THROW);
+    // All 9 rows should be the approximately same height, even the empty rows,
+    // because the fontsize is 18pt, which is about 50% larger than the requested row height.
+    for(sal_Int32 nRow = 0; nRow < 9; ++nRow)
+    {
+        xRefRow.set(xRows->getByIndex(nRow), uno::UNO_QUERY_THROW);
+        xRefRow->getPropertyValue("Height") >>= nHeight;
+        CPPUNIT_ASSERT_LESS(nHeight, sal_Int32(900));
+    }
+    xDocShRef3->DoClose();
 }
 
 void SdImportTest::testTdf93830()

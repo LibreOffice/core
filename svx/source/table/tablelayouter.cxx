@@ -749,7 +749,6 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
 
         bool bIsEmpty = true; // check if all cells in this row are merged
         bool bRowHasText = false;
-        bool bRowHasCellInEditMode = false;
 
         for( nCol = 0; nCol < nColCount; ++nCol )
         {
@@ -769,9 +768,6 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
                     bool bCellHasText = xCell->hasText();
                     bool bCellInEditMode = xCell->IsTextEditActive();
 
-                    if (!bRowHasCellInEditMode && bCellInEditMode)
-                        bRowHasCellInEditMode = true;
-
                     if ((bRowHasText == bCellHasText) || (bRowHasText && bCellInEditMode))
                     {
                         nMinHeight = std::max( nMinHeight, xCell->getMinimumHeight() );
@@ -786,11 +782,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
                     // This control decides when we use "Height" property value instead of calculated minimum height
                     //     Case 1: * Row has "Height" property
                     //             * Calculated minimum height is smaller than Height property value.
-                    //     Case 2: * Row has "Height" property
-                    //             * Calculated minimum height is bigger than Height property value and
-                    //             * Row has not any text of any cell in edit mode in the row (means completely empty)
-                    if ((nMinHeight < nRowPropHeight && nRowPropHeight > 0 && (bRowHasText || bRowHasCellInEditMode)) ||
-                        (nMinHeight > nRowPropHeight && nRowPropHeight > 0 && (!bRowHasText && !bRowHasCellInEditMode)))
+                    if (nMinHeight < nRowPropHeight && nRowPropHeight > 0)
                     {
                         nMinHeight = nRowPropHeight;
                     }
