@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f9ca05c_81631f48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-12T12:36:36Z",
+      "side": 1,
+      "message": "@david: it seems you did most of these for MingW LO build support AFAI can see, which was removed from LO.",
+      "revId": "a597f38c4d64f34209f56d3016694c7317a2a0b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
