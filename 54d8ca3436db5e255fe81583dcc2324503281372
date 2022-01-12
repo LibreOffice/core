@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5794ebca_5bf32426",
+        "filename": "lotuswordpro/source/filter/lwpdrawobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1418,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-12T10:13:41Z",
+      "side": 1,
+      "message": "if N is 32, which it can be, this is 0, right? that\u0027s a bit nonobvious",
+      "range": {
+        "startLine": 1418,
+        "startChar": 31,
+        "endLine": 1418,
+        "endChar": 39
+      },
+      "revId": "54d8ca3436db5e255fe81583dcc2324503281372",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
