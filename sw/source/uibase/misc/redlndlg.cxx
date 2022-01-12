@@ -742,7 +742,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
 
     // collect redlines of tracked table or table row insertion/deletions under a single tree list
     // item to accept/reject table (row) insertion/deletion with a single click on Accept/Reject
-    // Note: because update of the tree list depends on parent count, we doesn't modify
+    // Note: because update of the tree list depends on parent count, we don't modify
     // m_RedlineParents, only store the 2nd and more redlines as children of the tree list
     // item of the first redline
 
@@ -762,7 +762,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
     SwRedlineTable::size_type nPrevRowChange = SwRedlineTable::npos;
 
     // show all redlines as tree list items,
-    // redlines of a tracked table (row) inserion/deletion showed as children of a single parent
+    // redlines of a tracked table (row) insertion/deletion showed as children of a single parent
     for (SwRedlineTable::size_type i = nStart; i <= nEnd; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
