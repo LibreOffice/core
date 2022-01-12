@@ -29,6 +29,8 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdmodel.hxx>
 
 using namespace com::sun::star;
 
@@ -147,6 +149,7 @@ ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact&
 :   mrObjectContact(rObjectContact),
     mrViewContact(rViewContact),
     maGridOffset(0.0, 0.0),
+    mnActionChangedCount(0),
     mbLazyInvalidate(false)
 {
     // make the ViewContact remember me
@@ -193,7 +196,7 @@ const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
         {
             // if range is not computed (new or LazyInvalidate objects), force it
             const DisplayInfo aDisplayInfo;
-            const drawinglayer::primitive2d::Primitive2DContainer xSequence(getPrimitive2DSequence(aDisplayInfo));
+            const drawinglayer::primitive2d::Primitive2DContainer& xSequence(getPrimitive2DSequence(aDisplayInfo));
 
             if(!xSequence.empty())
             {
@@ -208,6 +211,10 @@ const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
 
 void ViewObjectContact::ActionChanged()
 {
+    // clear cached primitives
+    mxPrimitive2DSequence.clear();
+    ++mnActionChangedCount;
+
     if(mbLazyInvalidate)
         return;
 
@@ -330,6 +337,14 @@ void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInf
 
 drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
+    // only some of the top-level apps are any good at reliably invalidating us (e.g. writer is not)
+    if (SdrObject* pSdrObj = mrViewContact.TryToGetSdrObject())
+        if (pSdrObj->getSdrModelFromSdrObject().IsVOCInvalidationIsReliable())
+        {
+            if (!mxPrimitive2DSequence.empty())
+                return mxPrimitive2DSequence;
+        }
+
     /**
     This method is weird because
     (1) we have to re-walk the primitive tree because the flushing is unreliable
@@ -415,21 +430,28 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
     if(!isPrimitiveVisible(rDisplayInfo))
         return;
 
-    drawinglayer::primitive2d::Primitive2DContainer xRetval = getPrimitive2DSequence(rDisplayInfo);
-    if(xRetval.empty())
+    getPrimitive2DSequence(rDisplayInfo);
+    if(mxPrimitive2DSequence.empty())
         return;
 
     // get ranges
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-    const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
     const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
 
     // check geometrical visibility
-    bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(aObjectRange);
+    bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(maObjectRange);
     if(!bVisible)
         return;
 
-    rVisitor.visit(std::move(xRetval));
+    // temporarily take over the mxPrimitive2DSequence, in case it gets invalidated while we want to iterate over it
+    auto tmp = std::move(const_cast<ViewObjectContact*>(this)->mxPrimitive2DSequence);
+    int nPrevCount = mnActionChangedCount;
+
+    rVisitor.visit(tmp);
+
+    // if we received ActionChanged() calls while walking the primitives, then leave it empty, otherwise move it back
+    if (mnActionChangedCount == nPrevCount)
+        const_cast<ViewObjectContact*>(this)->mxPrimitive2DSequence = std::move(tmp);
 }
 
 void ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
