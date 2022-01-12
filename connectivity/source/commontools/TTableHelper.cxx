@@ -549,6 +549,11 @@ OUString SAL_CALL OTableHelper::getName()
     return sComposedName;
 }
 
+OUString OTableHelper::getTableName()
+{
+    return m_Name;
+}
+
 std::shared_ptr<sdbcx::KeyProperties> OTableHelper::getKeyProperties(const OUString& _sName) const
 {
     std::shared_ptr<sdbcx::KeyProperties> pKeyProps;

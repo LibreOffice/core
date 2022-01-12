@@ -29,12 +29,6 @@ private:
     ::osl::Mutex& m_rMutex;
     sal_Int32 m_nPrivileges;
 
-    /**
-    * Get the ALTER TABLE [TABLE] ALTER [COLUMN] String.
-    * Includes a trailing space.
-    */
-    OUString getAlterTableColumn(std::u16string_view rColumn);
-
 protected:
     void construct() override;
 
@@ -42,8 +36,9 @@ public:
     Table(Tables* pTables, ::osl::Mutex& rMutex,
           const css::uno::Reference<css::sdbc::XConnection>& _xConnection);
     Table(Tables* pTables, ::osl::Mutex& rMutex,
-          const css::uno::Reference<css::sdbc::XConnection>& _xConnection, const OUString& rName,
-          const OUString& rType, const OUString& rDescription);
+          const css::uno::Reference<css::sdbc::XConnection>& _xConnection, const OUString& rCatalog,
+          const OUString& rSchema, const OUString& rName, const OUString& rType,
+          const OUString& rDescription);
 
     // OTableHelper
     virtual ::connectivity::sdbcx::OCollection*
@@ -70,9 +65,6 @@ public:
 
     //XInterface
     virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
-
-    //XTypeProvider
-    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
 };
 
 } // namespace connectivity::mysqlc

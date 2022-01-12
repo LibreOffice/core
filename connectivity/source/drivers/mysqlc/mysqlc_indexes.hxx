@@ -18,7 +18,8 @@ namespace connectivity::mysqlc
 class Indexes : public ::connectivity::OIndexesHelper
 {
 private:
-    Table* m_pTable;
+    // TODO: useful?
+    // Table* m_pTable;
 
 protected:
     // XDrop

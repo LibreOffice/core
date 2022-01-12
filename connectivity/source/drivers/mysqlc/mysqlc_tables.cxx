@@ -54,6 +54,8 @@ ObjectType Tables::createObject(const OUString& rName)
         throw RuntimeException();
 
     ObjectType xRet(new Table(this, m_rMutex, m_xMetaData->getConnection(),
+                              xRow->getString(1), // Catalog
+                              xRow->getString(2), // Schema
                               xRow->getString(3), // Name
                               xRow->getString(4), // Type
                               xRow->getString(5))); // Description / Remarks / Comments

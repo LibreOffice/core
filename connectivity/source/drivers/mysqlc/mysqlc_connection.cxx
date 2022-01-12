@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "mysqlc_catalog.hxx"
 #include "mysqlc_connection.hxx"
 #include "mysqlc_databasemetadata.hxx"
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 #include "mysqlc_driver.hxx"
 #include "mysqlc_statement.hxx"
@@ -26,6 +28,10 @@
 #include "mysqlc_general.hxx"
 
 #include <com/sun/star/beans/NamedValue.hpp>
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <comphelper/storagehelper.hxx>
 
 #include <osl/diagnose.h>
 #include <cppuhelper/supportsservice.hxx>
@@ -37,6 +43,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
 using ::osl::MutexGuard;
 
 #define MYSQLC_URI_PREFIX "sdbc:mysqlc:"
@@ -53,6 +60,7 @@ void lcl_executeUpdate(MYSQL* pMySql, const OString& sql)
 OConnection::OConnection(MysqlCDriver& _rDriver)
     : OMetaConnection_BASE(m_aMutex)
     , m_mysql()
+    , m_xCatalog(nullptr)
     , m_xMetaData(nullptr)
     , m_xDriver(&_rDriver)
 {
@@ -487,6 +495,38 @@ OUString OConnection::transFormPreparedStatement(const OUString& _sSQL)
         }
     }
     return sSqlStatement;
+}
+
+//----- XUnoTunnel ----------------------------------------------------------
+// virtual
+sal_Int64 SAL_CALL OConnection::getSomething(const css::uno::Sequence<sal_Int8>& rId)
+{
+    return comphelper::getSomethingImpl(rId, this);
+}
+
+// static
+Sequence<sal_Int8> OConnection::getUnoTunnelId()
+{
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
+}
+
+Reference<XTablesSupplier> OConnection::createCatalog()
+{
+    MutexGuard aGuard(m_aMutex);
+
+    // m_xCatalog is a weak reference. Reuse it if it still exists.
+    Reference<XTablesSupplier> xCatalog = m_xCatalog;
+    if (xCatalog.is())
+    {
+        return xCatalog;
+    }
+    else
+    {
+        xCatalog = new Catalog(this);
+        m_xCatalog = xCatalog;
+        return m_xCatalog;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
