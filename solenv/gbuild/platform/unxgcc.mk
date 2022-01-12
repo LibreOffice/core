@@ -115,7 +115,7 @@ $(if $(strip $(and \
     )),$(true))
 endef
 
-# In theory would would need to track, if any of the linked objects is C++ code, so for the static build we assume yes :-(
+# In theory would need to track, if any of the linked objects is C++ code, so for the static build we assume yes :-(
 gb_LinkTarget__NeedsCxxLinker = $(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS)$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)$(DISABLE_DYNLOADING)),$(true))
 
 # note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
