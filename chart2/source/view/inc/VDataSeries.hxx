@@ -195,6 +195,7 @@ public: //member
 
 private: //member
     css::uno::Reference<css::chart2::XDataSeries> m_xDataSeries;
+    css::uno::Reference<css::beans::XPropertySet> m_xDataSeriesProps; // cached
 
     //all points given by the model data (here are not only the visible points meant)
     sal_Int32       m_nPointCount;
