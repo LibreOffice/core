@@ -221,11 +221,10 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
     //load draw object
     for (unsigned short i = 0; i < nRecCount; i++)
     {
-        XFFrame* pXFDrawObj = CreateDrawObject();
-
-        if (pXFDrawObj)
+        rtl::Reference<XFFrame> xXFDrawObj = CreateDrawObject();
+        if (xXFDrawObj)
         {
-            pDrawObjVector->push_back(pXFDrawObj);
+            pDrawObjVector->push_back(xXFDrawObj);
         }
     }
 }
@@ -280,17 +279,17 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
     //load draw object
     for (unsigned short i = 0; i < nRecCount; i++)
     {
-        XFFrame* pXFDrawObj = CreateDrawObject();
+        rtl::Reference<XFFrame> xXFDrawObj = CreateDrawObject();
 
-        if (pXFDrawObj)
+        if (xXFDrawObj)
         {
-            if (pXFDrawObj->GetFrameType() == enumXFFrameImage)
+            if (xXFDrawObj->GetFrameType() == enumXFFrameImage)
             {
-                m_pDrawObjVector->push_back(pXFDrawObj);
+                m_pDrawObjVector->push_back(xXFDrawObj);
             }
             else
             {
-                pXFDrawGroup->Add(pXFDrawObj);
+                pXFDrawGroup->Add(xXFDrawObj.get());
             }
         }
     }
@@ -302,14 +301,14 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
  * @descr   Create the XF-drawing objects according to the object type read from bento stream.
  * @return   the created XF-drawing objects.
  */
-XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
+rtl::Reference<XFFrame> LwpSdwGroupLoaderV0102::CreateDrawObject()
 {
     //record type
     unsigned char recType(0);
     m_pStream->ReadUChar(recType);
 
     std::unique_ptr<LwpDrawObj> pDrawObj;
-    XFFrame* pRetObject = nullptr;
+    rtl::Reference<XFFrame> xRetObject;
 
     switch(recType)
     {
@@ -371,12 +370,12 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
         // read out the object header
         pDrawObj.reset(new LwpDrawGroup(m_pStream));
 
-        pRetObject = CreateDrawGroupObject();
+        xRetObject = CreateDrawGroupObject();
 
-        if (pRetObject)
+        if (xRetObject)
         {
             // set anchor type
-            pRetObject->SetAnchorType(enumXFAnchorFrame);
+            xRetObject->SetAnchorType(enumXFAnchorFrame);
         }
         break;
     }
@@ -396,10 +395,10 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
     // we don't need create the corresponding XF-object of a group object.
     if (pDrawObj && recType != OT_GROUP)
     {
-        pRetObject = pDrawObj->CreateXFDrawObject();
+        xRetObject = pDrawObj->CreateXFDrawObject();
     }
 
-    return pRetObject;
+    return xRetObject;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
