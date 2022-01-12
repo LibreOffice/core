@@ -521,9 +521,8 @@
                             <property name="active">0</property>
                             <items>
                               <item translatable="yes" context="viewoptionspage|glyphposmode">Classic</item>
-                              <item translatable="yes" context="viewoptionspage|glyphposmode">ClassicInspired</item>
                               <item translatable="yes" context="viewoptionspage|glyphposmode">Layout</item>
-                              <item translatable="yes" context="viewoptionspage|glyphposmode">Readability</item>
+                              <item translatable="yes" context="viewoptionspage|glyphposmode">Layout &amp; Matching Render</item>
                             </items>
                           </object>
                           <packing>
