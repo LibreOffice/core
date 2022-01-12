@@ -865,21 +865,17 @@ namespace
         tools::Long nScr = rScrArray[i] - rScrArray[i - 1];
         switch (eGlyphPositioningMode)
         {
-            case GlyphPositioningMode::PreferLayout:
+            case GlyphPositioningMode::Layout:  // <- glyph positioning stable during editing,
+                                                // but at ~90% glyphs screen zoom rendering will
+                                                // start to show kerning problems
+            case GlyphPositioningMode::LayoutAndMatchingRender: // <- glyph positioning stable during editing,
+                                                                // and should render nicely at sane zoom levels
                 rScrPos = rKernArray[i - 1] + nScr;
                 // just accept the print layout positions, this is what editeng does
                 // https://freddie.witherden.org/pages/font-rasterisation/#application-requirements
                 break;
-            case GlyphPositioningMode::PreferReadability:
-            {
-                // Overwrite KernArray with the screen-optimized glyph positions
-                // these will generally be too wide at small sizes and text will spill out
-                // of its designated zones
-                rKernArray[i - 1] = rScrPos;
-                rScrPos += nScr;
-                break;
-            }
-            case GlyphPositioningMode::Classic:
+            case GlyphPositioningMode::Classic: // <- layout unstable during editing, fairly arbitrary glyph
+                                                // positioning depending on zoom
             {
                 // https://wiki.openoffice.org/wiki/Writer/WYSIWYG
                 if (nCh == CH_BLANK)
@@ -897,27 +893,6 @@ namespace
                     }
                 }
                 rKernArray[i - 1] = rScrPos - nScr;
-                break;
-            }
-            case GlyphPositioningMode::ClassicInspired:
-            {
-                // use the print layout positions for blanks and the first glyph after a blank or -
-                // and use screen layout within a run of glyphs
-                const bool bSyncWithPrintLayout = nCh == CH_BLANK || cChPrev == CH_BLANK || cChPrev == '-';
-                if (bSyncWithPrintLayout)
-                {
-                    // Leave KernArray untouched at its print layout position in this case
-                    // sync ScreenPos to print layout position
-                    rScrPos = rKernArray[i - 1] + nScr;
-                }
-                else
-                {
-                    // Overwrite KernArray within the run to use screen-optimized glyph positions
-                    rKernArray[i - 1] = rScrPos;
-                    rScrPos += nScr;
-                }
-                // at small sizes the screen positions tend to get wider, and the text begins to
-                // overlap the next word. http://people.redhat.com/otaylor/grid-fitting/
                 break;
             }
         }
@@ -1547,6 +1522,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     else
     {
+        GlyphPositioningMode eGlyphPositioningMode = rInf.GetShell()->GetViewOptions()->GetGlyphPositioningMode();
+        const bool bOrigTextRenderModeForResolutionIndependentLayout(rInf.GetOut().GetTextRenderModeForResolutionIndependentLayout());
+
+        // set text render mode to suit use of resolution independent text layout
+        rInf.GetOut().SetTextRenderModeForResolutionIndependentLayout(eGlyphPositioningMode == GlyphPositioningMode::LayoutAndMatchingRender);
+
         const OUString* pStr = &rInf.GetText();
 
         OUString aStr;
@@ -1733,8 +1714,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else
         {
-            GlyphPositioningMode eGlyphPositioningMode = rInf.GetShell()->GetViewOptions()->GetGlyphPositioningMode();
-
             // In case of Pair Kerning the printer influence on the positioning
             // grows
             const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
@@ -1948,6 +1927,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
         }
+
+        rInf.GetOut().SetTextRenderModeForResolutionIndependentLayout(bOrigTextRenderModeForResolutionIndependentLayout);
     }
 }
 
@@ -2075,11 +2056,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         else
         {
             GlyphPositioningMode eGlyphPositioningMode = rInf.GetShell()->GetViewOptions()->GetGlyphPositioningMode();
-            if (eGlyphPositioningMode == GlyphPositioningMode::PreferLayout)
-            {
-                aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
-            }
-            else
+            if (eGlyphPositioningMode == GlyphPositioningMode::Classic)
             {
                 std::vector<sal_Int32> aScrArray;
                 rInf.GetOut().GetTextArray( rInf.GetText(), &aScrArray,
@@ -2105,6 +2082,10 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                 }
 
                 aTextSize.setWidth( nScrPos );
+            }
+            else
+            {
+                aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
             }
         }
     }
