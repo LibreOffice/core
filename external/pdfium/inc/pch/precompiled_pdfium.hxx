@@ -66,7 +66,6 @@
 #if PCH_LEVEL >= 2
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <absl/types/bad_optional_access.h>
 #include <build/build_config.h>
 #include <constants/access_permissions.h>
 #include <constants/annotation_common.h>
