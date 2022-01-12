@@ -16,6 +16,24 @@
       "message": "Nice work. But there is an issue: the label \"Text Orientation\" becomes now separated from the control itself. I would just fill the space (and align the indent spinner). The Text Extension buttons below should just come after Vertically Stacked but I\u0027d appreciate a label as it is some orthogonal attribute. (Or just remove all these less-frequently used settings from the sidebar.)\n\nI wonder if \"Merge Cells\" isn\u0027t better suited at Cell Appearance. But this would be rather another patch.",
       "revId": "36b4de8c55bbbf11a7cc6e0c73c4e25c3e5c0a32",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbe42523_32062cc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2022-01-12T23:44:21Z",
+      "side": 1,
+      "message": "I\u0027m sorry but I didn\u0027t know what you mean. Text Orientation and the other settings are the same than before master.\n\nThis change move Wrap Text and Merge cells to the end. From the UI point of view nothing more changed.",
+      "parentUuid": "8ab68001_0c6345d8",
+      "revId": "36b4de8c55bbbf11a7cc6e0c73c4e25c3e5c0a32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
