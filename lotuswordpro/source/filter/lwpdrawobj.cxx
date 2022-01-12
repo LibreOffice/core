@@ -374,7 +374,7 @@ OUString LwpDrawObj::GetArrowName(sal_uInt8 nArrowStyle)
  * @descr   template method of creating drawing object from Lwp-Model to XF-Model
  * @return   pointer of the drawing object of XF-Model.
  */
-XFFrame* LwpDrawObj::CreateXFDrawObject()
+rtl::Reference<XFFrame> LwpDrawObj::CreateXFDrawObject()
 {
     // read records
     Read();
@@ -383,27 +383,27 @@ XFFrame* LwpDrawObj::CreateXFDrawObject()
     OUString aStyleName = RegisterStyle();
 
     // create XF-Objects
-    XFFrame* pXFObj = nullptr;
+    rtl::Reference<XFFrame> xXFObj;
     if (m_pTransData
         && FABS(m_pTransData->fOffsetX - m_pTransData->fLeftMargin) < THRESHOLD
         && FABS(m_pTransData->fOffsetY - m_pTransData->fTopMargin) < THRESHOLD
         && FABS(m_pTransData->fScaleX - 1.0) < THRESHOLD
         && FABS(m_pTransData->fScaleY - 1.0) < THRESHOLD)
     {
-        pXFObj = CreateStandardDrawObj(aStyleName);
+        xXFObj = CreateStandardDrawObj(aStyleName);
     }
     else
     {
-        pXFObj = CreateDrawObj(aStyleName);
+        xXFObj = CreateDrawObj(aStyleName);
     }
 
     // set anchor type
-    if (pXFObj)
+    if (xXFObj)
     {
-        pXFObj->SetAnchorType(enumXFAnchorFrame);
+        xXFObj->SetAnchorType(enumXFAnchorFrame);
     }
 
-    return pXFObj;
+    return xXFObj;
 }
 
 /**
@@ -448,28 +448,28 @@ OUString LwpDrawLine::RegisterStyle()
     return pXFStyleManager->AddStyle(std::move(pStyle)).m_pStyle->GetStyleName();
 }
 
-XFFrame* LwpDrawLine::CreateDrawObj(const OUString& rStyleName )
+rtl::Reference<XFFrame> LwpDrawLine::CreateDrawObj(const OUString& rStyleName )
 {
-    XFDrawPath* pLine = new XFDrawPath();
-    pLine->MoveTo(XFPoint(static_cast<double>(m_aLineRec.nStartX)/TWIPS_PER_CM * m_pTransData->fScaleX,
+    rtl::Reference<XFDrawPath> xLine(new XFDrawPath());
+    xLine->MoveTo(XFPoint(static_cast<double>(m_aLineRec.nStartX)/TWIPS_PER_CM * m_pTransData->fScaleX,
         static_cast<double>(m_aLineRec.nStartY)/TWIPS_PER_CM * m_pTransData->fScaleY));
-    pLine->LineTo(XFPoint(static_cast<double>(m_aLineRec.nEndX)/TWIPS_PER_CM * m_pTransData->fScaleX,
+    xLine->LineTo(XFPoint(static_cast<double>(m_aLineRec.nEndX)/TWIPS_PER_CM * m_pTransData->fScaleX,
         static_cast<double>(m_aLineRec.nEndY)/TWIPS_PER_CM * m_pTransData->fScaleY));
-    SetPosition(pLine);
+    SetPosition(xLine.get());
 
-    pLine->SetStyleName(rStyleName);
+    xLine->SetStyleName(rStyleName);
 
-    return pLine;
+    return xLine;
 }
 
-XFFrame* LwpDrawLine::CreateStandardDrawObj(const  OUString& rStyleName)
+rtl::Reference<XFFrame> LwpDrawLine::CreateStandardDrawObj(const  OUString& rStyleName)
 {
-    XFDrawLine* pLine = new XFDrawLine();
-    pLine->SetStartPoint(static_cast<double>(m_aLineRec.nStartX)/TWIPS_PER_CM,static_cast<double>(m_aLineRec.nStartY)/TWIPS_PER_CM);
-    pLine->SetEndPoint(static_cast<double>(m_aLineRec.nEndX)/TWIPS_PER_CM,static_cast<double>(m_aLineRec.nEndY)/TWIPS_PER_CM);
+    rtl::Reference<XFDrawLine> xLine(new XFDrawLine());
+    xLine->SetStartPoint(static_cast<double>(m_aLineRec.nStartX)/TWIPS_PER_CM,static_cast<double>(m_aLineRec.nStartY)/TWIPS_PER_CM);
+    xLine->SetEndPoint(static_cast<double>(m_aLineRec.nEndX)/TWIPS_PER_CM,static_cast<double>(m_aLineRec.nEndY)/TWIPS_PER_CM);
 
-    pLine->SetStyleName(rStyleName);
-    return pLine;
+    xLine->SetStyleName(rStyleName);
+    return xLine;
 }
 
 /**
@@ -525,35 +525,35 @@ OUString LwpDrawPolyLine::RegisterStyle()
     return pXFStyleManager->AddStyle(std::move(pStyle)).m_pStyle->GetStyleName();
 }
 
-XFFrame* LwpDrawPolyLine::CreateDrawObj(const OUString& rStyleName )
+rtl::Reference<XFFrame> LwpDrawPolyLine::CreateDrawObj(const OUString& rStyleName )
 {
-    XFDrawPath* pPolyline = new XFDrawPath();
-    pPolyline->MoveTo(XFPoint(static_cast<double>(m_pVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+    rtl::Reference<XFDrawPath> xPolyline(new XFDrawPath());
+    xPolyline->MoveTo(XFPoint(static_cast<double>(m_pVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
             static_cast<double>(m_pVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
     for (sal_uInt16 nC = 1; nC < m_aPolyLineRec.nNumPoints; nC++)
     {
-        pPolyline->LineTo(XFPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        xPolyline->LineTo(XFPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
             static_cast<double>(m_pVector[nC].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
     }
-    SetPosition(pPolyline);
+    SetPosition(xPolyline.get());
 
-    pPolyline->SetStyleName(rStyleName);
+    xPolyline->SetStyleName(rStyleName);
 
-    return pPolyline;
+    return xPolyline;
 }
 
-XFFrame* LwpDrawPolyLine::CreateStandardDrawObj(const  OUString& rStyleName)
+rtl::Reference<XFFrame> LwpDrawPolyLine::CreateStandardDrawObj(const  OUString& rStyleName)
 {
-    XFDrawPolyline* pPolyline = new XFDrawPolyline();
+    rtl::Reference<XFDrawPolyline> xPolyline(new XFDrawPolyline());
     for (sal_uInt16 nC = 0; nC < m_aPolyLineRec.nNumPoints; nC++)
     {
-        pPolyline->AddPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM,
+        xPolyline->AddPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM,
             static_cast<double>(m_pVector[nC].y)/TWIPS_PER_CM);
     }
 
-    pPolyline->SetStyleName(rStyleName);
+    xPolyline->SetStyleName(rStyleName);
 
-    return pPolyline;
+    return xPolyline;
 }
 
 /**
@@ -605,35 +605,35 @@ OUString LwpDrawPolygon::RegisterStyle()
     return pXFStyleManager->AddStyle(std::move(pStyle)).m_pStyle->GetStyleName();
 }
 
-XFFrame* LwpDrawPolygon::CreateDrawObj(const OUString& rStyleName)
+rtl::Reference<XFFrame> LwpDrawPolygon::CreateDrawObj(const OUString& rStyleName)
 {
-    XFDrawPath* pPolygon = new XFDrawPath();
-    pPolygon->MoveTo(XFPoint(static_cast<double>(m_pVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+    rtl::Reference<XFDrawPath> xPolygon(new XFDrawPath());
+    xPolygon->MoveTo(XFPoint(static_cast<double>(m_pVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
             static_cast<double>(m_pVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
     for (sal_uInt16 nC = 1; nC < m_nNumPoints; nC++)
     {
-        pPolygon->LineTo(XFPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        xPolygon->LineTo(XFPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
             static_cast<double>(m_pVector[nC].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
     }
-    pPolygon->ClosePath();
-    SetPosition(pPolygon);
-    pPolygon->SetStyleName(rStyleName);
+    xPolygon->ClosePath();
+    SetPosition(xPolygon.get());
+    xPolygon->SetStyleName(rStyleName);
 
-    return pPolygon;
+    return xPolygon;
 }
 
-XFFrame* LwpDrawPolygon::CreateStandardDrawObj(const  OUString& rStyleName)
+rtl::Reference<XFFrame> LwpDrawPolygon::CreateStandardDrawObj(const  OUString& rStyleName)
 {
-    XFDrawPolygon* pPolygon = new XFDrawPolygon();
+    rtl::Reference<XFDrawPolygon> xPolygon(new XFDrawPolygon());
     for (sal_uInt16 nC = 0; nC < m_nNumPoints; nC++)
     {
-        pPolygon->AddPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM,
+        xPolygon->AddPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM,
             static_cast<double>(m_pVector[nC].y)/TWIPS_PER_CM);
     }
 
-    pPolygon->SetStyleName(rStyleName);
+    xPolygon->SetStyleName(rStyleName);
 
-    return pPolygon;
+    return xPolygon;
 }
 
 /**
@@ -685,7 +685,7 @@ OUString LwpDrawRectangle::RegisterStyle()
     return pXFStyleManager->AddStyle(std::move(pStyle)).m_pStyle->GetStyleName();
 }
 
-XFFrame* LwpDrawRectangle::CreateDrawObj(const OUString& rStyleName)
+rtl::Reference<XFFrame> LwpDrawRectangle::CreateDrawObj(const OUString& rStyleName)
 {
     if (m_eType == OT_RNDRECT)
     {
@@ -693,22 +693,22 @@ XFFrame* LwpDrawRectangle::CreateDrawObj(const OUString& rStyleName)
     }
     else
     {
-        XFDrawPath* pRect = new XFDrawPath();
-        pRect->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        rtl::Reference<XFDrawPath> xRect(new XFDrawPath());
+        xRect->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
             static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
         for (sal_uInt8 nC = 1; nC < 4; nC++)
         {
-            pRect->LineTo(XFPoint(static_cast<double>(m_aVector[nC].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+            xRect->LineTo(XFPoint(static_cast<double>(m_aVector[nC].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
                 static_cast<double>(m_aVector[nC].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
         }
-        pRect->LineTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+        xRect->LineTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
                 static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
-        pRect->ClosePath();
-        SetPosition(pRect);
+        xRect->ClosePath();
+        SetPosition(xRect.get());
 
-        pRect->SetStyleName(rStyleName);
+        xRect->SetStyleName(rStyleName);
 
-        return pRect;
+        return xRect;
     }
 }
 
@@ -755,7 +755,7 @@ XFFrame* LwpDrawRectangle::CreateRoundedRect(const OUString& rStyleName)
     return pRoundedRect;
 }
 
-XFFrame* LwpDrawRectangle::CreateStandardDrawObj(const  OUString& rStyleName)
+rtl::Reference<XFFrame> LwpDrawRectangle::CreateStandardDrawObj(const  OUString& rStyleName)
 {
     if (m_eType == OT_RNDRECT)
     {
@@ -763,7 +763,7 @@ XFFrame* LwpDrawRectangle::CreateStandardDrawObj(const  OUString& rStyleName)
     }
     else
     {
-        XFDrawRect* pRect = new XFDrawRect();
+        rtl::Reference<XFDrawRect> xRect(new XFDrawRect());
         double fStartX, fStartY, fWidth, fHeight;
         double fRotAngle = 0.0;
         SdwRectangle aSdwRect;
@@ -791,18 +791,18 @@ XFFrame* LwpDrawRectangle::CreateStandardDrawObj(const  OUString& rStyleName)
         fWidth = aOriginalRect.GetWidth();
         fHeight = aOriginalRect.GetHeight();
 
-        pRect->SetStartPoint(XFPoint(fStartX/TWIPS_PER_CM + m_pTransData->fOffsetX,
+        xRect->SetStartPoint(XFPoint(fStartX/TWIPS_PER_CM + m_pTransData->fOffsetX,
             fStartY/TWIPS_PER_CM + m_pTransData->fOffsetY));
-        pRect->SetSize(fWidth/TWIPS_PER_CM, fHeight/TWIPS_PER_CM);
+        xRect->SetSize(fWidth/TWIPS_PER_CM, fHeight/TWIPS_PER_CM);
 
         if (aSdwRect.IsRectRotated())
         {
-            pRect->SetRotate( basegfx::rad2deg(fRotAngle) );// aXFCenter);
+            xRect->SetRotate( basegfx::rad2deg(fRotAngle) );// aXFCenter);
         }
 
-        pRect->SetStyleName(rStyleName);
+        xRect->SetStyleName(rStyleName);
 
-        return pRect;
+        return xRect;
     }
 }
 
@@ -844,10 +844,10 @@ OUString LwpDrawEllipse::RegisterStyle()
     return pXFStyleManager->AddStyle(std::move(pStyle)).m_pStyle->GetStyleName();
 }
 
-XFFrame* LwpDrawEllipse::CreateDrawObj(const OUString& rStyleName )
+rtl::Reference<XFFrame> LwpDrawEllipse::CreateDrawObj(const OUString& rStyleName )
 {
-    XFDrawPath* pEllipse = new XFDrawPath();
-    pEllipse->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+    rtl::Reference<XFDrawPath> xEllipse(new XFDrawPath());
+    xEllipse->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
         static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
     sal_uInt8 nPtIndex = 1;
     for (sal_uInt8 nC = 0; nC < 4; nC++)
@@ -862,17 +862,17 @@ XFFrame* LwpDrawEllipse::CreateDrawObj(const OUString& rStyleName )
         static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
         nPtIndex++;
 
-        pEllipse->CurveTo(aDest, aCtrl1, aCtrl2);
+        xEllipse->CurveTo(aDest, aCtrl1, aCtrl2);
     }
-    pEllipse->ClosePath();
-    SetPosition(pEllipse);
+    xEllipse->ClosePath();
+    SetPosition(xEllipse.get());
 
-    pEllipse->SetStyleName(rStyleName);
+    xEllipse->SetStyleName(rStyleName);
 
-    return pEllipse;
+    return xEllipse;
 }
 
-XFFrame* LwpDrawEllipse::CreateStandardDrawObj(const  OUString& rStyleName)
+rtl::Reference<XFFrame> LwpDrawEllipse::CreateStandardDrawObj(const  OUString& rStyleName)
 {
     return CreateDrawObj(rStyleName);
 }
@@ -923,10 +923,10 @@ OUString LwpDrawArc::RegisterStyle()
     return pXFStyleManager->AddStyle(std::move(pStyle)).m_pStyle->GetStyleName();
 }
 
-XFFrame* LwpDrawArc::CreateDrawObj(const OUString& rStyleName )
+rtl::Reference<XFFrame> LwpDrawArc::CreateDrawObj(const OUString& rStyleName )
 {
-    XFDrawPath* pArc = new XFDrawPath();
-    pArc->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
+    rtl::Reference<XFDrawPath> xArc(new XFDrawPath());
+    xArc->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
         static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
     XFPoint aDest(static_cast<double>(m_aVector[3].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
         static_cast<double>(m_aVector[3].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
@@ -934,16 +934,16 @@ XFFrame* LwpDrawArc::CreateDrawObj(const OUString& rStyleName )
         static_cast<double>(m_aVector[1].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
     XFPoint aCtl2(static_cast<double>(m_aVector[2].x)/TWIPS_PER_CM* m_pTransData->fScaleX,
         static_cast<double>(m_aVector[2].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
-    pArc->CurveTo(aDest, aCtl1, aCtl2);
+    xArc->CurveTo(aDest, aCtl1, aCtl2);
 
-    SetPosition(pArc);
+    SetPosition(xArc.get());
 
-    pArc->SetStyleName(rStyleName);
+    xArc->SetStyleName(rStyleName);
 
-    return pArc;
+    return xArc;
 }
 
-XFFrame* LwpDrawArc::CreateStandardDrawObj(const  OUString& rStyleName)
+rtl::Reference<XFFrame> LwpDrawArc::CreateStandardDrawObj(const  OUString& rStyleName)
 {
     return CreateDrawObj(rStyleName);
 }
@@ -1074,9 +1074,9 @@ OUString LwpDrawTextBox::RegisterStyle()
     return pXFStyleManager->AddStyle(std::move(pStyle)).m_pStyle->GetStyleName();
 }
 
-XFFrame* LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
+rtl::Reference<XFFrame> LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
 {
-    XFFrame* pTextBox = new XFFrame(true);
+    rtl::Reference<XFFrame> xTextBox(new XFFrame(true));
 
     sal_Int16 TextLength = m_aObjHeader.nRecLen - 71;
     rtl_TextEncoding aEncoding;
@@ -1094,26 +1094,26 @@ XFFrame* LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
     pXFPara->Add(OUString(reinterpret_cast<char*>(m_aTextRec.pTextString), (TextLength-2), aEncoding));
     pXFPara->SetStyleName(rStyleName);
 
-    pTextBox->Add(pXFPara);
-    SetPosition(pTextBox);
+    xTextBox->Add(pXFPara);
+    SetPosition(xTextBox.get());
 
     std::unique_ptr<XFTextBoxStyle> pBoxStyle(new XFTextBoxStyle());
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     OUString sName = pXFStyleManager->AddStyle(std::move(pBoxStyle)).m_pStyle->GetStyleName();
-    pTextBox->SetStyleName(sName);
+    xTextBox->SetStyleName(sName);
 
     //todo: add the interface for rotating textbox
 //  if (m_aTextRec.nTextRotation)
 //  {
 //      double fAngle = double(3600-m_aTextRec.nTextRotation)/10;
-//      pTextBox->SetRotate(fAngle);
+//      xTextBox->SetRotate(fAngle);
 //  }
 
-    return pTextBox;
+    return xTextBox;
 }
 
-XFFrame* LwpDrawTextBox::CreateStandardDrawObj(const  OUString& rStyleName)
+rtl::Reference<XFFrame> LwpDrawTextBox::CreateStandardDrawObj(const  OUString& rStyleName)
 {
     return CreateDrawObj(rStyleName);
 }
@@ -1270,17 +1270,16 @@ OUString LwpDrawTextArt::RegisterStyle()
     return pXFStyleManager->AddStyle(std::move(pStyle)).m_pStyle->GetStyleName();
 }
 
-XFFrame* LwpDrawTextArt::CreateDrawObj(const OUString& rStyleName)
+rtl::Reference<XFFrame> LwpDrawTextArt::CreateDrawObj(const OUString& rStyleName)
 {
-    XFFrame* pRetObj = nullptr;
     std::unique_ptr<XFDrawStyle> pStyle(new XFDrawStyle());
 
-    pRetObj = new XFDrawPath();
-    XFDrawPath* pFWPath = static_cast<XFDrawPath*>(pRetObj);
+    rtl::Reference<XFFrame> xRetObj(new XFDrawPath());
+    XFDrawPath* pFWPath = static_cast<XFDrawPath*>(xRetObj.get());
     CreateFWPath(pFWPath);
     pStyle->SetFontWorkStyle(enumXFFWSlantY, enumXFFWAdjustAutosize);
 
-    SetPosition(pRetObj);
+    SetPosition(xRetObj.get());
 
     rtl_TextEncoding aEncoding;
     if (!m_aTextArtRec.nTextCharacterSet)
@@ -1296,15 +1295,15 @@ XFFrame* LwpDrawTextArt::CreateDrawObj(const OUString& rStyleName)
     XFParagraph* pXFPara = new XFParagraph();
     pXFPara->Add(OUString(reinterpret_cast<char*>(m_aTextArtRec.pTextString), (m_aTextArtRec.nTextLen-1), aEncoding));
     pXFPara->SetStyleName(rStyleName);
-    pRetObj->Add(pXFPara);
+    xRetObj->Add(pXFPara);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    pRetObj->SetStyleName(pXFStyleManager->AddStyle(std::move(pStyle)).m_pStyle->GetStyleName());
+    xRetObj->SetStyleName(pXFStyleManager->AddStyle(std::move(pStyle)).m_pStyle->GetStyleName());
 
-    return pRetObj;
+    return xRetObj;
 }
 
-XFFrame* LwpDrawTextArt::CreateStandardDrawObj(const OUString& rStyleName )
+rtl::Reference<XFFrame> LwpDrawTextArt::CreateStandardDrawObj(const OUString& rStyleName )
 {
     return CreateDrawObj(rStyleName);
 }
@@ -1486,18 +1485,18 @@ OUString LwpDrawBitmap::RegisterStyle()
     return pXFStyleManager->AddStyle(std::move(pBmpStyle)).m_pStyle->GetStyleName();
 }
 
-XFFrame* LwpDrawBitmap::CreateDrawObj(const OUString& rStyleName)
+rtl::Reference<XFFrame> LwpDrawBitmap::CreateDrawObj(const OUString& rStyleName)
 {
-    XFImage* pImage = new XFImage();
-    pImage->SetImageData(m_pImageData.get(), m_aBmpRec.nFileSize);
-    SetPosition(pImage);
+    rtl::Reference<XFImage> xImage(new XFImage());
+    xImage->SetImageData(m_pImageData.get(), m_aBmpRec.nFileSize);
+    SetPosition(xImage.get());
 
-    pImage->SetStyleName(rStyleName);
+    xImage->SetStyleName(rStyleName);
 
-    return pImage;
+    return xImage;
 }
 
-XFFrame* LwpDrawBitmap::CreateStandardDrawObj(const  OUString& rStyleName)
+rtl::Reference<XFFrame> LwpDrawBitmap::CreateStandardDrawObj(const  OUString& rStyleName)
 {
     return CreateDrawObj(rStyleName);
 }
