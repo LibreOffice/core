@@ -210,6 +210,7 @@ protected:
     bool                m_bPasteResize:1; // Objects are being resized due to Paste with different MapMode
     bool                m_bStarDrawPreviewMode:1;
     bool                mbDisableTextEditUsesCommonUndoManager:1;
+    bool                mbVOCInvalidationIsReliable:1; // does the app reliably invalidate the VOC, or do we need to rebuild the primitives on every render?
     sal_uInt16          m_nDefaultTabulator;
     sal_uInt32          m_nMaxUndoCount;
 
@@ -612,6 +613,9 @@ public:
     virtual sal_Int32 getImagePreferredDPI() const { return 0; }
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+    bool IsVOCInvalidationIsReliable() const { return mbVOCInvalidationIsReliable; }
+    void SetVOCInvalidationIsReliable(bool b) { mbVOCInvalidationIsReliable = b; }
 };
 
 /*

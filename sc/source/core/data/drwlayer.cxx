@@ -239,6 +239,8 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     bAdjustEnabled( true ),
     bHyphenatorSet( false )
 {
+    SetVOCInvalidationIsReliable(true);
+
     pGlobalDrawPersist = nullptr;          // Only use once
 
     SfxObjectShell* pObjSh = pDocument ? pDocument->GetDocumentShell() : nullptr;

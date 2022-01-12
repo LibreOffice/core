@@ -121,6 +121,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, comphelper::IEmbeddedHelper* pEmbeddedHel
     , m_bPasteResize(false)
     , m_bStarDrawPreviewMode(false)
     , mbDisableTextEditUsesCommonUndoManager(false)
+    , mbVOCInvalidationIsReliable(false)
     , m_nDefaultTabulator(0)
     , m_nMaxUndoCount(16)
     , m_pTextChain(new TextChain)

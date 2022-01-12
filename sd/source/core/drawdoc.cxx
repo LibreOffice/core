@@ -139,6 +139,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mbEmbedFontScriptComplex(true)
 , mnImagePreferredDPI(0)
 {
+    SetVOCInvalidationIsReliable(true);
+
     mpDrawPageListWatcher.reset(new ImpDrawPageListWatcher(*this));
     mpMasterPageListWatcher.reset(new ImpMasterPageListWatcher(*this));
 
