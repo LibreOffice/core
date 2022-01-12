@@ -1023,6 +1023,7 @@ void LwpDrawTextBox::Read()
 
     m_pStream->ReadInt16( m_aTextRec.nTextHeight );
     m_pStream->ReadBytes(m_aTextRec.tmpTextFaceName, DRAW_FACESIZE);
+    m_aTextRec.tmpTextFaceName[DRAW_FACESIZE - 1] = 0;
     m_pStream->SeekRel(1);// PitchAndFamily
 
     m_pStream->ReadInt16( m_aTextRec.nTextSize );
@@ -1222,6 +1223,7 @@ void LwpDrawTextArt::Read()
     m_pStream->SeekRel(1);
 
     m_pStream->ReadBytes(m_aTextArtRec.tmpTextFaceName, DRAW_FACESIZE);
+    m_aTextArtRec.tmpTextFaceName[DRAW_FACESIZE - 1] = 0;
     m_pStream->SeekRel(1);// PitchAndFamily
 
     m_pStream->ReadInt16( m_aTextArtRec.nTextSize );
