@@ -159,6 +159,30 @@
       },
       "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7602c38d_894865b4",
+        "filename": "svx/source/sdr/primitive2d/sdrpathprimitive2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-12T10:50:19Z",
+      "side": 1,
+      "message": "Argh - could not quote that one, but doing it handish here:\n\n\u003e Ah, so what you are saying is that ideally every single primitive needs to define getB2DRange so that the ranges of the child objects is correctly translated/transformed up through the hierarchy.\n\nNo, what I try to say is that the result of getB2DRange may be buffered, cost would be a B2Range (4 doubles), spare would be to iterate again over existing primitive decompose - not really worth it, the B2Range merge is fast...\n\nFor getB2DRange:\n\n- Primitives which have *no* decompose *have* to implement it. Those are the minimal non-decomposable primitives explained in the primitive header\n\n- Primitive base impl of getB2DRange iterates over decompose to solve\n\nWith that two, the system works and is waterproof. To optimize:\n\nFor all primitives that can reliably deliver a getB2DRange with overseeable cost it *should* be implemented. This is e.g. the case for FatLines by using the range of the PolyPoygon and expanding it mainly by using 1/2 lineWidth. Note: This is already not trivial due to line end modes like miter that may expand bigger areas. All his is pretty much in place, but may be further optimized.\n\nFor the Sdr* primitives like SdrPathPrimitive the decompose creates *all* necessary content, the fill itself, the (Fat)Line \u0026 it\u0027s pattern if needed, the shadow (by re-using the referenced rest \u0026 embedding to a colorModify), the Text that may stick out of the object.\n\nIn that case impl of getB2DRange would have to do all of that handish o do the same - unreliable and expensive.\nThat\u0027s where we came from: SdrObjects had a ::Paint \u0026\u0026 a ::GetBoundRect (which is still there but using primiives now). Both had to be implemented. Usually they were not in sync, every change on any SdrObject on one of these leaded to 2-3 errors to be fixed.\nBoth needed to extract all data from ItemSets \u0026 do similar calculations -\u003e definitely *more* expensive that primitives do nowadays. Also unsafe, due to being self-contained now (by purpose *not* holding references to e.g. ItenmSets) primitives are independent from the old core -\u003e a preparation to get rid of vcl long-term. One reason I do not want drawinglayer being used in vcl - it needs to be the other way around as long as we need vcl.\nSelf-contained is important - many people do not realize that for visual invalidation on the view you need *two* ranges - the one the to-be-visualized obj was painted last \u0026 the one it needs to be painted. Since primitves are self-contained the last used one will reliably deliver the first one, even after model/itemSets have already changed.\n\nPrimitives reorganized that whole process to a defined behaviour with correctness \u0026 reliability, stabiliy when adding/changing stuff (it just works), plus the poassibility to buffer stuff.\n\nSince they offer a uniform system they also allow to make central/uniform optimizations. Buffering is done at primitives themselves, but also on VOC using the create-and-compare as described. If there are usages in SW/SC due to not being changed to primitives, either add VC/VOC/OC as can be seen on examples there I did, or use that create-and-compare as used in VOC locally to add that buffering.\n\nSince they offer a uniform system they will allow to write simple processors to do suff. B2DProcessor *is* the vistor concept you talk about.\n\nBTW: I thought when you talked about visitor concept to do something with lamdas/callbacks so that a primitive offering it may produce decompose-primitives one-by-one on the sack \u0026 using that callback. That way, existing (collect in a vector) \u0026 new could be combined \u0026 expensive creations avoided. That would require to do ssth what I suggested, change impl to use SharedPtr completely, then add that as a concept.\n\nBTW2: You can always optimize seq\u003cprimitives\u003e by e.g just packing a seq when reaching a defined number of members (e.g. 100) to a neutral GroupPrimitive with neutral transformation, reducing it to one reference. That way it is always possible to create balanced trees of primitives which would have less UNO API overhead. Thanks to the unified behaviour of B2DProcessor all will work as before (one more iteration a visit) - compare that o adding a MetaFileAction, that rquires to adapt *all* places that iterate over these...",
+      "parentUuid": "62fb9999_e1a038cc",
+      "range": {
+        "startLine": 164,
+        "startChar": 25,
+        "endLine": 164,
+        "endChar": 52
+      },
+      "revId": "7a636000596bf14a3dedec2eb7caad14504a6c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
