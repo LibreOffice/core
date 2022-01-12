@@ -16,6 +16,24 @@
       "message": "Xisco: many thanks for reviewing! I\u0027ll extend the Release notes soon with this improvement.",
       "revId": "dabf1516e83963b24cf4c54c42b02354053a2199",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bda56ed3_34d6ac86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-12T18:15:09Z",
+      "side": 1,
+      "message": "Thank to you for all the work you do :)",
+      "parentUuid": "0c52f296_71d768a6",
+      "revId": "dabf1516e83963b24cf4c54c42b02354053a2199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
