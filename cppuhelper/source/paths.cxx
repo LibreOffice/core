@@ -64,13 +64,8 @@ OUString cppu::getUnoIniUri() {
 #else
     OUString uri(get_this_libpath());
 #ifdef MACOSX
-    // We keep both the LO and URE dylibs directly in "Frameworks"
-    // (that is, LIBO_LIB_FOLDER) and rc files in "Resources"
-    // (LIBO_ETC_FOLDER). Except for unorc, of which there are two,
-    // the "LO" one (which is in "Resources") and the "URE" one (which
-    // is in "Resources/ure/etc" (LIBO_URE_ETC_FOLDER)). As this code
-    // goes into the cppuhelper library which is part of URE, we are
-    // looking for the latter one here. I think...
+    // We keep the URE dylibs directly in "Frameworks" (that is, LIBO_LIB_FOLDER) and unorc in
+    // "Resources/ure/etc" (LIBO_URE_ETC_FOLDER).
     if (uri.endsWith( "/" LIBO_LIB_FOLDER ) )
     {
         uri = OUString::Concat(uri.subView( 0, uri.getLength() - (sizeof(LIBO_LIB_FOLDER)-1) )) + LIBO_URE_ETC_FOLDER;
