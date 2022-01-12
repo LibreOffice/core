@@ -102,14 +102,14 @@ Bitmap::ScopedReadAccess& VclCanvasBitmap::getBitmapReadAccess()
     // need only info access, create read access only on demand.
     if(!m_pBmpReadAcc)
         m_pBmpReadAcc.emplace(m_aBitmap);
-    return m_pBmpReadAcc.value();
+    return *m_pBmpReadAcc;
 }
 
 Bitmap::ScopedReadAccess& VclCanvasBitmap::getAlphaReadAccess()
 {
     if(!m_pAlphaReadAcc)
         m_pAlphaReadAcc.emplace(m_aAlpha);
-    return m_pAlphaReadAcc.value();
+    return *m_pAlphaReadAcc;
 }
 
 VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
