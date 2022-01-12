@@ -217,4 +217,109 @@ class trackedchanges(UITestCase):
             # Check the changes are shown after opening the Manage Tracked Changes dialog
             self.assertGreater(document.CurrentController.PageCount, 5)
 
+    def test_tdf144270_tracked_table_rows(self):
+        with self.ui_test.load_file(get_url_for_data_file("TC-table-del-add.docx")) as document:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+            tables = document.getTextTables()
+            self.assertEqual(3, len(tables))
+
+            # Accept
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                changesList = xTrackDlg.getChild("writerchanges")
+
+                # This was 14 (every cell is a different change instead of counting rows or tables)
+                # Now: 4 changes (2 deleted/inserted rows and 2 deleted/inserted tables)
+                self.assertEqual(4, len(changesList.getChildren()))
+
+                # Without the fix in place, it would have crashed here
+                for i in (3, 2, 1, 0):
+                    xAccBtn = xTrackDlg.getChild("accept")
+                    xAccBtn.executeAction("CLICK", tuple())
+                    self.assertEqual(i, len(changesList.getChildren()))
+
+                tables = document.getTextTables()
+                self.assertEqual(2, len(tables))
+
+                for i in range(1, 5):
+                    xUndoBtn = xTrackDlg.getChild("undo")
+                    xUndoBtn.executeAction("CLICK", tuple())
+                    self.assertEqual(i, len(changesList.getChildren()))
+
+            tables = document.getTextTables()
+            self.assertEqual(3, len(tables))
+
+            # Accept All
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                changesList = xTrackDlg.getChild("writerchanges")
+
+                # This was 14 (every cell is a different change instead of counting rows or tables)
+                # Now: 4 changes (2 deleted/inserted rows and 2 deleted/inserted tables)
+                self.assertEqual(4, len(changesList.getChildren()))
+
+                xAccBtn = xTrackDlg.getChild("acceptall")
+                xAccBtn.executeAction("CLICK", tuple())
+                self.assertEqual(0, len(changesList.getChildren()))
+
+                tables = document.getTextTables()
+                self.assertEqual(2, len(tables))
+
+                xUndoBtn = xTrackDlg.getChild("undo")
+                xUndoBtn.executeAction("CLICK", tuple())
+                self.assertEqual(4, len(changesList.getChildren()))
+
+            tables = document.getTextTables()
+            self.assertEqual(3, len(tables))
+
+            # goto to the start of the document to reject from the first tracked table row change
+            self.xUITest.executeCommand(".uno:GoToStartOfDoc")
+
+            # Reject
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                changesList = xTrackDlg.getChild("writerchanges")
+
+                # This was 14 (every cell is a different change instead of counting rows or tables)
+                # Now: 4 changes (2 deleted/inserted rows and 2 deleted/inserted tables)
+                self.assertEqual(4, len(changesList.getChildren()))
+
+                # Without the fix in place, it would have crashed here
+                for i in (3, 2, 1, 0):
+                    xAccBtn = xTrackDlg.getChild("reject")
+                    xAccBtn.executeAction("CLICK", tuple())
+                    self.assertEqual(i, len(changesList.getChildren()))
+
+                tables = document.getTextTables()
+                self.assertEqual(2, len(tables))
+
+                for i in range(1, 5):
+                    xUndoBtn = xTrackDlg.getChild("undo")
+                    xUndoBtn.executeAction("CLICK", tuple())
+                    self.assertEqual(i, len(changesList.getChildren()))
+
+            tables = document.getTextTables()
+            self.assertEqual(3, len(tables))
+
+            # Reject All
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                changesList = xTrackDlg.getChild("writerchanges")
+
+                # This was 14 (every cell is a different change instead of counting rows or tables)
+                # Now: 4 changes (2 deleted/inserted rows and 2 deleted/inserted tables)
+                self.assertEqual(4, len(changesList.getChildren()))
+
+                xAccBtn = xTrackDlg.getChild("rejectall")
+                xAccBtn.executeAction("CLICK", tuple())
+                self.assertEqual(0, len(changesList.getChildren()))
+
+                tables = document.getTextTables()
+                self.assertEqual(2, len(tables))
+
+                xUndoBtn = xTrackDlg.getChild("undo")
+                xUndoBtn.executeAction("CLICK", tuple())
+                self.assertEqual(4, len(changesList.getChildren()))
+
+            tables = document.getTextTables()
+            self.assertEqual(3, len(tables))
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
