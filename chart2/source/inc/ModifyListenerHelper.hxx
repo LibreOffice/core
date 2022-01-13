@@ -20,16 +20,13 @@
 
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
-#include <vector>
+#include <mutex>
 #include <algorithm>
 #include <utility>
-
-namespace com::sun::star::uno { class XWeak; }
-namespace com::sun::star::uno { template <class interface_type> class WeakReference; }
 
 namespace chart
 {
@@ -37,24 +34,14 @@ namespace chart
 /** This helper class serves as forwarder of modify events.  It can be used
     whenever an object has to send modify events after it gets a modify event of
     one of its children.
-
-    <p>The listeners are held as WeakReferences if they support XWeak.  Thus the
-    life time of the listeners is independent of the broadcaster's lifetime in
-    this case.</p>
  */
-class ModifyEventForwarder :
-        public cppu::BaseMutex,
-        public ::cppu::WeakComponentImplHelper<
+class ModifyEventForwarder final :
+        public ::comphelper::WeakComponentImplHelper<
             css::util::XModifyBroadcaster,
             css::util::XModifyListener >
 {
 public:
     ModifyEventForwarder();
-
-    void AddListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener );
-    void RemoveListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener );
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
@@ -66,29 +53,15 @@ public:
     virtual void SAL_CALL modified(
         const css::lang::EventObject& aEvent ) override;
 
-protected:
+private:
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
         const css::lang::EventObject& Source ) override;
 
     // ____ WeakComponentImplHelperBase ____
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>& ) override;
 
-private:
-    /// call disposing() at all listeners and remove all listeners
-    void DisposeAndClear( const css::uno::Reference<
-                              css::uno::XWeak > & xSource );
-
-//     ::osl::Mutex & m_rMutex;
-    ::cppu::OBroadcastHelper  m_aModifyListeners;
-
-    typedef std::vector<
-            std::pair<
-            css::uno::WeakReference< css::util::XModifyListener >,
-            css::uno::Reference< css::util::XModifyListener > > >
-        tListenerMap;
-
-    tListenerMap m_aListenerMap;
+    comphelper::OInterfaceContainerHelper4<css::util::XModifyListener>  m_aModifyListeners;
 };
 
 }
