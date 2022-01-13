@@ -2858,7 +2858,10 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     {
                         double fExtrusionShininess = 0;
                         if ( rrProp.Value >>= fExtrusionShininess )
-                            AddOpt( DFF_Prop_c3DShininess, static_cast<sal_Int32>( fExtrusionShininess * 655.36 ) );
+                        {
+                            // currently not used in LO, save value same as read.
+                            AddOpt( DFF_Prop_c3DShininess, static_cast<sal_Int32>(fExtrusionShininess) );
+                        }
                     }
                     else if ( rrProp.Name == "Skew" )
                     {
@@ -2875,7 +2878,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     {
                         double fExtrusionSpecularity = 0;
                         if ( rrProp.Value >>= fExtrusionSpecularity )
-                            AddOpt( DFF_Prop_c3DSpecularAmt, static_cast<sal_Int32>( fExtrusionSpecularity * 1333 ) );
+                            AddOpt( DFF_Prop_c3DSpecularAmt, static_cast<sal_Int32>( fExtrusionSpecularity * 655.36 ) );
                     }
                     else if ( rrProp.Name == "ProjectionMode" )
                     {

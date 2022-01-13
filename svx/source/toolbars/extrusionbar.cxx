@@ -126,9 +126,9 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     {
         css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
 
+        bool bOn(false);
         if( pAny )
         {
-            bool bOn(false);
             (*pAny) >>= bOn;
             bOn = !bOn;
             (*pAny) <<= bOn;
@@ -139,6 +139,23 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             aPropValue.Name = sExtrusion;
             aPropValue.Value <<= true;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            bOn = true;
+        }
+        // draw:extrusion-diffusion has default 0% and c3DDiffuseAmt has default 100%. We set property
+        // "Diffusion" with value 100% here if it does not exists already. This forces, that the
+        // property is written to file in case an extrusion is newly created, and users of old
+        // documents, which usually do not have this property, can force the value to 100% by toggling
+        // the extrusion off and on.
+        if (bOn)
+        {
+            pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"Diffusion");
+            if (!pAny)
+            {
+                css::beans::PropertyValue aPropValue;
+                aPropValue.Name = u"Diffusion";
+                aPropValue.Value <<= 100.0;
+                rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            }
         }
     }
     break;
@@ -345,32 +362,47 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
 
             // ODF has no dedicated property for 'surface'. MS Office binary format uses attribute
             // c3DSpecularAmt to distinguish between 'matte' (=0) and 'plastic'.
-            // From point of ODF, using not harsh light has similar effect.
+            // We do the same. draw:extrusion-*light-harsh is not related.
             double fOldSpecularity = 0.0;
             pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"Specularity");
             if (pAny)
                 *pAny >>= fOldSpecularity;
             double fSpecularity = fOldSpecularity;
-            bool bOldIsFirstLightHarsh = true;
-            pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"FirstLightHarsh");
-            if (pAny)
-                *pAny >>= bOldIsFirstLightHarsh;
-            bool bIsFirstLightHarsh = bOldIsFirstLightHarsh;
             switch( nSurface )
             {
             case 0: // wireframe
                 break;
             case 1: // matte
                 fSpecularity = 0.0;
-                bIsFirstLightHarsh = false;
                 break;
             case 2: // plastic
             case 3: // metal
                 if (basegfx::fTools::equalZero(fOldSpecularity, 0.0001))
-                    fSpecularity = 80; // estimated value, can be changed if necessary
-                if (!bOldIsFirstLightHarsh)
-                    bIsFirstLightHarsh = true;
+                    // MS Office uses 80000/35536 (=122%), but that is not allowed in ODF
+                    fSpecularity = 100;
                 break;
+            }
+
+            // ToDo: draw:extrusion-*light-harsh has no UI. Set values here depending on surface?
+
+            // MS Office binary format uses attribute c3DDiffuseAmt in addition to the 'metal' flag,
+            // with value =43712 (Fixed 16.16). For other surface kinds default = 65536 is used.
+            // We toggle between 100 and 43712.0 / 655.36 here, to get better ODF -> MSO binary.
+            // We keep other values, those might be set outside regular UI, e.g by macro.
+            double fOldDiffusion = 100.0;
+            pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"Diffusion");
+            if (pAny)
+                *pAny >>= fOldDiffusion;
+            double fDiffusion = fOldDiffusion;
+            if (bMetal)
+            {
+                if (fOldDiffusion == 100.0)
+                    fDiffusion = 43712.0 / 655.36;
+            }
+            else
+            {
+                if (basegfx::fTools::equalZero(fOldDiffusion - 43712.0 / 655.36, 0.0001))
+                    fDiffusion = 100.0;
             }
 
             css::beans::PropertyValue aPropValue;
@@ -389,10 +421,10 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
                 rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
             }
 
-            if (bOldIsFirstLightHarsh != bIsFirstLightHarsh)
+            if (!basegfx::fTools::equalZero(fOldDiffusion - fDiffusion, 0.0001))
             {
-                aPropValue.Name = "FirstLightHarsh";
-                aPropValue.Value <<= bIsFirstLightHarsh;
+                aPropValue.Name = "Diffusion";
+                aPropValue.Value <<= fDiffusion;
                 rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
             }
         }
@@ -408,6 +440,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             double fLevel1;
             double fLevel2;
 
+            // ToDo: Values are different from MS Office. Should they be kept?
             switch( nLevel )
             {
             case 0: // bright
@@ -430,10 +463,6 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             css::beans::PropertyValue aPropValue;
             aPropValue.Name = "Brightness";
             aPropValue.Value <<= fBrightness;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
-
-            aPropValue.Name = "SecondLightHarsh";
-            aPropValue.Value <<= false;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
             aPropValue.Name = "FirstLightLevel";
