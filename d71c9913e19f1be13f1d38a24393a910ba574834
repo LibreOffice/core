@@ -70,6 +70,24 @@
       "parentUuid": "caa34c3f_19cd31d6",
       "revId": "d71c9913e19f1be13f1d38a24393a910ba574834",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "489e5709_e22dc382",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-13T10:15:06Z",
+      "side": 1,
+      "message": "\u003e \"Simple\" means that it\u0027s good enough and I do not need to think more about all the implications of changing it for all the cases that I haven\u0027t checked. If you want to check those, feel free to do that and do a follow-up commit.\n\nThanks for clarifying \u0027simple\u0027, usually I understand it for code complexity. If as here this means that another system-dependent info like which backend is active is used, it\u0027s not simple for me anymore from my POV. Another system-dependent decision in system-independent code.\n\n\u003e Or you actually meant to say \"I as the author of the code say that you can simplify it by always checking for 32x32 and do not need to check for specific backends\", then just say that and do not say misleading things like \"your solution is also okay for me\" when apparently it\u0027s not.\n\nNo, it means what I said - just do it like that if you want. Being the author does not mean much in opensource :-) I gave that possible \u0027more simple\u0027 solution (in the sense of code complexity \u0026\u0026 avoiding system-dependent info usage) since you initially wrote that you could not find a simpler solution. That sounded like asking for it, so I took the time to think about it. I am just irritated that you then do not want to check it out.\n\n\u003e \u003e Yes, but since aContent.GetAlpha() gets from aContent and aContent was created one line above from mpContent-\u003eGetBitmapEx and mpContent/mpAlpha is separated, aContent.GetAlpha() will always be empty,\n\n\u003e Will it? So what if a bitmap with alpha was drawn into the content, or if there\u0027s another transparence primitive inside this one?\n\nUsually yes - that\u0027s why all that mpAlphaVDev in OutputDevice is marked as\n\n    // TEMP TEMP TEMP\n    VclPtr\u003cVirtualDevice\u003e           mpAlphaVDev;\n\nEven the orig author told me that this is/was a hack and he wishes that this will vanish earlier than later. It\u0027s a hack for the presentation module and only used there. To allow removal, presentation needs to be changed to primitives and - hopefully - no one else starts using that until then.\n\nBut tin doubt - just use IsAlpha() at BitmapEx before doing the costly blend - unfortunately cannot be checked inside BlendWith, that\u0027s too late.\n\nTo repeat: I am fine with this version, as told. It does not improve code quality from my pov for given reasons, so I offered a more simple possibility due to thinking that you asked for one - no need for you to pick it up or use it, but maybe I misinterpreted your \"I couldn\u0027t find a better way\" in the commit comment.",
+      "parentUuid": "145f0673_10198364",
+      "revId": "d71c9913e19f1be13f1d38a24393a910ba574834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
