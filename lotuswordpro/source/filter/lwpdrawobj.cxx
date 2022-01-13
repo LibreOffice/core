@@ -1362,6 +1362,9 @@ void LwpDrawBitmap::Read()
     m_pStream->ReadUInt16( m_aBmpRec.nTranslation );
     m_pStream->ReadUInt16( m_aBmpRec.nRotation );
 
+    if (m_aObjHeader.nRecLen < 20)
+        throw BadRead();
+
     // 20 == length of draw-specific fields.
     // 14 == length of bmp file header.
     m_aBmpRec.nFileSize = m_aObjHeader.nRecLen - 20 + 14;
