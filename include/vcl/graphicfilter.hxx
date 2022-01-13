@@ -89,6 +89,7 @@ namespace o3tl
 #define IMP_PCD                 "SVPCD"
 #define IMP_PBM                 "SVPBM"
 #define IMP_DXF                 "SVDXF"
+#define IMP_WEBP                "SVIWEBP"
 
 #define EXP_BMP                 "SVBMP"
 #define EXP_SVMETAFILE          "SVMETAFILE"
@@ -101,6 +102,7 @@ namespace o3tl
 #define EXP_TIFF                "SVTIFF"
 #define EXP_EPS                 "SVEEPS"
 #define EXP_GIF                 "SVEGIF"
+#define EXP_WEBP                "SVEWEBP"
 
 
 inline constexpr OUStringLiteral BMP_SHORTNAME = u"BMP";
@@ -115,6 +117,7 @@ inline constexpr OUStringLiteral WMF_SHORTNAME = u"WMF";
 inline constexpr OUStringLiteral EMF_SHORTNAME = u"EMF";
 inline constexpr OUStringLiteral SVG_SHORTNAME = u"SVG";
 inline constexpr OUStringLiteral PDF_SHORTNAME = u"PDF";
+inline constexpr OUStringLiteral WEBP_SHORTNAME = u"WEBP";
 
 //  Info class for all supported file formats
 
@@ -137,6 +140,7 @@ enum class GraphicFileFormat
     TGA = 0x000e,
     PSD = 0x000f,
     EPS = 0x0010,
+    WEBP = 0x0011,
     DXF = 0x00f1,
     MET = 0x00f2,
     PCT = 0x00f3,
@@ -184,6 +188,7 @@ class VCL_DLLPUBLIC GraphicDescriptor final
     bool            ImpDetectTGA( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectPSD( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectEPS( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectWEBP( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectDXF( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectMET( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectPCT( SvStream& rStm, bool bExtendedInfo );
@@ -374,6 +379,7 @@ public:
     static ErrCode readPCD(SvStream & rStream, Graphic & rGraphic);
     static ErrCode readPBM(SvStream & rStream, Graphic & rGraphic);
     static ErrCode readDXF(SvStream & rStream, Graphic & rGraphic);
+    static ErrCode readWEBP(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
 
 private:
     OUString        aFilterPath;
