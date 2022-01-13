@@ -111,6 +111,7 @@ ppm;Graphics/pic.ppm;ppm_Portable_Pixelmap;ppm_Portable_Pixelmap
 ras;Graphics/pic.ras;ras_Sun_Rasterfile;ras_Sun_Rasterfile
 svm;Graphics/pic.svm;svm_StarView_Metafile;svm_StarView_Metafile:generic_Text
 tif;Graphics/pic.tif;tif_Tag_Image_File;tif_Tag_Image_File:generic_Text
+webp;Graphics/pic.webp;webp_WebP;webp_WebP
 wmf;Graphics/pic.wmf;wmf_MS_Windows_Metafile;wmf_MS_Windows_Metafile:generic_Text
 
 

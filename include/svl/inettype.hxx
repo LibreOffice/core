@@ -103,6 +103,7 @@ inline constexpr OUStringLiteral CONTENT_TYPE_STR_IMAGE_PCX = u"image/pcx";
 inline constexpr OUStringLiteral CONTENT_TYPE_STR_IMAGE_PNG = u"image/png";
 inline constexpr OUStringLiteral CONTENT_TYPE_STR_IMAGE_TIFF = u"image/tiff";
 inline constexpr OUStringLiteral CONTENT_TYPE_STR_IMAGE_BMP = u"image/x-MS-bmp";
+inline constexpr OUStringLiteral CONTENT_TYPE_STR_IMAGE_WEBP = u"image/webp";
 inline constexpr OUStringLiteral CONTENT_TYPE_STR_INET_MSG_RFC822 = u"message/rfc822";
 inline constexpr OUStringLiteral CONTENT_TYPE_STR_INET_MULTI_ALTERNATIVE = u"multipart/alternative";
 inline constexpr OUStringLiteral CONTENT_TYPE_STR_INET_MULTI_DIGEST = u"multipart/digest";
@@ -178,6 +179,7 @@ enum INetContentType
     CONTENT_TYPE_IMAGE_PNG,
     CONTENT_TYPE_IMAGE_TIFF,
     CONTENT_TYPE_IMAGE_BMP,
+    CONTENT_TYPE_IMAGE_WEBP,
     CONTENT_TYPE_TEXT_HTML,
     CONTENT_TYPE_TEXT_PLAIN,
     CONTENT_TYPE_TEXT_URL,
