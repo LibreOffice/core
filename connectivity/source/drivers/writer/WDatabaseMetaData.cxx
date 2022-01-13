@@ -90,12 +90,12 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
     sal_Int32 nTableCount = aTableNames.getLength();
     for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
     {
-        OUString aName = aTableNames[nTable];
-        if (match(tableNamePattern, aName, '\0'))
+        const OUString& rName = aTableNames[nTable];
+        if (match(tableNamePattern, rName, '\0'))
         {
             ODatabaseMetaDataResultSet::ORow aRow{ nullptr, nullptr, nullptr };
             aRow.reserve(6);
-            aRow.push_back(new ORowSetValueDecorator(aName));
+            aRow.push_back(new ORowSetValueDecorator(rName));
             aRow.push_back(new ORowSetValueDecorator(aTable));
             aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
             aRows.push_back(aRow);
