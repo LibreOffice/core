@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a33c8e45_a8504f07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-13T09:59:42Z",
+      "side": 1,
+      "message": "don\u0027t feel like myself checking what IWYU missed here, but note \u003chttps://gerrit.libreoffice.org/c/core/+/128369\u003e \"Fix build\"",
+      "revId": "840b4eb2f3443ff883016e6a8a8ae49e9cbd9e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
