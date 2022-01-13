@@ -8154,9 +8154,11 @@ void DocxAttributeOutput::ParaNumRule_Impl( const SwTextNode* pTextNd, sal_Int32
         const sal_Int32 nTableSize = m_rExport.m_pUsedNumTable ? m_rExport.m_pUsedNumTable->size() : 0;
         const SwNumRule* pRule = nNumId > 0 && nNumId <= nTableSize ? (*m_rExport.m_pUsedNumTable)[nNumId-1] : nullptr;
         const bool bOutlineRule = pRule && pRule->IsOutlineRule();
+        const bool bIsNumbered(pRule && pRule->Get(nLvl).GetNumberingType() != SVX_NUM_NUMBER_NONE);
 
         // Do not export outline rules (Chapter Numbering) as paragraph properties, only as style properties.
-        if ( !pTextNd || !bOutlineRule )
+        // Only export them as style properties if the outline level actually applies numbering.
+        if ((!pTextNd && bIsNumbered) || !bOutlineRule)
         {
             m_pSerializer->startElementNS(XML_w, XML_numPr);
             m_pSerializer->singleElementNS(XML_w, XML_ilvl,
