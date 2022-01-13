@@ -27,9 +27,7 @@
 #elif defined MACOSX
 #include "osx/svsys.h"
 #elif defined IOS
-#include "ios/svsys.h"
 #elif defined ANDROID
-#include "android/svsys.h"
 #elif defined HAIKU
 #elif !HAVE_FEATURE_UI
 #else
