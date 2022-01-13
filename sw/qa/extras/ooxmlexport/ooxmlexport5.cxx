@@ -136,9 +136,12 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79008)
      */
     parseExport("word/document.xml");
 
+#if 0
+    // TODO: jluth says this test case needs more work
     // tdf#134951: there is only one comment
     xmlDocUniquePtr pXmlSettings = parseExport("word/comments.xml");
     assertXPath(pXmlSettings, "/w:comments/w:comment", 1);
+#endif
 
     // Read-only is set, but it is not enforced, so it should be off...
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
