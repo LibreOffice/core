@@ -122,6 +122,9 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
         case GfxLinkType::NativePdf:
             aExtension = "pdf";
             break;
+        case GfxLinkType::NativeWebp:
+            aExtension = "webp";
+            break;
         default:
             break;
     }
@@ -162,6 +165,9 @@ OUString GraphicHelper::GetImageType(const Graphic& rGraphic)
                 break;
             case GfxLinkType::NativeBmp:
                 aGraphicTypeString = SvxResId(STR_IMAGE_BMP);
+                break;
+            case GfxLinkType::NativeWebp:
+                aGraphicTypeString = SvxResId(STR_IMAGE_WEBP);
                 break;
             default:
                 break;

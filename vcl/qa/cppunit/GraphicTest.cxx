@@ -81,6 +81,7 @@ private:
     void testLoadXPM();
     void testLoadPCX();
     void testLoadEPS();
+    void testLoadWEBP();
 
     void testAvailableThreaded();
 
@@ -118,6 +119,7 @@ private:
     CPPUNIT_TEST(testLoadXPM);
     CPPUNIT_TEST(testLoadPCX);
     CPPUNIT_TEST(testLoadEPS);
+    CPPUNIT_TEST(testLoadWEBP);
 
     CPPUNIT_TEST(testAvailableThreaded);
 
@@ -305,7 +307,7 @@ void GraphicTest::testUnloadedGraphic()
 
 void GraphicTest::testUnloadedGraphicLoading()
 {
-    const OUString aFormats[] = { "png", "gif", "jpg", "tif" };
+    const OUString aFormats[] = { "png", "gif", "jpg", "tif", "webp" };
 
     for (OUString const& sFormat : aFormats)
     {
@@ -1308,6 +1310,14 @@ void GraphicTest::testLoadEPS()
 {
     Graphic aGraphic = loadGraphic(u"TypeDetectionExample.eps");
     CPPUNIT_ASSERT_EQUAL(GraphicType::GdiMetafile, aGraphic.GetType());
+}
+
+void GraphicTest::testLoadWEBP()
+{
+    Graphic aGraphic = loadGraphic(u"TypeDetectionExample.webp");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Height());
 }
 
 void GraphicTest::testAvailableThreaded()

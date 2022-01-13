@@ -51,6 +51,7 @@
 #define MIMETYPE_EMF        "image/x-emf"
 #define MIMETYPE_SVG        "image/svg+xml"
 #define MIMETYPE_PDF        "application/pdf"
+#define MIMETYPE_WEBP       "image/webp"
 inline constexpr OUStringLiteral MIMETYPE_VCLGRAPHIC = u"image/x-vclgraphic";
 
 namespace comphelper { class PropertySetInfo; }

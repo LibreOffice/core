@@ -368,12 +368,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="jpgquality">
+              <object class="GtkFrame" id="jpgwebpquality">
                 <property name="can-focus">False</property>
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=2 n-rows=1 -->
+                  <!-- n-columns=2 n-rows=2 -->
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -381,7 +381,27 @@
                     <property name="margin-top">6</property>
                     <property name="column-spacing">6</property>
                     <child>
-                      <object class="GtkSpinButton" id="compressionjpgnf">
+                      <object class="GtkCheckButton" id="losslesscb">
+                        <property name="label" translatable="yes" context="graphicexport|losslesscb">Lossless</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="losslesscb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="graphicexport|extended_tip|losslesscb">Lossless images do not lose quality but result in larger files.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="compressionjpgwebpnf">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="activates-default">True</property>
@@ -389,18 +409,18 @@
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment1</property>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="compressionjpgnf-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="graphicexport|extended_tip|compressionjpgnf">Sets the quality for the export. Choose from a low quality with minimal file size, up to a high quality and big file size.</property>
+                          <object class="AtkObject" id="compressionjpgwebpnf-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="graphicexport|extended_tip|compressionjpgwebpnf">Sets the quality for the export. Choose from a low quality with minimal file size, up to a high quality and big file size.</property>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkScale" id="compressionjpgsb">
+                      <object class="GtkScale" id="compressionjpgwebpsb">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="valign">center</property>
@@ -410,7 +430,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                   </object>
