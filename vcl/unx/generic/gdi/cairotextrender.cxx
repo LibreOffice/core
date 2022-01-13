@@ -174,11 +174,13 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         bool bDisableAA = !rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias();
 
-        bool bWithoutHintingInTextDirection = rGraphics.getTextRenderModeForResolutionIndependentLayoutEnabled();
+        const bool bResolutionIndependentLayoutEnabled = rGraphics.getTextRenderModeForResolutionIndependentLayoutEnabled();
         cairo_hint_style_t eHintStyle = cairo_font_options_get_hint_style(pFontOptions);
-        bool bAllowedHintStyle = !bWithoutHintingInTextDirection || (eHintStyle == CAIRO_HINT_STYLE_NONE || eHintStyle == CAIRO_HINT_STYLE_SLIGHT);
+        cairo_hint_metrics_t eHintMetricsStyle = cairo_font_options_get_hint_metrics(pFontOptions);
+        bool bAllowedHintStyle = !bResolutionIndependentLayoutEnabled || (eHintStyle == CAIRO_HINT_STYLE_NONE || eHintStyle == CAIRO_HINT_STYLE_SLIGHT);
+        bool bAllowedHintMetricStyle = !bResolutionIndependentLayoutEnabled || (eHintMetricsStyle == CAIRO_HINT_METRICS_OFF);
 
-        if (bDisableAA || !bAllowedHintStyle)
+        if (bDisableAA || !bAllowedHintStyle || !bAllowedHintMetricStyle)
         {
             // Disable font AA in case global AA setting is supposed to affect
             // font rendering (not the default) and AA is disabled.
@@ -186,10 +188,9 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
             if (bDisableAA)
                 cairo_font_options_set_antialias(pOptions, CAIRO_ANTIALIAS_NONE);
             if (!bAllowedHintStyle)
-            {
                 cairo_font_options_set_hint_style(pOptions, CAIRO_HINT_STYLE_SLIGHT);
+            if (!bAllowedHintMetricStyle)
                 cairo_font_options_set_hint_metrics(pOptions, CAIRO_HINT_METRICS_OFF);
-            }
             cairo_set_font_options(cr, pOptions);
             cairo_font_options_destroy(pOptions);
         }
