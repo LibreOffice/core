@@ -626,6 +626,54 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoubleBorderVertical)
     CPPUNIT_ASSERT_GREATER(aBorderWidthVec[2], aBorderWidthVec[3]);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoubleBorderHorizontal)
+{
+    // Given a table with a top and bottom double border, outer is thin, inner is thick:
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "double-border-horizontal.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // When rendering table borders:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+
+    // Then make sure the top border is thin+thick and the bottom border is thick+thin (from top to
+    // bottom):
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    // Collect widths of horizontal lines.
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    // Vertical position -> width.
+    std::map<sal_Int32, sal_Int32> aBorderWidths;
+    for (int i = 0; i < xmlXPathNodeSetGetLength(pXmlNodes); i += 2)
+    {
+        xmlNodePtr pStart = pXmlNodes->nodeTab[i];
+        xmlNodePtr pEnd = pXmlNodes->nodeTab[i + 1];
+        xmlChar* pStartY = xmlGetProp(pStart, BAD_CAST("y"));
+        xmlChar* pEndY = xmlGetProp(pEnd, BAD_CAST("y"));
+        sal_Int32 nStartY = OString(reinterpret_cast<char const*>(pStartY)).toInt32();
+        sal_Int32 nEndY = OString(reinterpret_cast<char const*>(pEndY)).toInt32();
+        if (nStartY != nEndY)
+        {
+            // Vertical border.
+            continue;
+        }
+        xmlChar* pWidth = xmlGetProp(pStart->parent, BAD_CAST("width"));
+        sal_Int32 nWidth = OString(reinterpret_cast<char const*>(pWidth)).toInt32();
+        aBorderWidths[nStartY] = nWidth;
+    }
+    xmlXPathFreeObject(pXmlObj);
+    std::vector<sal_Int32> aBorderWidthVec;
+    std::transform(aBorderWidths.begin(), aBorderWidths.end(), std::back_inserter(aBorderWidthVec),
+                   [](const std::pair<sal_Int32, sal_Int32>& rPair) { return rPair.second; });
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aBorderWidthVec.size());
+    CPPUNIT_ASSERT_GREATER(aBorderWidthVec[0], aBorderWidthVec[1]);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 120
+    // - Actual  : 60
+    // i.e. the bottom border was thin+thick, not thick+thin.
+    CPPUNIT_ASSERT_GREATER(aBorderWidthVec[3], aBorderWidthVec[2]);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
