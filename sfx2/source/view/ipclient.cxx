@@ -94,9 +94,9 @@ public:
 tools::Rectangle lcl_negateRectX(const tools::Rectangle& rRect)
 {
     return tools::Rectangle(
-        std::max(0l, -rRect.Right()),
+        std::max(static_cast<tools::Long>(0l), -rRect.Right()),
         rRect.Top(),
-        std::max(0l, -rRect.Left()),
+        std::max(static_cast<tools::Long>(0l), -rRect.Left()),
         rRect.Bottom());
 }
 
