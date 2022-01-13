@@ -52,6 +52,24 @@
       "parentUuid": "fbe42523_32062cc0",
       "revId": "36b4de8c55bbbf11a7cc6e0c73c4e25c3e5c0a32",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e693334_b3a625fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2022-01-13T08:13:52Z",
+      "side": 1,
+      "message": "how should it look like from your point of view?",
+      "parentUuid": "1d061d12_dbf5e42c",
+      "revId": "36b4de8c55bbbf11a7cc6e0c73c4e25c3e5c0a32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
