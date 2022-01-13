@@ -1341,21 +1341,41 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     vcl::text::ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen,
             nPixelWidth, flags, pLayoutCache);
 
+    DeviceCoordinate nEndGlyphCoord(0);
     std::unique_ptr<DeviceCoordinate[]> xDXPixelArray;
-    DeviceCoordinate* pDXPixelArray(nullptr);
+    std::unique_ptr<double[]> xNaturalDXPixelArray;
     if( !pDXArray.empty() )
     {
-        if(mbMap)
+        DeviceCoordinate* pDXPixelArray(nullptr);
+        if (mbMap)
         {
-            // convert from logical units to font units using a temporary array
-            xDXPixelArray.reset(new DeviceCoordinate[nLen]);
-            pDXPixelArray = xDXPixelArray.get();
-            // using base position for better rounding a.k.a. "dancing characters"
-            DeviceCoordinate nPixelXOfs2 = LogicWidthToDeviceCoordinate(rLogicalPos.X() * 2);
-            for( int i = 0; i < nLen; ++i )
+            if (GetTextRenderModeForResolutionIndependentLayout())
             {
-                pDXPixelArray[i] = (LogicWidthToDeviceCoordinate((rLogicalPos.X() + pDXArray[i]) * 2) - nPixelXOfs2) / 2;
+                // convert from logical units to font units using a temporary array
+                xNaturalDXPixelArray.reset(new double[nLen]);
+
+                for (int i = 0; i < nLen; ++i)
+                    xNaturalDXPixelArray[i] = LogicWidthToDeviceFontCoordinate(pDXArray[i]);
+
+                aLayoutArgs.SetAltNaturalDXArray(xNaturalDXPixelArray.get());
+                nEndGlyphCoord = std::lround(xNaturalDXPixelArray[nLen - 1]);
             }
+            else
+            {
+                // convert from logical units to font units using a temporary array
+                xDXPixelArray.reset(new DeviceCoordinate[nLen]);
+                pDXPixelArray = xDXPixelArray.get();
+                // using base position for better rounding a.k.a. "dancing characters"
+                DeviceCoordinate nPixelXOfs2 = LogicWidthToDeviceCoordinate(rLogicalPos.X() * 2);
+                for( int i = 0; i < nLen; ++i )
+                {
+                    pDXPixelArray[i] = (LogicWidthToDeviceCoordinate((rLogicalPos.X() + pDXArray[i]) * 2) - nPixelXOfs2) / 2;
+                }
+
+                aLayoutArgs.SetDXArray(pDXPixelArray);
+                nEndGlyphCoord = pDXPixelArray[nLen - 1];
+            }
+
         }
         else
         {
@@ -1369,10 +1389,11 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 #else /* !VCL_FLOAT_DEVICE_PIXEL */
             pDXPixelArray = const_cast<DeviceCoordinate*>(pDXArray.data());
 #endif /* !VCL_FLOAT_DEVICE_PIXEL */
+
+            aLayoutArgs.SetDXArray(pDXPixelArray);
+            nEndGlyphCoord = pDXPixelArray[nLen - 1];
         }
     }
-
-    aLayoutArgs.SetDXArray(pDXPixelArray);
 
     // get matching layout object for base font
     std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout(0);
@@ -1403,8 +1424,8 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     if( aLayoutArgs.mnFlags & SalLayoutFlags::RightAlign )
     {
         DeviceCoordinate nRTLOffset;
-        if( pDXPixelArray )
-            nRTLOffset = pDXPixelArray[ nLen - 1 ];
+        if (!pDXArray.empty())
+            nRTLOffset = nEndGlyphCoord;
         else if( nPixelWidth )
             nRTLOffset = nPixelWidth;
         else

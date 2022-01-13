@@ -136,7 +136,8 @@ private:
                     GenericSalLayout( const GenericSalLayout& ) = delete;
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 
-    void            ApplyDXArray(const DeviceCoordinate*, SalLayoutFlags nLayoutFlags);
+    template<typename DC>
+    void            ApplyDXArray(const DC*, SalLayoutFlags nLayoutFlags);
     void            Justify(DeviceCoordinate nNewWidth);
     void            ApplyAsianKerning(const OUString& rStr);
 

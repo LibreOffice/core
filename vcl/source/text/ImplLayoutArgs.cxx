@@ -37,6 +37,7 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCh
     , mnEndCharPos(nEndCharPos)
     , m_pTextLayoutCache(pLayoutCache)
     , mpDXArray(nullptr)
+    , mpAltNaturalDXArray(nullptr)
     , mnLayoutWidth(0)
     , mnOrientation(0)
 {
@@ -100,6 +101,11 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCh
 void ImplLayoutArgs::SetLayoutWidth(DeviceCoordinate nWidth) { mnLayoutWidth = nWidth; }
 
 void ImplLayoutArgs::SetDXArray(DeviceCoordinate const* pDXArray) { mpDXArray = pDXArray; }
+
+void ImplLayoutArgs::SetAltNaturalDXArray(double const* pDXArray)
+{
+    mpAltNaturalDXArray = pDXArray;
+}
 
 void ImplLayoutArgs::SetOrientation(Degree10 nOrientation) { mnOrientation = nOrientation; }
 

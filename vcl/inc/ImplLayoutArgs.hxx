@@ -35,7 +35,8 @@ public:
     vcl::text::TextLayoutCache const* m_pTextLayoutCache;
 
     // positioning related inputs
-    const DeviceCoordinate* mpDXArray; // in pixel units
+    const DeviceCoordinate* mpDXArray; // in integer pixel units
+    const double* mpAltNaturalDXArray; // in floating point pixel units
     DeviceCoordinate mnLayoutWidth; // in pixel units
     Degree10 mnOrientation; // in 0-3600 system
 
@@ -48,6 +49,7 @@ public:
 
     void SetLayoutWidth(DeviceCoordinate nWidth);
     void SetDXArray(const DeviceCoordinate* pDXArray);
+    void SetAltNaturalDXArray(const double* pDXArray);
     void SetOrientation(Degree10 nOrientation);
 
     void ResetPos();
