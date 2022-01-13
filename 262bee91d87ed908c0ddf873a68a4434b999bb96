@@ -46,6 +46,30 @@
       },
       "revId": "262bee91d87ed908c0ddf873a68a4434b999bb96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6897c524_7ac88a04",
+        "filename": "sfx2/source/doc/autoredactdialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1003374
+      },
+      "writtenOn": "2022-01-13T06:52:20Z",
+      "side": 1,
+      "message": "Hello\nAs per your suggestion I tested the way without using the return value\nBut the above error will appear like patchset 5\nSo I went to check the program related to double click event\nLike line 623 in autocdlg.cxx, there are actually return values\nBased on the above reasons, I guess it may not be possible to have no return value",
+      "parentUuid": "0433d7d4_ce1183ac",
+      "range": {
+        "startLine": 320,
+        "startChar": 74,
+        "endLine": 320,
+        "endChar": 78
+      },
+      "revId": "262bee91d87ed908c0ddf873a68a4434b999bb96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

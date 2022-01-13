@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6efcea3e_194aaca3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003374
+      },
+      "writtenOn": "2022-01-13T06:52:20Z",
+      "side": 1,
+      "message": "Hello\nAs per your suggestion I tested the way without using the return value\nBut the above error will appear like patchset 5\nSo I went to check the program related to double click event\nLike line 623 in autocdlg.cxx, there are actually return values\nBased on the above reasons, I guess it may not be possible to have no return value",
+      "revId": "9b9c7710645db4e41794c356b1cc608dc3e81641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
