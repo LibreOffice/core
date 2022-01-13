@@ -1234,13 +1234,14 @@ void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
     {
         // In case we are routing the window, notify the client
         std::vector<vcl::LOKPayloadItem> aPayload;
+        tools::Rectangle aRect(Point(0, 0), aSize);
         if (pRectangle)
-            aPayload.emplace_back("rectangle", pRectangle->toString());
-        else
-        {
-            const tools::Rectangle aRect(Point(0, 0), aSize);
-            aPayload.emplace_back("rectangle", aRect.toString());
-        }
+            aRect = *pRectangle;
+
+        if (AllSettings::GetLayoutRTL() && GetOutDev())
+            GetOutDev()->ReMirror(aRect);
+
+        aPayload.emplace_back("rectangle", aRect.toString());
 
         pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);
     }
@@ -1428,6 +1429,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 
         i_pTargetOutDev->DrawOutDev(i_rPos, aSize, Point(), pDevice->PixelToLogic(aSize), *pDevice);
 
+        bool bHasMirroredGraphics = pDevice->HasMirroredGraphics();
+
         // get rid of virtual device now so they don't pile up during recursive calls
         pDevice.disposeAndClear();
 
@@ -1437,6 +1440,9 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
             if( pChild->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame && pChild->IsVisible() )
             {
                 tools::Long nDeltaX = pChild->mnOutOffX - mnOutOffX;
+                if( bHasMirroredGraphics )
+                    nDeltaX = mnOutWidth - nDeltaX - pChild->mnOutWidth;
+
                 tools::Long nDeltaY = pChild->mnOutOffY - mnOutOffY;
 
                 Point aPos( i_rPos );
