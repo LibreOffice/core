@@ -29,7 +29,7 @@
 #include <jobset.h>
 #include <print.h>
 #include <salptype.hxx>
-#include <saldatabasic.hxx>
+#include <svdata.hxx>
 
 #include <unx/genpspgraphics.h>
 

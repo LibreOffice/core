@@ -25,6 +25,7 @@
 #include <unx/freetype_glyphcache.hxx>
 #include <vcl/svapp.hxx>
 #include <sallayout.hxx>
+#include <salinst.hxx>
 
 #include <cairo.h>
 #include <cairo-ft.h>
@@ -168,8 +169,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         return;
     }
 
-    ImplSVData* pSVData = ImplGetSVData();
-    if (const cairo_font_options_t* pFontOptions = pSVData->mpDefInst->GetCairoFontOptions())
+    if (const cairo_font_options_t* pFontOptions = GetSalInstance()->GetCairoFontOptions())
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         bool bDisableAA = !rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias();
@@ -300,8 +300,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 
 void FontConfigFontOptions::cairo_font_options_substitute(FcPattern* pPattern)
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    const cairo_font_options_t* pFontOptions = pSVData->mpDefInst->GetCairoFontOptions();
+    const cairo_font_options_t* pFontOptions = GetSalInstance()->GetCairoFontOptions();
     if( !pFontOptions )
         return;
     cairo_ft_font_options_substitute(pFontOptions, pPattern);

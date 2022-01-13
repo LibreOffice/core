@@ -59,7 +59,7 @@ extern "C"
         X11SalInstance* pInstance = new X11SalInstance( std::make_unique<SalYieldMutex>() );
 
         // initialize SalData
-        X11SalData *pSalData = new X11SalData(pInstance);
+        X11SalData *pSalData = new X11SalData();
 
         pSalData->Init();
         pInstance->SetLib( pSalData->GetLib() );
