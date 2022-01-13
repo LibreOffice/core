@@ -837,7 +837,7 @@ void QtWidget::changeEvent(QEvent* pEvent)
             [[fallthrough]];
         case QEvent::StyleChange:
         {
-            auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
+            auto* pSalInst(GetQtInstance());
             assert(pSalInst);
             pSalInst->UpdateStyle(QEvent::FontChange == pEvent->type());
             break;
