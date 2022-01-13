@@ -39,7 +39,7 @@ run and compile LibreOffice, also used by the TDF builds:
     * Build: Cygwin + Visual Studio 2019 version 16.5
 * macOS:
     * Runtime: 10.13
-    * Build: 10.14.4 + Xcode 11.3
+    * Build: 11.0 + Xcode 12.5
 * Linux:
     * Runtime: RHEL 7 or CentOS 7
     * Build: either GCC 7.0.0; or Clang 8.0.1 with libstdc++ 7.3.0
