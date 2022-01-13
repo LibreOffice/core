@@ -330,8 +330,8 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
  * class GtkSalData                                                   *
  **********************************************************************/
 
-GtkSalData::GtkSalData( SalInstance *pInstance )
-    : GenericUnixSalData(pInstance)
+GtkSalData::GtkSalData()
+    : GenericUnixSalData()
 {
     m_pUserEvent = nullptr;
 }
@@ -759,8 +759,7 @@ GtkSalTimer::GtkSalTimer()
 
 GtkSalTimer::~GtkSalTimer()
 {
-    GtkInstance *pInstance = static_cast<GtkInstance *>(GetSalData()->m_pInstance);
-    pInstance->RemoveTimer();
+    GetGtkInstance()->RemoveTimer();
     Stop();
 }
 

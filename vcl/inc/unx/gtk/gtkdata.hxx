@@ -285,7 +285,7 @@ class GtkSalData final : public GenericUnixSalData
     rtl::Reference<DocumentFocusListener> m_xDocumentFocusListener;
 
 public:
-    GtkSalData( SalInstance *pInstance );
+    GtkSalData();
     virtual ~GtkSalData() override;
 
     DocumentFocusListener & GetDocumentFocusListener();

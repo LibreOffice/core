@@ -38,7 +38,6 @@
 #include <X11/keysym.h>
 #include <X11/extensions/shape.h>
 
-#include <saldatabasic.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 #include <unx/salframe.h>
@@ -3295,7 +3294,7 @@ bool X11SalFrame::HandleFocusEvent( XFocusChangeEvent const *pEvent )
 
         if( FocusIn == pEvent->type )
         {
-            GetSalData()->m_pInstance->updatePrinterUpdate();
+            GetSalInstance()->updatePrinterUpdate();
             mbInputFocus = True;
             ImplSVData* pSVData = ImplGetSVData();
 

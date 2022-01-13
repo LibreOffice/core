@@ -12,7 +12,7 @@
 
 #include <osl/socket.hxx>
 
-#include <saldatabasic.hxx>
+#include <svdata.hxx>
 
 #include <memory>
 
@@ -24,7 +24,24 @@ class PrintFontManager;
 class PrinterInfoManager;
 }
 
-class VCL_DLLPUBLIC GenericUnixSalData : public SalData
+// SalData is a bit of a mess. For ImplSVData we need a SalData base class.
+// Windows, MacOS and iOS implement their own SalData class, so there is no
+// way to do inheritance from the "top" in all plugins. We also really don't
+// want to rename GenericUnixSalData and don't want to reinterpret_cast some
+// dummy pointer everywhere, so this seems the only sensible solution.
+class VCL_PLUGIN_PUBLIC SalData
+{
+protected:
+    SalData();
+
+public:
+    virtual ~SalData();
+};
+
+// This class is kind of a misnomer. What this class is mainly about is the
+// usage of Freetype and Fontconfig, which happens to match all *nix backends;
+// except that the osx and ios backends are *nix but don't use this.
+class VCL_PLUGIN_PUBLIC GenericUnixSalData : public SalData
 {
     friend class ::psp::PrinterInfoManager;
 
@@ -42,9 +59,9 @@ class VCL_DLLPUBLIC GenericUnixSalData : public SalData
     void InitPrintFontManager();
 
 public:
-    GenericUnixSalData(SalInstance* const pInstance);
+    GenericUnixSalData();
     virtual ~GenericUnixSalData() override;
-    virtual void Dispose() {}
+    virtual void Dispose();
 
     SalGenericDisplay* GetDisplay() const { return m_pDisplay; }
     void SetDisplay(SalGenericDisplay* pDisp) { m_pDisplay = pDisp; }

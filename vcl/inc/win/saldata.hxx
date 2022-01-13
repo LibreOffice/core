@@ -133,9 +133,6 @@ public:
 #endif
 };
 
-inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }
-inline SalData* GetSalData() { return ImplGetSVData()->mpSalData; }
-
 struct SalShlData
 {
     HINSTANCE               mhInst;                 // Instance of SAL-DLL

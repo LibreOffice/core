@@ -410,7 +410,7 @@ void QtMenu::SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned n
 
 void QtMenu::SetFrame(const SalFrame* pFrame)
 {
-    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
+    auto* pSalInst(GetQtInstance());
     assert(pSalInst);
     if (!pSalInst->IsMainThread())
     {

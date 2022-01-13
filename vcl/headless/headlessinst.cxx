@@ -66,20 +66,11 @@ const OUString& SalGetDesktopEnvironment()
     return aEnv;
 }
 
-SalData::SalData()
-    : m_pInstance(nullptr)
-{
-}
-
-SalData::~SalData()
-{
-}
-
 // This is our main entry point:
 SalInstance *CreateSalInstance()
 {
     HeadlessSalInstance* pInstance = new HeadlessSalInstance(std::make_unique<SvpSalYieldMutex>());
-    new SvpSalData(pInstance);
+    new SvpSalData();
     pInstance->AcquireYieldMutex();
     return pInstance;
 }

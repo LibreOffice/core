@@ -14412,7 +14412,6 @@ vcl/inc/quartz/salvd.h
 vcl/inc/quartz/utils.h
 vcl/inc/regband.hxx
 vcl/inc/salbmp.hxx
-vcl/inc/saldatabasic.hxx
 vcl/inc/salframe.hxx
 vcl/inc/salgdi.hxx
 vcl/inc/salgdiimpl.hxx

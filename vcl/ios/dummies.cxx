@@ -23,10 +23,6 @@
 #include "unx/fontmanager.hxx"
 #include "unx/gendata.hxx"
 
-class FreetypeManager
-{
-};
-
 std::unique_ptr<SalPrinter> SvpSalInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
 {
     return nullptr;
@@ -111,23 +107,6 @@ void SalGenericInstance::jobEndedPrinterUpdate()
 }
 
 using namespace psp;
-
-GenericUnixSalData::GenericUnixSalData(SalInstance *const pInstance)
-    : m_pDisplay(nullptr)
-    , m_pFreetypeManager(new FreetypeManager)
-    , m_pPrintFontManager(nullptr)
-{
-    m_pInstance = pInstance;
-    SetSalData(this);
-}
-
-GenericUnixSalData::~GenericUnixSalData()
-{
-}
-
-PrintFontManager::~PrintFontManager()
-{
-}
 
 bool AquaGraphicsBackend::drawNativeControl(ControlType /* nType */,
                                             ControlPart /* nPart */,
