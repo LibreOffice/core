@@ -173,7 +173,7 @@ void ScatterChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAn
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL ScatterChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & ScatterChartTypeTemplate::getInfoHelper()
 {
     return *StaticScatterChartTypeTemplateInfoHelper::get();
 }

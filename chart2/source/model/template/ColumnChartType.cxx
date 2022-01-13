@@ -161,7 +161,7 @@ void ColumnChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL ColumnChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & ColumnChartType::getInfoHelper()
 {
     return *StaticColumnChartTypeInfoHelper::get();
 }

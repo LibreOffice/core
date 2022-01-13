@@ -177,7 +177,7 @@ void PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) 
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL PieChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & PieChartTypeTemplate::getInfoHelper()
 {
     return *StaticPieChartTypeTemplateInfoHelper::get();
 }

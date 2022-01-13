@@ -226,7 +226,7 @@ struct StaticChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans:
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL ChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & ChartType::getInfoHelper()
 {
     return *StaticChartTypeInfoHelper::get();
 }

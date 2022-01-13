@@ -179,7 +179,7 @@ void DataPoint::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
     rAny = xFast->getFastPropertyValue( nHandle );
 }
 
-void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
+void DataPoint::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const uno::Any& rValue )
 {
     if(    nHandle == DataPointProperties::PROP_DATAPOINT_ERROR_BAR_Y
@@ -207,7 +207,7 @@ void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
     ::property::OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL DataPoint::getInfoHelper()
+::cppu::IPropertyArrayHelper & DataPoint::getInfoHelper()
 {
     return *StaticDataPointInfoHelper::get();
 }

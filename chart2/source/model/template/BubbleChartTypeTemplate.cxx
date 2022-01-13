@@ -118,7 +118,7 @@ void BubbleChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL BubbleChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & BubbleChartTypeTemplate::getInfoHelper()
 {
     return *StaticBubbleChartTypeTemplateInfoHelper::get();
 }

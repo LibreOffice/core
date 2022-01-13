@@ -264,7 +264,7 @@ void Legend::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL Legend::getInfoHelper()
+::cppu::IPropertyArrayHelper & Legend::getInfoHelper()
 {
     return *StaticLegendInfoHelper::get();
 }

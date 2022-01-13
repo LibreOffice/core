@@ -53,10 +53,10 @@ private:
     virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
 
     // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ OPropertySet ____
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast
+    virtual void setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,
           const css::uno::Any& rValue ) override;
 

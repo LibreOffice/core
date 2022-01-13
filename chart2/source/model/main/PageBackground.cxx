@@ -142,7 +142,7 @@ void PageBackground::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL PageBackground::getInfoHelper()
+::cppu::IPropertyArrayHelper & PageBackground::getInfoHelper()
 {
     return *StaticPageBackgroundInfoHelper::get();
 }

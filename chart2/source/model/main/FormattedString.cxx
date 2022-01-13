@@ -124,14 +124,14 @@ uno::Reference< util::XCloneable > SAL_CALL FormattedString::createClone()
 // ____ XFormattedString ____
 OUString SAL_CALL FormattedString::getString()
 {
-    MutexGuard aGuard( m_aMutex);
+    std::unique_lock aGuard( m_aMutex);
     return m_aString;
 }
 
 void SAL_CALL FormattedString::setString( const OUString& String )
 {
     {
-        MutexGuard aGuard( m_aMutex);
+        std::unique_lock aGuard( m_aMutex);
         m_aString = String;
     }
     //don't keep the mutex locked while calling out
@@ -142,7 +142,7 @@ void SAL_CALL FormattedString::setString( const OUString& String )
 // ____ XDataPointCustomLabelField ____
 css::chart2::DataPointCustomLabelFieldType SAL_CALL FormattedString::getFieldType()
 {
-    MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     return m_aType;
 }
 
@@ -150,7 +150,7 @@ void SAL_CALL
 FormattedString::setFieldType(const css::chart2::DataPointCustomLabelFieldType Type)
 {
     {
-        MutexGuard aGuard(m_aMutex);
+        std::unique_lock aGuard(m_aMutex);
         m_aType = Type;
     }
     //don't keep the mutex locked while calling out
@@ -159,14 +159,14 @@ FormattedString::setFieldType(const css::chart2::DataPointCustomLabelFieldType T
 
 OUString SAL_CALL FormattedString::getGuid()
 {
-    MutexGuard aGuard( m_aMutex);
+    std::unique_lock aGuard( m_aMutex);
     return m_aGuid;
 }
 
 void SAL_CALL FormattedString::setGuid( const OUString& guid )
 {
     {
-        MutexGuard aGuard( m_aMutex);
+        std::unique_lock aGuard( m_aMutex);
         m_aGuid= guid;
     }
     //don't keep the mutex locked while calling out
@@ -176,14 +176,14 @@ void SAL_CALL FormattedString::setGuid( const OUString& guid )
 
 sal_Bool SAL_CALL FormattedString::getDataLabelsRange()
 {
-    MutexGuard aGuard( m_aMutex);
+    std::unique_lock aGuard( m_aMutex);
     return m_bDataLabelsRange;
 }
 
 void SAL_CALL FormattedString::setDataLabelsRange( sal_Bool dataLabelsRange )
 {
     {
-        MutexGuard aGuard( m_aMutex);
+        std::unique_lock aGuard( m_aMutex);
         m_bDataLabelsRange = dataLabelsRange;
     }
     //don't keep the mutex locked while calling out
@@ -192,14 +192,14 @@ void SAL_CALL FormattedString::setDataLabelsRange( sal_Bool dataLabelsRange )
 
 OUString SAL_CALL FormattedString::getCellRange()
 {
-    MutexGuard aGuard( m_aMutex);
+    std::unique_lock aGuard( m_aMutex);
     return m_aCellRange;
 }
 
 void SAL_CALL FormattedString::setCellRange( const OUString& cellRange )
 {
     {
-        MutexGuard aGuard( m_aMutex);
+        std::unique_lock aGuard( m_aMutex);
         m_aCellRange = cellRange;
     }
     //don't keep the mutex locked while calling out
@@ -268,7 +268,7 @@ void FormattedString::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL FormattedString::getInfoHelper()
+::cppu::IPropertyArrayHelper & FormattedString::getInfoHelper()
 {
     return *StaticFormattedStringInfoHelper::get();
 }

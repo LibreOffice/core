@@ -157,7 +157,7 @@ void StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny 
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL StockChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & StockChartTypeTemplate::getInfoHelper()
 {
     return GetStaticStockChartTypeTemplateInfoHelper();
 }

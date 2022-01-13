@@ -274,7 +274,7 @@ void CandleStickChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) 
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL CandleStickChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & CandleStickChartType::getInfoHelper()
 {
     return *StaticCandleStickChartTypeInfoHelper::get();
 }
@@ -285,7 +285,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL CandleStickChartType::getPropertyS
     return *StaticCandleStickChartTypeInfo::get();
 }
 
-void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(
+void CandleStickChartType::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const uno::Any& rValue )
 {
     if(    nHandle == PROP_CANDLESTICKCHARTTYPE_WHITE_DAY

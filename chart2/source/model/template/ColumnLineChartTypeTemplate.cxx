@@ -146,7 +146,7 @@ void ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& 
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL ColumnLineChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & ColumnLineChartTypeTemplate::getInfoHelper()
 {
     return *StaticColumnLineChartTypeTemplateInfoHelper::get();
 }

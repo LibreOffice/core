@@ -19,7 +19,6 @@
 #pragma once
 
 #include <OPropertySet.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
@@ -46,7 +45,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class Axis final :
-    public cppu::BaseMutex,
+    public ::BaseStdMutex,
     public impl::Axis_Base,
     public ::property::OPropertySet
 {
@@ -74,7 +73,7 @@ private:
     virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
 
     // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL

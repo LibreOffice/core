@@ -152,7 +152,7 @@ void GridProperties::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL GridProperties::getInfoHelper()
+::cppu::IPropertyArrayHelper & GridProperties::getInfoHelper()
 {
     return *StaticGridInfoHelper::get();
 }

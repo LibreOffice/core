@@ -274,7 +274,7 @@ void RegressionCurveModel::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) 
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL RegressionCurveModel::getInfoHelper()
+::cppu::IPropertyArrayHelper & RegressionCurveModel::getInfoHelper()
 {
     return GetStaticRegressionCurveInfoHelper();
 }

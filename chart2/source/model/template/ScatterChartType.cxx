@@ -207,7 +207,7 @@ void ScatterChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) cons
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL ScatterChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & ScatterChartType::getInfoHelper()
 {
     return *StaticScatterChartTypeInfoHelper::get();
 }

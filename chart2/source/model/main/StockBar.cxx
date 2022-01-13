@@ -149,7 +149,7 @@ void StockBar::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL StockBar::getInfoHelper()
+::cppu::IPropertyArrayHelper & StockBar::getInfoHelper()
 {
     return *StaticStockBarInfoHelper::get();
 }

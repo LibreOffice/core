@@ -45,7 +45,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class DataPoint final :
-        public cppu::BaseMutex,
+        public BaseStdMutex,
         public impl::DataPoint_Base,
         public ::property::OPropertySet
 {
@@ -65,8 +65,8 @@ private:
 
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
+    virtual void setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,
           const css::uno::Any& rValue ) override;
 

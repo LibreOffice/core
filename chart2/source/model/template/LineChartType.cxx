@@ -168,7 +168,7 @@ void LineChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL LineChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & LineChartType::getInfoHelper()
 {
     return *StaticLineChartTypeInfoHelper::get();
 }

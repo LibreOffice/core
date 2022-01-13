@@ -197,7 +197,7 @@ void PieChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL PieChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & PieChartType::getInfoHelper()
 {
     return *StaticPieChartTypeInfoHelper::get();
 }

@@ -42,7 +42,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class GridProperties final :
-        public cppu::BaseMutex,
+        public ::BaseStdMutex,
         public impl::GridProperties_Base,
         public ::property::OPropertySet
 {
@@ -66,7 +66,7 @@ private:
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
 
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL

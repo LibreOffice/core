@@ -341,7 +341,7 @@ void BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) 
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL BaseCoordinateSystem::getInfoHelper()
+::cppu::IPropertyArrayHelper & BaseCoordinateSystem::getInfoHelper()
 {
     return *StaticCooSysInfoHelper::get();
 }

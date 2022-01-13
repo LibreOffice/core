@@ -140,7 +140,7 @@ void AreaChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny )
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL AreaChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & AreaChartTypeTemplate::getInfoHelper()
 {
     return *StaticAreaChartTypeTemplateInfoHelper::get();
 }

@@ -399,7 +399,7 @@ void Axis::AllocateSubGrids()
     std::vector< Reference< beans::XPropertySet > > aOldBroadcasters;
     std::vector< Reference< beans::XPropertySet > > aNewBroadcasters;
     {
-        MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
         xEventListener = this;
 
@@ -443,7 +443,7 @@ void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
     Reference< chart2::data::XLabeledDataSequence > xOldCategories;
     Reference< chart2::data::XLabeledDataSequence > xNewCategories = rScaleData.Categories;
     {
-        MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
         xEventListener = this;
         xOldCategories = m_aScaleData.Categories;
@@ -467,18 +467,18 @@ void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
 
 chart2::ScaleData SAL_CALL Axis::getScaleData()
 {
-    MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_aScaleData;
 }
 
 Reference< beans::XPropertySet > SAL_CALL Axis::getGridProperties()
 {
-    MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_xGrid;
 }
 Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubGridProperties()
 {
-    MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_aSubGridProperties;
 }
 
@@ -491,7 +491,7 @@ Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties
 // ____ XTitled ____
 Reference< chart2::XTitle > SAL_CALL Axis::getTitleObject()
 {
-    MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_xTitle;
 }
 
@@ -500,7 +500,7 @@ void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle
     Reference< util::XModifyListener > xModifyEventForwarder;
     Reference< chart2::XTitle > xOldTitle;
     {
-        MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         xOldTitle = m_xTitle;
         xModifyEventForwarder = m_xModifyEventForwarder;
         m_xTitle = xNewTitle;
@@ -585,7 +585,7 @@ void Axis::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL Axis::getInfoHelper()
+::cppu::IPropertyArrayHelper & Axis::getInfoHelper()
 {
     return *StaticAxisInfoHelper::get();
 }

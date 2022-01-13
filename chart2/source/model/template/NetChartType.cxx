@@ -119,7 +119,7 @@ struct StaticNetChartTypeInfo : public rtl::StaticAggregate< uno::Reference< bea
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL NetChartType_Base::getInfoHelper()
+::cppu::IPropertyArrayHelper & NetChartType_Base::getInfoHelper()
 {
     return *StaticNetChartTypeInfoHelper::get();
 }

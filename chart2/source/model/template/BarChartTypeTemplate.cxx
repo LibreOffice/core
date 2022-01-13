@@ -234,7 +234,7 @@ void BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) 
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL BarChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & BarChartTypeTemplate::getInfoHelper()
 {
     return *StaticBarChartTypeTemplateInfoHelper::get();
 }

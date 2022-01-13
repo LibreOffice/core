@@ -137,7 +137,7 @@ void Wall::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL Wall::getInfoHelper()
+::cppu::IPropertyArrayHelper & Wall::getInfoHelper()
 {
     return *StaticWallInfoHelper::get();
 }

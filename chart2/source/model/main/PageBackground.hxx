@@ -42,7 +42,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class PageBackground final :
-    public cppu::BaseMutex,
+    public ::BaseStdMutex,
     public impl::PageBackground_Base,
     public ::property::OPropertySet
 {
@@ -65,7 +65,7 @@ private:
     virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
 
     // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL

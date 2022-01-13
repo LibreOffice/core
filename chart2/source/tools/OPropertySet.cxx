@@ -41,23 +41,21 @@ using ::cppu::OPropertySetHelper;
 namespace property
 {
 
-OPropertySet::OPropertySet( ::osl::Mutex & par_rMutex ) :
-        OBroadcastHelper( par_rMutex ),
+OPropertySet::OPropertySet( std::mutex & par_rMutex ) :
         // the following causes a warning; there seems to be no way to avoid it
-        OPropertySetHelper( static_cast< OBroadcastHelper & >( *this )),
+        comphelper::OPropertySetHelper( par_rMutex ),
         m_rMutex( par_rMutex ),
         m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault(false)
 {
 }
 
-OPropertySet::OPropertySet( const OPropertySet & rOther, ::osl::Mutex & par_rMutex ) :
-        OBroadcastHelper( par_rMutex ),
+OPropertySet::OPropertySet( const OPropertySet & rOther, std::mutex & par_rMutex ) :
         // the following causes a warning; there seems to be no way to avoid it
-        OPropertySetHelper( static_cast< OBroadcastHelper & >( *this )),
+        comphelper::OPropertySetHelper( par_rMutex ),
         m_rMutex( par_rMutex ),
         m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault(false)
 {
-    MutexGuard aGuard( m_rMutex );
+    std::unique_lock aGuard( m_rMutex );
 
     m_aProperties = rOther.m_aProperties;
 
@@ -208,7 +206,7 @@ Sequence< Any > SAL_CALL
     return aResult;
 }
 
-sal_Bool SAL_CALL OPropertySet::convertFastPropertyValue
+sal_Bool OPropertySet::convertFastPropertyValue
     ( Any & rConvertedValue,
       Any & rOldValue,
       sal_Int32 nHandle,
@@ -241,7 +239,7 @@ sal_Bool SAL_CALL OPropertySet::convertFastPropertyValue
     return true;
 }
 
-void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
+void OPropertySet::setFastPropertyValue_NoBroadcast
     ( sal_Int32 nHandle,
       const Any& rValue )
 {
@@ -272,7 +270,7 @@ void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
         SetPropertyValueByHandle( nHandle, rValue );
 }
 
-void SAL_CALL OPropertySet::getFastPropertyValue
+void OPropertySet::getFastPropertyValue
     ( Any& rValue,
       sal_Int32 nHandle ) const
 {
@@ -373,7 +371,7 @@ void SAL_CALL OPropertySet::setStyle( const Reference< style::XStyle >& xStyle )
 void SAL_CALL OPropertySet::setPropertyValues(
     const Sequence< OUString >& PropertyNames, const Sequence< Any >& Values )
 {
-    ::cppu::OPropertySetHelper::setPropertyValues( PropertyNames, Values );
+    ::comphelper::OPropertySetHelper::setPropertyValues( PropertyNames, Values );
 
     firePropertyChangeEvent();
 }
@@ -381,7 +379,7 @@ void SAL_CALL OPropertySet::setPropertyValues(
 // ____ XFastPropertySet ____
 void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
 {
-    ::cppu::OPropertySetHelper::setFastPropertyValue( nHandle, rValue );
+    ::comphelper::OPropertySetHelper::setFastPropertyValue( nHandle, rValue );
 
     firePropertyChangeEvent();
 }

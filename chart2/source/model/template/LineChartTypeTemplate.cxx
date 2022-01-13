@@ -174,7 +174,7 @@ void LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny )
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL LineChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & LineChartTypeTemplate::getInfoHelper()
 {
     return *StaticLineChartTypeTemplateInfoHelper::get();
 }

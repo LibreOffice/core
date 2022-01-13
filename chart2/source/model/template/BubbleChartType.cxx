@@ -172,7 +172,7 @@ void BubbleChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL BubbleChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & BubbleChartType::getInfoHelper()
 {
     return *StaticBubbleChartTypeInfoHelper::get();
 }
