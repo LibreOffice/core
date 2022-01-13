@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bbd46cb_bd059f11",
+        "filename": "sc/inc/dbdata.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-01-13T10:43:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbf7690f_62f802d0",
+      "revId": "ea5dc381e3058a86a6e72d60a5dfdd77ec99e214",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb5dff12_775ea313",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "27230033_f4c80bfd",
+        "filename": "sc/source/core/data/documen2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-01-13T10:43:01Z",
+      "side": 1,
+      "message": "Ok, moved it before the ScTable::CopyToTable() call.\n\n\n\u003e The CopyToDocContext could be augmented to contain a mapping from/to old/new dbrange indices and be filled in CopyToTable() to be used by formula adjustments.\n\nI don\u0027t understand which formulas need to be adjusted. Can you share an example?\nMaybe that can also be a follow up task, for this use case everything seems to work.",
+      "parentUuid": "fb5dff12_775ea313",
+      "revId": "ea5dc381e3058a86a6e72d60a5dfdd77ec99e214",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "083cf4a5_2dcf86ec",
         "filename": "sc/source/core/tool/dbdata.cxx",
         "patchSetId": 4
@@ -48,6 +84,24 @@
       "writtenOn": "2021-12-30T20:36:41Z",
       "side": 1,
       "message": "See comment in header about copy-ctor taking name.",
+      "revId": "ea5dc381e3058a86a6e72d60a5dfdd77ec99e214",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b20cccbe_5e2eea4b",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-01-13T10:43:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "083cf4a5_2dcf86ec",
       "revId": "ea5dc381e3058a86a6e72d60a5dfdd77ec99e214",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

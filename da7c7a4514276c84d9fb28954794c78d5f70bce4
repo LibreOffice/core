@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e8c7db2_e27bcd69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-01-13T10:43:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "91537ea9_399ae59c",
+      "revId": "da7c7a4514276c84d9fb28954794c78d5f70bce4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "760570d6_b88c2ce9",
@@ -70,6 +88,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50726b28_bbced0a7",
+        "filename": "sc/source/core/data/documen2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-01-13T10:43:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "760570d6_b88c2ce9",
+      "revId": "da7c7a4514276c84d9fb28954794c78d5f70bce4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee3a0887_3327123d",
@@ -83,6 +119,24 @@
       "writtenOn": "2021-12-16T13:33:41Z",
       "side": 1,
       "message": "This can\u0027t work.\n\nFor one, it duplicates the name and index ID in the copy, but then the underlying std::set::insert() with an identical name should fail. For correctness this should be\n\n    std::unique_ptr\u003cScDBData\u003e pDataCopy(new ScDBData(*p));\n    if (mpCollection-\u003egetNamedDBs().insert(std::move(pDataCopy)))\n        pDataCopy-\u003eUpdateMoveTab(mnOldTab, mnNewTab);\n\nBut even if a new unique name and index was used (index can be set to 0 before ScDBCollection::NamedDBs::insert() and then a new value will be assigned) all formula expressions that are copied along and supposed to use the new copy instead of the old dbrange would have to be adapted to use the new index.\n\nYou can take a look at sc/source/core/data/formulacell.cxx the ScFormulaCell ctor that calls adjustDBRange() and its implementation. That handles the case for when a sheet is copied to another document and same name ScDBData. Something similar but for copying sheet within the same document would be needed, along with a mapping of old to new names so they can be properly reused for subsequent tokens or formula expressions during the same copy. Also of interest may be adjustRangeName() and the ScDocument::CopyAdjustRangeName() it calls because there similarly sheet-local scope named ranges are created, if referenced by a copied formula cell (which case isn\u0027t applicable if the dbrange is to be copied with the sheet anyway).\n\nAlso note that named expressions and conditional formats may contain references to ScDBData, so if sheet-local scope named expressions are created during copying the sheet or conditional formats are copied along then those will have to be adapted to use the new ScDBData as well.",
+      "revId": "da7c7a4514276c84d9fb28954794c78d5f70bce4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be3eacb0_dcb32ccc",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-01-13T10:43:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ee3a0887_3327123d",
       "revId": "da7c7a4514276c84d9fb28954794c78d5f70bce4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
