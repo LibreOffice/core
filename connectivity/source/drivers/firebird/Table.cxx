@@ -237,23 +237,6 @@ Any SAL_CALL Table::queryInterface(const Type& rType)
     return OTableHelper::queryInterface(rType);
 }
 
-// ----- XTypeProvider --------------------------------------------------------
-uno::Sequence< Type > SAL_CALL Table::getTypes()
-{
-    uno::Sequence< Type > aTypes = OTableHelper::getTypes();
-
-    for (int i = 0; i < aTypes.getLength(); i++)
-    {
-        if (aTypes[i].getTypeName() == "com.sun.star.sdbcx.XRename")
-        {
-            ::comphelper::removeElementAt(aTypes, i);
-            break;
-        }
-    }
-
-    return OTableHelper::getTypes();
-}
-
 OUString Table::getAlterTableColumn(std::u16string_view rColumn)
 {
     return ("ALTER TABLE \"" + getName() + "\" ALTER COLUMN \"" + rColumn + "\" ");
