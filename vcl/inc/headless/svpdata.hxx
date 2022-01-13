@@ -7,15 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <headless/svpdata.hxx>
-#include <headless/svpinst.hxx>
+#pragma once
 
-// plugin factory function
-SalInstance* svp_create_SalInstance()
+#include <unx/gendata.hxx>
+
+class SvpSalData : public GenericUnixSalData
 {
-    SvpSalInstance* pInstance = new SvpSalInstance( std::make_unique<SvpSalYieldMutex>() );
-    new SvpSalData( pInstance );
-    return pInstance;
-}
+public:
+    explicit SvpSalData(SalInstance* pInstance)
+        : GenericUnixSalData(pInstance)
+    {
+    }
+    virtual void ErrorTrapPush() override {}
+    virtual bool ErrorTrapPop(bool /*bIgnoreError*/ = true) override { return false; }
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
