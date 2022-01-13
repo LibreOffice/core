@@ -77,6 +77,7 @@ public:
     bool checkTGA();
     bool checkMOV();
     bool checkPDF();
+    bool checkWEBP();
 };
 }
 
