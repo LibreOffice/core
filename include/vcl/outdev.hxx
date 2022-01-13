@@ -1230,6 +1230,14 @@ public:
                                             o3tl::span<const sal_Int32> pLogicDXArray={}, SalLayoutFlags flags = SalLayoutFlags::NONE,
                                             vcl::text::TextLayoutCache const* = nullptr,
                                             const SalLayoutGlyphs* pGlyphs = nullptr) const;
+
+    SAL_DLLPRIVATE vcl::text::ImplLayoutArgs ImplPrepareLayoutArgsWithLogicalDXArray(OUString& rStr,
+                                                         const sal_Int32 nIndex, const sal_Int32 nLen,
+                                                         const Point& rLogicalPos, DeviceCoordinate nPixelWidth,
+                                                         o3tl::span<const sal_Int32> pDXArray, DeviceCoordinate& rEndGlyphCoord,
+                                                         SalLayoutFlags flags = SalLayoutFlags::NONE,
+                                                         vcl::text::TextLayoutCache const* = nullptr) const;
+
     SAL_DLLPRIVATE vcl::text::ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
                                                          DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray,
                                                          SalLayoutFlags flags = SalLayoutFlags::NONE,
