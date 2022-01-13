@@ -282,7 +282,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     sal_uInt16      nOldCode = pWinFrameData->mnMouseCode;
 
     if (comphelper::LibreOfficeKit::isActive() && AllSettings::GetLayoutRTL()
-        && xWindow->GetOutDev() && !xWindow->ImplIsAntiparallel())
+        && xWindow->GetOutDev() && !xWindow->GetOutDev()->ImplIsAntiparallel())
     {
         xWindow->GetOutDev()->ReMirror(aMousePos);
         nX = aMousePos.X();
