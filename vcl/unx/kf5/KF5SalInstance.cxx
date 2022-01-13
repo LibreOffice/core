@@ -104,7 +104,7 @@ VCLPLUG_KF5_PUBLIC SalInstance* create_SalInstance()
     KF5SalInstance* pInstance = new KF5SalInstance(pQApp, bUseCairo);
     pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 
-    new QtData(pInstance);
+    new QtData();
 
     return pInstance;
 }

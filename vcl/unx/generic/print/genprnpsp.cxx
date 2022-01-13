@@ -55,7 +55,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 #include <strings.hrc>
-#include <saldatabasic.hxx>
 #include <unx/genprn.h>
 #include <unx/geninst.h>
 #include <unx/genpspgraphics.h>
@@ -830,7 +829,7 @@ bool PspSalPrinter::StartJob(
     ImplJobSetup* pJobSetup )
 {
     SAL_INFO( "vcl.unx.print", "PspSalPrinter::StartJob");
-    GetSalData()->m_pInstance->jobStartedPrinterUpdate();
+    GetSalInstance()->jobStartedPrinterUpdate();
     m_bPdf      = false;
     if (pFileName)
         m_aFileName = *pFileName;
@@ -883,7 +882,7 @@ bool PspSalPrinter::EndJob()
             bSuccess = createPdf( m_aFileName, m_aTmpFile, rInfo.m_aCommand );
         }
     }
-    GetSalData()->m_pInstance->jobEndedPrinterUpdate();
+    GetSalInstance()->jobEndedPrinterUpdate();
     return bSuccess;
 }
 
@@ -1226,7 +1225,7 @@ int PrinterUpdate::nActiveJobs = 0;
 void PrinterUpdate::doUpdate()
 {
     ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
-    SalGenericInstance *pInst = static_cast<SalGenericInstance *>( GetSalData()->m_pInstance );
+    SalGenericInstance *pInst = GetGenericInstance();
     if( pInst && rManager.checkPrintersChanged( false ) )
         pInst->PostPrintersChanged();
 }

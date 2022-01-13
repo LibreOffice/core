@@ -24,7 +24,7 @@
 #include <memory>
 #include <comphelper/solarmutex.hxx>
 #include <salinst.hxx>
-#include <saldatabasic.hxx>
+#include <svdata.hxx>
 #include <unx/genprn.h>
 
 class VCL_DLLPUBLIC SalYieldMutex : public comphelper::SolarMutex
@@ -81,7 +81,7 @@ protected:
 
 inline SalGenericInstance *GetGenericInstance()
 {
-    return static_cast<SalGenericInstance *>(GetSalData()->m_pInstance);
+    return static_cast<SalGenericInstance*>(GetSalInstance());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

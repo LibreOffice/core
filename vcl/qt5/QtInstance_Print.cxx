@@ -32,7 +32,6 @@
 #include <jobset.h>
 #include <print.h>
 #include <salptype.hxx>
-#include <saldatabasic.hxx>
 
 #include <unx/genpspgraphics.h>
 

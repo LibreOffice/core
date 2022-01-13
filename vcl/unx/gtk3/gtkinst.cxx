@@ -103,7 +103,7 @@ using namespace com::sun::star::lang;
 
 extern "C"
 {
-    #define GET_YIELD_MUTEX() static_cast<GtkYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())
+    #define GET_YIELD_MUTEX() static_cast<GtkYieldMutex*>(GetSalInstance()->GetYieldMutex())
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static void GdkThreadsEnter()
     {
@@ -169,7 +169,7 @@ extern "C"
         SAL_INFO("vcl.gtk", "creating GtkInstance " << pInstance);
 
         // Create SalData, this does not leak
-        new GtkSalData( pInstance );
+        new GtkSalData();
 
         return pInstance;
     }
@@ -858,7 +858,7 @@ public:
             aRet <<= aSeq;
         }
 #else
-        SalInstance* pInstance = GetSalData()->m_pInstance;
+        SalInstance* pInstance = GetSalInstance();
         read_transfer_result aRes;
         const char *mime_types[] = { it->second.getStr(), nullptr };
 

@@ -23,19 +23,24 @@
 #include <unx/glyphcache.hxx>
 #include <printerinfomanager.hxx>
 
-GenericUnixSalData::GenericUnixSalData(SalInstance* const pInstance)
+SalData::SalData() { SetSalData(this); }
+
+SalData::~SalData() {}
+
+GenericUnixSalData::GenericUnixSalData()
     : m_pDisplay(nullptr)
 {
-    m_pInstance = pInstance;
-    SetSalData(this);
 }
 
 GenericUnixSalData::~GenericUnixSalData()
 {
+    // at least for InitPrintFontManager the sequence is important
     m_pPrintFontManager.reset();
     m_pFreetypeManager.reset();
     m_pPrinterInfoManager.reset();
 }
+
+void GenericUnixSalData::Dispose() {}
 
 void GenericUnixSalData::InitFreetypeManager() { m_pFreetypeManager.reset(new FreetypeManager); }
 

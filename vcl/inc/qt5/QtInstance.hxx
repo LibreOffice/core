@@ -168,4 +168,6 @@ public:
     void* CreateGStreamerSink(const SystemChildWindow*) override;
 };
 
+inline QtInstance* GetQtInstance() { return static_cast<QtInstance*>(GetSalInstance()); }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

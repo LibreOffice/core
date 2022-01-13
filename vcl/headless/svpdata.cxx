@@ -14,7 +14,7 @@
 SalInstance* svp_create_SalInstance()
 {
     SvpSalInstance* pInstance = new SvpSalInstance( std::make_unique<SvpSalYieldMutex>() );
-    new SvpSalData( pInstance );
+    new SvpSalData();
     return pInstance;
 }
 
