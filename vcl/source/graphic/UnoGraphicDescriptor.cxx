@@ -127,6 +127,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
         case GraphicFileFormat::RAS: pMimeType = MIMETYPE_RAS; cType = graphic::GraphicType::PIXEL; break;
         case GraphicFileFormat::TGA: pMimeType = MIMETYPE_TGA; cType = graphic::GraphicType::PIXEL; break;
         case GraphicFileFormat::PSD: pMimeType = MIMETYPE_PSD; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::WEBP: pMimeType = MIMETYPE_WEBP; cType = graphic::GraphicType::PIXEL; break;
 
         case GraphicFileFormat::EPS: pMimeType = MIMETYPE_EPS; cType = graphic::GraphicType::VECTOR; break;
         case GraphicFileFormat::DXF: pMimeType = MIMETYPE_DXF; cType = graphic::GraphicType::VECTOR; break;
@@ -298,6 +299,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                             case GfxLinkType::NativeWmf: pMimeType = MIMETYPE_WMF; break;
                             case GfxLinkType::NativeMet: pMimeType = MIMETYPE_MET; break;
                             case GfxLinkType::NativePct: pMimeType = MIMETYPE_PCT; break;
+                            case GfxLinkType::NativeWebp: pMimeType = MIMETYPE_WEBP; break;
 
                             // added Svg mimetype support
                             case GfxLinkType::NativeSvg: pMimeType = MIMETYPE_SVG; break;

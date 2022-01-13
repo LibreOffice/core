@@ -144,6 +144,8 @@ void VclFiltersTest::testExportImport()
     checkExportImport(u"png");
     fprintf(stderr, "Check ExportImport BMP\n");
     checkExportImport(u"bmp");
+    fprintf(stderr, "Check ExportImport WEBP\n");
+    checkExportImport(u"webp");
 }
 
 void VclFiltersTest::testCVEs()

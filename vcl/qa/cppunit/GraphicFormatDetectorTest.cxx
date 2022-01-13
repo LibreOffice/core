@@ -43,6 +43,7 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     void testDetectSVGZ();
     void testDetectPDF();
     void testDetectEPS();
+    void testDetectWEBP();
     void testMatchArray();
     void testCheckArrayForMatchingStrings();
 
@@ -63,6 +64,7 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testDetectSVGZ);
     CPPUNIT_TEST(testDetectPDF);
     CPPUNIT_TEST(testDetectEPS);
+    CPPUNIT_TEST(testDetectWEBP);
     CPPUNIT_TEST(testMatchArray);
     CPPUNIT_TEST(testCheckArrayForMatchingStrings);
     CPPUNIT_TEST_SUITE_END();
@@ -306,6 +308,21 @@ void GraphicFormatDetectorTest::testDetectEPS()
     OUString rFormatExtension;
     CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("EPS"), rFormatExtension);
+}
+
+void GraphicFormatDetectorTest::testDetectWEBP()
+{
+    SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.webp"), StreamMode::READ);
+    vcl::GraphicFormatDetector aDetector(aFileStream, "WEBP");
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkWEBP());
+
+    aFileStream.Seek(aDetector.mnStreamPosition);
+
+    OUString rFormatExtension;
+    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT_EQUAL(OUString("WEBP"), rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testMatchArray()

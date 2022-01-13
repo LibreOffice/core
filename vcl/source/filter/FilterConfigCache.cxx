@@ -41,8 +41,8 @@ using namespace ::com::sun::star::configuration ;
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
 {
-    IMP_BMP, IMP_GIF, IMP_PNG,IMP_JPEG, IMP_XBM, IMP_XPM,
-    EXP_BMP, EXP_JPEG, EXP_PNG, IMP_MOV, nullptr
+    IMP_BMP, IMP_GIF, IMP_PNG,IMP_JPEG, IMP_XBM, IMP_XPM, IMP_WEBP,
+    EXP_BMP, EXP_JPEG, EXP_PNG, IMP_MOV, EXP_WEBP, nullptr
 };
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameList[] =
@@ -255,6 +255,8 @@ const char* FilterConfigCache::InternalFilterListForSvxLight[] =
     "xpm","2","exp",
     "svg","1","SVISVG",
     "svg","2","SVESVG",
+    "webp","1","SVIWEBP",
+    "webp","2","SVEWEBP",
     nullptr
 };
 
