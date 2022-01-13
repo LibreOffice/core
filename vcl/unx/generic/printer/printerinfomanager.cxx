@@ -19,9 +19,8 @@
 
 #include <unx/cpdmgr.hxx>
 #include <unx/cupsmgr.hxx>
+#include <unx/gendata.hxx>
 #include <unx/helper.hxx>
-
-#include <saldatabasic.hxx>
 
 #include <tools/urlobj.hxx>
 #include <tools/config.hxx>
@@ -75,31 +74,23 @@ namespace psp
 
 PrinterInfoManager& PrinterInfoManager::get()
 {
-    SalData* pSalData = GetSalData();
+    // can't move to GenericUnixSalData, because of vcl/null/printerinfomanager.cxx
+    GenericUnixSalData* pSalData = GetGenericUnixSalData();
+    PrinterInfoManager* pPIM = pSalData->m_pPrinterInfoManager.get();
+    if (pPIM)
+        return *pPIM;
 
-    if( ! pSalData->m_pPIManager )
-    {
-        pSalData->m_pPIManager = CPDManager::tryLoadCPD();
-        if( ! pSalData->m_pPIManager )
-            pSalData->m_pPIManager = CUPSManager::tryLoadCUPS();
-        if( ! pSalData->m_pPIManager )
-            pSalData->m_pPIManager = new PrinterInfoManager();
-        pSalData->m_pPIManager->initialize();
-#if OSL_DEBUG_LEVEL > 1
-        SAL_INFO("vcl.unx.print", "PrinterInfoManager::get "
-                << "create Manager of type "
-                << ((int) pSalData->m_pPIManager->getType()));
-#endif
-    }
+    pPIM = CPDManager::tryLoadCPD();
+    if (!pPIM)
+        pPIM = CUPSManager::tryLoadCUPS();
+    if (!pPIM)
+        pPIM = new PrinterInfoManager();
+    pSalData->m_pPrinterInfoManager.reset(pPIM);
+    pPIM->initialize();
 
-    return *pSalData->m_pPIManager;
-}
-
-void PrinterInfoManager::release()
-{
-    SalData* pSalData = GetSalData();
-    delete pSalData->m_pPIManager;
-    pSalData->m_pPIManager = nullptr;
+    SAL_INFO("vcl.unx.print", "created PrinterInfoManager of type "
+                               << static_cast<int>(pPIM->getType()));
+    return *pPIM;
 }
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
