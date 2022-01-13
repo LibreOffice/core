@@ -29,18 +29,10 @@
 #include "quartz/salgdi.h"
 #endif
 
-namespace psp
-{
-    class PrinterInfoManager;
-}
-
 class VCL_PLUGIN_PUBLIC SalData
 {
 public:
     SalInstance*                  m_pInstance; // pointer to instance
-#ifndef IOS
-    psp::PrinterInfoManager*      m_pPIManager;
-#endif
 
     SalData();
     virtual ~SalData() COVERITY_NOEXCEPT_FALSE;
