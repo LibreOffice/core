@@ -268,7 +268,6 @@ namespace http_dav_ucp
 {
 // libcurl callbacks:
 
-#if OSL_DEBUG_LEVEL > 0
 static int debug_callback(CURL* handle, curl_infotype type, char* data, size_t size,
                           void* /*userdata*/)
 {
@@ -284,10 +283,17 @@ static int debug_callback(CURL* handle, curl_infotype type, char* data, size_t s
             return 0;
         case CURLINFO_HEADER_OUT:
         {
+            // unlike IN, this is all headers in one call
             OString tmp(data, size);
-            if (tmp.startsWith("Authorization: "))
+            sal_Int32 const start(tmp.indexOf("Authorization: "));
+            if (start != -1)
             {
-                tmp = "Authorization: " + OString::number(tmp.getLength() - 15) + " bytes redacted";
+                sal_Int32 const end(tmp.indexOf("\r\n", start));
+                assert(end != -1);
+                sal_Int32 const len(SAL_N_ELEMENTS("Authorization: ") - 1);
+                tmp = tmp.replaceAt(
+                    start + len, end - start - len,
+                    OStringConcatenation(OString::number(end - start - len) + " bytes redacted"));
             }
             SAL_INFO("ucb.ucp.webdav.curl", "CURLINFO_HEADER_OUT: " << handle << ": " << tmp);
             return 0;
@@ -311,7 +317,6 @@ static int debug_callback(CURL* handle, curl_infotype type, char* data, size_t s
     SAL_INFO("ucb.ucp.webdav.curl", "debug log: " << handle << ": " << pType << " " << size);
     return 0;
 }
-#endif
 
 static size_t write_callback(char* const ptr, size_t const size, size_t const nmemb,
                              void* const userdata)
@@ -622,7 +627,7 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
     // this supposedly gives the highest quality error reporting
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_ERRORBUFFER, m_ErrorBuffer);
     assert(rc == CURLE_OK);
-#if OSL_DEBUG_LEVEL > 0
+#if 1
     // just for debugging...
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_DEBUGFUNCTION, debug_callback);
     assert(rc == CURLE_OK);
