@@ -2739,6 +2739,57 @@ endef
 endif # !SYSTEM_LIBPNG
 
 
+ifneq ($(SYSTEM_LIBWEBP),)
+
+define gb_LinkTarget__use_libwebp
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(LIBWEBP_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(LIBWEBP_LIBS) \
+)
+
+endef
+
+gb_ExternalProject__use_libwebp :=
+
+else # !SYSTEM_LIBWEBP
+
+define gb_LinkTarget__use_libwebp
+$(call gb_LinkTarget_set_include,$(1),\
+	$(LIBWEBP_CFLAGS) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libwebp)/src \
+	$$(INCLUDE) \
+)
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libwebp)/output/lib/libwebp$(gb_StaticLibrary_PLAINEXT) \
+)
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,libwebp)/src/.libs -lwebp \
+)
+endif
+$(call gb_LinkTarget_use_external_project,$(1),libwebp)
+
+endef
+
+define gb_ExternalProject__use_libwebp
+$(call gb_ExternalProject_use_external_project,$(1),\
+	libwebp \
+)
+
+endef
+
+endif # !SYSTEM_LIBWEBP
+
+
 ifneq ($(SYSTEM_CURL),)
 
 define gb_LinkTarget__use_curl

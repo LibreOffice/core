@@ -78,6 +78,8 @@ namespace o3tl
 #define IMP_XPM                 "SVIXPM"
 #define IMP_SVG                 "SVISVG"
 #define IMP_PDF                 "SVIPDF"
+#define IMP_WEBP                "SVIWEBP"
+
 #define EXP_BMP                 "SVBMP"
 #define EXP_SVMETAFILE          "SVMETAFILE"
 #define EXP_WMF                 "SVWMF"
@@ -86,6 +88,7 @@ namespace o3tl
 #define EXP_SVG                 "SVESVG"
 #define EXP_PDF                 "SVEPDF"
 #define EXP_PNG                 "SVEPNG"
+#define EXP_WEBP                "SVEWEBP"
 
 #define BMP_SHORTNAME           u"BMP"
 #define GIF_SHORTNAME           u"GIF"
@@ -99,6 +102,7 @@ namespace o3tl
 #define EMF_SHORTNAME           u"EMF"
 #define SVG_SHORTNAME           u"SVG"
 #define PDF_SHORTNAME           u"PDF"
+#define WEBP_SHORTNAME           u"WEBP"
 
 //  Info class for all supported file formats
 
@@ -121,6 +125,7 @@ enum class GraphicFileFormat
     TGA = 0x000e,
     PSD = 0x000f,
     EPS = 0x0010,
+    WEBP = 0x0011,
     DXF = 0x00f1,
     MET = 0x00f2,
     PCT = 0x00f3,
@@ -168,6 +173,7 @@ class VCL_DLLPUBLIC GraphicDescriptor final
     bool            ImpDetectTGA( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectPSD( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectEPS( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectWEBP( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectDXF( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectMET( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectPCT( SvStream& rStm, bool bExtendedInfo );

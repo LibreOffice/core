@@ -56,6 +56,7 @@
 #define FORMAT_EMF      13
 #define FORMAT_EPS      14
 #define FORMAT_SVG      16
+#define FORMAT_WEBP     17
 
 #define UNIT_DEFAULT    -1
 #define UNIT_INCH       0
@@ -88,6 +89,8 @@ static sal_Int16 GetFilterFormat(const OUString& rExt)
         nFormat = FORMAT_EPS;
     else if ( rExt == "SVG" )
         nFormat = FORMAT_SVG;
+    else if ( rExt == u"WEBP" )
+        nFormat = FORMAT_WEBP;
     return nFormat;
 }
 
@@ -292,6 +295,15 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
             pFilterOptions->WriteInt32("CompressionMode", nCheck);
         }
         break;
+
+        case FORMAT_WEBP :
+        {
+            assert(mpSbCompression);
+            pFilterOptions->WriteInt32("Quality", static_cast<sal_Int32>(mpSbCompression->get_value()));
+            pFilterOptions->WriteBool("Lossless", mxCbLossless->get_active());
+        }
+        break;
+
     }
 
     uno::Sequence< beans::PropertyValue > aRet( pFilterOptions->GetFilterData() );
@@ -584,12 +596,13 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     , mxLbResolution(m_xBuilder->weld_combo_box("resolutionlb"))
     , mxColorDepth(m_xBuilder->weld_widget("colordepth"))
     , mxLbColorDepth(m_xBuilder->weld_combo_box("colordepthlb"))
-    , mxJPGQuality(m_xBuilder->weld_widget("jpgquality"))
+    , mxJPGWEBPQuality(m_xBuilder->weld_widget("jpgwebpquality"))
     , mxPNGCompression(m_xBuilder->weld_widget("pngcompression"))
     , mxSbPngCompression(m_xBuilder->weld_scale("compressionpngsb"))
     , mxNfPngCompression(m_xBuilder->weld_spin_button("compressionpngnf"))
-    , mxSbJpgCompression(m_xBuilder->weld_scale("compressionjpgsb"))
-    , mxNfJpgCompression(m_xBuilder->weld_spin_button("compressionjpgnf"))
+    , mxSbJpgWebpCompression(m_xBuilder->weld_scale("compressionjpgwebpsb"))
+    , mxNfJpgWebpCompression(m_xBuilder->weld_spin_button("compressionjpgwebpnf"))
+    , mxCbLossless(m_xBuilder->weld_check_button("losslesscb"))
     , mxMode(m_xBuilder->weld_widget("mode"))
     , mxCbInterlaced(m_xBuilder->weld_check_button("interlacedcb"))
     , mxBMPCompression(m_xBuilder->weld_widget("bmpcompression"))
@@ -681,6 +694,8 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
 
     mxCbInterlaced->connect_toggled( LINK( this, ExportDialog, UpdateHdl ) );
 
+    mxCbLossless->connect_toggled( LINK( this, ExportDialog, UpdateHdlLossless ) );
+
     mxCbSaveTransparency->connect_toggled( LINK( this, ExportDialog, UpdateHdl ) );
 
     mxCbEPSPreviewTIFF->connect_toggled( LINK( this, ExportDialog, UpdateHdl ) );
@@ -758,15 +773,16 @@ void ExportDialog::createFilterOptions()
             mxColorDepth->show();
 
             // Quality
-            mxJPGQuality->show();
+            mxJPGWEBPQuality->show();
             sal_Int32 nQuality = mpFilterOptionsItem->ReadInt32("Quality", 75);
             if ((nQuality < 1 ) || (nQuality > 100))
                 nQuality = 75;
-            mpSbCompression = mxSbJpgCompression.get();
-            mpNfCompression = mxNfJpgCompression.get();
+            mpSbCompression = mxSbJpgWebpCompression.get();
+            mpNfCompression = mxNfJpgWebpCompression.get();
             mpSbCompression->set_range(1, 100);
             mpNfCompression->set_range(1, 100);
             mpNfCompression->set_value(nQuality);
+            mxCbLossless->hide(); // only for WebP
         }
         break;
         case FORMAT_PNG :
@@ -847,6 +863,24 @@ void ExportDialog::createFilterOptions()
 
             mxRbEPSCompressionLZW->set_active( nCompr == 1 );
             mxRbEPSCompressionNone->set_active( nCompr != 1 );
+        }
+        break;
+        case FORMAT_WEBP :
+        {
+            // Quality
+            mxJPGWEBPQuality->show();
+            sal_Int32 nQuality = mpFilterOptionsItem->ReadInt32("Quality", 75);
+            if ((nQuality < 1 ) || (nQuality > 100))
+                nQuality = 75;
+            mpSbCompression = mxSbJpgWebpCompression.get();
+            mpNfCompression = mxNfJpgWebpCompression.get();
+            mpSbCompression->set_range(1, 100);
+            mpNfCompression->set_range(1, 100);
+            mpNfCompression->set_value(nQuality);
+
+            // Lossless
+            mxCbLossless->set_active(mpFilterOptionsItem->ReadBool("Lossless", true));
+            UpdateHdlLossless(*mxCbLossless);
         }
         break;
     }
@@ -989,6 +1023,13 @@ IMPL_LINK_NOARG(ExportDialog, SelectListBoxHdl, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG(ExportDialog, UpdateHdl, weld::ToggleButton&, void)
 {
+    updateControls();
+}
+
+IMPL_LINK_NOARG(ExportDialog, UpdateHdlLossless, weld::ToggleButton&, void)
+{
+    mpSbCompression->set_sensitive(!mxCbLossless->get_active());
+    mpNfCompression->set_sensitive(!mxCbLossless->get_active());
     updateControls();
 }
 

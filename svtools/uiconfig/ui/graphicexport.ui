@@ -335,7 +335,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="jpgquality">
+              <object class="GtkFrame" id="jpgwebpquality">
                 <property name="can_focus">False</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
@@ -352,7 +352,28 @@
                         <property name="can_focus">False</property>
                         <property name="column_spacing">6</property>
                         <child>
-                          <object class="GtkSpinButton" id="compressionjpgnf">
+                          <object class="GtkCheckButton" id="losslesscb">
+                            <property name="label" translatable="yes" context="graphicexport|rlecb">Lossless</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="losslesscb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="graphicexport|extended_tip|losslesscb">Lossless images do not lose quality but result in larger files.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="compressionjpgwebpnf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
@@ -361,17 +382,17 @@
                             <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="compressionjpgnf-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="graphicexport|extended_tip|compressionjpgnf">Sets the quality for the export. Choose from a low quality with minimal file size, up to a high quality and big file size</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="graphicexport|extended_tip|compressionjpgwebpnf">Sets the quality for the export. Choose from a low quality with minimal file size, up to a high quality and big file size</property>
                               </object>
                             </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
+                            <property name="top_attach">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkScale" id="compressionjpgsb">
+                          <object class="GtkScale" id="compressionjpgwebpsb">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="valign">center</property>
@@ -381,7 +402,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
+                            <property name="top_attach">1</property>
                           </packing>
                         </child>
                       </object>
