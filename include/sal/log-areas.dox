@@ -468,6 +468,7 @@ certain functionality.
 @li @c vcl.emf - EMF/EMF+ processing
 @li @c vcl.eventtesting
 @li @c vcl.filter
+@li @c vcl.filter.webp
 @li @c vcl.fonts - font-specific code
 @li @c vcl.fonts.detail
 @li @c vcl.gdi - the GDI part of VCL, devices, bitmaps, etc.

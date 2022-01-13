@@ -152,6 +152,7 @@ SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     { "url",   false, STR_DESCRIPTION_LINK,                  SvImageId::NONE },
     { "vor",   false, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  SvImageId::WriterTemplate },
     { "vxd",   true,  STR_DESCRIPTION_SYSFILE,               SvImageId::NONE },
+    { "webp",  true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::WEBP },
     { "wmf",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::WMF },
     { "xls",   false, STR_DESCRIPTION_EXCEL_DOC,             SvImageId::Calc },
     { "xlt",   false, STR_DESCRIPTION_EXCEL_TEMPLATE_DOC,    SvImageId::CalcTemplate },
@@ -549,6 +550,8 @@ static OUString GetImageNameFromList_Impl( SvImageId nImageId, vcl::ImageType eI
                 return BMP_TEXTFILE_LC;
             case SvImageId::TIFF:
                 return BMP_TIFF_LC;
+            case SvImageId::WEBP:
+                return BMP_WEBP_LC;
             case SvImageId::WMF:
                 return BMP_WMF_LC;
             case SvImageId::Writer:
@@ -648,6 +651,8 @@ static OUString GetImageNameFromList_Impl( SvImageId nImageId, vcl::ImageType eI
                 return BMP_TEXTFILE_SC;
             case SvImageId::TIFF:
                 return BMP_TIFF_SC;
+            case SvImageId::WEBP:
+                return BMP_WEBP_SC;
             case SvImageId::WMF:
                 return BMP_WMF_SC;
             case SvImageId::Writer:

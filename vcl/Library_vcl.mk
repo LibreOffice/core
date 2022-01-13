@@ -104,6 +104,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
     icu_headers \
     icuuc \
     lcms2 \
+    libwebp \
     mdds_headers \
     $(if $(filter SKIA,$(BUILD_TYPE)),skia) \
 ))
@@ -443,6 +444,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/png/PngImageReader \
     vcl/source/filter/png/pngread \
     vcl/source/filter/png/pngwrite \
+    vcl/source/filter/webp/reader \
+    vcl/source/filter/webp/writer \
     vcl/source/font/Feature \
     vcl/source/font/FeatureCollector \
     vcl/source/font/FeatureParser \

@@ -220,7 +220,7 @@ void GraphicTest::testUnloadedGraphic()
 
 void GraphicTest::testUnloadedGraphicLoading()
 {
-    const OUString aFormats[] = { "png", "gif", "jpg" };
+    const OUString aFormats[] = { "png", "gif", "jpg", "webp" };
 
     for (OUString const& sFormat : aFormats)
     {
