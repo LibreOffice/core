@@ -4453,6 +4453,20 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                                 bExtrusionMetal ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
                                     }
                                     break;
+                                    case EAS_MetalColored :
+                                    {
+                                        // export only if ODF extensions are enabled
+                                        bool bExtrusionMetalColored;
+                                        if (rProp.Value >>= bExtrusionMetalColored)
+                                        {
+                                            SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
+                                            if (eVersion > SvtSaveOptions::ODFSVER_013
+                                                && (eVersion & SvtSaveOptions::ODFSVER_EXTENDED))
+                                                rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_EXTRUSION_METAL_COLORED,
+                                                bExtrusionMetalColored ? GetXMLToken(XML_TRUE) : GetXMLToken(XML_FALSE));
+                                        }
+                                    }
+                                    break;
                                     case EAS_ShadeMode :
                                     {
                                         // shadeMode

@@ -2320,6 +2320,7 @@ extrusion-second-light-level
 extrusion-first-light-direction
 extrusion-second-light-direction
 extrusion-metal
+extrusion-metal-colored
 extrusion-rotation-angle
 extrusion-rotation-center
 extrusion-shininess

@@ -126,9 +126,9 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     {
         css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
 
+        bool bOn(false);
         if( pAny )
         {
-            bool bOn(false);
             (*pAny) >>= bOn;
             bOn = !bOn;
             (*pAny) <<= bOn;
@@ -139,6 +139,23 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             aPropValue.Name = sExtrusion;
             aPropValue.Value <<= true;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            bOn = true;
+        }
+        // draw:extrusion-diffusion has default 0% and c3DDiffuseAmt has default 100%. We set property
+        // "Diffusion" with value 100% here if it does not exist already. This forces, that the
+        // property is written to file in case an extrusion is newly created, and users of old
+        // documents, which usually do not have this property, can force the value to 100% by toggling
+        // the extrusion off and on.
+        if (bOn)
+        {
+            pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"Diffusion");
+            if (!pAny)
+            {
+                css::beans::PropertyValue aPropValue;
+                aPropValue.Name = u"Diffusion";
+                aPropValue.Value <<= 100.0;
+                rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            }
         }
     }
     break;
@@ -335,42 +352,56 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
                     break;
                 case 1: // matte
                 case 2: // plastic
-                case 3: // metal
+                case 3: // metal ODF
+                case 4: // metal MS Office
                     if (eOldShadeMode == ShadeMode_DRAFT)
                         eShadeMode = ShadeMode_FLAT; // ODF default
                     break;
             }
 
-            bool bMetal = nSurface == 3;
-
             // ODF has no dedicated property for 'surface'. MS Office binary format uses attribute
             // c3DSpecularAmt to distinguish between 'matte' (=0) and 'plastic'.
-            // From point of ODF, using not harsh light has similar effect.
+            // We do the same.
             double fOldSpecularity = 0.0;
             pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"Specularity");
             if (pAny)
                 *pAny >>= fOldSpecularity;
             double fSpecularity = fOldSpecularity;
-            bool bOldIsFirstLightHarsh = true;
-            pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"FirstLightHarsh");
-            if (pAny)
-                *pAny >>= bOldIsFirstLightHarsh;
-            bool bIsFirstLightHarsh = bOldIsFirstLightHarsh;
             switch( nSurface )
             {
             case 0: // wireframe
                 break;
             case 1: // matte
                 fSpecularity = 0.0;
-                bIsFirstLightHarsh = false;
                 break;
             case 2: // plastic
-            case 3: // metal
+            case 3: // metal ODF
+            case 4: // metal MS Office
                 if (basegfx::fTools::equalZero(fOldSpecularity, 0.0001))
-                    fSpecularity = 80; // estimated value, can be changed if necessary
-                if (!bOldIsFirstLightHarsh)
-                    bIsFirstLightHarsh = true;
+                    // MS Office uses 80000/65536. That is currently not allowed in ODF.
+                    // But the ODF error will be catched in xmloff.
+                    fSpecularity = 80000.0 / 655.36; // interpreted as %
                 break;
+            }
+
+            // MS Office binary format uses attribute c3DDiffuseAmt with value =43712 (Fixed 16.16) in
+            // addition to the 'metal' flag. For other surface kinds default = 65536 is used.
+            // We toggle between 100 and 43712.0 / 655.36 here, to get better ODF -> MSO binary.
+            // We keep other values, those might be set outside regular UI, e.g by macro.
+            double fOldDiffusion = 100.0;
+            pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"Diffusion");
+            if (pAny)
+                *pAny >>= fOldDiffusion;
+            double fDiffusion = fOldDiffusion;
+            if (nSurface == 4)
+            {
+                if (fOldDiffusion == 100.0)
+                    fDiffusion = 43712.0 / 655.36; // interpreted as %
+            }
+            else
+            {
+                if (basegfx::fTools::equalZero(fOldDiffusion - 43712.0 / 655.36, 0.0001))
+                    fDiffusion = 100.0;
             }
 
             css::beans::PropertyValue aPropValue;
@@ -379,8 +410,12 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             rGeometryItem.SetPropertyValue( sExtrusion, aPropValue );
 
             aPropValue.Name = "Metal";
-            aPropValue.Value <<= bMetal;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            aPropValue.Value <<= nSurface == 3 || nSurface == 4;
+            rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
+
+            aPropValue.Name = "MetalColored";
+            aPropValue.Value <<= nSurface == 4;
+            rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
 
             if (!basegfx::fTools::equalZero(fOldSpecularity - fSpecularity, 0.0001))
             {
@@ -389,10 +424,10 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
                 rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
             }
 
-            if (bOldIsFirstLightHarsh != bIsFirstLightHarsh)
+            if (!basegfx::fTools::equalZero(fOldDiffusion - fDiffusion, 0.0001))
             {
-                aPropValue.Name = "FirstLightHarsh";
-                aPropValue.Value <<= bIsFirstLightHarsh;
+                aPropValue.Name = "Diffusion";
+                aPropValue.Value <<= fDiffusion;
                 rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
             }
         }
@@ -404,16 +439,17 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
         {
             sal_Int32 nLevel = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_LIGHTING_INTENSITY)->GetValue();
 
-            double fBrightness;
-            double fLevel1;
-            double fLevel2;
+            double fBrightness; // c3DAmbientIntensity in MS Office
+            double fLevel1; // c3DKeyIntensity in MS Office
+            double fLevel2; // c3DFillIntensity in MS Office
 
+            // ToDo: "bright" values are different from MS Office. Should they be kept?
             switch( nLevel )
             {
             case 0: // bright
-                fBrightness = 34.0;
-                fLevel1 = 66.0;
-                fLevel2 = 66.0;
+                fBrightness = 33.0; // ODF default.
+                fLevel1 = 66.0; // ODF default
+                fLevel2 = 66.0; // ODF default
                 break;
             case 1: // normal
                 fBrightness = 15.0;
@@ -432,10 +468,6 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             aPropValue.Value <<= fBrightness;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
-            aPropValue.Name = "SecondLightHarsh";
-            aPropValue.Value <<= false;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
-
             aPropValue.Name = "FirstLightLevel";
             aPropValue.Value <<= fLevel1;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
@@ -443,6 +475,12 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             aPropValue.Name = "SecondLightLevel";
             aPropValue.Value <<= fLevel2;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+
+            // If a user sets light preset 'Dim' in MS Office, MS Office sets second light to harsh.
+            // In other cases it is soft.
+            aPropValue.Name = "SecondLightHarsh";
+            aPropValue.Value <<= nLevel == 2;
+            rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
         }
     }
     break;
@@ -665,8 +703,8 @@ static void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rS
             }
 
             bool        bParallel = true;
-            Position3D  aViewPoint( 3472, -3472, 25000 );
-            double      fSkewAngle = -135;
+            Position3D  aViewPoint( 3472, -3472, 25000 ); // MSO default
+            double      fSkewAngle = -135; // MSO default
 
             pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "ProjectionMode" );
             sal_Int16 nProjectionMode = sal_Int16();
@@ -869,25 +907,31 @@ static void getExtrusionSurfaceState( SdrView const * pSdrView, SfxItemSet& rSet
             sal_Int32 nSurface = 0; // wire frame
 
             ShadeMode eShadeMode( ShadeMode_FLAT );
-            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "ShadeMode" );
+            pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"ShadeMode" );
             if( pAny )
                 *pAny >>= eShadeMode;
 
             if (eShadeMode != ShadeMode_DRAFT)
             {
                 bool bMetal = false;
-                pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "Metal" );
+                pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"Metal" );
                 if( pAny )
                     *pAny >>= bMetal;
 
                 if( bMetal )
                 {
-                    nSurface = 3; // metal
+                    nSurface = 3; // metal ODF
+                    bool bMetalColored(false);
+                    pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"MetalColored" );
+                    if (pAny)
+                        *pAny >>= bMetalColored;
+                    if (bMetalColored)
+                        nSurface = 4; // metal MS Office
                 }
                 else
                 {
                     double fSpecularity = 0;
-                    pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "Specularity" );
+                    pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"Specularity" );
                     if( pAny )
                         *pAny >>= fSpecularity;
 
@@ -951,7 +995,7 @@ static void getExtrusionDepthState( SdrView const * pSdrView, SfxItemSet& rSet )
                     continue;
             }
 
-            double fDepth = 1270.0;
+            double fDepth = 1270.0; // =36pt ODF default
             pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "Depth" );
             if( pAny )
             {
