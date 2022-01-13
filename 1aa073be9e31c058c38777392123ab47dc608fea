@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74105211_33a2d796",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2022-01-13T13:40:44Z",
+      "side": 1,
+      "message": "Merge of \"Internal names\" and \"Internal values\" columns\nHXX files presented differently:\n- with a tooltip about the line number\n- with a link to the source files list at the bottom\n\nNo change to the effective content\n\nThe result can be seen in https://wiki.documentfoundation.org/Development/DispatchCommands",
+      "revId": "1aa073be9e31c058c38777392123ab47dc608fea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
