@@ -16,6 +16,24 @@
       "message": "Instead of butchering the URL here (e.g., re-encoding existing percent encodings, encoding delimiters of query and fragment parts and of IP literals), why not instead fix its assembly as m_sURL in the AdditionsDialog constructor below.",
       "revId": "348e0651cc5add15ac03b11dde08057cf33f9b16",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e17864e4_ceedf117",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-13T08:35:29Z",
+      "side": 1,
+      "message": "seen addressed at \u003chttps://gerrit.libreoffice.org/c/core/+/128361\u003e \"tdf#146703 Rework previous fix to query extension metadata\"",
+      "parentUuid": "59897b89_000e8bd5",
+      "revId": "348e0651cc5add15ac03b11dde08057cf33f9b16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
