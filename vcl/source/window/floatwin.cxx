@@ -661,7 +661,9 @@ void FloatingWindow::PixelInvalidate(const tools::Rectangle* /*pRectangle*/)
     if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
     {
         std::vector<vcl::LOKPayloadItem> aPayload;
-        const tools::Rectangle aRect(Point(0,0), Size(GetSizePixel().Width()+1, GetSizePixel().Height()+1));
+        tools::Rectangle aRect(Point(0,0), Size(GetSizePixel().Width()+1, GetSizePixel().Height()+1));
+        if (AllSettings::GetLayoutRTL() && GetOutDev())
+            GetOutDev()->ReMirror(aRect);
         aPayload.push_back(std::make_pair(OString("rectangle"), aRect.toString()));
         const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
         pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);
@@ -689,7 +691,12 @@ void FloatingWindow::StateChanged( StateChangedType nType )
                 // dialog - but maybe we'll need a separate type for this
                 // later
                 aItems.emplace_back("type", "dialog");
-                aItems.emplace_back("position", mpImplData->maLOKTwipsPos.toString()); // twips
+
+                Point aPos(mpImplData->maLOKTwipsPos);
+                if (AllSettings::GetLayoutRTL() && GetOutDev())
+                    GetOutDev()->ReMirror(aPos);
+
+                aItems.emplace_back("position", aPos.toString()); // twips
             }
             else
             {
@@ -700,10 +707,17 @@ void FloatingWindow::StateChanged( StateChangedType nType )
                     aItems.emplace_back("type", "child");
 
                 aItems.emplace_back("parentId", OString::number(pParent->GetLOKWindowId()));
+
+                Point aPos;
                 if (mbInPopupMode)
-                    aItems.emplace_back("position", mpImplData->maPos.toString()); // pixels
+                    aPos = mpImplData->maPos; // pixels
                 else // mpImplData->maPos is not set
-                    aItems.emplace_back("position", GetPosPixel().toString());
+                    aPos = GetPosPixel();
+
+                if (AllSettings::GetLayoutRTL() && GetOutDev())
+                    pParent->GetOutDev()->ReMirror(aPos);
+
+                aItems.emplace_back("position", aPos.toString());
 
             }
             aItems.emplace_back("size", GetSizePixel().toString());
