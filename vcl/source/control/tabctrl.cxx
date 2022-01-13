@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
+
 #include <sal/config.h>
 #include <sal/log.hxx>
 
@@ -803,6 +805,12 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     tools::Rectangle aRect = pItem->maRect;
+    tools::Rectangle aMirroredRect = aRect; // mirrored if needed in RTL mode
+    bool bLOKRTL = comphelper::LibreOfficeKit::isActive() && IsRTLEnabled()
+        && GetOutDev() && !ImplIsAntiparallel();
+    if (bLOKRTL)
+        GetOutDev()->ReMirror(aMirroredRect);
+
     tools::Long nLeftBottom = aRect.Bottom();
     tools::Long nRightBottom = aRect.Bottom();
     bool bLeftBorder = true;
@@ -858,35 +866,40 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
     }
     if (IsEnabled())
         nState |= ControlState::ENABLED;
-    if (IsMouseOver() && pItem->maRect.IsInside(GetPointerPosPixel()))
+    if (IsMouseOver() && aMirroredRect.IsInside(GetPointerPosPixel()))
     {
         nState |= ControlState::ROLLOVER;
         for (auto const& item : mpTabCtrlData->maItemList)
-            if ((&item != pItem) && item.m_bVisible && item.maRect.IsInside(GetPointerPosPixel()))
+        {
+            tools::Rectangle aTestRect(item.maRect);
+            if (bLOKRTL)
+                GetOutDev()->ReMirror(aTestRect);
+            if ((&item != pItem) && item.m_bVisible && aTestRect.IsInside(GetPointerPosPixel()))
             {
                 nState &= ~ControlState::ROLLOVER; // avoid multiple highlighted tabs
                 break;
             }
+        }
         assert(nState & ControlState::ROLLOVER);
     }
 
     bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire);
     if ( bNativeOK )
     {
-        TabitemValue tiValue(tools::Rectangle(pItem->maRect.Left() + TAB_TABOFFSET_X,
-                                       pItem->maRect.Top() + TAB_TABOFFSET_Y,
-                                       pItem->maRect.Right() - TAB_TABOFFSET_X,
-                                       pItem->maRect.Bottom() - TAB_TABOFFSET_Y));
-        if (pItem->maRect.Left() < 5)
+        TabitemValue tiValue(tools::Rectangle(aMirroredRect.Left() + TAB_TABOFFSET_X,
+                                       aMirroredRect.Top() + TAB_TABOFFSET_Y,
+                                       aMirroredRect.Right() - TAB_TABOFFSET_X,
+                                       aMirroredRect.Bottom() - TAB_TABOFFSET_Y));
+        if (aMirroredRect.Left() < 5)
             tiValue.mnAlignment |= TabitemFlags::LeftAligned;
-        if (pItem->maRect.Right() > mnLastWidth - 5)
+        if (aMirroredRect.Right() > mnLastWidth - 5)
             tiValue.mnAlignment |= TabitemFlags::RightAligned;
         if (bFirstInGroup)
             tiValue.mnAlignment |= TabitemFlags::FirstInGroup;
         if (bLastInGroup)
             tiValue.mnAlignment |= TabitemFlags::LastInGroup;
 
-        tools::Rectangle aCtrlRegion( pItem->maRect );
+        tools::Rectangle aCtrlRegion( aMirroredRect );
         aCtrlRegion.AdjustBottom(TabPaneValue::m_nOverlap);
         bNativeOK = rRenderContext.DrawNativeControl(ControlType::TabItem, ControlPart::Entire,
                                                      aCtrlRegion, nState, tiValue, OUString() );
