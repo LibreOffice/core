@@ -21,11 +21,13 @@ class SalGenericDisplay;
 namespace psp
 {
 class PrintFontManager;
+class PrinterInfoManager;
 }
 
 class VCL_DLLPUBLIC GenericUnixSalData : public SalData
 {
-private:
+    friend class ::psp::PrinterInfoManager;
+
     SalGenericDisplay* m_pDisplay;
     // cached hostname to avoid slow lookup
     OUString m_aHostname;
@@ -34,6 +36,7 @@ private:
 
     std::unique_ptr<FreetypeManager> m_pFreetypeManager;
     std::unique_ptr<psp::PrintFontManager> m_pPrintFontManager;
+    std::unique_ptr<psp::PrinterInfoManager> m_pPrinterInfoManager;
 
     void InitFreetypeManager();
     void InitPrintFontManager();
