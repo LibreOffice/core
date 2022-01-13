@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f2e0480_0addaa49",
+        "filename": "sfx2/source/view/ipclient.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-13T14:15:08Z",
+      "side": 1,
+      "message": "Please use static_cast, or (IMO better) use constructor-style cast, since here you are constructing a value of an integral type:\n\n  tools::long(0)\n\nThe \u0027l\u0027 suffix will be unneeded, because you specify the type explicitly. reinterpret_cast is to re-interpret the same bits as a different type, which is not what is needed here.",
+      "range": {
+        "startLine": 96,
+        "startChar": 17,
+        "endLine": 96,
+        "endChar": 33
+      },
+      "revId": "217a2d267e187b5d3a57db49f87a49078340c4d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
