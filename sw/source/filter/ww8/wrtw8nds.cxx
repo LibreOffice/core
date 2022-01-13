@@ -717,7 +717,8 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
 
     if (maFlyIter == maFlyFrames.end())
     {
-        return FLY_NONE;
+        // tdf#143039 postponed prevents fly duplication at end of paragraph
+        return m_rExport.AttrOutput().IsFlyProcessingPostponed() ? FLY_POSTPONED : FLY_NONE;
     }
 
     /*
