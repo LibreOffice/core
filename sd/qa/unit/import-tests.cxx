@@ -1680,38 +1680,22 @@ void SdImportTest::testBnc910045()
 
 void SdImportTest::testRowHeight()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/n80340.pptx"), PPTX );
-    const SdrPage *pPage = GetPage( 1, xDocShRef );
-
-    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
-    CPPUNIT_ASSERT( pTableObj );
-
-    sal_Int32 nHeight;
-    uno::Reference< css::table::XTable > xTable(pTableObj->getTable(), uno::UNO_SET_THROW);
-    uno::Reference< css::table::XTableRows > xRows( xTable->getRows(), uno::UNO_SET_THROW);
-    uno::Reference< beans::XPropertySet > xRefRow( xRows->getByIndex(0), uno::UNO_QUERY_THROW );
-    xRefRow->getPropertyValue( "Height" ) >>= nHeight;
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(508), nHeight);
-
-    xDocShRef->DoClose();
-
-    sd::DrawDocShellRef xDocShRef2 = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tablescale.pptx"), PPTX );
-    const SdrPage *pPage2 = GetPage( 1, xDocShRef2 );
-
-    sdr::table::SdrTableObj *pTableObj2 = dynamic_cast<sdr::table::SdrTableObj*>(pPage2->GetObj(0));
-    CPPUNIT_ASSERT( pTableObj2 );
-
-    uno::Reference< css::table::XTable > xTable2(pTableObj2->getTable(), uno::UNO_SET_THROW);
-    uno::Reference< css::table::XTableRows > xRows2( xTable2->getRows(), uno::UNO_SET_THROW);
-
-    for(sal_Int32 nRow = 0; nRow < 7; ++nRow)
+    sd::DrawDocShellRef xDocShRef3 = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf144092.pptx"), PPTX);
+    const SdrPage* pPage = GetPage(1, xDocShRef3);
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj);
+    sal_Int32 nHeight = 0;
+    uno::Reference<css::table::XTable> xTable(pTableObj->getTable(), uno::UNO_SET_THROW);
+    uno::Reference<css::table::XTableRows> xRows(xTable->getRows(), uno::UNO_SET_THROW);
+    // All 9 rows should be the approximately same height, even the empty rows,
+    // because the fontsize is 18pt, which is about 50% larger than the requested row height.
+    for(sal_Int32 nRow = 0; nRow < 9; ++nRow)
     {
-        uno::Reference< beans::XPropertySet > xRefRow2( xRows2->getByIndex(nRow), uno::UNO_QUERY_THROW );
-        xRefRow2->getPropertyValue( "Height" ) >>= nHeight;
-        CPPUNIT_ASSERT_EQUAL( sal_Int32(800), nHeight);
+        uno::Reference<beans::XPropertySet> xRefRow(xRows->getByIndex(nRow), uno::UNO_QUERY_THROW);
+        xRefRow->getPropertyValue("Height") >>= nHeight;
+        CPPUNIT_ASSERT_LESS(nHeight, sal_Int32(900));
     }
-
-    xDocShRef2->DoClose();
+    xDocShRef3->DoClose();
 }
 
 void SdImportTest::testTdf93830()
