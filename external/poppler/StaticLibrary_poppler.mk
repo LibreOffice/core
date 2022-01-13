@@ -86,6 +86,8 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/Decrypt \
 	UnpackedTarball/poppler/poppler/Dict \
 	UnpackedTarball/poppler/poppler/Error \
+	UnpackedTarball/poppler/poppler/FDPDFDocBuilder \
+	UnpackedTarball/poppler/poppler/FILECacheLoader \
 	UnpackedTarball/poppler/poppler/FileSpec \
 	UnpackedTarball/poppler/poppler/FontEncodingTables \
 	UnpackedTarball/poppler/poppler/Form \
@@ -96,6 +98,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/GfxState \
 	UnpackedTarball/poppler/poppler/GlobalParams \
 	UnpackedTarball/poppler/poppler/Hints \
+	UnpackedTarball/poppler/poppler/ImageEmbeddingUtils \
 	UnpackedTarball/poppler/poppler/JArithmeticDecoder \
 	UnpackedTarball/poppler/poppler/JBIG2Stream \
 	UnpackedTarball/poppler/poppler/JSInfo \
@@ -132,8 +135,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/TextOutputDev \
 	UnpackedTarball/poppler/poppler/PageLabelInfo \
 	UnpackedTarball/poppler/poppler/SecurityHandler \
-	UnpackedTarball/poppler/poppler/StdinCachedFile \
-	UnpackedTarball/poppler/poppler/StdinPDFDocBuilder \
 	UnpackedTarball/poppler/poppler/Sound \
 	UnpackedTarball/poppler/poppler/ViewerPreferences \
 	UnpackedTarball/poppler/poppler/Movie \
