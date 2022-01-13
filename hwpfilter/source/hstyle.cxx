@@ -30,9 +30,7 @@ enum
     MAXSTYLENAME = 20
 };
 
-#define DATA static_cast<StyleData*>(style)
-
-namespace
+namespace hwpfilter
 {
 struct StyleData
 {
@@ -52,7 +50,7 @@ HWPStyle::HWPStyle()
 
 HWPStyle::~HWPStyle()
 {
-    delete[] DATA;
+    delete[] style;
     nstyles = 0;
 }
 
@@ -60,7 +58,7 @@ char* HWPStyle::GetName(int n) const
 {
     if (n < 0 || n >= nstyles)
         return nullptr;
-    return DATA[n].name;
+    return style[n].name;
 }
 
 void HWPStyle::SetName(int n, char const* name)
@@ -74,7 +72,7 @@ void HWPStyle::SetName(int n, char const* name)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
 #endif
-        auto const p = DATA[n].name;
+        auto const p = style[n].name;
         strncpy(p, name, MAXSTYLENAME);
         p[MAXSTYLENAME] = '\0'; // just in case, even though the array is zero-initialized
 #if defined __GNUC__ && (__GNUC__ >= 8 && __GNUC__ <= 11) && !defined __clang__
@@ -82,14 +80,14 @@ void HWPStyle::SetName(int n, char const* name)
 #endif
     }
     else
-        DATA[n].name[0] = 0;
+        style[n].name[0] = 0;
 }
 
 CharShape* HWPStyle::GetCharShape(int n) const
 {
     if (n < 0 || n >= nstyles)
         return nullptr;
-    return &DATA[n].cshape;
+    return &style[n].cshape;
 }
 
 void HWPStyle::SetCharShape(int n, CharShape const* cshapep)
@@ -97,9 +95,9 @@ void HWPStyle::SetCharShape(int n, CharShape const* cshapep)
     if (n >= 0 && n < nstyles)
     {
         if (cshapep)
-            DATA[n].cshape = *cshapep;
+            style[n].cshape = *cshapep;
         else
-            memset(&DATA[n].cshape, 0, sizeof(CharShape));
+            memset(&style[n].cshape, 0, sizeof(CharShape));
     }
 }
 
@@ -107,7 +105,7 @@ ParaShape* HWPStyle::GetParaShape(int n) const
 {
     if (n < 0 || n >= nstyles)
         return nullptr;
-    return &DATA[n].pshape;
+    return &style[n].pshape;
 }
 
 void HWPStyle::SetParaShape(int n, ParaShape const* pshapep)
@@ -115,9 +113,9 @@ void HWPStyle::SetParaShape(int n, ParaShape const* pshapep)
     if (n >= 0 && n < nstyles)
     {
         if (pshapep)
-            DATA[n].pshape = *pshapep;
+            style[n].pshape = *pshapep;
         else
-            DATA[n].pshape = ParaShape();
+            style[n].pshape = ParaShape();
     }
 }
 
@@ -127,7 +125,7 @@ void HWPStyle::Read(HWPFile& hwpf)
     ParaShape pshape;
 
     hwpf.Read2b(&nstyles, 1);
-    style = ::comphelper::newArray_null<StyleData>(nstyles);
+    style = ::comphelper::newArray_null<hwpfilter::StyleData>(nstyles);
     if (!style)
         return;
 

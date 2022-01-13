@@ -25,13 +25,16 @@
 
 #include "hwplib.h"
 #include "hinfo.h"
+
+namespace hwpfilter { struct StyleData; }
+
 /**
  * @short Using for global style object like "Standard"
  */
 class DLLEXPORT HWPStyle
 {
     short nstyles;
-    void *style;
+    hwpfilter::StyleData *style;
     public:
         HWPStyle( void );
         ~HWPStyle( void );
