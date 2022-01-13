@@ -2846,8 +2846,21 @@ void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem
     svx::frame::Style aB(rBoxItem.GetBottom(), 1.0);
     aB.SetWordTableCell(bWordTableCell);
 
+    // First cell in a row.
+    bool bLeftIsOuter = rFrame.IsCellFrame() && rFrame.GetUpper()->GetLower() == &rFrame;
+    // Last cell in a row.
+    bool bRightIsOuter = rFrame.IsCellFrame() && rFrame.GetNext() == nullptr;
+    // First row in a table.
+    bool bTopIsOuter = rFrame.IsCellFrame() && rFrame.GetUpper()->GetUpper()->GetLower() == rFrame.GetUpper();
+    // Last row in a table.
+    bool bBottomIsOuter = rFrame.IsCellFrame() && rFrame.GetUpper()->GetNext() == nullptr;
+
     aR.MirrorSelf();
-    aB.MirrorSelf();
+    if (!bWordTableCell || !bBottomIsOuter)
+    {
+        // Outer horizontal lines are never mirrored in Word.
+        aB.MirrorSelf();
+    }
 
     const SwTwips nLeft   = aBorderRect.Left_();
     const SwTwips nRight  = aBorderRect.Right_();
@@ -2859,39 +2872,30 @@ void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem
     aT.SetRefMode( !bVert ? svx::frame::RefMode::Begin : svx::frame::RefMode::End );
     aB.SetRefMode( !bVert ? svx::frame::RefMode::Begin : svx::frame::RefMode::End );
 
-    // First cell in a row.
-    bool bOuter = rFrame.IsCellFrame() && rFrame.GetUpper()->GetLower() == &rFrame;
-
-    if (bWordTableCell && bOuter)
+    if (bWordTableCell && bLeftIsOuter)
     {
-        // First vs secondary and inner vs outer is the other way around in Word.
+        // Outer vertical lines are always mirrored in Word.
         aL.MirrorSelf();
     }
 
-    SwLineEntry aLeft  (nLeft,   nTop,  nBottom, bOuter,
+    SwLineEntry aLeft  (nLeft,   nTop,  nBottom, bLeftIsOuter,
             bVert ? aB                         : (bR2L ? aR : aL));
     if (bWordTableCell && rBoxItem.GetLeft())
     {
         aLeft.LimitVerticalEndPos(rFrame, SwLineEntry::VerticalType::LEFT);
     }
 
-    // Last cell in a row.
-    bOuter = rFrame.IsCellFrame() && rFrame.GetNext() == nullptr;
-    SwLineEntry aRight (nRight,  nTop,  nBottom, bOuter,
+    SwLineEntry aRight (nRight,  nTop,  nBottom, bRightIsOuter,
             bVert ? (bBottomAsTop ? aB : aT) : (bR2L ? aL : aR));
     if (bWordTableCell && rBoxItem.GetRight())
     {
         aRight.LimitVerticalEndPos(rFrame, SwLineEntry::VerticalType::RIGHT);
     }
 
-    // First row in a table.
-    bOuter = rFrame.IsCellFrame() && rFrame.GetUpper()->GetUpper()->GetLower() == rFrame.GetUpper();
-    SwLineEntry aTop   (nTop,    nLeft, nRight, bOuter,
+    SwLineEntry aTop   (nTop,    nLeft, nRight, bTopIsOuter,
             bVert ? aL                         : (bBottomAsTop ? aB : aT));
 
-    // Last row in a table.
-    bOuter = rFrame.IsCellFrame() && rFrame.GetUpper()->GetNext() == nullptr;
-    SwLineEntry aBottom(nBottom, nLeft, nRight, bOuter,
+    SwLineEntry aBottom(nBottom, nLeft, nRight, bBottomIsOuter,
             bVert ? aR                         : aB);
 
     Insert( aLeft, false );
