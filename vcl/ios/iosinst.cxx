@@ -22,7 +22,6 @@
 #include <postmac.h>
 
 #include "ios/iosinst.hxx"
-#include <headless/svpdata.hxx>
 #include "headless/svpdummies.hxx"
 #include "unx/gendata.hxx"
 #include "quartz/utils.h"
@@ -31,6 +30,17 @@
 
 // Totally wrong of course but doesn't seem to harm much in the iOS app.
 static int viewWidth = 1, viewHeight = 1;
+
+class SalData
+{
+    SystemFontList* mpFontList;
+    CGColorSpaceRef mxRGBSpace;
+    CGColorSpaceRef mxGraySpace;
+
+    static void ensureThreadAutoreleasePool() {};
+
+    explicit SalData();
+};
 
 void IosSalInstance::GetWorkArea( tools::Rectangle& rRect )
 {
@@ -42,10 +52,7 @@ IosSalInstance *IosSalInstance::getInstance()
 {
     if (!ImplGetSVData())
         return NULL;
-    SvpSalData *pData = static_cast<SvpSalData *>(ImplGetSVData()->mpSalData);
-    if (!pData)
-        return NULL;
-    return static_cast<IosSalInstance *>(pData->m_pInstance);
+    return static_cast<IosSalInstance *>(GetSalInstance());
 }
 
 IosSalInstance::IosSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
@@ -147,16 +154,12 @@ const OUString& SalGetDesktopEnvironment()
 }
 
 SalData::SalData() :
-    m_pInstance( 0 ),
     mpFontList( 0 ),
     mxRGBSpace( CGColorSpaceCreateDeviceRGB() ),
     mxGraySpace( CGColorSpaceCreateDeviceGray() )
 {
 }
 
-SalData::~SalData()
-{
-}
 
 // This is our main entry point:
 SalInstance *CreateSalInstance()

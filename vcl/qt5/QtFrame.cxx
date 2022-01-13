@@ -59,7 +59,6 @@
 #endif
 #endif
 
-#include <saldatabasic.hxx>
 #include <window.h>
 #include <vcl/syswin.hxx>
 
@@ -120,7 +119,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 #endif
     , m_nInputLanguage(LANGUAGE_DONTKNOW)
 {
-    QtInstance* pInst = static_cast<QtInstance*>(GetSalData()->m_pInstance);
+    QtInstance* pInst = GetQtInstance();
     pInst->insertFrame(this);
 
     m_aDamageHandler.handle = this;
@@ -273,7 +272,7 @@ void QtFrame::fixICCCMwindowGroup()
 
 QtFrame::~QtFrame()
 {
-    QtInstance* pInst = static_cast<QtInstance*>(GetSalData()->m_pInstance);
+    QtInstance* pInst = GetQtInstance();
     pInst->eraseFrame(this);
     delete asChild();
     m_aSystemData.aShellWindow = 0;
@@ -334,7 +333,7 @@ void QtFrame::ReleaseGraphics(SalGraphics* pSalGraph)
 
 bool QtFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
-    QtInstance* pInst = static_cast<QtInstance*>(GetSalData()->m_pInstance);
+    QtInstance* pInst = GetQtInstance();
     pInst->PostEvent(this, pData.release(), SalEvent::UserEvent);
     return true;
 }
@@ -420,7 +419,7 @@ void QtFrame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed *
 void QtFrame::modalReparent(bool bVisible)
 {
 #ifndef NDEBUG
-    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
+    auto* pSalInst(GetQtInstance());
     assert(pSalInst);
     assert(pSalInst->IsMainThread());
     assert(!asChild()->isVisible());
@@ -439,7 +438,7 @@ void QtFrame::modalReparent(bool bVisible)
     if (!pModalWin || m_pParent->windowHandle() == pModalWin)
         return;
 
-    QtInstance* pInst = static_cast<QtInstance*>(GetSalData()->m_pInstance);
+    QtInstance* pInst = GetQtInstance();
     for (auto* pFrame : pInst->getFrames())
     {
         QtFrame* pQtFrame = static_cast<QtFrame*>(pFrame);
@@ -459,7 +458,7 @@ void QtFrame::Show(bool bVisible, bool bNoActivate)
     if (bVisible == asChild()->isVisible())
         return;
 
-    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
+    auto* pSalInst(GetQtInstance());
     assert(pSalInst);
 
     if (!bVisible) // hide
@@ -671,7 +670,7 @@ void QtFrame::SetModal(bool bModal)
     if (!isWindow() || asChild()->isModal() == bModal)
         return;
 
-    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
+    auto* pSalInst(GetQtInstance());
     assert(pSalInst);
     pSalInst->RunInMainThread([this, bModal]() {
 
@@ -856,7 +855,7 @@ void QtFrame::SetPointer(PointerStyle ePointerStyle)
         return;
     m_ePointerStyle = ePointerStyle;
 
-    pWindow->setCursor(static_cast<QtData*>(GetSalData())->getCursor(ePointerStyle));
+    pWindow->setCursor(GetQtData()->getCursor(ePointerStyle));
 }
 
 void QtFrame::CaptureMouse(bool bMouse)

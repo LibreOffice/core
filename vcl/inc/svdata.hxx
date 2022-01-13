@@ -464,4 +464,8 @@ struct ImplSVEvent
 
 extern int nImplSysDialog;
 
+inline SalData* GetSalData() { return ImplGetSVData()->mpSalData; }
+inline void SetSalData(SalData* pData) { ImplGetSVData()->mpSalData = pData; }
+inline SalInstance* GetSalInstance() { return ImplGetSVData()->mpDefInst; }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

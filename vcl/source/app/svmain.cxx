@@ -52,7 +52,7 @@
 #include <debugevent.hxx>
 #include <scrwnd.hxx>
 #include <windowdev.hxx>
-#include <saldatabasic.hxx>
+#include <svdata.hxx>
 
 #ifdef _WIN32
 #include <svsys.h>
@@ -105,6 +105,10 @@
 #if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
 #include <rtl/strbuf.hxx>
+#endif
+
+#ifdef LINUX
+#include <unx/gendata.hxx>
 #endif
 
 using namespace ::com::sun::star;
