@@ -35,7 +35,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include "ModifyListenerHelper.hxx"
 
 
 #include <vector>
@@ -132,7 +132,7 @@ private:
             css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
     tDataSequenceContainer m_aDataSequences;
 
-    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 
 } //  namespace chart

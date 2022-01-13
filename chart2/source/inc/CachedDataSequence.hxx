@@ -32,7 +32,7 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include "ModifyListenerHelper.hxx"
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -156,7 +156,7 @@ private:
     css::uno::Sequence< double >                           m_aNumericalSequence;
     css::uno::Sequence< OUString >                         m_aTextualSequence;
     css::uno::Sequence< css::uno::Any >                    m_aMixedSequence;
-    css::uno::Reference< css::util::XModifyListener >      m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 
 }  // namespace chart

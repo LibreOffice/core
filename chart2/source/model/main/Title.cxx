@@ -229,13 +229,13 @@ namespace chart
 
 Title::Title() :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+        m_xModifyEventForwarder( new ModifyEventForwarder() )
 {}
 
 Title::Title( const Title & rOther ) :
         impl::Title_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
-        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+        m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     CloneHelper::CloneRefSequence<chart2::XFormattedString>(
         rOther.m_aStrings, m_aStrings );
@@ -307,28 +307,12 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL Title::getPropertySetInfo()
 // ____ XModifyBroadcaster ____
 void SAL_CALL Title::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->addModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
 void SAL_CALL Title::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->removeModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____

@@ -59,7 +59,7 @@ CachedDataSequence::CachedDataSequence()
         : OPropertyContainer( GetBroadcastHelper()),
           CachedDataSequence_Base( GetMutex()),
           m_eCurrentDataType( NUMERICAL ),
-          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+          m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     registerProperties();
 }
@@ -67,7 +67,7 @@ CachedDataSequence::CachedDataSequence( const Reference< uno::XComponentContext 
         : OPropertyContainer( GetBroadcastHelper()),
           CachedDataSequence_Base( GetMutex()),
           m_eCurrentDataType( MIXED ),
-          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder( ))
+          m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     registerProperties();
 }
@@ -77,7 +77,7 @@ CachedDataSequence::CachedDataSequence( const OUString & rSingleText )
           CachedDataSequence_Base( GetMutex()),
           m_eCurrentDataType( TEXTUAL ),
           m_aTextualSequence({rSingleText}),
-          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+          m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     registerProperties();
 }
@@ -88,7 +88,7 @@ CachedDataSequence::CachedDataSequence( const CachedDataSequence & rSource )
           m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),
           m_eCurrentDataType( rSource.m_eCurrentDataType ),
-          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+          m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     switch( m_eCurrentDataType )
     {
@@ -313,28 +313,12 @@ Reference< util::XCloneable > SAL_CALL CachedDataSequence::createClone()
 
 void SAL_CALL CachedDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->addModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
 void SAL_CALL CachedDataSequence::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->removeModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // lang::XInitialization:

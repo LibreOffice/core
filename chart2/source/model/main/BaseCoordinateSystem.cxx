@@ -117,7 +117,7 @@ namespace chart
 BaseCoordinateSystem::BaseCoordinateSystem(
     sal_Int32 nDimensionCount /* = 2 */ ) :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
+        m_xModifyEventForwarder( new ModifyEventForwarder() ),
         m_nDimensionCount( nDimensionCount )
  {
     m_aAllAxis.resize( m_nDimensionCount );
@@ -152,7 +152,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
     const BaseCoordinateSystem & rSource ) :
         impl::BaseCoordinateSystem_Base(rSource),
         ::property::OPropertySet( rSource, m_aMutex ),
-    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
+    m_xModifyEventForwarder( new ModifyEventForwarder() ),
     m_nDimensionCount( rSource.m_nDimensionCount )
 {
     m_aAllAxis.resize(rSource.m_aAllAxis.size());
@@ -282,28 +282,12 @@ void SAL_CALL BaseCoordinateSystem::setChartTypes( const Sequence< Reference< ch
 // ____ XModifyBroadcaster ____
 void SAL_CALL BaseCoordinateSystem::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->addModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2" );
-    }
+    m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
 void SAL_CALL BaseCoordinateSystem::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->removeModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2" );
-    }
+    m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____

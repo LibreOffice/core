@@ -25,8 +25,7 @@
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
+#include <ModifyListenerHelper.hxx>
 
 namespace chart
 {
@@ -103,7 +102,7 @@ private:
 
     css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > > m_aStrings;
 
-    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 
 } //  namespace chart

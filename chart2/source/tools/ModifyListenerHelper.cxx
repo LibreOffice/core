@@ -78,13 +78,8 @@ private:
 
 } //  anonymous namespace
 
-namespace chart::ModifyListenerHelper
+namespace chart
 {
-
-uno::Reference< util::XModifyListener > createModifyEventForwarder()
-{
-    return new ModifyEventForwarder();
-}
 
 ModifyEventForwarder::ModifyEventForwarder() :
         ::cppu::WeakComponentImplHelper<

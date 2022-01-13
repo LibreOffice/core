@@ -22,6 +22,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -30,10 +31,8 @@
 namespace com::sun::star::uno { class XWeak; }
 namespace com::sun::star::uno { template <class interface_type> class WeakReference; }
 
-namespace chart::ModifyListenerHelper
+namespace chart
 {
-
-css::uno::Reference< css::util::XModifyListener > createModifyEventForwarder();
 
 /** This helper class serves as forwarder of modify events.  It can be used
     whenever an object has to send modify events after it gets a modify event of
@@ -57,7 +56,6 @@ public:
     void RemoveListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener );
 
-protected:
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
@@ -68,6 +66,7 @@ protected:
     virtual void SAL_CALL modified(
         const css::lang::EventObject& aEvent ) override;
 
+protected:
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
         const css::lang::EventObject& Source ) override;
@@ -91,6 +90,11 @@ private:
 
     tListenerMap m_aListenerMap;
 };
+
+}
+
+namespace chart::ModifyListenerHelper
+{
 
 namespace impl
 {

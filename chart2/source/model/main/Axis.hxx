@@ -27,8 +27,7 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
+#include <ModifyListenerHelper.hxx>
 
 namespace chart
 {
@@ -118,7 +117,7 @@ private:
 
     void AllocateSubGrids();
 
-    css::uno::Reference< css::util::XModifyListener >   m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 
     css::chart2::ScaleData             m_aScaleData;
 
