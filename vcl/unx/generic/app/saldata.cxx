@@ -232,8 +232,8 @@ static const char* XRequest[] = {
     "X_NoOperation"
 };
 
-X11SalData::X11SalData(SalInstance *pInstance)
-    : GenericUnixSalData(pInstance)
+X11SalData::X11SalData()
+    : GenericUnixSalData()
 {
     pXLib_          = nullptr;
 

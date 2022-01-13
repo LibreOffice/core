@@ -1890,7 +1890,7 @@ void SalX11Display::Yield()
         return;
 
     XEvent aEvent;
-    DBG_ASSERT( GetSalData()->m_pInstance->GetYieldMutex()->IsCurrentThread(),
+    DBG_ASSERT(GetSalInstance()->GetYieldMutex()->IsCurrentThread(),
                 "will crash soon since solar mutex not locked in SalDisplay::Yield" );
 
     XNextEvent( pDisp_, &aEvent );
@@ -1934,7 +1934,7 @@ void SalX11Display::Dispatch( XEvent *pEvent )
             return;
     }
 
-    SalInstance* pInstance = GetSalData()->m_pInstance;
+    SalInstance* pInstance = GetSalInstance();
     pInstance->CallEventCallback( pEvent, sizeof( XEvent ) );
 
     switch( pEvent->type )

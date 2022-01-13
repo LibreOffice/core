@@ -32,7 +32,7 @@
 #include <quartz/salvd.h>
 #include <quartz/utils.h>
 
-#include "saldatabasic.hxx"
+#include <svdata.hxx>
 
 // From salbmp.cxx
 

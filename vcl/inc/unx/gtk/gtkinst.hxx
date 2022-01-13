@@ -311,6 +311,8 @@ private:
     cairo_font_options_t*       m_pLastCairoFontOptions;
 };
 
+inline GtkInstance* GetGtkInstance() { return static_cast<GtkInstance*>(GetSalInstance()); }
+
 class SalGtkXWindow final : public weld::TransportAsXWindow
 {
 private:

@@ -14,8 +14,8 @@
 class SvpSalData : public GenericUnixSalData
 {
 public:
-    explicit SvpSalData(SalInstance* pInstance)
-        : GenericUnixSalData(pInstance)
+    explicit SvpSalData()
+        : GenericUnixSalData()
     {
     }
     virtual void ErrorTrapPush() override {}

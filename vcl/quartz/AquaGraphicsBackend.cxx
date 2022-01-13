@@ -41,7 +41,7 @@
 #endif
 #include <quartz/utils.h>
 #ifdef IOS
-#include "saldatabasic.hxx"
+#include <svdata.hxx>
 #endif
 #include <sft.hxx>
 

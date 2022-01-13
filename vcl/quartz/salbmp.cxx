@@ -42,7 +42,7 @@
 #ifdef MACOSX
 #include <osx/saldata.hxx>
 #else
-#include "saldatabasic.hxx"
+#include <svdata.hxx>
 #endif
 
 const unsigned long k32BitRedColorMask   = 0x00ff0000;

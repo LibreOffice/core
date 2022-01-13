@@ -35,7 +35,7 @@
 
 #include <unistd.h>
 #else
-#include <saldatabasic.hxx>
+#include <svdata.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <Windows.h>
 #endif
@@ -339,8 +339,8 @@ void DestroySalInstance( SalInstance *pInst )
 
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
-    if (GetSalData()->m_pInstance)
-        GetSalData()->m_pInstance->BeforeAbort(rErrorText, bDumpCore);
+    if (GetSalInstance())
+        GetSalInstance()->BeforeAbort(rErrorText, bDumpCore);
 
 #if defined _WIN32
     if( rErrorText.isEmpty() )
@@ -401,15 +401,6 @@ const OUString& SalGetDesktopEnvironment()
     static OUString aDesktopEnvironment("unknown");
 #endif
     return aDesktopEnvironment;
-}
-
-SalData::SalData() :
-    m_pInstance(nullptr)
-{
-}
-
-SalData::~SalData() COVERITY_NOEXCEPT_FALSE
-{
 }
 
 #ifdef _WIN32
