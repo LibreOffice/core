@@ -42,7 +42,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class PageBackground final :
-    public cppu::BaseMutex,
+    public ::BaseStdMutex,
     public impl::PageBackground_Base,
     public ::property::OPropertySet
 {

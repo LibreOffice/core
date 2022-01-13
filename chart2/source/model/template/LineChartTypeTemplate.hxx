@@ -28,7 +28,7 @@ namespace chart
 {
 
 class LineChartTypeTemplate :
-        public cppu::BaseMutex,
+        public ::BaseStdMutex,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {

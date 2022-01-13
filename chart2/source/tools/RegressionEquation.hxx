@@ -45,7 +45,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class RegressionEquation final :
-        public cppu::BaseMutex,
+        public ::BaseStdMutex,
         public impl::RegressionEquation_Base,
         public ::property::OPropertySet
 {
@@ -102,7 +102,7 @@ private:
                                    css::uno::Reference<
                                    css::chart2::XFormattedString > >& Strings ) override;
 
-    using ::cppu::OPropertySetHelper::disposing;
+    using ::comphelper::OPropertySetHelper::disposing;
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent() override;

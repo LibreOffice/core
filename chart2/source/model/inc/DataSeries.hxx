@@ -59,7 +59,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class DataSeries final :
-    public cppu::BaseMutex,
+    public ::BaseStdMutex,
     public impl::DataSeries_Base,
     public ::property::OPropertySet
 {

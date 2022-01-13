@@ -43,7 +43,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class Title final :
-    public cppu::BaseMutex,
+    public ::BaseStdMutex,
     public impl::Title_Base,
     public ::property::OPropertySet
 {

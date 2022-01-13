@@ -29,7 +29,7 @@ namespace chart
 {
 
 class PieChartTypeTemplate :
-        public cppu::BaseMutex,
+        public ::BaseStdMutex,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {

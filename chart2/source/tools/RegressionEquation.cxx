@@ -259,13 +259,13 @@ void RegressionEquation::fireModifyEvent()
 // ____ XTitle ____
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL RegressionEquation::getText()
 {
-    MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_aStrings;
 }
 
 void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& Strings )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     ModifyListenerHelper::removeListenerFromAllElements(
         comphelper::sequenceToContainer<std::vector<uno::Reference< chart2::XFormattedString > > >( m_aStrings ),
         m_xModifyEventForwarder );

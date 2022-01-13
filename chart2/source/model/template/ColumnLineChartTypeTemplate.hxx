@@ -29,7 +29,7 @@ namespace chart
 {
 
 class ColumnLineChartTypeTemplate :
-        public cppu::BaseMutex,
+        public ::BaseStdMutex,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {

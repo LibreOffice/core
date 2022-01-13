@@ -27,7 +27,7 @@ namespace chart
 {
 
 class ScatterChartTypeTemplate :
-        public cppu::BaseMutex,
+        public ::BaseStdMutex,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {

@@ -19,7 +19,7 @@
 #pragma once
 
 // helper classes
-#include <cppuhelper/propshlp.hxx>
+#include <comphelper/propshlp.hxx>
 
 // interfaces and types
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -33,9 +33,8 @@ namespace property
 {
 
 class OPropertySet :
-    public ::cppu::OBroadcastHelper,
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet
-    public ::cppu::OPropertySetHelper,
+    public ::comphelper::OPropertySetHelper,
     // includes uno::XWeak (and XInterface, esp. ref-counting)
 
     public css::lang::XTypeProvider,
@@ -44,11 +43,11 @@ class OPropertySet :
     public css::style::XStyleSupplier
 {
 public:
-    OPropertySet( ::osl::Mutex & rMutex );
+    OPropertySet(std::mutex&);
     virtual ~OPropertySet();
 
 protected:
-    explicit OPropertySet( const OPropertySet & rOther, ::osl::Mutex & rMutex );
+    explicit OPropertySet( const OPropertySet & rOther, std::mutex& );
 
     void SetNewValuesExplicitlyEvenIfTheyEqualDefault();
 
@@ -220,7 +219,7 @@ private:
     bool SetStyle( const css::uno::Reference< css::style::XStyle > & xStyle );
 
     /// reference to mutex of class deriving from here
-    ::osl::Mutex &   m_rMutex;
+    std::mutex &   m_rMutex;
 
     bool m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault;
     typedef std::map< sal_Int32, css::uno::Any > tPropertyMap;

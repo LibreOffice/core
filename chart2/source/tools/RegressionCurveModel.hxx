@@ -48,7 +48,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class RegressionCurveModel :
-        public cppu::BaseMutex,
+        public ::BaseStdMutex,
         public impl::RegressionCurveModel_Base,
         public ::property::OPropertySet
 {
@@ -107,7 +107,7 @@ protected:
     virtual void SAL_CALL disposing(
         const css::lang::EventObject& Source ) override;
 
-    using ::cppu::OPropertySetHelper::disposing;
+    using ::comphelper::OPropertySetHelper::disposing;
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent() override;
