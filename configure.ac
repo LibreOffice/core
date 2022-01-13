@@ -13438,6 +13438,12 @@ LIBPNG_LIBS_internal="-L${WORKDIR}/LinkTarget/StaticLibrary -llibpng"
 libo_CHECK_SYSTEM_MODULE([libpng],[LIBPNG],[libpng])
 
 dnl ===================================================================
+dnl Test whether to build libwebp or rely on the system version
+dnl ===================================================================
+
+libo_CHECK_SYSTEM_MODULE([libwebp],[LIBWEBP],[libwebp])
+
+dnl ===================================================================
 dnl Check for runtime JVM search path
 dnl ===================================================================
 if test "$ENABLE_JAVA" != ""; then
