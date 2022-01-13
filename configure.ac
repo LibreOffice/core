@@ -2834,14 +2834,6 @@ AC_ARG_WITH(macosx-version-min-required,
     ],
 ,)
 
-AC_ARG_WITH(macosx-version-max-allowed,
-    AS_HELP_STRING([--with-macosx-version-max-allowed=<version>],
-        [set the maximum allowed OS version the LibreOffice compilation can use APIs from])
-    [
-                          e. g.: --with-macosx-version-max-allowed=11.0
-    ],
-,)
-
 
 dnl ===================================================================
 dnl options for stuff used during cross-compilation build
@@ -3367,10 +3359,6 @@ if test $_os = Darwin; then
         fi
     fi
 
-    if test "$with_macosx_version_max_allowed" = "" ; then
-        with_macosx_version_max_allowed="$macosx_sdk"
-    fi
-
     # export this so that "xcrun" invocations later return matching values
     DEVELOPER_DIR="${MACOSX_SDK_PATH%/SDKs*}"
     DEVELOPER_DIR="${DEVELOPER_DIR%/Platforms*}"
@@ -3468,60 +3456,13 @@ if test $_os = Darwin; then
         RANLIB=`xcrun -find ranlib`
     fi
 
-    case "$with_macosx_version_max_allowed" in
-    10.12)
-        MAC_OS_X_VERSION_MAX_ALLOWED="101200"
-        ;;
-    10.13)
-        MAC_OS_X_VERSION_MAX_ALLOWED="101300"
-        ;;
-    10.14)
-        MAC_OS_X_VERSION_MAX_ALLOWED="101400"
-        ;;
-    10.15)
-        MAC_OS_X_VERSION_MAX_ALLOWED="101500"
-        ;;
-    11.0)
-        MAC_OS_X_VERSION_MAX_ALLOWED="110000"
-        ;;
-    11.1)
-        MAC_OS_X_VERSION_MAX_ALLOWED="110100"
-        ;;
-    11.3)
-        MAC_OS_X_VERSION_MAX_ALLOWED="110300"
-        ;;
-    12.0)
-        MAC_OS_X_VERSION_MAX_ALLOWED="120000"
-        ;;
-    12.1)
-        MAC_OS_X_VERSION_MAX_ALLOWED="120100"
-        ;;
-    12.3)
-        MAC_OS_X_VERSION_MAX_ALLOWED="120300"
-        ;;
-    13.0)
-        MAC_OS_X_VERSION_MAX_ALLOWED="130000"
-        ;;
-    *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.12--13.0])
-        ;;
-    esac
-
-    AC_MSG_CHECKING([that macosx-version-min-required is coherent with macosx-version-max-allowed])
-    if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MAC_OS_X_VERSION_MAX_ALLOWED; then
-        AC_MSG_ERROR([the version minimum required, $MAC_OS_X_VERSION_MIN_REQUIRED, must be <= the version maximum allowed, $MAC_OS_X_VERSION_MAX_ALLOWED])
-    else
-        AC_MSG_RESULT([ok])
-    fi
-
-    AC_MSG_CHECKING([that macosx-version-max-allowed is coherent with macos-with-sdk])
-    if test $MAC_OS_X_VERSION_MAX_ALLOWED -gt $MACOSX_SDK_VERSION; then
-        AC_MSG_ERROR([the version maximum allowed cannot be greater than the sdk level])
+    AC_MSG_CHECKING([that macosx-version-min-required is coherent with macos-with-sdk])
+    if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MACOSX_SDK_VERSION; then
+        AC_MSG_ERROR([the version minimum required cannot be greater than the sdk level])
     else
         AC_MSG_RESULT([ok])
     fi
     AC_MSG_NOTICE([MAC_OS_X_VERSION_MIN_REQUIRED=$MAC_OS_X_VERSION_MIN_REQUIRED])
-    AC_MSG_NOTICE([MAC_OS_X_VERSION_MAX_ALLOWED=$MAC_OS_X_VERSION_MAX_ALLOWED])
 
     AC_MSG_CHECKING([whether to do code signing])
 
@@ -3609,7 +3550,6 @@ fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
 AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
-AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(INSTALL_NAME_TOOL)
 AC_SUBST(LIBTOOL) # Note that the macOS libtool command is unrelated to GNU libtool
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
