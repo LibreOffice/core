@@ -40,6 +40,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeMetalType.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <sax/tools/converter.hxx>
@@ -981,6 +982,18 @@ void XMLEnhancedCustomShapeContext::startFastElement(
             break;
             case EAS_extrusion_metal :
                 GetBool( maExtrusion, aIter.toView(), EAS_Metal );
+            break;
+            case EAS_extrusion_metal_type :
+            {
+                OUString rValue = aIter.toString();
+                sal_Int16 eMetalType(drawing::EnhancedCustomShapeMetalType::MetalODF);
+                if (rValue == "loext:MetalMSCompatible")
+                    eMetalType = drawing::EnhancedCustomShapeMetalType::MetalMSCompatible;
+                beans::PropertyValue aProp;
+                aProp.Name = EASGet(EAS_MetalType);
+                aProp.Value <<= eMetalType;
+                maExtrusion.push_back(aProp);
+            }
             break;
             case EAS_shade_mode :
             {

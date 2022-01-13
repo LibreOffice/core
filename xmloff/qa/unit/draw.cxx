@@ -16,15 +16,19 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeMetalType.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/saveopt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -44,6 +48,7 @@ public:
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
     void save(const OUString& rFilterName, utl::TempFile& rTempFile);
+    uno::Reference<drawing::XShape> getShape(sal_uInt8 nShapeIndex);
 };
 
 void XmloffDrawTest::setUp()
@@ -74,6 +79,17 @@ void XmloffDrawTest::save(const OUString& rFilterName, utl::TempFile& rTempFile)
     rTempFile.EnableKillingFile();
     xStorable->storeToURL(rTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     validate(rTempFile.GetFileName(), test::ODF);
+}
+
+uno::Reference<drawing::XShape> XmloffDrawTest::getShape(sal_uInt8 nShapeIndex)
+{
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(nShapeIndex),
+                                           uno::UNO_QUERY_THROW);
+    return xShape;
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
@@ -240,6 +256,90 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTableInShape)
     // reference, i.e. the table inside the shape was lost.
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), xCell->getString());
+}
+
+// Tests for save/load of new (LO 7.4) attribute loext:extrusion-metal-type
+namespace
+{
+void lcl_assertMetalProperties(std::string_view sInfo, uno::Reference<drawing::XShape>& rxShape)
+{
+    uno::Reference<beans::XPropertySet> xShapeProps(rxShape, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeoPropSeq;
+    comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
+    uno::Sequence<beans::PropertyValue> aExtrusionSeq;
+    aGeoPropMap.getValue("Extrusion") >>= aExtrusionSeq;
+    comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
+
+    bool bIsMetal(false);
+    aExtrusionPropMap.getValue("Metal") >>= bIsMetal;
+    OString sMsg = OString::Concat(sInfo) + " Metal";
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), bIsMetal);
+
+    sal_Int16 nMetalType(-1);
+    aExtrusionPropMap.getValue("MetalType") >>= nMetalType;
+    sMsg = OString::Concat(sInfo) + " MetalType";
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        sMsg.getStr(), css::drawing::EnhancedCustomShapeMetalType::MetalMSCompatible, nMetalType);
+}
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
+{
+    // import
+    getComponent() = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                                         + "tdf145700_3D_metal_type_MSCompatible.doc",
+                                     "com.sun.star.text.TextDocument");
+    // verify properties
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    lcl_assertMetalProperties("from doc", xShape);
+
+    // Test, that new attribute is written with loext namespace. Adapt when attribute is added to ODF.
+    utl::TempFile aTempFile;
+    // The file has set c3DSpecularAmt="65536" to prevent validation error in attribute
+    // draw:extrusion-specularity. The error, that 122% is written in case of c3DSpecularAmt="80000" is
+    // not yet fixed.
+    save("writer8", aTempFile);
+
+    // assert XML.
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", "true");
+    assertXPath(pXmlDoc,
+                "//draw:enhanced-geometry[@loext:extrusion-metal-type='loext:MetalMSCompatible']");
+
+    // reload
+    getComponent()->dispose();
+    getComponent() = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    // verify properties
+    uno::Reference<drawing::XShape> xShapeReload(getShape(0));
+    lcl_assertMetalProperties("from ODF 1.3 extended", xShapeReload);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
+{
+    // import
+    getComponent() = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                                         + "tdf145700_3D_metal_type_MSCompatible.doc",
+                                     "com.sun.star.text.TextDocument");
+
+    // save ODF 1.3 strict and test, that new attribute is not written. Adapt when attribute is
+    // added to ODF.
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
+    // The file has set c3DSpecularAmt="65536" to prevent validation error in attribute
+    // draw:extrusion-specularity. The error, that 122% is written in case of c3DSpecularAmt="80000" is
+    // not yet fixed.
+    utl::TempFile aTempFile;
+    save("writer8", aTempFile);
+
+    // assert XML.
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", "true");
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@loext:extrusion-metal-type]", 0);
+
+    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

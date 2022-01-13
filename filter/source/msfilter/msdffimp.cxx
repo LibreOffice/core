@@ -149,6 +149,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeMetalType.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1675,14 +1676,20 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aExtrusionPropVec.push_back( aProp );
 
         // "Brightness"
+        // MS Office default 0x00004E20 16.16 FixedPoint, 20000/65536=0.30517, ODF default 33%.
+        // Thus must set value even if default.
+        double fBrightness = 20000.0;
         if ( IsProperty( DFF_Prop_c3DAmbientIntensity ) )
         {
-            double fBrightness = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DAmbientIntensity, 0 ));
-            fBrightness /= 655.36;
-            aProp.Name = "Brightness";
-            aProp.Value <<= fBrightness;
-            aExtrusionPropVec.push_back( aProp );
+            // Value must be in range 0.0 to 1.0 in MS Office binary specification, but larger
+            // values are in fact interpreted.
+            fBrightness = GetPropertyValue( DFF_Prop_c3DAmbientIntensity, 0 );
         }
+        fBrightness /= 655.36;
+        aProp.Name = "Brightness";
+        aProp.Value <<= fBrightness;
+        aExtrusionPropVec.push_back( aProp );
+
         // "Depth" in 1/100mm
         if ( IsProperty( DFF_Prop_c3DExtrudeBackward ) || IsProperty( DFF_Prop_c3DExtrudeForward ) )
         {
@@ -1700,14 +1707,17 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aExtrusionPropVec.push_back( aProp );
         }
         // "Diffusion"
+        // ODF default is 0%, MS Office default is 100%. Thus must set value even if default.
+        double fDiffusion = 100;
         if ( IsProperty( DFF_Prop_c3DDiffuseAmt ) )
         {
-            double fDiffusion = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DDiffuseAmt, 0 ));
+            fDiffusion = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DDiffuseAmt, 0 ));
             fDiffusion /= 655.36;
-            aProp.Name = "Diffusion";
-            aProp.Value <<= fDiffusion;
-            aExtrusionPropVec.push_back( aProp );
         }
+        aProp.Name = "Diffusion";
+        aProp.Value <<= fDiffusion;
+        aExtrusionPropVec.push_back( aProp );
+
         // "NumberOfLineSegments"
         if ( IsProperty( DFF_Prop_c3DTolerance ) )
         {
@@ -1730,24 +1740,35 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aProp.Name = "SecondLightHarsh";
         aProp.Value <<= bExtrusionSecondLightHarsh;
         aExtrusionPropVec.push_back( aProp );
+
         // "FirstLightLevel"
+        // MS Office default 0x00009470 16.16 FixedPoint, 38000/65536 = 0.5798, ODF default 66%.
+        // Thus must set value even if default.
+        double fFirstLightLevel = 38000.0;
         if ( IsProperty( DFF_Prop_c3DKeyIntensity ) )
         {
-            double fFirstLightLevel = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DKeyIntensity, 0 ));
-            fFirstLightLevel /= 655.36;
-            aProp.Name = "FirstLightLevel";
-            aProp.Value <<= fFirstLightLevel;
-            aExtrusionPropVec.push_back( aProp );
+            // value<0 and value>1 are allowed in MS Office. Clamp such in ODF export, not here.
+            fFirstLightLevel = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DKeyIntensity, 0 ));
         }
+        fFirstLightLevel /= 655.36;
+        aProp.Name = "FirstLightLevel";
+        aProp.Value <<= fFirstLightLevel;
+        aExtrusionPropVec.push_back( aProp );
+
         // "SecondLightLevel"
+        // MS Office default 0x00009470 16.16 FixedPoint, 38000/65536 = 0.5798, ODF default 66%.
+        // Thus must set value even if default.
+        double fSecondLightLevel = 38000.0;
         if ( IsProperty( DFF_Prop_c3DFillIntensity ) )
         {
-            double fSecondLightLevel = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DFillIntensity, 0 ));
-            fSecondLightLevel /= 655.36;
-            aProp.Name = "SecondLightLevel";
-            aProp.Value <<= fSecondLightLevel;
-            aExtrusionPropVec.push_back( aProp );
+            // value<0 and value>1 are allowed in MS Office. Clamp such in ODF export, not here.
+            fSecondLightLevel = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DFillIntensity, 0 ));
         }
+        fSecondLightLevel /= 655.36;
+        aProp.Name = "SecondLightLevel";
+        aProp.Value <<= fSecondLightLevel;
+        aExtrusionPropVec.push_back( aProp );
+
         // "FirstLightDirection"
         if ( IsProperty( DFF_Prop_c3DKeyX ) || IsProperty( DFF_Prop_c3DKeyY ) || IsProperty( DFF_Prop_c3DKeyZ ) )
         {
@@ -1776,6 +1797,10 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aProp.Name = "Metal";
         aProp.Value <<= bExtrusionMetal;
         aExtrusionPropVec.push_back( aProp );
+        aProp.Name = "MetalType";
+        aProp.Value <<= css::drawing::EnhancedCustomShapeMetalType::MetalMSCompatible;
+        aExtrusionPropVec.push_back(aProp);
+
         // "ShadeMode"
         if ( IsProperty( DFF_Prop_c3DRenderMode ) )
         {
@@ -1788,7 +1813,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aProp.Value <<= eExtrusionShadeMode;
             aExtrusionPropVec.push_back( aProp );
         }
-        // "RotateAngle" in Grad
+        // "RotateAngle" in Degree
         if ( IsProperty( DFF_Prop_c3DXRotationAngle ) || IsProperty( DFF_Prop_c3DYRotationAngle ) )
         {
             double fAngleX = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DXRotationAngle, 0 ))) / 65536.0;
@@ -1821,34 +1846,44 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             }
         }
         // "Shininess"
+        // MS Office default 5, ODF default 50%.
         if ( IsProperty( DFF_Prop_c3DShininess ) )
         {
             double fShininess = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DShininess, 0 ));
-            fShininess /= 655.36;
+            fShininess *= 10.0; // error in [MS ODRAW] (2021), type is not FixedPoint but long.
             aProp.Name = "Shininess";
             aProp.Value <<= fShininess;
             aExtrusionPropVec.push_back( aProp );
         }
+
         // "Skew"
+        // MS Office angle file value is 16.16 FixedPoint, default 0xFF790000,
+        // -8847360/65536=-135, ODF default 45. Thus must set value even if default.
+        double fSkewAngle = -135.0;
+        // MS Office amount file value is signed integer in range 0xFFFFFF9C to 0x00000064,
+        // default 0x00000032, ODF default 50.0
+        double fSkewAmount = 50.0;
         if ( IsProperty( DFF_Prop_c3DSkewAmount ) || IsProperty( DFF_Prop_c3DSkewAngle ) )
         {
-            double fSkewAmount = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DSkewAmount, 50 ));
-            double fSkewAngle = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DSkewAngle, sal::static_int_cast< sal_uInt32 >(-135 * 65536) ))) / 65536.0;
-
-            EnhancedCustomShapeParameterPair aSkewPair;
-            aSkewPair.First.Value <<= fSkewAmount;
-            aSkewPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
-            aSkewPair.Second.Value <<= fSkewAngle;
-            aSkewPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
-            aProp.Name = "Skew";
-            aProp.Value <<= aSkewPair;
-            aExtrusionPropVec.push_back( aProp );
+            fSkewAmount = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DSkewAmount, 50 ));
+            fSkewAngle = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DSkewAngle, sal::static_int_cast< sal_uInt32 >(-135 * 65536) ));
+            fSkewAngle /= 65536.0;
         }
+        EnhancedCustomShapeParameterPair aSkewPair;
+        aSkewPair.First.Value <<= fSkewAmount;
+        aSkewPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
+        aSkewPair.Second.Value <<= fSkewAngle;
+        aSkewPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
+        aProp.Name = "Skew";
+        aProp.Value <<= aSkewPair;
+        aExtrusionPropVec.push_back( aProp );
+
         // "Specularity"
+        // Type Fixed point 16.16, percent in API
         if ( IsProperty( DFF_Prop_c3DSpecularAmt ) )
         {
             double fSpecularity = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DSpecularAmt, 0 ));
-            fSpecularity /= 1333;
+            fSpecularity /= 655.36;
             aProp.Name = "Specularity";
             aProp.Value <<= fSpecularity;
             aExtrusionPropVec.push_back( aProp );
@@ -1860,16 +1895,22 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aExtrusionPropVec.push_back( aProp );
 
         // "ViewPoint" in 1/100mm
+        // MS Office default 1250000 EMU=3472.222 Hmm, ODF default 3.5cm
+        // Thus must set value even if default.
+        double fViewX = 1250000.0 / 360.0;
+        double fViewY = -1250000.0 / 360.0;;
+        double fViewZ = 9000000.0 / 360.0;
         if ( IsProperty( DFF_Prop_c3DXViewpoint ) || IsProperty( DFF_Prop_c3DYViewpoint ) || IsProperty( DFF_Prop_c3DZViewpoint ) )
         {
-            double fViewX = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DXViewpoint, 1250000 ))) / 360.0;
-            double fViewY = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DYViewpoint, sal_uInt32(-1250000) )))/ 360.0;
-            double fViewZ = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DZViewpoint, 9000000 ))) / 360.0;
-            css::drawing::Position3D aExtrusionViewPoint( fViewX, fViewY, fViewZ );
-            aProp.Name = "ViewPoint";
-            aProp.Value <<= aExtrusionViewPoint;
-            aExtrusionPropVec.push_back( aProp );
+            fViewX = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DXViewpoint, 1250000 ))) / 360.0;
+            fViewY = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DYViewpoint, sal_uInt32(-1250000) )))/ 360.0;
+            fViewZ = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DZViewpoint, 9000000 ))) / 360.0;
         }
+        css::drawing::Position3D aExtrusionViewPoint( fViewX, fViewY, fViewZ );
+        aProp.Name = "ViewPoint";
+        aProp.Value <<= aExtrusionViewPoint;
+        aExtrusionPropVec.push_back( aProp );
+
         // "Origin"
         if ( IsProperty( DFF_Prop_c3DOriginX ) || IsProperty( DFF_Prop_c3DOriginY ) )
         {
