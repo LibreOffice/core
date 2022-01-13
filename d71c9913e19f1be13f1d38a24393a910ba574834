@@ -88,6 +88,24 @@
       "parentUuid": "145f0673_10198364",
       "revId": "d71c9913e19f1be13f1d38a24393a910ba574834",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce68bc37_7eec371e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-13T13:13:25Z",
+      "side": 1,
+      "message": "\u003e \u003e Or you actually meant to say \"I as the author of the code say that you can simplify it by always checking for 32x32 and do not need to check for specific backends\", then just say that and do not say misleading things like \"your solution is also okay for me\" when apparently it\u0027s not.\n\nAhem - I wrote \"if squareSize is smaller than \u0027small size\u0027 (which is defined here as 32x32)\". I made the experience that it\u0027s always better to use SquareSize, *never* Width/Height. By doing so you risk to use ssth like Width:32, Height:1000 which still fires the same problems...",
+      "parentUuid": "489e5709_e22dc382",
+      "revId": "d71c9913e19f1be13f1d38a24393a910ba574834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
