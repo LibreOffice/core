@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d859e2d6_408280b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-13T15:59:30Z",
+      "side": 1,
+      "message": "Holding it back until early February, after the LO 7.3.0 release.",
+      "revId": "3a2f5cd39a9f535827117f66e40b8fdf4b6a491c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
