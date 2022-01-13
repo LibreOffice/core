@@ -64,6 +64,8 @@
 #include <filter/GifWriter.hxx>
 #include <filter/BmpReader.hxx>
 #include <filter/BmpWriter.hxx>
+#include <filter/WebpReader.hxx>
+#include <filter/WebpWriter.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -89,6 +91,23 @@
 
 #include <graphic/GraphicFormatDetector.hxx>
 #include <graphic/GraphicReader.hxx>
+
+// Support for GfxLinkType::NativeWebp is so far disabled,
+// as enabling it would write .webp images e.g. to .odt documents,
+// making those images unreadable for older readers. So for now
+// disable the support so that .webp images will be written out as .png,
+// and somewhen later enable the support unconditionally.
+static bool supportNativeWebp()
+{
+    static const char* const testname = getenv("LO_TESTNAME");
+    if(testname == nullptr)
+        return false;
+    // Enable support only for those unittests that test it.
+    if( std::string_view("_anonymous_namespace___GraphicTest__testUnloadedGraphicLoading_") == testname
+        || std::string_view("VclFiltersTest__testExportImport_") == testname)
+        return true;
+    return false;
+}
 
 static std::vector< GraphicFilter* > gaFilterHdlList;
 
@@ -899,6 +918,13 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
         {
             eLinkType = GfxLinkType::NativeMet;
         }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_WEBP))
+        {
+            if(supportNativeWebp())
+                eLinkType = GfxLinkType::NativeWebp;
+            else
+                nStatus = ERRCODE_GRFILTER_FILTERERROR;
+        }
         else
         {
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
@@ -1305,6 +1331,18 @@ ErrCode GraphicFilter::readDXF(SvStream & rStream, Graphic & rGraphic)
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
+ErrCode GraphicFilter::readWEBP(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType)
+{
+    if (ImportWebpGraphic(rStream, rGraphic))
+    {
+        if(supportNativeWebp())
+            rLinkType = GfxLinkType::NativeWebp;
+        return ERRCODE_NONE;
+    }
+    else
+        return ERRCODE_GRFILTER_FILTERERROR;
+}
+
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      const css::uno::Sequence< css::beans::PropertyValue >* /*pFilterData*/,
@@ -1454,6 +1492,10 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_DXF))
         {
             nStatus = readDXF(rIStream, rGraphic);
+        }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_WEBP))
+        {
+            nStatus = readWEBP(rIStream, rGraphic, eLinkType);
         }
         else
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
@@ -1840,6 +1882,14 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                     }
                 }
             }
+            else if (aFilterName.equalsIgnoreAsciiCase(EXP_WEBP))
+            {
+                if (!ExportWebpGraphic(rOStm, aGraphic, &aConfigItem))
+                    nStatus = ERRCODE_GRFILTER_FORMATERROR;
+
+                if( rOStm.GetError() )
+                    nStatus = ERRCODE_GRFILTER_IOERROR;
+            }
             else
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
     }
@@ -1882,6 +1932,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         case ConvertDataFormat::WMF: aShortName = WMF_SHORTNAME; break;
         case ConvertDataFormat::EMF: aShortName = EMF_SHORTNAME; break;
         case ConvertDataFormat::SVG: aShortName = SVG_SHORTNAME; break;
+        case ConvertDataFormat::WEBP: aShortName = WEBP_SHORTNAME; break;
 
         default:
         break;
