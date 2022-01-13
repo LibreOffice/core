@@ -32,20 +32,12 @@ namespace psp
 using namespace psp;
 using namespace osl;
 
-
 PrinterInfoManager& PrinterInfoManager::get()
 {
-    SalData* pSalData = GetSalData();
-    if( ! pSalData->m_pPIManager )
-        pSalData->m_pPIManager = new PrinterInfoManager();
-    return *pSalData->m_pPIManager;
-}
-
-void PrinterInfoManager::release()
-{
-    SalData* pSalData = GetSalData();
-    delete pSalData->m_pPIManager;
-    pSalData->m_pPIManager = nullptr;
+    GenericUnixSalData* pSalData = GetGenericUnixSalData();
+    if (!pSalData->m_pPrinterInfoManager)
+        pSalData->m_pPrinterInfoManager.reset(new PrinterInfoManager());
+    return *pSalData->m_pPrinterInfoManager;
 }
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :

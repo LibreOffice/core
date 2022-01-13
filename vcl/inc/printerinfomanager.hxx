@@ -127,8 +127,6 @@ public:
 
     // there can only be one
     static PrinterInfoManager& get();
-    // only called by SalData destructor, frees the global instance
-    static void release();
 
     // get PrinterInfoManager type
     Type getType() const { return m_eType; }

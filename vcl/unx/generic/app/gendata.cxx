@@ -21,6 +21,7 @@
 
 #include <unx/fontmanager.hxx>
 #include <unx/glyphcache.hxx>
+#include <printerinfomanager.hxx>
 
 GenericUnixSalData::GenericUnixSalData(SalInstance* const pInstance)
     : m_pDisplay(nullptr)
@@ -29,7 +30,12 @@ GenericUnixSalData::GenericUnixSalData(SalInstance* const pInstance)
     SetSalData(this);
 }
 
-GenericUnixSalData::~GenericUnixSalData() {}
+GenericUnixSalData::~GenericUnixSalData()
+{
+    m_pPrintFontManager.reset();
+    m_pFreetypeManager.reset();
+    m_pPrinterInfoManager.reset();
+}
 
 void GenericUnixSalData::InitFreetypeManager() { m_pFreetypeManager.reset(new FreetypeManager); }
 
