@@ -323,7 +323,7 @@ namespace chart
 
 Axis::Axis() :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
+        m_xModifyEventForwarder( new ModifyEventForwarder() ),
         m_aScaleData( AxisHelper::createDefaultScale() ),
         m_xGrid( new GridProperties() )
 {
@@ -343,7 +343,7 @@ Axis::Axis() :
 Axis::Axis( const Axis & rOther ) :
         impl::Axis_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
+    m_xModifyEventForwarder( new ModifyEventForwarder() ),
     m_aScaleData( rOther.m_aScaleData )
 {
     m_xGrid.set( CloneHelper::CreateRefClone< beans::XPropertySet >()( rOther.m_xGrid ));
@@ -526,28 +526,12 @@ Reference< util::XCloneable > SAL_CALL Axis::createClone()
 // ____ XModifyBroadcaster ____
 void SAL_CALL Axis::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->addModifyListener( aListener );
-    }
-    catch( const uno::Exception &)
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
 void SAL_CALL Axis::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->removeModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____

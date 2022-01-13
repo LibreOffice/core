@@ -141,7 +141,7 @@ namespace chart
 RegressionCurveModel::RegressionCurveModel( tCurveType eCurveType ) :
     ::property::OPropertySet( m_aMutex ),
     m_eRegressionCurveType( eCurveType ),
-    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
+    m_xModifyEventForwarder( new ModifyEventForwarder() ),
     m_xEquationProperties( new RegressionEquation )
 {
     // set 0 line width (default) hard, so that it is always written to XML,
@@ -155,7 +155,7 @@ RegressionCurveModel::RegressionCurveModel( const RegressionCurveModel & rOther 
     impl::RegressionCurveModel_Base(rOther),
     ::property::OPropertySet( rOther, m_aMutex ),
     m_eRegressionCurveType( rOther.m_eRegressionCurveType ),
-    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+    m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     m_xEquationProperties.set( CloneHelper::CreateRefClone< beans::XPropertySet >()( rOther.m_xEquationProperties ));
     ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );
@@ -216,28 +216,12 @@ OUString SAL_CALL RegressionCurveModel::getServiceName()
 // ____ XModifyBroadcaster ____
 void SAL_CALL RegressionCurveModel::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->addModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
 void SAL_CALL RegressionCurveModel::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->removeModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____

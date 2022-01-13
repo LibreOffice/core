@@ -99,7 +99,7 @@ FormattedString::FormattedString() :
         ::property::OPropertySet( m_aMutex ),
     m_aType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT),
     m_bDataLabelsRange(false),
-    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+    m_xModifyEventForwarder( new ModifyEventForwarder() )
 {}
 
 FormattedString::FormattedString( const FormattedString & rOther ) :
@@ -109,7 +109,7 @@ FormattedString::FormattedString( const FormattedString & rOther ) :
     m_aType(rOther.m_aType),
     m_aGuid(rOther.m_aGuid),
     m_bDataLabelsRange(rOther.m_bDataLabelsRange),
-    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+    m_xModifyEventForwarder( new ModifyEventForwarder() )
 {}
 
 FormattedString::~FormattedString()
@@ -209,28 +209,12 @@ void SAL_CALL FormattedString::setCellRange( const OUString& cellRange )
 // ____ XModifyBroadcaster ____
 void SAL_CALL FormattedString::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->addModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
 void SAL_CALL FormattedString::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->removeModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____

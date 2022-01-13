@@ -256,7 +256,7 @@ namespace chart
 Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
         ::property::OPropertySet( m_aMutex ),
         m_xContext( xContext ),
-        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+        m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     // Set camera position to a default position (that should be set hard, so
     // that it will be exported.  The property default is a camera looking
@@ -271,7 +271,7 @@ Diagram::Diagram( const Diagram & rOther ) :
         impl::Diagram_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
-    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+    m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     lcl_CloneCoordinateSystems( rOther.m_aCoordSystems, m_aCoordSystems );
     ModifyListenerHelper::addListenerToAllElements( m_aCoordSystems, m_xModifyEventForwarder );
@@ -519,28 +519,12 @@ Reference< util::XCloneable > SAL_CALL Diagram::createClone()
 // ____ XModifyBroadcaster ____
 void SAL_CALL Diagram::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->addModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
 void SAL_CALL Diagram::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->removeModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____

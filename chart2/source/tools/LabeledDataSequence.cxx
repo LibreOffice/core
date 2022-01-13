@@ -33,13 +33,13 @@ namespace chart
 {
 
 LabeledDataSequence::LabeledDataSequence() :
-        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+        m_xModifyEventForwarder( new ModifyEventForwarder() )
 {}
 
 LabeledDataSequence::LabeledDataSequence(
     const uno::Reference< chart2::data::XDataSequence > & rValues ) :
         m_xData( rValues ),
-        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+        m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     ModifyListenerHelper::addListener( m_xData, m_xModifyEventForwarder );
 }
@@ -49,7 +49,7 @@ LabeledDataSequence::LabeledDataSequence(
     const uno::Reference< chart2::data::XDataSequence > & rLabel ) :
         m_xData( rValues ),
         m_xLabel( rLabel ),
-        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+        m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     ModifyListenerHelper::addListener( m_xData, m_xModifyEventForwarder );
     ModifyListenerHelper::addListener( m_xLabel, m_xModifyEventForwarder );
@@ -120,28 +120,12 @@ uno::Reference< util::XCloneable > SAL_CALL LabeledDataSequence::createClone()
 // ____ XModifyBroadcaster ____
 void SAL_CALL LabeledDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->addModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
 void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->removeModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 OUString SAL_CALL LabeledDataSequence::getImplementationName()

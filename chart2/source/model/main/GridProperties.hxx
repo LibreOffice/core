@@ -23,8 +23,7 @@
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
+#include <ModifyListenerHelper.hxx>
 
 #include <OPropertySet.hxx>
 
@@ -93,7 +92,7 @@ private:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
-    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 
 } //  namespace chart

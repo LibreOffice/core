@@ -25,8 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
+#include <ModifyListenerHelper.hxx>
 
 namespace chart
 {
@@ -134,7 +133,7 @@ private:
     OUString m_aCellRange;
     bool m_bDataLabelsRange;
 
-    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 
 } //  namespace chart
