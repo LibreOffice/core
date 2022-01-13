@@ -22,6 +22,7 @@
 #include <postmac.h>
 
 #include "ios/iosinst.hxx"
+#include <headless/svpdata.hxx>
 #include "headless/svpdummies.hxx"
 #include "unx/gendata.hxx"
 #include "quartz/utils.h"
@@ -30,17 +31,6 @@
 
 // Totally wrong of course but doesn't seem to harm much in the iOS app.
 static int viewWidth = 1, viewHeight = 1;
-
-class IosSalData : public GenericUnixSalData
-{
-public:
-    explicit IosSalData(SalInstance *pInstance)
-        : GenericUnixSalData(pInstance)
-    {
-    }
-    virtual void ErrorTrapPush() {}
-    virtual bool ErrorTrapPop( bool ) { return false; }
-};
 
 void IosSalInstance::GetWorkArea( tools::Rectangle& rRect )
 {
@@ -52,7 +42,7 @@ IosSalInstance *IosSalInstance::getInstance()
 {
     if (!ImplGetSVData())
         return NULL;
-    IosSalData *pData = static_cast<IosSalData *>(ImplGetSVData()->mpSalData);
+    SvpSalData *pData = static_cast<SvpSalData *>(ImplGetSVData()->mpSalData);
     if (!pData)
         return NULL;
     return static_cast<IosSalInstance *>(pData->m_pInstance);
@@ -172,7 +162,7 @@ SalData::~SalData()
 SalInstance *CreateSalInstance()
 {
     IosSalInstance* pInstance = new IosSalInstance( std::make_unique<SvpSalYieldMutex>() );
-    new IosSalData( pInstance );
+    new SvpSalData( pInstance );
     pInstance->AcquireYieldMutex();
     return pInstance;
 }

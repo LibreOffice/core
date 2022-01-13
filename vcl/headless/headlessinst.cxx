@@ -8,7 +8,7 @@
  */
 #include <headless/svpinst.hxx>
 #include <headless/svpdummies.hxx>
-#include <unx/gendata.hxx>
+#include <headless/svpdata.hxx>
 #include <unistd.h>
 
 class HeadlessSalInstance : public SvpSalInstance
@@ -45,14 +45,6 @@ SalSystem *HeadlessSalInstance::CreateSalSystem()
     return new HeadlessSalSystem();
 }
 
-class HeadlessSalData : public GenericUnixSalData
-{
-public:
-    explicit HeadlessSalData(SalInstance *pInstance) : GenericUnixSalData(pInstance) {}
-    virtual void ErrorTrapPush() override {}
-    virtual bool ErrorTrapPop( bool ) override { return false; }
-};
-
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
     OUString aError( rErrorText );
@@ -88,7 +80,7 @@ SalData::~SalData()
 SalInstance *CreateSalInstance()
 {
     HeadlessSalInstance* pInstance = new HeadlessSalInstance(std::make_unique<SvpSalYieldMutex>());
-    new HeadlessSalData( pInstance );
+    new SvpSalData(pInstance);
     pInstance->AcquireYieldMutex();
     return pInstance;
 }
