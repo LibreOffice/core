@@ -36,10 +36,7 @@ AndroidSalInstance *AndroidSalInstance::getInstance()
 {
     if (!ImplGetSVData())
         return NULL;
-    SvpSalData *pData = static_cast<SvpSalData *>(ImplGetSVData()->mpSalData);
-    if (!pData)
-        return NULL;
-    return static_cast<AndroidSalInstance *>(pData->m_pInstance);
+    return static_cast<AndroidSalInstance *>(GetSalInstance());
 }
 
 AndroidSalInstance::AndroidSalInstance( std::unique_ptr<SalYieldMutex> pMutex )

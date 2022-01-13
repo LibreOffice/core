@@ -52,7 +52,6 @@
 
 #include <salframe.hxx>
 #include <svdata.hxx>
-#include <unx/gendata.hxx>
 // FIXME: remove when we re-work the svp mainloop
 #include <unx/salunxtime.h>
 #include <comphelper/lok.hxx>
@@ -339,7 +338,7 @@ SvpSalYieldMutex::~SvpSalYieldMutex()
 
 void SvpSalYieldMutex::doAcquire(sal_uInt32 const nLockCount)
 {
-    SvpSalInstance *const pInst = static_cast<SvpSalInstance *>(GetSalData()->m_pInstance);
+    auto *const pInst = static_cast<SvpSalInstance*>(GetSalInstance());
     if (pInst && pInst->IsMainThread())
     {
         if (m_bNoYieldLock)
@@ -386,7 +385,7 @@ void SvpSalYieldMutex::doAcquire(sal_uInt32 const nLockCount)
 
 sal_uInt32 SvpSalYieldMutex::doRelease(bool const bUnlockAll)
 {
-    SvpSalInstance *const pInst = static_cast<SvpSalInstance *>(GetSalData()->m_pInstance);
+    auto *const pInst = static_cast<SvpSalInstance*>(GetSalInstance());
     if (pInst && pInst->IsMainThread())
     {
         if (m_bNoYieldLock)
