@@ -545,6 +545,18 @@ bool GraphicFormatDetector::checkPDF()
     return false;
 }
 
+bool GraphicFormatDetector::checkWEBP()
+{
+    if (maFirstBytes[0] == 'R' && maFirstBytes[1] == 'I' && maFirstBytes[2] == 'F'
+        && maFirstBytes[3] == 'F' && maFirstBytes[8] == 'W' && maFirstBytes[9] == 'E'
+        && maFirstBytes[10] == 'B' && maFirstBytes[11] == 'P')
+    {
+        msDetectedFormat = "WEBP";
+        return true;
+    }
+    return false;
+}
+
 } // vcl namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -104,14 +104,16 @@ private:
     std::unique_ptr<weld::Widget> mxColorDepth;
     std::unique_ptr<weld::ComboBox> mxLbColorDepth;
 
-    std::unique_ptr<weld::Widget> mxJPGQuality;
+    std::unique_ptr<weld::Widget> mxJPGWEBPQuality;
     std::unique_ptr<weld::Widget> mxPNGCompression;
 
     std::unique_ptr<weld::Scale> mxSbPngCompression;
     std::unique_ptr<weld::SpinButton> mxNfPngCompression;
 
-    std::unique_ptr<weld::Scale> mxSbJpgCompression;
-    std::unique_ptr<weld::SpinButton> mxNfJpgCompression;
+    std::unique_ptr<weld::Scale> mxSbJpgWebpCompression;
+    std::unique_ptr<weld::SpinButton> mxNfJpgWebpCompression;
+
+    std::unique_ptr<weld::CheckButton> mxCbLossless;
 
     std::unique_ptr<weld::Widget> mxMode;
     std::unique_ptr<weld::CheckButton> mxCbInterlaced;
@@ -148,6 +150,7 @@ private:
     DECL_LINK(UpdateHdlMtfSizeY, weld::SpinButton&, void);
     DECL_LINK(UpdateHdlNfResolution, weld::SpinButton&, void);
     DECL_LINK(SbCompressionUpdateHdl, weld::Scale&, void);
+    DECL_LINK(UpdateHdlLossless, weld::ToggleButton&, void);
 
     DECL_LINK(OK, weld::Button&, void);
 

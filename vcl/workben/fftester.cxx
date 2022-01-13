@@ -42,6 +42,7 @@
 #include <vcl/wmf.hxx>
 #include <vcl/wrkwin.hxx>
 #include <fltcall.hxx>
+#include <filter/WebpReader.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <tools/stream.hxx>
@@ -320,6 +321,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
+        }
+        else if (strcmp(argv[2], "webp") == 0)
+        {
+            Graphic aGraphic;
+            SvFileStream aFileStream(out, StreamMode::READ);
+            ret = static_cast<int>(ImportWebpGraphic(aFileStream, aGraphic));
         }
         else if ((strcmp(argv[2], "doc") == 0) || (strcmp(argv[2], "ww8") == 0))
         {

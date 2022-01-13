@@ -34,6 +34,7 @@
 #define FORMAT_GIF  "gif"
 #define FORMAT_JPG  "jpg"
 #define FORMAT_PNG  "png"
+#define FORMAT_WEBP  "webp"
 
 using namespace com::sun::star;
 
@@ -182,6 +183,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
 
                     case GfxLinkType::NativeJpg: aExt = FORMAT_JPG; break;
                     case GfxLinkType::NativePng: aExt = FORMAT_PNG; break;
+                    case GfxLinkType::NativeWebp: aExt = FORMAT_WEBP; break;
 
                     default:
                     break;
