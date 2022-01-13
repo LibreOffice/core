@@ -256,7 +256,20 @@ void vcl::Cursor::LOKNotify( vcl::Window* pWindow, const OUString& rAction )
         if (!aSize.Width())
             aSize.setWidth( pWindow->GetSettings().GetStyleSettings().GetCursorSize() );
 
-        const tools::Rectangle aRect(Point(nX, nY), aSize);
+        Point aPos(nX, nY);
+
+        if (pWindow->IsRTLEnabled() && pWindow->GetOutDev() && pParent->GetOutDev()
+            && !pWindow->GetOutDev()->ImplIsAntiparallel())
+            pParent->GetOutDev()->ReMirror(aPos);
+
+        if (!pWindow->IsRTLEnabled() && pWindow->GetOutDev() && pParent->GetOutDev()
+            && pWindow->GetOutDev()->ImplIsAntiparallel())
+        {
+            pWindow->GetOutDev()->ReMirror(aPos);
+            pParent->GetOutDev()->ReMirror(aPos);
+        }
+
+        const tools::Rectangle aRect(aPos, aSize);
         aItems.emplace_back("rectangle", aRect.toString());
     }
 
