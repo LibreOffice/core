@@ -7,14 +7,15 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="margin-start">6</property>
-    <property name="margin-end">6</property>
+    <property name="margin-end">12</property>
     <property name="column-spacing">6</property>
     <property name="row-homogeneous">True</property>
     <child>
       <object class="GtkLabel" id="label">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="margin-start">6</property>
+        <property name="halign">start</property>
+        <property name="valign">center</property>
         <property name="use-underline">True</property>
         <property name="mnemonic-widget">button</property>
         <property name="xalign">0</property>
