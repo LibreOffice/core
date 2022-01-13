@@ -466,6 +466,7 @@ OUString convertGfxLinkTypeToString(GfxLinkType eGfxLinkType)
         case GfxLinkType::NativeSvg: return "NativeSvg";
         case GfxLinkType::NativeTif: return "NativeTif";
         case GfxLinkType::NativeWmf: return "NativeWmf";
+        case GfxLinkType::NativeWebp: return "NativeWebp";
         case GfxLinkType::NONE: return "None";
     }
     return OUString();
