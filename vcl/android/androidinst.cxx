@@ -14,7 +14,7 @@
 
 #include <android/androidinst.hxx>
 #include <headless/svpdummies.hxx>
-#include <unx/gendata.hxx>
+#include <headless/svpdata.hxx>
 #include <osl/detail/android-bootstrap.h>
 #include <rtl/strbuf.hxx>
 #include <vcl/settings.hxx>
@@ -25,14 +25,6 @@
 
 // Horrible hack
 static int viewWidth = 1, viewHeight = 1;
-
-class AndroidSalData : public GenericUnixSalData
-{
-public:
-    explicit AndroidSalData(SalInstance *pInstance) : GenericUnixSalData(pInstance) {}
-    virtual void ErrorTrapPush() {}
-    virtual bool ErrorTrapPop( bool ) { return false; }
-};
 
 void AndroidSalInstance::GetWorkArea(tools::Rectangle& rRect)
 {
@@ -169,7 +161,7 @@ extern "C" SalInstance *create_SalInstance()
 {
     LOGI("Android: CreateSalInstance!");
     AndroidSalInstance* pInstance = new AndroidSalInstance( std::make_unique<SvpSalYieldMutex>() );
-    new AndroidSalData( pInstance );
+    new SvpSalData( pInstance );
     return pInstance;
 }
 
