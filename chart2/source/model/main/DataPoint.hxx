@@ -24,11 +24,10 @@
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <OPropertySet.hxx>
+#include "ModifyListenerHelper.hxx"
 
 namespace chart
 {
@@ -103,7 +102,7 @@ private:
 
     css::uno::WeakReference< css::beans::XPropertySet >   m_xParentProperties;
 
-    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
     bool m_bNoParentPropAllowed;
 };
 

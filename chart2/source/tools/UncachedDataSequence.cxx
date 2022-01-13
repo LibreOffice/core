@@ -62,7 +62,7 @@ UncachedDataSequence::UncachedDataSequence(
           m_nNumberFormatKey(0),
           m_xDataProvider( xIntDataProv ),
           m_aSourceRepresentation( rRangeRepresentation ),
-          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+          m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     registerProperties();
 }
@@ -76,7 +76,7 @@ UncachedDataSequence::UncachedDataSequence(
           m_nNumberFormatKey(0),
           m_xDataProvider( xIntDataProv ),
           m_aSourceRepresentation( rRangeRepresentation ),
-          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+          m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     registerProperties();
     setFastPropertyValue_NoBroadcast( PROP_PROPOSED_ROLE, uno::Any( rRole ));
@@ -89,7 +89,7 @@ UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource
           m_sRole( rSource.m_sRole ),
           m_xDataProvider( rSource.m_xDataProvider ),
           m_aSourceRepresentation( rSource.m_aSourceRepresentation ),
-          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+          m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     registerProperties();
 }

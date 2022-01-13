@@ -26,8 +26,7 @@
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
+#include "ModifyListenerHelper.hxx"
 
 #include <vector>
 
@@ -111,7 +110,7 @@ protected:
     void fireModifyEvent();
 
 protected:
-    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 
 private:
     sal_Int32                                             m_nDimensionCount;

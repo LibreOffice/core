@@ -166,13 +166,13 @@ namespace chart
 
 RegressionEquation::RegressionEquation() :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( new ModifyEventForwarder())
 {}
 
 RegressionEquation::RegressionEquation( const RegressionEquation & rOther ) :
         impl::RegressionEquation_Base(rOther),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( new ModifyEventForwarder())
 {}
 
 RegressionEquation::~RegressionEquation()
@@ -209,28 +209,12 @@ Reference< beans::XPropertySetInfo > SAL_CALL RegressionEquation::getPropertySet
 // ____ XModifyBroadcaster ____
 void SAL_CALL RegressionEquation::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->addModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
 void SAL_CALL RegressionEquation::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->removeModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____

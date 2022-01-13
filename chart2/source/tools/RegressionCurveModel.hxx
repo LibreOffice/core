@@ -29,8 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
+#include "ModifyListenerHelper.hxx"
 
 namespace chart
 {
@@ -117,7 +116,7 @@ protected:
 private:
     const tCurveType    m_eRegressionCurveType;
 
-    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
     css::uno::Reference< css::beans::XPropertySet > m_xEquationProperties;
 };
 

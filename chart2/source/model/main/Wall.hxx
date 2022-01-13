@@ -19,13 +19,12 @@
 #pragma once
 
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
 #include <OPropertySet.hxx>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
+#include "ModifyListenerHelper.hxx"
 
 namespace chart
 {
@@ -87,7 +86,7 @@ private:
 
 private:
 
-    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 
 } //  namespace chart

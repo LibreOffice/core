@@ -23,6 +23,7 @@
 
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include "ModifyListenerHelper.hxx"
 
 namespace com::sun::star::chart2::data { class XDataSequence; }
 namespace com::sun::star::util { class XCloneable; }
@@ -80,7 +81,7 @@ private:
     css::uno::Reference< css::chart2::data::XDataSequence > m_xData;
     css::uno::Reference< css::chart2::data::XDataSequence > m_xLabel;
 
-    css::uno::Reference< css::util::XModifyListener >       m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 
 } //  namespace chart

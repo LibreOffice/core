@@ -24,14 +24,13 @@
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 // helper classes
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
+#include "ModifyListenerHelper.hxx"
 
 // STL
 #include <vector>
@@ -160,7 +159,7 @@ private:
         tRegressionCurveContainerType;
     tRegressionCurveContainerType m_aRegressionCurves;
 
-    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 
 }  // namespace chart

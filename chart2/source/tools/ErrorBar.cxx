@@ -91,7 +91,7 @@ ErrorBar::ErrorBar() :
     mfNegativeError(0),
     mfWeight(1),
     meStyle(css::chart::ErrorBarStyle::NONE),
-    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+    m_xModifyEventForwarder( new ModifyEventForwarder() )
 {}
 
 ErrorBar::ErrorBar( const ErrorBar & rOther ) :
@@ -109,7 +109,7 @@ ErrorBar::ErrorBar( const ErrorBar & rOther ) :
     mfNegativeError(rOther.mfNegativeError),
     mfWeight(rOther.mfWeight),
     meStyle(rOther.meStyle),
-    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
+    m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     if( ! rOther.m_aDataSequences.empty())
     {
@@ -401,28 +401,12 @@ void ErrorBar::removeVetoableChangeListener( const OUString&, const css::uno::Re
 // ____ XModifyBroadcaster ____
 void SAL_CALL ErrorBar::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->addModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
 void SAL_CALL ErrorBar::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
-    try
-    {
-        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->removeModifyListener( aListener );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
