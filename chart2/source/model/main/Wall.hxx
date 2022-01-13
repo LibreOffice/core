@@ -40,7 +40,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class Wall final :
-    public cppu::BaseMutex,
+    public ::BaseStdMutex,
     public impl::Wall_Base,
     public ::property::OPropertySet
 {

@@ -27,7 +27,7 @@ namespace chart
 {
 
 class BubbleChartTypeTemplate :
-        public cppu::BaseMutex,
+        public ::BaseStdMutex,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {

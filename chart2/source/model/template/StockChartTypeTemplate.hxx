@@ -27,7 +27,7 @@ namespace chart
 {
 
 class StockChartTypeTemplate :
-        public cppu::BaseMutex,
+        public ::BaseStdMutex,
         public ChartTypeTemplate,
         public ::property::OPropertySet
 {

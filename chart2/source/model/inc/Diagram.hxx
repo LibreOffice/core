@@ -55,7 +55,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class Diagram final :
-    public cppu::BaseMutex,
+    public ::BaseStdMutex,
     public impl::Diagram_Base,
     public ::property::OPropertySet
 {

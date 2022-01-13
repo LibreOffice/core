@@ -47,8 +47,8 @@ typedef ::cppu::WeakImplHelper
 }
 
 class BaseCoordinateSystem :
+        public ::BaseStdMutex,
         public impl::BaseCoordinateSystem_Base,
-        public cppu::BaseMutex,
         public ::property::OPropertySet
 {
 public:

@@ -40,7 +40,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class StockBar final :
-        public cppu::BaseMutex,
+        public ::BaseStdMutex,
         public impl::StockBar_Base,
         public ::property::OPropertySet
 {

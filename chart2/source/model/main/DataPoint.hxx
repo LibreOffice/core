@@ -45,7 +45,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class DataPoint final :
-        public cppu::BaseMutex,
+        public BaseStdMutex,
         public impl::DataPoint_Base,
         public ::property::OPropertySet
 {

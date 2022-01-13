@@ -43,7 +43,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class Legend final :
-    public cppu::BaseMutex,
+    public ::BaseStdMutex,
     public impl::Legend_Base,
     public ::property::OPropertySet
 {

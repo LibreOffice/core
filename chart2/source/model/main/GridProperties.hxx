@@ -42,7 +42,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class GridProperties final :
-        public cppu::BaseMutex,
+        public ::BaseStdMutex,
         public impl::GridProperties_Base,
         public ::property::OPropertySet
 {

@@ -47,7 +47,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class ChartType :
-    public cppu::BaseMutex,
+    public ::BaseStdMutex,
     public impl::ChartType_Base,
     public ::property::OPropertySet
 {

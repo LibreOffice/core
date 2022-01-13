@@ -43,7 +43,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class FormattedString final :
-    public cppu::BaseMutex,
+    public ::BaseStdMutex,
     public impl::FormattedString_Base,
     public ::property::OPropertySet
 {
