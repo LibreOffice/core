@@ -2568,7 +2568,7 @@ void ScChart2DataSequence::BuildDataCache()
 
                         aItem.mAddress = ScAddress(nCol, nRow, nTab);
 
-                        m_aDataArray.push_back(aItem);
+                        m_aDataArray.push_back(std::move(aItem));
                         ++nDataCount;
                     }
                 }
