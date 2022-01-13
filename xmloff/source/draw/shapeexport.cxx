@@ -46,6 +46,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeMetalType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
@@ -4451,6 +4452,25 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         if ( rProp.Value >>= bExtrusionMetal )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_METAL,
                                                 bExtrusionMetal ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
+                                    }
+                                    break;
+                                    case EAS_MetalType :
+                                    {
+                                        // export only if ODF extensions are enabled
+                                        sal_Int16 eMetalType;
+                                        if (rProp.Value >>= eMetalType)
+                                        {
+                                            SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
+                                            if (eVersion > SvtSaveOptions::ODFSVER_013
+                                                && (eVersion & SvtSaveOptions::ODFSVER_EXTENDED))
+                                            {
+                                                if (eMetalType == drawing::EnhancedCustomShapeMetalType::MetalMSCompatible)
+                                                    aStr = "loext:MetalMSCompatible";
+                                                else
+                                                    aStr = "draw:MetalODF";
+                                                rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_EXTRUSION_METAL_TYPE, aStr);
+                                            }
+                                        }
                                     }
                                     break;
                                     case EAS_ShadeMode :

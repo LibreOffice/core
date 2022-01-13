@@ -2295,6 +2295,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	EnhancedCustomShapeSegmentCommand \
 	EnhancedCustomShapeTextFrame \
 	EnhancedCustomShapeTextPathMode \
+    EnhancedCustomShapeMetalType \
 	EscapeDirection \
 	FillStyle \
 	FlagSequence \

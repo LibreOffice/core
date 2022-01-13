@@ -398,8 +398,9 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
     assertXPath(pXmlDoc, "//scene", "projectionMode", "Perspective");
     assertXPath(pXmlDoc, "//scene/extrude3D[1]/fill", "color", "#ff0000");
     assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material", "color", "#ff0000");
+    // ODF default 50% is repesented by Specular Intensity = 2^5. The relationship is not linear.
     assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material", "specularIntensity",
-                "20");
+                "32");
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMetal)
@@ -411,12 +412,12 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMetal)
 
     xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
 
-    // ODF specifies specular color as rgb(200,200,200) and adding 15 to specularity for metal=true
-    // without patch the specular color was #ffffff
-    assertXPath(pXmlDoc, "(//material)[1]", "specular", "#c8c8c8");
-    // specularIntensity = 100 - (80 + 15), with nominal value 80 in the file
-    // without patch specularIntensity was 15
-    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", "5");
+    // ODF specifies for metal = true specular color as rgb(200,200,200) and adding 15 to specularity
+    // Together with extrusion-first-light-level 67% and extrusion-specularity 80% factor is
+    // 0.67*0.8 * 200/255 = 0.42 and color #6b6b6b
+    assertXPath(pXmlDoc, "(//material)[1]", "specular", "#6b6b6b");
+    // 3D specularIntensity = 2^(50/10) + 15 = 47, with default extrusion-shininess 50%
+    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", "47");
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testExtrusionPhong)
@@ -442,16 +443,20 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMattePPT)
 
     xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
 
-    // The preset 'matte' in the PPT user interface sets the specularity of material to 0. To get the
-    // same effect in LO, specular of the lights need to be false in addition. Without patch the
-    // lights 1, 2, 3 are used, with patch lights 2, 3, 4. Thereby light 4 has the same color and
-    // direction as light 1, but without being specular. The dump has in both cases three lights, but
-    // without number. So we test as ersatz, that the third of them has the color of light 1. Being
-    // not light 1, it is never specular in LO, so no need to test.
-    // 'color' was "#464646" without patch.
-    assertXPath(pXmlDoc, "(//light)[3]", "color", "#aaaaaa");
-    // 'specularIntensity' was "15" without patch. specularIntensity = 100 - specularity of material.
-    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", "100");
+    // The preset 'matte' sets the specularity of material to 0. But that alone does not make the
+    // rendering 'matte' in LO. To get a 'matte' effect in LO, specularity of the light need to be
+    // false in addition. To get this, first light is set off and values from first light are copied
+    // to forth light, as only first light is specular. Because first and third lights are off, the
+    // forth light is the second one in the dump. The gray color corresponding to
+    // FirstLightLevel = 38000/2^16 is #949494.
+    assertXPath(pXmlDoc, "(//material)[1]", "specular", "#000000");
+    assertXPath(pXmlDoc, "(//light)[2]", "color", "#949494");
+    // To make the second light soft, part of its intensity is moved to lights 5,6,7 and 8.
+    assertXPath(pXmlDoc, "(//light)[1]", "color", "#1e1e1e");
+    assertXPath(pXmlDoc, "(//light)[3]", "color", "#3b3b3b");
+    // The 3D property specularIntensity is not related to 'extrusion-specularity' but to
+    // 'extrusion-shininess'. specularIntensity = 2^(shininess/10), here default 32.
+    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", "32");
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testMaterialSpecular)
@@ -465,10 +470,17 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testMaterialSpecular)
     xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    // The material property 'draw:extrusion-specularity' was not applied to the object but to the
-    // scene. Without patch the object has always a default value 15 of specularIntensity. The file
-    // has specularity=77%. It should be specularIntensity = 100-77=23 with patch.
-    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", "23");
+    // 3D specular color is derived from properties 'extrusion-specularity' and 'extrusion-first-light
+    // -level'. 3D specularIntensity is dervied from property 'draw:extrusion-shininess'. Both are
+    // object properties, not scene properties. Those were wrong in various forms before the patch.
+    // Specularity = 77% * first-light-level 67% = 0.5159, which corresponds to gray color #848484.
+    assertXPath(pXmlDoc, "(//material)[1]", "specular", "#848484");
+    // extrusion-shinines 50% corresponds to 3D specularIntensity 32, use 2^(50/10).
+    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", "32");
+    // extrusion-first-light-level 67% corresponds to gray color #ababab, use 255 * 0.67.
+    assertXPath(pXmlDoc, "(//light)[1]", "color", "#ababab");
+    // The first light is harsh, the second light soft. So the 3D scene should have 6 lights (1+1+4).
+    assertXPath(pXmlDoc, "//light", 6);
 }
 }
 

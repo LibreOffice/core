@@ -45,6 +45,7 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <svx/sdr/properties/properties.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeMetalType.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
@@ -53,6 +54,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
+#include <basegfx/color/bcolor.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -90,6 +92,9 @@ void GetSkew( const SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, doub
     if ( ! ( pAny && ( *pAny >>= aSkewParaPair ) && ( aSkewParaPair.First.Value >>= rSkewAmount ) && ( aSkewParaPair.Second.Value >>= rSkewAngle ) ) )
     {
         rSkewAmount = 50;
+        // ODF default is 45, but older ODF documents expect -135 as default. For intermediate
+        // solution see tdf#141301 and tdf#141127.
+        // MS Office default -135 is set in msdffimp.cxx to make import independent from setting here.
         rSkewAngle = -135;
     }
     rSkewAngle = basegfx::deg2rad(rSkewAngle);
@@ -170,6 +175,56 @@ drawing::Direction3D GetDirection3D( const SdrCustomShapeGeometryItem& rItem, co
     return aRetValue;
 }
 
+sal_Int16 GetMetalType(const SdrCustomShapeGeometryItem& rItem, const sal_Int16 eDefault)
+{
+    sal_Int16 aRetValue(eDefault);
+    const Any* pAny = rItem.GetPropertyValueByName("Extrusion", "MetalType");
+    if (pAny)
+        *pAny >>= aRetValue;
+    return aRetValue;
+}
+
+// Calculates the light directions for the additional lights, which are used to emulate soft
+// lights of MS Office. Method needs to be documented in the Wiki
+// https://wiki.documentfoundation.org/Development/ODF_Implementer_Notes in part
+// List_of_LibreOffice_ODF_implementation-defined_items
+// The method expects vector rLight to be normalized and results normalized vectors.
+void lcl_SoftLightsDirection(const basegfx::B3DVector& rLight, basegfx::B3DVector& rSoftUp,
+                             basegfx::B3DVector& rSoftDown, basegfx::B3DVector& rSoftRight,
+                             basegfx::B3DVector& rSoftLeft)
+{
+    constexpr double fAngle = basegfx::deg2rad(60); // angle between regular light and soft light
+
+    // We first create directions around (0|0|1) and then rotate them to the light position.
+    rSoftUp = basegfx::B3DVector(0.0, sin(fAngle), cos(fAngle));
+    rSoftDown = basegfx::B3DVector(0.0, -sin(fAngle), cos(fAngle));
+    rSoftRight = basegfx::B3DVector(sin(fAngle), 0.0, cos(fAngle));
+    rSoftLeft = basegfx::B3DVector(-sin(fAngle), 0.0, cos(fAngle));
+
+    basegfx::B3DHomMatrix aRotateMat;
+    aRotateMat.rotate(0.0, 0.0, M_PI_4);
+    if (rLight.getX() == 0.0 && rLight.getZ() == 0.0)
+    {
+        // Special case with light from top or bottom
+        if (rLight.getY() >= 0.0)
+            aRotateMat.rotate(-M_PI_2, 0.0, 0.0);
+        else
+            aRotateMat.rotate(M_PI_2, 0.0, 0.0);
+    }
+    else
+    {
+        // Azimuth from z-axis to x-axis. (0|0|1) to (1|0|0) is 90deg.
+        double fAzimuth = atan2(rLight.getX(), rLight.getZ());
+        // Elevation from xz-plane to y-axis. (0|0|1) to (0|1|0) is 90deg.
+        double fElevation = atan2(rLight.getY(), std::hypot(rLight.getX(), rLight.getZ()));
+        aRotateMat.rotate(-fElevation, fAzimuth, 0.0);
+    }
+
+    rSoftUp = aRotateMat * rSoftUp;
+    rSoftDown = aRotateMat * rSoftDown;
+    rSoftRight = aRotateMat * rSoftRight;
+    rSoftLeft = aRotateMat * rSoftLeft;
+}
 }
 
 SdrObject* EnhancedCustomShape3d::Create3DObject(
@@ -256,7 +311,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
         pScene->GetProperties().SetObjectItem( Svx3DShadeModeItem(static_cast<sal_uInt16>(eShadeMode)));
         aSet.Put( makeSvx3DPercentDiagonalItem( 0 ) );
         aSet.Put( Svx3DTextureModeItem( 1 ) );
-         // SPECIFIC needed for ShadeMode_SMOOTH and ShadeMode_PHONG, otherwise FLAT is faster
+        // SPECIFIC needed for ShadeMode_SMOOTH and ShadeMode_PHONG, otherwise FLAT is faster.
         if (eShadeMode == drawing::ShadeMode_SMOOTH || eShadeMode == drawing::ShadeMode_PHONG)
             aSet.Put( Svx3DNormalsKindItem(static_cast<sal_uInt16>(drawing::NormalsKind_SPECIFIC)));
         else
@@ -703,105 +758,259 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             pScene->SetLogicRect(a2DProjectionResult.GetBoundRect());
 
 
-            // light
+            // light and material
 
+            // "LightFace" has nothing corresponding in 3D rendering engine.
+            /* bool bLightFace = */ GetBool(rGeometryItem, "LightFace", true); // default in ODF
 
-            drawing::Direction3D aFirstLightDirectionDefault( 50000, 0, 10000 );
-            drawing::Direction3D aFirstLightDirection( GetDirection3D( rGeometryItem, "FirstLightDirection", aFirstLightDirectionDefault ) );
-            if ( aFirstLightDirection.DirectionZ == 0.0 )
+            // Light directions
+
+            drawing::Direction3D aFirstLightDirectionDefault(50000.0, 0.0, 10000.0);
+            drawing::Direction3D aFirstLightDirection(GetDirection3D( rGeometryItem, "FirstLightDirection", aFirstLightDirectionDefault));
+            if (aFirstLightDirection.DirectionX == 0.0 && aFirstLightDirection.DirectionY == 0.0
+                && aFirstLightDirection.DirectionZ == 0.0)
                 aFirstLightDirection.DirectionZ = 1.0;
+            basegfx::B3DVector aLight1Vector(aFirstLightDirection.DirectionX, -aFirstLightDirection.DirectionY, aFirstLightDirection.DirectionZ);
+            aLight1Vector.normalize();
 
-            double fLightIntensity = GetDouble( rGeometryItem, "FirstLightLevel", 43712.0 / 655.36 ) / 100.0;
+            drawing::Direction3D aSecondLightDirectionDefault(-50000.0, 0.0, 10000.0);
+            drawing::Direction3D aSecondLightDirection(GetDirection3D( rGeometryItem, "SecondLightDirection", aSecondLightDirectionDefault));
+            if (aSecondLightDirection.DirectionX == 0.0 && aSecondLightDirection.DirectionY == 0.0
+                && aSecondLightDirection.DirectionZ == 0.0)
+                aSecondLightDirection.DirectionZ = 1.0;
+            basegfx::B3DVector aLight2Vector(aSecondLightDirection.DirectionX, -aSecondLightDirection.DirectionY, aSecondLightDirection.DirectionZ);
+            aLight2Vector.normalize();
 
-            bool bFirstLightHarsh = GetBool( rGeometryItem, "FirstLightHarsh", true );
+            // Light Intensity
 
-            drawing::Direction3D aSecondLightDirectionDefault( -50000, 0, 10000 );
-            drawing::Direction3D aSecondLightDirection( GetDirection3D( rGeometryItem, "SecondLightDirection", aSecondLightDirectionDefault ) );
-            if ( aSecondLightDirection.DirectionZ == 0.0 )
-                aSecondLightDirection.DirectionZ = -1;
+            // For "FirstLight" the 3D-Scene light "1" is regulary used. In case of surface "Matte"
+            // the light 4 is used instead. For "SecondLight" the 3D-Scene light "2" is regulary used.
+            // In case first or second light is not harsh, the lights 5 to 8 are used in addition
+            // to get a soft light appearance.
+            // The 3D-Scene light "3" is currently not used.
 
-            double fLight2Intensity = GetDouble( rGeometryItem, "SecondLightLevel", 43712.0 / 655.36 ) / 100.0;
+            // ODF default 66%. MS Office default 38000/65536=0.579 is set in import filter.
+            double fLight1Intensity = GetDouble(rGeometryItem, "FirstLightLevel", 66) / 100.0;
+            // ODF and MS Office have both default 'true'.
+            bool bFirstLightHarsh = GetBool(rGeometryItem, "FirstLightHarsh", true);
+            // ODF default 66%. MS Office default 38000/65536=0.579 is set in import filter
+            double fLight2Intensity = GetDouble(rGeometryItem, "SecondLightLevel", 66) / 100.0;
+            // ODF has default 'true'. MS Office default 'false' is set in import.
+            bool bSecondLightHarsh = GetBool(rGeometryItem, "SecondLightHarsh", true);
 
-            /* sal_Bool bLight2Harsh = */ GetBool( rGeometryItem, "SecondLightHarsh", false );
-            /* sal_Bool bLightFace = */ GetBool( rGeometryItem, "LightFace", false );
+            // ODF default 33%. MS Office default 20000/65536=0.305 is set in import filter.
+            double fAmbientIntensity = GetDouble(rGeometryItem, "Brightness", 33) / 100.0;
 
-            double fAmbientIntensity = GetDouble( rGeometryItem, "Brightness", 22178.0 / 655.36 ) / 100.0;
-            bool bMetal = GetBool( rGeometryItem, "Metal", false );
-
-            // Currently needed for import from binary MS Office.
-            // ToDo: Create a solution in the filters.
-            // MS Office adds black to diffuse and ambient color in case of metal. Use an
-            // approximating ersatz.
-            if (bMetal)
+            double fLight1IntensityForSpecular(fLight1Intensity); // remember original value
+            if (!bFirstLightHarsh || !bSecondLightHarsh) // might need softing lights
             {
-                fAmbientIntensity -= 0.15; // Estimated value. Adapt it if necessary.
-                fAmbientIntensity = std::clamp(fAmbientIntensity, 0.0, 1.0);
-                fLight2Intensity -= 0.15;
-                fLight2Intensity = std::clamp(fLight2Intensity, 0.0, 1.0);
+                bool bNeedSoftLights(false); // catch case of lights with zero intensity.
+                basegfx::B3DVector aLight5Vector;
+                basegfx::B3DVector aLight6Vector;
+                basegfx::B3DVector aLight7Vector;
+                basegfx::B3DVector aLight8Vector;
+                // The needed light intensities depend on the angle between regular light and
+                // additional lights, currently for 60deg.
+                Color aHoriSoftLightColor;
+                Color aVertSoftLightColor;
+
+                if (!bSecondLightHarsh && fLight2Intensity > 0.0
+                    && (bFirstLightHarsh || fLight1Intensity == 0.0)) // only second light soft
+                {
+                    // That is default for shapes generated in the UI, for LO and MS Office as well.
+                    bNeedSoftLights = true;
+                    double fLight2SoftIntensity = fLight2Intensity * 0.40;
+                    aHoriSoftLightColor = Color(basegfx::BColor(fLight2SoftIntensity).clamp());
+                    aVertSoftLightColor = aHoriSoftLightColor;
+                    fLight2Intensity *= 0.2;
+
+                    lcl_SoftLightsDirection(aLight2Vector, aLight5Vector, aLight6Vector,
+                                            aLight7Vector, aLight8Vector);
+                }
+                else if (!bFirstLightHarsh && fLight1Intensity > 0.0
+                         && (bSecondLightHarsh || fLight2Intensity == 0.0)) // only first light soft
+                {
+                    bNeedSoftLights = true;
+                    double fLight1SoftIntensity = fLight1Intensity * 0.40;
+                    aHoriSoftLightColor = Color(basegfx::BColor(fLight1SoftIntensity).clamp());
+                    aVertSoftLightColor = aHoriSoftLightColor;
+                    fLight1Intensity *= 0.2;
+
+                    lcl_SoftLightsDirection(aLight1Vector, aLight5Vector, aLight6Vector,
+                                            aLight7Vector, aLight8Vector);
+                }
+                else if (!bFirstLightHarsh && fLight1Intensity > 0.0 && !bSecondLightHarsh
+                         && fLight2Intensity > 0.0) // both lights soft
+                {
+                    bNeedSoftLights = true;
+                    // We do not hat enough lights. We use two soft lights for FirstLight and two for
+                    // SecondLight and double intensity.
+                    double fLight1SoftIntensity = fLight1Intensity * 0.8;
+                    fLight1Intensity *= 0.4;
+                    aHoriSoftLightColor = Color(basegfx::BColor(fLight1SoftIntensity).clamp());
+                    basegfx::B3DVector aDummy1, aDummy2;
+                    lcl_SoftLightsDirection(aLight1Vector, aDummy1, aDummy2, aLight7Vector,
+                                            aLight8Vector);
+
+                    double fLight2SoftIntensity = fLight2Intensity * 0.8;
+                    aVertSoftLightColor = Color(basegfx::BColor(fLight2SoftIntensity).clamp());
+                    fLight2Intensity *= 0.4;
+                    lcl_SoftLightsDirection(aLight2Vector, aLight5Vector, aLight6Vector, aDummy1,
+                                            aDummy2);
+                }
+
+                if (bNeedSoftLights)
+                {
+                    pScene->GetProperties().SetObjectItem(
+                        makeSvx3DLightDirection5Item(aLight5Vector));
+                    pScene->GetProperties().SetObjectItem(
+                        makeSvx3DLightcolor5Item(aVertSoftLightColor));
+                    pScene->GetProperties().SetObjectItem(makeSvx3DLightOnOff5Item(true));
+                    pScene->GetProperties().SetObjectItem(
+                        makeSvx3DLightDirection6Item(aLight6Vector));
+                    pScene->GetProperties().SetObjectItem(
+                        makeSvx3DLightcolor6Item(aVertSoftLightColor));
+                    pScene->GetProperties().SetObjectItem(makeSvx3DLightOnOff6Item(true));
+                    pScene->GetProperties().SetObjectItem(
+                        makeSvx3DLightDirection7Item(aLight7Vector));
+                    pScene->GetProperties().SetObjectItem(
+                        makeSvx3DLightcolor7Item(aHoriSoftLightColor));
+                    pScene->GetProperties().SetObjectItem(makeSvx3DLightOnOff7Item(true));
+                    pScene->GetProperties().SetObjectItem(
+                        makeSvx3DLightDirection8Item(aLight8Vector));
+                    pScene->GetProperties().SetObjectItem(
+                        makeSvx3DLightcolor8Item(aHoriSoftLightColor));
+                    pScene->GetProperties().SetObjectItem(makeSvx3DLightOnOff8Item(true));
+                }
             }
 
-            sal_uInt16 nAmbientColor = static_cast<sal_uInt16>( fAmbientIntensity * 255.0 );
-            if ( nAmbientColor > 255 )
-                nAmbientColor = 255;
-            Color aGlobalAmbientColor( static_cast<sal_uInt8>(nAmbientColor), static_cast<sal_uInt8>(nAmbientColor), static_cast<sal_uInt8>(nAmbientColor) );
-            pScene->GetProperties().SetObjectItem( makeSvx3DAmbientcolorItem( aGlobalAmbientColor ) );
-
-            sal_uInt8 nSpotLight1 = static_cast<sal_uInt8>( fLightIntensity * 255.0 );
-            basegfx::B3DVector aSpotLight1( aFirstLightDirection.DirectionX, - ( aFirstLightDirection.DirectionY ), -( aFirstLightDirection.DirectionZ ) );
-            aSpotLight1.normalize();
-            pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff1Item( true ) );
-            Color aAmbientSpot1Color( nSpotLight1, nSpotLight1, nSpotLight1 );
-            pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor1Item( aAmbientSpot1Color ) );
-            pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection1Item( aSpotLight1 ) );
-
-            sal_uInt8 nSpotLight2 = static_cast<sal_uInt8>( fLight2Intensity * 255.0 );
-            basegfx::B3DVector aSpotLight2( aSecondLightDirection.DirectionX, -aSecondLightDirection.DirectionY, -aSecondLightDirection.DirectionZ );
-            aSpotLight2.normalize();
-            pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff2Item( true ) );
-            Color aAmbientSpot2Color( nSpotLight2, nSpotLight2, nSpotLight2 );
-            pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor2Item( aAmbientSpot2Color ) );
-            pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection2Item( aSpotLight2 ) );
-
-            // Currently needed for import from binary MS Office.
-            // ToDo: Create a solution in the filters.
-            // Binary MS Office creates brighter shapes than our 3D engine with same values.
-            sal_uInt8 nSpotLight3 = 70;
-            basegfx::B3DVector aSpotLight3( 0.0, 0.0, 1.0 );
-            pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff3Item( true ) );
-            Color aAmbientSpot3Color( nSpotLight3, nSpotLight3, nSpotLight3 );
-            pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor3Item( aAmbientSpot3Color ) );
-            pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection3Item( aSpotLight3 ) );
-
-            double fSpecular = GetDouble( rGeometryItem, "Specularity", 0 );
-            // ODF specifies 'white', OOXML uses shape fill color in some presets
-            Color aSpecularCol(255, 255, 255);
-            if ( bMetal )
+            // ToDo: MSO seems to add half of the surplus to ambient color. ODF restricts value to <1.
+            if (fLight1Intensity > 1.0)
             {
-                // values as specified in ODF
-                aSpecularCol = Color( 200, 200, 200 );
-                fSpecular += 15.0;
+                fAmbientIntensity += (fLight1Intensity - 1.0) / 2.0;
             }
-            sal_Int32 nIntensity = 100 - static_cast<sal_Int32>(fSpecular);
-            nIntensity = std::clamp<sal_Int32>(nIntensity, 0, 100);
 
-            // specularity is an object property, not a scene property
-            SdrObjListIter aSceneIter( *pScene, SdrIterMode::DeepNoGroups );
+            // ToDo: How to handle fAmbientIntensity larger 1.0 ? Perhaps lighten object color?
+
+            // Now set the regulary 3D-scene light attributes.
+            Color aAmbientColor(basegfx::BColor(fAmbientIntensity).clamp());
+            pScene->GetProperties().SetObjectItem(makeSvx3DAmbientcolorItem(aAmbientColor));
+
+            pScene->GetProperties().SetObjectItem(makeSvx3DLightDirection1Item(aLight1Vector));
+            pScene->GetProperties().SetObjectItem(makeSvx3DLightOnOff1Item(fLight1Intensity > 0.0));
+            Color aLight1Color(basegfx::BColor(fLight1Intensity).clamp());
+            pScene->GetProperties().SetObjectItem(makeSvx3DLightcolor1Item(aLight1Color));
+
+            pScene->GetProperties().SetObjectItem(makeSvx3DLightDirection2Item(aLight2Vector));
+            pScene->GetProperties().SetObjectItem(makeSvx3DLightOnOff2Item(fLight2Intensity > 0.0));
+            Color aLight2Color(basegfx::BColor(fLight2Intensity).clamp());
+            pScene->GetProperties().SetObjectItem(makeSvx3DLightcolor2Item(aLight2Color));
+
+            // Object reactions on light
+            // Diffusion, Specular-Color and -Intensity are object properties, not scene properties.
+            // Surface flag "Metal" is an object property too.
+
+            // Property "Diffusion" would correspond to style attribute "drd3:diffuse-color".
+            // But that is not implemented. We cannot ignore the attribute because MS Office sets
+            // attribute c3DDiffuseAmt to 43712 (Type Fixed 16.16, approx 66,9%) instead of MSO
+            // default 65536 (100%), if the user sets surface 'Metal' in the UI of MS Office.
+            // We will change the material color of the 3D object as ersatz.
+            // ODF data type is percent with default 0%. MSO default is set in import filter.
+            double fDiffusion = GetDouble(rGeometryItem, "Diffusion", 0.0) / 100.0;
+
+            // ODF standard specifies for value true: "the specular color for the shading of an
+            // extruded shape is gray (red, green and blue values of 200) instead of white and 15% is
+            // added to the specularity."
+            // Neither 'specularity' nor 'specular color' is clearly defined in the standard. ODF term
+            // 'specularity' seems to correspond to UI field 'Specular Intensity' for 3D scenes.
+            // MS Office uses current material color in case 'Metal' is set. To detect, whether
+            // rendering similar to MS Office has to be used the property 'MetalType' is used. It is
+            // set on import and in the extrusion bar.
+            bool bMetal = GetBool(rGeometryItem, "Metal", false);
+            sal_Int16 eMetalType(
+                GetMetalType(rGeometryItem, drawing::EnhancedCustomShapeMetalType::MetalODF));
+            bool bMetalMSCompatible
+                = eMetalType == drawing::EnhancedCustomShapeMetalType::MetalMSCompatible;
+
+            // Property "Specularity" corresponds to 3D object style attribute dr3d:specular-color.
+            double fSpecularity = GetDouble(rGeometryItem, "Specularity", 0) / 100.0;
+
+            if (bMetal && !bMetalMSCompatible)
+            {
+                fSpecularity *= 200.0 / 255.0;
+            }
+
+            // MS Office seems to render as if 'Specular Color' = Specularity * Light1Intensity.
+            double fShadingFactor = fLight1IntensityForSpecular * fSpecularity;
+            Color aSpecularCol(basegfx::BColor(fShadingFactor).clamp());
+            // In case of bMetalMSCompatible the color will be recalculated in the below loop.
+
+            // Shininess ODF default 50 (unit %). MS Office default 5, import filter makes *10.
+            // Shininess corresponds to "Specular Intensity" with the nonlinear relationship
+            // "Specular Intensity" = 2^c3DShininess = 2^("Shininess" / 10)
+            double fShininess = GetDouble(rGeometryItem, "Shininess", 50) / 10.0;
+            fShininess = std::clamp<double>(pow(2, fShininess), 0.0, 100.0);
+            sal_uInt16 nIntensity = static_cast<sal_uInt16>(basegfx::fround(fShininess));
+            if (bMetal && !bMetalMSCompatible)
+            {
+                nIntensity += 15; // as specified in ODF
+                nIntensity = std::clamp<sal_uInt16>(nIntensity, 0, 100);
+            }
+
+            SdrObjListIter aSceneIter(*pScene, SdrIterMode::DeepNoGroups);
             while (aSceneIter.IsMore())
             {
                 const SdrObject* pNext = aSceneIter.Next();
+
+                // Change material color as ersatz for missing style attribute "drd3:diffuse-color".
+                // For this ersatz we exclude case fDiffusion == 0.0, because for older documents this
+                // attribute is not written out to draw:extrusion-diffusion and ODF default 0 would
+                // produce black objects.
+                const Color& rMatColor
+                    = pNext->GetProperties().GetItem(XATTR_FILLCOLOR).GetColorValue();
+                Color aOldMatColor(rMatColor);
+                if (basegfx::fTools::more(fDiffusion, 0.0)
+                    && !basegfx::fTools::equal(fDiffusion, 1.0))
+                {
+                    // Occurs e.g. with MS surface preset 'Metal'.
+                    sal_uInt16 nHue;
+                    sal_uInt16 nSaturation;
+                    sal_uInt16 nBrightness;
+                    rMatColor.RGBtoHSB(nHue, nSaturation, nBrightness);
+                    nBrightness
+                        = static_cast<sal_uInt16>(static_cast<double>(nBrightness) * fDiffusion);
+                    nBrightness = std::clamp<sal_uInt16>(nBrightness, 0, 100);
+                    Color aNewMatColor = Color::HSBtoRGB(nHue, nSaturation, nBrightness);
+                    pNext->GetProperties().SetObjectItem(XFillColorItem("", aNewMatColor));
+                }
+
+                // Using material color instead of gray in case of MS Office compatible rendering.
+                if (bMetal && bMetalMSCompatible)
+                {
+                    sal_uInt16 nHue;
+                    sal_uInt16 nSaturation;
+                    sal_uInt16 nBrightness;
+                    aOldMatColor.RGBtoHSB(nHue, nSaturation, nBrightness);
+                    nBrightness = static_cast<sal_uInt16>(static_cast<double>(nBrightness)
+                                                          * fShadingFactor);
+                    nBrightness = std::clamp<sal_uInt16>(nBrightness, 0, 100);
+                    aSpecularCol = Color::HSBtoRGB(nHue, nSaturation, nBrightness);
+                }
+
                 pNext->GetProperties().SetObjectItem(makeSvx3DMaterialSpecularItem(aSpecularCol));
-                pNext->GetProperties().SetObjectItem(makeSvx3DMaterialSpecularIntensityItem(static_cast<sal_uInt16>(nIntensity)));
+                pNext->GetProperties().SetObjectItem(
+                    makeSvx3DMaterialSpecularIntensityItem(nIntensity));
             }
 
-            // fSpecular = 0 is used to indicate surface preset "matte".
-            if (!bFirstLightHarsh || basegfx::fTools::equalZero(fSpecular, 0.0001))
+            // fSpecularity = 0 is used to indicate surface preset "Matte".
+            if (basegfx::fTools::equalZero(fSpecularity))
             {
                 // First light in LO 3D engine is always specular, all other lights are never specular.
                 // We copy light1 values to light4 and use it instead of light1 in the 3D scene.
                 pScene->GetProperties().SetObjectItem(makeSvx3DLightOnOff1Item(false));
                 pScene->GetProperties().SetObjectItem(makeSvx3DLightOnOff4Item(true));
-                pScene->GetProperties().SetObjectItem(makeSvx3DLightcolor4Item(aAmbientSpot1Color));
-                pScene->GetProperties().SetObjectItem(makeSvx3DLightDirection4Item(aSpotLight1));
+                pScene->GetProperties().SetObjectItem(makeSvx3DLightcolor4Item(aLight1Color));
+                pScene->GetProperties().SetObjectItem(makeSvx3DLightDirection4Item(aLight1Vector));
             }
 
             // removing placeholder objects
