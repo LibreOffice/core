@@ -22,6 +22,11 @@
     <property name="can_focus">False</property>
     <property name="icon_name">svx/res/wireframe_16.png</property>
   </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">svx/res/metal_16.png</property>
+  </object>
   <object class="GtkPopover" id="SurfaceWindow">
     <property name="can_focus">False</property>
     <property name="no_show_all">True</property>
@@ -89,7 +94,7 @@
         </child>
         <child>
           <object class="GtkRadioButton" id="metal">
-            <property name="label" translatable="yes" context="surfacewindow|RID_SVXSTR_METAL">Me_tal</property>
+            <property name="label" translatable="yes" context="surfacewindow|RID_SVXSTR_METAL">Me_tal ODF</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -103,6 +108,24 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkRadioButton" id="metalMSO">
+            <property name="label" translatable="yes" context="surfacewindow|RID_SVXSTR_METALMSO">Meta_l MSO</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="image">image5</property>
+            <property name="use_underline">True</property>
+            <property name="always_show_image">True</property>
+            <property name="draw_indicator">True</property>
+            <property name="group">wireframe</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>

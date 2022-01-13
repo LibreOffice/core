@@ -2473,6 +2473,7 @@ namespace xmloff::token {
         TOKEN( "extrusion-first-light-direction" ,      XML_EXTRUSION_FIRST_LIGHT_DIRECTION ),
         TOKEN( "extrusion-second-light-direction" , XML_EXTRUSION_SECOND_LIGHT_DIRECTION ),
         TOKEN( "extrusion-metal" ,                      XML_EXTRUSION_METAL ),
+        TOKEN( "extrusion-metal-colored" ,              XML_EXTRUSION_METAL_COLORED ),
         TOKEN( "extrusion-rotation-angle" ,         XML_EXTRUSION_ROTATION_ANGLE ),
         TOKEN( "extrusion-rotation-center" ,            XML_EXTRUSION_ROTATION_CENTER ),
         TOKEN( "extrusion-shininess" ,                  XML_EXTRUSION_SHININESS ),

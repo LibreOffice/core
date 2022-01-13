@@ -982,6 +982,9 @@ void XMLEnhancedCustomShapeContext::startFastElement(
             case EAS_extrusion_metal :
                 GetBool( maExtrusion, aIter.toView(), EAS_Metal );
             break;
+            case EAS_extrusion_metal_colored :
+                GetBool( maExtrusion, aIter.toView(), EAS_MetalColored );
+            break;
             case EAS_shade_mode :
             {
                 drawing::ShadeMode eShadeMode( drawing::ShadeMode_FLAT );

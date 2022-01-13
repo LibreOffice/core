@@ -829,11 +829,13 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(svt::PopupWindowController* pCont
     , mxMatt(m_xBuilder->weld_radio_button("matt"))
     , mxPlastic(m_xBuilder->weld_radio_button("plastic"))
     , mxMetal(m_xBuilder->weld_radio_button("metal"))
+    , mxMetalMSO(m_xBuilder->weld_radio_button("metalMSO"))
 {
     mxWireFrame->connect_toggled(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
     mxMatt->connect_toggled(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
     mxPlastic->connect_toggled(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
     mxMetal->connect_toggled(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
+    mxMetalMSO->connect_toggled(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
 
     AddStatusListener( g_sExtrusionSurface );
 }
@@ -853,6 +855,8 @@ void ExtrusionSurfaceWindow::implSetSurface( int nSurface, bool bEnabled )
     mxPlastic->set_sensitive(bEnabled);
     mxMetal->set_active(nSurface == 3 && bEnabled);
     mxMetal->set_sensitive(bEnabled);
+    mxMetalMSO->set_active(nSurface == 4 && bEnabled);
+    mxMetalMSO->set_sensitive(bEnabled);
 }
 
 void ExtrusionSurfaceWindow::statusChanged(
@@ -886,8 +890,10 @@ IMPL_LINK(ExtrusionSurfaceWindow, SelectHdl, weld::Toggleable&, rButton, void)
         nSurface = 1;
     else if (mxPlastic->get_active())
         nSurface = 2;
-    else
+    else if (mxMetal->get_active())
         nSurface = 3;
+    else
+        nSurface = 4;
 
     Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
         OUString(g_sExtrusionSurface).copy(5), nSurface) };

@@ -94,6 +94,13 @@ service EnhancedCustomShapeExtrusion
     */
     [optional, property] boolean Metal;
 
+    /** Specifies in case of Metal if the object color is used instead of gray.
+    <p>Note: Not usable in ODF strict.</p>
+
+    @since LibreOffice 7.4
+    */
+    [optional, property] boolean MetalColored;
+
     /** This property defines the shade mode.
     */
     [optional, property] ::com::sun::star::drawing::ShadeMode ShadeMode;
