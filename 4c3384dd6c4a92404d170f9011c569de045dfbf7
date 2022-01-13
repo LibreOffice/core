@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fd949b1_4650cb8b",
+        "filename": "avmedia/source/viewer/mediawindow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-13T08:53:51Z",
+      "side": 0,
+      "message": "I prefer \u0027filter\u0027 instead of \u0027a\u0027 for variable name.",
+      "revId": "4c3384dd6c4a92404d170f9011c569de045dfbf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "681343f4_0e24a767",
+        "filename": "avmedia/source/viewer/mediawindow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-13T08:53:51Z",
+      "side": 0,
+      "message": "The same here.",
+      "revId": "4c3384dd6c4a92404d170f9011c569de045dfbf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66c8660d_b4ae2b45",
+        "filename": "avmedia/source/viewer/mediawindow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-13T08:53:51Z",
+      "side": 0,
+      "message": "And here.",
+      "revId": "4c3384dd6c4a92404d170f9011c569de045dfbf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
