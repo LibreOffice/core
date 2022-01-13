@@ -404,16 +404,12 @@ const OUString& SalGetDesktopEnvironment()
 }
 
 SalData::SalData() :
-    m_pInstance(nullptr),
-    m_pPIManager(nullptr)
+    m_pInstance(nullptr)
 {
 }
 
 SalData::~SalData() COVERITY_NOEXCEPT_FALSE
 {
-#if (defined UNX && !defined MACOSX)
-    psp::PrinterInfoManager::release();
-#endif
 }
 
 #ifdef _WIN32
