@@ -1830,4 +1830,12 @@ DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( tools::Long nWidth 
 #endif
 }
 
+double OutputDevice::LogicWidthToDeviceFontCoordinate(tools::Long nWidth) const
+{
+    if (!mbMap)
+        return nWidth;
+
+    return ImplLogicToPixel(static_cast<double>(nWidth), mnDPIX, maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
