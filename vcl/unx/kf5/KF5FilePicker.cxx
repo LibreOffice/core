@@ -84,7 +84,7 @@ void SAL_CALL KF5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAct
 uno::Any SAL_CALL KF5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
     SolarMutexGuard g;
-    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
+    auto* pSalInst(GetQtInstance());
     assert(pSalInst);
     if (!pSalInst->IsMainThread())
     {

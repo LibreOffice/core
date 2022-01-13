@@ -52,7 +52,6 @@
 
 #include <salframe.hxx>
 #include <svdata.hxx>
-#include <unx/gendata.hxx>
 // FIXME: remove when we re-work the svp mainloop
 #include <unx/salunxtime.h>
 #include <comphelper/lok.hxx>

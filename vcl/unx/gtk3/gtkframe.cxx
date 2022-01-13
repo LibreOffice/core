@@ -3670,8 +3670,7 @@ void GtkSalFrame::TriggerPaintEvent()
 
 void GtkSalFrame::DrawingAreaFocusInOut(SalEvent nEventType)
 {
-    SalGenericInstance* pSalInstance =
-        static_cast<SalGenericInstance*>(GetSalData()->m_pInstance);
+    SalGenericInstance* pSalInstance = GetGenericInstance();
 
     // check if printers have changed (analogous to salframe focus handler)
     pSalInstance->updatePrinterUpdate();
@@ -3703,8 +3702,7 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
-    SalGenericInstance *pSalInstance =
-        static_cast< SalGenericInstance* >(GetSalData()->m_pInstance);
+    SalGenericInstance *pSalInstance = GetGenericInstance();
 
     // check if printers have changed (analogous to salframe focus handler)
     pSalInstance->updatePrinterUpdate();
@@ -4343,7 +4341,7 @@ void GtkSalFrame::signalStyleUpdated(GtkWidget*, gpointer frame)
     // a plausible alternative might be to send SalEvent::FontChanged if pSetting starts with "gtk-xft"
 
     // fire off font-changed when the system cairo font hints change
-    GtkInstance *pInstance = static_cast<GtkInstance*>(GetSalData()->m_pInstance);
+    GtkInstance *pInstance = GetGtkInstance();
     const cairo_font_options_t* pLastCairoFontOptions = pInstance->GetLastSeenCairoFontOptions();
     const cairo_font_options_t* pCurrentCairoFontOptions = pThis->get_font_options();
     bool bFontSettingsChanged = true;
@@ -4633,7 +4631,7 @@ public:
 
         gtk_selection_data_free(m_pData);
 #else
-        SalInstance* pInstance = GetSalData()->m_pInstance;
+        SalInstance* pInstance = GetSalInstance();
         read_transfer_result aRes;
         const char *mime_types[] = { it->second.getStr(), nullptr };
 
@@ -5945,8 +5943,7 @@ bool GtkSalFrame::CallCallbackExc(SalEvent nEvent, const void* pEvent) const
     }
     catch (...)
     {
-        GtkSalData *pSalData = static_cast<GtkSalData*>(GetSalData());
-        pSalData->setException(std::current_exception());
+        GetGtkSalData()->setException(std::current_exception());
     }
     return nRet;
 }

@@ -98,7 +98,7 @@ public:
 
 bool QtYieldMutex::IsCurrentThread() const
 {
-    auto const* pSalInst(static_cast<QtInstance const*>(GetSalData()->m_pInstance));
+    auto const* pSalInst(GetQtInstance());
     assert(pSalInst);
     if (pSalInst->IsMainThread() && m_bNoYieldLock)
     {
@@ -109,7 +109,7 @@ bool QtYieldMutex::IsCurrentThread() const
 
 void QtYieldMutex::doAcquire(sal_uInt32 nLockCount)
 {
-    auto const* pSalInst(static_cast<QtInstance const*>(GetSalData()->m_pInstance));
+    auto const* pSalInst(GetQtInstance());
     assert(pSalInst);
     if (!pSalInst->IsMainThread())
     {
@@ -155,7 +155,7 @@ void QtYieldMutex::doAcquire(sal_uInt32 nLockCount)
 
 sal_uInt32 QtYieldMutex::doRelease(bool const bUnlockAll)
 {
-    auto const* pSalInst(static_cast<QtInstance const*>(GetSalData()->m_pInstance));
+    auto const* pSalInst(GetQtInstance());
     assert(pSalInst);
     if (pSalInst->IsMainThread() && m_bNoYieldLock)
     {
@@ -704,7 +704,7 @@ VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()
     QtInstance* pInstance = new QtInstance(pQApp, bUseCairo);
     pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 
-    new QtData(pInstance);
+    new QtData();
 
     return pInstance;
 }
