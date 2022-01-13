@@ -52,6 +52,24 @@
       "parentUuid": "cfb66247_ae2ce83b",
       "revId": "d71c9913e19f1be13f1d38a24393a910ba574834",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "145f0673_10198364",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-01-13T09:40:07Z",
+      "side": 1,
+      "message": "\u003e Would you not prefer generic, if it\u0027s easier readable and understandable? I do not think that it currently is \"this simple\", I think it would be \"more simple\" and less code to just use directly allocated buffers.\n\u003e It is correct that \u0027in some cases always allocating may be less efficient\u0027, but I think it would be worth a try here. I see that you try to be very careful and do things only in special cases for one backend to not change anything, but that does not make the code easier or better readable/understandable in the long term.\n\u003e Having a fallback for very small VDevs is missing anyways/I oversaw that when adding the buffer. Or better: I did not think that using just 32x32 of a 1000x1000 already existing buffer would do harm here, but as can be seen, you never know.\n\n\"Simple\" means that it\u0027s good enough and I do not need to think more about all the implications of changing it for all the cases that I haven\u0027t checked. If you want to check those, feel free to do that and do a follow-up commit.\n\nOr you actually meant to say \"I as the author of the code say that you can simplify it by always checking for 32x32 and do not need to check for specific backends\", then just say that and do not say misleading things like \"your solution is also okay for me\" when apparently it\u0027s not.\n\n\u003e Yes, but since aContent.GetAlpha() gets from aContent and aContent was created one line above from mpContent-\u003eGetBitmapEx and mpContent/mpAlpha is separated, aContent.GetAlpha() will always be empty,\n\nWill it? So what if a bitmap with alpha was drawn into the content, or if there\u0027s another transparence primitive inside this one?",
+      "parentUuid": "caa34c3f_19cd31d6",
+      "revId": "d71c9913e19f1be13f1d38a24393a910ba574834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
