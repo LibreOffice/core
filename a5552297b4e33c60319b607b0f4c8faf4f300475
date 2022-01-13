@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ff7f31e_14010a9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-01-13T07:47:49Z",
+      "side": 1,
+      "message": "Looks great. Good to get that weirdness cleaned up. I think I never really understood what Norbert was after when he added that option;)",
+      "revId": "a5552297b4e33c60319b607b0f4c8faf4f300475",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
