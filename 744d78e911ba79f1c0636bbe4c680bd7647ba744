@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dff3716_806c522c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-13T18:11:25Z",
+      "side": 1,
+      "message": "this is all quite convoluted, and i have only vague ideas of what is going on",
+      "revId": "744d78e911ba79f1c0636bbe4c680bd7647ba744",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
