@@ -26,6 +26,8 @@
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdmodel.hxx>
 
 namespace sdr::contact
 {
@@ -184,6 +186,8 @@ void ViewContact::ActionChildInserted(ViewContact& rChild)
 // React on changes of the object of this ViewContact
 void ViewContact::ActionChanged()
 {
+    mxViewIndependentPrimitive2DSequence.clear(); // clear cache
+
     // propagate change to all existing VOCs. This will invalidate
     // all drawn visualisations in all known views
     const sal_uInt32 nCount(maViewObjectContactVector.size());
@@ -229,6 +233,17 @@ void ViewContact::createViewIndependentPrimitive2DSequence(
 void ViewContact::getViewIndependentPrimitive2DContainer(
     drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
+    // only some of the top-level apps are any good at reliably invalidating us (e.g. writer is not)
+    if (SdrObject* pSdrObj = TryToGetSdrObject())
+        if (pSdrObj->getSdrModelFromSdrObject().IsVOCInvalidationIsReliable())
+        {
+            if (!mxViewIndependentPrimitive2DSequence.empty())
+            {
+                rVisitor.visit(mxViewIndependentPrimitive2DSequence);
+                return;
+            }
+        }
+
     /* Local up-to-date checks. Create new list and compare.
         We cannot just always use the new data because the old data has cached bitmaps in it e.g. see the document in tdf#146108.
     */
