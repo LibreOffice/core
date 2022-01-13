@@ -442,6 +442,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_web_filters.xc
 	writer_web_pdf_Export\
 	writer_web_png_Export\
 	writer_web_jpg_Export\
+	writer_web_webp_Export\
 	writerweb8_writer_template\
 	writerweb8_writer \
 ))
@@ -715,6 +716,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_typ
 	svm_StarView_Metafile \
 	tga_Truevision_TARGA \
 	tif_Tag_Image_File \
+	webp_WebP \
 	wmf_MS_Windows_Metafile \
 	xbm_X_Consortium \
 	xpm_XPM \
@@ -742,6 +744,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	SVM___StarView_Metafile \
 	TGA___Truevision_TARGA \
 	TIF___Tag_Image_File \
+	WEBP___WebP \
 	WMF___MS_Windows_Metafile \
 	XBM___X_Consortium \
 	XPM \
@@ -757,6 +760,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	draw_png_Export \
 	draw_svg_Export \
 	draw_tif_Export \
+	draw_webp_Export \
 	draw_wmf_Export \
 ))
 
@@ -781,6 +785,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_
 	svm_StarView_Metafile \
 	tif_Tag_Image_File \
 	wmf_MS_Windows_Metafile \
+	webp_WebP \
 	xpm_XPM \
 ))
 
@@ -795,6 +800,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphic
 	impress_png_Export \
 	impress_svg_Export \
 	impress_tif_Export \
+	impress_webp_Export \
 	impress_wmf_Export \
 ))
 
@@ -809,6 +815,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writergraphics
 	writer_jpg_Export \
 	writer_png_Export \
 	writer_svg_Export \
+	writer_webp_Export \
 ))
 
 # fcfg_calcgraphics
@@ -821,6 +828,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calcgraphics_f
 	calc_jpg_Export \
 	calc_png_Export \
 	calc_svg_Export \
+	calc_webp_Export \
 ))
 
 # fcfg_internalgraphics
@@ -848,6 +856,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics
 	svm_StarView_Metafile \
 	tga_Truevision_TARGA \
 	tif_Tag_Image_File \
+	webp_WebP \
 	wmf_MS_Windows_Metafile \
 	xbm_X_Consortium \
 	xpm_XPM \
@@ -887,11 +896,13 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	tga_Import \
 	tif_Export \
 	tif_Import \
+	webp_Export \
+	webp_Import \
 	wmf_Export \
 	wmf_Import \
 	xbm_Import \
 	xpm_Import \
-        mov_Import \
+	mov_Import \
 ))
 
 # fcfg_xslt

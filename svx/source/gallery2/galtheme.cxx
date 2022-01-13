@@ -420,6 +420,7 @@ bool GalleryTheme::InsertGraphic(const Graphic& rGraphic, sal_uInt32 nInsertPos)
                 case GfxLinkType::NativeMet: nExportFormat = ConvertDataFormat::MET; break;
                 case GfxLinkType::NativePct: nExportFormat = ConvertDataFormat::PCT; break;
                 case GfxLinkType::NativeSvg: nExportFormat = ConvertDataFormat::SVG; break;
+                case GfxLinkType::NativeWebp: nExportFormat = ConvertDataFormat::WEBP; break;
                 default:
                     break;
             }

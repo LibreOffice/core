@@ -47,6 +47,8 @@
 #include "jpeg/jpeg.hxx"
 #include "ixbm/xbmread.hxx"
 #include "ixpm/xpmread.hxx"
+#include <filter/WebpReader.hxx>
+#include <filter/WebpWriter.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -65,6 +67,7 @@
 #include <vector>
 #include <memory>
 #include <string_view>
+#include <o3tl/string_view.hxx>
 
 #include "FilterConfigCache.hxx"
 #include "graphicfilter_internal.hxx"
@@ -73,6 +76,41 @@
 #include <graphic/GraphicReader.hxx>
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
+
+// Support for GfxLinkType::NativeWebp is so far disabled,
+// as enabling it would write .webp images e.g. to .odt documents,
+// making those images unreadable for older readers. So for now
+// disable the support so that .webp images will be written out as .png,
+// and somewhen later enable the support unconditionally.
+
+namespace
+{
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool starts_with(std::basic_string_view<charT, traits> sv,
+                           std::basic_string_view<charT, traits> x) noexcept
+{
+    return sv.substr(0, x.size()) == x;
+}
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool starts_with(std::basic_string_view<charT, traits> sv, charT const* x)
+{
+    return starts_with(sv, std::basic_string_view<charT, traits>(x));
+}
+
+}
+
+static bool supportNativeWebp()
+{
+    const char* const testname = getenv("LO_TESTNAME");
+    if(testname == nullptr)
+        return false;
+    // Enable support only for those unittests that test it.
+    if( std::string_view("_anonymous_namespace___GraphicTest__testUnloadedGraphicLoading_") == testname
+        || std::string_view("VclFiltersTest__testExportImport_") == testname
+        || starts_with(std::string_view(testname), "WebpFilterTest__"))
+        return true;
+    return false;
+}
 
 typedef ::std::vector< GraphicFilter* > FilterList_impl;
 static FilterList_impl* pFilterHdlList = nullptr;
@@ -438,6 +476,16 @@ bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension, bool b
     if (!bTest || rFormatExtension.startsWith("PDF"))
     {
         if (aDetector.checkPDF())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("WEBP"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkWEBP())
         {
             rFormatExtension = aDetector.msDetectedFormat;
             return true;
@@ -1325,6 +1373,13 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
         {
             eLinkType = GfxLinkType::NativePdf;
         }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_WEBP))
+        {
+            if(supportNativeWebp())
+                eLinkType = GfxLinkType::NativeWebp;
+            else
+                nStatus = ERRCODE_GRFILTER_FILTERERROR;
+        }
         else
         {
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
@@ -1723,6 +1778,16 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         {
             if (vcl::ImportPDF(rIStream, rGraphic))
                 eLinkType = GfxLinkType::NativePdf;
+            else
+                nStatus = ERRCODE_GRFILTER_FILTERERROR;
+        }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_WEBP))
+        {
+            if (ImportWebpGraphic(rIStream, rGraphic))
+            {
+                if(supportNativeWebp())
+                    eLinkType = GfxLinkType::NativeWebp;
+            }
             else
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
         }
@@ -2150,6 +2215,14 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                     }
                 }
             }
+            else if (aFilterName.equalsIgnoreAsciiCase(EXP_WEBP))
+            {
+                if (!ExportWebpGraphic(rOStm, aGraphic, &aConfigItem))
+                    nStatus = ERRCODE_GRFILTER_FORMATERROR;
+
+                if( rOStm.GetError() )
+                    nStatus = ERRCODE_GRFILTER_IOERROR;
+            }
             else
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
         }
@@ -2230,6 +2303,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         case ConvertDataFormat::WMF: aShortName = WMF_SHORTNAME; break;
         case ConvertDataFormat::EMF: aShortName = EMF_SHORTNAME; break;
         case ConvertDataFormat::SVG: aShortName = SVG_SHORTNAME; break;
+        case ConvertDataFormat::WEBP: aShortName = WEBP_SHORTNAME; break;
 
         default:
         break;

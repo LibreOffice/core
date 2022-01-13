@@ -137,6 +137,7 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
                 case GfxLinkType::NativeSvg: aShortName = SVG_SHORTNAME; break;
                 case GfxLinkType::NativeBmp: aShortName = BMP_SHORTNAME; break;
                 case GfxLinkType::NativePdf: aShortName = PDF_SHORTNAME; break;
+                case GfxLinkType::NativeWebp: aShortName = WEBP_SHORTNAME; break;
                 default: break;
             }
             if (!aShortName.isEmpty())

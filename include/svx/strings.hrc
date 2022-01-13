@@ -1382,6 +1382,7 @@
 #define STR_IMAGE_PCT                                       NC_("STR_IMAGE_PCT", "PCT image")
 #define STR_IMAGE_SVG                                       NC_("STR_IMAGE_SVG", "SVG image")
 #define STR_IMAGE_BMP                                       NC_("STR_IMAGE_BMP", "BMP image")
+#define STR_IMAGE_WEBP                                      NC_("STR_IMAGE_WEBP", "WebP image")
 #define STR_IMAGE_UNKNOWN                                   NC_("STR_IMAGE_UNKNOWN", "Unknown")
 
 #define STR_SWITCH                                          NC_("STR_SWITCH", "Switch")

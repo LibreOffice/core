@@ -25,6 +25,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <filter/WebpReader.hxx>
 #include "graphicfilter_internal.hxx"
 
 #define DATA_SIZE           640
@@ -87,6 +88,7 @@ bool GraphicDescriptor::Detect( bool bExtendedInfo )
         else if ( ImpDetectPSD( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectEPS( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectPCD( rStm, bExtendedInfo ) ) bRet = true;
+        else if ( ImpDetectWEBP( rStm, bExtendedInfo ) ) bRet = true;
 
         rStm.SetEndian( nOldFormat );
     }
@@ -1143,6 +1145,36 @@ bool GraphicDescriptor::ImpDetectSVG( SvStream& /*rStm*/, bool /*bExtendedInfo*/
     return bRet;
 }
 
+bool GraphicDescriptor::ImpDetectWEBP( SvStream& rStm, bool bExtendedInfo )
+{
+    sal_uInt32  nTemp32 = 0;
+    bool    bRet = false;
+
+    sal_Int32 nStmPos = rStm.Tell();
+    rStm.SetEndian( SvStreamEndian::BIG );
+    rStm.ReadUInt32( nTemp32 );
+
+    if ( nTemp32 == 0x52494646 )
+    {
+        rStm.ReadUInt32( nTemp32 ); // skip
+        rStm.ReadUInt32( nTemp32 );
+        if ( nTemp32 == 0x57454250 )
+        {
+            nFormat = GraphicFileFormat::WEBP;
+            bRet = true;
+
+            if ( bExtendedInfo )
+            {
+                rStm.Seek(nStmPos);
+                ReadWebpInfo(rStm, aPixSize, nBitsPerPixel, bIsAlpha );
+                bIsTransparent = bIsAlpha;
+            }
+        }
+    }
+    rStm.Seek( nStmPos );
+    return bRet;
+}
+
 OUString GraphicDescriptor::GetImportFormatShortName( GraphicFileFormat nFormat )
 {
     const char *pKeyName = nullptr;
@@ -1172,6 +1204,7 @@ OUString GraphicDescriptor::GetImportFormatShortName( GraphicFileFormat nFormat 
         case GraphicFileFormat::WMF :   pKeyName = "wmf";   break;
         case GraphicFileFormat::EMF :   pKeyName = "emf";   break;
         case GraphicFileFormat::SVG :   pKeyName = "svg";   break;
+        case GraphicFileFormat::WEBP :  pKeyName = "webp";   break;
         default: assert(false);
     }
 

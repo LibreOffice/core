@@ -232,6 +232,7 @@ int getFlatTypeRank(const OUString& rType)
         "pcd_Photo_CD_Base",
         "pcd_Photo_CD_Base4",
         "pcd_Photo_CD_Base16",
+        "webp_WebP",
         "impress_CGM_Computer_Graphics_Metafile", // There is binary and ascii variants ?
         "draw_WordPerfect_Graphics",
         "draw_Visio_Document",

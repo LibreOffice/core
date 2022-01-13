@@ -117,6 +117,9 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
         case GfxLinkType::NativePdf:
             aExtension = "pdf";
             break;
+        case GfxLinkType::NativeWebp:
+            aExtension = "webp";
+            break;
         default:
             break;
     }

@@ -669,6 +669,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                     }
                     break;
                 case GfxLinkType::NativePdf: aExtension = ".pdf"; break;
+                case GfxLinkType::NativeWebp: aExtension = ".webp"; break;
 
                 default:
                     aExtension = ".grf";

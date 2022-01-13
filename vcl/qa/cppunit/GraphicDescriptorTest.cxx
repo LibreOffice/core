@@ -33,12 +33,14 @@ class GraphicDescriptorTest : public test::BootstrapFixtureBase
     void testDetectJPG();
     void testDetectGIF();
     void testDetectBMP();
+    void testDetectWEBP();
 
     CPPUNIT_TEST_SUITE(GraphicDescriptorTest);
     CPPUNIT_TEST(testDetectPNG);
     CPPUNIT_TEST(testDetectJPG);
     CPPUNIT_TEST(testDetectGIF);
     CPPUNIT_TEST(testDetectBMP);
+    CPPUNIT_TEST(testDetectWEBP);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -120,6 +122,20 @@ void GraphicDescriptorTest::testDetectBMP()
     CPPUNIT_ASSERT_EQUAL(MapUnit::MapMM, aGraphic.GetPrefMapMode().GetMapUnit());
     aGraphic.makeAvailable();
     CPPUNIT_ASSERT_EQUAL(MapUnit::MapMM, aGraphic.GetPrefMapMode().GetMapUnit());
+}
+
+void GraphicDescriptorTest::testDetectWEBP()
+{
+    SvMemoryStream aStream;
+    createBitmapAndExportForType(aStream, u"webp");
+
+    GraphicDescriptor aDescriptor(aStream, nullptr);
+    aDescriptor.Detect(true);
+
+    CPPUNIT_ASSERT_EQUAL(GraphicFileFormat::WEBP, aDescriptor.GetFileFormat());
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Height());
 }
 
 } // namespace

@@ -28,6 +28,7 @@
 
 namespace vcl
 {
+
 namespace
 {
 bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
@@ -540,6 +541,18 @@ bool GraphicFormatDetector::checkPDF()
         && maFirstBytes[3] == 'F' && maFirstBytes[4] == '-')
     {
         msDetectedFormat = "PDF";
+        return true;
+    }
+    return false;
+}
+
+bool GraphicFormatDetector::checkWEBP()
+{
+    if (maFirstBytes[0] == 'R' && maFirstBytes[1] == 'I' && maFirstBytes[2] == 'F'
+        && maFirstBytes[3] == 'F' && maFirstBytes[8] == 'W' && maFirstBytes[9] == 'E'
+        && maFirstBytes[10] == 'B' && maFirstBytes[11] == 'P')
+    {
+        msDetectedFormat = "WEBP";
         return true;
     }
     return false;
