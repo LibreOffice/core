@@ -94,11 +94,20 @@ service EnhancedCustomShapeExtrusion
     */
     [optional, property] boolean Metal;
 
+    /** Specifies in case of Metal=true the way the rendering of the shape is modified.
+        <p>Note: Currently not usable in ODF strict.</p>
+
+        @see EnhancedCustomShapeMetalType
+
+        @since LibreOffice 7.4
+    */
+    [optional, property] short MetalType;
+
     /** This property defines the shade mode.
     */
     [optional, property] ::com::sun::star::drawing::ShadeMode ShadeMode;
 
-    /** This attributes specifies the rotation angle about the x-axis in grad.
+    /** This attributes specifies the rotation angle about the x-axis in degrees.
         The order of rotation is: z-axis, y-axis and then x-axis. The z-axis is
         specified by the draw:rotate-angle.
     */

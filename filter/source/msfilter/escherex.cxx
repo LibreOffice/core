@@ -91,6 +91,7 @@
 #include <sal/log.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -2858,7 +2859,11 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     {
                         double fExtrusionShininess = 0;
                         if ( rrProp.Value >>= fExtrusionShininess )
-                            AddOpt( DFF_Prop_c3DShininess, static_cast<sal_Int32>( fExtrusionShininess * 655.36 ) );
+                        {
+                            // ODF to MS Office conversion invers to msdffimp.cxx
+                            fExtrusionShininess = basegfx::fround(fExtrusionShininess / 10.0);
+                            AddOpt( DFF_Prop_c3DShininess, static_cast<sal_Int32>(fExtrusionShininess) );
+                        }
                     }
                     else if ( rrProp.Name == "Skew" )
                     {
@@ -2875,7 +2880,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     {
                         double fExtrusionSpecularity = 0;
                         if ( rrProp.Value >>= fExtrusionSpecularity )
-                            AddOpt( DFF_Prop_c3DSpecularAmt, static_cast<sal_Int32>( fExtrusionSpecularity * 1333 ) );
+                            AddOpt( DFF_Prop_c3DSpecularAmt, static_cast<sal_Int32>( fExtrusionSpecularity * 655.36 ) );
                     }
                     else if ( rrProp.Name == "ProjectionMode" )
                     {

@@ -2395,6 +2395,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4123 -->
+  <rng:define name="draw-enhanced-geometry-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:extrusion-metal-type">
+        <rng:ref name="namespacedToken"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- TODO no proposal -->
   <rng:define name="draw-custom-shape-attlist" combine="interleave">
     <rng:ref name="common-draw-rel-size-attlist"/>
