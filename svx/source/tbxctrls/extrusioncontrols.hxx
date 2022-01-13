@@ -188,6 +188,7 @@ private:
     std::unique_ptr<weld::RadioButton> mxMatt;
     std::unique_ptr<weld::RadioButton> mxPlastic;
     std::unique_ptr<weld::RadioButton> mxMetal;
+    std::unique_ptr<weld::RadioButton> mxMetalMSO;
 
     DECL_LINK( SelectHdl, weld::Toggleable&, void );
 

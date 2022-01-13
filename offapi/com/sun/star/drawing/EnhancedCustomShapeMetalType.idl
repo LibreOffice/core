@@ -1,0 +1,36 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeMetalType_idl__
+#define __com_sun_star_drawing_EnhancedCustomShapeMetalType_idl__
+
+
+ module com {  module sun {  module star {  module drawing {
+
+/** These constants define the way the attribute Metal of service
+    EnhancedCustomShapeExtrusion is interpreted for rendering the shape.
+    @since LibreOffice 7.4
+ */
+constants EnhancedCustomShapeMetalType
+{
+    /** The rendering of the shape is modified as specified in the ODF standard.
+     */
+     const short MetalODF = 0;
+
+    /** The rendering of the shape is modified to get a similar rendering as in Microsoft Office for objects, which have the fc3DMetallic flag in Rich Text Format or binary MS Office format set.
+     */
+     const short MetalMSCompatible = 1;
+};
+
+
+}; }; }; };
+
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
