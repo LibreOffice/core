@@ -201,7 +201,7 @@ void FilterConfigCache::ImplInit()
         // The first extension will be used
         // to generate our internal FilterType ( BMP, WMF ... )
         OUString aExtension( aEntry.GetShortName() );
-        if (aExtension.getLength() != 3)
+        if (aExtension.isEmpty())
             continue;
 
         if ( aEntry.nFlags & 1 )
