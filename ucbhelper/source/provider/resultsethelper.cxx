@@ -90,11 +90,11 @@ void SAL_CALL ResultSetImplHelper::dispose()
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
+    if ( m_aDisposeEventListeners.getLength() )
     {
         lang::EventObject aEvt;
         aEvt.Source = static_cast< lang::XComponent * >( this );
-        m_pDisposeEventListeners->disposeAndClear( aGuard, aEvt );
+        m_aDisposeEventListeners.disposeAndClear( aGuard, aEvt );
     }
 }
 
@@ -105,10 +105,7 @@ void SAL_CALL ResultSetImplHelper::addEventListener(
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners.reset(new comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>());
-
-    m_pDisposeEventListeners->addInterface( Listener );
+    m_aDisposeEventListeners.addInterface( Listener );
 }
 
 
@@ -118,8 +115,7 @@ void SAL_CALL ResultSetImplHelper::removeEventListener(
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if ( m_pDisposeEventListeners )
-        m_pDisposeEventListeners->removeInterface( Listener );
+    m_aDisposeEventListeners.removeInterface( Listener );
 }
 
 
