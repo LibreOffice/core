@@ -1481,12 +1481,16 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     {
         rFilterBox.grab_focus();
 
+        if (rFilterBox.n_children())
+        {
+            if (nSelPos != -1)
+                rFilterBox.set_cursor(nSelPos);
+            else
+                rFilterBox.set_cursor(0);
+        }
         // Select only after GrabFocus, so that the focus rectangle gets correct
         if (nSelPos != -1)
-        {
-            rFilterBox.set_cursor(nSelPos);
             rFilterBox.select(nSelPos);
-        }
         else
             rFilterBox.unselect_all();
 
