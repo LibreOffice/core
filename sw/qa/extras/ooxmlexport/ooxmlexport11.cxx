@@ -1406,7 +1406,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88496)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf77417)
 {
-    loadAndSave("tdf77417.docx");
+    loadAndReload("tdf77417.docx");
     // MSO 2010 compatibility mode: terminating white spaces are ignored in tables.
     // This was 3 pages with the first invisible blank page.
     CPPUNIT_ASSERT_EQUAL(2, getPages());

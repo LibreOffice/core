@@ -158,7 +158,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123622, "tdf123622.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf78749)
 {
-    loadAndSave("tdf78749.docx");
+    loadAndReload("tdf78749.docx");
     //Shape lost the background image before, now check if it still has...
     auto xShape = getShape(1);
     uno::Reference<beans::XPropertySet> xShpProps(xShape, uno::UNO_QUERY);
@@ -974,7 +974,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf95189)
 {
-    loadAndSave("tdf95189.docx");
+    loadAndReload("tdf95189.docx");
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
@@ -1045,7 +1045,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128889)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132754)
 {
-    loadAndSave("tdf132754.docx");
+    loadAndReload("tdf132754.docx");
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("0.0.0."), getProperty<OUString>(xPara, "ListLabelString"));
@@ -1370,7 +1370,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLineWidthRounding)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108505)
 {
-    loadAndSave("tdf108505.docx");
+    loadAndReload("tdf108505.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
     uno::Reference<text::XTextRange> xText
         = getRun(xParagraph, 1, "Wrong font when alone on the line");

@@ -78,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlShapeRelsize)
 
 CPPUNIT_TEST_FIXTURE(Test, testDmlPictureInTextframe)
 {
-    loadAndSave("dml-picture-in-textframe.docx");
+    loadAndReload("dml-picture-in-textframe.docx");
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/media/image1.gif")));
     // This was also true, image was written twice.
