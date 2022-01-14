@@ -16,6 +16,23 @@
       "message": "I did this when I got cc\u0027ed on the issue and was unaware that there was an existing patch in progress until now.",
       "revId": "d5a88ca0747aae29593c835b81efb52bcd4326fe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfb488dc_4d7991ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-14T12:05:13Z",
+      "side": 1,
+      "message": "Did some work at I242c3886534a2696b4c2438ca17e6e778c2c3991. It\u0027s not only the one control but CTK/CJK languages. And I don\u0027t see you moving the control actually.",
+      "revId": "d5a88ca0747aae29593c835b81efb52bcd4326fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
