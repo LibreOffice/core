@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a404049_b3340b61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-14T14:21:48Z",
+      "side": 1,
+      "message": "Justin: if one platforms fails in Jenkins, it\u0027s better to \"resume\" the build (there is a button for it on the Jenkins UI; if you don\u0027t have it then ask on #tdf-infra to get permissions), which only re-tries the failed platforms. Rebase will rebuild everything, which is a waste of resources. :-)",
+      "revId": "5afea0b7a9baeeec960bbca9bd7de73fa17515ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
