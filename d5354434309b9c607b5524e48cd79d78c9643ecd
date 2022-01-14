@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccb64a4a_157c8913",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-14T09:51:05Z",
+      "side": 1,
+      "message": "Will it work with colored tabs? (It looks like the vertical line is drawn on the area of the *next* tab, so I suspect that in case of colored tabs, they will owerpaint the line)",
+      "revId": "d5354434309b9c607b5524e48cd79d78c9643ecd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
