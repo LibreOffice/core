@@ -46,6 +46,30 @@
       },
       "revId": "0bd2f13c653057433b6cb31059c1ac01636e71f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73470013_7344f388",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-14T07:38:08Z",
+      "side": 1,
+      "message": "Yes, it properly breaks if I change it to a loadAndReload.",
+      "parentUuid": "cc442597_00821d84",
+      "range": {
+        "startLine": 501,
+        "startChar": 4,
+        "endLine": 501,
+        "endChar": 44
+      },
+      "revId": "0bd2f13c653057433b6cb31059c1ac01636e71f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
