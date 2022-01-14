@@ -137,10 +137,21 @@ public:
         mrRenderContext.DrawRect(maLineRect);
     }
 
+    void drawSeparator()
+    {
+        const tools::Long cMargin = 5;
+        const tools::Long aRight( maRect.Right() - 1 );
+        mrRenderContext.SetLineColor(mrStyleSettings.GetShadowColor());
+        mrRenderContext.DrawLine(Point(aRight, maRect.Top() + cMargin),
+                                 Point(aRight, maRect.Bottom() - cMargin));
+    }
+
     void drawTab()
     {
         drawOuterFrame();
         drawColorLine();
+        if (!mbSelected && !mbCustomColored)
+            drawSeparator();
         if (mbProtect)
         {
             BitmapEx aBitmap(BMP_TAB_LOCK);
