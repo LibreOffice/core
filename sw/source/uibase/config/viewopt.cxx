@@ -166,7 +166,6 @@ SwViewOption::SwViewOption() :
     m_nPagePreviewRow( 1 ),
     m_nPagePreviewCol( 2 ),
     m_nShadowCursorFillMode( SwFillMode::Tab ),
-    m_eGlyphPositioningMode( GlyphPositioningMode::Classic ),
     m_bReadonly(false),
     m_bStarOneSetting(false),
     m_bIsPagePreview(false),
@@ -254,7 +253,6 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     m_aRetouchColor  = rVOpt.GetRetoucheColor();
     m_sSymbolFont     = rVOpt.m_sSymbolFont;
     m_nShadowCursorFillMode = rVOpt.m_nShadowCursorFillMode;
-    m_eGlyphPositioningMode = rVOpt.m_eGlyphPositioningMode;
     m_bStarOneSetting = rVOpt.m_bStarOneSetting;
     mbBookView      = rVOpt.mbBookView;
     mbBrowseMode    = rVOpt.mbBrowseMode;
@@ -297,7 +295,6 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     m_aRetouchColor  = rVOpt.GetRetoucheColor();
     m_sSymbolFont     = rVOpt.m_sSymbolFont;
     m_nShadowCursorFillMode = rVOpt.m_nShadowCursorFillMode;
-    m_eGlyphPositioningMode = rVOpt.m_eGlyphPositioningMode;
     m_bStarOneSetting = rVOpt.m_bStarOneSetting;
     mbBookView      = rVOpt.mbBookView;
     mbBrowseMode    = rVOpt.mbBrowseMode;
