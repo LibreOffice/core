@@ -106,6 +106,24 @@
       "parentUuid": "489e5709_e22dc382",
       "revId": "d71c9913e19f1be13f1d38a24393a910ba574834",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6077ef81_a521a9cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-14T20:51:09Z",
+      "side": 1,
+      "message": "\u003eIt\u0027s a hack for the presentation module and only used there. To allow removal, presentation needs to be changed to primitives and - hopefully - no one else starts using that until then.\n\nAllright - I digged deeper and see that it\u0027s too late - exactly that is now used. So - forget about aContent.GeAlpha() being empty. I will check/analyze and write, but not here, as eMail :) Have a nice Weekend!",
+      "parentUuid": "ce68bc37_7eec371e",
+      "revId": "d71c9913e19f1be13f1d38a24393a910ba574834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
