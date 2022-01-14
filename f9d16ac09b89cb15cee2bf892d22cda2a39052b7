@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73e7ec19_02c35817",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_intel/call.s",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-14T10:45:36Z",
+      "side": 1,
+      "message": "okay the note is added, but this file doesn\u0027t actually use \"endbr32\", or am i missing something",
+      "revId": "f9d16ac09b89cb15cee2bf892d22cda2a39052b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
