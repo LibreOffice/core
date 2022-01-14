@@ -16,6 +16,24 @@
       "message": "Xisco, may I ask for your unit test wisdom here. In sw/qa/uitest/writer_test2/formatCharacter.py the test does\n\nxLangFontEast \u003d xDialog.getChild(\"eastlanglb\")\nselect_pos(xLangFontEast, \"0\")\nxLangFontEast \u003d xDialog.getChild(\"eastlanglb\")\nself.assertEqual(get_state_as_dict(xLangFontEast)[\"SelectEntryText\"], \"[None]\")\n\nAnd since I moved the controls into extra tabs I assume we need to switch explicitly.",
       "revId": "99e53d3ded5bdd7611018127c0afa5d4ea3a2c58",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f1dcc6f_ac5d070b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-14T15:52:53Z",
+      "side": 1,
+      "message": "you just need to move through the tabs. The new patch should fix it",
+      "parentUuid": "935f6463_9727db94",
+      "revId": "99e53d3ded5bdd7611018127c0afa5d4ea3a2c58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
