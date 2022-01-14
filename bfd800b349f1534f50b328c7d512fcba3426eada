@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b24dfffe_a8f4e51d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-14T13:44:11Z",
+      "side": 1,
+      "message": "copying V+1 from Jenkins",
+      "revId": "bfd800b349f1534f50b328c7d512fcba3426eada",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
