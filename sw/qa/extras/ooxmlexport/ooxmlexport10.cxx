@@ -401,7 +401,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133735)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134569_nestedTable)
 {
-    loadAndSave("tdf134569_nestedTable.docx");
+    loadAndReload("tdf134569_nestedTable.docx");
     // non-overridden w:after spacing in the table was pushing the document to the second page.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
