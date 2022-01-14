@@ -33,6 +33,24 @@
       "message": "I tried your patch WITHOUT reverting my stuff. I didn\u0027t get a unit test failure, and visually I see two comments - the same as before.\n\nYour patch WITH reverting my stuff breaks the document (but not the unit test). The unit test itself was rendered ineffective by changing it to a CPPUNIT_TEST_FIXTURE. (I made a note of that to Miklos.) It breaks when I change it back to a DECLARE_OOXMLEXPORT_TEST.\n\nSo I\u0027m really wondering how you hit on my unit test.\nP.S. I have no problem with my patch being reverted and the bug being re-opened if you know that my hacking is just wrong.",
       "revId": "744d78e911ba79f1c0636bbe4c680bd7647ba744",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bfcd828_4502e85f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-14T07:16:41Z",
+      "side": 1,
+      "message": "Ah, it is ooxmlexport5 - an existing unit test that matched the characteristic. OK - let me research that one a bit more.",
+      "parentUuid": "e771bd10_8bf12839",
+      "revId": "744d78e911ba79f1c0636bbe4c680bd7647ba744",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
