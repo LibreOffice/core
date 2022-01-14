@@ -537,14 +537,14 @@ void ImageManagerImpl::addEventListener( const uno::Reference< XEventListener >&
     }
 
     std::unique_lock aGuard(m_mutex);
-    m_aEventListeners.addInterface( xListener );
+    m_aEventListeners.addInterface( aGuard, xListener );
 }
 
 void ImageManagerImpl::removeEventListener( const uno::Reference< XEventListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     std::unique_lock aGuard(m_mutex);
-    m_aEventListeners.removeInterface( xListener );
+    m_aEventListeners.removeInterface( aGuard, xListener );
 }
 
 // XInitialization
@@ -1154,20 +1154,20 @@ void ImageManagerImpl::addConfigurationListener( const uno::Reference< css::ui::
     }
 
     std::unique_lock aGuard(m_mutex);
-    m_aConfigListeners.addInterface( xListener );
+    m_aConfigListeners.addInterface( aGuard, xListener );
 }
 
 void ImageManagerImpl::removeConfigurationListener( const uno::Reference< css::ui::XUIConfigurationListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     std::unique_lock aGuard(m_mutex);
-    m_aConfigListeners.removeInterface( xListener );
+    m_aConfigListeners.removeInterface( aGuard, xListener );
 }
 
 void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
 {
     std::unique_lock aGuard(m_mutex);
-    comphelper::OInterfaceIteratorHelper4 pIterator( m_aConfigListeners );
+    comphelper::OInterfaceIteratorHelper4 pIterator( aGuard, m_aConfigListeners );
     while ( pIterator.hasMoreElements() )
     {
         try
@@ -1187,7 +1187,7 @@ void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent&
         }
         catch( const css::uno::RuntimeException& )
         {
-            pIterator.remove();
+            pIterator.remove(aGuard);
         }
     }
 }

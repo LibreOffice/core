@@ -1234,7 +1234,7 @@ void SAL_CALL SwXParagraph::addEventListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_EventListeners.addInterface(xListener);
+    m_pImpl->m_EventListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL SwXParagraph::removeEventListener(
@@ -1242,7 +1242,7 @@ void SAL_CALL SwXParagraph::removeEventListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_EventListeners.removeInterface(xListener);
+    m_pImpl->m_EventListeners.removeInterface(aGuard, xListener);
 }
 
 uno::Reference< container::XEnumeration >  SAL_CALL

@@ -87,18 +87,18 @@ void SAL_CALL OInstanceLocker::dispose()
 
 void SAL_CALL OInstanceLocker::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
-    std::scoped_lock aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    m_aListenersContainer.addInterface( xListener );
+    m_aListenersContainer.addInterface( aGuard, xListener );
 }
 
 
 void SAL_CALL OInstanceLocker::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
-    std::scoped_lock aGuard( m_aMutex );
-    m_aListenersContainer.removeInterface( xListener );
+    std::unique_lock aGuard( m_aMutex );
+    m_aListenersContainer.removeInterface( aGuard, xListener );
 }
 
 // XInitialization

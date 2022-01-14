@@ -38,23 +38,25 @@ void SAL_CALL ModifyEventForwarder::addModifyListener( const Reference< util::XM
 {
     std::unique_lock aGuard(m_aMutex);
 
-    m_aModifyListeners.addInterface( aListener );
+    m_aModifyListeners.addInterface( aGuard, aListener );
 }
 
 void SAL_CALL ModifyEventForwarder::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     std::unique_lock aGuard(m_aMutex);
 
-    m_aModifyListeners.removeInterface( aListener );
+    m_aModifyListeners.removeInterface( aGuard, aListener );
 }
 
 // ____ XModifyListener ____
 void SAL_CALL ModifyEventForwarder::modified( const lang::EventObject& aEvent )
 {
-    if( m_aModifyListeners.getLength() == 0 )
+    std::unique_lock aGuard(m_aMutex);
+
+    if( m_aModifyListeners.getLength(aGuard) == 0 )
         return;
 
-    m_aModifyListeners.notifyEach( &util::XModifyListener::modified, aEvent );
+    m_aModifyListeners.notifyEach( aGuard, &util::XModifyListener::modified, aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____

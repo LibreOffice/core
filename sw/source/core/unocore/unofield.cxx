@@ -404,10 +404,9 @@ static sal_uInt16 lcl_GetPropertyMapOfService( SwServiceType nServiceId )
 class SwXFieldMaster::Impl
     : public SvtListener
 {
-private:
-    std::mutex m_Mutex; // just for OInterfaceContainerHelper3
-
 public:
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+
     uno::WeakReference<uno::XInterface> m_wThis;
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
 
@@ -970,15 +969,15 @@ void SAL_CALL SwXFieldMaster::dispose()
 void SAL_CALL SwXFieldMaster::addEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_EventListeners.addInterface(xListener);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_EventListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL SwXFieldMaster::removeEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_EventListeners.removeInterface(xListener);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_EventListeners.removeInterface(aGuard, xListener);
 }
 
 void SwXFieldMaster::Impl::Notify(const SfxHint& rHint)
@@ -1083,12 +1082,11 @@ struct SwFieldProperties_Impl
 class SwXTextField::Impl
     : public SvtListener
 {
-private:
-    std::mutex m_Mutex; // just for OInterfaceContainerHelper3
+public:
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
     SwFieldType* m_pFieldType;
     SwFormatField* m_pFormatField;
 
-public:
     uno::WeakReference<uno::XInterface> m_wThis;
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
 
@@ -2112,15 +2110,15 @@ void SAL_CALL SwXTextField::dispose()
 void SAL_CALL SwXTextField::addEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_EventListeners.addInterface(xListener);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_EventListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL SwXTextField::removeEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_EventListeners.removeInterface(xListener);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_EventListeners.removeInterface(aGuard, xListener);
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
@@ -2898,22 +2896,23 @@ void SAL_CALL SwXTextFieldTypes::refresh()
     }
     // call refresh listeners (without SolarMutex locked)
     lang::EventObject const event(static_cast< ::cppu::OWeakObject*>(this));
-    m_pImpl->m_RefreshListeners.notifyEach(
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_RefreshListeners.notifyEach(aGuard,
             & util::XRefreshListener::refreshed, event);
 }
 
 void SAL_CALL SwXTextFieldTypes::addRefreshListener(
         const uno::Reference<util::XRefreshListener> & xListener)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_RefreshListeners.addInterface(xListener);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_RefreshListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL SwXTextFieldTypes::removeRefreshListener(
         const uno::Reference<util::XRefreshListener> & xListener)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_RefreshListeners.removeInterface(xListener);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_RefreshListeners.removeInterface(aGuard, xListener);
 }
 
 class SwXFieldEnumeration::Impl

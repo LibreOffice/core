@@ -89,84 +89,84 @@ public:
     addWindowListener(const css::uno::Reference<css::awt::XWindowListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
-        m_aWindowListeners.addInterface(rListener);
+        m_aWindowListeners.addInterface(g, rListener);
     }
 
     void SAL_CALL
     removeWindowListener(const css::uno::Reference<css::awt::XWindowListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
-        m_aWindowListeners.removeInterface(rListener);
+        m_aWindowListeners.removeInterface(g, rListener);
     }
 
     void SAL_CALL
     addFocusListener(const css::uno::Reference<css::awt::XFocusListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
-        m_aFocusListeners.addInterface(rListener);
+        m_aFocusListeners.addInterface(g, rListener);
     }
 
     void SAL_CALL
     removeFocusListener(const css::uno::Reference<css::awt::XFocusListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
-        m_aFocusListeners.removeInterface(rListener);
+        m_aFocusListeners.removeInterface(g, rListener);
     }
 
     void SAL_CALL
     addKeyListener(const css::uno::Reference<css::awt::XKeyListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
-        m_aKeyListeners.addInterface(rListener);
+        m_aKeyListeners.addInterface(g, rListener);
     }
 
     void SAL_CALL
     removeKeyListener(const css::uno::Reference<css::awt::XKeyListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
-        m_aKeyListeners.removeInterface(rListener);
+        m_aKeyListeners.removeInterface(g, rListener);
     }
 
     void SAL_CALL
     addMouseListener(const css::uno::Reference<css::awt::XMouseListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
-        m_aMouseListeners.addInterface(rListener);
+        m_aMouseListeners.addInterface(g, rListener);
     }
 
     void SAL_CALL
     removeMouseListener(const css::uno::Reference<css::awt::XMouseListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
-        m_aMouseListeners.removeInterface(rListener);
+        m_aMouseListeners.removeInterface(g, rListener);
     }
 
     void SAL_CALL addMouseMotionListener(
         const css::uno::Reference<css::awt::XMouseMotionListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
-        m_aMotionListeners.addInterface(rListener);
+        m_aMotionListeners.addInterface(g, rListener);
     }
 
     void SAL_CALL removeMouseMotionListener(
         const css::uno::Reference<css::awt::XMouseMotionListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
-        m_aMotionListeners.removeInterface(rListener);
+        m_aMotionListeners.removeInterface(g, rListener);
     }
 
     void SAL_CALL
     addPaintListener(const css::uno::Reference<css::awt::XPaintListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
-        m_aPaintListeners.addInterface(rListener);
+        m_aPaintListeners.addInterface(g, rListener);
     }
 
     void SAL_CALL
     removePaintListener(const css::uno::Reference<css::awt::XPaintListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
-        m_aPaintListeners.removeInterface(rListener);
+        m_aPaintListeners.removeInterface(g, rListener);
     }
 };
 

@@ -2598,15 +2598,15 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
 void SAL_CALL SwXFrame::addEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_EventListeners.addInterface(xListener);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_EventListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL SwXFrame::removeEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_EventListeners.removeInterface(xListener);
+    std::unique_lock aGuard(m_pImpl->m_Mutex);
+    m_pImpl->m_EventListeners.removeInterface(aGuard, xListener);
 }
 
 void SwXFrame::DisposeInternal()
