@@ -436,15 +436,9 @@ excludelist:
     # base class has to be a complete type
     - boost/shared_array.hpp
     - map
-    chart2/source/view/inc/Linear3DTransformation.hxx:
-    # base class has to be a complete type
-    - com/sun/star/chart2/XTransformation.hpp
     chart2/source/view/inc/VLineProperties.hxx:
     # base class has to be a complete type
     - com/sun/star/uno/Reference.h
-    chart2/source/view/inc/VPolarTransformation.hxx:
-    # base class has to be a complete type
-    - com/sun/star/chart2/XTransformation.hpp
     chart2/source/view/axes/DateScaling.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/XScaling.hpp
