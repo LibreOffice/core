@@ -2689,6 +2689,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
+    xmlDocFormatDump(stderr, pXmlDoc.get(), true);
+
     // Without the accompanying fix in place, this test would have failed, as
     // the orientation was 0 (layout did not take btlr direction request from
     // doc model).
