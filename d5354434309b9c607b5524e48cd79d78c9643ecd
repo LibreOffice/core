@@ -88,6 +88,24 @@
       "parentUuid": "502f9269_d3966bb4",
       "revId": "d5354434309b9c607b5524e48cd79d78c9643ecd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "319fe232_bb88a3c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-14T12:34:28Z",
+      "side": 1,
+      "message": "\u003e Don\u0027t think similar adjacent colors are often used\n\nLol.\nWell, up to you; but when you get follow-up reports, my (hopefully better) suggestion would then be to slightly decrease padding on both sides of the flat button, and draw the line (as you do now) *between* them (that would make sure it\u0027s visible both with and without custom color).",
+      "parentUuid": "445fba74_214215e4",
+      "revId": "d5354434309b9c607b5524e48cd79d78c9643ecd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
