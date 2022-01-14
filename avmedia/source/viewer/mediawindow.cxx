@@ -219,21 +219,21 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
     aDlg.SetTitle( AvmResId( o_pbLink != nullptr
                 ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
 
-    for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
+    for( const auto &filter : aFilters )
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
             if( !aAllTypes.isEmpty() )
                 aAllTypes.append(aSeparator);
 
-            aAllTypes.append(aWildcard + aFilters[ i ].second.getToken( 0, ';', nIndex ));
+            aAllTypes.append(aWildcard + filter.second.getToken( 0, ';', nIndex ));
         }
     }
 
     // add filter for all media types
     aDlg.AddFilter( AvmResId( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes.makeStringAndClear() );
 
-    for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
+    for( const auto &filter : aFilters )
     {
         OUStringBuffer aTypes;
 
@@ -242,11 +242,11 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
             if( !aTypes.isEmpty() )
                 aTypes.append(aSeparator);
 
-            aTypes.append(aWildcard + aFilters[ i ].second.getToken( 0, ';', nIndex ));
+            aTypes.append(aWildcard + filter.second.getToken( 0, ';', nIndex ));
         }
 
         // add single filters
-        aDlg.AddFilter( aFilters[ i ].first, aTypes.makeStringAndClear() );
+        aDlg.AddFilter( filter.first, aTypes.makeStringAndClear() );
     }
 
     // add filter for all types
@@ -333,11 +333,11 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
         FilterNameVector        aFilters = getMediaFilters();
         const OUString          aExt( aURL.getExtension() );
 
-        for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
+        for( const auto &filter : aFilters )
         {
             for( sal_Int32 nIndex = 0; nIndex >= 0; )
             {
-                if( aExt.equalsIgnoreAsciiCase( aFilters[ i ].second.getToken( 0, ';', nIndex ) ) )
+                if( aExt.equalsIgnoreAsciiCase( filter.second.getToken( 0, ';', nIndex ) ) )
                     return true;
             }
         }
