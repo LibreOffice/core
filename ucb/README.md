@@ -7,7 +7,7 @@ various DMS and fileshare systems like WebDAV, CMIS, or GIO.
 The UCPs implement the Universal Content Provider UNO interfaces in
 C++, in particular the `com.sun.star.ucb.ContentProvider` service.
 
-## WebDAV ucp
+## WebDAV UCP
 
 The WebDAV content provider is based on `libcurl` for much of the
 network and protocol stuff, including authentication.
@@ -36,18 +36,29 @@ server idiosyncrasies:
 * Nextcloud will reply to a PROPFIND request with "100 Continue" and
   then after the data is uploaded it will send a "401 Unauthorized" if
   the auth header is missing in the headers to which it replied with
-  "100 Continue". So we reuse that.
-* Sharepoint 16 responds to PROPFIND with "Transfer-Encoding: chunked"
+  "100 Continue".
+* Sharepoint 16 responds to PROPFIND, PROPPATCH and LOCK with
+  "Transfer-Encoding: chunked"
   with "HTTP/1.1 200 OK" and an actual error message in the response *body*.
   * apparently setting Content-Length works better, so we use that
-  * Sharepoint 16 has the same problem with PROPFIND.
-  * and for when using chunked encoding for LOCK
 * Sharepoint returns redirect urls that curl can't parse, so we encode
   them (check `WebDAVResponseParser` for the code)
+* Sharepoint may reply to HEAD with 200 OK but then 404 NOT FOUND to PROPFIND
+* Sharepoint does not appear to support Dead Properties
 * avoiding chunked encoding for PUT, since for Nextcloud:
   * Transfer-Encoding: chunked creates a 0 byte file with response
     "201 Created"
   * see upstream bug: https://github.com/nextcloud/server/issues/7995
-  * apparently this doesn't happen with header Content-Length: 8347,
-    so we use that
+
+The most important classes are:
+* ContentProvider: the UNO entry point/factory, creates Content instances
+* Content: the main UNO service, translates the UCP API to WebDAV methods,
+  one instance per URL
+* DAVResourceAccess: sits between Content and CurlSession
+* DAVSessionFactory: creates CurlSession for DAVResourceAccess
+* CurlSession: low-level interfacing with libcurl
+* SerfLockStore: singleton used by CurlSession to store DAV lock tokens, runs
+  a thread to refresh locks when they expire
+* WebDAVResponseParser: parse XML responses to LOCK, PROPFIND requests
+* DAVAuthListener_Impl: request credentials from UI via UNO
 
