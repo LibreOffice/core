@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16dcf31a_fec54a24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-14T11:45:33Z",
+      "side": 1,
+      "message": "If this needs a re-test, you can change the comment to be a bit more accurate to say it failed because of a loadAndSave() instead of a loadAndReload(). Otherwise this is fine.\n\nIf Miklos\u0027 https://gerrit.libreoffice.org/c/core/+/128411  makes it in first, you could include the ooxmlexport16\n   // FIXME this should be loadAndReload(), but it fails currently.",
+      "revId": "8516828d959e34da4b9e5ad3648b874185c7ba69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
