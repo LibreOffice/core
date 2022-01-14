@@ -66,9 +66,8 @@ const OUString& SalGetDesktopEnvironment()
     return aEnv;
 }
 
-SalData::SalData() :
-    m_pInstance( nullptr ),
-    m_pPIManager( nullptr )
+SalData::SalData()
+    : m_pInstance(nullptr)
 {
 }
 
