@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <rtl/math.hxx>
 #include <cmath>
 
 #include "arraysumfunctorinternal.hxx"
@@ -17,7 +18,10 @@
   * This class provides LO with Kahan summation algorithm
   * About this algorithm: https://en.wikipedia.org/wiki/Kahan_summation_algorithm
   * For general purpose software we assume first order error is enough.
-  * This class could be made constexpr if needed.
+  *
+  * Additionally queue and remember the last recent non-zero value and add it
+  * similar to approxAdd() when obtaining the final result to further eliminate
+  * accuracy errors. (e.g. for the dreaded 0.1 + 0.2 - 0.3 != 0.0)
   */
 
 class KahanSum
@@ -51,12 +55,22 @@ public:
       */
     void add(double x_i)
     {
-        double t = m_fSum + x_i;
-        if (std::abs(m_fSum) >= std::abs(x_i))
-            m_fError += (m_fSum - t) + x_i;
+        if (x_i == 0.0)
+            return;
+
+        if (!m_fMem)
+        {
+            m_fMem = x_i;
+            return;
+        }
+
+        double t = m_fSum + m_fMem;
+        if (std::abs(m_fSum) >= std::abs(m_fMem))
+            m_fError += (m_fSum - t) + m_fMem;
         else
-            m_fError += (x_i - t) + m_fSum;
+            m_fError += (m_fMem - t) + m_fSum;
         m_fSum = t;
+        m_fMem = x_i;
     }
 
     /**
@@ -67,6 +81,7 @@ public:
     {
         add(fSum.m_fSum);
         add(fSum.m_fError);
+        add(fSum.m_fMem);
     }
 
     /**
@@ -77,6 +92,7 @@ public:
     {
         add(-fSum.m_fSum);
         add(-fSum.m_fError);
+        add(-fSum.m_fMem);
     }
 
 public:
@@ -85,6 +101,7 @@ public:
         KahanSum fKahanSum;
         fKahanSum.m_fSum = -m_fSum;
         fKahanSum.m_fError = -m_fError;
+        fKahanSum.m_fMem = -m_fMem;
         return fKahanSum;
     }
 
@@ -92,6 +109,7 @@ public:
     {
         m_fSum = fSum;
         m_fError = 0;
+        m_fMem = 0;
         return *this;
     }
 
@@ -139,76 +157,92 @@ public:
       */
     constexpr void operator*=(double fTimes)
     {
-        m_fSum *= fTimes;
-        m_fError *= fTimes;
+        if (m_fMem)
+        {
+            m_fSum = get() * fTimes;
+            m_fMem = 0.0;
+        }
+        else
+        {
+            m_fSum = (m_fSum + m_fError) * fTimes;
+        }
+        m_fError = 0.0;
     }
 
     constexpr void operator/=(double fDivides)
     {
-        m_fSum /= fDivides;
-        m_fError /= fDivides;
+        if (m_fMem)
+        {
+            m_fSum = get() / fDivides;
+            m_fMem = 0.0;
+        }
+        else
+        {
+            m_fSum = (m_fSum + m_fError) / fDivides;
+        }
+        m_fError = 0.0;
     }
 
-    inline KahanSum operator*(const KahanSum& fTimes) const
-    {
-        return *this * fTimes.m_fSum + *this * fTimes.m_fError;
-    }
+    inline KahanSum operator*(const KahanSum& fTimes) const { return get() * fTimes.get(); }
 
-    constexpr KahanSum operator*(double fTimes) const
-    {
-        KahanSum fSum(*this);
-        fSum *= fTimes;
-        return fSum;
-    }
+    inline KahanSum operator*(double fTimes) const { return get() * fTimes; }
 
-    inline KahanSum operator/(const KahanSum& fDivides) const { return *this / fDivides.get(); }
+    inline KahanSum operator/(const KahanSum& fDivides) const { return get() / fDivides.get(); }
 
-    constexpr KahanSum operator/(double fTimes) const
-    {
-        KahanSum fSum(*this);
-        fSum /= fTimes;
-        return fSum;
-    }
+    inline KahanSum operator/(double fDivides) const { return get() / fDivides; }
 
-    constexpr bool operator<(const KahanSum& fSum) const { return get() < fSum.get(); }
+    inline bool operator<(const KahanSum& fSum) const { return get() < fSum.get(); }
 
-    constexpr bool operator<(double fSum) const { return get() < fSum; }
+    inline bool operator<(double fSum) const { return get() < fSum; }
 
-    constexpr bool operator>(const KahanSum& fSum) const { return get() > fSum.get(); }
+    inline bool operator>(const KahanSum& fSum) const { return get() > fSum.get(); }
 
-    constexpr bool operator>(double fSum) const { return get() > fSum; }
+    inline bool operator>(double fSum) const { return get() > fSum; }
 
-    constexpr bool operator<=(const KahanSum& fSum) const { return get() <= fSum.get(); }
+    inline bool operator<=(const KahanSum& fSum) const { return get() <= fSum.get(); }
 
-    constexpr bool operator<=(double fSum) const { return get() <= fSum; }
+    inline bool operator<=(double fSum) const { return get() <= fSum; }
 
-    constexpr bool operator>=(const KahanSum& fSum) const { return get() >= fSum.get(); }
+    inline bool operator>=(const KahanSum& fSum) const { return get() >= fSum.get(); }
 
-    constexpr bool operator>=(double fSum) const { return get() >= fSum; }
+    inline bool operator>=(double fSum) const { return get() >= fSum; }
 
-    constexpr bool operator==(const KahanSum& fSum) const
-    {
-        return fSum.m_fSum == m_fSum && fSum.m_fError == m_fError;
-    }
+    inline bool operator==(const KahanSum& fSum) const { return get() == fSum.get(); }
 
-    constexpr bool operator!=(const KahanSum& fSum) const
-    {
-        return fSum.m_fSum != m_fSum || fSum.m_fError != m_fError;
-    }
-
-    constexpr double* getSum() { return &m_fSum; }
-    constexpr double* getError() { return &m_fError; }
+    inline bool operator!=(const KahanSum& fSum) const { return get() != fSum.get(); }
 
 public:
     /**
       * Returns the final sum.
       * @return final sum
       */
-    constexpr double get() const { return m_fSum + m_fError; }
+    double get() const
+    {
+        const double fTotal = m_fSum + m_fError;
+        if (!m_fMem)
+            return fTotal;
+
+        // Check the same condition as rtl::math::approxAdd() and if true
+        // return 0.0, if false use another Kahan summation adding m_fMem.
+        if (((m_fMem < 0.0 && fTotal > 0.0) || (fTotal < 0.0 && m_fMem > 0.0))
+            && rtl::math::approxEqual(m_fMem, -fTotal))
+        {
+            /* TODO: should we reset all values to zero here for further
+             * summation, or is it better to keep them as they are? */
+            return 0.0;
+        }
+
+        // The actual argument passed to add() here does not matter as long as
+        // it is not 0, m_fMem is not 0 and will be added anyway, see add().
+        const_cast<KahanSum*>(this)->add(m_fMem);
+        const_cast<KahanSum*>(this)->m_fMem = 0.0;
+        return m_fSum + m_fError;
+    }
 
 private:
     double m_fSum = 0;
     double m_fError = 0;
+    double m_fMem = 0;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
