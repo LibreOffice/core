@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71dd320f_872d519f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-14T21:28:58Z",
+      "side": 1,
+      "message": "There\u0027s a new crashtesting assert I\u0027ve bisected to this commit:\n\nto reproduce:\n1. wget https://bugs.documentfoundation.org/attachment.cgi?id\u003d49034 -O /tmp/fdo38619-2.ott\n2. ./instdir/program/soffice --headless --convert-to pdf /tmp/fdo38619-2.ott\n\nan assert of\n\nsoffice.bin: /home/caolan/LibreOffice/core/sw/source/core/layout/laycache.cxx:353: bool SwLayoutCache::CompareLayout(const SwDoc \u0026) const: Assertion `!pFrame-\u003eGetMergedPara()\u0027 failed.",
+      "revId": "657de5fba12b0e9afcdee361654d2a2d0dbd7311",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
