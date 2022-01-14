@@ -16,6 +16,24 @@
       "message": "okay the note is added, but this file doesn\u0027t actually use \"endbr32\", or am i missing something",
       "revId": "f9d16ac09b89cb15cee2bf892d22cda2a39052b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3d50339_98892cda",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_intel/call.s",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-14T11:02:50Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/126859/4..6/bridges/source/cpp_uno/gcc3_linux_intel/call.s#b26\n\n\"I don\u0027t think we need any of the endbr32 in this file, as all of them are only targets of non-indirect JMP instructions (E9 rel32) from the trampolines generated in codeSnippet in bridges/source/cpp_uno/gcc3_linux_intel/cpp2uno.cxx\"\n\nbut we still need to add the section, otherwise the feature gets disabled IIUC",
+      "parentUuid": "73e7ec19_02c35817",
+      "revId": "f9d16ac09b89cb15cee2bf892d22cda2a39052b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
