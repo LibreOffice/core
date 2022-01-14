@@ -319,17 +319,11 @@ SalInstance *CreateSalInstance()
         _exit( 1 );
     }
 
-    // acquire SolarMutex
-    pInst->AcquireYieldMutex();
-
     return pInst;
 }
 
 void DestroySalInstance( SalInstance *pInst )
 {
-    // release SolarMutex
-    pInst->ReleaseYieldMutexAll();
-
     delete pInst;
 #ifndef DISABLE_DYNLOADING
     if( pCloseModule )

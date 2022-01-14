@@ -71,13 +71,11 @@ SalInstance *CreateSalInstance()
 {
     HeadlessSalInstance* pInstance = new HeadlessSalInstance(std::make_unique<SvpSalYieldMutex>());
     new SvpSalData();
-    pInstance->AcquireYieldMutex();
     return pInstance;
 }
 
 void DestroySalInstance( SalInstance *pInst )
 {
-    pInst->ReleaseYieldMutexAll();
     delete pInst;
 }
 

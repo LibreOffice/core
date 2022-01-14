@@ -321,6 +321,7 @@ bool InitVCL()
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
         return false;
+    pSVData->mpDefInst->AcquireYieldMutex();
 
     // Desktop Environment context (to be able to get value of "system.desktop-environment" as soon as possible)
     css::uno::setCurrentContext(
@@ -598,6 +599,7 @@ void DeInitVCL()
     // Deinit Sal
     if (pSVData->mpDefInst)
     {
+        pSVData->mpDefInst->ReleaseYieldMutexAll();
         DestroySalInstance( pSVData->mpDefInst );
         pSVData->mpDefInst = nullptr;
     }
