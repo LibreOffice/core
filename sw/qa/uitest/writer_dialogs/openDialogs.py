@@ -13,7 +13,8 @@ from uitest.uihelper.testDialog import testDialog
 
 dialogs = [
     {"command": ".uno:OpenRemote", "closeButton": "cancel"},
-    {"command": ".uno:NewDoc", "closeButton": "close"},
+    #{"command": ".uno:NewDoc", "closeButton": "close"},
+        # tested in sw/qa/uitest/writer_tests2/tdf146375.py
     {"command": ".uno:SaveAsTemplate", "closeButton": "cancel"},
     #{"command": ".uno:ExportToPDF", "closeButton": "cancel", "skipTestOK": True},
         # tested in sw/qa/uitest/writer_tests4/exportToPDF.py
