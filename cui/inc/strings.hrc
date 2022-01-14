@@ -76,7 +76,6 @@
 #define RID_CUISTR_HYPDLG_MACROACT1                 NC_("RID_SVXSTR_HYPDLG_MACROACT1", "Mouse over object")
 #define RID_CUISTR_HYPDLG_MACROACT2                 NC_("RID_SVXSTR_HYPDLG_MACROACT2", "Trigger hyperlink")
 #define RID_CUISTR_HYPDLG_MACROACT3                 NC_("RID_SVXSTR_HYPDLG_MACROACT3", "Mouse leaves object")
-#define RID_CUISTR_HYPDLG_NOVALIDFILENAME           NC_("RID_SVXSTR_HYPDLG_NOVALIDFILENAME", "Please type in a valid file name.")
 #define RID_CUISTR_HYPERDLG_FORM_BUTTON             NC_("RID_SVXSTR_HYPERDLG_FORM_BUTTON", "Button")
 #define RID_CUISTR_HYPERDLG_FROM_TEXT               NC_("RID_SVXSTR_HYPERDLG_FROM_TEXT", "Text")
 #define RID_CUISTR_HYPERDLG_QUERYOVERWRITE          NC_("RID_SVXSTR_HYPERDLG_QUERYOVERWRITE", "The file already exists. Overwrite?")

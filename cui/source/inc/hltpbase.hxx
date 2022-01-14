@@ -105,7 +105,6 @@ public:
         mxDocumentFrame = rxDocumentFrame;
     }
 
-    virtual bool AskApply ( bool bShowWarning );
     virtual void DoApply ();
     virtual void SetInitFocus();
     virtual void SetMarkStr ( const OUString& aStrMark );
