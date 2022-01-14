@@ -261,7 +261,8 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
     return bOK;
 }
 
-void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout)
+void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout,
+                                             bool bSubpixelPositioning)
 {
     const CoreTextStyle& rStyle = *static_cast<const CoreTextStyle*>(&rLayout.GetFont());
     const vcl::font::FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
@@ -295,8 +296,12 @@ void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout)
     //    font.setScaleX(rStyle.mfFontStretch); TODO
     if (rStyle.mbFauxBold)
         font.setEmbolden(true);
-    font.setEdging(!mrShared.mbNonAntialiasedText ? SkFont::Edging::kAntiAlias
-                                                  : SkFont::Edging::kAlias);
+
+    SkFont::Edging ePreferredAliasing
+        = bSubpixelPositioning ? SkFont::Edging::kSubpixelAntiAlias : SkFont::Edging::kAntiAlias;
+    if (bSubpixelPositioning)
+        font.setSubpixel(true);
+    font.setEdging(mrShared.mbNonAntialiasedText ? SkFont::Edging::kAlias : ePreferredAliasing);
 
     // Vertical font, use width as "height".
     SkFont verticalFont(font);
