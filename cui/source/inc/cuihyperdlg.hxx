@@ -106,7 +106,7 @@ private:
 
     void Activate() override;
     virtual void Close() override;
-    void Apply( bool bWarn );
+    void Apply();
 
 public:
     SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld::Window* pParent);

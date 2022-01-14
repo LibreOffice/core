@@ -236,25 +236,6 @@ void SvxHyperlinkNewDocTp::SetInitFocus()
     m_xCbbPath->grab_focus();
 }
 
-/*************************************************************************
-|*
-|* Ask page whether an insert is possible
-|*
-\************************************************************************/
-bool SvxHyperlinkNewDocTp::AskApply( bool bShowWarning )
-{
-    INetURLObject aINetURLObject;
-    bool bRet = ImplGetURLObject(m_xCbbPath->get_active_text(), m_xCbbPath->GetBaseURL(), aINetURLObject);
-    if ( !bRet && bShowWarning )
-    {
-        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(mpDialog->getDialog(),
-                                                   VclMessageType::Warning, VclButtonsType::Ok,
-                                                   CuiResId(RID_CUISTR_HYPDLG_NOVALIDFILENAME)));
-        xWarn->run();
-    }
-    return bRet;
-}
-
 namespace
 {
     struct ExecuteInfo
