@@ -16,6 +16,24 @@
       "message": "Will it work with colored tabs? (It looks like the vertical line is drawn on the area of the *next* tab, so I suspect that in case of colored tabs, they will owerpaint the line)",
       "revId": "d5354434309b9c607b5524e48cd79d78c9643ecd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bd10d00_9404579d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-14T10:55:26Z",
+      "side": 1,
+      "message": "Work is a relative term ;-). You are right, it looks ugly https://i.imgur.com/XfqawRq.png but with the next patch like this https://i.imgur.com/WU5Whi6.png",
+      "parentUuid": "ccb64a4a_157c8913",
+      "revId": "d5354434309b9c607b5524e48cd79d78c9643ecd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
