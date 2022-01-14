@@ -26,7 +26,7 @@
             <property name="draw-indicator">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="suppressemptypages-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="printeroptions|extended_tip|suppressemptypages">If checked empty pages that have no cell contents or draw objects are not printed.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="printeroptions|extended_tip|suppressemptypages">If checked, empty pages that have no cell contents or drawing objects are not printed.</property>
               </object>
             </child>
           </object>
