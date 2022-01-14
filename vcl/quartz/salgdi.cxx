@@ -362,10 +362,10 @@ bool AquaSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*,
 
 void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    mpBackend->drawTextLayout(rLayout);
+    mpBackend->drawTextLayout(rLayout, getTextRenderModeForResolutionIndependentLayoutEnabled());
 }
 
-void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
+void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout, bool bTextRenderModeForResolutionIndependentLayout)
 {
 #ifdef IOS
     if (!mrShared.checkContext())
@@ -457,6 +457,14 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
         CGContextSetStrokeColor(mrShared.maContextHolder.get(), textColor.AsArray());
         CGContextSetLineWidth(mrShared.maContextHolder.get(), fSize);
         CGContextSetTextDrawingMode(mrShared.maContextHolder.get(), kCGTextFillStroke);
+    }
+
+    if (bTextRenderModeForResolutionIndependentLayout)
+    {
+        CGContextSetAllowsFontSubpixelQuantization(mrShared.maContextHolder.get(), false);
+        CGContextSetShouldSubpixelQuantizeFonts(mrShared.maContextHolder.get(), false);
+        CGContextSetAllowsFontSubpixelPositioning(mrShared.maContextHolder.get(), true);
+        CGContextSetShouldSubpixelPositionFonts(mrShared.maContextHolder.get(), true);
     }
 
     auto aIt = aGlyphOrientation.cbegin();
