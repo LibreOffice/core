@@ -209,7 +209,7 @@ void AccessibleEventNotifier::revokeClientNotifyDisposing(
 sal_Int32 AccessibleEventNotifier::addEventListener(
     const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener )
 {
-    std::scoped_lock aGuard( GetLocalMutex() );
+    std::unique_lock aGuard( GetLocalMutex() );
 
     ClientMap::iterator aClientPos;
     if ( !implLookupClient( _nClient, aClientPos ) )
@@ -217,15 +217,15 @@ sal_Int32 AccessibleEventNotifier::addEventListener(
         return 0;
 
     if ( _rxListener.is() )
-        aClientPos->second->addInterface( _rxListener );
+        aClientPos->second->addInterface( aGuard, _rxListener );
 
-    return aClientPos->second->getLength();
+    return aClientPos->second->getLength(aGuard);
 }
 
 sal_Int32 AccessibleEventNotifier::removeEventListener(
     const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener )
 {
-    std::scoped_lock aGuard( GetLocalMutex() );
+    std::unique_lock aGuard( GetLocalMutex() );
 
     ClientMap::iterator aClientPos;
     if ( !implLookupClient( _nClient, aClientPos ) )
@@ -233,9 +233,9 @@ sal_Int32 AccessibleEventNotifier::removeEventListener(
         return 0;
 
     if ( _rxListener.is() )
-        aClientPos->second->removeInterface( _rxListener );
+        aClientPos->second->removeInterface( aGuard,  _rxListener );
 
-    return aClientPos->second->getLength();
+    return aClientPos->second->getLength(aGuard);
 }
 
 void AccessibleEventNotifier::addEvent( const TClientId _nClient, const AccessibleEventObject& _rEvent )
@@ -243,7 +243,7 @@ void AccessibleEventNotifier::addEvent( const TClientId _nClient, const Accessib
     std::vector< Reference< XAccessibleEventListener > > aListeners;
 
     {
-        std::scoped_lock aGuard( GetLocalMutex() );
+        std::unique_lock aGuard( GetLocalMutex() );
 
         ClientMap::iterator aClientPos;
         if ( !implLookupClient( _nClient, aClientPos ) )
@@ -251,7 +251,7 @@ void AccessibleEventNotifier::addEvent( const TClientId _nClient, const Accessib
             return;
 
         // since we're synchronous, again, we want to notify immediately
-        aListeners = aClientPos->second->getElements();
+        aListeners = aClientPos->second->getElements(aGuard);
     }
 
     // default handling: loop through all listeners, and notify them

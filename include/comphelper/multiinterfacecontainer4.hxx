@@ -91,17 +91,18 @@ public:
         @return
                 the new count of elements in the container
     */
-    inline sal_Int32 addInterface(const key& rKey, const css::uno::Reference<listener>& rListener)
+    inline sal_Int32 addInterface(::std::unique_lock<::std::mutex>& rGuard, const key& rKey,
+                                  const css::uno::Reference<listener>& rListener)
     {
         auto iter = find(rKey);
         if (iter == m_aMap.end())
         {
             auto pLC = new OInterfaceContainerHelper4<listener>();
             m_aMap.emplace_back(rKey, pLC);
-            return pLC->addInterface(rListener);
+            return pLC->addInterface(rGuard, rListener);
         }
         else
-            return (*iter).second->addInterface(rListener);
+            return (*iter).second->addInterface(rGuard, rListener);
     }
     /** Removes an element from the container with the specified key.
         It uses interface equality to remove the interface.
@@ -112,14 +113,14 @@ public:
         @return
                 the new count of elements in the container
     */
-    inline sal_Int32 removeInterface(const key& rKey,
+    inline sal_Int32 removeInterface(::std::unique_lock<::std::mutex>& rGuard, const key& rKey,
                                      const css::uno::Reference<listener>& rListener)
     {
         // search container with id nUik
         auto iter = find(rKey);
         // container found?
         if (iter != m_aMap.end())
-            return (*iter).second->removeInterface(rListener);
+            return (*iter).second->removeInterface(rGuard, rListener);
         // no container with this id. Always return 0
         return 0;
     }
@@ -139,7 +140,7 @@ public:
         rGuard.unlock();
         for (auto& rPair : tempMap)
         {
-            OInterfaceIteratorHelper4<listener> aIt(*rPair.second);
+            OInterfaceIteratorHelper4<listener> aIt(rGuard, *rPair.second);
             while (aIt.hasMoreElements())
             {
                 try
