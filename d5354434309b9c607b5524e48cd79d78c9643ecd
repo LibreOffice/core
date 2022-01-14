@@ -52,6 +52,24 @@
       "parentUuid": "5bd10d00_9404579d",
       "revId": "d5354434309b9c607b5524e48cd79d78c9643ecd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "502f9269_d3966bb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-14T11:01:48Z",
+      "side": 1,
+      "message": "And my suggestion is: just paint it unconditionally, on the both sides of the rectangle, so that the line would be 2 pixel wide. The color should be detected like in drawColorLine.",
+      "parentUuid": "5b2b2ea0_d85d5141",
+      "revId": "d5354434309b9c607b5524e48cd79d78c9643ecd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
