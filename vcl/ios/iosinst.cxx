@@ -166,13 +166,11 @@ SalInstance *CreateSalInstance()
 {
     IosSalInstance* pInstance = new IosSalInstance( std::make_unique<SvpSalYieldMutex>() );
     new SvpSalData(pInstance);
-    pInstance->AcquireYieldMutex();
     return pInstance;
 }
 
 void DestroySalInstance( SalInstance *pInst )
 {
-    pInst->ReleaseYieldMutexAll();
     delete pInst;
 }
 
