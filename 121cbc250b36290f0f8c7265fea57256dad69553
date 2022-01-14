@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3da3f46f_9489c207",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-14T17:19:31Z",
+      "side": 1,
+      "message": "we have a new crashtesting assert since this landed, to reproduce one of them:\n\n1. wget https://bugs.documentfoundation.org/attachment.cgi?id\u003d160042 -O /tmp/tdf132502-1.docx\n2. ./instdir/program/soffice --headless --convert-to docx /tmp/tdf132502-1.docx \n\nThere is an assert of:\n\nsoffice.bin: /home/caolan/LibreOffice/core/sax/source/tools/fastserializer.cxx:379: void sax_fastparser::FastSaxSerializer::endFastElement(::sal_Int32): Assertion `Element \u003d\u003d maMarkStack.top()-\u003em_DebugStartedElements.back()\u0027 failed.\n\n\nI see open sdtContent elements in word/footer1.xml with no matching closing sdtContent if I disable asserts and allow it to save the invalid output",
+      "revId": "121cbc250b36290f0f8c7265fea57256dad69553",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
