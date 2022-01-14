@@ -2056,7 +2056,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	XTimeBased \
 	XTitle \
 	XTitled \
-	XTransformation \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2/data,\
 	DataSequenceRole \

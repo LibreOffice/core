@@ -27,7 +27,6 @@
 #include <VLineProperties.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/chart2/XTransformation.hpp>
 
 #include <memory>
 #include <vector>

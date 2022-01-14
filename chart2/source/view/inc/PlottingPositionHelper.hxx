@@ -34,7 +34,6 @@
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>
 
-namespace com::sun::star::chart2 { class XTransformation; }
 namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::drawing { struct HomogenMatrix; }
 namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
