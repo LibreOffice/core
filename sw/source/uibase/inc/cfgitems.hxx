@@ -35,7 +35,6 @@ class SwViewShell;
 class SwViewOption;
 class SwContentOptPage;
 class SwShdwCursorOptionsTabPage;
-enum class GlyphPositioningMode;
 enum class SwFillMode;
 
 /// Item for settings dialog - document view
@@ -84,8 +83,6 @@ class SW_DLLPUBLIC SwElemItem final : public SfxPoolItem
     bool m_bShowChangesInMargin :1;
     bool m_bFieldHiddenText   :1;
     bool m_bShowHiddenPara    :1;
-
-    GlyphPositioningMode m_eGlyphPositioningMode;
 
     friend class SwContentOptPage;
 
