@@ -281,8 +281,6 @@ public:
             positions in the kerning array.
     @param  pKernArray
                 The printers kerning array. Optional.
-    @param  pScrArray
-                The screen kerning array. Optional.
     @param  nStt
                 Start referring to the paragraph.
     @param  nLen
@@ -291,7 +289,7 @@ public:
                 The value which has to be added to a kashida opportunity.
     @return The number of kashida opportunities in the given range
 */
-    sal_Int32 KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray,
+    sal_Int32 KashidaJustify( sal_Int32* pKernArray,
           TextFrameIndex nStt, TextFrameIndex nLen, tools::Long nSpaceAdd = 0) const;
 
 /** Clears array of kashidas marked as invalid
@@ -354,8 +352,6 @@ public:
                 The String
     @param  pKernArray
                 The printers kerning array. Optional.
-    @param  pScrArray
-                The screen kerning array. Optional.
     @param  nIdx
                 Start referring to the paragraph.
     @param  nLen
@@ -365,7 +361,7 @@ public:
     @return The number of extra spaces in the given range
 */
     static TextFrameIndex ThaiJustify( const OUString& rText, sal_Int32* pKernArray,
-                                  sal_Int32* pScrArray, TextFrameIndex nIdx,
+                                  TextFrameIndex nIdx,
                                   TextFrameIndex nLen,
                                   TextFrameIndex nNumberOfBlanks = TextFrameIndex(0),
                                   tools::Long nSpaceAdd = 0 );
@@ -374,7 +370,7 @@ public:
             TextFrameIndex nPos, TextFrameIndex nEnd, LanguageType aLang);
 
     static void CJKJustify( const OUString& rText, sal_Int32* pKernArray,
-                                  sal_Int32* pScrArray, TextFrameIndex nStt,
+                                  TextFrameIndex nStt,
                                   TextFrameIndex nLen, LanguageType aLang,
                                   tools::Long nSpaceAdd, bool bIsSpaceStop );
 
