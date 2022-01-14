@@ -70,6 +70,30 @@
       },
       "revId": "0bd2f13c653057433b6cb31059c1ac01636e71f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e3870e2_94baa808",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-14T10:39:49Z",
+      "side": 1,
+      "message": "OK, going through all calls in sw/qa/extras and checking which ones are *not* just asserting the XML output, i.e. similar to the above case.",
+      "parentUuid": "73470013_7344f388",
+      "range": {
+        "startLine": 501,
+        "startChar": 4,
+        "endLine": 501,
+        "endChar": 44
+      },
+      "revId": "0bd2f13c653057433b6cb31059c1ac01636e71f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
