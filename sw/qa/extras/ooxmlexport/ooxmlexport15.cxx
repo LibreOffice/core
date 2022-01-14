@@ -770,7 +770,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135329_lostImage, "tdf135329_lostImage.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136441_commentInFootnote)
 {
-    loadAndSave("tdf136441_commentInFootnote.odt");
+    loadAndReload("tdf136441_commentInFootnote.odt");
     // failed to load without error if footnote contained a comment.
     // (MS Word's UI doesn't allow adding comments to a footnote.)
 }
