@@ -168,35 +168,35 @@ uno::Reference< container::XNameReplace > SAL_CALL SfxGlobalEvents_Impl::getEven
 
 void SAL_CALL SfxGlobalEvents_Impl::addEventListener(const uno::Reference< document::XEventListener >& xListener)
 {
-    std::scoped_lock g(m_aLock);
+    std::unique_lock g(m_aLock);
     if (m_disposed)
         throw css::lang::DisposedException();
-    m_aLegacyListeners.addInterface(xListener);
+    m_aLegacyListeners.addInterface(g, xListener);
 }
 
 
 void SAL_CALL SfxGlobalEvents_Impl::removeEventListener(const uno::Reference< document::XEventListener >& xListener)
 {
-    std::scoped_lock g(m_aLock);
+    std::unique_lock g(m_aLock);
     // The below removeInterface will silently do nothing when m_disposed
-    m_aLegacyListeners.removeInterface(xListener);
+    m_aLegacyListeners.removeInterface(g, xListener);
 }
 
 
 void SAL_CALL SfxGlobalEvents_Impl::addDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& Listener )
 {
-    std::scoped_lock g(m_aLock);
+    std::unique_lock g(m_aLock);
     if (m_disposed)
         throw css::lang::DisposedException();
-    m_aDocumentListeners.addInterface( Listener );
+    m_aDocumentListeners.addInterface( g, Listener );
 }
 
 
 void SAL_CALL SfxGlobalEvents_Impl::removeDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& Listener )
 {
-    std::scoped_lock g(m_aLock);
+    std::unique_lock g(m_aLock);
     // The below removeInterface will silently do nothing when m_disposed:
-    m_aDocumentListeners.removeInterface( Listener );
+    m_aDocumentListeners.removeInterface( g, Listener );
 }
 
 
@@ -478,43 +478,21 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::D
 
 void SfxGlobalEvents_Impl::implts_notifyListener(const document::DocumentEvent& aEvent)
 {
-    std::optional<comphelper::OInterfaceIteratorHelper4<document::XEventListener>> aIt1;
-    std::optional<comphelper::OInterfaceIteratorHelper4<document::XDocumentEventListener>> aIt2;
-
-    {
-        std::scoped_lock g(m_aLock);
-        aIt1.emplace(m_aLegacyListeners);
-        aIt2.emplace(m_aDocumentListeners);
-    }
+    std::unique_lock g(m_aLock);
 
     document::EventObject aLegacyEvent(aEvent.Source, aEvent.EventName);
-    while (aIt1->hasMoreElements())
-    {
-        auto xListener = aIt1->next();
-        try
+    m_aLegacyListeners.forEach(g,
+        [&aLegacyEvent](const css::uno::Reference<document::XEventListener>& xListener)
         {
             xListener->notifyEvent(aLegacyEvent);
         }
-        catch (css::lang::DisposedException const& exc)
-        {
-            if (exc.Context == xListener)
-                aIt1->remove();
-        }
-    }
-
-    while (aIt2->hasMoreElements())
-    {
-        auto xListener = aIt2->next();
-        try
+    );
+    m_aDocumentListeners.forEach(g,
+        [&aEvent](const css::uno::Reference<document::XDocumentEventListener>& xListener)
         {
             xListener->documentEventOccured(aEvent);
         }
-        catch (css::lang::DisposedException const& exc)
-        {
-            if (exc.Context == xListener)
-                aIt2->remove();
-        }
-    }
+    );
 }
 
 

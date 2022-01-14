@@ -1841,12 +1841,14 @@ SfxBaseController* SfxViewShell::GetBaseController_Impl() const
 
 void SfxViewShell::AddContextMenuInterceptor_Impl( const uno::Reference< ui::XContextMenuInterceptor >& xInterceptor )
 {
-    pImpl->aInterceptorContainer.addInterface( xInterceptor );
+    std::unique_lock g(pImpl->aMutex);
+    pImpl->aInterceptorContainer.addInterface( g, xInterceptor );
 }
 
 void SfxViewShell::RemoveContextMenuInterceptor_Impl( const uno::Reference< ui::XContextMenuInterceptor >& xInterceptor )
 {
-    pImpl->aInterceptorContainer.removeInterface( xInterceptor );
+    std::unique_lock g(pImpl->aMutex);
+    pImpl->aInterceptorContainer.removeInterface( g, xInterceptor );
 }
 
 bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt::XPopupMenu>& rIn,
@@ -1866,16 +1868,17 @@ bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt
 
     // call interceptors
     std::unique_lock g(pImpl->aMutex);
-    ::comphelper::OInterfaceIteratorHelper4 aIt( pImpl->aInterceptorContainer );
+    std::vector<uno::Reference< ui::XContextMenuInterceptor>> aInterceptors =
+        pImpl->aInterceptorContainer.getElements(g);
     g.unlock();
-    while( aIt.hasMoreElements() )
+    for (const auto & rListener : aInterceptors )
     {
         try
         {
             ui::ContextMenuInterceptorAction eAction;
             {
                 SolarMutexReleaser rel;
-                eAction = aIt.next()->notifyContextMenuExecute( aEvent );
+                eAction = rListener->notifyContextMenuExecute( aEvent );
             }
             switch ( eAction )
             {
@@ -1900,7 +1903,9 @@ bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt
         }
         catch (...)
         {
-            aIt.remove();
+            g.lock();
+            pImpl->aInterceptorContainer.removeInterface(g, rListener);
+            g.unlock();
         }
 
         break;
@@ -1931,16 +1936,17 @@ bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt
 
     // call interceptors
     std::unique_lock g(pImpl->aMutex);
-    ::comphelper::OInterfaceIteratorHelper4 aIt( pImpl->aInterceptorContainer );
+    std::vector<uno::Reference< ui::XContextMenuInterceptor>> aInterceptors =
+        pImpl->aInterceptorContainer.getElements(g);
     g.unlock();
-    while( aIt.hasMoreElements() )
+    for (const auto & rListener : aInterceptors )
     {
         try
         {
             css::ui::ContextMenuInterceptorAction eAction;
             {
                 SolarMutexReleaser rel;
-                eAction = aIt.next()->notifyContextMenuExecute( aEvent );
+                eAction = rListener->notifyContextMenuExecute( aEvent );
             }
             switch ( eAction )
             {
@@ -1965,7 +1971,9 @@ bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt
         }
         catch (...)
         {
-            aIt.remove();
+            g.lock();
+            pImpl->aInterceptorContainer.removeInterface(g, rListener);
+            g.unlock();
         }
 
         break;

@@ -134,19 +134,12 @@ void SfxStatusDispatcher::sendStatusChanged(const OUString& rURL, const css::fra
     ::comphelper::OInterfaceContainerHelper4<css::frame::XStatusListener>* pContnr = maListeners.getContainer(rURL);
     if (!pContnr)
         return;
-    ::comphelper::OInterfaceIteratorHelper4 aIt(*pContnr);
-    aGuard.unlock();
-    while (aIt.hasMoreElements())
-    {
-        try
+    pContnr->forEach(aGuard,
+        [&rEvent](const css::uno::Reference<css::frame::XStatusListener>& xListener)
         {
-            aIt.next()->statusChanged(rEvent);
+            xListener->statusChanged(rEvent);
         }
-        catch (const css::uno::RuntimeException&)
-        {
-            aIt.remove();
-        }
-    }
+    );
 }
 
 void SAL_CALL SfxStatusDispatcher::dispatch( const css::util::URL&, const css::uno::Sequence< css::beans::PropertyValue >& )
@@ -168,7 +161,7 @@ void SAL_CALL SfxStatusDispatcher::addStatusListener(const css::uno::Reference< 
 {
     {
         std::unique_lock aGuard(maMutex);
-        maListeners.addInterface( aURL.Complete, aListener );
+        maListeners.addInterface( aGuard, aURL.Complete, aListener );
     }
     if ( aURL.Complete == ".uno:LifeTime" )
     {
@@ -184,7 +177,7 @@ void SAL_CALL SfxStatusDispatcher::addStatusListener(const css::uno::Reference< 
 void SAL_CALL SfxStatusDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL )
 {
     std::unique_lock aGuard(maMutex);
-    maListeners.removeInterface( aURL.Complete, aListener );
+    maListeners.removeInterface( aGuard, aURL.Complete, aListener );
 }
 
 
@@ -300,7 +293,7 @@ void SAL_CALL SfxOfficeDispatch::addStatusListener(const css::uno::Reference< cs
 {
     {
         std::unique_lock aGuard(maMutex);
-        maListeners.addInterface( aURL.Complete, aListener );
+        maListeners.addInterface( aGuard, aURL.Complete, aListener );
     }
     if ( pImpl )
     {

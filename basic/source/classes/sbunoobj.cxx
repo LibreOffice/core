@@ -4364,13 +4364,13 @@ void SAL_CALL ModuleInvocationProxy::dispose()
 void SAL_CALL ModuleInvocationProxy::addEventListener( const Reference< XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
-    m_aListeners.addInterface( xListener );
+    m_aListeners.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL ModuleInvocationProxy::removeEventListener( const Reference< XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
-    m_aListeners.removeInterface( xListener );
+    m_aListeners.removeInterface( aGuard, xListener );
 }
 
 

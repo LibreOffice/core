@@ -236,7 +236,7 @@ void SAL_CALL ResultSet::dispose()
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
 
-    if ( m_pImpl->m_aDisposeEventListeners.getLength() )
+    if ( m_pImpl->m_aDisposeEventListeners.getLength(aGuard) )
     {
         lang::EventObject aEvt;
         aEvt.Source = static_cast< lang::XComponent * >( this );
@@ -262,7 +262,7 @@ void SAL_CALL ResultSet::addEventListener(
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
 
-    m_pImpl->m_aDisposeEventListeners.addInterface( Listener );
+    m_pImpl->m_aDisposeEventListeners.addInterface( aGuard, Listener );
 }
 
 
@@ -272,7 +272,7 @@ void SAL_CALL ResultSet::removeEventListener(
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
 
-    m_pImpl->m_aDisposeEventListeners.removeInterface( Listener );
+    m_pImpl->m_aDisposeEventListeners.removeInterface( aGuard, Listener );
 }
 
 
@@ -1256,7 +1256,7 @@ void SAL_CALL ResultSet::addPropertyChangeListener(
         m_pImpl->m_pPropertyChangeListeners.reset(
              new PropertyChangeListeners());
 
-    m_pImpl->m_pPropertyChangeListeners->addInterface(
+    m_pImpl->m_pPropertyChangeListeners->addInterface(aGuard,
                                                 aPropertyName, xListener );
 }
 
@@ -1274,7 +1274,7 @@ void SAL_CALL ResultSet::removePropertyChangeListener(
         throw beans::UnknownPropertyException(aPropertyName);
 
     if ( m_pImpl->m_pPropertyChangeListeners )
-        m_pImpl->m_pPropertyChangeListeners->removeInterface(
+        m_pImpl->m_pPropertyChangeListeners->removeInterface(aGuard,
                                                     aPropertyName, xListener );
 
 }
@@ -1303,6 +1303,8 @@ void SAL_CALL ResultSet::removeVetoableChangeListener(
 
 void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt ) const
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( !m_pImpl->m_pPropertyChangeListeners )
         return;
 
@@ -1312,7 +1314,7 @@ void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt ) const
                                                         rEvt.PropertyName );
     if ( pPropsContainer )
     {
-        pPropsContainer->notifyEach(&beans::XPropertyChangeListener::propertyChange, rEvt);
+        pPropsContainer->notifyEach(aGuard, &beans::XPropertyChangeListener::propertyChange, rEvt);
     }
 
     // Notify listeners interested in all properties.
@@ -1320,7 +1322,7 @@ void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt ) const
         = m_pImpl->m_pPropertyChangeListeners->getContainer( OUString() );
     if ( pPropsContainer )
     {
-        comphelper::OInterfaceIteratorHelper4 aIter( *pPropsContainer );
+        comphelper::OInterfaceIteratorHelper4 aIter( aGuard, *pPropsContainer );
         while ( aIter.hasMoreElements() )
         {
             aIter.next()->propertyChange( rEvt );

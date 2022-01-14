@@ -63,7 +63,7 @@ public:
     // Something else
     void                ReleaseAll();
     void                sendStatusChanged(const OUString& rURL, const css::frame::FeatureStateEvent& rEvent);
-    std::vector<OUString> getContainedTypes() { return maListeners.getContainedTypes(); };
+    std::vector<OUString> getContainedTypes() { std::unique_lock g(maMutex); return maListeners.getContainedTypes(g); };
 };
 
 class SfxSlotServer;

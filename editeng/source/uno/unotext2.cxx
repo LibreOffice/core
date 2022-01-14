@@ -242,13 +242,13 @@ void SAL_CALL SvxUnoTextContent::dispose()
 void SAL_CALL SvxUnoTextContent::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard(maDisposeContainerMutex);
-    maDisposeListeners.addInterface(xListener);
+    maDisposeListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL SvxUnoTextContent::removeEventListener( const uno::Reference< lang::XEventListener >& aListener )
 {
    std::unique_lock aGuard(maDisposeContainerMutex);
-   maDisposeListeners.removeInterface(aListener);
+   maDisposeListeners.removeInterface(aGuard, aListener);
 }
 
 // XEnumerationAccess

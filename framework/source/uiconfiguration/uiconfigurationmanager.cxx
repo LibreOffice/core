@@ -727,14 +727,14 @@ void SAL_CALL UIConfigurationManager::addEventListener( const Reference< XEventL
     }
 
     std::unique_lock aGuard(m_mutex);
-    m_aEventListeners.addInterface( xListener );
+    m_aEventListeners.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL UIConfigurationManager::removeEventListener( const Reference< XEventListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     std::unique_lock aGuard(m_mutex);
-    m_aEventListeners.removeInterface( xListener );
+    m_aEventListeners.removeInterface( aGuard, xListener );
 }
 
 // XUIConfigurationManager
@@ -749,14 +749,14 @@ void SAL_CALL UIConfigurationManager::addConfigurationListener( const Reference<
     }
 
     std::unique_lock aGuard(m_mutex);
-    m_aConfigListeners.addInterface( xListener );
+    m_aConfigListeners.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL UIConfigurationManager::removeConfigurationListener( const Reference< css::ui::XUIConfigurationListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     std::unique_lock aGuard(m_mutex);
-    m_aConfigListeners.removeInterface( xListener );
+    m_aConfigListeners.removeInterface( aGuard, xListener );
 }
 
 void SAL_CALL UIConfigurationManager::reset()
@@ -1347,7 +1347,7 @@ sal_Bool SAL_CALL UIConfigurationManager::isReadOnly()
 void UIConfigurationManager::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
 {
     std::unique_lock aGuard(m_mutex);
-    comphelper::OInterfaceIteratorHelper4 pIterator( m_aConfigListeners );
+    comphelper::OInterfaceIteratorHelper4 pIterator( aGuard, m_aConfigListeners );
     while ( pIterator.hasMoreElements() )
     {
         try
@@ -1367,7 +1367,7 @@ void UIConfigurationManager::implts_notifyContainerListener( const Configuration
         }
         catch( const css::uno::RuntimeException& )
         {
-            pIterator.remove();
+            pIterator.remove(aGuard);
         }
     }
 }

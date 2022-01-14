@@ -56,8 +56,11 @@ public:
        change the contents...
 
        @param rCont the container of the elements.
+       @param rGuard
+            this parameter only here to make that this container is accessed while locked
      */
-    OInterfaceIteratorHelper4(OInterfaceContainerHelper4<ListenerT>& rCont_)
+    OInterfaceIteratorHelper4(std::unique_lock<std::mutex>& /*rGuard*/,
+                              OInterfaceContainerHelper4<ListenerT>& rCont_)
         : rCont(rCont_)
         , maData(rCont.maData)
         , nRemain(maData->size())
@@ -75,8 +78,10 @@ public:
         from the underlying container. Calling this method before
         next() has been called or calling it twice with no next()
         in between is an error.
+        @param rGuard
+            this parameter only here to make that this container is accessed while locked
     */
-    void remove();
+    void remove(::std::unique_lock<::std::mutex>& rGuard);
 
 private:
     OInterfaceContainerHelper4<ListenerT>& rCont;
@@ -94,9 +99,10 @@ const css::uno::Reference<ListenerT>& OInterfaceIteratorHelper4<ListenerT>::next
     return (*maData)[nRemain];
 }
 
-template <class ListenerT> void OInterfaceIteratorHelper4<ListenerT>::remove()
+template <class ListenerT>
+void OInterfaceIteratorHelper4<ListenerT>::remove(::std::unique_lock<::std::mutex>& rGuard)
 {
-    rCont.removeInterface((*maData)[nRemain]);
+    rCont.removeInterface(rGuard, (*maData)[nRemain]);
 }
 
 /**
@@ -119,13 +125,18 @@ public:
     /**
       Return the number of Elements in the container. Only useful if you have acquired
       the mutex.
+      @param rGuard
+        this parameter only here to make that this container is accessed while locked
      */
-    sal_Int32 getLength() const;
+    sal_Int32 getLength(std::unique_lock<std::mutex>& rGuard) const;
 
     /**
       Return all interfaces added to this container.
+      @param rGuard
+          this parameter only here to make that this container is accessed while locked
      **/
-    std::vector<css::uno::Reference<ListenerT>> getElements() const;
+    std::vector<css::uno::Reference<ListenerT>>
+    getElements(std::unique_lock<std::mutex>& rGuard) const;
 
     /** Inserts an element into the container.  The position is not specified, thus it is not
         specified in which order events are fired.
@@ -140,18 +151,24 @@ public:
         @param rxIFace
                interface to be added; it is allowed to insert
                the same interface more than once
+        @param rGuard
+            this parameter only here to make that this container is accessed while locked
         @return
                 the new count of elements in the container
     */
-    sal_Int32 addInterface(const css::uno::Reference<ListenerT>& rxIFace);
+    sal_Int32 addInterface(std::unique_lock<std::mutex>& rGuard,
+                           const css::uno::Reference<ListenerT>& rxIFace);
     /** Removes an element from the container.  It uses interface equality to remove the interface.
 
         @param rxIFace
                interface to be removed
+        @param rGuard
+               this parameter only here to make that this container is accessed while locked
         @return
                 the new count of elements in the container
     */
-    sal_Int32 removeInterface(const css::uno::Reference<ListenerT>& rxIFace);
+    sal_Int32 removeInterface(std::unique_lock<std::mutex>& rGuard,
+                              const css::uno::Reference<ListenerT>& rxIFace);
     /**
       Call disposing on all object in the container that
       support XEventListener. Then clear the container.
@@ -161,8 +178,10 @@ public:
                          const css::lang::EventObject& rEvt);
     /**
       Clears the container without calling disposing().
+        @param rGuard
+            this parameter only here to make that this container is accessed while locked
      */
-    void clear();
+    void clear(::std::unique_lock<::std::mutex>& rGuard);
 
     /** Executes a functor for each contained listener of specified type, e.g.
         <code>forEach<awt::XPaintListener>(...</code>.
@@ -173,8 +192,11 @@ public:
         @tparam FuncT unary functor type, let your compiler deduce this for you
         @param func unary functor object expecting an argument of type
                     css::uno::Reference<ListenerT>
+        @param rGuard
+            this parameter only here to make that this container is accessed while locked
     */
-    template <typename FuncT> inline void forEach(FuncT const& func);
+    template <typename FuncT>
+    inline void forEach(std::unique_lock<std::mutex>& rGuard, FuncT const& func);
 
     /** Calls a UNO listener method for each contained listener.
 
@@ -189,6 +211,8 @@ public:
             Pointer to a method of a ListenerT interface.
         @param Event
             Event to notify to all contained listeners
+        @param rGuard
+            this parameter only here to make that this container is accessed while locked
 
         Example:
 @code
@@ -197,7 +221,8 @@ public:
 @endcode
     */
     template <typename EventT>
-    inline void notifyEach(void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&),
+    inline void notifyEach(std::unique_lock<std::mutex>& rGuard,
+                           void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&),
                            const EventT& Event);
 
 private:
@@ -242,9 +267,14 @@ inline OInterfaceContainerHelper4<T>::OInterfaceContainerHelper4()
 
 template <class T>
 template <typename FuncT>
-inline void OInterfaceContainerHelper4<T>::forEach(FuncT const& func)
+inline void OInterfaceContainerHelper4<T>::forEach(std::unique_lock<std::mutex>& rGuard,
+                                                   FuncT const& func)
 {
-    OInterfaceIteratorHelper4<T> iter(*this);
+    if (std::as_const(maData)->size() == 0)
+        return;
+    maData.make_unique(); // so we can iterate over the data without holding the lock
+    OInterfaceIteratorHelper4<T> iter(rGuard, *this);
+    rGuard.unlock();
     while (iter.hasMoreElements())
     {
         auto xListener = iter.next();
@@ -255,34 +285,44 @@ inline void OInterfaceContainerHelper4<T>::forEach(FuncT const& func)
         catch (css::lang::DisposedException const& exc)
         {
             if (exc.Context == xListener)
-                iter.remove();
+            {
+                rGuard.lock();
+                iter.remove(rGuard);
+                rGuard.unlock();
+            }
         }
     }
+    rGuard.lock();
 }
 
 template <class ListenerT>
 template <typename EventT>
 inline void OInterfaceContainerHelper4<ListenerT>::notifyEach(
+    std::unique_lock<std::mutex>& rGuard,
     void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&), const EventT& Event)
 {
-    forEach<NotifySingleListener<EventT>>(NotifySingleListener<EventT>(NotificationMethod, Event));
+    forEach<NotifySingleListener<EventT>>(rGuard,
+                                          NotifySingleListener<EventT>(NotificationMethod, Event));
 }
 
-template <class ListenerT> sal_Int32 OInterfaceContainerHelper4<ListenerT>::getLength() const
+template <class ListenerT>
+sal_Int32
+OInterfaceContainerHelper4<ListenerT>::getLength(std::unique_lock<std::mutex>& /*rGuard*/) const
 {
     return maData->size();
 }
 
 template <class ListenerT>
 std::vector<css::uno::Reference<ListenerT>>
-OInterfaceContainerHelper4<ListenerT>::getElements() const
+OInterfaceContainerHelper4<ListenerT>::getElements(std::unique_lock<std::mutex>& /*rGuard*/) const
 {
     return *maData;
 }
 
 template <class ListenerT>
 sal_Int32
-OInterfaceContainerHelper4<ListenerT>::addInterface(const css::uno::Reference<ListenerT>& rListener)
+OInterfaceContainerHelper4<ListenerT>::addInterface(std::unique_lock<std::mutex>& /*rGuard*/,
+                                                    const css::uno::Reference<ListenerT>& rListener)
 {
     assert(rListener.is());
     maData->push_back(rListener);
@@ -291,7 +331,7 @@ OInterfaceContainerHelper4<ListenerT>::addInterface(const css::uno::Reference<Li
 
 template <class ListenerT>
 sal_Int32 OInterfaceContainerHelper4<ListenerT>::removeInterface(
-    const css::uno::Reference<ListenerT>& rListener)
+    std::unique_lock<std::mutex>& /*rGuard*/, const css::uno::Reference<ListenerT>& rListener)
 {
     assert(rListener.is());
 
@@ -315,9 +355,10 @@ template <class ListenerT>
 void OInterfaceContainerHelper4<ListenerT>::disposeAndClear(std::unique_lock<std::mutex>& rGuard,
                                                             const css::lang::EventObject& rEvt)
 {
-    OInterfaceIteratorHelper4<ListenerT> aIt(*this);
+    OInterfaceIteratorHelper4<ListenerT> aIt(rGuard, *this);
     maData->clear();
     rGuard.unlock();
+    // unlock followed by iterating is only safe because we are not going to call remove() on the iterator
     while (aIt.hasMoreElements())
     {
         try
@@ -332,7 +373,11 @@ void OInterfaceContainerHelper4<ListenerT>::disposeAndClear(std::unique_lock<std
     }
 }
 
-template <class ListenerT> void OInterfaceContainerHelper4<ListenerT>::clear() { maData->clear(); }
+template <class ListenerT>
+void OInterfaceContainerHelper4<ListenerT>::clear(::std::unique_lock<::std::mutex>& /*rGuard*/)
+{
+    maData->clear();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

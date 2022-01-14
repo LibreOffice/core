@@ -37,14 +37,14 @@ void SAL_CALL WeakComponentImplHelperBase::addEventListener(
     std::unique_lock aGuard(m_aMutex);
     if (m_bDisposed)
         return;
-    maEventListeners.addInterface(rxListener);
+    maEventListeners.addInterface(aGuard, rxListener);
 }
 
 void SAL_CALL WeakComponentImplHelperBase::removeEventListener(
     css::uno::Reference<css::lang::XEventListener> const& rxListener)
 {
     std::unique_lock aGuard(m_aMutex);
-    maEventListeners.removeInterface(rxListener);
+    maEventListeners.removeInterface(aGuard, rxListener);
 }
 
 css::uno::Any SAL_CALL WeakComponentImplHelperBase::queryInterface(css::uno::Type const& rType)
