@@ -491,9 +491,17 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
     const tools::Long nClipBot = aClip.Top() + aClip.Height();
     const tools::Long nClipRig = aClip.Left() + aClip.Width();
 
+    const bool bDisableOffPagePositioning = GetFormat()->getIDocumentSettingAccess().get(
+        DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
+
+    bool bWrapTrough = false;
+    SwTextBoxHelper::getShapeWrapThrough(GetFormat(), bWrapTrough);
+
+    const bool bTextBoxOffPage = bWrapTrough && bDisableOffPagePositioning;
+
     const bool bBot = nBot > nClipBot;
     const bool bRig = nRig > nClipRig;
-    if (( bBot || bRig ) && !IsDraggingOffPageAllowed(FindFrameFormat(GetDrawObj())))
+    if (( bBot || bRig ) && !bTextBoxOffPage)
     {
         bool bAgain = false;
         // #i37068# - no move, if it's requested
@@ -510,7 +518,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
                 const tools::Long nOld = getFrameArea().Top();
 
                 // tdf#112443 disable positioning if content is completely off page
-                bool bDisableOffPagePositioning = GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
+
                 if ( !bDisableOffPagePositioning || nOld <= nClipBot)
                 {
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -530,7 +538,6 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             const tools::Long nOld = getFrameArea().Left();
 
             // tdf#112443 disable positioning if content is completely off page
-            bool bDisableOffPagePositioning = GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
             if ( !bDisableOffPagePositioning || nOld <= nClipRig )
             {
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);

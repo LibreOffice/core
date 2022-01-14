@@ -435,10 +435,15 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                                                          const bool bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = nProposedRelPosY;
-    // TODO: Replace the following condition with the correction
-    // of the implementation of option FollowTextFlow.
-    if ( SwAnchoredObject::IsDraggingOffPageAllowed(FindFrameFormat(&mrDrawObj)) &&
-        !(GetAnchorFrame().IsInTab() && DoesObjFollowsTextFlow()) )
+
+    // tdf#112443 if position is completely off-page
+    // return the proposed position and do not adjust it...
+    const bool bDisablePositioning = mpFrameFormat->getIDocumentSettingAccess().get(
+        DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
+    bool bWrapTrough = false;
+    SwTextBoxHelper::getShapeWrapThrough(mpFrameFormat, bWrapTrough);
+
+    if ( bWrapTrough && bDisablePositioning )
     {
         return nAdjustedRelPosY;
     }
@@ -492,7 +497,6 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
             // tdf#112443 if position is completely off-page
             // return the proposed position and do not adjust it...
             // tdf#120839 .. unless anchored to char (anchor can jump on other page)
-            const bool bDisablePositioning =  mpFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
             if ( bDisablePositioning && !IsAnchoredToChar() && nTopOfAnch + nAdjustedRelPosY > aPgAlignArea.Right() )
             {
                 return nProposedRelPosY;
@@ -514,10 +518,6 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
     }
     else
     {
-        // tdf#112443 if position is completely off-page
-        // return the proposed position and do not adjust it...
-        const bool bDisablePositioning =  mpFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
-
         // tdf#123002 disable the positioning in header and footer only
         // we should limit this since anchors of body frames may appear on other pages
         const bool bIsFooterOrHeader = GetAnchorFrame().GetUpper()
@@ -556,7 +556,14 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustHoriRelPos(
 {
     SwTwips nAdjustedRelPosX = _nProposedRelPosX;
 
-    if (SwAnchoredObject::IsDraggingOffPageAllowed(FindFrameFormat(&mrDrawObj)))
+    // tdf#112443 if position is completely off-page
+    // return the proposed position and do not adjust it...
+    const bool bDisablePositioning = mpFrameFormat->getIDocumentSettingAccess().get(
+        DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
+    bool bWrapTrough = false;
+    SwTextBoxHelper::getShapeWrapThrough(mpFrameFormat, bWrapTrough);
+
+    if (bWrapTrough && bDisablePositioning)
         return nAdjustedRelPosX;
 
     const SwFrame& rAnchorFrame = GetAnchorFrame();
