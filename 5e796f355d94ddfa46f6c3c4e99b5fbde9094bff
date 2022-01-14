@@ -16,6 +16,24 @@
       "message": "* Assigning back to m_sTag is dangerous:  If this code gets executed again, percent-encodings %xx in m_sTag will get re-encoded as %25xx due to EncodeMechanism::All.\n* Depending on whether m_sTag shall represent a single path segment or a relative path segment hierarchy, the correct choice might be PART_PCHAR rather than PART_FPATH.  (And given how a .json extension is added to m_sTag, my assumption would be that it should represent (part of) a single path segment, so that PART_PCHAR should be used.)",
       "revId": "5e796f355d94ddfa46f6c3c4e99b5fbde9094bff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c30632e6_d3210de3",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-14T09:04:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d04b4f84_da3e28f7",
+      "revId": "5e796f355d94ddfa46f6c3c4e99b5fbde9094bff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
