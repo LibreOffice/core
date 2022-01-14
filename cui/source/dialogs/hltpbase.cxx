@@ -292,13 +292,6 @@ void SvxHyperlinkTabPageBase::DoApply ()
     // default-implementation : do nothing
 }
 
-// Ask page whether an insert is possible
-bool SvxHyperlinkTabPageBase::AskApply ( bool /* bShowWarning */ )
-{
-    // default-implementation
-    return true;
-}
-
 // This method would be called from bookmark-window to set new mark-string
 void SvxHyperlinkTabPageBase::SetMarkStr ( const OUString& /*aStrMark*/ )
 {
