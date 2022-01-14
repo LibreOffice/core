@@ -435,10 +435,8 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                                                          const bool bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = nProposedRelPosY;
-    // TODO: Replace the following condition with the correction
-    // of the implementation of option FollowTextFlow.
-    if ( SwAnchoredObject::IsDraggingOffPageAllowed(FindFrameFormat(&mrDrawObj)) &&
-        !(GetAnchorFrame().IsInTab() && DoesObjFollowsTextFlow()) )
+
+    if ( SwAnchoredObject::IsDraggingOffPageAllowed(FindFrameFormat(&mrDrawObj)) )
     {
         return nAdjustedRelPosY;
     }
