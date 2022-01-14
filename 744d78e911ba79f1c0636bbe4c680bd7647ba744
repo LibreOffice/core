@@ -68,6 +68,24 @@
       "message": "I had been checking ooxmlexport16\u0027s testTdf134951_duplicates.",
       "revId": "744d78e911ba79f1c0636bbe4c680bd7647ba744",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcf3685c_8fc68cc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-14T09:10:25Z",
+      "side": 1,
+      "message": "If you are vague, you can only imagine how little I grasp of this.\n\nThe ooxmlexport5 test is probably not a great one.  Prior to my fix, on the first RT it duplicated the comment, and on the second round-trip, it corrupted the document.\n\nAfter my fix, the comment moved anchor point on the first RT, and was lost on the second RT.\n\nWith your fix, it is lost on the first RT.\n\nPerhaps the best thing to do is to keep my commit, and just remove that part of the ooxmlexport5 test. Otherwise, we will have to remove the ooxmlexport16 test [which will break when Miklos changes the loadAndSave() to loadAndReload()].",
+      "parentUuid": "1dff3716_806c522c",
+      "revId": "744d78e911ba79f1c0636bbe4c680bd7647ba744",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
