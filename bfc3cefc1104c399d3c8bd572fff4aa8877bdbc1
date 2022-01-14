@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f4c0d7f_9e60d0bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-14T10:56:20Z",
+      "side": 1,
+      "message": "@tor: do you have time to test the iOS changes in this patch, or want to patch the fallout afterwards?",
+      "revId": "bfc3cefc1104c399d3c8bd572fff4aa8877bdbc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
