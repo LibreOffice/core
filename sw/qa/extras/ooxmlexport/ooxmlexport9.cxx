@@ -141,7 +141,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109063, "tdf109063.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108269)
 {
-    loadAndSave("tdf108269.docm");
+    loadAndReload("tdf108269.docm");
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     // This failed: VBA streams were not roundtripped via the doc-level
     // grab-bag.

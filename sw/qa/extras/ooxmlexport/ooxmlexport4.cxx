@@ -1054,7 +1054,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedExcelChart)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf83227)
 {
-    loadAndSave("tdf83227.docx");
+    loadAndReload("tdf83227.docx");
     // Bug document contains a rotated image, which is handled as a draw shape (not as a Writer image) on export.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/media/image1.png")));
@@ -1064,7 +1064,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf83227)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf103001)
 {
-    loadAndSave("tdf103001.docx");
+    loadAndReload("tdf103001.docx");
     // The same image is featured in the header and in the body text, make sure
     // the header relation is still written, even when caching is enabled.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
