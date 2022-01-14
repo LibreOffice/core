@@ -2144,7 +2144,7 @@ void SwXTextDocument::NotifyRefreshListeners()
     // (sometimes) a different shell than GetWrtShell()?
     lang::EventObject const ev(static_cast<SwXTextDocumentBaseClass &>(*this));
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_RefreshListeners.notifyEach(
+    m_pImpl->m_RefreshListeners.notifyEach(aGuard,
             & util::XRefreshListener::refreshed, ev);
 }
 
@@ -2163,22 +2163,20 @@ void SwXTextDocument::refresh()
 void SAL_CALL SwXTextDocument::addRefreshListener(
         const Reference<util::XRefreshListener> & xListener)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
     if (xListener)
     {
         std::unique_lock aGuard(m_pImpl->m_Mutex);
-        m_pImpl->m_RefreshListeners.addInterface(xListener);
+        m_pImpl->m_RefreshListeners.addInterface(aGuard, xListener);
     }
 }
 
 void SAL_CALL SwXTextDocument::removeRefreshListener(
         const Reference<util::XRefreshListener> & xListener)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
     if (xListener)
     {
         std::unique_lock aGuard(m_pImpl->m_Mutex);
-        m_pImpl->m_RefreshListeners.removeInterface(xListener);
+        m_pImpl->m_RefreshListeners.removeInterface(aGuard, xListener);
     }
 }
 

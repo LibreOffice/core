@@ -306,7 +306,8 @@ void SAL_CALL RangeHighlighter::addSelectionChangeListener( const Reference< vie
 
     if( m_nAddedListenerCount == 0 )
         startListening();
-    maSelectionChangeListeners.addInterface( xListener);
+    std::unique_lock g(m_aMutex);
+    maSelectionChangeListeners.addInterface( g, xListener);
     ++m_nAddedListenerCount;
 
     //bring the new listener up to the current state
@@ -316,7 +317,8 @@ void SAL_CALL RangeHighlighter::addSelectionChangeListener( const Reference< vie
 
 void SAL_CALL RangeHighlighter::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener )
 {
-    maSelectionChangeListeners.removeInterface( xListener );
+    std::unique_lock g(m_aMutex);
+    maSelectionChangeListeners.removeInterface( g, xListener );
     --m_nAddedListenerCount;
     if( m_nAddedListenerCount == 0 )
         stopListening();
@@ -334,14 +336,16 @@ void SAL_CALL RangeHighlighter::selectionChanged( const lang::EventObject& /*aEv
 
 void RangeHighlighter::fireSelectionEvent()
 {
-    if( maSelectionChangeListeners.getLength() )
+    std::unique_lock g(m_aMutex);
+    if( maSelectionChangeListeners.getLength(g) )
     {
         lang::EventObject aEvent( static_cast< lang::XComponent* >( this ) );
-        comphelper::OInterfaceIteratorHelper4 aIt( maSelectionChangeListeners );
-        while( aIt.hasMoreElements() )
-        {
-            aIt.next()->selectionChanged( aEvent );
-        }
+        maSelectionChangeListeners.forEach(g,
+            [&aEvent](const css::uno::Reference<view::XSelectionChangeListener>& xListener)
+            {
+                xListener->selectionChanged(aEvent);
+            }
+        );
     }
 }
 

@@ -43,13 +43,13 @@ public:
     /**
       Return all id's under which at least one interface is added.
      */
-    inline std::vector<key> getContainedTypes() const
+    inline std::vector<key> getContainedTypes(std::unique_lock<std::mutex>& rGuard) const
     {
         std::vector<key> aInterfaceTypes;
         aInterfaceTypes.reserve(m_aMap.size());
         for (const auto& rPair : m_aMap)
             // are interfaces added to this container?
-            if (rPair.second->getLength())
+            if (rPair.second->getLength(rGuard))
                 // yes, put the type in the array
                 aInterfaceTypes.push_back(rPair.first);
         return aInterfaceTypes;

@@ -76,7 +76,7 @@ typedef ::comphelper::OInterfaceContainerHelper4< css::awt::XMouseListener > Sli
 class SlideShowViewMouseListeners : public SlideShowViewMouseListeners_Base
 {
 public:
-    void notify(const WrappedMouseEvent& rEvent);
+    void notify(std::unique_lock<std::mutex>& rGuard, const WrappedMouseEvent& rEvent);
 };
 
 
@@ -86,7 +86,7 @@ typedef ::comphelper::OInterfaceContainerHelper4< css::awt::XMouseMotionListener
 class SlideShowViewMouseMotionListeners : public SlideShowViewMouseMotionListeners_Base
 {
 public:
-    void notify( const WrappedMouseMotionEvent& rEvent );
+    void notify( std::unique_lock<std::mutex>& rGuard, const WrappedMouseMotionEvent& rEvent );
 };
 
 // SlideShowView

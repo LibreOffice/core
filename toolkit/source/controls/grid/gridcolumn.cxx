@@ -81,8 +81,7 @@ namespace toolkit
             i_oldValue, i_newValue, m_nIndex
         );
 
-        i_Guard.unlock();
-        maGridColumnListeners.notifyEach( &XGridColumnListener::columnChanged, aEvent );
+        maGridColumnListeners.notifyEach( i_Guard, &XGridColumnListener::columnChanged, aEvent );
     }
 
 
@@ -209,14 +208,14 @@ namespace toolkit
     void SAL_CALL GridColumn::addGridColumnListener( const Reference< XGridColumnListener >& xListener )
     {
         std::unique_lock aGuard( m_aMutex );
-        maGridColumnListeners.addInterface( xListener );
+        maGridColumnListeners.addInterface( aGuard, xListener );
     }
 
 
     void SAL_CALL GridColumn::removeGridColumnListener( const Reference< XGridColumnListener >& xListener )
     {
         std::unique_lock aGuard( m_aMutex );
-        maGridColumnListeners.removeInterface( xListener );
+        maGridColumnListeners.removeInterface( aGuard, xListener );
     }
 
 

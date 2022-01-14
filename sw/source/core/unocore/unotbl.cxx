@@ -146,12 +146,12 @@ namespace
         return event;
     }
 
-    void lcl_SendChartEvent(
+    void lcl_SendChartEvent(std::unique_lock<std::mutex>& rGuard,
             uno::Reference<uno::XInterface> const& xSource,
             ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> & rListeners)
     {
-        if (rListeners.getLength())
-            rListeners.notifyEach(
+        if (rListeners.getLength(rGuard))
+            rListeners.notifyEach(rGuard,
                     &chart::XChartDataChangeEventListener::chartDataChanged,
                     createChartEvent(xSource));
     }
@@ -2167,7 +2167,7 @@ void SAL_CALL SwXTextTable::addEventListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_EventListeners.addInterface(xListener);
+    m_pImpl->m_EventListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL SwXTextTable::removeEventListener(
@@ -2175,7 +2175,7 @@ void SAL_CALL SwXTextTable::removeEventListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_EventListeners.removeInterface(xListener);
+    m_pImpl->m_EventListeners.removeInterface(aGuard, xListener);
 }
 
 uno::Reference<table::XCell>  SwXTextTable::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
@@ -2317,7 +2317,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     xAllRange->setData(rData);
     // this is rather inconsistent: setData on XTextTable sends events, but e.g. CellRanges do not
     std::unique_lock aGuard2(m_pImpl->m_Mutex);
-    lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
+    lcl_SendChartEvent(aGuard2, *this, m_pImpl->m_ChartListeners);
 }
 
 uno::Sequence<OUString> SwXTextTable::getRowDescriptions()
@@ -2373,7 +2373,7 @@ void SAL_CALL SwXTextTable::addChartDataChangeEventListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_ChartListeners.addInterface(xListener);
+    m_pImpl->m_ChartListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL SwXTextTable::removeChartDataChangeEventListener(
@@ -2381,7 +2381,7 @@ void SAL_CALL SwXTextTable::removeChartDataChangeEventListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_ChartListeners.removeInterface(xListener);
+    m_pImpl->m_ChartListeners.removeInterface(aGuard, xListener);
 }
 
 sal_Bool SwXTextTable::isNotANumber(double nNumber)
@@ -2492,7 +2492,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     if (m_pImpl->m_bFirstRowAsLabel != bTmp)
                     {
                         std::unique_lock aGuard2(m_pImpl->m_Mutex);
-                        lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
+                        lcl_SendChartEvent(aGuard2, *this, m_pImpl->m_ChartListeners);
                         m_pImpl->m_bFirstRowAsLabel = bTmp;
                     }
                 }
@@ -2504,7 +2504,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     if (m_pImpl->m_bFirstColumnAsLabel != bTmp)
                     {
                         std::unique_lock aGuard2(m_pImpl->m_Mutex);
-                        lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
+                        lcl_SendChartEvent(aGuard2, *this, m_pImpl->m_ChartListeners);
                         m_pImpl->m_bFirstColumnAsLabel = bTmp;
                     }
                 }
@@ -3086,7 +3086,7 @@ void SwXTextTable::Impl::Notify(const SfxHint& rHint)
         else
         {
             std::unique_lock aGuard(m_Mutex);
-            lcl_SendChartEvent(xThis, m_ChartListeners);
+            lcl_SendChartEvent(aGuard, xThis, m_ChartListeners);
         }
     }
 }
@@ -3413,7 +3413,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             if (m_pImpl->m_bFirstRowAsLabel != bTmp)
             {
                 std::unique_lock aGuard2(m_pImpl->m_Mutex);
-                lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
+                lcl_SendChartEvent(aGuard2, *this, m_pImpl->m_ChartListeners);
                 m_pImpl->m_bFirstRowAsLabel = bTmp;
             }
         }
@@ -3424,7 +3424,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             if (m_pImpl->m_bFirstColumnAsLabel != bTmp)
             {
                 std::unique_lock aGuard2(m_pImpl->m_Mutex);
-                lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
+                lcl_SendChartEvent(aGuard2, *this, m_pImpl->m_ChartListeners);
                 m_pImpl->m_bFirstColumnAsLabel = bTmp;
             }
         }
@@ -3762,7 +3762,7 @@ void SAL_CALL SwXCellRange::addChartDataChangeEventListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_ChartListeners.addInterface(xListener);
+    m_pImpl->m_ChartListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL SwXCellRange::removeChartDataChangeEventListener(
@@ -3770,7 +3770,7 @@ void SAL_CALL SwXCellRange::removeChartDataChangeEventListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_ChartListeners.removeInterface(xListener);
+    m_pImpl->m_ChartListeners.removeInterface(aGuard, xListener);
 }
 
 sal_Bool SwXCellRange::isNotANumber(double /*fNumber*/)
@@ -3828,7 +3828,7 @@ void SwXCellRange::Impl::Notify( const SfxHint& rHint )
         if(m_pFrameFormat)
         {
             std::unique_lock aGuard(m_Mutex);
-            lcl_SendChartEvent(xThis, m_ChartListeners);
+            lcl_SendChartEvent(aGuard, xThis, m_ChartListeners);
         }
         else
         {

@@ -103,7 +103,7 @@ void StringResourceImpl::addModifyListener( const Reference< XModifyListener >& 
         throw RuntimeException();
 
     std::unique_lock aGuard( m_aMutex );
-    m_aListenerContainer.addInterface( aListener );
+    m_aListenerContainer.addInterface( aGuard, aListener );
 }
 
 void StringResourceImpl::removeModifyListener( const Reference< XModifyListener >& aListener )
@@ -112,7 +112,7 @@ void StringResourceImpl::removeModifyListener( const Reference< XModifyListener 
         throw RuntimeException();
 
     std::unique_lock aGuard( m_aMutex );
-    m_aListenerContainer.removeInterface( aListener );
+    m_aListenerContainer.removeInterface( aGuard, aListener );
 }
 
 
@@ -266,7 +266,7 @@ sal_Bool StringResourceImpl::isReadOnly()
     return m_bReadOnly;
 }
 
-void StringResourceImpl::implSetCurrentLocale( const Locale& locale,
+void StringResourceImpl::implSetCurrentLocale( std::unique_lock<std::mutex>& rGuard, const Locale& locale,
     bool FindClosestMatch, bool bUseDefaultIfNoMatch )
 {
     LocaleItem* pLocaleItem = nullptr;
@@ -284,14 +284,14 @@ void StringResourceImpl::implSetCurrentLocale( const Locale& locale,
         m_pCurrentLocaleItem = pLocaleItem;
 
         // Only notify without modifying
-        implNotifyListeners();
+        implNotifyListeners(rGuard);
     }
 }
 
 void StringResourceImpl::setCurrentLocale( const Locale& locale, sal_Bool FindClosestMatch )
 {
     std::unique_lock aGuard( m_aMutex );
-    implSetCurrentLocale( locale, FindClosestMatch, false/*bUseDefaultIfNoMatch*/ );
+    implSetCurrentLocale( aGuard, locale, FindClosestMatch, false/*bUseDefaultIfNoMatch*/ );
 }
 
 void StringResourceImpl::setDefaultLocale( const Locale& locale )
@@ -310,11 +310,11 @@ void StringResourceImpl::setDefaultLocale( const Locale& locale )
 
         m_pDefaultLocaleItem = pLocaleItem;
         m_bDefaultModified = true;
-        implModified();
+        implModified(aGuard);
     }
 }
 
-void StringResourceImpl::implSetString( const OUString& ResourceID,
+void StringResourceImpl::implSetString( std::unique_lock<std::mutex>& rGuard, const OUString& ResourceID,
     const OUString& Str, LocaleItem* pLocaleItem )
 {
     if( !(pLocaleItem != nullptr && loadLocale( pLocaleItem )) )
@@ -332,14 +332,14 @@ void StringResourceImpl::implSetString( const OUString& ResourceID,
     }
     rHashMap[ ResourceID ] = Str;
     pLocaleItem->m_bModified = true;
-    implModified();
+    implModified(rGuard);
 }
 
 void StringResourceImpl::setString( const OUString& ResourceID, const OUString& Str )
 {
     std::unique_lock aGuard( m_aMutex );
     implCheckReadOnly( "StringResourceImpl::setString(): Read only" );
-    implSetString( ResourceID, Str, m_pCurrentLocaleItem );
+    implSetString( aGuard, ResourceID, Str, m_pCurrentLocaleItem );
 }
 
 void StringResourceImpl::setStringForLocale
@@ -348,10 +348,10 @@ void StringResourceImpl::setStringForLocale
     std::unique_lock aGuard( m_aMutex );
     implCheckReadOnly( "StringResourceImpl::setStringForLocale(): Read only" );
     LocaleItem* pLocaleItem = getItemForLocale( locale, false );
-    implSetString( ResourceID, Str, pLocaleItem );
+    implSetString( aGuard, ResourceID, Str, pLocaleItem );
 }
 
-void StringResourceImpl::implRemoveId( const OUString& ResourceID, LocaleItem* pLocaleItem )
+void StringResourceImpl::implRemoveId( std::unique_lock<std::mutex>& rGuard, const OUString& ResourceID, LocaleItem* pLocaleItem )
 {
     if( pLocaleItem != nullptr && loadLocale( pLocaleItem ) )
     {
@@ -363,7 +363,7 @@ void StringResourceImpl::implRemoveId( const OUString& ResourceID, LocaleItem* p
         }
         rHashMap.erase( it );
         pLocaleItem->m_bModified = true;
-        implModified();
+        implModified(rGuard);
     }
 }
 
@@ -371,7 +371,7 @@ void StringResourceImpl::removeId( const OUString& ResourceID )
 {
     std::unique_lock aGuard( m_aMutex );
     implCheckReadOnly( "StringResourceImpl::removeId(): Read only" );
-    implRemoveId( ResourceID, m_pCurrentLocaleItem );
+    implRemoveId( aGuard, ResourceID, m_pCurrentLocaleItem );
 }
 
 void StringResourceImpl::removeIdForLocale( const OUString& ResourceID, const Locale& locale )
@@ -379,7 +379,7 @@ void StringResourceImpl::removeIdForLocale( const OUString& ResourceID, const Lo
     std::unique_lock aGuard( m_aMutex );
     implCheckReadOnly( "StringResourceImpl::removeIdForLocale(): Read only" );
     LocaleItem* pLocaleItem = getItemForLocale( locale, false );
-    implRemoveId( ResourceID, pLocaleItem );
+    implRemoveId( aGuard, ResourceID, pLocaleItem );
 }
 
 void StringResourceImpl::newLocale( const Locale& locale )
@@ -438,7 +438,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
         m_bDefaultModified = true;
     }
 
-    implModified();
+    implModified(aGuard);
 }
 
 void StringResourceImpl::removeLocale( const Locale& locale )
@@ -499,7 +499,7 @@ void StringResourceImpl::removeLocale( const Locale& locale )
 
     m_aLocaleItemVector.erase( it );
 
-    implModified();
+    implModified(aGuard);
 }
 
 void StringResourceImpl::implScanIdForNumber( const OUString& ResourceID )
@@ -590,29 +590,22 @@ LocaleItem* StringResourceImpl::getClosestMatchItemForLocale( const Locale& loca
     return pRetItem;
 }
 
-void StringResourceImpl::implModified()
+void StringResourceImpl::implModified(std::unique_lock<std::mutex>& rGuard)
 {
     m_bModified = true;
-    implNotifyListeners();
+    implNotifyListeners(rGuard);
 }
 
-void StringResourceImpl::implNotifyListeners()
+void StringResourceImpl::implNotifyListeners(std::unique_lock<std::mutex>& rGuard)
 {
     EventObject aEvent;
     aEvent.Source = static_cast< XInterface* >( static_cast<OWeakObject*>(this) );
-
-    ::comphelper::OInterfaceIteratorHelper4 it( m_aListenerContainer );
-    while( it.hasMoreElements() )
-    {
-        try
+    m_aListenerContainer.forEach(rGuard,
+        [&aEvent](const css::uno::Reference<XModifyListener>& xListener)
         {
-            it.next()->modified( aEvent );
+            xListener->modified(aEvent);
         }
-        catch(RuntimeException&)
-        {
-            it.remove();
-        }
-    }
+    );
 }
 
 
@@ -671,7 +664,7 @@ Sequence< OUString > StringResourcePersistenceImpl::getSupportedServiceNames(  )
 constexpr OUStringLiteral aNameBaseDefaultStr = u"strings";
 
 void StringResourcePersistenceImpl::implInitializeCommonParameters
-    ( const Sequence< Any >& aArguments )
+    ( std::unique_lock<std::mutex>& rGuard, const Sequence< Any >& aArguments )
 {
     bool bReadOnlyOk = (aArguments[1] >>= m_bReadOnly);
     if( !bReadOnlyOk )
@@ -702,7 +695,7 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
 
     implScanLocales();
 
-    implSetCurrentLocale( aCurrentLocale, true/*FindClosestMatch*/, true/*bUseDefaultIfNoMatch*/ );
+    implSetCurrentLocale( rGuard, aCurrentLocale, true/*FindClosestMatch*/, true/*bUseDefaultIfNoMatch*/ );
 }
 
 
@@ -2078,7 +2071,7 @@ void StringResourceWithStorageImpl::initialize( const Sequence< Any >& aArgument
         throw IllegalArgumentException( "StringResourceWithStorageImpl::initialize: invalid storage", Reference< XInterface >(), 0 );
     }
 
-    implInitializeCommonParameters( aArguments );
+    implInitializeCommonParameters( aGuard, aArguments );
 }
 
 
@@ -2368,7 +2361,7 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
         throw IllegalArgumentException( "StringResourceWithStorageImpl::initialize: invalid type", Reference< XInterface >(), 5 );
     }
 
-    implInitializeCommonParameters( aArguments );
+    implInitializeCommonParameters( aGuard, aArguments );
 }
 
 

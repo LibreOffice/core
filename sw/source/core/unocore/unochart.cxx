@@ -160,7 +160,8 @@ static void LaunchModifiedEvent(
         const uno::Reference< uno::XInterface > &rxI )
 {
     lang::EventObject aEvtObj( rxI );
-    rICH.notifyEach( &util::XModifyListener::modified, aEvtObj );
+    std::unique_lock aGuard(GetChartMutex());
+    rICH.notifyEach( aGuard, &util::XModifyListener::modified, aEvtObj );
 }
 
 /**
@@ -1383,7 +1384,7 @@ void SAL_CALL SwChartDataProvider::addEventListener(
 {
     std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
-        m_aEventListeners.addInterface( rxListener );
+        m_aEventListeners.addInterface( aGuard, rxListener );
 }
 
 void SAL_CALL SwChartDataProvider::removeEventListener(
@@ -1391,7 +1392,7 @@ void SAL_CALL SwChartDataProvider::removeEventListener(
 {
     std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
-        m_aEventListeners.removeInterface( rxListener );
+        m_aEventListeners.removeInterface( aGuard, rxListener );
 }
 
 OUString SAL_CALL SwChartDataProvider::getImplementationName(  )
@@ -2191,7 +2192,7 @@ void SAL_CALL SwChartDataSequence::addModifyListener(
 {
     std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
-        m_aModifyListeners.addInterface( rxListener );
+        m_aModifyListeners.addInterface( aGuard, rxListener );
 }
 
 void SAL_CALL SwChartDataSequence::removeModifyListener(
@@ -2199,7 +2200,7 @@ void SAL_CALL SwChartDataSequence::removeModifyListener(
 {
     std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
-        m_aModifyListeners.removeInterface( rxListener );
+        m_aModifyListeners.removeInterface( aGuard, rxListener );
 }
 
 void SAL_CALL SwChartDataSequence::disposing( const lang::EventObject& rSource )
@@ -2274,7 +2275,7 @@ void SAL_CALL SwChartDataSequence::addEventListener(
 {
     std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
-        m_aEvtListeners.addInterface( rxListener );
+        m_aEvtListeners.addInterface( aGuard, rxListener );
 }
 
 void SAL_CALL SwChartDataSequence::removeEventListener(
@@ -2282,7 +2283,7 @@ void SAL_CALL SwChartDataSequence::removeEventListener(
 {
     std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
-        m_aEvtListeners.removeInterface( rxListener );
+        m_aEvtListeners.removeInterface( aGuard, rxListener );
 }
 
 bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
@@ -2652,7 +2653,7 @@ void SAL_CALL SwChartLabeledDataSequence::addModifyListener(
 {
     std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
-        m_aModifyListeners.addInterface( rxListener );
+        m_aModifyListeners.addInterface( aGuard, rxListener );
 }
 
 void SAL_CALL SwChartLabeledDataSequence::removeModifyListener(
@@ -2660,7 +2661,7 @@ void SAL_CALL SwChartLabeledDataSequence::removeModifyListener(
 {
     std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
-        m_aModifyListeners.removeInterface( rxListener );
+        m_aModifyListeners.removeInterface( aGuard, rxListener );
 }
 
 void SAL_CALL SwChartLabeledDataSequence::dispose(  )
@@ -2690,7 +2691,7 @@ void SAL_CALL SwChartLabeledDataSequence::addEventListener(
 {
     std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
-        m_aEventListeners.addInterface( rxListener );
+        m_aEventListeners.addInterface( aGuard, rxListener );
 }
 
 void SAL_CALL SwChartLabeledDataSequence::removeEventListener(
@@ -2698,7 +2699,7 @@ void SAL_CALL SwChartLabeledDataSequence::removeEventListener(
 {
     std::unique_lock aGuard( GetChartMutex() );
     if (!m_bDisposed && rxListener.is())
-        m_aEventListeners.removeInterface( rxListener );
+        m_aEventListeners.removeInterface( aGuard, rxListener );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

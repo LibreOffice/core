@@ -228,9 +228,9 @@ sal_Bool SAL_CALL TableDesignStyle::isUserDefined()
 sal_Bool SAL_CALL TableDesignStyle::isInUse()
 {
     std::unique_lock aGuard( m_aMutex );
-    if (maModifyListeners.getLength())
+    if (maModifyListeners.getLength(aGuard))
     {
-        comphelper::OInterfaceIteratorHelper4 it(maModifyListeners);
+        comphelper::OInterfaceIteratorHelper4 it(aGuard, maModifyListeners);
         while ( it.hasMoreElements() )
         {
             TableDesignUser* pUser = dynamic_cast< TableDesignUser* >( it.next().get() );
@@ -396,7 +396,7 @@ void SAL_CALL TableDesignStyle::addModifyListener( const Reference< XModifyListe
     }
     else
     {
-        maModifyListeners.addInterface( xListener );
+        maModifyListeners.addInterface( aGuard, xListener );
     }
 }
 
@@ -404,7 +404,7 @@ void SAL_CALL TableDesignStyle::addModifyListener( const Reference< XModifyListe
 void SAL_CALL TableDesignStyle::removeModifyListener( const Reference< XModifyListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
-    maModifyListeners.removeInterface( xListener );
+    maModifyListeners.removeInterface( aGuard, xListener );
 }
 
 
@@ -412,10 +412,10 @@ void TableDesignStyle::notifyModifyListener()
 {
     std::unique_lock aGuard( m_aMutex );
 
-    if( maModifyListeners.getLength() )
+    if( maModifyListeners.getLength(aGuard) )
     {
         EventObject aEvt( static_cast< OWeakObject * >( this ) );
-        maModifyListeners.forEach(
+        maModifyListeners.forEach(aGuard,
             [&] (Reference<XModifyListener> const& xListener)
                 { return xListener->modified(aEvt); });
     }

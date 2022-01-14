@@ -270,7 +270,11 @@ template <typename FuncT>
 inline void OInterfaceContainerHelper4<T>::forEach(std::unique_lock<std::mutex>& rGuard,
                                                    FuncT const& func)
 {
+    if (std::as_const(maData)->size() == 0)
+        return;
+    maData.make_unique(); // so we can iterate over the data without holding the lock
     OInterfaceIteratorHelper4<T> iter(rGuard, *this);
+    rGuard.unlock();
     while (iter.hasMoreElements())
     {
         auto xListener = iter.next();
@@ -281,9 +285,14 @@ inline void OInterfaceContainerHelper4<T>::forEach(std::unique_lock<std::mutex>&
         catch (css::lang::DisposedException const& exc)
         {
             if (exc.Context == xListener)
+            {
+                rGuard.lock();
                 iter.remove(rGuard);
+                rGuard.unlock();
+            }
         }
     }
+    rGuard.lock();
 }
 
 template <class ListenerT>

@@ -134,7 +134,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::addEventListener( const uno::Referen
     if( m_bDisposed || m_bInDispose )
         return;
     std::unique_lock aGuard(m_aContainerMutex);
-    m_aDisposeEventListeners.addInterface( xListener );
+    m_aDisposeEventListeners.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL ChineseTranslation_UnoDialog::removeEventListener( const uno::Reference< lang::XEventListener > & xListener )
@@ -143,7 +143,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::removeEventListener( const uno::Refe
     if( m_bDisposed || m_bInDispose )
         return;
     std::unique_lock aGuard(m_aContainerMutex);
-    m_aDisposeEventListeners.removeInterface( xListener );
+    m_aDisposeEventListeners.removeInterface( aGuard, xListener );
 }
 
 

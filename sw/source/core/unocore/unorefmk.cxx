@@ -360,7 +360,7 @@ void SAL_CALL SwXReferenceMark::addEventListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_EventListeners.addInterface(xListener);
+    m_pImpl->m_EventListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL SwXReferenceMark::removeEventListener(
@@ -368,7 +368,7 @@ void SAL_CALL SwXReferenceMark::removeEventListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_EventListeners.removeInterface(xListener);
+    m_pImpl->m_EventListeners.removeInterface(aGuard, xListener);
 }
 
 OUString SAL_CALL SwXReferenceMark::getName()
@@ -876,7 +876,7 @@ SwXMeta::addEventListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_EventListeners.addInterface(xListener);
+    m_pImpl->m_EventListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL
@@ -885,7 +885,7 @@ SwXMeta::removeEventListener(
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_EventListeners.removeInterface(xListener);
+    m_pImpl->m_EventListeners.removeInterface(aGuard, xListener);
 }
 
 void SAL_CALL

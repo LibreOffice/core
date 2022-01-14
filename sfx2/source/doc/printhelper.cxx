@@ -782,13 +782,13 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
     }
 
     std::unique_lock aGuard(m_aMutex);
-    if (!m_aJobListeners.getLength())
+    if (!m_aJobListeners.getLength(aGuard))
         return;
     view::PrintJobEvent aEvent;
     aEvent.Source = m_xPrintJob;
     aEvent.State = pPrintHint->GetWhich();
 
-    comphelper::OInterfaceIteratorHelper4 pIterator(m_aJobListeners);
+    comphelper::OInterfaceIteratorHelper4 pIterator(aGuard, m_aJobListeners);
     aGuard.unlock();
     while (pIterator.hasMoreElements())
         pIterator.next()->printJobEvent( aEvent );
@@ -797,13 +797,13 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
 void SAL_CALL SfxPrintHelper::addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener )
 {
     std::unique_lock aGuard(m_pData->m_aMutex);
-    m_pData->m_aJobListeners.addInterface( xListener );
+    m_pData->m_aJobListeners.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL SfxPrintHelper::removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener )
 {
     std::unique_lock aGuard(m_pData->m_aMutex);
-    m_pData->m_aJobListeners.removeInterface( xListener );
+    m_pData->m_aJobListeners.removeInterface( aGuard, xListener );
 }
 
 

@@ -117,21 +117,21 @@ protected:
     LocaleItem* getClosestMatchItemForLocale( const css::lang::Locale& locale );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void implSetCurrentLocale( const css::lang::Locale& locale,
+    void implSetCurrentLocale( std::unique_lock<std::mutex>& rGuard, const css::lang::Locale& locale,
         bool FindClosestMatch, bool bUseDefaultIfNoMatch );
 
-    void implModified();
-    void implNotifyListeners();
+    void implModified(std::unique_lock<std::mutex>&);
+    void implNotifyListeners(std::unique_lock<std::mutex>&);
 
     //=== Impl methods for ...ForLocale methods ===
     /// @throws css::resource::MissingResourceException
     OUString implResolveString( const OUString& ResourceID, LocaleItem* pLocaleItem );
     bool implHasEntryForId( const OUString& ResourceID, LocaleItem* pLocaleItem );
     css::uno::Sequence< OUString > implGetResourceIDs( LocaleItem* pLocaleItem );
-    void implSetString( const OUString& ResourceID,
+    void implSetString( std::unique_lock<std::mutex>& rGuard, const OUString& ResourceID,
         const OUString& Str, LocaleItem* pLocaleItem );
     /// @throws css::resource::MissingResourceException
-    void implRemoveId( const OUString& ResourceID, LocaleItem* pLocaleItem );
+    void implRemoveId( std::unique_lock<std::mutex>& rGuard, const OUString& ResourceID, LocaleItem* pLocaleItem );
 
     // Method to load a locale if necessary, returns true if loading was
     // successful. Default implementation in base class just returns true.
@@ -196,7 +196,7 @@ protected:
 
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    void implInitializeCommonParameters( const css::uno::Sequence< css::uno::Any >& aArguments );
+    void implInitializeCommonParameters( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< css::uno::Any >& aArguments );
 
     // Scan locale properties files
     virtual void implScanLocales();
