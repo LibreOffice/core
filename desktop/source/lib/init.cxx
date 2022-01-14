@@ -1494,6 +1494,8 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     m_states.emplace(LOK_CALLBACK_CURSOR_VISIBLE, "NIL");
     m_states.emplace(LOK_CALLBACK_SET_PART, "NIL");
     m_states.emplace(LOK_CALLBACK_TABLE_SELECTED, "NIL");
+    m_states.emplace(LOK_CALLBACK_TAB_STOP_LIST, "NIL");
+    m_states.emplace(LOK_CALLBACK_RULER_UPDATE, "NIL");
 }
 
 CallbackFlushHandler::~CallbackFlushHandler()
