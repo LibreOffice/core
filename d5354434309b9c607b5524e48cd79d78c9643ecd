@@ -34,6 +34,24 @@
       "parentUuid": "ccb64a4a_157c8913",
       "revId": "d5354434309b9c607b5524e48cd79d78c9643ecd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b2b2ea0_d85d5141",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-14T10:57:24Z",
+      "side": 1,
+      "message": "\u003e but with the next patch like this https://i.imgur.com/WU5Whi6.png\n\nPlease also check how it will look like when the colored tabs have the same color",
+      "parentUuid": "5bd10d00_9404579d",
+      "revId": "d5354434309b9c607b5524e48cd79d78c9643ecd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
