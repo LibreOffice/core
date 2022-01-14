@@ -31,6 +31,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <FileDefinitionWidgetDraw.hxx>
 #include <rtl/math.hxx>
+#include <comphelper/lok.hxx>
 
 // The only common SalFrame method
 
@@ -752,7 +753,10 @@ bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const
     if (aControlRegion.IsEmpty() || aControlRegion.GetWidth() <= 0 || aControlRegion.GetHeight() <= 0)
         return bRet;
 
-    if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
+    bool bLayoutRTL = true && (m_nLayout & SalLayoutFlags::BiDiRtl);
+    bool bDevRTL = rOutDev.IsRTLEnabled();
+    bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+    if( (bLayoutRTL || bDevRTL) && !bIsLOK )
     {
         mirror(aControlRegion, rOutDev);
         std::unique_ptr< ImplControlValue > mirrorValue( aValue.clone());
