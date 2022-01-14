@@ -126,10 +126,8 @@ public:
        The lifetime must be longer than the lifetime
        of this object.
      */
-    OInterfaceContainerHelper3(::osl::Mutex& rMutex_)
-        : mrMutex(rMutex_)
-    {
-    }
+    inline OInterfaceContainerHelper3(::osl::Mutex& rMutex_);
+
     /**
       Return the number of Elements in the container. Only useful if you have acquired
       the mutex.
@@ -224,6 +222,16 @@ private:
     OInterfaceContainerHelper3(const OInterfaceContainerHelper3&) = delete;
     OInterfaceContainerHelper3& operator=(const OInterfaceContainerHelper3&) = delete;
 
+    static o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
+                             o3tl::ThreadSafeRefCountingPolicy>&
+    DEFAULT()
+    {
+        static o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
+                                 o3tl::ThreadSafeRefCountingPolicy>
+            SINGLETON;
+        return SINGLETON;
+    }
+
 private:
     template <typename EventT> class NotifySingleListener
     {
@@ -245,6 +253,13 @@ private:
         }
     };
 };
+
+template <class T>
+inline OInterfaceContainerHelper3<T>::OInterfaceContainerHelper3(::osl::Mutex& rMutex_)
+    : maData(OInterfaceContainerHelper3<T>::DEFAULT())
+    , mrMutex(rMutex_)
+{
+}
 
 template <class T>
 template <typename FuncT>
