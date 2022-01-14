@@ -428,7 +428,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
 {
-    loadAndSave("testCustomShapePresetExport.odt");
+    loadAndReload("testCustomShapePresetExport.odt");
     // Check if the load failed.
     CPPUNIT_ASSERT(getPages());
 
@@ -495,7 +495,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125936_numberingSuperscript, "tdf125936_numberin
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
 {
-    loadAndSave("tdf134619_numberingProps.doc");
+    loadAndReload("tdf134619_numberingProps.doc");
     // Get the third paragraph's numbering style's 1st level's bullet size
     uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
     auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
@@ -510,6 +510,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134951_duplicates)
 {
+    // FIXME this should be loadAndReload(), but it fails currently.
     loadAndSave("tdf134951_duplicates.odt");
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -692,7 +693,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf140572_docDefault_superscript)
 {
-    loadAndSave("tdf140572_docDefault_superscript.docx");
+    loadAndReload("tdf140572_docDefault_superscript.docx");
     // A round-trip was crashing.
 
     // Without the fix, everything was DFLT_ESC_AUTO_SUPER (default superscript)

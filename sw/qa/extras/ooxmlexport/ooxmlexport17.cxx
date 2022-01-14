@@ -50,7 +50,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135164_cancelledNumbering, "tdf135164_cancelledN
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 {
-    loadAndSave("tdf135906.docx");
+    loadAndReload("tdf135906.docx");
     // just test round-tripping. The document was exported as corrupt and didn't re-load.
 }
 
