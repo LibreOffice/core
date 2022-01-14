@@ -69,7 +69,6 @@
 
 #include <impfontcache.hxx>
 #include <salinst.hxx>
-#include <svdata.hxx>
 #include <vcl/svmain.hxx>
 #include <dbggui.hxx>
 #include <accmgr.hxx>
