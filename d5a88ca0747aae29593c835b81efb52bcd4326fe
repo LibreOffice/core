@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4c706b8_8444a4dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-14T11:44:09Z",
+      "side": 1,
+      "message": "I did this when I got cc\u0027ed on the issue and was unaware that there was an existing patch in progress until now.",
+      "revId": "d5a88ca0747aae29593c835b81efb52bcd4326fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
