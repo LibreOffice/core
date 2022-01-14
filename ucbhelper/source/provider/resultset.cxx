@@ -147,7 +147,7 @@ struct ResultSet_Impl
     uno::Sequence< beans::Property >                m_aProperties;
     rtl::Reference< ResultSetDataSupplier >         m_xDataSupplier;
     std::mutex                          m_aMutex;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper4<lang::XEventListener>> m_pDisposeEventListeners;
+    comphelper::OInterfaceContainerHelper4<lang::XEventListener> m_aDisposeEventListeners;
     std::unique_ptr<PropertyChangeListeners>        m_pPropertyChangeListeners;
     sal_Int32                           m_nPos;
     bool                            m_bWasNull;
@@ -236,12 +236,11 @@ void SAL_CALL ResultSet::dispose()
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
 
-    if ( m_pImpl->m_pDisposeEventListeners &&
-         m_pImpl->m_pDisposeEventListeners->getLength() )
+    if ( m_pImpl->m_aDisposeEventListeners.getLength() )
     {
         lang::EventObject aEvt;
         aEvt.Source = static_cast< lang::XComponent * >( this );
-        m_pImpl->m_pDisposeEventListeners->disposeAndClear( aGuard, aEvt );
+        m_pImpl->m_aDisposeEventListeners.disposeAndClear( aGuard, aEvt );
         aGuard.lock();
     }
 
@@ -263,11 +262,7 @@ void SAL_CALL ResultSet::addEventListener(
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
 
-    if ( !m_pImpl->m_pDisposeEventListeners )
-        m_pImpl->m_pDisposeEventListeners.reset(
-            new comphelper::OInterfaceContainerHelper4<lang::XEventListener>());
-
-    m_pImpl->m_pDisposeEventListeners->addInterface( Listener );
+    m_pImpl->m_aDisposeEventListeners.addInterface( Listener );
 }
 
 
@@ -277,8 +272,7 @@ void SAL_CALL ResultSet::removeEventListener(
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
 
-    if ( m_pImpl->m_pDisposeEventListeners )
-        m_pImpl->m_pDisposeEventListeners->removeInterface( Listener );
+    m_pImpl->m_aDisposeEventListeners.removeInterface( Listener );
 }
 
 
