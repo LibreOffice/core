@@ -16,6 +16,24 @@
       "message": "Justin: if one platforms fails in Jenkins, it\u0027s better to \"resume\" the build (there is a button for it on the Jenkins UI; if you don\u0027t have it then ask on #tdf-infra to get permissions), which only re-tries the failed platforms. Rebase will rebuild everything, which is a waste of resources. :-)",
       "revId": "5afea0b7a9baeeec960bbca9bd7de73fa17515ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48c61557_503f5b06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-14T16:50:29Z",
+      "side": 1,
+      "message": "I needed to rebase to get mstahl\u0027s fixed commit included so I could remove the FIXME. But yeah, I don\u0027t have the resume ability either so I\u0027ll ping them.",
+      "parentUuid": "6a404049_b3340b61",
+      "revId": "5afea0b7a9baeeec960bbca9bd7de73fa17515ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
