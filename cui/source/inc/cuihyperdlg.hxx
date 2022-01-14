@@ -95,7 +95,7 @@ private:
 
     DECL_LINK( ResetHdl, weld::Button&, void) ;
     DECL_LINK (ClickOkHdl_Impl, weld::Button&, void );
-    DECL_LINK (ClickApplyHdl_Impl, weld::Button&, void );
+    DECL_STATIC_LINK (SvxHpLinkDlg, ClickApplyHdl_Impl, weld::Button&, void );
 
     IconChoicePage*         GetTabPage( std::string_view rPageId )
                                 { return GetPageData(rPageId)->xPage.get(); }
@@ -106,7 +106,7 @@ private:
 
     void Activate() override;
     virtual void Close() override;
-    void Apply( bool bWarn );
+    static void Apply();
 
 public:
     SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld::Window* pParent);

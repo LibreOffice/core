@@ -182,32 +182,15 @@ void SvxHpLinkDlg::Close()
         pViewFrame->ToggleChildWindow(SID_HYPERLINK_DIALOG);
 }
 
-void SvxHpLinkDlg::Apply( bool bWarn )
+void SvxHpLinkDlg::Apply()
 {
     SfxItemSetFixed<SID_HYPERLINK_GETLINK, SID_HYPERLINK_SETLINK> aItemSet( SfxGetpApp()->GetPool() );
-
-    SvxHyperlinkTabPageBase* pCurrentPage = static_cast<SvxHyperlinkTabPageBase*>(
-                                                GetTabPage( GetCurPageId() ) );
-
-    // tdf#109390: only show warning that the dialog was not filled properly
-    // if the user pressed Apply
-    if ( pCurrentPage->AskApply( bWarn ) )
-    {
-        pCurrentPage->FillItemSet( &aItemSet );
-
-        const SvxHyperlinkItem *aItem = aItemSet.GetItem(SID_HYPERLINK_SETLINK);
-        if ( !aItem->GetURL().isEmpty() )
-            GetDispatcher()->ExecuteList(SID_HYPERLINK_SETLINK,
-                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { aItem });
-
-        static_cast<SvxHyperlinkTabPageBase*>( GetTabPage( GetCurPageId() ) )->DoApply();
-    }
 }
 
 /// Click on OK button
 IMPL_LINK_NOARG(SvxHpLinkDlg, ClickOkHdl_Impl, weld::Button&, void)
 {
-    Apply( false );
+    Apply();
     m_xDialog->response(RET_OK);
 }
 
@@ -216,9 +199,9 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickOkHdl_Impl, weld::Button&, void)
 |* Click on Apply-button
 |*
 |************************************************************************/
-IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl, weld::Button&, void)
+IMPL_STATIC_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl, weld::Button&, void)
 {
-    Apply( true );
+    Apply();
 }
 
 /*************************************************************************
