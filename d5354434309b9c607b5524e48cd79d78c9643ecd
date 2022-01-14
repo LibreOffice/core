@@ -70,6 +70,24 @@
       "parentUuid": "5b2b2ea0_d85d5141",
       "revId": "d5354434309b9c607b5524e48cd79d78c9643ecd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "445fba74_214215e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-14T12:03:03Z",
+      "side": 1,
+      "message": "2px is too large IMO; all the effort around this topic was made to have flat tabs. Don\u0027t think similar adjacent colors are often used and would rather accept the shortcoming.",
+      "parentUuid": "502f9269_d3966bb4",
+      "revId": "d5354434309b9c607b5524e48cd79d78c9643ecd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
