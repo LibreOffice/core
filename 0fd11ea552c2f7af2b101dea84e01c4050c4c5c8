@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5d58021_f75bb148",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-14T19:25:05Z",
+      "side": 1,
+      "message": "Since with gen rendering I couldn\u0027t reproduce the error quoted in my previous comment, I suppose it\u0027s unrelated to connectivity/dbaccess part but rather to gtk3 rendering (the default rendering I use).\n\n",
+      "revId": "0fd11ea552c2f7af2b101dea84e01c4050c4c5c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
