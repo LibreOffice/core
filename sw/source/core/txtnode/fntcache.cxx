@@ -855,50 +855,6 @@ static void lcl_DrawLineForWrongListData(
         rInf.GetOut().Pop();
 }
 
-namespace
-{
-    void AdjustKernArray(GlyphPositioningMode eGlyphPositioningMode, sal_Int32 i, tools::Long& rScrPos,
-                         sal_Unicode cChPrev, sal_Unicode nCh,
-                         const std::vector<sal_Int32>& rScrArray, std::vector<sal_Int32>& rKernArray,
-                         int nMul)
-    {
-        tools::Long nScr = rScrArray[i] - rScrArray[i - 1];
-        switch (eGlyphPositioningMode)
-        {
-            case GlyphPositioningMode::Layout:  // <- glyph positioning stable during editing,
-                                                // but at ~90% screen zoom rendering will
-                                                // start to show kerning problems
-            case GlyphPositioningMode::LayoutAndMatchRender: // <- glyph positioning stable during editing,
-                                                                // and should render nicely at sane zoom levels
-                rScrPos = rKernArray[i - 1] + nScr;
-                // just accept the print layout positions, this is what editeng does
-                // https://freddie.witherden.org/pages/font-rasterisation/#application-requirements
-                break;
-            case GlyphPositioningMode::Classic: // <- layout unstable during editing, fairly arbitrary glyph
-                                                // positioning depends on zoom
-            {
-                // https://wiki.openoffice.org/wiki/Writer/WYSIWYG
-                if (nCh == CH_BLANK)
-                    rScrPos = rKernArray[i - 1] + nScr;
-                else
-                {
-                    if (cChPrev == CH_BLANK || cChPrev == '-')
-                        rScrPos = rKernArray[i - 1] + nScr;
-                    else
-                    {
-                        rScrPos += nScr;
-
-                        const int nDiv = nMul+1;
-                        rScrPos = (nMul * rScrPos + rKernArray[i]) / nDiv;
-                    }
-                }
-                rKernArray[i - 1] = rScrPos - nScr;
-                break;
-            }
-        }
-    }
-}
-
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 {
     OSL_ENSURE( rInf.GetShell(), "SwFntObj::DrawText without shell" );
@@ -1381,7 +1337,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
                     if (!MsLangId::isKorean(aLang))
                     {
-                        SwScriptInfo::CJKJustify( rInf.GetText(), aKernArray.data(), nullptr,
+                        SwScriptInfo::CJKJustify( rInf.GetText(), aKernArray.data(),
                                 rInf.GetIdx(), rInf.GetLen(), aLang, nSpaceAdd, rInf.IsSpaceStop() );
 
                         bSpecialJust = true;
@@ -1395,7 +1351,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
                     {
                         if ( pSI && pSI->CountKashida() &&
-                            pSI->KashidaJustify( aKernArray.data(), nullptr, rInf.GetIdx(),
+                            pSI->KashidaJustify( aKernArray.data(), rInf.GetIdx(),
                                                  rInf.GetLen(), nSpaceAdd ) != -1 )
                         {
                             bSpecialJust = true;
@@ -1413,7 +1369,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     {
                         // Use rInf.GetSpace() because it has more precision than
                         // nSpaceAdd:
-                        SwScriptInfo::ThaiJustify( rInf.GetText(), aKernArray.data(), nullptr,
+                        SwScriptInfo::ThaiJustify( rInf.GetText(), aKernArray.data(),
                                                    rInf.GetIdx(), rInf.GetLen(),
                                                    rInf.GetNumberOfBlanks(),
                                                    rInf.GetSpace() );
@@ -1522,11 +1478,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     else
     {
-        GlyphPositioningMode eGlyphPositioningMode = rInf.GetShell()->GetViewOptions()->GetGlyphPositioningMode();
         const bool bOrigTextRenderModeForResolutionIndependentLayout(rInf.GetOut().GetTextRenderModeForResolutionIndependentLayout());
-
         // set text render mode to suit use of resolution independent text layout
-        rInf.GetOut().SetTextRenderModeForResolutionIndependentLayout(eGlyphPositioningMode == GlyphPositioningMode::LayoutAndMatchRender);
+        rInf.GetOut().SetTextRenderModeForResolutionIndependentLayout(true);
 
         const OUString* pStr = &rInf.GetText();
 
@@ -1538,13 +1492,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         std::vector<sal_Int32> aKernArray;
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
 
-        // get screen array
-        std::vector<sal_Int32> aScrArray;
-        SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()) };
-        SalLayoutGlyphs* pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey);
-        rInf.GetOut().GetTextArray( rInf.GetText(), &aScrArray,
-                        sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), nullptr, pGlyphs);
-
         // OLE: no printer available
         // OSL_ENSURE( pPrinter, "DrawText needs pPrinter" )
         if ( m_pPrinter )
@@ -1555,19 +1502,17 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if( !m_pPrtFont->IsSameInstance( m_pPrinter->GetFont() ) )
                     m_pPrinter->SetFont( *m_pPrtFont );
             }
-            aGlyphsKey = SwTextGlyphsKey{ m_pPrinter, rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()) };
-            pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey);
+            SwTextGlyphsKey aGlyphsKey{ m_pPrinter, rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()) };
+            SalLayoutGlyphs* pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey);
             m_pPrinter->GetTextArray(rInf.GetText(), &aKernArray,
                     sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), nullptr, pGlyphs);
         }
         else
         {
-#ifndef NDEBUG
+            SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()) };
+            SalLayoutGlyphs* pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey);
             rInf.GetOut().GetTextArray( rInf.GetText(), &aKernArray,
-                    sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
-            assert(aKernArray == aScrArray);
-#endif
-            aKernArray = aScrArray;
+                            sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), nullptr, pGlyphs);
         }
 
         // Modify Printer and ScreenArrays for special justifications
@@ -1585,10 +1530,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                  pSI && pSI->CountCompChg() &&
                  lcl_IsMonoSpaceFont( rInf.GetOut() ) )
             {
-                Point aTmpPos( aTextOriginPos );
-                pSI->Compress( aScrArray.data(), rInf.GetIdx(), rInf.GetLen(),
-                               rInf.GetKanaComp(),
-                               o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ), &aTmpPos );
                 pSI->Compress( aKernArray.data(), rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
                                o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
@@ -1601,7 +1542,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
                 if (!MsLangId::isKorean(aLang))
                 {
-                    SwScriptInfo::CJKJustify( rInf.GetText(), aKernArray.data(), aScrArray.data(),
+                    SwScriptInfo::CJKJustify( rInf.GetText(), aKernArray.data(),
                             rInf.GetIdx(), rInf.GetLen(), aLang, nSpaceAdd, rInf.IsSpaceStop() );
 
                     nSpaceAdd = 0;
@@ -1614,7 +1555,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
                 {
                     if ( pSI && pSI->CountKashida() &&
-                         pSI->KashidaJustify( aKernArray.data(), aScrArray.data(), rInf.GetIdx(),
+                         pSI->KashidaJustify( aKernArray.data(), rInf.GetIdx(),
                                               rInf.GetLen(), nSpaceAdd ) != -1 )
                         nSpaceAdd = 0;
                     else
@@ -1630,7 +1571,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if ( LANGUAGE_THAI == aLang )
                 {
                     SwScriptInfo::ThaiJustify( rInf.GetText(), aKernArray.data(),
-                                               aScrArray.data(), rInf.GetIdx(),
+                                               rInf.GetIdx(),
                                                rInf.GetLen(),
                                                rInf.GetNumberOfBlanks(),
                                                rInf.GetSpace() );
@@ -1640,8 +1581,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
         }
-
-        tools::Long nScrPos = aScrArray[ 0 ];
 
         if( bBullet )
         {
@@ -1714,10 +1653,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else
         {
-            // In case of Pair Kerning the printer influence on the positioning
-            // grows
-            const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
-
             // nSpaceSum contains the sum of the intermediate space distributed
             // among Spaces by the Justification.
             // The Spaces themselves will be positioned in the middle of the
@@ -1737,7 +1672,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             for (sal_Int32 i = 1; i < sal_Int32(nCnt); ++i, nKernSum += rInf.GetKern())
             {
                 sal_Unicode nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
-                AdjustKernArray(eGlyphPositioningMode, i, nScrPos, cChPrev, nCh, aScrArray, aKernArray, nMul);
 
                 // Apply SpaceSum
                 if (cChPrev == CH_BLANK)
@@ -1876,8 +1810,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 sal_Int32 nTmpIdx = bBullet
                             ? (rInf.GetIdx() ? 1 : 0)
                             : sal_Int32(rInf.GetIdx());
-                aGlyphsKey = SwTextGlyphsKey{ &rInf.GetOut(), *pStr, nTmpIdx, nLen };
-                pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey);
+                SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), *pStr, nTmpIdx, nLen };
+                SalLayoutGlyphs* pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey);
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray,
                                              nTmpIdx , nLen, SalLayoutFlags::NONE, pGlyphs );
                 if (bBullet)
@@ -2049,45 +1983,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         else
             rInf.SetKanaDiff( 0 );
 
-        if ( rInf.GetKanaDiff() )
-        {
-            aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
-        }
-        else
-        {
-            GlyphPositioningMode eGlyphPositioningMode = rInf.GetShell()->GetViewOptions()->GetGlyphPositioningMode();
-            if (eGlyphPositioningMode == GlyphPositioningMode::Classic)
-            {
-                std::vector<sal_Int32> aScrArray;
-                rInf.GetOut().GetTextArray( rInf.GetText(), &aScrArray,
-                            sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
-                tools::Long nScrPos = aScrArray[ 0 ];
-                TextFrameIndex nCnt(rInf.GetText().getLength());
-                if ( nCnt < rInf.GetIdx() )
-                    nCnt = TextFrameIndex(0); // assert???
-                else
-                    nCnt = nCnt - rInf.GetIdx();
-                nCnt = std::min(nCnt, nLn);
-                sal_Unicode nChPrev = rInf.GetText()[ sal_Int32(rInf.GetIdx()) ];
-
-                // In case of Pair Kerning the printer influence on the positioning
-                // grows
-                const int nMul = m_pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
-
-                for (sal_Int32 i = 1; i < sal_Int32(nCnt); i++)
-                {
-                    sal_Unicode nCh = rInf.GetText()[sal_Int32(rInf.GetIdx()) + i];
-                    AdjustKernArray(eGlyphPositioningMode, i, nScrPos, nChPrev, nCh, aScrArray, aKernArray, nMul);
-                    nChPrev = nCh;
-                }
-
-                aTextSize.setWidth( nScrPos );
-            }
-            else
-            {
-                aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
-            }
-        }
+        aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
     }
     else
     {
@@ -2171,7 +2067,7 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
 
             if (!MsLangId::isKorean(aLang))
             {
-                SwScriptInfo::CJKJustify( rInf.GetText(), aKernArray.data(), nullptr,
+                SwScriptInfo::CJKJustify( rInf.GetText(), aKernArray.data(),
                         rInf.GetIdx(), rInf.GetLen(), aLang, nSpaceAdd, rInf.IsSpaceStop() );
 
                 nSpaceAdd = 0;
@@ -2185,7 +2081,7 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
             if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
             {
                 if ( pSI && pSI->CountKashida() &&
-                    pSI->KashidaJustify( aKernArray.data(), nullptr, rInf.GetIdx(), rInf.GetLen(),
+                    pSI->KashidaJustify( aKernArray.data(), rInf.GetIdx(), rInf.GetLen(),
                                          nSpaceAdd ) != -1 )
                     nSpaceAdd = 0;
             }
@@ -2198,7 +2094,7 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
 
             if ( LANGUAGE_THAI == aLang )
             {
-                SwScriptInfo::ThaiJustify( rInf.GetText(), aKernArray.data(), nullptr,
+                SwScriptInfo::ThaiJustify( rInf.GetText(), aKernArray.data(),
                                            rInf.GetIdx(), rInf.GetLen(),
                                            rInf.GetNumberOfBlanks(),
                                            rInf.GetSpace() );

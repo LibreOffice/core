@@ -104,7 +104,6 @@ SwElemItem::SwElemItem() :
     m_bShowChangesInMargin =
     m_bFieldHiddenText =
     m_bShowHiddenPara  = false;
-    m_eGlyphPositioningMode = GlyphPositioningMode::Classic;
 }
 
 SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
@@ -124,7 +123,6 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
     m_bShowChangesInMargin = rVOpt.IsShowChangesInMargin();
     m_bFieldHiddenText = rVOpt.IsShowHiddenField();
     m_bShowHiddenPara  = rVOpt.IsShowHiddenPara();
-    m_eGlyphPositioningMode = rVOpt.GetGlyphPositioningMode();
 }
 
 SwElemItem* SwElemItem::Clone( SfxItemPool* ) const
@@ -151,8 +149,7 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 m_bTreatSubOutlineLevelsAsContent == rItem.m_bTreatSubOutlineLevelsAsContent &&
                 m_bShowChangesInMargin  == rItem.m_bShowChangesInMargin &&
                 m_bFieldHiddenText == rItem.m_bFieldHiddenText &&
-                m_bShowHiddenPara  == rItem.m_bShowHiddenPara &&
-                m_eGlyphPositioningMode == rItem.m_eGlyphPositioningMode);
+                m_bShowHiddenPara  == rItem.m_bShowHiddenPara);
 }
 
 void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
@@ -172,7 +169,6 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetShowChangesInMargin( m_bShowChangesInMargin );
     rVOpt.SetShowHiddenField(m_bFieldHiddenText );
     rVOpt.SetShowHiddenPara(m_bShowHiddenPara );
-    rVOpt.SetGlyphPositioningMode(m_eGlyphPositioningMode);
 }
 
 // CTOR for empty Item
