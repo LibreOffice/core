@@ -2704,7 +2704,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
     // Without the accompanying fix in place, this test would have failed with 'Expected: 1979;
     // Actual  : 2129', i.e. the gray background of the "AAA2." text was too close to the right edge
     // of the text portion. Now it's exactly behind the text portion.
-    assertXPath(pXmlDoc, "//rect[@top='2159']", "left", "1979");
+    assertXPath(pXmlDoc, "(//rect)[2]", "left", "1979");
 
     // Without the accompanying fix in place, this test would have failed with 'Expected: 269;
     // Actual  : 0', i.e. the AAA2 frame was not visible due to 0 width.
