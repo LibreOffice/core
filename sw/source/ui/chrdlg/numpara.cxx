@@ -323,8 +323,9 @@ bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
     weld::Window* pDialogParent = GetFrameWeld();
     css::uno::Any aAny(pDialogParent->GetXWindow());
     SfxUnoAnyItem aDialogParent(SID_DIALOG_PARENT, aAny);
-    const SfxPoolItem* pInternalItems[ 1 ];
+    const SfxPoolItem* pInternalItems[ 2 ];
     pInternalItems[ 0 ] = &aDialogParent;
+    pInternalItems[ 1 ] = nullptr;
 
     const SfxPoolItem* pItem = rDispatcher.Execute(
         nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
