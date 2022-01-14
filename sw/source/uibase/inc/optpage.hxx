@@ -42,7 +42,6 @@ class SwContentOptPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xVRulerRightCBox;
     std::unique_ptr<weld::ComboBox> m_xVMetric;
     std::unique_ptr<weld::CheckButton> m_xSmoothCBox;
-    std::unique_ptr<weld::ComboBox> m_xGlyphPosModeLB;
 
     std::unique_ptr<weld::CheckButton> m_xGrfCB;
     std::unique_ptr<weld::CheckButton> m_xTableCB;
