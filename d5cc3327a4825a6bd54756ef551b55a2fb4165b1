@@ -16,6 +16,24 @@
       "message": "Hey, all fixed now. ",
       "revId": "d5cc3327a4825a6bd54756ef551b55a2fb4165b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa3163d2_5ed588eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-15T12:11:30Z",
+      "side": 1,
+      "message": "\u0027vcldemo\u0027 and \u0027svdemo\u0027 are good now, but \u0027mtfdemo\u0027 and \u0027minvcl\u0027 still finish with:\n\"Aborted (core dumped)\"",
+      "parentUuid": "37576a5a_81d120e3",
+      "revId": "d5cc3327a4825a6bd54756ef551b55a2fb4165b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
