@@ -87,6 +87,24 @@
       "parentUuid": "d7b14792_fb963d99",
       "revId": "ee9148ec259a28e4b8d1a46522a0707341507c28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d90bfd89_ebe00dc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-15T14:47:51Z",
+      "side": 1,
+      "message": "Could it be that there are missing some initialization steps for _XDocumentIndex.java like XDocumentIndex::testUpdate() does in uno::Reference\u003cuno::XInterface\u003e SwXDocumentIndex::init()?\n\nUnfortunately, I was not able to create a java macro which does the same as the test macro:\n\nimport com.sun.star.uno.UnoRuntime;\nimport com.sun.star.text.XTextDocument;\nimport com.sun.star.text.XText;\nimport com.sun.star.text.XTextRange;\nimport com.sun.star.beans.XPropertySet;\nimport com.sun.star.text.XTextContent;\nimport com.sun.star.beans.XPropertySet;\n\nimport com.sun.star.lang.XMultiServiceFactory;\nimport com.sun.star.text.XDocumentIndexesSupplier;\nimport com.sun.star.container.XIndexAccess;\n\nimport com.sun.star.text.XDocumentIndex;\n\n\nimport com.sun.star.text.XTextCursor;\n \noDoc \u003d XSCRIPTCONTEXT.getDocument();\nxTextDoc \u003d UnoRuntime.queryInterface(XTextDocument.class, oDoc);\nXText xText \u003d xTextDoc.getText();\nXTextRange xTR \u003d xText.getEnd();\nxTR.setString(\"IndexMark\");\n\nXMultiServiceFactory xDocMSF \u003d UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);\nObject idxMark \u003d xDocMSF.createInstance(\"com.sun.star.text.DocumentIndexMark\");\nXTextContent xTC \u003d UnoRuntime.queryInterface(XTextContent.class, idxMark);\nxText.insertTextContent(xTR, xTC, true);\n\n// Here I don\u0027t know how to create a document index \"com.sun.star.text.DocumentIndex\".\n\nMaybe you have an idea. Thank you very much.",
+      "parentUuid": "713f58f1_28b004dc",
+      "revId": "ee9148ec259a28e4b8d1a46522a0707341507c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
