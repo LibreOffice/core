@@ -2916,6 +2916,16 @@ if test -z "$BASH"; then
 fi
 AC_SUBST(BASH)
 
+# prefer parallel comression tools, if available
+AC_PATH_PROG(COMPRESSIONTOOL, pigz)
+if test -z "$COMPRESSIONTOOL"; then
+    AC_PATH_PROG(COMPRESSIONTOOL, gzip)
+    if test -z "$COMPRESSIONTOOL"; then
+        AC_MSG_ERROR([gzip not found in \$PATH])
+    fi
+fi
+AC_SUBST(COMPRESSIONTOOL)
+
 AC_MSG_CHECKING([for GNU or BSD tar])
 for a in $GNUTAR gtar gnutar bsdtar tar /usr/sfw/bin/gtar; do
     $a --version 2> /dev/null | egrep "GNU|bsdtar"  2>&1 > /dev/null

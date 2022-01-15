@@ -520,7 +520,7 @@ sub create_tar_gz_file_from_directory
         unlink("$installdir/install");
     }
 
-    my $systemcall = "cd $changedir; $fakerootstring tar -cf - $packdir | gzip > $targzname";
+    my $systemcall = "cd $changedir; $fakerootstring tar -cf - $packdir | $installer::globals::packertool > $targzname";
 
     my $returnvalue = system($systemcall);
 
