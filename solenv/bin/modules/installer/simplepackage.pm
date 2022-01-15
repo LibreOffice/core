@@ -470,7 +470,7 @@ sub create_package
             $fakerootstring = "fakeroot";
         }
 
-        $systemcall = "cd $tempdir; $fakerootstring tar -cf - . | gzip > $archive";
+        $systemcall = "cd $tempdir; $fakerootstring tar -cf - . | $installer::globals::packertool > $archive";
     }
 
     if ( $makesystemcall )
