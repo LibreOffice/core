@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <ModifyListenerHelper.hxx>
+#include <charttoolsdllapi.hxx>
 
 #include <vector>
 
@@ -53,7 +54,7 @@ typedef ::cppu::WeakImplHelper<
     Diagram_Base;
 }
 
-class Diagram final :
+class OOO_DLLPUBLIC_CHARTTOOLS Diagram final :
     public cppu::BaseMutex,
     public impl::Diagram_Base,
     public ::property::OPropertySet
@@ -72,7 +73,6 @@ public:
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 
-private:
     explicit Diagram( const Diagram & rOther );
 
     // ____ OPropertySet ____
@@ -135,6 +135,8 @@ private:
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+
+private:
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

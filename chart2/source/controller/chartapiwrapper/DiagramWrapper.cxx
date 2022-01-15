@@ -585,7 +585,7 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
     OUString aRet;
 
     rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xChartDoc.is() && xDiagram.is() )
     {
         Reference< beans::XPropertySet > xChartDocProp( static_cast<cppu::OWeakObject*>(xChartDoc.get()), uno::UNO_QUERY );
@@ -632,7 +632,7 @@ Reference<
         throw lang::IndexOutOfBoundsException("DataSeries index invalid",
                                               static_cast< ::cppu::OWeakObject * >( this ));
 
-    sal_Int32 nNewAPIIndex = lcl_getNewAPIIndexForOldAPIIndex( nRow, m_spChart2ModelContact->getChart2Diagram() );
+    sal_Int32 nNewAPIIndex = lcl_getNewAPIIndexForOldAPIIndex( nRow, m_spChart2ModelContact->getDiagram() );
     if( nNewAPIIndex < 0 )
         throw lang::IndexOutOfBoundsException("DataSeries index invalid",
                                               static_cast< ::cppu::OWeakObject * >( this ));
@@ -649,7 +649,7 @@ Reference<
         throw lang::IndexOutOfBoundsException("DataSeries index invalid",
                                               static_cast< ::cppu::OWeakObject * >( this ));
 
-    sal_Int32 nNewAPIIndex = lcl_getNewAPIIndexForOldAPIIndex( nRow, m_spChart2ModelContact->getChart2Diagram() );
+    sal_Int32 nNewAPIIndex = lcl_getNewAPIIndexForOldAPIIndex( nRow, m_spChart2ModelContact->getDiagram() );
     if( nNewAPIIndex < 0 )
         throw lang::IndexOutOfBoundsException("DataSeries index invalid",
                                               static_cast< ::cppu::OWeakObject * >( this ));
@@ -1042,21 +1042,21 @@ Reference<
 // ____ X3DDefaultSetter ____
 void SAL_CALL DiagramWrapper::set3DSettingsToDefault()
 {
-    Reference< X3DDefaultSetter > x3DDefaultSetter( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
+    rtl::Reference< ::chart::Diagram > x3DDefaultSetter( m_spChart2ModelContact->getDiagram() );
     if( x3DDefaultSetter.is() )
         x3DDefaultSetter->set3DSettingsToDefault();
 }
 
 void SAL_CALL DiagramWrapper::setDefaultRotation()
 {
-    Reference< X3DDefaultSetter > x3DDefaultSetter( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
+    rtl::Reference< ::chart::Diagram > x3DDefaultSetter( m_spChart2ModelContact->getDiagram() );
     if( x3DDefaultSetter.is() )
         x3DDefaultSetter->setDefaultRotation();
 }
 
 void SAL_CALL DiagramWrapper::setDefaultIllumination()
 {
-    Reference< X3DDefaultSetter > x3DDefaultSetter( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
+    rtl::Reference< ::chart::Diagram > x3DDefaultSetter( m_spChart2ModelContact->getDiagram() );
     if( x3DDefaultSetter.is() )
         x3DDefaultSetter->setDefaultIllumination();
 }
@@ -1238,7 +1238,7 @@ bool WrappedStackingProperty::detectInnerValue( StackMode& eStackMode ) const
 {
     bool bHasDetectableInnerValue = false;
     bool bIsAmbiguous = false;
-    eStackMode = DiagramHelper::getStackMode( m_spChart2ModelContact->getChart2Diagram()
+    eStackMode = DiagramHelper::getStackMode( m_spChart2ModelContact->getDiagram()
         , bHasDetectableInnerValue, bIsAmbiguous );
     return bHasDetectableInnerValue;
 }
@@ -1263,7 +1263,7 @@ void WrappedStackingProperty::setPropertyValue( const Any& rOuterValue, const Re
     if( !bNewValue && eInnerStackMode != m_eStackMode )
         return;
 
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xDiagram.is() )
     {
         StackMode eNewStackMode = bNewValue ? m_eStackMode : StackMode::NONE;
@@ -1325,7 +1325,7 @@ void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Refer
 
     m_aOuterValue = rOuterValue;
 
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( !xDiagram.is() )
         return;
 
@@ -1336,7 +1336,7 @@ void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Refer
 
 Any WrappedDim3DProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xDiagram.is() )
     {
         bool b3D = DiagramHelper::getDimension( xDiagram ) == 3;
@@ -1388,7 +1388,7 @@ void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Re
 
     m_aOuterValue = rOuterValue;
 
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( !xDiagram.is() )
         return;
 
@@ -1401,7 +1401,7 @@ void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Re
 
 Any WrappedVerticalProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xDiagram.is() )
     {
         bool bFound = false;
@@ -1455,7 +1455,7 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
 {
     sal_Int32 nNumberOfLines = 0;
     bool bHasDetectableInnerValue = false;
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     if( xDiagram.is() && xChartDoc.is() )
     {
@@ -1495,7 +1495,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
     m_aOuterValue = rOuterValue;
 
     rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     sal_Int32 nDimension = ::chart::DiagramHelper::getDimension( xDiagram );
     if( !(xChartDoc.is() && xDiagram.is() && nDimension == 2) )
         return;
@@ -1603,10 +1603,9 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
 
     m_aOuterValue = rOuterValue;
 
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
-    Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
 
-    if( !(xDiagram.is() && xDiaProp.is()))
+    if( !xDiagram )
         return;
 
     std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
@@ -1634,10 +1633,9 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
 
 Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    Reference< chart2::XDiagram >    xDiagram( m_spChart2ModelContact->getChart2Diagram() );
-    Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
 
-    if( xDiagram.is() && xDiaProp.is())
+    if( xDiagram )
     {
         std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
             ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
@@ -1707,7 +1705,7 @@ void WrappedSolidTypeProperty::setPropertyValue( const Any& rOuterValue, const R
 
     m_aOuterValue = rOuterValue;
 
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( !xDiagram.is() )
         return;
 
@@ -1720,7 +1718,7 @@ void WrappedSolidTypeProperty::setPropertyValue( const Any& rOuterValue, const R
 
 Any WrappedSolidTypeProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xDiagram.is() )
     {
         bool bFound = false;
@@ -1842,7 +1840,7 @@ Any WrappedIncludeHiddenCellsProperty::getPropertyValue( const Reference< beans:
 // ____ XDiagramProvider ____
 Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
 {
-    return m_spChart2ModelContact->getChart2Diagram();
+    return m_spChart2ModelContact->getDiagram();
 }
 
 void SAL_CALL DiagramWrapper::setDiagram(
@@ -1854,7 +1852,7 @@ void SAL_CALL DiagramWrapper::setDiagram(
 
 Reference< beans::XPropertySet > DiagramWrapper::getInnerPropertySet()
 {
-    return Reference< beans::XPropertySet >( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
+    return m_spChart2ModelContact->getDiagram();
 }
 
 const Sequence< beans::Property >& DiagramWrapper::getPropertySequence()

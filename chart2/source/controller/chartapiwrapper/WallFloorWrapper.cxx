@@ -113,7 +113,7 @@ Reference< beans::XPropertySet > WallFloorWrapper::getInnerPropertySet()
 {
     Reference< beans::XPropertySet > xRet;
 
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xDiagram.is() )
     {
         if( m_bWall )
