@@ -1020,6 +1020,7 @@ chart2/source/inc/ConfigColorScheme.hxx
 chart2/source/inc/DataSeriesHelper.hxx
 chart2/source/inc/DataSource.hxx
 chart2/source/inc/DataSourceHelper.hxx
+chart2/source/inc/Diagram.hxx
 chart2/source/inc/DiagramHelper.hxx
 chart2/source/inc/ErrorBar.hxx
 chart2/source/inc/EventListenerHelper.hxx
@@ -1075,7 +1076,6 @@ chart2/source/model/filter/XMLFilter.cxx
 chart2/source/model/inc/BaseCoordinateSystem.hxx
 chart2/source/model/inc/ChartTypeManager.hxx
 chart2/source/model/inc/DataSeries.hxx
-chart2/source/model/inc/Diagram.hxx
 chart2/source/model/inc/StockBar.hxx
 chart2/source/model/inc/XMLFilter.hxx
 chart2/source/model/main/Axis.cxx

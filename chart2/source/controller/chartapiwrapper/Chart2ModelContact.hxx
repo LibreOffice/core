@@ -26,6 +26,7 @@
 #include <svx/unopage.hxx>
 #include <unotools/weakref.hxx>
 #include <ChartModel.hxx>
+#include <Diagram.hxx>
 #include <map>
 
 namespace chart { struct ExplicitIncrementData; }
@@ -62,7 +63,7 @@ public:
 
     rtl::Reference<ChartModel> getDocumentModel() const;
 
-    css::uno::Reference< css::chart2::XDiagram > getChart2Diagram() const;
+    rtl::Reference< ::chart::Diagram > getDiagram() const;
 
     rtl::Reference<SvxDrawPage> getDrawPage() const;
 

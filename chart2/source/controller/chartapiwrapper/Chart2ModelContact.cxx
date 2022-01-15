@@ -31,6 +31,7 @@
 #include <ChartModel.hxx>
 
 #include <comphelper/servicehelper.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -82,9 +83,19 @@ rtl::Reference< ChartModel > Chart2ModelContact::getDocumentModel() const
     return m_xChartModel;
 }
 
-Reference< chart2::XDiagram > Chart2ModelContact::getChart2Diagram() const
+rtl::Reference< ::chart::Diagram > Chart2ModelContact::getDiagram() const
 {
-    return ChartModelHelper::findDiagram( uno::Reference<XChartDocument>(m_xChartModel.get()) );
+    try
+    {
+        rtl::Reference<ChartModel> xChartModel = getDocumentModel();
+        if( xChartModel)
+            return xChartModel->getFirstChartDiagram();
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+    return nullptr;
 }
 
 uno::Reference< lang::XUnoTunnel > const & Chart2ModelContact::getChartView() const

@@ -157,7 +157,7 @@ void WrappedAxisAndGridExistenceProperty::setPropertyValue( const Any& rOuterVal
     if( bOldValue == bNewValue )
         return;
 
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( bNewValue )
     {
         if( m_bAxis )
@@ -177,7 +177,7 @@ void WrappedAxisAndGridExistenceProperty::setPropertyValue( const Any& rOuterVal
 Any WrappedAxisAndGridExistenceProperty::getPropertyValue( const Reference< beans::XPropertySet >& /* xInnerPropertySet */ ) const
 {
     Any aRet;
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if(m_bAxis)
     {
         bool bShown = AxisHelper::isAxisShown( m_nDimensionIndex, m_bMain, xDiagram );
@@ -370,7 +370,7 @@ void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue
     if( bOldValue == bNewValue )
         return;
 
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     Reference< beans::XPropertySet > xProp( AxisHelper::getAxis( m_nDimensionIndex, m_bMain, xDiagram ), uno::UNO_QUERY );
     if( !xProp.is() && bNewValue )
     {
@@ -386,7 +386,7 @@ void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue
 Any WrappedAxisLabelExistenceProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
     Any aRet;
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     Reference< beans::XPropertySet > xProp( AxisHelper::getAxis( m_nDimensionIndex, m_bMain, xDiagram ), uno::UNO_QUERY );
     if( xProp.is() )
         aRet = xProp->getPropertyValue( "DisplayLabels" );
