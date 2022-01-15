@@ -913,7 +913,7 @@ sub collectpackagemaps
     # Create a tar gz file with all package maps
     my $tarfilename = $subdirname . ".tar";
     my $targzname = $tarfilename . ".gz";
-    $systemcall = "cd $pkgmapdir; tar -cf - $subdirname | gzip > $targzname";
+    $systemcall = "cd $pkgmapdir; tar -cf - $subdirname | $installer::globals::packertool > $targzname";
     installer::systemactions::make_systemcall($systemcall);
     installer::systemactions::remove_complete_directory($pkgmapsubdir, 1);
 }

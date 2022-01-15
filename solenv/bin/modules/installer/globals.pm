@@ -129,6 +129,8 @@ BEGIN
 
     $strip = 0;
 
+    $packertool = "gzip";           # the default package compression tool for *NIX
+
     $logfilename = "logfile.log";   # the default logfile name for global errors
     @logfileinfo = ();
     @errorlogfileinfo = ();
