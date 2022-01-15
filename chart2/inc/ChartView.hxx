@@ -114,7 +114,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ___lang::XInitialization___
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual OOO_DLLPUBLIC_CHARTVIEW void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // ___ExplicitValueProvider___
     virtual bool getExplicitValuesForAxis(

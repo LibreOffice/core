@@ -18,6 +18,7 @@
  */
 
 #include <ChartDocumentWrapper.hxx>
+#include <ChartView.hxx>
 #include <servicenames.hxx>
 #include <PropertyHelper.hxx>
 #include <TitleHelper.hxx>
@@ -1242,19 +1243,17 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
     {
         if( !m_xChartView.is() )
         {
-            Reference< lang::XMultiServiceFactory > xFact(
-                m_spChart2ModelContact->m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-            Reference< lang::XInitialization > xViewInit( xFact->createInstance(
-                    CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
-            if(xViewInit.is())
+            ChartModel* pModel = m_spChart2ModelContact->getModel();
+            ChartView* pChartView = pModel->getChartView();
+            if(pChartView)
             {
                 try
                 {
-                    m_xChartView = xViewInit;
+                    m_xChartView = pChartView;
 
                     Sequence< Any > aArguments{ Any(Reference<frame::XModel>(this)),
                                                 Any(true) }; // bRefreshAddIn
-                    xViewInit->initialize(aArguments);
+                    pChartView->initialize(aArguments);
                 }
                 catch (const uno::Exception&)
                 {
@@ -1262,7 +1261,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 }
             }
         }
-        xResult.set( m_xChartView );
+        xResult.set( static_cast<cppu::OWeakObject*>(m_xChartView.get()) );
         bServiceFound = true;
     }
     else
@@ -1272,7 +1271,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
         {
             if( !m_xShapeFactory.is() && m_xChartView.is() )
             {
-                m_xShapeFactory = getShapeFactory( m_xChartView );
+                m_xShapeFactory = getShapeFactory( static_cast<cppu::OWeakObject*>(m_xChartView.get()) );
             }
             else
             {
@@ -1280,7 +1279,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 if(pModel)
                 {
                     m_xChartView = pModel->getChartView();
-                    m_xShapeFactory = getShapeFactory( m_xChartView );
+                    m_xShapeFactory = getShapeFactory( static_cast<cppu::OWeakObject*>(m_xChartView.get()) );
                 }
             }
 
@@ -1386,7 +1385,7 @@ void ChartDocumentWrapper::_disposing( const lang::EventObject& rSource )
         m_xArea.set( nullptr );
     else if( rSource.Source == m_xAddIn )
         m_xAddIn.set( nullptr );
-    else if( rSource.Source == m_xChartView )
+    else if( rSource.Source == static_cast<cppu::OWeakObject*>(m_xChartView.get()) )
         m_xChartView.set( nullptr );
 }
 
