@@ -188,7 +188,7 @@ ObjectType Tables::appendObject(const OUString& rName,
 
     m_xMetaData->getConnection()->createStatement()->execute(sSql);
 
-    return createObject(rName);
+    return createObject(sSchema + "." + rName);
 }
 
 //----- XDrop -----------------------------------------------------------------
