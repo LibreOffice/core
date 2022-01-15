@@ -105,6 +105,23 @@
       "parentUuid": "713f58f1_28b004dc",
       "revId": "ee9148ec259a28e4b8d1a46522a0707341507c28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e3956fa_46718172",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-15T17:16:43Z",
+      "side": 1,
+      "message": "Hi Xisco, sry for the noise.\n\nI could now reproduce the test in beanshell and the code works as expected.\nSo I added the following lines to the test before the index will be updated:\n\n        XTextDocument xTextDoc \u003d (XTextDocument)tEnv.getObjRelation(\"TextDoc\");\n        XText xText \u003d xTextDoc.getText();\n        XTextCursor xTextCursor \u003d xText.createTextCursor();\n        xTextCursor.gotoEnd(false);\n\nThe tests succeeds when run using:\nmake debugrun\nmake gb_JunitTest_DEBUGRUN\u003dT JunitTest_sw_unoapi_1\n\nbut fails if I call:\nmake JunitTest_sw_unoapi_1\n\nAny ideas?",
+      "revId": "ee9148ec259a28e4b8d1a46522a0707341507c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
