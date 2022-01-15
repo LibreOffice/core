@@ -56,6 +56,7 @@ The following parameter are needed:
 -languagepack : do create a languagepack, no product pack (optional)
 -helppack : do create a helppack, no product pack (optional)
 -strip: Stripping files (Unix only)
+-packer: Path and parameters for tarball packaging tool (default: gzip (Unix only))
 -log : Logging all available information (optional)
 
 Examples for Windows:
@@ -127,6 +128,7 @@ sub getparameter
         elsif ($param eq "-helppack") { $installer::globals::helppack = 1;}
         elsif ($param eq "-debian") { $installer::globals::debian = 1; }
         elsif ($param eq "-strip") { $installer::globals::strip = 1; }
+        elsif ($param eq "-packer") { $installer::globals::packertool = shift(@ARGV); }
         elsif ($param eq "-destdir")    # new parameter for simple installer
         {
             $installer::globals::rootpath ne "" && die "must set destdir before -i or -simple";

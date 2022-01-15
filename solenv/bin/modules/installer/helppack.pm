@@ -130,7 +130,7 @@ sub create_tar_gz_file
 
     $packagename =~ s/\.rpm\s*$//;
     my $targzname = $packagename . ".tar.gz";
-    my $systemcall = "cd $installdir; tar -cf - $packagestring | gzip > $targzname";
+    my $systemcall = "cd $installdir; tar -cf - $packagestring | $installer::globals::packertool > $targzname";
     installer::logger::print_message( "... $systemcall ...\n" );
 
     my $returnvalue = system($systemcall);
