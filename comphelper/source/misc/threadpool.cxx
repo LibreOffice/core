@@ -371,8 +371,10 @@ void ThreadTaskTag::waitUntilDone()
         if( RUNNING_ON_VALGRIND )
             maxTimeout = 30 * 60;
 #endif
+#if defined DBGUTIL
         if( isDebuggerAttached())
             maxTimeout = 300 * 60;
+#endif
         std::cv_status result = maTasksComplete.wait_for(
             aGuard, std::chrono::seconds( maxTimeout ));
         assert(result != std::cv_status::timeout);
