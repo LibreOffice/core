@@ -9,6 +9,7 @@
 
 #include "mysqlc_table.hxx"
 #include "mysqlc_tables.hxx"
+#include "mysqlc_catalog.hxx"
 
 #include <TConnection.hxx>
 
@@ -34,10 +35,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 
 //----- OCollection -----------------------------------------------------------
-void Tables::impl_refresh()
-{
-    // TODO implement
-}
+void Tables::impl_refresh() { static_cast<Catalog&>(m_rParent).refreshTables(); }
 
 ObjectType Tables::createObject(const OUString& rName)
 {
