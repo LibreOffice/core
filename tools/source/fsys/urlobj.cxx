@@ -869,8 +869,34 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             aSynScheme = parseScheme(&p1, pEnd, nFragmentDelimiter);
             if (!aSynScheme.isEmpty())
             {
-                m_eScheme = INetProtocol::Generic;
-                pPos = p1;
+                if (bSmart && m_eSmartScheme != m_eScheme && p1 != pEnd && rtl::isAsciiDigit(*p1))
+                {
+                    // rTheAbsURIRef doesn't define a known scheme (handled by the "if (pPrefix)"
+                    // branch above); but a known scheme is defined in m_eSmartScheme. If this
+                    // scheme may have a port in authority component, then avoid misinterpreting
+                    // URLs like www.foo.bar:123/baz as using unknown "www.foo.bar" scheme with
+                    // 123/baz rootless path. For now, do not try to handle possible colons in
+                    // user information, require such ambiguous URLs to have explicit scheme part.
+                    // Also ignore possibility of empty port.
+                    const SchemeInfo& rInfo = getSchemeInfo(m_eSmartScheme);
+                    if (rInfo.m_bAuthority && rInfo.m_bPort)
+                    {
+                        // Make sure that all characters from colon to [/?#] or to EOL are digits.
+                        // Or maybe make it simple, and just assume that "xyz:1..." is more likely
+                        // to be host "xyz" and port "1...", than scheme "xyz" and path "1..."?
+                        sal_Unicode const* p2 = p1 + 1;
+                        while (p2 != pEnd && rtl::isAsciiDigit(*p2))
+                            ++p2;
+                        if (p2 == pEnd || *p2 == '/' || *p2 == '?' || *p2 == '#')
+                            m_eScheme = m_eSmartScheme;
+                    }
+                }
+
+                if (m_eScheme == INetProtocol::NotValid)
+                {
+                    m_eScheme = INetProtocol::Generic;
+                    pPos = p1;
+                }
             }
         }
 

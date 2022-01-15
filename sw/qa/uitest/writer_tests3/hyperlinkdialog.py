@@ -72,6 +72,27 @@ class HyperlinkDialog(UITestCase):
             self.assertEqual(get_state_as_dict(xedit)["SelectedText"], "link")
 
 
+    def test_insert_hyperlink_without_scheme(self):
+
+        with self.ui_test.create_doc_in_start_center("writer"):
+            xMainWindow = self.xUITest.getTopFocusWindow()
+
+            with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog") as xDialog:
+
+                # insert link
+                xtab=xDialog.getChild("tabcontrol")
+                select_pos(xtab, "0")
+
+                xtarget = xDialog.getChild("target")
+                xtarget.executeAction("TYPE", mkPropertyValues({"TEXT": "www.libreoffice.org:80"}))
+
+            # Check that the link is added with http scheme
+            xMainWindow = self.xUITest.getTopFocusWindow()
+            xedit = xMainWindow.getChild("writer_edit")
+            xedit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "29"}))
+            self.assertEqual(get_state_as_dict(xedit)["SelectedText"], "http://www.libreoffice.org:80")
+
+
     def test_tdf141166(self):
         # Skip this test for --with-help=html and --with-help=online, as that would fail with a
         # DialogNotExecutedException("did not execute a dialog for a blocking action") thrown from

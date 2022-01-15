@@ -319,6 +319,32 @@ namespace tools_urlobj
                 obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         }
 
+        void testParseSmart()
+        {
+            {
+                // host:port must not be misinterpreted as scheme:path
+                INetURLObject obj("example.com:8080/foo", INetProtocol::Http);
+                CPPUNIT_ASSERT(!obj.HasError());
+                CPPUNIT_ASSERT_EQUAL(OUString("http://example.com:8080/foo"),
+                    obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+                CPPUNIT_ASSERT_EQUAL(INetProtocol::Http, obj.GetProtocol());
+                CPPUNIT_ASSERT_EQUAL(OUString("example.com"), obj.GetHost());
+                CPPUNIT_ASSERT_EQUAL(sal_uInt32(8080), obj.GetPort());
+                CPPUNIT_ASSERT_EQUAL(OUString("/foo"), obj.GetURLPath());
+            }
+            {
+                // port may only contain decimal digits, so this must be treated as unknown scheme
+                INetURLObject obj("example.com:80a0/foo", INetProtocol::Http);
+                CPPUNIT_ASSERT(!obj.HasError());
+                CPPUNIT_ASSERT_EQUAL(OUString("example.com:80a0/foo"),
+                    obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+                CPPUNIT_ASSERT_EQUAL(INetProtocol::Generic, obj.GetProtocol());
+                CPPUNIT_ASSERT(obj.isSchemeEqualTo(u"example.com"));
+                CPPUNIT_ASSERT_EQUAL(OUString(""), obj.GetHost());
+                CPPUNIT_ASSERT_EQUAL(OUString("80a0/foo"), obj.GetURLPath());
+            }
+        }
+
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
@@ -335,6 +361,7 @@ namespace tools_urlobj
         CPPUNIT_TEST( testSetExtension );
         CPPUNIT_TEST( testChangeScheme );
         CPPUNIT_TEST( testTd146382 );
+        CPPUNIT_TEST( testParseSmart );
         CPPUNIT_TEST_SUITE_END(  );
     };                          // class createPool
 
