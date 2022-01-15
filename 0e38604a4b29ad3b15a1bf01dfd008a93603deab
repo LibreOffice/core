@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5496634_ca3af18e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-15T16:01:28Z",
+      "side": 1,
+      "message": "At least, this one isn\u0027t frustrating since I succeeded to rely on the general mechanism.\n\n\"Table\" inherits from \"OTableHelper\"\n  \"OTableHelper\" inherits from \"OTable_TYPEDEF\" which is in fact connectivity::sdbcx::OTable\n       \"Otable\" inherits from several elements including \"OTable_BASE\"\n       \"OTable_BASE\"\nFinally this last one is defined like this:\n        typedef ::cppu::ImplHelper4\u003c               css::sdbcx::XDataDescriptorFactory,\n                                                   css::sdbcx::XIndexesSupplier,\n                                                   css::sdbcx::XRename,\n                                                   css::sdbcx::XAlterTable \u003e OTable_BASE;\n",
+      "revId": "0e38604a4b29ad3b15a1bf01dfd008a93603deab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
