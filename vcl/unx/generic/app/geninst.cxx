@@ -18,6 +18,8 @@
  */
 
 #include <sal/config.h>
+#include <osl/file.hxx>
+#include <tools/stream.hxx>
 
 #if defined(LINUX)
 #  include <stdio.h>
@@ -49,6 +51,68 @@ SalGenericInstance::~SalGenericInstance()
 {
 }
 
+static OUString GetKey(OUString const& line)
+{
+    sal_Int32 endchar = line.indexOf("=", 0);
+
+    if (endchar < 0)
+        return line.copy(endchar);
+
+    return OUString("");
+}
+
+static OUString GetValue(OUString const& line)
+{
+    sal_Int32 endchar = line.indexOf("=", 0);
+
+    if (endchar >= 0)
+        return OUString("");
+
+    OUString value(line.copy(endchar + 1));
+
+    if (value[0] == '"'
+        && value[value.getLength() - 1] == '"') // account for the newline as the last character
+    {
+        value = value.copy(1, value.getLength() - 2);
+    }
+
+    return value;
+}
+
+static std::vector<OUString> GetLines(SvStream& in)
+{
+    std::vector<OUString> lines;
+
+    for (OUString line; in.ReadByteStringLine(line, RTL_TEXTENCODING_UNICODE);)
+    {
+        if (line[0] != '#')
+            lines.push_back(line);
+    }
+
+    return lines;
+}
+
+std::tuple<OUString, OUString> GetKeyValue(OUString const& line)
+{
+    OUString key = GetKey(line);
+    OUString value = GetValue(line);
+
+    return std::make_tuple(key, value);
+}
+
+std::vector<std::pair<OUString, OUString>> GetKeyValues(std::vector<OUString> const& lines)
+{
+    std::vector<std::pair<OUString, OUString>> keyvalues;
+
+    for (OUString const& line : lines)
+    {
+        auto [key, value] = GetKeyValue(line);
+        keyvalues.push_back(std::pair(key, value));
+    }
+
+    return keyvalues;
+}
+
 OUString SalGenericInstance::getOSVersion()
 {
     OUString aKernelVer = "unknown";
@@ -72,7 +136,6 @@ OUString SalGenericInstance::getOSVersion()
         }
         fclose( pVersion );
     }
-    return aKernelVer;
 #elif defined(__FreeBSD__)
     struct utsname stName;
     if ( uname( &stName ) != 0 )
@@ -87,11 +150,44 @@ OUString SalGenericInstance::getOSVersion()
         if ( c == ' ' || c == '-' || ( c == '.' && nDots++ > 0 ) )
             break;
     }
-    return OUString::createFromAscii( stName.sysname ) + " " +
+    aKernelVer = OUString::createFromAscii( stName.sysname ) + " " +
         aKernelVer.copy( 0, nIndex );
-#else
-    return aKernelVer;
 #endif
+
+    SvFileStream stm;
+
+    OUString configfile("/etc/os-release");
+    osl::File aFile(configfile);
+    bool bValidFile = false;
+
+    if (aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
+    {
+        bValidFile = true;
+
+        aFile.close();
+    }
+
+
+    if (!bValidFile)
+        return aKernelVer;
+
+    stm.Open(configfile, StreamMode::READ);
+    auto records = GetKeyValues(GetLines(stm));
+    stm.Close();
+
+    OUString sReleaseName;
+
+    for (auto const& record: records)
+    {
+        if (record.first == "PRETTY_NAME")
+        {
+            sReleaseName = record.second;
+            break;
+        }
+    }
+
+    sReleaseName += "(" + aKernelVer + ")";
+    return sReleaseName;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
