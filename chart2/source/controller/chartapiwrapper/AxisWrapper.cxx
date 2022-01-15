@@ -490,18 +490,18 @@ OUString SAL_CALL AxisWrapper::getShapeType()
 // ____ XNumberFormatsSupplier ____
 uno::Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getNumberFormatSettings()
 {
-    Reference< util::XNumberFormatsSupplier > xNumSuppl( m_spChart2ModelContact->getChartModel(), uno::UNO_QUERY );
-    if( xNumSuppl.is() )
-        return xNumSuppl->getNumberFormatSettings();
+    rtl::Reference<ChartModel> xChartModel( m_spChart2ModelContact->getChartModel() );
+    if( xChartModel )
+        return xChartModel->getNumberFormatSettings();
 
     return uno::Reference< beans::XPropertySet >();
 }
 
 uno::Reference< util::XNumberFormats > SAL_CALL AxisWrapper::getNumberFormats()
 {
-    Reference< util::XNumberFormatsSupplier > xNumSuppl( m_spChart2ModelContact->getChartModel(), uno::UNO_QUERY );
-    if( xNumSuppl.is() )
-        return xNumSuppl->getNumberFormats();
+    rtl::Reference<ChartModel> xChartModel( m_spChart2ModelContact->getChartModel() );
+    if( xChartModel )
+        return xChartModel->getNumberFormats();
 
     return uno::Reference< util::XNumberFormats >();
 }

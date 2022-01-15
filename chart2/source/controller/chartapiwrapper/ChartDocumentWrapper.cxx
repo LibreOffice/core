@@ -1347,7 +1347,9 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
     if( rDelegator.is())
     {
         m_xDelegator = rDelegator;
-        m_spChart2ModelContact->setModel( uno::Reference< frame::XModel >(m_xDelegator, uno::UNO_QUERY) );
+        ChartModel* pChartModel = dynamic_cast<ChartModel*>(rDelegator.get());
+        assert(pChartModel);
+        m_spChart2ModelContact->setModel( pChartModel );
     }
     else
     {
