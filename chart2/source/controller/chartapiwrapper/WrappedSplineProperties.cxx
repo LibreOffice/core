@@ -63,7 +63,7 @@ public:
         bool bHasDetectableInnerValue = false;
         rHasAmbiguousValue = false;
         Sequence< css::uno::Reference< css::chart2::XChartType > > aChartTypes(
-            ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
+            ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getDiagram() ) );
         for( sal_Int32 nN = aChartTypes.getLength(); nN--; )
         {
             try
@@ -115,7 +115,7 @@ public:
             return;
 
         Sequence< css::uno::Reference< css::chart2::XChartType > > aChartTypes(
-            ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
+            ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getDiagram() ) );
         for( sal_Int32 nN = aChartTypes.getLength(); nN--; )
         {
             try

@@ -69,6 +69,7 @@ class SvNumberFormatter;
 
 namespace chart
 {
+class Diagram;
 
 namespace impl
 {
@@ -158,8 +159,7 @@ private:
         m_xChartTypeManager;
 
     // Diagram Access
-    css::uno::Reference< css::chart2::XDiagram >
-        m_xDiagram;
+    rtl::Reference< ::chart::Diagram > m_xDiagram;
 
     css::uno::Reference< css::chart2::XTitle >
                                           m_xTitle;
@@ -455,6 +455,8 @@ public:
         getNumberFormatsSupplier();
 
     ChartView* getChartView() const;
+
+    const rtl::Reference< ::chart::Diagram > & getFirstChartDiagram() { return m_xDiagram; }
 
     bool isTimeBased() const { return mbTimeBased;}
 

@@ -284,7 +284,7 @@ beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Referenc
     if( m_ePropertyType == DATA_SERIES && //single series or point
         m_spChart2ModelContact)
     {
-        Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+        rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
         Reference< chart2::XDataSeries > xSeries( xInnerPropertyState, uno::UNO_QUERY );
         Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
         if( ChartTypeHelper::isSupportingSymbolProperties( xChartType, 2 ) )
