@@ -1839,7 +1839,7 @@ sub create_packages_without_epm
 
     # Solaris: pkgmk -o -f solaris-2.8-sparc/SUNWso8m34.prototype -d solaris-2.8-sparc
     # Solaris: pkgtrans solaris-2.8-sparc SUNWso8m34.pkg SUNWso8m34
-    # Solaris: tar -cf - SUNWso8m34 | gzip > SUNWso8m34.tar.gz
+    # Solaris: tar -cf - SUNWso8m34 | $installer::globals::packertool > SUNWso8m34.tar.gz
 
     if ( $installer::globals::issolarispkgbuild )
     {
@@ -1983,7 +1983,7 @@ sub create_packages_without_epm
         #########################
 
         # my $targzname = $packagename . ".tar.gz";
-        # $systemcall = "cd $destinationdir; tar -cf - $packagename | gzip > $targzname";
+        # $systemcall = "cd $destinationdir; tar -cf - $packagename | $installer::globals::packertool > $targzname";
         # print "... $systemcall ...\n";
 
         # $returnvalue = system($systemcall);
