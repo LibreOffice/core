@@ -241,7 +241,7 @@ cppu_detail_getUnoType(
     SAL_UNUSED_PARAMETER css::uno::Sequence< T > const *)
 {
     return cppu_detail_getUnoType(
-        static_cast< ::cppu::UnoSequenceType< T > * >(0));
+        static_cast< ::cppu::UnoSequenceType< T > * >(NULL));
 }
 
 inline css::uno::Type const & cppu_detail_getUnoType(
@@ -297,7 +297,7 @@ public:
 #else
         typedef T T1;
 #endif
-        return cppu_detail_getUnoType(static_cast< T1 * >(0));
+        return cppu_detail_getUnoType(static_cast< T1 * >(NULL));
     }
 
 private:

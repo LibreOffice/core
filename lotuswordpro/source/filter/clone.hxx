@@ -29,7 +29,7 @@ struct has_clone
 
     enum
     {
-        value = sizeof(check_sig<T>(0)) == sizeof(yes)
+        value = sizeof(check_sig<T>(nullptr)) == sizeof(yes)
     };
 };
 
@@ -63,7 +63,7 @@ struct cloner<T, true>
 template<typename T>
 T* clone(T* const other)
 {
-    return other ? ::detail::cloner<T, ::detail::has_clone<T>::value>::clone(other) : 0;
+    return other ? ::detail::cloner<T, ::detail::has_clone<T>::value>::clone(other) : nullptr;
 }
 
 #endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_CLONE_HXX

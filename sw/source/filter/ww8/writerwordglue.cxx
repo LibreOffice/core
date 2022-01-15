@@ -289,9 +289,9 @@ namespace myImplHelpers
     C* StyleMapperImpl<C>::MakeNonCollidingStyle(const OUString& rName)
     {
         OUString aName(rName);
-        C* pColl = 0;
+        C* pColl = nullptr;
 
-        if (0 != (pColl = maHelper.GetStyle(aName)))
+        if (nullptr != (pColl = maHelper.GetStyle(aName)))
         {
             //If the style collides first stick WW- in front of it, unless
             //it already has it and then successively add a larger and
@@ -302,7 +302,7 @@ namespace myImplHelpers
             sal_Int32 nI = 1;
             OUString aBaseName = aName;
             while (
-                    0 != (pColl = maHelper.GetStyle(aName)) &&
+                    nullptr != (pColl = maHelper.GetStyle(aName)) &&
                     (nI < SAL_MAX_INT32)
                   )
             {
@@ -310,7 +310,7 @@ namespace myImplHelpers
             }
         }
 
-        return pColl ? 0 : maHelper.MakeStyle(aName);
+        return pColl ? nullptr : maHelper.MakeStyle(aName);
     }
 
     static OUString FindBestMSSubstituteFont(const OUString &rFont)

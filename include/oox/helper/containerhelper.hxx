@@ -245,13 +245,13 @@ public:
 template< typename VectorType >
 /*static*/ const typename VectorType::value_type* ContainerHelper::getVectorElement( const VectorType& rVector, sal_Int32 nIndex )
 {
-    return ((0 <= nIndex) && (static_cast< size_t >( nIndex ) < rVector.size())) ? &rVector[ static_cast< size_t >( nIndex ) ] : 0;
+    return ((0 <= nIndex) && (static_cast< size_t >( nIndex ) < rVector.size())) ? &rVector[ static_cast< size_t >( nIndex ) ] : nullptr;
 }
 
 template< typename VectorType >
 /*static*/ typename VectorType::value_type* ContainerHelper::getVectorElementAccess( VectorType& rVector, sal_Int32 nIndex )
 {
-    return ((0 <= nIndex) && (static_cast< size_t >( nIndex ) < rVector.size())) ? &rVector[ static_cast< size_t >( nIndex ) ] : 0;
+    return ((0 <= nIndex) && (static_cast< size_t >( nIndex ) < rVector.size())) ? &rVector[ static_cast< size_t >( nIndex ) ] : nullptr;
 }
 
 template< typename VectorType >
@@ -264,7 +264,7 @@ template< typename MapType >
 /*static*/ const typename MapType::mapped_type* ContainerHelper::getMapElement( const MapType& rMap, const typename MapType::key_type& rKey )
 {
     typename MapType::const_iterator aIt = rMap.find( rKey );
-    return (aIt == rMap.end()) ? 0 : &aIt->second;
+    return (aIt == rMap.end()) ? nullptr : &aIt->second;
 }
 
 template< typename MapType >

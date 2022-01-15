@@ -34,7 +34,7 @@ namespace {
 template< typename Type >
 const Type* lclGetStyleElement( const RefVector< Type >& rVector, sal_Int32 nIndex )
 {
-    return (rVector.empty() || (nIndex < 1)) ? 0 :
+    return (rVector.empty() || (nIndex < 1)) ? nullptr :
         rVector.get( ::std::min( static_cast< sal_Int32 >( nIndex - 1 ), static_cast< sal_Int32 >( rVector.size() - 1 ) ) ).get();
 }
 

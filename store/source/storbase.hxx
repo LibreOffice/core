@@ -290,7 +290,7 @@ struct PageData
             {
                 return new(page) T(nSize);
             }
-            return 0;
+            return nullptr;
         }
 
         bool allocate (void ** ppPage, sal_uInt16 * pnSize)
@@ -406,13 +406,13 @@ class PageHolderObject
     template< class U >
     static U * dynamic_page_cast (PageData * p)
     {
-        return isA<U>(p) ? static_cast<U*>(p) : 0;
+        return isA<U>(p) ? static_cast<U*>(p) : nullptr;
     }
 
     template< class U >
     static U const * dynamic_page_cast (PageData const * p)
     {
-        return isA<U>(p) ? static_cast<U const *>(p) : 0;
+        return isA<U>(p) ? static_cast<U const *>(p) : nullptr;
     }
 
 public:

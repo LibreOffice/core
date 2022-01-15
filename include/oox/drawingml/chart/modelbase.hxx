@@ -38,7 +38,7 @@ public:
                  ModelRef() {}
                  ModelRef( const std::shared_ptr< ModelType >& rxModel ) : std::shared_ptr< ModelType >( rxModel ) {}
 
-    bool         is() const { return this->get() != 0; }
+    bool         is() const { return this->get() != nullptr; }
 
     ModelType&   create() { (*this) = std::make_shared<ModelType>(); return **this; }
     template< typename Param1Type >

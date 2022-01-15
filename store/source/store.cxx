@@ -52,7 +52,7 @@ public:
     {
         return store::query (
             static_cast<OStoreObject*>(pHandle),
-            static_cast<store_handle_type*>(0));
+            static_cast<store_handle_type*>(nullptr));
     }
 };
 
