@@ -339,6 +339,8 @@ int ListFonts::Main()
         VclPtrInstance<ListFontsWin> pWin;
         OutputDevice* pOutDev = pWin->GetOutDev();
 
+        std::cerr << Application::GetOSVersion();
+
         std::streambuf* coutbuf = nullptr;
         std::fstream out;
 
