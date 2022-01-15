@@ -4987,6 +4987,13 @@ void TestFormula::testFuncSUM()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A4 should have inherited the same error as A2.",
                            static_cast<int>(nErr), static_cast<int>(m_pDoc->GetErrCode(ScAddress(0,3,0))));
 
+    // Test the dreaded 0.1 + 0.2 - 0.3 != 0.0
+    m_pDoc->SetString(ScAddress(1,0,0), "=SUM(0.1;0.2;-0.3)");
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    // Also for +/- operators
+    m_pDoc->SetString(ScAddress(1,1,0), "=0.1+0.2-0.3");
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
