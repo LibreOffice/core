@@ -68,8 +68,8 @@ class VCL_DLLPUBLIC SalLayout
 public:
     virtual         ~SalLayout();
     // used by upper layers
-    Point&          DrawBase()                              { return maDrawBase; }
-    const Point&    DrawBase() const                        { return maDrawBase; }
+    DevicePoint&    DrawBase()                              { return maDrawBase; }
+    const DevicePoint& DrawBase() const                     { return maDrawBase; }
     Point&          DrawOffset()                            { return maDrawOffset; }
     const Point&    DrawOffset() const                      { return maDrawOffset; }
     DevicePoint     GetDrawPosition( const DevicePoint& rRelative = DevicePoint(0,0) ) const;
@@ -114,7 +114,7 @@ protected:
     Degree10        mnOrientation;
 
     mutable Point   maDrawOffset;
-    Point           maDrawBase;
+    DevicePoint     maDrawBase;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

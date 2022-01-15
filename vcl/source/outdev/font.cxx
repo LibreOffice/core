@@ -1138,7 +1138,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
             }
             aOutPoint.adjustX(aAdjPoint.X() - nEmphasisWidth2);
             aOutPoint.adjustY(aAdjPoint.Y() - nEmphasisHeight2);
-            ImplDrawEmphasisMark( rSalLayout.DrawBase().X(),
+            ImplDrawEmphasisMark( rSalLayout.DrawBase().getX(),
                                   aOutPoint.getX(), aOutPoint.getY(),
                                   aPolyPoly, bPolyLine, aRect1, aRect2 );
         }
