@@ -75,7 +75,7 @@ public:
 
     bool TraverseInitListExpr(InitListExpr * expr, DataRecursionQueue * queue = nullptr);
 
-    // bool shouldVisitTemplateInstantiations() const { return true; }
+    bool shouldVisitTemplateInstantiations() const { return true; }
 
 private:
     bool isInLokIncludeFile(SourceLocation spellingLocation) const;
@@ -208,6 +208,9 @@ bool Nullptr::VisitParmVarDecl(ParmVarDecl const * decl) {
     }
     if (!isAnyKindOfPointerType(decl->getType())) {
         return true;
+    }
+    if (decl->hasUninstantiatedDefaultArg()) {
+        return true; //TODO
     }
     auto e = decl->getDefaultArg();
     if (e == nullptr) {

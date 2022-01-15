@@ -50,7 +50,7 @@ inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::~OMu
     while( iter != end )
     {
         delete static_cast<OInterfaceContainerHelper*>((*iter).second);
-        (*iter).second = 0;
+        (*iter).second = NULL;
         ++iter;
     }
     delete m_pMap;

@@ -106,7 +106,7 @@ private:
 
 template< typename Val >
 RegexpMapConstIter< Val >::RegexpMapConstIter():
-    m_aEntry(OUString(), 0),
+    m_aEntry(OUString(), nullptr),
     m_pMap(nullptr),
     m_nList(-1),
     m_bEntrySet(false)
@@ -115,7 +115,7 @@ RegexpMapConstIter< Val >::RegexpMapConstIter():
 template< typename Val >
 RegexpMapConstIter< Val >::RegexpMapConstIter(RegexpMap< Val > * pTheMap,
                                             bool bBegin):
-    m_aEntry(OUString(), 0),
+    m_aEntry(OUString(), nullptr),
     m_pMap(pTheMap),
     m_bEntrySet(false)
 {
@@ -136,7 +136,7 @@ template< typename Val >
 inline RegexpMapConstIter< Val >::RegexpMapConstIter(RegexpMap< Val > * pTheMap,
                                                    int nTheList,
                                                    ListIterator aTheIndex):
-    m_aEntry(OUString(), 0),
+    m_aEntry(OUString(), nullptr),
     m_aIndex(aTheIndex),
     m_pMap(pTheMap),
     m_nList(nTheList),
@@ -411,7 +411,7 @@ Val const * RegexpMap< Val >::map(OUString const & rString) const
     if (m_pDefault
         && m_pDefault->m_aRegexp.matches(rString))
         return &m_pDefault->m_aValue;
-    return 0;
+    return nullptr;
 }
 
 }

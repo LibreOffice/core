@@ -156,7 +156,7 @@ inline t_val const * lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lookup(
             return &entry->m_val;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >

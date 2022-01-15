@@ -30,7 +30,7 @@ template<typename T> T *
 newArray_null(size_t const n) noexcept
 {
     if ((::std::numeric_limits<size_t>::max() / sizeof(T)) <= n) {
-        return 0;
+        return nullptr;
     }
     return new (::std::nothrow) T[n];
 }

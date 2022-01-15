@@ -93,7 +93,7 @@ public:
 
     virtual bool isWriteable() const override
     {
-        return m_pWriter != 0;
+        return m_pWriter != nullptr;
     }
 };
 

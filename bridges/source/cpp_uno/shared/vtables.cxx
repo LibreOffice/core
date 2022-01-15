@@ -82,7 +82,7 @@ template< typename T > bridges::cpp_uno::shared::VtableSlot doGetVtableSlot(
     bridges::cpp_uno::shared::VtableSlot slot;
     slot.offset = 0;
     T * member = const_cast< T * >(ifcMember);
-    while (member->pBaseRef != 0) {
+    while (member->pBaseRef != nullptr) {
         assert(member->nIndex < member->pInterface->nBaseTypes);
         for (sal_Int32 i = 0; i < member->nIndex; ++i) {
             slot.offset += getVtableCount(member->pInterface->ppBaseTypes[i]);

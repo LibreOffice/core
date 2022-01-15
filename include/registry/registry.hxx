@@ -298,7 +298,7 @@ public:
             return m_pValueList[index];
         } else
         {
-            return 0;
+            return {};
         }
     }
 

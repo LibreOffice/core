@@ -151,7 +151,7 @@ private:
     const value_type*   getRef( sal_Int32 nIndex ) const
                         {
                             return ((0 <= nIndex) && (static_cast< size_type >( nIndex ) < this->size())) ?
-                                &(*this)[ static_cast< size_type >( nIndex ) ] : 0;
+                                &(*this)[ static_cast< size_type >( nIndex ) ] : nullptr;
                         }
 };
 

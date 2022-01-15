@@ -49,7 +49,7 @@ namespace ww
             if (aPair.first != aPair.second)
                 return aPair.first;
             else
-                return 0;
+                return nullptr;
         }
 
         SortedArray(C *pWwSprmTab, size_t nNoElems)

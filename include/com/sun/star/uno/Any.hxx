@@ -202,7 +202,7 @@ inline bool Any::isExtractableTo( const Type & rType ) const
 template <typename T>
 inline bool Any::has() const
 {
-    Type const & rType = ::cppu::getTypeFavourUnsigned(static_cast< T * >(0));
+    Type const & rType = ::cppu::getTypeFavourUnsigned(static_cast< T * >(NULL));
     return ::uno_type_isAssignableFromData(
         rType.getTypeLibType(), pData, pType,
         cpp_queryInterface,
