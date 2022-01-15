@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43e87b48_80c8e8f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-01-15T23:43:35Z",
+      "side": 1,
+      "message": "I wonder if it would be prudent to somehow respect PARALLELISM when using pigz though?",
+      "revId": "8d7b0bbb7d4fbe99ac3cd6f2095fa285a6b54cfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
