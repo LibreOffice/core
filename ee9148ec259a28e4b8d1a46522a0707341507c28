@@ -69,6 +69,24 @@
       "parentUuid": "fe4c8794_eed7c055",
       "revId": "ee9148ec259a28e4b8d1a46522a0707341507c28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "713f58f1_28b004dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-15T12:02:59Z",
+      "side": 1,
+      "message": "Hi Xisco! Thx for your help. I find the file and checked the code. I still not fully understand was the code does in order to reproduce it manually.\n\nIt is strange that in XDocumentIndex::testUpdate the same code works.",
+      "parentUuid": "d7b14792_fb963d99",
+      "revId": "ee9148ec259a28e4b8d1a46522a0707341507c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
