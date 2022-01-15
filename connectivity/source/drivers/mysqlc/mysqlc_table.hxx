@@ -59,12 +59,6 @@ public:
 
     virtual void SAL_CALL alterColumnByIndex(
         sal_Int32 index, const css::uno::Reference<css::beans::XPropertySet>& descriptor) override;
-
-    // XRename
-    virtual void SAL_CALL rename(const OUString& sName) override;
-
-    //XInterface
-    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
 };
 
 } // namespace connectivity::mysqlc

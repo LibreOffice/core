@@ -163,19 +163,4 @@ void SAL_CALL Table::alterColumnByIndex(
                       descriptor);
 }
 
-// ----- XRename --------------------------------------------------------------
-void SAL_CALL Table::rename(const OUString&)
-{
-    MutexGuard aGuard(m_rMutex);
-    // TODO: implement
-}
-
-// ----- XInterface -----------------------------------------------------------
-Any SAL_CALL Table::queryInterface(const Type& rType)
-{
-    if (rType.getTypeName() == "com.sun.star.sdbcx.XRename")
-        return Any();
-    return OTableHelper::queryInterface(rType);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
