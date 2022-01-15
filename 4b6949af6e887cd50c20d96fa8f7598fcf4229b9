@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f23c99d3_4100ecd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-15T09:52:38Z",
+      "side": 1,
+      "message": "Lubos: do you think this is appropriate? I know that you care about performance; I believe this should not affect the performance, but I realize that I may be mistaken.",
+      "revId": "4b6949af6e887cd50c20d96fa8f7598fcf4229b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
