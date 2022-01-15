@@ -76,7 +76,7 @@ void WrappedStockProperty::setPropertyValue( const css::uno::Any& rOuterValue, c
     m_aOuterValue = rOuterValue;
 
     rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     sal_Int32 nDimension = ::chart::DiagramHelper::getDimension( xDiagram );
     if( !(xChartDoc.is() && xDiagram.is() && nDimension==2) )
         return;
@@ -130,7 +130,7 @@ WrappedVolumeProperty::WrappedVolumeProperty(const std::shared_ptr<Chart2ModelCo
 css::uno::Any WrappedVolumeProperty::getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
     rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xDiagram.is() && xChartDoc.is() )
     {
         std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
@@ -199,7 +199,7 @@ WrappedUpDownProperty::WrappedUpDownProperty(const std::shared_ptr<Chart2ModelCo
 css::uno::Any WrappedUpDownProperty::getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
     rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xDiagram.is() && xChartDoc.is() )
     {
         std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(

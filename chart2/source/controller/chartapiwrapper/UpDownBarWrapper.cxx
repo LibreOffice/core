@@ -163,7 +163,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName,
     Reference< beans::XPropertySet > xPropSet;
 
     const Sequence< Reference< chart2::XChartType > > aTypes(
-            ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
+            ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getDiagram() ) );
     for( Reference< chart2::XChartType > const & xType : aTypes )
     {
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
@@ -185,7 +185,7 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const OUString& rPropertyN
     Reference< beans::XPropertySet > xPropSet;
 
     const Sequence< Reference< chart2::XChartType > > aTypes(
-            ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
+            ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getDiagram() ) );
     for( Reference< chart2::XChartType > const & xType : aTypes )
     {
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )

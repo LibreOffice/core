@@ -581,7 +581,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
         bool  bMainAxis = true;
         AxisWrapper::getDimensionAndMainAxisBool( m_eType, nDimensionIndex, bMainAxis );
 
-        Reference< XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+        rtl::Reference< Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
         xAxis = AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram );
         if( !xAxis.is() )
         {
