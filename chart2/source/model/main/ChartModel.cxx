@@ -188,9 +188,11 @@ void SAL_CALL ChartModel::initialize( const Sequence< Any >& /*rArguments*/ )
     //support argument "DocumentRecoverySupport"?
 }
 
-css::uno::Reference< css::uno::XInterface > ChartModel::getChartView() const
+ChartView* ChartModel::getChartView() const
 {
-    return static_cast< ::cppu::OWeakObject* >( mxChartView.get() );
+    if(!mxChartView.is())
+        mxChartView = new ChartView( m_xContext, const_cast<ChartModel&>(*this));
+    return mxChartView.get();
 }
 
 // private methods

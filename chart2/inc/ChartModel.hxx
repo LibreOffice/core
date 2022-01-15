@@ -120,7 +120,7 @@ private:
 
     bool mbTimeBased;
 
-    rtl::Reference<ChartView> mxChartView;
+    mutable rtl::Reference<ChartView> mxChartView;
 
     OUString m_aResource;
     css::uno::Sequence< css::beans::PropertyValue >   m_aMediaDescriptor;
@@ -454,7 +454,7 @@ public:
     css::uno::Reference< css::util::XNumberFormatsSupplier > const &
         getNumberFormatsSupplier();
 
-    css::uno::Reference< css::uno::XInterface > getChartView() const;
+    ChartView* getChartView() const;
 
     bool isTimeBased() const { return mbTimeBased;}
 

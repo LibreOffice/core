@@ -32,6 +32,7 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XRefreshable; }
+namespace chart { class ChartView; }
 
 namespace chart::wrapper
 {
@@ -157,7 +158,7 @@ private: //member
     OUString   m_aBaseDiagram;
     bool        m_bUpdateAddIn;
 
-    css::uno::Reference< css::uno::XInterface >   m_xChartView;
+    rtl::Reference< ChartView >                   m_xChartView;
     css::uno::Reference< css::lang::XMultiServiceFactory>
                                                   m_xShapeFactory;
 
