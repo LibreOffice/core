@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22d44d34_51315f65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-01-15T03:03:35Z",
+      "side": 1,
+      "message": "Jan-Marek, can you have a look at this one? Fixes build. ",
+      "revId": "44c7454b3cb86bcc4520dc40b54c8767e5a946a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
