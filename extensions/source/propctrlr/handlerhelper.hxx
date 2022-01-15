@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/Optional.hpp>
 #include <unotools/resmgr.hxx>
 
+#include <memory>
 #include <vector>
 
 namespace weld { class Builder; class Widget; class Window; }
