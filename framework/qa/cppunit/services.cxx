@@ -14,6 +14,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <salhelper/thread.hxx>
@@ -125,6 +126,29 @@ CPPUNIT_TEST_FIXTURE(Test, testLoadComponentFromURL)
         SolarMutexReleaser releaser;
         xThread->join();
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testURLTransformer_parseSmart)
+{
+    // Without the accompanying fix in place, this test would have failed with
+    // "www.example.com:" treated as scheme, "/8080/foo/" as path, "bar?q=baz"
+    // as name, and "F" as fragment.
+
+    css::util::URL aURL;
+    aURL.Complete = "www.example.com:8080/foo/bar?q=baz#F";
+    css::uno::Reference xParser(css::util::URLTransformer::create(mxComponentContext));
+    CPPUNIT_ASSERT(xParser->parseSmart(aURL, "http:"));
+    CPPUNIT_ASSERT_EQUAL(OUString("http://www.example.com:8080/foo/bar?q=baz#F"), aURL.Complete);
+    CPPUNIT_ASSERT_EQUAL(OUString("http://www.example.com:8080/foo/bar"), aURL.Main);
+    CPPUNIT_ASSERT_EQUAL(OUString("http://"), aURL.Protocol);
+    CPPUNIT_ASSERT(aURL.User.isEmpty());
+    CPPUNIT_ASSERT(aURL.Password.isEmpty());
+    CPPUNIT_ASSERT_EQUAL(OUString("www.example.com"), aURL.Server);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(8080), aURL.Port);
+    CPPUNIT_ASSERT_EQUAL(OUString("/foo/"), aURL.Path);
+    CPPUNIT_ASSERT_EQUAL(OUString("bar"), aURL.Name);
+    CPPUNIT_ASSERT_EQUAL(OUString("q=baz"), aURL.Arguments);
+    CPPUNIT_ASSERT_EQUAL(OUString("F"), aURL.Mark);
 }
 }
 

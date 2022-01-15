@@ -158,13 +158,7 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
     // erase leading and trailing whitespaces
     OUString aStrURL(m_xCbbTarget->get_active_text().trim());
 
-    INetURLObject aURL(aStrURL);
-
-    if( aURL.GetProtocol() == INetProtocol::NotValid )
-    {
-        aURL.SetSmartProtocol( GetSmartProtocolFromButtons() );
-        aURL.SetSmartURL(aStrURL);
-    }
+    INetURLObject aURL(aStrURL, GetSmartProtocolFromButtons());
 
     // username and password for ftp-url
     if( aURL.GetProtocol() == INetProtocol::Ftp && !m_xEdLogin->get_text().isEmpty() )
