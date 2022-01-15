@@ -465,24 +465,24 @@ void SAL_CALL ChartDataWrapper::setData( const Sequence< Sequence< double > >& r
 }
 void SAL_CALL ChartDataWrapper::setRowDescriptions( const Sequence< OUString >& rRowDescriptions )
 {
-    lcl_RowDescriptionsOperator aOperator( rRowDescriptions, m_spChart2ModelContact->getChart2Document() );
+    lcl_RowDescriptionsOperator aOperator( rRowDescriptions, m_spChart2ModelContact->getDocumentModel() );
     applyData( aOperator );
 }
 void SAL_CALL ChartDataWrapper::setColumnDescriptions( const Sequence< OUString >& rColumnDescriptions )
 {
-    lcl_ColumnDescriptionsOperator aOperator( rColumnDescriptions, m_spChart2ModelContact->getChart2Document() );
+    lcl_ColumnDescriptionsOperator aOperator( rColumnDescriptions, m_spChart2ModelContact->getDocumentModel() );
     applyData( aOperator );
 }
 
 // ____ XComplexDescriptionAccess (write) ____
 void SAL_CALL ChartDataWrapper::setComplexRowDescriptions( const Sequence< Sequence< OUString > >& rRowDescriptions )
 {
-    lcl_ComplexRowDescriptionsOperator aOperator( rRowDescriptions, m_spChart2ModelContact->getChart2Document() );
+    lcl_ComplexRowDescriptionsOperator aOperator( rRowDescriptions, m_spChart2ModelContact->getDocumentModel() );
     applyData( aOperator );
 }
 void SAL_CALL ChartDataWrapper::setComplexColumnDescriptions( const Sequence< Sequence< OUString > >& rColumnDescriptions )
 {
-    lcl_ComplexColumnDescriptionsOperator aOperator( rColumnDescriptions, m_spChart2ModelContact->getChart2Document() );
+    lcl_ComplexColumnDescriptionsOperator aOperator( rColumnDescriptions, m_spChart2ModelContact->getDocumentModel() );
     applyData( aOperator );
 }
 
@@ -501,7 +501,7 @@ void SAL_CALL ChartDataWrapper::setAnyColumnDescriptions( const Sequence< Sequen
 // ____ XDateCategories (write) ____
 void SAL_CALL ChartDataWrapper::setDateCategories( const Sequence< double >& rDates )
 {
-    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
     lcl_DateCategoriesOperator aOperator( rDates );
     applyData( aOperator );
@@ -573,7 +573,7 @@ void ChartDataWrapper::fireChartDataChangeEvent( css::chart::ChartDataChangeEven
 void ChartDataWrapper::switchToInternalDataProvider()
 {
     //create an internal data provider that is connected to the model
-    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     if( xChartDoc.is() )
         xChartDoc->createInternalDataProvider( true /*bCloneExistingData*/ );
     initDataAccess();
@@ -581,7 +581,7 @@ void ChartDataWrapper::switchToInternalDataProvider()
 
 void ChartDataWrapper::initDataAccess()
 {
-    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     if( !xChartDoc.is() )
         return;
     if( xChartDoc->hasInternalDataProvider() )
@@ -597,7 +597,7 @@ void ChartDataWrapper::initDataAccess()
 void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
 {
     //bool bSetValues, bool bSetRowDescriptions, bool bSetColumnDescriptions
-    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     if( !xChartDoc.is() )
         return;
 
@@ -605,7 +605,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     bool bStacked = false;
     bool bPercent = false;
     bool bDeep = false;
-    uno::Reference< css::chart::XChartDocument > xOldDoc( xChartDoc, uno::UNO_QUERY );
+    uno::Reference< css::chart::XChartDocument > xOldDoc( static_cast<cppu::OWeakObject*>(xChartDoc.get()), uno::UNO_QUERY );
     OSL_ASSERT( xOldDoc.is());
     uno::Reference< beans::XPropertySet > xDiaProp( xOldDoc->getDiagram(), uno::UNO_QUERY );
     if( xDiaProp.is())

@@ -132,7 +132,7 @@ void SAL_CALL AreaWrapper::removeEventListener(
 // WrappedPropertySet
 Reference< beans::XPropertySet > AreaWrapper::getInnerPropertySet()
 {
-    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     if( xChartDoc.is() )
         return xChartDoc->getPageBackground();
     OSL_FAIL("AreaWrapper::getInnerPropertySet() is NULL");

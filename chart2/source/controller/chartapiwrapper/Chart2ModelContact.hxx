@@ -24,6 +24,8 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <rtl/ref.hxx>
 #include <svx/unopage.hxx>
+#include <unotools/weakref.hxx>
+#include <ChartModel.hxx>
 #include <map>
 
 namespace chart { struct ExplicitIncrementData; }
@@ -55,14 +57,11 @@ public:
     ~Chart2ModelContact();
 
 public:
-    void setModel( const css::uno::Reference< css::frame::XModel >& xChartModel );
+    void setDocumentModel( ChartModel* pChartModel );
     void clear();
 
-    css::uno::Reference< css::frame::XModel > getChartModel() const;
+    rtl::Reference<ChartModel> getDocumentModel() const;
 
-    ChartModel* getModel() const { return mpModel;}
-
-    css::uno::Reference< css::chart2::XChartDocument > getChart2Document() const;
     css::uno::Reference< css::chart2::XDiagram > getChart2Diagram() const;
 
     rtl::Reference<SvxDrawPage> getDrawPage() const;
@@ -137,9 +136,7 @@ public: //member
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
 private: //member
-    css::uno::WeakReference< css::frame::XModel >   m_xChartModel;
-
-    ChartModel* mpModel;
+    unotools::WeakReference< ChartModel >   m_xChartModel;
 
     mutable css::uno::Reference< css::lang::XUnoTunnel > m_xChartView;
 

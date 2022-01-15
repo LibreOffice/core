@@ -584,11 +584,11 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
 {
     OUString aRet;
 
-    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xChartDoc.is() && xDiagram.is() )
     {
-        Reference< beans::XPropertySet > xChartDocProp( xChartDoc, uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xChartDocProp( static_cast<cppu::OWeakObject*>(xChartDoc.get()), uno::UNO_QUERY );
         if( xChartDocProp.is() )
         {
             uno::Reference< util::XRefreshable > xAddIn;
@@ -671,7 +671,7 @@ awt::Point SAL_CALL DiagramWrapper::getPosition()
 
 void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
     Reference< beans::XPropertySet > xProp( getInnerPropertySet() );
     if( !xProp.is() )
         return;
@@ -701,7 +701,7 @@ awt::Size SAL_CALL DiagramWrapper::getSize()
 
 void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
     Reference< beans::XPropertySet > xProp( getInnerPropertySet() );
     if( !xProp.is() )
         return;
@@ -734,7 +734,7 @@ OUString SAL_CALL DiagramWrapper::getShapeType()
 
 void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning()
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
     {
@@ -756,8 +756,8 @@ sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  )
 }
 void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectangle& rPositionRect )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
-    DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
+    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+    DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getDocumentModel(), rPositionRect );
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::Any(true) );
@@ -784,8 +784,8 @@ awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionExcludingAxes(  
 }
 void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectangle& rPositionRect )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
-    DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
+    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+    DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getDocumentModel(), rPositionRect );
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::Any(false) );
@@ -796,7 +796,7 @@ awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  
 }
 void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( const awt::Rectangle& rPositionRect )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
     awt::Rectangle aRect( m_spChart2ModelContact->SubstractAxisTitleSizes(rPositionRect) );
     DiagramWrapper::setDiagramPositionIncludingAxes( aRect );
 }
@@ -1144,14 +1144,14 @@ void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, con
     uno::Sequence< sal_Int32 > aSequenceMapping;
 
     if( DataSourceHelper::detectRangeSegmentation(
-            m_spChart2ModelContact->getChartModel(), aRangeString, aSequenceMapping, bUseColumns
+            m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
             , bFirstCellAsLabel, bHasCategories ) )
     {
         if( bUseColumns != bNewUseColumns )
         {
             aSequenceMapping.realloc(0);
             DataSourceHelper::setRangeSegmentation(
-                m_spChart2ModelContact->getChartModel(), aSequenceMapping, bNewUseColumns , bFirstCellAsLabel , bHasCategories);
+                m_spChart2ModelContact->getDocumentModel(), aSequenceMapping, bNewUseColumns , bFirstCellAsLabel , bHasCategories);
         }
     }
 }
@@ -1165,7 +1165,7 @@ Any WrappedDataRowSourceProperty::getPropertyValue( const Reference< beans::XPro
     uno::Sequence< sal_Int32 > aSequenceMapping;
 
     if( DataSourceHelper::detectRangeSegmentation(
-            m_spChart2ModelContact->getChartModel(), aRangeString, aSequenceMapping, bUseColumns
+            m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
             , bFirstCellAsLabel, bHasCategories ) )
     {
         css::chart::ChartDataRowSource eChartDataRowSource = css::chart::ChartDataRowSource_ROWS;
@@ -1456,7 +1456,7 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
     sal_Int32 nNumberOfLines = 0;
     bool bHasDetectableInnerValue = false;
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
-    uno::Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     if( xDiagram.is() && xChartDoc.is() )
     {
         std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
@@ -1494,7 +1494,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
 
     m_aOuterValue = rOuterValue;
 
-    uno::Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     sal_Int32 nDimension = ::chart::DiagramHelper::getDimension( xDiagram );
     if( !(xChartDoc.is() && xDiagram.is() && nDimension == 2) )
@@ -1541,7 +1541,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
     try
     {
         // locked controllers
-        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
         uno::Reference< beans::XPropertySet > xProp( xTemplate, uno::UNO_QUERY );
         xProp->setPropertyValue( "NumberOfLines", uno::Any(nNewValue) );
         xTemplate->changeDiagram( xDiagram );
@@ -1830,12 +1830,12 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( "Property IncludeHiddenCells requires boolean value", nullptr, 0 );
 
-    ChartModelHelper::setIncludeHiddenCells( bNewValue, *m_spChart2ModelContact->getModel() );
+    ChartModelHelper::setIncludeHiddenCells( bNewValue, *m_spChart2ModelContact->getDocumentModel() );
 }
 
 Any WrappedIncludeHiddenCellsProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    bool bValue = ChartModelHelper::isIncludeHiddenCells( m_spChart2ModelContact->getChartModel() );
+    bool bValue = ChartModelHelper::isIncludeHiddenCells( m_spChart2ModelContact->getDocumentModel() );
     return uno::Any(bValue);
 }
 

@@ -126,8 +126,8 @@ uno::Reference< chart2::data::XDataProvider > lcl_getDataProviderFromContact(
     uno::Reference< chart2::data::XDataProvider > xResult;
     if( spChart2ModelContact)
     {
-        uno::Reference< chart2::XChartDocument > xChartDoc(
-            spChart2ModelContact->getChart2Document());
+        rtl::Reference< ChartModel > xChartDoc(
+            spChart2ModelContact->getDocumentModel());
         if( xChartDoc.is())
             xResult.set( xChartDoc->getDataProvider());
     }
