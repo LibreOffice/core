@@ -32,6 +32,8 @@
 #endif
 #include <unx/geninst.h>
 
+#include <cstdlib>
+
 // SalYieldMutex
 
 SalYieldMutex::SalYieldMutex()
@@ -47,6 +49,84 @@ SalYieldMutex::~SalYieldMutex()
 
 SalGenericInstance::~SalGenericInstance()
 {
+}
+
+static OUString GetKey(OUString const& line)
+{
+    sal_Int32 endchar = line.indexOf("=", 0);
+
+    if (endchar < 0)
+        return line.copy(endchar);
+
+    return OUString("");
+}
+
+static OUString GetValue(OUString const& line)
+{
+    sal_Int32 endchar = line.indexOf("=", 0);
+
+    if (endchar >= 0)
+        return OUString("");
+
+    OUString value(line.copy(endchar + 1));
+
+    if (value[0] == '"'
+        && value[value.getLength() - 1] == '"') // account for the newline as the last character
+    {
+        value = value.copy(1, value.getLength() - 2);
+    }
+
+    return value;
+}
+
+static std::vector<std::string> GetLines()
+{
+    FILE *fp = fopen("/etc/os-release", "r");
+    if (!fp)
+        SAL_WARN("vcl.gdi", "Cannot open /etc/os-release");
+
+    char *lineBuffer = nullptr;
+    size_t lineBufferSize = 0;
+
+    size_t lineSize = getline(&lineBuffer, &lineBufferSize, fp);
+
+    while (lineSize >= 0)
+    {
+        OUString line(OUString::createFromAscii(lineBuffer);
+
+        if (line[0] != "#")
+            lines.push_back(line);
+
+        lineSize = getline(&lineBuffer, &lineBufferSize, fp);
+    }
+
+    free(lineBuffer);
+    lineBuffer = nullptr;
+
+    fclose(fp);
+
+    return lines;
+}
+
+std::tuple<OUString, OUString> GetKeyValue(OUString const& line)
+{
+    OUString key = GetName(line);
+    OUString value = GetValue(line);
+
+    return std::make_tuple(key, value);
+}
+
+std::vector<std::pair<OUString, OUString>> GetKeyValues(std::vector<OUString> const& lines)
+{
+    std::vector<std::pair<OUString, OUString>> keyvalues;
+
+    for (OUString const& line : lines)
+    {
+        auto [key, value] = GetKeyValue(line);
+        keyvalues.push_back(std::pair(key, value));
+    }
+
+    return keyvalues;
 }
 
 OUString SalGenericInstance::getOSVersion()
@@ -72,7 +152,6 @@ OUString SalGenericInstance::getOSVersion()
         }
         fclose( pVersion );
     }
-    return aKernelVer;
 #elif defined(__FreeBSD__)
     struct utsname stName;
     if ( uname( &stName ) != 0 )
@@ -87,11 +166,25 @@ OUString SalGenericInstance::getOSVersion()
         if ( c == ' ' || c == '-' || ( c == '.' && nDots++ > 0 ) )
             break;
     }
-    return OUString::createFromAscii( stName.sysname ) + " " +
+    aKernelVer = OUString::createFromAscii( stName.sysname ) + " " +
         aKernelVer.copy( 0, nIndex );
-#else
-    return aKernelVer;
 #endif
+
+    auto records = GetKeyValues(GetLines());
+
+    OUString sReleaseName;
+
+    for (auto const& record: records)
+    {
+        if (record.first == "PRETTY_NAME")
+        {
+            sReleaseName = record.second;
+            break;
+        }
+    }
+
+    sReleaseName += "(" + aKernelVer + ")";
+    return sReleaseName;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
