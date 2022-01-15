@@ -710,7 +710,7 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
     SetTextColor( aColor );
     ImplInitTextColor();
 
-    pLayout->DrawBase() = Point( nBaseX+mnTextOffX, nBaseY+mnTextOffY );
+    pLayout->DrawBase() = DevicePoint(nBaseX + mnTextOffX, nBaseY + mnTextOffY);
 
     tools::Rectangle aPixelRect;
     aPixelRect.SetLeft( nBaseX+mnTextOffX );
@@ -811,7 +811,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
     if( bWordLine )
     {
         // draw everything relative to the layout base point
-        const Point aStartPt = rSalLayout.DrawBase();
+        const DevicePoint aStartPt = rSalLayout.DrawBase();
 
         // calculate distance of each word from the base point
         DevicePoint aPos;
@@ -827,10 +827,10 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                 if( !nWidth )
                 {
                     // get the distance to the base point (as projected to baseline)
-                    nDist = aPos.getX() - aStartPt.X();
+                    nDist = aPos.getX() - aStartPt.getX();
                     if( mpFontInstance->mnOrientation )
                     {
-                        const DeviceCoordinate nDY = aPos.getY() - aStartPt.Y();
+                        const DeviceCoordinate nDY = aPos.getY() - aStartPt.getY();
                         const double fRad = toRadians(mpFontInstance->mnOrientation);
                         nDist = FRound( nDist*cos(fRad) - nDY*sin(fRad) );
                     }
@@ -842,7 +842,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
             else if( nWidth > 0 )
             {
                 // draw the textline for each word
-                ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), nDist, nWidth,
+                ImplDrawTextLine( aStartPt.getX(), aStartPt.getY(), nDist, nWidth,
                                   eStrikeout, eUnderline, eOverline, bUnderlineAbove );
                 nWidth = 0;
             }
@@ -851,7 +851,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
         // draw textline for the last word
         if( nWidth > 0 )
         {
-            ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), nDist, nWidth,
+            ImplDrawTextLine( aStartPt.getX(), aStartPt.getY(), nDist, nWidth,
                               eStrikeout, eUnderline, eOverline, bUnderlineAbove );
         }
     }

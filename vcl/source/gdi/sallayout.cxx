@@ -150,7 +150,7 @@ void SalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
 
 DevicePoint SalLayout::GetDrawPosition(const DevicePoint& rRelative) const
 {
-    DevicePoint aPos(maDrawBase.X(), maDrawBase.Y());
+    DevicePoint aPos(maDrawBase);
     DevicePoint aOfs(rRelative.getX() + maDrawOffset.X(),
                      rRelative.getY() + maDrawOffset.Y());
 
@@ -1124,8 +1124,8 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
             nStart |= nFontTag;
             if (pFallbackFont)
                 *pFallbackFont = pFontFace;
-            rPos.adjustX(maDrawBase.X() + maDrawOffset.X());
-            rPos.adjustY(maDrawBase.Y() + maDrawOffset.Y());
+            rPos.adjustX(maDrawBase.getX() + maDrawOffset.X());
+            rPos.adjustY(maDrawBase.getY() + maDrawOffset.Y());
             return true;
         }
     }

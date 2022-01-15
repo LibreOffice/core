@@ -1713,6 +1713,7 @@ public:
      @returns Device's X pixel coordinate
      */
     SAL_DLLPRIVATE tools::Long         ImplLogicXToDevicePixel( tools::Long nX ) const;
+    SAL_DLLPRIVATE double LogicXToDeviceFontCoordinate( tools::Long nWidth ) const;
 
     /** Convert a logical Y coordinate to a device pixel's Y coordinate.
 
