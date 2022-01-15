@@ -16,7 +16,9 @@
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
 #include <skia/win/font.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/windowserrorstring.hxx>
+#include <sal/log.hxx>
 
 #include <SkCanvas.h>
 #include <SkPaint.h>
@@ -119,39 +121,16 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
     return true;
 }
 
-#ifdef SAL_LOG_INFO
-static HRESULT checkResult(HRESULT hr, const char* file, size_t line)
+sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFONT hfont) try
 {
-    if (FAILED(hr))
-    {
-        OUString sLocationString
-            = OUString::createFromAscii(file) + ":" + OUString::number(line) + " ";
-        SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_INFO, ::SAL_DETAIL_LOG_LEVEL_INFO, "vcl.skia",
-                              sLocationString.toUtf8().getStr(),
-                              "HRESULT failed with: 0x" << OUString::number(hr, 16) << ": "
-                                                        << WindowsErrorStringFromHRESULT(hr));
-    }
-    return hr;
-}
-
-#define CHECKHR(funct) checkResult(funct, __FILE__, __LINE__)
-#else
-#define CHECKHR(funct) (funct)
-#endif
-
-sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFONT hfont)
-{
+    using sal::systools::ThrowIfFailed;
     if (!dwriteDone)
     {
-        if (SUCCEEDED(
-                CHECKHR(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
-                                            reinterpret_cast<IUnknown**>(&dwriteFactory)))))
-        {
-            if (SUCCEEDED(CHECKHR(dwriteFactory->GetGdiInterop(&dwriteGdiInterop))))
-                dwriteFontMgr = SkFontMgr_New_DirectWrite(dwriteFactory.get());
-            else
-                dwriteFactory.clear();
-        }
+        ThrowIfFailed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
+                                          reinterpret_cast<IUnknown**>(&dwriteFactory)),
+                      SAL_WHERE);
+        ThrowIfFailed(dwriteFactory->GetGdiInterop(&dwriteGdiInterop), SAL_WHERE);
+        dwriteFontMgr = SkFontMgr_New_DirectWrite(dwriteFactory.get());
         dwriteDone = true;
     }
     if (!dwriteFontMgr)
@@ -164,20 +143,17 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
     // For that CreateFromFaceFromHdc() is necessary. The simpler
     // CreateFontFromLOGFONT() seems to search for the best matching font,
     // which may not be the exact font.
-    HFONT oldFont = SelectFont(hdc, hfont);
     sal::systools::COMReference<IDWriteFontFace> fontFace;
-    if (FAILED(CHECKHR(dwriteGdiInterop->CreateFontFaceFromHdc(hdc, &fontFace))))
     {
-        SelectFont(hdc, oldFont);
-        return nullptr;
+        comphelper::ScopeGuard g(
+            [ hdc, oldFont(SelectFont(hdc, hfont)) ] { SelectFont(hdc, oldFont); });
+        ThrowIfFailed(dwriteGdiInterop->CreateFontFaceFromHdc(hdc, &fontFace), SAL_WHERE);
     }
 
-    SelectFont(hdc, oldFont);
     sal::systools::COMReference<IDWriteFontCollection> collection;
-    if (FAILED(CHECKHR(dwriteFactory->GetSystemFontCollection(&collection))))
-        return nullptr;
+    ThrowIfFailed(dwriteFactory->GetSystemFontCollection(&collection), SAL_WHERE);
     sal::systools::COMReference<IDWriteFont> font;
-    // Do not use CHECKHR() here, as said above, this fails for our fonts.
+    // As said above, this fails for our fonts.
     if (FAILED(collection->GetFontFromFontFace(fontFace.get(), &font)))
     {
         // If not found in system collection, try our private font collection.
@@ -191,26 +167,26 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
             // private fonts with this newly used font.
 
             sal::systools::COMReference<IDWriteFactory3> dwriteFactory3;
-            if (FAILED(dwriteFactory->QueryInterface<IDWriteFactory3>(&dwriteFactory3)))
-                return nullptr;
+            ThrowIfFailed(dwriteFactory->QueryInterface(&dwriteFactory3), SAL_WHERE);
 
-            if (!dwriteFontSetBuilder
-                && FAILED(dwriteFactory3->CreateFontSetBuilder(&dwriteFontSetBuilder)))
-                return nullptr;
+            if (!dwriteFontSetBuilder)
+                ThrowIfFailed(dwriteFactory3->CreateFontSetBuilder(&dwriteFontSetBuilder),
+                              SAL_WHERE);
 
             UINT32 numberOfFiles;
-            if (FAILED(fontFace->GetFiles(&numberOfFiles, nullptr)) || numberOfFiles != 1)
+            ThrowIfFailed(fontFace->GetFiles(&numberOfFiles, nullptr), SAL_WHERE);
+            if (numberOfFiles != 1)
                 return nullptr;
 
             sal::systools::COMReference<IDWriteFontFile> fontFile;
-            if (FAILED(fontFace->GetFiles(&numberOfFiles, &fontFile)))
-                return nullptr;
+            ThrowIfFailed(fontFace->GetFiles(&numberOfFiles, &fontFile), SAL_WHERE);
 
             BOOL isSupported;
             DWRITE_FONT_FILE_TYPE fileType;
             UINT32 numberOfFonts;
-            if (FAILED(fontFile->Analyze(&isSupported, &fileType, nullptr, &numberOfFonts))
-                || !isSupported)
+            ThrowIfFailed(fontFile->Analyze(&isSupported, &fileType, nullptr, &numberOfFonts),
+                          SAL_WHERE);
+            if (!isSupported)
                 return nullptr;
 
             // For each font within the font file, get a font face reference and add to the builder.
@@ -226,24 +202,27 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
                 dwriteFontSetBuilder->AddFontFaceReference(fontFaceReference.get());
             }
 
-            dwritePrivateCollection.clear();
             sal::systools::COMReference<IDWriteFontSet> fontSet;
-            if (SUCCEEDED(CHECKHR(dwriteFontSetBuilder->CreateFontSet(&fontSet))))
-                dwriteFactory3->CreateFontCollectionFromFontSet(fontSet.get(),
-                                                                &dwritePrivateCollection);
+            ThrowIfFailed(dwriteFontSetBuilder->CreateFontSet(&fontSet), SAL_WHERE);
+            ThrowIfFailed(dwriteFactory3->CreateFontCollectionFromFontSet(fontSet.get(),
+                                                                          &dwritePrivateCollection),
+                          SAL_WHERE);
+            ThrowIfFailed(dwritePrivateCollection->GetFontFromFontFace(fontFace.get(), &font),
+                          SAL_WHERE);
         }
-
-        if (!dwritePrivateCollection)
-            return nullptr;
-        // CHECKHR because we expect to succeed here
-        if (FAILED(CHECKHR(dwritePrivateCollection->GetFontFromFontFace(fontFace.get(), &font))))
-            return nullptr;
     }
     sal::systools::COMReference<IDWriteFontFamily> fontFamily;
-    if (FAILED(CHECKHR(font->GetFontFamily(&fontFamily))))
-        return nullptr;
+    ThrowIfFailed(font->GetFontFamily(&fontFamily), SAL_WHERE);
     return sk_sp<SkTypeface>(
         SkCreateTypefaceDirectWrite(dwriteFontMgr, fontFace.get(), font.get(), fontFamily.get()));
+}
+catch (const sal::systools::ComError& e)
+{
+    SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_INFO, ::SAL_DETAIL_LOG_LEVEL_INFO, "vcl.skia",
+                          e.what(),
+                          "HRESULT 0x" << OUString::number(e.GetHresult(), 16) << ": "
+                                       << WindowsErrorStringFromHRESULT(e.GetHresult()));
+    return nullptr;
 }
 
 bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
