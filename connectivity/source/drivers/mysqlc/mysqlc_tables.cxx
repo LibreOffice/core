@@ -202,10 +202,7 @@ void Tables::dropObject(sal_Int32 nPosition, const OUString& sName)
     OUString sType;
     xTable->getPropertyValue("Type") >>= sType;
 
-    const OUString sQuoteString = m_xMetaData->getIdentifierQuoteString();
-
-    m_xMetaData->getConnection()->createStatement()->execute(
-        "DROP " + sType + ::dbtools::quoteName(sQuoteString, sName));
+    m_xMetaData->getConnection()->createStatement()->execute("DROP " + sType + " " + sName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
