@@ -64,7 +64,7 @@ public:
             m_spChart2ModelContact )
         {
             std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
-                ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
+                ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getDiagram() ) );
             for (auto const& series : aSeriesVector)
             {
                 PROPERTYTYPE aCurValue = getValueFromSeries( css::uno::Reference< css::beans::XPropertySet >::query(series) );
@@ -91,7 +91,7 @@ public:
             m_spChart2ModelContact )
         {
             std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
-                ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
+                ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getDiagram() ) );
             for (auto const& series : aSeriesVector)
             {
                 css::uno::Reference< css::beans::XPropertySet > xSeriesPropertySet(series, css::uno::UNO_QUERY);

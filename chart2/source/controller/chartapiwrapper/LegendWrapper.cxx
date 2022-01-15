@@ -370,7 +370,7 @@ awt::Size LegendWrapper::getCurrentSizeForReference()
 Reference< beans::XPropertySet > LegendWrapper::getInnerPropertySet()
 {
     Reference< beans::XPropertySet > xRet;
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xDiagram.is() )
         xRet.set( xDiagram->getLegend(), uno::UNO_QUERY );
     OSL_ENSURE(xRet.is(),"LegendWrapper::getInnerPropertySet() is NULL");

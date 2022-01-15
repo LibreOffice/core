@@ -325,7 +325,7 @@ void WrappedAttachedAxisProperty::setPropertyValue( const Any& rOuterValue, cons
 
     if( bNewAttachedToMainAxis != bOldAttachedToMainAxis)
     {
-        Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+        rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
         if( xDiagram.is() )
             ::chart::DiagramHelper::attachSeriesToAxis( bNewAttachedToMainAxis, xDataSeries, xDiagram, m_spChart2ModelContact->m_xContext, false );
     }
@@ -537,7 +537,7 @@ void SAL_CALL DataSeriesPointWrapper::disposing( const lang::EventObject& /*Sour
 bool DataSeriesPointWrapper::isSupportingAreaProperties()
 {
     Reference< chart2::XDataSeries > xSeries( getDataSeries() );
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
@@ -549,7 +549,7 @@ Reference< chart2::XDataSeries > DataSeriesPointWrapper::getDataSeries()
     Reference< chart2::XDataSeries > xSeries( m_xDataSeries );
     if( !xSeries.is() )
     {
-        Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+        rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
         std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
             ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
 
@@ -849,7 +849,7 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rProperty
                 uno::Reference< beans::XPropertyState > xPointState( DataSeriesPointWrapper::getDataPointProperties(), uno::UNO_QUERY );
                 if( xPointState.is() && xPointState->getPropertyState("Color") == beans::PropertyState_DEFAULT_VALUE )
                 {
-                    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+                    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
                     if( xDiagram.is() )
                     {
                         Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme() );

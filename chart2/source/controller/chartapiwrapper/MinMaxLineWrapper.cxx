@@ -156,7 +156,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName
 {
     Reference< beans::XPropertySet > xPropSet;
 
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     const Sequence< Reference< chart2::XChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
     for( Reference< chart2::XChartType > const & xType : aTypes )
@@ -193,7 +193,7 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rProperty
 
     Reference< beans::XPropertySet > xPropSet;
 
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     const Sequence< Reference< chart2::XChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
     for( Reference< chart2::XChartType > const & xType : aTypes )

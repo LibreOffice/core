@@ -131,7 +131,7 @@ Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
     Reference< beans::XPropertySet > xRet;
     try
     {
-        Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+        rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
         uno::Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 /*nCooSysIndex*/ ) );
 
         sal_Int32 nDimensionIndex = 1;

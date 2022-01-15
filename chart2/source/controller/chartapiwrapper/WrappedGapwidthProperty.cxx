@@ -65,7 +65,7 @@ void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, 
 
     m_aOuterValue = rOuterValue;
 
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( !xDiagram.is() )
         return;
 
@@ -107,7 +107,7 @@ void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, 
 
 Any WrappedBarPositionProperty_Base::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xDiagram.is() )
     {
         bool bInnerValueDetected = false;

@@ -31,6 +31,7 @@
 #include <ChartView.hxx>
 #include <PopupRequest.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <Diagram.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
@@ -149,7 +150,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
 
         Reference< util::XModifyListener > xListener;
         Reference< chart2::XTitle > xNewTitle = CreateRefClone< chart2::XTitle >()( rOther.m_xTitle );
-        Reference< chart2::XDiagram > xNewDiagram = CreateRefClone< chart2::XDiagram >()( rOther.m_xDiagram );
+        rtl::Reference< ::chart::Diagram > xNewDiagram = new ::chart::Diagram( *rOther.m_xDiagram );
         Reference< beans::XPropertySet > xNewPageBackground = CreateRefClone< beans::XPropertySet >()( rOther.m_xPageBackground );
         Reference< chart2::XChartTypeManager > xChartTypeManager = CreateRefClone< chart2::XChartTypeManager >()( rOther.m_xChartTypeManager );
         Reference< container::XNameAccess > xXMLNamespaceMap = CreateRefClone< container::XNameAccess >()( rOther.m_xXMLNamespaceMap );
@@ -165,7 +166,8 @@ ChartModel::ChartModel( const ChartModel & rOther )
         }
 
         ModifyListenerHelper::addListener( xNewTitle, xListener );
-        ModifyListenerHelper::addListener( xNewDiagram, xListener );
+        if( xNewDiagram && xListener)
+            xNewDiagram->addModifyListener( xListener );
         ModifyListenerHelper::addListener( xNewPageBackground, xListener );
         xListener.clear();
     }
@@ -525,7 +527,7 @@ void SAL_CALL ChartModel::dispose()
     //// @todo
 
     if ( m_xDiagram.is() )
-        ModifyListenerHelper::removeListener( m_xDiagram, this );
+        m_xDiagram->removeModifyListener( this );
 
     if ( m_xDataProvider.is() )
     {
@@ -539,7 +541,7 @@ void SAL_CALL ChartModel::dispose()
     m_xNumberFormatsSupplier.clear();
     DisposeHelper::DisposeAndClear( m_xOwnNumberFormatsSupplier );
     DisposeHelper::DisposeAndClear( m_xChartTypeManager );
-    DisposeHelper::DisposeAndClear( m_xDiagram );
+    m_xDiagram.clear();
     DisposeHelper::DisposeAndClear( m_xTitle );
     DisposeHelper::DisposeAndClear( m_xPageBackground );
     DisposeHelper::DisposeAndClear( m_xXMLNamespaceMap );
@@ -670,18 +672,20 @@ uno::Reference< chart2::XDiagram > SAL_CALL ChartModel::getFirstDiagram()
 
 void SAL_CALL ChartModel::setFirstDiagram( const uno::Reference< chart2::XDiagram >& xDiagram )
 {
-    Reference< chart2::XDiagram > xOldDiagram;
+    rtl::Reference< ::chart::Diagram > xOldDiagram;
     Reference< util::XModifyListener > xListener;
     {
         MutexGuard aGuard( m_aModelMutex );
-        if( xDiagram == m_xDiagram )
+        if( xDiagram.get() == m_xDiagram.get() )
             return;
         xOldDiagram = m_xDiagram;
-        m_xDiagram = xDiagram;
+        assert(!xDiagram || dynamic_cast<::chart::Diagram*>(xDiagram.get()));
+        m_xDiagram = dynamic_cast<::chart::Diagram*>(xDiagram.get());
         xListener = this;
     }
     //don't keep the mutex locked while calling out
-    ModifyListenerHelper::removeListener( xOldDiagram, xListener );
+    if( xOldDiagram && xListener )
+        xOldDiagram->removeModifyListener( xListener );
     ModifyListenerHelper::addListener( xDiagram, xListener );
     setModified( true );
 }
