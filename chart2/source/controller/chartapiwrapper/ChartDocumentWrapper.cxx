@@ -291,19 +291,19 @@ void WrappedDataSourceLabelsInFirstRowProperty::setPropertyValue( const Any& rOu
     uno::Sequence< sal_Int32 > aSequenceMapping;
 
     if( !DataSourceHelper::detectRangeSegmentation(
-            m_spChart2ModelContact->getChartModel(), aRangeString, aSequenceMapping, bUseColumns
+            m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
             , bFirstCellAsLabel, bHasCategories ) )
         return;
 
     if( bUseColumns && bNewValue != bFirstCellAsLabel )
     {
         DataSourceHelper::setRangeSegmentation(
-            m_spChart2ModelContact->getChartModel(), aSequenceMapping, bUseColumns ,bNewValue, bHasCategories );
+            m_spChart2ModelContact->getDocumentModel(), aSequenceMapping, bUseColumns ,bNewValue, bHasCategories );
     }
     else if( !bUseColumns && bNewValue != bHasCategories )
     {
         DataSourceHelper::setRangeSegmentation(
-            m_spChart2ModelContact->getChartModel(), aSequenceMapping, bUseColumns , bFirstCellAsLabel, bNewValue );
+            m_spChart2ModelContact->getDocumentModel(), aSequenceMapping, bUseColumns , bFirstCellAsLabel, bNewValue );
     }
 }
 
@@ -316,7 +316,7 @@ Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyValue( const Reference
     uno::Sequence< sal_Int32 > aSequenceMapping;
 
     if( DataSourceHelper::detectRangeSegmentation(
-            m_spChart2ModelContact->getChartModel(), aRangeString, aSequenceMapping, bUseColumns
+            m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
             , bFirstCellAsLabel, bHasCategories ) )
     {
         bool bLabelsInFirstRow = true;
@@ -381,19 +381,19 @@ void WrappedDataSourceLabelsInFirstColumnProperty::setPropertyValue( const Any& 
     uno::Sequence< sal_Int32 > aSequenceMapping;
 
     if( !DataSourceHelper::detectRangeSegmentation(
-            m_spChart2ModelContact->getChartModel(), aRangeString, aSequenceMapping, bUseColumns
+            m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
             , bFirstCellAsLabel, bHasCategories ) )
         return;
 
     if( bUseColumns && bNewValue != bHasCategories )
     {
         DataSourceHelper::setRangeSegmentation(
-            m_spChart2ModelContact->getChartModel(), aSequenceMapping, bUseColumns, bFirstCellAsLabel, bNewValue );
+            m_spChart2ModelContact->getDocumentModel(), aSequenceMapping, bUseColumns, bFirstCellAsLabel, bNewValue );
     }
     else if( !bUseColumns && bNewValue != bFirstCellAsLabel )
     {
         DataSourceHelper::setRangeSegmentation(
-            m_spChart2ModelContact->getChartModel(), aSequenceMapping, bUseColumns , bNewValue, bHasCategories );
+            m_spChart2ModelContact->getDocumentModel(), aSequenceMapping, bUseColumns , bNewValue, bHasCategories );
     }
 }
 
@@ -406,7 +406,7 @@ Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyValue( const Refere
     uno::Sequence< sal_Int32 > aSequenceMapping;
 
     if( DataSourceHelper::detectRangeSegmentation(
-            m_spChart2ModelContact->getChartModel(), aRangeString, aSequenceMapping, bUseColumns
+            m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
             , bFirstCellAsLabel, bHasCategories ) )
     {
         bool bLabelsInFirstColumn = true;
@@ -461,7 +461,7 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
 
     try
     {
-        Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( *m_spChart2ModelContact->getModel(), m_spChart2ModelContact->m_xContext,bNewValue ));
+        Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( *m_spChart2ModelContact->getDocumentModel(), m_spChart2ModelContact->m_xContext,bNewValue ));
         if(xLegend.is())
         {
             Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY_THROW );
@@ -484,7 +484,7 @@ Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropert
     try
     {
         Reference< beans::XPropertySet > xLegendProp(
-            LegendHelper::getLegend( *m_spChart2ModelContact->getModel() ), uno::UNO_QUERY );
+            LegendHelper::getLegend( *m_spChart2ModelContact->getDocumentModel() ), uno::UNO_QUERY );
         if( xLegendProp.is())
             aRet = xLegendProp->getPropertyValue("Show");
         else
@@ -539,9 +539,9 @@ void WrappedHasMainTitleProperty::setPropertyValue( const Any& rOuterValue, cons
     try
     {
         if( bNewValue )
-            TitleHelper::createTitle( TitleHelper::MAIN_TITLE, "main-title", m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
+            TitleHelper::createTitle( TitleHelper::MAIN_TITLE, "main-title", m_spChart2ModelContact->getDocumentModel(), m_spChart2ModelContact->m_xContext );
         else
-            TitleHelper::removeTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getChartModel() );
+            TitleHelper::removeTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getDocumentModel() );
     }
     catch (const uno::Exception&)
     {
@@ -554,7 +554,7 @@ Any WrappedHasMainTitleProperty::getPropertyValue( const Reference< beans::XProp
     Any aRet;
     try
     {
-        aRet <<= TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getChartModel() ).is();
+        aRet <<= TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getDocumentModel() ).is();
     }
     catch (const uno::Exception&)
     {
@@ -605,9 +605,9 @@ void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const
     try
     {
         if( bNewValue )
-            TitleHelper::createTitle( TitleHelper::SUB_TITLE, "", m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
+            TitleHelper::createTitle( TitleHelper::SUB_TITLE, "", m_spChart2ModelContact->getDocumentModel(), m_spChart2ModelContact->m_xContext );
         else
-            TitleHelper::removeTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getChartModel() );
+            TitleHelper::removeTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getDocumentModel() );
     }
     catch (const uno::Exception&)
     {
@@ -620,7 +620,7 @@ Any WrappedHasSubTitleProperty::getPropertyValue( const Reference< beans::XPrope
     Any aRet;
     try
     {
-        aRet <<= TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getChartModel() ).is();
+        aRet <<= TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getDocumentModel() ).is();
     }
     catch (const uno::Exception&)
     {
@@ -664,7 +664,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getTitle()
 {
     if( !m_xTitle.is()  )
     {
-        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChart2Document() );
+        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
         m_xTitle = new TitleWrapper( TitleHelper::MAIN_TITLE, m_spChart2ModelContact );
     }
     return m_xTitle;
@@ -674,7 +674,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getSubTitle()
 {
     if( !m_xSubTitle.is() )
     {
-        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChart2Document() );
+        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
         m_xSubTitle = new TitleWrapper( TitleHelper::SUB_TITLE, m_spChart2ModelContact );
     }
     return m_xSubTitle;
@@ -734,7 +734,7 @@ void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& xDi
 
         try
         {
-            Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+            rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
             if( xChartDoc.is() )
             {
                 // set the new diagram
@@ -765,7 +765,7 @@ void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& x
     if( !xNewData.is() )
         return;
 
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChart2Document() );
+    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
     m_xChartData.set( new ChartDataWrapper( m_spChart2ModelContact, xNewData ) );
 }
 
@@ -774,7 +774,7 @@ sal_Bool SAL_CALL ChartDocumentWrapper::attachResource(
     const OUString& URL,
     const Sequence< beans::PropertyValue >& Arguments )
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         return xModel->attachResource( URL, Arguments );
     return false;
@@ -782,7 +782,7 @@ sal_Bool SAL_CALL ChartDocumentWrapper::attachResource(
 
 OUString SAL_CALL ChartDocumentWrapper::getURL()
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         return xModel->getURL();
     return OUString();
@@ -790,7 +790,7 @@ OUString SAL_CALL ChartDocumentWrapper::getURL()
 
 Sequence< beans::PropertyValue > SAL_CALL ChartDocumentWrapper::getArgs()
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         return xModel->getArgs();
     return Sequence< beans::PropertyValue >();
@@ -798,7 +798,7 @@ Sequence< beans::PropertyValue > SAL_CALL ChartDocumentWrapper::getArgs()
 
 void SAL_CALL ChartDocumentWrapper::connectController( const Reference< frame::XController >& Controller )
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         xModel->connectController( Controller );
 }
@@ -806,28 +806,28 @@ void SAL_CALL ChartDocumentWrapper::connectController( const Reference< frame::X
 void SAL_CALL ChartDocumentWrapper::disconnectController(
     const Reference< frame::XController >& Controller )
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         xModel->disconnectController( Controller );
 }
 
 void SAL_CALL ChartDocumentWrapper::lockControllers()
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         xModel->lockControllers();
 }
 
 void SAL_CALL ChartDocumentWrapper::unlockControllers()
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         xModel->unlockControllers();
 }
 
 sal_Bool SAL_CALL ChartDocumentWrapper::hasControllersLocked()
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         return xModel->hasControllersLocked();
     return false;
@@ -835,7 +835,7 @@ sal_Bool SAL_CALL ChartDocumentWrapper::hasControllersLocked()
 
 Reference< frame::XController > SAL_CALL ChartDocumentWrapper::getCurrentController()
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         return xModel->getCurrentController();
     return nullptr;
@@ -844,14 +844,14 @@ Reference< frame::XController > SAL_CALL ChartDocumentWrapper::getCurrentControl
 void SAL_CALL ChartDocumentWrapper::setCurrentController(
     const Reference< frame::XController >& Controller )
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         xModel->setCurrentController( Controller );
 }
 
 Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::getCurrentSelection()
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         return xModel->getCurrentSelection();
     return nullptr;
@@ -940,7 +940,7 @@ void ChartDocumentWrapper::impl_resetAddIn()
 
 void ChartDocumentWrapper::setBaseDiagram( const OUString& rBaseDiagram )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
     m_aBaseDiagram = rBaseDiagram;
 
     uno::Reference< XDiagram > xDiagram( ChartDocumentWrapper::createInstance( rBaseDiagram ), uno::UNO_QUERY );
@@ -953,7 +953,7 @@ void ChartDocumentWrapper::setAddIn( const Reference< util::XRefreshable >& xAdd
     if( m_xAddIn == xAddIn )
         return;
 
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
     impl_resetAddIn();
     m_xAddIn = xAddIn;
     // initialize AddIn with this as chart document
@@ -1017,14 +1017,14 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
 
 void SAL_CALL ChartDocumentWrapper::addEventListener( const Reference< lang::XEventListener >& xListener )
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         xModel->addEventListener( xListener );
 }
 
 void SAL_CALL ChartDocumentWrapper::removeEventListener( const Reference< lang::XEventListener >& aListener )
 {
-    Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
+    rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         xModel->removeEventListener( aListener );
 }
@@ -1059,7 +1059,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
 {
     uno::Reference< uno::XInterface > xResult;
 
-    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     if( !xChartDoc.is() )
         return xResult;
 
@@ -1176,12 +1176,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
             case SERVICE_NAME_BITMAP_TABLE:
             case SERVICE_NAME_TRANSP_GRADIENT_TABLE:
             case SERVICE_NAME_MARKER_TABLE:
-                {
-                    uno::Reference< lang::XMultiServiceFactory > xTableFactory( xChartDoc, uno::UNO_QUERY );
-                    OSL_ENSURE( xTableFactory.get() != this, "new model is expected to implement service factory for gradient table etc" );
-                    if( xTableFactory.is() && xTableFactory.get() != this )
-                        xResult.set( xTableFactory->createInstance( aIt->first ), uno::UNO_QUERY );
-                }
+                xResult.set( xChartDoc->createInstance( aIt->first ), uno::UNO_QUERY );
                 break;
 
             case SERVICE_NAME_NAMESPACE_MAP:
@@ -1201,7 +1196,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 {
                     // locked controllers
                     ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
-                    Reference< chart2::XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
+                    Reference< chart2::XDiagram > xDiagram = ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xChartDoc) );
                     ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
                     Reference< lang::XMultiServiceFactory > xTemplateManager( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
                     DiagramHelper::tTemplateWithServiceName aTemplateWithService(
@@ -1243,7 +1238,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
     {
         if( !m_xChartView.is() )
         {
-            ChartModel* pModel = m_spChart2ModelContact->getModel();
+            rtl::Reference<ChartModel> pModel = m_spChart2ModelContact->getDocumentModel();
             ChartView* pChartView = pModel->getChartView();
             if(pChartView)
             {
@@ -1275,7 +1270,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
             }
             else
             {
-                ChartModel* pModel = m_spChart2ModelContact->getModel();
+                rtl::Reference<ChartModel> pModel = m_spChart2ModelContact->getDocumentModel();
                 if(pModel)
                 {
                     m_xChartView = pModel->getChartView();
@@ -1347,7 +1342,9 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
     if( rDelegator.is())
     {
         m_xDelegator = rDelegator;
-        m_spChart2ModelContact->setModel( uno::Reference< frame::XModel >(m_xDelegator, uno::UNO_QUERY) );
+        ChartModel* pChartModel = dynamic_cast<ChartModel*>(rDelegator.get());
+        assert(pChartModel);
+        m_spChart2ModelContact->setDocumentModel( pChartModel );
     }
     else
     {

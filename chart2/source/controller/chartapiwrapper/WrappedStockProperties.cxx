@@ -75,7 +75,7 @@ void WrappedStockProperty::setPropertyValue( const css::uno::Any& rOuterValue, c
 
     m_aOuterValue = rOuterValue;
 
-    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     sal_Int32 nDimension = ::chart::DiagramHelper::getDimension( xDiagram );
     if( !(xChartDoc.is() && xDiagram.is() && nDimension==2) )
@@ -94,7 +94,7 @@ void WrappedStockProperty::setPropertyValue( const css::uno::Any& rOuterValue, c
     try
     {
         // locked controllers
-        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
         xTemplate->changeDiagram( xDiagram );
     }
     catch( const uno::Exception & )
@@ -129,7 +129,7 @@ WrappedVolumeProperty::WrappedVolumeProperty(const std::shared_ptr<Chart2ModelCo
 
 css::uno::Any WrappedVolumeProperty::getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xDiagram.is() && xChartDoc.is() )
     {
@@ -198,7 +198,7 @@ WrappedUpDownProperty::WrappedUpDownProperty(const std::shared_ptr<Chart2ModelCo
 
 css::uno::Any WrappedUpDownProperty::getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xDiagram.is() && xChartDoc.is() )
     {

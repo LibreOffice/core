@@ -275,11 +275,11 @@ void WrappedAxisTitleExistenceProperty::setPropertyValue( const Any& rOuterValue
     if( bNewValue )
     {
         TitleHelper::createTitle(  m_eTitleType, OUString()
-            , m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
+            , m_spChart2ModelContact->getDocumentModel(), m_spChart2ModelContact->m_xContext );
     }
     else
     {
-        TitleHelper::removeTitle( m_eTitleType, m_spChart2ModelContact->getChartModel() );
+        TitleHelper::removeTitle( m_eTitleType, m_spChart2ModelContact->getDocumentModel() );
     }
 }
 
@@ -287,7 +287,7 @@ Any WrappedAxisTitleExistenceProperty::getPropertyValue( const Reference< beans:
 {
     bool bHasTitle = false;
 
-    Reference< chart2::XTitle > xTitle( TitleHelper::getTitle( m_eTitleType, m_spChart2ModelContact->getChartModel() ) );
+    Reference< chart2::XTitle > xTitle( TitleHelper::getTitle( m_eTitleType, m_spChart2ModelContact->getDocumentModel() ) );
     if( xTitle.is() && !TitleHelper::getCompleteString( xTitle ).isEmpty() )
         bHasTitle = true;
 
