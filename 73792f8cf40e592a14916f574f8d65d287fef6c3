@@ -16,6 +16,23 @@
       "message": "Since there\u0027s nothing on Firebird, I took a look at the other databases.\nOnly HSQLDB and Postgresql part implement it.\nI thought about using Postgresql because I wanted to avoid possible Java related stuff from HSQLDB but Postgresql implementation seemed too complicated to me (for example no idea what\u0027s the goal of ReflectionBase + pq_xcontainer.hxx with EventBroadcastHelper, ...)\n\nI tried to use the minimum also, I replaced macros.",
       "revId": "73792f8cf40e592a14916f574f8d65d287fef6c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f823b71f_02d5d8e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-16T19:45:07Z",
+      "side": 1,
+      "message": "Stephan:\nIn cppuhelper/propshlp.hxx, I see:\n362 class CPPUHELPER_DLLPUBLIC OPropertySetHelper :\n363                            public css::beans::XMultiPropertySet,\n364                            public css::beans::XFastPropertySet,\n365                            public css::beans::XPropertySet\n366 {\n367 public:\n\n487     virtual css::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) SAL_OVERRIDE;\n\n599     virtual void SAL_CALL getFastPropertyValue(\n600         css::uno::Any\u0026 rValue,\n601         sal_Int32 nHandle ) const \u003d 0;\n\n671        You must call disposing before destruction.\n672      */\n673     ~OPropertySetHelper();\n674 };\n\nwhat should I do to avoid:\nerror \"  by ‘virtual void connectivity::mysqlc::View::getFastPropertyValue(com::sun::star::uno::Any\u0026, sal_Int32) const’ [-Werror\u003doverloaded-virtual]\" triggered in included file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/connectivity/source/drivers/mysqlc/mysqlc_view.hxx:57:27 ( https://ci.libreoffice.org/job/gerrit_linux_gcc_release/109242/ )\n\ncompiler warning overloaded-virtual treated as error: ‘virtual com::sun::star::uno::Any cppu::OPropertySetHelper::getFastPropertyValue(sal_Int32)’ was hidden in file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/include/cppuhelper/propshlp.hxx:487:36 ( https://ci.libreoffice.org/job/gerrit_linux_gcc_release/109242/ )\n\nerror: ‘virtual com::sun::star::uno::Any cppu::OPropertySetHelper::getFastPropertyValue(sal_Int32)’ was hidden [-Werror\u003doverloaded-virtual] in file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/include/cppuhelper/propshlp.hxx ( https://ci.libreoffice.org/job/gerrit_linux_gcc_release/109242/ )",
+      "revId": "73792f8cf40e592a14916f574f8d65d287fef6c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
