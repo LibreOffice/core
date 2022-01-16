@@ -140,19 +140,6 @@ SalFrame *IosSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSt
     return new IosSalFrame( this, pParent, nStyle );
 }
 
-void SalAbort( const OUString& rErrorText, bool bDumpCore )
-{
-    (void) bDumpCore;
-
-    NSLog(@"SalAbort: %s", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
-}
-
-const OUString& SalGetDesktopEnvironment()
-{
-    static OUString aEnv( "iOS" );
-    return aEnv;
-}
-
 SalData::SalData() :
     mpFontList( 0 ),
     mxRGBSpace( CGColorSpaceCreateDeviceRGB() ),
@@ -162,16 +149,11 @@ SalData::SalData() :
 
 
 // This is our main entry point:
-SalInstance *CreateSalInstance()
+extern "C" SalInstance *create_SalInstance()
 {
     IosSalInstance* pInstance = new IosSalInstance( std::make_unique<SvpSalYieldMutex>() );
     new SvpSalData(pInstance);
     return pInstance;
-}
-
-void DestroySalInstance( SalInstance *pInst )
-{
-    delete pInst;
 }
 
 int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
