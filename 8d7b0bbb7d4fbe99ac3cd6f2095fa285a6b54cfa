@@ -16,6 +16,46 @@
       "message": "I wonder if it would be prudent to somehow respect PARALLELISM when using pigz though?",
       "revId": "8d7b0bbb7d4fbe99ac3cd6f2095fa285a6b54cfa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1386c513_56fde8d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-16T09:53:48Z",
+      "side": 1,
+      "message": "Do you expect this tool to be used for other parts then the LO installer? I\u0027m just wondering, because the variable name is so generic... please ignore, if it\u0027s too much bike-shedding ;-)",
+      "revId": "8d7b0bbb7d4fbe99ac3cd6f2095fa285a6b54cfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "576eb1a0_eefcdbef",
+        "filename": "config_host.mk.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-16T09:53:48Z",
+      "side": 1,
+      "message": "I know the list isn\u0027t perfectly sorted...",
+      "range": {
+        "startLine": 481,
+        "startChar": 0,
+        "endLine": 481,
+        "endChar": 40
+      },
+      "revId": "8d7b0bbb7d4fbe99ac3cd6f2095fa285a6b54cfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
