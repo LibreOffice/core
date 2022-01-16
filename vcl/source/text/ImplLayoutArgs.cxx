@@ -310,7 +310,7 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
     s << "\"";
 
     s << ",DXArray=";
-    if (rArgs.mpDXArray)
+    if (rArgs.mpDXArray || rArgs.mpAltNaturalDXArray)
     {
         s << "[";
         int count = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
@@ -319,7 +319,10 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
             lim = 7;
         for (int i = 0; i < lim; i++)
         {
-            s << rArgs.mpDXArray[i];
+            if (rArgs.mpDXArray)
+                s << rArgs.mpDXArray[i];
+            else
+                s << rArgs.mpAltNaturalDXArray[i];
             if (i < lim - 1)
                 s << ",";
         }
@@ -327,7 +330,10 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
         {
             if (count > lim + 1)
                 s << "...";
-            s << rArgs.mpDXArray[count - 1];
+            if (rArgs.mpDXArray)
+                s << rArgs.mpDXArray[count - 1];
+            else
+                s << rArgs.mpAltNaturalDXArray[count - 1];
         }
         s << "]";
     }
