@@ -1676,14 +1676,18 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
             if ((pState->mnMask & FRAMESTATE_MASK_GEOMETRY) != FRAMESTATE_MASK_GEOMETRY)
                 GetPosSize (aPosSize);
 
+            sal_uInt16 nPosFlags = 0;
+
             // change requested properties
             if (pState->mnMask & WindowStateMask::X)
             {
-                aPosSize.SetPosX (pState->mnX);
+                aPosSize.SetPosX(pState->mnX - (mpParent ? mpParent->maGeometry.nX : 0));
+                nPosFlags |= SAL_FRAME_POSSIZE_X;
             }
             if (pState->mnMask & WindowStateMask::Y)
             {
-                aPosSize.SetPosY (pState->mnY);
+                aPosSize.SetPosY(pState->mnY - (mpParent ? mpParent->maGeometry.nY : 0));
+                nPosFlags |= SAL_FRAME_POSSIZE_Y;
             }
             if (pState->mnMask & WindowStateMask::Width)
             {
@@ -1732,7 +1736,10 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
                     aPosSize.Move( 0, static_cast<tools::Long>(aGeom.nTopDecoration) - aPosSize.Top() );
             }
 
-            SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
+            SetPosSize(aPosSize.getX(), aPosSize.getY(),
+                       aPosSize.GetWidth(), aPosSize.GetHeight(),
+                       SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT |
+                       nPosFlags);
         }
     }
 
