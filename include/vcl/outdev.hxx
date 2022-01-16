@@ -1685,6 +1685,7 @@ public:
      @returns Physical point on the device.
      */
     SAL_DLLPRIVATE Point        ImplLogicToDevicePixel( const Point& rLogicPt ) const;
+    SAL_DLLPRIVATE DevicePoint  ImplLogicToDeviceFontCoordinate(const Point& rLogicPt) const;
 
     /** Convert a logical width to a width in units of device pixels.
 
@@ -1697,9 +1698,9 @@ public:
      @returns Width in units of device pixels.
      */
     SAL_DLLPRIVATE tools::Long         ImplLogicWidthToDevicePixel( tools::Long nWidth ) const;
+    SAL_DLLPRIVATE double              ImplLogicWidthToDeviceFontWidth(tools::Long nWidth) const;
 
     SAL_DLLPRIVATE DeviceCoordinate LogicWidthToDeviceCoordinate( tools::Long nWidth ) const;
-    SAL_DLLPRIVATE double LogicWidthToDeviceFontCoordinate( tools::Long nWidth ) const;
 
     /** Convert a logical X coordinate to a device pixel's X coordinate.
 
@@ -1713,7 +1714,6 @@ public:
      @returns Device's X pixel coordinate
      */
     SAL_DLLPRIVATE tools::Long         ImplLogicXToDevicePixel( tools::Long nX ) const;
-    SAL_DLLPRIVATE double LogicXToDeviceFontCoordinate( tools::Long nWidth ) const;
 
     /** Convert a logical Y coordinate to a device pixel's Y coordinate.
 
