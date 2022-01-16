@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a13828a9_a52f5678",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-16T18:10:11Z",
+      "side": 1,
+      "message": "I began to read your email from today and thought about submitting a quick patch for this to be sure not forgetting it :-)",
+      "revId": "fea07923a2eeea4c5719a0f0ba1d86b5f1f3d1cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
