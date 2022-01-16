@@ -24,7 +24,6 @@
 #include <unotools/tempfile.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/UnitConversion.hxx>
-#include <math.h>
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
 #include <sot/storage.hxx>
@@ -100,7 +99,6 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/unoapi.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>

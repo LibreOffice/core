@@ -63,7 +63,6 @@
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/xml/xslt/XSLT2Transformer.hpp>
 #include <com/sun/star/xml/xslt/XSLTTransformer.hpp>

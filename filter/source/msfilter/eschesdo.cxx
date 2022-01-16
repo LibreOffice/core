@@ -21,14 +21,14 @@
 #include "eschesdo.hxx"
 #include <o3tl/any.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/unoapi.hxx>
-#include <svx/unoshape.hxx>
 #include <tools/poly.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/fract.hxx>
 #include <svx/fmdpage.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
@@ -44,7 +44,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::style;
 
 constexpr o3tl::Length geUnitsSrc(o3tl::Length::mm100);
 // PowerPoint: 576 dpi, WinWord: 1440 dpi, Excel: 1440 dpi

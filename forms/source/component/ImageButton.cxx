@@ -18,11 +18,13 @@
  */
 
 #include "ImageButton.hxx"
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/basicio.hxx>
 #include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <property.hxx>
 #include <services.hxx>

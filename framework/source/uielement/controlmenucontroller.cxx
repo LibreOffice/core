@@ -32,8 +32,6 @@
 #include <vcl/image.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <osl/mutex.hxx>
-#include <memory>
-#include <string_view>
 #include <unordered_map>
 
 #include <classes/fwkresid.hxx>

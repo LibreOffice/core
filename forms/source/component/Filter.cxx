@@ -22,8 +22,6 @@
 #include <config_features.h>
 #include <config_fuzzers.h>
 
-#include <string_view>
-
 #include "Filter.hxx"
 #include <strings.hrc>
 #include <frm_resource.hxx>

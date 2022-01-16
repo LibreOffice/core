@@ -21,8 +21,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <osl/mutex.hxx>
-#include <osl/time.h>
 
 #include <helper/wakeupthread.hxx>
 #include <chrono>

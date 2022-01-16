@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 namespace framework{
 
 inline constexpr OUStringLiteral ATTRIBUTE_TYPE_CDATA = u"CDATA";

@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
 #include <config_fonts.h>
 
 #include <test/bootstrapfixture.hxx>
@@ -32,8 +31,6 @@
 #include <svl/srchitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <unotools/transliterationwrapper.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 

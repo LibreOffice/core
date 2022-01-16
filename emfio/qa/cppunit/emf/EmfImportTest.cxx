@@ -8,7 +8,6 @@
  */
 
 #include <sal/config.h>
-#include <config_features.h>
 #include <config_fonts.h>
 
 #include <test/bootstrapfixture.hxx>
@@ -21,11 +20,9 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <comphelper/seqstream.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/graphic/EmfTools.hpp>
 
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>

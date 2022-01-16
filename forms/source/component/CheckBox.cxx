@@ -21,6 +21,8 @@
 #include <property.hxx>
 #include <services.hxx>
 #include <comphelper/basicio.hxx>
+#include <tools/debug.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 
 namespace frm

@@ -21,8 +21,6 @@
 
 #include <com/sun/star/awt/KeyEvent.hpp>
 
-#include <rtl/ustring.hxx>
-
 namespace framework{
 
 /**

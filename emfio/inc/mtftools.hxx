@@ -27,6 +27,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/rendercontext/State.hxx>
+#include <vcl/metaact.hxx>
 #include <rtl/ref.hxx>
 
 #include "emfiodllapi.h"
@@ -259,8 +260,6 @@ namespace emfio
 //Scalar constants
 #define UNDOCUMENTED_WIN_RCL_RELATION 32
 #define MS_FIXPOINT_BITCOUNT_28_4 4
-
-class MetaFontAction;
 
 //============================ WmfReader ==================================
 

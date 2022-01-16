@@ -35,8 +35,6 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/ShapeCollection.hpp>
-#include <com/sun/star/drawing/BitmapMode.hpp>
-#include <com/sun/star/drawing/RectanglePoint.hpp>
 
 #include <rtl/bootstrap.hxx>
 #include <svx/unopage.hxx>
@@ -49,7 +47,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>

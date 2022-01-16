@@ -22,12 +22,10 @@
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
-#include <editeng/fieldupdater.hxx>
 #include <editeng/macros.hxx>
 #include <editeng/section.hxx>
 #include "editobj2.hxx"
 #include <editeng/editdata.hxx>
-#include <editattr.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/flditem.hxx>
 

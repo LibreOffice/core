@@ -21,15 +21,7 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
-#include <com/sun/star/awt/XFocusListener.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/form/XBoundComponent.hpp>
-#include <com/sun/star/sdbc/XRowSetListener.hpp>
-
 #include <vcl/InterimItemWindow.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include "bibshortcuthandler.hxx"
 
 

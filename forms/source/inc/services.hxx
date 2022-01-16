@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
 
 inline constexpr OUStringLiteral VCL_CONTROL_LISTBOX = u"stardiv.vcl.control.ListBox";
 inline constexpr OUStringLiteral VCL_CONTROL_COMBOBOX = u"stardiv.vcl.control.ComboBox";

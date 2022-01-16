@@ -39,7 +39,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/enumrange.hxx>
-#include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/filter/PngImageReader.hxx>

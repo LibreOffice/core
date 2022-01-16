@@ -20,6 +20,7 @@
 #pragma once
 
 #include <editeng/editeng.hxx>
+#include <svl/poolitem.hxx>
 
 SfxItemState GetSvxEditEngineItemState( EditEngine const & rEditEngine, const ESelection& rSel, sal_uInt16 nWhich );
 

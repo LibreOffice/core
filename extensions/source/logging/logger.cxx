@@ -32,7 +32,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <rtl/ref.hxx>
 #include <map>
 
 

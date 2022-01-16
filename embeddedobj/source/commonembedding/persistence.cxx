@@ -48,7 +48,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/io/XTruncate.hpp>
 
 #include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>

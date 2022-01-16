@@ -41,7 +41,6 @@
 #include <editeng/unofdesc.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/editids.hrc>
-#include <editeng/numdef.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/temporary.hxx>
 #include <memory>

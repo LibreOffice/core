@@ -26,6 +26,7 @@
 #include <strings.hrc>
 #include "BaseListBox.hxx"
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -34,7 +35,6 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
 #include <connectivity/dbtools.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>

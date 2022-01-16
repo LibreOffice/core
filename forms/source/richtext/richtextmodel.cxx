@@ -25,15 +25,16 @@
 #include <services.hxx>
 
 #include <com/sun/star/awt/LineEndFormat.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 
 #include <comphelper/guarding.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <svl/itempool.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <editeng/editstat.hxx>
 #include <vcl/outdev.hxx>

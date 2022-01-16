@@ -27,7 +27,6 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 
 #include <oleembobj.hxx>
-#include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/seqstream.hxx>
 #include <filter/msfilter/classids.hxx>
 #include <sal/log.hxx>

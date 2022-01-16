@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vector>
 #include <comphelper/sequenceashashmap.hxx>
-#include <osl/mutex.hxx>
 
 
 namespace filter::config {

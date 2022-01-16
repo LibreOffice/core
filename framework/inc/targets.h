@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 namespace framework{
 
 //  Values for special frame search ... sTargetFrameName of findFrame() or queryDispatch() or loadComponentFromURL()

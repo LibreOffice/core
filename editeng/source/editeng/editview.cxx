@@ -19,12 +19,10 @@
 
 
 #include <memory>
-#include <sal/macros.h>
 #include <vcl/image.hxx>
 
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <vcl/metric.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -50,7 +48,6 @@
 #include <vcl/window.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/unolingu.hxx>
-#include <editeng/fontitem.hxx>
 #include <unotools/lingucfg.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
@@ -64,7 +61,6 @@
 #include <sfx2/viewsh.hxx>
 #include <osl/diagnose.h>
 #include <boost/property_tree/json_parser.hpp>
-#include <sfx2/dispatch.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

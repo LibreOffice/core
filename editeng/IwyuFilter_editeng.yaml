@@ -17,6 +17,9 @@ excludelist:
     - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
     - com/sun/star/accessibility/XAccessible.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    editeng/source/editeng/impedit2.cxx:
+    # Needed for ValueRestorationGuard
+    - comphelper/flagguard.hxx
     editeng/source/items/CustomPropertyField.cxx:
     # Actually used
     - com/sun/star/document/XDocumentProperties.hpp

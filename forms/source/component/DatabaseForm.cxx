@@ -32,6 +32,7 @@
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/DataSelectionType.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/TabulatorCycle.hpp>

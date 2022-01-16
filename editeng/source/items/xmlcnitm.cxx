@@ -26,7 +26,6 @@
 #include <xmloff/xmlcnimp.hxx>
 #include <xmloff/unoatrcn.hxx>
 #include <editeng/xmlcnitm.hxx>
-#include <tools/solar.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;

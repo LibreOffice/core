@@ -20,7 +20,6 @@
 
 #include "bundles.hxx"
 
-#include <memory>
 #include <string.h>
 
 void Bundle::SetColor( sal_uInt32 nColor )

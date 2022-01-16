@@ -18,7 +18,6 @@
  */
 
 #include <formula/grammar.hxx>
-#include <tools/debug.hxx>
 #include <cassert>
 
 namespace formula {

@@ -27,8 +27,6 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
 
-#include <rtl/ustrbuf.hxx>
-
 namespace framework{
 
 /* Throws a SaxException in case a wrong formatted XML
