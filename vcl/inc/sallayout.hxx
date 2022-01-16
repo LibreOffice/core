@@ -81,8 +81,8 @@ public:
     void            InitFont() const override;
 
     void SetIncomplete(bool bIncomplete);
+    void            AdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs);
 
-public:
     virtual         ~MultiSalLayout() override;
 
 private:
@@ -97,7 +97,7 @@ private:
 
 class VCL_DLLPUBLIC GenericSalLayout : public SalLayout
 {
-    friend void MultiSalLayout::AdjustLayout(vcl::text::ImplLayoutArgs&);
+    friend void MultiSalLayout::AdjustMultiLayout(vcl::text::ImplLayoutArgs&);
 
 public:
                     GenericSalLayout(LogicalFontInstance&);

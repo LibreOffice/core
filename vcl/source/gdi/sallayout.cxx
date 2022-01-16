@@ -645,6 +645,11 @@ bool MultiSalLayout::LayoutText( vcl::text::ImplLayoutArgs& rArgs, const SalLayo
 void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
 {
     SalLayout::AdjustLayout( rArgs );
+    AdjustMultiLayout(rArgs);
+}
+
+void MultiSalLayout::AdjustMultiLayout( vcl::text::ImplLayoutArgs& rArgs )
+{
     vcl::text::ImplLayoutArgs aMultiArgs = rArgs;
     std::vector<DeviceCoordinate> aJustificationArray;
 
@@ -983,6 +988,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
 
     mpLayouts[0]->Simplify( true );
 }
+
 
 void MultiSalLayout::InitFont() const
 {
