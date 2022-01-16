@@ -16,6 +16,24 @@
       "message": "IIUC this is specific to non-accelerated calculations, and would give different results for AVX et all?",
       "revId": "4478771647917c265effcd818b15618b7a291c16",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87ed95da_e42c9b1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-16T14:49:52Z",
+      "side": 1,
+      "message": "Yes; in a pure AVX case (i.e. cell range size multiple of 8) the final KahanSum will have only\na) m_fSum and m_fError set, or\nb) in the case of operator+\u003d() on a 0 KahanSum, m_fSum and m_fMem which in get() will become m_fSum and m_fError again.\n\nSo for A1:A8 with {0.1;0.2;-0.3;0.1;0.2;-0.3;0.1;-0.1} the \u003dSUM(A1:A8) result is 5.55111512312578E-17\n\nIf the size is not a multiple of 8 then the operator+\u003d() in sc/inc/arraysumfunctor.hxx sumArray() works as expected, with the above example and additional cells A9:A11 with {0.1;0.2;-0;3} the results for \u003dSUM(A$1:A9), \u003dSUM(A$1:A10) and \u003dSUM(A$1:A11) are 0.1, 0.3 and 0.",
+      "parentUuid": "b9ae30f7_fe842570",
+      "revId": "4478771647917c265effcd818b15618b7a291c16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
