@@ -64,6 +64,9 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/filter/qa/")) {
         return true;
     }
+    if (fileName == SRCDIR "/vcl/source/app/salplug.cxx") {
+        return true;
+    }
     report(
         DiagnosticsEngine::Warning,
         "extern prototype in main file without definition",
