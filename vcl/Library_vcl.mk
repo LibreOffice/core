@@ -391,6 +391,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/help \
     vcl/source/app/i18nhelp \
     vcl/source/app/idle \
+    vcl/source/app/salplug \
     vcl/source/app/salusereventlist \
     vcl/source/app/salvtables \
     vcl/source/app/scheduler \
@@ -621,9 +622,6 @@ endif # !DISABLE_GUI
 # * select headless code and corresponding libraries
 #
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    $(if $(filter-out iOS,$(OS)), \
-        vcl/source/app/salplug \
-    ) \
     $(if $(USE_HEADLESS_CODE), \
         $(if $(ENABLE_CUPS), \
             vcl/unx/generic/printer/cupsmgr \
