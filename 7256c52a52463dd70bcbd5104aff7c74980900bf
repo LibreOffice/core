@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dabea196_99390d96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-16T15:46:09Z",
+      "side": 1,
+      "message": "Hi Xisco! Maybe you have an advice to get this test working. Thank you very much!",
+      "revId": "7256c52a52463dd70bcbd5104aff7c74980900bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59d20ac6_662c638e",
+        "filename": "sw/qa/uitest/writer_tests5/tdf106899.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-16T15:46:09Z",
+      "side": 1,
+      "message": "The test always fails at the end of a with statement. Is there something I need to consider here? If I omit the time.sleep(2) command, I get the error at line 29 and so on.",
+      "revId": "7256c52a52463dd70bcbd5104aff7c74980900bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
