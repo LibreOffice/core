@@ -156,7 +156,7 @@ SalFrame *AndroidSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags
 // This is our main entry point:
 extern "C" SalInstance *create_SalInstance()
 {
-    LOGI("Android: CreateSalInstance!");
+    LOGI("Android: create_SalInstance!");
     AndroidSalInstance* pInstance = new AndroidSalInstance( std::make_unique<SvpSalYieldMutex>() );
     new SvpSalData();
     return pInstance;
