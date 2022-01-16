@@ -175,7 +175,7 @@
               <object class="GtkLabel" id="westfontnameft-nocjk">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" context="charnamepage|westfontnameft-nocjk">Family:</property>
+                <property name="label" translatable="no" context="charnamepage|westfontnameft-nocjk">Family:</property>
               </object>
             </child>
           </object>
@@ -265,7 +265,7 @@
               <object class="GtkLabel" id="weststyleft-nocjk">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" context="charnamepage|weststyleft-nocjk">Style:</property>
+                <property name="label" translatable="no" context="charnamepage|weststyleft-nocjk">Style:</property>
               </object>
             </child>
           </object>
@@ -498,7 +498,7 @@
                   <object class="GtkLabel" id="westfontnameft-cjk">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" context="charnamepage|westfontnameft-cjk">Family:</property>
+                    <property name="label" translatable="no" context="charnamepage|westfontnameft-cjk">Family:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">westfontnamelb-cjk</property>
                     <property name="xalign">0</property>
@@ -564,7 +564,7 @@
                   <object class="GtkLabel" id="weststyleft-cjk">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" context="charnamepage|weststyleft-cjk">Style:</property>
+                    <property name="label" translatable="no" context="charnamepage|weststyleft-cjk">Style:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">weststylelb-cjk</property>
                     <property name="xalign">0</property>
@@ -680,7 +680,7 @@
                   <object class="GtkLabel" id="eastfontnameft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" context="charnamepage|eastfontnameft">Family:</property>
+                    <property name="label" translatable="no" context="charnamepage|eastfontnameft">Family:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">eastfontnamelb</property>
                     <property name="xalign">0</property>
@@ -800,7 +800,7 @@
                   <object class="GtkLabel" id="eaststyleft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" context="charnamepage|eaststyleft">Style:</property>
+                    <property name="label" translatable="no" context="charnamepage|eaststyleft">Style:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">eaststylelb</property>
                     <property name="xalign">0</property>
@@ -872,7 +872,7 @@
                   <object class="GtkLabel" id="ctlfontnameft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" context="charnamepage|ctlfontnameft">Family:</property>
+                    <property name="label" translatable="no" context="charnamepage|ctlfontnameft">Family:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">ctlfontnamelb</property>
                     <property name="xalign">0</property>
@@ -886,7 +886,7 @@
                   <object class="GtkLabel" id="ctlstyleft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" context="charnamepage|ctlstyleft">Style:</property>
+                    <property name="label" translatable="no" context="charnamepage|ctlstyleft">Style:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">ctlstylelb</property>
                     <property name="xalign">0</property>
