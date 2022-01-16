@@ -16,6 +16,41 @@
       "message": "Jan-Marek, can you have a look at this one? Fixes build. ",
       "revId": "44c7454b3cb86bcc4520dc40b54c8767e5a946a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c3cc1e9_1cebe155",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-16T10:10:46Z",
+      "side": 1,
+      "message": "Please provide your build config (autogen.input, OS info, make version).\n\nIt doesn\u0027t happen here and moving the templated functions endef (AKA gb_LinkTarget__command_dep_$(1)) out of the template is wrong.",
+      "parentUuid": "22d44d34_51315f65",
+      "revId": "44c7454b3cb86bcc4520dc40b54c8767e5a946a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecb91e81_d34dc6c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-16T10:10:46Z",
+      "side": 1,
+      "message": "Please ",
+      "revId": "44c7454b3cb86bcc4520dc40b54c8767e5a946a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
