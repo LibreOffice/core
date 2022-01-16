@@ -40,6 +40,7 @@
 
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QThread>
+#include <QtGui/QScreen>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 
@@ -249,6 +250,12 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
 
     connect(QGuiApplication::inputMethod(), &QInputMethod::localeChanged, this,
             &QtInstance::localeChanged);
+
+    for (const QScreen* pCurScreen : QApplication::screens())
+        connectQScreenSignals(pCurScreen);
+    connect(qApp, &QGuiApplication::primaryScreenChanged, this, &QtInstance::primaryScreenChanged);
+    connect(qApp, &QGuiApplication::screenAdded, this, &QtInstance::screenAdded);
+    connect(qApp, &QGuiApplication::screenRemoved, this, &QtInstance::screenRemoved);
 
 #ifndef EMSCRIPTEN
     m_bSupportsOpenGL = true;
@@ -603,6 +610,35 @@ void* QtInstance::CreateGStreamerSink(const SystemChildWindow* pWindow)
     return nullptr;
 #endif
 }
+
+void QtInstance::connectQScreenSignals(const QScreen* pScreen)
+{
+    connect(pScreen, &QScreen::orientationChanged, this, &QtInstance::orientationChanged);
+    connect(pScreen, &QScreen::virtualGeometryChanged, this, &QtInstance::virtualGeometryChanged);
+}
+
+void QtInstance::notifyDisplayChanged()
+{
+    SolarMutexGuard aGuard;
+    SalFrame* pAnyFrame = anyFrame();
+    if (pAnyFrame)
+        pAnyFrame->CallCallback(SalEvent::DisplayChanged, nullptr);
+}
+
+void QtInstance::orientationChanged(Qt::ScreenOrientation) { notifyDisplayChanged(); }
+
+void QtInstance::primaryScreenChanged(QScreen*) { notifyDisplayChanged(); }
+
+void QtInstance::screenAdded(QScreen* pScreen)
+{
+    connectQScreenSignals(pScreen);
+    if (QApplication::screens().size() == 1)
+        notifyDisplayChanged();
+}
+
+void QtInstance::screenRemoved(QScreen*) { notifyDisplayChanged(); }
+
+void QtInstance::virtualGeometryChanged(const QRect&) { notifyDisplayChanged(); }
 
 void QtInstance::AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
                                       std::unique_ptr<int>& rFakeArgc,
