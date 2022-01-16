@@ -648,7 +648,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
     vcl::text::ImplLayoutArgs aMultiArgs = rArgs;
     std::vector<DeviceCoordinate> aJustificationArray;
 
-    if( !rArgs.mpDXArray && rArgs.mnLayoutWidth )
+    if( !rArgs.HasDXArray() && rArgs.mnLayoutWidth )
     {
         // for stretched text in a MultiSalLayout the target width needs to be
         // distributed by individually adjusting its virtual character widths
@@ -713,6 +713,17 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
         }
     }
 
+    if (aMultiArgs.mpAltNaturalDXArray)
+        ImplAdjustMultiLayout(rArgs, aMultiArgs, aMultiArgs.mpAltNaturalDXArray);
+    else
+        ImplAdjustMultiLayout(rArgs, aMultiArgs, aMultiArgs.mpDXArray);
+}
+
+template<typename DC>
+void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
+                                           vcl::text::ImplLayoutArgs& rMultiArgs,
+                                           const DC* pMultiDXArray)
+{
     // Compute rtl flags, since in some scripts glyphs/char order can be
     // reversed for a few character sequences e.g. Myanmar
     std::vector<bool> vRtl(rArgs.mnEndCharPos - rArgs.mnMinCharPos, false);
@@ -739,10 +750,10 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
         // now adjust the individual components
         if( n > 0 )
         {
-            aMultiArgs.maRuns = maFallbackRuns[ n-1 ];
-            aMultiArgs.mnFlags |= SalLayoutFlags::ForFallback;
+            rMultiArgs.maRuns = maFallbackRuns[ n-1 ];
+            rMultiArgs.mnFlags |= SalLayoutFlags::ForFallback;
         }
-        mpLayouts[n]->AdjustLayout( aMultiArgs );
+        mpLayouts[n]->AdjustLayout( rMultiArgs );
 
         // remove unused parts of component
         if( n > 0 )
@@ -841,7 +852,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
         }
 
         // skip to end of layout run and calculate its advance width
-        DeviceCoordinate nRunAdvance = 0;
+        DC nRunAdvance = 0;
         bool bKeepNotDef = (nFBLevel >= nLevel);
         for(;;)
         {
@@ -897,7 +908,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
                 bKeepNotDef = bNeedFallback;
             }
             // check for reordered glyphs
-            if (aMultiArgs.mpDXArray &&
+            if (pMultiDXArray &&
                 nRunVisibleEndChar < mnEndCharPos &&
                 nRunVisibleEndChar >= mnMinCharPos &&
                 pGlyphs[n]->charPos() < mnEndCharPos &&
@@ -905,14 +916,14 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
             {
                 if (vRtl[nActiveCharPos - mnMinCharPos])
                 {
-                    if (aMultiArgs.mpDXArray[nRunVisibleEndChar-mnMinCharPos]
-                        >= aMultiArgs.mpDXArray[pGlyphs[n]->charPos() - mnMinCharPos])
+                    if (pMultiDXArray[nRunVisibleEndChar-mnMinCharPos]
+                        >= pMultiDXArray[pGlyphs[n]->charPos() - mnMinCharPos])
                     {
                         nRunVisibleEndChar = pGlyphs[n]->charPos();
                     }
                 }
-                else if (aMultiArgs.mpDXArray[nRunVisibleEndChar-mnMinCharPos]
-                         <= aMultiArgs.mpDXArray[pGlyphs[n]->charPos() - mnMinCharPos])
+                else if (pMultiDXArray[nRunVisibleEndChar-mnMinCharPos]
+                         <= pMultiDXArray[pGlyphs[n]->charPos() - mnMinCharPos])
                 {
                     nRunVisibleEndChar = pGlyphs[n]->charPos();
                 }
@@ -921,7 +932,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
 
         // if a justification array is available
         // => use it directly to calculate the corresponding run width
-        if( aMultiArgs.mpDXArray )
+        if (pMultiDXArray)
         {
             // the run advance is the width from the first char
             // in the run to the first char in the next run
@@ -930,16 +941,16 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
             if (nActiveCharIndex >= 0 && vRtl[nActiveCharIndex])
             {
               if (nRunVisibleEndChar > mnMinCharPos && nRunVisibleEndChar <= mnEndCharPos)
-                  nRunAdvance -= aMultiArgs.mpDXArray[nRunVisibleEndChar - 1 - mnMinCharPos];
+                  nRunAdvance -= pMultiDXArray[nRunVisibleEndChar - 1 - mnMinCharPos];
               if (nLastRunEndChar > mnMinCharPos && nLastRunEndChar <= mnEndCharPos)
-                  nRunAdvance += aMultiArgs.mpDXArray[nLastRunEndChar - 1 - mnMinCharPos];
+                  nRunAdvance += pMultiDXArray[nLastRunEndChar - 1 - mnMinCharPos];
             }
             else
             {
                 if (nRunVisibleEndChar >= mnMinCharPos)
-                  nRunAdvance += aMultiArgs.mpDXArray[nRunVisibleEndChar - mnMinCharPos];
+                  nRunAdvance += pMultiDXArray[nRunVisibleEndChar - mnMinCharPos];
                 if (nLastRunEndChar >= mnMinCharPos)
-                  nRunAdvance -= aMultiArgs.mpDXArray[nLastRunEndChar - mnMinCharPos];
+                  nRunAdvance -= pMultiDXArray[nLastRunEndChar - mnMinCharPos];
             }
             nLastRunEndChar = nRunVisibleEndChar;
             nRunVisibleEndChar = pGlyphs[nFirstValid]->charPos();

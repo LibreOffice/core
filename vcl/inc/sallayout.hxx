@@ -82,7 +82,11 @@ public:
 
     void SetIncomplete(bool bIncomplete);
 
-public:
+    template<typename DC>
+    void            ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
+                                          vcl::text::ImplLayoutArgs& rMultiArgs,
+                                          const DC* pMultiDXArray);
+
     virtual         ~MultiSalLayout() override;
 
 private:
@@ -97,7 +101,10 @@ private:
 
 class VCL_DLLPUBLIC GenericSalLayout : public SalLayout
 {
-    friend void MultiSalLayout::AdjustLayout(vcl::text::ImplLayoutArgs&);
+    template<typename DC> friend void MultiSalLayout::ImplAdjustMultiLayout(
+            vcl::text::ImplLayoutArgs& rArgs,
+            vcl::text::ImplLayoutArgs& rMultiArgs,
+            const DC* pMultiDXArray);
 
 public:
                     GenericSalLayout(LogicalFontInstance&);
