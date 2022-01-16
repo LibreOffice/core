@@ -498,7 +498,7 @@ void LwpDrawPolyLine::Read()
     m_pStream->ReadUChar( m_aPolyLineRec.aPenColor.unused );
     m_pStream->ReadUInt16( m_aPolyLineRec.nNumPoints );
 
-    if (m_aPolyLineRec.nNumPoints > m_pStream->remainingSize() / 4)
+    if (!m_pStream->good() || m_aPolyLineRec.nNumPoints > m_pStream->remainingSize() / 4)
         throw BadRead();
 
     m_pVector.reset( new SdwPoint[m_aPolyLineRec.nNumPoints] );
@@ -578,7 +578,7 @@ void LwpDrawPolygon::Read()
     ReadClosedObjStyle();
     m_pStream->ReadUInt16( m_nNumPoints );
 
-    if (m_nNumPoints > m_pStream->remainingSize() / 4)
+    if (!m_pStream->good() || m_nNumPoints > m_pStream->remainingSize() / 4)
         throw BadRead();
 
     m_pVector.reset( new SdwPoint[m_nNumPoints] );
@@ -1043,6 +1043,9 @@ void LwpDrawTextBox::Read()
     m_pStream->ReadInt16( m_aTextRec.nTextRotation );
     m_pStream->ReadInt16( m_aTextRec.nTextExtraSpacing );
 
+    if (!m_pStream->good())
+        throw BadRead();
+
     // some draw files in version 1.2 have an extra byte following '\0'.
     // can't rely on that, so read in the whole string into memory.
 
@@ -1188,17 +1191,17 @@ void LwpDrawTextArt::Read()
     m_pStream->ReadInt16( m_aTextArtRec.nRotation );
 
     sal_uInt16 nPointNumber;
-    sal_Int16 nX, nY;
     m_pStream->ReadUInt16( nPointNumber );
 
     size_t nPoints = nPointNumber*3+1;
-    if (nPoints > m_pStream->remainingSize() / 4)
+    if (!m_pStream->good() || nPoints > m_pStream->remainingSize() / 4)
         throw BadRead();
 
     m_aTextArtRec.aPath[0].n = nPointNumber;
     m_aTextArtRec.aPath[0].aPts.resize(nPoints);
     for (size_t nPt = 0; nPt < nPoints; ++nPt)
     {
+        sal_Int16 nX, nY;
         m_pStream->ReadInt16( nX );
         m_pStream->ReadInt16( nY );
         m_aTextArtRec.aPath[0].aPts[nPt].x = nX;
@@ -1208,13 +1211,14 @@ void LwpDrawTextArt::Read()
     m_pStream->ReadUInt16( nPointNumber );
 
     nPoints = nPointNumber*3+1;
-    if (nPoints > m_pStream->remainingSize() / 4)
+    if (!m_pStream->good() || nPoints > m_pStream->remainingSize() / 4)
         throw BadRead();
 
     m_aTextArtRec.aPath[1].n = nPointNumber;
     m_aTextArtRec.aPath[1].aPts.resize(nPoints);
     for (size_t nPt = 0; nPt < nPoints; ++nPt)
     {
+        sal_Int16 nX, nY;
         m_pStream->ReadInt16( nX );
         m_pStream->ReadInt16( nY );
         m_aTextArtRec.aPath[1].aPts[nPt].x = nX;
@@ -1243,7 +1247,7 @@ void LwpDrawTextArt::Read()
                                                     - (m_aTextArtRec.aPath[1].n*3 + 1)*4;
 
 
-    if (m_aTextArtRec.nTextLen > m_pStream->remainingSize())
+    if (!m_pStream->good() || m_aTextArtRec.nTextLen > m_pStream->remainingSize())
         throw BadRead();
 
     m_aTextArtRec.pTextString = new sal_uInt8 [m_aTextArtRec.nTextLen];
@@ -1383,7 +1387,7 @@ void LwpDrawBitmap::Read()
         m_pStream->ReadUInt16( aInfoHeader2.nPlanes );
         m_pStream->ReadUInt16( aInfoHeader2.nBitCount );
 
-        if (!IsValid(aInfoHeader2))
+        if (!m_pStream->good() || !IsValid(aInfoHeader2))
             throw BadRead();
 
         N = aInfoHeader2.nPlanes * aInfoHeader2.nBitCount;
@@ -1403,7 +1407,7 @@ void LwpDrawBitmap::Read()
         m_pStream->ReadUInt16( aInfoHeader2.nPlanes );
         m_pStream->ReadUInt16( aInfoHeader2.nBitCount );
 
-        if (!IsValid(aInfoHeader2))
+        if (!m_pStream->good() || !IsValid(aInfoHeader2))
             throw BadRead();
 
         N = aInfoHeader2.nPlanes * aInfoHeader2.nBitCount;
