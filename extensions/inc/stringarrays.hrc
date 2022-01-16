@@ -20,6 +20,8 @@
 #ifndef INCLUDED_EXTENSIONS_INC_STRINGARRAYS_HRC
 #define INCLUDED_EXTENSIONS_INC_STRINGARRAYS_HRC
 
+#include <unotools/resmgr.hxx>
+
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 const TranslateId RID_RSC_ENUM_VERTICAL_ALIGN[] =

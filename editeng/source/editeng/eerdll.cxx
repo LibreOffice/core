@@ -35,7 +35,6 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>
-#include <svl/itempool.hxx>
 #include <svl/grabbagitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

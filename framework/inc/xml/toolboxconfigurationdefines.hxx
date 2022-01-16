@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 #define XMLNS_TOOLBAR               "http://openoffice.org/2001/toolbar"
 #define XMLNS_XLINK                 "http://www.w3.org/1999/xlink"
 inline constexpr OUStringLiteral XMLNS_TOOLBAR_PREFIX = u"toolbar:";

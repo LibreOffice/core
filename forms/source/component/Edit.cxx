@@ -22,6 +22,7 @@
 #include <property.hxx>
 #include <services.hxx>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -36,6 +37,7 @@
 
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

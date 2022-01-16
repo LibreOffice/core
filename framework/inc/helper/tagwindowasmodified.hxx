@@ -26,7 +26,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <vcl/window.hxx>
 
 namespace framework{

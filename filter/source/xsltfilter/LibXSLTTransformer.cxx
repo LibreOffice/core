@@ -38,7 +38,6 @@
 
 #include "LibXSLTTransformer.hxx"
 #include "OleHandler.hxx"
-#include <memory>
 
 using namespace ::cppu;
 using namespace ::osl;

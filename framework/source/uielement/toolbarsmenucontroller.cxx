@@ -44,15 +44,12 @@
 #include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <unotools/cmdoptions.hxx>
-#include <svtools/miscopt.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <cppuhelper/supportsservice.hxx>

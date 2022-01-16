@@ -96,8 +96,6 @@
 #include <officecfg/Office/Recovery.hxx>
 #include <officecfg/Setup.hxx>
 
-#include <stdtypes.h>
-
 using namespace css::uno;
 using namespace css::document;
 using namespace css::frame;

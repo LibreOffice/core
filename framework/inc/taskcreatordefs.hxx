@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 /// [XFrame] if it's set, it will be used as parent frame for the new created frame.
 inline constexpr OUStringLiteral ARGUMENT_PARENTFRAME = u"ParentFrame"; // XFrame
 

@@ -21,7 +21,6 @@
 #include "convert.hxx"
 
 #include <sstream>
-#include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <tools/date.hxx>

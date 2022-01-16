@@ -21,7 +21,6 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/component.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>

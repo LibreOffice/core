@@ -19,7 +19,6 @@
 #pragma once
 #include <filter/msfilter/escherex.hxx>
 #include <o3tl/any.hxx>
-#include <o3tl/unit_conversion.hxx>
 
 
 // fractions of Draw PPTWriter etc.

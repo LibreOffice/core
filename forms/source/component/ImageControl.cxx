@@ -30,6 +30,7 @@
 #include <com/sun/star/awt/PopupMenu.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>

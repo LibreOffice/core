@@ -23,6 +23,7 @@
 #include <services.hxx>
 
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 
 #include <comphelper/streamsection.hxx>

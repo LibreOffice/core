@@ -21,6 +21,7 @@
 
 #include <formula/compiler.hxx>
 #include <utility>
+#include <unotools/resmgr.hxx>
 
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 

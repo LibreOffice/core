@@ -19,6 +19,7 @@
 
 #include "File.hxx"
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 
 #include <property.hxx>

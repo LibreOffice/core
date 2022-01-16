@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

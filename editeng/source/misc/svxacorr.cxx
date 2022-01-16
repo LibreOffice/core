@@ -43,7 +43,6 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/string.hxx>
 #include <editeng/editids.hrc>
 #include <sot/storage.hxx>
 #include <editeng/udlnitem.hxx>

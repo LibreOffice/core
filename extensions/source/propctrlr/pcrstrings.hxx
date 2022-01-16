@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
 
 namespace pcr
 {

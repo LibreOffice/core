@@ -26,7 +26,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "OleHandler.hxx"
-#include <memory>
 #include <optional>
 
 using namespace ::com::sun::star::uno;

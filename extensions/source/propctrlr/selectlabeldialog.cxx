@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include "selectlabeldialog.hxx"
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -37,7 +35,6 @@
 #include <comphelper/types.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
-#include <rtl/ustrbuf.hxx>
 
 
 namespace pcr

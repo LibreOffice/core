@@ -19,22 +19,18 @@
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/form/XBoundComponent.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/event.hxx>
 #include <vcl/mnemonic.hxx>
-#include <vcl/settings.hxx>
 #include "general.hxx"
 #include "bibresid.hxx"
 #include "datman.hxx"
@@ -42,11 +38,7 @@
 #include <strings.hrc>
 #include "bibmod.hxx"
 #include <helpids.h>
-#include <tools/debug.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/i18nhelp.hxx>
 #include <algorithm>
-#include <tools/urlobj.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/objsh.hxx>
 

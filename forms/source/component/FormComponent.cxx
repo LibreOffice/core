@@ -25,6 +25,7 @@
 
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
@@ -43,7 +44,6 @@
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/guarding.hxx>
-#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/property.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
