@@ -26,6 +26,7 @@
 #include <chartview/ExplicitValueProvider.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <AxisHelper.hxx>
+#include <ChartView.hxx>
 #include <DiagramHelper.hxx>
 
 #include <ChartModel.hxx>
@@ -98,14 +99,14 @@ rtl::Reference< ::chart::Diagram > Chart2ModelContact::getDiagram() const
     return nullptr;
 }
 
-uno::Reference< lang::XUnoTunnel > const & Chart2ModelContact::getChartView() const
+rtl::Reference< ::chart::ChartView > const & Chart2ModelContact::getChartView() const
 {
     if(!m_xChartView.is())
     {
         // get the chart view
         rtl::Reference<ChartModel> xChartModel( m_xChartModel );
         if( xChartModel )
-            m_xChartView.set( xChartModel->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+            m_xChartView = xChartModel->getChartView(); // will create if necessary
     }
     return m_xChartView;
 }
@@ -115,7 +116,7 @@ ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
     getChartView();
 
     //obtain the ExplicitValueProvider from the chart view
-    return comphelper::getFromUnoTunnel<ExplicitValueProvider>(m_xChartView);
+    return m_xChartView.get();
 }
 
 rtl::Reference<SvxDrawPage> Chart2ModelContact::getDrawPage() const
@@ -168,7 +169,7 @@ awt::Size Chart2ModelContact::GetPageSize() const
 awt::Rectangle Chart2ModelContact::SubstractAxisTitleSizes( const awt::Rectangle& rPositionRect )
 {
     awt::Rectangle aRect = ExplicitValueProvider::AddSubtractAxisTitleSizes(
-        *m_xChartModel.get(), getChartView(), rPositionRect, true );
+        *m_xChartModel.get(), getChartView().get(), rPositionRect, true );
     return aRect;
 }
 
@@ -178,7 +179,7 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingTitle() const
 
     //add axis title sizes to the diagram size
     aRect = ExplicitValueProvider::AddSubtractAxisTitleSizes(
-        *m_xChartModel.get(), getChartView(), aRect, false );
+        *m_xChartModel.get(), getChartView().get(), aRect, false );
 
     return aRect;
 }
