@@ -38,6 +38,8 @@
 #include <sfx2/dispatch.hxx>
 #include <workwin.hxx>
 
+#include <sfx2/sfxsids.hrc>
+
 const sal_uInt16 nVersion = 2;
 
 SfxChildWinFactory::SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID,
@@ -236,7 +238,7 @@ std::unique_ptr<SfxChildWindow> SfxChildWindow::CreateChildWindow( sal_uInt16 nI
             {
                 if ( pBindings )
                     pBindings->ENTERREGISTRATIONS();
-                SfxChildWinInfo aInfo = rFactInfo;
+                SfxChildWinInfo aInfo = nId == SID_SEARCH_DLG ? rInfo : rFactInfo;
                 Application::SetSystemWindowMode( SystemWindowFlags::NOAUTOMODE );
                 pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
                 Application::SetSystemWindowMode( nOldMode );
