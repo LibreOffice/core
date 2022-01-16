@@ -45,38 +45,11 @@ SalSystem *HeadlessSalInstance::CreateSalSystem()
     return new HeadlessSalSystem();
 }
 
-void SalAbort( const OUString& rErrorText, bool bDumpCore )
-{
-    OUString aError( rErrorText );
-    if( aError.isEmpty() )
-        aError = "Unknown application error";
-
-    SAL_WARN("vcl.headless", rErrorText);
-    SAL_INFO("vcl.headless", "SalAbort: '" << aError << "'.");
-
-    if( bDumpCore )
-        abort();
-    else
-        _exit(1);
-}
-
-const OUString& SalGetDesktopEnvironment()
-{
-    static OUString aEnv( "headless" );
-    return aEnv;
-}
-
-// This is our main entry point:
-SalInstance *CreateSalInstance()
+extern "C" SalInstance *create_SalInstance()
 {
     HeadlessSalInstance* pInstance = new HeadlessSalInstance(std::make_unique<SvpSalYieldMutex>());
     new SvpSalData();
     return pInstance;
-}
-
-void DestroySalInstance( SalInstance *pInst )
-{
-    delete pInst;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
