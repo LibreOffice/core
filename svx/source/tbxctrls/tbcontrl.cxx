@@ -457,6 +457,7 @@ private:
     std::unique_ptr<weld::CustomWeld> mxFrameSetWin;
     std::vector<std::pair<BitmapEx, OUString>> aImgVec;
     bool                        bParagraphMode;
+    bool                        m_bIsWriter;
 
     void InitImageList();
     void CalcSizeValueSet();
@@ -2177,7 +2178,13 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     , mxFrameSet(new SvxFrmValueSet_Impl)
     , mxFrameSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxFrameSet))
     , bParagraphMode(false)
+    , m_bIsWriter(false)
 {
+
+    // check whether the document is Writer or not
+    if (Reference<lang::XServiceInfo> xSI{ m_xFrame->getController()->getModel(), UNO_QUERY })
+        m_bIsWriter = xSI->supportsService("com.sun.star.text.TextDocument");
+
     mxFrameSet->SetStyle(WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);
     AddStatusListener(".uno:BorderReducedMode");
     InitImageList();
@@ -2193,15 +2200,22 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
 
     sal_uInt16 i = 0;
 
-    for ( i=1; i<11; i++ )
+    // diagonal borders available only for Calc.
+    // Therefore, Calc uses 10 border types while
+    // Writer uses 8 of them - for a single cell.
+    for ( i=1; i < (m_bIsWriter ? 9 : 11); i++ )
         mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
 
     //bParagraphMode should have been set in StateChanged
     if ( !bParagraphMode )
-        for ( i = 11; i < 16; i++ )
+        // when multiple cell selected:
+        // Writer has 12 border types and Calc has 15 of them.
+        for ( i = (m_bIsWriter ? 9 : 11); i < (m_bIsWriter ? 13 : 16); i++ )
             mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
 
-    mxFrameSet->SetColCount( 5 );
+    // adjust frame column for Writer
+    sal_uInt16 colCount = m_bIsWriter ? 4 : 5;
+    mxFrameSet->SetColCount( colCount );
     mxFrameSet->SetSelectHdl( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
     CalcSizeValueSet();
 
@@ -2258,6 +2272,17 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     // tdf#48622, tdf#145828 use correct default to create intended 0.75pt
     // cell border using the border formatting tool in the standard toolbar
     theDefLine.GuessLinesWidths(theDefLine.GetBorderLineStyle(), SvxBorderLineWidth::Thin);
+
+    // nSel has 15 cases which means 15 border
+    // types for Calc. But Writer uses only 12
+    // of them - when diagonal borders excluded.
+    if (m_bIsWriter)
+    {
+        // add appropriate increments
+        // to match the correct borders.
+        if (nSel > 8) { nSel += 2; }
+        else if (nSel > 4) { nSel++; }
+    }
 
     switch ( nSel )
     {
@@ -2416,18 +2441,19 @@ void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rE
     if(!mxFrameSet->GetItemCount())
         return;
 
-    bool bTableMode = ( mxFrameSet->GetItemCount() == 15 );
+    // set 12 border types for Writer, otherwise 15 for Calc.
+    bool bTableMode = ( mxFrameSet->GetItemCount() == static_cast<size_t>(m_bIsWriter ? 12 : 15) );
     bool bResize    = false;
 
     if ( bTableMode && bParagraphMode )
     {
-        for ( sal_uInt16 i = 11; i < 16; i++ )
+        for ( sal_uInt16 i = (m_bIsWriter ? 9 : 11); i < (m_bIsWriter ? 13 : 16); i++ )
             mxFrameSet->RemoveItem(i);
         bResize = true;
     }
     else if ( !bTableMode && !bParagraphMode )
     {
-        for ( sal_uInt16 i = 11; i < 16; i++ )
+        for ( sal_uInt16 i = (m_bIsWriter ? 9 : 11); i < (m_bIsWriter ? 13 : 16); i++ )
             mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
         bResize = true;
     }
@@ -2450,25 +2476,53 @@ void SvxFrameWindow_Impl::CalcSizeValueSet()
 
 void SvxFrameWindow_Impl::InitImageList()
 {
-    aImgVec = {
-        {BitmapEx(RID_SVXBMP_FRAME1), SvxResId(RID_SVXSTR_TABLE_PRESET_NONE)},
-        {BitmapEx(RID_SVXBMP_FRAME2), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT)},
-        {BitmapEx(RID_SVXBMP_FRAME3), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT)},
-        {BitmapEx(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)},
-        {BitmapEx(RID_SVXBMP_FRAME14), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN)}, // diagonal down border
+    if (m_bIsWriter)
+    {
+        // Writer-specific aImgVec.
+        // Since Writer doesn't have diagonal borders,
+        // we have to use 12 border types here.
+        aImgVec = {
+            {BitmapEx(RID_SVXBMP_FRAME1), SvxResId(RID_SVXSTR_TABLE_PRESET_NONE)},
+            {BitmapEx(RID_SVXBMP_FRAME2), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT)},
+            {BitmapEx(RID_SVXBMP_FRAME3), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT)},
+            {BitmapEx(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)},
 
-        {BitmapEx(RID_SVXBMP_FRAME5), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP)},
-        {BitmapEx(RID_SVXBMP_FRAME6), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTBOTTOM)},
-        {BitmapEx(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
-        {BitmapEx(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_ONLYOUTER)},
-        {BitmapEx(RID_SVXBMP_FRAME13), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP)}, // diagonal up border
+            {BitmapEx(RID_SVXBMP_FRAME5), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP)},
+            {BitmapEx(RID_SVXBMP_FRAME6), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTBOTTOM)},
+            {BitmapEx(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
+            {BitmapEx(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_ONLYOUTER)},
 
-        {BitmapEx(RID_SVXBMP_FRAME9), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI)},
-        {BitmapEx(RID_SVXBMP_FRAME10), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERHORI)},
-        {BitmapEx(RID_SVXBMP_FRAME11), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERVERI)},
-        {BitmapEx(RID_SVXBMP_FRAME12), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL)},
-        {BitmapEx(RID_SVXBMP_FRAME15), SvxResId(RID_SVXSTR_PARA_PRESET_CRISSCROSS)} // criss-cross border
-    };
+            {BitmapEx(RID_SVXBMP_FRAME9), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI)},
+            {BitmapEx(RID_SVXBMP_FRAME10), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERHORI)},
+            {BitmapEx(RID_SVXBMP_FRAME11), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERVERI)},
+            {BitmapEx(RID_SVXBMP_FRAME12), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL)}
+        };
+    }
+    else
+    {
+        // Calc has diagonal borders feature.
+        // Therefore use additional 3 diagonal border types,
+        // which make border types 15 in total.
+        aImgVec = {
+            {BitmapEx(RID_SVXBMP_FRAME1), SvxResId(RID_SVXSTR_TABLE_PRESET_NONE)},
+            {BitmapEx(RID_SVXBMP_FRAME2), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT)},
+            {BitmapEx(RID_SVXBMP_FRAME3), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT)},
+            {BitmapEx(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)},
+            {BitmapEx(RID_SVXBMP_FRAME14), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN)}, // diagonal down border
+
+            {BitmapEx(RID_SVXBMP_FRAME5), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP)},
+            {BitmapEx(RID_SVXBMP_FRAME6), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTBOTTOM)},
+            {BitmapEx(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
+            {BitmapEx(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_ONLYOUTER)},
+            {BitmapEx(RID_SVXBMP_FRAME13), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP)}, // diagonal up border
+
+            {BitmapEx(RID_SVXBMP_FRAME9), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI)},
+            {BitmapEx(RID_SVXBMP_FRAME10), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERHORI)},
+            {BitmapEx(RID_SVXBMP_FRAME11), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERVERI)},
+            {BitmapEx(RID_SVXBMP_FRAME12), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL)},
+            {BitmapEx(RID_SVXBMP_FRAME15), SvxResId(RID_SVXSTR_PARA_PRESET_CRISSCROSS)} // criss-cross border
+        };
+    }
 }
 
 static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
