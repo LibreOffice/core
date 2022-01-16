@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5869bcd_046c8b64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-01-16T08:21:06Z",
+      "side": 1,
+      "message": "First approach using static variable is no bueno. Patchset 2 initializes SfxChildWinInfo::aPos to MAX_LONG to indicate the variable has not been filled. ",
+      "revId": "09350f63f7481954b673443a893ab5aad8109f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
