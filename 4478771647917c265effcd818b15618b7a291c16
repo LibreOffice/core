@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9ae30f7_fe842570",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-16T10:13:37Z",
+      "side": 1,
+      "message": "IIUC this is specific to non-accelerated calculations, and would give different results for AVX et all?",
+      "revId": "4478771647917c265effcd818b15618b7a291c16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
