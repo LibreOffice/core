@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ed16b2e_34c65c94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-16T16:52:26Z",
+      "side": 1,
+      "message": "Since there\u0027s nothing on Firebird, I took a look at the other databases.\nOnly HSQLDB and Postgresql part implement it.\nI thought about using Postgresql because I wanted to avoid possible Java related stuff from HSQLDB but Postgresql implementation seemed too complicated to me (for example no idea what\u0027s the goal of ReflectionBase + pq_xcontainer.hxx with EventBroadcastHelper, ...)\n\nI tried to use the minimum also, I replaced macros.",
+      "revId": "73792f8cf40e592a14916f574f8d65d287fef6c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
