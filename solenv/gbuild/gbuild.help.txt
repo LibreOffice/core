@@ -33,12 +33,16 @@ AVAILABLE TARGETS
                             be run against it. You can provide additional
                             arguments to soffice.bin using the gb_DBGARGS
                             variable.
+
        check                run unit tests and if in toplevel subsequentcheck
        unitcheck            run unit tests
        slowcheck            run slow unit tests
        screenshot           create all screenshots
        subsequentcheck      run system tests (requires full installation)
        perfcheck            run performance/callgrind unit tests
+       uicheck              run UI tests
+
+       You can set gb_SUPPRESS_TESTS to just build but not run the tests.
 
        build-l10n-only      builds translation files for the build products
        build-non-l10n-only  builds the product without the localization files
@@ -49,16 +53,20 @@ AVAILABLE TARGETS
                             NOTE: needs graphviz to work
        showmodules          shows all registered modules
 
-       <module>         build the named module (without running unittests)
-       <module>.build   an alias for the above
-       <module>.check   run unittests of the named module
-       <module>.clean   clean the named module
-       <module>.all     build the named module and the pre-requisite modules for it
-       <module>.showdeliverables show the targets delivered to INSTDIR and their
-                        source
+       <module>         an alias for <module>.build
+       <module>.<toplevel target>  runs the toplevel target for the named
+                        module. Per default, all pre-requisite are excluded!
+       <module>.allbuild  as build + including all the pre-requisite modules
+       <module>.allcheck  as check + including all the pre-requisite modules
+       <module>.buildall  an alias for <module>.allbuild
+       <module>.checkall  an alias for <module>.allcheck
+       <module>.showdeliverables  show the targets delivered to INSTDIR and
+                        their source
+
        cmd              execute the command contained in the variable cmd=""
                         in a shell with config_host.mk or config_build.mk
                         environment set. (see gb_SIDE)
+
        <target>         build gbuild target (such as Library_vbaswobj or
                         CppunitTest_sw_macros_test)
        <target>.clean   clean gbuild target
