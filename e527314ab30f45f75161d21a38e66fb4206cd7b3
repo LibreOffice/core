@@ -16,6 +16,24 @@
       "message": "The fly in the ointment may be with system cairo prior to 1.17.4 especially with the apparent lack of proper releases at the moment\n\nhttps://www.cairographics.org/news/cairo-1.17.4/",
       "revId": "e527314ab30f45f75161d21a38e66fb4206cd7b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bc614f5_2424c52a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-16T21:28:44Z",
+      "side": 1,
+      "message": "on the other hand on trying with cairo 1.16.0 I don\u0027t really see a difference, which is a good thing",
+      "parentUuid": "b5280f4b_2d8fe9d9",
+      "revId": "e527314ab30f45f75161d21a38e66fb4206cd7b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
