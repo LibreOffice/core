@@ -70,6 +70,7 @@ struct SAL_DLLPUBLIC_RTTI SfxChildWinInfo
 
                         SfxChildWinInfo()
                         {
+                            aPos = Point(LONG_MAX, LONG_MAX);
                             bVisible = false;
                             nFlags = SfxChildWindowFlags::NONE;
                         }
