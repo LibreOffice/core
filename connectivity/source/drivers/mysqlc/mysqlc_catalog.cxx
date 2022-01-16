@@ -9,6 +9,7 @@
 
 #include "mysqlc_catalog.hxx"
 #include "mysqlc_tables.hxx"
+#include "mysqlc_views.hxx"
 #include "mysqlc_users.hxx"
 
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -44,8 +45,19 @@ void Catalog::refreshTables()
 
 void Catalog::refreshViews()
 {
-    // TODO: implement me.
-    // Sets m_pViews (OCatalog)
+    uno::Reference<XResultSet> xViews = m_xMetaData->getTables(Any(), "%", "%", { "VIEW" });
+
+    if (!xViews.is())
+        return;
+
+    ::std::vector<OUString> aViewNames;
+
+    fillNames(xViews, aViewNames);
+
+    if (!m_pViews)
+        m_pViews.reset(new Views(m_xConnection, *this, m_aMutex, aViewNames));
+    else
+        m_pViews->reFill(aViewNames);
 }
 
 //----- IRefreshableGroups ---------------------------------------------------
