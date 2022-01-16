@@ -1867,7 +1867,7 @@ sal_Int32 ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabe
 
 awt::Rectangle ExplicitValueProvider::AddSubtractAxisTitleSizes(
             ChartModel& rModel
-            , const Reference< uno::XInterface >& xChartView
+            , ExplicitValueProvider* pChartView
             , const awt::Rectangle& rPositionAndSize, bool bSubtract )
 {
     awt::Rectangle aRet(rPositionAndSize);
@@ -1879,7 +1879,7 @@ awt::Rectangle ExplicitValueProvider::AddSubtractAxisTitleSizes(
     uno::Reference< chart2::XTitle > xSecondTitle_Width( TitleHelper::getTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, rModel ) );
     if( xTitle_Height.is() || xTitle_Width.is() || xSecondTitle_Height.is() || xSecondTitle_Width.is() )
     {
-        ExplicitValueProvider* pExplicitValueProvider = comphelper::getFromUnoTunnel<ExplicitValueProvider>(xChartView);
+        ExplicitValueProvider* pExplicitValueProvider = pChartView;
         if( pExplicitValueProvider )
         {
             //detect whether x axis points into x direction or not

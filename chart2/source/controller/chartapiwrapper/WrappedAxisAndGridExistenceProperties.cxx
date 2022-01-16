@@ -29,6 +29,7 @@
 #include <WrappedProperty.hxx>
 #include "Chart2ModelContact.hxx"
 #include <TitleHelper.hxx>
+#include <ChartView.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;

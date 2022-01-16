@@ -72,7 +72,7 @@ public:
     static css::awt::Rectangle
         AddSubtractAxisTitleSizes(
                 ChartModel& rModel
-            , const css::uno::Reference< css::uno::XInterface >& xChartView
+            , ExplicitValueProvider* pChartView
             , const css::awt::Rectangle& rPositionAndSize, bool bSubtract );
 
     static sal_Int32 getExplicitNumberFormatKeyForAxis(

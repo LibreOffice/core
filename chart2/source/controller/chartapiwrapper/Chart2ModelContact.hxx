@@ -131,7 +131,7 @@ public:
 
 private: //methods
     ExplicitValueProvider* getExplicitValueProvider() const;
-    css::uno::Reference< css::lang::XUnoTunnel > const & getChartView() const;
+    rtl::Reference< ChartView > const & getChartView() const;
 
 public: //member
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;
@@ -139,7 +139,7 @@ public: //member
 private: //member
     unotools::WeakReference< ChartModel >   m_xChartModel;
 
-    mutable css::uno::Reference< css::lang::XUnoTunnel > m_xChartView;
+    mutable rtl::Reference< ChartView > m_xChartView;
 
     std::map< OUString, css::uno::Reference< css::container::XNameContainer > > m_aTableMap;
 };
