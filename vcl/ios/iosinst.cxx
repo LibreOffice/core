@@ -23,24 +23,13 @@
 
 #include "ios/iosinst.hxx"
 #include "headless/svpdummies.hxx"
-#include "unx/gendata.hxx"
+#include <osx/saldata.hxx>
 #include "quartz/utils.h"
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 
 // Totally wrong of course but doesn't seem to harm much in the iOS app.
 static int viewWidth = 1, viewHeight = 1;
-
-class SalData
-{
-    SystemFontList* mpFontList;
-    CGColorSpaceRef mxRGBSpace;
-    CGColorSpaceRef mxGraySpace;
-
-    static void ensureThreadAutoreleasePool() {};
-
-    explicit SalData();
-};
 
 void IosSalInstance::GetWorkArea( tools::Rectangle& rRect )
 {
@@ -140,19 +129,6 @@ SalFrame *IosSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSt
     return new IosSalFrame( this, pParent, nStyle );
 }
 
-void SalAbort( const OUString& rErrorText, bool bDumpCore )
-{
-    (void) bDumpCore;
-
-    NSLog(@"SalAbort: %s", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
-}
-
-const OUString& SalGetDesktopEnvironment()
-{
-    static OUString aEnv( "iOS" );
-    return aEnv;
-}
-
 SalData::SalData() :
     mpFontList( 0 ),
     mxRGBSpace( CGColorSpaceCreateDeviceRGB() ),
@@ -160,18 +136,19 @@ SalData::SalData() :
 {
 }
 
+SalData::~SalData()
+{
+    CGColorSpaceRelease(mxRGBSpace);
+    CGColorSpaceRelease(mxGraySpace);
+}
 
-// This is our main entry point:
-SalInstance *CreateSalInstance()
+void SalData::ensureThreadAutoreleasePool() {}
+
+extern "C" SalInstance *create_SalInstance()
 {
     IosSalInstance* pInstance = new IosSalInstance( std::make_unique<SvpSalYieldMutex>() );
     new SvpSalData(pInstance);
     return pInstance;
-}
-
-void DestroySalInstance( SalInstance *pInst )
-{
-    delete pInst;
 }
 
 int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
