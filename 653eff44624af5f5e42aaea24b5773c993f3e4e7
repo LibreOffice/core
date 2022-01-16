@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ef303ae_a4965c10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-16T17:22:42Z",
+      "side": 1,
+      "message": "if it really mattered I suppose you could (re)launch an idle to notify libreoffice of the displaychanged event on each qt event so there would only be one eventual displaychanged event processed",
+      "revId": "653eff44624af5f5e42aaea24b5773c993f3e4e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
