@@ -224,10 +224,6 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore );
 
 const OUString& SalGetDesktopEnvironment();
 
-#ifdef DISABLE_DYNLOADING
-extern "C" SalInstance *create_SalInstance();
-#endif
-
 #endif // INCLUDED_VCL_INC_SALINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
