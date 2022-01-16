@@ -75,6 +75,12 @@ private Q_SLOTS:
     static void deleteObjectLater(QObject* pObject);
     static void localeChanged();
 
+    void orientationChanged(Qt::ScreenOrientation);
+    void primaryScreenChanged(QScreen*);
+    void screenAdded(QScreen*);
+    void screenRemoved(QScreen*);
+    void virtualGeometryChanged(const QRect&);
+
 Q_SIGNALS:
     bool ImplYieldSignal(bool bWait, bool bHandleAllCurrentEvents);
     void deleteObjectLaterSignal(QObject* pObject);
@@ -86,6 +92,8 @@ protected:
     bool useCairo() const { return m_bUseCairo; }
     // encodes cairo usage and Qt platform name into the ToolkitName
     OUString constructToolkitID(std::u16string_view sTKname);
+    void connectQScreenSignals(const QScreen*);
+    void notifyDisplayChanged();
 
 public:
     explicit QtInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo = false);
