@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "198061d4_63eb0bf4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-16T10:05:43Z",
+      "side": 1,
+      "message": "man pigz shows a \"-p threads\" parameter.\n\nFYI there is the bit unknown / obscure fact, that PARALLELISM can be something different then a number. PARALLELISM\u003d\" --load-average\u003d10\" works as expected AKA make then uses system load instead of threads; nice hack. According to cloph, this is at least something the TDF infra uses.",
+      "parentUuid": "43e87b48_80c8e8f7",
+      "revId": "8d7b0bbb7d4fbe99ac3cd6f2095fa285a6b54cfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "576eb1a0_eefcdbef",
         "filename": "config_host.mk.in",
         "patchSetId": 1
