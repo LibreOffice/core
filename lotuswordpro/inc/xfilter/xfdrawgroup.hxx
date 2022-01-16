@@ -72,7 +72,10 @@
 class XFDrawGroup : public XFDrawObject
 {
 public:
-    XFDrawGroup() {}
+    XFDrawGroup()
+        : m_aChildren(new XFContentContainer)
+    {
+    }
 
 public:
     using XFDrawObject::Add;
