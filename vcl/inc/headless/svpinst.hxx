@@ -88,8 +88,6 @@ public:
     virtual bool IsCurrentThread() const override;
 };
 
-SalInstance* svp_create_SalInstance();
-
 // NOTE: the functions IsMainThread, DoYield and Wakeup *require* the use of
 // SvpSalYieldMutex; if a subclass uses something else it must override these
 // (Wakeup is only called by SvpSalTimer and SvpSalFrame)
