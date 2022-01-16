@@ -1359,7 +1359,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                 xNaturalDXPixelArray.reset(new double[nLen]);
 
                 for (int i = 0; i < nLen; ++i)
-                    xNaturalDXPixelArray[i] = LogicWidthToDeviceFontCoordinate(pDXArray[i]);
+                    xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceFontWidth(pDXArray[i]);
 
                 aLayoutArgs.SetAltNaturalDXArray(xNaturalDXPixelArray.get());
                 nEndGlyphCoord = std::lround(xNaturalDXPixelArray[nLen - 1]);
@@ -1426,12 +1426,13 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     // position, justify, etc. the layout
     pSalLayout->AdjustLayout( aLayoutArgs );
 
-    Point aDevicePos = ImplLogicToDevicePixel(rLogicalPos);
     if (bTextRenderModeForResolutionIndependentLayout)
-        pSalLayout->DrawBase().setX(LogicXToDeviceFontCoordinate(rLogicalPos.X()));
+        pSalLayout->DrawBase() = ImplLogicToDeviceFontCoordinate(rLogicalPos);
     else
-        pSalLayout->DrawBase().setX(aDevicePos.X());
-    pSalLayout->DrawBase().setY(aDevicePos.Y());
+    {
+        Point aDevicePos = ImplLogicToDevicePixel(rLogicalPos);
+        pSalLayout->DrawBase() = DevicePoint(aDevicePos.X(), aDevicePos.Y());
+    }
 
     // adjust to right alignment if necessary
     if( aLayoutArgs.mnFlags & SalLayoutFlags::RightAlign )
