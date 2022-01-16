@@ -56,6 +56,8 @@ public:
     bool GetNextPos(int* nCharPos, bool* bRTL);
     bool GetNextRun(int* nMinRunPos, int* nEndRunPos, bool* bRTL);
     void AddFallbackRun(int nMinRunPos, int nEndRunPos, bool bRTL);
+    bool HasDXArray() const { return mpDXArray || mpAltNaturalDXArray; }
+
     // methods used by BiDi and glyph fallback
     bool HasFallbackRun() const;
     bool PrepareFallback(const SalLayoutGlyphsImpl* pGlyphsImpl);
