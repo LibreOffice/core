@@ -135,7 +135,8 @@ SalLayout::SalLayout()
     mnEndCharPos( -1 ),
     mnUnitsPerPixel( 1 ),
     mnOrientation( 0 ),
-    maDrawOffset( 0, 0 )
+    maDrawOffset( 0, 0 ),
+    mbTextRenderModeForResolutionIndependentLayout(false)
 {}
 
 SalLayout::~SalLayout()
@@ -171,9 +172,18 @@ DevicePoint SalLayout::GetDrawPosition(const DevicePoint& rRelative) const
 
         double fX = aOfs.getX();
         double fY = aOfs.getY();
-        tools::Long nX = static_cast<tools::Long>( +fCos * fX + fSin * fY );
-        tools::Long nY = static_cast<tools::Long>( +fCos * fY - fSin * fX );
-        aPos += DevicePoint(nX, nY);
+        if (mbTextRenderModeForResolutionIndependentLayout)
+        {
+            double nX = +fCos * fX + fSin * fY;
+            double nY = +fCos * fY - fSin * fX;
+            aPos += DevicePoint(nX, nY);
+        }
+        else
+        {
+            tools::Long nX = static_cast<tools::Long>( +fCos * fX + fSin * fY );
+            tools::Long nY = static_cast<tools::Long>( +fCos * fY - fSin * fX );
+            aPos += DevicePoint(nX, nY);
+        }
     }
 
     return aPos;
