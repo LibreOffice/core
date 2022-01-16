@@ -82,6 +82,11 @@ public:
     int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
     Degree10        GetOrientation() const                  { return mnOrientation; }
 
+    void            SetTextRenderModeForResolutionIndependentLayout(bool bTextRenderModeForResolutionIndependentLayout)
+    {
+        mbTextRenderModeForResolutionIndependentLayout = bTextRenderModeForResolutionIndependentLayout;
+    }
+
     // methods using string indexing
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const = 0;
     virtual DeviceCoordinate FillDXArray( std::vector<DeviceCoordinate>* pDXArray ) const = 0;
@@ -115,6 +120,8 @@ protected:
 
     mutable Point   maDrawOffset;
     DevicePoint     maDrawBase;
+
+    bool            mbTextRenderModeForResolutionIndependentLayout;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
