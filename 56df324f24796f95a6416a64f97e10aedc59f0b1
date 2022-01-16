@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c2008b4_5fc69a56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-16T20:20:17Z",
+      "side": 1,
+      "message": "I had avoided this line from HView.hxx\n\"using HView_Base::getFastPropertyValue;\"\nSee https://opengrok.libreoffice.org/xref/core/connectivity/source/inc/hsqldb/HView.hxx?r\u003d6069a6669#81\nbecause I didn\u0027t understand what was its goal.\n\nFinally, copycating this could perhaps help gcc Jenkins.",
+      "revId": "56df324f24796f95a6416a64f97e10aedc59f0b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
