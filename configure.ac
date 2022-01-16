@@ -14602,11 +14602,11 @@ fi
 cat << _EOF
 ****************************************************************************
 
-To build, run:
-$GNUMAKE
-
-To view some help, run:
+To show information on various make targets and make flags, run:
 $GNUMAKE help
+
+To just build, run:
+$GNUMAKE
 
 _EOF
 
@@ -14622,7 +14622,7 @@ _EOF
     fi
     cat << _EOF
 
-If you want to run the smoketest, run:
+If you want to run the unit tests, run:
 $GNUMAKE check
 
 _EOF
