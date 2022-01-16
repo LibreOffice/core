@@ -671,8 +671,6 @@ bool hasUnhiddenData( const uno::Reference< chart2::XDataSeries >& xSeries )
             continue;
         if( lcl_SequenceHasUnhiddenData( aDataSequences[nN]->getValues() ) )
             return true;
-        if( lcl_SequenceHasUnhiddenData( aDataSequences[nN]->getLabel() ) )
-            return true;
     }
     return false;
 }
