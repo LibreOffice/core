@@ -37,7 +37,6 @@
 
 #include <pattern/window.hxx>
 #include <properties.h>
-#include <stdtypes.h>
 #include <targets.h>
 
 #include <com/sun/star/awt/Toolkit.hpp>

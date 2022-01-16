@@ -23,6 +23,8 @@
 #include <services.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
+#include <tools/debug.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 

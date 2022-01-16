@@ -25,7 +25,6 @@
 #include <acceleratorconst.h>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 
 #include <comphelper/attributelist.hxx>

@@ -26,7 +26,6 @@
 #include <string_view>
 
 #include <o3tl/string_view.hxx>
-#include <rtl/ustring.hxx>
 
 namespace framework{
 

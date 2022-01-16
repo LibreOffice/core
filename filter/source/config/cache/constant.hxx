@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 /*  disable impl_loadOnDemand function of BaseContainer for certain
     functions, where it the feature "impl_loadItemOnDemand() of class FilterCache
     can be used instead of loadAll()!*/

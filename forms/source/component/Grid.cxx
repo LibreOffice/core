@@ -22,6 +22,7 @@
 #include "Grid.hxx"
 #include <property.hxx>
 #include <services.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -31,6 +32,7 @@
 #include <comphelper/types.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::uno;

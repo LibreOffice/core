@@ -19,7 +19,6 @@
 
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include "controlfontdialog.hxx"
 
 #include <comphelper/propertyvalue.hxx>

@@ -28,13 +28,13 @@
 #include <connectivity/dbconversion.hxx>
 #include <o3tl/any.hxx>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/numuno.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/Date.hpp>

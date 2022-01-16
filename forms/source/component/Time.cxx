@@ -21,6 +21,8 @@
 #include <property.hxx>
 #include <services.hxx>
 #include <connectivity/dbconversion.hxx>
+#include <tools/debug.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>

@@ -28,8 +28,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <tools/stream.hxx>
-#include <comphelper/servicehelper.hxx>
-#include <cppuhelper/weak.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>

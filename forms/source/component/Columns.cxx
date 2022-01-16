@@ -21,6 +21,7 @@
 #include <property.hxx>
 #include <componenttools.hxx>
 #include "findpos.hxx"
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>

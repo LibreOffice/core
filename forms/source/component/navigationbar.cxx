@@ -21,11 +21,13 @@
 #include <property.hxx>
 #include <services.hxx>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
+#include <tools/debug.hxx>
 
 using namespace comphelper;
 

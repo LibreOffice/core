@@ -28,6 +28,7 @@
 #include "BaseListBox.hxx"
 #include <componenttools.hxx>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

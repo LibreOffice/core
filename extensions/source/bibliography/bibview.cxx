@@ -28,9 +28,7 @@
 
 
 #include <vcl/svapp.hxx>
-#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <vcl/weld.hxx>
-#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::form;

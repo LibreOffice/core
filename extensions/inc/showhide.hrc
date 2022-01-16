@@ -20,6 +20,8 @@
 #ifndef INCLUDED_EXTENSIONS_INC_SHOWHIDE_HRC
 #define INCLUDED_EXTENSIONS_INC_SHOWHIDE_HRC
 
+#include <unotools/resmgr.hxx>
+
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 namespace {

@@ -33,7 +33,6 @@
 #include <com/sun/star/embed/StorageWrappedTargetException.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XStream.hpp>

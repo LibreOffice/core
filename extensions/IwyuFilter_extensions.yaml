@@ -1,6 +1,9 @@
 ---
 assumeFilename: extensions/source/propctrlr/formcomponenthandler.cxx
 excludelist:
+    extensions/inc/strings.hrc:
+    # Needed for TranslateId macro
+    - unotools/resmgr.hxx
     extensions/source/logging/loghandler.hxx:
     # Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx
@@ -80,3 +83,6 @@ excludelist:
     extensions/source/propctrlr/xsdvalidationpropertyhandler.cxx:
     # Actually used
     - com/sun/star/inspection/XObjectInspectorUI.hpp
+    extensions/source/scanner/grid.cxx:
+    # Needed for rtl::math::expm1
+    - rtl/math.hxx

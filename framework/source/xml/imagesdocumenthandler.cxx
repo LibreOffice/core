@@ -22,7 +22,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
-#include <vcl/svapp.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <comphelper/attributelist.hxx>

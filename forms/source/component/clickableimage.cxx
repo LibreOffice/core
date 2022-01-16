@@ -41,7 +41,7 @@
 #include <osl/mutex.hxx>
 #include <property.hxx>
 #include <services.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/types.hxx>

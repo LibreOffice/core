@@ -18,8 +18,6 @@
  */
 
 
-#include <vcl/svapp.hxx>
-
 #include <svl/srchitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -35,6 +33,7 @@
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
+#include <osl/thread.h>
 
 #include <editxml.hxx>
 

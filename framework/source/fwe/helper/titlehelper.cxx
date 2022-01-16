@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <framework/titlehelper.hxx>
 #include <classes/fwkresid.hxx>
 #include <strings.hrc>
@@ -38,7 +36,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/svapp.hxx>
 
 

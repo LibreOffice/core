@@ -33,7 +33,6 @@
 #include <comphelper/storagehelper.hxx>
 
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <comphelper/mimeconfighelper.hxx>
 
 #include <vcl/svapp.hxx>

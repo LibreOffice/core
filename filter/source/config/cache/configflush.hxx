@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include "cacheitem.hxx"
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/multicontainer2.hxx>

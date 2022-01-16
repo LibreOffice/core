@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUStringLiteral STR_APPL_NAME_WRITER = u"%PRODUCTNAME Writer (.sxw)";
 inline constexpr OUStringLiteral STR_APPL_NAME_CALC = u"%PRODUCTNAME Calc (.sxc)";
 inline constexpr OUStringLiteral STR_APPL_NAME_IMPRESS = u"%PRODUCTNAME Impress (.sxi)";

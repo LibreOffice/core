@@ -21,7 +21,6 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <rtl/string.hxx>
 #include <vector>
 
 

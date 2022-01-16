@@ -27,8 +27,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <rtl/ustrbuf.hxx>
-
 namespace logging
 {
 using css::logging::LogRecord;

@@ -23,7 +23,6 @@
 #include "submission_put.hxx"
 
 #include <comphelper/processfactory.hxx>
-#include <osl/diagnose.h>
 #include <ucbhelper/content.hxx>
 #include <tools/diagnose_ex.h>
 

@@ -41,7 +41,6 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/IOException.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/classids.hxx>

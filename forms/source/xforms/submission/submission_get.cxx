@@ -28,8 +28,6 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <tools/diagnose_ex.h>
 
-#include <memory>
-
 using namespace css::uno;
 using namespace css::ucb;
 using namespace css::task;

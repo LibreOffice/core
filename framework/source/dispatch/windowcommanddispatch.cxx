@@ -28,7 +28,6 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
-#include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 namespace framework{

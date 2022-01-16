@@ -26,7 +26,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/i18nhelp.hxx>

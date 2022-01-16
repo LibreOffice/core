@@ -20,6 +20,8 @@
 #ifndef EXTENSIONS_HELPIDS_H
 #define EXTENSIONS_HELPIDS_H
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OStringLiteral HID_ABSPILOT_PREVIOUS = "EXTENSIONS_HID_ABSPILOT_PREVIOUS";
 inline constexpr OStringLiteral HID_ABSPILOT_NEXT = "EXTENSIONS_HID_ABSPILOT_NEXT";
 inline constexpr OStringLiteral HID_ABSPILOT_CANCEL = "EXTENSIONS_HID_ABSPILOT_CANCEL";

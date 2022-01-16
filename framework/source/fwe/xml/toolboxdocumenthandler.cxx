@@ -30,8 +30,8 @@
 
 #include <sal/config.h>
 #include <sal/macros.h>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <comphelper/attributelist.hxx>

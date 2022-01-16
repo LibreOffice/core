@@ -27,8 +27,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/long.hxx>
 
-#include <memory>
-
 namespace framework
 {
     class FontSizeMenuController final : public svt::PopupMenuControllerBase

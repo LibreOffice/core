@@ -21,7 +21,6 @@
 
 #include <com/sun/star/awt/XWindow.hpp>
 
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>

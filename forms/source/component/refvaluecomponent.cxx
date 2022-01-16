@@ -21,7 +21,10 @@
 #include <property.hxx>
 
 #include <comphelper/property.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <vector>
 

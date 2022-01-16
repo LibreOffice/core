@@ -23,9 +23,7 @@
 
 #include <unordered_map>
 
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/propagg.hxx>
-#include <tools/debug.hxx>
 
 #include "frm_strings.hxx"
 

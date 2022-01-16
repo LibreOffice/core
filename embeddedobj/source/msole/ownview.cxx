@@ -29,7 +29,6 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XEventListener.hpp>

@@ -28,7 +28,6 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/servicehelper.hxx>

@@ -22,6 +22,7 @@
 #include <property.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/NotRemoveableException.hpp>

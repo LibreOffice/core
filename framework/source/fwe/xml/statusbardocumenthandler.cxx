@@ -27,7 +27,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 
-#include <vcl/svapp.hxx>
 #include <vcl/status.hxx>
 
 #include <comphelper/attributelist.hxx>
