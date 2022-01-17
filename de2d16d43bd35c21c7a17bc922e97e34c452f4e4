@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa376dc4_67388b9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-01-17T08:05:18Z",
+      "side": 1,
+      "message": "Cherry-picking because a wider border will lessen tdf#145080",
+      "revId": "de2d16d43bd35c21c7a17bc922e97e34c452f4e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
