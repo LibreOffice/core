@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "830486d9_b0296e96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-01-17T10:32:49Z",
+      "side": 1,
+      "message": "I having the set_window_state",
+      "revId": "eb13093cee1a833d0a68ffec0a7f8a7995582820",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8079e571_7baf5f52",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-01-17T10:32:49Z",
+      "side": 1,
+      "message": "I think having this in the destructor causes position not to be restored. My first stab was to do it this way as well. Seems the position gets clobbered before getting here. So I created a handler for the close button and moved similar to this stuff there (my approach is per session using static variables). Plus gtk3 calls the cancel button when closed with the system X and Esc. See  GtkInstanceDialog::close(bool bCloseSignal) This requires the action-widget response to be set \u003d\"-6\" for the close button in the .ui file.",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 367,
+        "endChar": 69
+      },
+      "revId": "eb13093cee1a833d0a68ffec0a7f8a7995582820",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
