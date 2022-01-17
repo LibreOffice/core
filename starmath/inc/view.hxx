@@ -61,6 +61,8 @@ public:
     virtual void dispose() override;
     virtual ~SmGraphicWindow() override;
 
+    virtual bool IsStarMath() const override { return true; }
+
     void SetTotalSize(const Size& rNewSize);
     Size GetTotalSize() const;
 
@@ -71,6 +73,8 @@ public:
 
     virtual void Resize() override;
     void ShowContextMenu(const CommandEvent& rCEvt);
+
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
 
     SmGraphicWidget& GetGraphicWidget()
     {
@@ -287,6 +291,8 @@ public:
 
     SmViewShell(SfxViewFrame *pFrame, SfxViewShell *pOldSh);
     virtual ~SmViewShell() override;
+
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
 
     SmDocShell * GetDoc()
     {

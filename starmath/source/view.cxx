@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -281,6 +282,15 @@ void SmGraphicWindow::ShowContextMenu(const CommandEvent& rCEvt)
 
     // added for replaceability of context menus
     SfxDispatcher::ExecutePopup( this, &aPos );
+}
+
+// virtual
+void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+        GetGraphicWidget().MouseButtonDown(rMEvt);
+    else
+        InterimItemWindow::MouseButtonDown(rMEvt);
 }
 
 SmGraphicWidget::SmGraphicWidget(SmViewShell& rShell, SmGraphicWindow& rGraphicWindow)
@@ -579,7 +589,7 @@ void SmGraphicWidget::SetTotalSize()
 bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
 {
     if (!SmViewShell::IsInlineEditEnabled())
-        return mrViewShell.KeyInput(rKEvt);
+        return mrViewShell.SfxViewShell::KeyInput(rKEvt);
 
     bool bConsumed = true;
 
@@ -681,7 +691,7 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
             else{
                 if(code != 0){
                     rCursor.InsertText(OUString(code));
-                }else if (!mrViewShell.KeyInput(rKEvt))
+                }else if (!mrViewShell.SfxViewShell::KeyInput(rKEvt))
                     bConsumed = false;
             }
         }
@@ -822,8 +832,12 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
 
     Hide();
 
-    aInitialFocusTimer.SetInvokeHandler(LINK(this, SmCmdBoxWindow, InitialFocusTimerHdl));
-    aInitialFocusTimer.SetTimeout(100);
+    // Don't try to grab focus in LOK inline edit mode
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        aInitialFocusTimer.SetInvokeHandler(LINK(this, SmCmdBoxWindow, InitialFocusTimerHdl));
+        aInitialFocusTimer.SetTimeout(100);
+    }
 }
 
 Point SmCmdBoxWindow::WidgetToWindowPos(const weld::Widget& rWidget, const Point& rPos)
@@ -2089,8 +2103,12 @@ void SmViewShell::Activate( bool bIsMDIActivate )
 {
     SfxViewShell::Activate( bIsMDIActivate );
 
-    SmEditWindow *pEdit = GetEditWindow();
-    if ( pEdit )
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // In LOK, activate in-place editing
+        GetGraphicWidget().GrabFocus();
+    }
+    else if (SmEditWindow *pEdit = GetEditWindow())
     {
         //! Since there is no way to be informed if a "drag and drop"
         //! event has taken place, we call SetText here in order to
@@ -2149,7 +2167,8 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 bool SmViewShell::IsInlineEditEnabled()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get();
+    return comphelper::LibreOfficeKit::isActive()
+           || officecfg::Office::Common::Misc::ExperimentalMode::get();
 }
 
 void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
@@ -2183,6 +2202,15 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
         default:
             break;
     }
+}
+
+//virtual
+bool SmViewShell::KeyInput(const KeyEvent& rKEvt)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+        return GetGraphicWidget().GetView().KeyInput(rKEvt);
+    else
+        return SfxViewShell::KeyInput(rKEvt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

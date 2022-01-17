@@ -57,6 +57,39 @@ public:
                              double fScaleX = 1.0, double fScaleY = 1.0);
 };
 
+/// A class for math editing support via LibreOfficeKit.
+class SFX2_DLLPUBLIC LokStarMathHelper
+{
+private:
+    SfxViewShell* mpViewShell;
+    css::uno::Reference<css::frame::XController> mxController;
+    css::uno::Reference<css::frame::XDispatch> mxDispatcher;
+    VclPtr<vcl::Window> mpWindow;
+
+public:
+    LokStarMathHelper(SfxViewShell* pViewShell)
+        : mpViewShell(pViewShell)
+    {
+    }
+
+    css::uno::Reference<css::frame::XController>& GetXController();
+    css::uno::Reference<css::frame::XDispatch>& GetXDispatcher();
+    vcl::Window* GetWindow();
+    tools::Rectangle GetBoundingBox();
+    void Invalidate();
+
+    bool Hit(const Point& aPos);
+    static bool HitAny(const Point& aPos);
+    void PaintTile(VirtualDevice& rRenderContext, const tools::Rectangle& rTileRect);
+    static void PaintAllStarMathsOnTile(VirtualDevice& rDevice, int nOutputWidth, int nOutputHeight,
+                                        int nTilePosX, int nTilePosY, tools::Long nTileWidth,
+                                        tools::Long nTileHeight);
+    bool postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier,
+                        double fScaleX = 1.0, double fScaleY = 1.0);
+    bool setTextSelection(int nType, int nX, int nY);
+    bool setGraphicSelection(int nType, int nX, int nY, double fScaleX = 1.0, double fScaleY = 1.0);
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
