@@ -1478,7 +1478,8 @@ void LwpDrawBitmap::Read()
         pPicData += 30*sizeof(sal_uInt8);
     }
 
-    m_pStream->ReadBytes(pPicData, nDIBRemaining);
+    if (nDIBRemaining != m_pStream->ReadBytes(pPicData, nDIBRemaining))
+        throw BadRead();
 }
 
 OUString LwpDrawBitmap::RegisterStyle()
