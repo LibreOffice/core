@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7af40c90_c6ef2da3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-01-17T20:51:33Z",
+      "side": 1,
+      "message": "Thanks Szymon, good stuff. Left some questions. Hope they aren\u0027t obvious things that I should\u0027ve known.",
+      "revId": "9cf2c00a1ac5f0ea1861e1cd3b47202ae44820f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28c5d855_d8770fb5",
+        "filename": "sw/qa/extras/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2549,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-01-17T20:51:33Z",
+      "side": 1,
+      "message": "Isn\u0027t it better to just send .uno:SelectAll followed by a single delete?",
+      "revId": "9cf2c00a1ac5f0ea1861e1cd3b47202ae44820f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3644a07d_553450e6",
+        "filename": "sw/source/core/doc/extinput.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-01-17T20:51:33Z",
+      "side": 1,
+      "message": "Not obvious to me why this is needed here for this fix. Is there no risk of breaking something by heaving the SolarMutex taking in each and every SwExtTextInput destructor? Can we avoid this guard at all?",
+      "revId": "9cf2c00a1ac5f0ea1861e1cd3b47202ae44820f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d0f90b1_f5227d3f",
+        "filename": "sw/source/core/doc/extinput.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-01-17T20:51:33Z",
+      "side": 1,
+      "message": "Not clear why we need this, since we aren\u0027t changing the insertion of the new content (meaning, isn\u0027t rIdx already nEndCnt?).",
+      "revId": "9cf2c00a1ac5f0ea1861e1cd3b47202ae44820f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e4a192e_4c584f6b",
+        "filename": "sw/source/core/doc/extinput.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-01-17T20:51:33Z",
+      "side": 1,
+      "message": "But isn\u0027t nEndCnt wrong after the EraseText above? Why do we reset rIdx to it again?",
+      "revId": "9cf2c00a1ac5f0ea1861e1cd3b47202ae44820f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
