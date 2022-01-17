@@ -33,6 +33,24 @@
       "message": "There is another different backtrace with\n\n1. wget wget -O https://bugs.documentfoundation.org/attachment.cgi?id\u003d96245 /tmp/fdo76513-1.docx\n2. ./instdir/program/soffice --headless --convert-to docx /tmp/fdo76513-1.docx\n\nThere is an assert of:\n\nwarn:legacy.osl:1854742:1854742:oox/source/vml/vmlshapecontainer.cxx:44: lclMapShapesById - shape identifier already used \nsoffice.bin: /home/caolan/LibreOffice/core/oox/source/vml/vmlshapecontainer.cxx:111: std::shared_ptr\u003cShapeBase\u003e oox::vml::ShapeContainer::takeLastShape(): Assertion `!markStack.empty()\u0027 failed.",
       "revId": "121cbc250b36290f0f8c7265fea57256dad69553",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77705511_55f8daae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-17T15:44:24Z",
+      "side": 1,
+      "message": "Thank you for showing the problems. Fixing is in progress. Patch coming soon.",
+      "parentUuid": "2ca4a9fd_bf3037f4",
+      "revId": "121cbc250b36290f0f8c7265fea57256dad69553",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
