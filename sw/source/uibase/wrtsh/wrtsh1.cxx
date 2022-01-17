@@ -646,8 +646,12 @@ void SwWrtShell::LaunchOLEObj(sal_Int32 nVerb)
     // LOK: we don't want to handle any other embedded objects than
     // charts, there are too many problems with eg. embedded spreadsheets
     // (like it creates a separate view for the calc sheet)
-    if (comphelper::LibreOfficeKit::isActive() && !SotExchange::IsChart(xRef->getClassID()))
-        return;
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        const auto classId = xRef->getClassID();
+        if (!SotExchange::IsChart(classId) /* && !SotExchange::IsMath(classId) */)
+            return;
+    }
 
     SfxInPlaceClient* pCli = GetView().FindIPClient( xRef.GetObject(), &GetView().GetEditWin() );
     if ( !pCli )

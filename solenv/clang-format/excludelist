@@ -5635,7 +5635,7 @@ include/sfx2/ipclient.hxx
 include/sfx2/linkmgr.hxx
 include/sfx2/linksrc.hxx
 include/sfx2/lnkbase.hxx
-include/sfx2/lokcharthelper.hxx
+include/sfx2/lokcomponenthelpers.hxx
 include/sfx2/lokhelper.hxx
 include/sfx2/mailmodelapi.hxx
 include/sfx2/minfitem.hxx

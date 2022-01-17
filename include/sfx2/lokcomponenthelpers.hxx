@@ -60,6 +60,29 @@ public:
                              double fScaleX = 1.0, double fScaleY = 1.0);
 };
 
+/// A class for math editing support via LibreOfficeKit.
+class SFX2_DLLPUBLIC LokStarMathHelper
+{
+public:
+    LokStarMathHelper(SfxViewShell* pViewShell)
+        : mpViewShell(pViewShell)
+    {
+    }
+
+    vcl::Window* GetWindow();
+
+    bool postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier,
+                        double fScaleX = 1.0, double fScaleY = 1.0);
+
+private:
+    css::uno::Reference<css::frame::XController>& GetXController();
+    tools::Rectangle GetBoundingBox();
+
+    SfxViewShell* mpViewShell;
+    css::uno::Reference<css::frame::XController> mxController;
+    VclPtr<vcl::Window> mpWindow;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

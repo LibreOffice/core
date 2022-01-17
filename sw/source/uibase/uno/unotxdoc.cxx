@@ -35,7 +35,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <sfx2/lokcharthelper.hxx>
+#include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/ipclient.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -3518,17 +3518,17 @@ OUString SwXTextDocument::getPartHash(int nPart)
 VclPtr<vcl::Window> SwXTextDocument::getDocWindow()
 {
     SolarMutexGuard aGuard;
-    VclPtr<vcl::Window> pWindow;
     SwView* pView = m_pDocShell->GetView();
+
+    if (VclPtr<vcl::Window> pWindow = LokChartHelper(pView).GetWindow())
+        return pWindow;
+    if (VclPtr<vcl::Window> pWindow = LokStarMathHelper(pView).GetWindow())
+        return pWindow;
+
     if (pView)
-        pWindow = &(pView->GetEditWin());
+        return &(pView->GetEditWin());
 
-    LokChartHelper aChartHelper(pView);
-    VclPtr<vcl::Window> pChartWindow = aChartHelper.GetWindow();
-    if (pChartWindow)
-        pWindow = pChartWindow;
-
-    return pWindow;
+    return {};
 }
 
 void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
@@ -3623,12 +3623,14 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
     double fScale = aOption.GetZoom() / o3tl::convert(100.0, o3tl::Length::px, o3tl::Length::twip);
 
-    // check if the user hit a chart which is being edited by this view
-    SfxViewShell* pViewShell = m_pDocShell->GetView();
-    LokChartHelper aChartHelper(pViewShell);
-    if (aChartHelper.postMouseEvent(nType, nX, nY,
-                                    nCount, nButtons, nModifier,
-                                    fScale, fScale))
+    // check if the user hit a chart/math object which is being edited by this view
+    if (LokChartHelper(m_pDocShell->GetView()).postMouseEvent(nType, nX, nY,
+                                                              nCount, nButtons, nModifier,
+                                                              fScale, fScale))
+        return;
+    if (LokStarMathHelper(m_pDocShell->GetView()).postMouseEvent(nType, nX, nY,
+                                                                 nCount, nButtons, nModifier,
+                                                                 fScale, fScale))
         return;
 
     // check if the user hit a chart which is being edited by someone else
