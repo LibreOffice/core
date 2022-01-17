@@ -309,20 +309,16 @@ InternalDataProvider::InternalDataProvider()
 {}
 
 InternalDataProvider::InternalDataProvider(
-    const Reference< chart2::XChartDocument > & xChartDoc,
+    const rtl::Reference<::chart::ChartModel> & xChartDoc,
     bool bConnectToModel,
     bool bDefaultDataInColumns)
 :   m_bDataInColumns( bDefaultDataInColumns )
 {
     try
     {
-        auto pModel = dynamic_cast<ChartModel*>(xChartDoc.get());
-        assert(!xChartDoc || pModel);
-        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( pModel ) );
+        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartDoc ) );
         if( xDiagram.is())
         {
-            Reference< frame::XModel > xChartModel = xChartDoc;
-
             //data in columns?
             {
                 OUString aRangeString;
@@ -331,7 +327,7 @@ InternalDataProvider::InternalDataProvider(
                 uno::Sequence< sal_Int32 > aSequenceMapping;
                 const bool bSomethingDetected(
                     DataSourceHelper::detectRangeSegmentation(
-                        pModel, aRangeString, aSequenceMapping, m_bDataInColumns, bFirstCellAsLabel, bHasCategories ));
+                        xChartDoc, aRangeString, aSequenceMapping, m_bDataInColumns, bFirstCellAsLabel, bHasCategories ));
 
                 // #i120559# if no data was available, restore default
                 if(!bSomethingDetected && m_bDataInColumns != bDefaultDataInColumns)
@@ -344,7 +340,7 @@ InternalDataProvider::InternalDataProvider(
             {
                 vector< vector< uno::Any > > aNewCategories;//inner count is level
                 {
-                    ExplicitCategoriesProvider aExplicitCategoriesProvider(ChartModelHelper::getFirstCoordinateSystem(pModel), *pModel);
+                    ExplicitCategoriesProvider aExplicitCategoriesProvider(ChartModelHelper::getFirstCoordinateSystem(xChartDoc), *xChartDoc);
 
                     const Sequence< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
                     sal_Int32 nLevelCount = rSplitCategoriesList.getLength();
@@ -388,7 +384,7 @@ InternalDataProvider::InternalDataProvider(
             }
 
             // data series
-            std::vector< Reference< chart2::XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( pModel ));
+            std::vector< Reference< chart2::XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xChartDoc ));
             lcl_internalizeSeries ftor( m_aInternalData, *this, bConnectToModel, m_bDataInColumns );
             for( const auto& rxScreen : aSeriesVector )
                 ftor( rxScreen );
