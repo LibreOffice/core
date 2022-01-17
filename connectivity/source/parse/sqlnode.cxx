@@ -217,7 +217,7 @@ OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, c
     Reference< XNumberFormatTypes >     xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
 
     double fDate = DBTypeConversion::toDouble(aDate,DBTypeConversion::getNULLDate(xSupplier));
-    sal_Int32 nKey = xTypes->getStandardIndex(rParam.rLocale) + 36; // XXX hack
+    sal_Int32 nKey = xTypes->getFormatIndex(NumberFormatIndex::DATE_SYS_DDMMYYYY, rParam.rLocale);
     return rParam.xFormatter->convertNumberToString(nKey, fDate);
 }
 
@@ -229,7 +229,7 @@ OUString OSQLParseNode::convertDateTimeString(const SQLParseNodeParameter& rPara
     Reference< XNumberFormatTypes >  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
 
     double fDateTime = DBTypeConversion::toDouble(aDate,DBTypeConversion::getNULLDate(xSupplier));
-    sal_Int32 nKey = xTypes->getStandardIndex(rParam.rLocale) + 51; // XXX hack
+    sal_Int32 nKey = xTypes->getFormatIndex(NumberFormatIndex::DATETIME_SYS_DDMMYYYY_HHMMSS, rParam.rLocale);
     return rParam.xFormatter->convertNumberToString(nKey, fDateTime);
 }
 
@@ -242,7 +242,7 @@ OUString OSQLParseNode::convertTimeString(const SQLParseNodeParameter& rParam, c
     Reference< XNumberFormatTypes >  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
 
     double fTime = DBTypeConversion::toDouble(aTime);
-    sal_Int32 nKey = xTypes->getStandardIndex(rParam.rLocale) + 41; // XXX hack
+    sal_Int32 nKey = xTypes->getFormatIndex(NumberFormatIndex::TIME_HHMMSS, rParam.rLocale);
     return rParam.xFormatter->convertNumberToString(nKey, fTime);
 }
 
