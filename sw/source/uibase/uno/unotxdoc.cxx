@@ -35,7 +35,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <sfx2/lokcharthelper.hxx>
+#include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/ipclient.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -3400,10 +3400,17 @@ VclPtr<vcl::Window> SwXTextDocument::getDocWindow()
     if (pView)
         pWindow = &(pView->GetEditWin());
 
-    LokChartHelper aChartHelper(pView);
-    VclPtr<vcl::Window> pChartWindow = aChartHelper.GetWindow();
-    if (pChartWindow)
-        pWindow = pChartWindow;
+    {
+        LokChartHelper aChartHelper(pView);
+        VclPtr<vcl::Window> pChartWindow = aChartHelper.GetWindow();
+        if (pChartWindow)
+            pWindow = pChartWindow;
+    }
+    {
+        LokStarMathHelper aHelper(pView);
+        if (VclPtr<vcl::Window> pEmbeddedWindow = aHelper.GetWindow())
+            pWindow = pEmbeddedWindow;
+    }
 
     return pWindow;
 }
@@ -3502,11 +3509,18 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
 
     // check if the user hit a chart which is being edited by this view
     SfxViewShell* pViewShell = m_pDocShell->GetView();
-    LokChartHelper aChartHelper(pViewShell);
-    if (aChartHelper.postMouseEvent(nType, nX, nY,
-                                    nCount, nButtons, nModifier,
-                                    fScale, fScale))
-        return;
+    {
+        LokChartHelper aChartHelper(pViewShell);
+        if (aChartHelper.postMouseEvent(nType, nX, nY,
+                                        nCount, nButtons, nModifier,
+                                        fScale, fScale))
+            return;
+    }
+    {
+        LokStarMathHelper aHelper(pViewShell);
+        if (aHelper.postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
+            return;
+    }
 
     // check if the user hit a chart which is being edited by someone else
     // and, if so, skip current mouse event
