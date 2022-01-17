@@ -19,6 +19,7 @@
 
 #include "ChartDropTargetHelper.hxx"
 #include <DataSourceHelper.hxx>
+#include <ChartModel.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -60,7 +61,7 @@ namespace chart
 
 ChartDropTargetHelper::ChartDropTargetHelper(
     const Reference< datatransfer::dnd::XDropTarget >& rxDropTarget,
-    const Reference< chart2::XChartDocument > & xChartDocument ) :
+    const rtl::Reference<::chart::ChartModel> & xChartDocument ) :
         DropTargetHelper( rxDropTarget ),
         m_xChartDocument( xChartDocument )
 {}
@@ -109,10 +110,9 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 if( aStrings.size() >= 3 && aStrings[0] == "soffice" )
                 {
                     OUString aRangeString( aStrings[2] );
-                    Reference< container::XChild > xChild( m_xChartDocument, uno::UNO_QUERY );
-                    if( xChild.is())
+                    if( m_xChartDocument.is())
                     {
-                        Reference< frame::XModel > xParentModel( xChild->getParent(), uno::UNO_QUERY );
+                        Reference< frame::XModel > xParentModel( m_xChartDocument->getParent(), uno::UNO_QUERY );
                         if( xParentModel.is() &&
                             m_xChartDocument.is())
                         {

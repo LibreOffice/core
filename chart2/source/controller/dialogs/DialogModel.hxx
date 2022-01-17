@@ -20,6 +20,7 @@
 
 #include <TimerTriggeredControllerLock.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 
 #include <map>
 #include <memory>
@@ -62,7 +63,7 @@ class DialogModel
 {
 public:
     explicit DialogModel(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
+        const rtl::Reference<::chart::ChartModel> & xChartDocument,
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
     ~DialogModel();
 
@@ -81,7 +82,7 @@ public:
     std::shared_ptr< RangeSelectionHelper > const &
         getRangeSelectionHelper() const;
 
-    css::uno::Reference< css::frame::XModel >
+    const rtl::Reference<::chart::ChartModel> &
         getChartModel() const;
 
     css::uno::Reference< css::chart2::data::XDataProvider >
@@ -150,7 +151,7 @@ public:
     ChartModel& getModel() const;
 
 private:
-    css::uno::Reference< css::chart2::XChartDocument >
+    rtl::Reference<::chart::ChartModel>
         m_xChartDocument;
 
     css::uno::Reference< css::chart2::XChartTypeTemplate >

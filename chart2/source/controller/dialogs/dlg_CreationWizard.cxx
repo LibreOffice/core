@@ -44,7 +44,7 @@ namespace chart
 #define STATE_OBJECTS      3
 #define STATE_LAST         STATE_OBJECTS
 
-CreationWizard::CreationWizard(weld::Window* pParent, const uno::Reference<frame::XModel>& xChartModel,
+CreationWizard::CreationWizard(weld::Window* pParent, const rtl::Reference<::chart::ChartModel>& xChartModel,
                                const uno::Reference<uno::XComponentContext>& xContext)
     : vcl::RoadmapWizardMachine(pParent)
     , m_xChartModel(xChartModel,uno::UNO_QUERY)

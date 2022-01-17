@@ -31,6 +31,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 #include <tools/color.hxx>
+#include <unotools/weakref.hxx>
 
 #include <map>
 #include <vector>
@@ -61,7 +62,7 @@ struct AccessibleElementInfo
 {
     AccessibleUniqueId m_aOID;
 
-    css::uno::WeakReference< css::chart2::XChartDocument > m_xChartDocument;
+    unotools::WeakReference< ::chart::ChartModel > m_xChartDocument;
     css::uno::WeakReference< css::view::XSelectionSupplier > m_xSelectionSupplier;
     css::uno::WeakReference< css::uno::XInterface >   m_xView;
     css::uno::WeakReference< css::awt::XWindow >      m_xWindow;

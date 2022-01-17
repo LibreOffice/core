@@ -41,7 +41,7 @@ public:
 
     DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWrapper
         , const OUString& rObjectCID
-        , const css::uno::Reference< css::frame::XModel >& xChartModel
+        , const rtl::Reference<::chart::ChartModel>& xChartModel
         , RotationDirection eRotationDirection
         );
     virtual ~DragMethod_RotateDiagram() override;

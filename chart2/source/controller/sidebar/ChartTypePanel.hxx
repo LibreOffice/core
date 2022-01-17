@@ -90,13 +90,12 @@ private:
 
     vcl::EnumContext maContext;
 
-    css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
 
     bool mbModelValid;
 
     void Initialize();
-    void doUpdateModel(css::uno::Reference<css::frame::XModel> xModel);
+    void doUpdateModel(rtl::Reference<::chart::ChartModel> xModel);
 
     std::unique_ptr<Dim3DLookResourceGroup> m_pDim3DLookResourceGroup;
     std::unique_ptr<StackingResourceGroup> m_pStackingResourceGroup;
@@ -104,7 +103,7 @@ private:
     std::unique_ptr<GeometryResourceGroup> m_pGeometryResourceGroup;
     std::unique_ptr<SortByXValuesResourceGroup> m_pSortByXValuesResourceGroup;
 
-    css::uno::Reference<css::chart2::XChartDocument> m_xChartModel;
+    rtl::Reference<::chart::ChartModel> m_xChartModel;
 
     std::vector<std::unique_ptr<ChartTypeDialogController>> m_aChartTypeDialogControllerList;
     ChartTypeDialogController* m_pCurrentMainType;

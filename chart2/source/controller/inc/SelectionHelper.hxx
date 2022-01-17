@@ -38,7 +38,7 @@ public: //methods
     const ObjectIdentifier& getSelectedOID() const { return m_aSelectedOID;}
 
     bool isResizeableObjectSelected() const;
-    bool isRotateableObjectSelected( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;
+    bool isRotateableObjectSelected( const rtl::Reference<::chart::ChartModel>& xChartModel ) const;
     bool isDragableObjectSelected() const;
 
     bool isAdditionalShapeSelected() const;
@@ -93,7 +93,7 @@ public:
         bool bGetDiagramInsteadOf_Wall=false );
 
     static bool isRotateableObject( const OUString& rCID
-                    , const css::uno::Reference< css::frame::XModel >& xChartModel );
+                    , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     explicit SelectionHelper( SdrObject* pSelectedObj );
     virtual ~SelectionHelper();

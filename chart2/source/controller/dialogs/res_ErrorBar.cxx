@@ -24,6 +24,7 @@
 #include <chartview/ChartSfxItemIds.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <vcl/weld.hxx>
+#include <ChartModel.hxx>
 
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
@@ -165,12 +166,12 @@ void ErrorBarResources::SetErrorBarType( tErrorBarType eNewType )
 }
 
 void ErrorBarResources::SetChartDocumentForRangeChoosing(
-    const uno::Reference< chart2::XChartDocument > & xChartDocument )
+    const rtl::Reference<::chart::ChartModel> & xChartDocument )
 {
     if( xChartDocument.is())
     {
         m_bHasInternalDataProvider = xChartDocument->hasInternalDataProvider();
-        uno::Reference< beans::XPropertySet > xProps( xChartDocument, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xProps( static_cast<cppu::OWeakObject*>(xChartDocument.get()), uno::UNO_QUERY );
         if ( xProps.is() )
         {
             try

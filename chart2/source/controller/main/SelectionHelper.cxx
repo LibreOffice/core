@@ -21,6 +21,7 @@
 #include <ObjectIdentifier.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartModel.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <svx/svdpage.hxx>
@@ -303,7 +304,7 @@ bool Selection::isResizeableObjectSelected() const
     }
 }
 
-bool Selection::isRotateableObjectSelected( const uno::Reference< frame::XModel >& xChartModel ) const
+bool Selection::isRotateableObjectSelected( const rtl::Reference<::chart::ChartModel>& xChartModel ) const
 {
     return SelectionHelper::isRotateableObject( m_aSelectedOID.getObjectCID(), xChartModel );
 }
@@ -442,7 +443,7 @@ OUString SelectionHelper::getHitObjectCID(
 }
 
 bool SelectionHelper::isRotateableObject( const OUString& rCID
-                    , const uno::Reference< frame::XModel >& xChartModel )
+                    , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     if( !ObjectIdentifier::isRotateableObject( rCID ) )
         return false;

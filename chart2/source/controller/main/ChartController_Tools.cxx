@@ -92,16 +92,15 @@ namespace
 
 bool lcl_deleteDataSeries(
     const OUString & rCID,
-    const Reference< frame::XModel > & xModel,
+    const rtl::Reference<::chart::ChartModel> & xModel,
     const Reference< document::XUndoManager > & xUndoManager )
 {
     bool bResult = false;
     uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rCID, xModel ));
-    uno::Reference< chart2::XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
-    if( xSeries.is() && xChartDoc.is())
+    if( xSeries.is() && xModel.is())
     {
         uno::Reference< chart2::XChartType > xChartType(
-            DataSeriesHelper::getChartTypeOfSeries( xSeries, xChartDoc->getFirstDiagram()));
+            DataSeriesHelper::getChartTypeOfSeries( xSeries, xModel->getFirstDiagram()));
         if( xChartType.is())
         {
             UndoGuard aUndoGuard(
@@ -125,7 +124,7 @@ bool lcl_deleteDataSeries(
 
 bool lcl_deleteDataCurve(
     const OUString & rCID,
-    const Reference< frame::XModel > & xModel,
+    const rtl::Reference<::chart::ChartModel> & xModel,
     const Reference< document::XUndoManager > & xUndoManager )
 {
     bool bResult = false;
@@ -161,10 +160,9 @@ bool lcl_deleteDataCurve(
 
 std::unique_ptr<ReferenceSizeProvider> ChartController::impl_createReferenceSizeProvider()
 {
-    awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
+    awt::Size aPageSize( ChartModelHelper::getPageSize( getChartModel() ) );
 
-    return std::make_unique<ReferenceSizeProvider>(
-        aPageSize, Reference<chart2::XChartDocument>(getModel(), uno::UNO_QUERY));
+    return std::make_unique<ReferenceSizeProvider>(aPageSize, getChartModel());
 }
 
 void ChartController::impl_adaptDataSeriesAutoResize()
@@ -181,7 +179,7 @@ void ChartController::executeDispatch_NewArrangement()
 
     try
     {
-        Reference< frame::XModel > xModel( getModel() );
+        rtl::Reference<::chart::ChartModel> xModel( getChartModel() );
         Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ));
         if( xDiagram.is())
         {
@@ -243,7 +241,7 @@ void ChartController::executeDispatch_ScaleText()
     UndoGuard aUndoGuard(
         SchResId( STR_ACTION_SCALE_TEXT ),
         m_xUndoManager );
-    ControllerLockGuardUNO aCtlLockGuard( getModel() );
+    ControllerLockGuardUNO aCtlLockGuard( getChartModel() );
 
     std::unique_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
     OSL_ASSERT(pRefSizeProv);
@@ -607,7 +605,7 @@ bool ChartController::executeDispatch_Delete()
                         ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_TITLE )),
                     m_xUndoManager );
                 TitleHelper::removeTitle(
-                    ObjectIdentifier::getTitleTypeForCID( aCID ), getModel() );
+                    ObjectIdentifier::getTitleTypeForCID( aCID ), getChartModel() );
                 bReturn = true;
                 aUndoGuard.commit();
                 break;
@@ -633,7 +631,7 @@ bool ChartController::executeDispatch_Delete()
             }
 
             case OBJECTTYPE_DATA_SERIES:
-                bReturn = lcl_deleteDataSeries( aCID, getModel(), m_xUndoManager );
+                bReturn = lcl_deleteDataSeries( aCID, getChartModel(), m_xUndoManager );
                 break;
 
             case OBJECTTYPE_LEGEND_ENTRY:
@@ -642,14 +640,14 @@ bool ChartController::executeDispatch_Delete()
                     ObjectIdentifier::getFullParentParticle( aCID ));
                 if( eParentObjectType == OBJECTTYPE_DATA_SERIES )
                 {
-                    bReturn = lcl_deleteDataSeries( aCID, getModel(), m_xUndoManager );
+                    bReturn = lcl_deleteDataSeries( aCID, getChartModel(), m_xUndoManager );
                 }
                 else if( eParentObjectType == OBJECTTYPE_DATA_CURVE )
                 {
                     sal_Int32 nEndPos = aCID.lastIndexOf(':');
                     OUString aParentCID = aCID.copy(0, nEndPos);
 
-                    bReturn = lcl_deleteDataCurve(aParentCID, getModel(), m_xUndoManager );
+                    bReturn = lcl_deleteDataCurve(aParentCID, getChartModel(), m_xUndoManager );
                 }
                 else if( eParentObjectType == OBJECTTYPE_DATA_AVERAGE_LINE )
                 {
@@ -663,7 +661,7 @@ bool ChartController::executeDispatch_Delete()
             {
                 uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
                     ObjectIdentifier::getObjectPropertySet(
-                        ObjectIdentifier::getFullParentParticle( aCID ), getModel()), uno::UNO_QUERY );
+                        ObjectIdentifier::getFullParentParticle( aCID ), getChartModel()), uno::UNO_QUERY );
                 if( xRegCurveCnt.is())
                 {
                     UndoGuard aUndoGuard(
@@ -679,18 +677,18 @@ bool ChartController::executeDispatch_Delete()
 
             case OBJECTTYPE_DATA_CURVE:
             {
-                bReturn = lcl_deleteDataCurve( aCID, getModel(), m_xUndoManager );
+                bReturn = lcl_deleteDataCurve( aCID, getChartModel(), m_xUndoManager );
             }
             break;
 
             case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
                 uno::Reference< beans::XPropertySet > xEqProp(
-                    ObjectIdentifier::getObjectPropertySet( aCID, getModel()));
+                    ObjectIdentifier::getObjectPropertySet( aCID, getChartModel()));
 
                 if( xEqProp.is())
                 {
-                    uno::Reference< frame::XModel > xModel( getModel() );
+                    rtl::Reference<::chart::ChartModel> xModel( getChartModel() );
                     UndoGuard aUndoGuard(
                         ActionDescriptionProvider::createDescription(
                             ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_CURVE_EQUATION )),
@@ -713,7 +711,7 @@ bool ChartController::executeDispatch_Delete()
             case OBJECTTYPE_DATA_ERRORS_Z:
             {
                 uno::Reference< beans::XPropertySet > xErrorBarProp(
-                    ObjectIdentifier::getObjectPropertySet( aCID, getModel() ));
+                    ObjectIdentifier::getObjectPropertySet( aCID, getChartModel() ));
                 if( xErrorBarProp.is())
                 {
                     TranslateId pId;
@@ -725,7 +723,7 @@ bool ChartController::executeDispatch_Delete()
                     else
                         pId = STR_OBJECT_ERROR_BARS_Z;
 
-                    uno::Reference< frame::XModel > xModel( getModel() );
+                    rtl::Reference<::chart::ChartModel> xModel( getChartModel() );
                     UndoGuard aUndoGuard(
                         ActionDescriptionProvider::createDescription(
                             ActionDescriptionProvider::ActionType::Delete, SchResId(pId)),
@@ -746,7 +744,7 @@ bool ChartController::executeDispatch_Delete()
             case OBJECTTYPE_DATA_LABEL:
             {
                 uno::Reference< beans::XPropertySet > xObjectProperties =
-                    ObjectIdentifier::getObjectPropertySet( aCID, getModel() );
+                    ObjectIdentifier::getObjectPropertySet( aCID, getChartModel() );
                 if( xObjectProperties.is() )
                 {
                     UndoGuard aUndoGuard(
@@ -764,7 +762,7 @@ bool ChartController::executeDispatch_Delete()
                     aLabel.ShowSeriesName = false;
                     if( aObjectType == OBJECTTYPE_DATA_LABELS )
                     {
-                        uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( aCID, getModel() ));
+                        uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( aCID, getChartModel() ));
                         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, CHART_UNONAME_LABEL, uno::Any(aLabel) );
                         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any() );
                     }
@@ -858,7 +856,7 @@ void ChartController::executeDispatch_ToggleGridHorizontal()
 {
     UndoGuard aUndoGuard(
         SchResId( STR_ACTION_TOGGLE_GRID_HORZ ), m_xUndoManager );
-    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getModel() ));
+    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getChartModel() ));
     if( !xDiagram.is())
         return;
 
@@ -891,7 +889,7 @@ void ChartController::executeDispatch_ToggleGridVertical()
 {
     UndoGuard aUndoGuard(
         SchResId( STR_ACTION_TOGGLE_GRID_VERTICAL ), m_xUndoManager );
-    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getModel() ));
+    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getChartModel() ));
     if( !xDiagram.is())
         return;
 
@@ -925,7 +923,7 @@ void ChartController::executeDispatch_FillColor(sal_uInt32 nColor)
     try
     {
         OUString aCID( m_aSelection.getSelectedCID() );
-        const uno::Reference< frame::XModel >& xChartModel = getModel();
+        rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
         if( xChartModel.is() )
         {
             Reference< beans::XPropertySet > xPointProperties(
@@ -948,7 +946,7 @@ void ChartController::executeDispatch_FillGradient(OUString sJSONGradient)
     try
     {
         OUString aCID( m_aSelection.getSelectedCID() );
-        const uno::Reference< frame::XModel >& xChartModel = getModel();
+        rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
 
         if( xChartModel.is() )
         {
@@ -962,7 +960,7 @@ void ChartController::executeDispatch_FillGradient(OUString sJSONGradient)
                                 + OUString::number(static_cast<sal_Int32>(aXGradient.GetAngle().get()));
 
                 OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(css::uno::Any(aGradient),
-                                        css::uno::Reference<css::lang::XMultiServiceFactory>(xChartModel, css::uno::UNO_QUERY_THROW),
+                                        xChartModel,
                                         aPrefferedName);
 
                 xPropSet->setPropertyValue("FillGradientName", css::uno::Any(aNewName));
@@ -980,7 +978,7 @@ void ChartController::executeDispatch_LineColor(sal_uInt32 nColor)
     try
     {
         OUString aCID( m_aSelection.getSelectedCID() );
-        const uno::Reference< frame::XModel >& xChartModel = getModel();
+        rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
         if( xChartModel.is() )
         {
             Reference< beans::XPropertySet > xPropSet(
@@ -1010,7 +1008,7 @@ void ChartController::executeDispatch_LineWidth(sal_uInt32 nWidth)
     try
     {
         OUString aCID( m_aSelection.getSelectedCID() );
-        const uno::Reference< frame::XModel >& xChartModel = getModel();
+        rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
         if( xChartModel.is() )
         {
             Reference< beans::XPropertySet > xPropSet(
@@ -1071,7 +1069,7 @@ void ChartController::executeDispatch_LOKPieSegmentDragging( int nOffset )
     try
     {
         OUString aCID( m_aSelection.getSelectedCID() );
-        const uno::Reference< frame::XModel >& xChartModel = getModel();
+        rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
         if( xChartModel.is() )
         {
             Reference< beans::XPropertySet > xPointProperties(

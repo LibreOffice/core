@@ -22,6 +22,7 @@
 
 #include <SelectionHelper.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartModel.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
@@ -44,7 +45,7 @@ using ::com::sun::star::uno::Reference;
 
 DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWrapper
         , const OUString& rObjectCID
-        , const Reference< frame::XModel >& xChartModel
+        , const rtl::Reference<::chart::ChartModel>& xChartModel
         , RotationDirection eRotationDirection )
     : DragMethod_Base( rDrawViewWrapper, rObjectCID, xChartModel, ActionDescriptionProvider::ActionType::Rotate )
     , m_pScene(nullptr)

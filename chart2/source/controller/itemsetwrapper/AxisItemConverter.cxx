@@ -29,6 +29,7 @@
 #include <AxisHelper.hxx>
 #include <CommonConverters.hxx>
 #include <ChartTypeHelper.hxx>
+#include <ChartModel.hxx>
 #include <unonames.hxx>
 #include <memory>
 
@@ -79,15 +80,13 @@ AxisItemConverter::AxisItemConverter(
     const Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const Reference< chart2::XChartDocument > & xChartDoc,
+    const rtl::Reference<::chart::ChartModel> & xChartDoc,
     ::chart::ExplicitScaleData const * pScale /* = NULL */,
     ::chart::ExplicitIncrementData const * pIncrement /* = NULL */,
     const awt::Size* pRefSize ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_xChartDoc( xChartDoc )
 {
-    Reference< lang::XMultiServiceFactory > xNamedPropertyContainerFactory( xChartDoc, uno::UNO_QUERY );
-
     if( pScale )
         m_pExplicitScale.reset( new ::chart::ExplicitScaleData( *pScale ) );
     if( pIncrement )
@@ -95,7 +94,7 @@ AxisItemConverter::AxisItemConverter(
 
     m_aConverters.emplace_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
-                                 xNamedPropertyContainerFactory,
+                                 xChartDoc,
                                  GraphicObjectType::LineProperties ));
     m_aConverters.emplace_back(
         new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));

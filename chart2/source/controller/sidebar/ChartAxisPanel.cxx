@@ -28,6 +28,7 @@
 
 #include "ChartAxisPanel.hxx"
 #include <ChartController.hxx>
+#include <ChartModel.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -36,7 +37,7 @@ namespace chart::sidebar {
 
 namespace {
 
-bool isLabelShown(const css::uno::Reference<css::frame::XModel>& xModel,
+bool isLabelShown(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference< css::beans::XPropertySet > xAxis(
@@ -54,7 +55,7 @@ bool isLabelShown(const css::uno::Reference<css::frame::XModel>& xModel,
     return bVisible;
 }
 
-void setLabelShown(const css::uno::Reference<css::frame::XModel>& xModel,
+void setLabelShown(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, bool bVisible)
 {
     css::uno::Reference< css::beans::XPropertySet > xAxis(
@@ -79,7 +80,7 @@ AxisLabelPosMap const aLabelPosMap[] = {
     { 3, css::chart::ChartAxisLabelPosition_OUTSIDE_END }
 };
 
-sal_Int32 getLabelPosition(const css::uno::Reference<css::frame::XModel>& xModel,
+sal_Int32 getLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference< css::beans::XPropertySet > xAxis(
@@ -103,7 +104,7 @@ sal_Int32 getLabelPosition(const css::uno::Reference<css::frame::XModel>& xModel
     return 0;
 }
 
-void setLabelPosition(const css::uno::Reference<css::frame::XModel>& xModel,
+void setLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, sal_Int32 nPos)
 {
     css::uno::Reference< css::beans::XPropertySet > xAxis(
@@ -122,7 +123,7 @@ void setLabelPosition(const css::uno::Reference<css::frame::XModel>& xModel,
     xAxis->setPropertyValue("LabelPosition", css::uno::Any(ePos));
 }
 
-bool isReverse(const css::uno::Reference<css::frame::XModel>& xModel,
+bool isReverse(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference< css::chart2::XAxis > xAxis =
@@ -136,7 +137,7 @@ bool isReverse(const css::uno::Reference<css::frame::XModel>& xModel,
     return aData.Orientation == css::chart2::AxisOrientation_REVERSE;
 }
 
-void setReverse(const css::uno::Reference<css::frame::XModel>& xModel,
+void setReverse(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, bool bReverse)
 {
     css::uno::Reference< css::chart2::XAxis > xAxis =
@@ -174,7 +175,7 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
     return aCID;
 }
 
-void setAxisRotation(const css::uno::Reference<css::frame::XModel>& xModel,
+void setAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, double nVal)
 {
     css::uno::Reference< css::beans::XPropertySet > xAxis(
@@ -186,7 +187,7 @@ void setAxisRotation(const css::uno::Reference<css::frame::XModel>& xModel,
     xAxis->setPropertyValue("TextRotation", css::uno::Any(nVal));
 }
 
-double getAxisRotation(const css::uno::Reference<css::frame::XModel>& xModel,
+double getAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference< css::beans::XPropertySet > xAxis(
@@ -212,7 +213,7 @@ ChartAxisPanel::ChartAxisPanel(
     , mxLBLabelPos(m_xBuilder->weld_combo_box("comboboxtext_label_position"))
     , mxGridLabel(m_xBuilder->weld_widget("label_props"))
     , mxNFRotation(m_xBuilder->weld_metric_spin_button("spinbutton1", FieldUnit::DEGREE))
-    , mxModel(pController->getModel())
+    , mxModel(pController->getChartModel())
     , mxModifyListener(new ChartSidebarModifyListener(this))
     , mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_AXIS))
     , mbModelValid(true)
@@ -235,8 +236,7 @@ ChartAxisPanel::~ChartAxisPanel()
 
 void ChartAxisPanel::Initialize()
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->addModifyListener(mxModifyListener);
+    mxModel->addModifyListener(mxModifyListener);
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
@@ -306,12 +306,11 @@ void ChartAxisPanel::modelInvalid()
     mbModelValid = false;
 }
 
-void ChartAxisPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartAxisPanel::doUpdateModel(rtl::Reference<::chart::ChartModel> xModel)
 {
     if (mbModelValid)
     {
-        css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-        xBroadcaster->removeModifyListener(mxModifyListener);
+        mxModel->removeModifyListener(mxModifyListener);
 
         css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
             mxModel->getCurrentController(), css::uno::UNO_QUERY);
@@ -326,8 +325,7 @@ void ChartAxisPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xMode
     if (!mbModelValid)
         return;
 
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcasterNew->addModifyListener(mxModifyListener);
+    mxModel->addModifyListener(mxModifyListener);
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
@@ -336,7 +334,9 @@ void ChartAxisPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xMode
 
 void ChartAxisPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
-    doUpdateModel(xModel);
+    ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
+    assert(!xModel || pModel);
+    doUpdateModel(pModel);
 }
 
 void ChartAxisPanel::selectionChanged(bool bCorrectType)

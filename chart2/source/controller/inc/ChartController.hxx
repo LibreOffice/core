@@ -336,24 +336,24 @@ public:
 
     css::uno::Reference<css::uno::XInterface> const & getChartView() const;
 
+    rtl::Reference<::chart::ChartModel> getChartModel();
+
 private:
     class TheModel : public salhelper::SimpleReferenceObject
     {
         public:
-            explicit TheModel( const css::uno::Reference<
-                        css::frame::XModel > & xModel );
+            explicit TheModel( const rtl::Reference<::chart::ChartModel> & xModel );
 
             virtual ~TheModel() override;
 
             void        addListener( ChartController* pController );
             void        removeListener(  ChartController* pController );
             void        tryTermination();
-            const css::uno::Reference< css::frame::XModel >&
+            const rtl::Reference<::chart::ChartModel>&
                         getModel() const { return m_xModel;}
 
         private:
-            css::uno::Reference< css::frame::XModel >     m_xModel;
-            css::uno::Reference< css::util::XCloseable >  m_xCloseable;
+            rtl::Reference<::chart::ChartModel>     m_xModel;
 
             //the ownership between model and controller is not clear at first
             //each controller might consider himself as owner of the model first

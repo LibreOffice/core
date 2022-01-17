@@ -27,6 +27,8 @@ namespace com::sun::star::beans { class XPropertySetInfo; }
 
 namespace chart
 {
+class ChartModel;
+
 typedef ::svt::OGenericUnoDialog ChartTypeUnoDlg_BASE;
 class ChartTypeUnoDlg final : public ChartTypeUnoDlg_BASE
                         ,public ::comphelper::OPropertyArrayUsageHelper< ChartTypeUnoDlg >
@@ -57,7 +59,7 @@ private:
     ChartTypeUnoDlg(const ChartTypeUnoDlg&) = delete;
     void operator =(const ChartTypeUnoDlg&) = delete;
 
-    css::uno::Reference< css::frame::XModel >           m_xChartModel;
+    rtl::Reference<::chart::ChartModel>           m_xChartModel;
 };
 
 } //namespace chart

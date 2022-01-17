@@ -21,6 +21,7 @@ namespace com::sun::star::util { class XModifyListener; }
 namespace chart {
 
 class ChartController;
+class ChartModel;
 
 namespace sidebar {
 
@@ -72,13 +73,13 @@ private:
     std::unique_ptr<weld::SpinButton> mxMFPos;
     std::unique_ptr<weld::SpinButton> mxMFNeg;
 
-    css::uno::Reference<css::frame::XModel> mxModel;
+    rtl::Reference<::chart::ChartModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
 
     bool mbModelValid;
 
     void Initialize();
-    void doUpdateModel(css::uno::Reference<css::frame::XModel> xModel);
+    void doUpdateModel(rtl::Reference<::chart::ChartModel> xModel);
 
     DECL_LINK(RadioBtnHdl, weld::Toggleable&, void);
     DECL_LINK(ListBoxHdl, weld::ComboBox&, void);

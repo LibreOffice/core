@@ -20,6 +20,7 @@
 
 #include <com/sun/star/document/XUndoAction.hpp>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/compbase.hxx>
 
@@ -31,6 +32,7 @@ class SdrUndoAction;
 
 namespace chart
 {
+class ChartModel;
 class ChartModelClone;
 
 namespace impl
@@ -52,7 +54,7 @@ public:
             Upon <member>invoking</member>, the clone model is applied to the document model.
     */
     UndoElement( const OUString & i_actionString,
-                 const css::uno::Reference< css::frame::XModel >& i_documentModel,
+                 const rtl::Reference<::chart::ChartModel>& i_documentModel,
                  const std::shared_ptr< ChartModelClone >& i_modelClone
                );
     virtual ~UndoElement() override;
@@ -73,7 +75,7 @@ private:
 
 private:
     OUString                                      m_sActionString;
-    css::uno::Reference< css::frame::XModel >     m_xDocumentModel;
+    rtl::Reference<::chart::ChartModel>           m_xDocumentModel;
     std::shared_ptr< ChartModelClone >            m_pModelClone;
 };
 

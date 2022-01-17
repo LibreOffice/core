@@ -12,6 +12,7 @@
 #include <string_view>
 
 #include "ChartColorWrapper.hxx"
+#include <ChartModel.hxx>
 
 #include <ObjectIdentifier.hxx>
 #include <PropertyHelper.hxx>
@@ -53,7 +54,7 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 }
 
 css::uno::Reference<css::beans::XPropertySet> getPropSet(
-        const css::uno::Reference<css::frame::XModel>& xModel)
+        const rtl::Reference<::chart::ChartModel>& xModel)
 {
     OUString aCID = getCID(xModel);
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -76,7 +77,7 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
 }
 
 ChartColorWrapper::ChartColorWrapper(
-        css::uno::Reference<css::frame::XModel> const & xModel,
+        rtl::Reference<::chart::ChartModel> const & xModel,
         SvxColorToolBoxControl* pControl,
         const OUString& rName):
     mxModel(xModel),
@@ -98,7 +99,7 @@ void ChartColorWrapper::operator()([[maybe_unused]] const OUString& , const svx:
     xPropSet->setPropertyValue(maPropertyName, css::uno::makeAny(rColor.m_aColor));
 }
 
-void ChartColorWrapper::updateModel(const css::uno::Reference<css::frame::XModel>& xModel)
+void ChartColorWrapper::updateModel(const rtl::Reference<::chart::ChartModel>& xModel)
 {
     mxModel = xModel;
 }
@@ -133,14 +134,14 @@ void ChartColorWrapper::updateData()
 }
 
 ChartLineStyleWrapper::ChartLineStyleWrapper(
-        css::uno::Reference<css::frame::XModel> const & xModel,
+        rtl::Reference<::chart::ChartModel> const & xModel,
         SvxLineStyleToolBoxControl* pControl)
     : mxModel(xModel)
     , mpControl(pControl)
 {
 }
 
-void ChartLineStyleWrapper::updateModel(const css::uno::Reference<css::frame::XModel>& xModel)
+void ChartLineStyleWrapper::updateModel(const rtl::Reference<::chart::ChartModel>& xModel)
 {
     mxModel = xModel;
 }
@@ -218,7 +219,7 @@ bool ChartLineStyleWrapper::operator()(std::u16string_view rCommand, const css::
         css::uno::Any aAny;
         aDashItem.QueryValue(aAny, MID_LINEDASH);
         OUString aDashName = PropertyHelper::addLineDashUniqueNameToTable(aAny,
-                css::uno::Reference<css::lang::XMultiServiceFactory>(mxModel, css::uno::UNO_QUERY),
+                mxModel,
                 "");
         xPropSet->setPropertyValue("LineDash", aAny);
         xPropSet->setPropertyValue("LineDashName", css::uno::Any(aDashName));

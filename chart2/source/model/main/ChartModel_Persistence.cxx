@@ -22,6 +22,7 @@
 #include <MediaDescriptorHelper.hxx>
 #include <ChartViewHelper.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartTypeManager.hxx>
 #include <DataSourceHelper.hxx>
 #include <AxisHelper.hxx>
 #include <ThreeDHelper.hxx>
@@ -724,10 +725,10 @@ void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
                 DataSourceHelper::createArguments("PivotChart", uno::Sequence<sal_Int32>(), true, true, true);
 
             Reference<chart2::data::XDataSource> xDataSource(xDataProvider->createDataSource(aArguments));
-            Reference<lang::XMultiServiceFactory> xFactory(getChartTypeManager(), uno::UNO_QUERY);
+            rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = getTypeManager();
             Reference<chart2::XDiagram> xDiagram(getFirstDiagram());
 
-            DiagramHelper::tTemplateWithServiceName aTemplateAndService = DiagramHelper::getTemplateForDiagram(xDiagram, xFactory);
+            DiagramHelper::tTemplateWithServiceName aTemplateAndService = DiagramHelper::getTemplateForDiagram(xDiagram, xChartTypeManager);
             css::uno::Reference<css::chart2::XChartTypeTemplate> xChartTypeTemplate(aTemplateAndService.first);
             xChartTypeTemplate->changeDiagramData(xDiagram, xDataSource, aArguments);
         }
