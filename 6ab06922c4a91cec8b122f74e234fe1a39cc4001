@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b7a3738_93aa0207",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-17T11:46:18Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/105722/ : FAILURE\n\u003e \n\u003e Uncategorized build failure. If it is generic enough, please add a suitable Cause for it. ( https://ci.libreoffice.org/job/gerrit_master/105722/ )\n\n/usr/bin/sh: line 1: 12985 Killed for msbuild, while building coinmp.. -\u003e resume",
+      "revId": "6ab06922c4a91cec8b122f74e234fe1a39cc4001",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
