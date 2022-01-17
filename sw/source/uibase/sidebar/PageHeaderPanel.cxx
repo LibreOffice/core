@@ -103,7 +103,7 @@ void PageHeaderPanel::Initialize()
 
     SetMarginsAndSpacingFieldUnit();
 
-    aCustomEntry = mxCustomEntry->get_label();
+    m_aCustomEntry = mxCustomEntry->get_label();
     mxHeaderToggle->connect_toggled( LINK(this, PageHeaderPanel, HeaderToggleHdl) );
     mxHeaderMarginPresetLB->connect_changed( LINK(this, PageHeaderPanel, HeaderLRMarginHdl));
     mxHeaderSpacingLB->connect_changed( LINK(this, PageHeaderPanel, HeaderSpacingHdl));
@@ -144,15 +144,15 @@ void PageHeaderPanel::UpdateMarginControl()
             if (mxHeaderMarginPresetLB->get_id(i).toUInt32() == nLeft)
             {
                 mxHeaderMarginPresetLB->set_active(i);
-                int nCustomEntry = mxHeaderMarginPresetLB->find_text(aCustomEntry);
+                int nCustomEntry = mxHeaderMarginPresetLB->find_text(m_aCustomEntry);
                 if (nCustomEntry != -1)
                     mxHeaderMarginPresetLB->remove(nCustomEntry);
                 return;
             }
         }
     }
-    mxHeaderMarginPresetLB->append_text(aCustomEntry);
-    mxHeaderMarginPresetLB->set_active_text(aCustomEntry);
+    mxHeaderMarginPresetLB->append_text(m_aCustomEntry);
+    mxHeaderMarginPresetLB->set_active_text(m_aCustomEntry);
 }
 
 void PageHeaderPanel::UpdateSpacingControl()
@@ -164,14 +164,14 @@ void PageHeaderPanel::UpdateSpacingControl()
         if (mxHeaderSpacingLB->get_id(i).toUInt32() == nBottom)
         {
             mxHeaderSpacingLB->set_active(i);
-            int nCustomEntry = mxHeaderSpacingLB->find_text(aCustomEntry);
+            int nCustomEntry = mxHeaderSpacingLB->find_text(m_aCustomEntry);
             if (nCustomEntry != -1)
                 mxHeaderSpacingLB->remove(nCustomEntry);
             return;
         }
     }
-    mxHeaderSpacingLB->append_text(aCustomEntry);
-    mxHeaderSpacingLB->set_active_text(aCustomEntry);
+    mxHeaderSpacingLB->append_text(m_aCustomEntry);
+    mxHeaderSpacingLB->set_active_text(m_aCustomEntry);
 }
 
 void PageHeaderPanel::UpdateLayoutControl()

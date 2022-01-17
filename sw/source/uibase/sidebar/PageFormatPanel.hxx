@@ -86,7 +86,7 @@ private:
     tools::Long mnPageRightMargin;
     tools::Long mnPageTopMargin;
     tools::Long mnPageBottomMargin;
-    OUString aCustomEntry;
+    OUString m_aCustomEntry;
 
     void Initialize();
     void SetMarginFieldUnit();

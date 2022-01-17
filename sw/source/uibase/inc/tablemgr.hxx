@@ -41,9 +41,9 @@ const char cParaDelim = 0x0a;
 
 class SW_DLLPUBLIC SwTableFUNC
 {
-    SwFrameFormat    *pFormat;
-    SwWrtShell  *pSh;
-    SwTabCols   aCols;
+    SwFrameFormat    *m_pFormat;
+    SwWrtShell  *m_pSh;
+    SwTabCols   m_aCols;
 
 private:
     SAL_DLLPRIVATE int GetRightSeparator(int nNum) const;
@@ -60,7 +60,7 @@ public:
     sal_uInt16  GetColCount() const;
     sal_uInt16  GetCurColNum() const;
 
-    SwWrtShell* GetShell() const { return pSh; }
+    SwWrtShell* GetShell() const { return m_pSh; }
 
     // @deprecated
     void UpdateChart();
