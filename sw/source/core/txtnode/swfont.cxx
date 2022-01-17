@@ -1230,9 +1230,7 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
         }
 
         rInf.SetWidth( sal_uInt16(aFontSize.Width() + nSpace) );
-        rInf.SetText( "  " );
-        rInf.SetIdx( TextFrameIndex(0) );
-        rInf.SetLen( TextFrameIndex(2) );
+        rInf.SetTextIdxLen( "  ", TextFrameIndex(0), TextFrameIndex(2) );
         SetUnderline( nOldUnder );
         rInf.SetUnderFnt( nullptr );
 
@@ -1242,9 +1240,7 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
         pUnderFnt->GetFont().DrawStretchText_( rInf );
 
         rInf.SetUnderFnt( pUnderFnt );
-        rInf.SetText(oldStr);
-        rInf.SetIdx( nOldIdx );
-        rInf.SetLen( nOldLen );
+        rInf.SetTextIdxLen(oldStr, nOldIdx, nOldLen);
     }
 
     rInf.SetPos(aOldPos);
@@ -1312,9 +1308,7 @@ void SwSubFont::DrawStretchText_( SwDrawTextInfo &rInf )
         const OUString oldStr = rInf.GetText();
         TextFrameIndex const nOldIdx = rInf.GetIdx();
         TextFrameIndex const nOldLen = rInf.GetLen();
-        rInf.SetText( "  " );
-        rInf.SetIdx( TextFrameIndex(0) );
-        rInf.SetLen( TextFrameIndex(2) );
+        rInf.SetTextIdxLen( "  ", TextFrameIndex(0), TextFrameIndex(2) );
         SetUnderline( nOldUnder );
         rInf.SetUnderFnt( nullptr );
 
@@ -1324,9 +1318,7 @@ void SwSubFont::DrawStretchText_( SwDrawTextInfo &rInf )
         pUnderFnt->GetFont().DrawStretchText_( rInf );
 
         rInf.SetUnderFnt( pUnderFnt );
-        rInf.SetText(oldStr);
-        rInf.SetIdx( nOldIdx );
-        rInf.SetLen( nOldLen );
+        rInf.SetTextIdxLen(oldStr, nOldIdx, nOldLen);
     }
 
     rInf.SetPos(aOldPos);

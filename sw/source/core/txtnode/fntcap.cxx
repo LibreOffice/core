@@ -720,14 +720,11 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                             oldText.copy(sal_Int32(nOldPos), sal_Int32(nTmp-nOldPos)));
                         aCapInf.nIdx = nOldPos;
                         aCapInf.nLen = nTmp - nOldPos;
-                        rDo.GetInf().SetIdx(TextFrameIndex(0));
-                        rDo.GetInf().SetLen(TextFrameIndex(aNewText.getLength()));
-                        rDo.GetInf().SetText( aNewText );
+                        rDo.GetInf().SetTextIdxLen( aNewText, TextFrameIndex(0), TextFrameIndex(aNewText.getLength()));
                     }
                     else
                     {
-                        rDo.GetInf().SetIdx( nOldPos );
-                        rDo.GetInf().SetLen( nTmp - nOldPos );
+                        rDo.GetInf().SetIdxLen( nOldPos, nTmp - nOldPos );
                     }
 
                     rDo.GetInf().SetOut( *pOutSize );
