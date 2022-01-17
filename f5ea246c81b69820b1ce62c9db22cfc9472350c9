@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b74cfa6_c7378a99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-17T19:28:39Z",
+      "side": 1,
+      "message": "The changes are good, but please fix these two issues.",
+      "revId": "f5ea246c81b69820b1ce62c9db22cfc9472350c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8d0e450_f13b2a32",
+        "filename": "UnoControls/source/inc/progressbar.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-17T19:28:39Z",
+      "side": 1,
+      "message": "You can use COL_WHITE instead and remove the comment.",
+      "revId": "f5ea246c81b69820b1ce62c9db22cfc9472350c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25f3864d_374c60f6",
+        "filename": "UnoControls/source/inc/progressbar.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-17T19:28:39Z",
+      "side": 1,
+      "message": "You can use COL_BLACK here and remove the comment.",
+      "revId": "f5ea246c81b69820b1ce62c9db22cfc9472350c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
