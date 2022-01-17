@@ -77,12 +77,13 @@ LwpSdwFileLoader::~LwpSdwFileLoader() {}
 void LwpSdwFileLoader::CreateDrawObjects(std::vector<rtl::Reference<XFFrame>>* pDrawObjVector)
 {
     unsigned char BinSignature[2];
-    m_pStream->ReadBytes(BinSignature, 2);
+    if (m_pStream->ReadBytes(BinSignature, 2) != 2)
+        return;
 
     if (BinSignature[0] != 'S' || BinSignature[1] != 'M')
         return;
 
-    unsigned short nVersion;
+    unsigned short nVersion(0);
     m_pStream->ReadUInt16(nVersion);
 
     m_pStream->Seek(0);
