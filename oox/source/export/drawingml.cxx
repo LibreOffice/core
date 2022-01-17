@@ -1660,12 +1660,19 @@ void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const cs
 {
         mpFS->startElementNS(XML_a, XML_pattFill, XML_prst, GetHatchPattern(rHatch));
 
+        sal_Int32 nAlpha = MAX_PERCENT;
+        if (GetProperty(rXPropSet, "FillTransparence"))
+        {
+            sal_Int32 nTransparency = 0;
+            mAny >>= nTransparency;
+            nAlpha = (MAX_PERCENT - (PER_PERCENT * nTransparency));
+        }
+
         mpFS->startElementNS(XML_a, XML_fgClr);
-        WriteColor(::Color(ColorTransparency, rHatch.Color));
+        WriteColor(::Color(ColorTransparency, rHatch.Color), nAlpha);
         mpFS->endElementNS( XML_a , XML_fgClr );
 
         ::Color nColor = COL_WHITE;
-        sal_Int32 nAlpha  = 0;
 
         if ( GetProperty( rXPropSet, "FillBackground" ) )
         {
@@ -1673,13 +1680,13 @@ void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const cs
             mAny >>= isBackgroundFilled;
             if( isBackgroundFilled )
             {
-                nAlpha = MAX_PERCENT;
-
                 if( GetProperty( rXPropSet, "FillColor" ) )
                 {
                     mAny >>= nColor;
                 }
             }
+            else
+                nAlpha = 0;
         }
 
         mpFS->startElementNS(XML_a, XML_bgClr);
