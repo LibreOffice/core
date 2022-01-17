@@ -66,6 +66,7 @@ class SVGExport : public SvXMLExport
     bool    mbIsUseOpacity;
     bool    mbIsUseNativeTextDecoration;
     bool    mbIsUsePositionedCharacters;
+    std::set<sal_Unicode> maEmbeddedBulletGlyphs;
 
 public:
 
@@ -83,6 +84,9 @@ public:
     bool IsUsePositionedCharacters() const { return mbIsUsePositionedCharacters; };
 
     void writeMtf( const GDIMetaFile& rMtf );
+
+    void SetEmbeddedBulletGlyph(sal_Unicode cBullet);
+    bool IsEmbeddedBulletGlyph(sal_Unicode cBullet) const;
 
 protected:
 

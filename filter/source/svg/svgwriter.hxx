@@ -189,7 +189,7 @@ class GDIMetaFile;
 
 struct BulletListItemInfo
 {
-    tools::Long nFontSize;
+    vcl::Font aFont;
     Color aColor;
     Point aPos;
     sal_Unicode cBulletChar;
