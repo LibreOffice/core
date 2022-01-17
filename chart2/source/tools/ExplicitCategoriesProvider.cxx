@@ -101,7 +101,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
                         //->split them in the direction of the first series
                         //detect whether the first series is a row or a column
                         bool bSeriesUsesColumns = true;
-                        std::vector< Reference< XDataSeries > > aSeries( ChartModelHelper::getDataSeries( mrModel ) );
+                        std::vector< Reference< XDataSeries > > aSeries( ChartModelHelper::getDataSeries( &mrModel ) );
                         if( !aSeries.empty() )
                         {
                             uno::Reference< data::XDataSource > xSeriesSource( aSeries.front(), uno::UNO_QUERY );
@@ -175,12 +175,12 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
     auto pOutTexts = rOutTexts.getArray();
 
     sal_Int32 nAxisNumberFormat = 0;
-    rtl::Reference< BaseCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
+    rtl::Reference< BaseCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( &rModel ) );
     if( xCooSysModel.is() )
     {
         Reference< chart2::XAxis > xAxis( xCooSysModel->getAxisByDimension(0,0) );
         nAxisNumberFormat = AxisHelper::getExplicitNumberFormatKeyForAxis(
-            xAxis, xCooSysModel, uno::Reference<chart2::XChartDocument>(&rModel), false );
+            xAxis, xCooSysModel, &rModel, false );
     }
 
     Color nLabelColor;
@@ -406,7 +406,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
         bool bOwnData = false;
         bool bOwnDataAnddAxisHasAnyFormat = false;
         bool bOwnDataAnddAxisHasDateFormat = false;
-        Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
+        Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( &rModel ) );
         if( xCooSysModel.is() )
         {
             if( rModel.hasInternalDataProvider() )

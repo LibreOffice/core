@@ -229,7 +229,7 @@ awt::Size Chart2ModelContact::GetLegendSize() const
     if( pProvider )
     {
         uno::Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( *m_xChartModel.get() ) );
-        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel.get() ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
         aSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
     }
     return aSize;
@@ -242,7 +242,7 @@ awt::Point Chart2ModelContact::GetLegendPosition() const
     if( pProvider )
     {
         uno::Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( *m_xChartModel.get() ) );
-        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel.get() ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
         aPoint = ToPoint( pProvider->getRectangleOfObject( aCID ) );
     }
     return aPoint;
@@ -254,7 +254,7 @@ awt::Size Chart2ModelContact::GetTitleSize( const uno::Reference< css::chart2::X
     ExplicitValueProvider* pProvider( getExplicitValueProvider() );
     if( pProvider && xTitle.is() )
     {
-        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, m_xChartModel.get() ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, m_xChartModel ) );
         aSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
     }
     return aSize;

@@ -502,7 +502,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection()
             uno::Any aSel = xSelectionSupl->getSelection();
             OUString aObjectCID;
             if( aSel >>= aObjectCID )
-                xReturn.set( ObjectIdentifier::getObjectPropertySet( aObjectCID, Reference< XChartDocument >(this)));
+                xReturn.set( ObjectIdentifier::getObjectPropertySet( aObjectCID, this));
         }
     }
     return xReturn;
@@ -723,7 +723,7 @@ void SAL_CALL ChartModel::createInternalDataProvider( sal_Bool bCloneExistingDat
         if( bCloneExistingData )
             m_xInternalDataProvider = ChartModelHelper::createInternalDataProvider( this, true );
         else
-            m_xInternalDataProvider = ChartModelHelper::createInternalDataProvider( Reference<XChartDocument>(), true );
+            m_xInternalDataProvider = ChartModelHelper::createInternalDataProvider( nullptr, true );
         m_xDataProvider.set( m_xInternalDataProvider );
     }
     setModified( true );
@@ -772,7 +772,7 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
         {
             try
             {
-                bool bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( Reference< frame::XModel >(this) );
+                bool bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( this );
                 xProp->setPropertyValue("IncludeHiddenCells", uno::Any(bIncludeHiddenCells));
             }
             catch (const beans::UnknownPropertyException&)
@@ -862,12 +862,12 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
 
 Sequence< OUString > SAL_CALL ChartModel::getUsedRangeRepresentations()
 {
-    return DataSourceHelper::getUsedDataRanges( Reference< frame::XModel >(this));
+    return DataSourceHelper::getUsedDataRanges(this);
 }
 
 Reference< chart2::data::XDataSource > SAL_CALL ChartModel::getUsedData()
 {
-    return DataSourceHelper::getUsedData( Reference< chart2::XChartDocument >(this));
+    return DataSourceHelper::getUsedData(this);
 }
 
 Reference< chart2::data::XRangeHighlighter > SAL_CALL ChartModel::getRangeHighlighter()
@@ -1251,7 +1251,7 @@ void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent 
 uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartModel::getDataSequences()
 {
     Reference< chart2::data::XDataSource > xSource(
-        DataSourceHelper::getUsedData( uno::Reference< frame::XModel >(this) ) );
+        DataSourceHelper::getUsedData( this ) );
     if( xSource.is())
         return xSource->getDataSequences();
 

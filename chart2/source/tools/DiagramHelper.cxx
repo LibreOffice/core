@@ -919,7 +919,7 @@ Sequence< OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( const
 Sequence< OUString > DiagramHelper::getExplicitSimpleCategories(
             ChartModel& rModel )
 {
-    rtl::Reference< BaseCoordinateSystem > xCooSys = ChartModelHelper::getFirstCoordinateSystem( rModel );
+    rtl::Reference< BaseCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( &rModel ) );
     ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, rModel );
     return aExplicitCategoriesProvider.getSimpleCategories();
 }
@@ -1019,7 +1019,7 @@ void lcl_switchToTextCategories( const Reference< XChartDocument >& xChartDoc, c
 
 }
 
-void DiagramHelper::switchToDateCategories( const Reference< XChartDocument >& xChartDoc )
+void DiagramHelper::switchToDateCategories( const rtl::Reference<::chart::ChartModel>& xChartDoc )
 {
     if(xChartDoc.is())
     {
@@ -1034,7 +1034,7 @@ void DiagramHelper::switchToDateCategories( const Reference< XChartDocument >& x
     }
 }
 
-void DiagramHelper::switchToTextCategories( const Reference< XChartDocument >& xChartDoc )
+void DiagramHelper::switchToTextCategories( const rtl::Reference<::chart::ChartModel>& xChartDoc )
 {
     if(xChartDoc.is())
     {
@@ -1542,7 +1542,7 @@ static void lcl_ensureRange0to1( double& rValue )
         rValue=1.0;
 }
 
-bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >& xChartModel,
+bool DiagramHelper::setDiagramPositioning( const rtl::Reference<::chart::ChartModel>& xChartModel,
         const awt::Rectangle& rPosRect /*100th mm*/ )
 {
     ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
@@ -1587,7 +1587,7 @@ bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >
     return bChanged;
 }
 
-awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference< frame::XModel >& xChartModel )
+awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     awt::Rectangle aRet(-1,-1,-1,-1);
 
