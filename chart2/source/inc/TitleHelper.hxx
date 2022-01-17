@@ -21,6 +21,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
 #include "charttoolsdllapi.hxx"
+#include <rtl/ref.hxx>
 
 namespace chart { class ChartModel; }
 namespace chart { class ReferenceSizeProvider; }
@@ -57,24 +58,24 @@ public:
 
     static css::uno::Reference< css::chart2::XTitle >
         getTitle( eTitleType nTitleIndex
-                    , const css::uno::Reference< css::frame::XModel >& xModel );
+                    , const rtl::Reference<::chart::ChartModel>& xModel );
 
     static css::uno::Reference<
             css::chart2::XTitle >
         createTitle(  eTitleType nTitleIndex
                     , const OUString& rTitleText
-                    , const css::uno::Reference< css::frame::XModel >& xModel
+                    , const rtl::Reference<::chart::ChartModel>& xModel
                     , const css::uno::Reference< css::uno::XComponentContext > & xContext
                     , ReferenceSizeProvider * pRefSizeProvider = nullptr );
     static css::uno::Reference<
             css::chart2::XTitle >
           createOrShowTitle(  eTitleType nTitleIndex
                     , const OUString& rTitleText
-                    , const css::uno::Reference< css::frame::XModel >& xModel
+                    , const rtl::Reference<::chart::ChartModel>& xModel
                     , const css::uno::Reference< css::uno::XComponentContext > & xContex );
 
     static void removeTitle( eTitleType nTitleIndex
-                    , const css::uno::Reference< css::frame::XModel >& xModel );
+                    , const rtl::Reference<::chart::ChartModel>& xModel );
 
     static OUString getCompleteString( const css::uno::Reference< css::chart2::XTitle >& xTitle );
     static void setCompleteString( const OUString& rNewText
@@ -88,9 +89,9 @@ public:
 
     static bool getTitleType( eTitleType& rType
                     , const css::uno::Reference< css::chart2::XTitle >& xTitle
-                    , const css::uno::Reference< css::frame::XModel >& xModel );
+                    , const rtl::Reference<::chart::ChartModel>& xModel );
     static void hideTitle( eTitleType nTitleIndex,
-            const css::uno::Reference< css::frame::XModel > & xModel);
+            const rtl::Reference<::chart::ChartModel> & xModel);
 };
 
 } //namespace chart

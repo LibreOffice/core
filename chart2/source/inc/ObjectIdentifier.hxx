@@ -104,11 +104,7 @@ public:
 
     static OUString createClassifiedIdentifierForObject(
           const css::uno::Reference< css::uno::XInterface >& xObject
-        , ChartModel& rModel);
-
-    static OUString createClassifiedIdentifierForObject(
-          const css::uno::Reference< css::uno::XInterface >& xObject
-        , const css::uno::Reference< css::frame::XModel >& xChartModel );
+        , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     static OUString createClassifiedIdentifierForParticle(
         const OUString& rParticle );
@@ -121,18 +117,14 @@ public:
 
     static OUString createClassifiedIdentifierForGrid(
           const css::uno::Reference< css::chart2::XAxis >& xAxis
-        , const css::uno::Reference< css::frame::XModel >& xChartModel
+        , const rtl::Reference<::chart::ChartModel>& xChartModel
         , sal_Int32 nSubIndex = -1 );//-1: main grid, 0: first subgrid etc
 
     SAL_DLLPRIVATE static OUString createParticleForDiagram();
 
     static OUString createParticleForCoordinateSystem(
           const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys
-        , ChartModel& rModel );
-
-    static OUString createParticleForCoordinateSystem(
-          const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys
-        , const css::uno::Reference< css::frame::XModel >& xChartModel );
+        , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     static OUString createParticleForAxis(
                       sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
@@ -143,10 +135,8 @@ public:
     static OUString createParticleForSeries( sal_Int32 nDiagramIndex, sal_Int32 nCooSysIndex
             , sal_Int32 nChartTypeIndex, sal_Int32 nSeriesIndex );
 
-    static OUString createParticleForLegend( ChartModel& rModel );
-
     static OUString createParticleForLegend(
-        const css::uno::Reference< css::frame::XModel >& xChartModel );
+        const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     static OUString addChildParticle( std::u16string_view rParticle, std::u16string_view rChildParticle );
     static OUString createChildParticleWithIndex( ObjectType eObjectType, sal_Int32 nIndex );
@@ -198,32 +188,24 @@ public:
     static css::uno::Reference< css::beans::XPropertySet >
             getObjectPropertySet(
                   const OUString& rObjectCID
-                , const css::uno::Reference< css::frame::XModel >& xChartModel );
-    static css::uno::Reference< css::beans::XPropertySet >
-            getObjectPropertySet(
-                  const OUString& rObjectCID
-                , const css::uno::Reference< css::chart2::XChartDocument >& xChartDocument );
-    static css::uno::Reference< css::beans::XPropertySet >
-            getObjectPropertySet(
-                  const OUString& rObjectCID
                 , const rtl::Reference< ::chart::ChartModel >& xChartDocument );
 
     //return the axis object that belongs to rObjectCID if any
     static css::uno::Reference< css::chart2::XAxis >
             getAxisForCID(
                   const OUString& rObjectCID
-                , const css::uno::Reference< css::frame::XModel >& xChartModel );
+                , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     //return the series object that belongs to rObjectCID if any
     static css::uno::Reference< css::chart2::XDataSeries >
             getDataSeriesForCID(
                   const OUString& rObjectCID
-                , const css::uno::Reference< css::frame::XModel >& xChartModel );
+                , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     static css::uno::Reference< css::chart2::XDiagram >
             getDiagramForCID(
                   const OUString& rObjectCID
-                , const css::uno::Reference< css::frame::XModel >& xChartModel );
+                , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     static const OUString& getPieSegmentDragMethodServiceName();
     static OUString createPieSegmentDragParameterString(

@@ -21,6 +21,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include "charttoolsdllapi.hxx"
+#include <rtl/ref.hxx>
 
 namespace com::sun::star {
     namespace chart2 {
@@ -35,6 +36,7 @@ namespace com::sun::star {
 
 namespace chart
 {
+class ChartModel;
 
 class OOO_DLLPUBLIC_CHARTTOOLS ReferenceSizeProvider
 {
@@ -50,7 +52,7 @@ public:
 
     ReferenceSizeProvider(
         css::awt::Size aPageSize,
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
+        const rtl::Reference<::chart::ChartModel> & xChartDoc );
 
     const css::awt::Size& getPageSize() const { return m_aPageSize;}
 
@@ -63,7 +65,7 @@ public:
         with state NO, AUTO_RESIZE_AMBIGUOUS is returned.
     */
     static AutoResizeState getAutoResizeState(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
+        const rtl::Reference<::chart::ChartModel> & xChartDoc );
 
     /** sets or resets the auto-resize at all objects that support this feature
         for text to the opposite of the current setting.  If the current state
@@ -119,7 +121,7 @@ private:
         AutoResizeState & rInOutState );
 
     css::awt::Size m_aPageSize;
-    css::uno::Reference< css::chart2::XChartDocument > m_xChartDoc;
+    rtl::Reference<::chart::ChartModel> m_xChartDoc;
     bool      m_bUseAutoScale;
 };
 

@@ -128,7 +128,7 @@ OUString lcl_getTitleParentParticle( TitleHelper::eTitleType aTitleType )
     return aRet;
 }
 
-Reference<XChartType> lcl_getFirstStockChartType( const Reference< frame::XModel >& xChartModel )
+Reference<XChartType> lcl_getFirstStockChartType( const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     if(!xDiagram.is())
@@ -218,7 +218,7 @@ void lcl_parseSeriesIndices( sal_Int32& rnChartTypeIndex, sal_Int32& rnSeriesInd
 }
 
 void lcl_getDiagramAndCooSys( const OUString& rObjectCID
-                , const Reference< frame::XModel >& xChartModel
+                , const rtl::Reference<::chart::ChartModel>& xChartModel
                 , Reference< XDiagram >& xDiagram
                 , Reference< XCoordinateSystem >& xCooSys )
 {
@@ -305,89 +305,7 @@ bool ObjectIdentifier::operator<( const ObjectIdentifier& rOID ) const
 
 OUString ObjectIdentifier::createClassifiedIdentifierForObject(
           const Reference< uno::XInterface >& xObject
-        , ChartModel& rModel)
-{
-    OUString aRet;
-
-    enum ObjectType eObjectType = OBJECTTYPE_UNKNOWN;
-    const OUString aObjectID;
-    OUString aParentParticle;
-    const OUString aDragMethodServiceName;
-    const OUString aDragParameterString;
-
-    try
-    {
-        //title
-        Reference< XTitle > xTitle( xObject, uno::UNO_QUERY );
-        if( xTitle.is() )
-        {
-            TitleHelper::eTitleType aTitleType;
-            if( TitleHelper::getTitleType( aTitleType, xTitle, rModel ) )
-            {
-                eObjectType = OBJECTTYPE_TITLE;
-                aParentParticle = lcl_getTitleParentParticle( aTitleType );
-                aRet = ObjectIdentifier::createClassifiedIdentifierWithParent(
-                    eObjectType, aObjectID, aParentParticle, aDragMethodServiceName, aDragParameterString );
-            }
-            return aRet;
-
-        }
-
-        //axis
-        Reference< XAxis > xAxis( xObject, uno::UNO_QUERY );
-        if( xAxis.is() )
-        {
-            rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, rModel.getFirstDiagram() ) );
-            OUString aCooSysParticle( createParticleForCoordinateSystem( xCooSys, rModel ) );
-            sal_Int32 nDimensionIndex=-1;
-            sal_Int32 nAxisIndex=-1;
-            AxisHelper::getIndicesForAxis( xAxis, xCooSys, nDimensionIndex, nAxisIndex );
-            OUString aAxisParticle( createParticleForAxis( nDimensionIndex, nAxisIndex ) );
-            return createClassifiedIdentifierForParticles( aCooSysParticle, aAxisParticle );
-        }
-
-        //legend
-        Reference< XLegend > xLegend( xObject, uno::UNO_QUERY );
-        if( xLegend.is() )
-        {
-            return createClassifiedIdentifierForParticle( createParticleForLegend( rModel ) );
-        }
-
-        //diagram
-        Reference< XDiagram > xDiagram( xObject, uno::UNO_QUERY );
-        if( xDiagram.is() )
-        {
-            return createClassifiedIdentifierForParticle( createParticleForDiagram() );
-        }
-
-        //todo
-        //XDataSeries
-        //CooSys
-        //charttype
-        //datapoint?
-        //Gridproperties
-    }
-    catch(const uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    if( eObjectType != OBJECTTYPE_UNKNOWN )
-    {
-        aRet = ObjectIdentifier::createClassifiedIdentifierWithParent(
-            eObjectType, aObjectID, aParentParticle, aDragMethodServiceName, aDragParameterString );
-    }
-    else
-    {
-        OSL_FAIL("give object could not be identified in createClassifiedIdentifierForObject");
-    }
-
-    return aRet;
-}
-
-OUString ObjectIdentifier::createClassifiedIdentifierForObject(
-          const Reference< uno::XInterface >& xObject
-        , const Reference< frame::XModel >& xChartModel )
+        , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     OUString aRet;
 
@@ -507,33 +425,7 @@ OUString ObjectIdentifier::createParticleForDiagram()
 
 OUString ObjectIdentifier::createParticleForCoordinateSystem(
           const Reference< XCoordinateSystem >& xCooSys
-        , ChartModel& rModel )
-{
-    OUString aRet;
-
-    Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
-    Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if( xCooSysContainer.is() )
-    {
-        sal_Int32 nCooSysIndex = 0;
-        uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-        for( ; nCooSysIndex < aCooSysList.getLength(); ++nCooSysIndex )
-        {
-            Reference< XCoordinateSystem > xCurrentCooSys( aCooSysList[nCooSysIndex] );
-            if( xCooSys == xCurrentCooSys )
-            {
-                aRet = ObjectIdentifier::createParticleForDiagram() + ":CS=" + OUString::number( nCooSysIndex );
-                break;
-            }
-        }
-    }
-
-    return aRet;
-}
-
-OUString ObjectIdentifier::createParticleForCoordinateSystem(
-          const Reference< XCoordinateSystem >& xCooSys
-        , const Reference< frame::XModel >& xChartModel )
+        , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     OUString aRet;
 
@@ -579,7 +471,7 @@ OUString ObjectIdentifier::createParticleForGrid(
 
 OUString ObjectIdentifier::createClassifiedIdentifierForGrid(
           const Reference< XAxis >& xAxis
-        , const Reference< frame::XModel >& xChartModel
+        , const rtl::Reference<::chart::ChartModel>& xChartModel
         , sal_Int32 nSubGridIndex )
 {
     //-1: main grid, 0: first subgrid etc
@@ -607,15 +499,9 @@ OUString ObjectIdentifier::createParticleForSeries(
         OUString::number( nSeriesIndex );
 }
 
-OUString ObjectIdentifier::createParticleForLegend( ChartModel&  )
-{
-    //todo: if more than one diagram is implemented, find the correct diagram which is owner of the given legend
-
-    return ObjectIdentifier::createParticleForDiagram() + ":" + getStringForType( OBJECTTYPE_LEGEND ) + "=";
-}
 
 OUString ObjectIdentifier::createParticleForLegend(
-        const Reference< frame::XModel >& )
+        const rtl::Reference<::chart::ChartModel>& )
 {
     //todo: if more than one diagram is implemented, find the correct diagram which is owner of the given legend
 
@@ -1150,24 +1036,8 @@ bool ObjectIdentifier::isCID( const OUString& rName )
 }
 
 Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
-    const OUString& rObjectCID,
-    const Reference< chart2::XChartDocument >& xChartDocument )
-{
-    return ObjectIdentifier::getObjectPropertySet(
-        rObjectCID, Reference< frame::XModel >( xChartDocument ));
-}
-
-Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                 const OUString& rObjectCID
-                , const rtl::Reference< ::chart::ChartModel >& xChartModel )
-{
-    return ObjectIdentifier::getObjectPropertySet(
-        rObjectCID, Reference< frame::XModel >( xChartModel ));
-}
-
-Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
-                const OUString& rObjectCID
-                , const Reference< frame::XModel >& xChartModel )
+                , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     //return the model object that is indicated by rObjectCID
     if(rObjectCID.isEmpty())
@@ -1189,9 +1059,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
         {
             case OBJECTTYPE_PAGE:
                 {
-                    Reference< XChartDocument > xChartDocument( xChartModel, uno::UNO_QUERY );
-                    if( xChartDocument.is())
-                        xObjectProperties.set( xChartDocument->getPageBackground() );
+                    xObjectProperties.set( xChartModel->getPageBackground() );
                 }
                 break;
             case OBJECTTYPE_TITLE:
@@ -1354,7 +1222,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
 
 Reference< XAxis > ObjectIdentifier::getAxisForCID(
                 const OUString& rObjectCID
-                , const Reference< frame::XModel >& xChartModel )
+                , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     Reference< XDiagram > xDiagram;
     Reference< XCoordinateSystem > xCooSys;
@@ -1369,7 +1237,7 @@ Reference< XAxis > ObjectIdentifier::getAxisForCID(
 
 Reference< XDataSeries > ObjectIdentifier::getDataSeriesForCID(
                 const OUString& rObjectCID
-                , const Reference< frame::XModel >& xChartModel )
+                , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     Reference< XDataSeries > xSeries;
 
@@ -1395,7 +1263,7 @@ Reference< XDataSeries > ObjectIdentifier::getDataSeriesForCID(
 
 Reference< XDiagram > ObjectIdentifier::getDiagramForCID(
                   const OUString& rObjectCID
-                , const uno::Reference< frame::XModel >& xChartModel )
+                , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     Reference< XDiagram > xDiagram;
 

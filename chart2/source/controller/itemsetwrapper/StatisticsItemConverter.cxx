@@ -22,7 +22,7 @@
 #include <RegressionCurveHelper.hxx>
 #include <ErrorBar.hxx>
 #include <StatisticsHelper.hxx>
-
+#include <ChartModel.hxx>
 #include <unonames.hxx>
 
 #include <svl/stritem.hxx>
@@ -211,7 +211,7 @@ namespace chart::wrapper
 {
 
 StatisticsItemConverter::StatisticsItemConverter(
-    const uno::Reference< frame::XModel > & xModel,
+    const rtl::Reference<::chart::ChartModel> & xModel,
     const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool ) :
         ItemConverter( rPropertySet, rItemPool ),
@@ -553,18 +553,17 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE).GetValue();
             uno::Reference< chart2::data::XDataSource > xErrorBarSource( lcl_GetErrorBar( GetPropertySet(), bYError),
                                                                          uno::UNO_QUERY );
-            uno::Reference< chart2::XChartDocument > xChartDoc( m_xModel, uno::UNO_QUERY );
             uno::Reference< chart2::data::XDataProvider > xDataProvider;
 
-            if( xChartDoc.is())
-                xDataProvider.set( xChartDoc->getDataProvider());
+            if( m_xModel.is())
+                xDataProvider.set( m_xModel->getDataProvider());
             if( xErrorBarSource.is() && xDataProvider.is())
             {
                 OUString aNewRange( static_cast< const SfxStringItem & >( rItemSet.Get( nWhichId )).GetValue());
                 bool bApplyNewRange = false;
 
                 bool bIsPositiveValue( nWhichId == SCHATTR_STAT_RANGE_POS );
-                if( xChartDoc->hasInternalDataProvider())
+                if( m_xModel->hasInternalDataProvider())
                 {
                     if( !aNewRange.isEmpty())
                     {

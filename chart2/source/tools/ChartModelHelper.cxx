@@ -49,7 +49,7 @@ uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeH
 }
 
 rtl::Reference< InternalDataProvider > ChartModelHelper::createInternalDataProvider(
-    const uno::Reference< css::chart2::XChartDocument >& xChartDoc, bool bConnectToModel )
+    const rtl::Reference<::chart::ChartModel>& xChartDoc, bool bConnectToModel )
 {
     bool bDefaultDataInColumns(true);
 
@@ -57,7 +57,8 @@ rtl::Reference< InternalDataProvider > ChartModelHelper::createInternalDataProvi
     // chart data and use it as default for creating a new InternalDataProvider
     if(xChartDoc.is())
     {
-        css::uno::Reference< css::chart::XChartDocument > xDoc(xChartDoc, uno::UNO_QUERY);
+        // old XChartDocument interface
+        css::uno::Reference< css::chart::XChartDocument > xDoc(static_cast<cppu::OWeakObject*>(xChartDoc.get()), uno::UNO_QUERY);
 
         if(xDoc.is())
         {
@@ -82,24 +83,13 @@ rtl::Reference< InternalDataProvider > ChartModelHelper::createInternalDataProvi
     return new InternalDataProvider( xChartDoc, bConnectToModel, bDefaultDataInColumns );
 }
 
-rtl::Reference< Diagram > ChartModelHelper::findDiagram( const uno::Reference< frame::XModel >& xModel )
-{
-    uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
-    if( xChartDoc.is())
-        return ChartModelHelper::findDiagram( xChartDoc );
-    return nullptr;
-}
-
-rtl::Reference< Diagram > ChartModelHelper::findDiagram( const uno::Reference< chart2::XChartDocument >& xChartDoc )
+rtl::Reference< Diagram > ChartModelHelper::findDiagram( const rtl::Reference<::chart::ChartModel>& xChartDoc )
 {
     try
     {
         if( !xChartDoc )
             return nullptr;
-        uno::Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
-        ::chart::Diagram* pDiagram = dynamic_cast<::chart::Diagram*>(xDiagram.get());
-        assert(!xDiagram || pDiagram);
-        return pDiagram;
+        return xChartDoc->getFirstChartDiagram();
     }
     catch( const uno::Exception & )
     {
@@ -108,27 +98,7 @@ rtl::Reference< Diagram > ChartModelHelper::findDiagram( const uno::Reference< c
     return nullptr;
 }
 
-rtl::Reference< Diagram > ChartModelHelper::findDiagram( const rtl::Reference< ::chart::ChartModel >& xChartDoc )
-{
-    if( !xChartDoc )
-        return nullptr;
-    rtl::Reference<::chart::Diagram> xDiagram = xChartDoc->getFirstChartDiagram();
-    return xDiagram;
-}
-
-rtl::Reference< BaseCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( ChartModel& rModel )
-{
-    rtl::Reference< Diagram > xDiagram = rModel.getFirstChartDiagram();
-    if( xDiagram.is() )
-    {
-        auto& rCooSysSeq( xDiagram->getBaseCoordinateSystems() );
-        if( !rCooSysSeq.empty() )
-            return rCooSysSeq[0];
-    }
-    return nullptr;
-}
-
-rtl::Reference< BaseCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( const uno::Reference< frame::XModel >& xModel )
+rtl::Reference< BaseCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( const rtl::Reference<::chart::ChartModel>& xModel )
 {
     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
     if( xDiagram.is() )
@@ -141,19 +111,7 @@ rtl::Reference< BaseCoordinateSystem > ChartModelHelper::getFirstCoordinateSyste
 }
 
 std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
-    ChartModel& rModel )
-{
-    std::vector< uno::Reference< XDataSeries > > aResult;
-
-    uno::Reference< XDiagram > xDiagram = rModel.getFirstDiagram();
-    if( xDiagram.is())
-        aResult = DiagramHelper::getDataSeriesFromDiagram( xDiagram );
-
-    return aResult;
-}
-
-std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
-    const uno::Reference< XChartDocument > & xChartDoc )
+    const rtl::Reference<::chart::ChartModel> & xChartDoc )
 {
     std::vector< uno::Reference< XDataSeries > > aResult;
 
@@ -164,14 +122,8 @@ std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
     return aResult;
 }
 
-std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
-    const uno::Reference< frame::XModel > & xModel )
-{
-    return getDataSeries( uno::Reference< chart2::XChartDocument >( xModel, uno::UNO_QUERY ));
-}
-
 uno::Reference< XChartType > ChartModelHelper::getChartTypeOfSeries(
-                                const uno::Reference< frame::XModel >& xModel
+                                const rtl::Reference<::chart::ChartModel>& xModel
                               , const uno::Reference< XDataSeries >&   xGivenDataSeries )
 {
     return DiagramHelper::getChartTypeOfSeries( ChartModelHelper::findDiagram( xModel ), xGivenDataSeries );
@@ -182,22 +134,20 @@ awt::Size ChartModelHelper::getDefaultPageSize()
     return awt::Size( 16000, 9000 );
 }
 
-awt::Size ChartModelHelper::getPageSize( const uno::Reference< frame::XModel >& xModel )
+awt::Size ChartModelHelper::getPageSize( const rtl::Reference<::chart::ChartModel>& xModel )
 {
     awt::Size aPageSize( ChartModelHelper::getDefaultPageSize() );
-    uno::Reference< embed::XVisualObject > xVisualObject(xModel,uno::UNO_QUERY);
-    OSL_ENSURE(xVisualObject.is(),"need xVisualObject for page size");
-    if( xVisualObject.is() )
-        aPageSize = xVisualObject->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+    OSL_ENSURE(xModel.is(),"need xVisualObject for page size");
+    if( xModel.is() )
+        aPageSize = xModel->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
     return aPageSize;
 }
 
-void ChartModelHelper::triggerRangeHighlighting( const uno::Reference< frame::XModel >& xModel )
+void ChartModelHelper::triggerRangeHighlighting( const rtl::Reference<::chart::ChartModel>& xModel )
 {
-    uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xModel, uno::UNO_QUERY );
-    if( xDataReceiver.is() )
+    if( xModel.is() )
     {
-        uno::Reference< view::XSelectionChangeListener > xSelectionChangeListener( xDataReceiver->getRangeHighlighter(), uno::UNO_QUERY );
+        uno::Reference< view::XSelectionChangeListener > xSelectionChangeListener( xModel->getRangeHighlighter(), uno::UNO_QUERY );
         //trigger selection of cell range
         if( xSelectionChangeListener.is() )
         {
@@ -207,7 +157,7 @@ void ChartModelHelper::triggerRangeHighlighting( const uno::Reference< frame::XM
     }
 }
 
-bool ChartModelHelper::isIncludeHiddenCells( const uno::Reference< frame::XModel >& xChartModel )
+bool ChartModelHelper::isIncludeHiddenCells( const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     bool bIncluded = true;  // hidden cells are included by default.
 

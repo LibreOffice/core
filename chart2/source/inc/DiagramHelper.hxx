@@ -194,10 +194,10 @@ public:
             const css::uno::Reference< css::chart2::XCoordinateSystem > & xCooSys );
 
     static void switchToDateCategories(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
+        const rtl::Reference<::chart::ChartModel> & xChartDoc );
 
     static void switchToTextCategories(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
+        const rtl::Reference<::chart::ChartModel> & xChartDoc );
 
     static bool isSupportingDateAxis( const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
     static bool isDateNumberFormat( sal_Int32 nNumberFormat, const css::uno::Reference< css::util::XNumberFormats >& xNumberFormats );
@@ -278,10 +278,10 @@ public:
 
     static DiagramPositioningMode getDiagramPositioningMode( const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
-    static bool setDiagramPositioning( const css::uno::Reference< css::frame::XModel >& xChartModel,
+    static bool setDiagramPositioning( const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::awt::Rectangle& rPosRect /*100th mm*/ );
 
-    static css::awt::Rectangle getDiagramRectangleFromModel( const css::uno::Reference< css::frame::XModel >& xChartModel );
+    static css::awt::Rectangle getDiagramRectangleFromModel( const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     static bool switchDiagramPositioningToExcludingPositioning( ChartModel& rModel
         , bool bResetModifiedState //set model back to unchanged if it was unchanged before

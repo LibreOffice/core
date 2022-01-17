@@ -413,7 +413,7 @@ VCoordinateSystem* addCooSysToList( std::vector< std::unique_ptr<VCoordinateSyst
     if(!pVCooSys)
         return nullptr;
 
-    OUString aCooSysParticle( ObjectIdentifier::createParticleForCoordinateSystem( xCooSys, rChartModel ) );
+    OUString aCooSysParticle( ObjectIdentifier::createParticleForCoordinateSystem( xCooSys, &rChartModel ) );
     pVCooSys->setParticle(aCooSysParticle);
 
     pVCooSys->setExplicitCategoriesProvider( new ExplicitCategoriesProvider(xCooSys, rChartModel) );
@@ -1399,7 +1399,6 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     SeriesPlottersType& rSeriesPlotterList = rParam.mpSeriesPlotterContainer->getSeriesPlotterList();
 
     //create VAxis, so they can give necessary information for automatic scaling
-    uno::Reference<chart2::XChartDocument> const xChartDoc(&mrChartModel);
     uno::Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(
             mrChartModel.getNumberFormatsSupplier());
     size_t nC = 0;
@@ -1415,7 +1414,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
             pVCooSys->set3DWallPositions( eLeftWallPos, eBackWallPos, eBottomPos );
         }
 
-        pVCooSys->createVAxisList(xChartDoc, rPageSize, rParam.maRemainingSpace, rParam.mbUseFixedInnerSize);
+        pVCooSys->createVAxisList(&mrChartModel, rPageSize, rParam.maRemainingSpace, rParam.mbUseFixedInnerSize);
     }
 
     // - prepare list of all axis and how they are used
@@ -1819,7 +1818,7 @@ bool lcl_getPropertySwapXAndYAxis( const uno::Reference< XDiagram >& xDiagram )
 sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                   const Reference< chart2::XAxis >& xAxis
                 , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
-                , const Reference<chart2::XChartDocument>& xChartDoc)
+                , const rtl::Reference<::chart::ChartModel>& xChartDoc)
 {
     return AxisHelper::getExplicitNumberFormatKeyForAxis( xAxis, xCorrespondingCoordinateSystem, xChartDoc
         , true /*bSearchForParallelAxisIfNothingIsFound*/ );
@@ -1889,28 +1888,28 @@ awt::Rectangle ExplicitValueProvider::AddSubtractAxisTitleSizes(
 
             if( xTitle_Height.is() )
             {
-                OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Height, rModel ) );
+                OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Height, &rModel ) );
                 nTitleSpaceHeight = pExplicitValueProvider->getRectangleOfObject( aCID_X, true ).Height;
                 if( nTitleSpaceHeight )
                     nTitleSpaceHeight+=lcl_getDiagramTitleSpace();
             }
             if( xTitle_Width.is() )
             {
-                OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Width, rModel ) );
+                OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Width, &rModel ) );
                 nTitleSpaceWidth = pExplicitValueProvider->getRectangleOfObject( aCID_Y, true ).Width;
                 if(nTitleSpaceWidth)
                     nTitleSpaceWidth+=lcl_getDiagramTitleSpace();
             }
             if( xSecondTitle_Height.is() )
             {
-                OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Height, rModel ) );
+                OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Height, &rModel ) );
                 nSecondTitleSpaceHeight = pExplicitValueProvider->getRectangleOfObject( aCID_X, true ).Height;
                 if( nSecondTitleSpaceHeight )
                     nSecondTitleSpaceHeight+=lcl_getDiagramTitleSpace();
             }
             if( xSecondTitle_Width.is() )
             {
-                OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Width, rModel ) );
+                OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Width, &rModel ) );
                 nSecondTitleSpaceWidth += pExplicitValueProvider->getRectangleOfObject( aCID_Y, true ).Width;
                 if( nSecondTitleSpaceWidth )
                     nSecondTitleSpaceWidth+=lcl_getDiagramTitleSpace();
@@ -2110,7 +2109,7 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
         bYAxisTitle = true;
     }
     apVTitle = std::make_shared<VTitle>(xTitle);
-    OUString aCID = ObjectIdentifier::createClassifiedIdentifierForObject(xTitle, rModel);
+    OUString aCID = ObjectIdentifier::createClassifiedIdentifierForObject(xTitle, &rModel);
     apVTitle->init(xPageShapes, aCID);
     apVTitle->createShapes(awt::Point(0, 0), rPageSize, aTextMaxWidth, bYAxisTitle);
     awt::Size aTitleUnrotatedSize = apVTitle->getUnrotatedSize();

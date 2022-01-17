@@ -48,43 +48,29 @@ public:
             const css::uno::Reference< css::view::XSelectionSupplier >& xSelectionSupplier );
 
     static rtl::Reference< InternalDataProvider > createInternalDataProvider(
-            const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc, bool bConnectToModel );
+            const rtl::Reference<::chart::ChartModel>& xChartDoc, bool bConnectToModel );
 
     static rtl::Reference< Diagram >
-        findDiagram( const css::uno::Reference< css::frame::XModel >& xModel );
-
-    static rtl::Reference< Diagram >
-        findDiagram( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
-
-    static rtl::Reference< Diagram >
-        findDiagram( const rtl::Reference<::chart::ChartModel>& xChartDoc );
+        findDiagram( const rtl::Reference< ::chart::ChartModel >& xModel );
 
     static rtl::Reference< ::chart::BaseCoordinateSystem >
-        getFirstCoordinateSystem( ChartModel& rModel );
+        getFirstCoordinateSystem( const rtl::Reference<::chart::ChartModel>& xModel );
 
-    static rtl::Reference< ::chart::BaseCoordinateSystem >
-        getFirstCoordinateSystem( const css::uno::Reference< css::frame::XModel >& xModel );
-
-    SAL_DLLPRIVATE static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
-        getDataSeries( ChartModel& rModel );
-
-    SAL_DLLPRIVATE static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
-            getDataSeries( const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
     static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
-            getDataSeries( const css::uno::Reference< css::frame::XModel > & xModel );
+            getDataSeries( const rtl::Reference<::chart::ChartModel> & xChartDoc );
 
     static css::uno::Reference< css::chart2::XChartType >
         getChartTypeOfSeries(
-            const css::uno::Reference< css::frame::XModel >& xModel
+            const rtl::Reference<::chart::ChartModel>& xModel
             , const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries );
 
     static css::awt::Size getDefaultPageSize();
 
-    static css::awt::Size getPageSize( const css::uno::Reference< css::frame::XModel >& xModel );
+    static css::awt::Size getPageSize( const rtl::Reference<::chart::ChartModel>& xModel );
 
-    static void triggerRangeHighlighting( const css::uno::Reference< css::frame::XModel >& xModel );
+    static void triggerRangeHighlighting( const rtl::Reference<::chart::ChartModel>& xModel );
 
-    static bool isIncludeHiddenCells( const css::uno::Reference< css::frame::XModel >& xChartModel );
+    static bool isIncludeHiddenCells( const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     static bool setIncludeHiddenCells( bool bIncludeHiddenCells, ChartModel& rModel);
 };

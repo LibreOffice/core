@@ -1157,9 +1157,7 @@ void CombiColumnLineChartDialogController::fillExtraControls(
     if (!m_xMF_NumberOfLines)
         return;
 
-    uno::Reference< frame::XModel > xModel = xChartModel;
-
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
     if(!xDiagram.is())
         return;
 
@@ -1180,7 +1178,7 @@ void CombiColumnLineChartDialogController::fillExtraControls(
         nNumLines = 0;
     m_xMF_NumberOfLines->set_value(nNumLines);
 
-    sal_Int32 nMaxLines = ChartModelHelper::getDataSeries( xModel ).size() - 1;
+    sal_Int32 nMaxLines = ChartModelHelper::getDataSeries( xChartModel ).size() - 1;
     if( nMaxLines < 0 )
         nMaxLines = 0;
     m_xMF_NumberOfLines->set_max(nMaxLines);
