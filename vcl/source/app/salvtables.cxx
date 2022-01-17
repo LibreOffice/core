@@ -1307,6 +1307,8 @@ void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRen
             break;
     }
 
+    bool bHasMirroredGraphics = pWindow->GetOutDev()->HasMirroredGraphics();
+
     xOutput.disposeAndClear();
 
     pWindow->EnableMapMode(bOldMapModeEnabled);
@@ -1317,11 +1319,20 @@ void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRen
     {
         if (!pChild->IsVisible())
             continue;
-        Point aRelPos(pChild->GetPosPixel());
-        Size aRelLogicOffset(rOutput.PixelToLogic(Size(aRelPos.X(), aRelPos.Y())));
-        DoRecursivePaint(pChild,
-                         rRenderLogicPos + Point(aRelLogicOffset.Width(), aRelLogicOffset.Height()),
-                         rOutput);
+
+        tools::Long nDeltaX
+            = pChild->GetOutDev()->GetOutOffXPixel() - pWindow->GetOutDev()->GetOutOffXPixel();
+        if (bHasMirroredGraphics)
+            nDeltaX = pWindow->GetOutDev()->GetOutputWidthPixel() - nDeltaX
+                      - pChild->GetOutDev()->GetOutputWidthPixel();
+
+        tools::Long nDeltaY
+            = pChild->GetOutDev()->GetOutOffYPixel() - pWindow->GetOutDev()->GetOutOffYPixel();
+
+        Point aPos(rRenderLogicPos);
+        aPos += rOutput.PixelToLogic(Point(nDeltaX, nDeltaY));
+
+        DoRecursivePaint(pChild, aPos, rOutput);
     }
 }
 
