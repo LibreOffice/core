@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "518a9c45_6a43fca4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-17T12:07:39Z",
+      "side": 1,
+      "message": "Hi Gülşah,\nI do confirm this patch fixes tdf#146731. I think you should also mention it in the commit\u0027s message.",
+      "revId": "8624085cbc5300eb497ca4ccf8c8277b2fe1dc6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
