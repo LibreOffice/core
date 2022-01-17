@@ -812,6 +812,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 {
                     eFillStyle = FillStyle_HATCH;
                     rPropMap.setProperty( ShapeProperty::FillHatch, createHatch( maPatternProps.moPattPreset.get(), aColor.getColor( rGraphicHelper, nPhClr ) ) );
+                    if( aColor.hasTransparency() )
+                        rPropMap.setProperty( ShapeProperty::FillTransparency, aColor.getTransparency() );
 
                     // Set background color for hatch
                     if(maPatternProps.maPattBgColor.isUsed())

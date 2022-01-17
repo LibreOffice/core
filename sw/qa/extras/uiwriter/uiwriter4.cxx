@@ -3681,7 +3681,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf143760WrapContourToOff)
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(1), "SurroundContour"));
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf127989)
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testHatchFill)
 {
     createSwDoc();
 
@@ -3695,16 +3695,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf127989)
     xShapeProps->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_HATCH));
     xShapeProps->setPropertyValue("FillHatchName", uno::makeAny(OUString("Black 0 Degrees")));
     xShapeProps->setPropertyValue("FillBackground", uno::makeAny(false));
+    xShapeProps->setPropertyValue("FillTransparence", uno::makeAny(sal_Int32(30)));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     xDrawPage->add(xShape);
 
     // Save it as DOCX and load it again.
-    reload("Office Open XML Text", "tdf127989.docx");
+    reload("Office Open XML Text", "hatchFill.docx");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    // Without fix this had failed, because the background of the hatch was not set as 'no background'.
+    // tdf#127989 Without fix this had failed, because the background of the hatch was not set as 'no background'.
     CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "FillBackground"));
+
+    // tdf#146822 Without fix this had failed, because the transparency value of the hatch was not exported.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(30), getProperty<sal_Int32>(getShape(1), "FillTransparence"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testCaptionShape)
