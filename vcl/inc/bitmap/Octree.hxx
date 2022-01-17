@@ -42,9 +42,9 @@ class VCL_PLUGIN_PUBLIC Octree
 {
 private:
     void CreatePalette(OctreeNode* pNode);
-    void GetPalIndex(const OctreeNode* pNode);
+    void GetPalIndex(const OctreeNode* pNode, BitmapColor const& color);
 
-    SAL_DLLPRIVATE void add(std::unique_ptr<OctreeNode>& rpNode);
+    SAL_DLLPRIVATE void add(std::unique_ptr<OctreeNode>& rpNode, BitmapColor const& color);
     SAL_DLLPRIVATE void reduce();
 
     BitmapPalette maPalette;
@@ -52,7 +52,6 @@ private:
     sal_uLong mnLevel;
     std::unique_ptr<OctreeNode> pTree;
     std::vector<OctreeNode*> mpReduce;
-    BitmapColor const* mpColor;
     sal_uInt16 mnPalIndex;
 
 public:
