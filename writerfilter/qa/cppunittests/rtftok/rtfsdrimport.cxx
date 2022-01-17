@@ -13,6 +13,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 
 using namespace ::com::sun::star;
@@ -63,6 +64,28 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureInTextframe)
     // i.e. the properties of the inner shape (including its anchor type and bitmap fill) were lost
     // on import.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, eAnchorType);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testWatermark)
+{
+    // Given a document with a picture watermark, and the "washout" checkbox is ticked on the Word
+    // UI:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "watermark.rtf";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure the watermark effect is not lost on import:
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPagesSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    drawing::ColorMode eMode{};
+    xShape->getPropertyValue("GraphicColorMode") >>= eMode;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 0
+    // i.e. the color mode was STANDARD, not WATERMARK.
+    CPPUNIT_ASSERT_EQUAL(drawing::ColorMode_WATERMARK, eMode);
 }
 }
 
