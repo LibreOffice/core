@@ -50,6 +50,24 @@
       "message": "on M1, this returns -1 and errno\u003dENOENT, leaving buffer unchanged (i.e., containing garbage, leading to garbage in aVersion); \"machdep.cpu.brand_string\" successfully returns \"Apple M1\", though",
       "revId": "1e39a673843baaa19901fdb0ac43824209c57f58",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7d6d827_1f23dec2",
+        "filename": "vcl/osx/salinst.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-17T18:16:26Z",
+      "side": 1,
+      "message": "\u003e \"machdep.cpu.brand_string\" successfully returns \"Apple M1\", though\n\nwhereas on my old Intel Mac, machdep.cpu.vendor is \"GenuineIntel\" and machdep.cpu.brand_string is \"Intel(R) Core(TM) i7-3740QM CPU @ 2.70GHz\"",
+      "parentUuid": "89c35673_ad177afa",
+      "revId": "1e39a673843baaa19901fdb0ac43824209c57f58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
