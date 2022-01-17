@@ -16,6 +16,7 @@ public:
     void testTdf128212();
     void testColumnsLayout();
     void tdf143258_testTbRlLayout();
+    void testTdf146731();
 
     CPPUNIT_TEST_SUITE(SdLayoutTest);
 
@@ -24,6 +25,7 @@ public:
     CPPUNIT_TEST(testTdf128212);
     CPPUNIT_TEST(testColumnsLayout);
     CPPUNIT_TEST(tdf143258_testTbRlLayout);
+    CPPUNIT_TEST(testTdf146731);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -247,6 +249,30 @@ void SdLayoutTest::tdf143258_testTbRlLayout()
         assertXPath(pXmlDoc, sXPath, "x", OUString::number(x));
         assertXPath(pXmlDoc, sXPath, "y", OUString::number(y));
     }
+
+    xDocShRef->DoClose();
+}
+
+void SdLayoutTest::testTdf146731()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf146731.pptx"), PPTX);
+
+    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[3]/polyline[1]", "width", "187");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[4]/polyline[1]", "width", "187");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]", "width", "187");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 30
+    // - Actual  : 187
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[6]/polyline[1]", "width", "30");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline[1]", "width", "187");
 
     xDocShRef->DoClose();
 }
