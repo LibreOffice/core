@@ -48,7 +48,7 @@ class StatusBarCommandDispatch : public impl::StatusBarCommandDispatch_Base
 public:
     explicit StatusBarCommandDispatch(
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
-        const css::uno::Reference< css::frame::XModel > & xModel,
+        const rtl::Reference<::chart::ChartModel> & xModel,
         const css::uno::Reference< css::view::XSelectionSupplier > & xSelSupp );
     virtual ~StatusBarCommandDispatch() override;
 
@@ -82,7 +82,7 @@ protected:
         const css::lang::EventObject& aEvent ) override;
 
 private:
-    css::uno::Reference< css::util::XModifiable > m_xModifiable;
+    rtl::Reference<::chart::ChartModel> m_xChartModel;
     css::uno::Reference< css::view::XSelectionSupplier > m_xSelectionSupplier;
     bool m_bIsModified;
     ObjectIdentifier m_aSelectedOID;

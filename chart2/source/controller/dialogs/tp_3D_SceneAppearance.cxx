@@ -19,6 +19,7 @@
 
 #include "tp_3D_SceneAppearance.hxx"
 #include <ChartModelHelper.hxx>
+#include <ChartModel.hxx>
 #include <ThreeDHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -48,7 +49,7 @@ struct lcl_ModelProperties
     {}
 };
 
-lcl_ModelProperties lcl_getPropertiesFromModel( uno::Reference< frame::XModel > const & xModel )
+lcl_ModelProperties lcl_getPropertiesFromModel( rtl::Reference<::chart::ChartModel> const & xModel )
 {
     lcl_ModelProperties aProps;
     try
@@ -66,7 +67,7 @@ lcl_ModelProperties lcl_getPropertiesFromModel( uno::Reference< frame::XModel > 
     return aProps;
 }
 
-void lcl_setShadeModeAtModel( uno::Reference< frame::XModel > const & xModel, drawing::ShadeMode aShadeMode )
+void lcl_setShadeModeAtModel( rtl::Reference<::chart::ChartModel> const & xModel, drawing::ShadeMode aShadeMode )
 {
     try
     {
@@ -90,7 +91,7 @@ namespace chart
 #define POS_3DSCHEME_CUSTOM 2
 
 ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(weld::Container* pParent,
-        const uno::Reference<frame::XModel>& xChartModel,
+        const rtl::Reference<::chart::ChartModel>& xChartModel,
         ControllerLockHelper& rControllerLockHelper)
     : m_xChartModel(xChartModel)
     , m_bUpdateOtherControls(true)

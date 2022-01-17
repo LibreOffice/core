@@ -106,7 +106,7 @@ struct ControllerState
     ControllerState();
 
     void update( const Reference< frame::XController > & xController,
-                 const Reference< frame::XModel > & xModel );
+                 const rtl::Reference<::chart::ChartModel> & xModel );
 
     // -- State variables -------
     bool bHasSelectedObject;
@@ -173,7 +173,7 @@ ControllerState::ControllerState() :
 
 void ControllerState::update(
     const Reference< frame::XController > & xController,
-    const Reference< frame::XModel > & xModel )
+    const rtl::Reference<::chart::ChartModel> & xModel )
 {
     Reference< view::XSelectionSupplier > xSelectionSupplier(
         xController, uno::UNO_QUERY );
@@ -325,7 +325,7 @@ struct ModelState
 {
     ModelState();
 
-    void update( const Reference< frame::XModel > & xModel );
+    void update( const rtl::Reference<::chart::ChartModel> & xModel );
 
     bool HasAnyAxis() const;
     bool HasAnyGrid() const;
@@ -397,15 +397,11 @@ ModelState::ModelState() :
         bSupportsAxes(false)
 {}
 
-void ModelState::update( const Reference< frame::XModel > & xModel )
+void ModelState::update( const rtl::Reference<::chart::ChartModel> & xModel )
 {
-    Reference< chart2::XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
     Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ));
 
-    bIsReadOnly = true;
-    Reference< frame::XStorable > xStorable( xModel, uno::UNO_QUERY );
-    if( xStorable.is())
-        bIsReadOnly = xStorable->isReadonly();
+    bIsReadOnly = xModel->isReadonly();
 
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
@@ -414,11 +410,10 @@ void ModelState::update( const Reference< frame::XModel > & xModel )
     bSupportsAxes = ChartTypeHelper::isSupportingMainAxis( xFirstChartType, nDimensionCount, 0 );
 
     bIsThreeD = (nDimensionCount == 3);
-    if (xChartDoc.is())
+    if (xModel.is())
     {
-        ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc);
-        bHasOwnData = rModel.hasInternalDataProvider();
-        bHasDataFromPivotTable = !bHasOwnData && rModel.isDataFromPivotTable();
+        bHasOwnData = xModel->hasInternalDataProvider();
+        bHasDataFromPivotTable = !bHasOwnData && xModel->isDataFromPivotTable();
     }
 
     bHasMainTitle =  TitleHelper::getTitle( TitleHelper::MAIN_TITLE, xModel ).is();
@@ -443,7 +438,7 @@ void ModelState::update( const Reference< frame::XModel > & xModel )
     bHasHelpZGrid = bSupportsAxes && AxisHelper::isGridShown( 2, 0, false, xDiagram );
 
     bHasAutoScaledText =
-        (ReferenceSizeProvider::getAutoResizeState( xChartDoc ) ==
+        (ReferenceSizeProvider::getAutoResizeState( xModel ) ==
          ReferenceSizeProvider::AUTO_RESIZE_YES);
 
     bHasLegend = LegendHelper::hasLegend( xDiagram );
@@ -491,11 +486,10 @@ void ControllerCommandDispatch::initialize()
     if( !m_xChartController.is())
         return;
 
-    Reference< frame::XModel > xModel( m_xChartController->getModel());
-    Reference< util::XModifyBroadcaster > xModifyBroadcaster( xModel, uno::UNO_QUERY );
-    OSL_ASSERT( xModifyBroadcaster.is());
-    if( xModifyBroadcaster.is())
-        xModifyBroadcaster->addModifyListener( this );
+    rtl::Reference<::chart::ChartModel> xModel( m_xChartController->getChartModel());
+    OSL_ASSERT( xModel.is());
+    if( xModel.is())
+        xModel->addModifyListener( this );
 
     // Listen selection modifications (Arrangement feature - issue 63017).
     if( m_xSelectionSupplier.is() )
@@ -795,14 +789,14 @@ void SAL_CALL ControllerCommandDispatch::modified( const lang::EventObject& aEve
     // Update the "ModelState" Struct.
     if( m_apModelState && m_xChartController.is())
     {
-        m_apModelState->update( m_xChartController->getModel());
+        m_apModelState->update( m_xChartController->getChartModel());
         bUpdateCommandAvailability = true;
     }
 
     // Update the "ControllerState" Struct.
     if( m_apControllerState && m_xChartController.is())
     {
-        m_apControllerState->update( m_xChartController, m_xChartController->getModel());
+        m_apControllerState->update( m_xChartController, m_xChartController->getChartModel());
         bUpdateCommandAvailability = true;
     }
 
@@ -825,7 +819,7 @@ void SAL_CALL ControllerCommandDispatch::selectionChanged( const lang::EventObje
     // Update the "ControllerState" Struct.
     if( m_apControllerState && m_xChartController.is())
     {
-        m_apControllerState->update( m_xChartController, m_xChartController->getModel());
+        m_apControllerState->update( m_xChartController, m_xChartController->getChartModel());
         updateCommandAvailability();
     }
 

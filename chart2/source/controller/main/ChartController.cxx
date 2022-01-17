@@ -122,12 +122,10 @@ ChartController::~ChartController()
     stopDoubleClickWaiting();
 }
 
-ChartController::TheModel::TheModel( const uno::Reference< frame::XModel > & xModel ) :
+ChartController::TheModel::TheModel( const rtl::Reference<::chart::ChartModel> & xModel ) :
     m_xModel( xModel ),
     m_bOwnership( true )
 {
-    m_xCloseable =
-        uno::Reference< util::XCloseable >( xModel, uno::UNO_QUERY );
 }
 
 ChartController::TheModel::~TheModel()
@@ -136,33 +134,22 @@ ChartController::TheModel::~TheModel()
 
 void ChartController::TheModel::addListener( ChartController* pController )
 {
-    if(m_xCloseable.is())
+    if(m_xModel)
     {
         //if you need to be able to veto against the destruction of the model
         // you must add as a close listener
 
         //otherwise you 'can' add as closelistener or 'must' add as dispose event listener
 
-        m_xCloseable->addCloseListener(
+        m_xModel->addCloseListener(
             static_cast<util::XCloseListener*>(pController) );
     }
-    else if( m_xModel.is() )
-    {
-        //we need to add as dispose event listener
-        m_xModel->addEventListener(
-            static_cast<util::XCloseListener*>(pController) );
-    }
-
 }
 
 void ChartController::TheModel::removeListener(  ChartController* pController )
 {
-    if(m_xCloseable.is())
-        m_xCloseable->removeCloseListener(
-            static_cast<util::XCloseListener*>(pController) );
-
-    else if( m_xModel.is() )
-        m_xModel->removeEventListener(
+    if(m_xModel)
+        m_xModel->removeCloseListener(
             static_cast<util::XCloseListener*>(pController) );
 }
 
@@ -173,7 +160,7 @@ void ChartController::TheModel::tryTermination()
 
     try
     {
-        if(m_xCloseable.is())
+        if(m_xModel.is())
         {
             try
             {
@@ -181,7 +168,7 @@ void ChartController::TheModel::tryTermination()
                 //I think yes, because there might be other CloseListeners later in the list which might be interested still
                 //but make sure that we do not throw the CloseVetoException here ourselves
                 //so stop listening before trying to terminate or check the source of queryclosing event
-                m_xCloseable->close(true);
+                m_xModel->close(true);
 
                 m_bOwnership                = false;
             }
@@ -195,12 +182,6 @@ void ChartController::TheModel::tryTermination()
                 return;
             }
 
-        }
-        else if( m_xModel.is() )
-        {
-            //@todo correct??
-            m_xModel->dispose();
-            return;
         }
     }
     catch(const uno::Exception&)
@@ -436,8 +417,7 @@ void SAL_CALL ChartController::attachFrame(
         m_xViewWindow.set( pChartWindow->GetComponentInterface(), uno::UNO_QUERY );
         pChartWindow->Show();
         m_apDropTargetHelper.reset(
-            new ChartDropTargetHelper( pChartWindow->GetDropTarget(),
-                                       uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY )));
+            new ChartDropTargetHelper( pChartWindow->GetDropTarget(), getChartModel()));
 
         impl_createDrawViewController();
     }
@@ -529,7 +509,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
                     if( m_aSelection.hasSelection() )
                         this->impl_selectObjectAndNotiy();
                     else
-                        ChartModelHelper::triggerRangeHighlighting( getModel() );
+                        ChartModelHelper::triggerRangeHighlighting( getChartModel() );
 
                     impl_initializeAccessible();
 
@@ -557,7 +537,10 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
         return false; //behave passive if already disposed or suspended
     aGuard.clear();
 
-    TheModelRef aNewModelRef( new TheModel( xModel), m_aModelMutex);
+    ::chart::ChartModel* pChartModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
+    assert(!xModel || pChartModel);
+
+    TheModelRef aNewModelRef( new TheModel(pChartModel), m_aModelMutex);
     TheModelRef aOldModelRef(m_aModel,m_aModelMutex);
     m_aModel = aNewModelRef;
 
@@ -571,9 +554,8 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
 
         aOldModelRef->removeListener( this );
  #ifdef TEST_ENABLE_MODIFY_LISTENER
-        uno::Reference< util::XModifyBroadcaster > xMBroadcaster( aOldModelRef->getModel(),uno::UNO_QUERY );
-        if( xMBroadcaster.is())
-            xMBroadcaster->removeModifyListener( this );
+        if( aOldModelRef->getModel().is())
+            aOldModelRef->getModel()->removeModifyListener( this );
 #endif
     }
 
@@ -601,9 +583,8 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     aGuard.clear();
 
 #ifdef TEST_ENABLE_MODIFY_LISTENER
-    uno::Reference< util::XModifyBroadcaster > xMBroadcaster( aNewModelRef->getModel(),uno::UNO_QUERY );
-    if( xMBroadcaster.is())
-        xMBroadcaster->addModifyListener( this );
+    if( aNewModelRef->getModel().is())
+        aNewModelRef->getModel()->addModifyListener( this );
 #endif
 
     // #i119999# Do not do this per default to allow the user to deselect the chart OLE with a single press to ESC
@@ -644,6 +625,11 @@ uno::Reference< frame::XFrame > SAL_CALL ChartController::getFrame()
 
 uno::Reference< frame::XModel > SAL_CALL ChartController::getModel()
 {
+    return getChartModel();
+}
+
+rtl::Reference<::chart::ChartModel> ChartController::getChartModel()
+{
     //provides access to currently attached model
     //returns the currently attached model
 
@@ -652,7 +638,7 @@ uno::Reference< frame::XModel > SAL_CALL ChartController::getModel()
     if(aModelRef.is())
         return aModelRef->getModel();
 
-    return uno::Reference< frame::XModel > ();
+    return nullptr;
 }
 
 uno::Any SAL_CALL ChartController::getViewData()
@@ -822,9 +808,8 @@ void SAL_CALL ChartController::dispose()
 #ifdef TEST_ENABLE_MODIFY_LISTENER
             try
             {
-                uno::Reference< util::XModifyBroadcaster > xMBroadcaster( aModelRef->getModel(),uno::UNO_QUERY );
-                if( xMBroadcaster.is())
-                    xMBroadcaster->removeModifyListener( this );
+                if( aModelRef->getModel().is())
+                    aModelRef->getModel()->removeModifyListener( this );
             }
             catch( const uno::Exception & )
             {
@@ -881,7 +866,7 @@ void SAL_CALL ChartController::queryClosing(
     if( !aModelRef.is() )
         return;
 
-    if( aModelRef->getModel() != rSource.Source )
+    if( uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(aModelRef->getModel().get())) != rSource.Source )
     {
         OSL_FAIL( "queryClosing was called on a controller from an unknown source" );
         return;
@@ -925,7 +910,7 @@ bool ChartController::impl_releaseThisModel(
     bool bReleaseModel = false;
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_aModelMutex );
-        if( m_aModel.is() && m_aModel->getModel() == xModel )
+        if( m_aModel.is() && uno::Reference< uno::XInterface >(static_cast<cppu::OWeakObject*>(m_aModel->getModel().get())) == xModel )
         {
             m_aModel = nullptr;
             m_xUndoManager.clear();
@@ -1342,7 +1327,7 @@ void ChartController::executeDispatch_ChartType()
 
     SolarMutexGuard aSolarGuard;
     //prepare and open dialog
-    ChartTypeDialog aDlg(GetChartFrame(), getModel());
+    ChartTypeDialog aDlg(GetChartFrame(), getChartModel());
     if (aDlg.run() == RET_OK)
     {
         impl_adaptDataSeriesAutoResize();
@@ -1353,14 +1338,14 @@ void ChartController::executeDispatch_ChartType()
 void ChartController::executeDispatch_SourceData()
 {
     //convert properties to ItemSet
-    uno::Reference< XChartDocument >   xChartDoc( getModel(), uno::UNO_QUERY );
+    rtl::Reference< ::chart::ChartModel >  xChartDoc = getChartModel();
     OSL_ENSURE( xChartDoc.is(), "Invalid XChartDocument" );
     if( !xChartDoc.is() )
         return;
 
     // If there is a data table we should ask user if we really want to destroy it
     // and switch to data ranges.
-    ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc);
+    ChartModel& rModel = *xChartDoc;
     if ( rModel.hasInternalDataProvider() )
     {
         // Check if we will able to create data provider later
@@ -1404,12 +1389,12 @@ void ChartController::executeDispatch_SourceData()
 
 void ChartController::executeDispatch_MoveSeries( bool bForward )
 {
-    ControllerLockGuardUNO aCLGuard( getModel() );
+    ControllerLockGuardUNO aCLGuard( getChartModel() );
 
     //get selected series
     OUString aObjectCID(m_aSelection.getSelectedCID());
     uno::Reference< XDataSeries > xGivenDataSeries( ObjectIdentifier::getDataSeriesForCID( //yyy todo also legend entries and labels?
-            aObjectCID, getModel() ) );
+            aObjectCID, getChartModel() ) );
 
     UndoGuardWithSelection aUndoGuard(
         ActionDescriptionProvider::createDescription(
@@ -1417,7 +1402,7 @@ void ChartController::executeDispatch_MoveSeries( bool bForward )
             SchResId(STR_OBJECT_DATASERIES)),
         m_xUndoManager );
 
-    bool bChanged = DiagramHelper::moveSeries( ChartModelHelper::findDiagram( getModel() ), xGivenDataSeries, bForward );
+    bool bChanged = DiagramHelper::moveSeries( ChartModelHelper::findDiagram( getChartModel() ), xGivenDataSeries, bForward );
     if( bChanged )
     {
         m_aSelection.setSelection( ObjectIdentifier::getMovedSeriesCID( aObjectCID, bForward ) );

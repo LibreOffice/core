@@ -20,6 +20,7 @@
 
 #include "charttoolsdllapi.hxx"
 #include <com/sun/star/chart2/ScaleData.hpp>
+#include <rtl/ref.hxx>
 
 #include <vector>
 
@@ -56,7 +57,7 @@ public:
     static sal_Int32 getExplicitNumberFormatKeyForAxis(
                   const css::uno::Reference< css::chart2::XAxis >& xAxis
                 , const css::uno::Reference< css::chart2::XCoordinateSystem >& xCorrespondingCoordinateSystem
-                , const css::uno::Reference< css::chart2::XChartDocument>& xChartDoc
+                , const rtl::Reference<::chart::ChartModel>& xChartDoc
                 , bool bSearchForParallelAxisIfNothingIsFound );
 
     static css::uno::Reference<

@@ -153,7 +153,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
 }
 
 bool PositionAndSizeHelper::moveObject( const OUString& rObjectCID
-                , const uno::Reference< frame::XModel >& xChartModel
+                , const rtl::Reference<::chart::ChartModel>& xChartModel
                 , const awt::Rectangle& rNewPositionAndSize
                 , const awt::Rectangle& rOldPositionAndSize
                 , const awt::Rectangle& rPageRectangle

@@ -25,10 +25,11 @@
 #include <svtools/toolboxcontroller.hxx>
 
 #include <vcl/InterimItemWindow.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 
 namespace chart
 {
+class ChartController;
 
 struct ListBoxEntryData
 {
@@ -50,11 +51,11 @@ public:
 
     void ReleaseFocus_Impl();
 
-    void SetChartController( const css::uno::Reference< css::frame::XController >& xChartController );
+    void SetChartController( const rtl::Reference< ::chart::ChartController >& xChartController );
     void UpdateChartElementsListAndSelection();
 
 private:
-    css::uno::WeakReference<css::frame::XController> m_xChartController;
+    unotools::WeakReference<::chart::ChartController> m_xChartController;
     std::unique_ptr<weld::ComboBox> m_xWidget;
 
     std::vector<ListBoxEntryData> m_aEntries;

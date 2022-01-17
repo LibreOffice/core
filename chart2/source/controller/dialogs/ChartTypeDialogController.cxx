@@ -26,6 +26,8 @@
 #include <ControllerLockGuard.hxx>
 #include <AxisHelper.hxx>
 #include <unonames.hxx>
+#include <ChartModel.hxx>
+#include <ChartTypeManager.hxx>
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -301,9 +303,9 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
 }
 
 void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParameter
-                , const uno::Reference< XChartDocument >& xChartModel )
+                , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
-    uno::Reference< lang::XMultiServiceFactory > xTemplateManager( xChartModel->getChartTypeManager(), uno::UNO_QUERY );
+    rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = xChartModel->getTypeManager();
     uno::Reference< XChartTypeTemplate > xTemplate( getCurrentTemplate( rParameter, xTemplateManager ) );
     if(!xTemplate.is())
         return;
@@ -358,7 +360,7 @@ void ChartTypeDialogController::showExtraControls(weld::Builder* /*pBuilder*/)
 void ChartTypeDialogController::hideExtraControls() const
 {
 }
-void ChartTypeDialogController::fillExtraControls(  const uno::Reference< XChartDocument >& /*xChartModel*/
+void ChartTypeDialogController::fillExtraControls(  const rtl::Reference<::chart::ChartModel>& /*xChartModel*/
                                                   , const uno::Reference< beans::XPropertySet >& /*xTemplateProps*/ ) const
 {
 }
@@ -1146,15 +1148,13 @@ void CombiColumnLineChartDialogController::hideExtraControls() const
 }
 
 void CombiColumnLineChartDialogController::fillExtraControls(
-                  const uno::Reference< XChartDocument >& xChartModel
+                  const rtl::Reference<::chart::ChartModel>& xChartModel
                 , const uno::Reference< beans::XPropertySet >& xTemplateProps ) const
 {
     if (!m_xMF_NumberOfLines)
         return;
 
-    uno::Reference< frame::XModel > xModel = xChartModel;
-
-    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
+    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
     if(!xDiagram.is())
         return;
 
@@ -1175,7 +1175,7 @@ void CombiColumnLineChartDialogController::fillExtraControls(
         nNumLines = 0;
     m_xMF_NumberOfLines->set_value(nNumLines);
 
-    sal_Int32 nMaxLines = ChartModelHelper::getDataSeries( xModel ).size() - 1;
+    sal_Int32 nMaxLines = ChartModelHelper::getDataSeries( xChartModel ).size() - 1;
     if( nMaxLines < 0 )
         nMaxLines = 0;
     m_xMF_NumberOfLines->set_max(nMaxLines);

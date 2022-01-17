@@ -20,6 +20,7 @@
 #include "DataBrowserModel.hxx"
 #include "DialogModel.hxx"
 #include <ChartModelHelper.hxx>
+#include <ChartTypeManager.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ControllerLockGuard.hxx>
@@ -246,7 +247,7 @@ struct DataBrowserModel::implColumnLess
 };
 
 DataBrowserModel::DataBrowserModel(
-    const Reference< chart2::XChartDocument > & xChartDoc,
+    const rtl::Reference<::chart::ChartModel> & xChartDoc,
     const Reference< uno::XComponentContext > & xContext ) :
         m_xChartDocument( xChartDoc ),
         m_apDialogModel( new DialogModel( xChartDoc, xContext ))
@@ -673,9 +674,8 @@ bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const 
 
             m_apDialogModel->startControllerLockTimer();
             //notify change directly to the model (this is necessary here as sequences for complex categories not known directly to the chart model so they do not notify their changes) (for complex categories see issue #i82971#)
-            Reference< util::XModifiable > xModifiable( m_xChartDocument, uno::UNO_QUERY );
-            if( xModifiable.is() )
-                xModifiable->setModified(true);
+            if( m_xChartDocument.is() )
+                m_xChartDocument->setModified(true);
         }
         catch( const uno::Exception & )
         {
@@ -767,20 +767,16 @@ void DataBrowserModel::updateFromModel()
         return;
 
     // set template at DialogModel
-    uno::Reference< lang::XMultiServiceFactory > xFact( m_xChartDocument->getChartTypeManager(), uno::UNO_QUERY );
+    rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = m_xChartDocument->getTypeManager();
     DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-        DiagramHelper::getTemplateForDiagram( xDiagram, xFact );
+        DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
     if( aTemplateAndService.first.is())
         m_apDialogModel->setTemplate( aTemplateAndService.first );
 
     sal_Int32 nHeaderStart = 0;
     sal_Int32 nHeaderEnd   = 0;
     {
-        Reference< frame::XModel > xChartModel = m_xChartDocument;
-        ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
-        if (!pModel)
-            return;
-        ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(xChartModel), *pModel );
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(m_xChartDocument), *m_xChartDocument );
 
         const Sequence< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
         sal_Int32 nLevelCount = rSplitCategoriesList.getLength();

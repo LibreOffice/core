@@ -22,6 +22,7 @@
 #include <TimerTriggeredControllerLock.hxx>
 
 #include <vcl/wizardmachine.hxx>
+#include <rtl/ref.hxx>
 
 #include <memory>
 
@@ -32,12 +33,13 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
+class ChartModel;
 
 class TitlesAndObjectsTabPage final : public vcl::OWizardPage
 {
 public:
     TitlesAndObjectsTabPage(weld::Container* pPage, weld::DialogController* pController,
-                            const css::uno::Reference< css::chart2::XChartDocument >& xChartModel,
+                            const rtl::Reference<::chart::ChartModel>& xChartModel,
                             const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~TitlesAndObjectsTabPage() override;
 
@@ -54,7 +56,7 @@ private:
     std::unique_ptr< TitleResources >            m_xTitleResources;
     std::unique_ptr< LegendPositionResources >   m_xLegendPositionResources;
 
-    css::uno::Reference< css::chart2::XChartDocument >   m_xChartModel;
+    rtl::Reference<::chart::ChartModel>   m_xChartModel;
     css::uno::Reference< css::uno::XComponentContext>    m_xCC;
 
     bool    m_bCommitToModel;

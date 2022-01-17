@@ -120,19 +120,17 @@ uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleInde
 }
 
 uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleIndex
-                                              , const uno::Reference< frame::XModel >& xModel )
+                                              , const rtl::Reference<::chart::ChartModel>& xModel )
 {
     if(nTitleIndex == TitleHelper::MAIN_TITLE)
     {
-        uno::Reference< XTitled > xTitled( xModel, uno::UNO_QUERY );
-        return xTitled;
+        return xModel;
     }
 
-    uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
     uno::Reference< XDiagram > xDiagram;
 
-    if( xChartDoc.is())
-        xDiagram.set( xChartDoc->getFirstDiagram());
+    if( xModel.is())
+        xDiagram.set( xModel->getFirstDiagram());
 
     return lcl_getTitleParent( nTitleIndex, xDiagram );
 }
@@ -153,19 +151,18 @@ uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIn
 }
 
 uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
-                            , const uno::Reference< frame::XModel >& xModel )
+                            , const rtl::Reference<::chart::ChartModel>& xModel )
 {
     uno::Reference< XTitled > xTitled;
     if(nTitleIndex == TitleHelper::MAIN_TITLE)
     {
-        xTitled.set( xModel, uno::UNO_QUERY );
+        xTitled = xModel;
     }
     else
     {
-        uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
         uno::Reference< XDiagram > xDiagram;
-        if( xChartDoc.is())
-            xDiagram.set( xChartDoc->getFirstDiagram());
+        if( xModel.is())
+            xDiagram.set( xModel->getFirstDiagram());
         xTitled = lcl_getTitleParent( nTitleIndex, xDiagram );
     }
     if( xTitled.is())
@@ -176,7 +173,7 @@ uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIn
 uno::Reference< XTitle > TitleHelper::createOrShowTitle(
       TitleHelper::eTitleType eTitleType
     , const OUString& rTitleText
-    , const uno::Reference< frame::XModel >& xModel
+    , const rtl::Reference<::chart::ChartModel>& xModel
     , const uno::Reference< uno::XComponentContext > & xContext )
 {
     uno::Reference< chart2::XTitle > xTitled( TitleHelper::getTitle( eTitleType, xModel ) );
@@ -195,7 +192,7 @@ uno::Reference< XTitle > TitleHelper::createOrShowTitle(
 uno::Reference< XTitle > TitleHelper::createTitle(
       TitleHelper::eTitleType eTitleType
     , const OUString& rTitleText
-    , const uno::Reference< frame::XModel >& xModel
+    , const rtl::Reference<::chart::ChartModel>& xModel
     , const uno::Reference< uno::XComponentContext > & xContext
     , ReferenceSizeProvider * pRefSizeProvider )
 {
@@ -385,7 +382,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
 }
 
 void TitleHelper::removeTitle( TitleHelper::eTitleType nTitleIndex
-                    , const css::uno::Reference< css::frame::XModel >& xModel )
+                    , const rtl::Reference<::chart::ChartModel>& xModel )
 {
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xModel ) );
     if( xTitled.is())
@@ -417,7 +414,7 @@ bool TitleHelper::getTitleType( eTitleType& rType
 
 bool TitleHelper::getTitleType( eTitleType& rType
                     , const css::uno::Reference< css::chart2::XTitle >& xTitle
-                    , const css::uno::Reference< css::frame::XModel >& xModel )
+                    , const rtl::Reference<::chart::ChartModel>& xModel )
 {
     if( !xTitle.is() || !xModel.is() )
         return false;
@@ -437,7 +434,7 @@ bool TitleHelper::getTitleType( eTitleType& rType
 }
 
 void TitleHelper::hideTitle( TitleHelper::eTitleType nTitleIndex
-        , const css::uno::Reference< css::frame::XModel >& xModel)
+        , const rtl::Reference<::chart::ChartModel>& xModel)
 {
     uno::Reference< chart2::XTitle > xTitled( TitleHelper::getTitle( nTitleIndex, xModel ) );
     if( xTitled.is())

@@ -21,6 +21,7 @@
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <ChartTypeTemplateProvider.hxx>
+#include <ChartModel.hxx>
 #include <RangeSelectionHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ControllerLockGuard.hxx>
@@ -908,9 +909,8 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
     {
         try
         {
-            Reference< util::XModifiable > xModifiable( m_rDialogModel.getChartModel(), uno::UNO_QUERY );
-            if( xModifiable.is() )
-                xModifiable->setModified( true );
+            if( m_rDialogModel.getChartModel() )
+                m_rDialogModel.getChartModel()->setModified( true );
             const DialogModelTimeBasedInfo& rInfo = m_rDialogModel.getTimeBasedInfo();
             if(rInfo.bTimeBased)
             {

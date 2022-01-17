@@ -19,7 +19,7 @@
 
 #include "DragMethod_Base.hxx"
 #include <DrawViewWrapper.hxx>
-
+#include <ChartModel.hxx>
 #include <ObjectNameProvider.hxx>
 #include <ObjectIdentifier.hxx>
 
@@ -36,13 +36,13 @@ using ::com::sun::star::uno::WeakReference;
 
 DragMethod_Base::DragMethod_Base( DrawViewWrapper& rDrawViewWrapper
                                              , const OUString& rObjectCID
-                                             , const Reference< frame::XModel >& xChartModel
+                                             , const rtl::Reference<::chart::ChartModel>& xChartModel
                                              , ActionDescriptionProvider::ActionType eActionType )
     : SdrDragMethod( rDrawViewWrapper )
     , m_rDrawViewWrapper(rDrawViewWrapper)
     , m_aObjectCID(rObjectCID)
     , m_eActionType( eActionType )
-    , m_xChartModel( WeakReference< frame::XModel >(xChartModel) )
+    , m_xChartModel( xChartModel.get() )
 {
     setMoveOnly(true);
 }
@@ -50,9 +50,9 @@ DragMethod_Base::~DragMethod_Base()
 {
 }
 
-Reference< frame::XModel > DragMethod_Base::getChartModel() const
+rtl::Reference<::chart::ChartModel> DragMethod_Base::getChartModel() const
 {
-    return Reference< frame::XModel >( m_xChartModel );
+    return m_xChartModel.get();
 }
 
 OUString DragMethod_Base::getUndoDescription() const

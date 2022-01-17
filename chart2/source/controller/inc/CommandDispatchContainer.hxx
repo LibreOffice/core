@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 #include <o3tl/sorted_vector.hxx>
 
 #include <map>
@@ -33,7 +33,7 @@ namespace com::sun::star::util { struct URL; }
 
 namespace chart
 {
-
+class ChartModel;
 class DrawCommandDispatch;
 class ShapeController;
 
@@ -73,7 +73,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
 
     void setModel(
-        const css::uno::Reference< css::frame::XModel > & xModel );
+        const rtl::Reference<::chart::ChartModel> & xModel );
 
     /** Set a chart dispatcher that is used for all commands contained in
         rChartCommands
@@ -122,7 +122,7 @@ private:
     mutable tDisposeVector m_aToBeDisposedDispatches;
 
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-    css::uno::WeakReference< css::frame::XModel >         m_xModel;
+    unotools::WeakReference< ::chart::ChartModel >         m_xModel;
 
     css::uno::Reference< css::frame::XDispatch >          m_xChartDispatcher;
     o3tl::sorted_vector< OUString >                       m_aChartCommands;

@@ -18,6 +18,7 @@
  */
 
 #include "UndoCommandDispatch.hxx"
+#include <ChartModel.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -40,12 +41,11 @@ namespace chart
 
 UndoCommandDispatch::UndoCommandDispatch(
     const Reference< uno::XComponentContext > & xContext,
-    const Reference< frame::XModel > & xModel ) :
+    const rtl::Reference<::chart::ChartModel> & xModel ) :
         CommandDispatch( xContext ),
         m_xModel( xModel )
 {
-    uno::Reference< document::XUndoManagerSupplier > xSuppUndo( m_xModel, uno::UNO_QUERY_THROW );
-    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_SET_THROW );
+    m_xUndoManager.set( m_xModel->getUndoManager(), uno::UNO_SET_THROW );
 }
 
 UndoCommandDispatch::~UndoCommandDispatch()

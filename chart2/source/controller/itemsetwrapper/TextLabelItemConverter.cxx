@@ -193,7 +193,7 @@ bool useSourceFormatFromItemToPropertySet(
 } // anonymous namespace
 
 TextLabelItemConverter::TextLabelItemConverter(
-    const uno::Reference<frame::XModel>& xChartModel,
+    const rtl::Reference<::chart::ChartModel>& xChartModel,
     const uno::Reference<beans::XPropertySet>& rPropertySet,
     const uno::Reference<XDataSeries>& xSeries,
     SfxItemPool& rItemPool, const awt::Size* pRefSize,

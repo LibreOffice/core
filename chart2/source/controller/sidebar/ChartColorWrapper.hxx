@@ -11,9 +11,10 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <svx/Palette.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::frame { class XModel; }
-
+namespace chart { class ChartModel; }
 class SvxColorToolBoxControl;
 class SvxLineStyleToolBoxControl;
 
@@ -22,20 +23,20 @@ namespace chart::sidebar {
 class ChartColorWrapper
 {
 public:
-    ChartColorWrapper(css::uno::Reference<css::frame::XModel> const & xModel,
+    ChartColorWrapper(rtl::Reference<::chart::ChartModel> const & xModel,
             SvxColorToolBoxControl* pControl,
             const OUString& rPropertyName);
 
     void operator()(const OUString& rCommand, const svx::NamedThemedColor& rColor);
         // ColorSelectFunction signature
 
-    void updateModel(const css::uno::Reference<css::frame::XModel>& xModel);
+    void updateModel(const rtl::Reference<::chart::ChartModel>& xModel);
 
     void updateData();
 
 private:
 
-    css::uno::Reference<css::frame::XModel> mxModel;
+    rtl::Reference<::chart::ChartModel> mxModel;
 
     SvxColorToolBoxControl* mpControl;
 
@@ -45,18 +46,18 @@ private:
 class ChartLineStyleWrapper
 {
 public:
-    ChartLineStyleWrapper(css::uno::Reference<css::frame::XModel> const & xModel,
+    ChartLineStyleWrapper(rtl::Reference<::chart::ChartModel> const & xModel,
             SvxLineStyleToolBoxControl* pControl);
 
     bool operator()(std::u16string_view rCommand, const css::uno::Any& rValue);
 
-    void updateModel(const css::uno::Reference<css::frame::XModel>& xModel);
+    void updateModel(const rtl::Reference<::chart::ChartModel>& xModel);
 
     void updateData();
 
 private:
 
-    css::uno::Reference<css::frame::XModel> mxModel;
+    rtl::Reference<::chart::ChartModel> mxModel;
 
     SvxLineStyleToolBoxControl* mpControl;
 };

@@ -41,7 +41,7 @@ public:
             used for keyboard navigation).
      */
     explicit ObjectHierarchy(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
+        const rtl::Reference<::chart::ChartModel> & xChartDocument,
         ExplicitValueProvider * pExplicitValueProvider,
         bool bFlattenDiagram = false,
         bool bOrderingForElementSelector = false );
@@ -63,14 +63,14 @@ public:
     sal_Int32        getIndexInParent( const ObjectIdentifier& rNode ) const;
 
 private:
-    void createTree( const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
+    void createTree( const rtl::Reference<::chart::ChartModel> & xChartDocument );
     void createAxesTree(
         ObjectHierarchy::tChildContainer & rContainer,
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
+        const rtl::Reference<::chart::ChartModel> & xChartDoc,
         const css::uno::Reference< css::chart2::XDiagram > & xDiagram  );
     void createDiagramTree(
         ObjectHierarchy::tChildContainer& rContainer,
-        const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
+        const rtl::Reference<::chart::ChartModel>& xChartDoc,
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
     void createDataSeriesTree(
         ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
@@ -80,7 +80,7 @@ private:
         const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
     void createLegendTree(
         ObjectHierarchy::tChildContainer & rContainer,
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
+        const rtl::Reference<::chart::ChartModel> & xChartDoc,
         const css::uno::Reference< css::chart2::XDiagram > & xDiagram  );
     void createAdditionalShapesTree( ObjectHierarchy::tChildContainer& rContainer );
     ObjectIdentifier getParentImpl(
@@ -99,7 +99,7 @@ class ObjectKeyNavigation
 {
 public:
     explicit ObjectKeyNavigation( const ObjectIdentifier & rCurrentOID,
-                                  const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
+                                  const rtl::Reference<::chart::ChartModel> & xChartDocument,
                                   ExplicitValueProvider * pExplicitValueProvider );
 
     bool handleKeyEvent( const css::awt::KeyEvent & rEvent );
@@ -117,7 +117,7 @@ private:
     bool veryLast();
 
     ObjectIdentifier m_aCurrentOID;
-    css::uno::Reference< css::chart2::XChartDocument > m_xChartDocument;
+    rtl::Reference<::chart::ChartModel> m_xChartDocument;
     ExplicitValueProvider * m_pExplicitValueProvider;
 };
 
