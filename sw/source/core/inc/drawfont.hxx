@@ -118,6 +118,7 @@ public:
                     vcl::text::TextLayoutCache const*const pCachedVclData = nullptr)
         : m_pCachedVclData(pCachedVclData)
     {
+        assert( (nLen == TextFrameIndex(COMPLETE_STRING)) ? (nIdx.get() < rText.getLength()) : (nIdx + nLen).get() <= rText.getLength() );
         m_pFrame = nullptr;
         m_pSh = pSh;
         m_pOut = &rOut;
@@ -414,8 +415,27 @@ public:
 
     void SetText( const OUString &rNew )
     {
+        assert( (m_nLen == TextFrameIndex(COMPLETE_STRING)) ? (m_nIdx.get() < rNew.getLength()) : (m_nIdx + m_nLen).get() <= rNew.getLength() );
         m_aText = rNew;
         m_pCachedVclData = nullptr; // would any case benefit from save/restore?
+    }
+
+    // These methods are here so we can set all the related fields together to preserve the invariants that we assert
+    void SetTextIdxLen( const OUString &rNewStr, TextFrameIndex const nNewIdx, TextFrameIndex const nNewLen )
+    {
+        assert( (nNewLen == TextFrameIndex(COMPLETE_STRING)) ? (nNewIdx.get() < rNewStr.getLength()) : (nNewIdx + nNewLen).get() <= rNewStr.getLength() );
+        m_aText = rNewStr;
+        m_nIdx = nNewIdx;
+        m_nLen = nNewLen;
+        m_pCachedVclData = nullptr; // would any case benefit from save/restore?
+    }
+
+    // These methods are here so we can set all the related fields together to preserve the invariants that we assert
+    void SetIdxLen( TextFrameIndex const nNewIdx, TextFrameIndex const nNewLen )
+    {
+        assert( (nNewLen == TextFrameIndex(COMPLETE_STRING)) ? (nNewIdx.get() < m_aText.getLength()) : (nNewIdx + nNewLen).get() <= m_aText.getLength() );
+        m_nIdx = nNewIdx;
+        m_nLen = nNewLen;
     }
 
     void SetWrong(sw::WrongListIterator *const pNew)
@@ -457,11 +477,13 @@ public:
 
     void SetIdx(TextFrameIndex const nNew)
     {
+        assert( (m_nLen == TextFrameIndex(COMPLETE_STRING)) ? (nNew.get() < m_aText.getLength()) : (nNew + m_nLen).get() <= m_aText.getLength() );
         m_nIdx = nNew;
     }
 
     void SetLen(TextFrameIndex const nNew)
     {
+        assert( (nNew == TextFrameIndex(COMPLETE_STRING)) ? (m_nIdx.get() < m_aText.getLength()) : (m_nIdx + nNew).get() <= m_aText.getLength() );
         m_nLen = nNew;
     }
 
