@@ -130,7 +130,7 @@ void PageFormatPanel::Initialize()
     mxPaperWidth->SetFieldUnit(meFUnit);
     mxPaperHeight->SetFieldUnit(meFUnit);
     SetMarginFieldUnit();
-    aCustomEntry = mxCustomEntry->get_label();
+    m_aCustomEntry = mxCustomEntry->get_label();
 
     mxPaperWidth->set_max(mxPaperWidth->normalize(SvtOptionsDrawinglayer::GetMaximumPaperWidth()), FieldUnit::CM);
     mxPaperHeight->set_max(mxPaperHeight->normalize(SvtOptionsDrawinglayer::GetMaximumPaperHeight()), FieldUnit::CM);
@@ -354,7 +354,7 @@ void PageFormatPanel::UpdateMarginBox()
     mnPageTopMargin = mpPageULMarginItem->GetUpper();
     mnPageBottomMargin = mpPageULMarginItem->GetLower();
 
-    int nCustomEntry = mxMarginSelectBox->find_text(aCustomEntry);
+    int nCustomEntry = mxMarginSelectBox->find_text(m_aCustomEntry);
 
     bool bMirrored = (mpPageItem->GetPageUsage() == SvxPageUsage::Mirror);
     if( IsNone(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
@@ -408,8 +408,8 @@ void PageFormatPanel::UpdateMarginBox()
     else
     {
         if (nCustomEntry == -1)
-            mxMarginSelectBox->append_text(aCustomEntry);
-        mxMarginSelectBox->set_active_text(aCustomEntry);
+            mxMarginSelectBox->append_text(m_aCustomEntry);
+        mxMarginSelectBox->set_active_text(m_aCustomEntry);
     }
 }
 

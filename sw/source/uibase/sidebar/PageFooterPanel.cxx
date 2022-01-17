@@ -100,7 +100,7 @@ void PageFooterPanel::Initialize()
 
     SetMarginsAndSpacingFieldUnit();
 
-    aCustomEntry = mxCustomEntry->get_label();
+    m_aCustomEntry = mxCustomEntry->get_label();
     mxFooterToggle->connect_toggled( LINK(this, PageFooterPanel, FooterToggleHdl) );
     mxFooterMarginPresetLB->connect_changed( LINK(this, PageFooterPanel, FooterLRMarginHdl));
     mxFooterSpacingLB->connect_changed( LINK(this, PageFooterPanel, FooterSpacingHdl));
@@ -141,15 +141,15 @@ void PageFooterPanel::UpdateMarginControl()
             if (mxFooterMarginPresetLB->get_id(i).toUInt32() == nLeft)
             {
                 mxFooterMarginPresetLB->set_active(i);
-                int nCustomEntry = mxFooterMarginPresetLB->find_text(aCustomEntry);
+                int nCustomEntry = mxFooterMarginPresetLB->find_text(m_aCustomEntry);
                 if (nCustomEntry != -1)
                     mxFooterMarginPresetLB->remove(nCustomEntry);
                 return;
             }
         }
     }
-    mxFooterMarginPresetLB->append_text(aCustomEntry);
-    mxFooterMarginPresetLB->set_active_text(aCustomEntry);
+    mxFooterMarginPresetLB->append_text(m_aCustomEntry);
+    mxFooterMarginPresetLB->set_active_text(m_aCustomEntry);
 }
 
 void PageFooterPanel::UpdateSpacingControl()
@@ -161,14 +161,14 @@ void PageFooterPanel::UpdateSpacingControl()
         if (mxFooterSpacingLB->get_id(i).toUInt32() == nBottom)
         {
             mxFooterSpacingLB->set_active(i);
-            int nCustomEntry = mxFooterSpacingLB->find_text(aCustomEntry);
+            int nCustomEntry = mxFooterSpacingLB->find_text(m_aCustomEntry);
             if (nCustomEntry != -1)
                 mxFooterSpacingLB->remove(nCustomEntry);
             return;
         }
     }
-    mxFooterSpacingLB->append_text(aCustomEntry);
-    mxFooterSpacingLB->set_active_text(aCustomEntry);
+    mxFooterSpacingLB->append_text(m_aCustomEntry);
+    mxFooterSpacingLB->set_active_text(m_aCustomEntry);
 }
 
 void PageFooterPanel::UpdateLayoutControl()

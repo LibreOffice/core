@@ -66,7 +66,7 @@ private:
 
     FieldUnit meFUnit;
 
-    OUString aCustomEntry;
+    OUString m_aCustomEntry;
 
     void Initialize();
     void SetMarginsAndSpacingFieldUnit();

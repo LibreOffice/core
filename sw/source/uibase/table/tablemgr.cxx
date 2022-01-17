@@ -59,39 +59,39 @@ SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const
 {
     SwTwips nWidth = 0;
 
-    if( aCols.Count() > 0 )
+    if( m_aCols.Count() > 0 )
     {
-        if(aCols.Count() == GetColCount())
+        if(m_aCols.Count() == GetColCount())
         {
-            if(nNum == aCols.Count())
-                nWidth = aCols.GetRight() - aCols[nNum-1];
+            if(nNum == m_aCols.Count())
+                nWidth = m_aCols.GetRight() - m_aCols[nNum-1];
             else
             {
                 if(nNum == 0)
-                    nWidth = aCols[nNum] - aCols.GetLeft();
+                    nWidth = m_aCols[nNum] - m_aCols.GetLeft();
                 else
-                    nWidth = aCols[nNum] - aCols[nNum-1];
+                    nWidth = m_aCols[nNum] - m_aCols[nNum-1];
             }
         }
         else
         {
             SwTwips nRValid = nNum < GetColCount() ?
-                              aCols[GetRightSeparator(nNum)] :
-                              aCols.GetRight();
+                              m_aCols[GetRightSeparator(nNum)] :
+                              m_aCols.GetRight();
             SwTwips nLValid = nNum ?
-                              aCols[GetRightSeparator(nNum - 1)] :
-                              aCols.GetLeft();
+                              m_aCols[GetRightSeparator(nNum - 1)] :
+                              m_aCols.GetLeft();
             nWidth = nRValid - nLValid;
         }
     }
     else
-        nWidth = aCols.GetRight();
+        nWidth = m_aCols.GetRight();
     return nWidth;
 }
 
 SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
 {
-    OSL_ENSURE(nNum <= aCols.Count(), "Index out of Area");
+    OSL_ENSURE(nNum <= m_aCols.Count(), "Index out of Area");
 
     if ( GetColCount() > 0 )
     {
@@ -120,48 +120,48 @@ void SwTableFUNC::SetColWidth(sal_uInt16 nNum, SwTwips nNewWidth )
     // move all of the following
     bool bCurrentOnly = false;
 
-    if ( aCols.Count() > 0 )
+    if ( m_aCols.Count() > 0 )
     {
-        if(aCols.Count() != GetColCount())
+        if(m_aCols.Count() != GetColCount())
             bCurrentOnly = true;
         SwTwips nWidth = GetColWidth(nNum);
 
         int nDiff = static_cast<int>(nNewWidth - nWidth);
         if( !nNum )
-            aCols[ GetRightSeparator(0) ] += nDiff;
+            m_aCols[ GetRightSeparator(0) ] += nDiff;
         else if( nNum < GetColCount()  )
         {
             if(nDiff < GetColWidth(nNum + 1) - MINLAY)
-                aCols[ GetRightSeparator(nNum) ] += nDiff;
+                m_aCols[ GetRightSeparator(nNum) ] += nDiff;
             else
             {
                 int nDiffLeft = nDiff - static_cast<int>(GetColWidth(nNum + 1)) + int(MINLAY);
-                aCols[ GetRightSeparator(nNum) ] += (nDiff - nDiffLeft);
-                aCols[ GetRightSeparator(nNum - 1) ] -= nDiffLeft;
+                m_aCols[ GetRightSeparator(nNum) ] += (nDiff - nDiffLeft);
+                m_aCols[ GetRightSeparator(nNum - 1) ] -= nDiffLeft;
             }
         }
         else
-            aCols[ GetRightSeparator(nNum-1) ] -= nDiff;
+            m_aCols[ GetRightSeparator(nNum-1) ] -= nDiff;
     }
     else
-        aCols.SetRight( std::min( nNewWidth, SwTwips(aCols.GetRightMax()) ) );
+        m_aCols.SetRight( std::min( nNewWidth, SwTwips(m_aCols.GetRightMax()) ) );
 
-    pSh->StartAllAction();
-    pSh->SetTabCols( aCols, bCurrentOnly );
-    pSh->EndAllAction();
+    m_pSh->StartAllAction();
+    m_pSh->SetTabCols( m_aCols, bCurrentOnly );
+    m_pSh->EndAllAction();
 }
 
 void SwTableFUNC::InitTabCols()
 {
-    OSL_ENSURE(pSh, "no Shell");
+    OSL_ENSURE(m_pSh, "no Shell");
 
-    if( pFormat && pSh)
-        pSh->GetTabCols( aCols );
+    if( m_pFormat && m_pSh)
+        m_pSh->GetTabCols( m_aCols );
 }
 
 SwTableFUNC::SwTableFUNC(SwWrtShell *pShell)
-    : pFormat(pShell->GetTableFormat()),
-      pSh(pShell)
+    : m_pFormat(pShell->GetTableFormat()),
+      m_pSh(pShell)
 {
 }
 
@@ -173,12 +173,12 @@ void SwTableFUNC::UpdateChart()
 {
     //Update of the fields triggered by the user, all Charts of
     //the table will be brought up to date
-    SwFrameFormat *pFormat2 = pSh->GetTableFormat();
-    if ( pFormat2 && pSh->HasOLEObj( pFormat2->GetName() ) )
+    SwFrameFormat *pFormat2 = m_pSh->GetTableFormat();
+    if ( pFormat2 && m_pSh->HasOLEObj( pFormat2->GetName() ) )
     {
-        pSh->StartAllAction();
-        pSh->UpdateCharts( pFormat2->GetName() );
-        pSh->EndAllAction();
+        m_pSh->StartAllAction();
+        m_pSh->UpdateCharts( pFormat2->GetName() );
+        m_pSh->EndAllAction();
     }
 }
 
@@ -189,22 +189,22 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         SwFlyFrameFormat** ppFlyFrameFormat )
 {
     uno::Reference< frame::XModel > xChartModel;
-    pSh->StartUndo( SwUndoId::UI_INSERT_CHART );
-    pSh->StartAllAction();
+    m_pSh->StartUndo( SwUndoId::UI_INSERT_CHART );
+    m_pSh->StartAllAction();
 
     OUString aName;
-    if (pSh->IsCursorInTable())
+    if (m_pSh->IsCursorInTable())
     {
-        aName = pSh->GetTableFormat()->GetName();
+        aName = m_pSh->GetTableFormat()->GetName();
         // insert node before table
-        pSh->MoveTable( GotoCurrTable, fnTableStart );
-        pSh->Up( false );
-        if ( pSh->IsCursorInTable() )
+        m_pSh->MoveTable( GotoCurrTable, fnTableStart );
+        m_pSh->Up( false );
+        if ( m_pSh->IsCursorInTable() )
         {
-            if ( aName != pSh->GetTableFormat()->GetName() )
-                pSh->Down( false ); // two adjacent tables
+            if ( aName != m_pSh->GetTableFormat()->GetName() )
+                m_pSh->Down( false ); // two adjacent tables
         }
-        pSh->SplitNode();
+        m_pSh->SplitNode();
     }
 
     // insert chart
@@ -218,7 +218,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     {
 
         SwFlyFrameFormat* pTmp = nullptr;
-        pSh->InsertOleObject( aEmbObjRef, &pTmp );
+        m_pSh->InsertOleObject( aEmbObjRef, &pTmp );
         if (ppFlyFrameFormat)
             *ppFlyFrameFormat = pTmp;
 
@@ -235,21 +235,21 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
 
         // set the table name at the OLE-node
         if (!aName.isEmpty())
-            pSh->SetChartName( aName );
+            m_pSh->SetChartName( aName );
     }
-    pSh->EndAllAction();
+    m_pSh->EndAllAction();
 
     if (xObj.is() && !comphelper::LibreOfficeKit::isActive())
     {
         // Let the chart be activated after the inserting (unless
         // via LibreOfficeKit)
-        SfxInPlaceClient* pClient = pSh->GetView().FindIPClient( xObj, &pSh->GetView().GetEditWin() );
+        SfxInPlaceClient* pClient = m_pSh->GetView().FindIPClient( xObj, &m_pSh->GetView().GetEditWin() );
         if ( !pClient )
         {
-            pClient = new SwOleClient( &pSh->GetView(), &pSh->GetView().GetEditWin(), aEmbObjRef );
-            pSh->SetCheckForOLEInCaption( true );
+            pClient = new SwOleClient( &m_pSh->GetView(), &m_pSh->GetView().GetEditWin(), aEmbObjRef );
+            m_pSh->SetCheckForOLEInCaption( true );
         }
-        pSh->CalcAndSetScale( aEmbObjRef );
+        m_pSh->CalcAndSetScale( aEmbObjRef );
         //#50270# We don't need to handle errors,
         //this does the DoVerb in the SfxViewShell.
         ErrCode nErr = pClient->DoVerb(embed::EmbedVerbs::MS_OLEVERB_SHOW);
@@ -264,7 +264,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     {
         xDataReceiver->attachDataProvider( rxDataProvider );
 
-        uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pSh->GetView().GetDocShell()->GetModel(), uno::UNO_QUERY );
+        uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( m_pSh->GetView().GetDocShell()->GetModel(), uno::UNO_QUERY );
         xDataReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
         // default values for ranges that do not consist of a single row or column
@@ -310,7 +310,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         xDataReceiver->setArguments( aArgs );
     }
 
-    pSh->EndUndo( SwUndoId::UI_INSERT_CHART );
+    m_pSh->EndUndo( SwUndoId::UI_INSERT_CHART );
 
     if( xChartModel.is() )
         xChartModel->unlockControllers(); //#i79578# don't request a new replacement image for charts to often
@@ -319,10 +319,10 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
 
 sal_uInt16  SwTableFUNC::GetCurColNum() const
 {
-    const size_t nPos = pSh->GetCurTabColNum();
+    const size_t nPos = m_pSh->GetCurTabColNum();
     size_t nCount = 0;
     for( size_t i = 0; i < nPos; i++ )
-        if(aCols.IsHidden(i))
+        if(m_aCols.IsHidden(i))
             nCount ++;
     return nPos - nCount;
 }
@@ -330,10 +330,10 @@ sal_uInt16  SwTableFUNC::GetCurColNum() const
 sal_uInt16  SwTableFUNC::GetColCount() const
 {
     size_t nCount = 0;
-    for(size_t i = 0; i < aCols.Count(); i++ )
-        if(aCols.IsHidden(i))
+    for(size_t i = 0; i < m_aCols.Count(); i++ )
+        if(m_aCols.IsHidden(i))
             nCount ++;
-    return aCols.Count() - nCount;
+    return m_aCols.Count() - nCount;
 }
 
 int SwTableFUNC::GetRightSeparator(int nNum) const
@@ -342,7 +342,7 @@ int SwTableFUNC::GetRightSeparator(int nNum) const
     int i = 0;
     while( nNum >= 0 )
     {
-        if( !aCols.IsHidden(i) )
+        if( !m_aCols.IsHidden(i) )
             nNum--;
         i++;
     }
