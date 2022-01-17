@@ -33,6 +33,24 @@
       "message": "Working on a similar issue at I0c6f20692af88c603106d76c45c722cdb7deb118. Caolan taught me to use \u003cdialog\u003e-\u003eset_window_state() / get_window_state() but it works reliably only for gtk3.",
       "revId": "09350f63f7481954b673443a893ab5aad8109f48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6813c9c_d1238ba8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-01-17T09:28:48Z",
+      "side": 1,
+      "message": "I have been looking at set_window_state() and get_window_state() and have also found it only works for gtk3. Using window_move() seems to work for all backends. Problem with set_window_state() for gen backend seems to be something to do with going on\u0027s in SystemWindow::SetWindowStateData. Setting the if (pWindow-\u003empWindowImpl-\u003embFrame) to if (false) and allowing the else block to do it\u0027s thing and get to setPosSizePixel( nX, nY, nWidth, nHeight, nPosSize ) makes the window position at the previous spot but still doesn\u0027t work correctly to restore the size. GtkInstanceWindow uses a different set_window_state, one that works!",
+      "parentUuid": "e495a982_85336b46",
+      "revId": "09350f63f7481954b673443a893ab5aad8109f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
