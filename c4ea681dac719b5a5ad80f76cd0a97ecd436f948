@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff77823b_b7c2b33f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-17T07:22:24Z",
+      "side": 1,
+      "message": "Did you consider the case where the form-filling use-case, where the ~entire document is read-only, but you\u0027re still allowed to edit input fields, dropdowns and other form controls?\n\nAssuming that works today, will this change break that workflow?",
+      "revId": "c4ea681dac719b5a5ad80f76cd0a97ecd436f948",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
