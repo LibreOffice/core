@@ -32,7 +32,7 @@
 
 #include "ChartSeriesPanel.hxx"
 #include <ChartController.hxx>
-
+#include <ChartModel.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <RegressionCurveHelper.hxx>
@@ -47,7 +47,7 @@ namespace chart::sidebar {
 
 namespace {
 
-bool isDataLabelVisible(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rCID)
+bool isDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, const OUString& rCID)
 {
     css::uno::Reference< css::chart2::XDataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -58,7 +58,7 @@ bool isDataLabelVisible(const css::uno::Reference<css::frame::XModel>& xModel, c
     return DataSeriesHelper::hasDataLabelsAtSeries(xSeries);
 }
 
-void setDataLabelVisible(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rCID, bool bVisible)
+void setDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, const OUString& rCID, bool bVisible)
 {
     css::uno::Reference< css::chart2::XDataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -87,7 +87,7 @@ LabelPlacementMap const aLabelPlacementMap[] = {
     { 5, css::chart::DataLabelPlacement::NEAR_ORIGIN }
 };
 
-sal_Int32 getDataLabelPlacement(const css::uno::Reference<css::frame::XModel>& xModel,
+sal_Int32 getDataLabelPlacement(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference< css::beans::XPropertySet > xSeries(
@@ -112,7 +112,7 @@ sal_Int32 getDataLabelPlacement(const css::uno::Reference<css::frame::XModel>& x
     return 0;
 }
 
-void setDataLabelPlacement(const css::uno::Reference<css::frame::XModel>& xModel,
+void setDataLabelPlacement(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, sal_Int32 nPos)
 {
     css::uno::Reference< css::beans::XPropertySet > xSeries(
@@ -134,7 +134,7 @@ void setDataLabelPlacement(const css::uno::Reference<css::frame::XModel>& xModel
     xSeries->setPropertyValue("LabelPlacement", css::uno::Any(nApi));
 }
 
-bool isTrendlineVisible(const css::uno::Reference<css::frame::XModel>& xModel,
+bool isTrendlineVisible(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference< css::chart2::XRegressionCurveContainer > xRegressionCurveContainer(
@@ -146,7 +146,7 @@ bool isTrendlineVisible(const css::uno::Reference<css::frame::XModel>& xModel,
     return xRegressionCurveContainer->getRegressionCurves().hasElements();
 }
 
-void setTrendlineVisible(const css::uno::Reference<css::frame::XModel>&
+void setTrendlineVisible(const rtl::Reference<::chart::ChartModel>&
         xModel, const OUString& rCID, bool bVisible)
 {
     css::uno::Reference< css::chart2::XRegressionCurveContainer > xRegressionCurveContainer(
@@ -167,7 +167,7 @@ void setTrendlineVisible(const css::uno::Reference<css::frame::XModel>&
 
 }
 
-bool isErrorBarVisible(const css::uno::Reference<css::frame::XModel>& xModel,
+bool isErrorBarVisible(const rtl::Reference<::chart::ChartModel>& xModel,
                        const OUString& rCID, bool bYError)
 {
     css::uno::Reference< css::chart2::XDataSeries > xSeries =
@@ -179,7 +179,7 @@ bool isErrorBarVisible(const css::uno::Reference<css::frame::XModel>& xModel,
     return StatisticsHelper::hasErrorBars(xSeries, bYError);
 }
 
-void setErrorBarVisible(const css::uno::Reference<css::frame::XModel>&
+void setErrorBarVisible(const rtl::Reference<::chart::ChartModel>&
         xModel, const OUString& rCID, bool bYError, bool bVisible)
 {
     css::uno::Reference< css::chart2::XDataSeries > xSeries =
@@ -200,7 +200,7 @@ void setErrorBarVisible(const css::uno::Reference<css::frame::XModel>&
     }
 }
 
-bool isPrimaryAxis(const css::uno::Reference<css::frame::XModel>&
+bool isPrimaryAxis(const rtl::Reference<::chart::ChartModel>&
         xModel, const OUString& rCID)
 {
     css::uno::Reference< css::chart2::XDataSeries > xSeries =
@@ -212,7 +212,7 @@ bool isPrimaryAxis(const css::uno::Reference<css::frame::XModel>&
     return DataSeriesHelper::getAttachedAxisIndex(xSeries) == 0;
 }
 
-void setAttachedAxisType(const css::uno::Reference<css::frame::XModel>&
+void setAttachedAxisType(const rtl::Reference<::chart::ChartModel>&
         xModel, const OUString& rCID, bool bPrimary)
 {
     const uno::Reference<chart2::XDataSeries>& xDataSeries = ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -220,16 +220,14 @@ void setAttachedAxisType(const css::uno::Reference<css::frame::XModel>&
     if (!xDataSeries.is())
         return;
 
-    uno::Reference<chart2::XChartDocument> xChartDoc(xModel, css::uno::UNO_QUERY);
-    uno::Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    uno::Reference<chart2::XDiagram> xDiagram = xModel->getFirstDiagram();
     DiagramHelper::attachSeriesToAxis(bPrimary, xDataSeries, xDiagram, comphelper::getProcessComponentContext());
 }
 
 css::uno::Reference<css::chart2::XChartType> getChartType(
-        const css::uno::Reference<css::frame::XModel>& xModel)
+        const rtl::Reference<::chart::ChartModel>& xModel)
 {
-    css::uno::Reference<css::chart2::XChartDocument> xChartDoc (xModel, css::uno::UNO_QUERY);
-    css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    css::uno::Reference<css::chart2::XDiagram> xDiagram = xModel->getFirstDiagram();
     css::uno::Reference< css::chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, UNO_QUERY_THROW );
     css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
     css::uno::Reference< css::chart2::XChartTypeContainer > xChartTypeContainer( xCooSysSequence[0], UNO_QUERY_THROW );
@@ -237,7 +235,7 @@ css::uno::Reference<css::chart2::XChartType> getChartType(
     return xChartTypeSequence[0];
 }
 
-OUString getSeriesLabel(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rCID)
+OUString getSeriesLabel(const rtl::Reference<::chart::ChartModel>& xModel, const OUString& rCID)
 {
     css::uno::Reference< css::chart2::XDataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
@@ -293,7 +291,7 @@ ChartSeriesPanel::ChartSeriesPanel(
     , mxLBLabelPlacement(m_xBuilder->weld_combo_box("comboboxtext_label"))
     , mxFTSeriesName(m_xBuilder->weld_label("label_series_name"))
     , mxFTSeriesTemplate(m_xBuilder->weld_label("label_series_tmpl"))
-    , mxModel(pController->getModel())
+    , mxModel(pController->getChartModel())
     , mxListener(new ChartSidebarModifyListener(this))
     , mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_DATA_SERIES))
     , mbModelValid(true)
@@ -322,8 +320,7 @@ ChartSeriesPanel::~ChartSeriesPanel()
 
 void ChartSeriesPanel::Initialize()
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->addModifyListener(mxListener);
+    mxModel->addModifyListener(mxListener);
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
@@ -408,12 +405,11 @@ void ChartSeriesPanel::modelInvalid()
     mbModelValid = false;
 }
 
-void ChartSeriesPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartSeriesPanel::doUpdateModel(rtl::Reference<::chart::ChartModel> xModel)
 {
     if (mbModelValid)
     {
-        css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-        xBroadcaster->removeModifyListener(mxListener);
+        mxModel->removeModifyListener(mxListener);
     }
 
     css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
@@ -428,8 +424,7 @@ void ChartSeriesPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xMo
     if (!mbModelValid)
         return;
 
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcasterNew->addModifyListener(mxListener);
+    mxModel->addModifyListener(mxListener);
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
@@ -438,7 +433,9 @@ void ChartSeriesPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xMo
 
 void ChartSeriesPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
-    doUpdateModel(xModel);
+    ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
+    assert(!xModel || pModel);
+    doUpdateModel(pModel);
 }
 
 void ChartSeriesPanel::selectionChanged(bool bCorrectType)

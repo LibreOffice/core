@@ -19,6 +19,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 
 #include <memory>
 #include <vector>
@@ -35,12 +36,13 @@ namespace chart
 {
 
 class DialogModel;
+class ChartModel;
 
 class DataBrowserModel final
 {
 public:
     explicit DataBrowserModel(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
+        const rtl::Reference<::chart::ChartModel> & xChartDoc,
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
     ~DataBrowserModel();
 
@@ -146,7 +148,7 @@ private:
 
     sal_Int32 getCategoryColumnCount();
 
-    css::uno::Reference< css::chart2::XChartDocument > m_xChartDocument;
+    rtl::Reference<::chart::ChartModel> m_xChartDocument;
     std::unique_ptr< DialogModel > m_apDialogModel;
 
     struct tDataColumn;

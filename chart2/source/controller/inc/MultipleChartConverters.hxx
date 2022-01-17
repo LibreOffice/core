@@ -19,11 +19,12 @@
 #pragma once
 
 #include "MultipleItemConverter.hxx"
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
-
+namespace chart { class ChartModel; }
 class SdrModel;
 
 namespace chart::wrapper {
@@ -32,7 +33,7 @@ class AllAxisItemConverter final : public MultipleItemConverter
 {
 public:
     AllAxisItemConverter(
-        const css::uno::Reference<css::frame::XModel> & xChartModel,
+        const rtl::Reference<::chart::ChartModel> & xChartModel,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         const css::awt::Size* pRefSize );
@@ -47,7 +48,7 @@ class AllGridItemConverter final : public MultipleItemConverter
 {
 public:
     AllGridItemConverter(
-        const css::uno::Reference<css::frame::XModel>& xChartModel,
+        const rtl::Reference<::chart::ChartModel>& xChartModel,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         const css::uno::Reference<css::lang::XMultiServiceFactory> & xNamedPropertyContainerFactory );
@@ -61,7 +62,7 @@ class AllDataLabelItemConverter final : public MultipleItemConverter
 {
 public:
     AllDataLabelItemConverter(
-        const css::uno::Reference<css::frame::XModel>& xChartModel,
+        const rtl::Reference<::chart::ChartModel>& xChartModel,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory );
@@ -76,7 +77,7 @@ class AllTitleItemConverter final : public MultipleItemConverter
 {
 public:
     AllTitleItemConverter(
-        const css::uno::Reference<css::frame::XModel>& xChartModel,
+        const rtl::Reference<::chart::ChartModel>& xChartModel,
         SfxItemPool& rItemPool, SdrModel& rDrawModel,
         const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory );
 
@@ -90,7 +91,7 @@ class AllSeriesStatisticsConverter final : public MultipleItemConverter
 {
 public:
     AllSeriesStatisticsConverter(
-        const css::uno::Reference<css::frame::XModel>& xChartModel, SfxItemPool& rItemPool );
+        const rtl::Reference<::chart::ChartModel>& xChartModel, SfxItemPool& rItemPool );
     virtual ~AllSeriesStatisticsConverter() override;
 
 protected:

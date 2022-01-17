@@ -22,6 +22,7 @@
 
 #include <ChartController.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartModel.hxx>
 #include <ChartResourceGroups.hxx>
 #include <ChartTypeDialogController.hxx>
 #include <ChartTypeManager.hxx>
@@ -44,7 +45,6 @@ namespace chart::sidebar
 {
 ChartTypePanel::ChartTypePanel(weld::Widget* pParent, ::chart::ChartController* pController)
     : PanelLayout(pParent, "ChartTypePanel", "modules/schart/ui/sidebartype.ui")
-    , mxModel(pController->getModel())
     , mxListener(new ChartSidebarModifyListener(this))
     , mbModelValid(true)
     , m_pDim3DLookResourceGroup(new Dim3DLookResourceGroup(m_xBuilder.get()))
@@ -53,7 +53,7 @@ ChartTypePanel::ChartTypePanel(weld::Widget* pParent, ::chart::ChartController* 
           new SplineResourceGroup(m_xBuilder.get(), pController->GetChartFrame()))
     , m_pGeometryResourceGroup(new GeometryResourceGroup(m_xBuilder.get()))
     , m_pSortByXValuesResourceGroup(new SortByXValuesResourceGroup(m_xBuilder.get()))
-    , m_xChartModel(mxModel, css::uno::UNO_QUERY_THROW)
+    , m_xChartModel(pController->getChartModel())
     , m_aChartTypeDialogControllerList(0)
     , m_pCurrentMainType(nullptr)
     , m_nChangingCalls(0)
@@ -75,7 +75,8 @@ ChartTypePanel::ChartTypePanel(weld::Widget* pParent, ::chart::ChartController* 
     m_xSubTypeList->SetLineCount(1);
 
     bool bEnableComplexChartTypes = true;
-    uno::Reference<beans::XPropertySet> xProps(m_xChartModel, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xProps(static_cast<cppu::OWeakObject*>(m_xChartModel.get()),
+                                               uno::UNO_QUERY);
     if (xProps.is())
     {
         try
@@ -159,11 +160,10 @@ void ChartTypePanel::Initialize()
 {
     if (!m_xChartModel.is())
         return;
-    rtl::Reference<::chart::ChartTypeManager> xTemplateManager
-        = dynamic_cast<::chart::ChartTypeManager*>(m_xChartModel->getChartTypeManager().get());
-    rtl::Reference<Diagram> xDiagram(ChartModelHelper::findDiagram(m_xChartModel));
+    rtl::Reference<::chart::ChartTypeManager> xChartTypeManager = m_xChartModel->getTypeManager();
+    rtl::Reference<Diagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
     DiagramHelper::tTemplateWithServiceName aTemplate
-        = DiagramHelper::getTemplateForDiagram(xDiagram, xTemplateManager);
+        = DiagramHelper::getTemplateForDiagram(xDiagram, xChartTypeManager);
     OUString aServiceName(aTemplate.sServiceName);
 
     bool bFound = false;
@@ -224,12 +224,10 @@ void ChartTypePanel::updateData()
     // Chart Type related
     if (!m_xChartModel.is())
         return;
-    rtl::Reference<::chart::ChartTypeManager> xTemplateManager
-        = dynamic_cast<::chart::ChartTypeManager*>(m_xChartModel->getChartTypeManager().get());
-    uno::Reference<frame::XModel> xModel(m_xChartModel);
-    rtl::Reference<Diagram> xDiagram(ChartModelHelper::findDiagram(xModel));
+    rtl::Reference<::chart::ChartTypeManager> xChartTypeManager = m_xChartModel->getTypeManager();
+    rtl::Reference<Diagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
     DiagramHelper::tTemplateWithServiceName aTemplate
-        = DiagramHelper::getTemplateForDiagram(xDiagram, xTemplateManager);
+        = DiagramHelper::getTemplateForDiagram(xDiagram, xChartTypeManager);
     OUString aServiceName(aTemplate.sServiceName);
 
     sal_uInt16 nM = 0;
@@ -265,29 +263,27 @@ void ChartTypePanel::HandleContextChange(const vcl::EnumContext& rContext)
 
 void ChartTypePanel::modelInvalid() { mbModelValid = false; }
 
-void ChartTypePanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartTypePanel::doUpdateModel(rtl::Reference<::chart::ChartModel> xModel)
 {
     if (mbModelValid)
     {
-        css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel,
-                                                                        css::uno::UNO_QUERY_THROW);
-        xBroadcaster->removeModifyListener(mxListener);
+        m_xChartModel->removeModifyListener(mxListener);
     }
 
-    mxModel = xModel;
-    mbModelValid = mxModel.is();
+    m_xChartModel = xModel;
+    mbModelValid = m_xChartModel.is();
 
     if (!mbModelValid)
         return;
 
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel,
-                                                                       css::uno::UNO_QUERY_THROW);
-    xBroadcasterNew->addModifyListener(mxListener);
+    m_xChartModel->addModifyListener(mxListener);
 }
 
 void ChartTypePanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
-    doUpdateModel(xModel);
+    ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
+    assert(!xModel || pModel);
+    doUpdateModel(pModel);
 }
 
 rtl::Reference<::chart::ChartTypeTemplate> ChartTypePanel::getCurrentTemplate() const
@@ -296,9 +292,9 @@ rtl::Reference<::chart::ChartTypeTemplate> ChartTypePanel::getCurrentTemplate() 
     {
         ChartTypeParameter aParameter(getCurrentParameter());
         m_pCurrentMainType->adjustParameterToSubType(aParameter);
-        rtl::Reference<ChartTypeManager> xTemplateManager
-            = dynamic_cast<ChartTypeManager*>(m_xChartModel->getChartTypeManager().get());
-        return m_pCurrentMainType->getCurrentTemplate(aParameter, xTemplateManager);
+        rtl::Reference<::chart::ChartTypeManager> xChartTypeManager
+            = m_xChartModel->getTypeManager();
+        return m_pCurrentMainType->getCurrentTemplate(aParameter, xChartTypeManager);
     }
     return nullptr;
 }

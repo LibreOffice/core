@@ -57,7 +57,7 @@ using ::com::sun::star::uno::Any;
 namespace
 {
 
-OUString lcl_getDataSeriesName( const OUString& rObjectCID, const Reference< frame::XModel >& xChartModel )
+OUString lcl_getDataSeriesName( const OUString& rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     OUString aRet;
 
@@ -76,7 +76,7 @@ OUString lcl_getDataSeriesName( const OUString& rObjectCID, const Reference< fra
     return aRet;
 }
 
-OUString lcl_getFullSeriesName( const OUString& rObjectCID, const Reference< frame::XModel >& xChartModel )
+OUString lcl_getFullSeriesName( const OUString& rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     OUString aRet(SchResId(STR_TIP_DATASERIES));
     OUString aWildcard( "%SERIESNAME" );
@@ -318,7 +318,7 @@ OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
 }
 
 OUString ObjectNameProvider::getAxisName( const OUString& rObjectCID
-                        , const uno::Reference< frame::XModel >& xChartModel  )
+                        , const rtl::Reference<::chart::ChartModel>& xChartModel  )
 {
     OUString aRet;
 
@@ -394,7 +394,7 @@ OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
 }
 
 OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
-                        , const Reference< frame::XModel >& xChartModel )
+                        , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     OUString aRet;
 
@@ -413,7 +413,7 @@ OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
 }
 
 OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
-                        , const uno::Reference< frame::XModel >& xChartModel )
+                        , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     OUString aRet;
 
@@ -465,12 +465,7 @@ OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
     return aRet;
 }
 
-OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Reference< chart2::XChartDocument >& xChartDocument )
-{
-    return getHelpText( rObjectCID, Reference< frame::XModel >( xChartDocument ) );
-}
-
-OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Reference< frame::XModel >& xChartModel, bool bVerbose )
+OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel, bool bVerbose )
 {
     OUString aRet;
     ObjectType eObjectType( ObjectIdentifier::getObjectType(rObjectCID) );
@@ -722,18 +717,17 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
     return aRet;
 }
 
-OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID, const css::uno::Reference< css::chart2::XChartDocument >& xChartDocument )
+OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID, const rtl::Reference<::chart::ChartModel>& xChartDocument )
 {
     OUString aRet;
     ObjectType eObjectType( ObjectIdentifier::getObjectType(rObjectCID) );
-    Reference< frame::XModel > xChartModel = xChartDocument;
 
     if( eObjectType == OBJECTTYPE_DATA_POINT )
     {
         aRet = SchResId( STR_STATUS_DATAPOINT_MARKED );
 
-        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-        Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel );
+        rtl::Reference< Diagram > xDiagram =  ChartModelHelper::findDiagram( xChartDocument );
+        Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartDocument );
         if( xDiagram.is() && xSeries.is() )
         {
             sal_Int32 nPointIndex( ObjectIdentifier::getParticleID(rObjectCID).toInt32() );
@@ -756,14 +750,14 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
 
             // replace point value
             replaceParamterInString( aRet, "%POINTVALUES", lcl_getDataPointValueText(
-                xSeries, nPointIndex, DataSeriesHelper::getCoordinateSystemOfSeries(xSeries, xDiagram), xChartModel ) );
+                xSeries, nPointIndex, DataSeriesHelper::getCoordinateSystemOfSeries(xSeries, xDiagram), xChartDocument ) );
         }
     }
     else
     {
         // use the verbose text including the formula for trend lines
         const bool bVerbose( eObjectType == OBJECTTYPE_DATA_CURVE || eObjectType == OBJECTTYPE_DATA_AVERAGE_LINE );
-        const OUString aHelpText( getHelpText( rObjectCID, xChartModel, bVerbose ));
+        const OUString aHelpText( getHelpText( rObjectCID, xChartDocument, bVerbose ));
         if( !aHelpText.isEmpty())
         {
             aRet = SchResId( STR_STATUS_OBJECT_MARKED );
@@ -776,22 +770,21 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
 
 OUString ObjectNameProvider::getNameForCID(
     const OUString& rObjectCID,
-    const uno::Reference< chart2::XChartDocument >& xChartDocument )
+    const rtl::Reference<::chart::ChartModel>& xChartDocument )
 {
     ObjectType eType( ObjectIdentifier::getObjectType( rObjectCID ));
-    Reference< frame::XModel > xModel = xChartDocument;
 
     switch( eType )
     {
         case OBJECTTYPE_AXIS:
-            return getAxisName( rObjectCID, xModel );
+            return getAxisName( rObjectCID, xChartDocument );
         case OBJECTTYPE_TITLE:
-            return getTitleName( rObjectCID, xModel );
+            return getTitleName( rObjectCID, xChartDocument );
         case OBJECTTYPE_GRID:
         case OBJECTTYPE_SUBGRID:
-            return getGridName( rObjectCID, xModel );
+            return getGridName( rObjectCID, xChartDocument );
         case OBJECTTYPE_DATA_SERIES:
-            return lcl_getFullSeriesName( rObjectCID, xModel );
+            return lcl_getFullSeriesName( rObjectCID, xChartDocument );
         case OBJECTTYPE_DATA_POINT:
         case OBJECTTYPE_DATA_LABELS:
         case OBJECTTYPE_DATA_LABEL:
@@ -802,7 +795,7 @@ OUString ObjectNameProvider::getNameForCID(
         case OBJECTTYPE_DATA_CURVE:
         case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
-                OUString aRet = lcl_getFullSeriesName( rObjectCID, xModel ) + " ";
+                OUString aRet = lcl_getFullSeriesName( rObjectCID, xChartDocument ) + " ";
                 if( eType == OBJECTTYPE_DATA_POINT || eType == OBJECTTYPE_DATA_LABEL )
                 {
                     aRet += getName( OBJECTTYPE_DATA_POINT  );
@@ -815,7 +808,7 @@ OUString ObjectNameProvider::getNameForCID(
                 }
                 else if (eType == OBJECTTYPE_DATA_CURVE || eType == OBJECTTYPE_DATA_CURVE_EQUATION)
                 {
-                    Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xModel ));
+                    Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartDocument ));
                     Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
 
                     aRet += " " + getName(eType);
@@ -846,15 +839,14 @@ OUString ObjectNameProvider::getNameForCID(
 OUString ObjectNameProvider::getName_ObjectForSeries(
         ObjectType eObjectType,
         const OUString& rSeriesCID,
-        const uno::Reference< chart2::XChartDocument >& xChartDocument )
+        const rtl::Reference<::chart::ChartModel>& xChartDocument )
 {
-    uno::Reference< frame::XModel> xChartModel = xChartDocument;
-    Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rSeriesCID , xChartModel );
+    Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rSeriesCID , xChartDocument );
     if( xSeries.is() )
     {
         OUString aRet = SchResId(STR_OBJECT_FOR_SERIES);
         replaceParamterInString( aRet, "%OBJECTNAME", getName( eObjectType ) );
-        replaceParamterInString( aRet, "%SERIESNAME", lcl_getDataSeriesName( rSeriesCID, xChartModel ) );
+        replaceParamterInString( aRet, "%SERIESNAME", lcl_getDataSeriesName( rSeriesCID, xChartDocument ) );
         return aRet;
     }
     else

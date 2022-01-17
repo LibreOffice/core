@@ -644,7 +644,7 @@ rtl::Reference<::chart::ChartModel> ChartController::getChartModel()
 
 rtl::Reference<::chart::Diagram> ChartController::getFirstDiagram()
 {
-    return ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) );
+    return ChartModelHelper::findDiagram( getChartModel() );
 }
 
 uno::Any SAL_CALL ChartController::getViewData()

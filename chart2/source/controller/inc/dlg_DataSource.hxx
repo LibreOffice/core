@@ -33,6 +33,7 @@ class RangeChooserTabPage;
 class DataSourceTabPage;
 class ChartTypeTemplateProvider;
 class DialogModel;
+class ChartModel;
 
 class DataSourceDialog final :
         public weld::GenericDialogController,
@@ -41,7 +42,7 @@ class DataSourceDialog final :
 public:
     explicit DataSourceDialog(
         weld::Window * pParent,
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
+        const rtl::Reference<::chart::ChartModel> & xChartDocument,
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~DataSourceDialog() override;
 

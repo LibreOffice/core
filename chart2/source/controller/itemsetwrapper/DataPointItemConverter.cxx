@@ -198,7 +198,7 @@ bool lcl_UseSourceFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxIte
 } // anonymous namespace
 
 DataPointItemConverter::DataPointItemConverter(
-    const uno::Reference< frame::XModel > & xChartModel,
+    const rtl::Reference<::chart::ChartModel> & xChartModel,
     const uno::Reference< uno::XComponentContext > & xContext,
     const uno::Reference< beans::XPropertySet > & rPropertySet,
     const uno::Reference< XDataSeries > & xSeries,

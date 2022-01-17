@@ -29,6 +29,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <rtl/ref.hxx>
 
 #include <map>
 
@@ -36,6 +37,7 @@ namespace com::sun::star::chart2 { class XChartDocument; }
 
 namespace chart
 {
+class ChartModel;
 
 namespace impl
 {
@@ -70,7 +72,7 @@ public:
     // #i120559# allow handing over a default for data orientation
     // (DataInColumns) that will be used when no data is available
     explicit InternalDataProvider(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
+        const rtl::Reference<::chart::ChartModel> & xChartDoc,
         bool bConnectToModel,
         bool bDefaultDataInColumns );
     explicit InternalDataProvider( const InternalDataProvider & rOther );

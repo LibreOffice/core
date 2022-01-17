@@ -23,6 +23,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <tools/diagnose_ex.h>
+#include <ChartModel.hxx>
 
 using namespace ::com::sun::star;
 
@@ -33,7 +34,7 @@ namespace chart
 {
 
 RangeSelectionHelper::RangeSelectionHelper(
-    const Reference< chart2::XChartDocument > & xChartDocument ) :
+    const rtl::Reference<::chart::ChartModel> & xChartDocument ) :
         m_xChartDocument( xChartDocument )
 {}
 

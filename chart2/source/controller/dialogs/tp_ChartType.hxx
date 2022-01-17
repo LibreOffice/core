@@ -45,7 +45,7 @@ class ChartTypeTabPage final : public ResourceChangeListener, public vcl::OWizar
 {
 public:
     ChartTypeTabPage( weld::Container* pPage, weld::DialogController* pController
-                , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
+                , const rtl::Reference<::chart::ChartModel>& xChartModel
                 , bool bShowDescription = true );
     virtual ~ChartTypeTabPage() override;
 
@@ -74,7 +74,7 @@ private:
     std::unique_ptr<GeometryResourceGroup>      m_pGeometryResourceGroup;
     std::unique_ptr<SortByXValuesResourceGroup> m_pSortByXValuesResourceGroup;
 
-    css::uno::Reference< css::chart2::XChartDocument >   m_xChartModel;
+    rtl::Reference<::chart::ChartModel>   m_xChartModel;
 
     std::vector< std::unique_ptr<ChartTypeDialogController> > m_aChartTypeDialogControllerList;
     ChartTypeDialogController*                  m_pCurrentMainType;

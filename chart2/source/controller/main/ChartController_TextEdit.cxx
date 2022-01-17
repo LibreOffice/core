@@ -136,7 +136,7 @@ bool ChartController::EndTextEdit()
     if ( !aObjectCID.isEmpty() )
     {
         uno::Reference< beans::XPropertySet > xPropSet =
-            ObjectIdentifier::getObjectPropertySet( aObjectCID, uno::Reference<chart2::XChartDocument>(getChartModel()) );
+            ObjectIdentifier::getObjectPropertySet( aObjectCID, getChartModel() );
 
         // lock controllers till end of block
         ControllerLockGuardUNO aCLGuard( getChartModel() );

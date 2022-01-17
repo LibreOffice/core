@@ -20,6 +20,7 @@
 #include <ReferenceSizeProvider.hxx>
 #include <RelativeSizeHelper.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartModel.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <AxisHelper.hxx>
@@ -42,7 +43,7 @@ namespace chart
 
 ReferenceSizeProvider::ReferenceSizeProvider(
     awt::Size aPageSize,
-    const Reference< XChartDocument > & xChartDoc ) :
+    const rtl::Reference<::chart::ChartModel> & xChartDoc ) :
         m_aPageSize( aPageSize ),
         m_xChartDoc( xChartDoc ),
         m_bUseAutoScale( getAutoResizeState( xChartDoc ) == AUTO_RESIZE_YES )
@@ -218,14 +219,13 @@ void ReferenceSizeProvider::impl_getAutoResizeFromTitled(
     with state NO, AUTO_RESIZE_AMBIGUOUS is returned.
 */
 ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState(
-    const Reference< XChartDocument > & xChartDoc )
+    const rtl::Reference<::chart::ChartModel> & xChartDoc )
 {
     AutoResizeState eResult = AUTO_RESIZE_UNKNOWN;
 
     // Main Title
-    Reference< XTitled > xDocTitled( xChartDoc, uno::UNO_QUERY );
-    if( xDocTitled.is())
-        impl_getAutoResizeFromTitled( xDocTitled, eResult );
+    if( xChartDoc.is())
+        impl_getAutoResizeFromTitled( xChartDoc, eResult );
     if( eResult == AUTO_RESIZE_AMBIGUOUS )
         return eResult;
 
@@ -315,7 +315,7 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
     m_bUseAutoScale = (eNewState == AUTO_RESIZE_YES);
 
     // Main Title
-    impl_setValuesAtTitled( Reference< XTitled >( m_xChartDoc, uno::UNO_QUERY ));
+    impl_setValuesAtTitled( m_xChartDoc );
 
     // diagram is needed by the rest of the objects
     Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( m_xChartDoc );

@@ -20,6 +20,7 @@
 #include <DataSourceHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartTypeManager.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <DataSeriesHelper.hxx>
@@ -274,40 +275,16 @@ uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
     return comphelper::containerToSequence( aResult );
 }
 
-uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges( const uno::Reference< frame::XModel > & xChartModel )
+uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges( const rtl::Reference<::chart::ChartModel> & xChartModel )
 {
     rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     return getUsedDataRanges( xDiagram );
 }
 
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
-    const uno::Reference< chart2::XChartDocument >& xChartDoc )
+    const rtl::Reference<::chart::ChartModel>& xChartDoc )
 {
     return pressUsedDataIntoRectangularFormat( xChartDoc );
-}
-
-uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
-    const uno::Reference< frame::XModel >& xChartModel )
-{
-    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;
-
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-    uno::Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
-    if( xCategories.is() )
-        aResult.push_back( xCategories );
-
-    std::vector< uno::Reference< XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xChartModel ) );
-    for (auto const& series : aSeriesVector)
-    {
-        uno::Reference< data::XDataSource > xDataSource(series, uno::UNO_QUERY);
-        if( !xDataSource.is() )
-            continue;
-        const uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
-        aResult.insert( aResult.end(), aDataSequences.begin(), aDataSequences.end() );
-    }
-
-    return uno::Reference< chart2::data::XDataSource >(
-        new DataSource( comphelper::containerToSequence( aResult )));
 }
 
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
@@ -315,12 +292,12 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
 {
     std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;
 
-    uno::Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
+    rtl::Reference< Diagram > xDiagram =  rModel.getFirstChartDiagram();
     uno::Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
     if( xCategories.is() )
         aResult.push_back( xCategories );
 
-    std::vector< uno::Reference< XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( rModel ) );
+    std::vector< uno::Reference< XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( &rModel ) );
     for (auto const& series : aSeriesVector)
     {
         uno::Reference< data::XDataSource > xDataSource(series, uno::UNO_QUERY);
@@ -335,8 +312,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
 }
 
 bool DataSourceHelper::detectRangeSegmentation(
-    const uno::Reference<
-        frame::XModel >& xChartModel
+    const rtl::Reference<::chart::ChartModel>& xChartModel
     , OUString& rOutRangeString
     , css::uno::Sequence< sal_Int32 >& rSequenceMapping
     , bool& rOutUseColumns
@@ -345,22 +321,21 @@ bool DataSourceHelper::detectRangeSegmentation(
 {
     bool bSomethingDetected = false;
 
-    uno::Reference< XChartDocument > xChartDocument( xChartModel, uno::UNO_QUERY );
-    if( !xChartDocument.is() )
+    if( !xChartModel.is() )
         return bSomethingDetected;
-    uno::Reference< data::XDataProvider >  xDataProvider( xChartDocument->getDataProvider() );
+    uno::Reference< data::XDataProvider >  xDataProvider( xChartModel->getDataProvider() );
     if( !xDataProvider.is() )
         return bSomethingDetected;
 
     try
     {
         DataSourceHelper::readArguments(
-            xDataProvider->detectArguments( pressUsedDataIntoRectangularFormat( xChartDocument ) ),
+            xDataProvider->detectArguments( pressUsedDataIntoRectangularFormat( xChartModel ) ),
             rOutRangeString, rSequenceMapping, rOutUseColumns, rOutFirstCellAsLabel, rOutHasCategories );
         bSomethingDetected = !rOutRangeString.isEmpty();
 
         uno::Reference< chart2::data::XLabeledDataSequence > xCategories(
-                    DiagramHelper::getCategoriesFromDiagram( xChartDocument->getFirstDiagram() ));
+                    DiagramHelper::getCategoriesFromDiagram( xChartModel->getFirstDiagram() ));
         rOutHasCategories = xCategories.is();
     }
     catch( uno::Exception & )
@@ -371,7 +346,7 @@ bool DataSourceHelper::detectRangeSegmentation(
 }
 
 bool DataSourceHelper::allArgumentsForRectRangeDetected(
-    const uno::Reference< chart2::XChartDocument >& xChartDocument )
+    const rtl::Reference<::chart::ChartModel>& xChartDocument )
 {
     bool bHasDataRowSource = false;
     bool bHasFirstCellAsLabel = false;
@@ -415,30 +390,24 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
 }
 
 void DataSourceHelper::setRangeSegmentation(
-            const uno::Reference< frame::XModel >& xChartModel
+            const rtl::Reference<::chart::ChartModel>& xChartModel
             , const css::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool bUseColumns , bool bFirstCellAsLabel, bool bUseCategories )
 {
-    uno::Reference< XChartDocument > xChartDocument( xChartModel, uno::UNO_QUERY );
-    if( !xChartDocument.is() )
-        return;
-    uno::Reference< data::XDataProvider > xDataProvider( xChartDocument->getDataProvider() );
+    uno::Reference< data::XDataProvider > xDataProvider( xChartModel->getDataProvider() );
     if( !xDataProvider.is() )
         return;
     rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     if( !xDiagram.is() )
         return;
-    uno::Reference< chart2::XChartTypeManager > xChartTypeManager( xChartDocument->getChartTypeManager() );
+    rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartModel->getTypeManager();
     if( !xChartTypeManager.is() )
-        return;
-    uno::Reference< lang::XMultiServiceFactory > xTemplateFactory( xChartTypeManager, uno::UNO_QUERY );
-    if( !xTemplateFactory.is() )
         return;
 
     OUString aRangeString;
     bool bDummy;
     uno::Sequence< sal_Int32 > aDummy;
-    readArguments( xDataProvider->detectArguments( pressUsedDataIntoRectangularFormat( xChartDocument )),
+    readArguments( xDataProvider->detectArguments( pressUsedDataIntoRectangularFormat( xChartModel )),
                    aRangeString, aDummy, bDummy, bDummy, bDummy );
 
     uno::Sequence< beans::PropertyValue > aArguments(

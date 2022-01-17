@@ -918,7 +918,7 @@ void VLegend::createShapes(
     try
     {
         //create shape and add to page
-        OUString aLegendParticle( ObjectIdentifier::createParticleForLegend( mrModel ) );
+        OUString aLegendParticle( ObjectIdentifier::createParticleForLegend( &mrModel ) );
         m_xShape = ShapeFactory::createGroup2D( m_xTarget,
                     ObjectIdentifier::createClassifiedIdentifierForParticle( aLegendParticle ) );
 

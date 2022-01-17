@@ -21,6 +21,7 @@
 #include <ControllerLockGuard.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/sheet/XRangeSelectionListener.hpp>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::frame
 {
@@ -29,6 +30,8 @@ class XModel;
 
 namespace chart
 {
+class ChartModel;
+
 class RangeSelectionListenerParent
 {
 public:
@@ -45,7 +48,7 @@ class RangeSelectionListener final
 public:
     explicit RangeSelectionListener(
         RangeSelectionListenerParent& rParent, const OUString& rInitialRange,
-        const css::uno::Reference<css::frame::XModel>& xModelToLockController);
+        const rtl::Reference<::chart::ChartModel>& xModelToLockController);
     virtual ~RangeSelectionListener() override;
 
 protected:

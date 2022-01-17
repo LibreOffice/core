@@ -42,12 +42,12 @@ namespace chart
 {
 class DialogModel;
 class ChartTypeTemplateProvider;
+class ChartModel;
 
 class CreationWizard final : public vcl::RoadmapWizardMachine, public TabPageNotifiable
 {
 public:
-    CreationWizard(weld::Window* pParent,
-                   const css::uno::Reference<css::frame::XModel>& xChartModel,
+    CreationWizard(weld::Window* pParent, const rtl::Reference<::chart::ChartModel>& xChartModel,
                    const css::uno::Reference<css::uno::XComponentContext>& xContext);
 
     CreationWizard() = delete;
@@ -67,7 +67,7 @@ protected:
 private:
     virtual std::unique_ptr<BuilderPage> createPage(WizardState nState) override;
 
-    css::uno::Reference<css::chart2::XChartDocument> m_xChartModel;
+    rtl::Reference<::chart::ChartModel> m_xChartModel;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     ChartTypeTemplateProvider* m_pTemplateProvider;
     std::unique_ptr<DialogModel> m_pDialogModel;

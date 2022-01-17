@@ -516,7 +516,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
 {
     uno::Reference< chart2::XRegressionCurve > xRegCurve(
-        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), uno::Reference<chart2::XChartDocument>(getChartModel()) ), uno::UNO_QUERY );
+        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getChartModel() ), uno::UNO_QUERY );
     if( !xRegCurve.is() )
     {
         uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
@@ -544,7 +544,7 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
 void ChartController::executeDispatch_InsertR2Value()
 {
     uno::Reference< beans::XPropertySet > xEqProp =
-        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), uno::Reference<chart2::XChartDocument>(getChartModel()) );
+        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getChartModel() );
     if( xEqProp.is())
     {
         UndoGuard aUndoGuard(
@@ -559,7 +559,7 @@ void ChartController::executeDispatch_InsertR2Value()
 void ChartController::executeDispatch_DeleteR2Value()
 {
     uno::Reference< beans::XPropertySet > xEqProp =
-        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), uno::Reference<chart2::XChartDocument>(getChartModel()) );
+        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getChartModel() );
     if( xEqProp.is())
     {
         UndoGuard aUndoGuard(
@@ -650,7 +650,7 @@ void ChartController::executeDispatch_InsertDataLabel()
     UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::ActionType::Insert,
         SchResId( STR_OBJECT_LABEL )),
         m_xUndoManager );
-    DataSeriesHelper::insertDataLabelToPoint( ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), uno::Reference<chart2::XChartDocument>(getChartModel()) ) );
+    DataSeriesHelper::insertDataLabelToPoint( ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getChartModel() ) );
     aUndoGuard.commit();
 }
 
@@ -673,7 +673,7 @@ void ChartController::executeDispatch_DeleteDataLabel()
     UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::ActionType::Delete,
         SchResId( STR_OBJECT_LABEL )),
         m_xUndoManager );
-    DataSeriesHelper::deleteDataLabelsFromPoint( ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), uno::Reference<chart2::XChartDocument>(getChartModel()) ) );
+    DataSeriesHelper::deleteDataLabelsFromPoint( ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getChartModel() ) );
     aUndoGuard.commit();
 }
 

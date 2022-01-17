@@ -1792,7 +1792,7 @@ bool ChartController::impl_moveOrResizeObject(
 
     rtl::Reference<::chart::ChartModel> xChartModel( getChartModel() );
     uno::Reference< beans::XPropertySet > xObjProp(
-        ObjectIdentifier::getObjectPropertySet( rCID, uno::Reference<chart2::XChartDocument>(xChartModel) ));
+        ObjectIdentifier::getObjectPropertySet( rCID, xChartModel ));
     if( xObjProp.is())
     {
         awt::Size aRefSize = ChartModelHelper::getPageSize( xChartModel );

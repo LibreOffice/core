@@ -148,7 +148,7 @@ sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForAxis(
 {
     Reference< chart2::XCoordinateSystem > xCooSys(
         AxisHelper::getCoordinateSystemOfAxis(
-              xAxis, ChartModelHelper::findDiagram( uno::Reference<XChartDocument>(m_xChartModel.get()) ) ) );
+              xAxis, ChartModelHelper::findDiagram( m_xChartModel ) ) );
 
     return ExplicitValueProvider::getExplicitNumberFormatKeyForAxis( xAxis, xCooSys
               , m_xChartModel.get() );
@@ -187,7 +187,7 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingTitle() const
 awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
 {
     awt::Rectangle aRect(0,0,0,0);
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<XChartDocument>(m_xChartModel.get()) ) );
+    rtl::Reference< Diagram > xDiagram =  ChartModelHelper::findDiagram( m_xChartModel );
 
     if( DiagramHelper::getDiagramPositioningMode( xDiagram ) == DiagramPositioningMode_INCLUDING )
         aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel.get());
@@ -203,7 +203,7 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
 awt::Rectangle Chart2ModelContact::GetDiagramRectangleExcludingAxes() const
 {
     awt::Rectangle aRect(0,0,0,0);
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<XChartDocument>(m_xChartModel.get()) ) );
+    rtl::Reference< Diagram > xDiagram =  ChartModelHelper::findDiagram( m_xChartModel );
 
     if( DiagramHelper::getDiagramPositioningMode( xDiagram ) == DiagramPositioningMode_EXCLUDING )
         aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel.get());
@@ -223,7 +223,7 @@ awt::Size Chart2ModelContact::GetLegendSize() const
     if( pProvider )
     {
         uno::Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( *m_xChartModel.get() ) );
-        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, uno::Reference<XChartDocument>(m_xChartModel.get()) ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
         aSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
     }
     return aSize;
@@ -236,7 +236,7 @@ awt::Point Chart2ModelContact::GetLegendPosition() const
     if( pProvider )
     {
         uno::Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( *m_xChartModel.get() ) );
-        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, uno::Reference<XChartDocument>(m_xChartModel.get()) ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
         aPoint = ToPoint( pProvider->getRectangleOfObject( aCID ) );
     }
     return aPoint;
@@ -248,7 +248,7 @@ awt::Size Chart2ModelContact::GetTitleSize( const uno::Reference< css::chart2::X
     ExplicitValueProvider* pProvider( getExplicitValueProvider() );
     if( pProvider && xTitle.is() )
     {
-        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, uno::Reference<XChartDocument>(m_xChartModel.get()) ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, m_xChartModel ) );
         aSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
     }
     return aSize;
