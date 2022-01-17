@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a49edcd_ebcd814a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-17T11:57:42Z",
+      "side": 1,
+      "message": "The value returned by AquaSalInstance::getOSVersion is also used in the \"About LibreOffice\" dialog, and use of the name \"Macintosh\" looks rather dated there (\"Around [the late 1990\u0027s], Apple phased out the Macintosh name in favor of \u0027Mac\u0027\", according to \u003chttps://en.wikipedia.org/wiki/Macintosh\u003e).  If use of \"Macintosh\" is relevant for Calc\u0027s INFO(\"OSVERSION\") (e.g., for compatibility with Excel), I would suggest using different functions to obtain the relevant values for Calc and for the \"About LibreOffice\" dialog.  If the use of \"Macintosh\" is not relevant there, I would suggest changing to something like \"Mac\" or \"macOS\" (the value returned by AquaSalInstance::getOSVersion prior to this change contained \"Mac OS X\", but which is outdated also).",
+      "revId": "1e39a673843baaa19901fdb0ac43824209c57f58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89c35673_ad177afa",
+        "filename": "vcl/osx/salinst.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-17T11:57:42Z",
+      "side": 1,
+      "message": "on M1, this returns -1 and errno\u003dENOENT, leaving buffer unchanged (i.e., containing garbage, leading to garbage in aVersion); \"machdep.cpu.brand_string\" successfully returns \"Apple M1\", though",
+      "revId": "1e39a673843baaa19901fdb0ac43824209c57f58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
