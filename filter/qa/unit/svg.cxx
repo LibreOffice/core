@@ -179,6 +179,33 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testShapeNographic)
     xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
 }
 
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testCustomBullet)
+{
+    // Given a presentation with a custom bullet:
+    load(u"custom-bullet.fodp");
+
+    // When exporting that to SVG:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
+    aMediaDescriptor["OutputStream"] <<= xOut;
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Then make sure the bullet glyph is not lost:
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//svg:g[@class='BulletChars']//svg:path' number of nodes is incorrect
+    // i.e. the custom bullet used '<use transform="scale(285,285)"
+    // xlink:href="#bullet-char-template-45"/>', but nobody produced a bullet-char-template-45,
+    // instead we need the path of the glyph inline.
+    CPPUNIT_ASSERT(!getXPath(pXmlDoc, "//svg:g[@class='BulletChars']//svg:path", "d").isEmpty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
