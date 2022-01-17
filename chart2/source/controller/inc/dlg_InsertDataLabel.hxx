@@ -28,7 +28,7 @@ namespace chart
 {
 class DataLabelResources;
 
-class DataLabelsDialog : public weld::GenericDialogController
+class DataLabelsDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<DataLabelResources> m_apDataLabelResources;

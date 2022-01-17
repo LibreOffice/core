@@ -30,7 +30,7 @@ class SdrModel;
 namespace chart::wrapper
 {
 
-class LegendItemConverter : public ItemConverter
+class LegendItemConverter final : public ItemConverter
 {
 public:
     LegendItemConverter(

@@ -23,7 +23,7 @@
 namespace chart
 {
 
-class PotentialRegressionCurveCalculator : public RegressionCurveCalculator
+class PotentialRegressionCurveCalculator final : public RegressionCurveCalculator
 {
 public:
     PotentialRegressionCurveCalculator();

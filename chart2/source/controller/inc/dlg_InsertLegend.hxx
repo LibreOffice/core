@@ -30,7 +30,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart
 {
 
-class SchLegendDlg : public weld::GenericDialogController
+class SchLegendDlg final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<LegendPositionResources> m_xLegendPositionResources;

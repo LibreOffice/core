@@ -27,7 +27,7 @@ namespace chart
 
 class PolarPlottingPositionHelper;
 
-class PolarLabelPositionHelper : public LabelPositionHelper
+class PolarLabelPositionHelper final : public LabelPositionHelper
 {
 public:
     PolarLabelPositionHelper(

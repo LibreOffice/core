@@ -29,7 +29,7 @@ class SdrModel;
 namespace chart::wrapper
 {
 
-class ErrorBarItemConverter : public ItemConverter
+class ErrorBarItemConverter final : public ItemConverter
 {
 public:
     ErrorBarItemConverter(

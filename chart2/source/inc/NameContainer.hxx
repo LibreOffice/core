@@ -42,7 +42,7 @@ typedef ::cppu::WeakImplHelper<
     NameContainer_Base;
 }
 
-class NameContainer : public impl::NameContainer_Base
+class NameContainer final : public impl::NameContainer_Base
 {
 public:
     NameContainer() = delete;

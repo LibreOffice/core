@@ -153,7 +153,7 @@ public:
     virtual void adjustSubTypeAndEnableControls(ChartTypeParameter& rParameter) override;
 };
 
-class ColumnChartDialogController : public ColumnOrBarChartDialogController_Base
+class ColumnChartDialogController final : public ColumnOrBarChartDialogController_Base
 {
 public:
     ColumnChartDialogController();
@@ -166,7 +166,7 @@ public:
                                  const ChartTypeParameter& rParameter) override;
 };
 
-class BarChartDialogController : public ColumnOrBarChartDialogController_Base
+class BarChartDialogController final : public ColumnOrBarChartDialogController_Base
 {
 public:
     BarChartDialogController();
@@ -179,7 +179,7 @@ public:
                                  const ChartTypeParameter& rParameter) override;
 };
 
-class PieChartDialogController : public ChartTypeDialogController
+class PieChartDialogController final : public ChartTypeDialogController
 {
 public:
     PieChartDialogController();
@@ -195,7 +195,7 @@ public:
     virtual bool shouldShow_3DLookControl() const override;
 };
 
-class LineChartDialogController : public ChartTypeDialogController
+class LineChartDialogController final : public ChartTypeDialogController
 {
 public:
     LineChartDialogController();
@@ -213,7 +213,7 @@ public:
     virtual bool shouldShow_SplineControl() const override;
 };
 
-class XYChartDialogController : public ChartTypeDialogController
+class XYChartDialogController final : public ChartTypeDialogController
 {
 public:
     XYChartDialogController();
@@ -230,7 +230,7 @@ public:
     virtual bool shouldShow_SortByXValuesResourceGroup() const override;
 };
 
-class AreaChartDialogController : public ChartTypeDialogController
+class AreaChartDialogController final : public ChartTypeDialogController
 {
 public:
     AreaChartDialogController();
@@ -247,7 +247,7 @@ public:
     virtual bool shouldShow_3DLookControl() const override;
 };
 
-class NetChartDialogController : public ChartTypeDialogController
+class NetChartDialogController final : public ChartTypeDialogController
 {
 public:
     NetChartDialogController();
@@ -263,7 +263,7 @@ public:
     virtual bool shouldShow_StackingControl() const override;
 };
 
-class StockChartDialogController : public ChartTypeDialogController
+class StockChartDialogController final : public ChartTypeDialogController
 {
 public:
     StockChartDialogController();
@@ -277,7 +277,7 @@ public:
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 };
 
-class CombiColumnLineChartDialogController : public ChartTypeDialogController
+class CombiColumnLineChartDialogController final : public ChartTypeDialogController
 {
 public:
     CombiColumnLineChartDialogController();
@@ -306,7 +306,7 @@ private:
     std::unique_ptr<weld::SpinButton> m_xMF_NumberOfLines;
 };
 
-class BubbleChartDialogController : public ChartTypeDialogController
+class BubbleChartDialogController final : public ChartTypeDialogController
 {
 public:
     BubbleChartDialogController();

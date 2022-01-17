@@ -35,7 +35,7 @@ namespace chart
 
 class DataBrowser;
 
-class DataEditor : public weld::GenericDialogController
+class DataEditor final : public weld::GenericDialogController
 {
 public:
     DataEditor(weld::Window* pParent,

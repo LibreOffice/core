@@ -50,7 +50,7 @@ class ChartDocumentWrapper_Base : public ::cppu::ImplInheritanceHelper
 {
 };
 
-class ChartDocumentWrapper : public ChartDocumentWrapper_Base
+class ChartDocumentWrapper final : public ChartDocumentWrapper_Base
                            , public ::utl::OEventListenerAdapter
 {
 public:

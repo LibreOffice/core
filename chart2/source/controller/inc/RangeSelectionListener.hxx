@@ -39,7 +39,8 @@ protected:
     ~RangeSelectionListenerParent() {}
 };
 
-class RangeSelectionListener : public ::cppu::WeakImplHelper<css::sheet::XRangeSelectionListener>
+class RangeSelectionListener final
+    : public ::cppu::WeakImplHelper<css::sheet::XRangeSelectionListener>
 {
 public:
     explicit RangeSelectionListener(

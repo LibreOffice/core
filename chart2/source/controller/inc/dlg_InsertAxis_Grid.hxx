@@ -57,7 +57,7 @@ public:
 |* Grid dialog
 |*
 \************************************************************************/
-class SchGridDlg : public SchAxisDlg
+class SchGridDlg final : public SchAxisDlg
 {
 public:
     SchGridDlg(weld::Window* pParent, const InsertAxisOrGridDialogData& rInput);

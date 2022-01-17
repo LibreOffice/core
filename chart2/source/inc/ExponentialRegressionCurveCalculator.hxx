@@ -23,7 +23,7 @@
 namespace chart
 {
 
-class ExponentialRegressionCurveCalculator : public RegressionCurveCalculator
+class ExponentialRegressionCurveCalculator final : public RegressionCurveCalculator
 {
 public:
     ExponentialRegressionCurveCalculator();

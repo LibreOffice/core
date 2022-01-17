@@ -23,7 +23,7 @@
 
 namespace chart
 {
-class TextDirectionListBox : public svx::FrameDirectionListBox
+class TextDirectionListBox final : public svx::FrameDirectionListBox
 {
 public:
     explicit TextDirectionListBox(std::unique_ptr<weld::ComboBox> pControl);

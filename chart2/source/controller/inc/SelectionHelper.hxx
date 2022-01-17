@@ -72,7 +72,7 @@ private: //member
     ObjectIdentifier    m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing;
 };
 
-class SelectionHelper : public MarkHandleProvider
+class SelectionHelper final : public MarkHandleProvider
 {
 public:
     static bool             findNamedParent( SdrObject*& pInOutObject

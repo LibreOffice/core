@@ -24,7 +24,7 @@ namespace chart
 {
 /** dialog for paragraph properties of shapes
  */
-class ShapeParagraphDialog : public SfxTabDialogController
+class ShapeParagraphDialog final : public SfxTabDialogController
 {
 public:
     ShapeParagraphDialog(weld::Window* pParent, const SfxItemSet* pAttr);

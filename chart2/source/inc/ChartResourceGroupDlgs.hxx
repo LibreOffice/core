@@ -25,7 +25,7 @@ namespace chart
 {
 class ChartTypeParameter;
 
-class SplinePropertiesDialog : public weld::GenericDialogController
+class SplinePropertiesDialog final : public weld::GenericDialogController
 {
 public:
     explicit SplinePropertiesDialog(weld::Window* pParent);
@@ -43,7 +43,7 @@ private:
     std::unique_ptr<weld::SpinButton> m_xMF_SplineOrder;
 };
 
-class SteppedPropertiesDialog : public weld::GenericDialogController
+class SteppedPropertiesDialog final : public weld::GenericDialogController
 {
 public:
     explicit SteppedPropertiesDialog(weld::Window* pParent);

@@ -30,7 +30,7 @@ class SdrModel;
 
 namespace chart::wrapper {
 
-class RegressionEquationItemConverter : public ItemConverter
+class RegressionEquationItemConverter final : public ItemConverter
 {
 public:
     RegressionEquationItemConverter(

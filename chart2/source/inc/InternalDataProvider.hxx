@@ -61,7 +61,7 @@ typedef ::cppu::WeakImplHelper<
     <p>The format for a complete range is "all". (Do we need more than
     that?)</p>
  */
-class InternalDataProvider :
+class InternalDataProvider final :
         public impl::InternalDataProvider_Base
 {
 public:

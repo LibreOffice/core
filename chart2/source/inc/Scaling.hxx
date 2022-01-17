@@ -26,7 +26,7 @@
 namespace chart
 {
 
-class LogarithmicScaling :
+class LogarithmicScaling final :
         public ::cppu::WeakImplHelper<
         css::chart2::XScaling,
         css::lang::XServiceName,
@@ -59,7 +59,7 @@ private:
     const double m_fLogOfBase;
 };
 
-class ExponentialScaling :
+class ExponentialScaling final :
         public ::cppu::WeakImplHelper<
         css::chart2::XScaling,
         css::lang::XServiceName,
@@ -91,7 +91,7 @@ private:
     const double m_fBase;
 };
 
-class LinearScaling : public ::cppu::WeakImplHelper<
+class LinearScaling final : public ::cppu::WeakImplHelper<
         css::chart2::XScaling,
         css::lang::XServiceName,
         css::lang::XServiceInfo
@@ -123,7 +123,7 @@ private:
     const double m_fOffset;
 };
 
-class PowerScaling : public ::cppu::WeakImplHelper<
+class PowerScaling final : public ::cppu::WeakImplHelper<
         css::chart2::XScaling,
         css::lang::XServiceName,
         css::lang::XServiceInfo

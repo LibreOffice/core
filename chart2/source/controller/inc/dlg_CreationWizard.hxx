@@ -43,7 +43,7 @@ namespace chart
 class DialogModel;
 class ChartTypeTemplateProvider;
 
-class CreationWizard : public vcl::RoadmapWizardMachine, public TabPageNotifiable
+class CreationWizard final : public vcl::RoadmapWizardMachine, public TabPageNotifiable
 {
 public:
     CreationWizard(weld::Window* pParent,

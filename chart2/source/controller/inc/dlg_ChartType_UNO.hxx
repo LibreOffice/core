@@ -28,7 +28,7 @@ namespace com::sun::star::beans { class XPropertySetInfo; }
 namespace chart
 {
 typedef ::svt::OGenericUnoDialog ChartTypeUnoDlg_BASE;
-class ChartTypeUnoDlg : public ChartTypeUnoDlg_BASE
+class ChartTypeUnoDlg final : public ChartTypeUnoDlg_BASE
                         ,public ::comphelper::OPropertyArrayUsageHelper< ChartTypeUnoDlg >
 {
 public:

@@ -55,7 +55,7 @@ protected:
     ~MinimumAndMaximumSupplier() {}
 };
 
-class MergedMinimumAndMaximumSupplier : public MinimumAndMaximumSupplier
+class MergedMinimumAndMaximumSupplier final : public MinimumAndMaximumSupplier
 {
 public:
     MergedMinimumAndMaximumSupplier();

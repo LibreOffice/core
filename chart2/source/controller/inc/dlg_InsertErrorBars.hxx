@@ -31,7 +31,7 @@ class XModel;
 
 namespace chart
 {
-class InsertErrorBarsDialog : public weld::GenericDialogController
+class InsertErrorBarsDialog final : public weld::GenericDialogController
 {
 public:
     InsertErrorBarsDialog(weld::Window* pParent, const SfxItemSet& rMyAttrs,

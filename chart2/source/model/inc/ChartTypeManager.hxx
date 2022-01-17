@@ -28,7 +28,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart
 {
 
-class ChartTypeManager :
+class ChartTypeManager final :
         public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::lang::XMultiServiceFactory,

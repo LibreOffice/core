@@ -28,7 +28,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart::wrapper
 {
 
-class SeriesOptionsItemConverter : public ItemConverter
+class SeriesOptionsItemConverter final : public ItemConverter
 {
 public:
     SeriesOptionsItemConverter(
