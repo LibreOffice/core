@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "364dbffe_f22bc277",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-17T19:29:57Z",
+      "side": 1,
+      "message": "We usually don\u0027t use - after tdf#xxx. Please remove that.",
+      "revId": "d154c40aa5fe46a4327b207f966a4967e8a86717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "49578291_132f7c3a",
