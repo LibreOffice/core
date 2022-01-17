@@ -1218,6 +1218,7 @@ void DoRecursivePaint(vcl::Window* pWindow, const Point& rPos, OutputDevice& rOu
     Size aSize = pWindow->GetSizePixel();
 
     VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    xOutput->EnableRTL(pWindow->IsRTLEnabled());
     xOutput->SetOutputSizePixel(aSize);
     xOutput->DrawOutDev(Point(), aSize, rPos, aSize, rOutput);
 
@@ -1233,6 +1234,8 @@ void DoRecursivePaint(vcl::Window* pWindow, const Point& rPos, OutputDevice& rOu
 
     rOutput.DrawOutDev(rPos, aSize, Point(), aSize, *xOutput);
 
+    bool bHasMirroredGraphics = pWindow->GetOutDev()->HasMirroredGraphics();
+
     xOutput.disposeAndClear();
 
     for (vcl::Window* pChild = pWindow->GetWindow(GetWindowType::FirstChild); pChild;
@@ -1240,7 +1243,17 @@ void DoRecursivePaint(vcl::Window* pWindow, const Point& rPos, OutputDevice& rOu
     {
         if (!pChild->IsVisible())
             continue;
-        DoRecursivePaint(pChild, rPos + pChild->GetPosPixel(), rOutput);
+
+        tools::Long nDeltaX = pChild->GetOutOffXPixel() - pWindow->GetOutOffXPixel();
+        if (bHasMirroredGraphics)
+            nDeltaX = pWindow->GetOutputWidthPixel() - nDeltaX - pChild->GetOutputWidthPixel();
+
+        tools::Long nDeltaY = pChild->GetOutOffYPixel() - pWindow->GetOutOffYPixel();
+
+        Point aPos(rPos);
+        aPos += Point(nDeltaX, nDeltaY);
+
+        DoRecursivePaint(pChild, aPos, rOutput);
     }
 }
 }
