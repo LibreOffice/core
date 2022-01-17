@@ -63,6 +63,8 @@ public:
     virtual void dispose() override;
     virtual ~SmGraphicWindow() override;
 
+    virtual bool IsStarMath() const override { return true; }
+
     void SetTotalSize(const Size& rNewSize);
     Size GetTotalSize() const;
 
@@ -109,6 +111,7 @@ public:
     virtual bool MouseMove(const MouseEvent &rMEvt) override;
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
 
     void SetTotalSize();
 
@@ -139,7 +142,6 @@ private:
     void SetCursor(const tools::Rectangle &rRect);
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual bool Command(const CommandEvent& rCEvt) override;
 
     void RepaintViewShellDoc();

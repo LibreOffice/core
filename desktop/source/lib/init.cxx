@@ -112,7 +112,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/lokcharthelper.hxx>
+#include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/DocumentSigner.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
