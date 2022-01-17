@@ -119,7 +119,7 @@
 
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
-#include <sfx2/lokcharthelper.hxx>
+#include <sfx2/lokcomponenthelpers.hxx>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
