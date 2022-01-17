@@ -81,7 +81,7 @@
 #include <opencl/platforminfo.hxx>
 #endif
 #include <sfx2/lokhelper.hxx>
-#include <sfx2/lokcharthelper.hxx>
+#include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/LokControlHandler.hxx>
 
 #include <cellsuno.hxx>

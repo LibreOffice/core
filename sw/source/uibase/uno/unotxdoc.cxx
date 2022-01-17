@@ -35,7 +35,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <sfx2/lokcharthelper.hxx>
+#include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/ipclient.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -3395,17 +3395,27 @@ OUString SwXTextDocument::getPartHash(int nPart)
 VclPtr<vcl::Window> SwXTextDocument::getDocWindow()
 {
     SolarMutexGuard aGuard;
-    VclPtr<vcl::Window> pWindow;
     SwView* pView = m_pDocShell->GetView();
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        {
+            LokChartHelper aChartHelper(pView);
+            VclPtr<vcl::Window> pChartWindow = aChartHelper.GetWindow();
+            if (pChartWindow)
+                return pChartWindow;
+        }
+        {
+            LokStarMathHelper aHelper(pView);
+            if (VclPtr<vcl::Window> pEmbeddedWindow = aHelper.GetWindow())
+                return pEmbeddedWindow;
+        }
+    }
+
     if (pView)
-        pWindow = &(pView->GetEditWin());
+        return &(pView->GetEditWin());
 
-    LokChartHelper aChartHelper(pView);
-    VclPtr<vcl::Window> pChartWindow = aChartHelper.GetWindow();
-    if (pChartWindow)
-        pWindow = pChartWindow;
-
-    return pWindow;
+    return {};
 }
 
 void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
@@ -3491,29 +3501,36 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
 {
     SolarMutexGuard aGuard;
 
-    SwViewShell* pWrtViewShell = m_pDocShell->GetWrtShell();
-    if (!pWrtViewShell)
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        return;
-    }
-
-    SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
-    double fScale = aOption.GetZoom() / o3tl::convert(100.0, o3tl::Length::px, o3tl::Length::twip);
-
-    // check if the user hit a chart which is being edited by this view
-    SfxViewShell* pViewShell = m_pDocShell->GetView();
-    LokChartHelper aChartHelper(pViewShell);
-    if (aChartHelper.postMouseEvent(nType, nX, nY,
-                                    nCount, nButtons, nModifier,
-                                    fScale, fScale))
-        return;
-
-    // check if the user hit a chart which is being edited by someone else
-    // and, if so, skip current mouse event
-    if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
-    {
-        if (LokChartHelper::HitAny(Point(nX, nY)))
+        SwViewShell* pWrtViewShell = m_pDocShell->GetWrtShell();
+        if (!pWrtViewShell)
             return;
+
+        SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
+        double fScale = aOption.GetZoom() / o3tl::toTwips(100.0, o3tl::Length::px);
+
+        // check if the user hit a chart/math object which is being edited by this view
+        {
+            LokChartHelper aChartHelper(m_pDocShell->GetView());
+            if (aChartHelper.postMouseEvent(nType, nX, nY,
+                                            nCount, nButtons, nModifier,
+                                            fScale, fScale))
+                return;
+        }
+        {
+            LokStarMathHelper aHelper(m_pDocShell->GetView());
+            if (aHelper.postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
+                return;
+        }
+
+        // check if the user hit a chart which is being edited by someone else
+        // and, if so, skip current mouse event
+        if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
+        {
+            if (LokChartHelper::HitAny(Point(nX, nY)))
+                return;
+        }
     }
 
     SwEditWin& rEditWin = m_pDocShell->GetView()->GetEditWin();
