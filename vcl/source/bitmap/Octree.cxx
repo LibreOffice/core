@@ -34,7 +34,6 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
     : mnLeafCount(0)
     , mnLevel(0)
     , mpReduce(OCTREE_BITS + 1, nullptr)
-    , mpColor(nullptr)
     , mnPalIndex(0)
 {
     const BitmapReadAccess* pAccess = &rReadAcc;
@@ -53,9 +52,8 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
             Scanline pScanline = pAccess->GetScanline(nY);
             for (tools::Long nX = 0; nX < nWidth; nX++)
             {
-                mpColor = &pAccess->GetPaletteColor(pAccess->GetIndexFromData(pScanline, nX));
                 mnLevel = 0;
-                add(pTree);
+                add(pTree, pAccess->GetPaletteColor(pAccess->GetIndexFromData(pScanline, nX)));
 
                 while (mnLeafCount > nMax)
                     reduce();
@@ -64,18 +62,13 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
     }
     else
     {
-        BitmapColor aColor;
-
-        mpColor = &aColor;
-
         for (tools::Long nY = 0; nY < nHeight; nY++)
         {
             Scanline pScanline = pAccess->GetScanline(nY);
             for (tools::Long nX = 0; nX < nWidth; nX++)
             {
-                aColor = pAccess->GetPixelFromData(pScanline, nX);
                 mnLevel = 0;
-                add(pTree);
+                add(pTree, pAccess->GetPixelFromData(pScanline, nX));
 
                 while (mnLeafCount > nMax)
                     reduce();
@@ -86,7 +79,7 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
 
 Octree::~Octree() {}
 
-void Octree::add(std::unique_ptr<OctreeNode>& rpNode)
+void Octree::add(std::unique_ptr<OctreeNode>& rpNode, BitmapColor const& color)
 {
     // possibly generate new nodes
     if (!rpNode)
@@ -106,20 +99,20 @@ void Octree::add(std::unique_ptr<OctreeNode>& rpNode)
     if (rpNode->bLeaf)
     {
         rpNode->nCount++;
-        rpNode->nRed += mpColor->GetRed();
-        rpNode->nGreen += mpColor->GetGreen();
-        rpNode->nBlue += mpColor->GetBlue();
+        rpNode->nRed += color.GetRed();
+        rpNode->nGreen += color.GetGreen();
+        rpNode->nBlue += color.GetBlue();
     }
     else
     {
         const sal_uLong nShift = 7 - mnLevel;
         const sal_uInt8 cMask = 0x80 >> mnLevel;
-        const sal_uLong nIndex = (((mpColor->GetRed() & cMask) >> nShift) << 2)
-                                 | (((mpColor->GetGreen() & cMask) >> nShift) << 1)
-                                 | ((mpColor->GetBlue() & cMask) >> nShift);
+        const sal_uLong nIndex = (((color.GetRed() & cMask) >> nShift) << 2)
+                                 | (((color.GetGreen() & cMask) >> nShift) << 1)
+                                 | ((color.GetBlue() & cMask) >> nShift);
 
         mnLevel++;
-        add(rpNode->pChild[nIndex]);
+        add(rpNode->pChild[nIndex], color);
     }
 }
 
@@ -184,7 +177,7 @@ void Octree::CreatePalette(OctreeNode* pNode)
     }
 }
 
-void Octree::GetPalIndex(const OctreeNode* pNode)
+void Octree::GetPalIndex(const OctreeNode* pNode, BitmapColor const& color)
 {
     if (pNode->bLeaf)
         mnPalIndex = pNode->nPalIndex;
@@ -193,11 +186,11 @@ void Octree::GetPalIndex(const OctreeNode* pNode)
         const sal_uLong nShift = 7 - mnLevel;
         const sal_uInt8 cMask = 0x80 >> mnLevel;
         mnLevel++;
-        const sal_uLong nIndex = (((mpColor->GetRed() & cMask) >> nShift) << 2)
-                                 | (((mpColor->GetGreen() & cMask) >> nShift) << 1)
-                                 | ((mpColor->GetBlue() & cMask) >> nShift);
+        const sal_uLong nIndex = (((color.GetRed() & cMask) >> nShift) << 2)
+                                 | (((color.GetGreen() & cMask) >> nShift) << 1)
+                                 | ((color.GetBlue() & cMask) >> nShift);
 
-        GetPalIndex(pNode->pChild[nIndex].get());
+        GetPalIndex(pNode->pChild[nIndex].get(), color);
     }
 }
 
@@ -211,10 +204,9 @@ const BitmapPalette& Octree::GetPalette()
 
 sal_uInt16 Octree::GetBestPaletteIndex(const BitmapColor& rColor)
 {
-    mpColor = &rColor;
     mnPalIndex = 65535;
     mnLevel = 0;
-    GetPalIndex(pTree.get());
+    GetPalIndex(pTree.get(), rColor);
     return mnPalIndex;
 }
 
