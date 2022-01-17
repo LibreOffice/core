@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d78b5f57_644ab7d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-01-17T13:08:50Z",
+      "side": 1,
+      "message": "Fix for formula bar rendering (arrow button should be on the left in RTL)\n\nstill needs to be improved because we see leftovers on the right side",
+      "revId": "4f191088394166751be6d1260f26720c7984fb96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
