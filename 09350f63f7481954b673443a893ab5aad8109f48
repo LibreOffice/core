@@ -16,6 +16,23 @@
       "message": "First approach using static variable is no bueno. Patchset 2 initializes SfxChildWinInfo::aPos to MAX_LONG to indicate the variable has not been filled. ",
       "revId": "09350f63f7481954b673443a893ab5aad8109f48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e495a982_85336b46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-17T08:42:44Z",
+      "side": 1,
+      "message": "Working on a similar issue at I0c6f20692af88c603106d76c45c722cdb7deb118. Caolan taught me to use \u003cdialog\u003e-\u003eset_window_state() / get_window_state() but it works reliably only for gtk3.",
+      "revId": "09350f63f7481954b673443a893ab5aad8109f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
