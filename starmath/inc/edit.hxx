@@ -33,11 +33,6 @@ class SmCmdBoxWindow;
 class CommandEvent;
 class Timer;
 
-namespace svtools
-{
-class ColorConfig;
-}
-
 void SmGetLeftSelectionPart(const ESelection& rSelection, sal_Int32& nPara, sal_uInt16& nPos);
 
 class SmEditWindow;

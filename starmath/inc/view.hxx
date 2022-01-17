@@ -38,8 +38,6 @@ class SmGraphicAccessible;
 class SmGraphicWidget;
 class SmElementsDockingWindow;
 
-namespace svtools { class ColorConfig; }
-
 class SmGraphicWindow final : public InterimItemWindow
 {
 private:
