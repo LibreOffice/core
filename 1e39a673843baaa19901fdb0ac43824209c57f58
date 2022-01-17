@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48fa434e_5ded6cfe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-17T12:14:15Z",
+      "side": 1,
+      "message": "Also, thinking about it some more, I\u0027m not sure whether it is better for the \"About LibreOffice\" dialog to mention the actual CPU architecture or the current process\u0027s target architecture (which can be different when running an x86-64 soffice on M1 via Rosetta).  The original value prior to this change avoided that question by mentioning neither.",
+      "revId": "1e39a673843baaa19901fdb0ac43824209c57f58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89c35673_ad177afa",
