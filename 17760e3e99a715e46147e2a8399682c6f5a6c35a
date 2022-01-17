@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be83d2fc_de96df69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-01-17T00:35:39Z",
+      "side": 1,
+      "message": "Abandon in favour of gerrit#125051",
+      "revId": "17760e3e99a715e46147e2a8399682c6f5a6c35a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
