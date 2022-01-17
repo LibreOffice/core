@@ -63,6 +63,8 @@ public:
     virtual void dispose() override;
     virtual ~SmGraphicWindow() override;
 
+    virtual bool IsStarMath() const override { return true; }
+
     void SetTotalSize(const Size& rNewSize);
     Size GetTotalSize() const;
 
