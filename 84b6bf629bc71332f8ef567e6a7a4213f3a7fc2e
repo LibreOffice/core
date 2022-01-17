@@ -16,6 +16,24 @@
       "message": "So here we even need the close_button. Otherwise, the index won\u0027t be inserted.",
       "revId": "84b6bf629bc71332f8ef567e6a7a4213f3a7fc2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecd4732a_f33b79e0",
+        "filename": "sw/qa/uitest/writer_tests5/tdf106899.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-17T12:13:15Z",
+      "side": 1,
+      "message": "default argument of close_button is \u0027ok\u0027, so you don\u0027t need to pass it if you want to use it",
+      "parentUuid": "c63770f2_746523b7",
+      "revId": "84b6bf629bc71332f8ef567e6a7a4213f3a7fc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
