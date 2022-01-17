@@ -259,9 +259,9 @@ namespace sdr::contact
                             {
                                 // copy styles for current cell to CellBorderArray for primitive creation
                                 aArray.SetCellStyleLeft(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, false, nColCount, nRowCount, bIsRTL));
-                                aArray.SetCellStyleRight(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, false, nColCount, nRowCount, bIsRTL));
+                                aArray.SetCellStyleRight(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol + 1, aCellPos.mnRow, false, nColCount, nRowCount, bIsRTL));
                                 aArray.SetCellStyleTop(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, true, nColCount, nRowCount, bIsRTL));
-                                aArray.SetCellStyleBottom(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, true, nColCount, nRowCount, bIsRTL));
+                                aArray.SetCellStyleBottom(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow + 1, true, nColCount, nRowCount, bIsRTL));
 
                                 // ignore merged cells (all except the top-left of a merged cell)
                                 if(!xCurrentCell->isMerged())
