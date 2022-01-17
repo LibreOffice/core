@@ -260,6 +260,7 @@ struct ArrayImpl
     sal_Int32              GetMergedLastRow( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     const Cell&         GetMergedOriginCell( sal_Int32 nCol, sal_Int32 nRow ) const;
+    const Cell&         GetMergedLastCell( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     bool                IsMergedOverlappedLeft( sal_Int32 nCol, sal_Int32 nRow ) const;
     bool                IsMergedOverlappedRight( sal_Int32 nCol, sal_Int32 nRow ) const;
@@ -341,6 +342,11 @@ sal_Int32 ArrayImpl::GetMergedLastRow( sal_Int32 nCol, sal_Int32 nRow ) const
 const Cell& ArrayImpl::GetMergedOriginCell( sal_Int32 nCol, sal_Int32 nRow ) const
 {
     return GetCell( GetMergedFirstCol( nCol, nRow ), GetMergedFirstRow( nCol, nRow ) );
+}
+
+const Cell& ArrayImpl::GetMergedLastCell( sal_Int32 nCol, sal_Int32 nRow ) const
+{
+    return GetCell( GetMergedLastCol( nCol, nRow ), GetMergedLastRow( nCol, nRow ) );
 }
 
 bool ArrayImpl::IsMergedOverlappedLeft( sal_Int32 nCol, sal_Int32 nRow ) const
@@ -486,6 +492,7 @@ MergedCellIterator& MergedCellIterator::operator++()
 #define CELL( col, row )        mxImpl->GetCell( col, row )
 #define CELLACC( col, row )     mxImpl->GetCellAcc( col, row )
 #define ORIGCELL( col, row )    mxImpl->GetMergedOriginCell( col, row )
+#define LASTCELL( col, row )    mxImpl->GetMergedLastCell( col, row )
 
 
 Array::Array()
@@ -653,7 +660,7 @@ const Style& Array::GetCellStyleRight( sal_Int32 nCol, sal_Int32 nRow ) const
         return ORIGCELL( nCol + 1, nRow ).GetStyleLeft();
     // right clipping border: always own right style
     if( nCol == mxImpl->mnLastClipCol )
-        return ORIGCELL( nCol, nRow ).GetStyleRight();
+        return LASTCELL( nCol, nRow ).GetStyleRight();
     // outside clipping columns: invisible
     if( !mxImpl->IsColInClipRange( nCol ) )
         return OBJ_STYLE_NONE;
@@ -689,7 +696,7 @@ const Style& Array::GetCellStyleBottom( sal_Int32 nCol, sal_Int32 nRow ) const
         return ORIGCELL( nCol, nRow + 1 ).GetStyleTop();
     // bottom clipping border: always own bottom style
     if( nRow == mxImpl->mnLastClipRow )
-        return ORIGCELL( nCol, nRow ).GetStyleBottom();
+        return LASTCELL( nCol, nRow ).GetStyleBottom();
     // outside clipping rows: invisible
     if( !mxImpl->IsRowInClipRange( nRow ) )
         return OBJ_STYLE_NONE;
@@ -1519,6 +1526,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveArray()
 }
 
 #undef ORIGCELL
+#undef LASTCELL
 #undef CELLACC
 #undef CELL
 #undef DBG_FRAME_CHECK_ROW_1
