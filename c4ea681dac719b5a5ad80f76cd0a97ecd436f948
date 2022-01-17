@@ -34,6 +34,23 @@
       "parentUuid": "ff77823b_b7c2b33f",
       "revId": "c4ea681dac719b5a5ad80f76cd0a97ecd436f948",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b58816d_e4f4e0ef",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1474,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-17T12:22:30Z",
+      "side": 1,
+      "message": "the point of the PROTECT_FIELDS was to prevent the user from accidentally deleting the fields, but clicking the field to replace the content should be allowed, see also commit 3fc68fdc6f4ef04091db2fd46499a10396c3a4f2.\n\nnote there is also PROTECT_FORM which originates in Word formats and i don\u0027t know exactly what it should do, possibly it should allow inserting data into \"form\" fields.",
+      "revId": "c4ea681dac719b5a5ad80f76cd0a97ecd436f948",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
