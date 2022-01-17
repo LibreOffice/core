@@ -346,7 +346,7 @@
             <desc>Specifies the Glyph Positioning Mode.</desc>
             <label>Glyph Positioning Mode</label>
           </info>
-          <value>0</value>
+          <value>2</value>
         </prop>
       </group>
       <group oor:name="Other">
