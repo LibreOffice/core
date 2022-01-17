@@ -16,6 +16,23 @@
       "message": "Mike, are you ok for merging this patch?",
       "revId": "950f980b37050c32e422e713ad2d3e2bcc057d99",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc2cea6f_da113ae4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-17T13:57:32Z",
+      "side": 1,
+      "message": "I totally do not understand the purpose of this test. This test pretends to check CBool, but in fact it \"checks\" how expressions are evaluated in general when calculating arguments. It is useless here, and only clutters the test.",
+      "revId": "950f980b37050c32e422e713ad2d3e2bcc057d99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
