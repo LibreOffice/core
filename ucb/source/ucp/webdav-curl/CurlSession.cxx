@@ -1271,14 +1271,51 @@ auto CurlProcessor::ProcessRequest(
         }
 
         ResponseHeaders headers(rSession.m_pCurl.get());
+        uno::Reference<io::XSequenceOutputStream> xSeqOutStream;
+        uno::Reference<io::XOutputStream> xDebugOutStream;
+        if (!pxOutStream)
+        {
+            xSeqOutStream = io::SequenceOutputStream::create(rSession.m_xContext);
+            xDebugOutStream = xSeqOutStream;
+        }
 
         try
         {
-            ProcessRequestImpl(rSession, rURI, pRequestHeaderList.get(), pxOutStream,
+            ProcessRequestImpl(rSession, rURI, pRequestHeaderList.get(),
+                               pxOutStream ? pxOutStream : &xDebugOutStream,
                                pxInStream ? &data : nullptr, pRequestedHeaders, headers);
         }
         catch (DAVException const& rException)
         {
+            if (xDebugOutStream.is())
+            {
+                auto const bytes(xSeqOutStream->getWrittenBytes());
+                auto const len(::std::min(bytes.getLength(), 10000));
+                SAL_INFO("ucb.ucp.webdav.curl",
+                         "DAVException; (first) " << len << " bytes of data received:");
+                if (0 < len)
+                {
+                    OStringBuffer buf(len);
+                    for (sal_Int32 i = 0; i < len; ++i)
+                    {
+                        if (bytes[i] < 0x20) // also if negative
+                        {
+                            static char const hexDigit[16]
+                                = { '0', '1', '2', '3', '4', '5', '6', '7',
+                                    '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+                            buf.append("\\x");
+                            buf.append(hexDigit[static_cast<sal_uInt8>(bytes[i]) >> 4]);
+                            buf.append(hexDigit[bytes[i] & 0x0F]);
+                        }
+                        else
+                        {
+                            buf.append(static_cast<char>(bytes[i]));
+                        }
+                    }
+                    SAL_INFO("ucb.ucp.webdav.curl", buf.makeStringAndClear());
+                }
+            }
+
             // error handling part 3: special HTTP status codes
             // that require unlocking m_Mutex to handle
             if (rException.getError() == DAVException::DAV_HTTP_ERROR)
