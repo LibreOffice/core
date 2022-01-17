@@ -80,6 +80,24 @@
       "message": "Also here, a comment why things are done this way would be welcome.\nJust think of the poor next soul coming across this trying to grok things.",
       "revId": "86063ff4f38f754daaf9dd60fc2a2eb30c126858",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c3a319d_7c95b2e5",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6635,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-17T07:45:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80da267a_8bdbe000",
+      "revId": "86063ff4f38f754daaf9dd60fc2a2eb30c126858",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
