@@ -51,6 +51,24 @@
       "parentUuid": "59d20ac6_662c638e",
       "revId": "7256c52a52463dd70bcbd5104aff7c74980900bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b43af3e8_efcb22da",
+        "filename": "sw/qa/uitest/writer_tests5/tdf106899.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-17T11:51:30Z",
+      "side": 1,
+      "message": "Thank you very much! I would like to test, if there can be an alphabetial index using special utf8 characters. Previously, the alphabetical index just worked with ASCII characters.",
+      "parentUuid": "2d7d337e_e7a7ed21",
+      "revId": "7256c52a52463dd70bcbd5104aff7c74980900bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

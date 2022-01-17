@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c63770f2_746523b7",
+        "filename": "sw/qa/uitest/writer_tests5/tdf106899.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-17T11:51:30Z",
+      "side": 1,
+      "message": "So here we even need the close_button. Otherwise, the index won\u0027t be inserted.",
+      "revId": "84b6bf629bc71332f8ef567e6a7a4213f3a7fc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
