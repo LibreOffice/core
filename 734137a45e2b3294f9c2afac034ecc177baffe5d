@@ -33,6 +33,24 @@
       "message": "Fine for me. Missing a reference to Bugzilla in the summary. And a in-code comment might be good explaining why bWriter should behave differently.",
       "revId": "734137a45e2b3294f9c2afac034ecc177baffe5d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bf02f81_2670e951",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2022-01-17T15:56:53Z",
+      "side": 1,
+      "message": "I\u0027m going to send a new patch for this then.",
+      "parentUuid": "3fd3069c_db488c51",
+      "revId": "734137a45e2b3294f9c2afac034ecc177baffe5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
