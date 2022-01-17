@@ -11,7 +11,7 @@
 
 #include <com/sun/star/beans/Optional.hpp>
 #include <comphelper/base64.hxx>
-#include <comphelper/configurationhelper.hxx>
+#include <comphelper/configuration.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -19,6 +19,7 @@
 #include <map>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <tools/diagnose_ex.h>
+#include <officecfg/UserProfile.hxx>
 
 #include <Iads.h>
 #include <Adshlp.h>
@@ -86,7 +87,7 @@ constexpr OUStringLiteral mail(u"mail");
 class ADsUserAccess : public extensions::config::WinUserInfo::WinUserInfoBe_Impl
 {
 public:
-    ADsUserAccess(const css::uno::Reference<css::uno::XComponentContext>& xContext)
+    ADsUserAccess()
     {
         try
         {
@@ -123,12 +124,12 @@ public:
             m_aMap[facsimiletelephonenumber] = Str(pUser, L"facsimileTelephoneNumber");
             m_aMap[mail] = Str(pUser, &IADsUser::get_EmailAddress);
 
-            CacheData(xContext);
+            CacheData();
         }
         catch (sal::systools::ComError&)
         {
             // Maybe we temporarily lost connection to AD; try to get cached data
-            GetCachedData(xContext);
+            GetCachedData();
         }
     }
 
@@ -188,7 +189,7 @@ private:
         return "";
     }
 
-    void CacheData(const css::uno::Reference<css::uno::XComponentContext>& xContext)
+    void CacheData()
     {
         try
         {
@@ -213,16 +214,10 @@ private:
             OUStringBuffer sOutBuf;
             comphelper::Base64::encode(sOutBuf, seqCachedData);
 
-            auto xIface = comphelper::ConfigurationHelper::openConfig(
-                xContext, "org.openoffice.UserProfile/WinUserInfo",
-                comphelper::EConfigurationModes::Standard);
-            css::uno::Reference<css::container::XNameReplace> xNameReplace(
-                xIface, css::uno::UNO_QUERY_THROW);
-            xNameReplace->replaceByName("Cache", css::uno::makeAny(sOutBuf.makeStringAndClear()));
-
-            css::uno::Reference<css::util::XChangesBatch> xChangesBatch(xIface,
-                                                                        css::uno::UNO_QUERY_THROW);
-            xChangesBatch->commitChanges();
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                comphelper::ConfigurationChanges::create());
+            officecfg::UserProfile::WinUserInfo::Cache::set(sOutBuf.makeStringAndClear(), batch);
+            batch->commit();
         }
         catch (const css::uno::Exception&)
         {
@@ -231,18 +226,13 @@ private:
         }
     }
 
-    void GetCachedData(const css::uno::Reference<css::uno::XComponentContext>& xContext)
+    void GetCachedData()
     {
         if (m_sUserDN.isEmpty())
             throw css::uno::RuntimeException();
 
-        auto xIface = comphelper::ConfigurationHelper::openConfig(
-            xContext, "org.openoffice.UserProfile/WinUserInfo",
-            comphelper::EConfigurationModes::ReadOnly);
-        css::uno::Reference<css::container::XNameAccess> xNameAccess(xIface,
-                                                                     css::uno::UNO_QUERY_THROW);
-        OUString sCache;
-        xNameAccess->getByName("Cache") >>= sCache;
+        OUString sCache = officecfg::UserProfile::WinUserInfo::Cache::get();
+
         if (sCache.isEmpty())
             throw css::uno::RuntimeException();
 
@@ -321,13 +311,13 @@ namespace config
 {
 namespace WinUserInfo
 {
-WinUserInfoBe::WinUserInfoBe(const css::uno::Reference<css::uno::XComponentContext>& xContext)
+WinUserInfoBe::WinUserInfoBe()
     : WinUserInfoMutexHolder()
     , BackendBase(mMutex)
 {
     try
     {
-        m_pImpl.reset(new ADsUserAccess(xContext));
+        m_pImpl.reset(new ADsUserAccess());
     }
     catch (css::uno::RuntimeException&)
     {
@@ -442,10 +432,9 @@ css::uno::Sequence<OUString> SAL_CALL WinUserInfoBe::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-extensions_WinUserInfoBe_get_implementation(css::uno::XComponentContext* context,
-                                            css::uno::Sequence<css::uno::Any> const&)
+extensions_WinUserInfoBe_get_implementation(css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new extensions::config::WinUserInfo::WinUserInfoBe(context));
+    return cppu::acquire(new extensions::config::WinUserInfo::WinUserInfoBe());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
