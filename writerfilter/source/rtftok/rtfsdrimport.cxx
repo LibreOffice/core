@@ -18,6 +18,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -395,6 +396,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     OUString aShapeText = "";
     OUString aFontFamily = "";
     float nFontSize = 1.0;
+
+    sal_Int32 nContrast = 0x10000;
+    sal_Int16 nBrightness = 0;
 
     bool bCustom(false);
     int const nType = initShape(xShape, xPropertySet, bCustom, rShape, bClose, shapeOrPict);
@@ -855,6 +859,26 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             obFlipH = rProperty.second.toInt32() == 1;
         else if (rProperty.first == "fFlipV")
             obFlipV = rProperty.second.toInt32() == 1;
+        else if (rProperty.first == "pictureContrast")
+        {
+            // Gain / contrast.
+            nContrast = rProperty.second.toInt32();
+            if (nContrast < 0x10000)
+            {
+                nContrast *= 101; // 100 + 1 to round
+                nContrast /= 0x10000;
+                nContrast -= 100;
+            }
+        }
+        else if (rProperty.first == "pictureBrightness")
+        {
+            // Blacklevel / brightness.
+            nBrightness = rProperty.second.toInt32();
+            if (nBrightness != 0)
+            {
+                nBrightness /= 327;
+            }
+        }
         else
             SAL_INFO("writerfilter", "TODO handle shape property '" << rProperty.first << "':'"
                                                                     << rProperty.second << "'");
@@ -878,6 +902,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
 
     if (!m_aParents.empty() && m_aParents.top().is() && !m_bTextFrame)
         m_aParents.top()->add(xShape);
+
+    if (nContrast == -70 && nBrightness == 70 && xPropertySet.is())
+    {
+        // Map MSO 'washout' to our watermark colormode.
+        xPropertySet->setPropertyValue("GraphicColorMode",
+                                       uno::makeAny(drawing::ColorMode_WATERMARK));
+    }
 
     if (bPib)
     {
