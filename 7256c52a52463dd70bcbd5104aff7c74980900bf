@@ -33,6 +33,24 @@
       "message": "The test always fails at the end of a with statement. Is there something I need to consider here? If I omit the time.sleep(2) command, I get the error at line 29 and so on.",
       "revId": "7256c52a52463dd70bcbd5104aff7c74980900bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d7d337e_e7a7ed21",
+        "filename": "sw/qa/uitest/writer_tests5/tdf106899.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-17T11:47:29Z",
+      "side": 1,
+      "message": "Hi Andreas,\nCheck execute_dialog_through_command in uitest/uitest/test.py, you can pass the parameter close_button.\nI\u0027ve improved the test a bit, however it fails with\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nFAIL: test_tdf106899_alphabetical_index_utf8 (tdf106899.tdf106899)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/xisco/libreoffice/sw/qa/uitest/writer_tests5/tdf106899.py\", line 41, in test_tdf106899_alphabetical_index_utf8\n    self.assertEqual(\"Cựu Kim Sơn\" in xIndexAnchor.getString(), True)\nAssertionError: False !\u003d True\n\n\nno idea what you want to test with this test though.",
+      "parentUuid": "59d20ac6_662c638e",
+      "revId": "7256c52a52463dd70bcbd5104aff7c74980900bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
