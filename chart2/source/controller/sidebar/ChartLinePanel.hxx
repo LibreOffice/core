@@ -69,12 +69,12 @@ protected:
 
 private:
 
-    css::uno::Reference<css::frame::XModel> mxModel;
+    rtl::Reference<::chart::ChartModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
     rtl::Reference<ChartSidebarSelectionListener> mxSelectionListener;
 
     void Initialize();
-    void doUpdateModel(css::uno::Reference<css::frame::XModel> xModel);
+    void doUpdateModel(rtl::Reference<::chart::ChartModel> xModel);
 
     bool mbUpdate;
     bool mbModelValid;

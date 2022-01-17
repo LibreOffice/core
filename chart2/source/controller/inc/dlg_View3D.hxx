@@ -35,7 +35,7 @@ class ThreeD_SceneIllumination_TabPage;
 class View3DDialog final : public weld::GenericDialogController
 {
 public:
-    View3DDialog(weld::Window* pWindow, const css::uno::Reference<css::frame::XModel>& xChartModel);
+    View3DDialog(weld::Window* pWindow, const rtl::Reference<::chart::ChartModel>& xChartModel);
     virtual ~View3DDialog() override;
 
     virtual short run() override;

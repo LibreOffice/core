@@ -19,7 +19,7 @@
 
 #include "DragMethod_PieSegment.hxx"
 #include <DrawViewWrapper.hxx>
-
+#include <ChartModel.hxx>
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <ObjectIdentifier.hxx>
@@ -38,7 +38,7 @@ using ::basegfx::B2DVector;
 
 DragMethod_PieSegment::DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper
                                              , const OUString& rObjectCID
-                                             , const Reference< frame::XModel >& xChartModel )
+                                             , const rtl::Reference<::chart::ChartModel>& xChartModel )
     : DragMethod_Base( rDrawViewWrapper, rObjectCID, xChartModel )
     , m_aStartVector(100.0,100.0)
     , m_fInitialOffset(0.0)
@@ -112,7 +112,7 @@ bool DragMethod_PieSegment::EndSdrDrag(bool /*bCopy*/)
 
     try
     {
-        Reference< frame::XModel > xChartModel( getChartModel() );
+        rtl::Reference<::chart::ChartModel> xChartModel( getChartModel() );
         if( xChartModel.is() )
         {
             Reference< beans::XPropertySet > xPointProperties(

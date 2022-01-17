@@ -24,6 +24,8 @@
 #include <ChartTypeTemplateProvider.hxx>
 #include <DiagramHelper.hxx>
 #include "DialogModel.hxx"
+#include <ChartModel.hxx>
+#include <ChartTypeManager.hxx>
 
 #include "tp_RangeChooser.hxx"
 #include "tp_DataSource.hxx"
@@ -43,7 +45,7 @@ class DocumentChartTypeTemplateProvider : public ChartTypeTemplateProvider
 {
 public:
     explicit DocumentChartTypeTemplateProvider(
-        const Reference< chart2::XChartDocument > & xDoc );
+        const rtl::Reference<::chart::ChartModel> & xDoc );
 
     // ____ ChartTypeTemplateProvider ____
     virtual Reference< chart2::XChartTypeTemplate > getCurrentTemplate() const override;
@@ -55,7 +57,7 @@ private:
 }
 
 DocumentChartTypeTemplateProvider::DocumentChartTypeTemplateProvider(
-    const Reference< chart2::XChartDocument > & xDoc )
+    const rtl::Reference<::chart::ChartModel> & xDoc )
 {
     if( !xDoc.is())
         return;
@@ -66,8 +68,7 @@ DocumentChartTypeTemplateProvider::DocumentChartTypeTemplateProvider(
         DiagramHelper::tTemplateWithServiceName aResult(
             DiagramHelper::getTemplateForDiagram(
                 xDia,
-                Reference< lang::XMultiServiceFactory >(
-                    xDoc->getChartTypeManager(), uno::UNO_QUERY ) ));
+                xDoc->getTypeManager() ));
         m_xTemplate.set( aResult.first );
     }
 }
@@ -80,7 +81,7 @@ Reference< chart2::XChartTypeTemplate > DocumentChartTypeTemplateProvider::getCu
 sal_uInt16 DataSourceDialog::m_nLastPageId = 0;
 
 DataSourceDialog::DataSourceDialog(weld::Window * pParent,
-    const Reference< XChartDocument > & xChartDocument,
+    const rtl::Reference<::chart::ChartModel> & xChartDocument,
     const Reference< uno::XComponentContext > & xContext)
     : GenericDialogController(pParent, "modules/schart/ui/datarangedialog.ui",
                               "DataRangeDialog")

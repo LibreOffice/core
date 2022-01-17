@@ -143,7 +143,7 @@ void setLegendOverlay(const css::uno::Reference<css::frame::XModel>& xModel, boo
     xLegendProp->setPropertyValue("Overlay", css::uno::Any(bOverlay));
 }
 
-bool isTitleVisible(const css::uno::Reference<css::frame::XModel>& xModel, TitleHelper::eTitleType eTitle)
+bool isTitleVisible(const rtl::Reference<::chart::ChartModel>& xModel, TitleHelper::eTitleType eTitle)
 {
     css::uno::Reference<css::uno::XInterface> xTitle = TitleHelper::getTitle(eTitle, xModel);
     if (!xTitle.is())
@@ -155,7 +155,7 @@ bool isTitleVisible(const css::uno::Reference<css::frame::XModel>& xModel, Title
     return bVisible;
 }
 
-bool isGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridType eType)
+bool isGridVisible(const rtl::Reference<::chart::ChartModel>& xModel, GridType eType)
 {
     Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
     if(xDiagram.is())
@@ -172,7 +172,7 @@ bool isGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridTy
     return false;
 }
 
-void setGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridType eType, bool bVisible)
+void setGridVisible(const rtl::Reference<::chart::ChartModel>& xModel, GridType eType, bool bVisible)
 {
     Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
     if(!xDiagram.is())
@@ -192,7 +192,7 @@ void setGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridT
         AxisHelper::hideGrid(nDimensionIndex, nCooSysIndex, bMajor, xDiagram);
 }
 
-bool isAxisVisible(const css::uno::Reference<css::frame::XModel>& xModel, AxisType eType)
+bool isAxisVisible(const rtl::Reference<::chart::ChartModel>& xModel, AxisType eType)
 {
     Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
     if(xDiagram.is())
@@ -211,7 +211,7 @@ bool isAxisVisible(const css::uno::Reference<css::frame::XModel>& xModel, AxisTy
     return false;
 }
 
-void setAxisVisible(const css::uno::Reference<css::frame::XModel>& xModel, AxisType eType, bool bVisible)
+void setAxisVisible(const rtl::Reference<::chart::ChartModel>& xModel, AxisType eType, bool bVisible)
 {
     Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
     if(!xDiagram.is())
@@ -326,7 +326,7 @@ ChartElementsPanel::ChartElementsPanel(
     , mxLBGrid(m_xBuilder->weld_label("label_gri"))
     , mxLBLegendPosition(m_xBuilder->weld_combo_box("comboboxtext_legend"))
     , mxBoxLegend(m_xBuilder->weld_widget("box_legend"))
-    , mxModel(pController->getModel())
+    , mxModel(pController->getChartModel())
     , mxListener(new ChartSidebarModifyListener(this))
     , mbModelValid(true)
 {
@@ -373,8 +373,7 @@ ChartElementsPanel::~ChartElementsPanel()
 
 void ChartElementsPanel::Initialize()
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->addModifyListener(mxListener);
+    mxModel->addModifyListener(mxListener);
     updateData();
 
     Link<weld::Toggleable&,void> aLink = LINK(this, ChartElementsPanel, CheckBoxHdl);
@@ -562,12 +561,11 @@ void ChartElementsPanel::modelInvalid()
     mbModelValid = false;
 }
 
-void ChartElementsPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartElementsPanel::doUpdateModel(rtl::Reference<::chart::ChartModel> xModel)
 {
     if (mbModelValid)
     {
-        css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-        xBroadcaster->removeModifyListener(mxListener);
+        xModel->removeModifyListener(mxListener);
     }
 
     mxModel = xModel;
@@ -576,13 +574,14 @@ void ChartElementsPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> x
     if (!mbModelValid)
         return;
 
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcasterNew->addModifyListener(mxListener);
+    mxModel->addModifyListener(mxListener);
 }
 
 void ChartElementsPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
-    doUpdateModel(xModel);
+    ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
+    assert(!xModel || pModel);
+    doUpdateModel(pModel);
 }
 
 IMPL_LINK(ChartElementsPanel, CheckBoxHdl, weld::Toggleable&, rCheckBox, void)

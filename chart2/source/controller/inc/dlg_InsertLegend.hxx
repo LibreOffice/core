@@ -38,8 +38,8 @@ private:
 public:
     SchLegendDlg(weld::Window* pParent, const css::uno::Reference< css::uno::XComponentContext>& xCC);
 
-    void init( const css::uno::Reference< css::frame::XModel >& xChartModel );
-    void writeToModel( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;
+    void init( const rtl::Reference<::chart::ChartModel>& xChartModel );
+    void writeToModel( const rtl::Reference<::chart::ChartModel>& xChartModel ) const;
 };
 
 } //namespace chart

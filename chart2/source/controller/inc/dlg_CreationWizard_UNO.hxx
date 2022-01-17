@@ -101,7 +101,7 @@ private:
     DECL_STATIC_LINK(CreationWizardUnoDlg, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 
 private:
-    css::uno::Reference< css::frame::XModel >            m_xChartModel;
+    rtl::Reference<::chart::ChartModel>            m_xChartModel;
     css::uno::Reference< css::uno::XComponentContext>    m_xCC;
     css::uno::Reference< css::awt::XWindow >             m_xParentWindow;
 

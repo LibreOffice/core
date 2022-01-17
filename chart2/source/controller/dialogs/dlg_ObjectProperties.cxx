@@ -108,9 +108,9 @@ ObjectPropertiesDialogParameter::~ObjectPropertiesDialogParameter()
 {
 }
 
-void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel >& xChartModel )
+void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
-    m_xChartDocument.set( xChartModel, uno::UNO_QUERY );
+    m_xChartDocument = xChartModel;
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aObjectCID, xChartModel );
     uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );

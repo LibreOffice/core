@@ -23,6 +23,7 @@
 
 #include "ChartErrorBarPanel.hxx"
 #include <ChartController.hxx>
+#include <ChartModel.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
@@ -41,12 +42,12 @@ enum class ErrorBarDirection
 };
 
 css::uno::Reference<css::beans::XPropertySet> getErrorBarPropSet(
-        const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rCID)
+        const rtl::Reference<::chart::ChartModel>& xModel, const OUString& rCID)
 {
     return ObjectIdentifier::getObjectPropertySet(rCID, xModel);
 }
 
-bool showPositiveError(const css::uno::Reference<css::frame::XModel>& xModel,
+bool showPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -65,7 +66,7 @@ bool showPositiveError(const css::uno::Reference<css::frame::XModel>& xModel,
     return bShow;
 }
 
-bool showNegativeError(const css::uno::Reference<css::frame::XModel>& xModel,
+bool showNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -84,7 +85,7 @@ bool showNegativeError(const css::uno::Reference<css::frame::XModel>& xModel,
     return bShow;
 }
 
-void setShowPositiveError(const css::uno::Reference<css::frame::XModel>& xModel,
+void setShowPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, bool bShow)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -96,7 +97,7 @@ void setShowPositiveError(const css::uno::Reference<css::frame::XModel>& xModel,
     xPropSet->setPropertyValue("ShowPositiveError", css::uno::Any(bShow));
 }
 
-void setShowNegativeError(const css::uno::Reference<css::frame::XModel>& xModel,
+void setShowNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, bool bShow)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -124,7 +125,7 @@ ErrorBarTypeMap const aErrorBarType[] = {
     { 6, css::chart::ErrorBarStyle::ERROR_MARGIN },
 };
 
-sal_Int32 getTypePos(const css::uno::Reference<css::frame::XModel>& xModel,
+sal_Int32 getTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -150,7 +151,7 @@ sal_Int32 getTypePos(const css::uno::Reference<css::frame::XModel>& xModel,
     return 0;
 }
 
-void setTypePos(const css::uno::Reference<css::frame::XModel>& xModel,
+void setTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, sal_Int32 nPos)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -169,7 +170,7 @@ void setTypePos(const css::uno::Reference<css::frame::XModel>& xModel,
     xPropSet->setPropertyValue("ErrorBarStyle", css::uno::Any(nApi));
 }
 
-double getValue(const css::uno::Reference<css::frame::XModel>& xModel,
+double getValue(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, ErrorBarDirection eDir)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -193,7 +194,7 @@ double getValue(const css::uno::Reference<css::frame::XModel>& xModel,
     return nVal;
 }
 
-void setValue(const css::uno::Reference<css::frame::XModel>& xModel,
+void setValue(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, double nVal, ErrorBarDirection eDir)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -209,7 +210,7 @@ void setValue(const css::uno::Reference<css::frame::XModel>& xModel,
     xPropSet->setPropertyValue(aName, css::uno::Any(nVal));
 }
 
-OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
+OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
 {
     css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
@@ -242,7 +243,7 @@ ChartErrorBarPanel::ChartErrorBarPanel(weld::Widget* pParent, ChartController* p
     , mxLBType(m_xBuilder->weld_combo_box("comboboxtext_type"))
     , mxMFPos(m_xBuilder->weld_spin_button("spinbutton_pos"))
     , mxMFNeg(m_xBuilder->weld_spin_button("spinbutton_neg"))
-    , mxModel(pController->getModel())
+    , mxModel(pController->getChartModel())
     , mxListener(new ChartSidebarModifyListener(this))
     , mbModelValid(true)
 {
@@ -265,8 +266,7 @@ ChartErrorBarPanel::~ChartErrorBarPanel()
 
 void ChartErrorBarPanel::Initialize()
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->addModifyListener(mxListener);
+    mxModel->addModifyListener(mxListener);
     mxRBNeg->set_active(false);
     mxRBPos->set_active(false);
     mxRBPosAndNeg->set_active(false);
@@ -370,12 +370,11 @@ void ChartErrorBarPanel::modelInvalid()
     mbModelValid = false;
 }
 
-void ChartErrorBarPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartErrorBarPanel::doUpdateModel(rtl::Reference<::chart::ChartModel> xModel)
 {
     if (mbModelValid)
     {
-        css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-        xBroadcaster->removeModifyListener(mxListener);
+        mxModel->removeModifyListener(mxListener);
     }
 
     mxModel = xModel;
@@ -384,13 +383,14 @@ void ChartErrorBarPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> x
     if (!mbModelValid)
         return;
 
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcasterNew->addModifyListener(mxListener);
+    mxModel->addModifyListener(mxListener);
 }
 
 void ChartErrorBarPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
-    doUpdateModel(xModel);
+    ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
+    assert(!xModel || pModel);
+    doUpdateModel(pModel);
 }
 
 IMPL_LINK_NOARG(ChartErrorBarPanel, RadioBtnHdl, weld::Toggleable&, void)

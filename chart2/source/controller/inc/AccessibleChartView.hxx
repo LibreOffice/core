@@ -102,7 +102,7 @@ private: // methods
 
 private: // members
     css::uno::WeakReference< css::view::XSelectionSupplier >        m_xSelectionSupplier;
-    css::uno::WeakReference< css::frame::XModel >                   m_xChartModel;
+    unotools::WeakReference<::chart::ChartModel>                    m_xChartModel;
     css::uno::WeakReference< css::uno::XInterface >                 m_xChartView;
     css::uno::WeakReference< css::awt::XWindow >                    m_xWindow;
     css::uno::WeakReference< css::accessibility::XAccessible >      m_xParent;

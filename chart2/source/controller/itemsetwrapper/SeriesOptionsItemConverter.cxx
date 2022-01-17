@@ -42,7 +42,7 @@ namespace chart::wrapper
 {
 
 SeriesOptionsItemConverter::SeriesOptionsItemConverter(
-        const uno::Reference< frame::XModel >& xChartModel
+        const rtl::Reference<::chart::ChartModel>& xChartModel
         , const uno::Reference< uno::XComponentContext > & xContext
         , const uno::Reference< beans::XPropertySet >& xPropertySet
         , SfxItemPool& rItemPool )
@@ -130,8 +130,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         m_nMissingValueTreatment = DiagramHelper::getCorrectedMissingValueTreatment(
             ChartModelHelper::findDiagram(m_xChartModel), xChartType );
 
-        uno::Reference< XChartDocument > xChartDoc( m_xChartModel, uno::UNO_QUERY );
-        uno::Reference< beans::XPropertySet > xProp( xChartDoc->getDataProvider(), uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xProp( m_xChartModel->getDataProvider(), uno::UNO_QUERY );
         if( xProp.is() )
         {
             try

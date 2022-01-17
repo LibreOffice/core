@@ -45,6 +45,7 @@
 #include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/accessiblestatesethelper.hxx>
+#include <ChartModel.hxx>
 
 #include <algorithm>
 #include <iterator>
@@ -733,7 +734,7 @@ Color AccessibleBase::getColor( eColorType eColType )
 
     xObjProp =
         ObjectIdentifier::getObjectPropertySet(
-            aObjectCID, Reference< chart2::XChartDocument >( m_aAccInfo.m_xChartDocument ));
+            aObjectCID, m_aAccInfo.m_xChartDocument );
     if( xObjProp.is())
     {
         try

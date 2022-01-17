@@ -57,7 +57,7 @@ void ErrorBarsTabPage::SetErrorBarType( ErrorBarResources::tErrorBarType eNewTyp
 }
 
 void ErrorBarsTabPage::SetChartDocumentForRangeChoosing(
-    const uno::Reference< chart2::XChartDocument > & xChartDocument )
+    const rtl::Reference<::chart::ChartModel> & xChartDocument )
 {
     m_aErrorBarResources.SetChartDocumentForRangeChoosing( xChartDocument );
 }

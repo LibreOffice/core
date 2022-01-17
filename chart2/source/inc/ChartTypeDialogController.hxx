@@ -45,7 +45,10 @@ namespace com::sun::star::lang
 {
 class XMultiServiceFactory;
 }
-
+namespace chart
+{
+class ChartModel;
+}
 class ValueSet;
 
 namespace chart
@@ -114,7 +117,7 @@ public:
     virtual void showExtraControls(weld::Builder* pBuilder);
     virtual void hideExtraControls() const;
     virtual void
-    fillExtraControls(const css::uno::Reference<css::chart2::XChartDocument>& xChartModel,
+    fillExtraControls(const rtl::Reference<::chart::ChartModel>& xChartModel,
                       const css::uno::Reference<css::beans::XPropertySet>& xTemplateProps) const;
     /// @throws css::uno::RuntimeException
     virtual void setTemplateProperties(
@@ -131,7 +134,7 @@ public:
     virtual void adjustParameterToMainType(ChartTypeParameter& rParameter);
     OUString getServiceNameForParameter(const ChartTypeParameter& rParameter) const;
     void commitToModel(const ChartTypeParameter& rParameter,
-                       const css::uno::Reference<css::chart2::XChartDocument>& xChartModel);
+                       const rtl::Reference<::chart::ChartModel>& xChartModel);
     css::uno::Reference<css::chart2::XChartTypeTemplate> getCurrentTemplate(
         const ChartTypeParameter& rParameter,
         const css::uno::Reference<css::lang::XMultiServiceFactory>& xTemplateManager) const;
@@ -292,7 +295,7 @@ public:
     virtual void showExtraControls(weld::Builder* pBuilder) override;
     virtual void hideExtraControls() const override;
     virtual void fillExtraControls(
-        const css::uno::Reference<css::chart2::XChartDocument>& xChartModel,
+        const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::uno::Reference<css::beans::XPropertySet>& xTemplateProps) const override;
 
     virtual void setTemplateProperties(

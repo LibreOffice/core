@@ -53,7 +53,7 @@ private:
     void    discardSnapshot();
 
 private:
-    const css::uno::Reference< css::frame::XModel >           m_xChartModel;
+    rtl::Reference<::chart::ChartModel>                       m_xChartModel;
     const css::uno::Reference< css::document::XUndoManager >  m_xUndoManager;
 
     std::shared_ptr< ChartModelClone >  m_pDocumentSnapshot;

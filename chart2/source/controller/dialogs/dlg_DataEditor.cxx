@@ -19,6 +19,7 @@
 
 #include <dlg_DataEditor.hxx>
 #include "DataBrowser.hxx"
+#include <ChartModel.hxx>
 #include <comphelper/stl_types.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
@@ -32,7 +33,7 @@ namespace chart
 {
 
 DataEditor::DataEditor(weld::Window* pParent,
-    const Reference< chart2::XChartDocument > & xChartDoc,
+    const rtl::Reference<::chart::ChartModel> & xChartDoc,
     const Reference< uno::XComponentContext > & xContext)
     : GenericDialogController(pParent, "modules/schart/ui/chartdatadialog.ui", "ChartDataDialog")
     , m_bReadOnly(false)
@@ -61,9 +62,8 @@ DataEditor::DataEditor(weld::Window* pParent,
     m_xBrwData->GrabFocus();
 
     bool bReadOnly = true;
-    Reference< frame::XStorable > xStor( m_xChartDoc, uno::UNO_QUERY );
-    if( xStor.is())
-        bReadOnly = xStor->isReadonly();
+    if( m_xChartDoc.is())
+        bReadOnly = m_xChartDoc->isReadonly();
     SetReadOnly( bReadOnly );
 }
 

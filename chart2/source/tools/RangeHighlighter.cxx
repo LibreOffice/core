@@ -23,6 +23,7 @@
 #include <DataSourceHelper.hxx>
 #include <ObjectIdentifier.hxx>
 #include <DataSeriesHelper.hxx>
+#include <ChartModel.hxx>
 
 #include <com/sun/star/chart2/ScaleData.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
@@ -93,9 +94,12 @@ void RangeHighlighter::determineRanges()
     try
     {
         Reference< frame::XController > xController( m_xSelectionSupplier, uno::UNO_QUERY );
-        Reference< frame::XModel > xChartModel;
+        rtl::Reference<::chart::ChartModel> xChartModel;
         if( xController.is())
-            xChartModel.set( xController->getModel());
+        {
+            assert(dynamic_cast<::chart::ChartModel*>(xController->getModel().get()));
+            xChartModel = dynamic_cast<::chart::ChartModel*>(xController->getModel().get());
+        }
 
         m_bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( xChartModel );
 
@@ -182,8 +186,7 @@ void RangeHighlighter::determineRanges()
         else
         {
             //if nothing is selected select all ranges
-            Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY_THROW );
-            fillRangesForDiagram( xChartDoc->getFirstDiagram() );
+            fillRangesForDiagram( xChartModel->getFirstDiagram() );
             return;
         }
     }

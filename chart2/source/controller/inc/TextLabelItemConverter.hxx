@@ -21,12 +21,13 @@
 #include "ItemConverter.hxx"
 
 #include <com/sun/star/uno/Sequence.h>
-
+#include <rtl/ref.hxx>
 #include <vector>
 
 namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::chart2 { class XDataSeries; }
 namespace com::sun::star::frame { class XModel; }
+namespace chart { class ChartModel; }
 
 namespace chart::wrapper {
 
@@ -34,7 +35,7 @@ class TextLabelItemConverter final : public ItemConverter
 {
 public:
     TextLabelItemConverter(
-        const css::uno::Reference<css::frame::XModel>& xChartModel,
+        const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
         SfxItemPool& rItemPool,

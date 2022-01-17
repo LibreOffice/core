@@ -72,7 +72,7 @@ LegendPositionResources::~LegendPositionResources()
 {
 }
 
-void LegendPositionResources::writeToResources( const uno::Reference< frame::XModel >& xChartModel )
+void LegendPositionResources::writeToResources( const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     try
     {
@@ -114,12 +114,12 @@ void LegendPositionResources::writeToResources( const uno::Reference< frame::XMo
     }
 }
 
-void LegendPositionResources::writeToModel( const css::uno::Reference< frame::XModel >& xChartModel ) const
+void LegendPositionResources::writeToModel( const rtl::Reference<::chart::ChartModel>& xChartModel ) const
 {
     try
     {
         bool bShowLegend = m_xCbxShow && m_xCbxShow->get_active();
-        ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartModel);
+        ChartModel& rModel = *xChartModel;
         uno::Reference< beans::XPropertySet > xProp(LegendHelper::getLegend(rModel, m_xCC, bShowLegend), uno::UNO_QUERY);
         if( xProp.is() )
         {

@@ -98,7 +98,7 @@ bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
 chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxis >& xAxis, ChartModel& rModel )
 {
     ScaleData aScale = xAxis->getScaleData();
-    Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
+    Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( &rModel ) );
     if( aScale.AutoDateAxis && aScale.AxisType == AxisType::CATEGORY )
     {
         sal_Int32 nDimensionIndex=0; sal_Int32 nAxisIndex=0;
@@ -133,14 +133,14 @@ void AxisHelper::checkDateAxis( chart2::ScaleData& rScale, ExplicitCategoriesPro
 sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                   const Reference< chart2::XAxis >& xAxis
                 , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
-                , const Reference<chart2::XChartDocument>& xChartDoc
+                , const rtl::Reference<::chart::ChartModel>& xChartDoc
                 , bool bSearchForParallelAxisIfNothingIsFound )
 {
     sal_Int32 nNumberFormatKey(0);
     sal_Int32 nAxisIndex = 0;
     sal_Int32 nDimensionIndex = 1;
     AxisHelper::getIndicesForAxis( xAxis, xCorrespondingCoordinateSystem, nDimensionIndex, nAxisIndex );
-    Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(xChartDoc, uno::UNO_QUERY);
+    Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(static_cast<cppu::OWeakObject*>(xChartDoc.get()), uno::UNO_QUERY);
 
     Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
     if (!xProp.is())

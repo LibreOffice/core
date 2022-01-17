@@ -20,10 +20,12 @@
 
 #include "ItemConverter.hxx"
 #include <com/sun/star/uno/Sequence.h>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::chart2 { class XCoordinateSystem; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
+namespace chart { class ChartModel; }
 
 namespace chart::wrapper
 {
@@ -32,7 +34,7 @@ class SeriesOptionsItemConverter final : public ItemConverter
 {
 public:
     SeriesOptionsItemConverter(
-        const css::uno::Reference< css::frame::XModel > & xChartModel,
+        const rtl::Reference<::chart::ChartModel> & xChartModel,
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool );
@@ -46,7 +48,7 @@ protected:
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet ) override;
 
 private:
-    css::uno::Reference< css::frame::XModel >  m_xChartModel;
+    rtl::Reference<::chart::ChartModel>  m_xChartModel;
     css::uno::Reference< css::uno::XComponentContext>   m_xCC;
 
     bool m_bAttachToMainAxis;

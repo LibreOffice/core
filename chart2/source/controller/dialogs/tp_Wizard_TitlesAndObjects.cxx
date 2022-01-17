@@ -21,6 +21,7 @@
 #include <res_Titles.hxx>
 #include <res_LegendPosition.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartModel.hxx>
 #include <AxisHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/frame/XModel.hpp>
@@ -32,7 +33,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 TitlesAndObjectsTabPage::TitlesAndObjectsTabPage(weld::Container* pPage, weld::DialogController* pController,
-                                                 const uno::Reference< XChartDocument >& xChartModel,
+                                                 const rtl::Reference<::chart::ChartModel>& xChartModel,
                                                  const uno::Reference< uno::XComponentContext >& xContext )
     : OWizardPage(pPage, pController, "modules/schart/ui/wizelementspage.ui", "WizElementsPage")
     , m_xTitleResources(new TitleResources(*m_xBuilder, false))
@@ -101,7 +102,7 @@ bool TitlesAndObjectsTabPage::commitPage( ::vcl::WizardTypes::CommitPageReason /
 void TitlesAndObjectsTabPage::commitToModel()
 {
     m_aTimerTriggeredControllerLock.startTimer();
-    uno::Reference< frame::XModel >  xModel = m_xChartModel;
+    rtl::Reference<::chart::ChartModel>  xModel = m_xChartModel;
 
     ControllerLockGuardUNO aLockedControllers( xModel );
 

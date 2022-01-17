@@ -97,7 +97,7 @@ void VCartesianCoordinateSystem::createGridShapes()
 }
 
 void VCartesianCoordinateSystem::createVAxisList(
-              const uno::Reference<chart2::XChartDocument> & xChartDoc
+              const rtl::Reference<::chart::ChartModel> & xChartDoc
             , const awt::Size& rFontReferenceSize
             , const awt::Rectangle& rMaximumSpaceForLabels
             , bool bLimitSpaceForLabels

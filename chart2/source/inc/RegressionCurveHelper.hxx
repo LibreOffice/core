@@ -20,6 +20,7 @@
 
 #include <svx/chrtitem.hxx>
 #include "charttoolsdllapi.hxx"
+#include <rtl/ref.hxx>
 
 #include <vector>
 
@@ -31,6 +32,7 @@ namespace com::sun::star::chart2 { class XRegressionCurveCalculator; }
 namespace com::sun::star::chart2 { class XRegressionCurveContainer; }
 namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::frame { class XModel; }
+namespace chart { class ChartModel; }
 
 namespace chart::RegressionCurveHelper
 {
@@ -144,7 +146,7 @@ namespace chart::RegressionCurveHelper
     OOO_DLLPUBLIC_CHARTTOOLS void initializeCurveCalculator(
         const css::uno::Reference<css::chart2::XRegressionCurveCalculator>& xOutCurveCalculator,
         const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
-        const css::uno::Reference<css::frame::XModel>& xModel );
+        const rtl::Reference<::chart::ChartModel>& xModel );
 
     OOO_DLLPUBLIC_CHARTTOOLS OUString getUINameForRegressionCurve(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
