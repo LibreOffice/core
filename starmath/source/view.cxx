@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -2154,7 +2155,8 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 bool SmViewShell::IsInlineEditEnabled()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get();
+    return comphelper::LibreOfficeKit::isActive()
+           || officecfg::Office::Common::Misc::ExperimentalMode::get();
 }
 
 void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
