@@ -41,7 +41,10 @@ namespace com::sun::star::lang
 {
 class XMultiServiceFactory;
 }
-
+namespace chart
+{
+class ChartModel;
+}
 class ValueSet;
 
 namespace chart

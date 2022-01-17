@@ -22,6 +22,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include "charttoolsdllapi.hxx"
+#include <rtl/ref.hxx>
 
 namespace chart { class ChartModel; }
 namespace chart { class ReferenceSizeProvider; }

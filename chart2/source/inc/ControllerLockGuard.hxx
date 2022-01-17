@@ -20,6 +20,7 @@
 
 #include "charttoolsdllapi.hxx"
 #include <com/sun/star/uno/Reference.h>
+#include <rtl/ref.hxx>
 
 namespace chart
 {
@@ -39,11 +40,11 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockGuardUNO
 {
 public:
-    explicit ControllerLockGuardUNO(const css::uno::Reference<css::frame::XModel>& xModel);
+    explicit ControllerLockGuardUNO(const rtl::Reference<::chart::ChartModel>& xModel);
     ~ControllerLockGuardUNO();
 
 private:
-    css::uno::Reference<css::frame::XModel> mxModel;
+    rtl::Reference<::chart::ChartModel> mxModel;
 };
 
 class ControllerLockGuard
@@ -65,14 +66,14 @@ private:
 class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockHelper
 {
 public:
-    explicit ControllerLockHelper(const css::uno::Reference<css::frame::XModel>& xModel);
+    explicit ControllerLockHelper(const rtl::Reference<::chart::ChartModel>& xModel);
     ~ControllerLockHelper();
 
     SAL_DLLPRIVATE void lockControllers();
     SAL_DLLPRIVATE void unlockControllers();
 
 private:
-    css::uno::Reference<css::frame::XModel> m_xModel;
+    rtl::Reference<::chart::ChartModel> m_xModel;
 };
 
 /** This guard calls lockControllers at the given ControllerLockHelper in the

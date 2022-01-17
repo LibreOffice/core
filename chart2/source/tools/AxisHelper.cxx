@@ -101,7 +101,7 @@ bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
 chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxis >& xAxis, ChartModel& rModel )
 {
     ScaleData aScale = xAxis->getScaleData();
-    Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
+    Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( &rModel ) );
     if( aScale.AutoDateAxis && aScale.AxisType == AxisType::CATEGORY )
     {
         sal_Int32 nDimensionIndex=0; sal_Int32 nAxisIndex=0;
@@ -189,7 +189,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 }
                 else
                 {
-                    Reference< data::XDataSource > xSource( DataSourceHelper::getUsedData( Reference< XChartDocument >(xChartDoc) ) );
+                    Reference< data::XDataSource > xSource( DataSourceHelper::getUsedData( xChartDoc ) );
                     if( xSource.is() )
                     {
                         std::vector< Reference< chart2::data::XLabeledDataSequence > > aXValues(
