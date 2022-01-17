@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cefda9c3_30c6bad9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2022-01-17T07:38:46Z",
+      "side": 1,
+      "message": "the patch is ready for review. thanks. ",
+      "revId": "734137a45e2b3294f9c2afac034ecc177baffe5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
