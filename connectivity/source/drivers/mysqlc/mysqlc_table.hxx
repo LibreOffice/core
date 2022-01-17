@@ -19,10 +19,6 @@
 
 namespace connectivity::mysqlc
 {
-/**
-* Implements sdbcx.Table. We don't support table renaming (XRename)
-* hence the appropriate methods are overridden.
-*/
 class Table : public OTableHelper
 {
 private:
