@@ -51,6 +51,23 @@
       "parentUuid": "e495a982_85336b46",
       "revId": "09350f63f7481954b673443a893ab5aad8109f48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9496ee7_283a8066",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-17T12:09:19Z",
+      "side": 1,
+      "message": "Caolan, please have a look at Jim\u0027s findings. I imagine issues when set/get_window_state() is not working properly, for example bug 125543 maybe.",
+      "revId": "09350f63f7481954b673443a893ab5aad8109f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
