@@ -1420,11 +1420,12 @@ void SVGTextWriter::implWriteBulletChars()
 
             SvXMLElementExport aPositioningElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
 
-            // <use transform="scale(font-size)" xlink:ref="/" >
+            if (mrExport.IsEmbeddedBulletGlyph(rInfo.cBulletChar))
             {
+                // <use transform="scale(font-size)" xlink:ref="/" >
                 // Add size attribute through a scaling
-                sScaling = "scale(" + OUString::number( rInfo.nFontSize ) +
-                           "," + OUString::number( rInfo.nFontSize )+ ")";
+                sScaling = "scale(" + OUString::number( rInfo.aFont.GetFontHeight() ) +
+                           "," + OUString::number( rInfo.aFont.GetFontHeight() )+ ")";
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sScaling );
 
                 // Add ref attribute
@@ -1433,6 +1434,21 @@ void SVGTextWriter::implWriteBulletChars()
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
 
                 SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
+            }
+            else
+            {
+                // <path d="...">
+                tools::PolyPolygon aPolyPolygon;
+                OUString aStr(rInfo.cBulletChar);
+                mpVDev->Push(vcl::PushFlags::FONT);
+                mpVDev->SetFont(rInfo.aFont);
+                if (mpVDev->GetTextOutline(aPolyPolygon, aStr))
+                {
+                    OUString aPathString(SVGActionWriter::GetPathString(aPolyPolygon, false));
+                    mrExport.AddAttribute(XML_NAMESPACE_NONE, "d", aPathString);
+                    SvXMLElementExport aPath(mrExport, XML_NAMESPACE_NONE, "path", true, true);
+                }
+                mpVDev->Pop();
             }
         } // close aPositioningElem
     }
@@ -1688,7 +1704,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
             {
                 sId += ".bp";
                 BulletListItemInfo& aBulletListItemInfo = maBulletListItemMap[ sId ];
-                aBulletListItemInfo.nFontSize = rFont.GetFontHeight();
+                aBulletListItemInfo.aFont = rFont;
                 aBulletListItemInfo.aColor = aTextColor;
                 aBulletListItemInfo.aPos = maTextPos;
                 aBulletListItemInfo.cBulletChar = mcBulletChar;
