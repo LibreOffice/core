@@ -12,6 +12,7 @@ class SdLayoutTest : public SdModelTestBaseXML
 {
 public:
     void testTdf104722();
+    void testTdf135843();
     void testTdf136949();
     void testTdf128212();
     void testColumnsLayout();
@@ -20,6 +21,7 @@ public:
     CPPUNIT_TEST_SUITE(SdLayoutTest);
 
     CPPUNIT_TEST(testTdf104722);
+    CPPUNIT_TEST(testTdf135843);
     CPPUNIT_TEST(testTdf136949);
     CPPUNIT_TEST(testTdf128212);
     CPPUNIT_TEST(testColumnsLayout);
@@ -45,6 +47,29 @@ void SdLayoutTest::testTdf104722()
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "x", "2093");
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", "9273");
+
+    xDocShRef->DoClose();
+}
+
+void SdLayoutTest::testTdf135843()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf135843.pptx"), PPTX);
+
+    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix, the test fails with:
+    // - Expected: 21165
+    // - Actual  : 4218
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]", "x", "21165");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]", "y", "3866");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "x", "21165");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "y", "5956");
 
     xDocShRef->DoClose();
 }
