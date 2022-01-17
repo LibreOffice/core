@@ -1230,7 +1230,9 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                     {
                         continue;
                     }
-                    if (i >= TextFrameIndex(GetText().getLength())
+                    if ((i + TextFrameIndex(1) ).get() > GetText().getLength())
+                        ; // prevent crash by not passing bad data down to GetTextSize->SwDrawTextInfo
+                    else if (i >= TextFrameIndex(GetText().getLength())
                         || GetText()[sal_Int32(i)] != CH_BLANK)
                     {
                         sal_uInt16 nOldWidth = rPor.Width();
