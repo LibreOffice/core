@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -579,6 +580,90 @@ void SmGraphicWidget::SetTotalSize()
         mrGraphicWindow.SetTotalSize(aTmp);
 }
 
+namespace
+{
+SmBracketType BracketTypeOf(sal_uInt32 c)
+{
+    switch (c)
+    {
+        case '(':
+        case ')':
+            return SmBracketType::Round;
+        case '[':
+        case ']':
+            return SmBracketType::Square;
+        case '{':
+        case '}':
+            return SmBracketType::Curly;
+    }
+    assert(false); // Unreachable
+    return SmBracketType::Round;
+}
+
+bool CharInput(sal_uInt32 c, SmCursor& rCursor, OutputDevice& rDevice)
+{
+    switch (c)
+    {
+        case 0:
+            return false;
+        case ' ':
+            rCursor.InsertElement(BlankElement);
+            break;
+        case '!':
+            rCursor.InsertElement(FactorialElement);
+            break;
+        case '%':
+            rCursor.InsertElement(PercentElement);
+            break;
+        case '*':
+            rCursor.InsertElement(CDotElement);
+            break;
+        case '+':
+            rCursor.InsertElement(PlusElement);
+            break;
+        case '-':
+            rCursor.InsertElement(MinusElement);
+            break;
+        case '<':
+            rCursor.InsertElement(LessThanElement);
+            break;
+        case '=':
+            rCursor.InsertElement(EqualElement);
+            break;
+        case '>':
+            rCursor.InsertElement(GreaterThanElement);
+            break;
+        case '^':
+            rCursor.InsertSubSup(RSUP);
+            break;
+        case '_':
+            rCursor.InsertSubSup(RSUB);
+            break;
+        case '/':
+            rCursor.InsertFraction();
+            break;
+        case '(':
+        case '[':
+        case '{':
+            rCursor.InsertBrackets(BracketTypeOf(c));
+            break;
+        case ')':
+        case ']':
+        case '}':
+            if (rCursor.IsAtTailOfBracket(BracketTypeOf(c)))
+            {
+                rCursor.Move(&rDevice, MoveRight);
+                break;
+            }
+            [[fallthrough]];
+        default:
+            rCursor.InsertText(OUString(&c, 1));
+            break;
+    }
+    return true;
+}
+}
+
 bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
 {
     if (!SmViewShell::IsInlineEditEnabled())
@@ -632,61 +717,10 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
         {
             rCursor.DeletePrev(&rDevice);
         }break;
-        case KEY_ADD:
-            rCursor.InsertElement(PlusElement);
-            break;
-        case KEY_SUBTRACT:
-            if(rKEvt.GetKeyCode().IsShift())
-                rCursor.InsertSubSup(RSUB);
-            else
-                rCursor.InsertElement(MinusElement);
-            break;
-        case KEY_MULTIPLY:
-            rCursor.InsertElement(CDotElement);
-            break;
-        case KEY_DIVIDE:
-            rCursor.InsertFraction();
-            break;
-        case KEY_LESS:
-            rCursor.InsertElement(LessThanElement);
-            break;
-        case KEY_GREATER:
-            rCursor.InsertElement(GreaterThanElement);
-            break;
-        case KEY_EQUAL:
-            rCursor.InsertElement(EqualElement);
-            break;
         default:
         {
-            sal_Unicode code = rKEvt.GetCharCode();
-
-            if(code == ' ') {
-                rCursor.InsertElement(BlankElement);
-            }else if(code == '^') {
-                rCursor.InsertSubSup(RSUP);
-            }else if(code == '(') {
-                rCursor.InsertBrackets(SmBracketType::Round);
-            }else if(code == '[') {
-                rCursor.InsertBrackets(SmBracketType::Square);
-            }else if(code == '{') {
-                rCursor.InsertBrackets(SmBracketType::Curly);
-            }else if(code == '!') {
-                rCursor.InsertElement(FactorialElement);
-            }else if(code == '%') {
-                rCursor.InsertElement(PercentElement);
-            }
-            else if ((code == ')' && rCursor.IsAtTailOfBracket(SmBracketType::Round))
-                     || (code == ']' && rCursor.IsAtTailOfBracket(SmBracketType::Square))
-                     || (code == '}' && rCursor.IsAtTailOfBracket(SmBracketType::Curly)))
-            {
-                rCursor.Move(&rDevice, MoveRight);
-            }
-            else{
-                if(code != 0){
-                    rCursor.InsertText(OUString(code));
-                }else if (!mrViewShell.KeyInput(rKEvt))
-                    bConsumed = false;
-            }
+            if (!CharInput(rKEvt.GetCharCode(), rCursor, rDevice))
+                bConsumed = mrViewShell.KeyInput(rKEvt);
         }
     }
     }
@@ -729,6 +763,27 @@ bool SmGraphicWidget::Command(const CommandEvent& rCEvt)
             break;
 
             default: break;
+        }
+    }
+    else
+    {
+        switch (rCEvt.GetCommand())
+        {
+            case CommandEventId::ExtTextInput:
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
+                    assert(pData);
+                    const OUString& rText = pData->GetText();
+                    SmCursor& rCursor = mrViewShell.GetDoc()->GetCursor();
+                    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+                    for (sal_Int32 i = 0; i < rText.getLength();)
+                        CharInput(rText.iterateCodePoints(&i), rCursor, rDevice);
+                    bCallBase = false;
+                }
+                break;
+            default:
+                break;
         }
     }
     return !bCallBase;
@@ -825,8 +880,12 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
 
     Hide();
 
-    aInitialFocusTimer.SetInvokeHandler(LINK(this, SmCmdBoxWindow, InitialFocusTimerHdl));
-    aInitialFocusTimer.SetTimeout(100);
+    // Don't try to grab focus in LOK inline edit mode
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        aInitialFocusTimer.SetInvokeHandler(LINK(this, SmCmdBoxWindow, InitialFocusTimerHdl));
+        aInitialFocusTimer.SetTimeout(100);
+    }
 }
 
 Point SmCmdBoxWindow::WidgetToWindowPos(const weld::Widget& rWidget, const Point& rPos)
@@ -2112,8 +2171,12 @@ void SmViewShell::Activate( bool bIsMDIActivate )
 {
     SfxViewShell::Activate( bIsMDIActivate );
 
-    SmEditWindow *pEdit = GetEditWindow();
-    if ( pEdit )
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // In LOK, activate in-place editing
+        GetGraphicWidget().GrabFocus();
+    }
+    else if (SmEditWindow *pEdit = GetEditWindow())
     {
         //! Since there is no way to be informed if a "drag and drop"
         //! event has taken place, we call SetText here in order to
@@ -2172,7 +2235,8 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 bool SmViewShell::IsInlineEditEnabled()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get();
+    return /* comphelper::LibreOfficeKit::isActive()
+           || */ officecfg::Office::Common::Misc::ExperimentalMode::get();
 }
 
 void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
