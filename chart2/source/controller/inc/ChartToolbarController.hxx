@@ -27,7 +27,7 @@ typedef comphelper::WeakComponentImplHelper<
     css::util::XUpdatable, css::lang::XInitialization,
     css::lang::XServiceInfo> ChartToolbarControllerBase;
 
-class ChartToolbarController : public ChartToolbarControllerBase
+class ChartToolbarController final : public ChartToolbarControllerBase
 {
 public:
     ChartToolbarController(const css::uno::Sequence<css::uno::Any>& rProperties);

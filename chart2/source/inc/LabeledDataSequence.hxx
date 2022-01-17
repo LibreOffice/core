@@ -40,7 +40,7 @@ typedef cppu::WeakImplHelper<
     LabeledDataSequence_Base;
 }
 
-class LabeledDataSequence :
+class LabeledDataSequence final :
         public cppu::BaseMutex,
         public impl::LabeledDataSequence_Base
 {

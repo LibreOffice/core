@@ -23,7 +23,7 @@
 namespace chart
 {
 
-class LogarithmicRegressionCurveCalculator : public RegressionCurveCalculator
+class LogarithmicRegressionCurveCalculator final : public RegressionCurveCalculator
 {
 public:
     LogarithmicRegressionCurveCalculator();

@@ -35,7 +35,7 @@ enum class GraphicObjectType
     LineAndFillProperties
 };
 
-class GraphicPropertyItemConverter : public ItemConverter
+class GraphicPropertyItemConverter final : public ItemConverter
 {
 public:
     GraphicPropertyItemConverter(

@@ -40,7 +40,7 @@ class VclWindowEvent;
 namespace chart
 {
 
-class CreationWizardUnoDlg : public cppu::BaseMutex
+class CreationWizardUnoDlg final : public cppu::BaseMutex
                             , public ::cppu::OComponentHelper
                             , public css::ui::dialogs::XAsynchronousExecutableDialog
                             , public css::lang::XServiceInfo

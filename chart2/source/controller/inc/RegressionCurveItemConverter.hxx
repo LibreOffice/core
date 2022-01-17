@@ -28,7 +28,7 @@ class SdrModel;
 namespace chart::wrapper
 {
 
-class RegressionCurveItemConverter : public ItemConverter
+class RegressionCurveItemConverter final : public ItemConverter
 {
 public:
     RegressionCurveItemConverter(

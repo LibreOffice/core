@@ -24,7 +24,7 @@
 namespace chart
 {
 
-class Linear3DTransformation : public XTransformation2
+class Linear3DTransformation final : public XTransformation2
 {
 public:
     Linear3DTransformation( const css::drawing::HomogenMatrix& rHomMatrix, bool bSwapXAndY  );

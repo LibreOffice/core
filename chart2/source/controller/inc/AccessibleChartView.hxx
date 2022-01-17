@@ -48,7 +48,7 @@ typedef ::cppu::ImplInheritanceHelper<
     AccessibleChartView_Base;
 }
 
-class AccessibleChartView :
+class AccessibleChartView final :
         public impl::AccessibleChartView_Base
 {
 public:

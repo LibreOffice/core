@@ -44,7 +44,7 @@ namespace chart
 
 class RangeSelectionHelper;
 
-class ErrorBarResources : public RangeSelectionListenerParent
+class ErrorBarResources final : public RangeSelectionListenerParent
 {
 public:
     enum tErrorBarType

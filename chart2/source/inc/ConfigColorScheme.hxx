@@ -39,7 +39,7 @@ namespace impl
 class ChartConfigItem;
 }
 
-class ConfigColorScheme :
+class ConfigColorScheme final :
     public ::cppu::WeakImplHelper<
         css::chart2::XColorScheme,
         css::lang::XServiceInfo >

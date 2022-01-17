@@ -23,7 +23,7 @@
 namespace chart
 {
 
-class VPolarTransformation : public XTransformation2
+class VPolarTransformation final : public XTransformation2
 {
 public:
     VPolarTransformation( const PolarPlottingPositionHelper& rPositionHelper );

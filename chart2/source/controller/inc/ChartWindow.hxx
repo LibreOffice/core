@@ -29,7 +29,7 @@ class ChartController;
 thus the controller can perform appropriate actions
 */
 
-class ChartWindow : public vcl::Window
+class ChartWindow final : public vcl::Window
 {
 public:
     ChartWindow( ChartController* pController, vcl::Window* pParent, WinBits nStyle );

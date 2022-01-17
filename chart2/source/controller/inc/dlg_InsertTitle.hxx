@@ -24,7 +24,7 @@
 
 namespace chart
 {
-class SchTitleDlg : public weld::GenericDialogController
+class SchTitleDlg final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<TitleResources> m_xTitleResources;

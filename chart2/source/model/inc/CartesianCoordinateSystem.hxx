@@ -42,7 +42,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
-class CartesianCoordinateSystem2d : public CartesianCoordinateSystem
+class CartesianCoordinateSystem2d final : public CartesianCoordinateSystem
 {
 public:
     explicit CartesianCoordinateSystem2d();
@@ -54,7 +54,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
-class CartesianCoordinateSystem3d : public CartesianCoordinateSystem
+class CartesianCoordinateSystem3d final : public CartesianCoordinateSystem
 {
 public:
     explicit CartesianCoordinateSystem3d();

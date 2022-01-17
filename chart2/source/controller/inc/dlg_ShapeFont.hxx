@@ -26,7 +26,7 @@ class ViewElementListProvider;
 
 /** dialog for font properties of shapes
  */
-class ShapeFontDialog : public SfxTabDialogController
+class ShapeFontDialog final : public SfxTabDialogController
 {
 public:
     ShapeFontDialog(weld::Window* pParent, const SfxItemSet* pAttr,

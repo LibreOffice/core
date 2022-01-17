@@ -71,7 +71,7 @@ private:
     css::uno::WeakReference< Listener > m_xListener;
 };
 
-class WeakModifyListenerAdapter :
+class WeakModifyListenerAdapter final :
         public WeakListenerAdapter< css::util::XModifyListener >
 {
 public:
@@ -84,7 +84,7 @@ protected:
     virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
 };
 
-class WeakSelectionChangeListenerAdapter :
+class WeakSelectionChangeListenerAdapter final :
         public WeakListenerAdapter< css::view::XSelectionChangeListener >
 {
 public:

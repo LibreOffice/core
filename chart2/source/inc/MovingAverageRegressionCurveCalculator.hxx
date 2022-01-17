@@ -25,7 +25,7 @@
 namespace chart
 {
 
-class MovingAverageRegressionCurveCalculator : public RegressionCurveCalculator
+class MovingAverageRegressionCurveCalculator final : public RegressionCurveCalculator
 {
 public:
     MovingAverageRegressionCurveCalculator();

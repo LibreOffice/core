@@ -38,7 +38,7 @@ enum
     POS_3DSCHEME_REALISTIC = 1
 };
 
-class Dim3DLookResourceGroup : public ChangingResource
+class Dim3DLookResourceGroup final : public ChangingResource
 {
 public:
     explicit Dim3DLookResourceGroup(weld::Builder* pBuilder);
@@ -57,7 +57,7 @@ private:
     std::unique_ptr<weld::ComboBox> m_xLB_Scheme;
 };
 
-class SortByXValuesResourceGroup : public ChangingResource
+class SortByXValuesResourceGroup final : public ChangingResource
 {
 public:
     explicit SortByXValuesResourceGroup(weld::Builder* pBuilder);
@@ -74,7 +74,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCB_XValueSorting;
 };
 
-class StackingResourceGroup : public ChangingResource
+class StackingResourceGroup final : public ChangingResource
 {
 public:
     explicit StackingResourceGroup(weld::Builder* pBuilder);
@@ -99,7 +99,7 @@ private:
 #define POS_LINETYPE_SMOOTH 1
 #define POS_LINETYPE_STEPPED 2
 
-class SplineResourceGroup : public ChangingResource
+class SplineResourceGroup final : public ChangingResource
 {
 public:
     explicit SplineResourceGroup(weld::Builder* pBuilder, weld::Window* pParent);
@@ -125,7 +125,7 @@ private:
     std::unique_ptr<SteppedPropertiesDialog> m_xSteppedPropertiesDialog;
 };
 
-class GeometryResourceGroup : public ChangingResource
+class GeometryResourceGroup final : public ChangingResource
 {
 public:
     explicit GeometryResourceGroup(weld::Builder* pBuilder);

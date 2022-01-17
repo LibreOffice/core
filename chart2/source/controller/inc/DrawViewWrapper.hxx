@@ -43,7 +43,7 @@ protected:
     ~MarkHandleProvider() {}
 };
 
-class DrawViewWrapper : public E3dView
+class DrawViewWrapper final : public E3dView
 {
 public:
     DrawViewWrapper(

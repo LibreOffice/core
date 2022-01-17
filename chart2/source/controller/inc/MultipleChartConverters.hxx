@@ -28,7 +28,7 @@ class SdrModel;
 
 namespace chart::wrapper {
 
-class AllAxisItemConverter : public MultipleItemConverter
+class AllAxisItemConverter final : public MultipleItemConverter
 {
 public:
     AllAxisItemConverter(
@@ -43,7 +43,7 @@ protected:
     virtual const WhichRangesContainer& GetWhichPairs() const override;
 };
 
-class AllGridItemConverter : public MultipleItemConverter
+class AllGridItemConverter final : public MultipleItemConverter
 {
 public:
     AllGridItemConverter(
@@ -57,7 +57,7 @@ protected:
     virtual const WhichRangesContainer& GetWhichPairs() const override;
 };
 
-class AllDataLabelItemConverter : public MultipleItemConverter
+class AllDataLabelItemConverter final : public MultipleItemConverter
 {
 public:
     AllDataLabelItemConverter(
@@ -72,7 +72,7 @@ protected:
     virtual const WhichRangesContainer& GetWhichPairs() const override;
 };
 
-class AllTitleItemConverter : public MultipleItemConverter
+class AllTitleItemConverter final : public MultipleItemConverter
 {
 public:
     AllTitleItemConverter(
@@ -86,7 +86,7 @@ protected:
     virtual const WhichRangesContainer& GetWhichPairs() const override;
 };
 
-class AllSeriesStatisticsConverter : public MultipleItemConverter
+class AllSeriesStatisticsConverter final : public MultipleItemConverter
 {
 public:
     AllSeriesStatisticsConverter(

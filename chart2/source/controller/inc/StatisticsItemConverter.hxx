@@ -25,7 +25,7 @@ namespace com::sun::star::frame { class XModel; }
 namespace chart::wrapper
 {
 
-class StatisticsItemConverter : public ItemConverter
+class StatisticsItemConverter final : public ItemConverter
 {
 public:
     StatisticsItemConverter(

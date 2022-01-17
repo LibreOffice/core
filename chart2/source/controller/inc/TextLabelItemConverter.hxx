@@ -30,7 +30,7 @@ namespace com::sun::star::frame { class XModel; }
 
 namespace chart::wrapper {
 
-class TextLabelItemConverter : public ItemConverter
+class TextLabelItemConverter final : public ItemConverter
 {
 public:
     TextLabelItemConverter(

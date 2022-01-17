@@ -107,7 +107,7 @@ private:
 
 class ViewElementListProvider;
 
-class SchAttribTabDlg : public SfxTabDialogController
+class SchAttribTabDlg final : public SfxTabDialogController
 {
 private:
     const ObjectPropertiesDialogParameter * const        m_pParameter;

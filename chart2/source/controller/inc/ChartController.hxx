@@ -92,7 +92,7 @@ class ViewElementListProvider;
 enum ChartDrawMode { CHARTDRAW_INSERT, CHARTDRAW_SELECT };
 
 
-class ChartController   : public ::cppu::WeakImplHelper <
+class ChartController final : public ::cppu::WeakImplHelper <
          css::frame::XController   //comprehends XComponent (required interface)
         ,css::frame::XDispatchProvider     //(required interface)
         ,css::view::XSelectionSupplier     //(optional interface)

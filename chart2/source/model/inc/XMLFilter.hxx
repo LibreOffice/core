@@ -129,7 +129,7 @@ private:
     ::osl::Mutex                                   m_aMutex;
 };
 
-class XMLReportFilterHelper : public XMLFilter
+class XMLReportFilterHelper final : public XMLFilter
 {
     virtual void isOasisFormat(const css::uno::Sequence< css::beans::PropertyValue >& _rMediaDescriptor,
                                bool & _rOutOASIS ) override;

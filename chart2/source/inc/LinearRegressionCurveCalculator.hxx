@@ -23,7 +23,7 @@
 namespace chart
 {
 
-class LinearRegressionCurveCalculator : public PolynomialRegressionCurveCalculator
+class LinearRegressionCurveCalculator final : public PolynomialRegressionCurveCalculator
 {
 public:
     LinearRegressionCurveCalculator();

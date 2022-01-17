@@ -32,7 +32,7 @@ class ThreeD_SceneGeometry_TabPage;
 class ThreeD_SceneAppearance_TabPage;
 class ThreeD_SceneIllumination_TabPage;
 
-class View3DDialog : public weld::GenericDialogController
+class View3DDialog final : public weld::GenericDialogController
 {
 public:
     View3DDialog(weld::Window* pWindow, const css::uno::Reference<css::frame::XModel>& xChartModel);

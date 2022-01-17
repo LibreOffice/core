@@ -35,7 +35,7 @@ class SdrModel;
 
 namespace chart::wrapper {
 
-class DataPointItemConverter : public ItemConverter
+class DataPointItemConverter final : public ItemConverter
 {
 public:
     DataPointItemConverter(

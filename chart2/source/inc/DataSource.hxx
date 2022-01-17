@@ -26,7 +26,7 @@
 namespace chart
 {
 
-class DataSource : public
+class DataSource final : public
     ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::chart2::data::XDataSource,

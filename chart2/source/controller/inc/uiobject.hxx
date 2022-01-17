@@ -14,7 +14,7 @@
 
 #include "ChartWindow.hxx"
 
-class ChartUIObject : public UIObject
+class ChartUIObject final : public UIObject
 {
 public:
 
@@ -41,7 +41,7 @@ private:
     DECL_LINK(PostCommand, void*, void);
 };
 
-class ChartWindowUIObject : public WindowUIObject
+class ChartWindowUIObject final : public WindowUIObject
 {
     VclPtr<chart::ChartWindow> mxChartWindow;
 
