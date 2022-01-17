@@ -984,6 +984,9 @@ WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS,
     {
         rpFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
     }
+    // tdf#146515 export "Use printer metrics for document formatting"
+    if (!rDoc.getIDocumentSettingAccess().get(DocumentSettingId::USE_VIRTUAL_DEVICE))
+        rpFS->singleElementNS(XML_w, XML_usePrinterMetrics);
 }
 
 void DocxExport::WriteSettings()
