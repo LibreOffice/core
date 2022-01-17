@@ -51,7 +51,7 @@ struct WinUserInfoMutexHolder
 class WinUserInfoBe : private WinUserInfoMutexHolder, public BackendBase
 {
 public:
-    explicit WinUserInfoBe(const css::uno::Reference<css::uno::XComponentContext>& xContext);
+    explicit WinUserInfoBe();
     virtual ~WinUserInfoBe() override;
 
     // XServiceInfo
