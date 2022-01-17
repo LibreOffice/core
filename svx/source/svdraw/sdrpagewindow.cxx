@@ -428,8 +428,7 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId,
 // Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
 void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
 {
-    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
-    if (!bLOKActive && GetPageView().IsVisible() && GetPaintWindow().OutputToWindow())
+    if (GetPageView().IsVisible() && GetPaintWindow().OutputToWindow())
     {
         const SvtOptionsDrawinglayer aDrawinglayerOpt;
         OutputDevice& rWindow(GetPaintWindow().GetOutputDevice());
@@ -443,10 +442,14 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
             aDiscreteRange.grow(1.0);
         }
 
+        // If the shapes use negative X coordinates, make them positive before sending
+        // the invalidation rectangle.
+        bool bNegativeX = mpImpl->mrPageView.GetView().IsNegativeX();
+
         const tools::Rectangle aVCLDiscreteRectangle(
-            static_cast<tools::Long>(floor(aDiscreteRange.getMinX())),
+            static_cast<tools::Long>(bNegativeX ? std::max(0.0, ceil(-aDiscreteRange.getMaxX())) : floor(aDiscreteRange.getMinX())),
             static_cast<tools::Long>(floor(aDiscreteRange.getMinY())),
-            static_cast<tools::Long>(ceil(aDiscreteRange.getMaxX())),
+            static_cast<tools::Long>(bNegativeX ? std::max(0.0, floor(-aDiscreteRange.getMinX())) : ceil(aDiscreteRange.getMaxX())),
             static_cast<tools::Long>(ceil(aDiscreteRange.getMaxY())));
 
         const bool bWasMapModeEnabled(rWindow.IsMapModeEnabled());
@@ -454,7 +457,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
         GetPageView().GetView().InvalidateOneWin(rWindow, aVCLDiscreteRectangle);
         rWindow.EnableMapMode(bWasMapModeEnabled);
     }
-    else if (bLOKActive)
+    else if (comphelper::LibreOfficeKit::isActive())
     {
         // we don't really have to have a paint window with LOK; OTOH we know
         // that the drawinglayer units are 100ths of mm, so they are easy to
