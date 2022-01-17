@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "968893b7_7de273f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-17T20:41:55Z",
+      "side": 1,
+      "message": "Just a comment removed, let\u0027s push this one.",
+      "revId": "e3041ba406c57be2f4e99ca9a115fd91c409d682",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
