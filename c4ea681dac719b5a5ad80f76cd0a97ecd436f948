@@ -51,6 +51,24 @@
       "message": "the point of the PROTECT_FIELDS was to prevent the user from accidentally deleting the fields, but clicking the field to replace the content should be allowed, see also commit 3fc68fdc6f4ef04091db2fd46499a10396c3a4f2.\n\nnote there is also PROTECT_FORM which originates in Word formats and i don\u0027t know exactly what it should do, possibly it should allow inserting data into \"form\" fields.",
       "revId": "c4ea681dac719b5a5ad80f76cd0a97ecd436f948",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bca34c5d_1045e734",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1474,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-17T13:40:07Z",
+      "side": 1,
+      "message": "OK, I can check to see the result of using PROTECT_FORM, and I will try removing PROTECT_FIELDS.\nBtw, I am trying to do what MS Word does when a section is protected. You can check the attachment, and compare the double click behavior in LO and MS Word: \nhttps://bugs.documentfoundation.org/attachment.cgi?id\u003d149778",
+      "parentUuid": "4b58816d_e4f4e0ef",
+      "revId": "c4ea681dac719b5a5ad80f76cd0a97ecd436f948",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
