@@ -1527,6 +1527,7 @@ void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPat
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "d", sPathData );
     SvXMLElementExport aPathElem( *mpSVGExport, XML_NAMESPACE_NONE, "path", true, true );
 
+    mpSVGExport->SetEmbeddedBulletGlyph(cBullet);
 }
 
 void SVGFilter::implExportBackgroundBitmaps()
@@ -2859,6 +2860,17 @@ void SVGExport::writeMtf( const GDIMetaFile& rMtf )
         aWriter.WriteMetaFile( aPoint100thmm, aSize100thmm, rMtf,
             SVGWRITER_WRITE_FILL | SVGWRITER_WRITE_TEXT );
     }
+}
+
+void SVGExport::SetEmbeddedBulletGlyph(sal_Unicode cBullet)
+{
+    maEmbeddedBulletGlyphs.insert(cBullet);
+}
+
+bool SVGExport::IsEmbeddedBulletGlyph(sal_Unicode cBullet) const
+{
+    auto it = maEmbeddedBulletGlyphs.find(cBullet);
+    return it != maEmbeddedBulletGlyphs.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
