@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a99e6d9_d13c32d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-17T10:21:13Z",
+      "side": 1,
+      "message": "Might fix your linking problem with --disable-gui. Will try, after my --disable-dynloading build has finished.",
+      "revId": "06cc90816f1b395fab9a74b836814574f25cfd3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
