@@ -16,6 +16,23 @@
       "message": "the patch is ready for review. thanks. ",
       "revId": "734137a45e2b3294f9c2afac034ecc177baffe5d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fd3069c_db488c51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-17T12:13:16Z",
+      "side": 1,
+      "message": "Fine for me. Missing a reference to Bugzilla in the summary. And a in-code comment might be good explaining why bWriter should behave differently.",
+      "revId": "734137a45e2b3294f9c2afac034ecc177baffe5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
