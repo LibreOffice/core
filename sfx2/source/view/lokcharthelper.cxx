@@ -26,20 +26,6 @@
 
 using namespace com::sun::star;
 
-namespace {
-
-Point lcl_TwipsToHMM( const Point& rPoint )
-{
-    return Point(convertTwipToMm100(rPoint.getX()), convertTwipToMm100(rPoint.getY()));
-}
-
-Size lcl_TwipsToHMM( const Size& rSize )
-{
-    return Size(convertTwipToMm100(rSize.getWidth()), convertTwipToMm100(rSize.getHeight()));
-}
-
-} // end anonymous ns
-
 css::uno::Reference<css::frame::XController>& LokChartHelper::GetXController()
 {
     if(!mxController.is() && mpViewShell)
@@ -206,8 +192,8 @@ void LokChartHelper::PaintTile(VirtualDevice& rRenderContext, const tools::Recta
         return;
 
     Point aOffset( aChartRect.Left() - rTileRect.Left(), aChartRect.Top() - rTileRect.Top() );
-    Point aOffsetFromTile = lcl_TwipsToHMM(aOffset);
-    Size aSize = lcl_TwipsToHMM(aChartRect.GetSize());
+    Point aOffsetFromTile = convertTwipToMm100(aOffset);
+    Size aSize = convertTwipToMm100(aChartRect.GetSize());
     tools::Rectangle aRectangle(Point(0,0), aSize);
 
     bool bEnableMapMode = !pChartWindow->IsMapModeEnabled();
