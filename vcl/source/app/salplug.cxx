@@ -65,7 +65,6 @@ extern "C" SalInstance* create_SalInstance();
 #endif
 
 #if defined(_WIN32)
-#include <svdata.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <Windows.h>
 #else
