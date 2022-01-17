@@ -16,6 +16,23 @@
       "message": "Can we merge this request? 😂",
       "revId": "e8c76818c1891ffb37e73839862d6557298d9ea2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21cd4054_8b5d86cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-17T12:10:46Z",
+      "side": 1,
+      "message": "+2\u0027ed before the last build.",
+      "revId": "e8c76818c1891ffb37e73839862d6557298d9ea2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
