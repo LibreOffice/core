@@ -1420,7 +1420,7 @@ void SwChartDataProvider::RemoveDataSequence( const SwTable &rTable, uno::Refere
     m_aDataSequences[ &rTable ].erase( rxDataSequence );
 }
 
-void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
+void SwChartDataProvider::InvalidateTable( const SwTable *pTable, bool bImmediate )
 {
     OSL_ENSURE( pTable, "table pointer is NULL" );
     if (!pTable)
@@ -1440,6 +1440,10 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
             xRef->setModified( true );
         }
     }
+
+    // tdf#122995 added Immediate-mode to allow non-timer-delayed Chart invalidation
+    if (bImmediate && !m_bDisposed)
+       pTable->GetFrameFormat()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().Disconnect();
 }
 
 void SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rBox )
