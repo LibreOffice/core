@@ -57,6 +57,10 @@ inline constexpr OStringLiteral HID_GRID_TRAVEL_NEW = "SVX_HID_GRID_TRAVEL_NEW";
 inline constexpr OStringLiteral HID_GRID_TRAVEL_ABSOLUTE = "SVX_HID_GRID_TRAVEL_ABSOLUTE";
 inline constexpr OStringLiteral HID_GRID_NUMBEROFRECORDS = "SVX_HID_GRID_NUMBEROFRECORDS";
 
+// Help IDs for Manage Track Changes
+inline constexpr OStringLiteral HID_REDLINE_CTRL_VIEW = "SVX_HID_REDLINE_CTRL_VIEW";
+inline constexpr OStringLiteral HID_REDLINE_CTRL_FILTER = "SVX_HID_REDLINE_CTRL_FILTER";
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

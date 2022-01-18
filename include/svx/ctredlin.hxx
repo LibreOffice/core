@@ -274,7 +274,6 @@ private:
     bool bEnableClearFormat;
     bool bEnableClearFormatAll;
 
-    weld::Window* m_pDialog;
     std::unique_ptr<weld::Button> m_xAccept;
     std::unique_ptr<weld::Button> m_xReject;
     std::unique_ptr<weld::Button> m_xAcceptAll;
@@ -284,9 +283,8 @@ private:
 
     DECL_DLLPRIVATE_LINK( PbClickHdl, weld::Button&, void );
 
-    void            EnableClearFormatButton(weld::Button&, bool bFlag);
 public:
-    SvxTPView(weld::Container* pParent, weld::Window* pDialog, weld::Builder* pTopLevel);
+    SvxTPView(weld::Container* pParent);
     virtual ~SvxTPView() override;
 
     SvxRedlinTable* GetTableControl() { return m_xViewData.get(); }
@@ -329,7 +327,7 @@ private:
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OString&, bool);
 
 public:
-    SvxAcceptChgCtr(weld::Container* pParent, weld::Window* pDialog, weld::Builder* pTopLevel);
+    SvxAcceptChgCtr(weld::Container* pParent);
     ~SvxAcceptChgCtr();
 
     void            ShowFilterPage();
