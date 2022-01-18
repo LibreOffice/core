@@ -16,6 +16,23 @@
       "message": "Kerning and tracking, these are not weird concepts if you’ve ever opened Scribus or InDesign... or MS Word. I’d advocate for using “tracking” instead of something else.",
       "revId": "caed4584a871b855b27b1803430ada967eb6823a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a5d192f_863a2ccb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-01-18T12:05:24Z",
+      "side": 1,
+      "message": "Nah, nevermind, I just checked that the most recent version of MS Word indeed uses “character spacing” in its UI. So it’s both idiomatic and precise. (y)",
+      "revId": "caed4584a871b855b27b1803430ada967eb6823a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
