@@ -43,6 +43,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <tabvwsh.hxx>
+#include <vcl/lineinfo.hxx>
 
 #include <gridwin.hxx>
 #include <viewdata.hxx>
@@ -851,6 +852,9 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
+    //tdf#128258 - draw a dotted line before hidden columns/rows
+    DrawHiddenIndicator(nX1,nY1,nX2,nY2, *pContentDev);
+
     if ( bPageMode )
     {
         // DrawPagePreview draws complete lines/page numbers, must always be clipped
@@ -1658,6 +1662,33 @@ void ScGridWindow::CheckNeedsRepaint()
     rBindings.Invalidate( SID_STATUS_SUM );
     rBindings.Invalidate( SID_ATTR_SIZE );
     rBindings.Invalidate( SID_TABLE_CELL );
+}
+
+void ScGridWindow::DrawHiddenIndicator( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, vcl::RenderContext& rRenderContext)
+{
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB nTab = mrViewData.GetTabNo();
+    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    Color aLineColor = rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor;
+    LineInfo aLineInfo(LineStyle::Dash,1);
+    aLineInfo.SetDashCount(0);
+    aLineInfo.SetDotCount(1);
+
+    rRenderContext.SetLineColor(aLineColor);
+    for (int i=nX1; i<nX2; i++) {
+        if (rDoc.ColHidden(i,nTab) && (i<MAXCOL ? !rDoc.ColHidden(i+1,nTab) : true)) {
+            Point aStart = mrViewData.GetScrPos(i, nY1, eWhich, true );
+            Point aEnd = mrViewData.GetScrPos(i, nY2, eWhich, true );
+            rRenderContext.DrawLine(aStart,aEnd,aLineInfo);
+        }
+    }
+    for (int i=nY1; i<nY2; i++) {
+        if (rDoc.RowHidden(i,nTab) && (i<MAXROW ? !rDoc.RowHidden(i+1,nTab) : true)) {
+            Point aStart = mrViewData.GetScrPos(nX1, i, eWhich, true );
+            Point aEnd = mrViewData.GetScrPos(nX2, i, eWhich, true );
+            rRenderContext.DrawLine(aStart,aEnd,aLineInfo);
+        }
+    }
 }
 
 void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, vcl::RenderContext& rRenderContext)
