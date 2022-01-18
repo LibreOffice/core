@@ -34,6 +34,24 @@
       "parentUuid": "06bfe799_0bebecb3",
       "revId": "e81d2a9516795abf6567b99b009e75ce5718f07c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "400f1017_53352c01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-18T22:18:19Z",
+      "side": 1,
+      "message": "(btw, what would be the configure options for such a \"static build\"?)",
+      "parentUuid": "59f9c7fb_82673019",
+      "revId": "e81d2a9516795abf6567b99b009e75ce5718f07c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
