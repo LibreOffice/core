@@ -82,6 +82,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145731)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145321)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf145321.odt");
+
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf129382.docx");
