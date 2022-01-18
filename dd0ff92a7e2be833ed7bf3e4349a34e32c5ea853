@@ -52,6 +52,24 @@
       "parentUuid": "2ffc7c78_419d50c4",
       "revId": "dd0ff92a7e2be833ed7bf3e4349a34e32c5ea853",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f41620c_07a9a074",
+        "filename": "include/osl/module.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-18T14:26:07Z",
+      "side": 1,
+      "message": "AFAIK, the reason for config_global.h is, that it basically never changes, because it encodes non-changeable system and compiler settings. That\u0027s why I used global over features. If you don\u0027t change your OS / libc the dl-API won\u0027t change. In that case you very likely need to recompile everything anyway.",
+      "parentUuid": "37204638_bd6709f6",
+      "revId": "dd0ff92a7e2be833ed7bf3e4349a34e32c5ea853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
