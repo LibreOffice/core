@@ -333,6 +333,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo106029)
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:doNotExpandShiftReturn");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf146515)
+{
+    loadAndSave("tdf146515.odt");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:usePrinterMetrics");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFDO74106)
 {
     loadAndSave("FDO74106.docx");
