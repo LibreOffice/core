@@ -16,6 +16,24 @@
       "message": "If possible, we try to avoid such \u0027pixel assert\u0027 tests, as they easily differ from one system to an other system. Did you consider dumping the file to a GDIMetaFile and then assert that?\n\nSfxObjectShell::GetPreviewMetaFile() can be used for this, see sw/qa/core/layout/layout.cxx:412 for an example and include/vcl/mtfxmldump.hxx:44 for more documentation.\n\nIf the metafile-based test can work, that\u0027s better than a pixel assert.",
       "revId": "cabf93f2f8557f58dc09d280aafe2beaa6e34644",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15c810ac_ba9ec89d",
+        "filename": "svx/qa/unit/customshapes.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-01-18T23:42:39Z",
+      "side": 1,
+      "message": "I have now tried it with a metafile. Thank you for the pointer. But it does not work. If the shape is not extruded, then the xml-file contains \u003cpolygon\u003e. But if the shape it extruded, the xml-file contains nothing from the shape. That might have the same root cause as bug tdf#146316?",
+      "parentUuid": "7031f29c_98f46bd7",
+      "revId": "cabf93f2f8557f58dc09d280aafe2beaa6e34644",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
