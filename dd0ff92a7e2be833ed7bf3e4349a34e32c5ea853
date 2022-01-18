@@ -16,6 +16,24 @@
       "message": "I wouldn\u0027t want to do such a \"convenience include\" (that would hopefully get removed with the next round of IWYU fixes anyway) at all.  Why not include config_global.h where it is actually needed?",
       "revId": "dd0ff92a7e2be833ed7bf3e4349a34e32c5ea853",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ffc7c78_419d50c4",
+        "filename": "include/osl/module.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-18T13:31:41Z",
+      "side": 1,
+      "message": "My thought was simply to get the HAVE_DLAPI to all current callers of dlsym, so they can be replaced by osl_getAsciiFunctionSymbol over time, as an EasyHack. It\u0027s a small file with just a few defines. I guess config_global.h will be available almost everywhere anyway, but this way seemed more correct.",
+      "parentUuid": "d3e69fca_71ae8874",
+      "revId": "dd0ff92a7e2be833ed7bf3e4349a34e32c5ea853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
