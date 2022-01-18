@@ -22,7 +22,7 @@
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <rtl/ref.hxx>
-
+#include <tools/color.hxx>
 #include <basecontainercontrol.hxx>
 
 namespace com::sun::star::awt { class XControlModel; }
@@ -35,12 +35,12 @@ namespace unocontrols {
 
 class ProgressBar;
 
-#define STATUSINDICATOR_FREEBORDER              5                                                       // border around and between the controls
-#define STATUSINDICATOR_BACKGROUNDCOLOR         sal_Int32(Color( 0xC0, 0xC0, 0xC0 ))              // lightgray
-#define STATUSINDICATOR_LINECOLOR_BRIGHT        sal_Int32(Color( 0xFF, 0xFF, 0xFF ))              // white
-#define STATUSINDICATOR_LINECOLOR_SHADOW        sal_Int32(Color( 0x00, 0x00, 0x00 ))              // black
-#define STATUSINDICATOR_DEFAULT_WIDTH           300
-#define STATUSINDICATOR_DEFAULT_HEIGHT          25
+constexpr auto  STATUSINDICATOR_FREEBORDER = 5; // border around and between the controls
+constexpr auto STATUSINDICATOR_DEFAULT_WIDTH = 300;
+constexpr auto STATUSINDICATOR_DEFAULT_HEIGHT = 25;
+constexpr sal_Int32 STATUSINDICATOR_BACKGROUNDCOLOR = sal_Int32(COL_LIGHTGRAY);
+constexpr sal_Int32 STATUSINDICATOR_LINECOLOR_BRIGHT = sal_Int32(COL_WHITE);
+constexpr sal_Int32 STATUSINDICATOR_LINECOLOR_SHADOW = sal_Int32(COL_BLACK);
 
 class StatusIndicator final : public css::awt::XLayoutConstrains
                         , public css::task::XStatusIndicator

@@ -21,23 +21,25 @@
 
 #include <com/sun/star/awt/XProgressBar.hpp>
 
+#include <climits>
+
 #include <tools/color.hxx>
 
 #include <basecontrol.hxx>
 
 namespace unocontrols {
 
-#define PROGRESSBAR_FREESPACE               4
-#define PROGRESSBAR_DEFAULT_HORIZONTAL      true
-#define PROGRESSBAR_DEFAULT_BLOCKDIMENSION  Size(1,1)
-#define PROGRESSBAR_DEFAULT_BACKGROUNDCOLOR Color( 0xC0, 0xC0, 0xC0 ) // lightgray
-#define PROGRESSBAR_DEFAULT_FOREGROUNDCOLOR Color( 0x00, 0x00, 0x80 ) // blue
-#define PROGRESSBAR_DEFAULT_MINRANGE        INT_MIN
-#define PROGRESSBAR_DEFAULT_MAXRANGE        INT_MAX
-#define PROGRESSBAR_DEFAULT_BLOCKVALUE      1
-#define PROGRESSBAR_DEFAULT_VALUE           PROGRESSBAR_DEFAULT_MINRANGE
-#define PROGRESSBAR_LINECOLOR_BRIGHT        sal_Int32(Color( 0xFF, 0xFF, 0xFF )) // white
-#define PROGRESSBAR_LINECOLOR_SHADOW        sal_Int32(Color( 0x00, 0x00, 0x00 )) // black
+#define PROGRESSBAR_DEFAULT_BLOCKDIMENSION Size(1,1)
+constexpr Color PROGRESSBAR_DEFAULT_FOREGROUNDCOLOR = COL_BLUE;
+constexpr Color PROGRESSBAR_DEFAULT_BACKGROUNDCOLOR = COL_LIGHTGRAY;
+constexpr bool PROGRESSBAR_DEFAULT_HORIZONTAL = true;
+constexpr auto PROGRESSBAR_FREESPACE = 4;
+constexpr auto PROGRESSBAR_DEFAULT_MINRANGE = INT_MIN;
+constexpr auto PROGRESSBAR_DEFAULT_MAXRANGE = INT_MAX;
+constexpr auto PROGRESSBAR_DEFAULT_VALUE = INT_MIN;
+constexpr auto PROGRESSBAR_DEFAULT_BLOCKVALUE = 1;
+constexpr sal_Int32 PROGRESSBAR_LINECOLOR_BRIGHT = sal_Int32(COL_WHITE);
+constexpr sal_Int32 PROGRESSBAR_LINECOLOR_SHADOW = sal_Int32(COL_BLACK);
 
 class ProgressBar final : public css::awt::XControlModel
                     , public css::awt::XProgressBar
