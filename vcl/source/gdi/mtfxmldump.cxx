@@ -1032,6 +1032,30 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 // dumping the real polypolygon in the future
                 tools::Rectangle aRectangle = pMetaClipRegionAction->GetRegion().GetBoundRect();
                 writeRectangle(rWriter, aRectangle);
+
+                vcl::Region aRegion = pMetaClipRegionAction->GetRegion();
+
+                if (aRegion.HasPolyPolygonOrB2DPolyPolygon())
+                {
+                    tools::PolyPolygon aPolyPolygon = aRegion.GetAsPolyPolygon();
+
+                    for (sal_uInt16 j = 0; j < aPolyPolygon.Count(); ++j)
+                    {
+                        rWriter.startElement("polygon");
+                        tools::Polygon const& rPolygon = aPolyPolygon[j];
+                        bool bFlags = rPolygon.HasFlags();
+                        for (sal_uInt16 i = 0; i < rPolygon.GetSize(); ++i)
+                        {
+                            rWriter.startElement("point");
+                            writePoint(rWriter, rPolygon[i]);
+                            if (bFlags)
+                                rWriter.attribute("flags", convertPolygonFlags(rPolygon.GetFlags(i)));
+                            rWriter.endElement();
+                        }
+                        rWriter.endElement();
+                    }
+                }
+
                 rWriter.endElement();
             }
             break;
