@@ -845,7 +845,10 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     if( !IsOrganizerMode() && !IsBlockMode() && !m_bInsertMode &&
           !m_aOption.IsFormatsOnly() &&
             // sw_redlinehide: disable layout cache for now
-          *o3tl::doAccess<bool>(xInfoSet->getPropertyValue(sShowChanges)))
+          *o3tl::doAccess<bool>(xInfoSet->getPropertyValue(sShowChanges)) &&
+            // sw_fieldmarkhide: also disable if there is a fieldmark
+          rDoc.getIDocumentMarkAccess()->getFieldmarksBegin()
+              == rDoc.getIDocumentMarkAccess()->getFieldmarksEnd())
     {
         try
         {
