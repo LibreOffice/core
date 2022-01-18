@@ -4081,33 +4081,37 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
         if (SwTextNode* pPreviousNode = (bStartLine && m_xPreviousNode) ? m_xPreviousNode->GetTextNode() : nullptr)
         {
             SwTextNode* pEndNd = m_pPaM->GetNode().GetTextNode();
-            const sal_Int32 nDropCapLen = pPreviousNode->GetText().getLength();
-
-            // Need to reset the font size and text position for the dropcap
+            SAL_WARN_IF(!pEndNd, "sw.ww8", "didn't found textnode for dropcap");
+            if (pEndNd)
             {
-                SwPaM aTmp(*pEndNd, 0, *pEndNd, nDropCapLen+1);
-                m_xCtrlStck->Delete(aTmp);
+                const sal_Int32 nDropCapLen = pPreviousNode->GetText().getLength();
+
+                // Need to reset the font size and text position for the dropcap
+                {
+                    SwPaM aTmp(*pEndNd, 0, *pEndNd, nDropCapLen+1);
+                    m_xCtrlStck->Delete(aTmp);
+                }
+
+                // Get the default document dropcap which we can use as our template
+                const SwFormatDrop* defaultDrop =
+                    static_cast<const SwFormatDrop*>( GetFormatAttr(RES_PARATR_DROP));
+                SwFormatDrop aDrop(*defaultDrop);
+
+                aDrop.GetLines() = nDropLines;
+                aDrop.GetDistance() = nDistance;
+                aDrop.GetChars() = writer_cast<sal_uInt8>(nDropCapLen);
+                // Word has no concept of a "whole word dropcap"
+                aDrop.GetWholeWord() = false;
+
+                if (pFormat)
+                    aDrop.SetCharFormat(const_cast<SwCharFormat*>(pFormat));
+                else if(pNewSwCharFormat)
+                    aDrop.SetCharFormat(pNewSwCharFormat);
+
+                SwPosition aStart(*pEndNd);
+                m_xCtrlStck->NewAttr(aStart, aDrop);
+                m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_PARATR_DROP);
             }
-
-            // Get the default document dropcap which we can use as our template
-            const SwFormatDrop* defaultDrop =
-                static_cast<const SwFormatDrop*>( GetFormatAttr(RES_PARATR_DROP));
-            SwFormatDrop aDrop(*defaultDrop);
-
-            aDrop.GetLines() = nDropLines;
-            aDrop.GetDistance() = nDistance;
-            aDrop.GetChars() = writer_cast<sal_uInt8>(nDropCapLen);
-            // Word has no concept of a "whole word dropcap"
-            aDrop.GetWholeWord() = false;
-
-            if (pFormat)
-                aDrop.SetCharFormat(const_cast<SwCharFormat*>(pFormat));
-            else if(pNewSwCharFormat)
-                aDrop.SetCharFormat(pNewSwCharFormat);
-
-            SwPosition aStart(*pEndNd);
-            m_xCtrlStck->NewAttr(aStart, aDrop);
-            m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_PARATR_DROP);
             m_xPreviousNode.reset();
         }
         else if (m_bDropCap)
