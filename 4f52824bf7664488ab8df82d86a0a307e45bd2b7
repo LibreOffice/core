@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "049b2912_29862d09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-01-18T21:40:02Z",
+      "side": 1,
+      "message": "Thoughts on this one ? we have quite a bit hung on: statechanged: .uno:ModifiedStatus\u003dtrue\" - are we truly edge triggered everywhere? there was also some stuff on track-changes on \u0026 off I think that migt need testing.\n\nIt very significantly reduces protocol thrash for me though; will build some numbers on that.",
+      "revId": "4f52824bf7664488ab8df82d86a0a307e45bd2b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
