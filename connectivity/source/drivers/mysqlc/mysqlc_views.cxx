@@ -36,7 +36,6 @@ using namespace css::sdbcx;
 using namespace css::sdbc;
 using namespace css::container;
 using namespace css::lang;
-using namespace dbtools;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 Views::Views(const Reference<XConnection>& _rxConnection, ::cppu::OWeakObject& _rParent,
