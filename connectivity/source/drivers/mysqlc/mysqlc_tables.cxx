@@ -37,11 +37,37 @@ using namespace ::com::sun::star::uno;
 //----- OCollection -----------------------------------------------------------
 void Tables::impl_refresh() { static_cast<Catalog&>(m_rParent).refreshTables(); }
 
+static void lcl_unescape(OUString& rName)
+{
+    // Remove ending ` if there's one
+    sal_Int32 nLastIndexBacktick = rName.lastIndexOf("`");
+    if ((nLastIndexBacktick > 0) && (nLastIndexBacktick == (rName.getLength() - 1)))
+    {
+        rName = rName.copy(0, nLastIndexBacktick);
+    }
+    // Remove beginning ` and replace double ` by simple `
+    rName = rName.replaceFirst("`", "").replaceAll("``", "`");
+}
+
 ObjectType Tables::createObject(const OUString& rName)
 {
+    OUString sCatalog, sSchema, sTable;
+    ::dbtools::qualifiedNameComponents(m_xMetaData, rName, sCatalog, sSchema, sTable,
+                                       ::dbtools::EComposeRule::InDataManipulation);
+
+    Any aCatalog;
+    if (!sCatalog.isEmpty())
+    {
+        aCatalog <<= sCatalog;
+        lcl_unescape(sCatalog);
+    }
+
+    lcl_unescape(sSchema);
+    lcl_unescape(sTable);
+
     // Only retrieving a single table, so table type is irrelevant (param 4)
     uno::Reference<XResultSet> xTables
-        = m_xMetaData->getTables(Any(), u"%", rName, uno::Sequence<OUString>());
+        = m_xMetaData->getTables(aCatalog, sSchema, sTable, uno::Sequence<OUString>());
 
     if (!xTables.is())
         throw RuntimeException("Could not acquire table.");
@@ -130,12 +156,11 @@ uno::Reference<XPropertySet> Tables::createDescriptor()
 }
 
 //----- XAppend ---------------------------------------------------------------
-ObjectType Tables::appendObject(const OUString& rName,
+ObjectType Tables::appendObject(const OUString& /* rName */,
                                 const uno::Reference<XPropertySet>& rDescriptor)
 {
-    /* OUString sSql(::dbtools::createSqlCreateTableStatement(rDescriptor,
-                                                            m_xMetaData->getConnection())); */
-    OUStringBuffer aSqlBuffer("CREATE TABLE ");
+    OUString sSql(
+        ::dbtools::createSqlCreateTableStatement(rDescriptor, m_xMetaData->getConnection()));
     OUString sCatalog, sSchema, sComposedName, sTable;
     const Reference<XConnection>& xConnection = m_xMetaData->getConnection();
 
@@ -150,43 +175,9 @@ ObjectType Tables::appendObject(const OUString& rName,
     if (sComposedName.isEmpty())
         ::dbtools::throwFunctionSequenceException(xConnection);
 
-    aSqlBuffer.append(sComposedName);
-    aSqlBuffer.append(" (");
-
-    // columns
-    Reference<XColumnsSupplier> xColumnSup(rDescriptor, UNO_QUERY);
-    Reference<XIndexAccess> xColumns(xColumnSup->getColumns(), UNO_QUERY);
-    // check if there are columns
-    if (!xColumns.is() || !xColumns->getCount())
-        ::dbtools::throwFunctionSequenceException(xConnection);
-
-    Reference<XPropertySet> xColProp;
-
-    sal_Int32 nCount = xColumns->getCount();
-    for (sal_Int32 i = 0; i < nCount; ++i)
-    {
-        if ((xColumns->getByIndex(i) >>= xColProp) && xColProp.is())
-        {
-            aSqlBuffer.append(createStandardColumnPart(xColProp, xConnection));
-            aSqlBuffer.append(",");
-        }
-    }
-    OUString sSql = aSqlBuffer.makeStringAndClear();
-
-    const OUString sKeyStmt = ::dbtools::createStandardKeyStatement(rDescriptor, xConnection);
-    if (!sKeyStmt.isEmpty())
-        sSql += sKeyStmt;
-    else
-    {
-        if (sSql.endsWith(","))
-            sSql = sSql.replaceAt(sSql.getLength() - 1, 1, u")");
-        else
-            sSql += ")";
-    }
-
     m_xMetaData->getConnection()->createStatement()->execute(sSql);
 
-    return createObject(sSchema + "." + rName);
+    return createObject(sComposedName);
 }
 
 //----- XDrop -----------------------------------------------------------------

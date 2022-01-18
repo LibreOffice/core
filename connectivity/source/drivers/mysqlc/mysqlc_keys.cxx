@@ -15,7 +15,6 @@
 using namespace ::connectivity;
 using namespace ::connectivity::mysqlc;
 
-using namespace ::dbtools;
 using namespace ::osl;
 
 using namespace ::com::sun::star;
@@ -25,29 +24,7 @@ using namespace ::com::sun::star::uno;
 
 Keys::Keys(Table* pTable, Mutex& rMutex, const ::std::vector<OUString>& rNames)
     : OKeysHelper(pTable, rMutex, rNames)
-    , m_pTable(pTable)
 {
-}
-
-//----- XDrop ----------------------------------------------------------------
-void Keys::dropObject(sal_Int32 nPosition, const OUString& sName)
-{
-    // TODO: implement (should we just copy from Firebird LO code below?)
-    if (m_pTable->isNew())
-        return;
-
-    uno::Reference<XPropertySet> xKey(getObject(nPosition), UNO_QUERY);
-
-    if (xKey.is())
-    {
-        const OUString sQuote
-            = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
-
-        OUString sSql("ALTER TABLE " + quoteName(sQuote, m_pTable->getTableName())
-                      + " DROP CONSTRAINT " + quoteName(sQuote, sName));
-
-        m_pTable->getConnection()->createStatement()->execute(sSql);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
