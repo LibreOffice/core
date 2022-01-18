@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7031f29c_98f46bd7",
+        "filename": "svx/qa/unit/customshapes.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-18T07:30:50Z",
+      "side": 1,
+      "message": "If possible, we try to avoid such \u0027pixel assert\u0027 tests, as they easily differ from one system to an other system. Did you consider dumping the file to a GDIMetaFile and then assert that?\n\nSfxObjectShell::GetPreviewMetaFile() can be used for this, see sw/qa/core/layout/layout.cxx:412 for an example and include/vcl/mtfxmldump.hxx:44 for more documentation.\n\nIf the metafile-based test can work, that\u0027s better than a pixel assert.",
+      "revId": "cabf93f2f8557f58dc09d280aafe2beaa6e34644",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
