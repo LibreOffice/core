@@ -52,6 +52,23 @@
       "parentUuid": "43f9300d_15cbe7c4",
       "revId": "a8ea92457236759749986bf58f5fc233cf507178",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e61eb092_5f3fd033",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-18T14:36:38Z",
+      "side": 1,
+      "message": "Heiko, I\u0027m abandoning this patch. A new one was created at:\nhttps://gerrit.libreoffice.org/c/core/+/128563\nChange-Id: I12da7811635dfc142d5d0a66d3275d3d170692e1\n\nLet\u0027s continue working from there.",
+      "revId": "a8ea92457236759749986bf58f5fc233cf507178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
