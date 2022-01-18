@@ -69,6 +69,24 @@
       "parentUuid": "4b58816d_e4f4e0ef",
       "revId": "c4ea681dac719b5a5ad80f76cd0a97ecd436f948",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6f64957_b504d562",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1474,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-18T10:49:59Z",
+      "side": 1,
+      "message": "I\u0027ve removed the PROTECT_FIELDS from the code, and the remaining are doing the job as expected.",
+      "parentUuid": "bca34c5d_1045e734",
+      "revId": "c4ea681dac719b5a5ad80f76cd0a97ecd436f948",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
