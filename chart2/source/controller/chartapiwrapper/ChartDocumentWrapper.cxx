@@ -20,6 +20,7 @@
 #include <ChartDocumentWrapper.hxx>
 #include <ChartView.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartTypeTemplate.hxx>
 #include <servicenames.hxx>
 #include <PropertyHelper.hxx>
 #include <TitleHelper.hxx>
@@ -1071,102 +1072,92 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
     if( aIt != rMap.end())
     {
         bool bCreateDiagram = false;
-        rtl::Reference< ::chart::ChartTypeManager > xManagerFact =
+        rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager =
             xChartDoc->getTypeManager();
-        uno::Reference< chart2::XChartTypeTemplate > xTemplate;
+        rtl::Reference< ::chart::ChartTypeTemplate > xTemplate;
 
         switch( (*aIt).second )
         {
             case SERVICE_NAME_AREA_DIAGRAM:
-                if( xManagerFact.is())
+                if( xChartTypeManager.is())
                 {
-                    xTemplate.set(
-                        xManagerFact->createInstance("com.sun.star.chart2.template.Area"),
-                                uno::UNO_QUERY );
+                    xTemplate =
+                        xChartTypeManager->createTemplate("com.sun.star.chart2.template.Area");
                     bCreateDiagram = true;
                 }
                 break;
             case SERVICE_NAME_BAR_DIAGRAM:
-                if( xManagerFact.is())
+                if( xChartTypeManager.is())
                 {
                     // this is for bar and column (the latter is the default if
                     // no "Vertical=false" property was set)
-                    xTemplate.set(
-                        xManagerFact->createInstance("com.sun.star.chart2.template.Column"),
-                                uno::UNO_QUERY );
+                    xTemplate =
+                        xChartTypeManager->createTemplate("com.sun.star.chart2.template.Column");
                     bCreateDiagram = true;
                 }
                 break;
             case SERVICE_NAME_DONUT_DIAGRAM:
-                if( xManagerFact.is())
+                if( xChartTypeManager.is())
                 {
-                    xTemplate.set(
-                        xManagerFact->createInstance("com.sun.star.chart2.template.Donut"),
-                                uno::UNO_QUERY );
+                    xTemplate =
+                        xChartTypeManager->createTemplate("com.sun.star.chart2.template.Donut");
                     bCreateDiagram = true;
                 }
                 break;
             case SERVICE_NAME_LINE_DIAGRAM:
-                if( xManagerFact.is())
+                if( xChartTypeManager.is())
                 {
-                    xTemplate.set(
-                        xManagerFact->createInstance("com.sun.star.chart2.template.Line"),
-                                uno::UNO_QUERY );
+                    xTemplate =
+                        xChartTypeManager->createTemplate("com.sun.star.chart2.template.Line");
                     bCreateDiagram = true;
                 }
                 break;
             case SERVICE_NAME_NET_DIAGRAM:
-                if( xManagerFact.is())
+                if( xChartTypeManager.is())
                 {
-                    xTemplate.set(
-                        xManagerFact->createInstance("com.sun.star.chart2.template.Net"),
-                                uno::UNO_QUERY );
+                    xTemplate =
+                        xChartTypeManager->createTemplate("com.sun.star.chart2.template.Net");
                     bCreateDiagram = true;
                 }
                 break;
             case SERVICE_NAME_FILLED_NET_DIAGRAM:
-                if( xManagerFact.is())
+                if( xChartTypeManager.is())
                 {
-                    xTemplate.set(
-                        xManagerFact->createInstance("com.sun.star.chart2.template.FilledNet"),
-                                uno::UNO_QUERY );
+                    xTemplate =
+                        xChartTypeManager->createTemplate("com.sun.star.chart2.template.FilledNet");
                     bCreateDiagram = true;
                 }
                 break;
             case SERVICE_NAME_PIE_DIAGRAM:
-                if( xManagerFact.is())
+                if( xChartTypeManager.is())
                 {
-                    xTemplate.set(
-                        xManagerFact->createInstance("com.sun.star.chart2.template.Pie"),
-                                uno::UNO_QUERY );
+                    xTemplate =
+                        xChartTypeManager->createTemplate("com.sun.star.chart2.template.Pie");
                     bCreateDiagram = true;
                 }
                 break;
             case SERVICE_NAME_STOCK_DIAGRAM:
-                if( xManagerFact.is())
+                if( xChartTypeManager.is())
                 {
-                    xTemplate.set(
-                        xManagerFact->createInstance("com.sun.star.chart2.template.StockLowHighClose"),
-                                uno::UNO_QUERY );
+                    xTemplate =
+                        xChartTypeManager->createTemplate("com.sun.star.chart2.template.StockLowHighClose");
                     bCreateDiagram = true;
                 }
                 break;
             case SERVICE_NAME_XY_DIAGRAM:
-                if( xManagerFact.is())
+                if( xChartTypeManager.is())
                 {
-                    xTemplate.set(
-                        xManagerFact->createInstance("com.sun.star.chart2.template.ScatterLineSymbol"),
-                                uno::UNO_QUERY );
+                    xTemplate =
+                        xChartTypeManager->createTemplate("com.sun.star.chart2.template.ScatterLineSymbol");
                     bCreateDiagram = true;
                 }
                 break;
 
             case SERVICE_NAME_BUBBLE_DIAGRAM:
-                if( xManagerFact.is())
+                if( xChartTypeManager.is())
                 {
-                    xTemplate.set(
-                        xManagerFact->createInstance("com.sun.star.chart2.template.Bubble"),
-                                uno::UNO_QUERY );
+                    xTemplate =
+                        xChartTypeManager->createTemplate("com.sun.star.chart2.template.Bubble");
                     bCreateDiagram = true;
                 }
                 break;

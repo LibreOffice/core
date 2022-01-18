@@ -19,7 +19,7 @@
 #pragma once
 
 #include <cppuhelper/implbase.hxx>
-#include <StackMode.hxx>
+#include "StackMode.hxx"
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 
@@ -74,7 +74,6 @@ public:
         const OUString & rServiceName );
     virtual ~ChartTypeTemplate() override;
 
-protected:
     // ____ XChartTypeTemplate ____
     virtual css::uno::Reference< css::chart2::XDiagram > SAL_CALL createDiagramByDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,

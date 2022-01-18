@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include "ChartTypeTemplate.hxx"
+#include <ChartTypeTemplate.hxx>
 #include <StackMode.hxx>
 
 #include <OPropertySet.hxx>

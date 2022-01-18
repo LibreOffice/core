@@ -28,6 +28,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
+class ChartTypeTemplate;
 
 class OOO_DLLPUBLIC_CHARTTOOLS ChartTypeManager final :
         public ::cppu::WeakImplHelper<
@@ -59,6 +60,8 @@ public:
 
     // ____ XChartTypeManager ____
     // currently empty
+
+    rtl::Reference< ::chart::ChartTypeTemplate > createTemplate( const OUString& aServiceSpecifier );
 
 private:
     css::uno::Reference< css::uno::XComponentContext >

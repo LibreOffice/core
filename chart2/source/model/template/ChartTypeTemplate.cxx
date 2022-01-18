@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ChartTypeTemplate.hxx"
+#include <ChartTypeTemplate.hxx>
 #include "DataInterpreter.hxx"
 #include <CommonConverters.hxx>
 #include <ChartTypeHelper.hxx>
