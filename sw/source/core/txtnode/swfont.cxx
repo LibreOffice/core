@@ -1148,7 +1148,7 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
         CalcEsc( rInf, aPos );
 
     rInf.SetPos( aPos );
-    rInf.SetKern( CheckKerning() + rInf.GetSperren() / SPACING_PRECISION_FACTOR );
+    rInf.SetKern( CheckKerning() + rInf.GetCharacterSpacing() / SPACING_PRECISION_FACTOR );
 
     if( IsCapital() )
         DrawCapital( rInf );
@@ -1274,7 +1274,7 @@ void SwSubFont::DrawStretchText_( SwDrawTextInfo &rInf )
     if( GetEscapement() )
         CalcEsc( rInf, aPos );
 
-    rInf.SetKern( CheckKerning() + rInf.GetSperren() / SPACING_PRECISION_FACTOR );
+    rInf.SetKern( CheckKerning() + rInf.GetCharacterSpacing() / SPACING_PRECISION_FACTOR );
     rInf.SetPos( aPos );
 
     if( IsCapital() )

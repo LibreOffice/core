@@ -65,7 +65,7 @@ class SW_DLLPUBLIC SwDrawTextInfo
     sal_uInt16 m_nWidth;
     sal_uInt16 m_nAscent;
     sal_uInt16 m_nCompress;
-    tools::Long m_nSperren;
+    tools::Long m_nCharacterSpacing;
     tools::Long m_nSpace;
     tools::Long m_nKern;
     TextFrameIndex m_nNumberOfBlanks;
@@ -98,7 +98,7 @@ public:
     bool m_bKana  : 1;
     bool m_bOfst  : 1;
     bool m_bAscent: 1;
-    bool m_bSperr : 1;
+    bool m_bCharacterSpacing : 1;
     bool m_bSpace : 1;
     bool m_bNumberOfBlanks : 1;
     bool m_bUppr  : 1;
@@ -149,7 +149,7 @@ public:
         m_nKanaDiff = 0;
         m_nOfst = 0;
         m_nAscent = 0;
-        m_nSperren = 0;
+        m_nCharacterSpacing = 0;
         m_nSpace = 0;
         m_bUpper = false;
         m_bDrawSpace = false;
@@ -161,7 +161,7 @@ public:
         m_bPos = m_bWrong = m_bGrammarCheck = m_bSize = m_bFnt = m_bAscent =
         m_bSpace = m_bNumberOfBlanks = m_bUppr =
         m_bDrawSp = m_bKana = m_bOfst = m_bHyph =
-        m_bSperr = false;
+        m_bCharacterSpacing = false;
 #endif
     }
 
@@ -312,12 +312,12 @@ public:
         return m_nCompress;
     }
 
-    tools::Long GetSperren() const
+    tools::Long GetCharacterSpacing() const
     {
 #ifdef DBG_UTIL
-        OSL_ENSURE( m_bSperr, "DrawTextInfo: Undefined >Sperren<" );
+        OSL_ENSURE( m_bCharacterSpacing, "DrawTextInfo: Undefined CharacterSpacing" );
 #endif
-        return m_nSperren;
+        return m_nCharacterSpacing;
     }
 
     tools::Long GetKern() const
@@ -525,17 +525,17 @@ public:
     {
         if( nNew < 0 )
         {
-            m_nSperren = -nNew;
+            m_nCharacterSpacing = -nNew;
             m_nSpace = 0;
         }
         else
         {
             m_nSpace = nNew;
-            m_nSperren = 0;
+            m_nCharacterSpacing = 0;
         }
 #ifdef DBG_UTIL
         m_bSpace = true;
-        m_bSperr = true;
+        m_bCharacterSpacing = true;
 #endif
     }
 
