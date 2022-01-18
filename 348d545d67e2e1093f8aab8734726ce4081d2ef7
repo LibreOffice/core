@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ba63186_04661b5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-18T09:54:28Z",
+      "side": 1,
+      "message": "\u003e The code to shrink aCtrlRegion prior to calling GetNativeControlRegion had been introduced with 27be8a263eddb54cb6b66cc0f832bfd02016a694 \"KDE4 fix edit box borders\".\n\n...which, I hope, this change does not affect negatively?",
+      "revId": "348d545d67e2e1093f8aab8734726ce4081d2ef7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
