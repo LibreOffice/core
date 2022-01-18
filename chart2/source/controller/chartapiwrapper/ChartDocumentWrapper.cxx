@@ -19,6 +19,7 @@
 
 #include <ChartDocumentWrapper.hxx>
 #include <ChartView.hxx>
+#include <ChartTypeManager.hxx>
 #include <servicenames.hxx>
 #include <PropertyHelper.hxx>
 #include <TitleHelper.hxx>
@@ -1070,8 +1071,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
     if( aIt != rMap.end())
     {
         bool bCreateDiagram = false;
-        uno::Reference< lang::XMultiServiceFactory > xManagerFact(
-            xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
+        rtl::Reference< ::chart::ChartTypeManager > xManagerFact =
+            xChartDoc->getTypeManager();
         uno::Reference< chart2::XChartTypeTemplate > xTemplate;
 
         switch( (*aIt).second )
@@ -1198,7 +1199,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
                     Reference< chart2::XDiagram > xDiagram = ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xChartDoc) );
                     ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
-                    Reference< lang::XMultiServiceFactory > xTemplateManager( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
+                    rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = xChartDoc->getTypeManager();
                     DiagramHelper::tTemplateWithServiceName aTemplateWithService(
                         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager ));
                     if( aTemplateWithService.first.is())

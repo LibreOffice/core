@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <tools/diagnose_ex.h>
+#include <ChartTypeManager.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -81,12 +82,12 @@ void WrappedStockProperty::setPropertyValue( const css::uno::Any& rOuterValue, c
     if( !(xChartDoc.is() && xDiagram.is() && nDimension==2) )
         return;
 
-    Reference< lang::XMultiServiceFactory > xFactory( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
+    rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
     DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-            DiagramHelper::getTemplateForDiagram( xDiagram, xFactory );
+            DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
 
     uno::Reference< chart2::XChartTypeTemplate > xTemplate =
-            getNewTemplate( bNewValue, aTemplateAndService.second, xFactory );
+            getNewTemplate( bNewValue, aTemplateAndService.second, xChartTypeManager );
 
     if(!xTemplate.is())
         return;
@@ -137,9 +138,9 @@ css::uno::Any WrappedVolumeProperty::getPropertyValue( const css::uno::Reference
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
         if( !aSeriesVector.empty() )
         {
-            Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
+            rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
             DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-                    DiagramHelper::getTemplateForDiagram( xDiagram, xFact );
+                    DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
 
             if(    aTemplateAndService.second == "com.sun.star.chart2.template.StockVolumeLowHighClose"
                 || aTemplateAndService.second == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
@@ -206,9 +207,9 @@ css::uno::Any WrappedUpDownProperty::getPropertyValue( const css::uno::Reference
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
         if( !aSeriesVector.empty() )
         {
-            Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
+            rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
             DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-                    DiagramHelper::getTemplateForDiagram( xDiagram, xFact );
+                    DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
 
             if(    aTemplateAndService.second == "com.sun.star.chart2.template.StockOpenLowHighClose"
                 || aTemplateAndService.second == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )

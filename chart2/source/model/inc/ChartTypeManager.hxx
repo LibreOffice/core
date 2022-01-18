@@ -22,13 +22,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XChartTypeManager.hpp>
+#include <charttoolsdllapi.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
 
-class ChartTypeManager final :
+class OOO_DLLPUBLIC_CHARTTOOLS ChartTypeManager final :
         public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::lang::XMultiServiceFactory,
@@ -49,7 +50,6 @@ public:
         getSupportedServiceNames()
         override;
 
-protected:
     // ____ XMultiServiceFactory ____
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(
