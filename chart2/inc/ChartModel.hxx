@@ -70,6 +70,7 @@ class SvNumberFormatter;
 namespace chart
 {
 class Diagram;
+class ChartTypeManager;
 
 namespace impl
 {
@@ -155,7 +156,7 @@ private:
                                 m_xNumberFormatsSupplier;
     std::unique_ptr< SvNumberFormatter > m_apSvNumberFormatter; // #i113784# avoid memory leak
 
-    css::uno::Reference< css::chart2::XChartTypeManager >
+    rtl::Reference< ::chart::ChartTypeManager >
         m_xChartTypeManager;
 
     // Diagram Access
@@ -467,6 +468,8 @@ public:
     bool isDataFromPivotTable() const;
 
     void removeDataProviders();
+
+    const rtl::Reference< ::chart::ChartTypeManager > & getTypeManager() const { return m_xChartTypeManager; }
 
     /// See sfx2::XmlDump::dumpAsXml().
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;

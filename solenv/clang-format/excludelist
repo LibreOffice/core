@@ -743,6 +743,7 @@ canvas/source/vcl/windowoutdevholder.cxx
 canvas/source/vcl/windowoutdevholder.hxx
 canvas/workben/canvasdemo.cxx
 chart2/inc/ChartModel.hxx
+chart2/inc/ChartTypeManager.hxx
 chart2/inc/ChartView.hxx
 chart2/inc/unonames.hxx
 chart2/qa/extras/PivotChartTest.cxx
@@ -1074,7 +1075,6 @@ chart2/source/inc/chartview/ExplicitValueProvider.hxx
 chart2/source/inc/servicenames_coosystems.hxx
 chart2/source/model/filter/XMLFilter.cxx
 chart2/source/model/inc/BaseCoordinateSystem.hxx
-chart2/source/model/inc/ChartTypeManager.hxx
 chart2/source/model/inc/DataSeries.hxx
 chart2/source/model/inc/StockBar.hxx
 chart2/source/model/inc/XMLFilter.hxx
