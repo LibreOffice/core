@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06ca67c9_8355d290",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-18T11:23:52Z",
+      "side": 1,
+      "message": "Eike, need your wisdom. Trying to draw a dotted line but it always becomes solid. And scrolling does not redraw. Last but not least I wonder if this visual hint needs a dedicated color and on/off switch. What do you think?",
+      "revId": "f377576393aa812f12c8b4c24a271d9ac02e0b9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df380ad8_84a0ed75",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1679,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-18T11:23:52Z",
+      "side": 1,
+      "message": "Probably not needed",
+      "range": {
+        "startLine": 1679,
+        "startChar": 34,
+        "endLine": 1679,
+        "endChar": 83
+      },
+      "revId": "f377576393aa812f12c8b4c24a271d9ac02e0b9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
