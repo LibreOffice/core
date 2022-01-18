@@ -366,6 +366,7 @@ public:
     int get_active() const { return m_xComboBox->get_active(); }
     OUString get_active_text() const { return m_xComboBox->get_active_text(); }
     void set_active_or_entry_text(const OUString& rText);
+    void set_active(int nPos) { m_xComboBox->set_active(nPos); }
     int get_count() const { return m_xComboBox->get_count(); }
     OUString get_text(int nIndex) const { return m_xComboBox->get_text(nIndex); }
     void set_sensitive(bool bSensitive) { m_xComboBox->set_sensitive(bSensitive); }
