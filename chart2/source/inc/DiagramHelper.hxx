@@ -39,6 +39,7 @@ namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 namespace chart
 {
+class ChartTypeManager;
 
 enum DiagramPositioningMode
 {
@@ -66,7 +67,7 @@ public:
     static tTemplateWithServiceName
         getTemplateForDiagram(
             const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & xChartTypeManager);
+            const rtl::Reference< ::chart::ChartTypeManager > & xChartTypeManager);
 
     /** Sets the "SwapXAndYAxis" property at all coordinate systems found in the
         given diagram.

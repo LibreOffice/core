@@ -22,6 +22,7 @@
 
 #include <dlg_DataSource.hxx>
 #include <ChartTypeTemplateProvider.hxx>
+#include <ChartTypeManager.hxx>
 #include <DiagramHelper.hxx>
 #include "DialogModel.hxx"
 
@@ -66,8 +67,7 @@ DocumentChartTypeTemplateProvider::DocumentChartTypeTemplateProvider(
         DiagramHelper::tTemplateWithServiceName aResult(
             DiagramHelper::getTemplateForDiagram(
                 xDia,
-                Reference< lang::XMultiServiceFactory >(
-                    xDoc->getChartTypeManager(), uno::UNO_QUERY ) ));
+                dynamic_cast<::chart::ChartTypeManager*>(xDoc->getChartTypeManager().get()) ));
         m_xTemplate.set( aResult.first );
     }
 }
