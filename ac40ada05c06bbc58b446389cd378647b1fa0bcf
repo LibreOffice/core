@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2af44b01_46f77819",
+        "filename": "sw/qa/uitest/writer_tests5/tdf106899.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-18T21:41:41Z",
+      "side": 1,
+      "message": "Hi Xisco, you may have an idea why the update of the index doesn\u0027t work here? Updating it manually works in the ui test.",
+      "revId": "ac40ada05c06bbc58b446389cd378647b1fa0bcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
