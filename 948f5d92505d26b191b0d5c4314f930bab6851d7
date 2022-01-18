@@ -16,6 +16,23 @@
       "message": "Mike: could you please review this? Thanks.",
       "revId": "948f5d92505d26b191b0d5c4314f930bab6851d7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "013a9696_d1c5a641",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-18T07:20:34Z",
+      "side": 1,
+      "message": "Hmm, using sal_Unicode for bullet glyph looks weird - it misses even non-BMP Unicode code points, let alone combined glyphs (common with emojis). But I see how it\u0027s in line with the existing code, and should be changed separately, together with the rest of bullet-handling code.",
+      "revId": "948f5d92505d26b191b0d5c4314f930bab6851d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
