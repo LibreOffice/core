@@ -25,8 +25,11 @@
 #define INCLUDED_OSL_MODULE_H
 
 #include "sal/config.h"
+
+#ifdef LIBO_INTERNAL_ONLY
 // convenience include for HAVE_DLAPI define
 #include "config_global.h"
+#endif
 
 #include "rtl/ustring.h"
 #include "sal/saldllapi.h"
