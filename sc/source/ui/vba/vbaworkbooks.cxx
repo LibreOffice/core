@@ -140,9 +140,14 @@ ScVbaWorkbooks::Add( const uno::Any& Template )
 
     // need to set up the document modules ( and vba mode ) here
     excel::setUpDocumentModules( xSpreadDoc );
-    if( xSpreadDoc.is() )
-        return getWorkbook( mxContext, xSpreadDoc, mxParent );
-    return uno::Any();
+    if (!xSpreadDoc.is())
+        return uno::Any();
+
+    uno::Any aRet = getWorkbook( mxContext, xSpreadDoc, mxParent );
+    uno::Reference< excel::XWorkbook > xWBook( aRet, uno::UNO_QUERY );
+    if (xWBook.is())
+        xWBook->Activate();
+    return aRet;
 }
 
 void SAL_CALL
