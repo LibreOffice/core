@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13351373_3901a934",
+        "filename": "sw/source/core/text/inftxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-18T10:34:06Z",
+      "side": 1,
+      "message": "mabye it would help to have a SAL_WARN here?",
+      "revId": "5e7bdf28c7f1ce45e7b02046fa4345e37997eba9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
