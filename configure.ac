@@ -1088,8 +1088,6 @@ linux-android*)
     enable_python=no
     enable_xmlhelp=no
     _os=Android
-
-    AC_DEFINE(HAVE_FT_FACE_GETCHARVARIANTINDEX)
     ;;
 
 haiku*)
