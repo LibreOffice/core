@@ -2032,8 +2032,6 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     {
         if( !m_pPrtFont->IsSameInstance( m_pPrinter->GetFont() ) )
             m_pPrinter->SetFont(*m_pPrtFont);
-        aTextSize.setWidth( m_pPrinter->GetTextWidth( rInf.GetText(),
-                               sal_Int32(rInf.GetIdx()), sal_Int32(nLn)));
         aTextSize.setHeight( m_pPrinter->GetTextHeight() );
         std::vector<sal_Int32> aKernArray;
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
