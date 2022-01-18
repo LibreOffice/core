@@ -17,14 +17,8 @@ class Table;
 
 class Keys : public ::connectivity::OKeysHelper
 {
-private:
-    Table* m_pTable;
-
 public:
     Keys(Table* pTable, ::osl::Mutex& rMutex, const ::std::vector<OUString>& rNames);
-
-    // OKeysHelper / XDrop
-    void dropObject(sal_Int32 nPosition, const OUString& sName) override;
 };
 }
 
