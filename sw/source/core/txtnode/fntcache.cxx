@@ -203,7 +203,7 @@ const SalLayoutFlags eGlyphItemsOnlyLayout = SalLayoutFlags::GlyphItemsOnly | Sa
  */
 static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, SwTextGlyphsMap::iterator it)
 {
-    assert (!it->second.m_aTextGlyphs.IsValid());
+    assert (!it->second.IsValid());
 
     if (rKey.m_nIndex >= rKey.m_aText.getLength())
         // Same as in OutputDevice::GetTextArray().
@@ -217,9 +217,9 @@ static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, SwTextGlyp
         return nullptr;
 
     // Remember the calculation result.
-    it->second.m_aTextGlyphs = pLayout->GetGlyphs();
+    it->second = pLayout->GetGlyphs();
 
-    return &it->second.m_aTextGlyphs;
+    return &it->second;
 }
 
 SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key)
@@ -227,31 +227,15 @@ SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key)
     SwTextGlyphsMap::iterator it = m_aTextGlyphs.find(key);
     if(it != m_aTextGlyphs.end())
     {
-        if( it->second.m_aTextGlyphs.IsValid())
-            return &it->second.m_aTextGlyphs;
+        if( it->second.IsValid())
+            return &it->second;
         // Do not try to create the layout here. If a cache item exists, it's already
         // been attempted and the layout was invalid (this happens with MultiSalLayout).
         // So in that case this is a cached failure.
         return nullptr;
     }
-    it = m_aTextGlyphs.insert_or_assign( it, key, SwTextGlyphsData());
+    it = m_aTextGlyphs.insert_or_assign( it, key, SalLayoutGlyphs());
     return lcl_CreateLayout(key, it);
-}
-
-tools::Long SwFntObj::GetCachedTextWidth(const SwTextGlyphsKey& key, const vcl::text::TextLayoutCache* vclCache)
-{
-    SwTextGlyphsMap::iterator it = m_aTextGlyphs.find(key);
-    if(it != m_aTextGlyphs.end() && it->second.m_nTextWidth >= 0)
-        return it->second.m_nTextWidth;
-    if(it == m_aTextGlyphs.end())
-    {
-        it = m_aTextGlyphs.insert_or_assign( it, key, SwTextGlyphsData());
-        lcl_CreateLayout(key, it);
-    }
-    it->second.m_nTextWidth = key.m_pOutputDevice->GetTextWidth(key.m_aText, key.m_nIndex, key.m_nLength, vclCache,
-        it->second.m_aTextGlyphs.IsValid() ? &it->second.m_aTextGlyphs : nullptr );
-    assert(it->second.m_nTextWidth >= 0);
-    return it->second.m_nTextWidth;
 }
 
 void SwFntObj::ClearCachedTextGlyphs()
