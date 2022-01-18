@@ -210,25 +210,28 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDele
 {
     PasteCellsWarningReseter resetWarningBox;
 
-    ScTabViewShell* pTabViewShell = getBestViewShell( xModel );
-    ScDocShell* pDocShell = getDocShell( xModel );
-    if ( !(pTabViewShell && pDocShell) )
+    ScTabViewShell* pTabViewShell = getBestViewShell(xModel);
+    if (!pTabViewShell)
+        return;
+
+    ScDocShell* pDocShell = getDocShell(xModel);
+    if (!pDocShell)
         return;
 
     ScViewData& rView = pTabViewShell->GetViewData();
     vcl::Window* pWin = rView.GetActiveWin();
-    if (pWin)
+    if (!pWin)
+        return;
+
+    const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pWin));
+    if (pOwnClip)
     {
-        const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(pDocShell->GetClipData());
-        ScDocument* pDoc = nullptr;
-        if ( pOwnClip )
-            pDoc = pOwnClip->GetDocument();
-        pTabViewShell->PasteFromClip( nFlags, pDoc,
+        pTabViewShell->PasteFromClip(nFlags, pOwnClip->GetDocument(),
             nFunction, bSkipEmpty, bTranspose, false,
-            INS_NONE, InsertDeleteFlags::NONE, true );
+            INS_NONE, InsertDeleteFlags::NONE, true);
+
         pTabViewShell->CellContentChanged();
     }
-
 }
 
 ScDocShell*
