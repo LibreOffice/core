@@ -38,13 +38,13 @@ using namespace ::com::sun::star::awt;
 
 namespace unocontrols {
 
-#define DEFAULT_X                           0
-#define DEFAULT_Y                           0
-#define DEFAULT_WIDTH                       100
-#define DEFAULT_HEIGHT                      100
-#define DEFAULT_VISIBLE                     false
-#define DEFAULT_INDESIGNMODE                false
-#define DEFAULT_ENABLE                      true
+constexpr sal_Int32 DEFAULT_X = 0;
+constexpr sal_Int32 DEFAULT_Y = 0;
+constexpr sal_Int32 DEFAULT_WIDTH = 100;
+constexpr sal_Int32 DEFAULT_HEIGHT = 100;
+constexpr bool DEFAULT_VISIBLE = false;
+constexpr bool DEFAULT_INDESIGNMODE = false;
+constexpr bool DEFAULT_ENABLE = true;
 
 //  construct/destruct
 
