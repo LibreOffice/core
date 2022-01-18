@@ -16,6 +16,24 @@
       "message": "What is If1ffb50743292f3cc0c3271646d0538337977762 ?\nit doesn\u0027t exist",
       "revId": "9585e88a811198585d91d37d4454c815529f7be9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1db4010_eee595f0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-18T09:18:10Z",
+      "side": 1,
+      "message": "Change ID in https://gerrit.libreoffice.org/c/core/+/126688",
+      "parentUuid": "463ac6d4_dc420771",
+      "revId": "9585e88a811198585d91d37d4454c815529f7be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
