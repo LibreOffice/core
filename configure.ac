@@ -823,6 +823,7 @@ test_gdb_index=no
 test_openldap=yes
 test_split_debug=no
 test_webdav=yes
+usable_dlapi=yes
 
 # There is currently just iOS not using salplug, so this explicitly enables it.
 # must: using_freetype_fontconfig
@@ -910,6 +911,7 @@ cygwin*|wsl*)
 
     using_freetype_fontconfig=no
     using_x11=no
+    test_unix_dlapi=no
     test_openldap=no
     test_eot=no
     enable_pagein=no
@@ -1071,6 +1073,8 @@ dragonfly*)
     ;;
 
 linux-android*)
+    # API exists, but seems not really usable since Android 7 AFAIK
+    usable_dlapi=no
     using_freetype_fontconfig=yes
     using_headless_plugin=no
     using_x11=no
@@ -1108,6 +1112,8 @@ haiku*)
     ;;
 
 emscripten)
+    # API currently just exists in headers, not code
+    usable_dlapi=no
     using_freetype_fontconfig=yes
     using_x11=no
     test_openldap=no
@@ -1194,6 +1200,7 @@ fi
 AC_SUBST(ENABLE_HEADLESS)
 AC_SUBST(USE_HEADLESS_CODE)
 
+AC_MSG_NOTICE([VCL platform has a usable dynamic loading API: $usable_dlapi])
 AC_MSG_NOTICE([VCL platform uses freetype+fontconfig: $using_freetype_fontconfig])
 AC_MSG_NOTICE([VCL platform uses headless plugin: $using_headless_plugin])
 AC_MSG_NOTICE([VCL platform uses vclplug: $using_vclplug])
@@ -1339,14 +1346,18 @@ else
 fi
 AC_SUBST(ENDIANNESS)
 
-if test $_os != "WINNT"; then
-    save_LIBS="$LIBS"
-    AC_SEARCH_LIBS([dlsym], [dl],
-        [case "$ac_cv_search_dlsym" in -l*) DLOPEN_LIBS="$ac_cv_search_dlsym";; esac],
-        [AC_MSG_ERROR([dlsym not found in either libc nor libdl])])
-    LIBS="$save_LIBS"
+if test "$usable_dlapi" != no; then
+    AC_DEFINE([HAVE_DLAPI])
+    if test "$test_unix_dlapi" != no; then
+        save_LIBS="$LIBS"
+        AC_SEARCH_LIBS([dlsym], [dl],
+            [case "$ac_cv_search_dlsym" in -l*) UNIX_DLAPI_LIBS="$ac_cv_search_dlsym";; esac],
+            [AC_MSG_ERROR([dlsym not found in either libc nor libdl])])
+        LIBS="$save_LIBS"
+        AC_DEFINE([HAVE_UNIX_DLAPI])
+    fi
 fi
-AC_SUBST(DLOPEN_LIBS)
+AC_SUBST(UNIX_DLAPI_LIBS)
 
 # Check for a (GNU) backtrace implementation
 AC_ARG_VAR([BACKTRACE_CFLAGS], [Compiler flags needed to use backtrace(3)])
