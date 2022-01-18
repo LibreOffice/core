@@ -80,14 +80,9 @@ struct SwTextGlyphsKeyHash
     size_t operator()(SwTextGlyphsKey const & rKey) const { return rKey.mnHashCode; }
 };
 /**
- * Glyphs and text width for the given SwTextGlyphsKey.
+ * Glyphs for the given SwTextGlyphsKey.
  */
-struct SwTextGlyphsData
-{
-    SalLayoutGlyphs m_aTextGlyphs;
-    tools::Long m_nTextWidth = -1; // -1 = not computed yet
-};
-typedef std::unordered_map<SwTextGlyphsKey, SwTextGlyphsData, SwTextGlyphsKeyHash> SwTextGlyphsMap;
+typedef std::unordered_map<SwTextGlyphsKey, SalLayoutGlyphs, SwTextGlyphsKeyHash> SwTextGlyphsMap;
 
 class SwFntObj final : public SwCacheObj
 {
@@ -145,7 +140,6 @@ public:
     sal_uInt16   GetPropWidth() const { return m_nPropWidth; }
     bool     IsSymbol() const { return m_bSymbol; }
 
-    tools::Long GetCachedTextWidth(const SwTextGlyphsKey& key, const vcl::text::TextLayoutCache* vclCache);
     SalLayoutGlyphs* GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key);
     void ClearCachedTextGlyphs();
 
