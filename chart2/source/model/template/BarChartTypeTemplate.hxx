@@ -22,7 +22,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 
-#include "ChartTypeTemplate.hxx"
+#include <ChartTypeTemplate.hxx>
 #include <StackMode.hxx>
 
 namespace chart
