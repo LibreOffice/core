@@ -3099,8 +3099,11 @@ void SvxFontNameBox_Base::statusChanged_Impl( const css::frame::FeatureStateEven
         css::awt::FontDescriptor aFontDesc;
         if ( rEvent.State >>= aFontDesc )
             Update(&aFontDesc);
-        else
+        else {
+            // no active element; delete value in the display
+            m_xWidget->set_active(-1);
             set_active_or_entry_text("");
+        }
         m_xWidget->save_value();
     }
 }
