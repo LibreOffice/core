@@ -60,10 +60,6 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
         return true;
     }
     StringRef fileName { getFilenameOfLocation(functionDecl->getLocation()) };
-    // the filters use some kind of dynamic loading stunt
-    if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/filter/qa/")) {
-        return true;
-    }
     // keeps  the code structure of salplug.cxx easier to follow
     if (fileName == SRCDIR "/vcl/source/app/salplug.cxx") {
         return true;
