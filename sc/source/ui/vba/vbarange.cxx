@@ -2510,7 +2510,9 @@ ScVbaRange::Copy(const ::uno::Any& Destination)
     }
     else
     {
-        excel::implnCopy( getUnoModel() );
+        uno::Reference<frame::XModel> xModel = getModelFromRange(mxRange);
+        Select();
+        excel::implnCopy(getUnoModel());
     }
 }
 
@@ -2868,7 +2870,8 @@ ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, cons
 
     InsertDeleteFlags nFlags = getPasteFlags(nPaste);
     ScPasteFunc nFormulaBits = getPasteFormulaBits(nOperation);
-    excel::implnPasteSpecial(pShell->GetModel(), nFlags,nFormulaBits,bSkipBlanks,bTranspose);
+
+    excel::implnPasteSpecial(xModel, nFlags, nFormulaBits, bSkipBlanks, bTranspose);
 }
 
 uno::Reference< excel::XRange >
