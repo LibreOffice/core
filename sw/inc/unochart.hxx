@@ -175,7 +175,8 @@ public:
     void        RemoveDataSequence( const SwTable &rTable, css::uno::Reference< css::chart2::data::XDataSequence > const &rxDataSequence );
 
     // will send modified events for all data-sequences of the table
-    void        InvalidateTable( const SwTable *pTable );
+    // tdf#122995 added Immediate-Mode to allow non-timer-delayed Chart invalidation
+    void        InvalidateTable( const SwTable *pTable, bool bImmediate = false );
     void        DeleteBox( const SwTable *pTable, const SwTableBox &rBox );
     void        DisposeAllDataSequences( const SwTable *pTable );
 
