@@ -271,7 +271,10 @@ inline void OInterfaceContainerHelper4<T>::forEach(std::unique_lock<std::mutex>&
                                                    FuncT const& func)
 {
     if (std::as_const(maData)->size() == 0)
+    {
+        rGuard.unlock(); // code depends on the guard being unlocked after return
         return;
+    }
     maData.make_unique(); // so we can iterate over the data without holding the lock
     OInterfaceIteratorHelper4<T> iter(rGuard, *this);
     rGuard.unlock();
