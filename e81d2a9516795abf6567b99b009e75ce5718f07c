@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06bfe799_0bebecb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-18T15:45:55Z",
+      "side": 1,
+      "message": "This will just fail, if you build any static build with clang plugins, what we don\u0027t do anywhere ATM.",
+      "revId": "e81d2a9516795abf6567b99b009e75ce5718f07c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
