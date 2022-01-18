@@ -154,7 +154,6 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(const std::shared_ptr<weld::Window>& rPar
     , m_xPopup(pBuilder->weld_menu("writermenu"))
     , m_xSortMenu(pBuilder->weld_menu("writersortmenu"))
 {
-    m_xTabPagesCTRL->set_help_id(HID_REDLINE_CTRL);
     m_pTPView = m_xTabPagesCTRL->GetViewPage();
 
     m_pTable = m_pTPView->GetTableControl();

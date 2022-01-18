@@ -37,8 +37,6 @@ inline constexpr OStringLiteral HID_NAVIGATOR_GLOB_TREELIST = "SW_HID_NAVIGATOR_
 
 // TabPage Help-IDs
 
-inline constexpr OStringLiteral HID_REDLINE_CTRL = "SW_HID_REDLINE_CTRL";
-
 inline constexpr OStringLiteral HID_LINGU_AUTOCORR = "SW_HID_LINGU_AUTOCORR";
 inline constexpr OStringLiteral HID_LINGU_REPLACE = "SW_HID_LINGU_REPLACE";
 inline constexpr OStringLiteral HID_LINGU_IGNORE_SELECTION = "SW_HID_LINGU_IGNORE_SELECTION";    // grammar check context menu
