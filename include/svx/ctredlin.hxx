@@ -286,7 +286,7 @@ private:
 
     void            EnableClearFormatButton(weld::Button&, bool bFlag);
 public:
-    SvxTPView(weld::Container* pParent, weld::Window* pDialog, weld::Builder* pTopLevel);
+    SvxTPView(weld::Container* pParent, weld::Window* pDialog);
     virtual ~SvxTPView() override;
 
     SvxRedlinTable* GetTableControl() { return m_xViewData.get(); }
@@ -329,7 +329,7 @@ private:
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OString&, bool);
 
 public:
-    SvxAcceptChgCtr(weld::Container* pParent, weld::Window* pDialog, weld::Builder* pTopLevel);
+    SvxAcceptChgCtr(weld::Container* pParent, weld::Window* pDialog);
     ~SvxAcceptChgCtr();
 
     void            ShowFilterPage();
