@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_macros_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_macros_test, \
     sc/qa/extras/macros-test \
+    sc/qa/extras/vba-macro-test \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_macros_test, \
