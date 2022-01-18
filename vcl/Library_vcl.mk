@@ -648,7 +648,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 $(eval $(call gb_Library_add_libs,vcl,\
     $(if $(filter LINUX %BSD SOLARIS,$(OS)), \
         -lm \
-        $(if $(DISABLE_DYNLOADING),,$(DLOPEN_LIBS)) \
+        $(if $(DISABLE_DYNLOADING),,$(UNIX_DLAPI_LIBS)) \
     ) \
 ))
 

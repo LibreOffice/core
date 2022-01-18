@@ -35,7 +35,7 @@ $(eval $(call gb_Library_add_defs,libreofficekitgtk,\
 
 ifeq ($(OS),$(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,libreofficekitgtk,\
-    $(DLOPEN_LIBS) -lm \
+    $(UNIX_DLAPI_LIBS) -lm \
 ))
 endif
 

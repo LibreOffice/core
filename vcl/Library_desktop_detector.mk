@@ -66,7 +66,7 @@ $(eval $(call gb_Library_add_exception_objects,desktop_detector,\
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,desktop_detector,\
-	-lm $(DLOPEN_LIBS) \
+	-lm $(UNIX_DLAPI_LIBS) \
 ))
 endif
 
