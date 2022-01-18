@@ -2126,11 +2126,11 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
 {
     tools::Long nSpaceAdd =       rInf.GetSpace() / SPACING_PRECISION_FACTOR;
-    const tools::Long nSperren = -rInf.GetSperren() / SPACING_PRECISION_FACTOR;
+    const tools::Long nCharacterSpacing = -rInf.GetCharacterSpacing() / SPACING_PRECISION_FACTOR;
     tools::Long nKern = rInf.GetKern();
 
-    if( 0 != nSperren )
-        nKern -= nSperren;
+    if( 0 != nCharacterSpacing )
+        nKern -= nCharacterSpacing;
 
     std::vector<sal_Int32> aKernArray;
 
