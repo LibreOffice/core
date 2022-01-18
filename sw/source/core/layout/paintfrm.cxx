@@ -116,6 +116,7 @@
 
 #include <vcl/BitmapTools.hxx>
 #include <comphelper/lok.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #define COL_NOTES_SIDEPANE                  Color(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           Color(200,200,200)
@@ -5227,6 +5228,25 @@ void SwFrame::PaintSwFrameShadowAndBorder(
             pBottomBorder = aAccess.Get()->GetBox().GetBottom();
         }
 
+        bool bWordTableCell = false;
+        SwViewShell* pShell = getRootFrame()->GetCurrShell();
+        if (pShell)
+        {
+            const IDocumentSettingAccess& rIDSA = pShell->GetDoc()->getIDocumentSettingAccess();
+            bWordTableCell = rIDSA.get(DocumentSettingId::TABLE_ROW_KEEP);
+        }
+        bool bInWordTableCell = IsContentFrame() && GetUpper()->IsCellFrame() && bWordTableCell;
+        if (bInWordTableCell)
+        {
+            // Compat mode: don't paint bottom border if we know the bottom of the content was cut
+            // off.
+            auto pContentFrame = static_cast<const SwContentFrame*>(this);
+            if (pContentFrame->IsUndersized())
+            {
+                pBottomBorder = nullptr;
+            }
+        }
+
         if(nullptr != pLeftBorder || nullptr != pRightBorder || nullptr != pTopBorder || nullptr != pBottomBorder)
         {
             // now we have all SvxBorderLine(s) sorted out, create geometry
@@ -5240,14 +5260,28 @@ void SwFrame::PaintSwFrameShadowAndBorder(
             const svx::frame::Style aStyleLeft(pLeftBorder, 1.0);
             drawinglayer::primitive2d::Primitive2DContainer aBorderLineTarget;
 
-            aBorderLineTarget.append(
-                drawinglayer::primitive2d::Primitive2DReference(
+            drawinglayer::primitive2d::Primitive2DReference aRetval(
                     new drawinglayer::primitive2d::SwBorderRectanglePrimitive2D(
                         aBorderTransform,
                         aStyleTop,
                         aStyleRight,
                         aStyleBottom,
-                        aStyleLeft)));
+                        aStyleLeft));
+
+            if (bInWordTableCell)
+            {
+                // Compat mode: cut off the borders which are outside of our own area.
+                const SwRect& rClip = getFrameArea();
+                basegfx::B2DRectangle aClip(rClip.Left(), rClip.Top(), rClip.Right(),
+                                            rClip.Bottom());
+                const basegfx::B2DPolyPolygon aPolyPolygon(
+                    basegfx::utils::createPolygonFromRect(aClip));
+                const drawinglayer::primitive2d::Primitive2DReference xClipped(
+                    new drawinglayer::primitive2d::MaskPrimitive2D(aPolyPolygon, { aRetval }));
+                aRetval = xClipped;
+            }
+
+            aBorderLineTarget.append(aRetval);
             gProp.pBLines->AddBorderLines(aBorderLineTarget);
         }
     }
