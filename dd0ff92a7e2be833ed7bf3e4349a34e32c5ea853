@@ -34,6 +34,24 @@
       "parentUuid": "d3e69fca_71ae8874",
       "revId": "dd0ff92a7e2be833ed7bf3e4349a34e32c5ea853",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37204638_bd6709f6",
+        "filename": "include/osl/module.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-18T14:13:25Z",
+      "side": 1,
+      "message": "Please include those config_host/config_*.h include files only where they are actually used.  (That\u0027s why they are split up into multiple files anyway, to reduce recompilation when any one of them changes.)",
+      "parentUuid": "2ffc7c78_419d50c4",
+      "revId": "dd0ff92a7e2be833ed7bf3e4349a34e32c5ea853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
