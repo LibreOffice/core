@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include "ChartTypeTemplate.hxx"
+#include <ChartTypeTemplate.hxx>
 #include <OPropertySet.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <StackMode.hxx>
