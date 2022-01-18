@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0012fb0_0381a547",
+        "filename": "include/osl/module.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-18T12:57:24Z",
+      "side": 1,
+      "message": "an include file like this one that is part of the published URE interface must not include an include file like config_host/config_global.h that is not part of the published URE interface",
+      "revId": "b5b1eae538a902fed165d5dd93ad6ddda3c5cb70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
