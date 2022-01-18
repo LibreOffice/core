@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48bcc61b_90bb51e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-01-18T12:31:27Z",
+      "side": 1,
+      "message": "Looks plausible, although I don\u0027t understand the relationship between 100 * height and the expected vs actual values in the failed scenario.",
+      "revId": "59e9b5619fd374ada9243826672e465f3ed47774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
