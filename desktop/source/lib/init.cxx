@@ -1471,6 +1471,7 @@ void CallbackFlushHandler::TimeoutIdle::Invoke()
     mHandler->Invoke();
 }
 
+// One of these is created per view to handle events cf. doc_registerCallback
 CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData)
     : Idle( "lokit idle callback" ),
       m_pDocument(pDocument),
@@ -2271,22 +2272,56 @@ void CallbackFlushHandler::Invoke()
         const auto& payload = it2->getPayload();
         const int viewId = lcl_isViewCallbackType(type) ? it2->getViewId() : -1;
 
+        SAL_INFO("lok", "processing event: [" << type << ',' << viewId << "]: [" << payload << "].");
+
+        // common code-path for events on this view:
         if (viewId == -1)
         {
-            const auto stateIt = m_states.find(type);
-            if (stateIt != m_states.end())
+            // key-value pairs
+            if (type == LOK_CALLBACK_STATE_CHANGED)
             {
-                // If the state didn't change, it's safe to ignore.
-                if (stateIt->second == payload)
+                size_t idx = payload.find('=');
+                if (idx != std::string::npos)
                 {
-                    SAL_INFO("lok", "Skipping duplicate [" << type << "]: [" << payload << "].");
-                    continue;
+                    std::string key = payload.substr(0, idx);
+                    std::string value = payload.substr(idx+1);
+                    const auto stateIt = m_lastStateChange.find(key);
+                    if (stateIt != m_lastStateChange.end())
+                    {
+                        // If the value didn't change, it's safe to ignore.
+                        if (stateIt->second == value)
+                        {
+                            SAL_INFO("lok", "Skipping new state duplicate: [" << type << "]: [" << payload << "].");
+                            continue;
+                        }
+                        SAL_INFO("lok", "Replacing a state element [" << type << "]: [" << payload << "].");
+                        stateIt->second = value;
+                    }
+                    else
+                    {
+                        SAL_INFO("lok", "Inserted a new state element: [" << type << "]: [" << payload << "]");
+                        m_lastStateChange.emplace(key, value);
+                    }
                 }
-
-                stateIt->second = payload;
+                else
+                    assert(false && "state changed string is missing = new state");
+            }
+            else
+            {
+                const auto stateIt = m_states.find(type);
+                if (stateIt != m_states.end())
+                {
+                    // If the state didn't change, it's safe to ignore.
+                    if (stateIt->second == payload)
+                    {
+                        SAL_INFO("lok", "Skipping duplicate [" << type << "]: [" << payload << "].");
+                        continue;
+                    }
+                    stateIt->second = payload;
+                }
             }
         }
-        else
+        else // less common path for events relating to other views
         {
             const auto statesIt = m_viewStates.find(viewId);
             if (statesIt != m_viewStates.end())
