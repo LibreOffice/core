@@ -16,6 +16,24 @@
       "message": "CppunitTest_sc_screenshots (part of `make screenshot`) now fails for me with\n\n  warn:vcl.gtk:1196206:1196206:vcl/unx/gtk3/gtkinst.cxx:22333: GtkInstanceBuilder: error when calling gtk_builder_add_from_file: /home/sbergman/lo2/core/instdir/share/config/soffice.cfg/modules/scalc/ui/sidebaralignment.ui:246:1 attribute \u0027internal_child\u0027 invalid for element \u0027child\u0027\n  cppunittester: /home/sbergman/lo2/core/vcl/unx/gtk3/gtkinst.cxx:22336: void {anonymous}::load_ui_file(GtkBuilder*, const rtl::OUString\u0026): Assertion `rc \u0026\u0026 \"could not load UI file\"\u0027 failed.",
       "revId": "7a2042dc00c72ac074a21c2c324ace5eac89a5f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62e2949f_7e003567",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-18T06:49:23Z",
+      "side": 1,
+      "message": "No problem for me running kf5 but I can confirm Calc crashing with gtk3 on start.",
+      "parentUuid": "26fc0437_65216c3b",
+      "revId": "7a2042dc00c72ac074a21c2c324ace5eac89a5f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
