@@ -18,6 +18,7 @@
  */
 
 #include <ChartTypeDialogController.hxx>
+#include <ChartTypeManager.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -303,7 +304,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
 void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParameter
                 , const uno::Reference< XChartDocument >& xChartModel )
 {
-    uno::Reference< lang::XMultiServiceFactory > xTemplateManager( xChartModel->getChartTypeManager(), uno::UNO_QUERY );
+    rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = dynamic_cast<::chart::ChartTypeManager*>( xChartModel->getChartTypeManager().get() );
     uno::Reference< XChartTypeTemplate > xTemplate( getCurrentTemplate( rParameter, xTemplateManager ) );
     if(!xTemplate.is())
         return;

@@ -22,6 +22,7 @@
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartTypeManager.hxx>
 #include <DiagramHelper.hxx>
 #include <unonames.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -302,7 +303,7 @@ void ChartTypeTabPage::initializePage()
 {
     if( !m_xChartModel.is() )
         return;
-    uno::Reference< lang::XMultiServiceFactory > xTemplateManager( m_xChartModel->getChartTypeManager(), uno::UNO_QUERY );
+    rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = dynamic_cast<::chart::ChartTypeManager*>( m_xChartModel->getChartTypeManager().get() );
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
     DiagramHelper::tTemplateWithServiceName aTemplate =
         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager );
