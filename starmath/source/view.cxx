@@ -338,7 +338,7 @@ bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
     if (!pTree)
         return true;
 
-    if (IsInlineEditEnabled()) {
+    if (SmViewShell::IsInlineEditEnabled()) {
         mrViewShell.GetDoc()->GetCursor().MoveTo(&rDevice, aPos, !rMEvt.IsShift());
         return true;
     }
@@ -368,7 +368,7 @@ bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool SmGraphicWidget::MouseMove(const MouseEvent &rMEvt)
 {
-    if (rMEvt.IsLeft() && IsInlineEditEnabled())
+    if (rMEvt.IsLeft() && SmViewShell::IsInlineEditEnabled())
     {
         OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
         Point aPos(rDevice.PixelToLogic(rMEvt.GetPosPixel()) - GetFormulaDrawPos());
@@ -382,14 +382,9 @@ bool SmGraphicWidget::MouseMove(const MouseEvent &rMEvt)
     return true;
 }
 
-bool SmGraphicWidget::IsInlineEditEnabled()
-{
-    return SmViewShell::IsInlineEditEnabled();
-}
-
 void SmGraphicWidget::GetFocus()
 {
-    if (!IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled())
         return;
     if (mrViewShell.GetEditWindow())
         mrViewShell.GetEditWindow()->Flush();
@@ -411,7 +406,7 @@ void SmGraphicWidget::LoseFocus()
         mxAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,
                 aOldValue, aNewValue );
     }
-    if (!IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled())
         return;
     SetIsCursorVisible(false);
     ShowLine(false);
@@ -444,7 +439,7 @@ void SmGraphicWidget::CaretBlinkInit()
 
 void SmGraphicWidget::CaretBlinkStart()
 {
-    if (!IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled())
         return;
     if (aCaretBlinkTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME)
         aCaretBlinkTimer.Start();
@@ -452,7 +447,7 @@ void SmGraphicWidget::CaretBlinkStart()
 
 void SmGraphicWidget::CaretBlinkStop()
 {
-    if (!IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled())
         return;
     aCaretBlinkTimer.Stop();
 }
@@ -460,7 +455,7 @@ void SmGraphicWidget::CaretBlinkStop()
 // shows or hides the formula-cursor depending on 'bShow' is true or not
 void SmGraphicWidget::ShowCursor(bool bShow)
 {
-    if (IsInlineEditEnabled())
+    if (SmViewShell::IsInlineEditEnabled())
         return;
 
     bool bInvert = bShow != IsCursorVisible();
@@ -475,7 +470,7 @@ void SmGraphicWidget::ShowCursor(bool bShow)
 
 void SmGraphicWidget::ShowLine(bool bShow)
 {
-    if (!IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled())
         return;
 
     bIsLineVisible = bShow;
@@ -483,7 +478,7 @@ void SmGraphicWidget::ShowLine(bool bShow)
 
 void SmGraphicWidget::SetCursor(const SmNode *pNode)
 {
-    if (IsInlineEditEnabled())
+    if (SmViewShell::IsInlineEditEnabled())
         return;
 
     const SmNode *pTree = mrViewShell.GetDoc()->GetFormulaTree();
@@ -502,7 +497,7 @@ void SmGraphicWidget::SetCursor(const tools::Rectangle &rRect)
     // The old cursor will be removed, and the new one will be shown if
     // that is activated in the ConfigItem
 {
-    if (IsInlineEditEnabled())
+    if (SmViewShell::IsInlineEditEnabled())
         return;
 
     SmModule *pp = SM_MOD();
@@ -522,7 +517,7 @@ const SmNode * SmGraphicWidget::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
     // rectangle. If not the formula-cursor will be hidden.
     // In any case the search result is being returned.
 {
-    if (IsInlineEditEnabled())
+    if (SmViewShell::IsInlineEditEnabled())
         return nullptr;
 
     // find visible node with token at nRow, nCol
@@ -547,7 +542,7 @@ void SmGraphicWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     rDoc.DrawFormula(rRenderContext, aPoint, true);  //! modifies aPoint to be the topleft
                                                      //! corner of the formula
     aFormulaDrawPos = aPoint;
-    if (IsInlineEditEnabled())
+    if (SmViewShell::IsInlineEditEnabled())
     {
         //Draw cursor if any...
         if (mrViewShell.GetDoc()->HasCursor() && IsLineVisible())
@@ -583,7 +578,7 @@ void SmGraphicWidget::SetTotalSize()
 
 bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
 {
-    if (!IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled())
         return mrViewShell.KeyInput(rKEvt);
 
     bool bConsumed = true;
