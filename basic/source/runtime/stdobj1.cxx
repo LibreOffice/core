@@ -128,12 +128,6 @@ void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     if( !pHint )
         return;
 
-    if( pHint->GetId() == SfxHintId::BasicInfoWanted )
-    {
-        SbxObject::Notify( rBC, rHint );
-        return;
-    }
-
     SbxVariable* pVar   = pHint->GetVar();
     const sal_uInt32 nWhich = pVar->GetUserData();
     bool         bWrite = pHint->GetId() == SfxHintId::BasicDataChanged;
