@@ -16,6 +16,23 @@
       "message": "It\u0027s not perfect but I think it goes in the right way.\nHowever testing the extreme case with `back``ticks are fun`.`n``est-ce pas?` I had an error when trying to save a new table in the editor.\nHere\u0027s the generated statement:\nCREATE TABLE `back`ticks are fun`.`Table156` (`id` VARCHAR(100) NOT NULL, PRIMARY KEY  (`id`))\n",
       "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0b2d91b_4482bc7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-18T21:55:02Z",
+      "side": 1,
+      "message": "Also, having the same table name was a pb before the patch and now it\u0027s ok.\n\nI thought about removing completely \"Keys\" part but it\u0027s used by \"OCollection* Table::createKeys(const ::std::vector\u003cOUString\u003e\u0026 rNames)\"\nand it seems implementing \"Table::createKeys\" is mandatory (unless I missed something).\n\nFinally, I didn\u0027t take time to try to dig about the 2 annoying bugs with Views:\n- No automatic refresh after a creating a new one\n- Error when trying to rename a view\nbut that\u0027s another story.",
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
