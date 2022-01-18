@@ -674,6 +674,26 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoubleBorderHorizontal)
     CPPUNIT_ASSERT_GREATER(aBorderWidthVec[3], aBorderWidthVec[2]);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testParaBorderInCellClip)
+{
+    // Given a document which has outside-cell borders defined, which should not be visible:
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "para-border-in-cell-clip.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // When rendering those borders:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+
+    // Then make sure that we have clipping setup for both paragraphs inside the table cell:
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // - XPath '//clipregion/polygon' number of nodes is incorrect
+    // i.e. there was no clipping applied, leading to unexpected left/right borders.
+    assertXPath(pXmlDoc, "//clipregion/polygon", 2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
