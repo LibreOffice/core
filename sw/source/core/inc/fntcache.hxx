@@ -110,7 +110,7 @@ class SwFntObj final : public SwCacheObj
 
     void GetTextArray(const OutputDevice& rOutputDevice, const OUString& rStr,
                       std::vector<sal_Int32>& rDXAry, sal_Int32 nIndex, sal_Int32 nLen,
-                      bool bCaching);
+                      GlyphPositioningMode ePositioningMode, bool bCaching);
 
     static tools::Long s_nPixWidth;
     static MapMode *s_pPixMap;
