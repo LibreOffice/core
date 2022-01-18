@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50859042_6303964b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-01-18T12:03:47Z",
+      "side": 1,
+      "message": "Kerning and tracking, these are not weird concepts if you’ve ever opened Scribus or InDesign... or MS Word. I’d advocate for using “tracking” instead of something else.",
+      "revId": "caed4584a871b855b27b1803430ada967eb6823a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
