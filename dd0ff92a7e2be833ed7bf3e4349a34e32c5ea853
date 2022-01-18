@@ -70,6 +70,24 @@
       "parentUuid": "37204638_bd6709f6",
       "revId": "dd0ff92a7e2be833ed7bf3e4349a34e32c5ea853",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5df5aab_8587ac96",
+        "filename": "include/osl/module.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-18T15:22:36Z",
+      "side": 1,
+      "message": "Indeed true for the specific config_global.h, but still:  Please don\u0027t include it where it is not actually used.  I still see no good reason to just include it wherever that new HAVE_DLAPI macro is used, just as with any other config_*.h macro use.",
+      "parentUuid": "2f41620c_07a9a074",
+      "revId": "dd0ff92a7e2be833ed7bf3e4349a34e32c5ea853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
