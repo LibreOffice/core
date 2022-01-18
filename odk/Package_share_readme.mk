@@ -18,7 +18,6 @@ $(eval $(call gb_Package_add_files,odk_share_readme,$(SDKDIRNAME)/share/readme,\
 
 # for WNT see Package_share_readme_generated.mk
 ifneq ($(OS),WNT)
-readlicense_oo_DIR := $(call gb_CustomTarget_get_workdir,readlicense_oo/license)
 $(eval $(call gb_Package_add_file,odk_share_readme,$(SDKDIRNAME)/share/readme/LICENSE,LICENSE))
 endif
 
