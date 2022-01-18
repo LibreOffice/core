@@ -120,13 +120,7 @@ void SvxHyperlinkMailTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNa
 OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 {
     OUString aStrURL = m_xCbbReceiver->get_active_text();
-    INetURLObject aURL(aStrURL);
-
-    if( aURL.GetProtocol() == INetProtocol::NotValid )
-    {
-        aURL.SetSmartProtocol( INetProtocol::Mailto );
-        aURL.SetSmartURL(aStrURL);
-    }
+    INetURLObject aURL(aStrURL, INetProtocol::Mailto);
 
     // subject for EMail-url
     if( aURL.GetProtocol() == INetProtocol::Mailto )
