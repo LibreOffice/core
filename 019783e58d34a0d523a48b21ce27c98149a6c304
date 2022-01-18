@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8f83f1f_7a4f6f3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2022-01-18T16:09:02Z",
+      "side": 1,
+      "message": "Thank you for the patch!  See below - before merging, can you try the different check please?",
+      "revId": "019783e58d34a0d523a48b21ce27c98149a6c304",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33ad8c6b_8d03f9ad",
+        "filename": "vcl/source/window/layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2022-01-18T16:09:02Z",
+      "side": 1,
+      "message": "I wonder - we check for the emptiness of m_aMainGroupDimensions here; could it be that the m_aMainGroupSize is empty, and causes the nExtraSpace to underflow?  Can you try if a check for the emptiness of m_aMainGroupSize one would fix the issue?\n\nIf yes - I\u0027d prefer that as a fix here.\n\nIf not - happy enough with the nExtraSpace check...",
+      "range": {
+        "startLine": 641,
+        "startChar": 16,
+        "endLine": 641,
+        "endChar": 53
+      },
+      "revId": "019783e58d34a0d523a48b21ce27c98149a6c304",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
