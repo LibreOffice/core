@@ -684,7 +684,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 #if HAVE_FEATURE_MACOSX_SANDBOX
                 rSet.DisableItem(nSID);
 #endif
-                if (isExportLocked() && nSID != SID_MAIL_SENDDOC)
+                if (isExportLocked())
                     rSet.DisableItem(nSID);
                 break;
             }
