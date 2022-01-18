@@ -139,6 +139,7 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
         { std::u16string_view(u"/CalcPageBreak"), false },
         { std::u16string_view(u"/CalcPageBreakManual"), false },
         { std::u16string_view(u"/CalcPageBreakAutomatic"), false },
+        { std::u16string_view(u"/CalcHiddenColRow"), true },
         { std::u16string_view(u"/CalcDetective")   ,false },
         { std::u16string_view(u"/CalcDetectiveError")   ,false },
         { std::u16string_view(u"/CalcReference")   ,false },
@@ -433,6 +434,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_BLUE, //CALCPAGEBREAK
         Color(0x2300dc), //CALCPAGEBREAKMANUAL
         COL_GRAY7, //CALCPAGEBREAKAUTOMATIC
+        Color(0x2300dc), //CALCHIDDENCOLROW
         COL_LIGHTBLUE, // CALCDETECTIVE
         COL_LIGHTRED, // CALCDETECTIVEERROR
         Color(0xef0fff), // CALCREFERENCE

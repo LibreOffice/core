@@ -303,6 +303,14 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
+        <node oor:name="CalcHiddenColRow">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="CalcDetective">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
@@ -584,6 +592,14 @@
           </prop>
         </node>
         <node oor:name="CalcPageBreakAutomatic">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcHiddenColRow">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
           <prop oor:name="Color">
             <value xsi:nil="true"/>
           </prop>

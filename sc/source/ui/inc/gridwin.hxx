@@ -274,6 +274,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     void            DrawAfterScroll();
     tools::Rectangle       GetListValButtonRect( const ScAddress& rButtonPos );
 
+    void            DrawHiddenIndicator( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, vcl::RenderContext& rRenderContext);
     void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, vcl::RenderContext& rRenderContext);
 
     bool            GetEditUrl( const Point& rPos,
