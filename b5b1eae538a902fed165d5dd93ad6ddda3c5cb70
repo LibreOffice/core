@@ -16,6 +16,24 @@
       "message": "an include file like this one that is part of the published URE interface must not include an include file like config_host/config_global.h that is not part of the published URE interface",
       "revId": "b5b1eae538a902fed165d5dd93ad6ddda3c5cb70",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a689590_d0ceee84",
+        "filename": "include/osl/module.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-18T13:02:00Z",
+      "side": 1,
+      "message": "Ok - I just grep\u0027ed for it, but that didn\u0027t show the #ifdef LIBO_INTERNAL_ONLY. I\u0027ll add a followup patch.",
+      "parentUuid": "a0012fb0_0381a547",
+      "revId": "b5b1eae538a902fed165d5dd93ad6ddda3c5cb70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
