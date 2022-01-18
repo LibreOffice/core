@@ -17,14 +17,6 @@ class Test : public SwModelTestBase
 public:
     Test() : SwModelTestBase("/sw/qa/extras/odfexport/data/", "writer8") {}
 
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // Only test import of .odt document
-        return OString(filename).endsWith(".odt");
-    }
-
     bool mustValidate(const char* /*filename*/) const override
     {
         return true;
@@ -79,8 +71,9 @@ DECLARE_ODFEXPORT_TEST(testTdf143793_noBodyWrapping, "tdf143793_noBodyWrapping.o
     CPPUNIT_ASSERT_MESSAGE("Header text should fill two lines", nParaHeight > 400);
 }
 
-DECLARE_ODFEXPORT_TEST(testTdf137199, "tdf137199.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf137199)
 {
+    loadAndReload("tdf137199.docx");
     CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(getParagraph(1), "ListLabelString"));
 
     CPPUNIT_ASSERT_EQUAL(OUString("1)"), getProperty<OUString>(getParagraph(2), "ListLabelString"));
@@ -97,8 +90,9 @@ DECLARE_ODFEXPORT_TEST(testTdf143605, "tdf143605.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("."), getProperty<OUString>(getParagraph(1), "ListLabelString"));
 }
 
-DECLARE_ODFEXPORT_TEST(testListFormatDocx, "listformat.docx")
+CPPUNIT_TEST_FIXTURE(Test, testListFormatDocx)
 {
+    loadAndReload("listformat.docx");
     // Ensure in resulting ODT we also have not just prefix/suffix, but custom delimiters
     CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(getParagraph(1), "ListLabelString"));
     CPPUNIT_ASSERT_EQUAL(OUString(">>1/1<<"), getProperty<OUString>(getParagraph(2), "ListLabelString"));
@@ -217,7 +211,6 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleLink)
     CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph Char"), getProperty<OUString>(aParaStyle, "LinkStyle"));
 }
 
-// This test started in LO 7.2. Use the odfexport.cxx if you intend to backport to 7.1.
-
 CPPUNIT_PLUGIN_IMPLEMENT();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
