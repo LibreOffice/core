@@ -35,6 +35,26 @@
 
 namespace com::sun::star::bridge::oleautomation { struct Decimal; }
 
+enum class UserData
+{
+    NONE                    = 0,
+    ATTR_IMP_TYPE           = 1,
+    ATTR_IMP_WIDTH          = 2,
+    ATTR_IMP_HEIGHT         = 3,
+    ATTR_IMP_BOLD           = 4,
+    ATTR_IMP_ITALIC         = 5,
+    ATTR_IMP_STRIKETHROUGH  = 6,
+    ATTR_IMP_UNDERLINE      = 7,
+    ATTR_IMP_SIZE           = 9,
+    ATTR_IMP_NAME           = 10,
+    METH_CLEAR              = 20,
+    METH_GETDATA            = 21,
+    METH_GETFORMAT          = 22,
+    METH_GETTEXT            = 23,
+    METH_SETDATA            = 24,
+    METH_SETTEXT            = 25
+};
+
 class SbxDecimal;
 enum class SfxHintId;
 
@@ -242,6 +262,10 @@ class StarBASIC;
 class BASIC_DLLPUBLIC SbxVariable : public SbxValue
 {
     friend class SbMethod;
+    friend class SbStdFont;
+    friend class SbiStdObject;
+    friend class SbStdPicture;
+    friend class SbStdClipboard;
 
     OUString         m_aDeclareClassName;
     css::uno::Reference< css::uno::XInterface > m_xComListener;
@@ -253,11 +277,13 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
 
 protected:
     SbxInfoRef  pInfo;              // Probably called information
-    sal_uInt32 nUserData= 0;        // User data for Call()
+    UserData nUserData = UserData::NONE;        // User data for Call()
     SbxObject* pParent = nullptr;   // Currently attached object
     virtual ~SbxVariable() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
+    UserData GetUserDataEnum() const { return nUserData; }
+    void SetUserData( UserData n ) { nUserData = n; }
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_VARIABLE,2);
     SbxVariable();
@@ -273,8 +299,8 @@ public:
 
     virtual void SetModified( bool ) override;
 
-    sal_uInt32 GetUserData() const { return nUserData; }
-    void SetUserData( sal_uInt32 n ) { nUserData = n; }
+    sal_uInt32 GetUserData() const { return static_cast<sal_uInt32>(nUserData); }
+    void SetUserData( sal_uInt32 n ) { nUserData = static_cast<UserData>(n); }
 
     virtual SbxDataType  GetType()  const override;
     virtual SbxClassType GetClass() const;

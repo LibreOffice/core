@@ -403,7 +403,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
                                                                 RTL_TEXTENCODING_ASCII_US);
         sal_uInt32 nTemp;
         rStrm.ReadUInt32( nTemp );
-        nUserData = nTemp;
+        SetUserData(nTemp);
     }
     else
     {
@@ -414,7 +414,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
                                                                 RTL_TEXTENCODING_ASCII_US);
         sal_uInt32 nTemp;
         rStrm.ReadUInt32( nTemp );
-        nUserData = nTemp;
+        SetUserData(nTemp);
         // correction: old methods have instead of SbxNULL now SbxEMPTY
         if( nType == SbxNULL && GetClass() == SbxClassType::Method )
         {
@@ -529,7 +529,7 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
     }
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, maName,
                                                       RTL_TEXTENCODING_ASCII_US);
-    rStrm.WriteUInt32( nUserData );
+    rStrm.WriteUInt32( GetUserData() );
     if( pInfo.is() )
     {
         rStrm.WriteUChar( 2 );     // Version 2: with UserData!

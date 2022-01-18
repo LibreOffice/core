@@ -1013,7 +1013,7 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
                 eCT = SbxClassType::Method;
             }
             pVar = Make(OUString(p->sName), eCT, p->eType, (p->nArgs & FUNCTION_) == FUNCTION_);
-            pVar->SetUserData( nIndex + 1 );
+            pVar->SetUserData( static_cast<UserData>(nIndex + 1) );
             pVar->SetFlags( nAccess );
         }
     }
