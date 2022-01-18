@@ -72,6 +72,7 @@ namespace chart
 class Diagram;
 class ChartTypeManager;
 class NameContainer;
+class PageBackground;
 
 namespace impl
 {
@@ -166,8 +167,7 @@ private:
     css::uno::Reference< css::chart2::XTitle >
                                           m_xTitle;
 
-    css::uno::Reference< css::beans::XPropertySet >
-                                          m_xPageBackground;
+    rtl::Reference< ::chart::PageBackground > m_xPageBackground;
 
     rtl::Reference< ::chart::NameContainer > m_xXMLNamespaceMap;
 
