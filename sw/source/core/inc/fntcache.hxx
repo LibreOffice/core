@@ -66,13 +66,13 @@ extern SwFntObj *pLastFont;
  */
 struct SwTextGlyphsKey
 {
-    VclPtr<OutputDevice> m_pOutputDevice;
+    VclPtr<const OutputDevice> m_pOutputDevice;
     OUString m_aText;
     sal_Int32 m_nIndex;
     sal_Int32 m_nLength;
     size_t mnHashCode;
 
-    SwTextGlyphsKey(VclPtr<OutputDevice> const& pOutputDevice, const OUString & sText, sal_Int32 nIndex, sal_Int32 nLength);
+    SwTextGlyphsKey(const OutputDevice* pOutputDevice, const OUString & sText, sal_Int32 nIndex, sal_Int32 nLength);
     bool operator==(SwTextGlyphsKey const & rhs) const;
 };
 struct SwTextGlyphsKeyHash
@@ -107,6 +107,10 @@ class SwFntObj final : public SwCacheObj
 
     /// Cache of already calculated layout glyphs and text widths.
     SwTextGlyphsMap m_aTextGlyphs;
+
+    void GetTextArray(const OutputDevice& rOutputDevice, const OUString& rStr,
+                      std::vector<sal_Int32>& rDXAry, sal_Int32 nIndex, sal_Int32 nLen,
+                      bool bCaching);
 
     static tools::Long s_nPixWidth;
     static MapMode *s_pPixMap;
