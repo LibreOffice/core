@@ -25,6 +25,8 @@
 #define INCLUDED_OSL_MODULE_H
 
 #include "sal/config.h"
+// convenience include for HAVE_DLAPI define
+#include <config_global.h>
 
 #include "rtl/ustring.h"
 #include "sal/saldllapi.h"

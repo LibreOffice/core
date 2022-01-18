@@ -2204,7 +2204,7 @@ define gb_LinkTarget_use_glxtest
 $(call gb_LinkTarget_use_libraries,$(1),vcl,,$(4))
 
 ifeq (,$(DISABLE_DYNLOADING))
-$(call gb_LinkTarget_add_libs,$(1),$(DLOPEN_LIBS))
+$(call gb_LinkTarget_add_libs,$(1),$(UNIX_DLAPI_LIBS))
 endif
 
 ifeq (,$(DISABLE_GUI))

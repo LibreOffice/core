@@ -34,6 +34,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <sal/log.hxx>
+#include <osl/module.h>
 
 #include <langboost.hxx>
 #include <font/PhysicalFontCollection.hxx>
@@ -161,11 +162,16 @@ namespace
 {
     void dlFT_Done_MM_Var(FT_Library library, FT_MM_Var *amaster)
     {
-        static auto func = reinterpret_cast<void(*)(FT_Library, FT_MM_Var*)>(dlsym(nullptr, "FT_Done_MM_Var"));
+#if !HAVE_DLAPI
+        FT_Done_MM_Var(library, amaster);
+#else
+        static auto func = reinterpret_cast<void(*)(FT_Library, FT_MM_Var*)>(
+            osl_getAsciiFunctionSymbol(nullptr, "FT_Done_MM_Var"));
         if (func)
             func(library, amaster);
         else
             free(amaster);
+#endif
     }
 }
 

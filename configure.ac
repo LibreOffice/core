@@ -910,6 +910,7 @@ cygwin*|wsl*)
 
     using_freetype_fontconfig=no
     using_x11=no
+    test_unix_dlapi=no
     test_openldap=no
     test_eot=no
     enable_pagein=no
@@ -1071,6 +1072,8 @@ dragonfly*)
     ;;
 
 linux-android*)
+    # API exists, but seems not really usable since Android 7 AFAIK
+    using_dlapi=no
     using_freetype_fontconfig=yes
     using_headless_plugin=no
     using_x11=no
@@ -1108,6 +1111,8 @@ haiku*)
     ;;
 
 emscripten)
+    # API currently just exists in headers, not code
+    using_dlapi=no
     using_freetype_fontconfig=yes
     using_x11=no
     test_openldap=no
@@ -1339,14 +1344,18 @@ else
 fi
 AC_SUBST(ENDIANNESS)
 
-if test $_os != "WINNT"; then
-    save_LIBS="$LIBS"
-    AC_SEARCH_LIBS([dlsym], [dl],
-        [case "$ac_cv_search_dlsym" in -l*) DLOPEN_LIBS="$ac_cv_search_dlsym";; esac],
-        [AC_MSG_ERROR([dlsym not found in either libc nor libdl])])
-    LIBS="$save_LIBS"
+if test "$using_dlapi" != no; then
+    AC_DEFINE([HAVE_DLAPI])
+    if test "$test_unix_dlapi" != no; then
+        save_LIBS="$LIBS"
+        AC_SEARCH_LIBS([dlsym], [dl],
+            [case "$ac_cv_search_dlsym" in -l*) UNIX_DLAPI_LIBS="$ac_cv_search_dlsym";; esac],
+            [AC_MSG_ERROR([dlsym not found in either libc nor libdl])])
+        LIBS="$save_LIBS"
+        AC_DEFINE([HAVE_UNIX_DLAPI])
+    fi
 fi
-AC_SUBST(DLOPEN_LIBS)
+AC_SUBST(UNIX_DLAPI_LIBS)
 
 # Check for a (GNU) backtrace implementation
 AC_ARG_VAR([BACKTRACE_CFLAGS], [Compiler flags needed to use backtrace(3)])
