@@ -52,6 +52,24 @@
       "parentUuid": "59f9c7fb_82673019",
       "revId": "e81d2a9516795abf6567b99b009e75ce5718f07c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64205650_97cfa79e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-18T23:04:27Z",
+      "side": 1,
+      "message": "--enable-customtarget-components\n--disable-dynamic-loading\n\nThen select one backend, like:\n\n--disable-gtk3\n--disable-gen\n--enable-qt5",
+      "parentUuid": "400f1017_53352c01",
+      "revId": "e81d2a9516795abf6567b99b009e75ce5718f07c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
