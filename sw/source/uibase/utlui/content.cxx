@@ -3682,6 +3682,10 @@ void SwContentTree::UpdateTracking()
     if (State::HIDDEN == m_eState || !m_pActiveShell)
         return;
 
+    // only when treeview or treeview context menu does not have focus
+    if (m_xTreeView->has_focus() || m_xTreeView->has_child_focus())
+        return;
+
     // m_bIgnoreDocChange is set on delete and outline visibility toggle
     if (m_bIgnoreDocChange)
     {
@@ -4491,7 +4495,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
 
     std::unique_ptr<weld::TreeIter> xFirst(m_xTreeView->make_iterator());
     if (!m_xTreeView->get_selected(xFirst.get()))
-        xFirst.reset();
+        return; // this shouldn't happen, but better to be safe than ...
 
     auto nSelectedPopupEntry = rSelectedPopupEntry.toUInt32();
     switch (nSelectedPopupEntry)
