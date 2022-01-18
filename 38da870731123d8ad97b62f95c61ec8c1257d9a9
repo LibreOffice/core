@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c2fcd9a_3aa871d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-18T07:22:52Z",
+      "side": 1,
+      "message": "Still, what would be used here ideally? sal_Int32? (To keep that in mind in the long term.)",
+      "revId": "38da870731123d8ad97b62f95c61ec8c1257d9a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
