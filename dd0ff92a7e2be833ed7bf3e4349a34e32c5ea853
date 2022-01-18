@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3e69fca_71ae8874",
+        "filename": "include/osl/module.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-18T13:16:20Z",
+      "side": 1,
+      "message": "I wouldn\u0027t want to do such a \"convenience include\" (that would hopefully get removed with the next round of IWYU fixes anyway) at all.  Why not include config_global.h where it is actually needed?",
+      "revId": "dd0ff92a7e2be833ed7bf3e4349a34e32c5ea853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
