@@ -43,4 +43,11 @@ Any change in this header will cause a rebuild of almost everything.
    bogus -Werror=redundant-move (GCC 9)". */
 #define HAVE_P1155R3 0
 
+// Whether the OS provides a usable dynamcic loading API
+#define HAVE_DLAPI 0
+
+// Whether the OS uses the common UNIX dynamcic loading API calls, like dlopen, dlsym, dladdr etc.
+// Use HAVE_DLAPI instead. Should not be used outside of sal/osl/unx/module.cxx!
+#define HAVE_UNIX_DLAPI 0
+
 #endif

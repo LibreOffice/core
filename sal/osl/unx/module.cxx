@@ -35,14 +35,9 @@
 #include <sys/ldr.h>
 #endif
 
-#ifdef ANDROID
-#include <osl/detail/android-bootstrap.h>
-#endif
-
-static bool getModulePathFromAddress(void * address, rtl_String ** path) {
+static bool getModulePathFromAddress(void * address, rtl_String ** path)
+{
     bool result = false;
-    // We do want to have this functionality also in the
-    // DISABLE_DYNLOADING case, I think?
 #if defined(AIX)
     int size = 4 * 1024;
     char *buf, *filename=NULL;
@@ -87,6 +82,7 @@ static bool getModulePathFromAddress(void * address, rtl_String ** path) {
 
     free(buf);
 #else
+#if HAVE_UNIX_DLAPI
     Dl_info dl_info;
 
     result = dladdr(address, &dl_info) != 0;
@@ -95,6 +91,10 @@ static bool getModulePathFromAddress(void * address, rtl_String ** path) {
     {
         rtl_string_newFromStr(path, dl_info.dli_fname);
     }
+#else
+    (void) address;
+    (void) path;
+#endif
 #endif
     return result;
 }
@@ -134,16 +134,13 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 
 oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sal_Int32 nRtldMode)
 {
+#if HAVE_UNIX_DLAPI
     SAL_WARN_IF(
         ((nRtldMode & SAL_LOADMODULE_LAZY) != 0
          && (nRtldMode & SAL_LOADMODULE_NOW) != 0),
         "sal.osl", "only either LAZY or NOW");
     if (pModuleName)
     {
-#ifdef ANDROID
-        (void) nRtldMode;
-        void *pLib = lo_dlopen(pModuleName);
-#else
         int rtld_mode =
             ((nRtldMode & SAL_LOADMODULE_NOW) ? RTLD_NOW : RTLD_LAZY) |
             ((nRtldMode & SAL_LOADMODULE_GLOBAL) ? RTLD_GLOBAL : RTLD_LOCAL);
@@ -153,9 +150,12 @@ oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sal_Int32 nRtldM
             pLib == nullptr, "sal.osl",
             "dlopen(" << pModuleName << ", " << rtld_mode << "): "
                 << dlerror());
-#endif
         return pLib;
     }
+#else
+    (void) pModuleName;
+    (void) nRtldMode;
+#endif
     return nullptr;
 }
 
@@ -197,45 +197,49 @@ oslModule osl_loadModuleRelativeAscii(
 sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *, oslModule *pResult)
 {
-#if !defined(DISABLE_DYNLOADING) || defined(IOS)
+#if HAVE_UNIX_DLAPI
     *pResult = static_cast<oslModule>(RTLD_DEFAULT);
+    return true;
 #else
     *pResult = nullptr;
+    return false;
 #endif
-    return true;
 }
-
-#ifndef DISABLE_DYNLOADING
 
 /*****************************************************************************/
 /* osl_unloadModule */
 /*****************************************************************************/
 void SAL_CALL osl_unloadModule(oslModule hModule)
 {
+#if !defined(DISABLE_DYNLOADING) && HAVE_UNIX_DLAPI
     if (hModule)
     {
-#ifdef ANDROID
-        int nRet = lo_dlclose(hModule);
-#else
         int nRet = dlclose(hModule);
-#endif
         SAL_INFO_IF(
             nRet != 0, "sal.osl", "dlclose(" << hModule << "): " << dlerror());
     }
+#else
+    (void) hModule;
+#endif
 }
-
-#endif // !DISABLE_DYNLOADING
 
 namespace {
 
-void * getSymbol(oslModule module, char const * symbol) {
+void * getSymbol(oslModule module, char const * symbol)
+{
     assert(symbol != nullptr);
+#if HAVE_UNIX_DLAPI
     // We do want to use dlsym() also in the DISABLE_DYNLOADING case
     // just to look up symbols in the static executable, I think:
     void * p = dlsym(module, symbol);
     SAL_INFO_IF(
         p == nullptr, "sal.osl",
         "dlsym(" << module << ", " << symbol << "): " << dlerror());
+#else
+    (void) module;
+    (void) symbol;
+    void *p = nullptr;
+#endif
     return p;
 }
 

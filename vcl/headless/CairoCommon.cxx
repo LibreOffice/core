@@ -27,14 +27,15 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sal/log.hxx>
+#include <osl/module.h>
 
 void dl_cairo_surface_set_device_scale(cairo_surface_t* surface, double x_scale, double y_scale)
 {
-#ifdef ANDROID
+#if !HAVE_DLAPI
     cairo_surface_set_device_scale(surface, x_scale, y_scale);
 #else
     static auto func = reinterpret_cast<void (*)(cairo_surface_t*, double, double)>(
-        dlsym(nullptr, "cairo_surface_set_device_scale"));
+        osl_getAsciiFunctionSymbol(nullptr, "cairo_surface_set_device_scale"));
     if (func)
         func(surface, x_scale, y_scale);
 #endif
@@ -42,11 +43,11 @@ void dl_cairo_surface_set_device_scale(cairo_surface_t* surface, double x_scale,
 
 void dl_cairo_surface_get_device_scale(cairo_surface_t* surface, double* x_scale, double* y_scale)
 {
-#ifdef ANDROID
+#if !HAVE_DLAPI
     cairo_surface_get_device_scale(surface, x_scale, y_scale);
 #else
     static auto func = reinterpret_cast<void (*)(cairo_surface_t*, double*, double*)>(
-        dlsym(nullptr, "cairo_surface_get_device_scale"));
+        osl_getAsciiFunctionSymbol(nullptr, "cairo_surface_get_device_scale"));
     if (func)
         func(surface, x_scale, y_scale);
     else

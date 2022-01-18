@@ -25,7 +25,7 @@ $(eval $(call gb_Library_add_defs,crashreport,\
 
 $(eval $(call gb_Library_add_libs,crashreport,\
     $(if $(filter LINUX %BSD SOLARIS, $(OS)), \
-        $(DLOPEN_LIBS) \
+        $(UNIX_DLAPI_LIBS) \
     ) \
 ))
 
