@@ -25,6 +25,7 @@
 #include <ControllerLockGuard.hxx>
 #include <StatisticsHelper.hxx>
 #include <ChartTypeHelper.hxx>
+#include <ChartTypeManager.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 
@@ -767,9 +768,9 @@ void DataBrowserModel::updateFromModel()
         return;
 
     // set template at DialogModel
-    uno::Reference< lang::XMultiServiceFactory > xFact( m_xChartDocument->getChartTypeManager(), uno::UNO_QUERY );
+    rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = dynamic_cast<::chart::ChartTypeManager*>( m_xChartDocument->getChartTypeManager().get() );
     DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-        DiagramHelper::getTemplateForDiagram( xDiagram, xFact );
+        DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager );
     if( aTemplateAndService.first.is())
         m_apDialogModel->setTemplate( aTemplateAndService.first );
 

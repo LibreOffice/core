@@ -24,6 +24,7 @@
 #include <ChartModelHelper.hxx>
 #include <ChartResourceGroups.hxx>
 #include <ChartTypeDialogController.hxx>
+#include <ChartTypeManager.hxx>
 #include <DiagramHelper.hxx>
 #include <unonames.hxx>
 
@@ -156,8 +157,8 @@ void ChartTypePanel::Initialize()
 {
     if (!m_xChartModel.is())
         return;
-    uno::Reference<lang::XMultiServiceFactory> xTemplateManager(
-        m_xChartModel->getChartTypeManager(), uno::UNO_QUERY);
+    rtl::Reference<::chart::ChartTypeManager> xTemplateManager
+        = dynamic_cast<::chart::ChartTypeManager*>(m_xChartModel->getChartTypeManager().get());
     uno::Reference<css::chart2::XDiagram> xDiagram(ChartModelHelper::findDiagram(m_xChartModel));
     DiagramHelper::tTemplateWithServiceName aTemplate
         = DiagramHelper::getTemplateForDiagram(xDiagram, xTemplateManager);
@@ -220,8 +221,8 @@ void ChartTypePanel::updateData()
     // Chart Type related
     if (!m_xChartModel.is())
         return;
-    uno::Reference<lang::XMultiServiceFactory> xTemplateManager(
-        m_xChartModel->getChartTypeManager(), uno::UNO_QUERY);
+    rtl::Reference<::chart::ChartTypeManager> xTemplateManager
+        = dynamic_cast<::chart::ChartTypeManager*>(m_xChartModel->getChartTypeManager().get());
     uno::Reference<frame::XModel> xModel(m_xChartModel);
     uno::Reference<css::chart2::XDiagram> xDiagram(ChartModelHelper::findDiagram(xModel));
     DiagramHelper::tTemplateWithServiceName aTemplate
