@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c41f6577_401edac3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-01-18T15:56:17Z",
+      "side": 1,
+      "message": "Fixed :). Thanks for the suggestions",
+      "parentUuid": "7b74cfa6_c7378a99",
+      "revId": "f5ea246c81b69820b1ce62c9db22cfc9472350c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8d0e450_f13b2a32",
@@ -35,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65f35230_1593a5db",
+        "filename": "UnoControls/source/inc/progressbar.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-01-18T15:56:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b8d0e450_f13b2a32",
+      "revId": "f5ea246c81b69820b1ce62c9db22cfc9472350c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25f3864d_374c60f6",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-01-17T19:28:39Z",
       "side": 1,
       "message": "You can use COL_BLACK here and remove the comment.",
+      "revId": "f5ea246c81b69820b1ce62c9db22cfc9472350c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87398a57_1c7c9637",
+        "filename": "UnoControls/source/inc/progressbar.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-01-18T15:56:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "25f3864d_374c60f6",
       "revId": "f5ea246c81b69820b1ce62c9db22cfc9472350c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
