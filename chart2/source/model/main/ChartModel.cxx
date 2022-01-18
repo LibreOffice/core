@@ -95,8 +95,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_xContext( xContext )
     , m_aVisualAreaSize( ChartModelHelper::getDefaultPageSize() )
     , m_xPageBackground( new PageBackground )
-    , m_xXMLNamespaceMap( createNameContainer( ::cppu::UnoType<OUString>::get(),
-                "com.sun.star.xml.NamespaceMap", "com.sun.star.comp.chart.XMLNameSpaceMap" ) )
+    , m_xXMLNamespaceMap( new NameContainer() )
     , mnStart(0)
     , mnEnd(0)
 {
@@ -153,7 +152,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
         rtl::Reference< ::chart::Diagram > xNewDiagram = new ::chart::Diagram( *rOther.m_xDiagram );
         Reference< beans::XPropertySet > xNewPageBackground = CreateRefClone< beans::XPropertySet >()( rOther.m_xPageBackground );
         rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager; // does not implement XCloneable
-        Reference< container::XNameAccess > xXMLNamespaceMap = CreateRefClone< container::XNameAccess >()( rOther.m_xXMLNamespaceMap );
+        rtl::Reference< ::chart::NameContainer > xXMLNamespaceMap = new NameContainer( *rOther.m_xXMLNamespaceMap );
 
         {
             MutexGuard aGuard( m_aModelMutex );
@@ -544,7 +543,7 @@ void SAL_CALL ChartModel::dispose()
     m_xDiagram.clear();
     DisposeHelper::DisposeAndClear( m_xTitle );
     DisposeHelper::DisposeAndClear( m_xPageBackground );
-    DisposeHelper::DisposeAndClear( m_xXMLNamespaceMap );
+    m_xXMLNamespaceMap.clear();
 
     m_xStorage.clear();
         // just clear, don't dispose - we're not the owner
@@ -1146,7 +1145,7 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
                 }
                 break;
             case SERVICE_NAMESPACE_MAP:
-                return Reference< uno::XInterface >( m_xXMLNamespaceMap );
+                return static_cast<cppu::OWeakObject*>(m_xXMLNamespaceMap.get());
         }
     }
     else if(rServiceSpecifier == CHART_VIEW_SERVICE_NAME)

@@ -31,25 +31,13 @@ using ::com::sun::star::uno::Any;
 namespace chart
 {
 
-uno::Reference< container::XNameContainer > createNameContainer(
-        const css::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName )
-{
-    return new NameContainer( rType, rServicename, rImplementationName );
-}
 
-NameContainer::NameContainer( const css::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName )
-    : m_aType( rType )
-    , m_aServicename( rServicename )
-    , m_aImplementationName( rImplementationName )
+NameContainer::NameContainer()
 {
 }
 
-NameContainer::NameContainer(
-    const NameContainer & rOther )
+NameContainer::NameContainer( const NameContainer & rOther )
     : impl::NameContainer_Base(rOther)
-    , m_aType( rOther.m_aType )
-    , m_aServicename( rOther.m_aServicename )
-    , m_aImplementationName( rOther.m_aImplementationName )
     , m_aMap( rOther.m_aMap )
 {
 }
@@ -61,7 +49,7 @@ NameContainer::~NameContainer()
 //XServiceInfo
 OUString SAL_CALL NameContainer::getImplementationName()
 {
-    return m_aImplementationName;
+    return "com.sun.star.comp.chart.XMLNameSpaceMap";
 }
 
 sal_Bool SAL_CALL NameContainer::supportsService( const OUString& ServiceName )
@@ -71,7 +59,7 @@ sal_Bool SAL_CALL NameContainer::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL NameContainer::getSupportedServiceNames()
 {
-    return { m_aServicename };
+    return { "com.sun.star.xml.NamespaceMap" };
 }
 
 // XNameContainer
@@ -126,7 +114,7 @@ sal_Bool SAL_CALL NameContainer::hasElements()
 
 uno::Type SAL_CALL NameContainer::getElementType()
 {
-    return m_aType;
+    return ::cppu::UnoType<OUString>::get();
 }
 
 // XCloneable
