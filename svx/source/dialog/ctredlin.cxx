@@ -27,6 +27,8 @@
 #include <svtools/ctrlbox.hxx>
 #include <unotools/textsearch.hxx>
 
+#include <helpids.h>
+
 #include <svx/ctredlin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -298,7 +300,7 @@ void SvxTPage::ActivatePage()
 {
 }
 
-SvxTPView::SvxTPView(weld::Container* pParent, weld::Window* pDialog, weld::Builder* pTopLevel)
+SvxTPView::SvxTPView(weld::Container* pParent, weld::Window* pDialog)
     : SvxTPage(pParent, "svx/ui/redlineviewpage.ui", "RedlineViewPage")
     , bEnableAccept(true)
     , bEnableAcceptAll(true)
@@ -308,11 +310,11 @@ SvxTPView::SvxTPView(weld::Container* pParent, weld::Window* pDialog, weld::Buil
     , bEnableClearFormat(false)
     , bEnableClearFormatAll(false)
     , m_pDialog(pDialog)
-    , m_xAccept(pTopLevel->weld_button("accept"))
-    , m_xReject(pTopLevel->weld_button("reject"))
-    , m_xAcceptAll(pTopLevel->weld_button("acceptall"))
-    , m_xRejectAll(pTopLevel->weld_button("rejectall"))
-    , m_xUndo(pTopLevel->weld_button("undo"))
+    , m_xAccept(m_xBuilder->weld_button("accept"))
+    , m_xReject(m_xBuilder->weld_button("reject"))
+    , m_xAcceptAll(m_xBuilder->weld_button("acceptall"))
+    , m_xRejectAll(m_xBuilder->weld_button("rejectall"))
+    , m_xUndo(m_xBuilder->weld_button("undo"))
     , m_xViewData(new SvxRedlinTable(m_xBuilder->weld_tree_view("writerchanges"),
                                      m_xBuilder->weld_tree_view("calcchanges")))
 {
@@ -411,40 +413,10 @@ void SvxTPView::EnableRejectAll(bool bFlag)
     m_xRejectAll->set_sensitive(bFlag);
 }
 
-void SvxTPView::EnableClearFormatButton(weld::Button& rButton, bool bFlag)
-{
-    OUString sText = rButton.get_label();
-    OUString sClearFormat = SvxResId(RID_SVXSTR_CLEARFORM);
-    sal_Int32 nPos = sText.indexOf(sClearFormat);
-
-    // add or remove "Clear formatting" to get "Reject" or "Reject/Clear formatting"
-    if (bFlag)
-    {
-        if (nPos == -1)
-        {
-            rButton.set_label(sText + "/" + sClearFormat);
-        }
-    }
-    else
-    {
-        if (nPos > 0)
-        {
-            rButton.set_label(sText.copy(0, nPos - 1));
-        }
-    }
-
-    if (m_pDialog)
-    {
-        // tdf#127218 allow dialog to shrink
-        m_pDialog->resize_to_request();
-    }
-}
-
 void SvxTPView::EnableClearFormat(bool bFlag)
 {
     if (bEnableClearFormat == bFlag)
         return;
-    EnableClearFormatButton(*m_xReject, bFlag);
     bEnableClearFormat = bFlag;
 }
 
@@ -452,7 +424,6 @@ void SvxTPView::EnableClearFormatAll(bool bFlag)
 {
     if (bEnableClearFormatAll == bFlag)
         return;
-    EnableClearFormatButton(*m_xRejectAll, bFlag);
     bEnableClearFormatAll = bFlag;
 }
 
@@ -991,7 +962,7 @@ IMPL_LINK_NOARG(SvxTPFilter, RefHandle, weld::Button&, void)
     aRefLink.Call(this);
 }
 
-SvxAcceptChgCtr::SvxAcceptChgCtr(weld::Container* pParent, weld::Window* pDialog, weld::Builder* pTopLevel)
+SvxAcceptChgCtr::SvxAcceptChgCtr(weld::Container* pParent, weld::Window* pDialog)
     : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/redlinecontrol.ui"))
     , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
 {
@@ -999,9 +970,10 @@ SvxAcceptChgCtr::SvxAcceptChgCtr(weld::Container* pParent, weld::Window* pDialog
     m_xTabCtrl->connect_leave_page(LINK(this, SvxAcceptChgCtr, DeactivatePageHdl));
 
     m_xTPFilter.reset(new SvxTPFilter(m_xTabCtrl->get_page("filter")));
-    m_xTPView.reset(new SvxTPView(m_xTabCtrl->get_page("view"), pDialog, pTopLevel));
+    m_xTPView.reset(new SvxTPView(m_xTabCtrl->get_page("view"), pDialog));
     m_xTPFilter->SetRedlinTable(m_xTPView->GetTableControl());
     m_xTabCtrl->set_current_page("view");
+    m_xTabCtrl->set_help_id(HID_REDLINE_CTRL_VIEW);
     m_xTabCtrl->show();
 }
 
@@ -1017,9 +989,15 @@ void SvxAcceptChgCtr::ShowFilterPage()
 IMPL_LINK(SvxAcceptChgCtr, ActivatePageHdl, const OString&, rPage, void)
 {
     if (rPage == "filter")
+    {
         m_xTPFilter->ActivatePage();
+        m_xTabCtrl->set_help_id(HID_REDLINE_CTRL_FILTER);
+    }
     else if (rPage == "view")
+    {
         m_xTPView->ActivatePage();
+        m_xTabCtrl->set_help_id(HID_REDLINE_CTRL_VIEW);
+    }
 }
 
 IMPL_LINK(SvxAcceptChgCtr, DeactivatePageHdl, const OString&, rPage, bool)
