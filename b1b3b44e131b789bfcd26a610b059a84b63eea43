@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bfde784_b6196921",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-18T21:44:48Z",
+      "side": 1,
+      "message": "It\u0027s not perfect but I think it goes in the right way.\nHowever testing the extreme case with `back``ticks are fun`.`n``est-ce pas?` I had an error when trying to save a new table in the editor.\nHere\u0027s the generated statement:\nCREATE TABLE `back`ticks are fun`.`Table156` (`id` VARCHAR(100) NOT NULL, PRIMARY KEY  (`id`))\n",
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
