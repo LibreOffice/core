@@ -85,6 +85,7 @@ namespace desktop {
         static tools::Rectangle CheckedRectangle(const tools::Rectangle& rect);
     };
 
+    /// One instance of this per view, handles flushing callbacks
     class DESKTOP_DLLPUBLIC CallbackFlushHandler final : public Idle, public SfxLokCallbackInterface
     {
     public:
@@ -190,6 +191,7 @@ namespace desktop {
         queue_type1 m_queue1;
         queue_type2 m_queue2;
         std::map<int, std::string> m_states;
+        std::unordered_map<std::string, std::string> m_lastStateChange;
         std::unordered_map<int, std::unordered_map<int, std::string>> m_viewStates;
 
         // For some types only the last message matters (see isUpdatedType()) or only the last message
