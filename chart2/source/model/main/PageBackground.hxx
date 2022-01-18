@@ -56,7 +56,6 @@ public:
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
 
-private:
     explicit PageBackground( const PageBackground & rOther );
 
     // ____ OPropertySet ____
@@ -77,6 +76,8 @@ private:
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+
+private:
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

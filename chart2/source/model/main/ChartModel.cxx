@@ -109,7 +109,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     }
 
     {
-        ModifyListenerHelper::addListener( m_xPageBackground, this );
+        m_xPageBackground->addModifyListener( this );
         m_xChartTypeManager = new ::chart::ChartTypeManager( m_xContext );
     }
     osl_atomic_decrement(&m_refCount);
@@ -150,7 +150,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
         Reference< util::XModifyListener > xListener;
         Reference< chart2::XTitle > xNewTitle = CreateRefClone< chart2::XTitle >()( rOther.m_xTitle );
         rtl::Reference< ::chart::Diagram > xNewDiagram = new ::chart::Diagram( *rOther.m_xDiagram );
-        Reference< beans::XPropertySet > xNewPageBackground = CreateRefClone< beans::XPropertySet >()( rOther.m_xPageBackground );
+        rtl::Reference< ::chart::PageBackground > xNewPageBackground = new PageBackground( *rOther.m_xPageBackground );
         rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager; // does not implement XCloneable
         rtl::Reference< ::chart::NameContainer > xXMLNamespaceMap = new NameContainer( *rOther.m_xXMLNamespaceMap );
 
@@ -167,7 +167,8 @@ ChartModel::ChartModel( const ChartModel & rOther )
         ModifyListenerHelper::addListener( xNewTitle, xListener );
         if( xNewDiagram && xListener)
             xNewDiagram->addModifyListener( xListener );
-        ModifyListenerHelper::addListener( xNewPageBackground, xListener );
+        if( xNewPageBackground && xListener)
+            xNewPageBackground->addModifyListener( xListener );
         xListener.clear();
     }
     osl_atomic_decrement(&m_refCount);
@@ -542,7 +543,7 @@ void SAL_CALL ChartModel::dispose()
     m_xChartTypeManager.clear();
     m_xDiagram.clear();
     DisposeHelper::DisposeAndClear( m_xTitle );
-    DisposeHelper::DisposeAndClear( m_xPageBackground );
+    m_xPageBackground.clear();
     m_xXMLNamespaceMap.clear();
 
     m_xStorage.clear();
