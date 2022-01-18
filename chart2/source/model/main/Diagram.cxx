@@ -18,6 +18,7 @@
  */
 
 #include <Diagram.hxx>
+#include <ChartTypeManager.hxx>
 #include <PropertyHelper.hxx>
 #include "Wall.hxx"
 #include <ModifyListenerHelper.hxx>
@@ -394,8 +395,7 @@ void SAL_CALL Diagram::setDiagramData(
     const Reference< chart2::data::XDataSource >& xDataSource,
     const Sequence< beans::PropertyValue >& aArguments )
 {
-    uno::Reference< lang::XMultiServiceFactory > xChartTypeManager( m_xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.chart2.ChartTypeManager", m_xContext ), uno::UNO_QUERY );
+    rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = new ::chart::ChartTypeManager( m_xContext );
     DiagramHelper::tTemplateWithServiceName aTemplateAndService = DiagramHelper::getTemplateForDiagram( this, xChartTypeManager );
     uno::Reference< chart2::XChartTypeTemplate > xTemplate( aTemplateAndService.first );
     if( !xTemplate.is() )

@@ -43,6 +43,7 @@
 #include <unonames.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <ChartTypeManager.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -600,7 +601,7 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
             }
         }
 
-        Reference< lang::XMultiServiceFactory > xChartTypeManager( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
+        rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
         DiagramHelper::tTemplateWithServiceName aTemplateAndService =
             DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
 
@@ -1463,9 +1464,9 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
         if( !aSeriesVector.empty() )
         {
-            Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
+            rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
             DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-                    DiagramHelper::getTemplateForDiagram( xDiagram, xFact );
+                    DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
             if( aTemplateAndService.second == "com.sun.star.chart2.template.ColumnWithLine" )
             {
                 try
@@ -1500,9 +1501,9 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
     if( !(xChartDoc.is() && xDiagram.is() && nDimension == 2) )
         return;
 
-    Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
+    rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
     DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-            DiagramHelper::getTemplateForDiagram( xDiagram, xFact );
+            DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
 
     uno::Reference< chart2::XChartTypeTemplate > xTemplate;
     if( aTemplateAndService.second == "com.sun.star.chart2.template.ColumnWithLine" )
@@ -1525,14 +1526,14 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         }
         else
         {
-            xTemplate.set( xFact->createInstance("com.sun.star.chart2.template.Column"), uno::UNO_QUERY );
+            xTemplate.set( xChartTypeManager->createInstance("com.sun.star.chart2.template.Column"), uno::UNO_QUERY );
         }
     }
     else if( aTemplateAndService.second == "com.sun.star.chart2.template.Column" )
     {
         if( nNewValue == 0 )
             return;
-        xTemplate.set( xFact->createInstance( "com.sun.star.chart2.template.ColumnWithLine" ), uno::UNO_QUERY );
+        xTemplate.set( xChartTypeManager->createInstance( "com.sun.star.chart2.template.ColumnWithLine" ), uno::UNO_QUERY );
     }
 
     if(!xTemplate.is())
