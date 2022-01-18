@@ -77,11 +77,6 @@
 #define HAVE_FEATURE_READONLY_INSTALLSET 0
 
 /*
- * Whether FreeType has FT_Face_GetCharVariantIndex or not.
- */
-#define HAVE_FT_FACE_GETCHARVARIANTINDEX 0
-
-/*
  * Whether to use validation on files.
  */
 #define HAVE_EXPORT_VALIDATION 0
