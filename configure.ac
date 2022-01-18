@@ -827,7 +827,6 @@ test_webdav=yes
 # There is currently just iOS not using salplug, so this explicitly enables it.
 # must: using_freetype_fontconfig
 #  may: using_headless_plugin defaults to $using_freetype_fontconfig
-using_vclplug=yes
 # must: using_x11
 
 # Default values, as such probably valid just for Linux, set
@@ -968,7 +967,6 @@ darwin*|macos*) # macOS
 
 ios*) # iOS
     using_freetype_fontconfig=no
-    using_vclplug=no
     using_x11=no
     build_crypto=no
     test_libcmis=no
@@ -1196,7 +1194,6 @@ AC_SUBST(USE_HEADLESS_CODE)
 
 AC_MSG_NOTICE([VCL platform uses freetype+fontconfig: $using_freetype_fontconfig])
 AC_MSG_NOTICE([VCL platform uses headless plugin: $using_headless_plugin])
-AC_MSG_NOTICE([VCL platform uses vclplug: $using_vclplug])
 AC_MSG_NOTICE([VCL platform uses X11: $using_x11])
 
 # ===================================================================
