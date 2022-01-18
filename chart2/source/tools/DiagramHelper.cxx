@@ -21,6 +21,7 @@
 #include <DataSeriesHelper.hxx>
 #include <AxisHelper.hxx>
 #include <ChartTypeHelper.hxx>
+#include <ChartTypeManager.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -75,7 +76,7 @@ namespace chart
 DiagramHelper::tTemplateWithServiceName
     DiagramHelper::getTemplateForDiagram(
         const Reference< XDiagram > & xDiagram,
-        const Reference< lang::XMultiServiceFactory > & xChartTypeManager )
+        const rtl::Reference< ::chart::ChartTypeManager > & xChartTypeManager )
 {
     DiagramHelper::tTemplateWithServiceName aResult;
 
