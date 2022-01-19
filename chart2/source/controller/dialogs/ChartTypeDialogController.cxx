@@ -19,6 +19,7 @@
 
 #include <ChartTypeDialogController.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartTypeTemplate.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -252,19 +253,19 @@ OUString ChartTypeDialogController::getServiceNameForParameter( const ChartTypeP
     }
     return OUString();
 }
-uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTemplate(
+rtl::Reference< ChartTypeTemplate > ChartTypeDialogController::getCurrentTemplate(
     const ChartTypeParameter& rParameter
-    , const uno::Reference< lang::XMultiServiceFactory >& xTemplateManager ) const
+    , const rtl::Reference< ChartTypeManager >& xTemplateManager ) const
 {
-    uno::Reference< XChartTypeTemplate > xTemplate;
+    rtl::Reference< ChartTypeTemplate > xTemplate;
 
     OUString aServiceName( getServiceNameForParameter( rParameter ) );
     if(!aServiceName.isEmpty())
     {
-        xTemplate.set( xTemplateManager->createInstance( aServiceName ), uno::UNO_QUERY );
+        xTemplate = xTemplateManager->createTemplate( aServiceName );
         if(xTemplate.is())
         {
-            uno::Reference< beans::XPropertySet > xTemplateProps( xTemplate, uno::UNO_QUERY );
+            uno::Reference< beans::XPropertySet > xTemplateProps( static_cast<cppu::OWeakObject*>(xTemplate.get()), uno::UNO_QUERY );
             if(xTemplateProps.is())
             {
                 try
@@ -315,8 +316,8 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
     DiagramHelper::tTemplateWithServiceName aTemplateWithService(
         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager ));
-    if( aTemplateWithService.first.is())
-        aTemplateWithService.first->resetStyles( xDiagram );
+    if( aTemplateWithService.xChartTypeTemplate.is())
+        aTemplateWithService.xChartTypeTemplate->resetStyles( xDiagram );
     xTemplate->changeDiagram( xDiagram );
     if( AllSettings::GetMathLayoutRTL() )
         AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );

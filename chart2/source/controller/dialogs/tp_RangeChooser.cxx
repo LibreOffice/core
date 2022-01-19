@@ -20,6 +20,7 @@
 #include "tp_RangeChooser.hxx"
 #include <DataSourceHelper.hxx>
 #include <ChartTypeTemplateProvider.hxx>
+#include <ChartTypeTemplate.hxx>
 #include "DialogModel.hxx"
 #include <RangeSelectionHelper.hxx>
 #include <TabPageNotifiable.hxx>
@@ -191,7 +192,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
     if( !m_xCurrentChartTypeTemplate.is() )
     {
         if(m_pTemplateProvider)
-            m_xCurrentChartTypeTemplate.set( m_pTemplateProvider->getCurrentTemplate());
+            m_xCurrentChartTypeTemplate = m_pTemplateProvider->getCurrentTemplate();
         if( !m_xCurrentChartTypeTemplate.is())
         {
             OSL_FAIL( "Need a template to change data source" );

@@ -23,6 +23,7 @@
 #include <dlg_DataSource.hxx>
 #include <ChartTypeTemplateProvider.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartTypeTemplate.hxx>
 #include <DiagramHelper.hxx>
 #include "DialogModel.hxx"
 
@@ -47,10 +48,10 @@ public:
         const Reference< chart2::XChartDocument > & xDoc );
 
     // ____ ChartTypeTemplateProvider ____
-    virtual Reference< chart2::XChartTypeTemplate > getCurrentTemplate() const override;
+    virtual rtl::Reference< ::chart::ChartTypeTemplate > getCurrentTemplate() const override;
 
 private:
-    Reference< chart2::XChartTypeTemplate > m_xTemplate;
+    rtl::Reference< ::chart::ChartTypeTemplate > m_xTemplate;
 };
 
 }
@@ -68,11 +69,11 @@ DocumentChartTypeTemplateProvider::DocumentChartTypeTemplateProvider(
             DiagramHelper::getTemplateForDiagram(
                 xDia,
                 dynamic_cast<::chart::ChartTypeManager*>(xDoc->getChartTypeManager().get()) ));
-        m_xTemplate.set( aResult.first );
+        m_xTemplate = aResult.xChartTypeTemplate;
     }
 }
 
-Reference< chart2::XChartTypeTemplate > DocumentChartTypeTemplateProvider::getCurrentTemplate() const
+rtl::Reference< ::chart::ChartTypeTemplate > DocumentChartTypeTemplateProvider::getCurrentTemplate() const
 {
     return m_xTemplate;
 }

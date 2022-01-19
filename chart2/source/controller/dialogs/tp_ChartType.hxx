@@ -52,7 +52,7 @@ public:
     virtual void        initializePage() override;
     virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason eReason ) override;
 
-    virtual css::uno::Reference< css::chart2::XChartTypeTemplate > getCurrentTemplate() const override;
+    virtual rtl::Reference< ::chart::ChartTypeTemplate > getCurrentTemplate() const override;
 
 private:
     ChartTypeDialogController* getSelectedMainType();

@@ -19,19 +19,16 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
-
-namespace com::sun::star::chart2
-{
-class XChartTypeTemplate;
-}
+#include <rtl/ref.hxx>
 
 namespace chart
 {
+class ChartTypeTemplate;
+
 class ChartTypeTemplateProvider
 {
 public:
-    virtual css::uno::Reference<css::chart2::XChartTypeTemplate> getCurrentTemplate() const = 0;
+    virtual rtl::Reference<::chart::ChartTypeTemplate> getCurrentTemplate() const = 0;
     virtual ~ChartTypeTemplateProvider() {}
 };
 

@@ -25,6 +25,7 @@
 #include <ChartResourceGroups.hxx>
 #include <ChartTypeDialogController.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartTypeTemplate.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <unonames.hxx>
@@ -163,7 +164,7 @@ void ChartTypePanel::Initialize()
     rtl::Reference<Diagram> xDiagram(ChartModelHelper::findDiagram(m_xChartModel));
     DiagramHelper::tTemplateWithServiceName aTemplate
         = DiagramHelper::getTemplateForDiagram(xDiagram, xTemplateManager);
-    OUString aServiceName(aTemplate.second);
+    OUString aServiceName(aTemplate.sServiceName);
 
     bool bFound = false;
 
@@ -176,7 +177,9 @@ void ChartTypePanel::Initialize()
 
             m_xMainTypeList->set_active(nM);
             showAllControls(*elem);
-            uno::Reference<beans::XPropertySet> xTemplateProps(aTemplate.first, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xTemplateProps(
+                static_cast<cppu::OWeakObject*>(aTemplate.xChartTypeTemplate.get()),
+                uno::UNO_QUERY);
             ChartTypeParameter aParameter
                 = elem->getChartTypeParameterForService(aServiceName, xTemplateProps);
             m_pCurrentMainType = getSelectedMainType();
@@ -227,7 +230,7 @@ void ChartTypePanel::updateData()
     rtl::Reference<Diagram> xDiagram(ChartModelHelper::findDiagram(xModel));
     DiagramHelper::tTemplateWithServiceName aTemplate
         = DiagramHelper::getTemplateForDiagram(xDiagram, xTemplateManager);
-    OUString aServiceName(aTemplate.second);
+    OUString aServiceName(aTemplate.sServiceName);
 
     sal_uInt16 nM = 0;
     for (auto const& elem : m_aChartTypeDialogControllerList)
@@ -287,14 +290,14 @@ void ChartTypePanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
     doUpdateModel(xModel);
 }
 
-uno::Reference<css::chart2::XChartTypeTemplate> ChartTypePanel::getCurrentTemplate() const
+rtl::Reference<::chart::ChartTypeTemplate> ChartTypePanel::getCurrentTemplate() const
 {
     if (m_pCurrentMainType && m_xChartModel.is())
     {
         ChartTypeParameter aParameter(getCurrentParameter());
         m_pCurrentMainType->adjustParameterToSubType(aParameter);
-        uno::Reference<lang::XMultiServiceFactory> xTemplateManager(
-            m_xChartModel->getChartTypeManager(), uno::UNO_QUERY);
+        rtl::Reference<ChartTypeManager> xTemplateManager
+            = dynamic_cast<ChartTypeManager*>(m_xChartModel->getChartTypeManager().get());
         return m_pCurrentMainType->getCurrentTemplate(aParameter, xTemplateManager);
     }
     return nullptr;
@@ -433,7 +436,8 @@ void ChartTypePanel::selectMainType()
     }
 
     fillAllControls(aParameter);
-    uno::Reference<beans::XPropertySet> xTemplateProps(getCurrentTemplate(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTemplateProps(
+        static_cast<cppu::OWeakObject*>(getCurrentTemplate().get()), uno::UNO_QUERY);
     m_pCurrentMainType->fillExtraControls(m_xChartModel, xTemplateProps);
 }
 } // end of namespace ::chart::sidebar
