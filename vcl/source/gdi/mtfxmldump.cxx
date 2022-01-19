@@ -1094,9 +1094,6 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 const auto* pMetaClipRegionAction = static_cast<const MetaClipRegionAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
 
-                // FIXME for now we dump only the bounding box; this is
-                // enough for the tests we have, but may need extending to
-                // dumping the real polypolygon in the future
                 tools::Rectangle aRectangle = pMetaClipRegionAction->GetRegion().GetBoundRect();
                 writeRectangle(rWriter, aRectangle);
 
