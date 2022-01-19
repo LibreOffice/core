@@ -16,6 +16,24 @@
       "message": "mabye it would help to have a SAL_WARN here?",
       "revId": "5e7bdf28c7f1ce45e7b02046fa4345e37997eba9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63938a72_ff5ac728",
+        "filename": "sw/source/core/text/inftxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-19T12:11:14Z",
+      "side": 1,
+      "message": "sure, https://gerrit.libreoffice.org/c/core/+/128614",
+      "parentUuid": "13351373_3901a934",
+      "revId": "5e7bdf28c7f1ce45e7b02046fa4345e37997eba9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
