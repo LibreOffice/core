@@ -24,6 +24,7 @@
 #include "tp_3D_SceneAppearance.hxx"
 #include "tp_3D_SceneIllumination.hxx"
 #include <ChartModelHelper.hxx>
+#include <Diagram.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -41,7 +42,7 @@ View3DDialog::View3DDialog(weld::Window* pParent, const uno::Reference< frame::X
     , m_aControllerLocker(xChartModel)
     , m_xTabControl(m_xBuilder->weld_notebook("tabcontrol"))
 {
-    uno::Reference< beans::XPropertySet > xSceneProperties( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
+    rtl::Reference< Diagram > xSceneProperties( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
 
     m_xTabControl->append_page("geometry", SchResId(STR_PAGE_PERSPECTIVE));
     m_xGeometry.reset(new ThreeD_SceneGeometry_TabPage(m_xTabControl->get_page("geometry"), xSceneProperties, m_aControllerLocker));

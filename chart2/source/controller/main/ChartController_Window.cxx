@@ -29,6 +29,7 @@
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <TitleHelper.hxx>
 #include "UndoGuard.hxx"
 #include <ControllerLockGuard.hxx>
@@ -1031,7 +1032,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 xPopupMenu->insertSeparator( -1 );
 
                 ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
-                Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) );
+                rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) );
 
                 OUString aFormatCommand( lcl_getFormatCommandForObjectCID( m_aSelection.getSelectedCID() ) );
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, aFormatCommand );

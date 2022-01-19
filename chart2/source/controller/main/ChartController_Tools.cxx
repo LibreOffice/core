@@ -38,6 +38,7 @@
 #include <RegressionCurveHelper.hxx>
 #include "ShapeController.hxx"
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <ObjectNameProvider.hxx>
 #include <unonames.hxx>
 
@@ -108,7 +109,7 @@ bool lcl_deleteDataSeries(
                     ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_DATASERIES )),
                 xUndoManager );
 
-            Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xModel) ) );
+            rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xModel) ) );
             uno::Reference< chart2::XAxis > xAxis( DiagramHelper::getAttachedAxis( xSeries, xDiagram ) );
 
             DataSeriesHelper::deleteSeries( xSeries, xChartType );
@@ -180,7 +181,7 @@ void ChartController::executeDispatch_NewArrangement()
     try
     {
         rtl::Reference<::chart::ChartModel> xModel( getChartModel() );
-        Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xModel) ));
+        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xModel) ));
         if( xDiagram.is())
         {
             UndoGuard aUndoGuard(
@@ -189,13 +190,12 @@ void ChartController::executeDispatch_NewArrangement()
             ControllerLockGuardUNO aCtlLockGuard( xModel );
 
             // diagram
-            Reference< beans::XPropertyState > xState( xDiagram, uno::UNO_QUERY_THROW );
-            xState->setPropertyToDefault( "RelativeSize");
-            xState->setPropertyToDefault( "RelativePosition");
-            xState->setPropertyToDefault( "PosSizeExcludeAxes");
+            xDiagram->setPropertyToDefault( "RelativeSize");
+            xDiagram->setPropertyToDefault( "RelativePosition");
+            xDiagram->setPropertyToDefault( "PosSizeExcludeAxes");
 
             // 3d rotation
-            ThreeDHelper::set3DSettingsToDefault( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ) );
+            ThreeDHelper::set3DSettingsToDefault( xDiagram );
 
             // legend
             Reference< beans::XPropertyState > xLegendState( xDiagram->getLegend(), uno::UNO_QUERY );
@@ -856,7 +856,7 @@ void ChartController::executeDispatch_ToggleGridHorizontal()
 {
     UndoGuard aUndoGuard(
         SchResId( STR_ACTION_TOGGLE_GRID_HORZ ), m_xUndoManager );
-    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) ));
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) ));
     if( !xDiagram.is())
         return;
 
@@ -889,7 +889,7 @@ void ChartController::executeDispatch_ToggleGridVertical()
 {
     UndoGuard aUndoGuard(
         SchResId( STR_ACTION_TOGGLE_GRID_VERTICAL ), m_xUndoManager );
-    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) ));
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) ));
     if( !xDiagram.is())
         return;
 

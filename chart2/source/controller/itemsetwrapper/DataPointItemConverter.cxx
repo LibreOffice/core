@@ -27,6 +27,7 @@
 #include <SeriesOptionsItemConverter.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <unonames.hxx>
@@ -234,7 +235,7 @@ DataPointItemConverter::DataPointItemConverter(
         m_aConverters.emplace_back( new SeriesOptionsItemConverter( xChartModel, xContext, rPropertySet, rItemPool ));
     }
 
-    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
     uno::Reference< XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram , xSeries ) );
     bool bFound = false;
     bool bAmbiguous = false;

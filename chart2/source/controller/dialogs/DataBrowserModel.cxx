@@ -21,6 +21,7 @@
 #include "DialogModel.hxx"
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <StatisticsHelper.hxx>
@@ -289,7 +290,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         nAfterColumnIndex = getCategoryColumnCount()-1;
 
     sal_Int32 nStartCol = 0;
-    Reference<chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartDocument);
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(m_xChartDocument);
     Reference<chart2::XChartType> xChartType;
     Reference<chart2::XDataSeries> xSeries;
     if (o3tl::make_unsigned(nAfterColumnIndex) < m_aColumns.size())
@@ -763,7 +764,7 @@ void DataBrowserModel::updateFromModel()
     m_aColumns.clear();
     m_aHeaders.clear();
 
-    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDocument ));
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDocument ));
     if( !xDiagram.is())
         return;
 
@@ -803,10 +804,9 @@ void DataBrowserModel::updateFromModel()
         }
     }
 
-    Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
-    if( !xCooSysCnt.is())
+    if( !xDiagram.is())
         return;
-    const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+    const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xDiagram->getCoordinateSystems());
     for( Reference< chart2::XCoordinateSystem > const & coords : aCooSysSeq )
     {
         Reference< chart2::XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );

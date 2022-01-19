@@ -28,6 +28,7 @@
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <DataSeriesHelper.hxx>
 #include <TitleHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -60,7 +61,7 @@ OUString lcl_getDataSeriesName( const OUString& rObjectCID, const Reference< fra
 {
     OUString aRet;
 
-    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel );
     if( xDiagram.is() && xSeries.is() )
     {
@@ -501,7 +502,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
         else
             aRet=SchResId(STR_TIP_DATAPOINT);
 
-        Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
         Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel );
         if( xDiagram.is() && xSeries.is() )
         {
@@ -731,7 +732,7 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
     {
         aRet = SchResId( STR_STATUS_DATAPOINT_MARKED );
 
-        Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
         Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel );
         if( xDiagram.is() && xSeries.is() )
         {

@@ -19,6 +19,7 @@
 
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <DataSourceHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <RangeHighlighter.hxx>
@@ -80,7 +81,7 @@ uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDa
     return new InternalDataProvider( xChartDoc, bConnectToModel, bDefaultDataInColumns );
 }
 
-uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< frame::XModel >& xModel )
+rtl::Reference< Diagram > ChartModelHelper::findDiagram( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
     if( xChartDoc.is())
@@ -88,12 +89,16 @@ uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< 
     return nullptr;
 }
 
-uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< chart2::XChartDocument >& xChartDoc )
+rtl::Reference< Diagram > ChartModelHelper::findDiagram( const uno::Reference< chart2::XChartDocument >& xChartDoc )
 {
     try
     {
-        if( xChartDoc.is())
-            return xChartDoc->getFirstDiagram();
+        if( !xChartDoc )
+            return nullptr;
+        uno::Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+        ::chart::Diagram* pDiagram = dynamic_cast<::chart::Diagram*>(xDiagram.get());
+        assert(!xDiagram || pDiagram);
+        return pDiagram;
     }
     catch( const uno::Exception & )
     {
@@ -118,7 +123,7 @@ uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( 
 uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< XCoordinateSystem > XCooSys;
-    uno::Reference< XCoordinateSystemContainer > xCooSysCnt( ChartModelHelper::findDiagram( xModel ), uno::UNO_QUERY );
+    rtl::Reference< Diagram > xCooSysCnt( ChartModelHelper::findDiagram( xModel ), uno::UNO_QUERY );
     if( xCooSysCnt.is() )
     {
         uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
@@ -145,7 +150,7 @@ std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
 {
     std::vector< uno::Reference< XDataSeries > > aResult;
 
-    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
     if( xDiagram.is())
         aResult = DiagramHelper::getDataSeriesFromDiagram( xDiagram );
 
@@ -199,17 +204,13 @@ bool ChartModelHelper::isIncludeHiddenCells( const uno::Reference< frame::XModel
 {
     bool bIncluded = true;  // hidden cells are included by default.
 
-    uno::Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
     if (!xDiagram.is())
-        return bIncluded;
-
-    uno::Reference< beans::XPropertySet > xProp( xDiagram, uno::UNO_QUERY );
-    if (!xProp.is())
         return bIncluded;
 
     try
     {
-        xProp->getPropertyValue("IncludeHiddenCells") >>= bIncluded;
+        xDiagram->getPropertyValue("IncludeHiddenCells") >>= bIncluded;
     }
     catch( const beans::UnknownPropertyException& )
     {

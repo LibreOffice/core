@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/style/XStyleSupplier.hpp>
+#include "charttoolsdllapi.hxx"
 
 #include <map>
 
@@ -143,6 +144,7 @@ protected:
      */
     virtual void firePropertyChangeEvent();
 
+public:
     // Interfaces
 
     // ____ XInterface ____
@@ -159,6 +161,7 @@ protected:
         getPropertyState( const OUString& PropertyName ) override;
     virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL
         getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
+    OOO_DLLPUBLIC_CHARTTOOLS
     virtual void SAL_CALL
         setPropertyToDefault( const OUString& PropertyName ) override;
     virtual css::uno::Any SAL_CALL

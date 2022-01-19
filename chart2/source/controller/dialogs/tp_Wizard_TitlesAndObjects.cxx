@@ -21,6 +21,7 @@
 #include <res_Titles.hxx>
 #include <res_LegendPosition.hxx>
 #include <ChartModelHelper.hxx>
+#include <Diagram.hxx>
 #include <AxisHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/frame/XModel.hpp>
@@ -75,7 +76,7 @@ void TitlesAndObjectsTabPage::initializePage()
 
     //init grid checkboxes
     {
-        uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( m_xChartModel );
+        rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( m_xChartModel );
         uno::Sequence< sal_Bool > aPossibilityList;
         uno::Sequence< sal_Bool > aExistenceList;
         AxisHelper::getAxisOrGridPossibilities( aPossibilityList, xDiagram, false );
@@ -120,7 +121,7 @@ void TitlesAndObjectsTabPage::commitToModel()
 
     //commit grid changes to model
     {
-        uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
+        rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
         uno::Sequence< sal_Bool > aOldExistenceList;
         AxisHelper::getAxisOrGridExistence( aOldExistenceList, xDiagram, false );
         uno::Sequence< sal_Bool > aNewExistenceList(aOldExistenceList);

@@ -32,6 +32,7 @@
 #include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <ChartTypeHelper.hxx>
 
 #include <ChartModel.hxx>
@@ -157,7 +158,7 @@ bool isTitleVisible(const css::uno::Reference<css::frame::XModel>& xModel, Title
 
 bool isGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridType eType)
 {
-    Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
+    rtl::Reference< Diagram > xDiagram(ChartModelHelper::findDiagram(xModel));
     if(xDiagram.is())
     {
         sal_Int32 nDimensionIndex = 0;
@@ -174,7 +175,7 @@ bool isGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridTy
 
 void setGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridType eType, bool bVisible)
 {
-    Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
+    rtl::Reference< Diagram > xDiagram(ChartModelHelper::findDiagram(xModel));
     if(!xDiagram.is())
         return;
 
@@ -194,7 +195,7 @@ void setGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridT
 
 bool isAxisVisible(const css::uno::Reference<css::frame::XModel>& xModel, AxisType eType)
 {
-    Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
+    rtl::Reference< Diagram > xDiagram(ChartModelHelper::findDiagram(xModel));
     if(xDiagram.is())
     {
         sal_Int32 nDimensionIndex = 0;
@@ -213,7 +214,7 @@ bool isAxisVisible(const css::uno::Reference<css::frame::XModel>& xModel, AxisTy
 
 void setAxisVisible(const css::uno::Reference<css::frame::XModel>& xModel, AxisType eType, bool bVisible)
 {
-    Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
+    rtl::Reference< Diagram > xDiagram(ChartModelHelper::findDiagram(xModel));
     if(!xDiagram.is())
         return;
 
@@ -438,7 +439,7 @@ void ChartElementsPanel::updateData()
     if (!mbModelValid)
         return;
 
-    Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(mxModel));
+    rtl::Reference< Diagram > xDiagram(ChartModelHelper::findDiagram(mxModel));
     sal_Int32 nDimension = DiagramHelper::getDimension(xDiagram);
     SolarMutexGuard aGuard;
 

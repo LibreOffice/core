@@ -23,6 +23,7 @@
 #include <ChartTypeHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <ItemPropertyMap.hxx>
 #include "SchWhichPairs.hxx"
 #include <unonames.hxx>
@@ -207,7 +208,7 @@ TextLabelItemConverter::TextLabelItemConverter(
 {
     maConverters.emplace_back(new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 
-    uno::Reference<XDiagram> xDiagram(ChartModelHelper::findDiagram(xChartModel));
+    rtl::Reference< Diagram > xDiagram(ChartModelHelper::findDiagram(xChartModel));
     uno::Reference<XChartType> xChartType(DiagramHelper::getChartTypeOfSeries(xDiagram, xSeries));
     bool bFound = false;
     bool bAmbiguous = false;

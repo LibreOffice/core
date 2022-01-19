@@ -24,6 +24,7 @@
 #include <ChartModelHelper.hxx>
 #include <ChartTypeManager.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <unonames.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -178,7 +179,7 @@ void ChartTypeTabPage::stateChanged()
     commitToModel( aParameter );
 
     //detect the new ThreeDLookScheme
-    uno::Reference<XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
     // tdf#124295 - select always a 3D scheme
     if (ThreeDLookScheme aThreeDLookScheme = ThreeDHelper::detectScheme(xDiagram);
         aThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Unknown)
@@ -186,8 +187,7 @@ void ChartTypeTabPage::stateChanged()
 
     try
     {
-        uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
-        xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
+        xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
     catch ( const uno::Exception& )
     {
@@ -249,11 +249,10 @@ void ChartTypeTabPage::selectMainType()
         && aParameter.eThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Realistic)
         aParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;
 
-    uno::Reference<XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
     try
     {
-        uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
-        xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
+        xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
     catch ( const uno::Exception& )
     {
@@ -304,7 +303,7 @@ void ChartTypeTabPage::initializePage()
     if( !m_xChartModel.is() )
         return;
     rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = dynamic_cast<::chart::ChartTypeManager*>( m_xChartModel->getChartTypeManager().get() );
-    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
     DiagramHelper::tTemplateWithServiceName aTemplate =
         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager );
     OUString aServiceName( aTemplate.second );
@@ -332,8 +331,7 @@ void ChartTypeTabPage::initializePage()
 
             try
             {
-                uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
-                xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
+                xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
             }
             catch (const uno::Exception&)
             {

@@ -24,6 +24,7 @@
 #include <TitleDialogData.hxx>
 #include <TitleHelper.hxx>
 #include <ChartModelHelper.hxx>
+#include <Diagram.hxx>
 #include <AxisHelper.hxx>
 
 namespace chart
@@ -41,7 +42,7 @@ TitleDialogData::TitleDialogData( std::unique_ptr<ReferenceSizeProvider> pRefSiz
 
 void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChartModel )
 {
-    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(xChartModel);
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(xChartModel);
 
     //get possibilities
     uno::Sequence< sal_Bool > aAxisPossibilityList;

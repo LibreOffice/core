@@ -24,6 +24,7 @@
 #include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <defines.hxx>
@@ -73,20 +74,19 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
 
     m_aWireframePolyPolygon = m_pScene->CreateWireframe();
 
-    uno::Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram(uno::Reference<chart2::XChartDocument>(getChartModel())) );
-    uno::Reference< beans::XPropertySet > xDiagramProperties( xDiagram, uno::UNO_QUERY );
-    if( !xDiagramProperties.is() )
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(uno::Reference<chart2::XChartDocument>(getChartModel())) );
+    if( !xDiagram.is() )
         return;
 
-    ThreeDHelper::getRotationFromDiagram( xDiagramProperties
+    ThreeDHelper::getRotationFromDiagram( xDiagram
         , m_nInitialHorizontalAngleDegree, m_nInitialVerticalAngleDegree );
 
-    ThreeDHelper::getRotationAngleFromDiagram( xDiagramProperties
+    ThreeDHelper::getRotationAngleFromDiagram( xDiagram
         , m_fInitialXAngleRad, m_fInitialYAngleRad, m_fInitialZAngleRad );
 
     if( ChartTypeHelper::isSupportingRightAngledAxes(
         DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
-        xDiagramProperties->getPropertyValue("RightAngledAxes") >>= m_bRightAngledAxes;
+        xDiagram->getPropertyValue("RightAngledAxes") >>= m_bRightAngledAxes;
     if(m_bRightAngledAxes)
     {
         if( m_eRotationDirection==ROTATIONDIRECTION_Z )
@@ -161,12 +161,12 @@ bool DragMethod_RotateDiagram::EndSdrDrag(bool /*bCopy*/)
         if(m_bRightAngledAxes)
             ThreeDHelper::adaptRadAnglesForRightAngledAxes( fResultX, fResultY );
 
-        ThreeDHelper::setRotationAngleToDiagram( uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) ), uno::UNO_QUERY )
+        ThreeDHelper::setRotationAngleToDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) )
             , fResultX, fResultY, fResultZ );
     }
     else
     {
-        ThreeDHelper::setRotationToDiagram( ( uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) ), uno::UNO_QUERY ) )
+        ThreeDHelper::setRotationToDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) )
             , m_nInitialHorizontalAngleDegree+m_nAdditionalHorizontalAngleDegree, m_nInitialVerticalAngleDegree+m_nAdditionalVerticalAngleDegree );
     }
 
