@@ -642,6 +642,11 @@ rtl::Reference<::chart::ChartModel> ChartController::getChartModel()
     return nullptr;
 }
 
+rtl::Reference<::chart::Diagram> ChartController::getFirstDiagram()
+{
+    return ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) );
+}
+
 uno::Any SAL_CALL ChartController::getViewData()
 {
     //provides access to current view status
@@ -1403,7 +1408,7 @@ void ChartController::executeDispatch_MoveSeries( bool bForward )
             SchResId(STR_OBJECT_DATASERIES)),
         m_xUndoManager );
 
-    bool bChanged = DiagramHelper::moveSeries( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) ), xGivenDataSeries, bForward );
+    bool bChanged = DiagramHelper::moveSeries( getFirstDiagram(), xGivenDataSeries, bForward );
     if( bChanged )
     {
         m_aSelection.setSelection( ObjectIdentifier::getMovedSeriesCID( aObjectCID, bForward ) );
