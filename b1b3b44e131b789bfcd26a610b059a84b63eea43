@@ -169,6 +169,24 @@
       "parentUuid": "df7934fe_014294b4",
       "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ced8989_25b5c5f5",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-01-19T13:08:30Z",
+      "side": 1,
+      "message": "::dbtools::qualifiedNameComponents *leaves* \"`\" that are already there or it adds them? You have to realise it is not only about the \"`\" at the beginning and the end, but also about escaping (by doubling in SQL syntax) any \"`\" that are in the middle.\n\nTry to go up the chain of callers and see where the escaping is done... createObject seems is called by appendObject. Is the \"rName\" passed to appendObject already escaped? It should not. The problem could be in appendObject, because it calls composeTableName which adds the escaping?\n\nMaybe (I\u0027m not sure) the pragmatic solution is to unescape the names before passing them to getTables. Not by removing _all_ \"`\", but by:\n\n1) Removing first and last character which _must_ be \"`\"\n2) Replace all \"``\" (doubled \"`\") by single \"`\"\n\nThere might be a utility function in LibreOffice to do that, but I didn\u0027t immediately find it.",
+      "parentUuid": "298083e0_9f654922",
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
