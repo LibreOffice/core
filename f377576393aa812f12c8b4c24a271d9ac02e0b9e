@@ -39,6 +39,30 @@
       },
       "revId": "f377576393aa812f12c8b4c24a271d9ac02e0b9e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5d1af51_bfbb55e1",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1679,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-19T12:23:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df380ad8_84a0ed75",
+      "range": {
+        "startLine": 1679,
+        "startChar": 34,
+        "endLine": 1679,
+        "endChar": 83
+      },
+      "revId": "f377576393aa812f12c8b4c24a271d9ac02e0b9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
