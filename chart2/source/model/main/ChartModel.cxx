@@ -540,7 +540,7 @@ void SAL_CALL ChartModel::dispose()
     m_xDataProvider.clear();
     m_xInternalDataProvider.clear();
     m_xNumberFormatsSupplier.clear();
-    DisposeHelper::DisposeAndClear( m_xOwnNumberFormatsSupplier );
+    m_xOwnNumberFormatsSupplier.clear();
     m_xChartTypeManager.clear();
     m_xDiagram.clear();
     DisposeHelper::DisposeAndClear( m_xTitle );
@@ -800,9 +800,9 @@ void SAL_CALL ChartModel::attachNumberFormatsSupplier( const uno::Reference< uti
 {
     {
         MutexGuard aGuard( m_aModelMutex );
-        if( xNewSupplier==m_xNumberFormatsSupplier )
+        if( xNewSupplier == m_xNumberFormatsSupplier )
             return;
-        if( xNewSupplier==m_xOwnNumberFormatsSupplier )
+        if( xNewSupplier == uno::Reference<XNumberFormatsSupplier>(m_xOwnNumberFormatsSupplier) )
             return;
         if( m_xOwnNumberFormatsSupplier.is() && xNewSupplier.is() )
         {
