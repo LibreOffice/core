@@ -104,6 +104,8 @@ public:
 
     sal_uInt16 createRegion (const OUString &rName);
 
+    void readlistdata();
+
     bool renameRegion(std::u16string_view rTitle, const OUString &rNewTitle);
 
     bool removeRegion (const sal_uInt16 nItemId);
