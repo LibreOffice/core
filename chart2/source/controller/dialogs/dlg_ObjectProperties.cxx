@@ -34,6 +34,7 @@
 #include <ResId.hxx>
 #include <ViewElementListProvider.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ObjectNameProvider.hxx>
 #include <DiagramHelper.hxx>
@@ -115,7 +116,7 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
     m_xChartDocument = xChartModel;
     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aObjectCID, xChartModel );
-    uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
+    rtl::Reference< ChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
     bool bHasSeriesProperties = (m_eObjectType==OBJECTTYPE_DATA_SERIES);

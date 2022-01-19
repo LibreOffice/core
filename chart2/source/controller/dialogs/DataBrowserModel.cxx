@@ -20,6 +20,7 @@
 #include "DataBrowserModel.hxx"
 #include "DialogModel.hxx"
 #include <ChartModelHelper.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeManager.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
@@ -293,7 +294,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
 
     sal_Int32 nStartCol = 0;
     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(m_xChartDocument);
-    Reference<chart2::XChartType> xChartType;
+    rtl::Reference<ChartType> xChartType;
     Reference<chart2::XDataSeries> xSeries;
     if (o3tl::make_unsigned(nAfterColumnIndex) < m_aColumns.size())
         // Get the data series at specific column position (if available).
@@ -303,7 +304,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
     if( xSeries.is())
     {
         // Use the chart type of the currently selected data series.
-        xChartType.set( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ));
+        xChartType = DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries );
 
         // Find the corresponding header and determine the last column of this
         // data series.
@@ -321,7 +322,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
     else
     {
         // No data series at specified column position. Use the first chart type.
-        xChartType.set( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ));
+        xChartType = DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
         nStartCol = nAfterColumnIndex;
     }
 
@@ -330,10 +331,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
 
     // Get shared sequences of current series.  Normally multiple data series
     // only share "values-x" sequences. (TODO: simplify this logic).
-    Reference< chart2::XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY );
-    lcl_tSharedSeqVec aSharedSequences;
-    if( xSeriesCnt.is())
-        aSharedSequences = lcl_getSharedSequences( xSeriesCnt->getDataSeries());
+    lcl_tSharedSeqVec aSharedSequences = lcl_getSharedSequences( xChartType->getDataSeries());
 
     Reference<chart2::XDataSeries> xNewSeries =
         m_apDialogModel->insertSeriesAfter(xSeries, xChartType, true);

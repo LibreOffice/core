@@ -39,6 +39,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart
 {
 class BaseCoordinateSystem;
+class ChartType;
 
 class OOO_DLLPUBLIC_CHARTTOOLS AxisHelper
 {
@@ -191,13 +192,13 @@ public:
     static bool isSecondaryYAxisNeeded( const css::uno::Reference<
                     css::chart2::XCoordinateSystem >& xCooSys );
 
-    static css::uno::Reference< css::chart2::XChartType >
+    static rtl::Reference< ::chart::ChartType >
         getChartTypeByIndex( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys,
                              sal_Int32 nIndex );
 
     static void setRTLAxisLayout( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys );
 
-    static css::uno::Reference< css::chart2::XChartType >
+    static rtl::Reference< ::chart::ChartType >
         getFirstChartTypeWithSeriesAttachedToAxisIndex( const css::uno::Reference< css::chart2::XDiagram >& xDiagram, const sal_Int32 nAttachedAxisIndex );
 
     static bool isAxisPositioningEnabled();

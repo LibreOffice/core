@@ -109,6 +109,11 @@ uno::Reference< util::XCloneable > SAL_CALL BubbleChartType::createClone()
     return uno::Reference< util::XCloneable >( new BubbleChartType( *this ));
 }
 
+rtl::Reference< ChartType > BubbleChartType::cloneChartType() const
+{
+    return new BubbleChartType( *this );
+}
+
 // ____ XChartType ____
 Reference< chart2::XCoordinateSystem > SAL_CALL
     BubbleChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )

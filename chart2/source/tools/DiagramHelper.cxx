@@ -21,6 +21,7 @@
 #include <Diagram.hxx>
 #include <DataSeriesHelper.hxx>
 #include <AxisHelper.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
@@ -591,7 +592,7 @@ uno::Reference< XAxis > DiagramHelper::getAttachedAxis(
     return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), xDiagram );
 }
 
-uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
+rtl::Reference< ChartType > DiagramHelper::getChartTypeOfSeries(
                                 const uno::Reference< chart2::XDiagram >&   xDiagram
                               , const uno::Reference< XDataSeries >&        xGivenDataSeries )
 {
@@ -610,16 +611,11 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
     for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : pDiagram->getBaseCoordinateSystems() )
     {
         //iterate through all chart types in the current coordinate system
-        const uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xCooSys->getChartTypes() );
-        for( uno::Reference< XChartType > const & xChartType : aChartTypeList )
+        const std::vector< rtl::Reference< ChartType > > & aChartTypeList( xCooSys->getChartTypes2() );
+        for( rtl::Reference< ChartType > const & xChartType : aChartTypeList )
         {
             //iterate through all series in this chart type
-            uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-            OSL_ASSERT( xDataSeriesContainer.is());
-            if( !xDataSeriesContainer.is() )
-                continue;
-
-            const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+            const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xChartType->getDataSeries() );
             for( uno::Reference< XDataSeries > const & dataSeries : aSeriesList )
             {
                 if( xGivenDataSeries==dataSeries )
@@ -687,7 +683,7 @@ Sequence< Sequence< Reference< XDataSeries > > >
     return comphelper::containerToSequence( aResult );
 }
 
-Reference< XChartType >
+rtl::Reference< ChartType >
     DiagramHelper::getChartTypeByIndex( const Reference< XDiagram >& xDiagram, sal_Int32 nIndex )
 {
     if (!xDiagram)
@@ -696,19 +692,19 @@ Reference< XChartType >
     Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
     assert(pDiagram);
 
-    Reference< XChartType > xChartType;
+    rtl::Reference< ChartType > xChartType;
 
     //iterate through all coordinate systems
     sal_Int32 nTypesSoFar = 0;
     for( rtl::Reference< BaseCoordinateSystem > const & coords : pDiagram->getBaseCoordinateSystems() )
     {
-        Sequence< Reference< XChartType > > aChartTypeList( coords->getChartTypes() );
-        if( nIndex >= 0 && nIndex < (nTypesSoFar + aChartTypeList.getLength()) )
+        const std::vector< rtl::Reference< ChartType > > & aChartTypeList( coords->getChartTypes2() );
+        if( nIndex >= 0 && nIndex < static_cast<sal_Int32>(nTypesSoFar + aChartTypeList.size()) )
         {
-            xChartType.set( aChartTypeList[nIndex - nTypesSoFar] );
+            xChartType = aChartTypeList[nIndex - nTypesSoFar];
             break;
         }
-        nTypesSoFar += aChartTypeList.getLength();
+        nTypesSoFar += aChartTypeList.size();
     }
 
     return xChartType;
@@ -1153,7 +1149,7 @@ sal_Int32 DiagramHelper::getPercentNumberFormat( const Reference< util::XNumberF
     return nRet;
 }
 
-Sequence< Reference< XChartType > >
+std::vector< rtl::Reference< ChartType > >
     DiagramHelper::getChartTypesFromDiagram(
         const Reference< XDiagram > & xDiagram )
 {
@@ -1162,12 +1158,12 @@ Sequence< Reference< XChartType > >
 
     Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
     assert(pDiagram);
-    std::vector< Reference< XChartType > > aResult;
+    std::vector< rtl::Reference< ChartType > > aResult;
     try
     {
         for( rtl::Reference< BaseCoordinateSystem > const & coords : pDiagram->getBaseCoordinateSystems() )
         {
-            const Sequence< Reference< XChartType > > aChartTypeSeq( coords->getChartTypes());
+            const std::vector< rtl::Reference< ChartType > > & aChartTypeSeq( coords->getChartTypes2());
             aResult.insert( aResult.end(), aChartTypeSeq.begin(), aChartTypeSeq.end() );
         }
     }
@@ -1176,7 +1172,7 @@ Sequence< Reference< XChartType > >
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
-    return comphelper::containerToSequence( aResult );
+    return aResult;
 }
 
 bool DiagramHelper::areChartTypesCompatible( const Reference< ::chart2::XChartType >& xFirstType,
@@ -1401,9 +1397,9 @@ bool DiagramHelper::isSupportingFloorAndWall( const Reference<
     //todo: allow this in future again, if fileversion is available for OLE objects (metastream)
     //thus the wrong bottom can be removed on import
 
-    const Sequence< Reference< chart2::XChartType > > aTypes(
+    const std::vector< rtl::Reference< ChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
-    for( Reference< chart2::XChartType > const & xType : aTypes )
+    for( rtl::Reference< ChartType > const & xType : aTypes )
     {
         if( xType.is() && xType->getChartType().match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return false;

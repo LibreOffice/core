@@ -26,6 +26,7 @@
 #include <TitleHelper.hxx>
 #include <LegendHelper.hxx>
 #include <ObjectIdentifier.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartController.hxx>
 #include <RegressionCurveHelper.hxx>
@@ -406,7 +407,7 @@ void ModelState::update( const rtl::Reference<::chart::ChartModel> & xModel )
 
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
-    uno::Reference< chart2::XChartType > xFirstChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    rtl::Reference< ChartType > xFirstChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
     bSupportsStatistics = ChartTypeHelper::isSupportingStatisticProperties( xFirstChartType, nDimensionCount );
     bSupportsAxes = ChartTypeHelper::isSupportingMainAxis( xFirstChartType, nDimensionCount, 0 );
 

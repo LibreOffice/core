@@ -40,6 +40,7 @@
 #include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartModel.hxx>
 #include <ColorPerPointHelper.hxx>
@@ -198,7 +199,7 @@ wrapper::ItemConverter* createItemConverter(
                     wrapper::GraphicObjectType::FilledDataPoint;
 
                 uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aObjectCID, xChartModel );
-                uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
+                rtl::Reference< ChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
 
                 rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
                 sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );

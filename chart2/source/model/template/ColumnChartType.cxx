@@ -139,6 +139,11 @@ uno::Reference< util::XCloneable > SAL_CALL ColumnChartType::createClone()
     return uno::Reference< util::XCloneable >( new ColumnChartType( *this ));
 }
 
+rtl::Reference< ChartType > ColumnChartType::cloneChartType() const
+{
+    return new ColumnChartType( *this );
+}
+
 // ____ XChartType ____
 OUString SAL_CALL ColumnChartType::getChartType()
 {

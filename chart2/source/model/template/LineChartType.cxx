@@ -151,6 +151,11 @@ uno::Reference< util::XCloneable > SAL_CALL LineChartType::createClone()
     return uno::Reference< util::XCloneable >( new LineChartType( *this ));
 }
 
+rtl::Reference< ChartType > LineChartType::cloneChartType() const
+{
+    return new LineChartType( *this );
+}
+
 // ____ XChartType ____
 OUString SAL_CALL LineChartType::getChartType()
 {

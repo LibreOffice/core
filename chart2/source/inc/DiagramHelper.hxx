@@ -40,6 +40,7 @@ namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 namespace chart
 {
+class ChartType;
 class ChartTypeManager;
 class ChartTypeTemplate;
 
@@ -156,7 +157,7 @@ public:
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
 
-    static css::uno::Reference< css::chart2::XChartType >
+    static rtl::Reference< ChartType >
         getChartTypeOfSeries(
             const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
             const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
@@ -207,11 +208,10 @@ public:
     static sal_Int32 getPercentNumberFormat( const css::uno::Reference<
                 css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
-    static css::uno::Reference< css::chart2::XChartType >
+    static rtl::Reference< ChartType >
         getChartTypeByIndex( const css::uno::Reference< css::chart2::XDiagram >& xDiagram, sal_Int32 nIndex );
 
-    static css::uno::Sequence<
-            css::uno::Reference< css::chart2::XChartType > >
+    static std::vector< rtl::Reference< ChartType > >
         getChartTypesFromDiagram(
             const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 

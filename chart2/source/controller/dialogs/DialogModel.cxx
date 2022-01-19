@@ -26,6 +26,7 @@
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <ControllerLockGuard.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <ThreeDHelper.hxx>
@@ -290,7 +291,7 @@ Sequence< OUString > lcl_CopyExcludingValuesFirst(
 
 Reference< XDataSeries > lcl_CreateNewSeries(
     const Reference< uno::XComponentContext > & xContext,
-    const Reference< XChartType > & xChartType,
+    const uno::Reference< XChartType > & xChartType,
     sal_Int32 nNewSeriesIndex,
     sal_Int32 nTotalNumberOfSeriesInCTGroup,
     const Reference< XDiagram > & xDiagram,
@@ -316,12 +317,14 @@ Reference< XDataSeries > lcl_CreateNewSeries(
         sal_Int32 nGroupIndex=0;
         if( xChartType.is())
         {
-            Sequence< Reference< XChartType > > aCTs(
+            auto pChartType = dynamic_cast<::chart::ChartType*>(xChartType.get());
+            assert(pChartType);
+            std::vector< rtl::Reference< ::chart::ChartType > > aCTs(
                 ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ));
-            for( ; nGroupIndex<aCTs.getLength(); ++nGroupIndex)
-                if( aCTs[nGroupIndex] == xChartType )
+            for( ; nGroupIndex < static_cast<sal_Int32>(aCTs.size()); ++nGroupIndex)
+                if( aCTs[nGroupIndex] == pChartType )
                     break;
-            if( nGroupIndex == aCTs.getLength())
+            if( nGroupIndex == static_cast<sal_Int32>(aCTs.size()))
                 nGroupIndex = 0;
         }
         xTemplate->applyStyle( xResult, nGroupIndex, nNewSeriesIndex, nTotalNumberOfSeriesInCTGroup );

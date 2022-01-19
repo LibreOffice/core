@@ -19,6 +19,7 @@
 
 #include "PieChartTypeTemplate.hxx"
 #include <CommonConverters.hxx>
+#include <ChartType.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
@@ -274,7 +275,7 @@ void PieChartTypeTemplate::adaptScales(
 void PieChartTypeTemplate::createChartTypes(
     const Sequence< Sequence< Reference< chart2::XDataSeries > > > & aSeriesSeq,
     const Sequence< Reference< chart2::XCoordinateSystem > > & rCoordSys,
-    const Sequence< Reference< chart2::XChartType > >& /* aOldChartTypesSeq */ )
+    const std::vector< rtl::Reference< ChartType > >& /* aOldChartTypesSeq */ )
 {
     if( ! rCoordSys.hasElements() ||
         ! rCoordSys[0].is() )
@@ -391,8 +392,8 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
     //check UseRings
     if( bResult )
     {
-        uno::Reference< beans::XPropertySet > xCTProp(
-            DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), uno::UNO_QUERY_THROW );
+        rtl::Reference< ChartType > xCTProp =
+            DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
         bool bUseRings = false;
         if( xCTProp->getPropertyValue( "UseRings") >>= bUseRings )
         {
