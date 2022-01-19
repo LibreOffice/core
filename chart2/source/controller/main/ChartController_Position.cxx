@@ -183,7 +183,7 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
 
             awt::Rectangle aNewObjectRect;
             lcl_getPositionAndSizeFromItemSet( aItemSet, aNewObjectRect, ToSize(aOldObjectRect) );
-            awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
+            awt::Size aPageSize( ChartModelHelper::getPageSize( getChartModel() ) );
             awt::Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
             bool bChanged = false;
@@ -193,7 +193,7 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
                 bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning(rModel, false , true);
             }
 
-            bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID(), getModel()
+            bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID(), getChartModel()
                         , aNewObjectRect, aOldObjectRect, aPageRect );
             if( bMoved || bChanged )
                 aUndoGuard.commit();

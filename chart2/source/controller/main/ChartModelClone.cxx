@@ -60,36 +60,33 @@ namespace chart
     // = helper
     namespace
     {
-        Reference< XModel > lcl_cloneModel( const Reference< XModel > & xModel )
+        rtl::Reference<::chart::ChartModel> lcl_cloneModel( const rtl::Reference<::chart::ChartModel> & xModel )
         {
-            Reference< XModel > xResult;
             try
             {
-                const Reference< XCloneable > xCloneable( xModel, UNO_QUERY_THROW );
-                xResult.set( xCloneable->createClone(), UNO_QUERY_THROW );
+                return new ChartModel(*xModel);
             }
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
-            return xResult;
+            return nullptr;
         }
 
     }
 
     // = ChartModelClone
-    ChartModelClone::ChartModelClone( const Reference< XModel >& i_model, const ModelFacet i_facet )
+    ChartModelClone::ChartModelClone( const rtl::Reference<::chart::ChartModel>& i_model, const ModelFacet i_facet )
     {
-        m_xModelClone.set( lcl_cloneModel( i_model ) );
+        m_xModelClone = lcl_cloneModel( i_model );
 
         try
         {
             if ( i_facet == E_MODEL_WITH_DATA )
             {
-                const Reference< XChartDocument > xChartDoc( m_xModelClone, UNO_QUERY_THROW );
-                ENSURE_OR_THROW( xChartDoc->hasInternalDataProvider(), "invalid chart model" );
+                ENSURE_OR_THROW( m_xModelClone && m_xModelClone->hasInternalDataProvider(), "invalid chart model" );
 
-                const Reference< XCloneable > xCloneable( xChartDoc->getDataProvider(), UNO_QUERY_THROW );
+                const Reference< XCloneable > xCloneable( m_xModelClone->getDataProvider(), UNO_QUERY_THROW );
                 m_xDataClone.set( xCloneable->createClone(), UNO_QUERY_THROW );
             }
 
@@ -116,15 +113,6 @@ namespace chart
         if ( impl_isDisposed() )
             return;
 
-        try
-        {
-            Reference< XComponent > xComp( m_xModelClone, UNO_QUERY_THROW );
-            xComp->dispose();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
         m_xModelClone.clear();
         m_xDataClone.clear();
         m_aSelection.clear();
@@ -139,7 +127,7 @@ namespace chart
         return E_MODEL;
     }
 
-    void ChartModelClone::applyToModel( const Reference< XModel >& i_model ) const
+    void ChartModelClone::applyToModel( const rtl::Reference<::chart::ChartModel>& i_model ) const
     {
         applyModelContentToModel( i_model, m_xModelClone, m_xDataClone );
 
@@ -179,8 +167,9 @@ namespace chart
         }
     }
 
-    void ChartModelClone::applyModelContentToModel( const Reference< XModel >& i_model,
-        const Reference< XModel >& i_modelToCopyFrom, const Reference< XInternalDataProvider >& i_data )
+    void ChartModelClone::applyModelContentToModel( const rtl::Reference<::chart::ChartModel>& i_model,
+        const rtl::Reference<::chart::ChartModel>& i_modelToCopyFrom,
+        const Reference< XInternalDataProvider >& i_data )
     {
         ENSURE_OR_RETURN_VOID( i_model.is(), "ChartModelElement::applyModelContentToModel: invalid source model!" );
         ENSURE_OR_RETURN_VOID( i_modelToCopyFrom.is(), "ChartModelElement::applyModelContentToModel: invalid source model!" );
@@ -188,25 +177,20 @@ namespace chart
         {
             // locked controllers of destination
             ControllerLockGuardUNO aLockedControllers( i_model );
-            Reference< XChartDocument > xSource( i_modelToCopyFrom, UNO_QUERY_THROW );
-            Reference< XChartDocument > xDestination( i_model, UNO_QUERY_THROW );
 
             // propagate the correct flag for plotting of hidden values to the data provider and all used sequences
-            ChartModel& rModel = dynamic_cast<ChartModel&>(*i_model);
-            ChartModelHelper::setIncludeHiddenCells(ChartModelHelper::isIncludeHiddenCells( i_modelToCopyFrom ), rModel);
+            ChartModelHelper::setIncludeHiddenCells(ChartModelHelper::isIncludeHiddenCells( i_modelToCopyFrom ), *i_model);
 
             // diagram
-            xDestination->setFirstDiagram( xSource->getFirstDiagram() );
+            i_model->setFirstDiagram( i_modelToCopyFrom->getFirstDiagram() );
 
             // main title
-            Reference< XTitled > xDestinationTitled( xDestination, UNO_QUERY_THROW );
-            Reference< XTitled > xSourceTitled( xSource, UNO_QUERY_THROW );
-            xDestinationTitled->setTitleObject( xSourceTitled->getTitleObject() );
+            i_model->setTitleObject( i_modelToCopyFrom->getTitleObject() );
 
             // page background
             ::comphelper::copyProperties(
-                xSource->getPageBackground(),
-                xDestination->getPageBackground() );
+                i_modelToCopyFrom->getPageBackground(),
+                i_model->getPageBackground() );
 
             // apply data (not applied in standard Undo)
             if ( i_data.is() )
@@ -214,10 +198,10 @@ namespace chart
 
             // register all sequences at the internal data provider to get adapted
             // indexes when columns are added/removed
-            if ( xDestination->hasInternalDataProvider() )
+            if ( i_model->hasInternalDataProvider() )
             {
-                Reference< XInternalDataProvider > xNewDataProvider( xDestination->getDataProvider(), UNO_QUERY );
-                Reference< XDataSource > xUsedData( DataSourceHelper::getUsedData( i_model ) );
+                Reference< XInternalDataProvider > xNewDataProvider( i_model->getDataProvider(), UNO_QUERY );
+                Reference< XDataSource > xUsedData( DataSourceHelper::getUsedData( *i_model ) );
                 if ( xUsedData.is() && xNewDataProvider.is() )
                 {
                     const Sequence< Reference< XLabeledDataSequence > > aData( xUsedData->getDataSequences() );
@@ -230,11 +214,9 @@ namespace chart
             }
 
             // restore modify status
-            Reference< XModifiable > xSourceMod( xSource, UNO_QUERY );
-            Reference< XModifiable > xDestMod( xDestination, UNO_QUERY );
-            if ( xSourceMod.is() && xDestMod.is() && !xSourceMod->isModified() )
+            if ( !i_modelToCopyFrom->isModified() )
             {
-                xDestMod->setModified( false );
+                i_model->setModified( false );
             }
             // \-- locked controllers of destination
         }

@@ -21,12 +21,14 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::chart2 { class XInternalDataProvider; }
 namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {
+class ChartModel;
 
     enum ModelFacet
     {
@@ -39,7 +41,7 @@ namespace chart
     {
     public:
         ChartModelClone(
-            const css::uno::Reference< css::frame::XModel >& i_model,
+            const rtl::Reference<::chart::ChartModel>& i_model,
             const ModelFacet i_facet
         );
 
@@ -50,11 +52,11 @@ namespace chart
 
         ModelFacet getFacet() const;
 
-        void applyToModel( const css::uno::Reference< css::frame::XModel >& i_model ) const;
+        void applyToModel( const rtl::Reference<::chart::ChartModel>& i_model ) const;
 
         static void applyModelContentToModel(
-            const css::uno::Reference< css::frame::XModel > & i_model,
-            const css::uno::Reference< css::frame::XModel > & i_modelToCopyFrom,
+            const rtl::Reference<::chart::ChartModel> & i_model,
+            const rtl::Reference<::chart::ChartModel> & i_modelToCopyFrom,
             const css::uno::Reference< css::chart2::XInternalDataProvider > & i_data );
 
         void dispose();
@@ -63,7 +65,7 @@ namespace chart
         bool    impl_isDisposed() const { return !m_xModelClone.is(); }
 
     private:
-        css::uno::Reference< css::frame::XModel >                 m_xModelClone;
+        rtl::Reference<::chart::ChartModel>                       m_xModelClone;
         css::uno::Reference< css::chart2::XInternalDataProvider > m_xDataClone;
         css::uno::Any                                             m_aSelection;
     };
