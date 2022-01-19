@@ -39,6 +39,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
+class Wall;
 
 namespace impl
 {
@@ -160,11 +161,9 @@ private:
 
     tCoordinateSystemContainerType m_aCoordSystems;
 
-    css::uno::Reference< css::beans::XPropertySet >
-                        m_xWall;
+    rtl::Reference< Wall >  m_xWall;
 
-    css::uno::Reference< css::beans::XPropertySet >
-                        m_xFloor;
+    rtl::Reference< Wall >  m_xFloor;
 
     css::uno::Reference< css::chart2::XTitle >
                         m_xTitle;
