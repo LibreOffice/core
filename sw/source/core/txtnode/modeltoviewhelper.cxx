@@ -31,7 +31,9 @@
 #include <txtftn.hxx>
 #include <scriptinfo.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include <bookmark.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <deque>
 #include <vector>
 
 namespace {
@@ -103,6 +105,99 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
 
     if (eMode & ExpandMode::HideDeletions)
         SwScriptInfo::selectRedLineDeleted(rNode, aHiddenMulti);
+
+    if (eMode & ExpandMode::ExpandFields)
+    {
+        // hide fieldmark commands
+        IDocumentMarkAccess const& rIDMA(*rNode.GetDoc().getIDocumentMarkAccess());
+        ::std::deque<::std::pair<sw::mark::IFieldmark const*, bool>> startedFields;
+        SwPaM cursor(rNode, 0);
+        while (true)
+        {
+            sw::mark::IFieldmark const* pFieldMark(nullptr);
+            while (true) // loop to skip NonTextFieldmarks, those are handled later
+            {
+                pFieldMark = rIDMA.getFieldmarkFor(*cursor.GetPoint());
+                if (pFieldMark == nullptr
+                    || pFieldMark->GetMarkStart().nNode.GetNode().GetTextNode()->GetText()[
+                            pFieldMark->GetMarkStart().nContent.GetIndex()]
+                        != CH_TXT_ATR_FORMELEMENT)
+                {
+                    break;
+                }
+                pFieldMark = nullptr;
+                if (!cursor.Move(fnMoveBackward, GoInContent))
+                {
+                    break;
+                }
+            }
+            if (!pFieldMark)
+            {
+                break;
+            }
+            assert(pFieldMark->GetMarkStart().nNode.GetNode().GetTextNode()->GetText()[pFieldMark->GetMarkStart().nContent.GetIndex()] != CH_TXT_ATR_FORMELEMENT);
+            // getFieldmarkFor may also return one that starts at rNode,0 -
+            // skip it, must be handled in loop below
+            if (pFieldMark->GetMarkStart().nNode < rNode)
+            {
+                SwPosition const sepPos(::sw::mark::FindFieldSep(*pFieldMark));
+                startedFields.emplace_front(pFieldMark, sepPos.nNode < rNode);
+                *cursor.GetPoint() = pFieldMark->GetMarkStart();
+            }
+            if (!cursor.Move(fnMoveBackward, GoInContent))
+            {
+                break;
+            }
+        }
+        ::std::optional<sal_Int32> oStartHidden;
+        if (!::std::all_of(startedFields.begin(), startedFields.end(),
+                    [](auto const& it) { return it.second; }))
+        {
+            oStartHidden.emplace(0); // node starts out hidden as field command
+        }
+        for (sal_Int32 i = 0; i < rNode.GetText().getLength(); ++i)
+        {
+            switch (rNode.GetText()[i])
+            {
+                case CH_TXT_ATR_FIELDSTART:
+                {
+                    auto const pFieldMark(rIDMA.getFieldmarkAt(SwPosition(const_cast<SwTextNode&>(rNode), i)));
+                    assert(pFieldMark);
+                    startedFields.emplace_back(pFieldMark, false);
+                    if (!oStartHidden)
+                    {
+                        oStartHidden.emplace(i);
+                    }
+                    break;
+                }
+                case CH_TXT_ATR_FIELDSEP:
+                {
+                    assert(startedFields.back().first->IsCoveringPosition(SwPosition(const_cast<SwTextNode&>(rNode), i)));
+                    startedFields.back().second = true;
+                    assert(oStartHidden);
+                    if (::std::all_of(startedFields.begin(), startedFields.end(),
+                            [](auto const& it) { return it.second; }))
+                    {
+                        // i is still hidden but the Range end is oddly "-1"
+                        aHiddenMulti.Select({*oStartHidden, i}, true);
+                        oStartHidden.reset();
+                    }
+                    break;
+                }
+                case CH_TXT_ATR_FIELDEND:
+                {
+                    assert(startedFields.back().first == rIDMA.getFieldmarkAt(SwPosition(const_cast<SwTextNode&>(rNode), i)));
+                    startedFields.pop_back();
+                    aHiddenMulti.Select({i, i}, true);
+                    break;
+                }
+            }
+        }
+        if (oStartHidden && rNode.Len() != 0)
+        {
+            aHiddenMulti.Select({*oStartHidden, rNode.Len() - 1}, true);
+        }
+    }
 
     std::vector<block> aBlocks;
 
