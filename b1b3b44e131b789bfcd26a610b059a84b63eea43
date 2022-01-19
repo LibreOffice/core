@@ -187,6 +187,24 @@
       "parentUuid": "298083e0_9f654922",
       "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51bd70fc_ac2338b4",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T14:17:30Z",
+      "side": 1,
+      "message": "After some test, `a`.`Table333` comes from sComposedName in Tables::appendObject, it\u0027s the result from:\n::dbtools::composeTableName(m_xMetaData, sCatalog, sSchema, sTable, true,::dbtools::EComposeRule::InTableDefinitions);\n\nHere\u0027s the output of this same call except \"false\" instead of \"true\"\na.Table333",
+      "parentUuid": "5ced8989_25b5c5f5",
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
