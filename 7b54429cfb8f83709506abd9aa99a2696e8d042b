@@ -16,6 +16,75 @@
       "message": "Note from https://bugs.documentfoundation.org/show_bug.cgi?id\u003d122995#c14:\n\nI noticed that sometimes the very 1st change in the yellow-marked number does fail. I experimented with moving change in SwDoc::UpdateCharts_ before/after notifies, but changes nothing. Also tried to split. Also debugged to make sure SwDoc::UpdateCharts_ gets called at 1st change a all - it gets.\nWhen I do menu tools/update/charts (that always works, also after 1st change) it gets updated after change of 1st number. This *seems* to initialize something that is not up-to-date after load \u0026 1st change.\nStill, proposed solution is better than current state, but I\u0027ll check and try to identify...",
       "revId": "7b54429cfb8f83709506abd9aa99a2696e8d042b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6afbe3f3_ddda4178",
+        "filename": "sw/source/core/doc/docchart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-19T09:51:08Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 111,
+        "startChar": 55,
+        "endLine": 111,
+        "endChar": 68
+      },
+      "revId": "7b54429cfb8f83709506abd9aa99a2696e8d042b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d36fe371_aca3cbe4",
+        "filename": "sw/source/core/doc/docchart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-19T09:51:08Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 113,
+        "startChar": 59,
+        "endLine": 113,
+        "endChar": 71
+      },
+      "revId": "7b54429cfb8f83709506abd9aa99a2696e8d042b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54e73273_c26b6275",
+        "filename": "sw/source/core/doc/docchart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-19T09:51:08Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 119,
+        "startChar": 38,
+        "endLine": 119,
+        "endChar": 46
+      },
+      "revId": "7b54429cfb8f83709506abd9aa99a2696e8d042b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
