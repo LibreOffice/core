@@ -1231,7 +1231,8 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                         continue;
                     }
                     if ((i + TextFrameIndex(1) ).get() > GetText().getLength())
-                        ; // prevent crash by not passing bad data down to GetTextSize->SwDrawTextInfo
+                        // prevent crash by not passing bad data down to GetTextSize->SwDrawTextInfo
+                        SAL_WARN("sw", "something dodgy, clamping text index to prevent crash");
                     else if (i >= TextFrameIndex(GetText().getLength())
                         || GetText()[sal_Int32(i)] != CH_BLANK)
                     {
