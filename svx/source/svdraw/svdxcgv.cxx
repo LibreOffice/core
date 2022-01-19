@@ -50,6 +50,7 @@
 #include <svx/svdotable.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 
@@ -406,7 +407,9 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     nSizY /= aDstFr.GetNumerator();
     tools::Long xs=nSizX;
     tools::Long ys=nSizY;
-    Point aPos(rCenter.X()-xs/2,rCenter.Y()-ys/2);
+    // set the pos to 0, 0 for online case
+    bool isLOK = comphelper::LibreOfficeKit::isActive();
+    Point aPos(isLOK ? 0 : rCenter.X()-xs/2, isLOK ? 0 : rCenter.Y()-ys/2);
     tools::Rectangle aR(aPos.X(),aPos.Y(),aPos.X()+xs,aPos.Y()+ys);
     pObj->SetLogicRect(aR);
     rLst.InsertObject(pObj, SAL_MAX_SIZE);
