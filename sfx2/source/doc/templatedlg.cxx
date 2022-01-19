@@ -223,6 +223,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
 
     mxActionBar->show();
 
+    mxLocalView->readlistdata();
     mxLocalView->Populate();
     mxLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
 
