@@ -1009,6 +1009,7 @@ chart2/source/controller/sidebar/ChartSidebarSelectionListener.cxx
 chart2/source/controller/uitest/uiobject.cxx
 chart2/source/inc/AxisHelper.hxx
 chart2/source/inc/BaseGFXHelper.hxx
+chart2/source/inc/BaseCoordinateSystem.hxx
 chart2/source/inc/CachedDataSequence.hxx
 chart2/source/inc/CharacterProperties.hxx
 chart2/source/inc/ChartModelHelper.hxx
@@ -1075,7 +1076,6 @@ chart2/source/inc/chartview/DrawModelWrapper.hxx
 chart2/source/inc/chartview/ExplicitValueProvider.hxx
 chart2/source/inc/servicenames_coosystems.hxx
 chart2/source/model/filter/XMLFilter.cxx
-chart2/source/model/inc/BaseCoordinateSystem.hxx
 chart2/source/model/inc/DataSeries.hxx
 chart2/source/model/inc/StockBar.hxx
 chart2/source/model/inc/XMLFilter.hxx

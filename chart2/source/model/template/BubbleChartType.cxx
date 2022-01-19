@@ -113,8 +113,8 @@ uno::Reference< util::XCloneable > SAL_CALL BubbleChartType::createClone()
 Reference< chart2::XCoordinateSystem > SAL_CALL
     BubbleChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
 {
-    Reference< chart2::XCoordinateSystem > xResult(
-        new CartesianCoordinateSystem( DimensionCount ));
+    rtl::Reference< CartesianCoordinateSystem > xResult =
+        new CartesianCoordinateSystem( DimensionCount );
 
     for( sal_Int32 i=0; i<DimensionCount; ++i )
     {

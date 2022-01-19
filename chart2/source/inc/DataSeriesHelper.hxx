@@ -35,6 +35,7 @@ namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace chart { class BaseCoordinateSystem; }
 
 namespace chart::DataSeriesHelper
 {
@@ -114,7 +115,7 @@ OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getNumberFormatKeyFromAxis(
     sal_Int32 nAxisIndex = -1 );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-css::uno::Reference< css::chart2::XCoordinateSystem >
+rtl::Reference< ::chart::BaseCoordinateSystem >
     getCoordinateSystemOfSeries(
         const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
         const css::uno::Reference< css::chart2::XDiagram > & xDiagram );

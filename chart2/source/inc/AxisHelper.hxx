@@ -37,6 +37,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
+class BaseCoordinateSystem;
 
 class OOO_DLLPUBLIC_CHARTTOOLS AxisHelper
 {
@@ -105,12 +106,12 @@ public:
     static bool isAxisVisible( const css::uno::Reference< css::chart2::XAxis >& xAxis );
     static bool isGridVisible( const css::uno::Reference< css::beans::XPropertySet >& xGridProperties );
 
-    static css::uno::Reference< css::chart2::XCoordinateSystem >
+    static rtl::Reference< ::chart::BaseCoordinateSystem >
         getCoordinateSystemByIndex(
             const css::uno::Reference< css::chart2::XDiagram >& xDiagram
             , sal_Int32 nIndex );
 
-    static css::uno::Reference< css::chart2::XCoordinateSystem >
+    static rtl::Reference< ::chart::BaseCoordinateSystem >
         getCoordinateSystemOfAxis(
               const css::uno::Reference< css::chart2::XAxis >& xAxis
             , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );

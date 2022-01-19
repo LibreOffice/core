@@ -30,6 +30,7 @@
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <unonames.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -336,7 +337,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         Reference< XAxis > xAxis( xObject, uno::UNO_QUERY );
         if( xAxis.is() )
         {
-            Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, rModel.getFirstDiagram() ) );
+            rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, rModel.getFirstDiagram() ) );
             OUString aCooSysParticle( createParticleForCoordinateSystem( xCooSys, rModel ) );
             sal_Int32 nDimensionIndex=-1;
             sal_Int32 nAxisIndex=-1;

@@ -27,7 +27,7 @@ class VPolarCoordinateSystem : public VCoordinateSystem
 {
 public:
     VPolarCoordinateSystem() = delete;
-    explicit VPolarCoordinateSystem( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys );
+    explicit VPolarCoordinateSystem( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
     virtual ~VPolarCoordinateSystem() override;
 
     //better performance for big data

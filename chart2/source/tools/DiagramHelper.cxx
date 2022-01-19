@@ -32,6 +32,7 @@
 #include <ControllerLockGuard.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <unonames.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
@@ -958,7 +959,7 @@ Sequence< OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( const
 Sequence< OUString > DiagramHelper::getExplicitSimpleCategories(
             ChartModel& rModel )
 {
-    uno::Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
+    rtl::Reference< BaseCoordinateSystem > xCooSys = ChartModelHelper::getFirstCoordinateSystem( rModel );
     ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, rModel );
     return aExplicitCategoriesProvider.getSimpleCategories();
 }

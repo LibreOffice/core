@@ -35,6 +35,7 @@
 #include <CommonConverters.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <RegressionCurveHelper.hxx>
+#include <BaseCoordinateSystem.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>

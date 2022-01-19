@@ -40,6 +40,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart
 {
 class Wall;
+class BaseCoordinateSystem;
 
 namespace impl
 {
@@ -137,6 +138,12 @@ public:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
+    typedef
+        std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > >
+        tCoordinateSystemContainerType;
+
+    const tCoordinateSystemContainerType & getBaseCoordinateSystems() { return m_aCoordSystems; }
+
 private:
 
     // ____ XModifyListener ____
@@ -154,10 +161,6 @@ private:
     void fireModifyEvent();
 
      css::uno::Reference< css::uno::XComponentContext >                m_xContext;
-
-    typedef
-        std::vector< css::uno::Reference< css::chart2::XCoordinateSystem > >
-        tCoordinateSystemContainerType;
 
     tCoordinateSystemContainerType m_aCoordSystems;
 

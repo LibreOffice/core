@@ -20,6 +20,7 @@
 #include "VPolarCoordinateSystem.hxx"
 #include "VPolarGrid.hxx"
 #include "VPolarAxis.hxx"
+#include <BaseCoordinateSystem.hxx>
 #include <AxisIndexDefines.hxx>
 #include <AxisHelper.hxx>
 #include <ChartModel.hxx>
@@ -31,7 +32,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
-VPolarCoordinateSystem::VPolarCoordinateSystem( const Reference< XCoordinateSystem >& xCooSys )
+VPolarCoordinateSystem::VPolarCoordinateSystem( const rtl::Reference< BaseCoordinateSystem >& xCooSys )
     : VCoordinateSystem(xCooSys)
 {
 }

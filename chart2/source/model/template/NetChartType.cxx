@@ -55,8 +55,8 @@ Reference< XCoordinateSystem > SAL_CALL
             "NetChart must be two-dimensional",
             static_cast< ::cppu::OWeakObject* >( this ), 0 );
 
-    Reference< XCoordinateSystem > xResult(
-        new PolarCoordinateSystem( DimensionCount ));
+    rtl::Reference< PolarCoordinateSystem > xResult =
+        new PolarCoordinateSystem( DimensionCount );
 
     Reference< XAxis > xAxis( xResult->getAxisByDimension( 0, MAIN_AXIS_INDEX ) );
     if( xAxis.is() )
