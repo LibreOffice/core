@@ -48,6 +48,7 @@ using namespace drawingml;
 ShapeContextHandler::ShapeContextHandler(const rtl::Reference<ShapeFilterBase>& xFilterBase) :
   mnStartToken(0),
   m_bFullWPGSUpport(false),
+  m_bVMLinsideWPG(false),
   mxShapeFilterBase(xFilterBase)
 
 {
@@ -228,6 +229,13 @@ ShapeContextHandler::getContextHandler(sal_Int32 nElement)
 {
     uno::Reference<xml::sax::XFastContextHandler> xResult;
 
+    // A tiny hack, if there is a WPG shape having VML OLE inside
+    // return with the WPG shape instead if the flag is true
+    if (m_bVMLinsideWPG && mxWpgContext)
+    {
+        return getWpgContext(mnStartToken);
+    }
+
     switch (getNamespace( mnStartToken ))
     {
         case NMSP_doc:
@@ -397,7 +405,7 @@ ShapeContextHandler::getShape()
 
     if (mxShapeFilterBase && xShapes.is())
     {
-        if ( getContextHandler() == getDrawingShapeContext() )
+        if ( getContextHandler() == getDrawingShapeContext() && !m_bVMLinsideWPG)
         {
             mpDrawing->finalizeFragmentImport();
             if( std::shared_ptr< vml::ShapeBase > pShape = mpDrawing->getShapes().takeLastShape() )
@@ -405,6 +413,8 @@ ShapeContextHandler::getShape()
             // Only now remove the recursion mark, because getShape() is called in writerfilter
             // after endFastElement().
             mpDrawing->getShapes().popMark();
+            if (mxWpgContext)
+                m_bVMLinsideWPG = true;
         }
         else if (mxDiagramShapeContext.is())
         {
@@ -496,6 +506,7 @@ ShapeContextHandler::getShape()
                 xResult = pShape->getXShape();
                 mxSavedShape = xResult;
                 mxWpgContext.clear();
+                m_bVMLinsideWPG = false;
             }
         }
         else if (mpShape)
