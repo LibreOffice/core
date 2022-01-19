@@ -20,6 +20,7 @@
 #include "WrappedSplineProperties.hxx"
 #include "Chart2ModelContact.hxx"
 #include <FastPropertyIdRanges.hxx>
+#include <ChartType.hxx>
 #include <DiagramHelper.hxx>
 #include <WrappedProperty.hxx>
 #include <unonames.hxx>
@@ -62,17 +63,13 @@ public:
     {
         bool bHasDetectableInnerValue = false;
         rHasAmbiguousValue = false;
-        Sequence< css::uno::Reference< css::chart2::XChartType > > aChartTypes(
+        std::vector< rtl::Reference< ChartType > > aChartTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getDiagram() ) );
-        for( sal_Int32 nN = aChartTypes.getLength(); nN--; )
+        for( sal_Int32 nN = aChartTypes.size(); nN--; )
         {
             try
             {
-                uno::Reference<beans::XPropertySet> xChartTypePropertySet(aChartTypes[nN], uno::UNO_QUERY);
-                if (!xChartTypePropertySet.is())
-                    continue;
-
-                Any aSingleValue = convertInnerToOuterValue( xChartTypePropertySet->getPropertyValue(m_aOwnInnerName) );
+                Any aSingleValue = convertInnerToOuterValue( aChartTypes[nN]->getPropertyValue(m_aOwnInnerName) );
                 PROPERTYTYPE aCurValue = PROPERTYTYPE();
                 aSingleValue >>= aCurValue;
                 if( !bHasDetectableInnerValue )
@@ -114,17 +111,13 @@ public:
         if( !(bHasAmbiguousValue || aNewValue != aOldValue) )
             return;
 
-        Sequence< css::uno::Reference< css::chart2::XChartType > > aChartTypes(
+        std::vector< rtl::Reference< ChartType > > aChartTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getDiagram() ) );
-        for( sal_Int32 nN = aChartTypes.getLength(); nN--; )
+        for( sal_Int32 nN = aChartTypes.size(); nN--; )
         {
             try
             {
-                css::uno::Reference< css::beans::XPropertySet > xChartTypePropertySet( aChartTypes[nN], css::uno::UNO_QUERY );
-                if( xChartTypePropertySet.is() )
-                {
-                    xChartTypePropertySet->setPropertyValue(m_aOwnInnerName,convertOuterToInnerValue(uno::Any(aNewValue)));
-                }
+                aChartTypes[nN]->setPropertyValue(m_aOwnInnerName,convertOuterToInnerValue(uno::Any(aNewValue)));
             }
             catch( uno::Exception & ex )
             {

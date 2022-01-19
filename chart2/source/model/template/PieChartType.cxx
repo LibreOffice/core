@@ -139,6 +139,11 @@ uno::Reference< util::XCloneable > SAL_CALL PieChartType::createClone()
     return uno::Reference< util::XCloneable >( new PieChartType( *this ));
 }
 
+rtl::Reference< ChartType > PieChartType::cloneChartType() const
+{
+    return new PieChartType( *this );
+}
+
 // ____ XChartType ____
 OUString SAL_CALL PieChartType::getChartType()
 {

@@ -18,6 +18,7 @@
  */
 
 #include <ChartTypeHelper.hxx>
+#include <ChartType.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 
@@ -418,6 +419,26 @@ bool ChartTypeHelper::isSupportingAxisPositioning( const uno::Reference< chart2:
 }
 
 bool ChartTypeHelper::isSupportingDateAxis( const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex )
+{
+    if( nDimensionIndex!=0 )
+        return false;
+    if( xChartType.is() )
+    {
+        sal_Int32 nType = ChartTypeHelper::getAxisType( xChartType, nDimensionIndex );
+        if( nType != AxisType::CATEGORY )
+            return false;
+        OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+            return false;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
+            return false;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
+            return false;
+    }
+    return true;
+}
+
+bool ChartTypeHelper::isSupportingDateAxis( const rtl::Reference< ChartType >& xChartType, sal_Int32 nDimensionIndex )
 {
     if( nDimensionIndex!=0 )
         return false;

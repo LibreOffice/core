@@ -22,6 +22,7 @@
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>
+#include <ChartType.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/CurveStyle.hpp>
@@ -267,12 +268,11 @@ sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
     {
         try
         {
-            uno::Reference< beans::XPropertySet > xChartTypeProp(
-                DiagramHelper::getChartTypeByIndex( xDiagram, 0 ),
-                uno::UNO_QUERY_THROW );
-            setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE, xChartTypeProp->getPropertyValue(CHART_UNONAME_CURVE_STYLE) );
-            setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION, xChartTypeProp->getPropertyValue(CHART_UNONAME_CURVE_RESOLUTION) );
-            setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER, xChartTypeProp->getPropertyValue(CHART_UNONAME_SPLINE_ORDER) );
+            rtl::Reference< ChartType > xChartType =
+                DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
+            setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE, xChartType->getPropertyValue(CHART_UNONAME_CURVE_STYLE) );
+            setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION, xChartType->getPropertyValue(CHART_UNONAME_CURVE_RESOLUTION) );
+            setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER, xChartType->getPropertyValue(CHART_UNONAME_SPLINE_ORDER) );
         }
         catch( const uno::Exception & )
         {

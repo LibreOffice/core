@@ -19,6 +19,7 @@
 
 #include "DataSeriesPointWrapper.hxx"
 #include "Chart2ModelContact.hxx"
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <LinePropertiesHelper.hxx>

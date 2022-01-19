@@ -29,6 +29,7 @@
 #include <ChartModel.hxx>
 #include <AxisHelper.hxx>
 #include <CommonConverters.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <Diagram.hxx>
 #include <unonames.hxx>

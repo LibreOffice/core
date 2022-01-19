@@ -21,6 +21,7 @@
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ChartTypeHelper.hxx>
+#include <ChartType.hxx>
 #include <AxisIndexDefines.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <servicenames_coosystems.hxx>
@@ -889,7 +890,7 @@ void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityL
 
     //set possibilities:
     sal_Int32 nIndex=0;
-    Reference< XChartType > xChartType = DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
+    rtl::Reference< ChartType > xChartType = DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
     for(nIndex=0;nIndex<3;nIndex++)
         pPossibilityList[nIndex]=ChartTypeHelper::isSupportingMainAxis(xChartType,nDimensionCount,nIndex);
     for(nIndex=3;nIndex<6;nIndex++)
@@ -1044,16 +1045,17 @@ rtl::Reference< BaseCoordinateSystem > AxisHelper::getCoordinateSystemOfAxis(
     return xRet;
 }
 
-Reference< XChartType > AxisHelper::getChartTypeByIndex( const Reference< XCoordinateSystem >& xCooSys, sal_Int32 nIndex )
+rtl::Reference< ChartType > AxisHelper::getChartTypeByIndex( const Reference< XCoordinateSystem >& xCooSys, sal_Int32 nIndex )
 {
-    Reference< XChartType > xChartType;
+    rtl::Reference< ChartType > xChartType;
 
     Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-    if( xChartTypeContainer.is() )
+    if( xCooSys.is() )
     {
-        Sequence< Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-        if( nIndex >= 0 && nIndex < aChartTypeList.getLength() )
-            xChartType.set( aChartTypeList[nIndex] );
+        auto pCooSys = dynamic_cast<BaseCoordinateSystem*>(xCooSys.get());
+        const std::vector< rtl::Reference< ChartType > > aChartTypeList( pCooSys->getChartTypes2() );
+        if( nIndex >= 0 && nIndex < static_cast<sal_Int32>(aChartTypeList.size()) )
+            xChartType = aChartTypeList[nIndex];
     }
 
     return xChartType;
@@ -1127,9 +1129,9 @@ void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys
     }
 }
 
-Reference< XChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( const Reference< chart2::XDiagram >& xDiagram, const sal_Int32 nAttachedAxisIndex )
+rtl::Reference< ChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( const Reference< chart2::XDiagram >& xDiagram, const sal_Int32 nAttachedAxisIndex )
 {
-    Reference< XChartType > xChartType;
+    rtl::Reference< ChartType > xChartType;
     std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
     for (auto const& series : aSeriesVector)
     {

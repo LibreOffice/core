@@ -45,6 +45,11 @@ uno::Reference< util::XCloneable > SAL_CALL BarChartType::createClone()
     return uno::Reference< util::XCloneable >( new BarChartType( *this ));
 }
 
+rtl::Reference< ChartType > BarChartType::cloneChartType() const
+{
+    return new BarChartType( *this );
+}
+
 // ____ XChartType ____
 OUString SAL_CALL BarChartType::getChartType()
 {

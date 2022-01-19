@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <OPropertySet.hxx>
+#include "OPropertySet.hxx"
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
@@ -28,8 +28,10 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
+#include <rtl/ref.hxx>
 
 #include <vector>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
@@ -46,7 +48,7 @@ typedef ::cppu::WeakImplHelper<
     ChartType_Base;
 }
 
-class ChartType :
+class OOO_DLLPUBLIC_CHARTTOOLS ChartType :
     public cppu::BaseMutex,
     public impl::ChartType_Base,
     public ::property::OPropertySet
@@ -58,7 +60,6 @@ public:
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
 
-protected:
     explicit ChartType( const ChartType & rOther );
 
     // ____ XChartType ____
@@ -88,6 +89,10 @@ protected:
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        
+    virtual rtl::Reference<ChartType> cloneChartType() const = 0;
+
+protected:
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include "ChartType.hxx"
+#include <ChartType.hxx>
 
 namespace chart
 {
@@ -37,6 +37,8 @@ public:
         supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
+
+    virtual rtl::Reference<ChartType> cloneChartType() const override;
 
 private:
     explicit CandleStickChartType( const CandleStickChartType & rOther );

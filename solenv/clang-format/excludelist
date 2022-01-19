@@ -1013,6 +1013,7 @@ chart2/source/inc/BaseCoordinateSystem.hxx
 chart2/source/inc/CachedDataSequence.hxx
 chart2/source/inc/CharacterProperties.hxx
 chart2/source/inc/ChartModelHelper.hxx
+chart2/source/inc/ChartType.hxx
 chart2/source/inc/ChartTypeHelper.hxx
 chart2/source/inc/ChartTypeTemplate.hxx
 chart2/source/inc/CloneHelper.hxx
@@ -1126,7 +1127,6 @@ chart2/source/model/template/BubbleDataInterpreter.hxx
 chart2/source/model/template/CandleStickChartType.cxx
 chart2/source/model/template/CandleStickChartType.hxx
 chart2/source/model/template/ChartType.cxx
-chart2/source/model/template/ChartType.hxx
 chart2/source/model/template/ChartTypeManager.cxx
 chart2/source/model/template/ChartTypeTemplate.cxx
 chart2/source/model/template/ColumnChartType.cxx
