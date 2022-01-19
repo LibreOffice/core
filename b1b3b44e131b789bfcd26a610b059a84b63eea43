@@ -133,6 +133,24 @@
       "parentUuid": "c68464bc_b2eedd26",
       "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df7934fe_014294b4",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T09:02:01Z",
+      "side": 1,
+      "message": "Yes I tried to avoid this but don\u0027t know how to do it.",
+      "parentUuid": "49600022_260dedd9",
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
