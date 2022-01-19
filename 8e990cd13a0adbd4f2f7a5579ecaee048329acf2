@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f308283c_ab05cbc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-19T17:19:50Z",
+      "side": 1,
+      "message": "Quite some work, and the result is really nice! Some nitpicking: the buttons could benefit from som spacing, 3px according the HIG. And I don\u0027t like the resizing when switching to a format change due to the label change Reject -\u003e Reject/Clear formatting. Either we drop the formatting text or make the dialog larger in the first place.",
+      "revId": "8e990cd13a0adbd4f2f7a5579ecaee048329acf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
