@@ -241,6 +241,24 @@
       "parentUuid": "2e047b64_7554f27a",
       "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a0877b1_1756e9ad",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-01-19T15:39:37Z",
+      "side": 1,
+      "message": "I lost track or we had a misunderstanding and we were discussing different things... I thought we were discussing a piece of code that was running a query like\n\nSELECT foo FROM bar WHERE qux LIKE schemaName and qux LIKE tableName\n\nWhere schemaName and tableName are _strings_, not _identifiers_. So, we were avoiding backtick-quoting _in_ _the_ _string_. Strings start and stop with \"\u0027\" (apostrophe) and each \"\u0027\" inside must be quoted/doubled.\n\nNow, you mention a \"CREATE TABLE\" command, that\u0027s a different case. The table creation command should be:\n\nCREATE TABLE `back``ticks are fun`.`testjul8` (`id` VARCHAR(100) NOT NULL, PRIMARY KEY  (`id`))\n\nNote the doubled backtick inside. Identifiers start and stop with a \"`\" (backtick) and each backtick inside must be doubled. The quoteName/composeName/composeTableName/... utility functions should do that automatically?\n\n(and then, test with a name that contains \".\")",
+      "parentUuid": "ad7dd380_53190aa2",
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
