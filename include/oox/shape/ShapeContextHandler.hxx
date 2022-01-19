@@ -19,6 +19,7 @@
 #pragma once
 
 #include <memory>
+#include <stack>
 #include <cppuhelper/implbase.hxx>
 #include <oox/drawingml/graphicshapecontext.hxx>
 #include <oox/core/fragmenthandler2.hxx>
@@ -90,12 +91,15 @@ public:
     void setRelationFragmentPath(const OUString & the_value);
 
     sal_Int32 getStartToken() const;
-    void setStartToken( sal_Int32 _starttoken );
+    void popStartToken();
+    void pushStartToken( sal_Int32 _starttoken );
 
     void setPosition(const css::awt::Point& rPosition);
 
-    const bool& getFullWPGSupport() { return m_bFullWPGSUpport; };
-    void setFullWPGSupport(const bool& rbUse) { m_bFullWPGSUpport = rbUse; };
+    const bool& getFullWPGSupport() { return m_bFullWPGSUpport; }
+    void setFullWPGSupport(const bool& rbUse) { m_bFullWPGSUpport = rbUse; }
+
+    bool isWordProcessingGroupShape() const { return mxWpgContext ? true : false; }
 
     void setDocumentProperties(const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
     void setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
@@ -109,9 +113,13 @@ private:
     ShapeContextHandler(ShapeContextHandler const &) = delete;
     void operator =(ShapeContextHandler const &) = delete;
 
-    ::sal_uInt32 mnStartToken;
+    // Special stack which always have at least one element.
+    // In case of group shapes with embed content it will have more element than one.
+    std::stack<sal_uInt32> mnStartTokenStack;
+
     css::awt::Point maPosition;
-    bool m_bFullWPGSUpport;
+    bool m_bFullWPGSUpport; // Is this DrawingML shape supposed to be proccessed as WPG?
+
     drawingml::ShapePtr mpShape;
     std::shared_ptr< vml::Drawing > mpDrawing;
 

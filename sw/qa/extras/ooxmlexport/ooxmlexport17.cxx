@@ -54,6 +54,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
     // just test round-tripping. The document was exported as corrupt and didn't re-load.
 }
 
+CPPUNIT_TEST_FIXTURE(Test, TestTdf146802)
+{
+    load(DATA_DIRECTORY, "tdf146802.docx");
+
+    // First check if the load failed, as before the fix.
+    CPPUNIT_ASSERT(mxComponent);
+
+    // There is a group shape with text box inside having an embed VML formula, check if something missing.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Where is the formula?", 2, getShapes());
+    // Before the fix the bugdoc failed to load or the formula was miising.
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testParaStyleNumLevel)
 {
     loadAndSave("para-style-num-level.docx");
