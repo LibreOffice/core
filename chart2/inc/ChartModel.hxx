@@ -66,6 +66,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { class XAggregation; }
 
 class SvNumberFormatter;
+class SvNumberFormatsSupplierObj;
 
 namespace chart
 {
@@ -153,8 +154,7 @@ private:
     */
     rtl::Reference< InternalDataProvider > m_xInternalDataProvider;
 
-    css::uno::Reference< css::util::XNumberFormatsSupplier >
-                                m_xOwnNumberFormatsSupplier;
+    rtl::Reference< SvNumberFormatsSupplierObj > m_xOwnNumberFormatsSupplier;
     css::uno::Reference< css::util::XNumberFormatsSupplier >
                                 m_xNumberFormatsSupplier;
     std::unique_ptr< SvNumberFormatter > m_apSvNumberFormatter; // #i113784# avoid memory leak
