@@ -238,20 +238,15 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
 {
     //flag
     unsigned char BinSignature[2];
-    m_pStream->ReadBytes(BinSignature, 2);
-    if (BinSignature[0] != 'S' || BinSignature[1] != 'M')
-    {
-        assert(false);
+    if (m_pStream->ReadBytes(BinSignature, 2) != 2)
         return nullptr;
-    }
+    if (BinSignature[0] != 'S' || BinSignature[1] != 'M')
+        return nullptr;
     //version
-    unsigned short nVersion;
+    unsigned short nVersion(0);
     m_pStream->ReadUInt16(nVersion);
     if (nVersion<0x0102)
-    {
-        assert(false);
         return nullptr;
-    }
     // topObj, botObj
     m_pStream->SeekRel(4);
     //record count
