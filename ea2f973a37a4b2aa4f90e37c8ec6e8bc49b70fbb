@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aabbaa55_8cf6cba0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-19T06:18:41Z",
+      "side": 1,
+      "message": "The suggested changes helps minimize the number of casts used in the code.",
+      "revId": "ea2f973a37a4b2aa4f90e37c8ec6e8bc49b70fbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e91a885a_973fb401",
