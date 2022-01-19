@@ -22,6 +22,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <ChartModel.hxx>
 
 using namespace ::com::sun::star;
 
@@ -33,10 +34,10 @@ namespace chart
 
 StatusBarCommandDispatch::StatusBarCommandDispatch(
     const Reference< uno::XComponentContext > & xContext,
-    const Reference< frame::XModel > & xModel,
+    const rtl::Reference<::chart::ChartModel> & xModel,
     const Reference< view::XSelectionSupplier > & xSelSupp ) :
         impl::StatusBarCommandDispatch_Base( xContext ),
-        m_xModifiable( xModel, uno::UNO_QUERY  ),
+        m_xChartModel( xModel  ),
         m_xSelectionSupplier( xSelSupp ),
         m_bIsModified( false )
 {}
@@ -46,9 +47,9 @@ StatusBarCommandDispatch::~StatusBarCommandDispatch()
 
 void StatusBarCommandDispatch::initialize()
 {
-    if( m_xModifiable.is())
+    if( m_xChartModel.is())
     {
-        m_xModifiable->addModifyListener( this );
+        m_xChartModel->addModifyListener( this );
     }
 
     if( m_xSelectionSupplier.is())
@@ -68,8 +69,7 @@ void StatusBarCommandDispatch::fireStatusEvent(
     if( bFireContext )
     {
         uno::Any aArg;
-        Reference< chart2::XChartDocument > xDoc( m_xModifiable, uno::UNO_QUERY );
-        aArg <<= ObjectNameProvider::getSelectedObjectText( m_aSelectedOID.getObjectCID(), xDoc );
+        aArg <<= ObjectNameProvider::getSelectedObjectText( m_aSelectedOID.getObjectCID(), m_xChartModel );
         fireStatusEventForURL( ".uno:Context", aArg, true, xSingleListener );
     }
     if( bFireModified )
@@ -93,22 +93,22 @@ void SAL_CALL StatusBarCommandDispatch::dispatch(
 /// is called when this is disposed
 void SAL_CALL StatusBarCommandDispatch::disposing()
 {
-    m_xModifiable.clear();
+    m_xChartModel.clear();
     m_xSelectionSupplier.clear();
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL StatusBarCommandDispatch::disposing( const lang::EventObject& /* Source */ )
 {
-    m_xModifiable.clear();
+    m_xChartModel.clear();
     m_xSelectionSupplier.clear();
 }
 
 // ____ XModifyListener ____
 void SAL_CALL StatusBarCommandDispatch::modified( const lang::EventObject& aEvent )
 {
-    if( m_xModifiable.is())
-        m_bIsModified = m_xModifiable->isModified();
+    if( m_xChartModel.is())
+        m_bIsModified = m_xChartModel->isModified();
 
     CommandDispatch::modified( aEvent );
 }

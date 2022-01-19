@@ -19,6 +19,7 @@
 
 #include "UndoActions.hxx"
 #include "ChartModelClone.hxx"
+#include <ChartModel.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 
@@ -34,7 +35,7 @@ namespace chart::impl
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::lang::DisposedException;
 
-UndoElement::UndoElement( const OUString& i_actionString, const Reference< XModel >& i_documentModel, const std::shared_ptr< ChartModelClone >& i_modelClone )
+UndoElement::UndoElement( const OUString& i_actionString, const rtl::Reference<::chart::ChartModel>& i_documentModel, const std::shared_ptr< ChartModelClone >& i_modelClone )
     :m_sActionString( i_actionString )
     ,m_xDocumentModel( i_documentModel )
     ,m_pModelClone( i_modelClone )

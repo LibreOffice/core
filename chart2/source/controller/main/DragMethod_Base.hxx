@@ -20,19 +20,20 @@
 
 #include <svx/ActionDescriptionProvider.hxx>
 #include <svx/svddrgmt.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 
 namespace chart { class DrawViewWrapper; }
 namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {
+class ChartModel;
 
 class DragMethod_Base : public SdrDragMethod
 {
 public:
     DragMethod_Base( DrawViewWrapper& rDrawViewWrapper, const OUString& rObjectCID
-        , const css::uno::Reference< css::frame::XModel >& xChartModel
+        , const rtl::Reference<::chart::ChartModel>& xChartModel
         , ActionDescriptionProvider::ActionType eActionType = ActionDescriptionProvider::ActionType::Move );
     virtual ~DragMethod_Base() override;
 
@@ -42,7 +43,7 @@ public:
     virtual PointerStyle GetSdrDragPointer() const override;
 
 protected:
-    css::uno::Reference< css::frame::XModel > getChartModel() const;
+    rtl::Reference<::chart::ChartModel> getChartModel() const;
 
 protected:
     DrawViewWrapper&    m_rDrawViewWrapper;
@@ -50,7 +51,7 @@ protected:
     ActionDescriptionProvider::ActionType m_eActionType;
 
 private:
-    css::uno::WeakReference< css::frame::XModel > m_xChartModel;
+    unotools::WeakReference<::chart::ChartModel> m_xChartModel;
 };
 
 } //  namespace chart

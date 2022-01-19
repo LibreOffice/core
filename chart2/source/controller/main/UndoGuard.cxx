@@ -20,6 +20,7 @@
 #include "UndoGuard.hxx"
 #include "ChartModelClone.hxx"
 #include "UndoActions.hxx"
+#include <ChartModel.hxx>
 
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -35,11 +36,12 @@ namespace chart
 
 UndoGuard::UndoGuard( const OUString& i_undoString, const uno::Reference< document::XUndoManager > & i_undoManager,
                                const ModelFacet i_facet )
-    :m_xChartModel( i_undoManager->getParent(), uno::UNO_QUERY_THROW )
-    ,m_xUndoManager( i_undoManager )
+    :m_xUndoManager( i_undoManager )
     ,m_aUndoString( i_undoString )
     ,m_bActionPosted( false )
 {
+    m_xChartModel = dynamic_cast<::chart::ChartModel*>(i_undoManager->getParent().get());
+    assert(m_xChartModel);
     m_pDocumentSnapshot = std::make_shared<ChartModelClone>( m_xChartModel, i_facet );
 }
 
