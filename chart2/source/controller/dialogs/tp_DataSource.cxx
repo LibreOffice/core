@@ -21,6 +21,7 @@
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <ChartTypeTemplateProvider.hxx>
+#include <ChartTypeTemplate.hxx>
 #include <RangeSelectionHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ControllerLockGuard.hxx>

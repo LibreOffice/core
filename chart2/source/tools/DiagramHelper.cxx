@@ -23,6 +23,7 @@
 #include <AxisHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartTypeTemplate.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -93,13 +94,13 @@ DiagramHelper::tTemplateWithServiceName
     {
         try
         {
-            Reference< XChartTypeTemplate > xTempl(
-                xChartTypeManager->createInstance( aServiceNames[ i ] ), uno::UNO_QUERY_THROW );
+            rtl::Reference< ::chart::ChartTypeTemplate > xTempl =
+                xChartTypeManager->createTemplate( aServiceNames[ i ] );
 
             if (xTempl.is() && xTempl->matchesTemplate(xDiagram, true))
             {
-                aResult.first = xTempl;
-                aResult.second = aServiceNames[ i ];
+                aResult.xChartTypeTemplate = xTempl;
+                aResult.sServiceName = aServiceNames[ i ];
                 bTemplateFound = true;
             }
         }

@@ -23,6 +23,7 @@
 #include <ResId.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartTypeTemplate.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <unonames.hxx>
@@ -260,7 +261,7 @@ void ChartTypeTabPage::selectMainType()
     }
 
     fillAllControls( aParameter );
-    uno::Reference< beans::XPropertySet > xTemplateProps( getCurrentTemplate(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xTemplateProps( static_cast<cppu::OWeakObject*>(getCurrentTemplate().get()), uno::UNO_QUERY );
     m_pCurrentMainType->fillExtraControls(m_xChartModel,xTemplateProps);
 }
 
@@ -306,7 +307,7 @@ void ChartTypeTabPage::initializePage()
     rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
     DiagramHelper::tTemplateWithServiceName aTemplate =
         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager );
-    OUString aServiceName( aTemplate.second );
+    OUString aServiceName( aTemplate.sServiceName );
 
     bool bFound = false;
 
@@ -319,7 +320,7 @@ void ChartTypeTabPage::initializePage()
 
             m_xMainTypeList->select(nM);
             showAllControls(*elem);
-            uno::Reference< beans::XPropertySet > xTemplateProps( aTemplate.first, uno::UNO_QUERY );
+            uno::Reference< beans::XPropertySet > xTemplateProps( static_cast<cppu::OWeakObject*>(aTemplate.xChartTypeTemplate.get()), uno::UNO_QUERY );
             ChartTypeParameter aParameter = elem->getChartTypeParameterForService( aServiceName, xTemplateProps );
             m_pCurrentMainType = getSelectedMainType();
 
@@ -363,13 +364,13 @@ bool ChartTypeTabPage::commitPage( ::vcl::WizardTypes::CommitPageReason /*eReaso
     return true; // return false if this page should not be left
 }
 
-uno::Reference< XChartTypeTemplate > ChartTypeTabPage::getCurrentTemplate() const
+rtl::Reference< ChartTypeTemplate > ChartTypeTabPage::getCurrentTemplate() const
 {
     if( m_pCurrentMainType && m_xChartModel.is() )
     {
         ChartTypeParameter aParameter( getCurrentParamter() );
         m_pCurrentMainType->adjustParameterToSubType( aParameter );
-        uno::Reference< lang::XMultiServiceFactory > xTemplateManager( m_xChartModel->getChartTypeManager(), uno::UNO_QUERY );
+        rtl::Reference< ChartTypeManager > xTemplateManager = dynamic_cast<ChartTypeManager*>(m_xChartModel->getChartTypeManager().get());
         return m_pCurrentMainType->getCurrentTemplate( aParameter, xTemplateManager );
     }
     return nullptr;

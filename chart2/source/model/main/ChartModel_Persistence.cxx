@@ -23,6 +23,7 @@
 #include <ChartViewHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartTypeTemplate.hxx>
 #include <DataSourceHelper.hxx>
 #include <AxisHelper.hxx>
 #include <ThreeDHelper.hxx>
@@ -729,8 +730,7 @@ void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
             Reference<chart2::XDiagram> xDiagram(getFirstDiagram());
 
             DiagramHelper::tTemplateWithServiceName aTemplateAndService = DiagramHelper::getTemplateForDiagram(xDiagram, xChartTypeManager);
-            css::uno::Reference<css::chart2::XChartTypeTemplate> xChartTypeTemplate(aTemplateAndService.first);
-            xChartTypeTemplate->changeDiagramData(xDiagram, xDataSource, aArguments);
+            aTemplateAndService.xChartTypeTemplate->changeDiagramData(xDiagram, xDataSource, aArguments);
         }
         catch (const uno::Exception &)
         {

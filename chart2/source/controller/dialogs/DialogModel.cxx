@@ -26,6 +26,7 @@
 #include <ResId.hxx>
 #include <ControllerLockGuard.hxx>
 #include <ChartTypeHelper.hxx>
+#include <ChartTypeTemplate.hxx>
 #include <ThreeDHelper.hxx>
 #include <ChartModel.hxx>
 
@@ -430,7 +431,7 @@ DialogModel::~DialogModel()
 }
 
 void DialogModel::setTemplate(
-    const Reference< XChartTypeTemplate > & xTemplate )
+    const rtl::Reference< ChartTypeTemplate > & xTemplate )
 {
     m_xTemplate = xTemplate;
 }

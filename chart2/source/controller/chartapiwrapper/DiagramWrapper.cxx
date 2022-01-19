@@ -44,6 +44,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartTypeTemplate.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -605,7 +606,7 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
         DiagramHelper::tTemplateWithServiceName aTemplateAndService =
             DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
 
-        aRet = lcl_getDiagramType( aTemplateAndService.second );
+        aRet = lcl_getDiagramType( aTemplateAndService.sServiceName );
     }
 
     if( aRet.isEmpty())
@@ -1467,11 +1468,11 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
             DiagramHelper::tTemplateWithServiceName aTemplateAndService =
                     DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
-            if( aTemplateAndService.second == "com.sun.star.chart2.template.ColumnWithLine" )
+            if( aTemplateAndService.sServiceName == "com.sun.star.chart2.template.ColumnWithLine" )
             {
                 try
                 {
-                    uno::Reference< beans::XPropertySet > xProp( aTemplateAndService.first, uno::UNO_QUERY );
+                    uno::Reference< beans::XPropertySet > xProp( static_cast<cppu::OWeakObject*>(aTemplateAndService.xChartTypeTemplate.get()), uno::UNO_QUERY );
                     xProp->getPropertyValue( m_aOuterName ) >>= nNumberOfLines;
                     bHasDetectableInnerValue = true;
                 }
@@ -1505,16 +1506,16 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
     DiagramHelper::tTemplateWithServiceName aTemplateAndService =
             DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
 
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate;
-    if( aTemplateAndService.second == "com.sun.star.chart2.template.ColumnWithLine" )
+    rtl::Reference< ChartTypeTemplate > xTemplate;
+    if( aTemplateAndService.sServiceName == "com.sun.star.chart2.template.ColumnWithLine" )
     {
         if( nNewValue != 0 )
         {
-            xTemplate.set( aTemplateAndService.first );
+            xTemplate = aTemplateAndService.xChartTypeTemplate;
             try
             {
                 sal_Int32 nOldValue = 0;
-                uno::Reference< beans::XPropertySet > xProp( xTemplate, uno::UNO_QUERY );
+                uno::Reference< beans::XPropertySet > xProp( static_cast<cppu::OWeakObject*>(xTemplate.get()), uno::UNO_QUERY );
                 xProp->getPropertyValue( m_aOuterName ) >>= nOldValue;
                 if( nOldValue == nNewValue )
                     return;
@@ -1526,14 +1527,14 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         }
         else
         {
-            xTemplate.set( xChartTypeManager->createInstance("com.sun.star.chart2.template.Column"), uno::UNO_QUERY );
+            xTemplate = xChartTypeManager->createTemplate("com.sun.star.chart2.template.Column");
         }
     }
-    else if( aTemplateAndService.second == "com.sun.star.chart2.template.Column" )
+    else if( aTemplateAndService.sServiceName == "com.sun.star.chart2.template.Column" )
     {
         if( nNewValue == 0 )
             return;
-        xTemplate.set( xChartTypeManager->createInstance( "com.sun.star.chart2.template.ColumnWithLine" ), uno::UNO_QUERY );
+        xTemplate = xChartTypeManager->createTemplate( "com.sun.star.chart2.template.ColumnWithLine" );
     }
 
     if(!xTemplate.is())
@@ -1543,7 +1544,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
     {
         // locked controllers
         ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
-        uno::Reference< beans::XPropertySet > xProp( xTemplate, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xProp( static_cast<cppu::OWeakObject*>(xTemplate.get()), uno::UNO_QUERY );
         xProp->setPropertyValue( "NumberOfLines", uno::Any(nNewValue) );
         xTemplate->changeDiagram( xDiagram );
     }

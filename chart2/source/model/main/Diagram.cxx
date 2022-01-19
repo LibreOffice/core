@@ -19,6 +19,7 @@
 
 #include <Diagram.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartTypeTemplate.hxx>
 #include <PropertyHelper.hxx>
 #include "Wall.hxx"
 #include <ModifyListenerHelper.hxx>
@@ -403,9 +404,9 @@ void SAL_CALL Diagram::setDiagramData(
 {
     rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = new ::chart::ChartTypeManager( m_xContext );
     DiagramHelper::tTemplateWithServiceName aTemplateAndService = DiagramHelper::getTemplateForDiagram( this, xChartTypeManager );
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate( aTemplateAndService.first );
+    rtl::Reference< ::chart::ChartTypeTemplate > xTemplate( aTemplateAndService.xChartTypeTemplate );
     if( !xTemplate.is() )
-        xTemplate.set( xChartTypeManager->createInstance( "com.sun.star.chart2.template.Column" ), uno::UNO_QUERY );
+        xTemplate = xChartTypeManager->createTemplate( "com.sun.star.chart2.template.Column" );
     if(!xTemplate.is())
         return;
     xTemplate->changeDiagramData( this, xDataSource, aArguments );

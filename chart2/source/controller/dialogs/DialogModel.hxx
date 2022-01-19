@@ -48,6 +48,7 @@ namespace chart
 {
 
 class RangeSelectionHelper;
+class ChartTypeTemplate;
 
 struct DialogModelTimeBasedInfo
 {
@@ -76,7 +77,7 @@ public:
         tRolesWithRanges;
 
     void setTemplate(
-        const css::uno::Reference< css::chart2::XChartTypeTemplate > & xTemplate );
+        const rtl::Reference< ::chart::ChartTypeTemplate > & xTemplate );
 
     std::shared_ptr< RangeSelectionHelper > const &
         getRangeSelectionHelper() const;

@@ -27,6 +27,7 @@
 #include <StatisticsHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartTypeTemplate.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 
@@ -772,8 +773,8 @@ void DataBrowserModel::updateFromModel()
     rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = dynamic_cast<::chart::ChartTypeManager*>( m_xChartDocument->getChartTypeManager().get() );
     DiagramHelper::tTemplateWithServiceName aTemplateAndService =
         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager );
-    if( aTemplateAndService.first.is())
-        m_apDialogModel->setTemplate( aTemplateAndService.first );
+    if( aTemplateAndService.xChartTypeTemplate.is())
+        m_apDialogModel->setTemplate( aTemplateAndService.xChartTypeTemplate );
 
     sal_Int32 nHeaderStart = 0;
     sal_Int32 nHeaderEnd   = 0;

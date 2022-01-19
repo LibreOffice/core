@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <tools/diagnose_ex.h>
 #include <ChartTypeManager.hxx>
+#include <ChartTypeTemplate.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -87,7 +88,7 @@ void WrappedStockProperty::setPropertyValue( const css::uno::Any& rOuterValue, c
             DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
 
     uno::Reference< chart2::XChartTypeTemplate > xTemplate =
-            getNewTemplate( bNewValue, aTemplateAndService.second, xChartTypeManager );
+            getNewTemplate( bNewValue, aTemplateAndService.sServiceName, xChartTypeManager );
 
     if(!xTemplate.is())
         return;
@@ -142,10 +143,10 @@ css::uno::Any WrappedVolumeProperty::getPropertyValue( const css::uno::Reference
             DiagramHelper::tTemplateWithServiceName aTemplateAndService =
                     DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
 
-            if(    aTemplateAndService.second == "com.sun.star.chart2.template.StockVolumeLowHighClose"
-                || aTemplateAndService.second == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
+            if(    aTemplateAndService.sServiceName == "com.sun.star.chart2.template.StockVolumeLowHighClose"
+                || aTemplateAndService.sServiceName == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
                 m_aOuterValue <<= true;
-            else if( !aTemplateAndService.second.isEmpty() || !m_aOuterValue.hasValue() )
+            else if( !aTemplateAndService.sServiceName.isEmpty() || !m_aOuterValue.hasValue() )
                 m_aOuterValue <<= false;
         }
         else if(!m_aOuterValue.hasValue())
@@ -211,10 +212,10 @@ css::uno::Any WrappedUpDownProperty::getPropertyValue( const css::uno::Reference
             DiagramHelper::tTemplateWithServiceName aTemplateAndService =
                     DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
 
-            if(    aTemplateAndService.second == "com.sun.star.chart2.template.StockOpenLowHighClose"
-                || aTemplateAndService.second == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
+            if(    aTemplateAndService.sServiceName == "com.sun.star.chart2.template.StockOpenLowHighClose"
+                || aTemplateAndService.sServiceName == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
                 m_aOuterValue <<= true;
-            else if( !aTemplateAndService.second.isEmpty() || !m_aOuterValue.hasValue() )
+            else if( !aTemplateAndService.sServiceName.isEmpty() || !m_aOuterValue.hasValue() )
                 m_aOuterValue <<= false;
         }
         else if(!m_aOuterValue.hasValue())
