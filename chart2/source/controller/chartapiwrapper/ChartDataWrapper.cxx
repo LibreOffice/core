@@ -21,6 +21,7 @@
 #include <DiagramHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModelHelper.hxx>
+#include <InternalDataProvider.hxx>
 #include <ControllerLockGuard.hxx>
 #include "Chart2ModelContact.hxx"
 #include <cppuhelper/supportsservice.hxx>
@@ -589,8 +590,9 @@ void ChartDataWrapper::initDataAccess()
     else
     {
         //create a separate "internal data provider" that is not connected to the model
-        m_xDataAccess.set( ChartModelHelper::createInternalDataProvider(
-            xChartDoc, false /*bConnectToModel*/ ), uno::UNO_QUERY_THROW );
+        auto xInternal = ChartModelHelper::createInternalDataProvider(
+            xChartDoc, false /*bConnectToModel*/ );
+        m_xDataAccess.set( static_cast<cppu::OWeakObject*>(xInternal.get()), uno::UNO_QUERY_THROW );
     }
 }
 

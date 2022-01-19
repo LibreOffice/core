@@ -20,6 +20,7 @@
 #include <UncachedDataSequence.hxx>
 #include <CommonFunctors.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <InternalDataProvider.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
@@ -55,7 +56,7 @@ namespace chart
 {
 
 UncachedDataSequence::UncachedDataSequence(
-    const Reference< chart2::XInternalDataProvider > & xIntDataProv,
+    const rtl::Reference< InternalDataProvider > & xIntDataProv,
     const OUString & rRangeRepresentation )
         : OPropertyContainer( GetBroadcastHelper()),
           UncachedDataSequence_Base( GetMutex()),
@@ -68,7 +69,7 @@ UncachedDataSequence::UncachedDataSequence(
 }
 
 UncachedDataSequence::UncachedDataSequence(
-    const Reference< chart2::XInternalDataProvider > & xIntDataProv,
+    const rtl::Reference< InternalDataProvider > & xIntDataProv,
     const OUString & rRangeRepresentation,
     const OUString & rRole )
         : OPropertyContainer( GetBroadcastHelper()),

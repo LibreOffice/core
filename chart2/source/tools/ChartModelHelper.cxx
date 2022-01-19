@@ -48,7 +48,7 @@ uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeH
     return new RangeHighlighter( xSelectionSupplier );
 }
 
-uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider(
+rtl::Reference< InternalDataProvider > ChartModelHelper::createInternalDataProvider(
     const uno::Reference< css::chart2::XChartDocument >& xChartDoc, bool bConnectToModel )
 {
     bool bDefaultDataInColumns(true);

@@ -39,6 +39,7 @@ namespace chart
 {
 class BaseCoordinateSystem;
 class Diagram;
+class InternalDataProvider;
 
 class OOO_DLLPUBLIC_CHARTTOOLS ChartModelHelper
 {
@@ -46,7 +47,7 @@ public:
     static css::uno::Reference< css::chart2::data::XRangeHighlighter > createRangeHighlighter(
             const css::uno::Reference< css::view::XSelectionSupplier >& xSelectionSupplier );
 
-    static css::uno::Reference< css::chart2::data::XDataProvider > createInternalDataProvider(
+    static rtl::Reference< InternalDataProvider > createInternalDataProvider(
             const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc, bool bConnectToModel );
 
     static rtl::Reference< Diagram >

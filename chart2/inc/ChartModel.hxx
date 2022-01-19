@@ -71,6 +71,7 @@ namespace chart
 {
 class Diagram;
 class ChartTypeManager;
+class InternalDataProvider;
 class NameContainer;
 class PageBackground;
 
@@ -150,7 +151,7 @@ private:
     /** is only valid if m_xDataProvider is set. If m_xDataProvider is set to an
         external data provider this reference must be set to 0
     */
-    css::uno::Reference< css::chart2::data::XDataProvider >   m_xInternalDataProvider;
+    rtl::Reference< InternalDataProvider > m_xInternalDataProvider;
 
     css::uno::Reference< css::util::XNumberFormatsSupplier >
                                 m_xOwnNumberFormatsSupplier;
