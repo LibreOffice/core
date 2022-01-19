@@ -205,6 +205,24 @@
       "parentUuid": "5ced8989_25b5c5f5",
       "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e047b64_7554f27a",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-01-19T14:29:58Z",
+      "side": 1,
+      "message": "I haven\u0027t looked in details, but I guess when the schema name or the table name contains \".\", not quoting (calling with false) will create problems.\n\nSee my previous \"maybe the pragmatic solution\" comment.",
+      "parentUuid": "51bd70fc_ac2338b4",
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
