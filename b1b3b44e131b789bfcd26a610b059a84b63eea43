@@ -115,6 +115,24 @@
       "parentUuid": "9c2e8518_ca27b7a6",
       "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49600022_260dedd9",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-01-19T08:24:32Z",
+      "side": 1,
+      "message": "Oh, I see. The schemaName and tableName should _not_ be escaped as per the (My)SQL identifier rules. The problem is in the caller of getTables. It is called as:\n  getTables(\"\", \"`a`\", \"`testJul3`\", ...)\nbut should be called as\n  getTables(\"\", \"a\", \"testJul3\", ...)",
+      "parentUuid": "c68464bc_b2eedd26",
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
