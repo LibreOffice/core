@@ -140,7 +140,6 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::uno::XAggregation >      m_xOldModelAgg;
 
-    css::uno::Reference< css::embed::XStorage >        m_xStorage;
     //the content of this should be always synchronized with the current m_xViewWindow size. The variable is necessary to hold the information as long as no view window exists.
     css::awt::Size                                     m_aVisualAreaSize;
     css::uno::Reference< css::frame::XModel >          m_xParent;

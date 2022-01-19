@@ -132,7 +132,6 @@ ChartModel::ChartModel( const ChartModel & rOther )
     // @note: the old model aggregate must not be shared with other models if it
     // is, you get mutex deadlocks
     //, m_xOldModelAgg( nullptr ) //rOther.m_xOldModelAgg )
-    // m_xStorage( nullptr ) //rOther.m_xStorage )
     , m_aVisualAreaSize( rOther.m_aVisualAreaSize )
     , m_aGraphicObjectVector( rOther.m_aGraphicObjectVector )
     , m_xDataProvider( rOther.m_xDataProvider )
