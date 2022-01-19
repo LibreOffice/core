@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e314292f_4843c4f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T19:40:20Z",
+      "side": 1,
+      "message": "Hope Jenkins is ok. It seems impossible to satisfy all cases:\n- impossible to remove primary key in the \"extreme\" case\n- impossible to create a new table in the \"extreme\" case\nBut it\u0027s extreme and I just wonder now why people who created databases allow all this when I see the pbs it triggers.\nWho does put a space or quotes in a schema/table/column name?\nJust wonder too how software like phpmyadmin does display all this without any pb...\n\nAbout prepared statement, no idea how to do this in LO.\n\n",
+      "revId": "cfd16d5ac1eb5898984954635dd2a29fafe45b78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
