@@ -223,6 +223,24 @@
       "parentUuid": "51bd70fc_ac2338b4",
       "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad7dd380_53190aa2",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T15:22:28Z",
+      "side": 1,
+      "message": "With the new patch and unescaping process, it\u0027s better now we got:\nCREATE TABLE `back`ticks are fun`.`testjul8` (`id` VARCHAR(100) NOT NULL, PRIMARY KEY  (`id`))\n\nThere\u0027s still the ̀  at the middle of the schema name.",
+      "parentUuid": "2e047b64_7554f27a",
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
