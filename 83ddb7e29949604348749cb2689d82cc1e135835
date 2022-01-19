@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55e60fc9_1d49e6ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T18:07:02Z",
+      "side": 1,
+      "message": "I suppose it\u0027s indeed libgtk and not libtk (\"tk\" exists too).",
+      "revId": "83ddb7e29949604348749cb2689d82cc1e135835",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
