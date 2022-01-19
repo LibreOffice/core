@@ -31,6 +31,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <comphelper/lok.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -180,7 +181,8 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
 
     if (EditView* pEditView = GetEditView())
     {
-        pEditView->Paint(rRect, &rRenderContext);
+        pEditView->Paint(comphelper::LibreOfficeKit::isActive() ?
+                         rRenderContext.PixelToLogic(rRect) : rRect, &rRenderContext);
 
         if (HasFocus())
         {
