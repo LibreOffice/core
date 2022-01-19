@@ -38,6 +38,7 @@ namespace com::sun::star::view { class XSelectionSupplier; }
 namespace chart
 {
 class BaseCoordinateSystem;
+class ChartType;
 class Diagram;
 class InternalDataProvider;
 
@@ -73,7 +74,7 @@ public:
     static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
             getDataSeries( const css::uno::Reference< css::frame::XModel > & xModel );
 
-    static css::uno::Reference< css::chart2::XChartType >
+    static rtl::Reference< ChartType >
         getChartTypeOfSeries(
             const css::uno::Reference< css::frame::XModel >& xModel
             , const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries );

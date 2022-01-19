@@ -160,7 +160,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnLineChartTypeTemplate::
 void ColumnLineChartTypeTemplate::createChartTypes(
     const Sequence< Sequence< Reference< XDataSeries > > > & aSeriesSeq,
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys,
-    const Sequence< Reference< XChartType > >& aOldChartTypesSeq )
+    const std::vector< rtl::Reference< ChartType > >& aOldChartTypesSeq )
 {
     if( ! rCoordSys.hasElements() ||
         ! rCoordSys[0].is() )

@@ -19,6 +19,7 @@
 
 #include "ScatterChartTypeTemplate.hxx"
 #include "XYDataInterpreter.hxx"
+#include <ChartType.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
@@ -297,9 +298,8 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
     {
         try
         {
-            uno::Reference< beans::XPropertySet > xChartTypeProp(
-                DiagramHelper::getChartTypeByIndex( xDiagram, 0 ),
-                uno::UNO_QUERY_THROW );
+            rtl::Reference< ChartType > xChartTypeProp =
+                DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
             setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE, xChartTypeProp->getPropertyValue(CHART_UNONAME_CURVE_STYLE) );
             setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION, xChartTypeProp->getPropertyValue(CHART_UNONAME_CURVE_RESOLUTION) );
             setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER, xChartTypeProp->getPropertyValue(CHART_UNONAME_SPLINE_ORDER) );

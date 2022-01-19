@@ -23,6 +23,8 @@
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include "charttoolsdllapi.hxx"
+#include <rtl/ref.hxx>
+#include <vector>
 
 namespace com::sun::star::chart2 { class XChartType; }
 namespace com::sun::star::chart2 { class XCoordinateSystemContainer; }
@@ -31,6 +33,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
+class ChartType;
 
 /** For creating diagrams and modifying existing diagrams.  A base class that
     implements XChartTypeTemplate and offers some tooling for classes that
@@ -191,9 +194,7 @@ public:
             const css::uno::Sequence<
                 css::uno::Reference<
                     css::chart2::XCoordinateSystem > > & rCoordSys,
-            const css::uno::Sequence<
-                      css::uno::Reference<
-                          css::chart2::XChartType > > & aOldChartTypesSeq
+            const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq
             );
 
     /** create axes and add them to the given container. If there are already
@@ -223,6 +224,9 @@ public:
     static void copyPropertiesFromOldToNewCoordinateSystem(
                     const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > & rOldChartTypesSeq,
                     const css::uno::Reference< css::chart2::XChartType > & xNewChartType );
+    static void copyPropertiesFromOldToNewCoordinateSystem(
+                    const std::vector< rtl::Reference< ChartType > > & rOldChartTypesSeq,
+                    const css::uno::Reference< css::chart2::XChartType > & xNewChartType );
 
 protected:
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;
@@ -242,9 +246,9 @@ private:
                                   css::chart2::XDataSeries > > > & aSeriesSeq,
                       const css::uno::Reference<
                           css::chart2::data::XLabeledDataSequence >& xCategories,
-                      const css::uno::Sequence<
-                              css::uno::Reference<
-                                  css::chart2::XChartType > > & aOldChartTypesSeq);
+                      const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq);
+
+    rtl::Reference< ChartType > getChartTypeForNewSeries2( const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes );
 };
 
 } //  namespace chart

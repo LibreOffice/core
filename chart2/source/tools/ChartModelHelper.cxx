@@ -26,6 +26,7 @@
 #include <InternalDataProvider.hxx>
 #include <ChartModel.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <ChartType.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -170,7 +171,7 @@ std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
     return getDataSeries( uno::Reference< chart2::XChartDocument >( xModel, uno::UNO_QUERY ));
 }
 
-uno::Reference< XChartType > ChartModelHelper::getChartTypeOfSeries(
+rtl::Reference< ChartType > ChartModelHelper::getChartTypeOfSeries(
                                 const uno::Reference< frame::XModel >& xModel
                               , const uno::Reference< XDataSeries >&   xGivenDataSeries )
 {
