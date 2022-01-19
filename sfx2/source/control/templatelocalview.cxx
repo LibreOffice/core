@@ -22,6 +22,14 @@
 #include <vcl/weld.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <tools/stream.hxx>
+#include <vcl/pngwrite.hxx>
+#include <sys/stat.h>
+#include <fstream>
+#include <iostream>
+#include <vcl/svapp.hxx>
+#include <vcl/wrkwin.hxx>
+#include <vcl/pngread.hxx>
 
 #include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
@@ -31,6 +39,84 @@
 #include <unotools/ucbhelper.hxx>
 #include <sfxurlrelocator.hxx>
 #include <../doc/doctemplateslocal.hxx>
+
+#if defined(_WIN32)
+    #include <direct.h>
+    #include <systools/win32/uwinapi.h>
+    #include <config_folders.h>
+#else
+    #include <rtl/bootstrap.hxx>
+    #include <osl/file.h>
+    #include <osl/file.hxx>
+    #include <unotools/pathoptions.hxx>
+#endif
+
+#define PATH_SIZE 256
+#define LINE_SIZE 256
+
+    sal_uInt16 firstrun = 0, exist_listfile = 0;
+    using namespace std;
+
+    struct ThumbnailCache {
+        int no;
+        char date[40];
+        char mapname[20];
+        char filename[120];
+    };
+
+    vector<struct ThumbnailCache> cachedata ;
+
+    #define X_OFFSET 15
+    #define Y_OFFSET 15
+
+    class WaitWindow_Impl : public WorkWindow
+    {
+        tools::Rectangle     maRect;
+        DrawTextFlags mnTextStyle;
+        OUString      maText;
+
+    public:
+        WaitWindow_Impl(sal_uInt16);
+        virtual ~WaitWindow_Impl();
+        virtual void dispose() override;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    };
+
+    WaitWindow_Impl::WaitWindow_Impl(sal_uInt16 first_run) : WorkWindow(nullptr, WB_BORDER | WB_3DLOOK)
+    {
+        tools::Rectangle aRect = tools::Rectangle(0, 0, 400, 30000);
+        mnTextStyle = DrawTextFlags::Center | DrawTextFlags::VCenter | DrawTextFlags::WordBreak | DrawTextFlags::MultiLine;
+        if(first_run)
+            maText = SfxResId(RID_CNT_STR_CACHE);
+        else
+            maText = SfxResId(RID_CNT_STR_LOAD);
+        maRect = GetTextRect(aRect, maText, mnTextStyle);
+        aRect = maRect;
+        aRect.AdjustRight(2 * X_OFFSET );
+        aRect.AdjustBottom(2 * Y_OFFSET );
+        maRect.SetPos(Point(X_OFFSET, Y_OFFSET));
+        SetOutputSizePixel(aRect.GetSize());
+
+        Show();
+        PaintImmediately();
+        fflush();
+    }
+
+    WaitWindow_Impl::~WaitWindow_Impl()
+    {
+        disposeOnce();
+    }
+
+    void  WaitWindow_Impl::dispose()
+    {
+        Hide();
+        WorkWindow::dispose();
+    }
+
+    void WaitWindow_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+    {
+        rRenderContext.DrawText(maRect, maText, mnTextStyle);
+    }
 
 using namespace ::com::sun::star;
 
@@ -98,10 +184,128 @@ TemplateLocalView::~TemplateLocalView()
 {
 }
 
+OUString getCacheFolder()
+{
+    #if defined(_WIN32)
+        OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
+    #else
+        SvtPathOptions aPathOpt;
+        OUString url = aPathOpt.GetUserConfigPath() + "/../../cache";
+    #endif
+
+    rtl::Bootstrap::expandMacros(url);
+    osl::Directory::create(url);
+    if( url.startsWith( "file://" ) )
+    {
+        OUString aSysPath;
+        if( osl_getSystemPathFromFileURL( url.pData, &aSysPath.pData ) == osl_File_E_None )
+            url = aSysPath;
+    }
+        return url;
+    }
+
+void TemplateLocalView::readlistdata()
+    {
+        cachedata.clear();
+        // read list.txt data to struct
+        char line[200];
+        unsigned int nAllCount = 0;
+        struct ThumbnailCache tmpcachedata = {0,"","",""};
+        #if defined(_WIN32)
+            OUString Listurl = getCacheFolder() + "\\pic\\list.txt";
+        #else
+            OUString Listurl = getCacheFolder() + "/pic/list.txt";
+        #endif
+        FILE *pf = NULL;
+
+        if ((pf = fopen (OUStringToOString( Listurl, RTL_TEXTENCODING_UTF8 ).getStr(), "r")) == NULL) {
+            printf ( "could not open file\n");
+        }else{
+            printf ( "Success open file\n");
+            while ((fgets (line, sizeof (line), pf))) {
+                if ((sscanf (line, "%d %24[^\n] %10s %120[^\n]"
+                ,&tmpcachedata.no ,tmpcachedata.date ,tmpcachedata.mapname ,tmpcachedata.filename)) == 4) {
+                    cachedata.push_back(tmpcachedata);
+                    exist_listfile = 1;
+                }
+            }
+
+            sal_uInt16 nCount = mpDocTemplates->GetRegionCount();
+            for (sal_uInt16 i = 0; i < nCount; ++i)
+            {
+                sal_uInt16 nEntries = mpDocTemplates->GetCount(i);
+
+                for (sal_uInt16 j = 0; j < nEntries; ++j)
+                {
+                    OUString OUS_mapname;
+                    if(exist_listfile)
+                        OUS_mapname += OStringToOUString(string(cachedata[nAllCount].filename).c_str(), RTL_TEXTENCODING_UTF8);
+                    nAllCount++;
+                }
+            }
+            fclose(pf);
+        }
+
+        if ((nAllCount != cachedata.size()) || cachedata.size() == 0)
+            firstrun = 1;
+    }
+
+    OUString cToOUString( const char* s )
+    {
+        return OUString( s, (sal_Int32) strlen( s ), RTL_TEXTENCODING_UTF8 );
+    }
+
 void TemplateLocalView::Populate()
 {
     maRegions.clear();
     maAllTemplates.clear();
+
+    VclPtrInstance< WaitWindow_Impl > pWin(firstrun);
+
+    #if defined(_WIN32)
+        OUString PicPath = getCacheFolder() + "\\pic";
+    #else
+        OUString PicPath = getCacheFolder() + "/pic";
+    #endif
+
+    FILE* fstream = NULL;
+    sal_uInt16 nAllCount = 1, nAllCount2 = 0;
+    char cList[PATH_SIZE],cIndex[PATH_SIZE],cDir[PATH_SIZE],cDirB[PATH_SIZE],cDirS[PATH_SIZE];
+    char cFile[PATH_SIZE],csFile[PATH_SIZE];
+    snprintf(cDir,PATH_SIZE,"%s",OUStringToOString( PicPath, RTL_TEXTENCODING_UTF8 ).getStr());
+
+    #if defined(_WIN32)
+        snprintf(cDirB,PATH_SIZE,"%s\\b",cDir);
+        snprintf(cDirS,PATH_SIZE,"%s\\s",cDir);
+        snprintf(cList,PATH_SIZE,"%s\\list.txt",cDir);
+    #else
+        snprintf(cDirB,PATH_SIZE,"%s/b",cDir);
+        snprintf(cDirS,PATH_SIZE,"%s/s",cDir);
+        snprintf(cList,PATH_SIZE,"%s/list.txt",cDir);
+    #endif
+
+    /* if directory does not exist, create it */
+    struct stat *cDirbuf = (struct stat *) malloc(sizeof(struct stat));
+    struct stat *cFilebuf = (struct stat *) malloc(sizeof(struct stat));
+    if (stat(cDirB, cDirbuf) != 0 || stat(cDirS, cDirbuf) != 0)
+    {
+        #if defined(_WIN32)
+            CreateDirectory(cDir, NULL);
+            CreateDirectory(cDirB, NULL);
+            CreateDirectory(cDirS, NULL);
+        #else
+            mkdir(cDir,S_IRWXU | S_IRWXG |S_IRWXO);
+            mkdir(cDirB,S_IRWXU | S_IRWXG |S_IRWXO);
+            mkdir(cDirS,S_IRWXU | S_IRWXG |S_IRWXO);
+        #endif
+    }else{
+        if( remove( cList ) != 0 )
+            perror( "Error deleting file" );
+        else
+            printf("remove list.txt OK!\n");
+    }
+
+    fstream = fopen(cList,"a");
 
     sal_uInt16 nCount = mpDocTemplates->GetRegionCount();
     for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -126,16 +330,94 @@ void TemplateLocalView::Populate()
             aProperties.aName = aName;
             aProperties.aPath = aURL;
             aProperties.aRegionName = aRegionName;
-            aProperties.aThumbnail = TemplateLocalView::fetchThumbnail(aURL,
-                                                                          mnThumbnailWidth,
-                                                                          mnThumbnailHeight);
 
+            std::fill_n(cIndex, PATH_SIZE, 0);
+            std::fill_n(cFile, PATH_SIZE, 0);
+            std::fill_n(csFile, PATH_SIZE, 0);
+            BitmapEx cImg;
+            OUString imgurl/*,imgurl2*/;
+            OUString ii = OStringToOUString(std::to_string(i).c_str(), RTL_TEXTENCODING_UTF8);
+            OUString jj = OStringToOUString(std::to_string(j).c_str(), RTL_TEXTENCODING_UTF8);
+
+            #if defined(_WIN32)
+                if(mnThumbnailWidth < TEMPLATE_ITEM_MAX_WIDTH) {
+                    imgurl += PicPath + "\\s\\" + ii + jj +".png";
+                    firstrun = 0;
+                } else {
+                    imgurl += PicPath + "\\b\\" + ii + jj +".png";
+                }
+            #else
+                if(mnThumbnailWidth < TEMPLATE_ITEM_MAX_WIDTH) {
+                    imgurl += PicPath + "/s/" + ii + jj +".png";
+                    firstrun = 0;
+                } else {
+                    imgurl += PicPath + "/b/" + ii + jj +".png";
+                }
+            #endif
+
+            snprintf(cFile,PATH_SIZE,OUStringToOString( imgurl, RTL_TEXTENCODING_UTF8 ).getStr());
+
+            // check png file exist
+            OUString OUS_mapname;
+            if(exist_listfile)
+                OUS_mapname += OStringToOUString(string(cachedata[nAllCount2].filename).c_str(), RTL_TEXTENCODING_UTF8);
+            if((aName.compareTo(OUS_mapname) != 0) || (stat(cFile, cFilebuf) != 0))
+            {
+                snprintf(csFile,PATH_SIZE,OUStringToOString( OUString(PicPath + "/s/" + ii + jj +".png"), RTL_TEXTENCODING_UTF8 ).getStr());
+                remove(csFile);
+
+                // wirte list.txt
+                snprintf(cIndex,LINE_SIZE,"%-4d %-20s  %d%d  %-s\n",nAllCount++,"Sun Oct 29 15:03:07 2015",i,j,OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr());
+                fwrite(cIndex,1,strlen(cIndex),fstream);
+
+                cImg = TemplateLocalView::fetchThumbnail(aURL, mnThumbnailWidth, mnThumbnailHeight);
+                // write cache png
+                SvFileStream aNew(imgurl, StreamMode::WRITE|StreamMode::TRUNC);
+                vcl::PNGWriter aPNGWriter(cImg);
+                aPNGWriter.Write(aNew);
+                aNew.Close();
+            } else {
+                // wirte list.txt
+                snprintf(cIndex,LINE_SIZE,"%-4d %-20s  %d%d  %-s\n",nAllCount++,"Sun Oct 29 15:03:07 2017",i,j,cachedata[nAllCount2].filename);
+                fwrite(cIndex,1,strlen(cIndex),fstream);
+
+                OUString PngURL;
+
+                #if defined(_WIN32)
+
+                    if(mnThumbnailHeight < TEMPLATE_ITEM_MAX_WIDTH)
+                    {
+                        PngURL += PicPath + "\\s\\" + OStringToOUString(string(cachedata[nAllCount2].mapname).c_str(), RTL_TEXTENCODING_UTF8) +".png";
+                    } else {
+                        PngURL += PicPath + "\\b\\" + OStringToOUString(string(cachedata[nAllCount2].mapname).c_str(), RTL_TEXTENCODING_UTF8) +".png";
+                    }
+                #else
+                    if(mnThumbnailHeight < TEMPLATE_ITEM_MAX_WIDTH)
+                    {
+                        PngURL += PicPath + "/s/" + OStringToOUString(string(cachedata[nAllCount2].mapname).c_str(), RTL_TEXTENCODING_UTF8) +".png";
+                    } else {
+                        PngURL += PicPath + "/b/" + OStringToOUString(string(cachedata[nAllCount2].mapname).c_str(), RTL_TEXTENCODING_UTF8) +".png";
+                    }
+
+                #endif
+
+                SvFileStream aFileStream(PngURL, StreamMode::READ);
+                vcl::PNGReader aPNGReader(aFileStream);
+                cImg = aPNGReader.Read();
+            }
+            nAllCount2++;
+            aProperties.aThumbnail = cImg;
             pItem->maTemplates.push_back(aProperties);
             maAllTemplates.push_back(aProperties);
         }
 
         maRegions.push_back(std::move(pItem));
     }
+
+    pWin.disposeAndClear();
+    free(cDirbuf);
+    free(cFilebuf);
+    fclose(fstream);
 }
 
 void TemplateLocalView::reload()
@@ -840,7 +1122,8 @@ BitmapEx TemplateLocalView::scaleImg (const BitmapEx &rImg, tools::Long width, t
 
         // make the picture fit the given width/height constraints
         double nRatio = std::min(double(width)/double(aSize.Width()), double(height)/double(aSize.Height()));
-
+        // when scaling use the full 24bit RGB values
+        aImg.Convert(BmpConversion::N24Bit);
         aImg.Scale(Size(aSize.Width() * nRatio, aSize.Height() * nRatio));
     }
 
