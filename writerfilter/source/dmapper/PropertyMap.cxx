@@ -882,13 +882,18 @@ void SectionPropertyMap::CopyHeaderFooterTextProperty( const uno::Reference< bea
 }
 
 // Copy headers and footers from the previous page style.
-void SectionPropertyMap::CopyHeaderFooter( const uno::Reference< beans::XPropertySet >& xPrevStyle,
+void SectionPropertyMap::CopyHeaderFooter( DomainMapper_Impl& rDM_Impl,
+                                           const uno::Reference< beans::XPropertySet >& xPrevStyle,
                                            const uno::Reference< beans::XPropertySet >& xStyle,
                                            bool bOmitRightHeader,
                                            bool bOmitLeftHeader,
                                            bool bOmitRightFooter,
                                            bool bOmitLeftFooter )
 {
+    if (!rDM_Impl.IsNewDoc())
+    {   // see also DomainMapper_Impl::PushPageHeaderFooter()
+        return; // tdf#139737 SwUndoInserts cannot deal with new header/footer
+    }
     bool bHasPrevHeader = false;
     bool bHeaderIsShared = true;
     OUString sHeaderIsOn = getPropertyName( PROP_HEADER_IS_ON );
@@ -966,13 +971,13 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
 
         if ( bFirstPage )
         {
-            CopyHeaderFooter( xPrevStyle, xStyle,
+            CopyHeaderFooter(rDM_Impl, xPrevStyle, xStyle,
                 !m_bFirstPageHeaderLinkToPrevious, true,
                 !m_bFirstPageFooterLinkToPrevious, true );
         }
         else
         {
-            CopyHeaderFooter( xPrevStyle, xStyle,
+            CopyHeaderFooter(rDM_Impl, xPrevStyle, xStyle,
                              !m_bDefaultHeaderLinkToPrevious,
                              !(m_bEvenPageHeaderLinkToPrevious && bUseEvenPages),
                              !m_bDefaultFooterLinkToPrevious,
@@ -1844,7 +1849,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 rDM_Impl.GetPageStyles()->insertByName( evenOddStyleName, uno::makeAny( evenOddStyle ) );
                 evenOddStyle->setPropertyValue( "HeaderIsOn", uno::makeAny( false ) );
                 evenOddStyle->setPropertyValue( "FooterIsOn", uno::makeAny( false ) );
-                CopyHeaderFooter( pageProperties, evenOddStyle );
+                CopyHeaderFooter(rDM_Impl, pageProperties, evenOddStyle);
                 *pageStyle = evenOddStyleName; // And use it instead of the original one (which is set as follow of this one).
                 if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_evenPage) )
                     evenOddStyle->setPropertyValue( getPropertyName( PROP_PAGE_STYLE_LAYOUT ), uno::makeAny( style::PageStyleLayout_LEFT ) );
