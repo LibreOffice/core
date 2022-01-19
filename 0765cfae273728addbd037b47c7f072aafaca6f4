@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d0a7a74_8cf9a04a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-19T17:19:59Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! If you can cut the fixed problem from the bug doc,  we could close the issue with a minimized test document, filing the remaining problems in the issue tracker, if needed.",
+      "revId": "0765cfae273728addbd037b47c7f072aafaca6f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
