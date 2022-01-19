@@ -645,7 +645,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
                 tools::Long nExtraSpace = nAllocPrimaryDimension - nMainPrimaryDimension;
                 if (nExtraSpace < 0)
                 {
-                    SAL_WARN("vcl.layout", "nExtra space went negative, setting to zero");
+                    SAL_WARN("vcl.layout", "nExtraSpace went negative, setting to zero");
                     nExtraSpace = 0;
                 }
                 nExtraSpace += (aReq.m_aMainGroupDimensions.size()-1) * nSpacing;
