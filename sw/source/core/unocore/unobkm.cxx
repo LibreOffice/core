@@ -848,16 +848,7 @@ SwXFieldmark::getPresentation(sal_Bool const bShowCommand)
     else
     {
         OUString const type(getFieldType());
-        if (type == ODF_FORMCHECKBOX)
-        {
-            ::sw::mark::ICheckboxFieldmark const*const pCheckboxFm(
-                    dynamic_cast<ICheckboxFieldmark const*>(pMark));
-            assert(pCheckboxFm);
-            return pCheckboxFm->IsChecked()
-                    ? OUString(u"\u2612")
-                    : OUString(u"\u2610");
-        }
-        else if (type == ODF_FORMDROPDOWN)
+        if (type == ODF_FORMCHECKBOX || type == ODF_FORMDROPDOWN)
         {
             return sw::mark::ExpandFieldmark(const_cast<IFieldmark *>(pMark));
         }
