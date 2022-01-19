@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f28e2c14_6a0e9ed0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-19T06:30:40Z",
+      "side": 1,
+      "message": "So I tried different approaches:\n            self.xUITest.executeCommand(\".uno:UpdateAllIndexes\")\n            count \u003d xDocumentIndexes.getCount()\n            for i in range(0,count):\n                xDocumentIndexes.getByIndex(i).update            \n            xDocumentIndex.refresh()\n            xDocumentIndex.refresh\n            xDocumentIndex.update()\n            xDocumentIndex.refresh\n\nThe only one working is .uno:UpdateAllIndexes. Alle others won\u0027t refresh the index, but even then the following fails:\nself.assertEqual(\"Nguyễn Khánh\" in xIndexAnchor.getString(), True)",
+      "revId": "ac40ada05c06bbc58b446389cd378647b1fa0bcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2af44b01_46f77819",
