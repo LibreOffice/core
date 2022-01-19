@@ -19,12 +19,14 @@
 #pragma once
 
 #include "CommandDispatch.hxx"
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::document { class XUndoManager; }
 namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {
+class ChartModel;
 
 /** This is a CommandDispatch implementation for Undo and Redo.
  */
@@ -33,7 +35,7 @@ class UndoCommandDispatch : public CommandDispatch
 public:
     explicit UndoCommandDispatch(
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
-        const css::uno::Reference< css::frame::XModel > & xModel );
+        const rtl::Reference<::chart::ChartModel> & xModel );
     virtual ~UndoCommandDispatch() override;
 
     // late initialisation, especially for adding as listener
@@ -58,7 +60,7 @@ protected:
         const css::uno::Reference< css::frame::XStatusListener > & xSingleListener ) override;
 
 private:
-    css::uno::Reference< css::frame::XModel > m_xModel;
+    rtl::Reference<::chart::ChartModel> m_xModel;
     css::uno::Reference< css::document::XUndoManager > m_xUndoManager;
 };
 

@@ -28,7 +28,7 @@ class DragMethod_PieSegment : public DragMethod_Base
 {
 public:
     DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper, const OUString& rObjectCID
-        , const css::uno::Reference< css::frame::XModel >& xChartModel );
+        , const rtl::Reference<::chart::ChartModel>& xChartModel );
     virtual ~DragMethod_PieSegment() override;
 
     virtual OUString GetSdrDragComment() const override;

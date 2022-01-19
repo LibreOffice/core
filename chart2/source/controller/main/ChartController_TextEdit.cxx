@@ -23,6 +23,7 @@
 #include "UndoGuard.hxx"
 #include <DrawViewWrapper.hxx>
 #include <ChartWindow.hxx>
+#include <ChartModel.hxx>
 #include <TitleHelper.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ControllerLockGuard.hxx>
@@ -135,10 +136,10 @@ bool ChartController::EndTextEdit()
     if ( !aObjectCID.isEmpty() )
     {
         uno::Reference< beans::XPropertySet > xPropSet =
-            ObjectIdentifier::getObjectPropertySet( aObjectCID, getModel() );
+            ObjectIdentifier::getObjectPropertySet( aObjectCID, uno::Reference<chart2::XChartDocument>(getChartModel()) );
 
         // lock controllers till end of block
-        ControllerLockGuardUNO aCLGuard( getModel() );
+        ControllerLockGuardUNO aCLGuard( getChartModel() );
 
         TitleHelper::setCompleteString( aString, uno::Reference<
             css::chart2::XTitle >::query( xPropSet ), m_xCC );

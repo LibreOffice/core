@@ -23,6 +23,7 @@
 #include <DisposeHelper.hxx>
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
+#include <ChartModel.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -48,13 +49,13 @@ CommandDispatchContainer::CommandDispatchContainer(
 }
 
 void CommandDispatchContainer::setModel(
-    const Reference< frame::XModel > & xModel )
+    const rtl::Reference<::chart::ChartModel> & xModel )
 {
     // remove all existing dispatcher that base on the old model
     m_aCachedDispatches.clear();
     DisposeHelper::DisposeAllElements( m_aToBeDisposedDispatches );
     m_aToBeDisposedDispatches.clear();
-    m_xModel = xModel;
+    m_xModel = xModel.get();
 }
 
 void CommandDispatchContainer::setChartDispatch(
@@ -83,7 +84,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
     }
     else
     {
-        uno::Reference< frame::XModel > xModel( m_xModel );
+        rtl::Reference< ::chart::ChartModel > xModel( m_xModel );
 
         if( xModel.is() && ( rURL.Path == "Undo" || rURL.Path == "Redo" ||
                              rURL.Path == "GetUndoStrings" || rURL.Path == "GetRedoStrings" ) )
