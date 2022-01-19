@@ -19,6 +19,7 @@
 
 #include <ExplicitCategoriesProvider.hxx>
 #include <DiagramHelper.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <AxisHelper.hxx>
 #include <DataSourceHelper.hxx>

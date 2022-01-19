@@ -21,6 +21,7 @@
 #include "SchWhichPairs.hxx"
 
 #include <ChartModelHelper.hxx>
+#include <ChartType.hxx>
 #include <AxisHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
@@ -74,7 +75,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         m_bAttachToMainAxis = DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
 
         rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
-        uno::Reference< XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram , xDataSeries ) );
+        rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram , xDataSeries ) );
 
         m_xCooSys = DataSeriesHelper::getCoordinateSystemOfSeries( xDataSeries, xDiagram );
         if( m_xCooSys.is() )
@@ -93,15 +94,14 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
             sal_Int32 nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
 
             uno::Sequence< sal_Int32 > aBarPositionSequence;
-            uno::Reference< beans::XPropertySet > xChartTypeProps( xChartType, uno::UNO_QUERY );
-            if( xChartTypeProps.is() )
+            if( xChartType.is() )
             {
-                if( xChartTypeProps->getPropertyValue( "OverlapSequence" ) >>= aBarPositionSequence )
+                if( xChartType->getPropertyValue( "OverlapSequence" ) >>= aBarPositionSequence )
                 {
                     if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )
                         m_nBarOverlap = aBarPositionSequence[nAxisIndex];
                 }
-                if( xChartTypeProps->getPropertyValue( "GapwidthSequence" ) >>= aBarPositionSequence )
+                if( xChartType->getPropertyValue( "GapwidthSequence" ) >>= aBarPositionSequence )
                 {
                     if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )
                         m_nGapWidth = aBarPositionSequence[nAxisIndex];
@@ -206,28 +206,25 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
 
                 uno::Reference< XDataSeries > xDataSeries( GetPropertySet(), uno::UNO_QUERY );
                 rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(m_xChartModel) );
-                uno::Reference< beans::XPropertySet > xChartTypeProps( DiagramHelper::getChartTypeOfSeries( xDiagram , xDataSeries ), uno::UNO_QUERY );
-                if( xChartTypeProps.is() )
+                rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram , xDataSeries ) );
+                if( xChartType.is() )
                 {
                     sal_Int32 nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
                     uno::Sequence< sal_Int32 > aBarPositionSequence;
-                    if( xChartTypeProps.is() )
+                    if( xChartType->getPropertyValue( aPropName ) >>= aBarPositionSequence )
                     {
-                        if( xChartTypeProps->getPropertyValue( aPropName ) >>= aBarPositionSequence )
+                        bool bGroupBarsPerAxis =  rItemSet.Get( SCHATTR_GROUP_BARS_PER_AXIS ).GetValue();
+                        if(!bGroupBarsPerAxis)
                         {
-                            bool bGroupBarsPerAxis =  rItemSet.Get( SCHATTR_GROUP_BARS_PER_AXIS ).GetValue();
-                            if(!bGroupBarsPerAxis)
-                            {
-                                //set the same value for all axes
-                                for( auto & pos : asNonConstRange(aBarPositionSequence) )
-                                    pos = rBarPosition;
-                            }
-                            else if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )
-                                aBarPositionSequence.getArray()[nAxisIndex] = rBarPosition;
-
-                            xChartTypeProps->setPropertyValue( aPropName, uno::Any(aBarPositionSequence) );
-                            bChanged = true;
+                            //set the same value for all axes
+                            for( auto & pos : asNonConstRange(aBarPositionSequence) )
+                                pos = rBarPosition;
                         }
+                        else if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )
+                            aBarPositionSequence.getArray()[nAxisIndex] = rBarPosition;
+
+                        xChartType->setPropertyValue( aPropName, uno::Any(aBarPositionSequence) );
+                        bChanged = true;
                     }
                 }
             }

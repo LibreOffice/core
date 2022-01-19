@@ -27,6 +27,7 @@ namespace com::sun::star::chart2 { class XDataSeries; }
 
 namespace chart
 {
+class ChartType;
 
 class OOO_DLLPUBLIC_CHARTTOOLS ChartTypeHelper
 {
@@ -47,6 +48,7 @@ public:
     static bool isSupportingBaseValue(           const css::uno::Reference< css::chart2::XChartType >& xChartType );
     static bool isSupportingAxisPositioning(     const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
     static bool isSupportingDateAxis( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex );
+    static bool isSupportingDateAxis( const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionIndex );
     static bool isSupportingComplexCategory( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     static bool isSupportingCategoryPositioning( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static bool shiftCategoryPosAtXAxisPerDefault(     const css::uno::Reference< css::chart2::XChartType >& xChartType );

@@ -21,6 +21,7 @@
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
+#include <ChartType.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -87,8 +88,8 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
-    uno::Reference< beans::XPropertySet > xChartTypeProp(
-        DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), uno::UNO_QUERY_THROW );
+    rtl::Reference< ChartType > xChartType =
+        DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
 
     if( bResult )
     {

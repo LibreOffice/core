@@ -21,6 +21,7 @@
 #include <CharacterPropertyItemConverter.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
@@ -210,7 +211,7 @@ TextLabelItemConverter::TextLabelItemConverter(
     maConverters.emplace_back(new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 
     rtl::Reference< Diagram > xDiagram(ChartModelHelper::findDiagram(xChartModel));
-    uno::Reference<XChartType> xChartType(DiagramHelper::getChartTypeOfSeries(xDiagram, xSeries));
+    rtl::Reference< ChartType > xChartType(DiagramHelper::getChartTypeOfSeries(xDiagram, xSeries));
     bool bFound = false;
     bool bAmbiguous = false;
     bool bSwapXAndY = DiagramHelper::getVertical(xDiagram, bFound, bAmbiguous);

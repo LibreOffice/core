@@ -19,6 +19,7 @@
 
 #include "MinMaxLineWrapper.hxx"
 #include "Chart2ModelContact.hxx"
+#include <ChartType.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -157,31 +158,27 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName
     Reference< beans::XPropertySet > xPropSet;
 
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
-    const Sequence< Reference< chart2::XChartType > > aTypes(
+    const std::vector< rtl::Reference< ChartType > > & aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
-    for( Reference< chart2::XChartType > const & xType : aTypes )
+    for( rtl::Reference< ChartType > const & xType : aTypes )
     {
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
-            Reference< chart2::XDataSeriesContainer > xSeriesContainer(xType,uno::UNO_QUERY);
-            if( xSeriesContainer.is() )
+            Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xType->getDataSeries() );
+            if(aSeriesSeq.hasElements())
             {
-                Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
-                if(aSeriesSeq.hasElements())
+                xPropSet.set(aSeriesSeq[0],uno::UNO_QUERY);
+                if(xPropSet.is())
                 {
-                    xPropSet.set(aSeriesSeq[0],uno::UNO_QUERY);
-                    if(xPropSet.is())
-                    {
-                        if( rPropertyName == "LineColor" )
-                            xPropSet->setPropertyValue( "Color", rValue );
-                        else if( rPropertyName == "LineTransparence" )
-                            xPropSet->setPropertyValue( "Transparency", rValue );
-                        else if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
-                            m_aWrappedLineJointProperty.setPropertyValue( rValue, xPropSet );
-                        else
-                            xPropSet->setPropertyValue( rPropertyName, rValue );
-                        return;
-                    }
+                    if( rPropertyName == "LineColor" )
+                        xPropSet->setPropertyValue( "Color", rValue );
+                    else if( rPropertyName == "LineTransparence" )
+                        xPropSet->setPropertyValue( "Transparency", rValue );
+                    else if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
+                        m_aWrappedLineJointProperty.setPropertyValue( rValue, xPropSet );
+                    else
+                        xPropSet->setPropertyValue( rPropertyName, rValue );
+                    return;
                 }
             }
         }
@@ -194,21 +191,17 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rProperty
     Reference< beans::XPropertySet > xPropSet;
 
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
-    const Sequence< Reference< chart2::XChartType > > aTypes(
+    const std::vector< rtl::Reference< ChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
-    for( Reference< chart2::XChartType > const & xType : aTypes )
+    for( rtl::Reference< ChartType > const & xType : aTypes )
     {
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
-            Reference< chart2::XDataSeriesContainer > xSeriesContainer(xType,uno::UNO_QUERY);
-            if( xSeriesContainer.is() )
+            Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xType->getDataSeries() );
+            if(aSeriesSeq.hasElements())
             {
-                Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
-                if(aSeriesSeq.hasElements())
-                {
-                    xPropSet.set(aSeriesSeq[0],uno::UNO_QUERY);
-                    break;
-                }
+                xPropSet.set(aSeriesSeq[0],uno::UNO_QUERY);
+                break;
             }
         }
     }

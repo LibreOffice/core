@@ -28,6 +28,7 @@
 #include <ResId.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartType.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <TitleHelper.hxx>
@@ -1100,22 +1101,18 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatDataSeries" );
                     }
 
-                    Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
+                    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
                     if( xChartType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
                     {
                         try
                         {
-                            Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-                            if( xChartTypeProp.is() )
-                            {
-                                bool bJapaneseStyle = false;
-                                xChartTypeProp->getPropertyValue( "Japanese" ) >>= bJapaneseStyle;
+                            bool bJapaneseStyle = false;
+                            xChartType->getPropertyValue( "Japanese" ) >>= bJapaneseStyle;
 
-                                if( bJapaneseStyle )
-                                {
-                                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatStockLoss" );
-                                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatStockGain" );
-                                }
+                            if( bJapaneseStyle )
+                            {
+                                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatStockLoss" );
+                                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatStockGain" );
                             }
                         }
                         catch( const uno::Exception & )

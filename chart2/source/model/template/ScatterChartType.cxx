@@ -154,6 +154,11 @@ uno::Reference< util::XCloneable > SAL_CALL ScatterChartType::createClone()
     return uno::Reference< util::XCloneable >( new ScatterChartType( *this ));
 }
 
+rtl::Reference< ChartType > ScatterChartType::cloneChartType() const
+{
+    return new ScatterChartType( *this );
+}
+
 // ____ XChartType ____
 Reference< chart2::XCoordinateSystem > SAL_CALL
     ScatterChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )

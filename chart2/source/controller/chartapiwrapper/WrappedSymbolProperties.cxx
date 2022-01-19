@@ -20,6 +20,7 @@
 #include "WrappedSymbolProperties.hxx"
 #include "WrappedSeriesOrDiagramProperty.hxx"
 #include <FastPropertyIdRanges.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
@@ -286,7 +287,7 @@ beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Referenc
     {
         rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
         Reference< chart2::XDataSeries > xSeries( xInnerPropertyState, uno::UNO_QUERY );
-        Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
+        rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
         if( ChartTypeHelper::isSupportingSymbolProperties( xChartType, 2 ) )
             return beans::PropertyState_DIRECT_VALUE;
     }

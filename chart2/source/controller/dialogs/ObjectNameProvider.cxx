@@ -27,6 +27,7 @@
 #include <AxisHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartType.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <DataSeriesHelper.hxx>
@@ -66,7 +67,7 @@ OUString lcl_getDataSeriesName( const OUString& rObjectCID, const rtl::Reference
     Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel );
     if( xDiagram.is() && xSeries.is() )
     {
-        Reference< XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
+        rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
         if( xChartType.is() )
         {
             aRet = ::chart::DataSeriesHelper::getDataSeriesLabel(

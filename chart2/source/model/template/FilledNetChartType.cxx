@@ -48,6 +48,11 @@ uno::Reference< util::XCloneable > SAL_CALL FilledNetChartType::createClone()
     return uno::Reference< util::XCloneable >( new FilledNetChartType( *this ));
 }
 
+rtl::Reference< ChartType > FilledNetChartType::cloneChartType() const
+{
+    return new FilledNetChartType( *this );
+}
+
 // ____ XChartType ____
 OUString SAL_CALL FilledNetChartType::getChartType()
 {

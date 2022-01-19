@@ -19,6 +19,7 @@
 
 #include "UpDownBarWrapper.hxx"
 #include "Chart2ModelContact.hxx"
+#include <ChartType.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -162,17 +163,13 @@ void SAL_CALL UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName,
 {
     Reference< beans::XPropertySet > xPropSet;
 
-    const Sequence< Reference< chart2::XChartType > > aTypes(
+    const std::vector< rtl::Reference< ChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getDiagram() ) );
-    for( Reference< chart2::XChartType > const & xType : aTypes )
+    for( rtl::Reference< ChartType > const & xType : aTypes )
     {
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
-            Reference< beans::XPropertySet > xTypeProps( xType, uno::UNO_QUERY );
-            if(xTypeProps.is())
-            {
-                xTypeProps->getPropertyValue( m_aPropertySetName ) >>= xPropSet;
-            }
+            xType->getPropertyValue( m_aPropertySetName ) >>= xPropSet;
         }
     }
     if(xPropSet.is())
@@ -184,17 +181,13 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const OUString& rPropertyN
 
     Reference< beans::XPropertySet > xPropSet;
 
-    const Sequence< Reference< chart2::XChartType > > aTypes(
+    const std::vector< rtl::Reference< ChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getDiagram() ) );
-    for( Reference< chart2::XChartType > const & xType : aTypes )
+    for( rtl::Reference<ChartType > const & xType : aTypes )
     {
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
-            Reference< beans::XPropertySet > xTypeProps( xType, uno::UNO_QUERY );
-            if(xTypeProps.is())
-            {
-                xTypeProps->getPropertyValue( m_aPropertySetName ) >>= xPropSet;
-            }
+            xType->getPropertyValue( m_aPropertySetName ) >>= xPropSet;
         }
     }
     if(xPropSet.is())

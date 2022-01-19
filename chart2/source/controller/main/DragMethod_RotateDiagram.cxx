@@ -25,6 +25,7 @@
 #include <ChartModel.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <defines.hxx>

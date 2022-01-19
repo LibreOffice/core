@@ -38,6 +38,7 @@ namespace com::sun::star::view { class XSelectionSupplier; }
 namespace chart
 {
 class BaseCoordinateSystem;
+class ChartType;
 class Diagram;
 class InternalDataProvider;
 
@@ -75,7 +76,7 @@ public:
     static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
             getDataSeries( const rtl::Reference< ::chart::ChartModel > & xModel );
 
-    static css::uno::Reference< css::chart2::XChartType >
+    static rtl::Reference< ChartType >
         getChartTypeOfSeries(
             const css::uno::Reference< css::frame::XModel >& xModel
             , const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries );
@@ -89,6 +90,7 @@ public:
     static bool isIncludeHiddenCells( const css::uno::Reference< css::frame::XModel >& xChartModel );
 
     static bool setIncludeHiddenCells( bool bIncludeHiddenCells, ChartModel& rModel);
+
 };
 
 } //namespace chart

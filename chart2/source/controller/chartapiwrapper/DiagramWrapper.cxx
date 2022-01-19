@@ -28,6 +28,7 @@
 #include <DiagramHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartType.hxx>
 #include <WrappedIgnoreProperty.hxx>
 #include "WrappedAxisAndGridExistenceProperties.hxx"
 #include "WrappedStatisticProperties.hxx"
@@ -438,7 +439,7 @@ struct StaticDiagramWrapperPropertyArray : public rtl::StaticAggregate< Sequence
 bool lcl_isXYChart( const Reference< chart2::XDiagram >& rDiagram )
 {
     bool bRet = false;
-    Reference< chart2::XChartType > xChartType( ::chart::DiagramHelper::getChartTypeByIndex( rDiagram, 0 ) );
+    rtl::Reference< ::chart::ChartType > xChartType( ::chart::DiagramHelper::getChartTypeByIndex( rDiagram, 0 ) );
     if( xChartType.is() )
     {
         OUString aChartType( xChartType->getChartType() );
@@ -613,7 +614,7 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
     {
         // none of the standard templates matched
         // use first chart type
-        Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+        rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
         if( xChartType.is() )
         {
             aRet = xChartType->getChartType();
