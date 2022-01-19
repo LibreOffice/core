@@ -32,6 +32,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
+    virtual rtl::Reference<ChartType> cloneChartType() const override;
+
 private:
     explicit FilledNetChartType(const FilledNetChartType& rOther);
 

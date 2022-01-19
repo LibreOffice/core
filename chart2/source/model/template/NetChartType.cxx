@@ -147,6 +147,11 @@ uno::Reference< util::XCloneable > SAL_CALL NetChartType::createClone()
     return uno::Reference< util::XCloneable >( new NetChartType( *this ));
 }
 
+rtl::Reference< ChartType > NetChartType::cloneChartType() const
+{
+    return new NetChartType( *this );
+}
+
 // ____ XChartType ____
 OUString SAL_CALL NetChartType::getChartType()
 {

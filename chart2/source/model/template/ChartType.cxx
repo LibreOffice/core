@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ChartType.hxx"
+#include <ChartType.hxx>
 #include <CartesianCoordinateSystem.hxx>
 #include <AxisHelper.hxx>
 #include <CloneHelper.hxx>

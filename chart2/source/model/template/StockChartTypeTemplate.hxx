@@ -98,9 +98,7 @@ protected:
             const css::uno::Sequence<
                 css::uno::Reference<
                     css::chart2::XCoordinateSystem > > & rCoordSys,
-            const css::uno::Sequence<
-                  css::uno::Reference<
-                      css::chart2::XChartType > > & aOldChartTypesSeq
+            const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq
             ) override;
 
     virtual css::uno::Reference< css::chart2::XChartType >

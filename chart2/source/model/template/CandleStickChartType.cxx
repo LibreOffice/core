@@ -206,6 +206,11 @@ uno::Reference< util::XCloneable > SAL_CALL CandleStickChartType::createClone()
     return uno::Reference< util::XCloneable >( new CandleStickChartType( *this ));
 }
 
+rtl::Reference< ChartType > CandleStickChartType::cloneChartType() const
+{
+    return new CandleStickChartType( *this );
+}
+
 // ____ XChartType ____
 OUString SAL_CALL CandleStickChartType::getChartType()
 {

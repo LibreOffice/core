@@ -28,6 +28,7 @@
 #include <CommonConverters.hxx>
 #include "RegressionCurveModel.hxx"
 #include <ChartTypeHelper.hxx>
+#include <ChartType.hxx>
 #include <ChartModelHelper.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>

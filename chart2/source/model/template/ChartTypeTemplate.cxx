@@ -21,6 +21,7 @@
 #include "DataInterpreter.hxx"
 #include <CommonConverters.hxx>
 #include <ChartTypeHelper.hxx>
+#include <ChartType.hxx>
 
 #include <AxisHelper.hxx>
 #include <DiagramHelper.hxx>
@@ -161,7 +162,7 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
             for( auto const & j : i )
                 lcl_applyDefaultStyle( j, nCount++, xDia );
 
-        Sequence< Reference< XChartType > > aOldChartTypesSeq;
+        std::vector< rtl::Reference< ChartType > > aOldChartTypesSeq;
         FillDiagram( xDia, aData.Series, aData.Categories, aOldChartTypesSeq );
     }
     catch( const uno::Exception & )
@@ -225,8 +226,8 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
             }
 
         // remove charttype groups from all coordinate systems
-        Sequence< Reference< XChartType > > aOldChartTypesSeq(
-            DiagramHelper::getChartTypesFromDiagram(xDiagram) );
+        std::vector< rtl::Reference< ChartType > > aOldChartTypesSeq =
+            DiagramHelper::getChartTypesFromDiagram(xDiagram);
 
         Reference< XCoordinateSystemContainer > xCoordSysCnt( xDiagram, uno::UNO_QUERY );
         OSL_ASSERT( xCoordSysCnt.is());
@@ -286,13 +287,12 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
         // categories
         DiagramHelper::setCategoriesToDiagram( aData.Categories, xDiagram, true, supportsCategories() );
 
-        Sequence< Reference< XChartType > > aChartTypes(
-            DiagramHelper::getChartTypesFromDiagram( xDiagram ));
-        sal_Int32 nMax = std::min( aChartTypes.getLength(), aSeriesSeq.getLength());
+        std::vector< rtl::Reference< ChartType > > aChartTypes =
+            DiagramHelper::getChartTypesFromDiagram( xDiagram );
+        sal_Int32 nMax = std::min( static_cast<sal_Int32>(aChartTypes.size()), aSeriesSeq.getLength());
         for( i=0; i<nMax; ++i )
         {
-            Reference< XDataSeriesContainer > xDSCnt( aChartTypes[i], uno::UNO_QUERY_THROW );
-            xDSCnt->setDataSeries( aSeriesSeq[i] );
+            aChartTypes[i]->setDataSeries( aSeriesSeq[i] );
         }
     }
     catch( const uno::Exception & )
@@ -748,11 +748,19 @@ sal_Int32 ChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension )
     return (nDimension < getDimension()) ? 1 : 0;
 }
 
+rtl::Reference< ChartType > ChartTypeTemplate::getChartTypeForNewSeries( const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
+{
+    uno::Reference<XChartType> xChartType = getChartTypeForNewSeries(comphelper::containerToSequence<uno::Reference<XChartType>>(aFormerlyUsedChartTypes));
+    auto pChartType = dynamic_cast<ChartType*>(xChartType.get());
+    assert(!xChartType || pChartType);
+    return pChartType;
+}
+
 void ChartTypeTemplate::FillDiagram(
     const Reference< XDiagram >& xDiagram,
     const Sequence< Sequence< Reference< XDataSeries > > >& aSeriesSeq,
     const Reference< data::XLabeledDataSequence >& xCategories,
-    const Sequence< Reference< XChartType > >& aOldChartTypesSeq )
+    const std::vector< rtl::Reference< ChartType > >& aOldChartTypesSeq )
 {
     adaptDiagram( xDiagram );
 
@@ -779,7 +787,7 @@ void ChartTypeTemplate::FillDiagram(
 void ChartTypeTemplate::createChartTypes(
     const Sequence< Sequence< Reference< XDataSeries > > > & aSeriesSeq,
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys,
-    const Sequence< Reference< XChartType > >& aOldChartTypesSeq )
+    const std::vector< rtl::Reference< ChartType > >& aOldChartTypesSeq )
 {
     if( ! rCoordSys.hasElements() ||
         ! rCoordSys[0].is() )
@@ -788,11 +796,11 @@ void ChartTypeTemplate::createChartTypes(
     try
     {
         sal_Int32 nCooSysIdx=0;
-        Reference< XChartType > xCT;
+        rtl::Reference< ChartType > xCT;
         if( !aSeriesSeq.hasElements() )
         {
             // we need a new chart type
-            xCT.set( getChartTypeForNewSeries( aOldChartTypesSeq ));
+            xCT = getChartTypeForNewSeries( aOldChartTypesSeq );
             Reference< XChartTypeContainer > xCTCnt( rCoordSys[nCooSysIdx], uno::UNO_QUERY_THROW );
             xCTCnt->setChartTypes({ xCT });
         }
@@ -803,7 +811,7 @@ void ChartTypeTemplate::createChartTypes(
                 if( nSeriesIdx == nCooSysIdx )
                 {
                     // we need a new chart type
-                    xCT.set( getChartTypeForNewSeries( aOldChartTypesSeq ));
+                    xCT = getChartTypeForNewSeries( aOldChartTypesSeq );
                     Reference< XChartTypeContainer > xCTCnt( rCoordSys[nCooSysIdx], uno::UNO_QUERY_THROW );
                     Sequence< Reference< XChartType > > aCTSeq( xCTCnt->getChartTypes());
                     if( aCTSeq.hasElements())
@@ -814,21 +822,19 @@ void ChartTypeTemplate::createChartTypes(
                     else
                         xCTCnt->addChartType( xCT );
 
-                    Reference< chart2::XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
-                    xDSCnt->setDataSeries( aSeriesSeq[nSeriesIdx] );
+                    xCT->setDataSeries( aSeriesSeq[nSeriesIdx] );
                 }
                 else
                 {
                     // reuse existing chart type
                     OSL_ASSERT( xCT.is());
-                    Reference< chart2::XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
-                    Sequence< Reference< XDataSeries > > aNewSeriesSeq( xDSCnt->getDataSeries());
+                    Sequence< Reference< XDataSeries > > aNewSeriesSeq( xCT->getDataSeries());
                     sal_Int32 nNewStartIndex = aNewSeriesSeq.getLength();
                     aNewSeriesSeq.realloc( nNewStartIndex + aSeriesSeq[nSeriesIdx].getLength() );
                     std::copy( aSeriesSeq[nSeriesIdx].begin(),
                                  aSeriesSeq[nSeriesIdx].end(),
                                  aNewSeriesSeq.getArray() + nNewStartIndex );
-                    xDSCnt->setDataSeries( aNewSeriesSeq );
+                    xCT->setDataSeries( aNewSeriesSeq );
                 }
 
                 // spread the series over the available coordinate systems
@@ -859,6 +865,30 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
         if( xOldType.is() && xOldType->getChartType() == aNewChartType )
         {
             xSource.set( Reference< beans::XPropertySet >(xOldType, uno::UNO_QUERY ) );
+            if( xSource.is() )
+                break;
+        }
+    }
+    if( xSource.is() )
+        comphelper::copyProperties( xSource, xDestination );
+}
+
+void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
+                    const std::vector< rtl::Reference< ChartType > > & rOldChartTypesSeq,
+                    const Reference< XChartType > & xNewChartType )
+{
+    Reference< beans::XPropertySet > xDestination( xNewChartType, uno::UNO_QUERY );
+    if( !xDestination.is() )
+        return;
+
+    OUString aNewChartType( xNewChartType->getChartType() );
+
+    Reference< beans::XPropertySet > xSource;
+    for( rtl::Reference< ChartType > const & xOldType : rOldChartTypesSeq )
+    {
+        if( xOldType.is() && xOldType->getChartType() == aNewChartType )
+        {
+            xSource = xOldType;
             if( xSource.is() )
                 break;
         }

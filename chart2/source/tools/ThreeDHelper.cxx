@@ -20,6 +20,7 @@
 #include <ThreeDHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
+#include <ChartType.hxx>
 #include <BaseGFXHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <defines.hxx>

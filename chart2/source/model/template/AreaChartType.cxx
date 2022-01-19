@@ -44,6 +44,11 @@ uno::Reference< util::XCloneable > SAL_CALL AreaChartType::createClone()
     return uno::Reference< util::XCloneable >( new AreaChartType( *this ));
 }
 
+rtl::Reference< ChartType > AreaChartType::cloneChartType() const
+{
+    return new AreaChartType( *this );
+}
+
 // ____ XChartType ____
 OUString SAL_CALL AreaChartType::getChartType()
 {
