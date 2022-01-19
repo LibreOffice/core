@@ -70,6 +70,24 @@
       "parentUuid": "400f1017_53352c01",
       "revId": "e81d2a9516795abf6567b99b009e75ce5718f07c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce7f68fc_9a69decc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-19T22:25:16Z",
+      "side": 1,
+      "message": "...which already causes other warnings like\n\n  sal/textenc/textenc.cxx:356:41: error: extern prototype in main file without definition [loplugin:externandnotdefined]\n  extern \"C\" ImplTextEncodingData const * sal_getFullTextEncodingData(\n             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\nanyway, so I wonder why you would care about that one specific file?",
+      "parentUuid": "64205650_97cfa79e",
+      "revId": "e81d2a9516795abf6567b99b009e75ce5718f07c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
