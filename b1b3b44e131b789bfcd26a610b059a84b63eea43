@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cc73c844_294a2ca4",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T08:13:21Z",
+      "side": 1,
+      "message": "I had put this aside and forgot it, I\u0027ll take a look",
+      "parentUuid": "4ef5d3e4_dfd6b89c",
+      "range": {
+        "startLine": 836,
+        "startChar": 4,
+        "endLine": 836,
+        "endChar": 39
+      },
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c2e8518_ca27b7a6",
         "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
         "patchSetId": 1
@@ -71,6 +95,24 @@
       "writtenOn": "2022-01-19T07:58:50Z",
       "side": 1,
       "message": "I don\u0027t think that ` is incompatible with LIKE. This works:\n\nSELECT (\u0027a`b\u0027 LIKE \u0027%`%\u0027);\n\nWhat makes you think there is an incompatibility?",
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c68464bc_b2eedd26",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T08:13:21Z",
+      "side": 1,
+      "message": "I removed locally these replaceAll. When using design option to create a table, then saving, it indeed created the table but you can quit the edit dialog because of \nwarn:dbaccess:5698:5698:dbaccess/source/ui/tabledesign/TableController.cxx:381: DBG_UNHANDLED_EXCEPTION in doSaveDoc exception: com.sun.star.uno.RuntimeException message: /home/julien/lo/libreoffice/connectivity/source/drivers/mysqlc/mysqlc_tables.cxx:60\n\nHere is the request which returns nothing:\nSELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA AS TABLE_SCHEM, TABLE_NAME,IF(STRCMP(TABLE_TYPE,\u0027BASE TABLE\u0027), TABLE_TYPE, \u0027TABLE\u0027) AS TABLE_TYPE, TABLE_COMMENT AS REMARKS FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA NOT IN (\u0027information_schema\u0027, \u0027mysql\u0027, \u0027performance_schema\u0027) AND TABLE_SCHEMA LIKE \u0027`a`\u0027 AND TABLE_NAME LIKE \u0027`testJul3`\u0027  ORDER BY TABLE_TYPE, TABLE_SCHEMA, TABLE_NAME",
+      "parentUuid": "9c2e8518_ca27b7a6",
       "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
