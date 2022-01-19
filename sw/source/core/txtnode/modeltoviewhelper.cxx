@@ -281,10 +281,10 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
             //now get the dropdown formfields, get their position in the node and what the text they expand
             //to is
             SwPaM aPaM(rNode, 0, rNode, rNode.Len());
-            std::vector<sw::mark::IFieldmark*> aDropDowns =
-                rNode.GetDoc().getIDocumentMarkAccess()->getDropDownsFor(aPaM);
+            std::vector<sw::mark::IFieldmark*> aNoTextFieldmarks =
+                rNode.GetDoc().getIDocumentMarkAccess()->getNoTextFieldmarksIn(aPaM);
 
-            for (sw::mark::IFieldmark *pMark : aDropDowns)
+            for (sw::mark::IFieldmark *const pMark : aNoTextFieldmarks)
             {
                 const sal_Int32 nDummyCharPos = pMark->GetMarkPos().nContent.GetIndex()-1;
                 if (aHiddenMulti.IsSelected(nDummyCharPos))

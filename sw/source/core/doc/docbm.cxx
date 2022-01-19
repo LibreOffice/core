@@ -1569,7 +1569,7 @@ namespace sw::mark
         return pMark;
     }
 
-    std::vector<IFieldmark*> MarkManager::getDropDownsFor(const SwPaM &rPaM) const
+    std::vector<IFieldmark*> MarkManager::getNoTextFieldmarksIn(const SwPaM &rPaM) const
     {
         std::vector<IFieldmark*> aRet;
 
@@ -1582,8 +1582,11 @@ namespace sw::mark
                 continue;
 
             IFieldmark *pMark = dynamic_cast<IFieldmark*>(pI);
-            if (!pMark || pMark->GetFieldname() != ODF_FORMDROPDOWN)
+            if (!pMark || (pMark->GetFieldname() != ODF_FORMDROPDOWN
+                            && pMark->GetFieldname() != ODF_FORMCHECKBOX))
+            {
                 continue;
+            }
 
             aRet.push_back(pMark);
         }
