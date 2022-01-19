@@ -31,6 +31,7 @@
 #include <ChartTypeHelper.hxx>
 #include <Diagram.hxx>
 #include <unonames.hxx>
+#include <BaseCoordinateSystem.hxx>
 #include <memory>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
@@ -354,7 +355,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             //read only item
             //necessary tp display the crossing value with an appropriate format
 
-            Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
+            rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
                 m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
 
             Reference< chart2::XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys ) );

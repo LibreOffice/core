@@ -25,6 +25,7 @@
 #include <RangeHighlighter.hxx>
 #include <InternalDataProvider.hxx>
 #include <ChartModel.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -107,30 +108,28 @@ rtl::Reference< Diagram > ChartModelHelper::findDiagram( const uno::Reference< c
     return nullptr;
 }
 
-uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( ChartModel& rModel )
+rtl::Reference< BaseCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( ChartModel& rModel )
 {
-    uno::Reference< XCoordinateSystem > XCooSys;
-    uno::Reference< XCoordinateSystemContainer > xCooSysCnt( rModel.getFirstDiagram(), uno::UNO_QUERY );
-    if( xCooSysCnt.is() )
+    rtl::Reference< Diagram > xDiagram = rModel.getFirstChartDiagram();
+    if( xDiagram.is() )
     {
-        uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
-        if( aCooSysSeq.hasElements() )
-            XCooSys = aCooSysSeq[0];
+        auto& rCooSysSeq( xDiagram->getBaseCoordinateSystems() );
+        if( !rCooSysSeq.empty() )
+            return rCooSysSeq[0];
     }
-    return XCooSys;
+    return nullptr;
 }
 
-uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( const uno::Reference< frame::XModel >& xModel )
+rtl::Reference< BaseCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( const uno::Reference< frame::XModel >& xModel )
 {
-    uno::Reference< XCoordinateSystem > XCooSys;
-    rtl::Reference< Diagram > xCooSysCnt( ChartModelHelper::findDiagram( xModel ), uno::UNO_QUERY );
-    if( xCooSysCnt.is() )
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
+    if( xDiagram.is() )
     {
-        uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
-        if( aCooSysSeq.hasElements() )
-            XCooSys = aCooSysSeq[0];
+        auto& rCooSysSeq( xDiagram->getBaseCoordinateSystems() );
+        if( !rCooSysSeq.empty() )
+            return rCooSysSeq[0];
     }
-    return XCooSys;
+    return nullptr;
 }
 
 std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(

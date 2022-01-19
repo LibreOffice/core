@@ -28,6 +28,7 @@
 #include <AxisHelper.hxx>
 #include <ChartView.hxx>
 #include <DiagramHelper.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <ChartModel.hxx>
 

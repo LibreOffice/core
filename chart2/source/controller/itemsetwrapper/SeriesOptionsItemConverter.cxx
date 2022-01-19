@@ -27,6 +27,7 @@
 #include <ChartTypeHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ChartModel.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/chart2/XDataSeries.hpp>
 

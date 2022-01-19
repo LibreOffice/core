@@ -31,6 +31,7 @@
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ExplicitCategoriesProvider.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>

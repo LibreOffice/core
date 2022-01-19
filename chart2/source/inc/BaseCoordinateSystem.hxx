@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <OPropertySet.hxx>
+#include "OPropertySet.hxx"
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
@@ -26,7 +26,7 @@
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <ModifyListenerHelper.hxx>
+#include "ModifyListenerHelper.hxx"
 
 #include <vector>
 
@@ -69,7 +69,6 @@ public:
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 
-protected:
     // ____ XCoordinateSystem ____
     virtual ::sal_Int32 SAL_CALL getDimension() override;
     virtual void SAL_CALL setAxisByDimension(
@@ -94,6 +93,8 @@ protected:
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+
+protected:
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

@@ -30,6 +30,7 @@
 #include <ChartTypeTemplate.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <ExplicitCategoriesProvider.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <ChartModel.hxx>
 #include <unonames.hxx>

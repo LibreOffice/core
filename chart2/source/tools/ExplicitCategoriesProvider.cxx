@@ -26,6 +26,7 @@
 #include <ChartModelHelper.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <unonames.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <o3tl/safeint.hxx>
@@ -173,7 +174,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
     auto pOutTexts = rOutTexts.getArray();
 
     sal_Int32 nAxisNumberFormat = 0;
-    Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
+    rtl::Reference< BaseCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
     if( xCooSysModel.is() )
     {
         Reference< chart2::XAxis > xAxis( xCooSysModel->getAxisByDimension(0,0) );

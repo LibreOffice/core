@@ -30,6 +30,7 @@
 #include <CloneHelper.hxx>
 #include <SceneProperties.hxx>
 #include <unonames.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -226,27 +227,16 @@ const uno::Reference< beans::XPropertySetInfo >& StaticDiagramInfo()
     return xPropertySetInfo;
 };
 
-/// clones a UNO-sequence of UNO-References
-typedef Reference< chart2::XCoordinateSystem > lcl_tCooSysRef;
-typedef std::vector< lcl_tCooSysRef >          lcl_tCooSysVector;
-
 void lcl_CloneCoordinateSystems(
-        const lcl_tCooSysVector & rSource,
-        lcl_tCooSysVector & rDestination )
+        const ::chart::Diagram::tCoordinateSystemContainerType & rSource,
+        ::chart::Diagram::tCoordinateSystemContainerType & rDestination )
 {
-    for( auto const & i : rSource )
+    for( rtl::Reference< ::chart::BaseCoordinateSystem > const & i : rSource )
     {
-        lcl_tCooSysRef xClone;
-        css::uno::Reference< css::util::XCloneable > xCloneable( i, css::uno::UNO_QUERY );
-        if( xCloneable.is())
-            xClone.set( xCloneable->createClone(), css::uno::UNO_QUERY );
-
-        if( xClone.is())
-        {
-            rDestination.push_back( xClone );
-        }
-        else
-            rDestination.push_back( i );
+        auto xClone = i->createClone();
+        ::chart::BaseCoordinateSystem* pClone = dynamic_cast<::chart::BaseCoordinateSystem*>(xClone.get());
+        assert(pClone);
+        rDestination.push_back( pClone );
     }
 }
 
@@ -276,7 +266,8 @@ Diagram::Diagram( const Diagram & rOther ) :
     m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     lcl_CloneCoordinateSystems( rOther.m_aCoordSystems, m_aCoordSystems );
-    ModifyListenerHelper::addListenerToAllElements( m_aCoordSystems, m_xModifyEventForwarder );
+    for (auto & xSystem : m_aCoordSystems)
+        xSystem->addModifyListener(m_xModifyEventForwarder);
 
     if ( rOther.m_xWall )
         m_xWall = new Wall( *rOther.m_xWall );
@@ -297,7 +288,8 @@ Diagram::~Diagram()
 {
     try
     {
-        ModifyListenerHelper::removeListenerFromAllElements( m_aCoordSystems, m_xModifyEventForwarder );
+        for (auto & xSystem : m_aCoordSystems)
+            xSystem->removeModifyListener(m_xModifyEventForwarder);
 
         if ( m_xWall )
             m_xWall->removeModifyListener( m_xModifyEventForwarder );
@@ -456,9 +448,11 @@ void SAL_CALL Diagram::setDefaultIllumination()
 void SAL_CALL Diagram::addCoordinateSystem(
     const uno::Reference< chart2::XCoordinateSystem >& aCoordSys )
 {
+    ::chart::BaseCoordinateSystem* pCoordSys = dynamic_cast<::chart::BaseCoordinateSystem*>(aCoordSys.get());
+    assert(pCoordSys);
     {
         MutexGuard aGuard( m_aMutex );
-        if( std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys )
+        if( std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), pCoordSys )
             != m_aCoordSystems.end())
             throw lang::IllegalArgumentException("coordsys not found", static_cast<cppu::OWeakObject*>(this), 1);
 
@@ -467,7 +461,7 @@ void SAL_CALL Diagram::addCoordinateSystem(
             OSL_FAIL( "more than one coordinatesystem is not supported yet by the fileformat" );
             return;
         }
-        m_aCoordSystems.push_back( aCoordSys );
+        m_aCoordSystems.push_back( pCoordSys );
     }
     ModifyListenerHelper::addListener( aCoordSys, m_xModifyEventForwarder );
     fireModifyEvent();
@@ -476,10 +470,11 @@ void SAL_CALL Diagram::addCoordinateSystem(
 void SAL_CALL Diagram::removeCoordinateSystem(
     const uno::Reference< chart2::XCoordinateSystem >& aCoordSys )
 {
+    ::chart::BaseCoordinateSystem* pCoordSys = dynamic_cast<::chart::BaseCoordinateSystem*>(aCoordSys.get());
+    assert(pCoordSys);
     {
         MutexGuard aGuard( m_aMutex );
-        std::vector< uno::Reference< chart2::XCoordinateSystem > >::iterator
-              aIt( std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys ));
+        auto aIt =  std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), pCoordSys );
         if( aIt == m_aCoordSystems.end())
             throw container::NoSuchElementException(
                 "The given coordinate-system is no element of the container",
@@ -493,7 +488,7 @@ void SAL_CALL Diagram::removeCoordinateSystem(
 uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > SAL_CALL Diagram::getCoordinateSystems()
 {
     MutexGuard aGuard( m_aMutex );
-    return comphelper::containerToSequence( m_aCoordSystems );
+    return comphelper::containerToSequence<uno::Reference< chart2::XCoordinateSystem >>( m_aCoordSystems );
 }
 
 void SAL_CALL Diagram::setCoordinateSystems(
@@ -504,15 +499,19 @@ void SAL_CALL Diagram::setCoordinateSystems(
     if( aCoordinateSystems.hasElements() )
     {
         OSL_ENSURE( aCoordinateSystems.getLength()<=1, "more than one coordinatesystem is not supported yet by the fileformat" );
-        aNew.push_back( aCoordinateSystems[0] );
+        ::chart::BaseCoordinateSystem* pCoordSys = dynamic_cast<::chart::BaseCoordinateSystem*>(aCoordinateSystems[0].get());
+        assert(pCoordSys);
+        aNew.push_back( pCoordSys );
     }
     {
         MutexGuard aGuard( m_aMutex );
         std::swap( aOld, m_aCoordSystems );
         m_aCoordSystems = aNew;
     }
-    ModifyListenerHelper::removeListenerFromAllElements( aOld, m_xModifyEventForwarder );
-    ModifyListenerHelper::addListenerToAllElements( aNew, m_xModifyEventForwarder );
+    for (auto & xSystem : aOld)
+        xSystem->removeModifyListener(m_xModifyEventForwarder);
+    for (auto & xSystem : aNew)
+        xSystem->addModifyListener(m_xModifyEventForwarder);
     fireModifyEvent();
 }
 

@@ -19,6 +19,7 @@
 
 #include <AxisHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <ChartTypeHelper.hxx>
 #include <AxisIndexDefines.hxx>
 #include <LinePropertiesHelper.hxx>
@@ -31,6 +32,7 @@
 #include <ReferenceSizeProvider.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <unonames.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <unotools/saveopt.hxx>
 
@@ -569,15 +571,16 @@ bool AxisHelper::isGridShown( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex,
     return bRet;
 }
 
-Reference< XCoordinateSystem > AxisHelper::getCoordinateSystemByIndex(
+rtl::Reference< ::chart::BaseCoordinateSystem > AxisHelper::getCoordinateSystemByIndex(
     const Reference< XDiagram >& xDiagram, sal_Int32 nIndex )
 {
-    Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if(!xCooSysContainer.is())
+    if(!xDiagram.is())
         return nullptr;
-    Sequence< Reference< XCoordinateSystem > > aCooSysList = xCooSysContainer->getCoordinateSystems();
-    if(0<=nIndex && nIndex<aCooSysList.getLength())
-        return aCooSysList[nIndex];
+    ::chart::Diagram* pDiagram = dynamic_cast<::chart::Diagram*>(xDiagram.get());
+    assert(pDiagram);
+    auto & rCooSysList = pDiagram->getBaseCoordinateSystems();
+    if(0<=nIndex && nIndex < static_cast<sal_Int32>(rCooSysList.size()))
+        return rCooSysList[nIndex];
     return nullptr;
 }
 
@@ -1021,27 +1024,26 @@ bool AxisHelper::changeVisibilityOfGrids( const Reference< XDiagram >& xDiagram
     return bChanged;
 }
 
-Reference< XCoordinateSystem > AxisHelper::getCoordinateSystemOfAxis(
+rtl::Reference< BaseCoordinateSystem > AxisHelper::getCoordinateSystemOfAxis(
               const Reference< XAxis >& xAxis
             , const Reference< XDiagram >& xDiagram )
 {
-    Reference< XCoordinateSystem > xRet;
+    if (!xDiagram)
+        return nullptr;
+    ::chart::Diagram* pDiagram = dynamic_cast<::chart::Diagram*>(xDiagram.get());
+    assert(pDiagram);
 
-    Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if( xCooSysContainer.is() )
+    rtl::Reference< BaseCoordinateSystem > xRet;
+    for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : pDiagram->getBaseCoordinateSystems() )
     {
-        const Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-        for( Reference< XCoordinateSystem > const & xCooSys : aCooSysList )
-        {
-            std::vector< Reference< XAxis > > aAllAxis( AxisHelper::getAllAxesOfCoordinateSystem( xCooSys ) );
+        std::vector< Reference< XAxis > > aAllAxis( AxisHelper::getAllAxesOfCoordinateSystem( xCooSys ) );
 
-            std::vector< Reference< XAxis > >::iterator aFound =
-                  std::find( aAllAxis.begin(), aAllAxis.end(), xAxis );
-            if( aFound != aAllAxis.end())
-            {
-                xRet.set( xCooSys );
-                break;
-            }
+        std::vector< Reference< XAxis > >::iterator aFound =
+              std::find( aAllAxis.begin(), aAllAxis.end(), xAxis );
+        if( aFound != aAllAxis.end())
+        {
+            xRet = xCooSys;
+            break;
         }
     }
     return xRet;
