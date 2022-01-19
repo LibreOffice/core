@@ -26,6 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <comphelper/lok.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
@@ -178,7 +179,9 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
 
     if (EditView* pEditView = GetEditView())
     {
-        pEditView->Paint(rRect, &rRenderContext);
+        pEditView->Paint(comphelper::LibreOfficeKit::isActive() ? rRenderContext.PixelToLogic(rRect)
+                                                                : rRect,
+                         &rRenderContext);
 
         if (HasFocus())
         {
