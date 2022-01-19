@@ -875,6 +875,16 @@ void SwMetaPortion::Paint( const SwTextPaintInfo &rInf ) const
 namespace sw::mark {
     OUString ExpandFieldmark(IFieldmark* pBM)
     {
+        if (pBM->GetFieldname() == ODF_FORMCHECKBOX)
+        {
+            ::sw::mark::ICheckboxFieldmark const*const pCheckboxFm(
+                    dynamic_cast<ICheckboxFieldmark const*>(pBM));
+            assert(pCheckboxFm);
+            return pCheckboxFm->IsChecked()
+                    ? OUString(u"\u2612")
+                    : OUString(u"\u2610");
+        }
+        assert(pBM->GetFieldname() == ODF_FORMDROPDOWN);
         const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
         sal_Int32 nCurrentIdx = 0;
         const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(OUString(ODF_FORMDROPDOWN_RESULT));

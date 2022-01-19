@@ -94,7 +94,7 @@ namespace sw::mark {
             virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& rPos) const override;
 
             virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition &rPos) const override;
-            virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const override;
+            virtual std::vector<::sw::mark::IFieldmark*> getNoTextFieldmarksIn(const SwPaM &rPaM) const override;
 
             virtual void deleteFieldmarkAt(const SwPosition& rPos) override;
             virtual ::sw::mark::IFieldmark* changeFormFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType) override;
