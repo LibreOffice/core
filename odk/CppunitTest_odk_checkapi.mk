@@ -9,29 +9,32 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,odk_checkapi))
 
-$(eval $(call gb_CppunitTest_use_custom_headers,odk_checkapi,\
-	odk/allheaders \
-))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,odk_checkapi,\
     odk/qa/checkapi/checkapi \
-))
-
-$(eval $(call gb_CppunitTest_use_internal_comprehensive_api,odk_checkapi,\
-	udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_add_cxxflags,odk_checkapi,\
 	$(gb_CXX03FLAGS) \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,odk_checkapi,\
-	cppu \
-	cppuhelper \
-    sal \
-    salhelper \
+$(eval $(call gb_CppunitTest_set_external_code,odk_checkapi))
+
+# The remaining lines must be in the given order, to set up a set of include paths that only
+# contains the instdir SDK include directory, plus the workdir sub-directory containing the
+# generated allheaders.hxx and the workdir sub-directory containing the generated UNOIDL include
+# files (which are not bundled in the SDK but would rather get created on demand by the SDK's
+# makefiles), plus whatever is needed for CppUnit:
+
+$(eval $(call gb_CppunitTest_set_include,odk_checkapi,-I$(INSTDIR)/$(SDKDIRNAME)/include))
+
+$(eval $(call gb_CppunitTest_use_custom_headers,odk_checkapi,\
+	odk/allheaders \
 ))
 
-$(eval $(call gb_CppunitTest_set_external_code,odk_checkapi))
+$(eval $(call gb_CppunitTest_use_internal_comprehensive_api,odk_checkapi,\
+	udkapi \
+))
+
+$(eval $(call gb_CppunitTest_use_external,odk_checkapi,cppunit))
 
 # vim: set noet sw=4 ts=4:

@@ -1154,7 +1154,7 @@ endef
 # call gb_LinkTarget_set_include,linktarget,includes
 define gb_LinkTarget_set_include
 $(call gb_LinkTarget__check_srcdir_paths,$(1),\
-    $(patsubst -I%,%,$(filter -I$(SRCDIR)/%,$(filter-out -I$(WORKDIR)/%,$(2)))))
+    $(patsubst -I%,%,$(filter -I$(SRCDIR)/%,$(filter-out -I$(INSTDIR)/% -I$(WORKDIR)/%,$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $(2)
 
 endef
