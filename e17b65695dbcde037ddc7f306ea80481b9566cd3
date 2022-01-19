@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ffea812_55ba54ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-19T12:22:54Z",
+      "side": 1,
+      "message": "Line is dotted now and also configurable; remaining issue is that slow scrolling doesn\u0027t refresh properly. No idea what I do wrong.",
+      "revId": "e17b65695dbcde037ddc7f306ea80481b9566cd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
