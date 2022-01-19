@@ -277,13 +277,17 @@ Diagram::Diagram( const Diagram & rOther ) :
     lcl_CloneCoordinateSystems( rOther.m_aCoordSystems, m_aCoordSystems );
     ModifyListenerHelper::addListenerToAllElements( m_aCoordSystems, m_xModifyEventForwarder );
 
-    m_xWall.set( CloneHelper::CreateRefClone< beans::XPropertySet >()( rOther.m_xWall ));
-    m_xFloor.set( CloneHelper::CreateRefClone< beans::XPropertySet >()( rOther.m_xFloor ));
+    if ( rOther.m_xWall )
+        m_xWall = new Wall( *rOther.m_xWall );
+    if ( rOther.m_xFloor )
+        m_xFloor = new Wall( *rOther.m_xFloor );
     m_xTitle.set( CloneHelper::CreateRefClone< chart2::XTitle >()( rOther.m_xTitle ));
     m_xLegend.set( CloneHelper::CreateRefClone< chart2::XLegend >()( rOther.m_xLegend ));
 
-    ModifyListenerHelper::addListener( m_xWall, m_xModifyEventForwarder );
-    ModifyListenerHelper::addListener( m_xFloor, m_xModifyEventForwarder );
+    if ( m_xWall )
+        m_xWall->addModifyListener( m_xModifyEventForwarder );
+    if ( m_xFloor )
+        m_xFloor->addModifyListener( m_xModifyEventForwarder );
     ModifyListenerHelper::addListener( m_xTitle, m_xModifyEventForwarder );
     ModifyListenerHelper::addListener( m_xLegend, m_xModifyEventForwarder );
 }
@@ -294,8 +298,10 @@ Diagram::~Diagram()
     {
         ModifyListenerHelper::removeListenerFromAllElements( m_aCoordSystems, m_xModifyEventForwarder );
 
-        ModifyListenerHelper::removeListener( m_xWall, m_xModifyEventForwarder );
-        ModifyListenerHelper::removeListener( m_xFloor, m_xModifyEventForwarder );
+        if ( m_xWall )
+            m_xWall->removeModifyListener( m_xModifyEventForwarder );
+        if ( m_xFloor )
+            m_xFloor->removeModifyListener( m_xModifyEventForwarder );
         ModifyListenerHelper::removeListener( m_xTitle, m_xModifyEventForwarder );
         ModifyListenerHelper::removeListener( m_xLegend, m_xModifyEventForwarder );
     }
@@ -308,7 +314,7 @@ Diagram::~Diagram()
 // ____ XDiagram ____
 uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
 {
-    uno::Reference< beans::XPropertySet > xRet;
+    rtl::Reference< Wall > xRet;
     bool bAddListener = false;
     {
         MutexGuard aGuard( m_aMutex );
@@ -320,13 +326,13 @@ uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
         xRet =  m_xWall;
     }
     if(bAddListener)
-        ModifyListenerHelper::addListener( xRet, m_xModifyEventForwarder );
+        xRet->addModifyListener( m_xModifyEventForwarder );
     return xRet;
 }
 
 uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getFloor()
 {
-    uno::Reference< beans::XPropertySet > xRet;
+    rtl::Reference< Wall > xRet;
     bool bAddListener = false;
     {
         MutexGuard aGuard( m_aMutex );
@@ -338,7 +344,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getFloor()
         xRet = m_xFloor;
     }
     if(bAddListener)
-        ModifyListenerHelper::addListener( xRet, m_xModifyEventForwarder );
+        xRet->addModifyListener( m_xModifyEventForwarder );
     return xRet;
 }
 

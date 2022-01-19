@@ -50,7 +50,6 @@ public:
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
 
-private:
     explicit Wall( const Wall & rOther );
 
     // ____ OPropertySet ____
@@ -72,6 +71,7 @@ private:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
+private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
         const css::lang::EventObject& aEvent ) override;
