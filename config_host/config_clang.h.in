@@ -8,6 +8,7 @@ Settings related to Clang compiler plugins.
 #define CONFIG_CLANG_H
 
 #undef BUILDDIR
+#undef SDKDIR
 #undef SRCDIR
 #undef WORKDIR
 
