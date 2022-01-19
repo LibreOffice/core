@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "charttoolsdllapi.hxx"
 
 #include <memory>
 #include <string_view>
@@ -110,7 +111,9 @@ class ChartController final : public ::cppu::WeakImplHelper <
 {
 public:
     ChartController() = delete;
+    OOO_DLLPUBLIC_CHARTTOOLS
     explicit ChartController(css::uno::Reference< css::uno::XComponentContext > const & xContext);
+    OOO_DLLPUBLIC_CHARTTOOLS
     virtual ~ChartController() override;
 
     OUString GetContextName();
@@ -143,6 +146,7 @@ public:
         suspend( sal_Bool bSuspend ) override;
 
     // css::lang::XComponent (base of XController)
+    OOO_DLLPUBLIC_CHARTTOOLS
     virtual void SAL_CALL
         dispose() override;
 

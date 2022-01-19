@@ -73,6 +73,7 @@ class Diagram;
 class ChartTypeManager;
 class NameContainer;
 class PageBackground;
+class ChartController;
 
 namespace impl
 {
@@ -131,8 +132,8 @@ private:
     css::uno::Reference< css::document::XDocumentProperties > m_xDocumentProperties;
     ::rtl::Reference< UndoManager >                    m_pUndoManager;
 
-    ::comphelper::OInterfaceContainerHelper2           m_aControllers;
-    css::uno::Reference< css::frame::XController >     m_xCurrentController;
+    std::vector<rtl::Reference< ::chart::ChartController >> m_aControllers;
+    rtl::Reference< ::chart::ChartController >         m_xCurrentController;
     sal_uInt16                                         m_nControllerLockCount;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -176,12 +177,10 @@ private:
 
     OUString impl_g_getLocation();
 
-    bool
-        impl_isControllerConnected( const css::uno::Reference< com::sun::star::frame::XController >& xController );
+    bool impl_isControllerConnected( const rtl::Reference< ::chart::ChartController >& xController );
 
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::frame::XController >
-        impl_getCurrentController();
+    rtl::Reference< ::chart::ChartController > impl_getCurrentController();
 
     /// @throws css::uno::RuntimeException
     void

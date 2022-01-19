@@ -19,6 +19,7 @@
 
 #include <ChartModel.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartController.hxx>
 #include <servicenames.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModelHelper.hxx>
@@ -90,7 +91,6 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_nInLoad(0)
     , m_bUpdateNotificationsPending(false)
     , mbTimeBased(false)
-    , m_aControllers( m_aModelMutex )
     , m_nControllerLockCount(0)
     , m_xContext( xContext )
     , m_aVisualAreaSize( ChartModelHelper::getDefaultPageSize() )
@@ -125,7 +125,6 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , mbTimeBased(rOther.mbTimeBased)
     , m_aResource( rOther.m_aResource )
     , m_aMediaDescriptor( rOther.m_aMediaDescriptor )
-    , m_aControllers( m_aModelMutex )
     , m_nControllerLockCount(0)
     , m_xContext( rOther.m_xContext )
     // @note: the old model aggregate must not be shared with other models if it
@@ -209,12 +208,12 @@ OUString ChartModel::impl_g_getLocation()
     return m_aResource;
 }
 
-bool ChartModel::impl_isControllerConnected( const uno::Reference< frame::XController >& xController )
+bool ChartModel::impl_isControllerConnected( const rtl::Reference< ChartController >& xController )
 {
     try
     {
-        std::vector< uno::Reference<uno::XInterface> > aSeq = m_aControllers.getElements();
-        for( const auto & r : aSeq )
+        MutexGuard g(m_aModelMutex);
+        for( const rtl::Reference< ::chart::ChartController > & r : m_aControllers )
         {
             if( r == xController )
                 return true;
@@ -226,7 +225,7 @@ bool ChartModel::impl_isControllerConnected( const uno::Reference< frame::XContr
     return false;
 }
 
-uno::Reference< frame::XController > ChartModel::impl_getCurrentController()
+rtl::Reference< ChartController > ChartModel::impl_getCurrentController()
 {
         //@todo? hold only weak references to controllers
 
@@ -234,15 +233,15 @@ uno::Reference< frame::XController > ChartModel::impl_getCurrentController()
     if( m_xCurrentController.is() )
         return m_xCurrentController;
 
+    MutexGuard g(m_aModelMutex);
     // get the first controller of this model
-    if( m_aControllers.getLength() )
+    if( !m_aControllers.empty() )
     {
-        uno::Reference<uno::XInterface> xI = m_aControllers.getInterface(0);
-        return uno::Reference<frame::XController>( xI, uno::UNO_QUERY );
+        return m_aControllers[0];
     }
 
     //return nothing if no controllers are connected at all
-    return uno::Reference< frame::XController > ();
+    return nullptr;
 }
 
 void ChartModel::impl_notifyCloseListeners()
@@ -375,8 +374,11 @@ void SAL_CALL ChartModel::connectController( const uno::Reference< frame::XContr
         return ; //behave passive if already disposed or closed
     //mutex is acquired
 
+    ChartController* pController = dynamic_cast<ChartController*>(xController.get());
+    assert(pController);
     //--add controller
-    m_aControllers.addInterface(xController);
+    MutexGuard g(m_aModelMutex);
+    m_aControllers.push_back(pController);
 }
 
 void SAL_CALL ChartModel::disconnectController( const uno::Reference< frame::XController >& xController )
@@ -387,11 +389,15 @@ void SAL_CALL ChartModel::disconnectController( const uno::Reference< frame::XCo
     if(!aGuard.startApiCall())
         return; //behave passive if already disposed or closed
 
+    ChartController* pController = dynamic_cast<ChartController*>(xController.get());
+    assert(pController);
+
     //--remove controller
-    m_aControllers.removeInterface(xController);
+    MutexGuard g(m_aModelMutex);
+    m_aControllers.erase(std::remove(m_aControllers.begin(), m_aControllers.end(), pController), m_aControllers.end());
 
     //case: current controller is disconnected:
-    if( m_xCurrentController == xController )
+    if( m_xCurrentController == pController )
         m_xCurrentController.clear();
 
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
@@ -471,13 +477,16 @@ void SAL_CALL ChartModel::setCurrentController( const uno::Reference< frame::XCo
                 "setCurrentController was called on an already disposed or closed model",
                 static_cast< ::cppu::OWeakObject* >(this) );
 
+    ChartController* pController = dynamic_cast<ChartController*>(xController.get());
+    assert(pController);
+
     //OSL_ENSURE( impl_isControllerConnected(xController), "setCurrentController is called with a Controller which is not connected" );
-    if(!impl_isControllerConnected(xController))
+    if(!impl_isControllerConnected(pController))
         throw container::NoSuchElementException(
                 "setCurrentController is called with a Controller which is not connected",
                 static_cast< ::cppu::OWeakObject* >(this) );
 
-    m_xCurrentController = xController;
+    m_xCurrentController = pController;
 
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
     DisposeHelper::DisposeAndClear(m_xPopupRequest);
@@ -557,7 +566,10 @@ void SAL_CALL ChartModel::dispose()
     if( m_xOldModelAgg.is())  // #i120828#, to release cyclic reference to ChartModel object
         m_xOldModelAgg->setDelegator( nullptr );
 
-    m_aControllers.disposeAndClear( lang::EventObject( static_cast< cppu::OWeakObject * >( this )));
+    lang::EventObject aEvt( static_cast< cppu::OWeakObject * >( this ) );
+    for (auto & rxController : m_aControllers)
+        rxController->disposing(aEvt);
+    m_aControllers.clear();
     m_xCurrentController.clear();
 
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );

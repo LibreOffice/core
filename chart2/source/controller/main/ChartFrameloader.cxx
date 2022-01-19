@@ -18,6 +18,7 @@
  */
 
 #include "ChartFrameloader.hxx"
+#include <ChartController.hxx>
 #include <servicenames.hxx>
 #include <MediaDescriptorHelper.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -103,18 +104,14 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
     }
 
     //create the controller(+XWindow)
-    uno::Reference< frame::XController >    xController;
+    rtl::Reference< ::chart::ChartController > xController;
     uno::Reference< awt::XWindow >          xComponentWindow;
     {
-        xController.set(
-            m_xCC->getServiceManager()->createInstanceWithContext(
-            CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME,m_xCC )
-            , uno::UNO_QUERY );
+        xController = new ChartController(m_xCC);
 
         //!!!it is a special characteristic of the example application
         //that the controller simultaneously provides the XWindow controller functionality
-        xComponentWindow =
-                      uno::Reference< awt::XWindow >( xController, uno::UNO_QUERY );
+        xComponentWindow = xController;
 
         if( impl_checkCancel() )
             return false;

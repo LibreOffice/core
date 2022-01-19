@@ -107,7 +107,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
     m_xWidget->clear();
     m_aEntries.clear();
 
-    rtl::Reference< ::chart::ChartController > xChartController = m_xChartController.get();
+    rtl::Reference< ::chart::ChartController > xChartController = m_xChartController;
     if( xChartController.is() )
     {
         ObjectIdentifier aSelectedOID( xChartController->getSelection() );

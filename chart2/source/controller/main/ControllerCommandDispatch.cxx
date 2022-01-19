@@ -58,7 +58,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-bool lcl_isStatusBarVisible( const Reference< frame::XController > & xController )
+bool lcl_isStatusBarVisible( const rtl::Reference< ::chart::ChartController > & xController )
 {
     bool bIsStatusBarVisible = false;
     // Status-Bar visible, workaround: this should not be necessary. @todo:
@@ -106,7 +106,7 @@ struct ControllerState
 {
     ControllerState();
 
-    void update( const Reference< frame::XController > & xController,
+    void update( const rtl::Reference< ::chart::ChartController > & xController,
                  const rtl::Reference<::chart::ChartModel> & xModel );
 
     // -- State variables -------
@@ -173,17 +173,14 @@ ControllerState::ControllerState() :
 {}
 
 void ControllerState::update(
-    const Reference< frame::XController > & xController,
+    const rtl::Reference< ::chart::ChartController > & xController,
     const rtl::Reference<::chart::ChartModel> & xModel )
 {
-    Reference< view::XSelectionSupplier > xSelectionSupplier(
-        xController, uno::UNO_QUERY );
-
     // Update ControllerState variables.
-    if( !xSelectionSupplier.is())
+    if( !xController.is())
         return;
 
-    uno::Any aSelObj( xSelectionSupplier->getSelection() );
+    uno::Any aSelObj( xController->getSelection() );
     ObjectIdentifier aSelOID( aSelObj );
     OUString aSelObjCID( aSelOID.getObjectCID() );
 
