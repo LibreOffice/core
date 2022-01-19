@@ -21,6 +21,7 @@
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ChartTypeHelper.hxx>
+#include <ChartType.hxx>
 #include <AxisIndexDefines.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <servicenames_coosystems.hxx>
@@ -894,7 +895,7 @@ void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityL
 
     //set possibilities:
     sal_Int32 nIndex=0;
-    Reference< XChartType > xChartType = DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
+    rtl::Reference< ChartType > xChartType = DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
     for(nIndex=0;nIndex<3;nIndex++)
         pPossibilityList[nIndex]=ChartTypeHelper::isSupportingMainAxis(xChartType,nDimensionCount,nIndex);
     for(nIndex=3;nIndex<6;nIndex++)

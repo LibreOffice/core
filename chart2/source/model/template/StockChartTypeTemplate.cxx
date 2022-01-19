@@ -279,7 +279,7 @@ Reference< XChartType > StockChartTypeTemplate::getChartTypeForIndex( sal_Int32 
 void StockChartTypeTemplate::createChartTypes(
     const Sequence< Sequence< Reference< XDataSeries > > > & aSeriesSeq,
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys,
-    const Sequence< Reference< XChartType > >& /* aOldChartTypesSeq */ )
+    const std::vector< rtl::Reference< ChartType > >& /* aOldChartTypesSeq */ )
 {
     if( !rCoordSys.hasElements() )
         return;

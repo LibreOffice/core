@@ -58,7 +58,6 @@ public:
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
 
-protected:
     explicit ChartType( const ChartType & rOther );
 
     // ____ XChartType ____
@@ -88,6 +87,8 @@ protected:
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+
+protected:
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

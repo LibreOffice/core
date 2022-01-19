@@ -22,6 +22,7 @@
 #include <ChartView.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <Diagram.hxx>
+#include <ChartType.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <VDiagram.hxx>
 #include "VTitle.hxx"
@@ -3002,7 +3003,7 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
 {
     uno::Reference<XDiagram> xDiagram = mrChartModel.getFirstDiagram();
 
-    Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
     sal_Int32 nDimension = DiagramHelper::getDimension( xDiagram );
 
     if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )

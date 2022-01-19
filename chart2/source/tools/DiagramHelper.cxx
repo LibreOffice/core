@@ -612,7 +612,7 @@ uno::Reference< XAxis > DiagramHelper::getAttachedAxis(
     return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), xDiagram );
 }
 
-uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
+rtl::Reference< ChartType > DiagramHelper::getChartTypeOfSeries(
                                 const uno::Reference< chart2::XDiagram >&   xDiagram
                               , const uno::Reference< XDataSeries >&        xGivenDataSeries )
 {
@@ -637,16 +637,11 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
         OSL_ASSERT( xChartTypeContainer.is());
         if( !xChartTypeContainer.is() )
             continue;
-        const uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-        for( uno::Reference< XChartType > const & xChartType : aChartTypeList )
+        const std::vector< rtl::Reference< ChartType > > & aChartTypeList( xChartTypeContainer->getChartTypes2() );
+        for( rtl::Reference< ChartType > const & xChartType : aChartTypeList )
         {
             //iterate through all series in this chart type
-            uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-            OSL_ASSERT( xDataSeriesContainer.is());
-            if( !xDataSeriesContainer.is() )
-                continue;
-
-            const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+            const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xChartType->getDataSeries() );
             for( uno::Reference< XDataSeries > const & dataSeries : aSeriesList )
             {
                 if( xGivenDataSeries==dataSeries )
