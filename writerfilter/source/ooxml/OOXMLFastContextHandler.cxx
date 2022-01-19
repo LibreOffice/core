@@ -1761,8 +1761,9 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 
 bool OOXMLFastContextHandlerShape::isDMLGroupShape() const
 {
-    return (mrShapeContext->getFullWPGSupport() &&
-           (mrShapeContext->getStartToken() == Token_t(oox::NMSP_wpg | oox::XML_wgp)));
+    return (mrShapeContext->getFullWPGSupport()
+            && (mrShapeContext->getIsVMLInsideWPG()
+                || mrShapeContext->getStartToken() == Token_t(oox::NMSP_wpg | oox::XML_wgp)));
 };
 
 void OOXMLFastContextHandlerShape::lcl_endFastElement

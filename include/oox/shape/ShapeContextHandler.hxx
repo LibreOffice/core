@@ -94,8 +94,10 @@ public:
 
     void setPosition(const css::awt::Point& rPosition);
 
-    const bool& getFullWPGSupport() { return m_bFullWPGSUpport; };
-    void setFullWPGSupport(const bool& rbUse) { m_bFullWPGSUpport = rbUse; };
+    const bool& getFullWPGSupport() { return m_bFullWPGSUpport; }
+    void setFullWPGSupport(const bool& rbUse) { m_bFullWPGSUpport = rbUse; }
+
+    const bool& getIsVMLInsideWPG() const { return m_bVMLinsideWPG; }
 
     void setDocumentProperties(const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
     void setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
@@ -112,6 +114,7 @@ private:
     ::sal_uInt32 mnStartToken;
     css::awt::Point maPosition;
     bool m_bFullWPGSUpport;
+    bool m_bVMLinsideWPG;
     drawingml::ShapePtr mpShape;
     std::shared_ptr< vml::Drawing > mpDrawing;
 
