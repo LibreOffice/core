@@ -2466,21 +2466,9 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObject);
     CPPUNIT_ASSERT(pTextObj);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TEXT), pTextObj->GetObjIdentifier());
-    // This test is unreliable: it gives alternating results for the following coordinates.
-    // As a compromise, instead of disabling it altogether, we allow for both sets of values.
     const Point aPos = pTextObj->GetLastBoundRect().TopLeft();
-    if (aPos.getX() < 10000)
-    {
-        // We get this with 'make CppunitTest_sd_tiledrendering'
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(6739), aPos.getX(), 100);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(6822), aPos.getY(), 100);
-    }
-    else
-    {
-        // We get this with 'make check'
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(12990), aPos.getX(), 100);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(7393), aPos.getY(), 100);
-    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(0), aPos.getX());
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(0), aPos.getY());
 }
 
 void SdTiledRenderingTest::testTdf115873()
