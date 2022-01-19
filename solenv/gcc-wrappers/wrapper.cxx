@@ -60,8 +60,11 @@ void setupccenv() {
     std::string inctmp(incbuf);
     free(incbuf);
 
-    // 3 = strlen(" -I")
+    // 2 = strlen("-I")
     for(size_t pos=0,len=0;pos<inctmp.length();) {
+        while (pos != inctmp.length() && inctmp[pos] == ' ') {
+            ++pos;
+        }
         size_t endpos=inctmp.find(" -I",pos+1);
         if(endpos==std::string::npos)
             endpos=inctmp.length();
@@ -70,9 +73,9 @@ void setupccenv() {
         while(len>0&&inctmp[pos+len-1]==' ')
             --len;
 
-        if(len>3) {
+        if(len>2) {
             includepath.append(";");
-            includepath.append(inctmp,pos+3,len-3);
+            includepath.append(inctmp,pos+2,len-2);
         }
         pos=endpos;
     }
