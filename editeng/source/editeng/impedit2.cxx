@@ -2728,8 +2728,10 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
             if (nChars > MAXCHARSINPARA)
             {
                 sal_Int32 nMaxNewChars = std::max<sal_Int32>(0, MAXCHARSINPARA - nExistingChars);
-                nEnd -= ( aLine.getLength() - nMaxNewChars ); // Then the characters end up in the next paragraph.
-                aLine = aLine.copy( 0, nMaxNewChars );        // Delete the Rest...
+                // Remaining characters end up in the next paragraph. Note that
+                // new nStart will be nEnd+1 below so decrement by one more.
+                nEnd -= (aLine.getLength() - nMaxNewChars + 1);
+                aLine = aLine.copy( 0, nMaxNewChars );  // Delete the Rest...
             }
             if ( IsUndoEnabled() && !IsInUndo() )
                 InsertUndo(std::make_unique<EditUndoInsertChars>(pEditEngine, CreateEPaM(aPaM), aLine));
