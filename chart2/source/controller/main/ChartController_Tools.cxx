@@ -856,7 +856,7 @@ void ChartController::executeDispatch_ToggleGridHorizontal()
 {
     UndoGuard aUndoGuard(
         SchResId( STR_ACTION_TOGGLE_GRID_HORZ ), m_xUndoManager );
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) ));
+    rtl::Reference< Diagram > xDiagram( getFirstDiagram() );
     if( !xDiagram.is())
         return;
 
@@ -889,7 +889,7 @@ void ChartController::executeDispatch_ToggleGridVertical()
 {
     UndoGuard aUndoGuard(
         SchResId( STR_ACTION_TOGGLE_GRID_VERTICAL ), m_xUndoManager );
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) ));
+    rtl::Reference< Diagram > xDiagram( getFirstDiagram() );
     if( !xDiagram.is())
         return;
 

@@ -720,7 +720,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         }
         if( eObjectType==OBJECTTYPE_DIAGRAM_WALL || eObjectType==OBJECTTYPE_DIAGRAM_FLOOR )
         {
-            if( !DiagramHelper::isSupportingFloorAndWall( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) ) ) )
+            if( !DiagramHelper::isSupportingFloorAndWall( getFirstDiagram() ) )
                 return bRet;
         }
 

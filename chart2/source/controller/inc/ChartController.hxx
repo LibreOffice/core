@@ -88,6 +88,7 @@ class DrawModelWrapper;
 class DrawViewWrapper;
 class ReferenceSizeProvider;
 class ViewElementListProvider;
+class Diagram;
 
 enum ChartDrawMode { CHARTDRAW_INSERT, CHARTDRAW_SELECT };
 
@@ -337,6 +338,7 @@ public:
     css::uno::Reference<css::uno::XInterface> const & getChartView() const;
 
     rtl::Reference<::chart::ChartModel> getChartModel();
+    rtl::Reference<::chart::Diagram> getFirstDiagram();
 
 private:
     class TheModel : public salhelper::SimpleReferenceObject

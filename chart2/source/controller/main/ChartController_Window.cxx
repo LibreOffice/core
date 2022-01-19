@@ -1032,7 +1032,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 xPopupMenu->insertSeparator( -1 );
 
                 ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
-                rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) );
+                rtl::Reference< Diagram > xDiagram = getFirstDiagram();
 
                 OUString aFormatCommand( lcl_getFormatCommandForObjectCID( m_aSelection.getSelectedCID() ) );
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, aFormatCommand );

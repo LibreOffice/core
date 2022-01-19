@@ -95,7 +95,7 @@ void ChartController::executeDispatch_InsertAxes()
     try
     {
         InsertAxisOrGridDialogData aDialogInput;
-        rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(uno::Reference<chart2::XChartDocument>(getChartModel()));
+        rtl::Reference< Diagram > xDiagram = getFirstDiagram();
         AxisHelper::getAxisOrGridExistence( aDialogInput.aExistenceList, xDiagram );
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram );
 
@@ -133,7 +133,7 @@ void ChartController::executeDispatch_InsertGrid()
     try
     {
         InsertAxisOrGridDialogData aDialogInput;
-        rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(uno::Reference<chart2::XChartDocument>(getChartModel()));
+        rtl::Reference< Diagram > xDiagram = getFirstDiagram();
         AxisHelper::getAxisOrGridExistence( aDialogInput.aExistenceList, xDiagram, false );
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, false );
 
@@ -329,7 +329,7 @@ void ChartController::executeDispatch_InsertMenu_MeanValues()
     else
     {
         std::vector< uno::Reference< chart2::XDataSeries > > aSeries(
-            DiagramHelper::getDataSeriesFromDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) )));
+            DiagramHelper::getDataSeriesFromDiagram( getFirstDiagram()));
 
         for( const auto& xSrs : aSeries )
             lcl_InsertMeanValueLine( xSrs );
@@ -716,7 +716,7 @@ void ChartController::executeDispatch_InsertAxisTitle()
             sal_Int32 nDimensionIndex = -1;
             sal_Int32 nCooSysIndex = -1;
             sal_Int32 nAxisIndex = -1;
-            AxisHelper::getIndicesForAxis( xAxis, ChartModelHelper::findDiagram(uno::Reference<chart2::XChartDocument>(getChartModel())), nCooSysIndex, nDimensionIndex, nAxisIndex );
+            AxisHelper::getIndicesForAxis( xAxis, getFirstDiagram(), nCooSysIndex, nDimensionIndex, nAxisIndex );
 
             TitleHelper::eTitleType eTitleType = TitleHelper::X_AXIS_TITLE;
             if( nDimensionIndex==0 )
