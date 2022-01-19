@@ -24,6 +24,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <comphelper/lok.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -145,7 +146,8 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
 
     if (EditView* pEditView = GetEditView())
     {
-        pEditView->Paint(rRect, &rRenderContext);
+        pEditView->Paint(comphelper::LibreOfficeKit::isActive() ?
+                         rRenderContext.PixelToLogic(rRect) : rRect, &rRenderContext);
 
         if (HasFocus())
         {
