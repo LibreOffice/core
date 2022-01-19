@@ -29,6 +29,7 @@
 #include <ControllerLockGuard.hxx>
 #include <AxisHelper.hxx>
 #include <unonames.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>

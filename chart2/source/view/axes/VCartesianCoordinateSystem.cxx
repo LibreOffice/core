@@ -20,6 +20,7 @@
 #include "VCartesianCoordinateSystem.hxx"
 #include "VCartesianGrid.hxx"
 #include "VCartesianAxis.hxx"
+#include <BaseCoordinateSystem.hxx>
 #include <AxisIndexDefines.hxx>
 #include <AxisHelper.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -58,7 +59,7 @@ private: //member
 
 }
 
-VCartesianCoordinateSystem::VCartesianCoordinateSystem( const Reference< XCoordinateSystem >& xCooSys )
+VCartesianCoordinateSystem::VCartesianCoordinateSystem( const rtl::Reference< BaseCoordinateSystem >& xCooSys )
     : VCoordinateSystem(xCooSys)
 {
 }

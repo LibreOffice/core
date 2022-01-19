@@ -27,7 +27,7 @@ class VCartesianCoordinateSystem : public VCoordinateSystem
 {
 public:
     VCartesianCoordinateSystem() = delete;
-    explicit VCartesianCoordinateSystem( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys );
+    explicit VCartesianCoordinateSystem( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
     virtual ~VCartesianCoordinateSystem() override;
 
     virtual void createVAxisList(

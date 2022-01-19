@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include "BaseCoordinateSystem.hxx"
+#include <BaseCoordinateSystem.hxx>
 
 namespace chart
 {
