@@ -33,6 +33,46 @@
       "message": "Also, having the same table name was a pb before the patch and now it\u0027s ok.\n\nI thought about removing completely \"Keys\" part but it\u0027s used by \"OCollection* Table::createKeys(const ::std::vector\u003cOUString\u003e\u0026 rNames)\"\nand it seems implementing \"Table::createKeys\" is mandatory (unless I missed something).\n\nFinally, I didn\u0027t take time to try to dig about the 2 annoying bugs with Views:\n- No automatic refresh after a creating a new one\n- Error when trying to rename a view\nbut that\u0027s another story.",
       "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ef5d3e4_dfd6b89c",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-01-19T07:58:50Z",
+      "side": 1,
+      "message": "You want to take care of that TODO? Since the tablename and schemaname are put in a _string_ in the query (not and identifier) the escaping that needs to be done is to double all \u0027 characters. There most probably is a utility function in LibreOffice that escapes SQL strings... In the current (and previous) code, if the schemaPattern or tableNamePattern contain a \u0027 character, the query will raise an error.\n\nNote that if you take care of the _previous_ TODO (use a parametrized query instead), the parametrised query will  (should, at least) do that work for you (\"use the generic mechanism\").",
+      "range": {
+        "startLine": 836,
+        "startChar": 4,
+        "endLine": 836,
+        "endChar": 39
+      },
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c2e8518_ca27b7a6",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-01-19T07:58:50Z",
+      "side": 1,
+      "message": "I don\u0027t think that ` is incompatible with LIKE. This works:\n\nSELECT (\u0027a`b\u0027 LIKE \u0027%`%\u0027);\n\nWhat makes you think there is an incompatibility?",
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
