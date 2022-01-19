@@ -16,6 +16,23 @@
       "message": "I suppose it\u0027s indeed libgtk and not libtk (\"tk\" exists too).",
       "revId": "83ddb7e29949604348749cb2689d82cc1e135835",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24ab1071_ab9b6e73",
+        "filename": "comphelper/source/misc/synchronousdispatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-19T18:25:41Z",
+      "side": 1,
+      "message": "Should be libtl AKA tools/Library_tl.mk",
+      "revId": "83ddb7e29949604348749cb2689d82cc1e135835",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
