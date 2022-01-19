@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99e8ea38_07d8b035",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-19T17:30:39Z",
+      "side": 1,
+      "message": "Finally, I bypassed the error in the python uitest using uno commands and text cursors. @Mike: Can this be committed using this test?",
+      "revId": "8b4abdbb67c68f91902ad91fd80d99ef420f5f98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
