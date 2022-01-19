@@ -27,6 +27,7 @@
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include "ControllerCommandDispatch.hxx"
+#include <Diagram.hxx>
 #include <strings.hrc>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <ChartViewHelper.hxx>

@@ -28,6 +28,7 @@
 #include <AxisHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>

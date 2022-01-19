@@ -24,6 +24,7 @@
 #include <bitmaps.hlst>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <ControllerLockGuard.hxx>
 #include <AxisHelper.hxx>
 #include <unonames.hxx>
@@ -311,7 +312,7 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
 
     // locked controllers
     ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
-    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
     DiagramHelper::tTemplateWithServiceName aTemplateWithService(
         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager ));
     if( aTemplateWithService.first.is())
@@ -322,10 +323,9 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
     if( rParameter.b3DLook )
         ThreeDHelper::setScheme( xDiagram, rParameter.eThreeDLookScheme );
 
-    uno::Reference<beans::XPropertySet> xDiaProp(xDiagram, uno::UNO_QUERY);
-    if (xDiaProp.is())
+    if (xDiagram.is())
     {
-        xDiaProp->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, uno::Any(rParameter.bSortByXValues));
+        xDiagram->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, uno::Any(rParameter.bSortByXValues));
     }
 }
 void ChartTypeDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
@@ -1155,7 +1155,7 @@ void CombiColumnLineChartDialogController::fillExtraControls(
 
     uno::Reference< frame::XModel > xModel = xChartModel;
 
-    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
     if(!xDiagram.is())
         return;
 

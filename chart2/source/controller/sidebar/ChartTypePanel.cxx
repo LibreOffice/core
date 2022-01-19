@@ -26,6 +26,7 @@
 #include <ChartTypeDialogController.hxx>
 #include <ChartTypeManager.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -159,7 +160,7 @@ void ChartTypePanel::Initialize()
         return;
     rtl::Reference<::chart::ChartTypeManager> xTemplateManager
         = dynamic_cast<::chart::ChartTypeManager*>(m_xChartModel->getChartTypeManager().get());
-    uno::Reference<css::chart2::XDiagram> xDiagram(ChartModelHelper::findDiagram(m_xChartModel));
+    rtl::Reference<Diagram> xDiagram(ChartModelHelper::findDiagram(m_xChartModel));
     DiagramHelper::tTemplateWithServiceName aTemplate
         = DiagramHelper::getTemplateForDiagram(xDiagram, xTemplateManager);
     OUString aServiceName(aTemplate.second);
@@ -188,8 +189,7 @@ void ChartTypePanel::Initialize()
 
             try
             {
-                uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
-                xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES)
+                xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES)
                     >>= aParameter.bSortByXValues;
             }
             catch (const uno::Exception&)
@@ -224,7 +224,7 @@ void ChartTypePanel::updateData()
     rtl::Reference<::chart::ChartTypeManager> xTemplateManager
         = dynamic_cast<::chart::ChartTypeManager*>(m_xChartModel->getChartTypeManager().get());
     uno::Reference<frame::XModel> xModel(m_xChartModel);
-    uno::Reference<css::chart2::XDiagram> xDiagram(ChartModelHelper::findDiagram(xModel));
+    rtl::Reference<Diagram> xDiagram(ChartModelHelper::findDiagram(xModel));
     DiagramHelper::tTemplateWithServiceName aTemplate
         = DiagramHelper::getTemplateForDiagram(xDiagram, xTemplateManager);
     OUString aServiceName(aTemplate.second);
@@ -372,12 +372,11 @@ void ChartTypePanel::stateChanged()
     commitToModel(aParameter);
 
     //detect the new ThreeDLookScheme
-    uno::Reference<css::chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
+    rtl::Reference<Diagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
     aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme(xDiagram);
     try
     {
-        uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
-        xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
+        xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
     catch (const uno::Exception&)
     {
@@ -423,11 +422,10 @@ void ChartTypePanel::selectMainType()
         && aParameter.eThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Realistic)
         aParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;
 
-    uno::Reference<css::chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
+    rtl::Reference<Diagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
     try
     {
-        uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
-        xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
+        xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
     catch (const uno::Exception&)
     {

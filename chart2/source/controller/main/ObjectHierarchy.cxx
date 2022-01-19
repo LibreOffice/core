@@ -21,6 +21,7 @@
 #include <ObjectIdentifier.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <AxisHelper.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
@@ -129,10 +130,10 @@ void ObjectHierarchy::createTree( const Reference< XChartDocument >& xChartDocum
 
     //@todo: change ObjectIdentifier to take an XChartDocument rather than XModel
     Reference< frame::XModel > xModel = xChartDocument;
-    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartDocument ) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartDocument ) );
     ObjectIdentifier aDiaOID;
     if( xDiagram.is() )
-        aDiaOID = ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram, xModel ) );
+        aDiaOID = ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( uno::Reference<XDiagram>(xDiagram), xModel ) );
     ObjectHierarchy::tChildContainer aTopLevelContainer;
 
     // First Level
@@ -161,13 +162,9 @@ void ObjectHierarchy::createTree( const Reference< XChartDocument >& xChartDocum
     if( xDiagram.is())
     {
         // Sub Title.  Note: This is interpreted of being top level
-        Reference< XTitled > xDiaTitled( xDiagram, uno::UNO_QUERY );
-        if( xDiaTitled.is())
-        {
-            Reference< XTitle > xSubTitle( xDiaTitled->getTitleObject());
-            if( xSubTitle.is())
-                aTopLevelContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForObject( xSubTitle, xModel ) );
-        }
+        Reference< XTitle > xSubTitle( xDiagram->getTitleObject());
+        if( xSubTitle.is())
+            aTopLevelContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForObject( xSubTitle, xModel ) );
 
         if( !m_bOrderingForElementSelector )
         {

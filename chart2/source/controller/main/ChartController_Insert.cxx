@@ -32,6 +32,7 @@
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 #include <NumberFormatterWrapper.hxx>
@@ -94,7 +95,7 @@ void ChartController::executeDispatch_InsertAxes()
     try
     {
         InsertAxisOrGridDialogData aDialogInput;
-        uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(uno::Reference<chart2::XChartDocument>(getChartModel()));
+        rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(uno::Reference<chart2::XChartDocument>(getChartModel()));
         AxisHelper::getAxisOrGridExistence( aDialogInput.aExistenceList, xDiagram );
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram );
 
@@ -132,7 +133,7 @@ void ChartController::executeDispatch_InsertGrid()
     try
     {
         InsertAxisOrGridDialogData aDialogInput;
-        uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(uno::Reference<chart2::XChartDocument>(getChartModel()));
+        rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(uno::Reference<chart2::XChartDocument>(getChartModel()));
         AxisHelper::getAxisOrGridExistence( aDialogInput.aExistenceList, xDiagram, false );
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, false );
 

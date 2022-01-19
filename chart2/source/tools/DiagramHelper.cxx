@@ -18,6 +18,7 @@
  */
 
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <DataSeriesHelper.hxx>
 #include <AxisHelper.hxx>
 #include <ChartTypeHelper.hxx>
@@ -1592,14 +1593,14 @@ bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >
 
     bool bChanged = false;
     awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
-    uno::Reference< beans::XPropertySet > xDiaProps( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
-    if( !xDiaProps.is() )
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+    if( !xDiagram.is() )
         return bChanged;
 
     RelativePosition aOldPos;
     RelativeSize aOldSize;
-    xDiaProps->getPropertyValue("RelativePosition" ) >>= aOldPos;
-    xDiaProps->getPropertyValue("RelativeSize" ) >>= aOldSize;
+    xDiagram->getPropertyValue("RelativePosition" ) >>= aOldPos;
+    xDiagram->getPropertyValue("RelativeSize" ) >>= aOldSize;
 
     RelativePosition aNewPos;
     aNewPos.Anchor = drawing::Alignment_TOP_LEFT;
@@ -1619,8 +1620,8 @@ bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >
     if( (aNewPos.Secondary + aNewSize.Secondary) > 1.0 )
         aNewPos.Secondary = 1.0 - aNewSize.Secondary;
 
-    xDiaProps->setPropertyValue( "RelativePosition", uno::Any(aNewPos) );
-    xDiaProps->setPropertyValue( "RelativeSize", uno::Any(aNewSize) );
+    xDiagram->setPropertyValue( "RelativePosition", uno::Any(aNewPos) );
+    xDiagram->setPropertyValue( "RelativeSize", uno::Any(aNewSize) );
 
     bChanged = (aOldPos.Anchor!=aNewPos.Anchor) ||
         (aOldPos.Primary!=aNewPos.Primary) ||
@@ -1634,16 +1635,16 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference
 {
     awt::Rectangle aRet(-1,-1,-1,-1);
 
-    uno::Reference< beans::XPropertySet > xDiaProps( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
-    if( !xDiaProps.is() )
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+    if( !xDiagram.is() )
         return aRet;
 
     awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
 
     RelativePosition aRelPos;
     RelativeSize aRelSize;
-    xDiaProps->getPropertyValue("RelativePosition" ) >>= aRelPos;
-    xDiaProps->getPropertyValue("RelativeSize" ) >>= aRelSize;
+    xDiagram->getPropertyValue("RelativePosition" ) >>= aRelPos;
+    xDiagram->getPropertyValue("RelativeSize" ) >>= aRelSize;
 
     awt::Size aAbsSize(
         static_cast< sal_Int32 >( aRelSize.Primary * aPageSize.Width ),

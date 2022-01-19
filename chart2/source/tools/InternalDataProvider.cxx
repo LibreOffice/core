@@ -29,6 +29,7 @@
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
@@ -313,7 +314,7 @@ InternalDataProvider::InternalDataProvider(
 {
     try
     {
-        Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartDoc ) );
+        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartDoc ) );
         if( xDiagram.is())
         {
             Reference< frame::XModel > xChartModel = xChartDoc;

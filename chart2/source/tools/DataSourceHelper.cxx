@@ -21,6 +21,7 @@
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DataSource.hxx>
 #include <ControllerLockGuard.hxx>
@@ -275,7 +276,7 @@ uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
 
 uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges( const uno::Reference< frame::XModel > & xChartModel )
 {
-    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     return getUsedDataRanges( xDiagram );
 }
 
@@ -290,7 +291,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
 {
     std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;
 
-    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     uno::Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
     if( xCategories.is() )
         aResult.push_back( xCategories );
@@ -424,7 +425,7 @@ void DataSourceHelper::setRangeSegmentation(
     uno::Reference< data::XDataProvider > xDataProvider( xChartDocument->getDataProvider() );
     if( !xDataProvider.is() )
         return;
-    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     if( !xDiagram.is() )
         return;
     uno::Reference< chart2::XChartTypeManager > xChartTypeManager( xChartDocument->getChartTypeManager() );

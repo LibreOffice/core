@@ -21,6 +21,7 @@
 #include <ChartModelHelper.hxx>
 #include <LegendHelper.hxx>
 #include <ChartModel.hxx>
+#include <Diagram.hxx>
 
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
@@ -76,7 +77,7 @@ void LegendPositionResources::writeToResources( const uno::Reference< frame::XMo
 {
     try
     {
-        uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+        rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
         uno::Reference< beans::XPropertySet > xProp( xDiagram->getLegend(), uno::UNO_QUERY );
         if( xProp.is() )
         {

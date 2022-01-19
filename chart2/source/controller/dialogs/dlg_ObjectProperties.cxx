@@ -37,6 +37,7 @@
 #include <ChartTypeHelper.hxx>
 #include <ObjectNameProvider.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <AxisHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -111,7 +112,7 @@ ObjectPropertiesDialogParameter::~ObjectPropertiesDialogParameter()
 void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel >& xChartModel )
 {
     m_xChartDocument.set( xChartModel, uno::UNO_QUERY );
-    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aObjectCID, xChartModel );
     uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );

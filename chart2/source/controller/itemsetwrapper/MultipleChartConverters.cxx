@@ -25,6 +25,7 @@
 #include <GraphicPropertyItemConverter.hxx>
 #include <DataPointItemConverter.hxx>
 #include <ChartModelHelper.hxx>
+#include <Diagram.hxx>
 #include <TitleHelper.hxx>
 #include <TitleItemConverter.hxx>
 #include <AxisHelper.hxx>
@@ -49,7 +50,7 @@ AllAxisItemConverter::AllAxisItemConverter(
     const awt::Size* pRefSize )
         : MultipleItemConverter( rItemPool )
 {
-    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     const Sequence< Reference< XAxis > > aElementList( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
     for( Reference< XAxis > const & axis : aElementList )
     {
@@ -78,7 +79,7 @@ AllGridItemConverter::AllGridItemConverter(
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
         : MultipleItemConverter( rItemPool )
 {
-    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     const Sequence< Reference< beans::XPropertySet > > aElementList( AxisHelper::getAllGrids( xDiagram ) );
     for( Reference< beans::XPropertySet > const & xObjectProperties : aElementList )
     {

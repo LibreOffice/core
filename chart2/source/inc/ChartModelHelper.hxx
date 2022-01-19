@@ -20,6 +20,7 @@
 
 #include <com/sun/star/awt/Size.hpp>
 #include "charttoolsdllapi.hxx"
+#include <rtl/ref.hxx>
 
 #include <vector>
 
@@ -36,6 +37,7 @@ namespace com::sun::star::view { class XSelectionSupplier; }
 
 namespace chart
 {
+class Diagram;
 
 class OOO_DLLPUBLIC_CHARTTOOLS ChartModelHelper
 {
@@ -46,10 +48,10 @@ public:
     static css::uno::Reference< css::chart2::data::XDataProvider > createInternalDataProvider(
             const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc, bool bConnectToModel );
 
-    static css::uno::Reference< css::chart2::XDiagram >
+    static rtl::Reference< Diagram >
         findDiagram( const css::uno::Reference< css::frame::XModel >& xModel );
 
-    static css::uno::Reference< css::chart2::XDiagram >
+    static rtl::Reference< Diagram >
         findDiagram( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 
     static css::uno::Reference< css::chart2::XCoordinateSystem >

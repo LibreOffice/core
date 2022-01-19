@@ -20,6 +20,7 @@
 #include <SelectionHelper.hxx>
 #include <ObjectIdentifier.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <ChartModelHelper.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>

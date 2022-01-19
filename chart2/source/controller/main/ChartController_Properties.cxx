@@ -44,6 +44,7 @@
 #include <ChartModel.hxx>
 #include <ColorPerPointHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <ControllerLockGuard.hxx>
 #include "UndoGuard.hxx"
 #include <ObjectNameProvider.hxx>
@@ -144,9 +145,6 @@ wrapper::ItemConverter* createItemConverter(
                 if (pRefSizeProvider)
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
-                uno::Reference< beans::XPropertySet > xDiaProp;
-                xDiaProp.set( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xChartModel) ), uno::UNO_QUERY );
-
                 // the second property set contains the property CoordinateOrigin
                 // nOriginIndex is the index of the corresponding index of the
                 // origin (x=0, y=1, z=2)
@@ -202,7 +200,7 @@ wrapper::ItemConverter* createItemConverter(
                 uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aObjectCID, xChartModel );
                 uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
 
-                uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xChartModel) ) );
+                rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xChartModel) ) );
                 sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
                 if( !ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount ) )
                     eMapTo = wrapper::GraphicObjectType::LineDataPoint;
@@ -376,14 +374,14 @@ OUString lcl_getAxisCIDForCommand( std::string_view rDispatchCommand, const rtl:
         nDimensionIndex=1; bMainAxis=false;
     }
 
-    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xChartModel) ) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xChartModel) ) );
     uno::Reference< XAxis > xAxis( AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram ) );
     return ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, xChartModel );
 }
 
 OUString lcl_getGridCIDForCommand( std::string_view rDispatchCommand, const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
-    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xChartModel) ) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xChartModel) ) );
 
     if( rDispatchCommand == "DiagramGridAll")
         return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_GRID, u"ALLELEMENTS" );
