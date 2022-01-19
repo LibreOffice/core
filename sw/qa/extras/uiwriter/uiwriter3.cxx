@@ -254,6 +254,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138482)
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128375)
+{
+    for (sal_Int32 i = 0; i < 2; ++i)
+    {
+        createSwDoc(DATA_DIRECTORY, "tdf128375.docx");
+
+        uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                             uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+        dispatchCommand(mxComponent, ".uno:SelectAll", {});
+        Scheduler::ProcessEventsToIdle();
+
+        // Without the fix in place, this test would have crashed cutting the second document
+        dispatchCommand(mxComponent, ".uno:Cut", {});
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135061)
 {
     createSwDoc(DATA_DIRECTORY, "tdf135061.odt");
