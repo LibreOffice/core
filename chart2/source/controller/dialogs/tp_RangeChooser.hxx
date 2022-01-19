@@ -28,7 +28,7 @@ namespace com::sun::star::chart2 { class XChartTypeTemplate; }
 
 namespace chart
 {
-
+class ChartTypeTemplate;
 class ChartTypeTemplateProvider;
 class DialogModel;
 
@@ -72,7 +72,7 @@ private:
     bool            m_bIsDirty;
 
     OUString                                                m_aLastValidRangeString;
-    css::uno::Reference< css::chart2::XChartTypeTemplate >  m_xCurrentChartTypeTemplate;
+    rtl::Reference< ::chart::ChartTypeTemplate >            m_xCurrentChartTypeTemplate;
     ChartTypeTemplateProvider*                              m_pTemplateProvider;
 
     DialogModel &                                           m_rDialogModel;

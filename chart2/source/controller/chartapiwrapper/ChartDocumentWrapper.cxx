@@ -1193,8 +1193,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = xChartDoc->getTypeManager();
                     DiagramHelper::tTemplateWithServiceName aTemplateWithService(
                         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager ));
-                    if( aTemplateWithService.first.is())
-                        aTemplateWithService.first->resetStyles( xDiagram );//#i109371#
+                    if( aTemplateWithService.xChartTypeTemplate.is())
+                        aTemplateWithService.xChartTypeTemplate->resetStyles( xDiagram );//#i109371#
                     xTemplate->changeDiagram( xDiagram );
                     if( AllSettings::GetMathLayoutRTL() )
                         AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );

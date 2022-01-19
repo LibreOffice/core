@@ -50,6 +50,9 @@ class ValueSet;
 
 namespace chart
 {
+class ChartTypeTemplate;
+class ChartTypeManager;
+
 enum GlobalStackMode
 {
     GlobalStackMode_NONE,
@@ -132,9 +135,9 @@ public:
     OUString getServiceNameForParameter(const ChartTypeParameter& rParameter) const;
     void commitToModel(const ChartTypeParameter& rParameter,
                        const css::uno::Reference<css::chart2::XChartDocument>& xChartModel);
-    css::uno::Reference<css::chart2::XChartTypeTemplate> getCurrentTemplate(
-        const ChartTypeParameter& rParameter,
-        const css::uno::Reference<css::lang::XMultiServiceFactory>& xTemplateManager) const;
+    rtl::Reference<::chart::ChartTypeTemplate>
+    getCurrentTemplate(const ChartTypeParameter& rParameter,
+                       const rtl::Reference<::chart::ChartTypeManager>& xTemplateManager) const;
 
 protected:
     bool bSupportsXAxisWithValues;

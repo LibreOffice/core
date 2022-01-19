@@ -41,6 +41,7 @@ namespace com::sun::star::util { class XNumberFormatsSupplier; }
 namespace chart
 {
 class ChartTypeManager;
+class ChartTypeTemplate;
 
 enum DiagramPositioningMode
 {
@@ -52,10 +53,10 @@ enum DiagramPositioningMode
 class OOO_DLLPUBLIC_CHARTTOOLS DiagramHelper
 {
 public:
-    typedef std::pair<
-            css::uno::Reference< css::chart2::XChartTypeTemplate >,
-            OUString >
-        tTemplateWithServiceName;
+    struct tTemplateWithServiceName {
+        rtl::Reference< ::chart::ChartTypeTemplate > xChartTypeTemplate;
+        OUString sServiceName;
+    };
 
     /** tries to find a template in the chart-type manager that matches the
         given diagram.
