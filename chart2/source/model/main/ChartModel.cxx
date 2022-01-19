@@ -24,6 +24,7 @@
 #include <ChartModelHelper.hxx>
 #include <DisposeHelper.hxx>
 #include <ControllerLockGuard.hxx>
+#include <InternalDataProvider.hxx>
 #include <ObjectIdentifier.hxx>
 #include "PageBackground.hxx"
 #include <CloneHelper.hxx>
@@ -695,24 +696,20 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
     Reference< chart2::data::XDataSource > xDataSource;
     if( hasInternalDataProvider() )
     {
-        uno::Reference< lang::XInitialization > xIni(m_xInternalDataProvider,uno::UNO_QUERY);
-        if( xIni.is() )
+        //init internal dataprovider
         {
-            //init internal dataprovider
-            {
-                beans::NamedValue aParam( "CreateDefaultData" ,uno::Any(true) );
-                uno::Sequence< uno::Any > aArgs{ uno::Any(aParam) };
-                xIni->initialize(aArgs);
-            }
-            //create data
-            uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                { "CellRangeRepresentation", uno::Any( OUString("all") ) },
-                { "HasCategories", uno::Any( true ) },
-                { "FirstCellAsLabel", uno::Any( true ) },
-                { "DataRowSource", uno::Any( css::chart::ChartDataRowSource_COLUMNS ) }
-                }));
-            xDataSource = m_xInternalDataProvider->createDataSource( aArgs );
+            beans::NamedValue aParam( "CreateDefaultData" ,uno::Any(true) );
+            uno::Sequence< uno::Any > aArgs{ uno::Any(aParam) };
+            m_xInternalDataProvider->initialize(aArgs);
         }
+        //create data
+        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+            { "CellRangeRepresentation", uno::Any( OUString("all") ) },
+            { "HasCategories", uno::Any( true ) },
+            { "FirstCellAsLabel", uno::Any( true ) },
+            { "DataRowSource", uno::Any( css::chart::ChartDataRowSource_COLUMNS ) }
+            }));
+        xDataSource = m_xInternalDataProvider->createDataSource( aArgs );
     }
     return xDataSource;
 }
