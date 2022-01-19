@@ -379,6 +379,7 @@ void BackingWindow::initializeLocalView()
     if (!mbLocalViewInitialized)
     {
         mbLocalViewInitialized = true;
+        mxLocalView->readlistdata();
         mxLocalView->Populate();
         mxLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
         mxLocalView->showAllTemplates();

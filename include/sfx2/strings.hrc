@@ -244,6 +244,9 @@
 
 #define RID_CNT_STR_WAITING                     NC_("RID_CNT_STR_WAITING", "The templates are being initialized for first-time usage.")
 
+#define RID_CNT_STR_CACHE                       NC_("RID_CNT_STR_CACHE", "The templates are being initialized for thumbnail cache.")
+#define RID_CNT_STR_LOAD                        NC_("RID_CNT_STR_LOAD", "Loading...")
+
 #define STR_NODEFPRINTER                        NC_("STR_NODEFPRINTER", "No default printer found.\nPlease choose a printer and try again.")
 #define STR_NOSTARTPRINTER                      NC_("STR_NOSTARTPRINTER", "Could not start printer.\nPlease check your printer configuration.")
 #define STR_ERROR_PRINTER_BUSY                  NC_("STR_ERROR_PRINTER_BUSY", "Printer busy")
