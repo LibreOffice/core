@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbd695e5_57fdf565",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-19T19:17:51Z",
+      "side": 1,
+      "message": "it seems the test passes without the fix in place, it should fail",
+      "revId": "33289396adbbc4e0cb236a76eb9a78df0597e3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
