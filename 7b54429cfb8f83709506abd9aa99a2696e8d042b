@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf57f9ee_a71771db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-19T08:56:17Z",
+      "side": 1,
+      "message": "Note from https://bugs.documentfoundation.org/show_bug.cgi?id\u003d122995#c14:\n\nI noticed that sometimes the very 1st change in the yellow-marked number does fail. I experimented with moving change in SwDoc::UpdateCharts_ before/after notifies, but changes nothing. Also tried to split. Also debugged to make sure SwDoc::UpdateCharts_ gets called at 1st change a all - it gets.\nWhen I do menu tools/update/charts (that always works, also after 1st change) it gets updated after change of 1st number. This *seems* to initialize something that is not up-to-date after load \u0026 1st change.\nStill, proposed solution is better than current state, but I\u0027ll check and try to identify...",
+      "revId": "7b54429cfb8f83709506abd9aa99a2696e8d042b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
