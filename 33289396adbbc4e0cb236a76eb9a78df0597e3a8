@@ -16,6 +16,24 @@
       "message": "it seems the test passes without the fix in place, it should fail",
       "revId": "33289396adbbc4e0cb236a76eb9a78df0597e3a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40e4c6b4_ed33e25f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-19T20:01:55Z",
+      "side": 1,
+      "message": "On linux it always passes and it fails only on windows when utf8 is not enabled system wide. Can this be set in the test?",
+      "parentUuid": "dbd695e5_57fdf565",
+      "revId": "33289396adbbc4e0cb236a76eb9a78df0597e3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
