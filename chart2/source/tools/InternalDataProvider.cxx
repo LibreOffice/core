@@ -483,29 +483,29 @@ void InternalDataProvider::decreaseMapReferences(
     }
 }
 
-Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenceAndAddToMap(
+rtl::Reference< UncachedDataSequence > InternalDataProvider::createDataSequenceAndAddToMap(
     const OUString & rRangeRepresentation )
 {
-    Reference<chart2::data::XDataSequence> xSeq = createDataSequenceFromArray(rRangeRepresentation, u"", u"");
+    rtl::Reference<UncachedDataSequence> xSeq = createDataSequenceFromArray(rRangeRepresentation, u"", u"");
     if (xSeq.is())
-        return xSeq;
+        return nullptr;
 
     xSeq.set(new UncachedDataSequence(this, rRangeRepresentation));
     addDataSequenceToMap(rRangeRepresentation, xSeq);
     return xSeq;
 }
 
-uno::Reference<chart2::data::XDataSequence>
+rtl::Reference<UncachedDataSequence>
 InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, std::u16string_view rRole, std::u16string_view rRoleQualifier )
 {
     if (rArrayStr.indexOf('{') != 0 || rArrayStr[rArrayStr.getLength()-1] != '}')
     {
         // Not an array string.
-        return uno::Reference<chart2::data::XDataSequence>();
+        return nullptr;
     }
 
     bool bAllNumeric = true;
-    uno::Reference<chart2::data::XDataSequence> xSeq;
+    rtl::Reference<UncachedDataSequence> xSeq;
 
     const sal_Unicode* p = rArrayStr.getStr();
     const sal_Unicode* pEnd = p + rArrayStr.getLength();
@@ -665,8 +665,8 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenc
     const OUString & rRangeRepresentation,
     const OUString & rRole )
 {
-    Reference< chart2::data::XDataSequence > xSeq(
-        new UncachedDataSequence( this, rRangeRepresentation, rRole ));
+    rtl::Reference< UncachedDataSequence > xSeq =
+        new UncachedDataSequence( this, rRangeRepresentation, rRole );
     addDataSequenceToMap( rRangeRepresentation, xSeq );
     return xSeq;
 }
