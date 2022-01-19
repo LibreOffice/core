@@ -722,6 +722,9 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                 if (xGraphic.is())
                 {
+                    if (maBlipProps.moColorEffect.get(XML_TOKEN_INVALID) == XML_grayscl)
+                        xGraphic = lclGreysScaleGraphic(xGraphic);
+
                     if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName) &&
                         rPropMap.setProperty(ShapeProperty::FillBitmapName, xGraphic))
                     {

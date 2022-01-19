@@ -171,6 +171,7 @@ public:
     void testTdf49856();
     void testTdf103347();
     void testHyperlinksOnShapes();
+    void testTdf112209();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -234,6 +235,7 @@ public:
     CPPUNIT_TEST(testTdf134210CropPosition);
     CPPUNIT_TEST(testTdf103347);
     CPPUNIT_TEST(testHyperlinksOnShapes);
+    CPPUNIT_TEST(testTdf112209);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1904,6 +1906,30 @@ void SdImportTest2::testHyperlinksOnShapes()
                 break;
         }
     }
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest2::testTdf112209()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf112209.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef),
+                                               uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xShape.is());
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("FillBitmap") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+
+    Graphic aGraphic(xGraphic);
+    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Color: R:132 G:132 B:132 A:0
+    // - Actual  : Color: R:21 G:170 B:236 A:0
+    // i.e. the image color was blue instead of grey.
+    CPPUNIT_ASSERT_EQUAL(Color(0x848484), aBitmap.GetPixelColor(0, 0));
 
     xDocShRef->DoClose();
 }
