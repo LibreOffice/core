@@ -37,6 +37,7 @@ namespace com::sun::star::view { class XSelectionSupplier; }
 
 namespace chart
 {
+class BaseCoordinateSystem;
 class Diagram;
 
 class OOO_DLLPUBLIC_CHARTTOOLS ChartModelHelper
@@ -54,10 +55,10 @@ public:
     static rtl::Reference< Diagram >
         findDiagram( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 
-    static css::uno::Reference< css::chart2::XCoordinateSystem >
+    static rtl::Reference< ::chart::BaseCoordinateSystem >
         getFirstCoordinateSystem( ChartModel& rModel );
 
-    static css::uno::Reference< css::chart2::XCoordinateSystem >
+    static rtl::Reference< ::chart::BaseCoordinateSystem >
         getFirstCoordinateSystem( const css::uno::Reference< css::frame::XModel >& xModel );
 
     SAL_DLLPRIVATE static std::vector< css::uno::Reference< css::chart2::XDataSeries > >

@@ -21,11 +21,13 @@
 
 #include <ChartView.hxx>
 #include <chartview/DrawModelWrapper.hxx>
+#include <Diagram.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <VDiagram.hxx>
 #include "VTitle.hxx"
 #include "VButton.hxx"
 #include <ShapeFactory.hxx>
+#include <BaseCoordinateSystem.hxx>
 #include <VCoordinateSystem.hxx>
 #include <VSeriesPlotter.hxx>
 #include <CommonConverters.hxx>
@@ -377,7 +379,7 @@ std::vector< LegendEntryProvider* > SeriesPlotterContainer::getLegendEntryProvid
 }
 
 VCoordinateSystem* findInCooSysList( const std::vector< std::unique_ptr<VCoordinateSystem> >& rVCooSysList
-                                    , const uno::Reference< XCoordinateSystem >& xCooSys )
+                                    , const rtl::Reference< BaseCoordinateSystem >& xCooSys )
 {
     for(auto & pVCooSys : rVCooSysList)
     {
@@ -400,7 +402,7 @@ VCoordinateSystem* lcl_getCooSysForPlotter( const std::vector< std::unique_ptr<V
 }
 
 VCoordinateSystem* addCooSysToList( std::vector< std::unique_ptr<VCoordinateSystem> >& rVCooSysList
-            , const uno::Reference< XCoordinateSystem >& xCooSys
+            , const rtl::Reference< BaseCoordinateSystem >& xCooSys
             , ChartModel& rChartModel )
 {
     VCoordinateSystem* pExistingVCooSys = findInCooSysList( rVCooSysList, xCooSys );
@@ -422,7 +424,7 @@ VCoordinateSystem* addCooSysToList( std::vector< std::unique_ptr<VCoordinateSyst
 void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
               ChartModel& rChartModel )
 {
-    uno::Reference< XDiagram > xDiagram( rChartModel.getFirstDiagram() );
+    rtl::Reference< Diagram > xDiagram = rChartModel.getFirstChartDiagram();
     if( !xDiagram.is())
         return;
 
@@ -446,16 +448,15 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     sal_Int32 n3DRelativeHeight = 100;
     try
     {
-        uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY_THROW );
-        xDiaProp->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= bSortByXValues;
-        xDiaProp->getPropertyValue( "ConnectBars" ) >>= bConnectBars;
-        xDiaProp->getPropertyValue( "GroupBarsPerAxis" ) >>= bGroupBarsPerAxis;
-        xDiaProp->getPropertyValue( "IncludeHiddenCells" ) >>= bIncludeHiddenCells;
-        xDiaProp->getPropertyValue( "StartingAngle" ) >>= nStartingAngle;
+        xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= bSortByXValues;
+        xDiagram->getPropertyValue( "ConnectBars" ) >>= bConnectBars;
+        xDiagram->getPropertyValue( "GroupBarsPerAxis" ) >>= bGroupBarsPerAxis;
+        xDiagram->getPropertyValue( "IncludeHiddenCells" ) >>= bIncludeHiddenCells;
+        xDiagram->getPropertyValue( "StartingAngle" ) >>= nStartingAngle;
 
         if (nDimensionCount == 3)
         {
-            xDiaProp->getPropertyValue( "3DRelativeHeight" ) >>= n3DRelativeHeight;
+            xDiagram->getPropertyValue( "3DRelativeHeight" ) >>= n3DRelativeHeight;
         }
     }
     catch( const uno::Exception & )
@@ -469,16 +470,12 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     // - add plotter to coordinate systems
 
     //iterate through all coordinate systems
-    uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    OSL_ASSERT( xCooSysContainer.is());
-    if( !xCooSysContainer.is())
-        return;
     uno::Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
-    uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    auto & rCooSysList = xDiagram->getBaseCoordinateSystems();
     sal_Int32 nGlobalSeriesIndex = 0;//for automatic symbols
-    for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+    for( sal_Int32 nCS = 0; nCS < static_cast<sal_Int32>(rCooSysList.size()); ++nCS )
     {
-        uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
+        rtl::Reference< BaseCoordinateSystem > xCooSys( rCooSysList[nCS] );
         VCoordinateSystem* pVCooSys = addCooSysToList(m_rVCooSysList,xCooSys,rChartModel);
         // Let's check whether the secondary Y axis is visible
         try
@@ -494,11 +491,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }
         //iterate through all chart types in the current coordinate system
-        uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-        OSL_ASSERT( xChartTypeContainer.is());
-        if( !xChartTypeContainer.is() )
-            continue;
-        uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+        uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xCooSys->getChartTypes() );
         for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
         {
             uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
@@ -1675,7 +1668,7 @@ bool ChartView::getExplicitValuesForAxis(
     if(!xAxis.is())
         return false;
 
-    uno::Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(xAxis, mrChartModel.getFirstDiagram() ) );
+    rtl::Reference< BaseCoordinateSystem > xCooSys = AxisHelper::getCoordinateSystemOfAxis(xAxis, mrChartModel.getFirstDiagram() );
     const VCoordinateSystem* pVCooSys = findInCooSysList(m_aVCooSysList,xCooSys);
     if(!pVCooSys)
         return false;

@@ -28,6 +28,7 @@
 #include <AxisHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

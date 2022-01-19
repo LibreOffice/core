@@ -44,6 +44,7 @@ namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 namespace chart
 {
+class BaseCoordinateSystem;
 
 class VAxisBase;
 
@@ -52,8 +53,8 @@ class VCoordinateSystem
 public:
     virtual ~VCoordinateSystem();
 
-    static std::unique_ptr<VCoordinateSystem> createCoordinateSystem( const css::uno::Reference<
-                                css::chart2::XCoordinateSystem >& xCooSysModel );
+    static std::unique_ptr<VCoordinateSystem> createCoordinateSystem( const rtl::Reference<
+                                ::chart::BaseCoordinateSystem >& xCooSysModel );
 
     /// @throws css::uno::RuntimeException
     void initPlottingTargets(
@@ -107,7 +108,7 @@ public:
 
     void set3DWallPositions( CuboidPlanePosition eLeftWallPos, CuboidPlanePosition eBackWallPos, CuboidPlanePosition eBottomPos );
 
-    const css::uno::Reference< css::chart2::XCoordinateSystem >&
+    const rtl::Reference< ::chart::BaseCoordinateSystem >&
         getModel() const { return m_xCooSysModel;}
 
     /**
@@ -137,8 +138,7 @@ public:
     void setSeriesNamesForAxis( const css::uno::Sequence< OUString >& rSeriesNames );
 
 protected: //methods
-    VCoordinateSystem( const css::uno::Reference<
-        css::chart2::XCoordinateSystem >& xCooSys );
+    VCoordinateSystem( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
 
     css::uno::Reference< css::chart2::XAxis >
         getAxisByDimension( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex  ) const;
@@ -160,7 +160,7 @@ private: //methods
     void impl_adjustDimensionAndIndex( sal_Int32& rDimensionIndex, sal_Int32& rAxisIndex ) const;
 
 protected: //member
-    css::uno::Reference< css::chart2::XCoordinateSystem > m_xCooSysModel;
+    rtl::Reference< ::chart::BaseCoordinateSystem > m_xCooSysModel;
 
     OUString m_aCooSysParticle;
 

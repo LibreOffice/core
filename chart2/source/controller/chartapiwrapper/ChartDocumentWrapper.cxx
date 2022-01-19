@@ -31,6 +31,7 @@
 #include <chartview/ExplicitValueProvider.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include "Chart2ModelContact.hxx"
+#include <BaseCoordinateSystem.hxx>
 
 #include <ChartModel.hxx>
 

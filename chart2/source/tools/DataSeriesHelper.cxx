@@ -20,6 +20,8 @@
 #include <DataSeriesHelper.hxx>
 #include <DataSource.hxx>
 #include <unonames.hxx>
+#include <Diagram.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
@@ -108,18 +110,16 @@ Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
 void lcl_getCooSysAndChartTypeOfSeries(
     const Reference< chart2::XDataSeries > & xSeries,
     const Reference< chart2::XDiagram > & xDiagram,
-    Reference< chart2::XCoordinateSystem > & xOutCooSys,
+    rtl::Reference< ::chart::BaseCoordinateSystem > & xOutCooSys,
     Reference< chart2::XChartType > & xOutChartType )
 {
-    Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
-    if( !xCooSysCnt.is())
+    if( !xDiagram.is())
         return;
+    ::chart::Diagram* pDiagram = dynamic_cast<::chart::Diagram*>(xDiagram.get());
 
-    const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
-    for( Reference< chart2::XCoordinateSystem > const & coords : aCooSysSeq )
+    for( rtl::Reference< ::chart::BaseCoordinateSystem > const & coords : pDiagram->getBaseCoordinateSystems() )
     {
-        Reference< chart2::XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
-        const Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+        const Sequence< Reference< chart2::XChartType > > aChartTypes( coords->getChartTypes());
         for( Reference< chart2::XChartType > const & chartType : aChartTypes )
         {
             Reference< chart2::XDataSeriesContainer > xSeriesCnt( chartType, uno::UNO_QUERY );
@@ -130,7 +130,7 @@ void lcl_getCooSysAndChartTypeOfSeries(
                 {
                     if( dataSeries == xSeries )
                     {
-                        xOutCooSys.set( coords );
+                        xOutCooSys = coords;
                         xOutChartType.set( chartType );
                     }
                 }
@@ -486,11 +486,11 @@ sal_Int32 getNumberFormatKeyFromAxis(
     return nResult;
 }
 
-Reference< chart2::XCoordinateSystem > getCoordinateSystemOfSeries(
+rtl::Reference< ::chart::BaseCoordinateSystem > getCoordinateSystemOfSeries(
     const Reference< chart2::XDataSeries > & xSeries,
     const Reference< chart2::XDiagram > & xDiagram )
 {
-    Reference< chart2::XCoordinateSystem > xResult;
+    rtl::Reference< ::chart::BaseCoordinateSystem > xResult;
     Reference< chart2::XChartType > xDummy;
     lcl_getCooSysAndChartTypeOfSeries( xSeries, xDiagram, xResult, xDummy );
 
@@ -502,7 +502,7 @@ Reference< chart2::XChartType > getChartTypeOfSeries(
     const Reference< chart2::XDiagram > & xDiagram )
 {
     Reference< chart2::XChartType > xResult;
-    Reference< chart2::XCoordinateSystem > xDummy;
+    rtl::Reference< ::chart::BaseCoordinateSystem > xDummy;
     lcl_getCooSysAndChartTypeOfSeries( xSeries, xDiagram, xDummy, xResult );
 
     return xResult;

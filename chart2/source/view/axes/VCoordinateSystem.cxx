@@ -21,6 +21,7 @@
 #include <VCoordinateSystem.hxx>
 #include "VCartesianCoordinateSystem.hxx"
 #include "VPolarCoordinateSystem.hxx"
+#include <BaseCoordinateSystem.hxx>
 #include <ScaleAutomatism.hxx>
 #include <ShapeFactory.hxx>
 #include <servicenames_coosystems.hxx>
@@ -46,7 +47,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
 std::unique_ptr<VCoordinateSystem> VCoordinateSystem::createCoordinateSystem(
-            const Reference< XCoordinateSystem >& xCooSysModel )
+            const rtl::Reference< BaseCoordinateSystem >& xCooSysModel )
 {
     if( !xCooSysModel.is() )
         return nullptr;
@@ -64,7 +65,7 @@ std::unique_ptr<VCoordinateSystem> VCoordinateSystem::createCoordinateSystem(
     return pRet;
 }
 
-VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCooSys )
+VCoordinateSystem::VCoordinateSystem( const rtl::Reference< BaseCoordinateSystem >& xCooSys )
     : m_xCooSysModel(xCooSys)
     , m_eLeftWallPos(CuboidPlanePosition_Left)
     , m_eBackWallPos(CuboidPlanePosition_Back)
@@ -523,11 +524,10 @@ void VCoordinateSystem::clearMinimumAndMaximumSupplierList()
 
 bool VCoordinateSystem::getPropertySwapXAndYAxis() const
 {
-    Reference<beans::XPropertySet> xProp(m_xCooSysModel, uno::UNO_QUERY );
     bool bSwapXAndY = false;
-    if( xProp.is()) try
+    if( m_xCooSysModel.is()) try
     {
-        xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
+        m_xCooSysModel->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
     }
     catch( const uno::Exception& )
     {

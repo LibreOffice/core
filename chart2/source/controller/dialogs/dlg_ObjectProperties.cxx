@@ -44,6 +44,7 @@
 #include <ChartModel.hxx>
 #include <CommonConverters.hxx>
 #include <RegressionCalculationHelper.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
@@ -163,7 +164,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                     m_bHasNumberProperties = true;
 
                 //is the crossing main axis a category axes?:
-                uno::Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, xDiagram ) );
+                rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, xDiagram ) );
                 uno::Reference< XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ) );
                 if( xCrossingMainAxis.is() )
                 {
