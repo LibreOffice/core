@@ -151,6 +151,24 @@
       "parentUuid": "49600022_260dedd9",
       "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "298083e0_9f654922",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T12:25:26Z",
+      "side": 1,
+      "message": "schema and table are passed by Tables::createObject\n    OUString sCatalog, sSchema, sTable;\n    ::dbtools::qualifiedNameComponents(m_xMetaData, rName, sCatalog, sSchema, sTable,\n                                       ::dbtools::EComposeRule::InDataManipulation);\n    Any aCatalog;\n    if (!sCatalog.isEmpty())\n        aCatalog \u003c\u003c\u003d sCatalog;\n    uno::Reference\u003cXResultSet\u003e xTables\n        \u003d m_xMetaData-\u003egetTables(aCatalog, sSchema, sTable, uno::Sequence\u003cOUString\u003e());\n\n::dbtools::qualifiedNameComponents decomposes rName but it lets \"`\".\nI could also do the replaceAll in createObject but don\u0027t know how to avoid qualifiedNameComponents provides variables with \"`\"",
+      "parentUuid": "df7934fe_014294b4",
+      "revId": "b1b3b44e131b789bfcd26a610b059a84b63eea43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
