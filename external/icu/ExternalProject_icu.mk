@@ -52,7 +52,7 @@ icu_CXXFLAGS:="$(CXXFLAGS) $(CXXFLAGS_CXX11) \
 	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
 	$(if $(call gb_Module__symbols_enabled,icu),$(gb_DEBUGINFO_FLAGS)) \
 	$(if $(filter FUZZERS,$(BUILD_TYPE)),-DU_USE_STRTOD_L=0) \
-	$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer $(SOLARINC))"
+	$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer -I$(SRCDIR)/include)"
 icu_LDFLAGS:=" \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter TRUE,$(HAVE_LD_HASH_STYLE)),-Wl$(COMMA)--hash-style=$(WITH_LINKER_HASH_STYLE)) \
