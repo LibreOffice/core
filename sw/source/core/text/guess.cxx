@@ -76,6 +76,14 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     SwTwips nLineWidth = rInf.GetLineWidth();
     TextFrameIndex nMaxLen = TextFrameIndex(rInf.GetText().getLength()) - rInf.GetIdx();
 
+    // see sw/qa/python/testdocuments/TESTMETA.odt
+    if (nMaxLen < TextFrameIndex(0))
+    {
+        assert(false && "negative text length");
+        SAL_WARN("sw.core", "negative text length");
+        return false;
+    }
+
     const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
 
     // tdf#104668 space chars at the end should be cut if the compatibility option is enabled
