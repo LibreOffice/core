@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5489e094_62979ad2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-19T16:30:59Z",
+      "side": 1,
+      "message": "$ git grep CreateMessageDialog | wc -l\n499\n\nI blindly assumed it returns a unique_ptr, so the std::move is wrong. But anyway, just whitelisting the file won\u0027t work because of potentially a few hundreds more.\n\nAny ideas?",
+      "revId": "ce95acbb1d9b025db31e793c3ac70a61b04e1e9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
