@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e91a885a_973fb401",
+        "filename": "basic/source/runtime/stdobj1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-19T06:16:54Z",
+      "side": 1,
+      "message": "Merge `ATTR_IMP` and `METH` enum classes, so that they can be used as a new enum class `UserData`. You may have to use something like \u0027UserData::ATTR_IMP_WIDTH\u0027. You have to add `ATTR_IMP` and `METH` again. Sorry for that.\n\nAdd this enum class to `include/basic/sbxvar.hxx`.",
+      "revId": "ea2f973a37a4b2aa4f90e37c8ec6e8bc49b70fbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac5e8b0b_68026f5e",
+        "filename": "basic/source/runtime/stdobj1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-19T06:16:54Z",
+      "side": 1,
+      "message": "Define a private SetUserData() that gets enum class `UserData` as the parameter in addition to SetUserData() that gets sal_uInt32. A similar GetUserData() would also be needed that outputs enum class `UserData`. You need to declare the using classes as friend of this class to be able to use these methods.",
+      "revId": "ea2f973a37a4b2aa4f90e37c8ec6e8bc49b70fbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e400c81_c009c514",
+        "filename": "basic/source/runtime/stdobj1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-19T06:16:54Z",
+      "side": 1,
+      "message": "By using enum type, you will see that some of the cases are not handled. You can use \u0027default: break;\u0027 to keep the behavior.",
+      "revId": "ea2f973a37a4b2aa4f90e37c8ec6e8bc49b70fbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "345d088f_c4639fc1",
+        "filename": "basic/source/runtime/stdobj1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-19T06:16:54Z",
+      "side": 1,
+      "message": "The same \u0027default: break;\u0027 should be added here.",
+      "revId": "ea2f973a37a4b2aa4f90e37c8ec6e8bc49b70fbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82edcf06_8770b356",
+        "filename": "basic/source/runtime/stdobj1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-19T06:16:54Z",
+      "side": 1,
+      "message": "Define this variable as `UserData` enum class.",
+      "revId": "ea2f973a37a4b2aa4f90e37c8ec6e8bc49b70fbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5fcca1e_f9a3f4be",
+        "filename": "basic/source/runtime/stdobj1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-19T06:16:54Z",
+      "side": 1,
+      "message": "The same \u0027default: break;\u0027 should be added here.",
+      "revId": "ea2f973a37a4b2aa4f90e37c8ec6e8bc49b70fbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
