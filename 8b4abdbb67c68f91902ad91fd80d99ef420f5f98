@@ -16,6 +16,40 @@
       "message": "Finally, I bypassed the error in the python uitest using uno commands and text cursors. @Mike: Can this be committed using this test?",
       "revId": "8b4abdbb67c68f91902ad91fd80d99ef420f5f98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8214cbc3_cbe6e240",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-19T17:48:36Z",
+      "side": 1,
+      "message": "Great work!\nPlease consider my nitpicks, and I suppose we are good :-)",
+      "revId": "8b4abdbb67c68f91902ad91fd80d99ef420f5f98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8056343a_cf106d3b",
+        "filename": "sw/source/filter/basflt/iodetect.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-19T17:48:36Z",
+      "side": 1,
+      "message": "I\u0027m not sure it makes sense. The function should return the detected encoding. If it didn\u0027t detect, it needs to tell so, not lie with some random unrelated result. It\u0027s up to the call site to decide what to do on RTL_TEXTENCODING_DONTKNOW IMO. Even though it makes the call site a bit less pretty ;)",
+      "revId": "8b4abdbb67c68f91902ad91fd80d99ef420f5f98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

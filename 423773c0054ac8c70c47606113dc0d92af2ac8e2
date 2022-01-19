@@ -33,6 +33,24 @@
       "message": "I added the nullptr since it makes the function easier to read, or should it be done by passing false/nullptr without changing the signature of the function?",
       "revId": "423773c0054ac8c70c47606113dc0d92af2ac8e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29ae913c_45b5dc0d",
+        "filename": "sw/inc/iodetect.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-19T17:48:36Z",
+      "side": 1,
+      "message": "The only place where it is used is in implementation of GetTextEncoding. Please undo the change, because it doesn\u0027t improve anything.",
+      "parentUuid": "af7e740c_f229e259",
+      "revId": "423773c0054ac8c70c47606113dc0d92af2ac8e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
