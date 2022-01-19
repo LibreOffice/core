@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a41684d7_af2d0951",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T18:29:56Z",
+      "side": 1,
+      "message": "My previous patch was wrong since it removed last ` even if it wasn\u0027t the last character of the string.\n\nFor the rest, there are still pbs... I must keep on (I\u0027m losing patience with all these tricky mechanisms)",
+      "revId": "4fdcc3c1f50a3870f02a929614a6233513397627",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
