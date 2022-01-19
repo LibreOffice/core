@@ -1721,7 +1721,7 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
     OOXMLFastContextHandler::setToken(nToken);
 
     if (mrShapeContext.is())
-        mrShapeContext->setStartToken(nToken);
+        mrShapeContext->pushStartToken(nToken);
 }
 
 void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
@@ -1761,8 +1761,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 
 bool OOXMLFastContextHandlerShape::isDMLGroupShape() const
 {
-    return (mrShapeContext->getFullWPGSupport() &&
-           (mrShapeContext->getStartToken() == Token_t(oox::NMSP_wpg | oox::XML_wgp)));
+    return (mrShapeContext->getFullWPGSupport() && mrShapeContext->isWordProcessingGroupShape());
 };
 
 void OOXMLFastContextHandlerShape::lcl_endFastElement

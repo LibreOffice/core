@@ -44,7 +44,6 @@ using namespace core;
 using namespace drawingml;
 
 ShapeContextHandler::ShapeContextHandler(const rtl::Reference<ShapeFilterBase>& xFilterBase) :
-  mnStartToken(0),
   m_bFullWPGSUpport(false),
   mxShapeFilterBase(xFilterBase)
 
@@ -225,8 +224,9 @@ uno::Reference<xml::sax::XFastContextHandler>
 ShapeContextHandler::getContextHandler(sal_Int32 nElement)
 {
     uno::Reference<xml::sax::XFastContextHandler> xResult;
+    const sal_uInt32 nStartToken = getStartToken();
 
-    switch (getNamespace( mnStartToken ))
+    switch (getNamespace( nStartToken ))
     {
         case NMSP_doc:
         case NMSP_vml:
@@ -236,19 +236,19 @@ ShapeContextHandler::getContextHandler(sal_Int32 nElement)
             xResult.set(getDiagramShapeContext());
             break;
         case NMSP_dmlLockedCanvas:
-            xResult.set(getLockedCanvasContext(mnStartToken));
+            xResult.set(getLockedCanvasContext(nStartToken));
             break;
         case NMSP_dmlChart:
-            xResult.set(getChartShapeContext(mnStartToken));
+            xResult.set(getChartShapeContext(nStartToken));
             break;
         case NMSP_wps:
-            xResult.set(getWpsContext(mnStartToken, nElement));
+            xResult.set(getWpsContext(nStartToken, nElement));
             break;
         case NMSP_wpg:
-            xResult.set(getWpgContext(mnStartToken));
+            xResult.set(getWpgContext(nStartToken));
             break;
         default:
-            xResult.set(getGraphicShapeContext(mnStartToken));
+            xResult.set(getGraphicShapeContext(nStartToken));
             break;
     }
 
@@ -456,7 +456,7 @@ ShapeContextHandler::getShape()
         //NMSP_dmlChart == getNamespace( mnStartToken ) check is introduced to make sure that
         //mnStartToken is set as NMSP_dmlChart in setStartToken.
         //Only in case it is set then only the below block of code for ChartShapeContext should be executed.
-        else if (mxChartShapeContext.is() && (NMSP_dmlChart == getNamespace( mnStartToken )))
+        else if (mxChartShapeContext.is() && (NMSP_dmlChart == getNamespace( getStartToken() )))
         {
             ChartGraphicDataContext* pChartGraphicDataContext = dynamic_cast<ChartGraphicDataContext*>(mxChartShapeContext.get());
             if (pChartGraphicDataContext)
@@ -514,6 +514,8 @@ ShapeContextHandler::getShape()
         }
     }
 
+    if (xResult)
+        popStartToken();
     return xResult;
 }
 
@@ -537,12 +539,19 @@ void ShapeContextHandler::setRelationFragmentPath(const OUString & the_value)
 
 sal_Int32 ShapeContextHandler::getStartToken() const
 {
-    return mnStartToken;
+    assert(mnStartTokenStack.size() && "This stack must not be empty!");
+    return mnStartTokenStack.top();
 }
 
-void ShapeContextHandler::setStartToken( sal_Int32 _starttoken )
+void ShapeContextHandler::popStartToken()
 {
-    mnStartToken = _starttoken;
+    if (mnStartTokenStack.size() > 1)
+        mnStartTokenStack.pop();
+}
+
+void ShapeContextHandler::pushStartToken( sal_Int32 _starttoken )
+{
+    mnStartTokenStack.push(_starttoken);
 }
 
 void ShapeContextHandler::setPosition(const awt::Point& rPosition)
