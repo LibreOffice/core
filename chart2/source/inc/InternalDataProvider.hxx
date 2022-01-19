@@ -29,6 +29,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <rtl/ref.hxx>
 
 #include <map>
 
@@ -36,6 +37,7 @@ namespace com::sun::star::chart2 { class XChartDocument; }
 
 namespace chart
 {
+class UncachedDataSequence;
 
 namespace impl
 {
@@ -180,10 +182,10 @@ private:
     css::uno::Reference< css::chart2::data::XDataSequence >
         createDataSequenceAndAddToMap( const OUString & rRangeRepresentation,
                                        const OUString & rRole );
-    css::uno::Reference< css::chart2::data::XDataSequence >
+    rtl::Reference< UncachedDataSequence >
         createDataSequenceAndAddToMap( const OUString & rRangeRepresentation );
 
-    css::uno::Reference<css::chart2::data::XDataSequence>
+    rtl::Reference<UncachedDataSequence>
         createDataSequenceFromArray( const OUString& rArrayStr, std::u16string_view rRole,
             std::u16string_view rRoleQualifier);
 
