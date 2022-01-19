@@ -176,7 +176,7 @@ struct lcl_DataOperator : public lcl_Operator
 struct lcl_RowDescriptionsOperator : public lcl_Operator
 {
     lcl_RowDescriptionsOperator( const Sequence< OUString >& rRowDescriptions
-        , const Reference< chart2::XChartDocument >& xChartDoc )
+        , const rtl::Reference<::chart::ChartModel>& xChartDoc )
         : m_rRowDescriptions( rRowDescriptions )
         , m_xChartDoc(xChartDoc)
         , m_bDataInColumns(true)
@@ -200,14 +200,14 @@ struct lcl_RowDescriptionsOperator : public lcl_Operator
     }
 
     const Sequence< OUString >& m_rRowDescriptions;
-    Reference< chart2::XChartDocument > m_xChartDoc;
+    rtl::Reference<::chart::ChartModel> m_xChartDoc;
     bool m_bDataInColumns;
 };
 
 struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
 {
     lcl_ComplexRowDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexRowDescriptions
-        , const Reference< chart2::XChartDocument >& xChartDoc )
+        , const rtl::Reference<::chart::ChartModel>& xChartDoc )
         : m_rComplexRowDescriptions( rComplexRowDescriptions )
         , m_xChartDoc(xChartDoc)
         , m_bDataInColumns(true)
@@ -231,7 +231,7 @@ struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
     }
 
     const Sequence< Sequence< OUString > >& m_rComplexRowDescriptions;
-    Reference< chart2::XChartDocument > m_xChartDoc;
+    rtl::Reference<::chart::ChartModel> m_xChartDoc;
     bool m_bDataInColumns;
 };
 
@@ -259,7 +259,7 @@ struct lcl_AnyRowDescriptionsOperator : public lcl_Operator
 struct lcl_ColumnDescriptionsOperator : public lcl_Operator
 {
     lcl_ColumnDescriptionsOperator( const Sequence< OUString >& rColumnDescriptions
-        , const Reference< chart2::XChartDocument >& xChartDoc )
+        , const rtl::Reference<::chart::ChartModel>& xChartDoc )
         : m_rColumnDescriptions( rColumnDescriptions )
         , m_xChartDoc(xChartDoc)
         , m_bDataInColumns(true)
@@ -283,14 +283,14 @@ struct lcl_ColumnDescriptionsOperator : public lcl_Operator
     }
 
     const Sequence< OUString >& m_rColumnDescriptions;
-    Reference< chart2::XChartDocument > m_xChartDoc;
+    rtl::Reference<::chart::ChartModel> m_xChartDoc;
     bool m_bDataInColumns;
 };
 
 struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
 {
     lcl_ComplexColumnDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexColumnDescriptions
-        , const Reference< chart2::XChartDocument >& xChartDoc )
+        , const rtl::Reference<::chart::ChartModel>& xChartDoc )
         : m_rComplexColumnDescriptions( rComplexColumnDescriptions )
         , m_xChartDoc(xChartDoc)
         , m_bDataInColumns(true)
@@ -314,7 +314,7 @@ struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
     }
 
     const Sequence< Sequence< OUString > >& m_rComplexColumnDescriptions;
-    Reference< chart2::XChartDocument > m_xChartDoc;
+    rtl::Reference<::chart::ChartModel> m_xChartDoc;
     bool m_bDataInColumns;
 };
 
