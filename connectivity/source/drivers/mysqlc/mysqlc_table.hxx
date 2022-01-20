@@ -44,6 +44,13 @@ public:
     virtual ::connectivity::sdbcx::OCollection*
     createIndexes(const ::std::vector<OUString>& rNames) override;
 
+    /** Returns always "RENAME TABLE " even for views.
+    *
+    * \return The start of the rename statement.
+    * @see http://dev.mysql.com/doc/refman/5.1/de/rename-table.html
+    */
+    virtual OUString getRenameStart() const override;
+
     // XAlterTable
     /**
     * See css::sdbcx::ColumnDescriptor for details of
