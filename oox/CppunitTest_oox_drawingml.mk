@@ -42,6 +42,12 @@ $(eval $(call gb_CppunitTest_use_custom_headers,oox_drawingml,\
 
 $(eval $(call gb_CppunitTest_use_configuration,oox_drawingml))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,oox_drawingml, \
+    modules/simpress \
+    sfx \
+    svt \
+))
+
 $(eval $(call gb_CppunitTest_add_arguments,oox_drawingml, \
     -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 ))
