@@ -21,12 +21,14 @@
 #include <ReferenceSizeProvider.hxx>
 #include <memory>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
+class ChartModel;
 
 struct TitleDialogData
 {
@@ -37,11 +39,11 @@ struct TitleDialogData
 
     TitleDialogData(std::unique_ptr<ReferenceSizeProvider> pReferenzeSizeProvider = nullptr);
 
-    void readFromModel( const css::uno::Reference< css::frame::XModel >& xChartModel );
+    void readFromModel( const rtl::Reference<::chart::ChartModel>& xChartModel );
     /* return true if anything has changed;
     when pOldState is NULL then all data are written to the model
     */
-    bool writeDifferenceToModel( const css::uno::Reference< css::frame::XModel >& xChartModel
+    bool writeDifferenceToModel( const rtl::Reference<::chart::ChartModel>& xChartModel
                         , const css::uno::Reference< css::uno::XComponentContext >& xContext
                         , TitleDialogData* pOldState=nullptr );
 };

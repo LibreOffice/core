@@ -33,7 +33,7 @@ public:
     ObjectPropertiesDialogParameter( const OUString& rObjectCID );
     ~ObjectPropertiesDialogParameter();
 
-    void            init( const css::uno::Reference< css::frame::XModel >& xModel );
+    void            init( const rtl::Reference<::chart::ChartModel>& xModel );
     ObjectType      getObjectType() const { return m_eObjectType;}
     const OUString& getLocalizedName() const { return m_aLocalizedName;}
 
@@ -57,7 +57,7 @@ public:
     bool IsSupportingCategoryPositioning() const { return m_bSupportingCategoryPositioning;}
     const css::uno::Sequence< OUString >& GetCategories() const { return m_aCategories;}
 
-    const css::uno::Reference< css::chart2::XChartDocument >&
+    const rtl::Reference<::chart::ChartModel>&
         getDocument() const { return m_xChartDocument;}
 
     bool IsComplexCategoriesAxis() const { return m_bComplexCategoriesAxis;}
@@ -92,7 +92,7 @@ private:
     bool m_bSupportingCategoryPositioning;
     css::uno::Sequence< OUString > m_aCategories;
 
-    css::uno::Reference< css::chart2::XChartDocument > m_xChartDocument;
+    rtl::Reference<::chart::ChartModel> m_xChartDocument;
 
     bool m_bComplexCategoriesAxis;
 

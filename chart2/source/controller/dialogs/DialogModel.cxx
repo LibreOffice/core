@@ -414,7 +414,7 @@ DialogModelTimeBasedInfo::DialogModelTimeBasedInfo():
 }
 
 DialogModel::DialogModel(
-    const Reference< XChartDocument > & xChartDocument,
+    const rtl::Reference<::chart::ChartModel> & xChartDocument,
     const Reference< uno::XComponentContext > & xContext ) :
         m_xChartDocument( xChartDocument ),
         m_xContext( xContext ),
@@ -446,7 +446,7 @@ std::shared_ptr< RangeSelectionHelper > const &
     return m_spRangeSelectionHelper;
 }
 
-Reference< frame::XModel > DialogModel::getChartModel() const
+const rtl::Reference<::chart::ChartModel> & DialogModel::getChartModel() const
 {
     return m_xChartDocument;
 }
@@ -725,7 +725,7 @@ void DialogModel::detectArguments(
         if( m_xChartDocument.is())
         {
             (void)DataSourceHelper::detectRangeSegmentation(
-                Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY_THROW ),
+                m_xChartDocument,
                 rOutRangeString, aSequenceMapping, rOutUseColumns, rOutFirstCellAsLabel, rOutHasCategories );
         }
     }

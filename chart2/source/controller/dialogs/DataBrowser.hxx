@@ -43,6 +43,7 @@ namespace chart
 
 class DataBrowserModel;
 class NumberFormatterWrapper;
+class ChartModel;
 
 namespace impl
 {
@@ -97,7 +98,7 @@ public:
     void SetReadOnly( bool bNewState );
     bool IsReadOnly() const { return m_bIsReadOnly;}
 
-    void SetDataFromModel( const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
+    void SetDataFromModel( const rtl::Reference<::chart::ChartModel> & xChartDoc,
                            const css::uno::Reference< css::uno::XComponentContext > & xContext );
 
     // predicates to determine what actions are possible at the current cursor
@@ -145,7 +146,7 @@ public:
     void RenewSeriesHeaders();
 
 private:
-    css::uno::Reference< css::chart2::XChartDocument > m_xChartDoc;
+    rtl::Reference<::chart::ChartModel> m_xChartDoc;
     std::unique_ptr< DataBrowserModel > m_apDataBrowserModel;
 
     typedef std::vector< std::shared_ptr< impl::SeriesHeader > > tSeriesHeaderContainer;
