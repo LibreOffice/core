@@ -64,16 +64,7 @@ AboutDialog::AboutDialog(weld::Window* pParent)
     , m_xContentArea(m_xDialog->weld_content_area())
 {
     m_xDialog->add_button(GetStandardText(StandardButtonType::Close), RET_CLOSE);
-    m_xDialog->add_button(CuiResId(RID_SVXSTR_ABOUT_CREDITS), 101);
-    m_xDialog->add_button(CuiResId(RID_SVXSTR_ABOUT_WEBSITE), 102);
-    m_xDialog->add_button(CuiResId(RID_SVXSTR_ABOUT_RELEASE_NOTES), 103);
 
-    m_xCreditsButton.reset(m_xDialog->weld_widget_for_response(101));
-    m_xCreditsButton->set_secondary(true);
-    m_xWebsiteButton.reset(m_xDialog->weld_widget_for_response(102));
-    m_xWebsiteButton->set_secondary(true);
-    m_xReleaseNotesButton.reset(m_xDialog->weld_widget_for_response(103));
-    m_xReleaseNotesButton->set_secondary(true);
     m_xCloseButton.reset(m_xDialog->weld_widget_for_response(RET_CLOSE));
 
     m_buildIdLinkString = m_xDialog->get_website_label();
@@ -88,54 +79,11 @@ AboutDialog::AboutDialog(weld::Window* pParent)
     m_xDialog->connect_size_allocate(LINK(this, AboutDialog, SizeAllocHdl));
 
     // Connect all handlers
-    m_xCreditsButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
-    m_xWebsiteButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
-    m_xReleaseNotesButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
     m_xCloseButton->grab_focus();
 }
 
 AboutDialog::~AboutDialog()
 {
-}
-
-IMPL_LINK(AboutDialog, HandleClick, weld::Button&, rButton, void)
-{
-    OUString sURL = "";
-
-    // Find which button was pressed and from this, get the URL to be opened
-    if (&rButton == m_xCreditsButton.get())
-        sURL = CuiResId(RID_SVXSTR_ABOUT_CREDITS_URL);
-    else if (&rButton == m_xWebsiteButton.get())
-    {
-        sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
-        localizeWebserviceURI(sURL);
-    }
-    else if (&rButton == m_xReleaseNotesButton.get())
-    {
-        sURL = officecfg::Office::Common::Menus::ReleaseNotesURL::get() +
-               "?LOvers=" + utl::ConfigManager::getProductVersion() +
-               "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
-    }
-
-    // If the URL is empty, don't do anything
-    if ( sURL.isEmpty() )
-        return;
-    try
-    {
-        Reference< css::system::XSystemShellExecute > xSystemShellExecute(
-            css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext() ) );
-        xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
-    }
-    catch (const Exception&)
-    {
-        Any exc( ::cppu::getCaughtException() );
-        OUString msg( ::comphelper::anyToString( exc ) );
-        const SolarMutexGuard guard;
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(getDialog(),
-                                                       VclMessageType::Warning, VclButtonsType::Ok, msg));
-        xErrorBox->set_title(m_xDialog->get_title());
-        xErrorBox->run();
-    }
 }
 
 void AboutDialog::SetBuildIdLink()
@@ -152,7 +100,7 @@ void AboutDialog::SetBuildIdLink()
         }
 
         m_xDialog->set_website_label(m_buildIdLinkString.replaceAll("$GITHASH", buildId));
-        m_xDialog->set_website("https://hub.libreoffice.org/git-core/" + buildId);
+        m_xDialog->set_website(OUString());
     }
     else
     {
