@@ -23,6 +23,7 @@
 #include <BaseGFXHelper.hxx>
 #include <VLineProperties.hxx>
 #include <ShapeFactory.hxx>
+#include <Diagram.hxx>
 
 #include <CommonConverters.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -2360,8 +2361,8 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
 
     if( xTarget.is() )
     {
-        uno::Reference< XCoordinateSystemContainer > xCooSysCnt( rModel.getFirstDiagram(), uno::UNO_QUERY );
-        Reference< chart2::XCoordinateSystem > xCooSys(xCooSysCnt->getCoordinateSystems()[0]);
+        rtl::Reference< Diagram > xDiagram = rModel.getFirstChartDiagram();
+        Reference< chart2::XCoordinateSystem > xCooSys(xDiagram->getCoordinateSystems()[0]);
         Reference< beans::XPropertySet > xProp( xCooSys, uno::UNO_QUERY );
         bool bSwapXAndY = false;
 

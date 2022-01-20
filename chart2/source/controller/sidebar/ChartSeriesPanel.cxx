@@ -35,6 +35,7 @@
 #include <ChartModel.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <StatisticsHelper.hxx>
 
@@ -227,9 +228,8 @@ void setAttachedAxisType(const rtl::Reference<::chart::ChartModel>&
 css::uno::Reference<css::chart2::XChartType> getChartType(
         const rtl::Reference<::chart::ChartModel>& xModel)
 {
-    css::uno::Reference<css::chart2::XDiagram> xDiagram = xModel->getFirstDiagram();
-    css::uno::Reference< css::chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, UNO_QUERY_THROW );
-    css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
+    rtl::Reference<Diagram> xDiagram = xModel->getFirstChartDiagram();
+    css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > xCooSysSequence( xDiagram->getCoordinateSystems());
     css::uno::Reference< css::chart2::XChartTypeContainer > xChartTypeContainer( xCooSysSequence[0], UNO_QUERY_THROW );
     css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
     return xChartTypeSequence[0];

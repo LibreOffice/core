@@ -406,17 +406,14 @@ void ChartElementsPanel::Initialize()
 
 namespace {
 
-css::uno::Reference<css::chart2::XChartType> getChartType(const css::uno::Reference<css::frame::XModel>& xModel)
+css::uno::Reference<css::chart2::XChartType> getChartType(const rtl::Reference<ChartModel>& xModel)
 {
-    css::uno::Reference<css::chart2::XChartDocument> xChartDoc(xModel, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<chart2::XDiagram > xDiagram = xChartDoc->getFirstDiagram();
+    rtl::Reference<Diagram > xDiagram = xModel->getFirstChartDiagram();
     if (!xDiagram.is()) {
         return css::uno::Reference<css::chart2::XChartType>();
     }
 
-    css::uno::Reference<css::chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, css::uno::UNO_QUERY_THROW );
-
-    css::uno::Sequence<css::uno::Reference<css::chart2::XCoordinateSystem>> xCooSysSequence(xCooSysContainer->getCoordinateSystems());
+    css::uno::Sequence<css::uno::Reference<css::chart2::XCoordinateSystem>> xCooSysSequence(xDiagram->getCoordinateSystems());
 
     if (!xCooSysSequence.hasElements())
         return css::uno::Reference<css::chart2::XChartType>();
