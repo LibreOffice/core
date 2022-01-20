@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba114993_1aa248d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-20T14:34:13Z",
+      "side": 1,
+      "message": "Heiko, this patch had received a +2 from you, but since I had to rebase it, it lost the +2 you gave. Is there anything else I need to do for this patch, or is it good for merging?",
+      "revId": "2ea696a2c8998be674c17f60c9eec9b43b91357d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
