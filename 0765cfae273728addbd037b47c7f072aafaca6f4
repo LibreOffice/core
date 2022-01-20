@@ -16,6 +16,23 @@
       "message": "@Attila: very nice fix! If you can cut the fixed problem from the bug doc,  we could close the issue with a minimized test document, filing the remaining problems in the issue tracker, if needed.",
       "revId": "0765cfae273728addbd037b47c7f072aafaca6f4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9aef5bd2_fd76ebf5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-20T07:44:41Z",
+      "side": 1,
+      "message": "@Laszlo: Thank you for the so quick response. Unfortunately this not solve the original problem just only the minimised one (but if i think well there is an exception because the group-shape has invisible parts when the VML formula inside.) So better fix coming, but do not worry this is only the first attempt (except from the local changes) ;)",
+      "revId": "0765cfae273728addbd037b47c7f072aafaca6f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
