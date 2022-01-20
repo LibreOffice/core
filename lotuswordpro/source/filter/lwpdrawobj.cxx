@@ -1372,10 +1372,14 @@ void LwpDrawBitmap::Read()
     // 20 == length of draw-specific fields.
     // 14 == length of bmp file header.
     m_aBmpRec.nFileSize = m_aObjHeader.nRecLen - 20 + 14;
-    m_pImageData.reset( new sal_uInt8 [m_aBmpRec.nFileSize] );
 
     BmpInfoHeader2 aInfoHeader2;
     m_pStream->ReadUInt32( aInfoHeader2.nHeaderLen );
+
+    if (!m_pStream->good())
+        throw BadRead();
+
+    m_pImageData.reset( new sal_uInt8 [m_aBmpRec.nFileSize] );
 
     sal_uInt32 N;
     sal_uInt32 rgbTableSize;
