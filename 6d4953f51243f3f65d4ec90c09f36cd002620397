@@ -225,6 +225,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bb0df43_fc286602",
+        "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-20T14:36:32Z",
+      "side": 1,
+      "message": "I agree. I\u0027ll prepare a draft with UI improvements and submit it initially in Bugzilla for discussion.",
+      "parentUuid": "5aaaca80_bbfd99c4",
+      "range": {
+        "startLine": 584,
+        "startChar": 193,
+        "endLine": 584,
+        "endChar": 215
+      },
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1321b354_a3371f0f",
