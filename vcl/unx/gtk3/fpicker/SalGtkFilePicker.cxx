@@ -1926,7 +1926,9 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
                 if (!aTokens.isEmpty())
                     aTokens.append(",");
                 aTokens.append(aToken);
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+                gtk_file_filter_add_suffix(filter, aToken.toUtf8().getStr());
+#else
                 gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_URI,
                     case_insensitive_filter,
                     g_strdup( OUStringToOString(aToken, RTL_TEXTENCODING_UTF8).getStr() ),
