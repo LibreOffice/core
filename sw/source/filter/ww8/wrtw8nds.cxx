@@ -394,7 +394,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
     return nMinPos;
 }
 
-void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars, bool bPostponeSingleUse)
+void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
 {
     m_rExport.AttrOutput().RTLAndCJKState( mbCharIsRTL, GetScript() );
 
@@ -457,13 +457,6 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars, bool bPostpo
                         }
                         nWhichId = aIter.NextWhich();
                     }
-                }
-                else if (bPostponeSingleUse &&
-                         (nWhich == RES_TXTATR_FTN || nWhich == RES_TXTATR_ANNOTATION || nWhich == RES_TXTATR_FIELD))
-                {
-                    // Do not duplicate these multiple times when the character run is split.
-                    // Skip this time - it will be attempted later.
-                    // ?? also RES_TXTATR_REFMARK: RES_TXTATR_TOXMARK: RES_TXTATR_META: RES_TXTATR_METAFIELD: ??
                 }
                 else
                     aRangeItems[nWhich] = (&(pHt->GetAttr()));
@@ -2388,6 +2381,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nCurrentPos );
             bool bPostponeWritingText    = false ;
+            bool bStartedPostponedRunProperties = false;
             OUString aSavedSnippet ;
 
             sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nCurrentPos );
@@ -2655,8 +2649,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             {
                 // Output the character attributes
                 // #i51277# do this before writing flys at end of paragraph
+                bStartedPostponedRunProperties = true;
                 AttrOutput().StartRunProperties();
-                aAttrIter.OutAttr(nCurrentPos, false, bPostponeWritingText);
+                aAttrIter.OutAttr(nCurrentPos, false);
                 AttrOutput().EndRunProperties( pRedlineData );
             }
 
@@ -2758,26 +2753,25 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             AttrOutput().WritePostitFieldReference();
 
-            if (bPostponeWritingText
-                && (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame))
+            if (bPostponeWritingText)
             {
-                AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
-                //write the postponed text run
-                AttrOutput().StartRun( pRedlineData, nCurrentPos, bSingleEmptyRun );
-                AttrOutput().SetAnchorIsLinkedToNode( false );
-                AttrOutput().ResetFlyProcessingFlag();
-                if (0 != nEnd)
+                if (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame)
+                {
+                    AttrOutput().EndRun(&rNode, nCurrentPos, /*bLastRun=*/false);
+
+                    AttrOutput().StartRun( pRedlineData, nCurrentPos, bSingleEmptyRun );
+                    AttrOutput().SetAnchorIsLinkedToNode( false );
+                    AttrOutput().ResetFlyProcessingFlag();
+                }
+                if (0 != nEnd && !bStartedPostponedRunProperties)
                 {
                     AttrOutput().StartRunProperties();
                     aAttrIter.OutAttr( nCurrentPos, false );
                     AttrOutput().EndRunProperties( pRedlineData );
+
+                    // OutAttr may have introduced new comments, so write them out now
+                    AttrOutput().WritePostitFieldReference();
                 }
-                AttrOutput().RunText( aSavedSnippet, eChrSet );
-                AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
-            }
-            else if( bPostponeWritingText && !aSavedSnippet.isEmpty() )
-            {
-                //write the postponed text run
                 AttrOutput().RunText( aSavedSnippet, eChrSet );
                 AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
             }
