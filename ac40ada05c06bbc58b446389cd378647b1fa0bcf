@@ -33,6 +33,24 @@
       "message": "Hi Xisco, you may have an idea why the update of the index doesn\u0027t work here? Updating it manually works in the ui test.",
       "revId": "ac40ada05c06bbc58b446389cd378647b1fa0bcf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b5a6145_66424b53",
+        "filename": "sw/qa/uitest/writer_tests5/tdf106899.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-20T09:02:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2af44b01_46f77819",
+      "revId": "ac40ada05c06bbc58b446389cd378647b1fa0bcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

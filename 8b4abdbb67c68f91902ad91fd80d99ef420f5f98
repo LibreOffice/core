@@ -50,6 +50,24 @@
       "message": "I\u0027m not sure it makes sense. The function should return the detected encoding. If it didn\u0027t detect, it needs to tell so, not lie with some random unrelated result. It\u0027s up to the call site to decide what to do on RTL_TEXTENCODING_DONTKNOW IMO. Even though it makes the call site a bit less pretty ;)",
       "revId": "8b4abdbb67c68f91902ad91fd80d99ef420f5f98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "585144ed_b66dc17f",
+        "filename": "sw/source/filter/basflt/iodetect.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-20T09:02:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8056343a_cf106d3b",
+      "revId": "8b4abdbb67c68f91902ad91fd80d99ef420f5f98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
