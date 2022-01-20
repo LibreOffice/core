@@ -2756,11 +2756,24 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
                             {
                                 const sal_Unicode c = aLine[nPos];
                                 // Ignore NO-BREAK spaces, NBSP, NNBSP, ZWNBSP.
-                                if (c != 0x00A0 && c != 0x202F && c != 0xFEFF)
+                                if (c == 0x00A0 || c == 0x202F || c == 0xFEFF)
+                                    break;
+                                if (c == '-' && nPos + 1 < nMaxNewChars)
                                 {
-                                    nMaxNewChars = nPos + 1;    // line break after
-                                    nPos = 0;   // will break loop
+                                    // Keep HYPHEN-MINUS with a number to the right.
+                                    const sal_Int16 t = unicode::getUnicodeType(aLine[nPos+1]);
+                                    if (    t == css::i18n::UnicodeType::DECIMAL_DIGIT_NUMBER ||
+                                            t == css::i18n::UnicodeType::LETTER_NUMBER ||
+                                            t == css::i18n::UnicodeType::OTHER_NUMBER)
+                                        nMaxNewChars = nPos;        // line break before
+                                    else
+                                        nMaxNewChars = nPos + 1;    // line break after
                                 }
+                                else
+                                {
+                                    nMaxNewChars = nPos + 1;        // line break after
+                                }
+                                nPos = 0;   // will break loop
                             }
                     }
                 }
