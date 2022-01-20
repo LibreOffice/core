@@ -238,7 +238,8 @@ std::unique_ptr<SfxChildWindow> SfxChildWindow::CreateChildWindow( sal_uInt16 nI
             {
                 if ( pBindings )
                     pBindings->ENTERREGISTRATIONS();
-                SfxChildWinInfo aInfo = nId == SID_SEARCH_DLG ? rInfo : rFactInfo;
+                SfxChildWinInfo aInfo = (nId == SID_SEARCH_DLG || nId == SID_NAVIGATOR) ?
+                            rInfo : rFactInfo;
                 Application::SetSystemWindowMode( SystemWindowFlags::NOAUTOMODE );
                 pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
                 Application::SetSystemWindowMode( nOldMode );
