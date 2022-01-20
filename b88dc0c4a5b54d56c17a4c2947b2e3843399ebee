@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9419217_74966336",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-20T19:01:27Z",
+      "side": 1,
+      "message": "sberg, so there definitely were some issues in that commit that ASAN flagged, and this changed fixes that.\n\nHowever, I still get an ASAN failure even with these fixes, and I cannot see why.\n\nIf there truly was a nullptr there, I would expect it to fail a normal build too.\n\nI have tried making more stuff public in chart2/ (assuming it might be some kind of symbol visibility issue confusing ASAN), but that did not help.\n",
+      "revId": "b88dc0c4a5b54d56c17a4c2947b2e3843399ebee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
