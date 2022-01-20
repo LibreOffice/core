@@ -234,7 +234,7 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
  *      the corresponding drawing objects.
  * @param   pDrawObjVector   a container which will contains the created drawing object of XF-Model.
  */
-XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
+rtl::Reference<XFDrawGroup> LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
 {
     //flag
     unsigned char BinSignature[2];
@@ -263,7 +263,7 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
     // fileSize
     m_pStream->SeekRel(2);
 
-    XFDrawGroup* pXFDrawGroup = new XFDrawGroup();
+    rtl::Reference<XFDrawGroup> xXFDrawGroup(new XFDrawGroup());
 
     if (nRecCount > m_pStream->remainingSize())
     {
@@ -284,12 +284,12 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
             }
             else
             {
-                pXFDrawGroup->Add(xXFDrawObj.get());
+                xXFDrawGroup->Add(xXFDrawObj.get());
             }
         }
     }
 
-    return pXFDrawGroup;
+    return xXFDrawGroup;
 }
 
 /**
