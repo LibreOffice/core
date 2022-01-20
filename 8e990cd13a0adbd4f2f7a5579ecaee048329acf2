@@ -34,6 +34,24 @@
       "parentUuid": "f308283c_ab05cbc0",
       "revId": "8e990cd13a0adbd4f2f7a5579ecaee048329acf2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01cb6f55_394a0298",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-20T14:43:40Z",
+      "side": 1,
+      "message": "What I mean is to size the dialog larger from the beginning.",
+      "parentUuid": "35d26fad_7aa42cf2",
+      "revId": "8e990cd13a0adbd4f2f7a5579ecaee048329acf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
