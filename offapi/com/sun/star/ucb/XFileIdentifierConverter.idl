@@ -33,7 +33,7 @@ published interface XFileIdentifierConverter : com::sun::star::uno::XInterface
 {
     /** Get information about the "locality" of a file content provider.
 
-        <p>The returned information can be used to chose the "best" among a
+        <p>The returned information can be used to choose the "best" among a
         number of file content providers implementing this interface.
 
         @param BaseURL
