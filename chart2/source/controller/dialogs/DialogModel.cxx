@@ -30,6 +30,7 @@
 #include <ChartTypeTemplate.hxx>
 #include <ThreeDHelper.hxx>
 #include <ChartModel.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -472,12 +473,11 @@ std::vector< Reference< XDataSeriesContainer > >
         rtl::Reference< Diagram > xDiagram = m_xChartDocument->getFirstChartDiagram();
         if( xDiagram.is())
         {
-            const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
-                xDiagram->getCoordinateSystems());
-            for( Reference< XCoordinateSystem > const & coords : aCooSysSeq )
+            const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysSeq(
+                xDiagram->getBaseCoordinateSystems());
+            for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysSeq )
             {
-                Reference< XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
-                const Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
+                const Sequence< Reference< XChartType > > aChartTypeSeq( coords->getChartTypes());
                 std::transform(
                     aChartTypeSeq.begin(), aChartTypeSeq.end(),
                     std::back_inserter( aResult ),

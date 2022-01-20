@@ -38,6 +38,7 @@
 #include <Diagram.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <StatisticsHelper.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <comphelper/processfactory.hxx>
 
@@ -229,9 +230,8 @@ css::uno::Reference<css::chart2::XChartType> getChartType(
         const rtl::Reference<::chart::ChartModel>& xModel)
 {
     rtl::Reference<Diagram> xDiagram = xModel->getFirstChartDiagram();
-    css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > xCooSysSequence( xDiagram->getCoordinateSystems());
-    css::uno::Reference< css::chart2::XChartTypeContainer > xChartTypeContainer( xCooSysSequence[0], UNO_QUERY_THROW );
-    css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > xCooSysSequence( xDiagram->getBaseCoordinateSystems());
+    css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > xChartTypeSequence( xCooSysSequence[0]->getChartTypes() );
     return xChartTypeSequence[0];
 }
 
