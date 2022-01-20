@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#pragma once
+
+#include <sal/types.h>
+
 namespace i18npool {
 
 const sal_Unicode table_AIUFullWidth_ja_JP[] = {

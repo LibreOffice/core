@@ -29,7 +29,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <jvmaccess/virtualmachine.hxx>
 #include <jvmaccess/unovirtualmachine.hxx>
-#include <osl/mutex.hxx>
 
 namespace {
 

@@ -7,11 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <rtl/ustring.hxx>
+
 #include <memory>
 #include <cstdlib>
 #include <cassert>
 #include <iostream>
-#include <fstream>
 #include <iomanip>
 #include <string_view>
 

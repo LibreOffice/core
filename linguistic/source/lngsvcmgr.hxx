@@ -34,7 +34,6 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vector>
-#include <memory>
 #include <optional>
 
 class SpellCheckerDispatcher;

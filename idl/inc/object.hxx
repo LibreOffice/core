@@ -21,7 +21,9 @@
 #define INCLUDED_IDL_INC_OBJECT_HXX
 
 #include "types.hxx"
-#include "slot.hxx"
+
+#include <tools/solar.h>
+
 #include <vector>
 
 class SvMetaClass;

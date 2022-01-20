@@ -21,7 +21,6 @@
 #define INCLUDED_LINGUISTIC_SOURCE_LNGOPT_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multiinterfacecontainer3.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>

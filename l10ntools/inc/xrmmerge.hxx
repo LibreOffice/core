@@ -26,6 +26,11 @@
 #include <fstream>
 #include <string_view>
 
+#include <rtl/string.hxx>
+
+#include "export.hxx"
+#include "po.hxx"
+
 /// Parser for *.xrm and description.xml files
 class XRMResParser
 {

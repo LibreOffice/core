@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <vector>
-#include <memory>
 #include <optional>
 
 namespace com::sun::star::i18n { class XLocaleData5; }

@@ -22,7 +22,6 @@
 #include <unordered_set>
 
 #include <mutex>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>

@@ -18,13 +18,10 @@
  */
 
 
-#include <limits.h>
 #include <bastype.hxx>
 #include <lex.hxx>
-#include <globals.hxx>
 #include <hash.hxx>
 #include <database.hxx>
-#include <tools/stream.hxx>
 
 bool SvBOOL::ReadSvIdl( SvStringHashEntry const * pName, SvTokenStream & rInStm )
 {

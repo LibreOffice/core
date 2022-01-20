@@ -11,7 +11,6 @@
 #include <gdk/gdkkeysyms.h>
 
 #include <iostream>
-#include <sstream>
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

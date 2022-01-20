@@ -21,7 +21,6 @@
 #include <HelpLinker.hxx>
 #include <sal/main.h>
 #include <iostream>
-#include <memory>
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {

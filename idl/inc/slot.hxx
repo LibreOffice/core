@@ -21,7 +21,8 @@
 #define INCLUDED_IDL_INC_SLOT_HXX
 
 #include "types.hxx"
-#include "command.hxx"
+
+#include <tools/solar.h>
 
 class SvMetaSlot : public SvMetaAttribute
 {

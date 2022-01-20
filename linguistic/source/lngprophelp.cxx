@@ -19,7 +19,6 @@
 
 
 #include <tools/debug.hxx>
-#include <sal/macros.h>
 #include <sal/log.hxx>
 
 #include <com/sun/star/linguistic2/LinguServiceEvent.hpp>

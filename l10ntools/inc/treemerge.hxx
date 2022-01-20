@@ -12,7 +12,6 @@
 
 #include <libxml/tree.h>
 #include <rtl/string.hxx>
-#include <vector>
 
 /**
   Class for localization of *.tree files

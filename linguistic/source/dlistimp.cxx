@@ -19,7 +19,6 @@
 
 
 #include <cppuhelper/factory.hxx>
-#include <i18nlangtag/mslangid.hxx>
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>

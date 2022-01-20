@@ -20,9 +20,7 @@
 #ifndef INCLUDED_LINGUCOMPONENT_SOURCE_LINGUTIL_LINGUTIL_HXX
 #define INCLUDED_LINGUCOMPONENT_SOURCE_LINGUTIL_LINGUTIL_HXX
 
-#include <com/sun/star/lang/Locale.hpp>
 #include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
 
 #include <vector>
 

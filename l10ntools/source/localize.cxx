@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <cstddef>
 #include <cstdlib>
 #include <iostream>
 #include <string>

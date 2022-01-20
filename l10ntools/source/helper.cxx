@@ -9,7 +9,10 @@
 
 #include <sal/config.h>
 
+#include <libxml/parser.h>
+
 #include <o3tl/safeint.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <helper.hxx>
 

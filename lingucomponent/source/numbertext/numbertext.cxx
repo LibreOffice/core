@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <iostream>
 #include <mutex>
 
 #include <osl/file.hxx>
@@ -26,18 +25,14 @@
 
 #include <sal/config.h>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XNumberText.hpp>
 #include <unotools/pathoptions.hxx>
 #include <osl/thread.h>
-
-#include <sal/macros.h>
 
 #include <Numbertext.hxx>
 

@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <sal/types.h>
+
 namespace i18npool {
 
 /*
