@@ -81,4 +81,6 @@ $(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
 
 $(eval $(call gb_CppunitTest_use_configuration,starmath_qa_cppunit))
 
+$(eval $(call gb_CppunitTest_use_more_fonts,starmath_qa_cppunit))
+
 # vim: set noet sw=4 ts=4:
