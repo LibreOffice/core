@@ -36,6 +36,7 @@ ScVbaFileDialog::ScVbaFileDialog( const uno::Reference< XHelperInterface >& xPar
     : ScVbaFileDialog_BASE( xParent, xContext)
     , m_nType(nType)
     , m_sTitle("FileDialog")
+    , m_bMultiSelectMode(false)
 {}
 
 uno::Any
@@ -62,6 +63,16 @@ css::uno::Any ScVbaFileDialog::getTitle() { return uno::makeAny( m_sTitle ); }
 void ScVbaFileDialog::setTitle( const css::uno::Any& rTitle )
 {
     rTitle >>= m_sTitle;
+}
+
+uno::Any ScVbaFileDialog::getAllowMultiSelect()
+{
+    return uno::makeAny(m_bMultiSelectMode);
+}
+
+void ScVbaFileDialog::setAllowMultiSelect(const uno::Any& rAllowMultiSelect)
+{
+    rAllowMultiSelect >>= m_bMultiSelectMode;
 }
 
 uno::Reference< excel::XFileDialogSelectedItems > SAL_CALL ScVbaFileDialog::getSelectedItems()

@@ -17,6 +17,11 @@ class ScVbaFileDialogSelectedItems final : public FileDialogSelectedItems_BASE
 {
     const std::vector<OUString> m_sItems;
 public:
+    std::vector<OUString> const& getItems()
+    {
+        return m_sItems;
+    }
+
     ScVbaFileDialogSelectedItems( const css::uno::Reference< ov::XHelperInterface >& xParent,
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
             std::vector<OUString>&& sItems);
