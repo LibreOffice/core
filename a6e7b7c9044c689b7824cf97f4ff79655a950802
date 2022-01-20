@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d87c69b6_51ffd00a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-20T16:00:53Z",
+      "side": 1,
+      "message": "I get a std::system_error on activating presentation mode with a \"fine dissolve\" opengl transition which looks a similar class of problem to this",
+      "revId": "a6e7b7c9044c689b7824cf97f4ff79655a950802",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
