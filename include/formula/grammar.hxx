@@ -33,7 +33,7 @@ class FORMULA_DLLPUBLIC FormulaGrammar
 {
 public:
     enum AddressConvention{
-        CONV_UNSPECIFIED = -1,  /* useful when we want method to chose, must be first */
+        CONV_UNSPECIFIED = -1,  /* useful when we want method to choose, must be first */
 
         /* elements must be sequential and changes should be reflected in ScCompiler::pCharTables */
         CONV_OOO     =  0,  /* 'doc'#sheet.A1:sheet2.B2 */

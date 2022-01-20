@@ -255,7 +255,7 @@ namespace pcr
         */
         bool impl_dialogFilterOrSort_nothrow( bool _bFilter, OUString& _out_rSelectedClause, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
-        /** executes a dialog which allows the user to chose the columns linking
+        /** executes a dialog which allows the user to choose the columns linking
             a sub to a master form, and sets the respective MasterFields / SlaveFields
             properties at the form.
             @precond
