@@ -22,7 +22,7 @@
 
 
 #include <sal/types.h>
-#include <tools/globname.hxx>
+#include <rtl/string.hxx>
 
 class SvStringHashEntry;
 class SvIdlDataBase;

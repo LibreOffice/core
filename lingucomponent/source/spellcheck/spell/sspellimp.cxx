@@ -23,12 +23,9 @@
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -38,14 +35,12 @@
 #include <hunspell.hxx>
 #include "sspellimp.hxx"
 
-#include <linguistic/lngprops.hxx>
+#include <linguistic/misc.hxx>
 #include <linguistic/spelldta.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/strings.hrc>
-#include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/resmgr.hxx>
-#include <unotools/useroptions.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>

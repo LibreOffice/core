@@ -21,7 +21,6 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
-#include <memory>
 #include <optional>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

@@ -62,7 +62,6 @@
 #include <xfilter/xfcell.hxx>
 #include <xfilter/xfcontent.hxx>
 #include <rtl/ref.hxx>
-#include <map>
 
 class XFCell;
 class XFTable;

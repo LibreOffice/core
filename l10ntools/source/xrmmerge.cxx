@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cstring>
-
 #include <stdio.h>
 
 #include <common.hxx>
@@ -31,7 +29,6 @@
 #include <tokens.h>
 #include <helper.hxx>
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <memory>
 

@@ -14,7 +14,6 @@
 
 #include <sal/config.h>
 
-#include <iostream>
 #include <string_view>
 
 #include <rtl/string.hxx>

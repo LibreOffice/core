@@ -18,9 +18,7 @@
  */
 
 #include <module.hxx>
-#include <globals.hxx>
 #include <database.hxx>
-#include <osl/file.hxx>
 
 SvMetaModule::SvMetaModule() {}
 

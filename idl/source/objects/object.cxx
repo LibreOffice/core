@@ -22,12 +22,12 @@
 #include <algorithm>
 
 #include <rtl/strbuf.hxx>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 #include <object.hxx>
 #include <globals.hxx>
 #include <database.hxx>
+#include <slot.hxx>
 
 
 SvClassElement::SvClassElement()

@@ -22,8 +22,6 @@
 #include <rtl/character.hxx>
 
 #include <basobj.hxx>
-#include <module.hxx>
-#include <globals.hxx>
 #include <database.hxx>
 
 void SvMetaObject::WriteTab( SvStream & rOutStm, sal_uInt16 nTab )

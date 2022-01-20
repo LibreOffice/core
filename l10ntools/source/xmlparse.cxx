@@ -18,19 +18,17 @@
  */
 #include <sal/config.h>
 
-#include <iterator> /* std::iterator*/
-
 #include <cassert>
 #include <stdio.h>
 #include <string_view>
 
 #include <helper.hxx>
-#include <common.hxx>
 #include <xmlparse.hxx>
 #include <fstream>
 #include <iostream>
-#include <osl/thread.hxx>
+#include <osl/file.hxx>
 #include <osl/process.h>
+#include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <unicode/regex.h>
 

@@ -308,8 +308,6 @@ protected:
     void Read() override;
 };
 
-#include "lwpcelllayout.hxx"
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

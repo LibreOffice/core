@@ -24,7 +24,6 @@
 #include <com/sun/star/io/IOException.hpp>
 
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
