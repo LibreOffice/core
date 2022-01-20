@@ -193,8 +193,6 @@ void SAL_CALL ChartModel::initialize( const Sequence< Any >& /*rArguments*/ )
 
 ChartView* ChartModel::getChartView() const
 {
-    if(!mxChartView.is())
-        mxChartView = new ChartView( m_xContext, const_cast<ChartModel&>(*this));
     return mxChartView.get();
 }
 

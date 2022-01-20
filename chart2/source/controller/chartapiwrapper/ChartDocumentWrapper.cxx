@@ -1231,22 +1231,20 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
     {
         if( !m_xChartView.is() )
         {
-            rtl::Reference<ChartModel> pModel = m_spChart2ModelContact->getDocumentModel();
-            ChartView* pChartView = pModel->getChartView();
-            if(pChartView)
-            {
-                try
-                {
-                    m_xChartView = pChartView;
+            rtl::Reference<::chart::ChartModel> pChartModel = new ::chart::ChartModel(m_spChart2ModelContact->m_xContext);
+            rtl::Reference<ChartView> xChartView = new ::chart::ChartView(m_spChart2ModelContact->m_xContext, *pChartModel);
 
-                    Sequence< Any > aArguments{ Any(Reference<frame::XModel>(this)),
-                                                Any(true) }; // bRefreshAddIn
-                    pChartView->initialize(aArguments);
-                }
-                catch (const uno::Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION("chart2");
-                }
+            try
+            {
+                m_xChartView = xChartView;
+
+                Sequence< Any > aArguments{ Any(Reference<frame::XModel>(this)),
+                                            Any(true) }; // bRefreshAddIn
+                xChartView->initialize(aArguments);
+            }
+            catch (const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
         xResult.set( static_cast<cppu::OWeakObject*>(m_xChartView.get()) );
