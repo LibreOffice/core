@@ -13,9 +13,13 @@
 #include <utility>
 #include <algorithm>
 #include <initializer_list>
+#include <vector>
+
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+
+#include <comphelper/comphelperdllapi.h>
 
 namespace comphelper
 {
@@ -48,6 +52,8 @@ namespace comphelper
                        });
         return vResult;
     }
+
+    COMPHELPER_DLLPUBLIC std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson);
 }   // namespace comphelper
 
 
