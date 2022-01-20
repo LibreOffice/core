@@ -161,6 +161,15 @@ struct CurlOption
     }
 };
 
+// NOBODY will prevent logging the response body in ProcessRequest() exception
+// handler, so only use it if logging is disabled
+const CurlOption g_NoBody{ CURLOPT_NOBODY,
+                           sal_detail_log_report(SAL_DETAIL_LOG_LEVEL_INFO, "ucb.ucp.webdav.curl")
+                                   == SAL_DETAIL_LOG_ACTION_IGNORE
+                               ? 1L
+                               : 0L,
+                           nullptr };
+
 /// combined guard class to ensure things are released in correct order,
 /// particularly in ProcessRequest() error handling
 class Guard
@@ -332,7 +341,8 @@ static size_t write_callback(char* const ptr, size_t const size, size_t const nm
     {
         return 0; // that is an error
     }
-    if (200 <= *oResponseCode && *oResponseCode < 300)
+    // always write, for exception handler in ProcessRequest()
+    //    if (200 <= *oResponseCode && *oResponseCode < 300)
     {
         try
         {
@@ -1271,49 +1281,48 @@ auto CurlProcessor::ProcessRequest(
         }
 
         ResponseHeaders headers(rSession.m_pCurl.get());
-        uno::Reference<io::XSequenceOutputStream> xSeqOutStream;
-        uno::Reference<io::XOutputStream> xDebugOutStream;
-        if (!pxOutStream)
-        {
-            xSeqOutStream = io::SequenceOutputStream::create(rSession.m_xContext);
-            xDebugOutStream = xSeqOutStream;
-        }
+        // always pass a stream for debug logging, buffer the result body
+        uno::Reference<io::XSequenceOutputStream> const xSeqOutStream(
+            io::SequenceOutputStream::create(rSession.m_xContext));
+        uno::Reference<io::XOutputStream> const xTempOutStream(xSeqOutStream);
+        assert(xTempOutStream.is());
 
         try
         {
-            ProcessRequestImpl(rSession, rURI, pRequestHeaderList.get(),
-                               pxOutStream ? pxOutStream : &xDebugOutStream,
+            ProcessRequestImpl(rSession, rURI, pRequestHeaderList.get(), &xTempOutStream,
                                pxInStream ? &data : nullptr, pRequestedHeaders, headers);
+            if (pxOutStream)
+            { // only copy to result stream if transfer was successful
+                (*pxOutStream)->writeBytes(xSeqOutStream->getWrittenBytes());
+                (*pxOutStream)->closeOutput(); // signal EOF
+            }
         }
         catch (DAVException const& rException)
         {
-            if (xDebugOutStream.is())
+            // log start of request body if there was any
+            auto const bytes(xSeqOutStream->getWrittenBytes());
+            auto const len(::std::min<sal_Int32>(bytes.getLength(), 10000));
+            SAL_INFO("ucb.ucp.webdav.curl",
+                     "DAVException; (first) " << len << " bytes of data received:");
+            if (0 < len)
             {
-                auto const bytes(xSeqOutStream->getWrittenBytes());
-                auto const len(::std::min<sal_Int32>(bytes.getLength(), 10000));
-                SAL_INFO("ucb.ucp.webdav.curl",
-                         "DAVException; (first) " << len << " bytes of data received:");
-                if (0 < len)
+                OStringBuffer buf(len);
+                for (sal_Int32 i = 0; i < len; ++i)
                 {
-                    OStringBuffer buf(len);
-                    for (sal_Int32 i = 0; i < len; ++i)
+                    if (bytes[i] < 0x20) // also if negative
                     {
-                        if (bytes[i] < 0x20) // also if negative
-                        {
-                            static char const hexDigit[16]
-                                = { '0', '1', '2', '3', '4', '5', '6', '7',
-                                    '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-                            buf.append("\\x");
-                            buf.append(hexDigit[static_cast<sal_uInt8>(bytes[i]) >> 4]);
-                            buf.append(hexDigit[bytes[i] & 0x0F]);
-                        }
-                        else
-                        {
-                            buf.append(static_cast<char>(bytes[i]));
-                        }
+                        static char const hexDigit[16] = { '0', '1', '2', '3', '4', '5', '6', '7',
+                                                           '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+                        buf.append("\\x");
+                        buf.append(hexDigit[static_cast<sal_uInt8>(bytes[i]) >> 4]);
+                        buf.append(hexDigit[bytes[i] & 0x0F]);
                     }
-                    SAL_INFO("ucb.ucp.webdav.curl", buf.makeStringAndClear());
+                    else
+                    {
+                        buf.append(static_cast<char>(bytes[i]));
+                    }
                 }
+                SAL_INFO("ucb.ucp.webdav.curl", buf.makeStringAndClear());
             }
 
             // error handling part 3: special HTTP status codes
@@ -1451,9 +1460,9 @@ auto CurlSession::OPTIONS(OUString const& rURIReference,
     DAVResource result;
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(headerNames, result);
 
-    ::std::vector<CurlOption> const options{ { CURLOPT_NOBODY, 1L, nullptr },
-                                             { CURLOPT_CUSTOMREQUEST, "OPTIONS",
-                                               "CURLOPT_CUSTOMREQUEST" } };
+    ::std::vector<CurlOption> const options{
+        g_NoBody, { CURLOPT_CUSTOMREQUEST, "OPTIONS", "CURLOPT_CUSTOMREQUEST" }
+    };
 
     CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, &headers);
 
@@ -1758,7 +1767,7 @@ auto CurlSession::HEAD(OUString const& rURIReference, ::std::vector<OUString> co
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    ::std::vector<CurlOption> const options{ { CURLOPT_NOBODY, 1L, nullptr } };
+    ::std::vector<CurlOption> const options{ g_NoBody };
 
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
@@ -1991,7 +2000,7 @@ auto CurlSession::MKCOL(OUString const& rURIReference, DAVRequestEnvironment con
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
     ::std::vector<CurlOption> const options{
-        { CURLOPT_NOBODY, 1L, nullptr }, { CURLOPT_CUSTOMREQUEST, "MKCOL", "CURLOPT_CUSTOMREQUEST" }
+        g_NoBody, { CURLOPT_CUSTOMREQUEST, "MKCOL", "CURLOPT_CUSTOMREQUEST" }
     };
 
     CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, nullptr);
@@ -2020,7 +2029,7 @@ auto CurlProcessor::MoveOrCopy(CurlSession& rSession, OUString const& rSourceURI
     }
 
     ::std::vector<CurlOption> const options{
-        { CURLOPT_NOBODY, 1L, nullptr }, { CURLOPT_CUSTOMREQUEST, pMethod, "CURLOPT_CUSTOMREQUEST" }
+        g_NoBody, { CURLOPT_CUSTOMREQUEST, pMethod, "CURLOPT_CUSTOMREQUEST" }
     };
 
     CurlProcessor::ProcessRequest(rSession, uriSource, options, &rEnv, ::std::move(pList), nullptr,
@@ -2051,9 +2060,9 @@ auto CurlSession::DESTROY(OUString const& rURIReference, DAVRequestEnvironment c
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    ::std::vector<CurlOption> const options{ { CURLOPT_NOBODY, 1L, nullptr },
-                                             { CURLOPT_CUSTOMREQUEST, "DELETE",
-                                               "CURLOPT_CUSTOMREQUEST" } };
+    ::std::vector<CurlOption> const options{
+        g_NoBody, { CURLOPT_CUSTOMREQUEST, "DELETE", "CURLOPT_CUSTOMREQUEST" }
+    };
 
     CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, nullptr);
 }
