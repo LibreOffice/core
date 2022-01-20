@@ -1240,7 +1240,7 @@ $(emscripten_fs_image_WORKDIR)/soffice.data.filelist: \
 	    $(foreach item,$(filter-out $(BUILDDIR)%,$(gb_emscripten_fs_image_all_files)),$(subst @,@@,$(item))@$(subst @,@@,$(subst $(SRCDIR)/,,$(item))))) \
 	&& mv $$TEMPFILE $@
 
-# Unfortunatly the file packager just allows a cmdline file list, but all paths are
+# Unfortunately the file packager just allows a cmdline file list, but all paths are
 # relative to $(BUILDDIR), so we won't run out of cmdline space that fast...
 $(emscripten_fs_image_WORKDIR)/soffice.data.js.metadata: $(emscripten_fs_image_WORKDIR)/soffice.data.filelist
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$(emscripten_fs_image_WORKDIR)/soffice.data),$(true),GEN,2)
