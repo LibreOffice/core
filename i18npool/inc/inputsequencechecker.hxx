@@ -23,7 +23,6 @@
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 
 #include <vector>
-#include <memory>
 #include <optional>
 
 namespace com::sun::star::uno { class XComponentContext; }

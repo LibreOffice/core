@@ -8,13 +8,11 @@
  */
 
 #include <iostream>
-#include <fstream>
 #include <cassert>
 #include <cstring>
 
 #include <libxml/tree.h>
 #include <libxml/parser.h>
-#include <libxml/xmlmemory.h>
 #include <libxml/xmlstring.h>
 
 #include <export.hxx>

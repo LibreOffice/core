@@ -62,7 +62,6 @@
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFGLOBAL_HXX
 
 #include <rtl/ustring.hxx>
-#include <cmath>
 
 #define FLOAT_MIN 0.001
 #define MAX2(a, b) (((a) > (b)) ? (a) : (b))

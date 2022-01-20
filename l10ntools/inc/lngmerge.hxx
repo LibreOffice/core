@@ -22,11 +22,10 @@
 
 #include <sal/config.h>
 
-#include <iosfwd>
 #include <vector>
 
-#include "common.hxx"
 #include "export.hxx"
+#include "po.hxx"
 
 #define LNG_OK              0x0000
 #define LNG_COULD_NOT_OPEN  0x0001

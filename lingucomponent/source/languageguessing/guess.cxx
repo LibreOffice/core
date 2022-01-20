@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <iostream>
 #include <string.h>
 
 #ifdef SYSTEM_LIBEXTTEXTCAT

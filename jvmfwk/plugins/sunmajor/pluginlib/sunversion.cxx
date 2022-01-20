@@ -21,6 +21,7 @@
 #include "sunversion.hxx"
 #include <osl/thread.h>
 #include <rtl/character.hxx>
+#include <rtl/ustring.hxx>
 #include <string.h>
 namespace jfw_plugin  { //stoc_javadetect
 

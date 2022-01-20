@@ -20,8 +20,7 @@
 #ifndef INCLUDED_IDL_INC_HASH_HXX
 #define INCLUDED_IDL_INC_HASH_HXX
 
-#include <rtl/ustring.hxx>
-#include <tools/ref.hxx>
+#include <rtl/string.hxx>
 #include <tools/solar.h>
 #include <unordered_map>
 #include <memory>

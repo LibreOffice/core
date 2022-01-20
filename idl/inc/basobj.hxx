@@ -22,7 +22,6 @@
 
 #include <tools/ref.hxx>
 #include "bastype.hxx"
-#include <functional>
 #include <vector>
 
 class SvTokenStream;

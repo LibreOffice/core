@@ -31,7 +31,6 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <string_view>
-#include <memory>
 #include <optional>
 #include <osl/module.hxx>
 

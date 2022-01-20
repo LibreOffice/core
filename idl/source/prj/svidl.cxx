@@ -18,10 +18,8 @@
  */
 
 
-#include <stdlib.h>
 #include <stdio.h>
 #include <database.hxx>
-#include <globals.hxx>
 #include <command.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
