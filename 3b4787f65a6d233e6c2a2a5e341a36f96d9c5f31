@@ -16,6 +16,24 @@
       "message": "There shouldn\u0027t be helpcontent2 here.",
       "revId": "3b4787f65a6d233e6c2a2a5e341a36f96d9c5f31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aee7f717_1f15438c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2022-01-20T14:23:22Z",
+      "side": 1,
+      "message": "Thanks a lot Julien. I\u0027m going to upload new patch.",
+      "parentUuid": "3352d1e9_f60451ce",
+      "revId": "3b4787f65a6d233e6c2a2a5e341a36f96d9c5f31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
