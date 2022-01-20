@@ -444,7 +444,7 @@ endef
 		( \
 		    patch_file=$$(pwd)/$*.new.patch.1; \
 			cd $(call gb_UnpackedTarball_get_dir,) ; \
-			diff -ur $*.org $* > $$patch_file; \
+			$(DIFF) -ur $*.org $* > $$patch_file; \
 		    echo "Patch $$patch_file generated" ; \
 		); \
 	else \
