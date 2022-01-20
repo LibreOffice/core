@@ -33,6 +33,24 @@
       "message": "Should be libtl AKA tools/Library_tl.mk",
       "revId": "83ddb7e29949604348749cb2689d82cc1e135835",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "823c8bf1_8d98ad1d",
+        "filename": "comphelper/source/misc/synchronousdispatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2022-01-20T14:36:47Z",
+      "side": 1,
+      "message": "Thanks a lot Jan-Marek. I\u0027m going to upload new version.",
+      "parentUuid": "24ab1071_ab9b6e73",
+      "revId": "83ddb7e29949604348749cb2689d82cc1e135835",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
