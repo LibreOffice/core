@@ -16,12 +16,9 @@
 
 #include <string_view>
 
-#include <sal/types.h>
-
-#include <libxml/parser.h>
+#include <libxml/xmlstring.h>
 
 #include <rtl/string.hxx>
-#include <rtl/strbuf.hxx>
 
 
 namespace helper {

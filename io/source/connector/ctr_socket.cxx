@@ -20,7 +20,6 @@
 
 #include "connector.hxx"
 #include <com/sun/star/io/IOException.hpp>
-#include <rtl/ustrbuf.hxx>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

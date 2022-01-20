@@ -18,13 +18,8 @@
  */
 
 
-// C and C++ includes
-#include <stdlib.h>
-
 // program-sensitive includes
 #include <hash.hxx>
-
-#include <rtl/character.hxx>
 
 SvStringHashEntry * SvStringHashTable::Insert( const OString& rElement, sal_uInt32 * pInsertPos )
 {

@@ -11,10 +11,9 @@
 #error Build system problem; LIBO_INTERNAL_ONLY should not be defined here
 #endif
 
-#include <LibreOfficeKit/LibreOfficeKit.hxx>
-
 #include <sal/config.h>
-#include <sal/saldllapi.h>
+#include <sal/types.h>
+
 #include <cppunit/plugin/TestPlugIn.h>
 
 CPPUNIT_PLUGIN_IMPLEMENT();

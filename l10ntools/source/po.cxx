@@ -8,6 +8,7 @@
  */
 
 #include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/crc.h>
 #include <sal/log.hxx>
 

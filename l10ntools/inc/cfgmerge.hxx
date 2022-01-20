@@ -27,6 +27,7 @@
 #include <memory>
 #include <vector>
 #include "po.hxx"
+#include "export.hxx"
 
 typedef std::unordered_map<OString, OString> OStringHashMap;
 

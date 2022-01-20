@@ -21,11 +21,12 @@
 
 #include <algorithm>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string_view>
 
+#include <command.hxx>
 #include <database.hxx>
 #include <globals.hxx>
+#include <slot.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 

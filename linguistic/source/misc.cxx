@@ -38,13 +38,11 @@
 #include <unotools/charclass.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/syslocale.hxx>
 #include <svtools/strings.hrc>
 #include <unotools/resmgr.hxx>
 
 #include <linguistic/misc.hxx>
 #include <linguistic/hyphdta.hxx>
-#include <mutex>
 
 using namespace osl;
 using namespace com::sun::star;

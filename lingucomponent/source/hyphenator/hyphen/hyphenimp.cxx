@@ -23,8 +23,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
@@ -40,12 +38,9 @@
 #include <rtl/textenc.h>
 #include <sal/log.hxx>
 
-#include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
 #include <svtools/strings.hrc>
 #include <unotools/charclass.hxx>
-#include <unotools/pathoptions.hxx>
-#include <unotools/useroptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/resmgr.hxx>
 #include <osl/file.hxx>

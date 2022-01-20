@@ -28,7 +28,6 @@
 
 #include <i18nutil/paper.hxx>
 
-#include <cstdlib>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 

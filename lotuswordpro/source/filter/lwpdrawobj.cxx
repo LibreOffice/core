@@ -67,6 +67,7 @@
 
 #include <xfilter/xfframe.hxx>
 
+#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xfdrawstyle.hxx>
 #include <xfilter/xfparastyle.hxx>

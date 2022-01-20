@@ -18,10 +18,8 @@
  */
 
 #include <sal/config.h>
-#include <rtl/instance.hxx>
 
 #include <globals.hxx>
-#include <database.hxx>
 
 IdlDll & GetIdlApp()
 {

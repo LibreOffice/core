@@ -21,9 +21,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
@@ -34,19 +31,16 @@
 #include <comphelper/sequence.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/resmgr.hxx>
 
 #include <rtl/string.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
 
 #include <svtools/strings.hrc>
 
 #include "nthesimp.hxx"
 #include <linguistic/misc.hxx>
-#include <linguistic/lngprops.hxx>
 #include "nthesdta.hxx"
 
 #include <vector>

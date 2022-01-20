@@ -24,8 +24,6 @@
 
 #include <string_view>
 
-#include <rtl/ustring.hxx>
-
 namespace jfw_plugin
 {
 /* SunVersion is used to compare java versions based on a string, as taken

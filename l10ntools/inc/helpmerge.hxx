@@ -24,10 +24,10 @@
 
 #include <string_view>
 
+#include "export.hxx"
 #include "xmlparse.hxx"
-#include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
+
+#include <rtl/string.hxx>
 
 /// This Class is responsible for extracting/merging OpenOffice XML Helpfiles
 class HelpParser
