@@ -136,15 +136,11 @@ Reference<XChartType> lcl_getFirstStockChartType( const Reference< frame::XModel
 
     //iterate through all coordinate systems
 
-    const uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xDiagram->getCoordinateSystems() );
-    for( Reference< XCoordinateSystem > const & coords : aCooSysList )
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysList( xDiagram->getBaseCoordinateSystems() );
+    for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysList )
     {
         //iterate through all chart types in the current coordinate system
-        Reference< XChartTypeContainer > xChartTypeContainer( coords, uno::UNO_QUERY );
-        if( !xChartTypeContainer.is() )
-            continue;
-
-        const uno::Sequence< Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+        const uno::Sequence< Reference< XChartType > > aChartTypeList( coords->getChartTypes() );
         for( Reference< XChartType > const & xChartType : aChartTypeList )
         {
             if(!xChartType.is())

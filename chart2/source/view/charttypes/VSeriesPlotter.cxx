@@ -24,6 +24,7 @@
 #include <VLineProperties.hxx>
 #include <ShapeFactory.hxx>
 #include <Diagram.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <CommonConverters.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -2362,13 +2363,12 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
     if( xTarget.is() )
     {
         rtl::Reference< Diagram > xDiagram = rModel.getFirstChartDiagram();
-        Reference< chart2::XCoordinateSystem > xCooSys(xDiagram->getCoordinateSystems()[0]);
-        Reference< beans::XPropertySet > xProp( xCooSys, uno::UNO_QUERY );
+        rtl::Reference< BaseCoordinateSystem > xCooSys(xDiagram->getBaseCoordinateSystems()[0]);
         bool bSwapXAndY = false;
 
-        if( xProp.is()) try
+        try
         {
-            xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
+            xCooSys->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
         }
         catch( const uno::Exception& )
         {

@@ -804,11 +804,10 @@ void DataBrowserModel::updateFromModel()
 
     if( !xDiagram.is())
         return;
-    const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xDiagram->getCoordinateSystems());
-    for( Reference< chart2::XCoordinateSystem > const & coords : aCooSysSeq )
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysSeq( xDiagram->getBaseCoordinateSystems());
+    for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysSeq )
     {
-        Reference< chart2::XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
-        const Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+        const Sequence< Reference< chart2::XChartType > > aChartTypes( coords->getChartTypes());
         sal_Int32 nXAxisNumberFormat = DataSeriesHelper::getNumberFormatKeyFromAxis( nullptr, coords, 0, 0 );
 
         for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
@@ -881,8 +880,7 @@ void DataBrowserModel::updateFromModel()
                         bool bSwapXAndYAxis = false;
                         try
                         {
-                            Reference< beans::XPropertySet > xProp( coords, uno::UNO_QUERY );
-                            xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndYAxis;
+                            coords->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndYAxis;
                         }
                         catch( const beans::UnknownPropertyException & ) {}
 

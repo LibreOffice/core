@@ -1796,13 +1796,12 @@ bool lcl_getPropertySwapXAndYAxis( const rtl::Reference< Diagram >& xDiagram )
 
     if( xDiagram.is() )
     {
-        uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xDiagram->getCoordinateSystems() );
-        if( aCooSysList.hasElements() )
+        const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysList( xDiagram->getBaseCoordinateSystems() );
+        if( !aCooSysList.empty() )
         {
-            uno::Reference<beans::XPropertySet> xProp(aCooSysList[0], uno::UNO_QUERY );
-            if( xProp.is()) try
+            try
             {
-                xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
+                aCooSysList[0]->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
             }
             catch( const uno::Exception& )
             {

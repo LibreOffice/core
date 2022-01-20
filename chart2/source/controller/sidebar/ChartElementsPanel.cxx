@@ -34,8 +34,8 @@
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ChartTypeHelper.hxx>
-
 #include <ChartModel.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 
 using namespace css;
@@ -409,18 +409,15 @@ namespace {
 css::uno::Reference<css::chart2::XChartType> getChartType(const rtl::Reference<ChartModel>& xModel)
 {
     rtl::Reference<Diagram > xDiagram = xModel->getFirstChartDiagram();
-    if (!xDiagram.is()) {
-        return css::uno::Reference<css::chart2::XChartType>();
-    }
-
-    css::uno::Sequence<css::uno::Reference<css::chart2::XCoordinateSystem>> xCooSysSequence(xDiagram->getCoordinateSystems());
-
-    if (!xCooSysSequence.hasElements())
+    if (!xDiagram.is())
         return css::uno::Reference<css::chart2::XChartType>();
 
-    css::uno::Reference<css::chart2::XChartTypeContainer> xChartTypeContainer(xCooSysSequence[0], css::uno::UNO_QUERY_THROW);
+    const std::vector<rtl::Reference<BaseCoordinateSystem>> & xCooSysSequence(xDiagram->getBaseCoordinateSystems());
 
-    css::uno::Sequence<css::uno::Reference<css::chart2::XChartType>> xChartTypeSequence(xChartTypeContainer->getChartTypes());
+    if (xCooSysSequence.empty())
+        return css::uno::Reference<css::chart2::XChartType>();
+
+    css::uno::Sequence<css::uno::Reference<css::chart2::XChartType>> xChartTypeSequence(xCooSysSequence[0]->getChartTypes());
 
     if (!xChartTypeSequence.hasElements())
         return css::uno::Reference<css::chart2::XChartType>();
