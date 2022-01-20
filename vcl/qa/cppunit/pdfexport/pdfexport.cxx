@@ -42,6 +42,7 @@
 #include <unotools/streamwrap.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1960,6 +1961,31 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWrongPage)
     CPPUNIT_ASSERT(pPdfPage->hasLinks());
 
     // Second page should have no links (3rd slide).
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage2 = pPdfDocument->openPage(/*nIndex=*/1);
+    CPPUNIT_ASSERT(pPdfPage2);
+    CPPUNIT_ASSERT(!pPdfPage2->hasLinks());
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWrongPagePartial)
+{
+    // Given a Draw document with 3 pages, a link on the 2nd page:
+    // When exporting that the 2nd and 3rd page to pdf:
+    uno::Sequence<beans::PropertyValue> aFilterData = {
+        comphelper::makePropertyValue("PageRange", OUString("2-3")),
+    };
+    aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    saveAsPDF(u"link-wrong-page-partial.odg");
+
+    // Then make sure the we have a link on the 1st page, but not on the 2nd one:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    // Without the accompanying fix in place, this test would have failed, as the link was on the
+    // 2nd page instead.
+    CPPUNIT_ASSERT(pPdfPage->hasLinks());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage2 = pPdfDocument->openPage(/*nIndex=*/1);
     CPPUNIT_ASSERT(pPdfPage2);
     CPPUNIT_ASSERT(!pPdfPage2->hasLinks());
