@@ -142,7 +142,7 @@ and read clang code for `WASM_EmscriptenInvoke`, but if there were some
 standalone code or documentation I'm missing, that would be nice to know."
 
 We basically would go the same way then the other backends. Write the bridge in
-C++, which is probably largely boilerplate code, but the function call in WAT
+C++, which is probably largely boilerplate code, but the function call in WABT
 (<https://github.com/WebAssembly/wabt>) based on the LLVM WASM calling
 conventions in `WASM_EmscriptenInvoke`. I didn't get a reply to that question for
 hours. Maybe I'll open an Emscripten issue, if we really have to implement
