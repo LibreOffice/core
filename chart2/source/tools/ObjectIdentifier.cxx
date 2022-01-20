@@ -1159,6 +1159,14 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
 
 Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                 const OUString& rObjectCID
+                , const rtl::Reference< ::chart::ChartModel >& xChartModel )
+{
+    return ObjectIdentifier::getObjectPropertySet(
+        rObjectCID, Reference< frame::XModel >( xChartModel ));
+}
+
+Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
+                const OUString& rObjectCID
                 , const Reference< frame::XModel >& xChartModel )
 {
     //return the model object that is indicated by rObjectCID

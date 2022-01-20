@@ -108,6 +108,14 @@ rtl::Reference< Diagram > ChartModelHelper::findDiagram( const uno::Reference< c
     return nullptr;
 }
 
+rtl::Reference< Diagram > ChartModelHelper::findDiagram( const rtl::Reference< ::chart::ChartModel >& xChartDoc )
+{
+    if( !xChartDoc )
+        return nullptr;
+    rtl::Reference<::chart::Diagram> xDiagram = xChartDoc->getFirstChartDiagram();
+    return xDiagram;
+}
+
 rtl::Reference< BaseCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( ChartModel& rModel )
 {
     rtl::Reference< Diagram > xDiagram = rModel.getFirstChartDiagram();

@@ -23,6 +23,7 @@
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
 #include "RangeSelectionListener.hxx"
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::chart2 { class XChartDocument; }
 namespace weld { class Builder; }
@@ -41,7 +42,7 @@ namespace weld { class Widget; }
 
 namespace chart
 {
-
+class ChartModel;
 class RangeSelectionHelper;
 
 class ErrorBarResources final : public RangeSelectionListenerParent
@@ -60,7 +61,7 @@ public:
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
     void SetErrorBarType( tErrorBarType eNewType );
     void SetChartDocumentForRangeChoosing(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
+        const rtl::Reference<::chart::ChartModel> & xChartDocument );
     void Reset(const SfxItemSet& rInAttrs);
     void FillItemSet(SfxItemSet& rOutAttrs) const;
 
