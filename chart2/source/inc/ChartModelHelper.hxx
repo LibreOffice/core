@@ -56,6 +56,9 @@ public:
     static rtl::Reference< Diagram >
         findDiagram( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 
+    static rtl::Reference< Diagram >
+        findDiagram( const rtl::Reference<::chart::ChartModel>& xChartDoc );
+
     static rtl::Reference< ::chart::BaseCoordinateSystem >
         getFirstCoordinateSystem( ChartModel& rModel );
 

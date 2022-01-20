@@ -19,6 +19,7 @@
 
 #include "AccessibleChartElement.hxx"
 #include <CharacterProperties.hxx>
+#include <ChartModel.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ObjectNameProvider.hxx>
 #include <servicenames.hxx>
@@ -148,8 +149,12 @@ OUString SAL_CALL AccessibleChartElement::getImplementationName()
 // ________ AccessibleChartElement::XAccessibleContext (override) ________
 OUString SAL_CALL AccessibleChartElement::getAccessibleName()
 {
+    uno::Reference<chart2::XChartDocument> xDoc = GetInfo().m_xChartDocument;
+    ChartModel* pChartModel = dynamic_cast<ChartModel*>(xDoc.get());
+    assert(!xDoc || pChartModel);
+
     return ObjectNameProvider::getNameForCID(
-        GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument );
+        GetInfo().m_aOID.getObjectCID(), pChartModel );
 }
 
 // ________ AccessibleChartElement::XAccessibleContext (override) ________
@@ -188,8 +193,12 @@ OUString SAL_CALL AccessibleChartElement::getToolTipText()
 {
     CheckDisposeState();
 
+    uno::Reference<chart2::XChartDocument> xDoc = GetInfo().m_xChartDocument;
+    ChartModel* pChartModel = dynamic_cast<ChartModel*>(xDoc.get());
+    assert(!xDoc || pChartModel);
+
     return ObjectNameProvider::getHelpText(
-        GetInfo().m_aOID.getObjectCID(), Reference< chart2::XChartDocument >( GetInfo().m_xChartDocument ));
+        GetInfo().m_aOID.getObjectCID(), pChartModel );
 }
 
 // ________ XAccessibleComponent ________

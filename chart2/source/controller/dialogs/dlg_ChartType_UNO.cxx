@@ -19,6 +19,7 @@
 
 #include <dlg_ChartType_UNO.hxx>
 #include <dlg_ChartType.hxx>
+#include <ChartModel.hxx>
 #include <servicenames.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -64,7 +65,12 @@ void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
     if (_rValue >>= aProperty)
     {
         if (aProperty.Name == "ChartModel")
-            m_xChartModel.set(aProperty.Value,uno::UNO_QUERY);
+        {
+            uno::Reference<XInterface> xInt;
+            aProperty.Value >>= xInt;
+            assert(dynamic_cast<::chart::ChartModel*>(xInt.get()));
+            m_xChartModel = dynamic_cast<::chart::ChartModel*>(xInt.get());
+        }
         else
             ChartTypeUnoDlg_BASE::implInitialize(_rValue);
     }
@@ -74,7 +80,9 @@ void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
 
 std::unique_ptr<weld::DialogController> ChartTypeUnoDlg::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    return std::make_unique<ChartTypeDialog>(Application::GetFrameWeld(rParent), m_xChartModel);
+    ChartModel* pChartModel = dynamic_cast<ChartModel*>(rParent.get());
+    assert(pChartModel);
+    return std::make_unique<ChartTypeDialog>(Application::GetFrameWeld(rParent), pChartModel);
 }
 
 uno::Reference<beans::XPropertySetInfo>  SAL_CALL ChartTypeUnoDlg::getPropertySetInfo()

@@ -22,6 +22,7 @@
 
 #include <ChartController.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartModel.hxx>
 #include <ChartResourceGroups.hxx>
 #include <ChartTypeDialogController.hxx>
 #include <ChartTypeManager.hxx>
@@ -53,7 +54,7 @@ ChartTypePanel::ChartTypePanel(weld::Widget* pParent, ::chart::ChartController* 
           new SplineResourceGroup(m_xBuilder.get(), pController->GetChartFrame()))
     , m_pGeometryResourceGroup(new GeometryResourceGroup(m_xBuilder.get()))
     , m_pSortByXValuesResourceGroup(new SortByXValuesResourceGroup(m_xBuilder.get()))
-    , m_xChartModel(mxModel, css::uno::UNO_QUERY_THROW)
+    , m_xChartModel(dynamic_cast<ChartModel*>(mxModel.get()))
     , m_aChartTypeDialogControllerList(0)
     , m_pCurrentMainType(nullptr)
     , m_nChangingCalls(0)
@@ -75,7 +76,8 @@ ChartTypePanel::ChartTypePanel(weld::Widget* pParent, ::chart::ChartController* 
     m_xSubTypeList->SetLineCount(1);
 
     bool bEnableComplexChartTypes = true;
-    uno::Reference<beans::XPropertySet> xProps(m_xChartModel, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xProps(static_cast<cppu::OWeakObject*>(m_xChartModel.get()),
+                                               uno::UNO_QUERY);
     if (xProps.is())
     {
         try

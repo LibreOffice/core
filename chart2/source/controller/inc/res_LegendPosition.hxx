@@ -20,6 +20,7 @@
 
 #include <svl/itemset.hxx>
 #include <tools/link.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
@@ -30,6 +31,7 @@ namespace weld { class Toggleable; }
 
 namespace chart
 {
+class ChartModel;
 
 class LegendPositionResources final
 {
@@ -42,8 +44,8 @@ public:
                        css::uno::XComponentContext>& xCC );
     ~LegendPositionResources();
 
-    void writeToResources( const css::uno::Reference< css::frame::XModel >& xChartModel );
-    void writeToModel( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;
+    void writeToResources( const rtl::Reference<::chart::ChartModel>& xChartModel );
+    void writeToModel( const rtl::Reference<::chart::ChartModel>& xChartModel ) const;
 
     void initFromItemSet( const SfxItemSet& rInAttrs );
     void writeToItemSet( SfxItemSet& rOutAttrs ) const;

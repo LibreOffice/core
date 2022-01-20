@@ -34,6 +34,7 @@ class LightButton;
 namespace chart
 {
 struct LightSourceInfo;
+class ChartModel;
 
 class ThreeD_SceneIllumination_TabPage
 {
@@ -41,7 +42,7 @@ public:
     ThreeD_SceneIllumination_TabPage(
         weld::Container* pParent, weld::Window* pTopLevel,
         const css::uno::Reference<css::beans::XPropertySet>& xSceneProperties,
-        const css::uno::Reference<css::frame::XModel>& xChartModel);
+        const rtl::Reference<::chart::ChartModel>& xChartModel);
     ~ThreeD_SceneIllumination_TabPage();
 
 private:
@@ -68,7 +69,7 @@ private:
     bool m_bInCommitToModel;
 
     ModifyListenerCallBack m_aModelChangeListener;
-    css::uno::Reference<css::frame::XModel> m_xChartModel;
+    rtl::Reference<::chart::ChartModel> m_xChartModel;
 
     weld::Window* m_pTopLevel;
     std::unique_ptr<weld::Builder> m_xBuilder;
