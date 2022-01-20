@@ -74,14 +74,14 @@ private:
     std::unique_ptr<weld::Widget> mxGridLabel;
     std::unique_ptr<weld::MetricSpinButton> mxNFRotation;
 
-    css::uno::Reference<css::frame::XModel> mxModel;
+    rtl::Reference<::chart::ChartModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxModifyListener;
     css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
 
     bool mbModelValid;
 
     void Initialize();
-    void doUpdateModel(css::uno::Reference<css::frame::XModel> xModel);
+    void doUpdateModel(rtl::Reference<::chart::ChartModel> xModel);
 
     DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
     DECL_LINK(ListBoxHdl, weld::ComboBox&, void);
