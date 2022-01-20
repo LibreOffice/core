@@ -118,7 +118,6 @@ class ExtMgrDialog : public weld::GenericDialogController
     std::unique_ptr<weld::CheckButton> m_xBundledCbx;
     std::unique_ptr<weld::CheckButton> m_xSharedCbx;
     std::unique_ptr<weld::CheckButton> m_xUserCbx;
-    std::unique_ptr<weld::LinkButton> m_xGetExtensions;
     std::unique_ptr<weld::Label> m_xProgressText;
     std::unique_ptr<weld::ProgressBar> m_xProgressBar;
     std::unique_ptr<weld::Button> m_xCancelBtn;
