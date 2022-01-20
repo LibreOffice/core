@@ -25,13 +25,14 @@ namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {
+class ChartModel;
 
 class ThreeD_SceneAppearance_TabPage
 {
 public:
     ThreeD_SceneAppearance_TabPage(
         weld::Container* pParent,
-        const css::uno::Reference< css::frame::XModel > & xChartModel,
+        const rtl::Reference<::chart::ChartModel> & xChartModel,
         ControllerLockHelper & rControllerLockHelper );
     void ActivatePage();
     ~ThreeD_SceneAppearance_TabPage();
@@ -47,7 +48,7 @@ private:
     void updateScheme();
 
 private:
-    css::uno::Reference<css::frame::XModel> m_xChartModel;
+    rtl::Reference<::chart::ChartModel> m_xChartModel;
 
     bool            m_bUpdateOtherControls;
     bool            m_bCommitToModel;

@@ -103,7 +103,7 @@ private:
     std::unique_ptr<GeometryResourceGroup> m_pGeometryResourceGroup;
     std::unique_ptr<SortByXValuesResourceGroup> m_pSortByXValuesResourceGroup;
 
-    css::uno::Reference<css::chart2::XChartDocument> m_xChartModel;
+    rtl::Reference<::chart::ChartModel> m_xChartModel;
 
     std::vector<std::unique_ptr<ChartTypeDialogController>> m_aChartTypeDialogControllerList;
     ChartTypeDialogController* m_pCurrentMainType;

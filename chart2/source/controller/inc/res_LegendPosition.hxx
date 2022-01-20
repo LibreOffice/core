@@ -42,8 +42,8 @@ public:
                        css::uno::XComponentContext>& xCC );
     ~LegendPositionResources();
 
-    void writeToResources( const css::uno::Reference< css::frame::XModel >& xChartModel );
-    void writeToModel( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;
+    void writeToResources( const rtl::Reference<::chart::ChartModel>& xChartModel );
+    void writeToModel( const rtl::Reference<::chart::ChartModel>& xChartModel ) const;
 
     void initFromItemSet( const SfxItemSet& rInAttrs );
     void writeToItemSet( SfxItemSet& rOutAttrs ) const;
