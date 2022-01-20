@@ -82,7 +82,7 @@ struct TimeBasedInfo
  * The View is not responsible to handle single user events (that is instead
  * done by the ChartWindow).
  */
-class ChartView final : public ::cppu::WeakImplHelper<
+class OOO_DLLPUBLIC_CHARTVIEW ChartView final : public ::cppu::WeakImplHelper<
     css::lang::XInitialization
         ,css::lang::XServiceInfo
         ,css::datatransfer::XTransferable
@@ -114,7 +114,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ___lang::XInitialization___
-    virtual OOO_DLLPUBLIC_CHARTVIEW void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // ___ExplicitValueProvider___
     virtual bool getExplicitValuesForAxis(
