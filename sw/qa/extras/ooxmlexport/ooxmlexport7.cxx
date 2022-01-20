@@ -88,8 +88,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchorIdForWP14AndW14)
     loadAndSave("AnchorId.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:inline", "anchorId", "78735EFD");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "anchorId", "78735EFD");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[4]/mc:AlternateContent/mc:Choice/w:drawing/wp:inline", "anchorId", "78735EFD");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[4]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "anchorId", "78735EFD");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDkVert, "dkvert.docx")

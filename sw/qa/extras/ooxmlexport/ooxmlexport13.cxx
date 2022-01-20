@@ -995,7 +995,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125518)
     CPPUNIT_ASSERT_EQUAL(OUString("Object2"), anchorName);
 
     // 4th diagram has anchor too
-    anchorName = getXPath(pXmlDoc, "/w:document/w:body/w:p[14]/w:r[3]/w:drawing/wp:anchor/wp:docPr", "name");
+    anchorName = getXPath(pXmlDoc, "/w:document/w:body/w:p[14]/w:r[4]/w:drawing/wp:anchor/wp:docPr", "name");
     CPPUNIT_ASSERT_EQUAL(OUString("Object3"), anchorName);
 }
 

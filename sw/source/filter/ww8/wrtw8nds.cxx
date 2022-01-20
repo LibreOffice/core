@@ -2758,14 +2758,16 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             AttrOutput().WritePostitFieldReference();
 
-            if (bPostponeWritingText
-                && (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame))
+            if (bPostponeWritingText)
             {
                 AttrOutput().EndRun(&rNode, nCurrentPos, /*bLastRun=*/false);
                 //write the postponed text run
                 AttrOutput().StartRun( pRedlineData, nCurrentPos, bSingleEmptyRun );
-                AttrOutput().SetAnchorIsLinkedToNode( false );
-                AttrOutput().ResetFlyProcessingFlag();
+                if (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame)
+                {
+                    AttrOutput().SetAnchorIsLinkedToNode( false );
+                    AttrOutput().ResetFlyProcessingFlag();
+                }
                 if (0 != nEnd)
                 {
                     AttrOutput().StartRunProperties();
@@ -2775,12 +2777,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     // OutAttr may have introduced new comments, so write them out now
                     AttrOutput().WritePostitFieldReference();
                 }
-                AttrOutput().RunText( aSavedSnippet, eChrSet );
-                AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
-            }
-            else if( bPostponeWritingText && !aSavedSnippet.isEmpty() )
-            {
-                //write the postponed text run
                 AttrOutput().RunText( aSavedSnippet, eChrSet );
                 AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
             }

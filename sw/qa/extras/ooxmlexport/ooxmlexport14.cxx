@@ -195,25 +195,25 @@ CPPUNIT_TEST_FIXTURE(Test, Tdf133065)
     CPPUNIT_ASSERT(pxmldoc);
     OUString aVal;
 
-    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[3]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[3]/w:r[3]/w:object/v:shape/w10:wrap", "type");
     CPPUNIT_ASSERT(aVal.indexOf("square") > -1);
-    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[3]/w:r[2]/w:object/v:shape/w10:wrap", "side");
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[3]/w:r[3]/w:object/v:shape/w10:wrap", "side");
     CPPUNIT_ASSERT(aVal.indexOf("left") > -1);
 
-    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[8]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[8]/w:r[3]/w:object/v:shape/w10:wrap", "type");
     CPPUNIT_ASSERT(aVal.indexOf("square") > -1);
-    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[8]/w:r[2]/w:object/v:shape/w10:wrap", "side");
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[8]/w:r[3]/w:object/v:shape/w10:wrap", "side");
     CPPUNIT_ASSERT(aVal.indexOf("right") > -1);
 
-    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[12]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[12]/w:r[3]/w:object/v:shape/w10:wrap", "type");
     CPPUNIT_ASSERT(aVal.indexOf("square") > -1);
-    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[12]/w:r[2]/w:object/v:shape/w10:wrap", "side");
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[12]/w:r[3]/w:object/v:shape/w10:wrap", "side");
     CPPUNIT_ASSERT(aVal.indexOf("largest") > -1);
 
-    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[20]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[20]/w:r[3]/w:object/v:shape/w10:wrap", "type");
     CPPUNIT_ASSERT(aVal.indexOf("topAndBottom") > -1);
 
-    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[24]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[24]/w:r[3]/w:object/v:shape/w10:wrap", "type");
     CPPUNIT_ASSERT(aVal.indexOf("square") > -1);
 }
 
