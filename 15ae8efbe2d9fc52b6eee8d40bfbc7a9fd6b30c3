@@ -1,0 +1,354 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee7784a2_aea62a7b",
+        "filename": "include/vcl/pngread.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "This was removed as we use the new PNG reader include/vcl/filter/PngImageReader.hxx instead",
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6ae3ba3_44a50368",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "avoid declaring this - always use std::\u003cclass,method\u003e instead",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 24
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9aade1ae_e210d1b9",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "This is c++ - you don\u0027t need to write \"struct ThumbnailCache\" - just \"ThumbnailCache\" is enough",
+      "range": {
+        "startLine": 67,
+        "startChar": 11,
+        "endLine": 67,
+        "endChar": 32
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1006848_675a4370",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "std::vector",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 10
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0ed1179_ffefaf27",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "constant are better declared with:\nconstexpr tools::Long X_OFFSET \u003d 15;",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 2
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9992d2a0_912fc397",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "This windows specific is unneeded. How to get the cache folder as URL you can check getCacheFolder() in vcl/source/opengl/win/WinDeviceInfo.cxx",
+      "range": {
+        "startLine": 189,
+        "startChar": 4,
+        "endLine": 194,
+        "endChar": 10
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7934b721_f7d9b976",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "unneeded",
+      "range": {
+        "startLine": 213,
+        "startChar": 8,
+        "endLine": 213,
+        "endChar": 14
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29837b38_42a94c61",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "unnecessary windows specific - if you keep the path as URL",
+      "range": {
+        "startLine": 214,
+        "startChar": 6,
+        "endLine": 218,
+        "endChar": 14
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b83bf483_4dbc2fb0",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "use SvFileStream instead .. and its reading functions",
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53960d49_bb8edcc9",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "unnecessary windows specific",
+      "range": {
+        "startLine": 265,
+        "startChar": 0,
+        "endLine": 269,
+        "endChar": 10
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "745f45e2_fdb17a83",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "use SvFileStream",
+      "range": {
+        "startLine": 271,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 11
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3502332f_e920ec33",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "we have ways to do this in LibreOffice which is independent of OS",
+      "range": {
+        "startLine": 287,
+        "startChar": 0,
+        "endLine": 308,
+        "endChar": 31
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e427b665_0d36bfc1",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "why not use OString or std::string instead?",
+      "range": {
+        "startLine": 334,
+        "startChar": 0,
+        "endLine": 336,
+        "endChar": 46
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03a7604a_0bb11557",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "OUString::number(i)",
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "902a6d8f_ac60d4f7",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "unneeded windows specific that can be avided",
+      "range": {
+        "startLine": 342,
+        "startChar": 0,
+        "endLine": 342,
+        "endChar": 1
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0ed3582_0e4c7661",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-20T01:50:12Z",
+      "side": 1,
+      "message": "unneeded windows specific that can be avided",
+      "range": {
+        "startLine": 386,
+        "startChar": 0,
+        "endLine": 386,
+        "endChar": 2
+      },
+      "revId": "15ae8efbe2d9fc52b6eee8d40bfbc7a9fd6b30c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
