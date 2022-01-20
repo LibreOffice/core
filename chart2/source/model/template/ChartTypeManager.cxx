@@ -232,13 +232,6 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
 {
     TemplateId nId = lcl_GetTemplateIdForService( aServiceSpecifier );
 
-    if( nId == TEMPLATE_NOT_FOUND )
-    {
-        assert(false);
-        SAL_WARN("chart2", "Couldn't instantiate service: "<< aServiceSpecifier );
-        return nullptr;
-    }
-
     rtl::Reference< ::chart::ChartTypeTemplate > xTemplate;
     switch( nId )
     {
@@ -507,14 +500,16 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
         case TEMPLATE_BUBBLE:
             xTemplate.set( new BubbleChartTypeTemplate( m_xContext, aServiceSpecifier ));
             break;
+
+        case TEMPLATE_NOT_FOUND:
+            SAL_WARN("chart2", "Couldn't instantiate service: "<< aServiceSpecifier );
+            assert(false);
+            break;
+
         default: break;
 //            case TEMPLATE_SURFACE:
 //            case TEMPLATE_ADDIN:
 //               break;
-
-        case TEMPLATE_NOT_FOUND:
-            assert( false );
-            break;
     }
 
     return xTemplate;
