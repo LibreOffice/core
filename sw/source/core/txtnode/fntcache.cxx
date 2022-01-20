@@ -2091,13 +2091,11 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     {
         if( !m_pPrtFont->IsSameInstance( rInf.GetOut().GetFont() ) )
             rInf.GetOut().SetFont( *m_pPrtFont );
-        SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(nLn) };
         if( bCompress )
         {
             std::vector<sal_Int32> aKernArray;
-            SalLayoutGlyphs* pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey);
             rInf.GetOut().GetTextArray( rInf.GetText(), &aKernArray,
-                                sal_Int32(rInf.GetIdx()), sal_Int32(nLn), nullptr, pGlyphs);
+                                sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( aKernArray.data(),
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
                 o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()) ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
@@ -2105,6 +2103,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         }
         else
         {
+            SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(nLn) };
             aTextSize.setWidth( GetCachedTextWidth(aGlyphsKey, rInf.GetVclCache()));
             rInf.SetKanaDiff( 0 );
         }
