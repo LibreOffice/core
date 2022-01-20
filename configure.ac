@@ -11415,6 +11415,12 @@ if test -z "$DIFF"; then
 fi
 AC_SUBST([DIFF])
 
+AC_PATH_PROG(UNIQ, uniq)
+if test -z "$UNIQ"; then
+    AC_MSG_ERROR(["uniq" not found in \$PATH, install it])
+fi
+AC_SUBST([UNIQ])
+
 dnl ***************************************
 dnl Checking for patch
 dnl ***************************************
