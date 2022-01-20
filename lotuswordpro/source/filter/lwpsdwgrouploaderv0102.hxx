@@ -83,7 +83,7 @@ public:
 
 public:
     void BeginDrawObjects(std::vector<rtl::Reference<XFFrame>>* pDrawObjVector);
-    XFDrawGroup* CreateDrawGroupObject();
+    rtl::Reference<XFDrawGroup> CreateDrawGroupObject();
     rtl::Reference<XFFrame> CreateDrawObject();
 };
 
