@@ -34,6 +34,23 @@
       "parentUuid": "37576a5a_81d120e3",
       "revId": "d5cc3327a4825a6bd54756ef551b55a2fb4165b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfd6fe95_acf65861",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-20T16:02:23Z",
+      "side": 1,
+      "message": "I also found that the problem is also there for \u0027gtktiledviewer\u0027. You can test with:\n    bin/run gtktiledviewer --lo-path\u003d$PWD/instdir/program path/to/test.odt\nhttps://docs.libreoffice.org/libreofficekit.html",
+      "revId": "d5cc3327a4825a6bd54756ef551b55a2fb4165b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
