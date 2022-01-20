@@ -220,6 +220,7 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                     aMtf.Stop();
                     aMtf.WindStart();
 
+                    bool bEmptyPage = false;
                     if( aMtf.GetActionSize() &&
                              ( !mbSkipEmptyPages || aPageSize.Width || aPageSize.Height ) )
                     {
@@ -244,6 +245,10 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                         ImplExportPage(rPDFWriter, rPDFExtOutDevData, aMtf);
                         bRet = true;
                     }
+                    else
+                    {
+                        bEmptyPage = true;
+                    }
 
                     pOut->Pop();
 
@@ -253,7 +258,12 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                         *pFirstPage <<= false;
 
                     ++mnProgressValue;
-                    ++nCurrentPage;
+                    if (!bEmptyPage)
+                    {
+                        // Calculate the page number in the PDF output, which may be smaller than the page number in
+                        // case of hidden slides or a partial export.
+                        ++nCurrentPage;
+                    }
                 }
             }
             else
