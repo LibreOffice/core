@@ -1995,6 +1995,78 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145584)
     CPPUNIT_ASSERT_EQUAL(OUString("World"), sText);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140731)
+{
+    SwDoc* const pDoc = createSwDoc();
+    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    pWrtSh->Insert("Lorem");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F3);
+    Scheduler::ProcessEventsToIdle();
+
+    // generating a big text with ~60k words and several paragraphs
+    for (sal_Int32 i = 0; i < 8; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:SelectAll", {});
+        Scheduler::ProcessEventsToIdle();
+
+        dispatchCommand(mxComponent, ".uno:Copy", {});
+        Scheduler::ProcessEventsToIdle();
+
+        dispatchCommand(mxComponent, ".uno:Paste", {});
+        Scheduler::ProcessEventsToIdle();
+
+        dispatchCommand(mxComponent, ".uno:Paste", {});
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Format->Text operations on small selections (which would generate <~500 redlines)
+    // changetracking still working
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    Scheduler::ProcessEventsToIdle();
+
+    SwCursorShell* pShell(pDoc->GetEditShell());
+
+    pShell->SelectText(1, 500);
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToTitleCase", {});
+    Scheduler::ProcessEventsToIdle();
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(118),
+                         pEditShell->GetRedlineCount());
+
+    //Removing all the redlines.
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), pEditShell->GetRedlineCount());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToTitleCase", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, on big selections writer would freeze. Now it ignores change tracking.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), pEditShell->GetRedlineCount());
+
+    // The patch has no effects on the Format->Text operations
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Lorem Ipsum Dolor Sit Amet"));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToUpper", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("LOREM IPSUM DOLOR SIT AMET"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf116315)
 {
     SwDoc* const pDoc = createSwDoc();
