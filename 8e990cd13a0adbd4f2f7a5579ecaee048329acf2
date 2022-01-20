@@ -70,6 +70,24 @@
       "parentUuid": "01cb6f55_394a0298",
       "revId": "8e990cd13a0adbd4f2f7a5579ecaee048329acf2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "527296dd_8bc5476e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-20T15:38:14Z",
+      "side": 1,
+      "message": "You set the minimum dialog size per code with \u003cweld_control\u003e-\u003eset_size_request(w,h) (using -1 for automatic).",
+      "parentUuid": "dd74712a_4acc0759",
+      "revId": "8e990cd13a0adbd4f2f7a5579ecaee048329acf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
