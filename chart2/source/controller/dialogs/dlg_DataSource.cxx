@@ -27,7 +27,6 @@
 #include <DiagramHelper.hxx>
 #include "DialogModel.hxx"
 #include <ChartModel.hxx>
-#include <ChartTypeManager.hxx>
 
 #include "tp_RangeChooser.hxx"
 #include "tp_DataSource.hxx"
