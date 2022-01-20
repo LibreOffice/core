@@ -107,7 +107,12 @@ rtl::Reference< ::chart::ChartView > const & Chart2ModelContact::getChartView() 
         // get the chart view
         rtl::Reference<ChartModel> xChartModel( m_xChartModel );
         if( xChartModel )
-            m_xChartView = xChartModel->getChartView(); // will create if necessary
+        {
+            auto xInstance = xChartModel->createInstance( CHART_VIEW_SERVICE_NAME );
+            auto pChartView = dynamic_cast<ChartView*>(xInstance.get());
+            assert(!xInstance || pChartView);
+            m_xChartView = pChartView;
+        }
     }
     return m_xChartView;
 }
