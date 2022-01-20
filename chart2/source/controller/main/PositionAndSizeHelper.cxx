@@ -27,6 +27,7 @@
 #include <tools/gen.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <Diagram.hxx>
 
 namespace chart
 {
@@ -167,7 +168,7 @@ bool PositionAndSizeHelper::moveObject( const OUString& rObjectCID
     ObjectType eObjectType( ObjectIdentifier::getObjectType( rObjectCID ) );
     if(eObjectType==OBJECTTYPE_DIAGRAM || eObjectType==OBJECTTYPE_DIAGRAM_WALL || eObjectType==OBJECTTYPE_DIAGRAM_FLOOR)
     {
-        xObjectProp.set( ObjectIdentifier::getDiagramForCID( rObjectCID, xChartModel ), uno::UNO_QUERY );
+        xObjectProp = ObjectIdentifier::getDiagramForCID( rObjectCID, xChartModel );
         if(!xObjectProp.is())
             return false;
     }

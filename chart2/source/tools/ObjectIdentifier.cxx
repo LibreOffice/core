@@ -130,16 +130,13 @@ OUString lcl_getTitleParentParticle( TitleHelper::eTitleType aTitleType )
 
 Reference<XChartType> lcl_getFirstStockChartType( const Reference< frame::XModel >& xChartModel )
 {
-    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     if(!xDiagram.is())
         return nullptr;
 
     //iterate through all coordinate systems
-    Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if( !xCooSysContainer.is())
-        return nullptr;
 
-    const uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    const uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xDiagram->getCoordinateSystems() );
     for( Reference< XCoordinateSystem > const & coords : aCooSysList )
     {
         //iterate through all chart types in the current coordinate system
@@ -219,7 +216,7 @@ void lcl_parseSeriesIndices( sal_Int32& rnChartTypeIndex, sal_Int32& rnSeriesInd
 
 void lcl_getDiagramAndCooSys( const OUString& rObjectCID
                 , const Reference< frame::XModel >& xChartModel
-                , Reference< XDiagram >& xDiagram
+                , rtl::Reference< Diagram >& xDiagram
                 , Reference< XCoordinateSystem >& xCooSys )
 {
     sal_Int32 nDiagramIndex = -1;
@@ -231,13 +228,9 @@ void lcl_getDiagramAndCooSys( const OUString& rObjectCID
 
     if( nCooSysIndex > -1 )
     {
-        Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-        if( xCooSysContainer.is() )
-        {
-            uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-            if( nCooSysIndex < aCooSysList.getLength() )
-                xCooSys = aCooSysList[nCooSysIndex];
-        }
+        uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xDiagram->getCoordinateSystems() );
+        if( nCooSysIndex < aCooSysList.getLength() )
+            xCooSys = aCooSysList[nCooSysIndex];
     }
 }
 
@@ -511,12 +504,11 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
 {
     OUString aRet;
 
-    Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
-    Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if( xCooSysContainer.is() )
+    rtl::Reference< Diagram > xDiagram( rModel.getFirstChartDiagram() );
+    if( xDiagram.is() )
     {
         sal_Int32 nCooSysIndex = 0;
-        uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+        uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xDiagram->getCoordinateSystems() );
         for( ; nCooSysIndex < aCooSysList.getLength(); ++nCooSysIndex )
         {
             Reference< XCoordinateSystem > xCurrentCooSys( aCooSysList[nCooSysIndex] );
@@ -537,12 +529,11 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
 {
     OUString aRet;
 
-    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-    Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if( xCooSysContainer.is() )
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    if( xDiagram.is() )
     {
         sal_Int32 nCooSysIndex = 0;
-        uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+        uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xDiagram->getCoordinateSystems() );
         for( ; nCooSysIndex < aCooSysList.getLength(); ++nCooSysIndex )
         {
             Reference< XCoordinateSystem > xCurrentCooSys( aCooSysList[nCooSysIndex] );
@@ -1181,7 +1172,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
         ObjectType eObjectType = ObjectIdentifier::getObjectType( rObjectCID );
         OUString aParticleID = ObjectIdentifier::getParticleID( rObjectCID );
 
-        Reference< XDiagram > xDiagram;
+        rtl::Reference< Diagram > xDiagram;
         Reference< XCoordinateSystem > xCooSys;
         lcl_getDiagramAndCooSys( rObjectCID, xChartModel, xDiagram, xCooSys );
 
@@ -1211,7 +1202,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     break;
             case OBJECTTYPE_DIAGRAM:
                 {
-                    xObjectProperties.set( xDiagram, uno::UNO_QUERY );
+                    xObjectProperties = xDiagram;
                 }
                 break;
             case OBJECTTYPE_DIAGRAM_WALL:
@@ -1356,7 +1347,7 @@ Reference< XAxis > ObjectIdentifier::getAxisForCID(
                 const OUString& rObjectCID
                 , const Reference< frame::XModel >& xChartModel )
 {
-    Reference< XDiagram > xDiagram;
+    rtl::Reference< Diagram > xDiagram;
     Reference< XCoordinateSystem > xCooSys;
     lcl_getDiagramAndCooSys( rObjectCID, xChartModel, xDiagram, xCooSys );
 
@@ -1373,7 +1364,7 @@ Reference< XDataSeries > ObjectIdentifier::getDataSeriesForCID(
 {
     Reference< XDataSeries > xSeries;
 
-    Reference< XDiagram > xDiagram;
+    rtl::Reference< Diagram > xDiagram;
     Reference< XCoordinateSystem > xCooSys;
     lcl_getDiagramAndCooSys( rObjectCID, xChartModel, xDiagram, xCooSys );
 
@@ -1393,12 +1384,11 @@ Reference< XDataSeries > ObjectIdentifier::getDataSeriesForCID(
     return xSeries;
 }
 
-Reference< XDiagram > ObjectIdentifier::getDiagramForCID(
+rtl::Reference< Diagram > ObjectIdentifier::getDiagramForCID(
                   const OUString& rObjectCID
                 , const uno::Reference< frame::XModel >& xChartModel )
 {
-    Reference< XDiagram > xDiagram;
-
+    rtl::Reference< Diagram > xDiagram;
     Reference< XCoordinateSystem > xCooSys;
     lcl_getDiagramAndCooSys( rObjectCID, xChartModel, xDiagram, xCooSys );
 

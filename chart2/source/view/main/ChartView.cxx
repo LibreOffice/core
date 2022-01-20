@@ -1790,14 +1790,13 @@ sal_Int32 lcl_getDiagramTitleSpace()
 {
     return 200; //=0,2 cm spacing
 }
-bool lcl_getPropertySwapXAndYAxis( const uno::Reference< XDiagram >& xDiagram )
+bool lcl_getPropertySwapXAndYAxis( const rtl::Reference< Diagram >& xDiagram )
 {
     bool bSwapXAndY = false;
 
-    uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if( xCooSysContainer.is() )
+    if( xDiagram.is() )
     {
-        uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+        uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xDiagram->getCoordinateSystems() );
         if( aCooSysList.hasElements() )
         {
             uno::Reference<beans::XPropertySet> xProp(aCooSysList[0], uno::UNO_QUERY );
@@ -1876,7 +1875,7 @@ awt::Rectangle ExplicitValueProvider::AddSubtractAxisTitleSizes(
         if( pExplicitValueProvider )
         {
             //detect whether x axis points into x direction or not
-            if( lcl_getPropertySwapXAndYAxis( rModel.getFirstDiagram() ) )
+            if( lcl_getPropertySwapXAndYAxis( rModel.getFirstChartDiagram() ) )
             {
                 std::swap( xTitle_Height, xTitle_Width );
                 std::swap( xSecondTitle_Height, xSecondTitle_Width );
