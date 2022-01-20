@@ -48,6 +48,7 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/i18n/UnicodeType.hpp>
 
 #include <rtl/character.hxx>
 
@@ -2730,6 +2731,39 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
             if (nChars > MAXCHARSINPARA)
             {
                 sal_Int32 nMaxNewChars = std::max<sal_Int32>(0, MAXCHARSINPARA - nExistingChars);
+                // Wherever we break, it may be wrong. However, try to find the
+                // previous non-alnum/non-letter character. Note this is only
+                // in the to be appended data, otherwise already existing
+                // characters would have to be moved and PaM to be updated.
+                // Restrict to 2*42, if not found by then assume other data or
+                // language-script uses only letters or idiographs.
+                sal_Int32 nPos = nMaxNewChars;
+                while (nPos-- > 0 && (nMaxNewChars - nPos) <= 84)
+                {
+                    switch (unicode::getUnicodeType(aLine[nPos]))
+                    {
+                        case css::i18n::UnicodeType::UPPERCASE_LETTER:
+                        case css::i18n::UnicodeType::LOWERCASE_LETTER:
+                        case css::i18n::UnicodeType::TITLECASE_LETTER:
+                        case css::i18n::UnicodeType::MODIFIER_LETTER:
+                        case css::i18n::UnicodeType::OTHER_LETTER:
+                        case css::i18n::UnicodeType::DECIMAL_DIGIT_NUMBER:
+                        case css::i18n::UnicodeType::LETTER_NUMBER:
+                        case css::i18n::UnicodeType::OTHER_NUMBER:
+                        case css::i18n::UnicodeType::CURRENCY_SYMBOL:
+                        break;
+                        default:
+                            {
+                                const sal_Unicode c = aLine[nPos];
+                                // Ignore NO-BREAK spaces, NBSP, NNBSP, ZWNBSP.
+                                if (c != 0x00A0 && c != 0x202F && c != 0xFEFF)
+                                {
+                                    nMaxNewChars = nPos + 1;    // line break after
+                                    nPos = 0;   // will break loop
+                                }
+                            }
+                    }
+                }
                 // Remaining characters end up in the next paragraph. Note that
                 // new nStart will be nEnd+1 below so decrement by one more.
                 nEnd -= (aLine.getLength() - nMaxNewChars + 1);
