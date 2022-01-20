@@ -34,6 +34,24 @@
       "parentUuid": "5489e094_62979ad2",
       "revId": "ce95acbb1d9b025db31e793c3ac70a61b04e1e9a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c51ebf6_b9bd73f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-20T06:15:32Z",
+      "side": 1,
+      "message": "\u003e \u003e Any ideas?\n\u003e \n\u003e witness the various lists for excluding specific source files in compilerplugins/clang/makeshared.cxx, I guess that plugin is just not up to its job and should be disabled/removed?\n\nQuoting myself: \"But anyway, just whitelisting the file won\u0027t work because of potentially a few hundreds more.\"\n\nSure that sentence has a bit of missing context. So in more obvious terms, the grep for CreateMessageDialog found ~500 hits. Currently they are just stored in unique_ptr, but when we switch these to async, they face the same problem and adding all these ~250 files (git grep -l CreateMessageDialog | wc -l), seems not remotely a sensible idea. So yes, I saw the lists in the plugin and I would be fine, if I would just add my new single file, which would work ATM... OTOH this just handles the weld::MessageDialog. I have no way to know, if these are the only ones. A lot more dialogs (and PopupMenus) need async handling.\n\nI could just return a shared_ptr from CreateMessageDialog to begin with. The bit of overhead should be neglectable, because this just creates a GUI dialog and that is not fast anyway. But I\u0027m still asking, if there is a clang-plugin-based solution, other then disabling it or whitelisting IMHO huge amounts of files.",
+      "parentUuid": "dd460df5_812f2bb4",
+      "revId": "ce95acbb1d9b025db31e793c3ac70a61b04e1e9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
