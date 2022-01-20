@@ -26,6 +26,13 @@ struct ScDragData
     OUString       aLinkArea;
     OUString       aJumpTarget;
     OUString       aJumpText;
+
+    ScDragData() :
+        pCellTransfer(nullptr),
+        pDrawTransfer(nullptr),
+        pJumpLocalDoc(nullptr)
+    {
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
