@@ -2761,7 +2761,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             if (bPostponeWritingText
                 && (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame))
             {
-                AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
+                AttrOutput().EndRun(&rNode, nCurrentPos, /*bLastRun=*/false);
                 //write the postponed text run
                 AttrOutput().StartRun( pRedlineData, nCurrentPos, bSingleEmptyRun );
                 AttrOutput().SetAnchorIsLinkedToNode( false );
