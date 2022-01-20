@@ -2475,7 +2475,7 @@ void SdXMLChartShapeContext::startFastElement (sal_Int32 nElement,
 #if !ENABLE_WASM_STRIP_CHART
                 // WASM_CHART change
                 // TODO: Maybe use SdXMLGraphicObjectShapeContext completely instead
-                // or try to create as mbIsPlaceholder object adding a Chart visuailzation
+                // or try to create as mbIsPlaceholder object adding a Chart visualization
                 // that should be available somehow
                 mxChartContext.set( GetImport().GetChartImport()->CreateChartContext( GetImport(), xChartModel ) );
 #endif
