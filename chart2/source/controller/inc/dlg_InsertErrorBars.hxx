@@ -35,13 +35,13 @@ class InsertErrorBarsDialog final : public weld::GenericDialogController
 {
 public:
     InsertErrorBarsDialog(weld::Window* pParent, const SfxItemSet& rMyAttrs,
-                          const css::uno::Reference<css::chart2::XChartDocument>& xChartDocument,
+                          const rtl::Reference<::chart::ChartModel>& xChartDocument,
                           ErrorBarResources::tErrorBarType eType);
 
     void SetAxisMinorStepWidthForErrorBarDecimals(double fMinorStepWidth);
 
     static double getAxisMinorStepWidthForErrorBarDecimals(
-        const css::uno::Reference<css::frame::XModel>& xChartModel,
+        const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::uno::Reference<css::uno::XInterface>& xChartView,
         const OUString& rSelectedObjectCID);
 

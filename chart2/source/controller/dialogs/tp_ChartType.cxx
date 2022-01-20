@@ -19,9 +19,11 @@
 
 #include "tp_ChartType.hxx"
 #include <ChartResourceGroups.hxx>
+#include <ChartTypeManager.hxx>
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartModel.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <DiagramHelper.hxx>
@@ -41,7 +43,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogController* pController, const uno::Reference< XChartDocument >& xChartModel,
+ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogController* pController, const rtl::Reference<::chart::ChartModel>& xChartModel,
                                    bool bShowDescription)
     : OWizardPage(pPage, pController, "modules/schart/ui/tp_ChartType.ui", "tp_ChartType")
     , m_pDim3DLookResourceGroup( new Dim3DLookResourceGroup(m_xBuilder.get()) )
@@ -82,7 +84,7 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
     m_xSubTypeList->SetLineCount(1);
 
     bool bEnableComplexChartTypes = true;
-    uno::Reference< beans::XPropertySet > xProps( m_xChartModel, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xProps( static_cast<cppu::OWeakObject*>(m_xChartModel.get()), uno::UNO_QUERY );
     if ( xProps.is() )
     {
         try
@@ -303,10 +305,10 @@ void ChartTypeTabPage::initializePage()
 {
     if( !m_xChartModel.is() )
         return;
-    rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = dynamic_cast<::chart::ChartTypeManager*>( m_xChartModel->getChartTypeManager().get() );
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
+    rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = m_xChartModel->getTypeManager();
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( m_xChartModel );
     DiagramHelper::tTemplateWithServiceName aTemplate =
-        DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager );
+        DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
     OUString aServiceName( aTemplate.sServiceName );
 
     bool bFound = false;
@@ -370,8 +372,8 @@ rtl::Reference< ChartTypeTemplate > ChartTypeTabPage::getCurrentTemplate() const
     {
         ChartTypeParameter aParameter( getCurrentParamter() );
         m_pCurrentMainType->adjustParameterToSubType( aParameter );
-        rtl::Reference< ChartTypeManager > xTemplateManager = dynamic_cast<ChartTypeManager*>(m_xChartModel->getChartTypeManager().get());
-        return m_pCurrentMainType->getCurrentTemplate( aParameter, xTemplateManager );
+        rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = m_xChartModel->getTypeManager();
+        return m_pCurrentMainType->getCurrentTemplate( aParameter, xChartTypeManager );
     }
     return nullptr;
 }

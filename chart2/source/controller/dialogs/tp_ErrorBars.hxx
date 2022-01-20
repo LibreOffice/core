@@ -21,9 +21,11 @@
 #include <res_ErrorBar.hxx>
 
 #include <sfx2/tabdlg.hxx>
+#include <rtl/ref.hxx>
 
 namespace chart
 {
+class ChartModel;
 
 class ErrorBarsTabPage : public SfxTabPage
 {
@@ -33,7 +35,7 @@ public:
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
     void SetErrorBarType( ErrorBarResources::tErrorBarType eNewType );
     void SetChartDocumentForRangeChoosing(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
+        const rtl::Reference<::chart::ChartModel> & xChartDocument );
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;

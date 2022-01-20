@@ -38,13 +38,13 @@ namespace chart
 class TimerTriggeredControllerLock final
 {
 public:
-    TimerTriggeredControllerLock(const css::uno::Reference<css::frame::XModel>& xModel);
+    TimerTriggeredControllerLock(const rtl::Reference<::chart::ChartModel>& xModel);
     ~TimerTriggeredControllerLock();
 
     void startTimer();
 
 private:
-    css::uno::Reference<css::frame::XModel> m_xModel;
+    rtl::Reference<::chart::ChartModel> m_xModel;
     std::unique_ptr<ControllerLockGuardUNO> m_apControllerLockGuard;
     AutoTimer m_aTimer;
 

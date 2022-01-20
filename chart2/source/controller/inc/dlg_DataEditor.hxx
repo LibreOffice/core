@@ -39,7 +39,7 @@ class DataEditor final : public weld::GenericDialogController
 {
 public:
     DataEditor(weld::Window* pParent,
-               const css::uno::Reference<css::chart2::XChartDocument> & xChartDoc,
+               const rtl::Reference<::chart::ChartModel> & xChartDoc,
                const css::uno::Reference<css::uno::XComponentContext> & xContext);
     virtual ~DataEditor() override;
 
@@ -50,7 +50,7 @@ public:
 private:
     bool                           m_bReadOnly;
 
-    css::uno::Reference<css::chart2::XChartDocument> m_xChartDoc;
+    rtl::Reference<::chart::ChartModel> m_xChartDoc;
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
 
     std::unique_ptr<weld::Toolbar> m_xTbxData;

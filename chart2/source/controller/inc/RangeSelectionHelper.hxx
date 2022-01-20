@@ -41,7 +41,7 @@ class RangeSelectionHelper
 {
 public:
     explicit RangeSelectionHelper(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
+        const rtl::Reference<::chart::ChartModel> & xChartDocument );
     ~RangeSelectionHelper();
 
     bool hasRangeSelection();
@@ -59,8 +59,7 @@ private:
     css::uno::Reference< css::sheet::XRangeSelection >
         m_xRangeSelection;
 
-    css::uno::Reference< css::chart2::XChartDocument >
-        m_xChartDocument;
+    rtl::Reference<::chart::ChartModel> m_xChartDocument;
 
     css::uno::Reference< css::sheet::XRangeSelectionListener >
         m_xRangeSelectionListener;

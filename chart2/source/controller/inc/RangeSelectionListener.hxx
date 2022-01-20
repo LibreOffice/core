@@ -45,7 +45,7 @@ class RangeSelectionListener final
 public:
     explicit RangeSelectionListener(
         RangeSelectionListenerParent& rParent, const OUString& rInitialRange,
-        const css::uno::Reference<css::frame::XModel>& xModelToLockController);
+        const rtl::Reference<::chart::ChartModel>& xModelToLockController);
     virtual ~RangeSelectionListener() override;
 
 protected:

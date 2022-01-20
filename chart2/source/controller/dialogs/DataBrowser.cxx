@@ -30,6 +30,7 @@
 #include <ResId.hxx>
 #include <bitmaps.hlst>
 #include <helpids.h>
+#include <ChartModel.hxx>
 
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
@@ -719,7 +720,7 @@ OUString DataBrowser::GetCellText( sal_Int32 nRow, sal_uInt16 nColumnId ) const
                     // getDateTimeInputNumberFormat() instead of doing the
                     // guess work.
                     sal_Int32 nNumberFormat = DiagramHelper::getDateTimeInputNumberFormat(
-                            Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY), fDouble );
+                            m_xChartDoc, fDouble );
                     Color nLabelColor;
                     bool bColorChanged = false;
                     aResult = m_spNumberFormatterWrapper->getFormattedString(
@@ -831,15 +832,14 @@ void DataBrowser::CellModified()
 }
 
 void DataBrowser::SetDataFromModel(
-    const Reference< chart2::XChartDocument > & xChartDoc,
+    const rtl::Reference<::chart::ChartModel> & xChartDoc,
     const Reference< uno::XComponentContext > & xContext )
 {
-    m_xChartDoc.set( xChartDoc );
+    m_xChartDoc = xChartDoc;
 
     m_apDataBrowserModel.reset( new DataBrowserModel( m_xChartDoc, xContext ));
     m_spNumberFormatterWrapper =
-        std::make_shared<NumberFormatterWrapper>(
-            Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ));
+        std::make_shared<NumberFormatterWrapper>(m_xChartDoc);
 
     Formatter& rFormatter = m_aNumberEditField->get_formatter();
     rFormatter.SetFormatter( m_spNumberFormatterWrapper->getSvNumberFormatter() );
