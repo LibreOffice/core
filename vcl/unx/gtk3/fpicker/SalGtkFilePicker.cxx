@@ -1831,14 +1831,24 @@ void SAL_CALL SalGtkFilePicker::cancel()
 
 void SalGtkFilePicker::SetCurFilter( const OUString& rFilter )
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     // Get all the filters already added
-    GSList *filters = gtk_file_chooser_list_filters ( GTK_FILE_CHOOSER( m_pDialog ) );
-    bool bFound = false;
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GListModel *filters = gtk_file_chooser_get_filters(GTK_FILE_CHOOSER(m_pDialog));
+#else
+    GSList *filters = gtk_file_chooser_list_filters(GTK_FILE_CHOOSER(m_pDialog));
+#endif
 
-    for( GSList *iter = filters; !bFound && iter; iter = iter->next )
+#if GTK_CHECK_VERSION(4, 0, 0)
+    int nIndex = 0;
+    while (gpointer pElem = g_list_model_get_item(filters, nIndex))
     {
-        GtkFileFilter* pFilter = static_cast<GtkFileFilter *>( iter->data );
+        GtkFileFilter* pFilter = static_cast<GtkFileFilter*>(pElem);
+        ++nIndex;
+#else
+    for( GSList *iter = filters; iter; iter = iter->next )
+    {
+        GtkFileFilter* pFilter = static_cast<GtkFileFilter*>( iter->data );
+#endif
         const gchar * filtername = gtk_file_filter_get_name( pFilter );
         OUString sFilterName( filtername, strlen( filtername ), RTL_TEXTENCODING_UTF8 );
 
@@ -1847,13 +1857,14 @@ void SalGtkFilePicker::SetCurFilter( const OUString& rFilter )
         {
             SAL_INFO( "vcl.gtk", "actually setting " << filtername );
             gtk_file_chooser_set_filter( GTK_FILE_CHOOSER( m_pDialog ), pFilter );
-            bFound = true;
+            break;
         }
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     g_slist_free( filters );
 #else
-    (void)rFilter;
+    g_object_unref (filters);
 #endif
 }
 
