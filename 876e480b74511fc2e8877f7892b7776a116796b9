@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e5b9b93_7b93aeba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-20T23:12:07Z",
+      "side": 1,
+      "message": "I increased the width to 400. In my opinion it looks better now. In Writer, you can see the 4 columns.",
+      "revId": "876e480b74511fc2e8877f7892b7776a116796b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
