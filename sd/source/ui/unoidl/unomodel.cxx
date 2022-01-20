@@ -1882,14 +1882,6 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
         !(pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides()) )
         return;
 
-    if (pPDFExtOutDevData)
-    {
-        // Calculate the page number in the PDF output, which may be smaller than the page number in
-        // case of hidden slides.
-        sal_Int32 nOutputPageNum = CalcOutputPageNum(pPDFExtOutDevData, mpDoc, nPageNumber);
-        pPDFExtOutDevData->SetCurrentPageNumber(nOutputPageNum);
-    }
-
     ::sd::ClientView aView( mpDocShell, pOut );
     ::tools::Rectangle aVisArea( Point(), mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind )->GetSize() );
     vcl::Region                       aRegion( aVisArea );
