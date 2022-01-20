@@ -34,6 +34,7 @@
 #include <ooo/vba/excel/XlMousePointer.hpp>
 #include <ooo/vba/office/MsoShapeType.hpp>
 #include <ooo/vba/office/MsoAutoShapeType.hpp>
+#include <ooo/vba/office/MsoFileDialogType.hpp>
 
 #include "vbaapplication.hxx"
 #include "vbaworkbooks.hxx"
@@ -55,6 +56,7 @@
 #include <sc.hrc>
 #include <macromgr.hxx>
 #include "vbafiledialog.hxx"
+#include "vbafiledialogitems.hxx"
 
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
@@ -71,13 +73,13 @@
 #include <basic/sbuno.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sberrors.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <convuno.hxx>
 #include <cellsuno.hxx>
 #include <unonames.hxx>
 #include <docsh.hxx>
 #include "excelvbahelper.hxx"
-
 #include <basic/sbxobj.hxx>
 
 #include <viewutil.hxx>
@@ -345,6 +347,41 @@ ScVbaApplication::getActiveCell()
 
     // #i117392# excel::getUnoSheetModuleObj() may return null in documents without global VBA mode enabled
     return new ScVbaRange( excel::getUnoSheetModuleObj( xRange ), mxContext, xRange->getCellRangeByPosition( nCursorX, nCursorY, nCursorX, nCursorY ) );
+}
+
+uno::Any SAL_CALL
+ScVbaApplication::GetOpenFilename(const uno::Any& /*aFileFilter*/, const uno::Any& /*aFilterIndex*/, const uno::Any& aTitle, const uno::Any& /*aButtonText*/, const uno::Any& aMultiSelect)
+{
+    // TODO - take all parameters into account
+    auto xDialog = uno::Reference<excel::XFileDialog> (new ScVbaFileDialog( this, mxContext, office::MsoFileDialogType::msoFileDialogFilePicker));
+    xDialog->setTitle(aTitle);
+    xDialog->setAllowMultiSelect(aMultiSelect);
+
+    bool bMultiSelect = false;
+    aMultiSelect >>= bMultiSelect;
+
+    if (xDialog->Show() == 0)
+    {
+        // return FALSE when canceled
+        return uno::makeAny(false);
+    }
+
+    uno::Reference<excel::XFileDialogSelectedItems> xItems = xDialog->getSelectedItems();
+    auto* pItems = dynamic_cast<ScVbaFileDialogSelectedItems*>(xItems.get());
+    auto const & rItemVector = pItems->getItems();
+
+    if (!bMultiSelect) // only 1 selection allowed - return path
+    {
+        OUString aPath;
+        if (!rItemVector.empty())
+            aPath = rItemVector.at(0);
+        return uno::makeAny(aPath);
+    }
+    else
+    {
+        // convert to sequence
+        return uno::makeAny(comphelper::containerToSequence(rItemVector));
+    }
 }
 
 uno::Any SAL_CALL
