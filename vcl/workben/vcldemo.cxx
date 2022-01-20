@@ -57,6 +57,10 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+#include <framework/desktop.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+
 #define FIXME_SELF_INTERSECTING_WORKING 0
 #define FIXME_BOUNCE_BUTTON 0
 #define THUMB_REPEAT_FACTOR 10
@@ -2222,6 +2226,8 @@ public:
 protected:
     void Init() override
     {
+        LanguageTag::setConfiguredSystemLanguage(MsLangId::getSystemLanguage());
+
         try
         {
             uno::Reference<uno::XComponentContext> xComponentContext
@@ -2240,6 +2246,9 @@ protected:
     }
     void DeInit() override
     {
+        framework::getDesktop(::comphelper::getProcessComponentContext())->terminate();
+        framework::getDesktop(::comphelper::getProcessComponentContext())->disposing();
+
         uno::Reference< lang::XComponent >(
             comphelper::getProcessComponentContext(),
         uno::UNO_QUERY_THROW)-> dispose();
