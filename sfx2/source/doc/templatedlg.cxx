@@ -161,7 +161,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     , mxMoveButton(m_xBuilder->weld_button("move_btn"))
     , mxExportButton(m_xBuilder->weld_button("export_btn"))
     , mxImportButton(m_xBuilder->weld_button("import_btn"))
-    , mxLinkButton(m_xBuilder->weld_button("online_link"))
     , mxCBXHideDlg(m_xBuilder->weld_check_button("hidedialogcb"))
     , mxActionBar(m_xBuilder->weld_menu_button("action_menu"))
     , mxSearchView(new TemplateSearchView(m_xBuilder->weld_scrolled_window("scrollsearch"),
@@ -214,7 +213,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     mxMoveButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, MoveClickHdl));
     mxExportButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, ExportClickHdl));
     mxImportButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, ImportClickHdl));
-    mxLinkButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, LinkClickHdl));
 
     mxSearchFilter->connect_changed(LINK(this, SfxTemplateManagerDlg, SearchUpdateHdl));
     mxSearchFilter->connect_focus_in(LINK( this, SfxTemplateManagerDlg, GetFocusHdl ));
@@ -1360,7 +1358,6 @@ SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(weld::Window* pParent)
 
     mxCBApp->set_sensitive(false);
     mxActionBar->hide();
-    mxLinkButton->hide();
     mxMoveButton->hide();
     mxExportButton->hide();
     mxCBXHideDlg->show();

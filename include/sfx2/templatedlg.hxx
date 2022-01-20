@@ -130,7 +130,6 @@ protected:
     std::unique_ptr<weld::Button> mxMoveButton;
     std::unique_ptr<weld::Button> mxExportButton;
     std::unique_ptr<weld::Button> mxImportButton;
-    std::unique_ptr<weld::Button> mxLinkButton;
     std::unique_ptr<weld::CheckButton> mxCBXHideDlg;
     std::unique_ptr<weld::MenuButton> mxActionBar;
     std::unique_ptr<TemplateSearchView> mxSearchView;
