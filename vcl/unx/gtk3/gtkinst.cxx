@@ -18352,6 +18352,7 @@ private:
     static gboolean signalKeyPress(GtkEventControllerKey*, guint keyval, guint keycode, GdkModifierType state, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        SolarMutexGuard aGuard;
         return pThis->signal_key_press(CreateKeyEvent(keyval, keycode, state, 0));
     }
 
