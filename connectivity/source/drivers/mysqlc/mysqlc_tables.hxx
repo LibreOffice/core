@@ -46,8 +46,8 @@ public:
     {
     }
 
-    // TODO: we should also implement XDataDescriptorFactory, XRefreshable,
-    // XAppend,  etc., but all are optional.
+    // TODO: should we also implement XDataDescriptorFactory, XRefreshable,
+    // XAppend,  etc. ?
 
     // XDrop
     virtual void dropObject(sal_Int32 nPosition, const OUString& rName) override;
