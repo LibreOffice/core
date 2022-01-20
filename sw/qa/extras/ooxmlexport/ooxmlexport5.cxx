@@ -130,18 +130,15 @@ CPPUNIT_TEST_FIXTURE(Test, testNoDuplicateAttributeExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo79008)
 {
-    loadAndSave("fdo79008.docx");
+    loadAndReload("fdo79008.docx");
     /* File crashing while saving in LO.
      * Check if document.xml file is created after fix
      */
     parseExport("word/document.xml");
 
-#if 0
-    // TODO: jluth says this test case needs more work
     // tdf#134951: there is only one comment
     xmlDocUniquePtr pXmlSettings = parseExport("word/comments.xml");
     assertXPath(pXmlSettings, "/w:comments/w:comment", 1);
-#endif
 
     // Read-only is set, but it is not enforced, so it should be off...
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
