@@ -231,16 +231,14 @@ bool ChartController::TheModelRef::is() const
 namespace {
 
 css::uno::Reference<css::chart2::XChartType> getChartType(
-        const css::uno::Reference<css::chart2::XChartDocument>& xChartDoc)
+        const rtl::Reference<ChartModel>& xChartDoc)
 {
-    Reference <chart2::XDiagram > xDiagram = xChartDoc->getFirstDiagram();
+    rtl::Reference<Diagram > xDiagram = xChartDoc->getFirstChartDiagram();
     if (!xDiagram.is()) {
         return css::uno::Reference<css::chart2::XChartType>();
     }
 
-    Reference< chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY_THROW );
-
-    Sequence< Reference< chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
+    Sequence< Reference< chart2::XCoordinateSystem > > xCooSysSequence( xDiagram->getCoordinateSystems());
     if (!xCooSysSequence.hasElements()) {
         return css::uno::Reference<css::chart2::XChartType>();
     }
@@ -284,7 +282,7 @@ OUString ChartController::GetContextName()
             return "Grid";
         case OBJECTTYPE_DIAGRAM:
             {
-                css::uno::Reference<css::chart2::XChartType> xChartType = getChartType(css::uno::Reference<css::chart2::XChartDocument>(getModel(), uno::UNO_QUERY));
+                css::uno::Reference<css::chart2::XChartType> xChartType = getChartType(getChartModel());
                 if (xChartType.is() && xChartType->getChartType() == "com.sun.star.chart2.PieChartType")
                     return "ChartElements";
                 break;

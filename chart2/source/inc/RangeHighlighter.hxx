@@ -22,6 +22,7 @@
 #include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star {
     namespace chart2 {
@@ -35,6 +36,7 @@ namespace com::sun::star::view { class XSelectionSupplier; }
 
 namespace chart
 {
+class Diagram;
 
 namespace impl
 {
@@ -80,6 +82,7 @@ private:
     void determineRanges();
 
     void fillRangesForDiagram( const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+    void fillRangesForDiagram( const rtl::Reference< ::chart::Diagram > & xDiagram );
     void fillRangesForDataSeries( const css::uno::Reference< css::chart2::XDataSeries > & xSeries );
     void fillRangesForCategories( const css::uno::Reference< css::chart2::XAxis > & xAxis );
     void fillRangesForDataPoint( const css::uno::Reference< css::uno::XInterface > & xDataSeries, sal_Int32 nIndex );

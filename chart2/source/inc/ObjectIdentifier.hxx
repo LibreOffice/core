@@ -42,6 +42,7 @@ namespace com::sun::star::uno { class XInterface; }
 
 namespace chart
 {
+class Diagram;
 
 enum ObjectType
 {
@@ -220,7 +221,7 @@ public:
                   const OUString& rObjectCID
                 , const css::uno::Reference< css::frame::XModel >& xChartModel );
 
-    static css::uno::Reference< css::chart2::XDiagram >
+    static rtl::Reference< ::chart::Diagram >
             getDiagramForCID(
                   const OUString& rObjectCID
                 , const css::uno::Reference< css::frame::XModel >& xChartModel );

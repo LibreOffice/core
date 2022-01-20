@@ -22,6 +22,7 @@
 #include <DataSeriesHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <ControllerLockGuard.hxx>
@@ -466,15 +467,13 @@ std::vector< Reference< XDataSeriesContainer > >
 
     try
     {
-        Reference< XDiagram > xDiagram;
-        if( m_xChartDocument.is())
-            xDiagram.set( m_xChartDocument->getFirstDiagram());
+        if( !m_xChartDocument )
+            return {};
+        rtl::Reference< Diagram > xDiagram = m_xChartDocument->getFirstChartDiagram();
         if( xDiagram.is())
         {
-            Reference< XCoordinateSystemContainer > xCooSysCnt(
-                xDiagram, uno::UNO_QUERY_THROW );
             const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
-                xCooSysCnt->getCoordinateSystems());
+                xDiagram->getCoordinateSystems());
             for( Reference< XCoordinateSystem > const & coords : aCooSysSeq )
             {
                 Reference< XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
