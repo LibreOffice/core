@@ -31,7 +31,6 @@
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <ChartModel.hxx>
-#include <ChartTypeManager.hxx>
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
