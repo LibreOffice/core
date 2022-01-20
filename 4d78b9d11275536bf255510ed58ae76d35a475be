@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2528ca72_275fa2ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-01-20T13:33:01Z",
+      "side": 1,
+      "message": "Admittedly a minor issue -- but maybe some years will pass before Writer\u0027s B\u0026N dialog is reworked into the Impress style.",
+      "revId": "4d78b9d11275536bf255510ed58ae76d35a475be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
