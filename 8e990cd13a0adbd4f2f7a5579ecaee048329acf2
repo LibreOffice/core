@@ -52,6 +52,24 @@
       "parentUuid": "35d26fad_7aa42cf2",
       "revId": "8e990cd13a0adbd4f2f7a5579ecaee048329acf2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd74712a_4acc0759",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-20T15:20:49Z",
+      "side": 1,
+      "message": "I also think the dialog could be a bit larger, specially because the column \"Comments\" can\u0027t be seen with the current size. The problem is that I tried to set the \"Default Width\" option of \"acceptrejectchangesdialog.ui\" in Glade, but it had no effect.\n\nWhere should I define the default size? What size do you recommend for this dialog?",
+      "parentUuid": "01cb6f55_394a0298",
+      "revId": "8e990cd13a0adbd4f2f7a5579ecaee048329acf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
