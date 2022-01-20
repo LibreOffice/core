@@ -104,7 +104,7 @@ IMPL_LINK(AboutDialog, HandleClick, weld::Button&, rButton, void)
 
     // Find which button was pressed and from this, get the URL to be opened
     if (&rButton == m_xCreditsButton.get())
-        sURL = CuiResId(RID_SVXSTR_ABOUT_CREDITS_URL);
+        sURL = officecfg::Office::Common::Menus::CreditsURL::get();
     else if (&rButton == m_xWebsiteButton.get())
     {
         sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
