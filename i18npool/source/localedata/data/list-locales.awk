@@ -83,8 +83,14 @@ function printEntry() {
         tmp = file
         gsub( /.*\//, "", tmp )
         gsub( /\.xml/, "", tmp )
-        split( tmp, iso, /_/ )
-        if ( iso[2] )
+        n = split( tmp, iso, /_/ )
+        if ( n > 2 )
+        {
+            if (length(iso[1]) == 2)
+                printf(" ")
+            printf( "%s: %s - %s\n", tmp, language, country )
+        }
+        else if ( n == 2 )
             printf( "%3s_%2s: %s - %s\n", iso[1], iso[2], language, country )
         else
             printf( "%3s %2s: %s   %s\n", iso[1], iso[2], language, country )
