@@ -63,6 +63,30 @@
       },
       "revId": "f19ce42d26970654a36c7a1e7936c1742b17c8c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "557364ec_e901bbb0",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 3026,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-01-20T11:27:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "44b13fc9_89da0a5d",
+      "range": {
+        "startLine": 3026,
+        "startChar": 0,
+        "endLine": 3026,
+        "endChar": 1
+      },
+      "revId": "f19ce42d26970654a36c7a1e7936c1742b17c8c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
