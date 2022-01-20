@@ -463,7 +463,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                   pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
             {
                 SfxRequest aReq( SID_SAVEDOC, SfxCallMode::SLOT, pObjSh->GetPool() );
-                if ( pObjSh->IsModified() )
+                if ( pObjSh->IsModified() && !pObjSh->isSaveLocked())
                 {
                     pObjSh->ExecuteSlot( aReq );
                     const SfxBoolItem *pItem = dynamic_cast<const SfxBoolItem*>( aReq.GetReturnValue()  );
@@ -1155,7 +1155,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                           pObjSh;
                           pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
                     {
-                        if ( pObjSh->IsModified() )
+                        if ( pObjSh->IsModified() && !pObjSh->isSaveLocked() )
                         {
                             bModified = true;
                             break;
