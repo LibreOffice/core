@@ -2103,6 +2103,11 @@
           <desc>Specifies the URL used with the UNO command WhatsNew (SID_WHATSNEW).</desc>
         </info>
       </prop>
+      <prop oor:name="CreditsURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL for the LibreOffice Credits page.</desc>
+        </info>
+      </prop>
       <prop oor:name="HyphenationMissingURL" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Specifies the URL used with the UNO command HyphenationMissing (SID_HYPHENATIONMISSING).</desc>

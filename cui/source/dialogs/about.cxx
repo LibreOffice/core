@@ -117,7 +117,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   }
 
   // Links
-  m_pCreditsButton->set_uri(CuiResId(RID_CUISTR_ABOUT_CREDITS_URL));
+  m_pCreditsButton->set_uri(officecfg::Office::Common::Menus::CreditsURL::get());
 
   OUString sURL(officecfg::Office::Common::Help::StartCenter::InfoURL::get());
   localizeWebserviceURI(sURL);
