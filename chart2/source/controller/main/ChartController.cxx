@@ -53,6 +53,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -234,18 +235,14 @@ css::uno::Reference<css::chart2::XChartType> getChartType(
         const rtl::Reference<ChartModel>& xChartDoc)
 {
     rtl::Reference<Diagram > xDiagram = xChartDoc->getFirstChartDiagram();
-    if (!xDiagram.is()) {
+    if (!xDiagram.is())
         return css::uno::Reference<css::chart2::XChartType>();
-    }
 
-    Sequence< Reference< chart2::XCoordinateSystem > > xCooSysSequence( xDiagram->getCoordinateSystems());
-    if (!xCooSysSequence.hasElements()) {
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > xCooSysSequence( xDiagram->getBaseCoordinateSystems());
+    if (xCooSysSequence.empty())
         return css::uno::Reference<css::chart2::XChartType>();
-    }
 
-    Reference< chart2::XChartTypeContainer > xChartTypeContainer( xCooSysSequence[0], uno::UNO_QUERY_THROW );
-
-    Sequence< Reference< chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
+    Sequence< Reference< chart2::XChartType > > xChartTypeSequence( xCooSysSequence[0]->getChartTypes() );
 
     return xChartTypeSequence[0];
 }
