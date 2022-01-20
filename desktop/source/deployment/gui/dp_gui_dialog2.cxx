@@ -433,7 +433,6 @@ ExtMgrDialog::ExtMgrDialog(weld::Window *pParent, TheExtensionManager *pManager)
     , m_xBundledCbx(m_xBuilder->weld_check_button("bundled"))
     , m_xSharedCbx(m_xBuilder->weld_check_button("shared"))
     , m_xUserCbx(m_xBuilder->weld_check_button("user"))
-    , m_xGetExtensions(m_xBuilder->weld_link_button("getextensions"))
     , m_xProgressText(m_xBuilder->weld_label("progressft"))
     , m_xProgressBar(m_xBuilder->weld_progress_bar("progressbar"))
     , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
@@ -490,9 +489,8 @@ ExtMgrDialog::~ExtMgrDialog()
     m_aIdle.Stop();
 }
 
-void ExtMgrDialog::setGetExtensionsURL( const OUString &rURL )
+void ExtMgrDialog::setGetExtensionsURL( const OUString &/* rURL */ )
 {
-    m_xGetExtensions->set_uri( rURL );
 }
 
 void ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
