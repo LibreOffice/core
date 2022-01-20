@@ -19,9 +19,7 @@
 #ifndef INCLUDED_LINGUCOMPONENT_SOURCE_LANGUAGEGUESSING_SIMPLEGUESSER_HXX
 #define INCLUDED_LINGUCOMPONENT_SOURCE_LANGUAGEGUESSING_SIMPLEGUESSER_HXX
 
-#include <string.h>
 #include <string>
-#include <cstdlib>
 #include <vector>
 #include "guess.hxx"
 

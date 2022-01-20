@@ -20,11 +20,11 @@
 #include <sal/config.h>
 
 #include <cstddef>
-#include <fstream>
-#include <iterator>
+#include <iostream>
 #include <memory>
 #include <string>
 
+#include <common.hxx>
 #include <po.hxx>
 #include <lngmerge.hxx>
 

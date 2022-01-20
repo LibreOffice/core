@@ -60,7 +60,6 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWOBJ_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWOBJ_HXX
 
-#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfframe.hxx>
 #include <basegfx/numeric/ftools.hxx>
 

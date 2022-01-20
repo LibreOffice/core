@@ -26,8 +26,10 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
+#ifdef _WIN32
 #include <osl/file.hxx>
 #include <osl/process.h>
+#endif
 #include <osl/thread.hxx>
 #include <jvmfwk/framework.hxx>
 #include <vendorbase.hxx>

@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <cstring>
 

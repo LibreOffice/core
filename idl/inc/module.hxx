@@ -20,7 +20,6 @@
 #ifndef INCLUDED_IDL_INC_MODULE_HXX
 #define INCLUDED_IDL_INC_MODULE_HXX
 
-#include "slot.hxx"
 #include "object.hxx"
 
 class SvMetaModule final : public SvMetaObject

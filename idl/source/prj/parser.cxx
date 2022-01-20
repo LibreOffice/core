@@ -24,6 +24,7 @@
 #include <parser.hxx>
 #include <database.hxx>
 #include <globals.hxx>
+#include <slot.hxx>
 #include <osl/file.hxx>
 
 void SvIdlParser::ReadSvIdl( const OUString & rPath )

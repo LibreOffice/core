@@ -26,14 +26,10 @@
 #include <memory>
 #include <vector>
 
-#include <signal.h>
-
-#include <libxml/xmlexports.h>
 #include <expat.h>
 
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
-#include "export.hxx"
 #include <unordered_map>
 
 class XMLParentNode;

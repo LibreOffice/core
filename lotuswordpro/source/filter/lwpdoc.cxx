@@ -54,12 +54,12 @@
  *
  ************************************************************************/
 #include <lwpglobalmgr.hxx>
+#include "lwpcharacterstyle.hxx"
 #include "lwpdoc.hxx"
 #include "lwpfootnote.hxx"
 #include "lwppagehint.hxx"
 #include "lwpdivinfo.hxx"
 #include "lwpholder.hxx"
-#include "lwpparastyle.hxx"
 #include "lwpstory.hxx"
 #include "lwpsilverbullet.hxx"
 #include "lwpsortopt.hxx"
