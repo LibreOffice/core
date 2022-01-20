@@ -19,6 +19,7 @@
 #pragma once
 
 #include <vcl/weld.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::frame
 {
@@ -27,16 +28,17 @@ class XModel;
 
 namespace chart
 {
+class ChartModel;
 class ChartTypeTabPage;
+
 class ChartTypeDialog final : public weld::GenericDialogController
 {
 public:
-    ChartTypeDialog(weld::Window* pWindow,
-                    const css::uno::Reference<css::frame::XModel>& xChartModel);
+    ChartTypeDialog(weld::Window* pWindow, const rtl::Reference<::chart::ChartModel>& xChartModel);
     virtual ~ChartTypeDialog() override;
 
 private:
-    css::uno::Reference<css::frame::XModel> m_xChartModel;
+    rtl::Reference<::chart::ChartModel> m_xChartModel;
     std::unique_ptr<weld::Container> m_xContentArea;
     std::unique_ptr<ChartTypeTabPage> m_xChartTypeTabPage;
 };

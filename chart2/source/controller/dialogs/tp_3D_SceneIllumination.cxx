@@ -20,6 +20,7 @@
 #include "tp_3D_SceneIllumination.hxx"
 #include <CommonConverters.hxx>
 #include <ControllerLockGuard.hxx>
+#include <ChartModel.hxx>
 
 #include <svx/colorbox.hxx>
 #include <svx/float3d.hxx>
@@ -183,7 +184,7 @@ namespace
 ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage(weld::Container* pParent,
     weld::Window* pTopLevel,
     const uno::Reference< beans::XPropertySet > & xSceneProperties,
-    const uno::Reference< frame::XModel >& xChartModel)
+    const rtl::Reference<::chart::ChartModel>& xChartModel)
     : m_xSceneProperties( xSceneProperties )
     , m_aTimerTriggeredControllerLock( xChartModel )
     , m_bInCommitToModel( false )

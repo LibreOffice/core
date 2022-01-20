@@ -22,6 +22,7 @@
 #include <chartview/ExplicitScaleValues.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartModel.hxx>
 #include <ObjectIdentifier.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
@@ -40,7 +41,7 @@ namespace chart
 
 InsertErrorBarsDialog::InsertErrorBarsDialog(
     weld::Window* pParent, const SfxItemSet& rMyAttrs,
-    const uno::Reference< chart2::XChartDocument > & xChartDocument,
+    const rtl::Reference<::chart::ChartModel> & xChartDocument,
     ErrorBarResources::tErrorBarType eType /* = ErrorBarResources::ERROR_BAR_Y */ )
         : GenericDialogController(pParent, "modules/schart/ui/dlg_InsertErrorBars.ui", "dlg_InsertErrorBars")
         , m_apErrorBarResources( new ErrorBarResources(
@@ -65,7 +66,7 @@ void InsertErrorBarsDialog::SetAxisMinorStepWidthForErrorBarDecimals( double fMi
 }
 
 double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
-    const Reference< frame::XModel >& xChartModel,
+    const rtl::Reference<::chart::ChartModel>& xChartModel,
     const Reference< uno::XInterface >& xChartView,
     const OUString& rSelectedObjectCID )
 {

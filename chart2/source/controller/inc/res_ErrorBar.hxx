@@ -60,7 +60,7 @@ public:
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
     void SetErrorBarType( tErrorBarType eNewType );
     void SetChartDocumentForRangeChoosing(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
+        const rtl::Reference<::chart::ChartModel> & xChartDocument );
     void Reset(const SfxItemSet& rInAttrs);
     void FillItemSet(SfxItemSet& rOutAttrs) const;
 

@@ -110,10 +110,10 @@ ObjectPropertiesDialogParameter::~ObjectPropertiesDialogParameter()
 {
 }
 
-void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel >& xChartModel )
+void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
-    m_xChartDocument.set( xChartModel, uno::UNO_QUERY );
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    m_xChartDocument = xChartModel;
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aObjectCID, xChartModel );
     uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
@@ -172,9 +172,8 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                     m_bIsCrossingAxisIsCategoryAxis = ( aScale.AxisType == chart2::AxisType::CATEGORY  );
                     if( m_bIsCrossingAxisIsCategoryAxis )
                     {
-                        ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
-                        if (pModel)
-                            m_aCategories = DiagramHelper::getExplicitSimpleCategories( *pModel );
+                        if (xChartModel)
+                            m_aCategories = DiagramHelper::getExplicitSimpleCategories( *xChartModel );
                     }
                 }
 
@@ -193,10 +192,9 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
 
                     if ( nDimensionIndex == 0 && ( aData.AxisType == chart2::AxisType::CATEGORY || aData.AxisType == chart2::AxisType::DATE ) )
                     {
-                        ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
-                        if (pModel)
+                        if (xChartModel)
                         {
-                            ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, *pModel );
+                            ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, *xChartModel );
                             m_bComplexCategoriesAxis = aExplicitCategoriesProvider.hasComplexCategories();
                         }
 
