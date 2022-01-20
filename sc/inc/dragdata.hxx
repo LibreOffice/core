@@ -27,6 +27,13 @@ struct ScDragData
     OUString       aLinkArea;
     OUString       aJumpTarget;
     OUString       aJumpText;
+
+    ScDragData() :
+        pCellTransfer(nullptr),
+        pDrawTransfer(nullptr),
+        pJumpLocalDoc(nullptr)
+    {
+    }
 };
 
 #endif
