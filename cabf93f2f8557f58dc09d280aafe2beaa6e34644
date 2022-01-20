@@ -34,6 +34,24 @@
       "parentUuid": "7031f29c_98f46bd7",
       "revId": "cabf93f2f8557f58dc09d280aafe2beaa6e34644",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "217e7f33_425b079f",
+        "filename": "svx/qa/unit/customshapes.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-20T10:19:38Z",
+      "side": 1,
+      "message": "Possible. Anyhow, as long as you gave that approach a try (even if it didn\u0027t work out), I consider the pixel assert less ugly. :-) Thanks for trying.",
+      "parentUuid": "15c810ac_ba9ec89d",
+      "revId": "cabf93f2f8557f58dc09d280aafe2beaa6e34644",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
