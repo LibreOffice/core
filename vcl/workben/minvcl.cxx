@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <framework/desktop.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -67,9 +68,9 @@ static int main_impl()
     TheApplication aApp;
     InitVCL();
     int ret = aApp.Main();
+    framework::getDesktop(::comphelper::getProcessComponentContext())->terminate();
     DeInitVCL();
 
-    css::uno::Reference<css::lang::XComponent>(xContext, css::uno::UNO_QUERY_THROW)->dispose();
     comphelper::setProcessServiceFactory(nullptr);
 
     return ret;
