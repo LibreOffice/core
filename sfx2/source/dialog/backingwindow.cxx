@@ -96,7 +96,6 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     get(mpHelpButton, "help");
     //set an alternative help label that doesn't hotkey the H of the Help menu
     mpHelpButton->SetText(get<Window>("althelplabel")->GetText());
-    get(mpExtensionsButton, "extensions");
 
     //Containers are invisible to cursor traversal
     //So on pressing "right" when in Help the
@@ -111,12 +110,7 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     //of a group, i.e. allow it to be grouped with the preceding
     //PushButton so when seen as a candidate by cursor travelling
     //it will be accepted as a continuation of the group.
-    WinBits nBits = mpExtensionsButton->GetStyle();
-    nBits &= ~WB_GROUP;
-    nBits |= WB_NOGROUP;
-    mpExtensionsButton->SetStyle(nBits);
     assert(mpHelpButton->GetStyle() & WB_GROUP);
-    assert(!(mpExtensionsButton->GetStyle() & WB_GROUP));
 
     get(mpAllButtonsBox, "all_buttons_box");
     get(mpButtonsBox, "buttons_box");
@@ -188,7 +182,6 @@ void BackingWindow::dispose()
     mpDBAllButton.clear();
     mpMathAllButton.clear();
     mpHelpButton.clear();
-    mpExtensionsButton.clear();
     mpAllButtonsBox.clear();
     mpButtonsBox.clear();
     mpSmallButtonsBox.clear();
@@ -258,8 +251,6 @@ void BackingWindow::initControls()
 
     checkInstalledModules();
 
-    mpExtensionsButton->SetClickHdl(LINK(this, BackingWindow, ExtLinkClickHdl));
-
     // setup nice colors
     mpCreateLabel->SetControlForeground(maButtonsTextColor);
     vcl::Font aFont(mpCreateLabel->GetSettings().GetStyleSettings().GetLabelFont());
@@ -267,7 +258,6 @@ void BackingWindow::initControls()
     mpCreateLabel->SetControlFont(aFont);
 
     mpHelpButton->SetControlForeground(maButtonsTextColor);
-    mpExtensionsButton->SetControlForeground(maButtonsTextColor);
 
     const Color aButtonsBackground(officecfg::Office::Common::Help::StartCenter::StartCenterBackgroundColor::get());
 
@@ -496,46 +486,6 @@ void BackingWindow::Resize()
 
     if (!IsInPaint())
         Invalidate();
-}
-
-IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton, void)
-{
-    OUString aNode;
-
-    if (pButton == mpExtensionsButton)
-        aNode = "AddFeatureURL";
-
-    if (aNode.isEmpty())
-        return;
-
-    try
-    {
-        uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
-        {
-            {"nodepath", uno::Any(OUString("/org.openoffice.Office.Common/Help/StartCenter"))}
-        }));
-
-        Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
-        Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS, args), UNO_QUERY);
-        if (xNameAccess.is())
-        {
-            OUString sURL;
-            Any value(xNameAccess->getByName(aNode));
-
-            sURL = value.get<OUString>();
-            localizeWebserviceURI(sURL);
-
-            Reference<css::system::XSystemShellExecute> const
-                xSystemShellExecute(
-                    css::system::SystemShellExecute::create(
-                        ::comphelper::getProcessComponentContext()));
-            xSystemShellExecute->execute(sURL, OUString(),
-                css::system::SystemShellExecuteFlags::URIS_ONLY);
-        }
-    }
-    catch (const Exception&)
-    {
-    }
 }
 
 IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton, void )
