@@ -16,6 +16,23 @@
       "message": "Admittedly a minor issue -- but maybe some years will pass before Writer\u0027s B\u0026N dialog is reworked into the Impress style.",
       "revId": "4d78b9d11275536bf255510ed58ae76d35a475be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fe3fd7f_64e5f619",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-20T13:55:01Z",
+      "side": 1,
+      "message": "\"Separator\" is an uncommon sub-level \"heading\" and captions the following \"before\" and \"after\". If you make it bold you better introduce a GtkFrame to also have Separator aligned with Numbering.\n\nMy take on the subject: before/after needs indentation after the caption. Looks bad, though. I wonder if we can do \"Separator: before [   ] after [   ]\".",
+      "revId": "4d78b9d11275536bf255510ed58ae76d35a475be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
