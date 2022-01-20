@@ -30,12 +30,12 @@ SchLegendDlg::SchLegendDlg(weld::Window* pWindow, const uno::Reference<uno::XCom
 {
 }
 
-void SchLegendDlg::init(const uno::Reference<frame::XModel>& xChartModel)
+void SchLegendDlg::init(const rtl::Reference<::chart::ChartModel>& xChartModel)
 {
     m_xLegendPositionResources->writeToResources(xChartModel);
 }
 
-void SchLegendDlg::writeToModel(const uno::Reference<frame::XModel>& xChartModel) const
+void SchLegendDlg::writeToModel(const rtl::Reference<::chart::ChartModel>& xChartModel) const
 {
     m_xLegendPositionResources->writeToModel(xChartModel);
 }

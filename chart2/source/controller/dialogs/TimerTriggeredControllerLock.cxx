@@ -20,13 +20,14 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <TimerTriggeredControllerLock.hxx>
 #include <ControllerLockGuard.hxx>
+#include <ChartModel.hxx>
 
 namespace chart
 {
 using namespace ::com::sun::star;
 
 TimerTriggeredControllerLock::TimerTriggeredControllerLock(
-    const uno::Reference<frame::XModel>& xModel)
+    const rtl::Reference<::chart::ChartModel>& xModel)
     : m_xModel(xModel)
     , m_aTimer("chart2 TimerTriggeredControllerLock")
 {

@@ -26,6 +26,7 @@
 #include <ChartModelHelper.hxx>
 #include <Diagram.hxx>
 #include <AxisHelper.hxx>
+#include <ChartModel.hxx>
 
 namespace chart
 {
@@ -40,7 +41,7 @@ TitleDialogData::TitleDialogData( std::unique_ptr<ReferenceSizeProvider> pRefSiz
 {
 }
 
-void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChartModel )
+void TitleDialogData::readFromModel( const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(xChartModel);
 
@@ -70,7 +71,7 @@ void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChar
 }
 
 bool TitleDialogData::writeDifferenceToModel(
-                          const uno::Reference< frame::XModel >& xChartModel
+                          const rtl::Reference<::chart::ChartModel>& xChartModel
                         , const uno::Reference< uno::XComponentContext >& xContext
                         , TitleDialogData* pOldState )
 {

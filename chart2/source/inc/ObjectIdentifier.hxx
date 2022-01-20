@@ -26,6 +26,7 @@
 #include "charttoolsdllapi.hxx"
 
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 
 namespace chart { class ChartModel; }
 namespace com::sun::star::awt { struct Point; }
@@ -202,6 +203,10 @@ public:
             getObjectPropertySet(
                   const OUString& rObjectCID
                 , const css::uno::Reference< css::chart2::XChartDocument >& xChartDocument );
+    static css::uno::Reference< css::beans::XPropertySet >
+            getObjectPropertySet(
+                  const OUString& rObjectCID
+                , const rtl::Reference< ::chart::ChartModel >& xChartDocument );
 
     //return the axis object that belongs to rObjectCID if any
     static css::uno::Reference< css::chart2::XAxis >
