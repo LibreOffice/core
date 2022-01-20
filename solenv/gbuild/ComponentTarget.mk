@@ -49,6 +49,7 @@ endef
 $(call gb_ComponentTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),CMP,1)
 	rm -f $(call gb_ComponentTarget_get_target,$*) \
+	    $(call gb_ComponentTarget_get_target,$*).allfiltered \
 	    $(call gb_ComponentTarget_get_target,$*).filtered \
 	    $(call gb_ComponentTarget_get_target,$*).optionals \
 
@@ -61,12 +62,21 @@ $(call gb_ComponentTarget_get_target,%).optionals : \
 	    | $(call gb_ComponentTarget_get_target,%).dir \
 	      $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
-	    $(gb_ComponentTarget_XSLT_DUMP_OPTIONALS) $(COMPONENTSOURCE) > $@ 2>&1
+	    $(gb_ComponentTarget_XSLT_DUMP_OPTIONALS) $(COMPONENTSOURCE) 2>&1 | sort > $@
 
 # %.filtered : list of all optional implementations we don't build
 .PRECIOUS: $(call gb_ComponentTarget_get_target,%).filtered
 $(call gb_ComponentTarget_get_target,%).filtered : $(call gb_ComponentTarget_get_target,%).optionals
 	cat $< $(COMPONENTIMPL) | sed -e '/^#\|^\s*$$/d' | sort | uniq -u > $@
+
+# %.allfiltered : contains all possible filtered components, which must match %.optionals
+.PRECIOUS: $(call gb_ComponentTarget_get_target,%).allfiltered
+$(call gb_ComponentTarget_get_target,%).allfiltered : $(call gb_ComponentTarget_get_target,%).optionals
+	$(if $(ALLFILTEREDIMPL), \
+	    cat $(ALLFILTEREDIMPL) | sed -e '/^#\|^\s*$$/d' | sort | uniq > $@.tmp, \
+	    touch $@.tmp)
+	$(DIFF) -u $< $@.tmp
+	mv $@.tmp $@
 
 # when a library is renamed, the component file needs to be rebuilt to match.
 # hence simply depend on Repository{,Fixes}.mk since the command runs quickly.
@@ -74,6 +84,7 @@ $(call gb_ComponentTarget_get_target,%) : \
 		$(SRCDIR)/Repository.mk \
 		$(SRCDIR)/RepositoryFixes.mk \
 		$(gb_ComponentTarget_XSLT_CREATE_COMPONENT) \
+		$(call gb_ComponentTarget_get_target,%).allfiltered \
 		$(call gb_ComponentTarget_get_target,%).filtered \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$*,$(true),CMP,1)
@@ -81,14 +92,19 @@ $(call gb_ComponentTarget_get_target,%) : \
 	$(call gb_ComponentTarget__command,$@)
 	$(call gb_Trace_EndRange,$*,CMP)
 
+gb_ComponentTarget__init_source = $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,$(1)))
+gb_ComponentTarget__init_allfiltered = $(wildcard $(call gb_ComponentTarget__init_source,$(1)).*)
+
 define gb_ComponentTarget_ComponentTarget
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTPREFIX := $(2)
 $(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(3)
-$(call gb_ComponentTarget_get_target,$(1)) : COMPONENTSOURCE := $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,$(1)))
+$(call gb_ComponentTarget_get_target,$(1)) : COMPONENTSOURCE := $(call gb_ComponentTarget__init_source,$(1))
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTIMPL :=
+$(call gb_ComponentTarget_get_target,$(1)) : ALLFILTEREDIMPL := $(call gb_ComponentTarget__init_allfiltered,$(1))
 
-$(call gb_ComponentTarget_get_target,$(1)) : $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,$(1)))
-$(call gb_ComponentTarget_get_target,$(1)).optionals : $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,$(1)))
+$(call gb_ComponentTarget_get_target,$(1)) : $(call gb_ComponentTarget__source,$(1))
+$(call gb_ComponentTarget_get_target,$(1)).optionals : $(call gb_ComponentTarget__init_source,$(1))
+$(call gb_ComponentTarget_get_target,$(1)).allfiltered : $(call gb_ComponentTarget__init_allfiltered,$(1))
 
 $(call gb_Helper_make_userfriendly_targets,$(1),ComponentTarget,$(call gb_ComponentTarget_get_target,$(1)))
 

@@ -11393,9 +11393,17 @@ else
     fi
 fi
 AC_SUBST([FLEX])
+
+AC_PATH_PROG(DIFF, diff)
+if test -z "$DIFF"; then
+    AC_MSG_ERROR(["diff" not found in \$PATH, install it])
+fi
+AC_SUBST([DIFF])
+
 dnl ***************************************
 dnl Checking for patch
 dnl ***************************************
+
 AC_PATH_PROG(PATCH, patch)
 if test -z "$PATCH"; then
     AC_MSG_ERROR(["patch" not found in \$PATH, install it])
@@ -11426,6 +11434,7 @@ fi
 if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
     GNUPATCH=`cygpath -m $GNUPATCH`
 fi
+AC_SUBST(GNUPATCH)
 
 dnl We also need to check for --with-gnu-cp
 
@@ -11469,7 +11478,6 @@ else
     esac
 fi
 
-AC_SUBST(GNUPATCH)
 AC_SUBST(GNUCP)
 AC_SUBST(x_GNUCP)
 
