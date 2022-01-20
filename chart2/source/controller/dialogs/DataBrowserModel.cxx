@@ -27,7 +27,6 @@
 #include <ControllerLockGuard.hxx>
 #include <StatisticsHelper.hxx>
 #include <ChartTypeHelper.hxx>
-#include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <ExplicitCategoriesProvider.hxx>

@@ -24,7 +24,6 @@
 #include <ResId.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
-#include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
