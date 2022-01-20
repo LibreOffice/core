@@ -16,6 +16,24 @@
       "message": "Is that for global documents?",
       "revId": "b5b46f1390ecda0d7933fb31b0e24712bba28004",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7670aa87_22294739",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-01-20T12:57:06Z",
+      "side": 1,
+      "message": "Yep. It is \"Save all\" menu item for all docs. And right now it is ignoring documents with locked save",
+      "parentUuid": "0f73a1e6_5c23445e",
+      "revId": "b5b46f1390ecda0d7933fb31b0e24712bba28004",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
