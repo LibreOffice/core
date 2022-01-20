@@ -91,14 +91,14 @@ private:
     std::unique_ptr<weld::Label> mxFTSeriesName;
     std::unique_ptr<weld::Label> mxFTSeriesTemplate;
 
-    css::uno::Reference<css::frame::XModel> mxModel;
+    rtl::Reference<::chart::ChartModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
     css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
 
     bool mbModelValid;
 
     void Initialize();
-    void doUpdateModel(css::uno::Reference<css::frame::XModel> xModel);
+    void doUpdateModel(rtl::Reference<::chart::ChartModel> xModel);
 
     DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
     DECL_LINK(RadioBtnHdl, weld::Toggleable&, void);

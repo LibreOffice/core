@@ -14,6 +14,7 @@
 #include "ChartAreaPanel.hxx"
 
 #include <ChartController.hxx>
+#include <ChartModel.hxx>
 #include <ViewElementListProvider.hxx>
 #include <PropertyHelper.hxx>
 
@@ -41,7 +42,7 @@ SvxColorToolBoxControl* getColorToolBoxControl(const ToolbarUnoDispatcher& rColo
     return pToolBoxColorControl;
 }
 
-OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
+OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
 {
     css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
@@ -72,7 +73,7 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 }
 
 css::uno::Reference<css::beans::XPropertySet> getPropSet(
-        const css::uno::Reference<css::frame::XModel>& xModel)
+        const rtl::Reference<::chart::ChartModel>& xModel)
 {
     OUString aCID = getCID(xModel);
     css::uno::Reference<css::beans::XPropertySet> xPropSet =
@@ -273,7 +274,7 @@ ChartAreaPanel::ChartAreaPanel(weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController):
     svx::sidebar::AreaPropertyPanelBase(pParent, rxFrame),
-    mxModel(pController->getModel()),
+    mxModel(pController->getChartModel()),
     mxListener(new ChartSidebarModifyListener(this)),
     mxSelectionListener(new ChartSidebarSelectionListener(this)),
     mbUpdate(true),
@@ -294,8 +295,7 @@ ChartAreaPanel::~ChartAreaPanel()
 
 void ChartAreaPanel::Initialize()
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->addModifyListener(mxListener);
+    mxModel->addModifyListener(mxListener);
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
@@ -334,7 +334,7 @@ void ChartAreaPanel::setFillFloatTransparence(
     const OUString& aName = rItem.GetName();
     css::uno::Any aGradientVal;
     rItem.QueryValue(aGradientVal, MID_FILLGRADIENT);
-    OUString aNewName = PropertyHelper::addTransparencyGradientUniqueNameToTable(aGradientVal, css::uno::Reference<css::lang::XMultiServiceFactory>(mxModel, css::uno::UNO_QUERY_THROW), aName);
+    OUString aNewName = PropertyHelper::addTransparencyGradientUniqueNameToTable(aGradientVal, mxModel, aName);
     xPropSet->setPropertyValue("FillTransparenceGradientName", css::uno::Any(aNewName));
 }
 
@@ -374,7 +374,7 @@ void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
     const OUString& aName = rGradientItem.GetName();
     css::uno::Any aGradientVal;
     rGradientItem.QueryValue(aGradientVal, MID_FILLGRADIENT);
-    OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(aGradientVal, css::uno::Reference<css::lang::XMultiServiceFactory>(mxModel, css::uno::UNO_QUERY_THROW), aName);
+    OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(aGradientVal, mxModel, aName);
     xPropSet->setPropertyValue("FillGradientName", css::uno::Any(aNewName));
 }
 
@@ -405,7 +405,7 @@ void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
     css::uno::Any aBitmap;
     rBitmapItem.QueryValue(aBitmap, MID_BITMAP);
     const OUString& aPreferredName = rBitmapItem.GetName();
-    aBitmap <<= PropertyHelper::addBitmapUniqueNameToTable(aBitmap, css::uno::Reference<css::lang::XMultiServiceFactory>(mxModel, css::uno::UNO_QUERY_THROW), aPreferredName);
+    aBitmap <<= PropertyHelper::addBitmapUniqueNameToTable(aBitmap, mxModel, aPreferredName);
     xPropSet->setPropertyValue("FillBitmapName", aBitmap);
 }
 
@@ -507,12 +507,11 @@ void ChartAreaPanel::selectionChanged(bool bCorrectType)
         updateData();
 }
 
-void ChartAreaPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartAreaPanel::doUpdateModel(rtl::Reference<::chart::ChartModel> xModel)
 {
     if (mbModelValid)
     {
-        css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-        xBroadcaster->removeModifyListener(mxListener);
+        mxModel->removeModifyListener(mxListener);
 
         css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
             mxModel->getCurrentController(), css::uno::UNO_QUERY);
@@ -527,8 +526,7 @@ void ChartAreaPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xMode
     if (!mbModelValid)
         return;
 
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcasterNew->addModifyListener(mxListener);
+    mxModel->addModifyListener(mxListener);
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
@@ -537,7 +535,9 @@ void ChartAreaPanel::doUpdateModel(css::uno::Reference<css::frame::XModel> xMode
 
 void ChartAreaPanel::updateModel( css::uno::Reference<css::frame::XModel> xModel)
 {
-    doUpdateModel(xModel);
+    ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
+    assert(!xModel || pModel);
+    doUpdateModel(pModel);
 }
 
 

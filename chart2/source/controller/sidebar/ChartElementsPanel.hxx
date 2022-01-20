@@ -93,7 +93,7 @@ private:
 
     vcl::EnumContext maContext;
 
-    css::uno::Reference<css::frame::XModel> mxModel;
+    rtl::Reference<::chart::ChartModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
 
     bool mbModelValid;
@@ -102,7 +102,7 @@ private:
     OUString maTextSubTitle;
 
     void Initialize();
-    void doUpdateModel(css::uno::Reference<css::frame::XModel> xModel);
+    void doUpdateModel(rtl::Reference<::chart::ChartModel> xModel);
 
     void setTitleVisible(TitleHelper::eTitleType eTitle, bool bVisible);
 

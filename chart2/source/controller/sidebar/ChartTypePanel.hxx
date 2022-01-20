@@ -89,13 +89,12 @@ private:
 
     vcl::EnumContext maContext;
 
-    css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
 
     bool mbModelValid;
 
     void Initialize();
-    void doUpdateModel(css::uno::Reference<css::frame::XModel> xModel);
+    void doUpdateModel(rtl::Reference<::chart::ChartModel> xModel);
 
     std::unique_ptr<Dim3DLookResourceGroup> m_pDim3DLookResourceGroup;
     std::unique_ptr<StackingResourceGroup> m_pStackingResourceGroup;
