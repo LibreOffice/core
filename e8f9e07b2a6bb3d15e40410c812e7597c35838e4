@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1521849d_db97257a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-20T17:09:56Z",
+      "side": 1,
+      "message": "it seems to me this ps fixed the problem... if it passes Jenkins and i done a test it can be merged.",
+      "revId": "e8f9e07b2a6bb3d15e40410c812e7597c35838e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
