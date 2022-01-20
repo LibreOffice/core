@@ -1732,7 +1732,10 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
                     aPosSize.Move( 0, static_cast<tools::Long>(aGeom.nTopDecoration) - aPosSize.Top() );
             }
 
-            SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
+            SetPosSize(aPosSize.getX(), aPosSize.getY(),
+                       aPosSize.GetWidth(), aPosSize.GetHeight(),
+                       SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT |
+                       SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y);
         }
     }
 

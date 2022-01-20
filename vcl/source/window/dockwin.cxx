@@ -834,8 +834,8 @@ void DockingWindow::setPosSizePixel( tools::Long nX, tools::Long nY,
             Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
         else
         {
-            mpFloatWin->SetOutputSizePixel(Size(nWidth, nHeight));
-            mpFloatWin->SetPosPixel(Point(nX, nY));
+//            mpFloatWin->SetOutputSizePixel(Size(nWidth, nHeight));
+//            mpFloatWin->SetPosPixel(Point(nX, nY));
         }
     }
 
