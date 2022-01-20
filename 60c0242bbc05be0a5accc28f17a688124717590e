@@ -16,6 +16,24 @@
       "message": "any plans to backport this to 7.3? It needs it.",
       "revId": "60c0242bbc05be0a5accc28f17a688124717590e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "222e0116_125f79ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-20T10:07:21Z",
+      "side": 1,
+      "message": "Done at https://gerrit.libreoffice.org/c/core/+/128648",
+      "parentUuid": "c66de80e_425ff41c",
+      "revId": "60c0242bbc05be0a5accc28f17a688124717590e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
