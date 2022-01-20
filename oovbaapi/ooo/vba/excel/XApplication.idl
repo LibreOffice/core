@@ -65,6 +65,16 @@ interface XApplication
 
     string getDefaultFilePath() raises(com::sun::star::script::BasicErrorException);
 
+    // Opens the file dialog and returns the selected file
+    // Parameters:
+    // Title: title of the file dialog
+    // MultiSelect: true if multi selection is allowed (false by default)
+    // returns:
+    //   false - if file dialog was canceled
+    //   filename - if "MultiSelect" is false
+    //   array of filename - if "MultiSelect" is true
+    any GetOpenFilename([in] any FileFilter, [in] any FilterIndex, [in] any Title, [in] any ButtonText, [in] any MultiSelect);
+
     any International( [in] long Index );
     any Workbooks( [in] any Index );
     any Worksheets( [in] any Index );

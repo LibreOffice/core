@@ -34,6 +34,8 @@ interface XFileDialog
 
     [attribute]  any  InitialFileName;
     [attribute]  any  Title;
+    [attribute]  any  AllowMultiSelect;
+
     [attribute, readonly]  XFileDialogSelectedItems  SelectedItems;
 
     long Show();

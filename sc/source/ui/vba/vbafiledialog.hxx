@@ -36,6 +36,7 @@ private:
     sal_Int32 m_nType;
     OUString m_sTitle;
     OUString m_sInitialFileName;
+    bool m_bMultiSelectMode;
     css::uno::Reference< ov::excel::XFileDialogSelectedItems> m_xItems;
 public:
     ScVbaFileDialog( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const sal_Int32 nType);
@@ -44,6 +45,9 @@ public:
     virtual void SAL_CALL setInitialFileName( const css::uno::Any& rName ) override;
     virtual css::uno::Any SAL_CALL getTitle() override;
     virtual void SAL_CALL setTitle( const css::uno::Any& rTitle ) override;
+    virtual css::uno::Any SAL_CALL getAllowMultiSelect() override;
+    virtual void SAL_CALL setAllowMultiSelect(const css::uno::Any& rAllowMultiSelect) override;
+
     virtual css::uno::Reference< ov::excel::XFileDialogSelectedItems > SAL_CALL getSelectedItems() override;
 
     virtual sal_Int32 SAL_CALL Show() override;
