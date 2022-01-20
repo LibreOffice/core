@@ -62,18 +62,18 @@ $(call gb_ComponentTarget_get_target,%).optionals : \
 	    | $(call gb_ComponentTarget_get_target,%).dir \
 	      $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
-	    $(gb_ComponentTarget_XSLT_DUMP_OPTIONALS) $(COMPONENTSOURCE) 2>&1 | sort > $@
+	    $(gb_ComponentTarget_XSLT_DUMP_OPTIONALS) $(COMPONENTSOURCE) 2>&1 | LC_ALL=C $(SORT) > $@
 
 # %.filtered : list of all optional implementations we don't build
 .PRECIOUS: $(call gb_ComponentTarget_get_target,%).filtered
 $(call gb_ComponentTarget_get_target,%).filtered : $(call gb_ComponentTarget_get_target,%).optionals
-	cat $< $(COMPONENTIMPL) | sed -e '/^#/d' -e '/^[ 	]*$$/d' | sort | uniq -u > $@
+	cat $< $(COMPONENTIMPL) | sed -e '/^#/d' -e '/^[ 	]*$$/d' | LC_ALL=C $(SORT) | $(UNIQ) -u > $@
 
 # %.allfiltered : contains all possible filtered components, which must match %.optionals
 .PRECIOUS: $(call gb_ComponentTarget_get_target,%).allfiltered
 $(call gb_ComponentTarget_get_target,%).allfiltered : $(call gb_ComponentTarget_get_target,%).optionals
 	$(if $(ALLFILTEREDIMPL), \
-	    cat $(ALLFILTEREDIMPL) | sed -e '/^#/d' -e '/^[ 	]*$$/d' | sort | uniq > $@.tmp, \
+	    cat $(ALLFILTEREDIMPL) | sed -e '/^#/d' -e '/^[ 	]*$$/d' | LC_ALL=C $(SORT) -u > $@.tmp, \
 	    touch $@.tmp)
 	$(DIFF) -u $< $@.tmp
 	mv $@.tmp $@
