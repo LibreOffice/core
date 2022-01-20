@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b23bb6d2_aa316c67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-20T19:51:16Z",
+      "side": 1,
+      "message": "I would have expected RENAME VIEW ok but I noticed mysql_jdbc which indicated:\n\"Returns always \"RENAME TABLE \" even for views\"\n+ https://dev.mysql.com/doc/refman/8.0/en/rename-table.html (once the link upgraded from 5.1)",
+      "revId": "2996e48add5a8e06caf91ed7e62faccdcf73b15b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
