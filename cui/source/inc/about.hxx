@@ -28,9 +28,6 @@ private:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::shared_ptr<weld::AboutDialog> m_xDialog;
     std::unique_ptr<weld::Container> m_xContentArea;
-    std::unique_ptr<weld::Button> m_xCreditsButton;
-    std::unique_ptr<weld::Button> m_xWebsiteButton;
-    std::unique_ptr<weld::Button> m_xReleaseNotesButton;
     std::unique_ptr<weld::Button> m_xCloseButton;
 
     BitmapEx           aLogoBitmap;
@@ -52,7 +49,6 @@ public:
     virtual weld::Dialog* getDialog() override { return m_xDialog.get(); }
     virtual ~AboutDialog() override;
 
-    DECL_LINK(HandleClick, weld::Button&, void);
     DECL_LINK(SizeAllocHdl, const Size&, void);
 };
 
