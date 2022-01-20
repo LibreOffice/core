@@ -17,25 +17,13 @@
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <comphelper/types.hxx>
 
-using namespace ::connectivity;
-using namespace ::connectivity::mysqlc;
-using namespace ::connectivity::sdbcx;
-using namespace ::cppu;
-using namespace ::osl;
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::uno;
-
 //----- OCollection -----------------------------------------------------------
-void Tables::impl_refresh() { static_cast<Catalog&>(m_rParent).refreshTables(); }
+void connectivity::mysqlc::Tables::impl_refresh()
+{
+    static_cast<Catalog&>(m_rParent).refreshTables();
+}
 
 static void lcl_unescape(OUString& rName)
 {
@@ -53,17 +41,17 @@ static void lcl_unescape(OUString& rName)
         rName = rName.copy(1, rName.getLength() - 1);
     }
 
-    // Remove beginning ` and replace double ` by simple `
+    // Replace double ` by simple `
     rName = rName.replaceAll("``", "`");
 }
 
-ObjectType Tables::createObject(const OUString& rName)
+connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::createObject(const OUString& rName)
 {
     OUString sCatalog, sSchema, sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData, rName, sCatalog, sSchema, sTable,
                                        ::dbtools::EComposeRule::InDataManipulation);
 
-    Any aCatalog;
+    css::uno::Any aCatalog;
     if (!sCatalog.isEmpty())
     {
         aCatalog <<= sCatalog;
@@ -74,35 +62,36 @@ ObjectType Tables::createObject(const OUString& rName)
     lcl_unescape(sTable);
 
     // Only retrieving a single table, so table type is irrelevant (param 4)
-    uno::Reference<XResultSet> xTables
-        = m_xMetaData->getTables(aCatalog, sSchema, sTable, uno::Sequence<OUString>());
+    css::uno::Reference<css::sdbc::XResultSet> xTables
+        = m_xMetaData->getTables(aCatalog, sSchema, sTable, css::uno::Sequence<OUString>());
 
     if (!xTables.is())
-        throw RuntimeException("Could not acquire table.");
+        throw css::uno::RuntimeException("Could not acquire table.");
 
-    uno::Reference<XRow> xRow(xTables, UNO_QUERY_THROW);
+    css::uno::Reference<css::sdbc::XRow> xRow(xTables, css::uno::UNO_QUERY_THROW);
 
     if (!xTables->next())
-        throw RuntimeException();
+        throw css::uno::RuntimeException();
 
-    ObjectType xRet(new Table(this, m_rMutex, m_xMetaData->getConnection(),
-                              xRow->getString(1), // Catalog
-                              xRow->getString(2), // Schema
-                              xRow->getString(3), // Name
-                              xRow->getString(4), // Type
-                              xRow->getString(5))); // Description / Remarks / Comments
+    connectivity::sdbcx::ObjectType xRet(
+        new Table(this, m_rMutex, m_xMetaData->getConnection(),
+                  xRow->getString(1), // Catalog
+                  xRow->getString(2), // Schema
+                  xRow->getString(3), // Name
+                  xRow->getString(4), // Type
+                  xRow->getString(5))); // Description / Remarks / Comments
 
     if (xTables->next())
-        throw RuntimeException("Found more tables than expected.");
+        throw css::uno::RuntimeException("Found more tables than expected.");
 
     return xRet;
 }
 
-OUString Tables::createStandardColumnPart(const Reference<XPropertySet>& xColProp,
-                                          const Reference<XConnection>& _xConnection)
+OUString connectivity::mysqlc::Tables::createStandardColumnPart(
+    const css::uno::Reference<css::beans::XPropertySet>& xColProp,
+    const css::uno::Reference<css::sdbc::XConnection>& _xConnection)
 {
-    // TODO test
-    Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
+    css::uno::Reference<css::sdbc::XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
 
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
 
@@ -117,7 +106,7 @@ OUString Tables::createStandardColumnPart(const Reference<XPropertySet>& xColPro
 
     // check if the user enter a specific string to create autoincrement values
     OUString sAutoIncrementValue;
-    Reference<XPropertySetInfo> xPropInfo = xColProp->getPropertySetInfo();
+    css::uno::Reference<css::beans::XPropertySetInfo> xPropInfo = xColProp->getPropertySetInfo();
 
     if (xPropInfo.is()
         && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)))
@@ -134,7 +123,7 @@ OUString Tables::createStandardColumnPart(const Reference<XPropertySet>& xColPro
     {
         sal_Int32 aType = 0;
         xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)) >>= aType;
-        if (aType == DataType::BINARY || aType == DataType::VARBINARY)
+        if (aType == css::sdbc::DataType::BINARY || aType == css::sdbc::DataType::VARBINARY)
         {
             aSql.append(" ");
             aSql.append("CHARACTER SET OCTETS");
@@ -149,13 +138,13 @@ OUString Tables::createStandardColumnPart(const Reference<XPropertySet>& xColPro
     // AutoIncrement "IDENTITY" is implicitly "NOT NULL"
     else if (::comphelper::getINT32(
                  xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE)))
-             == ColumnValue::NO_NULLS)
+             == css::sdbc::ColumnValue::NO_NULLS)
         aSql.append(" NOT NULL");
 
     return aSql.makeStringAndClear();
 }
 
-uno::Reference<XPropertySet> Tables::createDescriptor()
+css::uno::Reference<css::beans::XPropertySet> connectivity::mysqlc::Tables::createDescriptor()
 {
     // There is some internal magic so that the same class can be used as either
     // a descriptor or as a normal table. See VTable.cxx for the details. In our
@@ -164,13 +153,13 @@ uno::Reference<XPropertySet> Tables::createDescriptor()
 }
 
 //----- XAppend ---------------------------------------------------------------
-ObjectType Tables::appendObject(const OUString& /* rName */,
-                                const uno::Reference<XPropertySet>& rDescriptor)
+connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::appendObject(
+    const OUString& /* rName */, const css::uno::Reference<css::beans::XPropertySet>& rDescriptor)
 {
     OUString sSql(
         ::dbtools::createSqlCreateTableStatement(rDescriptor, m_xMetaData->getConnection()));
     OUString sCatalog, sSchema, sComposedName, sTable;
-    const Reference<XConnection>& xConnection = m_xMetaData->getConnection();
+    const css::uno::Reference<css::sdbc::XConnection>& xConnection = m_xMetaData->getConnection();
 
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
 
@@ -189,11 +178,11 @@ ObjectType Tables::appendObject(const OUString& /* rName */,
 }
 
 //----- XDrop -----------------------------------------------------------------
-void Tables::dropObject(sal_Int32 nPosition, const OUString& sName)
+void connectivity::mysqlc::Tables::dropObject(sal_Int32 nPosition, const OUString& sName)
 {
-    uno::Reference<XPropertySet> xTable(getObject(nPosition));
+    css::uno::Reference<css::beans::XPropertySet> xTable(getObject(nPosition));
 
-    if (ODescriptor::isNew(xTable))
+    if (connectivity::sdbcx::ODescriptor::isNew(xTable))
         return;
 
     OUString sType;
