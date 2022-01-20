@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d067ebcb_1dc62f84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-20T12:53:06Z",
+      "side": 1,
+      "message": "A question: PS3 solve the original ticket, however if there are more OLE objects than one in the group shape, it can cause crash... :( What is your opinion should we close this with that limitation (and solve that in other patch)?",
+      "revId": "ec952bff7ad640b38b1a44fc11d033ba19e63052",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
