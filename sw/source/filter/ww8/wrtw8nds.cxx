@@ -2771,6 +2771,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     AttrOutput().StartRunProperties();
                     aAttrIter.OutAttr( nCurrentPos, false );
                     AttrOutput().EndRunProperties( pRedlineData );
+
+                    // OutAttr may have introduced new comments, so write them out now
+                    AttrOutput().WritePostitFieldReference();
                 }
                 AttrOutput().RunText( aSavedSnippet, eChrSet );
                 AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
