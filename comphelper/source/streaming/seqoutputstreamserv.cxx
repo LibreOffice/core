@@ -62,8 +62,9 @@ private:
 
 
     ::osl::Mutex m_aMutex;
-    uno::Reference< io::XOutputStream > m_xOutputStream;
+    // WARNING: dtor of m_xOutputStream writes into m_aSequence so that must live longer!
     uno::Sequence< ::sal_Int8 > m_aSequence;
+    uno::Reference< io::XOutputStream > m_xOutputStream;
 };
 SequenceOutputStreamService::SequenceOutputStreamService()
 {
