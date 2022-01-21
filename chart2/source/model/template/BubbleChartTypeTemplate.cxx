@@ -21,6 +21,7 @@
 #include "BubbleDataInterpreter.hxx"
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
+#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <PropertyHelper.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -149,8 +150,8 @@ void SAL_CALL BubbleChartTypeTemplate::applyStyle(
     DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
 }
 
-// ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL BubbleChartTypeTemplate::supportsCategories()
+// ____ ChartTypeTemplate ____
+bool BubbleChartTypeTemplate::supportsCategories()
 {
     return false;
 }

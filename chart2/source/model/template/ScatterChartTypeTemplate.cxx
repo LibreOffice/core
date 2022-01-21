@@ -29,6 +29,7 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -221,15 +222,15 @@ void SAL_CALL ScatterChartTypeTemplate::applyStyle(
     }
 }
 
-// ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL ScatterChartTypeTemplate::supportsCategories()
+// ____ ChartTypeTemplate ____
+bool ScatterChartTypeTemplate::supportsCategories()
 {
     return false;
 }
 
-sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
+bool ScatterChartTypeTemplate::matchesTemplate(
     const Reference< chart2::XDiagram >& xDiagram,
-    sal_Bool bAdaptProperties )
+    bool bAdaptProperties )
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
