@@ -58,7 +58,8 @@ Atom::Atom( const DffRecordHeader& rRecordHeader, SvStream& rStream )
         }
     }
 
-    maRecordHeader.SeekToEndOfRecord( mrStream );
+    if (!maRecordHeader.SeekToEndOfRecord(mrStream))
+        mrStream.SetError(SVSTREAM_FILEFORMAT_ERROR);
 }
 
 Atom::~Atom()
