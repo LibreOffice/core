@@ -51,6 +51,42 @@
       "message": "I also found that the problem is also there for \u0027gtktiledviewer\u0027. You can test with:\n    bin/run gtktiledviewer --lo-path\u003d$PWD/instdir/program path/to/test.odt\nhttps://docs.libreoffice.org/libreofficekit.html",
       "revId": "d5cc3327a4825a6bd54756ef551b55a2fb4165b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34436379_7094ccbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-21T11:39:27Z",
+      "side": 1,
+      "message": "I\u0027ve fixed these problems.",
+      "parentUuid": "fa3163d2_5ed588eb",
+      "revId": "d5cc3327a4825a6bd54756ef551b55a2fb4165b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b8a6f51_c443016b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-21T11:39:27Z",
+      "side": 1,
+      "message": "This crash seems to be unrelated to the issue fixed here.",
+      "parentUuid": "dfd6fe95_acf65861",
+      "revId": "d5cc3327a4825a6bd54756ef551b55a2fb4165b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
