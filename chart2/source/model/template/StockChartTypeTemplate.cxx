@@ -186,7 +186,7 @@ sal_Int32 StockChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension 
     return bHasVolume ? 2 : 1;
 }
 
-void SAL_CALL StockChartTypeTemplate::applyStyle(
+void StockChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
@@ -230,7 +230,7 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
     }
 }
 
-void SAL_CALL StockChartTypeTemplate::resetStyles(
+void StockChartTypeTemplate::resetStyles(
     const Reference< chart2::XDiagram >& xDiagram )
 {
     ChartTypeTemplate::resetStyles( xDiagram );
@@ -364,10 +364,10 @@ void StockChartTypeTemplate::createChartTypes(
     }
 }
 
-// ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
+// ____ ChartTypeTemplate ____
+bool StockChartTypeTemplate::matchesTemplate(
     const uno::Reference< XDiagram >& xDiagram,
-    sal_Bool /* bAdaptProperties */ )
+    bool /* bAdaptProperties */ )
 {
     bool bResult = false;
 
@@ -439,7 +439,7 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
     return bResult;
 }
 
-Reference< XChartType > SAL_CALL StockChartTypeTemplate::getChartTypeForNewSeries(
+Reference< XChartType > StockChartTypeTemplate::getChartTypeForNewSeries(
         const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
 {
     Reference< chart2::XChartType > xResult;
@@ -460,7 +460,7 @@ Reference< XChartType > SAL_CALL StockChartTypeTemplate::getChartTypeForNewSerie
     return xResult;
 }
 
-Reference< XDataInterpreter > SAL_CALL StockChartTypeTemplate::getDataInterpreter()
+Reference< XDataInterpreter > StockChartTypeTemplate::getDataInterpreter()
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new StockDataInterpreter( m_eStockVariant ) );

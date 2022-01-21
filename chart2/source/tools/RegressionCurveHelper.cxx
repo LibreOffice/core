@@ -36,6 +36,8 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
+#include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
 

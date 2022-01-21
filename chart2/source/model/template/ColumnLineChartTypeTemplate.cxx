@@ -28,6 +28,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -235,7 +236,7 @@ void ColumnLineChartTypeTemplate::createChartTypes(
     }
 }
 
-void SAL_CALL ColumnLineChartTypeTemplate::applyStyle(
+void ColumnLineChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
@@ -267,9 +268,9 @@ StackMode ColumnLineChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex )
 }
 
 // ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
+bool ColumnLineChartTypeTemplate::matchesTemplate(
     const uno::Reference< XDiagram >& xDiagram,
-    sal_Bool bAdaptProperties )
+    bool bAdaptProperties )
 {
     bool bResult = false;
 
@@ -364,7 +365,7 @@ Reference< chart2::XChartType > ColumnLineChartTypeTemplate::getChartTypeForInde
     return xCT;
 }
 
-Reference< XChartType > SAL_CALL ColumnLineChartTypeTemplate::getChartTypeForNewSeries(
+Reference< XChartType > ColumnLineChartTypeTemplate::getChartTypeForNewSeries(
         const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
 {
     Reference< chart2::XChartType > xResult;
@@ -385,7 +386,7 @@ Reference< XChartType > SAL_CALL ColumnLineChartTypeTemplate::getChartTypeForNew
     return xResult;
 }
 
-Reference< XDataInterpreter > SAL_CALL ColumnLineChartTypeTemplate::getDataInterpreter()
+Reference< XDataInterpreter > ColumnLineChartTypeTemplate::getDataInterpreter()
 {
     if( ! m_xDataInterpreter.is())
     {

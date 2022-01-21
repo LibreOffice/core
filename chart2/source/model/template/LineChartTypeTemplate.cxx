@@ -28,6 +28,8 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -196,10 +198,10 @@ StackMode LineChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ )
     return m_eStackMode;
 }
 
-// ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
+// ____ ChartTypeTemplate ____
+bool LineChartTypeTemplate::matchesTemplate(
     const uno::Reference< chart2::XDiagram >& xDiagram,
-    sal_Bool bAdaptProperties )
+    bool bAdaptProperties )
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
@@ -313,7 +315,7 @@ Reference< chart2::XChartType > LineChartTypeTemplate::getChartTypeForIndex( sal
     return xResult;
 }
 
-Reference< chart2::XChartType > SAL_CALL LineChartTypeTemplate::getChartTypeForNewSeries(
+Reference< chart2::XChartType > LineChartTypeTemplate::getChartTypeForNewSeries(
         const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
 {
     Reference< chart2::XChartType > xResult;
@@ -346,7 +348,7 @@ Reference< chart2::XChartType > SAL_CALL LineChartTypeTemplate::getChartTypeForN
     return xResult;
 }
 
-void SAL_CALL LineChartTypeTemplate::applyStyle(
+void LineChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,

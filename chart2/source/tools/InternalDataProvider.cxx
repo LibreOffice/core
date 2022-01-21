@@ -34,6 +34,7 @@
 #include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
