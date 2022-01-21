@@ -202,6 +202,9 @@ void XclRoot::SetTextEncoding( rtl_TextEncoding eTextEnc )
 {
     if( eTextEnc != RTL_TEXTENCODING_DONTKNOW )
         mrData.meTextEnc = eTextEnc;
+    LanguageType rUILanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
+    if( rUILanguage == LANGUAGE_CHINESE_TRADITIONAL )
+        mrData.meTextEnc = RTL_TEXTENCODING_MS_950;
 }
 
 void XclRoot::SetCharWidth( const XclFontData& rFontData )
