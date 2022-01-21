@@ -184,10 +184,12 @@ void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
 
         if( aStyle == "Outline")
         {
-            // tdf#145804 show "Chapter Numbering"
-            assert(!m_xNumberStyleBX->get_sensitive() && "pseudo entry shouldn't be editable");
-            m_xNumberStyleLB->append_text(msOutlineNumbering);
-            m_xNumberStyleLB->set_active_text(msOutlineNumbering);
+            if (m_xNumberStyleLB->find_id("pseudo") == -1)
+            {
+                // tdf#145804 show "Chapter Numbering"
+                m_xNumberStyleLB->append("pseudo", msOutlineNumbering);
+            }
+            m_xNumberStyleLB->set_active_id("pseudo");
             m_xNumberStyleLB->save_value();
         }
         else
@@ -291,8 +293,8 @@ IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl, weld::Toggleable&, voi
 IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl, weld::ComboBox&, void)
 {
     int numSelectPos = m_xNumberStyleLB->get_active();
-    // 0 is "None" and -1 is unselected state
-    if (numSelectPos == 0 || numSelectPos == -1)
+    // 0 is "None" and -1 is unselected state and a "pseudo" is uneditable "Chapter Numbering"
+    if (numSelectPos == 0 || numSelectPos == -1 || m_xNumberStyleLB->get_active_id() == "pseudo")
         m_xEditNumStyleBtn->set_sensitive(false);
     else
         m_xEditNumStyleBtn->set_sensitive(true);
