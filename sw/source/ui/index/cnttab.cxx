@@ -53,6 +53,7 @@
 #include <docsh.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>
+#include <iodetect.hxx>
 
 #include <cmdid.h>
 #include <cnttab.hrc>
@@ -3772,7 +3773,10 @@ void SwEntryBrowseBox::InitController(
 void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
 {
     AutoMarkEntry* pToInsert = nullptr;
-    rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
+    // tdf#108910, tdf#125496 - read index entries using the appropriate character set
+    rtl_TextEncoding eTEnc = SwIoSystem::GetTextEncoding(rInStr);
+    if (eTEnc == RTL_TEXTENCODING_DONTKNOW)
+        eTEnc = osl_getThreadTextEncoding();
     while (rInStr.good())
     {
         OUString sLine;
@@ -3832,13 +3836,13 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
     if (pController->IsValueChangedFromSaved())
         GoToColumnId(nCol + (nCol < ITEM_CASE ? 1 : -1 ));
 
-    rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
     for(const std::unique_ptr<AutoMarkEntry> & rpEntry : m_Entries)
     {
         AutoMarkEntry* pEntry = rpEntry.get();
         if(!pEntry->sComment.isEmpty())
         {
-            rOutStr.WriteByteStringLine( OUStringConcatenation("#" + pEntry->sComment), eTEnc );
+            // tdf#108910, tdf#125496 - write index entries using the utf8 text encoding
+            rOutStr.WriteByteStringLine( OUStringConcatenation("#" + pEntry->sComment), RTL_TEXTENCODING_UTF8 );
         }
 
         OUString sWrite( pEntry->sSearch + ";" +
@@ -3850,7 +3854,8 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
                          (pEntry->bWord ? std::u16string_view(u"1") : std::u16string_view(u"0")) );
 
         if( sWrite.getLength() > 5 )
-            rOutStr.WriteByteStringLine( sWrite, eTEnc );
+            // tdf#108910, tdf#125496 - write index entries using the utf8 text encoding
+            rOutStr.WriteByteStringLine( sWrite, RTL_TEXTENCODING_UTF8 );
     }
 }
 
@@ -3918,7 +3923,8 @@ IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl, weld::Button&, void)
                         bCreateMode ? StreamMode::WRITE
                                     : StreamMode::WRITE| StreamMode::TRUNC );
         SvStream* pStrm = aMed.GetOutStream();
-        pStrm->SetStreamCharSet( RTL_TEXTENCODING_MS_1253 );
+        // tdf#108910, tdf#125496 - write index entries using the utf8 text encoding
+        pStrm->SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
         if( !pStrm->GetError() )
         {
             m_xEntriesBB->WriteEntries( *pStrm );
