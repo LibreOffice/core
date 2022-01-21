@@ -28,6 +28,7 @@
                 <property name="label" translatable="yes" context="mmselectpage|currentdoc">Use the current _document</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has-focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
                 <property name="active">True</property>
