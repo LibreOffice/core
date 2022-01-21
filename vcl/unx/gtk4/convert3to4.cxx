@@ -451,6 +451,13 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 xPropertyLabel = xChild;
             }
 
+            if (sName == "modal")
+            {
+                OUString sParentClass = GetParentObjectType(xChild);
+                if (sParentClass == "GtkPopover")
+                    xName->setNodeValue("autohide");
+            }
+
             if (sName == "visible")
                 bHasVisible = true;
 
