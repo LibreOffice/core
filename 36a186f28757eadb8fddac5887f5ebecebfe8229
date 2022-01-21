@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "331faed3_3ae20aaf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-21T12:40:56Z",
+      "side": 1,
+      "message": "The test file is unfortunate because it already contains a line feed \u0026#x0a; at the 16368th position, so no further line splitting takes place when editing the content. Manually executing the test in an unfixed version also passes.\n\nRemoving the \u0026#x0a; yields usable content. Note however that (for yet unknown reason) pasting into the Input Line adds a blank before the line break, which it doesn\u0027t when pasting in-cell after F2. So this test is fragile in case that gets fixed..\n",
+      "revId": "36a186f28757eadb8fddac5887f5ebecebfe8229",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
