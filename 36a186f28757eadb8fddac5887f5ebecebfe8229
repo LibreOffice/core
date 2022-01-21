@@ -16,6 +16,24 @@
       "message": "The test file is unfortunate because it already contains a line feed \u0026#x0a; at the 16368th position, so no further line splitting takes place when editing the content. Manually executing the test in an unfixed version also passes.\n\nRemoving the \u0026#x0a; yields usable content. Note however that (for yet unknown reason) pasting into the Input Line adds a blank before the line break, which it doesn\u0027t when pasting in-cell after F2. So this test is fragile in case that gets fixed..\n",
       "revId": "36a186f28757eadb8fddac5887f5ebecebfe8229",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18248013_dfc62510",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-21T14:35:10Z",
+      "side": 1,
+      "message": "Hi Eike,\nit fails for me with\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nFAIL: test_tdf139974 (tdf139974.tdf139974)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/xisco/libreoffice/sc/qa/uitest/inputLine/tdf139974.py\", line 48, in test_tdf139974\n    self.assertEqual(17205, len(get_state_as_dict(xInputWin)[\"Text\"]))\nAssertionError: 17205 !\u003d 17204\n\nwithout the fix",
+      "parentUuid": "331faed3_3ae20aaf",
+      "revId": "36a186f28757eadb8fddac5887f5ebecebfe8229",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
