@@ -16,6 +16,23 @@
       "message": "Hi Noel, I have been looking at window position and resize issues and came across what seems be the cause of the floating Navigator window being set to the top left corner whenever it is resized. Actually only the mpFloatWin-\u003eSetPosPixel(Point(nX, nY)) needs removed. I saw in the code history Ashod and you added these lines for LOK which I know little about. I am unsure of how to handle this.",
       "revId": "5130bb2f703207141b96810e25a340b6b6dd878a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c16314e_90a39bb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-21T06:09:51Z",
+      "side": 1,
+      "message": "ash, any ideas here? \n\nI think it seems wrong to need to disable position/size inside DockingWindow::setPosSizePixel, it seems more likely to me that the bug is in the calling code",
+      "revId": "5130bb2f703207141b96810e25a340b6b6dd878a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
