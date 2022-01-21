@@ -108,7 +108,7 @@ public:
     static bool IsValidStgFilter( const css::uno::Reference < css::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
     // tdf#106899 - wrapper around IsDetectableText to retrieve the text encoding for a given stream
-    static rtl_TextEncoding GetTextEncoding(SvStream&);
+    SW_DLLPUBLIC static rtl_TextEncoding GetTextEncoding(SvStream&);
     static bool IsDetectableText( const char* pBuf, sal_uLong &rLen,
             rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd, bool *pBom);
 
