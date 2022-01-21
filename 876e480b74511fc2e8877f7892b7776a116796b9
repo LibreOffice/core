@@ -16,6 +16,23 @@
       "message": "I increased the width to 400. In my opinion it looks better now. In Writer, you can see the 4 columns.",
       "revId": "876e480b74511fc2e8877f7892b7776a116796b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04fb7bf7_6602a49d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-21T09:27:30Z",
+      "side": 1,
+      "message": "Nice work! RID_SVXSTR_CLEARFORM seems to be used elsewehre so we keep it. Last nitpick: do you have a ticket as reference?",
+      "revId": "876e480b74511fc2e8877f7892b7776a116796b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
