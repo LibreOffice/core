@@ -777,17 +777,15 @@ bool AxisHelper::getIndicesForAxis( const Reference< XAxis >& xAxis, const Refer
     rOutDimensionIndex = -1;
     rOutAxisIndex = -1;
 
-    Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if(xCooSysContainer.is())
+    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
+    assert(pDiagram);
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysList = pDiagram->getBaseCoordinateSystems();
+    for( sal_Int32 nC=0; nC < static_cast<sal_Int32>(aCooSysList.size()); ++nC )
     {
-        Sequence< Reference< XCoordinateSystem > > aCooSysList = xCooSysContainer->getCoordinateSystems();
-        for( sal_Int32 nC=0; nC<aCooSysList.getLength(); ++nC )
+        if( AxisHelper::getIndicesForAxis( xAxis, aCooSysList[nC], rOutDimensionIndex, rOutAxisIndex ) )
         {
-            if( AxisHelper::getIndicesForAxis( xAxis, aCooSysList[nC], rOutDimensionIndex, rOutAxisIndex ) )
-            {
-                rOutCooSysIndex = nC;
-                return true;
-            }
+            rOutCooSysIndex = nC;
+            return true;
         }
     }
 
@@ -844,17 +842,14 @@ Sequence< Reference< XAxis > > AxisHelper::getAllAxesOfDiagram(
       const Reference< XDiagram >& xDiagram
     , bool bOnlyVisible )
 {
+    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
+    assert(pDiagram);
     std::vector< Reference< XAxis > > aAxisVector;
 
-    Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if(xCooSysContainer.is())
+    for( rtl::Reference< BaseCoordinateSystem > const & coords : pDiagram->getBaseCoordinateSystems() )
     {
-        const Sequence< Reference< XCoordinateSystem > > aCooSysList = xCooSysContainer->getCoordinateSystems();
-        for( Reference< XCoordinateSystem > const & coords : aCooSysList )
-        {
-            std::vector< Reference< XAxis > > aAxesPerCooSys( AxisHelper::getAllAxesOfCoordinateSystem( coords, bOnlyVisible ) );
-            aAxisVector.insert( aAxisVector.end(), aAxesPerCooSys.begin(), aAxesPerCooSys.end() );
-        }
+        std::vector< Reference< XAxis > > aAxesPerCooSys( AxisHelper::getAllAxesOfCoordinateSystem( coords, bOnlyVisible ) );
+        aAxisVector.insert( aAxisVector.end(), aAxesPerCooSys.begin(), aAxesPerCooSys.end() );
     }
 
     return comphelper::containerToSequence( aAxisVector );
