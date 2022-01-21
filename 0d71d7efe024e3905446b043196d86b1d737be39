@@ -33,6 +33,23 @@
       "message": "Hi Caolan, could you please take a look at this patch?",
       "revId": "0d71d7efe024e3905446b043196d86b1d737be39",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7413f76c_68a69b1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-21T16:55:43Z",
+      "side": 1,
+      "message": "I think the reason the problem exists is because where the focus is when the wizard appears, the focus is in the help button and at some point the focus must have been either in the \"roadmap\" area which SetRoadmapHelpId affects or somewhere else that was not the help button itself.\n\nSetting the toplevel help for the wizard makes more sense than setting just the help id of the roadmap area, so this look like a good move regardless of the possible problem with the selection of the initial focus widget",
+      "revId": "0d71d7efe024e3905446b043196d86b1d737be39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
