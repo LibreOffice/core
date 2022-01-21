@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include "ModifyListenerHelper.hxx"
+#include "charttoolsdllapi.hxx"
 
 #include <vector>
 
@@ -45,7 +46,7 @@ typedef ::cppu::WeakImplHelper
     BaseCoordinateSystem_Base;
 }
 
-class BaseCoordinateSystem :
+class SAL_DLLPUBLIC_RTTI BaseCoordinateSystem :
         public impl::BaseCoordinateSystem_Base,
         public cppu::BaseMutex,
         public ::property::OPropertySet

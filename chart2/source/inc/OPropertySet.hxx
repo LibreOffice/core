@@ -33,7 +33,7 @@
 namespace property
 {
 
-class OPropertySet :
+class SAL_DLLPUBLIC_RTTI OPropertySet :
     public ::cppu::OBroadcastHelper,
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet
     public ::cppu::OPropertySetHelper,

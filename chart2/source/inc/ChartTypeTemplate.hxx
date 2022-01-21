@@ -22,6 +22,7 @@
 #include "StackMode.hxx"
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::chart2 { class XChartType; }
 namespace com::sun::star::chart2 { class XCoordinateSystemContainer; }
@@ -65,7 +66,7 @@ namespace chart
 
     * create an XLegend via the global service factory, set it at the diagram.
  */
-class ChartTypeTemplate : public ::cppu::WeakImplHelper<
+class SAL_DLLPUBLIC_RTTI ChartTypeTemplate : public ::cppu::WeakImplHelper<
         css::chart2::XChartTypeTemplate,
         css::lang::XServiceName >
 {
