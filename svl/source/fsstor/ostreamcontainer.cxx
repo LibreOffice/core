@@ -227,7 +227,6 @@ void SAL_CALL OFSStreamContainer::dispose()
 
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject*>( this ) );
     m_aListenersContainer.disposeAndClear( aGuard, aSource );
-    aGuard.lock();
     m_bDisposed = true;
 }
 

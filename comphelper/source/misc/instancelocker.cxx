@@ -72,7 +72,6 @@ void SAL_CALL OInstanceLocker::dispose()
 
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
     m_aListenersContainer.disposeAndClear( aGuard, aSource );
-    aGuard.lock();
     if ( m_xLockListener.is() )
     {
         auto tmp = std::move(m_xLockListener);

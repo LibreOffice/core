@@ -1007,6 +1007,8 @@ SvxAcceptChgCtr::SvxAcceptChgCtr(weld::Container* pParent, weld::Window* pDialog
 
 SvxAcceptChgCtr::~SvxAcceptChgCtr()
 {
+    m_xTPFilter.reset();
+    m_xTPView.reset();
 }
 
 void SvxAcceptChgCtr::ShowFilterPage()

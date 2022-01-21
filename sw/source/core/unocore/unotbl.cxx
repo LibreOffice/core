@@ -3080,7 +3080,6 @@ void SwXTextTable::Impl::Notify(const SfxHint& rHint)
             lang::EventObject const ev(xThis);
             std::unique_lock aGuard(m_Mutex);
             m_EventListeners.disposeAndClear(aGuard, ev);
-            aGuard.lock();
             m_ChartListeners.disposeAndClear(aGuard, ev);
         }
         else
