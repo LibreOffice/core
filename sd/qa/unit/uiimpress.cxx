@@ -869,7 +869,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123658_SearchAfterSlideChange)
     lcl_search("of");
     // Instead of finding this on the 1st page (or on the 2nd page would be acceptable too)
     // it was going to the third page.
-    //checkCurrentPageNumber(1);
+    checkCurrentPageNumber(1);
 }
 #endif
 

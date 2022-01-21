@@ -809,6 +809,14 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
 
     if (!getOutlinerView() || !GetEditEngine().HasView(&getOutlinerView()->GetEditView()))
     {
+        std::shared_ptr<sd::DrawViewShell> pDrawViewShell (
+            std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell));
+
+        // Perhaps the user switched to a different page/slide between searches.
+        // If so, reset the starting search position to the current slide like DetectChange does
+        if (pDrawViewShell && pDrawViewShell->GetCurPagePos() != maCurrentPosition.mnPageIndex)
+            maObjectIterator = sd::outliner::OutlinerContainer(this).current();
+
         mpImpl->ProvideOutlinerView(*this, pViewShell, mpWindow);
     }
 
