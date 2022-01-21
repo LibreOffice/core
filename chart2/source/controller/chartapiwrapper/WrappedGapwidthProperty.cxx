@@ -21,6 +21,7 @@
 #include "Chart2ModelContact.hxx"
 #include <ChartType.hxx>
 #include <DiagramHelper.hxx>
+#include <com/sun/star/chart2/XChartType.hpp>
 #include <tools/long.hxx>
 
 using namespace ::com::sun::star;

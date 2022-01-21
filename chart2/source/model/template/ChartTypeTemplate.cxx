@@ -34,6 +34,8 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XColorScheme.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
@@ -134,8 +136,8 @@ ChartTypeTemplate::ChartTypeTemplate(
 ChartTypeTemplate::~ChartTypeTemplate()
 {}
 
-// ____ XChartTypeTemplate ____
-uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource(
+// ____ ChartTypeTemplate ____
+uno::Reference< XDiagram > ChartTypeTemplate::createDiagramByDataSource(
     const uno::Reference< data::XDataSource >& xDataSource,
     const uno::Sequence< beans::PropertyValue >& aArguments )
 {
@@ -173,12 +175,12 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
     return xDia;
 }
 
-sal_Bool SAL_CALL ChartTypeTemplate::supportsCategories()
+bool ChartTypeTemplate::supportsCategories()
 {
     return true;
 }
 
-void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >& xDiagram )
+void ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >& xDiagram )
 {
     if( ! xDiagram.is())
         return;
@@ -251,7 +253,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
     }
 }
 
-void SAL_CALL ChartTypeTemplate::changeDiagramData(
+void ChartTypeTemplate::changeDiagramData(
     const Reference< chart2::XDiagram >& xDiagram,
     const Reference< chart2::data::XDataSource >& xDataSource,
     const Sequence< beans::PropertyValue >& aArguments )
@@ -301,9 +303,9 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
     }
 }
 
-sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
+bool ChartTypeTemplate::matchesTemplate(
     const Reference< chart2::XDiagram >& xDiagram,
-    sal_Bool /* bAdaptProperties */ )
+    bool /* bAdaptProperties */ )
 {
     bool bResult = false;
 
@@ -362,7 +364,7 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
     return bResult;
 }
 
-Reference< chart2::XDataInterpreter > SAL_CALL ChartTypeTemplate::getDataInterpreter()
+Reference< chart2::XDataInterpreter > ChartTypeTemplate::getDataInterpreter()
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new DataInterpreter );
@@ -370,7 +372,7 @@ Reference< chart2::XDataInterpreter > SAL_CALL ChartTypeTemplate::getDataInterpr
     return m_xDataInterpreter;
 }
 
-void SAL_CALL ChartTypeTemplate::applyStyle(
+void ChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 /* nSeriesIndex */,
@@ -427,7 +429,7 @@ void ChartTypeTemplate::applyStyles( const Reference< chart2::XDiagram >& xDiagr
     lcl_ensureCorrectMissingValueTreatment( xDiagram, getChartTypeForIndex( 0 ) );
 }
 
-void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
+void ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
 {
     // reset number format if we had percent stacking on
     bool bPercent = (getStackMode(0) == StackMode::YStackedPercent);

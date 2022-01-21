@@ -387,7 +387,7 @@ void ChartModel::insertDefaultChart()
     try
     {
         // create default chart
-        Reference< chart2::XChartTypeTemplate > xTemplate( impl_createDefaultChartTypeTemplate() );
+        rtl::Reference< ::chart::ChartTypeTemplate > xTemplate( impl_createDefaultChartTypeTemplate() );
         if( xTemplate.is())
         {
             try

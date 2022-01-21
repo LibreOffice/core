@@ -47,6 +47,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDataProviderAccess.hpp>
 
 // only needed until #i68864# is fixed

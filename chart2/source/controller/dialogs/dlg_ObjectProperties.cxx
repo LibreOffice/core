@@ -49,6 +49,7 @@
 
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <svl/intitem.hxx>
 #include <svl/ctloptions.hxx>
 

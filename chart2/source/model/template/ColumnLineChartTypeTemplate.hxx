@@ -56,18 +56,18 @@ protected:
         getPropertySetInfo() override;
 
     // ____ XChartTypeTemplate ____
-    virtual sal_Bool SAL_CALL matchesTemplate(
+    virtual bool matchesTemplate(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
-        sal_Bool bAdaptProperties ) override;
-    virtual css::uno::Reference< css::chart2::XChartType > SAL_CALL
+        bool bAdaptProperties ) override;
+    virtual css::uno::Reference< css::chart2::XChartType >
         getChartTypeForNewSeries( const css::uno::Sequence<
             css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override;
-    virtual void SAL_CALL applyStyle(
+    virtual void applyStyle(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeGroupIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount ) override;
-    virtual css::uno::Reference< css::chart2::XDataInterpreter > SAL_CALL getDataInterpreter() override;
+    virtual css::uno::Reference< css::chart2::XDataInterpreter > getDataInterpreter() override;
 
     // ____ ChartTypeTemplate ____
     virtual void createChartTypes(

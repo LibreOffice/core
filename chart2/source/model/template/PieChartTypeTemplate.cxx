@@ -31,6 +31,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <officecfg/Office/Compatibility.hxx>
@@ -314,9 +315,9 @@ void PieChartTypeTemplate::createChartTypes(
 }
 
 // ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
+bool PieChartTypeTemplate::matchesTemplate(
     const uno::Reference< chart2::XDiagram >& xDiagram,
-    sal_Bool bAdaptProperties )
+    bool bAdaptProperties )
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
@@ -430,7 +431,7 @@ Reference< chart2::XChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_
     return xResult;
 }
 
-Reference< chart2::XChartType > SAL_CALL PieChartTypeTemplate::getChartTypeForNewSeries(
+Reference< chart2::XChartType > PieChartTypeTemplate::getChartTypeForNewSeries(
         const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
 {
     Reference< chart2::XChartType > xResult;
@@ -458,7 +459,7 @@ Reference< chart2::XChartType > SAL_CALL PieChartTypeTemplate::getChartTypeForNe
     return xResult;
 }
 
-void SAL_CALL PieChartTypeTemplate::applyStyle(
+void PieChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
@@ -553,7 +554,7 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
     }
 }
 
-void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
+void PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
 {
     // reset axes and grids
     Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );

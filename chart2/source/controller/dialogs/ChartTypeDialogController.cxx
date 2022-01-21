@@ -309,7 +309,7 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
                 , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = xChartModel->getTypeManager();
-    uno::Reference< XChartTypeTemplate > xTemplate( getCurrentTemplate( rParameter, xTemplateManager ) );
+    rtl::Reference< ::chart::ChartTypeTemplate > xTemplate( getCurrentTemplate( rParameter, xTemplateManager ) );
     if(!xTemplate.is())
         return;
 

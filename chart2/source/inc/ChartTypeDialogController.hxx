@@ -37,10 +37,6 @@ namespace com::sun::star::chart2
 {
 class XChartDocument;
 }
-namespace com::sun::star::chart2
-{
-class XChartTypeTemplate;
-}
 namespace com::sun::star::lang
 {
 class XMultiServiceFactory;

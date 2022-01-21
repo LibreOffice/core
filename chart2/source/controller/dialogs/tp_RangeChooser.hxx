@@ -24,7 +24,6 @@
 #include <vcl/wizardmachine.hxx>
 
 namespace chart { class TabPageNotifiable; }
-namespace com::sun::star::chart2 { class XChartTypeTemplate; }
 
 namespace chart
 {

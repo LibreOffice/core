@@ -73,9 +73,6 @@ excludelist:
     - com/sun/star/chart2/data/XDataSink.hpp
     - com/sun/star/chart2/data/XDataSource.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    chart2/source/inc/DiagramHelper.hxx:
-    # # typedef in base class needs a complete type
-    - com/sun/star/chart2/XChartTypeTemplate.hpp
     chart2/source/inc/ErrorBar.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
@@ -291,7 +288,6 @@ excludelist:
     - com/sun/star/util/XModifyListener.hpp
     chart2/source/model/template/ChartTypeTemplate.hxx:
     # base class has to be a complete type
-    - com/sun/star/chart2/XChartTypeTemplate.hpp
     - com/sun/star/lang/XServiceName.hpp
     chart2/source/model/template/DataInterpreter.hxx:
     # base class has to be a complete type

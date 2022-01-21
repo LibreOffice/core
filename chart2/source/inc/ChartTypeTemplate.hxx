@@ -20,15 +20,20 @@
 
 #include <cppuhelper/implbase.hxx>
 #include "StackMode.hxx"
-#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
 #include <vector>
 
+namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::chart2 { class XChartType; }
+namespace com::sun::star::chart2 { class XCoordinateSystem; }
 namespace com::sun::star::chart2 { class XCoordinateSystemContainer; }
 namespace com::sun::star::chart2 { class XDataSeries; }
+namespace com::sun::star::chart2 { class XDataInterpreter; }
+namespace com::sun::star::chart2 { class XDiagram; }
+namespace com::sun::star::chart2::data { class XDataSource; }
+namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
@@ -70,7 +75,6 @@ class ChartType;
     * create an XLegend via the global service factory, set it at the diagram.
  */
 class SAL_DLLPUBLIC_RTTI ChartTypeTemplate : public ::cppu::WeakImplHelper<
-        css::chart2::XChartTypeTemplate,
         css::lang::XServiceName >
 {
 public:
@@ -78,32 +82,33 @@ public:
         const OUString & rServiceName );
     virtual ~ChartTypeTemplate() override;
 
-    // ____ XChartTypeTemplate ____
-    virtual css::uno::Reference< css::chart2::XDiagram > SAL_CALL createDiagramByDataSource(
+    virtual css::uno::Reference< css::chart2::XDiagram > createDiagramByDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments );
     /// denotes if the chart needs categories at the first scale
-    virtual sal_Bool SAL_CALL supportsCategories() override;
+    virtual bool supportsCategories();
 
-    virtual void SAL_CALL changeDiagram(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
-    virtual void SAL_CALL changeDiagramData(
+    virtual void changeDiagram(
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+    virtual void changeDiagramData(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
-    virtual sal_Bool SAL_CALL matchesTemplate(
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments );
+    virtual bool matchesTemplate(
         const css::uno::Reference<
         css::chart2::XDiagram >& xDiagram,
-        sal_Bool bAdaptProperties ) override;
-    // still abstract: getChartTypeForNewSeries()
-    virtual css::uno::Reference< css::chart2::XDataInterpreter > SAL_CALL getDataInterpreter() override;
-    virtual void SAL_CALL applyStyle(
+        bool bAdaptProperties );
+    virtual css::uno::Reference< css::chart2::XChartType >
+        getChartTypeForNewSeries( const css::uno::Sequence<
+            css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) = 0;
+    virtual css::uno::Reference< css::chart2::XDataInterpreter > getDataInterpreter();
+    virtual void applyStyle(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeIndex,
         ::sal_Int32 nSeriesIndex,
-        ::sal_Int32 nSeriesCount ) override;
-    virtual void SAL_CALL resetStyles(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
+        ::sal_Int32 nSeriesCount );
+    virtual void resetStyles(
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
 
     /// @throws css::uno::RuntimeException
     void applyStyles(
@@ -248,7 +253,6 @@ private:
                           css::chart2::data::XLabeledDataSequence >& xCategories,
                       const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq);
 
-    using XChartTypeTemplate::getChartTypeForNewSeries;
     rtl::Reference< ChartType > getChartTypeForNewSeries( const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes );
 };
 

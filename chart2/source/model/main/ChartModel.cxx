@@ -19,6 +19,7 @@
 
 #include <ChartModel.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartTypeTemplate.hxx>
 #include <servicenames.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModelHelper.hxx>
@@ -55,7 +56,6 @@
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -839,7 +839,7 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
                 Reference< chart2::XDiagram > xDia( getFirstDiagram() );
                 if( !xDia.is() )
                 {
-                    Reference< chart2::XChartTypeTemplate > xTemplate( impl_createDefaultChartTypeTemplate() );
+                    rtl::Reference< ::chart::ChartTypeTemplate > xTemplate( impl_createDefaultChartTypeTemplate() );
                     if( xTemplate.is())
                         setFirstDiagram( xTemplate->createDiagramByDataSource( xDataSource, aArguments ) );
                 }
@@ -888,11 +888,11 @@ Reference<awt::XRequestCallback> SAL_CALL ChartModel::getPopupRequest()
     return m_xPopupRequest;
 }
 
-Reference< chart2::XChartTypeTemplate > ChartModel::impl_createDefaultChartTypeTemplate()
+rtl::Reference< ::chart::ChartTypeTemplate > ChartModel::impl_createDefaultChartTypeTemplate()
 {
-    Reference< chart2::XChartTypeTemplate > xTemplate;
+    rtl::Reference< ::chart::ChartTypeTemplate > xTemplate;
     if( m_xChartTypeManager.is() )
-        xTemplate.set( m_xChartTypeManager->createInstance( "com.sun.star.chart2.template.Column" ), uno::UNO_QUERY );
+        xTemplate = m_xChartTypeManager->createTemplate( "com.sun.star.chart2.template.Column" );
     return xTemplate;
 }
 

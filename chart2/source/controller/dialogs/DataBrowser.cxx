@@ -43,6 +43,7 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 
 #include <algorithm>

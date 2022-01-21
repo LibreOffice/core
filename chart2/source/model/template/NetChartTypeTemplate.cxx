@@ -25,6 +25,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <tools/diagnose_ex.h>
@@ -59,7 +61,7 @@ StackMode NetChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) 
     return m_eStackMode;
 }
 
-void SAL_CALL NetChartTypeTemplate::applyStyle(
+void NetChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
@@ -81,10 +83,10 @@ void SAL_CALL NetChartTypeTemplate::applyStyle(
     }
 }
 
-// ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
+// ____ ChartTypeTemplate ____
+bool NetChartTypeTemplate::matchesTemplate(
     const Reference< chart2::XDiagram >& xDiagram,
-    sal_Bool bAdaptProperties )
+    bool bAdaptProperties )
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
@@ -182,7 +184,7 @@ Reference< chart2::XChartType > NetChartTypeTemplate::getChartTypeForIndex( sal_
     return xResult;
 }
 
-Reference< chart2::XChartType > SAL_CALL NetChartTypeTemplate::getChartTypeForNewSeries(
+Reference< chart2::XChartType > NetChartTypeTemplate::getChartTypeForNewSeries(
         const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
 {
     Reference< chart2::XChartType > xResult( getChartTypeForIndex( 0 ) );

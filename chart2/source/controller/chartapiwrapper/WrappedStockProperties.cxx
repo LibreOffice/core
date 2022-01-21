@@ -50,7 +50,7 @@ public:
 
     css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
-    virtual uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const = 0;
+    virtual rtl::Reference< ::chart::ChartTypeTemplate > getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const rtl::Reference< ::chart::ChartTypeManager >& xFactory ) const = 0;
 
 protected:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -87,7 +87,7 @@ void WrappedStockProperty::setPropertyValue( const css::uno::Any& rOuterValue, c
     DiagramHelper::tTemplateWithServiceName aTemplateAndService =
             DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
 
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate =
+    rtl::Reference< ::chart::ChartTypeTemplate > xTemplate =
             getNewTemplate( bNewValue, aTemplateAndService.sServiceName, xChartTypeManager );
 
     if(!xTemplate.is())
@@ -119,7 +119,7 @@ public:
 
     css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const override;
+    rtl::Reference< ::chart::ChartTypeTemplate > getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const rtl::Reference< ::chart::ChartTypeManager >& xFactory ) const override;
 };
 
 }
@@ -155,9 +155,9 @@ css::uno::Any WrappedVolumeProperty::getPropertyValue( const css::uno::Reference
     return m_aOuterValue;
 }
 
-uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const
+rtl::Reference< ::chart::ChartTypeTemplate > WrappedVolumeProperty::getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const rtl::Reference< ::chart::ChartTypeManager >& xFactory ) const
 {
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate;
+    rtl::Reference< ::chart::ChartTypeTemplate > xTemplate;
 
     if(!xFactory.is())
         return xTemplate;
@@ -165,16 +165,16 @@ uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTempla
     if( bNewValue ) //add volume
     {
         if( rCurrentTemplate == "com.sun.star.chart2.template.StockLowHighClose" )
-            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockVolumeLowHighClose" ), uno::UNO_QUERY );
+            xTemplate = xFactory->createTemplate( "com.sun.star.chart2.template.StockVolumeLowHighClose" );
         else if( rCurrentTemplate == "com.sun.star.chart2.template.StockOpenLowHighClose" )
-            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ), uno::UNO_QUERY );
+            xTemplate = xFactory->createTemplate( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" );
     }
     else //remove volume
     {
         if( rCurrentTemplate == "com.sun.star.chart2.template.StockVolumeLowHighClose" )
-            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockLowHighClose" ), uno::UNO_QUERY );
+            xTemplate = xFactory->createTemplate( "com.sun.star.chart2.template.StockLowHighClose" );
         else if( rCurrentTemplate == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
-            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockOpenLowHighClose" ), uno::UNO_QUERY );
+            xTemplate = xFactory->createTemplate( "com.sun.star.chart2.template.StockOpenLowHighClose" );
     }
     return xTemplate;
 }
@@ -188,7 +188,7 @@ public:
 
     css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const override;
+    rtl::Reference< ::chart::ChartTypeTemplate > getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const rtl::Reference< ChartTypeManager >& xFactory ) const override;
 };
 
 }
@@ -223,22 +223,22 @@ css::uno::Any WrappedUpDownProperty::getPropertyValue( const css::uno::Reference
     }
     return m_aOuterValue;
 }
-uno::Reference< chart2::XChartTypeTemplate > WrappedUpDownProperty::getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const
+rtl::Reference< ::chart::ChartTypeTemplate > WrappedUpDownProperty::getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const rtl::Reference< ChartTypeManager >& xFactory ) const
 {
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate;
+    rtl::Reference< ::chart::ChartTypeTemplate > xTemplate;
     if( bNewValue ) //add open series
     {
         if( rCurrentTemplate == "com.sun.star.chart2.template.StockLowHighClose" )
-            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockOpenLowHighClose" ), uno::UNO_QUERY );
+            xTemplate = xFactory->createTemplate( "com.sun.star.chart2.template.StockOpenLowHighClose" );
         else if( rCurrentTemplate == "com.sun.star.chart2.template.StockVolumeLowHighClose" )
-            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ), uno::UNO_QUERY );
+            xTemplate = xFactory->createTemplate( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" );
     }
     else //remove open series
     {
         if( rCurrentTemplate == "com.sun.star.chart2.template.StockOpenLowHighClose" )
-            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockLowHighClose" ), uno::UNO_QUERY );
+            xTemplate = xFactory->createTemplate( "com.sun.star.chart2.template.StockLowHighClose" );
         else if( rCurrentTemplate == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
-            xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockVolumeLowHighClose" ), uno::UNO_QUERY );
+            xTemplate = xFactory->createTemplate( "com.sun.star.chart2.template.StockVolumeLowHighClose" );
     }
     return xTemplate;
 }

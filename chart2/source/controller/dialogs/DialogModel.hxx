@@ -37,7 +37,6 @@ namespace com::sun::star::chart2 {
     class XDataSeriesContainer;
     class XDataSeries;
     class XChartType;
-    class XChartTypeTemplate;
     struct InterpretedData;
     namespace data {
         class XDataProvider;
@@ -155,8 +154,7 @@ private:
     rtl::Reference<::chart::ChartModel>
         m_xChartDocument;
 
-    css::uno::Reference< css::chart2::XChartTypeTemplate >
-        m_xTemplate;
+    rtl::Reference< ::chart::ChartTypeTemplate > m_xTemplate;
 
     css::uno::Reference< css::uno::XComponentContext >
         m_xContext;

@@ -23,6 +23,8 @@
 #include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -173,8 +175,8 @@ StackMode AreaChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ )
     return m_eStackMode;
 }
 
-// ____ XChartTypeTemplate ____
-void SAL_CALL AreaChartTypeTemplate::applyStyle(
+// ____ ChartTypeTemplate ____
+void AreaChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
@@ -184,7 +186,7 @@ void SAL_CALL AreaChartTypeTemplate::applyStyle(
     DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
 }
 
-void SAL_CALL AreaChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
+void AreaChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
 {
     ChartTypeTemplate::resetStyles( xDiagram );
     std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
@@ -222,7 +224,7 @@ Reference< chart2::XChartType > AreaChartTypeTemplate::getChartTypeForIndex( sal
     return xResult;
 }
 
-Reference< chart2::XChartType > SAL_CALL AreaChartTypeTemplate::getChartTypeForNewSeries(
+Reference< chart2::XChartType > AreaChartTypeTemplate::getChartTypeForNewSeries(
         const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
 {
     Reference< chart2::XChartType > xResult( getChartTypeForIndex( 0 ) );

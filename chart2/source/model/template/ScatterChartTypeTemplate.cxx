@@ -29,6 +29,7 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -197,7 +198,7 @@ StackMode ScatterChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex *
     return StackMode::NONE;
 }
 
-void SAL_CALL ScatterChartTypeTemplate::applyStyle(
+void ScatterChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
@@ -221,15 +222,15 @@ void SAL_CALL ScatterChartTypeTemplate::applyStyle(
     }
 }
 
-// ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL ScatterChartTypeTemplate::supportsCategories()
+// ____ ChartTypeTemplate ____
+bool ScatterChartTypeTemplate::supportsCategories()
 {
     return false;
 }
 
-sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
+bool ScatterChartTypeTemplate::matchesTemplate(
     const Reference< chart2::XDiagram >& xDiagram,
-    sal_Bool bAdaptProperties )
+    bool bAdaptProperties )
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
@@ -343,7 +344,7 @@ Reference< chart2::XChartType > ScatterChartTypeTemplate::getChartTypeForIndex( 
     return xResult;
 }
 
-Reference< chart2::XChartType > SAL_CALL ScatterChartTypeTemplate::getChartTypeForNewSeries(
+Reference< chart2::XChartType > ScatterChartTypeTemplate::getChartTypeForNewSeries(
         const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
 {
     Reference< chart2::XChartType > xResult;
@@ -376,7 +377,7 @@ Reference< chart2::XChartType > SAL_CALL ScatterChartTypeTemplate::getChartTypeF
     return xResult;
 }
 
-Reference< chart2::XDataInterpreter > SAL_CALL ScatterChartTypeTemplate::getDataInterpreter()
+Reference< chart2::XDataInterpreter > ScatterChartTypeTemplate::getDataInterpreter()
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new XYDataInterpreter );
