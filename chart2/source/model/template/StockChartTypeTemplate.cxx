@@ -21,6 +21,8 @@
 #include <DataSeriesHelper.hxx>
 #include "StockDataInterpreter.hxx"
 #include <DiagramHelper.hxx>
+#include <Diagram.hxx>
+#include <BaseCoordinateSystem.hxx>
 #include <servicenames_charttypes.hxx>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -371,6 +373,8 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
 
     if( ! xDiagram.is())
         return bResult;
+    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
+    assert(pDiagram);
 
     try
     {
@@ -385,14 +389,9 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
         Reference< chart2::XChartType > xLineChartType;
         sal_Int32 nNumberOfChartTypes = 0;
 
-        Reference< XCoordinateSystemContainer > xCooSysCnt(
-            xDiagram, uno::UNO_QUERY_THROW );
-        const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
-            xCooSysCnt->getCoordinateSystems());
-        for( Reference< XCoordinateSystem > const & coords : aCooSysSeq )
+        for( rtl::Reference< BaseCoordinateSystem > const & coords : pDiagram->getBaseCoordinateSystems() )
         {
-            Reference< XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
-            const Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
+            const Sequence< Reference< XChartType > > aChartTypeSeq( coords->getChartTypes());
             for( Reference< XChartType >  const & chartType : aChartTypeSeq )
             {
                 if( chartType.is())
