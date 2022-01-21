@@ -16,6 +16,24 @@
       "message": "I get a std::system_error on activating presentation mode with a \"fine dissolve\" opengl transition which looks a similar class of problem to this",
       "revId": "a6e7b7c9044c689b7824cf97f4ff79655a950802",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35db6fe9_b9290133",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-21T08:32:49Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/128723",
+      "parentUuid": "d87c69b6_51ffd00a",
+      "revId": "a6e7b7c9044c689b7824cf97f4ff79655a950802",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
