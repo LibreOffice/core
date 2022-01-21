@@ -994,6 +994,12 @@ void Ruler::ApplySettings(vcl::RenderContext& rRenderContext)
     svtools::ColorConfig aColorConfig;
     aColor = aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor;
     ApplyControlBackground(rRenderContext, aColor);
+    // A hack to get it to change the non-ruler application background to change immediately
+    if (aColor != maVirDev->GetBackground().GetColor())
+    {
+        maVirDev->SetBackground(aColor);
+        Resize();
+    }
 }
 
 void Ruler::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
