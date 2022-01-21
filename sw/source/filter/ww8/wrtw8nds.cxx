@@ -2720,6 +2720,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
                 if (bTextAtr || bAttrWithRange || bIncludeEndOfParaCRInRedlineProperties)
                 {
+                    AttrOutput().WritePostitFieldReference();
+
                     // insert final graphic anchors if any before CR
                     nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
                     // insert final bookmarks if any before CR and after flys
