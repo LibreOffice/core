@@ -16,6 +16,24 @@
       "message": "As far as I\u0027ve tested, \u0027vcldemo\u0027 and \u0027svdemo\u0027 are fixed by this patch.\n\n\u0027mtfdemo\u0027 has 2 different exit points. One for displaying the wmf file, and another for the xml dump. This change is not OK for \u0027mtfdemo\u0027, and causes problems for both situations.",
       "revId": "6f99cbfcfd83dfdd2f95bd70a73a5c09da676545",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e09547c1_e916b969",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-21T11:39:55Z",
+      "side": 1,
+      "message": "This is fixed now.",
+      "parentUuid": "ced635d5_c9ecd612",
+      "revId": "6f99cbfcfd83dfdd2f95bd70a73a5c09da676545",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
