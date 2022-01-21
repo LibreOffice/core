@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdc056d6_0f808cdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-01-21T00:02:46Z",
+      "side": 1,
+      "message": "Hi Noel, I have been looking at window position and resize issues and came across what seems be the cause of the floating Navigator window being set to the top left corner whenever it is resized. Actually only the mpFloatWin-\u003eSetPosPixel(Point(nX, nY)) needs removed. I saw in the code history Ashod and you added these lines for LOK which I know little about. I am unsure of how to handle this.",
+      "revId": "5130bb2f703207141b96810e25a340b6b6dd878a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
