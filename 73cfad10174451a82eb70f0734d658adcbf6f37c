@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07996643_a02b4baa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-21T18:38:45Z",
+      "side": 1,
+      "message": "LGTM code-wise; I didn\u0027t check the behavior. Heiko, up to you :-)",
+      "revId": "73cfad10174451a82eb70f0734d658adcbf6f37c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
