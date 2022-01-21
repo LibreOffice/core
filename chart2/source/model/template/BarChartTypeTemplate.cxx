@@ -25,7 +25,10 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/diagnose_ex.h>
@@ -159,10 +162,10 @@ bool BarChartTypeTemplate::isSwapXAndY() const
     return (m_eBarDirection == HORIZONTAL);
 }
 
-// ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
+// ____ ChartTypeTemplate ____
+bool  BarChartTypeTemplate::matchesTemplate(
     const Reference< chart2::XDiagram >& xDiagram,
-    sal_Bool bAdaptProperties )
+    bool bAdaptProperties )
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 

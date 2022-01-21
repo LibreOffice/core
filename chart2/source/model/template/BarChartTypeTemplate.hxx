@@ -63,9 +63,9 @@ protected:
         getPropertySetInfo() override;
 
     // ____ XChartTypeTemplate ____
-    virtual sal_Bool SAL_CALL matchesTemplate(
+    virtual bool matchesTemplate(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
-        sal_Bool bAdaptProperties ) override;
+        bool bAdaptProperties ) override;
     virtual css::uno::Reference< css::chart2::XChartType > SAL_CALL
         getChartTypeForNewSeries( const css::uno::Sequence<
             css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override;

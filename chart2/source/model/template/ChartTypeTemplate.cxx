@@ -34,6 +34,8 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XColorScheme.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
@@ -173,7 +175,7 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
     return xDia;
 }
 
-sal_Bool SAL_CALL ChartTypeTemplate::supportsCategories()
+bool ChartTypeTemplate::supportsCategories()
 {
     return true;
 }
@@ -301,9 +303,9 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
     }
 }
 
-sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
+bool ChartTypeTemplate::matchesTemplate(
     const Reference< chart2::XDiagram >& xDiagram,
-    sal_Bool /* bAdaptProperties */ )
+    bool /* bAdaptProperties */ )
 {
     bool bResult = false;
 

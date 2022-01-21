@@ -32,6 +32,7 @@
 
 #include <ChartModel.hxx>
 
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <tools/diagnose_ex.h>
 

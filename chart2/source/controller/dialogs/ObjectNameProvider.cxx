@@ -45,6 +45,7 @@
 
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/MovingAverageType.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <tools/diagnose_ex.h>
 

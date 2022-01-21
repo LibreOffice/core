@@ -28,6 +28,8 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -196,10 +198,10 @@ StackMode LineChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ )
     return m_eStackMode;
 }
 
-// ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
+// ____ ChartTypeTemplate ____
+bool LineChartTypeTemplate::matchesTemplate(
     const uno::Reference< chart2::XDiagram >& xDiagram,
-    sal_Bool bAdaptProperties )
+    bool bAdaptProperties )
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 

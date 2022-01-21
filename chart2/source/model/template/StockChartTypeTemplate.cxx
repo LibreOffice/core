@@ -364,10 +364,10 @@ void StockChartTypeTemplate::createChartTypes(
     }
 }
 
-// ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
+// ____ ChartTypeTemplate ____
+bool StockChartTypeTemplate::matchesTemplate(
     const uno::Reference< XDiagram >& xDiagram,
-    sal_Bool /* bAdaptProperties */ )
+    bool /* bAdaptProperties */ )
 {
     bool bResult = false;
 

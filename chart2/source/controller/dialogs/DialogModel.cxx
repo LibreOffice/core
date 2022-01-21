@@ -39,6 +39,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/XDataInterpreter.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
@@ -295,7 +296,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
     sal_Int32 nNewSeriesIndex,
     sal_Int32 nTotalNumberOfSeriesInCTGroup,
     const Reference< XDiagram > & xDiagram,
-    const Reference< XChartTypeTemplate > & xTemplate,
+    const rtl::Reference< ::chart::ChartTypeTemplate > & xTemplate,
     bool bCreateDataCachedSequences )
 {
     // create plain series

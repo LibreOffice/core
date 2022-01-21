@@ -52,7 +52,7 @@ protected:
         getPropertySetInfo() override;
 
     // ____ XChartTypeTemplate ____
-    virtual sal_Bool SAL_CALL supportsCategories() override;
+    virtual bool supportsCategories() override;
     virtual css::uno::Reference< css::chart2::XChartType > SAL_CALL
         getChartTypeForNewSeries( const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override;
     virtual css::uno::Reference< css::chart2::XDataInterpreter > SAL_CALL getDataInterpreter() override;
