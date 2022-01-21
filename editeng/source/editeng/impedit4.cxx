@@ -115,10 +115,6 @@ EditPaM ImpEditEngine::ReadText( SvStream& rInput, EditSelection aSel )
     bool bDone = rInput.ReadByteStringLine( aTmpStr, rInput.GetStreamCharSet() );
     while ( bDone )
     {
-        if (aTmpStr.getLength() > MAXCHARSINPARA)
-        {
-            aTmpStr = aTmpStr.copy(0, MAXCHARSINPARA);
-        }
         aPaM = ImpInsertText( EditSelection( aPaM, aPaM ), aTmpStr );
         aPaM = ImpInsertParaBreak( aPaM );
         bDone = rInput.ReadByteStringLine( aTmpStr, rInput.GetStreamCharSet() );
