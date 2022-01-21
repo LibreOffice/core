@@ -5063,6 +5063,53 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145089_RedlineTableRowInsertionDOCX
     assertXPath(pXmlDoc, "//page[1]//body/tab/row", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testPasteTrackedTableRow)
+{
+    // load a 1-row table
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // check table count
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    // check table row count
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
+
+    // copy table row and paste it by Paste Special->Rows Above
+    dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:Escape", {});
+    dispatchCommand(mxComponent, ".uno:PasteRowsBefore", {});
+
+    // 2-row table
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
+
+    // This was 2 (inserted as a nested table in the first cell of the new row)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    // Is it a tracked row insertion? Its rejection results the original 1-row table
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145091)
 {
     // load a deleted table, reject them, and delete only its text and export to DOCX
