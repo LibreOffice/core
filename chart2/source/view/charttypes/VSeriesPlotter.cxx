@@ -61,6 +61,7 @@
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/MovingAverageType.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>

@@ -21,6 +21,7 @@
 #include "BubbleDataInterpreter.hxx"
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
+#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <PropertyHelper.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -139,7 +140,7 @@ StackMode BubbleChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */
     return StackMode::NONE;
 }
 
-void SAL_CALL BubbleChartTypeTemplate::applyStyle(
+void BubbleChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
@@ -149,8 +150,8 @@ void SAL_CALL BubbleChartTypeTemplate::applyStyle(
     DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
 }
 
-// ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL BubbleChartTypeTemplate::supportsCategories()
+// ____ ChartTypeTemplate ____
+bool BubbleChartTypeTemplate::supportsCategories()
 {
     return false;
 }
@@ -174,7 +175,7 @@ Reference< chart2::XChartType > BubbleChartTypeTemplate::getChartTypeForIndex( s
     return xResult;
 }
 
-Reference< chart2::XChartType > SAL_CALL BubbleChartTypeTemplate::getChartTypeForNewSeries(
+Reference< chart2::XChartType > BubbleChartTypeTemplate::getChartTypeForNewSeries(
         const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
 {
     Reference< chart2::XChartType > xResult;
@@ -196,7 +197,7 @@ Reference< chart2::XChartType > SAL_CALL BubbleChartTypeTemplate::getChartTypeFo
     return xResult;
 }
 
-Reference< chart2::XDataInterpreter > SAL_CALL BubbleChartTypeTemplate::getDataInterpreter()
+Reference< chart2::XDataInterpreter > BubbleChartTypeTemplate::getDataInterpreter()
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new BubbleDataInterpreter );

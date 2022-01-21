@@ -30,6 +30,7 @@
 #include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>

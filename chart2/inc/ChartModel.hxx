@@ -57,7 +57,6 @@
 #include <memory>
 
 namespace com::sun::star::awt { class XRequestCallback; }
-namespace com::sun::star::chart2 { class XChartTypeTemplate; }
 namespace com::sun::star::chart2::data { class XDataProvider; }
 namespace com::sun::star::document { class XFilter; }
 namespace com::sun::star::embed { class XStorage; }
@@ -72,6 +71,7 @@ namespace chart
 {
 class Diagram;
 class ChartTypeManager;
+class ChartTypeTemplate;
 class InternalDataProvider;
 class NameContainer;
 class PageBackground;
@@ -205,7 +205,7 @@ private:
     css::uno::Reference< css::document::XFilter >
         impl_createFilter( const css::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );
 
-    css::uno::Reference< css::chart2::XChartTypeTemplate > impl_createDefaultChartTypeTemplate();
+    rtl::Reference< ::chart::ChartTypeTemplate > impl_createDefaultChartTypeTemplate();
     css::uno::Reference< css::chart2::data::XDataSource > impl_createDefaultData();
 
     void impl_adjustAdditionalShapesPositionAndSize(

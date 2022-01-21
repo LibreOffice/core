@@ -21,7 +21,6 @@
 #include "StackMode.hxx"
 #include "charttoolsdllapi.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <rtl/ref.hxx>
 
 #include <utility>
@@ -30,8 +29,11 @@
 namespace chart { class ChartModel; }
 namespace com::sun::star::chart2 { class XAxis; }
 namespace com::sun::star::chart2 { class XChartDocument; }
+namespace com::sun::star::chart2 { class XChartType; }
 namespace com::sun::star::chart2 { class XCoordinateSystem; }
 namespace com::sun::star::chart2 { class XDiagram; }
+namespace com::sun::star::chart2 { class XDataSeries; }
+namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::uno { class XComponentContext; }

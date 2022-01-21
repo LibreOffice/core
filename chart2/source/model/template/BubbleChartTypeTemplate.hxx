@@ -51,12 +51,12 @@ protected:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
 
-    // ____ XChartTypeTemplate ____
-    virtual sal_Bool SAL_CALL supportsCategories() override;
-    virtual css::uno::Reference< css::chart2::XChartType > SAL_CALL
+    // ____ ChartTypeTemplate ____
+    virtual bool supportsCategories() override;
+    virtual css::uno::Reference< css::chart2::XChartType >
         getChartTypeForNewSeries( const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override;
-    virtual css::uno::Reference< css::chart2::XDataInterpreter > SAL_CALL getDataInterpreter() override;
-    virtual void SAL_CALL applyStyle(
+    virtual css::uno::Reference< css::chart2::XDataInterpreter > getDataInterpreter() override;
+    virtual void applyStyle(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeGroupIndex,
         ::sal_Int32 nSeriesIndex,
