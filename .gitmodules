@@ -6,7 +6,3 @@
 	path = helpcontent2
 	url = ../help
 	branch = .
-[submodule "translations"]
-	path = translations
-	url = ../translations
-	branch = .
