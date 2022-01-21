@@ -20,6 +20,7 @@
 #include <BaseCoordinateSystem.hxx>
 #include <PropertyHelper.hxx>
 #include <UserDefinedProperties.hxx>
+#include <ChartType.hxx>
 #include <CloneHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include "Axis.hxx"
@@ -159,11 +160,13 @@ BaseCoordinateSystem::BaseCoordinateSystem(
     tAxisVecVecType::size_type nN=0;
     for( nN=0; nN<m_aAllAxis.size(); nN++ )
         CloneHelper::CloneRefVector<chart2::XAxis>( rSource.m_aAllAxis[nN], m_aAllAxis[nN] );
-    CloneHelper::CloneRefVector<chart2::XChartType>( rSource.m_aChartTypes, m_aChartTypes );
+    for (auto& rxChartType : rSource.m_aChartTypes)
+        m_aChartTypes.push_back( dynamic_cast<ChartType*>(rxChartType->createClone().get()) );
 
     for( nN=0; nN<m_aAllAxis.size(); nN++ )
         ModifyListenerHelper::addListenerToAllElements( m_aAllAxis[nN], m_xModifyEventForwarder );
-    ModifyListenerHelper::addListenerToAllElements( m_aChartTypes, m_xModifyEventForwarder );
+    for (auto& rxChartType : m_aChartTypes)
+        rxChartType->addModifyListener( m_xModifyEventForwarder );
 }
 
 BaseCoordinateSystem::~BaseCoordinateSystem()
@@ -172,7 +175,8 @@ BaseCoordinateSystem::~BaseCoordinateSystem()
     {
         for(const tAxisVecVecType::value_type & i : m_aAllAxis)
             ModifyListenerHelper::removeListenerFromAllElements( i, m_xModifyEventForwarder );
-        ModifyListenerHelper::removeListenerFromAllElements( m_aChartTypes, m_xModifyEventForwarder );
+        for (auto& rxChartType : m_aChartTypes)
+            rxChartType->removeModifyListener( m_xModifyEventForwarder );
     }
     catch( const uno::Exception & )
     {
@@ -243,39 +247,50 @@ sal_Int32 SAL_CALL BaseCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int
 // ____ XChartTypeContainer ____
 void SAL_CALL BaseCoordinateSystem::addChartType( const Reference< chart2::XChartType >& aChartType )
 {
-    if( std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType )
+    ChartType* pChartType = dynamic_cast<ChartType*>(aChartType.get());
+    assert(pChartType);
+    if( std::find( m_aChartTypes.begin(), m_aChartTypes.end(), pChartType )
         != m_aChartTypes.end())
         throw lang::IllegalArgumentException("type not found", static_cast<cppu::OWeakObject*>(this), 1);
 
-    m_aChartTypes.push_back( aChartType );
-    ModifyListenerHelper::addListener( aChartType, m_xModifyEventForwarder );
+    m_aChartTypes.push_back( pChartType );
+    pChartType->addModifyListener( m_xModifyEventForwarder );
     fireModifyEvent();
 }
 
 void SAL_CALL BaseCoordinateSystem::removeChartType( const Reference< chart2::XChartType >& aChartType )
 {
-    std::vector< uno::Reference< chart2::XChartType > >::iterator
-          aIt( std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType ));
+    ChartType* pChartType = dynamic_cast<ChartType*>(aChartType.get());
+    assert(pChartType);
+    auto aIt( std::find( m_aChartTypes.begin(), m_aChartTypes.end(), pChartType ));
     if( aIt == m_aChartTypes.end())
         throw container::NoSuchElementException(
             "The given chart type is no element of the container",
             static_cast< uno::XWeak * >( this ));
 
     m_aChartTypes.erase( aIt );
-    ModifyListenerHelper::removeListener( aChartType, m_xModifyEventForwarder );
+    pChartType->removeModifyListener( m_xModifyEventForwarder );
     fireModifyEvent();
 }
 
 Sequence< Reference< chart2::XChartType > > SAL_CALL BaseCoordinateSystem::getChartTypes()
 {
-    return comphelper::containerToSequence( m_aChartTypes );
+    return comphelper::containerToSequence<Reference< chart2::XChartType >>( m_aChartTypes );
 }
 
 void SAL_CALL BaseCoordinateSystem::setChartTypes( const Sequence< Reference< chart2::XChartType > >& aChartTypes )
 {
-    ModifyListenerHelper::removeListenerFromAllElements( m_aChartTypes, m_xModifyEventForwarder );
-    m_aChartTypes = comphelper::sequenceToContainer<std::vector< css::uno::Reference< css::chart2::XChartType > >>( aChartTypes );
-    ModifyListenerHelper::addListenerToAllElements( m_aChartTypes, m_xModifyEventForwarder );
+    for (auto& rxChartType : m_aChartTypes)
+        rxChartType->removeModifyListener( m_xModifyEventForwarder );
+    m_aChartTypes.clear();
+    for(auto & rxChartType : aChartTypes)
+    {
+        ChartType* pChartType = dynamic_cast<ChartType*>(rxChartType.get());
+        assert(pChartType);
+        m_aChartTypes.push_back(pChartType);
+    }
+    for (auto& rxChartType : m_aChartTypes)
+        rxChartType->addModifyListener( m_xModifyEventForwarder );
     fireModifyEvent();
 }
 

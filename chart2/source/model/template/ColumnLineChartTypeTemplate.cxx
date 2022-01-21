@@ -19,6 +19,7 @@
 
 #include "ColumnLineChartTypeTemplate.hxx"
 #include <CommonConverters.hxx>
+#include <ChartType.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <servicenames_charttypes.hxx>
@@ -157,7 +158,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnLineChartTypeTemplate::
     return *StaticColumnLineChartTypeTemplateInfo::get();
 }
 
-void ColumnLineChartTypeTemplate::createChartTypes(
+int ColumnLineChartTypeTemplate::createChartTypes(
     const Sequence< Sequence< Reference< XDataSeries > > > & aSeriesSeq,
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys,
     const std::vector< rtl::Reference< ChartType > >& aOldChartTypesSeq )
@@ -195,27 +196,26 @@ void ColumnLineChartTypeTemplate::createChartTypes(
 
         // Columns
 
-        Reference< XChartType > xCT(
-            xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY_THROW );
+        rtl::Reference< ChartType > xCT =
+            xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN );
 
         ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aOldChartTypesSeq, xCT );
 
         Reference< XChartTypeContainer > xCTCnt( rCoordSys[ 0 ], uno::UNO_QUERY_THROW );
-        xCTCnt->setChartTypes( Sequence< Reference< chart2::XChartType > >( &xCT, 1 ));
+        xCTCnt->setChartTypes( std::vector< rtl::Reference< ChartType > >{ xCT });
 
         if( nNumberOfColumns > 0 )
         {
-            Reference< XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
             Sequence< Reference< XDataSeries > > aColumnSeq( nNumberOfColumns );
             std::copy( aFlatSeriesSeq.begin(),
                          aFlatSeriesSeq.begin() + nNumberOfColumns,
                          aColumnSeq.getArray());
-            xDSCnt->setDataSeries( aColumnSeq );
+            xCT->setDataSeries( aColumnSeq );
         }
 
         // Lines
 
-        xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY_THROW );
+        xCT = xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_LINE );
         xCTCnt.set( rCoordSys[ 0 ], uno::UNO_QUERY_THROW );
         xCTCnt->addChartType( xCT );
 

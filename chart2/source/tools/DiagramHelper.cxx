@@ -21,6 +21,7 @@
 #include <Diagram.hxx>
 #include <DataSeriesHelper.hxx>
 #include <AxisHelper.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
@@ -620,24 +621,19 @@ rtl::Reference< ChartType > DiagramHelper::getChartTypeOfSeries(
         return nullptr;
     if(!xDiagram.is())
         return nullptr;
+    ::chart::Diagram* pDiagram = dynamic_cast<::chart::Diagram*>(xDiagram.get());
+    assert(pDiagram);
 
     //iterate through the model to find the given xSeries
     //the found parent indicates the charttype
 
     //iterate through all coordinate systems
-    uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if( !xCooSysContainer.is())
-        return nullptr;
 
-    const uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-    for( uno::Reference< XCoordinateSystem > const & xCooSys : aCooSysList )
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysList( pDiagram->getBaseCoordinateSystems() );
+    for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : aCooSysList )
     {
         //iterate through all chart types in the current coordinate system
-        uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-        OSL_ASSERT( xChartTypeContainer.is());
-        if( !xChartTypeContainer.is() )
-            continue;
-        const std::vector< rtl::Reference< ChartType > > & aChartTypeList( xChartTypeContainer->getChartTypes2() );
+        const std::vector< rtl::Reference< ChartType > > & aChartTypeList( xCooSys->getChartTypes2() );
         for( rtl::Reference< ChartType > const & xChartType : aChartTypeList )
         {
             //iterate through all series in this chart type
@@ -713,30 +709,29 @@ Sequence< Sequence< Reference< XDataSeries > > >
     return comphelper::containerToSequence( aResult );
 }
 
-Reference< XChartType >
+rtl::Reference< ChartType >
     DiagramHelper::getChartTypeByIndex( const Reference< XDiagram >& xDiagram, sal_Int32 nIndex )
 {
-    Reference< XChartType > xChartType;
+    if (!xDiagram)
+        return nullptr;
+    ::chart::Diagram* pDiagram = dynamic_cast<::chart::Diagram*>(xDiagram.get());
+    assert(pDiagram);
+
+    rtl::Reference< ChartType > xChartType;
 
     //iterate through all coordinate systems
-    Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if( ! xCooSysContainer.is())
-        return xChartType;
 
-    const Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysList( pDiagram->getBaseCoordinateSystems() );
     sal_Int32 nTypesSoFar = 0;
-    for( Reference< XCoordinateSystem > const & coords : aCooSysList )
+    for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysList )
     {
-        Reference< XChartTypeContainer > xChartTypeContainer( coords, uno::UNO_QUERY );
-        if( !xChartTypeContainer.is() )
-            continue;
-        Sequence< Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-        if( nIndex >= 0 && nIndex < (nTypesSoFar + aChartTypeList.getLength()) )
+        std::vector< rtl::Reference< ChartType > > & aChartTypeList( coords->getChartTypes2() );
+        if( nIndex >= 0 && nIndex < (nTypesSoFar + aChartTypeList.size()) )
         {
             xChartType.set( aChartTypeList[nIndex - nTypesSoFar] );
             break;
         }
-        nTypesSoFar += aChartTypeList.getLength();
+        nTypesSoFar += aChartTypeList.size();
     }
 
     return xChartType;

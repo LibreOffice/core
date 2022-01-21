@@ -25,6 +25,7 @@
 #include <TitleHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartType.hxx>
 #include <AxisHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DiagramHelper.hxx>
@@ -1369,7 +1370,7 @@ Reference< XDataSeries > ObjectIdentifier::getDataSeriesForCID(
     sal_Int32 nPointIndex = -1;
     lcl_parseSeriesIndices( nChartTypeIndex, nSeriesIndex, nPointIndex, rObjectCID );
 
-    Reference< XDataSeriesContainer > xDataSeriesContainer( DiagramHelper::getChartTypeByIndex( xDiagram, nChartTypeIndex ), uno::UNO_QUERY );
+    rtl::Reference< ChartType > xDataSeriesContainer( DiagramHelper::getChartTypeByIndex( xDiagram, nChartTypeIndex ) );
     if( xDataSeriesContainer.is() )
     {
         uno::Sequence< uno::Reference< XDataSeries > > aDataSeriesSeq( xDataSeriesContainer->getDataSeries() );

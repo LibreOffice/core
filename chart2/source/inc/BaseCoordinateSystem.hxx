@@ -33,6 +33,7 @@
 
 namespace chart
 {
+class ChartType;
 
 namespace impl
 {
@@ -95,6 +96,8 @@ public:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
+    const std::vector<rtl::Reference<ChartType>> & getChartTypes2() const { return m_aChartTypes; }
+
 protected:
 
     // ____ XModifyListener ____
@@ -118,7 +121,7 @@ private:
     sal_Int32                                             m_nDimensionCount;
     typedef std::vector< std::vector< css::uno::Reference< css::chart2::XAxis > > > tAxisVecVecType;
     tAxisVecVecType m_aAllAxis; //outer sequence is the dimension; inner sequence is the axis index that indicates main or secondary axis
-    std::vector< css::uno::Reference< css::chart2::XChartType > >          m_aChartTypes;
+    std::vector< rtl::Reference< ChartType > > m_aChartTypes;
 };
 
 } //  namespace chart

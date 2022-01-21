@@ -226,7 +226,7 @@ public:
                     const css::uno::Reference< css::chart2::XChartType > & xNewChartType );
     static void copyPropertiesFromOldToNewCoordinateSystem(
                     const std::vector< rtl::Reference< ChartType > > & rOldChartTypesSeq,
-                    const css::uno::Reference< css::chart2::XChartType > & xNewChartType );
+                    const rtl::Reference< ChartType > & xNewChartType );
 
 protected:
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;

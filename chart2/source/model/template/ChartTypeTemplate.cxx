@@ -865,6 +865,25 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
         comphelper::copyProperties( xSource, xDestination );
 }
 
+void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
+                    const std::vector< rtl::Reference< ChartType > > & rOldChartTypesSeq,
+                    const rtl::Reference< ChartType > & xNewChartType )
+{
+    OUString aNewChartType( xNewChartType->getChartType() );
+
+    Reference< beans::XPropertySet > xSource;
+    for( rtl::Reference< ChartType > const & xOldType : rOldChartTypesSeq )
+    {
+        if( xOldType->getChartType() == aNewChartType )
+        {
+            xSource = xOldType;
+            break;
+        }
+    }
+    if( xSource.is() )
+        comphelper::copyProperties( xSource, xNewChartType );
+}
+
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
