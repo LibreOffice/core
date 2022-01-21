@@ -465,6 +465,7 @@
                 <child>
                   <object class="GtkTreeView" id="charttype">
                     <property name="can-focus">True</property>
+                    <property name="has-focus">True</property>
                     <property name="vexpand">True</property>
                     <property name="model">liststore2</property>
                     <property name="headers-visible">False</property>
