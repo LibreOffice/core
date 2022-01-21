@@ -20,6 +20,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/dispatch.hxx>
@@ -187,6 +188,21 @@ void SdUiImpressTest::save(sd::DrawDocShell* pShell, FileFormat const* pFormat,
     }
     pShell->DoSaveAs(aStoreMedium);
     pShell->DoClose();
+}
+
+static void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false)
+{
+    Scheduler::ProcessEventsToIdle();
+    SvxSearchCmd eSearch = bFindAll ? SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND;
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+        { "SearchItem.SearchString", uno::makeAny(rKey) },
+        { "SearchItem.Backward", uno::makeAny(bBackwards) },
+        { "SearchItem.Command", uno::makeAny(sal_uInt16(eSearch)) },
+    }));
+
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
@@ -842,6 +858,24 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSearchAllInDocumentAndNotes)
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
 
     Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123658_SearchAfterSlideChange)
+{
+    mxComponent = loadFromDesktop(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf123658_SearchAfterSlideChange.odp"));
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+
+    lcl_search("second");
+    checkCurrentPageNumber(2);
+
+    pXImpressDocument->setPart(0); // Switch to 1st page
+
+    lcl_search("of");
+    // Instead of finding this on the 1st page (or on the 2nd page would be acceptable too)
+    // it was going to the third page.
+    checkCurrentPageNumber(1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf142589)
