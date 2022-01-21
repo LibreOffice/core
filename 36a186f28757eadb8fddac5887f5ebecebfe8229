@@ -52,6 +52,23 @@
       "parentUuid": "18248013_dfc62510",
       "revId": "36a186f28757eadb8fddac5887f5ebecebfe8229",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd22b434_7302d29a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-21T17:38:43Z",
+      "side": 1,
+      "message": "Anyway, could you please add the right test file to the bugzilla so I can adapt the test accordingly ?",
+      "revId": "36a186f28757eadb8fddac5887f5ebecebfe8229",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
