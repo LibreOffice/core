@@ -2266,7 +2266,6 @@ void SAL_CALL SwChartDataSequence::dispose(  )
     lang::EventObject aEvtObj( static_cast< chart2::data::XDataSequence * >(this) );
     std::unique_lock aGuard( GetChartMutex() );
     m_aModifyListeners.disposeAndClear( aGuard, aEvtObj );
-    aGuard.lock();
     m_aEvtListeners.disposeAndClear( aGuard, aEvtObj );
 }
 
@@ -2681,7 +2680,6 @@ void SAL_CALL SwChartLabeledDataSequence::dispose(  )
         lang::EventObject aEvtObj( static_cast< chart2::data::XLabeledDataSequence * >(this) );
         std::unique_lock aGuard( GetChartMutex() );
         m_aModifyListeners.disposeAndClear( aGuard, aEvtObj );
-        aGuard.lock();
         m_aEventListeners.disposeAndClear( aGuard, aEvtObj );
     }
 }

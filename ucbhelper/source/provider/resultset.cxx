@@ -241,7 +241,6 @@ void SAL_CALL ResultSet::dispose()
         lang::EventObject aEvt;
         aEvt.Source = static_cast< lang::XComponent * >( this );
         m_pImpl->m_aDisposeEventListeners.disposeAndClear( aGuard, aEvt );
-        aGuard.lock();
     }
 
     if ( m_pImpl->m_pPropertyChangeListeners )
@@ -249,7 +248,6 @@ void SAL_CALL ResultSet::dispose()
         lang::EventObject aEvt;
         aEvt.Source = static_cast< beans::XPropertySet * >( this );
         m_pImpl->m_pPropertyChangeListeners->disposeAndClear( aGuard, aEvt );
-        aGuard.lock();
     }
 
     m_pImpl->m_xDataSupplier->close();

@@ -257,7 +257,6 @@ void SfxGlobalEvents_Impl::dispose() {
         tmpModels.clear();
         g.lock();
         m_aLegacyListeners.disposeAndClear(g, {static_cast<OWeakObject *>(this)});
-        g.lock(); // because disposeAndClear is going to want to unlock()
         m_aDocumentListeners.disposeAndClear(g, {static_cast<OWeakObject *>(this)});
     }
     for (auto const & i: listeners) {
@@ -487,7 +486,6 @@ void SfxGlobalEvents_Impl::implts_notifyListener(const document::DocumentEvent& 
             xListener->notifyEvent(aLegacyEvent);
         }
     );
-    g.lock();
     m_aDocumentListeners.forEach(g,
         [&aEvent](const css::uno::Reference<document::XDocumentEventListener>& xListener)
         {
