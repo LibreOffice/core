@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a53d0489_8885c361",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-01-21T12:05:43Z",
+      "side": 1,
+      "message": "Failure detection test Ok with patch#2, running for success",
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
