@@ -1036,7 +1036,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	) \
 	resource_fonts \
 	cui \
-    static/emscripten_fs_image \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
