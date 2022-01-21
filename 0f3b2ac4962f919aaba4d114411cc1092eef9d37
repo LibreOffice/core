@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee159a45_d77833b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-01-21T14:28:56Z",
+      "side": 1,
+      "message": "Your remarks have been considered",
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68a6ba5c_0563b8e7",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-01-21T12:57:19Z",
       "side": 1,
       "message": "Should this line be present in the final patch? Isn\u0027t this only used for running the test locally?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 1
+      },
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99c5fd13_359f075b",
+        "filename": "basic/qa/basic_coverage/test_Collection_class.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-01-21T14:28:56Z",
+      "side": 1,
+      "message": "I removed it",
+      "parentUuid": "68a6ba5c_0563b8e7",
       "range": {
         "startLine": 17,
         "startChar": 0,
@@ -58,6 +99,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3310f9b_1c0b113f",
+        "filename": "basic/qa/basic_coverage/test_Collection_class.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-01-21T14:28:56Z",
+      "side": 1,
+      "message": "\"Try Catch Finally\" is a frequent programming construct found in Java, C++, .Net etc... Although not fully transposable to libO Basic.\nI removed useless labels.",
+      "parentUuid": "861cbae9_69262aaa",
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "556044b1_2bd82c49",
@@ -75,6 +134,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "949b00bc_c3f02de6",
+        "filename": "basic/qa/basic_coverage/test_Collection_class.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-01-21T14:28:56Z",
+      "side": 1,
+      "message": "Remnants have been removed",
+      "parentUuid": "556044b1_2bd82c49",
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a41a00e6_2ea856ce",
@@ -88,6 +165,30 @@
       "writtenOn": "2022-01-21T12:57:19Z",
       "side": 1,
       "message": "How about making sure the items are in the right order?\n\nTestUtil.assertEqual(c.Item(1), \"Earth\", \"c.Item(1)\")\nTestUtil.assertEqual(c.Item(2), \"Jupiter\", \"c.Item(2)\")\nTestUtil.assertEqual(c.Item(3), \"Mars\", \"c.Item(3)\")\nTestUtil.assertEqual(c.Item(4), \"Mercury\", \"c.Item(4)\")\nTestUtil.assertEqual(c.Item(5), \"Neptune\", \"c.Item(5)\")\nTestUtil.assertEqual(c.Item(6), \"Saturn\", \"c.Item(6)\")\nTestUtil.assertEqual(c.Item(7), \"Uranus\", \"c.Item(7)\")\nTestUtil.assertEqual(c.Item(8), \"Venus\", \"c.Item(8)\")",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 48
+      },
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7188a40_b6f98ccd",
+        "filename": "basic/qa/basic_coverage/test_Collection_class.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-01-21T14:28:56Z",
+      "side": 1,
+      "message": "The objective of the test is to validate \"All possible syntax\" for Collection.Add() and Collection.remove() methods. Adding items this way permits such validations. I admit one could do it differently.",
+      "parentUuid": "a41a00e6_2ea856ce",
       "range": {
         "startLine": 42,
         "startChar": 4,
