@@ -1146,6 +1146,15 @@ bool SectionPropertyMap::FloatingTableConversion( const DomainMapper_Impl& rDM_I
     if (rDM_Impl.m_bConvertedTable && !rDM_Impl.GetIsLastSectionGroup() && rInfo.m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_nextPage)
         return false;
 
+    sal_Int32 nVertOrientPosition = rInfo.getPropertyValue(u"VertOrientPosition").get<sal_Int32>();
+    sal_Int16 nHoriOrientRelation = rInfo.getPropertyValue( u"HoriOrientRelation" ).get<sal_Int16>();
+    if (nVertOrientPosition < 0 && nHoriOrientRelation != text::RelOrientation::PAGE_FRAME)
+    {
+        // Negative vertical position: then need a floating table, as normal tables can't have
+        // negative top margins.
+        return true;
+    }
+
     sal_Int32 nPageWidth = GetPageWidth();
     sal_Int32 nTextAreaWidth = nPageWidth - GetLeftMargin() - GetRightMargin();
     // Count the layout width of the table.
@@ -1161,7 +1170,6 @@ bool SectionPropertyMap::FloatingTableConversion( const DomainMapper_Impl& rDM_I
     if ( rInfo.getPropertyValue( u"RightMargin" ) >>= nRightMargin )
         nTableWidth += nRightMargin;
 
-    sal_Int16 nHoriOrientRelation = rInfo.getPropertyValue( u"HoriOrientRelation" ).get<sal_Int16>();
     sal_Int16 nVertOrientRelation = rInfo.getPropertyValue( u"VertOrientRelation" ).get<sal_Int16>();
     if ( nHoriOrientRelation == text::RelOrientation::PAGE_FRAME && nVertOrientRelation == text::RelOrientation::PAGE_FRAME )
     {
@@ -1174,7 +1182,6 @@ bool SectionPropertyMap::FloatingTableConversion( const DomainMapper_Impl& rDM_I
             // The more close we are to the bottom, the more likely the table will span over to the next page
             // So if we're in the bottom left quarter, don't do any conversion.
             sal_Int32 nHoriOrientPosition = rInfo.getPropertyValue( u"HoriOrientPosition" ).get<sal_Int32>();
-            sal_Int32 nVertOrientPosition = rInfo.getPropertyValue( u"VertOrientPosition" ).get<sal_Int32>();
             sal_Int32 nPageHeight = getProperty( PROP_HEIGHT )->second.get<sal_Int32>();
             if ( nHoriOrientPosition < (nPageWidth / 2) && nVertOrientPosition >( nPageHeight / 2 ) )
                 return false;
