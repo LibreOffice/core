@@ -74,7 +74,7 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
 
     m_aWireframePolyPolygon = m_pScene->CreateWireframe();
 
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(uno::Reference<chart2::XChartDocument>(getChartModel())) );
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(getChartModel());
     if( !xDiagram.is() )
         return;
 
@@ -161,12 +161,12 @@ bool DragMethod_RotateDiagram::EndSdrDrag(bool /*bCopy*/)
         if(m_bRightAngledAxes)
             ThreeDHelper::adaptRadAnglesForRightAngledAxes( fResultX, fResultY );
 
-        ThreeDHelper::setRotationAngleToDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) )
+        ThreeDHelper::setRotationAngleToDiagram( ChartModelHelper::findDiagram( getChartModel() )
             , fResultX, fResultY, fResultZ );
     }
     else
     {
-        ThreeDHelper::setRotationToDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(getChartModel()) )
+        ThreeDHelper::setRotationToDiagram( ChartModelHelper::findDiagram( getChartModel() )
             , m_nInitialHorizontalAngleDegree+m_nAdditionalHorizontalAngleDegree, m_nInitialVerticalAngleDegree+m_nAdditionalVerticalAngleDegree );
     }
 

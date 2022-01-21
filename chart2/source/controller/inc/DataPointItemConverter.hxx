@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <tools/color.hxx>
+#include <rtl/ref.hxx>
 
 #include <vector>
 
@@ -30,7 +31,7 @@ namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::chart2 { class XDataSeries; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
-
+namespace chart { class ChartModel; }
 class SdrModel;
 
 namespace chart::wrapper {
@@ -39,7 +40,7 @@ class DataPointItemConverter final : public ItemConverter
 {
 public:
     DataPointItemConverter(
-        const css::uno::Reference<css::frame::XModel>& xChartModel,
+        const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::uno::Reference<css::uno::XComponentContext>& xContext,
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         const css::uno::Reference<css::chart2::XDataSeries>& xSeries,

@@ -23,6 +23,7 @@
 #include <ObjectIdentifier.hxx>
 #include <ObjectNameProvider.hxx>
 #include <servicenames.hxx>
+#include <ChartModel.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
@@ -66,7 +67,7 @@ bool AccessibleChartElement::ImplUpdateChildren()
     bool bResult = false;
     Reference< chart2::XTitle > xTitle(
         ObjectIdentifier::getObjectPropertySet(
-            GetInfo().m_aOID.getObjectCID(), Reference< chart2::XChartDocument >( GetInfo().m_xChartDocument )),
+            GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument ),
         uno::UNO_QUERY );
     m_bHasText = xTitle.is();
 
@@ -149,12 +150,8 @@ OUString SAL_CALL AccessibleChartElement::getImplementationName()
 // ________ AccessibleChartElement::XAccessibleContext (override) ________
 OUString SAL_CALL AccessibleChartElement::getAccessibleName()
 {
-    uno::Reference<chart2::XChartDocument> xDoc = GetInfo().m_xChartDocument;
-    ChartModel* pChartModel = dynamic_cast<ChartModel*>(xDoc.get());
-    assert(!xDoc || pChartModel);
-
     return ObjectNameProvider::getNameForCID(
-        GetInfo().m_aOID.getObjectCID(), pChartModel );
+        GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument );
 }
 
 // ________ AccessibleChartElement::XAccessibleContext (override) ________
@@ -175,7 +172,7 @@ Reference< awt::XFont > SAL_CALL AccessibleChartElement::getFont()
     {
         Reference< beans::XMultiPropertySet > xObjProp(
             ObjectIdentifier::getObjectPropertySet(
-                GetInfo().m_aOID.getObjectCID(), Reference< chart2::XChartDocument >( GetInfo().m_xChartDocument )), uno::UNO_QUERY );
+                GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument ), uno::UNO_QUERY );
         awt::FontDescriptor aDescr(
             CharacterProperties::createFontDescriptorFromPropertySet( xObjProp ));
         xFont = xDevice->getFont( aDescr );
@@ -193,12 +190,8 @@ OUString SAL_CALL AccessibleChartElement::getToolTipText()
 {
     CheckDisposeState();
 
-    uno::Reference<chart2::XChartDocument> xDoc = GetInfo().m_xChartDocument;
-    ChartModel* pChartModel = dynamic_cast<ChartModel*>(xDoc.get());
-    assert(!xDoc || pChartModel);
-
     return ObjectNameProvider::getHelpText(
-        GetInfo().m_aOID.getObjectCID(), pChartModel );
+        GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument );
 }
 
 // ________ XAccessibleComponent ________

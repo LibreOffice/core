@@ -92,7 +92,7 @@ wrapper::ItemConverter* createItemConverter(
     if( !bAffectsMultipleObjects )
     {
         uno::Reference< beans::XPropertySet > xObjectProperties =
-            ObjectIdentifier::getObjectPropertySet( aObjectCID, uno::Reference<chart2::XChartDocument>(xChartModel ));
+            ObjectIdentifier::getObjectPropertySet( aObjectCID, xChartModel );
         if(!xObjectProperties.is())
             return nullptr;
         //create itemconverter for a single object
@@ -200,7 +200,7 @@ wrapper::ItemConverter* createItemConverter(
                 uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aObjectCID, xChartModel );
                 uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
 
-                rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xChartModel) ) );
+                rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
                 sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
                 if( !ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount ) )
                     eMapTo = wrapper::GraphicObjectType::LineDataPoint;
@@ -374,14 +374,14 @@ OUString lcl_getAxisCIDForCommand( std::string_view rDispatchCommand, const rtl:
         nDimensionIndex=1; bMainAxis=false;
     }
 
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xChartModel) ) );
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
     uno::Reference< XAxis > xAxis( AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram ) );
     return ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, xChartModel );
 }
 
 OUString lcl_getGridCIDForCommand( std::string_view rDispatchCommand, const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xChartModel) ) );
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
 
     if( rDispatchCommand == "DiagramGridAll")
         return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_GRID, u"ALLELEMENTS" );
@@ -759,7 +759,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         if(aDialogParameter.HasSymbolProperties())
         {
             uno::Reference< beans::XPropertySet > xObjectProperties =
-                ObjectIdentifier::getObjectPropertySet( rObjectCID, uno::Reference<chart2::XChartDocument>(getChartModel()) );
+                ObjectIdentifier::getObjectPropertySet( rObjectCID, getChartModel() );
             wrapper::DataPointItemConverter aSymbolItemConverter( getChartModel(), m_xCC
                                         , xObjectProperties, ObjectIdentifier::getDataSeriesForCID( rObjectCID, getChartModel() )
                                         , m_pDrawModelWrapper->getSdrModel().GetItemPool()
