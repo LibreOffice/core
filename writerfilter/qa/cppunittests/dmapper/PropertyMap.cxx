@@ -15,6 +15,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 using namespace ::com::sun::star;
 
@@ -86,6 +87,26 @@ CPPUNIT_TEST_FIXTURE(Test, testFollowPageTopMargin)
     // - Actual  : 1249
     // i.e. the top margin on page 2 was too large.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(250), nTopMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableNegativeVerticalPos)
+{
+    // Given a document with a table which has a negative vertical position (moves up to overlap
+    // with the header):
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "table-negative-vertical-pos.docx";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure we don't import that as a plain table, which can't have a negative top margin:
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. this was imported as a plain table, resulting in a 0 top margin (y pos too large).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
 }
 }
 
