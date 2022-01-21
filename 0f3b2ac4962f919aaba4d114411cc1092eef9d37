@@ -16,6 +16,40 @@
       "message": "Failure detection test Ok with patch#2, running for success",
       "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "861cbae9_69262aaa",
+        "filename": "basic/qa/basic_coverage/test_Collection_class.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-21T12:38:07Z",
+      "side": 1,
+      "message": "What does this construct do? It seems that it would work the same without try..finally, only with on error goto catch?",
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "556044b1_2bd82c49",
+        "filename": "basic/qa/basic_coverage/test_Collection_class.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-21T12:38:07Z",
+      "side": 1,
+      "message": "Is \"planet\" a remnant from the commented-out line 42? Please remove it then. If you want to keep the print line (which I don\u0027t think is reasonable, but not strongly opposing), then please have a separate dim at the commented out block, and comment the lines together.",
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
