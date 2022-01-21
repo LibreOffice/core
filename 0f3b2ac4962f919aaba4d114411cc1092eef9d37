@@ -52,6 +52,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3f4e1a7_2df79826",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-01-21T14:42:34Z",
+      "side": 1,
+      "message": "I don\u0027t intend to test kwargs unless you recommend me to add such tests.",
+      "parentUuid": "501d232a_ad0cd94d",
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68a6ba5c_0563b8e7",
