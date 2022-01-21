@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eddb8a41_688ae443",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-01-21T09:35:56Z",
+      "side": 1,
+      "message": "This reads like an incomplete sentence to me. It’s not immediately clear to me if I should translate the adjective “linked” as a singular or a plural, for example.",
+      "revId": "822dbc3002e207c042eada6f9c7701253a3fb45f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
