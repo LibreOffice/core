@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2b8e691_5de56162",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2022-01-21T23:44:02Z",
+      "side": 1,
+      "message": "adding a link to tdf#118246 in the commit message would be nicer.",
+      "revId": "0db6911c5d1b2b436fe2533f549d49d0eae7809b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
