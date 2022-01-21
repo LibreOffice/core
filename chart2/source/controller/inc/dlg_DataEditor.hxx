@@ -33,7 +33,6 @@ namespace com::sun::star {
 
 namespace chart
 {
-
 class ChartModel;
 class DataBrowser;
 

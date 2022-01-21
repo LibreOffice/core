@@ -25,6 +25,7 @@
 #include <GraphicPropertyItemConverter.hxx>
 #include <DataPointItemConverter.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartModel.hxx>
 #include <Diagram.hxx>
 #include <TitleHelper.hxx>
 #include <TitleItemConverter.hxx>
@@ -44,7 +45,7 @@ using ::com::sun::star::uno::Sequence;
 namespace chart::wrapper {
 
 AllAxisItemConverter::AllAxisItemConverter(
-    const uno::Reference< frame::XModel > & xChartModel,
+    const rtl::Reference<::chart::ChartModel> & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const awt::Size* pRefSize )
@@ -57,7 +58,7 @@ AllAxisItemConverter::AllAxisItemConverter(
         uno::Reference< beans::XPropertySet > xObjectProperties(axis, uno::UNO_QUERY);
         m_aConverters.emplace_back( new ::chart::wrapper::AxisItemConverter(
             xObjectProperties, rItemPool, rDrawModel,
-            uno::Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY ), nullptr, nullptr,
+            xChartModel, nullptr, nullptr,
             pRefSize));
     }
 }
@@ -73,7 +74,7 @@ const WhichRangesContainer& AllAxisItemConverter::GetWhichPairs() const
 }
 
 AllGridItemConverter::AllGridItemConverter(
-    const uno::Reference< frame::XModel > & xChartModel,
+    const rtl::Reference<::chart::ChartModel> & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
@@ -100,7 +101,7 @@ const WhichRangesContainer& AllGridItemConverter::GetWhichPairs() const
 }
 
 AllDataLabelItemConverter::AllDataLabelItemConverter(
-    const uno::Reference< frame::XModel > & xChartModel,
+    const rtl::Reference<::chart::ChartModel> & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
@@ -116,7 +117,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
 
         sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties );
         sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
-                xObjectProperties,uno::Reference< util::XNumberFormatsSupplier >(xChartModel, uno::UNO_QUERY));
+                xObjectProperties,xChartModel);
 
         m_aConverters.emplace_back(
             new ::chart::wrapper::DataPointItemConverter(
@@ -137,7 +138,7 @@ const WhichRangesContainer& AllDataLabelItemConverter::GetWhichPairs() const
 }
 
 AllTitleItemConverter::AllTitleItemConverter(
-    const uno::Reference< frame::XModel > & xChartModel,
+    const rtl::Reference<::chart::ChartModel> & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
@@ -166,7 +167,7 @@ const WhichRangesContainer& AllTitleItemConverter::GetWhichPairs() const
 }
 
 AllSeriesStatisticsConverter::AllSeriesStatisticsConverter(
-    const uno::Reference< frame::XModel > & xChartModel,
+    const rtl::Reference<::chart::ChartModel> & xChartModel,
     SfxItemPool& rItemPool )
         : MultipleItemConverter( rItemPool )
 {

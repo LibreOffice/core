@@ -24,6 +24,7 @@
 #include <ResId.hxx>
 #include <strings.hrc>
 #include "AccessibleViewForwarder.hxx"
+#include <ChartModel.hxx>
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -171,14 +172,14 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
     bool bNewInvalid = false;
 
     Reference< view::XSelectionSupplier > xSelectionSupplier;
-    Reference< frame::XModel > xChartModel;
+    rtl::Reference<::chart::ChartModel> xChartModel;
     Reference< uno::XInterface > xChartView;
     Reference< XAccessible > xParent;
     Reference< awt::XWindow > xWindow;
     {
         MutexGuard aGuard( m_aMutex);
         xSelectionSupplier.set( m_xSelectionSupplier );
-        xChartModel.set( m_xChartModel );
+        xChartModel = m_xChartModel;
         xChartView.set( m_xChartView );
         xParent.set( m_xParent );
         xWindow.set( m_xWindow );
@@ -193,9 +194,11 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
     {
         Reference< frame::XModel > xNewChartModel;
         rArguments[1] >>= xNewChartModel;
-        if( xNewChartModel != xChartModel )
+        assert(!xNewChartModel || dynamic_cast<::chart::ChartModel*>(xNewChartModel.get()));
+        ::chart::ChartModel* pNewChartModel = dynamic_cast<::chart::ChartModel*>(xNewChartModel.get());
+        if( pNewChartModel != xChartModel.get() )
         {
-            xChartModel = xNewChartModel;
+            xChartModel = pNewChartModel;
             bChanged = true;
         }
     }
@@ -280,7 +283,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
     {
         MutexGuard aGuard( m_aMutex);
         m_xSelectionSupplier = WeakReference< view::XSelectionSupplier >(xSelectionSupplier);
-        m_xChartModel = WeakReference< frame::XModel >(xChartModel);
+        m_xChartModel = xChartModel.get();
         m_xChartView = WeakReference< uno::XInterface >(xChartView);
         m_xParent = WeakReference< XAccessible >(xParent);
         m_xWindow = WeakReference< awt::XWindow >(xWindow);
@@ -296,10 +299,9 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
         //before notification we prepare for creation of new context
         //the old context will be deleted after notification than
         MutexGuard aGuard( m_aMutex);
-        Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
-        if( xChartDoc.is())
+        if( xChartModel.is())
             m_spObjectHierarchy =
-                std::make_shared<ObjectHierarchy>( xChartDoc, comphelper::getFromUnoTunnel<ExplicitValueProvider>(m_xChartView) );
+                std::make_shared<ObjectHierarchy>( xChartModel, comphelper::getFromUnoTunnel<ExplicitValueProvider>(m_xChartView) );
         else
             m_spObjectHierarchy.reset();
     }
@@ -307,8 +309,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
     {
         AccessibleElementInfo aAccInfo;
         aAccInfo.m_aOID = ObjectIdentifier("ROOT");
-        aAccInfo.m_xChartDocument = uno::WeakReference< chart2::XChartDocument >(
-            uno::Reference< chart2::XChartDocument >( m_xChartModel.get(), uno::UNO_QUERY ));
+        aAccInfo.m_xChartDocument = m_xChartModel;
         aAccInfo.m_xSelectionSupplier = m_xSelectionSupplier;
         aAccInfo.m_xView = m_xChartView;
         aAccInfo.m_xWindow = m_xWindow;

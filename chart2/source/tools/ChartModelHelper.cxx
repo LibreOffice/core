@@ -165,6 +165,18 @@ std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
 }
 
 std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
+    const rtl::Reference< ::chart::ChartModel > & xChartDoc )
+{
+    std::vector< uno::Reference< XDataSeries > > aResult;
+
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
+    if( xDiagram.is())
+        aResult = DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+
+    return aResult;
+}
+
+std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
     const uno::Reference< frame::XModel > & xModel )
 {
     return getDataSeries( uno::Reference< chart2::XChartDocument >( xModel, uno::UNO_QUERY ));

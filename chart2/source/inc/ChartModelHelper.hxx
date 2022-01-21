@@ -72,6 +72,8 @@ public:
             getDataSeries( const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
     static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
             getDataSeries( const css::uno::Reference< css::frame::XModel > & xModel );
+    static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
+            getDataSeries( const rtl::Reference< ::chart::ChartModel > & xModel );
 
     static css::uno::Reference< css::chart2::XChartType >
         getChartTypeOfSeries(

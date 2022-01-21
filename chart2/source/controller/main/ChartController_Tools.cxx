@@ -109,7 +109,7 @@ bool lcl_deleteDataSeries(
                     ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_DATASERIES )),
                 xUndoManager );
 
-            rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xModel) ) );
+            rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
             uno::Reference< chart2::XAxis > xAxis( DiagramHelper::getAttachedAxis( xSeries, xDiagram ) );
 
             DataSeriesHelper::deleteSeries( xSeries, xChartType );
@@ -131,7 +131,7 @@ bool lcl_deleteDataCurve(
     bool bResult = false;
 
     uno::Reference< beans::XPropertySet > xProperties(
-        ObjectIdentifier::getObjectPropertySet( rCID, uno::Reference<chart2::XChartDocument>(xModel)));
+        ObjectIdentifier::getObjectPropertySet( rCID, xModel));
 
     uno::Reference< chart2::XRegressionCurve > xRegressionCurve( xProperties, uno::UNO_QUERY );
 
@@ -139,7 +139,7 @@ bool lcl_deleteDataCurve(
     {
         uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer(
             ObjectIdentifier::getObjectPropertySet(
-                ObjectIdentifier::getFullParentParticle( rCID ), uno::Reference<chart2::XChartDocument>(xModel)), uno::UNO_QUERY );
+                ObjectIdentifier::getFullParentParticle( rCID ), xModel), uno::UNO_QUERY );
 
         if( xRegressionCurveContainer.is())
         {
@@ -181,7 +181,7 @@ void ChartController::executeDispatch_NewArrangement()
     try
     {
         rtl::Reference<::chart::ChartModel> xModel( getChartModel() );
-        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( uno::Reference<chart2::XChartDocument>(xModel) ));
+        rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
         if( xDiagram.is())
         {
             UndoGuard aUndoGuard(
@@ -661,7 +661,7 @@ bool ChartController::executeDispatch_Delete()
             {
                 uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
                     ObjectIdentifier::getObjectPropertySet(
-                        ObjectIdentifier::getFullParentParticle( aCID ), uno::Reference<chart2::XChartDocument>(getChartModel())), uno::UNO_QUERY );
+                        ObjectIdentifier::getFullParentParticle( aCID ), getChartModel()), uno::UNO_QUERY );
                 if( xRegCurveCnt.is())
                 {
                     UndoGuard aUndoGuard(
@@ -684,7 +684,7 @@ bool ChartController::executeDispatch_Delete()
             case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
                 uno::Reference< beans::XPropertySet > xEqProp(
-                    ObjectIdentifier::getObjectPropertySet( aCID, uno::Reference<chart2::XChartDocument>(getChartModel())));
+                    ObjectIdentifier::getObjectPropertySet( aCID, getChartModel()));
 
                 if( xEqProp.is())
                 {
@@ -711,7 +711,7 @@ bool ChartController::executeDispatch_Delete()
             case OBJECTTYPE_DATA_ERRORS_Z:
             {
                 uno::Reference< beans::XPropertySet > xErrorBarProp(
-                    ObjectIdentifier::getObjectPropertySet( aCID, uno::Reference<chart2::XChartDocument>(getChartModel()) ));
+                    ObjectIdentifier::getObjectPropertySet( aCID, getChartModel() ));
                 if( xErrorBarProp.is())
                 {
                     TranslateId pId;
@@ -744,7 +744,7 @@ bool ChartController::executeDispatch_Delete()
             case OBJECTTYPE_DATA_LABEL:
             {
                 uno::Reference< beans::XPropertySet > xObjectProperties =
-                    ObjectIdentifier::getObjectPropertySet( aCID, uno::Reference<chart2::XChartDocument>(getChartModel()) );
+                    ObjectIdentifier::getObjectPropertySet( aCID, getChartModel() );
                 if( xObjectProperties.is() )
                 {
                     UndoGuard aUndoGuard(
@@ -927,7 +927,7 @@ void ChartController::executeDispatch_FillColor(sal_uInt32 nColor)
         if( xChartModel.is() )
         {
             Reference< beans::XPropertySet > xPointProperties(
-                ObjectIdentifier::getObjectPropertySet( aCID, uno::Reference<chart2::XChartDocument>(xChartModel) ) );
+                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
             if( xPointProperties.is() )
                 xPointProperties->setPropertyValue( "FillColor", uno::Any( nColor ) );
         }
@@ -951,7 +951,7 @@ void ChartController::executeDispatch_FillGradient(OUString sJSONGradient)
         if( xChartModel.is() )
         {
             Reference< beans::XPropertySet > xPropSet(
-                ObjectIdentifier::getObjectPropertySet( aCID, uno::Reference<chart2::XChartDocument>(xChartModel) ) );
+                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
 
             if( xPropSet.is() )
             {
@@ -982,7 +982,7 @@ void ChartController::executeDispatch_LineColor(sal_uInt32 nColor)
         if( xChartModel.is() )
         {
             Reference< beans::XPropertySet > xPropSet(
-                ObjectIdentifier::getObjectPropertySet( aCID, uno::Reference<chart2::XChartDocument>(xChartModel) ) );
+                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
 
             ObjectType eType = ObjectIdentifier::getObjectType(aCID);
             if (eType == OBJECTTYPE_DIAGRAM)
@@ -1012,7 +1012,7 @@ void ChartController::executeDispatch_LineWidth(sal_uInt32 nWidth)
         if( xChartModel.is() )
         {
             Reference< beans::XPropertySet > xPropSet(
-                ObjectIdentifier::getObjectPropertySet( aCID, uno::Reference<chart2::XChartDocument>(xChartModel) ) );
+                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
 
             ObjectType eType = ObjectIdentifier::getObjectType(aCID);
             if (eType == OBJECTTYPE_DIAGRAM)
@@ -1073,7 +1073,7 @@ void ChartController::executeDispatch_LOKPieSegmentDragging( int nOffset )
         if( xChartModel.is() )
         {
             Reference< beans::XPropertySet > xPointProperties(
-                ObjectIdentifier::getObjectPropertySet( aCID, uno::Reference<chart2::XChartDocument>(xChartModel) ) );
+                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
             if( xPointProperties.is() )
                 xPointProperties->setPropertyValue( "Offset", uno::Any( nOffset / 100.0 ) );
         }
