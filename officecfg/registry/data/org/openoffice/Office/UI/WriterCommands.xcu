@@ -1877,7 +1877,7 @@
       </node>
       <node oor:name=".uno:DecrementLevel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Demote One Level</value>
+          <value xml:lang="en-US">Demote Outline Level</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -1890,7 +1890,7 @@
       </node>
       <node oor:name=".uno:IncrementLevel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Promote One Level</value>
+          <value xml:lang="en-US">Promote Outline Level</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -1926,7 +1926,7 @@
       </node>
       <node oor:name=".uno:MoveUp" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Move Up</value>
+          <value xml:lang="en-US">Move Chapter Up</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -1939,7 +1939,7 @@
       </node>
       <node oor:name=".uno:MoveDown" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Move Down</value>
+          <value xml:lang="en-US">Move Chapter Down</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -1986,7 +1986,7 @@
       </node>
       <node oor:name=".uno:DecrementSubLevels" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Demote One Level With Subpoints</value>
+          <value xml:lang="en-US">Demote Outline Level With Subpoints</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -1999,7 +1999,7 @@
       </node>
       <node oor:name=".uno:IncrementSubLevels" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Promote One Level With Subpoints</value>
+          <value xml:lang="en-US">Promote Outline Level With Subpoints</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -2007,7 +2007,7 @@
       </node>
       <node oor:name=".uno:MoveUpSubItems" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Move Up with Subpoints</value>
+          <value xml:lang="en-US">Move Chapter Up with Subpoints</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -2020,7 +2020,7 @@
       </node>
       <node oor:name=".uno:MoveDownSubItems" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Move Down with Subpoints</value>
+          <value xml:lang="en-US">Move Chapter Down with Subpoints</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
