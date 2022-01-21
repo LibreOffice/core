@@ -61,21 +61,6 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-struct lcl_ObjectToOID
-{
-    explicit lcl_ObjectToOID( const rtl::Reference<::chart::ChartModel> & xChartDoc ) :
-            m_xModel( xChartDoc )
-    {}
-
-    ::chart::ObjectIdentifier operator() ( const Reference< uno::XInterface > & xObj )
-    {
-        return ::chart::ObjectIdentifier( ::chart::ObjectIdentifier::createClassifiedIdentifierForObject( xObj, m_xModel ) );
-    }
-
-private:
-    rtl::Reference<::chart::ChartModel> m_xModel;
-};
-
 void lcl_getChildOIDs(
     ::chart::ObjectHierarchy::tChildContainer& rOutChildren,
     const Reference< container::XIndexAccess >& xShapes )
@@ -238,9 +223,10 @@ void ObjectHierarchy::createAxesTree(
 
     Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ true ) );
     if( !m_bOrderingForElementSelector )
-        std::transform( std::cbegin(aAxes), std::cend(aAxes),
-                      std::back_inserter( rContainer ),
-                      lcl_ObjectToOID( xChartDoc ));
+    {
+        for (const auto & rAxis : std::as_const(aAxes))
+            rContainer.push_back( ObjectIdentifier::createClassifiedIdentifierForObject( rAxis, xChartDoc ) );
+    }
 
     // get all axes, also invisible ones
     aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
