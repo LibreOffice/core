@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "501d232a_ad0cd94d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-01-21T14:31:23Z",
+      "side": 1,
+      "message": "Some keyword arguments remain to be tested.",
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68a6ba5c_0563b8e7",
@@ -189,6 +206,30 @@
       "side": 1,
       "message": "The objective of the test is to validate \"All possible syntax\" for Collection.Add() and Collection.remove() methods. Adding items this way permits such validations. I admit one could do it differently.",
       "parentUuid": "a41a00e6_2ea856ce",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 48
+      },
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50e80dd8_ee7cad7e",
+        "filename": "basic/qa/basic_coverage/test_Collection_class.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-01-21T14:31:23Z",
+      "side": 1,
+      "message": "However arg1 and arg2 keyword arguments have not been considered...",
+      "parentUuid": "e7188a40_b6f98ccd",
       "range": {
         "startLine": 42,
         "startChar": 4,
