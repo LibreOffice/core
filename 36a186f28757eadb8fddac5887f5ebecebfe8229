@@ -34,6 +34,24 @@
       "parentUuid": "331faed3_3ae20aaf",
       "revId": "36a186f28757eadb8fddac5887f5ebecebfe8229",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ddca65a_b94ff7ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-21T17:38:11Z",
+      "side": 1,
+      "message": "That\u0027s accidental.. the original string is 17204 characters (including the linefeed *that already replaced the 0 of a 1234567890*), the expected value 17205 is a result of a space character being added because when pasting multi-line content into the input line a linefeed is replaced by a space character (i.e. the entire string is pasted as a single line), and the new breaking does not munge that space anymore but breaks after the space, i.e. the result has one character added. If the content was copied from in-cell after F2 the resulting length would still be 17204.\n\nSo what is actually tested here is a combination of the paste-into-input-line-converts-linefeed-to-space and the new breaking. In the unfixed version I tried it\u0027s mere luck here that the original string has the linefeed as 16368th character right after the 123456789 so such number is not broken into two and the formula still works as the space was added as the 16368th character and then eaten. I didn\u0027t notice the length difference.\n\nHowever, an original string without linefeed but an intact 1234567890 number, then after F2 with the resulting line break copied from, and pasted into a cell instead of input line would narrow the test to what the bug actually was about. The result for both cells then should be 1930864179960 and the lengths still 17204 for the original (that does not contain a linefeed) and 17205 for the pasted (that does contain a linefeed). For an unfixed version the length would be 17204 for both, and as one number was crippled to 123456789 the result of the pasted cell would be 1929753068859. As is, with the current test document the result is 1929753068859 in all cases, in unfixed and fixed versions.",
+      "parentUuid": "18248013_dfc62510",
+      "revId": "36a186f28757eadb8fddac5887f5ebecebfe8229",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
