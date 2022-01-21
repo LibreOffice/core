@@ -51,6 +51,24 @@
       "parentUuid": "04fb7bf7_6602a49d",
       "revId": "876e480b74511fc2e8877f7892b7776a116796b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e07e8ded_dc6431d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-21T12:55:07Z",
+      "side": 1,
+      "message": "Yes please, that\u0027s the point of having a reference to BZ.",
+      "parentUuid": "3140a63c_ac1f0420",
+      "revId": "876e480b74511fc2e8877f7892b7776a116796b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
