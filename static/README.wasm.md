@@ -42,7 +42,7 @@ Most of the information from <https://doc.qt.io/qt-6/wasm.html> is still valid f
 generally the Qt6 WASM documentation is much better, because it incorporated many
 information from the Qt Wiki.
 
-FWIW: Qt 5.15 LTS is not maintained publically and Qt WASM has quite a few bugs. Most
+FWIW: Qt 5.15 LTS is not maintained publicly and Qt WASM has quite a few bugs. Most
 WASM fixes from Qt 6 are needed for Qt 5.15 too. They can mainly be cherry-picked from:
 - git log origin/dev src/plugins/platforms/wasm/
 - git log --grep wasm origin/dev
@@ -71,7 +71,7 @@ with some options. This way the LO WASM needs at least 64GB RAM. For faster link
 and generating source maps (see emscripten.py, finalize_wasm, and avoid modify_wasm = True).
 This is just needed for Qt examples, as LO already uses the correct flags!
 
-The install is not really needed, as LO currently just uses qtbase on it's own. You can do
+The install is not really needed, as LO currently just uses qtbase on its own. You can do
 
     make -j<CORES> install
 or
@@ -112,7 +112,7 @@ linked dynamically, but everything else is static.
     tar -chf wasm.tar --xform 's/.*program/lo-wasm/' instdir/program/soffice.* \
         instdir/program/qt*
 
-Your HTTP server needs to provide aditional headers:
+Your HTTP server needs to provide additional headers:
 * add_header Cross-Origin-Opener-Policy same-origin
 * add_header Cross-Origin-Embedder-Policy require-corp
 
