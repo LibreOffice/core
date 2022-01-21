@@ -355,6 +355,7 @@
                 <property name="can-focus">False</property>
                 <property name="no-show-all">True</property>
                 <property name="spacing">6</property>
+                <property name="homogeneous">True</property>
                 <property name="layout-style">spread</property>
                 <child>
                   <object class="GtkButton" id="ok">
