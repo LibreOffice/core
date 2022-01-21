@@ -33,6 +33,24 @@
       "message": "Try..catch here look overkill. Overall, try..catch is designed in C++ language as *error handling* machinery, and must be used as such as much as possible. In this case, its use is not about error, and additionally it doesn\u0027t even clarify the code (which would justify use of the block in not performance-critical code). Simply checking if xServices is valid would be much cleaner, without clutter:\n\n    // check whether the document is Writer or not\n    if (Reference\u003clang::XServiceInfo\u003e xSI{ m_xFrame-\u003egetController()-\u003egetModel(), UNO_QUERY })\n        m_bIsWriter \u003d xSI-\u003esupportsService(\"com.sun.star.text.TextDocument\");",
       "revId": "ccd074f1802094e64a6c2d5eb1b90867d6fb6ff5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2bba929_cc1355fc",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2184,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2022-01-21T18:53:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f07c758_50fc7ad0",
+      "revId": "ccd074f1802094e64a6c2d5eb1b90867d6fb6ff5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
