@@ -61,6 +61,7 @@
         <property name="label" translatable="yes" context="generalpagewizard|createDatabase">Create a n_ew database</property>
         <property name="visible">True</property>
         <property name="can-focus">True</property>
+        <property name="has-focus">True</property>
         <property name="receives-default">False</property>
         <property name="margin-start">12</property>
         <property name="use-underline">True</property>
