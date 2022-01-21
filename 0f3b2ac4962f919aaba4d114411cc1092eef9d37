@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "68a6ba5c_0563b8e7",
+        "filename": "basic/qa/basic_coverage/test_Collection_class.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-21T12:57:19Z",
+      "side": 1,
+      "message": "Should this line be present in the final patch? Isn\u0027t this only used for running the test locally?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 1
+      },
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "861cbae9_69262aaa",
         "filename": "basic/qa/basic_coverage/test_Collection_class.bas",
         "patchSetId": 4
@@ -48,6 +71,29 @@
       "writtenOn": "2022-01-21T12:38:07Z",
       "side": 1,
       "message": "Is \"planet\" a remnant from the commented-out line 42? Please remove it then. If you want to keep the print line (which I don\u0027t think is reasonable, but not strongly opposing), then please have a separate dim at the commented out block, and comment the lines together.",
+      "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a41a00e6_2ea856ce",
+        "filename": "basic/qa/basic_coverage/test_Collection_class.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-21T12:57:19Z",
+      "side": 1,
+      "message": "How about making sure the items are in the right order?\n\nTestUtil.assertEqual(c.Item(1), \"Earth\", \"c.Item(1)\")\nTestUtil.assertEqual(c.Item(2), \"Jupiter\", \"c.Item(2)\")\nTestUtil.assertEqual(c.Item(3), \"Mars\", \"c.Item(3)\")\nTestUtil.assertEqual(c.Item(4), \"Mercury\", \"c.Item(4)\")\nTestUtil.assertEqual(c.Item(5), \"Neptune\", \"c.Item(5)\")\nTestUtil.assertEqual(c.Item(6), \"Saturn\", \"c.Item(6)\")\nTestUtil.assertEqual(c.Item(7), \"Uranus\", \"c.Item(7)\")\nTestUtil.assertEqual(c.Item(8), \"Venus\", \"c.Item(8)\")",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 48
+      },
       "revId": "0f3b2ac4962f919aaba4d114411cc1092eef9d37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
