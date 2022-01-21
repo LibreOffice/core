@@ -811,6 +811,8 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
     if (!getOutlinerView() || !GetEditEngine().HasView(&getOutlinerView()->GetEditView()))
     {
         mpImpl->ProvideOutlinerView(*this, pViewShell, mpWindow);
+        // reset the starting search position to the current slide like DetectChange does
+        maObjectIterator = sd::outliner::OutlinerContainer(this).current();
     }
 
     if (pViewShell)
