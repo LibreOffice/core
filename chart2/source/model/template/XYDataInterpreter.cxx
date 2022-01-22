@@ -45,7 +45,7 @@ XYDataInterpreter::~XYDataInterpreter()
 }
 
 // ____ XDataInterpreter ____
-chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
+chart2::InterpretedData XYDataInterpreter::interpretDataSource(
     const Reference< chart2::data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
     const Sequence< Reference< XDataSeries > >& aSeriesToReUse )
@@ -135,7 +135,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
     return InterpretedData( { comphelper::containerToSequence( aSeriesVec ) }, xCategories );
 }
 
-chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
+chart2::InterpretedData XYDataInterpreter::reinterpretDataSeries(
     const chart2::InterpretedData& aInterpretedData )
 {
     InterpretedData aResult( aInterpretedData );
@@ -219,7 +219,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
 }
 
 // criterion: all series must have exactly two data::XLabeledDataSequences
-sal_Bool SAL_CALL XYDataInterpreter::isDataCompatible(
+bool XYDataInterpreter::isDataCompatible(
     const chart2::InterpretedData& aInterpretedData )
 {
     const Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));

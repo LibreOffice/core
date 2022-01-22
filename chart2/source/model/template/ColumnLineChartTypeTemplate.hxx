@@ -67,7 +67,7 @@ protected:
         ::sal_Int32 nChartTypeGroupIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount ) override;
-    virtual css::uno::Reference< css::chart2::XDataInterpreter > getDataInterpreter() override;
+    virtual rtl::Reference< ::chart::DataInterpreter > getDataInterpreter() override;
 
     // ____ ChartTypeTemplate ____
     virtual void createChartTypes(

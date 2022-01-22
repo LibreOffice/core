@@ -1021,6 +1021,7 @@ chart2/source/inc/ColorPerPointHelper.hxx
 chart2/source/inc/CommonConverters.hxx
 chart2/source/inc/CommonFunctors.hxx
 chart2/source/inc/ConfigColorScheme.hxx
+chart2/source/inc/DataInterpreter.hxx
 chart2/source/inc/DataSeriesHelper.hxx
 chart2/source/inc/DataSource.hxx
 chart2/source/inc/DataSourceHelper.hxx
@@ -1135,7 +1136,6 @@ chart2/source/model/template/ColumnLineChartTypeTemplate.cxx
 chart2/source/model/template/ColumnLineChartTypeTemplate.hxx
 chart2/source/model/template/ColumnLineDataInterpreter.cxx
 chart2/source/model/template/DataInterpreter.cxx
-chart2/source/model/template/DataInterpreter.hxx
 chart2/source/model/template/FilledNetChartType.cxx
 chart2/source/model/template/LineChartType.cxx
 chart2/source/model/template/LineChartType.hxx

@@ -44,7 +44,7 @@ BubbleDataInterpreter::~BubbleDataInterpreter()
 }
 
 // ____ XDataInterpreter ____
-chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
+chart2::InterpretedData BubbleDataInterpreter::interpretDataSource(
     const Reference< chart2::data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
     const Sequence< Reference< XDataSeries > >& aSeriesToReUse )
@@ -151,7 +151,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
     return InterpretedData( { comphelper::containerToSequence(aSeriesVec) }, xCategories );
 }
 
-chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
+chart2::InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
     const chart2::InterpretedData& aInterpretedData )
 {
     InterpretedData aResult( aInterpretedData );
@@ -254,7 +254,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
     return aResult;
 }
 
-sal_Bool SAL_CALL BubbleDataInterpreter::isDataCompatible(
+bool BubbleDataInterpreter::isDataCompatible(
     const chart2::InterpretedData& aInterpretedData )
 {
     const Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
