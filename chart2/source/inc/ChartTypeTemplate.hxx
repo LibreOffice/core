@@ -39,6 +39,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart
 {
 class ChartType;
+class Diagram;
 
 /** For creating diagrams and modifying existing diagrams.  A base class that
     implements XChartTypeTemplate and offers some tooling for classes that
@@ -82,7 +83,8 @@ public:
         const OUString & rServiceName );
     virtual ~ChartTypeTemplate() override;
 
-    virtual css::uno::Reference< css::chart2::XDiagram > createDiagramByDataSource(
+    OOO_DLLPUBLIC_CHARTTOOLS
+    rtl::Reference< ::chart::Diagram > createDiagramByDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments );
     /// denotes if the chart needs categories at the first scale
