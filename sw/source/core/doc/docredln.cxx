@@ -411,8 +411,11 @@ bool SwRedlineTable::Insert(SwRangeRedline*& p)
         size_type nP = rv.first - begin();
         LOKRedlineNotification(RedlineNotification::Add, p);
 
-        // set IsMoved checking nearby redlines
-        isMoved(nP);
+        // detect text moving by checking nearby redlines, except during Undo
+        // (no Undo recording during OOXML import, but apply isMoved() here too,
+        // to fix missing text moving detection of e.g. web version of MSO)
+        if ( p->GetDoc().GetIDocumentUndoRedo().DoesUndo() || p->GetDoc().IsInWriterfilterImport() )
+            isMoved(nP);
 
         p->CallDisplayFunc(nP);
         if (rv.second)
