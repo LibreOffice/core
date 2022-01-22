@@ -9,10 +9,6 @@
 
 #pragma once
 
-#include <sal/config.h>
-
-#include <string_view>
-
 #include "mysqlc_tables.hxx"
 
 #include <connectivity/TTableHelper.hxx>
