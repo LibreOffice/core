@@ -23,7 +23,6 @@
 #include <ObjectIdentifier.hxx>
 #include <ObjectNameProvider.hxx>
 #include <servicenames.hxx>
-#include <ChartModel.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
