@@ -111,22 +111,24 @@ LwpTableLayout* LwpSuperTableLayout::GetTableLayout()
 {
     LwpObjectID *pID = &GetChildTail();
 
-    while(pID && !pID->IsNull())
+    o3tl::sorted_vector<LwpObjectID*> aSeen;
+    while (pID && !pID->IsNull())
     {
+        bool bAlreadySeen = !aSeen.insert(pID).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
+
         LwpLayout* pLayout = dynamic_cast<LwpLayout*>(pID->obj().get());
         if (!pLayout)
-        {
             break;
-        }
         if (pLayout->GetLayoutType() == LWP_TABLE_LAYOUT)
-        {
             return dynamic_cast<LwpTableLayout *>(pLayout);
-        }
         pID = &pLayout->GetPrevious();
     }
 
     return nullptr;
 }
+
 /**
  * @short   Get effective heading table layout, the one just before table layout is the only one which is effective
  * @return LwpTableHeadingLayout* - pointer to table heading layout
@@ -135,23 +137,24 @@ LwpTableHeadingLayout* LwpSuperTableLayout::GetTableHeadingLayout()
 {
     LwpObjectID *pID = &GetChildTail();
 
-    while(pID && !pID->IsNull())
+    o3tl::sorted_vector<LwpObjectID*> aSeen;
+    while (pID && !pID->IsNull())
     {
+        bool bAlreadySeen = !aSeen.insert(pID).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
+
         LwpLayout * pLayout = dynamic_cast<LwpLayout *>(pID->obj().get());
         if (!pLayout)
-        {
             break;
-        }
-
         if (pLayout->GetLayoutType() == LWP_TABLE_HEADING_LAYOUT)
-        {
             return dynamic_cast<LwpTableHeadingLayout *>(pLayout);
-        }
         pID = &pLayout->GetPrevious();
     }
 
     return nullptr;
 }
+
 /**
  * @short   Register super table layout style
  */
