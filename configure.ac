@@ -2916,7 +2916,7 @@ if test -z "$BASH"; then
 fi
 AC_SUBST(BASH)
 
-# prefer parallel comression tools, if available
+# prefer parallel compression tools, if available
 AC_PATH_PROG(COMPRESSIONTOOL, pigz)
 if test -z "$COMPRESSIONTOOL"; then
     AC_PATH_PROG(COMPRESSIONTOOL, gzip)

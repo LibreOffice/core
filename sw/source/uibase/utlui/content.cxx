@@ -2906,7 +2906,7 @@ bool SwContentTree::HasContentChanged()
             if (bContentChanged)
                 continue;
 
-            // does entry have childern?
+            // does entry have children?
             if (m_xTreeView->get_row_expanded(*xEntry))
             {
                 const size_t nChildCount = GetChildCount(*xEntry);
