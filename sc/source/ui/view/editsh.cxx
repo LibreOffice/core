@@ -528,6 +528,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_TOGGLE_REL:
             {
+                /* TODO: MLFORMULA: this should work also with multi-line formulas. */
                 if (pEngine->GetParagraphCount() == 1)
                 {
                     OUString aText = pEngine->GetText();

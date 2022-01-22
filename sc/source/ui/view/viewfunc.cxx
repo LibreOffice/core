@@ -661,7 +661,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             // formulas have to be recognized even if they're formatted
             // (but common attributes are still collected)
 
-            if ( !bSimple && aEngine.GetParagraphCount() == 1 )
+            if (!bSimple)
             {
                 OUString aParStr(aEngine.GetText( 0 ));
                 if ( aParStr[0] == '=' )
