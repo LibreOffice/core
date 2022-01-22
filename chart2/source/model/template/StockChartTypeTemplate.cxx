@@ -18,6 +18,9 @@
  */
 
 #include "StockChartTypeTemplate.hxx"
+#include "ColumnChartType.hxx"
+#include "CandleStickChartType.hxx"
+#include "LineChartType.hxx"
 #include <DataSeriesHelper.hxx>
 #include "StockDataInterpreter.hxx"
 #include <DiagramHelper.hxx>
@@ -249,31 +252,26 @@ void StockChartTypeTemplate::resetStyles(
     DiagramHelper::setVertical( xDiagram, false );
 }
 
-Reference< XChartType > StockChartTypeTemplate::getChartTypeForIndex( sal_Int32 nChartTypeIndex )
+rtl::Reference< ChartType > StockChartTypeTemplate::getChartTypeForIndex( sal_Int32 nChartTypeIndex )
 {
-    Reference< XChartType > xCT;
-    Reference< lang::XMultiServiceFactory > xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY );
-    if(xFact.is())
+    rtl::Reference< ChartType > xCT;
+    bool bHasVolume = false;
+    getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME ) >>= bHasVolume;
+    if( bHasVolume )
     {
-        bool bHasVolume = false;
-        getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME ) >>= bHasVolume;
-        if( bHasVolume )
-        {
-            if( nChartTypeIndex == 0 )
-                xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY );
-            else if( nChartTypeIndex == 1 )
-                xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ), uno::UNO_QUERY );
-            else
-                xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY );
-        }
+        if( nChartTypeIndex == 0 )
+            xCT = new ColumnChartType();
+        else if( nChartTypeIndex == 1 )
+            xCT = new CandleStickChartType();
         else
-        {
-            if( nChartTypeIndex == 0 )
-                xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ), uno::UNO_QUERY );
-            else
-                xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY );
-        }
+            xCT = new LineChartType();
+    }
+    else
+    {
+        if( nChartTypeIndex == 0 )
+            xCT = new CandleStickChartType();
+        else
+            xCT = new LineChartType();
     }
     return xCT;
 }
@@ -439,17 +437,14 @@ bool StockChartTypeTemplate::matchesTemplate(
     return bResult;
 }
 
-Reference< XChartType > StockChartTypeTemplate::getChartTypeForNewSeries(
-        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+rtl::Reference< ChartType > StockChartTypeTemplate::getChartTypeForNewSeries(
+        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
-    Reference< chart2::XChartType > xResult;
+    rtl::Reference< ChartType > xResult;
 
     try
     {
-        Reference< lang::XMultiServiceFactory > xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
-        xResult.set( xFact->createInstance(
-                         CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY_THROW );
+        xResult = new LineChartType();
         ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
     }
     catch( const uno::Exception & )

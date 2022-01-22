@@ -18,6 +18,7 @@
  */
 
 #include "ScatterChartTypeTemplate.hxx"
+#include "ScatterChartType.hxx"
 #include "XYDataInterpreter.hxx"
 #include <ChartType.hxx>
 #include <DiagramHelper.hxx>
@@ -314,27 +315,20 @@ bool ScatterChartTypeTemplate::matchesTemplate(
     return bResult;
 }
 
-Reference< chart2::XChartType > ScatterChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+rtl::Reference< ChartType > ScatterChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
 {
-    Reference< chart2::XChartType > xResult;
+    rtl::Reference< ChartType > xResult;
 
     try
     {
-        Reference< lang::XMultiServiceFactory > xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
-        xResult.set( xFact->createInstance(
-                         CHART2_SERVICE_NAME_CHARTTYPE_SCATTER ), uno::UNO_QUERY_THROW );
+        xResult = new ScatterChartType();
 
-        Reference< beans::XPropertySet > xCTProp( xResult, uno::UNO_QUERY );
-        if( xCTProp.is())
-        {
-            xCTProp->setPropertyValue(
-                CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
-            xCTProp->setPropertyValue(
-                CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
-            xCTProp->setPropertyValue(
-                CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
-        }
+        xResult->setPropertyValue(
+            CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
+        xResult->setPropertyValue(
+            CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+        xResult->setPropertyValue(
+            CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
     }
     catch( const uno::Exception & )
     {
@@ -344,30 +338,23 @@ Reference< chart2::XChartType > ScatterChartTypeTemplate::getChartTypeForIndex( 
     return xResult;
 }
 
-Reference< chart2::XChartType > ScatterChartTypeTemplate::getChartTypeForNewSeries(
-        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+rtl::Reference< ChartType > ScatterChartTypeTemplate::getChartTypeForNewSeries(
+        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
-    Reference< chart2::XChartType > xResult;
+    rtl::Reference< ChartType > xResult;
 
     try
     {
-        Reference< lang::XMultiServiceFactory > xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
-        xResult.set( xFact->createInstance(
-                         CHART2_SERVICE_NAME_CHARTTYPE_SCATTER ), uno::UNO_QUERY_THROW );
+        xResult = new ScatterChartType();
 
         ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
 
-        Reference< beans::XPropertySet > xCTProp( xResult, uno::UNO_QUERY );
-        if( xCTProp.is())
-        {
-            xCTProp->setPropertyValue(
-                CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
-            xCTProp->setPropertyValue(
-                CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
-            xCTProp->setPropertyValue(
-                CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
-        }
+        xResult->setPropertyValue(
+            CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
+        xResult->setPropertyValue(
+            CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+        xResult->setPropertyValue(
+            CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
     }
     catch( const uno::Exception & )
     {
