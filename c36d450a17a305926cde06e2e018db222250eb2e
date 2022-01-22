@@ -16,6 +16,41 @@
       "message": "Looks good. Hope no edge cases that relied on the late (duplicate) notifications. Thanks. ",
       "revId": "c36d450a17a305926cde06e2e018db222250eb2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13b99474_734790d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-01-22T21:24:03Z",
+      "side": 1,
+      "message": "Yep - slightly risky; but ... hopefully saves quite some notifications.\nWe could special cases the \u0027Modified\u0027 status if that helps you (?) or do you think the risk is acceptable ?",
+      "parentUuid": "69978c72_e2b532a5",
+      "revId": "c36d450a17a305926cde06e2e018db222250eb2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8c7ae30_ea6ea3a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-01-22T21:24:03Z",
+      "side": 1,
+      "message": "\u003d)",
+      "revId": "c36d450a17a305926cde06e2e018db222250eb2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
