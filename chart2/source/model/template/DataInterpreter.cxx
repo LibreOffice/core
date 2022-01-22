@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DataInterpreter.hxx"
+#include <DataInterpreter.hxx>
 #include <DataSeries.hxx>
 #include <DataSourceHelper.hxx>
 #include <DataSeriesHelper.hxx>
@@ -54,7 +54,7 @@ DataInterpreter::~DataInterpreter()
 {}
 
 // ____ XDataInterpreter ____
-InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
+InterpretedData DataInterpreter::interpretDataSource(
     const Reference< data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
     const Sequence< Reference< XDataSeries > >& aSeriesToReUse )
@@ -126,7 +126,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
     return InterpretedData( { comphelper::containerToSequence( aSeriesVec ) }, xCategories );
 }
 
-InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
+InterpretedData DataInterpreter::reinterpretDataSeries(
     const InterpretedData& aInterpretedData )
 {
     InterpretedData aResult( aInterpretedData );
@@ -181,7 +181,7 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
 }
 
 // criterion: all series must have exactly one data::XLabeledDataSequence
-sal_Bool SAL_CALL DataInterpreter::isDataCompatible(
+bool DataInterpreter::isDataCompatible(
     const chart2::InterpretedData& aInterpretedData )
 {
     const Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
@@ -256,7 +256,7 @@ private:
 
 } // anonymous namespace
 
-Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
+Reference< data::XDataSource > DataInterpreter::mergeInterpretedData(
     const InterpretedData& aInterpretedData )
 {
     vector< Reference< data::XLabeledDataSequence > > aResultVec;
@@ -295,7 +295,7 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
     return DataSourceHelper::createDataSource( comphelper::containerToSequence( aResultVec ) );
 }
 
-uno::Any SAL_CALL DataInterpreter::getChartTypeSpecificData(
+uno::Any DataInterpreter::getChartTypeSpecificData(
     const OUString & )
 {
     return uno::Any();

@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include "DataInterpreter.hxx"
+#include <DataInterpreter.hxx>
 
 #include "StockChartTypeTemplate.hxx"
 
@@ -34,15 +34,15 @@ public:
 
 protected:
     // ____ XDataInterpreter ____
-    virtual css::chart2::InterpretedData SAL_CALL interpretDataSource(
+    virtual css::chart2::InterpretedData interpretDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
         const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aSeriesToReUse ) override;
-    virtual sal_Bool SAL_CALL isDataCompatible(
+    virtual bool isDataCompatible(
         const css::chart2::InterpretedData& aInterpretedData ) override;
-    virtual css::chart2::InterpretedData SAL_CALL reinterpretDataSeries(
+    virtual css::chart2::InterpretedData reinterpretDataSeries(
         const css::chart2::InterpretedData& aInterpretedData ) override;
-    virtual css::uno::Any SAL_CALL getChartTypeSpecificData(
+    virtual css::uno::Any getChartTypeSpecificData(
         const OUString& sKey ) override;
 
 private:
