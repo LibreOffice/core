@@ -105,8 +105,9 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
     caught >>= exception;
     if ( !exception.Message.isEmpty() )
     {
-        sMessage.append(" message: ");
+        sMessage.append(" message: \"");
         sMessage.append(toOString(exception.Message));
+        sMessage.append("\"");
     }
 /*  TODO FIXME (see https://gerrit.libreoffice.org/#/c/83245/)
     if ( exception.Context.is() )

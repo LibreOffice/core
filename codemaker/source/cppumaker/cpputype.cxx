@@ -2871,7 +2871,7 @@ void ExceptionType::dumpHppFile(
         out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
         out << "    if (!Message.isEmpty())\n";
         out << "        Message += \" \";\n";
-        out << "    Message += o3tl::runtimeToOUString(location.file_name()) + \":\" + OUString::number(location.line());\n";
+        out << "    Message += \"at \" + o3tl::runtimeToOUString(location.file_name()) + \":\" + OUString::number(location.line());\n";
         out << "#endif\n";
     }
     out << "}\n\n";
@@ -2924,7 +2924,7 @@ void ExceptionType::dumpHppFile(
             out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
             out << "    if (!Message.isEmpty())\n";
             out << "        Message += \" \";\n";
-            out << "    Message += o3tl::runtimeToOUString(location.file_name()) + \":\" + OUString::number(location.line());\n";
+            out << "    Message += \"at \" + o3tl::runtimeToOUString(location.file_name()) + \":\" + OUString::number(location.line());\n";
             out << "#endif\n";
         }
         out << "}\n\n";
