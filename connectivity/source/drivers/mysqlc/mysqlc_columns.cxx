@@ -10,18 +10,8 @@
 #include "mysqlc_columns.hxx"
 #include "mysqlc_column.hxx"
 
-using namespace ::connectivity;
-using namespace ::connectivity::mysqlc;
-using namespace ::connectivity::sdbcx;
-
-using namespace ::cppu;
-using namespace ::osl;
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::uno;
-
-Columns::Columns(Table& rTable, Mutex& rMutex, const ::std::vector<OUString>& rVector)
+connectivity::mysqlc::Columns::Columns(Table& rTable, osl::Mutex& rMutex,
+                                       const ::std::vector<OUString>& rVector)
     : OColumnsHelper(rTable,
                      true, // case sensitivity
                      rMutex, rVector,
@@ -30,6 +20,9 @@ Columns::Columns(Table& rTable, Mutex& rMutex, const ::std::vector<OUString>& rV
     OColumnsHelper::setParent(&rTable);
 }
 
-Reference<css::beans::XPropertySet> Columns::createDescriptor() { return new Column; }
+css::uno::Reference<css::beans::XPropertySet> connectivity::mysqlc::Columns::createDescriptor()
+{
+    return new Column;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
