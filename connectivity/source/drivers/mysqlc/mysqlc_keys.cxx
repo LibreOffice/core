@@ -10,19 +10,8 @@
 #include "mysqlc_keys.hxx"
 #include "mysqlc_table.hxx"
 
-#include <connectivity/dbtools.hxx>
-
-using namespace ::connectivity;
-using namespace ::connectivity::mysqlc;
-
-using namespace ::osl;
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::uno;
-
-Keys::Keys(Table* pTable, Mutex& rMutex, const ::std::vector<OUString>& rNames)
+connectivity::mysqlc::Keys::Keys(Table* pTable, osl::Mutex& rMutex,
+                                 const ::std::vector<OUString>& rNames)
     : OKeysHelper(pTable, rMutex, rNames)
 {
 }
