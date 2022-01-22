@@ -323,7 +323,7 @@ bool ChartTypeTemplate::matchesTemplate(
         bResult = aCooSysSeq.hasElements();
         if( bResult )
         {
-            Sequence< Reference< XChartType > > aFormerlyUsedChartTypes;
+            std::vector< rtl::Reference< ChartType > > aFormerlyUsedChartTypes;
             Reference<XChartType> xOldCT = getChartTypeForNewSeries(aFormerlyUsedChartTypes);
             if (!xOldCT.is())
                 return false;
@@ -527,8 +527,8 @@ void ChartTypeTemplate::createCoordinateSystems(
 {
     if( ! xOutCooSysCnt.is())
         return;
-    Sequence< Reference< XChartType > > aFormerlyUsedChartTypes;
-    Reference< XChartType > xChartType( getChartTypeForNewSeries(aFormerlyUsedChartTypes));
+    std::vector< rtl::Reference< ChartType > > aFormerlyUsedChartTypes;
+    rtl::Reference< ChartType > xChartType( getChartTypeForNewSeries(aFormerlyUsedChartTypes));
     if( ! xChartType.is())
         return;
     Reference< XCoordinateSystem > xCooSys( xChartType->createCoordinateSystem( getDimension()));
@@ -615,7 +615,7 @@ void ChartTypeTemplate::adaptScales(
                         aData.Categories = xCategories;
                         if(bSupportsCategories)
                         {
-                            Reference< XChartType > xChartType(getChartTypeForNewSeries(Sequence< Reference< XChartType > >()));
+                            rtl::Reference< ChartType > xChartType = getChartTypeForNewSeries({});
                             if( aData.AxisType == AxisType::CATEGORY )
                             {
                                 aData.ShiftedCategoryPosition = m_aServiceName.indexOf("Column") != -1 || m_aServiceName.indexOf("Bar") != -1 || m_aServiceName.endsWith("Close");
@@ -748,14 +748,6 @@ void ChartTypeTemplate::adaptAxes(
 sal_Int32 ChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension )
 {
     return (nDimension < getDimension()) ? 1 : 0;
-}
-
-rtl::Reference< ChartType > ChartTypeTemplate::getChartTypeForNewSeries( const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
-{
-    uno::Reference<XChartType> xChartType = getChartTypeForNewSeries(comphelper::containerToSequence<uno::Reference<XChartType>>(aFormerlyUsedChartTypes));
-    auto pChartType = dynamic_cast<ChartType*>(xChartType.get());
-    assert(!xChartType || pChartType);
-    return pChartType;
 }
 
 void ChartTypeTemplate::FillDiagram(

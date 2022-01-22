@@ -18,6 +18,7 @@
  */
 
 #include "LineChartTypeTemplate.hxx"
+#include "LineChartType.hxx"
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
@@ -285,27 +286,20 @@ bool LineChartTypeTemplate::matchesTemplate(
     return bResult;
 }
 
-Reference< chart2::XChartType > LineChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+rtl::Reference< ChartType > LineChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
 {
-    Reference< chart2::XChartType > xResult;
+    rtl::Reference< ChartType > xResult;
 
     try
     {
-        Reference< lang::XMultiServiceFactory > xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
-        xResult.set( xFact->createInstance(
-                         CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY_THROW );
+        xResult = new LineChartType();
 
-        Reference< beans::XPropertySet > xCTProp( xResult, uno::UNO_QUERY );
-        if( xCTProp.is())
-        {
-            xCTProp->setPropertyValue(
-                CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE ));
-            xCTProp->setPropertyValue(
-                CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
-            xCTProp->setPropertyValue(
-                CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
-        }
+        xResult->setPropertyValue(
+            CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE ));
+        xResult->setPropertyValue(
+            CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+        xResult->setPropertyValue(
+            CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
     }
     catch( const uno::Exception & )
     {
@@ -315,30 +309,23 @@ Reference< chart2::XChartType > LineChartTypeTemplate::getChartTypeForIndex( sal
     return xResult;
 }
 
-Reference< chart2::XChartType > LineChartTypeTemplate::getChartTypeForNewSeries(
-        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+rtl::Reference< ChartType > LineChartTypeTemplate::getChartTypeForNewSeries(
+        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
-    Reference< chart2::XChartType > xResult;
+    rtl::Reference< ChartType > xResult;
 
     try
     {
-        Reference< lang::XMultiServiceFactory > xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
-        xResult.set( xFact->createInstance(
-                         CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY_THROW );
+        xResult = new LineChartType();
 
         ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
 
-        Reference< beans::XPropertySet > xCTProp( xResult, uno::UNO_QUERY );
-        if( xCTProp.is())
-        {
-            xCTProp->setPropertyValue(
-                CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE ));
-            xCTProp->setPropertyValue(
-                CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
-            xCTProp->setPropertyValue(
-                CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
-        }
+        xResult->setPropertyValue(
+            CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE ));
+        xResult->setPropertyValue(
+            CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+        xResult->setPropertyValue(
+            CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
     }
     catch( const uno::Exception & )
     {

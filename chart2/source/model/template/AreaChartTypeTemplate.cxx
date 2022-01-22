@@ -18,6 +18,7 @@
  */
 
 #include "AreaChartTypeTemplate.hxx"
+#include "AreaChartType.hxx"
 #include <servicenames_charttypes.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>
@@ -205,29 +206,15 @@ void AreaChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xD
     }
 }
 
-Reference< chart2::XChartType > AreaChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+rtl::Reference< ChartType > AreaChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
 {
-    Reference< chart2::XChartType > xResult;
-
-    try
-    {
-        Reference< lang::XMultiServiceFactory > xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
-        xResult.set( xFact->createInstance(
-                         CHART2_SERVICE_NAME_CHARTTYPE_AREA ), uno::UNO_QUERY_THROW );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return xResult;
+    return new AreaChartType();
 }
 
-Reference< chart2::XChartType > AreaChartTypeTemplate::getChartTypeForNewSeries(
-        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+rtl::Reference< ChartType > AreaChartTypeTemplate::getChartTypeForNewSeries(
+        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
-    Reference< chart2::XChartType > xResult( getChartTypeForIndex( 0 ) );
+    rtl::Reference< ChartType > xResult( getChartTypeForIndex( 0 ) );
     ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
     return xResult;
 }

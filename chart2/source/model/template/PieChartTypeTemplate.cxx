@@ -18,6 +18,7 @@
  */
 
 #include "PieChartTypeTemplate.hxx"
+#include "PieChartType.hxx"
 #include <CommonConverters.hxx>
 #include <ChartType.hxx>
 #include <DiagramHelper.hxx>
@@ -405,23 +406,15 @@ bool PieChartTypeTemplate::matchesTemplate(
     return bResult;
 }
 
-Reference< chart2::XChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
 {
-    Reference< chart2::XChartType > xResult;
+    rtl::Reference< ChartType > xResult;
 
     try
     {
-        Reference< lang::XMultiServiceFactory > xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
-        xResult.set( xFact->createInstance(
-                         CHART2_SERVICE_NAME_CHARTTYPE_PIE ), uno::UNO_QUERY_THROW );
-        Reference< beans::XPropertySet > xCTProp( xResult, uno::UNO_QUERY );
-        if( xCTProp.is())
-        {
-            xCTProp->setPropertyValue(
-                "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
-        }
-
+        xResult = new PieChartType();
+        xResult->setPropertyValue(
+            "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
     }
     catch( const uno::Exception & )
     {
@@ -431,25 +424,17 @@ Reference< chart2::XChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_
     return xResult;
 }
 
-Reference< chart2::XChartType > PieChartTypeTemplate::getChartTypeForNewSeries(
-        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForNewSeries(
+        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
-    Reference< chart2::XChartType > xResult;
+    rtl::Reference< ChartType > xResult;
 
     try
     {
-        Reference< lang::XMultiServiceFactory > xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
-        xResult.set( xFact->createInstance(
-                         CHART2_SERVICE_NAME_CHARTTYPE_PIE ), uno::UNO_QUERY_THROW );
+        xResult = new PieChartType();
         ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
-        Reference< beans::XPropertySet > xCTProp( xResult, uno::UNO_QUERY );
-        if( xCTProp.is())
-        {
-            xCTProp->setPropertyValue(
-                "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
-        }
-
+        xResult->setPropertyValue(
+            "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
     }
     catch( const uno::Exception & )
     {

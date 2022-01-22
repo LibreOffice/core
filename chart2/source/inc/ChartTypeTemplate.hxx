@@ -98,9 +98,9 @@ public:
         const css::uno::Reference<
         css::chart2::XDiagram >& xDiagram,
         bool bAdaptProperties );
-    virtual css::uno::Reference< css::chart2::XChartType >
-        getChartTypeForNewSeries( const css::uno::Sequence<
-            css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) = 0;
+    virtual rtl::Reference< ::chart::ChartType >
+        getChartTypeForNewSeries( const std::vector<
+            rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) = 0;
     virtual css::uno::Reference< css::chart2::XDataInterpreter > getDataInterpreter();
     virtual void applyStyle(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
@@ -132,7 +132,7 @@ public:
      */
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
 
-    virtual css::uno::Reference< css::chart2::XChartType >
+    virtual rtl::Reference< ::chart::ChartType >
                 getChartTypeForIndex( sal_Int32 nChartTypeIndex ) = 0;
 
     virtual bool isSwapXAndY() const;
@@ -252,8 +252,6 @@ private:
                       const css::uno::Reference<
                           css::chart2::data::XLabeledDataSequence >& xCategories,
                       const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq);
-
-    rtl::Reference< ChartType > getChartTypeForNewSeries( const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes );
 };
 
 } //  namespace chart

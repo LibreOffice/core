@@ -66,9 +66,9 @@ protected:
     virtual bool matchesTemplate(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
         bool bAdaptProperties ) override;
-    virtual css::uno::Reference< css::chart2::XChartType >
-        getChartTypeForNewSeries( const css::uno::Sequence<
-            css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override;
+    virtual rtl::Reference< ::chart::ChartType >
+        getChartTypeForNewSeries( const std::vector<
+            rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) override;
     virtual void applyStyle(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeGroupIndex,
@@ -78,7 +78,7 @@ protected:
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
 
     // ____ ChartTypeTemplate ____
-    virtual css::uno::Reference< css::chart2::XChartType >
+    virtual rtl::Reference< ::chart::ChartType >
                 getChartTypeForIndex( sal_Int32 nChartTypeIndex ) override;
     virtual sal_Int32 getDimension() const override;
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const override;

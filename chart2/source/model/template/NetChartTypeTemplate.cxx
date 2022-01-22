@@ -18,6 +18,8 @@
  */
 
 #include "NetChartTypeTemplate.hxx"
+#include "FilledNetChartType.hxx"
+#include "NetChartType.hxx"
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
@@ -160,34 +162,18 @@ bool NetChartTypeTemplate::matchesTemplate(
     return bResult;
 }
 
-Reference< chart2::XChartType > NetChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+rtl::Reference< ChartType > NetChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
 {
-    Reference< chart2::XChartType > xResult;
-
-    try
-    {
-        Reference< lang::XMultiServiceFactory > xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
-
-        if( m_bHasFilledArea )
-            xResult.set( xFact->createInstance(
-                             CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ), uno::UNO_QUERY_THROW );
-        else
-            xResult.set( xFact->createInstance(
-                             CHART2_SERVICE_NAME_CHARTTYPE_NET ), uno::UNO_QUERY_THROW );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return xResult;
+    if( m_bHasFilledArea )
+        return new FilledNetChartType();
+    else
+        return new NetChartType();
 }
 
-Reference< chart2::XChartType > NetChartTypeTemplate::getChartTypeForNewSeries(
-        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+rtl::Reference< ChartType > NetChartTypeTemplate::getChartTypeForNewSeries(
+        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
 {
-    Reference< chart2::XChartType > xResult( getChartTypeForIndex( 0 ) );
+    rtl::Reference< ChartType > xResult( getChartTypeForIndex( 0 ) );
     ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
     return xResult;
 }
