@@ -123,13 +123,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
     if( ( ASPECT_THUMBNAIL == nAspect ) || ( ASPECT_DOCPRINT == nAspect ) )
     {
         // provide size of first page
-        MapMode aSrcMapMode(MapUnit::MapPixel);
-        MapMode aDstMapMode(MapUnit::Map100thMM);
-        Size aSize = mpDoc->GetSdPage(0, PageKind::Standard)->GetSize();
-        aSrcMapMode.SetMapUnit(MapUnit::Map100thMM);
-
-        aSize = Application::GetDefaultDevice()->LogicToLogic(aSize, &aSrcMapMode, &aDstMapMode);
-        aVisArea.SetSize(aSize);
+        aVisArea.SetSize(mpDoc->GetSdPage(0, PageKind::Standard)->GetSize());
     }
     else
     {
