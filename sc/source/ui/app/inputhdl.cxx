@@ -1278,6 +1278,7 @@ void ScInputHandler::ShowTipCursor()
     HideTipBelow();
     EditView* pActiveView = pTopView ? pTopView : pTableView;
 
+    /* TODO: MLFORMULA: this should work also with multi-line formulas. */
     if ( !(bFormulaMode && pActiveView && pFormulaDataPara && mpEditEngine->GetParagraphCount() == 1) )
         return;
 
@@ -1525,7 +1526,7 @@ void ScInputHandler::UseFormulaData()
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
 
-    // Formulas may only have 1 paragraph
+    /* TODO: MLFORMULA: this should work also with multi-line formulas. */
     if ( !(pActiveView && pFormulaData && mpEditEngine->GetParagraphCount() == 1) )
         return;
 
@@ -2756,7 +2757,7 @@ void ScInputHandler::UpdateFormulaMode()
 {
     SfxApplication* pSfxApp = SfxGetpApp();
 
-    bool bIsFormula = !bProtected && mpEditEngine->GetParagraphCount() == 1;
+    bool bIsFormula = !bProtected;
     if (bIsFormula)
     {
         const OUString& rText = mpEditEngine->GetText(0);
