@@ -33,6 +33,24 @@
       "message": "Waiting for Jenkins to verify the build, once it verifies, I guess this cast will not be needed",
       "revId": "c525eac62d70b9d558252c140b12ca2008076176",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82f6d9a5_b1def93a",
+        "filename": "basctl/source/basicide/baside2b.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-01-22T12:29:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05f9ee4c_7edf7778",
+      "revId": "c525eac62d70b9d558252c140b12ca2008076176",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
