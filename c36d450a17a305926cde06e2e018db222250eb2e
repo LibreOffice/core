@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69978c72_e2b532a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-01-22T18:36:01Z",
+      "side": 1,
+      "message": "Looks good. Hope no edge cases that relied on the late (duplicate) notifications. Thanks. ",
+      "revId": "c36d450a17a305926cde06e2e018db222250eb2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
