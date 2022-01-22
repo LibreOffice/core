@@ -1288,10 +1288,14 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, weld::Button&, rIB, void)
 
 bool SvxNumberFormatTabPage::Click_Impl(const weld::Button& rIB)
 {
-    sal_uLong       nReturn = 0;
-    constexpr sal_uLong nReturnChanged  = 0x1;  // THE boolean return value
-    constexpr sal_uLong nReturnAdded    = 0x2;  // temp: format added
-    constexpr sal_uLong nReturnOneArea  = 0x4;  // temp: one area but category changed => ignored
+    unsigned int nReturn = 0;
+    //sal_uLong       nReturn = 0;
+    constexpr unsigned int nReturnChanged = 0x1;
+    //constexpr sal_uLong nReturnChanged  = 0x1;  // THE boolean return value
+    constexpr unsigned int nReturnAdded = 0x2;
+    //constexpr sal_uLong nReturnAdded    = 0x2;  // temp: format added
+    constexpr unsigned int nReturnOneArea = 0x4;
+    //constexpr sal_uLong nReturnOneArea  = 0x4;  // temp: one area but category changed => ignored
 
     if (&rIB == m_xIbAdd.get())
     {   // Also called from FillItemSet() if a temporary currency format has
