@@ -188,8 +188,6 @@ public:
         SwContentType(SwWrtShell* pParent, ContentTypeId nType, sal_uInt8 nLevel );
         virtual ~SwContentType() override;
 
-        void                Init(bool* pbInvalidateWindow = nullptr);
-
         /** Fill the List of contents */
         void                FillMemberList(bool* pbLevelChanged = nullptr);
         size_t              GetMemberCount() const
