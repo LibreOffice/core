@@ -19,6 +19,7 @@
 
 #include "DialogModel.hxx"
 #include <RangeSelectionHelper.hxx>
+#include <DataInterpreter.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <DiagramHelper.hxx>
@@ -346,7 +347,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
             //special handling for candlestick type
             if( xTemplate.is())
             {
-                Reference< XDataInterpreter > xInterpreter( xTemplate->getDataInterpreter());
+                rtl::Reference< ::chart::DataInterpreter > xInterpreter( xTemplate->getDataInterpreter());
                 if( xInterpreter.is())
                 {
                     sal_Int32 nStockVariant;
@@ -767,7 +768,7 @@ void DialogModel::setData(
         Reference< chart2::data::XDataSource > xDataSource(
             xDataProvider->createDataSource( rArguments ) );
 
-        Reference< chart2::XDataInterpreter > xInterpreter(
+        rtl::Reference< ::chart::DataInterpreter > xInterpreter(
             m_xTemplate->getDataInterpreter());
         if( xInterpreter.is())
         {

@@ -2033,7 +2033,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	XColorScheme \
 	XCoordinateSystem \
 	XCoordinateSystemContainer \
-	XDataInterpreter \
 	XDataProviderAccess \
 	XDataPointCustomLabelField \
 	XDataSeries \

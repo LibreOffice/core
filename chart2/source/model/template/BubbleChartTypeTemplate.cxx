@@ -181,7 +181,7 @@ rtl::Reference< ChartType > BubbleChartTypeTemplate::getChartTypeForNewSeries(
     return xResult;
 }
 
-Reference< chart2::XDataInterpreter > BubbleChartTypeTemplate::getDataInterpreter()
+rtl::Reference< DataInterpreter > BubbleChartTypeTemplate::getDataInterpreter()
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new BubbleDataInterpreter );
