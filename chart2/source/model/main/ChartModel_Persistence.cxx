@@ -27,6 +27,7 @@
 #include <DataSourceHelper.hxx>
 #include <AxisHelper.hxx>
 #include <ThreeDHelper.hxx>
+#include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <BaseCoordinateSystem.hxx>
 
@@ -402,7 +403,7 @@ void ChartModel::insertDefaultChart()
                                                      beans::PropertyState_DIRECT_VALUE ) };
                 }
 
-                Reference< chart2::XDiagram > xDiagram( xTemplate->createDiagramByDataSource( xDataSource, aParam ) );
+                rtl::Reference< Diagram > xDiagram( xTemplate->createDiagramByDataSource( xDataSource, aParam ) );
 
                 setFirstDiagram( xDiagram );
 
@@ -430,11 +431,10 @@ void ChartModel::insertDefaultChart()
                     xDiagram->setLegend( xLegend );
 
                 // set simple 3D look
-                Reference< beans::XPropertySet > xDiagramProperties( xDiagram, uno::UNO_QUERY );
-                if( xDiagramProperties.is() )
+                if( xDiagram.is() )
                 {
-                    xDiagramProperties->setPropertyValue( "RightAngledAxes", uno::Any( true ));
-                    xDiagramProperties->setPropertyValue( "D3DScenePerspective", uno::Any( drawing::ProjectionMode_PARALLEL ));
+                    xDiagram->setPropertyValue( "RightAngledAxes", uno::Any( true ));
+                    xDiagram->setPropertyValue( "D3DScenePerspective", uno::Any( drawing::ProjectionMode_PARALLEL ));
                     ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme::ThreeDLookScheme_Realistic );
                 }
 
