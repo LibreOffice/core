@@ -8,8 +8,8 @@ export ABW_TARBALL := libabw-0.1.3.tar.xz
 # please repack the tarball using external/boost/repack_tarball.sh
 export BOOST_SHA256SUM := 9b334d6c6d7af5a0687280788cd84444398b8e0b472cd88e52bbc3c3ef11d98e
 export BOOST_TARBALL := boost_1_77_0.tar.xz
-export BOX2D_SHA256SUM := 58ffc8475a8650aadc351345aef696937747b40501ab78d72c197c5ff5b3035c
-export BOX2D_TARBALL := box2d-2.3.1.tar.gz
+export BOX2D_SHA256SUM := d6b4650ff897ee1ead27cf77a5933ea197cbeef6705638dd181adc2e816b23c2
+export BOX2D_TARBALL := box2d-2.4.1.tar.gz
 export BREAKPAD_SHA256SUM := c44a2e898895cfc13b42d2371ba4b88b0777d7782214d6cdc91c33720f3b0d91
 export BREAKPAD_TARBALL := breakpad-b324760c7f53667af128a6b77b790323da04fcb9.tar.xz
 export BSH_SHA256SUM := 9e93c73e23aff644b17dfff656444474c14150e7f3b38b19635e622235e01c96
