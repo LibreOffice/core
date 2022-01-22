@@ -24,6 +24,7 @@
 #include <ChartType.hxx>
 
 #include <AxisHelper.hxx>
+#include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <AxisIndexDefines.hxx>
 #include <unonames.hxx>
@@ -137,20 +138,16 @@ ChartTypeTemplate::~ChartTypeTemplate()
 {}
 
 // ____ ChartTypeTemplate ____
-uno::Reference< XDiagram > ChartTypeTemplate::createDiagramByDataSource(
+rtl::Reference< Diagram > ChartTypeTemplate::createDiagramByDataSource(
     const uno::Reference< data::XDataSource >& xDataSource,
     const uno::Sequence< beans::PropertyValue >& aArguments )
 {
-    Reference< XDiagram > xDia;
+    rtl::Reference< Diagram > xDia;
 
     try
     {
         // create diagram
-        xDia.set(
-            GetComponentContext()->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.chart2.Diagram",
-                GetComponentContext() ),
-            uno::UNO_QUERY_THROW );
+        xDia = new Diagram(GetComponentContext());
 
         // modify diagram
         Reference< chart2::XDataInterpreter > xInterpreter( getDataInterpreter());
