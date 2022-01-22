@@ -1140,7 +1140,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-OUString EditorWindow::GetActualSubName( sal_uLong nLine )
+OUString EditorWindow::GetActualSubName( sal_uInt32 nLine )
 {
     SbxArrayRef pMethods = rModulWindow.GetSbModule()->GetMethods();
     for (sal_uInt32 i = 0; i < pMethods->Count(); i++)
@@ -1194,7 +1194,7 @@ void EditorWindow::InitScrollBars()
     }
 }
 
-void EditorWindow::ImpDoHighlight( sal_uLong nLine )
+void EditorWindow::ImpDoHighlight( sal_uInt32 nLine )
 {
     if ( !bDoSyntaxHighlight )
         return;
@@ -1258,7 +1258,7 @@ void EditorWindow::ImplSetFont()
     }
 }
 
-void EditorWindow::DoSyntaxHighlight( sal_uLong nPara )
+void EditorWindow::DoSyntaxHighlight( sal_uInt32 nPara )
 {
     // because of the DelayedSyntaxHighlight it's possible
     // that this line does not exist anymore!
@@ -1271,7 +1271,7 @@ void EditorWindow::DoSyntaxHighlight( sal_uLong nPara )
     }
 }
 
-void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
+void EditorWindow::DoDelayedSyntaxHighlight( sal_uInt32 nPara )
 {
     // line is only added to list, processed in TimerHdl
     // => don't manipulate breaks while EditEngine is formatting
@@ -1313,7 +1313,7 @@ IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl, Timer *, void)
     bHighlighting = false;
 }
 
-void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
+void EditorWindow::ParagraphInsertedDeleted( sal_uInt32 nPara, bool bInserted )
 {
     if ( pProgress )
         pProgress->StepProgress();
@@ -1326,7 +1326,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
     }
     else
     {
-        rModulWindow.GetBreakPoints().AdjustBreakPoints( static_cast<sal_uInt16>(nPara)+1, bInserted );
+        rModulWindow.GetBreakPoints().AdjustBreakPoints( nPara+1, bInserted );
 
         tools::Long nLineHeight = GetTextHeight();
         Size aSz = rModulWindow.GetBreakPointWindow().GetOutDev()->GetOutputSize();
