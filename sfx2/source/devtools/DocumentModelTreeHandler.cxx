@@ -720,7 +720,7 @@ uno::Reference<uno::XInterface> DocumentModelTreeHandler::getObjectByID(OUString
 
 void DocumentModelTreeHandler::clearAll()
 {
-    // destroy all DocumetModelTreeEntries from the tree
+    // destroy all DocumentModelTreeEntries from the tree
     mpDocumentModelTree->all_foreach([this](weld::TreeIter& rEntry) {
         OUString sID = mpDocumentModelTree->get_id(rEntry);
         auto* pEntry = reinterpret_cast<DocumentModelTreeEntry*>(sID.toInt64());
