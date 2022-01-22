@@ -215,7 +215,7 @@ public:
     // Note: we cannot make this a global variable, because it might be initialised BEFORE the putenv() call in cppunittester.
     static bool IsRunningUnitTest() { return getenv("LO_TESTNAME") != nullptr; }
 
-    // both must to be implemented, if the VCL plugin needs to run via system event loop
+    // both must be implemented, if the VCL plugin needs to run via system event loop
     virtual bool DoExecute(int &nExitCode);
     virtual void DoQuit();
 };
