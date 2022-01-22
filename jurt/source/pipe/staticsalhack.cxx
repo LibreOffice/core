@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#define DISABLE_DYNLOADING
 #define NO_CHILD_PROCESSES
 #undef SAL_LOG_INFO
 #undef SAL_LOG_WARN
