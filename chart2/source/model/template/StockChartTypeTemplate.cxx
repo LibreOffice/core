@@ -455,7 +455,7 @@ rtl::Reference< ChartType > StockChartTypeTemplate::getChartTypeForNewSeries(
     return xResult;
 }
 
-Reference< XDataInterpreter > StockChartTypeTemplate::getDataInterpreter()
+rtl::Reference< DataInterpreter > StockChartTypeTemplate::getDataInterpreter()
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new StockDataInterpreter( m_eStockVariant ) );

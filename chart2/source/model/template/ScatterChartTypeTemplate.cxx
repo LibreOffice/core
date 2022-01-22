@@ -364,7 +364,7 @@ rtl::Reference< ChartType > ScatterChartTypeTemplate::getChartTypeForNewSeries(
     return xResult;
 }
 
-Reference< chart2::XDataInterpreter > ScatterChartTypeTemplate::getDataInterpreter()
+rtl::Reference< DataInterpreter > ScatterChartTypeTemplate::getDataInterpreter()
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new XYDataInterpreter );

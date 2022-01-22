@@ -18,7 +18,7 @@
  */
 
 #include <ChartTypeTemplate.hxx>
-#include "DataInterpreter.hxx"
+#include <DataInterpreter.hxx>
 #include <CommonConverters.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartType.hxx>
@@ -150,7 +150,7 @@ rtl::Reference< Diagram > ChartTypeTemplate::createDiagramByDataSource(
         xDia = new Diagram(GetComponentContext());
 
         // modify diagram
-        Reference< chart2::XDataInterpreter > xInterpreter( getDataInterpreter());
+        rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter());
         chart2::InterpretedData aData(
             xInterpreter->interpretDataSource(
                 xDataSource, aArguments, Sequence< Reference< XDataSeries > >() ));
@@ -190,7 +190,7 @@ void ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >& xDiagra
         const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.getLength();
 
         // chart-type specific interpretation of existing data series
-        Reference< chart2::XDataInterpreter > xInterpreter( getDataInterpreter());
+        rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter());
         chart2::InterpretedData aData;
         aData.Series = aSeriesSeq;
         aData.Categories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
@@ -265,7 +265,7 @@ void ChartTypeTemplate::changeDiagramData(
         Sequence< Reference< XDataSeries > > aFlatSeriesSeq(
             comphelper::containerToSequence( DiagramHelper::getDataSeriesFromDiagram( xDiagram )));
         const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.getLength();
-        Reference< chart2::XDataInterpreter > xInterpreter( getDataInterpreter());
+        rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter());
         chart2::InterpretedData aData =
             xInterpreter->interpretDataSource( xDataSource, aArguments, aFlatSeriesSeq );
 
@@ -361,7 +361,7 @@ bool ChartTypeTemplate::matchesTemplate(
     return bResult;
 }
 
-Reference< chart2::XDataInterpreter > ChartTypeTemplate::getDataInterpreter()
+rtl::Reference< DataInterpreter > ChartTypeTemplate::getDataInterpreter()
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new DataInterpreter );

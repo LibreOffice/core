@@ -43,7 +43,7 @@ StockDataInterpreter::~StockDataInterpreter()
 {}
 
 // ____ XDataInterpreter ____
-InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
+InterpretedData StockDataInterpreter::interpretDataSource(
     const Reference< data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& rArguments,
     const Sequence< Reference< XDataSeries > >& rSeriesToReUse )
@@ -258,7 +258,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
 
 // todo: skip first criterion? (to allow easy switch from stock-chart without
 // volume to one with volume)
-sal_Bool SAL_CALL StockDataInterpreter::isDataCompatible(
+bool StockDataInterpreter::isDataCompatible(
     const InterpretedData& aInterpretedData )
 {
     // high/low/close
@@ -314,14 +314,14 @@ sal_Bool SAL_CALL StockDataInterpreter::isDataCompatible(
     return true;
 }
 
-InterpretedData SAL_CALL StockDataInterpreter::reinterpretDataSeries(
+InterpretedData StockDataInterpreter::reinterpretDataSeries(
     const InterpretedData& aInterpretedData )
 {
     // prerequisite: StockDataInterpreter::isDataCompatible() returned true
     return aInterpretedData;
 }
 
-uno::Any SAL_CALL StockDataInterpreter::getChartTypeSpecificData(
+uno::Any StockDataInterpreter::getChartTypeSpecificData(
     const OUString& sKey )
 {
     if( sKey == "stock variant" )

@@ -19,6 +19,7 @@
 
 #include "DialogModel.hxx"
 #include <RangeSelectionHelper.hxx>
+#include <DataInterpreter.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <DiagramHelper.hxx>
@@ -39,7 +40,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/XDataInterpreter.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
@@ -346,7 +346,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
             //special handling for candlestick type
             if( xTemplate.is())
             {
-                Reference< XDataInterpreter > xInterpreter( xTemplate->getDataInterpreter());
+                rtl::Reference< ::chart::DataInterpreter > xInterpreter( xTemplate->getDataInterpreter());
                 if( xInterpreter.is())
                 {
                     sal_Int32 nStockVariant;
@@ -767,7 +767,7 @@ void DialogModel::setData(
         Reference< chart2::data::XDataSource > xDataSource(
             xDataProvider->createDataSource( rArguments ) );
 
-        Reference< chart2::XDataInterpreter > xInterpreter(
+        rtl::Reference< ::chart::DataInterpreter > xInterpreter(
             m_xTemplate->getDataInterpreter());
         if( xInterpreter.is())
         {

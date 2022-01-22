@@ -30,7 +30,6 @@ namespace com::sun::star::chart2 { class XChartType; }
 namespace com::sun::star::chart2 { class XCoordinateSystem; }
 namespace com::sun::star::chart2 { class XCoordinateSystemContainer; }
 namespace com::sun::star::chart2 { class XDataSeries; }
-namespace com::sun::star::chart2 { class XDataInterpreter; }
 namespace com::sun::star::chart2 { class XDiagram; }
 namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
@@ -40,6 +39,7 @@ namespace chart
 {
 class ChartType;
 class Diagram;
+class DataInterpreter;
 
 /** For creating diagrams and modifying existing diagrams.  A base class that
     implements XChartTypeTemplate and offers some tooling for classes that
@@ -103,7 +103,7 @@ public:
     virtual rtl::Reference< ::chart::ChartType >
         getChartTypeForNewSeries( const std::vector<
             rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) = 0;
-    virtual css::uno::Reference< css::chart2::XDataInterpreter > getDataInterpreter();
+    virtual rtl::Reference< ::chart::DataInterpreter > getDataInterpreter();
     virtual void applyStyle(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeIndex,
@@ -237,7 +237,7 @@ public:
 
 protected:
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;
-    mutable css::uno::Reference< css::chart2::XDataInterpreter > m_xDataInterpreter;
+    mutable rtl::Reference< ::chart::DataInterpreter > m_xDataInterpreter;
 
 private:
     const OUString m_aServiceName;

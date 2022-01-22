@@ -41,8 +41,8 @@ ColumnLineDataInterpreter::ColumnLineDataInterpreter(
 ColumnLineDataInterpreter::~ColumnLineDataInterpreter()
 {}
 
-// ____ XDataInterpreter ____
-InterpretedData SAL_CALL ColumnLineDataInterpreter::interpretDataSource(
+// ____ DataInterpreter ____
+InterpretedData ColumnLineDataInterpreter::interpretDataSource(
     const Reference< data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
     const Sequence< Reference< XDataSeries > >& aSeriesToReUse )
