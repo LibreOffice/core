@@ -2439,7 +2439,7 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
             geometry::RealPoint2D const & rPoint = xAnnotation->getPosition();
             geometry::RealSize2D const & rSize = xAnnotation->getSize();
             ::tools::Rectangle aRectangle(Point(rPoint.X * 100.0, rPoint.Y * 100.0), Size(rSize.Width * 100.0, rSize.Height * 100.0));
-            aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+            aRectangle = o3tl::toTwips(aRectangle, o3tl::Length::mm100);
             OString sRectangle = aRectangle.toString();
             rJsonWriter.put("rectangle", sRectangle.getStr());
         }

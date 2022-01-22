@@ -370,7 +370,6 @@ tools::Long ScColumn::GetNeededSize(
         vcl::Font aOldFont = pDev->GetFont();
 
         MapMode aHMMMode( MapUnit::Map100thMM, Point(), rZoomX, rZoomY );
-        MapMode aTwipMode(MapUnit::MapTwip, Point(), rZoomX, rZoomY);
 
         // save in document ?
         std::unique_ptr<ScFieldEditEngine> pEngine = rDocument.CreateFieldEditEngine();
@@ -447,7 +446,7 @@ tools::Long ScColumn::GetNeededSize(
             if ( !bTextWysiwyg )
             {
                 aPaper = bInPrintTwips ?
-                        OutputDevice::LogicToLogic(aPaper, aTwipMode, aHMMMode) :
+                        o3tl::convert(aPaper, o3tl::Length::twip, o3tl::Length::mm100) :
                         pDev->PixelToLogic(aPaper, aHMMMode);
             }
         }
@@ -502,7 +501,7 @@ tools::Long ScColumn::GetNeededSize(
             aSize = Size( nWidth, nHeight );
 
             Size aTextSize = bInPrintTwips ?
-                    OutputDevice::LogicToLogic(aSize, aHMMMode, aTwipMode) :
+                    o3tl::toTwips(aSize, o3tl::Length::mm100) :
                     pDev->LogicToPixel(aSize, aHMMMode);
 
             if ( bEdWidth )
@@ -526,18 +525,18 @@ tools::Long ScColumn::GetNeededSize(
                 nValue = 0;
             else
             {
-                Size aTextSize(pEngine->CalcTextWidth(), 0);
+                sal_uInt32 aTextSize(pEngine->CalcTextWidth());
                 nValue = bInPrintTwips ?
-                        OutputDevice::LogicToLogic(aTextSize, aHMMMode, aTwipMode).Width() :
-                        pDev->LogicToPixel(aTextSize, aHMMMode).Width();
+                        o3tl::toTwips(aTextSize, o3tl::Length::mm100) :
+                        pDev->LogicToPixel(Size(aTextSize, 0), aHMMMode).Width();
             }
         }
         else            // height
         {
-            Size aTextSize(0, pEngine->GetTextHeight());
+            sal_uInt32 aTextSize(pEngine->GetTextHeight());
             nValue = bInPrintTwips ?
-                    OutputDevice::LogicToLogic(aTextSize, aHMMMode, aTwipMode).Height() :
-                    pDev->LogicToPixel(aTextSize, aHMMMode).Height();
+                    o3tl::toTwips(aTextSize, o3tl::Length::mm100) :
+                    pDev->LogicToPixel(Size(0, aTextSize), aHMMMode).Height();
 
             // With non-100% zoom and several lines or paragraphs, don't shrink below the result with FORMAT100 set
             if ( !bTextWysiwyg && ( rZoomY.GetNumerator() != 1 || rZoomY.GetDenominator() != 1 ) &&
@@ -545,10 +544,10 @@ tools::Long ScColumn::GetNeededSize(
             {
                 pEngine->SetControlWord( nCtrl | EEControlBits::FORMAT100 );
                 pEngine->QuickFormatDoc( true );
-                aTextSize = Size(0, pEngine->GetTextHeight());
+                aTextSize = pEngine->GetTextHeight();
                 tools::Long nSecondValue = bInPrintTwips ?
-                        OutputDevice::LogicToLogic(aTextSize, aHMMMode, aTwipMode).Height() :
-                        pDev->LogicToPixel(aTextSize, aHMMMode).Height();
+                        o3tl::toTwips(aTextSize, o3tl::Length::mm100) :
+                        pDev->LogicToPixel(Size(0, aTextSize), aHMMMode).Height();
                 if ( nSecondValue > nValue )
                     nValue = nSecondValue;
             }

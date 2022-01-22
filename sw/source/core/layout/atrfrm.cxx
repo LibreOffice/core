@@ -3554,13 +3554,13 @@ IMapObject* SwFrameFormat::GetIMapObject( const Point& rPoint,
     {
         Point aPos( rPoint );
         Size aActSz ( pRef == pFly ? pFly->getFrameArea().SSize() : pRef->getFramePrintArea().SSize() );
-        const MapMode aSrc ( MapUnit::MapTwip );
-        const MapMode aDest( MapUnit::Map100thMM );
-        aOrigSz = OutputDevice::LogicToLogic( aOrigSz, aSrc, aDest );
-        aActSz  = OutputDevice::LogicToLogic( aActSz,  aSrc, aDest );
+        const o3tl::Length aSrc ( o3tl::Length::twip );
+        const o3tl::Length aDest( o3tl::Length::mm100 );
+        aOrigSz = o3tl::convert( aOrigSz, aSrc, aDest );
+        aActSz  = o3tl::convert( aActSz,  aSrc, aDest );
         aPos -= pRef->getFrameArea().Pos();
         aPos -= pRef->getFramePrintArea().Pos();
-        aPos    = OutputDevice::LogicToLogic( aPos, aSrc, aDest );
+        aPos    = o3tl::convert( aPos, aSrc, aDest );
         sal_uInt32 nFlags = 0;
         if ( pFly != pRef && pNd->IsGrfNode() )
         {
