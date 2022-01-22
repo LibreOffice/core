@@ -10,25 +10,19 @@
 #include "mysqlc_catalog.hxx"
 #include "mysqlc_tables.hxx"
 #include "mysqlc_views.hxx"
-#include "mysqlc_users.hxx"
 
-#include <com/sun/star/sdbc/XRow.hpp>
-
-using namespace ::connectivity::mysqlc;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::uno;
-
-Catalog::Catalog(const uno::Reference<XConnection>& rConnection)
+connectivity::mysqlc::Catalog::Catalog(
+    const css::uno::Reference<css::sdbc::XConnection>& rConnection)
     : OCatalog(rConnection)
     , m_xConnection(rConnection)
 {
 }
 
 //----- OCatalog -------------------------------------------------------------
-void Catalog::refreshTables()
+void connectivity::mysqlc::Catalog::refreshTables()
 {
-    uno::Reference<XResultSet> xTables = m_xMetaData->getTables(Any(), "%", "%", {});
+    css::uno::Reference<css::sdbc::XResultSet> xTables
+        = m_xMetaData->getTables(css::uno::Any(), "%", "%", {});
 
     if (!xTables.is())
         return;
@@ -43,9 +37,10 @@ void Catalog::refreshTables()
         m_pTables->reFill(aTableNames);
 }
 
-void Catalog::refreshViews()
+void connectivity::mysqlc::Catalog::refreshViews()
 {
-    uno::Reference<XResultSet> xViews = m_xMetaData->getTables(Any(), "%", "%", { "VIEW" });
+    css::uno::Reference<css::sdbc::XResultSet> xViews
+        = m_xMetaData->getTables(css::uno::Any(), "%", "%", { "VIEW" });
 
     if (!xViews.is())
         return;
@@ -61,13 +56,13 @@ void Catalog::refreshViews()
 }
 
 //----- IRefreshableGroups ---------------------------------------------------
-void Catalog::refreshGroups()
+void connectivity::mysqlc::Catalog::refreshGroups()
 {
     // TODO: implement me
 }
 
 //----- IRefreshableUsers ----------------------------------------------------
-void Catalog::refreshUsers()
+void connectivity::mysqlc::Catalog::refreshUsers()
 {
     // TODO: implement me
 }
