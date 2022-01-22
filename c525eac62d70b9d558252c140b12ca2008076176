@@ -16,6 +16,23 @@
       "message": "Tried to change some sal_uLong to other types, please review this patch and let me know if changes are needed",
       "revId": "c525eac62d70b9d558252c140b12ca2008076176",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05f9ee4c_7edf7778",
+        "filename": "basctl/source/basicide/baside2b.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-01-22T12:16:35Z",
+      "side": 1,
+      "message": "Waiting for Jenkins to verify the build, once it verifies, I guess this cast will not be needed",
+      "revId": "c525eac62d70b9d558252c140b12ca2008076176",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
