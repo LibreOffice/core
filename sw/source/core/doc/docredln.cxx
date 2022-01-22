@@ -412,7 +412,8 @@ bool SwRedlineTable::Insert(SwRangeRedline*& p)
         LOKRedlineNotification(RedlineNotification::Add, p);
 
         // set IsMoved checking nearby redlines
-        isMoved(nP);
+        if ( p->GetDoc().GetIDocumentUndoRedo().DoesUndo() )
+            isMoved(nP);
 
         p->CallDisplayFunc(nP);
         if (rv.second)
