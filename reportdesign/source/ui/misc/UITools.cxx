@@ -393,7 +393,7 @@ namespace
         if ( SfxItemState::SET == _rItemSet.GetItemState( _nFontHeight,true,&pItem) )
             if ( auto pFontItem = dynamic_cast< const SvxFontHeightItem *>( pItem ) )
             {
-                aNewFont.SetFontHeight(OutputDevice::LogicToLogic(Size(0, pFontItem->GetHeight()), MapMode(MapUnit::MapTwip), MapMode(MapUnit::MapPoint)).Height());
+                aNewFont.SetFontHeight(o3tl::convert(pFontItem->GetHeight(), o3tl::Length::twip, o3tl::Length::pt));
             }
         if ( SfxItemState::SET == _rItemSet.GetItemState( _nPosture,true,&pItem) )
             if ( auto pFontItem = dynamic_cast< const SvxPostureItem *>( pItem ) )

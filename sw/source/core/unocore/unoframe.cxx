@@ -2247,9 +2247,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             {
                 OSL_ENSURE( pTmpFrame->isFrameAreaDefinitionValid(), "frame not valid" );
                 const SwRect &rRect = pTmpFrame->getFrameArea();
-                Size aMM100Size = OutputDevice::LogicToLogic(
+                Size aMM100Size = o3tl::convert(
                         Size( rRect.Width(), rRect.Height() ),
-                        MapMode( MapUnit::MapTwip ), MapMode( MapUnit::Map100thMM ));
+                        o3tl::Length::twip, o3tl::Length::mm100 );
                 aAny <<= awt::Size( aMM100Size.Width(), aMM100Size.Height() );
             }
         }

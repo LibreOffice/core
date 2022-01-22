@@ -4210,7 +4210,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
                         || rPropValue.Name == "TransformRotationY")
                 {
                     rPropValue.Value >>= value;
-                    value = OutputDevice::LogicToLogic(value, MapUnit::MapTwip, MapUnit::Map100thMM);
+                    value = o3tl::convert(value, o3tl::Length::twip, o3tl::Length::mm100);
                     rPropValue.Value <<= value;
                 }
             }

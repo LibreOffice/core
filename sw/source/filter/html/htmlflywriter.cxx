@@ -1937,10 +1937,9 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             default: break;
             }
 
-            Size aMM100Size;
             const SwFormatFrameSize& rSize = rFrameFormat.GetFrameSize();
-            aMM100Size = OutputDevice::LogicToLogic( rSize.GetSize(),
-                            MapMode( MapUnit::MapTwip ), MapMode( MapUnit::Map100thMM ));
+            Size aMM100Size = o3tl::convert( rSize.GetSize(),
+                            o3tl::Length::twip, o3tl::Length::mm100 );
 
             OUString aFilterName("");
 

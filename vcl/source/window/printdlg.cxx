@@ -223,18 +223,18 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
 
     // use correct measurements
     const LocaleDataWrapper& rLocWrap(Application::GetSettings().GetLocaleDataWrapper());
-    MapUnit eUnit = MapUnit::MapMM;
+    o3tl::Length eUnit = o3tl::Length::mm;
     int nDigits = 0;
     if( rLocWrap.getMeasurementSystemEnum() == MeasurementSystem::US )
     {
-        eUnit = MapUnit::Map100thInch;
+        eUnit = o3tl::Length::in100;
         nDigits = 2;
     }
-    Size aLogicPaperSize(OutputDevice::LogicToLogic(i_rOrigSize, MapMode(MapUnit::Map100thMM), MapMode(eUnit)));
+    Size aLogicPaperSize(o3tl::convert(i_rOrigSize, o3tl::Length::mm100, eUnit));
     OUString aNumText( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
     OUStringBuffer aBuf;
     aBuf.append( aNumText + " " );
-    aBuf.appendAscii( eUnit == MapUnit::MapMM ? "mm" : "in" );
+    aBuf.appendAscii( eUnit == o3tl::Length::mm ? "mm" : "in" );
     if( !i_rPaperName.empty() )
     {
         aBuf.append( " (" );
@@ -245,7 +245,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
 
     aNumText = rLocWrap.getNum( aLogicPaperSize.Height(), nDigits );
     aBuf.append( aNumText + " " );
-    aBuf.appendAscii( eUnit == MapUnit::MapMM ? "mm" : "in" );
+    aBuf.appendAscii( eUnit == o3tl::Length::mm ? "mm" : "in" );
     maVertText = aBuf.makeStringAndClear();
 
     // We have a new Metafile and evtl. a new page, so we need to reset

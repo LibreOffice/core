@@ -3031,19 +3031,14 @@ void SwAccessibleMap::FireEvents()
 
 tools::Rectangle SwAccessibleMap::GetVisibleArea() const
 {
-    MapMode aSrc( MapUnit::MapTwip );
-    MapMode aDest( MapUnit::Map100thMM );
-    return OutputDevice::LogicToLogic( GetVisArea().SVRect(), aSrc, aDest );
+    return o3tl::convert( GetVisArea().SVRect(), o3tl::Length::twip, o3tl::Length::mm100 );
 }
 
 // Convert a MM100 value relative to the document root into a pixel value
 // relative to the screen!
 Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
 {
-    MapMode aSrc( MapUnit::Map100thMM );
-    MapMode aDest( MapUnit::MapTwip );
-
-    Point aPoint = OutputDevice::LogicToLogic( rPoint, aSrc, aDest );
+    Point aPoint = o3tl::toTwips( rPoint, o3tl::Length::mm100 );
     if (const vcl::Window* pWin = GetShell()->GetWin())
     {
         MapMode aMapMode;
@@ -3057,9 +3052,7 @@ Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
 
 Size SwAccessibleMap::LogicToPixel( const Size& rSize ) const
 {
-    MapMode aSrc( MapUnit::Map100thMM );
-    MapMode aDest( MapUnit::MapTwip );
-    Size aSize( OutputDevice::LogicToLogic( rSize, aSrc, aDest ) );
+    Size aSize( o3tl::toTwips( rSize, o3tl::Length::mm100 ) );
     if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
     {
         MapMode aMapMode;

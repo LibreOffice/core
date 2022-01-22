@@ -2085,9 +2085,7 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
     }
 
     sal_Int32 nBaseline = ::comphelper::getINT32(aBaseline);
-    const MapMode aSourceMapMode( MapUnit::Map100thMM );
-    const MapMode aTargetMapMode( MapUnit::MapTwip );
-    nBaseline = OutputDevice::LogicToLogic( nBaseline, aSourceMapMode.GetMapUnit(), aTargetMapMode.GetMapUnit() );
+    nBaseline = o3tl::toTwips( nBaseline, o3tl::Length::mm100 );
 
     OSL_ENSURE( nBaseline > 0, "Wrong value of Baseline while retrieving from Starmath!" );
     //nBaseline must be moved by aPrt position
