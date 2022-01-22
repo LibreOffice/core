@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a676d249_f7d1e152",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-01-22T12:12:49Z",
+      "side": 1,
+      "message": "Tried to change some sal_uLong to other types, please review this patch and let me know if changes are needed",
+      "revId": "c525eac62d70b9d558252c140b12ca2008076176",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
