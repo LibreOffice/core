@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include "DataInterpreter.hxx"
+#include <DataInterpreter.hxx>
 
 namespace chart
 {
@@ -29,12 +29,12 @@ public:
     virtual ~ColumnLineDataInterpreter() override;
 
 protected:
-    // ____ XDataInterpreter ____
-    virtual css::chart2::InterpretedData SAL_CALL interpretDataSource(
-        const css::uno::Reference<css::chart2::data::XDataSource>& xSource,
-        const css::uno::Sequence<css::beans::PropertyValue>& aArguments,
-        const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries>>& aSeriesToReUse)
-        override;
+    // ____ DataInterpreter ____
+    virtual css::chart2::InterpretedData
+    interpretDataSource(const css::uno::Reference<css::chart2::data::XDataSource>& xSource,
+                        const css::uno::Sequence<css::beans::PropertyValue>& aArguments,
+                        const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries>>&
+                            aSeriesToReUse) override;
 
 private:
     sal_Int32 m_nNumberOfLines;

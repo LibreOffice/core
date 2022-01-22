@@ -378,13 +378,13 @@ rtl::Reference< ChartType > ColumnLineChartTypeTemplate::getChartTypeForNewSerie
     return xResult;
 }
 
-Reference< XDataInterpreter > ColumnLineChartTypeTemplate::getDataInterpreter()
+rtl::Reference< DataInterpreter > ColumnLineChartTypeTemplate::getDataInterpreter()
 {
     if( ! m_xDataInterpreter.is())
     {
         sal_Int32 nNumberOfLines = 1;
         getFastPropertyValue( PROP_COL_LINE_NUMBER_OF_LINES ) >>= nNumberOfLines;
-        m_xDataInterpreter.set( new ColumnLineDataInterpreter( nNumberOfLines ) );
+        m_xDataInterpreter = new ColumnLineDataInterpreter( nNumberOfLines );
     }
     else
     {

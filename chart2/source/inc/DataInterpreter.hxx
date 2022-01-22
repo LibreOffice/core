@@ -16,29 +16,52 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef com_sun_star_chart2_XDataInterpreter_idl
-#define com_sun_star_chart2_XDataInterpreter_idl
+#pragma once
 
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/beans/PropertyValue.idl>
-#include <com/sun/star/chart2/InterpretedData.idl>
-#include <com/sun/star/chart2/data/XDataSource.idl>
-#include <com/sun/star/chart2/XDataSeries.idl>
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/chart2/InterpretedData.hpp>
+#include <com/sun/star/chart2/data/XDataSource.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 
-module com
-{
-module sun
-{
-module star
-{
-module chart2
+namespace chart
 {
 
 /** offers tooling to interpret different data sources in a structural
     and chart-type-dependent way.
  */
-interface XDataInterpreter  : ::com::sun::star::uno::XInterface
+class DataInterpreter : public ::cppu::WeakImplHelper<
+        css::lang::XServiceInfo >
 {
+public:
+    explicit DataInterpreter();
+    virtual ~DataInterpreter() override;
+
+    /// XServiceInfo declarations
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    // convenience methods
+    static  OUString GetRole( const css::uno::Reference< css::chart2::data::XDataSequence > & xSeq );
+
+    static void SetRole(
+        const css::uno::Reference< css::chart2::data::XDataSequence > & xSeq,
+        const OUString & rRole );
+
+    static css::uno::Any GetProperty(
+        const css::uno::Sequence<css::beans::PropertyValue > & aArguments,
+        std::u16string_view rName );
+
+    static bool HasCategories(
+        const css::uno::Sequence< css::beans::PropertyValue > & rArguments,
+        const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rData );
+
+    static bool UseCategoriesAsX(
+        const css::uno::Sequence< css::beans::PropertyValue > & rArguments );
+
+    // ____ DataInterpreter ____
     /** Interprets the given data.
 
         @param xSource
@@ -57,15 +80,16 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
             use all the data series given here for the result before
             creating new ones.
      */
-    InterpretedData interpretDataSource(
-        [in] com::sun::star::chart2::data::XDataSource xSource,
-        [in] sequence< com::sun::star::beans::PropertyValue > aArguments,
-        [in] sequence< XDataSeries > aSeriesToReUse );
+    virtual css::chart2::InterpretedData interpretDataSource(
+        const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
+        const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aSeriesToReUse );
 
     /** Re-interprets the data given in <code>aInterpretedData</code>
         while keeping the number of data series and the categories.
      */
-    InterpretedData reinterpretDataSeries( [in] InterpretedData aInterpretedData );
+    virtual css::chart2::InterpretedData reinterpretDataSeries(
+        const css::chart2::InterpretedData& aInterpretedData );
 
     /** parses the given data and states, if a
         reinterpretDataSeries() call can be done
@@ -76,7 +100,8 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
             <code>aInterpretedData</code> has a similar structure than
             the one required is used as output of the data interpreter.
      */
-    boolean isDataCompatible( [in] InterpretedData aInterpretedData );
+    virtual bool isDataCompatible(
+        const css::chart2::InterpretedData& aInterpretedData );
 
     /** Try to reverse the operation done in
         interpretDataSource().
@@ -85,7 +110,8 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
         interpretDataSource()( <code>xSource</code> ),
         the result of this method should be <code>xSource</code>.</p>
      */
-    com::sun::star::chart2::data::XDataSource mergeInterpretedData( [in] InterpretedData aInterpretedData );
+    virtual css::uno::Reference< css::chart2::data::XDataSource > mergeInterpretedData(
+        const css::chart2::InterpretedData& aInterpretedData );
 
     /** Get chart information that is specific to a particular chart
         type, by key.
@@ -103,15 +129,10 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
         @return
             The value requested, or nothing if not present.
     */
-    any getChartTypeSpecificData([in] string sKey );
+    virtual css::uno::Any getChartTypeSpecificData(
+        const OUString& sKey );
 };
 
-} ; // chart2
-} ; // com
-} ; // sun
-} ; // star
-
-
-#endif
+} // namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

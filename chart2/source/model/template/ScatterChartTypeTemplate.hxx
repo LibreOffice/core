@@ -62,7 +62,7 @@ protected:
     virtual rtl::Reference< ::chart::ChartType >
         getChartTypeForNewSeries( const std::vector<
             rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) override;
-    virtual css::uno::Reference< css::chart2::XDataInterpreter > getDataInterpreter() override;
+    virtual rtl::Reference< ::chart::DataInterpreter > getDataInterpreter() override;
     virtual void applyStyle(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeGroupIndex,
