@@ -11,4 +11,7 @@
 
 $(eval $(call sd_export_test,-ooxml3))
 
+$(call gb_CppunitTest_get_target,sd_export_tests-ooxml3): \
+    $(call gb_Package_get_target,postprocess_images)
+
 # vim: set noet sw=4 ts=4:
