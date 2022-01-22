@@ -4121,7 +4121,7 @@ else # !SYSTEM_BOX2D
 define gb_LinkTarget__use_box2d
 $(call gb_LinkTarget_use_unpacked,$(1),box2d)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,box2d/Box2D/)\
+	-I$(call gb_UnpackedTarball_get_dir,box2d/include/)\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
