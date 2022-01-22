@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24b5414d_c9c4341b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-22T09:55:07Z",
+      "side": 1,
+      "message": "Thanks, this already looks great.  I have two further suggestions for improving it, if you like:\n\n* For one, while the various functions in include/comphelper/configuration.hxx can be called without an explicit XComponentContext (which then defaults to comphelper::getProcessComponentContext()), that\u0027s something of a hack, and as we already had passed around an XComponentContext here, I would suggest to keep using it.\n\n* For another, you can get rid of some of the no-longer needed #includes in extensions/source/config/WinUserInfo/WinUserInfoBe.cxx now.",
+      "revId": "f088698c9592e2146f2196a148f437e37a22ece0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
