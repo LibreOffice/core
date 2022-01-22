@@ -9,21 +9,15 @@
 
 #include "mysqlc_indexes.hxx"
 
-using namespace ::connectivity;
-using namespace ::connectivity::mysqlc;
-
-using namespace ::osl;
-using namespace ::std;
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::sdbc;
-
-Indexes::Indexes(Table* pTable, Mutex& rMutex, const vector<OUString>& rVector)
+connectivity::mysqlc::Indexes::Indexes(Table* pTable, osl::Mutex& rMutex,
+                                       const std::vector<OUString>& rVector)
     : OIndexesHelper(pTable, rMutex, rVector)
-/* , m_pTable(pTable) */ {}
+{
+}
 
 // XDrop
-void Indexes::dropObject(sal_Int32 /*nPosition*/, const OUString& /* sIndexName */)
+void connectivity::mysqlc::Indexes::dropObject(sal_Int32 /*nPosition*/,
+                                               const OUString& /* sIndexName */)
 {
     // TODO: implement
 }
