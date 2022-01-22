@@ -11,17 +11,13 @@
 
 #include <TConnection.hxx>
 
-using namespace connectivity;
-using namespace connectivity::mysqlc;
-using namespace connectivity::sdbcx;
-
-Column::Column()
+connectivity::mysqlc::Column::Column()
     : OColumn(true) // case sensitive
 {
     construct();
 }
 
-void Column::construct()
+void connectivity::mysqlc::Column::construct()
 {
     m_sAutoIncrement = "auto_increment";
     registerProperty(
@@ -30,17 +26,18 @@ void Column::construct()
         cppu::UnoType<decltype(m_sAutoIncrement)>::get());
 }
 
-::cppu::IPropertyArrayHelper* Column::createArrayHelper(sal_Int32 /*_nId*/) const
+::cppu::IPropertyArrayHelper*
+    connectivity::mysqlc::Column::createArrayHelper(sal_Int32 /*_nId*/) const
 {
     return doCreateArrayHelper();
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL Column::getInfoHelper()
+::cppu::IPropertyArrayHelper& SAL_CALL connectivity::mysqlc::Column::getInfoHelper()
 {
     return *Column_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 
-css::uno::Sequence<OUString> SAL_CALL Column::getSupportedServiceNames()
+css::uno::Sequence<OUString> SAL_CALL connectivity::mysqlc::Column::getSupportedServiceNames()
 {
     return { "com.sun.star.sdbcx.Column" };
 }
