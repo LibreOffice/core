@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3c844b0_5ca3c7af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-22T13:36:46Z",
+      "side": 1,
+      "message": "All Jenkins ok except Windows one which fails in Firebird part.\nThis patch concerns Mysql direct connector specifically.\nLet\u0027s push this one.",
+      "revId": "8b082ab8162a3fc79f46ecae53d0f3fe10821b3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
