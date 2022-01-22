@@ -451,6 +451,7 @@ constexpr Method aMethods[] = {
 
 { u"IDABORT",                       SbxINTEGER,      CPROP_,           SbRtl_IDABORT              },
 { u"IDCANCEL",                      SbxINTEGER,      CPROP_,           SbRtl_IDCANCEL             },
+{ u"IDIGNORE",                      SbxINTEGER,      CPROP_,           SbRtl_IDIGNORE             },
 { u"IDNO",                          SbxINTEGER,      CPROP_,           SbRtl_IDNO                 },
 { u"IDOK",                          SbxINTEGER,      CPROP_,           SbRtl_IDOK                 },
 { u"IDRETRY",                       SbxINTEGER,      CPROP_,           SbRtl_IDRETRY              },

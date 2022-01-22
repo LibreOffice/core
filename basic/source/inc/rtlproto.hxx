@@ -72,6 +72,7 @@ extern void SbRtl_IDOK(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_IDCANCEL(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_IDABORT(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_IDRETRY(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
+extern void SbRtl_IDIGNORE(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_IDYES(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_IDNO(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 

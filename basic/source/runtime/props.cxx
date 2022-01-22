@@ -104,10 +104,10 @@ void SbRtl_MB_APPLMODAL(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutInte
 void SbRtl_MB_SYSTEMMODAL(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutInteger(4096); }
 
 void SbRtl_IDOK(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutInteger(1); }
-
 void SbRtl_IDCANCEL(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutInteger(2); }
 void SbRtl_IDABORT(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutInteger(3); }
 void SbRtl_IDRETRY(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutInteger(4); }
+void SbRtl_IDIGNORE(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutInteger(5); }
 void SbRtl_IDYES(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutInteger(6); }
 void SbRtl_IDNO(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutInteger(7); }
 
