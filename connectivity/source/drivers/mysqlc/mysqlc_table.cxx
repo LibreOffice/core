@@ -14,29 +14,15 @@
 
 #include <TConnection.hxx>
 
-#include <sal/log.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-using namespace ::connectivity;
-using namespace ::connectivity::mysqlc;
-using namespace ::connectivity::sdbcx;
-
-using namespace ::osl;
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::uno;
-
-Table::Table(Tables* pTables, Mutex& rMutex, const uno::Reference<XConnection>& rConnection)
+connectivity::mysqlc::Table::Table(
+    Tables* pTables, osl::Mutex& rMutex,
+    const css::uno::Reference<OMetaConnection::XConnection>& rConnection)
     : OTableHelper(pTables, rConnection, true)
     , m_rMutex(rMutex)
     , m_nPrivileges(0)
@@ -44,9 +30,11 @@ Table::Table(Tables* pTables, Mutex& rMutex, const uno::Reference<XConnection>& 
     construct();
 }
 
-Table::Table(Tables* pTables, Mutex& rMutex, const uno::Reference<XConnection>& rConnection,
-             const OUString& rCatalog, const OUString& rSchema, const OUString& rName,
-             const OUString& rType, const OUString& rDescription)
+connectivity::mysqlc::Table::Table(
+    Tables* pTables, osl::Mutex& rMutex,
+    const css::uno::Reference<OMetaConnection::XConnection>& rConnection, const OUString& rCatalog,
+    const OUString& rSchema, const OUString& rName, const OUString& rType,
+    const OUString& rDescription)
     : OTableHelper(pTables, rConnection, true, rName, rType, rDescription, rSchema, rCatalog)
     , m_rMutex(rMutex)
     , m_nPrivileges(0)
@@ -54,44 +42,49 @@ Table::Table(Tables* pTables, Mutex& rMutex, const uno::Reference<XConnection>& 
     construct();
 }
 
-void Table::construct()
+void connectivity::mysqlc::Table::construct()
 {
     OTableHelper::construct();
     if (isNew())
         return;
 
     // TODO: get privileges when in non-embedded mode.
-    m_nPrivileges = Privilege::DROP | Privilege::REFERENCE | Privilege::ALTER | Privilege::CREATE
-                    | Privilege::READ | Privilege::DELETE | Privilege::UPDATE | Privilege::INSERT
-                    | Privilege::SELECT;
+    m_nPrivileges = css::sdbcx::Privilege::DROP | css::sdbcx::Privilege::REFERENCE
+                    | css::sdbcx::Privilege::ALTER | css::sdbcx::Privilege::CREATE
+                    | css::sdbcx::Privilege::READ | css::sdbcx::Privilege::DELETE
+                    | css::sdbcx::Privilege::UPDATE | css::sdbcx::Privilege::INSERT
+                    | css::sdbcx::Privilege::SELECT;
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),
-                     PROPERTY_ID_PRIVILEGES, PropertyAttribute::READONLY, &m_nPrivileges,
-                     cppu::UnoType<decltype(m_nPrivileges)>::get());
+                     PROPERTY_ID_PRIVILEGES, css::beans::PropertyAttribute::READONLY,
+                     &m_nPrivileges, cppu::UnoType<decltype(m_nPrivileges)>::get());
 }
 //----- OTableHelper ---------------------------------------------------------
-OCollection* Table::createColumns(const ::std::vector<OUString>& rNames)
+connectivity::sdbcx::OCollection*
+connectivity::mysqlc::Table::createColumns(const ::std::vector<OUString>& rNames)
 {
     return new Columns(*this, m_rMutex, rNames);
 }
 
-OCollection* Table::createKeys(const ::std::vector<OUString>& rNames)
+connectivity::sdbcx::OCollection*
+connectivity::mysqlc::Table::createKeys(const ::std::vector<OUString>& rNames)
 {
     return new Keys(this, m_rMutex, rNames);
 }
 
-OCollection* Table::createIndexes(const ::std::vector<OUString>& rNames)
+connectivity::sdbcx::OCollection*
+connectivity::mysqlc::Table::createIndexes(const ::std::vector<OUString>& rNames)
 {
     return new Indexes(this, m_rMutex, rNames);
 }
 
 //----- XAlterTable -----------------------------------------------------------
-void SAL_CALL Table::alterColumnByName(const OUString& rColName,
-                                       const uno::Reference<XPropertySet>& rDescriptor)
+void SAL_CALL connectivity::mysqlc::Table::alterColumnByName(
+    const OUString& rColName, const css::uno::Reference<XPropertySet>& rDescriptor)
 {
-    MutexGuard aGuard(m_rMutex);
+    osl::MutexGuard aGuard(m_rMutex);
     checkDisposed(WeakComponentImplHelperBase::rBHelper.bDisposed);
 
-    uno::Reference<XPropertySet> xColumn(m_xColumns->getByName(rColName), UNO_QUERY);
+    css::uno::Reference<XPropertySet> xColumn(m_xColumns->getByName(rColName), css::uno::UNO_QUERY);
 
     // sdbcx::Descriptor
     const bool bNameChanged
@@ -136,8 +129,6 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
             sSql.append(" NOT NULL");
 
         getConnection()->createStatement()->execute(sSql.makeStringAndClear());
-        // TODO: could cause errors e.g. if incompatible types, deal with them here as appropriate.
-        // possibly we have to wrap things in Util::evaluateStatusVector.
     }
 
     if (bNameChanged)
@@ -153,16 +144,17 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     m_xColumns->refresh();
 }
 
-void SAL_CALL Table::alterColumnByIndex(
+void SAL_CALL connectivity::mysqlc::Table::alterColumnByIndex(
     sal_Int32 index, const css::uno::Reference<css::beans::XPropertySet>& descriptor)
 {
-    MutexGuard aGuard(m_rMutex);
-    uno::Reference<XPropertySet> xColumn(m_xColumns->getByIndex(index), UNO_QUERY_THROW);
+    osl::MutexGuard aGuard(m_rMutex);
+    css::uno::Reference<XPropertySet> xColumn(m_xColumns->getByIndex(index),
+                                              css::uno::UNO_QUERY_THROW);
     alterColumnByName(comphelper::getString(xColumn->getPropertyValue(
                           OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),
                       descriptor);
 }
 
-OUString Table::getRenameStart() const { return "RENAME TABLE "; }
+OUString connectivity::mysqlc::Table::getRenameStart() const { return "RENAME TABLE "; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
