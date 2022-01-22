@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "mysqlc_tables.hxx"
 #include "mysqlc_views.hxx"
 #include "mysqlc_view.hxx"
 #include "mysqlc_catalog.hxx"
@@ -25,21 +24,9 @@
 #include <comphelper/types.hxx>
 #include <TConnection.hxx>
 
-using namespace ::comphelper;
-
-using namespace ::cppu;
-using namespace connectivity;
-using namespace connectivity::mysqlc;
-using namespace css::uno;
-using namespace css::beans;
-using namespace css::sdbcx;
-using namespace css::sdbc;
-using namespace css::container;
-using namespace css::lang;
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
-
-Views::Views(const Reference<XConnection>& _rxConnection, ::cppu::OWeakObject& _rParent,
-             ::osl::Mutex& _rMutex, const ::std::vector<OUString>& _rVector)
+connectivity::mysqlc::Views::Views(const css::uno::Reference<css::sdbc::XConnection>& _rxConnection,
+                                   ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+                                   const ::std::vector<OUString>& _rVector)
     : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
     , m_xConnection(_rxConnection)
     , m_xMetaData(_rxConnection->getMetaData())
@@ -47,7 +34,7 @@ Views::Views(const Reference<XConnection>& _rxConnection, ::cppu::OWeakObject& _
 {
 }
 
-sdbcx::ObjectType Views::createObject(const OUString& _rName)
+connectivity::sdbcx::ObjectType connectivity::mysqlc::Views::createObject(const OUString& _rName)
 {
     OUString sCatalog, sSchema, sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData, _rName, sCatalog, sSchema, sTable,
@@ -55,60 +42,64 @@ sdbcx::ObjectType Views::createObject(const OUString& _rName)
     return new View(m_xConnection, isCaseSensitive(), sSchema, sTable);
 }
 
-void Views::impl_refresh() { static_cast<Catalog&>(m_rParent).refreshViews(); }
+void connectivity::mysqlc::Views::impl_refresh()
+{
+    static_cast<Catalog&>(m_rParent).refreshViews();
+}
 
-void Views::disposing()
+void connectivity::mysqlc::Views::disposing()
 {
     m_xMetaData.clear();
     OCollection::disposing();
 }
 
-Reference<XPropertySet> Views::createDescriptor()
+css::uno::Reference<css::beans::XPropertySet> connectivity::mysqlc::Views::createDescriptor()
 {
     return new connectivity::sdbcx::OView(true, m_xMetaData);
 }
 
 // XAppend
-sdbcx::ObjectType Views::appendObject(const OUString& _rForName,
-                                      const Reference<XPropertySet>& descriptor)
+connectivity::sdbcx::ObjectType connectivity::mysqlc::Views::appendObject(
+    const OUString& _rForName, const css::uno::Reference<css::beans::XPropertySet>& descriptor)
 {
     createView(descriptor);
     return createObject(_rForName);
 }
 
 // XDrop
-void Views::dropObject(sal_Int32 _nPos, const OUString& /*_sElementName*/)
+void connectivity::mysqlc::Views::dropObject(sal_Int32 _nPos, const OUString& /*_sElementName*/)
 {
     if (m_bInDrop)
         return;
 
-    Reference<XInterface> xObject(getObject(_nPos));
+    css::uno::Reference<XInterface> xObject(getObject(_nPos));
     bool bIsNew = connectivity::sdbcx::ODescriptor::isNew(xObject);
     if (!bIsNew)
     {
         OUString aSql("DROP VIEW");
 
-        Reference<XPropertySet> xProp(xObject, UNO_QUERY);
+        css::uno::Reference<css::beans::XPropertySet> xProp(xObject, css::uno::UNO_QUERY);
         aSql += ::dbtools::composeTableName(m_xMetaData, xProp,
                                             ::dbtools::EComposeRule::InTableDefinitions, true);
 
-        Reference<XConnection> xConnection = m_xMetaData->getConnection();
-        Reference<XStatement> xStmt = xConnection->createStatement();
+        css::uno::Reference<css::sdbc::XConnection> xConnection = m_xMetaData->getConnection();
+        css::uno::Reference<css::sdbc::XStatement> xStmt = xConnection->createStatement();
         xStmt->execute(aSql);
         ::comphelper::disposeComponent(xStmt);
     }
 }
 
-void Views::dropByNameImpl(const OUString& elementName)
+void connectivity::mysqlc::Views::dropByNameImpl(const OUString& elementName)
 {
     m_bInDrop = true;
-    OCollection_TYPE::dropByName(elementName);
+    connectivity::sdbcx::OCollection::dropByName(elementName);
     m_bInDrop = false;
 }
 
-void Views::createView(const Reference<XPropertySet>& descriptor)
+void connectivity::mysqlc::Views::createView(
+    const css::uno::Reference<css::beans::XPropertySet>& descriptor)
 {
-    Reference<XConnection> xConnection = m_xMetaData->getConnection();
+    css::uno::Reference<css::sdbc::XConnection> xConnection = m_xMetaData->getConnection();
 
     OUString sCommand;
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND))
@@ -119,7 +110,7 @@ void Views::createView(const Reference<XPropertySet>& descriptor)
                                                   ::dbtools::EComposeRule::InTableDefinitions, true)
                     + " AS " + sCommand;
 
-    Reference<XStatement> xStmt = xConnection->createStatement();
+    css::uno::Reference<css::sdbc::XStatement> xStmt = xConnection->createStatement();
     if (xStmt.is())
     {
         xStmt->execute(aSql);
