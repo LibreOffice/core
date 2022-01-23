@@ -93,14 +93,13 @@ public:
 
     OOO_DLLPUBLIC_CHARTTOOLS
     void changeDiagram(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+        const rtl::Reference< ::chart::Diagram >& xDiagram );
     void changeDiagramData(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+        const rtl::Reference< ::chart::Diagram >& xDiagram,
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments );
     virtual bool matchesTemplate(
-        const css::uno::Reference<
-        css::chart2::XDiagram >& xDiagram,
+        const rtl::Reference< ::chart::Diagram >& xDiagram,
         bool bAdaptProperties );
     virtual rtl::Reference< ::chart::ChartType >
         getChartTypeForNewSeries( const std::vector<

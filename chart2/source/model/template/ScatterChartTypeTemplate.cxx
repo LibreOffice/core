@@ -21,6 +21,7 @@
 #include "ScatterChartType.hxx"
 #include "XYDataInterpreter.hxx"
 #include <ChartType.hxx>
+#include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
@@ -230,7 +231,7 @@ bool ScatterChartTypeTemplate::supportsCategories()
 }
 
 bool ScatterChartTypeTemplate::matchesTemplate(
-    const Reference< chart2::XDiagram >& xDiagram,
+    const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool bAdaptProperties )
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );

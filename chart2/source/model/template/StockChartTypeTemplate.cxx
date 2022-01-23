@@ -364,15 +364,13 @@ void StockChartTypeTemplate::createChartTypes(
 
 // ____ ChartTypeTemplate ____
 bool StockChartTypeTemplate::matchesTemplate(
-    const uno::Reference< XDiagram >& xDiagram,
+    const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool /* bAdaptProperties */ )
 {
     bool bResult = false;
 
     if( ! xDiagram.is())
         return bResult;
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
 
     try
     {
@@ -387,7 +385,7 @@ bool StockChartTypeTemplate::matchesTemplate(
         Reference< chart2::XChartType > xLineChartType;
         sal_Int32 nNumberOfChartTypes = 0;
 
-        for( rtl::Reference< BaseCoordinateSystem > const & coords : pDiagram->getBaseCoordinateSystems() )
+        for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
         {
             const Sequence< Reference< XChartType > > aChartTypeSeq( coords->getChartTypes());
             for( Reference< XChartType >  const & chartType : aChartTypeSeq )

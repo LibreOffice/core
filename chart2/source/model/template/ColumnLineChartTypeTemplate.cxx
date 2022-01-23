@@ -21,6 +21,8 @@
 #include "ColumnChartType.hxx"
 #include "LineChartType.hxx"
 #include <CommonConverters.hxx>
+#include <BaseCoordinateSystem.hxx>
+#include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <servicenames_charttypes.hxx>
@@ -271,7 +273,7 @@ StackMode ColumnLineChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex )
 
 // ____ XChartTypeTemplate ____
 bool ColumnLineChartTypeTemplate::matchesTemplate(
-    const uno::Reference< XDiagram >& xDiagram,
+    const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool bAdaptProperties )
 {
     bool bResult = false;
@@ -281,35 +283,27 @@ bool ColumnLineChartTypeTemplate::matchesTemplate(
 
     try
     {
-        Reference< chart2::XChartType > xColumnChartType;
-        Reference< XCoordinateSystem > xColumnChartCooSys;
-        Reference< chart2::XChartType > xLineChartType;
+        rtl::Reference< ChartType > xColumnChartType;
+        rtl::Reference< BaseCoordinateSystem > xColumnChartCooSys;
+        rtl::Reference< ChartType > xLineChartType;
         sal_Int32 nNumberOfChartTypes = 0;
 
-        Reference< XCoordinateSystemContainer > xCooSysCnt(
-            xDiagram, uno::UNO_QUERY_THROW );
-        const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
-            xCooSysCnt->getCoordinateSystems());
-        for( Reference< XCoordinateSystem > const & coords : aCooSysSeq )
+        for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
         {
-            Reference< XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
-            const Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
-            for( Reference< XChartType > const & chartType : aChartTypeSeq )
+            const std::vector< rtl::Reference< ChartType > > aChartTypeSeq( coords->getChartTypes2());
+            for( rtl::Reference< ChartType > const & chartType : aChartTypeSeq )
             {
-                if( chartType.is())
+                ++nNumberOfChartTypes;
+                if( nNumberOfChartTypes > 2 )
+                    break;
+                OUString aCTService = chartType->getChartType();
+                if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_COLUMN )
                 {
-                    ++nNumberOfChartTypes;
-                    if( nNumberOfChartTypes > 2 )
-                        break;
-                    OUString aCTService = chartType->getChartType();
-                    if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_COLUMN )
-                    {
-                        xColumnChartType.set( chartType );
-                        xColumnChartCooSys.set( coords );
-                    }
-                    else if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_LINE )
-                        xLineChartType.set( chartType );
+                    xColumnChartType = chartType;
+                    xColumnChartCooSys = coords;
                 }
+                else if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_LINE )
+                    xLineChartType = chartType;
             }
             if( nNumberOfChartTypes > 2 )
                 break;
@@ -334,10 +328,9 @@ bool ColumnLineChartTypeTemplate::matchesTemplate(
 
                 if( bResult && bAdaptProperties )
                 {
-                    Reference< XDataSeriesContainer > xSeriesContainer( xLineChartType, uno::UNO_QUERY );
-                    if( xSeriesContainer.is() )
+                    if( xLineChartType.is() )
                     {
-                        sal_Int32 nNumberOfLines = xSeriesContainer->getDataSeries().getLength();
+                        sal_Int32 nNumberOfLines = xLineChartType->getDataSeries().getLength();
                         setFastPropertyValue_NoBroadcast( PROP_COL_LINE_NUMBER_OF_LINES, uno::Any( nNumberOfLines ));
                     }
                 }

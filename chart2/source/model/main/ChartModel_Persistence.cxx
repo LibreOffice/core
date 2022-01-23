@@ -728,7 +728,7 @@ void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
 
             Reference<chart2::data::XDataSource> xDataSource(xDataProvider->createDataSource(aArguments));
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = getTypeManager();
-            Reference<chart2::XDiagram> xDiagram(getFirstDiagram());
+            rtl::Reference<Diagram> xDiagram(getFirstChartDiagram());
 
             DiagramHelper::tTemplateWithServiceName aTemplateAndService = DiagramHelper::getTemplateForDiagram(xDiagram, xChartTypeManager);
             aTemplateAndService.xChartTypeTemplate->changeDiagramData(xDiagram, xDataSource, aArguments);

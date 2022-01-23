@@ -40,7 +40,7 @@ public:
 protected:
     // ____ ChartTypeTemplate ____
     virtual bool matchesTemplate(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+        const rtl::Reference< ::chart::Diagram >& xDiagram,
         bool bAdaptProperties ) override;
     virtual rtl::Reference< ::chart::ChartType >
         getChartTypeForNewSeries( const std::vector<
