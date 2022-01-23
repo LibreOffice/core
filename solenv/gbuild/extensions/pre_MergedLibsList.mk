@@ -8,7 +8,7 @@
 #
 
 # we link all object files from these libraries into one, merged library
-MERGE_LIBRARY_LIST := \
+gb_MERGE_LIBRARY_LIST := \
 	avmedia \
 	$(if $(filter WNT,$(OS)),avmediawin) \
 	$(call gb_Helper_optional,SCRIPTING, \
@@ -112,13 +112,13 @@ MERGE_LIBRARY_LIST := \
 # allow module-deps.pl to color based on this.
 ifneq ($(ENABLE_PRINT_DEPS),)
 
-$(info MergeLibContents: $(MERGE_LIBRARY_LIST))
+$(info MergeLibContents: $(gb_MERGE_LIBRARY_LIST))
 
 endif
 
 ifneq ($(MERGELIBS),)
 
-gb_MERGEDLIBS := $(MERGE_LIBRARY_LIST)
+gb_MERGEDLIBS := $(gb_MERGE_LIBRARY_LIST)
 
 endif
 
