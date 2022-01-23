@@ -116,7 +116,7 @@ public:
 
     /// @throws css::uno::RuntimeException
     void applyStyles(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+        const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     // ____ XServiceName ____
     virtual OUString SAL_CALL getServiceName() override;
@@ -167,7 +167,7 @@ public:
         <p>Called by FillDiagram.</p>
      */
     virtual void adaptScales(
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > & aCooSysSeq,
+        const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > > & aCooSysSeq,
         const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xCategories );
 
     /** create a data series tree, that fits the requirements of the chart type.
@@ -200,9 +200,9 @@ public:
                 css::uno::Sequence<
                     css::uno::Reference<
                         css::chart2::XDataSeries > > > & aSeriesSeq,
-            const css::uno::Sequence<
-                css::uno::Reference<
-                    css::chart2::XCoordinateSystem > > & rCoordSys,
+            const std::vector<
+                rtl::Reference<
+                    ::chart::BaseCoordinateSystem > > & rCoordSys,
             const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq
             );
 
@@ -215,8 +215,6 @@ public:
         requesting a secondary axes a secondary y axes is added</p>
      */
     void createAxes(
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > & rCoordSys );
-    void createAxes(
         const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > > & rCoordSys );
 
     /** Give the number of requested axis per dimension here.  Default is one
@@ -227,7 +225,7 @@ public:
     /** adapt properties of existing axes and remove superfluous axes
     */
     virtual void adaptAxes(
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > & rCoordSys );
+        const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > > & rCoordSys );
 
     const css::uno::Reference< css::uno::XComponentContext >&
         GetComponentContext() const { return m_xContext;}
@@ -249,8 +247,7 @@ private:
 private:
     /** modifies the given diagram
      */
-    void FillDiagram( const css::uno::Reference<
-                          css::chart2::XDiagram > & xDiagram,
+    void FillDiagram( const rtl::Reference< ::chart::Diagram >& xDiagram,
                       const css::uno::Sequence<
                           css::uno::Sequence<
                               css::uno::Reference<

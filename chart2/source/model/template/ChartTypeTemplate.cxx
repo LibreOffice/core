@@ -396,7 +396,7 @@ void ChartTypeTemplate::applyStyle(
     }
 }
 
-void ChartTypeTemplate::applyStyles( const Reference< chart2::XDiagram >& xDiagram )
+void ChartTypeTemplate::applyStyles( const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     // apply chart-type specific styles, like "symbols on" for example
     Sequence< Sequence< Reference< XDataSeries > > > aNewSeriesSeq(
@@ -554,18 +554,15 @@ void ChartTypeTemplate::createCoordinateSystems(
 }
 
 void ChartTypeTemplate::adaptScales(
-    const Sequence< Reference< chart2::XCoordinateSystem > > & aCooSysSeq,
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysSeq,
     const Reference< data::XLabeledDataSequence > & xCategories //@todo: in future there may be more than one sequence of categories (e.g. charttype with categories at x and y axis )
     )
 {
     bool bSupportsCategories( supportsCategories() );
-    for( Reference< XCoordinateSystem > const & xCooSys : aCooSysSeq )
+    for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : aCooSysSeq )
     {
         try
         {
-            if( !xCooSys.is() )
-                continue;
-
             // attach categories to first axis
             sal_Int32 nDim( xCooSys->getDimension());
             if( nDim > 0 )
@@ -634,39 +631,6 @@ void ChartTypeTemplate::adaptScales(
 
 void ChartTypeTemplate::adaptDiagram( const Reference< XDiagram > & /* xDiagram */ )
 {
-    }
-
-void ChartTypeTemplate::createAxes(
-    const Sequence< Reference< XCoordinateSystem > > & rCoordSys )
-{
-    //create missing axes
-    if( !rCoordSys.hasElements() )
-        return;
-
-    Reference< XCoordinateSystem > xCooSys( rCoordSys[0] );
-    if(!xCooSys.is())
-        return;
-
-    //create main axis in first coordinate system
-    sal_Int32 nDimCount = xCooSys->getDimension();
-    sal_Int32 nDim=0;
-    for( nDim=0; nDim<nDimCount; ++nDim )
-    {
-        sal_Int32 nAxisCount = getAxisCountByDimension( nDim );
-        if( nDim == 1 &&
-            nAxisCount < 2 && AxisHelper::isSecondaryYAxisNeeded( xCooSys ))
-            nAxisCount = 2;
-        for( sal_Int32 nAxisIndex = 0; nAxisIndex < nAxisCount; ++nAxisIndex )
-        {
-            Reference< XAxis > xAxis = AxisHelper::getAxis( nDim, nAxisIndex, xCooSys );
-            if( !xAxis.is())
-            {
-                // create and add axis
-                xAxis.set( AxisHelper::createAxis(
-                               nDim, nAxisIndex, xCooSys, GetComponentContext() ));
-            }
-        }
-    }
 }
 
 void ChartTypeTemplate::createAxes(
@@ -703,14 +667,14 @@ void ChartTypeTemplate::createAxes(
 }
 
 void ChartTypeTemplate::adaptAxes(
-    const Sequence< Reference< XCoordinateSystem > > & rCoordSys )
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & rCoordSys )
 {
     //adapt properties of existing axes and remove superfluous axes
 
-    if( !rCoordSys.hasElements() )
+    if( rCoordSys.empty() )
         return;
 
-    for( Reference< XCoordinateSystem > const & xCooSys : rCoordSys )
+    for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : rCoordSys )
     {
         if( !xCooSys.is() )
             continue;
@@ -750,7 +714,7 @@ sal_Int32 ChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension )
 }
 
 void ChartTypeTemplate::FillDiagram(
-    const Reference< XDiagram >& xDiagram,
+    const rtl::Reference< ::chart::Diagram >& xDiagram,
     const Sequence< Sequence< Reference< XDataSeries > > >& aSeriesSeq,
     const Reference< data::XLabeledDataSequence >& xCategories,
     const std::vector< rtl::Reference< ChartType > >& aOldChartTypesSeq )
@@ -760,9 +724,8 @@ void ChartTypeTemplate::FillDiagram(
     try
     {
         // create coordinate systems and scales
-        Reference< XCoordinateSystemContainer > xCoordSysCnt( xDiagram, uno::UNO_QUERY_THROW );
-        createCoordinateSystems( xCoordSysCnt );
-        Sequence< Reference< XCoordinateSystem > > aCoordinateSystems( xCoordSysCnt->getCoordinateSystems());
+        createCoordinateSystems( xDiagram );
+        std::vector< rtl::Reference< BaseCoordinateSystem > > aCoordinateSystems( xDiagram->getBaseCoordinateSystems());
         createAxes( aCoordinateSystems );
         adaptAxes( aCoordinateSystems );
         adaptScales( aCoordinateSystems, xCategories );
@@ -779,11 +742,10 @@ void ChartTypeTemplate::FillDiagram(
 
 void ChartTypeTemplate::createChartTypes(
     const Sequence< Sequence< Reference< XDataSeries > > > & aSeriesSeq,
-    const Sequence< Reference< XCoordinateSystem > > & rCoordSys,
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & rCoordSys,
     const std::vector< rtl::Reference< ChartType > >& aOldChartTypesSeq )
 {
-    if( ! rCoordSys.hasElements() ||
-        ! rCoordSys[0].is() )
+    if( rCoordSys.empty() )
         return;
 
     try
@@ -794,8 +756,7 @@ void ChartTypeTemplate::createChartTypes(
         {
             // we need a new chart type
             xCT = getChartTypeForNewSeries( aOldChartTypesSeq );
-            Reference< XChartTypeContainer > xCTCnt( rCoordSys[nCooSysIdx], uno::UNO_QUERY_THROW );
-            xCTCnt->setChartTypes({ xCT });
+            rCoordSys[nCooSysIdx]->setChartTypes(std::vector{ xCT });
         }
         else
         {
@@ -805,15 +766,14 @@ void ChartTypeTemplate::createChartTypes(
                 {
                     // we need a new chart type
                     xCT = getChartTypeForNewSeries( aOldChartTypesSeq );
-                    Reference< XChartTypeContainer > xCTCnt( rCoordSys[nCooSysIdx], uno::UNO_QUERY_THROW );
-                    Sequence< Reference< XChartType > > aCTSeq( xCTCnt->getChartTypes());
-                    if( aCTSeq.hasElements())
+                    std::vector< rtl::Reference< ChartType > > aCTSeq( rCoordSys[nCooSysIdx]->getChartTypes2());
+                    if( !aCTSeq.empty())
                     {
-                        aCTSeq.getArray()[0] = xCT;
-                        xCTCnt->setChartTypes( aCTSeq );
+                        aCTSeq[0] = xCT;
+                        rCoordSys[nCooSysIdx]->setChartTypes( aCTSeq );
                     }
                     else
-                        xCTCnt->addChartType( xCT );
+                        rCoordSys[nCooSysIdx]->addChartType( xCT );
 
                     xCT->setDataSeries( aSeriesSeq[nSeriesIdx] );
                 }
@@ -831,7 +791,7 @@ void ChartTypeTemplate::createChartTypes(
                 }
 
                 // spread the series over the available coordinate systems
-                if( rCoordSys.getLength() > (nCooSysIdx + 1) )
+                if( static_cast<sal_Int32>(rCoordSys.size()) > (nCooSysIdx + 1) )
                     ++nCooSysIdx;
             }
         }

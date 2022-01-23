@@ -294,6 +294,16 @@ void SAL_CALL BaseCoordinateSystem::setChartTypes( const Sequence< Reference< ch
     fireModifyEvent();
 }
 
+void BaseCoordinateSystem::setChartTypes( const std::vector< rtl::Reference< ChartType > >& aChartTypes )
+{
+    for (auto const & aChartType : m_aChartTypes)
+        aChartType->removeModifyListener( m_xModifyEventForwarder );
+    m_aChartTypes = aChartTypes;
+    for (auto const & aChartType : m_aChartTypes)
+        aChartType->addModifyListener( m_xModifyEventForwarder );
+    fireModifyEvent();
+}
+
 // ____ XModifyBroadcaster ____
 void SAL_CALL BaseCoordinateSystem::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {

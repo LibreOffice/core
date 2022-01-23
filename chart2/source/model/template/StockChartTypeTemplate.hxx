@@ -94,9 +94,9 @@ protected:
                  css::uno::Sequence<
                     css::uno::Reference<
                         css::chart2::XDataSeries > > >& aSeriesSeq,
-            const css::uno::Sequence<
-                css::uno::Reference<
-                    css::chart2::XCoordinateSystem > > & rCoordSys,
+            const std::vector<
+                rtl::Reference<
+                    ::chart::BaseCoordinateSystem > > & rCoordSys,
             const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq
             ) override;
 
