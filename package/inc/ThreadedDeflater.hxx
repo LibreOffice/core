@@ -23,9 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <package/packagedllapi.hxx>
 #include <comphelper/threadpool.hxx>
-#include <atomic>
 #include <memory>
 #include <vector>
 #include <functional>

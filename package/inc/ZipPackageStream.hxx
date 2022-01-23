@@ -20,7 +20,6 @@
 #define INCLUDED_PACKAGE_INC_ZIPPACKAGESTREAM_HXX
 
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

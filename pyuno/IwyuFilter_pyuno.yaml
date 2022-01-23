@@ -18,6 +18,8 @@ excludelist:
     - osl/file.hxx
     # Needed for direct member access
     - com/sun/star/uno/XComponentContext.hpp
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
     pyuno/source/module/pyuno_module.cxx:
     # Needed on MACOSX
     - config_folders.h

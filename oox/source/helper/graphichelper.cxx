@@ -21,12 +21,8 @@
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XUnitConversion.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/graphic/GraphicMapper.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -37,7 +33,6 @@
 #include <vcl/outdev.hxx>
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/sequence.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>

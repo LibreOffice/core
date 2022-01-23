@@ -19,7 +19,6 @@
 #include <dlgedfac.hxx>
 #include <strings.hxx>
 #include <RptObject.hxx>
-#include <RptDef.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
 

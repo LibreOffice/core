@@ -20,6 +20,7 @@
 #define INCLUDED_PACKAGE_INC_PACKAGECONSTANTS_HXX
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 const sal_Int32 n_ConstBufferSize = 32768;
 

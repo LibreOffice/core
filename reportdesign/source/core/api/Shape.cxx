@@ -19,8 +19,8 @@
 #include <Shape.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <svx/svdobj.hxx>
 #include <tools/diagnose_ex.h>
-#include <svx/unoshape.hxx>
 
 #include <strings.hxx>
 #include <strings.hrc>

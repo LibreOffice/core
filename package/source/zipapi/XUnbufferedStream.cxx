@@ -23,7 +23,6 @@
 
 #include "XUnbufferedStream.hxx"
 #include <EncryptionData.hxx>
-#include <PackageConstants.hxx>
 #include <ZipFile.hxx>
 #include <EncryptedDataHeader.hxx>
 #include <algorithm>
@@ -31,7 +30,6 @@
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

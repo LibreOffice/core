@@ -23,7 +23,6 @@
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>

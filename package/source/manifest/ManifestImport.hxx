@@ -23,10 +23,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <unordered_map>
 #include <vector>
 #include <rtl/ustrbuf.hxx>
-
-#include <HashMaps.hxx>
 
 namespace com::sun::star {
     namespace xml::sax { class XAttributeList; }

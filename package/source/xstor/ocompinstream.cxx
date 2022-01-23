@@ -27,7 +27,6 @@
 #include <sal/log.hxx>
 
 #include "owriteablestream.hxx"
-#include "xstorage.hxx"
 
 using namespace ::com::sun::star;
 

@@ -19,10 +19,6 @@
 #ifndef INCLUDED_PACKAGE_INC_ZIPFILE_HXX
 #define INCLUDED_PACKAGE_INC_ZIPFILE_HXX
 
-#include <com/sun/star/packages/zip/ZipException.hpp>
-#include <com/sun/star/packages/zip/ZipIOException.hpp>
-#include <com/sun/star/packages/NoEncryptionException.hpp>
-#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
@@ -32,8 +28,6 @@
 #include "ByteGrabber.hxx"
 #include "HashMaps.hxx"
 #include "EncryptionData.hxx"
-
-#include <memory>
 
 namespace com::sun::star {
     namespace uno { class XComponentContext; }
