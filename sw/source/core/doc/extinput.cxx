@@ -201,7 +201,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             pTNd->EraseText( aIdx, nEndCnt - nSttCnt );
         }
 
-        // NOHINTEXPAND so we can use correct formatting in desctructor when we finish composing
+        // NOHINTEXPAND so we can use correct formatting in destructor when we finish composing
         pTNd->InsertText( rNewStr, aIdx, SwInsertFlags::NOHINTEXPAND );
         if( !HasMark() )
             SetMark();
