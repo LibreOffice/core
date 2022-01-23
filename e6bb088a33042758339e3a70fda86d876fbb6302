@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b3a2496_735d2de7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-01-23T15:38:24Z",
+      "side": 1,
+      "message": "Could someone help to rerun the Jenkins build? Windows build was time-out after 30min.",
+      "revId": "e6bb088a33042758339e3a70fda86d876fbb6302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
