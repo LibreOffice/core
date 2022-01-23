@@ -27,6 +27,7 @@
 #include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <AxisIndexDefines.hxx>
+#include <BaseCoordinateSystem.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -177,7 +178,7 @@ bool ChartTypeTemplate::supportsCategories()
     return true;
 }
 
-void ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >& xDiagram )
+void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram )
 {
     if( ! xDiagram.is())
         return;
@@ -228,18 +229,9 @@ void ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >& xDiagra
         std::vector< rtl::Reference< ChartType > > aOldChartTypesSeq =
             DiagramHelper::getChartTypesFromDiagram(xDiagram);
 
-        Reference< XCoordinateSystemContainer > xCoordSysCnt( xDiagram, uno::UNO_QUERY );
-        OSL_ASSERT( xCoordSysCnt.is());
-        if( xCoordSysCnt.is())
+        for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
         {
-            const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
-                xCoordSysCnt->getCoordinateSystems());
-            for( Reference< XCoordinateSystem > const & coords : aCooSysSeq )
-            {
-                Reference< XChartTypeContainer > xContainer( coords, uno::UNO_QUERY );
-                if( xContainer.is() )
-                    xContainer->setChartTypes( Sequence< Reference< XChartType > >() );
-            }
+            coords->setChartTypes( Sequence< Reference< XChartType > >() );
         }
 
         FillDiagram( xDiagram, aSeriesSeq, aData.Categories, aOldChartTypesSeq );
@@ -251,7 +243,7 @@ void ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >& xDiagra
 }
 
 void ChartTypeTemplate::changeDiagramData(
-    const Reference< chart2::XDiagram >& xDiagram,
+    const rtl::Reference< Diagram >& xDiagram,
     const Reference< chart2::data::XDataSource >& xDataSource,
     const Sequence< beans::PropertyValue >& aArguments )
 {
@@ -301,7 +293,7 @@ void ChartTypeTemplate::changeDiagramData(
 }
 
 bool ChartTypeTemplate::matchesTemplate(
-    const Reference< chart2::XDiagram >& xDiagram,
+    const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool /* bAdaptProperties */ )
 {
     bool bResult = false;
@@ -311,13 +303,11 @@ bool ChartTypeTemplate::matchesTemplate(
 
     try
     {
-        Reference< XCoordinateSystemContainer > xCooSysCnt(
-            xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
-            xCooSysCnt->getCoordinateSystems());
+        const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysSeq(
+            xDiagram->getBaseCoordinateSystems());
 
         // need to have at least one coordinate system
-        bResult = aCooSysSeq.hasElements();
+        bResult = !aCooSysSeq.empty();
         if( bResult )
         {
             std::vector< rtl::Reference< ChartType > > aFormerlyUsedChartTypes;
@@ -327,18 +317,14 @@ bool ChartTypeTemplate::matchesTemplate(
 
             const OUString aChartTypeToMatch = xOldCT->getChartType();
             const sal_Int32 nDimensionToMatch = getDimension();
-            for( sal_Int32 nCooSysIdx=0; bResult && (nCooSysIdx < aCooSysSeq.getLength()); ++nCooSysIdx )
+            for( sal_Int32 nCooSysIdx=0; bResult && (nCooSysIdx < static_cast<sal_Int32>(aCooSysSeq.size())); ++nCooSysIdx )
             {
                 // match dimension
                 bResult = bResult && (aCooSysSeq[nCooSysIdx]->getDimension() == nDimensionToMatch);
 
-                Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
-                Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
-                for( sal_Int32 nCTIdx=0; bResult && (nCTIdx < aChartTypeSeq.getLength()); ++nCTIdx )
+                std::vector< rtl::Reference< ChartType > > aChartTypeSeq( aCooSysSeq[nCooSysIdx]->getChartTypes2());
+                for( sal_Int32 nCTIdx=0; bResult && (nCTIdx < static_cast<sal_Int32>(aChartTypeSeq.size())); ++nCTIdx )
                 {
-                    if (!aChartTypeSeq[nCTIdx].is())
-                        return false;
-
                     // match chart type
                     bResult = bResult && aChartTypeSeq[nCTIdx]->getChartType() == aChartTypeToMatch;
                     bool bFound=false;

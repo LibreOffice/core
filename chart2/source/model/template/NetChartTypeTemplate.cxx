@@ -20,6 +20,7 @@
 #include "NetChartTypeTemplate.hxx"
 #include "FilledNetChartType.hxx"
 #include "NetChartType.hxx"
+#include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
@@ -87,7 +88,7 @@ void NetChartTypeTemplate::applyStyle(
 
 // ____ ChartTypeTemplate ____
 bool NetChartTypeTemplate::matchesTemplate(
-    const Reference< chart2::XDiagram >& xDiagram,
+    const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool bAdaptProperties )
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );

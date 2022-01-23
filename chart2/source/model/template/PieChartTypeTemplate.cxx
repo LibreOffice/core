@@ -21,6 +21,7 @@
 #include "PieChartType.hxx"
 #include <CommonConverters.hxx>
 #include <ChartType.hxx>
+#include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
@@ -317,7 +318,7 @@ void PieChartTypeTemplate::createChartTypes(
 
 // ____ XChartTypeTemplate ____
 bool PieChartTypeTemplate::matchesTemplate(
-    const uno::Reference< chart2::XDiagram >& xDiagram,
+    const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool bAdaptProperties )
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );

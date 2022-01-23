@@ -19,6 +19,7 @@
 
 #include "LineChartTypeTemplate.hxx"
 #include "LineChartType.hxx"
+#include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
@@ -201,7 +202,7 @@ StackMode LineChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ )
 
 // ____ ChartTypeTemplate ____
 bool LineChartTypeTemplate::matchesTemplate(
-    const uno::Reference< chart2::XDiagram >& xDiagram,
+    const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool bAdaptProperties )
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );

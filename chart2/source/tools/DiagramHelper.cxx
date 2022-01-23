@@ -85,6 +85,8 @@ DiagramHelper::tTemplateWithServiceName
 
     if( ! (xChartTypeManager.is() && xDiagram.is()))
         return aResult;
+    auto pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
+    assert(pDiagram);
 
     Sequence< OUString > aServiceNames( xChartTypeManager->getAvailableServiceNames());
     const sal_Int32 nLength = aServiceNames.getLength();
@@ -98,7 +100,7 @@ DiagramHelper::tTemplateWithServiceName
             rtl::Reference< ::chart::ChartTypeTemplate > xTempl =
                 xChartTypeManager->createTemplate( aServiceNames[ i ] );
 
-            if (xTempl.is() && xTempl->matchesTemplate(xDiagram, true))
+            if (xTempl.is() && xTempl->matchesTemplate(pDiagram, true))
             {
                 aResult.xChartTypeTemplate = xTempl;
                 aResult.sServiceName = aServiceNames[ i ];

@@ -19,6 +19,7 @@
 
 #include "BarChartTypeTemplate.hxx"
 #include "ColumnChartType.hxx"
+#include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
@@ -165,7 +166,7 @@ bool BarChartTypeTemplate::isSwapXAndY() const
 
 // ____ ChartTypeTemplate ____
 bool  BarChartTypeTemplate::matchesTemplate(
-    const Reference< chart2::XDiagram >& xDiagram,
+    const rtl::Reference< ::chart::Diagram >& xDiagram,
     bool bAdaptProperties )
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
