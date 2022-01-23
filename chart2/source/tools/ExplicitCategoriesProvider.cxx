@@ -181,7 +181,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
     {
         Reference< chart2::XAxis > xAxis( xCooSysModel->getAxisByDimension(0,0) );
         nAxisNumberFormat = AxisHelper::getExplicitNumberFormatKeyForAxis(
-            xAxis, xCooSysModel, uno::Reference<chart2::XChartDocument>(&rModel), false );
+            xAxis, xCooSysModel, &rModel, false );
     }
 
     Color nLabelColor;
