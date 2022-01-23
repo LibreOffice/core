@@ -25,26 +25,6 @@ void connectivity::mysqlc::Tables::impl_refresh()
     static_cast<Catalog&>(m_rParent).refreshTables();
 }
 
-static void lcl_unescape(OUString& rName)
-{
-    // Remove ending ` if there's one
-    sal_Int32 nLastIndexBacktick = rName.lastIndexOf("`");
-    if ((nLastIndexBacktick > 0) && (nLastIndexBacktick == (rName.getLength() - 1)))
-    {
-        rName = rName.copy(0, nLastIndexBacktick);
-    }
-
-    // Remove beginning `
-    nLastIndexBacktick = rName.indexOf("`");
-    if (nLastIndexBacktick == 0)
-    {
-        rName = rName.copy(1, rName.getLength() - 1);
-    }
-
-    // Replace double ` by simple `
-    rName = rName.replaceAll("``", "`");
-}
-
 connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::createObject(const OUString& rName)
 {
     OUString sCatalog, sSchema, sTable;
@@ -54,12 +34,12 @@ connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::createObject(const
     css::uno::Any aCatalog;
     if (!sCatalog.isEmpty())
     {
+        Catalog::unescape(sCatalog);
         aCatalog <<= sCatalog;
-        lcl_unescape(sCatalog);
     }
 
-    lcl_unescape(sSchema);
-    lcl_unescape(sTable);
+    Catalog::unescape(sSchema);
+    Catalog::unescape(sTable);
 
     // Only retrieving a single table, so table type is irrelevant (param 4)
     css::uno::Reference<css::sdbc::XResultSet> xTables

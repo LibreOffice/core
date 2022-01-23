@@ -29,6 +29,26 @@ public:
 
     // IRefreshableUsers
     virtual void refreshUsers() override;
+
+    static void unescape(OUString& rName)
+    {
+        // Remove ending ` if there's one
+        sal_Int32 nLastIndexBacktick = rName.lastIndexOf("`");
+        if ((nLastIndexBacktick > 0) && (nLastIndexBacktick == (rName.getLength() - 1)))
+        {
+            rName = rName.copy(0, nLastIndexBacktick);
+        }
+
+        // Remove beginning `
+        nLastIndexBacktick = rName.indexOf("`");
+        if (nLastIndexBacktick == 0)
+        {
+            rName = rName.copy(1, rName.getLength() - 1);
+        }
+
+        // Replace double ` by simple `
+        rName = rName.replaceAll("``", "`");
+    }
 };
 
 } // namespace connectivity::mysqlc

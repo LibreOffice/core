@@ -36,21 +36,42 @@ connectivity::mysqlc::Views::Views(const css::uno::Reference<css::sdbc::XConnect
 
 connectivity::sdbcx::ObjectType connectivity::mysqlc::Views::createObject(const OUString& _rName)
 {
-    OUString sCatalog, sSchema, sTable;
-    ::dbtools::qualifiedNameComponents(m_xMetaData, _rName, sCatalog, sSchema, sTable,
+    OUString sCatalog, sSchema, sView;
+    ::dbtools::qualifiedNameComponents(m_xMetaData, _rName, sCatalog, sSchema, sView,
                                        ::dbtools::EComposeRule::InDataManipulation);
-    return new View(m_xConnection, isCaseSensitive(), sSchema, sTable);
+
+    css::uno::Any aCatalog;
+    if (!sCatalog.isEmpty())
+    {
+        Catalog::unescape(sCatalog);
+        aCatalog <<= sCatalog;
+    }
+
+    Catalog::unescape(sSchema);
+    Catalog::unescape(sView);
+
+    // Only retrieving a single view
+    css::uno::Reference<css::sdbc::XResultSet> xViews
+        = m_xMetaData->getTables(aCatalog, sSchema, sView, { "VIEW" });
+
+    if (!xViews.is())
+        throw css::uno::RuntimeException("Could not acquire view.");
+
+    if (!xViews->next())
+        throw css::uno::RuntimeException();
+
+    connectivity::sdbcx::ObjectType xRet(
+        new View(m_xConnection, isCaseSensitive(), sSchema, sView));
+
+    if (xViews->next())
+        throw css::uno::RuntimeException("Found more views than expected.");
+
+    return xRet;
 }
 
 void connectivity::mysqlc::Views::impl_refresh()
 {
     static_cast<Catalog&>(m_rParent).refreshViews();
-}
-
-void connectivity::mysqlc::Views::disposing()
-{
-    m_xMetaData.clear();
-    OCollection::disposing();
 }
 
 css::uno::Reference<css::beans::XPropertySet> connectivity::mysqlc::Views::createDescriptor()
@@ -60,10 +81,13 @@ css::uno::Reference<css::beans::XPropertySet> connectivity::mysqlc::Views::creat
 
 // XAppend
 connectivity::sdbcx::ObjectType connectivity::mysqlc::Views::appendObject(
-    const OUString& _rForName, const css::uno::Reference<css::beans::XPropertySet>& descriptor)
+    const OUString& /* _rForName */,
+    const css::uno::Reference<css::beans::XPropertySet>& descriptor)
 {
     createView(descriptor);
-    return createObject(_rForName);
+    OUString sCompleteName = ::dbtools::composeTableName(
+        m_xMetaData, descriptor, ::dbtools::EComposeRule::InTableDefinitions, true);
+    return createObject(sCompleteName);
 }
 
 // XDrop
@@ -116,15 +140,7 @@ void connectivity::mysqlc::Views::createView(
         xStmt->execute(aSql);
         ::comphelper::disposeComponent(xStmt);
     }
-    /*  TODO find a way to refresh view to make the new one appear right away
-    // insert the new view also in the tables collection
-    Tables* pTables = static_cast<Tables*>(static_cast<Catalog&>(m_rParent).getPrivateTables());
-    if ( pTables)
-    {
-        OUString sName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::EComposeRule::InDataManipulation, false );
-        pTables->appendNew(sName);
-    }
-*/
+    //  TODO find a way to refresh view to make the new one appear right away
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
