@@ -31,7 +31,7 @@ public:
     virtual ~VCartesianCoordinateSystem() override;
 
     virtual void createVAxisList(
-            const css::uno::Reference< css::chart2::XChartDocument> &ChartDoc
+            const rtl::Reference<::chart::ChartModel> &ChartDoc
             , const css::awt::Size& rFontReferenceSize
             , const css::awt::Rectangle& rMaximumSpaceForLabels
             , bool bLimitSpaceForLabels ) override;

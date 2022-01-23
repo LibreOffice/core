@@ -35,7 +35,7 @@ public:
                                     , const css::awt::Size& rPageResolution ) override;
 
     virtual void createVAxisList(
-            const css::uno::Reference< css::chart2::XChartDocument> & xChartDoc
+            const rtl::Reference<::chart::ChartModel> & xChartDoc
             , const css::awt::Size& rFontReferenceSize
             , const css::awt::Rectangle& rMaximumSpaceForLabels
             , bool bLimitSpaceForLabels ) override;
