@@ -87,12 +87,14 @@ public:
     rtl::Reference< ::chart::Diagram > createDiagramByDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments );
+
     /// denotes if the chart needs categories at the first scale
     virtual bool supportsCategories();
 
-    virtual void changeDiagram(
+    OOO_DLLPUBLIC_CHARTTOOLS
+    void changeDiagram(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
-    virtual void changeDiagramData(
+    void changeDiagramData(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments );
