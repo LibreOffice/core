@@ -46,9 +46,9 @@
 #define BARS_TO_SHOW 2
 
 OLECHAR* pSlotUrl[BARS_NUMBER] =
-                        {L"slot:5910" // SID_TOGGLEFUNCTIONBAR
-                        ,L"slot:5920" // SID_TOGGLESTATUSBAR
-                        ,L"slot:6661" // SID_TOGGLE_MENUBAR
+                        {L".uno:FunctionBarVisible" // SID_TOGGLEFUNCTIONBAR
+                        ,L".uno:StatusBarVisible" // SID_TOGGLESTATUSBAR
+                        ,L".uno:MenuBarVisible" // SID_TOGGLE_MENUBAR
                         };
 
 OLECHAR* pSlotName[BARS_NUMBER] =
