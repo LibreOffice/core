@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eeb9a0f6_16f45289",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-01-23T16:55:21Z",
+      "side": 1,
+      "message": "As Michael said these were the last ones that make sense, you can change the status of 97046 to RESOLVED FIXED",
+      "revId": "1cc2690fe2f87e8acce4e9b4e0cb533fda26e295",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
