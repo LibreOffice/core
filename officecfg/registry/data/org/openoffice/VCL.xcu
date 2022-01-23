@@ -261,19 +261,19 @@
         <value>思源黑体 HW;Source Han Sans HW SC;Noto Sans Mono CJK SC;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
+        <value>思源黑体 Normal;Source Han Sans SC;思源黑体 CN Normal;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
+        <value>思源黑体 Normal;Source Han Sans SC;思源黑体 CN Normal;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
+        <value>思源黑体 Normal;Source Han Sans SC;思源黑体 CN Normal;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
+        <value>思源黑体 Normal;Source Han Sans SC;思源黑体 CN Normal;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
       </prop>
       <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>思源宋体;Source Han Serif SC;思源宋体 CN;Source Han Serif CN;Noto Serif SC;Noto Serif CJK SC;新宋体;NSimSun;宋体;SimSun;华文宋体;Songti SC;STSong;Arial Unicode MS;Tahoma</value>
+        <value>思源宋体 Medium;Source Han Serif SC;思源宋体 CN Medium;Source Han Serif CN;Noto Serif SC;Noto Serif CJK SC;新宋体;NSimSun;宋体;SimSun;华文宋体;Songti SC;STSong;Arial Unicode MS;Tahoma</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
         <value>思源黑体 HW;Source Han Sans HW SC;Noto Sans Mono CJK SC;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced</value>
@@ -282,7 +282,7 @@
         <value>思源黑体 HW;Source Han Sans HW SC;Noto Sans Mono CJK SC;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;宋体;SimSun;萍方-简;PingFang SC;华文细黑;STXihei;Segoe UI;Tahoma;San Francisco;Lucida Grande;Sans Serif</value>
+        <value>思源黑体 Normal;Source Han Sans SC;思源黑体 CN Normal;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;宋体;SimSun;萍方-简;PingFang SC;华文细黑;STXihei;Segoe UI;Tahoma;San Francisco;Lucida Grande;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="zh-tw" oor:op="replace">
@@ -377,19 +377,19 @@
         <value>思源黑体 HW;Source Han Sans HW SC;思源黑体 CN;Source Han Sans CN;Noto Sans Mono CJK SC;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
+        <value>思源黑体 Normal;Source Han Sans SC;思源黑体 CN Normal;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
+        <value>思源黑体 Normal;Source Han Sans SC;思源黑体 CN Normal;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
+        <value>思源黑体 Normal;Source Han Sans SC;思源黑体 CN Normal;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
+        <value>思源黑体 Normal;Source Han Sans SC;思源黑体 CN Normal;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma</value>
       </prop>
       <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>思源宋体;Source Han Serif SC;思源宋体 CN;Source Han Serif CN;Noto Serif SC;Noto Serif CJK SC;新宋体;NSimSun;宋体;SimSun;华文宋体;Songti SC;STSong;Arial Unicode MS;Tahoma</value>
+        <value>思源宋体 Medium;Source Han Serif SC;思源宋体 CN Medium;Source Han Serif CN;Noto Serif SC;Noto Serif CJK SC;新宋体;NSimSun;宋体;SimSun;华文宋体;Songti SC;STSong;Arial Unicode MS;Tahoma</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
         <value>思源黑体 HW;Source Han Sans HW SC;思源黑体 CN;Source Han Sans CN;Noto Sans Mono CJK SC;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced</value>
@@ -398,7 +398,7 @@
         <value>思源黑体 HW;Source Han Sans HW SC;思源黑体 CN;Source Han Sans CN;Noto Sans Mono CJK SC;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;宋体;SimSun;萍方-简;PingFang SC;华文细黑;STXihei;Segoe UI;Tahoma;San Francisco;Lucida Grande;Sans Serif</value>
+        <value>思源黑体 Normal;Source Han Sans SC;思源黑体 CN Normal;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;宋体;SimSun;萍方-简;PingFang SC;华文细黑;STXihei;Segoe UI;Tahoma;San Francisco;Lucida Grande;Sans Serif</value>
       </prop>
     </node>
     <node oor:name="ko-kr" oor:op="replace">
