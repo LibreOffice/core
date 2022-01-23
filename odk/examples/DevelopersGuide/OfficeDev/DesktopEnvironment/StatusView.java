@@ -67,11 +67,11 @@ public class StatusView extends    JPanel
      * const
      * These URL's describe available feature states.
      */
-    private static final String FEATUREURL_FONT      = "slot:10007";
-    private static final String FEATUREURL_SIZE      = "slot:10015";
-    private static final String FEATUREURL_BOLD      = "slot:10009";
-    private static final String FEATUREURL_ITALIC    = "slot:10008";
-    private static final String FEATUREURL_UNDERLINE = "slot:10014";
+    private static final String FEATUREURL_FONT      = ".uno:CharFontName";
+    private static final String FEATUREURL_SIZE      = ".uno:FontHeight";
+    private static final String FEATUREURL_BOLD      = ".uno:Bold";
+    private static final String FEATUREURL_ITALIC    = ".uno:Italic";
+    private static final String FEATUREURL_UNDERLINE = ".uno:Underline";
 
 
 

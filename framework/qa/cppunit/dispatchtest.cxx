@@ -227,7 +227,7 @@ CPPUNIT_TEST_FIXTURE(DispatchTest, testSfxOfficeDispatchDispose)
     mxComponent->dispose();
 
     util::URL urlSlot;
-    urlSlot.Complete = "slot:5598";
+    urlSlot.Complete = ".uno:JumpToMark";
     xParser->parseStrict(urlSlot);
     // crashed with UAF
     xDisp->dispatch(urlSlot, {});
