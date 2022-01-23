@@ -79,6 +79,10 @@ public:
               const css::uno::Reference< css::chart2::XAxis >& xAxis
             , const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
             , const css::uno::Reference< css::chart2::XChartDocument>& xChartDoc);
+    static sal_Int32 getExplicitNumberFormatKeyForAxis(
+              const css::uno::Reference< css::chart2::XAxis >& xAxis
+            , const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
+            , const rtl::Reference< ::chart::ChartModel>& xChartDoc);
 
     static sal_Int32 getExplicitNumberFormatKeyForDataLabel(
             const css::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp );

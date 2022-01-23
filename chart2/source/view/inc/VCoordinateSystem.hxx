@@ -32,6 +32,7 @@
 
 namespace chart { class ExplicitCategoriesProvider; }
 namespace chart { class ScaleAutomatism; }
+namespace chart { class ChartModel; }
 namespace com::sun::star::awt { struct Rectangle; }
 namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::beans { class XPropertySet; }
@@ -115,7 +116,7 @@ public:
      * Create "view" axis objects 'VAxis' from the coordinate system model.
      */
     virtual void createVAxisList(
-            const css::uno::Reference< css::chart2::XChartDocument> & xChartDoc
+            const rtl::Reference<::chart::ChartModel> & xChartDoc
             , const css::awt::Size& rFontReferenceSize
             , const css::awt::Rectangle& rMaximumSpaceForLabels
             , bool bLimitSpaceForLabels );
@@ -152,8 +153,7 @@ protected: //methods
 
     sal_Int32 getNumberFormatKeyForAxis( const css::uno::Reference<
                      css::chart2::XAxis >& xAxis
-                     , const css::uno::Reference<
-                     css::chart2::XChartDocument>& xChartDoc);
+                     , const rtl::Reference<::chart::ChartModel>& xChartDoc);
 
 private: //methods
     static void impl_adjustDimension( sal_Int32& rDimensionIndex );
