@@ -19,6 +19,7 @@
 
 #include "PieChartTypeTemplate.hxx"
 #include "PieChartType.hxx"
+#include <BaseCoordinateSystem.hxx>
 #include <CommonConverters.hxx>
 #include <ChartType.hxx>
 #include <Diagram.hxx>
@@ -540,17 +541,16 @@ void PieChartTypeTemplate::applyStyle(
     }
 }
 
-void PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
+void PieChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     // reset axes and grids
-    Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
-    if( xCooSysCnt.is())
+    if( xDiagram.is())
     {
-        const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+        const std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysSeq( xDiagram->getBaseCoordinateSystems());
         ChartTypeTemplate::createAxes( aCooSysSeq );
 
         //reset scale orientation
-        for( Reference< chart2::XCoordinateSystem > const & coords : aCooSysSeq )
+        for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysSeq )
         {
             try
             {
@@ -601,7 +601,7 @@ void PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDi
     }
 
     //reset scene properties
-    ThreeDHelper::setDefaultRotation( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ), false );
+    ThreeDHelper::setDefaultRotation( xDiagram, false );
 }
 
 // ____ XChartTypeTemplate ____

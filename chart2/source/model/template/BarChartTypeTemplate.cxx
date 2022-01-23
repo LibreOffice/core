@@ -262,7 +262,7 @@ void BarChartTypeTemplate::applyStyle(
 }
 
 void BarChartTypeTemplate::resetStyles(
-    const Reference< chart2::XDiagram >& xDiagram )
+    const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     ChartTypeTemplate::resetStyles( xDiagram );
     std::vector< Reference< chart2::XDataSeries > > aSeriesVec(

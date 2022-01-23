@@ -20,6 +20,7 @@
 #include "AreaChartTypeTemplate.hxx"
 #include "AreaChartType.hxx"
 #include <servicenames_charttypes.hxx>
+#include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>
@@ -187,7 +188,7 @@ void AreaChartTypeTemplate::applyStyle(
     DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
 }
 
-void AreaChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
+void AreaChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     ChartTypeTemplate::resetStyles( xDiagram );
     std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
