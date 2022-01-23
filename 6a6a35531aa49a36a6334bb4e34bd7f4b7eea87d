@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adcb6d19_f0e21a56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-23T17:00:45Z",
+      "side": 1,
+      "message": "This is odd, tried locally and the test fails with or without this change, and with or without all previous EditEngine changes. In fact *all* make UITest_... even in Writer fail just outputting\n\n    Traceback (most recent call last):\n      File \"/build/libo/dev/uitest/test_main.py\", line 111, in \u003cmodule\u003e\n\ttest_suite \u003d get_test_suite_for_dir(opts)\n      File \"/build/libo/dev/uitest/test_main.py\", line 98, in get_test_suite_for_dir\n\tadd_tests_for_file(test_file, test_suite)\n      File \"/build/libo/dev/uitest/test_main.py\", line 78, in add_tests_for_file\n\tmod \u003d loader.load_module()\n      File \"\u003cfrozen importlib._bootstrap_external\u003e\", line 548, in _check_name_wrapper\n      File \"\u003cfrozen importlib._bootstrap_external\u003e\", line 1063, in load_module\n      File \"\u003cfrozen importlib._bootstrap_external\u003e\", line 888, in load_module\n      File \"\u003cfrozen importlib._bootstrap\u003e\", line 283, in _load_module_shim\n    DeprecationWarning: the load_module() method is deprecated and slated for removal in Python 3.12; use exec_module() instead\n\n    Error: a unit test failed:\n",
+      "revId": "6a6a35531aa49a36a6334bb4e34bd7f4b7eea87d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
