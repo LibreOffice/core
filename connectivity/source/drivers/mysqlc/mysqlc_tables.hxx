@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
 #include <connectivity/sdbcx/VCollection.hxx>
