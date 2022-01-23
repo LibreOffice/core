@@ -873,11 +873,7 @@ Reference< chart2::data::XDataSource > SAL_CALL ChartModel::getUsedData()
 Reference< chart2::data::XRangeHighlighter > SAL_CALL ChartModel::getRangeHighlighter()
 {
     if( ! m_xRangeHighlighter.is())
-    {
-        uno::Reference< view::XSelectionSupplier > xSelSupp( getCurrentController(), uno::UNO_QUERY );
-        if( xSelSupp.is() )
-            m_xRangeHighlighter.set( ChartModelHelper::createRangeHighlighter( xSelSupp ));
-    }
+        m_xRangeHighlighter.set( ChartModelHelper::createRangeHighlighter( this ));
     return m_xRangeHighlighter;
 }
 

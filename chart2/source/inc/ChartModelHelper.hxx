@@ -46,7 +46,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS ChartModelHelper
 {
 public:
     static css::uno::Reference< css::chart2::data::XRangeHighlighter > createRangeHighlighter(
-            const css::uno::Reference< css::view::XSelectionSupplier >& xSelectionSupplier );
+            const rtl::Reference< ::chart::ChartModel >& xSelectionSupplier );
 
     static rtl::Reference< InternalDataProvider > createInternalDataProvider(
             const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc, bool bConnectToModel );
