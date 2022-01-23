@@ -33,6 +33,42 @@
       "message": "...and don\u0027t forget to send a license statement",
       "revId": "1cc2690fe2f87e8acce4e9b4e0cb533fda26e295",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7b5263d_9731eaa1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003511
+      },
+      "writtenOn": "2022-01-23T17:08:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eeb9a0f6_16f45289",
+      "revId": "1cc2690fe2f87e8acce4e9b4e0cb533fda26e295",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24eca67d_a9aed822",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003511
+      },
+      "writtenOn": "2022-01-23T17:08:04Z",
+      "side": 1,
+      "message": "License sent to the given mail :)",
+      "parentUuid": "17601193_50edfd74",
+      "revId": "1cc2690fe2f87e8acce4e9b4e0cb533fda26e295",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
