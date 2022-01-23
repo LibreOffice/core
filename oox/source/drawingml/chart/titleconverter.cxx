@@ -36,7 +36,6 @@
 #include <drawingml/textparagraph.hxx>
 #include <drawingml/chart/datasourceconverter.hxx>
 #include <drawingml/chart/titlemodel.hxx>
-#include <oox/helper/containerhelper.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <com/sun/star/chart2/RelativePosition.hpp>

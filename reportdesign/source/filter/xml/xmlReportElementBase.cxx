@@ -18,14 +18,13 @@
  */
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmltkmap.hxx>
+#include <xmloff/xmltoken.hxx>
 #include "xmlReportElementBase.hxx"
 #include "xmlfilter.hxx"
 #include "xmlControlProperty.hxx"
 #include "xmlReportElement.hxx"
 #include "xmlEnums.hxx"
 #include "xmlTable.hxx"
-#include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
 namespace rptxml

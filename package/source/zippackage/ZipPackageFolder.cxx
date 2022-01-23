@@ -17,24 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
 #include <ZipPackageFolder.hxx>
-#include <ZipFile.hxx>
 #include <ZipOutputStream.hxx>
 #include <ZipPackageStream.hxx>
 #include <PackageConstants.hxx>
 #include "ZipPackageFolderEnumeration.hxx"
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/packages/zip/ZipException.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <rtl/digest.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <EncryptedDataHeader.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::packages::zip::ZipConstants;

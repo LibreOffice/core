@@ -63,14 +63,12 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <svx/EnhancedCustomShapeTypeNames.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/svdobj.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;

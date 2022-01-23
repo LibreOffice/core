@@ -20,17 +20,12 @@
 #include "ManifestWriter.hxx"
 #include "ManifestExport.hxx"
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
-#include <osl/diagnose.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;

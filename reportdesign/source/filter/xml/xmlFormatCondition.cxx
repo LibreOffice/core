@@ -22,7 +22,6 @@
 #include <xmloff/xmlnamespace.hxx>
 #include "xmlHelper.hxx"
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace rptxml

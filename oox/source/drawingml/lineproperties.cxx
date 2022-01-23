@@ -31,7 +31,6 @@
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
-#include <oox/helper/containerhelper.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/token/tokens.hxx>
 

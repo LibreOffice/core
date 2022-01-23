@@ -9,8 +9,6 @@
 
 #include <sal/config.h>
 
-#include <stdexcept>
-
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>

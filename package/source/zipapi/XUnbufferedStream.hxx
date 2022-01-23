@@ -19,10 +19,8 @@
 #ifndef INCLUDED_PACKAGE_SOURCE_ZIPAPI_XUNBUFFEREDSTREAM_HXX
 #define INCLUDED_PACKAGE_SOURCE_ZIPAPI_XUNBUFFEREDSTREAM_HXX
 
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 
 #include <comphelper/refcountedmutex.hxx>

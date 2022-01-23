@@ -29,7 +29,6 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <oox/core/fastparser.hxx>
 #include <oox/core/relations.hxx>
-#include <oox/helper/containerhelper.hxx>
 #include "docprophandler.hxx"
 
 #include <comphelper/sequence.hxx>

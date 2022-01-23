@@ -20,10 +20,14 @@
 #include <ZipPackageStream.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/packages/NoRawFormatException.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
+#include <com/sun/star/packages/NoEncryptionException.hpp>
+#include <com/sun/star/packages/zip/ZipException.hpp>
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -32,14 +36,10 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 
-#include <string.h>
-
 #include <CRC32.hxx>
-#include <ThreadedDeflater.hxx>
 #include <ZipOutputEntry.hxx>
 #include <ZipOutputStream.hxx>
 #include <ZipPackage.hxx>
-#include <ZipPackageFolder.hxx>
 #include <ZipFile.hxx>
 #include <EncryptedDataHeader.hxx>
 #include <osl/diagnose.h>
@@ -48,7 +48,6 @@
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/random.h>
@@ -58,7 +57,6 @@
 #include <PackageConstants.hxx>
 
 #include <algorithm>
-#include <thread>
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::packages::zip;

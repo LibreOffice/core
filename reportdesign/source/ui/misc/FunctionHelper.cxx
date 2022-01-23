@@ -20,7 +20,6 @@
 #include <FunctionHelper.hxx>
 
 #include <o3tl/safeint.hxx>
-#include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <formula/funcvarargs.h>
 

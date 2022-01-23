@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
-#include <rtl/ustring.hxx>
 
 namespace com::sun::star {
     namespace beans { struct PropertyValue;}
