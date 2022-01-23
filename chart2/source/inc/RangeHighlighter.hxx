@@ -36,6 +36,7 @@ namespace com::sun::star::view { class XSelectionSupplier; }
 
 namespace chart
 {
+class ChartModel;
 class Diagram;
 
 namespace impl
@@ -52,7 +53,7 @@ class RangeHighlighter final :
 {
 public:
     explicit RangeHighlighter(
-        const css::uno::Reference< css::view::XSelectionSupplier > & xSelectionSupplier );
+        const rtl::Reference< ::chart::ChartModel > & xSelectionSupplier );
     virtual ~RangeHighlighter() override;
 
 protected:
@@ -91,6 +92,7 @@ private:
 
     css::uno::Reference< css::view::XSelectionSupplier >
         m_xSelectionSupplier;
+    rtl::Reference< ::chart::ChartModel > m_xChartModel;
     css::uno::Reference< css::view::XSelectionChangeListener >
         m_xListener;
     css::uno::Sequence< css::chart2::data::HighlightedRange >

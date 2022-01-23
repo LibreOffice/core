@@ -19,6 +19,7 @@
 
 #include <RangeHighlighter.hxx>
 #include <WeakListenerAdapter.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <ObjectIdentifier.hxx>
@@ -69,8 +70,9 @@ namespace chart
 {
 
 RangeHighlighter::RangeHighlighter(
-    const Reference< view::XSelectionSupplier > & xSelectionSupplier ) :
-        m_xSelectionSupplier( xSelectionSupplier ),
+    const rtl::Reference< ChartModel > & xChartModel ) :
+        m_xSelectionSupplier(xChartModel->getCurrentController(), uno::UNO_QUERY),
+        m_xChartModel( xChartModel ),
         m_nAddedListenerCount( 0 ),
         m_bIncludeHiddenCells(true)
 {
@@ -88,17 +90,14 @@ Sequence< chart2::data::HighlightedRange > SAL_CALL RangeHighlighter::getSelecte
 void RangeHighlighter::determineRanges()
 {
     m_aSelectedRanges.realloc( 0 );
+    if( !m_xChartModel.is())
+        return;
     if( !m_xSelectionSupplier.is())
         return;
 
     try
     {
-        Reference< frame::XController > xController( m_xSelectionSupplier, uno::UNO_QUERY );
-        Reference< frame::XModel > xChartModel;
-        if( xController.is())
-            xChartModel.set( xController->getModel());
-
-        m_bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( xChartModel );
+        m_bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( m_xChartModel );
 
         uno::Any aSelection( m_xSelectionSupplier->getSelection());
         const uno::Type& rType = aSelection.getValueType();
@@ -113,7 +112,7 @@ void RangeHighlighter::determineRanges()
             {
                 ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
                 sal_Int32 nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aCID );
-                Reference< chart2::XDataSeries > xDataSeries( ObjectIdentifier::getDataSeriesForCID( aCID, xChartModel ) );
+                Reference< chart2::XDataSeries > xDataSeries( ObjectIdentifier::getDataSeriesForCID( aCID, m_xChartModel ) );
                 if( eObjectType == OBJECTTYPE_LEGEND_ENTRY )
                 {
                     OUString aParentParticel( ObjectIdentifier::getFullParentParticle( aCID ) );
@@ -135,7 +134,7 @@ void RangeHighlighter::determineRanges()
                 {
                     // select error bar ranges, or data series, if the style is
                     // not set to FROM_DATA
-                    fillRangesForErrorBars( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), xDataSeries );
+                    fillRangesForErrorBars( ObjectIdentifier::getObjectPropertySet( aCID, m_xChartModel ), xDataSeries );
                     return;
                 }
                 else if( xDataSeries.is() )
@@ -147,7 +146,7 @@ void RangeHighlighter::determineRanges()
                 else if( eObjectType == OBJECTTYPE_AXIS )
                 {
                     // Axis (Categories)
-                    Reference< chart2::XAxis > xAxis( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), uno::UNO_QUERY );
+                    Reference< chart2::XAxis > xAxis( ObjectIdentifier::getObjectPropertySet( aCID, m_xChartModel ), uno::UNO_QUERY );
                     if( xAxis.is())
                     {
                         fillRangesForCategories( xAxis );
@@ -161,7 +160,7 @@ void RangeHighlighter::determineRanges()
                     )
                 {
                     // Diagram
-                    rtl::Reference< ::chart::Diagram > xDia( ObjectIdentifier::getDiagramForCID( aCID, xChartModel ) );
+                    rtl::Reference< ::chart::Diagram > xDia( ObjectIdentifier::getDiagramForCID( aCID, m_xChartModel ) );
                     if( xDia.is())
                     {
                         fillRangesForDiagram( xDia );
@@ -183,8 +182,7 @@ void RangeHighlighter::determineRanges()
         else
         {
             //if nothing is selected select all ranges
-            Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY_THROW );
-            fillRangesForDiagram( xChartDoc->getFirstDiagram() );
+            fillRangesForDiagram( m_xChartModel->getFirstChartDiagram() );
             return;
         }
     }

@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeHighlighter(
-        const uno::Reference< view::XSelectionSupplier > & xSelectionSupplier )
+        const rtl::Reference< ChartModel > & xSelectionSupplier )
 {
     return new RangeHighlighter( xSelectionSupplier );
 }
