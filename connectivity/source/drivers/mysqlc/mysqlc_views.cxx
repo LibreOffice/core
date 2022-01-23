@@ -47,12 +47,6 @@ void connectivity::mysqlc::Views::impl_refresh()
     static_cast<Catalog&>(m_rParent).refreshViews();
 }
 
-void connectivity::mysqlc::Views::disposing()
-{
-    m_xMetaData.clear();
-    OCollection::disposing();
-}
-
 css::uno::Reference<css::beans::XPropertySet> connectivity::mysqlc::Views::createDescriptor()
 {
     return new connectivity::sdbcx::OView(true, m_xMetaData);
@@ -116,15 +110,7 @@ void connectivity::mysqlc::Views::createView(
         xStmt->execute(aSql);
         ::comphelper::disposeComponent(xStmt);
     }
-    /*  TODO find a way to refresh view to make the new one appear right away
-    // insert the new view also in the tables collection
-    Tables* pTables = static_cast<Tables*>(static_cast<Catalog&>(m_rParent).getPrivateTables());
-    if ( pTables)
-    {
-        OUString sName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::EComposeRule::InDataManipulation, false );
-        pTables->appendNew(sName);
-    }
-*/
+    //  TODO find a way to refresh view to make the new one appear right away
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

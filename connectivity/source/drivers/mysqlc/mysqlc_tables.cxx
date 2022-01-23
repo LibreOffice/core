@@ -54,8 +54,8 @@ connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::createObject(const
     css::uno::Any aCatalog;
     if (!sCatalog.isEmpty())
     {
-        aCatalog <<= sCatalog;
         lcl_unescape(sCatalog);
+        aCatalog <<= sCatalog;
     }
 
     lcl_unescape(sSchema);
