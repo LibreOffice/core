@@ -412,7 +412,7 @@ void ChartTypeTemplate::applyStyles( const Reference< chart2::XDiagram >& xDiagr
     lcl_ensureCorrectMissingValueTreatment( xDiagram, getChartTypeForIndex( 0 ) );
 }
 
-void ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
+void ChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     // reset number format if we had percent stacking on
     bool bPercent = (getStackMode(0) == StackMode::YStackedPercent);
@@ -435,49 +435,32 @@ void ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagr
     }
 
     //reset label placement if default
+    for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : xDiagram->getBaseCoordinateSystems() )
     {
-        uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-        if( xCooSysContainer.is() )
+        //iterate through all chart types in the current coordinate system
+        for( rtl::Reference< ChartType > const & xChartType : xCooSys->getChartTypes2() )
         {
-            const uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-            for( uno::Reference< XCoordinateSystem > const & xCooSys : aCooSysList )
+            //iterate through all series in this chart type
+            const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xChartType->getDataSeries() );
+            for( Reference< XDataSeries > const & xSeries : aSeriesList )
             {
-                //iterate through all chart types in the current coordinate system
-                uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-                OSL_ASSERT( xChartTypeContainer.is());
-                if( !xChartTypeContainer.is() )
+                Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
+                if(!xSeries.is() || !xSeriesProp.is() )
                     continue;
-                const uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-                for( uno::Reference< XChartType > const & xChartType : aChartTypeList )
-                {
-                    //iterate through all series in this chart type
-                    uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-                    OSL_ASSERT( xDataSeriesContainer.is());
-                    if( !xDataSeriesContainer.is() )
-                        continue;
 
-                    const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
-                    for( Reference< XDataSeries > const & xSeries : aSeriesList )
-                    {
-                        Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
-                        if(!xSeries.is() || !xSeriesProp.is() )
-                            continue;
+                uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
+                    xChartType, isSwapXAndY(), xSeries ) );
+                if(!aAvailablePlacements.hasElements())
+                    continue;
 
-                        uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
-                            xChartType, isSwapXAndY(), xSeries ) );
-                        if(!aAvailablePlacements.hasElements())
-                            continue;
+                sal_Int32 nDefaultPlacement = aAvailablePlacements[0];
 
-                        sal_Int32 nDefaultPlacement = aAvailablePlacements[0];
+                lcl_resetLabelPlacementIfDefault( xSeriesProp, nDefaultPlacement );
 
-                        lcl_resetLabelPlacementIfDefault( xSeriesProp, nDefaultPlacement );
-
-                        uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                        if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
-                            for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
-                                lcl_resetLabelPlacementIfDefault( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), nDefaultPlacement );
-                    }
-                }
+                uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+                if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+                    for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
+                        lcl_resetLabelPlacementIfDefault( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), nDefaultPlacement );
             }
         }
     }
@@ -661,6 +644,39 @@ void ChartTypeTemplate::createAxes(
         return;
 
     Reference< XCoordinateSystem > xCooSys( rCoordSys[0] );
+    if(!xCooSys.is())
+        return;
+
+    //create main axis in first coordinate system
+    sal_Int32 nDimCount = xCooSys->getDimension();
+    sal_Int32 nDim=0;
+    for( nDim=0; nDim<nDimCount; ++nDim )
+    {
+        sal_Int32 nAxisCount = getAxisCountByDimension( nDim );
+        if( nDim == 1 &&
+            nAxisCount < 2 && AxisHelper::isSecondaryYAxisNeeded( xCooSys ))
+            nAxisCount = 2;
+        for( sal_Int32 nAxisIndex = 0; nAxisIndex < nAxisCount; ++nAxisIndex )
+        {
+            Reference< XAxis > xAxis = AxisHelper::getAxis( nDim, nAxisIndex, xCooSys );
+            if( !xAxis.is())
+            {
+                // create and add axis
+                xAxis.set( AxisHelper::createAxis(
+                               nDim, nAxisIndex, xCooSys, GetComponentContext() ));
+            }
+        }
+    }
+}
+
+void ChartTypeTemplate::createAxes(
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & rCoordSys )
+{
+    //create missing axes
+    if( rCoordSys.empty() )
+        return;
+
+    rtl::Reference< BaseCoordinateSystem > xCooSys( rCoordSys[0] );
     if(!xCooSys.is())
         return;
 

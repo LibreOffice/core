@@ -83,7 +83,7 @@ protected:
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount ) override;
     virtual void resetStyles(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
+        const rtl::Reference< ::chart::Diagram >& xDiagram ) override;
 
     // ChartTypeTemplate
     virtual sal_Int32 getAxisCountByDimension( sal_Int32 nDimension ) override;

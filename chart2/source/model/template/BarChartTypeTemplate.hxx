@@ -75,7 +75,7 @@ protected:
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount ) override;
     virtual void resetStyles(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
+        const rtl::Reference< ::chart::Diagram >& xDiagram ) override;
 
     // ____ ChartTypeTemplate ____
     virtual rtl::Reference< ::chart::ChartType >

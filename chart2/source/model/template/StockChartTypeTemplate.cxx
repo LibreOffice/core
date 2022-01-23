@@ -234,7 +234,7 @@ void StockChartTypeTemplate::applyStyle(
 }
 
 void StockChartTypeTemplate::resetStyles(
-    const Reference< chart2::XDiagram >& xDiagram )
+    const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     ChartTypeTemplate::resetStyles( xDiagram );
     if( getDimension() == 3 )

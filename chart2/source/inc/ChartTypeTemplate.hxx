@@ -37,6 +37,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
+class BaseCoordinateSystem;
 class ChartType;
 class Diagram;
 class DataInterpreter;
@@ -111,7 +112,7 @@ public:
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount );
     virtual void resetStyles(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+        const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     /// @throws css::uno::RuntimeException
     void applyStyles(
@@ -215,6 +216,8 @@ public:
      */
     void createAxes(
         const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > & rCoordSys );
+    void createAxes(
+        const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > > & rCoordSys );
 
     /** Give the number of requested axis per dimension here.  Default is one
         axis for each dimension
