@@ -62,7 +62,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
@@ -76,7 +75,6 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdoole2.hxx>
 #include <tools/diagnose_ex.h>
-#include <svx/unoapi.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/mathml/export.hxx>
 #include <basegfx/numeric/ftools.hxx>

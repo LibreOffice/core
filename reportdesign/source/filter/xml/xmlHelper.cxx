@@ -43,7 +43,6 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
-#include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
 #define XML_RPT_ALIGNMENT   (XML_DB_TYPES_START+1)

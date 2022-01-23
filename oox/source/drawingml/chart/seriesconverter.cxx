@@ -45,7 +45,6 @@
 #include <drawingml/chart/typegroupmodel.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <oox/core/xmlfilterbase.hxx>
-#include <oox/helper/containerhelper.hxx>
 #include <oox/helper/modelobjecthelper.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>

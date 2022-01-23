@@ -41,7 +41,6 @@
 #include <drawingml/chart/seriesconverter.hxx>
 #include <drawingml/chart/typegroupmodel.hxx>
 #include <oox/core/xmlfilterbase.hxx>
-#include <oox/helper/containerhelper.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>

@@ -9,8 +9,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <unicode/regex.h>
 
 #include <comphelper/configuration.hxx>

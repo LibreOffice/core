@@ -35,7 +35,6 @@
 #include <RptObject.hxx>
 #include <EndMarker.hxx>
 #include <sal/log.hxx>
-#include <svx/unoshape.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <core_resource.hxx>

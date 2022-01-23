@@ -36,7 +36,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <functional>
-#include <string_view>
 
 namespace rptui
 {

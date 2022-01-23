@@ -18,13 +18,11 @@
  */
 
 #include <ByteChucker.hxx>
-#include <PackageConstants.hxx>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 
 ByteChucker::ByteChucker(Reference<XOutputStream> const & xOstream)
 : xStream(xOstream)

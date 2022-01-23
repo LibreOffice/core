@@ -21,7 +21,6 @@
 #define INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
 
 #include <o3tl/cow_wrapper.hxx>
-#include <cppunit/extensions/HelperMacros.h>
 #include <assert.h>
 
 /* Definition of Cow_Wrapper_Clients classes */
