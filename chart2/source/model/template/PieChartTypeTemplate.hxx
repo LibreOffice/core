@@ -80,10 +80,10 @@ protected:
     virtual sal_Int32 getAxisCountByDimension( sal_Int32 nDimension ) override;
 
     virtual void adaptAxes(
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > & rCoordSys ) override;
+        const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > > & rCoordSys ) override;
 
     virtual void adaptScales(
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > & aCooSysSeq,
+        const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > > & aCooSysSeq,
         const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xCategories ) override;
 
     virtual void createChartTypes(
@@ -91,9 +91,9 @@ protected:
                 css::uno::Sequence<
                     css::uno::Reference<
                         css::chart2::XDataSeries > > >& aSeriesSeq,
-            const css::uno::Sequence<
-                css::uno::Reference<
-                    css::chart2::XCoordinateSystem > > & rCoordSys,
+            const std::vector<
+                rtl::Reference<
+                    ::chart::BaseCoordinateSystem > > & rCoordSys,
             const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq
             ) override;
 

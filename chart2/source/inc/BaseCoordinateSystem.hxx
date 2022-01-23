@@ -88,7 +88,7 @@ public:
         const css::uno::Reference< css::chart2::XChartType >& aChartType ) override;
     virtual css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > SAL_CALL getChartTypes() override;
     virtual void SAL_CALL setChartTypes(
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aChartTypes ) override;
+        const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aChartTypes ) final override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
@@ -96,6 +96,7 @@ public:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
+    void setChartTypes( const std::vector< rtl::Reference< ::chart::ChartType > >& aChartTypes );
     const std::vector< rtl::Reference<::chart::ChartType > > & getChartTypes2() const { return m_aChartTypes; }
 
 protected:

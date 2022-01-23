@@ -217,14 +217,14 @@ sal_Int32 PieChartTypeTemplate::getAxisCountByDimension( sal_Int32 /*nDimension*
 }
 
 void PieChartTypeTemplate::adaptAxes(
-    const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > & /*rCoordSys*/ )
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & /*rCoordSys*/ )
 {
     // hide existing axes
     //hhhh todo
 }
 
 void PieChartTypeTemplate::adaptScales(
-    const Sequence< Reference< chart2::XCoordinateSystem > > & aCooSysSeq,
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysSeq,
     const Reference< chart2::data::XLabeledDataSequence > & xCategories //@todo: in future there may be more than one sequence of categories (e.g. charttype with categories at x and y axis )
     )
 {
@@ -233,7 +233,7 @@ void PieChartTypeTemplate::adaptScales(
     //remove explicit scalings from radius axis
     //and ensure correct orientation of scales for donuts
 
-    for( Reference< chart2::XCoordinateSystem > const & coords : aCooSysSeq )
+    for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysSeq )
     {
         try
         {
@@ -278,34 +278,23 @@ void PieChartTypeTemplate::adaptScales(
 
 void PieChartTypeTemplate::createChartTypes(
     const Sequence< Sequence< Reference< chart2::XDataSeries > > > & aSeriesSeq,
-    const Sequence< Reference< chart2::XCoordinateSystem > > & rCoordSys,
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & rCoordSys,
     const std::vector< rtl::Reference< ChartType > >& /* aOldChartTypesSeq */ )
 {
-    if( ! rCoordSys.hasElements() ||
-        ! rCoordSys[0].is() )
+    if( rCoordSys.empty() )
         return;
 
     try
     {
-        Reference< lang::XMultiServiceFactory > xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
-
-        Reference< chart2::XChartType > xCT(
-            xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_PIE ), uno::UNO_QUERY_THROW );
-        Reference< beans::XPropertySet > xCTProp( xCT, uno::UNO_QUERY );
-        if( xCTProp.is())
-        {
-            xCTProp->setPropertyValue(
-                "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
-        }
-        Reference< chart2::XChartTypeContainer > xCTCnt( rCoordSys[0], uno::UNO_QUERY_THROW );
-        xCTCnt->setChartTypes( Sequence< Reference< chart2::XChartType > >( &xCT, 1 ));
+        rtl::Reference< ChartType > xCT = new PieChartType();
+        xCT->setPropertyValue(
+            "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
+        rCoordSys[0]->setChartTypes( std::vector{xCT} );
 
         if( aSeriesSeq.hasElements() )
         {
-            Reference< chart2::XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
             Sequence< Reference< chart2::XDataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));
-            xDSCnt->setDataSeries( aFlatSeriesSeq );
+            xCT->setDataSeries( aFlatSeriesSeq );
 
             DataSeriesHelper::setStackModeAtSeries(
                 aFlatSeriesSeq, rCoordSys[0], getStackMode( 0 ));
