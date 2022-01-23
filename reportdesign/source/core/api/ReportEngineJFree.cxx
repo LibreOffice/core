@@ -40,7 +40,6 @@
 #include <core_resource.hxx>
 
 #include <connectivity/CommonTools.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sfx2/docfilt.hxx>
 
 namespace reportdesign

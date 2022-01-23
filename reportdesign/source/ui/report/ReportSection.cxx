@@ -31,8 +31,8 @@
 
 #include <svx/svdpagv.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <svx/unoshape.hxx>
 #include <svx/gallery.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svditer.hxx>

@@ -23,7 +23,6 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
-#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sax/tools/converter.hxx>
 #include <oox/token/tokens.hxx>

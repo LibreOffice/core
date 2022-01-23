@@ -35,9 +35,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/theme.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <memory>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

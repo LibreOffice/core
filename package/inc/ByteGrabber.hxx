@@ -21,11 +21,6 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/io/BufferSizeExceededException.hpp>
-#include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/NotConnectedException.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <mutex>
 

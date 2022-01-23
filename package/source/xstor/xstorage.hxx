@@ -27,13 +27,10 @@
 #include <com/sun/star/embed/XStorageRawAccess.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
-#include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
@@ -41,11 +38,9 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/packages/NoEncryptionException.hpp>
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/deleter.hxx>

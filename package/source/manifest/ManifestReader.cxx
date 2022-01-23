@@ -19,9 +19,7 @@
 
 #include "ManifestReader.hxx"
 #include "ManifestImport.hxx"
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -29,8 +27,6 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <vector>
 
 using namespace ::std;

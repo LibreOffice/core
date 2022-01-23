@@ -30,7 +30,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <unotools/saveopt.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <connectivity/dbtools.hxx>
 

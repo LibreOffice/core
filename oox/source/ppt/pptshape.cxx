@@ -22,7 +22,6 @@
 #include <drawingml/textbody.hxx>
 #include <drawingml/textparagraph.hxx>
 #include <drawingml/textfield.hxx>
-#include <drawingml/table/tableproperties.hxx>
 #include <editeng/flditem.hxx>
 
 #include <com/sun/star/text/XTextField.hpp>

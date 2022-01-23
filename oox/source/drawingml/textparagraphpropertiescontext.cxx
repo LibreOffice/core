@@ -26,7 +26,6 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <svx/unopage.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/UnitConversion.hxx>
@@ -41,7 +40,6 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include <tools/helpers.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

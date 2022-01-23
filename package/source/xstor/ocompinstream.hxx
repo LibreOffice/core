@@ -21,8 +21,6 @@
 #define INCLUDED_PACKAGE_SOURCE_XSTOR_OCOMPINSTREAM_HXX
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/XExtendedStorageStream.hpp>

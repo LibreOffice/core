@@ -7,6 +7,9 @@ excludelist:
     oox/source/core/filterbase.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
+    oox/source/core/contexthandler2.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     oox/source/core/fragmenthandler2.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
@@ -76,6 +79,12 @@ excludelist:
     oox/source/drawingml/diagram/diagram.cxx:
     # Actually used
     - com/sun/star/xml/dom/XDocument.hpp
+    oox/source/export/drawingml.cxx:
+    # Needed for template
+    - com/sun/star/text/XTextFrame.hpp
+    oox/source/export/vmlexport.cxx:
+    # Needed for template
+    - com/sun/star/text/XTextFrame.hpp
     oox/source/helper/binarystreambase.cxx:
     # Actually used
     - com/sun/star/io/XSeekable.hpp

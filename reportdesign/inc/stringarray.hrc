@@ -10,6 +10,8 @@
 #ifndef INCLUDED_REPORTDESIGN_INC_FNP_HRC
 #define INCLUDED_REPORTDESIGN_INC_FNP_HRC
 
+#include <unotools/resmgr.hxx>
+
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 const TranslateId RID_STR_FORCENEWPAGE_CONST[] =

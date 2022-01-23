@@ -29,6 +29,8 @@
 #include <PackageConstants.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/packages/zip/ZipException.hpp>
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
 #include <com/sun/star/packages/manifest/ManifestWriter.hpp>
 #include <com/sun/star/io/TempFile.hpp>
@@ -37,28 +39,22 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <comphelper/fileurl.hxx>
 #include <ucbhelper/content.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
-#include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/UseBackupException.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
-#include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
@@ -66,12 +62,8 @@
 #include <sal/log.hxx>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 
-#include <cstring>
-#include <memory>
 #include <string_view>
-#include <vector>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>

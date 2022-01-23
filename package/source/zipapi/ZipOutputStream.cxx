@@ -20,10 +20,9 @@
 #include <ZipOutputStream.hxx>
 
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <comphelper/storagehelper.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 
 #include <osl/time.h>
 #include <osl/thread.hxx>

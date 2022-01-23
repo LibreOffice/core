@@ -29,7 +29,6 @@
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/report/KeepTogether.hpp>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace rptxml

@@ -1,0 +1,24 @@
+---
+assumeFilename: package/source/zippackage/ZipPackage.cxx
+excludelist:
+    package/source/manifest/ManifestExport.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    package/source/manifest/ManifestImport.cxx:
+    # Actually used
+    - com/sun/star/xml/sax/XAttributeList.hpp
+    package/source/xstor/owriteablestream.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    package/source/zippackage/ZipPackage.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    package/source/zippackage/ZipPackageFolder.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    package/source/zippackage/ZipPackageStream.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    package/source/xstor/xstorage.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp

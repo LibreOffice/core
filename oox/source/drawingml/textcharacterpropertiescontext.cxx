@@ -29,7 +29,6 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <sax/fastattribs.hxx>
-#include <sax/fastparser.hxx>
 
 #include <sal/log.hxx>
 

@@ -107,7 +107,6 @@
 #include <comphelper/xmltools.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/unit_conversion.hxx>
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -124,7 +123,6 @@
 #include <editeng/escapementitem.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <drawingml/presetgeometrynames.hxx>

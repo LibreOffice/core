@@ -21,8 +21,6 @@
 
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 
 #include <osl/diagnose.h>
 
@@ -30,7 +28,6 @@
 #include <ThreadedDeflater.hxx>
 #include <ZipEntry.hxx>
 #include <ZipFile.hxx>
-#include <ZipPackageBuffer.hxx>
 #include <ZipPackageStream.hxx>
 
 #include <algorithm>

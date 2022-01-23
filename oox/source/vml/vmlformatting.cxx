@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <cstdlib>
-#include <limits>
 
 #include <oox/vml/vmlformatting.hxx>
 

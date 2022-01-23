@@ -21,15 +21,12 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 #include <mutex>
 #include <cppuhelper/implbase.hxx>

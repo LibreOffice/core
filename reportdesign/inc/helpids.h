@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUStringLiteral UID_RPT_PROP_FORMULA = u"REPORTDESIGN_UID_RPT_PROP_FORMULA";
 inline constexpr OUStringLiteral UID_RPT_RPT_PROP_DLG_FONT_TYPE = u"REPORTDESIGN_UID_RPT_RPT_PROP_DLG_FONT_TYPE";
 inline constexpr OUStringLiteral UID_RPT_RPT_PROP_DLG_AREA = u"REPORTDESIGN_UID_RPT_RPT_PROP_DLG_AREA";

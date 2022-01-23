@@ -8,9 +8,6 @@
  */
 
 #include "XBufferedThreadedStream.hxx"
-#include <com/sun/star/packages/zip/ZipIOException.hpp>
-#include <cppuhelper/exc_hlp.hxx>
-#include <sal/log.hxx>
 
 using namespace css::uno;
 

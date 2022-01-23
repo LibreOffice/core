@@ -22,7 +22,6 @@
 
 #include <drawingml/textparagraphproperties.hxx>
 #include <array>
-#include <memory>
 
 namespace oox::drawingml
 {

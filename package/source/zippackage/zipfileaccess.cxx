@@ -20,6 +20,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -28,7 +29,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <zipfileaccess.hxx>
-#include <ZipEnumeration.hxx>
 #include "ZipPackageSink.hxx"
 #include <EncryptionData.hxx>
 

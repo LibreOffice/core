@@ -59,8 +59,8 @@
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/UnitConversion.hxx>
 #include <editeng/unoprnms.hxx>
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -75,6 +75,7 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -87,10 +88,10 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
@@ -100,8 +101,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <sal/log.hxx>
-#include <svx/unoapi.hxx>
-#include <svx/unoshape.hxx>
 #include <svx/sdtaitm.hxx>
 
 using namespace ::oox::core;

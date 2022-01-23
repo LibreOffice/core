@@ -17,13 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/packages/NoEncryptionException.hpp>
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/packages/zip/ZipException.hpp>
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
-#include <com/sun/star/xml/crypto/XCipherContextSupplier.hpp>
-#include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/NSSInitializer.hpp>
@@ -36,7 +39,6 @@
 
 #include <algorithm>
 #include <iterator>
-#include <memory>
 #include <vector>
 
 #include "blowfishcontext.hxx"
@@ -55,7 +57,6 @@
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::packages;
 using namespace com::sun::star::packages::zip;

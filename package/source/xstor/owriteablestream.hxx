@@ -26,10 +26,8 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
-#include <com/sun/star/packages/NoEncryptionException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
@@ -40,7 +38,6 @@
 #include <com/sun/star/beans/StringPair.hpp>
 
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.h>
 
 #include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequenceashashmap.hxx>

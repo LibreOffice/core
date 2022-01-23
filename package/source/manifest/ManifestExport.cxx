@@ -18,8 +18,6 @@
  */
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -28,7 +26,6 @@
 
 #include "ManifestDefines.hxx"
 #include "ManifestExport.hxx"
-#include <sax/tools/converter.hxx>
 
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>

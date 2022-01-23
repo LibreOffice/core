@@ -30,16 +30,15 @@
 #include <com/sun/star/embed/UseBackupException.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/StorageWrappedTargetException.hpp>
+#include <com/sun/star/packages/NoEncryptionException.hpp>
 #include <com/sun/star/packages/NoRawFormatException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
-#include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

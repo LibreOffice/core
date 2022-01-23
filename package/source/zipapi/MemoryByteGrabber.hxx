@@ -19,9 +19,7 @@
 #ifndef INCLUDED_PACKAGE_SOURCE_ZIPAPI_MEMORYBYTEGRABBER_HXX
 #define INCLUDED_PACKAGE_SOURCE_ZIPAPI_MEMORYBYTEGRABBER_HXX
 
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <string.h>
+#include <com/sun/star/uno/Sequence.h>
 
 class MemoryByteGrabber final
 {

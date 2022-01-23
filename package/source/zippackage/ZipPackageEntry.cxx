@@ -24,7 +24,6 @@
 #include <sal/log.hxx>
 
 #include <ZipPackageFolder.hxx>
-#include <ZipPackageStream.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>

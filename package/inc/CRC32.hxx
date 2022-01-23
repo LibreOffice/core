@@ -20,7 +20,7 @@
 #define INCLUDED_PACKAGE_INC_CRC32_HXX
 
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Reference.h>
 
 namespace com::sun::star {
     namespace io { class XInputStream; }

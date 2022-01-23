@@ -14,8 +14,6 @@
 
 #include <string_view>
 
-#include <rtl/ustring.hxx>
-
 namespace openclwrapper
 {
 struct GPUEnv;

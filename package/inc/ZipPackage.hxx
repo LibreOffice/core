@@ -30,15 +30,12 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/refcountedmutex.hxx>
 #include <rtl/ref.hxx>
 
 #include "HashMaps.hxx"
 #include "ZipFile.hxx"
-#include <osl/file.h>
 #include <vector>
-#include <memory>
 #include <optional>
 
 class ZipOutputStream;

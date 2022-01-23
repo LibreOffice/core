@@ -21,19 +21,15 @@
 #define INCLUDED_PACKAGE_INC_ZIPFILEACCESS_HXX
 
 #include <com/sun/star/packages/zip/XZipFileAccess2.hpp>
-#include <com/sun/star/packages/zip/ZipException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/refcountedmutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include "ZipFile.hxx"
-#include "HashMaps.hxx"
 
 #include <memory>
 #include <optional>

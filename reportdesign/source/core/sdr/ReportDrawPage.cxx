@@ -19,11 +19,9 @@
 #include <ReportDrawPage.hxx>
 #include <RptObject.hxx>
 #include <RptModel.hxx>
-#include <RptDef.hxx>
 #include <strings.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
-#include <editeng/outlobj.hxx>
 
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/embed/Aspects.hpp>

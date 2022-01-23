@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <drawingml/chart/chartcontextbase.hxx>
-#include <svl/zforlist.hxx>
 
 class SvNumberFormatter;
 

@@ -19,8 +19,6 @@
 
 #include <drawingml/table/tableproperties.hxx>
 #include <drawingml/table/tablestylelist.hxx>
-#include <drawingml/textbody.hxx>
-#include <drawingml/textparagraph.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>

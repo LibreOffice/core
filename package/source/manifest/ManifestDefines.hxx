@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <PackageConstants.hxx>
+#include <rtl/ustring.hxx>
 
 inline constexpr OUStringLiteral MANIFEST_NSPREFIX = u"manifest:";
 inline constexpr OUStringLiteral ELEMENT_MANIFEST = u"manifest:manifest";

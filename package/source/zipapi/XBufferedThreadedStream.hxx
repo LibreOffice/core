@@ -10,10 +10,13 @@
 #ifndef INCLUDED_PACKAGE_SOURCE_ZIPAPI_XBUFFEREDTHREADEDSTREAM_HXX
 #define INCLUDED_PACKAGE_SOURCE_ZIPAPI_XBUFFEREDTHREADEDSTREAM_HXX
 
+#include <com/sun/star/io/XInputStream.hpp>
+
+#include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
-#include "XUnbufferedStream.hxx"
+
 #include <queue>
-#include <vector>
 #include <mutex>
 #include <condition_variable>
 

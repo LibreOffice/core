@@ -21,10 +21,10 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <com/sun/star/packages/NoEncryptionException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -49,7 +49,6 @@
 #include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <rtl/digest.h>
 #include <tools/diagnose_ex.h>
 
 #include <PackageConstants.hxx>

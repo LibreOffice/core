@@ -22,7 +22,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/packages/manifest/XManifestWriter.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace com::sun::star {
