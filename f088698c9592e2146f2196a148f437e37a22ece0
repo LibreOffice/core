@@ -16,6 +16,24 @@
       "message": "Thanks, this already looks great.  I have two further suggestions for improving it, if you like:\n\n* For one, while the various functions in include/comphelper/configuration.hxx can be called without an explicit XComponentContext (which then defaults to comphelper::getProcessComponentContext()), that\u0027s something of a hack, and as we already had passed around an XComponentContext here, I would suggest to keep using it.\n\n* For another, you can get rid of some of the no-longer needed #includes in extensions/source/config/WinUserInfo/WinUserInfoBe.cxx now.",
       "revId": "f088698c9592e2146f2196a148f437e37a22ece0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2126b4d_54786614",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2022-01-23T00:56:27Z",
+      "side": 1,
+      "message": "Okay, I\u0027ve added the context back in for get(). set() does not take a context as an argument.\n\nI am also wondering what I should do for the rest of the instances of configurationhelper.hxx. I would like to fix the ones that I can. Should I keep making patches for every instance I can change or do it all at once?",
+      "parentUuid": "24b5414d_c9c4341b",
+      "revId": "f088698c9592e2146f2196a148f437e37a22ece0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
