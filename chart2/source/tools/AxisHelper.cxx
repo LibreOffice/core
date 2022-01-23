@@ -136,14 +136,13 @@ void AxisHelper::checkDateAxis( chart2::ScaleData& rScale, ExplicitCategoriesPro
 sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                   const Reference< chart2::XAxis >& xAxis
                 , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
-                , const Reference<chart2::XChartDocument>& xChartDoc
+                , const rtl::Reference<ChartModel>& xChartDoc
                 , bool bSearchForParallelAxisIfNothingIsFound )
 {
     sal_Int32 nNumberFormatKey(0);
     sal_Int32 nAxisIndex = 0;
     sal_Int32 nDimensionIndex = 1;
     AxisHelper::getIndicesForAxis( xAxis, xCorrespondingCoordinateSystem, nDimensionIndex, nAxisIndex );
-    Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(xChartDoc, uno::UNO_QUERY);
 
     Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
     if (!xProp.is())
@@ -157,18 +156,12 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
     {
         bool bFormatSet = false;
         //check whether we have a percent scale -> use percent format
-        ChartModel* pModel = nullptr;
-        if( xNumberFormatsSupplier.is() )
+        if (xChartDoc)
         {
-            pModel = dynamic_cast<ChartModel*>( xChartDoc.get() );
-            assert(pModel);
-        }
-        if (pModel)
-        {
-            ScaleData aData = AxisHelper::getDateCheckedScale( xAxis, *pModel );
+            ScaleData aData = AxisHelper::getDateCheckedScale( xAxis, *xChartDoc );
             if( aData.AxisType==AxisType::PERCENT )
             {
-                sal_Int32 nPercentFormat = DiagramHelper::getPercentNumberFormat( xNumberFormatsSupplier );
+                sal_Int32 nPercentFormat = DiagramHelper::getPercentNumberFormat( xChartDoc );
                 if( nPercentFormat != -1 )
                 {
                     nNumberFormatKey = nPercentFormat;
@@ -183,7 +176,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                     if( xSeq.is() && !( xChartDoc.is() && xChartDoc->hasInternalDataProvider()) )
                         nNumberFormatKey = xSeq->getNumberFormatKeyByIndex( -1 );
                     else
-                        nNumberFormatKey = DiagramHelper::getDateNumberFormat( xNumberFormatsSupplier );
+                        nNumberFormatKey = DiagramHelper::getDateNumberFormat( xChartDoc );
                     bFormatSet = true;
                 }
             }
@@ -192,11 +185,11 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram() );
                 if( DiagramHelper::isSupportingDateAxis( xDiagram ) )
                 {
-                    nNumberFormatKey = DiagramHelper::getDateNumberFormat( xNumberFormatsSupplier );
+                    nNumberFormatKey = DiagramHelper::getDateNumberFormat( xChartDoc );
                 }
                 else
                 {
-                    Reference< data::XDataSource > xSource( DataSourceHelper::getUsedData( xChartDoc ) );
+                    Reference< data::XDataSource > xSource( DataSourceHelper::getUsedData( Reference< XChartDocument >(xChartDoc) ) );
                     if( xSource.is() )
                     {
                         std::vector< Reference< chart2::data::XLabeledDataSequence > > aXValues(
@@ -222,7 +215,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                                         }
                                     }
                                     if( bHasValidDoubles )
-                                        nNumberFormatKey = DiagramHelper::getDateNumberFormat( xNumberFormatsSupplier );
+                                        nNumberFormatKey = DiagramHelper::getDateNumberFormat( xChartDoc );
                                 }
                             }
                         }

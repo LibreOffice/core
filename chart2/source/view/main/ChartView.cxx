@@ -1819,7 +1819,9 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                 , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
                 , const css::uno::Reference< css::chart2::XChartDocument>& xChartDoc)
 {
-    return AxisHelper::getExplicitNumberFormatKeyForAxis( xAxis, xCorrespondingCoordinateSystem, xChartDoc
+    auto pChartModel = dynamic_cast<ChartModel*>(xChartDoc.get());
+    assert(!xChartDoc || pChartModel);
+    return AxisHelper::getExplicitNumberFormatKeyForAxis( xAxis, xCorrespondingCoordinateSystem, pChartModel
         , true /*bSearchForParallelAxisIfNothingIsFound*/ );
 }
 
