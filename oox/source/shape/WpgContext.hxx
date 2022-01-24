@@ -28,7 +28,7 @@ public:
 
     const oox::drawingml::ShapePtr& getShape() const { return mpShape; }
 
-    const bool& isFullWPGSupport() { return m_bFullWPGSupport; };
+    const bool& isFullWPGSupport() const { return m_bFullWPGSupport; };
     void setFullWPGSupport(const bool& rbUse) { m_bFullWPGSupport = rbUse; };
 
 private:
