@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18105b95_53f698c6",
+        "filename": "setup_native/source/win32/customactions/shellextensions/checkpatches.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2022-01-24T11:45:00Z",
+      "side": 0,
+      "message": "do we still need this header?\nthis was added in https://gerrit.libreoffice.org/c/core/+/113476",
+      "revId": "ed9b410a1932fabfd335ab0b613be6595af6a5a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
