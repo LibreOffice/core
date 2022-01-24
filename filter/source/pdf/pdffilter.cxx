@@ -30,6 +30,9 @@
 
 #include <com/sun/star/io/XOutputStream.hpp>
 
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
+
 using namespace ::com::sun::star::io;
 
 PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
@@ -47,6 +50,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 {
     Reference< XOutputStream >  xOStm;
     Sequence< PropertyValue >   aFilterData;
+    OUString aFilterOptions;
     sal_Int32                   nLength = rDescriptor.getLength();
     const PropertyValue*        pValue = rDescriptor.getConstArray();
     bool                        bIsRedactMode = false;
@@ -60,6 +64,8 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             pValue[ i ].Value >>= xOStm;
         else if ( pValue[ i ].Name == "FilterData" )
             pValue[ i ].Value >>= aFilterData;
+        else if ( pValue[ i ].Name == "FilterOptions" )
+            pValue[ i ].Value >>= aFilterOptions;
         else if ( pValue[ i ].Name == "StatusIndicator" )
             pValue[ i ].Value >>= xStatusIndicator;
         else if ( pValue[i].Name == "InteractionHandler" )
@@ -70,6 +76,13 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     {
         if ( pValue[i].Name == "IsRedactMode")
             pValue[i].Value >>= bIsRedactMode;
+    }
+
+    if (!aFilterData.hasElements() && !aFilterOptions.isEmpty())
+    {
+        // Allow setting filter data keys from the cmdline.
+        std::vector<PropertyValue> aData = comphelper::JsonToPropertyValues(aFilterOptions.toUtf8());
+        aFilterData = comphelper::containerToSequence(aData);
     }
 
     /* we don't get FilterData if we are exporting directly
