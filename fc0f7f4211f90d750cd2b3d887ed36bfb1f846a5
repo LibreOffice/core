@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "022856af_442a7726",
+        "filename": "sfx2/source/dialog/basedlgs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-24T20:46:26Z",
+      "side": 1,
+      "message": "I\u0027ve just realized in the conflicting patch that they can be (should be allowed to) closed and get reopened/relaunched so the mbClosing should be reset back to false for that case.\n\nBut maybe its easier to disconnect the focus callback when we know we\u0027re tearing down. Let me check that.",
+      "revId": "fc0f7f4211f90d750cd2b3d887ed36bfb1f846a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
