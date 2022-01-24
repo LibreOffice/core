@@ -207,4 +207,6 @@ inline constexpr OUStringLiteral BMP_MENU_PREV = u"cmd/sc_prevrecord.png";
 inline constexpr OUStringLiteral BMP_MENU_FIRST = u"cmd/sc_firstrecord.png";
 inline constexpr OUStringLiteral BMP_MENU_LAST = u"cmd/sc_lastrecord.png";
 
+inline constexpr OUStringLiteral SFX_BMP_CLOSE_DOC = u"sfx2/res/closedoc.png";
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
