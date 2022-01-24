@@ -16,6 +16,23 @@
       "message": "online.git calc/bottom_toolbar_spec.js failed, retry",
       "revId": "f0afcb84486119a2d42429d577360a1925340d66",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5499320b_cd314fc1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-24T14:25:44Z",
+      "side": 1,
+      "message": "Mike: could you please review this? Thanks.\n\nThis is a one-page floating table, and the content originally didn\u0027t fit because the floating table has a negative top position. This is fine for fly frames, but normal tables can only have non-negative margins, so this feels like a clear case where we want floating tables.",
+      "revId": "f0afcb84486119a2d42429d577360a1925340d66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
