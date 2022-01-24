@@ -7102,6 +7102,7 @@ private:
     GtkButtonBox* m_pButtonBox;
 #else
     GtkBox* m_pButtonBox;
+    GtkEventController* m_pSidebarClickController;
 #endif
     GtkButton* m_pHelp;
     GtkButton* m_pBack;
@@ -7160,15 +7161,23 @@ private:
         help();
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalButton(GtkGestureClick* /*pGesture*/, int /*n_press*/, gdouble x, gdouble y, gpointer widget)
+    {
+        GtkInstanceAssistant* pThis = static_cast<GtkInstanceAssistant*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_button(x, y);
+    }
+#else
     static gboolean signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
     {
         GtkInstanceAssistant* pThis = static_cast<GtkInstanceAssistant*>(widget);
         SolarMutexGuard aGuard;
-        return pThis->signal_button(pEvent);
+        return pThis->signal_button(pEvent->x, pEvent->y);
     }
+#endif
 
-    bool signal_button(const GdkEventButton* pEvent)
+    bool signal_button(gtk_coord event_x, gtk_coord event_y)
     {
         int nNewCurrentPage = -1;
 
@@ -7178,7 +7187,7 @@ private:
 
 #if GTK_CHECK_VERSION(4, 0, 0)
         for (GtkWidget* pWidget = gtk_widget_get_first_child(m_pSidebar);
-             pWidget; pWidget = gtk_widget_get_next_sibling(pChild))
+             pWidget; pWidget = gtk_widget_get_next_sibling(pWidget))
         {
 #else
         GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pSidebar));
@@ -7208,7 +7217,7 @@ private:
                                              &dest_y2);
 
 
-            if (pEvent->x >= dest_x1 && pEvent->x <= dest_x2 && pEvent->y >= dest_y1 && pEvent->y <= dest_y2)
+            if (event_x >= dest_x1 && event_x <= dest_x2 && event_y >= dest_y1 && event_y <= dest_y2)
             {
                 nNewCurrentPage = nPageIndex;
                 break;
@@ -7229,13 +7238,16 @@ private:
 
         return false;
     }
-#endif
 
 public:
     GtkInstanceAssistant(GtkAssistant* pAssistant, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceDialog(GTK_WINDOW(pAssistant), pBuilder, bTakeOwnership)
         , m_pAssistant(pAssistant)
         , m_pSidebar(nullptr)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        , m_pSidebarClickController(nullptr)
+#endif
+        , m_nButtonPressSignalId(0)
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         m_pButtonBox = GTK_BUTTON_BOX(gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL));
@@ -7248,38 +7260,80 @@ public:
         m_pBack = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Back)).getStr()));
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_set_can_default(GTK_WIDGET(m_pBack), true);
+#endif
         ::set_buildable_id(GTK_BUILDABLE(m_pBack), "previous");
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_box_append(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pBack));
+#else
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pBack), false, false, 0);
+#endif
 
         m_pNext = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Next)).getStr()));
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_set_can_default(GTK_WIDGET(m_pNext), true);
+#endif
         ::set_buildable_id(GTK_BUILDABLE(m_pNext), "next");
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_box_append(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pNext));
+#else
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pNext), false, false, 0);
+#endif
 
         m_pCancel = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Cancel)).getStr()));
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_set_can_default(GTK_WIDGET(m_pCancel), true);
+#endif
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_box_append(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pCancel));
+#else
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pCancel), false, false, 0);
+#endif
 
         m_pFinish = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Finish)).getStr()));
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_set_can_default(GTK_WIDGET(m_pFinish), true);
+#endif
         ::set_buildable_id(GTK_BUILDABLE(m_pFinish), "finish");
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_box_append(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pFinish));
+#else
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pFinish), false, false, 0);
+#endif
 
         m_pHelp = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Help)).getStr()));
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_set_can_default(GTK_WIDGET(m_pHelp), true);
+#endif
         g_signal_connect(m_pHelp, "clicked", G_CALLBACK(signalHelpClicked), this);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_box_prepend(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pHelp));
+        gtk_widget_set_hexpand(GTK_WIDGET(m_pHelp), true);
+        gtk_widget_set_halign(GTK_WIDGET(m_pHelp), GTK_ALIGN_START);
+#else
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pHelp), false, false, 0);
+#endif
 
         gtk_assistant_add_action_widget(pAssistant, GTK_WIDGET(m_pButtonBox));
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_button_box_set_child_secondary(m_pButtonBox, GTK_WIDGET(m_pHelp), true);
+#endif
         gtk_widget_set_hexpand(GTK_WIDGET(m_pButtonBox), true);
 
         GtkWidget* pParent = gtk_widget_get_parent(GTK_WIDGET(m_pButtonBox));
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_child_set(GTK_CONTAINER(pParent), GTK_WIDGET(m_pButtonBox), "expand", true, "fill", true, nullptr);
+#endif
         gtk_widget_set_halign(pParent, GTK_ALIGN_FILL);
 
         // Hide the built-in ones early so we get a nice optimal size for the width without
         // including the unused contents
+#if GTK_CHECK_VERSION(4, 0, 0)
+        for (GtkWidget* pChild = gtk_widget_get_first_child(pParent);
+             pChild; pChild = gtk_widget_get_next_sibling(pChild))
+        {
+            gtk_widget_hide(pChild);
+        }
+#else
         GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pParent));
         for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
         {
@@ -7287,6 +7341,7 @@ public:
             gtk_widget_hide(pWidget);
         }
         g_list_free(pChildren);
+#endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_show_all(GTK_WIDGET(m_pButtonBox));
@@ -7297,8 +7352,18 @@ public:
         find_sidebar(GTK_WIDGET(m_pAssistant), &m_pSidebar);
 
         m_pSidebarEventBox = ::ensureEventWidget(m_pSidebar);
-        m_nButtonPressSignalId = m_pSidebarEventBox ? g_signal_connect(m_pSidebarEventBox, "button-press-event", G_CALLBACK(signalButton), this) : 0;
+        if (m_pSidebarEventBox)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            GtkGesture *pClick = gtk_gesture_click_new();
+            gtk_gesture_single_set_button(GTK_GESTURE_SINGLE(pClick), 0);
+            m_pSidebarClickController = GTK_EVENT_CONTROLLER(pClick);
+            gtk_widget_add_controller(m_pSidebarEventBox, m_pSidebarClickController);
+            m_nButtonPressSignalId = g_signal_connect(m_pSidebarClickController, "pressed", G_CALLBACK(signalButton), this);
+#else
+            m_nButtonPressSignalId = g_signal_connect(m_pSidebarEventBox, "button-press-event", G_CALLBACK(signalButton), this);
 #endif
+        }
     }
 
     virtual int get_current_page() const override
@@ -7441,7 +7506,13 @@ public:
     virtual ~GtkInstanceAssistant() override
     {
         if (m_nButtonPressSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(m_pSidebarClickController, m_nButtonPressSignalId);
+#else
             g_signal_handler_disconnect(m_pSidebarEventBox, m_nButtonPressSignalId);
+#endif
+        }
     }
 };
 
