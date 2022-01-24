@@ -450,7 +450,9 @@ void DataSourceHelper::setRangeSegmentation(
     if( !xDataSource.is() )
         return;
 
-    ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
+    auto pModel = dynamic_cast<ChartModel*>(xChartModel.get());
+    assert(pModel);
+    ControllerLockGuardUNO aCtrlLockGuard( pModel );
     xDiagram->setDiagramData( xDataSource, aArguments );
 }
 

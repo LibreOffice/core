@@ -862,12 +862,12 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
 
 Sequence< OUString > SAL_CALL ChartModel::getUsedRangeRepresentations()
 {
-    return DataSourceHelper::getUsedDataRanges( Reference< frame::XModel >(this));
+    return DataSourceHelper::getUsedDataRanges( this );
 }
 
 Reference< chart2::data::XDataSource > SAL_CALL ChartModel::getUsedData()
 {
-    return DataSourceHelper::getUsedData( Reference< chart2::XChartDocument >(this));
+    return DataSourceHelper::getUsedData( *this );
 }
 
 Reference< chart2::data::XRangeHighlighter > SAL_CALL ChartModel::getRangeHighlighter()
@@ -1247,7 +1247,7 @@ void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent 
 uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartModel::getDataSequences()
 {
     Reference< chart2::data::XDataSource > xSource(
-        DataSourceHelper::getUsedData( uno::Reference< frame::XModel >(this) ) );
+        DataSourceHelper::getUsedData( *this ) );
     if( xSource.is())
         return xSource->getDataSequences();
 
