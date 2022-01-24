@@ -10,7 +10,6 @@
 import org.libreoffice.unotest
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
-import time
 
 class tdf106899(UITestCase):
 
