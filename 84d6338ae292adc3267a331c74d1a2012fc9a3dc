@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86e8475c_a4692407",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2022-01-24T10:53:24Z",
+      "side": 1,
+      "message": "Thanks for the patch, Rash, looks great!",
+      "revId": "84d6338ae292adc3267a331c74d1a2012fc9a3dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
