@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-11-29 09:45:10 using:
+ Generated on 2022-01-24 15:46:15 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,6 +39,7 @@
 #include <new>
 #include <optional>
 #include <ostream>
+#include <set>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -116,7 +117,6 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
@@ -128,13 +128,14 @@
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
 #include <vcl/window.hxx>
-#include <vcl/wrkwin.hxx>
+#include <vcl/windowstate.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <basic/basicdllapi.h>
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
@@ -198,19 +199,20 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -221,8 +223,6 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -261,12 +261,14 @@
 #include <com/sun/star/util/RevisionTag.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <comphelper/compbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/docpasswordhelper.hxx>
@@ -274,6 +276,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/multicontainer2.hxx>
@@ -288,7 +291,6 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -296,9 +298,14 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <framework/fwkdllapi.h>
@@ -306,6 +313,7 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -458,7 +466,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/templatedlg.hxx>
-#include <sfx2/templatelocalview.hxx>
 #include <sfx2/thumbnailview.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <sfx2/tplpitem.hxx>
