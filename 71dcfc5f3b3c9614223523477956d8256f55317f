@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d051cd97_1e7b99bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-24T21:52:01Z",
+      "side": 1,
+      "message": "I just cleaned up the fods a little like it was done recently for all test documents, i.e. remove the \u003coffice:settings\u003e, \u003coffice:scripts\u003e and \u003coffice:font-face-decls\u003e elements.\n",
+      "revId": "71dcfc5f3b3c9614223523477956d8256f55317f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
