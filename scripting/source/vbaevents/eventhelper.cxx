@@ -253,7 +253,7 @@ static EventInfoHash& getEventTransInfo()
         EventInfoHash tmp;
         OUString sEventInfo;
         TranslatePropMap* pTransProp = aTranslatePropMap_Impl;
-        int nCount = SAL_N_ELEMENTS(aTranslatePropMap_Impl);
+        int nCount = std::size(aTranslatePropMap_Impl);
 
         int i = 0;
         while (i < nCount)

@@ -77,7 +77,7 @@ std::pair<std::u16string_view, std::u16string_view> const s_encodings[]
         { u"CP865", u"Western Europe (DOS/OS2-865/Nordic)" },
         { u"CP1252", u"Western Europe (Windows-1252/WinLatin 1)" } };
 
-std::size_t const numEncodings = SAL_N_ELEMENTS(s_encodings);
+std::size_t const numEncodings = std::size(s_encodings);
 
 void insertEncodings(weld::ComboBox& box)
 {

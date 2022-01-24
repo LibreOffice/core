@@ -114,7 +114,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     // Handle inset attributes for Writer textframes.
                     sal_Int32 aInsets[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
                     std::optional<sal_Int32> oInsets[4];
-                    for (std::size_t i = 0; i < SAL_N_ELEMENTS(aInsets); ++i)
+                    for (std::size_t i = 0; i < std::size(aInsets); ++i)
                     {
                         OptValue<OUString> oValue = rAttribs.getString(aInsets[i]);
                         if (oValue.has())
@@ -127,7 +127,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     const OUString aShapeProps[]
                         = { OUString("TextLeftDistance"), OUString("TextUpperDistance"),
                             OUString("TextRightDistance"), OUString("TextLowerDistance") };
-                    for (std::size_t i = 0; i < SAL_N_ELEMENTS(aShapeProps); ++i)
+                    for (std::size_t i = 0; i < std::size(aShapeProps); ++i)
                         if (oInsets[i])
                             xPropertySet->setPropertyValue(aShapeProps[i],
                                                            uno::makeAny(*oInsets[i]));

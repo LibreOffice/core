@@ -1853,7 +1853,7 @@ css::uno::Any cppuhelper::TypeManager::find(OUString const & name) {
         { std::u16string_view(u"string"), css::uno::TypeClass_STRING },
         { std::u16string_view(u"type"), css::uno::TypeClass_TYPE },
         { std::u16string_view(u"any"), css::uno::TypeClass_ANY } };
-    for (std::size_t i = 0; i != SAL_N_ELEMENTS(simple); ++i) {
+    for (std::size_t i = 0; i != std::size(simple); ++i) {
         if (name == simple[i].name) {
             return css::uno::makeAny<
                 css::uno::Reference< css::reflection::XTypeDescription > >(

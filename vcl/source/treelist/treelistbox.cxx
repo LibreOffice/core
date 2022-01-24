@@ -1135,7 +1135,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
         xContainer.set(new TransferDataContainer);
         // apparently some (unused) content is needed
         xContainer->CopyAnyData( SotClipboardFormatId::TREELISTBOX,
-                                    "unused", SAL_N_ELEMENTS("unused") );
+                                    "unused", std::size("unused") );
     }
 
     nDragDropMode = NotifyStartDrag();

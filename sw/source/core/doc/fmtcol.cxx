@@ -285,7 +285,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
     }
 
-    for( int nC = 0; nC < int(SAL_N_ELEMENTS(aFontSizeArr)); ++nC )
+    for( int nC = 0; nC < int(std::size(aFontSizeArr)); ++nC )
     {
         const SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
         if( pFSize && SfxItemState::SET == GetItemState(

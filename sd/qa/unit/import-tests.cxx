@@ -324,7 +324,7 @@ void SdImportTest::testDocumentLayout()
         // { u"pptx/n828390.pptx", u"pptx/xml/n828390_", PPTX, PPTX }, // Example
     };
 
-    for ( int i = 0; i < static_cast< int >( SAL_N_ELEMENTS( aFilesToCompare ) ); ++i )
+    for ( int i = 0; i < static_cast< int >( std::size( aFilesToCompare ) ); ++i )
     {
         int const nUpdateMe = -1; // index of test we want to update; supposedly only when the test is created
 
@@ -1090,7 +1090,7 @@ void SdImportTest::testFdo71075()
     uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(xSource->getDataSequences());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Invalid Series count", static_cast<sal_Int32>(1), aSeqCnt.getLength());
     uno::Reference< chart2::data::XDataSequence > xValueSeq( aSeqCnt[0]->getValues() );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Invalid Data count", static_cast<sal_Int32>(SAL_N_ELEMENTS(values)), xValueSeq->getData().getLength());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Invalid Data count", static_cast<sal_Int32>(std::size(values)), xValueSeq->getData().getLength());
     uno::Reference< chart2::data::XNumericalDataSequence > xNumSeq( xValueSeq, uno::UNO_QUERY );
     uno::Sequence< double > aValues( xNumSeq->getNumericalData());
     for(sal_Int32 i=0;i<xValueSeq->getData().getLength();i++)
@@ -1455,14 +1455,14 @@ void SdImportTest::testTableBorderLineStyle()
         };
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
-    CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(nObjBorderLineStyles), pPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(std::size(nObjBorderLineStyles), pPage->GetObjCount());
 
     sdr::table::SdrTableObj *pTableObj;
     uno::Reference< table::XCellRange > xTable;
     uno::Reference< beans::XPropertySet > xCell;
     table::BorderLine2 aBorderLine;
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(nObjBorderLineStyles); i++)
+    for (size_t i = 0; i < std::size(nObjBorderLineStyles); i++)
     {
         pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(i));
         CPPUNIT_ASSERT( pTableObj );
@@ -1887,7 +1887,7 @@ void SdImportTest::testTdf99729()
 {
     const OUString filenames[] = { "/sd/qa/unit/data/odp/tdf99729-new.odp", "/sd/qa/unit/data/odp/tdf99729-legacy.odp" };
     int nonwhitecounts[] = { 0, 0 };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(filenames); ++i)
+    for (size_t i = 0; i < std::size(filenames); ++i)
     {
         // 1st check for new behaviour - having AnchoredTextOverflowLegacy compatibility flag set to false in settings.xml
         uno::Reference<lang::XComponent> xComponent

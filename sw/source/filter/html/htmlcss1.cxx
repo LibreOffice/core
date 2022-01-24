@@ -90,7 +90,7 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
 SwCSS1Parser::SwCSS1Parser(SwDoc *const pDoc, SwHTMLParser const& rParser,
         const sal_uInt32 aFHeights[7], const OUString& rBaseURL, bool const bNewDoc)
     : SvxCSS1Parser(pDoc->GetAttrPool(), rBaseURL,
-                   aItemIds, SAL_N_ELEMENTS(aItemIds))
+                   aItemIds, std::size(aItemIds))
     , m_pDoc( pDoc )
     , m_rHTMLParser(rParser)
     , m_nDropCapCnt( 0 ),
@@ -664,9 +664,9 @@ static void RemoveScriptItems( SfxItemSet& rItemSet, Css1ScriptFlags nScript,
         break;
        }
 
-    for( size_t j=0; j < SAL_N_ELEMENTS(aWhichIds); ++j )
+    for( size_t j=0; j < std::size(aWhichIds); ++j )
     {
-        for( size_t i=0; i < SAL_N_ELEMENTS(aWhichIds[0]); ++i )
+        for( size_t i=0; i < std::size(aWhichIds[0]); ++i )
         {
             sal_uInt16 nWhich = aWhichIds[j][i];
             const SfxPoolItem *pItem;

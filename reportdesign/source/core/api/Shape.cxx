@@ -41,7 +41,7 @@ static uno::Sequence< OUString > lcl_getShapeOptionals()
         ,OUString(PROPERTY_CONTROLBACKGROUND)
         ,OUString(PROPERTY_CONTROLBACKGROUNDTRANSPARENT)
     };
-    return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
+    return uno::Sequence< OUString >(pProps,std::size(pProps));
 }
 
 

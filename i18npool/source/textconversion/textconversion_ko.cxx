@@ -98,10 +98,10 @@ static sal_Int16 checkScriptType(sal_Unicode c)
 
     UBlockCode block=ublock_getCode(static_cast<sal_uInt32>(c));
     size_t i;
-    for ( i = 0; i < SAL_N_ELEMENTS(scriptList); i++) {
+    for ( i = 0; i < std::size(scriptList); i++) {
         if (block <= scriptList[i].to) break;
     }
-    return (i < SAL_N_ELEMENTS(scriptList) && block >= scriptList[i].from) ? scriptList[i].script : SCRIPT_OTHERS;
+    return (i < std::size(scriptList) && block >= scriptList[i].from) ? scriptList[i].script : SCRIPT_OTHERS;
 }
 
 #ifdef DISABLE_DYNLOADING

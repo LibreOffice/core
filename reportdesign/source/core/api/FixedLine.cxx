@@ -119,7 +119,7 @@ static uno::Sequence< OUString > lcl_getLineOptionals()
 
 
     };
-    return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
+    return uno::Sequence< OUString >(pProps,std::size(pProps));
 }
 
 OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContext)

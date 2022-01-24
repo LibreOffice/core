@@ -609,7 +609,7 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
         if( AUTOFORMAT_DATA_ID_552 <= nVer )
         {
             rStream.ReadUInt16( nStrResId );
-            if (nStrResId < SAL_N_ELEMENTS(RID_SVXSTR_TBLAFMT))
+            if (nStrResId < std::size(RID_SVXSTR_TBLAFMT))
                 aName = SvxResId(RID_SVXSTR_TBLAFMT[nStrResId]);
             else
                 nStrResId = USHRT_MAX;

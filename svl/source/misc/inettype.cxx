@@ -300,7 +300,7 @@ OUString INetContentTypes::GetContentType(INetContentType eTypeID)
 INetContentType INetContentTypes::GetContentType4Extension(OUString const & rExtension)
 {
     MediaTypeEntry const * pEntry = seekEntry(rExtension, aStaticExtensionMap,
-                                              SAL_N_ELEMENTS(aStaticExtensionMap));
+                                              std::size(aStaticExtensionMap));
     if (pEntry)
         return pEntry->m_eTypeID;
     return CONTENT_TYPE_APP_OCTSTREAM;

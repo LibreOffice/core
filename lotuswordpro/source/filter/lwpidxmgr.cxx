@@ -136,7 +136,7 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
     sal_uInt16 KeyCount = pObjStrm->QuickReaduInt16();
     m_nLeafCount = KeyCount ? KeyCount + 1 : 0;
 
-    if (m_nLeafCount > SAL_N_ELEMENTS(m_ChildIndex))
+    if (m_nLeafCount > std::size(m_ChildIndex))
         throw std::range_error("corrupt RootData");
 
     if (KeyCount)

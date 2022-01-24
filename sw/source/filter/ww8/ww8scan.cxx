@@ -230,7 +230,7 @@ const wwSprmSearcher *wwSprmParser::GetWW2SprmSearcher()
         {164, { 4, L_FIX} }, // "sprmTSetShd", tap.rgshd complex 4 bytes
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
+    static wwSprmSearcher aSprmSrch(aSprms, std::size(aSprms));
     return &aSprmSrch;
 };
 
@@ -416,11 +416,11 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher(const WW8Fib& rFib)
     if (rFib.m_wIdent >= 0xa697 && rFib.m_wIdent <= 0xa699)
     {
         //see Read_AmbiguousSPRM for this oddity
-        static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms), true);
+        static wwSprmSearcher aSprmSrch(aSprms, std::size(aSprms), true);
         return &aSprmSrch;
     }
 
-    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
+    static wwSprmSearcher aSprmSrch(aSprms, std::size(aSprms));
     return &aSprmSrch;
 };
 
@@ -775,7 +775,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         InfoRow<NS_sprm::PFContextualSpacing>(),
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
+    static wwSprmSearcher aSprmSrch(aSprms, std::size(aSprms));
     return &aSprmSrch;
 };
 

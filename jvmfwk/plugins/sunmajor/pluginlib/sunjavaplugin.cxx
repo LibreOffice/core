@@ -581,7 +581,7 @@ static void do_msvcr_magic(OUString const &jvm_dll)
         };
         char const* importName = reinterpret_cast<char *>(dos_hdr) + imports->Name + VAtoPhys;
         sal_Int32 importNameLen = rtl_str_getLength(importName);
-        for (size_t i = 0; i < SAL_N_ELEMENTS(msvcrts); ++i)
+        for (size_t i = 0; i < std::size(msvcrts); ++i)
         {
             if (0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
                     msvcrts[i].data(), msvcrts[i].size(),

@@ -111,7 +111,7 @@ class DigestTest : public CppUnit::TestFixture
 public:
     void testCreate()
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(constDigestAlgorithms); i++)
+        for (size_t i = 0; i < std::size(constDigestAlgorithms); i++)
         {
             rtlDigest handle = rtl_digest_create( constDigestAlgorithms[i] );
             CPPUNIT_ASSERT_MESSAGE("create digest", handle != nullptr);
@@ -125,7 +125,7 @@ public:
 
     void testQuery()
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(constDigestAlgorithms); i++)
+        for (size_t i = 0; i < std::size(constDigestAlgorithms); i++)
         {
             rtlDigest handle = rtl_digest_create(constDigestAlgorithms[i]);
             rtlDigestAlgorithm aAlgo = rtl_digest_queryAlgorithm(handle);
@@ -140,7 +140,7 @@ public:
         rtlDigest handle;
         sal_uInt32 nAlgoLength;
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(constDigestAlgorithms); i++)
+        for (size_t i = 0; i < std::size(constDigestAlgorithms); i++)
         {
             handle = rtl_digest_create(constDigestAlgorithms[i]);
             nAlgoLength = rtl_digest_queryLength(handle);
@@ -168,7 +168,7 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE("init(handle, 0, 0)", rtl_Digest_E_None, aError);
         rtl_digest_destroy( handle );
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(constDigestAlgorithms); i++)
+        for (size_t i = 0; i < std::size(constDigestAlgorithms); i++)
         {
             handle = rtl_digest_create(constDigestAlgorithms[i]);
 
@@ -218,7 +218,7 @@ public:
 
     void testCheckSum()
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(constDigestAlgorithms); i++)
+        for (size_t i = 0; i < std::size(constDigestAlgorithms); i++)
         {
             OString aSum = getDigest(sSampleString, constDigestAlgorithms[i]);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Checksum of sample string is wrong.", OString(constSampleStringSums[i]), aSum);

@@ -66,7 +66,7 @@ namespace slideshow::internal
                 };
 
             static const AnimateAttributeMap aMap( lcl_attributeMap,
-                                             SAL_N_ELEMENTS(lcl_attributeMap),
+                                             std::size(lcl_attributeMap),
                                              false );
 
             AttributeType eAttributeType = AttributeType::Invalid;

@@ -244,7 +244,7 @@ void Test::testNormalizedMakeRelative() {
           "nonex3/nonex4" }
 #endif
     };
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
+    for (std::size_t i = 0; i < std::size(tests); ++i) {
         css::uno::Reference< css::uri::XUriReference > ref(
             URIHelper::normalizedMakeRelative(
                 m_context, OUString::createFromAscii(tests[i].base),
@@ -369,7 +369,7 @@ void Test::testFindFirstURLInText() {
         { "wfs:", nullptr, 0, 0 }
     };
     CharClass charClass( m_context, LanguageTag( css::lang::Locale("en", "US", "")));
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
+    for (std::size_t i = 0; i < std::size(tests); ++i) {
         OUString input(OUString::createFromAscii(tests[i].input));
         sal_Int32 begin = 0;
         sal_Int32 end = input.getLength();

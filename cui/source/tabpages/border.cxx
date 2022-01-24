@@ -1477,7 +1477,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 
     m_xLbLineStyle->SetSourceUnit( FieldUnit::TWIP );
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aLines); ++i)
+    for (size_t i = 0; i < std::size(aLines); ++i)
     {
         if (!IsBorderLineStyleAllowed(aLines[i].mnStyle))
             continue;
@@ -1602,7 +1602,7 @@ void SvxBorderTabPage::UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset )
 
     // Check if current selection involves deletion of at least one border
     bool bBorderDeletionReq = false;
-    for ( size_t i=0; i < SAL_N_ELEMENTS( eTypes1 ); ++i )
+    for ( size_t i=0; i < std::size( eTypes1 ); ++i )
     {
         if( pOldBoxItem->GetLine( eTypes2[i] ) || !( pOldBoxInfoItem->IsValid( eTypes1[i].second ) ) )
         {

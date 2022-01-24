@@ -105,9 +105,9 @@ XMLIndexTOCContext::XMLIndexTOCContext(SvXMLImport& rImport,
         if (SvXMLUnitConverter::convertEnum(eIndexType, SvXMLImport::getNameFromToken(nElement), aIndexTypeMap))
         {
             // check for array index:
-            OSL_ENSURE(unsigned(eIndexType) < (SAL_N_ELEMENTS(aIndexServiceMap)), "index out of range");
-            OSL_ENSURE(SAL_N_ELEMENTS(aIndexServiceMap) ==
-                       SAL_N_ELEMENTS(aIndexSourceElementMap),
+            OSL_ENSURE(unsigned(eIndexType) < (std::size(aIndexServiceMap)), "index out of range");
+            OSL_ENSURE(std::size(aIndexServiceMap) ==
+                       std::size(aIndexSourceElementMap),
                        "service and source element maps must be same size");
             bValid = true;
         }

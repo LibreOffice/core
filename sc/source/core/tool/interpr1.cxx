@@ -9027,10 +9027,10 @@ static bool IsDBCS(sal_Unicode currentChar)
     sal_uInt16 i;
     bool bRet = false;
     UBlockCode block = ublock_getCode(currentChar);
-    for ( i = 0; i < SAL_N_ELEMENTS(scriptList); i++) {
+    for ( i = 0; i < std::size(scriptList); i++) {
         if (block <= scriptList[i].to) break;
     }
-    bRet = (i < SAL_N_ELEMENTS(scriptList) && block >= scriptList[i].from);
+    bRet = (i < std::size(scriptList) && block >= scriptList[i].from);
     return bRet;
 }
 static sal_Int32 lcl_getLengthB( std::u16string_view str, sal_Int32 nPos )

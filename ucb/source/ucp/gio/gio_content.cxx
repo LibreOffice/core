@@ -1259,7 +1259,7 @@ css::uno::Sequence< css::beans::Property > Content::getProperties(
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY )
     };
 
-    const int nProps = SAL_N_ELEMENTS(aGenericProperties);
+    const int nProps = std::size(aGenericProperties);
     return css::uno::Sequence< css::beans::Property > ( aGenericProperties, nProps );
 }
 
@@ -1301,7 +1301,7 @@ css::uno::Sequence< css::ucb::CommandInfo > Content::getCommands( const css::uno
           -1, cppu::UnoType<css::ucb::ContentInfo>::get() )
     };
 
-    const int nProps = SAL_N_ELEMENTS(aCommandInfoTable);
+    const int nProps = std::size(aCommandInfoTable);
     return css::uno::Sequence< css::ucb::CommandInfo >(aCommandInfoTable, isFolder(xEnv) ? nProps : nProps - 2);
 }
 

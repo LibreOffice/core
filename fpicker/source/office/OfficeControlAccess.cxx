@@ -98,7 +98,7 @@ namespace svt
             { "VersionListLabel",       LISTBOX_VERSION_LABEL,          PROPERTY_FLAGS_COMMON | PropFlags::Text          }
         };
 
-        const sal_Int32 s_nControlCount = SAL_N_ELEMENTS( aDescriptions );
+        const sal_Int32 s_nControlCount = std::size( aDescriptions );
 
         ControlDescIterator s_pControls = aDescriptions;
         ControlDescIterator s_pControlsEnd = aDescriptions + s_nControlCount;
@@ -130,7 +130,7 @@ namespace svt
             { "Checked",            PropFlags::Checked           }
         };
 
-        const int s_nPropertyCount = SAL_N_ELEMENTS( aProperties );
+        const int s_nPropertyCount = std::size( aProperties );
 
         ControlPropertyIterator s_pProperties = aProperties;
         ControlPropertyIterator s_pPropertiesEnd = aProperties + s_nPropertyCount;

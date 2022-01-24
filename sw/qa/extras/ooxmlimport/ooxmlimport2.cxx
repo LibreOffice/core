@@ -885,7 +885,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129912)
     static constexpr OUStringLiteral pLabel5 = u"\uF0D1\uF031\uF032b";
     const OUString sFootnoteLabels[]
         = { OUString(u'\xF0A7'), "1", "2", OUString(u'\xF020'), pLabel5 };
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(SAL_N_ELEMENTS(sFootnoteLabels)), nCount);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(std::size(sFootnoteLabels)), nCount);
 
     pWrtShell->GotoPrevFootnoteAnchor();
     nCount--;
