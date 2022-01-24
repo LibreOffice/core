@@ -1024,7 +1024,9 @@ void DiagramHelper::switchToDateCategories( const Reference< XChartDocument >& x
 {
     if(xChartDoc.is())
     {
-        ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
+        auto pModel = dynamic_cast<ChartModel*>(xChartDoc.get());
+        assert(pModel);
+        ControllerLockGuardUNO aCtrlLockGuard( pModel );
 
         Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartDoc ) );
         if( xCooSys.is() )
@@ -1039,7 +1041,9 @@ void DiagramHelper::switchToTextCategories( const Reference< XChartDocument >& x
 {
     if(xChartDoc.is())
     {
-        ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
+        auto pModel = dynamic_cast<ChartModel*>(xChartDoc.get());
+        assert(pModel);
+        ControllerLockGuardUNO aCtrlLockGuard( pModel );
 
         Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartDoc ) );
         if( xCooSys.is() )
@@ -1546,7 +1550,9 @@ static void lcl_ensureRange0to1( double& rValue )
 bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >& xChartModel,
         const awt::Rectangle& rPosRect /*100th mm*/ )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
+    auto pModel = dynamic_cast<ChartModel*>(xChartModel.get());
+    assert(pModel);
+    ControllerLockGuardUNO aCtrlLockGuard( pModel );
 
     bool bChanged = false;
     awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );

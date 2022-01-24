@@ -320,6 +320,8 @@ InternalDataProvider::InternalDataProvider(
         if( xDiagram.is())
         {
             Reference< frame::XModel > xChartModel = xChartDoc;
+            auto pModel = dynamic_cast<ChartModel*>(xChartDoc.get());
+            assert(pModel);
 
             //data in columns?
             {
@@ -329,7 +331,7 @@ InternalDataProvider::InternalDataProvider(
                 uno::Sequence< sal_Int32 > aSequenceMapping;
                 const bool bSomethingDetected(
                     DataSourceHelper::detectRangeSegmentation(
-                        xChartModel, aRangeString, aSequenceMapping, m_bDataInColumns, bFirstCellAsLabel, bHasCategories ));
+                        pModel, aRangeString, aSequenceMapping, m_bDataInColumns, bFirstCellAsLabel, bHasCategories ));
 
                 // #i120559# if no data was available, restore default
                 if(!bSomethingDetected && m_bDataInColumns != bDefaultDataInColumns)
