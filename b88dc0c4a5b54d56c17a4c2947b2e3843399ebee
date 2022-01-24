@@ -34,6 +34,24 @@
       "parentUuid": "c9419217_74966336",
       "revId": "b88dc0c4a5b54d56c17a4c2947b2e3843399ebee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10d273ac_8d841de9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-24T08:46:38Z",
+      "side": 1,
+      "message": "Sorry, I should have updated this - I eventually fixed this specific problem with\n\n    commit c42a13c491196743d734107e54ef2f323fa1395b\n    Author: Noel Grandin \u003cnoel.grandin@collabora.co.uk\u003e\n    Date:   Fri Jan 21 14:00:12 2022 +0200\n    asan: fix symbol visibility in chart2\n\nI did not initially notice the problem with the warning from module.cxx was quite some way away from the eventual crash",
+      "parentUuid": "66a3879a_753476f0",
+      "revId": "b88dc0c4a5b54d56c17a4c2947b2e3843399ebee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
