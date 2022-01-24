@@ -19,6 +19,7 @@
 
 #include <DataSeriesHelper.hxx>
 #include <DataSource.hxx>
+#include <ChartType.hxx>
 #include <unonames.hxx>
 #include <Diagram.hxx>
 #include <BaseCoordinateSystem.hxx>
@@ -111,7 +112,7 @@ void lcl_getCooSysAndChartTypeOfSeries(
     const Reference< chart2::XDataSeries > & xSeries,
     const Reference< chart2::XDiagram > & xDiagram,
     rtl::Reference< ::chart::BaseCoordinateSystem > & xOutCooSys,
-    Reference< chart2::XChartType > & xOutChartType )
+    rtl::Reference< ::chart::ChartType > & xOutChartType )
 {
     if( !xDiagram.is())
         return;
@@ -119,20 +120,15 @@ void lcl_getCooSysAndChartTypeOfSeries(
 
     for( rtl::Reference< ::chart::BaseCoordinateSystem > const & coords : pDiagram->getBaseCoordinateSystems() )
     {
-        const Sequence< Reference< chart2::XChartType > > aChartTypes( coords->getChartTypes());
-        for( Reference< chart2::XChartType > const & chartType : aChartTypes )
+        for( rtl::Reference< ::chart::ChartType > const & chartType : coords->getChartTypes2() )
         {
-            Reference< chart2::XDataSeriesContainer > xSeriesCnt( chartType, uno::UNO_QUERY );
-            if( xSeriesCnt.is())
+            const Sequence< Reference< chart2::XDataSeries > > aSeries( chartType->getDataSeries());
+            for( Reference< chart2::XDataSeries > const & dataSeries : aSeries )
             {
-                const Sequence< Reference< chart2::XDataSeries > > aSeries( xSeriesCnt->getDataSeries());
-                for( Reference< chart2::XDataSeries > const & dataSeries : aSeries )
+                if( dataSeries == xSeries )
                 {
-                    if( dataSeries == xSeries )
-                    {
-                        xOutCooSys = coords;
-                        xOutChartType.set( chartType );
-                    }
+                    xOutCooSys = coords;
+                    xOutChartType = chartType;
                 }
             }
         }
@@ -491,17 +487,17 @@ rtl::Reference< ::chart::BaseCoordinateSystem > getCoordinateSystemOfSeries(
     const Reference< chart2::XDiagram > & xDiagram )
 {
     rtl::Reference< ::chart::BaseCoordinateSystem > xResult;
-    Reference< chart2::XChartType > xDummy;
+    rtl::Reference< ::chart::ChartType > xDummy;
     lcl_getCooSysAndChartTypeOfSeries( xSeries, xDiagram, xResult, xDummy );
 
     return xResult;
 }
 
-Reference< chart2::XChartType > getChartTypeOfSeries(
+rtl::Reference< ::chart::ChartType > getChartTypeOfSeries(
     const Reference< chart2::XDataSeries > & xSeries,
     const Reference< chart2::XDiagram > & xDiagram )
 {
-    Reference< chart2::XChartType > xResult;
+    rtl::Reference< ::chart::ChartType > xResult;
     rtl::Reference< ::chart::BaseCoordinateSystem > xDummy;
     lcl_getCooSysAndChartTypeOfSeries( xSeries, xDiagram, xDummy, xResult );
 
@@ -523,6 +519,28 @@ void deleteSeries(
         {
             aSeries.erase( aIt );
             xSeriesCnt->setDataSeries( comphelper::containerToSequence( aSeries ));
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+}
+
+void deleteSeries(
+    const Reference< chart2::XDataSeries > & xSeries,
+    const rtl::Reference< ::chart::ChartType > & xChartType )
+{
+    try
+    {
+        auto aSeries(
+            comphelper::sequenceToContainer<std::vector< Reference< chart2::XDataSeries > > >( xChartType->getDataSeries()));
+        std::vector< Reference< chart2::XDataSeries > >::iterator aIt =
+              std::find( aSeries.begin(), aSeries.end(), xSeries );
+        if( aIt != aSeries.end())
+        {
+            aSeries.erase( aIt );
+            xChartType->setDataSeries( comphelper::containerToSequence( aSeries ));
         }
     }
     catch( const uno::Exception & )
