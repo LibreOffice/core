@@ -48,6 +48,7 @@ namespace chart
 {
 
 class RangeSelectionHelper;
+class ChartType;
 class ChartTypeTemplate;
 
 struct DialogModelTimeBasedInfo
@@ -70,7 +71,7 @@ public:
     typedef std::pair<
                 OUString,
                 std::pair< css::uno::Reference< css::chart2::XDataSeries >,
-                             css::uno::Reference< css::chart2::XChartType > > >
+                             rtl::Reference< ::chart::ChartType > > >
         tSeriesWithChartTypeByName;
 
     typedef std::map< OUString, OUString >
@@ -88,7 +89,7 @@ public:
     css::uno::Reference< css::chart2::data::XDataProvider >
         getDataProvider() const;
 
-    std::vector< css::uno::Reference< css::chart2::XDataSeriesContainer > >
+    std::vector< rtl::Reference< ::chart::ChartType > >
         getAllDataSeriesContainers() const;
 
     std::vector< tSeriesWithChartTypeByName >
@@ -97,7 +98,7 @@ public:
     static tRolesWithRanges getRolesWithRanges(
         const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
         const OUString & aRoleOfSequenceForLabel,
-        const css::uno::Reference< css::chart2::XChartType > & xChartType );
+        const rtl::Reference< ::chart::ChartType > & xChartType );
 
     enum class MoveDirection
     {
@@ -111,12 +112,12 @@ public:
     css::uno::Reference<
             css::chart2::XDataSeries > insertSeriesAfter(
                 const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
-                const css::uno::Reference< css::chart2::XChartType > & xChartType,
+                const rtl::Reference< ::chart::ChartType > & xChartType,
                 bool bCreateDataCachedSequences = false );
 
     void deleteSeries(
         const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
-        const css::uno::Reference< css::chart2::XChartType > & xChartType );
+        const rtl::Reference< ::chart::ChartType > & xChartType );
 
     css::uno::Reference< css::chart2::data::XLabeledDataSequence >
         getCategories() const;

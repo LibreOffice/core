@@ -61,14 +61,6 @@ namespace
 {
 constexpr OUStringLiteral lcl_aLabelRole( u"label" );
 
-struct lcl_ChartTypeToSeriesCnt
-{
-    Reference< XDataSeriesContainer > operator() (
-        const Reference< XChartType > & xChartType )
-    {
-        return Reference< XDataSeriesContainer >::query( xChartType );
-    }
-};
 
 OUString lcl_ConvertRole( const OUString & rRoleString )
 {
@@ -130,53 +122,6 @@ lcl_tRoleIndexMap lcl_createRoleIndexMap()
     return aMap;
 }
 
-struct lcl_DataSeriesContainerAppend
-{
-    typedef Reference< XDataSeriesContainer > value_type;
-    typedef std::vector< ::chart::DialogModel::tSeriesWithChartTypeByName > tContainerType;
-
-    explicit lcl_DataSeriesContainerAppend( tContainerType * rCnt )
-            : m_rDestCnt( rCnt )
-    {}
-
-    lcl_DataSeriesContainerAppend & operator= ( const value_type & xVal )
-    {
-        try
-        {
-            if( xVal.is())
-            {
-                const Sequence< Reference< XDataSeries > > aSeq( xVal->getDataSeries());
-                OUString aRole( "values-y" );
-                Reference< XChartType > xCT( xVal, uno::UNO_QUERY );
-                if( xCT.is())
-                    aRole = xCT->getRoleOfSequenceForSeriesLabel();
-                for( Reference< XDataSeries > const & dataSeries : aSeq )
-                {
-                    m_rDestCnt->push_back(
-                        ::chart::DialogModel::tSeriesWithChartTypeByName(
-                            ::chart::DataSeriesHelper::getDataSeriesLabel( dataSeries, aRole ),
-                            std::make_pair( dataSeries, xCT )));
-                }
-            }
-        }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
-        return *this;
-    }
-
-    // Implement output operator requirements as required by std::copy (and
-    // implement prefix increment in terms of postfix increment to avoid unused
-    // member function warnings for the latter in the common case where
-    // std::copy would not actually need it):
-    lcl_DataSeriesContainerAppend & operator* ()     { return *this; }
-    lcl_DataSeriesContainerAppend & operator++ ()    { return operator++(0); }
-    lcl_DataSeriesContainerAppend & operator++ (int) { return *this; }
-
-private:
-    tContainerType * m_rDestCnt;
-};
 
 struct lcl_RolesWithRangeAppend
 {
@@ -242,13 +187,6 @@ private:
 
 namespace std
 {
-    template<> struct iterator_traits<lcl_DataSeriesContainerAppend>
-    {
-        typedef std::output_iterator_tag iterator_category;
-        typedef Reference< XDataSeriesContainer > value_type;
-        typedef value_type& reference;
-    };
-
     template<> struct iterator_traits<lcl_RolesWithRangeAppend>
     {
         typedef std::output_iterator_tag iterator_category;
@@ -465,10 +403,10 @@ Reference< data::XDataProvider > DialogModel::getDataProvider() const
     return xResult;
 }
 
-std::vector< Reference< XDataSeriesContainer > >
+std::vector< rtl::Reference< ChartType > >
     DialogModel::getAllDataSeriesContainers() const
 {
-    std::vector< Reference< XDataSeriesContainer > > aResult;
+    std::vector< rtl::Reference< ChartType > > aResult;
 
     try
     {
@@ -481,11 +419,9 @@ std::vector< Reference< XDataSeriesContainer > >
                 xDiagram->getBaseCoordinateSystems());
             for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysSeq )
             {
-                const Sequence< Reference< XChartType > > aChartTypeSeq( coords->getChartTypes());
-                std::transform(
-                    aChartTypeSeq.begin(), aChartTypeSeq.end(),
-                    std::back_inserter( aResult ),
-                    lcl_ChartTypeToSeriesCnt() );
+
+                for (const auto & rxChartType : coords->getChartTypes2())
+                    aResult.push_back(rxChartType);
             }
         }
     }
@@ -501,11 +437,29 @@ std::vector< DialogModel::tSeriesWithChartTypeByName >
     DialogModel::getAllDataSeriesWithLabel() const
 {
     std::vector< tSeriesWithChartTypeByName > aResult;
-    std::vector< Reference< XDataSeriesContainer > > aContainers(
+    std::vector< rtl::Reference< ChartType > > aContainers(
         getAllDataSeriesContainers());
 
-    std::copy( aContainers.begin(), aContainers.end(),
-                 lcl_DataSeriesContainerAppend( &aResult ));
+    for (const auto & rxChartType : aContainers )
+    {
+        try
+        {
+            const Sequence< Reference< XDataSeries > > aSeq( rxChartType->getDataSeries());
+            OUString aRole = rxChartType->getRoleOfSequenceForSeriesLabel();
+            for( Reference< XDataSeries > const & dataSeries : aSeq )
+            {
+                aResult.push_back(
+                    ::chart::DialogModel::tSeriesWithChartTypeByName(
+                        ::chart::DataSeriesHelper::getDataSeriesLabel( dataSeries, aRole ),
+                        std::make_pair( dataSeries, rxChartType )));
+            }
+        }
+        catch( const uno::Exception & )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+    }
+
     return aResult;
 }
 
@@ -556,7 +510,7 @@ void addNewSeriesToContainer(
 DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
     const Reference< XDataSeries > & xSeries,
     const OUString & aRoleOfSequenceForLabel,
-    const Reference< chart2::XChartType > & xChartType )
+    const rtl::Reference< ::chart::ChartType > & xChartType )
 {
     DialogModel::tRolesWithRanges aResult;
     try
@@ -600,7 +554,7 @@ void DialogModel::moveSeries(
 
 Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
     const Reference< XDataSeries > & xSeries,
-    const Reference< XChartType > & xChartType,
+    const rtl::Reference< ::chart::ChartType > & xChartType,
     bool bCreateDataCachedSequences /* = false */ )
 {
     m_aTimerTriggeredControllerLock.startTimer();
@@ -616,8 +570,7 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
         const sal_Int32 nTotalSeries = countSeries();
         if( xChartType.is())
         {
-            Reference< XDataSeriesContainer > xCnt( xChartType, uno::UNO_QUERY_THROW );
-            nSeriesInChartType = xCnt->getDataSeries().getLength();
+            nSeriesInChartType = xChartType->getDataSeries().getLength();
         }
 
         // create new series
@@ -646,7 +599,7 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
 
 void DialogModel::deleteSeries(
     const Reference< XDataSeries > & xSeries,
-    const Reference< XChartType > & xChartType )
+    const rtl::Reference< ChartType > & xChartType )
 {
     m_aTimerTriggeredControllerLock.startTimer();
     ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
@@ -867,14 +820,14 @@ void DialogModel::applyInterpretedData(
     }
 
     // data series
-    std::vector< Reference< XDataSeriesContainer > > aSeriesCnt( getAllDataSeriesContainers());
+    std::vector< rtl::Reference< ChartType > > aSeriesCnt( getAllDataSeriesContainers());
     auto aNewSeries(
         comphelper::sequenceToContainer<std::vector< Sequence< Reference< XDataSeries > > >>( rNewData.Series ));
 
     OSL_ASSERT( aSeriesCnt.size() == aNewSeries.size());
 
     std::vector< Sequence< Reference< XDataSeries > > >::const_iterator aSrcIt( aNewSeries.begin());
-    std::vector< Reference< XDataSeriesContainer > >::iterator aDestIt( aSeriesCnt.begin());
+    std::vector< rtl::Reference< ChartType > >::iterator aDestIt( aSeriesCnt.begin());
     for(; aSrcIt != aNewSeries.end() && aDestIt != aSeriesCnt.end();
         ++aSrcIt, ++aDestIt )
     {
@@ -894,7 +847,7 @@ void DialogModel::applyInterpretedData(
 
 sal_Int32 DialogModel::countSeries() const
 {
-    std::vector< Reference< XDataSeriesContainer > > aCnt( getAllDataSeriesContainers());
+    std::vector< rtl::Reference< ChartType > > aCnt( getAllDataSeriesContainers());
     return std::accumulate( aCnt.begin(), aCnt.end(), 0, lcl_addSeriesNumber());
 }
 

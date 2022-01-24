@@ -29,7 +29,7 @@ namespace chart { class TabPageNotifiable; }
 
 namespace chart
 {
-
+class ChartType;
 class ChartTypeTemplateProvider;
 class DialogModel;
 
@@ -42,7 +42,7 @@ public:
     css::uno::Reference< css::chart2::XDataSeries > m_xDataSeries;
 
     /// the chart type that contains the series (via XDataSeriesContainer)
-    css::uno::Reference< css::chart2::XChartType > m_xChartType;
+    rtl::Reference< ::chart::ChartType > m_xChartType;
 };
 
 class DataSourceTabPage final :

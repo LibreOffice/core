@@ -20,6 +20,7 @@
 #include "tp_DataSource.hxx"
 #include <strings.hrc>
 #include <ResId.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeTemplateProvider.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <ChartModel.hxx>
@@ -373,7 +374,7 @@ void DataSourceTabPage::fillSeriesListBox()
         m_aEntries.emplace_back(new SeriesEntry);
         pEntry = m_aEntries.back().get();
         pEntry->m_xDataSeries.set(series.second.first);
-        pEntry->m_xChartType.set(series.second.second);
+        pEntry->m_xChartType = series.second.second;
         m_xLB_SERIES->append(OUString::number(reinterpret_cast<sal_Int64>(pEntry)), aLabel);
         if (bHasSelectedEntry && series.second.first == xSelected)
             nSelectedEntry = nEntry;
@@ -560,7 +561,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, AddButtonClickedHdl, weld::Button&, void)
     m_rDialogModel.startControllerLockTimer();
     int nEntry = m_xLB_SERIES->get_selected_index();
     Reference< XDataSeries > xSeriesToInsertAfter;
-    Reference< XChartType > xChartTypeForNewSeries;
+    rtl::Reference< ChartType > xChartTypeForNewSeries;
     if( m_pTemplateProvider )
             m_rDialogModel.setTemplate( m_pTemplateProvider->getCurrentTemplate());
 
@@ -568,14 +569,14 @@ IMPL_LINK_NOARG(DataSourceTabPage, AddButtonClickedHdl, weld::Button&, void)
     {
         ::chart::SeriesEntry* pEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry).toInt64());
         xSeriesToInsertAfter.set(pEntry->m_xDataSeries);
-        xChartTypeForNewSeries.set(pEntry->m_xChartType);
+        xChartTypeForNewSeries = pEntry->m_xChartType;
     }
     else
     {
-        std::vector< Reference< XDataSeriesContainer > > aCntVec(
+        std::vector< rtl::Reference< ChartType > > aCntVec(
             m_rDialogModel.getAllDataSeriesContainers());
         if( ! aCntVec.empty())
-            xChartTypeForNewSeries.set( aCntVec.front(), uno::UNO_QUERY );
+            xChartTypeForNewSeries = aCntVec.front();
     }
     OSL_ENSURE( xChartTypeForNewSeries.is(), "Cannot insert new series" );
 
