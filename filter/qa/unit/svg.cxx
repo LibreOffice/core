@@ -209,6 +209,48 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testCustomBullet)
     CPPUNIT_ASSERT(!getXPath(pXmlDoc, "//svg:g[@class='BulletChars']//svg:path", "d").isEmpty());
 }
 
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, attributeRedefinedTest)
+{
+    // Load document containing empty paragraphs with ids.
+    load(u"attributeRedefinedTest.odp");
+
+    // Export to SVG.
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
+    aMediaDescriptor["OutputStream"] <<= xOut;
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+
+    // We expect four paragraph
+    // 2 empty paragraphs with ids
+    // 2 paragraphs with text
+    // Without the accompanying fix the test would have failed with
+    // Expected : 4
+    // Actual : 2
+    // i.e. 2 of the empty paragraph do not get generated even if there
+    // is id imported for the paragraphs
+    // If we don't create the empty paragraphs the id attribute attribute gets redefined like this:
+    // <tspan id="id14" id="id15" id="id17" class="TextParagraph" font-family="Bahnschrift Light" font-size="1129px" font-weight="400">
+
+    OString xPath = "//svg:g[@class='TextShape']//svg:text[@class='SVGTextShape']//"
+                    "svg:tspan[@class='TextParagraph']";
+    assertXPath(pXmlDoc, xPath, 4);
+
+    //assert that each tspan element with TextParagraph class has id and the tspan element of
+    //each empty paragraph doesnot contain tspan element with class TextPosition
+    assertXPath(pXmlDoc, xPath + "[1]", "id", "id4");
+    assertXPath(pXmlDoc, xPath + "[2]", "id", "id5");
+    assertXPath(pXmlDoc, xPath + "[2]//svg:tspan[@class='TextPosition']", 0);
+    assertXPath(pXmlDoc, xPath + "[3]", "id", "id6");
+    assertXPath(pXmlDoc, xPath + "[3]//svg:tspan[@class='TextPosition']", 0);
+    assertXPath(pXmlDoc, xPath + "[4]", "id", "id7");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
