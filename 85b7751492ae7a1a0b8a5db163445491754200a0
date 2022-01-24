@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8203f203_db318679",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-24T11:35:34Z",
+      "side": 1,
+      "message": "For one, it is UBSan not ASan that is typically failing due to missing (RTTI) symbols.  For another, there may be legitimate cases that a dlopen is failing due to an undefined symbol in osl_loadModuleAscii?  (I think, ultimately the right fix will be to change the sanitizer implementation in Clang to not implicitly link against symbols from the executable and require -z undefs, but explicitly link against some sanitizer runtime dynamic library.)",
+      "revId": "85b7751492ae7a1a0b8a5db163445491754200a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
