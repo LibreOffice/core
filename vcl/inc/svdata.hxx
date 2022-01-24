@@ -142,7 +142,7 @@ struct ImplSVAppData
     std::vector<Link<VclWindowEvent&,bool> >
                             maKeyListeners;       // listeners for key events only (eg, extended toolkit)
     std::vector<ImplPostEventPair> maPostedEventList;
-    ImplAccelManager*       mpAccelMgr;           // Accelerator Manager
+    ImplAccelManager*       mpAccelMgr = nullptr; // Accelerator Manager
     std::optional<OUString> mxAppName;            // Application name
     std::optional<OUString> mxAppFileName;        // Abs. Application FileName
     std::optional<OUString> mxDisplayName;        // Application Display Name
