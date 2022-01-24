@@ -697,7 +697,7 @@ void TestCondformat::testIconSet()
         { 2.0, 2 },
         { 3.0, 2 }
     };
-    for(size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    for(size_t i = 0; i < std::size(aTests); ++i)
     {
         m_pDoc->SetValue(0,0,0,aTests[i].nVal);
         std::unique_ptr<ScIconSetInfo> pInfo = pEntry->GetIconSetInfo(ScAddress(0,0,0));

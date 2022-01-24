@@ -191,19 +191,19 @@ namespace vcl_sal {
 
     const struct KeyboardReplacements aKeyboards[] =
     {
-        { "ast",aImplReplacements_Asturian, SAL_N_ELEMENTS(aImplReplacements_Asturian) },
-        { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
-        { "et", aImplReplacements_Estonian, SAL_N_ELEMENTS(aImplReplacements_Estonian) },
-        { "hu", aImplReplacements_Hungarian, SAL_N_ELEMENTS(aImplReplacements_Hungarian) },
-        { "lt", aImplReplacements_Lithuanian, SAL_N_ELEMENTS(aImplReplacements_Lithuanian) },
-        { "sl", aImplReplacements_Slovenian, SAL_N_ELEMENTS(aImplReplacements_Slovenian) },
-        { "es", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
+        { "ast",aImplReplacements_Asturian, std::size(aImplReplacements_Asturian) },
+        { "ca", aImplReplacements_Catalan, std::size(aImplReplacements_Catalan) },
+        { "et", aImplReplacements_Estonian, std::size(aImplReplacements_Estonian) },
+        { "hu", aImplReplacements_Hungarian, std::size(aImplReplacements_Hungarian) },
+        { "lt", aImplReplacements_Lithuanian, std::size(aImplReplacements_Lithuanian) },
+        { "sl", aImplReplacements_Slovenian, std::size(aImplReplacements_Slovenian) },
+        { "es", aImplReplacements_Spanish, std::size(aImplReplacements_Spanish) },
     };
 
     // translate keycodes, used within the displayed menu shortcuts
     OUString getKeysReplacementName( OUString const & pLang, LONG nSymbol )
     {
-        for( unsigned int n = 0; n < SAL_N_ELEMENTS(aKeyboards); n++ )
+        for( unsigned int n = 0; n < std::size(aKeyboards); n++ )
         {
             if( pLang.equalsAscii( aKeyboards[n].pLangName ) )
             {

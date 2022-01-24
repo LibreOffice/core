@@ -654,11 +654,11 @@ void UpdateHandler::loadStrings()
         { RID_UPDATE_BUBBLE_EXT_UPD_AVAIL, RID_UPDATE_BUBBLE_T_EXT_UPD_AVAIL }
     };
 
-    static_assert(SAL_N_ELEMENTS(RID_UPDATE_BUBBLE) == UPDATESTATES_COUNT - UPDATESTATE_UPDATE_AVAIL, "mismatch");
+    static_assert(std::size(RID_UPDATE_BUBBLE) == UPDATESTATES_COUNT - UPDATESTATE_UPDATE_AVAIL, "mismatch");
 
     // all update states before UPDATESTATE_UPDATE_AVAIL don't have a bubble
     // so we can ignore them
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UPDATE_BUBBLE); ++i)
+    for (size_t i = 0; i < std::size(RID_UPDATE_BUBBLE); ++i)
     {
         msBubbleTexts[i] = loadString(loc, RID_UPDATE_BUBBLE[i].first);
         msBubbleTitles[i] = loadString(loc, RID_UPDATE_BUBBLE[i].second);

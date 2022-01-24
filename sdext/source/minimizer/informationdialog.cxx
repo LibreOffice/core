@@ -67,7 +67,7 @@ OUString InsertFixedText( UnoDialog& rInformationDialog, const OUString& rContro
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -103,7 +103,7 @@ OUString InsertImage(
         Any( nPosY ),
         Any( bScale ),
         Any( nWidth ) };
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -137,7 +137,7 @@ OUString InsertCheckBox( UnoDialog& rInformationDialog, const OUString& rControl
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -175,7 +175,7 @@ OUString InsertButton( UnoDialog& rInformationDialog, const OUString& rControlNa
         Any( nWidth ) };
 
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -222,7 +222,7 @@ void InformationDialog::InitDialog()
         Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
         Any( sal_Int32( DIALOG_WIDTH ) ) };
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );

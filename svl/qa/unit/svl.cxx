@@ -271,7 +271,7 @@ void Test::testNumberFormat()
 
     SvNumberFormatter aFormatter(m_xContext, eLang);
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    for (size_t i = 0; i < std::size(aTests); ++i)
     {
         size_t nStart = aTests[i].eStart;
         size_t nEnd = aTests[i].eEnd;
@@ -474,7 +474,7 @@ void Test::testFdo60915()
             0x0E51, 0x0E51, 0x002F,
             0x0E52, 0x0E55, 0x0E54, 0x0E52
         };
-        sExpected = OUString(sTemp, SAL_N_ELEMENTS(sTemp));
+        sExpected = OUString(sTemp, std::size(sTemp));
         checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     }
     {
@@ -485,7 +485,7 @@ void Test::testFdo60915()
             0x0E51, 0x0E51, 0x002F,
             0x0E54, 0x0E52
         };
-        sExpected = OUString(sTemp, SAL_N_ELEMENTS(sTemp));
+        sExpected = OUString(sTemp, std::size(sTemp));
         checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     }
 }
@@ -507,7 +507,7 @@ void Test::testI116701()
         0x0044, // D
         0x0022, 0x65E5, 0x0022
     };
-    sCode = OUString(CODE1, SAL_N_ELEMENTS(CODE1));
+    sCode = OUString(CODE1, std::size(CODE1));
     sal_Unicode EXPECTED[] =
     {
         0x4E2D, 0x83EF, 0x6C11, 0x570B,
@@ -518,7 +518,7 @@ void Test::testI116701()
         0x0033, 0x0030, // 30
         0x65E5
     };
-    sExpected = OUString(EXPECTED, SAL_N_ELEMENTS(EXPECTED));
+    sExpected = OUString(EXPECTED, std::size(EXPECTED));
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     sal_Unicode CODE2[] =
     {
@@ -529,7 +529,7 @@ void Test::testI116701()
         0x0044, // D
         0x0022, 0x65E5, 0x0022
     };
-    sCode = OUString(CODE2, SAL_N_ELEMENTS(CODE2));
+    sCode = OUString(CODE2, std::size(CODE2));
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
 }
 
@@ -1094,7 +1094,7 @@ void Test::testDateInput()
     LanguageType eLang = LANGUAGE_ENGLISH_US;
     SvNumberFormatter aFormatter(m_xContext, eLang);
 
-    for (size_t i=0; i < SAL_N_ELEMENTS(aData); ++i)
+    for (size_t i=0; i < std::size(aData); ++i)
     {
         checkDateInput( aFormatter, aData[i][0], aData[i][1]);
     }
@@ -1153,7 +1153,7 @@ void Test::testIsNumberFormat()
         { "1999-11-23T12:34:56/789", false }
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    for (size_t i = 0; i < std::size(aTests); ++i)
     {
         sal_uInt32 nIndex = 0;
         double nNumber = 0;

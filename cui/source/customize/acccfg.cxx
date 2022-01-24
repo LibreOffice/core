@@ -785,7 +785,7 @@ const sal_uInt16 KEYCODE_ARRAY[] = { KEY_F1,
 #endif
 };
 
-const sal_uInt16 KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
+const sal_uInt16 KEYCODE_ARRAY_SIZE = std::size(KEYCODE_ARRAY);
 
 /** select the entry, which match the current key input ... excepting
     keys, which are used for the dialog itself.

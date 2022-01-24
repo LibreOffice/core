@@ -343,7 +343,7 @@ uno::Sequence<beans::PropertyValue>
 
     bool bHasEmbed = false;
     SdDrawDocument* pDoc = mxModel->GetDoc();
-    for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ )
+    for( size_t i = 0; i < std::size( aURLPropertyNames ); i++ )
     {
         const XPropertyListRef& pList = pDoc->GetPropertyList( static_cast<XPropertyListType>(i) );
         bHasEmbed = pList.is() && pList->IsEmbedInDocument();

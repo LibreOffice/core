@@ -752,7 +752,7 @@ void AccObject::UpdateRole()
     XAccessibleContext* pContext  = m_xAccContextRef.get();
     m_pIMAcc->Put_XAccRole( ROLE_SYSTEM_WINDOW  );
     sal_Int16 iRoleIndex = pContext->getAccessibleRole();
-    if ((0 <= iRoleIndex) && (o3tl::make_unsigned(iRoleIndex) < SAL_N_ELEMENTS(ROLE_TABLE)))
+    if ((0 <= iRoleIndex) && (o3tl::make_unsigned(iRoleIndex) < std::size(ROLE_TABLE)))
     {
         short iIA2Role = ROLE_TABLE[iRoleIndex][1] ;
         m_pIMAcc->Put_XAccRole( iIA2Role  );

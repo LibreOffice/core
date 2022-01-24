@@ -110,7 +110,7 @@ static bool isVulkanDenylisted(const VkPhysicalDeviceProperties& props)
     OUString deviceIdStr = "0x" + OUString::number(props.deviceID, 16);
     OUString driverVersionString = versionAsString(driverVersion);
     OUString apiVersion = versionAsString(props.apiVersion);
-    const char* deviceType = types[std::min<unsigned>(props.deviceType, SAL_N_ELEMENTS(types) - 1)];
+    const char* deviceType = types[std::min<unsigned>(props.deviceType, std::size(types) - 1)];
 
     CrashReporter::addKeyValue("VulkanVendor", vendorIdStr, CrashReporter::AddItem);
     CrashReporter::addKeyValue("VulkanDevice", deviceIdStr, CrashReporter::AddItem);

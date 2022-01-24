@@ -209,7 +209,7 @@ ScVbaInterior::GetPatternColor( const Color& rPattColor, const Color& rBackColor
         0x40, 0x40, 0x20, 0x60, 0x60, 0x60, 0x60, 0x48,     // 08 - 15
         0x50, 0x70, 0x78                                    // 16 - 18
     };
-    return ( nXclPattern < SAL_N_ELEMENTS( pnRatioTable ) ) ?
+    return ( nXclPattern < std::size( pnRatioTable ) ) ?
         GetMixedColor( rPattColor, rBackColor, pnRatioTable[ nXclPattern ] ) : rPattColor;
 }
 Color

@@ -32,7 +32,7 @@ void SvxPaperSizeListBox::FillPaperSizeEntries( PaperSizeApp eApp )
     const std::pair<TranslateId, int>* pPaperAry = eApp == PaperSizeApp::Std ?
         RID_SVXSTRARY_PAPERSIZE_STD : RID_SVXSTRARY_PAPERSIZE_DRAW;
     sal_uInt32 nCnt = eApp == PaperSizeApp::Std ?
-        SAL_N_ELEMENTS(RID_SVXSTRARY_PAPERSIZE_STD) : SAL_N_ELEMENTS(RID_SVXSTRARY_PAPERSIZE_DRAW);
+        std::size(RID_SVXSTRARY_PAPERSIZE_STD) : std::size(RID_SVXSTRARY_PAPERSIZE_DRAW);
 
     for ( sal_uInt32 i = 0; i < nCnt; ++i )
     {

@@ -1165,7 +1165,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
 
     //Reverse map from a given starsymbol char to exact matches in ms symbol
     //fonts.
-    int nEntries = SAL_N_ELEMENTS(aConservativeTable);
+    int nEntries = std::size(aConservativeTable);
     int i;
     for (i = 0; i < nEntries; ++i)
     {
@@ -1193,7 +1193,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
     };
 
      //Allow extra conversions that are not perfect, but "good enough"
-    nEntries = SAL_N_ELEMENTS(aAggressiveTable);
+    nEntries = std::size(aAggressiveTable);
 
     for (i = 0; i < nEntries; ++i)
     {
@@ -1355,7 +1355,7 @@ const ConvertChar* ConvertChar::GetRecodeData( std::u16string_view rOrgFontName,
     if( aMapName == "starsymbol"
      || aMapName == "opensymbol" )
     {
-        for( int i = 0; i < int(SAL_N_ELEMENTS(aStarSymbolRecodeTable)); ++i)
+        for( int i = 0; i < int(std::size(aStarSymbolRecodeTable)); ++i)
         {
             const RecodeTable& r = aStarSymbolRecodeTable[i];
             if( aOrgName.equalsAscii( r.pOrgName ) )
@@ -1370,7 +1370,7 @@ const ConvertChar* ConvertChar::GetRecodeData( std::u16string_view rOrgFontName,
     //adobe-symbol to unicode conversion in rtl instead
     else if( aMapName == "applesymbol" )
     {
-        for( int i = 0; i < int(SAL_N_ELEMENTS(aAppleSymbolRecodeTable)); ++i)
+        for( int i = 0; i < int(std::size(aAppleSymbolRecodeTable)); ++i)
         {
             const RecodeTable& r = aAppleSymbolRecodeTable[i];
             if( aOrgName.equalsAscii( r.pOrgName ) )

@@ -235,7 +235,7 @@ static bool SplitDriverVersion(const char* aSource, char* aAStr, char* aBStr, ch
 
     for (int i = 0; i < len; i++)
     {
-        if (destIdx >= SAL_N_ELEMENTS(dest))
+        if (destIdx >= std::size(dest))
         {
             // Invalid format found. Ensure we don't access dest beyond bounds.
             return false;
@@ -262,9 +262,9 @@ static bool SplitDriverVersion(const char* aSource, char* aAStr, char* aBStr, ch
     dest[destIdx][destPos] = 0;
 
     // Vulkan version numbers have only 3 fields.
-    if (versionType == VersionType::Vulkan && destIdx == SAL_N_ELEMENTS(dest) - 2)
+    if (versionType == VersionType::Vulkan && destIdx == std::size(dest) - 2)
         dest[++destIdx][0] = '\0';
-    if (destIdx != SAL_N_ELEMENTS(dest) - 1)
+    if (destIdx != std::size(dest) - 1)
     {
         return false;
     }
@@ -734,9 +734,9 @@ int32_t GetWindowsVersion()
         if (hLibrary != nullptr)
         {
             wchar_t szPath[MAX_PATH];
-            DWORD dwCount = GetModuleFileNameW(hLibrary, szPath, SAL_N_ELEMENTS(szPath));
+            DWORD dwCount = GetModuleFileNameW(hLibrary, szPath, std::size(szPath));
             FreeLibrary(hLibrary);
-            if (dwCount != 0 && dwCount < SAL_N_ELEMENTS(szPath))
+            if (dwCount != 0 && dwCount < std::size(szPath))
             {
                 dwCount = GetFileVersionInfoSizeW(szPath, nullptr);
                 if (dwCount != 0)

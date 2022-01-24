@@ -2787,7 +2787,7 @@ void ScInterpreter::ScBase()
         'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
         0
     };
-    static const int nDigits = SAL_N_ELEMENTS(pDigits) - 1;
+    static const int nDigits = std::size(pDigits) - 1;
     sal_Int32 nMinLen;
     if ( nParamCount == 3 )
     {
@@ -2992,7 +2992,7 @@ void ScInterpreter::ScRoman()
     {
         static const sal_Unicode pChars[] = { 'M', 'D', 'C', 'L', 'X', 'V', 'I' };
         static const sal_uInt16 pValues[] = { 1000, 500, 100, 50, 10, 5, 1 };
-        static const sal_uInt16 nMaxIndex = sal_uInt16(SAL_N_ELEMENTS(pValues) - 1);
+        static const sal_uInt16 nMaxIndex = sal_uInt16(std::size(pValues) - 1);
 
         OUStringBuffer aRoman;
         sal_uInt16 nVal = static_cast<sal_uInt16>(fVal);

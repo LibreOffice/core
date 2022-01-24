@@ -29,7 +29,7 @@ static void decode(const OUString& rIn, const OUString &rOut)
     //mcrypt --bare -a arcfour -o hex -k 435645 -s 3
     const sal_uInt8 aKey[3] = {'C', 'V', 'E'};
 
-    rtlCipherError result = rtl_cipher_init(cipher, rtl_Cipher_DirectionDecode, aKey, SAL_N_ELEMENTS(aKey), nullptr, 0);
+    rtlCipherError result = rtl_cipher_init(cipher, rtl_Cipher_DirectionDecode, aKey, std::size(aKey), nullptr, 0);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("cipher init failed", rtl_Cipher_E_None, result);
 

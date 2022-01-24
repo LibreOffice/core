@@ -48,7 +48,7 @@ const PROPERTYKEY g_rgPROPERTIES[] =
     PKEY_Comment
 };
 
-size_t const gPropertyTableSize = SAL_N_ELEMENTS(g_rgPROPERTIES);
+size_t const gPropertyTableSize = std::size(g_rgPROPERTIES);
 
 
 CPropertyHdl::CPropertyHdl( LONG nRefCnt ) :

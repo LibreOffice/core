@@ -23,6 +23,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <iterator>
 
 #include <rtl/textenc.h>
 #include <sal/types.h>
@@ -260,11 +261,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
             &adobeDingbatsEncodingData }; /* ADOBE_DINGBATS */
 
     static_assert(
-        SAL_N_ELEMENTS(aData) == RTL_TEXTENCODING_ADOBE_DINGBATS + 1,
+        std::size(aData) == RTL_TEXTENCODING_ADOBE_DINGBATS + 1,
         "update table above if a new encoding is added");
 
     return
-        nEncoding < SAL_N_ELEMENTS(aData) ? aData[nEncoding] : nullptr;
+        nEncoding < std::size(aData) ? aData[nEncoding] : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

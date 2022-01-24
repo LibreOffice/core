@@ -68,7 +68,7 @@ namespace pcr
         // special handling for booleans (this will become a list)
         if ( _rProperty.Type.getTypeClass() == TypeClass_BOOLEAN )
         {
-            _out_rDescriptor.Control = createListBoxControl(_rxControlFactory, RID_RSC_ENUM_YESNO, SAL_N_ELEMENTS(RID_RSC_ENUM_YESNO), bReadOnlyControl);
+            _out_rDescriptor.Control = createListBoxControl(_rxControlFactory, RID_RSC_ENUM_YESNO, std::size(RID_RSC_ENUM_YESNO), bReadOnlyControl);
             return;
         }
 

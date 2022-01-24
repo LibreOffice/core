@@ -44,7 +44,7 @@ namespace
     {
         char aBuf[28];
 
-        int i = SAL_N_ELEMENTS(aBuf);
+        int i = std::size(aBuf);
         aBuf[--i] = 0;
         do
         {

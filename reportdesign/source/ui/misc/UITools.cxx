@@ -719,7 +719,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     };
 
-    OSL_ASSERT( pDefaults.size() == SAL_N_ELEMENTS(aItemInfos) );
+    OSL_ASSERT( pDefaults.size() == std::size(aItemInfos) );
 
     static const WhichRangesContainer pRanges(svl::Items<
         XATTR_FILL_FIRST, ITEMID_WEIGHT_COMPLEX

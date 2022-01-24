@@ -430,7 +430,7 @@ void aqua_init_systray()
             }
 
             // insert the menu entries for launching the applications
-            for ( size_t i = 0; i < SAL_N_ELEMENTS( aMenuItems ); ++i )
+            for ( size_t i = 0; i < std::size( aMenuItems ); ++i )
             {
                 if ( !aModuleOptions.IsModuleInstalled( aMenuItems[i].eModuleIdentifier ) )
                     // the complete application is not even installed

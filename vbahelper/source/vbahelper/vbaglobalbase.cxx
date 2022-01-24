@@ -60,7 +60,7 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     // some strange behavior
     mxContext = ::cppu::createComponentContext(
                         aHandlerContextInfo,
-                        SAL_N_ELEMENTS( aHandlerContextInfo ), nullptr );
+                        std::size( aHandlerContextInfo ), nullptr );
     if ( !aSrvMgr.is() )
         return;
 

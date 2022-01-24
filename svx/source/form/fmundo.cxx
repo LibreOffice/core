@@ -545,8 +545,8 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             FM_PROP_TEXT, FM_PROP_STATE, FM_PROP_DATE, FM_PROP_TIME,
             FM_PROP_VALUE, FM_PROP_SELECT_SEQ, FM_PROP_EFFECTIVE_VALUE
         };
-        sal_Int32 nDefaultValueProps = SAL_N_ELEMENTS(pDefaultValueProperties);
-        OSL_ENSURE(SAL_N_ELEMENTS(aValueProperties) == nDefaultValueProps,
+        sal_Int32 nDefaultValueProps = std::size(pDefaultValueProperties);
+        OSL_ENSURE(std::size(aValueProperties) == nDefaultValueProps,
             "FmXUndoEnvironment::propertyChange: inconsistence!");
         for (sal_Int32 i=0; i<nDefaultValueProps; ++i)
         {

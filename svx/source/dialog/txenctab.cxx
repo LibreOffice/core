@@ -23,7 +23,7 @@
 
 OUString SvxTextEncodingTable::GetTextString(const rtl_TextEncoding nEnc)
 {
-    const size_t nCount = SAL_N_ELEMENTS(RID_SVXSTR_TEXTENCODING_TABLE);
+    const size_t nCount = std::size(RID_SVXSTR_TEXTENCODING_TABLE);
 
     for (size_t i = 0; i < nCount; ++i)
     {
@@ -36,7 +36,7 @@ OUString SvxTextEncodingTable::GetTextString(const rtl_TextEncoding nEnc)
 
 rtl_TextEncoding SvxTextEncodingTable::GetTextEncoding(const OUString& rStr)
 {
-    const size_t nCount = SAL_N_ELEMENTS(RID_SVXSTR_TEXTENCODING_TABLE);
+    const size_t nCount = std::size(RID_SVXSTR_TEXTENCODING_TABLE);
 
     for (size_t i = 0; i < nCount; ++i)
     {

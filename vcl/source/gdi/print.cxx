@@ -1404,8 +1404,8 @@ OUString Printer::GetPaperName( Paper ePaper )
             PAPER_ARCHE, PAPER_SCREEN_16_9, PAPER_SCREEN_16_10, PAPER_16K_195x270, PAPER_16K_197x273,
             PAPER_WIDESCREEN, PAPER_ONSCREENSHOW_4_3, PAPER_ONSCREENSHOW_16_9, PAPER_ONSCREENSHOW_16_10
         };
-        static_assert(SAL_N_ELEMENTS(PaperIndex) == SAL_N_ELEMENTS(RID_STR_PAPERNAMES), "localized paper name count wrong");
-        for (size_t i = 0; i < SAL_N_ELEMENTS(PaperIndex); ++i)
+        static_assert(std::size(PaperIndex) == std::size(RID_STR_PAPERNAMES), "localized paper name count wrong");
+        for (size_t i = 0; i < std::size(PaperIndex); ++i)
             pSVData->maPaperNames[PaperIndex[i]] = VclResId(RID_STR_PAPERNAMES[i]);
     }
 

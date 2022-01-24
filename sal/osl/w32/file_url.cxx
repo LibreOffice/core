@@ -316,16 +316,16 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
 
         DWORD   dwCandidatPathType = PATHTYPE_ERROR;
 
-        if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, WSTR_LONG_PATH_PREFIX_UNC, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1 ) )
+        if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, WSTR_LONG_PATH_PREFIX_UNC, std::size(WSTR_LONG_PATH_PREFIX_UNC) - 1, std::size(WSTR_LONG_PATH_PREFIX_UNC) - 1 ) )
         {
             /* This is long path in UNC notation */
-            lpComponent = lpszPath + SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1;
+            lpComponent = lpszPath + std::size(WSTR_LONG_PATH_PREFIX_UNC) - 1;
             dwCandidatPathType = PATHTYPE_ABSOLUTE_UNC | PATHTYPE_IS_LONGPATH;
         }
-        else if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, WSTR_LONG_PATH_PREFIX, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 ) )
+        else if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, WSTR_LONG_PATH_PREFIX, std::size(WSTR_LONG_PATH_PREFIX) - 1, std::size(WSTR_LONG_PATH_PREFIX) - 1 ) )
         {
             /* This is long path */
-            lpComponent = lpszPath + SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1;
+            lpComponent = lpszPath + std::size(WSTR_LONG_PATH_PREFIX) - 1;
 
             if (startsWithDriveColon(lpComponent))
             {
@@ -648,14 +648,14 @@ DWORD GetCaseCorrectPathName(
     /* Special handling for "\\.\" as system root */
     if ( lpszShortPath && 0 == wcscmp( lpszShortPath, o3tl::toW(WSTR_SYSTEM_ROOT_PATH) ) )
     {
-        if ( cchBuffer >= SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) )
+        if ( cchBuffer >= std::size(WSTR_SYSTEM_ROOT_PATH) )
         {
             wcscpy( lpszLongPath, o3tl::toW(WSTR_SYSTEM_ROOT_PATH) );
-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
+            return std::size(WSTR_SYSTEM_ROOT_PATH) - 1;
         }
         else
         {
-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
+            return std::size(WSTR_SYSTEM_ROOT_PATH) - 1;
         }
     }
     else if ( lpszShortPath )
@@ -910,7 +910,7 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
             switch ( dwPathType & PATHTYPE_MASK_TYPE )
             {
                 case PATHTYPE_ABSOLUTE_UNC:
-                    static_assert(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1 == 8,
+                    static_assert(std::size(WSTR_LONG_PATH_PREFIX_UNC) - 1 == 8,
                                   "Unexpected long path UNC prefix!");
 
                     /* generate the normal UNC path */
@@ -918,7 +918,7 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
                     break;
 
                 case PATHTYPE_ABSOLUTE_LOCAL:
-                    static_assert(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 == 4,
+                    static_assert(std::size(WSTR_LONG_PATH_PREFIX) - 1 == 4,
                                   "Unexpected long path prefix!");
 
                     /* generate the normal path */
