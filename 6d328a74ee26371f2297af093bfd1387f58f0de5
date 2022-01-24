@@ -33,6 +33,24 @@
       "message": "Ah - interesting :-) Just since I had the time I also made a local pro-build, also no problems with the test. Just to note... what\u0027s going on with these builds...?",
       "revId": "6d328a74ee26371f2297af093bfd1387f58f0de5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b8f28a5_6cf5c0e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-24T14:10:49Z",
+      "side": 1,
+      "message": "well half the time some test or other fails, then you just restart the build...",
+      "parentUuid": "42ee8a2e_031e411e",
+      "revId": "6d328a74ee26371f2297af093bfd1387f58f0de5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
