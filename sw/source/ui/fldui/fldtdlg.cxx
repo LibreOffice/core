@@ -102,10 +102,10 @@ SwFieldDlg::~SwFieldDlg()
 {
 }
 
-void SwFieldDlg::EndDialog()
+void SwFieldDlg::EndDialog(int nResponse)
 {
     m_bClosing = true;
-    SfxTabDialogController::EndDialog();
+    SfxTabDialogController::EndDialog(nResponse);
     m_bClosing = false;
 }
 
@@ -121,7 +121,7 @@ void SwFieldDlg::Close()
         // If Execute action did fail for whatever reason, this means that request
         // to close did fail or wasn't delivered to SwTextShell::ExecField().
         // Just explicitly close dialog in this case.
-        SfxTabDialogController::EndDialog();
+        SfxTabDialogController::EndDialog(RET_CLOSE);
     }
 }
 

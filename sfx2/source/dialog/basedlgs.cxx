@@ -142,11 +142,11 @@ SfxModelessDialogController::~SfxModelessDialogController()
         m_pBindings->SetActiveFrame(nullptr);
 }
 
-void SfxDialogController::EndDialog()
+void SfxDialogController::EndDialog(int nResponse)
 {
     if (!m_xDialog->get_visible())
         return;
-    response(RET_CLOSE);
+    response(nResponse);
 }
 
 bool SfxModelessDialogController::IsClosing() const
@@ -154,7 +154,7 @@ bool SfxModelessDialogController::IsClosing() const
     return m_xImpl->bClosing;
 }
 
-void SfxModelessDialogController::EndDialog()
+void SfxModelessDialogController::EndDialog(int nResponse)
 {
     if (m_xImpl->bClosing)
         return;
@@ -163,7 +163,7 @@ void SfxModelessDialogController::EndDialog()
     // stack frame.
     auto aHoldSelf = shared_from_this();
     m_xImpl->bClosing = true;
-    SfxDialogController::EndDialog();
+    SfxDialogController::EndDialog(nResponse);
     if (!m_xImpl)
         return;
     m_xImpl->bClosing = false;
