@@ -70,6 +70,30 @@
       },
       "revId": "262bee91d87ed908c0ddf873a68a4434b999bb96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "632dbb34_84df9579",
+        "filename": "sfx2/source/doc/autoredactdialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-24T22:03:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6897c524_7ac88a04",
+      "range": {
+        "startLine": 320,
+        "startChar": 74,
+        "endLine": 320,
+        "endChar": 78
+      },
+      "revId": "262bee91d87ed908c0ddf873a68a4434b999bb96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
