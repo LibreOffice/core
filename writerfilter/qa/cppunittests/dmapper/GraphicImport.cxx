@@ -275,6 +275,29 @@ CPPUNIT_TEST_FIXTURE(Test, testTextboxTextlineTop)
     sal_Int16 nExpectedOrient = text::VertOrientation::BOTTOM;
     CPPUNIT_ASSERT_EQUAL(nExpectedOrient, nActualOrient);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellWrapnoneColumn)
+{
+    // Given a file with a table, then a shape anchored inside the cell:
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "layout-in-cell-wrapnone-column.docx";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure the shape can leave the cell:
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xNamedShape(xShape, uno::UNO_QUERY);
+    // Not "Frame".
+    CPPUNIT_ASSERT(xNamedShape->getName().startsWith("Text Box"));
+    bool bFollowingTextFlow = true;
+    // Without the accompanying fix in place, this test would have failed, the shape was not allowed
+    // to leave the cell, leading to incorrect layout.
+    CPPUNIT_ASSERT(xShape->getPropertyValue("IsFollowingTextFlow") >>= bFollowingTextFlow);
+    CPPUNIT_ASSERT(!bFollowingTextFlow);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
