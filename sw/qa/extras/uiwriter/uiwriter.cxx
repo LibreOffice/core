@@ -4140,6 +4140,27 @@ static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xCompone
     xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf139843)
+{
+    load(DATA_DIRECTORY, "tdf139843.odt");
+
+    CPPUNIT_ASSERT_EQUAL(7, getPages());
+
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Without the fix in place, this test would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(7, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134252)
 {
     load(DATA_DIRECTORY, "tdf134252.fodt");
