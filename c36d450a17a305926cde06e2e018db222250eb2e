@@ -69,6 +69,23 @@
       "parentUuid": "13b99474_734790d8",
       "revId": "c36d450a17a305926cde06e2e018db222250eb2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10f5e182_721d26c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-01-24T16:25:43Z",
+      "side": 1,
+      "message": "We get a new ModifiedStatus on every key-stroke currently - which is indeed one of the most frequent.\n\nQuite why - I have no idea, I could swear it was less bad in the past; perhaps something changed in the dispatcher.",
+      "revId": "c36d450a17a305926cde06e2e018db222250eb2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
