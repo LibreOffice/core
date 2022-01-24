@@ -7324,7 +7324,11 @@ public:
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pFinish), false, false, 0);
 #endif
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+        m_pHelp = GTK_BUTTON(gtk_button_new_from_icon_name("help-browser-symbolic"));
+#else
         m_pHelp = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Help)).getStr()));
+#endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_set_can_default(GTK_WIDGET(m_pHelp), true);
 #endif
