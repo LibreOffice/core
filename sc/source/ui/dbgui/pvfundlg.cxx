@@ -171,10 +171,10 @@ void ScDPFunctionListBox::FillFunctionNames()
     OSL_ENSURE( !m_xControl->n_children(), "ScDPMultiFuncListBox::FillFunctionNames - do not add texts to resource" );
     m_xControl->clear();
     m_xControl->freeze();
-    for (size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(SCSTR_DPFUNCLISTBOX); ++nIndex)
+    for (size_t nIndex = 0; nIndex < std::size(SCSTR_DPFUNCLISTBOX); ++nIndex)
         m_xControl->append_text(ScResId(SCSTR_DPFUNCLISTBOX[nIndex]));
     m_xControl->thaw();
-    assert(m_xControl->n_children() == SAL_N_ELEMENTS(spnFunctions));
+    assert(m_xControl->n_children() == static_cast<int>(std::size(spnFunctions)));
 }
 
 namespace

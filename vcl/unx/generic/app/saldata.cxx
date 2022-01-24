@@ -459,7 +459,7 @@ static void PrintXError( Display *pDisplay, XErrorEvent *pEvent )
     char msg[ 120 ] = "";
     XGetErrorText( pDisplay, pEvent->error_code, msg, sizeof( msg ) );
     std::fprintf( stderr, "X-Error: %s\n", msg );
-    if( pEvent->request_code < SAL_N_ELEMENTS( XRequest ) )
+    if( pEvent->request_code < std::size( XRequest ) )
     {
         const char* pName = XRequest[pEvent->request_code];
         if( !pName )

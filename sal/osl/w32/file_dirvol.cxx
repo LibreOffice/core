@@ -121,7 +121,7 @@ namespace
     };
 
     bool is_UNC_path(const sal_Unicode* path)
-    { return (0 == wcsncmp(UNC_PREFIX, o3tl::toW(path), SAL_N_ELEMENTS(UNC_PREFIX) - 1)); }
+    { return (0 == wcsncmp(UNC_PREFIX, o3tl::toW(path), std::size(UNC_PREFIX) - 1)); }
 
     void parse_UNC_path(const sal_Unicode* path, UNCComponents* puncc)
     {
@@ -267,9 +267,9 @@ static HANDLE WINAPI OpenLogicalDrivesEnum()
     LPDRIVEENUM pEnum = static_cast<LPDRIVEENUM>(HeapAlloc( GetProcessHeap(), 0, sizeof(DRIVEENUM) ));
     if ( pEnum )
     {
-        DWORD dwNumCopied = GetLogicalDriveStringsW( SAL_N_ELEMENTS(pEnum->cBuffer) - 1, pEnum->cBuffer );
+        DWORD dwNumCopied = GetLogicalDriveStringsW( std::size(pEnum->cBuffer) - 1, pEnum->cBuffer );
 
-        if ( dwNumCopied && dwNumCopied < SAL_N_ELEMENTS(pEnum->cBuffer) )
+        if ( dwNumCopied && dwNumCopied < std::size(pEnum->cBuffer) )
         {
             pEnum->lpCurrent = pEnum->cBuffer;
             pEnum->lpIdent = L"tagDRIVEENUM";
@@ -1098,16 +1098,16 @@ static bool is_floppy_volume_mount_point(const OUString& path)
     osl::systemPathEnsureSeparator(p);
 
     WCHAR vn[51];
-    if (GetVolumeNameForVolumeMountPointW(o3tl::toW(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
+    if (GetVolumeNameForVolumeMountPointW(o3tl::toW(p.getStr()), vn, std::size(vn)))
     {
         WCHAR vnfloppy[51];
         if (is_floppy_A_present() &&
-            GetVolumeNameForVolumeMountPointW(FLOPPY_A, vnfloppy, SAL_N_ELEMENTS(vnfloppy)) &&
+            GetVolumeNameForVolumeMountPointW(FLOPPY_A, vnfloppy, std::size(vnfloppy)) &&
             (0 == wcscmp(vn, vnfloppy)))
             return true;
 
         if (is_floppy_B_present() &&
-            GetVolumeNameForVolumeMountPointW(FLOPPY_B, vnfloppy, SAL_N_ELEMENTS(vnfloppy)) &&
+            GetVolumeNameForVolumeMountPointW(FLOPPY_B, vnfloppy, std::size(vnfloppy)) &&
             (0 == wcscmp(vn, vnfloppy)))
             return true;
     }
@@ -1165,7 +1165,7 @@ static UINT get_volume_mount_point_drive_type(const OUString& path)
     osl::systemPathEnsureSeparator(p);
 
     WCHAR vn[51];
-    if (GetVolumeNameForVolumeMountPointW(o3tl::toW(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
+    if (GetVolumeNameForVolumeMountPointW(o3tl::toW(p.getStr()), vn, std::size(vn)))
         return GetDriveTypeW(vn);
 
     return DRIVE_NO_ROOT_DIR;
@@ -1408,7 +1408,7 @@ static oslFileError osl_getDriveInfo(
             case DRIVE_REMOTE:
             {
                 WCHAR szBuffer[1024];
-                DWORD const dwBufsizeConst = SAL_N_ELEMENTS(szBuffer);
+                DWORD const dwBufsizeConst = std::size(szBuffer);
                 DWORD dwBufsize = dwBufsizeConst;
 
                 DWORD dwResult = WNetGetConnectionW( cDrive, szBuffer, &dwBufsize );
@@ -1427,7 +1427,7 @@ static oslFileError osl_getDriveInfo(
             case DRIVE_FIXED:
             {
                 WCHAR szVolumeNameBuffer[1024];
-                DWORD const dwBufsizeConst = SAL_N_ELEMENTS(szVolumeNameBuffer);
+                DWORD const dwBufsizeConst = std::size(szVolumeNameBuffer);
 
                 if ( GetVolumeInformationW( cRoot, szVolumeNameBuffer, dwBufsizeConst, nullptr, nullptr, nullptr, nullptr, 0 ) )
                 {

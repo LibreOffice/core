@@ -310,7 +310,7 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
     if ( !_xReportControlFormat.is() )
         return;
 
-    for (size_t j = 0; j < SAL_N_ELEMENTS(aItems); ++j)
+    for (size_t j = 0; j < std::size(aItems); ++j)
     {
         m_xActions->set_item_active(aItems[j], OReportController::isFormatCommandEnabled(mapToolbarItemToSlotId(aItems[j]),
             _xReportControlFormat));

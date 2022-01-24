@@ -70,7 +70,7 @@ void lcl_FillAuthPattern(SwFormTokens &rAuthTokens, sal_uInt16 nTypeId)
         nTypeId == AUTH_TYPE_WWW ? AUTH_FIELD_URL : AUTH_FIELD_END
     };
 
-    for(size_t i = 0; i < SAL_N_ELEMENTS(nVals); ++i)
+    for(size_t i = 0; i < std::size(nVals); ++i)
     {
         if(nVals[i] == AUTH_FIELD_END)
             break;

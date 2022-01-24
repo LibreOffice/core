@@ -151,11 +151,11 @@ const char* const RepFontTab[] =
 
 int getRepFamilyName(const char* orig, char *buf, double &ratio)
 {
-    for( int i = 0 ; i < int(SAL_N_ELEMENTS(FontMapTab)); i++)
+    for( const auto& rFontMap : FontMapTab )
     {
-        if( !strcmp(orig, FontMapTab[i].familyname) ){
-            ratio = FontMapTab[i].ratio;
-            return strlen( strcpy(buf,RepFontTab[FontMapTab[i].key]) );
+        if( !strcmp(orig, rFontMap.familyname) ){
+            ratio = rFontMap.ratio;
+            return strlen( strcpy(buf,RepFontTab[rFontMap.key]) );
         }
     }
     ratio = FontMapTab[0].ratio;

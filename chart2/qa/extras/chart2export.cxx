@@ -932,7 +932,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
                 { 2, css::drawing::LineStyle_SOLID, 0x00FF0000 }  // solid red
             };
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aDataPoints); ++i)
+            for (size_t i = 0; i < std::size(aDataPoints); ++i)
             {
                 xPropSet = xDataSeries->getDataPointByIndex(aDataPoints[i].mnIndex);
                 CPPUNIT_ASSERT(xPropSet.is());

@@ -1013,7 +1013,7 @@ void FmXFormShell::ForceUpdateSelection_Lock()
 
 void FmXFormShell::GetConversionMenu_Lock(weld::Menu& rNewMenu)
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aConvertSlots); ++i)
+    for (size_t i = 0; i < std::size(aConvertSlots); ++i)
     {
         // the corresponding image at it
         rNewMenu.append(OUString::createFromAscii(aConvertSlots[i]), SvxResId(RID_SVXSW_CONVERTMENU[i]), aImgIds[i]);
@@ -1022,9 +1022,9 @@ void FmXFormShell::GetConversionMenu_Lock(weld::Menu& rNewMenu)
 
 OString FmXFormShell::SlotToIdent(sal_uInt16 nSlot)
 {
-    static_assert(SAL_N_ELEMENTS(SelObjectSlotMap) >= SAL_N_ELEMENTS(aConvertSlots));
+    static_assert(std::size(SelObjectSlotMap) >= std::size(aConvertSlots));
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aConvertSlots); ++i)
+    for (size_t i = 0; i < std::size(aConvertSlots); ++i)
     {
         if (nSlot == SelObjectSlotMap[i])
             return aConvertSlots[i];
@@ -1069,7 +1069,7 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
     OSL_ENSURE( isSolelySelected_Lock(_rxObject),
         "FmXFormShell::executeControlConversionSlot: hmm ... shouldn't this parameter be redundant?" );
 
-    for (size_t lookupSlot = 0; lookupSlot < SAL_N_ELEMENTS(aConvertSlots); ++lookupSlot)
+    for (size_t lookupSlot = 0; lookupSlot < std::size(aConvertSlots); ++lookupSlot)
     {
         if (rIdent == aConvertSlots[lookupSlot])
         {
@@ -1277,10 +1277,10 @@ bool FmXFormShell::canConvertCurrentSelectionToControl_Lock(std::string_view rId
        )
         return false;   // those types cannot be converted
 
-    DBG_ASSERT(SAL_N_ELEMENTS(aConvertSlots) == SAL_N_ELEMENTS(nObjectTypes),
+    DBG_ASSERT(std::size(aConvertSlots) == std::size(nObjectTypes),
         "FmXFormShell::canConvertCurrentSelectionToControl: aConvertSlots & nObjectTypes must have the same size !");
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aConvertSlots); ++i)
+    for (size_t i = 0; i < std::size(aConvertSlots); ++i)
         if (rIdent == aConvertSlots[i])
             return nObjectTypes[i] != nObjectType;
 

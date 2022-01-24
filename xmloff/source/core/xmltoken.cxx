@@ -3482,7 +3482,7 @@ namespace xmloff::token {
             bool foundDuplicate = false;
             const XMLTokenEntry* pEntry = aTokenList;
             const XMLTokenEntry* pEntryEnd =
-                pEntry + SAL_N_ELEMENTS(aTokenList);
+                pEntry + std::size(aTokenList);
             sal_uInt16 nPos = 0;
             while (pEntry < pEntryEnd)
             {
@@ -3515,7 +3515,7 @@ namespace xmloff::token {
 #endif
         assert(XML_TOKEN_INVALID < eToken);
         assert(eToken < XML_TOKEN_END);
-        assert(sal_uInt16(eToken) < SAL_N_ELEMENTS(aTokenList));
+        assert(sal_uInt16(eToken) < std::size(aTokenList));
 
         XMLTokenEntry* pToken = &aTokenList[static_cast<sal_uInt16>(eToken)];
         if (!pToken->xOUString)

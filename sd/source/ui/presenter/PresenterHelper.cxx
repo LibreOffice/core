@@ -383,7 +383,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
           BMP_PRESENTERSCREEN_SEPARATOR }
     };
     OUString bmpid;
-    for (std::size_t i = 0; i != SAL_N_ELEMENTS(map); ++i) {
+    for (std::size_t i = 0; i != std::size(map); ++i) {
         if (id.equalsAscii(map[i].sid)) {
             bmpid = map[i].bmpid;
             break;

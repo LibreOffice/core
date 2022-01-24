@@ -879,7 +879,7 @@ FontFamily PrintFontManager::matchFamilyName( std::u16string_view rFamily )
 
     OString aFamily = OUStringToOString( rFamily, RTL_TEXTENCODING_ASCII_US );
     sal_uInt32 nLower = 0;
-    sal_uInt32 nUpper = SAL_N_ELEMENTS(pFamilyMatch);
+    sal_uInt32 nUpper = std::size(pFamilyMatch);
 
     while( nLower < nUpper )
     {

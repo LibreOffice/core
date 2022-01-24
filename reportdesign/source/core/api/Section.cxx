@@ -45,7 +45,7 @@ static uno::Sequence< OUString> lcl_getGroupAbsent()
                 ,OUString(PROPERTY_CANSHRINK)
         };
 
-    return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
+    return uno::Sequence< OUString >(pProps,std::size(pProps));
 }
 
 
@@ -61,7 +61,7 @@ static uno::Sequence< OUString> lcl_getAbsent(bool _bPageSection)
                 ,OUString(PROPERTY_CANSHRINK)
                 ,OUString(PROPERTY_REPEATSECTION)
         };
-        return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
+        return uno::Sequence< OUString >(pProps,std::size(pProps));
     }
 
     const OUString pProps[] = {
@@ -70,7 +70,7 @@ static uno::Sequence< OUString> lcl_getAbsent(bool _bPageSection)
                 ,OUString(PROPERTY_REPEATSECTION)
         };
 
-    return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
+    return uno::Sequence< OUString >(pProps,std::size(pProps));
 }
 
 uno::Reference<report::XSection> OSection::createOSection(

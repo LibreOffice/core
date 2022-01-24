@@ -237,7 +237,7 @@ OUString WinSalInstance::GetDefaultPrinter()
 
     // get default printer from win.ini
     wchar_t szBuffer[256];
-    GetProfileStringW( aImplWindows, aImplDevice, L"", szBuffer, SAL_N_ELEMENTS( szBuffer ) );
+    GetProfileStringW( aImplWindows, aImplDevice, L"", szBuffer, std::size( szBuffer ) );
     if ( szBuffer[0] )
     {
         // search for printer name
@@ -421,13 +421,13 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     if( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmSize >= 64 )
     {
         sal_Int32 nLen = rtl_ustr_getLength( o3tl::toU(reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName) );
-        if ( sal::static_int_cast<size_t>(nLen) < SAL_N_ELEMENTS( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName ) )
+        if ( sal::static_int_cast<size_t>(nLen) < std::size( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName ) )
             memset( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName+nLen, 0, sizeof( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName )-(nLen*sizeof(sal_Unicode)) );
     }
     if( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmSize >= 166 )
     {
         sal_Int32 nLen = rtl_ustr_getLength( o3tl::toU(reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName) );
-        if ( sal::static_int_cast<size_t>(nLen) < SAL_N_ELEMENTS( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName ) )
+        if ( sal::static_int_cast<size_t>(nLen) < std::size( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName ) )
             memset( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName+nLen, 0, sizeof( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName )-(nLen*sizeof(sal_Unicode)) );
     }
 

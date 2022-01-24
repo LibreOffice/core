@@ -97,7 +97,7 @@ Mapping casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 l
     sal_uInt32 c;
     if (pos > 0 && rtl::isHighSurrogate(str[pos-1]) && rtl::isLowSurrogate(str[pos])) {
         c = rtl::combineSurrogates(str[pos-1], str[pos]);
-        if (c >= SAL_N_ELEMENTS(CaseMappingIndex) * 256)
+        if (c >= std::size(CaseMappingIndex) * 256)
             return dummy;
     } else {
         c = str[pos];

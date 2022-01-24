@@ -211,7 +211,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         m_bIsGreetingLineInMail_LastUserSetting(false),
         m_bIsGreetingLine_LastUserSetting(false)
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(SA_ADDRESS_HEADER); ++i)
+    for (size_t i = 0; i < std::size(SA_ADDRESS_HEADER); ++i)
     {
         m_AddressHeaderSA.emplace_back(SwResId(SA_ADDRESS_HEADER[i].first), SA_ADDRESS_HEADER[i].second);
     }

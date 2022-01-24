@@ -2789,7 +2789,7 @@ static void LoadThemedImageList(const StyleSettings &rStyleSettings,
     for (const auto &a : rResources)
     {
         BitmapEx aBmpEx(a);
-        aBmpEx.Replace(aColorAry1, aColorAry2, SAL_N_ELEMENTS(aColorAry1));
+        aBmpEx.Replace(aColorAry1, aColorAry2, std::size(aColorAry1));
         rList.emplace_back(aBmpEx);
     }
 }

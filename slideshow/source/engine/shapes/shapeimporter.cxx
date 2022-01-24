@@ -224,7 +224,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                                   mnAscendingPrio,
                                   "com.sun.star.comp.sfx2.AppletObject",
                                   aPropertyValues,
-                                  SAL_N_ELEMENTS(aPropertyValues),
+                                  std::size(aPropertyValues),
                                   mrContext );
     }
     else if( shapeType == u"com.sun.star.drawing.OLE2Shape" || shapeType == u"com.sun.star.presentation.OLE2Shape" )

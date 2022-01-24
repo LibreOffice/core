@@ -866,7 +866,7 @@ tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         &SwWW8ImplReader::Read_F_Shape,             // 95
         nullptr                                           // eMax - Dummy empty method
     };
-    OSL_ENSURE( SAL_N_ELEMENTS( aWW8FieldTab ) == eMax+1, "FieldFunc table not right" );
+    OSL_ENSURE( std::size( aWW8FieldTab ) == eMax+1, "FieldFunc table not right" );
 
     WW8PLCFx_FLD* pF = m_xPlcxMan->GetField();
     OSL_ENSURE(pF, "WW8PLCFx_FLD - Pointer not available");
@@ -899,7 +899,7 @@ tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     sal_uInt16 nI = n / 32;                     // # of sal_uInt32
     sal_uInt32 nMask = 1 << ( n % 32 );          // Mask for bits
 
-    if (SAL_N_ELEMENTS(m_nFieldTagAlways) <= nI)
+    if (std::size(m_nFieldTagAlways) <= nI)
     {   // if indexes larger than 95 are needed, then a new configuration
         // item has to be added, and nFieldTagAlways/nFieldTagBad expanded!
         return aF.nLen;

@@ -50,7 +50,7 @@ void PriorityFilterTest::testPriority()
         // TODO: expand this to check more of these priorities
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aToCheck); i++)
+    for (size_t i = 0; i < std::size(aToCheck); i++)
     {
         OUString aURL = OUString::createFromAscii(aToCheck[i].pURL);
         try

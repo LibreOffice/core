@@ -142,7 +142,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         if ( hPool == nullptr )
             throw BootstrapException( "cannot create random pool!" );
         sal_uInt8 bytes[ 16 ];
-        if ( rtl_random_getBytes( hPool, bytes, SAL_N_ELEMENTS( bytes ) )
+        if ( rtl_random_getBytes( hPool, bytes, std::size( bytes ) )
             != rtl_Random_E_None )
             throw BootstrapException( "random pool error!" );
         rtl_random_destroyPool( hPool );
@@ -171,7 +171,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         // start office process
         oslProcess hProcess = nullptr;
         oslProcessError rc = osl_executeProcess(
-            OUString(path + "soffice").pData, ar_args, SAL_N_ELEMENTS( ar_args ),
+            OUString(path + "soffice").pData, ar_args, std::size( ar_args ),
             osl_Process_DETACHED,
             sec.getHandle(),
             nullptr, // => current working dir

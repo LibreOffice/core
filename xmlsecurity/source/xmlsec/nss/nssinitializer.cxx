@@ -222,7 +222,7 @@ const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Refer
 
     if (xMozillaBootstrap.is())
     {
-        for (int i=0; i<int(SAL_N_ELEMENTS(productTypes)); ++i)
+        for (int i=0; i<int(std::size(productTypes)); ++i)
         {
             OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
 
@@ -262,7 +262,7 @@ css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNS
 
     if (xMozillaBootstrap.is())
     {
-        for (int i=0; i<int(SAL_N_ELEMENTS(productTypes)); ++i)
+        for (int i=0; i<int(std::size(productTypes)); ++i)
         {
             uno::Sequence<OUString> aProductProfileList;
             xMozillaBootstrap->getProfileList(productTypes[i], aProductProfileList);

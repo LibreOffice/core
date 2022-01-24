@@ -399,7 +399,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                     WMAdaptorProtocol* pMatch = static_cast<WMAdaptorProtocol*>(
                         bsearch( &aSearch,
                                  aProtocolTab,
-                                 SAL_N_ELEMENTS( aProtocolTab ),
+                                 std::size( aProtocolTab ),
                                  sizeof( struct WMAdaptorProtocol ),
                                  compareProtocol ));
                     if( pMatch )
@@ -650,7 +650,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                     WMAdaptorProtocol* pMatch = static_cast<WMAdaptorProtocol*>(
                         bsearch( &aSearch,
                                  aProtocolTab,
-                                 SAL_N_ELEMENTS( aProtocolTab ),
+                                 std::size( aProtocolTab ),
                                  sizeof( struct WMAdaptorProtocol ),
                                  compareProtocol ));
                     if( pMatch )

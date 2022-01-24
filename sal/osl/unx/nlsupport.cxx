@@ -608,7 +608,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     /* search the codeset in our language list */
     if ( codeset != nullptr )
     {
-        language = pair_search (codeset, nl_language_list, SAL_N_ELEMENTS( nl_language_list ) );
+        language = pair_search (codeset, nl_language_list, std::size( nl_language_list ) );
     }
 
     OSL_ASSERT( language && ( RTL_TEXTENCODING_DONTKNOW != language->value ) );
@@ -763,7 +763,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     if( compose_locale( pLocale, locale_buf, 64 ) )
     {
         /* check special handling list (EUC) first */
-        language = pair_search( locale_buf, full_locale_list, SAL_N_ELEMENTS( full_locale_list ) );
+        language = pair_search( locale_buf, full_locale_list, std::size( full_locale_list ) );
 
         if( nullptr == language )
         {
@@ -776,7 +776,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
             if( nullptr != cp )
             {
-                language = pair_search( cp + 1, locale_extension_list, SAL_N_ELEMENTS( locale_extension_list ) );
+                language = pair_search( cp + 1, locale_extension_list, std::size( locale_extension_list ) );
             }
         }
 
@@ -786,7 +786,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
             /* iso lang codes have 2 characters */
             locale_buf[2] = '\0';
 
-            language = pair_search( locale_buf, iso_language_list, SAL_N_ELEMENTS( iso_language_list ) );
+            language = pair_search( locale_buf, iso_language_list, std::size( iso_language_list ) );
         }
     }
 

@@ -528,7 +528,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             { FormulaMapGroupSpecialOffset::COL_ROW_NAME      , ocColRowName }     ,
             { FormulaMapGroupSpecialOffset::WHITESPACE        , ocWhitespace }
         };
-        const size_t nCount = SAL_N_ELEMENTS(aMap);
+        const size_t nCount = std::size(aMap);
         // Preallocate vector elements.
         FormulaOpCodeMapEntry aEntry;
         aEntry.Token.OpCode = getOpCodeUnknown();
@@ -564,7 +564,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 SC_OPCODE_CLOSE,
                 SC_OPCODE_SEP,
             };
-            lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
+            lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, std::size(aOpCodes) );
         }
         if ((nGroups & FormulaMapGroup::ARRAY_SEPARATORS) != 0)
         {
@@ -574,7 +574,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 SC_OPCODE_ARRAY_ROW_SEP,
                 SC_OPCODE_ARRAY_COL_SEP
             };
-            lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
+            lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, std::size(aOpCodes) );
         }
         if ((nGroups & FormulaMapGroup::UNARY_OPERATORS) != 0)
         {
@@ -623,7 +623,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 SC_OPCODE_AND,
                 SC_OPCODE_OR
             };
-            lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
+            lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, std::size(aOpCodes) );
             // functions with 2 or more parameters.
             for (sal_uInt16 nOp = SC_OPCODE_START_2_PAR; nOp < SC_OPCODE_STOP_2_PAR && nOp < mnSymbols; ++nOp)
             {
