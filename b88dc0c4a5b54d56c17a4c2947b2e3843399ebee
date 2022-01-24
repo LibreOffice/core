@@ -52,6 +52,24 @@
       "parentUuid": "66a3879a_753476f0",
       "revId": "b88dc0c4a5b54d56c17a4c2947b2e3843399ebee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c61d2e3f_ed76c6f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-24T10:23:56Z",
+      "side": 1,
+      "message": "\u003e Sorry, I should have updated this - I eventually fixed this specific problem with\n\u003e \n\u003e     commit c42a13c491196743d734107e54ef2f323fa1395b\n\u003e     Author: Noel Grandin \u003cnoel.grandin@collabora.co.uk\u003e\n\u003e     Date:   Fri Jan 21 14:00:12 2022 +0200\n\u003e     asan: fix symbol visibility in chart2\n\npotentially the above, plus definitely \u003chttps://gerrit.libreoffice.org/c/core/+/128851\u003e \"asan: fix symbol visibility in chart2\" is what fixes CppunitTest_chart2_export in my ASan+UBSan build (which did spit out various \"warn:sal.osl:957964:957964:sal/osl/unx/module.cxx:152: dlopen(instdir/program/libchartcontrollerlo.so, 257): instdir/program/libchartcontrollerlo.so: undefined symbol: _ZTIN5chart15DataInterpreterE\" after all, but which I had failed to notice before)",
+      "parentUuid": "10d273ac_8d841de9",
+      "revId": "b88dc0c4a5b54d56c17a4c2947b2e3843399ebee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
