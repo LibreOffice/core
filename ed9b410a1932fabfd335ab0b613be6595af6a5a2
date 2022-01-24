@@ -16,6 +16,24 @@
       "message": "do we still need this header?\nthis was added in https://gerrit.libreoffice.org/c/core/+/113476",
       "revId": "ed9b410a1932fabfd335ab0b613be6595af6a5a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f04e7a8_77862ab4",
+        "filename": "setup_native/source/win32/customactions/shellextensions/checkpatches.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-24T11:57:08Z",
+      "side": 0,
+      "message": "You are right; yet, as mentioned, this is mostly automated change, and I only remove the header where I need to do manual edits :-) so I rely on follow-up IWYU plugin :-)",
+      "parentUuid": "18105b95_53f698c6",
+      "revId": "ed9b410a1932fabfd335ab0b613be6595af6a5a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
