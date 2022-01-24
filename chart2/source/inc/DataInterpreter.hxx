@@ -24,6 +24,7 @@
 #include <com/sun/star/chart2/InterpretedData.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
@@ -31,7 +32,7 @@ namespace chart
 /** offers tooling to interpret different data sources in a structural
     and chart-type-dependent way.
  */
-class DataInterpreter : public ::cppu::WeakImplHelper<
+class SAL_DLLPUBLIC_RTTI DataInterpreter : public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo >
 {
 public:
