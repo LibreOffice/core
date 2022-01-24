@@ -108,7 +108,7 @@ Args *args_parse (void)
             length--;
         }
 
-        for ( j = 0; j < SAL_N_ELEMENTS (pArgDescr); ++j ) {
+        for ( j = 0; j < std::size (pArgDescr); ++j ) {
             if (rtl_ustr_ascii_compare_WithLength(
                     arg, length, pArgDescr[j].name)
                 == 0)

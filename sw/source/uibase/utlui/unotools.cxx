@@ -479,7 +479,7 @@ bool SwOneExampleFrame::CreatePopup(const Point& rPt)
     sal_Int16 nZoom = 0;
     aZoom >>= nZoom;
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(nZoomValues); ++i)
+    for (size_t i = 0; i < std::size(nZoomValues); ++i)
     {
         OUString sTemp = unicode::formatPercent(nZoomValues[i],
             Application::GetSettings().GetUILanguageTag());

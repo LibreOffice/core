@@ -424,9 +424,9 @@ OUString SpinfieldToolbarController::FormatOutputString( double fValue )
 
         aBuffer[0] = 0;
         if ( m_bFloat )
-            _snwprintf( o3tl::toW(aBuffer), SAL_N_ELEMENTS(aBuffer), o3tl::toW(m_aOutFormat.getStr()), fValue );
+            _snwprintf( o3tl::toW(aBuffer), std::size(aBuffer), o3tl::toW(m_aOutFormat.getStr()), fValue );
         else
-            _snwprintf( o3tl::toW(aBuffer), SAL_N_ELEMENTS(aBuffer), o3tl::toW(m_aOutFormat.getStr()), sal_Int32( fValue ));
+            _snwprintf( o3tl::toW(aBuffer), std::size(aBuffer), o3tl::toW(m_aOutFormat.getStr()), sal_Int32( fValue ));
 
         return OUString(aBuffer);
 #else

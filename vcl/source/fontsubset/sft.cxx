@@ -237,7 +237,7 @@ static char toHex(sal_uInt8 nIndex)
 {
     /* Hex Formatter functions */
     static const char HexChars[] = "0123456789ABCDEF";
-    assert(nIndex < SAL_N_ELEMENTS(HexChars));
+    assert(nIndex < std::size(HexChars));
     return HexChars[nIndex];
 }
 

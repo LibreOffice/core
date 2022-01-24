@@ -140,7 +140,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
             {
                 std::wstring fname = getShortPathName( buffer.get() );
                 ZeroMemory( m_szFileName, sizeof( m_szFileName ) );
-                wcsncpy( m_szFileName, fname.c_str(), ( SAL_N_ELEMENTS( m_szFileName ) - 1 ) );
+                wcsncpy( m_szFileName, fname.c_str(), ( std::size( m_szFileName ) - 1 ) );
                 hr = S_OK;
             }
             else

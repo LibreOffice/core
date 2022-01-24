@@ -778,7 +778,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     {
         // equivalent for traditional chinese disabled by popular request, #i89077#
         mpArray = aImplSimplifiedChinese;
-        mnElem = SAL_N_ELEMENTS(aImplSimplifiedChinese);
+        mnElem = std::size(aImplSimplifiedChinese);
     }
     else
     {

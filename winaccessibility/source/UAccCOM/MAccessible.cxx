@@ -3024,7 +3024,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_states(AccessibleStates __RP
     *states = 0x0;
     for( int i = 0; i < count; i++  )
     {
-        for( std::size_t j = 0; j < SAL_N_ELEMENTS(UNO_STATES); j++ )
+        for( std::size_t j = 0; j < std::size(UNO_STATES); j++ )
         {
             if( pStates[i] == UNO_STATES[j] )
             {

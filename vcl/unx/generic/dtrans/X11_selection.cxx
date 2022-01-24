@@ -763,7 +763,7 @@ bool SelectionManager::requestOwnership( Atom selection )
 void SelectionManager::convertTypeToNative( const OUString& rType, Atom selection, int& rFormat, ::std::list< Atom >& rConversions, bool bPushFront )
 {
     NativeTypeEntry* pTab = selection == m_nXdndSelection ? aXdndConversionTab : aNativeConversionTab;
-    int nTabEntries = selection == m_nXdndSelection ? SAL_N_ELEMENTS(aXdndConversionTab) : SAL_N_ELEMENTS(aNativeConversionTab);
+    int nTabEntries = selection == m_nXdndSelection ? std::size(aXdndConversionTab) : std::size(aNativeConversionTab);
 
     OString aType( OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ) );
     SAL_INFO( "vcl.unx.dtrans", "convertTypeToNative " << aType );
@@ -832,7 +832,7 @@ void SelectionManager::getNativeTypeList( const Sequence< DataFlavor >& rTypes, 
 OUString SelectionManager::convertTypeFromNative( Atom nType, Atom selection, int& rFormat )
 {
     NativeTypeEntry* pTab = (selection == m_nXdndSelection) ? aXdndConversionTab : aNativeConversionTab;
-    int nTabEntries = (selection == m_nXdndSelection) ? SAL_N_ELEMENTS(aXdndConversionTab) : SAL_N_ELEMENTS(aNativeConversionTab);
+    int nTabEntries = (selection == m_nXdndSelection) ? std::size(aXdndConversionTab) : std::size(aNativeConversionTab);
 
     for( int i = 0; i < nTabEntries; i++ )
     {

@@ -1369,7 +1369,7 @@ bool CffSubsetterContext::initialCffRead()
 //      assert( mnFontDictBase == tellRel());
         mpReadPtr = mpBasePtr + mnFontDictBase;
         mnFDAryCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
-        if (o3tl::make_unsigned(mnFDAryCount) >= SAL_N_ELEMENTS(maCffLocal))
+        if (o3tl::make_unsigned(mnFDAryCount) >= std::size(maCffLocal))
         {
             SAL_INFO("vcl.fonts", "CffSubsetterContext: too many CFF in font");
             return false;
@@ -1421,7 +1421,7 @@ bool CffSubsetterContext::initialCffRead()
 const char* CffSubsetterContext::getString( int nStringID)
 {
     // get a standard string if possible
-    const static int nStdStrings = SAL_N_ELEMENTS(pStringIds);
+    const static int nStdStrings = std::size(pStringIds);
     if( (nStringID >= 0) && (nStringID < nStdStrings))
         return pStringIds[ nStringID];
 

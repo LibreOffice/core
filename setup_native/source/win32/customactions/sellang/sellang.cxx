@@ -167,7 +167,7 @@ static int num_ui_langs = 0;
 
 static void add_ui_lang(char const * lang)
 {
-    if (lang != nullptr && num_ui_langs != SAL_N_ELEMENTS(ui_langs)) {
+    if (lang != nullptr && num_ui_langs != std::size(ui_langs)) {
         ui_langs[num_ui_langs++] = lang;
     }
 }
@@ -179,7 +179,7 @@ enum_ui_lang_proc (LPTSTR language, LONG_PTR /* unused_lParam */)
     if (langid > 0xFFFF)
         return TRUE;
     add_ui_lang(langid_to_string(static_cast<LANGID>(langid)));
-    if (num_ui_langs == SAL_N_ELEMENTS(ui_langs) )
+    if (num_ui_langs == std::size(ui_langs) )
         return FALSE;
     return TRUE;
 }
@@ -212,7 +212,7 @@ struct InstallLocalized {
 void addMatchingDictionaries(
     char const * lang, InstallLocalized * dicts, int ndicts)
 {
-    for (int i = 0; i != SAL_N_ELEMENTS(setup_native::languageDictionaries);
+    for (int i = 0; i != std::size(setup_native::languageDictionaries);
          ++i)
     {
         if (strcmp(lang, setup_native::languageDictionaries[i].language) == 0) {

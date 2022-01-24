@@ -465,7 +465,7 @@ PointerStyles const styles[] = {
 static tools::Long lcl_loPointerToMsoPointer( PointerStyle eType )
 {
     tools::Long nRet = msforms::fmMousePointer::fmMousePointerDefault;
-    for ( int i = 0; i < int(SAL_N_ELEMENTS( styles )); ++i )
+    for ( int i = 0; i < int(std::size( styles )); ++i )
     {
         if ( styles[ i ].loPointStyle == eType )
         {
@@ -479,7 +479,7 @@ static tools::Long lcl_loPointerToMsoPointer( PointerStyle eType )
 static PointerStyle lcl_msoPointerToLOPointer( tools::Long msoPointerStyle )
 {
     PointerStyle aPointer( PointerStyle::Arrow );
-    for ( int i = 0; i < int(SAL_N_ELEMENTS( styles )); ++i )
+    for ( int i = 0; i < int(std::size( styles )); ++i )
     {
         if ( styles[ i ].msoPointerStyle == msoPointerStyle )
         {
@@ -711,7 +711,7 @@ void ScVbaControl::setBackColor( sal_Int32 nBackColor )
 {
     auto const col = static_cast<sal_uInt32>(nBackColor);
     if ( ( col >= sal_uInt32(0x80000000) ) &&
-         ( col <= sal_uInt32(0x80000000) + SAL_N_ELEMENTS(nSysCols) ) )
+         ( col <= sal_uInt32(0x80000000) + std::size(nSysCols) ) )
     {
         nBackColor = nSysCols[ col & 0x0FF];
     }

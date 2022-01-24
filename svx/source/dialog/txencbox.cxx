@@ -138,7 +138,7 @@ namespace
 
         rtl_TextEncodingInfo aInfo;
         aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
-        const sal_uInt32 nCount = SAL_N_ELEMENTS(RID_SVXSTR_TEXTENCODING_TABLE);
+        const sal_uInt32 nCount = std::size(RID_SVXSTR_TEXTENCODING_TABLE);
         for (sal_uInt32 j = 0; j < nCount; ++j)
         {
             bool bInsert = true;

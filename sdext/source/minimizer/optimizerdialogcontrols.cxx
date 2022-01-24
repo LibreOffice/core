@@ -77,7 +77,7 @@ static OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUStri
         Any( sal_Int16( 0 ) ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -115,7 +115,7 @@ static OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString&
         Any( nWidth ) };
 
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -148,7 +148,7 @@ static OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUStri
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -185,7 +185,7 @@ static OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUStrin
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -228,7 +228,7 @@ static OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const O
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -275,7 +275,7 @@ static OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUStrin
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -311,7 +311,7 @@ static OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUSt
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -354,7 +354,7 @@ static OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -820,7 +820,7 @@ void OptimizerDialog::InitPage4()
             Any( sal_Int32(0) ),
             Any( sal_Int32( PAGE_WIDTH - 12 ) ) };
 
-        sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+        sal_Int32 nCount = std::size( pNames );
 
         Sequence< OUString >   aNames( pNames, nCount );
         Sequence< Any >             aValues( pValues, nCount );

@@ -120,7 +120,7 @@ OUString getDateString(sal_Int32 nIndex)
         STR_COND_NEXTYEAR
     };
 
-    if (nIndex >= 0 && o3tl::make_unsigned(nIndex) < SAL_N_ELEMENTS(aCondStrs))
+    if (nIndex >= 0 && o3tl::make_unsigned(nIndex) < std::size(aCondStrs))
         return ScResId(aCondStrs[nIndex]);
     assert(false);
     return OUString();

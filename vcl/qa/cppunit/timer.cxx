@@ -179,7 +179,7 @@ public:
 void TimerTest::testDurations()
 {
     static const sal_uLong aDurations[] = { 0, 1, 500, 1000 };
-    for (size_t i = 0; i < SAL_N_ELEMENTS( aDurations ); i++)
+    for (size_t i = 0; i < std::size( aDurations ); i++)
     {
         bool bDone = false;
         TimerBool aTimer( aDurations[i], bDone );

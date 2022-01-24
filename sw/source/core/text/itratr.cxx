@@ -652,7 +652,7 @@ static bool CanSkipOverRedline(
     {
         if (!isTheAnswerYes) return false;
     }
-    for (size_t i = 0; i < SAL_N_ELEMENTS(activeCharAttrsStart); ++i)
+    for (size_t i = 0; i < std::size(activeCharAttrsStart); ++i)
     {
         // all of these are poolable
 //        assert(!activeCharAttrsStart[i] || activeCharAttrsStart[i]->GetItemPool()->IsItemPoolable(*activeCharAttrsStart[i]));

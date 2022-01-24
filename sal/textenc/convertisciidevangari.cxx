@@ -251,9 +251,6 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
     char* pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
     sal_uInt32 * pInfo, sal_Size* pSrcCvtChars)
 {
-    size_t const entries = SAL_N_ELEMENTS(unicodeToISCIIEncoding);
-    BmpUnicodeToSingleByteRange const * ranges = unicodeToISCIIEncoding;
-
     sal_Unicode cHighSurrogate = m_cHighSurrogate;
     sal_uInt32 nInfo = 0;
     sal_Size nConverted = 0;
@@ -370,21 +367,19 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
 
         // Linearly searching through the ranges if probably fastest, assuming
         // that most converted characters belong to the ASCII subset:
-        for (size_t i = 0; i < entries; ++i)
+        for (const auto& r : unicodeToISCIIEncoding)
         {
-            if (c < ranges[i].unicode)
+            if (c < r.unicode)
             {
                 break;
             }
-            if (c <= sal::static_int_cast< sal_uInt32 >(
-                           ranges[i].unicode + ranges[i].range))
+            if (c <= sal::static_int_cast<sal_uInt32>(r.unicode + r.range))
             {
                 if (pDestBufEnd - pDestBufPtr < 1)
                 {
                     goto no_output;
                 }
-                *pDestBufPtr++ = static_cast< char >(
-                    ranges[i].byte + (c - ranges[i].unicode));
+                *pDestBufPtr++ = static_cast<char>(r.byte + (c - r.unicode));
                 m_cPrevChar = c;
                 goto done;
             }

@@ -53,7 +53,7 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForExtension(std::string_view rExt)
 
     OUString aMimeType;
 
-    tools::Long const nCount = SAL_N_ELEMENTS(aMapper);
+    tools::Long const nCount = std::size(aMapper);
     for (tools::Long i = 0; (i < nCount) && aMimeType.isEmpty(); ++i)
     {
         if (rExt == aMapper[i].pExt)

@@ -475,12 +475,12 @@ static sal_Bool send_args(int fd, rtl_uString const *pCwdPath)
 
     if ( bResult )
     {
-        char resp[SAL_N_ELEMENTS("InternalIPC::ProcessingDone")];
-        ssize_t n = read(fd, resp, SAL_N_ELEMENTS(resp));
-        bResult = n == (ssize_t) SAL_N_ELEMENTS(resp)
+        char resp[std::size("InternalIPC::ProcessingDone")];
+        ssize_t n = read(fd, resp, std::size(resp));
+        bResult = n == (ssize_t) std::size(resp)
             && (memcmp(
                     resp, "InternalIPC::ProcessingDone",
-                    SAL_N_ELEMENTS(resp))
+                    std::size(resp))
                 == 0);
     }
 
@@ -679,7 +679,7 @@ static void exec_javaldx(Args *args)
         sal_uInt64 bytes_read;
 
         /* Magically osl_readLine doesn't work with pipes with E_SPIPE - so be this lame instead: */
-        while (osl_readFile (fileOut, newpath, SAL_N_ELEMENTS (newpath), &bytes_read) == osl_File_E_INTR);
+        while (osl_readFile (fileOut, newpath, std::size (newpath), &bytes_read) == osl_File_E_INTR);
 
         if (bytes_read <= 0)
         {
@@ -776,10 +776,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         {
             // Wait for answer
             char resp[strlen("InternalIPC::SendArguments") + 1];
-            ssize_t n = read(fd, resp, SAL_N_ELEMENTS(resp));
-            if (n == (ssize_t) SAL_N_ELEMENTS(resp) &&
+            ssize_t n = read(fd, resp, std::size(resp));
+            if (n == (ssize_t) std::size(resp) &&
                 (memcmp(resp, "InternalIPC::SendArguments",
-                        SAL_N_ELEMENTS(resp) - 1) == 0))
+                        std::size(resp) - 1) == 0))
             {
                 rtl_uString *pCwdPath = NULL;
                 osl_getProcessWorkingDir(&pCwdPath);

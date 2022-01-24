@@ -136,7 +136,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
     {
         //some of these are supposed to *not* be localized
         //so catch them before looking up the resource
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aUnlocalized); ++i)
+        for (size_t i = 0; i < std::size(aUnlocalized); ++i)
         {
             if (aUnlocalized[i].first == nId)
             {
@@ -147,7 +147,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         //look up the rest of the ids in string resources
         if (aName.isEmpty())
         {
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aLocalized); ++i)
+            for (size_t i = 0; i < std::size(aLocalized); ++i)
             {
                 if (aLocalized[i].first == nId)
                 {
@@ -179,10 +179,10 @@ std::unique_ptr<GalleryBinaryEngine> GalleryThemeEntry::createGalleryStorageEngi
 
 void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aUnlocalized); ++i)
+    for (size_t i = 0; i < std::size(aUnlocalized); ++i)
         rListBox.append_text(aUnlocalized[i].second);
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aLocalized); ++i)
+    for (size_t i = 0; i < std::size(aLocalized); ++i)
         rListBox.append_text(SvxResId(aLocalized[i].second));
 }
 

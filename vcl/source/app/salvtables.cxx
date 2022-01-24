@@ -3699,7 +3699,7 @@ SalInstanceTreeView::SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBui
     m_xTreeView->SetCustomRenderHdl(LINK(this, SalInstanceTreeView, CustomRenderHdl));
     m_xTreeView->SetCustomMeasureHdl(LINK(this, SalInstanceTreeView, CustomMeasureHdl));
     const tools::Long aTabPositions[] = { 0 };
-    m_xTreeView->SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
+    m_xTreeView->SetTabs(std::size(aTabPositions), aTabPositions);
     LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
 
     if (pHeaderBox)

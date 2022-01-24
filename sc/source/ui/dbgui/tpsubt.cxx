@@ -52,7 +52,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogControl
     , mxLbFunctions(m_xBuilder->weld_tree_view("functions"))
     , mxLbSelectAllColumns(m_xBuilder->weld_check_button("select_all_columns_button"))
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(SCSTR_SUBTOTALS); ++i)
+    for (size_t i = 0; i < std::size(SCSTR_SUBTOTALS); ++i)
         mxLbFunctions->append_text(ScResId(SCSTR_SUBTOTALS[i]));
 
     auto nHeight = mxLbColumns->get_height_rows(14);

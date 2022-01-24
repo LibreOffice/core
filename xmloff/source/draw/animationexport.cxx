@@ -529,7 +529,7 @@ static OUString lcl_StoreMediaAndGetURL(SvXMLExport & rExport, OUString const& r
             uno::Reference<embed::XStorage> const xTarget(
                     rExport.GetTargetStorage(), uno::UNO_SET_THROW);
 
-            urlPath = rURL.copy(SAL_N_ELEMENTS(s_PkgScheme)-1);
+            urlPath = rURL.copy(std::size(s_PkgScheme)-1);
 
             lcl_CopyStream(xSource, xTarget, urlPath);
 

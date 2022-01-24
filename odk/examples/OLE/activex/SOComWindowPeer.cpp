@@ -46,7 +46,7 @@ STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)
         &IID_ISOComWindowPeer,
     };
 
-    for (int i = 0; i < SAL_N_ELEMENTS(arr); i++)
+    for (int i = 0; i < std::size(arr); i++)
     {
         if (InlineIsEqualGUID(*arr[i], riid))
             return S_OK;
