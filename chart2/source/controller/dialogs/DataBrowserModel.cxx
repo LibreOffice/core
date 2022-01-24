@@ -464,8 +464,7 @@ void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColu
         return;
     }
 
-    Reference<chart2::XDataSeriesContainer> xSeriesCnt(
-        getHeaderForSeries(xSeries).m_xChartType, uno::UNO_QUERY);
+    rtl::Reference<ChartType> xSeriesCnt(getHeaderForSeries(xSeries).m_xChartType);
     if (!xSeriesCnt.is())
     {
         // Unexpected happened.  Bail out.
@@ -804,101 +803,98 @@ void DataBrowserModel::updateFromModel()
     const std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysSeq( xDiagram->getBaseCoordinateSystems());
     for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysSeq )
     {
-        const Sequence< Reference< chart2::XChartType > > aChartTypes( coords->getChartTypes());
+        const std::vector< rtl::Reference< ChartType > > aChartTypes( coords->getChartTypes2());
         sal_Int32 nXAxisNumberFormat = DataSeriesHelper::getNumberFormatKeyFromAxis( nullptr, coords, 0, 0 );
 
-        for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
+        for( sal_Int32 nCTIdx=0; nCTIdx < static_cast<sal_Int32>(aChartTypes.size()); ++nCTIdx )
         {
-            Reference< chart2::XDataSeriesContainer > xSeriesCnt( aChartTypes[nCTIdx], uno::UNO_QUERY );
-            if( xSeriesCnt.is())
+            rtl::Reference< ChartType > xSeriesCnt( aChartTypes[nCTIdx] );
+            OUString aRoleForDataLabelNumberFormat = ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( aChartTypes[nCTIdx] );
+
+            const Sequence< Reference< chart2::XDataSeries > > aSeries( xSeriesCnt->getDataSeries());
+            lcl_tSharedSeqVec aSharedSequences( lcl_getSharedSequences( aSeries ));
+            for (auto const& sharedSequence : aSharedSequences)
             {
-                OUString aRoleForDataLabelNumberFormat = ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( aChartTypes[nCTIdx] );
+                tDataColumn aSharedSequence;
+                aSharedSequence.m_xLabeledDataSequence = sharedSequence;
+                aSharedSequence.m_aUIRoleName = lcl_getUIRoleName(sharedSequence);
+                aSharedSequence.m_eCellType = NUMBER;
+                // as the sequences are shared it should be ok to take the first series
+                // @todo: dimension index 0 for x-values used here. This is just a guess.
+                // Also, the axis index is 0, as there is usually only one x-axis
+                aSharedSequence.m_nNumberFormatKey = nXAxisNumberFormat;
+                m_aColumns.push_back( aSharedSequence );
+                ++nHeaderStart;
+            }
+            for( Reference< chart2::XDataSeries > const & dataSeries : aSeries )
+            {
+                tDataColumnVector::size_type nStartColIndex = m_aColumns.size();
+                Reference< chart2::XDataSeries > xSeries( dataSeries );
+                Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
+                if( xSource.is())
+                {
+                    Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqs( xSource->getDataSequences());
+                    if( !aLSeqs.hasElements() )
+                        continue;
+                    nHeaderEnd = nHeaderStart;
 
-                const Sequence< Reference< chart2::XDataSeries > > aSeries( xSeriesCnt->getDataSeries());
-                lcl_tSharedSeqVec aSharedSequences( lcl_getSharedSequences( aSeries ));
-                for (auto const& sharedSequence : aSharedSequences)
-                {
-                    tDataColumn aSharedSequence;
-                    aSharedSequence.m_xLabeledDataSequence = sharedSequence;
-                    aSharedSequence.m_aUIRoleName = lcl_getUIRoleName(sharedSequence);
-                    aSharedSequence.m_eCellType = NUMBER;
-                    // as the sequences are shared it should be ok to take the first series
-                    // @todo: dimension index 0 for x-values used here. This is just a guess.
-                    // Also, the axis index is 0, as there is usually only one x-axis
-                    aSharedSequence.m_nNumberFormatKey = nXAxisNumberFormat;
-                    m_aColumns.push_back( aSharedSequence );
-                    ++nHeaderStart;
-                }
-                for( Reference< chart2::XDataSeries > const & dataSeries : aSeries )
-                {
-                    tDataColumnVector::size_type nStartColIndex = m_aColumns.size();
-                    Reference< chart2::XDataSeries > xSeries( dataSeries );
-                    Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
-                    if( xSource.is())
+                    // @todo: dimension index 1 for y-values used here. This is just a guess
+                    sal_Int32 nYAxisNumberFormatKey =
+                        DataSeriesHelper::getNumberFormatKeyFromAxis(
+                            dataSeries, coords, 1 );
+
+                    sal_Int32 nSeqIdx=0;
+                    for( ; nSeqIdx<aLSeqs.getLength(); ++nSeqIdx )
                     {
-                        Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqs( xSource->getDataSequences());
-                        if( !aLSeqs.hasElements() )
-                            continue;
-                        nHeaderEnd = nHeaderStart;
+                        sal_Int32 nSequenceNumberFormatKey = nYAxisNumberFormatKey;
+                        OUString aRole = DataSeriesHelper::getRole(aLSeqs[nSeqIdx]);
 
-                        // @todo: dimension index 1 for y-values used here. This is just a guess
-                        sal_Int32 nYAxisNumberFormatKey =
-                            DataSeriesHelper::getNumberFormatKeyFromAxis(
-                                dataSeries, coords, 1 );
-
-                        sal_Int32 nSeqIdx=0;
-                        for( ; nSeqIdx<aLSeqs.getLength(); ++nSeqIdx )
+                        if( aRole == aRoleForDataLabelNumberFormat )
                         {
-                            sal_Int32 nSequenceNumberFormatKey = nYAxisNumberFormatKey;
-                            OUString aRole = DataSeriesHelper::getRole(aLSeqs[nSeqIdx]);
-
-                            if( aRole == aRoleForDataLabelNumberFormat )
-                            {
-                                nSequenceNumberFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
-                                    Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ));
-                            }
-                            else if( aRole == "values-x" )
-                                nSequenceNumberFormatKey = nXAxisNumberFormat;
-
-                            if( std::none_of( aSharedSequences.begin(), aSharedSequences.end(),
-                                             lcl_RepresentationsOfLSeqMatch( aLSeqs[nSeqIdx] )) )
-                            {
-                                // no shared sequence
-                                m_aColumns.emplace_back(
-                                        dataSeries,
-                                        lcl_getUIRoleName( aLSeqs[nSeqIdx] ),
-                                        aLSeqs[nSeqIdx],
-                                        NUMBER,
-                                        nSequenceNumberFormatKey );
-                                ++nHeaderEnd;
-                            }
-                            // else skip
+                            nSequenceNumberFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
+                                Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ));
                         }
-                        bool bSwapXAndYAxis = false;
-                        try
+                        else if( aRole == "values-x" )
+                            nSequenceNumberFormatKey = nXAxisNumberFormat;
+
+                        if( std::none_of( aSharedSequences.begin(), aSharedSequences.end(),
+                                         lcl_RepresentationsOfLSeqMatch( aLSeqs[nSeqIdx] )) )
                         {
-                            coords->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndYAxis;
+                            // no shared sequence
+                            m_aColumns.emplace_back(
+                                    dataSeries,
+                                    lcl_getUIRoleName( aLSeqs[nSeqIdx] ),
+                                    aLSeqs[nSeqIdx],
+                                    NUMBER,
+                                    nSequenceNumberFormatKey );
+                            ++nHeaderEnd;
                         }
-                        catch( const beans::UnknownPropertyException & ) {}
-
-                        // add ranges for error bars if present for a series
-                        if( StatisticsHelper::usesErrorBarRanges( dataSeries ))
-                            addErrorBarRanges( dataSeries, nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd, true );
-
-                        if( StatisticsHelper::usesErrorBarRanges( dataSeries, /* bYError = */ false ))
-                            addErrorBarRanges( dataSeries, nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd, false );
-
-                        m_aHeaders.emplace_back(
-                                dataSeries,
-                                aChartTypes[nCTIdx],
-                                bSwapXAndYAxis,
-                                nHeaderStart,
-                                nHeaderEnd - 1 );
-
-                        nHeaderStart = nHeaderEnd;
-
-                        std::sort( m_aColumns.begin() + nStartColIndex, m_aColumns.end(), implColumnLess() );
+                        // else skip
                     }
+                    bool bSwapXAndYAxis = false;
+                    try
+                    {
+                        coords->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndYAxis;
+                    }
+                    catch( const beans::UnknownPropertyException & ) {}
+
+                    // add ranges for error bars if present for a series
+                    if( StatisticsHelper::usesErrorBarRanges( dataSeries ))
+                        addErrorBarRanges( dataSeries, nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd, true );
+
+                    if( StatisticsHelper::usesErrorBarRanges( dataSeries, /* bYError = */ false ))
+                        addErrorBarRanges( dataSeries, nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd, false );
+
+                    m_aHeaders.emplace_back(
+                            dataSeries,
+                            aChartTypes[nCTIdx],
+                            bSwapXAndYAxis,
+                            nHeaderStart,
+                            nHeaderEnd - 1 );
+
+                    nHeaderStart = nHeaderEnd;
+
+                    std::sort( m_aColumns.begin() + nStartColIndex, m_aColumns.end(), implColumnLess() );
                 }
             }
         }

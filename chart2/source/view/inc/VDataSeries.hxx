@@ -41,6 +41,7 @@ namespace com::sun::star::drawing { class XShapes; }
 
 namespace chart
 {
+class ChartType;
 
 class VDataSequence
 {
@@ -107,7 +108,7 @@ public:
     sal_Int32   detectNumberFormatKey( sal_Int32 nPointIndex ) const;
 
     sal_Int32 getLabelPlacement(
-        sal_Int32 nPointIndex, const css::uno::Reference<css::chart2::XChartType>& xChartType,
+        sal_Int32 nPointIndex, const rtl::Reference<::chart::ChartType>& xChartType,
         bool bSwapXAndY ) const;
 
     css::awt::Point getLabelPosition( css::awt::Point aTextShapePos, sal_Int32 nPointIndex ) const;

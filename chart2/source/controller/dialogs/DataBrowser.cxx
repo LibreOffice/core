@@ -31,6 +31,7 @@
 #include <bitmaps.hlst>
 #include <helpids.h>
 #include <ChartModel.hxx>
+#include <ChartType.hxx>
 
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
@@ -171,7 +172,7 @@ public:
     void SetColor( const Color & rCol );
     void SetPos();
     void SetWidth( sal_Int32 nWidth );
-    void SetChartType( const Reference< chart2::XChartType > & xChartType,
+    void SetChartType( const rtl::Reference< ::chart::ChartType > & xChartType,
                        bool bSwapXAndYAxis );
     void SetSeriesName( const OUString & rName );
     void SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol );
@@ -223,7 +224,7 @@ private:
     DECL_LINK( SeriesNameEdited, SeriesHeaderEdit&, void );
 
     static OUString GetChartTypeImage(
-        const Reference< chart2::XChartType > & xChartType,
+        const rtl::Reference< ::chart::ChartType > & xChartType,
         bool bSwapXAndYAxis
         );
 
@@ -324,7 +325,7 @@ void SeriesHeader::SetPixelWidth( sal_Int32 nWidth )
 }
 
 void SeriesHeader::SetChartType(
-    const Reference< chart2::XChartType > & xChartType,
+    const rtl::Reference< ChartType > & xChartType,
     bool bSwapXAndYAxis
 )
 {
@@ -382,7 +383,7 @@ bool SeriesHeader::HasFocus() const
 }
 
 OUString SeriesHeader::GetChartTypeImage(
-    const Reference< chart2::XChartType > & xChartType,
+    const rtl::Reference< ChartType > & xChartType,
     bool bSwapXAndYAxis
 )
 {

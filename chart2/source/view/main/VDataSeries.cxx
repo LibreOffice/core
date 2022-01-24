@@ -23,6 +23,7 @@
 #include <ObjectIdentifier.hxx>
 #include <CommonConverters.hxx>
 #include <LabelPositionHelper.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <unonames.hxx>
@@ -574,7 +575,7 @@ sal_Int32 VDataSeries::detectNumberFormatKey( sal_Int32 index ) const
     return nRet;
 }
 
-sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Reference< chart2::XChartType >& xChartType, bool bSwapXAndY ) const
+sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const rtl::Reference< ChartType >& xChartType, bool bSwapXAndY ) const
 {
     sal_Int32 nLabelPlacement=0;
     try
