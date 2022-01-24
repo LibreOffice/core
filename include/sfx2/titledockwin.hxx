@@ -23,9 +23,10 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/dockwin.hxx>
 
-#include <vcl/toolbox.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/svborder.hxx>
+
+class ToolBox;
 
 namespace sfx2
 {

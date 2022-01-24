@@ -26,9 +26,9 @@
 #include <sfx2/sfxresid.hxx>
 
 #include <svl/eitem.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/event.hxx>
-
+#include <vcl/settings.hxx>
+#include <vcl/toolbox.hxx>
 
 namespace sfx2
 {
