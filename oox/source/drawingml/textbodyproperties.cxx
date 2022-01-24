@@ -62,7 +62,7 @@ void TextBodyProperties::pushRotationAdjustments()
 {
     sal_Int32 nOff      = 0;
     static sal_Int32 const aProps[] { PROP_TextLeftDistance, PROP_TextUpperDistance, PROP_TextRightDistance, PROP_TextLowerDistance };
-    sal_Int32 n         = SAL_N_ELEMENTS( aProps );
+    sal_Int32 n         = std::size( aProps );
 
     switch( moRotation.get(0) )
     {

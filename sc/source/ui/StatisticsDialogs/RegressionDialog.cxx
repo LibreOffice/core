@@ -419,7 +419,7 @@ void ScRegressionDialog::WriteRegressionStatistics(AddressWalkerWriter& rOutput,
     rTemplate.autoReplaceAddress("%NUMXVARS_ADDR%", rOutput.current(1, 2));
     rTemplate.autoReplaceAddress("%NUMOBS_ADDR%", rOutput.current(1, 3));
 
-    for (size_t nIdx = 0; nIdx < SAL_N_ELEMENTS(aMeasureNames); ++nIdx)
+    for (size_t nIdx = 0; nIdx < std::size(aMeasureNames); ++nIdx)
     {
         rOutput.writeString(ScResId(aMeasureNames[nIdx]));
         rOutput.nextColumn();

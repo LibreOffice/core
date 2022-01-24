@@ -164,7 +164,7 @@ const PageDesc aDinTab[] =
 
 };
 
-const size_t nTabSize = SAL_N_ELEMENTS(aDinTab);
+const size_t nTabSize = std::size(aDinTab);
 
 #define MAXSLOPPY 21
 
@@ -278,7 +278,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
                 bool bHalve = false;
 
-                size_t const nExtraTabSize = SAL_N_ELEMENTS(aCustoms);
+                size_t const nExtraTabSize = std::size(aCustoms);
                 for (size_t i = 0; i < nExtraTabSize; ++i)
                 {
                     if (rtl_str_compareIgnoreAsciiCase(aCustoms[i].pName, aPaper.getStr()) == 0)
@@ -370,7 +370,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
 PaperInfo::PaperInfo(Paper eType) : m_eType(eType)
 {
-    static_assert( SAL_N_ELEMENTS(aDinTab) == NUM_PAPER_ENTRIES,
+    static_assert( std::size(aDinTab) == NUM_PAPER_ENTRIES,
             "mismatch between array entries and enum values" );
 
     m_nPaperWidth = aDinTab[m_eType].m_nWidth;

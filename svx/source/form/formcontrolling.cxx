@@ -424,7 +424,7 @@ namespace svx
             SID_FM_FILTER_START,
             SID_FM_VIEW_AS_GRID
         };
-        sal_Int32 nFeatureCount = SAL_N_ELEMENTS( pSupportedFeatures );
+        sal_Int32 nFeatureCount = std::size( pSupportedFeatures );
         aSupportedFeatures.insert( aSupportedFeatures.begin(), pSupportedFeatures, pSupportedFeatures + nFeatureCount );
 
         m_pInvalidationCallback->invalidateFeatures( aSupportedFeatures );

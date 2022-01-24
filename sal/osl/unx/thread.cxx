@@ -596,7 +596,7 @@ struct HashEntry
 }
 
 static HashEntry* HashTable[31];
-const int HashSize = SAL_N_ELEMENTS(HashTable);
+const int HashSize = std::size(HashTable);
 
 static pthread_mutex_t HashLock = PTHREAD_MUTEX_INITIALIZER;
 

@@ -41,7 +41,7 @@ using ::com::sun::star::io::XOutputStream;
 #define NAMESPACE(x) (x >> 16)
 #define TOKEN(x) (x & 0xffff)
 // number of characters without terminating 0
-#define N_CHARS(string) (SAL_N_ELEMENTS(string) - 1)
+#define N_CHARS(string) (std::size(string) - 1)
 
 const char sClosingBracket[] = ">";
 const char sSlashAndClosingBracket[] = "/>";

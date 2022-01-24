@@ -2110,7 +2110,7 @@ const TransitionInfo* getTransitionInfo(
     sal_Int16 nTransitionType, sal_Int16 nTransitionSubType )
 {
     static const TransitionInfo* pTableEnd = lcl_transitionInfo+
-        SAL_N_ELEMENTS(lcl_transitionInfo);
+        std::size(lcl_transitionInfo);
 
     const TransitionInfo* pRes = ::std::find_if(
         lcl_transitionInfo, pTableEnd,
@@ -2125,7 +2125,7 @@ const TransitionInfo* getTransitionInfo(
 const TransitionInfo* getRandomTransitionInfo()
 {
     return lcl_transitionInfo + getRandomOrdinal(
-        SAL_N_ELEMENTS(lcl_transitionInfo)
+        std::size(lcl_transitionInfo)
         - 1 /* exclude random transition at end of table */ );
 }
 

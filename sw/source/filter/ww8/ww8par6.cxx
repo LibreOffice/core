@@ -126,9 +126,9 @@ Color SwWW8ImplReader::GetCol(sal_uInt8 nIco)
         COL_LIGHTGRAY
     };
     SAL_WARN_IF(
-        nIco >= SAL_N_ELEMENTS(eSwWW8ColA), "sw.ww8",
-        "ico " << sal_uInt32(nIco) << " >= " << SAL_N_ELEMENTS(eSwWW8ColA));
-    return nIco < SAL_N_ELEMENTS(eSwWW8ColA) ? eSwWW8ColA[nIco] : COL_AUTO;
+        nIco >= std::size(eSwWW8ColA), "sw.ww8",
+        "ico " << sal_uInt32(nIco) << " >= " << std::size(eSwWW8ColA));
+    return nIco < std::size(eSwWW8ColA) ? eSwWW8ColA[nIco] : COL_AUTO;
 }
 
 static sal_uInt32 MSRoundTweak(sal_uInt32 x)
@@ -454,7 +454,7 @@ bool wwSectionManager::SetCols(SwFrameFormat &rFormat, const wwSection &rSection
     if (!rSep.fEvenlySpaced)
     {
         aCol.SetOrtho_(false);
-        const sal_uInt16 maxIdx = SAL_N_ELEMENTS(rSep.rgdxaColumnWidthSpacing);
+        const sal_uInt16 maxIdx = std::size(rSep.rgdxaColumnWidthSpacing);
         for (sal_uInt16 i = 0, nIdx = 1; i < nCols && nIdx < maxIdx; i++, nIdx+=2 )
         {
             SwColumn* pCol = &aCol.GetColumns()[i];
@@ -4912,7 +4912,7 @@ void SwWW8Shade::SetShade(Color nFore, Color nBack, sal_uInt16 nIndex)
     if (nUseBack == COL_AUTO)
         nUseBack = COL_WHITE;
 
-    if( nIndex >= SAL_N_ELEMENTS( eMSGrayScale ) )
+    if( nIndex >= std::size( eMSGrayScale ) )
         nIndex = 0;
 
     sal_uLong nWW8BrushStyle = eMSGrayScale[nIndex];
@@ -5326,7 +5326,7 @@ tools::Long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
     if( pRes->nSprmId < 280 )
     {
         sal_uInt8 nIdx = static_cast< sal_uInt8 >(pRes->nSprmId - eFTN);
-        if( nIdx < SAL_N_ELEMENTS(aWwSprmTab)
+        if( nIdx < std::size(aWwSprmTab)
             && aWwSprmTab[nIdx] )
             return (this->*aWwSprmTab[nIdx])(pRes);
         else
@@ -5350,7 +5350,7 @@ void SwWW8ImplReader::EndExtSprm(sal_uInt16 nSprmId)
     };
 
     sal_uInt8 nIdx = static_cast< sal_uInt8 >(nSprmId - eFTN);
-    if( nIdx < SAL_N_ELEMENTS(aWwSprmTab)
+    if( nIdx < std::size(aWwSprmTab)
         && aWwSprmTab[nIdx] )
         (this->*aWwSprmTab[nIdx])();
 }
@@ -5525,7 +5525,7 @@ static const wwSprmDispatcher *GetWW2SprmDispatcher()
          {99, nullptr}                                     //"sprmPicBrcRight",
     };
 
-    static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
+    static wwSprmDispatcher aSprmSrch(aSprms, std::size(aSprms));
     return &aSprmSrch;
 }
 
@@ -5737,7 +5737,7 @@ static const wwSprmDispatcher *GetWW6SprmDispatcher()
         {207,                               nullptr},                             //dunno
     };
 
-    static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
+    static wwSprmDispatcher aSprmSrch(aSprms, std::size(aSprms));
     return &aSprmSrch;
 }
 
@@ -6106,7 +6106,7 @@ static const wwSprmDispatcher *GetWW8SprmDispatcher()
         {NS_sprm::PFContextualSpacing::val, &SwWW8ImplReader::Read_ParaContextualSpacing},
     };
 
-    static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
+    static wwSprmDispatcher aSprmSrch(aSprms, std::size(aSprms));
     return &aSprmSrch;
 }
 

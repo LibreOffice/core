@@ -124,7 +124,7 @@ what looks like a bug in the new handler*/
     { SIGXCPU,   ACT_ABORT,  SIG_DFL, false }, /* exceeded cpu limit */
     { SIGXFSZ,   ACT_ABORT,  SIG_DFL, false }  /* exceeded file size limit */
 };
-const int NoSignals = SAL_N_ELEMENTS(Signals);
+const int NoSignals = std::size(Signals);
 
 bool bSetSEGVHandler = false;
 bool bSetWINCHHandler = false;
@@ -283,7 +283,7 @@ namespace
 void printStack(int sig)
 {
     void *buffer[MAX_STACK_FRAMES];
-    int size = backtrace( buffer, SAL_N_ELEMENTS(buffer) );
+    int size = backtrace( buffer, std::size(buffer) );
 
     fprintf( stderr, "\n\nFatal exception: Signal %d\n", sig );
 

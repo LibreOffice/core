@@ -103,7 +103,7 @@ static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
     };
 
     sal_uInt16 nKeyCode = 0;
-    if( aCode < SAL_N_ELEMENTS( aKeyCodeMap)  )
+    if( aCode < std::size( aKeyCodeMap)  )
         nKeyCode = aKeyCodeMap[ aCode ];
     else if( aCode >= 0xf700 && aCode < 0xf780 )
         nKeyCode = aFunctionKeyCodeMap[ aCode - 0xf700 ];
@@ -137,7 +137,7 @@ static sal_uInt16 ImplMapKeyCode(sal_uInt16 nKeyCode)
            KEY_F2,     KEY_PAGEDOWN,           KEY_F1,         KEY_LEFT,        KEY_RIGHT,         KEY_DOWN,           KEY_UP,                0
     };
 
-    if (nKeyCode < SAL_N_ELEMENTS(aKeyCodeMap))
+    if (nKeyCode < std::size(aKeyCodeMap))
         return aKeyCodeMap[nKeyCode];
     return 0;
 }

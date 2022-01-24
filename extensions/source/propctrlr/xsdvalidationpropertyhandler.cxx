@@ -603,7 +603,7 @@ namespace pcr
             size_t i=0;
             const OUString* pLoop = nullptr;
             for ( i = 0, pLoop = aFacets;
-                  i < SAL_N_ELEMENTS( aFacets );
+                  i < std::size( aFacets );
                   ++i, ++pLoop
                 )
             {

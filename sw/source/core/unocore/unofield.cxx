@@ -183,7 +183,7 @@ const ServiceIdResId aServiceToRes[] =
 
 static SwFieldIds lcl_ServiceIdToResId(SwServiceType nServiceId)
 {
-    for (size_t i=0; i<SAL_N_ELEMENTS(aServiceToRes); ++i)
+    for (size_t i=0; i<std::size(aServiceToRes); ++i)
         if (aServiceToRes[i].nServiceId == nServiceId)
             return aServiceToRes[i].nResId;
 #if OSL_DEBUG_LEVEL > 0

@@ -2149,7 +2149,7 @@ Color SwPostItMgr::GetColorDark(std::size_t aAuthorIndex)
             COL_AUTHOR4_NORMAL,     COL_AUTHOR5_NORMAL,     COL_AUTHOR6_NORMAL,
             COL_AUTHOR7_NORMAL,     COL_AUTHOR8_NORMAL,     COL_AUTHOR9_NORMAL };
 
-        return aArrayNormal[ aAuthorIndex % SAL_N_ELEMENTS( aArrayNormal )];
+        return aArrayNormal[ aAuthorIndex % std::size( aArrayNormal )];
     }
     else
         return COL_WHITE;
@@ -2164,7 +2164,7 @@ Color SwPostItMgr::GetColorLight(std::size_t aAuthorIndex)
             COL_AUTHOR4_LIGHT,      COL_AUTHOR5_LIGHT,      COL_AUTHOR6_LIGHT,
             COL_AUTHOR7_LIGHT,      COL_AUTHOR8_LIGHT,      COL_AUTHOR9_LIGHT };
 
-        return aArrayLight[ aAuthorIndex % SAL_N_ELEMENTS( aArrayLight )];
+        return aArrayLight[ aAuthorIndex % std::size( aArrayLight )];
     }
     else
         return COL_WHITE;
@@ -2179,7 +2179,7 @@ Color SwPostItMgr::GetColorAnchor(std::size_t aAuthorIndex)
             COL_AUTHOR4_DARK,       COL_AUTHOR5_DARK,       COL_AUTHOR6_DARK,
             COL_AUTHOR7_DARK,       COL_AUTHOR8_DARK,       COL_AUTHOR9_DARK };
 
-        return aArrayAnchor[  aAuthorIndex % SAL_N_ELEMENTS( aArrayAnchor )];
+        return aArrayAnchor[  aAuthorIndex % std::size( aArrayAnchor )];
     }
     else
         return COL_WHITE;

@@ -116,7 +116,7 @@ void OptimizerSettings::SaveSettingsToConfiguration( const Reference< XNameRepla
 //          Any( maFilterName ),
         Any( mbOpenNewDocument ) };
 
-    for ( int i = 0; i < int(SAL_N_ELEMENTS( pNames )); i++ )
+    for ( int i = 0; i < int(std::size( pNames )); i++ )
     {
         try
         {

@@ -83,7 +83,7 @@ using namespace ::svxform;
         FM_SUN_COMPONENT_IMAGECONTROL
     };
 
-    static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);
+    static const sal_uInt16 nSvxComponentServiceNameListCount = std::size(aSvxComponentServiceNameList);
 
     auto aSeq( comphelper::arrayToSequence< OUString >(aSvxComponentServiceNameList, nSvxComponentServiceNameListCount) );
 

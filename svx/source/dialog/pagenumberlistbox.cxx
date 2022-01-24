@@ -28,7 +28,7 @@ SvxPageNumberListBox::SvxPageNumberListBox(std::unique_ptr<weld::ComboBox> pCont
 {
     m_xControl->set_size_request(150, -1);
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_SVXSTRARY_NUMBERINGTYPE); ++i)
+    for (size_t i = 0; i < std::size(RID_SVXSTRARY_NUMBERINGTYPE); ++i)
     {
         sal_uInt16 nData = RID_SVXSTRARY_NUMBERINGTYPE[i].second;
         switch (nData)

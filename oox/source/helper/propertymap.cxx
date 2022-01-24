@@ -596,7 +596,7 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
         }
         printLevel (level);
         fprintf (stderr,"};\n");
-        return "createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings )";
+        return "createStringSequence( std::size( aStrings ), aStrings )";
     }
     else if( value >>= propArray )
     {
@@ -688,7 +688,7 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
         }
         printLevel (level);
         fprintf (stderr,"};\n");
-        return "createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues )";
+        return "createSegmentSequence( std::size( nValues ), nValues )";
     }
     else if( value >>= segTextFrame )
     {
@@ -719,7 +719,7 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
         printLevel (level);
         fprintf (stderr,"};\n");
 
-        return "createParameterPairSequence(SAL_N_ELEMENTS(aData), aData)";
+        return "createParameterPairSequence(std::size(aData), aData)";
     }
     else if( value >>= segment )
     {

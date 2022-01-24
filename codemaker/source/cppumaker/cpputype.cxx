@@ -143,7 +143,7 @@ bool isBootstrapType(OUString const & name)
         "com.sun.star.uno.XWeak",
         "com.sun.star.util.XMacroExpander" };
         // cf. cppuhelper/unotypes/Makefile UNOTYPES (plus missing dependencies)
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(names); ++i) {
+    for (std::size_t i = 0; i < std::size(names); ++i) {
         if (name.equalsAscii(names[i])) {
             return true;
         }

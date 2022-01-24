@@ -157,7 +157,7 @@ void X11SalFrame::setXEmbedInfo()
                      32,
                      PropModeReplace,
                      reinterpret_cast<unsigned char*>(aInfo),
-                     SAL_N_ELEMENTS(aInfo) );
+                     std::size(aInfo) );
 }
 
 void X11SalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )

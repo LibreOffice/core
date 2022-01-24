@@ -966,7 +966,7 @@ void TestSharedFormula::testSharedFormulasInsertRow()
         {
             // B1:B2 and B4:B5 should point to $A$5.
             SCROW pRows[] = { 0, 1, 3, 4 };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(pRows); ++i)
+            for (size_t i = 0; i < std::size(pRows); ++i)
             {
                 ScAddress aPos(1, pRows[i], 0);
                 ASSERT_FORMULA_EQUAL(*pDoc, aPos, "$A$5", "Wrong formula!");
@@ -2782,9 +2782,9 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveWithinRun()
 
     // Check results in E3:E9
     const double fVec0[] = { 2200.0, 2200.0, 300.0, 300.0, 1900.0, 900.0, 900.0 };
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of checks mismatch.", SAL_N_ELEMENTS(fVec0), aData.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of checks mismatch.", std::size(fVec0), aData.size());
     aPos = aFormulaPos;
-    for (size_t i=0; i < SAL_N_ELEMENTS(fVec0); ++i)
+    for (size_t i=0; i < std::size(fVec0); ++i)
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "E3:E9", fVec0[i], m_pDoc->GetValue(aPos));
         aPos.IncRow();
@@ -2801,9 +2801,9 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveWithinRun()
 
     // Check results in E3:E9 after Cut.
     const double fVec1[] = { 2200.0, 2200.0, 300.0, 300.0, 1900.0, 1900.0, 1900.0 };
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of checks mismatch.", SAL_N_ELEMENTS(fVec1), aData.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of checks mismatch.", std::size(fVec1), aData.size());
     aPos = aFormulaPos;
-    for (size_t i=0; i < SAL_N_ELEMENTS(fVec1); ++i)
+    for (size_t i=0; i < std::size(fVec1); ++i)
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "E3:E9 after Cut.", fVec1[i], m_pDoc->GetValue(aPos));
         aPos.IncRow();
@@ -2816,9 +2816,9 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveWithinRun()
 
     // Check results in E3:E9 after Paste.
     const double fVec2[] = { 2200.0, 1200.0, -700.0, -700.0, 900.0, 900.0, 900.0 };
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of checks mismatch.", SAL_N_ELEMENTS(fVec2), aData.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of checks mismatch.", std::size(fVec2), aData.size());
     aPos = aFormulaPos;
-    for (size_t i=0; i < SAL_N_ELEMENTS(fVec2); ++i)
+    for (size_t i=0; i < std::size(fVec2); ++i)
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "E3:E9 after Paste.", fVec2[i], m_pDoc->GetValue(aPos));
         aPos.IncRow();

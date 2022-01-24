@@ -301,7 +301,7 @@ public:
                     rDev.SetLineColor(COL_BLACK);
                     basegfx::B2DPolygon aPoly;
                     tools::Rectangle aSub(aRegions[i]);
-                    for (size_t j = 0; j < SAL_N_ELEMENTS(aPoints); j++)
+                    for (size_t j = 0; j < std::size(aPoints); j++)
                     {
                         aPoly.append(basegfx::B2DPoint(aSub.Left() + aSub.GetWidth() * aPoints[j].nX,
                                                        aSub.Top()  + aSub.GetHeight() * aPoints[j].nY));
@@ -370,7 +370,7 @@ public:
                 {
                     for (int x = 0; x < 4; x++)
                     {
-                        assert(i < SAL_N_ELEMENTS(aRenderData));
+                        assert(i < std::size(aRenderData));
                         drawText(rDev, aSubRegions[i], aRenderData[i].mbClip,
                                  aRenderData[i].mbArabicText, aRenderData[i].mbRotate);
                         i++;
@@ -397,7 +397,7 @@ public:
                 0xd8, 0xab, 0xd8, 0xa9, 0xd9, 0x8c, 0x00
             };
             OUString aArabicText( reinterpret_cast<char const *>(pTextUTF8),
-                            SAL_N_ELEMENTS( pTextUTF8 ) - 1,
+                            std::size( pTextUTF8 ) - 1,
                             RTL_TEXTENCODING_UTF8 );
 
             OUString aText;
@@ -424,7 +424,7 @@ public:
                 "Times", "Liberation Sans", "Arial", "Linux Biolinum G", "Linux Libertine Display G"
               };
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
+            for (size_t i = 0; i < std::size(pNames); i++)
                 aFontNames.push_back(OUString::createFromAscii(pNames[i]));
 
             if (bClip && !bRotate)
@@ -551,7 +551,7 @@ public:
             Point aPos(r.Left(), r.Top()+20);
 
             tools::Long nMaxTextHeight = 0;
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aRuns); ++i)
+            for (size_t i = 0; i < std::size(aRuns); ++i)
             {
                 // Legend
                 vcl::Font aIndexFont("sans", Size(0,20));
@@ -574,7 +574,7 @@ public:
                                     aRuns[i].mpFont),
                                 Size(0,42));
                 aFont.SetColor(COL_BLACK);
-                for (size_t j = 0; j < SAL_N_ELEMENTS(aWeights); ++j)
+                for (size_t j = 0; j < std::size(aWeights); ++j)
                 {
                     aFont.SetItalic(aItalics[j]);
                     aFont.SetWeight(aWeights[j]);
@@ -814,11 +814,11 @@ public:
                     0, 0, 0, 0, 0
                 };
                 DemoRenderer::clearRects(rDev, aRegions);
-                assert(aRegions.size() <= SAL_N_ELEMENTS(nStartCols));
-                assert(aRegions.size() <= SAL_N_ELEMENTS(nEndCols));
-                assert(aRegions.size() <= SAL_N_ELEMENTS(eStyles));
-                assert(aRegions.size() <= SAL_N_ELEMENTS(nAngles));
-                assert(aRegions.size() <= SAL_N_ELEMENTS(nBorders));
+                assert(aRegions.size() <= std::size(nStartCols));
+                assert(aRegions.size() <= std::size(nEndCols));
+                assert(aRegions.size() <= std::size(eStyles));
+                assert(aRegions.size() <= std::size(nAngles));
+                assert(aRegions.size() <= std::size(nBorders));
                 for (size_t i = 0; i < aRegions.size(); i++)
                 {
                     tools::Rectangle aSub = aRegions[i];
@@ -868,7 +868,7 @@ public:
             tools::Long aSizes[] = { 200, 100, 200, 100, 50, 5, 2 };
 
             // and yes - we really do this in the page border rendering code ...
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aSizes); i++)
+            for (size_t i = 0; i < std::size(aSizes); i++)
             {
                 aShadowStretch.Scale(Size(aShadowStretch.GetSizePixel().Width(), aSizes[i]),
                                      BmpScaleFlag::Fast);
@@ -948,8 +948,8 @@ public:
                     tools::Rectangle aSubRect(r);
                     aSubRect.Move(x * r.GetWidth()/3, y * r.GetHeight()/3);
                     aSubRect.SetSize(Size(r.GetWidth()/2, r.GetHeight()/4));
-                    tools::Polygon aPoly(SAL_N_ELEMENTS(aPoints));
-                    for (size_t v = 0; v < SAL_N_ELEMENTS(aPoints); v++)
+                    tools::Polygon aPoly(std::size(aPoints));
+                    for (size_t v = 0; v < std::size(aPoints); v++)
                     {
                         aPoly.SetPoint(Point(aSubRect.Left() +
                                              aSubRect.GetWidth() * aPoints[v].nX,
@@ -1202,7 +1202,7 @@ public:
                 "cmd/lc_basicshapes.rectangle.png",
                 "cmd/lc_basicshapes.round-rectangle.png"
             };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
+            for (size_t i = 0; i < std::size(pNames); i++)
             {
                 maIconNames.push_back(OUString::createFromAscii(pNames[i]));
                 maIcons.emplace_back(maIconNames[i]);
@@ -2005,7 +2005,7 @@ public:
 
 IMPL_LINK(DemoWidgets, CursorButtonClick, Button*, pButton, void)
 {
-    for (size_t i=0; i<SAL_N_ELEMENTS(gvPointerData); ++i)
+    for (size_t i=0; i<std::size(gvPointerData); ++i)
     {
         if (mvCursorButtons[i].get() == pButton)
         {

@@ -146,7 +146,7 @@ OUString GetColorString( const Color& rCol )
         COL_LIGHTRED, COL_LIGHTMAGENTA, COL_YELLOW, COL_WHITE };
 
     sal_uInt16 nColor = 0;
-    while ( nColor < SAL_N_ELEMENTS(aColAry) &&
+    while ( nColor < std::size(aColAry) &&
             aColAry[nColor] != rCol.GetRGBColor() )
     {
         nColor += 1;
@@ -172,10 +172,10 @@ OUString GetColorString( const Color& rCol )
         RID_SVXITEMS_COLOR_WHITE
     };
 
-    static_assert(SAL_N_ELEMENTS(aColAry) == SAL_N_ELEMENTS(RID_SVXITEMS_COLORS), "must match");
+    static_assert(std::size(aColAry) == std::size(RID_SVXITEMS_COLORS), "must match");
 
     OUString sStr;
-    if ( nColor < SAL_N_ELEMENTS(aColAry) )
+    if ( nColor < std::size(aColAry) )
         sStr = EditResId(RID_SVXITEMS_COLORS[nColor]);
 
     if ( sStr.isEmpty() )

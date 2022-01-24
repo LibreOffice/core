@@ -1560,7 +1560,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 // 4 Borders and 5 distances
                 const SvxBoxItemLine aBorders[] = { SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::TOP };
-                for (int n(0); n != SAL_N_ELEMENTS(aBorders); ++n)
+                for (size_t n(0); n != std::size(aBorders); ++n)
                 {
                     if (!lcl_setLine(aSeq[n], *this, aBorders[n], bConvert))
                         return false;
@@ -2583,7 +2583,7 @@ OUString SvxFormatBreakItem::GetValueTextByPos( sal_uInt16 nPos )
         RID_SVXITEMS_BREAK_PAGE_AFTER,
         RID_SVXITEMS_BREAK_PAGE_BOTH
     };
-    static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_BREAK) == size_t(SvxBreak::End), "unexpected size");
+    static_assert(std::size(RID_SVXITEMS_BREAK) == size_t(SvxBreak::End), "unexpected size");
     assert(nPos < sal_uInt16(SvxBreak::End) && "enum overflow!");
     return EditResId(RID_SVXITEMS_BREAK[nPos]);
 }

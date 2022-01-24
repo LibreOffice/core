@@ -74,10 +74,10 @@ using namespace tdoc_ucp;
 
 
 #define MAKEPROPSEQUENCE( a ) \
-    uno::Sequence< beans::Property >( a, SAL_N_ELEMENTS(a) )
+    uno::Sequence< beans::Property >( a, std::size(a) )
 
 #define MAKECMDSEQUENCE( a ) \
-    uno::Sequence< ucb::CommandInfo >( a, SAL_N_ELEMENTS(a) )
+    uno::Sequence< ucb::CommandInfo >( a, std::size(a) )
 
 
 // IMPORTANT: If any property data ( name / type / ... ) are changed, then

@@ -67,7 +67,7 @@ ScXMLEditAttributeMap::Entry const aEntries[] = {
 
 ScXMLEditAttributeMap::ScXMLEditAttributeMap()
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aEntries); ++i)
+    for (size_t i = 0; i < std::size(aEntries); ++i)
     {
         maAPIEntries.emplace(
                 OUString::createFromAscii(aEntries[i].mpAPIName), &aEntries[i]);

@@ -189,7 +189,7 @@ CalcOp* FindOperator( const OUString& rSrch )
 
     return static_cast<CalcOp*>(bsearch( static_cast<void*>(&aSrch),
                               static_cast<void const *>(aOpTable),
-                              SAL_N_ELEMENTS( aOpTable ),
+                              std::size( aOpTable ),
                               sizeof( CalcOp ),
                               OperatorCompare ));
 }

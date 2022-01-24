@@ -363,7 +363,7 @@ const struct FormulaEntry FormulaMapTab[] = {
 #ifndef DEBUG
 hchar_string getMathMLEntity(const char *tex)
 {
-     static const size_t tabSize = SAL_N_ELEMENTS(FormulaMapTab);
+     static const size_t tabSize = std::size(FormulaMapTab);
 
      hchar_string buf;
      for (size_t i = 0 ; i < tabSize ; i++) {

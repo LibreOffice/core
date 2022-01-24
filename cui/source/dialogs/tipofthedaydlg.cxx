@@ -122,7 +122,7 @@ static bool file_exists(const OUString& fileName)
 
 void TipOfTheDayDialog::UpdateTip()
 {
-    constexpr sal_Int32 nNumberOfTips = SAL_N_ELEMENTS(TIPOFTHEDAY_STRINGARRAY);
+    constexpr sal_Int32 nNumberOfTips = std::size(TIPOFTHEDAY_STRINGARRAY);
 
     if ((m_nCurrentTip >= nNumberOfTips) || (m_nCurrentTip < 0))
         m_nCurrentTip = 0;
