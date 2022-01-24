@@ -474,6 +474,11 @@ com::sun::star::awt::Point GraphicImport::GetGraphicObjectPosition() const
     return (com::sun::star::awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
 }
 
+bool GraphicImport::GetLayoutInCell() const
+{
+    return m_pImpl->bLayoutInCell;
+}
+
 void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
 {
     switch (nVal)

@@ -100,6 +100,8 @@ public:
 
     com::sun::star::awt::Point GetGraphicObjectPosition() const;
 
+    bool GetLayoutInCell() const;
+
  private:
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) override;

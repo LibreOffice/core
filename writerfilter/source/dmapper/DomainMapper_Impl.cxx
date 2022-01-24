@@ -7457,6 +7457,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
         {
             uno::Reference<beans::XPropertySet> xEmbeddedProps(m_xEmbedded, uno::UNO_QUERY);
             xEmbeddedProps->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+            xEmbeddedProps->setPropertyValue("IsFollowingTextFlow", uno::makeAny(m_pGraphicImport->GetLayoutInCell()));
             uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
             xEmbeddedProps->setPropertyValue("HoriOrient", xShapeProps->getPropertyValue("HoriOrient"));
             xEmbeddedProps->setPropertyValue("HoriOrientPosition", xShapeProps->getPropertyValue("HoriOrientPosition"));
