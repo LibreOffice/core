@@ -69,6 +69,24 @@
       "message": "Anyway, could you please add the right test file to the bugzilla so I can adapt the test accordingly ?",
       "revId": "36a186f28757eadb8fddac5887f5ebecebfe8229",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "052a308c_d7d5a8dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-24T15:25:57Z",
+      "side": 1,
+      "message": "Please see https://bugs.documentfoundation.org/show_bug.cgi?id\u003d139974#c21 and attachment there.",
+      "parentUuid": "cd22b434_7302d29a",
+      "revId": "36a186f28757eadb8fddac5887f5ebecebfe8229",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
