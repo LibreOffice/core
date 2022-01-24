@@ -33,6 +33,24 @@
       "message": "Hi László,\nConsidering the issue has been there since OOo times, Why the rush to backport it to 7.3.0 branch ?",
       "revId": "3023856f966cb961815709f9f8b1464300644c16",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b301b1f_3c98fb42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-24T11:39:34Z",
+      "side": 1,
+      "message": "It\u0027s part of https://wiki.documentfoundation.org/ReleaseNotes/7.3#Tracked_table_row_deletion.2Finsertion, intended to be in the 7.3.0, but I missed its backport by accident, when I backported its twin fix for https://bugs.documentfoundation.org/show_bug.cgi?id\u003d146145). So it\u0027s like a regression for me. :) But you are right, it\u0027s not a real regression fix, unlike my upcoming table row insertion commits, so you can decide about it.",
+      "parentUuid": "1a670fd9_09bec039",
+      "revId": "3023856f966cb961815709f9f8b1464300644c16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
