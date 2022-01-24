@@ -16,6 +16,24 @@
       "message": "ASan doesn\u0027t need any RTTI, but UBSan does.  What failure exactly does this fix?",
       "revId": "62feec4c1919fd211316476d8feda9b063bfe46b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeb0e6b9_c398c946",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-24T09:10:47Z",
+      "side": 1,
+      "message": "this fixes a failure in\n\n   CppunitTest_oox_drawingml\n\nin my ASAN/UBSAN build, where I see\n\nwarn:sal.osl:3843066:3843066:sal/osl/unx/module.cxx:152: dlopen(/media/disk2/libo-asan/instdir/program/libchartcontrollerlo.so, 257): /media/disk2/libo-asan/instdir/program/libchartcontrollerlo.so: undefined symbol: _ZTIN5chart15DataInterpreterE",
+      "parentUuid": "f8f3dcb4_ccf0dedc",
+      "revId": "62feec4c1919fd211316476d8feda9b063bfe46b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
