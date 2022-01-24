@@ -146,10 +146,20 @@ oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sal_Int32 nRtldM
             ((nRtldMode & SAL_LOADMODULE_GLOBAL) ? RTLD_GLOBAL : RTLD_LOCAL);
         void* pLib = dlopen(pModuleName, rtld_mode);
 
+        const char* pStrDlError = pLib  ? nullptr : dlerror();
         SAL_WARN_IF(
             pLib == nullptr, "sal.osl",
             "dlopen(" << pModuleName << ", " << rtld_mode << "): "
-                << dlerror());
+                << pStrDlError);
+#if defined(__has_feature)
+#  if __has_feature(address_sanitizer)
+        if (!pLib && strstr(pStrDlError, "undefined symbol:"))
+        {
+            SAL_WARN("sal", "You likely need some SAL_DLLPUBLIC_RTTI, see above warning");
+            abort();
+        }
+#  endif
+#endif
         return pLib;
     }
 #else
