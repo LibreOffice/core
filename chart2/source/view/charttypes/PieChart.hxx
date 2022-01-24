@@ -35,7 +35,7 @@ class PieChart : public VSeriesPlotter
 public:
     PieChart() = delete;
 
-    PieChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
+    PieChart( const rtl::Reference< ::chart::ChartType >& xChartTypeModel
             , sal_Int32 nDimensionCount, bool bExcludingPositioning );
     virtual ~PieChart() override;
 

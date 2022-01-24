@@ -24,6 +24,7 @@
 #include <ExplicitCategoriesProvider.hxx>
 #include <ObjectIdentifier.hxx>
 #include "Splines.hxx"
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <LabelPositionHelper.hxx>
 #include <Clipping.hxx>
@@ -51,7 +52,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
+AreaChart::AreaChart( const rtl::Reference<ChartType>& xChartTypeModel
                      , sal_Int32 nDimensionCount
                      , bool bCategoryXAxis
                      , bool bNoArea
@@ -73,11 +74,11 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
 
     try
     {
-        if( m_xChartTypeModelProps.is() )
+        if( m_xChartTypeModel.is() )
         {
-            m_xChartTypeModelProps->getPropertyValue(CHART_UNONAME_CURVE_STYLE) >>= m_eCurveStyle;
-            m_xChartTypeModelProps->getPropertyValue(CHART_UNONAME_CURVE_RESOLUTION) >>= m_nCurveResolution;
-            m_xChartTypeModelProps->getPropertyValue(CHART_UNONAME_SPLINE_ORDER) >>= m_nSplineOrder;
+            m_xChartTypeModel->getPropertyValue(CHART_UNONAME_CURVE_STYLE) >>= m_eCurveStyle;
+            m_xChartTypeModel->getPropertyValue(CHART_UNONAME_CURVE_RESOLUTION) >>= m_nCurveResolution;
+            m_xChartTypeModel->getPropertyValue(CHART_UNONAME_SPLINE_ORDER) >>= m_nSplineOrder;
         }
     }
     catch( uno::Exception& e )

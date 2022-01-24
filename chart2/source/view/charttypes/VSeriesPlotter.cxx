@@ -32,6 +32,7 @@
 #include <StatisticsHelper.hxx>
 #include <PlottingPositionHelper.hxx>
 #include <LabelPositionHelper.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <Clipping.hxx>
 #include <servicenames_charttypes.hxx>
@@ -138,12 +139,11 @@ sal_Int32 VDataSeriesGroup::getSeriesCount() const
     return m_aSeriesVector.size();
 }
 
-VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeModel
+VSeriesPlotter::VSeriesPlotter( const rtl::Reference<ChartType>& xChartTypeModel
                                , sal_Int32 nDimensionCount, bool bCategoryXAxis )
         : PlotterBase( nDimensionCount )
         , m_pMainPosHelper( nullptr )
         , m_xChartTypeModel(xChartTypeModel)
-        , m_xChartTypeModelProps( uno::Reference< beans::XPropertySet >::query( xChartTypeModel ))
         , m_bCategoryXAxis(bCategoryXAxis)
         , m_nTimeResolution(css::chart::TimeUnit::DAY)
         , m_aNullDate(30,12,1899)
@@ -2647,10 +2647,10 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             CHART2_SERVICE_NAME_CHARTTYPE_PIE);
         try
         {
-            if (bIsPie && m_xChartTypeModelProps.is())
+            if (bIsPie)
             {
                 bool bDonut = false;
-                if ((m_xChartTypeModelProps->getPropertyValue("UseRings") >>= bDonut) && bDonut)
+                if ((m_xChartTypeModel->getPropertyValue("UseRings") >>= bDonut) && bDonut)
                     bIsPie = false;
             }
         }
@@ -2792,7 +2792,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
 }
 
 VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
-    const uno::Reference<XChartType>& xChartTypeModel
+    const rtl::Reference<ChartType>& xChartTypeModel
     , sal_Int32 nDimensionCount
     , bool bExcludingPositioning )
 {

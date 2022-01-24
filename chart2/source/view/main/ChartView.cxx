@@ -492,25 +492,21 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             TOOLS_WARN_EXCEPTION("chart2", "" );
         }
         //iterate through all chart types in the current coordinate system
-        uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xCooSys->getChartTypes() );
-        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+        std::vector< rtl::Reference< ChartType > > aChartTypeList( xCooSys->getChartTypes2() );
+        for( sal_Int32 nT = 0; nT < static_cast<sal_Int32>(aChartTypeList.size()); ++nT )
         {
-            uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
+            rtl::Reference< ChartType > xChartType( aChartTypeList[nT] );
             if(nDimensionCount == 3 && xChartType->getChartType().equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
             {
-                uno::Reference< beans::XPropertySet > xPropertySet( xChartType, uno::UNO_QUERY );
-                if (xPropertySet.is())
+                try
                 {
-                    try
-                    {
-                        sal_Int32 n3DRelativeHeightOldValue(100);
-                        uno::Any aAny = xPropertySet->getPropertyValue( "3DRelativeHeight" );
-                        aAny >>= n3DRelativeHeightOldValue;
-                        if (n3DRelativeHeightOldValue != n3DRelativeHeight)
-                            xPropertySet->setPropertyValue( "3DRelativeHeight", uno::Any(n3DRelativeHeight) );
-                    }
-                    catch (const uno::Exception&) { }
+                    sal_Int32 n3DRelativeHeightOldValue(100);
+                    uno::Any aAny = xChartType->getPropertyValue( "3DRelativeHeight" );
+                    aAny >>= n3DRelativeHeightOldValue;
+                    if (n3DRelativeHeightOldValue != n3DRelativeHeight)
+                        xChartType->setPropertyValue( "3DRelativeHeight", uno::Any(n3DRelativeHeight) );
                 }
+                catch (const uno::Exception&) { }
             }
 
             if(nT==0)
@@ -531,15 +527,10 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             if(pVCooSys)
                 pVCooSys->addMinimumAndMaximumSupplier(pPlotter);
 
-            uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-            OSL_ASSERT( xDataSeriesContainer.is());
-            if( !xDataSeriesContainer.is() )
-                continue;
-
             sal_Int32 zSlot=-1;
             sal_Int32 xSlot=-1;
             sal_Int32 ySlot=-1;
-            uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+            uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xChartType->getDataSeries() );
             for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
             {
                 uno::Reference< XDataSeries > const & xDataSeries = aSeriesList[nS];

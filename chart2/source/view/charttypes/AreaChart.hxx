@@ -32,7 +32,7 @@ class AreaChart : public VSeriesPlotter
 public:
     AreaChart() = delete;
 
-    AreaChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
+    AreaChart( const rtl::Reference< ::chart::ChartType >& xChartTypeModel
              , sal_Int32 nDimensionCount
              , bool bCategoryXAxis, bool bNoArea=false
              );

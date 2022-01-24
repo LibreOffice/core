@@ -18,6 +18,7 @@
  */
 
 #include "CandleStickChart.hxx"
+#include <ChartType.hxx>
 #include <ShapeFactory.hxx>
 #include <CommonConverters.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -33,7 +34,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-CandleStickChart::CandleStickChart( const uno::Reference<XChartType>& xChartTypeModel
+CandleStickChart::CandleStickChart( const rtl::Reference<ChartType>& xChartTypeModel
                                     , sal_Int32 nDimensionCount )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount )
         , m_pMainPosHelper( new BarPositionHelper() )
@@ -104,15 +105,15 @@ void CandleStickChart::createShapes()
     tAnySequence  aWhiteBox_Values, aBlackBox_Values;
     try
     {
-        if( m_xChartTypeModelProps.is() )
+        if( m_xChartTypeModel.is() )
         {
-            m_xChartTypeModelProps->getPropertyValue( "ShowFirst" ) >>= bShowFirst;
+            m_xChartTypeModel->getPropertyValue( "ShowFirst" ) >>= bShowFirst;
 
             uno::Reference< beans::XPropertySet > xWhiteDayProps;
             uno::Reference< beans::XPropertySet > xBlackDayProps;
-            m_xChartTypeModelProps->getPropertyValue( "Japanese" ) >>= bJapaneseStyle;
-            m_xChartTypeModelProps->getPropertyValue( "WhiteDay" ) >>= xWhiteDayProps;
-            m_xChartTypeModelProps->getPropertyValue( "BlackDay" ) >>= xBlackDayProps;
+            m_xChartTypeModel->getPropertyValue( "Japanese" ) >>= bJapaneseStyle;
+            m_xChartTypeModel->getPropertyValue( "WhiteDay" ) >>= xWhiteDayProps;
+            m_xChartTypeModel->getPropertyValue( "BlackDay" ) >>= xBlackDayProps;
 
             tPropertyNameValueMap aWhiteBox_Map;
             PropertyMapper::getValueMap( aWhiteBox_Map, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xWhiteDayProps );

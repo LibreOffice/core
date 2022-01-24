@@ -22,6 +22,7 @@
 #include <ShapeFactory.hxx>
 #include <ObjectIdentifier.hxx>
 #include <LabelPositionHelper.hxx>
+#include <ChartType.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <sal/log.hxx>
@@ -34,7 +35,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-BubbleChart::BubbleChart( const uno::Reference<XChartType>& xChartTypeModel
+BubbleChart::BubbleChart( const rtl::Reference<ChartType>& xChartTypeModel
                      , sal_Int32 nDimensionCount )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount, false )
         , m_fMaxLogicBubbleSize( 0.0 )
