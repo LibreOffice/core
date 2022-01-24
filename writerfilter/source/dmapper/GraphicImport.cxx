@@ -986,6 +986,13 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // But they aren't Writer pictures, either (which are already handled above).
                         uno::Reference< beans::XPropertySet > xShapeProps(m_xShape, uno::UNO_QUERY_THROW);
 
+                        if (m_pImpl->nWrap == text::WrapTextMode_THROUGH && m_pImpl->nHoriRelation == text::RelOrientation::FRAME)
+                        {
+                            // text::RelOrientation::FRAME is OOXML's "column", which behaves as if
+                            // layout-in-cell would be always off.
+                            m_pImpl->bLayoutInCell = false;
+                        }
+
                         // Anchored: Word only supports at-char in that case.
                         text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
 
