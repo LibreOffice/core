@@ -1942,6 +1942,27 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWrongPage)
     CPPUNIT_ASSERT(!HasLinksOnPage(pPdfPage2));
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testPageRange)
+{
+    // Given a document with 3 pages:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "link-wrong-page-partial.odg";
+
+    // When exporting that document to PDF, skipping the first page:
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
+    aMediaDescriptor["FilterOptions"]
+        <<= OUString("{\"PageRange\":{\"type\":\"string\",\"value\":\"2-\"}}");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+
+    // Then make sure the resulting PDF has 2 pages:
+    CPPUNIT_ASSERT(pPdfDocument);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 3
+    // i.e. FilterOptions was ignored.
+    CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testLargePage)
 {
     // Import the bugdoc and export as PDF.
