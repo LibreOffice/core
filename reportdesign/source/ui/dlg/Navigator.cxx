@@ -282,7 +282,7 @@ IMPL_LINK(NavigatorTree, CommandHdl, const CommandEvent&, rEvt, bool)
             std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
 
             const OString aIds[] = { "sorting", "page", "report", "function", "properties", "delete" };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+            for (size_t i = 0; i < std::size(aIds); ++i)
             {
                 sal_uInt16 nSId = mapIdent(aIds[i]);
 

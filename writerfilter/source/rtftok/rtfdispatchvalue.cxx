@@ -85,7 +85,7 @@ static int getNumberFormat(int nParam)
             NS_ooxml::LN_Value_ST_NumberFormat_arabicAlpha,
             NS_ooxml::LN_Value_ST_NumberFormat_hebrew2,
             NS_ooxml::LN_Value_ST_NumberFormat_arabicAbjad };
-    const int nLen = SAL_N_ELEMENTS(aMap);
+    const int nLen = std::size(aMap);
     int nValue = 0;
     if (nParam >= 0 && nParam < nLen)
         nValue = aMap[nParam];

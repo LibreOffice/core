@@ -885,8 +885,8 @@ OUString WinSalInstance::getOSVersion()
     if (HMODULE h_kernel32 = GetModuleHandleW(L"kernel32.dll"))
     {
         wchar_t szPath[MAX_PATH];
-        DWORD dwCount = GetModuleFileNameW(h_kernel32, szPath, SAL_N_ELEMENTS(szPath));
-        if (dwCount != 0 && dwCount < SAL_N_ELEMENTS(szPath))
+        DWORD dwCount = GetModuleFileNameW(h_kernel32, szPath, std::size(szPath));
+        if (dwCount != 0 && dwCount < std::size(szPath))
         {
             dwCount = GetFileVersionInfoSizeW(szPath, nullptr);
             if (dwCount != 0)

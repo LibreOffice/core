@@ -225,7 +225,7 @@ void SdOptionsLayout::GetPropNameArray( const char**& ppNames, sal_uLong& rCount
             "Other/TabStop/Metric"
         };
         ppNames = aPropNamesMetric;
-        rCount = SAL_N_ELEMENTS(aPropNamesMetric);
+        rCount = std::size(aPropNamesMetric);
     }
     else
     {
@@ -240,7 +240,7 @@ void SdOptionsLayout::GetPropNameArray( const char**& ppNames, sal_uLong& rCount
             "Other/TabStop/NonMetric"
         };
         ppNames = aPropNamesNonMetric;
-        rCount = SAL_N_ELEMENTS(aPropNamesNonMetric);
+        rCount = std::size(aPropNamesNonMetric);
     }
 }
 
@@ -364,7 +364,7 @@ void SdOptionsContents::GetPropNameArray( const char**& ppNames, sal_uLong& rCou
         "Display/TextPlaceholder"
     };
 
-    rCount = SAL_N_ELEMENTS(aPropNames);
+    rCount = std::size(aPropNames);
     ppNames = aPropNames;
 }
 
@@ -502,7 +502,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "TabBarVisible"
     };
 
-    rCount = ( IsImpress() ? SAL_N_ELEMENTS(aPropNames) : 14 );
+    rCount = ( IsImpress() ? std::size(aPropNames) : 14 );
     ppNames = aPropNames;
 }
 
@@ -786,7 +786,7 @@ void SdOptionsSnap::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "Position/PointReduction"
     };
 
-    rCount = SAL_N_ELEMENTS(aPropNames);
+    rCount = std::size(aPropNames);
     ppNames = aPropNames;
 }
 
@@ -919,7 +919,7 @@ void SdOptionsZoom::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "ScaleY"
     };
 
-    rCount = !IsImpress() ? SAL_N_ELEMENTS(aPropNames) : 0;
+    rCount = !IsImpress() ? std::size(aPropNames) : 0;
     ppNames = aPropNames;
 }
 
@@ -1003,7 +1003,7 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
             "SnapGrid/Size"
         };
         ppNames = aPropNamesMetric;
-        rCount = SAL_N_ELEMENTS(aPropNamesMetric);
+        rCount = std::size(aPropNamesMetric);
     }
     else
     {
@@ -1021,7 +1021,7 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
             "SnapGrid/Size"
         };
         ppNames = aPropNamesNonMetric;
-        rCount = SAL_N_ELEMENTS(aPropNamesNonMetric);
+        rCount = std::size(aPropNamesNonMetric);
     }
 }
 
@@ -1194,7 +1194,7 @@ void SdOptionsPrint::GetPropNameArray( const char**& ppNames, sal_uLong& rCount 
             "Other/HandoutHorizontal",
             "Other/PagesPerHandout"
         };
-        rCount = SAL_N_ELEMENTS(aImpressPropNames);
+        rCount = std::size(aImpressPropNames);
         ppNames = aImpressPropNames;
     }
     else
@@ -1218,7 +1218,7 @@ void SdOptionsPrint::GetPropNameArray( const char**& ppNames, sal_uLong& rCount 
             "Other/Quality",
             "Content/Drawing",
         };
-        rCount = SAL_N_ELEMENTS(aDrawPropNames);
+        rCount = std::size(aDrawPropNames);
         ppNames = aDrawPropNames;
     }
 }

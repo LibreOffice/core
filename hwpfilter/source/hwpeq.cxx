@@ -393,7 +393,7 @@ const hwpeq eq_tbl[] = {
 
 static const hwpeq *lookup_eqn(char const *str)
 {
-  static const int eqCount = SAL_N_ELEMENTS(eq_tbl);
+  static const int eqCount = std::size(eq_tbl);
   int l = 0, r = eqCount;
   const hwpeq *result = nullptr;
 

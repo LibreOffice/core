@@ -274,7 +274,7 @@ void TestBreakIterator::testWordBoundaries()
     for (int mode = i18n::WordType::ANY_WORD; mode <= i18n::WordType::WORD_COUNT; ++mode)
     {
         //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aBreakTests); ++i)
+        for (size_t i = 0; i < std::size(aBreakTests); ++i)
         {
             OUString aTest = "Word" + OUStringChar(aBreakTests[i]) + "Word";
             aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, mode, true);
@@ -307,7 +307,7 @@ void TestBreakIterator::testWordBoundaries()
     for (int mode = i18n::WordType::ANY_WORD; mode <= i18n::WordType::WORD_COUNT; ++mode)
     {
         //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aJoinTests); ++i)
+        for (size_t i = 0; i < std::size(aJoinTests); ++i)
         {
             OUString aTest = "Word" + OUStringChar(aJoinTests[i]) + "Word";
             aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, mode, true);
@@ -347,21 +347,21 @@ void TestBreakIterator::testWordBoundaries()
         };
 
         const sal_Int32 aDoublePositions[] = {0, 2, 4, 6, 8, 10, 12, 14};
-        for (size_t j = 0; j < SAL_N_ELEMENTS(aTests); ++j)
+        for (size_t j = 0; j < std::size(aTests); ++j)
         {
             OUString aTest = aBase.replace('x', aTests[j]);
             sal_Int32 nPos = -1;
             size_t i = 0;
             do
             {
-                CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aDoublePositions));
+                CPPUNIT_ASSERT(i < std::size(aDoublePositions));
                 nPos = m_xBreak->nextWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
                 CPPUNIT_ASSERT_EQUAL(aDoublePositions[i], nPos);
                 ++i;
             }
             while (nPos < aTest.getLength());
             nPos = aTest.getLength();
-            i = SAL_N_ELEMENTS(aDoublePositions)-1;
+            i = std::size(aDoublePositions)-1;
             do
             {
                 nPos = m_xBreak->previousWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
@@ -372,21 +372,21 @@ void TestBreakIterator::testWordBoundaries()
         }
 
         const sal_Int32 aSinglePositions[] = {0, 1, 3, 4, 6, 7, 9, 10};
-        for (size_t j = 1; j < SAL_N_ELEMENTS(aTests); ++j)
+        for (size_t j = 1; j < std::size(aTests); ++j)
         {
             OUString aTest = aBase.replaceAll("xx", OUStringChar(aTests[j]));
             sal_Int32 nPos = -1;
             size_t i = 0;
             do
             {
-                CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aSinglePositions));
+                CPPUNIT_ASSERT(i < std::size(aSinglePositions));
                 nPos = m_xBreak->nextWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
                 CPPUNIT_ASSERT_EQUAL(aSinglePositions[i], nPos);
                 ++i;
             }
             while (nPos < aTest.getLength());
             nPos = aTest.getLength();
-            i = SAL_N_ELEMENTS(aSinglePositions)-1;
+            i = std::size(aSinglePositions)-1;
             do
             {
                 nPos = m_xBreak->previousWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
@@ -404,14 +404,14 @@ void TestBreakIterator::testWordBoundaries()
             size_t i = 0;
             do
             {
-                CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aSingleQuotePositions));
+                CPPUNIT_ASSERT(i < std::size(aSingleQuotePositions));
                 nPos = m_xBreak->nextWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
                 CPPUNIT_ASSERT_EQUAL(aSingleQuotePositions[i], nPos);
                 ++i;
             }
             while (nPos < aTest.getLength());
             nPos = aTest.getLength();
-            i = SAL_N_ELEMENTS(aSingleQuotePositions)-1;
+            i = std::size(aSingleQuotePositions)-1;
             do
             {
                 nPos = m_xBreak->previousWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
@@ -434,14 +434,14 @@ void TestBreakIterator::testWordBoundaries()
         size_t i = 0;
         do
         {
-            CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
+            CPPUNIT_ASSERT(i < std::size(aExpected));
             nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
                 i18n::WordType::DICTIONARY_WORD, true).endPos;
             CPPUNIT_ASSERT_EQUAL(aExpected[i], nPos);
             ++i;
         }
         while (nPos++ < aTest.getLength());
-        CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(aExpected), i);
+        CPPUNIT_ASSERT_EQUAL(std::size(aExpected), i);
     }
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=85411
@@ -474,14 +474,14 @@ void TestBreakIterator::testWordBoundaries()
         size_t i = 0;
         do
         {
-            CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
+            CPPUNIT_ASSERT(i < std::size(aExpected));
             nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
                 i18n::WordType::DICTIONARY_WORD, true).endPos;
             CPPUNIT_ASSERT_EQUAL(aExpected[i], nPos);
             ++i;
         }
         while (nPos++ < aTest.getLength());
-        CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(aExpected), i);
+        CPPUNIT_ASSERT_EQUAL(std::size(aExpected), i);
     }
 
     //https://bz.apache.org/ooo/show_bug.cgi?id=21290
@@ -513,14 +513,14 @@ void TestBreakIterator::testWordBoundaries()
         size_t i = 0;
         do
         {
-            CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
+            CPPUNIT_ASSERT(i < std::size(aExpected));
             nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
                 i18n::WordType::DICTIONARY_WORD, true).endPos;
             CPPUNIT_ASSERT_EQUAL(aExpected[i], nPos);
             ++i;
         }
         while (nPos++ < aTest.getLength());
-        CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(aExpected), i);
+        CPPUNIT_ASSERT_EQUAL(std::size(aExpected), i);
     }
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=58513
@@ -537,14 +537,14 @@ void TestBreakIterator::testWordBoundaries()
             size_t i = 0;
             do
             {
-                CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
+                CPPUNIT_ASSERT(i < std::size(aExpected));
                 nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
                     i18n::WordType::WORD_COUNT, true).endPos;
                 CPPUNIT_ASSERT_EQUAL(aExpected[i], nPos);
                 ++i;
             }
             while (nPos++ < aTest.getLength());
-            CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(aExpected), i);
+            CPPUNIT_ASSERT_EQUAL(std::size(aExpected), i);
         }
 
         {
@@ -554,7 +554,7 @@ void TestBreakIterator::testWordBoundaries()
             size_t i = 0;
             do
             {
-                CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
+                CPPUNIT_ASSERT(i < std::size(aExpected));
                 aBounds = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
                     i18n::WordType::DICTIONARY_WORD, true);
                 CPPUNIT_ASSERT_EQUAL(aExpected[i], aBounds.startPos);
@@ -564,7 +564,7 @@ void TestBreakIterator::testWordBoundaries()
                 nPos = aBounds.endPos;
             }
             while (nPos++ < aTest.getLength());
-            CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(aExpected), i);
+            CPPUNIT_ASSERT_EQUAL(std::size(aExpected), i);
         }
     }
 
@@ -953,7 +953,7 @@ void TestBreakIterator::testNorthernThai()
     aLocale.Country = "TH";
 
     const sal_Unicode NORTHERN_THAI1[] = { 0x0E01, 0x0E38, 0x0E4A, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
-    OUString aTest(NORTHERN_THAI1, SAL_N_ELEMENTS(NORTHERN_THAI1));
+    OUString aTest(NORTHERN_THAI1, std::size(NORTHERN_THAI1));
     i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
         i18n::WordType::DICTIONARY_WORD, true);
     CPPUNIT_ASSERT_MESSAGE("Should skip full word",
@@ -976,7 +976,7 @@ void TestBreakIterator::testKhmer()
 
     const sal_Unicode KHMER[] = { 0x17B2, 0x17D2, 0x1799, 0x1782, 0x17C1 };
 
-    OUString aTest(KHMER, SAL_N_ELEMENTS(KHMER));
+    OUString aTest(KHMER, std::size(KHMER));
     i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
         i18n::WordType::DICTIONARY_WORD, true);
 

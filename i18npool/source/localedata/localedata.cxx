@@ -342,7 +342,7 @@ const struct {
 const sal_Unicode cUnder = '_';
 const sal_Unicode cHyphen = '-';
 
-const sal_Int16 nbOfLocales = SAL_N_ELEMENTS(aLibTable);
+const sal_Int16 nbOfLocales = std::size(aLibTable);
 
 namespace i18npool {
 

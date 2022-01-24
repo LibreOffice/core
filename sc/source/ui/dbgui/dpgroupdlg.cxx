@@ -223,7 +223,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg(weld::Window* pParent,
 
     if( nDatePart == 0 )
         nDatePart = css::sheet::DataPilotFieldGroupBy::MONTHS;
-    for (size_t nIdx = 0; nIdx < SAL_N_ELEMENTS(aDatePartResIds); ++nIdx)
+    for (size_t nIdx = 0; nIdx < std::size(aDatePartResIds); ++nIdx)
     {
         mxLbUnits->append();
         mxLbUnits->set_toggle(nIdx, (nDatePart & spnDateParts[ nIdx ]) ? TRISTATE_TRUE : TRISTATE_FALSE);

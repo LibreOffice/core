@@ -618,7 +618,7 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
                         (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
                             | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
                             | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR))
-                    && o3tl::make_unsigned(u.getLength()) < SAL_N_ELEMENTS(LocalHostname))
+                    && o3tl::make_unsigned(u.getLength()) < std::size(LocalHostname))
                 {
                     memcpy(LocalHostname, u.getStr(), (u.getLength() + 1) * sizeof (sal_Unicode));
                 }
@@ -756,7 +756,7 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr (
     WCHAR buf[16]; // 16 for IPV4, 46 for IPV6
     PCWSTR ret = InetNtopW(
             AF_INET, & pSystemInetAddr->sin_addr,
-            buf, SAL_N_ELEMENTS(buf));
+            buf, std::size(buf));
     if (nullptr == ret)
     {
         SAL_INFO("sal.osl", "InetNtopW failed: " << WSAGetLastError());

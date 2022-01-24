@@ -85,7 +85,7 @@ static Sequence< OUString > lcl_GetNotifyNames()
         "IsIgnoreKashida_CTL"                   // 20
     };
 
-    const int nCount = SAL_N_ELEMENTS( aTranslitNames );
+    const int nCount = std::size( aTranslitNames );
     Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
     for (sal_Int32 i = 0;  i < nCount;  ++i)

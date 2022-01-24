@@ -19,6 +19,7 @@
 
 #include "fields.hxx"
 #include <osl/diagnose.h>
+#include <iterator>
 #include <stddef.h>
 
 namespace ww
@@ -130,7 +131,7 @@ namespace ww
         };
 
         size_t nIndex = static_cast<size_t>(eIndex);
-        if (nIndex >= SAL_N_ELEMENTS(aFieldNames))
+        if (nIndex >= std::size(aFieldNames))
             eIndex = eNONE;
         OSL_ENSURE(eIndex != eNONE, "Unknown WinWord Field");
         return aFieldNames[eIndex];

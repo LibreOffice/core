@@ -1604,17 +1604,17 @@ void ScExportTest::testMiscRowHeightExport()
         // additionally there is effectively a default row height ( 5.29 mm ). So we test the
         // unset rows at the end of the document to ensure the effective xlsx default height
         // is set there too.
-        { "miscrowheights.", FORMAT_XLSX, FORMAT_XLSX, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
+        { "miscrowheights.", FORMAT_XLSX, FORMAT_XLSX, std::size(DfltRowData), DfltRowData },
         // Checks that some distributed ( non-empty ) heights remain set after export (to xls)
-        { "miscrowheights.", FORMAT_XLSX, FORMAT_XLS, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
+        { "miscrowheights.", FORMAT_XLSX, FORMAT_XLS, std::size(DfltRowData), DfltRowData },
         // Checks that repreated rows ( of various heights ) remain set after export ( to xlsx )
-        { "miscemptyrepeatedrowheights.", FORMAT_ODS, FORMAT_XLSX,
-          SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
+        { "miscemptyrepeatedrowheights.", FORMAT_ODS, FORMAT_XLSX, std::size(EmptyRepeatRowData),
+          EmptyRepeatRowData },
         // Checks that repreated rows ( of various heights ) remain set after export ( to xls )
-        { "miscemptyrepeatedrowheights.", FORMAT_ODS, FORMAT_XLS,
-          SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
+        { "miscemptyrepeatedrowheights.", FORMAT_ODS, FORMAT_XLS, std::size(EmptyRepeatRowData),
+          EmptyRepeatRowData },
     };
-    miscRowHeightsTest(aTestValues, SAL_N_ELEMENTS(aTestValues));
+    miscRowHeightsTest(aTestValues, std::size(aTestValues));
 }
 
 namespace
@@ -2714,7 +2714,7 @@ void ScExportTest::testExcelCellBorders(sal_uLong nFormatType)
     {
         ScDocument& rDoc = xDocSh->GetDocument();
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (size_t i = 0; i < std::size(aChecks); ++i)
         {
             const editeng::SvxBorderLine* pLine = nullptr;
             rDoc.GetBorderLines(2, aChecks[i].mnRow, 0, nullptr, &pLine, nullptr, nullptr);
@@ -2729,7 +2729,7 @@ void ScExportTest::testExcelCellBorders(sal_uLong nFormatType)
     ScDocShellRef xNewDocSh = saveAndReload(xDocSh.get(), nFormatType);
     xDocSh->DoClose();
     ScDocument& rDoc = xNewDocSh->GetDocument();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    for (size_t i = 0; i < std::size(aChecks); ++i)
     {
         const editeng::SvxBorderLine* pLine = nullptr;
         rDoc.GetBorderLines(2, aChecks[i].mnRow, 0, nullptr, &pLine, nullptr, nullptr);
@@ -3057,7 +3057,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
                 return false;
             }
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            for (size_t i = 0; i < std::size(aChecks); ++i)
             {
                 sal_uInt16 nActId = aChecks[i].mnActionId;
                 const ScChangeAction* pAction = pCT->GetAction(nActId);
@@ -3229,7 +3229,7 @@ void ScExportTest::testSheetTabColorsXLSX()
             }
 
             const char* pNames[] = { "Green", "Red", "Blue", "Yellow" };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); ++i)
+            for (size_t i = 0; i < std::size(pNames); ++i)
             {
                 OUString aExpected = OUString::createFromAscii(pNames[i]);
                 if (aExpected != aTabNames[i])
@@ -3247,7 +3247,7 @@ void ScExportTest::testSheetTabColorsXLSX()
                 0x00FFFF00, // yellow
             };
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aXclColors); ++i)
+            for (size_t i = 0; i < std::size(aXclColors); ++i)
             {
                 if (aXclColors[i] != rDoc.GetTabBgColor(i))
                 {
@@ -3795,7 +3795,7 @@ void ScExportTest::testSwappedOutImageExport()
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), xBatch);
     xBatch->commit();
 
-    for (size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter)
+    for (size_t nFilter = 0; nFilter < std::size(aFilterNames); ++nFilter)
     {
         // Check whether the export code swaps in the image which was swapped out before.
         ScDocShellRef xDocSh = loadDoc(u"document_with_two_images.", FORMAT_ODS);
@@ -3922,7 +3922,7 @@ void ScExportTest::testLinkedGraphicRT()
         "generic_HTML",
     };
 
-    for (size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter)
+    for (size_t nFilter = 0; nFilter < std::size(aFilterNames); ++nFilter)
     {
         // Load the original file with one image
         ScDocShellRef xDocSh = loadDoc(u"document_with_linked_graphic.", FORMAT_ODS);
@@ -3968,7 +3968,7 @@ void ScExportTest::testImageWithSpecialID()
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), batch);
     batch->commit();
 
-    for (size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter)
+    for (size_t nFilter = 0; nFilter < std::size(aFilterNames); ++nFilter)
     {
         ScDocShellRef xDocSh = loadDoc(u"images_with_special_IDs.", FORMAT_ODS);
 

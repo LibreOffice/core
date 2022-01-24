@@ -487,7 +487,7 @@ const char *natnum1Locales[] = {
     "fa",
     "cu"
 };
-const sal_Int16 nbOfLocale = SAL_N_ELEMENTS(natnum1Locales);
+const sal_Int16 nbOfLocale = std::size(natnum1Locales);
 
 //! ATTENTION: Do not change order of elements!
 //! Number and order must match elements of natnum1Locales!
@@ -519,7 +519,7 @@ const sal_Int16 natnum1[] = {
     NumberChar_EastIndic_ar,
     NumberChar_cu
 };
-const sal_Int16 sizeof_natnum1 = SAL_N_ELEMENTS(natnum1);
+const sal_Int16 sizeof_natnum1 = std::size(natnum1);
 
 //! ATTENTION: Do not change order of elements!
 //! Order must match first elements of natnum1Locales!
@@ -530,7 +530,7 @@ const sal_Int16 natnum2[] = {
     NumberChar_Upper_ko,
     NumberChar_he
 };
-const sal_Int16 sizeof_natnum2 = SAL_N_ELEMENTS(natnum2);
+const sal_Int16 sizeof_natnum2 = std::size(natnum2);
 
 sal_Int16 getLanguageNumber( const Locale& rLocale)
 {
@@ -670,7 +670,7 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
 
         sal_Int32 nStripCase = 0;
         size_t nCasing;
-        for (nCasing = 0; nCasing < SAL_N_ELEMENTS(Casings); ++nCasing)
+        for (nCasing = 0; nCasing < std::size(Casings); ++nCasing)
         {
             if (rNativeNumberParams.startsWith( Casings[nCasing].aLiteral))
             {
@@ -1050,14 +1050,14 @@ static void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, bool isLas
         output.append(value == 1000 ? thousand : isLast ? thousands_last : thousands);
     } else {
         sal_Int16 nbOfChar = 0;
-        for (sal_Int32 j = 0; num > 0 && j < sal_Int32(SAL_N_ELEMENTS(HebrewNumberCharArray)); j++) {
+        for (sal_Int32 j = 0; num > 0 && j < sal_Int32(std::size(HebrewNumberCharArray)); j++) {
             if (num - HebrewNumberCharArray[j].value >= 0) {
                 nbOfChar++;
                 // https://en.wikipedia.org/wiki/Hebrew_numerals#Key_exceptions
                 // By convention, the numbers 15 and 16 are represented as 9 + 6 and 9 + 7
                 if (num == 15 || num == 16) // substitution for 15 and 16
                     j++;
-                assert(j < sal_Int32(SAL_N_ELEMENTS(HebrewNumberCharArray)));
+                assert(j < sal_Int32(std::size(HebrewNumberCharArray)));
                 num = sal::static_int_cast<sal_Int16>( num - HebrewNumberCharArray[j].value );
                 output.append(HebrewNumberCharArray[j].code);
             }
@@ -1163,7 +1163,7 @@ static void makeCyrillicNumber(sal_Int64 value, OUStringBuffer& output, bool add
             addTitlo = false;
     }
 
-    for (sal_Int32 j = 0; num > 0 && j < sal_Int32(SAL_N_ELEMENTS(CyrillicNumberCharArray)); j++) {
+    for (sal_Int32 j = 0; num > 0 && j < sal_Int32(std::size(CyrillicNumberCharArray)); j++) {
         if (num < 20 && num > 10) {
             num -= 10;
             makeCyrillicNumber(num, output, false);

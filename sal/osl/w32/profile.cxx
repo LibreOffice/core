@@ -2197,7 +2197,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
             unsigned i = 0;
             char *pStr = aTmpPath + nPos;
 
-            for (i = 0; i < SAL_N_ELEMENTS(SubDirs); i++)
+            for (i = 0; i < std::size(SubDirs); i++)
                 if (strnicmp(pStr + 1, SubDirs[i], strlen(SubDirs[i])) == 0)
                 {
                     if ( *strPath == 0)

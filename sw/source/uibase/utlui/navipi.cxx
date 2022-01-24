@@ -591,8 +591,8 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
         STR_INACTIVE
     };
 
-    static_assert(SAL_N_ELEMENTS(REGIONNAME_ARY) == SAL_N_ELEMENTS(REGIONMODE_ARY), "### unexpected size!");
-    static_assert(SAL_N_ELEMENTS(REGIONNAME_ARY) == static_cast<sal_uInt16>(RegionMode::EMBEDDED) + 1, "### unexpected size!");
+    static_assert(std::size(REGIONNAME_ARY) == std::size(REGIONMODE_ARY), "### unexpected size!");
+    static_assert(std::size(REGIONNAME_ARY) == static_cast<sal_uInt16>(RegionMode::EMBEDDED) + 1, "### unexpected size!");
 
     for (sal_uInt16 i = 0; i <= static_cast<sal_uInt16>(RegionMode::EMBEDDED); ++i)
     {

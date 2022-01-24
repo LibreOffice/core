@@ -475,10 +475,10 @@ bool Picture::Read(HWPFile & hwpf)
         //read potentially compressed data in blocks as it's more
         //likely large values are simply broken and we'll run out
         //of data before we need to realloc
-        for (size_t i = 0; i < follow_block_size; i+= SAL_N_ELEMENTS(hwpf.scratch))
+        for (size_t i = 0; i < follow_block_size; i+= std::size(hwpf.scratch))
         {
            size_t nOldSize = follow.size();
-           size_t nBlock = std::min(SAL_N_ELEMENTS(hwpf.scratch), follow_block_size - nOldSize);
+           size_t nBlock = std::min(std::size(hwpf.scratch), follow_block_size - nOldSize);
            size_t nReadBlock = hwpf.ReadBlock(hwpf.scratch, nBlock);
            if (nReadBlock)
            {

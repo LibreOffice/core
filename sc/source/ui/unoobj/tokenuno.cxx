@@ -68,7 +68,7 @@ const formula::FormulaGrammar::AddressConvention aConvMap[] = {
     formula::FormulaGrammar::CONV_LOTUS_A1    // <- AddressConvention::LOTUS_A1
 };
 // sal_Int16 because of comparison of integer expressions below.
-constexpr sal_Int16 nConvMapCount = SAL_N_ELEMENTS(aConvMap);
+constexpr sal_Int16 nConvMapCount = std::size(aConvMap);
 
 
 SC_SIMPLE_SERVICE_INFO( ScFormulaParserObj, "ScFormulaParserObj", SC_SERVICENAME_FORMULAPARS )

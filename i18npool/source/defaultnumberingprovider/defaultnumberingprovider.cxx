@@ -450,7 +450,7 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
     {
         if (nSection)
         {
-            if (nSection > SAL_N_ELEMENTS( table_PersianWord_decadeX))
+            if (nSection > std::size( table_PersianWord_decadeX))
                 throw IllegalArgumentException();   // does not happen with sal_Int32
             aTemp.insert( 0, asPersianWord_conjunction).insert( 0, table_PersianWord_decadeX[nSection-1]);
         }
@@ -798,61 +798,61 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
           case CIRCLE_NUMBER:
               table = table_CircledNumber;
-              tableSize = SAL_N_ELEMENTS(table_CircledNumber);
+              tableSize = std::size(table_CircledNumber);
               break;
           case TIAN_GAN_ZH:
               table = table_TianGan_zh;
-              tableSize = SAL_N_ELEMENTS(table_TianGan_zh);
+              tableSize = std::size(table_TianGan_zh);
               break;
           case DI_ZI_ZH:
               table = table_DiZi_zh;
-              tableSize = SAL_N_ELEMENTS(table_DiZi_zh);
+              tableSize = std::size(table_DiZi_zh);
               break;
           case AIU_FULLWIDTH_JA:
               table = table_AIUFullWidth_ja_JP;
-              tableSize = SAL_N_ELEMENTS(table_AIUFullWidth_ja_JP);
+              tableSize = std::size(table_AIUFullWidth_ja_JP);
               bRecycleSymbol = true;
               break;
           case AIU_HALFWIDTH_JA:
               table = table_AIUHalfWidth_ja_JP;
-              tableSize = SAL_N_ELEMENTS(table_AIUHalfWidth_ja_JP);
+              tableSize = std::size(table_AIUHalfWidth_ja_JP);
               bRecycleSymbol = true;
               break;
           case IROHA_FULLWIDTH_JA:
               table = table_IROHAFullWidth_ja_JP;
-              tableSize = SAL_N_ELEMENTS(table_IROHAFullWidth_ja_JP);
+              tableSize = std::size(table_IROHAFullWidth_ja_JP);
               bRecycleSymbol = true;
               break;
           case IROHA_HALFWIDTH_JA:
               table = table_IROHAHalfWidth_ja_JP;
-              tableSize = SAL_N_ELEMENTS(table_IROHAHalfWidth_ja_JP);
+              tableSize = std::size(table_IROHAHalfWidth_ja_JP);
               bRecycleSymbol = true;
               break;
           case HANGUL_JAMO_KO:
               table = table_HangulJamo_ko;
-              tableSize = SAL_N_ELEMENTS(table_HangulJamo_ko);
+              tableSize = std::size(table_HangulJamo_ko);
               bRecycleSymbol = true;
               break;
           case HANGUL_SYLLABLE_KO:
               table = table_HangulSyllable_ko;
-              tableSize = SAL_N_ELEMENTS(table_HangulSyllable_ko);
+              tableSize = std::size(table_HangulSyllable_ko);
               bRecycleSymbol = true;
               break;
           case HANGUL_CIRCLED_JAMO_KO:
               table = table_HangulCircledJamo_ko;
-              tableSize = SAL_N_ELEMENTS(table_HangulCircledJamo_ko);
+              tableSize = std::size(table_HangulCircledJamo_ko);
               bRecycleSymbol = true;
               break;
           case HANGUL_CIRCLED_SYLLABLE_KO:
               table = table_HangulCircledSyllable_ko;
-              tableSize = SAL_N_ELEMENTS(table_HangulCircledSyllable_ko);
+              tableSize = std::size(table_HangulCircledSyllable_ko);
               bRecycleSymbol = true;
               break;
           case CHARS_ARABIC:
-              lcl_formatChars(table_Alphabet_ar, SAL_N_ELEMENTS(table_Alphabet_ar), number - 1, result);
+              lcl_formatChars(table_Alphabet_ar, std::size(table_Alphabet_ar), number - 1, result);
               break;
           case CHARS_ARABIC_ABJAD:
-              lcl_formatChars(table_Alphabet_ar_abjad, SAL_N_ELEMENTS(table_Alphabet_ar_abjad), number - 1, result);
+              lcl_formatChars(table_Alphabet_ar_abjad, std::size(table_Alphabet_ar_abjad), number - 1, result);
               break;
           case NUMBER_ARABIC_INDIC:
               natNum = NativeNumberMode::NATNUM1;
@@ -867,94 +867,94 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
               locale.Language = "hi";
               break;
           case CHARS_THAI:
-              lcl_formatChars(table_Alphabet_th, SAL_N_ELEMENTS(table_Alphabet_th), number - 1, result);
+              lcl_formatChars(table_Alphabet_th, std::size(table_Alphabet_th), number - 1, result);
               break;
           case CHARS_HEBREW:
-              lcl_formatChars(table_Alphabet_he, SAL_N_ELEMENTS(table_Alphabet_he), number - 1, result);
+              lcl_formatChars(table_Alphabet_he, std::size(table_Alphabet_he), number - 1, result);
               break;
           case NUMBER_HEBREW:
               natNum = NativeNumberMode::NATNUM1;
               locale.Language = "he";
               break;
           case CHARS_NEPALI:
-              lcl_formatChars(table_Alphabet_ne, SAL_N_ELEMENTS(table_Alphabet_ne), number - 1, result);
+              lcl_formatChars(table_Alphabet_ne, std::size(table_Alphabet_ne), number - 1, result);
               break;
           case CHARS_KHMER:
-              lcl_formatChars(table_Alphabet_km, SAL_N_ELEMENTS(table_Alphabet_km), number - 1, result);
+              lcl_formatChars(table_Alphabet_km, std::size(table_Alphabet_km), number - 1, result);
               break;
           case CHARS_LAO:
-              lcl_formatChars(table_Alphabet_lo, SAL_N_ELEMENTS(table_Alphabet_lo), number - 1, result);
+              lcl_formatChars(table_Alphabet_lo, std::size(table_Alphabet_lo), number - 1, result);
               break;
           case CHARS_MYANMAR:
-              lcl_formatChars(table_Alphabet_my, SAL_N_ELEMENTS(table_Alphabet_my), number - 1, result);
+              lcl_formatChars(table_Alphabet_my, std::size(table_Alphabet_my), number - 1, result);
               break;
          case CHARS_TIBETAN:
-              lcl_formatChars(table_Alphabet_dz, SAL_N_ELEMENTS(table_Alphabet_dz), number - 1, result);
+              lcl_formatChars(table_Alphabet_dz, std::size(table_Alphabet_dz), number - 1, result);
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_BG:
               lcl_formatChars2( table_CyrillicUpperLetter_bg,
                       table_CyrillicLowerLetter_bg,
-                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_bg), number-1,
+                      std::size(table_CyrillicLowerLetter_bg), number-1,
                       result); // 1=>a, 2=>b, ..., 28=>z, 29=>Aa, 30=>Ab, ...
               break;
          case CHARS_CYRILLIC_LOWER_LETTER_BG:
               lcl_formatChars( table_CyrillicLowerLetter_bg,
-                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_bg), number-1,
+                      std::size(table_CyrillicLowerLetter_bg), number-1,
                       result); // 1=>a, 2=>b, ..., 28=>z, 29=>aa, 30=>ab, ...
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_N_BG:
               lcl_formatChars3( table_CyrillicUpperLetter_bg,
                       table_CyrillicLowerLetter_bg,
-                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_bg), number-1,
+                      std::size(table_CyrillicLowerLetter_bg), number-1,
                       result); // 1=>a, 2=>b, ..., 28=>z, 29=>Aa, 30=>Bb, ...
               break;
          case CHARS_CYRILLIC_LOWER_LETTER_N_BG:
               lcl_formatChars1( table_CyrillicLowerLetter_bg,
-                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_bg), number-1,
+                      std::size(table_CyrillicLowerLetter_bg), number-1,
                       result); // 1=>a, 2=>b, ..., 28=>z, 29=>aa, 30=>bb, ...
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_RU:
               lcl_formatChars2( table_CyrillicUpperLetter_ru,
                       table_CyrillicLowerLetter_ru,
-                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_ru), number-1,
+                      std::size(table_CyrillicLowerLetter_ru), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>Aa, 29=>Ab, ...
               break;
          case CHARS_CYRILLIC_LOWER_LETTER_RU:
               lcl_formatChars( table_CyrillicLowerLetter_ru,
-                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_ru), number-1,
+                      std::size(table_CyrillicLowerLetter_ru), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>ab, ...
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_N_RU:
               lcl_formatChars3( table_CyrillicUpperLetter_ru,
                       table_CyrillicLowerLetter_ru,
-                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_ru), number-1,
+                      std::size(table_CyrillicLowerLetter_ru), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>Aa, 29=>Bb, ...
               break;
          case CHARS_CYRILLIC_LOWER_LETTER_N_RU:
               lcl_formatChars1( table_CyrillicLowerLetter_ru,
-                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_ru), number-1,
+                      std::size(table_CyrillicLowerLetter_ru), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>bb, ...
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_SR:
               lcl_formatChars2( table_CyrillicUpperLetter_sr,
                       table_CyrillicLowerLetter_sr,
-                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_sr), number-1,
+                      std::size(table_CyrillicLowerLetter_sr), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>Aa, 29=>Ab, ...
               break;
          case CHARS_CYRILLIC_LOWER_LETTER_SR:
               lcl_formatChars( table_CyrillicLowerLetter_sr,
-                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_sr), number-1,
+                      std::size(table_CyrillicLowerLetter_sr), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>ab, ...
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_N_SR:
               lcl_formatChars3( table_CyrillicUpperLetter_sr,
                       table_CyrillicLowerLetter_sr,
-                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_sr), number-1,
+                      std::size(table_CyrillicLowerLetter_sr), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>Aa, 29=>Bb, ...
               break;
          case CHARS_CYRILLIC_LOWER_LETTER_N_SR:
               lcl_formatChars1( table_CyrillicLowerLetter_sr,
-                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_sr), number-1,
+                      std::size(table_CyrillicLowerLetter_sr), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>bb, ...
               break;
 
@@ -967,7 +967,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
               break;
 
           case CHARS_PERSIAN:
-              lcl_formatChars(table_Alphabet_fa, SAL_N_ELEMENTS(table_Alphabet_fa), number - 1, result);
+              lcl_formatChars(table_Alphabet_fa, std::size(table_Alphabet_fa), number - 1, result);
               break;
 
           case CHARS_PERSIAN_WORD:
@@ -1108,7 +1108,7 @@ const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::ARABIC_ZERO4, "0001, 0002, 0003, ...", LANG_ALL},
         {style::NumberingType::ARABIC_ZERO5, "00001, 00002, 00003, ...", LANG_ALL},
 };
-const sal_Int32 nSupported_NumberingTypes = SAL_N_ELEMENTS(aSupportedTypes);
+const sal_Int32 nSupported_NumberingTypes = std::size(aSupportedTypes);
 
 OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
 {

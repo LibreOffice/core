@@ -34,7 +34,7 @@ namespace reportdesign
 static uno::Sequence< OUString > lcl_getFixedTextOptionals()
 {
     OUString pProps[] = { OUString(PROPERTY_DATAFIELD),OUString(PROPERTY_MASTERFIELDS),OUString(PROPERTY_DETAILFIELDS) };
-    return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
+    return uno::Sequence< OUString >(pProps,std::size(pProps));
 }
 
 OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContext)

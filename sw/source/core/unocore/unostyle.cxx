@@ -1565,7 +1565,7 @@ const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
 
         if(!m_pOldPageDesc)
         {
-            for (size_t i = 0; i < SAL_N_ELEMENTS(STR_POOLPAGE_ARY); ++i)
+            for (size_t i = 0; i < std::size(STR_POOLPAGE_ARY); ++i)
             {
                 if (SwResId(STR_POOLPAGE_ARY[i]) == m_rStyleName)
                 {

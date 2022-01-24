@@ -613,7 +613,7 @@ void OutlineTypeMgr::Init()
 
 sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*mLevel*/,sal_uInt16 nFromIndex)
 {
-    sal_uInt16 const nLength = SAL_N_ELEMENTS(pOutlineSettingsArrs);
+    sal_uInt16 const nLength = std::size(pOutlineSettingsArrs);
     for(sal_uInt16 iDex = nFromIndex; iDex < nLength; iDex++)
     {
         bool bNotMatch = false;
@@ -693,7 +693,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
 
 void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
-    sal_uInt16 const nLength = SAL_N_ELEMENTS(pOutlineSettingsArrs);
+    sal_uInt16 const nLength = std::size(pOutlineSettingsArrs);
     if ( nIndex >= nLength )
         return;
 
@@ -865,7 +865,7 @@ OUString OutlineTypeMgr::GetDescription(sal_uInt16 nIndex, bool isDefault)
 {
     OUString sRet;
 
-    if ( nIndex >= SAL_N_ELEMENTS(pOutlineSettingsArrs) )
+    if ( nIndex >= std::size(pOutlineSettingsArrs) )
         return sRet;
     else
     {
@@ -883,7 +883,7 @@ bool OutlineTypeMgr::IsCustomized(sal_uInt16 nIndex)
 {
     bool bRet = false;
 
-    if ( nIndex >= SAL_N_ELEMENTS(pOutlineSettingsArrs) )
+    if ( nIndex >= std::size(pOutlineSettingsArrs) )
         return bRet;
     else
     {

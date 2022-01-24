@@ -119,7 +119,7 @@ const sal_Unicode aWhiteSpaces[] =
    const sal_Int32 PROOFINFO_GET_PROOFRESULT = 1;
    const sal_Int32 PROOFINFO_MARK_PARAGRAPH = 2;
 
-const int nWhiteSpaces = SAL_N_ELEMENTS( aWhiteSpaces );
+const int nWhiteSpaces = std::size( aWhiteSpaces );
 
 static bool lcl_IsWhiteSpace( sal_Unicode cChar )
 {

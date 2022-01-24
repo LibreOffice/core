@@ -191,7 +191,7 @@ char const*const g_ServicesFootnote[] =
     "com.sun.star.text.Endnote", // NB: only supported for endnotes!
 };
 
-const size_t g_nServicesEndnote( SAL_N_ELEMENTS(g_ServicesFootnote) );
+const size_t g_nServicesEndnote( std::size(g_ServicesFootnote) );
 
 const size_t g_nServicesFootnote( g_nServicesEndnote - 1 ); // NB: omit!
 

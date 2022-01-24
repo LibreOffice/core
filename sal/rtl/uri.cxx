@@ -157,7 +157,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                 sal_Size nConverted;
                 sal_Size nDstSize = rtl_convertTextToUnicode(
                     aConverter, nullptr, aBuf.getStr(), aBuf.getLength(), aDst,
-                    SAL_N_ELEMENTS( aDst ),
+                    std::size( aDst ),
                     (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
                      | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
                      | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR),
@@ -598,7 +598,7 @@ sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     assert(
         (eCharClass >= 0
          && (sal::static_int_cast< std::size_t >(eCharClass)
-             < SAL_N_ELEMENTS(aCharClass)))); // bad eCharClass
+             < std::size(aCharClass)))); // bad eCharClass
     return aCharClass[eCharClass];
 }
 

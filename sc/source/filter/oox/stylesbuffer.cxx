@@ -372,7 +372,7 @@ ColorPalette::ColorPalette( const WorkbookHelper& rHelper )
     , mnAppendIndex(0)
 {
     // default colors
-    maColors.insert( maColors.begin(), spnDefColors8, spnDefColors8 + SAL_N_ELEMENTS(spnDefColors8) );
+    maColors.insert( maColors.begin(), spnDefColors8, spnDefColors8 + std::size(spnDefColors8) );
     mnAppendIndex = OOX_COLOR_USEROFFSET;
 }
 
@@ -2404,7 +2404,7 @@ const char* const sppcStyleNames[] =
     "60% - Accent6",
     "Explanatory Text"
 };
-const sal_Int32 snStyleNamesCount = static_cast< sal_Int32 >( SAL_N_ELEMENTS( sppcStyleNames ) );
+const sal_Int32 snStyleNamesCount = static_cast< sal_Int32 >( std::size( sppcStyleNames ) );
 
 OUString lclGetBuiltinStyleName( sal_Int32 nBuiltinId, std::u16string_view rName, sal_Int32 nLevel = 0 )
 {

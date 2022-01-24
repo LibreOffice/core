@@ -492,9 +492,9 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         m_xAddressElementsLB->append(OUString::number(USER_DATA_SALUTATION), SwResId(ST_SALUTATION));
         m_xAddressElementsLB->append(OUString::number(USER_DATA_PUNCTUATION), SwResId(ST_PUNCTUATION));
         m_xAddressElementsLB->append(OUString::number(USER_DATA_TEXT), SwResId(ST_TEXT));
-        for (size_t i = 0; i < SAL_N_ELEMENTS(RA_SALUTATION); ++i)
+        for (size_t i = 0; i < std::size(RA_SALUTATION); ++i)
             m_aSalutations.push_back(SwResId(RA_SALUTATION[i]));
-        for (size_t i = 0; i < SAL_N_ELEMENTS(RA_PUNCTUATION); ++i)
+        for (size_t i = 0; i < std::size(RA_PUNCTUATION); ++i)
             m_aPunctuations.push_back(SwResId(RA_PUNCTUATION[i]));
         m_xDragED->SetText("            ");
         m_xDialog->set_title(SwResId(eType == GREETING_MALE ? ST_TITLE_MALE : ST_TITLE_FEMALE));

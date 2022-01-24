@@ -378,8 +378,8 @@ void TestPivottable::testPivotTable()
         { "Frank",   "C", "15" },
     };
 
-    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t const nDataCount = SAL_N_ELEMENTS(aData);
+    size_t nFieldCount = std::size(aFields);
+    size_t const nDataCount = std::size(aData);
 
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
@@ -421,7 +421,7 @@ void TestPivottable::testPivotTable()
 
     // Update the cell values.
     double aData2[] = { 100, 200, 300, 400, 500, 600 };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aData2); ++i)
+    for (size_t i = 0; i < std::size(aData2); ++i)
     {
         SCROW nRow = i + 1;
         m_pDoc->SetValue(2, nRow, 0, aData2[i]);
@@ -559,8 +559,8 @@ void TestPivottable::testPivotTableLabels()
         { "LibreOffice", "3.4.0", "45" },
     };
 
-    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t const nDataCount = SAL_N_ELEMENTS(aData);
+    size_t nFieldCount = std::size(aFields);
+    size_t const nDataCount = std::size(aData);
 
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
@@ -614,8 +614,8 @@ void TestPivottable::testPivotTableDateLabels()
         { "Xavior", "2011-1-3", "45" }
     };
 
-    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t const nDataCount = SAL_N_ELEMENTS(aData);
+    size_t nFieldCount = std::size(aFields);
+    size_t const nDataCount = std::size(aData);
 
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
@@ -696,8 +696,8 @@ void TestPivottable::testPivotTableFilters()
         { "H", "2", "B", "1", "10" }
     };
 
-    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t const nDataCount = SAL_N_ELEMENTS(aData);
+    size_t nFieldCount = std::size(aFields);
+    size_t const nDataCount = std::size(aData);
 
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
@@ -844,8 +844,8 @@ void TestPivottable::testPivotTableNamedSource()
         { "Frank",   "C", "15" },
     };
 
-    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t const nDataCount = SAL_N_ELEMENTS(aData);
+    size_t nFieldCount = std::size(aFields);
+    size_t const nDataCount = std::size(aData);
 
     // Insert the raw data.
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
@@ -1062,7 +1062,7 @@ void TestPivottable::testPivotTableCache()
             // Dimension 0: Z, R, A, F, Y, 12
             nDim = 0;
             const char* aChecks[] = { "Z", "R", "A", "F", "Y" };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            for (size_t i = 0; i < std::size(aChecks); ++i)
             {
                 pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
                 aTest.SetString(OUString::createFromAscii(aChecks[i]));
@@ -1080,7 +1080,7 @@ void TestPivottable::testPivotTableCache()
             // Dimension 1: A, A, B, B, C, C
             nDim = 1;
             const char* aChecks[] = { "A", "A", "B", "B", "C", "C" };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            for (size_t i = 0; i < std::size(aChecks); ++i)
             {
                 pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
                 aTest.SetString(OUString::createFromAscii(aChecks[i]));
@@ -1093,7 +1093,7 @@ void TestPivottable::testPivotTableCache()
             // Dimension 2: 30, 20, 45, 12, 8, 15
             nDim = 2;
             double aChecks[] = { 30, 20, 45, 12, 8, 15 };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            for (size_t i = 0; i < std::size(aChecks); ++i)
             {
                 pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
                 aTest.SetValue(aChecks[i]);
@@ -1162,7 +1162,7 @@ void TestPivottable::testPivotTableDuplicateDataFields()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+        m_pDoc, aDataRange, aFields, std::size(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
@@ -1253,7 +1253,7 @@ void TestPivottable::testPivotTableNormalGrouping()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+        m_pDoc, aDataRange, aFields, std::size(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
@@ -1413,7 +1413,7 @@ void TestPivottable::testPivotTableNumberGrouping()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+        m_pDoc, aDataRange, aFields, std::size(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
@@ -1496,7 +1496,7 @@ void TestPivottable::testPivotTableDateGrouping()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+        m_pDoc, aDataRange, aFields, std::size(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
@@ -1667,7 +1667,7 @@ void TestPivottable::testPivotTableEmptyRows()
     aDataRange.aEnd.IncRow(2);
 
     ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+        m_pDoc, aDataRange, aFields, std::size(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
@@ -1773,7 +1773,7 @@ void TestPivottable::testPivotTableTextNumber()
     };
 
     // Insert raw data such that the first column values are entered as text.
-    for (size_t nRow = 0; nRow < SAL_N_ELEMENTS(aData); ++nRow)
+    for (size_t nRow = 0; nRow < std::size(aData); ++nRow)
     {
         ScSetStringParam aParam;
         aParam.mbDetectNumberFormat = false;
@@ -1794,7 +1794,7 @@ void TestPivottable::testPivotTableTextNumber()
     ScRange aDataRange(0, 0, 0, 1, 4, 0);
 
     ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+        m_pDoc, aDataRange, aFields, std::size(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
@@ -1876,7 +1876,7 @@ void TestPivottable::testPivotTableCaseInsensitiveStrings()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+        m_pDoc, aDataRange, aFields, std::size(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
@@ -1964,7 +1964,7 @@ void TestPivottable::testPivotTableNumStability()
     double fSamTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+3, aDataRange.aStart.Tab());
 
     ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+        m_pDoc, aDataRange, aFields, std::size(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
@@ -2034,7 +2034,7 @@ void TestPivottable::testPivotTableFieldReference()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+        m_pDoc, aDataRange, aFields, std::size(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
@@ -2202,7 +2202,7 @@ void TestPivottable::testPivotTableDocFunc()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     std::unique_ptr<ScDPObject> pDPObj(createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false));
+        m_pDoc, aDataRange, aFields, std::size(aFields), false));
 
     CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObj);
 
@@ -2272,7 +2272,7 @@ void TestPivottable::testFuncGETPIVOTDATA()
             { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
         };
 
-        pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+        pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, std::size(aFields), false);
     }
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
@@ -2332,7 +2332,7 @@ void TestPivottable::testFuncGETPIVOTDATA()
             { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false },
         };
 
-        pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+        pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, std::size(aFields), false);
     }
 
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
@@ -2427,7 +2427,7 @@ void TestPivottable::testFuncGETPIVOTDATALeafAccess()
     };
 
     // Create pivot table at A1 on 2nd sheet.
-    pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, std::size(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
@@ -2466,12 +2466,12 @@ void TestPivottable::testFuncGETPIVOTDATALeafAccess()
         { "=GETPIVOTDATA($A$1;\"Member[Donna]\")",    4.0 },
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    for (size_t i = 0; i < std::size(aChecks); ++i)
         m_pDoc->SetString(ScAddress(4,i,1), OUString::createFromAscii(aChecks[i].mpFormula));
 
     m_pDoc->CalcAll();
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    for (size_t i = 0; i < std::size(aChecks); ++i)
     {
         FormulaError nErr = m_pDoc->GetErrCode(ScAddress(4,i,1));
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(FormulaError::NONE), static_cast<sal_uInt16>(nErr));
@@ -2514,8 +2514,8 @@ void TestPivottable::testPivotTableRepeatItemLabels()
         { "Frank",   "FR", "2007", "45" },
     };
 
-    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t const nDataCount = SAL_N_ELEMENTS(aData);
+    size_t nFieldCount = std::size(aFields);
+    size_t const nDataCount = std::size(aData);
 
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
@@ -2585,8 +2585,8 @@ void TestPivottable::testPivotTableDPCollection()
         { "LibreOffice", "3.4.0", "45" },
     };
 
-    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t const nDataCount = SAL_N_ELEMENTS(aData);
+    size_t nFieldCount = std::size(aFields);
+    size_t const nDataCount = std::size(aData);
 
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
@@ -2693,7 +2693,7 @@ void TestPivottable::testPivotTableMedianFunc()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     std::unique_ptr<ScDPObject> pDPObj(createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false));
+        m_pDoc, aDataRange, aFields, std::size(aFields), false));
     CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObj);
 
     // Create a new pivot table output.

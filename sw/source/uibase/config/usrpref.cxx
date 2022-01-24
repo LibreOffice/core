@@ -114,7 +114,7 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
     static_assert(std::strcmp("Update/Link", aPropNames[g_UpdateLinkIndex]) == 0);
     static_assert(std::strcmp("Display/DefaultAnchor", aPropNames[g_DefaultAnchor]) == 0);
 #endif
-    const int nCount = m_bWeb ? 12 : SAL_N_ELEMENTS(aPropNames);
+    const int nCount = m_bWeb ? 12 : std::size(aPropNames);
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -498,7 +498,7 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
         "DirectCursor/Insert",          // 1
         "Option/ProtectedArea",         // 2
     };
-    const int nCount = SAL_N_ELEMENTS(aPropNames);
+    const int nCount = std::size(aPropNames);
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
