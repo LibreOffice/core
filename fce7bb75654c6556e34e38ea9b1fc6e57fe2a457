@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f56656d9_11552fd6",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-24T21:29:25Z",
+      "side": 1,
+      "message": "This is odd. It duplicates the AdjustRowHeight() call in ScDocFunc::SetEditCell() for the bHeight case, and executes it for the !bHeight case anyway. If we really want to call AdjustRowHeight() unconditionally in any case then rather pass a parameter down to ScDocFunc::SetEditCell().",
+      "revId": "fce7bb75654c6556e34e38ea9b1fc6e57fe2a457",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
