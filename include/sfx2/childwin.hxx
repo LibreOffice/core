@@ -155,6 +155,7 @@ public:
     SAL_DLLPRIVATE void SetFactory_Impl( const SfxChildWinFactory* );
 };
 
+const int nCloseResponseToJustHide = -42;
 
 #define SFX_DECL_CHILDWINDOW(Class) \
     public  :   \
