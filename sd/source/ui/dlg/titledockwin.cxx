@@ -17,20 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <sfx2/titledockwin.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/strings.hrc>
-#include <bitmaps.hlst>
-#include <sfx2/sfxresid.hxx>
-
 #include <svl/eitem.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
 
-namespace sfx2
+#include <bitmaps.hlst>
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <titledockwin.hxx>
+
+namespace sd
 {
     //= TitledDockingWindow
     TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, vcl::Window* i_pParent )
@@ -198,7 +197,7 @@ namespace sfx2
 
         // Get the closer bitmap and set it as right most button.
         m_aToolbox->InsertItem(ToolBoxItemId(1), Image(StockImage::Yes, SFX_BMP_CLOSE_DOC));
-        m_aToolbox->SetQuickHelpText(ToolBoxItemId(1), SfxResId(STR_CLOSE_PANE));
+        m_aToolbox->SetQuickHelpText(ToolBoxItemId(1), SdResId(STR_CLOSE_PANE));
         m_aToolbox->ShowItem( ToolBoxItemId(1) );
     }
 

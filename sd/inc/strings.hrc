@@ -483,4 +483,6 @@
 #define RID_SVXSTR_MENU_FIRST                           NC_("RID_SVXSTR_MENU_FIRST", "~First Slide")
 #define RID_SVXSTR_MENU_LAST                            NC_("RID_SVXSTR_MENU_LAST", "~Last Slide")
 
+#define STR_CLOSE_PANE                                  NC_("STR_CLOSE_PANE", "Close Pane")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

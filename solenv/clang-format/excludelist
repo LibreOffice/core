@@ -5677,7 +5677,6 @@ include/sfx2/tbxctrl.hxx
 include/sfx2/templatelocalview.hxx
 include/sfx2/thumbnailview.hxx
 include/sfx2/thumbnailviewitem.hxx
-include/sfx2/titledockwin.hxx
 include/sfx2/tplpitem.hxx
 include/sfx2/userinputinterception.hxx
 include/sfx2/viewfac.hxx
@@ -9680,6 +9679,7 @@ sd/source/ui/dlg/sddlgfact.hxx
 sd/source/ui/dlg/sdpreslt.cxx
 sd/source/ui/dlg/sdtreelb.cxx
 sd/source/ui/dlg/tabtempl.cxx
+sd/source/ui/dlg/titledockwin.cxx
 sd/source/ui/dlg/tpaction.cxx
 sd/source/ui/dlg/tpoption.cxx
 sd/source/ui/dlg/unchss.cxx
@@ -9911,6 +9911,7 @@ sd/source/ui/inc/sdxfer.hxx
 sd/source/ui/inc/slideshow.hxx
 sd/source/ui/inc/tabtempl.hxx
 sd/source/ui/inc/tmplctrl.hxx
+sd/source/ui/inc/titledockwin.hxx
 sd/source/ui/inc/tools/ConfigurationAccess.hxx
 sd/source/ui/inc/tools/IdleDetection.hxx
 sd/source/ui/inc/tools/PropertySet.hxx
@@ -10460,7 +10461,6 @@ sfx2/source/dialog/srchdlg.cxx
 sfx2/source/dialog/styledlg.cxx
 sfx2/source/dialog/tabdlg.cxx
 sfx2/source/dialog/templdlg.cxx
-sfx2/source/dialog/titledockwin.cxx
 sfx2/source/dialog/tplcitem.cxx
 sfx2/source/dialog/tplpitem.cxx
 sfx2/source/dialog/versdlg.cxx
