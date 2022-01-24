@@ -316,7 +316,9 @@ InternalDataProvider::InternalDataProvider(
 {
     try
     {
-        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartDoc ) );
+        auto pModel = dynamic_cast<ChartModel*>(xChartDoc.get());
+        assert(!xChartDoc || pModel);
+        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( pModel ) );
         if( xDiagram.is())
         {
             Reference< frame::XModel > xChartModel = xChartDoc;
@@ -329,7 +331,7 @@ InternalDataProvider::InternalDataProvider(
                 uno::Sequence< sal_Int32 > aSequenceMapping;
                 const bool bSomethingDetected(
                     DataSourceHelper::detectRangeSegmentation(
-                        xChartModel, aRangeString, aSequenceMapping, m_bDataInColumns, bFirstCellAsLabel, bHasCategories ));
+                        pModel, aRangeString, aSequenceMapping, m_bDataInColumns, bFirstCellAsLabel, bHasCategories ));
 
                 // #i120559# if no data was available, restore default
                 if(!bSomethingDetected && m_bDataInColumns != bDefaultDataInColumns)
@@ -342,8 +344,7 @@ InternalDataProvider::InternalDataProvider(
             {
                 vector< vector< uno::Any > > aNewCategories;//inner count is level
                 {
-                    ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartModel);
-                    ExplicitCategoriesProvider aExplicitCategoriesProvider(ChartModelHelper::getFirstCoordinateSystem(xChartModel), rModel);
+                    ExplicitCategoriesProvider aExplicitCategoriesProvider(ChartModelHelper::getFirstCoordinateSystem(pModel), *pModel);
 
                     const Sequence< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
                     sal_Int32 nLevelCount = rSplitCategoriesList.getLength();
@@ -387,7 +388,7 @@ InternalDataProvider::InternalDataProvider(
             }
 
             // data series
-            std::vector< Reference< chart2::XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xChartDoc ));
+            std::vector< Reference< chart2::XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( pModel ));
             lcl_internalizeSeries ftor( m_aInternalData, *this, bConnectToModel, m_bDataInColumns );
             for( const auto& rxScreen : aSeriesVector )
                 ftor( rxScreen );
