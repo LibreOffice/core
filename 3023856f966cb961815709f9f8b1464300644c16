@@ -16,6 +16,23 @@
       "message": "@Adolfo: thanks for reviewing.",
       "revId": "3023856f966cb961815709f9f8b1464300644c16",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a670fd9_09bec039",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-24T09:17:38Z",
+      "side": 1,
+      "message": "Hi László,\nConsidering the issue has been there since OOo times, Why the rush to backport it to 7.3.0 branch ?",
+      "revId": "3023856f966cb961815709f9f8b1464300644c16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
