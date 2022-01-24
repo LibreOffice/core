@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cffc952_584e0a97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-01-24T11:18:27Z",
+      "side": 1,
+      "message": "Made a local build, \"make CppunitTest_sw_core_undo\" -\u003e no problem...",
+      "revId": "6d328a74ee26371f2297af093bfd1387f58f0de5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
