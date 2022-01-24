@@ -459,18 +459,20 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         }
         break;
         case NS_ooxml::LN_CT_Style_default:
-            m_pImpl->m_pCurrentEntry->bIsDefaultStyle = (nIntValue != 0);
-
-            if (m_pImpl->m_pCurrentEntry->nStyleTypeCode != STYLE_TYPE_UNKNOWN)
+            if (nIntValue != 0)
             {
-                // "If this attribute is specified by multiple styles, then the last instance shall be used."
-                if ( m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA && !m_pImpl->m_pCurrentEntry->sStyleIdentifierD.isEmpty() )
-                    m_pImpl->m_sDefaultParaStyleName = m_pImpl->m_pCurrentEntry->sStyleIdentifierD;
+                m_pImpl->m_pCurrentEntry->bIsDefaultStyle = true;
+                if (m_pImpl->m_pCurrentEntry->nStyleTypeCode != STYLE_TYPE_UNKNOWN)
+                {
+                    // "If this attribute is specified by multiple styles, then the last instance shall be used."
+                    if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA && !m_pImpl->m_pCurrentEntry->sStyleIdentifierD.isEmpty())
+                        m_pImpl->m_sDefaultParaStyleName = m_pImpl->m_pCurrentEntry->sStyleIdentifierD;
 
-                beans::PropertyValue aValue;
-                aValue.Name = "default";
-                aValue.Value <<= m_pImpl->m_pCurrentEntry->bIsDefaultStyle;
-                m_pImpl->m_pCurrentEntry->AppendInteropGrabBag(aValue);
+                    beans::PropertyValue aValue;
+                    aValue.Name = "default";
+                    aValue.Value <<= true;
+                    m_pImpl->m_pCurrentEntry->AppendInteropGrabBag(aValue);
+                }
             }
         break;
         case NS_ooxml::LN_CT_Style_customStyle:
