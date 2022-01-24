@@ -205,6 +205,8 @@ public:
     const Color&        getFontRefColorForNodes() const { return maFontRefColorForNodes; }
     void                setLockedCanvas(bool bLockedCanvas);
     bool                getLockedCanvas() const { return mbLockedCanvas;}
+    void                setWPGChild(bool bWPG);
+    bool                isWPGChild() const { return mbWPGChild;}
     void                setWps(bool bWps);
     bool                getWps() const { return mbWps;}
     void                setTextBox(bool bTextBox);
@@ -360,6 +362,7 @@ private:
                                                          // we need separate flag because we don't want
                                                          // to propagate it when applying reference shape
     bool                            mbLocked;
+    bool mbWPGChild; // Is this shape a child of a WPG shape?
     bool mbLockedCanvas; ///< Is this shape part of a locked canvas?
     bool mbWps; ///< Is this a wps shape?
     bool mbTextBox; ///< This shape has a textbox.

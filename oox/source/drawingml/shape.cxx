@@ -134,6 +134,7 @@ Shape::Shape( const char* pServiceName, bool bDefaultHeight )
 , mbHidden( false )
 , mbHiddenMasterShape( false )
 , mbLocked( false )
+, mbWPGChild(false)
 , mbLockedCanvas( false )
 , mbWps( false )
 , mbTextBox( false )
@@ -176,6 +177,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbHidden( pSourceShape->mbHidden )
 , mbHiddenMasterShape( pSourceShape->mbHiddenMasterShape )
 , mbLocked( pSourceShape->mbLocked )
+, mbWPGChild( pSourceShape->mbWPGChild )
 , mbLockedCanvas( pSourceShape->mbLockedCanvas )
 , mbWps( pSourceShape->mbWps )
 , mbTextBox( pSourceShape->mbTextBox )
@@ -292,6 +294,41 @@ void Shape::addShape(
             if ( xShapes.is() )
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeMap, aMatrix );
 
+            if (isWPGChild() && xShape)
+            {
+                // This is a wps shape and it is the child of the WPG, now copy the
+                // the text body properties to the xshape.
+                Reference<XPropertySet> xChildWPSProperties(xShape, uno::UNO_QUERY);
+
+                if (getTextBody() && xChildWPSProperties)
+                {
+                    xChildWPSProperties->setPropertyValue(
+                        UNO_NAME_TEXT_VERTADJUST,
+                        uno::Any(getTextBody()->getTextProperties().meVA));
+
+                    xChildWPSProperties->setPropertyValue(
+                        UNO_NAME_TEXT_LEFTDIST,
+                        uno::Any(getTextBody()->getTextProperties().moInsets[0].has_value()
+                                     ? *getTextBody()->getTextProperties().moInsets[0]
+                                     : 0));
+                    xChildWPSProperties->setPropertyValue(
+                        UNO_NAME_TEXT_UPPERDIST,
+                        uno::Any(getTextBody()->getTextProperties().moInsets[1].has_value()
+                                     ? *getTextBody()->getTextProperties().moInsets[1]
+                                     : 0));
+                    xChildWPSProperties->setPropertyValue(
+                        UNO_NAME_TEXT_RIGHTDIST,
+                        uno::Any(getTextBody()->getTextProperties().moInsets[2].has_value()
+                                     ? *getTextBody()->getTextProperties().moInsets[2]
+                                     : 0));
+                    xChildWPSProperties->setPropertyValue(
+                        UNO_NAME_TEXT_LOWERDIST,
+                        uno::Any(getTextBody()->getTextProperties().moInsets[3].has_value()
+                                     ? *getTextBody()->getTextProperties().moInsets[3]
+                                     : 0));
+                }
+            }
+
             if( meFrameType == FRAMETYPE_DIAGRAM )
             {
                 keepDiagramCompatibilityInfo();
@@ -330,6 +367,11 @@ void Shape::addShape(
 void Shape::setLockedCanvas(bool bLockedCanvas)
 {
     mbLockedCanvas = bLockedCanvas;
+}
+
+void Shape::setWPGChild(bool bWPG)
+{
+    mbWPGChild = bWPG;
 }
 
 void Shape::setWps(bool bWps)

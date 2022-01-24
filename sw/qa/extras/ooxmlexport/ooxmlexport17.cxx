@@ -12,6 +12,7 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <com/sun/star/drawing/XShapes.hpp>
 
 #include <queue>
 #include <swmodeltestbase.hxx>
@@ -191,6 +192,54 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
     sal_Int16 nGridLines;
     xPageStyle->getPropertyValue("GridLines") >>= nGridLines;
     CPPUNIT_ASSERT_EQUAL( sal_Int16(36), nGridLines);   // was 23, left large space before text.
+}
+
+DECLARE_OOXMLEXPORT_TEST(testWPGBodyPr, "WPGbodyPr.docx")
+{
+    // Is load successful?
+    CPPUNIT_ASSERT(mxComponent);
+
+    // There are a WPG shape and a picture
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+
+    // Get the WPG shape
+    uno::Reference<drawing::XShapes> xGroup(getShape(2), uno::UNO_QUERY);
+    // And the embed WPG
+    uno::Reference<drawing::XShapes> xEmbedGroup(xGroup->getByIndex(1), uno::UNO_QUERY);
+
+    // Get the properties of the shapes
+    uno::Reference<beans::XPropertySet> xOuterShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMiddleShape(xEmbedGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xInnerShape(xEmbedGroup->getByIndex(1), uno::UNO_QUERY);
+
+    // Get the properties of the textboxes too
+    uno::Reference<beans::XPropertySet> xOuterTextBox(
+        xOuterShape->getPropertyValue("TextBoxContent"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMiddleTextBox(
+        xMiddleShape->getPropertyValue("TextBoxContent"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xInnerTextBox(
+        xInnerShape->getPropertyValue("TextBoxContent"), uno::UNO_QUERY);
+
+    // Check the alignments
+    CPPUNIT_ASSERT_EQUAL(css::drawing::TextVerticalAdjust::TextVerticalAdjust_TOP,
+                         xOuterTextBox->getPropertyValue("TextVerticalAdjust")
+                             .get<css::drawing::TextVerticalAdjust>());
+    CPPUNIT_ASSERT_EQUAL(css::drawing::TextVerticalAdjust::TextVerticalAdjust_TOP,
+                         xMiddleTextBox->getPropertyValue("TextVerticalAdjust")
+                             .get<css::drawing::TextVerticalAdjust>());
+    CPPUNIT_ASSERT_EQUAL(css::drawing::TextVerticalAdjust::TextVerticalAdjust_CENTER,
+                         xInnerTextBox->getPropertyValue("TextVerticalAdjust")
+                             .get<css::drawing::TextVerticalAdjust>());
+
+    // Check the inset margins, all were 0 before the fix
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(499),
+                         xInnerShape->getPropertyValue("TextLowerDistance").get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(499),
+                         xInnerShape->getPropertyValue("TextUpperDistance").get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000),
+                         xInnerShape->getPropertyValue("TextLeftDistance").get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(254),
+                         xInnerShape->getPropertyValue("TextRightDistance").get<sal_Int32>());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
