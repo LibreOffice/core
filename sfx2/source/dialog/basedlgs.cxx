@@ -40,7 +40,6 @@ class SfxModelessDialog_Impl : public SfxListener
 public:
     OString aWinState;
     SfxChildWindow* pMgr;
-    bool            bClosing;
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     Idle            aMoveIdle { "SfxModelessDialog_Impl aMoveIdle" };
@@ -98,7 +97,7 @@ void SfxModelessDialogController::Init(SfxBindings *pBindinx, SfxChildWindow *pC
     m_pBindings = pBindinx;
     m_xImpl.reset(new SfxModelessDialog_Impl);
     m_xImpl->pMgr = pCW;
-    m_xImpl->bClosing = false;
+    mbClosing = false;
     if (pBindinx)
         m_xImpl->StartListening( *pBindinx );
 }
@@ -110,6 +109,9 @@ void SfxModelessDialogController::Init(SfxBindings *pBindinx, SfxChildWindow *pC
 */
 IMPL_LINK_NOARG(SfxDialogController, FocusChangeHdl, weld::Container&, void)
 {
+    // // tdf3146571 we can get called inside destruction, in which case we don't want to do anything
+    if (mbClosing)
+        return;
     if (m_xDialog->has_toplevel_focus())
         Activate();
     else
@@ -146,27 +148,22 @@ void SfxDialogController::EndDialog()
 {
     if (!m_xDialog->get_visible())
         return;
+    mbClosing = true;
     response(RET_CLOSE);
-}
-
-bool SfxModelessDialogController::IsClosing() const
-{
-    return m_xImpl->bClosing;
 }
 
 void SfxModelessDialogController::EndDialog()
 {
-    if (m_xImpl->bClosing)
+    if (mbClosing)
         return;
+    mbClosing = true;
     // In the case of async dialogs, the call to SfxDialogController::EndDialog
     // may delete this object, so keep myself alive for the duration of this
     // stack frame.
     auto aHoldSelf = shared_from_this();
-    m_xImpl->bClosing = true;
     SfxDialogController::EndDialog();
     if (!m_xImpl)
         return;
-    m_xImpl->bClosing = false;
 }
 
 void SfxModelessDialogController::ChildWinDispose()
@@ -190,7 +187,7 @@ void SfxModelessDialogController::ChildWinDispose()
 */
 void SfxModelessDialogController::Close()
 {
-    if (m_xImpl->bClosing)
+    if (mbClosing)
         return;
     // Execute with Parameters, since Toggle is ignored by some ChildWindows.
     SfxBoolItem aValue(m_xImpl->pMgr->GetType(), false);
@@ -204,7 +201,8 @@ SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& 
     : GenericDialogController(pParent, rUIFile, rDialogId,
                                     comphelper::LibreOfficeKit::isActive()
                                     && SfxViewShell::Current()
-                                    && SfxViewShell::Current()->isLOKMobilePhone())
+                                    && SfxViewShell::Current()->isLOKMobilePhone()),
+      mbClosing(false)
 {
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, SfxDialogController, InstallLOKNotifierHdl));
     m_xDialog->connect_container_focus_changed(LINK(this, SfxDialogController, FocusChangeHdl));
