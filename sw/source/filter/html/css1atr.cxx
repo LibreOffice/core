@@ -3576,7 +3576,7 @@ SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_BOXATR_VALUE */              nullptr
 };
 
-static_assert(SAL_N_ELEMENTS(aCSS1AttrFnTab) == RES_BOXATR_END);
+static_assert(std::size(aCSS1AttrFnTab) == RES_BOXATR_END);
 
 void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
                                        bool bDeep )

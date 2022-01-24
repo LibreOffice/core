@@ -271,7 +271,7 @@ namespace frm
         };
 
         FeatureDescription const * pSupportedFeatures = aSupportedFeatures;
-        FeatureDescription const * pSupportedFeaturesEnd = aSupportedFeatures + SAL_N_ELEMENTS( aSupportedFeatures );
+        FeatureDescription const * pSupportedFeaturesEnd = aSupportedFeatures + std::size( aSupportedFeatures );
         for ( ; pSupportedFeatures < pSupportedFeaturesEnd; ++pSupportedFeatures )
         {
             if ( pSupportedFeatures->nId )

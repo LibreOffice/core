@@ -1211,7 +1211,7 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
             PROP_BOTTOM_BORDER_DISTANCE
         };
 
-        for( size_t nProperty = 0; nProperty < SAL_N_ELEMENTS( aBorderProperties ); ++nProperty)
+        for( size_t nProperty = 0; nProperty < std::size( aBorderProperties ); ++nProperty)
         {
             OUString sPropertyName = getPropertyName(aBorderProperties[nProperty]);
             beans::PropertyValue aValue;
@@ -5090,7 +5090,7 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
             NS_ooxml::LN_Value_ST_RubyAlign_right,
             NS_ooxml::LN_Value_ST_RubyAlign_rightVertical,
         };
-        aInfo.nRubyAlign = aRubyAlignValues[(nJc<SAL_N_ELEMENTS(aRubyAlignValues))?nJc:0];
+        aInfo.nRubyAlign = aRubyAlignValues[(nJc<std::size(aRubyAlignValues))?nJc:0];
     }
 
     // we don't parse or use the font field in rCommand
@@ -5238,7 +5238,7 @@ void DomainMapper_Impl::handleAuthor
     //search for a field mapping
     OUString sFieldServiceName;
     size_t nMap = 0;
-    for( ; nMap < SAL_N_ELEMENTS(aDocProperties); ++nMap )
+    for( ; nMap < std::size(aDocProperties); ++nMap )
     {
         if ((rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName)) && (!xPropertySetInfo->hasPropertyByName(rFirstParam)))
         {
@@ -5356,7 +5356,7 @@ OUString DomainMapper_Impl::extractTocTitle()
         // the paragraph after this new section might have been already inserted
         OUString sResult = xCursor->getString();
         if (sResult.endsWith(SAL_NEWLINE_STRING))
-            sResult = sResult.copy(0, sResult.getLength() - SAL_N_ELEMENTS(SAL_NEWLINE_STRING) + 1);
+            sResult = sResult.copy(0, sResult.getLength() - std::size(SAL_NEWLINE_STRING) + 1);
 
         return sResult;
     }

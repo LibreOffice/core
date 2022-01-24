@@ -3420,7 +3420,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDBF(SvStream &rStream)
 
     SvStream* pInputStream = aTempInput.GetStream(StreamMode::WRITE);
     sal_uInt8 aBuffer[8192];
-    while (auto nRead = rStream.ReadBytes(aBuffer, SAL_N_ELEMENTS(aBuffer)))
+    while (auto nRead = rStream.ReadBytes(aBuffer, std::size(aBuffer)))
         pInputStream->WriteBytes(aBuffer, nRead);
     aTempInput.CloseStream();
 

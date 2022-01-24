@@ -165,7 +165,7 @@ void ScEditUtil::RemoveCharAttribs( EditTextObject& rEditText, const ScPatternAt
 
     const SfxItemSet& rSet = rAttr.GetItemSet();
     const SfxPoolItem* pItem;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(AttrTypeMap); ++i)
+    for (size_t i = 0; i < std::size(AttrTypeMap); ++i)
     {
         if ( rSet.GetItemState(AttrTypeMap[i].nAttrType, false, &pItem) == SfxItemState::SET )
             rEditText.RemoveCharAttribs(AttrTypeMap[i].nCharType);

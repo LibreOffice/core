@@ -182,7 +182,7 @@ SfxItemInfo const  aItemInfos[] =
     { 0,                            true }     // ATTR_HIDDEN
 };
 static_assert(
-    SAL_N_ELEMENTS(aItemInfos) == ATTR_ENDINDEX - ATTR_STARTINDEX + 1, "these must match");
+    std::size(aItemInfos) == ATTR_ENDINDEX - ATTR_STARTINDEX + 1, "these must match");
 
 ScDocumentPool::ScDocumentPool()
 

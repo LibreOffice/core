@@ -76,7 +76,7 @@ void OptimizerDialog::InitDialog()
         Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
         Any( sal_Int32( OD_DIALOG_WIDTH ) ) };
 
-    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+    sal_Int32 nCount = std::size( pNames );
 
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -105,7 +105,7 @@ void OptimizerDialog::InitRoadmap()
             Any( mnTabIndex++ ),
             Any( sal_Int32( 85 ) ) };
 
-        sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+        sal_Int32 nCount = std::size( pNames );
 
         Sequence< OUString >   aNames( pNames, nCount );
         Sequence< Any >        aValues( pValues, nCount );

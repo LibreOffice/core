@@ -173,15 +173,13 @@ static int highbit(std::size_t n)
 
 PageCache::PageCache (sal_uInt16 nPageSize)
     : m_hash_table   (m_hash_table_0),
-      m_hash_size    (theTableSize),
+      m_hash_size    (std::size(m_hash_table_0)),
       m_hash_shift   (highbit(m_hash_size) - 1),
       m_page_shift   (highbit(nPageSize) - 1),
       m_hash_entries (0),
       m_nHit         (0),
       m_nMissed      (0)
 {
-    static size_t const theSize = SAL_N_ELEMENTS(m_hash_table_0);
-    static_assert(theSize == theTableSize, "must be equal");
 }
 
 PageCache::~PageCache()
@@ -209,7 +207,7 @@ PageCache::~PageCache()
     {
         std::free (m_hash_table);
         m_hash_table = m_hash_table_0;
-        m_hash_size  = theTableSize;
+        m_hash_size  = std::size(m_hash_table_0);
         m_hash_shift = highbit(m_hash_size) - 1;
     }
     SAL_INFO("store", "Hits: " << m_nHit << ", Misses: " <<  m_nMissed);

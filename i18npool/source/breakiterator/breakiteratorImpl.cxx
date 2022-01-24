@@ -504,7 +504,7 @@ const UBlock2Script scriptList[] =
     {UBLOCK_LATIN_EXTENDED_C, UBLOCK_LATIN_EXTENDED_D, ScriptType::LATIN}
 };
 
-#define scriptListCount SAL_N_ELEMENTS(scriptList)
+#define scriptListCount std::size(scriptList)
 
 //always sets rScriptType
 

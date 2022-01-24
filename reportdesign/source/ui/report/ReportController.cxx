@@ -3483,7 +3483,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     OUString sDefaultName;
                     size_t i = 0;
                     OUnoObject* pObjs[2];
-                    for(i = 0; i < SAL_N_ELEMENTS(pControl); ++i)
+                    for(i = 0; i < std::size(pControl); ++i)
                     {
                         pObjs[i] = dynamic_cast<OUnoObject*>(pControl[i].get());
                         assert(pObjs[i]);
@@ -3562,7 +3562,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     uno::Reference< report::XFixedText> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY_THROW);
                     xShapeProp->setName(xShapeProp->getName() + sDefaultName );
 
-                    for(i = 0; i < SAL_N_ELEMENTS(pControl); ++i) // insert controls
+                    for(i = 0; i < std::size(pControl); ++i) // insert controls
                     {
                         correctOverlapping(pControl[i].get(), pSectionWindow[1-i]->getReportSection());
                     }
@@ -3677,7 +3677,7 @@ void OReportController::listen(const bool _bAdd)
     uno::Reference< XPropertyChangeListener > xUndo = &rUndoEnv;
     const uno::Sequence< beans::Property> aSeq = m_xReportDefinition->getPropertySetInfo()->getProperties();
     const OUString* pPropsBegin = &aProps[0];
-    const OUString* pPropsEnd   = pPropsBegin + SAL_N_ELEMENTS(aProps) - 3;
+    const OUString* pPropsEnd   = pPropsBegin + std::size(aProps) - 3;
     for(const beans::Property& rProp : aSeq)
     {
         if ( ::std::find(pPropsBegin,pPropsEnd,rProp.Name) == pPropsEnd )

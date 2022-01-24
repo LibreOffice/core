@@ -57,7 +57,7 @@ const FileExtensionEntry OOFileExtensionTable[] = {
     };
 
 
-const size_t OOFileExtensionTableSize = SAL_N_ELEMENTS(OOFileExtensionTable);
+const size_t OOFileExtensionTableSize = std::size(OOFileExtensionTable);
 
 
 /** Return the extension of a file

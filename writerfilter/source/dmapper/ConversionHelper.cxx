@@ -247,7 +247,7 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineToken,
         COL_CYAN, COL_GREEN, COL_MAGENTA, COL_RED, COL_BROWN, COL_GRAY,
         COL_LIGHTGRAY
     };
-    if(!bIsOOXML && sal::static_int_cast<sal_uInt32>(nLineColor) < SAL_N_ELEMENTS(aBorderDefColor))
+    if(!bIsOOXML && sal::static_int_cast<sal_uInt32>(nLineColor) < std::size(aBorderDefColor))
         nLineColor = sal_Int32(aBorderDefColor[nLineColor]);
     //no auto color for borders
     if (nLineColor == sal_Int32(COL_AUTO))

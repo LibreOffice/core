@@ -156,7 +156,7 @@ SotClipboardFormatId DdeData::GetInternalFormat(sal_uLong nFmt)
         {
             WCHAR szName[ 256 ];
 
-            if(GetClipboardFormatNameW( nFmt, szName, SAL_N_ELEMENTS(szName) ))
+            if(GetClipboardFormatNameW( nFmt, szName, std::size(szName) ))
                 return SotExchange::RegisterFormatName( OUString(o3tl::toU(szName)) );
         }
         break;

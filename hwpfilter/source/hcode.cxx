@@ -551,7 +551,7 @@ static int is_jaso(hchar hh)
 {
     unsigned int i;
 
-    for (i = 0; i < SAL_N_ELEMENTS(jaso_hh_code); i++)
+    for (i = 0; i < std::size(jaso_hh_code); i++)
         if (hh == jaso_hh_code[i])
             return 1;
     return 0;
@@ -560,7 +560,7 @@ static int is_jaso(hchar hh)
 
 static hchar jaso2ks(hchar hh)
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(jaso_hh_code); i++)
+    for (size_t i = 0; i < std::size(jaso_hh_code); i++)
         if (hh == jaso_hh_code[i])
         {
             return sal::static_int_cast<hchar>(0xa4a1 + i);
@@ -1075,7 +1075,7 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
          }
          else{ /* combination of consonants and vowels includes old characters: an unfinished table */
              unsigned int index = choseong * 32 + jongseong - 308;
-             if( index < SAL_N_ELEMENTS(jamocomp1_to_unicode) ){
+             if( index < std::size(jamocomp1_to_unicode) ){
                  dest[0] = jamocomp1_to_unicode[index].v1;
                  dest[1] = jamocomp1_to_unicode[index].v2;
                  dest[2] = jamocomp1_to_unicode[index].v3;
@@ -1139,7 +1139,7 @@ hchar ksc5601_sym_to_ucs2 (hchar input)
     unsigned char ch = sal::static_int_cast<unsigned char>(input >> 8);
     unsigned char ch2 = sal::static_int_cast<unsigned char>(input & 0xff);
     int idx = (ch - 0xA1) * 94 + (ch2 - 0xA1);
-    if (idx >= 0 && idx < static_cast<int>(SAL_N_ELEMENTS(ksc5601_2uni_page21))) {
+    if (idx >= 0 && idx < static_cast<int>(std::size(ksc5601_2uni_page21))) {
         hchar value = ksc5601_2uni_page21[idx];
         return value ? value :  0x25a1;
     }
@@ -1151,7 +1151,7 @@ hchar ksc5601_han_to_ucs2 (hchar input)
     unsigned char ch = sal::static_int_cast<unsigned char>(input >> 8);
     unsigned char ch2 = sal::static_int_cast<unsigned char>(input & 0xff);
     int idx = (ch - 0xA1) * 94 + (ch2 - 0xA1);
-    if (idx >= 3854 && idx < static_cast<int>(3854 + SAL_N_ELEMENTS(ksc5601_2uni_page21))) {
+    if (idx >= 3854 && idx < static_cast<int>(3854 + std::size(ksc5601_2uni_page21))) {
         // Hanja : row 42 - row 93 : 3854 = 94 * (42-1)
         hchar value = ksc5601_2uni_page21[idx - 3854];
         return value ? value : '?';

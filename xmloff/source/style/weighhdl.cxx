@@ -89,7 +89,7 @@ bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rValue,
     if( bRet )
     {
         bRet = false;
-        int const nCount = SAL_N_ELEMENTS(aFontWeightMap);
+        int const nCount = std::size(aFontWeightMap);
         for (int i = 0; i < (nCount-1); ++i)
         {
             if( (nWeight >= aFontWeightMap[i].nValue) && (nWeight <= aFontWeightMap[i+1].nValue) )

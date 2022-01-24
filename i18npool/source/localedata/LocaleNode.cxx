@@ -274,7 +274,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("\tcountryDefaultName,\n");
     of.writeAsciiString("\tVariant\n");
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getLCInfo_", "SAL_N_ELEMENTS(LCInfoArray)", "LCInfoArray");
+    of.writeFunction("getLCInfo_", "std::size(LCInfoArray)", "LCInfoArray");
 }
 
 
@@ -503,7 +503,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("\tLongDateYearSeparator,\n");
     of.writeAsciiString("\tdecimalSeparatorAlternative\n");
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getLocaleItem_", "SAL_N_ELEMENTS(LCType)", "LCType");
+    of.writeFunction("getLocaleItem_", "std::size(LCType)", "LCType");
 }
 
 
@@ -2078,7 +2078,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     OUString str;
     sal_Int16 i;
 
-    for ( i = 0; i < sal_Int16(SAL_N_ELEMENTS(ReserveWord)); i++,nbOfWords++) {
+    for ( i = 0; i < sal_Int16(std::size(ReserveWord)); i++,nbOfWords++) {
         const LocaleNode * curNode = (reserveNode ? reserveNode->findNode(
                     ReserveWord[i].name) : nullptr);
         if (!curNode)

@@ -269,7 +269,7 @@ static ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
         DECL_PROP_3     ( "ActiveSelectionTextColor",         ACTIVE_SEL_TEXT_COLOR,         sal_Int32, BOUND, MAYBEDEFAULT, MAYBEVOID ),
         DECL_PROP_3     ( "InactiveSelectionTextColor",       INACTIVE_SEL_TEXT_COLOR,       sal_Int32, BOUND, MAYBEDEFAULT, MAYBEVOID ),
     };
-    rElementCount = SAL_N_ELEMENTS(aImplPropertyInfos);
+    rElementCount = std::size(aImplPropertyInfos);
     return aImplPropertyInfos;
 }
 

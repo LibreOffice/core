@@ -30,7 +30,7 @@
 static sal_uInt16   aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 static bool     bOutputForPrinter = true;
 
-#define DPI_COUNT SAL_N_ELEMENTS(aDPIArray)
+#define DPI_COUNT std::size(aDPIArray)
 
 SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "sfx/ui/optprintpage.ui", "OptPrintPage", &rSet)
@@ -200,7 +200,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( vcl::printer::Options* pCur
     pCurrentOptions->SetReducedBitmapMode( m_xReduceBitmapsOptimalRB->get_active() ? vcl::printer::BitmapMode::Optimal :
                                            ( m_xReduceBitmapsNormalRB->get_active() ? vcl::printer::BitmapMode::Normal : vcl::printer::BitmapMode::Resolution ) );
     pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ std::min<sal_uInt16>( m_xReduceBitmapsResolutionLB->get_active(),
-                                                                   SAL_N_ELEMENTS(aDPIArray) - 1 ) ] );
+                                                                   std::size(aDPIArray) - 1 ) ] );
     pCurrentOptions->SetReducedBitmapIncludesTransparency( m_xReduceBitmapsTransparencyCB->get_active() );
     pCurrentOptions->SetConvertToGreyscales( m_xConvertToGreyscalesCB->get_active() );
     bool bOrigBackEnd = pCurrentOptions->IsPDFAsStandardPrintJobFormat();

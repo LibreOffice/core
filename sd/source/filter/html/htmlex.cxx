@@ -2639,7 +2639,7 @@ void HtmlExport::CreateBitmaps()
     if(mnButtonThema == -1 || !mpButtonSet)
         return;
 
-    for( int nButton = 0; nButton != SAL_N_ELEMENTS(pButtonNames); nButton++ )
+    for( int nButton = 0; nButton != std::size(pButtonNames); nButton++ )
     {
         if(!mbFrames && (nButton == BTN_MORE || nButton == BTN_LESS))
             continue;

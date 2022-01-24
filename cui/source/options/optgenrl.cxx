@@ -262,7 +262,7 @@ void SvxGeneralTabPage::InitControls ()
             m_xBuilder->weld_label(vRowInfo[iRow].pTextId)));
         Row& rRow = *vRows.back();
         // fields in the row
-        static unsigned const nFieldCount = SAL_N_ELEMENTS(vFieldInfo);
+        static unsigned const nFieldCount = std::size(vFieldInfo);
         // skipping other (invisible) rows
         while (iField != nFieldCount && vFieldInfo[iField].eRow != eRow)
             ++iField;

@@ -62,7 +62,7 @@ void PageFormatPanel::SetMarginFieldUnit()
     if (IsInch(meFUnit))
     {
         OUString sSuffix = weld::MetricSpinButton::MetricToString(FieldUnit::INCH);
-        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
+        for (size_t i = 0; i < std::size(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
         {
             OUString sStr = rLocaleData.getNum(RID_PAGEFORMATPANEL_MARGINS_INCH[i].second, 2, true, false) + sSuffix;
             mxMarginSelectBox->append_text(SwResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i].first).replaceFirst("%1", sStr));
@@ -71,7 +71,7 @@ void PageFormatPanel::SetMarginFieldUnit()
     else
     {
         OUString sSuffix = weld::MetricSpinButton::MetricToString(FieldUnit::CM);
-        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
+        for (size_t i = 0; i < std::size(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
         {
             OUString sStr = rLocaleData.getNum(RID_PAGEFORMATPANEL_MARGINS_CM[i].second, 2, true, false) + " " + sSuffix;
             mxMarginSelectBox->append_text(SwResId(RID_PAGEFORMATPANEL_MARGINS_CM[i].first).replaceFirst("%1", sStr));

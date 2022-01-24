@@ -276,7 +276,7 @@ void Application::Abort( const OUString& rErrorText )
 
 size_t Application::GetReservedKeyCodeCount()
 {
-    return SAL_N_ELEMENTS(ReservedKeys);
+    return std::size(ReservedKeys);
 }
 
 const vcl::KeyCode* Application::GetReservedKeyCode( size_t i )
