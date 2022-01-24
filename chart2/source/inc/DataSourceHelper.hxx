@@ -22,6 +22,7 @@
 #include "charttoolsdllapi.hxx"
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
+#include <rtl/ref.hxx>
 
 namespace chart { class ChartModel; }
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -81,19 +82,16 @@ public:
             const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
         static css::uno::Sequence< OUString > getUsedDataRanges(
-            const css::uno::Reference< css::frame::XModel > & xChartModel );
+            const rtl::Reference<::chart::ChartModel> & xChartModel );
 
         static css::uno::Reference< css::chart2::data::XDataSource > getUsedData(
                 ChartModel& rModel );
 
         static css::uno::Reference< css::chart2::data::XDataSource > getUsedData(
-            const css::uno::Reference< css::frame::XModel >& xChartModel );
-
-        static css::uno::Reference< css::chart2::data::XDataSource > getUsedData(
-            const css::uno::Reference<css::chart2::XChartDocument >& xChartDoc );
+            const rtl::Reference<::chart::ChartModel>& xChartModel );
 
         static bool detectRangeSegmentation(
-            const css::uno::Reference< css::frame::XModel >& xChartModel
+            const rtl::Reference<::chart::ChartModel>& xChartModel
             , OUString& rOutRangeString
             , css::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool& rOutUseColumns
@@ -101,7 +99,7 @@ public:
             , bool& rOutHasCategories );
 
         static void setRangeSegmentation(
-            const css::uno::Reference< css::frame::XModel >& xChartModel
+            const rtl::Reference<::chart::ChartModel>& xChartModel
             , const css::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool bUseColumns
             , bool bFirstCellAsLabel
@@ -115,7 +113,7 @@ public:
             HasCategories and FirstCellAsLabel.
          */
         static bool allArgumentsForRectRangeDetected(
-            const css::uno::Reference< css::chart2::XChartDocument >& xChartDocument );
+            const rtl::Reference<::chart::ChartModel>& xChartDocument );
 
         SAL_DLLPRIVATE static css::uno::Sequence< OUString > getRangesFromLabeledDataSequence(
             const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xLSeq );

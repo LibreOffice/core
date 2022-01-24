@@ -502,7 +502,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection()
             uno::Any aSel = xSelectionSupl->getSelection();
             OUString aObjectCID;
             if( aSel >>= aObjectCID )
-                xReturn.set( ObjectIdentifier::getObjectPropertySet( aObjectCID, Reference< XChartDocument >(this)));
+                xReturn.set( ObjectIdentifier::getObjectPropertySet( aObjectCID, this));
         }
     }
     return xReturn;
@@ -723,7 +723,7 @@ void SAL_CALL ChartModel::createInternalDataProvider( sal_Bool bCloneExistingDat
         if( bCloneExistingData )
             m_xInternalDataProvider = ChartModelHelper::createInternalDataProvider( this, true );
         else
-            m_xInternalDataProvider = ChartModelHelper::createInternalDataProvider( Reference<XChartDocument>(), true );
+            m_xInternalDataProvider = ChartModelHelper::createInternalDataProvider( nullptr, true );
         m_xDataProvider.set( m_xInternalDataProvider );
     }
     setModified( true );
@@ -772,7 +772,7 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
         {
             try
             {
-                bool bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( Reference< frame::XModel >(this) );
+                bool bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( this );
                 xProp->setPropertyValue("IncludeHiddenCells", uno::Any(bIncludeHiddenCells));
             }
             catch (const beans::UnknownPropertyException&)

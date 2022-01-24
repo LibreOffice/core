@@ -25,6 +25,7 @@
 #include <ObjectIdentifier.hxx>
 #include <DataSeriesHelper.hxx>
 #include <Diagram.hxx>
+#include <ChartModel.hxx>
 
 #include <com/sun/star/chart2/ScaleData.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>

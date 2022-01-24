@@ -1817,17 +1817,6 @@ bool lcl_getPropertySwapXAndYAxis( const rtl::Reference< Diagram >& xDiagram )
 sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                   const Reference< chart2::XAxis >& xAxis
                 , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
-                , const css::uno::Reference< css::chart2::XChartDocument>& xChartDoc)
-{
-    auto pChartModel = dynamic_cast<ChartModel*>(xChartDoc.get());
-    assert(!xChartDoc || pChartModel);
-    return AxisHelper::getExplicitNumberFormatKeyForAxis( xAxis, xCorrespondingCoordinateSystem, pChartModel
-        , true /*bSearchForParallelAxisIfNothingIsFound*/ );
-}
-
-sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
-                  const Reference< chart2::XAxis >& xAxis
-                , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
                 , const rtl::Reference<::chart::ChartModel>& xChartDoc)
 {
     return AxisHelper::getExplicitNumberFormatKeyForAxis( xAxis, xCorrespondingCoordinateSystem, xChartDoc
