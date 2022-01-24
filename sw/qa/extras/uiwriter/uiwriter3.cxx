@@ -83,6 +83,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145731)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139843)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf139843.odt");
+
+    CPPUNIT_ASSERT_EQUAL(7, getPages());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(7, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145321)
 {
     createSwDoc(DATA_DIRECTORY, "tdf145321.odt");
