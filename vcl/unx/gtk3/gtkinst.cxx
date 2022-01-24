@@ -6973,6 +6973,9 @@ public:
         gtk_container_set_border_width(GTK_CONTAINER(m_pDialog), 0);
         if (GtkWidget* pActionArea = gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog)))
             gtk_widget_hide(pActionArea);
+        gtk_widget_show_all(pRefEdit);
+        if (pRefBtn)
+            gtk_widget_show_all(pRefBtn);
 #else
         if (GtkWidget* pActionArea = gtk_dialog_get_header_bar(GTK_DIALOG(m_pDialog)))
             gtk_widget_hide(pActionArea);
