@@ -1099,7 +1099,19 @@ bool SVGTextWriter::nextParagraph()
     const OUString& rParagraphId = implGetValidIDFromInterface( Reference<XInterface>(xTextContent, UNO_QUERY) );
     if( !rParagraphId.isEmpty() )
     {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rParagraphId );
+            // if there is id for empty paragraph we need to create a empty text paragraph
+            Reference < XTextRange > xRange( xTextContent, UNO_QUERY_THROW );
+            if ( xRange.is() && xRange->getString().isEmpty() )
+            {
+                endTextParagraph();
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "TextParagraph" );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rParagraphId );
+                mpTextParagraphElem.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS ));
+            }
+            else
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rParagraphId );
+            }
     }
     return true;
 }
