@@ -103,6 +103,7 @@ inline constexpr OUStringLiteral IMG_COPY = u"cmd/sc_copy.png";
 inline constexpr OUStringLiteral IMG_PASTE = u"cmd/sc_paste.png";
 inline constexpr OUStringLiteral IMG_MENU = u"sfx2/res/menu.png";
 inline constexpr OUStringLiteral IMG_CALENDAR = u"sc/res/date.png";
+inline constexpr OUStringLiteral IMG_OPEN = u"cmd/sc_open.png";
 
 inline constexpr OUStringLiteral RID_BMP_TREENODE_COLLAPSED = u"res/plus.png";
 inline constexpr OUStringLiteral RID_BMP_TREENODE_EXPANDED = u"res/minus.png";

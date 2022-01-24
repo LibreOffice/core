@@ -137,6 +137,8 @@ def do_replace_image_stock(current, stock):
     stock.text = "go-last"
   elif stock.text == 'gtk-new':
     stock.text = "document-new"
+  elif stock.text == 'gtk-open':
+    stock.text = "document-open"
   elif stock.text == 'gtk-media-stop':
     stock.text = "media-playback-stop"
   elif stock.text == 'gtk-media-play':
