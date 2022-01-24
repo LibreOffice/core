@@ -32,7 +32,7 @@ class CandleStickChart : public VSeriesPlotter
 public:
     CandleStickChart() = delete;
 
-    CandleStickChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
+    CandleStickChart( const rtl::Reference< ::chart::ChartType >& xChartTypeModel
                       , sal_Int32 nDimensionCount );
     virtual ~CandleStickChart() override;
 

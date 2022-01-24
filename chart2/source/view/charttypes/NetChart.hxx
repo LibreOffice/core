@@ -31,7 +31,7 @@ class NetChart : public VSeriesPlotter
 public:
     NetChart() = delete;
 
-    NetChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
+    NetChart( const rtl::Reference< ::chart::ChartType >& xChartTypeModel
              , sal_Int32 nDimensionCount
              , bool bNoArea
              , std::unique_ptr<PlottingPositionHelper> pPlottingPositionHelper //takes ownership

@@ -32,7 +32,7 @@ class BarChart : public VSeriesPlotter
 public:
     BarChart() = delete;
 
-    BarChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
+    BarChart( const rtl::Reference< ::chart::ChartType >& xChartTypeModel
             , sal_Int32 nDimensionCount );
     virtual ~BarChart() override;
 

@@ -27,6 +27,7 @@
 #include <Clipping.hxx>
 #include <PolarLabelPositionHelper.hxx>
 #include <DateHelper.hxx>
+#include <ChartType.hxx>
 
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
@@ -44,7 +45,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-NetChart::NetChart( const uno::Reference<XChartType>& xChartTypeModel
+NetChart::NetChart( const rtl::Reference<ChartType>& xChartTypeModel
                      , sal_Int32 nDimensionCount
                      , bool bNoArea
                      , std::unique_ptr<PlottingPositionHelper> pPlottingPositionHelper

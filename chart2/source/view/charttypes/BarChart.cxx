@@ -20,6 +20,7 @@
 #include "BarChart.hxx"
 #include "BarPositionHelper.hxx"
 
+#include <ChartType.hxx>
 #include <ShapeFactory.hxx>
 #include <CommonConverters.hxx>
 #include <ObjectIdentifier.hxx>
@@ -44,7 +45,7 @@ using namespace ::com::sun::star;
 using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
 
-BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
+BarChart::BarChart( const rtl::Reference<ChartType>& xChartTypeModel
                     , sal_Int32 nDimensionCount )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount )
         , m_pMainPosHelper( new BarPositionHelper() )
@@ -54,10 +55,10 @@ BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
 
     try
     {
-        if( m_xChartTypeModelProps.is() )
+        if( m_xChartTypeModel.is() )
         {
-            m_xChartTypeModelProps->getPropertyValue( "OverlapSequence" ) >>= m_aOverlapSequence;
-            m_xChartTypeModelProps->getPropertyValue( "GapwidthSequence" ) >>= m_aGapwidthSequence;
+            m_xChartTypeModel->getPropertyValue( "OverlapSequence" ) >>= m_aOverlapSequence;
+            m_xChartTypeModel->getPropertyValue( "GapwidthSequence" ) >>= m_aGapwidthSequence;
         }
     }
     catch( const uno::Exception& )

@@ -30,7 +30,7 @@ class BubbleChart : public VSeriesPlotter
 public:
     BubbleChart() = delete;
 
-    BubbleChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
+    BubbleChart( const rtl::Reference< ::chart::ChartType >& xChartTypeModel
              , sal_Int32 nDimensionCount );
     virtual ~BubbleChart() override;
 

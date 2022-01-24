@@ -25,6 +25,7 @@
 #include <PolarLabelPositionHelper.hxx>
 #include <CommonConverters.hxx>
 #include <ObjectIdentifier.hxx>
+#include <ChartType.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
@@ -191,7 +192,7 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
     return true;
 }
 
-PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
+PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
                    , sal_Int32 nDimensionCount
                    , bool bExcludingPositioning )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount )
@@ -205,13 +206,12 @@ PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
     m_pPosHelper->m_fRadiusOffset = 0.0;
     m_pPosHelper->m_fRingDistance = 0.0;
 
-    uno::Reference< beans::XPropertySet > xChartTypeProps( xChartTypeModel, uno::UNO_QUERY );
-    if( !xChartTypeProps.is() )
+    if( !xChartTypeModel.is() )
         return;
 
     try
     {
-        xChartTypeProps->getPropertyValue( "UseRings") >>= m_bUseRings;
+        xChartTypeModel->getPropertyValue( "UseRings") >>= m_bUseRings;
         if( m_bUseRings )
         {
             m_pPosHelper->m_fRadiusOffset = 1.0;
@@ -704,12 +704,11 @@ void PieChart::createShapes()
     m_aLabelInfoList.clear();
     m_fMaxOffset = std::numeric_limits<double>::quiet_NaN();
     sal_Int32 n3DRelativeHeight = 100;
-    uno::Reference< beans::XPropertySet > xPropertySet( m_xChartTypeModel, uno::UNO_QUERY );
-    if ( (m_nDimension==3) && xPropertySet.is())
+    if ( (m_nDimension==3) && m_xChartTypeModel.is())
     {
         try
         {
-            uno::Any aAny = xPropertySet->getPropertyValue( "3DRelativeHeight" );
+            uno::Any aAny = m_xChartTypeModel->getPropertyValue( "3DRelativeHeight" );
             aAny >>= n3DRelativeHeight;
         }
         catch (const uno::Exception&) { }

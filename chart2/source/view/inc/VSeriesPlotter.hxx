@@ -49,6 +49,7 @@ namespace com::sun::star {
 
 namespace chart {
 
+class ChartType;
 class NumberFormatterWrapper;
 
 class AxesNumberFormats
@@ -218,7 +219,7 @@ public:
     std::vector< VDataSeries* > getAllSeries();
 
     // This method creates a series plotter of the requested type; e.g. : return new PieChart...
-    static VSeriesPlotter* createSeriesPlotter( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
+    static VSeriesPlotter* createSeriesPlotter( const rtl::Reference< ::chart::ChartType >& xChartTypeModel
                                 , sal_Int32 nDimensionCount
                                 , bool bExcludingPositioning /*for pie and donut charts labels and exploded segments are excluded from the given size*/);
 
@@ -254,7 +255,7 @@ public:
 
 protected:
 
-    VSeriesPlotter( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
+    VSeriesPlotter( const rtl::Reference< ::chart::ChartType >& xChartTypeModel
                 , sal_Int32 nDimensionCount
                 , bool bCategoryXAxis=true );
 
@@ -398,8 +399,7 @@ protected:
 protected:
     PlottingPositionHelper*    m_pMainPosHelper;
 
-    css::uno::Reference< css::chart2::XChartType >    m_xChartTypeModel;
-    css::uno::Reference< css::beans::XPropertySet >   m_xChartTypeModelProps;
+    rtl::Reference< ::chart::ChartType > m_xChartTypeModel;
 
     std::vector< std::vector< VDataSeriesGroup > >  m_aZSlots;
 
