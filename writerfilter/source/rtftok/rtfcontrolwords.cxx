@@ -10,6 +10,8 @@
 #include "rtfcontrolwords.hxx"
 #include <oox/token/namespaces.hxx>
 
+#include <iterator>
+
 namespace writerfilter::rtftok
 {
 RTFSymbol const aRTFControlWords[] = {
@@ -1838,7 +1840,7 @@ RTFSymbol const aRTFControlWords[] = {
     { "flyhorz", RTFControlType::VALUE, RTFKeyword::FLYHORZ, 0 },
     { "flyanchor", RTFControlType::VALUE, RTFKeyword::FLYANCHOR, 0 },
 };
-const int nRTFControlWords = SAL_N_ELEMENTS(aRTFControlWords);
+const int nRTFControlWords = std::size(aRTFControlWords);
 
 RTFMathSymbol const aRTFMathControlWords[] = {
     // eKeyword nToken eDestination
@@ -1888,7 +1890,7 @@ RTFMathSymbol const aRTFMathControlWords[] = {
     { RTFKeyword::MBOX, M_TOKEN(box), Destination::MBOX },
     { RTFKeyword::MEQARR, M_TOKEN(eqArr), Destination::MEQARR },
 };
-const int nRTFMathControlWords = SAL_N_ELEMENTS(aRTFMathControlWords);
+const int nRTFMathControlWords = std::size(aRTFMathControlWords);
 
 bool RTFMathSymbol::operator<(const RTFMathSymbol& rOther) const
 {

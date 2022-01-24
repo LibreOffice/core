@@ -282,7 +282,7 @@ int getFlatTypeRank(const OUString& rType)
         "math_MathType_3x", // MathType equation embedded in Word doc.
     };
 
-    size_t n = SAL_N_ELEMENTS(ranks);
+    size_t n = std::size(ranks);
 
     for (size_t i = 0; i < n; ++i)
     {

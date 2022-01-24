@@ -388,13 +388,13 @@ void ScFiltersTest2::testMiscRowHeights()
            have default row heights ( there was a problem where the optimal
            height was being calculated after import if no hard height )
         */
-        { "alldefaultheights.", FORMAT_ODS, -1, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
+        { "alldefaultheights.", FORMAT_ODS, -1, std::size(DfltRowData), DfltRowData },
         /* Checks the imported height of some multiline input, additionally checks
            that the optimal height flag is set ( or not )
         */
-        { "multilineoptimal.", FORMAT_ODS, -1, SAL_N_ELEMENTS(MultiLineOptData), MultiLineOptData },
+        { "multilineoptimal.", FORMAT_ODS, -1, std::size(MultiLineOptData), MultiLineOptData },
     };
-    miscRowHeightsTest(aTestValues, SAL_N_ELEMENTS(aTestValues));
+    miscRowHeightsTest(aTestValues, std::size(aTestValues));
 }
 
 // regression test at least fdo#59193
@@ -586,7 +586,7 @@ void ScFiltersTest2::testOutlineODS()
                                         { 4, 23, false, true, 2, 0 },
                                         { 6, 20, true, true, 3, 0 } };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aRow); ++i)
+    for (size_t i = 0; i < std::size(aRow); ++i)
     {
         const ScOutlineEntry* pEntry = rArr.GetEntry(aRow[i].nDepth, aRow[i].nIndex);
         SCCOLROW nStart = pEntry->GetStart();

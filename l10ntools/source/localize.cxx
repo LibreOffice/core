@@ -73,14 +73,14 @@ bool passesNegativeList(std::u16string_view rUrl) {
          "org.openoffice.hu.hunspell.dictionaries/page1.xhp"),
         u"/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu"
     };
-    return !matchList(rUrl, list, SAL_N_ELEMENTS(list));
+    return !matchList(rUrl, list, std::size(list));
 }
 
 bool passesPositiveList(std::u16string_view rUrl) {
     static const std::u16string_view list[] = {
         u"/description.xml"
     };
-    return matchList(rUrl, list, SAL_N_ELEMENTS(list));
+    return matchList(rUrl, list, std::size(list));
 }
 
 void handleCommand(
@@ -192,7 +192,7 @@ bool handleFile(std::string_view rProject, const OUString& rUrl, const OString& 
         { std::u16string_view(u".properties"), "propex", false },
         { std::u16string_view(u".ui"), "uiex", false },
         { std::u16string_view(u".tree"), "treex", false } };
-    for (size_t i = 0; i != SAL_N_ELEMENTS(commands); ++i)
+    for (size_t i = 0; i != std::size(commands); ++i)
     {
         if (rUrl.endsWith(commands[i].extension) &&
             (commands[i].executable != "propex" || rUrl.indexOf("en_US") != -1))
@@ -342,7 +342,7 @@ bool includeProject(std::string_view rProject) {
         "wizards",
         "writerperfect",
         "xmlsecurity" };
-    for (size_t i = 0; i != SAL_N_ELEMENTS(projects); ++i) {
+    for (size_t i = 0; i != std::size(projects); ++i) {
         if (rProject == projects[i]) {
             return true;
         }

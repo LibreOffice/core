@@ -706,7 +706,7 @@ namespace
         };
 
         bool bCopied = false;
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aStreamNames) && !bCopied; ++i)
+        for (size_t i = 0; i < std::size(aStreamNames) && !bCopied; ++i)
         {
             uno::Reference<io::XStream> xEmbeddedFile;
             try

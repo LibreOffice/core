@@ -263,7 +263,7 @@ namespace cmis
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         };
 
-        const int nProps = SAL_N_ELEMENTS(aGenericProperties);
+        const int nProps = std::size(aGenericProperties);
         return uno::Sequence< beans::Property > ( aGenericProperties, nProps );
     }
 
@@ -292,7 +292,7 @@ namespace cmis
               -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),
         };
 
-        const int nProps = SAL_N_ELEMENTS(aCommandInfoTable);
+        const int nProps = std::size(aCommandInfoTable);
         return uno::Sequence< ucb::CommandInfo >(aCommandInfoTable, nProps );
     }
 

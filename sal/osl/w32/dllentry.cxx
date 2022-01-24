@@ -36,6 +36,8 @@
 
 #include "thread.hxx"
 
+#include <iterator>
+
 /*
 This is needed because DllMain is called after static constructors. A DLL's
 startup and shutdown sequence looks like this:
@@ -65,8 +67,8 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
             {
 #ifdef _DEBUG
                 WCHAR buf[64];
-                DWORD const res = GetEnvironmentVariableW(L"SAL_NO_ASSERT_DIALOGS", buf, SAL_N_ELEMENTS(buf));
-                if (res && res < SAL_N_ELEMENTS(buf))
+                DWORD const res = GetEnvironmentVariableW(L"SAL_NO_ASSERT_DIALOGS", buf, std::size(buf));
+                if (res && res < std::size(buf))
                 {
                     // disable the dialog on abort()
                     _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
@@ -192,9 +194,9 @@ BOOL WINAPI DllMain( HINSTANCE, DWORD fdwReason, LPVOID )
             // The corresponding code (setting the environment variable)
             // is desktop/win32/source/officeloader.cxx
 
-            DWORD dwResult = GetEnvironmentVariableW( L"ATTACHED_PARENT_PROCESSID", szBuffer, SAL_N_ELEMENTS(szBuffer) );
+            DWORD dwResult = GetEnvironmentVariableW( L"ATTACHED_PARENT_PROCESSID", szBuffer, std::size(szBuffer) );
 
-            if ( dwResult && dwResult < SAL_N_ELEMENTS(szBuffer) )
+            if ( dwResult && dwResult < std::size(szBuffer) )
             {
                 DWORD   dwThreadId = 0;
 

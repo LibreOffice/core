@@ -153,7 +153,7 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames()
         "IsUseWildcard"                         // 29
     };
 
-    const int nCount = SAL_N_ELEMENTS( aPropNames );
+    const int nCount = std::size( aPropNames );
     Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
     for (sal_Int32 i = 0;  i < nCount;  ++i)

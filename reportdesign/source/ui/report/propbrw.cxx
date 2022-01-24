@@ -124,7 +124,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
                 ::cppu::ContextEntry_Init( "ActiveConnection", makeAny( m_pDesignView->getController().getConnection() ) ),
             };
             m_xInspectorContext.set(
-                ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
+                ::cppu::createComponentContext( aHandlerContextInfo, std::size( aHandlerContextInfo ),
                 m_xORB ) );
             // create a property browser controller
             bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );

@@ -9511,8 +9511,7 @@ void TestCopyPaste::testCopyPasteSkipEmpty()
             { "D", COL_BLUE, true }, { "E", COL_BLUE, true },
         };
 
-        bool bRes
-            = aTest.checkRange(ScAddress(1, 0, 0), aChecks, aChecks + SAL_N_ELEMENTS(aChecks));
+        bool bRes = aTest.checkRange(ScAddress(1, 0, 0), aChecks, aChecks + std::size(aChecks));
         CPPUNIT_ASSERT_MESSAGE("Initial check failed.", bRes);
     }
 
@@ -9543,8 +9542,7 @@ void TestCopyPaste::testCopyPasteSkipEmpty()
             { "Clip3", COL_YELLOW, false },
         };
 
-        bool bRes
-            = aTest.checkRange(ScAddress(1, 0, 0), aChecks, aChecks + SAL_N_ELEMENTS(aChecks));
+        bool bRes = aTest.checkRange(ScAddress(1, 0, 0), aChecks, aChecks + std::size(aChecks));
         CPPUNIT_ASSERT_MESSAGE("Check after paste failed.", bRes);
     }
 
@@ -9556,8 +9554,7 @@ void TestCopyPaste::testCopyPasteSkipEmpty()
             { "D", COL_BLUE, true }, { "E", COL_BLUE, true },
         };
 
-        bool bRes
-            = aTest.checkRange(ScAddress(1, 0, 0), aChecks, aChecks + SAL_N_ELEMENTS(aChecks));
+        bool bRes = aTest.checkRange(ScAddress(1, 0, 0), aChecks, aChecks + std::size(aChecks));
         CPPUNIT_ASSERT_MESSAGE("Check after undo failed.", bRes);
     }
 
@@ -9570,8 +9567,7 @@ void TestCopyPaste::testCopyPasteSkipEmpty()
             { "Clip3", COL_YELLOW, false },
         };
 
-        bool bRes
-            = aTest.checkRange(ScAddress(1, 0, 0), aChecks, aChecks + SAL_N_ELEMENTS(aChecks));
+        bool bRes = aTest.checkRange(ScAddress(1, 0, 0), aChecks, aChecks + std::size(aChecks));
         CPPUNIT_ASSERT_MESSAGE("Check after redo failed.", bRes);
     }
 
@@ -9676,7 +9672,7 @@ void TestCopyPaste::testCutPasteGroupRefUndo()
     const char* aDataCheck[][2] = { { "1", "" },        { "2", "=A1+A1" },  { "3", "=A2+A1" },
                                     { "5", "=A3+A2" },  { "8", "=A4+A3" },  { "13", "=A5+A4" },
                                     { "21", "=A6+A5" }, { "34", "=A7+A6" }, { "55", "=A8+A7" } };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aDataCheck); ++i)
+    for (size_t i = 0; i < std::size(aDataCheck); ++i)
     {
         OUString aString = m_pDoc->GetString(0, i, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Initial data failure",
@@ -9698,7 +9694,7 @@ void TestCopyPaste::testCutPasteGroupRefUndo()
 
     // Check data after Cut.
     const char* aCutCheck[] = { "1", "2", "3", "", "", "", "0", "0", "0" };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aCutCheck); ++i)
+    for (size_t i = 0; i < std::size(aCutCheck); ++i)
     {
         OUString aString = m_pDoc->GetString(0, i, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Cut data failure", OUString::createFromAscii(aCutCheck[i]),
@@ -9724,7 +9720,7 @@ void TestCopyPaste::testCutPasteGroupRefUndo()
                                      { "21", "13", "=B7+B6", "=B6+B5" },
                                      { "34", "", "=A7+B7", "" },
                                      { "55", "", "=A8+A7", "" } };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aPasteCheck); ++i)
+    for (size_t i = 0; i < std::size(aPasteCheck); ++i)
     {
         for (size_t j = 0; j < 2; ++j)
         {
@@ -9739,7 +9735,7 @@ void TestCopyPaste::testCutPasteGroupRefUndo()
 
     // Undo Paste and check, must be same as after Cut.
     pUndoPaste->Undo();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aCutCheck); ++i)
+    for (size_t i = 0; i < std::size(aCutCheck); ++i)
     {
         OUString aString = m_pDoc->GetString(0, i, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Undo Paste data failure",
@@ -9748,7 +9744,7 @@ void TestCopyPaste::testCutPasteGroupRefUndo()
 
     // Undo Cut and check, must be initial data.
     pUndoCut->Undo();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aDataCheck); ++i)
+    for (size_t i = 0; i < std::size(aDataCheck); ++i)
     {
         OUString aString = m_pDoc->GetString(0, i, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Undo Cut data failure",

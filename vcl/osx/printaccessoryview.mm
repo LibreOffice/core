@@ -174,7 +174,7 @@ public:
     , mnLastPageCount( [i_pAccessoryController printerController]->getFilteredPageCount() )
     , mpAccessoryController( i_pAccessoryController )
     {
-        static_assert( SAL_N_ELEMENTS(SV_PRINT_NATIVE_STRINGS) == 5, "resources not found" );
+        static_assert( std::size(SV_PRINT_NATIVE_STRINGS) == 5, "resources not found" );
     }
 
     static OUString getMoreString()

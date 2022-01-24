@@ -47,7 +47,7 @@ protected:
             "math-escape.docx",
             "math-mso2k7.docx",
         };
-        std::vector<const char*> vDenylist(aDenylist, aDenylist + SAL_N_ELEMENTS(aDenylist));
+        std::vector<const char*> vDenylist(aDenylist, aDenylist + std::size(aDenylist));
 
         // If the testcase is stored in some other format, it's pointless to test.
         return (OString(filename).endsWith(".docx") && std::find(vDenylist.begin(), vDenylist.end(), filename) == vDenylist.end());
@@ -61,7 +61,7 @@ protected:
         const char* aAllowlist[] = {
             "paragraph-mark-nonempty.odt"
         };
-        std::vector<const char*> vAllowlist(aAllowlist, aAllowlist + SAL_N_ELEMENTS(aAllowlist));
+        std::vector<const char*> vAllowlist(aAllowlist, aAllowlist + std::size(aAllowlist));
 
         return std::find(vAllowlist.begin(), vAllowlist.end(), filename) != vAllowlist.end();
     }

@@ -263,8 +263,8 @@ void WinOpenGLDeviceInfo::GetData()
 
     // make sure the string is null terminated
     // (using the term "null" here to mean a zero UTF-16 unit)
-    if (wcsnlen(displayDevice.DeviceKey, SAL_N_ELEMENTS(displayDevice.DeviceKey))
-            == SAL_N_ELEMENTS(displayDevice.DeviceKey))
+    if (wcsnlen(displayDevice.DeviceKey, std::size(displayDevice.DeviceKey))
+            == std::size(displayDevice.DeviceKey))
     {
         // we did not find a null
         SAL_WARN("vcl.opengl", "string not null terminated");
@@ -274,14 +274,14 @@ void WinOpenGLDeviceInfo::GetData()
     /* DeviceKey is "reserved" according to MSDN so we'll be careful with it */
     /* check that DeviceKey begins with DEVICE_KEY_PREFIX */
     /* some systems have a DeviceKey starting with \REGISTRY\Machine\ so we need to compare case insensitively */
-    if (_wcsnicmp(displayDevice.DeviceKey, DEVICE_KEY_PREFIX, SAL_N_ELEMENTS(DEVICE_KEY_PREFIX)-1) != 0)
+    if (_wcsnicmp(displayDevice.DeviceKey, DEVICE_KEY_PREFIX, std::size(DEVICE_KEY_PREFIX)-1) != 0)
     {
         SAL_WARN("vcl.opengl", "incorrect DeviceKey");
         return;
     }
 
     // chop off DEVICE_KEY_PREFIX
-    maDeviceKey = o3tl::toU(displayDevice.DeviceKey) + SAL_N_ELEMENTS(DEVICE_KEY_PREFIX)-1;
+    maDeviceKey = o3tl::toU(displayDevice.DeviceKey) + std::size(DEVICE_KEY_PREFIX)-1;
 
     maDeviceID = o3tl::toU(displayDevice.DeviceID);
     maDeviceString = o3tl::toU(displayDevice.DeviceString);

@@ -42,8 +42,8 @@ bool ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, 
     size_t nIndex = static_cast<size_t>(eFunc);
     nIndex *= 4;
 
-    assert(nIndex + 3 < SAL_N_ELEMENTS(aImplKeyFuncTab) && "bad key code index");
-    if (nIndex + 3  >= SAL_N_ELEMENTS(aImplKeyFuncTab))
+    assert(nIndex + 3 < std::size(aImplKeyFuncTab) && "bad key code index");
+    if (nIndex + 3  >= std::size(aImplKeyFuncTab))
     {
         rCode1 = rCode2 = rCode3 = rCode4 = 0;
         return false;

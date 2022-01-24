@@ -203,7 +203,7 @@ ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
         SCFORMULAOPT_OPENCL_MIN_SIZE,
         SCFORMULAOPT_OPENCL_SUBSET_OPS,
     };
-    OSL_ENSURE( SAL_N_ELEMENTS(aVals) == aPropNames.getLength(), "Properties and ids are out of Sync");
+    OSL_ENSURE( std::size(aVals) == aPropNames.getLength(), "Properties and ids are out of Sync");
     PropsToIds aPropIdMap;
     for ( sal_Int32 i=0; i<aPropNames.getLength(); ++i )
         aPropIdMap[aPropNames[i]] = aVals[ i ];

@@ -645,7 +645,7 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
             continue;
         }
 
-        for (size_t j = 0; j < SAL_N_ELEMENTS(aConversionTab); ++j)
+        for (size_t j = 0; j < std::size(aConversionTab); ++j)
         {
             if (rtl_str_compare(pName, aConversionTab[j].pNativeType) == 0)
             {

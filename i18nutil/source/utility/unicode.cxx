@@ -182,7 +182,7 @@ sal_Int16 unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
     sal_Int16 nRet;
     if (eScript < USCRIPT_COMMON)
         nRet = ScriptType::WEAK;
-    else if (static_cast<size_t>(eScript) >= SAL_N_ELEMENTS(scriptTypes))
+    else if (static_cast<size_t>(eScript) >= std::size(scriptTypes))
         nRet = ScriptType::COMPLEX;         // anything new is going to be pretty wild
     else
         nRet = scriptTypes[eScript];
