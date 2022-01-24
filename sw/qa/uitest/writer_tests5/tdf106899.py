@@ -10,7 +10,6 @@
 import org.libreoffice.unotest
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
-import time
 
 class tdf106899(UITestCase):
 
@@ -38,7 +37,7 @@ class tdf106899(UITestCase):
             xCursor.gotoRange(xDocumentIndex.getAnchor().getEnd(), False)
             xCursor.gotoStartOfParagraph(True)
 
-            # Without the fix in place the index does not contain the ut8 index entry
+            # Without the fix in place the index does not contain the utf8 index entry
             self.assertEqual("Nguyễn Khánh" in xCursor.getString(), True)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
