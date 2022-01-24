@@ -236,6 +236,15 @@ namespace
             TOOLS_INFO_EXCEPTION( "sfx.appl", "trying to load bibliography database");
         }
     }
+    bool lcl_isSaveLocked(SfxObjectShell * pShell)
+    {
+        assert(pShell);
+        Reference<XModel> xModel = pShell->GetModel();
+        if (!xModel.is())
+            return false;
+        comphelper::NamedValueCollection aArgs(xModel->getArgs());
+        return aArgs.getOrDefault("LockSave", false);
+    }
 }
 /// Find the correct location of the document (CREDITS.fodt, etc.), and return
 /// it in rURL if found.
@@ -524,7 +533,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                   pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
             {
                 SfxRequest aReq( SID_SAVEDOC, SfxCallMode::SLOT, pObjSh->GetPool() );
-                if ( pObjSh->IsModified() && !pObjSh->isSaveLocked())
+                if ( pObjSh->IsModified() && !lcl_isSaveLocked(pObjSh) )
                 {
                     pObjSh->ExecuteSlot( aReq );
                     const SfxBoolItem *pItem = dynamic_cast<const SfxBoolItem*>( aReq.GetReturnValue()  );
@@ -1094,7 +1103,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                           pObjSh;
                           pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
                     {
-                        if ( pObjSh->IsModified() && !pObjSh->isSaveLocked() )
+                        if ( pObjSh->IsModified() && !lcl_isSaveLocked(pObjSh) )
                         {
                             bModified = true;
                             break;
