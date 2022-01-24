@@ -622,8 +622,7 @@ namespace svx
             pNewDefButton = m_xFind.get();
         }
 
-        pOldDefButton->set_has_default(false);
-        pNewDefButton->set_has_default(true);
+        m_xDialog->change_default_widget(pOldDefButton, pNewDefButton);
     }
 
     OUString HangulHanjaConversionDialog::GetCurrentSuggestion( ) const
