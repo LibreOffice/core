@@ -101,7 +101,7 @@ private:
     }
 
     // overflow validation in debug mode
-    static constexpr char JSON_WRITER_DEBUG_MARKER = 0xde;
+    static constexpr char JSON_WRITER_DEBUG_MARKER = static_cast<char>(0xde);
 
     inline void addValidationMark()
     {
