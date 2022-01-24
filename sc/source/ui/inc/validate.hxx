@@ -176,7 +176,7 @@ public:
 
     void            SetModal(bool bModal) { m_xDialog->set_modal(bModal); }
 
-    virtual void EndDialog() override;
+    virtual void EndDialog(int nResponse) override;
 
     virtual void            SetReference( const ScRange& rRef, ScDocument& rDoc ) override
     {
