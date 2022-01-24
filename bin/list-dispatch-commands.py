@@ -129,7 +129,7 @@ def analyze_xcu(all_commands):
                         label = 'label'
                     elif '<prop oor:name="ContextLabel"' in line:
                         label = 'contextlabel'
-                    elif '<prop oor:name="Label"' in line:
+                    elif '<prop oor:name="TooltipLabel"' in line:
                         label = 'tooltiplabel'
                     elif '<value xml:lang="en-US">' in line:
                         labeltext = line.replace('<value xml:lang="en-US">', '').replace('</value>', '').strip()
