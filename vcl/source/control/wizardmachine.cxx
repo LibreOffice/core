@@ -949,21 +949,15 @@ namespace vcl
         if (_nWizardButtonFlags & WizardButtonFlags::CANCEL)
             pNewDefButton = m_xCancel.get();
 
-        if ( pNewDefButton )
-            defaultButton( pNewDefButton );
-        else
-            m_xAssistant->recursively_unset_default_buttons();
+        defaultButton(pNewDefButton);
     }
 
     void WizardMachine::defaultButton(weld::Button* _pNewDefButton)
     {
         // loop through all (direct and indirect) descendants which participate in our tabbing order, and
-        // reset the WB_DEFBUTTON for every window which is a button
-        m_xAssistant->recursively_unset_default_buttons();
-
-        // set its new style
-        if (_pNewDefButton)
-            _pNewDefButton->set_has_default(true);
+        // reset the WB_DEFBUTTON for every window which is a button and set _pNewDefButton as the new
+        // WB_DEFBUTTON
+        m_xAssistant->change_default_widget(nullptr, _pNewDefButton);
     }
 
     void WizardMachine::enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable)
