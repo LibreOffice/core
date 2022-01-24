@@ -57,7 +57,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:AlignLeft">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="valign">start</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -69,7 +68,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:AlignHorizontalCenter">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -80,7 +78,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:AlignRight">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -91,7 +88,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:AlignBlock">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -118,7 +114,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:AlignTop">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -129,7 +124,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:AlignVCenter">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -140,7 +134,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:AlignBottom">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -166,7 +159,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:ParaLeftToRight">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -177,7 +169,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:ParaRightToLeft">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -215,7 +206,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:IncrementIndent">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -226,7 +216,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:DecrementIndent">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
