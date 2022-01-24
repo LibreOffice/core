@@ -16,6 +16,23 @@
       "message": "LGTM code-wise; I didn\u0027t check the behavior. Heiko, up to you :-)",
       "revId": "73cfad10174451a82eb70f0734d658adcbf6f37c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb1a6dcf_dca1df6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-24T10:41:03Z",
+      "side": 1,
+      "message": "The table toolbar still shows the border, only the sidebar doesn\u0027t.",
+      "revId": "73cfad10174451a82eb70f0734d658adcbf6f37c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
