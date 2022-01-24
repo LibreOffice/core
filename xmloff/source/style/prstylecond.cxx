@@ -70,7 +70,7 @@ const ConditionMap g_ConditionMap[] =
 
 OUString GetParaStyleCondExternal( OUString const &internal)
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(g_ConditionMap); ++i)
+    for (size_t i = 0; i < std::size(g_ConditionMap); ++i)
     {
         if (internal.compareToAscii( g_ConditionMap[i].aInternal ) == 0)
         {

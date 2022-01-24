@@ -945,7 +945,7 @@ OUString SdrCaptionTypeItem::GetValueTextByPos(sal_uInt16 nPos)
         STR_ItemValCAPTIONTYPE3,
         STR_ItemValCAPTIONTYPE4
     };
-    assert(nPos < SAL_N_ELEMENTS(ITEMVALCAPTIONTYPES) && "wrong pos!");
+    assert(nPos < std::size(ITEMVALCAPTIONTYPES) && "wrong pos!");
     return SvxResId(ITEMVALCAPTIONTYPES[nPos]);
 }
 
@@ -972,7 +972,7 @@ OUString SdrCaptionEscDirItem::GetValueTextByPos(sal_uInt16 nPos)
         STR_ItemValCAPTIONESCVERT,
         STR_ItemValCAPTIONESCBESTFIT
     };
-    assert(nPos < SAL_N_ELEMENTS(ITEMVALCAPTIONTYPES) && "wrong pos!");
+    assert(nPos < std::size(ITEMVALCAPTIONTYPES) && "wrong pos!");
     return SvxResId(ITEMVALCAPTIONTYPES[nPos]);
 }
 
@@ -1017,7 +1017,7 @@ OUString SdrTextFitToSizeTypeItem::GetValueTextByPos(sal_uInt16 nPos)
         STR_ItemValFITTOSIZEALLLINES,
         STR_ItemValFITTOSIZERESIZEAT
     };
-    assert(nPos < SAL_N_ELEMENTS(ITEMVALFITTISIZETYPES) && "wrong pos!");
+    assert(nPos < std::size(ITEMVALFITTISIZETYPES) && "wrong pos!");
     return SvxResId(ITEMVALFITTISIZETYPES[nPos]);
 }
 
@@ -1080,7 +1080,7 @@ OUString SdrTextVertAdjustItem::GetValueTextByPos(sal_uInt16 nPos)
         STR_ItemValTEXTVADJBLOCK,
         STR_ItemValTEXTVADJSTRETCH
     };
-    assert(nPos < SAL_N_ELEMENTS(ITEMVALTEXTVADJTYPES) && "wrong pos!");
+    assert(nPos < std::size(ITEMVALTEXTVADJTYPES) && "wrong pos!");
     return SvxResId(ITEMVALTEXTVADJTYPES[nPos]);
 }
 
@@ -1139,7 +1139,7 @@ OUString SdrTextHorzAdjustItem::GetValueTextByPos(sal_uInt16 nPos)
         STR_ItemValTEXTHADJBLOCK,
         STR_ItemValTEXTHADJSTRETCH
     };
-    assert(nPos < SAL_N_ELEMENTS(ITEMVALTEXTHADJTYPES) && "wrong pos!");
+    assert(nPos < std::size(ITEMVALTEXTHADJTYPES) && "wrong pos!");
     return SvxResId(ITEMVALTEXTHADJTYPES[nPos]);
 }
 
@@ -1191,7 +1191,7 @@ OUString SdrTextAniKindItem::GetValueTextByPos(sal_uInt16 nPos)
         STR_ItemValTEXTANI_ALTERNATE,
         STR_ItemValTEXTANI_SLIDE
     };
-    assert(nPos < SAL_N_ELEMENTS(ITEMVALTEXTANITYPES) && "wrong pos!");
+    assert(nPos < std::size(ITEMVALTEXTANITYPES) && "wrong pos!");
     return SvxResId(ITEMVALTEXTANITYPES[nPos]);
 }
 
@@ -1241,7 +1241,7 @@ OUString SdrTextAniDirectionItem::GetValueTextByPos(sal_uInt16 nPos)
         STR_ItemValTEXTANI_RIGHT,
         STR_ItemValTEXTANI_DOWN
     };
-    assert(nPos < SAL_N_ELEMENTS(ITEMVALTEXTANITYPES) && "wrong pos!");
+    assert(nPos < std::size(ITEMVALTEXTANITYPES) && "wrong pos!");
     return SvxResId(ITEMVALTEXTANITYPES[nPos]);
 }
 
@@ -1394,7 +1394,7 @@ OUString SdrEdgeKindItem::GetValueTextByPos(sal_uInt16 nPos)
         STR_ItemValEDGE_ONELINE,
         STR_ItemValEDGE_BEZIER
     };
-    assert(nPos < SAL_N_ELEMENTS(ITEMVALEDGES) && "wrong pos!");
+    assert(nPos < std::size(ITEMVALEDGES) && "wrong pos!");
     return SvxResId(ITEMVALEDGES[nPos]);
 }
 
@@ -1560,7 +1560,7 @@ OUString SdrMeasureKindItem::GetValueTextByPos(sal_uInt16 nPos)
         STR_ItemValMEASURE_STD,
         STR_ItemValMEASURE_RADIUS
     };
-    assert(nPos < SAL_N_ELEMENTS(ITEMVALMEASURETYPES) && "wrong pos!");
+    assert(nPos < std::size(ITEMVALMEASURETYPES) && "wrong pos!");
     return SvxResId(ITEMVALMEASURETYPES[nPos]);
 }
 
@@ -1660,7 +1660,7 @@ OUString SdrMeasureTextVPosItem::GetValueTextByPos(sal_uInt16 nPos)
         STR_ItemValMEASURE_BELOW,
         STR_ItemValMEASURETEXT_VERTICALCEN
     };
-    assert(nPos < SAL_N_ELEMENTS(ITEMVALMEASURETEXTTYPES) && "wrong pos!");
+    assert(nPos < std::size(ITEMVALMEASURETEXTTYPES) && "wrong pos!");
     return SvxResId(ITEMVALMEASURETEXTTYPES[nPos]);
 }
 
@@ -1748,7 +1748,7 @@ OUString SdrCircKindItem::GetValueTextByPos(sal_uInt16 nPos)
         STR_ItemValCIRC_CUT,
         STR_ItemValCIRC_ARC
     };
-    assert(nPos < SAL_N_ELEMENTS(ITEMVALCIRCTYPES) && "wrong pos!");
+    assert(nPos < std::size(ITEMVALCIRCTYPES) && "wrong pos!");
     return SvxResId(ITEMVALCIRCTYPES[nPos]);
 }
 

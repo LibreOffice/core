@@ -450,7 +450,7 @@ Strikeout2String(const uno::Any& rAny)
 {
     sal_Int16 n = rAny.get<sal_Int16>();
 
-    if( n >= 0 && n < sal_Int16(SAL_N_ELEMENTS(font_strikethrough)) )
+    if( n >= 0 && n < sal_Int16(std::size(font_strikethrough)) )
         return g_strdup( font_strikethrough[n] );
 
     return nullptr;
@@ -459,7 +459,7 @@ Strikeout2String(const uno::Any& rAny)
 static bool
 String2Strikeout( uno::Any& rAny, const gchar * value )
 {
-    for( sal_Int16 n=0; n < sal_Int16(SAL_N_ELEMENTS(font_strikethrough)); ++n )
+    for( sal_Int16 n=0; n < sal_Int16(std::size(font_strikethrough)); ++n )
     {
         if( ( nullptr != font_strikethrough[n] ) &&
             0 == strncmp( value, font_strikethrough[n], strlen( font_strikethrough[n] ) ) )
@@ -1350,7 +1350,7 @@ attribute_set_map_to_property_values(
     uno::Sequence< beans::PropertyValue >& rValueList )
 {
     // Ensure enough space ..
-    uno::Sequence< beans::PropertyValue > aAttributeList (SAL_N_ELEMENTS(g_TextAttrMap));
+    uno::Sequence< beans::PropertyValue > aAttributeList (std::size(g_TextAttrMap));
     auto pAttributeList = aAttributeList.getArray();
 
     sal_Int32 nIndex = 0;
@@ -1359,7 +1359,7 @@ attribute_set_map_to_property_values(
         AtkAttribute* attribute = reinterpret_cast<AtkAttribute *>(item);
 
         AtkTextAttribute text_attr = atk_text_attribute_for_name( attribute->name );
-        if( text_attr < SAL_N_ELEMENTS(g_TextAttrMap) )
+        if( text_attr < std::size(g_TextAttrMap) )
         {
             if( g_TextAttrMap[text_attr].name[0] != '\0' )
             {

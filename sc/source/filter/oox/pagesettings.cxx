@@ -478,8 +478,8 @@ constexpr OUStringLiteral gaDateTimeService( u"com.sun.star.text.TextField.DateT
 
 HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    maBoldNames( sppcBoldNames, sppcBoldNames + SAL_N_ELEMENTS(sppcBoldNames) ),
-    maItalicNames( sppcItalicNames, sppcItalicNames + SAL_N_ELEMENTS(sppcItalicNames) ),
+    maBoldNames( sppcBoldNames, sppcBoldNames + std::size(sppcBoldNames) ),
+    maItalicNames( sppcItalicNames, sppcItalicNames + std::size(sppcItalicNames) ),
     maPortions( static_cast< size_t >( HF_COUNT ) ),
     meCurrPortion( HF_CENTER )
 {

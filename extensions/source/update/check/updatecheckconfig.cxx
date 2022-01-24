@@ -73,7 +73,7 @@ const char * const aUpdateEntryProperties[] = {
     OLD_VERSION
 };
 
-const sal_uInt32 nUpdateEntryProperties = SAL_N_ELEMENTS(aUpdateEntryProperties);
+const sal_uInt32 nUpdateEntryProperties = std::size(aUpdateEntryProperties);
 
 NamedValueByNameAccess::~NamedValueByNameAccess()
 {

@@ -455,7 +455,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
         ::cppu::ContextEntry_Init( "ControlShapeAccess", makeAny( xControlMap ) )
     };
     m_xInspectorContext.set(
-        ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
+        ::cppu::createComponentContext( aHandlerContextInfo, std::size( aHandlerContextInfo ),
         m_xORB ) );
 
     bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );

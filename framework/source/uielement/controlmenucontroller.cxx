@@ -187,7 +187,7 @@ void ControlMenuController::updateImagesPopupMenu(Reference<awt::XPopupMenu> con
 {
     if (!rPopupMenu)
         return;
-    for (size_t i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
+    for (size_t i=0; i < std::size(aCommands); ++i)
     {
         sal_Int16 nItemId = i + 1;
         if (m_bShowMenuImages)
@@ -206,7 +206,7 @@ void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > con
 {
     resetPopupMenu( rPopupMenu );
 
-    for (size_t i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
+    for (size_t i=0; i < std::size(aCommands); ++i)
     {
         sal_Int16 nItemId = i + 1;
         OUString sCommand(OUString::createFromAscii(aCommands[i]));
@@ -245,7 +245,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
         return;
 
     sal_Int16 nItemId = 0;
-    for (size_t i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
+    for (size_t i=0; i < std::size(aCommands); ++i)
     {
         if ( Event.FeatureURL.Complete.equalsAscii( aCommands[i] ))
         {

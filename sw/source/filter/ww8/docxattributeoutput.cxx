@@ -1403,7 +1403,7 @@ const char *RubyAlignValues[] =
 
 const char *lclConvertWW8JCToOOXMLRubyAlign(sal_Int32 nJC)
 {
-    const sal_Int32 nElements = SAL_N_ELEMENTS(RubyAlignValues);
+    const sal_Int32 nElements = std::size(RubyAlignValues);
     if ( nJC >=0 && nJC < nElements )
         return RubyAlignValues[nJC];
     return RubyAlignValues[0];

@@ -93,7 +93,7 @@ void test::oustring::EndsWith::endsWith()
           RTL_CONSTASCII_STRINGPARAM("b\0c"), true },
         { RTL_CONSTASCII_STRINGPARAM("a\0b\0c"),
           RTL_CONSTASCII_STRINGPARAM("b"), false } };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
+    for (size_t i = 0; i < std::size(data); ++i) {
         OStringBuffer msg;
         appendString(msg, OString(data[i].str1, data[i].str1Len));
         msg.append(".endsWithIgnoreAsciiCaseAsciiL(");

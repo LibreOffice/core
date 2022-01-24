@@ -26,7 +26,7 @@ namespace SameContentListBox
     void Fill(weld::ComboBox& rComboBox)
     {
         rComboBox.clear();
-        for (size_t i = 0; i < SAL_N_ELEMENTS(RID_SVXSTRARY_SAMECONTENT); ++i)
+        for (size_t i = 0; i < std::size(RID_SVXSTRARY_SAMECONTENT); ++i)
         {
             OUString aStr = SvxResId(RID_SVXSTRARY_SAMECONTENT[i].first);
             sal_uInt32 nData = RID_SVXSTRARY_SAMECONTENT[i].second;

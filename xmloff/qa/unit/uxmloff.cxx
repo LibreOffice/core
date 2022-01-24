@@ -201,7 +201,7 @@ void Test::testMetaGenerator()
         { "LibreOfficeDev/7.0.6.0.0$Linux_X86_64 LibreOffice_project/dfc40e2292c6e19e285c10ed8c8044d9454107d0", ";70600", SvXMLImport::LO_7x },
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i)
+    for (size_t i = 0; i < std::size(tests); ++i)
     {
         // the DocumentInfo instance is cached so need fresh SvXMLImport
         rtl::Reference<SvXMLImport> const pImport(new SvXMLImport(

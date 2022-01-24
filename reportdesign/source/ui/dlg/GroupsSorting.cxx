@@ -816,7 +816,7 @@ OGroupsSortingDialog::OGroupsSortingDialog(weld::Window* pParent, bool bReadOnly
 
     m_xGroupIntervalEd->connect_focus_out(LINK(this, OGroupsSortingDialog, OnWidgetFocusLost));
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(pControlsLst) - 1; ++i)
+    for (size_t i = 0; i < std::size(pControlsLst) - 1; ++i)
         dynamic_cast<weld::ComboBox&>(*pControlsLst[i]).connect_changed(LINK(this,OGroupsSortingDialog,LBChangeHdl));
 
     m_pReportListener = new OPropertyChangeMultiplexer(this, m_pController->getReportDefinition());
@@ -945,7 +945,7 @@ IMPL_LINK(OGroupsSortingDialog, OnWidgetFocusGot, weld::Widget&, rControl, void 
         { m_xKeepTogetherLst.get(), STR_RPT_HELP_KEEP },
         { m_xOrderLst.get(), STR_RPT_HELP_SORT }
     };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
+    for (size_t i = 0; i < std::size(pControls); ++i)
     {
         if (&rControl == pControls[i].first)
         {
@@ -1077,7 +1077,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         case sdbc::DataType::TIMESTAMP:
             {
                 const TranslateId aIds[] = { STR_RPT_YEAR, STR_RPT_QUARTER,STR_RPT_MONTH,STR_RPT_WEEK,STR_RPT_DAY,STR_RPT_HOUR,STR_RPT_MINUTE };
-                for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+                for (size_t i = 0; i < std::size(aIds); ++i)
                 {
                     m_xGroupOnLst->append(OUString::number(i+2), RptResId(aIds[i]));
                 }

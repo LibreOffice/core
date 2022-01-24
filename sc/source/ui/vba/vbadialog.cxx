@@ -57,7 +57,7 @@ const std::u16string_view aStringList[]=
     u".uno:AutoFormat"
 };
 
-const sal_Int32 nDialogSize = SAL_N_ELEMENTS(aStringList);
+const sal_Int32 nDialogSize = std::size(aStringList);
 
 OUString
 ScVbaDialog::mapIndexToName( sal_Int32 nIndex )

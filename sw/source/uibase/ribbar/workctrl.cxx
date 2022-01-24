@@ -757,7 +757,7 @@ IMPL_LINK(NavElementBox_Base, SelectHdl, weld::ComboBox&, rComboBox, void)
 void NavElementBox_Base::UpdateBox()
 {
     sal_uInt16 nMoveType = SwView::GetMoveType();
-    for ( size_t i = 0; i < SAL_N_ELEMENTS( aNavigationInsertIds ); ++i )
+    for ( size_t i = 0; i < std::size( aNavigationInsertIds ); ++i )
     {
         if ( nMoveType == aNavigationInsertIds[i] )
         {

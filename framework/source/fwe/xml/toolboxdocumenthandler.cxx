@@ -101,7 +101,7 @@ constexpr ToolboxStyleItem Styles[ ] = {
     { css::ui::ItemStyle::TEXT,          ATTRIBUTE_ITEMSTYLE_TEXT },
 };
 
-sal_Int32 const nStyleItemEntries = SAL_N_ELEMENTS(Styles);
+sal_Int32 const nStyleItemEntries = std::size(Styles);
 
 namespace {
 

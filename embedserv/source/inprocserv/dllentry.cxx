@@ -95,8 +95,8 @@ namespace {
             for ( int nInd = 0; nInd < SUPPORTED_FACTORIES_NUM; nInd++ )
             {
                 const wchar_t pSubKeyTemplate[] = L"Software\\Classes\\CLSID\\.....................................\\InprocHandler32";
-                wchar_t pSubKey[SAL_N_ELEMENTS(pSubKeyTemplate)];
-                wcsncpy(pSubKey, pSubKeyTemplate, SAL_N_ELEMENTS(pSubKeyTemplate));
+                wchar_t pSubKey[std::size(pSubKeyTemplate)];
+                wcsncpy(pSubKey, pSubKeyTemplate, std::size(pSubKeyTemplate));
 
                 int nGuidLen = GetStringFromClassID( *guidList[nInd], &pSubKey[23], 38 );
 

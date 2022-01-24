@@ -93,7 +93,7 @@ SfxFormalArgument const aFormalArgs[] = {
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "AdditionsTag", SID_ADDITIONS_TAG },
 };
 
-sal_uInt16 const nMediaArgsCount = SAL_N_ELEMENTS(aFormalArgs);
+sal_uInt16 const nMediaArgsCount = std::size(aFormalArgs);
 
 constexpr OUStringLiteral sTemplateRegionName = u"TemplateRegionName";
 constexpr OUStringLiteral sTemplateName = u"TemplateName";

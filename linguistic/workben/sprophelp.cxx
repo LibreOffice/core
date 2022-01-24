@@ -174,7 +174,7 @@ static const char *aSP[] =
 PropertyHelper_Spell::PropertyHelper_Spell(
         const Reference< XInterface > & rxSource,
         Reference< XPropertySet > &rxPropSet ) :
-    PropertyChgHelper   ( rxSource, rxPropSet, aSP, SAL_N_ELEMENTS(aSP) )
+    PropertyChgHelper   ( rxSource, rxPropSet, aSP, std::size(aSP) )
 {
     SetDefault();
     sal_Int32 nLen = GetPropNames().getLength();

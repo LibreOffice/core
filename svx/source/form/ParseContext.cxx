@@ -37,7 +37,7 @@ using namespace ::connectivity;
 OSystemParseContext::OSystemParseContext()
     : IParseContext()
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_RSC_SQL_INTERNATIONAL); ++i)
+    for (size_t i = 0; i < std::size(RID_RSC_SQL_INTERNATIONAL); ++i)
         m_aLocalizedKeywords.push_back(SvxResId(RID_RSC_SQL_INTERNATIONAL[i]));
 }
 
@@ -129,7 +129,7 @@ IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const OS
         InternationalKeyCode::Collect, InternationalKeyCode::Fusion, InternationalKeyCode::Intersection
     };
 
-    sal_uInt32 const nCount = SAL_N_ELEMENTS(Intl_TokenID);
+    sal_uInt32 const nCount = std::size(Intl_TokenID);
     for (sal_uInt32 i = 0; i < nCount; i++)
     {
         OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
