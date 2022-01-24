@@ -8,6 +8,7 @@
  */
 
 #include "WpsContext.hxx"
+#include "WpgContext.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -24,6 +25,9 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/shape.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <drawingml/textbody.hxx>
+#include <drawingml/textbodyproperties.hxx>
 
 #include <optional>
 
@@ -39,6 +43,11 @@ WpsContext::WpsContext(ContextHandler2Helper const& rParent, uno::Reference<draw
 {
     if (mpShapePtr)
         mpShapePtr->setWps(true);
+
+    if (const auto pParent = dynamic_cast<const WpgContext*>(&rParent))
+        m_bHasWPGParent = pParent->isFullWPGSupport();
+    else
+        m_bHasWPGParent = false;
 }
 
 WpsContext::~WpsContext() = default;
@@ -168,6 +177,40 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                                                uno::makeAny(nWrappingType == XML_square));
 
                 return this;
+            }
+            else if (m_bHasWPGParent && mpShapePtr)
+            {
+                // this WPS context has to be inside a WPG shape, so the <BodyPr> element
+                // cannot be applied to mxShape member, use mpShape instead, and after the
+                // the parent shape finished, apply it for its children.
+                mpShapePtr->setWPGChild(true);
+                oox::drawingml::TextBodyPtr pTextBody;
+                pTextBody.reset(new oox::drawingml::TextBody());
+
+                if (rAttribs.hasAttribute(XML_anchor))
+                {
+                    drawing::TextVerticalAdjust eAdjust
+                        = drawingml::GetTextVerticalAdjust(rAttribs.getToken(XML_anchor, XML_t));
+                    pTextBody->getTextProperties().meVA = eAdjust;
+                }
+
+                sal_Int32 aInsets[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
+                for (int i = 0; i < 4; ++i)
+                {
+                    if (rAttribs.hasAttribute(XML_lIns))
+                    {
+                        OptValue<OUString> oValue = rAttribs.getString(aInsets[i]);
+                        if (oValue.has())
+                            pTextBody->getTextProperties().moInsets[i]
+                                = oox::drawingml::GetCoordinate(oValue.get());
+                        else
+                            // Defaults from the spec: left/right: 91440 EMU, top/bottom: 45720 EMU
+                            pTextBody->getTextProperties().moInsets[i]
+                                = (aInsets[i] == XML_lIns || aInsets[i] == XML_rIns) ? 254 : 127;
+                    }
+                }
+
+                mpShapePtr->setTextBody(pTextBody);
             }
             break;
         case XML_noAutofit:
