@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87a03761_ba27f640",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-01-24T16:48:29Z",
+      "side": 1,
+      "message": "Necessary for build on Windows, at least for me.",
+      "revId": "31302cc743f39bf01a9d6449f3a1ae0a6f8ecb31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
