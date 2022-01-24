@@ -47,7 +47,7 @@ public:
 
     // when the dialog has an associated SfxChildWin, typically for Modeless interaction
     virtual void ChildWinDispose() {} // called from the associated SfxChildWin dtor
-    virtual void Close() {} // called by the SfxChildWin when the dialog is closed
+    virtual void Close(); // called by the SfxChildWin when the dialog is closed
     virtual void EndDialog(int nResponse); // called by the SfxChildWin to close the dialog
 };
 

@@ -197,6 +197,7 @@ void SfxModelessDialogController::Close()
     m_pBindings->GetDispatcher_Impl()->ExecuteList(
         m_xImpl->pMgr->GetType(),
         SfxCallMode::RECORD|SfxCallMode::SYNCHRON, { &aValue } );
+    SfxDialogController::Close();
 }
 
 SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& rUIFile,
@@ -208,6 +209,12 @@ SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& 
 {
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, SfxDialogController, InstallLOKNotifierHdl));
     m_xDialog->connect_container_focus_changed(LINK(this, SfxDialogController, FocusChangeHdl));
+}
+
+void SfxDialogController::Close()
+{
+    // tdf3146571 ignore focus changes after we've closed
+    m_xDialog->connect_container_focus_changed(Link<weld::Container&, void>());
 }
 
 IMPL_STATIC_LINK_NOARG(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
