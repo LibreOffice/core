@@ -50,7 +50,7 @@ public:
     // when the dialog has an associated SfxChildWin, typically for Modeless interaction
     virtual void ChildWinDispose() {} // called from the associated SfxChildWin dtor
     virtual void Close() {} // called by the SfxChildWin when the dialog is closed
-    virtual void EndDialog(); // called by the SfxChildWin to close the dialog
+    virtual void EndDialog(int nResponse); // called by the SfxChildWin to close the dialog
 };
 
 class SfxModelessDialog_Impl;
@@ -75,7 +75,7 @@ public:
     void                    Initialize (SfxChildWinInfo const * pInfo);
     bool                    IsClosing() const;
     virtual void            Close() override;
-    virtual void            EndDialog() override;
+    virtual void            EndDialog(int nRespose) override;
     virtual void            Activate() override;
     virtual void            Deactivate() override;
     virtual void            ChildWinDispose() override;

@@ -1009,7 +1009,11 @@ void SfxWorkWindow::ShowChildren_Impl()
                     {
                         auto xController = pCli->xController;
                         weld::DialogController::runAsync(xController,
-                            [=](sal_Int32 /*nResult*/){ xController->Close(); });
+                            [=](sal_Int32 nResult){
+                                if (nResult == nCloseResponseToJustHide)
+                                    return;
+                                xController->Close();
+                            });
                     }
                 }
                 else

@@ -95,12 +95,12 @@ ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSe
     AddTabPage("erroralert", ScTPValidationError::Create, nullptr);
 }
 
-void ScValidationDlg::EndDialog()
+void ScValidationDlg::EndDialog(int nResponse)
 {
     // tdf#137215 ensure original modalality of true is restored before dialog loop ends
     if (m_bOwnRefHdlr)
         RemoveRefDlg(true);
-    ScValidationDlgBase::EndDialog();
+    ScValidationDlgBase::EndDialog(nResponse);
 }
 
 ScValidationDlg::~ScValidationDlg()

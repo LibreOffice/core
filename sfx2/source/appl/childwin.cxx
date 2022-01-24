@@ -628,7 +628,7 @@ void SfxChildWindow::SetVisible_Impl( bool bVis )
 void SfxChildWindow::Hide()
 {
     if (xController)
-        xController->EndDialog();
+        xController->EndDialog(nCloseResponseToJustHide);
     else
         pWindow->Hide();
 }
@@ -640,7 +640,11 @@ void SfxChildWindow::Show( ShowFlags nFlags )
         if (!xController->getDialog()->get_visible())
         {
             weld::DialogController::runAsync(xController,
-                [this](sal_Int32 /*nResult*/){ xController->Close(); });
+                [this](sal_Int32 nResult) {
+                    if (nResult == nCloseResponseToJustHide)
+                        return;
+                    xController->Close();
+                });
         }
     }
     else

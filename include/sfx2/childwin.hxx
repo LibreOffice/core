@@ -211,6 +211,7 @@ public:
     SAL_DLLPRIVATE void SetFactory_Impl( SfxChildWinFactory* );
 };
 
+const int nCloseResponseToJustHide = -42;
 
 //! The Macro of the future ...
 #define SFX_DECL_CHILDWINDOWCONTEXT(Class) \

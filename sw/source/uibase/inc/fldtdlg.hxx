@@ -53,7 +53,7 @@ public:
     void                ActivateDatabasePage();
     void                ShowReferencePage();
     virtual void        Close() override;
-    virtual void        EndDialog() override;
+    virtual void        EndDialog(int nResponse) override;
     virtual void        Activate() override;
 };
 
