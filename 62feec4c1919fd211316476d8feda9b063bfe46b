@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8f3dcb4_ccf0dedc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-24T08:53:15Z",
+      "side": 1,
+      "message": "ASan doesn\u0027t need any RTTI, but UBSan does.  What failure exactly does this fix?",
+      "revId": "62feec4c1919fd211316476d8feda9b063bfe46b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
