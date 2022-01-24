@@ -36,6 +36,7 @@ public:
 
 private:
     css::uno::Reference<css::drawing::XShape> mxShape;
+    bool m_bHasWPGParent;
 };
 }
 
