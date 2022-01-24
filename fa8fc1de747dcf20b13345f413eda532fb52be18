@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ae13c09_f56a1c24",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-24T21:12:47Z",
+      "side": 1,
+      "message": "This is ScViewFunc::AdjustRowHeight() that works on the current sheet/tab and is multiply called for each tab, instead of working on each rTab.",
+      "range": {
+        "startLine": 575,
+        "startChar": 16,
+        "endLine": 575,
+        "endChar": 51
+      },
+      "revId": "fa8fc1de747dcf20b13345f413eda532fb52be18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
