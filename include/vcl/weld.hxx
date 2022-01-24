@@ -136,9 +136,6 @@ public:
     // TODO: review if this has any practical difference from has_focus()
     virtual bool is_active() const = 0;
 
-    virtual void set_has_default(bool has_default) = 0;
-    virtual bool get_has_default() const = 0;
-
     /* size */
     virtual void set_size_request(int nWidth, int nHeight) = 0;
     virtual Size get_size_request() const = 0;
@@ -356,8 +353,6 @@ protected:
 public:
     // remove and add in one go
     virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) = 0;
-    // recursively unset has-default on any buttons in the widget hierarchy
-    virtual void recursively_unset_default_buttons() = 0;
     // create an XWindow as a child of this container. The XWindow is
     // suitable to contain css::awt::XControl items
     virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() = 0;
@@ -535,6 +530,12 @@ public:
     // desirable)
     virtual bool has_toplevel_focus() const = 0;
     virtual void present() = 0;
+
+    // with pOld of null, automatically find the old default widget and unset
+    // it, otherwise use as hint to the old default
+    virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) = 0;
+    virtual bool is_default_widget(const weld::Widget* pCandidate) const = 0;
+
     virtual void set_window_state(const OString& rStr) = 0;
     virtual OString get_window_state(WindowStateMask nMask) const = 0;
 

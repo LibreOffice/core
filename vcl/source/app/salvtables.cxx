@@ -304,13 +304,6 @@ bool SalInstanceWidget::is_active() const { return m_xWidget->IsActive(); }
 
 bool SalInstanceWidget::has_child_focus() const { return m_xWidget->HasChildPathFocus(true); }
 
-void SalInstanceWidget::set_has_default(bool has_default)
-{
-    m_xWidget->set_property("has-default", OUString::boolean(has_default));
-}
-
-bool SalInstanceWidget::get_has_default() const { return m_xWidget->GetStyle() & WB_DEFBUTTON; }
-
 void SalInstanceWidget::show() { m_xWidget->Show(); }
 
 void SalInstanceWidget::hide() { m_xWidget->Hide(); }
@@ -1179,30 +1172,6 @@ public:
 };
 }
 
-void SalInstanceContainer::implResetDefault(const vcl::Window* _pWindow)
-{
-    vcl::Window* pChildLoop = _pWindow->GetWindow(GetWindowType::FirstChild);
-    while (pChildLoop)
-    {
-        // does the window participate in the tabbing order?
-        if (pChildLoop->GetStyle() & WB_DIALOGCONTROL)
-            implResetDefault(pChildLoop);
-
-        // is it a button?
-        WindowType eType = pChildLoop->GetType();
-        if ((WindowType::PUSHBUTTON == eType) || (WindowType::OKBUTTON == eType)
-            || (WindowType::CANCELBUTTON == eType) || (WindowType::HELPBUTTON == eType)
-            || (WindowType::IMAGEBUTTON == eType) || (WindowType::MENUBUTTON == eType)
-            || (WindowType::MOREBUTTON == eType))
-        {
-            pChildLoop->SetStyle(pChildLoop->GetStyle() & ~WB_DEFBUTTON);
-        }
-
-        // the next one ...
-        pChildLoop = pChildLoop->GetWindow(GetWindowType::Next);
-    }
-}
-
 void SalInstanceContainer::connect_container_focus_changed(const Link<Container&, void>& rLink)
 {
     ensure_event_listener();
@@ -1248,11 +1217,6 @@ void SalInstanceContainer::child_grab_focus()
     m_xContainer->GrabFocus();
     if (vcl::Window* pFirstChild = m_xContainer->ImplGetDlgWindow(0, GetDlgWindowType::First))
         pFirstChild->ImplControlFocus();
-}
-
-void SalInstanceContainer::recursively_unset_default_buttons()
-{
-    implResetDefault(m_xContainer.get());
 }
 
 css::uno::Reference<css::awt::XWindow> SalInstanceContainer::CreateChildFrame()
@@ -1512,6 +1476,54 @@ bool SalInstanceWindow::has_toplevel_focus() const { return m_xWindow->HasChildP
 void SalInstanceWindow::present()
 {
     m_xWindow->ToTop(ToTopFlags::RestoreWhenMin | ToTopFlags::ForegroundTask);
+}
+
+void SalInstanceWindow::implResetDefault(const vcl::Window* _pWindow)
+{
+    vcl::Window* pChildLoop = _pWindow->GetWindow(GetWindowType::FirstChild);
+    while (pChildLoop)
+    {
+        // does the window participate in the tabbing order?
+        if (pChildLoop->GetStyle() & WB_DIALOGCONTROL)
+            implResetDefault(pChildLoop);
+
+        // is it a button?
+        WindowType eType = pChildLoop->GetType();
+        if ((WindowType::PUSHBUTTON == eType) || (WindowType::OKBUTTON == eType)
+            || (WindowType::CANCELBUTTON == eType) || (WindowType::HELPBUTTON == eType)
+            || (WindowType::IMAGEBUTTON == eType) || (WindowType::MENUBUTTON == eType)
+            || (WindowType::MOREBUTTON == eType))
+        {
+            pChildLoop->SetStyle(pChildLoop->GetStyle() & ~WB_DEFBUTTON);
+        }
+
+        // the next one ...
+        pChildLoop = pChildLoop->GetWindow(GetWindowType::Next);
+    }
+}
+
+void SalInstanceWindow::recursively_unset_default_buttons() { implResetDefault(m_xWindow.get()); }
+
+void SalInstanceWindow::change_default_widget(weld::Widget* pOld, weld::Widget* pNew)
+{
+    if (!pOld)
+        recursively_unset_default_buttons();
+    else
+    {
+        SalInstanceWidget* pVclOld = dynamic_cast<SalInstanceWidget*>(pOld);
+        pVclOld->getWidget()->set_property("has-default", OUString::boolean(false));
+    }
+    if (pNew)
+    {
+        SalInstanceWidget* pVclNew = dynamic_cast<SalInstanceWidget*>(pNew);
+        pVclNew->getWidget()->set_property("has-default", OUString::boolean(true));
+    }
+}
+
+bool SalInstanceWindow::is_default_widget(const weld::Widget* pCandidate) const
+{
+    const SalInstanceWidget* pVclCandidate = dynamic_cast<const SalInstanceWidget*>(pCandidate);
+    return pVclCandidate->getWidget()->GetStyle() & WB_DEFBUTTON;
 }
 
 void SalInstanceWindow::set_window_state(const OString& rStr)
