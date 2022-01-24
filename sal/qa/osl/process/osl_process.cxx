@@ -363,7 +363,7 @@ public:
             nullptr,
             suCWD.pData,
             child_env,
-            SAL_N_ELEMENTS(child_env),
+            std::size(child_env),
             &process);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE

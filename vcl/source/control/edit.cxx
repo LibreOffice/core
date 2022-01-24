@@ -477,7 +477,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
 
     if (nLen)
     {
-        if (o3tl::make_unsigned(2 * nLen) > SAL_N_ELEMENTS(nDXBuffer))
+        if (o3tl::make_unsigned(2 * nLen) > std::size(nDXBuffer))
         {
             pDXBuffer.reset(new sal_Int32[2 * (nLen + 1)]);
             pDX = pDXBuffer.get();
@@ -1074,7 +1074,7 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
 
     if( !aText.isEmpty() )
     {
-        if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+        if( o3tl::make_unsigned(2*aText.getLength()) > std::size(nDXBuffer) )
         {
             pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
             pDX = pDXBuffer.get();
@@ -1195,7 +1195,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     sal_Int32   nDXBuffer[256];
     std::unique_ptr<sal_Int32[]> pDXBuffer;
     sal_Int32*  pDX = nDXBuffer;
-    if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+    if( o3tl::make_unsigned(2*aText.getLength()) > std::size(nDXBuffer) )
     {
         pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
         pDX = pDXBuffer.get();

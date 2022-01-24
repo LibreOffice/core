@@ -69,7 +69,7 @@ Entry const CtrlIdToResIdTable[] = {
     { FILE_PICKER_FILE_TYPE,                    STR_FILEDLG_TYPE }
 };
 
-const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
+const sal_Int32 SIZE_TABLE = std::size( CtrlIdToResIdTable );
 
 static TranslateId CtrlIdToResId(sal_Int32 aControlId)
 {

@@ -36,7 +36,7 @@ extern "C" bool WNT_hasInternetConnection()
     bool fIsConnected = InternetGetConnectedStateExW(
         &dwFlags,
         szConnectionName,
-        SAL_N_ELEMENTS(szConnectionName),
+        std::size(szConnectionName),
         0 );
 
     return fIsConnected;

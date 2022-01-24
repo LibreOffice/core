@@ -278,7 +278,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
 
     TranslateId pResId;
 
-    sal_uInt32 const nCount = SAL_N_ELEMENTS( aSotResourcePairs );
+    sal_uInt32 const nCount = std::size( aSotResourcePairs );
     for (sal_uInt32 i = 0; ( i < nCount ) && !pResId; ++i)
     {
         if( aSotResourcePairs[ i ].mnSotId == nId )

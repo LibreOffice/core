@@ -172,7 +172,7 @@ PPPOptimizerTokenEnum TKGet( const OUString& rToken )
         {
             TypeNameHashMap* pH = new TypeNameHashMap;
             const TokenTable* pPtr = pTokenTableArray;
-            const TokenTable* pEnd = pPtr + SAL_N_ELEMENTS( pTokenTableArray );
+            const TokenTable* pEnd = pPtr + std::size( pTokenTableArray );
             for ( ; pPtr < pEnd; pPtr++ )
                 (*pH)[ pPtr->pS ] = pPtr->pE;
             pHashMap = pH;

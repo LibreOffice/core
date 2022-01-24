@@ -103,7 +103,7 @@ static void traceTrustStatus(DWORD err)
 {
     if (err == 0)
         SAL_INFO("xmlsecurity.xmlsec", "  " << arErrStrings[0].name);
-    for (std::size_t i = 1; i < SAL_N_ELEMENTS(arErrStrings); i++)
+    for (std::size_t i = 1; i < std::size(arErrStrings); i++)
     {
         if (arErrStrings[i].error & err)
             SAL_INFO("xmlsecurity.xmlsec", "  " << arErrStrings[i].name);

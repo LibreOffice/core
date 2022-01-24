@@ -389,7 +389,7 @@ PixmapHolder::PixmapHolder( Display* pDisplay )
         << ", class = "
         << ((m_aInfo.c_class >= 0 &&
                 unsigned(m_aInfo.c_class) <
-                SAL_N_ELEMENTS(pClasses)) ?
+                std::size(pClasses)) ?
             pClasses[m_aInfo.c_class] :
             "<unknown>")
         << " ("

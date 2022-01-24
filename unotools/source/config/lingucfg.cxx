@@ -268,7 +268,7 @@ uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
 {
     uno::Sequence< OUString > aNames;
 
-    sal_Int32 nMax = SAL_N_ELEMENTS(aNamesToHdl);
+    sal_Int32 nMax = std::size(aNamesToHdl);
 
     aNames.realloc( nMax );
     OUString *pNames = aNames.getArray();

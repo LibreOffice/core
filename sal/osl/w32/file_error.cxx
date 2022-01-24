@@ -101,13 +101,10 @@ const struct osl_file_error_entry errtable[] = {
 
 oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError)
 {
-    static const int n = SAL_N_ELEMENTS(errtable);
-
-    int i;
-    for (i = 0; i < n; ++i )
+    for (const auto& err : errtable)
     {
-        if (dwError == errtable[i].oscode)
-            return static_cast<oslFileError>(errtable[i].errnocode);
+        if (dwError == err.oscode)
+            return static_cast<oslFileError>(err.errnocode);
     }
 
     /* The error code wasn't in the table.  We check for a range of

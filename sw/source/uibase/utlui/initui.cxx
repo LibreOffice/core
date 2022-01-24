@@ -135,7 +135,7 @@ ShellResource::ShellResource()
     sPageDescFollowName(    SwResId(STR_PAGEDESC_FOLLOWNAME)),
     sPageDescName(          SwResId(STR_PAGEDESC_NAME))
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(FLD_DOCINFO_ARY); ++i)
+    for (size_t i = 0; i < std::size(FLD_DOCINFO_ARY); ++i)
         aDocInfoLst.push_back(SwResId(FLD_DOCINFO_ARY[i]));
 }
 
@@ -185,7 +185,7 @@ void ShellResource::GetAutoFormatNameLst_() const
     mxAutoFormatNameLst.emplace();
     mxAutoFormatNameLst->reserve(STR_AUTOFMTREDL_END);
 
-    static_assert(SAL_N_ELEMENTS(RID_SHELLRES_AUTOFMTSTRS) == STR_AUTOFMTREDL_END);
+    static_assert(std::size(RID_SHELLRES_AUTOFMTSTRS) == STR_AUTOFMTREDL_END);
     for (sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n)
     {
         OUString p(SwResId(RID_SHELLRES_AUTOFMTSTRS[n]));

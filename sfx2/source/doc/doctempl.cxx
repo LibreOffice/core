@@ -529,9 +529,9 @@ OUString SfxDocumentTemplates::ConvertResourceString(const OUString& rString)
         STR_TEMPLATE_NAME30
     };
 
-    static_assert(SAL_N_ELEMENTS(aTemplateNames) == SAL_N_ELEMENTS(STR_TEMPLATE_NAME));
+    static_assert(std::size(aTemplateNames) == std::size(STR_TEMPLATE_NAME));
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(STR_TEMPLATE_NAME); ++i)
+    for (size_t i = 0; i < std::size(STR_TEMPLATE_NAME); ++i)
     {
         if (rString == aTemplateNames[i])
             return SfxResId(STR_TEMPLATE_NAME[i]);

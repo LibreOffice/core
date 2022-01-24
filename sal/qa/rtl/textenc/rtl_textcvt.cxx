@@ -1287,7 +1287,7 @@ void Test::testSingleByte() {
                 0x0438,0x0439,0x043A,0x043B,0x043C,0x043D,0x043E,0x043F,
                 0x0440,0x0441,0x0442,0x0443,0x0444,0x0445,0x0446,0x0447,
                 0x0448,0x0449,0x044A,0x044B,0x044C,0x044D,0x044E,0x044F } } };
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
+    for (std::size_t i = 0; i < std::size(data); ++i) {
         testSingleByteCharSet(data[i]);
     }
 }
@@ -2562,7 +2562,7 @@ void Test::testComplex() {
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR }
 #endif
         };
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
+    for (std::size_t i = 0; i < std::size(data); ++i) {
         doComplexCharSetTest(data[i]);
     }
 }
@@ -2657,7 +2657,7 @@ void Test::testComplexCut() {
               false,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR } */ };
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
+    for (std::size_t i = 0; i < std::size(data); ++i) {
         doComplexCharSetCutTest(data[i]);
     }
 #endif
@@ -2990,7 +2990,7 @@ void Test::testInvalidUnicode() {
     sal_uInt32 info;
     sal_Size converted;
     auto const size = rtl_convertUnicodeToText(
-        converter, nullptr, input, SAL_N_ELEMENTS(input), buf, TEST_STRING_SIZE,
+        converter, nullptr, input, std::size(input), buf, TEST_STRING_SIZE,
         (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
          | RTL_UNICODETOTEXT_FLAGS_FLUSH),
         &info, &converted);
@@ -3014,7 +3014,7 @@ void Test::testSRCBUFFERTOSMALL() {
     CPPUNIT_ASSERT_EQUAL(
         sal_Size(0),
         rtl_convertTextToUnicode(
-            cv, cx, &src, 1, dst, SAL_N_ELEMENTS(dst),
+            cv, cx, &src, 1, dst, std::size(dst),
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR),
@@ -3123,7 +3123,7 @@ void Test::testMime() {
         { "CP154", RTL_TEXTENCODING_PT154, false },
         { "Cyrillic-Asian", RTL_TEXTENCODING_PT154, false }
     };
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
+    for (std::size_t i = 0; i < std::size(data); ++i) {
         if (data[i].mime == nullptr) {
             OSL_ASSERT(data[i].reverse);
             CPPUNIT_ASSERT_EQUAL(
@@ -3224,7 +3224,7 @@ void Test::testWindows() {
         { 0, RTL_TEXTENCODING_UCS2, true },
         { 57002, RTL_TEXTENCODING_ISCII_DEVANAGARI, true }
     };
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
+    for (std::size_t i = 0; i < std::size(data); ++i) {
         OSL_ASSERT(data[i].codePage != 0 || data[i].reverse);
         if (data[i].codePage != 0) {
             CPPUNIT_ASSERT_EQUAL(
@@ -3298,7 +3298,7 @@ void Test::testInfo() {
         { RTL_TEXTENCODING_PT154, RTL_TEXTENCODING_INFO_ASCII, true },
         { RTL_TEXTENCODING_PT154, RTL_TEXTENCODING_INFO_MIME, true }
     };
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
+    for (std::size_t i = 0; i < std::size(data); ++i) {
         rtl_TextEncodingInfo info;
         info.StructSize = sizeof info;
         CPPUNIT_ASSERT(rtl_getTextEncodingInfo(data[i].encoding, &info));

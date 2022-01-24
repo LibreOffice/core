@@ -26,7 +26,6 @@
 #include "StdAfx2.h"
 
 #include "SOActionsApproval.h"
-#include <sal/macros.h>
 
 #if defined __clang__
 #pragma clang diagnostic push
@@ -43,13 +42,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP SOActionsApproval::InterfaceSupportsErrorInfo(
         &IID_ISOActionsApproval,
     };
 
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(arr); i++)
+    for (const auto* pIID : arr)
     {
-#ifdef _MSC_VER
-        if (InlineIsEqualGUID(*arr[i], riid))
-#else
-        if (::ATL::InlineIsEqualGUID(*arr[i], riid))
-#endif
+        if (InlineIsEqualGUID(*pIID, riid))
             return S_OK;
     }
     return S_FALSE;

@@ -449,7 +449,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
                 for (sal_Int32 i = 1 ; i <= nCount ; ++i)
                 {
                     sColumnName = xMeta->getColumnName(i);
-                    for (size_t j = 0 ; j < SAL_N_ELEMENTS(sPrivs); ++j)
+                    for (size_t j = 0 ; j < std::size(sPrivs); ++j)
                     {
                         if ( sPrivs[j] == sColumnName )
                         {

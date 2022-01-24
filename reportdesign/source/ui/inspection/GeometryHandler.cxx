@@ -1206,7 +1206,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
             break;
         case PROPERTY_ID_TYPE:
             {
-                if (m_nDataFieldType < SAL_N_ELEMENTS(RID_STR_TYPE_CONST) - 1)
+                if (m_nDataFieldType < std::size(RID_STR_TYPE_CONST) - 1)
                     aControlValue <<= RptResId(RID_STR_TYPE_CONST[m_nDataFieldType]);
             }
             break;
@@ -1214,7 +1214,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
             {
                 style::VerticalAlignment nParagraphVertAlign = style::VerticalAlignment_TOP;
                 aPropertyValue >>= nParagraphVertAlign;
-                if (sal_uInt32(nParagraphVertAlign) < SAL_N_ELEMENTS(RID_STR_VERTICAL_ALIGN_CONST) - 1)
+                if (sal_uInt32(nParagraphVertAlign) < std::size(RID_STR_VERTICAL_ALIGN_CONST) - 1)
                     aControlValue <<= RptResId(RID_STR_VERTICAL_ALIGN_CONST[static_cast<sal_uInt32>(nParagraphVertAlign)]);
             }
             break;
@@ -1222,7 +1222,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
             {
                 sal_Int16 nParagraphAdjust = sal_Int16(style::ParagraphAdjust_LEFT);
                 aPropertyValue >>= nParagraphAdjust;
-                if (o3tl::make_unsigned(nParagraphAdjust) < SAL_N_ELEMENTS(RID_STR_PARAADJUST_CONST) - 1)
+                if (o3tl::make_unsigned(nParagraphAdjust) < std::size(RID_STR_PARAADJUST_CONST) - 1)
                     aControlValue <<= RptResId(RID_STR_PARAADJUST_CONST[nParagraphAdjust]);
             }
             break;

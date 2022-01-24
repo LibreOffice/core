@@ -299,10 +299,10 @@ bool Standard2007Engine::readEncryptionInfo(css::uno::Reference<css::io::XInputS
     aBinaryStream.skip(nHeaderSize - actualHeaderSize);
 
     mInfo.verifier.saltSize = aBinaryStream.readuInt32();
-    aBinaryStream.readArray(mInfo.verifier.salt, SAL_N_ELEMENTS(mInfo.verifier.salt));
-    aBinaryStream.readArray(mInfo.verifier.encryptedVerifier, SAL_N_ELEMENTS(mInfo.verifier.encryptedVerifier));
+    aBinaryStream.readArray(mInfo.verifier.salt, std::size(mInfo.verifier.salt));
+    aBinaryStream.readArray(mInfo.verifier.encryptedVerifier, std::size(mInfo.verifier.encryptedVerifier));
     mInfo.verifier.encryptedVerifierHashSize = aBinaryStream.readuInt32();
-    aBinaryStream.readArray(mInfo.verifier.encryptedVerifierHash, SAL_N_ELEMENTS(mInfo.verifier.encryptedVerifierHash));
+    aBinaryStream.readArray(mInfo.verifier.encryptedVerifierHash, std::size(mInfo.verifier.encryptedVerifierHash));
 
     if (mInfo.verifier.saltSize != 16)
         return false;

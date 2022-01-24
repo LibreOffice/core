@@ -120,7 +120,7 @@ private:
         "com.sun.star.script.InvocationAdapterFactory",
         "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"
     };
-    for (::std::size_t i = 0; i < SAL_N_ELEMENTS(services); ++i) {
+    for (::std::size_t i = 0; i < std::size(services); ++i) {
         ::rtl::OUString name(::rtl::OUString::createFromAscii(services[i]));
         css::uno::Reference< css::uno::XInterface > instance;
         try {
@@ -165,7 +165,7 @@ private:
     static char const * const singletons[] = {
         "com.sun.star.reflection.theTypeDescriptionManager"
     };
-    for (std::size_t i = 0; i != SAL_N_ELEMENTS(singletons); ++i) {
+    for (std::size_t i = 0; i != std::size(singletons); ++i) {
         css::uno::Reference< css::uno::XInterface > instance(
             context_->getValueByName(
                 "/singletons/" + rtl::OUString::createFromAscii(singletons[i])),

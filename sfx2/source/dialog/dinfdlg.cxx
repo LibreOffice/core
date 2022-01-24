@@ -1289,7 +1289,7 @@ namespace
 {
     void fillNameBox(weld::ComboBox& rNameBox)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_CB_PROPERTY_STRINGARRAY); ++i)
+        for (size_t i = 0; i < std::size(SFX_CB_PROPERTY_STRINGARRAY); ++i)
             rNameBox.append_text(SfxResId(SFX_CB_PROPERTY_STRINGARRAY[i]));
         Size aSize(rNameBox.get_preferred_size());
         rNameBox.set_size_request(aSize.Width(), aSize.Height());
@@ -1297,7 +1297,7 @@ namespace
 
     void fillTypeBox(weld::ComboBox& rTypeBox)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_LB_PROPERTY_STRINGARRAY); ++i)
+        for (size_t i = 0; i < std::size(SFX_LB_PROPERTY_STRINGARRAY); ++i)
         {
             OUString sId(OUString::number(SFX_LB_PROPERTY_STRINGARRAY[i].second));
             rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[i].first));

@@ -203,7 +203,7 @@ void SdLayoutTest::testColumnsLayout()
     xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(strings); ++i)
+    for (size_t i = 0; i < std::size(strings); ++i)
     {
         const auto & [ sentence, index, length, x, y ] = strings[i];
         OString sXPath = "/metafile/push[1]/push[1]/textarray[" + OString::number(i + 1) + "]";
@@ -254,9 +254,9 @@ void SdLayoutTest::tdf143258_testTbRlLayout()
     xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/font", SAL_N_ELEMENTS(strings));
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", SAL_N_ELEMENTS(strings));
-    for (size_t i = 0; i < SAL_N_ELEMENTS(strings); ++i)
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/font", std::size(strings));
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", std::size(strings));
+    for (size_t i = 0; i < std::size(strings); ++i)
     {
         const auto & [ sentence, index, length, x, y ] = strings[i];
         OString sXPath = "/metafile/push[1]/push[1]/font[" + OString::number(i + 1) + "]";

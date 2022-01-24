@@ -68,7 +68,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
             WCHAR chTopicBuf[250];
             if( hText1 )
                 DdeQueryStringW( pInst->hDdeInstSvr, hText1, chTopicBuf,
-                                SAL_N_ELEMENTS(chTopicBuf), CP_WINUNICODE );
+                                std::size(chTopicBuf), CP_WINUNICODE );
 
             for (auto& rpService : rAll)
             {
@@ -376,7 +376,7 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
 
         // Let's query our subclass
         WCHAR chBuf[250];
-        DdeQueryStringW(pInst->hDdeInstSvr,hItem,chBuf,SAL_N_ELEMENTS(chBuf),CP_WINUNICODE );
+        DdeQueryStringW(pInst->hDdeInstSvr,hItem,chBuf,std::size(chBuf),CP_WINUNICODE );
         bContinue = rTopic.MakeItem( OUString(o3tl::toU(chBuf)) );
         // We need to search again
     }
@@ -832,7 +832,7 @@ OUString DdeService::Formats()
         default:
             {
                 WCHAR buf[128];
-                GetClipboardFormatNameW( f, buf, SAL_N_ELEMENTS(buf) );
+                GetClipboardFormatNameW( f, buf, std::size(buf) );
                 s += o3tl::toU(buf);
             }
             break;

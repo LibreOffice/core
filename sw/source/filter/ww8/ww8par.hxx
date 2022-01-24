@@ -1069,7 +1069,7 @@ struct WW8TabBandDesc
 
     sal_uInt8 transCell(sal_uInt8 nWwCol) const
     {
-        return nWwCol < SAL_N_ELEMENTS(nTransCell) ? nTransCell[nWwCol] : 0xFF;
+        return nWwCol < std::size(nTransCell) ? nTransCell[nWwCol] : 0xFF;
     }
 
     WW8TabBandDesc();

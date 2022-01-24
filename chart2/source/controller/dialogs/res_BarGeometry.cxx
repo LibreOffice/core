@@ -27,10 +27,9 @@ BarGeometryResources::BarGeometryResources(weld::Builder* pBuilder)
     : m_xFT_Geometry(pBuilder->weld_label("shapeft"))
     , m_xLB_Geometry(pBuilder->weld_tree_view("shape"))
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(CHART_TYPE); ++i)
+    for (size_t i = 0; i < std::size(CHART_TYPE); ++i)
         m_xLB_Geometry->append_text(SchResId(CHART_TYPE[i]));
-    m_xLB_Geometry->set_size_request(-1,
-                                     m_xLB_Geometry->get_height_rows(SAL_N_ELEMENTS(CHART_TYPE)));
+    m_xLB_Geometry->set_size_request(-1, m_xLB_Geometry->get_height_rows(std::size(CHART_TYPE)));
 }
 
 void BarGeometryResources::connect_changed(const Link<weld::TreeView&, void>& rLink)

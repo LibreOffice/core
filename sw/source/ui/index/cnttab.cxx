@@ -750,7 +750,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
 
     m_xFromObjCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RES_SRCTYPES); ++i)
+    for (size_t i = 0; i < std::size(RES_SRCTYPES); ++i)
     {
         OUString sId(OUString::number(static_cast<sal_uInt32>(RES_SRCTYPES[i].second)));
         m_xFromObjCLB->append();
@@ -759,7 +759,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
         m_xFromObjCLB->set_id(i, sId);
     }
     m_xFromObjCLB->set_size_request(-1, std::max<int>(m_xFromObjCLB->get_preferred_size().Height(),
-                                                      m_xFromObjCLB->get_height_rows(SAL_N_ELEMENTS(RES_SRCTYPES))) + 2);
+                                                      m_xFromObjCLB->get_height_rows(std::size(RES_SRCTYPES))) + 2);
 
     SetExchangeSupport();
     m_xTypeLB->connect_changed(LINK(this, SwTOXSelectTabPage, TOXTypeHdl));

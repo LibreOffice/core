@@ -725,9 +725,9 @@ void SdOOXMLExportTest2::testPresetShapesExport()
     const OString sPropertyFmla("fmla");
 
     size_t i = 0;
-    while(i < SAL_N_ELEMENTS( sShapeTypeAndValues )) {
+    while(i < std::size( sShapeTypeAndValues )) {
         OString sType( sShapeTypeAndValues[ i++ ] );
-        for ( size_t j = 1 ; i < SAL_N_ELEMENTS( sShapeTypeAndValues ) && OString(sShapeTypeAndValues[i]).startsWith("adj") ; ++j ) {
+        for ( size_t j = 1 ; i < std::size( sShapeTypeAndValues ) && OString(sShapeTypeAndValues[i]).startsWith("adj") ; ++j ) {
             OString sXPath= sPattern.replaceFirst( sT, sType).replaceFirst( sN, OString::number(j) );
             assertXPath(pXmlDocCT, sXPath, sPropertyName , OUString::createFromAscii(sShapeTypeAndValues[ i++ ]) );
             assertXPath(pXmlDocCT, sXPath, sPropertyFmla , OUString::createFromAscii(sShapeTypeAndValues[ i++ ]) );
@@ -1093,7 +1093,7 @@ void SdOOXMLExportTest2::testTdf111798()
         }
     };
 
-    for (size_t nShapeIndex = 0; nShapeIndex < SAL_N_ELEMENTS(data); nShapeIndex++)
+    for (size_t nShapeIndex = 0; nShapeIndex < std::size(data); nShapeIndex++)
     {
         size_t nDataIndex = 0;
 
@@ -1107,7 +1107,7 @@ void SdOOXMLExportTest2::testTdf111798()
         assertXPath(pXmlDoc, sExt, "cx", data[nShapeIndex][nDataIndex++]);
         assertXPath(pXmlDoc, sExt, "cy", data[nShapeIndex][nDataIndex++]);
 
-        while (nDataIndex < SAL_N_ELEMENTS(data[nShapeIndex]))
+        while (nDataIndex < std::size(data[nShapeIndex]))
         {
             const OString sPt = sSpPr + "/a:custGeom/a:pathLst/a:path/a:" + data[nShapeIndex][nDataIndex++].toUtf8() + "/a:pt";
             assertXPath(pXmlDoc, sPt, "x", data[nShapeIndex][nDataIndex++]);
@@ -1240,7 +1240,7 @@ void SdOOXMLExportTest2::testRotateFlip()
     const OUString points[][2] = { {"221", "293"},     {"506", "12" },     {"367", "0"  },     {"29",  "406"},     {"431", "347"},    {"145", "645"},
                                    {"99",  "520"},     {"0",   "861"},     {"326", "765"},     {"209", "711"},     {"640", "233"},    {"640", "233"} };
 
-    for (size_t nShapeIndex = 0; nShapeIndex < SAL_N_ELEMENTS(data); nShapeIndex++)
+    for (size_t nShapeIndex = 0; nShapeIndex < std::size(data); nShapeIndex++)
     {
         size_t nDataIndex = 0;
 
@@ -1258,7 +1258,7 @@ void SdOOXMLExportTest2::testRotateFlip()
         assertXPath(pXmlDocContent, sExt, "cx", "1800000");
         assertXPath(pXmlDocContent, sExt, "cy", "3600000");
 
-        for (size_t nPointIndex = 0; nPointIndex < SAL_N_ELEMENTS(points); nPointIndex++)
+        for (size_t nPointIndex = 0; nPointIndex < std::size(points); nPointIndex++)
         {
             const OString sPt = sSpPr + "/a:custGeom/a:pathLst/a:path/a:lnTo[" + OString::number(nPointIndex + 1) + "]/a:pt";
             assertXPath(pXmlDocContent, sPt, "x", points[nPointIndex][0]);

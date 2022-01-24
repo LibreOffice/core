@@ -103,7 +103,7 @@ static uno::Sequence< OUString > lcl_getImageOptionals()
             , OUString(PROPERTY_CHARLOCALECOMPLEX)
 
     };
-    return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
+    return uno::Sequence< OUString >(pProps,std::size(pProps));
 }
 
 

@@ -102,7 +102,7 @@ namespace
     };
 
     /* size of the table */
-    #define ERRTABLESIZE (SAL_N_ELEMENTS(errtable))
+    #define ERRTABLESIZE (std::size(errtable))
 
     /* The following two constants must be the minimum and maximum
     values in the (contiguous) range of osl_File_E_xec Failure errors. */
@@ -313,7 +313,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                         {}, 0);
                 }
                 WIN32_FIND_DATAW wfd;
-                e2 = link->GetPath(path, SAL_N_ELEMENTS(path), &wfd, SLGP_RAWPATH);
+                e2 = link->GetPath(path, std::size(path), &wfd, SLGP_RAWPATH);
                 if (FAILED(e2)) {
                     throw css::lang::IllegalArgumentException(
                         ("XSystemShellExecute.execute, IShellLink.GetPath failed with "

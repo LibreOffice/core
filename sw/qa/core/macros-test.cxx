@@ -108,7 +108,7 @@ void SwMacrosTest::testVba()
             OUString("vnd.sun.Star.script:Project.NewMacros.Macro1?language=Basic&location=document")
         }
     };
-    for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
+    for ( size_t  i=0; i<std::size( testInfo ); ++i )
     {
         OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName, u"doc", aFileName);
