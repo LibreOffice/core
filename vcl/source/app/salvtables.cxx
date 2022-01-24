@@ -6995,8 +6995,10 @@ void SalInstanceWindow::help()
 {
     //show help for widget with keyboard focus
     vcl::Window* pWidget = ImplGetSVData()->mpWinData->mpFocusWin;
-    if (!pWidget || comphelper::LibreOfficeKit::isActive())
+    if (!pWidget)
         pWidget = m_xWindow;
+    if (comphelper::LibreOfficeKit::isActive() && m_xWindow->GetFocusedWindow())
+        pWidget = m_xWindow->GetFocusedWindow();
     OString sHelpId = pWidget->GetHelpId();
     while (sHelpId.isEmpty())
     {
