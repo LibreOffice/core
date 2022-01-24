@@ -474,7 +474,7 @@ void SdExportTest::testSwappedOutImageExport()
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), xBatch);
     xBatch->commit();
 
-    for( size_t nExportFormat = 0; nExportFormat < SAL_N_ELEMENTS(vFormats); ++nExportFormat )
+    for( size_t nExportFormat = 0; nExportFormat < std::size(vFormats); ++nExportFormat )
     {
         // Load the original file with one image
         ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/document_with_two_images.odp"), ODP);
@@ -697,7 +697,7 @@ void SdExportTest::testLinkedGraphicRT()
 //      PPTX, -> this fails now, need a fix
     };
 
-    for( size_t nExportFormat = 0; nExportFormat < SAL_N_ELEMENTS(vFormats); ++nExportFormat )
+    for( size_t nExportFormat = 0; nExportFormat < std::size(vFormats); ++nExportFormat )
     {
         // Load the original file with one image
         sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/document_with_linked_graphic.odp"), ODP);
@@ -808,7 +808,7 @@ void SdExportTest::testImageWithSpecialID()
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), batch);
     batch->commit();
 
-    for( size_t nExportFormat = 0; nExportFormat < SAL_N_ELEMENTS(vFormats); ++nExportFormat )
+    for( size_t nExportFormat = 0; nExportFormat < std::size(vFormats); ++nExportFormat )
     {
         // Load the original file
         ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/images_with_special_IDs.odp"), ODP);

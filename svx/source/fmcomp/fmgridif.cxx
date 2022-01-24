@@ -1558,7 +1558,7 @@ void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
     // as not all properties have to be supported by all columns we have to check this
     // before adding a listener
     Reference< XPropertySetInfo > xInfo = xCol->getPropertySetInfo();
-    for (size_t i=0; i<SAL_N_ELEMENTS(aPropsListenedTo); ++i)
+    for (size_t i=0; i<std::size(aPropsListenedTo); ++i)
     {
         if ( xInfo->hasPropertyByName( aPropsListenedTo[i] ) )
         {
@@ -2644,7 +2644,7 @@ Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
             FMURL_RECORD_MOVETONEW,
             FMURL_RECORD_UNDO
         };
-        Sequence< css::util::URL> tmp(SAL_N_ELEMENTS(sSupported));
+        Sequence< css::util::URL> tmp(std::size(sSupported));
         css::util::URL* pSupported = tmp.getArray();
 
         for ( sal_Int32 i = 0; i < tmp.getLength(); ++i, ++pSupported)

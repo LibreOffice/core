@@ -1187,11 +1187,11 @@ XclImpDecrypterRef lclReadFilepass8_Strong(XclImpStream& rStream)
 
     xDecr = std::make_shared<XclImpBiff8CryptoAPIDecrypter>(
         std::vector<sal_uInt8>(info.verifier.salt,
-            info.verifier.salt + SAL_N_ELEMENTS(info.verifier.salt)),
+            info.verifier.salt + std::size(info.verifier.salt)),
         std::vector<sal_uInt8>(info.verifier.encryptedVerifier,
-            info.verifier.encryptedVerifier + SAL_N_ELEMENTS(info.verifier.encryptedVerifier)),
+            info.verifier.encryptedVerifier + std::size(info.verifier.encryptedVerifier)),
         std::vector<sal_uInt8>(info.verifier.encryptedVerifierHash,
-            info.verifier.encryptedVerifierHash + SAL_N_ELEMENTS(info.verifier.encryptedVerifierHash)));
+            info.verifier.encryptedVerifierHash + std::size(info.verifier.encryptedVerifierHash)));
 
     return xDecr;
 }

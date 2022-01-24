@@ -75,9 +75,9 @@ const char* const sppcBaseNames[] =
 
 OUString lclGetBaseName( sal_Unicode cBuiltinId )
 {
-    OSL_ENSURE( cBuiltinId < SAL_N_ELEMENTS( sppcBaseNames ), "lclGetBaseName - unsupported built-in identifier" );
+    OSL_ENSURE( cBuiltinId < std::size( sppcBaseNames ), "lclGetBaseName - unsupported built-in identifier" );
     OUStringBuffer aBuffer;
-    if( cBuiltinId < SAL_N_ELEMENTS( sppcBaseNames ) )
+    if( cBuiltinId < std::size( sppcBaseNames ) )
         aBuffer.appendAscii( sppcBaseNames[ cBuiltinId ] );
     else
         aBuffer.append( static_cast< sal_Int32 >( cBuiltinId ) );
@@ -94,7 +94,7 @@ sal_Unicode lclGetBuiltinIdFromPrefixedName( const OUString& rModelName )
 {
     if( rModelName.matchIgnoreAsciiCase( spcOoxPrefix ) )
     {
-        for( sal_Unicode cBuiltinId = 0; cBuiltinId < SAL_N_ELEMENTS( sppcBaseNames ); ++cBuiltinId )
+        for( sal_Unicode cBuiltinId = 0; cBuiltinId < std::size( sppcBaseNames ); ++cBuiltinId )
         {
             OUString aBaseName = lclGetBaseName( cBuiltinId );
             sal_Int32 nBaseNameLen = aBaseName.getLength();
@@ -108,7 +108,7 @@ sal_Unicode lclGetBuiltinIdFromPrefixedName( const OUString& rModelName )
 /** returns the built-in name identifier from a built-in base name, e.g. 'Print_Area'. */
 sal_Unicode lclGetBuiltinIdFromBaseName( const OUString& rModelName )
 {
-    for( sal_Unicode cBuiltinId = 0; cBuiltinId < SAL_N_ELEMENTS( sppcBaseNames ); ++cBuiltinId )
+    for( sal_Unicode cBuiltinId = 0; cBuiltinId < std::size( sppcBaseNames ); ++cBuiltinId )
         if( rModelName.equalsIgnoreAsciiCaseAscii( sppcBaseNames[ cBuiltinId ] ) )
             return cBuiltinId;
     return BIFF_DEFNAME_UNKNOWN;

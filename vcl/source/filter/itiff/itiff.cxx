@@ -572,7 +572,7 @@ bool TIFFReader::ReadMap()
         {
             for (sal_uInt32 np = 0; np < nPlanes; ++np)
             {
-                if (np >= SAL_N_ELEMENTS(aMap))
+                if (np >= std::size(aMap))
                     return false;
                 sal_uInt32 nStrip = ny / GetRowsPerStrip() + np * nStripsPerPlane;
                 if ( nStrip >= aStripOffsets.size())
@@ -645,7 +645,7 @@ bool TIFFReader::ReadMap()
                     pTIFF->Seek(nOffset);
                     aCCIDecom.StartDecompression( *pTIFF );
                 }
-                if (np >= SAL_N_ELEMENTS(aMap))
+                if (np >= std::size(aMap))
                     return false;
                 DecompressStatus aResult = aCCIDecom.DecompressScanline(getMapData(np), nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes, np + 1 == nPlanes);
                 if (!aResult.m_bSuccess)
@@ -694,7 +694,7 @@ bool TIFFReader::ReadMap()
                     pTIFF->Seek(aStripOffsets[nStrip]);
                     aLZWDecom.StartDecompression(*pTIFF);
                 }
-                if (np >= SAL_N_ELEMENTS(aMap))
+                if (np >= std::size(aMap))
                     return false;
                 if ( ( aLZWDecom.Decompress(getMapData(np), nBytesPerRow) != nBytesPerRow ) || pTIFF->GetError() )
                     return false;
@@ -726,7 +726,7 @@ bool TIFFReader::ReadMap()
                     pTIFF->Seek(aStripOffsets[nStrip]);
                 }
                 sal_uInt32 nRowBytesLeft = nBytesPerRow;
-                if (np >= SAL_N_ELEMENTS(aMap))
+                if (np >= std::size(aMap))
                     return false;
                 sal_uInt8* pdst = getMapData(np);
                 do
@@ -1512,7 +1512,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
             if ( bStatus )
             {
                 sal_uInt64 nRowSize = (static_cast<sal_uInt64>(nImageWidth) * nSamplesPerPixel / nPlanes * nBitsPerSample + 7) >> 3;
-                auto nMaxSize = SAL_MAX_INT32 / SAL_N_ELEMENTS(aMap);
+                auto nMaxSize = SAL_MAX_INT32 / std::size(aMap);
                 if (utl::ConfigManager::IsFuzzing())
                     nMaxSize /= 2;
                 if (nRowSize > nMaxSize)
@@ -1536,7 +1536,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     else
                         nStripBytesPerRow = ( nBytesPerRow + 1 ) & 0xfffffffe;
                     sal_uInt32 np = nPlanes - 1;
-                    if (np >= SAL_N_ELEMENTS(aMap))
+                    if (np >= std::size(aMap))
                         bStatus = false;
                     sal_Int32 ny = nImageLength - 1;
                     sal_uInt32 nStrip(0);
@@ -1563,7 +1563,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     else if (nCompression == 4 && nGroup4Options & 0xffffffff)
                         bStatus = false;
                     sal_uInt32 np = nPlanes - 1;
-                    if (np >= SAL_N_ELEMENTS(aMap))
+                    if (np >= std::size(aMap))
                         bStatus = false;
                     sal_Int32 ny = nImageLength - 1;
                     sal_uInt32 nStrip(0);
@@ -1593,7 +1593,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 else if (nCompression == 5)
                 {
                     sal_uInt32 np = nPlanes - 1;
-                    if (np >= SAL_N_ELEMENTS(aMap))
+                    if (np >= std::size(aMap))
                         bStatus = false;
                     sal_Int32 ny = nImageLength - 1;
                     sal_uInt32 nStrip(0);

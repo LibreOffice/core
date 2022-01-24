@@ -934,7 +934,7 @@ void createFromCodePoints::test() {
         OUString(static_cast< sal_uInt32 const * >(nullptr), 0).getLength());
     sal_uInt32 cp[] = { 0, 0xD800, 0xFFFF, 0x10000, 0x10FFFF };
         // non-const, to avoid loplugin:stringliteralvar
-    OUString s(cp, SAL_N_ELEMENTS(cp));
+    OUString s(cp, std::size(cp));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), s.getLength());
     CPPUNIT_ASSERT_EQUAL(u'\0', s[0]);
     CPPUNIT_ASSERT_EQUAL(u'\xD800', s[1]);

@@ -395,7 +395,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             }
             else
             {
-                tools::Polygon aPoly( SAL_N_ELEMENTS(aAccentPos), aAccentPos,
+                tools::Polygon aPoly( std::size(aAccentPos), aAccentPos,
                                       aAccentPolyFlags );
                 double dScale = static_cast<double>(nDotSize)/1000.0;
                 aPoly.Scale( dScale, dScale );

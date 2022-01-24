@@ -2320,7 +2320,7 @@ void SlideshowImpl::hideChildWindows()
     if( !pViewFrame )
         return;
 
-    for( sal_uLong i = 0; i < SAL_N_ELEMENTS( aShowChildren ); i++ )
+    for( sal_uLong i = 0; i < std::size( aShowChildren ); i++ )
     {
         const sal_uInt16 nId = ( *aShowChildren[ i ] )();
 
@@ -2339,7 +2339,7 @@ void SlideshowImpl::showChildWindows()
         SfxViewFrame* pViewFrame = getViewFrame();
         if( pViewFrame )
         {
-            for( sal_uLong i = 0; i < SAL_N_ELEMENTS(aShowChildren); i++ )
+            for( sal_uLong i = 0; i < std::size(aShowChildren); i++ )
             {
                 if( mnChildMask & ( ::tools::ULong(1) << i ) )
                     pViewFrame->SetChildWindow( ( *aShowChildren[ i ] )(), true );

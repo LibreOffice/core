@@ -139,7 +139,7 @@ bool IsOEMCP( sal_uInt32 codepage )
                               861, 862, 863, 864, 865, 866,
                               869, 874, 932, 936, 949, 950, 1361 };
 
-    for ( size_t i = 0; i < SAL_N_ELEMENTS( arrOEMCP ); ++i )
+    for ( size_t i = 0; i < std::size( arrOEMCP ); ++i )
         if ( arrOEMCP[i] == codepage )
             return true;
 

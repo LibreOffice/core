@@ -940,7 +940,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     const HFONT hOldFont = SelectFont(getHDC(), pFontInstance->GetHFONT());
 
     wchar_t aFaceName[LF_FACESIZE+60];
-    if( GetTextFaceW( getHDC(), SAL_N_ELEMENTS(aFaceName), aFaceName ) )
+    if( GetTextFaceW( getHDC(), std::size(aFaceName), aFaceName ) )
         rxFontMetric->SetFamilyName(OUString(o3tl::toU(aFaceName)));
 
     rxFontMetric->SetMinKashida(pFontInstance->GetKashidaWidth());

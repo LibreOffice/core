@@ -300,55 +300,55 @@ struct SwFieldPack
 const SwFieldPack aSwFields[] =
 {
     // Document
-    { SwFieldTypesEnum::ExtendedUser,       FLD_EU_ARY,         SAL_N_ELEMENTS(FLD_EU_ARY),     nullptr,          0 },
-    { SwFieldTypesEnum::Author,             nullptr,            0,                              FMT_AUTHOR_ARY,   SAL_N_ELEMENTS(FMT_AUTHOR_ARY) },
-    { SwFieldTypesEnum::Date,               FLD_DATE_ARY,       SAL_N_ELEMENTS(FLD_DATE_ARY),   nullptr,          0 },
-    { SwFieldTypesEnum::Time,               FLD_TIME_ARY,       SAL_N_ELEMENTS(FLD_TIME_ARY),   nullptr,          0 },
-    { SwFieldTypesEnum::PageNumber,         nullptr,            0,                              FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) -1 },
-    { SwFieldTypesEnum::NextPage,           nullptr,            0,                              FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) },
-    { SwFieldTypesEnum::PreviousPage,       nullptr,            0,                              FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) },
-    { SwFieldTypesEnum::Filename,           nullptr,            0,                              FMT_FF_ARY,       SAL_N_ELEMENTS(FMT_FF_ARY) },
-    { SwFieldTypesEnum::DocumentStatistics, FLD_STAT_ARY,       SAL_N_ELEMENTS(FLD_STAT_ARY),   FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) -1 },
+    { SwFieldTypesEnum::ExtendedUser,       FLD_EU_ARY,         std::size(FLD_EU_ARY),     nullptr,          0 },
+    { SwFieldTypesEnum::Author,             nullptr,            0,                              FMT_AUTHOR_ARY,   std::size(FMT_AUTHOR_ARY) },
+    { SwFieldTypesEnum::Date,               FLD_DATE_ARY,       std::size(FLD_DATE_ARY),   nullptr,          0 },
+    { SwFieldTypesEnum::Time,               FLD_TIME_ARY,       std::size(FLD_TIME_ARY),   nullptr,          0 },
+    { SwFieldTypesEnum::PageNumber,         nullptr,            0,                              FMT_NUM_ARY,      std::size(FMT_NUM_ARY) -1 },
+    { SwFieldTypesEnum::NextPage,           nullptr,            0,                              FMT_NUM_ARY,      std::size(FMT_NUM_ARY) },
+    { SwFieldTypesEnum::PreviousPage,       nullptr,            0,                              FMT_NUM_ARY,      std::size(FMT_NUM_ARY) },
+    { SwFieldTypesEnum::Filename,           nullptr,            0,                              FMT_FF_ARY,       std::size(FMT_FF_ARY) },
+    { SwFieldTypesEnum::DocumentStatistics, FLD_STAT_ARY,       std::size(FLD_STAT_ARY),   FMT_NUM_ARY,      std::size(FMT_NUM_ARY) -1 },
 
-    { SwFieldTypesEnum::Chapter,            nullptr,            0,                              FMT_CHAPTER_ARY,  SAL_N_ELEMENTS(FMT_CHAPTER_ARY) },
-    { SwFieldTypesEnum::TemplateName,       nullptr,            0,                              FMT_FF_ARY,       SAL_N_ELEMENTS(FMT_FF_ARY) },
+    { SwFieldTypesEnum::Chapter,            nullptr,            0,                              FMT_CHAPTER_ARY,  std::size(FMT_CHAPTER_ARY) },
+    { SwFieldTypesEnum::TemplateName,       nullptr,            0,                              FMT_FF_ARY,       std::size(FMT_FF_ARY) },
     { SwFieldTypesEnum::ParagraphSignature, nullptr,            0,                              nullptr,          0 },
 
     // Functions
     { SwFieldTypesEnum::ConditionalText,    nullptr,            0,                              nullptr,          0 },
     { SwFieldTypesEnum::Dropdown,           nullptr,            0,                              nullptr,          0 },
-    { SwFieldTypesEnum::Input,              FLD_INPUT_ARY,      SAL_N_ELEMENTS(FLD_INPUT_ARY),  nullptr,          0 },
+    { SwFieldTypesEnum::Input,              FLD_INPUT_ARY,      std::size(FLD_INPUT_ARY),  nullptr,          0 },
     { SwFieldTypesEnum::Macro,              nullptr,            0,                              nullptr,          0 },
-    { SwFieldTypesEnum::JumpEdit,           nullptr,            0,                              FMT_MARK_ARY,     SAL_N_ELEMENTS(FMT_MARK_ARY) },
+    { SwFieldTypesEnum::JumpEdit,           nullptr,            0,                              FMT_MARK_ARY,     std::size(FMT_MARK_ARY) },
     { SwFieldTypesEnum::CombinedChars,      nullptr,            0,                              nullptr,          0 },
     { SwFieldTypesEnum::HiddenText,         nullptr,            0,                              nullptr,          0 },
     { SwFieldTypesEnum::HiddenParagraph,    nullptr,            0,                              nullptr,          0 },
 
     // Cross-References
     { SwFieldTypesEnum::SetRef,             nullptr,            0,                              nullptr,          0 },
-    { SwFieldTypesEnum::GetRef,             nullptr,            0,                              FMT_REF_ARY,      SAL_N_ELEMENTS(FMT_REF_ARY) },
+    { SwFieldTypesEnum::GetRef,             nullptr,            0,                              FMT_REF_ARY,      std::size(FMT_REF_ARY) },
 
     // DocInformation
-    { SwFieldTypesEnum::DocumentInfo,       nullptr,            0,                              FMT_REG_ARY,      SAL_N_ELEMENTS(FMT_REG_ARY) },
+    { SwFieldTypesEnum::DocumentInfo,       nullptr,            0,                              FMT_REG_ARY,      std::size(FMT_REG_ARY) },
 
     // Database
-    { SwFieldTypesEnum::Database,           nullptr,            0,                              FMT_DBFLD_ARY,    SAL_N_ELEMENTS(FMT_DBFLD_ARY) },
+    { SwFieldTypesEnum::Database,           nullptr,            0,                              FMT_DBFLD_ARY,    std::size(FMT_DBFLD_ARY) },
     { SwFieldTypesEnum::DatabaseNextSet,    nullptr,            0,                              nullptr,          0 },
     { SwFieldTypesEnum::DatabaseNumberSet,  nullptr,            0,                              nullptr,          0 },
-    { SwFieldTypesEnum::DatabaseSetNumber,  nullptr,            0,                              FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) - 2 },
+    { SwFieldTypesEnum::DatabaseSetNumber,  nullptr,            0,                              FMT_NUM_ARY,      std::size(FMT_NUM_ARY) - 2 },
     { SwFieldTypesEnum::DatabaseName,       nullptr,            0,                              nullptr,          0 },
 
     // Variables
-    { SwFieldTypesEnum::Set,                nullptr,            0,                              FMT_SETVAR_ARY,   SAL_N_ELEMENTS(FMT_SETVAR_ARY) },
+    { SwFieldTypesEnum::Set,                nullptr,            0,                              FMT_SETVAR_ARY,   std::size(FMT_SETVAR_ARY) },
 
-    { SwFieldTypesEnum::Get,                nullptr,            0,                              FMT_GETVAR_ARY,   SAL_N_ELEMENTS(FMT_GETVAR_ARY) },
-    { SwFieldTypesEnum::DDE,                nullptr,            0,                              FMT_DDE_ARY,      SAL_N_ELEMENTS(FMT_DDE_ARY) },
-    { SwFieldTypesEnum::Formel,             nullptr,            0,                              FMT_GETVAR_ARY,   SAL_N_ELEMENTS(FMT_GETVAR_ARY) },
-    { SwFieldTypesEnum::Input,              FLD_INPUT_ARY,      SAL_N_ELEMENTS(FLD_INPUT_ARY),  nullptr,          0 },
-    { SwFieldTypesEnum::Sequence,           nullptr,            0,                              FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) - 2 },
-    { SwFieldTypesEnum::SetRefPage,         FLD_PAGEREF_ARY,    SAL_N_ELEMENTS(FLD_PAGEREF_ARY),nullptr,          0 },
-    { SwFieldTypesEnum::GetRefPage,         nullptr,            0,                              FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) - 1 },
-    { SwFieldTypesEnum::User,               nullptr,            0,                              FMT_USERVAR_ARY,  SAL_N_ELEMENTS(FMT_USERVAR_ARY) }
+    { SwFieldTypesEnum::Get,                nullptr,            0,                              FMT_GETVAR_ARY,   std::size(FMT_GETVAR_ARY) },
+    { SwFieldTypesEnum::DDE,                nullptr,            0,                              FMT_DDE_ARY,      std::size(FMT_DDE_ARY) },
+    { SwFieldTypesEnum::Formel,             nullptr,            0,                              FMT_GETVAR_ARY,   std::size(FMT_GETVAR_ARY) },
+    { SwFieldTypesEnum::Input,              FLD_INPUT_ARY,      std::size(FLD_INPUT_ARY),  nullptr,          0 },
+    { SwFieldTypesEnum::Sequence,           nullptr,            0,                              FMT_NUM_ARY,      std::size(FMT_NUM_ARY) - 2 },
+    { SwFieldTypesEnum::SetRefPage,         FLD_PAGEREF_ARY,    std::size(FLD_PAGEREF_ARY),nullptr,          0 },
+    { SwFieldTypesEnum::GetRefPage,         nullptr,            0,                              FMT_NUM_ARY,      std::size(FMT_NUM_ARY) - 1 },
+    { SwFieldTypesEnum::User,               nullptr,            0,                              FMT_USERVAR_ARY,  std::size(FMT_USERVAR_ARY) }
 };
 
 // access to the shell
@@ -361,7 +361,7 @@ static SwWrtShell* lcl_GetShell()
     return nullptr;
 }
 
-static sal_uInt16 GetPackCount() {  return SAL_N_ELEMENTS(aSwFields); }
+static sal_uInt16 GetPackCount() {  return std::size(aSwFields); }
 
 // FieldManager controls inserting and updating of fields
 SwFieldMgr::SwFieldMgr(SwWrtShell* pSh ) :
@@ -1083,17 +1083,17 @@ bool SwFieldMgr::InsertField(
             sal_uInt16 nSeqNo = o3tl::narrowing<sal_uInt16>(rData.m_sPar2.toInt32());
             OUString sReferenceLanguage;
             // handle language-variant formats
-            if (nFormatId >= SAL_N_ELEMENTS(FMT_REF_ARY))
+            if (nFormatId >= std::size(FMT_REF_ARY))
             {
                 LanguageType nLang = GetCurrLanguage();
                 if (nLang == LANGUAGE_HUNGARIAN)
                 {
-                    if (nFormatId >= SAL_N_ELEMENTS(FMT_REF_ARY) * 2)
+                    if (nFormatId >= std::size(FMT_REF_ARY) * 2)
                         sReferenceLanguage = "Hu";
                     else
                         sReferenceLanguage = "hu";
                 }
-                nFormatId %= SAL_N_ELEMENTS(FMT_REF_ARY);
+                nFormatId %= std::size(FMT_REF_ARY);
             }
             pField.reset(new SwGetRefField(pTyp, rData.m_sPar1, sReferenceLanguage, nSubType, nSeqNo, nFormatId));
             bExp = true;
@@ -1804,7 +1804,7 @@ void SwFieldType::GetFieldName_()
 
     // insert infos for fields
     SwFieldType::s_pFieldNames = new std::vector<OUString>;
-    SwFieldType::s_pFieldNames->reserve(SAL_N_ELEMENTS(coFieldNms));
+    SwFieldType::s_pFieldNames->reserve(std::size(coFieldNms));
     for (const TranslateId & id : coFieldNms)
     {
         const OUString aTmp(SwResId(id));

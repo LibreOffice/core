@@ -194,7 +194,7 @@ static void lcl_mergeProps( const PropertyMapPtr& pToFill, const PropertyMapPtr&
         ( nStyleId == TBL_STYLE_FIRSTCOL )
     };
 
-    for ( unsigned i = 0 ; i != SAL_N_ELEMENTS(pPropsToCheck); i++ )
+    for ( unsigned i = 0 ; i != std::size(pPropsToCheck); i++ )
     {
         PropertyIds nId = pPropsToCheck[i];
         std::optional<PropertyMap::Property> pProp = pToAdd->getProperty(nId);

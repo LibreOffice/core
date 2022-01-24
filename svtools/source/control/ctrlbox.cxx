@@ -1466,7 +1466,7 @@ SvtLineListBox::~SvtLineListBox()
 OUString SvtLineListBox::GetLineStyleName(SvxBorderLineStyle eStyle)
 {
     OUString sRet;
-    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(RID_SVXSTR_BORDERLINE); ++i)
+    for (sal_uInt32 i = 0; i < std::size(RID_SVXSTR_BORDERLINE); ++i)
     {
         if (eStyle == RID_SVXSTR_BORDERLINE[i].second)
         {
@@ -1599,7 +1599,7 @@ IMPL_LINK_NOARG(SvtLineListBox, ValueSelectHdl, ValueSet*, void)
 void SvtLineListBox::UpdatePreview()
 {
     SvxBorderLineStyle eStyle = GetSelectEntryStyle();
-    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(RID_SVXSTR_BORDERLINE); ++i)
+    for (sal_uInt32 i = 0; i < std::size(RID_SVXSTR_BORDERLINE); ++i)
     {
         if (eStyle == RID_SVXSTR_BORDERLINE[i].second)
         {

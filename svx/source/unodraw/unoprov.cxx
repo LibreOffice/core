@@ -1599,37 +1599,37 @@ static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const rtl::OUStrin
     case XATTR_FILLBITMAP:
         pApiResIds = RID_SVXSTR_BMP_DEF;
         pIntResIds = RID_SVXSTR_BMP;
-        nCount = SAL_N_ELEMENTS(RID_SVXSTR_BMP_DEF);
+        nCount = std::size(RID_SVXSTR_BMP_DEF);
         break;
     case XATTR_LINEDASH:
         pApiResIds = RID_SVXSTR_DASH_DEF;
         pIntResIds = RID_SVXSTR_DASH;
-        nCount = SAL_N_ELEMENTS(RID_SVXSTR_DASH_DEF);
+        nCount = std::size(RID_SVXSTR_DASH_DEF);
         break;
 
     case XATTR_LINESTART:
     case XATTR_LINEEND:
         pApiResIds = RID_SVXSTR_LEND_DEF;
         pIntResIds = RID_SVXSTR_LEND;
-        nCount = SAL_N_ELEMENTS(RID_SVXSTR_LEND_DEF);
+        nCount = std::size(RID_SVXSTR_LEND_DEF);
         break;
 
     case XATTR_FILLGRADIENT:
         pApiResIds = RID_SVXSTR_GRDT_DEF;
         pIntResIds = RID_SVXSTR_GRDT;
-        nCount = SAL_N_ELEMENTS(RID_SVXSTR_GRDT_DEF);
+        nCount = std::size(RID_SVXSTR_GRDT_DEF);
         break;
 
     case XATTR_FILLHATCH:
         pApiResIds = RID_SVXSTR_HATCHS_DEF;
         pIntResIds = RID_SVXSTR_HATCHS;
-        nCount = SAL_N_ELEMENTS(RID_SVXSTR_HATCHS_DEF);
+        nCount = std::size(RID_SVXSTR_HATCHS_DEF);
         break;
 
     case XATTR_FILLFLOATTRANSPARENCE:
         pApiResIds = RID_SVXSTR_TRASNGR_DEF;
         pIntResIds = RID_SVXSTR_TRASNGR;
-        nCount = SAL_N_ELEMENTS(RID_SVXSTR_TRASNGR_DEF);
+        nCount = std::size(RID_SVXSTR_TRASNGR_DEF);
         break;
 
     default:
@@ -2015,7 +2015,7 @@ OUString SvxUnogetApiNameForItem(const sal_uInt16 nWhich, const OUString& rInter
 
     if( nWhich == sal_uInt16(XATTR_LINECOLOR) )
     {
-        if (SvxUnoConvertResourceStringBuiltInToApi(SvxUnoColorNameResId, SvxUnoColorNameDefResId, SAL_N_ELEMENTS(SvxUnoColorNameResId), aNew))
+        if (SvxUnoConvertResourceStringBuiltInToApi(SvxUnoColorNameResId, SvxUnoColorNameDefResId, std::size(SvxUnoColorNameResId), aNew))
         {
             return aNew;
         }
@@ -2048,7 +2048,7 @@ OUString SvxUnogetInternalNameForItem(const sal_uInt16 nWhich, const OUString& r
 
     if( nWhich == sal_uInt16(XATTR_LINECOLOR) )
     {
-        if (SvxUnoConvertResourceStringBuiltInFromApi(SvxUnoColorNameDefResId, SvxUnoColorNameResId, SAL_N_ELEMENTS(SvxUnoColorNameResId), aNew))
+        if (SvxUnoConvertResourceStringBuiltInFromApi(SvxUnoColorNameDefResId, SvxUnoColorNameResId, std::size(SvxUnoColorNameResId), aNew))
         {
             return aNew;
         }

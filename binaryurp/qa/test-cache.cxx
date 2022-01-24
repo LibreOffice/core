@@ -39,7 +39,7 @@ private:
 // cf. jurt/test/com/sun/star/lib/uno/protocols/urp/Cache_Test.java:
 void Test::testNothingLostFromLruList() {
     int a[8];
-    for (int i = 0; i != int(SAL_N_ELEMENTS(a)); ++i) {
+    for (int i = 0; i != int(std::size(a)); ++i) {
         for (int j = 0; j != i; ++j) {
             a[j] = 0;
         }

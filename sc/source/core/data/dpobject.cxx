@@ -1541,7 +1541,7 @@ bool parseFunction( const OUString& rList, sal_Int32 nStartPos, sal_Int32& rEndP
     {
         aFuncStr = comphelper::string::strip(aFuncStr, ' ');
 
-        const sal_Int32 nFuncCount = SAL_N_ELEMENTS(aFunctions);
+        const sal_Int32 nFuncCount = std::size(aFunctions);
         for ( sal_Int32 nFunc=0; nFunc<nFuncCount && !bFound; nFunc++ )
         {
             if (aFuncStr.equalsIgnoreAsciiCaseAscii(aFunctions[nFunc].pName))

@@ -167,7 +167,7 @@ namespace rptui
             { "Data",       RID_STR_PROPPAGE_DATA,      HID_RPT_PROPDLG_TAB_DATA },
         };
 
-        const size_t nCategories = SAL_N_ELEMENTS( aCategories );
+        const size_t nCategories = std::size( aCategories );
         Sequence< PropertyCategoryDescriptor > aReturn( nCategories );
         PropertyCategoryDescriptor* pReturn = aReturn.getArray();
         for ( size_t i=0; i<nCategories; ++i, ++pReturn )

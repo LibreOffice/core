@@ -90,14 +90,14 @@ constexpr rtl::OUStringConstExpr aBigPlaceHolders[] =
 
 static BitmapEx* getButtonImage( int index, bool large )
 {
-    static vcl::DeleteOnDeinit< BitmapEx > gSmallButtonImages[SAL_N_ELEMENTS(aSmallPlaceHolders)] = { vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty };
-    static vcl::DeleteOnDeinit< BitmapEx > gLargeButtonImages[SAL_N_ELEMENTS(aBigPlaceHolders)] = { vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty };
+    static vcl::DeleteOnDeinit< BitmapEx > gSmallButtonImages[std::size(aSmallPlaceHolders)] = { vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty };
+    static vcl::DeleteOnDeinit< BitmapEx > gLargeButtonImages[std::size(aBigPlaceHolders)] = { vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty };
 
-    assert(SAL_N_ELEMENTS(aSmallPlaceHolders) == SAL_N_ELEMENTS(aBigPlaceHolders));
+    assert(std::size(aSmallPlaceHolders) == std::size(aBigPlaceHolders));
 
     if( !gSmallButtonImages[0].get() )
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aSmallPlaceHolders); i++ )
+        for (size_t i = 0; i < std::size(aSmallPlaceHolders); i++ )
         {
             gSmallButtonImages[i].set(OUString(aSmallPlaceHolders[i]));
             gLargeButtonImages[i].set(OUString(aBigPlaceHolders[i]));

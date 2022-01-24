@@ -430,7 +430,7 @@ static Color lcl_GetAuthorColor(std::size_t nPos)
         COL_AUTHOR7_DARK, COL_AUTHOR8_DARK, COL_AUTHOR9_DARK
     };
 
-    return aColArr[nPos % SAL_N_ELEMENTS(aColArr)];
+    return aColArr[nPos % std::size(aColArr)];
 }
 
 /// Returns a JSON representation of a redline author.

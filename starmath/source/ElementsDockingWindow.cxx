@@ -264,7 +264,7 @@ const SmElementDescr SmElementsControl::m_a5ExamplesList[] =
     {"f(x) = {1} over { %sigma sqrt{2 %pi} } func e^-{ {(x-%mu)^2} over {2 %sigma^2} }", RID_EXAMPLE_GAUSS_DISTRIBUTION_HELP},
 };
 
-#define AS_PAIR(a) a, SAL_N_ELEMENTS(a)
+#define AS_PAIR(a) a, std::size(a)
 const std::tuple<TranslateId, const SmElementDescr*, size_t> SmElementsControl::m_a5Categories[] =
 {
     {RID_CATEGORY_UNARY_BINARY_OPERATORS, AS_PAIR(m_a5UnaryBinaryOperatorsList)},
@@ -279,7 +279,7 @@ const std::tuple<TranslateId, const SmElementDescr*, size_t> SmElementsControl::
     {RID_CATEGORY_EXAMPLES, AS_PAIR(m_a5ExamplesList)},
 };
 
-const size_t SmElementsControl::m_a5CategoriesSize = SAL_N_ELEMENTS(m_a5Categories);
+const size_t SmElementsControl::m_a5CategoriesSize = std::size(m_a5Categories);
 
 SmElementsControl::SmElementsControl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
     : mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))

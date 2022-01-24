@@ -1605,7 +1605,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
         aArguments.get_ensureType( "ReadOnly", bReadOnly );
         nFirstOpenMode = bReadOnly ? 1 : 0;
     }
-    const size_t nLastOpenMode = SAL_N_ELEMENTS( nOpenModes ) - 1;
+    const size_t nLastOpenMode = std::size( nOpenModes ) - 1;
     for ( size_t i=nFirstOpenMode; i <= nLastOpenMode; ++i )
     {
         uno::Sequence< uno::Any > aStorageCreationArgs{ aStorageSource, uno::Any(nOpenModes[i]) };
@@ -2149,7 +2149,7 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableServiceNames()
         u"com.sun.star.drawing.MarkerTable"
     };
 
-    static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);
+    static const sal_uInt16 nSvxComponentServiceNameListCount = std::size(aSvxComponentServiceNameList);
 
     uno::Sequence< OUString > aSeq( nSvxComponentServiceNameListCount );
     OUString* pStrings = aSeq.getArray();

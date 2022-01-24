@@ -329,8 +329,8 @@ void lcl_parseHandleRef(std::vector<beans::PropertyValue>& rHandle, const OStrin
                         const OUString& rName)
 {
     static const char aPrefix[] = "\", Handle = (long) 0, Value = (any) { (long) ";
-    const sal_Int32 nCheck = SAL_N_ELEMENTS(aPrefix) - 1;
-    const sal_Int32 nStart = SAL_N_ELEMENTS("Name = \"") - 1 + rName.getLength();
+    const sal_Int32 nCheck = std::size(aPrefix) - 1;
+    const sal_Int32 nStart = std::size("Name = \"") - 1 + rName.getLength();
 
     if (rValue.copy(nStart, nCheck).equalsL(aPrefix, nCheck))
     {

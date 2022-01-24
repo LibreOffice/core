@@ -182,7 +182,7 @@ static OUString lcl_getDescription( const LanguageTag& rTag )
 
 SvtLanguageTableImpl::SvtLanguageTableImpl()
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(STR_ARR_SVT_LANGUAGE_TABLE); ++i)
+    for (size_t i = 0; i < std::size(STR_ARR_SVT_LANGUAGE_TABLE); ++i)
     {
         m_aStrings.emplace_back(SvtResId(STR_ARR_SVT_LANGUAGE_TABLE[i].first), STR_ARR_SVT_LANGUAGE_TABLE[i].second);
     }

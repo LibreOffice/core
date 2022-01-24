@@ -135,8 +135,8 @@ namespace rptui
         };
 
         s_pPropertyInfos = aPropertyInfos;
-        s_nCount = SAL_N_ELEMENTS(aPropertyInfos);
-        ::std::sort( aPropertyInfos, aPropertyInfos + SAL_N_ELEMENTS(aPropertyInfos), PropertyInfoLessByName() );
+        s_nCount = std::size(aPropertyInfos);
+        ::std::sort( aPropertyInfos, aPropertyInfos + std::size(aPropertyInfos), PropertyInfoLessByName() );
 
         return s_pPropertyInfos;
     }
@@ -279,9 +279,9 @@ namespace rptui
         for (beans::Property const & prop : aProps)
         {
             size_t nPos = 0;
-            for (; nPos < SAL_N_ELEMENTS(pExcludeProperties) && pExcludeProperties[nPos] != prop.Name; ++nPos )
+            for (; nPos < std::size(pExcludeProperties) && pExcludeProperties[nPos] != prop.Name; ++nPos )
                 ;
-            if ( nPos == SAL_N_ELEMENTS(pExcludeProperties) )
+            if ( nPos == std::size(pExcludeProperties) )
                 _rExcludeProperties.push_back(prop);
         }
     }

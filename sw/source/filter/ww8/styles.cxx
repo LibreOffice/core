@@ -21,6 +21,8 @@
 
 #include <osl/diagnose.h>
 
+#include <iterator>
+
 namespace
 {
     const char **GetStiNames() noexcept
@@ -120,7 +122,7 @@ namespace
             "Plain Text"
         };
 
-        OSL_ENSURE( SAL_N_ELEMENTS(stiName) == ww::stiMax, "WrongSizeOfArray" );
+        OSL_ENSURE( std::size(stiName) == ww::stiMax, "WrongSizeOfArray" );
 
         return stiName;
     }

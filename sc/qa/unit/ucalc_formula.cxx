@@ -497,7 +497,7 @@ void TestFormula::testFormulaCreateStringFromTokens()
     CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
     CPPUNIT_ASSERT_MESSAGE("Failed to obtain sheet-local named expression object.", pSheetNames);
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
+    for (size_t i = 0; i < std::size(aNames); ++i)
     {
         ScRangeData* pName = new ScRangeData(
             *m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
@@ -532,7 +532,7 @@ void TestFormula::testFormulaCreateStringFromTokens()
     ScDBCollection* pDBs = m_pDoc->GetDBCollection();
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch DB collection object.", pDBs);
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aDBs); ++i)
+    for (size_t i = 0; i < std::size(aDBs); ++i)
     {
         std::unique_ptr<ScDBData> pData( new ScDBData(
             OUString::createFromAscii(
@@ -557,7 +557,6 @@ void TestFormula::testFormulaCreateStringFromTokens()
         "{1;TRUE;3|FALSE;5;\"Text\"|;;}", // inline matrix
         "SUM('file:///path/to/fake.file'#$Sheet.A1:B10)",
     };
-    (void) aTests;
 
     sc::TokenStringContext aCxt(*m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
 
@@ -570,7 +569,7 @@ void TestFormula::testFormulaCreateStringFromTokens()
 
     ScAddress aPos(0,0,0);
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    for (size_t i = 0; i < std::size(aTests); ++i)
     {
 #if 0
         OUString aFormula = OUString::createFromAscii(aTests[i]);
@@ -660,7 +659,7 @@ void TestFormula::testFormulaParseReference()
             "NoQuote.$C111"
         };
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (size_t i = 0; i < std::size(aChecks); ++i)
         {
             // Use the 'Dummy' sheet for this.
             OUString aInput = "=" + OUString::createFromAscii(aChecks[i]);
@@ -847,7 +846,7 @@ void TestFormula::testFormulaParseReference()
             { "=$A2:$AMJ2",     "2:2" }
         };
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (size_t i = 0; i < std::size(aChecks); ++i)
         {
             // Use the 'Dummy' sheet for this.
             m_pDoc->SetString(ScAddress(0,0,0), OUString::createFromAscii(aChecks[i][0]));
@@ -1205,7 +1204,7 @@ void TestFormula::testFormulaTokenEquality()
     };
 
     formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1;
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    for (size_t i = 0; i < std::size(aTests); ++i)
     {
         ScFormulaCell aCell1(*m_pDoc, ScAddress(), OUString::createFromAscii(aTests[i].mpFormula1), eGram);
         ScFormulaCell aCell2(*m_pDoc, ScAddress(), OUString::createFromAscii(aTests[i].mpFormula2), eGram);
@@ -1289,7 +1288,7 @@ void TestFormula::testFormulaCompiler()
         { "=B1-$C2+D$3-$E$4", FormulaGrammar::GRAM_NATIVE, "RC[1]-R[1]C3+R3C[3]-R4C5", FormulaGrammar::GRAM_NATIVE_XL_R1C1 },
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    for (size_t i = 0; i < std::size(aTests); ++i)
     {
         std::unique_ptr<ScTokenArray> pArray = compileFormula(m_pDoc, OUString::createFromAscii(aTests[i].pInput), aTests[i].eInputGram);
         CPPUNIT_ASSERT_MESSAGE("Token array shouldn't be NULL!", pArray);
@@ -1328,7 +1327,7 @@ void TestFormula::testFormulaCompilerJumpReordering()
         };
 
         sal_uInt16 nLen = pCode->GetCodeLen();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong RPN token count.", static_cast<sal_uInt16>(SAL_N_ELEMENTS(aCheckRPN)), nLen);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong RPN token count.", static_cast<sal_uInt16>(std::size(aCheckRPN)), nLen);
 
         FormulaToken** ppTokens = pCode->GetCode();
         for (sal_uInt16 i = 0; i < nLen; ++i)
@@ -1354,7 +1353,7 @@ void TestFormula::testFormulaCompilerJumpReordering()
         };
 
         nLen = pCode->GetCodeLen();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong RPN token count.", static_cast<sal_uInt16>(SAL_N_ELEMENTS(aCheckRPN2)), nLen);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong RPN token count.", static_cast<sal_uInt16>(std::size(aCheckRPN2)), nLen);
         ppTokens = pCode->GetCode();
         for (sal_uInt16 i = 0; i < nLen; ++i)
         {
@@ -4540,7 +4539,7 @@ void TestFormula::testFormulaRefUpdateValidity()
         bool checkList( std::vector<ScTypedStrData>& rList )
         {
             double aExpected[] = { 1.0, 2.0, 3.0 }; // must be sorted.
-            size_t nCheckSize = SAL_N_ELEMENTS(aExpected);
+            size_t nCheckSize = std::size(aExpected);
 
             if (rList.size() != nCheckSize)
             {
@@ -5219,7 +5218,7 @@ void TestFormula::testFuncN()
         0, 0,  0,    1, -1, 12.3, 0, // cell reference
         0, 1, -1, 123,  0,    0, 0   // in-line values
     };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(checks1); ++i)
+    for (size_t i = 0; i < std::size(checks1); ++i)
     {
         result = m_pDoc->GetValue(1, i, 0);
         bool bGood = result == checks1[i];
@@ -5232,7 +5231,7 @@ void TestFormula::testFuncN()
     double checks2[] = {
         0, 1, -1, 12.3               // range references
     };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(checks2); ++i)
+    for (size_t i = 0; i < std::size(checks2); ++i)
     {
         result = m_pDoc->GetValue(1, i+2, 0);
         bool bGood = result == checks2[i];
@@ -5271,7 +5270,7 @@ void TestFormula::testFuncCOUNTIF()
         "2002"
     };
 
-    SCROW nRows = SAL_N_ELEMENTS(aData);
+    SCROW nRows = std::size(aData);
     for (SCROW i = 0; i < nRows; ++i)
         m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
 
@@ -5294,7 +5293,7 @@ void TestFormula::testFuncCOUNTIF()
         { "=COUNTIF(A1:A12;)",           3 }
     };
 
-    nRows = SAL_N_ELEMENTS(aChecks);
+    nRows = std::size(aChecks);
     for (SCROW i = 0; i < nRows; ++i)
     {
         SCROW nRow = 20 + i;
@@ -5461,7 +5460,7 @@ void TestFormula::testFuncIFERROR()
         "23"
     };
 
-    SCROW nRows = SAL_N_ELEMENTS(aData);
+    SCROW nRows = std::size(aData);
     for (SCROW i = 0; i < nRows; ++i)
         m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
 
@@ -5486,7 +5485,7 @@ void TestFormula::testFuncIFERROR()
         { "{=IFERROR(3*A11:A12;1998)}[1]",         "69" }   // matrix formula, just a place holder, see below
     };
 
-    nRows = SAL_N_ELEMENTS(aChecks);
+    nRows = std::size(aChecks);
     for (SCROW i = 0; i < nRows-2; ++i)
     {
         SCROW nRow = 20 + i;
@@ -5527,7 +5526,7 @@ void TestFormula::testFuncIFERROR()
     CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
 
     // Array formula in F4:H6
-    const SCROW nElems2 = SAL_N_ELEMENTS(aCheck2);
+    const SCROW nElems2 = std::size(aCheck2);
     const SCCOL nStartCol = aPos.Col() + nCols;
     const SCROW nStartRow = aPos.Row() + nElems2;
     m_pDoc->InsertMatrixFormula( nStartCol, nStartRow, nStartCol+nCols-1, nStartRow+nElems2-1, aMark,
@@ -5623,7 +5622,7 @@ void TestFormula::testFuncNUMBERVALUE()
         "1a2b3e1%"
     };
 
-    SCROW nRows = SAL_N_ELEMENTS(aData);
+    SCROW nRows = std::size(aData);
     for (SCROW i = 0; i < nRows; ++i)
         m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
 
@@ -5643,7 +5642,7 @@ void TestFormula::testFuncNUMBERVALUE()
         { "=NUMBERVALUE(A6;\"b\";\"a\")",   "1.23" }
     };
 
-    nRows = SAL_N_ELEMENTS(aChecks);
+    nRows = std::size(aChecks);
     for (SCROW i = 0; i < nRows; ++i)
     {
         SCROW nRow = 20 + i;
@@ -5866,7 +5865,7 @@ void TestFormula::testFuncVLOOKUP()
     };
 
     // Insert formula data into D1:E18.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    for (size_t i = 0; i < std::size(aChecks); ++i)
     {
         m_pDoc->SetString(3, i, 0, OUString::createFromAscii(aChecks[i].pLookup));
         m_pDoc->SetString(4, i, 0, OUString::createFromAscii(aChecks[i].pFormula));
@@ -5875,7 +5874,7 @@ void TestFormula::testFuncVLOOKUP()
     printRange(m_pDoc, ScRange(3, 0, 0, 4, 17, 0), "formula data for VLOOKUP");
 
     // Verify results.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    for (size_t i = 0; i < std::size(aChecks); ++i)
     {
         if (i == 0)
             // Skip the header row.
@@ -6087,9 +6086,9 @@ void TestFormula::testFuncMATCH()
             { "Charlie", "12" }
         };
 
-        runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),1>(m_pDoc, aData, aChecks);
+        runTestMATCH<std::size(aData),std::size(aChecks),1>(m_pDoc, aData, aChecks);
         clearRange(m_pDoc, ScRange(0, 0, 0, 4, 40, 0));
-        runTestHorizontalMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),1>(m_pDoc, aData, aChecks);
+        runTestHorizontalMATCH<std::size(aData),std::size(aChecks),1>(m_pDoc, aData, aChecks);
         clearRange(m_pDoc, ScRange(0, 0, 0, 40, 4, 0));
     }
 
@@ -6132,9 +6131,9 @@ void TestFormula::testFuncMATCH()
             { "David", "#N/A" }
         };
 
-        runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),-1>(m_pDoc, aData, aChecks);
+        runTestMATCH<std::size(aData),std::size(aChecks),-1>(m_pDoc, aData, aChecks);
         clearRange(m_pDoc, ScRange(0, 0, 0, 4, 40, 0));
-        runTestHorizontalMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),-1>(m_pDoc, aData, aChecks);
+        runTestHorizontalMATCH<std::size(aData),std::size(aChecks),-1>(m_pDoc, aData, aChecks);
         clearRange(m_pDoc, ScRange(0, 0, 0, 40, 4, 0));
     }
 
@@ -6206,11 +6205,11 @@ void TestFormula::testFuncCELL()
             { "=CELL(\"PARENTHESES\";C10)",   "0" }
         };
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (size_t i = 0; i < std::size(aChecks); ++i)
             m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aChecks[i].pVal));
         m_pDoc->CalcAll();
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (size_t i = 0; i < std::size(aChecks); ++i)
         {
             OUString aVal = m_pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for CELL", aVal.equalsAscii(aChecks[i].pRes));
@@ -6294,7 +6293,7 @@ void TestFormula::testFuncINDIRECT()
             &aTest, &aRefErr, &aRefErr, &aTest
         };
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (size_t i = 0; i < std::size(aChecks); ++i)
         {
             OUString aVal = m_pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong value!", *aChecks[i], aVal);
@@ -6311,7 +6310,7 @@ void TestFormula::testFuncINDIRECT()
             &aTest, &aRefErr, &aRefErr, &aTest
         };
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (size_t i = 0; i < std::size(aChecks); ++i)
         {
             OUString aVal = m_pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong value!", *aChecks[i], aVal);
@@ -6327,7 +6326,7 @@ void TestFormula::testFuncINDIRECT()
             &aRefErr, &aTest, &aRefErr, &aTest
         };
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (size_t i = 0; i < std::size(aChecks); ++i)
         {
             OUString aVal = m_pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong value!", *aChecks[i], aVal);
@@ -6343,7 +6342,7 @@ void TestFormula::testFuncINDIRECT()
             &aRefErr, &aRefErr, &aTest, &aTest
         };
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (size_t i = 0; i < std::size(aChecks); ++i)
         {
             OUString aVal = m_pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong value!", *aChecks[i], aVal);
@@ -6891,7 +6890,7 @@ void TestFormula::testExternalRef()
     {
         // Referencing an empty cell should display '0'.
         const char* pChecks[] = { "Andy", "Bruce", "Charlie", "David", "0" };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
+        for (size_t i = 0; i < std::size(pChecks); ++i)
         {
             test = m_pDoc->GetString(0, static_cast<SCROW>(i+1), 0);
             CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", test.equalsAscii(pChecks[i]));
@@ -6904,7 +6903,7 @@ void TestFormula::testExternalRef()
     m_pDoc->SetString(1, 5, 0, "='file:///extdata.fake'#Data1.B6");
     {
         double pChecks[] = { 10, 11, 12, 13, 0 };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
+        for (size_t i = 0; i < std::size(pChecks); ++i)
         {
             val = m_pDoc->GetValue(1, static_cast<SCROW>(i+1), 0);
             ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected cell value.", pChecks[i], val);
@@ -6917,7 +6916,7 @@ void TestFormula::testExternalRef()
     m_pDoc->SetString(2, 3, 0, "='file:///extdata.fake'#Data3.A4");
     {
         const char* pChecks[] = { "Name", "Edward", "Frank", "George" };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
+        for (size_t i = 0; i < std::size(pChecks); ++i)
         {
             test = m_pDoc->GetString(2, static_cast<SCROW>(i), 0);
             CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", test.equalsAscii(pChecks[i]));
@@ -6930,7 +6929,7 @@ void TestFormula::testExternalRef()
     m_pDoc->SetString(3, 3, 0, "='file:///extdata.fake'#Data3.B4");
     {
         const char* pChecks[] = { "Value", "99", "98", "97" };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
+        for (size_t i = 0; i < std::size(pChecks); ++i)
         {
             test = m_pDoc->GetString(3, static_cast<SCROW>(i), 0);
             CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", test.equalsAscii(pChecks[i]));
@@ -7142,7 +7141,7 @@ void TestFormula::testExternalRefFunctions()
         { "=SUM('file:///extdata.fake'#Data.1:1048576)", 19 }
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    for (size_t i = 0; i < std::size(aChecks); ++i)
     {
         m_pDoc->SetString(0, 0, 0, OUString::createFromAscii(aChecks[i].pFormula));
         val = m_pDoc->GetValue(0, 0, 0);
@@ -7296,7 +7295,7 @@ void TestFormula::testMatrixOp()
     m_pDoc->SetString(4, 6, 0, "=SUMPRODUCT({1;2;4}-{8;16;32})");
     m_pDoc->SetString(4, 7, 0, "=SUMPRODUCT({8;16;32}-{1;2;4})");
     double fResult[8] = { 31.0, 31.0, -17.0, 17.0, 63.0, 63.0, -49.0, 49.0 };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(fResult); ++i)
+    for (size_t i = 0; i < std::size(fResult); ++i)
     {
         CPPUNIT_ASSERT_EQUAL( fResult[i], m_pDoc->GetValue(4, i, 0));
     }
@@ -7411,7 +7410,7 @@ void TestFormula::testFuncFORMULA()
         "#N/A",
         "=A3",
     };
-    for (size_t i=0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    for (size_t i=0; i < std::size(aChecks); ++i)
     {
         CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aChecks[i]), m_pDoc->GetString(2,i,0));
         CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aChecks[i]), m_pDoc->GetString(3,i,0));
@@ -7421,7 +7420,7 @@ void TestFormula::testFuncFORMULA()
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(3, 3, 3, 5, aMark, "=FORMULA(B1:B3)");
-    for (size_t i=0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    for (size_t i=0; i < std::size(aChecks); ++i)
     {
         CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aChecks[i]), m_pDoc->GetString(3,i+3,0));
     }
@@ -7493,7 +7492,7 @@ void TestFormula::testFuncTableRef()
         ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
         CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
+        for (size_t i = 0; i < std::size(aNames); ++i)
         {
             // Choose base position that does not intersect with the database
             // range definition to test later use of [#This Row] results in
@@ -7508,7 +7507,7 @@ void TestFormula::testFuncTableRef()
     }
 
     // Use the named expressions in COUNTA() formulas, on row 2 that intersects.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
+    for (size_t i = 0; i < std::size(aNames); ++i)
     {
         OUString aFormula( "=COUNTA(" + OUString::createFromAscii( aNames[i].pName) + ")");
         ScAddress aPos(3+i,1,0);
@@ -7520,7 +7519,7 @@ void TestFormula::testFuncTableRef()
     }
 
     // Use the named expressions in SUM() formulas, on row 3 that intersects.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
+    for (size_t i = 0; i < std::size(aNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
         ScAddress aPos(3+i,2,0);
@@ -7532,7 +7531,7 @@ void TestFormula::testFuncTableRef()
     }
 
     // Use the named expressions in SUM() formulas, on row 4 that intersects.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
+    for (size_t i = 0; i < std::size(aNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
         ScAddress aPos(3+i,3,0);
@@ -7544,7 +7543,7 @@ void TestFormula::testFuncTableRef()
     }
 
     // Use the named expressions in SUM() formulas, on row 5 that does not intersect.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
+    for (size_t i = 0; i < std::size(aNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
         ScAddress aPos(3+i,4,0);
@@ -7562,7 +7561,7 @@ void TestFormula::testFuncTableRef()
     // Re-verify the named expression in SUM() formula, on row 4 that
     // intersects, now starting at column E, still works.
     m_pDoc->CalcAll();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
+    for (size_t i = 0; i < std::size(aNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
         ScAddress aPos(4+i,3,0);
@@ -7667,7 +7666,7 @@ void TestFormula::testFuncTableRef()
         ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
         CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
+        for (size_t i = 0; i < std::size(aHlNames); ++i)
         {
             // Choose base position that does not intersect with the database
             // range definition to test later use of [#This Row] results in
@@ -7682,7 +7681,7 @@ void TestFormula::testFuncTableRef()
     }
 
     // Use the named expressions in COUNTA() formulas, on row 10 that intersects.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
+    for (size_t i = 0; i < std::size(aHlNames); ++i)
     {
         OUString aFormula( "=COUNTA(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
         ScAddress aPos(7+i,9,0);
@@ -7694,7 +7693,7 @@ void TestFormula::testFuncTableRef()
     }
 
     // Use the named expressions in SUM() formulas, on row 11 that intersects.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
+    for (size_t i = 0; i < std::size(aHlNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
         ScAddress aPos(7+i,10,0);
@@ -7706,7 +7705,7 @@ void TestFormula::testFuncTableRef()
     }
 
     // Use the named expressions in SUM() formulas, on row 12 that intersects.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
+    for (size_t i = 0; i < std::size(aHlNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
         ScAddress aPos(7+i,11,0);
@@ -7718,7 +7717,7 @@ void TestFormula::testFuncTableRef()
     }
 
     // Use the named expressions in SUM() formulas, on row 13 that does not intersect.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
+    for (size_t i = 0; i < std::size(aHlNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
         ScAddress aPos(7+i,12,0);
@@ -7736,7 +7735,7 @@ void TestFormula::testFuncTableRef()
     // Re-verify the named expression in SUM() formula, on row 12 that
     // intersects, now starting at column I, still works.
     m_pDoc->CalcAll();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
+    for (size_t i = 0; i < std::size(aHlNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
         ScAddress aPos(8+i,11,0);

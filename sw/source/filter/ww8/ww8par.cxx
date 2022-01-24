@@ -2129,7 +2129,7 @@ tools::Long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         else
         {
             const sal_uInt8 nLen = std::min<sal_uInt8>(pDescri->xstUsrInitl[0],
-                                                       SAL_N_ELEMENTS(pDescri->xstUsrInitl)-1);
+                                                       std::size(pDescri->xstUsrInitl)-1);
             sAuthor = OUString(pDescri->xstUsrInitl + 1, nLen, RTL_TEXTENCODING_MS_1252);
         }
     }
@@ -2138,7 +2138,7 @@ tools::Long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         const WW8_ATRD* pDescri = static_cast<const WW8_ATRD*>(pData);
         {
             const sal_uInt16 nLen = std::min<sal_uInt16>(SVBT16ToUInt16(pDescri->xstUsrInitl[0]),
-                                                         SAL_N_ELEMENTS(pDescri->xstUsrInitl)-1);
+                                                         std::size(pDescri->xstUsrInitl)-1);
             OUStringBuffer aBuf;
             aBuf.setLength(nLen);
             for(sal_uInt16 nIdx = 1; nIdx <= nLen; ++nIdx)
@@ -3381,7 +3381,7 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
             {
                 const SvxFontItem *pSourceFont = static_cast<const SvxFontItem*>(GetFormatAttr(nForceFromFontId));
 
-                for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+                for (size_t i = 0; i < std::size(aIds); ++i)
                 {
                     const SvxFontItem *pDestFont = static_cast<const SvxFontItem*>(GetFormatAttr(aIds[i]));
                     aForced[i] = aIds[i] != nForceFromFontId && *pSourceFont != *pDestFont;
@@ -3400,7 +3400,7 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
 
         simpleAddTextToParagraph(sChunk);
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+        for (size_t i = 0; i < std::size(aIds); ++i)
         {
             if (aForced[i])
             {

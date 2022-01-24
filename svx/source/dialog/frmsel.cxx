@@ -346,8 +346,8 @@ void FrameSelectorImpl::InitArrowImageList()
     pColorAry1[2] = Color( 255, 0, 255 );
     pColorAry2[2] = maBackCol;       // magenta -> background
 
-    assert(SAL_N_ELEMENTS(aImageIds) == 16);
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aImageIds); ++i)
+    assert(std::size(aImageIds) == 16);
+    for (size_t i = 0; i < std::size(aImageIds); ++i)
     {
         BitmapEx aBmpEx { OUString(aImageIds[i]) };
         aBmpEx.Replace(pColorAry1, pColorAry2, 3);

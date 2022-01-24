@@ -92,7 +92,7 @@ constexpr double n10s[] = {
     1e289,  1e290,  1e291,  1e292,  1e293,  1e294,  1e295,  1e296,  1e297,  1e298,  1e299,  1e300,
     1e301,  1e302,  1e303,  1e304,  1e305,  1e306,  1e307,  1e308,
 };
-static_assert(SAL_N_ELEMENTS(n10s) == maxExp - minExp + 1);
+static_assert(std::size(n10s) == maxExp - minExp + 1);
 
 // return pow(10.0,nExp) optimized for exponents in the interval [-323,308] (i.e., incl. denormals)
 static double getN10Exp(int nExp)
@@ -322,7 +322,7 @@ void doubleToString(typename T::String ** pResult,
         // pRou xor one or two digits from pSlot[].
         constexpr char pDig[] = "7976931348623157";
         constexpr char pRou[] = "8087931359623267";     // the only up-carry is 80
-        static_assert(SAL_N_ELEMENTS(pDig) == SAL_N_ELEMENTS(pRou), "digit count mismatch");
+        static_assert(std::size(pDig) == std::size(pRou), "digit count mismatch");
         constexpr sal_Int32 nDig2 = RTL_CONSTASCII_LENGTH(pRou) - 2;
         sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH(pRou) + 8;  // + "-1.E+308"
         const char pSlot[5][2][3] =

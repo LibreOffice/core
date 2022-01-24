@@ -540,7 +540,7 @@ namespace ucb::ucp::ext
             )
         };
 
-        return Sequence< CommandInfo >( aCommandInfoTable, SAL_N_ELEMENTS(aCommandInfoTable) );
+        return Sequence< CommandInfo >( aCommandInfoTable, std::size(aCommandInfoTable) );
     }
 
 
@@ -573,7 +573,7 @@ namespace ucb::ucp::ext
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             )
         };
-        return Sequence< Property >( aProperties, SAL_N_ELEMENTS( aProperties ) );
+        return Sequence< Property >( aProperties, std::size( aProperties ) );
     }
 
 
