@@ -3510,18 +3510,6 @@ public:
         return false;
     }
 
-    virtual void set_has_default(bool has_default) override
-    {
-        g_object_set(G_OBJECT(m_pWidget), "has-default", has_default, nullptr);
-    }
-
-    virtual bool get_has_default() const override
-    {
-        gboolean has_default(false);
-        g_object_get(G_OBJECT(m_pWidget), "has-default", &has_default, nullptr);
-        return has_default;
-    }
-
     virtual void show() override
     {
         gtk_widget_show(m_pWidget);
@@ -3876,7 +3864,7 @@ public:
         return m_pWidget;
     }
 
-    GtkWindow* getWindow()
+    GtkWindow* getWindow() const
     {
         return GTK_WINDOW(widget_get_toplevel(m_pWidget));
     }
@@ -5692,18 +5680,6 @@ private:
     gulong m_nSetFocusChildSignalId;
     bool m_bChildHasFocus;
 
-    static void implResetDefault(GtkWidget *pWidget, gpointer user_data)
-    {
-        if (GTK_IS_BUTTON(pWidget))
-            g_object_set(G_OBJECT(pWidget), "has-default", false, nullptr);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        if (GTK_IS_CONTAINER(pWidget))
-            gtk_container_forall(GTK_CONTAINER(pWidget), implResetDefault, user_data);
-#else
-        (void)user_data;
-#endif
-    }
-
     void signal_set_focus_child(bool bChildHasFocus)
     {
         if (m_bChildHasFocus != bChildHasFocus)
@@ -5805,11 +5781,6 @@ public:
             container_add(GTK_WIDGET(pNewContainer), pChild);
         }
         g_object_unref(pChild);
-    }
-
-    virtual void recursively_unset_default_buttons() override
-    {
-        implResetDefault(GTK_WIDGET(m_pContainer), nullptr);
     }
 
     virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override
@@ -6034,6 +6005,21 @@ private:
     gulong m_nToplevelFocusChangedSignalId;
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
+    static void implResetDefault(GtkWidget *pWidget, gpointer user_data)
+    {
+        if (GTK_IS_BUTTON(pWidget))
+            g_object_set(G_OBJECT(pWidget), "has-default", false, nullptr);
+        if (GTK_IS_CONTAINER(pWidget))
+            gtk_container_forall(GTK_CONTAINER(pWidget), implResetDefault, user_data);
+    }
+
+    void recursively_unset_default_buttons()
+    {
+        implResetDefault(GTK_WIDGET(m_pWindow), nullptr);
+    }
+#endif
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean help_pressed(GtkAccelGroup*, GObject*, guint, GdkModifierType, gpointer widget)
     {
         GtkInstanceWindow* pThis = static_cast<GtkInstanceWindow*>(widget);
@@ -6189,6 +6175,44 @@ public:
     virtual void present() override
     {
         gtk_window_present(m_pWindow);
+    }
+
+    virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) override
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkInstanceWidget* pGtkNew = dynamic_cast<GtkInstanceWidget*>(pNew);
+        GtkWidget* pWidgetNew = pGtkNew ? pGtkNew->getWidget() : nullptr;
+        gtk_window_set_default_widget(m_pWindow, pWidgetNew);
+        (void)pOld;
+#else
+        if (!pOld)
+            recursively_unset_default_buttons();
+        else
+        {
+            GtkInstanceWidget* pGtkOld = dynamic_cast<GtkInstanceWidget*>(pOld);
+            GtkWidget* pWidgetOld = pGtkOld->getWidget();
+            g_object_set(G_OBJECT(pWidgetOld), "has-default", false, nullptr);
+        }
+        if (pNew)
+        {
+            GtkInstanceWidget* pGtkNew = dynamic_cast<GtkInstanceWidget*>(pNew);
+            GtkWidget* pWidgetNew = pGtkNew->getWidget();
+            g_object_set(G_OBJECT(pWidgetNew), "has-default", true, nullptr);
+        }
+#endif
+    }
+
+    virtual bool is_default_widget(const weld::Widget* pCandidate) const override
+    {
+        const GtkInstanceWidget* pGtkCandidate = dynamic_cast<const GtkInstanceWidget*>(pCandidate);
+        GtkWidget* pWidget = pGtkCandidate->getWidget();
+#if GTK_CHECK_VERSION(4, 0, 0)
+        return gtk_window_get_default_widget(m_pWindow) == pWidget;
+#else
+        gboolean has_default(false);
+        g_object_get(G_OBJECT(pWidget), "has-default", &has_default, nullptr);
+        return has_default;
+#endif
     }
 
     virtual void set_window_state(const OString& rStr) override

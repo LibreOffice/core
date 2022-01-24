@@ -228,10 +228,6 @@ public:
 
     virtual bool has_child_focus() const override;
 
-    virtual void set_has_default(bool has_default) override;
-
-    virtual bool get_has_default() const override;
-
     virtual void show() override;
 
     virtual void hide() override;
@@ -417,9 +413,6 @@ class SalInstanceContainer : public SalInstanceWidget, public virtual weld::Cont
 protected:
     VclPtr<vcl::Window> m_xContainer;
 
-private:
-    void implResetDefault(const vcl::Window* _pWindow);
-
 public:
     SalInstanceContainer(vcl::Window* pContainer, SalInstanceBuilder* pBuilder,
                          bool bTakeOwnership);
@@ -427,7 +420,6 @@ public:
     virtual void connect_container_focus_changed(const Link<Container&, void>& rLink) override;
     virtual void child_grab_focus() override;
     virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) override;
-    virtual void recursively_unset_default_buttons() override;
     virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override;
 };
 
@@ -441,6 +433,10 @@ private:
     void override_child_help(vcl::Window* pParent);
 
     void clear_child_help(vcl::Window* pParent);
+
+    void recursively_unset_default_buttons();
+
+    void implResetDefault(const vcl::Window* _pWindow);
 
 public:
     SalInstanceWindow(vcl::Window* pWindow, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
@@ -474,6 +470,10 @@ public:
     virtual bool has_toplevel_focus() const override;
 
     virtual void present() override;
+
+    virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) override;
+
+    virtual bool is_default_widget(const weld::Widget* pCandidate) const override;
 
     virtual void set_window_state(const OString& rStr) override;
 

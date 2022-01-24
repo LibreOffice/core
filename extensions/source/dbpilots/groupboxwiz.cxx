@@ -280,17 +280,21 @@ namespace dbp
         m_xMoveLeft->set_sensitive(bSelectedSome);
         m_xMoveRight->set_sensitive(bUnfinishedInput);
 
-        getDialog()->enableButtons(WizardButtonFlags::NEXT, bHaveSome);
+        OControlWizard* pDialogController = getDialog();
+
+        pDialogController->enableButtons(WizardButtonFlags::NEXT, bHaveSome);
+
+        weld::Dialog* pDialog = pDialogController->getDialog();
 
         if (bUnfinishedInput)
         {
-            if (!m_xMoveRight->get_has_default())
-                getDialog()->defaultButton(m_xMoveRight.get());
+            if (!pDialog->is_default_widget(m_xMoveRight.get()))
+                pDialogController->defaultButton(m_xMoveRight.get());
         }
         else
         {
-            if (m_xMoveRight->get_has_default())
-                getDialog()->defaultButton(WizardButtonFlags::NEXT);
+            if (pDialog->is_default_widget(m_xMoveRight.get()))
+                pDialogController->defaultButton(WizardButtonFlags::NEXT);
         }
     }
 
