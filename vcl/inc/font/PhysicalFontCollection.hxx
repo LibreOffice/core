@@ -34,6 +34,34 @@
 
 namespace vcl::font
 {
+constexpr int CJK_MATCH_VALUE = 10'000'000;
+constexpr int CTL_MATCH_VALUE = 10'000'000;
+constexpr int NONLATIN_MATCH_VALUE = 10'000'000;
+constexpr int SYMBOL_MATCH_VALUE = 10'000'000;
+constexpr int FAMILY_NAME_MATCH_VALUE = 1'000'000;
+constexpr int SCRIPT_MATCH_VALUE = 1'000'000;
+constexpr int FIXED_MATCH_VALUE = 1'000'000;
+constexpr int SPECIAL_MATCH_VALUE = 1'000'000;
+constexpr int DECORATIVE_MATCH_VALUE = 1'000'000;
+constexpr int CAPITALS_TITLING_MATCH_VALUE = 1'000'000;
+constexpr int OUTLINE_SHADOW_MATCH_VALUE = 1'000'000;
+constexpr int FONTNAME_MATCH_VALUE = 5'000;
+constexpr int SERIF_MATCH_VALUE = 1'000'000;
+constexpr int SANSERIF_MATCH_VALUE = 1'000'000;
+constexpr int ITALIC_MATCH_VALUE = 1'000'000;
+constexpr int WIDTH_MATCH_VALUE = 1'000'000;
+constexpr int WEIGHT_MATCH_VALUE = 1'000'000;
+constexpr int SCALABLE_MATCH_VALUE = 10'000;
+constexpr int STANDARD_MATCH_VALUE = 10'000;
+constexpr int DEFAULT_MATCH_VALUE = 10'000;
+constexpr int FULL_MATCH_VALUE = 10'000;
+constexpr int NORMAL_MATCH_VALUE = 10'000;
+constexpr int OTHERSTYLE_MATCH_VALUE = 10'000;
+constexpr int ROUNDED_MATCH_VALUE = 1'000;
+constexpr int TYPEWRITER_MATCH_VALUE = 1'000;
+constexpr int GOTHIC_MATCH_VALUE = 1'000;
+constexpr int SCHOOLBOOK_MATCH_VALUE = 1'000;
+
 class GlyphFallbackFontSubstitution;
 class PreMatchFontSubstitution;
 }
