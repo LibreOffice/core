@@ -29,6 +29,7 @@
 #include "RegressionCurveModel.hxx"
 #include <ChartTypeHelper.hxx>
 #include <ChartType.hxx>
+#include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
@@ -229,7 +230,7 @@ void RegressionCurveHelper::initializeCurveCalculator(
 void RegressionCurveHelper::initializeCurveCalculator(
     const Reference< XRegressionCurveCalculator > & xOutCurveCalculator,
     const Reference< XDataSeries > & xSeries,
-    const Reference< frame::XModel > & xModel )
+    const rtl::Reference<::chart::ChartModel> & xModel )
 {
     sal_Int32 nAxisType = ChartTypeHelper::getAxisType(
         ChartModelHelper::getChartTypeOfSeries( xModel, xSeries ), 0 ); // x-axis

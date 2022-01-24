@@ -27,7 +27,7 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-ControllerLockGuardUNO::ControllerLockGuardUNO( const uno::Reference< frame::XModel >& xModel ) :
+ControllerLockGuardUNO::ControllerLockGuardUNO( const rtl::Reference<::chart::ChartModel>& xModel ) :
         mxModel( xModel )
 {
     mxModel->lockControllers();
@@ -49,7 +49,7 @@ ControllerLockGuard::~ControllerLockGuard()
     mrModel.unlockControllers();
 }
 
-ControllerLockHelper::ControllerLockHelper( const Reference< frame::XModel > & xModel ) :
+ControllerLockHelper::ControllerLockHelper( const rtl::Reference<::chart::ChartModel> & xModel ) :
         m_xModel( xModel )
 {}
 
