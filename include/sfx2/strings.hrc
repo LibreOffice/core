@@ -292,8 +292,6 @@
 #define STR_TRACK_CHANGES_BUTTON_HIDE           NC_("STR_TRACK_CHANGES_BUTTON_HIDE", "Hide Toolbar")
 #define STR_HYPHENATION_BUTTON                  NC_("STR_HYPHENATION_BUTTON", "Learn more")
 
-#define STR_CLOSE_PANE                          NC_("STR_CLOSE_PANE", "Close Pane")
-
 // Translators: default Impress template names
 #define STR_TEMPLATE_NAME1                      NC_("STR_TEMPLATE_NAME1", "Grey Elegant")
 #define STR_TEMPLATE_NAME2                      NC_("STR_TEMPLATE_NAME2", "Beehive")

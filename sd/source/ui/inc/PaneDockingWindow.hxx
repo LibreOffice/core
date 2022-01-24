@@ -19,11 +19,11 @@
 
 #pragma once
 
-#include <sfx2/titledockwin.hxx>
+#include "titledockwin.hxx"
 
 namespace sd {
 
-    class PaneDockingWindow : public ::sfx2::TitledDockingWindow
+    class PaneDockingWindow : public ::sd::TitledDockingWindow
 {
 public:
     /** Create a new docking window.

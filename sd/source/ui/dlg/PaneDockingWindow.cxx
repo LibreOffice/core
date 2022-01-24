@@ -28,7 +28,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::sfx2::TitledDockingWindow;
+using ::sd::TitledDockingWindow;
 
 namespace sd {
 

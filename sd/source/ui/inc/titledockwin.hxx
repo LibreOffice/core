@@ -17,20 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_TITLEDOCKWIN_HXX
-#define INCLUDED_SFX2_TITLEDOCKWIN_HXX
+#pragma once
 
-#include <sfx2/dllapi.h>
 #include <sfx2/dockwin.hxx>
-
-#include <vcl/vclptr.hxx>
 #include <tools/svborder.hxx>
+#include <vcl/vclptr.hxx>
 
 class ToolBox;
 
-namespace sfx2
+namespace sd
 {
-    class SFX2_DLLPUBLIC TitledDockingWindow : public SfxDockingWindow
+    class TitledDockingWindow : public SfxDockingWindow
     {
     public:
         TitledDockingWindow(
@@ -58,7 +55,7 @@ namespace sfx2
 
     protected:
         // Window overridables
-        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& i_rArea) override;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& i_rArea) override;
         virtual void Resize() override;
         virtual void StateChanged( StateChangedType i_nType ) override;
         virtual void DataChanged( const DataChangedEvent& i_rDataChangedEvent ) override;
@@ -71,7 +68,7 @@ namespace sfx2
         void    impl_resetToolBox();
 
     private:
-        DECL_DLLPRIVATE_LINK( OnToolboxItemSelected, ToolBox*, void );
+        DECL_LINK(OnToolboxItemSelected, ToolBox*, void);
 
         void    impl_layout();
 
@@ -92,10 +89,6 @@ namespace sfx2
 
     };
 
-
-} // namespace sfx2
-
-
-#endif // INCLUDED_SFX2_TITLEDOCKWIN_HXX
+} // namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

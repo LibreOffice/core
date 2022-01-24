@@ -64,8 +64,6 @@ inline constexpr OUStringLiteral BMP_128X128_IMPRESS_DOC = u"sfx2/res/128x128_im
 inline constexpr OUStringLiteral BMP_128X128_MATH_DOC = u"sfx2/res/128x128_math_doc-p.png";
 inline constexpr OUStringLiteral BMP_128X128_WRITER_DOC = u"sfx2/res/128x128_writer_doc-p.png";
 
-inline constexpr OUStringLiteral SFX_BMP_CLOSE_DOC = u"sfx2/res/closedoc.png";
-
 inline constexpr OUStringLiteral SIDEBAR_CLOSE_INDICATOR = u"cmd/lc_decrementlevel.png";
 inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_WRITER = u"res/odt_16_8.png";
 inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_CALC = u"res/ods_16_8.png";
