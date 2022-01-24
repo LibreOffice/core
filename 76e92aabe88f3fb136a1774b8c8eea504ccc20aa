@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e720da56_ceac31b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-01-24T12:39:24Z",
+      "side": 1,
+      "message": "Looks good. Pending Jenkins being happy, I suppose.",
+      "revId": "76e92aabe88f3fb136a1774b8c8eea504ccc20aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
