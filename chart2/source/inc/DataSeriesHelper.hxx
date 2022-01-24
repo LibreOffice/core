@@ -37,6 +37,7 @@ namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace chart { class BaseCoordinateSystem; }
+namespace chart { class ChartType; }
 
 namespace chart::DataSeriesHelper
 {
@@ -122,7 +123,7 @@ rtl::Reference< ::chart::BaseCoordinateSystem >
         const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-css::uno::Reference< css::chart2::XChartType >
+rtl::Reference< ::chart::ChartType >
     getChartTypeOfSeries(
         const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
         const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
@@ -130,6 +131,10 @@ css::uno::Reference< css::chart2::XChartType >
 OOO_DLLPUBLIC_CHARTTOOLS void deleteSeries(
     const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
     const css::uno::Reference< css::chart2::XChartType > & xChartType );
+
+OOO_DLLPUBLIC_CHARTTOOLS void deleteSeries(
+    const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+    const rtl::Reference< ::chart::ChartType > & xChartType );
 
 OOO_DLLPUBLIC_CHARTTOOLS void switchSymbolsOnOrOff(
     const css::uno::Reference< css::beans::XPropertySet > & xSeriesProperties,

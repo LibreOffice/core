@@ -242,7 +242,7 @@ void ControllerState::update(
     {
         bMayAddMenuTrendline = true;
         sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
-        uno::Reference< chart2::XChartType > xFirstChartType(
+        rtl::Reference< ::chart::ChartType > xFirstChartType(
             DataSeriesHelper::getChartTypeOfSeries( xGivenDataSeries, xDiagram ));
 
         // trend lines/mean value line

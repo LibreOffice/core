@@ -21,6 +21,7 @@
 #include <ChartWindow.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartType.hxx>
 #include <TitleHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <DataSeriesHelper.hxx>
@@ -100,8 +101,8 @@ bool lcl_deleteDataSeries(
     uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rCID, xModel ));
     if( xSeries.is() && xModel.is())
     {
-        uno::Reference< chart2::XChartType > xChartType(
-            DataSeriesHelper::getChartTypeOfSeries( xSeries, xModel->getFirstDiagram()));
+        rtl::Reference< ::chart::ChartType > xChartType =
+            DataSeriesHelper::getChartTypeOfSeries( xSeries, xModel->getFirstDiagram());
         if( xChartType.is())
         {
             UndoGuard aUndoGuard(
