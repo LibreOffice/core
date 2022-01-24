@@ -1619,8 +1619,8 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
             bool bResult = SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,
                                         nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext );
 
-            // set tracked insertion
-            if ( eOld & RedlineFlags::On )
+            // set tracked insertion, if it's not in a drag & drop action
+            if ( !rSh.ActionPend() && ( eOld & RedlineFlags::On) )
             {
                 SvxPrintItem aTracked(RES_PRINT, false);
                 rSh.GetDoc()->SetRowNotTracked( *rSh.GetCursor(), aTracked );
@@ -3925,6 +3925,11 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         {
             bool bTableCol(SelectionType::TableCol & nSelection);
 
+            ::sw::mark::IMark* pMarkMoveFrom = rSh.SetBookmark(
+                                    vcl::KeyCode(),
+                                    OUString(),
+                                    IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
+
             SwUndoId eUndoId = bMove ? SwUndoId::UI_DRAG_AND_MOVE : SwUndoId::UI_DRAG_AND_COPY;
 
             SwRewriter aRewriter;
@@ -3951,11 +3956,27 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                                     OUString(),
                                     IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
 
+            // paste rows above/columns before
+            pDispatch->Execute(bTableCol ? FN_TABLE_PASTE_COL_BEFORE : FN_TABLE_PASTE_ROW_BEFORE, SfxCallMode::SYNCHRON);
+
+            // go to the previously inserted table row and set it to tracked insertion
+            rSh.Up(false);
+            SvxPrintItem aTracked(RES_PRINT, false);
+            rSh.GetDoc()->SetRowNotTracked( *rSh.GetCursor(), aTracked );
+
             rSrcSh.Pop(SwCursorShell::PopMode::DeleteCurrent); // restore selection...
 
             // delete source rows/columns
             if (bMove)
+            {
+                // restore cursor position
+                if (pMarkMoveFrom != nullptr)
+                {
+                    rSh.GotoMark( pMarkMoveFrom );
+                    rSh.getIDocumentMarkAccess()->deleteMark( pMarkMoveFrom );
+                }
                 pDispatch->Execute(bTableCol ? FN_TABLE_DELETE_COL : FN_TABLE_DELETE_ROW, SfxCallMode::SYNCHRON);
+            }
 
             // restore cursor position
             if (pMark != nullptr)
@@ -3963,12 +3984,6 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 rSh.GotoMark( pMark );
                 rSh.getIDocumentMarkAccess()->deleteMark( pMark );
             }
-
-            // paste rows above/columns before
-            pDispatch->Execute(bTableCol ? FN_TABLE_PASTE_COL_BEFORE : FN_TABLE_PASTE_ROW_BEFORE, SfxCallMode::SYNCHRON);
-
-            if( rSrcSh.GetDoc() != rSh.GetDoc() )
-                rSrcSh.EndUndo();
 
             rSh.DestroyCursor();
             rSh.EndUndo();
