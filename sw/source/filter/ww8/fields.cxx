@@ -27,6 +27,8 @@ namespace ww
     {
         //0 Signifies the field names I can't find.
         // #i43956# - field <eFOOTREF> = 5 should be mapped to "REF"
+        // See [MS-DOC] 2.9.90 flt
+        // https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-doc/28a8d2c2-6107-409d-8f6a-e345ab6d4179
         static const char *aFieldNames[] =
         {
             /* 0*/  nullptr,
