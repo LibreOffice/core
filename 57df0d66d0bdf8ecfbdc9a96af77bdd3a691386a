@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28874d3d_7738c15a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-25T15:14:30Z",
+      "side": 1,
+      "message": "@Xisco: thanks for back-porting!",
+      "revId": "57df0d66d0bdf8ecfbdc9a96af77bdd3a691386a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
