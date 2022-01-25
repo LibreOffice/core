@@ -63,8 +63,7 @@ class SvxSingleNumPickTabPage final : public SfxTabPage
     sal_uInt16              nActNumLvl;
     bool                    bModified   : 1;
     bool                    bPreset     : 1;
-
-    sal_uInt16              nNumItemId;
+    TypedWhichId<SvxNumBulletItem> nNumItemId;
 
     std::unique_ptr<SvxNumValueSet> m_xExamplesVS;
     std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
@@ -92,7 +91,7 @@ class SvxBulletPickTabPage final : public SfxTabPage
     sal_uInt16          nActNumLvl;
     bool                bModified   : 1;
     bool                bPreset     : 1;
-    sal_uInt16          nNumItemId;
+    TypedWhichId<SvxNumBulletItem> nNumItemId;
 
     OUString            sBulletCharFormatName;
 
@@ -129,7 +128,7 @@ class SvxNumPickTabPage final : public SfxTabPage
     std::unique_ptr<SvxNumRule> pActNum;
     std::unique_ptr<SvxNumRule> pSaveNum;
     sal_uInt16              nActNumLvl;
-    sal_uInt16              nNumItemId;
+    TypedWhichId<SvxNumBulletItem> nNumItemId;
     bool                bModified   : 1;
     bool                bPreset     : 1;
 
@@ -164,7 +163,7 @@ class SvxBitmapPickTabPage final : public SfxTabPage
     std::unique_ptr<SvxNumRule> pActNum;
     std::unique_ptr<SvxNumRule> pSaveNum;
     sal_uInt16              nActNumLvl;
-    sal_uInt16              nNumItemId;
+    TypedWhichId<SvxNumBulletItem> nNumItemId;
     MapUnit             eCoreUnit;
     bool                bModified   : 1;
     bool                bPreset     : 1;
@@ -216,7 +215,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     sal_uInt8           nBullet;
     sal_uInt16          nActNumLvl;
-    sal_uInt16          nNumItemId;
+    TypedWhichId<SvxNumBulletItem> nNumItemId;
     MapUnit             eCoreUnit;
 
     SvxNumberingPreview m_aPreviewWIN;
@@ -312,7 +311,7 @@ class SvxNumPositionTabPage : public SfxTabPage
 
     ImplSVEvent*        m_pLevelHdlEvent;
     sal_uInt16          nActNumLvl;
-    sal_uInt16          nNumItemId;
+    TypedWhichId<SvxNumBulletItem>  nNumItemId;
     MapUnit             eCoreUnit;
 
     bool                bModified           : 1;

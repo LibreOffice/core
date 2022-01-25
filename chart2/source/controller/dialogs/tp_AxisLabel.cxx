@@ -178,8 +178,8 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
         m_xCbStacked->set_state(TRISTATE_INDET);
     StackedToggleHdl(*m_xCbStacked);
 
-    if( rInAttrs->GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
-        m_xLbTextDirection->set_active_id( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
+    if( const SvxFrameDirectionItem* pDirectionItem = rInAttrs->GetItemIfSet( EE_PARA_WRITINGDIR ) )
+        m_xLbTextDirection->set_active_id( pDirectionItem->GetValue() );
 
     // Text overlap ----------
     aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, false, &pPoolItem );
@@ -222,10 +222,9 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
     // text order ----------
     if( m_bShowStaggeringControls )
     {
-        aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_ORDER, false, &pPoolItem );
-        if( aState == SfxItemState::SET )
+        if( const SvxChartTextOrderItem* pOrderItem = rInAttrs->GetItemIfSet( SCHATTR_AXIS_LABEL_ORDER, false ) )
         {
-            SvxChartTextOrder eOrder = static_cast< const SvxChartTextOrderItem * >( pPoolItem )->GetValue();
+            SvxChartTextOrder eOrder = pOrderItem->GetValue();
 
             switch( eOrder )
             {

@@ -78,14 +78,13 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
             aUserItem >>= m_sExtraData;
         }
 
-        const SfxPoolItem* pItem;
+        const SfxStringItem* pItem;
         OUString sAsciiOptions;
         if( rDocSh.GetMedium() != nullptr &&
             rDocSh.GetMedium()->GetItemSet() != nullptr &&
-            SfxItemState::SET == rDocSh.GetMedium()->GetItemSet()->GetItemState(
-                SID_FILE_FILTEROPTIONS, true, &pItem ))
+            (pItem = rDocSh.GetMedium()->GetItemSet()->GetItemIfSet( SID_FILE_FILTEROPTIONS )))
         {
-            sAsciiOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
+            sAsciiOptions = pItem->GetValue();
         }
 
         const OUString sFindNm = OUString::createFromAscii(

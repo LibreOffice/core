@@ -351,12 +351,9 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
     return eRet;
 }
 
-bool SfxItemSet::HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem) const
+bool SfxItemSet::HasItem(sal_uInt16 nWhich) const
 {
-    bool bRet = SfxItemState::SET == GetItemState(nWhich, true, ppItem);
-    if (!bRet && ppItem)
-        *ppItem = nullptr;
-    return bRet;
+    return SfxItemState::SET == GetItemState(nWhich);
 }
 
 const SfxPoolItem* SfxItemSet::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership )

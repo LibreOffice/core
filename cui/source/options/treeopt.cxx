@@ -1186,7 +1186,6 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         {
             std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-            const SfxPoolItem* pItem = nullptr;
             SfxItemSetFixed<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER> aOptSet(SfxGetpApp()->GetPool());
             aOptSet.Put(rSet);
             if(aOptSet.Count())
@@ -1196,26 +1195,26 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 
 //          evaluate Year2000
             sal_uInt16 nY2K = USHRT_MAX;
-            if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
-                nY2K = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+            const SfxUInt16Item* pYearItem = rSet.GetItemIfSet( SID_ATTR_YEAR2000, false );
+            if( pYearItem )
+                nY2K = pYearItem->GetValue();
             if( USHRT_MAX != nY2K )
             {
                 if ( pViewFrame )
                 {
                     SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
                     pDispatch->ExecuteList(SID_ATTR_YEAR2000,
-                            SfxCallMode::ASYNCHRON, { pItem });
+                            SfxCallMode::ASYNCHRON, { pYearItem });
                 }
                 officecfg::Office::Common::DateFormat::TwoDigitYear::set(nY2K, batch);
             }
 
 //          evaluate print
-            if(SfxItemState::SET == rSet.GetItemState(SID_PRINTER_NOTFOUND_WARN, false, &pItem))
-                officecfg::Office::Common::Print::Warning::NotFound::set(static_cast<const SfxBoolItem*>(pItem)->GetValue(), batch);
+            if(const SfxBoolItem* pWarnItem = rSet.GetItemIfSet(SID_PRINTER_NOTFOUND_WARN, false))
+                officecfg::Office::Common::Print::Warning::NotFound::set(pWarnItem->GetValue(), batch);
 
-            if(SfxItemState::SET == rSet.GetItemState(SID_PRINTER_CHANGESTODOC, false, &pItem))
+            if(const SfxFlagItem* pFlag = rSet.GetItemIfSet(SID_PRINTER_CHANGESTODOC, false))
             {
-                const SfxFlagItem* pFlag = static_cast<const SfxFlagItem*>(pItem);
                 bool bPaperSizeWarning = bool(static_cast<SfxPrinterChangeFlags>(pFlag->GetValue()) &  SfxPrinterChangeFlags::CHG_SIZE);
                 officecfg::Office::Common::Print::Warning::PaperSize::set(bPaperSizeWarning, batch);
                 bool bPaperOrientationWarning = bool(static_cast<SfxPrinterChangeFlags>(pFlag->GetValue()) & SfxPrinterChangeFlags::CHG_ORIENTATION);
@@ -1267,10 +1266,8 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
 
     Reference< XComponentContext >  xContext( ::comphelper::getProcessComponentContext() );
     Reference< XLinguProperties >  xProp = LinguProperties::create( xContext );
-    if ( SfxItemState::SET == rSet.GetItemState(SID_ATTR_HYPHENREGION, false, &pItem ) )
+    if ( const SfxHyphenRegionItem* pHyphenItem = rSet.GetItemIfSet(SID_ATTR_HYPHENREGION, false ) )
     {
-        const SfxHyphenRegionItem* pHyphenItem = static_cast<const SfxHyphenRegionItem*>(pItem);
-
         xProp->setHyphMinLeading( static_cast<sal_Int16>(pHyphenItem->GetMinLead()) );
         xProp->setHyphMinTrailing( static_cast<sal_Int16>(pHyphenItem->GetMinTrail()) );
         bSaveSpellCheck = true;

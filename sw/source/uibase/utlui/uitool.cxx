@@ -82,11 +82,10 @@ using namespace ::com::sun::star;
 void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
 {
     std::shared_ptr<SvxBoxInfoItem> aBoxInfo(std::make_shared<SvxBoxInfoItem>(SID_ATTR_BORDER_INNER));
-    const SfxPoolItem *pBoxInfo;
 
-    if ( SfxItemState::SET == rSet.GetItemState( SID_ATTR_BORDER_INNER, true, &pBoxInfo))
+    if ( const SvxBoxInfoItem *pBoxInfo = rSet.GetItemIfSet( SID_ATTR_BORDER_INNER ))
     {
-        aBoxInfo.reset(static_cast<SvxBoxInfoItem*>(pBoxInfo->Clone()));
+        aBoxInfo.reset(pBoxInfo->Clone());
     }
 
         // Table variant: If more than one table cells are selected
@@ -109,10 +108,9 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, bool bIsPara)
     // Background / highlight
     {
         // Always use the visible background
-        const SfxPoolItem *pTmpBrush;
-        if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_HIGHLIGHT, true, &pTmpBrush ) )
+        if( const SvxBrushItem *pTmpBrush = rSet.GetItemIfSet( RES_CHRATR_HIGHLIGHT ) )
         {
-            SvxBrushItem aTmpBrush( pTmpBrush->StaticWhichCast(RES_CHRATR_HIGHLIGHT) );
+            SvxBrushItem aTmpBrush( *pTmpBrush );
             if( aTmpBrush.GetColor() != COL_TRANSPARENT )
             {
                 aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
@@ -147,17 +145,16 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, bool bIsPara)
 void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIsPara)
 {
     // Background / highlighting
-    const SfxPoolItem *pTmpItem;
-    if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BACKGROUND, false, &pTmpItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BACKGROUND, false ) )
     {
         // Highlight is an MS specific thing, so remove it at the first time when LO modifies
         // this part of the imported document.
         rSet.Put( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
 
         // Remove shading marker
-        if (SfxItemState::SET == rOrigSet.GetItemState(RES_CHRATR_GRABBAG, false, &pTmpItem))
+        if (const SfxGrabBagItem* pGrabBagItem = rOrigSet.GetItemIfSet(RES_CHRATR_GRABBAG, false))
         {
-            SfxGrabBagItem aGrabBag(pTmpItem->StaticWhichCast(RES_CHRATR_GRABBAG));
+            SfxGrabBagItem aGrabBag(*pGrabBagItem);
             std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
             auto aIterator = rMap.find("CharShadingMarker");
             if( aIterator != rMap.end() )
@@ -173,9 +170,9 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
 
     rSet.ClearItem( RES_BACKGROUND );
 
-    if (SfxItemState::SET == rOrigSet.GetItemState(RES_PARATR_GRABBAG, false, &pTmpItem))
+    if (const SfxGrabBagItem* pGrabBagItem = rOrigSet.GetItemIfSet(RES_PARATR_GRABBAG, false))
     {
-        SfxGrabBagItem aGrabBag(pTmpItem->StaticWhichCast(RES_PARATR_GRABBAG));
+        SfxGrabBagItem aGrabBag(*pGrabBagItem);
         std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
         auto aIterator = rMap.find("OrigItemSetRanges");
         if (aIterator != rMap.end())
@@ -213,10 +210,9 @@ void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell)
     rShell.SetAttrItem(SvxBrushItem(RES_CHRATR_HIGHLIGHT));
 
     // Remove shading marker
-    const SfxPoolItem *pTmpItem;
-    if (SfxItemState::SET == aCoreSet.GetItemState(RES_CHRATR_GRABBAG, false, &pTmpItem))
+    if (const SfxGrabBagItem* pGrabBagItem = aCoreSet.GetItemIfSet(RES_CHRATR_GRABBAG, false))
     {
-        SfxGrabBagItem aGrabBag(pTmpItem->StaticWhichCast(RES_CHRATR_GRABBAG));
+        SfxGrabBagItem aGrabBag(*pGrabBagItem);
         std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
         auto aIterator = rMap.find("CharShadingMarker");
         if (aIterator != rMap.end())
@@ -286,10 +282,8 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
     // before SetFormatAttr() in case it contains RES_BACKGROUND_FULL_SIZE
     // itself, as it does when called from SwXPageStyle
-    SfxPoolItem const* pItem(nullptr);
-    if (SfxItemState::SET == rSet.GetItemState(SID_ATTR_CHAR_GRABBAG, true, &pItem))
+    if (const SfxGrabBagItem* pGrabBag = rSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
     {
-        SfxGrabBagItem const*const pGrabBag(static_cast<SfxGrabBagItem const*>(pItem));
         bool bValue;
         if (pGrabBag->GetGrabBag().find("BackgroundFullSize")->second >>= bValue)
         {
@@ -327,10 +321,10 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         rMaster.SetFormatAttr(aSize);
     }
     // Evaluate header attributes
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PAGE_HEADERSET,
-            false, &pItem ) )
+    if( const SvxSetItem* pHeaderSetItem = rSet.GetItemIfSet( SID_ATTR_PAGE_HEADERSET,
+            false ) )
     {
-        const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
+        const SfxItemSet& rHeaderSet = pHeaderSetItem->GetItemSet();
         const SfxBoolItem& rHeaderOn = rHeaderSet.Get(SID_ATTR_PAGE_ON);
 
         if(rHeaderOn.GetValue())
@@ -363,10 +357,10 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     }
 
     // Evaluate footer attributes
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PAGE_FOOTERSET,
-            false, &pItem ) )
+    if( const SvxSetItem* pFooterSetItem = rSet.GetItemIfSet( SID_ATTR_PAGE_FOOTERSET,
+            false ) )
     {
-        const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
+        const SfxItemSet& rFooterSet = pFooterSetItem->GetItemSet();
         const SfxBoolItem& rFooterOn = rFooterSet.Get(SID_ATTR_PAGE_ON);
 
         if(rFooterOn.GetValue())
@@ -402,25 +396,26 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
     // Footnotes
 
-    if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_FTN_INFO,
-            false, &pItem ) )
-        rPageDesc.SetFootnoteInfo( static_cast<const SwPageFootnoteInfoItem*>(pItem)->GetPageFootnoteInfo() );
+    if( const SwPageFootnoteInfoItem* pFootnoteItem = rSet.GetItemIfSet( FN_PARAM_FTN_INFO,
+            false ) )
+        rPageDesc.SetFootnoteInfo( pFootnoteItem->GetPageFootnoteInfo() );
 
     // Columns
 
     // Register compliant
 
-    if(SfxItemState::SET != rSet.GetItemState(
-                            SID_SWREGISTER_MODE, false, &pItem))
+    const SfxBoolItem* pRegisterModeItem = rSet.GetItemIfSet(
+                            SID_SWREGISTER_MODE, false);
+    if(!pRegisterModeItem)
         return;
 
-    bool bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+    bool bSet = pRegisterModeItem->GetValue();
     if(!bSet)
         rPageDesc.SetRegisterFormatColl(nullptr);
-    else if(SfxItemState::SET == rSet.GetItemState(
-                            SID_SWREGISTER_COLLECTION, false, &pItem))
+    else if(const SfxStringItem* pCollectionItem = rSet.GetItemIfSet(
+                            SID_SWREGISTER_COLLECTION, false))
     {
-        const OUString& rColl = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        const OUString& rColl = pCollectionItem->GetValue();
         SwDoc& rDoc = *rMaster.GetDoc();
         SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName( rColl );
         if( !pColl )
@@ -484,11 +479,10 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     rSet.Put(rMaster.GetAttrSet());
 
     std::shared_ptr<SvxBoxInfoItem> aBoxInfo(std::make_shared<SvxBoxInfoItem>(SID_ATTR_BORDER_INNER));
-    const SfxPoolItem *pBoxInfo;
 
-    if ( SfxItemState::SET == rSet.GetItemState( SID_ATTR_BORDER_INNER, true, &pBoxInfo) )
+    if ( const SvxBoxInfoItem *pBoxInfo = rSet.GetItemIfSet( SID_ATTR_BORDER_INNER ) )
     {
-        aBoxInfo.reset(static_cast<SvxBoxInfoItem*>(pBoxInfo->Clone()));
+        aBoxInfo.reset(pBoxInfo->Clone());
     }
 
     aBoxInfo->SetTable( false );
@@ -619,10 +613,9 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         rSet.Put(SfxStringItem(SID_SWREGISTER_COLLECTION, pCol->GetName()));
 
     std::optional<SfxGrabBagItem> oGrabBag;
-    SfxPoolItem const* pItem(nullptr);
-    if (SfxItemState::SET == rSet.GetItemState(SID_ATTR_CHAR_GRABBAG, true, &pItem))
+    if (SfxGrabBagItem const* pItem = rSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
     {
-        oGrabBag.emplace(*static_cast<SfxGrabBagItem const*>(pItem));
+        oGrabBag.emplace(*pItem);
     }
     else
     {
@@ -687,9 +680,9 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
             assert(false); // unexpected
             break;
     }
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PARA_MODEL, false, &pItem ))
+    if( const SvxPageModelItem* pModelItem = rSet.GetItemIfSet( SID_ATTR_PARA_MODEL, false ))
     {
-        const OUString& rDescName = static_cast<const SvxPageModelItem*>(pItem)->GetValue();
+        const OUString& rDescName = pModelItem->GetValue();
         if( !rDescName.isEmpty() )   // No name -> disable PageDesc!
         {
             // Delete only, if PageDesc will be enabled!
@@ -706,9 +699,9 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
     {
         SfxItemSetFixed<RES_PAGEDESC, RES_PAGEDESC> aCoreSet(rShell.GetView().GetPool());
         rShell.GetCurAttr( aCoreSet );
-        if(SfxItemState::SET == aCoreSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
+        if(const SwFormatPageDesc* pPageDescItem = aCoreSet.GetItemIfSet( RES_PAGEDESC ) )
         {
-            auto pPageDesc = pItem->StaticWhichCast(RES_PAGEDESC).GetPageDesc();
+            const SwPageDesc* pPageDesc = pPageDescItem->GetPageDesc();
             if( pPageDesc )
             {
                 aPgDesc.RegisterToPageDesc( *const_cast<SwPageDesc*>(pPageDesc) );
@@ -723,11 +716,11 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
 // Inquire if in the set is a Sfx-PageDesc combination present and return it.
 void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 {
-    const SfxPoolItem* pItem = nullptr;
+    const SwFormatPageDesc* pItem = nullptr;
     OUString aName;
     ::std::optional<sal_uInt16> oNumOffset;
     bool bPut = true;
-    switch( rCoreSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
+    switch( rCoreSet.GetItemStateTyped( RES_PAGEDESC, true, &pItem ) )
     {
     case SfxItemState::SET:
         {

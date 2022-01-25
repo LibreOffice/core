@@ -1052,19 +1052,16 @@ void SwHTMLParser::InsertBodyOptions()
         m_pCSS1Parser->SetPageDescAttrs( bSetBrush ? aBrushItem.get() : nullptr,
                                        &aItemSet );
 
-        const SfxPoolItem *pItem;
-        static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,
+        static const TypedWhichId<SvxFontHeightItem> aWhichIds[3] = { RES_CHRATR_FONTSIZE,
                                        RES_CHRATR_CJK_FONTSIZE,
                                        RES_CHRATR_CTL_FONTSIZE };
-        for(sal_uInt16 i : aWhichIds)
+        for(auto const & i : aWhichIds)
         {
-            if( SfxItemState::SET == aItemSet.GetItemState( i, false,
-                                                       &pItem ) &&
-                static_cast <const SvxFontHeightItem * >(pItem)->GetProp() != 100)
+            const SvxFontHeightItem *pItem = aItemSet.GetItemIfSet( i, false );
+            if( pItem && pItem->GetProp() != 100)
             {
                 sal_uInt32 nHeight =
-                    ( m_aFontHeights[2] *
-                     static_cast <const SvxFontHeightItem * >(pItem)->GetProp() ) / 100;
+                    ( m_aFontHeights[2] * pItem->GetProp() ) / 100;
                 SvxFontHeightItem aNewItem( nHeight, 100, i );
                 aItemSet.Put( aNewItem );
             }

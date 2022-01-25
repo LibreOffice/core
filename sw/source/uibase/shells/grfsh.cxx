@@ -407,22 +407,21 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             {
                 rSh.StartAllAction();
                 rSh.StartUndo(SwUndoId::START);
-                const SfxPoolItem* pItem;
                 SfxItemSet* pSet = const_cast<SfxItemSet*>(pDlg->GetOutputItemSet());
                 rReq.Done(*pSet);
                 // change the 2 frmsize SizeItems to the correct SwFrameSizeItem
-                if( SfxItemState::SET == pSet->GetItemState(
-                                SID_ATTR_GRAF_FRMSIZE, false, &pItem ))
+                if( const SvxSizeItem* pSizeItem = pSet->GetItemIfSet(
+                                SID_ATTR_GRAF_FRMSIZE, false ))
                 {
                     SwFormatFrameSize aSize;
-                    const Size& rSz = static_cast<const SvxSizeItem*>(pItem)->GetSize();
+                    const Size& rSz = pSizeItem->GetSize();
                     aSize.SetWidth( rSz.Width() );
                     aSize.SetHeight( rSz.Height() );
 
-                    if( SfxItemState::SET == pSet->GetItemState(
-                            SID_ATTR_GRAF_FRMSIZE_PERCENT, false, &pItem ))
+                    pSizeItem = pSet->GetItemIfSet( SID_ATTR_GRAF_FRMSIZE_PERCENT, false );
+                    if( pSizeItem )
                     {
-                        const Size& rRelativeSize = static_cast<const SvxSizeItem*>(pItem)->GetSize();
+                        const Size& rRelativeSize = pSizeItem->GetSize();
                         aSize.SetWidthPercent( static_cast< sal_uInt8 >( rRelativeSize.Width() ) );
                         aSize.SetHeightPercent( static_cast< sal_uInt8 >( rRelativeSize.Height() ) );
                     }
@@ -447,18 +446,16 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 aMgr.UpdateFlyFrame();
 
                 bool bApplyUsrPref = false;
-                if (SfxItemState::SET == pSet->GetItemState(
-                    FN_KEEP_ASPECT_RATIO, true, &pItem ))
+                if (const SfxBoolItem* pRatioItem = pSet->GetItemIfSet(
+                    FN_KEEP_ASPECT_RATIO ))
                 {
-                    aUsrPref.SetKeepRatio(
-                                    static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+                    aUsrPref.SetKeepRatio( pRatioItem->GetValue() );
                     bApplyUsrPref = true;
                 }
-                if( SfxItemState::SET == pSet->GetItemState(
-                    SID_ATTR_GRAF_KEEP_ZOOM, true, &pItem ))
+                if( const SfxBoolItem* pZoomItem = pSet->GetItemIfSet(
+                    SID_ATTR_GRAF_KEEP_ZOOM ))
                 {
-                    aUsrPref.SetGrfKeepZoom(
-                                    static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+                    aUsrPref.SetGrfKeepZoom( pZoomItem->GetValue() );
                     bApplyUsrPref = true;
                 }
 
@@ -466,16 +463,16 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     SW_MOD()->ApplyUsrPref(aUsrPref, &GetView());
 
                 // and now set all the graphic attributes and other stuff
-                if( SfxItemState::SET == pSet->GetItemState(
-                                        SID_ATTR_GRAF_GRAPHIC, true, &pItem ))
+                if( const SvxBrushItem* pGraphicBrushItem = pSet->GetItemIfSet(
+                                        SID_ATTR_GRAF_GRAPHIC ))
                 {
-                    if( !static_cast<const SvxBrushItem*>(pItem)->GetGraphicLink().isEmpty() )
-                        sGrfNm = static_cast<const SvxBrushItem*>(pItem)->GetGraphicLink();
+                    if( !pGraphicBrushItem->GetGraphicLink().isEmpty() )
+                        sGrfNm = pGraphicBrushItem->GetGraphicLink();
                     else
                         sGrfNm.clear();
 
-                    if( !static_cast<const SvxBrushItem*>(pItem)->GetGraphicFilter().isEmpty() )
-                        sFilterNm = static_cast<const SvxBrushItem*>(pItem)->GetGraphicFilter();
+                    if( !pGraphicBrushItem->GetGraphicFilter().isEmpty() )
+                        sFilterNm = pGraphicBrushItem->GetGraphicFilter();
                     else
                         sFilterNm.clear();
 
@@ -493,21 +490,21 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                                      sFilterNm );
                     }
                 }
-                if ( SfxItemState::SET == pSet->GetItemState(
-                                        FN_SET_FRM_ALT_NAME, true, &pItem ))
+                if ( const SfxStringItem* pNameItem = pSet->GetItemIfSet(
+                                        FN_SET_FRM_ALT_NAME ))
                 {
                     // #i73249#
-                    rSh.SetObjTitle( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+                    rSh.SetObjTitle( pNameItem->GetValue() );
                 }
 
-                if ( SfxItemState::SET == pSet->GetItemState(
-                                        FN_UNO_DESCRIPTION, true, &pItem ))
-                    rSh.SetObjDescription( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+                if ( const SfxStringItem* pDescriptionItem = pSet->GetItemIfSet(
+                                        FN_UNO_DESCRIPTION ))
+                    rSh.SetObjDescription( pDescriptionItem->GetValue() );
 
                 // RotGrfFlyFrame: Get and process evtl. changed RotationAngle
-                if ( SfxItemState::SET == pSet->GetItemState(SID_ATTR_TRANSFORM_ANGLE, false, &pItem ))
+                if ( const SdrAngleItem* pAngleItem = pSet->GetItemIfSet(SID_ATTR_TRANSFORM_ANGLE, false ))
                 {
-                    const Degree10 aNewRotation = to<Degree10>(static_cast<const SdrAngleItem*>(pItem)->GetValue() % 36000_deg100);
+                    const Degree10 aNewRotation = to<Degree10>(pAngleItem->GetValue() % 36000_deg100);
 
                     // RotGrfFlyFrame: Possible rotation change here, SwFlyFrameAttrMgr aMgr is available
                     aMgr.SetRotation(nCurrentRotation, aNewRotation, aUnrotatedSize);

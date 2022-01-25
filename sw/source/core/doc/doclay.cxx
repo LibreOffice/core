@@ -182,8 +182,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
     const SwFormatAnchor* pAnchor = nullptr;
     if( pFlySet )
     {
-        pFlySet->GetItemState( RES_ANCHOR, false,
-                                reinterpret_cast<const SfxPoolItem**>(&pAnchor) );
+        pAnchor = pFlySet->GetItemIfSet( RES_ANCHOR, false );
         if( SfxItemState::SET == pFlySet->GetItemState( RES_CNTNT, false ))
         {
             SfxItemSet aTmpSet( *pFlySet );
@@ -295,10 +294,8 @@ SwFlyFrameFormat* SwDoc::MakeFlySection( RndStdIds eAnchorType,
     if ( !pAnchorPos && (RndStdIds::FLY_AT_PAGE != eAnchorType) )
     {
         const SwFormatAnchor* pAnch;
-        if( (pFlySet && SfxItemState::SET == pFlySet->GetItemState(
-                RES_ANCHOR, false, reinterpret_cast<const SfxPoolItem**>(&pAnch) )) ||
-            ( pFrameFormat && SfxItemState::SET == pFrameFormat->GetItemState(
-                RES_ANCHOR, true, reinterpret_cast<const SfxPoolItem**>(&pAnch) )) )
+        if( (pFlySet && (pAnch = pFlySet->GetItemIfSet( RES_ANCHOR, false ))) ||
+            ( pFrameFormat && (pAnch = pFrameFormat->GetItemIfSet(RES_ANCHOR)) ) )
         {
             if ( RndStdIds::FLY_AT_PAGE != pAnch->GetAnchorId() )
             {
@@ -329,8 +326,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection( RndStdIds eAnchorType,
         const SfxPoolItem * pItem = nullptr;
 
         if (bCalledFromShell && !lcl_IsItemSet(*pNewTextNd, RES_PARATR_ADJUST) &&
-            SfxItemState::SET == pAnchorNode->GetSwAttrSet().
-            GetItemState(RES_PARATR_ADJUST, true, &pItem))
+            SfxItemState::SET == pAnchorNode->GetSwAttrSet().GetItemState(RES_PARATR_ADJUST, true, &pItem))
         {
             pNewTextNd->SetAttr(*pItem);
         }

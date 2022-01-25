@@ -266,11 +266,9 @@ SwUnoCursorHelper::SetPageDesc(
         return false;
     }
     std::unique_ptr<SwFormatPageDesc> pNewDesc;
-    const SfxPoolItem* pItem;
-    if(SfxItemState::SET == rSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
+    if(const SwFormatPageDesc* pItem = rSet.GetItemIfSet( RES_PAGEDESC ))
     {
-        pNewDesc.reset(new SwFormatPageDesc(
-                    *static_cast<const SwFormatPageDesc*>(pItem)));
+        pNewDesc.reset(new SwFormatPageDesc(*pItem));
     }
     if (!pNewDesc)
     {
@@ -384,11 +382,9 @@ lcl_setDropcapCharStyle(SwPaM const & rPam, SfxItemSet & rItemSet,
         throw lang::IllegalArgumentException();
     }
     std::unique_ptr<SwFormatDrop> pDrop;
-    SfxPoolItem const* pItem(nullptr);
-    if (SfxItemState::SET ==
-            rItemSet.GetItemState(RES_PARATR_DROP, true, &pItem))
+    if (const SwFormatDrop* pItem = rItemSet.GetItemIfSet(RES_PARATR_DROP))
     {
-        pDrop.reset(new SwFormatDrop(*static_cast<const SwFormatDrop*>(pItem)));
+        pDrop.reset(new SwFormatDrop(*pItem));
     }
     if (!pDrop)
     {
@@ -409,11 +405,9 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
     }
 
     std::unique_ptr<SwFormatRuby> pRuby;
-    const SfxPoolItem* pItem;
-    if (SfxItemState::SET ==
-            rItemSet.GetItemState(RES_TXTATR_CJK_RUBY, true, &pItem))
+    if (const SwFormatRuby* pItem = rItemSet.GetItemIfSet(RES_TXTATR_CJK_RUBY))
     {
-        pRuby.reset(new SwFormatRuby(*static_cast<const SwFormatRuby*>(pItem)));
+        pRuby.reset(new SwFormatRuby(*pItem));
     }
     if (!pRuby)
     {

@@ -261,17 +261,18 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
        : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem;
+    const SfxStringItem* pGraphicItem;
     if ( pReqArgs &&
-         pReqArgs->GetItemState( SID_INSERT_GRAPHIC, true, &pItem ) == SfxItemState::SET )
+         (pGraphicItem = pReqArgs->GetItemIfSet( SID_INSERT_GRAPHIC, true )) )
     {
-        OUString aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        OUString aFileName = pGraphicItem->GetValue();
 
         OUString aFilterName;
-        if ( pReqArgs->GetItemState( FN_PARAM_FILTER, true, &pItem ) == SfxItemState::SET )
-            aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        if ( const SfxStringItem* pFilterItem = pReqArgs->GetItemIfSet( FN_PARAM_FILTER ) )
+            aFilterName = pFilterItem->GetValue();
 
         bool bAsLink = false;
+        const SfxPoolItem* pItem;
         if ( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
             bAsLink = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 

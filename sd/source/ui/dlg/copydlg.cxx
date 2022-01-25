@@ -105,7 +105,6 @@ void CopyDlg::Reset()
     m_xMtrFldWidth->set_range(-nRectWidth, nPageWidth, FieldUnit::MM_100TH);
     m_xMtrFldHeight->set_range(-nRectHeight, nPageHeight, FieldUnit::MM_100TH);
 
-    const SfxPoolItem* pPoolItem = nullptr;
     OUString aStr;
     SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
     if (aDlgOpt.Exists())
@@ -116,39 +115,39 @@ void CopyDlg::Reset()
 
     if (aStr.isEmpty())
     {
-        if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_NUMBER, true, &pPoolItem ) )
-            m_xNumFldCopies->set_value(static_cast<const SfxUInt16Item*>(pPoolItem)->GetValue());
+        if( const SfxUInt16Item* pPoolItem = mrOutAttrs.GetItemIfSet( ATTR_COPY_NUMBER ) )
+            m_xNumFldCopies->set_value(pPoolItem->GetValue());
         else
             m_xNumFldCopies->set_value(1);
 
         tools::Long nMoveX = 500;
-        if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_X, true, &pPoolItem ) )
-            nMoveX = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
+        if( const SfxInt32Item* pPoolItem = mrOutAttrs.GetItemIfSet( ATTR_COPY_MOVE_X ) )
+            nMoveX = pPoolItem->GetValue();
         SetMetricValue( *m_xMtrFldMoveX, tools::Long(nMoveX / maUIScale), MapUnit::Map100thMM);
 
         tools::Long nMoveY = 500;
-        if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_Y, true, &pPoolItem ) )
-            nMoveY = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
+        if( const SfxInt32Item* pPoolItem = mrOutAttrs.GetItemIfSet( ATTR_COPY_MOVE_Y ) )
+            nMoveY = pPoolItem->GetValue();
         SetMetricValue( *m_xMtrFldMoveY, tools::Long(nMoveY / maUIScale), MapUnit::Map100thMM);
 
-        if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
-            m_xMtrFldAngle->set_value(static_cast<const SdrAngleItem*>( pPoolItem )->GetValue().get(), FieldUnit::NONE);
+        if( const SdrAngleItem* pPoolItem = mrOutAttrs.GetItemIfSet( ATTR_COPY_ANGLE ) )
+            m_xMtrFldAngle->set_value( pPoolItem->GetValue().get(), FieldUnit::NONE);
         else
             m_xMtrFldAngle->set_value(0, FieldUnit::NONE);
 
         tools::Long nWidth = 0;
-        if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )
-            nWidth = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
+        if( const SfxInt32Item* pPoolItem = mrOutAttrs.GetItemIfSet( ATTR_COPY_WIDTH ) )
+            nWidth = pPoolItem->GetValue();
         SetMetricValue( *m_xMtrFldWidth, tools::Long(nWidth / maUIScale), MapUnit::Map100thMM);
 
         tools::Long nHeight = 0;
-        if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_HEIGHT, true, &pPoolItem ) )
-            nHeight = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
+        if( const SfxInt32Item* pPoolItem = mrOutAttrs.GetItemIfSet( ATTR_COPY_HEIGHT ) )
+            nHeight = pPoolItem->GetValue();
         SetMetricValue( *m_xMtrFldHeight, tools::Long(nHeight / maUIScale), MapUnit::Map100thMM);
 
-        if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
+        if( const XColorItem* pPoolItem = mrOutAttrs.GetItemIfSet( ATTR_COPY_START_COLOR ) )
         {
-            Color aColor = static_cast<const XColorItem*>( pPoolItem )->GetColorValue();
+            Color aColor = pPoolItem->GetColorValue();
             m_xLbStartColor->SelectEntry( aColor );
             m_xLbEndColor->SelectEntry( aColor );
         }
@@ -226,10 +225,9 @@ IMPL_LINK_NOARG(CopyDlg, SetViewData, weld::Button&, void)
                                     maUIScale ), MapUnit::Map100thMM);
 
     // sets color attribute
-    const SfxPoolItem*  pPoolItem = nullptr;
-    if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
+    if( const XColorItem* pPoolItem = mrOutAttrs.GetItemIfSet( ATTR_COPY_START_COLOR ) )
     {
-        Color aColor = static_cast<const XColorItem*>( pPoolItem )->GetColorValue();
+        Color aColor = pPoolItem->GetColorValue();
         m_xLbStartColor->SelectEntry( aColor );
     }
 }
@@ -251,10 +249,9 @@ IMPL_LINK_NOARG(CopyDlg, SetDefault, weld::Button&, void)
     SetMetricValue( *m_xMtrFldHeight, tools::Long(nValue / maUIScale), MapUnit::Map100thMM);
 
     // set color attribute
-    const SfxPoolItem*  pPoolItem = nullptr;
-    if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
+    if( const XColorItem* pPoolItem = mrOutAttrs.GetItemIfSet( ATTR_COPY_START_COLOR ) )
     {
-        Color aColor = static_cast<const XColorItem*>( pPoolItem )->GetColorValue();
+        Color aColor = pPoolItem->GetColorValue();
         m_xLbStartColor->SelectEntry( aColor );
         m_xLbEndColor->SelectEntry( aColor );
     }

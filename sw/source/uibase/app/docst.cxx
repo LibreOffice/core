@@ -439,9 +439,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 if( SfxItemState::SET == pArgs->GetItemState(SID_STYLE_MASK,
                     false, &pItem ))
                     nMask = static_cast<SfxStyleSearchBits>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
-                if( SfxItemState::SET == pArgs->GetItemState(FN_PARAM_WRTSHELL,
-                    false, &pItem ))
-                    pActShell = pShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
+                if( const SwPtrItem* pShellItem = pArgs->GetItemIfSet(FN_PARAM_WRTSHELL, false ))
+                    pActShell = pShell = static_cast<SwWrtShell*>(pShellItem->GetValue());
 
                 if( nSlot == SID_STYLE_UPDATE_BY_EXAMPLE && aParam.isEmpty() )
                 {
@@ -469,15 +468,15 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         }
                         break;
                         case SfxStyleFamily::Pseudo:
-                        if(SfxItemState::SET == pArgs->GetItemState(SID_STYLE_UPD_BY_EX_NAME, false, &pItem))
+                        if(const SfxStringItem* pExName = pArgs->GetItemIfSet(SID_STYLE_UPD_BY_EX_NAME, false))
                         {
-                            aParam = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                            aParam = pExName->GetValue();
                         }
                         break;
                         case SfxStyleFamily::Table:
-                        if(SfxItemState::SET == pArgs->GetItemState(SID_STYLE_UPD_BY_EX_NAME, false, &pItem))
+                        if(const SfxStringItem* pExName = pArgs->GetItemIfSet(SID_STYLE_UPD_BY_EX_NAME, false))
                         {
-                            aParam = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                            aParam = pExName->GetValue();
                         }
                         break;
                         default: break;
@@ -624,13 +623,11 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
 
         if (m_nFamily == SfxStyleFamily::Page)
         {
-            const SfxPoolItem* pItem = nullptr;
-            if (aTmpSet.HasItem(SID_ATTR_CHAR_GRABBAG, &pItem))
+            if (const SfxGrabBagItem* pGrabBagItem = aTmpSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
             {
-                const auto& rGrabBagItem = static_cast<const SfxGrabBagItem&>(*pItem);
                 bool bGutterAtTop{};
-                auto it = rGrabBagItem.GetGrabBag().find("GutterAtTop");
-                if (it != rGrabBagItem.GetGrabBag().end())
+                auto it = pGrabBagItem->GetGrabBag().find("GutterAtTop");
+                if (it != pGrabBagItem->GetGrabBag().end())
                 {
                     it->second >>= bGutterAtTop;
                 }
@@ -647,14 +644,12 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
 
         if (m_nFamily == SfxStyleFamily::Frame)
         {
-            const SfxPoolItem* pItem = nullptr;
-            if (aTmpSet.HasItem(FN_KEEP_ASPECT_RATIO, &pItem))
+            if (const SfxBoolItem* pBoolItem = aTmpSet.GetItemIfSet(FN_KEEP_ASPECT_RATIO))
             {
-                const auto& rBoolItem = static_cast<const SfxBoolItem&>(*pItem);
                 const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
                 SwViewOption aUsrPref(*pVOpt);
-                aUsrPref.SetKeepRatio(rBoolItem.GetValue());
-                if (rBoolItem.GetValue() != pVOpt->IsKeepRatio())
+                aUsrPref.SetKeepRatio(pBoolItem->GetValue());
+                if (pBoolItem->GetValue() != pVOpt->IsKeepRatio())
                 {
                     SW_MOD()->ApplyUsrPref(aUsrPref, &pWrtShell->GetView());
                 }
@@ -917,10 +912,9 @@ void SwDocShell::Edit(
         rSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
 
         std::optional<SfxGrabBagItem> oGrabBag;
-        SfxPoolItem const* pItem(nullptr);
-        if (SfxItemState::SET == rSet.GetItemState(SID_ATTR_CHAR_GRABBAG, true, &pItem))
+        if (SfxGrabBagItem const* pItem = rSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
         {
-            oGrabBag.emplace(*static_cast<SfxGrabBagItem const*>(pItem));
+            oGrabBag.emplace(*pItem);
         }
         else
         {

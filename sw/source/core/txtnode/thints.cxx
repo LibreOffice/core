@@ -1344,9 +1344,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     //JP 11.05.98: if the anchor is already set correctly,
                     // fix it after inserting the char, so that clients don't
                     // have to worry about it.
-                    const SwFormatAnchor* pAnchor = nullptr;
-                    (void)pFormat->GetItemState( RES_ANCHOR, false,
-                        reinterpret_cast<const SfxPoolItem**>(&pAnchor) );
+                    const SwFormatAnchor* pAnchor = pFormat->GetItemIfSet( RES_ANCHOR, false );
 
                     SwIndex aIdx( this, pAttr->GetStart() );
                     const OUString c(GetCharOfTextAttr(*pAttr));
@@ -1752,8 +1750,7 @@ void SwTextNode::DeleteAttributes(
             {
                 // Check if character format contains hidden attribute:
                 const SwCharFormat* pFormat = pTextHt->GetCharFormat().GetCharFormat();
-                const SfxPoolItem* pItem;
-                if ( SfxItemState::SET == pFormat->GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) )
+                if ( SfxItemState::SET == pFormat->GetItemState( RES_CHRATR_HIDDEN ) )
                     SetCalcHiddenCharFlags();
             }
             // #i75430# Recalc hidden flags if necessary
@@ -1877,12 +1874,9 @@ bool SwTextNode::SetAttr(
             }
 
             // check for auto style:
-            const SfxPoolItem* pItem;
-            const bool bAutoStyle = SfxItemState::SET == aTextSet.GetItemState( RES_TXTATR_AUTOFMT, false, &pItem );
-            if ( bAutoStyle )
+            if ( const SwFormatAutoFormat* pItem = aTextSet.GetItemIfSet( RES_TXTATR_AUTOFMT, false ) )
             {
-                const std::shared_ptr<SfxItemSet> & pAutoStyleSet = static_cast<const SwFormatAutoFormat*>(pItem)->GetStyleHandle();
-                const bool bRet = SetAttr( *pAutoStyleSet );
+                const bool bRet = SetAttr( *pItem->GetStyleHandle() );
                 if( 1 == aTextSet.Count() )
                     return bRet;
             }
@@ -2974,8 +2968,7 @@ bool SwpHints::TryInsertHint(
     {
         // Check if character format contains hidden attribute:
         const SwCharFormat* pFormat = pHint->GetCharFormat().GetCharFormat();
-        const SfxPoolItem* pItem;
-        if ( SfxItemState::SET == pFormat->GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) )
+        if ( SfxItemState::SET == pFormat->GetItemState( RES_CHRATR_HIDDEN ) )
             rNode.SetCalcHiddenCharFlags();
 
         static_txtattr_cast<SwTextCharFormat*>(pHint)->ChgTextNode( &rNode );

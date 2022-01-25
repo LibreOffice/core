@@ -41,11 +41,9 @@ sal_Int16 SwWriteTableCell::GetVertOri() const
     if( m_pBox->GetSttNd() )
     {
         const SfxItemSet& rItemSet = m_pBox->GetFrameFormat()->GetAttrSet();
-        const SfxPoolItem *pItem;
-        if( SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, false, &pItem ) )
+        if( const SwFormatVertOrient *pItem = rItemSet.GetItemIfSet( RES_VERT_ORIENT, false ) )
         {
-            sal_Int16 eBoxVertOri =
-                static_cast<const SwFormatVertOrient *>(pItem)->GetVertOrient();
+            sal_Int16 eBoxVertOri = pItem->GetVertOrient();
             if( text::VertOrientation::CENTER==eBoxVertOri || text::VertOrientation::BOTTOM==eBoxVertOri)
                 eCellVertOri = eBoxVertOri;
         }
@@ -149,12 +147,11 @@ tools::Long SwWriteTable::GetLineHeight( const SwTableBox *pBox )
         return 0;
 
     const SwFrameFormat *pLineFrameFormat = pLine->GetFrameFormat();
-    const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = pLineFrameFormat->GetAttrSet();
 
     tools::Long nHeight = 0;
-    if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
-        nHeight = static_cast<const SwFormatFrameSize*>(pItem)->GetHeight();
+    if( const SwFormatFrameSize* pItem = rItemSet.GetItemIfSet( RES_FRM_SIZE ) )
+        nHeight = pItem->GetHeight();
 
     return nHeight;
 }
@@ -167,20 +164,18 @@ const SvxBrushItem *SwWriteTable::GetLineBrush( const SwTableBox *pBox,
     while( pLine )
     {
         const SwFrameFormat *pLineFrameFormat = pLine->GetFrameFormat();
-        const SfxPoolItem* pItem;
         const SfxItemSet& rItemSet = pLineFrameFormat->GetAttrSet();
 
-        if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false,
-                                                   &pItem ) )
+        if( const SvxBrushItem* pItem = rItemSet.GetItemIfSet( RES_BACKGROUND, false ) )
         {
             if( !pLine->GetUpper() )
             {
                 if( !pRow->GetBackground() )
-                    pRow->SetBackground( static_cast<const SvxBrushItem *>(pItem) );
+                    pRow->SetBackground( pItem );
                 pItem = nullptr;
             }
 
-            return static_cast<const SvxBrushItem *>(pItem);
+            return pItem;
         }
 
         pBox = pLine->GetUpper();
@@ -586,18 +581,16 @@ void SwWriteTable::FillTableRowsCols( tools::Long nStartRPos, sal_uInt16 nStartR
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
 
         const SwFrameFormat *pLineFrameFormat = pLine->GetFrameFormat();
-        const SfxPoolItem* pItem;
         const SfxItemSet& rItemSet = pLineFrameFormat->GetAttrSet();
 
         tools::Long nHeight = 0;
-        if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
-            nHeight = static_cast<const SwFormatFrameSize*>(pItem)->GetHeight();
+        if( const SwFormatFrameSize* pFrameSizeItem = rItemSet.GetItemIfSet( RES_FRM_SIZE ))
+            nHeight = pFrameSizeItem->GetHeight();
 
         const SvxBrushItem *pBrushItem, *pLineBrush = pParentBrush;
-        if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false,
-                                                   &pItem ) )
+        if( const SvxBrushItem* pTmpBrush = rItemSet.GetItemIfSet( RES_BACKGROUND, false ) )
         {
-            pLineBrush = static_cast<const SvxBrushItem *>(pItem);
+            pLineBrush = pTmpBrush;
 
             // If the row spans the entire table, we can
             // print out the background to the row. Otherwise

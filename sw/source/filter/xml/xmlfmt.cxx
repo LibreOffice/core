@@ -643,13 +643,11 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
         m_oItemSet.emplace( rItemPool, aTableSetRange );
     }
 
-    const SfxPoolItem *pItem;
     std::unique_ptr<SwFormatPageDesc> pFormatPageDesc;
-    if( SfxItemState::SET == m_oItemSet->GetItemState( RES_PAGEDESC, false,
-                                                &pItem ) )
+    if( const SwFormatPageDesc* pItem = m_oItemSet->GetItemIfSet( RES_PAGEDESC, false ) )
     {
-         if( static_cast<const SwFormatPageDesc *>(pItem)->GetPageDesc() != pPageDesc )
-            pFormatPageDesc.reset(new SwFormatPageDesc( *static_cast<const SwFormatPageDesc *>(pItem) ));
+         if( pItem->GetPageDesc() != pPageDesc )
+            pFormatPageDesc.reset(new SwFormatPageDesc( *pItem ));
     }
     else
         pFormatPageDesc.reset(new SwFormatPageDesc());

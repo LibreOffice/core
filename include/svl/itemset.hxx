@@ -147,7 +147,28 @@ public:
                                                 bool bSrchInParent = true,
                                                 const SfxPoolItem **ppItem = nullptr ) const;
 
+    template <class T>
+    SfxItemState                GetItemState(   TypedWhichId<T> nWhich,
+                                                bool bSrchInParent = true,
+                                                const T **ppItem = nullptr ) const
+    { return GetItemState(sal_uInt16(nWhich), bSrchInParent, reinterpret_cast<SfxPoolItem const**>(ppItem)); }
+
+    /// Templatized version of GetItemState() to directly return the correct type.
+    template<class T>
+    const T *                   GetItemIfSet(   TypedWhichId<T> nWhich,
+                                                bool bSrchInParent = true ) const
+    {
+        const SfxPoolItem * pItem = nullptr;
+        if( SfxItemState::SET == GetItemState(sal_uInt16(nWhich), bSrchInParent, &pItem) )
+            return static_cast<const T*>(pItem);
+        return nullptr;
+    }
+
+    bool                        HasItem(sal_uInt16 nWhich) const;
     bool                        HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem = nullptr) const;
+    template<class T>
+    bool                        HasItem(TypedWhichId<T> nWhich, const T** ppItem = nullptr) const
+    { return HasItem(sal_uInt16(nWhich), reinterpret_cast<const SfxPoolItem**>(ppItem)); }
 
     void                        DisableItem(sal_uInt16 nWhich);
     void                        InvalidateItem( sal_uInt16 nWhich );

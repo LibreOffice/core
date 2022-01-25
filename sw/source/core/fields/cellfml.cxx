@@ -109,17 +109,16 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                 // will be removed from stack at the end.
         SwDoc* pDoc = GetFrameFormat()->GetDoc();
 
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == GetFrameFormat()->GetItemState(
-                                RES_BOXATR_FORMULA, false, &pItem ) )
+        if( const SwTableBoxFormula* pFormulaItem = GetFrameFormat()->GetItemIfSet(
+                                RES_BOXATR_FORMULA, false ) )
         {
             rCalcPara.m_rCalc.SetCalcError( SwCalcError::NONE ); // reset status
-            if( !static_cast<const SwTableBoxFormula*>(pItem)->IsValid() )
+            if( !pFormulaItem->IsValid() )
             {
                 // calculate
                 const SwTable* pTmp = rCalcPara.m_pTable;
                 rCalcPara.m_pTable = &pBox->GetSttNd()->FindTableNode()->GetTable();
-                const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem))->Calc( rCalcPara, nRet );
+                const_cast<SwTableBoxFormula*>(pFormulaItem)->Calc( rCalcPara, nRet );
 
                 if( !rCalcPara.IsStackOverflow() )
                 {
@@ -136,11 +135,11 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                 nRet = GetFrameFormat()->GetTableBoxValue().GetValue();
             break;
         }
-        else if( SfxItemState::SET == pBox->GetFrameFormat()->GetItemState(
-                                RES_BOXATR_VALUE, false, &pItem ) )
+        else if( const SwTableBoxValue* pBoxValueItem = pBox->GetFrameFormat()->GetItemIfSet(
+                                RES_BOXATR_VALUE, false ) )
         {
             rCalcPara.m_rCalc.SetCalcError( SwCalcError::NONE ); // reset status
-            nRet = static_cast<const SwTableBoxValue*>(pItem)->GetValue();
+            nRet = pBoxValueItem->GetValue();
             break;
         }
 

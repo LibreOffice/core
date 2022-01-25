@@ -723,7 +723,6 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
         case SID_ATTR_ZOOM:
         {
             const SfxItemSet *pArgs = rReq.GetArgs();
-            const SfxPoolItem* pItem;
             ScopedVclPtr<AbstractSvxZoomDialog> pDlg;
             if(!pArgs)
             {
@@ -750,13 +749,13 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             {
                 SvxZoomType eType = SvxZoomType::PERCENT;
                 sal_uInt16 nZoomFactor = USHRT_MAX;
-                if(SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOM, true, &pItem))
+                if(const SvxZoomItem* pZoomItem = pArgs->GetItemIfSet(SID_ATTR_ZOOM))
                 {
-                    eType = static_cast<const SvxZoomItem *>(pItem)->GetType();
-                    nZoomFactor = static_cast<const SvxZoomItem *>(pItem)->GetValue();
+                    eType = pZoomItem->GetType();
+                    nZoomFactor = pZoomItem->GetValue();
                 }
-                else if(SfxItemState::SET == pArgs->GetItemState(FN_PREVIEW_ZOOM, true, &pItem))
-                    nZoomFactor = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+                else if(const SfxUInt16Item* pPreviewItem = pArgs->GetItemIfSet(FN_PREVIEW_ZOOM))
+                    nZoomFactor = pPreviewItem->GetValue();
                 if(USHRT_MAX != nZoomFactor)
                     SetZoom(eType, nZoomFactor);
             }
@@ -765,11 +764,11 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
         case SID_ATTR_ZOOMSLIDER :
         {
             const SfxItemSet *pArgs = rReq.GetArgs();
-            const SfxPoolItem* pItem;
+            const SvxZoomSliderItem* pItem;
 
-            if ( pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ) )
+            if ( pArgs && (pItem = pArgs->GetItemIfSet(SID_ATTR_ZOOMSLIDER ) ) )
             {
-                const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem *>(pItem)->GetValue();
+                const sal_uInt16 nCurrentZoom = pItem->GetValue();
                 SetZoom( SvxZoomType::PERCENT, nCurrentZoom );
             }
         }
@@ -1038,8 +1037,7 @@ void  SwPagePreview::GetState( SfxItemSet& rSet )
                 const SfxPoolItem* pItem;
                 SfxItemSetFixed<SID_PRINTDOC, SID_PRINTDOC> aSet( *rSet.GetPool() );
                 GetSlotState( SID_PRINTDOC, SfxViewShell::GetInterface(), &aSet );
-                if( SfxItemState::DISABLED == aSet.GetItemState( SID_PRINTDOC,
-                        false, &pItem ))
+                if( SfxItemState::DISABLED == aSet.GetItemState( SID_PRINTDOC, false ))
                     rSet.DisableItem( nWhich );
                 else if( SfxItemState::SET == aSet.GetItemState( SID_PRINTDOC,
                         false, &pItem ))

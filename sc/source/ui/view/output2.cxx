@@ -1706,13 +1706,12 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                         }
                         else if ( SfxItemSet* pFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, nTab ) )
                         {
-                            const SfxPoolItem* pItem;
-                            if ( pFontSet->GetItemState( ATTR_FONT, true, &pItem ) == SfxItemState::SET )
-                                pAltPattern->GetItemSet().Put( static_cast<const SvxFontItem&>(*pItem) );
-                            if ( pFontSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) == SfxItemState::SET )
-                                pAltPattern->GetItemSet().Put( static_cast<const SvxFontItem&>(*pItem) );
-                            if ( pFontSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) == SfxItemState::SET )
-                                pAltPattern->GetItemSet().Put( static_cast<const SvxFontItem&>(*pItem) );
+                            if ( const SvxFontItem* pItem = pFontSet->GetItemIfSet( ATTR_FONT ) )
+                                pAltPattern->GetItemSet().Put( *pItem );
+                            if ( const SvxFontItem* pItem = pFontSet->GetItemIfSet( ATTR_CJK_FONT ) )
+                                pAltPattern->GetItemSet().Put( *pItem );
+                            if ( const SvxFontItem* pItem = pFontSet->GetItemIfSet( ATTR_CTL_FONT ) )
+                                pAltPattern->GetItemSet().Put( *pItem );
                         }
                         pPattern = pAltPattern;
                     }
@@ -2472,18 +2471,17 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     mpPattern->FillEditItemSet( pSet.get(), mpCondSet );
     if ( mpPreviewFontSet )
     {
-        const SfxPoolItem* pItem;
-        if ( mpPreviewFontSet->GetItemState( ATTR_FONT, true, &pItem ) == SfxItemState::SET )
+        if ( const SvxFontItem* pItem = mpPreviewFontSet->GetItemIfSet( ATTR_FONT ) )
         {
             // tdf#125054 adapt WhichID
             pSet->Put(*pItem, EE_CHAR_FONTINFO);
         }
-        if ( mpPreviewFontSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) == SfxItemState::SET )
+        if ( const SvxFontItem* pItem = mpPreviewFontSet->GetItemIfSet( ATTR_CJK_FONT ) )
         {
             // tdf#125054 adapt WhichID
             pSet->Put(*pItem, EE_CHAR_FONTINFO_CJK);
         }
-        if ( mpPreviewFontSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) == SfxItemState::SET )
+        if ( const SvxFontItem* pItem = mpPreviewFontSet->GetItemIfSet( ATTR_CTL_FONT ) )
         {
             // tdf#125054 adapt WhichID
             pSet->Put(*pItem, EE_CHAR_FONTINFO_CTL);

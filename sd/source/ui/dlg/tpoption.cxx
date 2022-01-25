@@ -268,14 +268,11 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     m_xLbMetric->save_value();
     // change metric if necessary (since TabPage is in the Dialog where
     // the metric is set)
-    const SfxPoolItem* pAttr = nullptr;
-    if( SfxItemState::SET != rSet.GetItemState( SID_ATTR_METRIC , false,
-                                    &pAttr ))
+    const SfxUInt16Item* pAttr = rSet.GetItemIfSet( SID_ATTR_METRIC , false );
+    if( !pAttr )
         return;
 
-    const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
-
-    FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<tools::Long>(pItem->GetValue()));
+    FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<tools::Long>(pAttr->GetValue()));
 
     if( eFUnit == m_xMtrFldOriginalWidth->get_unit() )
         return;

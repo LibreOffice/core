@@ -623,12 +623,12 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
     if( !aBoxAttrSet.Count() )
         return;
 
-    const SfxPoolItem* pItem;
+    const SwTableBoxNumFormat* pItem;
     SvNumberFormatter* pN = pDoc->GetNumberFormatter( false );
-    if( pN && pN->HasMergeFormatTable() && SfxItemState::SET == aBoxAttrSet.
-        GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
+    if( pN && pN->HasMergeFormatTable() &&
+        (pItem = aBoxAttrSet.GetItemIfSet( RES_BOXATR_FORMAT, false )) )
     {
-        sal_uLong nOldIdx = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+        sal_uLong nOldIdx = pItem->GetValue();
         sal_uLong nNewIdx = pN->GetMergeFormatIndex( nOldIdx );
         if( nNewIdx != nOldIdx )
             aBoxAttrSet.Put( SwTableBoxNumFormat( nNewIdx ));
