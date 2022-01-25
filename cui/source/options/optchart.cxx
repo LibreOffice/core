@@ -111,11 +111,10 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::Dia
 
     m_SvxChartOptionsUniquePtr.reset(new SvxChartOptions);
 
-    const SfxPoolItem* pItem = nullptr;
-    if ( rInAttrs.GetItemState( SID_SCH_EDITOPTIONS, false, &pItem ) == SfxItemState::SET )
+    if ( const SvxChartColorTableItem* pEditOptionsItem = rInAttrs.GetItemIfSet( SID_SCH_EDITOPTIONS, false ) )
     {
         m_SvxChartColorTableUniquePtr = std::make_unique<SvxChartColorTable>(
-            static_cast<const SvxChartColorTableItem*>(pItem)->GetColorList());
+            pEditOptionsItem->GetColorList());
     }
     else
     {

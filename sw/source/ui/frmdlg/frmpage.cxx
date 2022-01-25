@@ -870,13 +870,12 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     ::SetFieldUnit(*m_xAtHorzPosED, aMetric);
     ::SetFieldUnit(*m_xAtVertPosED, aMetric);
 
-    const SfxPoolItem* pItem = nullptr;
     const SwFormatAnchor& rAnchor = rSet->Get(RES_ANCHOR);
 
-    if (SfxItemState::SET == rSet->GetItemState(FN_OLE_IS_MATH, false, &pItem))
-        m_bIsMathOLE = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-    if (SfxItemState::SET == rSet->GetItemState(FN_MATH_BASELINE_ALIGNMENT, false, &pItem))
-        m_bIsMathBaselineAlignment = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+    if (const SfxBoolItem* pMathItem = rSet->GetItemIfSet(FN_OLE_IS_MATH, false))
+        m_bIsMathOLE = pMathItem->GetValue();
+    if (const SfxBoolItem* pAlignItem = rSet->GetItemIfSet(FN_MATH_BASELINE_ALIGNMENT, false))
+        m_bIsMathBaselineAlignment = pAlignItem->GetValue();
     EnableVerticalPositioning( !(m_bIsMathOLE && m_bIsMathBaselineAlignment
             && RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) );
 
@@ -906,8 +905,8 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     {
         OSL_ENSURE(pSh , "shell not found");
         //OS: only for the variant Insert/Graphic/Properties
-        if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_GRF_REALSIZE, false, &pItem))
-            m_aGrfSize = static_cast<const SvxSizeItem*>(pItem)->GetSize();
+        if(const SvxSizeItem* pSizeItem = rSet->GetItemIfSet(FN_PARAM_GRF_REALSIZE, false))
+            m_aGrfSize = pSizeItem->GetSize();
         else
             pSh->GetGrfSize( m_aGrfSize );
 
@@ -2345,21 +2344,20 @@ std::unique_ptr<SfxTabPage> SwGrfExtPage::Create(weld::Container* pPage, weld::D
 
 void SwGrfExtPage::Reset(const SfxItemSet *rSet)
 {
-    const SfxPoolItem* pItem;
     const sal_uInt16 nHtmlMode = ::GetHtmlMode(static_cast<const SwDocShell*>(SfxObjectShell::Current()));
     m_bHtmlMode = (nHtmlMode & HTMLMODE_ON) != 0;
 
-    if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_GRF_CONNECT, true, &pItem)
-        && static_cast<const SfxBoolItem *>(pItem)->GetValue() )
+    const SfxBoolItem* pConnectItem = rSet->GetItemIfSet( FN_PARAM_GRF_CONNECT );
+    if( pConnectItem && pConnectItem->GetValue() )
     {
         m_xBrowseBT->set_sensitive(true);
         m_xConnectED->set_editable(true);
     }
 
     // RotGrfFlyFrame: Get RotationAngle and set at control
-    if(SfxItemState::SET == rSet->GetItemState( SID_ATTR_TRANSFORM_ANGLE, false, &pItem))
+    if(const SdrAngleItem* pAngleItem = rSet->GetItemIfSet( SID_ATTR_TRANSFORM_ANGLE, false))
     {
-        m_xCtlAngle->SetRotation(static_cast<const SdrAngleItem*>(pItem)->GetValue());
+        m_xCtlAngle->SetRotation(pAngleItem->GetValue());
     }
     else
     {
@@ -2423,12 +2421,11 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         }
     }
 
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
+    if( const SvxBrushItem* pGraphicBrushItem = rSet.GetItemIfSet( SID_ATTR_GRAF_GRAPHIC, false ) )
     {
-        const SvxBrushItem& rBrush = *static_cast<const SvxBrushItem*>(pItem);
-        if( !rBrush.GetGraphicLink().isEmpty() )
+        if( !pGraphicBrushItem->GetGraphicLink().isEmpty() )
         {
-            aGrfName = aNewGrfName = rBrush.GetGraphicLink();
+            aGrfName = aNewGrfName = pGraphicBrushItem->GetGraphicLink();
             m_xConnectED->set_text(aNewGrfName);
         }
         OUString referer;
@@ -2437,7 +2434,7 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         if (it != nullptr) {
             referer = it->GetValue();
         }
-        const Graphic* pGrf = rBrush.GetGraphic(referer);
+        const Graphic* pGrf = pGraphicBrushItem->GetGraphic(referer);
         if( pGrf )
         {
             m_aBmpWin.SetGraphic( *pGrf );
@@ -2695,8 +2692,7 @@ SwFrameURLPage::~SwFrameURLPage()
 
 void SwFrameURLPage::Reset( const SfxItemSet *rSet )
 {
-    const SfxPoolItem* pItem;
-    if ( SfxItemState::SET == rSet->GetItemState( SID_DOCFRAME, true, &pItem))
+    if ( SfxItemState::SET == rSet->GetItemState( SID_DOCFRAME ))
     {
         TargetList aList;
         SfxFrame::GetDefaultTargetList(aList);
@@ -2707,9 +2703,8 @@ void SwFrameURLPage::Reset( const SfxItemSet *rSet )
         }
     }
 
-    if ( SfxItemState::SET == rSet->GetItemState( RES_URL, true, &pItem ) )
+    if ( const SwFormatURL* pFormatURL = rSet->GetItemIfSet( RES_URL ) )
     {
-        const SwFormatURL* pFormatURL = static_cast<const SwFormatURL*>(pItem);
         m_xURLED->set_text(INetURLObject::decode(pFormatURL->GetURL(),
                                            INetURLObject::DecodeMechanism::Unambiguous));
         m_xNameED->set_text(pFormatURL->GetName());
@@ -2840,7 +2835,6 @@ std::unique_ptr<SfxTabPage> SwFrameAddPage::Create(weld::Container* pPage, weld:
 
 void SwFrameAddPage::Reset(const SfxItemSet *rSet )
 {
-    const SfxPoolItem* pItem;
     sal_uInt16 nHtmlMode = ::GetHtmlMode(static_cast<const SwDocShell*>(SfxObjectShell::Current()));
     m_bHtmlMode = (nHtmlMode & HTMLMODE_ON) != 0;
     if (m_bHtmlMode)
@@ -2859,15 +2853,15 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
         m_xContentAlignFrame->hide();
     }
 
-    if(SfxItemState::SET == rSet->GetItemState(FN_SET_FRM_ALT_NAME, false, &pItem))
+    if(const SfxStringItem* pNameItem = rSet->GetItemIfSet(FN_SET_FRM_ALT_NAME, false))
     {
-        m_xAltNameED->set_text(static_cast<const SfxStringItem*>(pItem)->GetValue());
+        m_xAltNameED->set_text(pNameItem->GetValue());
         m_xAltNameED->save_value();
     }
 
-    if(SfxItemState::SET == rSet->GetItemState(FN_UNO_DESCRIPTION, false, &pItem))
+    if(const SfxStringItem* pDescriptionItem = rSet->GetItemIfSet(FN_UNO_DESCRIPTION, false))
     {
-        m_xDescriptionED->set_text(static_cast<const SfxStringItem*>(pItem)->GetValue());
+        m_xDescriptionED->set_text(pDescriptionItem->GetValue());
         m_xDescriptionED->save_value();
     }
 
@@ -2876,9 +2870,9 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
         // insert graphic - properties
         // bNew is not set, so recognise by selection
         OUString aTmpName1;
-        if(SfxItemState::SET == rSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
+        if(const SfxStringItem* pNameItem = rSet->GetItemIfSet(FN_SET_FRM_NAME, false))
         {
-            aTmpName1 = static_cast<const SfxStringItem*>(pItem)->GetValue();
+            aTmpName1 = pNameItem->GetValue();
         }
 
         OSL_ENSURE(m_pWrtSh, "no Shell?");

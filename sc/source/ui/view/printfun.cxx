@@ -895,10 +895,8 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     aHdr.pRight     = &pParamSet->Get(ATTR_PAGE_HEADERRIGHT);
     aHdr.pFirst     = &pParamSet->Get(ATTR_PAGE_HEADERFIRST);
 
-    const SvxSetItem* pHeaderSetItem;
     const SfxItemSet* pHeaderSet = nullptr;
-    if ( pParamSet->GetItemState( ATTR_PAGE_HEADERSET, false,
-                            reinterpret_cast<const SfxPoolItem**>(&pHeaderSetItem) ) == SfxItemState::SET )
+    if ( const SvxSetItem* pHeaderSetItem = pParamSet->GetItemIfSet( ATTR_PAGE_HEADERSET, false ) )
     {
         pHeaderSet = &pHeaderSetItem->GetItemSet();
                                                         // Headline has space below
@@ -912,10 +910,8 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     aFtr.pRight     = &pParamSet->Get(ATTR_PAGE_FOOTERRIGHT);
     aFtr.pFirst     = &pParamSet->Get(ATTR_PAGE_FOOTERFIRST);
 
-    const SvxSetItem* pFooterSetItem;
     const SfxItemSet* pFooterSet = nullptr;
-    if ( pParamSet->GetItemState( ATTR_PAGE_FOOTERSET, false,
-                            reinterpret_cast<const SfxPoolItem**>(&pFooterSetItem) ) == SfxItemState::SET )
+    if ( const SvxSetItem* pFooterSetItem = pParamSet->GetItemIfSet( ATTR_PAGE_FOOTERSET, false ) )
     {
         pFooterSet = &pFooterSetItem->GetItemSet();
                                                         // Footline has space above

@@ -1877,10 +1877,9 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemProperty
     {
     case SDRATTR_CIRCSTARTANGLE:
     {
-        const SfxPoolItem* pPoolItem=nullptr;
-        if(aSet.GetItemState(SDRATTR_CIRCSTARTANGLE,false,&pPoolItem)==SfxItemState::SET)
+        if(const SdrAngleItem* pPoolItem = aSet.GetItemIfSet(SDRATTR_CIRCSTARTANGLE,false))
         {
-            Degree100 nAngle = static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
+            Degree100 nAngle = pPoolItem->GetValue();
             aAny <<= nAngle.get();
         }
         break;
@@ -1888,10 +1887,9 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemProperty
 
     case SDRATTR_CIRCENDANGLE:
     {
-        const SfxPoolItem* pPoolItem=nullptr;
-        if (aSet.GetItemState(SDRATTR_CIRCENDANGLE,false,&pPoolItem)==SfxItemState::SET)
+        if (const SdrAngleItem* pPoolItem = aSet.GetItemIfSet(SDRATTR_CIRCENDANGLE,false))
         {
-            Degree100 nAngle = static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
+            Degree100 nAngle = pPoolItem->GetValue();
             aAny <<= nAngle.get();
         }
         break;

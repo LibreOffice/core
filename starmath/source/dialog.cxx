@@ -210,7 +210,7 @@ bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
 
 void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
 {
-    SmPrintSize ePrintSize = static_cast<SmPrintSize>(static_cast<const SfxUInt16Item &>(rSet->Get(SID_PRINTSIZE)).GetValue());
+    SmPrintSize ePrintSize = static_cast<SmPrintSize>(rSet->Get(SID_PRINTSIZE).GetValue());
 
     m_xSizeNormal->set_active(ePrintSize == PRINT_SIZE_NORMAL);
     m_xSizeScaled->set_active(ePrintSize == PRINT_SIZE_SCALED);
@@ -218,15 +218,15 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
 
     m_xZoom->set_sensitive(m_xSizeZoomed->get_active());
 
-    m_xZoom->set_value(static_cast<const SfxUInt16Item &>(rSet->Get(SID_PRINTZOOM)).GetValue(), FieldUnit::PERCENT);
+    m_xZoom->set_value(rSet->Get(SID_PRINTZOOM).GetValue(), FieldUnit::PERCENT);
 
     m_xSmZoom->set_sensitive(true);
-    m_xSmZoom->set_value(static_cast<const SfxUInt16Item &>(rSet->Get(SID_SMEDITWINDOWZOOM)).GetValue(), FieldUnit::PERCENT);
+    m_xSmZoom->set_value(rSet->Get(SID_SMEDITWINDOWZOOM).GetValue(), FieldUnit::PERCENT);
 
-    m_xTitle->set_active(static_cast<const SfxBoolItem &>(rSet->Get(SID_PRINTTITLE)).GetValue());
-    m_xNoRightSpaces->set_active(static_cast<const SfxBoolItem &>(rSet->Get(SID_NO_RIGHT_SPACES)).GetValue());
-    m_xSaveOnlyUsedSymbols->set_active(static_cast<const SfxBoolItem &>(rSet->Get(SID_SAVE_ONLY_USED_SYMBOLS)).GetValue());
-    m_xAutoCloseBrackets->set_active(static_cast<const SfxBoolItem &>(rSet->Get(SID_AUTO_CLOSE_BRACKETS)).GetValue());
+    m_xTitle->set_active(rSet->Get(SID_PRINTTITLE).GetValue());
+    m_xNoRightSpaces->set_active(rSet->Get(SID_NO_RIGHT_SPACES).GetValue());
+    m_xSaveOnlyUsedSymbols->set_active(rSet->Get(SID_SAVE_ONLY_USED_SYMBOLS).GetValue());
+    m_xAutoCloseBrackets->set_active(rSet->Get(SID_AUTO_CLOSE_BRACKETS).GetValue());
 }
 
 std::unique_ptr<SfxTabPage> SmPrintOptionsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)

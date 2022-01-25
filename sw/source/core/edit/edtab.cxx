@@ -396,11 +396,10 @@ bool SwEditShell::IsTableBoxTextFormat() const
         return false;
 
     sal_uInt32 nFormat = 0;
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == pBox->GetFrameFormat()->GetAttrSet().GetItemState(
-        RES_BOXATR_FORMAT, true, &pItem ))
+    if( const SwTableBoxNumFormat* pItem = pBox->GetFrameFormat()->GetAttrSet().GetItemIfSet(
+        RES_BOXATR_FORMAT ))
     {
-        nFormat = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+        nFormat = pItem->GetValue();
         return GetDoc()->GetNumberFormatter()->IsTextFormat( nFormat );
     }
 

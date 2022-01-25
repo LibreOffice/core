@@ -793,81 +793,72 @@ void ViewShell::SetupRulers()
     }
 }
 
-const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId)
+const SvxNumBulletItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, TypedWhichId<SvxNumBulletItem>& nNumItemId)
 {
-    const SfxPoolItem* pTmpItem = nullptr;
-
-    if(aNewAttr.GetItemState(nNumItemId, false, &pTmpItem) == SfxItemState::SET)
-    {
+    const SvxNumBulletItem* pTmpItem = aNewAttr.GetItemIfSet(nNumItemId, false);
+    if(pTmpItem)
         return pTmpItem;
-    }
-    else
+
+    nNumItemId = aNewAttr.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+    pTmpItem = aNewAttr.GetItemIfSet(nNumItemId, false);
+    if(pTmpItem)
+        return pTmpItem;
+
+    bool bOutliner = false;
+    bool bTitle = false;
+
+    if( mpView )
     {
-        nNumItemId = aNewAttr.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        SfxItemState eState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
-        if (eState == SfxItemState::SET)
-            return pTmpItem;
-        else
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+        const size_t nCount = rMarkList.GetMarkCount();
+
+        for(size_t nNum = 0; nNum < nCount; ++nNum)
         {
-            bool bOutliner = false;
-            bool bTitle = false;
-
-            if( mpView )
+            SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
+            if( pObj->GetObjInventor() == SdrInventor::Default )
             {
-                const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-                const size_t nCount = rMarkList.GetMarkCount();
-
-                for(size_t nNum = 0; nNum < nCount; ++nNum)
+                switch(pObj->GetObjIdentifier())
                 {
-                    SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
-                    if( pObj->GetObjInventor() == SdrInventor::Default )
-                    {
-                        switch(pObj->GetObjIdentifier())
-                        {
-                        case SdrObjKind::TitleText:
-                            bTitle = true;
-                            break;
-                        case SdrObjKind::OutlineText:
-                            bOutliner = true;
-                            break;
-                        default:
-                            break;
-                        }
-                    }
+                case SdrObjKind::TitleText:
+                    bTitle = true;
+                    break;
+                case SdrObjKind::OutlineText:
+                    bOutliner = true;
+                    break;
+                default:
+                    break;
                 }
             }
-
-            const SvxNumBulletItem *pItem = nullptr;
-            if(bOutliner)
-            {
-                SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
-                SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( STR_LAYOUT_OUTLINE + " 1", SfxStyleFamily::Pseudo);
-                if( pFirstStyleSheet )
-                    pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, reinterpret_cast<const SfxPoolItem**>(&pItem));
-            }
-
-            if( pItem == nullptr )
-                pItem = aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
-
-            aNewAttr.Put(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
-
-            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
-            {
-                const SvxNumBulletItem* pBulletItem = aNewAttr.GetItem(EE_PARA_NUMBULLET);
-                const SvxNumRule& rRule = pBulletItem->GetNumRule();
-                SvxNumRule aNewRule( rRule );
-                aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
-
-                SvxNumBulletItem aNewItem( std::move(aNewRule), EE_PARA_NUMBULLET );
-                aNewAttr.Put(aNewItem);
-            }
-
-            SfxItemState eNumState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
-            if (eNumState == SfxItemState::SET)
-                return pTmpItem;
-
         }
     }
+
+    const SvxNumBulletItem *pItem = nullptr;
+    if(bOutliner)
+    {
+        SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
+        SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( STR_LAYOUT_OUTLINE + " 1", SfxStyleFamily::Pseudo);
+        if( pFirstStyleSheet )
+            pItem = pFirstStyleSheet->GetItemSet().GetItemIfSet(EE_PARA_NUMBULLET, false);
+    }
+
+    if( pItem == nullptr )
+        pItem = aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+
+    aNewAttr.Put(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
+
+    if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
+    {
+        const SvxNumBulletItem* pBulletItem = aNewAttr.GetItem(EE_PARA_NUMBULLET);
+        const SvxNumRule& rRule = pBulletItem->GetNumRule();
+        SvxNumRule aNewRule( rRule );
+        aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
+
+        SvxNumBulletItem aNewItem( std::move(aNewRule), EE_PARA_NUMBULLET );
+        aNewAttr.Put(aNewItem);
+    }
+
+    pTmpItem = aNewAttr.GetItemIfSet(nNumItemId, false);
+
     return pTmpItem;
 }
 
@@ -1202,9 +1193,8 @@ void ViewShell::ImpSidUndo(SfxRequest& rReq)
 
         // Repair mode: allow undo/redo of all undo actions, even if access would
         // be limited based on the view shell ID.
-        const SfxPoolItem* pRepairItem;
-        if (pReqArgs->GetItemState(SID_REPAIRPACKAGE, false, &pRepairItem) == SfxItemState::SET)
-            bRepair = static_cast<const SfxBoolItem*>(pRepairItem)->GetValue();
+        if (const SfxBoolItem* pRepairItem = pReqArgs->GetItemIfSet(SID_REPAIRPACKAGE, false))
+            bRepair = pRepairItem->GetValue();
     }
 
     if(nNumber && pUndoManager)
@@ -1270,9 +1260,8 @@ void ViewShell::ImpSidRedo(SfxRequest& rReq)
         nNumber = pUIntItem->GetValue();
         // Repair mode: allow undo/redo of all undo actions, even if access would
         // be limited based on the view shell ID.
-        const SfxPoolItem* pRepairItem;
-        if (pReqArgs->GetItemState(SID_REPAIRPACKAGE, false, &pRepairItem) == SfxItemState::SET)
-            bRepair = static_cast<const SfxBoolItem*>(pRepairItem)->GetValue();
+        if (const SfxBoolItem* pRepairItem = pReqArgs->GetItemIfSet(SID_REPAIRPACKAGE, false))
+            bRepair = pRepairItem->GetValue();
     }
 
     if(nNumber && pUndoManager)

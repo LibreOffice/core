@@ -392,7 +392,6 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     }
 
     const SfxItemSet& rItemSet = pBox->GetFrameFormat()->GetAttrSet();
-    const SfxPoolItem *pItem;
 
     // ALIGN is only outputted at the paragraphs from now on
 
@@ -414,11 +413,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
     rWrt.m_bTextAttr = false;
     rWrt.m_bOutOpts = true;
-    const SvxBrushItem *pBrushItem = nullptr;
-    if( SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
-    {
-        pBrushItem = static_cast<const SvxBrushItem *>(pItem);
-    }
+    const SvxBrushItem *pBrushItem = rItemSet.GetItemIfSet( RES_BACKGROUND, false );
     if( !pBrushItem )
         pBrushItem = pCell->GetBackground();
 
@@ -441,14 +436,14 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     sal_uInt32 nNumFormat = 0;
     double nValue = 0.0;
     bool bNumFormat = false, bValue = false;
-    if( SfxItemState::SET==rItemSet.GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
+    if( const SwTableBoxNumFormat* pItem = rItemSet.GetItemIfSet( RES_BOXATR_FORMAT, false ) )
     {
-        nNumFormat = static_cast<const SwTableBoxNumFormat *>(pItem)->GetValue();
+        nNumFormat = pItem->GetValue();
         bNumFormat = true;
     }
-    if( SfxItemState::SET==rItemSet.GetItemState( RES_BOXATR_VALUE, false, &pItem ) )
+    if( const SwTableBoxValue* pItem = rItemSet.GetItemIfSet( RES_BOXATR_VALUE, false ) )
     {
-        nValue = static_cast<const SwTableBoxValue *>(pItem)->GetValue();
+        nValue = pItem->GetValue();
         bValue = true;
         if( !bNumFormat )
             nNumFormat = pBox->GetFrameFormat()->GetTableBoxNumFormat().GetValue();

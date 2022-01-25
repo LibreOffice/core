@@ -850,10 +850,11 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
 SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet, const SwDoc& rDoc )
     : SwUndo( SwUndoId::SETDEFTATTR, &rDoc )
 {
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rSet.GetItemState( RES_PARATR_TABSTOP, false, &pItem ) ) {
+    const SvxTabStopItem* pItem = rSet.GetItemIfSet( RES_PARATR_TABSTOP, false );
+    if( pItem )
+    {
         // store separately, because it may change!
-        m_pTabStop.reset(&pItem->Clone()->StaticWhichCast(RES_PARATR_TABSTOP));
+        m_pTabStop.reset(pItem->Clone());
         if ( 1 != rSet.Count() ) { // are there more attributes?
             m_oOldSet.emplace( rSet );
         }

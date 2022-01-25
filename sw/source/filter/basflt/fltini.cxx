@@ -271,13 +271,12 @@ void StgReader::SetFltName( const OUString& rFltNm )
 void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
         SwTwips nPageWidth)
 {
-    const SfxPoolItem* pItem = nullptr;
-    if( SfxItemState::SET != rFlySet.GetItemState( RES_FRM_SIZE, true, &pItem ) ||
-            MINFLY > static_cast<const SwFormatFrameSize*>(pItem)->GetWidth() )
+    const SwFormatFrameSize* pFrameSizeItem = rFlySet.GetItemIfSet( RES_FRM_SIZE );
+    if( !pFrameSizeItem || MINFLY > pFrameSizeItem->GetWidth() )
     {
         std::unique_ptr<SwFormatFrameSize> aSz(rFlySet.Get(RES_FRM_SIZE).Clone());
-        if (pItem)
-            aSz.reset(static_cast<SwFormatFrameSize*>(pItem->Clone()));
+        if (pFrameSizeItem)
+            aSz.reset(pFrameSizeItem->Clone());
 
         SwTwips nWidth;
         // determine the width; if there is a table use the width of the table;
@@ -369,9 +368,9 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
             aSz->SetHeight( MINFLY );
         rFlySet.Put( *aSz );
     }
-    else if( MINFLY > static_cast<const SwFormatFrameSize*>(pItem)->GetHeight() )
+    else if( MINFLY > pFrameSizeItem->GetHeight() )
     {
-        std::unique_ptr<SwFormatFrameSize> aSz(static_cast<SwFormatFrameSize*>(pItem->Clone()));
+        std::unique_ptr<SwFormatFrameSize> aSz(pFrameSizeItem->Clone());
         aSz->SetHeight( MINFLY );
         rFlySet.Put( std::move(aSz) );
     }

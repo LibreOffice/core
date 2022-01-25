@@ -1407,9 +1407,8 @@ void SwInsertDBColAutoPilot::SetTabSet()
                 pTableSet->ClearItem( i );
     }
 
-    if( SfxItemState::SET == pTableSet->GetItemState( FN_PARAM_TABLE_NAME, false,
-        &pItem ) && static_cast<const SfxStringItem*>(pItem)->GetValue() ==
-                    rSh.GetTableFormat()->GetName() )
+    const SfxStringItem* pTableNameItem = pTableSet->GetItemIfSet( FN_PARAM_TABLE_NAME, false);
+    if( pTableNameItem && pTableNameItem->GetValue() == rSh.GetTableFormat()->GetName() )
         pTableSet->ClearItem( FN_PARAM_TABLE_NAME );
 
     rSh.MoveTable( GotoCurrTable, fnTableStart );

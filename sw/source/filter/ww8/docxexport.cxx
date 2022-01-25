@@ -1168,10 +1168,10 @@ void DocxExport::WriteSettings()
 
     // Hyphenation details set depending on default style
     SwTextFormatColl* pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
-    const SfxPoolItem* pItem;
-    if (pColl && SfxItemState::SET == pColl->GetItemState(RES_PARATR_HYPHENZONE, false, &pItem))
+    const SvxHyphenZoneItem* pZoneItem;
+    if (pColl && (pZoneItem = pColl->GetItemIfSet(RES_PARATR_HYPHENZONE, false)))
     {
-        if (static_cast<const SvxHyphenZoneItem*>(pItem)->IsNoCapsHyphenation())
+        if (pZoneItem->IsNoCapsHyphenation())
             pFS->singleElementNS(XML_w, XML_doNotHyphenateCaps);
     }
 

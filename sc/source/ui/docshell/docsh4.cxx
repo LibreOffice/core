@@ -363,11 +363,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 bool bRowInit = false;
                 bool bAddRange = (nSlot == SID_CHART_ADDSOURCE);
 
-                if( pReqArgs->HasItem( SID_CHART_NAME, &pItem ) )
-                    aChartName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                if( const SfxStringItem* pChartItem = pReqArgs->GetItemIfSet( SID_CHART_NAME ) )
+                    aChartName = pChartItem->GetValue();
 
-                if( pReqArgs->HasItem( SID_CHART_SOURCE, &pItem ) )
-                    aRangeName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                if( const SfxStringItem* pChartItem = pReqArgs->GetItemIfSet( SID_CHART_SOURCE ) )
+                    aRangeName = pChartItem->GetValue();
 
                 if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                 {
@@ -728,31 +728,23 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 SfxApplication* pApp = SfxGetpApp();
                 const SfxPoolItem* pItem;
-                const SfxStringItem* pStringItem(nullptr);
+                const SfxStringItem* pFileNameItem(nullptr);
                 SfxMedium* pMed = nullptr;
-                if (pReqArgs && pReqArgs->GetItemState(SID_FILE_NAME, true, &pItem) == SfxItemState::SET)
+                if (pReqArgs)
+                    pFileNameItem = pReqArgs->GetItemIfSet(SID_FILE_NAME);
+                if (pFileNameItem)
                 {
-                    pStringItem = dynamic_cast<const SfxStringItem*>(pItem);
-                }
-                if (pStringItem)
-                {
-                    OUString aFileName = pStringItem->GetValue();
+                    OUString aFileName = pFileNameItem->GetValue();
 
                     OUString aFilterName;
-                    pStringItem = nullptr;
-                    if (pReqArgs->GetItemState(SID_FILTER_NAME, true, &pItem) == SfxItemState::SET)
-                        pStringItem = dynamic_cast<const SfxStringItem*>(pItem);
-                    if (pStringItem)
+                    if (const SfxStringItem* pFilterItem = pReqArgs->GetItemIfSet(SID_FILTER_NAME))
                     {
-                        aFilterName = pStringItem->GetValue();
+                        aFilterName = pFilterItem->GetValue();
                     }
                     OUString aOptions;
-                    pStringItem = nullptr;
-                    if (pReqArgs->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SfxItemState::SET)
-                        pStringItem = dynamic_cast<const SfxStringItem*>(pItem);
-                    if (pStringItem)
+                    if (const SfxStringItem* pOptionsItem = pReqArgs->GetItemIfSet(SID_FILE_FILTEROPTIONS))
                     {
-                        aOptions = pStringItem->GetValue();
+                        aOptions = pOptionsItem->GetValue();
                     }
                     short nVersion = 0;
                     const SfxInt16Item* pInt16Item(nullptr);

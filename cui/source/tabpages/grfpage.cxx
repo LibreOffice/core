@@ -184,7 +184,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     }
 
     bool bFound = false;
-    if( SfxItemState::SET == rSet->GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
+    if( const SvxBrushItem* pGraphicItem = rSet->GetItemIfSet( SID_ATTR_GRAF_GRAPHIC, false ) )
     {
         OUString referer;
         SfxStringItem const * it = static_cast<SfxStringItem const *>(
@@ -192,7 +192,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
         if (it != nullptr) {
             referer = it->GetValue();
         }
-        const Graphic* pGrf = static_cast<const SvxBrushItem*>(pItem)->GetGraphic(referer);
+        const Graphic* pGrf = pGraphicItem->GetGraphic(referer);
         if( pGrf )
         {
             m_aOrigSize = GetGrfOrigSize( *pGrf );
@@ -208,8 +208,8 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
                 m_aExampleWN.SetFrameSize( m_aOrigSize );
 
                 bFound = true;
-                if( !static_cast<const SvxBrushItem*>(pItem)->GetGraphicLink().isEmpty() )
-                    m_aGraphicName = static_cast<const SvxBrushItem*>(pItem)->GetGraphicLink();
+                if( !pGraphicItem->GetGraphicLink().isEmpty() )
+                    m_aGraphicName = pGraphicItem->GetGraphicLink();
             }
         }
     }
@@ -225,21 +225,21 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
     if( m_xWidthMF->get_value_changed_from_saved() ||
         m_xHeightMF->get_value_changed_from_saved() )
     {
-        constexpr sal_uInt16 nW = SID_ATTR_GRAF_FRMSIZE;
+        constexpr TypedWhichId<SvxSizeItem> nW = SID_ATTR_GRAF_FRMSIZE;
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
 
         std::shared_ptr<SvxSizeItem> aSz(std::make_shared<SvxSizeItem>(nW));
 
         // size could already have been set from another page
         const SfxItemSet* pExSet = GetDialogExampleSet();
-        const SfxPoolItem* pItem = nullptr;
-        if( pExSet && SfxItemState::SET ==pExSet->GetItemState( nW, false, &pItem ) )
+        const SvxSizeItem* pSizeItem = nullptr;
+        if( pExSet && (pSizeItem = pExSet->GetItemIfSet( nW, false )) )
         {
-            aSz.reset(static_cast< SvxSizeItem*>(pItem->Clone()));
+            aSz.reset(pSizeItem->Clone());
         }
         else
         {
-            aSz.reset(static_cast< SvxSizeItem*>(GetItemSet().Get(nW).Clone()));
+            aSz.reset(GetItemSet().Get(nW).Clone());
         }
 
         Size aTmpSz( aSz->GetSize() );
@@ -298,9 +298,8 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 
     // Size
     Size aSize;
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRAF_FRMSIZE, false, &pItem ) )
-        aSize = static_cast<const SvxSizeItem*>(pItem)->GetSize();
+    if( const SvxSizeItem* pFrmSizeItem = rSet.GetItemIfSet( SID_ATTR_GRAF_FRMSIZE, false ) )
+        aSize = pFrmSizeItem->GetSize();
 
     m_nOldWidth = aSize.Width();
     m_nOldHeight = aSize.Height();
@@ -316,12 +315,11 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
         m_xHeightMF->set_value(nHeight, FieldUnit::TWIP);
     m_xHeightMF->save_value();
 
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
+    if( const SvxBrushItem* pBrushItem = rSet.GetItemIfSet( SID_ATTR_GRAF_GRAPHIC, false ) )
     {
-        const SvxBrushItem& rBrush = *static_cast<const SvxBrushItem*>(pItem);
-        if( !rBrush.GetGraphicLink().isEmpty() &&
-            m_aGraphicName != rBrush.GetGraphicLink() )
-            m_aGraphicName = rBrush.GetGraphicLink();
+        if( !pBrushItem->GetGraphicLink().isEmpty() &&
+            m_aGraphicName != pBrushItem->GetGraphicLink() )
+            m_aGraphicName = pBrushItem->GetGraphicLink();
 
         OUString referer;
         SfxStringItem const * it = static_cast<SfxStringItem const *>(
@@ -329,7 +327,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
         if (it != nullptr) {
             referer = it->GetValue();
         }
-        const Graphic* pGrf = rBrush.GetGraphic(referer);
+        const Graphic* pGrf = pBrushItem->GetGraphic(referer);
         if( pGrf )
         {
             m_aExampleWN.SetGraphic( *pGrf );

@@ -450,13 +450,12 @@ void SwTabFrame::CheckDirection( bool bVert )
 void SwCellFrame::CheckDirection( bool bVert )
 {
     const SwFrameFormat* pFormat = GetFormat();
-    const SfxPoolItem* pItem;
+    const SvxFrameDirectionItem* pFrameDirItem;
     // Check if the item is set, before actually
     // using it. Otherwise the dynamic pool default is used, which may be set
     // to LTR in case of OOo 1.0 documents.
-    if( pFormat && SfxItemState::SET == pFormat->GetItemState( RES_FRAMEDIR, true, &pItem ) )
+    if( pFormat && (pFrameDirItem = pFormat->GetItemIfSet( RES_FRAMEDIR ) ) )
     {
-        const SvxFrameDirectionItem* pFrameDirItem = static_cast<const SvxFrameDirectionItem*>(pItem);
         const SwViewShell *pSh = getRootFrame()->GetCurrShell();
         const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         CheckDir( pFrameDirItem->GetValue(), bVert, false, bBrowseMode );

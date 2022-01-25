@@ -527,12 +527,10 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
     if( mpSectionFormatTable->end() != itFormatPos )
     {
         const SwNodeIndex* pIdx = pFormat->GetContent( false ).GetContentIdx();
-        const SfxPoolItem* pFootnoteEndAtTextEnd;
-        if( SfxItemState::SET != pFormat->GetItemState(
-                            RES_FTN_AT_TXTEND, true, &pFootnoteEndAtTextEnd ) ||
-            SfxItemState::SET != pFormat->GetItemState(
-                            RES_END_AT_TXTEND, true, &pFootnoteEndAtTextEnd ))
-            pFootnoteEndAtTextEnd = nullptr;
+        const SfxPoolItem* pFootnoteEndAtTextEnd = pFormat->GetItemIfSet(
+                            RES_FTN_AT_TXTEND);
+        if( !pFootnoteEndAtTextEnd )
+            pFootnoteEndAtTextEnd = pFormat->GetItemIfSet(RES_END_AT_TXTEND);
 
         const SwSectionNode* pSectNd;
 

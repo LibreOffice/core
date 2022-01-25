@@ -675,18 +675,16 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     if(!pOLV)
         return;
     const SfxItemSet *pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem = nullptr;
+    const SfxStringItem* pItem = nullptr;
     if( pArgs )
-        pArgs->GetItemState(SID_CHARMAP, false, &pItem);
+        pItem = pArgs->GetItemIfSet(SID_CHARMAP, false);
 
     OUString sSym;
     OUString sFontName;
     if ( pItem )
     {
-        sSym = static_cast<const SfxStringItem*>(pItem)->GetValue();
-        const SfxPoolItem* pFtItem = nullptr;
-        pArgs->GetItemState( SID_ATTR_SPECIALCHAR, false, &pFtItem);
-        const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
+        sSym = pItem->GetValue();
+        const SfxStringItem* pFontItem = pArgs->GetItemIfSet( SID_ATTR_SPECIALCHAR, false);
         if ( pFontItem )
             sFontName = pFontItem->GetValue();
     }

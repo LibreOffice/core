@@ -81,13 +81,11 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
     // style:master-page-name
     if( RES_FRMFMT == rFormat.Which() && XML_TABLE == eFamily )
     {
-        const SfxPoolItem *pItem;
-        if( SfxItemState::SET == rFormat.GetAttrSet().GetItemState( RES_PAGEDESC,
-                                                            false, &pItem ) )
+        if( const SwFormatPageDesc* pItem = rFormat.GetAttrSet().GetItemIfSet( RES_PAGEDESC,
+                                                            false ) )
         {
             OUString sName;
-            const SwPageDesc *pPageDesc =
-                static_cast<const SwFormatPageDesc *>(pItem)->GetPageDesc();
+            const SwPageDesc *pPageDesc = pItem->GetPageDesc();
             if( pPageDesc )
                 SwStyleNameMapper::FillProgName(
                                     pPageDesc->GetName(),
@@ -102,12 +100,10 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
     {
         OSL_ENSURE(RES_FRMFMT == rFormat.Which(), "only frame format");
 
-        const SfxPoolItem *pItem;
-        if( SfxItemState::SET ==
-            rFormat.GetAttrSet().GetItemState( RES_BOXATR_FORMAT,
-                                            false, &pItem ) )
+        if( const SwTableBoxNumFormat *pItem =
+                rFormat.GetAttrSet().GetItemIfSet( RES_BOXATR_FORMAT, false ) )
         {
-            sal_Int32 nFormat = static_cast<sal_Int32>(static_cast<const SwTableBoxNumFormat *>(pItem)->GetValue());
+            sal_Int32 nFormat = static_cast<sal_Int32>(pItem->GetValue());
 
             if ( (nFormat != -1) && (nFormat != static_cast<sal_Int32>(getSwDefaultTextFormat())) )
             {

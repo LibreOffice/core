@@ -628,8 +628,7 @@ sal_Int32 RtfSdrExport::StartShape()
                              msfilter::rtfutil::OutString(rEditObj.GetText(0),
                                                           m_rExport.GetCurrentEncoding()));
 
-                auto pFontFamily
-                    = static_cast<const SvxFontItem*>(rItemSet.GetItem(SID_ATTR_CHAR_FONT));
+                const SvxFontItem* pFontFamily = rItemSet.GetItem(SID_ATTR_CHAR_FONT);
                 if (pFontFamily)
                 {
                     lcl_AppendSP(m_rAttrOutput.RunText(), "gtextFont",

@@ -1364,13 +1364,16 @@ void SvxCharEffectsPage::Initialize()
     SetExchangeSupport();
 
     // HTML-Mode
-    const SfxPoolItem* pItem;
-    SfxObjectShell* pShell;
-    if ( SfxItemState::SET == GetItemSet().GetItemState( SID_HTML_MODE, false, &pItem ) ||
-         ( nullptr != ( pShell = SfxObjectShell::Current() ) &&
-           nullptr != ( pItem = pShell->GetItem( SID_HTML_MODE ) ) ) )
+    const SfxUInt16Item* pHtmlModeItem = GetItemSet().GetItemIfSet( SID_HTML_MODE, false );
+    if ( !pHtmlModeItem)
     {
-        m_nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        SfxObjectShell* pShell = SfxObjectShell::Current();
+        if (pShell)
+           pHtmlModeItem = pShell->GetItem( SID_HTML_MODE );
+    }
+    if (pHtmlModeItem)
+    {
+        m_nHtmlMode = pHtmlModeItem->GetValue();
         if ( ( m_nHtmlMode & HTMLMODE_ON ) == HTMLMODE_ON )
         {
             //!!! hide some controls please

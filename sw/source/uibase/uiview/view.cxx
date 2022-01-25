@@ -522,10 +522,10 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify, LinkParamNone*, void)
             m_bAttrChgNotified = true;
             m_aTimer.Start();
 
-            const SfxPoolItem *pItem;
-            if ( SfxItemState::SET != GetObjectShell()->GetMedium()->GetItemSet()->
-                                    GetItemState( SID_HIDDEN, false, &pItem ) ||
-                 !static_cast<const SfxBoolItem*>(pItem)->GetValue() )
+            const SfxBoolItem *pItem =
+                GetObjectShell()->GetMedium()->GetItemSet()->
+                                    GetItemIfSet( SID_HIDDEN, false );
+            if ( !pItem || !pItem->GetValue() )
             {
                 GetViewFrame()->GetBindings().ENTERREGISTRATIONS();
                 m_bAttrChgNotifiedWithRegistrations = true;

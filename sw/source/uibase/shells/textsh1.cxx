@@ -203,14 +203,14 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std:
     SfxItemSet aTmpSet( *pSet );
     ::ConvertAttrGenToChar(aTmpSet, *pCoreSet);
 
-    const SfxPoolItem* pSelectionItem;
+    const SfxStringItem* pSelectionItem;
     bool bInsert = false;
     sal_Int32 nInsert = 0;
 
     // The old item is for unknown reasons back in the set again.
-    if( !bSelectionPut && SfxItemState::SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, false, &pSelectionItem) )
+    if( !bSelectionPut && (pSelectionItem = aTmpSet.GetItemIfSet(FN_PARAM_SELECTION, false)) )
     {
-        OUString sInsert = static_cast<const SfxStringItem*>(pSelectionItem)->GetValue();
+        OUString sInsert = pSelectionItem->GetValue();
         bInsert = !sInsert.isEmpty();
         if(bInsert)
         {
@@ -280,11 +280,10 @@ static void sw_ParagraphDialogResult(SfxItemSet* pSet, SwWrtShell &rWrtSh, SfxRe
     if( pSet->Count() )
     {
         rWrtSh.StartAction();
-        const SfxPoolItem* pItem = nullptr;
-        if ( SfxItemState::SET == pSet->GetItemState(FN_DROP_TEXT, false, &pItem) )
+        if ( const SfxStringItem* pDropTextItem = pSet->GetItemIfSet(FN_DROP_TEXT, false) )
         {
-            if ( !static_cast<const SfxStringItem*>(pItem)->GetValue().isEmpty() )
-                rWrtSh.ReplaceDropText(static_cast<const SfxStringItem*>(pItem)->GetValue(), pPaM);
+            if ( !pDropTextItem->GetValue().isEmpty() )
+                rWrtSh.ReplaceDropText(pDropTextItem->GetValue(), pPaM);
         }
         rWrtSh.SetAttrSet(*pSet, SetAttrMode::DEFAULT, pPaM);
         rWrtSh.EndAction();
@@ -986,10 +985,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             if ( pArgs )
             {
-                const SfxPoolItem* pPaMItem = nullptr;
-                pArgs->GetItemState( GetPool().GetWhich( FN_PARAM_PAM ), false, &pPaMItem );
+                const SwPaMItem* pPaMItem = pArgs->GetItemIfSet( GetPool().GetWhich( FN_PARAM_PAM ), false );
                 if ( pPaMItem )
-                    pPaM = static_cast< const SwPaMItem* >( pPaMItem )->GetValue( );
+                    pPaM = pPaMItem->GetValue( );
             }
 
             if ( !pPaM )
@@ -1106,9 +1104,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         // Apply defaults if necessary.
                         SfxItemSet* pSet = const_cast<SfxItemSet*>(pDlg->GetOutputItemSet());
                         sal_uInt16 nNewDist;
-                        const SfxPoolItem* pItem2 = nullptr;
-                        if (SfxItemState::SET == pSet->GetItemState(SID_ATTR_TABSTOP_DEFAULTS, false, &pItem2) &&
-                            nDefDist != (nNewDist = static_cast<const SfxUInt16Item*>(pItem2)->GetValue()) )
+                        const SfxUInt16Item* pDefaultsItem = pSet->GetItemIfSet(SID_ATTR_TABSTOP_DEFAULTS, false);
+                        if (pDefaultsItem && nDefDist != (nNewDist = pDefaultsItem->GetValue()) )
                         {
                             SvxTabStopItem aDefTabs( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
                             MakeDefTabs( nNewDist, aDefTabs );
@@ -1116,17 +1113,18 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             pSet->ClearItem( SID_ATTR_TABSTOP_DEFAULTS );
                         }
 
+                        const SfxPoolItem* pItem2 = nullptr;
                         if (SfxItemState::SET == pSet->GetItemState(FN_PARAM_1, false, &pItem2))
                         {
                             pSet->Put(SfxStringItem(FN_DROP_TEXT, static_cast<const SfxStringItem*>(pItem2)->GetValue()));
                             pSet->ClearItem(FN_PARAM_1);
                         }
 
-                        if (SfxItemState::SET == pSet->GetItemState(RES_PARATR_DROP, false, &pItem2))
+                        if (const SwFormatDrop* pDropItem = pSet->GetItemIfSet(RES_PARATR_DROP, false))
                         {
                             OUString sCharStyleName;
-                            if (static_cast<const SwFormatDrop*>(pItem2)->GetCharFormat())
-                                sCharStyleName = static_cast<const SwFormatDrop*>(pItem2)->GetCharFormat()->GetName();
+                            if (pDropItem->GetCharFormat())
+                                sCharStyleName = pDropItem->GetCharFormat()->GetName();
                             pSet->Put(SfxStringItem(FN_DROP_CHAR_STYLE_NAME, sCharStyleName));
                         }
 
@@ -1220,7 +1218,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_CHAR_COLOR2:
         {
             Color aSet;
-            const SfxPoolItem* pColorStringItem = nullptr;
+            const SfxStringItem* pColorStringItem = nullptr;
             bool bHasItem = false;
 
             if(pItem)
@@ -1228,9 +1226,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
                 bHasItem = true;
             }
-            else if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
+            else if (pArgs && (pColorStringItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_STR, false)))
             {
-                OUString sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+                OUString sColor = pColorStringItem->GetValue();
                 aSet = Color(ColorTransparency, sColor.toInt32(16));
                 bHasItem = true;
             }
@@ -1257,11 +1255,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_CHAR_COLOR_EXT:
         {
             Color aSet;
-            const SfxPoolItem* pColorStringItem = nullptr;
+            const SfxStringItem* pColorStringItem = nullptr;
 
-            if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
+            if (pArgs && (pColorStringItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_STR, false)))
             {
-                OUString sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+                OUString sColor = pColorStringItem->GetValue();
                 if (sColor == "transparent")
                     aSet = COL_TRANSPARENT;
                 else

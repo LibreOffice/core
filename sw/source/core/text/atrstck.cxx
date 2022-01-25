@@ -220,9 +220,8 @@ static bool lcl_ChgHyperLinkColor( const SwTextAttr& rAttr,
                 // take color from character format 'unvisited link'
                 rINetAttr.SetVisited(false);
                 const SwCharFormat* pTmpFormat = rINetAttr.GetCharFormat();
-                const SfxPoolItem* pItem;
-                if (SfxItemState::SET == pTmpFormat->GetItemState(RES_CHRATR_COLOR, true, &pItem))
-                    *pColor = pItem->StaticWhichCast(RES_CHRATR_COLOR).GetValue();
+                if (const SvxColorItem* pItem = pTmpFormat->GetItemIfSet(RES_CHRATR_COLOR))
+                    *pColor = pItem->GetValue();
                 rINetAttr.SetVisited(true);
             }
             return true;

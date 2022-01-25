@@ -524,13 +524,12 @@ static OUString lcl_dbg_out(const SwNode & rNode)
             aTmpStr += "</number><rule>" +
                 pNumRule->GetName();
 
-            const SfxPoolItem * pItem = nullptr;
+            const SwNumRuleItem * pItem = nullptr;
 
-            if (pAttrSet && SfxItemState::SET ==
-                pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem))
+            if (pAttrSet &&
+                (pItem = pAttrSet->GetItemIfSet(RES_PARATR_NUMRULE, false)))
             {
-                aTmpStr += "(" +
-                    static_cast<const SwNumRuleItem *>(pItem)->GetValue() + ")*";
+                aTmpStr += "(" + pItem->GetValue() + ")*";
             }
 
             const SwNumFormat * pNumFormat = nullptr;

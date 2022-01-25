@@ -113,13 +113,11 @@ bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 
 void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
 {
-    const SfxPoolItem *pPoolItem = nullptr;
-
     m_xRbtAxis1->set_active(true);
     m_xRbtAxis2->set_active(false);
-    if (rInAttrs->GetItemState(SCHATTR_AXIS,true, &pPoolItem) == SfxItemState::SET)
+    if (const SfxInt32Item* pAxisItem = rInAttrs->GetItemIfSet(SCHATTR_AXIS))
     {
-        tools::Long nVal=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        tools::Long nVal = pAxisItem->GetValue();
         if(nVal==CHART_AXIS_SECONDARY_Y)
         {
             m_xRbtAxis2->set_active(true);
@@ -128,34 +126,34 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     }
 
     tools::Long nTmp;
-    if (rInAttrs->GetItemState(SCHATTR_BAR_GAPWIDTH, true, &pPoolItem) == SfxItemState::SET)
+    if (const SfxInt32Item* pGapWidthItem = rInAttrs->GetItemIfSet(SCHATTR_BAR_GAPWIDTH))
     {
-        nTmp = static_cast<tools::Long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
+        nTmp = static_cast<tools::Long>(pGapWidthItem->GetValue());
         m_xMTGap->set_value(nTmp, FieldUnit::PERCENT);
     }
 
-    if (rInAttrs->GetItemState(SCHATTR_BAR_OVERLAP, true, &pPoolItem) == SfxItemState::SET)
+    if (const SfxInt32Item* pOverlapItem = rInAttrs->GetItemIfSet(SCHATTR_BAR_OVERLAP))
     {
-        nTmp = static_cast<tools::Long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
+        nTmp = static_cast<tools::Long>(pOverlapItem->GetValue());
         m_xMTOverlap->set_value(nTmp, FieldUnit::PERCENT);
     }
 
-    if (rInAttrs->GetItemState(SCHATTR_BAR_CONNECT, true, &pPoolItem) == SfxItemState::SET)
+    if (const SfxBoolItem* pConnectItem = rInAttrs->GetItemIfSet(SCHATTR_BAR_CONNECT))
     {
-        bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        bool bCheck = pConnectItem->GetValue();
         m_xCBConnect->set_active(bCheck);
     }
 
-    if (rInAttrs->GetItemState(SCHATTR_AXIS_FOR_ALL_SERIES, true, &pPoolItem) == SfxItemState::SET)
+    if (const SfxInt32Item* pAllSeriesItem = rInAttrs->GetItemIfSet(SCHATTR_AXIS_FOR_ALL_SERIES))
     {
-        m_nAllSeriesAxisIndex = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        m_nAllSeriesAxisIndex = pAllSeriesItem->GetValue();
         m_xCBAxisSideBySide->set_sensitive(false);
     }
-    if (rInAttrs->GetItemState(SCHATTR_GROUP_BARS_PER_AXIS, true, &pPoolItem) == SfxItemState::SET)
+    if (const SfxBoolItem* pPerAxisItem = rInAttrs->GetItemIfSet(SCHATTR_GROUP_BARS_PER_AXIS))
     {
         // model property is "group bars per axis", UI feature is the other way
         // round: "show bars side by side"
-        bool bCheck = ! static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        bool bCheck = ! pPerAxisItem->GetValue();
         m_xCBAxisSideBySide->set_active( bCheck );
     }
     else
@@ -166,10 +164,12 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     //missing value treatment
     {
         std::vector< sal_Int32 > aMissingValueTreatments;
-        if( rInAttrs->GetItemState(SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS, true, &pPoolItem) == SfxItemState::SET )
-            aMissingValueTreatments = static_cast<const SfxIntegerListItem*>(pPoolItem)->GetList();
+        if (const SfxIntegerListItem* pValueTreatmentsItem = rInAttrs->GetItemIfSet(SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS))
+            aMissingValueTreatments = pValueTreatmentsItem->GetList();
 
-        if ( aMissingValueTreatments.size()>1 && rInAttrs->GetItemState(SCHATTR_MISSING_VALUE_TREATMENT,true, &pPoolItem) == SfxItemState::SET)
+        const SfxInt32Item* pMissingValueTreatmentItem;
+        if ( aMissingValueTreatments.size()>1 &&
+            (pMissingValueTreatmentItem = rInAttrs->GetItemIfSet(SCHATTR_MISSING_VALUE_TREATMENT)) )
         {
             m_xRB_DontPaint->set_sensitive(false);
             m_xRB_AssumeZero->set_sensitive(false);
@@ -185,7 +185,7 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
                     m_xRB_ContinueLine->set_sensitive(true);
             }
 
-            tools::Long nVal=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+            tools::Long nVal=pMissingValueTreatmentItem->GetValue();
             if(nVal==css::chart::MissingValueTreatment::LEAVE_GAP)
                 m_xRB_DontPaint->set_active(true);
             else if(nVal==css::chart::MissingValueTreatment::USE_ZERO)
@@ -200,9 +200,9 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     }
 
     // Include hidden cells
-    if (rInAttrs->GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, true, &pPoolItem) == SfxItemState::SET)
+    if (const SfxBoolItem* pHiddenCellsItem = rInAttrs->GetItemIfSet(SCHATTR_INCLUDE_HIDDEN_CELLS))
     {
-        bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
+        bool bVal = pHiddenCellsItem->GetValue();
         m_xCBIncludeHiddenCells->set_active(bVal);
     }
     else
@@ -215,9 +215,9 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
             m_xGrpPlotOptions->hide();
     }
 
-    if (rInAttrs->GetItemState(SCHATTR_HIDE_LEGEND_ENTRY, true, &pPoolItem) == SfxItemState::SET)
+    if (const SfxBoolItem* pEntryItem = rInAttrs->GetItemIfSet(SCHATTR_HIDE_LEGEND_ENTRY))
     {
-        bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
+        bool bVal = pEntryItem->GetValue();
         m_xCBHideLegendEntry->set_active(bVal);
     }
 

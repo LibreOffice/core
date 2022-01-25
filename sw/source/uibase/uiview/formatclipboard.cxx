@@ -140,27 +140,26 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
 
 void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
 {
-    const SfxPoolItem* pItem = nullptr;
     bool bBorder = ( SfxItemState::SET == rSet.GetItemState( RES_BOX ) ||
             SfxItemState::SET == rSet.GetItemState( SID_ATTR_BORDER_INNER ) );
-    bool bBackground = SfxItemState::SET == rSet.GetItemState( RES_BACKGROUND, false, &pItem );
-    const SfxPoolItem* pRowItem = nullptr, *pTableItem = nullptr;
-    bBackground |= SfxItemState::SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, false, &pRowItem );
-    bBackground |= SfxItemState::SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, false, &pTableItem );
+    const SvxBrushItem* pBackgroundItem = rSet.GetItemIfSet( RES_BACKGROUND, false );
+    const SvxBrushItem* pRowItem = rSet.GetItemIfSet( SID_ATTR_BRUSH_ROW, false );
+    const SvxBrushItem* pTableItem = rSet.GetItemIfSet( SID_ATTR_BRUSH_TABLE, false );
+    bool bBackground = pBackgroundItem || pRowItem || pTableItem;
 
     if(bBackground)
     {
-        if(pItem)
-            rSh.SetBoxBackground( *static_cast<const SvxBrushItem*>(pItem) );
+        if(pBackgroundItem)
+            rSh.SetBoxBackground( *pBackgroundItem );
         if(pRowItem)
         {
-            std::unique_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pRowItem->Clone()));
+            std::unique_ptr<SvxBrushItem> aBrush(pRowItem->Clone());
             aBrush->SetWhich(RES_BACKGROUND);
             rSh.SetRowBackground(*aBrush);
         }
         if(pTableItem)
         {
-            std::unique_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pTableItem->Clone()));
+            std::unique_ptr<SvxBrushItem> aBrush(pTableItem->Clone());
             aBrush->SetWhich(RES_BACKGROUND);
             rSh.SetTabBackground(*aBrush);
         }
@@ -168,61 +167,55 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     if(bBorder)
         rSh.SetTabBorders( rSet );
 
-    if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem) )
-        rSh.SetRowsToRepeat( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
+    if( const SfxUInt16Item* pHeadlineItem = rSet.GetItemIfSet( FN_PARAM_TABLE_HEADLINE, false) )
+        rSh.SetRowsToRepeat( pHeadlineItem->GetValue() );
 
     SwFrameFormat* pFrameFormat = rSh.GetTableFormat();
     if(pFrameFormat)
     {
         //RES_SHADOW
-        pItem=nullptr;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_SHADOW), false, &pItem);
+        const SfxPoolItem* pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhich(RES_SHADOW), false);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_BREAK
-        pItem=nullptr;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_BREAK), false, &pItem);
+        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhich(RES_BREAK), false);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_PAGEDESC
-        pItem=nullptr;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_PAGEDESC), false, &pItem);
+        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhich(RES_PAGEDESC), false);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_LAYOUT_SPLIT
-        pItem=nullptr;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_LAYOUT_SPLIT), false, &pItem);
+        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhich(RES_LAYOUT_SPLIT), false);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_KEEP
-        pItem=nullptr;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_KEEP), false, &pItem);
+        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhich(RES_KEEP), false);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_FRAMEDIR
-        pItem=nullptr;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_FRAMEDIR), false, &pItem);
+        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhich(RES_FRAMEDIR), false);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
     }
 
-    if( SfxItemState::SET == rSet.GetItemState( FN_TABLE_BOX_TEXTORIENTATION, false, &pItem) )
+    if( const SvxFrameDirectionItem* pTextOriItem = rSet.GetItemIfSet( FN_TABLE_BOX_TEXTORIENTATION, false ) )
     {
         SvxFrameDirectionItem aDirection( SvxFrameDirection::Environment, RES_FRAMEDIR );
-        aDirection.SetValue(static_cast< const SvxFrameDirectionItem* >(pItem)->GetValue());
+        aDirection.SetValue(pTextOriItem->GetValue());
         rSh.SetBoxDirection(aDirection);
     }
 
-    if( SfxItemState::SET == rSet.GetItemState( FN_TABLE_SET_VERT_ALIGN, false, &pItem))
-        rSh.SetBoxAlign(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
+    if( const SfxUInt16Item* pVertAlignItem = rSet.GetItemIfSet( FN_TABLE_SET_VERT_ALIGN, false ))
+        rSh.SetBoxAlign(pVertAlignItem->GetValue());
 
-    if( SfxItemState::SET == rSet.GetItemState( RES_ROW_SPLIT, false, &pItem) )
-        rSh.SetRowSplit(*static_cast<const SwFormatRowSplit*>(pItem));
+    if( const SwFormatRowSplit* pSplitItem = rSet.GetItemIfSet( RES_ROW_SPLIT, false ) )
+        rSh.SetRowSplit(*pSplitItem);
 }
 }//end anonymous namespace
 

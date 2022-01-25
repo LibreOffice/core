@@ -118,10 +118,9 @@ void SvxBkgTabPage::Reset( const SfxItemSet* )
     if ( m_xTblLBox && m_xTblLBox->get_visible() )
     {
         m_nActPos = -1;
-        const SfxPoolItem* pItem;
-        if ( SfxItemState::SET == m_pResetSet->GetItemState( SID_BACKGRND_DESTINATION, false, &pItem ) )
+        if ( const SfxUInt16Item* pDestItem = m_pResetSet->GetItemIfSet( SID_BACKGRND_DESTINATION, false ) )
         {
-            sal_uInt16 nDestValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+            sal_uInt16 nDestValue = pDestItem->GetValue();
             m_xTblLBox->set_active( nDestValue );
             TblDestinationHdl_Impl( *m_xTblLBox );
         }
@@ -204,7 +203,7 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         if (SfxItemState::SET == maSet.GetItemState(SID_ATTR_BRUSH_ROW))
         {
-            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(SID_ATTR_BRUSH_ROW)));
+            SvxBrushItem aBrushItem(maSet.Get(SID_ATTR_BRUSH_ROW));
             rCoreSet->Put(aBrushItem);
         }
     }
@@ -212,7 +211,7 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         if (SfxItemState::SET == maSet.GetItemState(SID_ATTR_BRUSH_TABLE))
         {
-            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(SID_ATTR_BRUSH_TABLE)));
+            SvxBrushItem aBrushItem(maSet.Get(SID_ATTR_BRUSH_TABLE));
             rCoreSet->Put(aBrushItem);
         }
     }

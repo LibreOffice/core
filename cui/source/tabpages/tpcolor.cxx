@@ -198,13 +198,12 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
     if( !pColorList.is() )
         return;
 
-    const SfxPoolItem* pPoolItem = nullptr;
-    if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
+    if( const XFillColorItem* pFillColorItem = rOutAttrs.GetItemIfSet( GetWhich( XATTR_FILLCOLOR ) ) )
     {
         SetColorModel( ColorModel::RGB );
         ChangeColorModel();
 
-        const Color aColor = static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue();
+        const Color aColor = pFillColorItem->GetColorValue();
         ChangeColor( aColor );
         sal_Int32 nPos = FindInPalette( aColor );
 

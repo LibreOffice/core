@@ -276,9 +276,9 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         if (nSlotId == SID_STYLE_PREVIEW)
         {
             SfxStyleFamily eFamily = SfxStyleFamily::Para;
-            const SfxPoolItem* pFamItem;
-            if ( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY, true, &pFamItem ) )
-                eFamily = static_cast<SfxStyleFamily>(static_cast<const SfxUInt16Item*>(pFamItem)->GetValue());
+            const SfxUInt16Item* pFamItem;
+            if ( pArgs && (pFamItem = pArgs->GetItemIfSet( SID_STYLE_FAMILY )) )
+                eFamily = static_cast<SfxStyleFamily>(pFamItem->GetValue());
             const SfxPoolItem* pNameItem;
             OUString aStyleName;
             if (pArgs && SfxItemState::SET == pArgs->GetItemState( nSlotId, true, &pNameItem ))
@@ -356,12 +356,13 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         ScStyleSaveData aNewData;
 
         SfxStyleFamily eFamily = SfxStyleFamily::Para;
-        const SfxPoolItem* pFamItem;
-        if ( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY, true, &pFamItem ) )
-            eFamily = static_cast<SfxStyleFamily>(static_cast<const SfxUInt16Item*>(pFamItem)->GetValue());
-        else if ( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME, true, &pFamItem ) )
+        const SfxUInt16Item* pFamItem;
+        const SfxStringItem* pFamilyNameItem;
+        if ( pArgs && (pFamItem = pArgs->GetItemIfSet( SID_STYLE_FAMILY )) )
+            eFamily = static_cast<SfxStyleFamily>(pFamItem->GetValue());
+        else if ( pArgs && (pFamilyNameItem = pArgs->GetItemIfSet( SID_STYLE_FAMILYNAME )) )
         {
-            OUString sFamily = static_cast<const SfxStringItem*>(pFamItem)->GetValue();
+            OUString sFamily = pFamilyNameItem->GetValue();
             if (sFamily == "CellStyles")
                 eFamily = SfxStyleFamily::Para;
             else if (sFamily == "PageStyles")
@@ -379,11 +380,10 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     if (pArgs && SfxItemState::SET == pArgs->GetItemState( nSlotId, true, &pNameItem ))
                         aStyleName  = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
 
-                    const SfxPoolItem* pRefItem=nullptr;
-                    if (pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_REFERENCE, true, &pRefItem ))
+                    const SfxStringItem* pRefItem=nullptr;
+                    if (pArgs && (pRefItem = pArgs->GetItemIfSet( SID_STYLE_REFERENCE )))
                     {
-                        if(pRefItem!=nullptr)
-                            aRefName  = static_cast<const SfxStringItem*>(pRefItem)->GetValue();
+                        aRefName  = pRefItem->GetValue();
                     }
 
                     pStyleSheet = &(pStylePool->Make( aStyleName, eFamily,
@@ -798,13 +798,11 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         {
                             SfxItemSet& rSet = pStyleSheet->GetItemSet();
 
-                            const SfxPoolItem* pItem;
-                            if ( rSet.GetItemState( ATTR_VALUE_FORMAT,
-                                    false, &pItem ) == SfxItemState::SET )
+                            if ( const SfxUInt32Item* pItem = rSet.GetItemIfSet( ATTR_VALUE_FORMAT,
+                                    false ) )
                             {
                                 // Produce and format NumberFormat Value from Value and Language
-                                sal_uLong nFormat =
-                                    static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+                                sal_uLong nFormat = pItem->GetValue();
                                 LanguageType eLang =
                                     rSet.Get(ATTR_LANGUAGE_FORMAT ).GetLanguage();
                                 sal_uLong nLangFormat = rDoc.GetFormatTable()->
@@ -960,9 +958,9 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             const OUString& rName = static_cast<const SfxStringItem*>(pItem)->GetValue();
             SfxClassificationHelper aHelper(pDocSh->getDocProperties());
             auto eType = SfxClassificationPolicyType::IntellectualProperty;
-            if (pArgs->GetItemState(SID_TYPE_NAME, false, &pItem) == SfxItemState::SET)
+            if (const SfxStringItem* pNameItem = pArgs->GetItemIfSet(SID_TYPE_NAME, false))
             {
-                const OUString& rType = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                const OUString& rType = pNameItem->GetValue();
                 eType = SfxClassificationHelper::stringToPolicyType(rType);
             }
             aHelper.SetBACName(rName, eType);
@@ -1227,8 +1225,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
         case SID_ATTR_NUMBERFORMAT_VALUE:
             if ( pReqArgs )
             {
-                const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( ATTR_VALUE_FORMAT, true, &pItem ) == SfxItemState::SET )
+                if ( const SfxUInt32Item* pItem = pReqArgs->GetItemIfSet( ATTR_VALUE_FORMAT ) )
                 {
                     // We have to accomplish this using ApplyAttributes()
                     // because we also need the language information to be
@@ -1538,20 +1535,17 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
          */
 
         const SfxItemSet&        rAttrSet   = pTabViewShell->GetSelectionPattern()->GetItemSet();
-        const SfxPoolItem*       pItem       = nullptr;
-        const SvxHorJustifyItem* pHorJustify = nullptr;
-        const SvxVerJustifyItem* pVerJustify = nullptr;
+        const SvxHorJustifyItem* pHorJustify = rAttrSet.GetItemIfSet(ATTR_HOR_JUSTIFY);
+        const SvxVerJustifyItem* pVerJustify = rAttrSet.GetItemIfSet(ATTR_VER_JUSTIFY );
         SvxCellHorJustify        eHorJustify = SvxCellHorJustify::Standard;
         SvxCellVerJustify        eVerJustify = SvxCellVerJustify::Standard;
 
-        if (rAttrSet.GetItemState(ATTR_HOR_JUSTIFY, true,&pItem ) == SfxItemState::SET)
+        if (pHorJustify)
         {
-            pHorJustify = static_cast<const SvxHorJustifyItem*>(pItem);
             eHorJustify = pHorJustify->GetValue();
         }
-        if (rAttrSet.GetItemState(ATTR_VER_JUSTIFY, true,&pItem ) == SfxItemState::SET)
+        if (pVerJustify)
         {
-            pVerJustify = static_cast<const SvxVerJustifyItem*>(pItem);
             eVerJustify = pVerJustify->GetValue();
         }
 
@@ -1637,12 +1631,12 @@ namespace
 {
     bool lcl_getColorFromStr(const SfxItemSet *pArgs, Color &rColor)
     {
-        const SfxPoolItem* pColorStringItem = nullptr;
+        const SfxStringItem* pColorStringItem = nullptr;
 
-        if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem) && pColorStringItem)
+        if (pArgs && (pColorStringItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_STR, false)))
         {
             OUString sColor;
-            sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+            sColor = pColorStringItem->GetValue();
 
             if (sColor == "transparent")
                 rColor = COL_TRANSPARENT;
@@ -1907,17 +1901,15 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                                                     Get( ATTR_BORDER );
 
                     // Evaluate border items from controller:
-                    const SfxPoolItem* pItem = nullptr;
 
-                    if ( pNewAttrs->GetItemState( ATTR_BORDER, true, &pItem )
-                         == SfxItemState::SET )
+                    if ( const SvxBoxItem* pBoxItem = pNewAttrs->GetItemIfSet( ATTR_BORDER ) )
                     {
                         //  The SvxFrameToolBoxControl toolbox controller uses a default
                         //  SvxBorderLine (all widths 0) to mark the lines that should be set.
                         //  Macro recording uses a SvxBoxItem with the real values (OutWidth > 0)
                         //  or NULL pointers for no lines.
                         //  -> Substitute existing lines with pDefLine only if widths are 0.
-                        SvxBoxItem aBoxItem ( *static_cast<const SvxBoxItem*>(pItem ));
+                        SvxBoxItem aBoxItem ( *pBoxItem );
                         if ( aBoxItem.GetTop() && aBoxItem.GetTop()->GetOutWidth() == 0 )
                             aBoxItem.SetLine( pDefLine, SvxBoxItemLine::TOP );
                         if ( aBoxItem.GetBottom() && aBoxItem.GetBottom()->GetOutWidth() == 0 )
@@ -1930,10 +1922,9 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         rReq.AppendItem( aBoxItem );
                     }
 
-                    if ( pNewAttrs->GetItemState( ATTR_BORDER_INNER, true, &pItem )
-                         == SfxItemState::SET )
+                    if ( const SvxBoxInfoItem* pBoxInfoItem = pNewAttrs->GetItemIfSet( ATTR_BORDER_INNER ) )
                     {
-                        SvxBoxInfoItem aBoxInfoItem( *static_cast<const SvxBoxInfoItem*>(pItem) );
+                        SvxBoxInfoItem aBoxInfoItem( *pBoxInfoItem );
                         if ( aBoxInfoItem.GetHori() && aBoxInfoItem.GetHori()->GetOutWidth() == 0 )
                             aBoxInfoItem.SetLine( pDefLine, SvxBoxInfoItemLine::HORI );
                         if ( aBoxInfoItem.GetVert() && aBoxInfoItem.GetVert()->GetOutWidth() == 0 )
@@ -1960,11 +1951,10 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     const ScPatternAttr* pOldAttrs = pTabViewShell->GetSelectionPattern();
                     SfxItemSet aOldSet(pOldAttrs->GetItemSet());
                     SfxItemSet aNewSet(pOldAttrs->GetItemSet());
-                    const SfxPoolItem* pItem = nullptr;
 
                     if(SID_ATTR_BORDER_DIAG_TLBR == nSlot)
                     {
-                        if(SfxItemState::SET == pNewAttrs->GetItemState(ATTR_BORDER_TLBR, true, &pItem))
+                        if(SfxItemState::SET == pNewAttrs->GetItemState(ATTR_BORDER_TLBR))
                         {
                             SvxLineItem aItem(ATTR_BORDER_TLBR);
                             aItem.SetLine(pNewAttrs->Get(ATTR_BORDER_TLBR).GetLine());
@@ -1975,7 +1965,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     }
                     else // if( nSlot == SID_ATTR_BORDER_DIAG_BLTR )
                     {
-                        if(SfxItemState::SET == pNewAttrs->GetItemState(ATTR_BORDER_BLTR, true, &pItem ))
+                        if(SfxItemState::SET == pNewAttrs->GetItemState(ATTR_BORDER_BLTR ))
                         {
                             SvxLineItem aItem(ATTR_BORDER_BLTR);
                             aItem.SetLine(pNewAttrs->Get(ATTR_BORDER_BLTR).GetLine());

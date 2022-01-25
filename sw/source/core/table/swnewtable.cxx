@@ -2135,10 +2135,9 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
     SwFormatFrameSize const outerSize(pSourceLine->GetFrameFormat()->GetFrameSize());
     tools::Long minHeights(0);
     {
-        SwFormatFrameSize const* pSize(nullptr);
         SwFrameFormat const& rSubLineFormat(*pSubTableBox->GetTabLines()[0]->GetFrameFormat());
-        if (rSubLineFormat.GetItemState(RES_FRM_SIZE, true,
-            reinterpret_cast<SfxPoolItem const**>(&pSize)) == SfxItemState::SET)
+        SwFormatFrameSize const* pSize = rSubLineFormat.GetItemIfSet(RES_FRM_SIZE);
+        if (pSize)
         {   // for first row, apply height from inner row to outer row.
             // in case the existing outer row height was larger than the entire
             // subtable, the last inserted row needs to be tweaked (below)
@@ -2157,9 +2156,8 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
             pSourceLine->GetTabBoxes().size() - 1 + pSubLine->GetTabBoxes().size(),
             nullptr);
         SwFrameFormat const& rSubLineFormat(*pSubLine->GetFrameFormat());
-        SwFormatFrameSize const* pSize(nullptr);
-        if (rSubLineFormat.GetItemState(RES_FRM_SIZE, true,
-            reinterpret_cast<SfxPoolItem const**>(&pSize)) == SfxItemState::SET)
+        SwFormatFrameSize const* pSize = rSubLineFormat.GetItemIfSet(RES_FRM_SIZE);
+        if (pSize)
         {   // for rows 2..N, copy inner row height to outer row
             pNewLine->ClaimFrameFormat();
             pNewLine->GetFrameFormat()->SetFormatAttr(*pSize);
@@ -2217,8 +2215,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
                     pDoc->GetNodes().Delete(insPos);
                     if (pRowBrush)
                     {
-                        SfxPoolItem const* pCellBrush(nullptr);
-                        if (pNewBox->GetFrameFormat()->GetItemState(RES_BACKGROUND, true, &pCellBrush) != SfxItemState::SET)
+                        if (pNewBox->GetFrameFormat()->GetItemState(RES_BACKGROUND, true) != SfxItemState::SET)
                         {   // set inner row background on inner cell
                             pNewBox->ClaimFrameFormat();
                             pNewBox->GetFrameFormat()->SetFormatAttr(*pRowBrush);

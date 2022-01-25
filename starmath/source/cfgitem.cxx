@@ -1358,56 +1358,55 @@ void SmMathConfig::Notify( const css::uno::Sequence< OUString >& rNames )
 void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
 {
     CommitLocker aLock(*this);
-    const SfxPoolItem *pItem     = nullptr;
 
     sal_uInt16 nU16;
     bool bVal;
-    if (rSet.GetItemState(SID_PRINTSIZE, true, &pItem) == SfxItemState::SET)
-    {   nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+    if (const SfxUInt16Item* pPrintSizeItem = rSet.GetItemIfSet(SID_PRINTSIZE))
+    {   nU16 = pPrintSizeItem->GetValue();
         SetPrintSize( static_cast<SmPrintSize>(nU16) );
     }
-    if (rSet.GetItemState(SID_PRINTZOOM, true, &pItem) == SfxItemState::SET)
-    {   nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+    if (const SfxUInt16Item* pPrintZoomItem = rSet.GetItemIfSet(SID_PRINTZOOM))
+    {   nU16 = pPrintZoomItem->GetValue();
         SetPrintZoomFactor( nU16 );
     }
-    if (rSet.GetItemState(SID_SMEDITWINDOWZOOM, true, &pItem) == SfxItemState::SET)
-    {   nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+    if (const SfxUInt16Item* pPrintZoomItem = rSet.GetItemIfSet(SID_SMEDITWINDOWZOOM))
+    {   nU16 = static_cast<const SfxUInt16Item *>(pPrintZoomItem)->GetValue();
         SetSmEditWindowZoomFactor( nU16 );
     }
-    if (rSet.GetItemState(SID_PRINTTITLE, true, &pItem) == SfxItemState::SET)
-    {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+    if (const SfxBoolItem* pPrintTitleItem = rSet.GetItemIfSet(SID_PRINTTITLE))
+    {   bVal = pPrintTitleItem->GetValue();
         SetPrintTitle( bVal );
     }
-    if (rSet.GetItemState(SID_PRINTTEXT, true, &pItem) == SfxItemState::SET)
-    {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+    if (const SfxBoolItem* pPrintTextItem = rSet.GetItemIfSet(SID_PRINTTEXT))
+    {   bVal = pPrintTextItem->GetValue();
         SetPrintFormulaText( bVal );
     }
-    if (rSet.GetItemState(SID_PRINTFRAME, true, &pItem) == SfxItemState::SET)
-    {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+    if (const SfxBoolItem* pPrintZoomItem = rSet.GetItemIfSet(SID_PRINTFRAME))
+    {   bVal = static_cast<const SfxBoolItem *>(pPrintZoomItem)->GetValue();
         SetPrintFrame( bVal );
     }
-    if (rSet.GetItemState(SID_AUTOREDRAW, true, &pItem) == SfxItemState::SET)
-    {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+    if (const SfxBoolItem* pRedrawItem = rSet.GetItemIfSet(SID_AUTOREDRAW))
+    {   bVal = pRedrawItem->GetValue();
         SetAutoRedraw( bVal );
     }
-    if (rSet.GetItemState(SID_NO_RIGHT_SPACES, true, &pItem) == SfxItemState::SET)
-    {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+    if (const SfxBoolItem* pSpacesItem = rSet.GetItemIfSet(SID_NO_RIGHT_SPACES))
+    {   bVal = pSpacesItem->GetValue();
         SetIgnoreSpacesRight( bVal );
     }
-    if (rSet.GetItemState(SID_SAVE_ONLY_USED_SYMBOLS, true, &pItem) == SfxItemState::SET)
-    {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+    if (const SfxBoolItem* pSymbolsItem = rSet.GetItemIfSet(SID_SAVE_ONLY_USED_SYMBOLS))
+    {   bVal = pSymbolsItem->GetValue();
         SetSaveOnlyUsedSymbols( bVal );
     }
 
-    if (rSet.GetItemState(SID_AUTO_CLOSE_BRACKETS, true, &pItem) == SfxItemState::SET)
+    if (const SfxBoolItem* pBracketsItem = rSet.GetItemIfSet(SID_AUTO_CLOSE_BRACKETS))
     {
-        bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+        bVal = pBracketsItem->GetValue();
         SetAutoCloseBrackets( bVal );
     }
 
-    if (rSet.GetItemState(SID_DEFAULT_SM_SYNTAX_VERSION, true, &pItem) == SfxItemState::SET)
+    if (const SfxUInt16Item* pSyntaxItem = rSet.GetItemIfSet(SID_DEFAULT_SM_SYNTAX_VERSION))
     {
-        nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+        nU16 = pSyntaxItem->GetValue();
         SetDefaultSmSyntaxVersion( nU16 );
     }
 }

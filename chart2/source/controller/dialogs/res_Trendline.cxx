@@ -126,29 +126,27 @@ IMPL_LINK_NOARG(TrendlineResources, SelectTrendLine, weld::Toggleable&, void)
 
 void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
 {
-    const SfxPoolItem *pPoolItem = nullptr;
-
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_CURVE_NAME, true, &pPoolItem ) == SfxItemState::SET )
+    if( const SfxStringItem* pCurveNameItem = rInAttrs.GetItemIfSet( SCHATTR_REGRESSION_CURVE_NAME ) )
     {
-        OUString aName = static_cast< const SfxStringItem* >(pPoolItem)->GetValue();
+        OUString aName = pCurveNameItem->GetValue();
         m_xEE_Name->set_text(aName);
     }
     else
     {
         m_xEE_Name->set_text("");
     }
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_XNAME, true, &pPoolItem ) == SfxItemState::SET )
+    if( const SfxStringItem* pRegressionXNameItem = rInAttrs.GetItemIfSet( SCHATTR_REGRESSION_XNAME ) )
     {
-        OUString aName = static_cast< const SfxStringItem* >(pPoolItem)->GetValue();
+        OUString aName = pRegressionXNameItem->GetValue();
         m_xEE_XName->set_text(aName);
     }
     else
     {
         m_xEE_XName->set_text("x");
     }
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_YNAME, true, &pPoolItem ) == SfxItemState::SET )
+    if( const SfxStringItem* pRegressionYNameItem = rInAttrs.GetItemIfSet( SCHATTR_REGRESSION_YNAME ) )
     {
-        OUString aName = static_cast< const SfxStringItem* >(pPoolItem)->GetValue();
+        OUString aName = pRegressionYNameItem->GetValue();
         m_xEE_YName->set_text(aName);
     }
     else
@@ -156,6 +154,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
         m_xEE_YName->set_text("f(x)");
     }
 
+    const SfxPoolItem* pPoolItem = nullptr;
     SfxItemState aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_TYPE, true, &pPoolItem );
     m_bTrendLineUnique = ( aState != SfxItemState::DONTCARE );
     if( aState == SfxItemState::SET )
@@ -167,9 +166,9 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
         }
     }
 
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_DEGREE, true, &pPoolItem ) == SfxItemState::SET )
+    if( const SfxInt32Item* pDegreeItem = rInAttrs.GetItemIfSet( SCHATTR_REGRESSION_DEGREE ) )
     {
-        sal_Int32 nDegree = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        sal_Int32 nDegree = pDegreeItem->GetValue();
         m_xNF_Degree->set_value( nDegree );
     }
     else
@@ -179,9 +178,9 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
 
     m_xNF_Degree->save_value();
 
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_PERIOD, true, &pPoolItem ) == SfxItemState::SET )
+    if( const SfxInt32Item* pPeriodItem = rInAttrs.GetItemIfSet( SCHATTR_REGRESSION_PERIOD ) )
     {
-        sal_Int32 nPeriod = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        sal_Int32 nPeriod = pPeriodItem->GetValue();
         m_xNF_Period->set_value( nPeriod );
     }
     else
@@ -192,23 +191,23 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     m_xNF_Period->save_value();
 
     double nValue = 0.0;
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD, true, &pPoolItem ) == SfxItemState::SET )
+    if( const SvxDoubleItem* pForwardItem = rInAttrs.GetItemIfSet( SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD ) )
     {
-        nValue = static_cast<const SvxDoubleItem*>(pPoolItem)->GetValue() ;
+        nValue = pForwardItem->GetValue() ;
     }
     lcl_setValue(*m_xFmtFld_ExtrapolateForward, nValue);
 
     nValue = 0.0;
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD, true, &pPoolItem ) == SfxItemState::SET )
+    if( const SvxDoubleItem* pBackwardItem = rInAttrs.GetItemIfSet( SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD ) )
     {
-        nValue = static_cast<const SvxDoubleItem*>(pPoolItem)->GetValue() ;
+        nValue = pBackwardItem->GetValue() ;
     }
     lcl_setValue(*m_xFmtFld_ExtrapolateBackward, nValue);
 
     nValue = 0.0;
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_INTERCEPT_VALUE, true, &pPoolItem ) == SfxItemState::SET )
+    if( const SvxDoubleItem* pValueItem = rInAttrs.GetItemIfSet( SCHATTR_REGRESSION_INTERCEPT_VALUE ) )
     {
-        nValue = static_cast<const SvxDoubleItem*>(pPoolItem)->GetValue() ;
+        nValue = pValueItem->GetValue() ;
     }
     lcl_setValue(*m_xFmtFld_InterceptValue, nValue);
 
@@ -245,9 +244,9 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
             m_xCB_ShowCorrelationCoeff->set_active( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
     }
 
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_MOVING_TYPE, true, &pPoolItem ) == SfxItemState::SET )
+    if( const SfxInt32Item* pMovingTypeItem = rInAttrs.GetItemIfSet( SCHATTR_REGRESSION_MOVING_TYPE ) )
     {
-        sal_Int32 nMovingType = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        sal_Int32 nMovingType = pMovingTypeItem->GetValue();
         if (nMovingType == MovingAverageType::Prior)
             m_xCB_RegressionMovingType->set_active(0);
         else if (nMovingType == MovingAverageType::Central)

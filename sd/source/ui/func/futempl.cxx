@@ -530,10 +530,9 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                         if( mpDoc->GetOnlineSpell() )
                         {
-                            const SfxPoolItem* pTempItem;
-                            if( SfxItemState::SET == rAttr.GetItemState(EE_CHAR_LANGUAGE, false, &pTempItem ) ||
-                                SfxItemState::SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CJK, false, &pTempItem ) ||
-                                SfxItemState::SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CTL, false, &pTempItem ) )
+                            if( SfxItemState::SET == rAttr.GetItemState(EE_CHAR_LANGUAGE, false ) ||
+                                SfxItemState::SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CJK, false ) ||
+                                SfxItemState::SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CTL, false ) )
                             {
                                 mpDoc->StopOnlineSpelling();
                                 mpDoc->StartOnlineSpelling();

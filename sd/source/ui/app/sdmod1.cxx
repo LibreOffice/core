@@ -90,11 +90,10 @@ void SdModule::Execute(SfxRequest& rReq)
         case SID_AUTOSPELL_CHECK:
         {
             // automatic spell checker
-            const SfxPoolItem* pItem;
-            if( pSet && SfxItemState::SET == pSet->GetItemState(
-                        SID_AUTOSPELL_CHECK, false, &pItem ) )
+            const SfxBoolItem* pItem;
+            if( pSet && (pItem = pSet->GetItemIfSet( SID_AUTOSPELL_CHECK, false ) ) )
             {
-                bool bOnlineSpelling = static_cast<const SfxBoolItem*>( pItem )->GetValue();
+                bool bOnlineSpelling = pItem->GetValue();
                 // save at document:
                 ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
                 if( pDocSh )
@@ -108,10 +107,10 @@ void SdModule::Execute(SfxRequest& rReq)
 
         case SID_ATTR_METRIC:
         {
-            const SfxPoolItem* pItem;
-            if ( pSet && SfxItemState::SET == pSet->GetItemState( SID_ATTR_METRIC, true, &pItem ) )
+            const SfxUInt16Item* pItem;
+            if ( pSet && (pItem = pSet->GetItemIfSet( SID_ATTR_METRIC ) ) )
             {
-                FieldUnit eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
+                FieldUnit eUnit = static_cast<FieldUnit>(pItem->GetValue());
                 switch( eUnit )
                 {
                     case FieldUnit::MM:      // only the units which are also in the dialog

@@ -1192,12 +1192,10 @@ bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
         }
     }
 
-    const SfxPoolItem *pItem;
+    const SwFormatDrop *pDrop;
     if( bCheckDropCap &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_PARATR_DROP, true,
-                &pItem ) )
+        (pDrop = rItemSet.GetItemIfSet( RES_PARATR_DROP )) )
     {
-        const SwFormatDrop *pDrop = static_cast<const SwFormatDrop *>(pItem);
         const SwCharFormat *pDCCharFormat = pDrop->GetCharFormat();
         if( pDCCharFormat )
         {
@@ -1580,12 +1578,10 @@ static Writer& OutCSS1_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     }
 
     // export Drop-Caps
-    const SfxPoolItem *pItem;
-    if( SfxItemState::SET==aItemSet.GetItemState( RES_PARATR_DROP, false, &pItem ))
+    if( const SwFormatDrop *pDrop = aItemSet.GetItemIfSet( RES_PARATR_DROP, false ) )
     {
         OUString sOut = aSelector +
             ":" + OStringToOUString( sCSS1_first_letter, RTL_TEXTENCODING_ASCII_US );
-        const SwFormatDrop *pDrop = static_cast<const SwFormatDrop *>(pItem);
         OutCSS1DropCapRule( rHTMLWrt, sOut, *pDrop, CSS1_FMT_ISTAG != nDeep, bHasScriptDependencies );
     }
 
@@ -2924,14 +2920,8 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
 static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
                                         const SfxItemSet& rItemSet )
 {
-    const SvxULSpaceItem *pULSpace = nullptr;
-    const SvxLRSpaceItem *pLRSpace = nullptr;
-    const SfxPoolItem *pItem;
-    if( SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE, false/*bDeep*/, &pItem ) )
-        pLRSpace = static_cast<const SvxLRSpaceItem *>(pItem);
-
-    if( SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE, false/*bDeep*/, &pItem ) )
-        pULSpace = static_cast<const SvxULSpaceItem *>(pItem);
+    const SvxLRSpaceItem *pLRSpace = rItemSet.GetItemIfSet( RES_LR_SPACE, false/*bDeep*/ );
+    const SvxULSpaceItem *pULSpace = rItemSet.GetItemIfSet( RES_UL_SPACE, false/*bDeep*/ );
 
     if( pLRSpace || pULSpace )
         OutCSS1_SvxULSpace_SvxLRSpace( rWrt, pULSpace, pLRSpace );
@@ -3015,22 +3005,16 @@ static Writer& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( Writer& rWrt,
                                         bool bDeep )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-    const SfxPoolItem *pItem;
-    const SvxFormatBreakItem *pBreakItem = nullptr;
-    if( SfxItemState::SET==rItemSet.GetItemState( RES_BREAK, bDeep, &pItem ))
-        pBreakItem = static_cast<const SvxFormatBreakItem *>(pItem);
+    const SvxFormatBreakItem *pBreakItem = rItemSet.GetItemIfSet( RES_BREAK, bDeep );
 
     const SwFormatPageDesc *pPDescItem = nullptr;
-    if( ( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) ||
-          !rHTMLWrt.m_bCSS1IgnoreFirstPageDesc ||
-          rHTMLWrt.m_pStartNdIdx->GetIndex() !=
-                      rHTMLWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() ) &&
-        SfxItemState::SET==rItemSet.GetItemState( RES_PAGEDESC, bDeep, &pItem ))
-        pPDescItem = static_cast<const SwFormatPageDesc*>(pItem);
+    if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) ||
+        !rHTMLWrt.m_bCSS1IgnoreFirstPageDesc ||
+        rHTMLWrt.m_pStartNdIdx->GetIndex() !=
+                    rHTMLWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() )
+        pPDescItem = rItemSet.GetItemIfSet( RES_PAGEDESC, bDeep );
 
-    const SvxFormatKeepItem *pKeepItem = nullptr;
-    if( SfxItemState::SET==rItemSet.GetItemState( RES_KEEP, bDeep, &pItem ))
-        pKeepItem = static_cast<const SvxFormatKeepItem *>(pItem);
+    const SvxFormatKeepItem *pKeepItem = rItemSet.GetItemIfSet( RES_KEEP, bDeep );
 
     if( pBreakItem || pPDescItem || pKeepItem )
         OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( rWrt, pBreakItem,
@@ -3585,27 +3569,22 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
     Out_SfxItemSet( aCSS1AttrFnTab, *this, rItemSet, bDeep );
 
     // some Attributes require special treatment
-    const SfxPoolItem *pItem = nullptr;
 
     // Underline, Overline, CrossedOut and Blink form together a CSS1-Property
     // (doesn't work of course for Hints)
     if( !IsCSS1Source(CSS1_OUTMODE_HINT) )
     {
-        const SvxUnderlineItem *pUnderlineItem = nullptr;
-        if( SfxItemState::SET==rItemSet.GetItemState( RES_CHRATR_UNDERLINE, bDeep, &pItem ))
-            pUnderlineItem = static_cast<const SvxUnderlineItem *>(pItem);
+        const SvxUnderlineItem *pUnderlineItem =
+            rItemSet.GetItemIfSet( RES_CHRATR_UNDERLINE, bDeep );
 
-        const SvxOverlineItem *pOverlineItem = nullptr;
-        if( SfxItemState::SET==rItemSet.GetItemState( RES_CHRATR_OVERLINE, bDeep, &pItem ))
-            pOverlineItem = static_cast<const SvxOverlineItem *>(pItem);
+        const SvxOverlineItem *pOverlineItem =
+            rItemSet.GetItemIfSet( RES_CHRATR_OVERLINE, bDeep );
 
-        const SvxCrossedOutItem *pCrossedOutItem = nullptr;
-        if( SfxItemState::SET==rItemSet.GetItemState( RES_CHRATR_CROSSEDOUT, bDeep, &pItem ))
-            pCrossedOutItem = static_cast<const SvxCrossedOutItem *>(pItem);
+        const SvxCrossedOutItem *pCrossedOutItem =
+            rItemSet.GetItemIfSet( RES_CHRATR_CROSSEDOUT, bDeep );
 
-        const SvxBlinkItem *pBlinkItem = nullptr;
-        if( SfxItemState::SET==rItemSet.GetItemState( RES_CHRATR_BLINK, bDeep, &pItem ))
-            pBlinkItem = static_cast<const SvxBlinkItem *>(pItem);
+        const SvxBlinkItem *pBlinkItem =
+            rItemSet.GetItemIfSet( RES_CHRATR_BLINK, bDeep );
 
         if( pUnderlineItem || pOverlineItem || pCrossedOutItem || pBlinkItem )
             OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( *this, pUnderlineItem,

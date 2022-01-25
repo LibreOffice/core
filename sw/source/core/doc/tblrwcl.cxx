@@ -1908,12 +1908,12 @@ static void lcl_CopyBoxToDoc(FndBox_ const& rFndBox, CpyPara *const pCpyPara)
                     aBoxAttrSet.Put(rFndBox.GetBox()->GetFrameFormat()->GetAttrSet());
                     if( aBoxAttrSet.Count() )
                     {
-                        const SfxPoolItem* pItem;
+                        const SwTableBoxNumFormat* pItem;
                         SvNumberFormatter* pN = pCpyPara->rDoc.GetNumberFormatter( false );
-                        if( pN && pN->HasMergeFormatTable() && SfxItemState::SET == aBoxAttrSet.
-                            GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
+                        if( pN && pN->HasMergeFormatTable() && (pItem = aBoxAttrSet.
+                            GetItemIfSet( RES_BOXATR_FORMAT, false )) )
                         {
-                            sal_uLong nOldIdx = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+                            sal_uLong nOldIdx = pItem->GetValue();
                             sal_uLong nNewIdx = pN->GetMergeFormatIndex( nOldIdx );
                             if( nNewIdx != nOldIdx )
                                 aBoxAttrSet.Put( SwTableBoxNumFormat( nNewIdx ));
