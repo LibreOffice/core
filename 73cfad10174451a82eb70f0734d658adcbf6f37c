@@ -33,6 +33,24 @@
       "message": "The table toolbar still shows the border, only the sidebar doesn\u0027t.",
       "revId": "73cfad10174451a82eb70f0734d658adcbf6f37c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6871f1f_51005868",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2022-01-25T10:24:00Z",
+      "side": 1,
+      "message": "I checked the behavior several times and it should work fine - at least works fine on my local machine. Diagonal borders shouldn\u0027t be seen/shown at TableToolbar\u003eBorders on Writer, while should be seen on Calc. Also, the patch doesn\u0027t affect the sidebar, but only affect Borders widget.\n\n(probably I missed out something on code-base) Could you please test it again and give me detailed feedback? Thanks.",
+      "parentUuid": "fb1a6dcf_dca1df6f",
+      "revId": "73cfad10174451a82eb70f0734d658adcbf6f37c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
