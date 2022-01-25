@@ -16,6 +16,23 @@
       "message": "Seems the default Color constructor initializes Alpha to zero - so (hopefully) unless touched this it is touched will behave as before. This removes the \u0027lok\u0027 hack in there, and - I hope makes things more consistent.\n\nThoughts ? - also (I guess) we need the RTL work forward porting to master too.\n",
       "revId": "82b8f40ecaf203a5b92cd7685391f2779b1df116",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e34483a_d83b53f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-01-25T08:54:24Z",
+      "side": 1,
+      "message": "This looks familiar, what problem is this trying to solve? On its own this is hack/incorrect, as it tries to set a value for a field that\u0027s clearly marked as irrelevant.\n",
+      "revId": "82b8f40ecaf203a5b92cd7685391f2779b1df116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
