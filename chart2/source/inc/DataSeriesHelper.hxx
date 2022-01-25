@@ -130,10 +130,6 @@ rtl::Reference< ::chart::ChartType >
 
 OOO_DLLPUBLIC_CHARTTOOLS void deleteSeries(
     const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
-    const css::uno::Reference< css::chart2::XChartType > & xChartType );
-
-OOO_DLLPUBLIC_CHARTTOOLS void deleteSeries(
-    const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
     const rtl::Reference< ::chart::ChartType > & xChartType );
 
 OOO_DLLPUBLIC_CHARTTOOLS void switchSymbolsOnOrOff(
