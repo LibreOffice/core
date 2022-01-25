@@ -2591,7 +2591,6 @@ void DesktopLOKTest::testInsertCertificate_DER_ODT()
     pDocument = loadDocUrl(aTempFile.GetURL(), LOK_DOCTYPE_TEXT);
 
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT(mxComponent.is());
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     Scheduler::ProcessEventsToIdle();
 
@@ -2641,7 +2640,6 @@ void DesktopLOKTest::testInsertCertificate_PEM_ODT()
     pDocument = loadDocUrl(aTempFile.GetURL(), LOK_DOCTYPE_TEXT);
 
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT(mxComponent.is());
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     Scheduler::ProcessEventsToIdle();
 
@@ -2698,7 +2696,6 @@ void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
     pDocument = loadDocUrl(aTempFile.GetURL(), LOK_DOCTYPE_TEXT);
 
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT(mxComponent.is());
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     Scheduler::ProcessEventsToIdle();
 
@@ -2751,7 +2748,6 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
     aTempFile.EnableKillingFile();
 
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT(mxComponent.is());
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     Scheduler::ProcessEventsToIdle();
 

@@ -3407,7 +3407,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128106)
 
     // new document now!
     mxComponent.set(pWrtShell->GetDoc()->GetDocShell()->GetModel());
-    CPPUNIT_ASSERT(mxComponent.is());
 
     SwDoc* const pMasterDoc(pWrtShell->GetDoc());
     CPPUNIT_ASSERT_EQUAL(
