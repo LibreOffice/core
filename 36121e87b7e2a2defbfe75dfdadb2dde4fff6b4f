@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3cc87ee_e409ce9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-25T17:36:40Z",
+      "side": 1,
+      "message": "assuming this is acceptable, does it need to go to 7-3 ?",
+      "revId": "36121e87b7e2a2defbfe75dfdadb2dde4fff6b4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
