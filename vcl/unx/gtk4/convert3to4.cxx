@@ -545,6 +545,12 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     xRemoveList.push_back(xChild);
             }
 
+            if (sName == "has-frame")
+            {
+                if (GetParentObjectType(xChild) == "GtkSpinButton")
+                    xRemoveList.push_back(xChild);
+            }
+
             if (sName == "toolbar-style")
             {
                 // is there an equivalent for this ?
