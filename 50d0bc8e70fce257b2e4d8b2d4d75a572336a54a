@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ff093c2_b9ede07d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-25T13:06:00Z",
+      "side": 1,
+      "message": "Screen cast of the redrawing issue https://i.imgur.com/Y8r1QT0.gif",
+      "revId": "50d0bc8e70fce257b2e4d8b2d4d75a572336a54a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
