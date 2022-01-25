@@ -16,7 +16,6 @@
         <property name="vexpand">True</property>
         <property name="width_chars">4</property>
         <property name="truncate-multiline">True</property>
-        <property name="shadow_type">none</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -33,7 +32,6 @@
         <property name="has_frame">False</property>
         <property name="width_chars">4</property>
         <property name="truncate-multiline">True</property>
-        <property name="shadow_type">none</property>
       </object>
       <packing>
         <property name="expand">False</property>
