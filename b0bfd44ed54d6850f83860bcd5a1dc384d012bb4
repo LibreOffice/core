@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d4b774c_d15e591b",
+        "filename": "sc/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-25T20:22:29Z",
+      "side": 1,
+      "message": "Surely the key inside the NC_ macro needs to be updated too?",
+      "revId": "b0bfd44ed54d6850f83860bcd5a1dc384d012bb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
