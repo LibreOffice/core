@@ -313,10 +313,10 @@ StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, b
     for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : pDiagram->getBaseCoordinateSystems() )
     {
         //iterate through all chart types in the current coordinate system
-        uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xCooSys->getChartTypes() );
-        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+        std::vector< rtl::Reference< ChartType > > aChartTypeList( xCooSys->getChartTypes2() );
+        for( sal_Int32 nT = 0; nT < static_cast<sal_Int32>(aChartTypeList.size()); ++nT )
         {
-            uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
+            rtl::Reference< ChartType > xChartType( aChartTypeList[nT] );
 
             StackMode eLocalStackMode = DiagramHelper::getStackModeFromChartType(
                 xChartType, rbFound, rbAmbiguous, xCooSys );
@@ -335,7 +335,7 @@ StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, b
 }
 
 StackMode DiagramHelper::getStackModeFromChartType(
-    const Reference< XChartType > & xChartType,
+    const rtl::Reference< ChartType > & xChartType,
     bool& rbFound, bool& rbAmbiguous,
     const Reference< XCoordinateSystem > & xCorrespondingCoordinateSystem )
 {
@@ -345,8 +345,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
 
     try
     {
-        Reference< XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY_THROW );
-        Sequence< Reference< chart2::XDataSeries > > aSeries( xDSCnt->getDataSeries());
+        Sequence< Reference< chart2::XDataSeries > > aSeries( xChartType->getDataSeries());
 
         chart2::StackingDirection eCommonDirection = chart2::StackingDirection_NO_STACKING;
         bool bDirectionInitialized = false;
@@ -470,8 +469,8 @@ void DiagramHelper::setDimension(
         {
             rtl::Reference< BaseCoordinateSystem > xNewCooSys;
 
-            const Sequence< Reference< XChartType > > aChartTypeList( xOldCooSys->getChartTypes() );
-            for( Reference< XChartType > const & xChartType : aChartTypeList )
+            const std::vector< rtl::Reference< ChartType > > aChartTypeList( xOldCooSys->getChartTypes2() );
+            for( rtl::Reference< ChartType > const & xChartType : aChartTypeList )
             {
                 bIsSupportingOnlyDeepStackingFor3D = ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( xChartType );
                 if(!xNewCooSys.is())
@@ -1176,8 +1175,8 @@ std::vector< rtl::Reference< ChartType > >
     return aResult;
 }
 
-bool DiagramHelper::areChartTypesCompatible( const Reference< ::chart2::XChartType >& xFirstType,
-                const Reference< ::chart2::XChartType >& xSecondType )
+bool DiagramHelper::areChartTypesCompatible( const rtl::Reference< ChartType >& xFirstType,
+                const rtl::Reference< ChartType >& xSecondType )
 {
     if( !xFirstType.is() || !xSecondType.is() )
         return false;
@@ -1242,20 +1241,16 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                 const rtl::Reference< BaseCoordinateSystem > & xCooSys( aCooSysList[nCS] );
 
                 //iterate through all chart types in the current coordinate system
-                uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xCooSys->getChartTypes() );
-                uno::Reference< XChartType > xFormerChartType;
+                std::vector< rtl::Reference< ChartType > > aChartTypeList( xCooSys->getChartTypes2() );
+                rtl::Reference< ChartType > xFormerChartType;
 
-                for( sal_Int32 nT = 0; !bFound && nT < aChartTypeList.getLength(); ++nT )
+                for( sal_Int32 nT = 0; !bFound && nT < static_cast<sal_Int32>(aChartTypeList.size()); ++nT )
                 {
-                    uno::Reference< XChartType > xCurrentChartType( aChartTypeList[nT] );
+                    rtl::Reference< ChartType > xCurrentChartType( aChartTypeList[nT] );
 
                     //iterate through all series in this chart type
-                    uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xCurrentChartType, uno::UNO_QUERY );
-                    OSL_ASSERT( xDataSeriesContainer.is());
-                    if( !xDataSeriesContainer.is() )
-                        continue;
 
-                    uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+                    uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xCurrentChartType->getDataSeries() );
                     auto aSeriesListRange = asNonConstRange(aSeriesList);
 
                     for( sal_Int32 nS = 0; !bFound && nS < aSeriesList.getLength(); ++nS )
@@ -1285,7 +1280,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                     {
                                         aSeriesListRange[ nOldSeriesIndex ] = aSeriesList[ nNewSeriesIndex ];
                                         aSeriesListRange[ nNewSeriesIndex ] = xGivenDataSeries;
-                                        xDataSeriesContainer->setDataSeries( aSeriesList );
+                                        xCurrentChartType->setDataSeries( aSeriesList );
                                     }
                                 }
                                 else if( nNewSeriesIndex<0 )
@@ -1296,46 +1291,38 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                         bMovedOrMoveAllowed = true;
                                         if( bDoMove )
                                         {
-                                            uno::Reference< XDataSeriesContainer > xOtherDataSeriesContainer( xFormerChartType, uno::UNO_QUERY );
-                                            if( xOtherDataSeriesContainer.is() )
+                                            uno::Sequence< uno::Reference< XDataSeries > > aOtherSeriesList( xFormerChartType->getDataSeries() );
+                                            sal_Int32 nOtherSeriesIndex = aOtherSeriesList.getLength()-1;
+                                            if( nOtherSeriesIndex >= 0 && nOtherSeriesIndex < aOtherSeriesList.getLength() )
                                             {
-                                                uno::Sequence< uno::Reference< XDataSeries > > aOtherSeriesList( xOtherDataSeriesContainer->getDataSeries() );
-                                                sal_Int32 nOtherSeriesIndex = aOtherSeriesList.getLength()-1;
-                                                if( nOtherSeriesIndex >= 0 && nOtherSeriesIndex < aOtherSeriesList.getLength() )
-                                                {
-                                                    uno::Reference< XDataSeries > xExchangeSeries( aOtherSeriesList[nOtherSeriesIndex] );
-                                                    aOtherSeriesList.getArray()[nOtherSeriesIndex] = xGivenDataSeries;
-                                                    xOtherDataSeriesContainer->setDataSeries(aOtherSeriesList);
+                                                uno::Reference< XDataSeries > xExchangeSeries( aOtherSeriesList[nOtherSeriesIndex] );
+                                                aOtherSeriesList.getArray()[nOtherSeriesIndex] = xGivenDataSeries;
+                                                xFormerChartType->setDataSeries(aOtherSeriesList);
 
-                                                    aSeriesListRange[nOldSeriesIndex]=xExchangeSeries;
-                                                    xDataSeriesContainer->setDataSeries(aSeriesList);
-                                                }
+                                                aSeriesListRange[nOldSeriesIndex]=xExchangeSeries;
+                                                xCurrentChartType->setDataSeries(aSeriesList);
                                             }
                                         }
                                     }
                                 }
-                                else if( nT+1 < aChartTypeList.getLength() )
+                                else if( nT+1 < static_cast<sal_Int32>(aChartTypeList.size()) )
                                 {
                                     //exchange series with next charttype
-                                    uno::Reference< XChartType > xOtherChartType( aChartTypeList[nT+1] );
+                                    rtl::Reference< ChartType > xOtherChartType( aChartTypeList[nT+1] );
                                     if( xOtherChartType.is() && DiagramHelper::areChartTypesCompatible( xOtherChartType, xCurrentChartType ) )
                                     {
                                         bMovedOrMoveAllowed = true;
                                         if( bDoMove )
                                         {
-                                            uno::Reference< XDataSeriesContainer > xOtherDataSeriesContainer( xOtherChartType, uno::UNO_QUERY );
-                                            if( xOtherDataSeriesContainer.is() )
+                                            uno::Sequence< uno::Reference< XDataSeries > > aOtherSeriesList( xOtherChartType->getDataSeries() );
+                                            if( aOtherSeriesList.hasElements() )
                                             {
-                                                uno::Sequence< uno::Reference< XDataSeries > > aOtherSeriesList( xOtherDataSeriesContainer->getDataSeries() );
-                                                if( aOtherSeriesList.hasElements() )
-                                                {
-                                                    uno::Reference< XDataSeries > xExchangeSeries( aOtherSeriesList[0] );
-                                                    aOtherSeriesList.getArray()[0] = xGivenDataSeries;
-                                                    xOtherDataSeriesContainer->setDataSeries(aOtherSeriesList);
+                                                uno::Reference< XDataSeries > xExchangeSeries( aOtherSeriesList[0] );
+                                                aOtherSeriesList.getArray()[0] = xGivenDataSeries;
+                                                xOtherChartType->setDataSeries(aOtherSeriesList);
 
-                                                    aSeriesListRange[nOldSeriesIndex]=xExchangeSeries;
-                                                    xDataSeriesContainer->setDataSeries(aSeriesList);
-                                                }
+                                                aSeriesListRange[nOldSeriesIndex]=xExchangeSeries;
+                                                xCurrentChartType->setDataSeries(aSeriesList);
                                             }
                                         }
                                     }
@@ -1487,7 +1474,7 @@ void DiagramHelper::setGeometry3D(
 
 sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
             const Reference< chart2::XDiagram > & xDiagram,
-            const Reference< chart2::XChartType >& xChartType )
+            const rtl::Reference< ChartType >& xChartType )
 {
     sal_Int32 nResult = css::chart::MissingValueTreatment::LEAVE_GAP;
     const uno::Sequence < sal_Int32 > aAvailableMissingValueTreatments(

@@ -18,6 +18,7 @@
  */
 
 #include <SceneProperties.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>

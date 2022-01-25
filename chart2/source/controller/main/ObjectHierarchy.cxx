@@ -32,6 +32,7 @@
 #include <LegendHelper.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <unonames.hxx>
+#include <BaseCoordinateSystem.hxx>
 
 #include <map>
 #include <algorithm>
@@ -315,22 +316,20 @@ void ObjectHierarchy::createDataSeriesTree(
     ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
     const Reference< XDiagram > & xDiagram )
 {
-    Reference< XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
-
+    auto pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
+    assert(pDiagram);
     try
     {
-        sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
-        Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
-            xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+        sal_Int32 nDimensionCount = DiagramHelper::getDimension( pDiagram );
+        std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysSeq(
+            pDiagram->getBaseCoordinateSystems());
+        for( sal_Int32 nCooSysIdx=0; nCooSysIdx<static_cast<sal_Int32>(aCooSysSeq.size()); ++nCooSysIdx )
         {
-            Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
-            Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
-            for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypeSeq.getLength(); ++nCTIdx )
+            std::vector< rtl::Reference< ChartType > > aChartTypeSeq( aCooSysSeq[nCooSysIdx]->getChartTypes2());
+            for( sal_Int32 nCTIdx=0; nCTIdx<static_cast<sal_Int32>(aChartTypeSeq.size()); ++nCTIdx )
             {
-                Reference< XChartType > xChartType( aChartTypeSeq[nCTIdx] );
-                Reference< XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY_THROW );
-                Sequence< Reference< XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
+                rtl::Reference< ChartType > xChartType( aChartTypeSeq[nCTIdx] );
+                Sequence< Reference< XDataSeries > > aSeriesSeq( xChartType->getDataSeries() );
                 const sal_Int32 nNumberOfSeries =
                     ChartTypeHelper::getNumberOfDisplayedSeries( xChartType, aSeriesSeq.getLength());
 

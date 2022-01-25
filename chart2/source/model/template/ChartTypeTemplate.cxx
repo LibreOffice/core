@@ -107,7 +107,7 @@ void lcl_resetLabelPlacementIfDefault( const Reference< beans::XPropertySet >& x
     }
 }
 
-void lcl_ensureCorrectMissingValueTreatment( const Reference< chart2::XDiagram >& xDiagram, const Reference< XChartType >& xChartType )
+void lcl_ensureCorrectMissingValueTreatment( const Reference< chart2::XDiagram >& xDiagram, const rtl::Reference< ::chart::ChartType >& xChartType )
 {
     Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
     if( xDiaProp.is() )

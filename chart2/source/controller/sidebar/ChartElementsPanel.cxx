@@ -33,6 +33,7 @@
 #include <AxisHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
+#include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartModel.hxx>
 #include <BaseCoordinateSystem.hxx>
@@ -406,21 +407,21 @@ void ChartElementsPanel::Initialize()
 
 namespace {
 
-css::uno::Reference<css::chart2::XChartType> getChartType(const rtl::Reference<ChartModel>& xModel)
+rtl::Reference<ChartType> getChartType(const rtl::Reference<ChartModel>& xModel)
 {
     rtl::Reference<Diagram > xDiagram = xModel->getFirstChartDiagram();
     if (!xDiagram.is())
-        return css::uno::Reference<css::chart2::XChartType>();
+        return nullptr;
 
     const std::vector<rtl::Reference<BaseCoordinateSystem>> & xCooSysSequence(xDiagram->getBaseCoordinateSystems());
 
     if (xCooSysSequence.empty())
-        return css::uno::Reference<css::chart2::XChartType>();
+        return nullptr;
 
-    css::uno::Sequence<css::uno::Reference<css::chart2::XChartType>> xChartTypeSequence(xCooSysSequence[0]->getChartTypes());
+    const std::vector<rtl::Reference<ChartType>> & xChartTypeSequence(xCooSysSequence[0]->getChartTypes2());
 
-    if (!xChartTypeSequence.hasElements())
-        return css::uno::Reference<css::chart2::XChartType>();
+    if (xChartTypeSequence.empty())
+        return nullptr;
 
     return xChartTypeSequence[0];
 }
