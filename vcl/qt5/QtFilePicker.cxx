@@ -187,6 +187,7 @@ void QtFilePicker::prepareExecute()
 
 void QtFilePicker::finished(int nResult)
 {
+    SolarMutexGuard g;
     uno::Reference<css::frame::XDesktop> xDesktop(css::frame::Desktop::create(m_context),
                                                   UNO_QUERY_THROW);
     xDesktop->removeTerminateListener(this);
