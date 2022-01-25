@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc91eccc_ae571bcf",
+        "filename": "sfx2/source/dialog/basedlgs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-25T06:33:21Z",
+      "side": 1,
+      "message": "Doesn\u0027t this mean that if we do \n  open;close;open \non the second open the behaviour will be different because we won\u0027t have a focus changed LINK any more?",
+      "revId": "ff2ecb311e3c0afeee8c35d1b63ed796617cd2b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
