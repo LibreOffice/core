@@ -38,6 +38,7 @@ namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace chart { class BaseCoordinateSystem; }
 namespace chart { class ChartType; }
+namespace chart { class Diagram; }
 
 namespace chart::DataSeriesHelper
 {
@@ -120,13 +121,13 @@ OOO_DLLPUBLIC_CHARTTOOLS
 rtl::Reference< ::chart::BaseCoordinateSystem >
     getCoordinateSystemOfSeries(
         const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+        const rtl::Reference< ::chart::Diagram > & xDiagram );
 
 OOO_DLLPUBLIC_CHARTTOOLS
 rtl::Reference< ::chart::ChartType >
     getChartTypeOfSeries(
         const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+        const rtl::Reference< ::chart::Diagram > & xDiagram );
 
 OOO_DLLPUBLIC_CHARTTOOLS void deleteSeries(
     const css::uno::Reference< css::chart2::XDataSeries > & xSeries,

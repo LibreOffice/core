@@ -102,7 +102,7 @@ bool lcl_deleteDataSeries(
     if( xSeries.is() && xModel.is())
     {
         rtl::Reference< ::chart::ChartType > xChartType =
-            DataSeriesHelper::getChartTypeOfSeries( xSeries, xModel->getFirstDiagram());
+            DataSeriesHelper::getChartTypeOfSeries( xSeries, xModel->getFirstChartDiagram());
         if( xChartType.is())
         {
             UndoGuard aUndoGuard(

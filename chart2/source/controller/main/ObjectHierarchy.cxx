@@ -191,7 +191,7 @@ void ObjectHierarchy::createTree( const rtl::Reference<::chart::ChartModel>& xCh
 void ObjectHierarchy::createLegendTree(
     ObjectHierarchy::tChildContainer & rContainer,
     const rtl::Reference<::chart::ChartModel> & xChartDoc,
-    const Reference< XDiagram > & xDiagram  )
+    const rtl::Reference< Diagram > & xDiagram  )
 {
     if( !(xDiagram.is() && LegendHelper::hasLegend( xDiagram )) )
         return;

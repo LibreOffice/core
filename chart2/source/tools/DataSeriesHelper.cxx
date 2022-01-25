@@ -484,7 +484,7 @@ sal_Int32 getNumberFormatKeyFromAxis(
 
 rtl::Reference< ::chart::BaseCoordinateSystem > getCoordinateSystemOfSeries(
     const Reference< chart2::XDataSeries > & xSeries,
-    const Reference< chart2::XDiagram > & xDiagram )
+    const rtl::Reference< Diagram > & xDiagram )
 {
     rtl::Reference< ::chart::BaseCoordinateSystem > xResult;
     rtl::Reference< ::chart::ChartType > xDummy;
@@ -495,7 +495,7 @@ rtl::Reference< ::chart::BaseCoordinateSystem > getCoordinateSystemOfSeries(
 
 rtl::Reference< ::chart::ChartType > getChartTypeOfSeries(
     const Reference< chart2::XDataSeries > & xSeries,
-    const Reference< chart2::XDiagram > & xDiagram )
+    const rtl::Reference< Diagram > & xDiagram )
 {
     rtl::Reference< ::chart::ChartType > xResult;
     rtl::Reference< ::chart::BaseCoordinateSystem > xDummy;

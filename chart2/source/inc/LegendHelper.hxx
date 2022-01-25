@@ -19,6 +19,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 #include "charttoolsdllapi.hxx"
 
 namespace chart { class ChartModel; }
@@ -28,6 +29,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
+class Diagram;
 
 class OOO_DLLPUBLIC_CHARTTOOLS LegendHelper
 {
@@ -47,7 +49,7 @@ public:
         is a legend which has a "Show" property of value <FALSE/>. Otherwise,
         <TRUE/> is returned.
      */
-    static bool hasLegend( const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+    static bool hasLegend( const rtl::Reference< ::chart::Diagram > & xDiagram );
 };
 
 } //namespace chart

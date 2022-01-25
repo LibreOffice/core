@@ -75,7 +75,7 @@ protected:
     virtual sal_Int32 getDimension() const override;
 
     virtual void adaptDiagram(
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram ) override;
+        const rtl::Reference< ::chart::Diagram > & xDiagram ) override;
 
     virtual sal_Int32 getAxisCountByDimension( sal_Int32 nDimension ) override;
 

@@ -19,6 +19,7 @@
 
 #include <LegendHelper.hxx>
 #include <ChartModel.hxx>
+#include <Diagram.hxx>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -105,7 +106,7 @@ uno::Reference< chart2::XLegend > LegendHelper::getLegend(
     return xResult;
 }
 
-bool LegendHelper::hasLegend( const uno::Reference< chart2::XDiagram > & xDiagram )
+bool LegendHelper::hasLegend( const rtl::Reference< Diagram > & xDiagram )
 {
     bool bReturn = false;
     if( xDiagram.is())
