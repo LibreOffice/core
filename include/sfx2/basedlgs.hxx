@@ -73,7 +73,7 @@ public:
     void                    Initialize (SfxChildWinInfo const * pInfo);
     bool                    IsClosing() const;
     virtual void            Close() override;
-    virtual void            EndDialog(int nRespose) override;
+    virtual void            EndDialog(int nResponse) override;
     virtual void            Activate() override;
     virtual void            Deactivate() override;
     virtual void            ChildWinDispose() override;
