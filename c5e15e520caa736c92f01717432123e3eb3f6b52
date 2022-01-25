@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed59bd37_a62ff6fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-01-25T05:39:29Z",
+      "side": 1,
+      "message": "Please amend your commit and add tdf#139734 to the beginning of your commit message.\n\nhttps://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Submitting_a_new_version",
+      "revId": "c5e15e520caa736c92f01717432123e3eb3f6b52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
