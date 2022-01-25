@@ -15,6 +15,8 @@ $(eval $(call gb_Extension_add_file,test-passive,platform.components,$(call gb_R
 
 $(eval $(call gb_Extension_add_files,test-passive,, \
     $(SRCDIR)/desktop/test/deployment/passive/Addons.xcu \
+    $(SRCDIR)/desktop/test/deployment/passive/WriterWindowState.xcu \
+    $(SRCDIR)/desktop/test/deployment/passive/img/bomb.png \
     $(SRCDIR)/desktop/test/deployment/passive/ProtocolHandler.xcu \
     $(SRCDIR)/desktop/test/deployment/passive/passive_python.py \
     $(call gb_Jar_get_target,passive_java) \
