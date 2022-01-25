@@ -12,6 +12,8 @@
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
+#include <viewdata.hxx>
+#include <tabvwsh.hxx>
 
 #include <docsh.hxx>
 #include <document.hxx>
@@ -45,10 +47,12 @@ public:
 
     void testSimpleCopyAndPaste();
     void testMultiDocumentCopyAndPaste();
+    void testSheetAndColumnSelectAndHide();
 
     CPPUNIT_TEST_SUITE(VBAMacroTest);
     CPPUNIT_TEST(testSimpleCopyAndPaste);
     CPPUNIT_TEST(testMultiDocumentCopyAndPaste);
+    CPPUNIT_TEST(testSheetAndColumnSelectAndHide);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -141,6 +145,78 @@ void VBAMacroTest::testMultiDocumentCopyAndPaste()
     CPPUNIT_ASSERT_EQUAL(200.0, rDoc.GetValue(ScAddress(1, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(100.0, rDoc.GetValue(ScAddress(1, 2, 0)));
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 3, 0)));
+}
+
+void VBAMacroTest::testSheetAndColumnSelectAndHide()
+{
+    OUString aFileName;
+    createFileURL(u"SheetAndColumnSelectAndHide.xlsm", aFileName);
+    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    ScTabViewShell* pView = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pView != nullptr);
+    auto const& rViewData = pView->GetViewData();
+
+    CPPUNIT_ASSERT(!rDoc.ColHidden(0, 1));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(1, 1));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(2, 1));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(3, 1));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(4, 1));
+
+    CPPUNIT_ASSERT(!rDoc.ColHidden(0, 2));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(1, 2));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(2, 2));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(3, 2));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(4, 2));
+
+    uno::Any aRet;
+    uno::Sequence<sal_Int16> aOutParamIndex;
+    uno::Sequence<uno::Any> aOutParam;
+    uno::Sequence<uno::Any> aParams;
+
+    SfxObjectShell::CallXScript(
+        mxComponent,
+        "vnd.sun.Star.script:VBAProject.ThisWorkbook.testHide?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    CPPUNIT_ASSERT(!rDoc.ColHidden(0, 1));
+    CPPUNIT_ASSERT(rDoc.ColHidden(1, 1));
+    CPPUNIT_ASSERT(rDoc.ColHidden(2, 1));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(3, 1));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(4, 1));
+
+    CPPUNIT_ASSERT(!rDoc.ColHidden(0, 2));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(1, 2));
+    CPPUNIT_ASSERT(rDoc.ColHidden(2, 2));
+    CPPUNIT_ASSERT(rDoc.ColHidden(3, 2));
+    CPPUNIT_ASSERT(rDoc.ColHidden(4, 2));
+
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), rViewData.GetTabNo());
+
+    SfxObjectShell::CallXScript(
+        mxComponent,
+        "vnd.sun.Star.script:VBAProject.ThisWorkbook.testUnhide?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    CPPUNIT_ASSERT(!rDoc.ColHidden(0, 1));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(1, 1));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(2, 1));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(3, 1));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(4, 1));
+
+    CPPUNIT_ASSERT(!rDoc.ColHidden(0, 2));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(1, 2));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(2, 2));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(3, 2));
+    CPPUNIT_ASSERT(!rDoc.ColHidden(4, 2));
+
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), rViewData.GetTabNo());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VBAMacroTest);
