@@ -176,12 +176,10 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
 void SvxGridTabPage::Reset( const SfxItemSet* rSet )
 {
-    const SfxPoolItem* pAttr = nullptr;
+    const SvxGridItem* pGridAttr = nullptr;
 
-    if( SfxItemState::SET == rSet->GetItemState( SID_ATTR_GRID_OPTIONS , false,
-                                    &pAttr ))
+    if( (pGridAttr = rSet->GetItemIfSet( SID_ATTR_GRID_OPTIONS , false )) )
     {
-        const SvxGridItem* pGridAttr = static_cast<const SvxGridItem*>(pAttr);
         m_xCbxUseGridsnap->set_active(pGridAttr->bUseGridsnap);
         m_xCbxSynchronize->set_active(pGridAttr->bSynchronize);
         m_xCbxGridVisible->set_active(pGridAttr->bGridVisible);
@@ -201,11 +199,9 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
 
 void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    const SfxPoolItem* pAttr = nullptr;
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS , false,
-                                    &pAttr ))
+    const SvxGridItem* pGridAttr = nullptr;
+    if( (pGridAttr = rSet.GetItemIfSet( SID_ATTR_GRID_OPTIONS , false )) )
     {
-        const SvxGridItem* pGridAttr = static_cast<const SvxGridItem*>(pAttr);
         m_xCbxUseGridsnap->set_active(pGridAttr->bUseGridsnap);
 
         ChangeGridsnapHdl_Impl(*m_xCbxUseGridsnap);
@@ -213,11 +209,10 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 
     // Metric Change if necessary (as TabPage is in the dialog, where the
     // metric can be set
-    if( SfxItemState::SET != rSet.GetItemState( SID_ATTR_METRIC , false,
-                                    &pAttr ))
+    const SfxUInt16Item* pItem = rSet.GetItemIfSet( SID_ATTR_METRIC , false );
+    if( !pItem )
         return;
 
-    const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
 
     FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<tools::Long>(pItem->GetValue()));
 

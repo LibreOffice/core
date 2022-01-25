@@ -3390,12 +3390,12 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
 
     OUString aFilterProvider, aFilterName;
     {
-        const SfxPoolItem* pItem = nullptr;
-        if (pImpl->m_pSet->HasItem(SID_FILTER_PROVIDER, &pItem))
-            aFilterProvider = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        const SfxStringItem* pItem = nullptr;
+        if ((pItem = pImpl->m_pSet->GetItemIfSet(SID_FILTER_PROVIDER)))
+            aFilterProvider = pItem->GetValue();
 
-        if (pImpl->m_pSet->HasItem(SID_FILTER_NAME, &pItem))
-            aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        if ((pItem = pImpl->m_pSet->GetItemIfSet(SID_FILTER_NAME)))
+            aFilterName = pItem->GetValue();
     }
 
     if (aFilterProvider.isEmpty())

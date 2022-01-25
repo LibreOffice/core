@@ -275,7 +275,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     {
         const SfxPoolItem* pItem;
 
-        if(SfxItemState::SET == GetItemSet().GetItemState(GetWhich(nId), false, &pItem))
+        if(SfxItemState::SET == GetItemSet().GetItemStateUntyped(GetWhich(nId), false, &pItem))
         {
             const SfxItemSet* _pSet = &(static_cast< const SvxSetItem* >(pItem)->GetItemSet());
 
@@ -330,7 +330,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     // Evaluate header-/footer- attributes
     const SvxSetItem* pSetItem = nullptr;
 
-    if ( SfxItemState::SET == rSet->GetItemState( GetWhich(nId), false,
+    if ( SfxItemState::SET == rSet->GetItemStateUntyped( GetWhich(nId), false,
                                             reinterpret_cast<const SfxPoolItem**>(&pSetItem) ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
@@ -416,13 +416,13 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     m_xCntSharedBox->save_state();
     RangeHdl();
 
-    const SfxPoolItem* pItem = nullptr;
     SfxObjectShell* pShell;
-    if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem) ||
+    const SfxUInt16Item* pItem = rSet->GetItemIfSet(SID_HTML_MODE, false);
+    if(pItem  ||
         ( nullptr != (pShell = SfxObjectShell::Current()) &&
                     nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
-        sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        sal_uInt16 nHtmlMode = pItem->GetValue();
         if (nHtmlMode & HTMLMODE_ON)
         {
             m_xCntSharedBox->hide();
@@ -578,7 +578,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
 
         const SfxPoolItem* pItem;
 
-        if(SfxItemState::SET == GetItemSet().GetItemState(GetWhich(nId), false, &pItem))
+        if(SfxItemState::SET == GetItemSet().GetItemStateUntyped(GetWhich(nId), false, &pItem))
         {
             // If a SfxItemSet from the SetItem for SID_ATTR_PAGE_HEADERSET or
             // SID_ATTR_PAGE_FOOTERSET exists, use its content
@@ -596,7 +596,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
             }
         }
 
-        if(SfxItemState::SET == GetItemSet().GetItemState(nInner, false, &pItem))
+        if(SfxItemState::SET == GetItemSet().GetItemStateUntyped(nInner, false, &pItem))
         {
             // The set InfoItem is always required
             pBBSet->Put(*pItem);
@@ -849,7 +849,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     // Evaluate Header attribute
     const SvxSetItem* pSetItem = nullptr;
 
-    if ( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped( GetWhich( SID_ATTR_PAGE_HEADERSET ),
                                             false,
                                             reinterpret_cast<const SfxPoolItem**>(&pSetItem) ) )
     {
@@ -889,7 +889,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     }
     pSetItem = nullptr;
 
-    if ( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
                                             false,
                                             reinterpret_cast<const SfxPoolItem**>(&pSetItem) ) )
     {

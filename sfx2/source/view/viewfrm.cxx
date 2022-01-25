@@ -2428,12 +2428,12 @@ void SfxViewFrame::ExecView_Impl
 
         case SID_VIEWSHELL:
         {
-            const SfxPoolItem *pItem = nullptr;
+            const SfxUInt16Item *pItem = nullptr;
             if  (   rReq.GetArgs()
-                &&  SfxItemState::SET == rReq.GetArgs()->GetItemState( SID_VIEWSHELL, false, &pItem )
+                &&  (pItem = rReq.GetArgs()->GetItemIfSet( SID_VIEWSHELL, false ))
                 )
             {
-                const sal_uInt16 nViewId = static_cast< const SfxUInt16Item* >( pItem )->GetValue();
+                const sal_uInt16 nViewId = pItem->GetValue();
                 bool bSuccess = SwitchToViewShell_Impl( nViewId );
                 rReq.SetReturnValue( SfxBoolItem( 0, bSuccess ) );
             }

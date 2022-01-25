@@ -264,7 +264,7 @@ void SfxBindings::Update_Impl(SfxStateCache& rCache /*The up to date SfxStatusCa
                 const SfxFoundCache_Impl& rFound = aFound[nPos];
                 sal_uInt16 nWhich = rFound.nWhichId;
                 const SfxPoolItem *pItem = nullptr;
-                SfxItemState eState = pSet->GetItemState(nWhich, true, &pItem);
+                SfxItemState eState = pSet->GetItemStateUntyped(nWhich, true, &pItem);
                 if ( eState == SfxItemState::DEFAULT && SfxItemPool::IsWhich(nWhich) )
                     pItem = &pSet->Get(nWhich);
                 UpdateControllers_Impl( rFound, pItem, eState );
@@ -990,7 +990,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
             SfxStateFunc pFunc = pSlot->GetStateFnc();
             (*pFunc)(pShell, aSet);
             const SfxPoolItem *pOldItem;
-            SfxItemState eState = aSet.GetItemState(nWhich, true, &pOldItem);
+            SfxItemState eState = aSet.GetItemStateUntyped(nWhich, true, &pOldItem);
             if ( eState == SfxItemState::DISABLED )
                 return;
 

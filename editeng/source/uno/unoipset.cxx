@@ -61,7 +61,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pM
 
     const SfxPoolItem* pItem = nullptr;
     SfxItemPool* pPool = rSet.GetPool();
-    (void)rSet.GetItemState( pMap->nWID, bSearchInParent, &pItem );
+    (void)rSet.GetItemStateUntyped( pMap->nWID, bSearchInParent, &pItem );
     if( nullptr == pItem && pPool )
         pItem = &(pPool->GetDefaultItem( pMap->nWID ));
 
@@ -106,7 +106,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, 
 
     // Get item
     const SfxPoolItem* pItem = nullptr;
-    SfxItemState eState = rSet.GetItemState( pMap->nWID, true, &pItem );
+    SfxItemState eState = rSet.GetItemStateUntyped( pMap->nWID, true, &pItem );
     SfxItemPool* pPool = rSet.GetPool();
 
     // Put UnoAny in the item value
@@ -172,7 +172,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pM
     if(aSet.Count())
     {
         const SfxPoolItem* pItem = nullptr;
-        SfxItemState eState = aSet.GetItemState( pMap->nWID, true, &pItem );
+        SfxItemState eState = aSet.GetItemStateUntyped( pMap->nWID, true, &pItem );
         if(eState >= SfxItemState::DEFAULT && pItem)
         {
             pItem->QueryValue( aVal, nMemberId );

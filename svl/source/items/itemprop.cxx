@@ -118,7 +118,7 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry& rEntry
 {
     // get the SfxPoolItem
     const SfxPoolItem* pItem = nullptr;
-    SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
+    SfxItemState eState = rSet.GetItemStateUntyped( rEntry.nWID, true, &pItem );
     if (SfxItemState::SET != eState && SfxItemPool::IsWhich(rEntry.nWID) )
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
     // return item values as uno::Any
@@ -166,7 +166,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry& rEntry
     // get the SfxPoolItem
     const SfxPoolItem* pItem = nullptr;
     std::unique_ptr<SfxPoolItem> pNewItem;
-    SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
+    SfxItemState eState = rSet.GetItemStateUntyped( rEntry.nWID, true, &pItem );
     if (SfxItemState::SET != eState && SfxItemPool::IsWhich(rEntry.nWID))
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
     if (pItem)

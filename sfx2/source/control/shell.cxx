@@ -491,7 +491,7 @@ const SfxPoolItem* SfxShell::GetSlotState
         SfxStateFunc pFunc = pSlot->GetStateFnc();
         if ( pFunc )
             (*pFunc)( this, aSet );
-        eState = aSet.GetItemState( nSlotId, true, &pItem );
+        eState = aSet.GetItemStateUntyped( nSlotId, true, &pItem );
         bItemStateSet = true;
 
         // get default Item if possible

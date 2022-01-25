@@ -496,7 +496,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
 
 
     // Segment Number Can be changed? and other states
-    SfxItemState eState = rAttrs.GetItemState( SID_ATTR_3D_INTERN, false, &pItem );
+    SfxItemState eState = rAttrs.GetItemStateUntyped( SID_ATTR_3D_INTERN, false, &pItem );
     if( SfxItemState::SET == eState )
     {
         sal_uInt32 nState = static_cast<const SfxUInt32Item*>(pItem)->GetValue();

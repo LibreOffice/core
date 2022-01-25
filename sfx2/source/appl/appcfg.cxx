@@ -409,7 +409,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     std::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
 
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_BIGSIZE), true, &pItem) )
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_BUTTON_BIGSIZE), true, &pItem) )
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         bool bBigSize = static_cast<const SfxBoolItem*>(pItem)->GetValue();
@@ -426,7 +426,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // Backup
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BACKUP), true, &pItem) )
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_BACKUP), true, &pItem) )
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         officecfg::Office::Common::Save::Document::CreateBackup::set(
@@ -435,7 +435,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // PrettyPrinting
-    if ( SfxItemState::SET == rSet.GetItemState( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), true, &pItem ) )
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), true, &pItem ) )
     {
         DBG_ASSERT( dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected" );
         officecfg::Office::Common::Save::Document::PrettyPrinting::set(
@@ -444,7 +444,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // WarnAlienFormat
-    if ( SfxItemState::SET == rSet.GetItemState( rPool.GetWhich( SID_ATTR_WARNALIENFORMAT ), true, &pItem ) )
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped( rPool.GetWhich( SID_ATTR_WARNALIENFORMAT ), true, &pItem ) )
     {
         DBG_ASSERT( dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected" );
         officecfg::Office::Common::Save::Document::WarnAlienFormat::set(
@@ -453,7 +453,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // AutoSave
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVE), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_AUTOSAVE), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         officecfg::Office::Common::Save::Document::AutoSave::set(
@@ -462,7 +462,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // AutoSave-Prompt
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVEPROMPT), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_AUTOSAVEPROMPT), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         officecfg::Office::Common::Save::Document::AutoSavePrompt::set(
@@ -471,7 +471,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // AutoSave-Time
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVEMINUTE), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_AUTOSAVEMINUTE), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxUInt16Item *>( pItem ) !=  nullptr, "UInt16Item expected");
         officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::set(
@@ -480,7 +480,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // UserAutoSave
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_USERAUTOSAVE), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_USERAUTOSAVE), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::set(
@@ -489,7 +489,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // DocInfo
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_DOCINFO), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_DOCINFO), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         officecfg::Office::Common::Save::Document::EditProperty::set(
@@ -498,7 +498,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // Mark open Documents
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WORKINGSET), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_WORKINGSET), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         officecfg::Office::Common::Save::WorkingSet::set(
@@ -507,20 +507,20 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // Save window settings
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_SAVEDOCVIEW), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_SAVEDOCVIEW), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         officecfg::Office::Common::Save::Document::ViewInfo::set(static_cast<const SfxBoolItem *>(pItem)->GetValue(), batch);
     }
 
     // Metric
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_METRIC), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_METRIC), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxUInt16Item *>( pItem ) !=  nullptr, "UInt16Item expected");
     }
 
     // HelpBalloons
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_HELPBALLOONS), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_HELPBALLOONS), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         officecfg::Office::Common::Help::ExtendedTip::set(
@@ -529,7 +529,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // HelpTips
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_HELPTIPS), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_HELPTIPS), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         officecfg::Office::Common::Help::Tip::set(
@@ -537,7 +537,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
                 batch);
     }
 
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_HELP_STYLESHEET ), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_HELP_STYLESHEET ), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxStringItem *>( pItem ) !=  nullptr, "StringItem expected");
         OUString sStyleSheet = static_cast<const SfxStringItem *>(pItem)->GetValue();
@@ -545,7 +545,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // SaveRelINet
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_SAVEREL_INET), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_SAVEREL_INET), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         officecfg::Office::Common::Save::URL::Internet::set(
@@ -554,7 +554,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // SaveRelFSys
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_SAVEREL_FSYS), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_SAVEREL_FSYS), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         officecfg::Office::Common::Save::URL::FileSystem::set(
@@ -563,7 +563,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // Undo-Count
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_UNDO_COUNT), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_UNDO_COUNT), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxUInt16Item *>( pItem ) !=  nullptr, "UInt16Item expected");
         sal_uInt16 nUndoCount = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
@@ -592,55 +592,53 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // Office autostart
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_QUICKLAUNCHER), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_QUICKLAUNCHER), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         ShutdownIcon::SetAutostart( static_cast<const SfxBoolItem*>( pItem )->GetValue() );
     }
 
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_INET_PROXY_TYPE), true, &pItem))
     {
         DBG_ASSERT( dynamic_cast< const SfxUInt16Item *>( pItem ) !=  nullptr, "UInt16Item expected" );
         officecfg::Inet::Settings::ooInetProxyType::set(
             static_cast< SfxUInt16Item const * >(pItem)->GetValue(), batch);
     }
 
-    if ( SfxItemState::SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), true, &pItem ) )
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), true, &pItem ) )
     {
         DBG_ASSERT( dynamic_cast< const SfxStringItem *>( pItem ) !=  nullptr, "StringItem expected" );
         officecfg::Inet::Settings::ooInetHTTPProxyName::set(
             static_cast< SfxStringItem const * >(pItem)->GetValue(), batch);
     }
-    if ( SfxItemState::SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), true, &pItem ) )
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), true, &pItem ) )
     {
         DBG_ASSERT( dynamic_cast< const SfxInt32Item *>( pItem ) !=  nullptr, "Int32Item expected" );
         officecfg::Inet::Settings::ooInetHTTPProxyPort::set(
             static_cast< SfxInt32Item const * >(pItem)->GetValue(), batch);
     }
-    if ( SfxItemState::SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_NAME ), true, &pItem ) )
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped( rPool.GetWhich( SID_INET_FTP_PROXY_NAME ), true, &pItem ) )
     {
         DBG_ASSERT( dynamic_cast< const SfxStringItem *>( pItem ) !=  nullptr, "StringItem expected" );
         officecfg::Inet::Settings::ooInetFTPProxyName::set(
             static_cast< SfxStringItem const * >(pItem)->GetValue(), batch);
     }
-    if ( SfxItemState::SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_PORT ), true, &pItem ) )
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped( rPool.GetWhich( SID_INET_FTP_PROXY_PORT ), true, &pItem ) )
     {
         DBG_ASSERT( dynamic_cast< const SfxInt32Item *>( pItem ) !=  nullptr, "Int32Item expected" );
         officecfg::Inet::Settings::ooInetFTPProxyPort::set(
             static_cast< SfxInt32Item const * >(pItem)->GetValue(), batch);
     }
-    if ( SfxItemState::SET == rSet.GetItemState(SID_INET_NOPROXY, true, &pItem))
+    if ( const SfxStringItem* pStringItem = rSet.GetItemIfSet(SID_INET_NOPROXY))
     {
-        DBG_ASSERT(dynamic_cast< const SfxStringItem *>( pItem ) !=  nullptr, "StringItem expected");
         officecfg::Inet::Settings::ooInetNoProxy::set(
-            static_cast< SfxStringItem const * >(pItem)->GetValue(), batch);
+            pStringItem->GetValue(), batch);
     }
 
     // Secure-Referrer
-    if ( SfxItemState::SET == rSet.GetItemState(SID_SECURE_URL, true, &pItem))
+    if ( const SfxStringListItem *pListItem = rSet.GetItemIfSet(SID_SECURE_URL))
     {
-        DBG_ASSERT(dynamic_cast< const SfxStringListItem *>( pItem ) !=  nullptr, "StringListItem expected");
-        SvtSecurityOptions::SetSecureURLs( std::vector(static_cast<const SfxStringListItem*>(pItem)->GetList()) );
+        SvtSecurityOptions::SetSecureURLs( std::vector(pListItem->GetList()) );
     }
 
     // Store changed data
@@ -659,7 +657,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
     SfxAllItemSet aSendSet( rSet );
 
     // PathName
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_PATHNAME), true, &pItem))
+    if ( SfxItemState::SET == rSet.GetItemStateUntyped(rPool.GetWhich(SID_ATTR_PATHNAME), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxAllEnumItem *>( pItem ) !=  nullptr, "AllEnumItem expected");
         const SfxAllEnumItem* pEnumItem = static_cast<const SfxAllEnumItem *>(pItem);

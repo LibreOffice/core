@@ -2542,7 +2542,7 @@ const SfxPoolItem* SvxScriptSetItem::GetItemOfScriptSet(
                             const SfxItemSet& rSet, sal_uInt16 nId )
 {
     const SfxPoolItem* pI;
-    SfxItemState eSt = rSet.GetItemState( nId, false, &pI );
+    SfxItemState eSt = rSet.GetItemStateUntyped( nId, false, &pI );
     if( SfxItemState::SET != eSt )
         pI = SfxItemState::DEFAULT == eSt ? &rSet.Get( nId ) : nullptr;
     return pI;

@@ -755,7 +755,7 @@ ATTR_SETUNDERLINE:
                     std::unique_ptr<SvxUnderlineItem> aUL(std::make_unique<SvxUnderlineItem>(LINESTYLE_SINGLE, wid));
                     const SfxPoolItem* pItem(nullptr);
 
-                    if (SfxItemState::SET == pSet->GetItemState(wid, false, &pItem))
+                    if (SfxItemState::SET == pSet->GetItemStateUntyped(wid, false, &pItem))
                     {
                         // is switched off ?
                         if( LINESTYLE_NONE == static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle() )
@@ -856,7 +856,7 @@ ATTR_SETOVERLINE:
                     std::unique_ptr<SvxOverlineItem> aOL(std::make_unique<SvxOverlineItem>(LINESTYLE_SINGLE, wid));
                     const SfxPoolItem* pItem(nullptr);
 
-                    if (SfxItemState::SET == pSet->GetItemState(wid, false, &pItem))
+                    if (SfxItemState::SET == pSet->GetItemStateUntyped(wid, false, &pItem))
                     {
                         // is switched off ?
                         if( LINESTYLE_NONE == static_cast<const SvxOverlineItem*>(pItem)->GetLineStyle() )
@@ -1345,7 +1345,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
     std::unique_ptr<SvxBoxItem> aAttr(std::make_unique<SvxBoxItem>(aPardMap[SID_ATTR_BORDER_OUTER]));
     const SfxPoolItem* pItem(nullptr);
 
-    if (SfxItemState::SET == rSet.GetItemState(aPardMap[SID_ATTR_BORDER_OUTER], false, &pItem))
+    if (SfxItemState::SET == rSet.GetItemStateUntyped(aPardMap[SID_ATTR_BORDER_OUTER], false, &pItem))
     {
         aAttr.reset(static_cast<SvxBoxItem*>(pItem->Clone()));
     }
@@ -1723,18 +1723,18 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
                 pCurrent->aAttrSet.Put(pDfltSet->Get(wid));
             else if( !pCurrent->aAttrSet.GetParent() )
             {
-                if (SfxItemState::SET == pDfltSet->GetItemState(wid, false, &pDef))
+                if (SfxItemState::SET == pDfltSet->GetItemStateUntyped(wid, false, &pDef))
                     pCurrent->aAttrSet.Put( *pDef );
                 else
                     pCurrent->aAttrSet.ClearItem(wid);
             }
             else if( SfxItemState::SET == pCurrent->aAttrSet.GetParent()->
-                        GetItemState(wid, true, &pItem) &&
+                        GetItemStateUntyped(wid, true, &pItem) &&
                     *( pDef = &pDfltSet->Get(wid)) != *pItem )
                 pCurrent->aAttrSet.Put( *pDef );
             else
             {
-                if (SfxItemState::SET == pDfltSet->GetItemState(wid, false, &pDef))
+                if (SfxItemState::SET == pDfltSet->GetItemStateUntyped(wid, false, &pDef))
                     pCurrent->aAttrSet.Put( *pDef );
                 else
                     pCurrent->aAttrSet.ClearItem(wid);

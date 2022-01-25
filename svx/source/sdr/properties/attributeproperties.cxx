@@ -405,7 +405,7 @@ namespace sdr::properties
             {
                 // #i61284# use mpItemSet with parents, makes things easier and reduces to
                 // one loop
-                if(SfxItemState::SET == mxItemSet->GetItemState(nWhich, true, &pItem))
+                if(SfxItemState::SET == mxItemSet->GetItemStateUntyped(nWhich, true, &pItem))
                 {
                     aDestItemSet.Put(*pItem);
                 }

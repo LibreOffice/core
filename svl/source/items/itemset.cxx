@@ -305,7 +305,7 @@ void SfxItemSet::InvalidateAllItems()
     memset(static_cast<void*>(m_ppItems), -1, m_nCount * sizeof(SfxPoolItem*));
 }
 
-SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
+SfxItemState SfxItemSet::GetItemStateUntyped( sal_uInt16 nWhich,
                                         bool bSrchInParent,
                                         const SfxPoolItem **ppItem ) const
 {
@@ -351,12 +351,9 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
     return eRet;
 }
 
-bool SfxItemSet::HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem) const
+bool SfxItemSet::HasItem(sal_uInt16 nWhich) const
 {
-    bool bRet = SfxItemState::SET == GetItemState(nWhich, true, ppItem);
-    if (!bRet && ppItem)
-        *ppItem = nullptr;
-    return bRet;
+    return SfxItemState::SET == GetItemStateUntyped(nWhich);
 }
 
 const SfxPoolItem* SfxItemSet::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership )
@@ -623,7 +620,7 @@ void SfxItemSet::RecreateRanges_Impl(const WhichRangesContainer& pNewRanges)
             for ( sal_uInt16 nWID = pRange.first; nWID <= pRange.second; ++nWID, ++n )
             {
                 // direct move of pointer (not via pool)
-                SfxItemState eState = GetItemState( nWID, false, aNewItems+n );
+                SfxItemState eState = GetItemStateUntyped( nWID, false, aNewItems+n );
                 if ( SfxItemState::SET == eState )
                 {
                     // increment new item count and possibly increment ref count
@@ -712,7 +709,7 @@ bool SfxItemSet::Set
         while ( nWhich )
         {
             const SfxPoolItem* pItem;
-            if( SfxItemState::SET == rSet.GetItemState( nWhich, true, &pItem ) )
+            if( SfxItemState::SET == rSet.GetItemStateUntyped( nWhich, true, &pItem ) )
                 bRet |= nullptr != Put( *pItem, pItem->Which() );
             nWhich = aIter.NextWhich();
         }
@@ -730,7 +727,7 @@ const SfxPoolItem* SfxItemSet::GetItem(sal_uInt16 nId, bool bSearchInParent) con
 
     // Is the Item set or 'bDeep == true' available?
     const SfxPoolItem *pItem = nullptr;
-    SfxItemState eState = GetItemState(nWhich, bSearchInParent, &pItem);
+    SfxItemState eState = GetItemStateUntyped(nWhich, bSearchInParent, &pItem);
     if (bSearchInParent && SfxItemState::DEFAULT == eState && SfxItemPool::IsWhich(nWhich))
     {
         pItem = &m_pPool->GetDefaultItem(nWhich);
@@ -1076,7 +1073,7 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet )
         while( 0 != ( nWhich = aIter.NextWhich() ) )
         {
             const SfxPoolItem* pItem = nullptr;
-            (void)rSet.GetItemState( nWhich, true, &pItem );
+            (void)rSet.GetItemStateUntyped( nWhich, true, &pItem );
             if( !pItem )
             {
                 // Not set, so default
@@ -1186,8 +1183,8 @@ bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
             {
                 // If the pointer of the poolable Items are unequal, the Items must match
                 const SfxPoolItem *pItem1 = nullptr, *pItem2 = nullptr;
-                if ( GetItemState( nWh, false, &pItem1 ) !=
-                        rCmp.GetItemState( nWh, false, &pItem2 ) ||
+                if ( GetItemStateUntyped( nWh, false, &pItem1 ) !=
+                        rCmp.GetItemStateUntyped( nWh, false, &pItem2 ) ||
                      ( pItem1 != pItem2 &&
                         ( !pItem1 || IsInvalidItem(pItem1) ||
                           (m_pPool->IsItemPoolable(*pItem1) &&
@@ -1236,7 +1233,7 @@ std::unique_ptr<SfxItemSet> SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool 
             while ( nWhich )
             {
                 const SfxPoolItem* pItem;
-                if ( SfxItemState::SET == GetItemState( nWhich, false, &pItem ) )
+                if ( SfxItemState::SET == GetItemStateUntyped( nWhich, false, &pItem ) )
                     pNewSet->Put( *pItem, pItem->Which() );
                 nWhich = aIter.NextWhich();
             }
@@ -1261,7 +1258,7 @@ SfxItemSet SfxItemSet::CloneAsValue(bool bItems, SfxItemPool *pToPool ) const
             while ( nWhich )
             {
                 const SfxPoolItem* pItem;
-                if ( SfxItemState::SET == GetItemState( nWhich, false, &pItem ) )
+                if ( SfxItemState::SET == GetItemStateUntyped( nWhich, false, &pItem ) )
                     aNewSet.Put( *pItem, pItem->Which() );
                 nWhich = aIter.NextWhich();
             }

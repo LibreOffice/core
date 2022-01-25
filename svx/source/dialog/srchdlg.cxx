@@ -1992,7 +1992,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
     {
         SearchAttrItem* pAItem = &pList->GetObject(n);
         if( !IsInvalidItem( pAItem->pItem ) &&
-            SfxItemState::SET == aOutSet.GetItemState(
+            SfxItemState::SET == aOutSet.GetItemStateUntyped(
                 pAItem->pItem->Which(), false, &pItem ) )
         {
             delete pAItem->pItem;

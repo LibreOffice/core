@@ -797,7 +797,7 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
                 if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
                 {
                     const SfxPoolItem* pItem;
-                    if( pNewAttrSet->GetItemState( pMap->nWID, true, &pItem ) == SfxItemState::SET )
+                    if( pNewAttrSet->GetItemStateUntyped( pMap->nWID, true, &pItem ) == SfxItemState::SET )
                     {
                         pOldAttrSet->Put( *pItem );
                     }
@@ -817,7 +817,7 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
                 if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
                 {
                     const SfxPoolItem* pItem;
-                    if( pNewParaSet->GetItemState( pMap->nWID, true, &pItem ) == SfxItemState::SET )
+                    if( pNewParaSet->GetItemStateUntyped( pMap->nWID, true, &pItem ) == SfxItemState::SET )
                     {
                         pOldParaSet->Put( *pItem );
                     }

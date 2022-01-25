@@ -556,11 +556,10 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
     SetDescriptionText_Impl();
 
     // It is a style with auto update? (SW only)
-    const SfxPoolItem* pPoolItem;
+    const SfxBoolItem* pPoolItem;
 
-    if ( SfxItemState::SET ==
-         rSet.GetItemState( SID_ATTR_AUTO_STYLE_UPDATE, false, &pPoolItem ) )
-        m_xAutoCB->set_active(static_cast<const SfxBoolItem*>(pPoolItem)->GetValue());
+    if ( (pPoolItem = rSet.GetItemIfSet( SID_ATTR_AUTO_STYLE_UPDATE, false )) )
+        m_xAutoCB->set_active(pPoolItem->GetValue());
     m_xAutoCB->save_state();
     m_xName->save_value();
 }

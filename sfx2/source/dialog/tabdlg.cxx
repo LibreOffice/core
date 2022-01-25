@@ -234,7 +234,7 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot
     const SfxItemPool* pPool = rSet.GetPool();
     sal_uInt16 nWh = pPool->GetWhich( nSlot, bDeep );
     const SfxPoolItem* pItem = nullptr;
-    rSet.GetItemState( nWh, true, &pItem );
+    rSet.GetItemStateUntyped( nWh, true, &pItem );
 
     if ( !pItem && nWh != nSlot )
         pItem = &pPool->GetDefaultItem( nWh );
@@ -440,7 +440,7 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
             // Iterate over the Range and set the Items
             sal_uInt16 nWh = pPool->GetWhich(nTmp);
             const SfxPoolItem* pItem;
-            if (SfxItemState::SET == m_pSet->GetItemState(nWh, false, &pItem))
+            if (SfxItemState::SET == m_pSet->GetItemStateUntyped(nWh, false, &pItem))
             {
                 m_xExampleSet->Put(*pItem);
                 m_pOutSet->Put(*pItem);
