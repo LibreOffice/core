@@ -273,7 +273,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     }
     else
     {
-        const SfxPoolItem* pItem;
+        const SvxSetItem* pItem;
 
         if(SfxItemState::SET == GetItemSet().GetItemState(GetWhich(nId), false, &pItem))
         {
@@ -330,7 +330,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     // Evaluate header-/footer- attributes
     const SvxSetItem* pSetItem = nullptr;
 
-    if ( SfxItemState::SET == rSet->GetItemState( GetWhich(nId), false,
+    if ( SfxItemState::SET == rSet->GetItemStateUntyped( GetWhich(nId), false,
                                             reinterpret_cast<const SfxPoolItem**>(&pSetItem) ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
@@ -416,7 +416,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     m_xCntSharedBox->save_state();
     RangeHdl();
 
-    const SfxPoolItem* pItem = nullptr;
+    const SfxUInt16Item* pItem = nullptr;
     SfxObjectShell* pShell;
     if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem) ||
         ( nullptr != (pShell = SfxObjectShell::Current()) &&

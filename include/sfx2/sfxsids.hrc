@@ -24,9 +24,10 @@
 #include <svl/typedwhich.hxx>
 
 class SvxZoomItem;
-class SfxUInt16Item;
-class SvxHyperlinkItem;
 class SfxDocumentInfoItem;
+class SfxUInt16Item;
+class SfxUnoAnyItem;
+class SvxHyperlinkItem;
 class SvxSearchItem;
 
 // Please be careful:
@@ -219,7 +220,7 @@ class SvxSearchItem;
 #define SID_VIEWONLY                        (SID_SFX_START + 1682)
 #define SID_REPAIRPACKAGE                       (SID_SFX_START + 1683)
 #define SID_MINIMIZED                       (SID_SFX_START + 1687)
-#define SID_COMPONENTDATA                   (SID_SFX_START + 1688)
+#define SID_COMPONENTDATA                   TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1688)
 #define SID_COMPONENTCONTEXT                (SID_SFX_START + 1689)
 #define SID_SCRIPTORGANIZER                 (SID_SFX_START + 1690)
 #define SID_MACROORGANIZER                  (SID_SFX_START + 1691)
@@ -512,7 +513,7 @@ class SvxSearchItem;
 #define SID_ATTR_BUTTON_BIGSIZE         (SID_OPTIONS_START + 63)
 #define SID_ATTR_QUICKLAUNCHER          (SID_OPTIONS_START + 74)
 #define SID_ATTR_YEAR2000               (SID_OPTIONS_START + 87)
-#define SID_ATTR_APPLYCHARUNIT          (SID_OPTIONS_START + 88)
+#define SID_ATTR_APPLYCHARUNIT          TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 88)
 
 // PathTabPage
 #define SID_ATTR_PATHNAME               (SID_OPTIONS_START + 11)
@@ -698,7 +699,7 @@ class SvxSearchItem;
 #define FN_REDLINE_PROTECT      (FN_EDIT2 + 23)
 #define FN_REDLINE_ON           (FN_EDIT2 + 25)
 
-#define SID_HTML_MODE           (SID_SVX_START + 414)
+#define SID_HTML_MODE           TypedWhichId<SfxUInt16Item>(SID_SVX_START + 414)
 
 // Calc-Id's used for SfxSecurityPage
 #ifndef SC_FUNCTION_START
