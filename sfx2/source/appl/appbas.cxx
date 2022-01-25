@@ -142,7 +142,7 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 rSet.Put(
                     SfxUInt16Item(
                         SID_ATTR_UNDO_COUNT,
-                        officecfg::Office::Common::Undo::Steps::get()));
+                        static_cast<sal_uInt16>(officecfg::Office::Common::Undo::Steps::get())));
                 break;
 
             default:

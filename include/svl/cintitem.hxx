@@ -33,6 +33,8 @@ public:
     CntByteItem(sal_uInt16 which, sal_uInt8 nTheValue):
         SfxPoolItem(which), m_nValue(nTheValue) {}
 
+    CntByteItem(sal_uInt16 which, sal_Int8 nTheValue) = delete;
+
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
@@ -69,6 +71,8 @@ public:
     CntUInt16Item(sal_uInt16 which, sal_uInt16 nTheValue):
         SfxPoolItem(which), m_nValue(nTheValue)
     {}
+
+    CntUInt16Item(sal_uInt16 which, sal_Int16 nTheValue) = delete;
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
@@ -107,6 +111,8 @@ public:
         SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
+    CntInt32Item(sal_uInt16 which, sal_uInt32 nTheValue) = delete;
+
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
@@ -143,6 +149,8 @@ public:
     CntUInt32Item(sal_uInt16 which, sal_uInt32 nTheValue):
         SfxPoolItem(which), m_nValue(nTheValue)
     {}
+
+    CntUInt32Item(sal_uInt16 which, sal_Int32 nTheValue) = delete;
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 

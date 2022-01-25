@@ -981,9 +981,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::makeAny(xHdl)) );
         }
         if (!pMacroExecItem)
-            rReq.AppendItem( SfxUInt16Item(SID_MACROEXECMODE,css::document::MacroExecMode::USE_CONFIG) );
+            rReq.AppendItem( SfxUInt16Item(SID_MACROEXECMODE, static_cast<sal_uInt16>(css::document::MacroExecMode::USE_CONFIG)) );
         if (!pDocTemplateItem)
-            rReq.AppendItem( SfxUInt16Item(SID_UPDATEDOCMODE,css::document::UpdateDocMode::ACCORDING_TO_CONFIG) );
+            rReq.AppendItem( SfxUInt16Item(SID_UPDATEDOCMODE, static_cast<sal_uInt16>(css::document::UpdateDocMode::ACCORDING_TO_CONFIG)) );
     }
 
     // extract target name

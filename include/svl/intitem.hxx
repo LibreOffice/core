@@ -33,6 +33,8 @@ public:
     explicit SfxByteItem(sal_uInt16 which = 0, sal_uInt8 nValue = 0):
         CntByteItem(which, nValue) {}
 
+    explicit SfxByteItem(sal_uInt16 which, sal_Int8 nValue) = delete;
+
     virtual SfxByteItem* Clone(SfxItemPool * = nullptr) const override
     { return new SfxByteItem(*this); }
 };
@@ -47,6 +49,8 @@ public:
     explicit SfxInt16Item(sal_uInt16 which = 0, sal_Int16 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)
     {}
+
+    explicit SfxInt16Item(sal_uInt16 which, sal_uInt16 nTheValue) = delete;
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
@@ -86,6 +90,8 @@ public:
     explicit SfxUInt16Item(sal_uInt16 which = 0, sal_uInt16 nValue = 0):
         CntUInt16Item(which, nValue) {}
 
+    explicit SfxUInt16Item(sal_uInt16 which, sal_Int16 nValue) = delete;
+
     virtual SfxUInt16Item* Clone(SfxItemPool * = nullptr) const override
     { return new SfxUInt16Item(*this); }
 
@@ -102,6 +108,8 @@ public:
     explicit SfxInt32Item(sal_uInt16 which = 0, sal_Int32 nValue = 0):
         CntInt32Item(which, nValue) {}
 
+    explicit SfxInt32Item(sal_uInt16 which, sal_uInt32 nValue) = delete;
+
     virtual SfxInt32Item* Clone(SfxItemPool * = nullptr) const override
     { return new SfxInt32Item(*this); }
 
@@ -117,6 +125,8 @@ public:
 
     explicit SfxUInt32Item(sal_uInt16 which = 0, sal_uInt32 nValue = 0):
         CntUInt32Item(which, nValue) {}
+
+    explicit SfxUInt32Item(sal_uInt16 which, sal_Int32 nValue) = delete;
 
     virtual SfxUInt32Item* Clone(SfxItemPool * = nullptr) const override
     { return new SfxUInt32Item(*this); }

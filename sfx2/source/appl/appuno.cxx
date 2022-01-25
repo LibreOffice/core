@@ -517,7 +517,10 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
                 DBG_ASSERT( bOK, "invalid type for ViewId" );
                 if (bOK)
-                    rSet.Put( SfxUInt16Item( SID_VIEW_ID, nVal ) );
+                {
+                    assert(nVal >= 0);
+                    rSet.Put( SfxUInt16Item( SID_VIEW_ID, static_cast<sal_uInt16>(nVal) ) );
+                }
             }
             else if ( aName == sPluginMode )
             {
@@ -525,7 +528,10 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
                 DBG_ASSERT( bOK, "invalid type for PluginMode" );
                 if (bOK)
-                    rSet.Put( SfxUInt16Item( SID_PLUGIN_MODE, nVal ) );
+                {
+                    assert(nVal >= 0);
+                    rSet.Put( SfxUInt16Item( SID_PLUGIN_MODE, static_cast<sal_uInt16>(nVal) ) );
+                }
             }
             else if ( aName == sReadOnly )
             {
@@ -729,7 +735,10 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
                 DBG_ASSERT( bOK, "invalid type for MacroExecMode" );
                 if (bOK)
-                    rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, nVal ) );
+                {
+                    assert( nVal >= 0 );
+                    rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, static_cast<sal_uInt16>(nVal) ) );
+                }
             }
             else if ( aName == sUpdateDocMode )
             {
@@ -737,7 +746,10 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
                 DBG_ASSERT( bOK, "invalid type for UpdateDocMode" );
                 if (bOK)
-                    rSet.Put( SfxUInt16Item( SID_UPDATEDOCMODE, nVal ) );
+                {
+                    assert( nVal >= 0 );
+                    rSet.Put( SfxUInt16Item( SID_UPDATEDOCMODE, static_cast<sal_uInt16>(nVal) ) );
+                }
             }
             else if ( aName == sRepairPackage )
             {

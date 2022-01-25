@@ -659,7 +659,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 if ( pRepairPackageItem && pRepairPackageItem->GetValue() )
                 {
                     // the macros in repaired documents should be disabled
-                    pMedium->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, document::MacroExecMode::NEVER_EXECUTE ) );
+                    pMedium->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, static_cast<sal_uInt16>(document::MacroExecMode::NEVER_EXECUTE) ) );
 
                     // the mediatype was retrieved by using fallback solution but this is a repairing mode
                     // so it is acceptable to open the document if there is no contents that required manifest.xml
