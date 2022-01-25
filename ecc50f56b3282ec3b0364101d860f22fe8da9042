@@ -88,6 +88,23 @@
       "parentUuid": "7cbca9e2_8f94d701",
       "revId": "ecc50f56b3282ec3b0364101d860f22fe8da9042",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c02ca22_5a323136",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-25T12:23:52Z",
+      "side": 1,
+      "message": "bisecting shows that this started to cause `make Library_salhelper \u0026\u0026 touch -c sal/osl/all/compat.cxx \u0026\u0026 make Library_salhelper` to erroneously link salhelper again during the second make invocation",
+      "revId": "ecc50f56b3282ec3b0364101d860f22fe8da9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
