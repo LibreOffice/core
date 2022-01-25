@@ -116,7 +116,7 @@ public:
             "ambiguous")
      */
     static StackMode getStackModeFromChartType(
-        const css::uno::Reference< css::chart2::XChartType > & xChartType,
+        const rtl::Reference< ::chart::ChartType > & xChartType,
         bool& rbFound, bool& rbAmbiguous,
         const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
         );
@@ -217,9 +217,9 @@ public:
         getChartTypesFromDiagram(
             const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
-    SAL_DLLPRIVATE static bool areChartTypesCompatible( const css::uno::Reference<
-                css::chart2::XChartType >& xFirstType,
-                const css::uno::Reference< css::chart2::XChartType >& xSecondType );
+    SAL_DLLPRIVATE static bool areChartTypesCompatible(
+                const rtl::Reference< ::chart::ChartType >& xFirstType,
+                const rtl::Reference< ::chart::ChartType >& xSecondType );
 
     /**
         * Test if a series can be moved.
@@ -276,7 +276,7 @@ public:
     //returns integer from constant group css::chart::MissingValueTreatment
     static sal_Int32 getCorrectedMissingValueTreatment(
             const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
-            const css::uno::Reference< css::chart2::XChartType >& xChartType );
+            const rtl::Reference< ::chart::ChartType >& xChartType );
 
     static DiagramPositioningMode getDiagramPositioningMode( const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 

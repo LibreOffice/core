@@ -933,7 +933,7 @@ bool AxisHelper::shouldAxisBeDisplayed( const Reference< XAxis >& xAxis
         if( AxisHelper::getIndicesForAxis( xAxis, xCooSys, nDimensionIndex, nAxisIndex ) )
         {
             sal_Int32 nDimensionCount = xCooSys->getDimension();
-            Reference< XChartType > xChartType( AxisHelper::getChartTypeByIndex( xCooSys, 0 ) );
+            rtl::Reference< ChartType > xChartType( AxisHelper::getChartTypeByIndex( xCooSys, 0 ) );
 
             bool bMainAxis = (nAxisIndex==MAIN_AXIS_INDEX);
             if( bMainAxis )

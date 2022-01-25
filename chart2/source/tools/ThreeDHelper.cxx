@@ -155,7 +155,7 @@ bool lcl_isLightScheme( const uno::Reference< beans::XPropertySet >& xDiagramPro
         return false;
 
     uno::Reference< chart2::XDiagram > xDiagram( xDiagramProps, uno::UNO_QUERY );
-    uno::Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
 
     sal_Int32 nColor = 0;
     xDiagramProps->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_2 ) >>= nColor;
@@ -213,7 +213,7 @@ void lcl_setLightsForScheme( const uno::Reference< beans::XPropertySet >& xDiagr
     xDiagramProps->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_2, uno::Any( true ) );
 
     uno::Reference< chart2::XDiagram > xDiagram( xDiagramProps, uno::UNO_QUERY );
-    uno::Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
     uno::Any aADirection( rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple
         ? ChartTypeHelper::getDefaultSimpleLightDirection(xChartType)
         : ChartTypeHelper::getDefaultRealisticLightDirection(xChartType) );
@@ -267,7 +267,7 @@ bool lcl_isSimpleScheme( drawing::ShadeMode aShadeMode
         return false;
     if(nObjectLines==0)
     {
-        uno::Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+        rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
         return ChartTypeHelper::noBordersForSimpleScheme( xChartType );
     }
     if(nObjectLines!=1)
@@ -292,7 +292,7 @@ void lcl_setSimpleScheme( drawing::ShadeMode& rShadeMode
     rShadeMode = drawing::ShadeMode_FLAT;
     rnRoundedEdges = 0;
 
-    uno::Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
     rnObjectLines = ChartTypeHelper::noBordersForSimpleScheme( xChartType ) ? 0 : 1;
 }
 

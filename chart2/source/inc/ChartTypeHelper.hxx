@@ -33,47 +33,46 @@ class ChartType;
 class OOO_DLLPUBLIC_CHARTTOOLS ChartTypeHelper
 {
 public:
-    static bool isSupportingGeometryProperties(  const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingStatisticProperties( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingRegressionProperties(const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingMainAxis(            const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
-    static bool isSupportingSecondaryAxis(       const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingAreaProperties(      const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingSymbolProperties(    const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingOverlapAndGapWidthProperties( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingBarConnectors(       const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingRightAngledAxes(     const css::uno::Reference< css::chart2::XChartType >& xChartType );
-    static bool isSupportingAxisSideBySide(      const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingStartingAngle(       const css::uno::Reference< css::chart2::XChartType >& xChartType );
+    static bool isSupportingGeometryProperties(  const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
+    static bool isSupportingStatisticProperties( const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
+    static bool isSupportingRegressionProperties(const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
+    static bool isSupportingMainAxis(            const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
+    static bool isSupportingSecondaryAxis(       const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
+    static bool isSupportingAreaProperties(      const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
+    static bool isSupportingSymbolProperties(    const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
+    static bool isSupportingOverlapAndGapWidthProperties( const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
+    static bool isSupportingBarConnectors(       const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
+    static bool isSupportingRightAngledAxes(     const rtl::Reference< ::chart::ChartType >& xChartType );
+    static bool isSupportingAxisSideBySide(      const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
+    static bool isSupportingStartingAngle(       const rtl::Reference< ::chart::ChartType >& xChartType );
     //starting value for bars or baseline for areas for example
-    static bool isSupportingBaseValue(           const css::uno::Reference< css::chart2::XChartType >& xChartType );
-    static bool isSupportingAxisPositioning(     const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
-    static bool isSupportingDateAxis( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex );
+    static bool isSupportingBaseValue(           const rtl::Reference< ::chart::ChartType >& xChartType );
+    static bool isSupportingAxisPositioning(     const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
     static bool isSupportingDateAxis( const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionIndex );
-    static bool isSupportingComplexCategory( const css::uno::Reference< css::chart2::XChartType >& xChartType );
-    static bool isSupportingCategoryPositioning( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool shiftCategoryPosAtXAxisPerDefault(     const css::uno::Reference< css::chart2::XChartType >& xChartType );
+    static bool isSupportingComplexCategory( const rtl::Reference< ::chart::ChartType >& xChartType );
+    static bool isSupportingCategoryPositioning( const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
+    static bool shiftCategoryPosAtXAxisPerDefault(     const rtl::Reference< ::chart::ChartType >& xChartType );
 
     //returns sequence of css::chart::DataLabelPlacement
     static css::uno::Sequence < sal_Int32 > getSupportedLabelPlacements(
-        const css::uno::Reference< css::chart2::XChartType >& xChartType, bool bSwapXAndY
+        const rtl::Reference< ::chart::ChartType >& xChartType, bool bSwapXAndY
         , const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
     //returns sequence of css::chart::MissingValueTreatment
     static css::uno::Sequence < sal_Int32 > getSupportedMissingValueTreatments(
-        const css::uno::Reference< css::chart2::XChartType >& xChartType );
+        const rtl::Reference< ::chart::ChartType >& xChartType );
 
-    SAL_DLLPRIVATE static css::drawing::Direction3D getDefaultSimpleLightDirection( const css::uno::Reference< css::chart2::XChartType >& xChartType );
-    SAL_DLLPRIVATE static css::drawing::Direction3D getDefaultRealisticLightDirection( const css::uno::Reference< css::chart2::XChartType >& xChartType );
-    SAL_DLLPRIVATE static sal_Int32 getDefaultDirectLightColor( bool bSimple, const css::uno::Reference< css::chart2::XChartType >& xChartType );
-    SAL_DLLPRIVATE static sal_Int32 getDefaultAmbientLightColor( bool bSimple, const css::uno::Reference< css::chart2::XChartType >& xChartType );
-    static sal_Int32 getNumberOfDisplayedSeries( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nNumberOfSeries );
-    SAL_DLLPRIVATE static bool noBordersForSimpleScheme( const css::uno::Reference< css::chart2::XChartType >& xChartType );
+    SAL_DLLPRIVATE static css::drawing::Direction3D getDefaultSimpleLightDirection( const rtl::Reference< ::chart::ChartType >& xChartType );
+    SAL_DLLPRIVATE static css::drawing::Direction3D getDefaultRealisticLightDirection( const rtl::Reference< ::chart::ChartType >& xChartType );
+    SAL_DLLPRIVATE static sal_Int32 getDefaultDirectLightColor( bool bSimple, const rtl::Reference< ::chart::ChartType >& xChartType );
+    SAL_DLLPRIVATE static sal_Int32 getDefaultAmbientLightColor( bool bSimple, const rtl::Reference< ::chart::ChartType >& xChartType );
+    static sal_Int32 getNumberOfDisplayedSeries( const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nNumberOfSeries );
+    SAL_DLLPRIVATE static bool noBordersForSimpleScheme( const rtl::Reference< ::chart::ChartType >& xChartType );
 
-    static bool isSeriesInFrontOfAxisLine( const css::uno::Reference< css::chart2::XChartType >& xChartType );
+    static bool isSeriesInFrontOfAxisLine( const rtl::Reference< ::chart::ChartType >& xChartType );
 
     static sal_Int32 //one of css::chart2::AxisType
-                    getAxisType( const css::uno::Reference< css::chart2::XChartType >& xChartType
+                    getAxisType( const rtl::Reference< ::chart::ChartType >& xChartType
                                 , sal_Int32 nDimensionIndex );
 
     static OUString getRoleOfSequenceForYAxisNumberFormatDetection( const css::uno::Reference<
@@ -82,7 +81,7 @@ public:
     static OUString getRoleOfSequenceForDataLabelNumberFormatDetection( const css::uno::Reference<
         css::chart2::XChartType >& xChartType );
 
-    static bool isSupportingOnlyDeepStackingFor3D( const css::uno::Reference< css::chart2::XChartType >& xChartType );
+    static bool isSupportingOnlyDeepStackingFor3D( const rtl::Reference< ::chart::ChartType >& xChartType );
 };
 
 } //namespace chart
