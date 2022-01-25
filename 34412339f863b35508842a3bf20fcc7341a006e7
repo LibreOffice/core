@@ -87,6 +87,23 @@
       "message": "I\u0027ll have some more work to do, then ;-)",
       "revId": "34412339f863b35508842a3bf20fcc7341a006e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "144d0657_eceba8a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-25T16:38:35Z",
+      "side": 1,
+      "message": "Now that you mention, I guess iterating over UTF-16 was meant with the original now removed comment\n\n  //2do: this should be a proper unicode string method\n",
+      "revId": "34412339f863b35508842a3bf20fcc7341a006e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
