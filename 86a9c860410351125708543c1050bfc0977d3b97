@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92fbcd1c_27866a46",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 48
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T09:42:47Z",
+      "side": 0,
+      "message": "Keep the behavior unchanged in this patch, and keep this test for now.",
+      "revId": "86a9c860410351125708543c1050bfc0977d3b97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2bf2e6a_0ed046f9",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 48
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T09:42:47Z",
+      "side": 1,
+      "message": "These are moved from the header file, and they are changed from \u0027const\u0027 to \u0027constexpr\u0027.",
+      "revId": "ceea6b9a090e22edf12983f9618b4cb0e1c4bc1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "324e3a7e_3a6eb937",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 48
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T09:42:47Z",
+      "side": 1,
+      "message": "Using \"vcl.fonts.match\" would be better. Here and elsewhere in this file.",
+      "revId": "ceea6b9a090e22edf12983f9618b4cb0e1c4bc1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caff3444_be4a1519",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 48
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T09:42:47Z",
+      "side": 1,
+      "message": "Is \"NoneLatin\" a typo? Could you please fix that?",
+      "revId": "ceea6b9a090e22edf12983f9618b4cb0e1c4bc1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7c430cb_4dd9c30c",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 48
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T09:42:47Z",
+      "side": 1,
+      "message": "There are few instances of NoneLatin in the code. Please fix them.\nhttps://opengrok.libreoffice.org/search?project\u003dcore\u0026full\u003dnonelatin",
+      "revId": "ceea6b9a090e22edf12983f9618b4cb0e1c4bc1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49cff6c6_688e1ae0",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 48
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T09:42:47Z",
+      "side": 1,
+      "message": "Also here.",
+      "revId": "ceea6b9a090e22edf12983f9618b4cb0e1c4bc1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "971cb455_6fb13088",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 48
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T09:42:47Z",
+      "side": 1,
+      "message": "And also here.",
+      "revId": "ceea6b9a090e22edf12983f9618b4cb0e1c4bc1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56e982c6_e9839a39",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 48
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T09:42:47Z",
+      "side": 1,
+      "message": "Can you avoid using Unicode string literals here, and elsewhere in this file?",
+      "revId": "ceea6b9a090e22edf12983f9618b4cb0e1c4bc1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d54c88e_26e41c9e",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 48
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T09:42:47Z",
+      "side": 1,
+      "message": "This behavior change should be done in another change, possibly this one:\nhttps://gerrit.libreoffice.org/c/core/+/123310",
+      "revId": "ceea6b9a090e22edf12983f9618b4cb0e1c4bc1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

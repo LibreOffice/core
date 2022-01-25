@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ba01cb3_d1d22931",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 49
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T09:42:47Z",
+      "side": 1,
+      "message": "1. The title your submission is: \"extract match functions from FindFontFamilyByAttributes\", but this patch also modifies the behavior so that the test case testShouldNotFindOtherStyleFamily() no longer passes. I think this change should be done in a separate patch, possibly here:\nhttps://gerrit.libreoffice.org/c/core/+/123310\n2. You have changed the formatting in a lot of places that you were not otherwise modifying. This causes trouble for following the changes in the git history. I have reverted back each of these changes manually, and this took a lot of time. Please don\u0027t do that.",
+      "revId": "42abcf48de40f05b3bbce8fa638a8cc439e96b80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
