@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d3f8442_91cbb8c5",
+        "filename": "sfx2/source/dialog/basedlgs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-01-25T15:38:23Z",
+      "side": 1,
+      "message": "FWIW, that bug reference seems to have a typo in it (\"3\" instead of \"#\"), but one would find the correct one from the git commit.",
+      "range": {
+        "startLine": 216,
+        "startChar": 7,
+        "endLine": 216,
+        "endChar": 17
+      },
+      "revId": "e953e80c2dcd574a16431eb95499aa98ef5a89fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
