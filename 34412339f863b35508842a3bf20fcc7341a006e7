@@ -46,6 +46,47 @@
       },
       "revId": "34412339f863b35508842a3bf20fcc7341a006e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59a9d1e6_3d84d6b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-01-25T14:35:26Z",
+      "side": 1,
+      "message": "I acted on the comments in gerrit #41271 and concentrated on making import/export with Excel work plus verifying behaviour in Excel.\nI didn\u0027t study the code  in lcl_ScInterpreter_IsPrintable as it received no comment at that time.\n\nNow it does receive comment, I will study unicode, UTF16 and odf formula definition.",
+      "parentUuid": "58580332_bb1af08e",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "34412339f863b35508842a3bf20fcc7341a006e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4f3bbd8_8f90812d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-01-25T14:35:26Z",
+      "side": 1,
+      "message": "I\u0027ll have some more work to do, then ;-)",
+      "revId": "34412339f863b35508842a3bf20fcc7341a006e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
