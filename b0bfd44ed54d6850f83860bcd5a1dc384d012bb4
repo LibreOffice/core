@@ -16,6 +16,24 @@
       "message": "Surely the key inside the NC_ macro needs to be updated too?",
       "revId": "b0bfd44ed54d6850f83860bcd5a1dc384d012bb4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5b25d42_d55282fe",
+        "filename": "sc/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-25T21:08:24Z",
+      "side": 1,
+      "message": "Not necessarily f.e. sc/uiconfig/scalc/ui/randomnumbergenerator.ui and the context \"randomnumbergenerator|distribution-liststore\" is reused as the context for all the entries of what used to be the same \"liststore\". Similarly where we moved stuff like that from a .ui file into a .hrc we kept the context it first appeared as, e.g. chart2/inc/chart.hrc\n\nThe existing contexts were grandfathered in to keep things unchanged for the existing translations and there\u0027s no need for the define and context to be the same foe new stuff. In this case I felt it might be helpful to translators to have them share the context, because in the final dialog they appear together.\n\nThough maybe I was being too clever anyway and they can come out of the .hrc and into the .ui now that I\u0027m not looking for a backwardly portable change anymore.",
+      "parentUuid": "8d4b774c_d15e591b",
+      "revId": "b0bfd44ed54d6850f83860bcd5a1dc384d012bb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
