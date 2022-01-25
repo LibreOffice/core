@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a89816c_c03ad5d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-25T16:54:14Z",
+      "side": 1,
+      "message": "I see cairo warnings in my hidpi setup with this change. https://gerrit.libreoffice.org/c/core/+/128938 solves them, if it\u0027s acceptable I can merge that change to this one",
+      "revId": "f0e1cd610e6936c24c7ed5e4077238fb72fe3866",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
