@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75c84640_e4f9acf3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T13:17:50Z",
+      "side": 1,
+      "message": "If you read the issue description carefully:\n    https://bugs.documentfoundation.org/show_bug.cgi?id\u003d139734#c0\nyou will see that we are only interested in the redundant asserts that come after MacrosTest::loadFromDesktop(). You can go to the definition of other functions that you have removed asserts after them to see if there is an appropriate assert inside them, but we are not interested in them in this specific EasyHack.\nPlease remove other changes that are not relevant to this issue, and only keep the removal of assert after MacrosTest::loadFromDesktop(). Even one single change would be OK for this EasyHack.\nAfter that, you should use \u0027git commit --amend\u0027 and resend the change as a new patch set.",
+      "revId": "76e07ad2bcb9c2eb64824d8906667a75fe8eb4b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
