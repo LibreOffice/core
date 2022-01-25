@@ -342,7 +342,7 @@ namespace
         gUserItemSz.setHeight(gUserItemSz.Height() * 16);
         gUserItemSz.setHeight(gUserItemSz.Height() / 10);
 
-        size_t nMaxDeviceHeight = SAL_MAX_INT16 / 2; // see limitXCreatePixmap
+        size_t nMaxDeviceHeight = SAL_MAX_INT16 / 16; // see limitXCreatePixmap and be generous wrt up to x16 hidpi
         gPreviewsPerDevice = nMaxDeviceHeight / gUserItemSz.Height();
     }
 }
