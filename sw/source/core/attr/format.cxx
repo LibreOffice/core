@@ -550,9 +550,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
 
     if (supportsFullDrawingLayerFillAttributeSet())
     {
-        const SfxPoolItem* pSource = nullptr;
-
-        if(SfxItemState::SET == aTempSet.GetItemState(RES_BACKGROUND, false, &pSource))
+        if(const SvxBrushItem* pSource = aTempSet.GetItemIfSet(RES_BACKGROUND, false))
         {
             // FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
             SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
@@ -560,8 +558,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
             // copy all items to be set anyways to a local ItemSet with is also prepared for the new
             // fill attribute ranges [XATTR_FILL_FIRST .. XATTR_FILL_LAST]. Add the attributes
             // corresponding as good as possible to the new fill properties and set the whole ItemSet
-            const SvxBrushItem& rSource(pSource->StaticWhichCast(RES_BACKGROUND));
-            setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
+            setSvxBrushItemAsFillAttributesToTargetSet(*pSource, aTempSet);
 
             if(IsModifyLocked())
             {

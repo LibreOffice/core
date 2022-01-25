@@ -187,10 +187,9 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 {
     // init objectshell and detect document name
     OUString sDocTitle;
-    const SfxPoolItem* pItem = nullptr;
     SfxObjectShell* pObjShell = nullptr;
-    if ( SfxItemState::SET == rSet.GetItemState( FN_PARAM_WRTSHELL, false, &pItem ) )
-        m_pWrtShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
+    if ( const SwPtrItem* pItem = rSet.GetItemIfSet( FN_PARAM_WRTSHELL, false ) )
+        m_pWrtShell = static_cast<SwWrtShell*>(pItem->GetValue());
     if ( m_pWrtShell )
     {
         pObjShell = m_pWrtShell->GetView().GetDocShell();

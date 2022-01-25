@@ -253,15 +253,14 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
     }
     else
     {
-        const SfxPoolItem* pPoolItem = nullptr;
-
-        if(SfxItemState::SET == m_rOutAttrs.GetItemState(GetWhich(XATTR_FILLSTYLE), true, &pPoolItem))
+        if(const XFillStyleItem* pFillStyleItem = m_rOutAttrs.GetItemIfSet(GetWhich(XATTR_FILLSTYLE)))
         {
-            const drawing::FillStyle eXFS(static_cast<const XFillStyleItem*>(pPoolItem)->GetValue());
+            const drawing::FillStyle eXFS(pFillStyleItem->GetValue());
 
-            if((drawing::FillStyle_BITMAP == eXFS) && (SfxItemState::SET == m_rOutAttrs.GetItemState(GetWhich(XATTR_FILLBITMAP), true, &pPoolItem)))
+            const XFillBitmapItem* pBitmapItem;
+            if((drawing::FillStyle_BITMAP == eXFS) && (pBitmapItem = m_rOutAttrs.GetItemIfSet(GetWhich(XATTR_FILLBITMAP))))
             {
-                pGraphicObject.reset(new GraphicObject(static_cast<const XFillBitmapItem*>(pPoolItem)->GetGraphicObject()));
+                pGraphicObject.reset(new GraphicObject(pBitmapItem->GetGraphicObject()));
             }
         }
 
@@ -370,12 +369,8 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
         }
         else // it must be a not existing imported bitmap
         {
-            const SfxPoolItem* pPoolItem = nullptr;
-
-            if(SfxItemState::SET == m_rOutAttrs.GetItemState(XATTR_FILLBITMAP, true, &pPoolItem))
+            if(const XFillBitmapItem* pFillBmpItem = m_rOutAttrs.GetItemIfSet(XATTR_FILLBITMAP))
             {
-                auto pFillBmpItem = dynamic_cast<const XFillBitmapItem*>(pPoolItem);
-                assert(pFillBmpItem);
                 pEntry.reset(new XBitmapEntry(pFillBmpItem->GetGraphicObject(), aName));
             }
             else

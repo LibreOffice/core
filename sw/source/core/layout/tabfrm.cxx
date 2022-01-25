@@ -5527,10 +5527,10 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             case RES_ATTRSET_CHG:
             {
                 auto& rChgSet = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet();
-                rChgSet.GetItemState(RES_VERT_ORIENT, false, &pVertOrientItem);
-                rChgSet.GetItemState(RES_PROTECT, false, &pProtectItem);
-                rChgSet.GetItemState(RES_FRAMEDIR, false, &pFrameDirItem);
-                rChgSet.GetItemState(RES_BOX, false, &pBoxItem);
+                pVertOrientItem = rChgSet.GetItemIfSet(RES_VERT_ORIENT, false);
+                pProtectItem = rChgSet.GetItemIfSet(RES_PROTECT, false);
+                pFrameDirItem = rChgSet.GetItemIfSet(RES_FRAMEDIR, false);
+                pBoxItem = rChgSet.GetItemIfSet(RES_BOX, false);
                 break;
             }
             case RES_VERT_ORIENT:

@@ -1177,10 +1177,9 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     }
                     else if( bHeaderRulerMove && bHeaderRulerChange )
                     {
-                        const SfxPoolItem* pItem = nullptr;
-                        if ( rStyleSet.GetItemState( ATTR_PAGE_HEADERSET, false, &pItem ) == SfxItemState::SET )
+                        if ( const SvxSetItem* pSetItem = rStyleSet.GetItemIfSet( ATTR_PAGE_HEADERSET, false ) )
                         {
-                            const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
+                            const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
                             Size  aHeaderSize = rHeaderSet.Get(ATTR_PAGE_SIZE).GetSize();
                             aHeaderSize.setHeight(o3tl::convert( aButtonUpPt.Y(), o3tl::Length::mm100, o3tl::Length::twip) + o3tl::convert(aOffset.Y(), o3tl::Length::mm100, o3tl::Length::twip) - aULItem.GetUpper());
                             aHeaderSize.setHeight( aHeaderSize.Height() * 100 / mnScale );
@@ -1192,10 +1191,9 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     }
                     else if( bFooterRulerMove && bFooterRulerChange )
                     {
-                        const SfxPoolItem* pItem = nullptr;
-                        if( rStyleSet.GetItemState( ATTR_PAGE_FOOTERSET, false, &pItem ) == SfxItemState::SET )
+                        if( const SvxSetItem* pSetItem = rStyleSet.GetItemIfSet( ATTR_PAGE_FOOTERSET, false ) )
                         {
-                            const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
+                            const SfxItemSet& rFooterSet = pSetItem->GetItemSet();
                             Size aFooterSize = rFooterSet.Get(ATTR_PAGE_SIZE).GetSize();
                             aFooterSize.setHeight(nHeight - o3tl::convert(aButtonUpPt.Y(), o3tl::Length::mm100, o3tl::Length::twip) - o3tl::convert(aOffset.Y(), o3tl::Length::mm100, o3tl::Length::twip) - aULItem.GetLower());
                             aFooterSize.setHeight( aFooterSize.Height() * 100 / mnScale );

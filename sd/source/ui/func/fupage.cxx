@@ -135,8 +135,7 @@ void FuPage::DoExecute(SfxRequest& rReq)
         return;
 
     // if there are no arguments given, open the dialog
-    const SfxPoolItem* pItem;
-    if (!mpArgs || mpArgs->GetItemState(SID_SELECT_BACKGROUND, true, &pItem) == SfxItemState::SET)
+    if (!mpArgs || mpArgs->GetItemState(SID_SELECT_BACKGROUND) == SfxItemState::SET)
     {
         mpView->SdrEndTextEdit();
         mpArgs = ExecuteDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr, rReq);
@@ -325,8 +324,8 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
             OUString aFileName(static_cast<const SfxStringItem*>(pItem)->GetValue());
             OUString aFilterName;
 
-            if (pArgs->GetItemState(FN_PARAM_FILTER, true, &pItem) == SfxItemState::SET)
-                aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+            if (const SfxStringItem* pFilterItem = pArgs->GetItemIfSet(FN_PARAM_FILTER))
+                aFilterName = pFilterItem->GetValue();
 
             nError = GraphicFilter::LoadGraphic(aFileName, aFilterName, aGraphic,
                                                 &GraphicFilter::GetGraphicFilter());
@@ -466,10 +465,9 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
                 pTempSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
             }
 
-            const SfxPoolItem *pItem;
-            if( SfxItemState::SET == pTempSet->GetItemState( EE_PARA_WRITINGDIR, false, &pItem ) )
+            if( const SvxFrameDirectionItem* pItem = pTempSet->GetItemIfSet( EE_PARA_WRITINGDIR, false ) )
             {
-                SvxFrameDirection nVal = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
+                SvxFrameDirection nVal = pItem->GetValue();
                 mpDoc->SetDefaultWritingMode( nVal == SvxFrameDirection::Horizontal_RL_TB ? css::text::WritingMode_RL_TB : css::text::WritingMode_LR_TB );
             }
 

@@ -616,16 +616,14 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoDefaultAttr>( aOld, *this ) );
         }
 
-        const SfxPoolItem* pTmpItem;
-        if( ( SfxItemState::SET ==
-                aNew.GetItemState( RES_PARATR_TABSTOP, false, &pTmpItem ) ) &&
-            pTmpItem->StaticWhichCast(RES_PARATR_TABSTOP).Count() )
+        const SvxTabStopItem* pTmpItem = aNew.GetItemIfSet( RES_PARATR_TABSTOP, false );
+        if( pTmpItem && pTmpItem->Count() )
         {
             // Set the default values of all TabStops to the new value.
             // Attention: we always work with the PoolAttribute here, so that
             // we don't calculate the same value on the same TabStop (pooled!) for all sets.
             // We send a FormatChg to modify.
-            SwTwips nNewWidth = pTmpItem->StaticWhichCast(RES_PARATR_TABSTOP)[ 0 ].GetTabPos(),
+            SwTwips nNewWidth = (*pTmpItem)[ 0 ].GetTabPos(),
                     nOldWidth = aOld.Get(RES_PARATR_TABSTOP)[ 0 ].GetTabPos();
 
             bool bChg = false;
@@ -1219,11 +1217,11 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
     // create the NumRule if necessary
     if( this != rColl.GetDoc() )
     {
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == pNewColl->GetItemState( RES_PARATR_NUMRULE,
-            false, &pItem ))
+        const SwNumRuleItem* pItem = pNewColl->GetItemIfSet( RES_PARATR_NUMRULE,
+            false );
+        if( pItem )
         {
-            const OUString& rName = pItem->StaticWhichCast(RES_PARATR_NUMRULE).GetValue();
+            const OUString& rName = pItem->GetValue();
             if( !rName.isEmpty() )
             {
                 const SwNumRule* pRule = rColl.GetDoc()->FindNumRulePtr( rName );
@@ -1304,12 +1302,12 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
         pDest->DelDiffs( *pSrc );
 
         // #i94285#: existing <SwFormatPageDesc> instance, before copying attributes
-        const SfxPoolItem* pItem;
+        const SwFormatPageDesc* pItem;
         if( &GetAttrPool() != pSrc->GetAttrSet().GetPool()
-                && SfxItemState::SET == pSrc->GetAttrSet().GetItemState( RES_PAGEDESC, false, &pItem )
-                && pItem->StaticWhichCast(RES_PAGEDESC).GetPageDesc() )
+                && (pItem = pSrc->GetAttrSet().GetItemIfSet( RES_PAGEDESC, false ))
+                && pItem->GetPageDesc() )
         {
-            SwFormatPageDesc aPageDesc( pItem->StaticWhichCast(RES_PAGEDESC) );
+            SwFormatPageDesc aPageDesc( *pItem );
             const OUString& rNm = aPageDesc.GetPageDesc()->GetName();
             SwPageDesc* pPageDesc = FindPageDesc( rNm );
             if( !pPageDesc )
@@ -1392,10 +1390,9 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                                         GetDfltFrameFormat() );
     pNewFormat->CopyAttrs( *pOldFormat );
 
-    if( SfxItemState::SET == pNewFormat->GetAttrSet().GetItemState(
-        RES_CNTNT, false, &pItem ))
+    if( const SwFormatContent* pContent = pNewFormat->GetAttrSet().GetItemIfSet(
+        RES_CNTNT, false ) )
     {
-        const SwFormatContent* pContent = &pItem->StaticWhichCast(RES_CNTNT);
         if( pContent->GetContentIdx() )
         {
             SwNodeIndex aTmpIdx( GetNodes().GetEndOfAutotext() );

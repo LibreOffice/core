@@ -62,16 +62,15 @@ SvxThemePage::~SvxThemePage() = default;
 
 void SvxThemePage::Reset(const SfxItemSet* pAttrs)
 {
-    const SfxPoolItem* pItem = nullptr;
-    if (!pAttrs->HasItem(SID_ATTR_CHAR_GRABBAG, &pItem))
+    const SfxGrabBagItem* pGrabBagItem = pAttrs->GetItemIfSet(SID_ATTR_CHAR_GRABBAG);
+    if (!pGrabBagItem)
     {
         SAL_WARN("cui.tabpages", "SvxThemePage::Reset: no SfxGrabBagItem");
         return;
     }
 
-    const auto& rGrabBagItem = static_cast<const SfxGrabBagItem&>(*pItem);
-    auto itTheme = rGrabBagItem.GetGrabBag().find("Theme");
-    if (itTheme == rGrabBagItem.GetGrabBag().end())
+    auto itTheme = pGrabBagItem->GetGrabBag().find("Theme");
+    if (itTheme == pGrabBagItem->GetGrabBag().end())
     {
         // No theme was defined previously, allow specifying colors.
         m_xDk1->set_sensitive(true);

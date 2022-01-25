@@ -268,9 +268,9 @@ namespace frm
         :AttributeHandler( _nAttributeId, _nWhichId )
         ,m_bScriptDependent( false )
     {
-        m_bScriptDependent = ( SID_ATTR_CHAR_WEIGHT == _nAttributeId )
-                         ||  ( SID_ATTR_CHAR_POSTURE == _nAttributeId )
-                         ||  ( SID_ATTR_CHAR_FONT == _nAttributeId );
+        m_bScriptDependent = ( sal_uInt16(SID_ATTR_CHAR_WEIGHT) == _nAttributeId )
+                         ||  ( sal_uInt16(SID_ATTR_CHAR_POSTURE) == _nAttributeId )
+                         ||  ( sal_uInt16(SID_ATTR_CHAR_FONT) == _nAttributeId );
     }
 
 
@@ -402,9 +402,8 @@ namespace frm
         // if the current adjustment of the was the default adjustment for the *previous* text direction,
         // then we toggle the adjustment, too
         SvxAdjust eCurrentAdjustment = SvxAdjust::Left;
-        const SfxPoolItem* pCurrentAdjustment = nullptr;
-        if ( SfxItemState::SET == _rCurrentAttribs.GetItemState( EE_PARA_JUST, true, &pCurrentAdjustment ) )
-            eCurrentAdjustment = static_cast< const SvxAdjustItem* >( pCurrentAdjustment )->GetAdjust();
+        if ( const SvxAdjustItem* pCurrentAdjustment =  _rCurrentAttribs.GetItemIfSet( EE_PARA_JUST ) )
+            eCurrentAdjustment = pCurrentAdjustment->GetAdjust();
 
         if ( eCurrentAdjustment == m_eOppositeDefaultAdjustment )
             _rNewAttribs.Put( SvxAdjustItem( m_eDefaultAdjustment, EE_PARA_JUST ) );

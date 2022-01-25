@@ -958,12 +958,12 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, const SvNumberFormatter& rFormatte
     OSL_ENSURE( rSet.GetItemState( ATTR_LANGUAGE_FORMAT, false ) == SfxItemState::DEFAULT,
         "ScGlobal::AddLanguage - language already added");
 
-    const SfxPoolItem* pHardItem;
-    if ( rSet.GetItemState( ATTR_VALUE_FORMAT, false, &pHardItem ) != SfxItemState::SET )
+    const SfxUInt32Item* pHardItem = rSet.GetItemIfSet( ATTR_VALUE_FORMAT, false );
+    if ( !pHardItem )
         return;
 
     const SvNumberformat* pHardFormat = rFormatter.GetEntry(
-        static_cast<const SfxUInt32Item*>(pHardItem)->GetValue() );
+        pHardItem->GetValue() );
 
     sal_uInt32 nParentFmt = 0; // Pool default
     const SfxItemSet* pParent = rSet.GetParent();

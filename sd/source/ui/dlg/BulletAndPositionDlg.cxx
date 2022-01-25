@@ -216,20 +216,19 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
 
     // ActivatePage part
 
-    const SfxPoolItem* pItem;
     const SfxItemSet* pExampleSet = &rSet;
     sal_uInt16 nTmpNumLvl = 1;
     bool bPreset = false;
     if (pExampleSet)
     {
-        if (SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
-            bPreset = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-        if (SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
-            nTmpNumLvl = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        if (const SfxBoolItem* pItem = pExampleSet->GetItemIfSet(SID_PARAM_NUM_PRESET, false))
+            bPreset = pItem->GetValue();
+        if (const SfxUInt16Item* pItem = pExampleSet->GetItemIfSet(SID_PARAM_CUR_NUM_LEVEL, false))
+            nTmpNumLvl = pItem->GetValue();
     }
-    if (SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
+    if (const SvxNumBulletItem* pItem = rSet.GetItemIfSet(nNumItemId, false))
     {
-        pSaveNum.reset(new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()));
+        pSaveNum.reset(new SvxNumRule(pItem->GetNumRule()));
     }
 
     bModified = (!pActNum->Get(0) || bPreset);
@@ -296,22 +295,20 @@ bool SvxBulletAndPositionDlg::IsSlideScope() const { return m_xSlideRB->get_acti
 
 void SvxBulletAndPositionDlg::Reset(const SfxItemSet* rSet)
 {
-    const SfxPoolItem* pItem;
+    const SvxNumBulletItem* pItem = rSet->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false);
     // in Draw the item exists as WhichId, in Writer only as SlotId
-    SfxItemState eState = rSet->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
-    if (eState != SfxItemState::SET)
+    if (!pItem)
     {
         nNumItemId = rSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet->GetItemState(nNumItemId, false, &pItem);
+        pItem = rSet->GetItemIfSet(nNumItemId, false);
 
-        if (eState != SfxItemState::SET)
+        if (!pItem)
         {
-            pItem = &static_cast<const SvxNumBulletItem&>(rSet->Get(nNumItemId));
-            eState = SfxItemState::SET;
+            pItem = &rSet->Get(nNumItemId);
         }
     }
-    DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
-    pSaveNum.reset(new SvxNumRule(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()));
+    DBG_ASSERT(pItem, "no item found!");
+    pSaveNum.reset(new SvxNumRule(pItem->GetNumRule()));
 
     // insert levels
     if (!m_xLevelLB->n_children())

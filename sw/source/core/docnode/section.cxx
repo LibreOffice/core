@@ -422,31 +422,28 @@ void SwSection::Notify(SfxHint const& rHint)
         {
             SfxItemSet* pNewSet = const_cast<SwAttrSetChg*>(static_cast<const SwAttrSetChg*>(pNew))->GetChgSet();
             SfxItemSet* pOldSet = const_cast<SwAttrSetChg*>(static_cast<const SwAttrSetChg*>(pOld))->GetChgSet();
-            const SfxPoolItem* pItem;
 
-            if( SfxItemState::SET == pNewSet->GetItemState(
-                        RES_PROTECT, false, &pItem ) )
+            if( const SvxProtectItem* pItem = pNewSet->GetItemIfSet(
+                        RES_PROTECT, false ) )
             {
-                m_Data.SetProtectFlag( static_cast<SvxProtectItem const*>(pItem)
-                        ->IsContentProtected() );
+                m_Data.SetProtectFlag( pItem->IsContentProtected() );
                 pNewSet->ClearItem( RES_PROTECT );
                 pOldSet->ClearItem( RES_PROTECT );
             }
 
             // --> edit in readonly sections
-            if( SfxItemState::SET == pNewSet->GetItemState(
-                        RES_EDIT_IN_READONLY, false, &pItem ) )
+            if( const SwFormatEditInReadonly* pItem = pNewSet->GetItemIfSet(
+                        RES_EDIT_IN_READONLY, false ) )
             {
-                m_Data.SetEditInReadonlyFlag(
-                    static_cast<SwFormatEditInReadonly const*>(pItem)->GetValue());
+                m_Data.SetEditInReadonlyFlag(pItem->GetValue());
                 pNewSet->ClearItem( RES_EDIT_IN_READONLY );
                 pOldSet->ClearItem( RES_EDIT_IN_READONLY );
             }
 
             if( SfxItemState::SET == pNewSet->GetItemState(
-                        RES_FTN_AT_TXTEND, false, &pItem ) ||
+                        RES_FTN_AT_TXTEND, false ) ||
                 SfxItemState::SET == pNewSet->GetItemState(
-                        RES_END_AT_TXTEND, false, &pItem ))
+                        RES_END_AT_TXTEND, false ))
             {
                     bUpdateFootnote = true;
             }
@@ -1221,11 +1218,9 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                 if( xDocSh->GetMedium() &&
                     rSection.GetLinkFilePassword().isEmpty() )
                 {
-                    const SfxPoolItem* pItem;
-                    if( SfxItemState::SET == xDocSh->GetMedium()->GetItemSet()->
-                        GetItemState( SID_PASSWORD, false, &pItem ) )
-                        rSection.SetLinkFilePassword(
-                                static_cast<const SfxStringItem*>(pItem)->GetValue() );
+                    if( const SfxStringItem* pItem = xDocSh->GetMedium()->GetItemSet()->
+                        GetItemIfSet( SID_PASSWORD, false ) )
+                        rSection.SetLinkFilePassword( pItem->GetValue() );
                 }
 
                 SwDoc* pSrcDoc = static_cast<SwDocShell*>( xDocSh.get() )->GetDoc();

@@ -977,21 +977,21 @@ void SwView::Execute(SfxRequest &rReq)
 
                 if( pArgs )
                 {
-                    if( SfxItemState::SET == pArgs->GetItemState( SID_FILE_NAME, false, &pItem ))
-                        sFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    if( const SfxStringItem* pFileItem = pArgs->GetItemIfSet( SID_FILE_NAME, false ))
+                        sFileName = pFileItem->GetValue();
                     bHasFileName = !sFileName.isEmpty();
 
-                    if( SfxItemState::SET == pArgs->GetItemState( SID_FILTER_NAME, false, &pItem ))
-                        sFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    if( const SfxStringItem* pFilterNameItem = pArgs->GetItemIfSet( SID_FILTER_NAME, false ))
+                        sFilterName = pFilterNameItem->GetValue();
 
-                    if( SfxItemState::SET == pArgs->GetItemState( SID_VERSION, false, &pItem ))
+                    if( const SfxInt16Item* pVersionItem = pArgs->GetItemIfSet( SID_VERSION, false ))
                     {
-                        nVersion = static_cast<const SfxInt16Item *>(pItem)->GetValue();
+                        nVersion = pVersionItem->GetValue();
                         m_pViewImpl->SetParam( nVersion );
                     }
-                    if( SfxItemState::SET == pArgs->GetItemState( SID_NO_ACCEPT_DIALOG, false, &pItem ))
+                    if( const SfxBoolItem* pDialogItem = pArgs->GetItemIfSet( SID_NO_ACCEPT_DIALOG, false ))
                     {
-                        bNoAcceptDialog = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+                        bNoAcceptDialog = pDialogItem->GetValue();
                     }
                 }
 
@@ -1217,21 +1217,25 @@ void SwView::Execute(SfxRequest &rReq)
 
         case SID_ATTR_DEFTABSTOP:
         {
-            if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
+            const SfxUInt16Item* pTabStopItem = nullptr;
+            if(pArgs && (pTabStopItem = pArgs->GetItemIfSet(SID_ATTR_DEFTABSTOP, false)))
             {
                 SvxTabStopItem aDefTabs( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
-                const sal_uInt16 nTab = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                const sal_uInt16 nTab = pTabStopItem->GetValue();
                 MakeDefTabs( nTab, aDefTabs );
                 m_pWrtShell->SetDefault( aDefTabs );
             }
         }
         break;
         case SID_ATTR_LANGUAGE  :
-        if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LANGUAGE, false, &pItem))
         {
-            SvxLanguageItem aLang(static_cast<const SvxLanguageItem*>(pItem)->GetLanguage(), RES_CHRATR_LANGUAGE);
-            m_pWrtShell->SetDefault( aLang );
-            lcl_SetAllTextToDefaultLanguage( *m_pWrtShell, RES_CHRATR_LANGUAGE );
+            const SvxLanguageItem* pLangItem;
+            if(pArgs && (pLangItem = pArgs->GetItemIfSet(SID_ATTR_LANGUAGE, false)))
+            {
+                SvxLanguageItem aLang(pLangItem->GetLanguage(), RES_CHRATR_LANGUAGE);
+                m_pWrtShell->SetDefault( aLang );
+                lcl_SetAllTextToDefaultLanguage( *m_pWrtShell, RES_CHRATR_LANGUAGE );
+            }
         }
         break;
         case  SID_ATTR_CHAR_CTL_LANGUAGE:
@@ -1958,22 +1962,23 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                         pSet = pDlg->GetOutputItemSet();
                 }
 
-                const SfxPoolItem* pViewLayoutItem = nullptr;
-                if ( pSet && SfxItemState::SET == pSet->GetItemState(SID_ATTR_VIEWLAYOUT, true, &pViewLayoutItem))
+                const SvxViewLayoutItem* pViewLayoutItem = nullptr;
+                if ( pSet && (pViewLayoutItem = pSet->GetItemIfSet(SID_ATTR_VIEWLAYOUT)))
                 {
-                    const sal_uInt16 nColumns = static_cast<const SvxViewLayoutItem *>(pViewLayoutItem)->GetValue();
-                    const bool bBookMode  = static_cast<const SvxViewLayoutItem *>(pViewLayoutItem)->IsBookMode();
+                    const sal_uInt16 nColumns = pViewLayoutItem->GetValue();
+                    const bool bBookMode  = pViewLayoutItem->IsBookMode();
                     SetViewLayout( nColumns, bBookMode );
                 }
 
-                if ( pSet && SfxItemState::SET == pSet->GetItemState(SID_ATTR_ZOOM, true, &pItem))
+                const SvxZoomItem* pZoomItem = nullptr;
+                if ( pSet && (pZoomItem = pSet->GetItemIfSet(SID_ATTR_ZOOM)))
                 {
-                    SvxZoomType eType = static_cast<const SvxZoomItem *>(pItem)->GetType();
-                    SetZoom( eType, static_cast<const SvxZoomItem *>(pItem)->GetValue() );
+                    SvxZoomType eType = pZoomItem->GetType();
+                    SetZoom( eType, pZoomItem->GetValue() );
                 }
                 bUp = true;
-                if ( pItem )
-                    rReq.AppendItem( *pItem );
+                if ( pZoomItem )
+                    rReq.AppendItem( *pZoomItem );
                 rReq.Done();
             }
         }
@@ -1984,11 +1989,10 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             if ( pArgs && !rSh.getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE) &&
                 ( ( GetDocShell()->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ) || !GetDocShell()->IsInPlaceActive() ) )
             {
-                if ( SfxItemState::SET == pArgs->GetItemState(SID_ATTR_VIEWLAYOUT, true, &pItem ))
+                if ( const SvxViewLayoutItem* pLayoutItem = pArgs->GetItemIfSet(SID_ATTR_VIEWLAYOUT ))
                 {
-                    const sal_uInt16 nColumns = static_cast<const SvxViewLayoutItem *>(pItem)->GetValue();
-                    const bool bBookMode  = (0 != nColumns && 0 == (nColumns % 2)) &&
-                                            static_cast<const SvxViewLayoutItem *>(pItem)->IsBookMode();
+                    const sal_uInt16 nColumns = pLayoutItem->GetValue();
+                    const bool bBookMode  = (0 != nColumns && 0 == (nColumns % 2)) && pLayoutItem->IsBookMode();
 
                     SetViewLayout( nColumns, bBookMode );
                 }
@@ -2005,9 +2009,9 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         {
             if ( pArgs && ( ( GetDocShell()->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ) || !GetDocShell()->IsInPlaceActive() ) )
             {
-                if ( SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ))
+                if ( const SvxZoomSliderItem* pZoomItem = pArgs->GetItemIfSet(SID_ATTR_ZOOMSLIDER) )
                 {
-                    const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem *>(pItem)->GetValue();
+                    const sal_uInt16 nCurrentZoom = pZoomItem->GetValue();
                     SetZoom( SvxZoomType::PERCENT, nCurrentZoom );
                 }
 
@@ -2385,11 +2389,10 @@ static size_t lcl_PageDescWithHeader( const SwDoc& rDoc )
     {
         const SwPageDesc& rPageDesc = rDoc.GetPageDesc( i );
         const SwFrameFormat& rMaster = rPageDesc.GetMaster();
-        const SfxPoolItem* pItem;
-        if( ( SfxItemState::SET == rMaster.GetAttrSet().GetItemState( RES_HEADER, false, &pItem ) &&
-              static_cast<const SwFormatHeader*>(pItem)->IsActive() ) ||
-            ( SfxItemState::SET == rMaster.GetAttrSet().GetItemState( RES_FOOTER, false, &pItem )  &&
-              static_cast<const SwFormatFooter*>(pItem)->IsActive()) )
+        const SwFormatHeader* pHeaderItem = rMaster.GetAttrSet().GetItemIfSet( RES_HEADER, false );
+        const SwFormatFooter* pFooterItem = rMaster.GetAttrSet().GetItemIfSet( RES_FOOTER, false );
+        if( (pHeaderItem && pHeaderItem->IsActive()) ||
+            (pFooterItem && pFooterItem->IsActive()) )
             ++nRet;
     }
     return nRet; // number of page styles with active header/footer

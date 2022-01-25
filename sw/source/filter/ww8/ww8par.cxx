@@ -974,9 +974,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             SfxItemSet aSet( pSdrModel->GetItemPool() );
             ApplyAttributes( rSt, aSet, rObjData );
 
-            const SfxPoolItem* pPoolItem=nullptr;
-            SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR,
-                                                     false, &pPoolItem );
+            SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR, false );
             if( SfxItemState::DEFAULT == eState )
                 aSet.Put( XFillColorItem( OUString(), mnDefaultColor ) );
             pObj->SetMergedItemSet(aSet);
@@ -1662,12 +1660,12 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     std::unordered_set<size_t> aLoopWatch;
     while (pSty && !bFound)
     {
-        const SfxPoolItem* pTabs;
+        const SvxTabStopItem* pTabs;
         bFound = pSty->GetAttrSet().GetItemState(RES_PARATR_TABSTOP, false,
             &pTabs) == SfxItemState::SET;
         if( bFound )
         {
-            aAttr.reset(static_cast<SvxTabStopItem*>(pTabs->Clone()));
+            aAttr.reset(pTabs->Clone());
         }
         else
         {
@@ -5598,10 +5596,10 @@ namespace
         OUString aPassw;
 
         const SfxItemSet* pSet = rMedium.GetItemSet();
-        const SfxPoolItem *pPasswordItem;
+        const SfxStringItem *pPasswordItem;
 
-        if(pSet && SfxItemState::SET == pSet->GetItemState(SID_PASSWORD, true, &pPasswordItem))
-            aPassw = static_cast<const SfxStringItem *>(pPasswordItem)->GetValue();
+        if(pSet && (pPasswordItem = pSet->GetItemIfSet(SID_PASSWORD)))
+            aPassw = pPasswordItem->GetValue();
         else
         {
             try

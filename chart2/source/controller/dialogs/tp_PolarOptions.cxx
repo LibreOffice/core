@@ -71,7 +71,7 @@ void PolarOptionsTabPage::Reset(const SfxItemSet* rInAttrs)
 {
     const SfxPoolItem *pPoolItem = nullptr;
 
-    if (rInAttrs->GetItemState(SCHATTR_STARTING_ANGLE, true, &pPoolItem) == SfxItemState::SET)
+    if (const SdrAngleItem* pAngleItem = rInAttrs->GetItemIfSet(SCHATTR_STARTING_ANGLE))
     {
         Degree100 nTmp = static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
         m_xAngleDial->SetRotation( nTmp );
@@ -81,18 +81,20 @@ void PolarOptionsTabPage::Reset(const SfxItemSet* rInAttrs)
         m_xFL_StartingAngle->hide();
     }
     // tdf#108059 Hide clockwise orientation checkbox in OOXML-heavy environments it would be useless anyways
-    if (!officecfg::Office::Compatibility::View::ClockwisePieChartDirection::get() && rInAttrs->GetItemState(SCHATTR_CLOCKWISE, true, &pPoolItem) == SfxItemState::SET)
+    const SfxBoolItem* pClockWiseItem;
+    if (!officecfg::Office::Compatibility::View::ClockwisePieChartDirection::get() &&
+        (pClockWiseItem = rInAttrs->GetItemIfSet(SCHATTR_CLOCKWISE)))
     {
-        bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        bool bCheck = pClockWiseItem->GetValue();
         m_xCB_Clockwise->set_active(bCheck);
     }
     else
     {
         m_xCB_Clockwise->hide();
     }
-    if (rInAttrs->GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, true, &pPoolItem) == SfxItemState::SET)
+    if (const SfxBoolItem* pHiddenCellsItem = rInAttrs->GetItemIfSet(SCHATTR_INCLUDE_HIDDEN_CELLS))
     {
-        bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
+        bool bVal = pHiddenCellsItem->GetValue();
         m_xCB_IncludeHiddenCells->set_active(bVal);
     }
     else

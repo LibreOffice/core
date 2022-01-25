@@ -56,18 +56,17 @@ void ScTpPrintOptions::Reset( const SfxItemSet* rCoreSet )
 {
     ScPrintOptions aOptions;
 
-    const SfxPoolItem* pItem;
-    if(SfxItemState::SET == rCoreSet->GetItemState(SID_SCPRINTOPTIONS, false , &pItem))
-        aOptions = static_cast<const ScTpPrintItem*>(pItem)->GetPrintOptions();
+    if(const ScTpPrintItem* pItem = rCoreSet->GetItemIfSet(SID_SCPRINTOPTIONS, false))
+        aOptions = pItem->GetPrintOptions();
     else
     {
         // when called from print dialog and no options set, use configuration
         aOptions = SC_MOD()->GetPrintOptions();
     }
 
-    if ( SfxItemState::SET == rCoreSet->GetItemState( SID_PRINT_SELECTEDSHEET, false , &pItem ) )
+    if ( const SfxBoolItem* pItem = rCoreSet->GetItemIfSet( SID_PRINT_SELECTEDSHEET, false))
     {
-        bool bChecked = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+        bool bChecked = pItem->GetValue();
         m_xSelectedSheetsCB->set_active( bChecked );
     }
     else

@@ -289,8 +289,7 @@ std::unique_ptr<SfxTabPage> SvxAngleTabPage::Create(weld::Container* pPage, weld
 
 void SvxAngleTabPage::ActivatePage(const SfxItemSet& rSet)
 {
-    SfxBoolItem const * bPosProtect = nullptr;
-    if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_TRANSFORM_PROTECT_POS, false, reinterpret_cast<SfxPoolItem const **>(&bPosProtect) ))
+    if(SfxBoolItem const * bPosProtect = rSet.GetItemIfSet( SID_ATTR_TRANSFORM_PROTECT_POS, false ))
     {
         m_xFlPosition->set_sensitive(!bPosProtect->GetValue());
         m_xFlAngle->set_sensitive(!bPosProtect->GetValue());
@@ -689,13 +688,11 @@ std::unique_ptr<SfxTabPage> SvxSlantTabPage::Create(weld::Container* pPage, weld
 
 void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    SfxBoolItem const * bPosProtect = nullptr;
-    if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_TRANSFORM_PROTECT_POS, false, reinterpret_cast<SfxPoolItem const **>(&bPosProtect) ))
+    if(SfxBoolItem const * bPosProtect = rSet.GetItemIfSet( SID_ATTR_TRANSFORM_PROTECT_POS, false ))
     {
         m_xFlAngle->set_sensitive(!bPosProtect->GetValue());
     }
-    SfxBoolItem const * bSizeProtect = nullptr;
-    if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_TRANSFORM_PROTECT_SIZE, false, reinterpret_cast<SfxPoolItem const **>(&bSizeProtect) ))
+    if(SfxBoolItem const * bSizeProtect = rSet.GetItemIfSet( SID_ATTR_TRANSFORM_PROTECT_SIZE, false ))
     {
         m_xFlAngle->set_sensitive(!bSizeProtect->GetValue());
     }
@@ -1105,9 +1102,7 @@ std::unique_ptr<SfxTabPage> SvxPositionSizeTabPage::Create(weld::Container* pPag
 
 void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    SfxRectangleItem const * pRectItem = nullptr;
-
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_TRANSFORM_INTERN, false, reinterpret_cast<SfxPoolItem const **>(&pRectItem) ) )
+    if( SfxRectangleItem const * pRectItem = rSet.GetItemIfSet( SID_ATTR_TRANSFORM_INTERN, false ) )
     {
         { // #i75273#
             const ::tools::Rectangle aTempRect(pRectItem->GetValue());

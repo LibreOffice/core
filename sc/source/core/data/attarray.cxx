@@ -299,11 +299,9 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
             GetPatternRange( nPatternStartRow, nPatternEndRow, nTempStartRow );
 
             nTempEndRow = std::min<SCROW>( nPatternEndRow, nEndRow );
-            const SfxPoolItem* pItem = nullptr;
-            pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pItem );
-            if(pItem)
+            if (const ScCondFormatItem* pItem = pPattern->GetItemSet().GetItemIfSet( ATTR_CONDITIONAL ))
             {
-                ScCondFormatIndexes const & rCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
+                ScCondFormatIndexes const & rCondFormatData = pItem->GetCondFormatData();
                 if (rCondFormatData.find(nIndex) == rCondFormatData.end())
                 {
                     ScCondFormatIndexes aNewCondFormatData;
@@ -357,9 +355,7 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
             GetPatternRange( nPatternStartRow, nPatternEndRow, nTempStartRow );
 
             nTempEndRow = std::min<SCROW>( nPatternEndRow, nEndRow );
-            const SfxPoolItem* pItem = nullptr;
-            pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pItem );
-            if(pItem)
+            if (const ScCondFormatItem* pItem = pPattern->GetItemSet().GetItemIfSet( ATTR_CONDITIONAL ))
             {
                 auto pPatternAttr = std::make_unique<ScPatternAttr>( *pPattern );
                 if (nIndex == 0)
@@ -370,7 +366,7 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
                 }
                 else
                 {
-                    ScCondFormatIndexes const & rCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
+                    ScCondFormatIndexes const & rCondFormatData = pItem->GetCondFormatData();
                     auto itr = rCondFormatData.find(nIndex);
                     if(itr != rCondFormatData.end())
                     {
@@ -739,23 +735,20 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
     {
         const ScPatternAttr*    pOldPattern = mvData[nPos].pPattern;
         const SfxItemSet&       rOldSet = pOldPattern->GetItemSet();
-        const SfxPoolItem*      pBoxItem = nullptr;
-        SfxItemState            eState = rOldSet.GetItemState( ATTR_BORDER, true, &pBoxItem );
-        const SfxPoolItem*      pTLBRItem = nullptr;
-        SfxItemState            eTLBRState = rOldSet.GetItemState( ATTR_BORDER_TLBR, true, &pTLBRItem );
-        const SfxPoolItem*      pBLTRItem = nullptr;
-        SfxItemState            eBLTRState = rOldSet.GetItemState( ATTR_BORDER_BLTR, true, &pBLTRItem );
+        const SvxBoxItem*       pBoxItem = rOldSet.GetItemIfSet( ATTR_BORDER );
+        const SvxLineItem*      pTLBRItem = rOldSet.GetItemIfSet( ATTR_BORDER_TLBR );
+        const SvxLineItem*      pBLTRItem = rOldSet.GetItemIfSet( ATTR_BORDER_BLTR );
 
-        if ( (SfxItemState::SET == eState) || (SfxItemState::SET == eTLBRState) || (SfxItemState::SET == eBLTRState) )
+        if ( pBoxItem || pTLBRItem || pBLTRItem )
         {
             std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pOldPattern));
             SfxItemSet&     rNewSet = pNewPattern->GetItemSet();
             SCROW           nY1 = nStart;
             SCROW           nY2 = mvData[nPos].nEndRow;
 
-            std::unique_ptr<SvxBoxItem>  pNewBoxItem( pBoxItem ? static_cast<SvxBoxItem*>(pBoxItem->Clone()) : nullptr);
-            std::unique_ptr<SvxLineItem> pNewTLBRItem( pTLBRItem ? static_cast<SvxLineItem*>(pTLBRItem->Clone()) : nullptr);
-            std::unique_ptr<SvxLineItem> pNewBLTRItem(pBLTRItem ? static_cast<SvxLineItem*>(pBLTRItem->Clone()) : nullptr);
+            std::unique_ptr<SvxBoxItem>  pNewBoxItem( pBoxItem ? pBoxItem->Clone() : nullptr);
+            std::unique_ptr<SvxLineItem> pNewTLBRItem( pTLBRItem ? pTLBRItem->Clone() : nullptr);
+            std::unique_ptr<SvxLineItem> pNewBLTRItem(pBLTRItem ? pBLTRItem->Clone() : nullptr);
 
             // fetch line and update attributes with parameters
 
@@ -1326,10 +1319,9 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
             {
                 const SfxItemSet* pSet = rDocument.GetCondResult( nCol, nRowCond, nTab );
 
-                const SfxPoolItem* pItem;
-                if( pSet && pSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SfxItemState::SET )
+                const ScProtectionAttr* pCondProtect;
+                if( pSet && (pCondProtect = pSet->GetItemIfSet( ATTR_PROTECTION )) )
                 {
-                    const ScProtectionAttr* pCondProtect = static_cast<const ScProtectionAttr*>(pItem);
                     if( pCondProtect->GetProtection() || pCondProtect->GetHideCell() )
                         bFoundCond = true;
                     else
@@ -1717,11 +1709,11 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
     {
         const ScPatternAttr* pOldPattern = mvData[nIndex].pPattern;
         const SfxItemSet& rOldSet = pOldPattern->GetItemSet();
-        const SfxPoolItem* pItem;
+        const SvxHorJustifyItem* pItem;
 
-        bool bNeedJust = ( rOldSet.GetItemState( ATTR_HOR_JUSTIFY, false, &pItem ) != SfxItemState::SET
-                           || (static_cast<const SvxHorJustifyItem*>(pItem)->GetValue() != SvxCellHorJustify::Left &&
-                               static_cast<const SvxHorJustifyItem*>(pItem)->GetValue() != SvxCellHorJustify::Right ));
+        bool bNeedJust = !( pItem = rOldSet.GetItemIfSet( ATTR_HOR_JUSTIFY, false ) )
+                           || (pItem->GetValue() != SvxCellHorJustify::Left &&
+                               pItem->GetValue() != SvxCellHorJustify::Right );
         sal_uInt16 nOldValue = rOldSet.Get( ATTR_INDENT ).GetValue();
         sal_uInt16 nNewValue = nOldValue;
         // To keep Increment indent from running outside the cell1659

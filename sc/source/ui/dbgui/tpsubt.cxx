@@ -45,7 +45,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogControl
     , pViewData(nullptr)
     , pDoc(nullptr)
     , nWhichSubTotals(rArgSet.GetPool()->GetWhich(SID_SUBTOTALS))
-    , rSubTotalData(static_cast<const ScSubTotalItem&>(rArgSet.Get(nWhichSubTotals)).GetSubTotalData())
+    , rSubTotalData(rArgSet.Get(nWhichSubTotals).GetSubTotalData())
     , nFieldCount(0)
     , mxLbGroup(m_xBuilder->weld_combo_box("group_by"))
     , mxLbColumns(m_xBuilder->weld_tree_view("columns"))
@@ -74,8 +74,7 @@ ScTpSubTotalGroup::~ScTpSubTotalGroup()
 
 void ScTpSubTotalGroup::Init()
 {
-    const ScSubTotalItem& rSubTotalItem = static_cast<const ScSubTotalItem&>(
-                                          GetItemSet().Get( nWhichSubTotals ));
+    const ScSubTotalItem& rSubTotalItem = GetItemSet().Get( nWhichSubTotals );
 
     pViewData = rSubTotalItem.GetViewData();
     assert(pViewData && "CreateScSubTotalDlg aArgSet must contain a ScSubTotalItem with ViewData set");
@@ -129,9 +128,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
     }
     mxLbFunctions->select(0);
 
-    ScSubTotalParam theSubTotalData( static_cast<const ScSubTotalItem&>(
-                                      rArgSet.Get( nWhichSubTotals )).
-                                            GetSubTotalData() );
+    const ScSubTotalParam & theSubTotalData( rArgSet.Get( nWhichSubTotals ).GetSubTotalData() );
 
     if ( theSubTotalData.bGroupActive[nGroupIdx] )
     {
@@ -195,9 +192,8 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     const SfxItemSet* pExample = GetDialogExampleSet();
     if (pExample)
     {
-        const SfxPoolItem* pItem;
-        if (pExample->GetItemState(nWhichSubTotals, true, &pItem) == SfxItemState::SET)
-            theSubTotalData = static_cast<const ScSubTotalItem*>(pItem)->GetSubTotalData();
+        if (const ScSubTotalItem* pItem = pExample->GetItemIfSet(nWhichSubTotals))
+            theSubTotalData = pItem->GetSubTotalData();
     }
 
     std::unique_ptr<ScSubTotalFunc[]> pFunctions;
@@ -444,9 +440,7 @@ ScTpSubTotalOptions::ScTpSubTotalOptions(weld::Container* pPage, weld::DialogCon
             pViewData       ( nullptr ),
             pDoc            ( nullptr ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
-            rSubTotalData   ( static_cast<const ScSubTotalItem&>(
-                              rArgSet.Get( nWhichSubTotals )).
-                                GetSubTotalData() )
+            rSubTotalData   ( rArgSet.Get( nWhichSubTotals ).GetSubTotalData() )
     , m_xBtnPagebreak(m_xBuilder->weld_check_button("pagebreak"))
     , m_xBtnCase(m_xBuilder->weld_check_button("case"))
     , m_xBtnSort(m_xBuilder->weld_check_button("sort"))
@@ -466,8 +460,7 @@ ScTpSubTotalOptions::~ScTpSubTotalOptions()
 
 void ScTpSubTotalOptions::Init()
 {
-    const ScSubTotalItem& rSubTotalItem = static_cast<const ScSubTotalItem&>(
-                                          GetItemSet().Get( nWhichSubTotals ));
+    const ScSubTotalItem& rSubTotalItem = GetItemSet().Get( nWhichSubTotals );
 
     pViewData   = rSubTotalItem.GetViewData();
     assert(pViewData && "CreateScSubTotalDlg aArgSet must contain a ScSubTotalItem with ViewData set");
@@ -517,9 +510,8 @@ bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
     const SfxItemSet* pExample = GetDialogExampleSet();
     if (pExample)
     {
-        const SfxPoolItem* pItem;
-        if (pExample->GetItemState(nWhichSubTotals, true, &pItem) == SfxItemState::SET)
-            theSubTotalData = static_cast<const ScSubTotalItem*>(pItem)->GetSubTotalData();
+        if (const ScSubTotalItem* pItem = pExample->GetItemIfSet(nWhichSubTotals))
+            theSubTotalData = pItem->GetSubTotalData();
     }
 
     theSubTotalData.bPagebreak      = m_xBtnPagebreak->get_active();

@@ -138,13 +138,16 @@ void SetLineSpace_Impl( SvxLineSpacingItem& rLineSpace,
 static sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
 {
     sal_uInt16 nHtmlMode = 0;
-    const SfxPoolItem* pItem = nullptr;
-    SfxObjectShell* pShell;
-    if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
-        ( nullptr != (pShell = SfxObjectShell::Current()) &&
-                    nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
+    const SfxUInt16Item* pItem = rSet.GetItemIfSet(SID_HTML_MODE, false);
+    if (!pItem)
     {
-        nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        SfxObjectShell* pShell = SfxObjectShell::Current();
+        if (pShell)
+            pItem = pShell->GetItem(SID_HTML_MODE);
+    }
+    if(pItem)
+    {
+        nHtmlMode = pItem->GetValue();
     }
     return nHtmlMode;
 
@@ -1626,8 +1629,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         {
             aApplyCollState.bTriStateEnabled = false;
 
-            const SvxPageModelItem& rModel =
-                static_cast<const SvxPageModelItem&>(rSet->Get( SID_ATTR_PARA_MODEL ));
+            const SvxPageModelItem& rModel = rSet->Get( SID_ATTR_PARA_MODEL );
             const OUString& aStr( rModel.GetValue() );
 
             if (!aStr.isEmpty() && m_xApplyCollBox->find_text(aStr) != -1)

@@ -113,6 +113,7 @@
 
 #include <ccoll.hxx>
 #include <hints.hxx>
+#include <uiitems.hxx>
 
 #include <cassert>
 #include <memory>
@@ -613,17 +614,17 @@ static bool lcl_GetHeaderFooterItem(
         SfxItemSet const& rSet, std::u16string_view rPropName, bool const bFooter,
         SvxSetItem const*& o_rpItem)
 {
-    SfxItemState eState = rSet.GetItemState(
+    o_rpItem = rSet.GetItemIfSet(
         bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-        false, reinterpret_cast<const SfxPoolItem**>(&o_rpItem));
-    if (SfxItemState::SET != eState &&
+        false);
+    if (!o_rpItem &&
         rPropName == u"" UNO_NAME_FIRST_IS_SHARED)
     {   // fdo#79269 header may not exist, check footer then
-        eState = rSet.GetItemState(
+        o_rpItem = rSet.GetItemIfSet(
             (!bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-            false, reinterpret_cast<const SfxPoolItem**>(&o_rpItem));
+            false);
     }
-    return SfxItemState::SET == eState;
+    return o_rpItem;
 }
 
 template<enum SfxStyleFamily>
@@ -1817,9 +1818,8 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAGEDESC)>(const SfxItemPropertyM
     // special handling for RES_PAGEDESC
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
     std::unique_ptr<SwFormatPageDesc> pNewDesc;
-    const SfxPoolItem* pItem;
-    if(SfxItemState::SET == rStyleSet.GetItemState(RES_PAGEDESC, true, &pItem))
-        pNewDesc.reset(new SwFormatPageDesc(*static_cast<const SwFormatPageDesc*>(pItem)));
+    if(const SwFormatPageDesc* pItem = rStyleSet.GetItemIfSet(RES_PAGEDESC))
+        pNewDesc.reset(new SwFormatPageDesc(*pItem));
     else
         pNewDesc.reset(new SwFormatPageDesc);
     const auto sValue(rValue.get<OUString>());
@@ -1942,9 +1942,8 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_TXTATR_CJK_RUBY)>(const SfxItemPr
     const auto sValue(rValue.get<OUString>());
     SfxItemSet& rStyleSet(o_rStyleBase.GetItemSet());
     std::unique_ptr<SwFormatRuby> pRuby;
-    const SfxPoolItem* pItem;
-    if(SfxItemState::SET == rStyleSet.GetItemState(RES_TXTATR_CJK_RUBY, true, &pItem))
-        pRuby.reset(new SwFormatRuby(*static_cast<const SwFormatRuby*>(pItem)));
+    if(const SwFormatRuby* pRubyItem = rStyleSet.GetItemIfSet(RES_TXTATR_CJK_RUBY))
+        pRuby.reset(new SwFormatRuby(*pRubyItem));
     else
         pRuby.reset(new SwFormatRuby(OUString()));
     OUString sStyle;
@@ -1971,9 +1970,8 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_DROP)>(const SfxItemProper
         throw lang::IllegalArgumentException();
     SfxItemSet& rStyleSet(o_rStyleBase.GetItemSet());
     std::unique_ptr<SwFormatDrop> pDrop;
-    const SfxPoolItem* pItem;
-    if(SfxItemState::SET == rStyleSet.GetItemState(RES_PARATR_DROP, true, &pItem))
-        pDrop.reset(new SwFormatDrop(*static_cast<const SwFormatDrop*>(pItem)));
+    if(const SwFormatDrop* pDropItem = rStyleSet.GetItemIfSet(RES_PARATR_DROP))
+        pDrop.reset(new SwFormatDrop(*pDropItem));
     else
         pDrop.reset(new SwFormatDrop);
     const auto sValue(rValue.get<OUString>());
@@ -2223,10 +2221,11 @@ uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAGEDESC)>(const SfxItemPrope
     if(MID_PAGEDESC_PAGEDESCNAME != rEntry.nMemberId)
         return GetStyleProperty<HINT_BEGIN>(rEntry, rPropSet, rBase);
     // special handling for RES_PAGEDESC
-    const SfxPoolItem* pItem;
-    if(SfxItemState::SET != rBase.GetItemSet().GetItemState(RES_PAGEDESC, true, &pItem))
+    const SwFormatPageDesc* pItem =
+        rBase.GetItemSet().GetItemIfSet(RES_PAGEDESC);
+    if(!pItem)
         return uno::Any();
-    const SwPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
+    const SwPageDesc* pDesc = pItem->GetPageDesc();
     if(!pDesc)
         return uno::Any();
     OUString aString;
@@ -2924,9 +2923,10 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                         if (pEntry->nWID == SID_ATTR_PAGE_SHARED_FIRST)
                         {
                             // Need to add this to the other as well
-                            if (SfxItemState::SET == aBaseImpl.GetItemSet().GetItemState(
+                            pSetItem = aBaseImpl.GetItemSet().GetItemIfSet(
                                         bFooter ? SID_ATTR_PAGE_HEADERSET : SID_ATTR_PAGE_FOOTERSET,
-                                        false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
+                                        false);
+                            if (pSetItem)
                             {
                                 PutItemToSet(pSetItem, *pPropSet, *pEntry, rValues[nProp], aBaseImpl);
                             }
@@ -2988,9 +2988,10 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                 if(bFirstIsShared) // only special handling for headers/footers here
                     break;
                 {
-                    const SvxSetItem* pSetItem = nullptr;
+                    const SvxSetItem* pSetItem =
+                        aBaseImpl.GetItemSet().GetItemIfSet(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false);
 
-                    if(SfxItemState::SET == aBaseImpl.GetItemSet().GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
+                    if(pSetItem)
                     {
                         // create a new SvxSetItem and get it's ItemSet as new target
                         std::unique_ptr<SvxSetItem> pNewSetItem(pSetItem->Clone());
@@ -3037,7 +3038,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                 throw lang::IllegalArgumentException();
             case FN_PARAM_FTN_INFO:
             {
-                const SfxPoolItem& rItem = aBaseImpl.GetItemSet().Get(FN_PARAM_FTN_INFO);
+                const SwPageFootnoteInfoItem& rItem = aBaseImpl.GetItemSet().Get(FN_PARAM_FTN_INFO);
                 std::unique_ptr<SfxPoolItem> pNewFootnoteItem(rItem.Clone());
                 if(!pNewFootnoteItem->PutValue(rValues[nProp], pEntry->nMemberId))
                     throw lang::IllegalArgumentException();
@@ -3203,8 +3204,9 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
                 {
                     rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
                     const SfxItemSet& rSet = xStyle->GetItemSet();
-                    const SvxSetItem* pSetItem;
-                    if(SfxItemState::SET == rSet.GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
+                    const SvxSetItem* pSetItem =
+                        rSet.GetItemIfSet(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false);
+                    if(pSetItem)
                     {
                         // set at SfxItemSet of the corresponding SfxSetItem
                         const SfxItemSet& rSetSet = pSetItem->GetItemSet();

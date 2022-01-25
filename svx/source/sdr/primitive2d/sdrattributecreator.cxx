@@ -423,12 +423,12 @@ namespace drawinglayer::primitive2d
                 if(100 != nTransparence)
                 {
                     // need to check XFillFloatTransparence, object fill may still be completely transparent
-                    const SfxPoolItem* pGradientItem;
+                    const XFillFloatTransparenceItem* pGradientItem;
 
-                    if(SfxItemState::SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem)
-                        && static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->IsEnabled())
+                    if((pGradientItem = rSet.GetItemIfSet(XATTR_FILLFLOATTRANSPARENCE, true))
+                        && pGradientItem->IsEnabled())
                     {
-                        const XGradient& rGradient = static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->GetGradientValue();
+                        const XGradient& rGradient = pGradientItem->GetGradientValue();
                         const sal_uInt8 nStartLuminance(rGradient.GetStartColor().GetLuminance());
                         const sal_uInt8 nEndLuminance(rGradient.GetEndColor().GetLuminance());
                         const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);
@@ -618,13 +618,13 @@ namespace drawinglayer::primitive2d
 
         attribute::FillGradientAttribute createNewTransparenceGradientAttribute(const SfxItemSet& rSet)
         {
-            const SfxPoolItem* pGradientItem;
+            const XFillFloatTransparenceItem* pGradientItem;
 
-            if(SfxItemState::SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem)
-                && static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->IsEnabled())
+            if((pGradientItem = rSet.GetItemIfSet(XATTR_FILLFLOATTRANSPARENCE))
+                && pGradientItem->IsEnabled())
             {
                 // test if float transparence is completely transparent
-                const XGradient& rGradient = static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->GetGradientValue();
+                const XGradient& rGradient = pGradientItem->GetGradientValue();
                 const sal_uInt8 nStartLuminance(rGradient.GetStartColor().GetLuminance());
                 const sal_uInt8 nEndLuminance(rGradient.GetEndColor().GetLuminance());
                 const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);

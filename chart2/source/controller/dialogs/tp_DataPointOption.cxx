@@ -53,12 +53,10 @@ bool DataPointOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 
 void DataPointOptionTabPage::Reset(const SfxItemSet* rInAttrs)
 {
-    const SfxPoolItem* pPoolItem = nullptr;
-
-    if (rInAttrs->GetItemState(SCHATTR_HIDE_DATA_POINT_LEGEND_ENTRY, true, &pPoolItem)
-        == SfxItemState::SET)
+    if (const SfxBoolItem* pEntryItem
+        = rInAttrs->GetItemIfSet(SCHATTR_HIDE_DATA_POINT_LEGEND_ENTRY))
     {
-        bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
+        bool bVal = pEntryItem->GetValue();
         m_xCBHideLegendEntry->set_active(bVal);
     }
 }

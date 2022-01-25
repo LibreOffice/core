@@ -421,19 +421,16 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
             is needed across various functions... */
     mbUseMarginItem = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_MARGIN)) != SfxItemState::UNKNOWN;
 
-    const SfxPoolItem* pItem = nullptr;
-    if (rCoreAttrs.HasItem(SID_ATTR_BORDER_STYLES, &pItem))
+    if (const SfxIntegerListItem* p = rCoreAttrs.GetItemIfSet(SID_ATTR_BORDER_STYLES))
     {
-        const SfxIntegerListItem* p = static_cast<const SfxIntegerListItem*>(pItem);
         std::vector<sal_Int32> aUsedStyles = p->GetList();
         for (int aUsedStyle : aUsedStyles)
             maUsedBorderStyles.insert(static_cast<SvxBorderLineStyle>(aUsedStyle));
     }
 
-    if (rCoreAttrs.HasItem(SID_ATTR_BORDER_DEFAULT_WIDTH, &pItem))
+    if (const SfxInt64Item* p = rCoreAttrs.GetItemIfSet(SID_ATTR_BORDER_DEFAULT_WIDTH))
     {
         // The caller specifies default line width.  Honor it.
-        const SfxInt64Item* p = static_cast<const SfxInt64Item*>(pItem);
         SetLineWidth(p->GetValue());
     }
 
@@ -546,6 +543,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     SetLineWidth(m_xLineWidthMF->get_value(FieldUnit::NONE));
 
     // connections
+    const SfxPoolItem* pItem = nullptr;
     if (rCoreAttrs.HasItem(GetWhich(SID_ATTR_PARA_GRABBAG), &pItem))
     {
         const SfxGrabBagItem* pGrabBag = static_cast<const SfxGrabBagItem*>(pItem);
@@ -845,13 +843,15 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
         SelStyleHdl_Impl(*m_xLbLineStyle);
     }
 
-    const SfxPoolItem* pItem;
-    SfxObjectShell* pShell;
-    if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem) ||
-        ( nullptr != (pShell = SfxObjectShell::Current()) &&
-                    nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
+    const SfxUInt16Item* pHtmlModeItem = rSet->GetItemIfSet(SID_HTML_MODE, false);
+    if(!pHtmlModeItem)
     {
-        sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        SfxObjectShell* pShell = SfxObjectShell::Current();
+        pHtmlModeItem = pShell->GetItem(SID_HTML_MODE);
+    }
+    if(pHtmlModeItem)
+    {
+        sal_uInt16 nHtmlMode = pHtmlModeItem->GetValue();
         if(nHtmlMode & HTMLMODE_ON)
         {
             // there are no shadows in Html-mode and only complete borders

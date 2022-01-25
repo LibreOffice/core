@@ -741,19 +741,20 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
             pOldAnchor.reset(new SwFormatAnchor( rAnch ));
             const_cast<SfxItemSet&>(rSet).Put( SwFormatAnchor( RndStdIds::FLY_AT_PAGE, 1 ) );
 
-            const SfxPoolItem* pItem;
-            if( SfxItemState::SET == rSet.GetItemState( RES_HORI_ORIENT, false, &pItem )
-                && text::HoriOrientation::NONE == static_cast<const SwFormatHoriOrient*>(pItem)->GetHoriOrient() )
+            const SwFormatHoriOrient* pHoriOrientItem;
+            if( (pHoriOrientItem = rSet.GetItemIfSet( RES_HORI_ORIENT, false ))
+                && text::HoriOrientation::NONE == pHoriOrientItem->GetHoriOrient() )
             {
                 bHOriChgd = true;
-                aOldH.reset(static_cast<SwFormatHoriOrient*>(pItem->Clone()));
+                aOldH.reset(pHoriOrientItem->Clone());
                 const_cast<SfxItemSet&>(rSet).Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT ) );
             }
-            if( SfxItemState::SET == rSet.GetItemState( RES_VERT_ORIENT, false, &pItem )
-                && text::VertOrientation::NONE == static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() )
+            const SwFormatVertOrient* pVertOrientItem;
+            if( (pVertOrientItem = rSet.GetItemIfSet( RES_VERT_ORIENT, false ))
+                && text::VertOrientation::NONE == pVertOrientItem->GetVertOrient() )
             {
                 bVOriChgd = true;
-                aOldV.reset(static_cast<SwFormatVertOrient*>(pItem->Clone()));
+                aOldV.reset(pVertOrientItem->Clone());
                 const_cast<SfxItemSet&>(rSet).Put( SwFormatVertOrient( 0, text::VertOrientation::TOP ) );
             }
         }
@@ -850,11 +851,9 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
         // Has the anchor not been set or been set incompletely?
         if( pFlyAttrSet )
         {
-            const SfxPoolItem* pItem;
-            if( SfxItemState::SET == pFlyAttrSet->GetItemState( RES_ANCHOR, false,
-                    &pItem ) )
+            if( const SwFormatAnchor* pItem = pFlyAttrSet->GetItemIfSet( RES_ANCHOR, false ) )
             {
-                SwFormatAnchor* pAnchor = const_cast<SwFormatAnchor*>(static_cast<const SwFormatAnchor*>(pItem));
+                SwFormatAnchor* pAnchor = const_cast<SwFormatAnchor*>(pItem);
                 switch( pAnchor->GetAnchorId())
                 {
                 case RndStdIds::FLY_AT_PARA:
@@ -1075,10 +1074,9 @@ bool SwFEShell::GetFlyFrameAttr( SfxItemSet &rSet ) const
 
     // now examine all attributes. Remove forbidden attributes, then
     // get all remaining attributes and enter them
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rSet.GetItemState( RES_ANCHOR, false, &pItem ) )
+
+    if( const SwFormatAnchor* pAnchor = rSet.GetItemIfSet( RES_ANCHOR, false ) )
     {
-        const SwFormatAnchor* pAnchor = static_cast<const SwFormatAnchor*>(pItem);
         RndStdIds eType = pAnchor->GetAnchorId();
 
         if ( RndStdIds::FLY_AT_PAGE != eType )

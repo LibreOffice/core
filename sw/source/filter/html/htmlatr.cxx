@@ -616,15 +616,10 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     }
 
     // should an ALIGN=... be written?
-    const SfxPoolItem* pAdjItem = nullptr;
-    const SfxPoolItem* pItem;
+    const SvxAdjustItem* pAdjItem = nullptr;
 
-    if( rInfo.moItemSet &&
-        SfxItemState::SET == rInfo.moItemSet->GetItemState( RES_PARATR_ADJUST,
-                                                      false, &pItem ) )
-    {
-        pAdjItem = pItem;
-    }
+    if( rInfo.moItemSet )
+        pAdjItem = rInfo.moItemSet->GetItemIfSet( RES_PARATR_ADJUST, false );
 
     // Consider the lower spacing of the paragraph? (never in the last
     // paragraph of tables)
@@ -672,8 +667,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         else if( !nNewDefListLvl && !rHWrt.m_bCfgOutStyles && bPara &&
                  rULSpace.GetLower()==0 &&
                  ((bUseParSpace && bIsNextTextNode) || rHWrt.m_nDefListLvl==1) &&
-                 (!pAdjItem || SvxAdjust::Left==
-                    static_cast<const SvxAdjustItem *>(pAdjItem)->GetAdjust()) )
+                 (!pAdjItem || SvxAdjust::Left==pAdjItem->GetAdjust()) )
         {
             // Export paragraphs without a lower spacing as DT
             nNewDefListLvl = 1;
@@ -819,15 +813,13 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
 
     if( rInfo.moItemSet )
     {
-        static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE };
+        static const TypedWhichId<SvxLanguageItem> aWhichIds[3] = { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE };
 
-        for(sal_uInt16 i : aWhichIds)
+        for(auto const & i : aWhichIds)
         {
             // export language if it differs from the default language only.
-            const SfxPoolItem *pTmpItem;
-            if( SfxItemState::SET == rInfo.moItemSet->GetItemState( i,
-                        true, &pTmpItem ) &&
-                static_cast<const SvxLanguageItem *>(pTmpItem)->GetLanguage() == eLang )
+            const SvxLanguageItem* pTmpItem = rInfo.moItemSet->GetItemIfSet( i );
+            if( pTmpItem && pTmpItem->GetLanguage() == eLang )
                 rInfo.moItemSet->ClearItem( i );
         }
     }
@@ -2039,11 +2031,10 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             aHtml.endAttribute();
             return rHTMLWrt;
         }
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == pItemSet->GetItemState( RES_LR_SPACE, false, &pItem ))
+        if( const SvxLRSpaceItem* pItem = pItemSet->GetItemIfSet( RES_LR_SPACE, false ))
         {
-            sal_Int32 nLeft = static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft();
-            sal_Int32 nRight = static_cast<const SvxLRSpaceItem*>(pItem)->GetRight();
+            sal_Int32 nLeft = pItem->GetLeft();
+            sal_Int32 nRight = pItem->GetRight();
             if( nLeft || nRight )
             {
                 const SwFrameFormat& rPgFormat =
@@ -2079,9 +2070,8 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             }
         }
 
-        if( SfxItemState::SET == pItemSet->GetItemState( RES_BOX, false, &pItem ))
+        if( const SvxBoxItem* pBoxItem = pItemSet->GetItemIfSet( RES_BOX, false ))
         {
-            const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
             const editeng::SvxBorderLine* pBorderLine = pBoxItem->GetBottom();
             if( pBorderLine )
             {
@@ -2113,11 +2103,11 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                   nPoolId == RES_POOLCOLL_TABLE_HDLN) )
     {
         // The current node is empty and contains the standard style ...
-        const SfxPoolItem* pItem;
+        const SvxFontHeightItem* pFontHeightItem;
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
         if( pItemSet && pItemSet->Count() &&
-            SfxItemState::SET == pItemSet->GetItemState( RES_CHRATR_FONTSIZE, false, &pItem ) &&
-            40 == static_cast<const SvxFontHeightItem *>(pItem)->GetHeight() )
+            (pFontHeightItem = pItemSet->GetItemIfSet( RES_CHRATR_FONTSIZE, false )) &&
+            40 == pFontHeightItem->GetHeight() )
         {
             // ... moreover, the 2pt font is set ...
             SwNodeOffset nNdPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex();
@@ -2150,19 +2140,18 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         rHTMLWrt.m_pStartNdIdx->GetIndex() != rHTMLWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() )
     {
         bool bPageBreakBefore = false;
-        const SfxPoolItem* pItem;
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
 
         if( pItemSet )
         {
-            if( SfxItemState::SET == pItemSet->GetItemState( RES_PAGEDESC, true, &pItem ) &&
-                static_cast<const SwFormatPageDesc *>(pItem)->GetPageDesc() )
+            const SwFormatPageDesc* pPageDescItem = pItemSet->GetItemIfSet( RES_PAGEDESC );
+            if( pPageDescItem && pPageDescItem->GetPageDesc() )
             {
                 bPageBreakBefore = true;
             }
-            else if( SfxItemState::SET == pItemSet->GetItemState( RES_BREAK, true, &pItem ) )
+            else if( const SvxFormatBreakItem* pItem = pItemSet->GetItemIfSet( RES_BREAK ) )
             {
-                switch( static_cast<const SvxFormatBreakItem *>(pItem)->GetBreak() )
+                switch( pItem->GetBreak() )
                 {
                 case SvxBreak::PageBefore:
                     bPageBreakBefore = true;
