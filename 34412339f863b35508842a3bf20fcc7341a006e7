@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "945f000d_1e84e741",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-25T05:59:12Z",
+      "side": 1,
+      "message": "I\u0027m afraid this can\u0027t be true :-)\n\nThe change makes lcl_ScInterpreter_IsPrintable treat UTF-16 code units a bit differently; but it has nothing to do with the CLEAN definition in ODF [1]:\n\n\u003e Evaluators should remove each particular character from the string, if and only if the character belongs to [UNICODE] class Cc (Other - Control), or to Unicode class Cn (Other - Not Assigned).\n\nThe definition (1) relates to Unicode characters (not UTF-16 code units), and (2) talk about two classes (and only one of them - Cc - is covered by the patch).\n\nCn is defined to cover (a) noncharacters (66), and (b) reserved (~830 000). I suppose that the only correct way would be to iterate code points (to handle non-BMP characters), and consult ICU for their classes.\n\n[1] https://docs.oasis-open.org/office/OpenDocument/v1.3/OpenDocument-v1.3-part4-formula.html#CLEAN",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "34412339f863b35508842a3bf20fcc7341a006e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
