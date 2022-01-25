@@ -19,6 +19,7 @@
 
 #include <ShapeFactory.hxx>
 #include <VDiagram.hxx>
+#include <Diagram.hxx>
 #include <PropertyMapper.hxx>
 #include <ViewDefines.hxx>
 #include <Stripe.hxx>
@@ -41,7 +42,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 VDiagram::VDiagram(
-    const uno::Reference<XDiagram> & xDiagram, const drawing::Direction3D& rPreferredAspectRatio,
+    const rtl::Reference<Diagram> & xDiagram, const drawing::Direction3D& rPreferredAspectRatio,
     sal_Int32 nDimension )
     : m_nDimensionCount(nDimension)
     , m_xDiagram(xDiagram)
@@ -54,13 +55,12 @@ VDiagram::VDiagram(
     if( m_nDimensionCount != 3)
         return;
 
-    uno::Reference< beans::XPropertySet > xSourceProp( m_xDiagram, uno::UNO_QUERY );
-    ThreeDHelper::getRotationAngleFromDiagram( xSourceProp, m_fXAnglePi, m_fYAnglePi, m_fZAnglePi );
+    ThreeDHelper::getRotationAngleFromDiagram( xDiagram, m_fXAnglePi, m_fYAnglePi, m_fZAnglePi );
     if( ChartTypeHelper::isSupportingRightAngledAxes(
             DiagramHelper::getChartTypeByIndex( m_xDiagram, 0 ) ) )
     {
-        if(xSourceProp.is())
-            xSourceProp->getPropertyValue("RightAngledAxes") >>= m_bRightAngledAxes;
+        if(xDiagram.is())
+            xDiagram->getPropertyValue("RightAngledAxes") >>= m_bRightAngledAxes;
         if( m_bRightAngledAxes )
         {
             ThreeDHelper::adaptRadAnglesForRightAngledAxes( m_fXAnglePi, m_fYAnglePi );
@@ -458,8 +458,8 @@ void VDiagram::createShapes_3d()
             aWallCID.clear();
         rtl::Reference<Svx3DSceneObject> xWallGroup_Shapes = ShapeFactory::createGroup3D( xOuterGroup_Shapes, aWallCID );
 
-        CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
-        CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
+        CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( m_xDiagram ) );
+        CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( m_xDiagram ) );
 
         //add left wall
         {
@@ -521,27 +521,25 @@ void VDiagram::createShapes_3d()
 
     try
     {
-        uno::Reference< beans::XPropertySet > xSourceProp( m_xDiagram, uno::UNO_QUERY_THROW );
-
         //perspective
         {
             //ignore distance and focal length from file format and model completely
             //use vrp only to indicate the distance of the camera and thus influence the perspective
             m_xOuterGroupShape->setPropertyValue( UNO_NAME_3D_SCENE_DISTANCE, uno::Any(
-                                        static_cast<sal_Int32>(ThreeDHelper::getCameraDistance( xSourceProp ))));
+                                        static_cast<sal_Int32>(ThreeDHelper::getCameraDistance( m_xDiagram ))));
             m_xOuterGroupShape->setPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE,
-                                        xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE));
+                                        m_xDiagram->getPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE));
         }
 
         //light
         {
             m_xOuterGroupShape->setPropertyValue( UNO_NAME_3D_SCENE_SHADE_MODE,
-                                        xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_SHADE_MODE));
+                                        m_xDiagram->getPropertyValue( UNO_NAME_3D_SCENE_SHADE_MODE));
             m_xOuterGroupShape->setPropertyValue( UNO_NAME_3D_SCENE_AMBIENTCOLOR,
-                                        xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_AMBIENTCOLOR));
+                                        m_xDiagram->getPropertyValue( UNO_NAME_3D_SCENE_AMBIENTCOLOR));
             m_xOuterGroupShape->setPropertyValue( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING,
-                                        xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING));
-            lcl_setLightSources( xSourceProp, m_xOuterGroupShape );
+                                        m_xDiagram->getPropertyValue( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING));
+            lcl_setLightSources( m_xDiagram, m_xOuterGroupShape );
         }
 
         //rotation
@@ -585,7 +583,7 @@ void VDiagram::createShapes_3d()
             ShapeFactory::createStripe(xOuterGroup_Shapes, aStripe
                 , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided );
 
-        CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
+        CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( m_xDiagram ) );
         if( !bAddFloorAndWall || (eBottomPos!=CuboidPlanePosition_Bottom) )
         {
             //we always need this object as dummy object for correct scene dimensions

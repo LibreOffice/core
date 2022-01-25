@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/drawing/CameraGeometry.hpp>
+#include <rtl/ref.hxx>
 #include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::beans { class XPropertySet; }
@@ -27,6 +28,7 @@ namespace com::sun::star::chart2 { class XDiagram; }
 
 namespace chart
 {
+class Diagram;
 
 enum class ThreeDLookScheme
 {
@@ -61,14 +63,14 @@ public:
         const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
             , double& rfXAngleRad, double& rfYAngleRad, double& rfZAngleRad );
     static void setRotationAngleToDiagram(
-        const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
+        const rtl::Reference< ::chart::Diagram >& xSceneProperties
             , double fXAngleRad, double fYAngleRad, double fZAngleRad );
 
     static void getRotationFromDiagram(
-        const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
+        const rtl::Reference< ::chart::Diagram >& xSceneProperties
             , sal_Int32& rnHorizontalAngleDegree, sal_Int32& rnVerticalAngleDegree );
     static void setRotationToDiagram(
-        const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
+        const rtl::Reference< ::chart::Diagram >& xSceneProperties
             , sal_Int32 nHorizontalAngleDegree, sal_Int32 nVerticalYAngleDegree );
 
     static void switchRightAngledAxes( const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
@@ -99,29 +101,29 @@ public:
     static double CameraDistanceToPerspective( double fCameraDistance );
     static double PerspectiveToCameraDistance( double fPerspective );
 
-    static void set3DSettingsToDefault( const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties );
-    static void setDefaultRotation( const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties );
-    static void setDefaultIllumination( const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties );
+    static void set3DSettingsToDefault( const rtl::Reference< ::chart::Diagram >& xSceneProperties );
+    static void setDefaultRotation( const rtl::Reference< ::chart::Diagram >& xDiagram );
+    static void setDefaultIllumination( const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static void setDefaultRotation( const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties, bool bPieOrDonut );
 
-    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardLeftWall( const css::uno::Reference<
-            css::beans::XPropertySet >& xSceneProperties );
-    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBackWall(const css::uno::Reference<
-            css::beans::XPropertySet >& xSceneProperties );
-    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBottom(const css::uno::Reference<
-            css::beans::XPropertySet >& xSceneProperties );
+    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardLeftWall( const rtl::Reference<
+            ::chart::Diagram >& xDiagram );
+    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBackWall(const rtl::Reference<
+            ::chart::Diagram >& xDiagram );
+    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBottom(const rtl::Reference<
+            ::chart::Diagram >& xDiagram );
 
-    static ThreeDLookScheme detectScheme( const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
-    static void setScheme( const css::uno::Reference< css::chart2::XDiagram >& xDiagram
+    static ThreeDLookScheme detectScheme( const rtl::Reference< ::chart::Diagram >& xDiagram );
+    static void setScheme( const rtl::Reference< ::chart::Diagram >& xDiagram
             , ThreeDLookScheme aScheme );
 
     //sal_Int32 nRoundedEdges:  <0 or >100 -> mixed state
     //sal_Int32 nObjectLines:  0->no lines; 1->all lines on; other->mixed state
 
-    static void getRoundedEdgesAndObjectLines( const css::uno::Reference< css::chart2::XDiagram >& xDiagram
+    static void getRoundedEdgesAndObjectLines( const rtl::Reference< ::chart::Diagram >& xDiagram
             , sal_Int32& rnRoundedEdges, sal_Int32& rnObjectLines );
-    static void setRoundedEdgesAndObjectLines( const css::uno::Reference< css::chart2::XDiagram >& xDiagram
+    static void setRoundedEdgesAndObjectLines( const rtl::Reference< ::chart::Diagram >& xDiagram
             , sal_Int32 nRoundedEdges, sal_Int32 nObjectLines );
 };
 

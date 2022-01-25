@@ -288,11 +288,10 @@ void BarChartTypeTemplate::resetStyles(
 }
 
 void BarChartTypeTemplate::createCoordinateSystems(
-    const Reference< chart2::XCoordinateSystemContainer > & xCooSysCnt )
+    const rtl::Reference< ::chart::Diagram > & xDiagram )
 {
-    ChartTypeTemplate::createCoordinateSystems( xCooSysCnt );
+    ChartTypeTemplate::createCoordinateSystems( xDiagram );
 
-    Reference< chart2::XDiagram > xDiagram( xCooSysCnt, uno::UNO_QUERY );
     DiagramHelper::setVertical( xDiagram, m_eBarDirection == HORIZONTAL );
 }
 

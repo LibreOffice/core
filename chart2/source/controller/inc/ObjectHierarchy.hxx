@@ -67,17 +67,17 @@ private:
     void createAxesTree(
         ObjectHierarchy::tChildContainer & rContainer,
         const rtl::Reference<::chart::ChartModel> & xChartDoc,
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram  );
+        const rtl::Reference< ::chart::Diagram > & xDiagram  );
     void createDiagramTree(
         ObjectHierarchy::tChildContainer& rContainer,
         const rtl::Reference<::chart::ChartModel>& xChartDoc,
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+        const rtl::Reference< ::chart::Diagram >& xDiagram );
     void createDataSeriesTree(
         ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
         const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
     static void createWallAndFloor(
         ObjectHierarchy::tChildContainer & rContainer,
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+        const rtl::Reference< ::chart::Diagram > & xDiagram );
     void createLegendTree(
         ObjectHierarchy::tChildContainer & rContainer,
         const rtl::Reference<::chart::ChartModel> & xChartDoc,

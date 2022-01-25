@@ -24,6 +24,7 @@
 #include <ChartTypeTemplateProvider.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
+#include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include "DialogModel.hxx"
 #include <ChartModel.hxx>
@@ -63,7 +64,7 @@ DocumentChartTypeTemplateProvider::DocumentChartTypeTemplateProvider(
     if( !xDoc.is())
         return;
 
-    Reference< chart2::XDiagram > xDia( xDoc->getFirstDiagram());
+    rtl::Reference< Diagram > xDia( xDoc->getFirstChartDiagram());
     if( xDia.is())
     {
         DiagramHelper::tTemplateWithServiceName aResult(

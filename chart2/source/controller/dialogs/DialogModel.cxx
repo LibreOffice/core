@@ -233,7 +233,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
     const uno::Reference< XChartType > & xChartType,
     sal_Int32 nNewSeriesIndex,
     sal_Int32 nTotalNumberOfSeriesInCTGroup,
-    const Reference< XDiagram > & xDiagram,
+    const rtl::Reference< ::chart::Diagram > & xDiagram,
     const rtl::Reference< ::chart::ChartTypeTemplate > & xTemplate,
     bool bCreateDataCachedSequences )
 {
@@ -548,7 +548,7 @@ void DialogModel::moveSeries(
     m_aTimerTriggeredControllerLock.startTimer();
     ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
 
-    Reference< XDiagram > xDiagram( m_xChartDocument->getFirstDiagram());
+    rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram());
     DiagramHelper::moveSeries( xDiagram, xSeries, eDirection==MoveDirection::Down );
 }
 
@@ -563,7 +563,7 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
 
     try
     {
-        Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram() );
+        rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram() );
         ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
 
         sal_Int32 nSeriesInChartType = 0;
@@ -614,7 +614,7 @@ Reference< data::XLabeledDataSequence > DialogModel::getCategories() const
     {
         if( m_xChartDocument.is())
         {
-            Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram());
+            rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram());
             xResult.set( DiagramHelper::getCategoriesFromDiagram( xDiagram ));
         }
     }
@@ -630,7 +630,7 @@ void DialogModel::setCategories( const Reference< chart2::data::XLabeledDataSequ
     if( !m_xChartDocument.is())
         return;
 
-    Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram());
+    rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram());
     if( !xDiagram.is())
         return;
 
@@ -663,7 +663,7 @@ bool DialogModel::isCategoryDiagram() const
 {
     bool bRet = false;
     if( m_xChartDocument.is())
-        bRet = DiagramHelper::isCategoryDiagram( m_xChartDocument->getFirstDiagram() );
+        bRet = DiagramHelper::isCategoryDiagram( m_xChartDocument->getFirstChartDiagram() );
     return bRet;
 }
 
@@ -724,7 +724,7 @@ void DialogModel::setData(
             m_xTemplate->getDataInterpreter());
         if( xInterpreter.is())
         {
-            Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram() );
+            rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram() );
             ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
 
             std::vector< Reference< XDataSeries > > aSeriesToReUse(

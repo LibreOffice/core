@@ -35,6 +35,7 @@ namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {
+class Diagram;
 
 class OOO_DLLPUBLIC_CHARTTOOLS DataSourceHelper
 {
@@ -79,7 +80,7 @@ public:
             pressUsedDataIntoRectangularFormat( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 
         SAL_DLLPRIVATE static css::uno::Sequence< OUString > getUsedDataRanges(
-            const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+            const rtl::Reference< ::chart::Diagram > & xDiagram );
 
         static css::uno::Sequence< OUString > getUsedDataRanges(
             const rtl::Reference<::chart::ChartModel> & xChartModel );

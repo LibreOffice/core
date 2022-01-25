@@ -20,18 +20,20 @@
 
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace chart { class ControllerLockHelper; }
 
 namespace chart
 {
+class Diagram;
 
 class ThreeD_SceneGeometry_TabPage
 {
 public:
     ThreeD_SceneGeometry_TabPage(weld::Container* pWindow,
-                                 const css::uno::Reference< css::beans::XPropertySet > & xSceneProperties,
+                                 const rtl::Reference< ::chart::Diagram > & xDiagram,
                                  ControllerLockHelper & rControllerLockHelper);
     ~ThreeD_SceneGeometry_TabPage();
 
@@ -54,7 +56,7 @@ private:
     void applyAnglesToModel();
     void applyPerspectiveToModel();
 
-    css::uno::Reference< css::beans::XPropertySet > m_xSceneProperties;
+    rtl::Reference< ::chart::Diagram > m_xDiagram;
 
     Timer           m_aAngleTimer;
     Timer           m_aPerspectiveTimer;

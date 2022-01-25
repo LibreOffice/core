@@ -192,21 +192,6 @@ void RangeHighlighter::determineRanges()
     }
 }
 
-void RangeHighlighter::fillRangesForDiagram( const Reference< chart2::XDiagram > & xDiagram )
-{
-    Sequence< OUString > aSelectedRanges( DataSourceHelper::getUsedDataRanges( xDiagram ));
-    m_aSelectedRanges.realloc( aSelectedRanges.getLength());
-    auto pSelectedRanges = m_aSelectedRanges.getArray();
-    // @todo: merge ranges
-    for( sal_Int32 i=0; i<aSelectedRanges.getLength(); ++i )
-    {
-        pSelectedRanges[i].RangeRepresentation = aSelectedRanges[i];
-        pSelectedRanges[i].Index = -1;
-        pSelectedRanges[i].PreferredColor = sal_Int32(defaultPreferredColor);
-        pSelectedRanges[i].AllowMerginigWithOtherRanges = true;
-    }
-}
-
 void RangeHighlighter::fillRangesForDiagram( const rtl::Reference< Diagram > & xDiagram )
 {
     Sequence< OUString > aSelectedRanges( DataSourceHelper::getUsedDataRanges( xDiagram ));

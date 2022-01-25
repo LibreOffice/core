@@ -688,7 +688,7 @@ OUString RegressionCurveHelper::getRegressionCurveName( const Reference< XRegres
 
 std::vector< Reference< chart2::XRegressionCurve > >
     RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine(
-        const Reference< chart2::XDiagram > & xDiagram )
+        const rtl::Reference< Diagram > & xDiagram )
 {
     std::vector< Reference< chart2::XRegressionCurve > > aResult;
     std::vector< Reference< chart2::XDataSeries > > aSeries( DiagramHelper::getDataSeriesFromDiagram( xDiagram ));

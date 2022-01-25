@@ -78,15 +78,13 @@ namespace chart
 
 DiagramHelper::tTemplateWithServiceName
     DiagramHelper::getTemplateForDiagram(
-        const Reference< XDiagram > & xDiagram,
+        const rtl::Reference< Diagram > & xDiagram,
         const rtl::Reference< ::chart::ChartTypeManager > & xChartTypeManager )
 {
     DiagramHelper::tTemplateWithServiceName aResult;
 
     if( ! (xChartTypeManager.is() && xDiagram.is()))
         return aResult;
-    auto pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
 
     Sequence< OUString > aServiceNames( xChartTypeManager->getAvailableServiceNames());
     const sal_Int32 nLength = aServiceNames.getLength();
@@ -100,7 +98,7 @@ DiagramHelper::tTemplateWithServiceName
             rtl::Reference< ::chart::ChartTypeTemplate > xTempl =
                 xChartTypeManager->createTemplate( aServiceNames[ i ] );
 
-            if (xTempl.is() && xTempl->matchesTemplate(pDiagram, true))
+            if (xTempl.is() && xTempl->matchesTemplate(xDiagram, true))
             {
                 aResult.xChartTypeTemplate = xTempl;
                 aResult.sServiceName = aServiceNames[ i ];
@@ -117,7 +115,7 @@ DiagramHelper::tTemplateWithServiceName
 }
 
 void DiagramHelper::setVertical(
-    const Reference< XDiagram > & xDiagram,
+    const rtl::Reference< Diagram > & xDiagram,
     bool bVertical /* = true */ )
 {
     try
@@ -125,12 +123,9 @@ void DiagramHelper::setVertical(
         if (!xDiagram.is())
             return;
 
-        Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-        assert(pDiagram);
-
         uno::Any aValue;
         aValue <<= bVertical;
-        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : pDiagram->getBaseCoordinateSystems() )
+        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : xDiagram->getBaseCoordinateSystems() )
         {
             bool bChanged = false;
             bool bOldSwap = false;
@@ -187,7 +182,7 @@ void DiagramHelper::setVertical(
     }
 }
 
-bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDiagram,
+bool DiagramHelper::getVertical( const rtl::Reference< Diagram > & xDiagram,
                              bool& rbFound, bool& rbAmbiguous )
 {
     bool bValue = false;
@@ -197,10 +192,7 @@ bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDia
     if (!xDiagram.is())
         return false;
 
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
-
-    for (rtl::Reference<BaseCoordinateSystem> const & coords : pDiagram->getBaseCoordinateSystems())
+    for (rtl::Reference<BaseCoordinateSystem> const & coords : xDiagram->getBaseCoordinateSystems())
     {
         bool bCurrent = false;
         if (coords->getPropertyValue("SwapXAndYAxis") >>= bCurrent)
@@ -221,12 +213,10 @@ bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDia
 }
 
 void DiagramHelper::setStackMode(
-    const Reference< XDiagram > & xDiagram,
+    const rtl::Reference< Diagram > & xDiagram,
     StackMode eStackMode
 )
 {
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
     try
     {
         bool bValueFound = false;
@@ -249,7 +239,7 @@ void DiagramHelper::setStackMode(
             bPercent = true;
 
         //iterate through all coordinate systems
-        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : pDiagram->getBaseCoordinateSystems() )
+        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : xDiagram->getBaseCoordinateSystems() )
         {
             //set correct percent stacking
             const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(1);
@@ -297,7 +287,7 @@ void DiagramHelper::setStackMode(
     }
 }
 
-StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, bool& rbFound, bool& rbAmbiguous )
+StackMode DiagramHelper::getStackMode( const rtl::Reference< Diagram > & xDiagram, bool& rbFound, bool& rbAmbiguous )
 {
     rbFound=false;
     rbAmbiguous=false;
@@ -306,11 +296,9 @@ StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, b
 
     if( !xDiagram.is() )
         return eGlobalStackMode;
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
 
     //iterate through all coordinate systems
-    for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : pDiagram->getBaseCoordinateSystems() )
+    for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : xDiagram->getBaseCoordinateSystems() )
     {
         //iterate through all chart types in the current coordinate system
         std::vector< rtl::Reference< ChartType > > aChartTypeList( xCooSys->getChartTypes2() );
@@ -415,19 +403,16 @@ StackMode DiagramHelper::getStackModeFromChartType(
     return eStackMode;
 }
 
-sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
+sal_Int32 DiagramHelper::getDimension( const rtl::Reference< Diagram > & xDiagram )
 {
     // -1: not yet set
     sal_Int32 nResult = -1;
     if (!xDiagram)
         return nResult;
 
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
-
     try
     {
-        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : pDiagram->getBaseCoordinateSystems() )
+        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : xDiagram->getBaseCoordinateSystems() )
         {
             if(xCooSys.is())
             {
@@ -445,13 +430,11 @@ sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
 }
 
 void DiagramHelper::setDimension(
-    const Reference< XDiagram > & xDiagram,
+    const rtl::Reference< Diagram > & xDiagram,
     sal_Int32 nNewDimensionCount )
 {
     if( ! xDiagram.is())
         return;
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
 
     if( DiagramHelper::getDimension( xDiagram ) == nNewDimensionCount )
         return;
@@ -464,7 +447,7 @@ void DiagramHelper::setDimension(
         bool bIsSupportingOnlyDeepStackingFor3D=false;
 
         //change all coordinate systems:
-        auto aCoordSystems = pDiagram->getBaseCoordinateSystems();
+        auto aCoordSystems = xDiagram->getBaseCoordinateSystems();
         for( rtl::Reference<BaseCoordinateSystem> const & xOldCooSys : aCoordSystems )
         {
             rtl::Reference< BaseCoordinateSystem > xNewCooSys;
@@ -501,7 +484,7 @@ void DiagramHelper::setDimension(
 }
 
 void DiagramHelper::replaceCoordinateSystem(
-    const Reference< XDiagram > & xDiagram,
+    const rtl::Reference< Diagram > & xDiagram,
     const Reference< XCoordinateSystem > & xCooSysToReplace,
     const Reference< XCoordinateSystem > & xReplacement )
 {
@@ -510,9 +493,6 @@ void DiagramHelper::replaceCoordinateSystem(
         return;
 
     // update the coordinate-system container
-    Reference< XCoordinateSystemContainer > xCont( xDiagram, uno::UNO_QUERY );
-    if( !xCont.is())
-        return;
 
     try
     {
@@ -523,8 +503,8 @@ void DiagramHelper::replaceCoordinateSystem(
         Reference< XChartTypeContainer > xCTCntReplacement( xReplacement, uno::UNO_QUERY_THROW );
         xCTCntReplacement->setChartTypes( xCTCntCooSys->getChartTypes());
 
-        xCont->removeCoordinateSystem( xCooSysToReplace );
-        xCont->addCoordinateSystem( xReplacement );
+        xDiagram->removeCoordinateSystem( xCooSysToReplace );
+        xDiagram->addCoordinateSystem( xReplacement );
 
         if( xCategories.is() )
             DiagramHelper::setCategoriesToDiagram( xCategories, xDiagram );
@@ -544,7 +524,7 @@ bool DiagramHelper::isSeriesAttachedToMainAxis(
 
 bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
                         , const uno::Reference< chart2::XDataSeries >& xDataSeries
-                        , const uno::Reference< chart2::XDiagram >& xDiagram
+                        , const rtl::Reference< Diagram >& xDiagram
                         , const uno::Reference< uno::XComponentContext > & xContext
                         , bool bAdaptAxes )
 {
@@ -587,28 +567,26 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
 
 uno::Reference< XAxis > DiagramHelper::getAttachedAxis(
         const uno::Reference< XDataSeries >& xSeries,
-        const uno::Reference< XDiagram >& xDiagram )
+        const rtl::Reference< Diagram >& xDiagram )
 {
     return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), xDiagram );
 }
 
 rtl::Reference< ChartType > DiagramHelper::getChartTypeOfSeries(
-                                const uno::Reference< chart2::XDiagram >&   xDiagram
+                                const rtl::Reference< Diagram >&   xDiagram
                               , const uno::Reference< XDataSeries >&        xGivenDataSeries )
 {
     if( !xGivenDataSeries.is() )
         return nullptr;
     if(!xDiagram.is())
         return nullptr;
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
 
     //iterate through the model to find the given xSeries
     //the found parent indicates the charttype
 
     //iterate through all coordinate systems
 
-    for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : pDiagram->getBaseCoordinateSystems() )
+    for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : xDiagram->getBaseCoordinateSystems() )
     {
         //iterate through all chart types in the current coordinate system
         const std::vector< rtl::Reference< ChartType > > & aChartTypeList( xCooSys->getChartTypes2() );
@@ -628,17 +606,15 @@ rtl::Reference< ChartType > DiagramHelper::getChartTypeOfSeries(
 
 std::vector< Reference< XDataSeries > >
     DiagramHelper::getDataSeriesFromDiagram(
-        const Reference< XDiagram > & xDiagram )
+        const rtl::Reference< Diagram > & xDiagram )
 {
     std::vector< Reference< XDataSeries > > aResult;
     if (!xDiagram)
         return aResult;
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
 
     try
     {
-        for( rtl::Reference< BaseCoordinateSystem > const & coords : pDiagram->getBaseCoordinateSystems() )
+        for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
         {
             const Sequence< Reference< XChartType > > aChartTypeSeq( coords->getChartTypes());
             for( Reference< XChartType> const & chartType : aChartTypeSeq )
@@ -658,17 +634,15 @@ std::vector< Reference< XDataSeries > >
 }
 
 Sequence< Sequence< Reference< XDataSeries > > >
-        DiagramHelper::getDataSeriesGroups( const Reference< XDiagram > & xDiagram )
+        DiagramHelper::getDataSeriesGroups( const rtl::Reference< Diagram > & xDiagram )
 {
     if (!xDiagram)
         return {};
 
     vector< Sequence< Reference< XDataSeries > > > aResult;
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
 
     //iterate through all coordinate systems
-    for( rtl::Reference< BaseCoordinateSystem > const & coords : pDiagram->getBaseCoordinateSystems() )
+    for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
     {
         //iterate through all chart types in the current coordinate system
         const Sequence< Reference< XChartType > > aChartTypeList( coords->getChartTypes() );
@@ -684,19 +658,16 @@ Sequence< Sequence< Reference< XDataSeries > > >
 }
 
 rtl::Reference< ChartType >
-    DiagramHelper::getChartTypeByIndex( const Reference< XDiagram >& xDiagram, sal_Int32 nIndex )
+    DiagramHelper::getChartTypeByIndex( const rtl::Reference< Diagram >& xDiagram, sal_Int32 nIndex )
 {
     if (!xDiagram)
         return nullptr;
-
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
 
     rtl::Reference< ChartType > xChartType;
 
     //iterate through all coordinate systems
     sal_Int32 nTypesSoFar = 0;
-    for( rtl::Reference< BaseCoordinateSystem > const & coords : pDiagram->getBaseCoordinateSystems() )
+    for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
     {
         const std::vector< rtl::Reference< ChartType > > & aChartTypeList( coords->getChartTypes2() );
         if( nIndex >= 0 && nIndex < static_cast<sal_Int32>(nTypesSoFar + aChartTypeList.size()) )
@@ -760,13 +731,11 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
 } // anonymous namespace
 
 bool DiagramHelper::isCategoryDiagram(
-            const Reference< XDiagram >& xDiagram )
+            const rtl::Reference< Diagram >& xDiagram )
 {
     try
     {
-        Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-        assert(pDiagram);
-        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : pDiagram->getBaseCoordinateSystems() )
+        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : xDiagram->getBaseCoordinateSystems() )
         {
             for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
             {
@@ -795,14 +764,12 @@ bool DiagramHelper::isCategoryDiagram(
 
 void DiagramHelper::setCategoriesToDiagram(
     const Reference< chart2::data::XLabeledDataSequence >& xCategories,
-    const Reference< XDiagram >& xDiagram,
+    const rtl::Reference< Diagram >& xDiagram,
     bool bSetAxisType  /* = false */,
     bool bCategoryAxis /* = true */ )
 {
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
     std::vector< Reference< chart2::XAxis > > aCatAxes(
-        lcl_getAxisHoldingCategoriesFromDiagram( pDiagram ));
+        lcl_getAxisHoldingCategoriesFromDiagram( xDiagram ));
 
     for (const Reference< chart2::XAxis >& xCatAxis : aCatAxes)
     {
@@ -824,16 +791,14 @@ void DiagramHelper::setCategoriesToDiagram(
 
 Reference< data::XLabeledDataSequence >
     DiagramHelper::getCategoriesFromDiagram(
-        const Reference< XDiagram > & xDiagram )
+        const rtl::Reference< Diagram > & xDiagram )
 {
     Reference< data::XLabeledDataSequence > xResult;
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
 
     try
     {
         std::vector< Reference< chart2::XAxis > > aCatAxes(
-            lcl_getAxisHoldingCategoriesFromDiagram( pDiagram ));
+            lcl_getAxisHoldingCategoriesFromDiagram( xDiagram ));
         //search for first categories
         if (!aCatAxes.empty())
         {
@@ -1049,7 +1014,7 @@ void DiagramHelper::switchToTextCategories( const rtl::Reference<::chart::ChartM
     }
 }
 
-bool DiagramHelper::isSupportingDateAxis( const Reference< chart2::XDiagram >& xDiagram )
+bool DiagramHelper::isSupportingDateAxis( const rtl::Reference< Diagram >& xDiagram )
 {
     return ::chart::ChartTypeHelper::isSupportingDateAxis(
             DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), 0 );
@@ -1151,17 +1116,15 @@ sal_Int32 DiagramHelper::getPercentNumberFormat( const Reference< util::XNumberF
 
 std::vector< rtl::Reference< ChartType > >
     DiagramHelper::getChartTypesFromDiagram(
-        const Reference< XDiagram > & xDiagram )
+        const rtl::Reference< Diagram > & xDiagram )
 {
     if(!xDiagram)
         return {};
 
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
     std::vector< rtl::Reference< ChartType > > aResult;
     try
     {
-        for( rtl::Reference< BaseCoordinateSystem > const & coords : pDiagram->getBaseCoordinateSystems() )
+        for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
         {
             const std::vector< rtl::Reference< ChartType > > & aChartTypeSeq( coords->getChartTypes2());
             aResult.insert( aResult.end(), aChartTypeSeq.begin(), aChartTypeSeq.end() );
@@ -1352,34 +1315,29 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
 } // anonymous namespace
 
 bool DiagramHelper::isSeriesMoveable(
-    const Reference< XDiagram >& xDiagram,
+    const rtl::Reference< Diagram >& xDiagram,
     const Reference< XDataSeries >& xGivenDataSeries,
     bool bForward )
 {
     const bool bDoMove = false;
 
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(!xDiagram || pDiagram);
     bool bIsMoveable = lcl_moveSeriesOrCheckIfMoveIsAllowed(
-        pDiagram, xGivenDataSeries, bForward, bDoMove );
+        xDiagram, xGivenDataSeries, bForward, bDoMove );
 
     return bIsMoveable;
 }
 
-bool DiagramHelper::moveSeries( const Reference< XDiagram >& xDiagram, const Reference< XDataSeries >& xGivenDataSeries, bool bForward )
+bool DiagramHelper::moveSeries( const rtl::Reference< Diagram >& xDiagram, const Reference< XDataSeries >& xGivenDataSeries, bool bForward )
 {
     const bool bDoMove = true;
 
-    Diagram* pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(!xDiagram || pDiagram);
     bool bMoved = lcl_moveSeriesOrCheckIfMoveIsAllowed(
-        pDiagram, xGivenDataSeries, bForward, bDoMove );
+        xDiagram, xGivenDataSeries, bForward, bDoMove );
 
     return bMoved;
 }
 
-bool DiagramHelper::isSupportingFloorAndWall( const Reference<
-                chart2::XDiagram >& xDiagram )
+bool DiagramHelper::isSupportingFloorAndWall( const rtl::Reference< Diagram >& xDiagram )
 {
     //pies and donuts currently do not support this because of wrong files from older versions
     //todo: allow this in future again, if fileversion is available for OLE objects (metastream)
@@ -1399,9 +1357,9 @@ bool DiagramHelper::isSupportingFloorAndWall( const Reference<
     return true;
 }
 
-bool DiagramHelper::isPieOrDonutChart( const css::uno::Reference< css::chart2::XDiagram >& xDiagram )
+bool DiagramHelper::isPieOrDonutChart( const rtl::Reference< Diagram >& xDiagram )
 {
-    uno::Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex(
+    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex(
         xDiagram, 0 ) );
 
     if( xChartType .is() )
@@ -1414,7 +1372,7 @@ bool DiagramHelper::isPieOrDonutChart( const css::uno::Reference< css::chart2::X
 }
 
 sal_Int32 DiagramHelper::getGeometry3D(
-    const uno::Reference< chart2::XDiagram > & xDiagram,
+    const rtl::Reference< Diagram > & xDiagram,
     bool& rbFound, bool& rbAmbiguous )
 {
     sal_Int32 nCommonGeom( DataPointGeometry3D::CUBOID );
@@ -1459,7 +1417,7 @@ sal_Int32 DiagramHelper::getGeometry3D(
 }
 
 void DiagramHelper::setGeometry3D(
-    const Reference< chart2::XDiagram > & xDiagram,
+    const rtl::Reference< Diagram > & xDiagram,
     sal_Int32 nNewGeometry )
 {
     std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
@@ -1473,15 +1431,14 @@ void DiagramHelper::setGeometry3D(
 }
 
 sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
-            const Reference< chart2::XDiagram > & xDiagram,
+            const rtl::Reference< Diagram > & xDiagram,
             const rtl::Reference< ChartType >& xChartType )
 {
     sal_Int32 nResult = css::chart::MissingValueTreatment::LEAVE_GAP;
     const uno::Sequence < sal_Int32 > aAvailableMissingValueTreatments(
                 ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
 
-    uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
-    if( xDiaProp.is() && (xDiaProp->getPropertyValue( "MissingValueTreatment" ) >>= nResult) )
+    if( xDiagram.is() && (xDiagram->getPropertyValue( "MissingValueTreatment" ) >>= nResult) )
     {
         //ensure that the set value is supported by this charttype
         for( sal_Int32 n : aAvailableMissingValueTreatments )
@@ -1499,20 +1456,19 @@ sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
     return nResult;
 }
 
-DiagramPositioningMode DiagramHelper::getDiagramPositioningMode( const uno::Reference<
-                chart2::XDiagram > & xDiagram )
+DiagramPositioningMode DiagramHelper::getDiagramPositioningMode( const rtl::Reference<
+                Diagram > & xDiagram )
 {
     DiagramPositioningMode eMode = DiagramPositioningMode_AUTO;
-    uno::Reference< beans::XPropertySet > xDiaProps( xDiagram, uno::UNO_QUERY );
-    if( xDiaProps.is() )
+    if( xDiagram.is() )
     {
         RelativePosition aRelPos;
         RelativeSize aRelSize;
-        if( (xDiaProps->getPropertyValue("RelativePosition") >>= aRelPos ) &&
-            (xDiaProps->getPropertyValue("RelativeSize") >>= aRelSize ) )
+        if( (xDiagram->getPropertyValue("RelativePosition") >>= aRelPos ) &&
+            (xDiagram->getPropertyValue("RelativeSize") >>= aRelSize ) )
         {
             bool bPosSizeExcludeAxes=false;
-            xDiaProps->getPropertyValue("PosSizeExcludeAxes") >>= bPosSizeExcludeAxes;
+            xDiagram->getPropertyValue("PosSizeExcludeAxes") >>= bPosSizeExcludeAxes;
             if( bPosSizeExcludeAxes )
                 eMode = DiagramPositioningMode_EXCLUDING;
             else

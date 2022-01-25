@@ -225,7 +225,9 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
     std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVector;
 
     //categories are always the first sequence
-    Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
+    auto pModel = dynamic_cast<ChartModel*>(xChartDoc.get());
+    assert(pModel);
+    rtl::Reference< Diagram > xDiagram( pModel->getFirstChartDiagram());
 
     Reference< chart2::data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
     if( xCategories.is() )
@@ -254,7 +256,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
 }
 
 uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
-    const uno::Reference< chart2::XDiagram > & xDiagram )
+    const rtl::Reference< Diagram > & xDiagram )
 {
     std::vector< OUString > aResult;
 
@@ -336,7 +338,7 @@ bool DataSourceHelper::detectRangeSegmentation(
         bSomethingDetected = !rOutRangeString.isEmpty();
 
         uno::Reference< chart2::data::XLabeledDataSequence > xCategories(
-                    DiagramHelper::getCategoriesFromDiagram( xChartModel->getFirstDiagram() ));
+                    DiagramHelper::getCategoriesFromDiagram( xChartModel->getFirstChartDiagram() ));
         rOutHasCategories = xCategories.is();
     }
     catch( uno::Exception & )
