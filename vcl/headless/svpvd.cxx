@@ -85,18 +85,22 @@ void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
     else
     {
         dl_cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
-        nNewDX *= fXScale;
-        nNewDY *= fYScale;
     }
 
     if (pBuffer)
     {
+        nNewDX *= fXScale;
+        nNewDY *= fYScale;
+
         m_pSurface = cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
                             nNewDX, nNewDY, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nNewDX));
         dl_cairo_surface_set_device_scale(m_pSurface, fXScale, fYScale);
     }
     else if(nNewDX <= 32 && nNewDY <= 32)
     {
+        nNewDX *= fXScale;
+        nNewDY *= fYScale;
+
         // Force image-based surface if small. Small VirtualDevice instances are often used for small
         // temporary bitmaps that will eventually have GetBitmap() called on them, which would cause
         // X Server roundtrip with Xlib-based surface, which may be way more costly than doing the drawing
