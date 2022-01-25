@@ -126,7 +126,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="checklbcontainer-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|checklbcontainer">The [L] and [S] checkbox displays the entries for the pair of OLE objects that can be converted when loading into %PRODUCTNAME [L] and/or when saving into a Microsoft format [S]. </property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|checklbcontainer">The [L] and [S] checkbox displays the entries for the pair of OLE objects that can be converted when loaded from a Microsoft format [L] and/or when saved to to a Microsoft format [S]. </property>
                       </object>
                     </child>
                   </object>
@@ -236,7 +236,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="highlighting-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|highlighting">Microsoft Office has two character attributes similar to %PRODUCTNAME character background. Select the appropriate attribute (highlighting or shading) which you would like to use during export to Microsoft Office file formats.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|highlighting">Microsoft Office has two character attributes similar to Writer character background. Select the appropriate attribute (highlighting or shading) which you would like to use during export to Microsoft Office file formats.</property>
                       </object>
                     </child>
                   </object>
@@ -257,7 +257,7 @@
                     <property name="group">highlighting</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="shading-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|shading">Microsoft Office has two character attributes similar to %PRODUCTNAME character background. Select the appropriate attribute (highlighting or shading) which you would like to use during export to Microsoft Office file formats.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|shading">Microsoft Office has two character attributes similar to Writer character background. Select the appropriate attribute (highlighting or shading) which you would like to use during export to Microsoft Office file formats.</property>
                       </object>
                     </child>
                   </object>
@@ -316,7 +316,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="mso_lockfile-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mso_lockfile">Mark this checkbox to generate a Microsoft Office lock file in addition to %PRODUCTNAME own lock file.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mso_lockfile">Mark this checkbox to generate a Microsoft Office lock file in addition to this office suite's own lock file.</property>
                   </object>
                 </child>
               </object>

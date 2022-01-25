@@ -144,7 +144,7 @@
                     <property name="hexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="savein-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="eventsconfigpage|extended_tip|savein">Select first where to save the event binding, in the current document or in %PRODUCTNAME.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="eventsconfigpage|extended_tip|savein">Select first where to save the event binding, in the current document or in the office suite.</property>
                       </object>
                     </child>
                   </object>

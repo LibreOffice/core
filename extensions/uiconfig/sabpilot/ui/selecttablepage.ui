@@ -74,7 +74,7 @@ Please select the one you mainly want to work with:</property>
             </child>
             <child internal-child="accessible">
               <object class="AtkObject" id="table-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="selecttablepage|extended_tip|table">Specifies the table that is to serve as the address book for the %PRODUCTNAME templates.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="selecttablepage|extended_tip|table">Specifies the table that is to serve as the address book for the office suite templates.</property>
               </object>
             </child>
           </object>
@@ -87,7 +87,7 @@ Please select the one you mainly want to work with:</property>
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="SelectTablePage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="selecttablepage|extended_tip|SelectTablePage">Specifies a table from the Seamonkey / Netscape address book source that is used as the address book in %PRODUCTNAME.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="selecttablepage|extended_tip|SelectTablePage">Specifies a table from the Seamonkey / Netscape address book source that is used as the address book in the office suite.</property>
       </object>
     </child>
   </object>

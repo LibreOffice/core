@@ -241,7 +241,7 @@
             <property name="draw-indicator">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="autoblankpages-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="printeroptions|extended_tip|autoblankpages">If this option is enabled automatically inserted blank pages are printed. This is best if you are printing double-sided. For example, in a book, a "chapter" paragraph style has been set to always start with an odd numbered page. If the previous chapter ends on an odd page, %PRODUCTNAME inserts an even numbered blank page. This option controls whether to print that even numbered page.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="printeroptions|extended_tip|autoblankpages">If this option is enabled automatically inserted blank pages are printed. This is best if you are printing double-sided. For example, in a book, a "chapter" paragraph style has been set to always start with an odd numbered page. If the previous chapter ends on an odd page, Writer inserts an even numbered blank page. This option controls whether to print that even numbered page.</property>
               </object>
             </child>
           </object>

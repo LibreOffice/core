@@ -188,7 +188,7 @@
         <property name="draw-indicator">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="userdatacb-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="documentinfopage|extended_tip|userdatacb">Saves the user's full name with the file. You can edit the name by choosing Tools - Options - %PRODUCTNAME - User Data.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="documentinfopage|extended_tip|userdatacb">Saves the user's full name with the file. You can edit the name by choosing Tools - Options - User Data.</property>
           </object>
         </child>
       </object>

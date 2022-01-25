@@ -812,7 +812,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="ColorPicker-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | ColorPicker">%PRODUCTNAME lets you define custom colors using a two-dimensional graphic and numerical gradient chart of the Pick a Color dialog.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | ColorPicker">Define custom colors using a two-dimensional graphic and numerical gradient chart of the Pick a Color dialog.</property>
       </object>
     </child>
   </object>

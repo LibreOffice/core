@@ -525,7 +525,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="FloatingContour-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="floatingcontour|extended_tip|FloatingContour">Changes the contour of the selected object. %PRODUCTNAME uses the contour when determining the text wrap options for the object.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="floatingcontour|extended_tip|FloatingContour">Changes the contour of the selected object. The contour is used when determining the text wrap options for the object.</property>
       </object>
     </child>
   </object>

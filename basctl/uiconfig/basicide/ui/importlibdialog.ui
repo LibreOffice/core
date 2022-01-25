@@ -119,7 +119,7 @@
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="ref-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="importlibdialog|extended_tip|ref">Adds the selected library as a read-only file. The library is reloaded each time you start %PRODUCTNAME.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="importlibdialog|extended_tip|ref">Adds the selected library as a read-only file. The library is reloaded each time you start the office suite.</property>
                           </object>
                         </child>
                       </object>

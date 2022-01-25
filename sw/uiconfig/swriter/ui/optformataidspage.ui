@@ -548,7 +548,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OptFormatAidsPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptFormatAidsPage">In %PRODUCTNAME text and HTML documents, defines the display for certain characters and for the direct cursor.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptFormatAidsPage">In Writer text and HTML documents, defines the display for certain characters and for the direct cursor.</property>
       </object>
     </child>
   </object>

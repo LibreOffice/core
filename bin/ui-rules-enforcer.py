@@ -525,6 +525,15 @@ def enforce_noshared_adjustments(current, adjustments):
           raise Exception(sys.argv[1] + ': adjustment used more than once', child.text)
         adjustments.add(child.text)
 
+def enforce_no_productname_in_accessible_description(current, adjustments):
+  for child in current:
+    enforce_no_productname_in_accessible_description(child, adjustments)
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "AtkObject::accessible-description":
+        if "%PRODUCTNAME" in child.text:
+          raise Exception(sys.argv[1] + ': %PRODUCTNAME used in accessible-description:' , child.text)
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   f.seek(0)
@@ -562,6 +571,7 @@ remove_toolbutton_focus(root)
 enforce_toolbar_can_focus(root)
 enforce_button_always_show_image(root)
 enforce_noshared_adjustments(root, set())
+enforce_no_productname_in_accessible_description(root, set())
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters

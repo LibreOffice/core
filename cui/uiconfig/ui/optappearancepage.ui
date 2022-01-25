@@ -254,7 +254,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OptAppearancePage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptAppearancePage">Sets the colors for the %PRODUCTNAME user interface.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptAppearancePage">Sets the colors for the user interface.</property>
       </object>
     </child>
   </object>

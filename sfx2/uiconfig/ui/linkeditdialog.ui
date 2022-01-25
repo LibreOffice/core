@@ -145,7 +145,7 @@
                     <property name="activates_default">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="app-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="linkeditdialog|extended_tip|app">Lists the application that last saved the source file. %PRODUCTNAME applications have the server name soffice.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="linkeditdialog|extended_tip|app">Lists the application that last saved the source file. The office suite applications have the server name soffice.</property>
                       </object>
                     </child>
                   </object>

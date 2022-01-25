@@ -236,7 +236,7 @@
                 </items>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="numerals-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numerals">Selects the type of numerals used within text, text in objects, fields, and controls, in all %PRODUCTNAME modules. Only cell contents of %PRODUCTNAME Calc are not affected.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numerals">Selects the type of numerals used within text, text in objects, fields, and controls, in all office suite modules. Only cell contents of Calc are not affected.</property>
                   </object>
                 </child>
               </object>

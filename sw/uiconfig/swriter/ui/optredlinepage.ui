@@ -99,7 +99,7 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="insertcolor-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="optredlinepage|insertcolor-atkobject">Color of Insertions</property>
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|insertcolor">You can also choose a color to display each type of recorded change. When you choose the condition "By author" in the list, the color is automatically determined by %PRODUCTNAME, then modified to match to the author of each change.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|insertcolor">You can also choose a color to display each type of recorded change. When you choose the condition "By author" in the list, the color is automatically determined by Writer, then modified to match to the author of each change.</property>
                   </object>
                 </child>
               </object>
@@ -231,7 +231,7 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="deletedcolor-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="optredlinepage|deletedcolor-atkobject">Color of Deletions</property>
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|deletedcolor">You can also choose a color to display each type of recorded change. When you choose the condition "By author" in the list, the color is automatically determined by %PRODUCTNAME, then modified to match to the author of each change.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|deletedcolor">You can also choose a color to display each type of recorded change. When you choose the condition "By author" in the list, the color is automatically determined by Writer, then modified to match to the author of each change.</property>
                   </object>
                 </child>
               </object>
@@ -363,7 +363,7 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="changedcolor-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="optredlinepage|changedcolor-atkobject">Color of Changed Attributes</property>
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|changedcolor">You can also choose a color to display each type of recorded change. When you choose the condition "By author" in the list, the color is automatically determined by %PRODUCTNAME, then modified to match to the author of each change.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|changedcolor">You can also choose a color to display each type of recorded change. When you choose the condition "By author" in the list, the color is automatically determined by Writer, then modified to match to the author of each change.</property>
                   </object>
                 </child>
               </object>

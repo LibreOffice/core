@@ -142,7 +142,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="colors-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="vectorize|extended_tip|colors">Enter the number of colors to be displayed in the converted image. %PRODUCTNAME generates a polygon for each occurrence of a color in the image.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="vectorize|extended_tip|colors">Enter the number of colors to be displayed in the converted image. A polygon is generated for each occurrence of a color in the image.</property>
                   </object>
                 </child>
               </object>

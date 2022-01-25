@@ -207,7 +207,7 @@
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="always-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|always">If you have made changes to your document, %PRODUCTNAME automatically saves a new version when you close the document.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|always">If you have made changes to your document then a new version is automatically saved when you close the document.</property>
                           </object>
                         </child>
                       </object>

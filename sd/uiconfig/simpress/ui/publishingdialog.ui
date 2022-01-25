@@ -295,7 +295,7 @@
             </child>
             <child internal-child="accessible">
               <object class="AtkObject" id="page1-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|page1">Determines the settings for publishing %PRODUCTNAME Draw or %PRODUCTNAME Impress documents in HTML format.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|page1">Determines the settings for publishing Draw or Impress documents in HTML format.</property>
               </object>
             </child>
           </object>

@@ -434,7 +434,7 @@
                             <property name="group">default</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="window-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|window">Slide show runs in the %PRODUCTNAME program window.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|window">Slide show runs in the Impress program window.</property>
                               </object>
                             </child>
                           </object>
@@ -477,7 +477,7 @@
                             <property name="draw_indicator">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="showlogo-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|showlogo">Displays the %PRODUCTNAME logo on the pause slide.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|showlogo">Displays the application logo on the pause slide.</property>
                               </object>
                             </child>
                           </object>
@@ -652,7 +652,7 @@
                             <property name="draw_indicator">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="alwaysontop-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|alwaysontop">The %PRODUCTNAME window remains on top during the presentation. No other program will show its window in front of your presentation.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|alwaysontop">The Impress window remains on top during the presentation. No other program will show its window in front of your presentation.</property>
                               </object>
                             </child>
                           </object>

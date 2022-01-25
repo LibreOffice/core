@@ -72,7 +72,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="animatedgraphics-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|animatedgraphics">Previews animated graphics, such as GIF images, in %PRODUCTNAME.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|animatedgraphics">Previews animated graphics, such as GIF images.</property>
                   </object>
                 </child>
               </object>
@@ -92,7 +92,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="animatedtext-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|animatedtext">Previews animated text, such as blinking and scrolling, in %PRODUCTNAME.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|animatedtext">Previews animated text, such as blinking and scrolling.</property>
                   </object>
                 </child>
               </object>
@@ -145,7 +145,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="autodetecthc-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autodetecthc">Switches %PRODUCTNAME into high contrast mode when the system background color is very dark.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autodetecthc">Switches the office suite into high contrast mode when the system background color is very dark.</property>
                   </object>
                 </child>
               </object>
@@ -165,7 +165,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="autofontcolor-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autofontcolor">Displays fonts in %PRODUCTNAME using the system color settings. This option only affects the screen display.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autofontcolor">Displays fonts in the office suite using the system color settings. This option only affects the screen display.</property>
                   </object>
                 </child>
               </object>
@@ -216,7 +216,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OptAccessibilityPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptAccessibilityPage">Sets options that make %PRODUCTNAME programs more accessible for users with reduced sight, limited dexterity or other disabilities.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptAccessibilityPage">Sets options that make the office suite programs more accessible for users with reduced sight, limited dexterity or other disabilities.</property>
       </object>
     </child>
   </object>

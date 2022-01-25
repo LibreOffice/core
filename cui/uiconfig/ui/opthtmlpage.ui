@@ -369,7 +369,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="unknowntag-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|unknowntag">Mark this check box if you want tags that are not recognized by %PRODUCTNAME to be imported as fields.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|unknowntag">Mark this check box if you want tags that are not recognized by Writer/Web to be imported as fields.</property>
                       </object>
                     </child>
                   </object>
@@ -530,7 +530,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="starbasicwarning-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|starbasicwarning">If this field is marked, when exporting to HTML a warning is shown that %PRODUCTNAME Basic macros will be lost.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|starbasicwarning">If this field is marked, when exporting to HTML a warning is shown that Basic macros will be lost.</property>
                       </object>
                     </child>
                   </object>
@@ -550,7 +550,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="starbasic-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|starbasic">Mark this check box to include the %PRODUCTNAME Basic instructions when exporting to HTML format.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|starbasic">Mark this check box to include the Basic instructions when exporting to HTML format.</property>
                       </object>
                     </child>
                   </object>

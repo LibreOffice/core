@@ -543,7 +543,7 @@
                     <property name="use_underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="ignoreall-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|ignoreall">Skips all occurrences of the unknown word until the end of the current %PRODUCTNAME session and continues with the spellcheck.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|ignoreall">Skips all occurrences of the unknown word until the end of the current office suite session and continues with the spellcheck.</property>
                       </object>
                     </child>
                   </object>

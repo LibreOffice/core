@@ -61,7 +61,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="javaenabled-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|javaenabled">Allows you to run Java applications in %PRODUCTNAME.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|javaenabled">Allows you to run extensions written with Java.</property>
                   </object>
                 </child>
               </object>
@@ -254,7 +254,7 @@
                                 </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="javas-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|javas">Select the JRE that you want to use. On some systems, you must wait a minute until the list gets populated. On some systems, you must restart %PRODUCTNAME to use your changed setting.</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|javas">Select the JRE that you want to use. On some systems, you must wait a minute until the list gets populated. On some systems, you must restart the office suite to use your changed setting.</property>
                                   </object>
                                 </child>
                               </object>
@@ -409,7 +409,7 @@
                 <property name="hexpand">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="expertconfig-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|expertconfig">Opens the Expert Configuration dialog for advanced settings and configuration of %PRODUCTNAME.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|expertconfig">Opens the Expert Configuration dialog for advanced settings and configuration.</property>
                   </object>
                 </child>
               </object>
@@ -437,11 +437,6 @@
         <property name="pack_type">end</property>
         <property name="position">1</property>
       </packing>
-    </child>
-    <child internal-child="accessible">
-      <object class="AtkObject" id="OptAdvancedPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptAdvancedPage">Allows you to run Java applications in %PRODUCTNAME.</property>
-      </object>
     </child>
   </object>
 </interface>

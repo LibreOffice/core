@@ -255,7 +255,7 @@
                 <property name="use_underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="default-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|default">Click to use the current settings on this tab page as the default for further sessions with %PRODUCTNAME.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|default">Click to use the current settings on this tab page as the default for further sessions with Writer.</property>
                   </object>
                 </child>
               </object>
@@ -285,7 +285,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OptCompatPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptCompatPage">Specifies compatibility settings for text documents. These options help in fine-tuning %PRODUCTNAME when importing Microsoft Word documents.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptCompatPage">Specifies compatibility settings for text documents. These options help in fine-tuning Writer when importing Microsoft Word documents.</property>
       </object>
     </child>
   </object>
