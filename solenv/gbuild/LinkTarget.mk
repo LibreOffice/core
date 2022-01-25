@@ -1326,7 +1326,7 @@ ifeq (,$(DISABLE_DYNLOADING))
 # for faster incremental builds when the ABI is unchanged.
 # export files are created from the library, so this also ensures the library exists.
 $(foreach lib,$(call gb_LinkTarget__filter_lo_libraries,$(3)),$(if $(filter $(lib),$(gb_Library_KNOWNLIBS)), \
-    $(eval $(call gb_LinkTarget_get_target,$(1)) : $(call gb_Library_get_exports_target,$(lib))) \
+    $$(eval $(call gb_LinkTarget_get_target,$(1)) : $(call gb_Library_get_exports_target,$(lib))) \
 ))
 
 else # DISABLE_DYNLOADING
@@ -1335,7 +1335,7 @@ ifneq (,$(call gb_LinkTarget_does_real_link,$(1)))
 $(call gb_LinkTarget_get_target,$(1)) : T_LIBS += $(call gb_LinkTarget__filter_sys_libraries,$(3))
 $(if $(filter-out Library,gb_LinkTarget__get_workdir_linktargetclass,$(1)), \
     $(foreach lib,$(call gb_LinkTarget__filter_lo_libraries,$(3)),$(if $(filter $(lib),$(gb_Library_KNOWNLIBS)), \
-        $(eval $(call gb_LinkTarget_get_target,$(1)) : $(call gb_Library_get_linktarget_target,$(lib))) \
+        $$(eval $(call gb_LinkTarget_get_target,$(1)) : $(call gb_Library_get_linktarget_target,$(lib))) \
     )))
 endif
 endif # DISABLE_DYNLOADING
