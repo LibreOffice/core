@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67f9b0f5_3e500683",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T10:06:49Z",
+      "side": 0,
+      "message": "You have changed the formatting in a lot of places that you were not otherwise modifying. Please don\u0027t do that here and elsewhere.\nI\u0027ve fixed/reverted some of these in the:\nhttps://gerrit.libreoffice.org/c/core/+/122836",
+      "revId": "2879c879b56de4e52fdbc73dce43cee61b72beb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
