@@ -806,7 +806,6 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
     load(mpTestDocumentPath, "renderable-page-position.odt");
     // Make sure that the document has 2 pages.
     uno::Reference<view::XRenderable> xRenderable(mxComponent, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Any aSelection = uno::makeAny(mxComponent);
 

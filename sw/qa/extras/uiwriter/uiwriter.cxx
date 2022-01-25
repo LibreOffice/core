@@ -3888,7 +3888,6 @@ void SwUiWriterTest::testEmbeddedDataSource()
 
     // Reload: should still have a component and a data source, too.
     reload("writer8", "embedded-data-source.odt");
-    CPPUNIT_ASSERT(mxComponent.is());
     CPPUNIT_ASSERT(xDatabaseContext->hasByName("calc-data-source"));
 
     // Data source has a table named Sheet1 after saving to a different directory.

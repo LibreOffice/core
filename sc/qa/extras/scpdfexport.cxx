@@ -107,7 +107,6 @@ void ScPDFExportTest::setUp()
         // Create spreadsheet
         uno::Sequence<beans::PropertyValue> args{ comphelper::makePropertyValue("Hidden", true) };
         mxComponent = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, args);
-        CPPUNIT_ASSERT(mxComponent.is());
 
         // create a frame
         xTargetFrame = xDesktop->findFrame("_blank", 0);
