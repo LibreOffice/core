@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d564cff_504a49a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-01-25T22:48:54Z",
+      "side": 1,
+      "message": "I\u0027m personally fine with incrementally adding this feature with a follow-up task to implement what Eike pointed out.",
+      "revId": "eda1724efc57d338e4a59defb8d00702c3306662",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7d50401_395cafc8",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1526,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-01-25T22:48:54Z",
+      "side": 1,
+      "message": "std::make_unique\u003cScDBData\u003e(...) should be preferred here.",
+      "revId": "eda1724efc57d338e4a59defb8d00702c3306662",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
