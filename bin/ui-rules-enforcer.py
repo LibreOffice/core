@@ -258,6 +258,22 @@ def remove_spin_button_max_length(current):
     if max_length != None:
       current.remove(max_length)
 
+def remove_entry_shadow_type(current):
+  shadow_type = None
+  isentry = current.get('class') == "GtkEntry"
+  for child in current:
+    remove_entry_shadow_type(child)
+    if not isentry:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "shadow_type" or attributes.get("name") == "shadow-type":
+        shadow_type = child
+
+  if isentry:
+    if shadow_type!= None:
+      current.remove(shadow_type)
+
 def remove_label_pad(current):
   xpad = None
   ypad = None
@@ -565,6 +581,7 @@ remove_expander_spacing(root)
 enforce_menubutton_indicator_consistency(root)
 enforce_active_in_group_consistency(root)
 enforce_entry_text_column_id_column_for_gtkcombobox(root)
+remove_entry_shadow_type(root)
 remove_double_buffered(root)
 remove_skip_pager_hint(root)
 remove_toolbutton_focus(root)
