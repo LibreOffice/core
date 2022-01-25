@@ -11,6 +11,8 @@
     <property name="skip-taskbar-hint">True</property>
     <property name="message-type">question</property>
     <property name="buttons">yes-no</property>
+    <property name="text" translatable="yes" context="warnautocorrect|WarnAutoCorrect">%PRODUCTNAME Calc found an error in the formula entered.</property>
+    <property name="secondary-text" translatable="yes" context="warnautocorrect|WarnAutoCorrect">Do you want to accept the correction proposed below?</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can-focus">False</property>
