@@ -16,6 +16,24 @@
       "message": "Doesn\u0027t this mean that if we do \n  open;close;open \non the second open the behaviour will be different because we won\u0027t have a focus changed LINK any more?",
       "revId": "ff2ecb311e3c0afeee8c35d1b63ed796617cd2b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e66ab98_f9970ab3",
+        "filename": "sfx2/source/dialog/basedlgs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-25T09:04:32Z",
+      "side": 1,
+      "message": "My understanding is no. It will be a new instance, the \"Close\" triggers destruction. While the open;switch to another libreoffice application;switch back will cause the dialog to disappear on switching away and reappear on switching back, with no \"Close\" called when it disappears and the instance isn\u0027t destroyed but reshown on switching back so whatever changes the user was making before it was hidden are still in-progress.\n\nMaybe some better names would help",
+      "parentUuid": "fc91eccc_ae571bcf",
+      "revId": "ff2ecb311e3c0afeee8c35d1b63ed796617cd2b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
