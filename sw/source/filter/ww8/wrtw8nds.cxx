@@ -571,8 +571,7 @@ void SwWW8AttrIter::handleToggleProperty(SfxItemSet& rExportSet, const SwFormatC
     {
         if (const SwCharFormat* pCharFormat = pCharFormatItem->GetCharFormat())
         {
-            const SfxPoolItem* pItem = nullptr;
-            if (pCharFormat->GetAttrSet().HasItem(nWhich, &pItem))
+            if (const SfxPoolItem* pItem = pCharFormat->GetAttrSet().GetItem(nWhich))
             {
                 hasPropertyInCharStyle = (*pItem == *pValue);
             }
@@ -587,8 +586,7 @@ void SwWW8AttrIter::handleToggleProperty(SfxItemSet& rExportSet, const SwFormatC
         const SwFormat* pFormat = m_rExport.m_pStyles->GetSwFormat(nStyle);
         if (pFormat)
         {
-            const SfxPoolItem* pItem = nullptr;
-            if (pFormat->GetAttrSet().HasItem(nWhich, &pItem))
+            if (const SfxPoolItem* pItem = pFormat->GetAttrSet().GetItem(nWhich))
             {
                 hasPropertyInParaStyle = (*pItem == *pValue);
             }
@@ -1698,13 +1696,11 @@ const SvxBrushItem* WW8Export::GetCurrentPageBgBrush() const
                     ? m_pCurrentPageDesc->GetMaster()
                     : m_rDoc.GetPageDesc(0).GetMaster();
 
-    const SfxPoolItem* pItem = nullptr;
     //If not set, or "no fill", get real bg
-    SfxItemState eState = rFormat.GetItemState(RES_BACKGROUND, true, &pItem);
+    const SvxBrushItem* pRet = rFormat.GetItemIfSet(RES_BACKGROUND);
 
-    const SvxBrushItem* pRet = static_cast<const SvxBrushItem*>(pItem);
-    if (SfxItemState::SET != eState || !pRet || (!pRet->GetGraphic() &&
-        pRet->GetColor() == COL_TRANSPARENT))
+    if (!pRet ||
+        (!pRet->GetGraphic() && pRet->GetColor() == COL_TRANSPARENT))
     {
         pRet = &(DefaultItemGet<SvxBrushItem>(m_rDoc,RES_BACKGROUND));
     }
@@ -1719,11 +1715,8 @@ std::shared_ptr<SvxBrushItem> WW8Export::TrueFrameBgBrush(const SwFrameFormat &r
     while (pFlyFormat)
     {
         //If not set, or "no fill", get real bg
-        const SfxPoolItem* pItem = nullptr;
-        SfxItemState eState =
-            pFlyFormat->GetItemState(RES_BACKGROUND, true, &pItem);
-        pRet = static_cast<const SvxBrushItem*>(pItem);
-        if (SfxItemState::SET != eState || !pRet || (!pRet->GetGraphic() &&
+        pRet = pFlyFormat->GetItemIfSet(RES_BACKGROUND);
+        if (!pRet || (!pRet->GetGraphic() &&
             pRet->GetColor() == COL_TRANSPARENT))
         {
             pRet = nullptr;
@@ -2856,16 +2849,14 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             if( (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE ) != nPrvNxtNd )
             {
-                const SfxPoolItem* pItem;
-                if( SfxItemState::SET == rNode.GetSwAttrSet().GetItemState(
-                        RES_UL_SPACE, true, &pItem ) &&
-                    ( ( !( ND_HAS_PREV_LAYNODE & nPrvNxtNd ) &&
-                       static_cast<const SvxULSpaceItem*>(pItem)->GetUpper()) ||
-                      ( !( ND_HAS_NEXT_LAYNODE & nPrvNxtNd ) &&
-                       static_cast<const SvxULSpaceItem*>(pItem)->GetLower()) ))
+                const SvxULSpaceItem* pSpaceItem = rNode.GetSwAttrSet().GetItemIfSet(
+                        RES_UL_SPACE );
+                if( pSpaceItem &&
+                    ( ( !( ND_HAS_PREV_LAYNODE & nPrvNxtNd ) && pSpaceItem->GetUpper()) ||
+                      ( !( ND_HAS_NEXT_LAYNODE & nPrvNxtNd ) && pSpaceItem->GetLower()) ))
                 {
                     oTmpSet.emplace( rNode.GetSwAttrSet() );
-                    SvxULSpaceItem aUL( *static_cast<const SvxULSpaceItem*>(pItem) );
+                    SvxULSpaceItem aUL( *pSpaceItem );
                     // #i25901#- consider compatibility option
                     if (!m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES))
                     {
@@ -3006,12 +2997,11 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     oTmpSet.emplace(rNode.GetSwAttrSet());
 
                 // create new LRSpace item, based on the current (if present)
-                const SfxPoolItem* pPoolItem = nullptr;
-                oTmpSet->GetItemState(RES_LR_SPACE, true, &pPoolItem);
+                const SfxPoolItem* pLrSpaceItem = oTmpSet->GetItemIfSet(RES_LR_SPACE);
                 SvxLRSpaceItem aLRSpace(
-                    ( pPoolItem == nullptr )
+                    ( pLrSpaceItem == nullptr )
                         ? SvxLRSpaceItem(0, 0, 0, 0, RES_LR_SPACE)
-                        : *static_cast<const SvxLRSpaceItem*>( pPoolItem ) );
+                        : *static_cast<const SvxLRSpaceItem*>( pLrSpaceItem ) );
 
                 // new left margin = old left + label space
                 const SwNumRule* pRule = rNode.GetNumRule();
@@ -3214,21 +3204,20 @@ void WW8AttributeOutput::EmptyParagraph()
 bool MSWordExportBase::NoPageBreakSection( const SfxItemSet* pSet )
 {
     bool bRet = false;
-    const SfxPoolItem* pI;
     if( pSet)
     {
         bool bNoPageBreak = false;
-        if ( SfxItemState::SET != pSet->GetItemState(RES_PAGEDESC, true, &pI)
-            || nullptr == static_cast<const SwFormatPageDesc*>(pI)->GetPageDesc() )
+        const SwFormatPageDesc* pDescItem = pSet->GetItemIfSet(RES_PAGEDESC);
+        if ( !pDescItem || nullptr == pDescItem->GetPageDesc() )
         {
             bNoPageBreak = true;
         }
 
         if (bNoPageBreak)
         {
-            if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, true, &pI))
+            if (const SvxFormatBreakItem* pBreakItem = pSet->GetItemIfSet(RES_BREAK))
             {
-                SvxBreak eBreak = static_cast<const SvxFormatBreakItem*>(pI)->GetBreak();
+                SvxBreak eBreak = pBreakItem->GetBreak();
                 switch (eBreak)
                 {
                     case SvxBreak::PageBefore:

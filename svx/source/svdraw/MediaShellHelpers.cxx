@@ -81,12 +81,11 @@ const ::avmedia::MediaItem* Execute(const SdrMarkView* pSdrView, SfxRequest cons
         return nullptr;
 
     const SfxItemSet* pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem;
+    if (!pArgs)
+        return nullptr;
 
-    if (!pArgs || (SfxItemState::SET != pArgs->GetItemState(SID_AVMEDIA_TOOLBOX, false, &pItem)))
-        pItem = nullptr;
-
-    if (!pItem)
+    const ::avmedia::MediaItem* pMediaItem = pArgs->GetItemIfSet(SID_AVMEDIA_TOOLBOX, false);
+    if (!pMediaItem)
         return nullptr;
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
@@ -99,7 +98,6 @@ const ::avmedia::MediaItem* Execute(const SdrMarkView* pSdrView, SfxRequest cons
     if (!dynamic_cast<SdrMediaObj*>(pObj))
         return nullptr;
 
-    const ::avmedia::MediaItem* pMediaItem = static_cast<const ::avmedia::MediaItem*>(pItem);
     static_cast<sdr::contact::ViewContactOfSdrMediaObj&>(pObj->GetViewContact())
         .executeMediaItem(*pMediaItem);
 

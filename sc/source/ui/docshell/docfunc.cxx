@@ -812,13 +812,12 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
         aOldValue.mnTab = rPos.Tab();
         aOldValue.maCell.assign(rDoc, rPos);
 
-        const SfxPoolItem* pItem;
         const ScPatternAttr* pPattern = rDoc.GetPattern( rPos.Col(),rPos.Row(),rPos.Tab() );
-        if ( SfxItemState::SET == pPattern->GetItemSet().GetItemState(
-                                ATTR_VALUE_FORMAT,false,&pItem) )
+        if ( const SfxUInt32Item* pItem = pPattern->GetItemSet().GetItemIfSet(
+                                ATTR_VALUE_FORMAT,false) )
         {
             aOldValue.mbHasFormat = true;
-            aOldValue.mnFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+            aOldValue.mnFormat = pItem->GetValue();
         }
         else
             aOldValue.mbHasFormat = false;

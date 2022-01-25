@@ -422,9 +422,9 @@ IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink&, rLink, void )
 OUString ScDocumentLoader::GetOptions( const SfxMedium& rMedium )
 {
     SfxItemSet* pSet = rMedium.GetItemSet();
-    const SfxPoolItem* pItem;
-    if ( pSet && SfxItemState::SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
-        return static_cast<const SfxStringItem*>(pItem)->GetValue();
+    const SfxStringItem* pItem;
+    if ( pSet && (pItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS )) )
+        return pItem->GetValue();
 
     return OUString();
 }

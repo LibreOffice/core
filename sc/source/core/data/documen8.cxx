@@ -227,8 +227,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 
                 if( SvtCTLOptions().IsCTLFontEnabled() )
                 {
-                    const SfxPoolItem *pItem = nullptr;
-                    if( rChanges.GetItemState(ATTR_WRITINGDIR, true, &pItem ) == SfxItemState::SET )
+                    if( rChanges.GetItemState(ATTR_WRITINGDIR ) == SfxItemState::SET )
                         ScChartHelper::DoUpdateAllCharts( *this );
                 }
             }

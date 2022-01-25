@@ -596,13 +596,12 @@ static void lcl_setRedlineAttr( SwTextFormatInfo &rInf, const SwTextNode& rTextN
     else
         SW_MOD()->GetInsertAuthorAttr(aAuthor, aSet);
 
-    const SfxPoolItem* pItem = nullptr;
-    if (SfxItemState::SET == aSet.GetItemState(RES_CHRATR_COLOR, true, &pItem))
-        pNumFnt->SetColor(static_cast<const SvxColorItem*>(pItem)->GetValue());
-    if (SfxItemState::SET == aSet.GetItemState(RES_CHRATR_UNDERLINE, true, &pItem))
-        pNumFnt->SetUnderline(static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle());
-    if (SfxItemState::SET == aSet.GetItemState(RES_CHRATR_CROSSEDOUT, true, &pItem))
-        pNumFnt->SetStrikeout( static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout() );
+    if (const SvxColorItem* pItem = aSet.GetItemIfSet(RES_CHRATR_COLOR))
+        pNumFnt->SetColor(pItem->GetValue());
+    if (const SvxUnderlineItem* pItem = aSet.GetItemIfSet(RES_CHRATR_UNDERLINE))
+        pNumFnt->SetUnderline(pItem->GetLineStyle());
+    if (const SvxCrossedOutItem* pItem = aSet.GetItemIfSet(RES_CHRATR_CROSSEDOUT))
+        pNumFnt->SetStrikeout( pItem->GetStrikeout() );
 }
 
 SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) const

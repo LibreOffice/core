@@ -36,6 +36,7 @@
 // +1 because one field is reserved for the "- undefined -" entry
 inline SCCOL SC_MAXFIELDS(const ScSheetLimits& rLimits) { return rLimits.GetMaxColCount() + 1; }
 
+class ScSortItem;
 class ScViewData;
 
 // Sort Criteria
@@ -61,7 +62,7 @@ private:
     OUString            aStrColumn;
     OUString            aStrRow;
 
-    const sal_uInt16    nWhichSort;
+    TypedWhichId<ScSortItem> nWhichSort;
     ScViewData*         pViewData;
     ScSortParam         aSortData;
     std::vector<SCCOLROW>  nFieldArr;
@@ -110,7 +111,7 @@ private:
     OUString            aStrColLabel;
     OUString            aStrUndefined;
 
-    const sal_uInt16    nWhichSort;
+    TypedWhichId<ScSortItem> nWhichSort;
     ScSortParam         aSortData;
     ScViewData*         pViewData;
     ScDocument*         pDoc;

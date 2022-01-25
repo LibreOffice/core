@@ -1604,9 +1604,8 @@ namespace //local functions originally from docfmt.cxx
         if( pOtherSet && pOtherSet->Count() )
         {
             SwTableNode* pTableNd;
-            const SwFormatPageDesc* pDesc;
-            if( SfxItemState::SET == pOtherSet->GetItemState( RES_PAGEDESC,
-                            false, reinterpret_cast<const SfxPoolItem**>(&pDesc) ))
+            const SwFormatPageDesc* pDesc = pOtherSet->GetItemIfSet( RES_PAGEDESC, false );
+            if( pDesc )
             {
                 if( pNode )
                 {
@@ -1657,8 +1656,7 @@ namespace //local functions originally from docfmt.cxx
             const SvxFormatBreakItem* pBreak;
             if( pNode && !(nFlags & SetAttrMode::APICALL) &&
                 nullptr != (pTableNd = pNode->FindTableNode() ) &&
-                SfxItemState::SET == pOtherSet->GetItemState( RES_BREAK,
-                            false, reinterpret_cast<const SfxPoolItem**>(&pBreak) ) )
+                (pBreak = pOtherSet->GetItemIfSet( RES_BREAK, false )) )
             {
                 SwTableNode* pCurTableNd = pTableNd;
                 while ( nullptr != ( pCurTableNd = pCurTableNd->StartOfSectionNode()->FindTableNode() ) )
@@ -1686,10 +1684,9 @@ namespace //local functions originally from docfmt.cxx
 
             {
                 // If we have a PoolNumRule, create it if needed
-                const SwNumRuleItem* pRule;
                 sal_uInt16 nPoolId=0;
-                if( SfxItemState::SET == pOtherSet->GetItemState( RES_PARATR_NUMRULE,
-                                    false, reinterpret_cast<const SfxPoolItem**>(&pRule) ) &&
+                const SwNumRuleItem* pRule = pOtherSet->GetItemIfSet( RES_PARATR_NUMRULE, false );
+                if( pRule &&
                     !rDoc.FindNumRulePtr( pRule->GetValue() ) &&
                     USHRT_MAX != (nPoolId = SwStyleNameMapper::GetPoolIdFromUIName ( pRule->GetValue(),
                                     SwGetPoolIdFromName::NumRule )) )
@@ -3152,8 +3149,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
 {
     SwDrawFrameFormat* pFormat = m_rDoc.MakeDrawFrameFormat( OUString(), m_rDoc.GetDfltFrameFormat() );
 
-    const SwFormatAnchor* pAnchor = nullptr;
-    rFlyAttrSet.GetItemState( RES_ANCHOR, false, reinterpret_cast<const SfxPoolItem**>(&pAnchor) );
+    const SwFormatAnchor* pAnchor = rFlyAttrSet.GetItemIfSet( RES_ANCHOR, false );
     pFormat->SetFormatAttr( rFlyAttrSet );
 
     // Didn't set the Anchor yet?
@@ -4739,15 +4735,14 @@ static void lcl_PushNumruleState(
     if (pAttrSet == nullptr)
         return;
 
-    const SfxPoolItem* pItem(nullptr);
-    if (SfxItemState::SET == pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem))
+    if (const SwNumRuleItem* pItem = pAttrSet->GetItemIfSet(RES_PARATR_NUMRULE, false))
     {
-        aNumRuleItemHolderIfSet.reset(&pItem->Clone()->StaticWhichCast(RES_PARATR_NUMRULE));
+        aNumRuleItemHolderIfSet.reset(pItem->Clone());
     }
 
-    if (SfxItemState::SET == pAttrSet->GetItemState(RES_PARATR_LIST_ID, false, &pItem))
+    if (const SfxStringItem* pItem = pAttrSet->GetItemIfSet(RES_PARATR_LIST_ID, false))
     {
-        aListIdItemHolderIfSet.reset(&pItem->Clone()->StaticWhichCast(RES_PARATR_LIST_ID));
+        aListIdItemHolderIfSet.reset(pItem->Clone());
     }
 }
 

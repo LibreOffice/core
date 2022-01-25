@@ -112,7 +112,6 @@ namespace sd {
 void TextObjectBar::Execute( SfxRequest &rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    const SfxPoolItem* pPoolItem = nullptr;
     sal_uInt16 nSlot = rReq.GetSlot();
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
@@ -459,7 +458,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " 1");
                         SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find(sStyleName, SfxStyleFamily::Pseudo);
                         if( pFirstStyleSheet )
-                            pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, reinterpret_cast<const SfxPoolItem**>(&pItem));
+                            pItem = pFirstStyleSheet->GetItemSet().GetItemIfSet(EE_PARA_NUMBULLET, false);
 
                         if (pItem )
                         {
@@ -712,8 +711,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
                 SvxAdjust nAdjust = SvxAdjust::Left;
-                if( SfxItemState::SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
-                    nAdjust = static_cast<const SvxAdjustItem*>(pPoolItem)->GetAdjust();
+                if( const SvxAdjustItem* pAdjustItem = aEditAttr.GetItemIfSet(EE_PARA_JUST) )
+                    nAdjust = pAdjustItem->GetAdjust();
 
                 if( bLeftToRight )
                 {
@@ -823,20 +822,16 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 pColorItem = std::make_unique<SvxColorItem>(pNewArgs->Get(EE_CHAR_COLOR));
             }
-            const SfxPoolItem* pItem = nullptr;
-            if (pArgs->GetItemState(SID_ATTR_COLOR_THEME_INDEX, false, &pItem) == SfxItemState::SET)
+            if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_THEME_INDEX, false))
             {
-                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
                 pColorItem->GetThemeColor().SetThemeIndex(pIntItem->GetValue());
             }
-            if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_MOD, false, &pItem) == SfxItemState::SET)
+            if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_LUM_MOD, false))
             {
-                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
                 pColorItem->GetThemeColor().SetLumMod(pIntItem->GetValue());
             }
-            if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_OFF, false, &pItem) == SfxItemState::SET)
+            if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_LUM_OFF, false))
             {
-                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
                 pColorItem->GetThemeColor().SetLumOff(pIntItem->GetValue());
             }
             if (pColorItem)

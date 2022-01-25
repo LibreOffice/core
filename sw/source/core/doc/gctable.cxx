@@ -33,10 +33,9 @@ static const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, bool bTop )
 
 bool SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrameFormat& rFormat )
 {
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rFormat.GetItemState( RES_BOX, true, &pItem ) )
+    if( const SvxBoxItem* pItem = rFormat.GetItemIfSet( RES_BOX ) )
     {
-        const SvxBorderLine* pBrd = static_cast<const SvxBoxItem*>(pItem)->GetLeft();
+        const SvxBorderLine* pBrd = pItem->GetLeft();
         if( pBrd )
         {
             if( *m_pBorderLine == *pBrd )
@@ -100,13 +99,13 @@ static sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTableLineBoxes& rCollTL
     sal_uInt16 nPos, nLastPos = 0;
     for( size_t nEnd = rCollTLB.Count(); rStt < nEnd; ++rStt )
     {
-        const SfxPoolItem* pItem;
         const SvxBorderLine* pBrd;
         const SwTableBox& rBox = rCollTLB.GetBox( rStt, &nPos );
+        const SvxBoxItem* pItem = rBox.GetFrameFormat()->GetItemIfSet(RES_BOX);
 
-        if( SfxItemState::SET != rBox.GetFrameFormat()->GetItemState(RES_BOX,true, &pItem ) )
+        if( !pItem )
             break;
-        pBrd = GetLineTB( static_cast<const SvxBoxItem*>(pItem), bTop );
+        pBrd = GetLineTB( pItem, bTop );
         if( !pBrd || *pBrd != rBrdLn )
             break;
         nLastPos = nPos;
@@ -116,17 +115,18 @@ static sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTableLineBoxes& rCollTL
 
 static const SvxBorderLine* lcl_GCBorder_GetBorder( const SwTableBox& rBox,
                                                 bool bTop,
-                                                const SfxPoolItem** ppItem )
+                                                const SvxBoxItem** ppItem )
 {
-    return SfxItemState::SET == rBox.GetFrameFormat()->GetItemState( RES_BOX, true, ppItem )
-            ? GetLineTB( static_cast<const SvxBoxItem*>(*ppItem), bTop )
-            : nullptr;
+    *ppItem = rBox.GetFrameFormat()->GetItemIfSet( RES_BOX );
+    if (*ppItem)
+        return GetLineTB( *ppItem, bTop );
+    return nullptr;
 }
 
 static void lcl_GCBorder_DelBorder( const SwCollectTableLineBoxes& rCollTLB,
                                 size_t& rStt, bool bTop,
                                 const SvxBorderLine& rLine,
-                                const SfxPoolItem* pItem,
+                                const SvxBoxItem* pItem,
                                 sal_uInt16 nEndPos,
                                 SwShareBoxFormats* pShareFormats )
 {
@@ -137,7 +137,7 @@ static void lcl_GCBorder_DelBorder( const SwCollectTableLineBoxes& rCollTLB,
     do {
         if( pLn && *pLn == rLine )
         {
-            SvxBoxItem aBox( *static_cast<const SvxBoxItem*>(pItem) );
+            SvxBoxItem aBox( *pItem );
             if( bTop )
                 aBox.SetLine( nullptr, SvxBoxItemLine::TOP );
             else
@@ -169,7 +169,6 @@ void sw_GC_Line_Border( const SwTableLine* pLine, SwGCLineBorder* pGCPara )
     {
         SwGCBorder_BoxBrd aBPara;
         const SvxBorderLine* pBrd;
-        const SfxPoolItem* pItem;
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         for( SwTableBoxes::size_type n = 0, nBoxes = rBoxes.size() - 1; n < nBoxes; ++n )
         {
@@ -185,9 +184,9 @@ void sw_GC_Line_Border( const SwTableLine* pLine, SwGCLineBorder* pGCPara )
             for( SwTableBoxes::size_type i = aBoxes.size(); i; )
             {
                 SwTableBox* pBox = aBoxes[ --i ];
-                if( SfxItemState::SET == pBox->GetFrameFormat()->GetItemState( RES_BOX, true, &pItem ) )
+                if( const SvxBoxItem* pItem = pBox->GetFrameFormat()->GetItemIfSet( RES_BOX ) )
                 {
-                    pBrd = static_cast<const SvxBoxItem*>(pItem)->GetRight();
+                    pBrd = pItem->GetRight();
                     if( pBrd )
                     {
                         aBPara.SetBorder( *pBrd );
@@ -195,7 +194,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, SwGCLineBorder* pGCPara )
                         if( lcl_GCBorder_ChkBoxBrd_B( pNextBox, &aBPara ) &&
                             aBPara.IsAnyBorderFound() )
                         {
-                            SvxBoxItem aBox( *static_cast<const SvxBoxItem*>(pItem) );
+                            SvxBoxItem aBox( *pItem );
                             aBox.SetLine( nullptr, SvxBoxItemLine::RIGHT );
                             if( pGCPara->pShareFormats )
                                 pGCPara->pShareFormats->SetAttr( *pBox, aBox );
@@ -231,7 +230,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, SwGCLineBorder* pGCPara )
 
         const SwTableBox *pBtmBox = &aBottom.GetBox( nSttBtm++, &nBtmPos );
         const SwTableBox *pTopBox = &aTop.GetBox( nSttTop++, &nTopPos );
-        const SfxPoolItem *pBtmItem = nullptr, *pTopItem = nullptr;
+        const SvxBoxItem *pBtmItem = nullptr, *pTopItem = nullptr;
         const SvxBorderLine *pBtmLine(nullptr), *pTopLine(nullptr);
         bool bGetTopItem = true, bGetBtmItem = true;
 
@@ -366,8 +365,7 @@ static bool lcl_MergeGCBox(SwTableBox* pTableBox, GCLinePara* pPara)
             {
                 for (auto pBox : pCpyLine->GetTabBoxes())
                 {
-                    SfxPoolItem const* pCellBrush(nullptr);
-                    if (pBox->GetFrameFormat()->GetItemState(RES_BACKGROUND, true, &pCellBrush) != SfxItemState::SET)
+                    if (pBox->GetFrameFormat()->GetItemState(RES_BACKGROUND) != SfxItemState::SET)
                     {   // set inner row background on inner cell
                         pBox->ClaimFrameFormat();
                         pBox->GetFrameFormat()->SetFormatAttr(*pRowBrush);

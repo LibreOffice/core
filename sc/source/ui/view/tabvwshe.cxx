@@ -258,12 +258,10 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
     {
         case FID_SEARCH_NOW:
             {
+                const SvxSearchItem* pSearchItem;
                 if ( pReqArgs &&
-                     SfxItemState::SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem) )
+                     (pSearchItem = pReqArgs->GetItemIfSet(SID_SEARCH_ITEM, false)) )
                 {
-                    assert( dynamic_cast<const SvxSearchItem*>( pItem) && "wrong Item" );
-                    const SvxSearchItem* pSearchItem = static_cast<const SvxSearchItem*>(pItem);
-
                     ScGlobal::SetSearchItem( *pSearchItem );
                     SearchAndReplace( pSearchItem, true, rReq.IsAPI() );
                     rReq.Done();
@@ -272,18 +270,20 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
             break;
 
         case SID_SEARCH_ITEM:
-            if (pReqArgs && SfxItemState::SET ==
-                            pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem))
+        {
+            const SvxSearchItem* pSearchItem;
+            if (pReqArgs && (pSearchItem =
+                            pReqArgs->GetItemIfSet(SID_SEARCH_ITEM, false)))
             {
                 // remember search item
-                assert( dynamic_cast<const SvxSearchItem*>( pItem) && "wrong Item" );
-                ScGlobal::SetSearchItem( *static_cast<const SvxSearchItem*>(pItem ));
+                ScGlobal::SetSearchItem( *pSearchItem );
             }
             else
             {
                 OSL_FAIL("SID_SEARCH_ITEM without Parameter");
             }
             break;
+        }
         case FID_SEARCH:
         case FID_REPLACE:
         case FID_REPLACE_ALL:

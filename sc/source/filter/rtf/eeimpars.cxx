@@ -357,10 +357,9 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
 
                     bool bTextFormat = false;
 
-                    const SfxPoolItem* pNumFmt = nullptr;
-                    if (rAttrItemSet2.GetItemState(ATTR_VALUE_FORMAT, false, &pNumFmt) == SfxItemState::SET)
+                    if (const SfxUInt32Item* pNumFmt = rAttrItemSet2.GetItemIfSet(ATTR_VALUE_FORMAT, false))
                     {
-                        sal_uInt32 nNumFmt = static_cast<const SfxUInt32Item*>(pNumFmt)->GetValue();
+                        sal_uInt32 nNumFmt = pNumFmt->GetValue();
                         SvNumFormatType nType = pFormatter->GetType(nNumFmt);
                         if (nType == SvNumFormatType::TEXT)
                             // Format is set to Text.

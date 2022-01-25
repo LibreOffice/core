@@ -30,6 +30,7 @@
 
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xbtmpit.hxx>
 
 SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
     SdDrawDocument& rDoc,
@@ -82,13 +83,12 @@ SdUndoAction* SdBackgroundObjUndoAction::Clone() const
 
 void SdBackgroundObjUndoAction::saveFillBitmap(SfxItemSet &rItemSet)
 {
-    const SfxPoolItem *pItem = nullptr;
-    if (rItemSet.GetItemState(XATTR_FILLBITMAP, false, &pItem) == SfxItemState::SET)
+    if (const XFillBitmapItem *pItem = rItemSet.GetItemIfSet(XATTR_FILLBITMAP, false))
         mpFillBitmapItem.reset(pItem->Clone());
     if (bool(mpFillBitmapItem))
     {
-        if (rItemSet.GetItemState(XATTR_FILLSTYLE, false, &pItem) == SfxItemState::SET)
-            mbHasFillBitmap = static_cast<const XFillStyleItem*>(pItem)->GetValue() == css::drawing::FillStyle_BITMAP;
+        if (const XFillStyleItem* pItem = rItemSet.GetItemIfSet(XATTR_FILLSTYLE, false))
+            mbHasFillBitmap = pItem->GetValue() == css::drawing::FillStyle_BITMAP;
         rItemSet.ClearItem(XATTR_FILLBITMAP);
         if (mbHasFillBitmap)
             rItemSet.ClearItem(XATTR_FILLSTYLE);

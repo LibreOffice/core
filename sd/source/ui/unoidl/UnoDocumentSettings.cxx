@@ -425,8 +425,8 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
     VclPtr<SfxPrinter> pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )
     {
-        SdOptionsPrintItem const * pPrinterOptions = nullptr;
-        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, false, reinterpret_cast<const SfxPoolItem**>(&pPrinterOptions)) == SfxItemState::SET)
+        SdOptionsPrintItem const * pPrinterOptions = pPrinter->GetOptions().GetItemIfSet( ATTR_OPTIONS_PRINT, false );
+        if(pPrinterOptions)
             aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
     }
     else
@@ -1099,8 +1099,8 @@ DocumentSettings::_getPropertyValues(
     SfxPrinter* pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )
     {
-        SdOptionsPrintItem const * pPrinterOptions = nullptr;
-        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, false, reinterpret_cast<const SfxPoolItem**>(&pPrinterOptions)) == SfxItemState::SET)
+        SdOptionsPrintItem const * pPrinterOptions = pPrinter->GetOptions().GetItemIfSet( ATTR_OPTIONS_PRINT, false );
+        if (pPrinterOptions)
             aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
     }
     else

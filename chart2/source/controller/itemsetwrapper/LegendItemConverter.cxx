@@ -96,10 +96,9 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
     {
         case SCHATTR_LEGEND_SHOW:
         {
-            const SfxPoolItem* pPoolItem = nullptr;
-            if( rInItemSet.GetItemState( SCHATTR_LEGEND_SHOW, true, &pPoolItem ) == SfxItemState::SET )
+            if( const SfxBoolItem* pShowItem = rInItemSet.GetItemIfSet( SCHATTR_LEGEND_SHOW ) )
             {
-                bool bShow = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+                bool bShow = pShowItem->GetValue();
                 bool bWasShown = true;
                 if( ! (GetPropertySet()->getPropertyValue( "Show" ) >>= bWasShown) ||
                     ( bWasShown != bShow ))
@@ -113,10 +112,9 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
         break;
         case SCHATTR_LEGEND_POS:
         {
-            const SfxPoolItem* pPoolItem = nullptr;
-            if( rInItemSet.GetItemState( SCHATTR_LEGEND_POS, true, &pPoolItem ) == SfxItemState::SET )
+            if( const SfxInt32Item* pPosItem = rInItemSet.GetItemIfSet( SCHATTR_LEGEND_POS ) )
             {
-                chart2::LegendPosition eNewPos = static_cast<chart2::LegendPosition>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
+                chart2::LegendPosition eNewPos = static_cast<chart2::LegendPosition>(pPosItem->GetValue());
 
                 css::chart::ChartLegendExpansion eExpansion = css::chart::ChartLegendExpansion_HIGH;
                 switch( eNewPos )
@@ -154,10 +152,9 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
         break;
         case SCHATTR_LEGEND_NO_OVERLAY:
         {
-            const SfxPoolItem* pPoolItem = nullptr;
-            if(rInItemSet.GetItemState(SCHATTR_LEGEND_NO_OVERLAY, true, &pPoolItem) == SfxItemState::SET)
+            if(const SfxBoolItem* pNoOverlayItem = rInItemSet.GetItemIfSet(SCHATTR_LEGEND_NO_OVERLAY))
             {
-                bool bOverlay = !static_cast<const SfxBoolItem *>(pPoolItem)->GetValue();
+                bool bOverlay = !pNoOverlayItem->GetValue();
                 bool bOldOverlay = false;
                 if(!(GetPropertySet()->getPropertyValue("Overlay") >>= bOldOverlay) ||
                     (bOldOverlay != bOverlay))

@@ -178,11 +178,12 @@ void SfxMacroTabPage::ActivatePage( const SfxItemSet& )
 
 void SfxMacroTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    const SfxPoolItem* pEventsItem;
-    if( !mpImpl->m_bGotEvents && SfxItemState::SET == aSet.GetItemState( SID_EVENTCONFIG, true, &pEventsItem ) )
+    if( mpImpl->m_bGotEvents )
+        return;
+    if( const SfxEventNamesItem* pEventsItem = aSet.GetItemIfSet( SID_EVENTCONFIG ) )
     {
         mpImpl->m_bGotEvents = true;
-        const SfxEventNamesList& rList = static_cast<const SfxEventNamesItem*>(pEventsItem)->GetEvents();
+        const SfxEventNamesList& rList = pEventsItem->GetEvents();
         for ( size_t nNo = 0, nCnt = rList.size(); nNo < nCnt; ++nNo )
         {
             const SfxEventName &rOwn = rList.at(nNo);
@@ -197,11 +198,11 @@ void SfxMacroTabPage::Reset( const SfxItemSet* rSet )
     if( SfxItemState::SET == rSet->GetItemState( GetWhich( aPageRg[0] ), true, &pItem ))
         aTbl = static_cast<const SvxMacroItem*>(pItem)->GetMacroTable();
 
-    const SfxPoolItem* pEventsItem;
-    if( !mpImpl->m_bGotEvents && SfxItemState::SET == rSet->GetItemState( SID_EVENTCONFIG, true, &pEventsItem ) )
+    const SfxEventNamesItem* pEventsItem;
+    if( !mpImpl->m_bGotEvents && (pEventsItem = rSet->GetItemIfSet( SID_EVENTCONFIG ) ) )
     {
         mpImpl->m_bGotEvents = true;
-        const SfxEventNamesList& rList = static_cast<const SfxEventNamesItem*>(pEventsItem)->GetEvents();
+        const SfxEventNamesList& rList = pEventsItem->GetEvents();
         for ( size_t nNo = 0, nCnt = rList.size(); nNo < nCnt; ++nNo )
         {
             const SfxEventName &rOwn = rList.at(nNo);

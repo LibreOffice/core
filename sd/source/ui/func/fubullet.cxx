@@ -151,18 +151,16 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
 void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem = nullptr;
+    const SfxStringItem* pItem = nullptr;
     if( pArgs )
-        pArgs->GetItemState(SID_CHARMAP, false, &pItem);
+        pItem = pArgs->GetItemIfSet(SID_CHARMAP, false);
 
     OUString aChars;
     vcl::Font aFont;
     if ( pItem )
     {
-        aChars = static_cast<const SfxStringItem*>(pItem)->GetValue();
-        const SfxPoolItem* pFtItem = nullptr;
-        pArgs->GetItemState( SID_ATTR_SPECIALCHAR, false, &pFtItem);
-        const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
+        aChars = pItem->GetValue();
+        const SfxStringItem* pFontItem = pArgs->GetItemIfSet( SID_ATTR_SPECIALCHAR, false );
         if ( pFontItem )
         {
             const OUString& aFontName = pFontItem->GetValue();
@@ -172,7 +170,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
         {
             SfxItemSet aFontAttr( mpDoc->GetPool() );
             mpView->GetAttributes( aFontAttr );
-            const SvxFontItem* pFItem = static_cast<const SvxFontItem*>(aFontAttr.GetItem( SID_ATTR_CHAR_FONT ));
+            const SvxFontItem* pFItem = aFontAttr.GetItem( SID_ATTR_CHAR_FONT );
             if( pFItem )
                 aFont = vcl::Font( pFItem->GetFamilyName(), pFItem->GetStyleName(), Size( 1, 1 ) );
         }
@@ -185,7 +183,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
 
         SfxItemSet aFontAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aFontAttr );
-        const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(aFontAttr.GetItem( SID_ATTR_CHAR_FONT ));
+        const SvxFontItem* pFontItem = aFontAttr.GetItem( SID_ATTR_CHAR_FONT );
         if( pFontItem )
             aSet.Put( *pFontItem );
 

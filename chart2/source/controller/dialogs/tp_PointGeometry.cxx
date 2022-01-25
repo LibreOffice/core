@@ -62,11 +62,9 @@ bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 
 void SchLayoutTabPage::Reset(const SfxItemSet* rInAttrs)
 {
-    const SfxPoolItem *pPoolItem = nullptr;
-
-    if (rInAttrs->GetItemState(SCHATTR_STYLE_SHAPE,true, &pPoolItem) == SfxItemState::SET)
+    if (const SfxInt32Item* pShapeItem = rInAttrs->GetItemIfSet(SCHATTR_STYLE_SHAPE))
     {
-        tools::Long nVal = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        tools::Long nVal = pShapeItem->GetValue();
         if(m_pGeometryResources)
         {
             m_pGeometryResources->select(static_cast<sal_uInt16>(nVal));

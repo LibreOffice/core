@@ -251,9 +251,9 @@ namespace
                 }
             }
         }
-        else if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
+        else if (const SvxDoubleItem* pWidthItem = pArgs->GetItemIfSet(SID_ATTR_LINE_WIDTH_ARG, false))
         {
-            double fValue = static_cast<const SvxDoubleItem*>(pItem)->GetValue();
+            double fValue = pWidthItem->GetValue();
             // FIXME: different units...
             int nPow = 100;
             int nValue = fValue * nPow;
@@ -261,15 +261,11 @@ namespace
             XLineWidthItem aItem(nValue);
             pArgs->Put(aItem);
         }
-        if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
+        if (const SfxStringItem* pJSON = pArgs->GetItemIfSet(SID_FILL_GRADIENT_JSON, false))
         {
-            const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
-            if (pJSON)
-            {
-                XGradient aGradient = XGradient::fromJSON(pJSON->GetValue());
-                XFillGradientItem aItem(aGradient);
-                pArgs->Put(aItem);
-            }
+            XGradient aGradient = XGradient::fromJSON(pJSON->GetValue());
+            XFillGradientItem aItem(aGradient);
+            pArgs->Put(aItem);
         }
     }
 }

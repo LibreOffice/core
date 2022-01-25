@@ -89,12 +89,11 @@ namespace
     {
         Color aColor;
         OUString sColor;
-        const SfxPoolItem* pItem = nullptr;
-
-        if (SfxItemState::SET != pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
+        const SfxStringItem* pItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_STR, false);
+        if (!pItem)
             return;
 
-        sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        sColor = pItem->GetValue();
 
         if (sColor == "transparent")
             aColor = COL_TRANSPARENT;
@@ -600,8 +599,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     EE_PARA_JUST, EE_PARA_JUST>  aAttr( *aNewAttr.GetPool() );
 
             SvxAdjust nAdjust = SvxAdjust::Left;
-            if( SfxItemState::SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
-                nAdjust = static_cast<const SvxAdjustItem*>(pPoolItem)->GetAdjust();
+            if( const SvxAdjustItem* pAdjustItem = aEditAttr.GetItemIfSet(EE_PARA_JUST) )
+                nAdjust = pAdjustItem->GetAdjust();
 
             if( bLeftToRight )
             {
@@ -675,7 +674,9 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
 
     SfxItemSet aEditAttr(pOLV->GetAttribs());
-    const SfxPoolItem *pAdjust = nullptr, *pLSpace = nullptr, *pEscItem = nullptr;
+    const SvxAdjustItem *pAdjust = nullptr;
+    const SvxLineSpacingItem *pLSpace = nullptr;
+    const SfxPoolItem *pEscItem = nullptr;
     SvxAdjust eAdjust;
     int nLSpace;
     SvxEscapement nEsc;
@@ -727,7 +728,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             ASK_ADJUST:
             {
                 if (!pAdjust)
-                    aEditAttr.GetItemState(EE_PARA_JUST, false, &pAdjust);
+                    pAdjust = aEditAttr.GetItemIfSet(EE_PARA_JUST, false);
 
                 if (!pAdjust || IsInvalidItem(pAdjust))
                 {
@@ -735,7 +736,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                     nSlotId = 0;
                 }
                 else
-                    bFlag = eAdjust == static_cast<const SvxAdjustItem*>(pAdjust)->GetAdjust();
+                    bFlag = eAdjust == pAdjust->GetAdjust();
             }
             break;
 
@@ -817,7 +818,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             ASK_LINESPACE:
             {
                 if (!pLSpace)
-                    aEditAttr.GetItemState(EE_PARA_SBL, false, &pLSpace);
+                    pLSpace = aEditAttr.GetItemIfSet(EE_PARA_SBL, false);
 
                 if (!pLSpace || IsInvalidItem(pLSpace))
                 {
@@ -825,7 +826,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                     nSlotId = 0;
                 }
                 else if (nLSpace
-                         == static_cast<const SvxLineSpacingItem*>(pLSpace)->GetPropLineSpace())
+                         == pLSpace->GetPropLineSpace())
                     bFlag = true;
                 else
                 {

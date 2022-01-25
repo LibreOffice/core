@@ -120,10 +120,9 @@ bool SwMacroAssignDlg::INetFormatDlg(weld::Window* pParent, SwWrtShell& rSh,
     if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == pOutSet->GetItemState( RES_FRMMACRO, false, &pItem ))
+        if( const SvxMacroItem* pItem = pOutSet->GetItemIfSet( RES_FRMMACRO, false ))
         {
-            rpINetItem->SetMacroTable( static_cast<const SvxMacroItem*>(pItem)->GetMacroTable() );
+            rpINetItem->SetMacroTable( pItem->GetMacroTable() );
             bRet = true;
         }
     }

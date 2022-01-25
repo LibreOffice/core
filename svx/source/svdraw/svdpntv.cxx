@@ -900,18 +900,20 @@ void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr)
 {
     // bReplaceAll has no effect here at all.
     bool bMeasure= dynamic_cast<const SdrView*>(this) != nullptr && static_cast<SdrView*>(this)->IsMeasureTool();
-    const SfxPoolItem *pPoolItem=nullptr;
-    if (rAttr.GetItemState(SDRATTR_LAYERID,true,&pPoolItem)==SfxItemState::SET) {
-        SdrLayerID nLayerId=static_cast<const SdrLayerIdItem*>(pPoolItem)->GetValue();
+
+    if (const SdrLayerIdItem *pPoolItem = rAttr.GetItemIfSet(SDRATTR_LAYERID))
+    {
+        SdrLayerID nLayerId = pPoolItem->GetValue();
         const SdrLayer* pLayer=mpModel->GetLayerAdmin().GetLayerPerID(nLayerId);
         if (pLayer!=nullptr) {
             if (bMeasure) maMeasureLayer=pLayer->GetName();
             else maActualLayer=pLayer->GetName();
         }
     }
-    if (rAttr.GetItemState(SDRATTR_LAYERNAME,true,&pPoolItem)==SfxItemState::SET) {
-        if (bMeasure) maMeasureLayer=static_cast<const SdrLayerNameItem*>(pPoolItem)->GetValue();
-        else maActualLayer=static_cast<const SdrLayerNameItem*>(pPoolItem)->GetValue();
+    if (const SdrLayerNameItem *pPoolItem = rAttr.GetItemIfSet(SDRATTR_LAYERNAME))
+    {
+        if (bMeasure) maMeasureLayer = pPoolItem->GetValue();
+        else maActualLayer = pPoolItem->GetValue();
     }
 }
 

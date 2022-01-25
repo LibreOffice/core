@@ -62,13 +62,12 @@ void SchLegendPosTabPage::Reset(const SfxItemSet* rInAttrs)
 {
     m_aLegendPositionResources.initFromItemSet(*rInAttrs);
 
-    const SfxPoolItem* pPoolItem = nullptr;
-    if( rInAttrs->GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
-        m_xLbTextDirection->set_active_id( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
+    if( const SvxFrameDirectionItem* pDirectionItem = rInAttrs->GetItemIfSet( EE_PARA_WRITINGDIR ) )
+        m_xLbTextDirection->set_active_id( pDirectionItem->GetValue() );
 
-    if (rInAttrs->GetItemState(SCHATTR_LEGEND_NO_OVERLAY, true, &pPoolItem) == SfxItemState::SET)
+    if (const SfxBoolItem* pNoOverlayItem = rInAttrs->GetItemIfSet(SCHATTR_LEGEND_NO_OVERLAY))
     {
-        bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
+        bool bVal = pNoOverlayItem->GetValue();
         m_xCBLegendNoOverlay->set_active(bVal);
     }
 }
