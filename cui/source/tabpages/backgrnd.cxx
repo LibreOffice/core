@@ -221,7 +221,7 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
     if (m_xTblLBox->get_value_changed_from_saved())
     {
-        rCoreSet->Put(SfxUInt16Item(SID_BACKGRND_DESTINATION, m_xTblLBox->get_active()));
+        rCoreSet->Put(SfxUInt16Item(SID_BACKGRND_DESTINATION, static_cast<sal_uInt16>(m_xTblLBox->get_active())));
     }
 
     return true;

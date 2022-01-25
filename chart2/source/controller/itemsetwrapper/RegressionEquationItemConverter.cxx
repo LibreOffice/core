@@ -137,7 +137,7 @@ void RegressionEquationItemConverter::FillSpecialItem(
             sal_Int32 nFormatKey = 0;
             if (GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nFormatKey)
             {
-                rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
+                rOutItemSet.Put( SfxUInt32Item( nWhichId, static_cast<sal_uInt32>(nFormatKey) ));
             }
         }
         break;

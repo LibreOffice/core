@@ -804,7 +804,7 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
                 _nFormatKey = _pFormatter->GetStandardFormat(SvNumFormatType::TEXT, Application::GetSettings().GetLanguageTag().getLanguageType());
         }
 
-        pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, _nFormatKey));
+        pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, static_cast<sal_uInt32>(_nFormatKey)));
     }
 
     if (!bText)

@@ -1057,10 +1057,10 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 if( SfxItemState::DEFAULT <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<const SfxUInt16Item*>(pItem)->GetValue() ) );
                 else
-                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, officecfg::Office::Common::DateFormat::TwoDigitYear::get() ) );
+                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<sal_uInt16>(officecfg::Office::Common::DateFormat::TwoDigitYear::get()) ) );
             }
             else
-                pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, officecfg::Office::Common::DateFormat::TwoDigitYear::get() ) );
+                pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<sal_uInt16>(officecfg::Office::Common::DateFormat::TwoDigitYear::get()) ) );
 
 
             // miscellaneous - Tabulator

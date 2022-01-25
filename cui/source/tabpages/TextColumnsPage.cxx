@@ -58,7 +58,8 @@ void SvxTextColumnsPage::Reset(const SfxItemSet* rAttrs)
 bool SvxTextColumnsPage::FillItemSet(SfxItemSet* rAttrs)
 {
     if (m_xColumnsNumber->get_value_changed_from_saved())
-        rAttrs->Put(SfxInt16Item(SDRATTR_TEXTCOLUMNS_NUMBER, m_xColumnsNumber->get_value()));
+        rAttrs->Put(SfxInt16Item(SDRATTR_TEXTCOLUMNS_NUMBER,
+                                 static_cast<sal_Int16>(m_xColumnsNumber->get_value())));
 
     if (m_xColumnsSpacing->get_value_changed_from_saved())
     {

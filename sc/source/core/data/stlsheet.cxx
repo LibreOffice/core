@@ -210,10 +210,10 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         rItemPool.SetPoolDefaultItem( aPaperSizeItem );
                         rItemPool.SetPoolDefaultItem( aLRSpaceItem );
                         rItemPool.SetPoolDefaultItem( aULSpaceItem );
-                        rItemPool.SetPoolDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALE, 100 ) );
+                        rItemPool.SetPoolDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALE, static_cast<sal_uInt16>(100) ) );
                         ScPageScaleToItem aScaleToItem;
                         rItemPool.SetPoolDefaultItem( aScaleToItem );
-                        rItemPool.SetPoolDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, 0 ) );
+                        rItemPool.SetPoolDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, static_cast<sal_uInt16>(0) ) );
                     }
                 }
                 break;

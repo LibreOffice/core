@@ -231,7 +231,7 @@ class SwTransparencyGrf final : public SfxByteItem
 {
 public:
     SwTransparencyGrf( sal_Int8 nVal = 0 )
-        : SfxByteItem( RES_GRFATR_TRANSPARENCY, nVal )
+        : SfxByteItem( RES_GRFATR_TRANSPARENCY, static_cast<sal_uInt8>(nVal) )
     {}
 
     // pure virtual methods from SfxInt16Item

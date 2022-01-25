@@ -402,7 +402,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, weld::MetricSpinButton&, v
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
         lX = tools::Long( lX * aUIScale );
 
-        SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,static_cast<sal_uInt32>(lX));
+        SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,static_cast<sal_Int32>(lX));
 
         GetBindings()->GetDispatcher()->ExecuteList(
             SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosXItem });
@@ -418,7 +418,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, weld::MetricSpinButton&, v
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
         lY = tools::Long( lY * aUIScale );
 
-        SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,static_cast<sal_uInt32>(lY));
+        SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,static_cast<sal_Int32>(lY));
 
         GetBindings()->GetDispatcher()->ExecuteList(
             SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosYItem });

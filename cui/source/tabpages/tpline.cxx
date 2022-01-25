@@ -630,7 +630,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             bModified=true;
         }
 
-        SfxInt32Item aTItem(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),m_nSymbolType);
+        SfxInt32Item aTItem(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE), m_nSymbolType);
         const SfxPoolItem* pTOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE) );
         bool bNewType = pTOld == nullptr || *static_cast<const SfxInt32Item*>(pTOld) != aTItem;
         if(bNewType && m_nSymbolType==SVX_SYMBOLTYPE_UNKNOWN)

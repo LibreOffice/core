@@ -710,7 +710,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pNewSet->Put( SfxStringItem( SID_FILTER_NAME, pMedium->GetFilter()->GetName() ) );
 
                     // let the current security settings be checked again
-                    pNewSet->Put( SfxUInt16Item( SID_MACROEXECMODE, document::MacroExecMode::USE_CONFIG ) );
+                    pNewSet->Put( SfxUInt16Item( SID_MACROEXECMODE, static_cast<sal_uInt16>(document::MacroExecMode::USE_CONFIG) ) );
 
                     if ( pSh->IsOriginallyReadOnlyMedium()
                          || pSh->IsOriginallyLoadedReadOnlyMedium() )
@@ -758,9 +758,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
 
                 if (!pMacroExecItem)
-                    pNewSet->Put( SfxUInt16Item(SID_MACROEXECMODE,css::document::MacroExecMode::USE_CONFIG) );
+                    pNewSet->Put( SfxUInt16Item(SID_MACROEXECMODE, static_cast<sal_uInt16>(css::document::MacroExecMode::USE_CONFIG)) );
                 if (!pDocTemplateItem)
-                    pNewSet->Put( SfxUInt16Item(SID_UPDATEDOCMODE,css::document::UpdateDocMode::ACCORDING_TO_CONFIG) );
+                    pNewSet->Put( SfxUInt16Item(SID_UPDATEDOCMODE, static_cast<sal_uInt16>(css::document::UpdateDocMode::ACCORDING_TO_CONFIG)) );
 
                 xOldObj->SetModified( false );
                 // Do not cache the old Document! Is invalid when loading

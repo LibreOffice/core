@@ -110,7 +110,7 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
         if (!xPopMenu->popup_at_rect(pPopupParent, aRect).isEmpty())
         {
             css::uno::Any a;
-            SfxUInt16Item aState( GetSlotId(), 0 );
+            SfxUInt16Item aState( GetSlotId(), sal_uInt16(0) );
             aState.QueryValue( a );
             INetURLObject aObj( m_aCommandURL );
 

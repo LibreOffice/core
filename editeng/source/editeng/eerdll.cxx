@@ -91,7 +91,7 @@ DefItems::DefItems()
     rDefItems[7]  = new SfxBoolItem( EE_PARA_HYPHENATE_NO_CAPS, false );
     rDefItems[8]  = new SfxBoolItem( EE_PARA_BULLETSTATE, true );
     rDefItems[9]  = new SvxLRSpaceItem( EE_PARA_OUTLLRSPACE );
-    rDefItems[10]  = new SfxInt16Item( EE_PARA_OUTLLEVEL, -1 );
+    rDefItems[10]  = new SfxInt16Item( EE_PARA_OUTLLEVEL, static_cast<sal_Int16>(-1) );
     rDefItems[11] = new SvxBulletItem( EE_PARA_BULLET );
     rDefItems[12] = new SvxLRSpaceItem( EE_PARA_LRSPACE );
     rDefItems[13] = new SvxULSpaceItem( EE_PARA_ULSPACE );

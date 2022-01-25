@@ -2693,7 +2693,7 @@ namespace pcr
 
             sal_Int32 nFormatKey = 0;
             impl_getPropertyValue_throw( PROPERTY_FORMATKEY ) >>= nFormatKey;
-            aCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, nFormatKey ) );
+            aCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, static_cast<sal_uInt32>(nFormatKey) ) );
 
             SvNumberFormatter* pFormatter = pSupplier->GetNumberFormatter();
             double dPreviewVal = OFormatSampleControl::getPreviewValue(pFormatter,nFormatKey);

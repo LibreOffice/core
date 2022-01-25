@@ -178,7 +178,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                         bRet = true;
                         if (!officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::isReadOnly())
                             if (!rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
-                                    officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::get() )))
+                                    static_cast<sal_uInt16>(officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::get()) )))
                                 bRet = false;
                     }
                     break;
@@ -238,7 +238,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                     if (rSet.Put(
                             SfxUInt16Item (
                                 rPool.GetWhich(SID_ATTR_UNDO_COUNT),
-                                officecfg::Office::Common::Undo::Steps::get())))
+                                static_cast<sal_uInt16>(officecfg::Office::Common::Undo::Steps::get()))))
                     {
                         bRet = true;
                     }
@@ -289,13 +289,13 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                     }
                     break;
                 case SID_INET_PROXY_TYPE :
-                    if (rSet.Put(
-                            SfxUInt16Item(
-                                rPool.GetWhich(SID_INET_PROXY_TYPE),
-                                (officecfg::Inet::Settings::ooInetProxyType::
-                                 get().value_or(0)))))
                     {
-                        bRet = true;
+                        sal_uInt16 nProxyType = officecfg::Inet::Settings::ooInetProxyType::get().value_or(0);
+                        if (rSet.Put(
+                                SfxUInt16Item(rPool.GetWhich(SID_INET_PROXY_TYPE), nProxyType)))
+                        {
+                            bRet = true;
+                        }
                     }
                     break;
                 case SID_INET_HTTP_PROXY_NAME :

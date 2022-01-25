@@ -1077,7 +1077,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
             //! If mnModifyCount gets changed then the call below will implicitly notify
             //! SmGraphicController::StateChanged and there the window gets invalidated.
             //! Thus all the 'mnModifyCount++' before invalidating this slot.
-            rSet.Put(SfxInt16Item(SID_GRAPHIC_SM, mnModifyCount));
+            rSet.Put(SfxInt16Item(SID_GRAPHIC_SM, static_cast<sal_Int16>(mnModifyCount)));
             break;
 
         case SID_UNDO:

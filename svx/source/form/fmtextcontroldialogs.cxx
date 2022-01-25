@@ -55,7 +55,7 @@ namespace svx
         }
         else if (rId == "position")
         {
-            aSet.Put( SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER) );
+            aSet.Put( SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(SVX_PREVIEW_CHARACTER)) );
             rPage.PageCreated(aSet);
         }
     }

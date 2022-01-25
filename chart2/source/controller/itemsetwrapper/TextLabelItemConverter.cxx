@@ -567,7 +567,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             sal_Int32 nKey = 0;
             if (!(GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nKey))
                 nKey = mnNumberFormat;
-            rOutItemSet.Put(SfxUInt32Item(nWhichId, nKey));
+            rOutItemSet.Put(SfxUInt32Item(nWhichId, static_cast<sal_uInt32>(nKey)));
         }
         break;
         case SCHATTR_PERCENT_NUMBERFORMAT_VALUE:
@@ -575,7 +575,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             sal_Int32 nKey = 0;
             if (!(GetPropertySet()->getPropertyValue("PercentageNumberFormat") >>= nKey))
                 nKey = mnPercentNumberFormat;
-            rOutItemSet.Put(SfxUInt32Item(nWhichId, nKey));
+            rOutItemSet.Put(SfxUInt32Item(nWhichId, static_cast<sal_uInt32>(nKey)));
         }
         break;
         case SID_ATTR_NUMBERFORMAT_SOURCE:

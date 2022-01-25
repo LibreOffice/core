@@ -67,7 +67,8 @@ TextColumnsPropertyPanel::~TextColumnsPropertyPanel()
 
 IMPL_LINK_NOARG(TextColumnsPropertyPanel, ModifyColumnsNumberHdl, weld::SpinButton&, void)
 {
-    SfxInt16Item aItem(SDRATTR_TEXTCOLUMNS_NUMBER, m_xColumnsNumber->get_value());
+    SfxInt16Item aItem(SDRATTR_TEXTCOLUMNS_NUMBER,
+                       static_cast<sal_Int16>(m_xColumnsNumber->get_value()));
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_TEXTCOLUMNS_NUMBER, SfxCallMode::RECORD,
                                              { &aItem });
 }

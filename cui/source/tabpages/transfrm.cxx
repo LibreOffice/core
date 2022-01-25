@@ -452,8 +452,8 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
         pView->GetSdrPageView()->LogicToPagePos(aObjectRect);
         Point aPt = aObjectRect.Center();
 
-        rAttrs->Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X, aPt.X()));
-        rAttrs->Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y, aPt.Y()));
+        rAttrs->Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X, static_cast<sal_Int32>(aPt.X())));
+        rAttrs->Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y, static_cast<sal_Int32>(aPt.Y())));
         rAttrs->Put( SfxBoolItem( SID_ATTR_TRANSFORM_SHEAR_VERTICAL, false ) );
     }
 

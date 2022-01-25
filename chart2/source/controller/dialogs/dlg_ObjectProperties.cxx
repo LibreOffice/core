@@ -491,7 +491,7 @@ void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
         aSet.Put (SvxColorListItem(m_pViewElementListProvider->GetColorTable(),SID_COLOR_TABLE));
         aSet.Put (SvxDashListItem(m_pViewElementListProvider->GetDashList(),SID_DASH_LIST));
         aSet.Put (SvxLineEndListItem(m_pViewElementListProvider->GetLineEndList(),SID_LINEEND_LIST));
-        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
+        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE, static_cast<sal_uInt16>(0)));
         aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nNoArrowNoShadowDlg));
 
         if( m_pParameter->HasSymbolProperties() )
@@ -511,13 +511,13 @@ void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
         aSet.Put(SvxHatchListItem(m_pViewElementListProvider->GetHatchList(),SID_HATCH_LIST));
         aSet.Put(SvxBitmapListItem(m_pViewElementListProvider->GetBitmapList(),SID_BITMAP_LIST));
         aSet.Put(SvxPatternListItem(m_pViewElementListProvider->GetPatternList(),SID_PATTERN_LIST));
-        aSet.Put(SfxUInt16Item(SID_PAGE_TYPE,0));
+        aSet.Put(SfxUInt16Item(SID_PAGE_TYPE, static_cast<sal_uInt16>(0)));
         aSet.Put(SfxUInt16Item(SID_DLG_TYPE,nNoArrowNoShadowDlg));
         rPage.PageCreated(aSet);
     }
     else if (rId == "transparent")
     {
-        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
+        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE, static_cast<sal_uInt16>(0)));
         aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nNoArrowNoShadowDlg));
         rPage.PageCreated(aSet);
     }

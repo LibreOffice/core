@@ -308,7 +308,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             break;
         case SCHATTR_AXIS_TIME_RESOLUTION:
             {
-                tools::Long nTimeResolution=0;
+                sal_Int32 nTimeResolution=0;
                 if( rTimeIncrement.TimeResolution >>= nTimeResolution )
                     rOutItemSet.Put( SfxInt32Item( nWhichId, nTimeResolution ) );
                 else if( m_pExplicitScale )
@@ -363,7 +363,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                 xCrossingMainAxis, xCooSys, m_xChartDoc);
 
-            rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
+            rOutItemSet.Put( SfxUInt32Item( nWhichId, static_cast<sal_uInt32>(nFormatKey) ));
         }
         break;
 
@@ -411,7 +411,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
                 sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                     m_xAxis, xCooSys, m_xChartDoc);
 
-                rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
+                rOutItemSet.Put( SfxUInt32Item( nWhichId, static_cast<sal_uInt32>(nFormatKey) ));
             }
         }
         break;

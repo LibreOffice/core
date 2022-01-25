@@ -444,7 +444,7 @@ void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, c
     if( bIncludeValueFormat )
     {
         ScNumFormatAbbrev& rNumFormat = const_cast<ScNumFormatAbbrev&>(rField.GetNumFormat());
-        SfxUInt32Item aValueFormat( ATTR_VALUE_FORMAT, 0 );
+        SfxUInt32Item aValueFormat( ATTR_VALUE_FORMAT, static_cast<sal_uInt32>(0) );
         aValueFormat.SetValue( rNumFormat.GetFormatIndex( *rDoc.GetFormatTable() ) );
         rItemSet.Put( aValueFormat );
         rItemSet.Put( SvxLanguageItem( rNumFormat.GetLanguage(), ATTR_LANGUAGE_FORMAT ) );

@@ -32,7 +32,7 @@
 
  */
 
-class EDITENG_DLLPUBLIC SvxTextRotateItem : public SfxUInt16Item
+class EDITENG_DLLPUBLIC SvxTextRotateItem : public SfxInt16Item
 {
 public:
     SvxTextRotateItem(Degree10 nValue, const sal_uInt16 nId);
@@ -48,8 +48,8 @@ public:
     virtual bool            QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
     virtual bool            PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
-    Degree10 GetValue() const { return Degree10(SfxUInt16Item::GetValue()); }
-    void SetValue(Degree10 val) { SfxUInt16Item::SetValue(val.get()); }
+    Degree10 GetValue() const { return Degree10(SfxInt16Item::GetValue()); }
+    void SetValue(Degree10 val) { SfxInt16Item::SetValue(val.get()); }
 
     // our currently only degree values
     void SetTopToBottom() { SetValue(2700_deg10); }

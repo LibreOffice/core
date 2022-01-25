@@ -127,7 +127,7 @@ void ScMergeAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
  * MergeFlag
  */
 ScMergeFlagAttr::ScMergeFlagAttr():
-    SfxInt16Item(ATTR_MERGE_FLAG, 0)
+    SfxInt16Item(ATTR_MERGE_FLAG, static_cast<sal_Int16>(0))
 {
 }
 

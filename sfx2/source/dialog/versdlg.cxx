@@ -259,7 +259,7 @@ void SfxVersionDialog::Open_Impl()
     SfxObjectShell *pObjShell = m_pViewFrame->GetObjectShell();
 
     auto nPos = m_xVersionBox->get_selected_index();
-    SfxInt16Item aItem( SID_VERSION, nPos + 1);
+    SfxInt16Item aItem( SID_VERSION, static_cast<sal_Int16>(nPos + 1));
     SfxStringItem aTarget( SID_TARGETNAME, "_blank" );
     SfxStringItem aReferer( SID_REFERER, "private:user" );
     SfxStringItem aFile( SID_FILE_NAME, pObjShell->GetMedium()->GetName() );
@@ -352,7 +352,7 @@ IMPL_LINK(SfxVersionDialog, ButtonHdl_Impl, weld::Button&, rButton, void)
     else if (&rButton == m_xCompareButton.get() && nEntry != -1)
     {
         SfxAllItemSet aSet( pObjShell->GetPool() );
-        aSet.Put(SfxInt16Item(SID_VERSION, nEntry + 1));
+        aSet.Put(SfxInt16Item(SID_VERSION, static_cast<sal_Int16>(nEntry + 1)));
         aSet.Put(SfxStringItem(SID_FILE_NAME, pObjShell->GetMedium()->GetName()));
 
         SfxItemSet* pSet = pObjShell->GetMedium()->GetItemSet();
