@@ -308,7 +308,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="contfromed-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|contfromed">Enter the text that you want to display on the page where the footnotes are continued, for example, "Continued from Page ". %PRODUCTNAME Writer automatically inserts the number of the previous page.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|contfromed">Enter the text that you want to display on the page where the footnotes are continued, for example, "Continued from Page ". Writer automatically inserts the number of the previous page.</property>
                   </object>
                 </child>
               </object>
@@ -327,7 +327,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="conted-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|conted">Enter the text that you want to display when the footnotes are continued on the next page, for example, "Continued on Page ". %PRODUCTNAME Writer automatically inserts the number of the following page.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|conted">Enter the text that you want to display when the footnotes are continued on the next page, for example, "Continued on Page ". Writer automatically inserts the number of the following page.</property>
                   </object>
                 </child>
               </object>

@@ -273,7 +273,7 @@ Use the browse button to select a database file.</property>
                             </child>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="availablelb-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="exchangedatabases|extended_tip|availablelb">Lists the databases that are registered in %PRODUCTNAME.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="exchangedatabases|extended_tip|availablelb">Lists the databases that are registered in Writer.</property>
                               </object>
                             </child>
                           </object>

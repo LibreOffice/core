@@ -53,7 +53,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="abbrev-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|abbrev">Type an abbreviation followed by a period, and then click New. This prevents %PRODUCTNAME from automatically capitalizing the first letter of the word that comes after the period at the end of the abbreviation.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|abbrev">Type an abbreviation followed by a period, and then click New. This prevents automatic capitalization of the first letter of the word that comes after the period at the end of the abbreviation.</property>
                   </object>
                 </child>
               </object>
@@ -244,7 +244,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="double-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|double">Type the word or abbreviation that starts with two capital letters or a small initial that you do not want %PRODUCTNAME to change to one initial capital. For example, enter PC to prevent %PRODUCTNAME from changing PC to Pc, or enter eBook to prevent a change to Ebook.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|double">Type the word or abbreviation that starts with two capital letters or a small initial that you do not want automatically changed to one initial capital. For example, enter PC to prevent a change from PC to Pc, or enter eBook to prevent a change to Ebook.</property>
                   </object>
                 </child>
               </object>
@@ -409,7 +409,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="AcorExceptPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|AcorExceptPage">Specify the abbreviations or letter combinations that you do not want %PRODUCTNAME to correct automatically.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|AcorExceptPage">Specify the abbreviations or letter combinations that you do not want corrected automatically.</property>
       </object>
     </child>
   </object>

@@ -386,7 +386,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="ExtensionManagerDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="extensionmanager|extended_tip|ExtensionManagerDialog">The Extension Manager adds, removes, disables, enables, and updates %PRODUCTNAME extensions.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="extensionmanager|extended_tip|ExtensionManagerDialog">The Extension Manager adds, removes, disables, enables, and updates extensions.</property>
       </object>
     </child>
   </object>

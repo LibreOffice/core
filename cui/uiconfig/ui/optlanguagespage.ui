@@ -77,7 +77,7 @@
                 <property name="hexpand">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="userinterface-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|userinterface">Select the language used for the user interface, for example menus, dialogs, help files. You must have installed at least one additional language pack or a multi-language version of %PRODUCTNAME.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|userinterface">Select the language used for the user interface, for example menus, dialogs, help files. You must have installed at least one additional language pack.</property>
                   </object>
                 </child>
               </object>
@@ -247,7 +247,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="ctlsupport-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ctlsupport">Activates complex text layout support. You can now modify the settings corresponding to complex text layout in %PRODUCTNAME.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ctlsupport">Activates complex text layout support. You can now modify the settings corresponding to complex text layout.</property>
                   </object>
                 </child>
               </object>
@@ -266,7 +266,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="asiansupport-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|asiansupport">Activates Asian languages support. You can now modify the corresponding Asian language settings in %PRODUCTNAME.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|asiansupport">Activates Asian languages support. You can now modify the corresponding Asian language settings.</property>
                   </object>
                 </child>
               </object>

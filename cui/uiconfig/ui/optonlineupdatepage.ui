@@ -36,7 +36,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="autocheck-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autocheck">Mark to check for online updates periodically, then select the time interval how often %PRODUCTNAME will check for online updates.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autocheck">Mark to check for online updates periodically, then select the time interval how often to automatically check for online updates.</property>
                   </object>
                 </child>
               </object>
@@ -450,7 +450,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OptOnlineUpdatePage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptOnlineUpdatePage">Specifies some options for the automatic notification and downloading of online updates to %PRODUCTNAME.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptOnlineUpdatePage">Specifies some options for the automatic notification and downloading of online updates to the office suite.</property>
       </object>
     </child>
   </object>

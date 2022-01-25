@@ -116,7 +116,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="autosave-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="autosave">Specifies that %PRODUCTNAME saves the information needed to restore all open documents in case of a crash. You can specify the saving time interval.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="autosave">Specifies that the office suite saves the information needed to restore all open documents in case of a crash. You can specify the saving time interval.</property>
                       </object>
                     </child>
                   </object>
@@ -170,7 +170,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="userautosave-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="userautosave">Specifies that %PRODUCTNAME saves all open documents when saving auto recovery information. Uses the same time interval as AutoRecovery does.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="userautosave">Specifies that the office suite saves all open documents when saving auto recovery information. Uses the same time interval as AutoRecovery does.</property>
                   </object>
                 </child>
               </object>
@@ -246,7 +246,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="backup-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="backup">Saves the previous version of a document as a backup copy whenever you save a document. Every time %PRODUCTNAME creates a backup copy, the previous backup copy is replaced. The backup copy gets the extension .BAK.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="backup">Saves the previous version of a document as a backup copy whenever you save a document. Every time the office suite creates a backup copy, the previous backup copy is replaced. The backup copy gets the extension .BAK.</property>
                   </object>
                 </child>
               </object>

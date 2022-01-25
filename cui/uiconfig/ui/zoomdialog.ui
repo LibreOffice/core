@@ -445,7 +445,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="ZoomDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|ZoomDialog">Reduces or enlarges the screen display of %PRODUCTNAME.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|ZoomDialog">Reduces or enlarges the screen display.</property>
       </object>
     </child>
   </object>

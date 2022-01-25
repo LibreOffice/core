@@ -434,7 +434,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OptGeneralPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | OptGeneralPage">Specifies the general settings for %PRODUCTNAME.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | OptGeneralPage">Specifies the general settings for the office suite.</property>
       </object>
     </child>
   </object>

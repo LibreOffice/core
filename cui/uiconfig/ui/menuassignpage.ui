@@ -442,7 +442,7 @@
                 <property name="hexpand">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="savein-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|savein">Select the location where the menu is to be attached. If attached to a %PRODUCTNAME module, the menu is available for all files opened in that module. If attached to the file, the menu will be available only when that file is opened and active.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|savein">Select the location where the menu is to be attached. If attached to an office suite module, the menu is available for all files opened in that module. If attached to the file, the menu will be available only when that file is opened and active.</property>
                   </object>
                 </child>
               </object>
@@ -995,7 +995,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="MenuAssignPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|MenuAssignPage">Lets you customize %PRODUCTNAME menus for all modules.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|MenuAssignPage">Lets you customize the office suite menus for all modules.</property>
       </object>
     </child>
   </object>

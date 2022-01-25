@@ -234,7 +234,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="libraries-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="eventassignpage|extended_tip|libraries">Lists the %PRODUCTNAME program and any open %PRODUCTNAME document.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="eventassignpage|extended_tip|libraries">Lists the office suite program and any open documents.</property>
                       </object>
                     </child>
                   </object>

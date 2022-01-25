@@ -516,7 +516,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="mtrfldsnaparea-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrfldsnaparea">Defines the snap distance between the mouse pointer and the object contour. %PRODUCTNAME Impress snaps to a snap point if the mouse pointer is nearer than the distance selected in the Snap range control.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrfldsnaparea">Defines the snap distance between the mouse pointer and the object contour. Impress snaps to a snap point if the mouse pointer is nearer than the distance selected in the Snap range control.</property>
                           </object>
                         </child>
                       </object>

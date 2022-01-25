@@ -22042,15 +22042,7 @@ namespace {
             const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
             if (pDesc && pDesc[0])
             {
-                if (ResHookProc pStringReplace = Translate::GetReadStringHook())
-                {
-                    // tdf#142704 %PRODUCTNAME shown in extended tips
-                    OUString aDesc(pDesc, strlen(pDesc), RTL_TEXTENCODING_UTF8);
-                    aDesc = (*pStringReplace)(aDesc);
-                    gtk_tooltip_set_text(tooltip, OUStringToOString(aDesc, RTL_TEXTENCODING_UTF8).getStr());
-                }
-                else
-                    gtk_tooltip_set_text(tooltip, pDesc);
+                gtk_tooltip_set_text(tooltip, pDesc);
                 return true;
             }
 #endif

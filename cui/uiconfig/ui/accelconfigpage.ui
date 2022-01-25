@@ -161,7 +161,7 @@ To quickly find a shortcut in this list, simply press the key combination.</prop
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="office-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|office">Displays shortcut keys that are common to all %PRODUCTNAME applications.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|office">Displays shortcut keys that are common to all the office suite applications.</property>
                       </object>
                     </child>
                   </object>
@@ -182,7 +182,7 @@ To quickly find a shortcut in this list, simply press the key combination.</prop
                     <property name="group">office</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="module-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|module">Displays shortcut keys for the current %PRODUCTNAME application.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|module">Displays shortcut keys for the current office suite application.</property>
                       </object>
                     </child>
                   </object>
@@ -573,7 +573,7 @@ To quickly find a shortcut in this list, simply press the key combination.</prop
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="AccelConfigPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|AccelConfigPage">Assigns or edits the shortcut keys for %PRODUCTNAME commands, or %PRODUCTNAME Basic macros.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|AccelConfigPage">Assigns or edits the shortcut keys for the office suite commands, or Basic macros.</property>
       </object>
     </child>
   </object>

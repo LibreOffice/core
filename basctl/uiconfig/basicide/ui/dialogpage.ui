@@ -125,7 +125,7 @@
                 <property name="use_underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="edit-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="dialogpage|extended_tip|edit">Opens the %PRODUCTNAME Basic editor so that you can modify the selected library.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="dialogpage|extended_tip|edit">Opens the Basic editor so that you can modify the selected library.</property>
                   </object>
                 </child>
               </object>
@@ -218,7 +218,7 @@
                 <property name="use_underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="import-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="dialogpage|extended_tip|import">Locate the %PRODUCTNAME Basic library that you want to add to the current list, and then click Open.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="dialogpage|extended_tip|import">Locate the Basic library that you want to add to the current list, and then click Open.</property>
                   </object>
                 </child>
               </object>

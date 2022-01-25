@@ -136,7 +136,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="match-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|match">Specifies that the search criteria you set for the Calc database functions must match the whole cell exactly. When both, the Search criteria = and &lt;&gt; must apply to whole cells box and the Enable wildcards in formulas box are marked, %PRODUCTNAME Calc behaves exactly as Microsoft Excel when searching cells in the database functions.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|match">Specifies that the search criteria you set for the Calc database functions must match the whole cell exactly. When both, the Search criteria = and &lt;&gt; must apply to whole cells box and the Enable wildcards in formulas box are marked, Calc behaves exactly as Microsoft Excel when searching cells in the database functions.</property>
                   </object>
                 </child>
               </object>

@@ -87,7 +87,7 @@
             <property name="draw_indicator">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="moveoutline-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|moveoutline">%PRODUCTNAME displays the contour line of each individual object when moving this object.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|moveoutline">The contour line of each individual object is displayed when moving this object.</property>
               </object>
             </child>
           </object>

@@ -868,7 +868,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="emptypages-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|emptypages">If switched on, automatically inserted blank pages are exported to the PDF file. This is best if you are printing the pdf file double-sided. Example: In a book a chapter paragraph style is set to always start with an odd numbered page. If the previous chapter ends on an odd page, %PRODUCTNAME inserts an even numbered blank page. This option controls whether to export that even numbered page or not.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|emptypages">If switched on, automatically inserted blank pages are exported to the PDF file. This is best if you are printing the pdf file double-sided. Example: In a book a chapter paragraph style is set to always start with an odd numbered page. If the previous chapter ends on an odd page, then an even numbered blank page is normally automatically inserted. This option controls whether to export that even numbered page or not.</property>
                       </object>
                     </child>
                   </object>

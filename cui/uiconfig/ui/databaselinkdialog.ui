@@ -177,7 +177,7 @@
                     <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="name-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|name">Enter a name for the database. %PRODUCTNAME uses this name to access the database.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|name">Enter a name for the database. The office suite uses this name to access the database.</property>
                       </object>
                     </child>
                   </object>

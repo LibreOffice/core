@@ -32,7 +32,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="wo_basic-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|wo_basic">Loads and saves the Basic code from a Microsoft document as a special %PRODUCTNAME Basic module with the document. The disabled Microsoft Basic code is visible in the %PRODUCTNAME Basic IDE between Sub and End Sub.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|wo_basic">Loads and saves the Basic code from a Microsoft document as a special Basic module with the document. The disabled Microsoft Basic code is visible in the Basic IDE between Sub and End Sub.</property>
                   </object>
                 </child>
               </object>
@@ -71,7 +71,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="wo_saveorig-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|wo_saveorig">Specifies that the original Microsoft Basic code contained in the document is held in a special internal memory for as long as the document remains loaded in %PRODUCTNAME. When saving the document in Microsoft format the Microsoft Basic is saved again with the code in an unchanged form.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|wo_saveorig">Specifies that the original Microsoft Basic code contained in the document is held in a special internal memory for as long as the document remains loaded in the office suite. When saving the document in Microsoft format the Microsoft Basic is saved again with the code in an unchanged form.</property>
                   </object>
                 </child>
               </object>
@@ -123,7 +123,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="ex_basic-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ex_basic">Loads and saves the Basic code from a Microsoft document as a special %PRODUCTNAME Basic module with the document. The disabled Microsoft Basic code is visible in the %PRODUCTNAME Basic IDE between Sub and End Sub.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ex_basic">Loads and saves the Basic code from a Microsoft document as a special Basic module with the document. The disabled Microsoft Basic code is visible in the Basic IDE between Sub and End Sub.</property>
                   </object>
                 </child>
               </object>
@@ -162,7 +162,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="ex_saveorig-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ex_saveorig">Specifies that the original Microsoft Basic code contained in the document is held in a special internal memory for as long as the document remains loaded in %PRODUCTNAME. When saving the document in Microsoft format the Microsoft Basic is saved again with the code in an unchanged form.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ex_saveorig">Specifies that the original Microsoft Basic code contained in the document is held in a special internal memory for as long as the document remains loaded in the office suite. When saving the document in Microsoft format the Microsoft Basic is saved again with the code in an unchanged form.</property>
                   </object>
                 </child>
               </object>
@@ -214,7 +214,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="pp_basic-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|pp_basic">Loads and saves the Basic code from a Microsoft document as a special %PRODUCTNAME Basic module with the document. The disabled Microsoft Basic code is visible in the %PRODUCTNAME Basic IDE between Sub and End Sub.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|pp_basic">Loads and saves the Basic code from a Microsoft document as a special Basic module with the document. The disabled Microsoft Basic code is visible in the Basic IDE between Sub and End Sub.</property>
                   </object>
                 </child>
               </object>
@@ -233,7 +233,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="pp_saveorig-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|pp_saveorig">Specifies that the original Microsoft Basic code contained in the document is held in a special internal memory for as long as the document remains loaded in %PRODUCTNAME. When saving the document in Microsoft format the Microsoft Basic is saved again with the code in an unchanged form.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|pp_saveorig">Specifies that the original Microsoft Basic code contained in the document is held in a special internal memory for as long as the document remains loaded in the office suite. When saving the document in Microsoft format the Microsoft Basic is saved again with the code in an unchanged form.</property>
                   </object>
                 </child>
               </object>

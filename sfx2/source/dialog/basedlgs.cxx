@@ -77,6 +77,8 @@ SfxModelessDialogController::SfxModelessDialogController(SfxBindings* pBindinx,
     const OString& rID)
     : SfxDialogController(pParent, rUIXMLDescription, rID)
 {
+    fprintf(stderr, "SfxModelessDialogController ctor %p\n", this);
+
     Init(pBindinx, pCW);
 }
 
@@ -133,6 +135,8 @@ void SfxModelessDialogController::Deactivate()
 
 SfxModelessDialogController::~SfxModelessDialogController()
 {
+    fprintf(stderr, "SfxModelessDialogController dtor %p\n", this);
+
     if (!m_xImpl->pMgr)
         return;
     auto xFrame = m_xImpl->pMgr->GetFrame();
@@ -213,6 +217,7 @@ SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& 
 
 void SfxDialogController::Close()
 {
+    fprintf(stderr, "really closing\n");
     // tdf3146571 ignore focus changes after we've closed
     m_xDialog->connect_container_focus_changed(Link<weld::Container&, void>());
 }

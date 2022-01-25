@@ -206,7 +206,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cbCompatibility-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|cbCompatibility">Specifies that %PRODUCTNAME Impress calculates the paragraph spacing exactly like Microsoft PowerPoint.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|cbCompatibility">Specifies that Impress calculates the paragraph spacing exactly like Microsoft PowerPoint.</property>
                   </object>
                 </child>
               </object>

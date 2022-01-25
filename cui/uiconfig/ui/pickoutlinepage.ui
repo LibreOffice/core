@@ -55,7 +55,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="PickOutlinePage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="pickoutlinepage|extended_tip|PickOutlinePage">Displays the different styles that you can apply to a hierarchical list. %PRODUCTNAME supports up to nine outline levels in a list hierarchy.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="pickoutlinepage|extended_tip|PickOutlinePage">Displays the different styles that you can apply to a hierarchical list. Up to nine outline levels in a list hierarchy are supported.</property>
       </object>
     </child>
   </object>

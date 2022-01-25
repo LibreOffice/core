@@ -200,7 +200,7 @@
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="treedoc-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="interactionpage|extended_tip|treedoc">Opens and displays a file during a slide show. If you select a %PRODUCTNAME file as the target document, you can also specify the page that will open.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="interactionpage|extended_tip|treedoc">Opens and displays a file during a slide show. If you select an ODF file as the target document, you can also specify the page that will open.</property>
                           </object>
                         </child>
                       </object>

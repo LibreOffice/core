@@ -168,7 +168,7 @@ This wizard helps you create the data source.</property>
             <property name="group">evolution</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="other-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|other">Select this option if you want to register another data source as address book in %PRODUCTNAME.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|other">Select this option if you want to register another data source as address book in the office suite.</property>
               </object>
             </child>
           </object>
@@ -204,7 +204,7 @@ This wizard helps you create the data source.</property>
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="SelectTypePage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|SelectTypePage">This wizard registers an existing address book as a data source in %PRODUCTNAME.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|SelectTypePage">This wizard registers an existing address book as a data source in the office suite.</property>
       </object>
     </child>
   </object>

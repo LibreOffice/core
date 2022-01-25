@@ -479,7 +479,7 @@
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="TSB_AUTO-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|TSB_AUTO">%PRODUCTNAME automatically determines the amount of time to wait before repeating the effect. To manually assign the delay period, clear this checkbox, and then enter a value in the Automatic box.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|TSB_AUTO">Automatically determine the amount of time to wait before repeating the effect. To manually assign the delay period, clear this checkbox, and then enter a value in the Automatic box.</property>
                       </object>
                     </child>
                   </object>

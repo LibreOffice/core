@@ -353,7 +353,7 @@
                         <property name="use_underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|edit">Starts the %PRODUCTNAME Basic editor and opens the selected macro or dialog for editing.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|edit">Starts the Basic editor and opens the selected macro or dialog for editing.</property>
                           </object>
                         </child>
                       </object>

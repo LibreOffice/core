@@ -418,7 +418,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OptFormula-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptFormula">Defines formula syntax options and loading options for %PRODUCTNAME Calc.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptFormula">Defines formula syntax options and loading options for Calc.</property>
       </object>
     </child>
   </object>
