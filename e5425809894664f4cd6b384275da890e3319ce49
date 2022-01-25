@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bceaa851_bf8efbd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-25T17:49:11Z",
+      "side": 1,
+      "message": "@Laszlo: Thank you so mutch! I did not pay attention enough... And you are right, Windows do not mind small or capital letters... :O",
+      "revId": "e5425809894664f4cd6b384275da890e3319ce49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
