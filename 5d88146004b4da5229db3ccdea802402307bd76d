@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8de0a39_33434e8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-25T12:54:00Z",
+      "side": 1,
+      "message": "I think that makes the generic X11 case work, I think things may have gone wrong for gen/X11 at the mentioned commit.\n\nThe qt case still isn\u0027t fully correct (as per the commit message) I don\u0027t know the exact purpose of the menuBarOffset() addition mentioned there to know what the right fix should be.\n\nAll the positioning stuff is disregarded on the wayland platforms anyway, so the observations are for X backends",
+      "revId": "5d88146004b4da5229db3ccdea802402307bd76d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
