@@ -67,7 +67,30 @@ TextCharacterSpacingControl::TextCharacterSpacingControl(TextCharacterSpacingPop
 
 void TextCharacterSpacingControl::GrabFocus()
 {
-    mxVeryTight->grab_focus();
+    tools::Long nKerning = mxEditKerning->get_value(FieldUnit::NONE);
+    switch (nKerning)
+    {
+        case SPACING_VERY_TIGHT:
+            mxVeryTight->grab_focus();
+            break;
+        case SPACING_TIGHT:
+            mxTight->grab_focus();
+            break;
+        case SPACING_NORMAL:
+            mxNormal->grab_focus();
+            break;
+        case SPACING_LOOSE:
+            mxLoose->grab_focus();
+            break;
+        case SPACING_VERY_LOOSE:
+            mxVeryLoose->grab_focus();
+            break;
+        default:
+            if (nKerning == mnCustomKern)
+                mxLastCustom->grab_focus();
+            else
+                mxEditKerning->grab_focus();
+    }
 }
 
 TextCharacterSpacingControl::~TextCharacterSpacingControl()
