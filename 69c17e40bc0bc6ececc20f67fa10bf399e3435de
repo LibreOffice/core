@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f68c5cba_0c21f618",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-25T07:11:53Z",
+      "side": 1,
+      "message": "partial solution to the problem michael mentioned, just that it means a fair amount of casting at various call sites",
+      "revId": "69c17e40bc0bc6ececc20f67fa10bf399e3435de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
