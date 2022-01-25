@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "mysqlc_tables.hxx"
 #include "mysqlc_views.hxx"
 #include "mysqlc_view.hxx"
 #include "mysqlc_catalog.hxx"
@@ -111,6 +112,14 @@ void connectivity::mysqlc::Views::createView(
         ::comphelper::disposeComponent(xStmt);
     }
     //  TODO find a way to refresh view to make the new one appear right away
+    connectivity::mysqlc::Tables* pTables = static_cast<connectivity::mysqlc::Tables*>(
+        static_cast<connectivity::mysqlc::Catalog&>(m_rParent).getPrivateTables());
+    if (pTables)
+    {
+        OUString sName = ::dbtools::composeTableName(
+            m_xMetaData, descriptor, ::dbtools::EComposeRule::InDataManipulation, false);
+        pTables->appendNew(sName);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

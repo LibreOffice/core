@@ -36,6 +36,11 @@ protected:
     appendObject(const OUString& rName,
                  const css::uno::Reference<css::beans::XPropertySet>& rDescriptor) override;
 
+    void createTable(const css::uno::Reference<css::beans::XPropertySet>& descriptor);
+    virtual OUString getNameForObject(const sdbcx::ObjectType& _xObject) override;
+    // XDrop
+    virtual void dropObject(sal_Int32 nPosition, const OUString& rName) override;
+
 public:
     Tables(const css::uno::Reference<css::sdbc::XDatabaseMetaData>& rMetaData,
            ::cppu::OWeakObject& rParent, ::osl::Mutex& rMutex,
@@ -45,11 +50,9 @@ public:
     {
     }
 
+    void appendNew(const OUString& _rsNewTable);
     // TODO: should we also implement XDataDescriptorFactory, XRefreshable,
     // XAppend,  etc. ?
-
-    // XDrop
-    virtual void dropObject(sal_Int32 nPosition, const OUString& rName) override;
 };
 
 } // namespace connectivity::mysqlc

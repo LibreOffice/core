@@ -29,6 +29,8 @@ public:
 
     // IRefreshableUsers
     virtual void refreshUsers() override;
+
+    sdbcx::OCollection* getPrivateTables() const { return m_pTables.get(); }
 };
 
 } // namespace connectivity::mysqlc

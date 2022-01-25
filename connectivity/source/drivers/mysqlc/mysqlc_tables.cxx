@@ -153,28 +153,48 @@ css::uno::Reference<css::beans::XPropertySet> connectivity::mysqlc::Tables::crea
 }
 
 //----- XAppend ---------------------------------------------------------------
-connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::appendObject(
-    const OUString& /* rName */, const css::uno::Reference<css::beans::XPropertySet>& rDescriptor)
+void connectivity::mysqlc::Tables::createTable(
+    const css::uno::Reference<css::beans::XPropertySet>& descriptor)
 {
-    OUString sSql(
-        ::dbtools::createSqlCreateTableStatement(rDescriptor, m_xMetaData->getConnection()));
-    OUString sCatalog, sSchema, sComposedName, sTable;
-    const css::uno::Reference<css::sdbc::XConnection>& xConnection = m_xMetaData->getConnection();
+    const css::uno::Reference<css::sdbc::XConnection> xConnection = m_xMetaData->getConnection();
+    OUString aSql = ::dbtools::createSqlCreateTableStatement(descriptor, xConnection);
 
-    ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+    css::uno::Reference<css::sdbc::XStatement> xStmt = xConnection->createStatement();
+    if (xStmt.is())
+    {
+        xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
+    }
+}
 
-    rDescriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= sCatalog;
-    rDescriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= sSchema;
-    rDescriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)) >>= sTable;
+// XAppend
+connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::appendObject(
+    const OUString& _rForName, const css::uno::Reference<css::beans::XPropertySet>& descriptor)
+{
+    createTable(descriptor);
+    return createObject(_rForName);
+}
 
-    sComposedName = ::dbtools::composeTableName(m_xMetaData, sCatalog, sSchema, sTable, true,
-                                                ::dbtools::EComposeRule::InTableDefinitions);
-    if (sComposedName.isEmpty())
-        ::dbtools::throwFunctionSequenceException(xConnection);
+void connectivity::mysqlc::Tables::appendNew(const OUString& _rsNewTable)
+{
+    insertElement(_rsNewTable, nullptr);
 
-    m_xMetaData->getConnection()->createStatement()->execute(sSql);
+    // notify our container listeners
+    css::container::ContainerEvent aEvent(static_cast<XContainer*>(this),
+                                          css::uno::makeAny(_rsNewTable), css::uno::Any(),
+                                          css::uno::Any());
+    comphelper::OInterfaceIteratorHelper3 aListenerLoop(m_aContainerListeners);
+    while (aListenerLoop.hasMoreElements())
+        aListenerLoop.next()->elementInserted(aEvent);
+}
 
-    return createObject(sComposedName);
+OUString
+connectivity::mysqlc::Tables::getNameForObject(const connectivity::sdbcx::ObjectType& _xObject)
+{
+    OSL_ENSURE(_xObject.is(), "OTables::getNameForObject: Object is NULL!");
+    return ::dbtools::composeTableName(m_xMetaData, _xObject,
+                                       ::dbtools::EComposeRule::InDataManipulation, false)
+        .replaceAll(u"`", u"̀ `");
 }
 
 //----- XDrop -----------------------------------------------------------------
