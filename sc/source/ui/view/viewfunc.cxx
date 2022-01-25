@@ -348,7 +348,8 @@ namespace
             : weld::MessageDialogController(pParent, "modules/scalc/ui/warnautocorrect.ui", "WarnAutoCorrect", "grid")
             , m_xError(m_xBuilder->weld_text_view("error"))
         {
-            m_xDialog->set_primary_text(ScResId(SCSTR_FORMULA_AUTOCORRECTION).trim());
+            m_xDialog->set_primary_text(ScResId(SCSTR_FORMULA_AUTOCORRECTION_PRIMARY));
+            m_xDialog->set_secondary_text(ScResId(SCSTR_FORMULA_AUTOCORRECTION_SECONDARY));
             m_xDialog->set_default_response(RET_YES);
 
             const int nMaxWidth = m_xError->get_approximate_digit_width() * 65;
