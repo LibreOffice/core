@@ -506,29 +506,6 @@ rtl::Reference< ::chart::ChartType > getChartTypeOfSeries(
 
 void deleteSeries(
     const Reference< chart2::XDataSeries > & xSeries,
-    const Reference< chart2::XChartType > & xChartType )
-{
-    try
-    {
-        Reference< chart2::XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY_THROW );
-        auto aSeries(
-            comphelper::sequenceToContainer<std::vector< Reference< chart2::XDataSeries > > >( xSeriesCnt->getDataSeries()));
-        std::vector< Reference< chart2::XDataSeries > >::iterator aIt =
-              std::find( aSeries.begin(), aSeries.end(), xSeries );
-        if( aIt != aSeries.end())
-        {
-            aSeries.erase( aIt );
-            xSeriesCnt->setDataSeries( comphelper::containerToSequence( aSeries ));
-        }
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-}
-
-void deleteSeries(
-    const Reference< chart2::XDataSeries > & xSeries,
     const rtl::Reference< ::chart::ChartType > & xChartType )
 {
     try
