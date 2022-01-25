@@ -317,12 +317,12 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
     impl_setValuesAtTitled( m_xChartDoc );
 
     // diagram is needed by the rest of the objects
-    Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( m_xChartDoc );
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( m_xChartDoc );
     if( ! xDiagram.is())
         return;
 
     // Sub Title
-    impl_setValuesAtTitled( Reference< XTitled >( xDiagram, uno::UNO_QUERY ));
+    impl_setValuesAtTitled( xDiagram );
 
     // Legend
     Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );

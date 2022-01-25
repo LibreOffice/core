@@ -66,7 +66,7 @@ public:
     static css::uno::Reference<
            css::chart2::XAxis >
         createAxis( sal_Int32 nDimensionIndex, bool bMainAxis
-                , const css::uno::Reference< css::chart2::XDiagram >& xDiagram
+                , const rtl::Reference< ::chart::Diagram >& xDiagram
                 , const css::uno::Reference< css::uno::XComponentContext >& xContext
                 , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
@@ -79,22 +79,22 @@ public:
             , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static void showAxis( sal_Int32 nDimensionIndex, bool bMainAxis
-                , const css::uno::Reference< css::chart2::XDiagram >& xDiagram
+                , const rtl::Reference< ::chart::Diagram >& xDiagram
                 , const css::uno::Reference< css::uno::XComponentContext >& xContext
                 , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static void showGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
-                , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+                , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static void hideAxis( sal_Int32 nDimensionIndex, bool bMainAxis
-                , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+                , const rtl::Reference< ::chart::Diagram >& xDiagram );
     static void hideGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
-                , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+                , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static bool isAxisShown( sal_Int32 nDimensionIndex, bool bMainAxis
-                , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+                , const rtl::Reference< ::chart::Diagram >& xDiagram );
     static bool isGridShown( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
-                , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+                , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static void makeAxisVisible( const css::uno::Reference< css::chart2::XAxis >& xAxis );
     static void makeGridVisible( const css::uno::Reference< css::beans::XPropertySet >& xGridProperties );
@@ -111,17 +111,17 @@ public:
 
     static rtl::Reference< ::chart::BaseCoordinateSystem >
         getCoordinateSystemByIndex(
-            const css::uno::Reference< css::chart2::XDiagram >& xDiagram
+            const rtl::Reference< ::chart::Diagram >& xDiagram
             , sal_Int32 nIndex );
 
     static rtl::Reference< ::chart::BaseCoordinateSystem >
         getCoordinateSystemOfAxis(
               const css::uno::Reference< css::chart2::XAxis >& xAxis
-            , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+            , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static css::uno::Reference< css::chart2::XAxis >
         getAxis( sal_Int32 nDimensionIndex, bool bMainAxis
-                , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+                , const rtl::Reference< ::chart::Diagram >& xDiagram );
     static css::uno::Reference< css::chart2::XAxis >
         getAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex
             , const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys );
@@ -132,7 +132,7 @@ public:
 
     static css::uno::Reference< css::chart2::XAxis >
         getParallelAxis( const css::uno::Reference< css::chart2::XAxis >& xAxis
-            , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+            , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static css::uno::Reference< css::beans::XPropertySet >
         getGridProperties( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys
@@ -143,7 +143,7 @@ public:
 
     static sal_Int32 getDimensionIndexOfAxis(
               const css::uno::Reference< css::chart2::XAxis >& xAxis
-            , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+            , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static bool getIndicesForAxis(
               const css::uno::Reference< css::chart2::XAxis >& xAxis
@@ -152,14 +152,14 @@ public:
 
     static bool getIndicesForAxis(
               const css::uno::Reference< css::chart2::XAxis >& xAxis
-            , const css::uno::Reference< css::chart2::XDiagram >& xDiagram
+            , const rtl::Reference< ::chart::Diagram >& xDiagram
             , sal_Int32& rOutCooSysIndex, sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex );
 
     /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
                </sal_True> are returned
      */
     static css::uno::Sequence< css::uno::Reference< css::chart2::XAxis > >
-            getAllAxesOfDiagram( const css::uno::Reference< css::chart2::XDiagram >& xDiagram
+            getAllAxesOfDiagram( const rtl::Reference< ::chart::Diagram >& xDiagram
             , bool bOnlyVisible = false );
 
     /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
@@ -170,19 +170,19 @@ public:
             , bool bOnlyVisible = false );
 
     static css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > >
-            getAllGrids( const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+            getAllGrids( const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static void getAxisOrGridPossibilities( css::uno::Sequence< sal_Bool >& rPossibilityList
         , const rtl::Reference< ::chart::Diagram>& xDiagram, bool bAxis=true );
 
     static void getAxisOrGridExistence( css::uno::Sequence< sal_Bool >& rExistenceList
-        , const css::uno::Reference< css::chart2::XDiagram>& xDiagram, bool bAxis=true );
+        , const rtl::Reference< ::chart::Diagram>& xDiagram, bool bAxis=true );
 
-    static bool changeVisibilityOfGrids( const css::uno::Reference< css::chart2::XDiagram>& xDiagram
+    static bool changeVisibilityOfGrids( const rtl::Reference< ::chart::Diagram>& xDiagram
                         , const css::uno::Sequence< sal_Bool >& rOldExistenceList
                         , const css::uno::Sequence< sal_Bool >& rNewExistenceList );
 
-    static bool changeVisibilityOfAxes( const css::uno::Reference< css::chart2::XDiagram>& xDiagram
+    static bool changeVisibilityOfAxes( const rtl::Reference< ::chart::Diagram>& xDiagram
                         , const css::uno::Sequence< sal_Bool >& rOldExistenceList
                         , const css::uno::Sequence< sal_Bool >& rNewExistenceList
                         , const css::uno::Reference< css::uno::XComponentContext >& xContext

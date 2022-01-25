@@ -202,7 +202,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
 
     if( !xTitled.is() )
     {
-        uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
+        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
         uno::Reference< chart2::XAxis > xAxis;
         switch( eTitleType )
         {

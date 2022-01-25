@@ -1657,7 +1657,7 @@ bool ChartView::getExplicitValuesForAxis(
     if(!xAxis.is())
         return false;
 
-    rtl::Reference< BaseCoordinateSystem > xCooSys = AxisHelper::getCoordinateSystemOfAxis(xAxis, mrChartModel.getFirstDiagram() );
+    rtl::Reference< BaseCoordinateSystem > xCooSys = AxisHelper::getCoordinateSystemOfAxis(xAxis, mrChartModel.getFirstChartDiagram() );
     const VCoordinateSystem* pVCooSys = findInCooSysList(m_aVCooSysList,xCooSys);
     if(!pVCooSys)
         return false;
