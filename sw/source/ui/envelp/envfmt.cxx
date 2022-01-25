@@ -227,13 +227,12 @@ void SwEnvFormatPage::Edit(std::string_view rIdent, bool bSender)
         if (aDlg.run() == RET_OK)
         {
             // maybe relocate defaults
-            const SfxPoolItem* pItem = nullptr;
+            const SfxUInt16Item* pDefaultsItem = nullptr;
             SfxItemSet* pOutputSet = const_cast<SfxItemSet*>(aDlg.GetOutputItemSet());
             sal_uInt16 nNewDist;
 
-            if( SfxItemState::SET == pOutputSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS,
-                false, &pItem ) &&
-                nDefDist != (nNewDist = static_cast<const SfxUInt16Item*>(pItem)->GetValue()) )
+            if( (pDefaultsItem = pOutputSet->GetItemIfSet( SID_ATTR_TABSTOP_DEFAULTS, false )) &&
+                nDefDist != (nNewDist = pDefaultsItem->GetValue()) )
             {
                 SvxTabStopItem aDefTabs( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
                 MakeDefTabs( nNewDist, aDefTabs );
