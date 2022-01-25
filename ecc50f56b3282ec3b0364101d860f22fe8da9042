@@ -105,6 +105,24 @@
       "message": "bisecting shows that this started to cause `make Library_salhelper \u0026\u0026 touch -c sal/osl/all/compat.cxx \u0026\u0026 make Library_salhelper` to erroneously link salhelper again during the second make invocation",
       "revId": "ecc50f56b3282ec3b0364101d860f22fe8da9042",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c9668bf_01c6b7f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-25T12:59:53Z",
+      "side": 1,
+      "message": "...which goes away with\n\n  diff --git a/solenv/gbuild/LinkTarget.mk b/solenv/gbuild/LinkTarget.mk\n  index 12c4dec988fa..73d04238bed3 100644\n  --- a/solenv/gbuild/LinkTarget.mk\n  +++ b/solenv/gbuild/LinkTarget.mk\n  @@ -1234,7 +1234,7 @@ else # DISABLE_DYNLOADING\n   # depend on the now-static libraries themself, but only if the target actually links to it\n   ifneq (,$(call gb_LinkTarget_does_real_link,$(1)))\n   $(foreach lib,$(3),$(if $(filter $(lib),$(gb_Library_KNOWNLIBS)), \\\n  -    $(eval $(call gb_LinkTarget_get_target,$(1)) : $(call gb_Library_get_target,$(lib))) \\\n  +    $$(eval $$(call gb_LinkTarget_get_target,$(1)) : $$(call gb_Library_get_target,$(lib))) \\\n   ))\n   endif\n   endif # DISABLE_DYNLOADING\n\nthough I\u0027m not sure exactly why, nor whether that\u0027s actually the right/best fix\n\n@Michael, any thoughts?",
+      "parentUuid": "3c02ca22_5a323136",
+      "revId": "ecc50f56b3282ec3b0364101d860f22fe8da9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
