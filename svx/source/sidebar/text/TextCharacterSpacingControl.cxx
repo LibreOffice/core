@@ -67,7 +67,7 @@ TextCharacterSpacingControl::TextCharacterSpacingControl(TextCharacterSpacingPop
 
 void TextCharacterSpacingControl::GrabFocus()
 {
-    mxVeryTight->grab_focus();
+    mxEditKerning->grab_focus();
 }
 
 TextCharacterSpacingControl::~TextCharacterSpacingControl()
