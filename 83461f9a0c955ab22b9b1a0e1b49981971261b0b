@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "409c3da4_ff861b60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-25T17:36:53Z",
+      "side": 1,
+      "message": "Only MacOs Jenkins is KO for a reason unrelated to the patch and all the other Jenkins machines are ok, let\u0027s push this one.",
+      "revId": "83461f9a0c955ab22b9b1a0e1b49981971261b0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
