@@ -259,6 +259,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/validationcriteriapage \
 	sc/uiconfig/scalc/ui/validationhelptabpage \
 	sc/uiconfig/scalc/ui/validationhelptabpage-mobile \
+	sc/uiconfig/scalc/ui/warnautocorrect \
 	sc/uiconfig/scalc/ui/xmlsourcedialog \
 	sc/uiconfig/scalc/ui/zoombox \
 	sc/uiconfig/scalc/ui/ztestdialog \
