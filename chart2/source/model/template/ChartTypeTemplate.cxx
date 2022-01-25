@@ -803,35 +803,10 @@ void ChartTypeTemplate::createChartTypes(
 }
 
 void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
-                    const Sequence< Reference< XChartType > > & rOldChartTypesSeq,
-                    const Reference< XChartType > & xNewChartType )
-{
-    Reference< beans::XPropertySet > xDestination( xNewChartType, uno::UNO_QUERY );
-    if( !xDestination.is() )
-        return;
-
-    OUString aNewChartType( xNewChartType->getChartType() );
-
-    Reference< beans::XPropertySet > xSource;
-    for( Reference< XChartType > const & xOldType : rOldChartTypesSeq )
-    {
-        if( xOldType.is() && xOldType->getChartType() == aNewChartType )
-        {
-            xSource.set( Reference< beans::XPropertySet >(xOldType, uno::UNO_QUERY ) );
-            if( xSource.is() )
-                break;
-        }
-    }
-    if( xSource.is() )
-        comphelper::copyProperties( xSource, xDestination );
-}
-
-void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
                     const std::vector< rtl::Reference< ChartType > > & rOldChartTypesSeq,
-                    const Reference< XChartType > & xNewChartType )
+                    const rtl::Reference< ChartType > & xNewChartType )
 {
-    Reference< beans::XPropertySet > xDestination( xNewChartType, uno::UNO_QUERY );
-    if( !xDestination.is() )
+    if( !xNewChartType.is() )
         return;
 
     OUString aNewChartType( xNewChartType->getChartType() );
@@ -847,7 +822,7 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
         }
     }
     if( xSource.is() )
-        comphelper::copyProperties( xSource, xDestination );
+        comphelper::copyProperties( xSource, xNewChartType );
 }
 
 } //  namespace chart

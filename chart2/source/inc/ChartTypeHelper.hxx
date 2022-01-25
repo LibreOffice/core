@@ -75,11 +75,11 @@ public:
                     getAxisType( const rtl::Reference< ::chart::ChartType >& xChartType
                                 , sal_Int32 nDimensionIndex );
 
-    static OUString getRoleOfSequenceForYAxisNumberFormatDetection( const css::uno::Reference<
-        css::chart2::XChartType >& xChartType );
+    static OUString getRoleOfSequenceForYAxisNumberFormatDetection( const rtl::Reference<
+        ::chart::ChartType >& xChartType );
 
-    static OUString getRoleOfSequenceForDataLabelNumberFormatDetection( const css::uno::Reference<
-        css::chart2::XChartType >& xChartType );
+    static OUString getRoleOfSequenceForDataLabelNumberFormatDetection( const rtl::Reference<
+        ::chart::ChartType >& xChartType );
 
     static bool isSupportingOnlyDeepStackingFor3D( const rtl::Reference< ::chart::ChartType >& xChartType );
 };
