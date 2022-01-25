@@ -45,6 +45,7 @@ namespace chart
 class ChartType;
 class ChartTypeManager;
 class ChartTypeTemplate;
+class Diagram;
 
 enum DiagramPositioningMode
 {
@@ -71,7 +72,7 @@ public:
      */
     static tTemplateWithServiceName
         getTemplateForDiagram(
-            const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+            const rtl::Reference< ::chart::Diagram > & xDiagram,
             const rtl::Reference< ::chart::ChartTypeManager > & xChartTypeManager);
 
     /** Sets the "SwapXAndYAxis" property at all coordinate systems found in the
@@ -79,7 +80,7 @@ public:
 
         "vertical==true" for bar charts, "vertical==false" for column charts
      */
-    static void setVertical( const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+    static void setVertical( const rtl::Reference< ::chart::Diagram > & xDiagram,
                              bool bVertical );
 
     /** Gets the "SwapXAndYAxis" property at all coordinate systems found in the
@@ -87,11 +88,11 @@ public:
 
         "vertical==true" for bar charts, "vertical==false" for column charts
     */
-    static bool getVertical( const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+    static bool getVertical( const rtl::Reference< ::chart::Diagram > & xDiagram,
                              bool& rbOutFoundResult, bool& rbOutAmbiguousResult );
 
     static StackMode getStackMode(
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+        const rtl::Reference< ::chart::Diagram > & xDiagram,
         bool& rbFound, bool& rbAmbiguous
         );
 
@@ -102,7 +103,7 @@ public:
         applies to the first chart type/the bars)
      */
     static void setStackMode(
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+        const rtl::Reference< ::chart::Diagram > & xDiagram,
         StackMode eStackMode
         );
 
@@ -125,7 +126,7 @@ public:
         dimension is not unique, 0 is returned.
      */
     static sal_Int32 getDimension(
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+        const rtl::Reference< ::chart::Diagram > & xDiagram );
 
     /** Sets the dimension of the diagram given.
 
@@ -135,14 +136,14 @@ public:
            XCoordinateSystemContainer of the diagram.
      */
     static void setDimension(
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+        const rtl::Reference< ::chart::Diagram > & xDiagram,
         sal_Int32 nNewDimensionCount );
 
     /** Replaces all occurrences of xCooSysToReplace in the tree with
         xReplacement in the diagram's tree
      */
     SAL_DLLPRIVATE static void replaceCoordinateSystem(
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+        const rtl::Reference< ::chart::Diagram > & xDiagram,
         const css::uno::Reference< css::chart2::XCoordinateSystem > & xCooSysToReplace,
         const css::uno::Reference< css::chart2::XCoordinateSystem > & xReplacement );
 
@@ -151,22 +152,22 @@ public:
 
     static bool attachSeriesToAxis( bool bMainAxis,
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+        const rtl::Reference< ::chart::Diagram >& xDiagram,
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         bool bAdaptAxes=true );
 
     static css::uno::Reference< css::chart2::XAxis > getAttachedAxis(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+        const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static rtl::Reference< ChartType >
         getChartTypeOfSeries(
-            const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+            const rtl::Reference< ::chart::Diagram >& xDiagram,
             const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
     static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
         getDataSeriesFromDiagram(
-            const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+            const rtl::Reference< ::chart::Diagram > & xDiagram );
 
     /** return all data series in this diagram grouped by chart-types
      */
@@ -174,20 +175,20 @@ public:
                css::uno::Sequence<
                    css::uno::Reference< css::chart2::XDataSeries > > >
         getDataSeriesGroups(
-            const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+            const rtl::Reference< ::chart::Diagram > & xDiagram );
 
     static bool isCategoryDiagram(
-            const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+            const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static void setCategoriesToDiagram(
             const css::uno::Reference< css::chart2::data::XLabeledDataSequence >& xCategories,
-            const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+            const rtl::Reference< ::chart::Diagram >& xDiagram,
             bool bSetAxisType = false, // when this flag is true ...
             bool bCategoryAxis = true);// set the AxisType to CATEGORY or back to REALNUMBER
 
     static css::uno::Reference< css::chart2::data::XLabeledDataSequence >
         getCategoriesFromDiagram(
-            const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+            const rtl::Reference< ::chart::Diagram > & xDiagram );
 
     static css::uno::Sequence< OUString >
         getExplicitSimpleCategories( ChartModel& rModel );
@@ -202,7 +203,7 @@ public:
     static void switchToTextCategories(
         const rtl::Reference<::chart::ChartModel> & xChartDoc );
 
-    static bool isSupportingDateAxis( const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+    static bool isSupportingDateAxis( const rtl::Reference< ::chart::Diagram >& xDiagram );
     static bool isDateNumberFormat( sal_Int32 nNumberFormat, const css::uno::Reference< css::util::XNumberFormats >& xNumberFormats );
     static sal_Int32 getDateNumberFormat( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     static sal_Int32 getDateTimeInputNumberFormat( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier, double fNumber );
@@ -211,11 +212,11 @@ public:
                 css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
     static rtl::Reference< ChartType >
-        getChartTypeByIndex( const css::uno::Reference< css::chart2::XDiagram >& xDiagram, sal_Int32 nIndex );
+        getChartTypeByIndex( const rtl::Reference< ::chart::Diagram >& xDiagram, sal_Int32 nIndex );
 
     static std::vector< rtl::Reference< ChartType > >
         getChartTypesFromDiagram(
-            const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+            const rtl::Reference< ::chart::Diagram > & xDiagram );
 
     SAL_DLLPRIVATE static bool areChartTypesCompatible(
                 const rtl::Reference< ::chart::ChartType >& xFirstType,
@@ -237,7 +238,7 @@ public:
         *
         */
     static bool isSeriesMoveable(
-            const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+            const rtl::Reference< ::chart::Diagram >& xDiagram,
             const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries,
             bool bForward );
 
@@ -257,28 +258,28 @@ public:
         *
         */
     static bool moveSeries(
-                const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+                const rtl::Reference< ::chart::Diagram >& xDiagram,
                 const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries,
                 bool bForward );
 
-    static bool isSupportingFloorAndWall( const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+    static bool isSupportingFloorAndWall( const rtl::Reference< ::chart::Diagram > & xDiagram );
 
-    static bool isPieOrDonutChart( const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+    static bool isPieOrDonutChart( const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static sal_Int32 getGeometry3D(
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+        const rtl::Reference< ::chart::Diagram > & xDiagram,
         bool& rbFound, bool& rbAmbiguous );
 
     static void setGeometry3D(
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+        const rtl::Reference< ::chart::Diagram > & xDiagram,
         sal_Int32 nNewGeometry );
 
     //returns integer from constant group css::chart::MissingValueTreatment
     static sal_Int32 getCorrectedMissingValueTreatment(
-            const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+            const rtl::Reference< ::chart::Diagram > & xDiagram,
             const rtl::Reference< ::chart::ChartType >& xChartType );
 
-    static DiagramPositioningMode getDiagramPositioningMode( const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+    static DiagramPositioningMode getDiagramPositioningMode( const rtl::Reference< ::chart::Diagram > & xDiagram );
 
     static bool setDiagramPositioning( const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::awt::Rectangle& rPosRect /*100th mm*/ );

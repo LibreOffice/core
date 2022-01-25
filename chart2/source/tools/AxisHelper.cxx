@@ -185,7 +185,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
             }
             else if( xChartDoc.is() && xChartDoc->hasInternalDataProvider() && nDimensionIndex == 0 ) //maybe date axis
             {
-                Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram() );
+                rtl::Reference< Diagram > xDiagram( xChartDoc->getFirstChartDiagram() );
                 if( DiagramHelper::isSupportingDateAxis( xDiagram ) )
                 {
                     nNumberFormatKey = DiagramHelper::getDateNumberFormat( xChartDoc );
@@ -491,7 +491,7 @@ void AxisHelper::makeAxisInvisible( const Reference< XAxis >& xAxis )
     }
 }
 
-void AxisHelper::hideAxisIfNoDataIsAttached( const Reference< XAxis >& xAxis, const Reference< XDiagram >& xDiagram )
+void AxisHelper::hideAxisIfNoDataIsAttached( const Reference< XAxis >& xAxis, const rtl::Reference< Diagram >& xDiagram )
 {
     //axis is hidden if no data is attached anymore but data is available
     bool bOtherSeriesAttachedToThisAxis = false;
@@ -875,7 +875,7 @@ Sequence< Reference< beans::XPropertySet > > AxisHelper::getAllGrids( const Refe
 }
 
 void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityList
-        , const Reference< XDiagram>& xDiagram, bool bAxis )
+        , const rtl::Reference< Diagram>& xDiagram, bool bAxis )
 {
     rPossibilityList.realloc(6);
     sal_Bool* pPossibilityList = rPossibilityList.getArray();
@@ -1123,7 +1123,7 @@ void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys
     }
 }
 
-rtl::Reference< ChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( const Reference< chart2::XDiagram >& xDiagram, const sal_Int32 nAttachedAxisIndex )
+rtl::Reference< ChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( const rtl::Reference< Diagram >& xDiagram, const sal_Int32 nAttachedAxisIndex )
 {
     rtl::Reference< ChartType > xChartType;
     std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );

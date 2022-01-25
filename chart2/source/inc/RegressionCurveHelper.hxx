@@ -33,6 +33,7 @@ namespace com::sun::star::chart2 { class XRegressionCurveContainer; }
 namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::frame { class XModel; }
 namespace chart { class ChartModel; }
+namespace chart { class Diagram; }
 
 namespace chart::RegressionCurveHelper
 {
@@ -162,7 +163,7 @@ namespace chart::RegressionCurveHelper
 
     OOO_DLLPUBLIC_CHARTTOOLS std::vector<css::uno::Reference<css::chart2::XRegressionCurve> >
         getAllRegressionCurvesNotMeanValueLine(
-                const css::uno::Reference<css::chart2::XDiagram>& xDiagram );
+                const rtl::Reference<::chart::Diagram>& xDiagram );
 
     OOO_DLLPUBLIC_CHARTTOOLS void resetEquationPosition(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );

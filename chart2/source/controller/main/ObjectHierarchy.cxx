@@ -214,9 +214,8 @@ void ObjectHierarchy::createLegendTree(
 void ObjectHierarchy::createAxesTree(
     ObjectHierarchy::tChildContainer & rContainer,
     const rtl::Reference<::chart::ChartModel> & xChartDoc,
-    const Reference< XDiagram > & xDiagram  )
+    const rtl::Reference< Diagram > & xDiagram  )
 {
-    Reference< XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
     rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
     bool bSupportsAxesGrids = ChartTypeHelper::isSupportingMainAxis( xChartType, nDimensionCount, 0 );
@@ -278,7 +277,7 @@ void ObjectHierarchy::createAxesTree(
 
 void ObjectHierarchy::createWallAndFloor(
     ObjectHierarchy::tChildContainer & rContainer,
-    const Reference< XDiagram > & xDiagram )
+    const rtl::Reference< Diagram > & xDiagram )
 {
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
     bool bIsThreeD = ( nDimensionCount == 3 );
@@ -297,7 +296,7 @@ void ObjectHierarchy::createWallAndFloor(
 void ObjectHierarchy::createDiagramTree(
     ObjectHierarchy::tChildContainer & rContainer,
     const rtl::Reference<::chart::ChartModel> & xChartDoc,
-    const Reference< XDiagram > & xDiagram )
+    const rtl::Reference< Diagram > & xDiagram )
 {
     if( !m_bOrderingForElementSelector )
     {

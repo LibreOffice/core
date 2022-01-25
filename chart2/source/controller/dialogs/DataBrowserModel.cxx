@@ -205,7 +205,7 @@ private:
     OUString m_aRole;
 };
 
-bool lcl_ShowCategoriesAsDataLabel( const Reference< chart2::XDiagram > & xDiagram )
+bool lcl_ShowCategoriesAsDataLabel( const rtl::Reference< ::chart::Diagram > & xDiagram )
 {
     return !DiagramHelper::isCategoryDiagram(xDiagram);
 }

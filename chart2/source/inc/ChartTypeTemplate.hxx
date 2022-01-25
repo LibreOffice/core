@@ -159,7 +159,7 @@ public:
         <p>The dimension depends on the value returned by getDimension().</p>
      */
     virtual void createCoordinateSystems(
-        const css::uno::Reference< css::chart2::XCoordinateSystemContainer > & xOutCooSysCnt );
+        const rtl::Reference< ::chart::Diagram > & xDiagram );
 
     /** Sets categories at the scales of dimension 0 and the percent stacking at
         the scales of dimension 1 of all given coordinate systems.

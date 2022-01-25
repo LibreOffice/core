@@ -40,6 +40,7 @@ namespace chart
 {
 class BaseCoordinateSystem;
 class ChartType;
+class Diagram;
 
 class OOO_DLLPUBLIC_CHARTTOOLS AxisHelper
 {
@@ -102,7 +103,7 @@ public:
     static void makeGridInvisible( const css::uno::Reference< css::beans::XPropertySet >& xGridProperties );
 
     static void hideAxisIfNoDataIsAttached( const css::uno::Reference< css::chart2::XAxis >& xAxis
-                                          , const css::uno::Reference< css::chart2::XDiagram >& xDiagram);
+                                          , const rtl::Reference< ::chart::Diagram >& xDiagram);
 
     SAL_DLLPRIVATE static bool areAxisLabelsVisible( const css::uno::Reference< css::beans::XPropertySet >& xAxisProperties );
     static bool isAxisVisible( const css::uno::Reference< css::chart2::XAxis >& xAxis );
@@ -172,7 +173,7 @@ public:
             getAllGrids( const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
 
     static void getAxisOrGridPossibilities( css::uno::Sequence< sal_Bool >& rPossibilityList
-        , const css::uno::Reference< css::chart2::XDiagram>& xDiagram, bool bAxis=true );
+        , const rtl::Reference< ::chart::Diagram>& xDiagram, bool bAxis=true );
 
     static void getAxisOrGridExistence( css::uno::Sequence< sal_Bool >& rExistenceList
         , const css::uno::Reference< css::chart2::XDiagram>& xDiagram, bool bAxis=true );
@@ -199,7 +200,7 @@ public:
     static void setRTLAxisLayout( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys );
 
     static rtl::Reference< ::chart::ChartType >
-        getFirstChartTypeWithSeriesAttachedToAxisIndex( const css::uno::Reference< css::chart2::XDiagram >& xDiagram, const sal_Int32 nAttachedAxisIndex );
+        getFirstChartTypeWithSeriesAttachedToAxisIndex( const rtl::Reference< ::chart::Diagram >& xDiagram, const sal_Int32 nAttachedAxisIndex );
 
     static bool isAxisPositioningEnabled();
 };

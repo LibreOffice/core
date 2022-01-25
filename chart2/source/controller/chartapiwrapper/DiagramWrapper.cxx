@@ -25,6 +25,7 @@
 #include "WallFloorWrapper.hxx"
 #include "MinMaxLineWrapper.hxx"
 #include "UpDownBarWrapper.hxx"
+#include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModelHelper.hxx>
@@ -438,7 +439,7 @@ struct StaticDiagramWrapperPropertyArray : public rtl::StaticAggregate< Sequence
 {
 };
 
-bool lcl_isXYChart( const Reference< chart2::XDiagram >& rDiagram )
+bool lcl_isXYChart( const rtl::Reference< ::chart::Diagram >& rDiagram )
 {
     bool bRet = false;
     rtl::Reference< ::chart::ChartType > xChartType( ::chart::DiagramHelper::getChartTypeByIndex( rDiagram, 0 ) );
@@ -453,7 +454,7 @@ bool lcl_isXYChart( const Reference< chart2::XDiagram >& rDiagram )
 
 sal_Int32 lcl_getNewAPIIndexForOldAPIIndex(
                 sal_Int32 nOldAPIIndex
-                , const Reference< chart2::XDiagram >& xDiagram )
+                , const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     sal_Int32 nNewAPIIndex = nOldAPIIndex;
 

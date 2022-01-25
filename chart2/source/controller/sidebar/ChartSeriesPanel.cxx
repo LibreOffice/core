@@ -222,7 +222,7 @@ void setAttachedAxisType(const rtl::Reference<::chart::ChartModel>&
     if (!xDataSeries.is())
         return;
 
-    uno::Reference<chart2::XDiagram> xDiagram = xModel->getFirstDiagram();
+    rtl::Reference<Diagram> xDiagram = xModel->getFirstChartDiagram();
     DiagramHelper::attachSeriesToAxis(bPrimary, xDataSeries, xDiagram, comphelper::getProcessComponentContext());
 }
 

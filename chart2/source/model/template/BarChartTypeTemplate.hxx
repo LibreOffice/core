@@ -85,7 +85,7 @@ protected:
     virtual bool isSwapXAndY() const override;
 
     virtual void createCoordinateSystems(
-        const css::uno::Reference< css::chart2::XCoordinateSystemContainer > & xCooSysCnt ) override;
+        const rtl::Reference< ::chart::Diagram > & xDiagram ) override;
 
 private:
     StackMode          m_eStackMode;

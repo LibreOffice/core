@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <svx/unoshape.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XDiagram; }
@@ -32,7 +33,7 @@ namespace com::sun::star::drawing { class XShape; }
 
 namespace chart
 {
-
+class Diagram;
 class ShapeFactory;
 
 /** The VDiagram is responsible to generate the visible parts of the Diagram
@@ -44,7 +45,7 @@ diagram.
 class VDiagram final
 {
 public: //methods
-    VDiagram( const css::uno::Reference<css::chart2::XDiagram>& xDiagram,
+    VDiagram( const rtl::Reference<::chart::Diagram>& xDiagram,
               const css::drawing::Direction3D& rPreferredAspectRatio,
               sal_Int32 nDimension );
     ~VDiagram();
@@ -92,8 +93,8 @@ private: //members
     rtl::Reference<SvxShapeGroupAnyD>   m_xCoordinateRegionShape;
     rtl::Reference<SvxShapeRect> m_xWall2D;
 
-    sal_Int32                                                               m_nDimensionCount;
-    css::uno::Reference< css::chart2::XDiagram >                                m_xDiagram;
+    sal_Int32                          m_nDimensionCount;
+    rtl::Reference< ::chart::Diagram > m_xDiagram;
 
     css::drawing::Direction3D                                  m_aPreferredAspectRatio;
     css::uno::Reference< css::beans::XPropertySet > m_xAspectRatio3D;

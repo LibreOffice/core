@@ -647,7 +647,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
         return;
     uno::Reference< chart2::data::XDataSource > xSource( xDataProvider->createDataSource( aArguments ) );
 
-    uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram() );
+    rtl::Reference< Diagram > xDia( xChartDoc->getFirstChartDiagram() );
     if( xDia.is() )
         xDia->setDiagramData( xSource, aArguments );
 

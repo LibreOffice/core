@@ -41,7 +41,7 @@ namespace {
 
 uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
       TitleHelper::eTitleType nTitleIndex
-    , const uno::Reference< XDiagram >& xDiagram )
+    , const rtl::Reference< Diagram >& xDiagram )
 {
     uno::Reference< XTitled > xResult;
 
@@ -61,7 +61,7 @@ uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
     {
         case TitleHelper::SUB_TITLE:
             if( xDiagram.is())
-                xResult.set( xDiagram, uno::UNO_QUERY );
+                xResult = xDiagram;
             break;
         case TitleHelper::X_AXIS_TITLE:
             if( xDiagram.is())
@@ -94,7 +94,7 @@ uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
 }
 
 uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleIndex
-                                              , const uno::Reference< XDiagram >& xDiagram )
+                                              , const rtl::Reference< Diagram >& xDiagram )
 {
     uno::Reference< XTitled > xResult;
     switch( nTitleIndex )
@@ -128,10 +128,10 @@ uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleInde
         return xModel;
     }
 
-    uno::Reference< XDiagram > xDiagram;
+    rtl::Reference< Diagram > xDiagram;
 
     if( xModel.is())
-        xDiagram.set( xModel->getFirstDiagram());
+        xDiagram = xModel->getFirstChartDiagram();
 
     return lcl_getTitleParent( nTitleIndex, xDiagram );
 }
@@ -144,7 +144,7 @@ uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIn
     if(nTitleIndex == TitleHelper::MAIN_TITLE)
         return rModel.getTitleObject();
 
-    uno::Reference< XDiagram > xDiagram = rModel.getFirstDiagram();
+    rtl::Reference< Diagram > xDiagram = rModel.getFirstChartDiagram();
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xDiagram ) );
     if( xTitled.is())
         return xTitled->getTitleObject();
@@ -225,7 +225,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
 
     if(xTitled.is())
     {
-        uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
+        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
 
         xTitle.set( xContext->getServiceManager()->createInstanceWithContext(
                         "com.sun.star.chart2.Title",

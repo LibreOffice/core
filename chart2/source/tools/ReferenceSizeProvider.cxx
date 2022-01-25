@@ -93,7 +93,7 @@ void ReferenceSizeProvider::setValuesAtTitle(
 
 void ReferenceSizeProvider::setValuesAtAllDataSeries()
 {
-    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDoc ));
+    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDoc ));
 
     // DataSeries/Points
     std::vector< Reference< XDataSeries > > aSeries(
@@ -230,14 +230,13 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
         return eResult;
 
     // diagram is needed by the rest of the objects
-    Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
+    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
     if( ! xDiagram.is())
         return eResult;
 
     // Sub Title
-    Reference< XTitled > xDiaTitled( xDiagram, uno::UNO_QUERY );
-    if( xDiaTitled.is())
-        impl_getAutoResizeFromTitled( xDiaTitled, eResult );
+    if( xDiagram.is())
+        impl_getAutoResizeFromTitled( xDiagram, eResult );
     if( eResult == AUTO_RESIZE_AMBIGUOUS )
         return eResult;
 

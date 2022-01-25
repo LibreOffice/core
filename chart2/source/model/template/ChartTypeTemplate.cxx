@@ -489,9 +489,9 @@ bool ChartTypeTemplate::isSwapXAndY() const
 }
 
 void ChartTypeTemplate::createCoordinateSystems(
-    const Reference< chart2::XCoordinateSystemContainer > & xOutCooSysCnt )
+    const rtl::Reference< ::chart::Diagram > & xDiagram )
 {
-    if( ! xOutCooSysCnt.is())
+    if( ! xDiagram.is())
         return;
     std::vector< rtl::Reference< ChartType > > aFormerlyUsedChartTypes;
     rtl::Reference< ChartType > xChartType( getChartTypeForNewSeries(aFormerlyUsedChartTypes));
@@ -501,7 +501,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     if( ! xCooSys.is())
     {
         // chart type wants no coordinate systems
-        xOutCooSysCnt->setCoordinateSystems( Sequence< Reference< XCoordinateSystem > >());
+        xDiagram->setCoordinateSystems( Sequence< Reference< XCoordinateSystem > >());
         return;
     }
     // #i69680# make grid of first y-axis visible (was in the CooSys CTOR before)
@@ -513,7 +513,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     }
 
     Sequence< Reference< XCoordinateSystem > > aCoordinateSystems(
-        xOutCooSysCnt->getCoordinateSystems());
+        xDiagram->getCoordinateSystems());
 
     if( aCoordinateSystems.hasElements())
     {
@@ -550,7 +550,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     // set new coordinate systems
     aCoordinateSystems = { xCooSys };
 
-    xOutCooSysCnt->setCoordinateSystems( aCoordinateSystems );
+    xDiagram->setCoordinateSystems( aCoordinateSystems );
 }
 
 void ChartTypeTemplate::adaptScales(

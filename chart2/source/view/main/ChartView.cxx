@@ -815,7 +815,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
             if( aVCooSysList_Y.empty() )
                 continue;
 
-            uno::Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
+            rtl::Reference< Diagram > xDiagram( rModel.getFirstChartDiagram() );
             if (!xDiagram.is())
                 continue;
 
@@ -1211,7 +1211,7 @@ static ::basegfx::B3DHomMatrix createTransformationSceneToScreen(
 namespace
 {
 
-bool lcl_IsPieOrDonut( const uno::Reference< XDiagram >& xDiagram )
+bool lcl_IsPieOrDonut( const rtl::Reference< Diagram >& xDiagram )
 {
     //special treatment for pie charts
     //the size is checked after complete creation to get the datalabels into the given space
@@ -1374,7 +1374,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     //return the used rectangle
     awt::Rectangle aUsedOuterRect(rParam.maRemainingSpace.X, rParam.maRemainingSpace.Y, 0, 0);
 
-    uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
+    rtl::Reference< Diagram > xDiagram( mrChartModel.getFirstChartDiagram() );
     if( !xDiagram.is())
         return aUsedOuterRect;
 
@@ -1399,10 +1399,9 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         VCoordinateSystem* pVCooSys = rVCooSysList[nC].get();
         if(nDimensionCount==3)
         {
-            uno::Reference<beans::XPropertySet> xSceneProperties( xDiagram, uno::UNO_QUERY );
-            CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( xSceneProperties ) );
-            CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( xSceneProperties ) );
-            CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( xSceneProperties ) );
+            CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( xDiagram ) );
+            CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( xDiagram ) );
+            CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( xDiagram ) );
             pVCooSys->set3DWallPositions( eLeftWallPos, eBackWallPos, eBottomPos );
         }
 
@@ -1633,8 +1632,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         awt::Size  aSize(rParam.maRemainingSpace.Width, rParam.maRemainingSpace.Height);
 
         bool bPosSizeExcludeAxesProperty = true;
-        uno::Reference< beans::XPropertySet > xDiaProps( xDiagram, uno::UNO_QUERY_THROW );
-        xDiaProps->getPropertyValue("PosSizeExcludeAxes") >>= bPosSizeExcludeAxesProperty;
+        xDiagram->getPropertyValue("PosSizeExcludeAxes") >>= bPosSizeExcludeAxesProperty;
         if (rParam.mbUseFixedInnerSize || bPosSizeExcludeAxesProperty)
         {
             aPos = awt::Point( m_aResultingDiagramRectangleExcludingAxes.X, m_aResultingDiagramRectangleExcludingAxes.Y );
@@ -2861,10 +2859,9 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     aParam.maRemainingSpace.Height = rPageSize.Height;
 
     //create the group shape for diagram and axes first to have title and legends on top of it
-    uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
-    uno::Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
+    rtl::Reference< Diagram > xDiagram( mrChartModel.getFirstChartDiagram() );
     bool bHasRelativeSize = false;
-    if( xProp.is() && xProp->getPropertyValue("RelativeSize").hasValue() )
+    if( xDiagram.is() && xDiagram->getPropertyValue("RelativeSize").hasValue() )
         bHasRelativeSize = true;
 
     OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) ) );//todo: other index if more than one diagram is possible
@@ -2932,7 +2929,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     bool bDummy = false;
     bool bIsVertical = DiagramHelper::getVertical(xDiagram, bDummy, bDummy);
 
-    if (getAvailablePosAndSizeForDiagram(aParam, rPageSize, xProp))
+    if (getAvailablePosAndSizeForDiagram(aParam, rPageSize, xDiagram))
     {
         awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent(aParam, rPageSize);
 
@@ -2991,7 +2988,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
 
 bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::awt::Size& rPageSize, bool bHasRelativeSize )
 {
-    uno::Reference<XDiagram> xDiagram = mrChartModel.getFirstDiagram();
+    rtl::Reference<Diagram> xDiagram = mrChartModel.getFirstChartDiagram();
 
     rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
     sal_Int32 nDimension = DiagramHelper::getDimension( xDiagram );
