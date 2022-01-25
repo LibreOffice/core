@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "327ec168_89efd918",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-25T08:51:02Z",
+      "side": 1,
+      "message": "Verified by Jenkins on all platforms.",
+      "revId": "5fdc7580a3ee3a7071d5b4028342636f388e1ad6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
