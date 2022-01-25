@@ -263,7 +263,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="ScriptOrganizerDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="scriptorganizer|extended_tip|ScriptOrganizerDialog">Select a macro or script from My Macros, %PRODUCTNAME Macros, or an open document. To view the available macros or scripts, double-click an entry.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="scriptorganizer|extended_tip|ScriptOrganizerDialog">Select a macro or script from My Macros, Application Macros, or an open document. To view the available macros or scripts, double-click an entry.</property>
       </object>
     </child>
   </object>
