@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80ba922e_42051756",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-25T15:12:36Z",
+      "side": 1,
+      "message": "Verified by Jenkins in https://gerrit.libreoffice.org/c/core/+/128922, follow-up of this commit.",
+      "revId": "5a2e4a2c38fc686cac960eb86142ea53e37ca1c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
