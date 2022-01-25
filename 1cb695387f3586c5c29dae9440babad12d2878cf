@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58e0e0c3_92ce119d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport17.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-25T17:16:24Z",
+      "side": 1,
+      "message": "\"b\" (only Windows\u0027 file system doesn\u0027t know the important difference)",
+      "range": {
+        "startLine": 152,
+        "startChar": 46,
+        "endLine": 152,
+        "endChar": 47
+      },
+      "revId": "1cb695387f3586c5c29dae9440babad12d2878cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
