@@ -1287,11 +1287,10 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
                 // fields are single characters
                 if ( nEnd == nStart+1 )
                 {
-                    const SfxPoolItem* pItem;
                     SfxItemSet aSet = rEngine.GetAttribs( aSel );
-                    if ( aSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SfxItemState::SET )
+                    if ( const SvxFieldItem* pFieldItem = aSet.GetItemIfSet( EE_FEATURE_FIELD, false ) )
                     {
-                        const SvxFieldData* pField = static_cast<const SvxFieldItem*>(pItem)->GetField();
+                        const SvxFieldData* pField = pFieldItem->GetField();
                         if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                         {
                             bUrl = true;

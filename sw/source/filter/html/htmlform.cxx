@@ -885,12 +885,9 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         uno::Reference< beans::XPropertySet > xShapePropSet( xCreate, UNO_QUERY );
 
         // set left/right border
-        const SfxPoolItem *pItem;
-        if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, true,
-                                                     &pItem ) )
+        if( const SvxLRSpaceItem* pLRItem = rCSS1ItemSet.GetItemIfSet( RES_LR_SPACE ) )
         {
             // Flatten first line indent
-            const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
             SvxLRSpaceItem aLRItem( *pLRItem );
             aLRItem.SetTextFirstLineOffset( 0 );
             if( rCSS1PropInfo.m_bLeftMargin )
@@ -916,11 +913,9 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         }
 
         // set upper/lower border
-        if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, true,
-                                                     &pItem ) )
+        if( const SvxULSpaceItem *pULItem = rCSS1ItemSet.GetItemIfSet( RES_UL_SPACE ) )
         {
             // Flatten first line indent
-            const SvxULSpaceItem *pULItem = static_cast<const SvxULSpaceItem *>(pItem);
             if( rCSS1PropInfo.m_bTopMargin )
             {
                 nUpperSpace = convertTwipToMm100( pULItem->GetUpper() );
@@ -947,11 +942,10 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
             rFCompPropSet->getPropertySetInfo();
         OUString sPropName = "BackgroundColor";
-        if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_BACKGROUND, true,
-                                                     &pItem ) &&
-            xPropSetInfo->hasPropertyByName( sPropName ) )
+        const SvxBrushItem* pBrushItem = rCSS1ItemSet.GetItemIfSet( RES_BACKGROUND );
+        if( pBrushItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            const Color &rColor = static_cast<const SvxBrushItem *>(pItem)->GetColor();
+            const Color &rColor = pBrushItem->GetColor();
             /// copy color, if color is not "no fill"/"auto fill"
             if( rColor != COL_TRANSPARENT )
             {
@@ -963,30 +957,24 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         }
 
         sPropName = "TextColor";
-        if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_CHRATR_COLOR, true,
-                                                     &pItem ) &&
-            xPropSetInfo->hasPropertyByName( sPropName ) )
+        const SvxColorItem* pColorItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_COLOR );
+        if( pColorItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= static_cast<sal_Int32>(static_cast<const SvxColorItem *>(pItem)->GetValue()
-                                                         .GetRGBColor());
+            aTmp <<= static_cast<sal_Int32>(pColorItem->GetValue().GetRGBColor());
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
         sPropName = "FontHeight";
-        if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_CHRATR_FONTSIZE,
-                                                     true, &pItem ) &&
-            xPropSetInfo->hasPropertyByName( sPropName ) )
+        const SvxFontHeightItem* pFontHeightItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_FONTSIZE );
+        if( pFontHeightItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            float fVal = static_cast< float >(
-                (static_cast<const SvxFontHeightItem *>(pItem)->GetHeight()) / 20.0 );
+            float fVal = static_cast< float >( pFontHeightItem->GetHeight() / 20.0 );
             aTmp <<= fVal;
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_CHRATR_FONT, true,
-                                                     &pItem ) )
+        if( const SvxFontItem* pFontItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_FONT ) )
         {
-            const SvxFontItem *pFontItem = static_cast<const SvxFontItem *>(pItem);
             sPropName = "FontName";
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
@@ -1020,40 +1008,36 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         }
 
         sPropName = "FontWeight";
-        if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_CHRATR_WEIGHT,
-                                                     true, &pItem ) &&
-            xPropSetInfo->hasPropertyByName( sPropName ) )
+        const SvxWeightItem* pWeightItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_WEIGHT );
+        if( pWeightItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             float fVal = vcl::unohelper::ConvertFontWeight(
-                    static_cast<const SvxWeightItem *>(pItem)->GetWeight() );
+                    pWeightItem->GetWeight() );
             aTmp <<= fVal;
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
         sPropName = "FontSlant";
-        if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_CHRATR_POSTURE,
-                                                     true, &pItem ) &&
-            xPropSetInfo->hasPropertyByName( sPropName ) )
+        const SvxPostureItem* pPostureItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_POSTURE );
+        if( pPostureItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= static_cast<sal_Int16>(static_cast<const SvxPostureItem *>(pItem)->GetPosture());
+            aTmp <<= static_cast<sal_Int16>(pPostureItem->GetPosture());
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
         sPropName = "FontUnderline";
-        if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_CHRATR_UNDERLINE,
-                                                     true, &pItem ) &&
-            xPropSetInfo->hasPropertyByName( sPropName ) )
+        const SvxUnderlineItem* pUnderlineItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_UNDERLINE );
+        if( pUnderlineItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= static_cast<sal_Int16>(static_cast<const SvxUnderlineItem *>(pItem)->GetLineStyle());
+            aTmp <<= static_cast<sal_Int16>(pUnderlineItem->GetLineStyle());
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
         sPropName = "FontStrikeout";
-        if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_CHRATR_CROSSEDOUT,
-                                                     true, &pItem ) &&
-            xPropSetInfo->hasPropertyByName( sPropName ) )
+        const SvxCrossedOutItem* pCrossedOutItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_CROSSEDOUT );
+        if( pCrossedOutItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= static_cast<sal_Int16>(static_cast<const SvxCrossedOutItem *>(pItem)->GetStrikeout());
+            aTmp <<= static_cast<sal_Int16>(pCrossedOutItem->GetStrikeout());
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 

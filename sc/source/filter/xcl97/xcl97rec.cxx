@@ -902,10 +902,9 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
     if( !aParaText.isEmpty() )
     {
         const SfxItemSet& aSet( rEditObj.GetParaAttribs( 0));
-        const SfxPoolItem* pItem = nullptr;
-        if( aSet.GetItemState( EE_PARA_JUST, true, &pItem ) == SfxItemState::SET )
+        if( const SvxAdjustItem* pItem = aSet.GetItemIfSet( EE_PARA_JUST ) )
         {
-            SvxAdjust eEEAlign = static_cast< const SvxAdjustItem& >( *pItem ).GetAdjust();
+            SvxAdjust eEEAlign = pItem->GetAdjust();
             pCaption->SetMergedItem( SvxAdjustItem( eEEAlign, EE_PARA_JUST ) );
         }
     }

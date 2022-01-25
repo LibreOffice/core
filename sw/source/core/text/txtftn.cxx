@@ -1313,17 +1313,14 @@ SwFootnoteSave::SwFootnoteSave(const SwTextSizeInfo& rInf, const SwTextFootnote*
         }
 
         // set the correct rotation at the footnote font
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_ROTATE,
-            true, &pItem ))
-            m_pFnt->SetVertical(static_cast<const SvxCharRotateItem*>(pItem)->GetValue(),
+        if( const SvxCharRotateItem* pItem = rSet.GetItemIfSet( RES_CHRATR_ROTATE ) )
+            m_pFnt->SetVertical(pItem->GetValue(),
                                 rInf.GetTextFrame()->IsVertical());
 
         m_pFnt->ChgPhysFnt(m_pInf->GetVsh(), *m_pInf->GetOut());
 
-        if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,
-            true, &pItem ))
-            m_pFnt->SetBackColor(static_cast<const SvxBrushItem*>(pItem)->GetColor());
+        if( const SvxBrushItem* pItem = rSet.GetItemIfSet( RES_CHRATR_BACKGROUND ) )
+            m_pFnt->SetBackColor(pItem->GetColor());
     }
     else
         m_pFnt = nullptr;

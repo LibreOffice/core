@@ -98,8 +98,24 @@ public:
     {
         return static_cast<const T&>(GetFormatAttr(sal_uInt16(nWhich), bInParents));
     }
+
     SfxItemState GetItemState( sal_uInt16 nWhich, bool bSrchInParent = true,
                                     const SfxPoolItem **ppItem = nullptr ) const;
+    template<class T>
+    SfxItemState GetItemState( TypedWhichId<T> nWhich, bool bSrchInParent = true,
+                                    const T **ppItem = nullptr ) const
+    { return GetItemState(sal_uInt16(nWhich), bSrchInParent, reinterpret_cast<const SfxPoolItem **>(ppItem)); }
+
+    /// Templatized version of GetItemState() to directly return the correct type.
+    template<class T>
+    const T *                   GetItemIfSet(   TypedWhichId<T> nWhich,
+                                                bool bSrchInParent = true ) const
+    {
+        const SfxPoolItem * pItem = nullptr;
+        if( SfxItemState::SET == GetItemState(sal_uInt16(nWhich), bSrchInParent, &pItem) )
+            return static_cast<const T*>(pItem);
+        return nullptr;
+    }
     SfxItemState GetBackgroundState(std::unique_ptr<SvxBrushItem>& rItem) const;
     virtual bool SetFormatAttr( const SfxPoolItem& rAttr );
     virtual bool SetFormatAttr( const SfxItemSet& rSet );

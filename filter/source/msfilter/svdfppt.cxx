@@ -5748,27 +5748,24 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                     const SfxItemSet* pItemSet = pTextObj->GetBackground();
                     if ( pItemSet )
                     {
-                        const SfxPoolItem* pFillStyleItem = nullptr;
-                        pItemSet->GetItemState( XATTR_FILLSTYLE, false, &pFillStyleItem );
+                        const XFillStyleItem* pFillStyleItem = pItemSet->GetItemIfSet( XATTR_FILLSTYLE, false );
                         if ( pFillStyleItem )
                         {
-                            drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem*>(pFillStyleItem)->GetValue();
+                            drawing::FillStyle eFillStyle = pFillStyleItem->GetValue();
                             switch( eFillStyle )
                             {
                                 case drawing::FillStyle_SOLID :
                                 {
-                                    const SfxPoolItem* pFillColorItem = nullptr;
-                                    pItemSet->GetItemState( XATTR_FILLCOLOR, false, &pFillColorItem );
+                                    const XColorItem* pFillColorItem = pItemSet->GetItemIfSet( XATTR_FILLCOLOR, false );
                                     if ( pFillColorItem )
-                                        aDefColor = static_cast<const XColorItem*>(pFillColorItem)->GetColorValue();
+                                        aDefColor = pFillColorItem->GetColorValue();
                                 }
                                 break;
                                 case drawing::FillStyle_GRADIENT :
                                 {
-                                    const SfxPoolItem* pGradientItem = nullptr;
-                                    pItemSet->GetItemState( XATTR_FILLGRADIENT, false, &pGradientItem );
+                                    const XFillGradientItem* pGradientItem = pItemSet->GetItemIfSet( XATTR_FILLGRADIENT, false );
                                     if ( pGradientItem )
-                                        aDefColor = static_cast<const XFillGradientItem*>(pGradientItem)->GetGradientValue().GetStartColor();
+                                        aDefColor = pGradientItem->GetGradientValue().GetStartColor();
                                 }
                                 break;
                                 case drawing::FillStyle_HATCH :

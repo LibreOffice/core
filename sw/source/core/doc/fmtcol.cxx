@@ -59,7 +59,7 @@ namespace TextFormatCollFunc
 
         if (!pNewNumRuleItem)
         {
-            (void)pTextFormatColl->GetItemState(RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNewNumRuleItem));
+            pNewNumRuleItem = pTextFormatColl->GetItemIfSet(RES_PARATR_NUMRULE, false);
         }
         if (pNewNumRuleItem)
         {
@@ -77,8 +77,7 @@ namespace TextFormatCollFunc
     {
         SwNumRule* pNumRule( nullptr );
 
-        const SwNumRuleItem* pNumRuleItem(nullptr);
-        (void)rTextFormatColl.GetItemState(RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNumRuleItem));
+        const SwNumRuleItem* pNumRuleItem = rTextFormatColl.GetItemIfSet(RES_PARATR_NUMRULE, false);
         if (pNumRuleItem)
         {
             const OUString& sNumRuleName = pNumRuleItem->GetValue();
@@ -142,23 +141,17 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         // Only recalculate if we're not the sender!
         pNewChgSet = &pNew->StaticWhichCast(RES_ATTRSET_CHG);
         pOldChgSet = &pOld->StaticWhichCast(RES_ATTRSET_CHG);
-        pNewChgSet->GetChgSet()->GetItemState(
-            RES_LR_SPACE, false, reinterpret_cast<const SfxPoolItem**>(&pNewLRSpace) );
-        pNewChgSet->GetChgSet()->GetItemState(
-            RES_UL_SPACE, false, reinterpret_cast<const SfxPoolItem**>(&pNewULSpace) );
-        pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_FONTSIZE,
-                        false, reinterpret_cast<const SfxPoolItem**>(&(aFontSizeArr[0])) );
-        pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CJK_FONTSIZE,
-                        false, reinterpret_cast<const SfxPoolItem**>(&(aFontSizeArr[1])) );
-        pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CTL_FONTSIZE,
-                        false, reinterpret_cast<const SfxPoolItem**>(&(aFontSizeArr[2])) );
+        pNewLRSpace = pNewChgSet->GetChgSet()->GetItemIfSet( RES_LR_SPACE, false );
+        pNewULSpace = pNewChgSet->GetChgSet()->GetItemIfSet( RES_UL_SPACE, false );
+        aFontSizeArr[0] = pNewChgSet->GetChgSet()->GetItemIfSet( RES_CHRATR_FONTSIZE, false );
+        aFontSizeArr[1] = pNewChgSet->GetChgSet()->GetItemIfSet( RES_CHRATR_CJK_FONTSIZE, false );
+        aFontSizeArr[2] = pNewChgSet->GetChgSet()->GetItemIfSet( RES_CHRATR_CTL_FONTSIZE, false );
         // #i70223#, #i84745#
         // check, if attribute set is applied to this paragraph style
         if ( bAssignedToListLevelOfOutlineStyle &&
              pNewChgSet->GetTheChgdSet() == &GetAttrSet() )
         {
-            pNewChgSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, false,
-                                                   reinterpret_cast<const SfxPoolItem**>(&pNewNumRuleItem) );
+            pNewNumRuleItem = pNewChgSet->GetChgSet()->GetItemIfSet( RES_PARATR_NUMRULE, false );
         }
 
         break;
@@ -213,8 +206,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
     bool bContinue = true;
 
     // Check against the own attributes
-    if( pNewLRSpace && SfxItemState::SET == GetItemState( RES_LR_SPACE, false,
-                                        reinterpret_cast<const SfxPoolItem**>(&pOldLRSpace) ))
+    if( pNewLRSpace && (pOldLRSpace = GetItemIfSet( RES_LR_SPACE, false)) )
     {
         if( pOldLRSpace != pNewLRSpace )    // Avoid recursion (SetAttr!)
         {
@@ -254,8 +246,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         }
     }
 
-    if( pNewULSpace && SfxItemState::SET == GetItemState(
-            RES_UL_SPACE, false, reinterpret_cast<const SfxPoolItem**>(&pOldULSpace) ) &&
+    if( pNewULSpace && (pOldULSpace = GetItemIfSet(RES_UL_SPACE, false)) &&
         pOldULSpace != pNewULSpace )    // Avoid recursion (SetAttr!)
     {
         SvxULSpaceItem aNew( *pOldULSpace );
@@ -288,8 +279,8 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
     for( int nC = 0; nC < int(SAL_N_ELEMENTS(aFontSizeArr)); ++nC )
     {
         const SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
-        if( pFSize && SfxItemState::SET == GetItemState(
-            pFSize->Which(), false, reinterpret_cast<const SfxPoolItem**>(&pOldFSize) ) &&
+        if( pFSize && (SfxItemState::SET == GetItemState(
+            pFSize->Which(), false, reinterpret_cast<const SfxPoolItem**>(&pOldFSize) )) &&
             // Avoid recursion (SetAttr!)
             pFSize != pOldFSize )
         {

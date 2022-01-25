@@ -111,16 +111,15 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
     {
         ESelection eSelection = pOutlView->GetSelection();
 
-        const SfxPoolItem *pItem = nullptr;
-        if( SfxItemState::SET == pArgs->GetItemState( ATTR_NUMBER_NEWSTART, false, &pItem ) )
+        if( const SfxBoolItem* pItem = pArgs->GetItemIfSet( ATTR_NUMBER_NEWSTART, false ) )
         {
-            const bool bNewStart = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+            const bool bNewStart = pItem->GetValue();
             pOutliner->SetParaIsNumberingRestart( eSelection.nStartPara, bNewStart );
         }
 
-        if( SfxItemState::SET == pArgs->GetItemState( ATTR_NUMBER_NEWSTART_AT, false, &pItem ) )
+        if( const SfxInt16Item* pItem = pArgs->GetItemIfSet( ATTR_NUMBER_NEWSTART_AT, false ) )
         {
-            const sal_Int16 nStartAt = static_cast<const SfxInt16Item*>(pItem)->GetValue();
+            const sal_Int16 nStartAt = pItem->GetValue();
             pOutliner->SetNumberingStartValue( eSelection.nStartPara, nStartAt );
         }
     }

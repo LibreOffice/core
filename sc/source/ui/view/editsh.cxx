@@ -397,9 +397,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 if ( pItem )
                 {
                     aString = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    const SfxPoolItem* pFtItem = nullptr;
-                    pArgs->GetItemState( SID_ATTR_SPECIALCHAR, false, &pFtItem);
-                    const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
+                    const SfxStringItem* pFontItem = pArgs->GetItemIfSet( SID_ATTR_SPECIALCHAR, false);
                     if ( pFontItem )
                     {
                         const OUString& aFontName(pFontItem->GetValue());
@@ -969,12 +967,10 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             {
                 if (pArgs)
                 {
-                    const SfxPoolItem* pColorStringItem = nullptr;
-
-                    if ( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_ATTR_COLOR_STR, false, &pColorStringItem ) )
+                    if ( const SfxStringItem* pColorStringItem = pArgs->GetItemIfSet( SID_ATTR_COLOR_STR, false ) )
                     {
                         Color aColor;
-                        OUString sColor = static_cast<const SfxStringItem*>( pColorStringItem )->GetValue();
+                        OUString sColor = pColorStringItem->GetValue();
                         if ( sColor == "transparent" )
                             aColor = COL_TRANSPARENT;
                         else

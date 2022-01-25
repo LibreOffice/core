@@ -416,13 +416,13 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     m_xCntSharedBox->save_state();
     RangeHdl();
 
-    const SfxPoolItem* pItem = nullptr;
     SfxObjectShell* pShell;
-    if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem) ||
+    const SfxUInt16Item* pItem = rSet->GetItemIfSet(SID_HTML_MODE, false);
+    if(pItem  ||
         ( nullptr != (pShell = SfxObjectShell::Current()) &&
                     nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
-        sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        sal_uInt16 nHtmlMode = pItem->GetValue();
         if (nHtmlMode & HTMLMODE_ON)
         {
             m_xCntSharedBox->hide();

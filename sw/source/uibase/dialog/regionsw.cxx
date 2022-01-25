@@ -68,12 +68,10 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     }
     else
     {
-        const SfxPoolItem *pItem = nullptr;
         OUString aTmpStr;
-        if ( SfxItemState::SET ==
-                pSet->GetItemState(FN_PARAM_REGION_NAME, true, &pItem) )
+        if ( const SfxStringItem* pItem = pSet->GetItemIfSet(FN_PARAM_REGION_NAME) )
         {
-            const OUString sRemoveWhenUniStringIsGone = static_cast<const SfxStringItem *>(pItem)->GetValue();
+            const OUString sRemoveWhenUniStringIsGone = pItem->GetValue();
             aTmpStr = rSh.GetUniqueSectionName(&sRemoveWhenUniStringIsGone);
         }
         else
@@ -83,44 +81,47 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         rReq.SetReturnValue(SfxStringItem(FN_INSERT_REGION, aTmpStr));
 
         aSet.Put( *pSet );
-        if(SfxItemState::SET == pSet->GetItemState(SID_ATTR_COLUMNS, false, &pItem)||
-            SfxItemState::SET == pSet->GetItemState(FN_INSERT_REGION, false, &pItem))
+        const SfxUInt16Item *pColRegionItem = nullptr;
+        if((pColRegionItem = pSet->GetItemIfSet(SID_ATTR_COLUMNS, false)) ||
+            (pColRegionItem = pSet->GetItemIfSet(FN_INSERT_REGION, false)))
         {
             SwFormatCol aCol;
             SwRect aRect;
             rSh.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
             tools::Long nWidth = aRect.Width();
 
-            sal_uInt16 nCol = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+            sal_uInt16 nCol = pColRegionItem->GetValue();
             if(nCol)
             {
                 aCol.Init( nCol, 0, static_cast< sal_uInt16 >(nWidth) );
                 aSet.Put(aCol);
             }
         }
-        else if(SfxItemState::SET == pSet->GetItemState(RES_COL, false, &pItem))
+        else if(const SwFormatCol* pFormatCol = pSet->GetItemIfSet(RES_COL, false))
         {
-            aSet.Put(*pItem);
+            aSet.Put(*pFormatCol);
         }
 
-        const bool bHidden = SfxItemState::SET == pSet->GetItemState(FN_PARAM_REGION_HIDDEN, true, &pItem) &&
-                             static_cast<const SfxBoolItem *>(pItem)->GetValue();
-        const bool bProtect = SfxItemState::SET == pSet->GetItemState(FN_PARAM_REGION_PROTECT, true, &pItem) &&
-                              static_cast<const SfxBoolItem *>(pItem)->GetValue();
+        const SfxBoolItem* pBoolItem;
+        const bool bHidden = (pBoolItem = pSet->GetItemIfSet(FN_PARAM_REGION_HIDDEN)) &&
+                             pBoolItem->GetValue();
+        const bool bProtect = (pBoolItem = pSet->GetItemIfSet(FN_PARAM_REGION_PROTECT)) &&
+                              pBoolItem->GetValue();
         // #114856# edit in readonly sections
-        const bool bEditInReadonly = SfxItemState::SET == pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, true, &pItem) &&
-                                     static_cast<const SfxBoolItem *>(pItem)->GetValue();
+        const bool bEditInReadonly = (pBoolItem = pSet->GetItemIfSet(FN_PARAM_REGION_EDIT_IN_READONLY)) &&
+                                     pBoolItem->GetValue();
 
         aSection.SetProtectFlag(bProtect);
         aSection.SetHidden(bHidden);
         // #114856# edit in readonly sections
         aSection.SetEditInReadonlyFlag(bEditInReadonly);
 
-        if(SfxItemState::SET ==
-                pSet->GetItemState(FN_PARAM_REGION_CONDITION, true, &pItem))
-            aSection.SetCondition(static_cast<const SfxStringItem *>(pItem)->GetValue());
+        if(const SfxStringItem* pConditionItem =
+                pSet->GetItemIfSet(FN_PARAM_REGION_CONDITION))
+            aSection.SetCondition(pConditionItem->GetValue());
 
         OUString aFile, aSub;
+        const SfxPoolItem* pItem;
         if(SfxItemState::SET ==
                 pSet->GetItemState(FN_PARAM_1, true, &pItem))
             aFile = static_cast<const SfxStringItem *>(pItem)->GetValue();

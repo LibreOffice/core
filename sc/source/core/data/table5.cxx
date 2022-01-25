@@ -75,7 +75,6 @@ void ScTable::UpdatePageBreaks(const ScRange* pUserArea)
         return;
     }
     SfxItemSet* pStyleSet = &pStyle->GetItemSet();
-    const SfxPoolItem* pItem;
 
     SCCOL nStartCol = 0;
     SCROW nStartRow = 0;
@@ -124,18 +123,15 @@ void ScTable::UpdatePageBreaks(const ScRange* pUserArea)
 
     if (!mbForceBreaks)
     {
-        if (pStyleSet->GetItemState(ATTR_PAGE_SCALETOPAGES, false, &pItem) == SfxItemState::SET)
+        if (const SfxUInt16Item* pItem = pStyleSet->GetItemIfSet(ATTR_PAGE_SCALETOPAGES, false))
         {
-            assert(dynamic_cast<const SfxUInt16Item*>(pItem) && "invalid Item");
-            bSkipColBreaks = bSkipRowBreaks
-                = static_cast<const SfxUInt16Item*>(pItem)->GetValue() > 0;
+            bSkipColBreaks = bSkipRowBreaks = pItem->GetValue() > 0;
         }
 
-        if (!bSkipColBreaks
-            && pStyleSet->GetItemState(ATTR_PAGE_SCALETO, false, &pItem) == SfxItemState::SET)
+        const ScPageScaleToItem* pScaleToItem;
+        if (!bSkipColBreaks && (pScaleToItem = pStyleSet->GetItemIfSet(ATTR_PAGE_SCALETO, false)))
         {
             // #i54993# when fitting to width or height, ignore only manual breaks in that direction
-            const ScPageScaleToItem* pScaleToItem = static_cast<const ScPageScaleToItem*>(pItem);
             if (pScaleToItem->GetWidth() > 0)
                 bSkipColBreaks = true;
             if (pScaleToItem->GetHeight() > 0)

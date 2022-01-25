@@ -26,6 +26,7 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdview.hxx>
+#include <svx/xbtmpit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
@@ -1472,11 +1473,10 @@ bool SdrUndoDelPage::CanSdrRepeat(SdrView& /*rView*/) const
 
 void SdrUndoDelPage::queryFillBitmap(const SfxItemSet& rItemSet)
 {
-    const SfxPoolItem *pItem = nullptr;
-    if (rItemSet.GetItemState(XATTR_FILLBITMAP, false, &pItem) == SfxItemState::SET)
+    if (const XFillBitmapItem *pItem = rItemSet.GetItemIfSet(XATTR_FILLBITMAP, false))
         mpFillBitmapItem.reset(pItem->Clone());
-    if (rItemSet.GetItemState(XATTR_FILLSTYLE, false, &pItem) == SfxItemState::SET)
-        mbHasFillBitmap = static_cast<const XFillStyleItem*>(pItem)->GetValue() == css::drawing::FillStyle_BITMAP;
+    if (const XFillStyleItem *pItem = rItemSet.GetItemIfSet(XATTR_FILLSTYLE, false))
+        mbHasFillBitmap = pItem->GetValue() == css::drawing::FillStyle_BITMAP;
 }
 
 void SdrUndoDelPage::clearFillBitmap()

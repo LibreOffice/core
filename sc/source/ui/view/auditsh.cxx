@@ -85,15 +85,12 @@ void ScAuditingShell::Execute( const SfxRequest& rReq )
                 const SfxItemSet* pReqArgs = rReq.GetArgs();
                 if ( pReqArgs )
                 {
-                    const SfxPoolItem* pXItem;
-                    const SfxPoolItem* pYItem;
-                    if ( pReqArgs->GetItemState( SID_RANGE_COL, true, &pXItem ) == SfxItemState::SET
-                      && pReqArgs->GetItemState( SID_RANGE_ROW, true, &pYItem ) == SfxItemState::SET )
+                    const SfxInt16Item* pXItem = pReqArgs->GetItemIfSet( SID_RANGE_COL );
+                    const SfxInt32Item* pYItem = pReqArgs->GetItemIfSet( SID_RANGE_ROW );
+                    if ( pXItem && pYItem )
                     {
-                        assert( dynamic_cast<const SfxInt16Item*>( pXItem) && dynamic_cast<const SfxInt32Item*>( pYItem) &&
-                                        "wrong items" );
-                        SCCOL nCol = static_cast<SCCOL>(static_cast<const SfxInt16Item*>(pXItem)->GetValue());
-                        SCROW nRow = static_cast<SCROW>(static_cast<const SfxInt32Item*>(pYItem)->GetValue());
+                        SCCOL nCol = static_cast<SCCOL>(pXItem->GetValue());
+                        SCROW nRow = static_cast<SCROW>(pYItem->GetValue());
                         ScViewFunc* pView = rViewData.GetView();
                         pView->MoveCursorAbs( nCol, nRow, SC_FOLLOW_LINE, false, false );
                         switch ( nFunction )

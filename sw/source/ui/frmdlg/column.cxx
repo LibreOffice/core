@@ -562,9 +562,8 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     }
     if (m_xBalanceColsCB->get_visible())
     {
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == rSet->GetItemState( RES_COLUMNBALANCE, false, &pItem ))
-            m_xBalanceColsCB->set_active(!static_cast<const SwFormatNoBalancedColumns*>(pItem)->GetValue());
+        if( const SwFormatNoBalancedColumns* pItem = rSet->GetItemIfSet( RES_COLUMNBALANCE, false ) )
+            m_xBalanceColsCB->set_active(!pItem->GetValue());
         else
             m_xBalanceColsCB->set_active(true);
     }

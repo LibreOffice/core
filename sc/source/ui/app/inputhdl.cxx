@@ -2472,11 +2472,10 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             {
                 // Percent format?
                 const SfxItemSet& rAttrSet = pPattern->GetItemSet();
-                const SfxPoolItem* pItem;
 
-                if ( SfxItemState::SET == rAttrSet.GetItemState( ATTR_VALUE_FORMAT, true, &pItem ) )
+                if ( const SfxUInt32Item* pItem = rAttrSet.GetItemIfSet( ATTR_VALUE_FORMAT ) )
                 {
-                    sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+                    sal_uInt32 nFormat = pItem->GetValue();
                     if (SvNumFormatType::PERCENT == rDoc.GetFormatTable()->GetType( nFormat ))
                         nCellPercentFormatDecSep = rDoc.GetFormatTable()->GetFormatDecimalSep( nFormat).toChar();
                     else
@@ -2486,8 +2485,8 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                     nCellPercentFormatDecSep = 0; // Default: no percent
 
                 // Validity specified?
-                if ( SfxItemState::SET == rAttrSet.GetItemState( ATTR_VALIDDATA, true, &pItem ) )
-                    nValidation = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+                if ( const SfxUInt32Item* pItem = rAttrSet.GetItemIfSet( ATTR_VALIDDATA ) )
+                    nValidation = pItem->GetValue();
                 else
                     nValidation = 0;
 

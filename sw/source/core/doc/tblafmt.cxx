@@ -532,8 +532,7 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
 
     const SwTableBoxNumFormat* pNumFormatItem;
     const SvNumberformat* pNumFormat = nullptr;
-    if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT, true,
-        reinterpret_cast<const SfxPoolItem**>(&pNumFormatItem) ) && pNFormatr &&
+    if( pNFormatr && (pNumFormatItem = rSet.GetItemIfSet( RES_BOXATR_FORMAT )) &&
         nullptr != (pNumFormat = pNFormatr->GetEntry( pNumFormatItem->GetValue() )) )
         pFormat->SetValueFormat( pNumFormat->GetFormatstring(),
                                 pNumFormat->GetLanguage(),

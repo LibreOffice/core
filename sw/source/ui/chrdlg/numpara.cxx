@@ -61,13 +61,15 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(weld::Container* pPage, weld::Dialo
     m_xRestartParaCountCB->set_state(TRISTATE_FALSE);
     m_xEditNumStyleBtn->set_sensitive(false);
 
-    const SfxPoolItem* pItem;
-    SfxObjectShell* pObjSh;
-    if(SfxItemState::SET == rAttr.GetItemState(SID_HTML_MODE, false, &pItem) ||
-        ( nullptr != ( pObjSh = SfxObjectShell::Current()) &&
-          nullptr != (pItem = pObjSh->GetItem(SID_HTML_MODE))))
+    const SfxUInt16Item* pItem = rAttr.GetItemIfSet(SID_HTML_MODE, false);
+    if (!pItem)
     {
-        const sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        if (SfxObjectShell* pObjSh = SfxObjectShell::Current())
+            pItem = pObjSh->GetItem(SID_HTML_MODE);
+    }
+    if(pItem)
+    {
+        const sal_uInt16 nHtmlMode = pItem->GetValue();
 
         if (HTMLMODE_ON & nHtmlMode)
             m_xCountParaFram->hide();
@@ -96,7 +98,7 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
     if (m_xOutlineLvLB->get_value_changed_from_saved())
     {
         const sal_uInt16 aOutlineLv = m_xOutlineLvLB->get_active();
-        const SfxUInt16Item* pOldOutlineLv = static_cast<const SfxUInt16Item*>(GetOldItem( *rSet, SID_ATTR_PARA_OUTLINE_LEVEL));
+        const SfxUInt16Item* pOldOutlineLv = GetOldItem( *rSet, SID_ATTR_PARA_OUTLINE_LEVEL);
         if (pOldOutlineLv)
         {
             std::unique_ptr<SfxUInt16Item> pOutlineLv(pOldOutlineLv->Clone());
@@ -165,7 +167,7 @@ void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
 
     if( eItemState >= SfxItemState::DEFAULT )
     {
-        sal_Int16 nOutlineLv = static_cast<const SfxUInt16Item &>(rSet->Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) )).GetValue();
+        sal_Int16 nOutlineLv = rSet->Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) ).GetValue();
         m_xOutlineLvLB->set_active(nOutlineLv) ;
     }
     else

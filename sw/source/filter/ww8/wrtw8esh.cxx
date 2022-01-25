@@ -122,7 +122,7 @@ OUString SwBasicEscherEx::GetBasePath() const
         const SfxItemSet* pPItemSet = pMedium->GetItemSet();
         if( pPItemSet )
         {
-            const SfxStringItem* pPItem = dynamic_cast< const SfxStringItem* >( pPItemSet->GetItem( SID_FILE_NAME ) );
+            const SfxStringItem* pPItem = pPItemSet->GetItem( SID_FILE_NAME );
             if ( pPItem )
                 sDocUrl = pPItem->GetValue();
         }
@@ -276,12 +276,8 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFo
 }
 void SwBasicEscherEx::PreWriteHyperlinkWithinFly(const SwFrameFormat& rFormat,EscherPropertyContainer& rPropOpt)
 {
-    const SfxPoolItem* pItem;
     const SwAttrSet& rAttrSet = rFormat.GetAttrSet();
-    if (SfxItemState::SET != rAttrSet.GetItemState(RES_URL, true, &pItem))
-        return;
-
-    const SwFormatURL *pINetFormat = dynamic_cast<const SwFormatURL*>(pItem);
+    const SwFormatURL* pINetFormat = rAttrSet.GetItemIfSet(RES_URL);
     if (!pINetFormat || pINetFormat->GetURL().isEmpty())
         return;
 
@@ -1359,10 +1355,9 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
 
         const SfxItemSet& aSet(rEditObj.GetParaAttribs(n));
         bool bIsRTLPara = false;
-        const SfxPoolItem *pItem;
-        if(SfxItemState::SET == aSet.GetItemState(EE_PARA_WRITINGDIR, true, &pItem))
+        if(const SvxFrameDirectionItem* pItem = aSet.GetItemIfSet(EE_PARA_WRITINGDIR))
         {
-            SvxFrameDirection nDir = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
+            SvxFrameDirection nDir = pItem->GetValue();
             bIsRTLPara = SvxFrameDirection::Horizontal_RL_TB == nDir;
         }
 
@@ -1666,27 +1661,23 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uI
 void SwBasicEscherEx::WriteGrfAttr(const SwNoTextNode& rNd, const SwFrameFormat& rFormat,
     EscherPropertyContainer& rPropOpt)
 {
-    const SfxPoolItem* pItem;
     GraphicDrawMode nMode = GraphicDrawMode::Standard;
     sal_Int32 nContrast = 0;
     sal_Int16 nBrightness = 0;
 
-    if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CONTRAST,
-        true, &pItem))
+    if (const SfxInt16Item* pItem = rNd.GetSwAttrSet().GetItemIfSet(RES_GRFATR_CONTRAST))
     {
-        nContrast = static_cast<const SfxInt16Item*>(pItem)->GetValue();
+        nContrast = pItem->GetValue();
     }
 
-    if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_LUMINANCE,
-        true, &pItem))
+    if (const SfxInt16Item* pItem = rNd.GetSwAttrSet().GetItemIfSet(RES_GRFATR_LUMINANCE))
     {
-        nBrightness = static_cast<const SfxInt16Item*>(pItem)->GetValue();
+        nBrightness = pItem->GetValue();
     }
 
-    if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE,
-        true, &pItem))
+    if (const SfxEnumItemInterface* pItem = rNd.GetSwAttrSet().GetItemIfSet(RES_GRFATR_DRAWMODE))
     {
-        nMode = static_cast<GraphicDrawMode>(static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue());
+        nMode = static_cast<GraphicDrawMode>(pItem->GetEnumValue());
         if (nMode == GraphicDrawMode::Watermark)
         {
             /*
@@ -1739,24 +1730,21 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTextNode& rNd, const SwFrameFormat&
     sal_Int32 nCropR = 0;
     sal_Int32 nCropT = 0;
     sal_Int32 nCropB = 0;
-    if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CROPGRF,
-        true, &pItem))
+    if (const SwCropGrf* pCropItem = rNd.GetSwAttrSet().GetItemIfSet(RES_GRFATR_CROPGRF))
     {
-        const SwCropGrf& rCrop = *static_cast<const SwCropGrf*>(pItem);
-        nCropL += rCrop.GetLeft();
-        nCropR += rCrop.GetRight();
-        nCropT += rCrop.GetTop();
-        nCropB += rCrop.GetBottom();
+        nCropL += pCropItem->GetLeft();
+        nCropR += pCropItem->GetRight();
+        nCropT += pCropItem->GetTop();
+        nCropB += pCropItem->GetBottom();
     }
 
     // simulate border padding as a negative crop.
-    if (SfxItemState::SET == rFormat.GetItemState(RES_BOX, false, &pItem))
+    if (const SvxBoxItem* pBoxItem = rFormat.GetItemIfSet(RES_BOX, false))
     {
-        const SvxBoxItem& rBox = *static_cast<const SvxBoxItem*>(pItem);
-        nCropL -= rBox.GetDistance( SvxBoxItemLine::LEFT );
-        nCropR -= rBox.GetDistance( SvxBoxItemLine::RIGHT );
-        nCropT -= rBox.GetDistance( SvxBoxItemLine::TOP );
-        nCropB -= rBox.GetDistance( SvxBoxItemLine::BOTTOM );
+        nCropL -= pBoxItem->GetDistance( SvxBoxItemLine::LEFT );
+        nCropR -= pBoxItem->GetDistance( SvxBoxItemLine::RIGHT );
+        nCropT -= pBoxItem->GetDistance( SvxBoxItemLine::TOP );
+        nCropB -= pBoxItem->GetDistance( SvxBoxItemLine::BOTTOM );
     }
 
     const Size aSz( rNd.GetTwipSize() );
@@ -1890,9 +1878,8 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
     MSO_SPT eShapeType, EscherPropertyContainer& rPropOpt)
 {
     sal_Int32 nLineWidth=0;
-    const SfxPoolItem* pItem;
     bool bFirstLine = true;
-    if (SfxItemState::SET == rFormat.GetItemState(RES_BOX, true, &pItem))
+    if (const SvxBoxItem* pItem = rFormat.GetItemIfSet(RES_BOX))
     {
         static const o3tl::enumarray<SvxBoxItemLine, sal_uInt16> aExhperProp =
         {
@@ -1903,7 +1890,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
 
         for( SvxBoxItemLine n : o3tl::enumrange<SvxBoxItemLine>() )
         {
-            pLine = static_cast<const SvxBoxItem*>(pItem)->GetLine( n );
+            pLine = pItem->GetLine( n );
             if( nullptr != pLine )
             {
                 if( bFirstLine )
@@ -1959,10 +1946,10 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
                     bFirstLine = false;
                 }
                 rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(
-                    static_cast<const SvxBoxItem*>(pItem)->GetDistance( n ) ));
+                    pItem->GetDistance( n ) ));
             }
             else
-                rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(static_cast<const SvxBoxItem*>(pItem)->GetDistance( n )) );
+                rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(pItem->GetDistance( n )) );
         }
     }
     else
@@ -1978,57 +1965,49 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
         rPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
     }
     const SwAttrSet& rAttrSet = rFormat.GetAttrSet();
-    if (SfxItemState::SET == rAttrSet.GetItemState(RES_BOX, false, &pItem))
+    if (const SvxBoxItem* pBox = rAttrSet.GetItemIfSet(RES_BOX, false))
     {
-        const SvxBoxItem* pBox = static_cast<const SvxBoxItem*>(pItem);
-        if( pBox )
+        if (const SvxShadowItem* pSI =rAttrSet.GetItemIfSet(RES_SHADOW))
         {
-            const SfxPoolItem* pShadItem;
-            if (SfxItemState::SET
-                == rAttrSet.GetItemState(RES_SHADOW, true, &pShadItem))
+            constexpr sal_uInt32 nShadowType = 131074;   // shadow type of ms word. need to set the default value.
+
+            Color  nColor = pSI->GetColor();
+            sal_Int32 nOffX
+                = o3tl::convert(pSI->GetWidth(), o3tl::Length::twip, o3tl::Length::emu);
+            sal_Int32 nOffY
+                = o3tl::convert(pSI->GetWidth(), o3tl::Length::twip, o3tl::Length::emu);
+
+            SvxShadowLocation eLocation = pSI->GetLocation();
+            if( (eLocation!=SvxShadowLocation::NONE) && (pSI->GetWidth()!=0) )
             {
-                const SvxShadowItem* pSI = static_cast<const SvxShadowItem*>(pShadItem);
-
-                constexpr sal_uInt32 nShadowType = 131074;   // shadow type of ms word. need to set the default value.
-
-                Color  nColor = pSI->GetColor();
-                sal_Int32 nOffX
-                    = o3tl::convert(pSI->GetWidth(), o3tl::Length::twip, o3tl::Length::emu);
-                sal_Int32 nOffY
-                    = o3tl::convert(pSI->GetWidth(), o3tl::Length::twip, o3tl::Length::emu);
-
-                SvxShadowLocation eLocation = pSI->GetLocation();
-                if( (eLocation!=SvxShadowLocation::NONE) && (pSI->GetWidth()!=0) )
+                switch( eLocation )
                 {
-                    switch( eLocation )
+                case SvxShadowLocation::TopLeft:
                     {
-                    case SvxShadowLocation::TopLeft:
-                        {
-                            nOffX = -nOffX;
-                            nOffY = -nOffY;
-                        }
-                        break;
-                    case SvxShadowLocation::TopRight:
-                        {
-                            nOffY = -nOffY;
-                        }
-                        break;
-                    case SvxShadowLocation::BottomLeft:
-                        {
-                            nOffX = -nOffX;
-                        }
-                        break;
-                    case SvxShadowLocation::BottomRight:
-                        break;
-                    default:
-                        break;
+                        nOffX = -nOffX;
+                        nOffY = -nOffY;
                     }
-
-                    rPropOpt.AddOpt( DFF_Prop_shadowColor,      wwUtility::RGBToBGR(nColor));
-                    rPropOpt.AddOpt( DFF_Prop_shadowOffsetX,    nOffX );
-                    rPropOpt.AddOpt( DFF_Prop_shadowOffsetY,    nOffY );
-                    rPropOpt.AddOpt( DFF_Prop_fshadowObscured,  nShadowType );
+                    break;
+                case SvxShadowLocation::TopRight:
+                    {
+                        nOffY = -nOffY;
+                    }
+                    break;
+                case SvxShadowLocation::BottomLeft:
+                    {
+                        nOffX = -nOffX;
+                    }
+                    break;
+                case SvxShadowLocation::BottomRight:
+                    break;
+                default:
+                    break;
                 }
+
+                rPropOpt.AddOpt( DFF_Prop_shadowColor,      wwUtility::RGBToBGR(nColor));
+                rPropOpt.AddOpt( DFF_Prop_shadowOffsetX,    nOffX );
+                rPropOpt.AddOpt( DFF_Prop_shadowOffsetY,    nOffY );
+                rPropOpt.AddOpt( DFF_Prop_fshadowObscured,  nShadowType );
             }
         }
     }
@@ -2085,13 +2064,12 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eS
      way, perhaps we should actually draw in this space into the graphic we
      are exporting!
      */
-    const SfxPoolItem* pItem;
-    if (SfxItemState::SET == rFormat.GetItemState(RES_LR_SPACE, true, &pItem))
+    if (const SvxLRSpaceItem* pItem = rFormat.GetItemIfSet(RES_LR_SPACE))
     {
         rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft,
-                DrawModelToEmu( static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft() ) );
+                DrawModelToEmu( pItem->GetLeft() ) );
         rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight,
-                DrawModelToEmu( static_cast<const SvxLRSpaceItem*>(pItem)->GetRight() ) );
+                DrawModelToEmu( pItem->GetRight() ) );
     }
     else
     {
@@ -2099,12 +2077,12 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eS
         rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight, 0 );
     }
 
-    if (SfxItemState::SET == rFormat.GetItemState(RES_UL_SPACE, true, &pItem))
+    if (const SvxULSpaceItem* pItem = rFormat.GetItemIfSet(RES_UL_SPACE))
     {
         rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistTop,
-                DrawModelToEmu( static_cast<const SvxULSpaceItem*>(pItem)->GetUpper() ) );
+                DrawModelToEmu( pItem->GetUpper() ) );
         rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistBottom,
-                DrawModelToEmu( static_cast<const SvxULSpaceItem*>(pItem)->GetLower() ) );
+                DrawModelToEmu( pItem->GetLower() ) );
     }
 
     if (rFormat.GetSurround().IsContour())
@@ -2300,12 +2278,8 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
 
             EscherPropertyContainer aPropOpt;
             const SwFrameFormat &rFormat = rWrt.m_rDoc.GetPageDesc(0).GetMaster();
-            const SfxPoolItem* pItem = nullptr;
-            SfxItemState eState = rFormat.GetItemState(RES_BACKGROUND, true,
-                &pItem);
-            if (SfxItemState::SET == eState && pItem)
+            if (const SvxBrushItem* pBrush = rFormat.GetItemIfSet(RES_BACKGROUND))
             {
-                const SvxBrushItem* pBrush = static_cast<const SvxBrushItem*>(pItem);
                 WriteBrushAttr(*pBrush, aPropOpt);
 
                 SvxGraphicPosition ePos = pBrush->GetGraphicPos();

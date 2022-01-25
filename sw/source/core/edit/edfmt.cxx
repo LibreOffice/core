@@ -41,10 +41,10 @@ SwCharFormat* SwEditShell::GetCurCharFormat() const
 {
     SwCharFormat *pFormat = nullptr;
     SfxItemSetFixed<RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT> aSet( GetDoc()->GetAttrPool() );
-    const SfxPoolItem* pItem;
-    if( GetCurAttr( aSet ) && SfxItemState::SET ==
-        aSet.GetItemState( RES_TXTATR_CHARFMT, false, &pItem ) )
-        pFormat = static_cast<const SwFormatCharFormat*>(pItem)->GetCharFormat();
+    const SwFormatCharFormat* pItem;
+    if( GetCurAttr( aSet ) &&
+        (pItem = aSet.GetItemIfSet( RES_TXTATR_CHARFMT, false ) ) )
+        pFormat = pItem->GetCharFormat();
 
     return pFormat;
 }

@@ -211,11 +211,9 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
         {
             SwNodeOffset nEnd = m_pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
 
-            const SfxPoolItem* pItem;
             const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
-            if( SfxItemState::SET == rItemSet.GetItemState( RES_COL,
-                                                       true, &pItem ) &&
-                static_cast<const SwFormatCol *>(pItem)->GetNumCols() > 1 )
+            const SwFormatCol* pFormatCol = rItemSet.GetItemIfSet( RES_COL );
+            if( pFormatCol && pFormatCol->GetNumCols() > 1 )
             {
                 // frame with columns
                 eType = HTML_FRMTYPE_MULTICOL;
@@ -524,7 +522,6 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
 {
     OString sRetEndTags;
     OStringBuffer sOut;
-    const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
 
     // Name
@@ -575,12 +572,13 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
                         : OOO_STRING_SVTOOLS_HTML_AL_left;
         }
     }
+    const SwFormatVertOrient* pVertOrient;
     if( (nFrameOpts & HtmlFrmOpts::Align) && !pStr &&
         ( !(nFrameOpts & HtmlFrmOpts::SAlign) ||
           (RndStdIds::FLY_AS_CHAR == eAnchorId) ) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, true, &pItem ))
+        (pVertOrient = rItemSet.GetItemIfSet( RES_VERT_ORIENT )) )
     {
-        switch( static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() )
+        switch( pVertOrient->GetVertOrient() )
         {
         case text::VertOrientation::LINE_TOP:     pStr = OOO_STRING_SVTOOLS_HTML_VA_top;        break;
         case text::VertOrientation::CHAR_TOP:
@@ -602,20 +600,20 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
 
     // HSPACE and VSPACE
     Size aTwipSpc( 0, 0 );
+    const SvxLRSpaceItem* pLRSpaceItem;
     if( (nFrameOpts & (HtmlFrmOpts::Space|HtmlFrmOpts::MarginSize)) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE, true, &pItem ))
+        (pLRSpaceItem = rItemSet.GetItemIfSet( RES_LR_SPACE )) )
     {
         aTwipSpc.setWidth(
-            ( static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft() +
-                static_cast<const SvxLRSpaceItem*>(pItem)->GetRight() ) / 2 );
+            ( pLRSpaceItem->GetLeft() + pLRSpaceItem->GetRight() ) / 2 );
         m_nDfltLeftMargin = m_nDfltRightMargin = aTwipSpc.Width();
     }
+    const SvxULSpaceItem* pULSpaceItem;
     if( (nFrameOpts & (HtmlFrmOpts::Space|HtmlFrmOpts::MarginSize)) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE, true, &pItem ))
+        (pULSpaceItem = rItemSet.GetItemIfSet( RES_UL_SPACE )) )
     {
         aTwipSpc.setHeight(
-            ( static_cast<const SvxULSpaceItem*>(pItem)->GetUpper() +
-                static_cast<const SvxULSpaceItem*>(pItem)->GetLower() ) / 2 );
+            ( pULSpaceItem->GetUpper() + pULSpaceItem->GetLower() ) / 2 );
         m_nDfltTopMargin = m_nDfltBottomMargin = o3tl::narrowing<sal_uInt16>(aTwipSpc.Height());
     }
 
@@ -657,11 +655,10 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         aTwipSpc.setHeight( 0 );
     }
 
+    const SvxBoxItem* pBoxItem;
     if( !(nFrameOpts & HtmlFrmOpts::AbsSize) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_BOX, true, &pItem ))
+        (pBoxItem = rItemSet.GetItemIfSet( RES_BOX )) )
     {
-        const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
-
         aTwipSpc.AdjustWidth(pBoxItem->CalcLineSpace( SvxBoxItemLine::LEFT ) );
         aTwipSpc.AdjustWidth(pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT ) );
         aTwipSpc.AdjustHeight(pBoxItem->CalcLineSpace( SvxBoxItemLine::TOP ) );
@@ -670,12 +667,12 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
 
     // WIDTH and/or HEIGHT
     // Output SwFrameSize::Variable/SwFrameSize::Minimum only, if ANYSIZE is set
+    const SwFormatFrameSize *pFSItem;
     if( (nFrameOpts & HtmlFrmOpts::Size) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ) &&
+        (pFSItem = rItemSet.GetItemIfSet( RES_FRM_SIZE )) &&
         ( (nFrameOpts & HtmlFrmOpts::AnySize) ||
-          SwFrameSize::Fixed == static_cast<const SwFormatFrameSize *>(pItem)->GetHeightSizeType()) )
+          SwFrameSize::Fixed == pFSItem->GetHeightSizeType()) )
     {
-        const SwFormatFrameSize *pFSItem = static_cast<const SwFormatFrameSize *>(pItem);
         sal_uInt8 nPercentWidth = pFSItem->GetWidthPercent();
         sal_uInt8 nPercentHeight = pFSItem->GetHeightPercent();
 
@@ -732,12 +729,12 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
 
     // Insert wrap for graphics that are anchored to a paragraph as
     // <BR CLEAR=...> in the string
+    const SwFormatSurround* pSurround;
     if( (nFrameOpts & HtmlFrmOpts::BrClear) &&
         ((RndStdIds::FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) ||
          (RndStdIds::FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId())) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_SURROUND, true, &pItem ))
+        (pSurround = rItemSet.GetItemIfSet( RES_SURROUND )) )
     {
-        const SwFormatSurround* pSurround = static_cast<const SwFormatSurround*>(pItem);
         sal_Int16 eHoriOri =    rFrameFormat.GetHoriOrient().GetHoriOrient();
         pStr = nullptr;
         css::text::WrapTextMode eSurround = pSurround->GetSurround();
@@ -800,7 +797,6 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
 void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, std::u16string_view rAlternateText, HtmlFrmOpts nFrameOptions)
 {
     bool bReplacement = (nFrameOptions & HtmlFrmOpts::Replacement) || mbReqIF;
-    const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
 
     // Name
@@ -841,12 +837,13 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
                         : OOO_STRING_SVTOOLS_HTML_AL_left;
         }
     }
+    const SwFormatVertOrient* pVertOrient;
     if( (nFrameOptions & HtmlFrmOpts::Align) && !pAlignString &&
         ( !(nFrameOptions & HtmlFrmOpts::SAlign) ||
           (RndStdIds::FLY_AS_CHAR == eAnchorId) ) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, true, &pItem ))
+        (pVertOrient = rItemSet.GetItemIfSet( RES_VERT_ORIENT )) )
     {
-        switch( static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() )
+        switch( pVertOrient->GetVertOrient() )
         {
         case text::VertOrientation::LINE_TOP:     pAlignString = OOO_STRING_SVTOOLS_HTML_VA_top;        break;
         case text::VertOrientation::CHAR_TOP:
@@ -867,20 +864,20 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
 
     // hspace and vspace
     Size aTwipSpc( 0, 0 );
+    const SvxLRSpaceItem* pLRSpaceItem;
     if( (nFrameOptions & (HtmlFrmOpts::Space | HtmlFrmOpts::MarginSize)) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE, true, &pItem ))
+        (pLRSpaceItem = rItemSet.GetItemIfSet( RES_LR_SPACE )) )
     {
         aTwipSpc.setWidth(
-            ( static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft() +
-                static_cast<const SvxLRSpaceItem*>(pItem)->GetRight() ) / 2 );
+            ( pLRSpaceItem->GetLeft() + pLRSpaceItem->GetRight() ) / 2 );
         m_nDfltLeftMargin = m_nDfltRightMargin = aTwipSpc.Width();
     }
+    const SvxULSpaceItem* pULSpaceItem;
     if( (nFrameOptions & (HtmlFrmOpts::Space|HtmlFrmOpts::MarginSize)) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE, true, &pItem ))
+        (pULSpaceItem = rItemSet.GetItemIfSet( RES_UL_SPACE )) )
     {
         aTwipSpc.setHeight(
-            ( static_cast<const SvxULSpaceItem*>(pItem)->GetUpper() +
-                static_cast<const SvxULSpaceItem*>(pItem)->GetLower() ) / 2 );
+            ( pULSpaceItem->GetUpper() + pULSpaceItem->GetLower() ) / 2 );
         m_nDfltTopMargin = m_nDfltBottomMargin = o3tl::narrowing<sal_uInt16>(aTwipSpc.Height());
     }
 
@@ -920,11 +917,10 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
         aTwipSpc.setHeight( 0 );
     }
 
+    const SvxBoxItem* pBoxItem;
     if( !(nFrameOptions & HtmlFrmOpts::AbsSize) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_BOX, true, &pItem ))
+        (pBoxItem = rItemSet.GetItemIfSet( RES_BOX )) )
     {
-        const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
-
         aTwipSpc.AdjustWidth(pBoxItem->CalcLineSpace( SvxBoxItemLine::LEFT ) );
         aTwipSpc.AdjustWidth(pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT ) );
         aTwipSpc.AdjustHeight(pBoxItem->CalcLineSpace( SvxBoxItemLine::TOP ) );
@@ -933,13 +929,10 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
 
     // "width" and/or "height"
     // Only output SwFrameSize::Variable/SwFrameSize::Minimum if ANYSIZE is set
-    const SwFormatFrameSize* pFSItem = nullptr;
     std::optional<SwFormatFrameSize> aFrameSize;
-    if (SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
-    {
-        pFSItem = static_cast<const SwFormatFrameSize *>(pItem);
-    }
-    else if (const SdrObject* pObject = rFrameFormat.FindSdrObject())
+    const SwFormatFrameSize* pFSItem = rItemSet.GetItemIfSet( RES_FRM_SIZE );
+    const SdrObject* pObject;
+    if (!pFSItem && (pObject = rFrameFormat.FindSdrObject()))
     {
         // Write size for Draw shapes as well.
         const tools::Rectangle& rSnapRect = pObject->GetSnapRect();
@@ -1014,12 +1007,12 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     RndStdIds nAnchorId = rFrameFormat.GetAnchor().GetAnchorId();
     if (RndStdIds::FLY_AT_PARA != nAnchorId && RndStdIds::FLY_AT_CHAR != nAnchorId)
         return;
-    if( SfxItemState::SET != rItemSet.GetItemState( RES_SURROUND, true, &pItem ) )
+    const SwFormatSurround* pSurround = rItemSet.GetItemIfSet( RES_SURROUND );
+    if (!pSurround)
         return;
 
     const char* pSurroundString = nullptr;
 
-    const SwFormatSurround* pSurround = static_cast<const SwFormatSurround*>(pItem);
     sal_Int16 eHoriOri = rFrameFormat.GetHoriOrient().GetHoriOrient();
     css::text::WrapTextMode eSurround = pSurround->GetSurround();
     bool bAnchorOnly = pSurround->IsAnchorOnly();
@@ -1082,13 +1075,9 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
 {
     OUString aIMapName;
 
-    const SfxPoolItem* pItem;
-
     // Only consider the URL attribute if no ImageMap was supplied
-    if (!pAltImgMap && SfxItemState::SET == rItemSet.GetItemState( RES_URL, true, &pItem))
-    {
-        pURLItem = static_cast<const SwFormatURL*>( pItem);
-    }
+    if (!pAltImgMap)
+        pURLItem = rItemSet.GetItemIfSet( RES_URL );
 
     // write ImageMap
     const ImageMap* pIMap = pAltImgMap;
@@ -1237,7 +1226,6 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
     if( !rHTMLWrt.mbEmbedImages && !HTMLOutFuncs::PrivateURLToInternalImg(aGraphicURL) && !rHTMLWrt.mpTempBaseURL )
         aGraphicURL = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), aGraphicURL);
 
-    const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
 
     const SwFormatURL* pURLItem = nullptr;
@@ -1254,11 +1242,7 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
     }
 
     // URL -> <a>...<img ... >...</a>
-    const SvxMacroItem *pMacItem = nullptr;
-    if (SfxItemState::SET == rItemSet.GetItemState(RES_FRMMACRO, true, &pItem))
-    {
-        pMacItem = static_cast<const SvxMacroItem *>(pItem);
-    }
+    const SvxMacroItem *pMacItem = rItemSet.GetItemIfSet(RES_FRMMACRO);
 
     if (pURLItem || pMacItem)
     {
@@ -1308,12 +1292,11 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
 
     // <font color = ...>...<img ... >...</font>
     sal_uInt16 nBorderWidth = 0;
+    const SvxBoxItem* pBoxItem;
     if( (nFrameOpts & HtmlFrmOpts::Border) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_BOX, true, &pItem ))
+        (pBoxItem = rItemSet.GetItemIfSet( RES_BOX )) )
     {
         Size aTwipBorder( 0, 0 );
-        const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
-
         const ::editeng::SvxBorderLine *pColBorderLine = nullptr;
         const ::editeng::SvxBorderLine *pBorderLine = pBoxItem->GetLeft();
         if( pBorderLine )
@@ -1408,9 +1391,9 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
     }
 
     // Events
-    if (SfxItemState::SET == rItemSet.GetItemState(RES_FRMMACRO, true, &pItem))
+    if (const SvxMacroItem* pMacroItem = rItemSet.GetItemIfSet(RES_FRMMACRO))
     {
-        const SvxMacroTableDtor& rMacTable = static_cast<const SvxMacroItem *>(pItem)->GetMacroTable();
+        const SvxMacroTableDtor& rMacTable = pMacroItem->GetMacroTable();
         if (!rMacTable.empty())
         {
             HtmlWriterHelper::applyEvents(rHtml, rMacTable, aImageEventTable, rHTMLWrt.m_bCfgStarBasic);

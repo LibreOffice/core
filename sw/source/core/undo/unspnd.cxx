@@ -30,6 +30,7 @@
 #include <rolbck.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
+#include <fmtpdsc.hxx>
 #include <IShellCursorSupplier.hxx>
 #include <osl/diagnose.h>
 
@@ -90,13 +91,10 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
             const SfxItemSet* pNdSet = pTNd->GetpSwAttrSet();
             if( pNdSet )
             {
-                const SfxPoolItem *pItem;
-                if( SfxItemState::SET == pNdSet->GetItemState( RES_PAGEDESC, false,
-                    &pItem ) )
+                if( const SwFormatPageDesc* pItem = pNdSet->GetItemIfSet( RES_PAGEDESC, false ) )
                     pTableFormat->SetFormatAttr( *pItem );
 
-                if( SfxItemState::SET == pNdSet->GetItemState( RES_BREAK, false,
-                     &pItem ) )
+                if( const SvxFormatBreakItem* pItem = pNdSet->GetItemIfSet( RES_BREAK, false ) )
                     pTableFormat->SetFormatAttr( *pItem );
             }
 

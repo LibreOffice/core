@@ -448,9 +448,8 @@ void SwHeaderFooterWin::ExecuteCommand(std::string_view rIdent)
         aSet.MergeRange(SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER);
         // Create a box info item... needed by the dialog
         std::shared_ptr<SvxBoxInfoItem> aBoxInfo(std::make_shared<SvxBoxInfoItem>(SID_ATTR_BORDER_INNER));
-        const SfxPoolItem *pBoxInfo;
-        if (SfxItemState::SET == pHFFormat->GetAttrSet().GetItemState(SID_ATTR_BORDER_INNER, true, &pBoxInfo))
-            aBoxInfo.reset(static_cast<SvxBoxInfoItem*>(pBoxInfo->Clone()));
+        if (const SvxBoxInfoItem *pBoxInfo = pHFFormat->GetAttrSet().GetItemIfSet(SID_ATTR_BORDER_INNER))
+            aBoxInfo.reset(pBoxInfo->Clone());
 
         aBoxInfo->SetTable(false);
         aBoxInfo->SetDist(true);
