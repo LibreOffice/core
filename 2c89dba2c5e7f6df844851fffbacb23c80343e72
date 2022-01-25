@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ddc4046_ca3d76ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-01-25T09:58:27Z",
+      "side": 1,
+      "message": "Wow - looks nicer to me \u003d) But really - it\u0027s worth getting a review / advice from someone that has loved the SfxItemSet recently - I guess that is you too ;-) but perhaps Mike / Stephan have some thoughts.\n\nThanks Noel!",
+      "revId": "2c89dba2c5e7f6df844851fffbacb23c80343e72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
