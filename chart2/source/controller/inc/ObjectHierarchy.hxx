@@ -81,7 +81,7 @@ private:
     void createLegendTree(
         ObjectHierarchy::tChildContainer & rContainer,
         const rtl::Reference<::chart::ChartModel> & xChartDoc,
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram  );
+        const rtl::Reference< ::chart::Diagram > & xDiagram  );
     void createAdditionalShapesTree( ObjectHierarchy::tChildContainer& rContainer );
     ObjectIdentifier getParentImpl(
         const ObjectIdentifier& rParentOID,

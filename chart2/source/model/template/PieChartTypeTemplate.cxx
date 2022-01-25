@@ -594,13 +594,13 @@ void PieChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >
 }
 
 // ____ XChartTypeTemplate ____
-void PieChartTypeTemplate::adaptDiagram( const uno::Reference< chart2::XDiagram >& xDiagram )
+void PieChartTypeTemplate::adaptDiagram( const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     if( !xDiagram.is() )
         return;
 
     //different default for scene geometry:
-    ThreeDHelper::setDefaultRotation( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ), true );
+    ThreeDHelper::setDefaultRotation( xDiagram, true );
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( PieChartTypeTemplate, ChartTypeTemplate, OPropertySet )

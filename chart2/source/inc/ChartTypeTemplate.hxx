@@ -149,7 +149,7 @@ public:
         changeDiagram
      */
     virtual void adaptDiagram(
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+        const rtl::Reference< ::chart::Diagram > & xDiagram );
 
     /** Creates a 2d or 3d cartesian coordinate system with mathematically
         oriented, linear scales with auto-min/max.  If the given

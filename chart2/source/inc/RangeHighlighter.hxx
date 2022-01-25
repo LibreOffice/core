@@ -82,7 +82,6 @@ private:
     void stopListening();
     void determineRanges();
 
-    void fillRangesForDiagram( const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
     void fillRangesForDiagram( const rtl::Reference< ::chart::Diagram > & xDiagram );
     void fillRangesForDataSeries( const css::uno::Reference< css::chart2::XDataSeries > & xSeries );
     void fillRangesForCategories( const css::uno::Reference< css::chart2::XAxis > & xAxis );

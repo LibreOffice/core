@@ -629,7 +629,7 @@ void ChartTypeTemplate::adaptScales(
     }
 }
 
-void ChartTypeTemplate::adaptDiagram( const Reference< XDiagram > & /* xDiagram */ )
+void ChartTypeTemplate::adaptDiagram( const rtl::Reference< ::chart::Diagram > & /* xDiagram */ )
 {
 }
 
