@@ -2715,18 +2715,15 @@ namespace pcr
             {
                 const SfxItemSet* pResult = aDialog.GetOutputItemSet();
 
-                const SfxPoolItem* pItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
-                const SvxNumberInfoItem* pInfoItem = dynamic_cast< const SvxNumberInfoItem* >( pItem );
-                if (pInfoItem)
+                if (const SvxNumberInfoItem* pInfoItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO ))
                 {
                     for (sal_uInt32 key : pInfoItem->GetDelFormats())
                         pFormatter->DeleteEntry(key);
                 }
 
-                pItem = nullptr;
-                if ( SfxItemState::SET == pResult->GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, false, &pItem ) )
+                if ( const SfxUInt32Item* pItem = pResult->GetItemIfSet( SID_ATTR_NUMBERFORMAT_VALUE, false ) )
                 {
-                    _out_rNewValue <<= static_cast<sal_Int32>( static_cast< const SfxUInt32Item* >( pItem )->GetValue() );
+                    _out_rNewValue <<= static_cast<sal_Int32>( pItem->GetValue() );
                     bChanged = true;
                 }
             }

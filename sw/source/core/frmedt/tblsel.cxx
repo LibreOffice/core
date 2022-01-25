@@ -1054,15 +1054,12 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             aNew.SetWidth( nLeft );
                             pBox->GetFrameFormat()->SetFormatAttr( aNew );
 
+                            if( const SvxBoxItem* pItem = pBox->GetFrameFormat()->GetAttrSet()
+                                        .GetItemIfSet( RES_BOX, false ))
                             {
-                            const SfxPoolItem* pItem;
-                            if( SfxItemState::SET == pBox->GetFrameFormat()->GetAttrSet()
-                                        .GetItemState( RES_BOX, false, &pItem ))
-                            {
-                                SvxBoxItem aBox( *static_cast<const SvxBoxItem*>(pItem) );
+                                SvxBoxItem aBox( *pItem );
                                 aBox.SetLine( nullptr, SvxBoxItemLine::RIGHT );
                                 pBox->GetFrameFormat()->SetFormatAttr( aBox );
-                            }
                             }
 
                             pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ];

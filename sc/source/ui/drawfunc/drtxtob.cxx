@@ -218,9 +218,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 if ( pItem )
                 {
                     aString = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    const SfxPoolItem* pFtItem = nullptr;
-                    pArgs->GetItemState( SID_ATTR_SPECIALCHAR, false, &pFtItem);
-                    const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
+                    const SfxStringItem* pFontItem = pArgs->GetItemIfSet( SID_ATTR_SPECIALCHAR, false);
                     if ( pFontItem )
                     {
                         const OUString& aFontName(pFontItem->GetValue());
@@ -262,10 +260,8 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
         case SID_HYPERLINK_SETLINK:
             if( pReqArgs )
             {
-                const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, true, &pItem ) == SfxItemState::SET )
+                if ( const SvxHyperlinkItem* pHyper = pReqArgs->GetItemIfSet( SID_HYPERLINK_SETLINK) )
                 {
-                    const SvxHyperlinkItem* pHyper = static_cast<const SvxHyperlinkItem*>(pItem);
                     const OUString& rName = pHyper->GetName();
                     const OUString& rURL      = pHyper->GetURL();
                     const OUString& rTarget   = pHyper->GetTargetFrame();

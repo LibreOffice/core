@@ -142,14 +142,14 @@
 
 #define MAX_ROWS_FOR_PREVIEW    20
 
-#define RPTUI_ID_LRSPACE    XATTR_FILL_FIRST - 8
-#define RPTUI_ID_ULSPACE    XATTR_FILL_FIRST - 7
+#define RPTUI_ID_LRSPACE    TypedWhichId<SvxLRSpaceItem>(XATTR_FILL_FIRST - 8)
+#define RPTUI_ID_ULSPACE    TypedWhichId<SvxULSpaceItem>(XATTR_FILL_FIRST - 7)
 #define RPTUI_ID_PAGE       TypedWhichId<SvxPageItem>(XATTR_FILL_FIRST - 6)
-#define RPTUI_ID_SIZE       XATTR_FILL_FIRST - 5
+#define RPTUI_ID_SIZE       TypedWhichId<SvxSizeItem>(XATTR_FILL_FIRST - 5)
 #define RPTUI_ID_PAGE_MODE  XATTR_FILL_FIRST - 4
 #define RPTUI_ID_START      XATTR_FILL_FIRST - 3
 #define RPTUI_ID_END        XATTR_FILL_FIRST - 2
-#define RPTUI_ID_BRUSH      XATTR_FILL_FIRST - 1
+#define RPTUI_ID_BRUSH      TypedWhichId<SvxBrushItem>(XATTR_FILL_FIRST - 1)
 #define RPTUI_ID_METRIC     XATTR_FILL_LAST + 1
 
 using namespace ::com::sun::star;
@@ -2455,40 +2455,37 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 const SfxItemSet* pSet = aDlg.GetOutputItemSet();
                 if ( _xSection.is() )
                 {
-                    const SfxPoolItem* pItem;
-                    if ( SfxItemState::SET == pSet->GetItemState( RPTUI_ID_BRUSH,true,&pItem))
-                        _xSection->setBackColor(sal_Int32(static_cast<const SvxBrushItem*>(pItem)->GetColor()));
+                    if ( const SvxBrushItem* pBrushItem = pSet->GetItemIfSet( RPTUI_ID_BRUSH ))
+                        _xSection->setBackColor(sal_Int32(pBrushItem->GetColor()));
                 }
                 else
                 {
                     uno::Reference< beans::XPropertySet> xProp(getUsedStyle(m_xReportDefinition),uno::UNO_QUERY_THROW);
                     const OUString sUndoAction(RptResId(RID_STR_UNDO_CHANGEPAGE));
                     UndoContext aUndoContext( getUndoManager(), sUndoAction );
-                    const SfxPoolItem* pItem = nullptr;
-                    if ( SfxItemState::SET == pSet->GetItemState( RPTUI_ID_SIZE,true,&pItem))
+                    if ( const SvxSizeItem* pSizeItem = pSet->GetItemIfSet( RPTUI_ID_SIZE ))
                     {
                         uno::Any aValue;
-                        static_cast<const SvxSizeItem*>(pItem)->QueryValue(aValue);
+                        pSizeItem->QueryValue(aValue);
                         xProp->setPropertyValue(PROPERTY_PAPERSIZE,aValue);
                         resetZoomType();
                     }
 
-                    if ( SfxItemState::SET == pSet->GetItemState( RPTUI_ID_LRSPACE,true,&pItem))
+                    if ( const SvxLRSpaceItem* pSpaceItem = pSet->GetItemIfSet( RPTUI_ID_LRSPACE ))
                     {
                         Any aValue;
-                        static_cast<const SvxLRSpaceItem*>(pItem)->QueryValue(aValue,MID_L_MARGIN);
+                        pSpaceItem->QueryValue(aValue,MID_L_MARGIN);
                         xProp->setPropertyValue(PROPERTY_LEFTMARGIN,aValue);
-                        static_cast<const SvxLRSpaceItem*>(pItem)->QueryValue(aValue,MID_R_MARGIN);
+                        pSpaceItem->QueryValue(aValue,MID_R_MARGIN);
                         xProp->setPropertyValue(PROPERTY_RIGHTMARGIN,aValue);
                     }
-                    if ( SfxItemState::SET == pSet->GetItemState( RPTUI_ID_ULSPACE,true,&pItem))
+                    if ( const SvxULSpaceItem* pSpaceItem = pSet->GetItemIfSet( RPTUI_ID_ULSPACE ))
                     {
-                        xProp->setPropertyValue(PROPERTY_TOPMARGIN,uno::makeAny(static_cast<const SvxULSpaceItem*>(pItem)->GetUpper()));
-                        xProp->setPropertyValue(PROPERTY_BOTTOMMARGIN,uno::makeAny(static_cast<const SvxULSpaceItem*>(pItem)->GetLower()));
+                        xProp->setPropertyValue(PROPERTY_TOPMARGIN,uno::makeAny(pSpaceItem->GetUpper()));
+                        xProp->setPropertyValue(PROPERTY_BOTTOMMARGIN,uno::makeAny(pSpaceItem->GetLower()));
                     }
-                    if ( SfxItemState::SET == pSet->GetItemState( RPTUI_ID_PAGE,true,&pItem))
+                    if ( const SvxPageItem* pPageItem = pSet->GetItemIfSet( RPTUI_ID_PAGE ))
                     {
-                        const SvxPageItem* pPageItem = static_cast<const SvxPageItem*>(pItem);
                         xProp->setPropertyValue(PROPERTY_ISLANDSCAPE,uno::makeAny(pPageItem->IsLandscape()));
                         xProp->setPropertyValue(PROPERTY_NUMBERINGTYPE,uno::makeAny(static_cast<sal_Int16>(pPageItem->GetNumType())));
                         uno::Any aValue;
@@ -2496,9 +2493,9 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                         xProp->setPropertyValue(PROPERTY_PAGESTYLELAYOUT,aValue);
                         resetZoomType();
                     }
-                    if ( SfxItemState::SET == pSet->GetItemState( RPTUI_ID_BRUSH,true,&pItem))
+                    if ( const SvxBrushItem* pBrushItem = pSet->GetItemIfSet( RPTUI_ID_BRUSH ))
                     {
-                        ::Color aBackColor = static_cast<const SvxBrushItem*>(pItem)->GetColor();
+                        ::Color aBackColor = pBrushItem->GetColor();
                         xProp->setPropertyValue(PROPERTY_BACKTRANSPARENT,uno::makeAny(aBackColor == COL_TRANSPARENT));
                         xProp->setPropertyValue(PROPERTY_BACKCOLOR,uno::makeAny(aBackColor));
                     }

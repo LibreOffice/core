@@ -81,6 +81,7 @@
 #include <unoparagraph.hxx>
 #include <wrtsh.hxx>
 #include <frameformats.hxx>
+#include <fmtpdsc.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svl/itemiter.hxx>
 
@@ -754,8 +755,8 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         // Send Hint for PageDesc. This should be done in the Layout when
         // pasting the frames, but that causes other problems that look
         // expensive to solve.
-        const SfxPoolItem *pItem;
-        if(HasWriterListeners() && SfxItemState::SET == pNode->GetSwAttrSet().GetItemState(RES_PAGEDESC, true, &pItem))
+        const SwFormatPageDesc *pItem;
+        if(HasWriterListeners() && (pItem = pNode->GetSwAttrSet().GetItemIfSet(RES_PAGEDESC)))
             pNode->TriggerNodeUpdate(sw::LegacyModifyHint(pItem, pItem));
     }
     return pNode;
@@ -3791,7 +3792,6 @@ namespace {
             }
             case RES_ATTRSET_CHG:
             {
-                const SfxPoolItem* pItem = nullptr;
                 const SwNumRule* pFormerNumRuleAtTextNode =
                     rTextNode.GetNum() ? rTextNode.GetNum()->GetNumRule() : nullptr;
                 if ( pFormerNumRuleAtTextNode )
@@ -3800,7 +3800,7 @@ namespace {
                 }
 
                 const SwAttrSetChg* pSet = dynamic_cast<const SwAttrSetChg*>(pNewValue);
-                if ( pSet && pSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, false, &pItem ) ==
+                if ( pSet && pSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, false ) ==
                         SfxItemState::SET )
                 {
                     // #i70748#
@@ -4690,15 +4690,11 @@ namespace {
           // #i70748#
           mbOutlineLevelSet( false )
     {
-        const SfxPoolItem* pItem = nullptr;
         // handle RES_PARATR_NUMRULE
-        if ( rItemSet.GetItemState( RES_PARATR_NUMRULE, false, &pItem ) == SfxItemState::SET )
+        if ( const SwNumRuleItem* pNumRuleItem = rItemSet.GetItemIfSet( RES_PARATR_NUMRULE, false ) )
         {
             mrTextNode.RemoveFromList();
 
-            const SwNumRuleItem* pNumRuleItem =
-                            dynamic_cast<const SwNumRuleItem*>(pItem);
-            assert(pNumRuleItem);
             if ( !pNumRuleItem->GetValue().isEmpty() )
             {
                 mbAddTextNodeToList = true;
@@ -4708,13 +4704,10 @@ namespace {
         }
 
         // handle RES_PARATR_LIST_ID
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_ID, false, &pItem ) == SfxItemState::SET )
+        if ( const SfxStringItem* pListIdItem = rItemSet.GetItemIfSet( RES_PARATR_LIST_ID, false ) )
         {
-            const SfxStringItem* pListIdItem =
-                                    dynamic_cast<const SfxStringItem*>(pItem);
             const OUString sListIdOfTextNode = mrTextNode.GetListId();
-            if ( pListIdItem &&
-                 pListIdItem->GetValue() != sListIdOfTextNode )
+            if ( pListIdItem->GetValue() != sListIdOfTextNode )
             {
                 mbAddTextNodeToList = true;
                 if ( mrTextNode.IsInList() )
@@ -4725,46 +4718,37 @@ namespace {
         }
 
         // handle RES_PARATR_LIST_LEVEL
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_LEVEL, false, &pItem ) == SfxItemState::SET )
+        if ( const SfxInt16Item* pListLevelItem = rItemSet.GetItemIfSet( RES_PARATR_LIST_LEVEL, false ) )
         {
-            const SfxInt16Item* pListLevelItem =
-                                dynamic_cast<const SfxInt16Item*>(pItem);
-            if (pListLevelItem && pListLevelItem->GetValue() != mrTextNode.GetAttrListLevel())
+            if (pListLevelItem->GetValue() != mrTextNode.GetAttrListLevel())
             {
                 mbUpdateListLevel = true;
             }
         }
 
         // handle RES_PARATR_LIST_ISRESTART
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_ISRESTART, false, &pItem ) == SfxItemState::SET )
+        if ( const SfxBoolItem* pListIsRestartItem = rItemSet.GetItemIfSet( RES_PARATR_LIST_ISRESTART, false ) )
         {
-            const SfxBoolItem* pListIsRestartItem =
-                                dynamic_cast<const SfxBoolItem*>(pItem);
-            if (pListIsRestartItem && pListIsRestartItem->GetValue() != mrTextNode.IsListRestart())
+            if (pListIsRestartItem->GetValue() != mrTextNode.IsListRestart())
             {
                 mbUpdateListRestart = true;
             }
         }
 
         // handle RES_PARATR_LIST_RESTARTVALUE
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_RESTARTVALUE, false, &pItem ) == SfxItemState::SET )
+        if ( const SfxInt16Item* pListRestartValueItem = rItemSet.GetItemIfSet( RES_PARATR_LIST_RESTARTVALUE, false ) )
         {
-            const SfxInt16Item* pListRestartValueItem =
-                                dynamic_cast<const SfxInt16Item*>(pItem);
-            if ( !mrTextNode.HasAttrListRestartValue() || (pListRestartValueItem &&
-                 pListRestartValueItem->GetValue() != mrTextNode.GetAttrListRestartValue()) )
+            if ( !mrTextNode.HasAttrListRestartValue() ||
+                 pListRestartValueItem->GetValue() != mrTextNode.GetAttrListRestartValue() )
             {
                 mbUpdateListRestart = true;
             }
         }
 
         // handle RES_PARATR_LIST_ISCOUNTED
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_ISCOUNTED, false, &pItem ) == SfxItemState::SET )
+        if ( const SfxBoolItem* pIsCountedInListItem = rItemSet.GetItemIfSet( RES_PARATR_LIST_ISCOUNTED, false ) )
         {
-            const SfxBoolItem* pIsCountedInListItem =
-                                dynamic_cast<const SfxBoolItem*>(pItem);
-            if (pIsCountedInListItem && pIsCountedInListItem->GetValue() !=
-                mrTextNode.IsCountedInList())
+            if (pIsCountedInListItem->GetValue() != mrTextNode.IsCountedInList())
             {
                 mbUpdateListCount = true;
             }
@@ -4772,12 +4756,9 @@ namespace {
 
         // #i70748#
         // handle RES_PARATR_OUTLINELEVEL
-        if ( rItemSet.GetItemState( RES_PARATR_OUTLINELEVEL, false, &pItem ) == SfxItemState::SET )
+        if ( const SfxUInt16Item* pOutlineLevelItem = rItemSet.GetItemIfSet( RES_PARATR_OUTLINELEVEL, false ) )
         {
-            const SfxUInt16Item* pOutlineLevelItem =
-                                dynamic_cast<const SfxUInt16Item*>(pItem);
-            if (pOutlineLevelItem && pOutlineLevelItem->GetValue() !=
-                mrTextNode.GetAttrOutlineLevel())
+            if (pOutlineLevelItem->GetValue() != mrTextNode.GetAttrOutlineLevel())
             {
                 mbOutlineLevelSet = true;
             }
@@ -4835,9 +4816,7 @@ namespace {
         }
         else
         {
-            const SfxPoolItem* pItem = nullptr;
-            if ( mrTextNode.GetSwAttrSet().GetItemState( RES_PARATR_NUMRULE,
-                                                        true, &pItem )
+            if ( mrTextNode.GetSwAttrSet().GetItemState( RES_PARATR_NUMRULE )
                                                             != SfxItemState::SET )
             {
                 mrTextNode.SetEmptyListStyleDueToSetOutlineLevelAttr();

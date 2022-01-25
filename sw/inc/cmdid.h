@@ -24,8 +24,12 @@
 #include <svx/svxids.hrc>
 #include <svl/solar.hrc>
 
+class SvxFrameDirectionItem;
+class SvxSizeItem;
 class SwAddPrinterItem;
+class SwPageFootnoteInfoItem;
 class SwPtrItem;
+class SwUINumRuleItem;
 
 #define FN_FILE                 SID_SW_START
 //#define FN_EDIT                 (SID_SW_START +  100) defined in svxids.hrc
@@ -149,7 +153,7 @@ class SwPtrItem;
 #define FN_REDLINE_REJECT_TONEXT     (FN_EDIT2 + 46)    /* Redlining Reject and jump to next*/
 
 // Region: View
-#define FN_DRAW_WRAP_DLG        (FN_VIEW + 3)   /* Draw wrapping dlg */
+#define FN_DRAW_WRAP_DLG        TypedWhichId<SfxInt16Item>(FN_VIEW + 3)   /* Draw wrapping dlg */
 #define FN_RULER                (FN_VIEW + 11)  /* Horizontal ruler */
 
 #define FN_VIEW_GRAPHIC         (FN_VIEW + 13)  /* View graphic */
@@ -173,11 +177,11 @@ class SwPtrItem;
 #define FN_VIEW_HIDDEN_PARA     (FN_VIEW + 42)  /* View hidden paragraphs */
 #define FN_VIEW_SMOOTH_SCROLL   (FN_VIEW + 43)
 
-#define FN_PREVIEW_ZOOM          (FN_VIEW + 51)  /* create table controller for zoom */
+#define FN_PREVIEW_ZOOM         TypedWhichId<SfxUInt16Item>(FN_VIEW + 51)  /* create table controller for zoom */
 
 #define FN_SET_MODOPT_TBLNUMFMT  (FN_VIEW + 52) /* Number recognition in tables */
-#define FN_HSCROLL_METRIC        TypedWhichId<SfxUInt16Item>(FN_VIEW + 53) /* Metric horizontal scrollbar */
-#define FN_VSCROLL_METRIC        TypedWhichId<SfxUInt16Item>(FN_VIEW + 54) /* Metric vertical scrollbar */
+#define FN_HSCROLL_METRIC       TypedWhichId<SfxUInt16Item>(FN_VIEW + 53) /* Metric horizontal scrollbar */
+#define FN_VSCROLL_METRIC       TypedWhichId<SfxUInt16Item>(FN_VIEW + 54) /* Metric vertical scrollbar */
 
 #define FN_NAV_ELEMENT          (FN_VIEW + 55)  /* Navigate By drop down controller */
 #define FN_SCROLL_PREV          (FN_VIEW + 57)  /* uno:ScrollToPrevious */
@@ -320,7 +324,7 @@ class SwPtrItem;
 #define FN_FORMAT_PAGE_DLG          (FN_FORMAT + 52)  /* page */
 #define FN_FORMAT_COLUMN            (FN_FORMAT + 53)  /* columns */
 #define FN_FORMAT_DROPCAPS          (FN_FORMAT + 54)  /* initials */
-#define FN_FORMAT_FRAME_DLG         (FN_FORMAT + 56)  /* frame */
+#define FN_FORMAT_FRAME_DLG         TypedWhichId<SfxStringItem>(FN_FORMAT + 56)  /* frame */
 #define FN_FORMAT_GRAFIC_DLG        (FN_FORMAT + 58)  /* graphic */
 #define FN_FORMAT_TABLE_DLG         (FN_FORMAT + 60)  /* table */
 
@@ -345,7 +349,7 @@ class SwPtrItem;
 
 #define FN_FORMAT_TITLEPAGE_DLG     (FN_FORMAT + 98)  /* Title Page */
 
-#define FN_TABLE_REP                (FN_FORMAT + 99)  /* TableRepresentation */
+#define FN_TABLE_REP                TypedWhichId<SwPtrItem>(FN_FORMAT + 99)  /* TableRepresentation */
 #define FN_CONVERT_TEXT_TABLE       (FN_FORMAT + 100)  /* convert text <-> table */
 #define FN_TABLE_INSERT_ROW         (FN_FORMAT + 101)  /* */
 #define FN_TABLE_INSERT_COL         (FN_FORMAT + 102)  /* */
@@ -424,11 +428,11 @@ class SwPtrItem;
 
 // +185..+187 removed in favor of corresponding globally available slot
 
-#define FN_TABLE_SET_VERT_ALIGN     (FN_FORMAT + 188)  /* vertical alignment in Writer table cells */
+#define FN_TABLE_SET_VERT_ALIGN     TypedWhichId<SfxUInt16Item>(FN_FORMAT + 188)  /* vertical alignment in Writer table cells */
 #define FN_TABLE_MODE_FIX           (FN_FORMAT + 189)  /* table mode */
 #define FN_TABLE_MODE_FIX_PROP      (FN_FORMAT + 190)  /*  -"-  */
 #define FN_TABLE_MODE_VARIABLE      (FN_FORMAT + 191)  /*  -"-  */
-#define FN_TABLE_BOX_TEXTORIENTATION (FN_FORMAT + 192)  /* text orientation of table cells */
+#define FN_TABLE_BOX_TEXTORIENTATION TypedWhichId<SvxFrameDirectionItem>(FN_FORMAT + 192)  /* text orientation of table cells */
 #define SID_ATTR_TABLE_ROW_HEIGHT    (FN_FORMAT + 193)
 #define SID_ATTR_TABLE_COLUMN_WIDTH  (FN_FORMAT2 + 194)
 
@@ -619,8 +623,8 @@ class SwPtrItem;
 #define FN_NAVIGATION_FORWARD               (FN_EXTRA2 + 115)
 
 // #i972: bool items to be passed to SwFramePage for evaluation
-#define FN_OLE_IS_MATH                      (FN_EXTRA2 + 116)
-#define FN_MATH_BASELINE_ALIGNMENT          (FN_EXTRA2 + 117)
+#define FN_OLE_IS_MATH                      TypedWhichId<SfxBoolItem>(FN_EXTRA2 + 116)
+#define FN_MATH_BASELINE_ALIGNMENT          TypedWhichId<SfxBoolItem>(FN_EXTRA2 + 117)
 
 #define FN_EMBEDDED_OBJECT                  (FN_EXTRA2 + 118)
 #define FN_UNO_DRAW_ASPECT                  (FN_EXTRA2 + 119)
@@ -738,14 +742,14 @@ class SwPtrItem;
 #define FN_TXTATR_INET              (FN_QUERY +29)      /* INet-Attribute */
 
 #define FN_GET_PRINT_AREA           (FN_QUERY +32)      /* Get attribute for printable area of page */
-#define FN_DB_CONNECTION_ANY            (FN_QUERY2 + 3)
-#define FN_DB_COLUMN_ANY                (FN_QUERY2 + 4)
-#define FN_DB_DATA_SOURCE_ANY           (FN_QUERY2 + 5)
-#define FN_DB_DATA_COMMAND_ANY          (FN_QUERY2 + 6)
-#define FN_DB_DATA_COMMAND_TYPE_ANY     (FN_QUERY2 + 7)
-#define FN_DB_DATA_COLUMN_NAME_ANY      (FN_QUERY2 + 8)
-#define FN_DB_DATA_SELECTION_ANY        (FN_QUERY2 + 9)
-#define FN_DB_DATA_CURSOR_ANY           (FN_QUERY2 + 10)
+#define FN_DB_CONNECTION_ANY            TypedWhichId<SfxUnoAnyItem>(FN_QUERY2 + 3)
+#define FN_DB_COLUMN_ANY                TypedWhichId<SfxUnoAnyItem>(FN_QUERY2 + 4)
+#define FN_DB_DATA_SOURCE_ANY           TypedWhichId<SfxUnoAnyItem>(FN_QUERY2 + 5)
+#define FN_DB_DATA_COMMAND_ANY          TypedWhichId<SfxUnoAnyItem>(FN_QUERY2 + 6)
+#define FN_DB_DATA_COMMAND_TYPE_ANY     TypedWhichId<SfxUnoAnyItem>(FN_QUERY2 + 7)
+#define FN_DB_DATA_COLUMN_NAME_ANY      TypedWhichId<SfxUnoAnyItem>(FN_QUERY2 + 8)
+#define FN_DB_DATA_SELECTION_ANY        TypedWhichId<SfxUnoAnyItem>(FN_QUERY2 + 9)
+#define FN_DB_DATA_CURSOR_ANY           TypedWhichId<SfxUnoAnyItem>(FN_QUERY2 + 10)
 
 // Region: Envelope
 #define FN_ENVELOP                  (FN_ENVELP    )
@@ -764,15 +768,15 @@ class SwPtrItem;
 #define FN_DELETE_COMMENT_THREAD    (FN_NOTES+11)
 
 // Region: Parameter
-#define FN_PARAM_MOVE_COUNT         (FN_PARAM+2)
-#define FN_PARAM_MOVE_SELECTION     (FN_PARAM+3)
+#define FN_PARAM_MOVE_COUNT         TypedWhichId<SfxInt32Item>(FN_PARAM+2)
+#define FN_PARAM_MOVE_SELECTION     TypedWhichId<SfxBoolItem>(FN_PARAM+3)
 
 #define FN_PARAM_ADDPRINTER         TypedWhichId<SwAddPrinterItem>(FN_PARAM+18)
 #define FN_PARAM_DOCDISP            TypedWhichId<SwDocDisplayItem>(FN_PARAM+20)
 #define FN_PARAM_ELEM               TypedWhichId<SwElemItem>(FN_PARAM+21)
 #define FN_PARAM_SWTEST             TypedWhichId<SwTestItem>(FN_PARAM+22)
 
-#define FN_PARAM_FTN_INFO           (FN_PARAM+23)
+#define FN_PARAM_FTN_INFO           TypedWhichId<SwPageFootnoteInfoItem>(FN_PARAM+23)
 
 #define FN_PARAM_REGION_NAME            TypedWhichId<SfxStringItem>(FN_PARAM+24)
 #define FN_PARAM_REGION_CONDITION       TypedWhichId<SfxStringItem>(FN_PARAM+25)
@@ -780,18 +784,18 @@ class SwPtrItem;
 #define FN_PARAM_REGION_PROTECT         TypedWhichId<SfxBoolItem>(FN_PARAM+27)
 #define FN_PARAM_REGION_EDIT_IN_READONLY TypedWhichId<SfxBoolItem>(FN_PARAM+28)
 
-#define FN_PARAM_INSERT_AFTER           (FN_PARAM+29)
+#define FN_PARAM_INSERT_AFTER           TypedWhichId<SfxBoolItem>(FN_PARAM+29)
 
-#define FN_PARAM_TABLE_NAME             (FN_PARAM+44)
-#define FN_PARAM_TABLE_HEADLINE         (FN_PARAM+50)
+#define FN_PARAM_TABLE_NAME             TypedWhichId<SfxStringItem>(FN_PARAM+44)
+#define FN_PARAM_TABLE_HEADLINE         TypedWhichId<SfxUInt16Item>(FN_PARAM+50)
 #define FN_PARAM_TABLE_SPACE            (FN_PARAM+51)
 
-#define FN_PARAM_GRF_CONNECT            (FN_PARAM+53)
-#define FN_PARAM_FIELD_TYPE             (FN_PARAM+54)
-#define FN_PARAM_FIELD_SUBTYPE          (FN_PARAM+56)
-#define FN_PARAM_FIELD_FORMAT           (FN_PARAM+57)
+#define FN_PARAM_GRF_CONNECT            TypedWhichId<SfxBoolItem>(FN_PARAM+53)
+#define FN_PARAM_FIELD_TYPE             TypedWhichId<SfxUInt16Item>(FN_PARAM+54)
+#define FN_PARAM_FIELD_SUBTYPE          TypedWhichId<SfxUInt16Item>(FN_PARAM+56)
+#define FN_PARAM_FIELD_FORMAT           TypedWhichId<SfxUInt32Item>(FN_PARAM+57)
 
-#define FN_PARAM_GRF_REALSIZE           (FN_PARAM+70)
+#define FN_PARAM_GRF_REALSIZE           TypedWhichId<SvxSizeItem>(FN_PARAM+70)
 #define FN_PARAM_GRF_DIALOG             (FN_PARAM+71)
 #define FN_INET_FIELD_MACRO             (FN_PARAM+77) /* Id for URL-Field-Macros*/
 
@@ -803,31 +807,31 @@ class SwPtrItem;
 #define FN_COND_COLL                    TypedWhichId<SwCondCollItem>(FN_PARAM2+1) /* Item for conditional templates */
 #define FN_PARAM_SELECTION              TypedWhichId<SfxStringItem>(FN_PARAM2+2) /* selected word for format/character/hyperlink */
 
-#define FN_PARAM_ACT_NUMBER             (FN_PARAM2+3) /* PointerItem the current NumRule */
+#define FN_PARAM_ACT_NUMBER             TypedWhichId<SwUINumRuleItem>(FN_PARAM2+3) /* PointerItem the current NumRule */
 
-#define FN_PARAM_NUM_PRESET             (FN_PARAM2+5) /* predefined numbering */
+#define FN_PARAM_NUM_PRESET             TypedWhichId<SfxBoolItem>(FN_PARAM2+5) /* predefined numbering */
 
 #define FN_PARAM_SHADOWCURSOR           TypedWhichId<SwShadowCursorItem>(FN_PARAM2+8) /* for ShadowCursor options */
 
 #define FN_TEXT_RANGE                   (FN_PARAM2+12) /* TextRange Property*/
 
 #define FN_PARAM_CRSR_IN_PROTECTED      TypedWhichId<SfxBoolItem>(FN_PARAM2+13) /* Cursor in protected areas */
-#define FN_PARAM_TOX_TYPE               (FN_PARAM2+14) /* TOX type in tox dialog*/
+#define FN_PARAM_TOX_TYPE               TypedWhichId<SfxUInt16Item>(FN_PARAM2+14) /* TOX type in tox dialog*/
 #define FN_PARAM_LINK_DISPLAY_NAME      (FN_PARAM2+15) /* LinkDisplayName property*/
 #define FN_PARAM_NUM_LEVEL              (FN_PARAM2+16) /* rtf filter*/
 #define FN_PARAM_CONTOUR_PP             (FN_PARAM2+17) /* contour PolyPolygon*/
 
 #define FN_ANCHOR_POSITION              (FN_PARAM2+18) /* AnchorPosition property */
-#define FN_DROP_TEXT                    (FN_PARAM2+18) /* text set in drop caps tab page - for recording */
-#define FN_DROP_CHAR_STYLE_NAME         (FN_PARAM2+19) /* character style of drop caps - for recording */
-#define FN_PARAM_CHAIN_PREVIOUS         (FN_PARAM2+20) /* Name of frame to be added as chain successor */
-#define FN_PARAM_CHAIN_NEXT             (FN_PARAM2+21) /* Name of frame to be added as chain predecessor */
+#define FN_DROP_TEXT                    TypedWhichId<SfxStringItem>(FN_PARAM2+18) /* text set in drop caps tab page - for recording */
+#define FN_DROP_CHAR_STYLE_NAME         TypedWhichId<SfxStringItem>(FN_PARAM2+19) /* character style of drop caps - for recording */
+#define FN_PARAM_CHAIN_PREVIOUS         TypedWhichId<SfxStringItem>(FN_PARAM2+20) /* Name of frame to be added as chain successor */
+#define FN_PARAM_CHAIN_NEXT             TypedWhichId<SfxStringItem>(FN_PARAM2+21) /* Name of frame to be added as chain predecessor */
 #define FN_PARAM_DATABASE_PROPERTIES    TypedWhichId<SfxUnoAnyItem>(FN_PARAM2+22) /* transport a Sequence<PropertyValue> containing database properties*/
 #define FN_SHAPE_TRANSFORMATION_IN_HORI_L2R (FN_PARAM2+23)
 #define FN_SHAPE_POSITION_LAYOUT_DIR    (FN_PARAM2+24)
 #define FN_SHAPE_STARTPOSITION_IN_HORI_L2R (FN_PARAM2+25)
 #define FN_SHAPE_ENDPOSITION_IN_HORI_L2R   (FN_PARAM2+26)
-#define FN_PARAM_PAM                    (FN_PARAM2+27) /* Point and Mark */
+#define FN_PARAM_PAM                    TypedWhichId<SwPaMItem>(FN_PARAM2+27) /* Point and Mark */
 #define FN_TEXT_BOX                     (FN_PARAM2+28) /* TextBox Property*/
 #define FN_BOOKMARK_HIDDEN              (FN_PARAM2+29) /* Hidden Property of bookmarks*/
 #define FN_BOOKMARK_CONDITION           (FN_PARAM2+30) /* Condition Property of bookmarks*/
@@ -859,9 +863,9 @@ class SwPtrItem;
 #define FN_SET_FRM_NAME                 TypedWhichId<SfxStringItem>(FN_FRAME + 6)
 #define FN_KEEP_ASPECT_RATIO            TypedWhichId<SfxBoolItem>(FN_FRAME + 7)
 
-#define FN_SET_FRM_ALT_NAME             (FN_FRAME + 18)
+#define FN_SET_FRM_ALT_NAME             TypedWhichId<SfxStringItem>(FN_FRAME + 18)
 #define FN_UNO_TITLE                    (FN_FRAME + 19)
-#define FN_UNO_DESCRIPTION              (FN_FRAME + 20)
+#define FN_UNO_DESCRIPTION              TypedWhichId<SfxStringItem>(FN_FRAME + 20)
 
 #define SID_ATTR_PAGE_COLUMN            (FN_SIDEBAR + 0)
 #define SID_ATTR_PAGE_HEADER            (FN_SIDEBAR + 3)

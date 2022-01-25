@@ -1028,49 +1028,40 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
     if( !(pOutSet && pOutSet->Count()) )
         return;
 
-    const SfxPoolItem *pColItem, *pBrushItem,
-                      *pFootnoteItem, *pEndItem, *pBalanceItem,
-                      *pFrameDirItem, *pLRSpaceItem;
-    SfxItemState eColState = pOutSet->GetItemState(
-                            RES_COL, false, &pColItem );
-    SfxItemState eBrushState = pOutSet->GetItemState(
-                            RES_BACKGROUND, false, &pBrushItem );
-    SfxItemState eFootnoteState = pOutSet->GetItemState(
-                            RES_FTN_AT_TXTEND, false, &pFootnoteItem );
-    SfxItemState eEndState = pOutSet->GetItemState(
-                            RES_END_AT_TXTEND, false, &pEndItem );
-    SfxItemState eBalanceState = pOutSet->GetItemState(
-                            RES_COLUMNBALANCE, false, &pBalanceItem );
-    SfxItemState eFrameDirState = pOutSet->GetItemState(
-                            RES_FRAMEDIR, false, &pFrameDirItem );
-    SfxItemState eLRState = pOutSet->GetItemState(
-                            RES_LR_SPACE, false, &pLRSpaceItem);
+    const SwFormatCol* pColItem = pOutSet->GetItemIfSet(
+                            RES_COL, false );
+    const SvxBrushItem* pBrushItem = pOutSet->GetItemIfSet(
+                            RES_BACKGROUND, false );
+    const SwFormatFootnoteAtTextEnd* pFootnoteItem = pOutSet->GetItemIfSet(
+                            RES_FTN_AT_TXTEND, false );
+    const SwFormatEndAtTextEnd* pEndItem = pOutSet->GetItemIfSet(
+                            RES_END_AT_TXTEND, false );
+    const SwFormatNoBalancedColumns* pBalanceItem = pOutSet->GetItemIfSet(
+                            RES_COLUMNBALANCE, false );
+    const SvxFrameDirectionItem* pFrameDirItem = pOutSet->GetItemIfSet(
+                            RES_FRAMEDIR, false );
+    const SvxLRSpaceItem* pLRSpaceItem = pOutSet->GetItemIfSet(
+                            RES_LR_SPACE, false );
 
-    if( !(SfxItemState::SET == eColState ||
-        SfxItemState::SET == eBrushState ||
-        SfxItemState::SET == eFootnoteState ||
-        SfxItemState::SET == eEndState ||
-        SfxItemState::SET == eBalanceState||
-        SfxItemState::SET == eFrameDirState||
-        SfxItemState::SET == eLRState))
+    if( !pColItem ||
+        !pBrushItem ||
+        !pFootnoteItem ||
+        !pEndItem ||
+        !pBalanceItem ||
+        !pFrameDirItem ||
+        !pLRSpaceItem )
         return;
 
-    m_xTree->selected_foreach([&](weld::TreeIter& rEntry){
+    m_xTree->selected_foreach([&](weld::TreeIter& rEntry)
+    {
         SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
-        if( SfxItemState::SET == eColState )
-            pRepr->GetCol() = *static_cast<const SwFormatCol*>(pColItem);
-        if( SfxItemState::SET == eBrushState )
-            pRepr->GetBackground().reset(static_cast<SvxBrushItem*>(pBrushItem->Clone()));
-        if( SfxItemState::SET == eFootnoteState )
-            pRepr->GetFootnoteNtAtEnd() = *static_cast<const SwFormatFootnoteAtTextEnd*>(pFootnoteItem);
-        if( SfxItemState::SET == eEndState )
-            pRepr->GetEndNtAtEnd() = *static_cast<const SwFormatEndAtTextEnd*>(pEndItem);
-        if( SfxItemState::SET == eBalanceState )
-            pRepr->GetBalance().SetValue(static_cast<const SwFormatNoBalancedColumns*>(pBalanceItem)->GetValue());
-        if( SfxItemState::SET == eFrameDirState )
-            pRepr->GetFrameDir()->SetValue(static_cast<const SvxFrameDirectionItem*>(pFrameDirItem)->GetValue());
-        if( SfxItemState::SET == eLRState )
-            pRepr->GetLRSpace().reset(static_cast<SvxLRSpaceItem*>(pLRSpaceItem->Clone()));
+        pRepr->GetCol() = *pColItem;
+        pRepr->GetBackground().reset(pBrushItem->Clone());
+        pRepr->GetFootnoteNtAtEnd() = *pFootnoteItem;
+        pRepr->GetEndNtAtEnd() = *pEndItem;
+        pRepr->GetBalance().SetValue(pBalanceItem->GetValue());
+        pRepr->GetFrameDir()->SetValue(pFrameDirItem->GetValue());
+        pRepr->GetLRSpace().reset(pLRSpaceItem->Clone());
         return false;
     });
 }
@@ -1281,9 +1272,8 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, v
         {
             sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
             sFilterName = pMedium->GetFilter()->GetFilterName();
-            const SfxPoolItem* pItem;
-            if ( SfxItemState::SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
-                sPassword = static_cast<const SfxStringItem*>(pItem )->GetValue();
+            if ( const SfxStringItem* pItem = pMedium->GetItemSet()->GetItemIfSet( SID_PASSWORD, false ) )
+                sPassword = pItem->GetValue();
             ::lcl_ReadSections(*pMedium, *m_xSubRegionED);
         }
     }
@@ -1413,11 +1403,10 @@ short SwInsertSectionTabDialog::Ok()
     if ( xRecorder.is() )
     {
         SfxRequest aRequest( pViewFrame, FN_INSERT_REGION);
-        const SfxPoolItem* pCol;
-        if(SfxItemState::SET == pOutputItemSet->GetItemState(RES_COL, false, &pCol))
+        if(const SwFormatCol* pCol = pOutputItemSet->GetItemIfSet(RES_COL, false))
         {
             aRequest.AppendItem(SfxUInt16Item(SID_ATTR_COLUMNS,
-                static_cast<const SwFormatCol*>(pCol)->GetColumns().size()));
+                pCol->GetColumns().size()));
         }
         aRequest.AppendItem(SfxStringItem( FN_PARAM_REGION_NAME,
                     m_pSectionData->GetSectionName()));
@@ -1729,9 +1718,8 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
         {
             m_sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
             m_sFilterName = pMedium->GetFilter()->GetFilterName();
-            const SfxPoolItem* pItem;
-            if ( SfxItemState::SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
-                m_sFilePasswd = static_cast<const SfxStringItem*>(pItem)->GetValue();
+            if ( const SfxStringItem* pItem = pMedium->GetItemSet()->GetItemIfSet( SID_PASSWORD, false ) )
+                m_sFilePasswd = pItem->GetValue();
             m_xFileNameED->set_text( INetURLObject::decode(
                 m_sFileName, INetURLObject::DecodeMechanism::Unambiguous ) );
             ::lcl_ReadSections(*pMedium, *m_xSubRegionED);

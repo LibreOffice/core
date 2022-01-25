@@ -2571,9 +2571,9 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         SfxMedium* pMedium = pShell->GetMedium();
         if (pMedium)
         {
-            const SfxPoolItem* pItem;
-            if (pMedium->GetItemSet()->GetItemState( SID_MACROEXECMODE, false, &pItem ) == SfxItemState::SET &&
-                    static_cast<const SfxUInt16Item*>(pItem)->GetValue() != css::document::MacroExecMode::NEVER_EXECUTE)
+            const SfxUInt16Item* pItem = pMedium->GetItemSet()->GetItemIfSet( SID_MACROEXECMODE, false );
+            if (pItem &&
+                    pItem->GetValue() != css::document::MacroExecMode::NEVER_EXECUTE)
                 pSet->Put( SfxUInt16Item( SID_MACROEXECMODE, css::document::MacroExecMode::USE_CONFIG));
         }
 

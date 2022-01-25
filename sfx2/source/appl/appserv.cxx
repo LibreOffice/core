@@ -244,12 +244,11 @@ namespace
     Reference<XFrame> GetRequestFrame(const SfxRequest& rReq)
     {
         const SfxItemSet* pArgs = rReq.GetInternalArgs_Impl();
-        const SfxPoolItem* pItem = nullptr;
+        const SfxUnoFrameItem* pItem = nullptr;
         Reference <XFrame> xFrame;
-        if (pArgs && pArgs->GetItemState(SID_FILLFRAME, false, &pItem) == SfxItemState::SET)
+        if (pArgs && (pItem = pArgs->GetItemIfSet(SID_FILLFRAME, false)))
         {
-            assert( dynamic_cast< const SfxUnoFrameItem *>( pItem ) && "SfxApplication::OfaExec_Impl: XFrames are to be transported via SfxUnoFrameItem by now!" );
-            xFrame = static_cast< const SfxUnoFrameItem*>( pItem )->GetFrame();
+            xFrame = pItem->GetFrame();
         }
         return xFrame;
     }
@@ -297,11 +296,10 @@ namespace
 weld::Window* SfxRequest::GetFrameWeld() const
 {
     const SfxItemSet* pIntArgs = GetInternalArgs_Impl();
-    const SfxPoolItem* pItem = nullptr;
-    if (pIntArgs && pIntArgs->GetItemState(SID_DIALOG_PARENT, false, &pItem) == SfxItemState::SET)
+    const SfxUnoAnyItem* pItem = nullptr;
+    if (pIntArgs && (pItem = pIntArgs->GetItemIfSet(SID_DIALOG_PARENT, false)))
     {
-        assert(dynamic_cast<const SfxUnoAnyItem*>(pItem));
-        auto aAny = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
+        auto aAny = pItem->GetValue();
         Reference<awt::XWindow> xWindow;
         aAny >>= xWindow;
         return Application::GetFrameWeld(xWindow);
@@ -1481,12 +1479,12 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_BASICCHOOSER:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
-            const SfxPoolItem* pItem;
+            const SfxBoolItem* pItem;
             bool bChooseOnly = false;
             Reference< XModel > xLimitToModel;
-            if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_RECORDMACRO, false, &pItem) )
+            if(pArgs && (pItem = pArgs->GetItemIfSet(SID_RECORDMACRO, false)) )
             {
-                bool bRecord = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                bool bRecord = pItem->GetValue();
                 if ( bRecord )
                 {
                     // !Hack
@@ -1508,11 +1506,11 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             SAL_INFO("sfx.appl", "handling SID_MACROORGANIZER");
             const SfxItemSet* pArgs = rReq.GetArgs();
-            const SfxPoolItem* pItem;
+            const SfxUInt16Item* pItem;
             sal_Int16 nTabId = 0;
-            if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_MACROORGANIZER, false, &pItem) )
+            if(pArgs && (pItem = pArgs->GetItemIfSet(SID_MACROORGANIZER, false) ))
             {
-                nTabId = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                nTabId = pItem->GetValue();
             }
 
             SfxApplication::MacroOrganizer(rReq.GetFrameWeld(), nTabId);
@@ -1577,11 +1575,11 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             SAL_INFO("sfx.appl", "SfxApplication::OfaExec_Impl: case ScriptOrg");
             const SfxItemSet* pArgs = rReq.GetArgs();
-            const SfxPoolItem* pItem;
+            const SfxScriptOrganizerItem* pItem;
             OUString aLanguage;
-            if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_SCRIPTORGANIZER, false, &pItem) )
+            if(pArgs && (pItem = pArgs->GetItemIfSet(SID_SCRIPTORGANIZER, false) ))
             {
-                aLanguage = static_cast<const SfxScriptOrganizerItem*>(pItem)->getLanguage();
+                aLanguage = pItem->getLanguage();
             }
 
             OUString aLang( aLanguage );

@@ -40,10 +40,8 @@ bool SdHTMLFilter::Export()
 
     css::uno::Sequence<css::beans::PropertyValue> aParams;
 
-    const SfxPoolItem* pItem;
-
-    if (pSet->GetItemState(SID_FILTER_DATA, false, &pItem) == SfxItemState::SET)
-        static_cast<const SfxUnoAnyItem*>(pItem)->GetValue() >>= aParams;
+    if (const SfxUnoAnyItem* pItem = pSet->GetItemIfSet(SID_FILTER_DATA, false))
+        pItem->GetValue() >>= aParams;
 
     HtmlExport aExport(mrMedium.GetName(), aParams, &mrDocument, &mrDocShell);
 

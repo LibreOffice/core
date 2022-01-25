@@ -154,13 +154,15 @@ SwCharURLPage::SwCharURLPage(weld::Container* pPage, weld::DialogController* pCo
     m_xVisitedLB->set_size_request(nMaxWidth , -1);
     m_xNotVisitedLB->set_size_request(nMaxWidth , -1);
 
-    const SfxPoolItem* pItem;
-    SfxObjectShell* pShell;
-    if(SfxItemState::SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
-        ( nullptr != ( pShell = SfxObjectShell::Current()) &&
-                    nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
+    const SfxUInt16Item* pItem = rCoreSet.GetItemIfSet(SID_HTML_MODE, false);
+    if (!pItem)
     {
-        sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        if (SfxObjectShell* pShell = SfxObjectShell::Current())
+            pItem = pShell->GetItem(SID_HTML_MODE);
+    }
+    if (pItem)
+    {
+        sal_uInt16 nHtmlMode = pItem->GetValue();
         if (HTMLMODE_ON & nHtmlMode)
             m_xCharStyleContainer->hide();
     }
@@ -195,10 +197,8 @@ SwCharURLPage::~SwCharURLPage()
 
 void SwCharURLPage::Reset(const SfxItemSet* rSet)
 {
-    const SfxPoolItem* pItem;
-    if (SfxItemState::SET == rSet->GetItemState(RES_TXTATR_INETFMT, false, &pItem))
+    if (const SwFormatINetFormat* pINetFormat = rSet->GetItemIfSet(RES_TXTATR_INETFMT, false))
     {
-        const SwFormatINetFormat* pINetFormat = static_cast<const SwFormatINetFormat*>( pItem);
         m_xURLED->set_text(INetURLObject::decode(pINetFormat->GetValue(),
             INetURLObject::DecodeMechanism::Unambiguous));
         m_xURLED->save_value();
@@ -230,9 +230,9 @@ void SwCharURLPage::Reset(const SfxItemSet* rSet)
         if( pINetFormat->GetMacroTable() )
             pINetItem->SetMacroTable(*pINetFormat->GetMacroTable());
     }
-    if (SfxItemState::SET == rSet->GetItemState(FN_PARAM_SELECTION, false, &pItem))
+    if (const SfxStringItem* pItem = rSet->GetItemIfSet(FN_PARAM_SELECTION, false))
     {
-        m_xTextED->set_text(static_cast<const SfxStringItem*>(pItem)->GetValue());
+        m_xTextED->set_text(pItem->GetValue());
         m_xTextFT->set_sensitive(false);
         m_xTextED->set_sensitive(false);
     }

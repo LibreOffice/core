@@ -1595,11 +1595,9 @@ bool SwContentNode::SetAttr( const SfxItemSet& rSet )
 {
     InvalidateInSwCache(RES_ATTRSET_CHG);
 
-    const SfxPoolItem* pFnd = nullptr;
-    if( SfxItemState::SET == rSet.GetItemState( RES_AUTO_STYLE, false, &pFnd ) )
+    if( const SwFormatAutoFormat* pFnd = rSet.GetItemIfSet( RES_AUTO_STYLE, false ) )
     {
         OSL_ENSURE( rSet.Count() == 1, "SetAutoStyle mixed with other attributes?!" );
-        const SwFormatAutoFormat* pTmp = static_cast<const SwFormatAutoFormat*>(pFnd);
 
         // If there already is an attribute set (usually containing a numbering
         // item), we have to merge the attribute of the new set into the old set:
@@ -1607,11 +1605,11 @@ bool SwContentNode::SetAttr( const SfxItemSet& rSet )
         if ( GetpSwAttrSet() )
         {
             bSetParent = false;
-            AttrSetHandleHelper::Put( mpAttrSet, *this, *pTmp->GetStyleHandle() );
+            AttrSetHandleHelper::Put( mpAttrSet, *this, *pFnd->GetStyleHandle() );
         }
         else
         {
-            mpAttrSet = pTmp->GetStyleHandle();
+            mpAttrSet = pFnd->GetStyleHandle();
         }
 
         if ( bSetParent )
@@ -1623,10 +1621,10 @@ bool SwContentNode::SetAttr( const SfxItemSet& rSet )
             // fact that nobody else uses the attribute set behind the handle.
             // FME 2007-07-10 #i78124# If autostyle does not have a parent,
             // the string is empty.
-            const SfxPoolItem* pNameItem = nullptr;
+            const SfxStringItem* pNameItem = nullptr;
             if ( nullptr != GetCondFormatColl() ||
-                 SfxItemState::SET != mpAttrSet->GetItemState( RES_FRMATR_STYLE_NAME, false, &pNameItem ) ||
-                 static_cast<const SfxStringItem*>(pNameItem)->GetValue().isEmpty() )
+                 !(pNameItem = mpAttrSet->GetItemIfSet( RES_FRMATR_STYLE_NAME, false )) ||
+                 pNameItem->GetValue().isEmpty() )
                 AttrSetHandleHelper::SetParent( mpAttrSet, *this, &GetAnyFormatColl(), GetFormatColl() );
             else
                 const_cast<SfxItemSet*>(mpAttrSet.get())->SetParent( &GetFormatColl()->GetAttrSet() );

@@ -283,14 +283,13 @@ void SwUndoInsTable::UndoImpl(::sw::UndoRedoContext & rContext)
     if( pNextNd )
     {
         SwFrameFormat* pTableFormat = pTableNd->GetTable().GetFrameFormat();
-        const SfxPoolItem *pItem;
 
-        if( SfxItemState::SET == pTableFormat->GetItemState( RES_PAGEDESC,
-            false, &pItem ) )
+        if( const SwFormatPageDesc* pItem = pTableFormat->GetItemIfSet( RES_PAGEDESC,
+            false ) )
             pNextNd->SetAttr( *pItem );
 
-        if( SfxItemState::SET == pTableFormat->GetItemState( RES_BREAK,
-            false, &pItem ) )
+        if( const SvxFormatBreakItem* pItem = pTableFormat->GetItemIfSet( RES_BREAK,
+            false ) )
             pNextNd->SetAttr( *pItem );
     }
 
@@ -911,15 +910,14 @@ sal_uInt16 SaveTable::AddFormat( SwFrameFormat* pFormat, bool bIsLine )
         // When a formula is set, never save the value. It possibly must be
         // recalculated.
         // Save formulas always in plain text.
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == pSet->GetItemState( RES_BOXATR_FORMULA, true, &pItem ))
+        if( const SwTableBoxFormula* pItem = pSet->GetItemIfSet( RES_BOXATR_FORMULA ))
         {
             pSet->ClearItem( RES_BOXATR_VALUE );
             if (m_pSwTable && m_bSaveFormula)
             {
                 SwTableFormulaUpdate aMsgHint(m_pSwTable);
                 aMsgHint.m_eFlags = TBL_BOXNAME;
-                SwTableBoxFormula* pFormulaItem = const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem));
+                SwTableBoxFormula* pFormulaItem = const_cast<SwTableBoxFormula*>(pItem);
                 pFormulaItem->ChgDefinedIn( pFormat );
                 pFormulaItem->ChangeState( &aMsgHint );
                 pFormulaItem->ChgDefinedIn( nullptr );
@@ -2067,24 +2065,23 @@ SwUndoTableNumFormat::SwUndoTableNumFormat( const SwTableBox& rBox,
 
     if( pNewSet )
     {
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == pNewSet->GetItemState( RES_BOXATR_FORMAT,
-                false, &pItem ))
+        if( const SwTableBoxNumFormat* pItem = pNewSet->GetItemIfSet( RES_BOXATR_FORMAT,
+                false ))
         {
             m_bNewFormat = true;
-            m_nNewFormatIdx = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+            m_nNewFormatIdx = pItem->GetValue();
         }
-        if( SfxItemState::SET == pNewSet->GetItemState( RES_BOXATR_FORMULA,
-                false, &pItem ))
+        if( const SwTableBoxFormula* pItem = pNewSet->GetItemIfSet( RES_BOXATR_FORMULA,
+                false ))
         {
             m_bNewFormula = true;
-            m_aNewFormula = static_cast<const SwTableBoxFormula*>(pItem)->GetFormula();
+            m_aNewFormula = pItem->GetFormula();
         }
-        if( SfxItemState::SET == pNewSet->GetItemState( RES_BOXATR_VALUE,
-                false, &pItem ))
+        if( const SwTableBoxValue* pItem = pNewSet->GetItemIfSet( RES_BOXATR_VALUE,
+                false ))
         {
             m_bNewValue = true;
-            m_fNewNum = static_cast<const SwTableBoxValue*>(pItem)->GetValue();
+            m_fNewNum = pItem->GetValue();
         }
     }
 
@@ -2780,14 +2777,13 @@ void SwUndoCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
     if( pNextNd )
     {
         SwFrameFormat* pTableFormat = pTNd->GetTable().GetFrameFormat();
-        const SfxPoolItem *pItem;
 
-        if( SfxItemState::SET == pTableFormat->GetItemState( RES_PAGEDESC,
-            false, &pItem ) )
+        if( const SwFormatPageDesc* pItem = pTableFormat->GetItemIfSet( RES_PAGEDESC,
+            false ) )
             pNextNd->SetAttr( *pItem );
 
-        if( SfxItemState::SET == pTableFormat->GetItemState( RES_BREAK,
-            false, &pItem ) )
+        if( const SvxFormatBreakItem* pItem = pTableFormat->GetItemIfSet( RES_BREAK,
+            false ) )
             pNextNd->SetAttr( *pItem );
     }
 

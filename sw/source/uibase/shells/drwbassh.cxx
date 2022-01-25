@@ -144,11 +144,10 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
 
                         if (pDlg->Execute() == RET_OK)
                         {
-                            const SfxPoolItem* pWrapItem;
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                            if(SfxItemState::SET == pOutSet->GetItemState(FN_DRAW_WRAP_DLG, false, &pWrapItem))
+                            if(const SfxInt16Item* pWrapItem = pOutSet->GetItemIfSet(FN_DRAW_WRAP_DLG, false))
                             {
-                                short nLayer = static_cast<const SfxInt16Item*>(pWrapItem)->GetValue();
+                                short nLayer = pWrapItem->GetValue();
                                 if (nLayer == 1)
                                     pSh->SelectionToHeaven();
                                 else
@@ -271,63 +270,58 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
 
                                 bool bSingleSelection = rMarkList.GetMarkCount() == 1;
 
-                                const SfxPoolItem* pAnchorItem;
-                                if(SfxItemState::SET == pOutSet->GetItemState(
-                                    SID_ATTR_TRANSFORM_ANCHOR, false, &pAnchorItem))
+                                if(const SfxInt16Item* pAnchorItem = pOutSet->GetItemIfSet(
+                                    SID_ATTR_TRANSFORM_ANCHOR, false))
                                 {
                                     if(!bSingleSelection)
-                                        pSh->ChgAnchor(static_cast<RndStdIds>(static_cast<const SfxInt16Item*>(pAnchorItem)
+                                        pSh->ChgAnchor(static_cast<RndStdIds>(pAnchorItem
                                                 ->GetValue()), false, bPosCorr );
                                     else
                                     {
                                         SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
-                                        aAnchor.SetType(static_cast<RndStdIds>(static_cast<const SfxInt16Item*>(pAnchorItem)->GetValue()));
+                                        aAnchor.SetType(static_cast<RndStdIds>(pAnchorItem->GetValue()));
                                         aFrameAttrSet.Put( aAnchor );
                                     }
                                 }
-                                const SfxPoolItem* pHoriOrient = nullptr;
-                                const SfxPoolItem* pHoriRelation = nullptr;
-                                const SfxPoolItem* pHoriPosition = nullptr;
-                                const SfxPoolItem* pHoriMirror = nullptr;
-                                pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_ORIENT, false, &pHoriOrient);
-                                pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_RELATION, false, &pHoriRelation);
-                                pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_POSITION, false, &pHoriPosition);
-                                pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_MIRROR, false, &pHoriMirror);
+                                const SfxInt16Item* pHoriOrient =
+                                    pOutSet->GetItemIfSet(SID_ATTR_TRANSFORM_HORI_ORIENT, false);
+                                const SfxInt16Item* pHoriRelation =
+                                    pOutSet->GetItemIfSet(SID_ATTR_TRANSFORM_HORI_RELATION, false);
+                                const SfxInt32Item* pHoriPosition =
+                                    pOutSet->GetItemIfSet(SID_ATTR_TRANSFORM_HORI_POSITION, false);
+                                const SfxBoolItem* pHoriMirror =
+                                    pOutSet->GetItemIfSet(SID_ATTR_TRANSFORM_HORI_MIRROR, false);
                                 if(pHoriOrient || pHoriRelation || pHoriPosition || pHoriMirror)
                                 {
                                     if(pHoriOrient)
-                                        aHOrientFinal.SetHoriOrient(
-                                              static_cast<const SfxInt16Item*>(pHoriOrient)->GetValue());
+                                        aHOrientFinal.SetHoriOrient(pHoriOrient->GetValue());
                                     if(pHoriRelation)
-                                        aHOrientFinal.SetRelationOrient(
-                                                  static_cast<const SfxInt16Item*>(pHoriRelation)->GetValue());
+                                        aHOrientFinal.SetRelationOrient(pHoriRelation->GetValue());
                                     if(pHoriPosition)
-                                        aHOrientFinal.SetPos( static_cast<const SfxInt32Item*>(pHoriPosition)->GetValue());
+                                        aHOrientFinal.SetPos( pHoriPosition->GetValue());
                                     if(pHoriMirror)
-                                        aHOrientFinal.SetPosToggle( static_cast<const SfxBoolItem*>(pHoriMirror)->GetValue());
+                                        aHOrientFinal.SetPosToggle( pHoriMirror->GetValue());
                                     aFrameAttrSet.Put(aHOrientFinal);
                                 }
 
-                                const SfxPoolItem* pVertOrient = nullptr;
-                                const SfxPoolItem* pVertRelation = nullptr;
-                                const SfxPoolItem* pVertPosition = nullptr;
-                                pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_ORIENT, false, &pVertOrient);
-                                pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_RELATION, false, &pVertRelation);
-                                pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_POSITION, false, &pVertPosition);
+                                const SfxInt16Item* pVertOrient =
+                                    pOutSet->GetItemIfSet(SID_ATTR_TRANSFORM_VERT_ORIENT, false);
+                                const SfxInt16Item* pVertRelation =
+                                    pOutSet->GetItemIfSet(SID_ATTR_TRANSFORM_VERT_RELATION, false);
+                                const SfxInt32Item* pVertPosition =
+                                    pOutSet->GetItemIfSet(SID_ATTR_TRANSFORM_VERT_POSITION, false);
                                 if(pVertOrient || pVertRelation || pVertPosition )
                                 {
                                     if(pVertOrient)
-                                        aVOrientFinal.SetVertOrient(
-                                            static_cast<const SfxInt16Item*>(pVertOrient)->GetValue());
+                                        aVOrientFinal.SetVertOrient(pVertOrient->GetValue());
                                     if(pVertRelation)
-                                        aVOrientFinal.SetRelationOrient(
-                                            static_cast<const SfxInt16Item*>(pVertRelation)->GetValue());
+                                        aVOrientFinal.SetRelationOrient(pVertRelation->GetValue());
                                     if(pVertPosition)
-                                        aVOrientFinal.SetPos( static_cast<const SfxInt32Item*>(pVertPosition)->GetValue());
+                                        aVOrientFinal.SetPos( pVertPosition->GetValue());
                                     aFrameAttrSet.Put( aVOrientFinal );
                                 }
-                                const SfxPoolItem* pFollowItem = nullptr;
-                                pOutSet->GetItemState(RES_FOLLOW_TEXT_FLOW, false, &pFollowItem);
+                                const SwFormatFollowTextFlow* pFollowItem =
+                                    pOutSet->GetItemIfSet(RES_FOLLOW_TEXT_FLOW, false);
                                 if(pFollowItem)
                                     aFrameAttrSet.Put(*pFollowItem);
 

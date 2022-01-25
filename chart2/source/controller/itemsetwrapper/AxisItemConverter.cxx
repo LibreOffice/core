@@ -899,8 +899,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             if( m_pExplicitScale )
             {
                 bool bUseSourceFormat =
-                    static_cast< const SfxBoolItem & >(
-                        rItemSet.Get( SID_ATTR_NUMBERFORMAT_SOURCE )).GetValue();
+                        rItemSet.Get( SID_ATTR_NUMBERFORMAT_SOURCE ).GetValue();
 
                 if( ! bUseSourceFormat )
                 {

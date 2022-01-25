@@ -116,8 +116,8 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
         aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
         OUString aFilterName;
-        if ( pArgs->GetItemState( FN_PARAM_FILTER, true, &pItem ) == SfxItemState::SET )
-            aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        if ( const SfxStringItem* pFilterItem = pArgs->GetItemIfSet( FN_PARAM_FILTER ) )
+            aFilterName = pFilterItem->GetValue();
 
         if ( pArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
             bAsLink = static_cast<const SfxBoolItem*>(pItem)->GetValue();

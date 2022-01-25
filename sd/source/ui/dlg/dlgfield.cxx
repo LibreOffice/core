@@ -264,9 +264,8 @@ void SdModifyFieldDlg::FillControls()
     m_xRbtFix->save_state();
     m_xRbtVar->save_state();
 
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == m_aInputSet.GetItemState(EE_CHAR_LANGUAGE, true, &pItem ) )
-        m_xLbLanguage->set_active_id(static_cast<const SvxLanguageItem*>(pItem)->GetLanguage());
+    if( const SvxLanguageItem* pItem = m_aInputSet.GetItemIfSet(EE_CHAR_LANGUAGE ) )
+        m_xLbLanguage->set_active_id(pItem->GetLanguage());
 
     m_xLbLanguage->save_active_id();
 

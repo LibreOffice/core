@@ -108,9 +108,8 @@ SwFormatTablePage::SwFormatTablePage(weld::Container* pPage, weld::DialogControl
 
     SetExchangeSupport();
 
-    const SfxPoolItem* pItem;
-    if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem))
-        bHtmlMode = 0 != (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
+    if(const SfxUInt16Item* pModeItem = rSet.GetItemIfSet(SID_HTML_MODE, false))
+        bHtmlMode = 0 != (pModeItem->GetValue() & HTMLMODE_ON);
 
     bool bCTL = SW_MOD()->GetCTLOptions().IsCTLFontEnabled();
     m_xProperties->set_visible(!bHtmlMode && bCTL);
@@ -434,7 +433,6 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
 void  SwFormatTablePage::Reset( const SfxItemSet* )
 {
     const SfxItemSet& rSet = GetItemSet();
-    const SfxPoolItem*  pItem;
 
     if(bHtmlMode)
     {
@@ -463,15 +461,15 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     SetFieldUnit(*m_xBottomMF, aMetric);
 
     //Name
-    if(SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
+    if(const SfxStringItem* pNameItem = rSet.GetItemIfSet( FN_PARAM_TABLE_NAME, false ))
     {
-        m_xNameED->set_text(static_cast<const SfxStringItem*>(pItem)->GetValue());
+        m_xNameED->set_text(pNameItem->GetValue());
         m_xNameED->save_value();
     }
 
-    if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
+    if(const SwPtrItem* pRepItem = rSet.GetItemIfSet( FN_TABLE_REP, false ))
     {
-        pTableData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>( pItem)->GetValue());
+        pTableData = static_cast<SwTableRep*>( pRepItem->GetValue());
         if (!m_xOrigTableData)
             m_xOrigTableData.reset(new SwTableRep(*pTableData));
         else // tdf#134925 and tdf#134913, reset back to the original data seen on dialog creation
@@ -562,20 +560,20 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     }
 
     //Margins
-    if(SfxItemState::SET == rSet.GetItemState( RES_UL_SPACE, false,&pItem ))
+    if(const SvxULSpaceItem* pSpaceItem = rSet.GetItemIfSet( RES_UL_SPACE, false ))
     {
         m_xTopMF->set_value(m_xTopMF->normalize(
-                        static_cast<const SvxULSpaceItem*>(pItem)->GetUpper()), FieldUnit::TWIP);
+                        pSpaceItem->GetUpper()), FieldUnit::TWIP);
         m_xBottomMF->set_value(m_xBottomMF->normalize(
-                        static_cast<const SvxULSpaceItem*>(pItem)->GetLower()), FieldUnit::TWIP);
+                        pSpaceItem->GetLower()), FieldUnit::TWIP);
         m_xTopMF->save_value();
         m_xBottomMF->save_value();
     }
 
     //Text direction
-    if( SfxItemState::SET == rSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
+    if( const SvxFrameDirectionItem* pDirectionItem = rSet.GetItemIfSet( RES_FRAMEDIR ) )
     {
-        SvxFrameDirection nVal = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
+        SvxFrameDirection nVal = pDirectionItem->GetValue();
         m_xTextDirectionLB->set_active_id(nVal);
         m_xTextDirectionLB->save_value();
     }
@@ -763,9 +761,8 @@ SwTableColumnPage::SwTableColumnPage(weld::Container* pPage, weld::DialogControl
     // all the pages that currently exist and the rest to come after this one
     m_pSizeHdlEvent = Application::PostUserEvent(LINK(this, SwTableColumnPage, SizeHdl));
 
-    const SfxPoolItem* pItem;
-    Init(SfxItemState::SET == GetItemSet().GetItemState(SID_HTML_MODE, false, &pItem)
-         && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
+    const SfxUInt16Item* pModeItem = GetItemSet().GetItemIfSet(SID_HTML_MODE, false);
+    Init(pModeItem && pModeItem->GetValue() & HTMLMODE_ON);
 }
 
 IMPL_LINK_NOARG(SwTableColumnPage, SizeHdl, void*, void)
@@ -816,10 +813,9 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
 {
     const SfxItemSet& rSet = GetItemSet();
 
-    const SfxPoolItem* pItem;
-    if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
+    if(const SwPtrItem* pRepItem = rSet.GetItemIfSet( FN_TABLE_REP, false ))
     {
-        m_pTableData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>( pItem)->GetValue());
+        m_pTableData = static_cast<SwTableRep*>( pRepItem->GetValue());
         if (!m_xOrigTableData)
             m_xOrigTableData.reset(new SwTableRep(*m_pTableData));
         else // tdf#134925 and tdf#134913, reset back to the original data seen on dialog creation
@@ -1294,9 +1290,8 @@ SwTextFlowPage::SwTextFlowPage(weld::Container* pPage, weld::DialogController* p
         LINK(this, SwTextFlowPage, SplitHdl_Impl));
     m_xHeadLineCB->connect_toggled(LINK(this, SwTextFlowPage, HeadLineCBClickHdl));
 
-    const SfxPoolItem *pItem;
-    if(SfxItemState::SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
-        && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
+    const SfxUInt16Item *pModeItem = rSet.GetItemIfSet( SID_HTML_MODE, false );
+    if(pModeItem && pModeItem->GetValue() & HTMLMODE_ON)
     {
         m_xKeepCB->hide();
         m_xSplitCB->hide();
@@ -1432,7 +1427,6 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
 
 void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 {
-    const SfxPoolItem* pItem;
     bool bFlowAllowed = !bHtmlMode || SvxHtmlOptions::IsPrintLayoutExtension();
     if(bFlowAllowed)
     {
@@ -1453,14 +1447,14 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                 m_xPageCollLB->append_text(aFormatName);
         }
 
-        if(SfxItemState::SET == rSet->GetItemState( RES_KEEP, false, &pItem ))
+        if(const SvxFormatKeepItem* pKeepItem = rSet->GetItemIfSet( RES_KEEP, false ))
         {
-            m_xKeepCB->set_active( static_cast<const SvxFormatKeepItem*>(pItem)->GetValue() );
+            m_xKeepCB->set_active( pKeepItem->GetValue() );
             m_xKeepCB->save_state();
         }
-        if(SfxItemState::SET == rSet->GetItemState( RES_LAYOUT_SPLIT, false, &pItem ))
+        if(const SwFormatLayoutSplit* pSplitItem = rSet->GetItemIfSet( RES_LAYOUT_SPLIT, false ))
         {
-            m_xSplitCB->set_active( static_cast<const SwFormatLayoutSplit*>(pItem)->GetValue() );
+            m_xSplitCB->set_active( pSplitItem->GetValue() );
         }
         else
             m_xSplitCB->set_active(true);
@@ -1468,9 +1462,9 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         m_xSplitCB->save_state();
         SplitHdl_Impl(*m_xSplitCB);
 
-        if(SfxItemState::SET == rSet->GetItemState( RES_ROW_SPLIT, false, &pItem ))
+        if(const SwFormatRowSplit* pSplitItem = rSet->GetItemIfSet( RES_ROW_SPLIT, false ))
         {
-            m_xSplitRowCB->set_active( static_cast<const SwFormatRowSplit*>(pItem)->GetValue() );
+            m_xSplitRowCB->set_active( pSplitItem->GetValue() );
         }
         else
             m_xSplitRowCB->set_state(TRISTATE_INDET);
@@ -1478,12 +1472,12 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 
         if(bPageBreak)
         {
-            if(SfxItemState::SET == rSet->GetItemState( RES_PAGEDESC, false, &pItem ))
+            if(const SwFormatPageDesc* pPageDescItem = rSet->GetItemIfSet( RES_PAGEDESC, false ))
             {
                 OUString sPageDesc;
-                const SwPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
+                const SwPageDesc* pDesc = pPageDescItem->GetPageDesc();
 
-                ::std::optional<sal_uInt16> oNumOffset = static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset();
+                ::std::optional<sal_uInt16> oNumOffset = pPageDescItem->GetNumOffset();
                 if (oNumOffset)
                 {
                     m_xPageNoCB->set_active(true);
@@ -1522,9 +1516,8 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                 }
             }
 
-            if(SfxItemState::SET == rSet->GetItemState( RES_BREAK, false, &pItem ))
+            if(const SvxFormatBreakItem* pPageBreak = rSet->GetItemIfSet( RES_BREAK, false ))
             {
-                const SvxFormatBreakItem* pPageBreak = static_cast<const SvxFormatBreakItem*>(pItem);
                 SvxBreak eBreak = pPageBreak->GetBreak();
 
                 if ( eBreak != SvxBreak::NONE )
@@ -1585,9 +1578,9 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         m_xPageCollLB->set_sensitive(false);
     }
 
-    if(SfxItemState::SET == rSet->GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem ))
+    if(const SfxUInt16Item* pHeadlineItem = rSet->GetItemIfSet( FN_PARAM_TABLE_HEADLINE, false ))
     {
-        sal_uInt16 nRep = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        sal_uInt16 nRep = pHeadlineItem->GetValue();
         m_xHeadLineCB->set_active(nRep > 0);
         m_xHeadLineCB->save_state();
         m_xRepeatHeaderNF->set_value(nRep);
@@ -1596,14 +1589,13 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
     }
     if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SfxItemState::DEFAULT )
     {
-        SvxFrameDirection nDirection =
-                static_cast<const SvxFrameDirectionItem&>(rSet->Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
+        SvxFrameDirection nDirection = rSet->Get(FN_TABLE_BOX_TEXTORIENTATION).GetValue();
         m_xTextDirectionLB->set_active_id(OUString::number(static_cast<sal_uInt32>(nDirection)));
     }
 
     if ( rSet->GetItemState(FN_TABLE_SET_VERT_ALIGN) > SfxItemState::DEFAULT )
     {
-        sal_uInt16 nVert = static_cast<const SfxUInt16Item&>(rSet->Get(FN_TABLE_SET_VERT_ALIGN)).GetValue();
+        sal_uInt16 nVert = rSet->Get(FN_TABLE_SET_VERT_ALIGN).GetValue();
         sal_uInt16 nPos = 0;
         switch(nVert)
         {

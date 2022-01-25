@@ -5262,14 +5262,13 @@ void DocxAttributeOutput::WriteSrcRect(
     sal_Int32 nCropB = aGraphicCropStruct.Bottom;
 
     // simulate border padding as a negative crop.
-    const SfxPoolItem* pItem;
-    if (pFrameFormat && SfxItemState::SET == pFrameFormat->GetItemState(RES_BOX, false, &pItem))
+    const SvxBoxItem* pBoxItem;
+    if (pFrameFormat && (pBoxItem = pFrameFormat->GetItemIfSet(RES_BOX, false)))
     {
-        const SvxBoxItem& rBox = *static_cast<const SvxBoxItem*>(pItem);
-        nCropL -= rBox.GetDistance( SvxBoxItemLine::LEFT );
-        nCropR -= rBox.GetDistance( SvxBoxItemLine::RIGHT );
-        nCropT -= rBox.GetDistance( SvxBoxItemLine::TOP );
-        nCropB -= rBox.GetDistance( SvxBoxItemLine::BOTTOM );
+        nCropL -= pBoxItem->GetDistance( SvxBoxItemLine::LEFT );
+        nCropR -= pBoxItem->GetDistance( SvxBoxItemLine::RIGHT );
+        nCropT -= pBoxItem->GetDistance( SvxBoxItemLine::TOP );
+        nCropB -= pBoxItem->GetDistance( SvxBoxItemLine::BOTTOM );
     }
 
     if ( !((0 != nCropL) || (0 != nCropT) || (0 != nCropR) || (0 != nCropB)) )
@@ -5427,10 +5426,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
 
     // In case there are any grab-bag items on the graphic frame, emit them now.
     // These are always character grab-bags, as graphics are at-char or as-char in Word.
-    const SfxPoolItem* pItem = nullptr;
-    if (pFrameFormat->GetAttrSet().HasItem(RES_FRMATR_GRABBAG, &pItem))
+    if (const SfxGrabBagItem* pGrabBag = pFrameFormat->GetAttrSet().GetItemIfSet(RES_FRMATR_GRABBAG))
     {
-        const SfxGrabBagItem* pGrabBag = static_cast<const SfxGrabBagItem*>(pItem);
         CharGrabBag(*pGrabBag);
     }
 
@@ -5549,11 +5546,10 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     else
         m_pSerializer->startElementNS(XML_a, XML_blip, FSNS(XML_r, nImageType), aRelId);
 
-    pItem = nullptr;
-
-    if ( pGrfNode && SfxItemState::SET == pGrfNode->GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE, true, &pItem))
+    const SfxEnumItemInterface* pGrafModeItem = nullptr;
+    if ( pGrfNode && (pGrafModeItem = pGrfNode->GetSwAttrSet().GetItemIfSet(RES_GRFATR_DRAWMODE)))
     {
-        GraphicDrawMode nMode = static_cast<GraphicDrawMode>(static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue());
+        GraphicDrawMode nMode = static_cast<GraphicDrawMode>(pGrafModeItem->GetEnumValue());
         if (nMode == GraphicDrawMode::Greys)
             m_pSerializer->singleElementNS (XML_a, XML_grayscl);
         else if (nMode == GraphicDrawMode::Mono) //black/white has a 0,5 threshold in LibreOffice

@@ -40,7 +40,7 @@
 
 ScHFEditPage::ScHFEditPage(weld::Container* pPage, weld::DialogController* pController,
                            const SfxItemSet& rCoreAttrs,
-                           sal_uInt16 nWhichId,
+                           TypedWhichId<ScPageHFItem> nWhichId,
                            bool bHeader)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/headerfootercontent.ui", "HeaderFooterContent", &rCoreAttrs)
     , nWhich( nWhichId )
@@ -146,17 +146,15 @@ void ScHFEditPage::SetNumType(SvxNumType eNumType)
 
 void ScHFEditPage::Reset( const SfxItemSet* rCoreSet )
 {
-    const SfxPoolItem* pItem = nullptr;
-    if ( !rCoreSet->HasItem(nWhich, &pItem) )
+    const ScPageHFItem* pItem = rCoreSet->GetItemIfSet(nWhich);
+    if ( !pItem )
         return;
 
-    const ScPageHFItem& rItem = static_cast<const ScPageHFItem&>(*pItem);
-
-    if( const EditTextObject* pLeft = rItem.GetLeftArea() )
+    if( const EditTextObject* pLeft = pItem->GetLeftArea() )
         m_xWndLeft->SetText( *pLeft );
-    if( const EditTextObject* pCenter = rItem.GetCenterArea() )
+    if( const EditTextObject* pCenter = pItem->GetCenterArea() )
         m_xWndCenter->SetText( *pCenter );
-    if( const EditTextObject* pRight = rItem.GetRightArea() )
+    if( const EditTextObject* pRight = pItem->GetRightArea() )
         m_xWndRight->SetText( *pRight );
 
     SetSelectDefinedList();

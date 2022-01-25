@@ -705,11 +705,11 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
             break;
         case SID_ATTR_ZOOMSLIDER:
             {
-                const SfxPoolItem* pItem;
+                const SvxZoomSliderItem* pItem;
                 eZoom = SvxZoomType::PERCENT;
-                if( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( SID_ATTR_ZOOMSLIDER, true, &pItem ) )
+                if( pReqArgs && (pItem = pReqArgs->GetItemIfSet( SID_ATTR_ZOOMSLIDER )) )
                 {
-                    const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem*>(pItem)->GetValue();
+                    const sal_uInt16 nCurrentZoom = pItem->GetValue();
                     if( nCurrentZoom )
                     {
                         pPreview->SetZoom( nCurrentZoom );
@@ -720,16 +720,16 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
             break;
         case SID_PREVIEW_SCALINGFACTOR:
             {
-                const SfxPoolItem* pItem;
+                const SvxZoomSliderItem* pItem;
                 SCTAB nTab                      = pPreview->GetTab();
                 OUString aOldName               = pDocShell->GetDocument().GetPageStyle( pPreview->GetTab() );
                 ScStyleSheetPool* pStylePool    = pDocShell->GetDocument().GetStyleSheetPool();
                 SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SfxStyleFamily::Page );
                 OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
-                if ( pReqArgs && pStyleSheet && SfxItemState::SET == pReqArgs->GetItemState( SID_PREVIEW_SCALINGFACTOR, true, &pItem ) )
+                if ( pReqArgs && pStyleSheet && (pItem = pReqArgs->GetItemIfSet( SID_PREVIEW_SCALINGFACTOR )) )
                 {
-                    const sal_uInt16 nCurrentZoom   = static_cast<const SvxZoomSliderItem *>(pItem)->GetValue();
+                    const sal_uInt16 nCurrentZoom   = pItem->GetValue();
                     SfxItemSet& rSet            = pStyleSheet->GetItemSet();
                     rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, nCurrentZoom ) );
                     ScPrintFunc aPrintFunc( pDocShell, pDocShell->GetPrinter(), nTab );

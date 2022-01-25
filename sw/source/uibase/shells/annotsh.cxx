@@ -559,8 +559,8 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 aAttr( *aNewAttr.GetPool() );
 
             SvxAdjust nAdjust = SvxAdjust::Left;
-            if( SfxItemState::SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
-                nAdjust = static_cast<const SvxAdjustItem*>(pPoolItem)->GetAdjust();
+            if( const SvxAdjustItem* pAdjustItem = aEditAttr.GetItemIfSet(EE_PARA_JUST ) )
+                nAdjust = pAdjustItem->GetAdjust();
 
             if( bLeftToRight )
             {
@@ -747,8 +747,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     else if (nWhich==SID_ATTR_PARA_ADJUST_BLOCK)
                         eAdjust = SvxAdjust::Block;
 
-                    const SfxPoolItem *pAdjust = nullptr;
-                    aEditAttr.GetItemState( EE_PARA_JUST, false, &pAdjust);
+                    const SvxAdjustItem *pAdjust = aEditAttr.GetItemIfSet( EE_PARA_JUST, false );
 
                     if( !pAdjust || IsInvalidItem( pAdjust ))
                     {
@@ -756,7 +755,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     }
                     else
                     {
-                        if ( eAdjust == static_cast<const SvxAdjustItem*>(pAdjust)->GetAdjust())
+                        if ( eAdjust == pAdjust->GetAdjust())
                             rSet.Put( SfxBoolItem( nWhich, true ));
                         else
                             rSet.InvalidateItem( nWhich );
@@ -778,8 +777,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     else if (nWhich==SID_ATTR_PARA_LINESPACE_20)
                         nLSpace = 200;
 
-                    const SfxPoolItem *pLSpace = nullptr;
-                    aEditAttr.GetItemState( EE_PARA_SBL, false, &pLSpace );
+                    const SvxLineSpacingItem *pLSpace = aEditAttr.GetItemIfSet( EE_PARA_SBL, false );
 
                     if( !pLSpace || IsInvalidItem( pLSpace ))
                     {
@@ -787,7 +785,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     }
                     else
                     {
-                        if( nLSpace == static_cast<const SvxLineSpacingItem*>(pLSpace)->GetPropLineSpace() )
+                        if( nLSpace == pLSpace->GetPropLineSpace() )
                             rSet.Put( SfxBoolItem( nWhich, true ));
                         else
                         {
@@ -1733,19 +1731,17 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
 
     const SfxItemSet *pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem = nullptr;
+    const SfxStringItem* pCharMapItem = nullptr;
     if( pArgs )
-        pArgs->GetItemState(SID_CHARMAP, false, &pItem);
+        pCharMapItem = pArgs->GetItemIfSet(SID_CHARMAP, false);
 
     OUString sSym;
     OUString sFontName;
-    if ( pItem )
+    if ( pCharMapItem )
     {
-        sSym = static_cast<const SfxStringItem*>(pItem)->GetValue();
-        const SfxPoolItem* pFtItem = nullptr;
-        pArgs->GetItemState( SID_ATTR_SPECIALCHAR, false, &pFtItem);
-
-        if (const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>(pFtItem))
+        sSym = pCharMapItem->GetValue();
+        const SfxStringItem* pFontItem = pArgs->GetItemIfSet( SID_ATTR_SPECIALCHAR, false);
+        if (pFontItem)
             sFontName = pFontItem->GetValue();
     }
 

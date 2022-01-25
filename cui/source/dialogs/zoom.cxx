@@ -228,11 +228,8 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
         SetFactor(nZoom);
     }
 
-    const SfxPoolItem* pPoolViewLayoutItem = nullptr;
-    if (SfxItemState::SET == m_rSet.GetItemState(SID_ATTR_VIEWLAYOUT, false, &pPoolViewLayoutItem))
+    if (const SvxViewLayoutItem* pViewLayoutItem = m_rSet.GetItemIfSet(SID_ATTR_VIEWLAYOUT, false))
     {
-        const SvxViewLayoutItem* pViewLayoutItem
-            = static_cast<const SvxViewLayoutItem*>(pPoolViewLayoutItem);
         const sal_uInt16 nColumns = pViewLayoutItem->GetValue();
         const bool bBookMode = pViewLayoutItem->IsBookMode();
 

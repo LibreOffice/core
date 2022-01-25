@@ -20,6 +20,7 @@
 #include <UndoDelete.hxx>
 
 #include <libxml/xmlwriter.h>
+#include <editeng/formatbreakitem.hxx>
 
 #include <hintids.hxx>
 #include <osl/diagnose.h>
@@ -45,6 +46,7 @@
 #include <rootfrm.hxx>
 #include <strings.hrc>
 #include <frameformats.hxx>
+#include <fmtpdsc.hxx>
 #include <vector>
 
 // DELETE
@@ -1245,13 +1247,12 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             {
                 SwFrameFormat* pTableFormat = pTableNd->GetTable().GetFrameFormat();
 
-                const SfxPoolItem *pItem;
-                if( SfxItemState::SET == pTableFormat->GetItemState( RES_PAGEDESC,
-                    false, &pItem ) )
+                if( const SwFormatPageDesc* pItem = pTableFormat->GetItemIfSet( RES_PAGEDESC,
+                    false ) )
                     pNextNd->SetAttr( *pItem );
 
-                if( SfxItemState::SET == pTableFormat->GetItemState( RES_BREAK,
-                    false, &pItem ) )
+                if( const SvxFormatBreakItem* pItem = pTableFormat->GetItemIfSet( RES_BREAK,
+                    false ) )
                     pNextNd->SetAttr( *pItem );
             }
             pTableNd->DelFrames();

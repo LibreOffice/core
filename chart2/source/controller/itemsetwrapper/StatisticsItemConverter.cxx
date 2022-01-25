@@ -108,10 +108,9 @@ uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
     // ensure that a trendline is on
     if( pItemSet )
     {
-        const SfxPoolItem *pPoolItem = nullptr;
-        if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, true, &pPoolItem ) == SfxItemState::SET )
+        if( const SvxChartRegressItem* pRegressionItem = pItemSet->GetItemIfSet( SCHATTR_REGRESSION_TYPE ) )
         {
-            SvxChartRegress eRegress = static_cast< const SvxChartRegressItem * >( pPoolItem )->GetValue();
+            SvxChartRegress eRegress = pRegressionItem->GetValue();
             bEquationExists = ( eRegress != SvxChartRegress::NONE );
         }
     }
@@ -138,10 +137,9 @@ uno::Reference< beans::XPropertySet > lcl_getCurveProperties(
     // ensure that a trendline is on
     if( pItemSet )
     {
-        const SfxPoolItem *pPoolItem = nullptr;
-        if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, true, &pPoolItem ) == SfxItemState::SET )
+        if( const SvxChartRegressItem* pRegressionItem = pItemSet->GetItemIfSet( SCHATTR_REGRESSION_TYPE ) )
         {
-            SvxChartRegress eRegress = static_cast< const SvxChartRegressItem * >( pPoolItem )->GetValue();
+            SvxChartRegress eRegress = pRegressionItem->GetValue();
             bExists = ( eRegress != SvxChartRegress::NONE );
         }
     }

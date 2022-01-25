@@ -1403,8 +1403,8 @@ namespace
         const SwFormatAnchor* pAnchorFormat = nullptr;
         if ( RES_ATTRSET_CHG == nWhich )
         {
-            static_cast<const SwAttrSetChg&>(_rItem).GetChgSet()->
-                GetItemState( RES_ANCHOR, false, reinterpret_cast<const SfxPoolItem**>(&pAnchorFormat) );
+            pAnchorFormat = static_cast<const SwAttrSetChg&>(_rItem).GetChgSet()->
+                GetItemIfSet( RES_ANCHOR, false );
         }
         else if ( RES_ANCHOR == nWhich )
         {

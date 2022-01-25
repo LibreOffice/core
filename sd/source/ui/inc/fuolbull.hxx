@@ -53,7 +53,7 @@ private:
 
     void SetCurrentBulletsNumbering(SfxRequest& rReq);
 
-    const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt32& nNumItemId);
+    const SvxNumBulletItem* GetNumBulletItem(SfxItemSet& aNewAttr, TypedWhichId<SvxNumBulletItem>& nNumItemId);
 };
 
 } // end of namespace sd

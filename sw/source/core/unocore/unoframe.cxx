@@ -1559,8 +1559,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     pFly = pFlyFrameFormat->GetFrame();
                 if ( pFly )
                 {
-                    const ::SfxPoolItem* pItem;
-                    if( SfxItemState::SET == pFrameFormat->GetItemState( RES_ANCHOR, false, &pItem ))
+                    if( const SwFormatAnchor* pItem = pFrameFormat->GetItemIfSet( RES_ANCHOR, false ))
                     {
                         pSet.emplace( pDoc->GetAttrPool(), aFrameFormatSetRange );
                         pSet->Put( *pItem );
@@ -1901,8 +1900,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                         pFly = pFrameFormat->GetFrame();
                     if (pFly)
                     {
-                        const ::SfxPoolItem* pItem;
-                        if( SfxItemState::SET == aSet.GetItemState( RES_ANCHOR, false, &pItem ))
+                        if( const SwFormatAnchor* pItem = aSet.GetItemIfSet( RES_ANCHOR, false ))
                         {
                             aSet.Put( *pItem );
                             if ( pFormat->GetDoc()->GetEditShell() != nullptr )
@@ -2762,11 +2760,10 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
         *aPam.GetMark() = *aIntPam.GetMark();
     }
 
-    const SfxPoolItem* pItem;
     RndStdIds eAnchorId = RndStdIds::FLY_AT_PARA;
-    if(SfxItemState::SET == aFrameSet.GetItemState(RES_ANCHOR, false, &pItem) )
+    if(const SwFormatAnchor* pItem = aFrameSet.GetItemIfSet(RES_ANCHOR, false) )
     {
-        eAnchorId = static_cast<const SwFormatAnchor*>(pItem)->GetAnchorId();
+        eAnchorId = pItem->GetAnchorId();
         if( RndStdIds::FLY_AT_FLY == eAnchorId &&
             !aPam.GetNode().FindFlyStartNode())
         {
@@ -2775,9 +2772,9 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
             aFrameSet.Put(aAnchor);
         }
         else if ((RndStdIds::FLY_AT_PAGE == eAnchorId) &&
-                 0 == static_cast<const SwFormatAnchor*>(pItem)->GetPageNum() )
+                 0 == pItem->GetPageNum() )
         {
-            SwFormatAnchor aAnchor( *static_cast<const SwFormatAnchor*>(pItem) );
+            SwFormatAnchor aAnchor( *pItem );
             aAnchor.SetAnchor( aPam.GetPoint() );
             aFrameSet.Put(aAnchor);
         }

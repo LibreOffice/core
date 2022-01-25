@@ -410,20 +410,20 @@ void SwNumFormatBase::CallSelectHdl()
 
     if (RET_OK == pDlg->Execute())
     {
-        const SfxPoolItem* pItem = pView->GetDocShell()->
+        const SvxNumberInfoItem* pFormatInfoItem = pView->GetDocShell()->
                         GetItem( SID_ATTR_NUMBERFORMAT_INFO );
 
-        if( pItem )
+        if( pFormatInfoItem )
         {
-            for ( sal_uInt32 key : static_cast<const SvxNumberInfoItem*>(pItem)->GetDelFormats() )
+            for ( sal_uInt32 key : pFormatInfoItem->GetDelFormats() )
                 pFormatter->DeleteEntry( key );
         }
 
         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-        if( SfxItemState::SET == pOutSet->GetItemState(
-            SID_ATTR_NUMBERFORMAT_VALUE, false, &pItem ))
+        if( const SfxUInt32Item* pFormatValueItem = pOutSet->GetItemIfSet(
+            SID_ATTR_NUMBERFORMAT_VALUE, false ))
         {
-            sal_uInt32 nNumberFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+            sal_uInt32 nNumberFormat = pFormatValueItem->GetValue();
             // oj #105473# change order of calls
             const SvNumberformat* pFormat = pFormatter->GetEntry(nNumberFormat);
             if( pFormat )
@@ -431,10 +431,11 @@ void SwNumFormatBase::CallSelectHdl()
             // SetDefFormat uses eCurLanguage to look for if this format already in the list
             SetDefFormat(nNumberFormat);
         }
-        if( bShowLanguageControl && SfxItemState::SET == pOutSet->GetItemState(
-            SID_ATTR_NUMBERFORMAT_ADD_AUTO, false, &pItem ))
+        const SfxBoolItem* pAddAutoItem;
+        if( bShowLanguageControl && (pAddAutoItem = pOutSet->GetItemIfSet(
+            SID_ATTR_NUMBERFORMAT_ADD_AUTO, false)))
         {
-            bUseAutomaticLanguage = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+            bUseAutomaticLanguage = pAddAutoItem->GetValue();
         }
     }
     else

@@ -617,7 +617,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
                 std::unique_ptr<SvxNumRule> pNumRule;
                 const SfxPoolItem* pTmpItem=nullptr;
-                sal_uInt16 nNumItemId = SID_ATTR_NUMBERING_RULE;
+                TypedWhichId<SvxNumBulletItem> nNumItemId = SID_ATTR_NUMBERING_RULE;
                 sal_uInt16 nActNumLvl = mpDrawView->GetSelectionLevel();
                 pTmpItem=GetNumBulletItem(aNewAttr, nNumItemId);
 

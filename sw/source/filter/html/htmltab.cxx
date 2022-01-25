@@ -1429,13 +1429,12 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                     const SwStartNode *pSttNd = pBox->GetSttNd();
                     pCNd = pSttNd->GetNodes()[pSttNd->GetIndex()+1]
                                  ->GetContentNode();
-                    const SfxPoolItem *pItem;
+                    const SvxAdjustItem *pItem;
                     if( pCNd && pCNd->HasSwAttrSet() &&
-                        SfxItemState::SET==pCNd->GetpSwAttrSet()->GetItemState(
-                            RES_PARATR_ADJUST, false, &pItem ) )
+                        (pItem = pCNd->GetpSwAttrSet()->GetItemIfSet(
+                            RES_PARATR_ADJUST, false )) )
                     {
-                        eAdjust = static_cast<const SvxAdjustItem *>(pItem)
-                            ->GetAdjust();
+                        eAdjust = pItem->GetAdjust();
                     }
                 }
                 aItemSet.Put( SwTableBoxNumFormat(nNumFormat) );
@@ -2735,11 +2734,9 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
         }
 
         m_pCSS1Parser->ParseStyleOption( rStyle, aItemSet, aPropInfo );
-        const SfxPoolItem *pItem = nullptr;
-        if( SfxItemState::SET == aItemSet.GetItemState( RES_BACKGROUND, false,
-                                                   &pItem ) )
+        if( const SvxBrushItem *pItem = aItemSet.GetItemIfSet( RES_BACKGROUND, false ) )
         {
-            pBrushItem = new SvxBrushItem( *static_cast<const SvxBrushItem *>(pItem) );
+            pBrushItem = new SvxBrushItem( *pItem );
         }
     }
 
@@ -3026,10 +3023,9 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
         if( rParser.ParseStyleOptions( m_aStyle, m_aId, m_aClass, aItemSet,
                                        aPropInfo, &aLang, &aDir ) )
         {
-            SfxPoolItem const* pItem;
-            if (SfxItemState::SET == aItemSet.GetItemState(RES_BOX, false, &pItem))
+            if (SvxBoxItem const* pItem = aItemSet.GetItemIfSet(RES_BOX, false))
             {   // fdo#41796: steal box item to set it in FixFrameFormat later!
-                m_xBoxItem.reset(dynamic_cast<SvxBoxItem *>(pItem->Clone()));
+                m_xBoxItem.reset(pItem->Clone());
                 aItemSet.ClearItem(RES_BOX);
             }
             rParser.InsertAttrs(aItemSet, aPropInfo, xCntxt.get());
@@ -3251,21 +3247,19 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                                    pCurTable->GetClass(),
                                                    aItemSet, aPropInfo,
                                                       nullptr, &pCurTable->GetDirection() );
-            const SfxPoolItem *pItem = nullptr;
             if( bStyleParsed )
             {
-                if( SfxItemState::SET == aItemSet.GetItemState(
-                                        RES_BACKGROUND, false, &pItem ) )
+                if( const SvxBrushItem* pItem = aItemSet.GetItemIfSet(
+                                        RES_BACKGROUND, false ) )
                 {
-                    pCurTable->SetBGBrush( *static_cast<const SvxBrushItem *>(pItem) );
+                    pCurTable->SetBGBrush( *pItem );
                     aItemSet.ClearItem( RES_BACKGROUND );
                 }
-                if( SfxItemState::SET == aItemSet.GetItemState(
-                                        RES_PARATR_SPLIT, false, &pItem ) )
+                if( const SvxFormatSplitItem* pSplitItem = aItemSet.GetItemIfSet(
+                                        RES_PARATR_SPLIT, false ) )
                 {
                     aItemSet.Put(
-                        SwFormatLayoutSplit( static_cast<const SvxFormatSplitItem *>(pItem)
-                                                ->GetValue() ) );
+                        SwFormatLayoutSplit( pSplitItem->GetValue() ) );
                     aItemSet.ClearItem( RES_PARATR_SPLIT );
                 }
             }
@@ -3503,23 +3497,23 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
                 if (pFrameFormat && pOldTextNd)
                 {
-                    const SfxPoolItem* pItem2;
-                    if( SfxItemState::SET == pOldTextNd->GetSwAttrSet()
-                            .GetItemState( RES_PAGEDESC, false, &pItem2 ) &&
-                        static_cast<const SwFormatPageDesc *>(pItem2)->GetPageDesc() )
+                    const SwFormatPageDesc* pPageDescItem = pOldTextNd->GetSwAttrSet()
+                            .GetItemIfSet( RES_PAGEDESC, false );
+                    if( pPageDescItem && pPageDescItem->GetPageDesc() )
                     {
-                        pFrameFormat->SetFormatAttr( *pItem2 );
+                        pFrameFormat->SetFormatAttr( *pPageDescItem );
                         pOldTextNd->ResetAttr( RES_PAGEDESC );
                     }
-                    if( SfxItemState::SET == pOldTextNd->GetSwAttrSet()
-                            .GetItemState( RES_BREAK, true, &pItem2 ) )
+
+                    if( const SvxFormatBreakItem* pBreakItem = pOldTextNd->GetSwAttrSet()
+                            .GetItemIfSet( RES_BREAK ) )
                     {
-                        switch( static_cast<const SvxFormatBreakItem *>(pItem2)->GetBreak() )
+                        switch( pBreakItem->GetBreak() )
                         {
                         case SvxBreak::PageBefore:
                         case SvxBreak::PageAfter:
                         case SvxBreak::PageBoth:
-                            pFrameFormat->SetFormatAttr( *pItem2 );
+                            pFrameFormat->SetFormatAttr( *pBreakItem );
                             pOldTextNd->ResetAttr( RES_BREAK );
                             break;
                         default:

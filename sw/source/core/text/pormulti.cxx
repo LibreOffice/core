@@ -969,9 +969,9 @@ std::optional<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rP
     // need the node that contains input rPos
     std::pair<SwTextNode const*, sal_Int32> startPos(m_pFrame->MapViewToModel(rPos));
     const SvxCharRotateItem* pActiveRotateItem(nullptr);
-    const SfxPoolItem* pNodeRotateItem(nullptr);
+    const SvxCharRotateItem* pNodeRotateItem(nullptr);
     const SvxTwoLinesItem* pActiveTwoLinesItem(nullptr);
-    const SfxPoolItem* pNodeTwoLinesItem(nullptr);
+    const SvxTwoLinesItem* pNodeTwoLinesItem(nullptr);
     SwTextAttr const* pActiveTwoLinesHint(nullptr);
     SwTextAttr const* pActiveRotateHint(nullptr);
     const SwTextAttr *pRuby = nullptr;
@@ -1029,25 +1029,16 @@ std::optional<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rP
             if (startPos.first->GetIndex() == pNode->GetIndex())
             {
                 iterAtStartOfNode.Assign(iter);
-                if (SfxItemState::SET == pNode->GetSwAttrSet().GetItemState(
-                            RES_CHRATR_ROTATE, true, &pNodeRotateItem) &&
-                    static_cast<const SvxCharRotateItem*>(pNodeRotateItem)->GetValue())
+                pNodeRotateItem = pNode->GetSwAttrSet().GetItemIfSet(RES_CHRATR_ROTATE);
+                if (pNodeRotateItem && pNodeRotateItem->GetValue())
                 {
-                    pActiveRotateItem = static_cast<const SvxCharRotateItem*>(pNodeRotateItem);
+                    pActiveRotateItem = pNodeRotateItem;
                 }
-                else
+                pNodeTwoLinesItem = startPos.first->GetSwAttrSet().GetItemIfSet(
+                            RES_CHRATR_TWO_LINES);
+                if (pNodeTwoLinesItem && pNodeTwoLinesItem->GetValue())
                 {
-                    pNodeRotateItem = nullptr;
-                }
-                if (SfxItemState::SET == startPos.first->GetSwAttrSet().GetItemState(
-                            RES_CHRATR_TWO_LINES, true, &pNodeTwoLinesItem) &&
-                    static_cast<const SvxTwoLinesItem*>(pNodeTwoLinesItem)->GetValue())
-                {
-                    pActiveTwoLinesItem = static_cast<const SvxTwoLinesItem*>(pNodeTwoLinesItem);
-                }
-                else
-                {
-                    pNodeTwoLinesItem = nullptr;
+                    pActiveTwoLinesItem = pNodeTwoLinesItem;
                 }
             }
         }
@@ -1090,9 +1081,9 @@ std::optional<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rP
             if (pNodeTwoLinesItem)
             {
                 aEnd.push_front(m_pFrame->MapModelToView(startPos.first, startPos.first->Len()));
-                bOn = static_cast<const SvxTwoLinesItem*>(pNodeTwoLinesItem)->GetEndBracket() ==
+                bOn = pNodeTwoLinesItem->GetEndBracket() ==
                         pActiveTwoLinesItem->GetEndBracket() &&
-                      static_cast<const SvxTwoLinesItem*>(pNodeTwoLinesItem)->GetStartBracket() ==
+                      pNodeTwoLinesItem->GetStartBracket() ==
                         pActiveTwoLinesItem->GetStartBracket();
             }
             else
@@ -1150,9 +1141,8 @@ std::optional<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rP
             }
             else
             {
-                pNodeTwoLinesItem = nullptr;
-                pNode->GetSwAttrSet().GetItemState(
-                            RES_CHRATR_TWO_LINES, true, &pNodeTwoLinesItem);
+                pNodeTwoLinesItem = pNode->GetSwAttrSet().GetItemIfSet(
+                            RES_CHRATR_TWO_LINES);
                 nTmpStart = m_pFrame->MapModelToView(pNode, 0);
                 nTmpEnd = m_pFrame->MapModelToView(pNode, pNode->Len());
                 assert(rPos <= nTmpEnd); // next node must not have smaller index
@@ -1255,9 +1245,8 @@ std::optional<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rP
             }
             else
             {
-                pNodeTwoLinesItem = nullptr;
-                pNode->GetSwAttrSet().GetItemState(
-                            RES_CHRATR_TWO_LINES, true, &pNodeTwoLinesItem);
+                pNodeTwoLinesItem = pNode->GetSwAttrSet().GetItemIfSet(
+                            RES_CHRATR_TWO_LINES);
                 nTmpStart = m_pFrame->MapModelToView(pNode, 0);
                 nTmpEnd = m_pFrame->MapModelToView(pNode, pNode->Len());
                 assert(n2Start <= nTmpEnd); // next node must not have smaller index
@@ -1321,7 +1310,7 @@ std::optional<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rP
             if (pNodeRotateItem)
             {
                 aEnd.push_front(m_pFrame->MapModelToView(startPos.first, startPos.first->Len()));
-                bOn = static_cast<const SvxCharRotateItem*>(pNodeRotateItem)->GetValue() ==
+                bOn = pNodeRotateItem->GetValue() ==
                         pActiveRotateItem->GetValue();
             }
             else
@@ -1356,9 +1345,8 @@ std::optional<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rP
             }
             else
             {
-                pNodeRotateItem = nullptr;
-                pNode->GetSwAttrSet().GetItemState(
-                            RES_CHRATR_ROTATE, true, &pNodeRotateItem);
+                pNodeRotateItem = pNode->GetSwAttrSet().GetItemIfSet(
+                            RES_CHRATR_ROTATE);
                 nTmpStart = m_pFrame->MapModelToView(pNode, 0);
                 nTmpEnd = m_pFrame->MapModelToView(pNode, pNode->Len());
                 assert(rPos <= nTmpEnd); // next node must not have smaller index

@@ -25,6 +25,7 @@
 class ScViewData;
 class ScDocument;
 struct ScSubTotalParam;
+class ScSubTotalItem;
 
 class ScTpSubTotalGroup : public SfxTabPage
 {
@@ -45,7 +46,7 @@ protected:
     ScViewData*             pViewData;
     ScDocument*             pDoc;
 
-    const sal_uInt16            nWhichSubTotals;
+    const TypedWhichId<ScSubTotalItem> nWhichSubTotals;
     const ScSubTotalParam&  rSubTotalData;
     std::vector<SCCOL>      mnFieldArr;
     sal_uInt16              nFieldCount;
@@ -129,7 +130,7 @@ private:
 
     ScViewData*             pViewData;
     ScDocument*             pDoc;
-    const sal_uInt16        nWhichSubTotals;
+    const TypedWhichId<ScSubTotalItem> nWhichSubTotals;
     const ScSubTotalParam&  rSubTotalData;
 
     std::unique_ptr<weld::CheckButton> m_xBtnPagebreak;

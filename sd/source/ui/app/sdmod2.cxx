@@ -533,7 +533,6 @@ std::optional<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
 
 void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
 {
-    const SfxPoolItem*  pItem = nullptr;
     bool bNewDefTab = false;
     bool bNewPrintOptions = false;
     bool bMiscOptions = false;
@@ -557,45 +556,42 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     }
     SdOptions* pOptions = GetSdOptions(eDocType);
     // Grid
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS ,
-                            false, &pItem ))
+    if( const SdOptionsGridItem* pGridItem = static_cast<const SdOptionsGridItem*>(rSet.GetItemIfSet( SID_ATTR_GRID_OPTIONS, false )) )
     {
-        const SdOptionsGridItem* pGridItem = static_cast<const SdOptionsGridItem*>(pItem);
         pGridItem->SetOptions( pOptions );
     }
 
     // Layout
-    const SdOptionsLayoutItem* pLayoutItem = nullptr;
-    if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_LAYOUT,
-                            false, reinterpret_cast<const SfxPoolItem**>(&pLayoutItem) ))
+    if( const SdOptionsLayoutItem* pLayoutItem = rSet.GetItemIfSet( ATTR_OPTIONS_LAYOUT, false ))
     {
         pLayoutItem->SetOptions( pOptions );
     }
 
     // Metric
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC, false, &pItem ) )
+    if( const SfxUInt16Item* pItem = rSet.GetItemIfSet( SID_ATTR_METRIC, false ) )
     {
         if( pDoc && eDocType == pDoc->GetDocumentType() )
             PutItem( *pItem );
-        pOptions->SetMetric( static_cast<const SfxUInt16Item*>( pItem )->GetValue() );
+        pOptions->SetMetric( pItem->GetValue() );
     }
     sal_uInt16 nDefTab = pOptions->GetDefTab();
     // Default-Tabulator
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_DEFTABSTOP, false, &pItem ) )
+    if( const SfxUInt16Item* pItem = rSet.GetItemIfSet( SID_ATTR_DEFTABSTOP, false ) )
     {
-        nDefTab = static_cast<const SfxUInt16Item*>( pItem )->GetValue();
+        nDefTab = pItem->GetValue();
         pOptions->SetDefTab( nDefTab );
 
         bNewDefTab = true;
     }
 
     // Scale
-    if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_X, false, &pItem ) )
+    if( const SfxInt32Item* pItem = rSet.GetItemIfSet( ATTR_OPTIONS_SCALE_X, false ) )
     {
-        sal_Int32 nX = static_cast<const SfxInt32Item*>( pItem )->GetValue();
-        if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_Y, false, &pItem ) )
+        sal_Int32 nX = pItem->GetValue();
+        pItem = rSet.GetItemIfSet( ATTR_OPTIONS_SCALE_Y, false );
+        if( pItem )
         {
-            sal_Int32 nY = static_cast<const SfxInt32Item*>( pItem )->GetValue();
+            sal_Int32 nY = pItem->GetValue();
             pOptions->SetScale( nX, nY );
 
             // Apply to document only if doc type match
@@ -609,18 +605,16 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     }
 
     // Misc
-    const SdOptionsMiscItem* pMiscItem = nullptr;
-    if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_MISC,
-                            false, reinterpret_cast<const SfxPoolItem**>(&pMiscItem) ))
+    const SdOptionsMiscItem* pMiscItem = rSet.GetItemIfSet( ATTR_OPTIONS_MISC, false);
+    if( pMiscItem )
     {
         pMiscItem->SetOptions( pOptions );
         bMiscOptions = true;
     }
 
     // Snap
-    const SdOptionsSnapItem* pSnapItem = nullptr;
-    if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_SNAP,
-                            false, reinterpret_cast<const SfxPoolItem**>(&pSnapItem) ))
+    const SdOptionsSnapItem* pSnapItem = rSet.GetItemIfSet( ATTR_OPTIONS_SNAP, false );
+    if( pSnapItem )
     {
         pSnapItem->SetOptions( pOptions );
     }
@@ -630,9 +624,8 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
                     ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT>  aPrintSet( GetPool() );
 
     // Print
-    const SdOptionsPrintItem* pPrintItem = nullptr;
-    if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_PRINT,
-                            false, reinterpret_cast<const SfxPoolItem**>(&pPrintItem) ))
+    const SdOptionsPrintItem* pPrintItem = rSet.GetItemIfSet( ATTR_OPTIONS_PRINT, false);
+    if( pPrintItem )
     {
         pPrintItem->SetOptions( pOptions );
 

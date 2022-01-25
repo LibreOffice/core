@@ -129,8 +129,7 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
         m_xWrapOutlineCB->show();
         m_xWrapOutsideCB->show();
 
-        m_xWrapTransparentCB->set_active( 0 == static_cast<const SfxInt16Item&>(rSet->Get(
-                                        FN_DRAW_WRAP_DLG)).GetValue() );
+        m_xWrapTransparentCB->set_active( 0 == rSet->Get(FN_DRAW_WRAP_DLG).GetValue() );
         m_xWrapTransparentCB->save_state();
     }
     else

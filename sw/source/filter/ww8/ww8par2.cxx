@@ -2503,19 +2503,18 @@ void WW8TabDesc::CreateSwTable()
     {
         if (const SfxItemSet* pSet = pNd->GetpSwAttrSet())
         {
-            SfxPoolItem *pSetAttr = nullptr;
-            const SfxPoolItem* pItem;
-            if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false, &pItem))
+            std::unique_ptr<SfxPoolItem> pSetAttr;
+
+            if (const SvxFormatBreakItem* pBreakItem = pSet->GetItemIfSet(RES_BREAK, false))
             {
-                pSetAttr = new SvxFormatBreakItem( *static_cast<const SvxFormatBreakItem*>(pItem) );
+                pSetAttr.reset(new SvxFormatBreakItem( *pBreakItem ));
                 pNd->ResetAttr( RES_BREAK );
             }
 
             // eventually set the PageDesc/Break now to the table
             if (pSetAttr)
             {
-                m_aItemSet.Put(*pSetAttr);
-                delete pSetAttr;
+                m_aItemSet.Put(std::move(pSetAttr));
             }
         }
     }

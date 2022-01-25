@@ -244,13 +244,13 @@ std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const S
         xMMConfig->SetSourceView(this);
 
         //set the first used database as default source on the config item
-        const SfxPoolItem* pItem = nullptr;
-        if (pArgs && SfxItemState::SET == pArgs->GetItemState(
-               FN_PARAM_DATABASE_PROPERTIES, false, &pItem))
+        const SfxUnoAnyItem* pItem = nullptr;
+        if (pArgs && (pItem = pArgs->GetItemIfSet(
+               FN_PARAM_DATABASE_PROPERTIES, false)))
         {
             //mailmerge has been called from the database beamer
             uno::Sequence< beans::PropertyValue> aDBValues;
-            if (static_cast<const SfxUnoAnyItem*>(pItem)->GetValue() >>= aDBValues)
+            if (pItem->GetValue() >>= aDBValues)
             {
                 SwDBData aDBData;
                 svx::ODataAccessDescriptor aDescriptor(aDBValues);

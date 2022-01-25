@@ -171,13 +171,12 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetFooter( false );
     }
 
-    if(SfxItemState::SET == rSet.GetItemState(RES_BACKGROUND, false, &pItem))
+    if(const SvxBrushItem* pBrushItem = rSet.GetItemIfSet(RES_BACKGROUND, false))
     {
         // create FillAttributes from SvxBrushItem
-        const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(*pItem);
         SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*rSet.GetPool());
 
-        setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+        setSvxBrushItemAsFillAttributesToTargetSet(*pBrushItem, aTempSet);
         setPageFillAttributes(
             std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
                     aTempSet));

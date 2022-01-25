@@ -98,11 +98,9 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     }
 
     // set left/right border
-    const SfxPoolItem *pItem;
-    if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
+    if( const SvxLRSpaceItem* pLRItem = rCSS1ItemSet.GetItemIfSet( RES_LR_SPACE ) )
     {
         // maybe flatten the first line indentation
-        const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
         SvxLRSpaceItem aLRItem( *pLRItem );
         aLRItem.SetTextFirstLineOffset( 0 );
         if( rCSS1PropInfo.m_bLeftMargin )
@@ -126,10 +124,9 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     }
 
     // set top/bottom border
-    if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, true, &pItem ) )
+    if( const SvxULSpaceItem* pULItem = rCSS1ItemSet.GetItemIfSet( RES_UL_SPACE ) )
     {
         // maybe flatten the first line indentation
-        const SvxULSpaceItem *pULItem = static_cast<const SvxULSpaceItem *>(pItem);
         if( rCSS1PropInfo.m_bTopMargin )
         {
             nUpperSpace = pULItem->GetUpper();
