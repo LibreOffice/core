@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f279993f_1284a11d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T10:00:25Z",
+      "side": 1,
+      "message": "Please describe in detail, what was the problem, and what has been done to fix that. Is this issue no. 3 in the bug report?",
+      "revId": "2879c879b56de4e52fdbc73dce43cee61b72beb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

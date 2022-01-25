@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bb3b02b_4485bc4a",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T10:00:25Z",
+      "side": 0,
+      "message": "You have changed the formatting in a lot of places that you were not otherwise modifying. This causes trouble for following the changes in the git history. Please don\u0027t do that here and elsewhere.",
+      "revId": "f337c36ff836935d25267559e5f74e7c4345c25c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31bf1c5c_69a0036a",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T10:00:25Z",
+      "side": 0,
+      "message": "Here.",
+      "revId": "f337c36ff836935d25267559e5f74e7c4345c25c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a2ae86f_8f7bba02",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T10:00:25Z",
+      "side": 0,
+      "message": "Here for the if.",
+      "revId": "f337c36ff836935d25267559e5f74e7c4345c25c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fc324ac_51c7ec74",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T10:00:25Z",
+      "side": 0,
+      "message": "And here.",
+      "revId": "f337c36ff836935d25267559e5f74e7c4345c25c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
