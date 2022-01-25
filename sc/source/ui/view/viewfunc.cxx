@@ -337,6 +337,29 @@ namespace HelperNotifyChanges
     }
 }
 
+namespace
+{
+    class AutoCorrectQuery : public weld::MessageDialogController
+    {
+    private:
+        std::unique_ptr<weld::TextView> m_xError;
+    public:
+        AutoCorrectQuery(weld::Window* pParent, const OUString& rFormula)
+            : weld::MessageDialogController(pParent, "modules/scalc/ui/warnautocorrect.ui", "WarnAutoCorrect", "grid")
+            , m_xError(m_xBuilder->weld_text_view("error"))
+        {
+            m_xDialog->set_primary_text(ScResId(SCSTR_FORMULA_AUTOCORRECTION).trim());
+            m_xDialog->set_default_response(RET_YES);
+
+            const int nMaxWidth = m_xError->get_approximate_digit_width() * 65;
+            const int nMaxHeight = m_xError->get_height_rows(6);
+            m_xError->set_size_request(nMaxWidth, nMaxHeight);
+
+            m_xError->set_text(rFormula);
+        }
+    };
+}
+
 //      actual functions
 
 //  input - undo OK
@@ -447,13 +470,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     nResult = RET_NO;   // empty formula, just '='
                 else
                 {
-                    OUString aMessage = ScResId( SCSTR_FORMULA_AUTOCORRECTION ) + aCorrectedFormula;
-
-                    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetViewData().GetDialogParent(),
-                                                                   VclMessageType::Question, VclButtonsType::YesNo,
-                                                                   aMessage));
-                    xQueryBox->set_default_response(RET_YES);
-                    nResult = xQueryBox->run();
+                    AutoCorrectQuery aQueryBox(GetViewData().GetDialogParent(), aCorrectedFormula);
+                    nResult = aQueryBox.run();
                 }
                 if ( nResult == RET_YES )
                 {
