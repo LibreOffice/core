@@ -33,6 +33,24 @@
       "message": "I believe you just followed the way the other parts are implemented with regard to std::for_each and CopyToTableFunc, and I guess I\u0027m responsible for using this pattern back in the old days.\n\nBut now that we use modern C++ (17), it\u0027s better to use a range-based for loop and without a function object.  I hope that makes sense.",
       "revId": "4016bf86e3ef00f912d0fb265ec85b2fcdcc6ce0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "839ddd76_6daafc81",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-01-25T13:03:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b58b0674_6f3a15c4",
+      "revId": "4016bf86e3ef00f912d0fb265ec85b2fcdcc6ce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
