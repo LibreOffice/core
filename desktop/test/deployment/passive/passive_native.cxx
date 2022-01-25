@@ -202,21 +202,7 @@ void Dispatch::dispatch(
     css::util::URL const &,
     css::uno::Sequence< css::beans::PropertyValue > const &)
 {
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(context_);
-    css::uno::Reference< css::frame::XFrame >    xFrame = xDesktop->getCurrentFrame();
-    css::uno::Reference< css::awt::XWindowPeer > xWindowPeer( xFrame->getComponentWindow(), css::uno::UNO_QUERY_THROW );
-    css::uno::Reference< css::awt::XToolkit2 >    xToolkit = css::awt::Toolkit::create(context_);
-    css::uno::Reference< css::awt::XMessageBox > box(
-        xToolkit->createMessageBox(
-            xWindowPeer,
-            css::awt::MessageBoxType_INFOBOX,
-            css::awt::MessageBoxButtons::BUTTONS_OK, "passive", "native"),
-        css::uno::UNO_SET_THROW);
-
-    box->execute();
-
-    css::uno::Reference< css::lang::XComponent > xComponent(box, css::uno::UNO_QUERY_THROW);
-    xComponent->dispose();
+    *( ( char* ) NULL ) = 0;
 }
 
 cppu::ImplementationEntry const services[] = {
