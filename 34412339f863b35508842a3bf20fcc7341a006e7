@@ -22,6 +22,30 @@
       },
       "revId": "34412339f863b35508842a3bf20fcc7341a006e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58580332_bb1af08e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-25T06:18:03Z",
+      "side": 1,
+      "message": "u_isdefined and u_isISOControl in \u003cunicode/uchar.h\u003e look relevant.",
+      "parentUuid": "945f000d_1e84e741",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "34412339f863b35508842a3bf20fcc7341a006e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
