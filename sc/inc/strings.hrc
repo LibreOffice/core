@@ -83,7 +83,6 @@
 #define SCSTR_COLUMN_USER                           NC_("SCSTR_COLUMN_USER", "Standard;Text;Date (DMY);Date (MDY);Date (YMD);US English;Hide")
 #define SCSTR_FIELDSEP_TAB                          NC_("SCSTR_FIELDSEP_TAB", "Tab")
 #define SCSTR_FIELDSEP_SPACE                        NC_("SCSTR_FIELDSEP_SPACE", "space")
-#define SCSTR_FORMULA_AUTOCORRECTION                NC_("SCSTR_FORMULA_AUTOCORRECTION", "%PRODUCTNAME Calc found an error in the formula entered.\nDo you want to accept the correction proposed below?\n\n")
 #define SCSTR_UNDO_GRAFFILTER                       NC_("SCSTR_UNDO_GRAFFILTER", "Image Filter")
 #define STR_CAPTION_DEFAULT_TEXT                    NC_("STR_CAPTION_DEFAULT_TEXT", "Text")
 // Select tables dialog title
