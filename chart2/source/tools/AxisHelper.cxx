@@ -148,6 +148,9 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
     if (!xProp.is())
         return 0;
 
+    auto pCorrespondingCoordinateSystem = dynamic_cast<BaseCoordinateSystem*>(xCorrespondingCoordinateSystem.get());
+    assert(pCorrespondingCoordinateSystem);
+
     bool bLinkToSource = true;
     xProp->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkToSource;
     xProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormatKey;
@@ -232,17 +235,15 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
 
             try
             {
-                Reference< XChartTypeContainer > xCTCnt( xCorrespondingCoordinateSystem, uno::UNO_QUERY_THROW );
                 OUString aRoleToMatch;
                 if( nDimensionIndex == 0 )
                     aRoleToMatch = "values-x";
-                const Sequence< Reference< XChartType > > aChartTypes( xCTCnt->getChartTypes());
-                for( Reference< XChartType > const & chartType : aChartTypes )
+                const std::vector< rtl::Reference< ChartType > > & aChartTypes( pCorrespondingCoordinateSystem->getChartTypes2());
+                for( rtl::Reference< ChartType > const & chartType : aChartTypes )
                 {
                     if( nDimensionIndex != 0 )
                         aRoleToMatch = ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( chartType );
-                    Reference< XDataSeriesContainer > xDSCnt( chartType, uno::UNO_QUERY_THROW );
-                    const Sequence< Reference< XDataSeries > > aDataSeriesSeq( xDSCnt->getDataSeries());
+                    const Sequence< Reference< XDataSeries > > aDataSeriesSeq( chartType->getDataSeries());
                     for( Reference< chart2::XDataSeries > const & xDataSeries : aDataSeriesSeq )
                     {
                         Reference< data::XDataSource > xSource( xDataSeries, uno::UNO_QUERY_THROW );
