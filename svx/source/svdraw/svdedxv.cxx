@@ -2242,7 +2242,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             while (nWhich != 0)
             {
                 const SfxPoolItem* pItem;
-                SfxItemState eState = pSet->GetItemState(nWhich, false, &pItem);
+                SfxItemState eState = pSet->GetItemStateUntyped(nWhich, false, &pItem);
                 if (eState == SfxItemState::SET)
                     aSet.Put(*pItem);
                 nWhich = aIter.NextWhich();

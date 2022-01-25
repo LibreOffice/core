@@ -195,7 +195,7 @@ namespace sdr::properties
 
             while(nWhich)
             {
-                if(SfxItemState::SET == rSet.GetItemState(nWhich, false, &pPoolItem))
+                if(SfxItemState::SET == rSet.GetItemStateUntyped(nWhich, false, &pPoolItem))
                 {
                     if(AllowItemChange(nWhich, pPoolItem))
                     {

@@ -30,9 +30,9 @@
 
 FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 {
-    if (const SfxPoolItem* pItem = nullptr;
+    if (const SfxUInt16Item* pItem = nullptr;
         SfxItemState::SET == rSet.GetItemState(SID_ATTR_METRIC, false, &pItem))
-        return static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
+        return static_cast<FieldUnit>(pItem->GetValue());
 
     return SfxModule::GetCurrentFieldUnit();
 }
@@ -40,9 +40,9 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 bool GetApplyCharUnit( const SfxItemSet& rSet )
 {
     bool  bUseCharUnit = false;
-    const SfxPoolItem* pItem = nullptr;
+    const SfxBoolItem* pItem = nullptr;
     if ( SfxItemState::SET == rSet.GetItemState( SID_ATTR_APPLYCHARUNIT, false, &pItem ) )
-        bUseCharUnit =  static_cast<const SfxBoolItem*>(pItem)->GetValue();
+        bUseCharUnit =  pItem->GetValue();
     else
     {
         // FIXME - this might be wrong, cf. the DEV300 changes in GetModuleFieldUnit()
@@ -57,7 +57,7 @@ bool GetApplyCharUnit( const SfxItemSet& rSet )
             {
                 pItem = pModule->GetItem( SID_ATTR_APPLYCHARUNIT );
                 if ( pItem )
-                    bUseCharUnit = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                    bUseCharUnit = pItem->GetValue();
             }
             else
             {

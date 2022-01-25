@@ -102,10 +102,10 @@ void FmFormView::Init()
     SfxObjectShell* pObjShell = pFormModel->GetObjectShell();
     if ( pObjShell && pObjShell->GetMedium() )
     {
-        const SfxPoolItem *pItem=nullptr;
+        const SfxUnoAnyItem *pItem=nullptr;
         if ( pObjShell->GetMedium()->GetItemSet()->GetItemState( SID_COMPONENTDATA, false, &pItem ) == SfxItemState::SET )
         {
-            ::comphelper::NamedValueCollection aComponentData( static_cast<const SfxUnoAnyItem*>(pItem)->GetValue() );
+            ::comphelper::NamedValueCollection aComponentData( pItem->GetValue() );
             bInitDesignMode = aComponentData.getOrDefault( "ApplyFormDesignMode", bInitDesignMode );
         }
     }

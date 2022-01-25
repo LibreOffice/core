@@ -696,7 +696,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if ( pArgs )
             {
                 const SfxPoolItem* pItem;
-                if ( ( pArgs->GetItemState( FN_PARAM_1, true, &pItem ) ) == SfxItemState::SET )
+                if ( ( pArgs->GetItemStateUntyped( FN_PARAM_1, true, &pItem ) ) == SfxItemState::SET )
                 {
                     const SfxInt32Item* pTypedItem = dynamic_cast<const SfxInt32Item* >( pItem );
                     if ( pTypedItem )

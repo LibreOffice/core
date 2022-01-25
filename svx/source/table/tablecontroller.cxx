@@ -535,12 +535,13 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
     if( pArgs )
     {
         const SfxPoolItem* pItem = nullptr;
-        pArgs->GetItemState(nSId, false, &pItem);
+        pArgs->GetItemStateUntyped(nSId, false, &pItem);
         if (pItem)
         {
             nCount = static_cast<const SfxInt16Item*>(pItem)->GetValue();
-            if(SfxItemState::SET == pArgs->GetItemState(SID_TABLE_PARAM_INSERT_AFTER, true, &pItem))
-                bInsertAfter = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+            const SfxBoolItem* pItem2 = nullptr;
+            if(SfxItemState::SET == pArgs->GetItemState(SID_TABLE_PARAM_INSERT_AFTER, true, &pItem2))
+                bInsertAfter = pItem2->GetValue();
         }
     }
 
@@ -1200,10 +1201,10 @@ void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
 
     TableStyleSettings aSettings(rTableObj.getTableStyleSettings() );
-    const SfxPoolItem *pPoolItem=nullptr;
+    const SfxBoolItem *pPoolItem=nullptr;
 
     if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEFIRSTROWSTYLE, false,&pPoolItem) )
-        aSettings.mbUseFirstRow = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
+        aSettings.mbUseFirstRow = pPoolItem->GetValue();
 
     if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USELASTROWSTYLE, false,&pPoolItem) )
         aSettings.mbUseLastRow = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
