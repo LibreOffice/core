@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32fad447_9025b145",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-25T09:54:26Z",
+      "side": 0,
+      "message": "Please add the behavior change from submission 122836:\nhttps://gerrit.libreoffice.org/c/core/+/122836/\nto here.",
+      "revId": "c4abebdf6c8b9abef7a54edaf72ac40e1fc67d2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
