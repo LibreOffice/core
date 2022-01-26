@@ -110,6 +110,8 @@ public:
     virtual void SAL_CALL setCutCopyMode( const css::uno::Any& _cutcopymode ) override;
     virtual css::uno::Any SAL_CALL getStatusBar() override;
     virtual void SAL_CALL setStatusBar( const css::uno::Any& _statusbar ) override;
+    virtual css::uno::Any SAL_CALL getWindowState() override;
+    virtual void SAL_CALL setWindowState(const css::uno::Any& rWindowState) override;
     virtual ::sal_Int32 SAL_CALL getCursor() override;
     virtual void SAL_CALL setCursor( ::sal_Int32 _cursor ) override;
     virtual void SAL_CALL OnKey( const OUString& Key, const css::uno::Any& Procedure ) override;
