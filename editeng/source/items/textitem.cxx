@@ -2214,7 +2214,7 @@ bool SvxTwoLinesItem::GetPresentation( SfxItemPresentation /*ePres*/,
 *************************************************************************/
 
 SvxTextRotateItem::SvxTextRotateItem(Degree10 nValue, const sal_uInt16 nW)
-    : SfxUInt16Item(nW, nValue.get())
+    : SfxInt16Item(nW, nValue.get())
 {
 }
 

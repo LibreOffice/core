@@ -796,7 +796,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
             {
                 const XFillStyleItem &rFillStyleItem = aAttr.Get (XATTR_FILLSTYLE);
 
-                rSet.Put (SfxUInt32Item (nWhich, static_cast<::tools::Long>(rFillStyleItem.GetValue ())));
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<sal_uInt32>(rFillStyleItem.GetValue ())));
                 break;
             }
 
@@ -804,7 +804,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
             {
                 const XLineStyleItem &rLineStyleItem = aAttr.Get (XATTR_LINESTYLE);
 
-                rSet.Put (SfxUInt32Item (nWhich, static_cast<::tools::Long>(rLineStyleItem.GetValue ())));
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<sal_uInt32>(rLineStyleItem.GetValue ())));
                 break;
             }
 
@@ -812,7 +812,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
             {
                 const XLineWidthItem &rLineWidthItem = aAttr.Get (XATTR_LINEWIDTH);
 
-                rSet.Put (SfxUInt32Item (nWhich, static_cast<::tools::Long>(rLineWidthItem.GetValue ())));
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<sal_uInt32>(rLineWidthItem.GetValue ())));
                 break;
             }
 
@@ -866,7 +866,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
                         ;
                 }
 
-                rSet.Put (SfxUInt32Item (nWhich, static_cast<::tools::Long>((nWhich == SID_GETRED)
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<sal_uInt32>((nWhich == SID_GETRED)
                                                              ? aColor.GetRed ()
                                                              : (nWhich == SID_GETGREEN)
                                                                    ? aColor.GetGreen ()

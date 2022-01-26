@@ -1408,7 +1408,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
         case SID_ATTR_PAGE_COLUMN:
         {
-            sal_uInt16 nColumnType = 0;
+            sal_Int16 nColumnType = 0;
 
             const SwFrameFormat& rMaster = rDesc.GetMaster();
             const SwFormatCol& aCol(rMaster.GetCol());
@@ -2440,7 +2440,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 bool bShared = !rDesc.IsHeaderShared();
                 bool bFirst = !rDesc.IsFirstShared(); // FIXME control changes for both header footer - tdf#100287
-                sal_uInt16 nLayout = (static_cast<int>(bShared)<<1) + static_cast<int>(bFirst);
+                sal_Int16 nLayout = (static_cast<int>(bShared)<<1) + static_cast<int>(bFirst);
                 SfxInt16Item aLayoutItem(SID_ATTR_PAGE_HEADER_LAYOUT, nLayout);
                 rSet.Put(aLayoutItem);
             }
@@ -2465,7 +2465,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 bool bShared = !rDesc.IsFooterShared();
                 bool bFirst = !rDesc.IsFirstShared(); // FIXME control changes for both header footer - tdf#100287
-                sal_uInt16 nLayout = (static_cast<int>(bShared)<<1) + static_cast<int>(bFirst);
+                sal_Int16 nLayout = (static_cast<int>(bShared)<<1) + static_cast<int>(bFirst);
                 SfxInt16Item aLayoutItem(SID_ATTR_PAGE_FOOTER_LAYOUT, nLayout);
                 rSet.Put(aLayoutItem);
             }

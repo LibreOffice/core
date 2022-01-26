@@ -283,7 +283,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_LEVEL:
                 if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_OUTLLEVEL])
                 {
-                    pSet->Put(SfxInt16Item(wid, static_cast<sal_uInt16>(nTokenValue)));
+                    pSet->Put(SfxInt16Item(wid, static_cast<sal_Int16>(nTokenValue)));
                 }
                 break;
 

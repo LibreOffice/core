@@ -141,7 +141,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
                     break;
             }
 
-            sal_uInt16 nCount = 1;
+            sal_Int16 nCount = 1;
             bool bInsertAfter = (nSlotId == SID_TABLE_INSERT_ROW_AFTER) || (nSlotId == SID_TABLE_INSERT_COL_AFTER);
 
             if (nSlotId == SID_TABLE_INSERT_ROW_DLG)

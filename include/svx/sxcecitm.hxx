@@ -67,7 +67,7 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrCaptionEscRelItem final : public SfxInt32Item {
 public:
-    SdrCaptionEscRelItem(tools::Long nEscRel=5000): SfxInt32Item(SDRATTR_CAPTIONESCREL,nEscRel) {}
+    SdrCaptionEscRelItem(sal_Int32 nEscRel=5000): SfxInt32Item(SDRATTR_CAPTIONESCREL,nEscRel) {}
     virtual ~SdrCaptionEscRelItem() override;
     virtual SdrCaptionEscRelItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
