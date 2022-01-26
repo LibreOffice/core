@@ -104,7 +104,7 @@ OOO_DLLPUBLIC_CHARTTOOLS OUString getLabelForLabeledDataSequence(
 
 OOO_DLLPUBLIC_CHARTTOOLS void setStackModeAtSeries(
     const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > & aSeries,
-    const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem,
+    const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
     StackMode eStackMode );
 
 OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getAttachedAxisIndex(
@@ -113,7 +113,7 @@ OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getAttachedAxisIndex(
 /// @param nAxisIndex, if -1 it is determined by the given data series via getAttachedAxisIndex
 OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getNumberFormatKeyFromAxis(
     const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
-    const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem,
+    const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
     sal_Int32 nDimensionIndex,
     sal_Int32 nAxisIndex = -1 );
 

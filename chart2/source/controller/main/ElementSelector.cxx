@@ -288,7 +288,7 @@ void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::Feat
             Reference< frame::XController > xChartController;
             rEvent.State >>= xChartController;
             ::chart::ChartController* pController = dynamic_cast<::chart::ChartController*>(xChartController.get());
-            assert(pController);
+            assert(!xChartController || pController);
             m_apSelectorListBox->SetChartController( pController );
             m_apSelectorListBox->UpdateChartElementsListAndSelection();
         }
