@@ -98,7 +98,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppu/cppudllapi.h>
