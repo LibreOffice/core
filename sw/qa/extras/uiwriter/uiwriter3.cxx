@@ -592,6 +592,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132597)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139737)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf139737.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Copy();
+
+    // Paste special as RTF
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "SelectedFormat", uno::makeAny(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
+
+    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144840)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf144840.odt");
