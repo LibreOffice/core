@@ -9769,8 +9769,6 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, co
     else
         x += nButtonWidth;
 
-    gtk_window_set_attached_to(pMenu, pMenuButton);
-
     gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pToplevel)), pMenu);
     gtk_window_set_transient_for(pMenu, GTK_WINDOW(pToplevel));
 
@@ -9899,8 +9897,6 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectan
     GtkWidget* pToplevel = widget_get_toplevel(pComboBox);
     gtk_coord x, y;
     gtk_widget_translate_coordinates(pComboBox, pToplevel, rAnchor.x, rAnchor.y, &x, &y);
-
-    gtk_window_set_attached_to(pMenu, pComboBox);
 
     gtk_widget_realize(GTK_WIDGET(pMenu));
     gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pToplevel)), pMenu);
