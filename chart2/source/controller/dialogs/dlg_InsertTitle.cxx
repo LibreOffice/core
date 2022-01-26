@@ -20,7 +20,6 @@
 #include <dlg_InsertTitle.hxx>
 #include <res_Titles.hxx>
 #include <ObjectNameProvider.hxx>
-#include <ChartModel.hxx>
 
 namespace chart
 {
