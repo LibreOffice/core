@@ -204,4 +204,18 @@ void Tables::dropObject(sal_Int32 nPosition, const OUString& sName)
         "DROP " + sType + " " + ::dbtools::quoteName(sQuoteString,sName));
 }
 
+void connectivity::firebird::Tables::appendNew(const OUString& _rsNewTable)
+{
+    insertElement(_rsNewTable, nullptr);
+
+    // notify our container listeners
+    css::container::ContainerEvent aEvent(static_cast<XContainer*>(this),
+                                          css::uno::makeAny(_rsNewTable), css::uno::Any(),
+                                          css::uno::Any());
+    comphelper::OInterfaceIteratorHelper3 aListenerLoop(m_aContainerListeners);
+    while (aListenerLoop.hasMoreElements())
+        aListenerLoop.next()->elementInserted(aEvent);
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
