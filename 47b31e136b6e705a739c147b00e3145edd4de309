@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a299db11_72f5f316",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-26T19:35:52Z",
+      "side": 1,
+      "message": "Samuel: noticing \ncommit 919bd3e78cce84a3338208e81d7056d8379d1bd5\nDate:   Mon Apr 20 16:10:03 2020 +0200\n    Fix macro signature getting lost when inserting data into table\nthought you might have some opinion here.",
+      "revId": "47b31e136b6e705a739c147b00e3145edd4de309",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
