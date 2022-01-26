@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01d7a09e_4e658680",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-26T05:16:26Z",
+      "side": 1,
+      "message": "Heiko: cc\u0027ing you for your awareness of a possible HIG violation (although I think it makes perfect sense in this case). [I\u0027m not even sure why kerning is so prominent to even be on the notebookbar, but I guess some typesetter-types would use it.]\n\nIt really is just a dropdown of buttons and isn\u0027t really a \"selection\" at all. However, the first item in the list (very tight) always has the focus (according to HIG guidelines I\u0027m sure) regardless of the current kerning setting. The number-field at the bottom of the list contains the current value, and that is where this patch is changing the initial focus - so the cursor is blinking in that box. To be fully HIG compliant, it would seem best to move that to the top position, but leaving the order as it always has been seems like a less controversial compromise to me.\n\nUse\nSAL_USE_VCLPLUGIN\u003dgen instdir/program/soffice\nto better observe the effect in Linux.",
+      "revId": "36ebea5bd7c7adbed924852dffb9d6f2d67689a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
