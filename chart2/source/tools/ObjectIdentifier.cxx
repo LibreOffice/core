@@ -327,7 +327,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         Reference< XAxis > xAxis( xObject, uno::UNO_QUERY );
         if( xAxis.is() )
         {
-            Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, ChartModelHelper::findDiagram( xChartModel ) ) );
+            rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, ChartModelHelper::findDiagram( xChartModel ) ) );
             OUString aCooSysParticle( createParticleForCoordinateSystem( xCooSys, xChartModel ) );
             sal_Int32 nDimensionIndex=-1;
             sal_Int32 nAxisIndex=-1;
@@ -414,7 +414,7 @@ OUString ObjectIdentifier::createParticleForDiagram()
 }
 
 OUString ObjectIdentifier::createParticleForCoordinateSystem(
-          const Reference< XCoordinateSystem >& xCooSys
+          const rtl::Reference< BaseCoordinateSystem >& xCooSys
         , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     OUString aRet;
@@ -423,11 +423,10 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
     if( xDiagram.is() )
     {
         sal_Int32 nCooSysIndex = 0;
-        uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xDiagram->getCoordinateSystems() );
-        for( ; nCooSysIndex < aCooSysList.getLength(); ++nCooSysIndex )
+        const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysList( xDiagram->getBaseCoordinateSystems() );
+        for( ; nCooSysIndex < static_cast<sal_Int32>(aCooSysList.size()); ++nCooSysIndex )
         {
-            Reference< XCoordinateSystem > xCurrentCooSys( aCooSysList[nCooSysIndex] );
-            if( xCooSys == xCurrentCooSys )
+            if( xCooSys == aCooSysList[nCooSysIndex] )
             {
                 aRet = ObjectIdentifier::createParticleForDiagram() + ":CS=" + OUString::number( nCooSysIndex );
                 break;
