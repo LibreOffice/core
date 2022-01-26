@@ -7788,22 +7788,27 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     flag_f16c=-mf16c
     flag_fma=-mfma
 else
-    # https://docs.microsoft.com/en-us/cpp/build/reference/arch-x86
-    # MSVC seems to differentiate only between SSE and SSE2, where in fact
-    # SSE2 seems to be SSE2+.
-    # Even if -arch:SSE2 is the default, set it explicitly, so that the variable
-    # is not empty (and can be tested in gbuild).
-    flag_sse2=-arch:SSE2
-    flag_ssse3=-arch:SSE2
-    flag_sse41=-arch:SSE2
-    flag_sse42=-arch:SSE2
+    # With MSVC using -arch is in fact not necessary for being able
+    # to use CPU intrinsics, code using AVX512F intrinsics will compile
+    # even if compiled with -arch:AVX, the -arch option really only affects
+    # instructions generated for C/C++ code.
+    # So use the matching same (or lower) -arch options, but only in order
+    # to generate the best matching instructions for the C++ code surrounding
+    # the intrinsics.
+    # SSE2 is the default for x86/x64, so no need to specify the option.
+    flag_sse2=
+    # No specific options for these, use the next lower.
+    flag_ssse3="$flag_sse2"
+    flag_sse41="$flag_sse2"
+    flag_sse42="$flag_sse2"
     flag_avx=-arch:AVX
     flag_avx2=-arch:AVX2
     flag_avx512=-arch:AVX512
-    flag_avx512f=-arch:AVX512
-    # These are part of -arch:AVX2
-    flag_f16c=-arch:AVX2
-    flag_fma=-arch:AVX2
+    # Using -arch:AVX512 would enable more than just AVX512F, so use only AVX2.
+    flag_avx512f=-arch:AVX2
+    # No MSVC options for these.
+    flag_f16c="$flag_sse2"
+    flag_fma="$flag_sse2"
 fi
 
 AC_MSG_CHECKING([whether $CXX can compile SSE2 intrinsics])
