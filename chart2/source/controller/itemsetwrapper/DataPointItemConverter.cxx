@@ -656,7 +656,7 @@ void DataPointItemConverter::FillSpecialItem(
 
         case SCHATTR_PERCENT_NUMBERFORMAT_VALUE:
         {
-            sal_Int32 nKey = 0;
+            sal_uInt32 nKey = 0;
             if( !(GetPropertySet()->getPropertyValue( "PercentageNumberFormat" ) >>= nKey) )
                 nKey = m_nPercentNumberFormat;
             rOutItemSet.Put( SfxUInt32Item( nWhichId, nKey ));

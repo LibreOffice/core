@@ -1046,7 +1046,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             // Left border as offset
             //#i24363# tab stops relative to indent
-            const tools::Long nOff = rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) ?
+            const sal_Int32 nOff = rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) ?
                 aCoreSet.Get( RES_LR_SPACE ).GetTextLeft() : 0;
             SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
             aCoreSet.Put( aOff );

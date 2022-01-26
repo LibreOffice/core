@@ -1595,14 +1595,14 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
                             rSet.ClearItem(ATTR_PAGE_SCALETOPAGES);
                             rSet.ClearItem(ATTR_PAGE_SCALE);
                             rSet.ClearItem(ATTR_PAGE_SCALETO);
-                            sal_Int16 nVal = 0;
+                            sal_uInt16 nVal = 0;
                             *pValue >>= nVal;
                             rSet.Put(SfxUInt16Item(pEntry->nWID, nVal));
                         }
                         break;
                     case ATTR_PAGE_FIRSTPAGENO:
                         {
-                            sal_Int16 nVal = 0;
+                            sal_uInt16 nVal = 0;
                             *pValue >>= nVal;
                             rSet.Put(SfxUInt16Item(ATTR_PAGE_FIRSTPAGENO, nVal));
                         }

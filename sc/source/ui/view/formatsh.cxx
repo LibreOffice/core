@@ -803,11 +803,11 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                     false, &pItem ) == SfxItemState::SET )
                             {
                                 // Produce and format NumberFormat Value from Value and Language
-                                sal_uLong nFormat =
+                                sal_uInt32 nFormat =
                                     static_cast<const SfxUInt32Item*>(pItem)->GetValue();
                                 LanguageType eLang =
                                     rSet.Get(ATTR_LANGUAGE_FORMAT ).GetLanguage();
-                                sal_uLong nLangFormat = rDoc.GetFormatTable()->
+                                sal_uInt32 nLangFormat = rDoc.GetFormatTable()->
                                     GetFormatForLanguageIfBuiltIn( nFormat, eLang );
                                 if ( nLangFormat != nFormat )
                                 {
