@@ -48,6 +48,8 @@ public:
     void testSimpleCopyAndPaste();
     void testMultiDocumentCopyAndPaste();
     void testSheetAndColumnSelectAndHide();
+    void testWindowState();
+
     void testVba();
     void testTdf107885();
     void testTdf131562();
@@ -58,6 +60,7 @@ public:
     CPPUNIT_TEST(testSimpleCopyAndPaste);
     CPPUNIT_TEST(testMultiDocumentCopyAndPaste);
     CPPUNIT_TEST(testSheetAndColumnSelectAndHide);
+    CPPUNIT_TEST(testWindowState);
 
     CPPUNIT_TEST(testVba);
     CPPUNIT_TEST(testTdf107885);
@@ -219,6 +222,25 @@ void VBAMacroTest::testSheetAndColumnSelectAndHide()
     CPPUNIT_ASSERT(!rDoc.ColHidden(4, 2));
 
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pViewData.GetTabNo());
+}
+
+void VBAMacroTest::testWindowState()
+{
+    // Application.WindowState = xlMinimized
+    // Application.WindowState = xlMaximized
+    // Application.WindowState = xlNormal
+
+    OUString aFileName;
+    createFileURL(u"VariousTestMacros.xlsm", aFileName);
+    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    SfxObjectShell::CallXScript(mxComponent,
+                                "vnd.sun.Star.script:VBAProject.ThisWorkbook.testWindowState?"
+                                "language=Basic&location=document",
+                                aParams, aRet, aOutParamIndex, aOutParam);
 }
 
 void VBAMacroTest::testVba()
