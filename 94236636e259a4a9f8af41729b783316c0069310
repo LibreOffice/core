@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7b93e77_63c7fd47",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2944,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-26T09:58:54Z",
+      "side": 1,
+      "message": "here and below, what is the benefit of these changes? The return type of SwWW8StyInf::WW8OutlineLevelToOutlinelevel is sal_uInt8, what is the problem with using that in the SfxUInt16Item ctors?",
+      "revId": "94236636e259a4a9f8af41729b783316c0069310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
