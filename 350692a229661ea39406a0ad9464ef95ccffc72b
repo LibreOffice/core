@@ -16,6 +16,24 @@
       "message": "Maybe I fail to understand why you made those changes in the first place, if reverting them again doesn\u0027t cause any issue?  (It\u0027s rather hard to review this change, which feels just too big, and for many changes it\u0027s unclear what motivated them from just looking at the modified lines and their direct surroundings.)",
       "revId": "350692a229661ea39406a0ad9464ef95ccffc72b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85690ecd_95554fc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-26T14:11:42Z",
+      "side": 1,
+      "message": "I essentially started by adding constructors like\n\n    explicit SfxInt16Item(sal_uInt16 which, sal_uInt16 nTheValue) \u003d delete;\n\nand used that to drive the discovery of things which looks dodgy.\n\nI was hoping to leave it in, but it generated too much noise, so I\u0027ve been paring it back.\n\nI\u0027m quite happy to break this up into a set of smaller fixes, which might make more sense.",
+      "parentUuid": "b2ba0187_3f67cd2d",
+      "revId": "350692a229661ea39406a0ad9464ef95ccffc72b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
