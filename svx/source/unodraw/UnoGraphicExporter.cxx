@@ -224,25 +224,29 @@ namespace {
                 const Size aHalfPixelInMtf(
                     (aOnePixelInMtf.getWidth() + 1) / 2,
                     (aOnePixelInMtf.getHeight() + 1) / 2);
-                const bool bHairlineBR(
-                    !aHairlineRect.IsEmpty() && (aRect.Right() == aHairlineRect.Right() || aRect.Bottom() == aHairlineRect.Bottom()));
 
-                // Move the content to (0,0), usually TopLeft ist slightly
-                // negative. For better visualization, add a half pixel, too
+                // tdf#126319 take bounds into account individually
+                const bool bHairlineRight(!aHairlineRect.IsEmpty() && aRect.Right() == aHairlineRect.Right());
+                const bool bHairlineBottom(!aHairlineRect.IsEmpty() && aRect.Bottom() == aHairlineRect.Bottom());
+                const bool bHairlineLeft(!aHairlineRect.IsEmpty() && aRect.Left() == aHairlineRect.Left());
+                const bool bHairlineTop(!aHairlineRect.IsEmpty() && aRect.Top() == aHairlineRect.Top());
+
+                // tdf#126319 Move the content dependent on Top/Left hairline
                 aMtf.Move(
-                    aHalfPixelInMtf.getWidth() - aRect.Left(),
-                    aHalfPixelInMtf.getHeight() - aRect.Top());
+                    (bHairlineLeft ? -aHalfPixelInMtf.getWidth() : aHalfPixelInMtf.getWidth()),
+                    (bHairlineTop ? -aHalfPixelInMtf.getHeight() : aHalfPixelInMtf.getHeight()));
 
                 // Do not Scale, but set the PrefSize. Some levels deeper the
                 // MetafilePrimitive will add a mapping to the decomposition
                 // (and possibly a clipping) to map the graphic content to
                 // a unit coordinate system.
-                // Size is the measured size plus one pixel if needed (bHairlineBR)
-                // and the moved half pixwel from above
+                // tdf#126319 Size is the previous already correct size plus one
+                // pixel if needed (dependent on Righ/Bottom hairline) and the
+                // already moved half pixel from above
                 aMtf.SetPrefSize(
                     Size(
-                        aRect.getWidth() + (bHairlineBR ? aOnePixelInMtf.getWidth() : 0) + aHalfPixelInMtf.getWidth(),
-                        aRect.getHeight() + (bHairlineBR ? aOnePixelInMtf.getHeight() : 0) + aHalfPixelInMtf.getHeight()));
+                        aMtf.GetPrefSize().Width() + (bHairlineRight ? aHalfPixelInMtf.getWidth() : 0),
+                        aMtf.GetPrefSize().Height() + (bHairlineBottom ? aHalfPixelInMtf.getHeight() : 0)));
             }
 
             return convertMetafileToBitmapEx(aMtf, aRange, nMaximumQuadraticPixels);
