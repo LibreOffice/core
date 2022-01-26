@@ -19,6 +19,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 
 using namespace ::connectivity;
@@ -204,5 +205,19 @@ void Tables::dropObject(sal_Int32 nPosition, const OUString& sName)
     m_xMetaData->getConnection()->createStatement()->execute(
         "DROP " + sType + ::dbtools::quoteName(sQuoteString,sName));
 }
+
+void connectivity::firebird::Tables::appendNew(const OUString& _rsNewTable)
+{
+    insertElement(_rsNewTable, nullptr);
+
+    // notify our container listeners
+    css::container::ContainerEvent aEvent(static_cast<XContainer*>(this),
+                                          css::uno::makeAny(_rsNewTable), css::uno::Any(),
+                                          css::uno::Any());
+    OInterfaceIteratorHelper2 aListenerLoop(m_aContainerListeners);
+    while (aListenerLoop.hasMoreElements())
+        static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
