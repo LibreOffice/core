@@ -32,7 +32,9 @@
 
 
 using namespace ::com::sun::star;
-using namespace objectpositioning;
+
+namespace objectpositioning
+{
 
 /** constructor */
 SwAsCharAnchoredObjectPosition::SwAsCharAnchoredObjectPosition(
@@ -389,6 +391,8 @@ SwTwips SwAsCharAnchoredObjectPosition::GetRelPosToBase(
     }
 
     return nRelPosToBase;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
