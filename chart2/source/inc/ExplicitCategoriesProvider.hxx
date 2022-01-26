@@ -19,7 +19,7 @@
 #pragma once
 
 #include "charttoolsdllapi.hxx"
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
@@ -33,6 +33,7 @@ namespace com::sun::star::uno { class Any; }
 
 namespace chart
 {
+class BaseCoordinateSystem;
 
 struct OOO_DLLPUBLIC_CHARTTOOLS ComplexCategory
 {
@@ -55,7 +56,7 @@ public:
 class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider final
 {
 public:
-    ExplicitCategoriesProvider( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSysModel
+    ExplicitCategoriesProvider( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSysModel
                        , ChartModel& rChartModel
                        );
     ~ExplicitCategoriesProvider();
@@ -68,7 +69,7 @@ public:
     const std::vector<ComplexCategory>* getCategoriesByLevel( sal_Int32 nLevel );
 
     static OUString getCategoryByIndex(
-          const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSysModel
+          const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSysModel
         , ChartModel& rModel
         , sal_Int32 nIndex );
 
@@ -93,7 +94,7 @@ private:
     ExplicitCategoriesProvider& operator =(ExplicitCategoriesProvider const &) = delete;
 
     bool volatile m_bDirty;
-    css::uno::WeakReference< css::chart2::XCoordinateSystem >   m_xCooSysModel;
+    unotools::WeakReference< ::chart::BaseCoordinateSystem >   m_xCooSysModel;
     ChartModel& mrModel;
     css::uno::Reference< css::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
 
