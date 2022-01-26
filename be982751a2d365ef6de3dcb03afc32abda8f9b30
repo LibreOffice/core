@@ -16,6 +16,23 @@
       "message": "Can you send a license statement: https://wiki.documentfoundation.org/Development/GetInvolved#License_statement\n\nThanks.",
       "revId": "be982751a2d365ef6de3dcb03afc32abda8f9b30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85e9b192_24561090",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-01-26T11:39:12Z",
+      "side": 1,
+      "message": "Of course Rashesh is covered under Collabora\u0027s statement - but worth adding him to the Developers page in the wiki too I think \u003d)",
+      "revId": "be982751a2d365ef6de3dcb03afc32abda8f9b30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
