@@ -1094,6 +1094,9 @@ rtl::Reference<XFFrame> LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName
         aEncoding = LwpCharSetMgr::GetTextCharEncoding();
     }
 
+    if (TextLength < 2)
+        throw BadRead();
+
     XFParagraph* pXFPara = new XFParagraph();
     pXFPara->Add(OUString(reinterpret_cast<char*>(m_aTextRec.pTextString), (TextLength-2), aEncoding));
     pXFPara->SetStyleName(rStyleName);
@@ -1106,13 +1109,6 @@ rtl::Reference<XFFrame> LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     OUString sName = pXFStyleManager->AddStyle(std::move(pBoxStyle)).m_pStyle->GetStyleName();
     xTextBox->SetStyleName(sName);
-
-    //todo: add the interface for rotating textbox
-//  if (m_aTextRec.nTextRotation)
-//  {
-//      double fAngle = double(3600-m_aTextRec.nTextRotation)/10;
-//      xTextBox->SetRotate(fAngle);
-//  }
 
     return xTextBox;
 }
