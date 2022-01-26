@@ -1092,6 +1092,9 @@ XFFrame* LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
         aEncoding = LwpCharSetMgr::GetTextCharEncoding();
     }
 
+    if (TextLength < 2)
+        throw BadRead();
+
     XFParagraph* pXFPara = new XFParagraph();
     pXFPara->Add(OUString(reinterpret_cast<char*>(m_aTextRec.pTextString), (TextLength-2), aEncoding));
     pXFPara->SetStyleName(rStyleName);
