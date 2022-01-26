@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f810c5d2_8818379e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-26T15:04:57Z",
+      "side": 1,
+      "message": "As far as I can see now this works ok for gen/X11 gtk/X11, windows looked good already. I split off the sub problem of qt/kf5 as https://gerrit.libreoffice.org/c/core/+/128981/1",
+      "revId": "8fe8c15f3f114e96863844f783d02006d94b9c94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
