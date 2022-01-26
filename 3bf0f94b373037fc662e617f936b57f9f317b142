@@ -16,6 +16,23 @@
       "message": "Thanks Caolán, I see Related: tdf#146648 store last known position when visible to return later https://gerrit.libreoffice.org/c/core/+/128980 makes the change to findreplacedialog.ui unneeded. ",
       "revId": "3bf0f94b373037fc662e617f936b57f9f317b142",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7883d332_c12f18f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-26T23:09:01Z",
+      "side": 1,
+      "message": "yeah, the window is not shown when the position is queried and vcl and gtk both take equally valid but different routes on reply for that scenario",
+      "revId": "3bf0f94b373037fc662e617f936b57f9f317b142",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
