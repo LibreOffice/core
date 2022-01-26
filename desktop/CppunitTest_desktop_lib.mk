@@ -37,6 +37,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_lib, \
 $(eval $(call gb_CppunitTest_use_externals,desktop_lib, \
     boost_headers \
     cairo \
+    pdfium \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,desktop_lib,\
