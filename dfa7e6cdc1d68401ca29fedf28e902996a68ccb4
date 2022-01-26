@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ada9f6a_f8f800da",
+        "filename": "chart2/source/controller/itemsetwrapper/DataPointItemConverter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-26T11:53:02Z",
+      "side": 1,
+      "message": "The only two occurrences of a property PercentageNumberFormat across udkapi and offapi (in css.chart.ChartDataPointProperties and css.chart2.DataPointProperties) are both UNOIDL LONG (aka C++ sal_Int32), so this doesn\u0027t look right.",
+      "revId": "dfa7e6cdc1d68401ca29fedf28e902996a68ccb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a243445b_63f3a955",
+        "filename": "sc/source/core/data/patattr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-26T11:53:02Z",
+      "side": 1,
+      "message": "but ScDocument::AddValidationIndex returns sal_uLong",
+      "revId": "dfa7e6cdc1d68401ca29fedf28e902996a68ccb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
