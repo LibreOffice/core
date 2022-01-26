@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
+  <LC_INFO>
+    <Language>
+      <LangID>pdc</LangID>
+      <DefaultName>Pennsylvania Dutch</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>US</CountryID>
+      <DefaultName>United States</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="en_US"/>
+  <LC_FORMAT ref="en_US" replaceFrom="[CURRENCY]" replaceTo="[$$-6AF]"/>
+  <LC_COLLATION ref="en_US"/>
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z</IndexKey>
+    <UnicodeScript>0</UnicodeScript>
+    <UnicodeScript>1</UnicodeScript>
+    <FollowPageWord> f.</FollowPageWord>
+    <FollowPageWord> ff.</FollowPageWord>
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>Sunn</DefaultAbbrvName>
+          <DefaultFullName>Sunndaag</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>Muun</DefaultAbbrvName>
+          <DefaultFullName>Muundaag</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>Din</DefaultAbbrvName>
+          <DefaultFullName>Dinschdaag</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>Mitt</DefaultAbbrvName>
+          <DefaultFullName>Mittwoch</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>Dunn</DefaultAbbrvName>
+          <DefaultFullName>Dunnerschdaag</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>Frei</DefaultAbbrvName>
+          <DefaultFullName>Freidaag</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>Sam</DefaultAbbrvName>
+          <DefaultFullName>Samschdaag</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Yenn</DefaultAbbrvName>
+          <DefaultFullName>Yenner</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Hann</DefaultAbbrvName>
+          <DefaultFullName>Hanning</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Mat</DefaultAbbrvName>
+          <DefaultFullName>Matz</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Apr</DefaultAbbrvName>
+          <DefaultFullName>Aprill</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>Moi</DefaultAbbrvName>
+          <DefaultFullName>Moi</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Yun</DefaultAbbrvName>
+          <DefaultFullName>Yuni</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Yul</DefaultAbbrvName>
+          <DefaultFullName>Yuli</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Aag</DefaultAbbrvName>
+          <DefaultFullName>Aaguscht</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Sept</DefaultAbbrvName>
+          <DefaultFullName>September</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Okt</DefaultAbbrvName>
+          <DefaultFullName>Oktower</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Now</DefaultAbbrvName>
+          <DefaultFullName>Nowember</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Dies</DefaultAbbrvName>
+          <DefaultFullName>Diesember</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>BC</DefaultAbbrvName>
+          <DefaultFullName>BC</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>AD</DefaultAbbrvName>
+          <DefaultFullName>AD</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>USD</CurrencyID>
+      <CurrencySymbol>$</CurrencySymbol>
+      <BankSymbol>USD</BankSymbol>
+      <CurrencyName>US Daaler</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+  </LC_CURRENCY>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>waahr</trueWord>
+      <falseWord>falsch</falseWord>
+      <quarter1Word>1scht Vaddel</quarter1Word>
+      <quarter2Word>2tt Vaddel</quarter2Word>
+      <quarter3Word>3tt Vaddel</quarter3Word>
+      <quarter4Word>4rt Vaddel</quarter4Word>
+      <aboveWord>drowwe</aboveWord>
+      <belowWord>drunne</belowWord>
+      <quarter1Abbreviation>V1</quarter1Abbreviation>
+      <quarter2Abbreviation>V2</quarter2Abbreviation>
+      <quarter3Abbreviation>V3</quarter3Abbreviation>
+      <quarter4Abbreviation>V4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="en_US"/>
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>

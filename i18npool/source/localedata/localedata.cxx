@@ -330,7 +330,8 @@ const struct {
     { "ha_Latn_NG",  lcl_DATA_OTHERS },
     { "min_ID", lcl_DATA_OTHERS },
     { "sun_ID", lcl_DATA_OTHERS },
-    { "en_IL",  lcl_DATA_OTHERS }   // needs to be in OTHERS instead of EN because inherits from he_IL
+    { "en_IL",  lcl_DATA_OTHERS },  // needs to be in OTHERS instead of EN because inherits from he_IL
+    { "pdc_US", lcl_DATA_OTHERS }
 };
 
 #else
