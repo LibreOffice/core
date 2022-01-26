@@ -42,6 +42,7 @@ namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 namespace chart
 {
+class BaseCoordinateSystem;
 class ChartType;
 class ChartTypeManager;
 class ChartTypeTemplate;
@@ -119,7 +120,7 @@ public:
     static StackMode getStackModeFromChartType(
         const rtl::Reference< ::chart::ChartType > & xChartType,
         bool& rbFound, bool& rbAmbiguous,
-        const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
+        const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem
         );
 
     /** Returns the dimension found for all chart types in the tree.  If the
@@ -144,8 +145,8 @@ public:
      */
     SAL_DLLPRIVATE static void replaceCoordinateSystem(
         const rtl::Reference< ::chart::Diagram > & xDiagram,
-        const css::uno::Reference< css::chart2::XCoordinateSystem > & xCooSysToReplace,
-        const css::uno::Reference< css::chart2::XCoordinateSystem > & xReplacement );
+        const rtl::Reference< ::chart::BaseCoordinateSystem > & xCooSysToReplace,
+        const rtl::Reference< ::chart::BaseCoordinateSystem > & xReplacement );
 
     static bool isSeriesAttachedToMainAxis(
         const css::uno::Reference< css::chart2::XDataSeries >& xDataSeries );
@@ -195,7 +196,7 @@ public:
 
     SAL_DLLPRIVATE static css::uno::Sequence< OUString >
         generateAutomaticCategoriesFromCooSys(
-            const css::uno::Reference< css::chart2::XCoordinateSystem > & xCooSys );
+            const rtl::Reference< ::chart::BaseCoordinateSystem > & xCooSys );
 
     static void switchToDateCategories(
         const rtl::Reference<::chart::ChartModel> & xChartDoc );
