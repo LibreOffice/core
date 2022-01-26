@@ -6002,6 +6002,7 @@ class GtkInstanceWindow : public GtkInstanceContainer, public virtual weld::Wind
 private:
     GtkWindow* m_pWindow;
     rtl::Reference<SalGtkXWindow> m_xWindow; //uno api
+    std::optional<Point> m_aPosWhileInvis; //tdf#146648 store last known position when visible to return as pos if hidden
     gulong m_nToplevelFocusChangedSignalId;
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -6134,11 +6135,30 @@ public:
 
     virtual Point get_position() const override
     {
+        if (m_aPosWhileInvis)
+        {
+            assert(!get_visible());
+            return *m_aPosWhileInvis;
+        }
+
         int current_x(0), current_y(0);
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_window_get_position(m_pWindow, &current_x, &current_y);
 #endif
         return Point(current_x, current_y);
+    }
+
+    virtual void show() override
+    {
+        m_aPosWhileInvis.reset();
+        GtkInstanceContainer::show();
+    }
+
+    virtual void hide() override
+    {
+        if (is_visible())
+            m_aPosWhileInvis = get_position();
+        GtkInstanceContainer::hide();
     }
 
     virtual tools::Rectangle get_monitor_workarea() const override
