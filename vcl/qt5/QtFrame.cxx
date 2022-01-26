@@ -730,6 +730,8 @@ void QtFrame::SetWindowState(const SalFrameState* pState)
              & (WindowStateMask::X | WindowStateMask::Y | WindowStateMask::Width
                 | WindowStateMask::Height))
     {
+        tools::Long nX = pState->mnX - (m_pParent ? m_pParent->maGeometry.nX : 0);
+        tools::Long nY = pState->mnY - (m_pParent ? m_pParent->maGeometry.nY : 0);
         sal_uInt16 nPosSizeFlags = 0;
         if (pState->mnMask & WindowStateMask::X)
             nPosSizeFlags |= SAL_FRAME_POSSIZE_X;
@@ -739,7 +741,7 @@ void QtFrame::SetWindowState(const SalFrameState* pState)
             nPosSizeFlags |= SAL_FRAME_POSSIZE_WIDTH;
         if (pState->mnMask & WindowStateMask::Height)
             nPosSizeFlags |= SAL_FRAME_POSSIZE_HEIGHT;
-        SetPosSize(pState->mnX, pState->mnY, pState->mnWidth, pState->mnHeight, nPosSizeFlags);
+        SetPosSize(nX, nY, pState->mnWidth, pState->mnHeight, nPosSizeFlags);
     }
     else if (pState->mnMask & WindowStateMask::State && !isChild())
     {
