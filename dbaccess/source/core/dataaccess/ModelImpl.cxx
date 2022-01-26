@@ -887,7 +887,7 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
 
                 uno::Reference<embed::XStorage> xTargetMetaInf
                     = _rxStorage->openStorageElement("META-INF", embed::ElementModes::READWRITE);
-                if (xMetaInf.is() && xTargetMetaInf.is())
+                if (xMetaInf.is() && xTargetMetaInf.is() && xMetaInf->hasByName(aScriptSignName))
                 {
                     xMetaInf->copyElementTo(aScriptSignName, xTargetMetaInf, aScriptSignName);
 
