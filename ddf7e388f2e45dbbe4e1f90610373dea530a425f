@@ -16,6 +16,24 @@
       "message": "Whatever this was supposed to fix (and however that would relate to UBSan), it probably wasn\u0027t the strategically best fix, cf. still failing \u003chttps://ci.libreoffice.org/job/lo_ubsan/2280/\u003e\n\n  [build CXX] chart2/source/controller/dialogs/res_Titles.cxx\n  In file included from /home/tdf/lode/jenkins/workspace/lo_ubsan/chart2/source/controller/dialogs/res_Titles.cxx:20:\n  In file included from /home/tdf/lode/jenkins/workspace/lo_ubsan/chart2/source/controller/inc/res_Titles.hxx:21:\n  In file included from /home/tdf/lode/jenkins/workspace/lo_ubsan/chart2/source/controller/inc/TitleDialogData.hxx:21:\n  In file included from /home/tdf/lode/jenkins/workspace/lo_ubsan/chart2/source/inc/ReferenceSizeProvider.hxx:24:\n  /home/tdf/lode/jenkins/workspace/lo_ubsan/include/rtl/ref.hxx:129:20: error: member access into incomplete type \u0027chart::ChartModel\u0027\n              m_pBody-\u003erelease();\n                     ^\n  /home/tdf/lode/jenkins/workspace/lo_ubsan/chart2/source/inc/ReferenceSizeProvider.hxx:41:32: note: in instantiation of member function \u0027rtl::Reference\u003cchart::ChartModel\u003e::~Reference\u0027 requested here\n  class OOO_DLLPUBLIC_CHARTTOOLS ReferenceSizeProvider\n                                 ^\n  /home/tdf/lode/opt_private/gcc-7.3.0/lib/gcc/x86_64-pc-linux-gnu/7.3.0/../../../../include/c++/7.3.0/bits/unique_ptr.h:268:4: note: in instantiation of member function \u0027std::default_delete\u003cchart::ReferenceSizeProvider\u003e::operator()\u0027 requested here\n            get_deleter()(__ptr);\n            ^\n  /home/tdf/lode/opt_private/gcc-7.3.0/lib/gcc/x86_64-pc-linux-gnu/7.3.0/../../../../include/c++/7.3.0/bits/unique_ptr.h:233:45: note: in instantiation of member function \u0027std::unique_ptr\u003cchart::ReferenceSizeProvider, std::default_delete\u003cchart::ReferenceSizeProvider\u003e \u003e::~unique_ptr\u0027 requested here\n          constexpr unique_ptr(nullptr_t) noexcept : unique_ptr() { }\n                                                     ^\n  /home/tdf/lode/jenkins/workspace/lo_ubsan/chart2/source/inc/ReferenceSizeProvider.hxx:39:7: note: forward declaration of \u0027chart::ChartModel\u0027\n  class ChartModel;\n        ^\n  1 error generated.\n  /home/tdf/lode/jenkins/workspace/lo_ubsan/solenv/gbuild/LinkTarget.mk:341: recipe for target \u0027/home/tdf/lode/jenkins/workspace/lo_ubsan/workdir/CxxObject/chart2/source/controller/dialogs/res_Titles.o\u0027 failed",
       "revId": "ddf7e388f2e45dbbe4e1f90610373dea530a425f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bd3cd1d_500776e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-26T08:40:39Z",
+      "side": 1,
+      "message": "let\u0027s see if \n    https://gerrit.libreoffice.org/c/core/+/128973\nhelps.\n\nCan\u0027t reproduce on my side, and my pyschic powers are not working, so we\u0027ll just have to keep on guessing",
+      "parentUuid": "1cf0863b_fb18ac1c",
+      "revId": "ddf7e388f2e45dbbe4e1f90610373dea530a425f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
