@@ -74,7 +74,7 @@ private:
         const rtl::Reference< ::chart::Diagram >& xDiagram );
     void createDataSeriesTree(
         ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+        const rtl::Reference< ::chart::Diagram > & xDiagram );
     static void createWallAndFloor(
         ObjectHierarchy::tChildContainer & rContainer,
         const rtl::Reference< ::chart::Diagram > & xDiagram );
