@@ -234,7 +234,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, attributeRedefinedTest)
     // Actual : 2
     // i.e. 2 of the empty paragraph do not get generated even if there
     // is id imported for the paragraphs
-    // If we don't create the empty paragraphs the id attribute attribute gets redefined like this:
+    // If we don't create the empty paragraphs the id attribute gets redefined like this:
     // <tspan id="id14" id="id15" id="id17" class="TextParagraph" font-family="Bahnschrift Light" font-size="1129px" font-weight="400">
 
     OString xPath = "//svg:g[@class='TextShape']//svg:text[@class='SVGTextShape']//"
@@ -242,7 +242,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, attributeRedefinedTest)
     assertXPath(pXmlDoc, xPath, 4);
 
     //assert that each tspan element with TextParagraph class has id and the tspan element of
-    //each empty paragraph doesnot contain tspan element with class TextPosition
+    //each empty paragraph does not contain tspan element with class TextPosition
     assertXPath(pXmlDoc, xPath + "[1]", "id", "id4");
     assertXPath(pXmlDoc, xPath + "[2]", "id", "id5");
     assertXPath(pXmlDoc, xPath + "[2]//svg:tspan[@class='TextPosition']", 0);
