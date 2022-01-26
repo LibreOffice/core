@@ -1367,8 +1367,8 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_Y,aRect.Top()));
 
         // size
-        tools::Long nResizeRefX=aRect.Left();
-        tools::Long nResizeRefY=aRect.Top();
+        sal_Int32 nResizeRefX=aRect.Left();
+        sal_Int32 nResizeRefY=aRect.Top();
         if (meDragMode==SdrDragMode::Rotate) { // use rotation axis as a reference for resizing, too
             nResizeRefX=maRef1.X();
             nResizeRefY=maRef1.Y();
@@ -1386,8 +1386,8 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         }
 
         // rotation
-        tools::Long nRotateRefX=aRect.Center().X();
-        tools::Long nRotateRefY=aRect.Center().Y();
+        sal_Int32 nRotateRefX=aRect.Center().X();
+        sal_Int32 nRotateRefY=aRect.Center().Y();
         if (meDragMode==SdrDragMode::Rotate) {
             nRotateRefX=aRotateAxe.X();
             nRotateRefY=aRotateAxe.Y();
@@ -1397,8 +1397,8 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_Y,nRotateRefY));
 
         // shearing
-        tools::Long nShearRefX=aRect.Left();
-        tools::Long nShearRefY=aRect.Bottom();
+        sal_Int32 nShearRefX=aRect.Left();
+        sal_Int32 nShearRefY=aRect.Bottom();
         if (meDragMode==SdrDragMode::Rotate) { // use rotation axis as a reference for shearing, too
             nShearRefX=aRotateAxe.X();
             nShearRefY=aRotateAxe.Y();

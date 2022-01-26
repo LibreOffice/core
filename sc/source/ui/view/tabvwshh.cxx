@@ -185,7 +185,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             tools::Rectangle aRect = pObj->GetLogicRect();
 
-                            tools::Long nVal;
+                            sal_Int32 nVal;
                             if ( nWhich == SID_OBJECT_LEFT )
                                 nVal = aRect.Left();
                             else if ( nWhich == SID_OBJECT_TOP )

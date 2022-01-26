@@ -74,7 +74,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         aNewAttr.Put( aEditAttr );
 
         // left border is offset
-        const ::tools::Long nOff = aNewAttr.Get( EE_PARA_LRSPACE ).GetTextLeft();
+        const sal_Int32 nOff = aNewAttr.Get( EE_PARA_LRSPACE ).GetTextLeft();
         // conversion since TabulatorTabPage always uses Twips!
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aNewAttr.Put( aOff );

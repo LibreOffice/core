@@ -2030,11 +2030,10 @@ static void lcl_SetCellProperty( const SfxItemPropertyMapEntry& rEntry, const un
                 LanguageType eOldLang = rSet.Get( ATTR_LANGUAGE_FORMAT ).GetLanguage();
                 nOldFormat = pFormatter->GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
 
-                sal_Int32 nIntVal = 0;
-                if ( !(rValue >>= nIntVal) )
+                sal_uInt32 nNewFormat = 0;
+                if ( !(rValue >>= nNewFormat) )
                     throw lang::IllegalArgumentException();
 
-                sal_uLong nNewFormat = static_cast<sal_uLong>(nIntVal);
                 rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
 
                 const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewFormat );
@@ -2320,7 +2319,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
 
                             std::unique_ptr<ScValidationData> pNewData(
                                     pValidObj->CreateValidationData( rDoc, eGrammar ));
-                            sal_uLong nIndex = rDoc.AddValidationEntry( *pNewData );
+                            sal_uInt32 nIndex = rDoc.AddValidationEntry( *pNewData );
                             pNewData.reset();
 
                             ScPatternAttr aPattern( rDoc.GetPool() );

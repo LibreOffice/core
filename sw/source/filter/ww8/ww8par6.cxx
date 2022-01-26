@@ -2941,7 +2941,7 @@ void SwWW8ImplReader::Read_POutLvl(sal_uInt16, const sal_uInt8* pData, short nLe
         {
             pSI->mnWW8OutlineLevel =
                     static_cast< sal_uInt8 >( ( (pData && nLen >= 1) ? *pData : 0 ) );
-            auto nLevel = SwWW8StyInf::WW8OutlineLevelToOutlinelevel(pSI->mnWW8OutlineLevel);
+            sal_uInt16 nLevel = SwWW8StyInf::WW8OutlineLevelToOutlinelevel(pSI->mnWW8OutlineLevel);
             if (nLevel == 0)
             {
                 SwTextFormatColl* pTextFormatColl = static_cast<SwTextFormatColl*>(pSI->m_pFormat);
@@ -2952,7 +2952,7 @@ void SwWW8ImplReader::Read_POutLvl(sal_uInt16, const sal_uInt8* pData, short nLe
     }
     else if (m_pPaM != nullptr)
     {
-        const sal_uInt8 nOutlineLevel
+        const sal_uInt16 nOutlineLevel
             = SwWW8StyInf::WW8OutlineLevelToOutlinelevel(
                 static_cast<sal_uInt8>(((pData && nLen >= 1) ? *pData : 0)));
         NewAttr(SfxUInt16Item(RES_PARATR_OUTLINELEVEL, nOutlineLevel));

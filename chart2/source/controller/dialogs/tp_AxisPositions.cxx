@@ -100,8 +100,8 @@ bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
         rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_LABEL_POSITION, nLabelPos ));
 
     // tick marks
-    tools::Long nTicks=0;
-    tools::Long nMinorTicks=0;
+    sal_Int32 nTicks=0;
+    sal_Int32 nMinorTicks=0;
 
     if(m_xCB_MinorInner->get_active())
         nMinorTicks|=CHAXIS_MARK_INNER;

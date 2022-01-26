@@ -92,7 +92,7 @@ void NumberFormatPropertyPanel::Initialize()
 
 IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, weld::ComboBox&, rBox, void )
 {
-    const sal_Int32 nVal = rBox.get_active();
+    const sal_uInt16 nVal = rBox.get_active();
     if( nVal != mnCategorySelected )
     {
         SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nVal );

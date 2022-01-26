@@ -6118,7 +6118,7 @@ void SwWW8ImplReader::SetOutlineStyles()
                     SwNumRuleItem(pStyleInf->GetOutlineNumrule()->GetName()));
             }
             // apply default outline level of WW8 Built-in Heading Style
-            const sal_uInt8 nOutlineLevel
+            const sal_uInt16 nOutlineLevel
                 = SwWW8StyInf::WW8OutlineLevelToOutlinelevel(
                     pStyleInf->mnWW8OutlineLevel);
             pTextFormatColl->SetFormatAttr(

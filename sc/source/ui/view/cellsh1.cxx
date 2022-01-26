@@ -2723,7 +2723,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     delete pImpl->m_pRequest;
                     pImpl->m_pRequest = new SfxRequest( rReq );
                     OUString sFile, sFilter, sOptions, sSource;
-                    sal_uLong nRefresh = 0;
+                    sal_uInt32 nRefresh = 0;
                     if (pImpl->m_pLinkedDlg->Execute() == RET_OK)
                     {
                         sFile = pImpl->m_pLinkedDlg->GetURL();

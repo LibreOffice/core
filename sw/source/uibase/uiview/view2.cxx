@@ -983,7 +983,7 @@ void SwView::Execute(SfxRequest &rReq)
                 }
 
                 m_pViewImpl->InitRequest( rReq );
-                tools::Long nFound = InsertDoc( nSlot, sFileName, sFilterName, nVersion );
+                sal_Int32 nFound = InsertDoc( nSlot, sFileName, sFilterName, nVersion );
 
                 if ( bHasFileName )
                 {
