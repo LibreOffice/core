@@ -173,7 +173,6 @@
                         <property name="label" translatable="yes" context="tp_ChartType|shapeft">Sh_ape</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">shape</property>
-                        <property name="angle">0.02</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>

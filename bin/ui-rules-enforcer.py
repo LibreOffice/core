@@ -294,6 +294,21 @@ def remove_label_pad(current):
   if ypad != None:
     current.remove(ypad)
 
+def remove_label_angle(current):
+  angle = None
+  islabel = current.get('class') == "GtkLabel"
+  for child in current:
+    remove_label_angle(child)
+    if not islabel:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "angle":
+        angle = child
+
+  if angle != None:
+    current.remove(angle)
+
 def remove_track_visited_links(current):
   track_visited_links = None
   islabel = current.get('class') == "GtkLabel"
@@ -576,6 +591,7 @@ remove_spin_button_input_purpose(root)
 remove_spin_button_max_length(root)
 remove_track_visited_links(root)
 remove_label_pad(root)
+remove_label_angle(root)
 remove_expander_label_fill(root)
 remove_expander_spacing(root)
 enforce_menubutton_indicator_consistency(root)
