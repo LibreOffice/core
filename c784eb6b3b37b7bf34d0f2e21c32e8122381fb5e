@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0746f74_6408f56b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-26T05:41:02Z",
+      "side": 1,
+      "message": "sd_tiledrendering typically is a false positive, but in this case it is real. The \"random\" numbers are because it is checking memory locations.",
+      "revId": "c784eb6b3b37b7bf34d0f2e21c32e8122381fb5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
