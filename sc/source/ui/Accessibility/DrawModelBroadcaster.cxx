@@ -99,7 +99,6 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
     {
         auto pSdrObject = const_cast<SdrObject*>(pSdrHint->GetObject());
         uno::Reference<drawing::XShape> xShape(pSdrObject->getUnoShape(), uno::UNO_QUERY);
-        aGuard.lock();
         auto it = maShapeListeners.find(xShape);
         if (it != maShapeListeners.end())
             it->second->notifyShapeEvent(aEvent);
