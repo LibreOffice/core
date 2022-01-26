@@ -153,7 +153,7 @@ void Chart2ModelContact::getExplicitValuesForAxis(
 sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForAxis(
             const Reference< chart2::XAxis >& xAxis )
 {
-    Reference< chart2::XCoordinateSystem > xCooSys(
+    rtl::Reference< BaseCoordinateSystem > xCooSys(
         AxisHelper::getCoordinateSystemOfAxis(
               xAxis, ChartModelHelper::findDiagram( m_xChartModel ) ) );
 

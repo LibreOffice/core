@@ -41,8 +41,9 @@ namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 namespace chart
 {
-
+class BaseCoordinateSystem;
 class DrawModelWrapper;
+
 class OOO_DLLPUBLIC_CHARTVIEW ExplicitValueProvider
 {
 public:
@@ -78,7 +79,7 @@ public:
 
     static sal_Int32 getExplicitNumberFormatKeyForAxis(
               const css::uno::Reference< css::chart2::XAxis >& xAxis
-            , const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
+            , const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem
             , const rtl::Reference<::chart::ChartModel>& xChartDoc);
 
     static sal_Int32 getExplicitNumberFormatKeyForDataLabel(

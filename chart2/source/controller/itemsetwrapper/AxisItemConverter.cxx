@@ -404,7 +404,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         {
             if( m_pExplicitScale )
             {
-                Reference< chart2::XCoordinateSystem > xCooSys(
+                rtl::Reference< BaseCoordinateSystem > xCooSys(
                         AxisHelper::getCoordinateSystemOfAxis(
                               m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
 
@@ -941,9 +941,9 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     }
                     else
                     {
-                        Reference< chart2::XCoordinateSystem > xCooSys(
-                        AxisHelper::getCoordinateSystemOfAxis(
-                              m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+                        rtl::Reference< BaseCoordinateSystem > xCooSys =
+                            AxisHelper::getCoordinateSystemOfAxis(
+                                m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) );
 
                         sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                             m_xAxis, xCooSys, m_xChartDoc);
