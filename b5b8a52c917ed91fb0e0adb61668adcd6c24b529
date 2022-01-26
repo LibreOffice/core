@@ -16,6 +16,24 @@
       "message": "Did your (Clang) ASan+UBSan build also report a similar issue with the original code?\n\nI\u0027m not 100% sure what is wrong with the original code.  I believe your change is benign and doesn\u0027t change the logic, so I\u0027m fine with it.  But it would be nice to know what GCC was unhappy about...",
       "revId": "b5b8a52c917ed91fb0e0adb61668adcd6c24b529",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b78707c_b30fcce1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-01-26T22:55:19Z",
+      "side": 1,
+      "message": "Ah, nevermind you did provide an answer to my question in your original comment.  The mystery deepens...",
+      "parentUuid": "b05ec39e_51f97027",
+      "revId": "b5b8a52c917ed91fb0e0adb61668adcd6c24b529",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
