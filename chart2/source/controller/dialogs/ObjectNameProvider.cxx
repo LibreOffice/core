@@ -98,7 +98,7 @@ void lcl_addText( OUString& rOut, std::u16string_view rSeparator, std::u16string
 }
 
 OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal_Int32 nPointIndex,
-                                    const Reference< XCoordinateSystem >& xCooSys,
+                                    const rtl::Reference< BaseCoordinateSystem >& xCooSys,
                                     const Reference< frame::XModel >& xChartModel )
 {
 

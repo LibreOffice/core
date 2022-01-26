@@ -46,10 +46,10 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using std::vector;
 
-ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2::XCoordinateSystem >& xCooSysModel
+ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< BaseCoordinateSystem >& xCooSysModel
                                                        , ChartModel& rModel )
     : m_bDirty(true)
-    , m_xCooSysModel( xCooSysModel )
+    , m_xCooSysModel( xCooSysModel.get() )
     , mrModel(rModel)
     , m_bIsExplicitCategoriesInited(false)
     , m_bIsDateAxis(false)
@@ -481,7 +481,7 @@ void ExplicitCategoriesProvider::init()
         {
             if(m_bIsDateAxis)
             {
-                if( ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( m_xCooSysModel, 0 ), 0 ) )
+                if( ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( m_xCooSysModel.get(), 0 ), 0 ) )
                     m_bIsDateAxis = lcl_fillDateCategories( m_xOriginalCategories->getValues(), m_aDateCategories, m_bIsAutoDate, mrModel );
                 else
                     m_bIsDateAxis = false;
@@ -518,7 +518,7 @@ Sequence< OUString > const & ExplicitCategoriesProvider::getSimpleCategories()
             }
         }
         if(!m_aExplicitCategories.hasElements())
-            m_aExplicitCategories = DiagramHelper::generateAutomaticCategoriesFromCooSys( m_xCooSysModel );
+            m_aExplicitCategories = DiagramHelper::generateAutomaticCategoriesFromCooSys( m_xCooSysModel.get() );
         m_bIsExplicitCategoriesInited = true;
     }
     return m_aExplicitCategories;
@@ -534,7 +534,7 @@ const std::vector<ComplexCategory>* ExplicitCategoriesProvider::getCategoriesByL
 }
 
 OUString ExplicitCategoriesProvider::getCategoryByIndex(
-          const Reference< XCoordinateSystem >& xCooSysModel
+          const rtl::Reference< BaseCoordinateSystem >& xCooSysModel
         , ChartModel& rModel
         , sal_Int32 nIndex )
 {
