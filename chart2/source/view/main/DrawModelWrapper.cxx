@@ -45,7 +45,6 @@ namespace chart
 DrawModelWrapper::DrawModelWrapper()
 :   SdrModel(&ChartItemPool::GetGlobalChartItemPool())
 {
-    SetVOCInvalidationIsReliable(true);
     SetScaleUnit(MapUnit::Map100thMM);
     SetScaleFraction(Fraction(1, 1));
     SetDefaultFontHeight(423);     // 12pt
