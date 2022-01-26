@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e65820d_f287554c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-26T06:30:57Z",
+      "side": 1,
+      "message": "I\u0027ll merge it, assuming Lubos has no objections; but please revert it if you find it wrong (and if I was too impatient). Thank you!",
+      "revId": "1fc58c50a63f2fa1524cdb5d6fdd39e58ae2d45c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
