@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39923f81_80622216",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2022-01-26T12:23:45Z",
+      "side": 1,
+      "message": "It\u0027s a bit interesting, because the original fix says \"rRect is in Logical units rather than Pixels\"...\n\nBut let\u0027s do this if it fixes the problem, because in master, there has been many changes to this in the meantime, so I suppose this patch is only for co-2021, not to be forward-ported back to master.\n\nIf you plan to forward-port it to master too, I\u0027d like the commit message to be extended with information why the core needs the PixelToLogic in the LOK case, and ideally checked by Caolán too :-)\n\nThank you!",
+      "revId": "7fe0856d5d01b1a0060b29fc8c92bc14478e34f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
