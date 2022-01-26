@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dbec533_bbf66c6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-26T11:05:48Z",
+      "side": 1,
+      "message": "Verified by Jenkins in the last 2 rebased patch sets.",
+      "revId": "ad699f2726dab3a50b1fcf42876bbdf58e9965ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
