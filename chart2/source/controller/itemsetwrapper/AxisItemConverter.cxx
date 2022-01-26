@@ -434,7 +434,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
         case SCHATTR_AXIS_ALLOW_DATEAXIS:
         {
-            Reference< chart2::XCoordinateSystem > xCooSys(
+            rtl::Reference< BaseCoordinateSystem > xCooSys(
                 AxisHelper::getCoordinateSystemOfAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
             sal_Int32 nDimensionIndex=0; sal_Int32 nAxisIndex=0;
             AxisHelper::getIndicesForAxis(m_xAxis, xCooSys, nDimensionIndex, nAxisIndex );
@@ -716,7 +716,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     if( !AxisHelper::isAxisPositioningEnabled() )
                     {
                         //keep old and new settings for axis positioning in sync somehow
-                        Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
+                        rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
                             m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
 
                         sal_Int32 nDimensionIndex=0;
@@ -793,7 +793,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
                 //keep old and new settings for axis positioning in sync somehow
                 {
-                    Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
+                    rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
                         m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
 
                     sal_Int32 nDimensionIndex=0;

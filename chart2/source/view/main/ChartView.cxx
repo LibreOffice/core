@@ -634,7 +634,7 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
     // there should only be one coordinate system per diagram).
     for (auto & pVCooSys : m_rVCooSysList)
     {
-        uno::Reference<XCoordinateSystem> xCooSys = pVCooSys->getModel();
+        rtl::Reference<BaseCoordinateSystem> xCooSys = pVCooSys->getModel();
         sal_Int32 nDimCount = xCooSys->getDimension();
         bool bComplexCategoryAllowed = ChartTypeHelper::isSupportingComplexCategory(AxisHelper::getChartTypeByIndex(xCooSys, 0));
 
@@ -914,7 +914,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
             ExplicitScaleData aExplicitScale( aVCooSysList[nC]->getExplicitScale( nDimensionIndex, nAxisIndex ) );
             ExplicitIncrementData aExplicitIncrement( aVCooSysList[nC]->getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
 
-            Reference< chart2::XCoordinateSystem > xCooSys( aVCooSysList[nC]->getModel() );
+            rtl::Reference< BaseCoordinateSystem > xCooSys( aVCooSysList[nC]->getModel() );
             Reference< XAxis > xAxis( xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
             Reference< beans::XPropertySet > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ), uno::UNO_QUERY );
 
