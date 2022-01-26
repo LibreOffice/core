@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af7cd257_ff41d694",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-26T09:29:23Z",
+      "side": 1,
+      "message": "in which case \u003chttps://git.libreoffice.org/core/+/ddf7e388f2e45dbbe4e1f90610373dea530a425f%5E%21\u003e \"extra include needed for UBSAN\" should be reverted?  (and I\u0027m not sure whether this is an issue due to -fsanitize\u003dundefined or maybe due to lo_ubsan\u0027s specific Clang and libstdc++ versions)",
+      "revId": "7639bd255a6eb1287d2eb7ef217a114ae5f5b344",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
