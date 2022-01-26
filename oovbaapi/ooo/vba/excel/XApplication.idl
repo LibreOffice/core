@@ -47,6 +47,7 @@ interface XApplication
     [attribute] boolean DisplayFormulaBar;
     [attribute] any CutCopyMode;
     [attribute] any StatusBar;
+    [attribute] any WindowState;
     [attribute] long Cursor;
     [attribute] boolean EnableEvents;
     [attribute] boolean EnableCancelKey;
