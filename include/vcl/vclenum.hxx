@@ -131,6 +131,7 @@ enum class WindowStateMask {
     MaximizedWidth   = 0x0400,
     MaximizedHeight  = 0x0800,
     Pos              = X | Y,
+    Size             = Width | Height,
     All              = X | Y | Width | Height | MaximizedX | MaximizedY | MaximizedWidth | MaximizedHeight | State | Minimized
 };
 namespace o3tl
