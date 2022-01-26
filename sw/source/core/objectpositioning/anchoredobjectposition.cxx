@@ -40,7 +40,9 @@
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
-using namespace objectpositioning;
+
+namespace objectpositioning
+{
 
 SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
     : mrDrawObj( _rDrawObj ),
@@ -1137,6 +1139,8 @@ bool SwAnchoredObjectPosition::Minor_( sal_Int16 _eRelOrient1,
         bRetVal = aRight[ _eRelOrient1 ] >= aRight[ _eRelOrient2 ];
 
     return bRetVal;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

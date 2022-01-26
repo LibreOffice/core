@@ -33,9 +33,10 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 
-using namespace objectpositioning;
 using namespace ::com::sun::star;
 
+namespace objectpositioning
+{
 SwToLayoutAnchoredObjectPosition::SwToLayoutAnchoredObjectPosition( SdrObject& _rDrawObj )
     : SwAnchoredObjectPosition( _rDrawObj )
 {}
@@ -218,6 +219,8 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 
     // keep calculate relative position
     maRelPos = aRelPos;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

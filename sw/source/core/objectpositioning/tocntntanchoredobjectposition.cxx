@@ -42,9 +42,10 @@
 #include <sortedobjs.hxx>
 #include <textboxhelper.hxx>
 
-using namespace objectpositioning;
 using namespace ::com::sun::star;
 
+namespace objectpositioning
+{
 SwToContentAnchoredObjectPosition::SwToContentAnchoredObjectPosition( SdrObject& _rDrawObj )
     : SwAnchoredObjectPosition ( _rDrawObj ),
       mpVertPosOrientFrame( nullptr ),
@@ -1211,5 +1212,6 @@ const SwFrame& SwToContentAnchoredObjectPosition::GetHoriVirtualAnchor(
     return *pHoriVirtAnchFrame;
 }
 
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

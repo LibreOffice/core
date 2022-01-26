@@ -22,7 +22,8 @@
 #include <pagefrm.hxx>
 #include <osl/diagnose.h>
 
-using namespace objectpositioning;
+namespace objectpositioning
+{
 
 SwEnvironmentOfAnchoredObject::SwEnvironmentOfAnchoredObject(
                                                 const bool   _bFollowTextFlow )
@@ -94,6 +95,8 @@ const SwLayoutFrame& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFram
                 "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrame(..) - found frame isn't a layout frame" );
 
     return static_cast<const SwLayoutFrame&>(*pVertEnvironmentLayFrame);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
