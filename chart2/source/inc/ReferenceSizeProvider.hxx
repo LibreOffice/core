@@ -22,6 +22,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
+#include <ChartModel.hxx>
 
 namespace com::sun::star {
     namespace chart2 {
@@ -36,7 +37,6 @@ namespace com::sun::star {
 
 namespace chart
 {
-class ChartModel;
 
 class OOO_DLLPUBLIC_CHARTTOOLS ReferenceSizeProvider
 {
