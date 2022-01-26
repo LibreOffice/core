@@ -1045,45 +1045,38 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
         aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine);
     }
 
-    // Setup Line Join
-    SkPaint::Join eSkLineJoin = SkPaint::kMiter_Join;
+    SkPaint aPaint = makeLinePaint(fTransparency);
+
     switch (eLineJoin)
     {
         case basegfx::B2DLineJoin::Bevel:
-            eSkLineJoin = SkPaint::kBevel_Join;
+            aPaint.setStrokeJoin(SkPaint::kBevel_Join);
             break;
         case basegfx::B2DLineJoin::Round:
-            eSkLineJoin = SkPaint::kRound_Join;
+            aPaint.setStrokeJoin(SkPaint::kRound_Join);
             break;
         case basegfx::B2DLineJoin::NONE:
+            break;
         case basegfx::B2DLineJoin::Miter:
-            eSkLineJoin = SkPaint::kMiter_Join;
+            aPaint.setStrokeJoin(SkPaint::kMiter_Join);
+            // convert miter minimum angle to miter limit
+            aPaint.setStrokeMiter(1.0 / std::sin(fMiterMinimumAngle / 2.0));
             break;
     }
-
-    // convert miter minimum angle to miter limit
-    double fMiterLimit = 1.0 / std::sin(fMiterMinimumAngle / 2.0);
-
-    // Setup Line Cap
-    SkPaint::Cap eSkLineCap(SkPaint::kButt_Cap);
 
     switch (eLineCap)
     {
         case css::drawing::LineCap_ROUND:
-            eSkLineCap = SkPaint::kRound_Cap;
+            aPaint.setStrokeCap(SkPaint::kRound_Cap);
             break;
         case css::drawing::LineCap_SQUARE:
-            eSkLineCap = SkPaint::kSquare_Cap;
+            aPaint.setStrokeCap(SkPaint::kSquare_Cap);
             break;
         default: // css::drawing::LineCap_BUTT:
-            eSkLineCap = SkPaint::kButt_Cap;
+            aPaint.setStrokeCap(SkPaint::kButt_Cap);
             break;
     }
 
-    SkPaint aPaint = makeLinePaint(fTransparency);
-    aPaint.setStrokeCap(eSkLineCap);
-    aPaint.setStrokeJoin(eSkLineJoin);
-    aPaint.setStrokeMiter(fMiterLimit);
     aPaint.setStrokeWidth(fLineWidth);
     aPaint.setAntiAlias(mParent.getAntiAlias());
     // See the tdf#134346 comment above.
