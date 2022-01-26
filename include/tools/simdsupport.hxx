@@ -34,34 +34,21 @@
 
 #if defined(_MSC_VER) // VISUAL STUDIO COMPILER
 
-// SSE2 is required for X64
-#if (defined(_M_X64) || defined(_M_IX86_FP) && _M_IX86_FP >= 2)
+// With MSVC using -arch is in fact not necessary for being able
+// to use CPU intrinsics, code using AVX512F intrinsics will compile
+// even if compiled with -arch:AVX, the -arch option really only affects
+// instructions generated for C/C++ code.
+#if defined(_M_X64) || defined(_M_X86)
+// As such, if we're building for X86 or X64, support for these is always available
+// with MSVC2019+.
 #define LO_SSE2_AVAILABLE
-#include <intrin.h>
-#endif // end SSE2
-
-// compiled with /arch:AVX
-#if defined(__AVX__)
-#ifndef LO_SSE2_AVAILABLE
-#define LO_SSE2_AVAILABLE
-#include <intrin.h>
-#endif
 #define LO_SSSE3_AVAILABLE
 #define LO_AVX_AVAILABLE
-#include <immintrin.h>
-#endif // end defined(__AVX__)
-
-// compiled with /arch:AVX2
-#if defined(__AVX2__)
 #define LO_AVX2_AVAILABLE
-#include <immintrin.h>
-#endif // defined(__AVX2__)
-
-// compiled with /arch:AVX512F
-#if defined(__AVX512F__)
 #define LO_AVX512F_AVAILABLE
+#include <intrin.h>
 #include <immintrin.h>
-#endif // defined(__AVX512F__)
+#endif
 
 #else // compiler Clang and GCC
 
