@@ -325,7 +325,7 @@ StackMode DiagramHelper::getStackMode( const rtl::Reference< Diagram > & xDiagra
 StackMode DiagramHelper::getStackModeFromChartType(
     const rtl::Reference< ChartType > & xChartType,
     bool& rbFound, bool& rbAmbiguous,
-    const Reference< XCoordinateSystem > & xCorrespondingCoordinateSystem )
+    const rtl::Reference< BaseCoordinateSystem > & xCorrespondingCoordinateSystem )
 {
     StackMode eStackMode = StackMode::NONE;
     rbFound = false;
@@ -485,8 +485,8 @@ void DiagramHelper::setDimension(
 
 void DiagramHelper::replaceCoordinateSystem(
     const rtl::Reference< Diagram > & xDiagram,
-    const Reference< XCoordinateSystem > & xCooSysToReplace,
-    const Reference< XCoordinateSystem > & xReplacement )
+    const rtl::Reference< BaseCoordinateSystem > & xCooSysToReplace,
+    const rtl::Reference< BaseCoordinateSystem > & xReplacement )
 {
     OSL_ASSERT( xDiagram.is());
     if( ! xDiagram.is())
@@ -499,9 +499,7 @@ void DiagramHelper::replaceCoordinateSystem(
         Reference< chart2::data::XLabeledDataSequence > xCategories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
 
         // move chart types of xCooSysToReplace to xReplacement
-        Reference< XChartTypeContainer > xCTCntCooSys( xCooSysToReplace, uno::UNO_QUERY_THROW );
-        Reference< XChartTypeContainer > xCTCntReplacement( xReplacement, uno::UNO_QUERY_THROW );
-        xCTCntReplacement->setChartTypes( xCTCntCooSys->getChartTypes());
+        xReplacement->setChartTypes( xCooSysToReplace->getChartTypes());
 
         xDiagram->removeCoordinateSystem( xCooSysToReplace );
         xDiagram->addCoordinateSystem( xReplacement );
@@ -863,15 +861,14 @@ static void lcl_generateAutomaticCategoriesFromChartType(
     }
 }
 
-Sequence< OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( const Reference< XCoordinateSystem > & xCooSys )
+Sequence< OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( const rtl::Reference< BaseCoordinateSystem > & xCooSys )
 {
     Sequence< OUString > aRet;
 
-    Reference< XChartTypeContainer > xTypeCntr( xCooSys, uno::UNO_QUERY );
-    if( xTypeCntr.is() )
+    if( xCooSys.is() )
     {
-        const Sequence< Reference< XChartType > > aChartTypes( xTypeCntr->getChartTypes() );
-        for( Reference< XChartType > const & chartType : aChartTypes )
+        const std::vector< rtl::Reference< ChartType > > & aChartTypes( xCooSys->getChartTypes2() );
+        for( rtl::Reference< ChartType > const & chartType : aChartTypes )
         {
             lcl_generateAutomaticCategoriesFromChartType( aRet, chartType );
             if( aRet.hasElements() )

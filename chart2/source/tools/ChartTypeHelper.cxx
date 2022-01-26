@@ -19,6 +19,7 @@
 
 #include <ChartTypeHelper.hxx>
 #include <ChartType.hxx>
+#include <BaseCoordinateSystem.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 
