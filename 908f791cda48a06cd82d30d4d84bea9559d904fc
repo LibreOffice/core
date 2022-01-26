@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b774457_1b250ca2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-26T15:46:03Z",
+      "side": 1,
+      "message": "I think I reproduced it in a multi-monitor setup",
+      "revId": "908f791cda48a06cd82d30d4d84bea9559d904fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
