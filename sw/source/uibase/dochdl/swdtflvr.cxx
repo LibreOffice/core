@@ -1569,8 +1569,13 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
             while((nIdx = aExpand.indexOf(sSearchRowOrCol, nIdx)) > -1)
             {
                 // skip rows/columns of nested tables, based on HTML indentation
-                if (nIdx > 2 && (aExpand[nIdx-1] != '\t' || aExpand[nIdx-2] != '\t' || (bShifted && aExpand[nIdx-3] != '\t')))
+                if ( nIdx > 3 && (aExpand[nIdx-1] != '\t' || aExpand[nIdx-2] != '\t' ||
+                    ( bShifted && aExpand[nIdx-3] != '\t') ) &&
+                    // skip also strange hidden empty rows <tr></tr>
+                    !aExpand.match("<tr></tr>", nIdx - 4) )
+                {
                     ++nSelectedRowsOrCols;
+                }
                 ++nIdx;
             }
             // are we at the beginning of the cell?

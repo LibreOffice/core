@@ -5156,6 +5156,42 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testPasteTrackedTableRowInHideChangesMode)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf146966)
+{
+    // load a 4-row table, select more than 1 row and copy them
+    // to check insertion of unnecessary empty rows
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf144748.fodt");
+
+    // check table row count
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getRows()->getCount());
+
+    // copy table row and paste it by Paste Special->Rows Above
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:Escape", {});
+    dispatchCommand(mxComponent, ".uno:PasteRowsBefore", {});
+
+    // This was 35 (extra empty rows)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xTable->getRows()->getCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {}); // FIXME Why 3 Undos?
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getRows()->getCount());
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xTable->getRows()->getCount());
+    // dispatchCommand(mxComponent, ".uno:Redo", {}); // FIXME assert
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145091)
 {
     // load a deleted table, reject them, and delete only its text and export to DOCX
