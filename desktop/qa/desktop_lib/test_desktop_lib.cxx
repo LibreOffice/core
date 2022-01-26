@@ -62,6 +62,7 @@
 #include <cppunit/TestAssert.h>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/pngwrite.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 #if USE_TLS_NSS
 #include <nss.h>
@@ -159,6 +160,7 @@ public:
     void testSearchAllNotificationsCalc();
     void testPaintTile();
     void testSaveAs();
+    void testSaveAsJsonOptions();
     void testSaveAsCalc();
     void testPasteWriter();
     void testPasteWriterJPEG();
@@ -225,6 +227,7 @@ public:
     CPPUNIT_TEST(testSearchAllNotificationsCalc);
     CPPUNIT_TEST(testPaintTile);
     CPPUNIT_TEST(testSaveAs);
+    CPPUNIT_TEST(testSaveAsJsonOptions);
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testPasteWriterJPEG);
@@ -673,6 +676,32 @@ void DesktopLOKTest::testSaveAs()
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
+}
+
+void DesktopLOKTest::testSaveAsJsonOptions()
+{
+    // Given a document with 3 pages:
+    LibLODocument_Impl* pDocument = loadDoc("3page.odg");
+
+    // When exporting that document to PDF, skipping the first page:
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    OString aOptions("{\"PageRange\":{\"type\":\"string\",\"value\":\"2-\"}}");
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "pdf", aOptions.getStr()));
+
+    // Then make sure the resulting PDF has 2 pages:
+    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    CPPUNIT_ASSERT(pPdfDocument);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 3
+    // i.e. FilterOptions was ignored.
+    CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
 }
 
 void DesktopLOKTest::testSaveAsCalc()

@@ -2897,7 +2897,12 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
         comphelper::SequenceAsHashMap aFilterDataMap;
 
-        setFormatSpecificFilterData(sFormat, aFilterDataMap);
+        // If filter options is JSON string, then make sure aFilterDataMap stays empty, otherwise we
+        // would ignore the filter options.
+        if (!aFilterOptions.startsWith("{"))
+        {
+            setFormatSpecificFilterData(sFormat, aFilterDataMap);
+        }
 
         if (!watermarkText.isEmpty())
             aFilterDataMap["TiledWatermark"] <<= watermarkText;
