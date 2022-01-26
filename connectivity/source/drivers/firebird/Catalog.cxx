@@ -10,6 +10,7 @@
 #include "Catalog.hxx"
 #include "Tables.hxx"
 #include "Users.hxx"
+#include "Views.hxx"
 
 #include <com/sun/star/sdbc/XRow.hpp>
 
@@ -53,8 +54,20 @@ void Catalog::refreshTables()
 
 void Catalog::refreshViews()
 {
-    // TODO: implement me.
-    // Sets m_pViews (OCatalog)
+    css::uno::Reference<css::sdbc::XResultSet> xViews
+        = m_xMetaData->getTables(css::uno::Any(), "%", "%", { "VIEW" });
+
+    if (!xViews.is())
+        return;
+
+    ::std::vector<OUString> aViewNames;
+
+    fillNames(xViews, aViewNames);
+
+    if (!m_pViews)
+        m_pViews.reset(new Views(m_xConnection, *this, m_aMutex, aViewNames));
+    else
+        m_pViews->reFill(aViewNames);
 }
 
 //----- IRefreshableGroups ---------------------------------------------------

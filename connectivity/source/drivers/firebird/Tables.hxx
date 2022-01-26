@@ -51,6 +51,8 @@ namespace connectivity::firebird
             // XDrop
             virtual void dropObject(sal_Int32 nPosition, const OUString& rName) override;
 
+            void appendNew(const OUString& _rsNewTable);
+
         };
 
 } // namespace connectivity::firebird
