@@ -16,6 +16,23 @@
       "message": "I think I reproduced it in a multi-monitor setup",
       "revId": "908f791cda48a06cd82d30d4d84bea9559d904fc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ceb95743_cf6df30b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-26T16:33:29Z",
+      "side": 1,
+      "message": "Yes, this fixes it, thanks!",
+      "revId": "908f791cda48a06cd82d30d4d84bea9559d904fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
