@@ -34,6 +34,24 @@
       "parentUuid": "b2ba0187_3f67cd2d",
       "revId": "350692a229661ea39406a0ad9464ef95ccffc72b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a95e83bf_8471cfbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-26T14:21:38Z",
+      "side": 1,
+      "message": "I understand that you found places that way where\n\n  T1 v \u003d function_returning_T1();\n  function_taking_T2(v);\n\ndidn\u0027t match.  What I don\u0027t understand is how you assumed that changing that to\n\n  T2 v \u003d function_returning_T1();\n  function_taking_T2(v);\n\nwould improve anything, in general?",
+      "parentUuid": "85690ecd_95554fc4",
+      "revId": "350692a229661ea39406a0ad9464ef95ccffc72b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
