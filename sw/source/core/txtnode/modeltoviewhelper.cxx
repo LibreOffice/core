@@ -178,9 +178,17 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
                     if (::std::all_of(startedFields.begin(), startedFields.end(),
                             [](auto const& it) { return it.second; }))
                     {
+// prevent -Werror=maybe-uninitialized under gcc 11.2.0
+#if defined __GNUC__ && !defined __clang_ && __GNUC__ == 11
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
                         // i is still hidden but the Range end is oddly "-1"
                         aHiddenMulti.Select({*oStartHidden, i}, true);
                         oStartHidden.reset();
+#if defined __GNUC__ && !defined __clang_ && __GNUC__ == 11
+#pragma GCC diagnostic pop
+#endif
                     }
                     break;
                 }
