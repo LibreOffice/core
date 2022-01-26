@@ -65,6 +65,7 @@
 #include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/throbber.hxx>
 #include <vcl/toolkit/unowrap.hxx>

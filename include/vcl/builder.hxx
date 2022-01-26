@@ -17,7 +17,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/toolbox.hxx>
+#include <vcl/toolboxid.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/EnumContext.hxx>
 
@@ -45,6 +45,7 @@ class SvTabListBox;
 class Slider;
 class DateField;
 class TimeField;
+class ToolBox;
 class VclExpander;
 class VclMultiLineEdit;
 struct NotebookBarAddonsItem;

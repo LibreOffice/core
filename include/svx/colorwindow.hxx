@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_TBXCTRLS_COLORWINDOW_HXX
-#define INCLUDED_SVX_SOURCE_TBXCTRLS_COLORWINDOW_HXX
+#pragma once
 
 #include <svtools/toolbarmenu.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/Palette.hxx>
-#include <vcl/toolbox.hxx>
+#include <vcl/toolboxid.hxx>
 
 typedef std::function<weld::Window*()> TopLevelParentFunction;
 
 namespace com::sun::star::frame { class XFrame; }
 
 class PaletteManager;
+class ToolBox;
 
 class SVXCORE_DLLPUBLIC ColorStatus
 {
@@ -133,7 +133,5 @@ public:
 
     virtual void GrabFocus() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

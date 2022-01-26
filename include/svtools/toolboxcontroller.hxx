@@ -33,7 +33,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <tools/link.hxx>
-#include <vcl/toolbox.hxx>
+#include <vcl/toolboxid.hxx>
 
 #include <unordered_map>
 
