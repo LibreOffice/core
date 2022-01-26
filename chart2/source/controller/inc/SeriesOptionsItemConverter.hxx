@@ -26,6 +26,7 @@ namespace com::sun::star::chart2 { class XCoordinateSystem; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace chart { class ChartModel; }
+namespace chart { class BaseCoordinateSystem; }
 
 namespace chart::wrapper
 {
@@ -66,7 +67,7 @@ private:
     sal_Int32 m_nStartingAngle;
 
     bool m_bClockwise;
-    css::uno::Reference< css::chart2::XCoordinateSystem > m_xCooSys;
+    rtl::Reference< ::chart::BaseCoordinateSystem > m_xCooSys;
 
     css::uno::Sequence< sal_Int32 > m_aSupportedMissingValueTreatments;
     sal_Int32 m_nMissingValueTreatment;
