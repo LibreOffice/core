@@ -42,6 +42,7 @@ namespace com::sun::star::uno { class XInterface; }
 
 namespace chart
 {
+class BaseCoordinateSystem;
 class Diagram;
 
 enum ObjectType
@@ -124,7 +125,7 @@ public:
     SAL_DLLPRIVATE static OUString createParticleForDiagram();
 
     static OUString createParticleForCoordinateSystem(
-          const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys
+          const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
         , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     static OUString createParticleForAxis(
