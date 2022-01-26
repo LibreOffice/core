@@ -48,11 +48,13 @@ public:
     void testSimpleCopyAndPaste();
     void testMultiDocumentCopyAndPaste();
     void testSheetAndColumnSelectAndHide();
+    void testWindowState();
 
     CPPUNIT_TEST_SUITE(VBAMacroTest);
     CPPUNIT_TEST(testSimpleCopyAndPaste);
     CPPUNIT_TEST(testMultiDocumentCopyAndPaste);
     CPPUNIT_TEST(testSheetAndColumnSelectAndHide);
+    CPPUNIT_TEST(testWindowState);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -217,6 +219,27 @@ void VBAMacroTest::testSheetAndColumnSelectAndHide()
     CPPUNIT_ASSERT(!rDoc.ColHidden(4, 2));
 
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), rViewData.GetTabNo());
+}
+
+void VBAMacroTest::testWindowState()
+{
+    // Application.WindowState = xlMinimized
+    // Application.WindowState = xlMaximized
+    // Application.WindowState = xlNormal
+
+    OUString aFileName;
+    createFileURL(u"VariousTestMacros.xlsm", aFileName);
+    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    uno::Any aRet;
+    uno::Sequence<sal_Int16> aOutParamIndex;
+    uno::Sequence<uno::Any> aOutParam;
+    uno::Sequence<uno::Any> aParams;
+
+    SfxObjectShell::CallXScript(mxComponent,
+                                "vnd.sun.Star.script:VBAProject.ThisWorkbook.testWindowState?"
+                                "language=Basic&location=document",
+                                aParams, aRet, aOutParamIndex, aOutParam);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VBAMacroTest);

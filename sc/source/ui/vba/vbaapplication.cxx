@@ -483,6 +483,16 @@ ScVbaApplication::getStatusBar()
     return uno::makeAny( !getDisplayStatusBar() );
 }
 
+css::uno::Any SAL_CALL ScVbaApplication::getWindowState()
+{
+    return getActiveWindow()->getWindowState();
+}
+
+void SAL_CALL ScVbaApplication::setWindowState(const css::uno::Any& rWindowState)
+{
+    getActiveWindow()->setWindowState(rWindowState);
+}
+
 void SAL_CALL
 ScVbaApplication::setStatusBar( const uno::Any& _statusbar )
 {
