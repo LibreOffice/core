@@ -33,6 +33,24 @@
       "message": "Do we need this change? I don\u0027t see a difference without it.",
       "revId": "5d88146004b4da5229db3ccdea802402307bd76d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "641a955e_f1414e95",
+        "filename": "svx/uiconfig/ui/findreplacedialog.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 1212,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-01-26T00:22:34Z",
+      "side": 1,
+      "message": "I think it is required for Gtk3 close with the system menu X and Esc. See  GtkInstanceDialog::close(bool bCloseSignal)",
+      "parentUuid": "eb81d249_0f230a5e",
+      "revId": "5d88146004b4da5229db3ccdea802402307bd76d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
