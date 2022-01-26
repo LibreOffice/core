@@ -16,6 +16,23 @@
       "message": "@Laszlo: Thank you so mutch! I did not pay attention enough... And you are right, Windows do not mind small or capital letters... :O",
       "revId": "e5425809894664f4cd6b384275da890e3319ce49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "827d42c8_4309be76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-01-26T08:11:20Z",
+      "side": 1,
+      "message": "it seems to me it can be submitted",
+      "revId": "e5425809894664f4cd6b384275da890e3319ce49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
