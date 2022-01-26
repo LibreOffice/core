@@ -133,7 +133,7 @@ Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
     try
     {
         rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
-        uno::Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 /*nCooSysIndex*/ ) );
+        rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 /*nCooSysIndex*/ ) );
 
         sal_Int32 nDimensionIndex = 1;
         bool bSubGrid = false;
