@@ -378,7 +378,7 @@ OUString getDataSeriesLabel(
 
 void setStackModeAtSeries(
     const Sequence< Reference< chart2::XDataSeries > > & aSeries,
-    const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem,
+    const rtl::Reference< BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
     StackMode eStackMode )
 {
     const uno::Any aPropValue(
@@ -460,7 +460,7 @@ sal_Int32 getAttachedAxisIndex( const Reference< chart2::XDataSeries > & xSeries
 
 sal_Int32 getNumberFormatKeyFromAxis(
     const Reference< chart2::XDataSeries > & xSeries,
-    const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem,
+    const rtl::Reference< BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
     sal_Int32 nDimensionIndex,
     sal_Int32 nAxisIndex /* = -1 */ )
 {
