@@ -34,6 +34,24 @@
       "parentUuid": "061a0bc4_054a7c96",
       "revId": "d1207a5f3a573dbe39a7874931ce373e5c88628d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5ec2978_0e103a9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-01-26T05:01:24Z",
+      "side": 1,
+      "message": "Alright, I will be moving to regression bugs very soon. Thanks",
+      "parentUuid": "904aadc1_615941b4",
+      "revId": "d1207a5f3a573dbe39a7874931ce373e5c88628d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
