@@ -202,7 +202,7 @@ void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEve
     }
 }
 
-std::unique_ptr<WeldToolbarPopup> PopupWindowController::weldPopupWindow()
+VclPtr<vcl::Window> PopupWindowController::createVclPopupWindow(vcl::Window* /*pParent*/)
 {
     return nullptr;
 }
