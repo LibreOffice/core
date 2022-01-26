@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40013da6_8630bc65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-26T12:30:32Z",
+      "side": 1,
+      "message": "\"Gerrit co-2021 check against online master\" failed with a java.lang.NullPointerException, resume.",
+      "revId": "bfeb0906cc1a1f27e8e3eb30d0fb81f7c8f226da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
