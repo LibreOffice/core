@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e9b0178_ad3c54e6",
+        "filename": "chart2/source/controller/itemsetwrapper/DataPointItemConverter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-26T13:53:16Z",
+      "side": 1,
+      "message": "reverted",
+      "parentUuid": "6ada9f6a_f8f800da",
+      "revId": "dfa7e6cdc1d68401ca29fedf28e902996a68ccb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a243445b_63f3a955",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-01-26T11:53:02Z",
       "side": 1,
       "message": "but ScDocument::AddValidationIndex returns sal_uLong",
+      "revId": "dfa7e6cdc1d68401ca29fedf28e902996a68ccb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebc53f50_c5b4e9bf",
+        "filename": "sc/source/core/data/patattr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-26T13:53:16Z",
+      "side": 1,
+      "message": "reverted",
+      "parentUuid": "a243445b_63f3a955",
       "revId": "dfa7e6cdc1d68401ca29fedf28e902996a68ccb4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
