@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcca174b_0d6ded42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-26T01:53:32Z",
+      "side": 1,
+      "message": "Than you Ramreiso,\nYou have done the requested changes, but can you implement the suggestion from Mike by using plain enum? In that way, the code would be much simpler.",
+      "revId": "a18b68c657f0e382229b2ff6a0cbdef67959b06c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78881bd3_42703e36",
