@@ -152,6 +152,7 @@
 #define MID_BOTTOM_BORDER           13
 #define LINE_STYLE                  14
 #define LINE_WIDTH                  15
+#define INSIDEH_BORDER              16
 
 //BrushItem
 #define MID_BACK_COLOR          0
