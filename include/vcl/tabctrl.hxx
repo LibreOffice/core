@@ -23,7 +23,6 @@
 #include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
 
@@ -33,6 +32,7 @@ class TabPage;
 class Button;
 class PushButton;
 class ListBox;
+class ToolBox;
 
 #ifndef TAB_APPEND
 #define TAB_APPEND          (sal_uInt16(0xFFFF))

@@ -25,6 +25,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
+#include <vcl/toolboxid.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/degree.hxx>
 
@@ -67,16 +68,6 @@ enum class ToolBoxLayoutMode
 
 // Position of the text when icon and text are painted
 enum class ToolBoxTextPosition { Right, Bottom };
-
-typedef o3tl::strong_int<sal_uInt16, struct ToolBoxItemIdTag> ToolBoxItemId;
-namespace std {
-    template<>
-    struct hash<ToolBoxItemId>
-    {
-        std::size_t operator()(ToolBoxItemId const & s) const
-        { return std::size_t(sal_uInt16(s)); }
-    };
-}
 
 class Idle;
 

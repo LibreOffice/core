@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
-#define INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
+#pragma once
 
 #include <framework/fwkdllapi.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/toolbox.hxx>
+#include <vcl/toolboxid.hxx>
 
 namespace com::sun::star::frame { class XFrame; class XToolbarController; }
 namespace com::sun::star::uno { template <typename > class Reference; }
@@ -104,7 +103,5 @@ FWK_DLLPUBLIC bool IsDockingWindowVisible(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     const OUString& rResourceURL );
 }
-
-#endif // INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

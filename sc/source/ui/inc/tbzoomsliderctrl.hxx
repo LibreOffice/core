@@ -19,6 +19,7 @@
 #pragma once
 
 #include <vcl/customweld.hxx>
+#include <vcl/image.hxx>
 #include <vcl/window.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/InterimItemWindow.hxx>
