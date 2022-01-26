@@ -50,6 +50,23 @@
       "message": "I believe it is so that this works:\n\ncommit b3ca461871a92d8d2bd1d4ee713046ee74abbcf0\nAuthor: Dennis Francis \u003cdennis.francis@collabora.com\u003e\nDate:   Wed Nov 10 18:53:14 2021 +0530\n\n    lokCalcRTL: h-flip the \"combined\" tile\n\n",
       "revId": "82b8f40ecaf203a5b92cd7685391f2779b1df116",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f4c4361_f68d982e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-01-26T09:52:09Z",
+      "side": 1,
+      "message": "I see. Well, as I said, this is a hack, although the 32bit access functions are generally broken (and as such unused I think?), so this is not making things worse. But your use-case is likely to get broken whenever somebody gets to fixing the 32bit bitmap handling.\n",
+      "revId": "82b8f40ecaf203a5b92cd7685391f2779b1df116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
