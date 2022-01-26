@@ -60,8 +60,8 @@ public:
 
     void EndPopupMode();
 
-    virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) = 0;
-    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow();
+    virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent);
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() = 0;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override = 0;
