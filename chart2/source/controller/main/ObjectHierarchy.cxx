@@ -313,15 +313,13 @@ void ObjectHierarchy::createDiagramTree(
 
 void ObjectHierarchy::createDataSeriesTree(
     ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
-    const Reference< XDiagram > & xDiagram )
+    const rtl::Reference< Diagram > & xDiagram )
 {
-    auto pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
-    assert(pDiagram);
     try
     {
-        sal_Int32 nDimensionCount = DiagramHelper::getDimension( pDiagram );
+        sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
         std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysSeq(
-            pDiagram->getBaseCoordinateSystems());
+            xDiagram->getBaseCoordinateSystems());
         for( sal_Int32 nCooSysIdx=0; nCooSysIdx<static_cast<sal_Int32>(aCooSysSeq.size()); ++nCooSysIdx )
         {
             std::vector< rtl::Reference< ChartType > > aChartTypeSeq( aCooSysSeq[nCooSysIdx]->getChartTypes2());
