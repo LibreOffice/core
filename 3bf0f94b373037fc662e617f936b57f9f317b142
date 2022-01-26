@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f66059ff_4c9ac038",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-01-26T22:57:54Z",
+      "side": 1,
+      "message": "Thanks Caolán, I see Related: tdf#146648 store last known position when visible to return later https://gerrit.libreoffice.org/c/core/+/128980 makes the change to findreplacedialog.ui unneeded. ",
+      "revId": "3bf0f94b373037fc662e617f936b57f9f317b142",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
