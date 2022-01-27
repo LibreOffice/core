@@ -1,0 +1,186 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "568bf7e0_56955fc8",
+        "filename": "desktop/Extension_test-crashextension.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-27T10:45:12Z",
+      "side": 1,
+      "message": "here and elsewhere: for new files please use the headers/footers from TEMPLATE.SOURCECODE.HEADER (and make sure to decide whether or not the file actually incorporates work covered by the ASF license)",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d28a55d7_2cf3e594",
+        "filename": "desktop/Library_crashextension.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-27T10:45:12Z",
+      "side": 1,
+      "message": "is that really needed, or is it cargo cult?",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1c902b5_c36abbc0",
+        "filename": "desktop/Module_desktop.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-27T10:45:12Z",
+      "side": 1,
+      "message": "any specific reason to introduce two empty lines in a row here (which is something not already used in this file)?",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eabd8304_35797104",
+        "filename": "desktop/Rdb_crashextension_platform.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-27T10:45:12Z",
+      "side": 1,
+      "message": "I\u0027d just drop the \"platform\" here, as this extension has just one Rdb",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c58825c_9dbf1b62",
+        "filename": "desktop/test/deployment/crashextension/Addons.xcu",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-27T10:45:12Z",
+      "side": 1,
+      "message": "here and elsewhere, better use libreoffice?",
+      "range": {
+        "startLine": 24,
+        "startChar": 26,
+        "endLine": 24,
+        "endChar": 36
+      },
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "def98f89_7deaf049",
+        "filename": "desktop/test/deployment/crashextension/crashextension.component",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-27T10:45:12Z",
+      "side": 1,
+      "message": "here and elsewhere, better use org.libreoffice?",
+      "range": {
+        "startLine": 22,
+        "startChar": 24,
+        "endLine": 22,
+        "endChar": 36
+      },
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c788808_35311ff2",
+        "filename": "desktop/test/deployment/crashextension/crashextension.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-27T10:45:12Z",
+      "side": 1,
+      "message": "are all of these includes actually needed?",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9680759a_f45d7997",
+        "filename": "desktop/test/deployment/crashextension/crashextension.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-27T10:45:12Z",
+      "side": 1,
+      "message": "IIRC, Extension_test-passive split out com.sun.star.test.deployment.passive_native_singleton mainly to demonstrate how to implement (passively registered) singletons in an extension, not for any technical reasons.  I guess Provider itself could just as well implement the XDispatch.",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff132e01_a79f4b69",
+        "filename": "desktop/test/deployment/crashextension/crashextension.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-27T10:45:12Z",
+      "side": 1,
+      "message": "it\u0027s odd to use NULL here and nullptr below (hint: for this gb_Library_set_external_code, I\u0027d stick to pre-C++11 NULL throughout, and include \u003ccstddef\u003e)",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c782a26_998ac0c1",
+        "filename": "desktop/test/deployment/passive/img/bomb.png",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-27T10:45:12Z",
+      "side": 1,
+      "message": "is this file added in error?",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
