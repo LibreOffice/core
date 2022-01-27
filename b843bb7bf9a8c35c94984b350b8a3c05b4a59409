@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6d985b0_5d4fd8cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-27T12:18:19Z",
+      "side": 1,
+      "message": "Just heard about TEMPLATE.SOURCECODE.HEADER so I applied it on new files.",
+      "revId": "b843bb7bf9a8c35c94984b350b8a3c05b4a59409",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
