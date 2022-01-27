@@ -42,6 +42,7 @@ namespace com::sun::star::chart2 { class XInternalDataProvider; }
 namespace chart
 {
 class InternalDataProvider;
+class ModifyEventForwarder;
 
 namespace impl
 {
@@ -164,7 +165,7 @@ private:
 
     rtl::Reference< InternalDataProvider > m_xDataProvider;
     OUString m_aSourceRepresentation;
-    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 
 }  // namespace chart

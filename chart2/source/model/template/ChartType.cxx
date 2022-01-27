@@ -242,8 +242,7 @@ void SAL_CALL ChartType::addModifyListener( const uno::Reference< util::XModifyL
 {
     try
     {
-        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->addModifyListener( aListener );
+        m_xModifyEventForwarder->addModifyListener( aListener );
     }
     catch( const uno::Exception & )
     {
@@ -255,8 +254,7 @@ void SAL_CALL ChartType::removeModifyListener( const uno::Reference< util::XModi
 {
     try
     {
-        uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
-        xBroadcaster->removeModifyListener( aListener );
+        m_xModifyEventForwarder->removeModifyListener( aListener );
     }
     catch( const uno::Exception & )
     {
