@@ -2503,7 +2503,7 @@ bool SwGrfExtPage::FillItemSet( SfxItemSet *rSet )
     // RotGrfFlyFrame: Safe rotation if modified
     if(m_xCtlAngle->IsValueModified())
     {
-        rSet->Put(SdrAngleItem(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_xCtlAngle->GetRotation()));
+        rSet->Put(SdrAngleItem(SID_ATTR_TRANSFORM_ANGLE, m_xCtlAngle->GetRotation()));
         bModified = true;
     }
 

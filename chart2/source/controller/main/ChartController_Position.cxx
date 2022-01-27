@@ -150,26 +150,21 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
             if (!pPool)
                 return;
 
-            sal_uInt16 nWhich;
             for (const auto& aProp: *pArgs)
             {
                 sal_Int32 nValue = 0;
                 aProp.Value >>= nValue;
                 if (aProp.Name == "TransformPosX") {
-                    nWhich = pPool->GetWhich(SID_ATTR_TRANSFORM_POS_X);
-                    aItemSet.Put(SfxInt32Item(nWhich, nValue));
+                    aItemSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_X, nValue));
                 }
                 else if (aProp.Name == "TransformPosY") {
-                    nWhich = pPool->GetWhich(SID_ATTR_TRANSFORM_POS_Y);
-                    aItemSet.Put(SfxInt32Item(nWhich, nValue));
+                    aItemSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_Y, nValue));
                 }
                 else if (aProp.Name == "TransformWidth") {
-                    nWhich = pPool->GetWhich(SID_ATTR_TRANSFORM_WIDTH);
-                    aItemSet.Put(SfxUInt32Item(nWhich, static_cast<sal_uInt32>(nValue)));
+                    aItemSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_WIDTH, static_cast<sal_uInt32>(nValue)));
                 }
                 else if (aProp.Name == "TransformHeight") {
-                    nWhich = pPool->GetWhich(SID_ATTR_TRANSFORM_HEIGHT);
-                    aItemSet.Put(SfxUInt32Item(nWhich, static_cast<sal_uInt32>(nValue)));
+                    aItemSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_HEIGHT, static_cast<sal_uInt32>(nValue)));
                 }
             }
         }

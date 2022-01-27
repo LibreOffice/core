@@ -748,7 +748,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
             rSet->InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_POS );
         else
             rSet->Put(
-                SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
+                SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_POS,
                 m_xPositionCB->get_state() == TRISTATE_TRUE ) );
         bModified = true;
     }
@@ -759,7 +759,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
             rSet->InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_SIZE );
         else
             rSet->Put(
-                SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
+                SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE,
                 m_xSizeCB->get_state() == TRISTATE_TRUE ) );
         bModified = true;
     }
@@ -783,8 +783,8 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
                 nHoriByPos += m_aAnchorPos.X();
                 nVertByPos += m_aAnchorPos.Y();
 
-                rSet->Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_POS_X ), nHoriByPos ) );
-                rSet->Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_POS_Y ), nVertByPos ) );
+                rSet->Put( SfxInt32Item( SID_ATTR_TRANSFORM_POS_X, nHoriByPos ) );
+                rSet->Put( SfxInt32Item( SID_ATTR_TRANSFORM_POS_Y, nVertByPos ) );
 
                 bModified = true;
             }
@@ -870,10 +870,10 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
     {
         sal_uInt32 nWidth = static_cast<sal_uInt32>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FieldUnit::TWIP)));
         sal_uInt32 nHeight = static_cast<sal_uInt32>(m_xHeightMF->denormalize(m_xHeightMF->get_value(FieldUnit::TWIP)));
-        rSet->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ), nWidth ) );
-        rSet->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ), nHeight ) );
+        rSet->Put( SfxUInt32Item( SID_ATTR_TRANSFORM_WIDTH, nWidth ) );
+        rSet->Put( SfxUInt32Item( SID_ATTR_TRANSFORM_HEIGHT, nHeight ) );
         //this item is required by SdrEditView::SetGeoAttrToMarked()
-        rSet->Put( SfxUInt16Item( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), sal_uInt16(RectPoint::LT) ) );
+        rSet->Put( SfxUInt16Item( SID_ATTR_TRANSFORM_SIZE_POINT, sal_uInt16(RectPoint::LT) ) );
 
         bModified = true;
     }
@@ -1049,9 +1049,9 @@ DeactivateRC SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
     {
-        _pSet->Put(SfxBoolItem(GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
+        _pSet->Put(SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_POS,
                 m_xPositionCB->get_active()));
-        _pSet->Put(SfxBoolItem(GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
+        _pSet->Put(SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE,
                 m_xSizeCB->get_active()));
         FillItemSet( _pSet );
     }
