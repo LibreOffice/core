@@ -67,6 +67,24 @@
       "message": "I see. Well, as I said, this is a hack, although the 32bit access functions are generally broken (and as such unused I think?), so this is not making things worse. But your use-case is likely to get broken whenever somebody gets to fixing the 32bit bitmap handling.\n",
       "revId": "82b8f40ecaf203a5b92cd7685391f2779b1df116",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f13b5585_ed766da5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-01-27T13:07:47Z",
+      "side": 1,
+      "message": "No doubt; hopefully it\u0027s less of a hack than what we have there, calling that LOK function per-pixel ;-)\n\nAny chance of a +2 ? \u003d)",
+      "parentUuid": "7f4c4361_f68d982e",
+      "revId": "82b8f40ecaf203a5b92cd7685391f2779b1df116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
