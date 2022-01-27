@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fba16835_6bdff015",
+        "filename": "sc/source/core/data/documen2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-27T11:50:40Z",
+      "side": 1,
+      "message": "Let\u0027s assume on Sheet1 we have a DBData named \u0027aaa\u0027 with index 1 used in a formula \u003dSUM(aaa) on Sheet1 and \u003dCOUNT(aaa) on Sheet2.\n\nCopying Sheet1 to Sheet3 copies and renames the DBData along to \u0027aaa1\u0027 with index 2 and copies the cell with \u003dSUM(aaa) as well. The token representing the \u0027aaa\u0027 range knows the index 1 so still the old range, but on Sheet3 it should point to the copied \u0027aaa1\u0027 range instead, so the token needs to have its DB index adjusted from 1 to 2 and then the expression will read and calculate \u003dSUM(aaa1). \u003dSUM(aaa) on Sheet1 and \u003dCOUNT(aaa) on Sheet2 are not to be touched.",
+      "parentUuid": "27230033_f4c80bfd",
+      "revId": "ea5dc381e3058a86a6e72d60a5dfdd77ec99e214",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "083cf4a5_2dcf86ec",
         "filename": "sc/source/core/tool/dbdata.cxx",
         "patchSetId": 4

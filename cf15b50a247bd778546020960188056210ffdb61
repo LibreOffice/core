@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3d50a29_d2f80c5a",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-27T11:50:40Z",
+      "side": 1,
+      "message": "lastIndex can be -1 here if there is no \u0027_\u0027, so this would be out of bounds.",
+      "range": {
+        "startLine": 1001,
+        "startChar": 53,
+        "endLine": 1001,
+        "endChar": 62
+      },
+      "revId": "cf15b50a247bd778546020960188056210ffdb61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b71b137_a528f1e0",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-27T11:50:40Z",
+      "side": 1,
+      "message": "Apart from the -1 problem, if the name was \u0027my_name\u0027 this would create an odd \u0027my_1\u0027.",
+      "range": {
+        "startLine": 1005,
+        "startChar": 39,
+        "endLine": 1005,
+        "endChar": 48
+      },
+      "revId": "cf15b50a247bd778546020960188056210ffdb61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
