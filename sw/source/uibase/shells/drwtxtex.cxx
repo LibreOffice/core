@@ -353,6 +353,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         break;
 
         case SID_CHAR_DLG_EFFECT:
+        case SID_CHAR_DLG_POSITION:
         case SID_CHAR_DLG:
         case SID_CHAR_DLG_FOR_PARAGRAPH:
         {
@@ -385,6 +386,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
                     pDlg->SetCurPageId("fonteffects");
+                }
+                else if (nSlot == SID_CHAR_DLG_POSITION)
+                {
+                    pDlg->SetCurPageId("position");
                 }
                 else if (nSlot == SID_CHAR_DLG_FOR_PARAGRAPH)
                 {
@@ -639,6 +644,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     else if (nEEWhich == EE_CHAR_COLOR)
     {
         GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_EFFECT);
+    }
+    else if (nEEWhich == EE_CHAR_KERNING)
+    {
+        GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_POSITION);
     }
 
 
