@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cef0fec_8aee2443",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-27T20:19:53Z",
+      "side": 1,
+      "message": "Please keep \u0027include/basic/sbxvar.hxx\u0027 untouched, and only put the \u0027enum\u0027 inside the .cxx file in the place of the #defines. In other words, only change the .cxx file.",
+      "revId": "c5439559f9654f31618038a55b622edad5453cf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
