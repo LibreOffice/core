@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+
+<o:component-data xmlns:o="http://openoffice.org/2001/registry"
+    o:package="org.openoffice.Office" o:name="ProtocolHandler">
+  <node o:name="HandlerSet">
+    <node o:name="org.libreoffice.test.desktop.deployment.crashextension" o:op="replace">
+      <prop o:name="Protocols">
+        <value>vnd.org.libreoffice.test.desktop.deployment.crashextension:*</value>
+      </prop>
+    </node>
+  </node>
+</o:component-data>

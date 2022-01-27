@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+
+<oor:component-data
+    xmlns:oor="http://openoffice.org/2001/registry"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    oor:name="Addons"
+    oor:package="org.openoffice.Office">
+ <node oor:name="AddonUI">
+  <node oor:name="OfficeToolbarMerging">
+   <node oor:name="org.libreoffice.test.desktop.deployment.crashextension.toolbarmerge" oor:op="replace">
+    <node oor:name="T1" oor:op="replace">
+     <prop oor:name="MergeToolBar">
+      <value>standardbar</value>
+     </prop>
+     <prop oor:name="MergePoint">
+      <value>.uno:HelpIndex</value>
+     </prop>
+     <prop oor:name="MergeCommand">
+      <value>AddAfter</value>
+     </prop>
+     <prop oor:name="MergeFallback">
+      <value>AddLast</value>
+     </prop>
+     <prop oor:name="MergeContext">
+      <value/>
+     </prop>
+     <node oor:name="ToolBarItems">
+      <node oor:name="B1" oor:op="replace">
+       <prop oor:name="URL">
+        <value>vnd.org.libreoffice.test.desktop.deployment.crashextension:</value>
+       </prop>
+       <prop oor:name="Title">
+        <value xml:lang="en-US">Crash LibreOffice</value>
+       </prop>
+      </node>
+     </node>
+    </node>
+   </node>
+  </node>
+ </node>
+</oor:component-data>
