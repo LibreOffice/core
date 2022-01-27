@@ -1690,7 +1690,7 @@ void XclExpColinfo::WriteBody( XclExpStream& rStrm )
 
 void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
 {
-    const double nExcelColumnWidth = mnScWidth  / static_cast< double >( convertTwipToMm100( GetCharWidth() ) );
+    const double nExcelColumnWidth = mnScWidth / convertTwipToMm100<double>(GetCharWidth());
 
     // tdf#101363 In MS specification the output value is set with double precision after delimiter:
     // =Truncate(({width in pixels} - 5)/{Maximum Digit Width} * 100 + 0.5)/100

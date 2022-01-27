@@ -33,8 +33,6 @@ namespace oox::xls {
 /** Units supported by the UnitConverter class. */
 enum class Unit
 {
-    Inch,          /// Inches.
-    Point,         /// Points.
     Twip,          /// Twips (1/20 point).
     Emu,           /// English Metric Unit (1/360,000 cm).
     ScreenX,       /// Horizontal screen pixels.
@@ -69,11 +67,6 @@ public:
     /** Converts the passed value between the passed units. */
     double              scaleValue( double fValue, Unit eFromUnit, Unit eToUnit ) const;
 
-    /** Converts the passed value to 1/100 millimeters. */
-    sal_Int32           scaleToMm100( double fValue, Unit eUnit ) const;
-    /** Converts the passed value from 1/100 millimeters to the passed unit. */
-    double              scaleFromMm100( sal_Int32 nMm100, Unit eUnit ) const;
-
     /** Returns the serial value of the passed datetime, based on current nulldate. */
     double              calcSerialFromDateTime( const css::util::DateTime& rDateTime ) const;
     /** Returns the datetime of the passed serial value, based on current nulldate. */
@@ -85,12 +78,12 @@ public:
     /** Returns an error string from the passed BIFF error code. */
     OUString            calcErrorString( sal_uInt8 nErrorCode ) const;
 
-    /** Returns the conversion coefficient for the passed unit. */
-    double              getCoefficient( Unit eUnit ) const;
-
 private:
     /** Adds an error code to the internal maps. */
     void                addErrorCode( sal_uInt8 nErrorCode, const OUString& rErrorCode );
+
+    /** Returns the conversion coefficient for the passed unit. */
+    double              getCoefficient( Unit eUnit ) const;
 
 private:
     o3tl::enumarray<Unit, double> maCoeffs;           /// Coefficients for unit conversion.
