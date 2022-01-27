@@ -16,6 +16,24 @@
       "message": "blocking for now, s. Caolán\u0027s comment in https://gerrit.libreoffice.org/c/core/+/129022",
       "revId": "7a19c5ca732b9173c24276a294675ef9dd082a72",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0bc90a4_aae1b7e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-01-27T16:15:29Z",
+      "side": 1,
+      "message": "Fixup commit from https://gerrit.libreoffice.org/c/core/+/129047 now included.",
+      "parentUuid": "6c2e9b4c_123f5242",
+      "revId": "7a19c5ca732b9173c24276a294675ef9dd082a72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
