@@ -145,6 +145,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c4273b2a_d7f71536",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-27T12:33:49Z",
+      "side": 1,
+      "message": "The benefit is that when we make the format \"officially supported\", the existing documents can just keep the WEBP and throw away the PNG after re-save. With current implementation the documents will only have the PNG file but the original will be discarded, which is less than ideal. Considering that the most common use case of WEBP is super minimized lossy images from the browser - keeping the original WEBP file will be a small additional increase in file size. The users can also decide to not bother with a fallback images if they wish so and actually enjoy full WEBP support which they hoped to get. \n\nAlso most of the raster image formats that aren\u0027t native are, unlike WEBP, formats where you you don\u0027t even want to keep it in the original form (PNG is always better) so there was not really any need in the past to add a fallback support. We don\u0027t want them to be native actually because they are some obscure obsolete format. For formats that we want native support we always implemented a fallback image - it doesn\u0027t really matter what kind of an image it is.   \n\nYes, I was against adding WEBP as it had very limited support all around (not even Firefox supported it yet), but that has changed. It is fairly well supported in browsers and programs now and MS Office also supports it now, which means we may have no other choice but to support it too. Also not sure what me being against it somewhere in the past has anything to do with this, but I still would want a proper implementation in either way.\n\nIf the primary point is to \"support copy\u0026pasting from browsers\" then I don\u0027t understand why you bothered with an WEBP writer, support for exporting as WEBP image and also adding support as GfxLink native format and then crippled it.",
+      "parentUuid": "8e71789c_03277c20",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 57
+      },
+      "revId": "1f03382f172d5417aa25e9ecc74122bef7a6f6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7105e6cc_a1525edc",
         "filename": "vcl/source/filter/webp/writer.cxx",
         "patchSetId": 7
