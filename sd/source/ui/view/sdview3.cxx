@@ -40,7 +40,9 @@
 #include <svx/unomodel.hxx>
 #include <svx/ImageMapInfo.hxx>
 #include <unotools/streamwrap.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/pdfread.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -678,6 +680,29 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 aLayout = aLayout.copy(0, nPos);
             pPage->SetPresentationLayout( aLayout, false, false );
        }
+    }
+
+    if(!bReturn && CHECK_FORMAT_TRANS( SotClipboardFormatId::PDF ))
+    {
+        ::tools::SvRef<SotTempStream> xStm;
+        if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::PDF, xStm ) )
+        {
+            Point aInsertPos(rPos);
+            Graphic aGraphic;
+            if (vcl::ImportPDF(*xStm, aGraphic))
+            {
+                std::unique_ptr<sal_uInt8[]> pGraphicContent;
+
+                const sal_Int32 nGraphicContentSize(xStm->Tell());
+                pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
+                xStm->Seek(0);
+                xStm->ReadBytes(pGraphicContent.get(), nGraphicContentSize);
+                aGraphic.SetGfxLink(std::make_shared<GfxLink>(std::move(pGraphicContent), nGraphicContentSize, GfxLinkType::NativePdf));
+
+                InsertGraphic(aGraphic, mnAction, aInsertPos, nullptr, nullptr);
+                bReturn = true;
+            }
+        }
     }
 
     if(!bReturn && CHECK_FORMAT_TRANS( SotClipboardFormatId::DRAWING ))
