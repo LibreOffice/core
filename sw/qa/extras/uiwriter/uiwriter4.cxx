@@ -219,7 +219,7 @@ public:
     void testTdf112025();
     void testTdf72942();
 
-    void testTdf113877_mergeDocs(const char* aDestDoc, const char* aInsertDoc);
+    void mergeDocs(const char* aDestDoc, const char* aInsertDoc);
     void testTdf113877();
     void testTdf113877NoMerge();
     void testTdf113877_default_style();
@@ -2144,24 +2144,9 @@ void SwUiWriterTest4::testTdf58604()
 
 void SwUiWriterTest4::testTdf112025()
 {
-    createSwDoc(DATA_DIRECTORY, "fdo112025.odt");
-    const int numberOfParagraphs = getParagraphs();
-    CPPUNIT_ASSERT_EQUAL(1, numberOfParagraphs);
+    mergeDocs("fdo112025.odt", "fdo112025-insert.docx");
 
-    // get a page cursor
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
-        xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
-                                              uno::UNO_QUERY);
-    xCursor->jumpToEndOfPage();
-
-    OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo112025-insert.docx";
-    uno::Sequence<beans::PropertyValue> aPropertyValues(
-        comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
-    dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
-    // something has been inserted + an additional paragraph
-    CPPUNIT_ASSERT_GREATER(numberOfParagraphs, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"),
                                                uno::UNO_QUERY);
@@ -2170,20 +2155,7 @@ void SwUiWriterTest4::testTdf112025()
 
 void SwUiWriterTest4::testTdf72942()
 {
-    createSwDoc(DATA_DIRECTORY, "fdo72942.docx");
-
-    // get a page cursor
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
-        xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
-                                              uno::UNO_QUERY);
-    xCursor->jumpToEndOfPage();
-
-    OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo72942-insert.docx";
-    uno::Sequence<beans::PropertyValue> aPropertyValues(
-        comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
-    dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+    mergeDocs("fdo72942.docx", "fdo72942-insert.docx");
 
     // check styles of paragraphs added from [fdo72942.docx]
     const uno::Reference<text::XTextRange> xRun1 = getRun(getParagraph(1), 1);
@@ -2232,7 +2204,7 @@ void SwUiWriterTest4::testTdf114306_2()
     CPPUNIT_ASSERT_EQUAL(4, getPages());
 }
 
-void SwUiWriterTest4::testTdf113877_mergeDocs(const char* aDestDoc, const char* aInsertDoc)
+void SwUiWriterTest4::mergeDocs(const char* aDestDoc, const char* aInsertDoc)
 {
     createSwDoc(DATA_DIRECTORY, aDestDoc);
 
@@ -2258,8 +2230,7 @@ void SwUiWriterTest4::testTdf113877_mergeDocs(const char* aDestDoc, const char* 
 // we should merge both lists into one, when they have the same list properties
 void SwUiWriterTest4::testTdf113877()
 {
-    testTdf113877_mergeDocs("tdf113877_insert_numbered_list.odt",
-                            "tdf113877_insert_numbered_list.odt");
+    mergeDocs("tdf113877_insert_numbered_list.odt", "tdf113877_insert_numbered_list.odt");
 
     const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
     const OUString listId4 = getProperty<OUString>(getParagraph(4), "ListId");
@@ -2279,8 +2250,7 @@ void SwUiWriterTest4::testTdf113877()
 // The same test as testTdf113877() but merging of two list should not be performed.
 void SwUiWriterTest4::testTdf113877NoMerge()
 {
-    testTdf113877_mergeDocs("tdf113877_insert_numbered_list.odt",
-                            "tdf113877_insert_numbered_list_abcd.odt");
+    mergeDocs("tdf113877_insert_numbered_list.odt", "tdf113877_insert_numbered_list_abcd.odt");
 
     const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
     const OUString listId4 = getProperty<OUString>(getParagraph(4), "ListId");
@@ -2306,7 +2276,7 @@ void SwUiWriterTest4::testTdf113877NoMerge()
 //
 void SwUiWriterTest4::testTdf113877_default_style()
 {
-    testTdf113877_mergeDocs("tdf113877_blank.odt", "tdf113877_insert_numbered_list_abcd.odt");
+    mergeDocs(nullptr, "tdf113877_insert_numbered_list_abcd.odt");
 
     const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
     const OUString listId2 = getProperty<OUString>(getParagraph(2), "ListId");
@@ -2325,8 +2295,7 @@ void SwUiWriterTest4::testTdf113877_default_style()
 //
 void SwUiWriterTest4::testTdf113877_Standard_style()
 {
-    testTdf113877_mergeDocs("tdf113877_blank_ownStandard.odt",
-                            "tdf113877_insert_numbered_list_abcd.odt");
+    mergeDocs("tdf113877_blank_ownStandard.odt", "tdf113877_insert_numbered_list_abcd.odt");
 
     const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
     const OUString listId2 = getProperty<OUString>(getParagraph(2), "ListId");
@@ -2338,8 +2307,7 @@ void SwUiWriterTest4::testTdf113877_Standard_style()
 
 void SwUiWriterTest4::testTdf113877_blank_bold_on()
 {
-    testTdf113877_mergeDocs("tdf113877_blank_bold_on.odt",
-                            "tdf113877_insert_numbered_list_abcd.odt");
+    mergeDocs("tdf113877_blank_bold_on.odt", "tdf113877_insert_numbered_list_abcd.odt");
 
     const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
     const OUString listId2 = getProperty<OUString>(getParagraph(2), "ListId");
@@ -2351,8 +2319,7 @@ void SwUiWriterTest4::testTdf113877_blank_bold_on()
 
 void SwUiWriterTest4::testTdf113877_blank_bold_off()
 {
-    testTdf113877_mergeDocs("tdf113877_blank_bold_off.odt",
-                            "tdf113877_insert_numbered_list_abcd.odt");
+    mergeDocs("tdf113877_blank_bold_off.odt", "tdf113877_insert_numbered_list_abcd.odt");
 
     const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
     const OUString listId2 = getProperty<OUString>(getParagraph(2), "ListId");
@@ -2363,36 +2330,11 @@ void SwUiWriterTest4::testTdf113877_blank_bold_off()
 }
 
 // just care that this does crash/assert
-void SwUiWriterTest4::testRhbz1810732()
-{
-    createSwDoc(DATA_DIRECTORY, "tdf113877_blank.odt");
-
-    // set a page cursor into the end of the document
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
-        xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
-                                              uno::UNO_QUERY);
-    xCursor->jumpToEndOfPage();
-
-    // insert the same document at current cursor position
-    {
-        const OUString insertFileid
-            = m_directories.getURLFromSrc(DATA_DIRECTORY) + "rhbz1810732.docx";
-        uno::Sequence<beans::PropertyValue> aPropertyValues(
-            comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
-        dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
-    }
-}
+void SwUiWriterTest4::testRhbz1810732() { mergeDocs(nullptr, "rhbz1810732.docx"); }
 
 void SwUiWriterTest4::testTdf142157()
 {
-    createSwDoc();
-
-    const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf142157.odt";
-    uno::Sequence<beans::PropertyValue> aPropertyValues(
-        comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
-    dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+    mergeDocs(nullptr, "tdf142157.odt");
 
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
