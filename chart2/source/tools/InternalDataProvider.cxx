@@ -314,10 +314,12 @@ InternalDataProvider::InternalDataProvider(
     bool bDefaultDataInColumns)
 :   m_bDataInColumns( bDefaultDataInColumns )
 {
+    if (!xChartDoc.is())
+        return;
     try
     {
         auto pModel = dynamic_cast<ChartModel*>(xChartDoc.get());
-        assert(!xChartDoc || pModel);
+        assert(pModel);
         rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( pModel ) );
         if( xDiagram.is())
         {
