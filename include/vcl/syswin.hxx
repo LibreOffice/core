@@ -103,6 +103,7 @@ private:
     bool            mbHideBtn;
     bool            mbSysChild;
     bool            mbIsCalculatingInitialLayoutSize;
+    bool            mbInitialLayoutSizeCalculated;
     bool            mbPaintComplete;
     MenuBarMode     mnMenuBarMode;
     sal_uInt16      mnIcon;
