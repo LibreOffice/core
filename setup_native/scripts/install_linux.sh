@@ -66,9 +66,7 @@ try_to_unpack_languagepack_file()
   echo "Unpacking shell script $FILENAME"
   TAILLINE=`head --lines=20 $FILENAME | sed --quiet 's/linenum=//p'`
 
-  UNPACKDIR=/var/tmp/install_$$
-  mkdir $UNPACKDIR
-  # UNPACKDIR=`mktemp -d`
+  UNPACKDIR=`mktemp -d -p /var/tmp`
   tail -n +$TAILLINE $FILENAME | gunzip | (cd $UNPACKDIR; tar xvf -)
 
   # Setting the new package path, in which the packages exist
