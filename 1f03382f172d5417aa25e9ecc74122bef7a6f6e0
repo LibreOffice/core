@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f1e2299c_a55b8afb",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-01-27T08:18:07Z",
+      "side": 1,
+      "message": "\u003e If the concern is backwards compatibility, we should create and write a fallback PNG image into the document just like we do with other formats where backwards compatibility was a concern.\n\nLike we do with other formats where? I\u0027m not aware of any such functionality or option. If I disable this and also places like SvXMLGraphicHelper::implSaveGraphic(), then all that happens is that the .webp is still written to the document, the document just names it .grf with mimetype image/x-vclgraphic .",
+      "parentUuid": "cc881c4b_0d6bdb6f",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 57
+      },
+      "revId": "1f03382f172d5417aa25e9ecc74122bef7a6f6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7105e6cc_a1525edc",
         "filename": "vcl/source/filter/webp/writer.cxx",
         "patchSetId": 7
