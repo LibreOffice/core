@@ -1708,7 +1708,8 @@ void ScGridWindow::DrawHiddenIndicator( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW n
         aLineInfo.SetDashCount(0);
         aLineInfo.SetDotCount(1);
         aLineInfo.SetDistance(15);
-        //round caps except when running VCL_PLUGIN=gen
+        // round caps except when running VCL_PLUGIN=gen due to a performance issue
+        // https://bugs.documentfoundation.org/show_bug.cgi?id=128258#c14
         if (mrViewData.GetActiveWin()->GetSystemData()->toolkit != SystemEnvData::Toolkit::Gen)
             aLineInfo.SetLineCap(css::drawing::LineCap_ROUND);
         aLineInfo.SetDotLen(1);
