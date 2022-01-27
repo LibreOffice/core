@@ -26,6 +26,7 @@
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include <svdata.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <webp/decode.h>
 
@@ -59,10 +60,7 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
         SAL_WARN("vcl.filter.webp", "WebPInitDecoderConfig() failed");
         return false;
     }
-    // This unique_ptr is here just to ensure WebPFreeDecBuffer() is called at the end,
-    // it doesn't actually own the data as such.
-    std::unique_ptr<WebPDecBuffer, decltype(&WebPFreeDecBuffer)> freeBuffer(&config.output,
-                                                                            WebPFreeDecBuffer);
+    comphelper::ScopeGuard freeBuffer([&config]() { WebPFreeDecBuffer(&config.output); });
     std::vector<uint8_t> data;
     if (!readWebpInfo(stream, data, config.input))
         return false;
