@@ -999,7 +999,9 @@ OUString lcl_IncrementNumberInNamedRange(ScDBCollection::NamedDBs& namedDBs,
                                          const OUString& sOldName,bool bIsUpperName)
 {
     sal_Int32 lastIndex = sOldName.lastIndexOf('_');
-    sal_Int32 nOldNumber = OUString(sOldName.subView(lastIndex)).toInt32();
+    sal_Int32 nOldNumber = 0;
+    if (lastIndex >= 0)
+        nOldNumber = OUString(sOldName.subView(lastIndex)).toInt32();
     OUString sNewName;
     do
     {
