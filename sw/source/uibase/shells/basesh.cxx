@@ -2295,6 +2295,8 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
     {
         if (nSlot == SID_ATTR_CHAR_KERNING)
             GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_POSITION);
+        else if (nSlot == SID_ATTR_CHAR_COLOR)
+            GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_EFFECT);
         else
             GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG);
     }
