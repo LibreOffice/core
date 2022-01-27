@@ -70,6 +70,7 @@ SystemWindow::SystemWindow(WindowType nType, const char* pIdleDebugName)
     , mbHideBtn(false)
     , mbSysChild(false)
     , mbIsCalculatingInitialLayoutSize(false)
+    , mbInitialLayoutSizeCalculated(false)
     , mbPaintComplete(false)
     , mnMenuBarMode(MenuBarMode::Normal)
     , mnIcon(0)
@@ -746,6 +747,11 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
             nY = rGeom.nHeight - nHeight;
         setPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
     }
+
+    // tdf#146648 if an explicit size state was set, then use it as the preferred
+    // size for layout
+    if (nValidMask & WindowStateMask::Size)
+        mbInitialLayoutSizeCalculated = true;
 }
 
 void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
@@ -1081,6 +1087,16 @@ void SystemWindow::setOptimalLayoutSize()
     aSize.setHeight( std::min(aMax.Height(), aSize.Height()) );
 
     SetMinOutputSizePixel(aSize);
+
+    if (!mbInitialLayoutSizeCalculated)
+        mbInitialLayoutSizeCalculated = true;
+    else
+    {
+        Size aCurrentSize = GetSizePixel();
+        aSize.setWidth(std::max(aSize.Width(), aCurrentSize.Width()));
+        aSize.setHeight(std::max(aSize.Height(), aCurrentSize.Height()));
+    }
+
     SetSizePixel(aSize);
     setPosSizeOnContainee(aSize, *pBox);
 }
