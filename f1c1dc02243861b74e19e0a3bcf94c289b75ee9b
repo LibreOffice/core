@@ -33,6 +33,24 @@
       "message": "I can\u0027t reproduce the original problem, see\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d120896#c9",
       "revId": "f1c1dc02243861b74e19e0a3bcf94c289b75ee9b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "748d2ec0_083aacae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-27T06:08:00Z",
+      "side": 1,
+      "message": "Buovjaga replied and confirmed all the steps are still reproducible, but you have to make sure your cursor is over the text, and not the space in between.",
+      "parentUuid": "7b3baec9_e83f163a",
+      "revId": "f1c1dc02243861b74e19e0a3bcf94c289b75ee9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
