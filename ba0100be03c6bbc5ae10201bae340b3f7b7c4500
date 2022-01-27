@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff58fe0c_8ab8a5fd",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1712,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-27T09:43:51Z",
+      "side": 1,
+      "message": "Is there an explanation for this conditional? it\u0027s the one and only case of such conditional drawing depending on the backend.",
+      "revId": "ba0100be03c6bbc5ae10201bae340b3f7b7c4500",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
