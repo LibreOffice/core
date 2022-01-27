@@ -164,6 +164,8 @@ static void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,
             pDlg->SetCurPageId("hyperlink");
         else if (nSlot == SID_CHAR_DLG_EFFECT)
             pDlg->SetCurPageId("fonteffects");
+        else if (nSlot == SID_CHAR_DLG_POSITION)
+            pDlg->SetCurPageId("position");
         else if (nSlot == SID_CHAR_DLG_FOR_PARAGRAPH)
             pDlg->SetCurPageId("font");
         else if (pReq)
@@ -946,6 +948,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case SID_CHAR_DLG:
         case SID_CHAR_DLG_EFFECT:
+        case SID_CHAR_DLG_POSITION:
         {
             sw_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
         }
