@@ -769,7 +769,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                         {
                             if (SfxViewShell* pViewShell = SfxViewShell::Current())
                             {
-                                boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(&xPopup->GetMenu());
+                                boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(xMenuInterface);
                                 boost::property_tree::ptree aRoot;
                                 aRoot.add_child("menu", aMenu);
 
