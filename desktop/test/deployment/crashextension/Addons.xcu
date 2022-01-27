@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+
+<o:items xmlns:o="http://openoffice.org/2001/registry">
+  <item o:path="/org.openoffice.Office.Addons">
+    <node o:name="AddonUI">
+      <node o:name="Images">
+        <node o:name="org.libreoffice.test.desktop.deployment.crashextension.imageCrash" o:op="replace">
+          <prop o:name="URL">
+            <value>vnd.org.libreoffice.test.desktop.deployment.crashextension:</value>
+          </prop>
+          <node o:name="UserDefinedImages">
+            <prop o:name="ImageSmallURL">
+              <value>%origin%/crash.png</value>
+            </prop>
+            <prop o:name="ImageBigURL">
+              <value>%origin%/crash.png</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+    </node>
+  </item>
+</o:items>
