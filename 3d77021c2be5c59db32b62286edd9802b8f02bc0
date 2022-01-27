@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5926f9f_dbd9805e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-27T15:10:05Z",
+      "side": 1,
+      "message": "I think this works now (outside of the known bad positioning of the qt ver) if you want to try this in trunk.\n\nThere are some other layout changes in this patch, not sure if want to entangle those with this remember/restore size patch, especially the change to the starting widths of the columns in bookmark.cxx",
+      "revId": "3d77021c2be5c59db32b62286edd9802b8f02bc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
