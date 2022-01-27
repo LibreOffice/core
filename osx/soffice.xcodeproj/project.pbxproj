@@ -774,6 +774,79 @@
 		BEB0734B27A2948900F75C00 /* fuolbull.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fuolbull.cxx; path = ../sd/source/ui/func/fuolbull.cxx; sourceTree = "<group>"; };
 		BEB0734C27A2948900F75C00 /* fudspord.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fudspord.cxx; path = ../sd/source/ui/func/fudspord.cxx; sourceTree = "<group>"; };
 		BEB0734D27A2948900F75C00 /* futxtatt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = futxtatt.cxx; path = ../sd/source/ui/func/futxtatt.cxx; sourceTree = "<group>"; };
+		BEB0735027A2B98200F75C00 /* IndexedPropertyValuesContainer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IndexedPropertyValuesContainer.cxx; path = ../../../comphelper/source/container/IndexedPropertyValuesContainer.cxx; sourceTree = "<group>"; };
+		BEB0735127A2B98200F75C00 /* containermultiplexer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = containermultiplexer.cxx; path = ../../../comphelper/source/container/containermultiplexer.cxx; sourceTree = "<group>"; };
+		BEB0735227A2B98200F75C00 /* interfacecontainer2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = interfacecontainer2.cxx; path = ../../../comphelper/source/container/interfacecontainer2.cxx; sourceTree = "<group>"; };
+		BEB0735327A2B98200F75C00 /* namecontainer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = namecontainer.cxx; path = ../../../comphelper/source/container/namecontainer.cxx; sourceTree = "<group>"; };
+		BEB0735427A2B98200F75C00 /* embeddedobjectcontainer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = embeddedobjectcontainer.cxx; path = ../../../comphelper/source/container/embeddedobjectcontainer.cxx; sourceTree = "<group>"; };
+		BEB0735527A2B98200F75C00 /* enumhelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = enumhelper.cxx; path = ../../../comphelper/source/container/enumhelper.cxx; sourceTree = "<group>"; };
+		BEB0735627A2B98200F75C00 /* NamedPropertyValuesContainer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NamedPropertyValuesContainer.cxx; path = ../../../comphelper/source/container/NamedPropertyValuesContainer.cxx; sourceTree = "<group>"; };
+		BEB0735727A2B98200F75C00 /* enumerablemap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = enumerablemap.cxx; path = ../../../comphelper/source/container/enumerablemap.cxx; sourceTree = "<group>"; };
+		BEB0735827A2B98200F75C00 /* container.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = container.cxx; path = ../../../comphelper/source/container/container.cxx; sourceTree = "<group>"; };
+		BEB0735A27A2BAC900F75C00 /* xmleohlp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmleohlp.cxx; path = ../svx/source/xml/xmleohlp.cxx; sourceTree = "<group>"; };
+		BEB0735B27A2BAC900F75C00 /* xmlexport.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlexport.cxx; path = ../svx/source/xml/xmlexport.cxx; sourceTree = "<group>"; };
+		BEB0735C27A2BAC900F75C00 /* xmlxtimp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlxtimp.cxx; path = ../svx/source/xml/xmlxtimp.cxx; sourceTree = "<group>"; };
+		BEB0735D27A2BAC900F75C00 /* xmlgrhlp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlgrhlp.cxx; path = ../svx/source/xml/xmlgrhlp.cxx; sourceTree = "<group>"; };
+		BEB0735E27A2BAC900F75C00 /* xmlxtexp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlxtexp.cxx; path = ../svx/source/xml/xmlxtexp.cxx; sourceTree = "<group>"; };
+		BEB0736227A2BDAC00F75C00 /* ximplink.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ximplink.cxx; path = ../xmloff/source/draw/ximplink.cxx; sourceTree = "<group>"; };
+		BEB0736327A2BDAC00F75C00 /* eventimp.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = eventimp.hxx; path = ../xmloff/source/draw/eventimp.hxx; sourceTree = "<group>"; };
+		BEB0736427A2BDAC00F75C00 /* descriptionimp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = descriptionimp.cxx; path = ../xmloff/source/draw/descriptionimp.cxx; sourceTree = "<group>"; };
+		BEB0736527A2BDAC00F75C00 /* shapeimport.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shapeimport.cxx; path = ../xmloff/source/draw/shapeimport.cxx; sourceTree = "<group>"; };
+		BEB0736627A2BDAC00F75C00 /* sdpropls.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdpropls.cxx; path = ../xmloff/source/draw/sdpropls.cxx; sourceTree = "<group>"; };
+		BEB0736727A2BDAC00F75C00 /* layerimp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = layerimp.cxx; path = ../xmloff/source/draw/layerimp.cxx; sourceTree = "<group>"; };
+		BEB0736827A2BDAC00F75C00 /* ximppage.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ximppage.hxx; path = ../xmloff/source/draw/ximppage.hxx; sourceTree = "<group>"; };
+		BEB0736927A2BDAC00F75C00 /* layerexp.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = layerexp.hxx; path = ../xmloff/source/draw/layerexp.hxx; sourceTree = "<group>"; };
+		BEB0736A27A2BDAC00F75C00 /* XMLShapePropertySetContext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = XMLShapePropertySetContext.cxx; path = ../xmloff/source/draw/XMLShapePropertySetContext.cxx; sourceTree = "<group>"; };
+		BEB0736B27A2BDAC00F75C00 /* ximpgrp.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ximpgrp.hxx; path = ../xmloff/source/draw/ximpgrp.hxx; sourceTree = "<group>"; };
+		BEB0736C27A2BDAC00F75C00 /* ximp3dscene.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ximp3dscene.cxx; path = ../xmloff/source/draw/ximp3dscene.cxx; sourceTree = "<group>"; };
+		BEB0736D27A2BDAC00F75C00 /* descriptionimp.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = descriptionimp.hxx; path = ../xmloff/source/draw/descriptionimp.hxx; sourceTree = "<group>"; };
+		BEB0736E27A2BDAC00F75C00 /* SignatureLineContext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SignatureLineContext.cxx; path = ../xmloff/source/draw/SignatureLineContext.cxx; sourceTree = "<group>"; };
+		BEB0736F27A2BDAC00F75C00 /* eventimp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = eventimp.cxx; path = ../xmloff/source/draw/eventimp.cxx; sourceTree = "<group>"; };
+		BEB0737027A2BDAC00F75C00 /* ximpshow.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ximpshow.hxx; path = ../xmloff/source/draw/ximpshow.hxx; sourceTree = "<group>"; };
+		BEB0737127A2BDAC00F75C00 /* ximpshap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ximpshap.cxx; path = ../xmloff/source/draw/ximpshap.cxx; sourceTree = "<group>"; };
+		BEB0737227A2BDAC00F75C00 /* ximpstyl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ximpstyl.hxx; path = ../xmloff/source/draw/ximpstyl.hxx; sourceTree = "<group>"; };
+		BEB0737327A2BDAC00F75C00 /* xexptran.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xexptran.cxx; path = ../xmloff/source/draw/xexptran.cxx; sourceTree = "<group>"; };
+		BEB0737427A2BDAC00F75C00 /* XMLShapeStyleContext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = XMLShapeStyleContext.cxx; path = ../xmloff/source/draw/XMLShapeStyleContext.cxx; sourceTree = "<group>"; };
+		BEB0737527A2BDAC00F75C00 /* numithdl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = numithdl.cxx; path = ../xmloff/source/draw/numithdl.cxx; sourceTree = "<group>"; };
+		BEB0737627A2BDAC00F75C00 /* SignatureLineContext.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SignatureLineContext.hxx; path = ../xmloff/source/draw/SignatureLineContext.hxx; sourceTree = "<group>"; };
+		BEB0737727A2BDAD00F75C00 /* animationimport.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = animationimport.cxx; path = ../xmloff/source/draw/animationimport.cxx; sourceTree = "<group>"; };
+		BEB0737827A2BDAD00F75C00 /* animimp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = animimp.cxx; path = ../xmloff/source/draw/animimp.cxx; sourceTree = "<group>"; };
+		BEB0737927A2BDAD00F75C00 /* ximpcustomshape.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ximpcustomshape.hxx; path = ../xmloff/source/draw/ximpcustomshape.hxx; sourceTree = "<group>"; };
+		BEB0737A27A2BDAD00F75C00 /* layerexp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = layerexp.cxx; path = ../xmloff/source/draw/layerexp.cxx; sourceTree = "<group>"; };
+		BEB0737B27A2BDAD00F75C00 /* ximpcustomshape.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ximpcustomshape.cxx; path = ../xmloff/source/draw/ximpcustomshape.cxx; sourceTree = "<group>"; };
+		BEB0737C27A2BDAD00F75C00 /* XMLImageMapContext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = XMLImageMapContext.cxx; path = ../xmloff/source/draw/XMLImageMapContext.cxx; sourceTree = "<group>"; };
+		BEB0737D27A2BDAD00F75C00 /* ximpnote.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ximpnote.cxx; path = ../xmloff/source/draw/ximpnote.cxx; sourceTree = "<group>"; };
+		BEB0737E27A2BDAD00F75C00 /* XMLGraphicsDefaultStyle.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = XMLGraphicsDefaultStyle.cxx; path = ../xmloff/source/draw/XMLGraphicsDefaultStyle.cxx; sourceTree = "<group>"; };
+		BEB0737F27A2BDAD00F75C00 /* ximpshap.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ximpshap.hxx; path = ../xmloff/source/draw/ximpshap.hxx; sourceTree = "<group>"; };
+		BEB0738027A2BDAD00F75C00 /* EnhancedCustomShapeToken.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EnhancedCustomShapeToken.cxx; path = ../xmloff/source/draw/EnhancedCustomShapeToken.cxx; sourceTree = "<group>"; };
+		BEB0738127A2BDAD00F75C00 /* propimp0.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = propimp0.cxx; path = ../xmloff/source/draw/propimp0.cxx; sourceTree = "<group>"; };
+		BEB0738227A2BDAD00F75C00 /* XMLReplacementImageContext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = XMLReplacementImageContext.cxx; path = ../xmloff/source/draw/XMLReplacementImageContext.cxx; sourceTree = "<group>"; };
+		BEB0738327A2BDAD00F75C00 /* sdpropls.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = sdpropls.hxx; path = ../xmloff/source/draw/sdpropls.hxx; sourceTree = "<group>"; };
+		BEB0738427A2BDAD00F75C00 /* shapeexport.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shapeexport.cxx; path = ../xmloff/source/draw/shapeexport.cxx; sourceTree = "<group>"; };
+		BEB0738527A2BDAD00F75C00 /* animexp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = animexp.cxx; path = ../xmloff/source/draw/animexp.cxx; sourceTree = "<group>"; };
+		BEB0738627A2BDAD00F75C00 /* ximpshow.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ximpshow.cxx; path = ../xmloff/source/draw/ximpshow.cxx; sourceTree = "<group>"; };
+		BEB0738727A2BDAD00F75C00 /* ximplink.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ximplink.hxx; path = ../xmloff/source/draw/ximplink.hxx; sourceTree = "<group>"; };
+		BEB0738827A2BDAD00F75C00 /* numithdl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = numithdl.hxx; path = ../xmloff/source/draw/numithdl.hxx; sourceTree = "<group>"; };
+		BEB0738927A2BDAD00F75C00 /* XMLImageMapExport.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = XMLImageMapExport.cxx; path = ../xmloff/source/draw/XMLImageMapExport.cxx; sourceTree = "<group>"; };
+		BEB0738A27A2BDAD00F75C00 /* sdxmlexp_impl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = sdxmlexp_impl.hxx; path = ../xmloff/source/draw/sdxmlexp_impl.hxx; sourceTree = "<group>"; };
+		BEB0738B27A2BDAD00F75C00 /* sdxmlimp_impl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = sdxmlimp_impl.hxx; path = ../xmloff/source/draw/sdxmlimp_impl.hxx; sourceTree = "<group>"; };
+		BEB0738C27A2BDAD00F75C00 /* animationexport.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = animationexport.cxx; path = ../xmloff/source/draw/animationexport.cxx; sourceTree = "<group>"; };
+		BEB0738D27A2BDAD00F75C00 /* XMLNumberStylesExport.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = XMLNumberStylesExport.hxx; path = ../xmloff/source/draw/XMLNumberStylesExport.hxx; sourceTree = "<group>"; };
+		BEB0738E27A2BDAD00F75C00 /* layerimp.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = layerimp.hxx; path = ../xmloff/source/draw/layerimp.hxx; sourceTree = "<group>"; };
+		BEB0738F27A2BDAD00F75C00 /* ximpbody.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ximpbody.cxx; path = ../xmloff/source/draw/ximpbody.cxx; sourceTree = "<group>"; };
+		BEB0739027A2BDAD00F75C00 /* ximpstyl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ximpstyl.cxx; path = ../xmloff/source/draw/ximpstyl.cxx; sourceTree = "<group>"; };
+		BEB0739127A2BDAD00F75C00 /* ximp3dscene.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ximp3dscene.hxx; path = ../xmloff/source/draw/ximp3dscene.hxx; sourceTree = "<group>"; };
+		BEB0739227A2BDAD00F75C00 /* sdxmlexp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdxmlexp.cxx; path = ../xmloff/source/draw/sdxmlexp.cxx; sourceTree = "<group>"; };
+		BEB0739327A2BDAE00F75C00 /* sdxmlimp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdxmlimp.cxx; path = ../xmloff/source/draw/sdxmlimp.cxx; sourceTree = "<group>"; };
+		BEB0739427A2BDAE00F75C00 /* XMLNumberStyles.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = XMLNumberStyles.cxx; path = ../xmloff/source/draw/XMLNumberStyles.cxx; sourceTree = "<group>"; };
+		BEB0739527A2BDAE00F75C00 /* QRCodeContext.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = QRCodeContext.hxx; path = ../xmloff/source/draw/QRCodeContext.hxx; sourceTree = "<group>"; };
+		BEB0739627A2BDAE00F75C00 /* ximppage.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ximppage.cxx; path = ../xmloff/source/draw/ximppage.cxx; sourceTree = "<group>"; };
+		BEB0739727A2BDAE00F75C00 /* ximpgrp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ximpgrp.cxx; path = ../xmloff/source/draw/ximpgrp.cxx; sourceTree = "<group>"; };
+		BEB0739827A2BDAE00F75C00 /* QRCodeContext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = QRCodeContext.cxx; path = ../xmloff/source/draw/QRCodeContext.cxx; sourceTree = "<group>"; };
+		BEB0739927A2BDAE00F75C00 /* ximp3dobject.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ximp3dobject.hxx; path = ../xmloff/source/draw/ximp3dobject.hxx; sourceTree = "<group>"; };
+		BEB0739A27A2BDAE00F75C00 /* ximp3dobject.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ximp3dobject.cxx; path = ../xmloff/source/draw/ximp3dobject.cxx; sourceTree = "<group>"; };
+		BEB0739B27A2BDAE00F75C00 /* ximpbody.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ximpbody.hxx; path = ../xmloff/source/draw/ximpbody.hxx; sourceTree = "<group>"; };
+		BEB0739C27A2BDAE00F75C00 /* ximpnote.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ximpnote.hxx; path = ../xmloff/source/draw/ximpnote.hxx; sourceTree = "<group>"; };
 		BEBF3E2D246588AE00415E87 /* salinit.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salinit.cxx; path = ../sal/osl/unx/salinit.cxx; sourceTree = "<group>"; };
 		BEBF3E2E246588AE00415E87 /* module.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = module.cxx; path = ../sal/osl/unx/module.cxx; sourceTree = "<group>"; };
 		BEBF3E2F246588AE00415E87 /* unixerrnostring.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = unixerrnostring.hxx; path = ../sal/osl/unx/unixerrnostring.hxx; sourceTree = "<group>"; };
@@ -1956,8 +2029,9 @@
 		BEACEEC5257FC7F5001BAABA /* svx */ = {
 			isa = PBXGroup;
 			children = (
-				456E58D0277CB9DE00FA12D2 /* unodraw */,
 				BEACEEC6257FC82A001BAABA /* tbxctrls */,
+				456E58D0277CB9DE00FA12D2 /* unodraw */,
+				BEB0735927A2BAAB00F75C00 /* xml */,
 			);
 			name = svx;
 			sourceTree = "<group>";
@@ -2079,6 +2153,116 @@
 				BEB0732F27A2948800F75C00 /* unprlout.cxx */,
 			);
 			name = func;
+			sourceTree = "<group>";
+		};
+		BEB0734E27A2B92900F75C00 /* comphelper */ = {
+			isa = PBXGroup;
+			children = (
+				BEB0734F27A2B93B00F75C00 /* container */,
+			);
+			path = comphelper;
+			sourceTree = "<group>";
+		};
+		BEB0734F27A2B93B00F75C00 /* container */ = {
+			isa = PBXGroup;
+			children = (
+				BEB0735827A2B98200F75C00 /* container.cxx */,
+				BEB0735127A2B98200F75C00 /* containermultiplexer.cxx */,
+				BEB0735427A2B98200F75C00 /* embeddedobjectcontainer.cxx */,
+				BEB0735727A2B98200F75C00 /* enumerablemap.cxx */,
+				BEB0735527A2B98200F75C00 /* enumhelper.cxx */,
+				BEB0735027A2B98200F75C00 /* IndexedPropertyValuesContainer.cxx */,
+				BEB0735227A2B98200F75C00 /* interfacecontainer2.cxx */,
+				BEB0735327A2B98200F75C00 /* namecontainer.cxx */,
+				BEB0735627A2B98200F75C00 /* NamedPropertyValuesContainer.cxx */,
+			);
+			path = container;
+			sourceTree = "<group>";
+		};
+		BEB0735927A2BAAB00F75C00 /* xml */ = {
+			isa = PBXGroup;
+			children = (
+				BEB0735A27A2BAC900F75C00 /* xmleohlp.cxx */,
+				BEB0735B27A2BAC900F75C00 /* xmlexport.cxx */,
+				BEB0735D27A2BAC900F75C00 /* xmlgrhlp.cxx */,
+				BEB0735E27A2BAC900F75C00 /* xmlxtexp.cxx */,
+				BEB0735C27A2BAC900F75C00 /* xmlxtimp.cxx */,
+			);
+			name = xml;
+			sourceTree = "<group>";
+		};
+		BEB0736027A2BD7100F75C00 /* xmloff */ = {
+			isa = PBXGroup;
+			children = (
+				BEB0736127A2BD8800F75C00 /* draw */,
+			);
+			name = xmloff;
+			sourceTree = "<group>";
+		};
+		BEB0736127A2BD8800F75C00 /* draw */ = {
+			isa = PBXGroup;
+			children = (
+				BEB0738C27A2BDAD00F75C00 /* animationexport.cxx */,
+				BEB0737727A2BDAD00F75C00 /* animationimport.cxx */,
+				BEB0738527A2BDAD00F75C00 /* animexp.cxx */,
+				BEB0737827A2BDAD00F75C00 /* animimp.cxx */,
+				BEB0736427A2BDAC00F75C00 /* descriptionimp.cxx */,
+				BEB0736D27A2BDAC00F75C00 /* descriptionimp.hxx */,
+				BEB0738027A2BDAD00F75C00 /* EnhancedCustomShapeToken.cxx */,
+				BEB0736F27A2BDAC00F75C00 /* eventimp.cxx */,
+				BEB0736327A2BDAC00F75C00 /* eventimp.hxx */,
+				BEB0737A27A2BDAD00F75C00 /* layerexp.cxx */,
+				BEB0736927A2BDAC00F75C00 /* layerexp.hxx */,
+				BEB0736727A2BDAC00F75C00 /* layerimp.cxx */,
+				BEB0738E27A2BDAD00F75C00 /* layerimp.hxx */,
+				BEB0737527A2BDAC00F75C00 /* numithdl.cxx */,
+				BEB0738827A2BDAD00F75C00 /* numithdl.hxx */,
+				BEB0738127A2BDAD00F75C00 /* propimp0.cxx */,
+				BEB0739827A2BDAE00F75C00 /* QRCodeContext.cxx */,
+				BEB0739527A2BDAE00F75C00 /* QRCodeContext.hxx */,
+				BEB0736627A2BDAC00F75C00 /* sdpropls.cxx */,
+				BEB0738327A2BDAD00F75C00 /* sdpropls.hxx */,
+				BEB0738A27A2BDAD00F75C00 /* sdxmlexp_impl.hxx */,
+				BEB0739227A2BDAD00F75C00 /* sdxmlexp.cxx */,
+				BEB0738B27A2BDAD00F75C00 /* sdxmlimp_impl.hxx */,
+				BEB0739327A2BDAE00F75C00 /* sdxmlimp.cxx */,
+				BEB0738427A2BDAD00F75C00 /* shapeexport.cxx */,
+				BEB0736527A2BDAC00F75C00 /* shapeimport.cxx */,
+				BEB0736E27A2BDAC00F75C00 /* SignatureLineContext.cxx */,
+				BEB0737627A2BDAC00F75C00 /* SignatureLineContext.hxx */,
+				BEB0737327A2BDAC00F75C00 /* xexptran.cxx */,
+				BEB0739A27A2BDAE00F75C00 /* ximp3dobject.cxx */,
+				BEB0739927A2BDAE00F75C00 /* ximp3dobject.hxx */,
+				BEB0736C27A2BDAC00F75C00 /* ximp3dscene.cxx */,
+				BEB0739127A2BDAD00F75C00 /* ximp3dscene.hxx */,
+				BEB0738F27A2BDAD00F75C00 /* ximpbody.cxx */,
+				BEB0739B27A2BDAE00F75C00 /* ximpbody.hxx */,
+				BEB0737B27A2BDAD00F75C00 /* ximpcustomshape.cxx */,
+				BEB0737927A2BDAD00F75C00 /* ximpcustomshape.hxx */,
+				BEB0739727A2BDAE00F75C00 /* ximpgrp.cxx */,
+				BEB0736B27A2BDAC00F75C00 /* ximpgrp.hxx */,
+				BEB0736227A2BDAC00F75C00 /* ximplink.cxx */,
+				BEB0738727A2BDAD00F75C00 /* ximplink.hxx */,
+				BEB0737D27A2BDAD00F75C00 /* ximpnote.cxx */,
+				BEB0739C27A2BDAE00F75C00 /* ximpnote.hxx */,
+				BEB0739627A2BDAE00F75C00 /* ximppage.cxx */,
+				BEB0736827A2BDAC00F75C00 /* ximppage.hxx */,
+				BEB0737127A2BDAC00F75C00 /* ximpshap.cxx */,
+				BEB0737F27A2BDAD00F75C00 /* ximpshap.hxx */,
+				BEB0738627A2BDAD00F75C00 /* ximpshow.cxx */,
+				BEB0737027A2BDAC00F75C00 /* ximpshow.hxx */,
+				BEB0739027A2BDAD00F75C00 /* ximpstyl.cxx */,
+				BEB0737227A2BDAC00F75C00 /* ximpstyl.hxx */,
+				BEB0737E27A2BDAD00F75C00 /* XMLGraphicsDefaultStyle.cxx */,
+				BEB0737C27A2BDAD00F75C00 /* XMLImageMapContext.cxx */,
+				BEB0738927A2BDAD00F75C00 /* XMLImageMapExport.cxx */,
+				BEB0739427A2BDAE00F75C00 /* XMLNumberStyles.cxx */,
+				BEB0738D27A2BDAD00F75C00 /* XMLNumberStylesExport.hxx */,
+				BEB0738227A2BDAD00F75C00 /* XMLReplacementImageContext.cxx */,
+				BEB0736A27A2BDAC00F75C00 /* XMLShapePropertySetContext.cxx */,
+				BEB0737427A2BDAC00F75C00 /* XMLShapeStyleContext.cxx */,
+			);
+			name = draw;
 			sourceTree = "<group>";
 		};
 		BEBF3E2A2465886A00415E87 /* sal */ = {
@@ -2384,6 +2568,7 @@
 			children = (
 				BE7816B3274D206300FC91C9 /* basic */,
 				BEDCC8B62459A0DA00FB02BD /* bridges */,
+				BEB0734E27A2B92900F75C00 /* comphelper */,
 				BEDCC8FD246082D400FB02BD /* cui */,
 				BE28694D257D0668000E863E /* dbaccess */,
 				BEBF3E7E246ACF8900415E87 /* desktop */,
@@ -2400,6 +2585,7 @@
 				BEBF3E8D246AD70C00415E87 /* ucb */,
 				BEDCC8F02460807C00FB02BD /* unotools */,
 				BE82BE5A18298E2E00A447B5 /* vcl */,
+				BEB0736027A2BD7100F75C00 /* xmloff */,
 				BE49323F247820A10013BCD6 /* xmlsecurity */,
 			);
 			sourceTree = "<group>";
