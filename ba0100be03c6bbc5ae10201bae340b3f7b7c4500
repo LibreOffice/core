@@ -16,6 +16,24 @@
       "message": "Is there an explanation for this conditional? it\u0027s the one and only case of such conditional drawing depending on the backend.",
       "revId": "ba0100be03c6bbc5ae10201bae340b3f7b7c4500",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19df61bf_13aac93b",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1712,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-27T12:13:52Z",
+      "side": 1,
+      "message": "Get a terrible lag with gen probably due to missing hardware acceleration. But since I wasn\u0027t sure about that I just commented on BZ for incoming complaints about performance regression.",
+      "parentUuid": "ff58fe0c_8ab8a5fd",
+      "revId": "ba0100be03c6bbc5ae10201bae340b3f7b7c4500",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
