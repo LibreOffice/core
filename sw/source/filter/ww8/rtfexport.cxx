@@ -59,9 +59,6 @@
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
-#if OSL_DEBUG_LEVEL > 1
-#include <iostream>
-#endif
 #include <svx/xflclit.hxx>
 #include <fmtmeta.hxx>
 #include <IDocumentSettingAccess.hxx>
