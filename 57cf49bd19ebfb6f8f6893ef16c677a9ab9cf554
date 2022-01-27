@@ -16,6 +16,24 @@
       "message": "Size is not a member of WindowStateMask. Changed it to WindowStateMask::Pos | WindowStateMask::Width |  WindowStateMask::Height and kf5 remembers the size but not the position while gtk3 does the opposite and pos works but not size. With gen both are restored nicely.\n\nI wonder what happens with the position in case of two display configurations where one is switched off. Or when the resolution changes. Is the possible maximum taken into account?",
       "revId": "57cf49bd19ebfb6f8f6893ef16c677a9ab9cf554",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf1fa525_2ac2cc10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-27T09:51:28Z",
+      "side": 1,
+      "message": "WindowStateMask::Size now now a new member of WindowStateMask, added in the previous commit this was rebased on.\n\nI\u0027m still working on this, there is a difference in how gtk and vcl consider default sizes before/after being shown. The gtk one of https://docs.gtk.org/gtk3/method.Window.set_default_size.html works before the window is shown. The vcl size is overwritten by the \"optimal\" size on InitialShow so changing the size only sticks after its already shown so I\u0027m thinking about the safest fix there.",
+      "parentUuid": "8c8d496d_ac870fa4",
+      "revId": "57cf49bd19ebfb6f8f6893ef16c677a9ab9cf554",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
