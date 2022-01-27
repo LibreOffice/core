@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2f9c1e3_676ebbbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-01-27T12:14:04Z",
+      "side": 1,
+      "message": "Yeah, right, of course a change to a single macOS-only file causes Jenkins failures for Android and Windows. Go home Jenkins, you are drunk.",
+      "revId": "9f4d078b550988d8118a2cbbeb536c5e16007b7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
