@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd452d93_0c7e9393",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-27T18:14:27Z",
+      "side": 1,
+      "message": "Hi Xisco! May I ask you how I could retrieve the text in the edit dialog of the concordance file index entries? I tried to monitor the execution and it tells me that it opens a \"CreateAutomarkDialog\" and then it types it on the \"entry\" element. \n\nHad no luck to retrieve the text.\n\nThank you for your help.",
+      "revId": "7a2269757cb0c8a8539ee13e0d8753a2b90054d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
