@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b66f159_f32bda0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-27T10:53:50Z",
+      "side": 1,
+      "message": "It\u0027s a trade-off: testing writerfilter/ changes from sw/ is a butterfly effect (you change one module and tests in other modules break), but you can\u0027t test the layout (only the doc model) in writerfilter/.\n\nSo this looks good enough to me.",
+      "revId": "7e2aa0801e4983c71f41ff9192fdcf4bc2c33f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
