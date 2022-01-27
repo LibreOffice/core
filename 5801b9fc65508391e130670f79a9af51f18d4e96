@@ -33,6 +33,24 @@
       "message": "I think we need a space between $(ENABLE_KF5) and $(ENABLE_GTK3_KDE5)\nso its $filter(TRUE,TRUE TRUE) not $filter(TRUE,TRUETRUE)",
       "revId": "5801b9fc65508391e130670f79a9af51f18d4e96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe6f26f_c0e481d4",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 2982,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-01-27T14:23:29Z",
+      "side": 1,
+      "message": "Thanks! I\u0027ve just submitted https://gerrit.libreoffice.org/c/core/+/129047 .",
+      "parentUuid": "83733004_fd2a8c61",
+      "revId": "5801b9fc65508391e130670f79a9af51f18d4e96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
