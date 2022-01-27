@@ -39,3 +39,15 @@ separated from each other by two-byte `NUL` code units.
 
 ### oosplash
 Splash screen for the LibreOffice `soffice` binary.
+
+
+## Extensions
+
+The directory `test/deployment` contains some extensions to be used for testing:
+
+* `test/deployment/crashextension`: C++ extension to make LibreOffice crash. Useful for testing Crashreporter.
+  * Build with `Extension_test-crashextension`.
+  * Extension can be found in `workdir/Extension/test-crashextension.oxt`
+* `test/deployment/passive`: C++, Java and Python extension samples with passive registration.
+  * Build with `make Extension_test-passive`.
+  * Extension can be found in `workdir/Extension/test-passive.oxt`
