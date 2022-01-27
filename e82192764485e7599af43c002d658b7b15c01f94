@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9816e19d_79725e1f",
+        "filename": "include/basic/sbxvar.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-27T14:38:45Z",
+      "side": 0,
+      "message": "This is an unneeded formatting change. Please avoid it.",
+      "revId": "e82192764485e7599af43c002d658b7b15c01f94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

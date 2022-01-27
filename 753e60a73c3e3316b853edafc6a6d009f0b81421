@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bb59fed_0c7dccb7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-27T14:38:45Z",
+      "side": 1,
+      "message": "There is a double space in this line. Please change it to only one space.",
+      "revId": "753e60a73c3e3316b853edafc6a6d009f0b81421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
