@@ -302,7 +302,7 @@ void SwPageBreakWin::execute(std::string_view rIdent)
         {
             SwPaM aPaM( rNd );
             SwPaMItem aPaMItem( pEditWin->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
-            SfxStringItem aItem( pEditWin->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), "textflow" );
+            SfxStringItem aItem( SID_PARA_DLG, "textflow" );
             pEditWin->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
                     SID_PARA_DLG,
                     SfxCallMode::SYNCHRON | SfxCallMode::RECORD,

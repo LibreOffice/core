@@ -1052,8 +1052,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
     const SfxPoolItem* pOld = GetOldItem( *rCoreSet, SID_AUTOSPELL_CHECK );
     if ( !pOld || static_cast<const SfxBoolItem*>(pOld)->GetValue() != bNewAutoCheck )
     {
-        rCoreSet->Put( SfxBoolItem( GetWhich( SID_AUTOSPELL_CHECK ),
-                                bNewAutoCheck ) );
+        rCoreSet->Put( SfxBoolItem( SID_AUTOSPELL_CHECK, bNewAutoCheck ) );
         bModified = true;
     }
 

@@ -77,7 +77,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(weld::Container* pPage, weld::DialogContr
     mnDecSep = aSep.isEmpty() ? u'.' : aSep[0];
 
     maSavedDocOptions = static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(
-            GetWhich(SID_SCDOCOPTIONS))).GetDocOptions();
+            SID_SCDOCOPTIONS)).GetDocOptions();
 }
 
 ScTpFormulaOptions::~ScTpFormulaOptions()

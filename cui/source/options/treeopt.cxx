@@ -1044,7 +1044,7 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                     SID_ATTR_YEAR2000, SID_ATTR_YEAR2000> );
 
             SfxItemSetFixed<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER> aOptSet( SfxGetpApp()->GetPool() );
-            SfxGetpApp()->GetOptions(aOptSet);
+            SfxApplication::GetOptions(aOptSet);
             pRet->Put(aOptSet);
 
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
@@ -1147,7 +1147,7 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                                 SID_SAVEREL_INET, SID_SAVEREL_FSYS,
                                 SID_INET_NOPROXY, SID_INET_FTP_PROXY_PORT,
                                 SID_SECURE_URL, SID_SECURE_URL> );
-                SfxGetpApp()->GetOptions(*pRet);
+                SfxApplication::GetOptions(*pRet);
         break;
         case SID_FILTER_DLG:
             pRet.emplace(
@@ -1157,7 +1157,7 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                     SID_ATTR_DOCINFO, SID_ATTR_AUTOSAVEMINUTE,
                     SID_SAVEREL_INET, SID_SAVEREL_FSYS,
                     SID_ATTR_PRETTYPRINTING, SID_ATTR_PRETTYPRINTING> );
-            SfxGetpApp()->GetOptions(*pRet);
+            SfxApplication::GetOptions(*pRet);
             break;
 
         case SID_SB_STARBASEOPTIONS:

@@ -2534,7 +2534,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxItemSet *pArgs = rReq.GetArgs();
                 const SfxPoolItem* pItem = nullptr;
                 if ( pArgs )
-                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
+                    pArgs->GetItemState(SID_CHARMAP, false, &pItem);
                 if ( pItem )
                 {
                     const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>( pItem  );

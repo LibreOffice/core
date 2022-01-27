@@ -677,7 +677,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = nullptr;
     if( pArgs )
-        pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
+        pArgs->GetItemState(SID_CHARMAP, false, &pItem);
 
     OUString sSym;
     OUString sFontName;
@@ -777,7 +777,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     pOutliner->SetUpdateLayout(true);
     pOLV->ShowCursor();
 
-    rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), sSym ) );
+    rReq.AppendItem( SfxStringItem( SID_CHARMAP, sSym ) );
     if(!aFont.GetFamilyName().isEmpty())
         rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aFont.GetFamilyName() ) );
     rReq.Done();

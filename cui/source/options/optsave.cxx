@@ -239,55 +239,54 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 
     if ( m_xDocInfoCB->get_state_changed_from_saved() )
     {
-        rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_DOCINFO ),
+        rSet->Put( SfxBoolItem( SID_ATTR_DOCINFO,
                                m_xDocInfoCB->get_active() ) );
         bModified = true;
     }
 
     if ( m_xBackupCB->get_sensitive() && m_xBackupCB->get_state_changed_from_saved() )
     {
-        rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_BACKUP ),
-                               m_xBackupCB->get_active() ) );
+        rSet->Put( SfxBoolItem( SID_ATTR_BACKUP, m_xBackupCB->get_active() ) );
         bModified = true;
     }
 
     if ( m_xAutoSaveCB->get_state_changed_from_saved() )
     {
-        rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_AUTOSAVE ),
+        rSet->Put( SfxBoolItem( SID_ATTR_AUTOSAVE,
                                m_xAutoSaveCB->get_active() ) );
         bModified = true;
     }
     if ( m_xWarnAlienFormatCB->get_state_changed_from_saved() )
     {
-        rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_WARNALIENFORMAT ),
+        rSet->Put( SfxBoolItem( SID_ATTR_WARNALIENFORMAT,
                                m_xWarnAlienFormatCB->get_active() ) );
         bModified = true;
     }
 
     if ( m_xAutoSaveEdit->get_value_changed_from_saved() )
     {
-        rSet->Put( SfxUInt16Item( GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
+        rSet->Put( SfxUInt16Item( SID_ATTR_AUTOSAVEMINUTE,
                                  static_cast<sal_uInt16>(m_xAutoSaveEdit->get_value()) ) );
         bModified = true;
     }
 
     if ( m_xUserAutoSaveCB->get_state_changed_from_saved() )
     {
-        rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_USERAUTOSAVE ),
+        rSet->Put( SfxBoolItem( SID_ATTR_USERAUTOSAVE,
                                m_xUserAutoSaveCB->get_active() ) );
         bModified = true;
     }
     // save relatively
     if ( m_xRelativeFsysCB->get_state_changed_from_saved() )
     {
-        rSet->Put( SfxBoolItem( GetWhich( SID_SAVEREL_FSYS ),
+        rSet->Put( SfxBoolItem( SID_SAVEREL_FSYS,
                                m_xRelativeFsysCB->get_active() ) );
         bModified = true;
     }
 
     if ( m_xRelativeInetCB->get_state_changed_from_saved() )
     {
-        rSet->Put( SfxBoolItem( GetWhich( SID_SAVEREL_INET ),
+        rSet->Put( SfxBoolItem( SID_SAVEREL_INET,
                                m_xRelativeInetCB->get_active() ) );
         bModified = true;
     }
