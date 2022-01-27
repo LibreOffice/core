@@ -1815,7 +1815,7 @@ VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent)
     : VclBin(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL | WB_TABSTOP)
     , m_bUserManagedScrolling(false)
     , m_eDrawFrameStyle(DrawFrameStyle::NONE)
-    , m_eDrawFrameFlags(DrawFrameFlags::NONE)
+    , m_eDrawFrameFlags(DrawFrameFlags::WindowBorder)
     , m_pVScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_VERT))
     , m_pHScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_HORZ))
     , m_aScrollBarBox(VclPtr<ScrollBarBox>::Create(this, WB_HIDE))
@@ -2066,7 +2066,9 @@ bool VclScrolledWindow::set_property(const OString &rKey, const OUString &rValue
         }
         else if (rKey == "name")
         {
-            m_eDrawFrameFlags = rValue == "monoborder" ? DrawFrameFlags::Mono : DrawFrameFlags::NONE;
+            m_eDrawFrameFlags = DrawFrameFlags::WindowBorder;
+            if (rValue == "monoborder")
+                m_eDrawFrameFlags |= DrawFrameFlags::Mono;
         }
 
         auto nBorderWidth = CalcBorderWidth();
