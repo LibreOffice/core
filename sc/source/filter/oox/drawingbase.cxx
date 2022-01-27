@@ -280,8 +280,8 @@ EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
         case CellAnchorType::Pixel:
         {
             const UnitConverter& rUnitConv = getUnitConverter();
-            aEmuPoint.X += static_cast< sal_Int64 >( rUnitConv.scaleValue( static_cast< double >( rModel.mnColOffset ), Unit::ScreenX, Unit::Emu ) );
-            aEmuPoint.Y += static_cast< sal_Int64 >( rUnitConv.scaleValue( static_cast< double >( rModel.mnRowOffset ), Unit::ScreenY, Unit::Emu ) );
+            aEmuPoint.X += std::round( rUnitConv.scaleValue( rModel.mnColOffset, Unit::ScreenX, Unit::Emu ) );
+            aEmuPoint.Y += std::round( rUnitConv.scaleValue( rModel.mnRowOffset, Unit::ScreenY, Unit::Emu ) );
         }
         break;
     }
