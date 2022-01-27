@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4e398fc_d0272e87",
+        "filename": "sc/source/filter/excel/xlroot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-27T13:06:32Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this only be done if eTextEnc \u003d\u003d RTL_TEXTENCODING_DONTKNOW or some other condition?\nAs is, it overrides any encoding if just the UI is zh-TW even if the file is in a different encoding, which would be wrong in many cases.",
+      "revId": "c205a7703ad6e4a40279cfdb69592216e07ba5e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
