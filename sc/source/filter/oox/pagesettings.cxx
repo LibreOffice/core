@@ -961,7 +961,6 @@ void PageSettingsConverter::writePageSettingsProperties(
     convertHeaderFooterData( rPropSet, maFooterData, rModel.maOddFooter, rModel.maEvenFooter, rModel.maFirstFooter, rModel.mbUseEvenHF, rModel.mbUseFirstHF, rModel.mfBottomMargin, rModel.mfFooterMargin );
 
     // write all properties to property set
-    const UnitConverter& rUnitConv = getUnitConverter();
     PropertyMap aPropMap;
     aPropMap.setProperty( PROP_IsLandscape, bLandscape);
     aPropMap.setProperty( PROP_FirstPageNumber, getLimitedValue< sal_Int16, sal_Int32 >( rModel.mbUseFirstPage ? rModel.mnFirstPage : 0, 0, 9999 ));
@@ -971,12 +970,12 @@ void PageSettingsConverter::writePageSettingsProperties(
     aPropMap.setProperty( PROP_CenterVertically, rModel.mbVerCenter);
     aPropMap.setProperty( PROP_PrintGrid, (!bChartSheet && rModel.mbPrintGrid));     // no gridlines in chart sheets
     aPropMap.setProperty( PROP_PrintHeaders, (!bChartSheet && rModel.mbPrintHeadings)); // no column/row headings in chart sheets
-    aPropMap.setProperty( PROP_LeftMargin, rUnitConv.scaleToMm100( rModel.mfLeftMargin, Unit::Inch ));
-    aPropMap.setProperty( PROP_RightMargin, rUnitConv.scaleToMm100( rModel.mfRightMargin, Unit::Inch ));
+    aPropMap.setProperty<sal_Int32>( PROP_LeftMargin, std::round(o3tl::convert( rModel.mfLeftMargin, o3tl::Length::in, o3tl::Length::mm100 )));
+    aPropMap.setProperty<sal_Int32>( PROP_RightMargin, std::round(o3tl::convert( rModel.mfRightMargin, o3tl::Length::in, o3tl::Length::mm100 )));
     // #i23296# In Calc, "TopMargin" property is distance to top of header if enabled
-    aPropMap.setProperty( PROP_TopMargin, rUnitConv.scaleToMm100( maHeaderData.mbHasContent ? rModel.mfHeaderMargin : rModel.mfTopMargin, Unit::Inch ));
+    aPropMap.setProperty<sal_Int32>( PROP_TopMargin, std::round(o3tl::convert( maHeaderData.mbHasContent ? rModel.mfHeaderMargin : rModel.mfTopMargin, o3tl::Length::in, o3tl::Length::mm100 )));
     // #i23296# In Calc, "BottomMargin" property is distance to bottom of footer if enabled
-    aPropMap.setProperty( PROP_BottomMargin, rUnitConv.scaleToMm100( maFooterData.mbHasContent ? rModel.mfFooterMargin : rModel.mfBottomMargin, Unit::Inch ));
+    aPropMap.setProperty<sal_Int32>( PROP_BottomMargin, std::round(o3tl::convert( maFooterData.mbHasContent ? rModel.mfFooterMargin : rModel.mfBottomMargin, o3tl::Length::in, o3tl::Length::mm100 )));
     aPropMap.setProperty( PROP_HeaderIsOn, maHeaderData.mbHasContent);
     aPropMap.setProperty( PROP_HeaderIsShared, maHeaderData.mbShareOddEven);
     aPropMap.setProperty( PROP_FirstPageHeaderIsShared, maHeaderData.mbShareFirst);
@@ -1028,7 +1027,7 @@ void PageSettingsConverter::convertHeaderFooterData(
     /*  Calc contains distance between bottom of header and top of page
         body in "HeaderBodyDistance" property, and distance between bottom
         of page body and top of footer in "FooterBodyDistance" property */
-    orHFData.mnBodyDist = getUnitConverter().scaleToMm100( fPageMargin - fContentMargin, Unit::Inch ) - orHFData.mnHeight;
+    orHFData.mnBodyDist = std::round(o3tl::convert( fPageMargin - fContentMargin, o3tl::Length::in, o3tl::Length::mm100 )) - orHFData.mnHeight;
     /*  #i23296# Distance less than 0 means, header or footer overlays page
         body. As this is not possible in Calc, set fixed header or footer
         height (crop header/footer) to get correct top position of page body. */
@@ -1054,7 +1053,7 @@ sal_Int32 PageSettingsConverter::writeHeaderFooter(
         {
             double fTotalHeight = mxHFParser->parse( xHFContent, rContent );
             rPropSet.setProperty( nPropId, xHFContent );
-            nHeight = getUnitConverter().scaleToMm100( fTotalHeight, Unit::Point );
+            nHeight = std::round(o3tl::convert(fTotalHeight, o3tl::Length::pt, o3tl::Length::mm100));
         }
     }
     return nHeight;
