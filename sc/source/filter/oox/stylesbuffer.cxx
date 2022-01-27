@@ -1187,7 +1187,7 @@ void Alignment::finalizeImport()
     // Note: indents are stored in twips
     sal_Int32 nIndent = rUnitConverter.scaleValue( 3.0 * maModel.mnIndent, Unit::Space, Unit::Twip);
     if( (0 <= nIndent) && (nIndent <= SAL_MAX_INT16) )
-        maApiData.mnIndent = static_cast< sal_Int16 >( nIndent );
+        maApiData.mnIndent = static_cast< sal_Int16 >( nIndent );;
 
     // complex text direction
     switch( maModel.mnTextDir )

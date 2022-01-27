@@ -91,14 +91,12 @@ UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
 {
     // initialize constant and default coefficients
     const DeviceInfo& rDeviceInfo = getBaseFilter().getGraphicHelper().getDeviceInfo();
-    maCoeffs[Unit::Inch] = o3tl::convert(1.0, o3tl::Length::in, o3tl::Length::mm100);
-    maCoeffs[Unit::Point] = o3tl::convert(1.0, o3tl::Length::pt, o3tl::Length::mm100);
-    maCoeffs[Unit::Twip] = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100);
-    maCoeffs[Unit::Emu] = o3tl::convert(1.0, o3tl::Length::emu, o3tl::Length::mm100);
-    maCoeffs[ Unit::ScreenX ] = (rDeviceInfo.PixelPerMeterX > 0) ? (100000.0 / rDeviceInfo.PixelPerMeterX) : 50.0;
-    maCoeffs[ Unit::ScreenY ] = (rDeviceInfo.PixelPerMeterY > 0) ? (100000.0 / rDeviceInfo.PixelPerMeterY) : 50.0;
-    maCoeffs[ Unit::Digit ]   = 200.0;                // default: 1 digit = 2 mm
-    maCoeffs[ Unit::Space ]   = 100.0;                // default  1 space = 1 mm
+    maCoeffs[Unit::Twip] = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::emu);
+    maCoeffs[Unit::Emu] = 1;
+    maCoeffs[Unit::ScreenX] = o3tl::convert((rDeviceInfo.PixelPerMeterX > 0) ? (1000.0 / rDeviceInfo.PixelPerMeterX) : 0.5, o3tl::Length::mm, o3tl::Length::emu);
+    maCoeffs[Unit::ScreenY] = o3tl::convert((rDeviceInfo.PixelPerMeterY > 0) ? (1000.0 / rDeviceInfo.PixelPerMeterY) : 0.5, o3tl::Length::mm, o3tl::Length::emu);
+    maCoeffs[Unit::Digit]   = o3tl::convert(2.0, o3tl::Length::mm, o3tl::Length::emu); // default: 1 digit = 2 mm
+    maCoeffs[Unit::Space]   = o3tl::convert(1.0, o3tl::Length::mm, o3tl::Length::emu); // default  1 space = 1 mm
 
     // error code maps
     addErrorCode( BIFF_ERR_NULL,  "#NULL!" );
@@ -131,14 +129,13 @@ void UnitConverter::finalizeImport()
     // get maximum width of all digits
     sal_Int64 nDigitWidth = 0;
     for( sal_Unicode cChar = '0'; cChar <= '9'; ++cChar )
-        nDigitWidth
-            = ::std::max(nDigitWidth, o3tl::convert(xFont->getCharWidth(cChar), o3tl::Length::twip,
-                                                    o3tl::Length::mm100));
+        nDigitWidth = ::std::max(nDigitWidth, o3tl::convert(xFont->getCharWidth(cChar),
+                                                            o3tl::Length::twip, o3tl::Length::emu));
     if( nDigitWidth > 0 )
         maCoeffs[ Unit::Digit ] = nDigitWidth;
     // get width of space character
-    sal_Int32 nSpaceWidth
-        = o3tl::convert(xFont->getCharWidth(' '), o3tl::Length::twip, o3tl::Length::mm100);
+    sal_Int64 nSpaceWidth
+        = o3tl::convert(xFont->getCharWidth(' '), o3tl::Length::twip, o3tl::Length::emu);
     if( nSpaceWidth > 0 )
         maCoeffs[ Unit::Space ] = nSpaceWidth;
 }
@@ -154,16 +151,6 @@ void UnitConverter::finalizeNullDate( const util::Date& rNullDate )
 double UnitConverter::scaleValue( double fValue, Unit eFromUnit, Unit eToUnit ) const
 {
     return (eFromUnit == eToUnit) ? fValue : (fValue * getCoefficient( eFromUnit ) / getCoefficient( eToUnit ));
-}
-
-sal_Int32 UnitConverter::scaleToMm100( double fValue, Unit eUnit ) const
-{
-    return static_cast< sal_Int32 >( fValue * getCoefficient( eUnit ) + 0.5 );
-}
-
-double UnitConverter::scaleFromMm100( sal_Int32 nMm100, Unit eUnit ) const
-{
-    return static_cast< double >( nMm100 ) / getCoefficient( eUnit );
 }
 
 double UnitConverter::calcSerialFromDateTime( const util::DateTime& rDateTime ) const
