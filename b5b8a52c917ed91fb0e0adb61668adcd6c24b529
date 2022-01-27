@@ -34,6 +34,24 @@
       "parentUuid": "b05ec39e_51f97027",
       "revId": "b5b8a52c917ed91fb0e0adb61668adcd6c24b529",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd2aa97d_1ce8d816",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-27T08:46:51Z",
+      "side": 1,
+      "message": "Also, the given warnings were only emitted when building with --enable-optimized.  Unfortunately, GCC is notorious for producing increasingly hard-to-comprehend warnings at increasing -O levels (with what at least feels like increasing rates of false positives).  If I ever find the time and energy, I\u0027ll try to generate a stripped-down reproducer and present it to the GCC folks.",
+      "parentUuid": "8b78707c_b30fcce1",
+      "revId": "b5b8a52c917ed91fb0e0adb61668adcd6c24b529",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
