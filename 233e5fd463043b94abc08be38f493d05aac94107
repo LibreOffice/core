@@ -33,6 +33,23 @@
       "message": "Hi Julien; if you wrote the code there yourself - and/or it was written by you and others listed in the Developers page who have assignments - then sure, it\u0027s best practice to use the smaller header (easier to read too \u003d) Thanks for the cleanup. If it is/was based on code that came from AOO - then we need the longer header.",
       "revId": "233e5fd463043b94abc08be38f493d05aac94107",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84c6e8cc_5b9a1234",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-27T13:05:01Z",
+      "side": 1,
+      "message": "Thank you Michael for your feedback.\nSince views come from Hsqldb part, I suppose the previous license which includes ALv2 is better.\nLet\u0027s abandon this one then.",
+      "revId": "233e5fd463043b94abc08be38f493d05aac94107",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
