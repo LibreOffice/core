@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bc66c362_51043e09",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-27T09:18:04Z",
+      "side": 1,
+      "message": "Haha geez... GraphicMimeTypeHelper is also used for converting extension to mime-type or around, which is used somewhere in ODF export.\n\nAlso in MultiImageImportHelper defines the priorities when you have multiple images available, so you have to make sure here that webp has higher priority than the replacement.",
+      "parentUuid": "1dda582c_83fafd30",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 57
+      },
+      "revId": "1f03382f172d5417aa25e9ecc74122bef7a6f6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7105e6cc_a1525edc",
         "filename": "vcl/source/filter/webp/writer.cxx",
         "patchSetId": 7
