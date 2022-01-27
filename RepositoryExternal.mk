@@ -2979,7 +2979,7 @@ endef # gb_LinkTarget__use_postgresql
 
 endif # !SYSTEM_POSTGRESQL
 
-ifeq ($(ENABLE_KF5),TRUE)
+ifneq (,$(filter TRUE,$(ENABLE_KF5)$(ENABLE_GTK3_KDE5)))
 
 define gb_LinkTarget__use_kf5
 $(call gb_LinkTarget_set_include,$(1),\
@@ -3007,7 +3007,7 @@ endif # ENABLE_KF5
 
 
 
-ifeq ($(ENABLE_QT5),TRUE)
+ifneq (,$(filter TRUE,$(ENABLE_QT5)$(ENABLE_GTK3_KDE5)))
 
 define gb_LinkTarget__use_qt5
 $(call gb_LinkTarget_set_include,$(1),\
