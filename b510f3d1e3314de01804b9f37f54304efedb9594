@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac705c0b_84a06e7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-27T06:30:41Z",
+      "side": 1,
+      "message": "Note that the interactive/GUI testing follows a different code path - there is a follow-up patch for that. But with both of these patches in place, the unit test can be repeatedly round-tripped now.",
+      "revId": "b510f3d1e3314de01804b9f37f54304efedb9594",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
