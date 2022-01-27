@@ -6676,6 +6676,11 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value xml:lang="en-US">Character Font Effects...</value>
         </prop>
       </node>
+      <node oor:name=".uno:FontPositionDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Character Font Position...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:FormatMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">F~ormat</value>
