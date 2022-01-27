@@ -7,28 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
-#include <string_view>
 
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-#include <com/sun/star/style/CaseMap.hpp>
-#include <vcl/errcode.hxx>
-#include <tools/gen.hxx>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
 #include <shellio.hxx>
 #include <expfld.hxx>
 #include <drawdoc.hxx>
-#include <docary.hxx>
 #include <redline.hxx>
-#include <section.hxx>
 #include <fmtclds.hxx>
 #include <dcontact.hxx>
-#include <textboxhelper.hxx>
 #include <view.hxx>
 #include <hhcwrp.hxx>
 #include <swacorr.hxx>
@@ -37,13 +28,8 @@
 #include <charatr.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <unotools/streamwrap.hxx>
-#include <unocrsr.hxx>
 #include <unocrsrhelper.hxx>
 #include <unotbl.hxx>
-#include <IMark.hxx>
-#include <IDocumentMarkAccess.hxx>
-#include <IDocumentSettingAccess.hxx>
-#include <pagedesc.hxx>
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
@@ -52,24 +38,11 @@
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
-#include <svl/itemiter.hxx>
 #include <svx/svxids.hrc>
-#include <unotools/localfilehelper.hxx>
-#include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/opaqitem.hxx>
-#include <editeng/protitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <i18nutil/transliteration.hxx>
 #include <i18nutil/searchopt.hxx>
-#include <reffld.hxx>
-#include <dbfld.hxx>
-#include <txatbase.hxx>
 #include <txtftn.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -80,16 +53,12 @@
 #include <textsh.hxx>
 #include <frmatr.hxx>
 #include <frmmgr.hxx>
-#include <tblafmt.hxx>
 
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
-#include <com/sun/star/util/SearchAlgorithms.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -100,29 +69,17 @@
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/linguistic2/XLinguProperties.hpp>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <com/sun/star/text/XPageCursor.hpp>
-#include <o3tl/cppunittraitshelper.hxx>
 #include <osl/file.hxx>
-#include <osl/thread.hxx>
-#include <paratr.hxx>
 #include <drawfont.hxx>
 #include <txtfrm.hxx>
 #include <txttypes.hxx>
 #include <SwPortionHandler.hxx>
-#include <hyp.hxx>
-#include <swdtflvr.hxx>
-#include <editeng/svxenum.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <sfx2/classificationhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/configurationhelper.hxx>
-#include <editeng/unolingu.hxx>
 #include <vcl/scheduler.hxx>
 #include <config_features.h>
 #include <config_fonts.h>
@@ -132,10 +89,7 @@
 #include <test/htmltesttools.hxx>
 #include <fmthdft.hxx>
 #include <iodetect.hxx>
-#include <wrthtml.hxx>
-#include <dbmgr.hxx>
 #include <frameformats.hxx>
-#include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rootfrm.hxx>
