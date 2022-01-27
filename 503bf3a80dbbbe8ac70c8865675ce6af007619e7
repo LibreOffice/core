@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "606989db_5b9a2f64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-27T13:59:00Z",
+      "side": 1,
+      "message": "Hi Caolán,\nThe document seems too big in size. if you remove the folder \u0027media\u0027 then it\u0027s 25 kbs and the assert is still reproducible",
+      "revId": "503bf3a80dbbbe8ac70c8865675ce6af007619e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
