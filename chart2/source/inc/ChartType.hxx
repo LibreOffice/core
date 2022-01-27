@@ -35,6 +35,7 @@
 
 namespace chart
 {
+class ModifyEventForwarder;
 
 namespace impl
 {
@@ -119,8 +120,7 @@ protected:
      DECLARE_XTYPEPROVIDER()
 
 protected:
-    css::uno::Reference< css::util::XModifyListener >
-        const m_xModifyEventForwarder;
+    rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 
 private:
     void impl_addDataSeriesWithoutNotification(
