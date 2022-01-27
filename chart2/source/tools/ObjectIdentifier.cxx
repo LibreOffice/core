@@ -129,7 +129,7 @@ OUString lcl_getTitleParentParticle( TitleHelper::eTitleType aTitleType )
     return aRet;
 }
 
-Reference<XChartType> lcl_getFirstStockChartType( const rtl::Reference<::chart::ChartModel>& xChartModel )
+rtl::Reference<ChartType> lcl_getFirstStockChartType( const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     if(!xDiagram.is())
@@ -141,11 +141,8 @@ Reference<XChartType> lcl_getFirstStockChartType( const rtl::Reference<::chart::
     for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysList )
     {
         //iterate through all chart types in the current coordinate system
-        const uno::Sequence< Reference< XChartType > > aChartTypeList( coords->getChartTypes() );
-        for( Reference< XChartType > const & xChartType : aChartTypeList )
+        for( rtl::Reference< ChartType > const & xChartType : coords->getChartTypes2() )
         {
-            if(!xChartType.is())
-                continue;
             OUString aChartType = xChartType->getChartType();
             if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
                 return xChartType;
@@ -1183,18 +1180,16 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     break;
             case OBJECTTYPE_DATA_STOCK_LOSS:
                     {
-                        Reference<XChartType> xChartType( lcl_getFirstStockChartType( xChartModel ) );
-                        Reference< beans::XPropertySet > xChartTypeProps( xChartType, uno::UNO_QUERY );
-                        if(xChartTypeProps.is())
-                            xChartTypeProps->getPropertyValue( "BlackDay" ) >>= xObjectProperties;
+                        rtl::Reference<ChartType> xChartType( lcl_getFirstStockChartType( xChartModel ) );
+                        if(xChartType.is())
+                            xChartType->getPropertyValue( "BlackDay" ) >>= xObjectProperties;
                     }
                     break;
             case OBJECTTYPE_DATA_STOCK_GAIN:
                     {
-                        Reference<XChartType> xChartType( lcl_getFirstStockChartType( xChartModel ) );
-                        Reference< beans::XPropertySet > xChartTypeProps( xChartType, uno::UNO_QUERY );
-                        if(xChartTypeProps.is())
-                            xChartTypeProps->getPropertyValue( "WhiteDay" ) >>= xObjectProperties;
+                        rtl::Reference<ChartType> xChartType( lcl_getFirstStockChartType( xChartModel ) );
+                        if(xChartType.is())
+                            xChartType->getPropertyValue( "WhiteDay" ) >>= xObjectProperties;
                     }
                     break;
             default: //OBJECTTYPE_UNKNOWN

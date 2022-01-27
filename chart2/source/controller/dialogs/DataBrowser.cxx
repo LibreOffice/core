@@ -1368,7 +1368,7 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit&, rEdit, voi
     if( !xSource.is())
         return;
 
-    Reference< chart2::XChartType > xChartType(
+    rtl::Reference< ChartType > xChartType(
         m_apDataBrowserModel->getHeaderForSeries( xSeries ).m_xChartType );
     if( xChartType.is())
     {

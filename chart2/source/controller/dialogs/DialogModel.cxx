@@ -230,7 +230,7 @@ Sequence< OUString > lcl_CopyExcludingValuesFirst(
 
 Reference< XDataSeries > lcl_CreateNewSeries(
     const Reference< uno::XComponentContext > & xContext,
-    const uno::Reference< XChartType > & xChartType,
+    const rtl::Reference< ::chart::ChartType > & xChartType,
     sal_Int32 nNewSeriesIndex,
     sal_Int32 nTotalNumberOfSeriesInCTGroup,
     const rtl::Reference< ::chart::Diagram > & xDiagram,
@@ -256,12 +256,10 @@ Reference< XDataSeries > lcl_CreateNewSeries(
         sal_Int32 nGroupIndex=0;
         if( xChartType.is())
         {
-            auto pChartType = dynamic_cast<::chart::ChartType*>(xChartType.get());
-            assert(pChartType);
             std::vector< rtl::Reference< ::chart::ChartType > > aCTs(
                 ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ));
             for( ; nGroupIndex < static_cast<sal_Int32>(aCTs.size()); ++nGroupIndex)
-                if( aCTs[nGroupIndex] == pChartType )
+                if( aCTs[nGroupIndex] == xChartType )
                     break;
             if( nGroupIndex == static_cast<sal_Int32>(aCTs.size()))
                 nGroupIndex = 0;
@@ -484,12 +482,11 @@ void addMissingRoles(DialogModel::tRolesWithRanges& rResult, const uno::Sequence
  * @param xNewSeries new data series to insert.
  */
 void addNewSeriesToContainer(
-    const Reference<XChartType>& xChartType,
+    const rtl::Reference<ChartType>& xChartType,
     const Reference<XDataSeries>& xSeries,
     const Reference<XDataSeries>& xNewSeries )
 {
-    Reference<XDataSeriesContainer> xSeriesCnt(xChartType, uno::UNO_QUERY_THROW);
-    auto aSeries = comphelper::sequenceToContainer<std::vector<Reference<XDataSeries> >>(xSeriesCnt->getDataSeries());
+    auto aSeries = comphelper::sequenceToContainer<std::vector<Reference<XDataSeries> >>(xChartType->getDataSeries());
 
     std::vector<Reference<XDataSeries> >::iterator aIt =
         std::find( aSeries.begin(), aSeries.end(), xSeries);
@@ -502,7 +499,7 @@ void addNewSeriesToContainer(
         ++aIt;
 
     aSeries.insert(aIt, xNewSeries);
-    xSeriesCnt->setDataSeries(comphelper::containerToSequence(aSeries));
+    xChartType->setDataSeries(comphelper::containerToSequence(aSeries));
 }
 
 }

@@ -33,6 +33,7 @@
 #include "ChartSeriesPanel.hxx"
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
+#include <ChartType.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
@@ -226,13 +227,12 @@ void setAttachedAxisType(const rtl::Reference<::chart::ChartModel>&
     DiagramHelper::attachSeriesToAxis(bPrimary, xDataSeries, xDiagram, comphelper::getProcessComponentContext());
 }
 
-css::uno::Reference<css::chart2::XChartType> getChartType(
+rtl::Reference<ChartType> getChartType(
         const rtl::Reference<::chart::ChartModel>& xModel)
 {
     rtl::Reference<Diagram> xDiagram = xModel->getFirstChartDiagram();
-    const std::vector< rtl::Reference< BaseCoordinateSystem > > xCooSysSequence( xDiagram->getBaseCoordinateSystems());
-    css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > xChartTypeSequence( xCooSysSequence[0]->getChartTypes() );
-    return xChartTypeSequence[0];
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & xCooSysSequence( xDiagram->getBaseCoordinateSystems());
+    return xCooSysSequence[0]->getChartTypes2()[0];
 }
 
 OUString getSeriesLabel(const rtl::Reference<::chart::ChartModel>& xModel, const OUString& rCID)
@@ -243,7 +243,7 @@ OUString getSeriesLabel(const rtl::Reference<::chart::ChartModel>& xModel, const
     if (!xSeries.is())
         return OUString();
 
-    css::uno::Reference<css::chart2::XChartType> xChartType = getChartType(xModel);
+    rtl::Reference<ChartType> xChartType = getChartType(xModel);
     return DataSeriesHelper::getDataSeriesLabel(xSeries, xChartType->getRoleOfSequenceForSeriesLabel());
 }
 
