@@ -39,6 +39,7 @@ class SvxBrushItem;
 class SvxChartColorTableItem;
 class SvxColorItem;
 class SvxColorListItem;
+class SvxColumnItem;
 class SvxDashListItem;
 class SvxGradientListItem;
 class SvxGridItem;
@@ -48,7 +49,9 @@ class SvxLineItem;
 class SvxLongLRSpaceItem;
 class SvxLongULSpaceItem;
 class SvxNumberInfoItem;
+class SvxObjectItem;
 class SvxPageItem;
+class SvxPagePosSizeItem;
 class SvxPatternListItem;
 class SvxPostItAuthorItem;
 class SvxPostItDateItem;
@@ -58,6 +61,7 @@ class SvxRulerItem;
 class SvxSetItem;
 class SvxSizeItem;
 class SvxViewLayoutItem;
+
 
 // member IDs
 
@@ -230,9 +234,9 @@ class SvxViewLayoutItem;
 
 #define SID_RULER_CHANGE_STATE                          ( SID_SVX_START + 78 )
 #define SID_RULER_NULL_OFFSET                           TypedWhichId<SfxPointItem>( SID_SVX_START + 79 )
-#define SID_RULER_BORDERS                               TypedWhichId<SvxRulerItem>( SID_SVX_START + 80 )
-#define SID_RULER_OBJECT                                TypedWhichId<SvxRulerItem>( SID_SVX_START + 81 )
-#define SID_RULER_PAGE_POS                              TypedWhichId<SvxRulerItem>( SID_SVX_START + 82 )
+#define SID_RULER_BORDERS                               TypedWhichId<SvxColumnItem>( SID_SVX_START + 80 )
+#define SID_RULER_OBJECT                                TypedWhichId<SvxObjectItem>( SID_SVX_START + 81 )
+#define SID_RULER_PAGE_POS                              TypedWhichId<SvxPagePosSizeItem>( SID_SVX_START + 82 )
 #define SID_RULER_ACT_LINE_ONLY                         TypedWhichId<SfxBoolItem>( SID_SVX_START + 83 )
 #define SID_RULER_LR_MIN_MAX                            TypedWhichId<SfxUInt32Item>( SID_SVX_START + 84 )
 #define SID_ATTR_NUMBERFORMAT_VALUE                     TypedWhichId<SfxUInt32Item>( SID_SVX_START + 85 )
