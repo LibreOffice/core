@@ -31,6 +31,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flstitem.hxx>
@@ -576,6 +577,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
     if(nEEWhich && pNewAttrs)
     {
         aNewAttr.Put(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
+    }
+    else if (nEEWhich == EE_CHAR_COLOR)
+    {
+        m_rView.GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_EFFECT);
     }
 
     tools::Rectangle aOutRect = pOLV->GetOutputArea();

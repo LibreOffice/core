@@ -636,6 +636,11 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
         aNewAttr.Put(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
     }
+    else if (nEEWhich == EE_CHAR_COLOR)
+    {
+        GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_EFFECT);
+    }
+
 
     SetAttrToMarked(aNewAttr);
 
