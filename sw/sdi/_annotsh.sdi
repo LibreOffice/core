@@ -326,6 +326,13 @@ interface _Annotation
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_CHAR_DLG_POSITION
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_ATTR_CHAR_WEIGHT // api:
     [
         ExecMethod = Exec ;
