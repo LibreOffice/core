@@ -14,10 +14,13 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
+#include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 
 class Test : public SwModelTestBase
@@ -1142,6 +1145,976 @@ DECLARE_OOXMLEXPORT_TEST(testTdf80526_word_wrap, "tdf80526_word_wrap.docx")
         return;
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xShape, "TextWordWrap"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf118521_marginsLR, "tdf118521_marginsLR.docx")
+{
+    // tdf#118521 paragraphs with direct formatting of only some of left, right, or first margins have
+    // lost the other unset margins coming from paragraph style, getting a bad margin from the default style instead
+
+    uno::Reference<beans::XPropertySet> xMyStyle(getStyles("ParagraphStyles")->getByName("MyStyle"),
+                                                 uno::UNO_QUERY);
+    // from paragraph style - this is what direct formatting should equal
+    sal_Int32 nMargin = getProperty<sal_Int32>(xMyStyle, "ParaLeftMargin");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nMargin);
+    // from direct formatting
+    CPPUNIT_ASSERT_EQUAL(nMargin, getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+
+    nMargin = getProperty<sal_Int32>(xMyStyle, "ParaRightMargin");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1900), nMargin);
+    CPPUNIT_ASSERT_EQUAL(nMargin, getProperty<sal_Int32>(getParagraph(2), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(882),
+                         getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf104797, "tdf104797.docx")
+{
+    // check moveFrom and moveTo
+    CPPUNIT_ASSERT_EQUAL(OUString("Will this sentence be duplicated?"),
+                         getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(1), 1)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 3), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Delete"),
+                         getProperty<OUString>(getRun(getParagraph(1), 3), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getRun(getParagraph(1), 3), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("This is a filler sentence. Will this sentence be duplicated ADDED STUFF?"),
+        getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(2), 1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("This is a filler sentence."),
+                         getRun(getParagraph(2), 2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(2), 3)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 3), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),
+                         getProperty<OUString>(getRun(getParagraph(2), 3), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getRun(getParagraph(2), 3), "IsStart"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), getRun(getParagraph(2), 4)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(2), 5)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 6), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),
+                         getProperty<OUString>(getRun(getParagraph(2), 6), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(2), 7)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 7), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getRun(getParagraph(2), 7), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Will this sentence be duplicated"),
+                         getRun(getParagraph(2), 8)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(" ADDED STUFF"), getRun(getParagraph(2), 11)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("?"), getRun(getParagraph(2), 14)->getString());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf145720, "tdf104797.docx")
+{
+    // check moveFromRangeStart/End and moveToRangeStart/End (to keep tracked text moving)
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (mbExported)
+    {
+        // These were 0 (missing move*FromRange* elements)
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeEnd", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeEnd", 1);
+
+        // paired names
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "name",
+                    "move471382752");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "name",
+                    "move471382752");
+
+        // mandatory authors and dates
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "author",
+                    u"Tekijä");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "author",
+                    u"Tekijä");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "date",
+                    "0-00-00T00:00:00Z");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "date",
+                    "0-00-00T00:00:00Z");
+    }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf143510, "TC-table-DnD-move.docx")
+{
+    // check moveFromRangeStart/End and moveToRangeStart/End for tracked table move by drag & drop
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (mbExported)
+    {
+        // This was 0 (missing tracked table row deletion/insertion)
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 2);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 2);
+    }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf143510_table_from_row, "TC-table-Separate-Move.docx")
+{
+    // check moveFromRangeStart/End and moveToRangeStart/End for tracked table move by drag & drop
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (mbExported)
+    {
+        // This was 0 (missing tracked table row deletion/insertion)
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[3]/w:trPr/w:del", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 1);
+    }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf143510_within_table, "TC-table-rowDND.docx")
+{
+    // check moveFromRangeStart/End and moveToRangeStart/End for tracked table row move by DnD
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (mbExported)
+    {
+        // This was 0 (missing tracked table row deletion/insertion)
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:del", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:ins", 1);
+    }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf143510_within_table2, "TC-table-rowDND-front.docx")
+{
+    // check moveFromRangeStart/End and moveToRangeStart/End for tracked table row move by DnD
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (mbExported)
+    {
+        // This was 0 (missing tracked table row deletion/insertion)
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:del", 1);
+    }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf113608_runAwayNumbering, "tdf113608_runAwayNumbering.docx")
+{
+    // check that an incorrect numbering style is not applied
+    // after removing a w:r-less paragraph
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf119188_list_margin_in_cell, "tdf119188_list_margin_in_cell.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+
+    // lists with auto margins in cells: top margin of the first paragraph is zero,
+    // but not the bottom margin of the last paragraph, also other list items have got
+    // zero margins.
+
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(0),
+        getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(0),
+        getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(0),
+        getProperty<sal_Int32>(getParagraphOfText(2, xCell->getText()), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(0),
+        getProperty<sal_Int32>(getParagraphOfText(2, xCell->getText()), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(0),
+        getProperty<sal_Int32>(getParagraphOfText(3, xCell->getText()), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(494),
+        getProperty<sal_Int32>(getParagraphOfText(3, xCell->getText()), "ParaBottomMargin"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testChart_BorderLine_Style)
+{
+    loadAndSave("Chart_BorderLine_Style.docx");
+    /* DOCX containing Chart with BorderLine Style as Dash Type should get preserved
+     * inside an XML tag <a:prstDash> with value "dash", "sysDot, "lgDot", etc.
+     */
+    xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
+    assertXPath(pXmlDoc,
+                "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:spPr/a:ln/a:prstDash",
+                "val", "sysDot");
+    assertXPath(pXmlDoc,
+                "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:spPr/a:ln/a:prstDash",
+                "val", "sysDash");
+    assertXPath(pXmlDoc,
+                "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:spPr/a:ln/a:prstDash",
+                "val", "dash");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testChart_Plot_BorderLine_Style)
+{
+    loadAndSave("Chart_Plot_BorderLine_Style.docx");
+    /* DOCX containing Chart wall (plot area) and Chart Page with BorderLine Style as Dash Type
+     * should get preserved inside an XML tag <a:prstDash> with value "dash", "sysDot, "lgDot", etc.
+     */
+    xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:ln/a:prstDash", "val",
+                "lgDashDot");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:ln/a:prstDash", "val", "sysDash");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedEmptyParagraph)
+{
+    loadAndSave("testTrackChangesDeletedEmptyParagraph.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:rPr/w:del");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTrackChangesEmptyParagraphsInADeletion)
+{
+    loadAndSave("testTrackChangesEmptyParagraphsInADeletion.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    for (int i = 1; i < 12; ++i)
+        assertXPath(pXmlDoc,
+                    "/w:document/w:body/w:p[" + OString::number(i) + "]/w:pPr/w:rPr/w:del");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf70234)
+{
+    loadAndSave("tdf70234.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // import field with tracked deletion
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r[1]/w:fldChar");
+
+    // export multiple runs of a field with tracked deletion
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r", 6);
+
+    // export w:delInstrText
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r/w:delInstrText");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf115212)
+{
+    loadAndSave("tdf115212.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // export field with tracked deletion
+    assertXPath(pXmlDoc, "//w:p[2]/w:del[1]/w:r[1]/w:fldChar");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf126243)
+{
+    loadAndSave("tdf120338.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // export change tracking rejection data for tracked paragraph style change
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:pPrChange/w:pPr/w:pStyle", "val",
+                "Heading3");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf126245)
+{
+    loadAndSave("tdf126245.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // export change tracking rejection data for tracked numbering change
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange/w:pPr/w:numPr/w:numId", "val",
+                "1");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf124491)
+{
+    loadAndSave("tdf124491.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // import format change of empty lines, FIXME: change w:r with w:pPr in export
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/*/w:rPr/w:rPrChange");
+    // empty line without format change
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/*/w:rPrChange", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/*/*/w:rPrChange", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf143911)
+{
+    loadAndSave("tdf126206.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // export format change of text portions
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:rPrChange");
+    // This was without tracked bold formatting
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:rPrChange/w:rPr/w:b");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf105485)
+{
+    loadAndSave("tdf105485.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // import change tracking of deleted comments
+    assertXPath(pXmlDoc, "//w:del/w:r/w:commentReference");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf125894)
+{
+    loadAndSave("tdf125894.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // import change tracking in frames
+    assertXPath(pXmlDoc, "//w:del", 2);
+    assertXPath(pXmlDoc, "//w:ins");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132271)
+{
+    loadAndSave("tdf132271.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // import change tracking in floating tables
+    if (!mbExported)
+    {
+        assertXPath(pXmlDoc, "//w:del", 2);
+        assertXPath(pXmlDoc, "//w:ins", 2);
+        assertXPath(pXmlDoc, "//w:moveFrom", 0);
+        assertXPath(pXmlDoc, "//w:moveTo", 0);
+    }
+    else
+    {
+        assertXPath(pXmlDoc, "//w:del", 1);
+        assertXPath(pXmlDoc, "//w:ins", 1);
+        // tracked text moving recognized during the import
+        assertXPath(pXmlDoc, "//w:moveFrom", 1);
+        assertXPath(pXmlDoc, "//w:moveTo", 1);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf136667)
+{
+    loadAndSave("tdf136667.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // import change tracking in floating tables
+    if (!mbExported)
+    {
+        assertXPath(pXmlDoc, "//w:del", 2);
+        assertXPath(pXmlDoc, "//w:ins", 4);
+        assertXPath(pXmlDoc, "//w:moveFrom", 0);
+        assertXPath(pXmlDoc, "//w:moveTo", 0);
+    }
+    else
+    {
+        assertXPath(pXmlDoc, "//w:del", 1);
+        assertXPath(pXmlDoc, "//w:ins", 3);
+        // tracked text moving recognized during the import
+        assertXPath(pXmlDoc, "//w:moveFrom", 1);
+        assertXPath(pXmlDoc, "//w:moveTo", 1);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf136850)
+{
+    loadAndSave("tdf136850.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // import change tracking in floating tables
+    assertXPath(pXmlDoc, "//w:del");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf128156)
+{
+    loadAndSave("tdf128156.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // import change tracking in frames
+    assertXPath(pXmlDoc, "//w:ins");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf125546)
+{
+    loadAndSave("tdf125546.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // compress redlines (it was 15)
+    assertXPath(pXmlDoc, "//w:rPrChange", 2);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLabelWidthAndPosition_Left_FirstLineIndent)
+{
+    loadAndSave("Hau_min_list2.fodt");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // list is LABEL_WIDTH_AND_POSITION with SvxAdjust::Left
+    // I) LTR
+    // a) all LTR cases with no number text look good in Word
+    // 1) negative first line indent on paragraph:
+    // no list width/indent: this one was 0 previously; this looks good
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "start", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "hanging", "399");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "end", "0");
+    // list width:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:ind", "start", "567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:ind", "hanging", "966");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:ind", "end", "0");
+    // list indent:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:ind", "start", "567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:ind", "hanging", "399");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:ind", "end", "0");
+    // list width + list indent:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:ind", "start", "1134");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:ind", "hanging", "966");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:ind", "end", "0");
+    // 2) positive first line indent on paragraph:
+    // no list width/indent:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:ind", "start", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:ind", "firstLine", "420");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:ind", "end", "0");
+    // list width:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:pPr/w:ind", "start", "567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:pPr/w:ind", "hanging", "147");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:pPr/w:ind", "end", "0");
+    // list indent:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", "567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "firstLine", "420");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "end", "0");
+    // list width + list indent:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:ind", "start", "1134");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:ind", "hanging", "147");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:ind", "end", "0");
+    // b) all LTR cases with number text: the indent looks good but some tabs are wrong
+    // 1) negative first line indent on paragraph:
+    // no list width/indent: this one was 0 previously; this looks good
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:ind", "start", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:ind", "hanging", "399");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:ind", "end", "0");
+    // list width:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:ind", "start", "567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:ind", "hanging", "966");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:ind", "end", "0");
+    // list indent:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:ind", "start", "567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:ind", "hanging", "399");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:ind", "end", "0");
+    // list width + list indent:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[12]/w:pPr/w:ind", "start", "1134");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[12]/w:pPr/w:ind", "hanging", "966");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[12]/w:pPr/w:ind", "end", "0");
+    // 2) positive first line indent on paragraph:
+    // no list width/indent:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:ind", "start", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:ind", "firstLine", "420");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:ind", "end", "0");
+    // list width:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[14]/w:pPr/w:ind", "start", "567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[14]/w:pPr/w:ind", "hanging", "147");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[14]/w:pPr/w:ind", "end", "0");
+    // list indent:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:ind", "start", "567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:ind", "firstLine", "420");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:ind", "end", "0");
+    // list width + list indent:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[16]/w:pPr/w:ind", "start", "1134");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[16]/w:pPr/w:ind", "hanging", "147");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[16]/w:pPr/w:ind", "end", "0");
+    // (w:p[17] is empty)
+    // I) RTL
+    // a) only RTL cases with no number text and no width/indent look good in Word
+    // 1) negative first line indent on paragraph:
+    // no list width/indent
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[18]/w:pPr/w:ind", "start", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[18]/w:pPr/w:ind", "hanging", "399");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[18]/w:pPr/w:ind", "end", "0");
+    // 2) positive first line indent on paragraph:
+    // no list width/indent:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[22]/w:pPr/w:ind", "start", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[22]/w:pPr/w:ind", "firstLine", "420");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[22]/w:pPr/w:ind", "end", "0");
+    // b) RTL cases with number text: the indent looks good but some tabs are wrong
+    // 1) negative first line indent on paragraph:
+    // no list width/indent
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[26]/w:pPr/w:ind", "start", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[26]/w:pPr/w:ind", "hanging", "399");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[26]/w:pPr/w:ind", "end", "0");
+    // 2) positive first line indent on paragraph:
+    // no list width/indent:
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[30]/w:pPr/w:ind", "start", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[30]/w:pPr/w:ind", "firstLine", "420");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[30]/w:pPr/w:ind", "end", "0");
+    // TODO: other cases
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf124604)
+{
+    loadAndSave("tdf124604.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // If the numbering comes from a base style, indentation of the base style has also priority.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", "0");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf95374)
+{
+    loadAndSave("tdf95374.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Numbering disabled by non-existent numId=0, disabling also inheritance of indentation of parent styles
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "hanging", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "start", "1136");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf108493)
+{
+    loadAndSave("tdf108493.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // set in the paragraph
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", "709");
+    // set in the numbering style (this was 0)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "hanging", "709");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf118691, "tdf118691.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    // Text "Before" stays in the first cell, not removed before the table because of
+    // bad handling of <w:cr>
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Before\nAfter"), xCell->getString());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf64264, "tdf64264.docx")
+{
+    // DOCX table rows with tblHeader setting mustn't modify the count of the
+    // repeated table header rows, when there is rows before them without tblHeader settings.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // table starts on page 1 and finished on page 2
+    // and it has got only a single repeating header line
+    assertXPath(pDump, "/root/page[2]/body/tab", 1);
+    assertXPath(pDump, "/root/page[2]/body/tab/row", 47);
+    CPPUNIT_ASSERT_EQUAL(OUString("Repeating Table Header"),
+                         parseDump("/root/page[2]/body/tab/row[1]/cell[1]/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         parseDump("/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-table-header.docx")
+{
+    // DOCX tables with more than 10 repeating header lines imported without repeating header lines
+    // as a workaround for MSO's limitation of header line repetition
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // table starts on page 1 and finished on page 2
+    // instead of showing only a part of it on page 2
+    assertXPath(pDump, "/root/page[1]/body/tab", 1);
+    assertXPath(pDump, "/root/page[1]/body/tab/row", 11);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test1"),
+                         parseDump("/root/page[2]/body/tab/row[1]/cell[1]/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Test2"),
+                         parseDump("/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf81100)
+{
+    loadAndSave("tdf81100.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // keep "repeat table header" setting of table styles
+    assertXPath(pXmlDoc, "/w:styles/w:style/w:tblStylePr/w:trPr/w:tblHeader", 4);
+
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+    // table starts on page 1 and finished on page 2
+    // and it has got only a single repeating header line
+    assertXPath(pDump, "/root/page[2]/body/tab[1]", 1);
+    assertXPath(pDump, "/root/page[2]/body/tab[1]/row", 2);
+    assertXPath(pDump, "/root/page[3]/body/tab", 1);
+    if (!mbExported) // TODO export tblHeader=false
+        assertXPath(pDump, "/root/page[3]/body/tab/row", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf88496)
+{
+    loadAndReload("tdf88496.docx");
+    // Switch off repeating header, there is no place for it.
+    // Now there are only 3 pages with complete table content
+    // instead of a 51-page long table only with header.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    // FIXME: this actually has 3 pages but SwWrtShell::SttPg() puts the cursor
+    // into the single SwTextFrame in the follow-flow-row at the top of the
+    // table but that SwTextFrame 1105 should not exist and the cursor ends up
+    // at the end of its master frame 848 instead; the problem is somewhere in
+    // SwTextFrame::FormatAdjust() which first determines nNew = 1 but then
+    // grows this frame anyway so that the follow is empty, but nothing
+    // invalidates 1105 again.
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf77417)
+{
+    loadAndReload("tdf77417.docx");
+    // MSO 2010 compatibility mode: terminating white spaces are ignored in tables.
+    // This was 3 pages with the first invisible blank page.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf130494)
+{
+    loadAndSave("tdf130494.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val",
+                "yellow");
+    // keep direct formatting of table cell paragraph with removed highlighting
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r/w:rPr/w:highlight", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf130690)
+{
+    loadAndSave("tdf130690.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val",
+                "yellow");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r[1]/w:rPr/w:highlight", 1);
+    // keep direct formatting of table cell paragraph with removed highlighting
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r[2]/w:rPr/w:highlight", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf105215)
+{
+    loadAndSave("tdf105215.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:rPr/w:rFonts", "ascii",
+                "Linux Libertine G");
+
+    // These were "Linux Libertine G"
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r/w:rPr", 5);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:rPr/w:rFonts", "ascii",
+                "Lohit Devanagari");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[2]/w:rPr/w:rFonts", "ascii",
+                "Lohit Devanagari");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[3]/w:rPr/w:rFonts", "ascii",
+                "Lohit Devanagari");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[4]/w:rPr/w:rFonts", "ascii",
+                "Lohit Devanagari");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[5]/w:rPr/w:rFonts", "ascii",
+                "Lohit Devanagari");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf135187)
+{
+    loadAndSave("tdf135187.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:pPr/w:rPr/w:b", 0);
+    // FIXME: remove duplicate
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:pPr/w:rPr/w:b", 2);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:pPr/w:rPr/w:b", 2);
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", 1);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b",
+                           "val");
+    // This was 0
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", 1);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b",
+                           "val");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", "val",
+                "false");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf121597TrackedDeletionOfMultipleParagraphs)
+{
+    loadAndSave("tdf121597.odt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // check paragraphs with removed paragraph mark
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:del");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:rPr/w:del");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:rPr/w:del");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:rPr/w:del");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:rPr/w:del");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf141660)
+{
+    loadAndSave("tdf141660.docx");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:footnoteReference", "id", "2");
+    // w:del is imported correctly with its footnote
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:del[2]/w:r/w:footnoteReference", "id", "3");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/w:footnoteReference", "id", "4");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf133643)
+{
+    loadAndSave("tdf133643.doc");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:fldChar", "fldCharType",
+                "begin");
+    assertXPath(
+        pXmlDoc,
+        "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:fldChar/w:ffData/w:ddList/w:listEntry[1]",
+        "val", "Bourgoin-Jallieu, ");
+    assertXPath(
+        pXmlDoc,
+        "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:fldChar/w:ffData/w:ddList/w:listEntry[2]",
+        "val", "Fontaine, ");
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[2]/w:instrText",
+                       " FORMDROPDOWN ");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[3]/w:fldChar", "fldCharType",
+                "separate");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[5]/w:fldChar", "fldCharType",
+                "end");
+
+    // Without the fix in place, this w:r wouldn't exist
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[6]/w:t",
+                       "le 22 fevrier 2013");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123189_tableBackground, "table-black_fill.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT,
+                         Color(ColorTransparency, getProperty<sal_uInt32>(xCell, "BackColor")));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf116084, "tdf116084.docx")
+{
+    // tracked line is not a single text portion: w:del is recognized within w:ins
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(1), 1)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("There should be a better start to this. "),
+                         getRun(getParagraph(1), 2)->getString());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf121176, "tdf121176.docx")
+{
+    // w:del is imported correctly when it is in a same size w:ins
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(1), 1)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("must"), getRun(getParagraph(1), 2)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf128913)
+{
+    loadAndSave("tdf128913.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // w:ins and w:del are imported correctly, if they contain only inline images
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:inline/a:graphic");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:inline/a:graphic");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf142700)
+{
+    loadAndSave("tdf142700.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // w:ins and w:del are imported correctly, if they contain only images anchored to character
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:anchor/a:graphic");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:anchor/a:graphic");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf142387)
+{
+    loadAndSave("tdf142387.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // w:del in w:ins is exported correctly (only w:del was exported)
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", "inserts ");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123054, "tdf123054.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("No Spacing"),
+                         getProperty<OUString>(getParagraph(20), "ParaStyleName"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD_DATABASE, "tdf67207.docx")
+{
+    // database fields use the database "database" and its table "Sheet1"
+    uno::Reference<beans::XPropertySet> xTextField
+        = getProperty<uno::Reference<beans::XPropertySet>>(getRun(getParagraph(2), 2), "TextField");
+    CPPUNIT_ASSERT(xTextField.is());
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xTextField, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XDependentTextField> xDependent(xTextField, uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.Database"));
+    OUString sValue;
+    xTextField->getPropertyValue("Content") >>= sValue;
+    CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8("<c1>"), sValue);
+
+    uno::Reference<beans::XPropertySet> xFiledMaster = xDependent->getTextFieldMaster();
+    uno::Reference<lang::XServiceInfo> xFiledMasterServiceInfo(xFiledMaster, uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(
+        xFiledMasterServiceInfo->supportsService("com.sun.star.text.fieldmaster.Database"));
+
+    // Defined properties: DataBaseName, Name, DataTableName, DataColumnName, DependentTextFields, DataCommandType, InstanceName, DataBaseURL
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("DataBaseName") >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("database"), sValue);
+    sal_Int32 nCommandType;
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("DataCommandType") >>= nCommandType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nCommandType); // css::sdb::CommandType::TABLE
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("DataTableName") >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1"), sValue);
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("DataColumnName") >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("c1"), sValue);
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("InstanceName") >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.text.fieldmaster.DataBase.database.Sheet1.c1"),
+                         sValue);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf101122_noFillForCustomShape)
+{
+    loadAndSave("tdf101122_noFillForCustomShape.odt");
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    // tdf#101122 check whether the "F" (noFill) option has been exported to docx
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/"
+                "a:graphic/a:graphicData/wps:wsp/wps:spPr/a:custGeom/a:pathLst/a:path",
+                "fill", "none");
+    assertXPathNoAttribute(
+        pXmlDoc,
+        "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+        "a:graphicData/wps:wsp/wps:spPr/a:custGeom/a:pathLst/a:path",
+        "fill");
+}
+// The (tdf124678_no_leading_paragraph.odt, tdf124678_with_leading_paragraph.odt) documents are the same,
+// except:
+// - tdf124678_no_leading_paragraph.odt doesn't contain leading empty paragraph
+//   before the first section
+//
+DECLARE_OOXMLEXPORT_TEST(testTdf124678_case1, "tdf124678_no_leading_paragraph.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", OUString(""),
+                                 parseDump("/root/page[1]/header/txt"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Second page header text", OUString("HEADER"),
+                                 parseDump("/root/page[2]/header/txt"));
+}
+
+// The (tdf124678_no_leading_paragraph.odt, tdf124678_with_leading_paragraph.odt) documents are the same,
+// except:
+// - tdf124678_no_leading_paragraph.odt doesn't contain leading empty paragraph
+//   before the first section
+//
+DECLARE_OOXMLEXPORT_TEST(testTdf124678_case2, "tdf124678_with_leading_paragraph.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", OUString(""),
+                                 parseDump("/root/page[1]/header/txt"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Second page header text", OUString("HEADER"),
+                                 parseDump("/root/page[2]/header/txt"));
+}
+
+static bool lcl_nearEqual(const sal_Int32 nNumber1, const sal_Int32 nNumber2,
+                          sal_Int32 nMaxDiff = 5)
+{
+    return std::abs(nNumber1 - nNumber2) < nMaxDiff;
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf119952_negativeMargins, "tdf119952_negativeMargins.docx")
+{
+    // With negative margins (in MS Word) one can set up header (or footer) that overlaps with the body.
+    // LibreOffice unable to display that, so when importing negative margins,
+    // the header (or footer) converted to a flyframe, anchored to the header..
+    // that can overlap with the body, and will appear like in Word.
+    // This conversion modifies the document [i.e. replacing header text with a textbox...]
+    // but its DOCX export looks the same, as the original document in Word, too.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    //Check layout positions / sizes
+    sal_Int32 nLeftHead = getXPath(pDump, "//page[1]/header/infos/bounds", "left").toInt32();
+    sal_Int32 nLeftBody = getXPath(pDump, "//page[1]/body/infos/bounds", "left").toInt32();
+    sal_Int32 nLeftFoot = getXPath(pDump, "//page[1]/footer/infos/bounds", "left").toInt32();
+    sal_Int32 nLeftHFly
+        = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds", "left").toInt32();
+    sal_Int32 nLeftFFly
+        = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds", "left").toInt32();
+
+    sal_Int32 nTopHead = getXPath(pDump, "//page[1]/header/infos/bounds", "top").toInt32();
+    sal_Int32 nTopBody = getXPath(pDump, "//page[1]/body/infos/bounds", "top").toInt32();
+    sal_Int32 nTopFoot = getXPath(pDump, "//page[1]/footer/infos/bounds", "top").toInt32();
+    sal_Int32 nTopHFly
+        = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds", "top").toInt32();
+    sal_Int32 nTopFFly
+        = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds", "top").toInt32();
+
+    sal_Int32 nHeightHead = getXPath(pDump, "//page[1]/header/infos/bounds", "height").toInt32();
+    sal_Int32 nHeightBody = getXPath(pDump, "//page[1]/body/infos/bounds", "height").toInt32();
+    sal_Int32 nHeightFoot = getXPath(pDump, "//page[1]/footer/infos/bounds", "height").toInt32();
+    sal_Int32 nHeightHFly
+        = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds", "height").toInt32();
+    sal_Int32 nHeightFFly
+        = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds", "height").toInt32();
+    sal_Int32 nHeightHFlyBound
+        = getXPath(pDump, "//page[1]/header/infos/prtBounds", "height").toInt32();
+    sal_Int32 nHeightFFlyBound
+        = getXPath(pDump, "//page[1]/footer/infos/prtBounds", "height").toInt32();
+
+    CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftBody));
+    CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftFoot));
+    CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftHFly));
+    CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftFFly));
+
+    CPPUNIT_ASSERT(lcl_nearEqual(nTopHead, 851));
+    CPPUNIT_ASSERT(lcl_nearEqual(nTopBody, 1418));
+    CPPUNIT_ASSERT(lcl_nearEqual(nTopFoot, 15875));
+    CPPUNIT_ASSERT(lcl_nearEqual(nTopHFly, 851));
+
+    // this seems to be an import bug
+    if (!mbExported)
+        CPPUNIT_ASSERT(lcl_nearEqual(nTopFFly, 14403));
+
+    CPPUNIT_ASSERT(lcl_nearEqual(nHeightHead, 567));
+    CPPUNIT_ASSERT(lcl_nearEqual(nHeightBody, 14457));
+    CPPUNIT_ASSERT(lcl_nearEqual(nHeightFoot, 680));
+    CPPUNIT_ASSERT(lcl_nearEqual(nHeightHFly, 2152));
+    CPPUNIT_ASSERT(lcl_nearEqual(nHeightFFly, 2152));
+
+    // after export these heights increase to like 567..
+    // not sure if it is an other import, or export bug... or just the result of the modified document
+    if (!mbExported)
+    {
+        CPPUNIT_ASSERT(lcl_nearEqual(nHeightHFlyBound, 57));
+        CPPUNIT_ASSERT(lcl_nearEqual(nHeightFFlyBound, 57));
+    }
+
+    //Check text of header/ footer
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("f1"),
+        getXPath(pDump, "//page[1]/header/txt/anchored/fly/txt[1]/Text", "Portion"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("                f8"),
+        getXPath(pDump, "//page[1]/header/txt/anchored/fly/txt[8]/Text", "Portion"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("                f8"),
+        getXPath(pDump, "//page[1]/footer/txt/anchored/fly/txt[1]/Text", "Portion"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("f1"),
+        getXPath(pDump, "//page[1]/footer/txt/anchored/fly/txt[8]/Text", "Portion"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("p1"),
+        getXPath(pDump, "//page[2]/header/txt/anchored/fly/txt[1]/Text", "Portion"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("p1"),
+        getXPath(pDump, "//page[2]/footer/txt/anchored/fly/txt[1]/Text", "Portion"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("  aaaa"),
+        getXPath(pDump, "//page[3]/header/txt/anchored/fly/txt[1]/Text", "Portion"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("      eeee"),
+        getXPath(pDump, "//page[3]/header/txt/anchored/fly/txt[5]/Text", "Portion"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("f1    f2      f3        f4          f5            f6            "
+                                  "  f7                f8"),
+                         parseDump("/root/page[1]/header/txt/anchored/fly"));
+    CPPUNIT_ASSERT_EQUAL(OUString("                f8              f7            f6          f5    "
+                                  "    f4      f3    f2f1"),
+                         parseDump("/root/page[1]/footer/txt/anchored/fly"));
+    CPPUNIT_ASSERT_EQUAL(OUString("p1"), parseDump("/root/page[2]/header/txt/anchored/fly"));
+    CPPUNIT_ASSERT_EQUAL(OUString("p1"), parseDump("/root/page[2]/footer/txt/anchored/fly"));
+    CPPUNIT_ASSERT_EQUAL(OUString("  aaaa   bbbb    cccc     dddd      eeee"),
+                         parseDump("/root/page[3]/header/txt/anchored/fly"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf143384_tableInFoot_negativeMargins,
+                         "tdf143384_tableInFoot_negativeMargins.docx")
+{
+    // There should be no crash during loading of the document
+    // so, let's check just how much pages we have
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
