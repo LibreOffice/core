@@ -1392,7 +1392,7 @@ void LwpDrawBitmap::Read()
             throw BadRead();
 
         N = aInfoHeader2.nPlanes * aInfoHeader2.nBitCount;
-        if (N == 24)
+        if (N >= 16)
         {
             rgbTableSize = 0;
         }
@@ -1412,7 +1412,7 @@ void LwpDrawBitmap::Read()
             throw BadRead();
 
         N = aInfoHeader2.nPlanes * aInfoHeader2.nBitCount;
-        if (N == 24)
+        if (N >= 16)
         {
             rgbTableSize = 0;
         }
