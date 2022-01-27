@@ -622,8 +622,8 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
         SfxItemSet* pSet = pDocSh->GetMedium()->GetItemSet();
         if (pSet)
         {
-            const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
-                pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+            const SfxUnoAnyItem* pItem =
+                pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
             if (pItem)
             {
                 pItem->GetValue() >>= xStatusIndicator;
@@ -724,8 +724,8 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     {
         if ( pMedDescrMedium && pMedDescrMedium->GetItemSet() )
         {
-            const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-                pMedDescrMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+            const SfxStringItem* pDocHierarchItem =
+                pMedDescrMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
             if ( pDocHierarchItem )
                 StreamPath = pDocHierarchItem->GetValue();
         }

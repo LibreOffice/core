@@ -1636,7 +1636,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
         if (nNewShearAngle>SDRMAXSHEAR) nNewShearAngle=SDRMAXSHEAR;
         if (nNewShearAngle<-SDRMAXSHEAR) nNewShearAngle=-SDRMAXSHEAR;
         if (nNewShearAngle!=nOldShearAngle) {
-            bShearVert=static_cast<const SfxBoolItem&>(rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_VERTICAL)).GetValue();
+            bShearVert = rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_VERTICAL).GetValue();
             if (bShearVert) {
                 nShearAngle=nNewShearAngle;
             } else {

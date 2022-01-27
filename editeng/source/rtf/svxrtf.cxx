@@ -929,19 +929,20 @@ void SvxRTFParser::BuildWhichTable()
     // Here are the IDs for all character attributes, which can be detected by
     // SvxParser and can be set in a SfxItemSet. The IDs are set correctly through
     // the SlotIds from POOL.
-    for (sal_uInt16 nWid : {
+    constexpr sal_uInt16 WIDS[] {
              SID_ATTR_CHAR_CASEMAP,        SID_ATTR_BRUSH_CHAR,        SID_ATTR_CHAR_COLOR,
              SID_ATTR_CHAR_CONTOUR,        SID_ATTR_CHAR_STRIKEOUT,    SID_ATTR_CHAR_ESCAPEMENT,
              SID_ATTR_CHAR_FONT,           SID_ATTR_CHAR_FONTHEIGHT,   SID_ATTR_CHAR_KERNING,
              SID_ATTR_CHAR_LANGUAGE,       SID_ATTR_CHAR_POSTURE,      SID_ATTR_CHAR_SHADOWED,
              SID_ATTR_CHAR_UNDERLINE,      SID_ATTR_CHAR_OVERLINE,     SID_ATTR_CHAR_WEIGHT,
              SID_ATTR_CHAR_WORDLINEMODE,   SID_ATTR_CHAR_AUTOKERN,     SID_ATTR_CHAR_CJK_FONT,
-             SID_ATTR_CHAR_CJK_FONTHEIGHT, SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CJK_POSTURE,
+             SID_ATTR_CHAR_CJK_FONTHEIGHT, sal_uInt16(SID_ATTR_CHAR_CJK_LANGUAGE), SID_ATTR_CHAR_CJK_POSTURE,
              SID_ATTR_CHAR_CJK_WEIGHT,     SID_ATTR_CHAR_CTL_FONT,     SID_ATTR_CHAR_CTL_FONTHEIGHT,
              SID_ATTR_CHAR_CTL_LANGUAGE,   SID_ATTR_CHAR_CTL_POSTURE,  SID_ATTR_CHAR_CTL_WEIGHT,
              SID_ATTR_CHAR_EMPHASISMARK,   SID_ATTR_CHAR_TWO_LINES,    SID_ATTR_CHAR_SCALEWIDTH,
              SID_ATTR_CHAR_ROTATED,        SID_ATTR_CHAR_RELIEF,       SID_ATTR_CHAR_HIDDEN,
-         })
+         };
+    for (sal_uInt16 nWid : WIDS)
     {
         sal_uInt16 nTrueWid = pAttrPool->GetTrueWhich(nWid, false);
         aPlainMap[nWid] = nTrueWid;
