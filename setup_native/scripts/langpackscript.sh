@@ -108,8 +108,7 @@ esac
 
 # Unpacking
 
-outdir=/var/tmp/install_$$
-mkdir $outdir
+outdir=`mktemp -d -p /var/tmp`
 
 #diskSpace=`df -k $outdir | $tail_prog -1 | awk '{if ( $4 ~ /%/) { print $3 } else { print $4 } }'`
 #if [ $diskSpace -lt $diskSpaceRequired ]; then
