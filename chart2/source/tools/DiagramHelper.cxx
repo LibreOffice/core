@@ -260,19 +260,14 @@ void DiagramHelper::setStackMode(
                 }
             }
             //iterate through all chart types in the current coordinate system
-            uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xCooSys->getChartTypes() );
-            if (!aChartTypeList.hasElements())
+            const std::vector< rtl::Reference< ChartType > > & aChartTypeList( xCooSys->getChartTypes2() );
+            if (aChartTypeList.empty())
                 continue;
 
-            uno::Reference< XChartType > xChartType( aChartTypeList[0] );
+            rtl::Reference< ChartType > xChartType( aChartTypeList[0] );
 
             //iterate through all series in this chart type
-            uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-            OSL_ASSERT( xDataSeriesContainer.is());
-            if( !xDataSeriesContainer.is() )
-                continue;
-
-            const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+            const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xChartType->getDataSeries() );
             for( uno::Reference< XDataSeries > const & dataSeries : aSeriesList )
             {
                 Reference< beans::XPropertySet > xProp( dataSeries, uno::UNO_QUERY );
@@ -614,11 +609,9 @@ std::vector< Reference< XDataSeries > >
     {
         for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
         {
-            const Sequence< Reference< XChartType > > aChartTypeSeq( coords->getChartTypes());
-            for( Reference< XChartType> const & chartType : aChartTypeSeq )
+            for( rtl::Reference< ChartType> const & chartType : coords->getChartTypes2() )
             {
-                Reference< XDataSeriesContainer > xDSCnt( chartType, uno::UNO_QUERY_THROW );
-                const Sequence< Reference< XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
+                const Sequence< Reference< XDataSeries > > aSeriesSeq( chartType->getDataSeries() );
                 aResult.insert( aResult.end(), aSeriesSeq.begin(), aSeriesSeq.end() );
             }
         }
@@ -643,13 +636,9 @@ Sequence< Sequence< Reference< XDataSeries > > >
     for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
     {
         //iterate through all chart types in the current coordinate system
-        const Sequence< Reference< XChartType > > aChartTypeList( coords->getChartTypes() );
-        for( Reference< XChartType >  const & chartType : aChartTypeList )
+        for( rtl::Reference< ChartType >  const & chartType : coords->getChartTypes2() )
         {
-            Reference< XDataSeriesContainer > xDataSeriesContainer( chartType, uno::UNO_QUERY );
-            if( !xDataSeriesContainer.is() )
-                continue;
-            aResult.push_back( xDataSeriesContainer->getDataSeries() );
+            aResult.push_back( chartType->getDataSeries() );
         }
     }
     return comphelper::containerToSequence( aResult );
@@ -833,16 +822,13 @@ Reference< data::XLabeledDataSequence >
 
 static void lcl_generateAutomaticCategoriesFromChartType(
             Sequence< OUString >& rRet,
-            const Reference< XChartType >& xChartType )
+            const rtl::Reference< ChartType >& xChartType )
 {
     if(!xChartType.is())
         return;
     OUString aMainSeq( xChartType->getRoleOfSequenceForSeriesLabel() );
-    Reference< XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY );
-    if( !xSeriesCnt.is() )
-        return;
 
-    const Sequence< Reference< XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries() );
+    const Sequence< Reference< XDataSeries > > aSeriesSeq( xChartType->getDataSeries() );
     for( Reference< XDataSeries > const & dataSeries : aSeriesSeq )
     {
         Reference< data::XDataSource > xDataSource( dataSeries, uno::UNO_QUERY );

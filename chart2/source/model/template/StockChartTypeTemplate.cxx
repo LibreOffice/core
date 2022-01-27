@@ -364,29 +364,25 @@ bool StockChartTypeTemplate::matchesTemplate(
         getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_OPEN ) >>= bHasOpenValue;
         getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE ) >>= bHasJapaneseStyle;
 
-        Reference< chart2::XChartType > xVolumeChartType;
-        Reference< chart2::XChartType > xCandleStickChartType;
-        Reference< chart2::XChartType > xLineChartType;
+        rtl::Reference< ChartType > xVolumeChartType;
+        rtl::Reference< ChartType > xCandleStickChartType;
+        rtl::Reference< ChartType > xLineChartType;
         sal_Int32 nNumberOfChartTypes = 0;
 
         for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
         {
-            const Sequence< Reference< XChartType > > aChartTypeSeq( coords->getChartTypes());
-            for( Reference< XChartType >  const & chartType : aChartTypeSeq )
+            for( rtl::Reference< ChartType >  const & chartType : coords->getChartTypes2() )
             {
-                if( chartType.is())
-                {
-                    ++nNumberOfChartTypes;
-                    if( nNumberOfChartTypes > 3 )
-                        break;
-                    OUString aCTService = chartType->getChartType();
-                    if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_COLUMN )
-                        xVolumeChartType.set( chartType );
-                    else if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
-                        xCandleStickChartType.set( chartType );
-                    else if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_LINE )
-                        xLineChartType.set( chartType );
-                }
+                ++nNumberOfChartTypes;
+                if( nNumberOfChartTypes > 3 )
+                    break;
+                OUString aCTService = chartType->getChartType();
+                if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_COLUMN )
+                    xVolumeChartType = chartType;
+                else if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
+                    xCandleStickChartType = chartType;
+                else if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_LINE )
+                    xLineChartType = chartType;
             }
             if( nNumberOfChartTypes > 3 )
                 break;
@@ -397,18 +393,14 @@ bool StockChartTypeTemplate::matchesTemplate(
             bResult = true;
 
             // check for japanese style
-            Reference< beans::XPropertySet > xCTProp( xCandleStickChartType, uno::UNO_QUERY );
-            if( xCTProp.is())
-            {
-                bool bJapaneseProp = false;
-                xCTProp->getPropertyValue( "Japanese") >>= bJapaneseProp;
-                bResult = bResult && ( bHasJapaneseStyle == bJapaneseProp );
+            bool bJapaneseProp = false;
+            xCandleStickChartType->getPropertyValue( "Japanese") >>= bJapaneseProp;
+            bResult = bResult && ( bHasJapaneseStyle == bJapaneseProp );
 
-                // in old chart japanese == showFirst
-                bool bShowFirstProp = false;
-                xCTProp->getPropertyValue( "ShowFirst") >>= bShowFirstProp;
-                bResult = bResult && ( bHasOpenValue == bShowFirstProp );
-            }
+            // in old chart japanese == showFirst
+            bool bShowFirstProp = false;
+            xCandleStickChartType->getPropertyValue( "ShowFirst") >>= bShowFirstProp;
+            bResult = bResult && ( bHasOpenValue == bShowFirstProp );
         }
     }
     catch( const uno::Exception & )
