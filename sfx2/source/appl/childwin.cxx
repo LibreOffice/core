@@ -313,7 +313,7 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
         aInfo.aSize = pDialog->get_size();
         WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
         if (pDialog->get_resizable())
-            nMask |= WindowStateMask::Width | WindowStateMask::Height;
+            nMask |= WindowStateMask::Size;
         aInfo.aWinState = pDialog->get_window_state(nMask);
     }
     else if (pWindow)
@@ -324,7 +324,7 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
         {
             WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
             if ( pWindow->GetStyle() & WB_SIZEABLE )
-                nMask |= WindowStateMask::Width | WindowStateMask::Height;
+                nMask |= WindowStateMask::Size;
             aInfo.aWinState = static_cast<SystemWindow*>(pWindow.get())->GetWindowState( nMask );
         }
         else if (DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pWindow.get()))
