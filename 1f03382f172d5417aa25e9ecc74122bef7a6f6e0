@@ -121,6 +121,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8e71789c_03277c20",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-01-27T09:50:02Z",
+      "side": 1,
+      "message": "I don\u0027t understand why this is supposed to be better than what I did. You argue with document size and doing like with other image formats, but writing an image twice will make documents larger rather than smaller, and this is not how other bitmap formats are handled, so it looks like extra work. And the only benefit I can see is a configuration option that practically nobody will care about.\n\nI also don\u0027t understand why you argue for saving .webp into documents when originally you were so against it that you didn\u0027t want to support .webp at all (https://bugs.documentfoundation.org/show_bug.cgi?id\u003d114533#c4). The primary point of this work is to support copy\u0026pasting from browsers, not making documents few bytes smaller.",
+      "parentUuid": "bc66c362_51043e09",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 57
+      },
+      "revId": "1f03382f172d5417aa25e9ecc74122bef7a6f6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7105e6cc_a1525edc",
         "filename": "vcl/source/filter/webp/writer.cxx",
         "patchSetId": 7
