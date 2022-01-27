@@ -311,7 +311,7 @@ bool ChartTypeTemplate::matchesTemplate(
         if( bResult )
         {
             std::vector< rtl::Reference< ChartType > > aFormerlyUsedChartTypes;
-            Reference<XChartType> xOldCT = getChartTypeForNewSeries(aFormerlyUsedChartTypes);
+            rtl::Reference<ChartType> xOldCT = getChartTypeForNewSeries(aFormerlyUsedChartTypes);
             if (!xOldCT.is())
                 return false;
 
@@ -322,7 +322,7 @@ bool ChartTypeTemplate::matchesTemplate(
                 // match dimension
                 bResult = bResult && (aCooSysSeq[nCooSysIdx]->getDimension() == nDimensionToMatch);
 
-                std::vector< rtl::Reference< ChartType > > aChartTypeSeq( aCooSysSeq[nCooSysIdx]->getChartTypes2());
+                const std::vector< rtl::Reference< ChartType > > & aChartTypeSeq( aCooSysSeq[nCooSysIdx]->getChartTypes2());
                 for( sal_Int32 nCTIdx=0; bResult && (nCTIdx < static_cast<sal_Int32>(aChartTypeSeq.size())); ++nCTIdx )
                 {
                     // match chart type

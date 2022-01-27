@@ -27,6 +27,7 @@
 #include <dlg_DataSource.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
+#include <ChartType.hxx>
 #include "ControllerCommandDispatch.hxx"
 #include <Diagram.hxx>
 #include <strings.hrc>
@@ -231,20 +232,17 @@ bool ChartController::TheModelRef::is() const
 
 namespace {
 
-css::uno::Reference<css::chart2::XChartType> getChartType(
-        const rtl::Reference<ChartModel>& xChartDoc)
+rtl::Reference<ChartType> getChartType(const rtl::Reference<ChartModel>& xChartDoc)
 {
     rtl::Reference<Diagram > xDiagram = xChartDoc->getFirstChartDiagram();
     if (!xDiagram.is())
-        return css::uno::Reference<css::chart2::XChartType>();
+        return nullptr;
 
-    const std::vector< rtl::Reference< BaseCoordinateSystem > > xCooSysSequence( xDiagram->getBaseCoordinateSystems());
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > & xCooSysSequence( xDiagram->getBaseCoordinateSystems());
     if (xCooSysSequence.empty())
-        return css::uno::Reference<css::chart2::XChartType>();
+        return nullptr;
 
-    Sequence< Reference< chart2::XChartType > > xChartTypeSequence( xCooSysSequence[0]->getChartTypes() );
-
-    return xChartTypeSequence[0];
+    return xCooSysSequence[0]->getChartTypes2()[0];
 }
 
 }
@@ -279,7 +277,7 @@ OUString ChartController::GetContextName()
             return "Grid";
         case OBJECTTYPE_DIAGRAM:
             {
-                css::uno::Reference<css::chart2::XChartType> xChartType = getChartType(getChartModel());
+                rtl::Reference<ChartType> xChartType = getChartType(getChartModel());
                 if (xChartType.is() && xChartType->getChartType() == "com.sun.star.chart2.PieChartType")
                     return "ChartElements";
                 break;
