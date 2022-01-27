@@ -449,6 +449,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             break;
         }
         case SID_CHAR_DLG_EFFECT:
+        case SID_CHAR_DLG_POSITION:
         case SID_CHAR_DLG:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
@@ -473,6 +474,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
                     pDlg->SetCurPageId("fonteffects");
+                }
+                if (nSlot == SID_CHAR_DLG_POSITION)
+                {
+                    pDlg->SetCurPageId("position");
                 }
                 else if (pItem)
                 {
@@ -582,6 +587,11 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
     {
         m_rView.GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_EFFECT);
     }
+    else if (nEEWhich == EE_CHAR_KERNING)
+    {
+        m_rView.GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_POSITION);
+    }
+
 
     tools::Rectangle aOutRect = pOLV->GetOutputArea();
     if (tools::Rectangle() != aOutRect && aNewAttr.Count())
