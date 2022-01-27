@@ -162,256 +162,21 @@ int CountFilesInDirectory(const OUString &rURL)
 
     return nRet;
 }
+
+void lcl_selectCharacters(SwPaM& rPaM, sal_Int32 first, sal_Int32 end)
+{
+    rPaM.GetPoint()->nContent.Assign(rPaM.GetContentNode(), first);
+    rPaM.SetMark();
+    rPaM.GetPoint()->nContent.Assign(rPaM.GetContentNode(), end);
 }
+} //namespace
 
 class SwUiWriterTest : public SwModelTestBase, public HtmlTestTools
 {
-
 public:
-    void testReplaceForward();
-    //Regression test of fdo#70143
-    //EDITING: undo search&replace corrupt text when searching backward
-    void testReplaceBackward();
-    void testRedlineFrame(char const*const file);
-    void testRedlineFrameAtCharStartOutside0();
-    void testRedlineFrameAtCharStartOutside();
-    void testRedlineFrameAtCharStartInside();
-    void testRedlineFrameAtParaStartOutside();
-    void testRedlineFrameAtParaEndInside();
-    void testRedlineFrameAtParaOneParagraph();
-    void testRedlineFrameAtPara2ndParagraph();
-    void testThreadedException();
-    void testBookmarkCopy();
-    void testFdo69893();
-    void testFdo70807();
-    void testImportRTF();
-    void testExportRTF();
-    void testDOCXAutoTextEmpty();
-    void testDOCXAutoTextMultiple();
-    void testDOTMAutoText();
-    void testDOCXAutoTextGallery();
-    void testWatermarkDOCX();
-    void testWatermarkPosition();
-    void testTdf67238();
-    void testFdo75110();
-    void testFdo75898();
-    void testFdo74981();
-    void testTdf98512();
-    void testShapeTextboxSelect();
-    void testShapeTextboxDelete();
-    void testAnchorChangeSelection();
-    void testCp1000071();
-    void testShapeTextboxVertadjust();
-    void testShapeTextboxAutosize();
-    void testFdo82191();
-    void testCommentedWord();
-    void testTextFieldGetAnchorGetTextInFooter();
-    void testChineseConversionBlank();
-    void testChineseConversionNonChineseText();
-    void testChineseConversionTraditionalToSimplified();
-    void testChineseConversionSimplifiedToTraditional();
-    void testFdo85554();
-    void testAutoCorr();
-    void testTdf83260();
-    void testTdf130274();
-    void testMergeDoc();
-    void testCreatePortions();
-    void testBookmarkUndo();
-    void testFdo85876();
-    void testCaretPositionMovingUp();
-    void testTdf93441();
-    void testTdf81226();
-    void testTdf137532();
-    void testFdo87448();
-    void testTextCursorInvalidation();
-    void testTdf68183();
-    void testCp1000115();
-    void testTdf63214();
-    void testTdf90003();
-    void testTdf51741();
-    void testDefaultsOfOutlineNumbering();
-    void testDeleteTableRedlines();
-    void testXFlatParagraph();
-    void testTdf81995();
-    void testExportToPicture();
-    void testTdf77340();
-    void testTdf79236();
-    void testTextSearch();
-    void testTdf69282();
-    void testTdf69282WithMirror();
-    void testTdf78742();
-    void testUnoParagraph();
-    void testTdf72788();
-    void testTdf60967();
-    void testSearchWithTransliterate();
-    void testTdf73660();
-    void testNewDocModifiedState();
-    void testTdf77342();
-    void testTdf63553();
-    void testTdf74230();
-    void testTdf74363();
-    void testTdf80663();
-    void testTdf57197();
-    void testTdf131990();
-    void testTdf90808();
-    void testTdf97601();
-    void testTdf75137();
-    void testTdf83798();
-    void testTdf89714();
-    void testTdf130287();
-    void testPropertyDefaults();
-    void testTableBackgroundColor();
-    void testTdf88899();
-    void testTdf90362();
-    void testUndoDelAsCharTdf107512();
-    void testUndoCharAttribute();
-    void testUndoDelAsChar();
-    void testTdf86639();
-    void testTdf90883TableBoxGetCoordinates();
-    void testEmbeddedDataSource();
-    void testUnoCursorPointer();
-    void testUnicodeNotationToggle();
-    void testTextTableCellNames();
-    void testShapeAnchorUndo();
-    void testTdf127635();
-    void testDde();
-    void testDocModState();
-    void testTdf94804();
-    void testTdf34957();
-    void testTdf89954();
-    void testTdf89720();
-    void testTdf88986();
-    void testTdf78150();
-    void testTdf138873();
-    void testTdf87922();
-    void testTdf77014();
-    void testTdf92648();
-    void testTdf103978_backgroundTextShape();
-    void testTdf117225();
-
-    CPPUNIT_TEST_SUITE(SwUiWriterTest);
-    CPPUNIT_TEST(testReplaceForward);
-    CPPUNIT_TEST(testReplaceBackward);
-    CPPUNIT_TEST(testRedlineFrameAtCharStartOutside0);
-    CPPUNIT_TEST(testRedlineFrameAtCharStartOutside);
-    CPPUNIT_TEST(testRedlineFrameAtCharStartInside);
-    CPPUNIT_TEST(testRedlineFrameAtParaStartOutside);
-    CPPUNIT_TEST(testRedlineFrameAtParaEndInside);
-    CPPUNIT_TEST(testRedlineFrameAtParaOneParagraph);
-    CPPUNIT_TEST(testRedlineFrameAtPara2ndParagraph);
-    CPPUNIT_TEST(testThreadedException);
-    CPPUNIT_TEST(testBookmarkCopy);
-    CPPUNIT_TEST(testFdo69893);
-    CPPUNIT_TEST(testFdo70807);
-    CPPUNIT_TEST(testImportRTF);
-    CPPUNIT_TEST(testExportRTF);
-    CPPUNIT_TEST(testDOCXAutoTextEmpty);
-    CPPUNIT_TEST(testDOCXAutoTextMultiple);
-    CPPUNIT_TEST(testDOTMAutoText);
-    CPPUNIT_TEST(testDOCXAutoTextGallery);
-    CPPUNIT_TEST(testWatermarkDOCX);
-    CPPUNIT_TEST(testWatermarkPosition);
-    CPPUNIT_TEST(testTdf67238);
-    CPPUNIT_TEST(testFdo75110);
-    CPPUNIT_TEST(testFdo75898);
-    CPPUNIT_TEST(testFdo74981);
-    CPPUNIT_TEST(testTdf98512);
-    CPPUNIT_TEST(testShapeTextboxSelect);
-    CPPUNIT_TEST(testShapeTextboxDelete);
-    CPPUNIT_TEST(testAnchorChangeSelection);
-    CPPUNIT_TEST(testCp1000071);
-    CPPUNIT_TEST(testShapeTextboxVertadjust);
-    CPPUNIT_TEST(testShapeTextboxAutosize);
-    CPPUNIT_TEST(testFdo82191);
-    CPPUNIT_TEST(testCommentedWord);
-    CPPUNIT_TEST(testTextFieldGetAnchorGetTextInFooter);
-    CPPUNIT_TEST(testChineseConversionBlank);
-    CPPUNIT_TEST(testChineseConversionNonChineseText);
-    CPPUNIT_TEST(testChineseConversionTraditionalToSimplified);
-    CPPUNIT_TEST(testChineseConversionSimplifiedToTraditional);
-    CPPUNIT_TEST(testFdo85554);
-    CPPUNIT_TEST(testAutoCorr);
-    CPPUNIT_TEST(testTdf83260);
-    CPPUNIT_TEST(testTdf130274);
-    CPPUNIT_TEST(testMergeDoc);
-    CPPUNIT_TEST(testCreatePortions);
-    CPPUNIT_TEST(testBookmarkUndo);
-    CPPUNIT_TEST(testFdo85876);
-    CPPUNIT_TEST(testCaretPositionMovingUp);
-    CPPUNIT_TEST(testTdf93441);
-    CPPUNIT_TEST(testTdf81226);
-    CPPUNIT_TEST(testTdf137532);
-    CPPUNIT_TEST(testFdo87448);
-    CPPUNIT_TEST(testTextCursorInvalidation);
-    CPPUNIT_TEST(testTdf68183);
-    CPPUNIT_TEST(testCp1000115);
-    CPPUNIT_TEST(testTdf63214);
-    CPPUNIT_TEST(testTdf90003);
-    CPPUNIT_TEST(testTdf51741);
-    CPPUNIT_TEST(testDefaultsOfOutlineNumbering);
-    CPPUNIT_TEST(testDeleteTableRedlines);
-    CPPUNIT_TEST(testXFlatParagraph);
-    CPPUNIT_TEST(testTdf81995);
-    CPPUNIT_TEST(testExportToPicture);
-    CPPUNIT_TEST(testTdf77340);
-    CPPUNIT_TEST(testTdf79236);
-    CPPUNIT_TEST(testTextSearch);
-    CPPUNIT_TEST(testTdf69282);
-    CPPUNIT_TEST(testTdf69282WithMirror);
-    CPPUNIT_TEST(testTdf78742);
-    CPPUNIT_TEST(testUnoParagraph);
-    CPPUNIT_TEST(testTdf72788);
-    CPPUNIT_TEST(testTdf60967);
-    CPPUNIT_TEST(testSearchWithTransliterate);
-    CPPUNIT_TEST(testTdf73660);
-    CPPUNIT_TEST(testNewDocModifiedState);
-    CPPUNIT_TEST(testTdf77342);
-    CPPUNIT_TEST(testTdf63553);
-    CPPUNIT_TEST(testTdf74230);
-    CPPUNIT_TEST(testTdf74363);
-    CPPUNIT_TEST(testTdf80663);
-    CPPUNIT_TEST(testTdf57197);
-    CPPUNIT_TEST(testTdf131990);
-    CPPUNIT_TEST(testTdf90808);
-    CPPUNIT_TEST(testTdf97601);
-    CPPUNIT_TEST(testTdf75137);
-    CPPUNIT_TEST(testTdf83798);
-    CPPUNIT_TEST(testTdf89714);
-    CPPUNIT_TEST(testTdf130287);
-    CPPUNIT_TEST(testPropertyDefaults);
-    CPPUNIT_TEST(testTableBackgroundColor);
-    CPPUNIT_TEST(testTdf88899);
-    CPPUNIT_TEST(testTdf90362);
-    CPPUNIT_TEST(testUndoDelAsCharTdf107512);
-    CPPUNIT_TEST(testUndoCharAttribute);
-    CPPUNIT_TEST(testUndoDelAsChar);
-    CPPUNIT_TEST(testTdf86639);
-    CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
-    CPPUNIT_TEST(testEmbeddedDataSource);
-    CPPUNIT_TEST(testUnoCursorPointer);
-    CPPUNIT_TEST(testUnicodeNotationToggle);
-    CPPUNIT_TEST(testTextTableCellNames);
-    CPPUNIT_TEST(testShapeAnchorUndo);
-    CPPUNIT_TEST(testTdf127635);
-    CPPUNIT_TEST(testDde);
-    CPPUNIT_TEST(testDocModState);
-    CPPUNIT_TEST(testTdf94804);
-    CPPUNIT_TEST(testTdf34957);
-    CPPUNIT_TEST(testTdf89954);
-    CPPUNIT_TEST(testTdf89720);
-    CPPUNIT_TEST(testTdf88986);
-    CPPUNIT_TEST(testTdf78150);
-    CPPUNIT_TEST(testTdf138873);
-    CPPUNIT_TEST(testTdf87922);
-    CPPUNIT_TEST(testTdf77014);
-    CPPUNIT_TEST(testTdf92648);
-    CPPUNIT_TEST(testTdf103978_backgroundTextShape);
-    CPPUNIT_TEST(testTdf117225);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
     std::unique_ptr<SwTextBlocks> readDOCXAutotext(
         std::u16string_view sFileName, bool bEmpty = false);
+    void testRedlineFrame(char const*const file);
 };
 
 std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(std::u16string_view sFileName, bool bEmpty)
@@ -434,40 +199,6 @@ std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(std::u16string_vi
     CPPUNIT_ASSERT_EQUAL(!bEmpty, aReader.ReadGlossaries(*pDOCXReader, *pGlossary, false));
 
     return pGlossary;
-}
-
-//Replacement tests
-
-static void lcl_selectCharacters(SwPaM& rPaM, sal_Int32 first, sal_Int32 end)
-{
-    rPaM.GetPoint()->nContent.Assign(rPaM.GetContentNode(), first);
-    rPaM.SetMark();
-    rPaM.GetPoint()->nContent.Assign(rPaM.GetContentNode(), end);
-}
-
-constexpr OUStringLiteral ORIGINAL_REPLACE_CONTENT(u"toto titi tutu");
-constexpr OUStringLiteral EXPECTED_REPLACE_CONTENT(u"toto toto tutu");
-
-void SwUiWriterTest::testReplaceForward()
-{
-    SwDoc* pDoc = createSwDoc();
-
-    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-
-    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
-    SwPaM aPaM(aIdx);
-
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, ORIGINAL_REPLACE_CONTENT);
-
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
-    lcl_selectCharacters(aPaM, 5, 9);
-    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "toto", false);
-
-    CPPUNIT_ASSERT_EQUAL(OUString(EXPECTED_REPLACE_CONTENT), pTextNode->GetText());
-
-    rUndoManager.Undo();
-
-    CPPUNIT_ASSERT_EQUAL(OUString(ORIGINAL_REPLACE_CONTENT), pTextNode->GetText());
 }
 
 void SwUiWriterTest::testRedlineFrame(char const*const file)
@@ -493,44 +224,78 @@ void SwUiWriterTest::testRedlineFrame(char const*const file)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
-void SwUiWriterTest::testRedlineFrameAtCharStartOutside0()
+//Replacement tests
+
+constexpr OUStringLiteral ORIGINAL_REPLACE_CONTENT(u"toto titi tutu");
+constexpr OUStringLiteral EXPECTED_REPLACE_CONTENT(u"toto toto tutu");
+
+// Chinese conversion tests
+
+const sal_Unicode CHINESE_TRADITIONAL_CONTENT(0x9F8D);
+const sal_Unicode CHINESE_SIMPLIFIED_CONTENT(0x9F99);
+constexpr OUStringLiteral NON_CHINESE_CONTENT(u"Hippopotamus");
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testReplaceForward)
+{
+    SwDoc* pDoc = createSwDoc();
+
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, ORIGINAL_REPLACE_CONTENT);
+
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    lcl_selectCharacters(aPaM, 5, 9);
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "toto", false);
+
+    CPPUNIT_ASSERT_EQUAL(OUString(EXPECTED_REPLACE_CONTENT), pTextNode->GetText());
+
+    rUndoManager.Undo();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(ORIGINAL_REPLACE_CONTENT), pTextNode->GetText());
+}
+
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testRedlineFrameAtCharStartOutside0)
 {
     testRedlineFrame("redlineFrame.fodt");
 }
 
-void SwUiWriterTest::testRedlineFrameAtCharStartOutside()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testRedlineFrameAtCharStartOutside)
 {
     testRedlineFrame("redlineFrame_at_char_start_outside.fodt");
 }
 
-void SwUiWriterTest::testRedlineFrameAtCharStartInside()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testRedlineFrameAtCharStartInside)
 {
     testRedlineFrame("redlineFrame_at_char_start_inside.fodt");
 }
 
-void SwUiWriterTest::testRedlineFrameAtParaStartOutside()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testRedlineFrameAtParaStartOutside)
 {
     testRedlineFrame("redline_fly_duplication_at_para_start_outside.fodt");
 }
 
-void SwUiWriterTest::testRedlineFrameAtParaEndInside()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testRedlineFrameAtParaEndInside)
 {
     testRedlineFrame("redline_fly_duplication_at_para_end_inside.fodt");
 }
 
-void SwUiWriterTest::testRedlineFrameAtParaOneParagraph()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testRedlineFrameAtParaOneParagraph)
 {
     // test ALLFLYS flag: oddly enough it didn't fail as fodt but failed as odt...
     testRedlineFrame("redline_fly_at_para_one_paragraph.odt");
 }
 
-void SwUiWriterTest::testRedlineFrameAtPara2ndParagraph()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testRedlineFrameAtPara2ndParagraph)
 {
     // lost via the buggy increment in Copy
     testRedlineFrame("redline_fly_duplication_at_para_2nd_paragraph.fodt");
 }
 
-void SwUiWriterTest::testThreadedException()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testThreadedException)
 {
     SvFileStream aFileStream(m_directories.getURLFromSrc(DATA_DIRECTORY) + "threadedException.fodt", StreamMode::READ);
 
@@ -541,7 +306,7 @@ void SwUiWriterTest::testThreadedException()
     CPPUNIT_ASSERT(!bRes);
 }
 
-void SwUiWriterTest::testBookmarkCopy()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkCopy)
 {
     SwDoc * pDoc(createSwDoc());
 
@@ -597,7 +362,7 @@ void SwUiWriterTest::testBookmarkCopy()
     }
 }
 
-void SwUiWriterTest::testTdf67238()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf67238)
 {
     //create a new writer document
     SwDoc* pDoc = createSwDoc();
@@ -690,7 +455,7 @@ void SwUiWriterTest::testTdf67238()
     CPPUNIT_ASSERT(!((rTable.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
 }
 
-void SwUiWriterTest::testFdo75110()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo75110)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo75110.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -703,7 +468,7 @@ void SwUiWriterTest::testFdo75110()
     rUndoManager.Undo();
 }
 
-void SwUiWriterTest::testFdo75898()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo75898)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo75898.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -718,8 +483,10 @@ void SwUiWriterTest::testFdo75898()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pTableNode->GetTable().GetTabLines().size());
 }
 
-void SwUiWriterTest::testReplaceBackward()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testReplaceBackward)
 {
+    //Regression test of fdo#70143
+    //EDITING: undo search&replace corrupt text when searching backward
     SwDoc* pDoc = createSwDoc();
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
@@ -740,7 +507,7 @@ void SwUiWriterTest::testReplaceBackward()
     CPPUNIT_ASSERT_EQUAL(OUString(ORIGINAL_REPLACE_CONTENT), pTextNode->GetText());
 }
 
-void SwUiWriterTest::testFdo69893()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo69893)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo69893.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -754,7 +521,7 @@ void SwUiWriterTest::testFdo69893()
     CPPUNIT_ASSERT_EQUAL(OUString("Para after table."), rEnd.GetText());
 }
 
-void SwUiWriterTest::testFdo70807()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo70807)
 {
     createSwDoc(DATA_DIRECTORY, "fdo70807.odt");
 
@@ -782,7 +549,7 @@ void SwUiWriterTest::testFdo70807()
     }
 }
 
-void SwUiWriterTest::testImportRTF()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testImportRTF)
 {
     // Insert "foobar" and position the cursor between "foo" and "bar".
     SwDoc* pDoc = createSwDoc();
@@ -803,7 +570,7 @@ void SwUiWriterTest::testImportRTF()
     CPPUNIT_ASSERT_EQUAL(OUString("bar"), pDoc->GetNodes()[nIndex]->GetTextNode()->GetText());
 }
 
-void SwUiWriterTest::testExportRTF()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testExportRTF)
 {
     // Insert "aaabbbccc" and select "bbb".
     SwDoc* pDoc = createSwDoc();
@@ -843,14 +610,14 @@ void SwUiWriterTest::testExportRTF()
     CPPUNIT_ASSERT(aData.endsWith("bbb}" SAL_NEWLINE_STRING "}"));
 }
 
-void SwUiWriterTest::testDOCXAutoTextEmpty()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOCXAutoTextEmpty)
 {
     // file contains normal content but no AutoText
     std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext(u"autotext-empty.dotx", true);
     CPPUNIT_ASSERT(pGlossary != nullptr);
 }
 
-void SwUiWriterTest::testDOCXAutoTextMultiple()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOCXAutoTextMultiple)
 {
     // file contains three AutoText entries
     std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext(u"autotext-multiple.dotx");
@@ -890,7 +657,7 @@ void SwUiWriterTest::testDOCXAutoTextMultiple()
     CPPUNIT_ASSERT_EQUAL(OUString("complex"), rLastNode.GetTextNode()->GetText());
 }
 
-void SwUiWriterTest::testDOTMAutoText()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOTMAutoText)
 {
     // this is dotm file difference is that in the dotm
     // there are no empty paragraphs at the end of each entry
@@ -906,7 +673,7 @@ void SwUiWriterTest::testDOTMAutoText()
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"), rNode.GetTextNode()->GetText());
 }
 
-void SwUiWriterTest::testDOCXAutoTextGallery()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOCXAutoTextGallery)
 {
     // this file contains one AutoText entry and other
     // entries which are not AutoText (have different "gallery" value)
@@ -922,7 +689,7 @@ void SwUiWriterTest::testDOCXAutoTextGallery()
     CPPUNIT_ASSERT_EQUAL(OUString("Multiple"), pGlossary->GetLongName(0));
 }
 
-void SwUiWriterTest::testWatermarkDOCX()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkDOCX)
 {
     SwDoc* const pDoc = createSwDoc(DATA_DIRECTORY, "watermark.docx");
     SwDocShell* pDocShell = pDoc->GetDocShell();
@@ -941,7 +708,7 @@ void SwUiWriterTest::testWatermarkDOCX()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), pWatermark->GetTransparency());
 }
 
-void SwUiWriterTest::testWatermarkPosition()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition)
 {
     // tdf#108494 Watermark inserted in the document with page break was outside the first page
     const int aPagesInDocument = 2;
@@ -1018,7 +785,7 @@ void SwUiWriterTest::testWatermarkPosition()
     }
 }
 
-void SwUiWriterTest::testFdo74981()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo74981)
 {
     // create a document with an input field
     SwDoc* pDoc = createSwDoc();
@@ -1048,7 +815,7 @@ void SwUiWriterTest::testFdo74981()
     }
 }
 
-void SwUiWriterTest::testTdf98512()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf98512)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1086,7 +853,7 @@ void SwUiWriterTest::testTdf98512()
     CPPUNIT_ASSERT_EQUAL(expected1, pWrtShell->getShellCursor(false)->GetText());
 }
 
-void SwUiWriterTest::testShapeTextboxSelect()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxSelect)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-textbox.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1104,7 +871,7 @@ void SwUiWriterTest::testShapeTextboxSelect()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_DRAWFRMFMT), pShape->GetFormat()->Which());
 }
 
-void SwUiWriterTest::testShapeTextboxDelete()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxDelete)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-textbox.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1121,7 +888,7 @@ void SwUiWriterTest::testShapeTextboxDelete()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), nActual);
 }
 
-void SwUiWriterTest::testAnchorChangeSelection()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testAnchorChangeSelection)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "test_anchor_as_character.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1140,7 +907,7 @@ void SwUiWriterTest::testAnchorChangeSelection()
     CPPUNIT_ASSERT_EQUAL(pObject, rMarkList.GetMark(0)->GetMarkedSdrObj());
 }
 
-void SwUiWriterTest::testCp1000071()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000071)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "cp1000071.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1179,7 +946,7 @@ void SwUiWriterTest::testCp1000071()
     CPPUNIT_ASSERT_EQUAL( redlineEnd1Index, rTable[ 1 ]->End()->nContent.GetIndex());
 }
 
-void SwUiWriterTest::testShapeTextboxVertadjust()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxVertadjust)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-textbox-vertadjust.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -1189,7 +956,7 @@ void SwUiWriterTest::testShapeTextboxVertadjust()
     CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_CENTER, pFormat->GetTextVertAdjust().GetValue());
 }
 
-void SwUiWriterTest::testShapeTextboxAutosize()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxAutosize)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "shape-textbox-autosize.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -1207,7 +974,7 @@ void SwUiWriterTest::testShapeTextboxAutosize()
     CPPUNIT_ASSERT(pFirst->GetSnapRect().getHeight() < pSecond->GetSnapRect().getHeight());
 }
 
-void SwUiWriterTest::testFdo82191()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo82191)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo82191.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -1226,7 +993,7 @@ void SwUiWriterTest::testFdo82191()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), SwTextBoxHelper::getCount(*pDoc));
 }
 
-void SwUiWriterTest::testCommentedWord()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCommentedWord)
 {
     // This word is commented. <- string in document
     // 123456789 <- character positions
@@ -1250,7 +1017,8 @@ void SwUiWriterTest::testCommentedWord()
     CPPUNIT_ASSERT_EQUAL(OUString("word"), xField->getAnchor()->getString());
 }
 
-void SwUiWriterTest::testTextFieldGetAnchorGetTextInFooter() {
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextFieldGetAnchorGetTextInFooter)
+{
     createSwDoc(DATA_DIRECTORY, "textfield-getanchor-gettext-in-footer.odt");
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -1262,14 +1030,8 @@ void SwUiWriterTest::testTextFieldGetAnchorGetTextInFooter() {
     CPPUNIT_ASSERT_EQUAL(OUString("userfield_in_footer"), value );
 }
 
-// Chinese conversion tests
-
-const sal_Unicode CHINESE_TRADITIONAL_CONTENT(0x9F8D);
-const sal_Unicode CHINESE_SIMPLIFIED_CONTENT(0x9F99);
-constexpr OUStringLiteral NON_CHINESE_CONTENT(u"Hippopotamus");
-
 // Tests that a blank document is still blank after conversion
-void SwUiWriterTest::testChineseConversionBlank()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionBlank)
 {
 
     // Given
@@ -1292,7 +1054,7 @@ void SwUiWriterTest::testChineseConversionBlank()
 }
 
 // Tests that non Chinese text is unchanged after conversion
-void SwUiWriterTest::testChineseConversionNonChineseText()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionNonChineseText)
 {
 
     // Given
@@ -1316,7 +1078,7 @@ void SwUiWriterTest::testChineseConversionNonChineseText()
 }
 
 // Tests conversion of traditional Chinese characters to simplified Chinese
-void SwUiWriterTest::testChineseConversionTraditionalToSimplified()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionTraditionalToSimplified)
 {
 
     // Given
@@ -1340,7 +1102,7 @@ void SwUiWriterTest::testChineseConversionTraditionalToSimplified()
 }
 
 // Tests conversion of simplified Chinese characters to traditional Chinese
-void SwUiWriterTest::testChineseConversionSimplifiedToTraditional()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionSimplifiedToTraditional)
 {
 
     // Given
@@ -1363,7 +1125,7 @@ void SwUiWriterTest::testChineseConversionSimplifiedToTraditional()
 
 }
 
-void SwUiWriterTest::testFdo85554()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo85554)
 {
     // Load the document, it contains one shape with a textbox.
     createSwDoc(DATA_DIRECTORY, "fdo85554.odt");
@@ -1384,7 +1146,7 @@ void SwUiWriterTest::testFdo85554()
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 }
 
-void SwUiWriterTest::testAutoCorr()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testAutoCorr)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1412,7 +1174,7 @@ void SwUiWriterTest::testAutoCorr()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
 }
 
-void SwUiWriterTest::testTdf83260()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf83260)
 {
     SwDoc* const pDoc(createSwDoc(DATA_DIRECTORY, "tdf83260-1.odt"));
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1470,7 +1232,7 @@ void SwUiWriterTest::testTdf83260()
     }
 }
 
-void SwUiWriterTest::testTdf130274()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf130274)
 {
     SwDoc *const pDoc(createSwDoc());
     SwWrtShell *const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1493,7 +1255,7 @@ void SwUiWriterTest::testTdf130274()
     CPPUNIT_ASSERT(!pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty());
 }
 
-void SwUiWriterTest::testMergeDoc()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testMergeDoc)
 {
     SwDoc* const pDoc1(createSwDoc(DATA_DIRECTORY, "merge-change1.odt"));
 
@@ -1524,7 +1286,7 @@ void SwUiWriterTest::testMergeDoc()
     xDoc2Component->dispose();
 }
 
-void SwUiWriterTest::testCreatePortions()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCreatePortions)
 {
     createSwDoc(DATA_DIRECTORY, "uno-cycle.odt");
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
@@ -1539,7 +1301,7 @@ void SwUiWriterTest::testCreatePortions()
     xParagraph->createEnumeration();
 }
 
-void SwUiWriterTest::testBookmarkUndo()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkUndo)
 {
     SwDoc* pDoc = createSwDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
@@ -1583,7 +1345,7 @@ static void lcl_setWeight(SwWrtShell* pWrtShell, FontWeight aWeight)
     pWrtShell->SetAttrSet(aScriptSetItem.GetItemSet());
 }
 
-void SwUiWriterTest::testFdo85876()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo85876)
 {
     SwDoc* const pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1611,7 +1373,7 @@ void SwUiWriterTest::testFdo85876()
     }
 }
 
-void SwUiWriterTest::testCaretPositionMovingUp()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCaretPositionMovingUp)
 {
     SwDoc* const pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1623,7 +1385,7 @@ void SwUiWriterTest::testCaretPositionMovingUp()
     CPPUNIT_ASSERT_EQUAL(OUString(u"beforeAfter" + OUStringChar(CH_TXTATR_NEWLINE)), getParagraph(1)->getString());
 }
 
-void SwUiWriterTest::testTdf93441()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf93441)
 {
     SwDoc* const pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1639,7 +1401,7 @@ void SwUiWriterTest::testTdf93441()
     CPPUNIT_ASSERT_EQUAL(OUString(u"Hello World" + OUStringChar(CH_TXTATR_NEWLINE) + u"Hello World"), getParagraph(1)->getString());
 }
 
-void SwUiWriterTest::testTdf81226()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf81226)
 {
     SwDoc* const pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1654,7 +1416,7 @@ void SwUiWriterTest::testTdf81226()
     CPPUNIT_ASSERT_EQUAL(OUString("beforeafter"), getParagraph(1)->getString());
 }
 
-void SwUiWriterTest::testTdf137532()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf137532)
 {
     SwDoc* const pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1698,7 +1460,7 @@ void SwUiWriterTest::testTdf137532()
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
 }
 
-void SwUiWriterTest::testFdo87448()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo87448)
 {
     createSwDoc(DATA_DIRECTORY, "fdo87448.odt");
 
@@ -1737,7 +1499,7 @@ void SwUiWriterTest::testFdo87448()
     CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), abs(nFirstEnd - nSecondEnd) < 10);
 }
 
-void SwUiWriterTest::testTextCursorInvalidation()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextCursorInvalidation)
 {
     createSwDoc();
     SwDoc* pDoc = createSwDoc();
@@ -1759,7 +1521,7 @@ void SwUiWriterTest::testTextCursorInvalidation()
     //CPPUNIT_ASSERT_THROW(xCursor->goRight(1, false), uno::RuntimeException);
 }
 
-void SwUiWriterTest::testTdf68183()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf68183)
 {
     // First disable RSID and check if indeed no such attribute is inserted.
     SwDoc* pDoc = createSwDoc();
@@ -1781,7 +1543,7 @@ void SwUiWriterTest::testTdf68183()
     CPPUNIT_ASSERT_EQUAL(true, pTextNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
 }
 
-void SwUiWriterTest::testCp1000115()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000115)
 {
     createSwDoc(DATA_DIRECTORY, "cp1000115.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1794,7 +1556,7 @@ void SwUiWriterTest::testCp1000115()
     xmlXPathFreeObject(pXmlObj);
 }
 
-void SwUiWriterTest::testTdf63214()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf63214)
 {
     //This is a crash test
     SwDoc* pDoc = createSwDoc();
@@ -1821,7 +1583,7 @@ void SwUiWriterTest::testTdf63214()
     rUndoManager.Redo();
 }
 
-void SwUiWriterTest::testTdf90003()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf90003)
 {
     createSwDoc(DATA_DIRECTORY, "tdf90003.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1831,7 +1593,7 @@ void SwUiWriterTest::testTdf90003()
     assertXPath(pXmlDoc, "//Special[@nType='PortionType::Fly']", 0);
 }
 
-void SwUiWriterTest::testTdf51741()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf51741)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1891,7 +1653,7 @@ void SwUiWriterTest::testTdf51741()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 }
 
-void SwUiWriterTest::testDefaultsOfOutlineNumbering()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDefaultsOfOutlineNumbering)
 {
     uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance("com.sun.star.text.DefaultNumberingProvider"), uno::UNO_QUERY);
     css::lang::Locale alocale;
@@ -1918,7 +1680,7 @@ void SwUiWriterTest::testDefaultsOfOutlineNumbering()
     }
 }
 
-void SwUiWriterTest::testDeleteTableRedlines()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDeleteTableRedlines)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1937,7 +1699,7 @@ void SwUiWriterTest::testDeleteTableRedlines()
     CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(0), rExtras.GetSize());
 }
 
-void SwUiWriterTest::testXFlatParagraph()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testXFlatParagraph)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1983,7 +1745,7 @@ void SwUiWriterTest::testXFlatParagraph()
     CPPUNIT_ASSERT_EQUAL(OUString("US"), aprimarylocale.Country);
 }
 
-void SwUiWriterTest::testTdf81995()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf81995)
 {
     uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance("com.sun.star.text.DefaultNumberingProvider"), uno::UNO_QUERY);
     css::lang::Locale alocale;
@@ -2015,7 +1777,7 @@ void SwUiWriterTest::testTdf81995()
     }
 }
 
-void SwUiWriterTest::testExportToPicture()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testExportToPicture)
 {
     createSwDoc();
     uno::Sequence<beans::PropertyValue> aFilterData( comphelper::InitPropertySequence({
@@ -2039,7 +1801,7 @@ void SwUiWriterTest::testExportToPicture()
     aTempFile.EnableKillingFile();
 }
 
-void SwUiWriterTest::testTdf77340()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf77340)
 {
     createSwDoc();
     //Getting some paragraph style in our document
@@ -2061,7 +1823,7 @@ void SwUiWriterTest::testTdf77340()
     CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(3)), xPropSet->getPropertyValue("PageNumberOffset"));
 }
 
-void SwUiWriterTest::testTdf79236()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf79236)
 {
     SwDoc* pDoc = createSwDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
@@ -2119,7 +1881,7 @@ void SwUiWriterTest::testTdf79236()
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, Adjust5);
 }
 
-void SwUiWriterTest::testTextSearch()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextSearch)
 {
     // Create a new empty Writer document
     SwDoc* pDoc = createSwDoc();
@@ -2265,7 +2027,7 @@ void SwUiWriterTest::testTextSearch()
                          pCursor->GetNode().GetTextNode()->GetText());
 }
 
-void SwUiWriterTest::testTdf69282()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf69282)
 {
     SwDoc* source = createSwDoc();
     uno::Reference<lang::XComponent> xSourceDoc = mxComponent;
@@ -2323,7 +2085,7 @@ void SwUiWriterTest::testTdf69282()
     xSourceDoc->dispose();
 }
 
-void SwUiWriterTest::testTdf69282WithMirror()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf69282WithMirror)
 {
     SwDoc* source = createSwDoc();
     uno::Reference<lang::XComponent> xSourceDoc = mxComponent;
@@ -2383,7 +2145,7 @@ void SwUiWriterTest::testTdf69282WithMirror()
     xSourceDoc->dispose();
 }
 
-void SwUiWriterTest::testTdf78742()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf78742)
 {
     //testing with service type and any .ods file
     OUString path = m_directories.getURLFromSrc(DATA_DIRECTORY) + "calc-data-source.ods";
@@ -2413,7 +2175,7 @@ void SwUiWriterTest::testTdf78742()
     CPPUNIT_ASSERT_EQUAL(OUString("writer8"), pFilter3->GetFilterName());
 }
 
-void SwUiWriterTest::testUnoParagraph()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testUnoParagraph)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -2447,7 +2209,7 @@ void SwUiWriterTest::testUnoParagraph()
     CPPUNIT_ASSERT_EQUAL(OUString("This is modified text in paragraph two"), xSecondPara->getString());
 }
 
-void SwUiWriterTest::testTdf72788()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf72788)
 {
     //Create a new empty Writer document
     SwDoc* pDoc = createSwDoc();
@@ -2508,7 +2270,7 @@ void SwUiWriterTest::testTdf72788()
     CPPUNIT_ASSERT_EQUAL(true, (*pPoolItem2 != aWeightItem));
 }
 
-void SwUiWriterTest::testTdf60967()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf60967)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -2560,7 +2322,7 @@ void SwUiWriterTest::testTdf60967()
     CPPUNIT_ASSERT_EQUAL(aPosAfterRedo, aPosAfterUndoMove);
 }
 
-void SwUiWriterTest::testSearchWithTransliterate()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testSearchWithTransliterate)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -2600,7 +2362,7 @@ void SwUiWriterTest::testSearchWithTransliterate()
     CPPUNIT_ASSERT_EQUAL(1,static_cast<int>(case2));
 }
 
-void SwUiWriterTest::testTdf73660()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf73660)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -2636,7 +2398,7 @@ void SwUiWriterTest::testTdf73660()
     CPPUNIT_ASSERT_EQUAL(sal_uLong(1), pWrtShell->SearchPattern(searchOpt,true,SwDocPositions::Start,SwDocPositions::End));
 }
 
-void SwUiWriterTest::testNewDocModifiedState()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testNewDocModifiedState)
 {
     //creating a new doc
     SwDoc* pDoc = new SwDoc();
@@ -2646,7 +2408,7 @@ void SwUiWriterTest::testNewDocModifiedState()
     CPPUNIT_ASSERT(!(rState.IsModified()));
 }
 
-void SwUiWriterTest::testTdf77342()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf77342)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -2887,7 +2649,7 @@ void SwUiWriterTest::testTdf77342()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pTFNote15->GetSeqRefNo());
 }
 
-void SwUiWriterTest::testTdf63553()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf63553)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3147,7 +2909,7 @@ void SwUiWriterTest::testTdf63553()
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pOldSeq15->GetFieldName());
 }
 
-void SwUiWriterTest::testTdf74230()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf74230)
 {
     createSwDoc();
     //exporting the empty document to ODT via TempFile
@@ -3167,7 +2929,7 @@ void SwUiWriterTest::testTdf74230()
     aTempFile.EnableKillingFile();
 }
 
-void SwUiWriterTest::testTdf74363()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf74363)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3182,7 +2944,7 @@ void SwUiWriterTest::testTdf74363()
     CPPUNIT_ASSERT_EQUAL(OUString("Testing "), static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
-void SwUiWriterTest::testTdf80663()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf80663)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3269,7 +3031,7 @@ void SwUiWriterTest::testTdf80663()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getColumns()->getCount());
 }
 
-void SwUiWriterTest::testTdf57197()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf57197)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3351,7 +3113,7 @@ void SwUiWriterTest::testTdf57197()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
 }
 
-void SwUiWriterTest::testTdf131990()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf131990)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3360,7 +3122,7 @@ void SwUiWriterTest::testTdf131990()
     CPPUNIT_ASSERT(!pWrtShell->Down( false, 1, true ));
 }
 
-void SwUiWriterTest::testTdf90808()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf90808)
 {
     createSwDoc();
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -3405,7 +3167,7 @@ void SwUiWriterTest::testTdf90808()
     CPPUNIT_ASSERT_THROW(xText->insertTextContent(xCursor, xNumBookmark2, true), css::lang::IllegalArgumentException);
 }
 
-void SwUiWriterTest::testTdf97601()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf97601)
 {
     // Instructions from the bugreport to trigger an infinite loop.
     createSwDoc(DATA_DIRECTORY, "tdf97601.odt");
@@ -3429,7 +3191,7 @@ void SwUiWriterTest::testTdf97601()
     Scheduler::ProcessEventsToIdle();
 }
 
-void SwUiWriterTest::testTdf75137()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf75137)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3446,7 +3208,7 @@ void SwUiWriterTest::testTdf75137()
     CPPUNIT_ASSERT(firstIndex != secondIndex);
 }
 
-void SwUiWriterTest::testTdf83798()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf83798)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf83798.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3485,7 +3247,7 @@ void SwUiWriterTest::testTdf83798()
     pCursor->DeleteMark();
 }
 
-void SwUiWriterTest::testTdf89714()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf89714)
 {
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
@@ -3496,7 +3258,7 @@ void SwUiWriterTest::testTdf89714()
     CPPUNIT_ASSERT_EQUAL( uno::makeAny(sal_Int8(2)), xPropState->getPropertyDefault("ParaWidows")  );
 }
 
-void SwUiWriterTest::testTdf130287()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf130287)
 {
     //create a new writer document
     SwDoc* pDoc = createSwDoc();
@@ -3516,7 +3278,7 @@ void SwUiWriterTest::testTdf130287()
     CPPUNIT_ASSERT_EQUAL( sal_Int8(0), getProperty<sal_Int8>(xParagraph, "ParaWidows"));
 }
 
-void SwUiWriterTest::testPropertyDefaults()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testPropertyDefaults)
 {
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
@@ -3563,7 +3325,7 @@ void SwUiWriterTest::testPropertyDefaults()
     CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue("CharUnderline"), aCharUnderline);
 }
 
-void SwUiWriterTest::testTableBackgroundColor()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTableBackgroundColor)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3600,7 +3362,7 @@ void SwUiWriterTest::testTableBackgroundColor()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
-void SwUiWriterTest::testTdf88899()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf88899)
 {
     createSwDoc();
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
@@ -3630,7 +3392,7 @@ void SwUiWriterTest::testTdf88899()
     CPPUNIT_ASSERT_EQUAL(OUString("11/10/14 03:03 AM"), xTextField->getPresentation(false));
 }
 
-void SwUiWriterTest::testTdf90362()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf90362)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf90362.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3649,7 +3411,7 @@ void SwUiWriterTest::testTdf90362()
     comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(false), comphelper::EConfigurationModes::Standard);
 }
 
-void SwUiWriterTest::testUndoDelAsCharTdf107512()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testUndoDelAsCharTdf107512)
 {
     SwDoc * pDoc(createSwDoc());
     sw::UndoManager & rUndoManager(pDoc->GetUndoManager());
@@ -3768,7 +3530,7 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
     query.ClearItem(RES_CHRATR_HIDDEN);
 }
 
-void SwUiWriterTest::testUndoCharAttribute()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testUndoCharAttribute)
 {
     // Create a new empty Writer document
     SwDoc* pDoc = createSwDoc();
@@ -3803,7 +3565,7 @@ void SwUiWriterTest::testUndoCharAttribute()
     CPPUNIT_ASSERT_EQUAL(false, (*pPoolItem == aWeightItem));
 }
 
-void SwUiWriterTest::testUndoDelAsChar()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testUndoDelAsChar)
 {
     SwDoc * pDoc(createSwDoc());
     sw::UndoManager & rUndoManager(pDoc->GetUndoManager());
@@ -3836,7 +3598,7 @@ void SwUiWriterTest::testUndoDelAsChar()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pShell->GetCursor()->GetNode().GetTextNode()->Len());
 }
 
-void SwUiWriterTest::testTdf86639()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf86639)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf86639.rtf");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3847,7 +3609,7 @@ void SwUiWriterTest::testTdf86639()
     CPPUNIT_ASSERT_EQUAL(aExpected, getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
 }
 
-void SwUiWriterTest::testTdf90883TableBoxGetCoordinates()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf90883TableBoxGetCoordinates)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf90883.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3863,7 +3625,7 @@ void SwUiWriterTest::testTdf90883TableBoxGetCoordinates()
     CPPUNIT_ASSERT_EQUAL( 2, static_cast<int>(pos.Y()) );
 }
 
-void SwUiWriterTest::testEmbeddedDataSource()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testEmbeddedDataSource)
 {
     // Initially no data source.
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
@@ -3913,7 +3675,7 @@ void SwUiWriterTest::testEmbeddedDataSource()
     xStorable->store();
 }
 
-void SwUiWriterTest::testUnoCursorPointer()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testUnoCursorPointer)
 {
     auto xDocComponent(loadFromDesktop("private:factory/swriter",
             "com.sun.star.text.TextDocument"));
@@ -3931,7 +3693,7 @@ void SwUiWriterTest::testUnoCursorPointer()
     CPPUNIT_ASSERT(!static_cast<bool>(pCursor));
 }
 
-void SwUiWriterTest::testTextTableCellNames()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextTableCellNames)
 {
     sal_Int32 nCol, nRow2;
     SwXTextTable::GetCellPosition( "z1", nCol, nRow2);
@@ -3944,7 +3706,7 @@ void SwUiWriterTest::testTextTableCellNames()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(105), nCol);
 }
 
-void SwUiWriterTest::testShapeAnchorUndo()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeAnchorUndo)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "draw-anchor-undo.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3969,7 +3731,7 @@ void SwUiWriterTest::testShapeAnchorUndo()
     CPPUNIT_ASSERT_EQUAL(pObject->GetLogicRect(), aOrigLogicRect);
 }
 
-void SwUiWriterTest::testTdf127635()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf127635)
 {
     SwDoc* pDoc = createSwDoc();
 
@@ -4011,7 +3773,7 @@ void SwUiWriterTest::testTdf127635()
     CPPUNIT_ASSERT_EQUAL(OUString("C d b"), getParagraph(1)->getString());
 }
 
-void SwUiWriterTest::testDde()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDde)
 {
 #if HAVE_FEATURE_UI
     // Type asdf and copy it.
@@ -4078,7 +3840,7 @@ IMPL_LINK(IdleTask, FlipFlag, Timer*, , void)
     flag = true;
 }
 
-void SwUiWriterTest::testDocModState()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDocModState)
 {
     //creating a new writer document via the XDesktop(to have more shells etc.)
     SwDoc* pDoc = createSwDoc();
@@ -4103,7 +3865,7 @@ void SwUiWriterTest::testDocModState()
     CPPUNIT_ASSERT(!(pShell->IsModified()));
 }
 
-void SwUiWriterTest::testTdf94804()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf94804)
 {
     //create new writer document
     SwDoc* pDoc = createSwDoc();
@@ -4128,7 +3890,7 @@ void SwUiWriterTest::testTdf94804()
     CPPUNIT_ASSERT(bookmark2name.match("__RefNumPara__"));
 }
 
-void SwUiWriterTest::testUnicodeNotationToggle()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testUnicodeNotationToggle)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "unicodeAltX.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -4151,7 +3913,7 @@ void SwUiWriterTest::testUnicodeNotationToggle()
     CPPUNIT_ASSERT_EQUAL( sDocString, sOriginalDocString );
 }
 
-void SwUiWriterTest::testTdf34957()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf34957)
 {
     createSwDoc(DATA_DIRECTORY, "tdf34957.odt");
     // table with "keep with next" always started on a new page if the table was large,
@@ -4161,7 +3923,7 @@ void SwUiWriterTest::testTdf34957()
     CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[4]/body/tab[1]/row[2]/cell[1]/txt") );
 }
 
-void SwUiWriterTest::testTdf89954()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf89954)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf89954.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -4182,7 +3944,7 @@ void SwUiWriterTest::testTdf89954()
         OUString(u"Tes\uFFF9t. Test."), aNodeIndex.GetNode().GetTextNode()->GetText());
 }
 
-void SwUiWriterTest::testTdf89720()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf89720)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf89720.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
@@ -4196,7 +3958,7 @@ void SwUiWriterTest::testTdf89720()
     }
 }
 
-void SwUiWriterTest::testTdf88986()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf88986)
 {
     // Create a text shell.
     SwDoc* pDoc = createSwDoc();
@@ -4212,7 +3974,7 @@ void SwUiWriterTest::testTdf88986()
     CPPUNIT_ASSERT(aSet.HasItem(SID_COLOR_TABLE));
 }
 
-void SwUiWriterTest::testTdf78150()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf78150)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -4229,7 +3991,7 @@ void SwUiWriterTest::testTdf78150()
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 }
 
-void SwUiWriterTest::testTdf138873()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf138873)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -4265,7 +4027,7 @@ void SwUiWriterTest::testTdf138873()
     CPPUNIT_ASSERT_EQUAL(OUString("A B C"), getParagraph(1)->getString());
 }
 
-void SwUiWriterTest::testTdf87922()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf87922)
 {
     // Create an SwDrawTextInfo.
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf87922.odt");
@@ -4353,7 +4115,7 @@ class PortionHandler : public SwPortionHandler
 }
 #endif
 
-void SwUiWriterTest::testTdf77014()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf77014)
 {
 #if HAVE_MORE_FONTS
     // The problem described in the bug tdf#77014 is that the input
@@ -4502,7 +4264,7 @@ void SwUiWriterTest::testTdf77014()
 #endif
 }
 
-void SwUiWriterTest::testTdf92648()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf92648)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf92648.docx");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -4524,7 +4286,7 @@ void SwUiWriterTest::testTdf92648()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nCount);
 }
 
-void SwUiWriterTest::testTdf103978_backgroundTextShape()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf103978_backgroundTextShape)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf103978_backgroundTextShape.docx");
 
@@ -4543,7 +4305,7 @@ void SwUiWriterTest::testTdf103978_backgroundTextShape()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of TextBoxes", sal_Int32(1), nCount);
 }
 
-void SwUiWriterTest::testTdf117225()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf117225)
 {
     // Test that saving a document with an embedded object does not leak
     // tempfiles in the directory of the target file.
@@ -4567,8 +4329,6 @@ void SwUiWriterTest::testTdf117225()
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
-
-CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
