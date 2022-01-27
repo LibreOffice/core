@@ -51,6 +51,23 @@
       "parentUuid": "7b3baec9_e83f163a",
       "revId": "f1c1dc02243861b74e19e0a3bcf94c289b75ee9b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2aded89f_196ef254",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-27T13:49:35Z",
+      "side": 1,
+      "message": "Can we call EnterHandler() only if content was changed from the spell-check menu? As is, it\u0027s rather unexpected that all actions including hitting Esc or choosing Spellcheck... or AutoCorrect Options... close the cell.\n",
+      "revId": "f1c1dc02243861b74e19e0a3bcf94c289b75ee9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
