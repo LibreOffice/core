@@ -149,7 +149,7 @@ public:
     void                        SaveBasicAndDialogContainer() const;
 
     // misc.
-    void                        GetOptions(SfxItemSet &);
+    static void                 GetOptions(SfxItemSet &);
     void                        SetOptions(const SfxItemSet &);
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
     void                        NotifyEvent(const SfxEventHint& rEvent, bool bSynchron = true );

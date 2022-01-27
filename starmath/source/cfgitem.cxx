@@ -1415,23 +1415,21 @@ void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
 
 void SmMathConfig::ConfigToItemSet(SfxItemSet &rSet) const
 {
-    const SfxItemPool *pPool = rSet.GetPool();
-
-    rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_PRINTSIZE),
+    rSet.Put(SfxUInt16Item(SID_PRINTSIZE,
                            sal::static_int_cast<sal_uInt16>(GetPrintSize())));
-    rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_PRINTZOOM),
+    rSet.Put(SfxUInt16Item(SID_PRINTZOOM,
                            GetPrintZoomFactor()));
-    rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_SMEDITWINDOWZOOM),
+    rSet.Put(SfxUInt16Item(SID_SMEDITWINDOWZOOM,
                            GetSmEditWindowZoomFactor()));
 
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTITLE), IsPrintTitle()));
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTEXT),  IsPrintFormulaText()));
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTFRAME), IsPrintFrame()));
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_AUTOREDRAW), IsAutoRedraw()));
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_NO_RIGHT_SPACES), IsIgnoreSpacesRight()));
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), IsSaveOnlyUsedSymbols()));
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_AUTO_CLOSE_BRACKETS), IsAutoCloseBrackets()));
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_DEFAULT_SM_SYNTAX_VERSION), GetDefaultSmSyntaxVersion()));
+    rSet.Put(SfxBoolItem(SID_PRINTTITLE, IsPrintTitle()));
+    rSet.Put(SfxBoolItem(SID_PRINTTEXT,  IsPrintFormulaText()));
+    rSet.Put(SfxBoolItem(SID_PRINTFRAME, IsPrintFrame()));
+    rSet.Put(SfxBoolItem(SID_AUTOREDRAW, IsAutoRedraw()));
+    rSet.Put(SfxBoolItem(SID_NO_RIGHT_SPACES, IsIgnoreSpacesRight()));
+    rSet.Put(SfxBoolItem(SID_SAVE_ONLY_USED_SYMBOLS, IsSaveOnlyUsedSymbols()));
+    rSet.Put(SfxBoolItem(SID_AUTO_CLOSE_BRACKETS, IsAutoCloseBrackets()));
+    rSet.Put(SfxBoolItem(SID_DEFAULT_SM_SYNTAX_VERSION, GetDefaultSmSyntaxVersion()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

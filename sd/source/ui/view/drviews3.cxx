@@ -687,8 +687,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 ::tools::Rectangle aRect = maMarkRect;
                 aRect.SetPos(aRect.TopLeft() + aPagePos);
 
-                const SvxObjectItem& rOI = static_cast<const SvxObjectItem&>(
-                        pArgs->Get(GetPool().GetWhich(SID_RULER_OBJECT)));
+                const SvxObjectItem& rOI = pArgs->Get(SID_RULER_OBJECT);
 
                 if ( rOI.GetStartX() != rOI.GetEndX() )
                 {

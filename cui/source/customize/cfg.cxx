@@ -214,8 +214,7 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
     AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
     AddTabPage("events", CreateSvxEventConfigPage, nullptr);
 
-    const SfxPoolItem* pItem =
-        pInSet->GetItem( pInSet->GetPool()->GetWhich( SID_CONFIG ) );
+    const SfxPoolItem* pItem = pInSet->GetItem( SID_CONFIG );
 
     if ( pItem )
     {

@@ -154,7 +154,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = nullptr;
     if( pArgs )
-        pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_CHARMAP), false, &pItem);
+        pArgs->GetItemState(SID_CHARMAP, false, &pItem);
 
     OUString aChars;
     vcl::Font aFont;

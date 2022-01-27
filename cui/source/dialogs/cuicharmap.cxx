@@ -653,10 +653,10 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
     } else {
         sal_UCS4 cChar = sGlyph.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
         const SfxItemPool* pPool = m_xOutputSet->GetPool();
-        m_xOutputSet->Put( SfxStringItem( pPool->GetWhich(SID_CHARMAP), sGlyph ) );
+        m_xOutputSet->Put( SfxStringItem( SID_CHARMAP, sGlyph ) );
         m_xOutputSet->Put( SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
             aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(), pPool->GetWhich(SID_ATTR_CHAR_FONT) ) );
-        m_xOutputSet->Put( SfxStringItem( pPool->GetWhich(SID_FONT_NAME), aFont.GetFamilyName() ) );
+        m_xOutputSet->Put( SfxStringItem( SID_FONT_NAME, aFont.GetFamilyName() ) );
         m_xOutputSet->Put( SfxInt32Item( pPool->GetWhich(SID_ATTR_CHAR), cChar ) );
     }
 }
