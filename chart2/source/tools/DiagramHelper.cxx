@@ -888,7 +888,7 @@ Sequence< OUString > DiagramHelper::getExplicitSimpleCategories(
 
 namespace
 {
-void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, const Reference< XAxis >& xAxis )
+void lcl_switchToDateCategories( const rtl::Reference< ChartModel >& xChartDoc, const Reference< XAxis >& xAxis )
 {
     if( !xAxis.is() )
         return;
@@ -924,13 +924,12 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
         }
         //check the numberformat at the axis
         Reference< beans::XPropertySet > xAxisProps( xAxis, uno::UNO_QUERY );
-        Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartDoc, uno::UNO_QUERY );
-        if( xAxisProps.is() && xNumberFormatsSupplier.is() )
+        if( xAxisProps.is() )
         {
             sal_Int32 nNumberFormat = -1;
             xAxisProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
 
-            Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
+            Reference< util::XNumberFormats > xNumberFormats( xChartDoc->getNumberFormats() );
             if( xNumberFormats.is() )
             {
                 Reference< beans::XPropertySet > xKeyProps;
@@ -964,7 +963,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
     xAxis->setScaleData( aScale );
 }
 
-void lcl_switchToTextCategories( const Reference< XChartDocument >& xChartDoc, const Reference< XAxis >& xAxis )
+void lcl_switchToTextCategories( const rtl::Reference< ChartModel >& xChartDoc, const Reference< XAxis >& xAxis )
 {
     if( !xAxis.is() )
         return;
