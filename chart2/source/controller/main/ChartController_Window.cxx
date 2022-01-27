@@ -1302,8 +1302,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     }
                 }
 
-                Menu* pPopupMenu = comphelper::getFromUnoTunnel<VCLXMenu>(xPopupMenu)->GetMenu();
-                boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(pPopupMenu);
+                boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(xPopupMenu);
                 boost::property_tree::ptree aRoot;
                 aRoot.add_child("menu", aMenu);
 
