@@ -124,6 +124,14 @@ $(eval $(call gb_Module_add_targets,desktop, \
 ))
 endif
 
+ifneq (,$(filter Extension_test-crashextension,$(MAKECMDGOALS)))
+$(eval $(call gb_Module_add_targets,desktop, \
+    Extension_test-crashextension \
+    Library_crashextension \
+    Rdb_crashextension \
+))
+endif
+
 $(eval $(call gb_Module_add_check_targets,desktop, \
     CppunitTest_desktop_app \
     CppunitTest_desktop_version \
