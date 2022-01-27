@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37fd9987_0280d991",
+        "filename": "filter/source/config/fragments/filters/WEBP___WebP.xcu",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-27T03:55:49Z",
+      "side": 1,
+      "message": "Completely new files don\u0027t need this declaration.",
+      "range": {
+        "startLine": 7,
+        "startChar": 2,
+        "endLine": 16,
+        "endChar": 64
+      },
+      "revId": "1f03382f172d5417aa25e9ecc74122bef7a6f6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc881c4b_0d6bdb6f",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-27T03:55:49Z",
+      "side": 1,
+      "message": "If the concern is backwards compatibility, we should create and write a fallback PNG image into the document just like we do with other formats where backwards compatibility was a concern. At least in that case the user can turn off fallback images when he knows backwards compatibility will not be an issue. Also in the future we can turn off writing of the fallback image and the user won\u0027t be stuck with and oversized PNG.",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 57
+      },
+      "revId": "1f03382f172d5417aa25e9ecc74122bef7a6f6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7105e6cc_a1525edc",
+        "filename": "vcl/source/filter/webp/writer.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-01-27T03:55:49Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to use comphelper::ScopeGuard instead, if all you need is to guarantee something is called when the function ends.",
+      "revId": "1f03382f172d5417aa25e9ecc74122bef7a6f6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
