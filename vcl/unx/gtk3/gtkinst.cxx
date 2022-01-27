@@ -6199,38 +6199,33 @@ public:
 
     virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) override
     {
-#if GTK_CHECK_VERSION(4, 0, 0)
         GtkInstanceWidget* pGtkNew = dynamic_cast<GtkInstanceWidget*>(pNew);
         GtkWidget* pWidgetNew = pGtkNew ? pGtkNew->getWidget() : nullptr;
+#if GTK_CHECK_VERSION(4, 0, 0)
         gtk_window_set_default_widget(m_pWindow, pWidgetNew);
         (void)pOld;
 #else
-        if (!pOld)
-            recursively_unset_default_buttons();
-        else
-        {
-            GtkInstanceWidget* pGtkOld = dynamic_cast<GtkInstanceWidget*>(pOld);
-            GtkWidget* pWidgetOld = pGtkOld->getWidget();
+        GtkInstanceWidget* pGtkOld = dynamic_cast<GtkInstanceWidget*>(pOld);
+        GtkWidget* pWidgetOld = pGtkOld ? pGtkOld->getWidget() : nullptr;
+        if (pWidgetOld)
             g_object_set(G_OBJECT(pWidgetOld), "has-default", false, nullptr);
-        }
-        if (pNew)
-        {
-            GtkInstanceWidget* pGtkNew = dynamic_cast<GtkInstanceWidget*>(pNew);
-            GtkWidget* pWidgetNew = pGtkNew->getWidget();
+        else
+            recursively_unset_default_buttons();
+        if (pWidgetNew)
             g_object_set(G_OBJECT(pWidgetNew), "has-default", true, nullptr);
-        }
 #endif
     }
 
     virtual bool is_default_widget(const weld::Widget* pCandidate) const override
     {
         const GtkInstanceWidget* pGtkCandidate = dynamic_cast<const GtkInstanceWidget*>(pCandidate);
-        GtkWidget* pWidget = pGtkCandidate->getWidget();
+        GtkWidget* pWidget = pGtkCandidate ? pGtkCandidate->getWidget() : nullptr;
 #if GTK_CHECK_VERSION(4, 0, 0)
-        return gtk_window_get_default_widget(m_pWindow) == pWidget;
+        return pWidget && gtk_window_get_default_widget(m_pWindow) == pWidget;
 #else
         gboolean has_default(false);
-        g_object_get(G_OBJECT(pWidget), "has-default", &has_default, nullptr);
+        if (pWidget)
+            g_object_get(G_OBJECT(pWidget), "has-default", &has_default, nullptr);
         return has_default;
 #endif
     }
