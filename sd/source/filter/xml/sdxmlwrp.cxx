@@ -508,8 +508,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
         SfxItemSet* pSet = mrMedium.GetItemSet();
         if(pSet)
         {
-            const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
-                pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+            const SfxUnoAnyItem* pItem = pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
             if (pItem)
             {
                 pItem->GetValue() >>= mxStatusIndicator;
@@ -565,8 +564,8 @@ bool SdXMLFilter::Import( ErrCode& nError )
         OUString aName;
         if ( mrMedium.GetItemSet() )
         {
-            const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-                mrMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+            const SfxStringItem* pDocHierarchItem =
+                mrMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
             if ( pDocHierarchItem )
                 aName = pDocHierarchItem->GetValue();
         }
@@ -802,8 +801,8 @@ bool SdXMLFilter::Export()
             OUString aName;
             if ( mrMedium.GetItemSet() )
             {
-                const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-                    mrMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+                const SfxStringItem* pDocHierarchItem =
+                    mrMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
                 if ( pDocHierarchItem )
                     aName = pDocHierarchItem->GetValue();
             }

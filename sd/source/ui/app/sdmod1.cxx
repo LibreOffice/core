@@ -161,9 +161,9 @@ void SdModule::Execute(SfxRequest& rReq)
                     LanguageType eLanguage = static_cast<const SvxLanguageItem*>(pItem)->GetValue();
                     SdDrawDocument* pDoc = pDocSh->GetDoc();
 
-                    if( nSlotId == SID_ATTR_CHAR_CJK_LANGUAGE )
+                    if( nSlotId == sal_uInt16(SID_ATTR_CHAR_CJK_LANGUAGE) )
                         pDoc->SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CJK );
-                    else if( nSlotId == SID_ATTR_CHAR_CTL_LANGUAGE )
+                    else if( nSlotId == sal_uInt16(SID_ATTR_CHAR_CTL_LANGUAGE) )
                         pDoc->SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CTL );
                     else
                         pDoc->SetLanguage( eLanguage, EE_CHAR_LANGUAGE );

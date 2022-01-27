@@ -163,7 +163,7 @@ constexpr TypedWhichId<SfxInt32Item>       SCHATTR_NUM_OF_LINES_FOR_BAR         
 constexpr TypedWhichId<SfxInt32Item>       SCHATTR_SPLINE_ORDER                       (SCHATTR_CHARTTYPE_START + 4);
 constexpr TypedWhichId<SfxInt32Item>       SCHATTR_SPLINE_RESOLUTION                  (SCHATTR_CHARTTYPE_START + 5);
 constexpr TypedWhichId<SfxBoolItem>        SCHATTR_GROUP_BARS_PER_AXIS                (SCHATTR_CHARTTYPE_START + 6);
-constexpr TypedWhichId<SfxInt32Item>       SCHATTR_STARTING_ANGLE                     (SCHATTR_CHARTTYPE_START + 7);
+constexpr TypedWhichId<SdrAngleItem>       SCHATTR_STARTING_ANGLE                     (SCHATTR_CHARTTYPE_START + 7);
 constexpr TypedWhichId<SfxBoolItem>        SCHATTR_CLOCKWISE                          (SCHATTR_CHARTTYPE_START + 8);
 constexpr TypedWhichId<SfxInt32Item>       SCHATTR_MISSING_VALUE_TREATMENT            (SCHATTR_CHARTTYPE_START + 9);
 constexpr TypedWhichId<SfxIntegerListItem> SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS (SCHATTR_CHARTTYPE_START + 10);

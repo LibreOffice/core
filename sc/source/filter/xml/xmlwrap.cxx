@@ -361,8 +361,8 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
     {
         if ( pMedium && pMedium->GetItemSet() )
         {
-            const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-                pMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+            const SfxStringItem* pDocHierarchItem =
+                pMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
             if ( pDocHierarchItem )
                 aName = pDocHierarchItem->GetValue();
         }
@@ -827,8 +827,8 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             OUString aName("dummyObjectName");
             if ( pMedium && pMedium->GetItemSet() )
             {
-                const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-                    pMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+                const SfxStringItem* pDocHierarchItem =
+                    pMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
                 if ( pDocHierarchItem )
                     aName = pDocHierarchItem->GetValue();
             }

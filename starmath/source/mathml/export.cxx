@@ -120,11 +120,11 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
         }
 
         // Fetch progress bar
-        auto pItem = pMediumItemSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
+        const SfxUnoAnyItem* pItem = pMediumItemSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
         if (pItem)
         {
             // set progress range and start status indicator
-            static_cast<const SfxUnoAnyItem*>(pItem)->GetValue() >>= xStatusIndicator;
+            pItem->GetValue() >>= xStatusIndicator;
             xStatusIndicator->start(SmResId(STR_STATSTR_WRITING), 3);
             xStatusIndicator->setValue(0);
         }
@@ -163,10 +163,11 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
         // TODO/LATER: handle the case of embedded links gracefully
         if (bEmbedded) //&& !pStg->IsRoot() )
         {
-            auto pDocHierarchItem = pMediumItemSet->GetItem(SID_DOC_HIERARCHICALNAME);
+            const SfxStringItem* pDocHierarchItem
+                = pMediumItemSet->GetItem(SID_DOC_HIERARCHICALNAME);
             if (pDocHierarchItem != nullptr)
             {
-                OUString aName = static_cast<const SfxStringItem*>(pDocHierarchItem)->GetValue();
+                OUString aName = pDocHierarchItem->GetValue();
                 if (!aName.isEmpty())
                     xInfoSet->setPropertyValue("StreamRelPath", makeAny(aName));
             }

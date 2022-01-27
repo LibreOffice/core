@@ -137,8 +137,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
         SfxItemSet* pSet = rMedium.GetItemSet();
         if (pSet)
         {
-            const SfxUnoAnyItem* pItem
-                = static_cast<const SfxUnoAnyItem*>(pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
+            const SfxUnoAnyItem* pItem = pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
             if (pItem != nullptr)
                 pItem->GetValue() >>= xStatusIndicator;
         }
@@ -180,8 +179,8 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
             OUString aName(u"dummyObjName");
             if (rMedium.GetItemSet())
             {
-                const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-                    rMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME));
+                const SfxStringItem* pDocHierarchItem
+                    = rMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
                 if (pDocHierarchItem != nullptr)
                     aName = pDocHierarchItem->GetValue();
             }
