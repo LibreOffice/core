@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee9070a6_8e25d120",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-27T20:20:04Z",
+      "side": 1,
+      "message": "With the latest changes, it is no longer \u0027enum class\u0027. This shuly only be \u0027enum\u0027.",
+      "revId": "c5439559f9654f31618038a55b622edad5453cf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0cef0fec_8aee2443",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 11
@@ -14,6 +31,23 @@
       "writtenOn": "2022-01-27T20:19:53Z",
       "side": 1,
       "message": "Please keep \u0027include/basic/sbxvar.hxx\u0027 untouched, and only put the \u0027enum\u0027 inside the .cxx file in the place of the #defines. In other words, only change the .cxx file.",
+      "revId": "c5439559f9654f31618038a55b622edad5453cf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be500fd0_54a20304",
+        "filename": "include/basic/sbxvar.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-01-27T20:20:04Z",
+      "side": 1,
+      "message": "Please forget NONE, and use zero in the header file, as it was before.",
       "revId": "c5439559f9654f31618038a55b622edad5453cf5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
