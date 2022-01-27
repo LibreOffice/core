@@ -90,12 +90,12 @@ ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
 
     if (pMediumItemSet)
     {
-        const SfxUnoAnyItem* pStatusBarItem = static_cast<const SfxUnoAnyItem*>(
-           pMediumItemSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
+        const SfxUnoAnyItem* pStatusBarItem =
+           pMediumItemSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
         if (pStatusBarItem)
             pStatusBarItem->GetValue() >>= xStatusIndicator;
-        const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-            pMediumItemSet->GetItem(SID_DOC_HIERARCHICALNAME));
+        const SfxStringItem* pDocHierarchItem =
+            pMediumItemSet->GetItem(SID_DOC_HIERARCHICALNAME);
         if (pDocHierarchItem)
             aDocHierarchicalName = pDocHierarchItem->GetValue();
         const SfxBoolItem* pNoEmbDS = pMediumItemSet->GetItem(SID_NO_EMBEDDED_DS);

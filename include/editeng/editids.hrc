@@ -21,6 +21,8 @@
 
 #include <svl/solar.hrc>
 
+class SvxLanguageItem;
+
 /*
   These SID_SVX_START entries came from include/svx/svxids.hrc, avoid
   accidentally colliding entries with include/svx/svxids.hrc and
@@ -90,12 +92,12 @@
 #define SID_ATTR_CHAR_CHARSETCOLOR                      ( SID_SVX_START + 877 )
 #define SID_ATTR_CHAR_CJK_FONT                          ( SID_SVX_START + 887 )
 #define SID_ATTR_CHAR_CJK_FONTHEIGHT                    ( SID_SVX_START + 888 )
-#define SID_ATTR_CHAR_CJK_LANGUAGE                      ( SID_SVX_START + 889 )
+#define SID_ATTR_CHAR_CJK_LANGUAGE                      TypedWhichId<SvxLanguageItem>( SID_SVX_START + 889 )
 #define SID_ATTR_CHAR_CJK_POSTURE                       ( SID_SVX_START + 890 )
 #define SID_ATTR_CHAR_CJK_WEIGHT                        ( SID_SVX_START + 891 )
 #define SID_ATTR_CHAR_CTL_FONT                          ( SID_SVX_START + 892 )
 #define SID_ATTR_CHAR_CTL_FONTHEIGHT                    ( SID_SVX_START + 893 )
-#define SID_ATTR_CHAR_CTL_LANGUAGE                      ( SID_SVX_START + 894 )
+#define SID_ATTR_CHAR_CTL_LANGUAGE                      TypedWhichId<SvxLanguageItem>( SID_SVX_START + 894 )
 #define SID_ATTR_CHAR_CTL_POSTURE                       ( SID_SVX_START + 895 )
 #define SID_ATTR_CHAR_CTL_WEIGHT                        ( SID_SVX_START + 896 )
 #define SID_ATTR_CHAR_TWO_LINES                         ( SID_SVX_START + 897 )

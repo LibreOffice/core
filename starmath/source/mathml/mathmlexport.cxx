@@ -115,8 +115,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
             SfxItemSet* pSet = rMedium.GetItemSet();
             if (pSet)
             {
-                const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
-                    pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
+                const SfxUnoAnyItem* pItem = pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
                 if (pItem)
                     pItem->GetValue() >>= xStatusIndicator;
             }
@@ -166,8 +165,8 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
             OUString aName;
             if (rMedium.GetItemSet())
             {
-                const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-                    rMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME));
+                const SfxStringItem* pDocHierarchItem
+                    = rMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
                 if (pDocHierarchItem)
                     aName = pDocHierarchItem->GetValue();
             }

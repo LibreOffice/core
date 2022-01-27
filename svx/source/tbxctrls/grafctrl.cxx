@@ -681,7 +681,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                             if( SfxItemState::SET <= pOutAttr->GetItemState( SID_ATTR_GRAF_FRMSIZE ) )
                             {
                                 Point       aNewOrigin( pObj->GetLogicRect().TopLeft() );
-                                const Size& rGrfSize = static_cast<const SvxSizeItem&>( pOutAttr->Get( SID_ATTR_GRAF_FRMSIZE ) ).GetSize();
+                                const Size& rGrfSize = pOutAttr->Get( SID_ATTR_GRAF_FRMSIZE ).GetSize();
                                 Size aNewGrfSize = o3tl::convert(rGrfSize, o3tl::Length::twip, o3tl::Length::mm100);
                                 Size        aOldGrfSize( pObj->GetLogicRect().GetSize() );
 
