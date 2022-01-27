@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e05e0d8d_68c15b60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-27T17:34:26Z",
+      "side": 1,
+      "message": "Jenkins verified - just a bug reference fix in the commit message.",
+      "revId": "9b2505568100a449d54853cdd5bf8e8cb7685cb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
