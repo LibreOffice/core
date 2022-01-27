@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "380e3ba8_1f4537c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-27T12:38:44Z",
+      "side": 1,
+      "message": "I\u0027ve just heard about TEMPLATE.SOURCECODE.HEADER\n\nI inspirated from Firebird and Hsqldb, is this license ok or should I use the one with ALv2 ?",
+      "revId": "233e5fd463043b94abc08be38f493d05aac94107",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
