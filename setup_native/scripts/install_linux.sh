@@ -241,7 +241,7 @@ else
 fi
 
 # populate the private rpm database with the dependencies needed
-FAKEDBRPM=/tmp/fake-db-1.0-$$.noarch.rpm
+FAKEDBRPM=`mktemp -p /tmp fake-db-1.0-XXXXXXXXXX.noarch.rpm`
 linenum=???
 tail -n +$linenum $0 > $FAKEDBRPM
 
