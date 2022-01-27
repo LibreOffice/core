@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "098a05ec_87f494e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-27T13:52:01Z",
+      "side": 1,
+      "message": "I have:\n\nIn file included from /home/caolan/LibreOffice/core/vcl/qt5/QtMenu.cxx:10:\n/home/caolan/LibreOffice/core/vcl/inc/qt5/QtMenu.hxx:53:18: error: no type named \u0027Connection\u0027 in \u0027QMetaObject\u0027\n    QMetaObject::Connection maCloseButtonConnection;\n    ~~~~~~~~~~~~~^\nIn file included from /home/caolan/LibreOffice/core/vcl/qt5/QtFrame.cxx:20:\nIn file included from /home/caolan/LibreOffice/core/vcl/inc/qt5/QtFrame.hxx:27:\n\nwhen I try and build with --enable-kf5 --enable-gtk3-kde5\n\nafter this commit",
+      "revId": "5801b9fc65508391e130670f79a9af51f18d4e96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
