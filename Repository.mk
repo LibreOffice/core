@@ -774,6 +774,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,UNOVERLIBS,ure, \
 $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
 	active_native \
 	passive_native \
+	crashextension \
 ))
 
 ifneq ($(ENABLE_JAVA),)
