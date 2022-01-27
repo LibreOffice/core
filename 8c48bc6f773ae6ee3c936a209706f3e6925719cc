@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42b0dbeb_d1883c9f",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-27T11:55:15Z",
+      "side": 1,
+      "message": "Please fix the two problems first I mentioned in the now already committed change,\nhttps://gerrit.libreoffice.org/c/core/+/126916/comment/d3d50a29_d2f80c5a/\nhttps://gerrit.libreoffice.org/c/core/+/126916/comment/9b71b137_a528f1e0/",
+      "revId": "8c48bc6f773ae6ee3c936a209706f3e6925719cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
