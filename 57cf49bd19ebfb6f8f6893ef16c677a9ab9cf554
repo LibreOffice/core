@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c8d496d_ac870fa4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-27T09:31:34Z",
+      "side": 1,
+      "message": "Size is not a member of WindowStateMask. Changed it to WindowStateMask::Pos | WindowStateMask::Width |  WindowStateMask::Height and kf5 remembers the size but not the position while gtk3 does the opposite and pos works but not size. With gen both are restored nicely.\n\nI wonder what happens with the position in case of two display configurations where one is switched off. Or when the resolution changes. Is the possible maximum taken into account?",
+      "revId": "57cf49bd19ebfb6f8f6893ef16c677a9ab9cf554",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
