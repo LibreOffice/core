@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include <vcl/graph.hxx>
 #include <tools/stream.hxx>
 #include <filter/WebpWriter.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <sal/log.hxx>
 
 #include <webp/encode.h>
@@ -87,9 +87,7 @@ static bool writeWebp(SvStream& rStream, const BitmapEx& bitmapEx, bool lossless
     picture.width = width;
     picture.height = height;
     picture.use_argb = lossless ? 1 : 0; // libwebp recommends argb only for lossless
-    // This unique_ptr is here just to ensure WebPPictureFree() is called at the end,
-    // it doesn't actually own the data as such.
-    std::unique_ptr<WebPPicture, decltype(&WebPPictureFree)> freePicture(&picture, WebPPictureFree);
+    comphelper::ScopeGuard freePicture([&picture]() { WebPPictureFree(&picture); });
 
     // Apparently libwebp needs the entire image data at once in WebPPicture,
     // so allocate it and copy there.
