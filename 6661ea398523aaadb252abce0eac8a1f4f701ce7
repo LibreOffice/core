@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60a4fce7_ac3df2f4",
+        "filename": "vcl/osx/OSXTransferable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-01-27T11:14:52Z",
+      "side": 0,
+      "message": "Hmm, wonder where the removal of that \u0027using\u0027 line came from, I don\u0027t remember doing that now? On the other hand, as this compiles, it surely is a good idea to remove stray \u0027using\u0027 lines.",
+      "revId": "6661ea398523aaadb252abce0eac8a1f4f701ce7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
