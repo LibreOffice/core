@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <sal/log.hxx>
 #include <utility>
 
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
@@ -30,7 +31,8 @@
 
 #include "DataFlavorMapping.hxx"
 
-using namespace osl;
+#include <quartz/utils.h>
+
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer;
@@ -160,6 +162,9 @@ void OSXTransferable::initClipboardItemList()
       throw RuntimeException("AquaClipboard: Cannot get clipboard data",
                              static_cast<XTransferable*>(this));
   }
+
+  SAL_INFO("vcl.macos.clipboard", "Types on pasteboard: " << NSStringArrayToOUString(pboardFormats));
+
 
   mFlavorList = mDataFlavorMapper->typesArrayToFlavorSequence(pboardFormats);
 }
