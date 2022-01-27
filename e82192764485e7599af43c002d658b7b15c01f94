@@ -16,6 +16,24 @@
       "message": "This is an unneeded formatting change. Please avoid it.",
       "revId": "e82192764485e7599af43c002d658b7b15c01f94",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f9220e6_1cb9dfe4",
+        "filename": "include/basic/sbxvar.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2022-01-27T15:06:35Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "9816e19d_79725e1f",
+      "revId": "e82192764485e7599af43c002d658b7b15c01f94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

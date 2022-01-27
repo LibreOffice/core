@@ -16,6 +16,24 @@
       "message": "There is a double space in this line. Please change it to only one space.",
       "revId": "753e60a73c3e3316b853edafc6a6d009f0b81421",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80495fde_ab0d8e22",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2022-01-27T15:06:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bb59fed_0c7dccb7",
+      "revId": "753e60a73c3e3316b853edafc6a6d009f0b81421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

@@ -85,6 +85,24 @@
       "message": "I think that in this  case, when the data is written to/read from file format, it\u0027s easier to not use enum class, but plain enum (with base type explicitly specified). No need to add explicit casts just to please the \"use scoped enums\" incantation - or alternatively, introduce a read/write helper methods that would convert the scoped enum value to/from sal_Int32, and only do the cast there (additionally performing sanity checks). And convert every single use of the value outside of the read/write into scoped enum.",
       "revId": "a18b68c657f0e382229b2ff6a0cbdef67959b06c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ee52020_3b950a6b",
+        "filename": "include/basic/sbxvar.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2022-01-27T15:06:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78881bd3_42703e36",
+      "revId": "a18b68c657f0e382229b2ff6a0cbdef67959b06c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
