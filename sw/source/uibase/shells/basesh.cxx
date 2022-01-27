@@ -2173,12 +2173,12 @@ SwBaseShell::~SwBaseShell()
 void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
+    const sal_uInt16 nSlot = rReq.GetSlot();
 
     if( pArgs)
     {
         SwWrtShell &rSh = GetShell();
         std::unique_ptr<SvxScriptSetItem> pSSetItem;
-        sal_uInt16 nSlot = rReq.GetSlot();
         SfxItemPool& rPool = rSh.GetAttrPool();
         sal_uInt16 nWhich = rPool.GetWhich( nSlot );
         SvtScriptType nScripts = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
@@ -2292,7 +2292,12 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
         }
     }
     else
-        GetView().GetViewFrame()->GetDispatcher()->Execute( SID_CHAR_DLG );
+    {
+        if (nSlot == SID_ATTR_CHAR_KERNING)
+            GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_POSITION);
+        else
+            GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG);
+    }
     rReq.Done();
 }
 
