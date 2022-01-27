@@ -77,7 +77,7 @@ public:
             , bool& bUseColumns, bool& bFirstCellAsLabel, bool& bHasCategories );
 
         static css::uno::Reference< css::chart2::data::XDataSource >
-            pressUsedDataIntoRectangularFormat( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
+            pressUsedDataIntoRectangularFormat( const rtl::Reference< ::chart::ChartModel >& xChartDoc );
 
         SAL_DLLPRIVATE static css::uno::Sequence< OUString > getUsedDataRanges(
             const rtl::Reference< ::chart::Diagram > & xDiagram );

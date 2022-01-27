@@ -220,14 +220,12 @@ void DataSourceHelper::readArguments( const uno::Sequence< beans::PropertyValue 
 }
 
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoRectangularFormat(
-        const uno::Reference< chart2::XChartDocument >& xChartDoc )
+        const rtl::Reference< ChartModel >& xChartDoc )
 {
     std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVector;
 
     //categories are always the first sequence
-    auto pModel = dynamic_cast<ChartModel*>(xChartDoc.get());
-    assert(pModel);
-    rtl::Reference< Diagram > xDiagram( pModel->getFirstChartDiagram());
+    rtl::Reference< Diagram > xDiagram( xChartDoc->getFirstChartDiagram());
 
     Reference< chart2::data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
     if( xCategories.is() )
