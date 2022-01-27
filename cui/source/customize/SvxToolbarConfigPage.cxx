@@ -106,7 +106,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage,
     m_aURLToSelect = ITEM_TOOLBAR_URL;
     m_aURLToSelect += "standardbar";
 
-    const SfxPoolItem* pItem = rSet.GetItem(rSet.GetPool()->GetWhich(SID_CONFIG));
+    const SfxPoolItem* pItem = rSet.GetItem(SID_CONFIG);
 
     if (pItem)
     {

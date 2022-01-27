@@ -1623,8 +1623,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SfxItemSetFixed<SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG> aSet(GetPool());
             const SfxPoolItem* pItem=nullptr;
             const SfxItemSet* pSet = rReq.GetArgs();
-            SfxItemPool* pSetPool = pSet ? pSet->GetPool() : nullptr;
-            if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), false, &pItem ) == SfxItemState::SET )
+            if ( pSet && pSet->GetItemState( SID_AUTO_CORRECT_DLG, false, &pItem ) == SfxItemState::SET )
                 aSet.Put( *pItem );
 
             ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateAutoCorrTabDialog(rReq.GetFrameWeld(), &aSet));

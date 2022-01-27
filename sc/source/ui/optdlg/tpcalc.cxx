@@ -36,10 +36,8 @@
 ScTpCalcOptions::ScTpCalcOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/optcalculatepage.ui", "OptCalculatePage", &rCoreAttrs)
     , pOldOptions(new ScDocOptions(
-        static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(
-            GetWhich(SID_SCDOCOPTIONS))).GetDocOptions()))
+        static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(SID_SCDOCOPTIONS)).GetDocOptions()))
     , pLocalOptions(new ScDocOptions)
-    , nWhichCalc(GetWhich(SID_SCDOCOPTIONS))
     , m_xBtnIterate(m_xBuilder->weld_check_button("iterate"))
     , m_xFtSteps(m_xBuilder->weld_label("stepsft"))
     , m_xEdSteps(m_xBuilder->weld_spin_button("steps"))
@@ -90,7 +88,7 @@ void ScTpCalcOptions::Reset(const SfxItemSet* rCoreAttrs)
 
     pOldOptions.reset(new ScDocOptions(
         static_cast<const ScTpCalcItem&>(rCoreAttrs->Get(
-            GetWhich(SID_SCDOCOPTIONS))).GetDocOptions()));
+            SID_SCDOCOPTIONS)).GetDocOptions()));
 
     *pLocalOptions = *pOldOptions;
 
@@ -193,7 +191,7 @@ bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
     }
     if ( *pLocalOptions != *pOldOptions )
     {
-        rCoreAttrs->Put( ScTpCalcItem( nWhichCalc, *pLocalOptions ) );
+        rCoreAttrs->Put( ScTpCalcItem( SID_SCDOCOPTIONS, *pLocalOptions ) );
         return true;
     }
     else

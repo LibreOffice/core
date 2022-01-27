@@ -213,7 +213,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 const SfxItemSet *pArgs = rReq.GetArgs();
                 const SfxPoolItem* pItem = nullptr;
                 if( pArgs )
-                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
+                    pArgs->GetItemState(SID_CHARMAP, false, &pItem);
 
                 if ( pItem )
                 {

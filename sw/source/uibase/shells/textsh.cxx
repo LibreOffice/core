@@ -878,7 +878,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = nullptr;
     if( pArgs )
-        pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
+        pArgs->GetItemState(SID_CHARMAP, false, &pItem);
 
     OUString aChars, aFontName;
     if ( pItem )
@@ -1035,7 +1035,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 
     if ( !aChars.isEmpty() )
     {
-        rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), aChars ) );
+        rReq.AppendItem( SfxStringItem( SID_CHARMAP, aChars ) );
         rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aNewFont.GetFamilyName() ) );
         rReq.Done();
     }
