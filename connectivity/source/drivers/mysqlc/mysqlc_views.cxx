@@ -111,7 +111,6 @@ void connectivity::mysqlc::Views::createView(
         xStmt->execute(aSql);
         ::comphelper::disposeComponent(xStmt);
     }
-    //  TODO find a way to refresh view to make the new one appear right away
     connectivity::mysqlc::Tables* pTables = static_cast<connectivity::mysqlc::Tables*>(
         static_cast<connectivity::mysqlc::Catalog&>(m_rParent).getPrivateTables());
     if (pTables)
