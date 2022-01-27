@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe4641e6_4ef9b87f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-27T15:58:12Z",
+      "side": 1,
+      "message": "I confirm it worked locally. Let\u0027s push this one.",
+      "revId": "b7b108f66a81e644acfe3f77bd6226f410382ba9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
