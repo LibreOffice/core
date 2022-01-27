@@ -33,6 +33,24 @@
       "message": "std::make_unique\u003cScDBData\u003e(...) should be preferred here.",
       "revId": "eda1724efc57d338e4a59defb8d00702c3306662",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28c8e45d_5faf0574",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1526,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-01-27T06:32:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7d50401_395cafc8",
+      "revId": "eda1724efc57d338e4a59defb8d00702c3306662",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
