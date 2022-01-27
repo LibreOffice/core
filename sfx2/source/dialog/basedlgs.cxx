@@ -175,7 +175,7 @@ void SfxModelessDialogController::ChildWinDispose()
     {
         WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
         if (m_xDialog->get_resizable())
-            nMask |= WindowStateMask::Width | WindowStateMask::Height;
+            nMask |= WindowStateMask::Size;
         m_xImpl->aWinState = m_xDialog->get_window_state(nMask);
         GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, m_xImpl->pMgr->GetType() );
     }
