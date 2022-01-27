@@ -1610,7 +1610,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
             // add the other new empty rows/columns after the actual table row/column
             if ( nSelectedRowsOrCols > 1 )
             {
-                SfxUInt16Item aCountItem( nDispatchSlot, nSelectedRowsOrCols-1 );
+                SfxInt16Item aCountItem( nDispatchSlot, nSelectedRowsOrCols-1 );
                 SfxBoolItem aAfter( FN_PARAM_INSERT_AFTER, true );
                 pDispatch->ExecuteList(nDispatchSlot,
                     SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
