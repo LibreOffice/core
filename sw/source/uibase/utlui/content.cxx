@@ -456,7 +456,6 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             const size_t nOutlineCount = m_nMemberCount =
                 m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
 
-            size_t nPos = 0;
             for (size_t i = 0; i < nOutlineCount; ++i)
             {
                 const sal_uInt8 nLevel = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i);
@@ -478,15 +477,28 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     auto pCnt(make_unique<SwOutlineContent>(this, aEntry, i, nLevel,
                                                         m_pWrtShell->IsOutlineMovable( i ), nYPos));
                     m_pMember->insert(std::move(pCnt));
-                    // with the same number and existing "pOldMember" the
-                    // old one is compared with the new OutlinePos.
-                    if (nOldMemberCount > nPos && static_cast<SwOutlineContent*>((*pOldMember)[nPos].get())->GetOutlineLevel() != nLevel)
-                        *pbLevelOrVisibilityChanged = true;
-
-                    nPos++;
                 }
             }
 
+            // need to check level (and equal entry number) after
+            // creation due to a sorted list being used here
+            if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
+            {
+                if (pOldMember->size() != m_pMember->size())
+                {
+                    *pbLevelOrVisibilityChanged = true;
+                    break;
+                }
+                for (size_t i = 0; i < pOldMember->size(); i++)
+                {
+                    if (static_cast<SwOutlineContent*>((*pOldMember)[i].get())->GetOutlineLevel() !=
+                            static_cast<SwOutlineContent*>((*m_pMember)[i].get())->GetOutlineLevel())
+                    {
+                        *pbLevelOrVisibilityChanged = true;
+                        break;
+                    }
+                }
+            }
         }
         break;
         case ContentTypeId::TABLE     :
