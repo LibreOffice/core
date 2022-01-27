@@ -9,8 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <sstream>
-
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -18,20 +16,16 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/AxisOrientation.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <com/sun/star/table/XTableRows.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/configuration.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <i18nlangtag/languagetag.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
 #include <ndtxt.hxx>
@@ -42,13 +36,11 @@
 #include <fmtanchr.hxx>
 #include <UndoManager.hxx>
 #include <sortedobjs.hxx>
-#include <anchoredobject.hxx>
 #include <itabenum.hxx>
 #include <fmtfsize.hxx>
 #include <xmloff/odffields.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svl/stritem.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -59,18 +51,15 @@
 #include <cmdid.h>
 #include <AnnotationWin.hxx>
 #include <PostItMgr.hxx>
-#include <postithelper.hxx>
 #include <fmtcntnt.hxx>
 #include <frameformats.hxx>
 #include <shellio.hxx>
 #include <editeng/fontitem.hxx>
 #include <tools/json_writer.hxx>
-#include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
-#include <comphelper/processfactory.hxx>
 
 namespace
 {
