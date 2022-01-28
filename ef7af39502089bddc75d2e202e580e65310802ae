@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10417587_6e9b8dc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-28T09:39:15Z",
+      "side": 1,
+      "message": "Jenkins approved - just a commit message spelling fix.",
+      "revId": "ef7af39502089bddc75d2e202e580e65310802ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
