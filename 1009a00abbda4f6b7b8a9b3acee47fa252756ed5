@@ -33,6 +33,23 @@
       "message": "IIUC, using our class has another - very important IMO - advantage to obey the \"Temporary files\" directory setting. Using anything else for temptiles is wrong.",
       "revId": "1009a00abbda4f6b7b8a9b3acee47fa252756ed5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98f31aff_f770eac7",
+        "filename": "hwpfilter/source/htags.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-01-28T13:21:52Z",
+      "side": 1,
+      "message": "will be faster if you get the stream from utl::TempFile, that keeps you on the \"happy path\" which is fast on both Windwos and Linux",
+      "revId": "1009a00abbda4f6b7b8a9b3acee47fa252756ed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
