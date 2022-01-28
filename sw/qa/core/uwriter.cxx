@@ -1130,7 +1130,7 @@ void SwDocTest::testTableAutoFormats()
     SfxBoolItem aStacked(0, true);
     aBoxAF.SetStacked(aStacked);
     //Set m_aMargin
-    SvxMarginItem aSvxMarginItem(sal_Int16(4), sal_Int16(2), sal_Int16(3), sal_Int16(3), 0);
+    SvxMarginItem aSvxMarginItem(sal_Int16(4), sal_Int16(2), sal_Int16(3), sal_Int16(3), TypedWhichId<SvxMarginItem>(0));
     aBoxAF.SetMargin(aSvxMarginItem);
     //Set m_aLinebreak
     SfxBoolItem aLBreak(0, true);
@@ -1139,7 +1139,7 @@ void SwDocTest::testTableAutoFormats()
     SfxInt32Item aRAngle(sal_Int32(5));
     aBoxAF.SetRotateAngle(aRAngle);
     //Set m_aRotateMode
-    SvxRotateModeItem aSvxRotateModeItem(SVX_ROTATE_MODE_CENTER, 0);
+    SvxRotateModeItem aSvxRotateModeItem(SVX_ROTATE_MODE_CENTER, TypedWhichId<SvxRotateModeItem>(0));
     aBoxAF.SetRotateMode(aSvxRotateModeItem);
     //Set m_sNumFormatString
     OUString aNFString = "UnitTestFormat";

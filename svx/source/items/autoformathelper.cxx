@@ -319,7 +319,7 @@ bool AutoFormatBase::LoadBlockB( SvStream& rStream, const AutoFormatVersions& rV
 {
     legacy::SvxHorJustify::Create(*m_aHorJustify, rStream, rVersions.nHorJustifyVersion);
     legacy::SvxVerJustify::Create(*m_aVerJustify, rStream, rVersions.nVerJustifyVersion);
-    SvxOrientationItem aOrientation( SvxCellOrientation::Standard, 0);
+    SvxOrientationItem aOrientation( SvxCellOrientation::Standard, TypedWhichId<SvxOrientationItem>(0));
     legacy::SvxOrientation::Create(aOrientation, rStream, rVersions.nOrientationVersion);
     legacy::SvxMargin::Create(*m_aMargin, rStream, rVersions.nMarginVersion);
     legacy::SfxBool::Create(*m_aLinebreak, rStream, rVersions.nBoolVersion);
@@ -377,7 +377,7 @@ bool AutoFormatBase::SaveBlockB( SvStream& rStream, sal_uInt16 fileVersion ) con
 {
     legacy::SvxHorJustify::Store(*m_aHorJustify, rStream, legacy::SvxHorJustify::GetVersion(fileVersion));
     legacy::SvxVerJustify::Store(*m_aVerJustify, rStream, legacy::SvxVerJustify::GetVersion(fileVersion));
-    SvxOrientationItem aOrientation( Degree100(m_aRotateAngle->GetValue()), m_aStacked->GetValue(), 0 );
+    SvxOrientationItem aOrientation( Degree100(m_aRotateAngle->GetValue()), m_aStacked->GetValue(), TypedWhichId<SvxOrientationItem>(0) );
     legacy::SvxOrientation::Store(aOrientation, rStream, legacy::SvxOrientation::GetVersion(fileVersion));
     legacy::SvxMargin::Store(*m_aMargin, rStream, legacy::SvxMargin::GetVersion(fileVersion));
     legacy::SfxBool::Store(*m_aLinebreak, rStream, legacy::SfxBool::GetVersion(fileVersion));

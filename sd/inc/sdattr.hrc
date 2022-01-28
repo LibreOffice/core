@@ -21,6 +21,8 @@
 
 #include <svl/solar.hrc>
 
+class XColorItem;
+
 // Layer attributes
 #define ATTR_LAYER_START        SID_SD_START + 1234
 #define ATTR_LAYER_NAME         ATTR_LAYER_START
@@ -78,11 +80,11 @@
 #define ATTR_COPY_NUMBER                ATTR_COPY_START
 #define ATTR_COPY_MOVE_X                ATTR_COPY_START + 1
 #define ATTR_COPY_MOVE_Y                ATTR_COPY_START + 2
-#define ATTR_COPY_ANGLE                 ATTR_COPY_START + 3
+#define ATTR_COPY_ANGLE                 TypedWhichId<SdrAngleItem>(ATTR_COPY_START + 3)
 #define ATTR_COPY_WIDTH                 ATTR_COPY_START + 4
 #define ATTR_COPY_HEIGHT                ATTR_COPY_START + 5
-#define ATTR_COPY_START_COLOR           ATTR_COPY_START + 6
-#define ATTR_COPY_END_COLOR             ATTR_COPY_START + 7
+#define ATTR_COPY_START_COLOR           TypedWhichId<XColorItem>(ATTR_COPY_START + 6)
+#define ATTR_COPY_END_COLOR             TypedWhichId<XColorItem>(ATTR_COPY_START + 7)
 #define ATTR_COPY_END                   ATTR_COPY_END_COLOR
 
 #define ATTR_SNAPLINE_START             ATTR_COPY_END + 1

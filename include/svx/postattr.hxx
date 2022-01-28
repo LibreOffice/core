@@ -30,9 +30,9 @@ class SVX_DLLPUBLIC SvxPostItAuthorItem final : public SfxStringItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxPostItAuthorItem( sal_uInt16 nWhich  );
+    SvxPostItAuthorItem( TypedWhichId<SvxPostItAuthorItem> nWhich  );
 
-    SvxPostItAuthorItem( const OUString& rAuthor, sal_uInt16 nWhich  );
+    SvxPostItAuthorItem( const OUString& rAuthor, TypedWhichId<SvxPostItAuthorItem> nWhich  );
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
@@ -50,9 +50,9 @@ class SVX_DLLPUBLIC SvxPostItDateItem final : public SfxStringItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxPostItDateItem( sal_uInt16 nWhich  );
+    SvxPostItDateItem( TypedWhichId<SvxPostItDateItem> nWhich  );
 
-    SvxPostItDateItem( const OUString& rDate, sal_uInt16 nWhich  );
+    SvxPostItDateItem( const OUString& rDate, TypedWhichId<SvxPostItDateItem> nWhich  );
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
@@ -69,9 +69,9 @@ class SVX_DLLPUBLIC SvxPostItTextItem final : public SfxStringItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxPostItTextItem( sal_uInt16 nWhich  );
+    SvxPostItTextItem( TypedWhichId<SvxPostItTextItem> nWhich  );
 
-    SvxPostItTextItem( const OUString& rText, sal_uInt16 nWhich  );
+    SvxPostItTextItem( const OUString& rText, TypedWhichId<SvxPostItTextItem> nWhich  );
     // "pure virtual methods" from SfxPoolItem
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -90,7 +90,7 @@ class SVX_DLLPUBLIC SvxPostItIdItem final : public SfxStringItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxPostItIdItem( sal_uInt16 nWhich );
+    SvxPostItIdItem( TypedWhichId<SvxPostItIdItem>  nWhich );
 
     virtual SvxPostItIdItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 };

@@ -32,9 +32,9 @@ struct SvxClipboardFormatItem_Impl
     SvxClipboardFormatItem_Impl() {}
 };
 
-SfxPoolItem* SvxClipboardFormatItem::CreateDefault() { return new  SvxClipboardFormatItem(0); };
+SfxPoolItem* SvxClipboardFormatItem::CreateDefault() { return new  SvxClipboardFormatItem(TypedWhichId<SvxClipboardFormatItem>(0)); };
 
-SvxClipboardFormatItem::SvxClipboardFormatItem( sal_uInt16 nId )
+SvxClipboardFormatItem::SvxClipboardFormatItem( TypedWhichId<SvxClipboardFormatItem> nId )
     : SfxPoolItem( nId ), pImpl( new SvxClipboardFormatItem_Impl )
 {
 }

@@ -713,7 +713,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             if (GetPropertySet()->getPropertyValue("TextRotation") >>= fValue)
             {
                 rOutItemSet.Put(
-                    SdrAngleItem(nWhichId, Degree100(static_cast<sal_Int32>(rtl::math::round(fValue * 100.0)))));
+                    SdrAngleItem(SCHATTR_TEXT_DEGREES, Degree100(static_cast<sal_Int32>(rtl::math::round(fValue * 100.0)))));
             }
         }
         break;

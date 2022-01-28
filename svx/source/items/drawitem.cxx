@@ -36,7 +36,7 @@ SvxColorListItem::SvxColorListItem()
 }
 
 
-SvxColorListItem::SvxColorListItem( XColorListRef const & pTable, sal_uInt16 nW ) :
+SvxColorListItem::SvxColorListItem( XColorListRef const & pTable, TypedWhichId<SvxColorListItem> nW ) :
     SfxPoolItem( nW ),
     pColorList( pTable )
 {
@@ -96,7 +96,7 @@ SvxGradientListItem::SvxGradientListItem()
 {
 }
 
-SvxGradientListItem::SvxGradientListItem( XGradientListRef const & pList, sal_uInt16 nW ) :
+SvxGradientListItem::SvxGradientListItem( XGradientListRef const & pList, TypedWhichId<SvxGradientListItem> nW ) :
     SfxPoolItem( nW ),
     pGradientList( pList )
 {
@@ -141,7 +141,7 @@ SvxHatchListItem::SvxHatchListItem()
 }
 
 
-SvxHatchListItem::SvxHatchListItem( XHatchListRef const & pList, sal_uInt16 nW ) :
+SvxHatchListItem::SvxHatchListItem( XHatchListRef const & pList, TypedWhichId<SvxHatchListItem> nW ) :
     SfxPoolItem( nW ),
     pHatchList( pList )
 {
@@ -185,7 +185,7 @@ SvxBitmapListItem::SvxBitmapListItem()
 {
 }
 
-SvxBitmapListItem::SvxBitmapListItem( XBitmapListRef const & pList, sal_uInt16 nW ) :
+SvxBitmapListItem::SvxBitmapListItem( XBitmapListRef const & pList, TypedWhichId<SvxBitmapListItem> nW ) :
     SfxPoolItem( nW ),
     pBitmapList( pList )
 {
@@ -226,7 +226,7 @@ SvxPatternListItem::SvxPatternListItem()
 {
 }
 
-SvxPatternListItem::SvxPatternListItem( XPatternListRef const & pList, sal_uInt16 nW ) :
+SvxPatternListItem::SvxPatternListItem( XPatternListRef const & pList, TypedWhichId<SvxPatternListItem> nW ) :
     SfxPoolItem( nW ),
     pPatternList( pList )
 {
@@ -267,7 +267,7 @@ SvxDashListItem::SvxDashListItem()
 {
 }
 
-SvxDashListItem::SvxDashListItem( XDashListRef const & pList, sal_uInt16 nW ) :
+SvxDashListItem::SvxDashListItem( XDashListRef const & pList, TypedWhichId<SvxDashListItem> nW ) :
     SfxPoolItem( nW ),
     pDashList( pList )
 {
@@ -308,7 +308,7 @@ SvxLineEndListItem::SvxLineEndListItem()
 {
 }
 
-SvxLineEndListItem::SvxLineEndListItem( XLineEndListRef const & pList, sal_uInt16 nW ) :
+SvxLineEndListItem::SvxLineEndListItem( XLineEndListRef const & pList, TypedWhichId<SvxLineEndListItem>  nW ) :
     SfxPoolItem( nW ),
     pLineEndList( pList )
 {

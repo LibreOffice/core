@@ -22,6 +22,8 @@
 
 #include <svx/svxids.hrc>
 
+class SvxZoomSliderItem;
+
 // areas
 
 #ifndef SC_VIEW_START // duplicated in sfx2/sfxsids.hrc
@@ -453,7 +455,7 @@
 #define SID_PREVIEW_LAST        (SID_PREVIEW_START+3)
 #define SID_PREVIEW_CLOSE       (SID_PREVIEW_START+7)
 #define SID_PREVIEW_MARGIN      (SID_PREVIEW_START+8)
-#define SID_PREVIEW_SCALINGFACTOR   (SID_PREVIEW_START+9)
+#define SID_PREVIEW_SCALINGFACTOR   TypedWhichId<SvxZoomSliderItem>(SID_PREVIEW_START+9)
 #define SID_PREVIEW_END         (SID_PREVIEW_START+20)
 
 //from sfx: #define SID_KEYFUNC_START       (SID_PREVIEW_END+5)

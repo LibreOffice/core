@@ -181,12 +181,12 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             {
                 double fMax = 10.0;
                 if( rScale.Maximum >>= fMax )
-                    rOutItemSet.Put( SvxDoubleItem( fMax, nWhichId ) );
+                    rOutItemSet.Put( SvxDoubleItem( fMax, SCHATTR_AXIS_MAX ) );
                 else
                 {
                     if( m_pExplicitScale )
                         fMax = m_pExplicitScale->Maximum;
-                    rOutItemSet.Put( SvxDoubleItem( fMax, nWhichId ) );
+                    rOutItemSet.Put( SvxDoubleItem( fMax, SCHATTR_AXIS_MAX ) );
                 }
             }
             break;
@@ -199,9 +199,9 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             {
                 double fMin = 0.0;
                 if( rScale.Minimum >>= fMin )
-                    rOutItemSet.Put( SvxDoubleItem( fMin, nWhichId ) );
+                    rOutItemSet.Put( SvxDoubleItem( fMin, SCHATTR_AXIS_MIN ) );
                 else if( m_pExplicitScale )
-                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitScale->Minimum, nWhichId ));
+                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitScale->Minimum, SCHATTR_AXIS_MIN ));
             }
             break;
 
@@ -239,17 +239,17 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             {
                 TimeInterval aTimeInterval;
                 if( rTimeIncrement.MajorTimeInterval >>= aTimeInterval )
-                    rOutItemSet.Put( SvxDoubleItem(aTimeInterval.Number, nWhichId ));
+                    rOutItemSet.Put( SvxDoubleItem(aTimeInterval.Number, SCHATTR_AXIS_STEP_MAIN ));
                 else if( m_pExplicitIncrement )
-                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitIncrement->MajorTimeInterval.Number, nWhichId ));
+                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitIncrement->MajorTimeInterval.Number, SCHATTR_AXIS_STEP_MAIN ));
             }
             else
             {
                 double fDistance = 1.0;
                 if( rIncrement.Distance >>= fDistance )
-                    rOutItemSet.Put( SvxDoubleItem(fDistance, nWhichId ));
+                    rOutItemSet.Put( SvxDoubleItem(fDistance, SCHATTR_AXIS_STEP_MAIN ));
                 else if( m_pExplicitIncrement )
-                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitIncrement->Distance, nWhichId ));
+                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitIncrement->Distance, SCHATTR_AXIS_STEP_MAIN ));
             }
             break;
 
@@ -330,7 +330,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
                 if( m_pExplicitScale )
                     fOrigin = m_pExplicitScale->Origin;
             }
-            rOutItemSet.Put( SvxDoubleItem( fOrigin, nWhichId ));
+            rOutItemSet.Put( SvxDoubleItem( fOrigin, SCHATTR_AXIS_ORIGIN ));
         }
         break;
 
@@ -346,7 +346,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         {
             double fValue = 0.0;
             if( GetPropertySet()->getPropertyValue( "CrossoverValue" ) >>= fValue )
-                rOutItemSet.Put( SvxDoubleItem( fValue, nWhichId ) );
+                rOutItemSet.Put( SvxDoubleItem( fValue, SCHATTR_AXIS_POSITION_VALUE ) );
         }
         break;
 
@@ -394,7 +394,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
             if( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fVal )
             {
-                rOutItemSet.Put( SdrAngleItem( nWhichId, Degree100(static_cast< sal_Int32 >(
+                rOutItemSet.Put( SdrAngleItem( SCHATTR_TEXT_DEGREES, Degree100(static_cast< sal_Int32 >(
                                                    ::rtl::math::round( fVal * 100.0 )) ) ));
             }
         }

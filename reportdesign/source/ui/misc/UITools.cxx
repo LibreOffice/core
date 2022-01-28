@@ -139,7 +139,7 @@
 #define ITEMID_ESCAPEMENT               XATTR_FILL_LAST + 14
 #define ITEMID_FONTLIST                 XATTR_FILL_LAST + 15
 #define ITEMID_AUTOKERN                 XATTR_FILL_LAST + 16
-#define ITEMID_COLOR_TABLE              XATTR_FILL_LAST + 17
+#define ITEMID_COLOR_TABLE              TypedWhichId<SvxColorListItem>(XATTR_FILL_LAST + 17)
 #define ITEMID_BLINK                    XATTR_FILL_LAST + 18
 #define ITEMID_EMPHASISMARK             XATTR_FILL_LAST + 19
 #define ITEMID_TWOLINES                 XATTR_FILL_LAST + 20

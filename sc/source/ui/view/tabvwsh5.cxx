@@ -378,7 +378,7 @@ std::unique_ptr<SvxNumberInfoItem> ScTabViewShell::MakeNumberInfoItem( ScDocumen
     }
 
     return std::make_unique<SvxNumberInfoItem>(
-        rDoc.GetFormatTable(), static_cast<sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO));
+        rDoc.GetFormatTable(), SID_ATTR_NUMBERFORMAT_INFO);
 }
 
 void ScTabViewShell::UpdateNumberFormatter(

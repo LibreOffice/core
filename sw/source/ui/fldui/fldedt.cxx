@@ -189,7 +189,7 @@ SfxTabPage* SwFieldEditDlg::CreatePage(sal_uInt16 nGroup)
         case GRP_REG:
             {
                 SfxObjectShell* pDocSh = SfxObjectShell::Current();
-                auto pSet = new SfxItemSetFixed<SID_DOCINFO, SID_DOCINFO>( pDocSh->GetPool() );
+                auto pSet = new SfxItemSetFixed<FN_FIELD_DIALOG_DOC_PROPS, FN_FIELD_DIALOG_DOC_PROPS>( pDocSh->GetPool() );
                 using namespace ::com::sun::star;
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     pDocSh->GetModel(), uno::UNO_QUERY_THROW);
@@ -198,7 +198,7 @@ SfxTabPage* SwFieldEditDlg::CreatePage(sal_uInt16 nGroup)
                 uno::Reference< beans::XPropertySet > xUDProps(
                     xDocProps->getUserDefinedProperties(),
                     uno::UNO_QUERY_THROW);
-                pSet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(xUDProps) ) );
+                pSet->Put( SfxUnoAnyItem( FN_FIELD_DIALOG_DOC_PROPS, uno::makeAny(xUDProps) ) );
                 xTabPage = SwFieldDokInfPage::Create(get_content_area(), this, pSet);
                 break;
             }

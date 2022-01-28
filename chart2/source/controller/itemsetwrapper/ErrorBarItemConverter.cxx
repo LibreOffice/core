@@ -356,7 +356,7 @@ void ErrorBarItemConverter::FillSpecialItem(
         {
             double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( GetPropertySet(), fPos, fNeg );
-            rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, nWhichId ));
+            rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, SCHATTR_STAT_PERCENT ));
         }
         break;
 
@@ -364,7 +364,7 @@ void ErrorBarItemConverter::FillSpecialItem(
         {
             double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( GetPropertySet(), fPos, fNeg );
-            rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, nWhichId ));
+            rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, SCHATTR_STAT_BIGERROR ));
         }
         break;
 
@@ -372,7 +372,7 @@ void ErrorBarItemConverter::FillSpecialItem(
         {
             double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( GetPropertySet(), fPos, fNeg );
-            rOutItemSet.Put( SvxDoubleItem( fPos, nWhichId ));
+            rOutItemSet.Put( SvxDoubleItem( fPos, SCHATTR_STAT_CONSTPLUS ));
         }
         break;
 
@@ -380,7 +380,7 @@ void ErrorBarItemConverter::FillSpecialItem(
         {
             double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( GetPropertySet(), fPos, fNeg );
-            rOutItemSet.Put( SvxDoubleItem( fNeg, nWhichId ));
+            rOutItemSet.Put( SvxDoubleItem( fNeg, SCHATTR_STAT_CONSTMINUS ));
         }
         break;
 

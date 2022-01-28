@@ -26,13 +26,13 @@
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SvxRotateModeItem::CreateDefault() { return new  SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD, 0);}
+SfxPoolItem* SvxRotateModeItem::CreateDefault() { return new  SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD, TypedWhichId<SvxRotateModeItem>(0));}
 
 
 //  SvxRotateModeItem - orientation with turned text
 
 
-SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, sal_uInt16 _nWhich )
+SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, TypedWhichId<SvxRotateModeItem> _nWhich )
     : SfxEnumItem( _nWhich, eMode )
 {
 }
