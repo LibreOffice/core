@@ -437,7 +437,7 @@ CPPUNIT_TEST_FIXTURE(Test, testObjectCrossReference)
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Illustration1_caption_only"), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("an other image"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(OUString("another image"), xRange->getString());
     }
 
     // Cross references to text frames
@@ -517,7 +517,7 @@ CPPUNIT_TEST_FIXTURE(Test, testObjectCrossReference)
                     xServiceInfo->supportsService("com.sun.star.text.TextField.GetReference"));
                 OUString sValue;
                 xPropertySet->getPropertyValue("CurrentPresentation") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("an other image"), sValue);
+                CPPUNIT_ASSERT_EQUAL(OUString("another image"), sValue);
                 xPropertySet->getPropertyValue("SourceName") >>= sValue;
                 CPPUNIT_ASSERT_EQUAL(OUString("Ref_Illustration1_caption_only"), sValue);
                 break;
@@ -2057,8 +2057,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119952_negativeMargins, "tdf119952_negativeMargi
     CPPUNIT_ASSERT(lcl_nearEqual(nHeightHFly, 2152));
     CPPUNIT_ASSERT(lcl_nearEqual(nHeightFFly, 2152));
 
-    // after export these heights increase to like 567..
-    // not sure if it is an other import, or export bug... or just the result of the modified document
+    // after export these heights increase to like 567.
+    // not sure if it is another import, or export bug... or just the result of the modified document
     if (!mbExported)
     {
         CPPUNIT_ASSERT(lcl_nearEqual(nHeightHFlyBound, 57));
