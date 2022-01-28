@@ -990,9 +990,8 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
     }
 
     // RTL: mirror cursor keys
-    const OutputDevice *pChildOutDev = pChild->GetOutDev();
     if( (aKeyCode.GetCode() == KEY_LEFT || aKeyCode.GetCode() == KEY_RIGHT) &&
-      pChildOutDev->HasMirroredGraphics() && pChild->IsRTLEnabled() )
+      pChild->IsRTLEnabled() && pChild->GetOutDev()->HasMirroredGraphics() )
         aKeyCode = vcl::KeyCode( aKeyCode.GetCode() == KEY_LEFT ? KEY_RIGHT : KEY_LEFT, aKeyCode.GetModifier() );
 
     KeyEvent    aKeyEvt( static_cast<sal_Unicode>(nCharCode), aKeyCode, nRepeat );
