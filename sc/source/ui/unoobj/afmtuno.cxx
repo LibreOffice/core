@@ -686,7 +686,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPrope
                         const ScRotateValueItem* pRotItem = pData->GetItem( nFieldIndex, ATTR_ROTATE_VALUE );
                         Degree100 nRot = pRotItem ? pRotItem->GetValue() : 0_deg100;
                         bool bStacked = static_cast<const ScVerticalStackCell*>(pItem)->GetValue();
-                        SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aVal );
+                        SvxOrientationItem( nRot, bStacked, TypedWhichId<SvxOrientationItem>(0) ).QueryValue( aVal );
                     }
                     break;
                     default:

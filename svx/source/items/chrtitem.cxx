@@ -27,10 +27,10 @@
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SvxDoubleItem::CreateDefault() { return new  SvxDoubleItem(0.0, 0);}
+SfxPoolItem* SvxDoubleItem::CreateDefault() { return new  SvxDoubleItem(0.0, TypedWhichId<SvxDoubleItem>(0));}
 
 SvxChartTextOrderItem::SvxChartTextOrderItem(SvxChartTextOrder eOrder,
-                                             sal_uInt16 nId) :
+                                             TypedWhichId<SvxChartTextOrderItem> nId) :
     SfxEnumItem(nId, eOrder)
 {
 }
@@ -98,7 +98,7 @@ bool SvxChartTextOrderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMe
     return true;
 }
 
-SvxDoubleItem::SvxDoubleItem(double fValue, sal_uInt16 nId) :
+SvxDoubleItem::SvxDoubleItem(double fValue, TypedWhichId<SvxDoubleItem> nId) :
     SfxPoolItem(nId),
     fVal(fValue)
 {
@@ -143,7 +143,7 @@ bool SvxDoubleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 }
 
 SvxChartKindErrorItem::SvxChartKindErrorItem(SvxChartKindError eOrient,
-                                               sal_uInt16 nId) :
+                                               TypedWhichId<SvxChartKindErrorItem> nId) :
     SfxEnumItem(nId, eOrient)
 {
 }
@@ -154,7 +154,7 @@ SvxChartKindErrorItem* SvxChartKindErrorItem::Clone(SfxItemPool* /*pPool*/) cons
 }
 
 SvxChartIndicateItem::SvxChartIndicateItem(SvxChartIndicate eOrient,
-                                               sal_uInt16 nId) :
+                                               TypedWhichId<SvxChartIndicateItem> nId) :
     SfxEnumItem(nId, eOrient)
 {
 }
@@ -165,7 +165,7 @@ SvxChartIndicateItem* SvxChartIndicateItem::Clone(SfxItemPool* /*pPool*/) const
 }
 
 SvxChartRegressItem::SvxChartRegressItem(SvxChartRegress eOrient,
-                                               sal_uInt16 nId) :
+                                               TypedWhichId<SvxChartRegressItem> nId) :
     SfxEnumItem(nId, eOrient)
 {
 }

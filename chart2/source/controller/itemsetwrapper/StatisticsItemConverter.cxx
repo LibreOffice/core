@@ -192,12 +192,12 @@ void lclConvertToItemSet(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::R
     }
 }
 
-void lclConvertToItemSetDouble(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::Reference<beans::XPropertySet>& xProperties, const OUString& aPropertyID)
+void lclConvertToItemSetDouble(SfxItemSet& rItemSet, TypedWhichId<SvxDoubleItem> nWhichId, const uno::Reference<beans::XPropertySet>& xProperties, const OUString& aPropertyID)
 {
     OSL_ASSERT(xProperties.is());
     if( xProperties.is() )
     {
-        double aValue = static_cast<const SvxDoubleItem&>(rItemSet.Get( nWhichId )).GetValue();
+        double aValue = rItemSet.Get( nWhichId ).GetValue();
         if(xProperties->getPropertyValue( aPropertyID ) >>= aValue)
         {
             rItemSet.Put(SvxDoubleItem( aValue, nWhichId ));
@@ -663,7 +663,7 @@ void StatisticsItemConverter::FillSpecialItem(
             {
                 double fPos(0.0), fNeg(0.0);
                 lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
-                rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, nWhichId ));
+                rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, SCHATTR_STAT_PERCENT ));
             }
         }
         break;
@@ -677,7 +677,7 @@ void StatisticsItemConverter::FillSpecialItem(
             {
                 double fPos(0.0), fNeg(0.0);
                 lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
-                rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, nWhichId ));
+                rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, SCHATTR_STAT_BIGERROR ));
             }
         }
         break;
@@ -691,7 +691,7 @@ void StatisticsItemConverter::FillSpecialItem(
             {
                 double fPos(0.0), fNeg(0.0);
                 lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
-                rOutItemSet.Put( SvxDoubleItem( fPos, nWhichId ));
+                rOutItemSet.Put( SvxDoubleItem( fPos, SCHATTR_STAT_CONSTPLUS ));
             }
         }
         break;
@@ -705,7 +705,7 @@ void StatisticsItemConverter::FillSpecialItem(
             {
                 double fPos(0.0), fNeg(0.0);
                 lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
-                rOutItemSet.Put( SvxDoubleItem( fNeg, nWhichId ));
+                rOutItemSet.Put( SvxDoubleItem( fNeg, SCHATTR_STAT_CONSTMINUS ));
             }
         }
         break;
@@ -745,14 +745,14 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD:
         {
             uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
-            lclConvertToItemSetDouble(rOutItemSet, nWhichId, xProperties, "ExtrapolateForward");
+            lclConvertToItemSetDouble(rOutItemSet, SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD, xProperties, "ExtrapolateForward");
         }
         break;
 
         case SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD:
         {
             uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
-            lclConvertToItemSetDouble(rOutItemSet, nWhichId, xProperties, "ExtrapolateBackward");
+            lclConvertToItemSetDouble(rOutItemSet, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD, xProperties, "ExtrapolateBackward");
         }
         break;
 
@@ -766,7 +766,7 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_REGRESSION_INTERCEPT_VALUE:
         {
             uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
-            lclConvertToItemSetDouble(rOutItemSet, nWhichId, xProperties, "InterceptValue");
+            lclConvertToItemSetDouble(rOutItemSet, SCHATTR_REGRESSION_INTERCEPT_VALUE, xProperties, "InterceptValue");
         }
         break;
 

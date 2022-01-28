@@ -35,6 +35,7 @@ class SfxStringListItem;
 class SfxUInt16Item;
 class SfxUnoAnyItem;
 class SfxUnoFrameItem;
+class SvxClipboardFormatItem;
 class SvxHyperlinkItem;
 class SvxLanguageItem;
 class SvxSearchItem;
@@ -67,7 +68,7 @@ class SvxZoomItem;
 #define SID_CONTEXT                         (SID_SFX_START + 310)
 
 #define SID_PASTE_SPECIAL                   (SID_SFX_START + 311)
-#define SID_CLIPBOARD_FORMAT_ITEMS          (SID_SFX_START + 312)
+#define SID_CLIPBOARD_FORMAT_ITEMS          TypedWhichId<SvxClipboardFormatItem>(SID_SFX_START + 312)
 
 #define SID_PASTE_UNFORMATTED               (SID_SFX_START + 314)
 #define SID_PRINTER_NOTFOUND_WARN           TypedWhichId<SfxBoolItem>(SID_SFX_START + 320)
@@ -578,7 +579,7 @@ class SvxZoomItem;
 #define SID_SIDEBAR                         (SID_SVX_START + 336)
 #define SID_NOTEBOOKBAR                     (SID_SVX_START + 338)
 #define SID_MENUBAR                         (SID_SVX_START + 339)
-#define SID_HYPERLINK_GETLINK               (SID_SVX_START + 361)
+#define SID_HYPERLINK_GETLINK               TypedWhichId<SvxHyperlinkItem>(SID_SVX_START + 361)
 #define SID_HYPERLINK_SETLINK               TypedWhichId<SvxHyperlinkItem>(SID_SVX_START + 362)
 #define SID_INFOBAR                         (SID_SVX_START + 365)
 #define SID_NAVIGATOR                       (SID_SVX_START + 366)

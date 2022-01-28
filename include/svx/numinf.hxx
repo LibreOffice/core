@@ -30,16 +30,16 @@ class SVX_DLLPUBLIC SvxNumberInfoItem final : public SfxPoolItem
 {
 public:
 
-    SvxNumberInfoItem( const sal_uInt16 nId  );
+    SvxNumberInfoItem( const TypedWhichId<SvxNumberInfoItem> nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
-                       const sal_uInt16 nId  );
+                       const TypedWhichId<SvxNumberInfoItem> nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const OUString& rVal,
-                       const sal_uInt16 nId  );
+                       const TypedWhichId<SvxNumberInfoItem> nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
-                       const sal_uInt16 nId  );
+                       const TypedWhichId<SvxNumberInfoItem> nId  );
     // if both double and String are supplied, String is used for text formats
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
-                       const OUString& rValueStr, const sal_uInt16 nId );
+                       const OUString& rValueStr, const TypedWhichId<SvxNumberInfoItem> nId );
     SvxNumberInfoItem( const SvxNumberInfoItem& );
     virtual ~SvxNumberInfoItem() override;
 
