@@ -1402,7 +1402,6 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
     TriState eState = m_xApplyCollBtn->get_state();
     bool bIsPageModel = false;
 
-    _nWhich = GetWhich( SID_ATTR_PARA_MODEL );
     OUString sPage;
     if ( m_xApplyCollBtn->get_state_changed_from_saved() ||
          ( TRISTATE_TRUE == eState &&
@@ -1417,7 +1416,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
         if ( !pOld || static_cast<const SvxPageModelItem*>(pOld)->GetValue() != sPage )
         {
-            rOutSet->Put( SvxPageModelItem( sPage, false, _nWhich ) );
+            rOutSet->Put( SvxPageModelItem( sPage, false, SID_ATTR_PARA_MODEL ) );
             bModified = true;
         }
         else
@@ -1426,7 +1425,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
     else if(TRISTATE_TRUE == eState && m_xApplyCollBtn->get_sensitive())
         bIsPageModel = true;
     else
-        rOutSet->Put( SvxPageModelItem( sPage, false, _nWhich ) );
+        rOutSet->Put( SvxPageModelItem( sPage, false, SID_ATTR_PARA_MODEL ) );
 
     _nWhich = GetWhich( SID_ATTR_PARA_PAGEBREAK );
 
@@ -1587,15 +1586,13 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     m_xMaxHyphenLabel->set_sensitive(bEnable);
     m_xMaxHyphenEdit->set_sensitive(bEnable);
 
-    _nWhich = GetWhich( SID_ATTR_PARA_PAGENUM );
-
-    switch (rSet->GetItemState(_nWhich))
+    switch (rSet->GetItemState(SID_ATTR_PARA_PAGENUM))
     {
         case SfxItemState::SET:
         {
             aPageNumState.bTriStateEnabled = false;
             m_xPageNumBox->set_state(TRISTATE_TRUE);
-            SfxUInt16Item const*const pItem(rSet->GetItem<SfxUInt16Item>(_nWhich));
+            SfxUInt16Item const*const pItem(rSet->GetItem<SfxUInt16Item>(SID_ATTR_PARA_PAGENUM));
             const sal_uInt16 nPageNum(pItem->GetValue());
             m_xPagenumEdit->set_value(nPageNum);
             break;
@@ -1622,16 +1619,15 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     if ( bPageBreak )
     {
         // first handle PageModel
-        _nWhich = GetWhich( SID_ATTR_PARA_MODEL );
         bool bIsPageModel = false;
-        eItemState = rSet->GetItemState( _nWhich );
+        eItemState = rSet->GetItemState( SID_ATTR_PARA_MODEL );
 
         if ( eItemState >= SfxItemState::SET )
         {
             aApplyCollState.bTriStateEnabled = false;
 
             const SvxPageModelItem& rModel =
-                static_cast<const SvxPageModelItem&>(rSet->Get( _nWhich ));
+                static_cast<const SvxPageModelItem&>(rSet->Get( SID_ATTR_PARA_MODEL ));
             const OUString& aStr( rModel.GetValue() );
 
             if (!aStr.isEmpty() && m_xApplyCollBox->find_text(aStr) != -1)

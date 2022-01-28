@@ -1896,7 +1896,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
         switch (nSlotId)
         {
             case SID_ATTR_PAGE_LRSPACE:
-                if( pArgs->GetItemState(GetPool().GetWhich(SID_ATTR_PAGE_LRSPACE),
+                if( pArgs->GetItemState(SID_ATTR_PAGE_LRSPACE,
                                         true,&pPoolItem) == SfxItemState::SET )
                 {
                     nLeft = static_cast<const SvxLongLRSpaceItem*>(pPoolItem)->GetLeft();
