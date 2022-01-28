@@ -255,6 +255,8 @@ private:
 
     void ResizeToRequest();
 
+    void DropPendingEvents();
+
 private:
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Popover> mxPopover;
