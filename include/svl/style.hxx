@@ -215,7 +215,7 @@ private:
     SVL_DLLPRIVATE bool         IsTrivialSearch() const;
 
     SfxStyleSheetBase*      pCurrentStyle;
-    sal_uInt16              nCurrentPosition;
+    sal_Int32               mnCurrentPosition;
     bool                    bSearchUsed;
 
 friend class SfxStyleSheetBasePool;
