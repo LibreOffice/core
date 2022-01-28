@@ -16,6 +16,24 @@
       "message": "Hi Xisco! May I ask you how I could retrieve the text in the edit dialog of the concordance file index entries? I tried to monitor the execution and it tells me that it opens a \"CreateAutomarkDialog\" and then it types it on the \"entry\" element. \n\nHad no luck to retrieve the text.\n\nThank you for your help.",
       "revId": "7a2269757cb0c8a8539ee13e0d8753a2b90054d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80267e20_72e46bde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-01-28T11:12:24Z",
+      "side": 1,
+      "message": "Hi Andreas,\nit seems the UItest doesn\u0027t support that widget at the moment, maybe it\u0027s possible to add support to it, I\u0027d have to check.\nAs a workaround, you can move the focus to the widget, copy the text, paste it somewhere else, and assert...",
+      "parentUuid": "fd452d93_0c7e9393",
+      "revId": "7a2269757cb0c8a8539ee13e0d8753a2b90054d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
