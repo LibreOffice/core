@@ -1937,7 +1937,7 @@ void SwRootFrame::UnoRemoveAllActions()
     {
         // #i84729#
         // No end action, if <SwViewShell> instance is currently in its end action.
-        // Recursives calls to <::EndAction()> are not allowed.
+        // Recursive calls to <::EndAction()> are not allowed.
         if ( !rSh.IsInEndAction() )
         {
             OSL_ENSURE(!rSh.GetRestoreActions(), "Restore action count is already set!");
