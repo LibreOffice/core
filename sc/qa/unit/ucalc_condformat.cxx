@@ -7,14 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
-#include <test/bootstrapfixture.hxx>
 #include "helper/qahelper.hxx"
 
-#include <conditio.hxx>
-#include <colorscale.hxx>
 
-#include <clipparam.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <docfunc.hxx>
@@ -23,7 +18,6 @@
 #include <attrib.hxx>
 #include <fillinfo.hxx>
 #include <compiler.hxx>
-#include <tokenarray.hxx>
 
 #include <svl/sharedstringpool.hxx>
 

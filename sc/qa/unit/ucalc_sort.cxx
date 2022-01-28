@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
 #include "helper/sorthelper.hxx"
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
@@ -16,7 +15,6 @@
 #include <postit.hxx>
 #include <sortparam.hxx>
 #include <dbdata.hxx>
-#include <patattr.hxx>
 #include <formulacell.hxx>
 #include <scopetools.hxx>
 #include <globalnames.hxx>
@@ -24,10 +22,7 @@
 #include <docfunc.hxx>
 #include <scitems.hxx>
 #include <editutil.hxx>
-#include <drwlayer.hxx>
-#include <formulaopt.hxx>
 
-#include <sal/config.h>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <svx/svdocirc.hxx>
