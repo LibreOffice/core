@@ -30,7 +30,6 @@ namespace svtools {
 
 void AsynchronLink::Call( void* pObj, bool bAllowDoubles )
 {
-    SAL_INFO_IF( !_bInCall, "svtools", "Recursives Call. Eher ueber Timer. TLX Fragen" ); // Do NOT translate. This is a valuable historical artefact.
     if( !_aLink.IsSet() )
         return;
 
@@ -47,8 +46,6 @@ AsynchronLink::~AsynchronLink()
     {
         Application::RemoveUserEvent( _nEventId );
     }
-    if( _pDeleted )
-        *_pDeleted = true;
 }
 
 void AsynchronLink::ClearPendingCall()
@@ -69,19 +66,7 @@ IMPL_LINK_NOARG( AsynchronLink, HandleCall_PostUserEvent, void*, void )
         // need to release the lock before calling the client since
         // the client may call back into us
     }
-    _bInCall = true;
-
-    // some fancy footwork in case we get deleted inside the call
-    bool bDeleted = false;
-    _pDeleted = &bDeleted;
-
     _aLink.Call( _pArg );
-
-    if( !bDeleted )
-    {
-        _bInCall = false;
-        _pDeleted = nullptr;
-    }
 }
 
 }
