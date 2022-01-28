@@ -3781,8 +3781,11 @@ void SwContentTree::UpdateTracking()
     else
     {
         // clear treeview selections
-        m_xTreeView->unselect_all();
-        Select();
+        if (m_xTreeView->count_selected_rows() > 0)
+        {
+            m_xTreeView->unselect_all();
+            Select();
+        }
     }
 }
 
