@@ -51,6 +51,24 @@
       "parentUuid": "f5926f9f_dbd9805e",
       "revId": "3d77021c2be5c59db32b62286edd9802b8f02bc0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27b55234_aa9f0a77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-01-28T08:48:28Z",
+      "side": 1,
+      "message": "Test observations:\n\nFor gtk3 the dialog reopens at the position it was at when closed and with the size it was when closed. This is the same regardless of the parent window size and position.\n\nFor x11 and qt5, when the parent window is not maximized, the dialog position changes on reopen if it is not within the parent window when closed. In this case it reopens within the parent window.",
+      "parentUuid": "a3033c50_e77dcc3e",
+      "revId": "3d77021c2be5c59db32b62286edd9802b8f02bc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
