@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
-#include <test/bootstrapfixture.hxx>
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 
@@ -20,19 +18,13 @@
 #include <docpool.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/editobj.hxx>
 #include <editutil.hxx>
 #include <formulacell.hxx>
-#include <formulaopt.hxx>
-#include <iostream>
-#include <patattr.hxx>
 #include <postit.hxx>
-#include <queryentry.hxx>
 #include <queryparam.hxx>
 #include <refundo.hxx>
 #include <scdll.hxx>
 #include <scitems.hxx>
-#include <scmod.hxx>
 #include <scopetools.hxx>
 
 #include <sfx2/docfile.hxx>

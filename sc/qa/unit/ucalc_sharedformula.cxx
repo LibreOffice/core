@@ -7,31 +7,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <memory>
-#include <string_view>
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 #include <editutil.hxx>
 #include <formulacell.hxx>
 #include <cellvalue.hxx>
-#include <docsh.hxx>
-#include <undoblk.hxx>
 #include <scopetools.hxx>
 #include <docfunc.hxx>
 #include <dbdocfun.hxx>
-#include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
 #include <globalnames.hxx>
 #include <dbdata.hxx>
 #include <bcaslot.hxx>
-#include <sharedformula.hxx>
 #include <scdll.hxx>
 
-#include <svl/sharedstring.hxx>
 #include <sfx2/docfile.hxx>
-
-#include <formula/grammar.hxx>
 
 class TestSharedFormula : public test::BootstrapFixture
 {
