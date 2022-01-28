@@ -7,53 +7,32 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
-
-#include <string_view>
-
 #include <officecfg/Office/Common.hxx>
-#include <config_features.h>
 #include <config_fonts.h>
 
-#include <sfx2/sfxmodelfactory.hxx>
-
 #include "helper/debughelper.hxx"
-#include "helper/qahelper.hxx"
 #include "helper/xpath.hxx"
 #include "helper/shared_test_impl.hxx"
 
 #include <userdat.hxx>
-#include <docsh.hxx>
-#include <patattr.hxx>
 #include <docpool.hxx>
 #include <scitems.hxx>
 #include <attrib.hxx>
 #include <stlpool.hxx>
-#include <document.hxx>
-#include <formulacell.hxx>
-#include <tokenarray.hxx>
 #include <editutil.hxx>
 #include <scopetools.hxx>
-#include <cellvalue.hxx>
 #include <postit.hxx>
 #include <tokenstringcontext.hxx>
 #include <chgtrack.hxx>
 #include <validat.hxx>
-#include <global.hxx>
 #include <scmod.hxx>
-#include <dpcache.hxx>
-#include <dpobject.hxx>
-#include <clipparam.hxx>
-#include <viewopti.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
 #include <tabprotection.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/editobj.hxx>
 #include <editeng/section.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/borderline.hxx>
@@ -61,22 +40,12 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/flditem.hxx>
 #include <editeng/colritem.hxx>
-#include <formula/grammar.hxx>
 #include <unotools/useroptions.hxx>
-#include <comphelper/scopeguard.hxx>
-#include <unotools/syslocaleoptions.hxx>
-#include <tools/datetime.hxx>
-#include <tools/fldunit.hxx>
-#include <svl/zformat.hxx>
 
-#include <test/xmltesttools.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
-#include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
