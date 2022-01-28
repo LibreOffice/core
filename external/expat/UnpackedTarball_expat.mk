@@ -15,6 +15,8 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,expat,conftools))
 
 $(eval $(call gb_UnpackedTarball_add_patches,expat,\
 	external/expat/expat-winapi.patch \
+	external/expat/CVE-2022-23852.patch \
+	external/expat/CVE-2022-23990.patch \
 ))
 
 # This is a bit hackish.
