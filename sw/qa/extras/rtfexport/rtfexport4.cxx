@@ -16,9 +16,7 @@
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
-#include <svx/swframetypes.hxx>
 
-#include <doc.hxx>
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <pam.hxx>
