@@ -924,7 +924,14 @@ void ThumbnailView::GetFocus()
 
         if (nSelected == -1 && !mItemList.empty())
         {
-            SelectItem(1);
+            ThumbnailViewItem* pFirst = nullptr;
+            if (!mFilteredItemList.empty()) {
+                pFirst = mFilteredItemList[0];
+            } else {
+                pFirst = mItemList[0].get();
+            }
+
+            SelectItem(pFirst->mnId);
         }
     }
 
