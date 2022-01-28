@@ -3433,6 +3433,62 @@ void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
     }
 }
 
+void DomainMapper_Impl::HandlePTab(sal_Int32 nAlignment)
+{
+    // We only handle the case when the line already has content, so the left-aligned ptab is
+    // equivalent to a line break.
+    if (nAlignment != NS_ooxml::LN_Value_ST_PTabAlignment_left)
+    {
+        return;
+    }
+
+    if (m_aTextAppendStack.empty())
+    {
+        return;
+    }
+
+    uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    if (!xTextAppend.is())
+    {
+        return;
+    }
+
+    uno::Reference<css::text::XTextRange> xInsertPosition
+        = m_aTextAppendStack.top().xInsertPosition;
+    if (!xInsertPosition.is())
+    {
+        xInsertPosition = xTextAppend->getEnd();
+    }
+    uno::Reference<text::XTextCursor> xCursor
+        = xTextAppend->createTextCursorByRange(xInsertPosition);
+
+    // Assume that we just inserted a tab character.
+    xCursor->goLeft(1, true);
+    if (xCursor->getString() != "\t")
+    {
+        return;
+    }
+
+    // Assume that there is some content before the tab character.
+    uno::Reference<text::XParagraphCursor> xParagraphCursor(xCursor, uno::UNO_QUERY);
+    if (!xParagraphCursor.is())
+    {
+        return;
+    }
+
+    xCursor->collapseToStart();
+    xParagraphCursor->gotoStartOfParagraph(true);
+    if (xCursor->isCollapsed())
+    {
+        return;
+    }
+
+    // Then select the tab again and replace with a line break.
+    xCursor->collapseToEnd();
+    xCursor->goRight(1, true);
+    xTextAppend->insertControlCharacter(xCursor, text::ControlCharacter::LINE_BREAK, true);
+}
+
 static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
 {
     sal_Int16 nRet = style::NumberingType::PAGE_DESCRIPTOR;
