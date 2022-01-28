@@ -8,23 +8,18 @@
  */
 
 #include <swmodeltestbase.hxx>
-#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <comphelper/scopeguard.hxx>
 #include <vcl/event.hxx>
 #include <vcl/scheduler.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/unolingu.hxx>
-#include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtcntnt.hxx>
 #include <wrtsh.hxx>
@@ -34,17 +29,14 @@
 #include <pagefrm.hxx>
 #include <bodyfrm.hxx>
 #include <sortedobjs.hxx>
-#include <anchoredobject.hxx>
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
-#include <docsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include <textboxhelper.hxx>
 #include <unoframe.hxx>
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
