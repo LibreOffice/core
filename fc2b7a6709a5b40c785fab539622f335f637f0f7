@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad7155d7_39658937",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-28T04:58:00Z",
+      "side": 1,
+      "message": "Jenkins approved - just removed an empty line that was mistakenly added.",
+      "revId": "fc2b7a6709a5b40c785fab539622f335f637f0f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
