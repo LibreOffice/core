@@ -2840,6 +2840,13 @@
         "https://gerrit.libreoffice.org/plugins/gitiles/dictionaries/+/master/cs_CZ/README_en.txt">Appendix A</a></p>
         <p>The thesaurus is generated automatically via a script by Jan Holesovsky &lt;kendy@collabora.com&gt;, based
         on idea of Zdenek Zabokrtsky - big thanks!</p>
+        <h2>Central Kurdish</h2>
+        <h3>Spelling dictionary</h3>
+      	<p>Author: Sina Ahmadi &lt;ahmadi.sina@outlook.com&gt;<br />
+        <p>The following software may be included in this product: Central Kurdish spelling dictionary. Use of any of this
+        software is governed by the terms of the license below:</p>
+        <p>Creative Commons <a href="#a__CC-BY-SA_4_0">CC-BY-SA</a></p>
+        <p>The source CKB dictionary is available from <a href="https://github.com/sinaahmadi/KurdishHunspell">Kurdish Hunspell</a> project.</p>
         <h2>Croatian</h2>
         <h3>Spelling dictionary</h3>
         <p>The following software may be included in this product: Croatian spelling dictionary. Use of any of this
