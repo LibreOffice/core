@@ -7,46 +7,27 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 #include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/outlobj.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/unoprnms.hxx>
 
-#include <svx/svdotext.hxx>
-#include <svx/svdomedia.hxx>
-#include <svx/svdotable.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/svdoole2.hxx>
-#include <rtl/ustring.hxx>
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/animations/TransitionType.hpp>
-#include <com/sun/star/animations/TransitionSubType.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/style/LineSpacing.hpp>
-#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <sdpage.hxx>
-#include <cfloat>
-#include <cstdlib>
-
-#include <rtl/character.hxx>
 
 class SdOOXMLExportTest3 : public SdModelTestBaseXML
 {
