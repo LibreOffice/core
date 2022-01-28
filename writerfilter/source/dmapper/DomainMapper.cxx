@@ -1167,7 +1167,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_PTab_leader:
         case NS_ooxml::LN_CT_PTab_relativeTo:
+            break;
         case NS_ooxml::LN_CT_PTab_alignment:
+            m_pImpl->HandlePTab(nIntValue);
             break;
         case NS_ooxml::LN_CT_Cnf_lastRowLastColumn:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "lastRowLastColumn", OUString::number(nIntValue));
