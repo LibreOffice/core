@@ -69,6 +69,24 @@
       "parentUuid": "a3033c50_e77dcc3e",
       "revId": "3d77021c2be5c59db32b62286edd9802b8f02bc0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "947ac0b6_e0b21486",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-28T15:51:59Z",
+      "side": 1,
+      "message": "wrt Jim\u0027s observations about x11\n\nhttps://gerrit.libreoffice.org/c/core/+/129115/1 (which this has been rebased on) should fix that. The qt5/kf5 one is possibly https://gerrit.libreoffice.org/c/core/+/128981 but I think we should put qt to one side for the moment and get the rest working. Windows seem ok from my own checks there.\n\nwrt Heiko\u0027s observations that the pos and size still aren\u0027t restored under x11\n\nThis needs all the previous patches to work, Your report sounds like it might just be checking this patch is isolation and not in an otherwise up to date trunk (plus the above patch at the time of writing which will soon be merged to trunk too)",
+      "parentUuid": "27b55234_aa9f0a77",
+      "revId": "3d77021c2be5c59db32b62286edd9802b8f02bc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
