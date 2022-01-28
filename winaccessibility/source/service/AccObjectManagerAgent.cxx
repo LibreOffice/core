@@ -298,7 +298,7 @@ bool AccObjectManagerAgent::GetIAccessibleFromXAccessible(
 {
     if(pWinManager)
     {
-        *ppXI = reinterpret_cast<IAccessible*>(pWinManager->GetIMAccByXAcc(pXAcc));
+        *ppXI = pWinManager->GetIMAccByXAcc(pXAcc);
         if(*ppXI)
             return true;
     }
