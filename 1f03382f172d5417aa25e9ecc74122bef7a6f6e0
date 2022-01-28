@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9811636_7202bc89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-28T09:59:48Z",
+      "side": 1,
+      "message": "I would suggest that we handle webp similar to any other exotic bitmap format that has no matching bitmap fallback, to not block the webp support change.\n\nThen it could be discussed as a separate change how we want to deal with this trade-off. Obivusly you can\u0027t have duplicated huge images and be nice to old ODF consumers at the same time, so whatever you do, somebody will be angry at you. :-)",
+      "revId": "1f03382f172d5417aa25e9ecc74122bef7a6f6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "37fd9987_0280d991",
