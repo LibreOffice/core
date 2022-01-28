@@ -236,6 +236,17 @@ Module gid_Module_Root_Extension_Dictionary_Ca
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Ckb
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_CKB );
+    Files = (gid_File_Extension_Dictionary_Ckb);
+    InstallOrder = "2000";
+    Sortkey = "525";
+    Spellcheckerlanguage = "ckb";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Cs
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_CS );
     Files = (gid_File_Extension_Dictionary_Cs);
