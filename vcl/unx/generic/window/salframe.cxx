@@ -1725,15 +1725,20 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
                     }
                 }
 
+                auto nRight = aPosSize.Right() + (mpParent ? mpParent->maGeometry.nX : 0);
+                auto nBottom = aPosSize.Bottom() + (mpParent ? mpParent->maGeometry.nY : 0);
+                auto nLeft = aPosSize.Left() + (mpParent ? mpParent->maGeometry.nX : 0);
+                auto nTop = aPosSize.Top() + (mpParent ? mpParent->maGeometry.nY : 0);
+
                 // adjust position so that frame fits onto screen
-                if( aPosSize.Right()+static_cast<tools::Long>(aGeom.nRightDecoration) > aScreenSize.Width()-1 )
-                    aPosSize.Move( aScreenSize.Width() - aPosSize.Right() - static_cast<tools::Long>(aGeom.nRightDecoration), 0 );
-                if( aPosSize.Bottom()+static_cast<tools::Long>(aGeom.nBottomDecoration) > aScreenSize.Height()-1 )
-                    aPosSize.Move( 0, aScreenSize.Height() - aPosSize.Bottom() - static_cast<tools::Long>(aGeom.nBottomDecoration) );
-                if( aPosSize.Left() < static_cast<tools::Long>(aGeom.nLeftDecoration) )
-                    aPosSize.Move( static_cast<tools::Long>(aGeom.nLeftDecoration) - aPosSize.Left(), 0 );
-                if( aPosSize.Top() < static_cast<tools::Long>(aGeom.nTopDecoration) )
-                    aPosSize.Move( 0, static_cast<tools::Long>(aGeom.nTopDecoration) - aPosSize.Top() );
+                if( nRight+static_cast<tools::Long>(aGeom.nRightDecoration) > aScreenSize.Width()-1 )
+                    aPosSize.Move( aScreenSize.Width() - nRight - static_cast<tools::Long>(aGeom.nRightDecoration), 0 );
+                if( nBottom+static_cast<tools::Long>(aGeom.nBottomDecoration) > aScreenSize.Height()-1 )
+                    aPosSize.Move( 0, aScreenSize.Height() - nBottom - static_cast<tools::Long>(aGeom.nBottomDecoration) );
+                if( nLeft < static_cast<tools::Long>(aGeom.nLeftDecoration) )
+                    aPosSize.Move( static_cast<tools::Long>(aGeom.nLeftDecoration) - nLeft, 0 );
+                if( nTop < static_cast<tools::Long>(aGeom.nTopDecoration) )
+                    aPosSize.Move( 0, static_cast<tools::Long>(aGeom.nTopDecoration) - nTop );
             }
 
             SetPosSize(aPosSize.getX(), aPosSize.getY(),
