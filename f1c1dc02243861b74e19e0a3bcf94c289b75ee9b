@@ -68,6 +68,24 @@
       "message": "Can we call EnterHandler() only if content was changed from the spell-check menu? As is, it\u0027s rather unexpected that all actions including hitting Esc or choosing Spellcheck... or AutoCorrect Options... close the cell.\n",
       "revId": "f1c1dc02243861b74e19e0a3bcf94c289b75ee9b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "207ad77c_a7f9903b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-28T11:15:01Z",
+      "side": 1,
+      "message": "Spellcheck itself calls EditHandler - even if it is cancelled. So that situation can be ignored. Hitting Esc is a big one though that I hadn\u0027t considered. Options - well I considered that to be a safe \"false positive\".\n\nSince the whole problem here is text caches that haven\u0027t been flushed, what is the best way to check whether the text has REALLY changed? I\u0027m guessing pHdl-\u003eGetEditText().\n\nBut even so, the same problem would still exist even if not changing the text, but changing the word/paragraph language to something else for example. So then I need to test that the attributes also haven\u0027t been changed.\n\nAhh - I can basically duplicate this call in the LINK function to selectively handle the situations I want.",
+      "parentUuid": "2aded89f_196ef254",
+      "revId": "f1c1dc02243861b74e19e0a3bcf94c289b75ee9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
