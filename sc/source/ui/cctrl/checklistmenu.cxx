@@ -299,6 +299,8 @@ void ScCheckListMenuControl::queueCloseSubMenu()
 
     maCloseTimer.mpSubMenu = maOpenTimer.mpSubMenu;
     maCloseTimer.mnMenuPos = maOpenTimer.mnMenuPos;
+    maOpenTimer.mpSubMenu = nullptr;
+    maOpenTimer.mnMenuPos = MENU_NOT_SELECTED;
     maCloseTimer.maTimer.Start();
 }
 
@@ -586,11 +588,8 @@ void ScCheckListMenuControl::GrabFocus()
     }
 }
 
-ScCheckListMenuControl::~ScCheckListMenuControl()
+void ScCheckListMenuControl::DropPendingEvents()
 {
-    EndPopupMode();
-    for (auto& rMenuItem : maMenuItems)
-        rMenuItem.mxSubMenuWin.reset();
     if (mnAsyncPostPopdownId)
     {
         Application::RemoveUserEvent(mnAsyncPostPopdownId);
@@ -601,6 +600,14 @@ ScCheckListMenuControl::~ScCheckListMenuControl()
         Application::RemoveUserEvent(mnAsyncSetDropdownPosId);
         mnAsyncSetDropdownPosId = nullptr;
     }
+}
+
+ScCheckListMenuControl::~ScCheckListMenuControl()
+{
+    EndPopupMode();
+    for (auto& rMenuItem : maMenuItems)
+        rMenuItem.mxSubMenuWin.reset();
+    DropPendingEvents();
 }
 
 void ScCheckListMenuControl::prepWindow()
@@ -1471,6 +1478,8 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, PopupModeEndHdl, weld::Popover&, void)
     clearSelectedMenuItem();
     if (mxPopupEndAction)
         mxPopupEndAction->execute();
+
+    DropPendingEvents();
 
     if (comphelper::LibreOfficeKit::isActive())
         NotifyCloseLOK();
