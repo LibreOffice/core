@@ -202,19 +202,17 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     }
     if (nSlot != SID_ATTR_BRUSH_ROW)
     {
-        nWhich = maSet.GetPool()->GetWhich(SID_ATTR_BRUSH_ROW);
-        if (SfxItemState::SET == maSet.GetItemState(nWhich))
+        if (SfxItemState::SET == maSet.GetItemState(SID_ATTR_BRUSH_ROW))
         {
-            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
+            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(SID_ATTR_BRUSH_ROW)));
             rCoreSet->Put(aBrushItem);
         }
     }
     if (nSlot != SID_ATTR_BRUSH_TABLE)
     {
-        nWhich = maSet.GetPool()->GetWhich(SID_ATTR_BRUSH_TABLE);
-        if (SfxItemState::SET == maSet.GetItemState(nWhich))
+        if (SfxItemState::SET == maSet.GetItemState(SID_ATTR_BRUSH_TABLE))
         {
-            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
+            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(SID_ATTR_BRUSH_TABLE)));
             rCoreSet->Put(aBrushItem);
         }
     }
@@ -260,8 +258,7 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
 
     if ( bCharBackColor )
     {
-        sal_uInt16 nWhich(maSet.GetPool()->GetWhich(SID_ATTR_CHAR_BACK_COLOR));
-        Color aBackColor(static_cast<const SvxColorItem&>(maSet.Get(nWhich)).GetValue());
+        Color aBackColor(static_cast<const SvxColorItem&>(maSet.Get(SID_ATTR_CHAR_BACK_COLOR)).GetValue());
         SvxBrushItem aBrushItem(SvxBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR));
         setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet);
     }

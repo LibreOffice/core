@@ -225,7 +225,7 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
     if( m_xWidthMF->get_value_changed_from_saved() ||
         m_xHeightMF->get_value_changed_from_saved() )
     {
-        sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_FRMSIZE );
+        constexpr sal_uInt16 nW = SID_ATTR_GRAF_FRMSIZE;
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
 
         std::shared_ptr<SvxSizeItem> aSz(std::make_shared<SvxSizeItem>(nW));

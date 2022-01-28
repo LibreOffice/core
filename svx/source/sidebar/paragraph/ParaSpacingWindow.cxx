@@ -74,8 +74,7 @@ void ParaULSpacingWindow::SetUnit(FieldUnit eUnit)
     m_xBelowSpacing->SetFieldUnit(eUnit);
 
     SfxItemPool &rPool = SfxGetpApp()->GetPool();
-    sal_uInt16 nWhich = rPool.GetWhich(SID_ATTR_PARA_ULSPACE);
-    m_eUnit = rPool.GetMetric(nWhich);
+    m_eUnit = rPool.GetMetric(SID_ATTR_PARA_ULSPACE);
 
     m_xAboveSpacing->set_max(m_xAboveSpacing->normalize(MAX_DURCH), MapToFieldUnit(m_eUnit));
     m_xBelowSpacing->set_max(m_xBelowSpacing->normalize(MAX_DURCH), MapToFieldUnit(m_eUnit));
@@ -277,8 +276,7 @@ void ParaLRSpacingWindow::SetUnit(FieldUnit eUnit)
     m_xFLSpacing->SetFieldUnit(eUnit);
 
     SfxItemPool &rPool = SfxGetpApp()->GetPool();
-    sal_uInt16 nWhich = rPool.GetWhich(SID_ATTR_PARA_LRSPACE);
-    m_eUnit = rPool.GetMetric(nWhich);
+    m_eUnit = rPool.GetMetric(SID_ATTR_PARA_LRSPACE);
 }
 
 IMPL_LINK_NOARG(ParaLRSpacingWindow, ModifySpacingHdl, weld::MetricSpinButton&, void)

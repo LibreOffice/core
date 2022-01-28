@@ -355,7 +355,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         case SID_ATTR_PARA_LRSPACE:
         {
             SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
-                GetPool().GetWhich(SID_ATTR_PARA_LRSPACE)));
+                SID_ATTR_PARA_LRSPACE));
 
             SfxItemSetFixed<EE_PARA_LRSPACE, EE_PARA_LRSPACE> aEditAttr( GetPool() );
             aLRSpace.SetWhich( EE_PARA_LRSPACE );

@@ -52,30 +52,24 @@ SvxPostItDialog::SvxPostItDialog(weld::Widget* pParent, const SfxItemSet& rCoreS
     m_xOKBtn->connect_clicked( LINK( this, SvxPostItDialog, OKHdl ) );
 
     bool bNew = true;
-    sal_uInt16 nWhich = 0;
 
     m_xPrevBtn->set_visible(bPrevNext);
     m_xNextBtn->set_visible(bPrevNext);
 
-    nWhich = m_rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR );
     OUString aAuthorStr, aDateStr;
 
-    if (m_rSet.GetItemState( nWhich ) >= SfxItemState::DEFAULT)
+    if (m_rSet.GetItemState( SID_ATTR_POSTIT_AUTHOR ) >= SfxItemState::DEFAULT)
     {
         bNew = false;
-        const SvxPostItAuthorItem& rAuthor =
-            static_cast<const SvxPostItAuthorItem&>(m_rSet.Get(nWhich));
+        const SvxPostItAuthorItem& rAuthor = m_rSet.Get(SID_ATTR_POSTIT_AUTHOR);
         aAuthorStr = rAuthor.GetValue();
     }
     else
         aAuthorStr = SvtUserOptions().GetID();
 
-    nWhich = m_rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_DATE );
-
-    if (m_rSet.GetItemState( nWhich ) >= SfxItemState::DEFAULT)
+    if (m_rSet.GetItemState( SID_ATTR_POSTIT_DATE ) >= SfxItemState::DEFAULT)
     {
-        const SvxPostItDateItem& rDate =
-            static_cast<const SvxPostItDateItem&>(m_rSet.Get( nWhich ));
+        const SvxPostItDateItem& rDate = m_rSet.Get( SID_ATTR_POSTIT_DATE );
         aDateStr = rDate.GetValue();
     }
     else
@@ -84,13 +78,10 @@ SvxPostItDialog::SvxPostItDialog(weld::Widget* pParent, const SfxItemSet& rCoreS
         aDateStr = rLocaleWrapper.getDate( Date( Date::SYSTEM ) );
     }
 
-    nWhich = m_rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT );
-
     OUString aTextStr;
-    if (m_rSet.GetItemState( nWhich ) >= SfxItemState::DEFAULT)
+    if (m_rSet.GetItemState( SID_ATTR_POSTIT_TEXT ) >= SfxItemState::DEFAULT)
     {
-        const SvxPostItTextItem& rText =
-            static_cast<const SvxPostItTextItem&>(m_rSet.Get( nWhich ));
+        const SvxPostItTextItem& rText = m_rSet.Get( SID_ATTR_POSTIT_TEXT );
         aTextStr = rText.GetValue();
     }
 
@@ -162,12 +153,9 @@ IMPL_LINK_NOARG(SvxPostItDialog, OKHdl, weld::Button&, void)
 {
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     m_xOutSet.reset(new SfxItemSet(m_rSet));
-    m_xOutSet->Put( SvxPostItAuthorItem(SvtUserOptions().GetID(),
-                                        m_rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR ) ) );
-    m_xOutSet->Put( SvxPostItDateItem(rLocaleWrapper.getDate( Date( Date::SYSTEM ) ),
-                                       m_rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_DATE ) ) );
-    m_xOutSet->Put( SvxPostItTextItem(m_xEditED->get_text(),
-                                      m_rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT ) ) );
+    m_xOutSet->Put( SvxPostItAuthorItem(SvtUserOptions().GetID(), SID_ATTR_POSTIT_AUTHOR ) );
+    m_xOutSet->Put( SvxPostItDateItem(rLocaleWrapper.getDate( Date( Date::SYSTEM ) ), SID_ATTR_POSTIT_DATE ) );
+    m_xOutSet->Put( SvxPostItTextItem(m_xEditED->get_text(), SID_ATTR_POSTIT_TEXT ) );
     m_xDialog->response(RET_OK);
 }
 
