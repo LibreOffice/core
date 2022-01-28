@@ -765,8 +765,8 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
     }
     else
     {
-        GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
-        SfxLokHelper::notifyOtherViews(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+        SfxLokHelper::notifyUpdate(GetShell()->GetSfxViewShell(),LOK_CALLBACK_TEXT_SELECTION);
+        SfxLokHelper::notifyOtherViewsUpdatePerViewId(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION);
     }
 }
 
