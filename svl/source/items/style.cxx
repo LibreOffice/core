@@ -391,7 +391,7 @@ struct DoesStyleMatchStyleSheetPredicate final : public svl::StyleSheetPredicate
 SfxStyleSheetIterator::SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
                                              SfxStyleFamily eFam, SfxStyleSearchBits n)
     : pCurrentStyle(nullptr)
-    , nCurrentPosition(0)
+    , mnCurrentPosition(0)
 {
     pBasePool=pBase;
     nSearchFamily=eFam;
@@ -434,7 +434,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
     if( IsTrivialSearch())
     {
         retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(nIdx);
-        nCurrentPosition = nIdx;
+        mnCurrentPosition = nIdx;
     }
     else if(nMask == SfxStyleSearchBits::All)
     {
@@ -443,7 +443,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
                 pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetPositionsByFamily(nSearchFamily).at(nIdx))
                 ;
         retval = ref.get();
-        nCurrentPosition = nIdx;
+        mnCurrentPosition = nIdx;
     }
     else
     {
@@ -452,7 +452,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
                 pBasePool->pImpl->mxIndexedStyleSheets->GetNthStyleSheetThatMatchesPredicate(nIdx, predicate);
         if (ref.get() != nullptr)
         {
-            nCurrentPosition = pBasePool->pImpl->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
+            mnCurrentPosition = pBasePool->pImpl->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
             retval = ref.get();
         }
     }
@@ -483,21 +483,21 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
     if ( IsTrivialSearch() )
     {
         unsigned nStyleSheets = pBasePool->pImpl->mxIndexedStyleSheets->GetNumberOfStyleSheets();
-        unsigned newPosition = nCurrentPosition +1;
+        unsigned newPosition = mnCurrentPosition +1;
         if (nStyleSheets > newPosition)
         {
-            nCurrentPosition = newPosition;
-            retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(nCurrentPosition);
+            mnCurrentPosition = newPosition;
+            retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(mnCurrentPosition);
         }
     }
     else if(nMask == SfxStyleSearchBits::All)
     {
-        unsigned newPosition = nCurrentPosition +1;
+        unsigned newPosition = mnCurrentPosition +1;
         const std::vector<unsigned>& familyVector =
             pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetPositionsByFamily(nSearchFamily);
         if (familyVector.size() > newPosition)
         {
-            nCurrentPosition = newPosition;
+            mnCurrentPosition = newPosition;
             unsigned stylePosition = familyVector[newPosition];
             retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(stylePosition);
         }
@@ -507,10 +507,10 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
         DoesStyleMatchStyleSheetPredicate predicate(this);
         rtl::Reference< SfxStyleSheetBase > ref =
                 pBasePool->pImpl->mxIndexedStyleSheets->GetNthStyleSheetThatMatchesPredicate(
-                        0, predicate, nCurrentPosition+1);
+                        0, predicate, mnCurrentPosition+1);
         retval = ref.get();
         if (retval != nullptr) {
-            nCurrentPosition = pBasePool->pImpl->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
+            mnCurrentPosition = pBasePool->pImpl->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
         }
     }
     pCurrentStyle = retval;
@@ -530,7 +530,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Find(const OUString& rStr)
 
     unsigned pos = positions.front();
     SfxStyleSheetBase* pStyle = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(pos);
-    nCurrentPosition = pos;
+    mnCurrentPosition = pos;
     pCurrentStyle = pStyle;
     return pCurrentStyle;
 }
