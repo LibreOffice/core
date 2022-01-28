@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48adf6ca_a08df172",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2022-01-28T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee9070a6_8e25d120",
+      "revId": "c5439559f9654f31618038a55b622edad5453cf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cef0fec_8aee2443",
@@ -35,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7292b087_12883520",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2022-01-28T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0cef0fec_8aee2443",
+      "revId": "c5439559f9654f31618038a55b622edad5453cf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be500fd0_54a20304",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-01-27T20:20:04Z",
       "side": 1,
       "message": "Please forget NONE, and use zero in the header file, as it was before.",
+      "revId": "c5439559f9654f31618038a55b622edad5453cf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54a685b2_d16c250f",
+        "filename": "include/basic/sbxvar.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2022-01-28T08:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be500fd0_54a20304",
       "revId": "c5439559f9654f31618038a55b622edad5453cf5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
