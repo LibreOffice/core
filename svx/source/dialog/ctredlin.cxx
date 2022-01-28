@@ -364,7 +364,6 @@ void SvxRedlinTable::SetWriterView()
         o3tl::narrowing<int>(nDigitWidth * 20)
     };
     pTreeView->set_column_fixed_widths(aWidths);
-    pTreeView->set_size_request(400, -1);
 }
 
 void SvxRedlinTable::SetCalcView()
@@ -384,7 +383,6 @@ void SvxRedlinTable::SetCalcView()
         o3tl::narrowing<int>(nDigitWidth * 20)
     };
     pTreeView->set_column_fixed_widths(aWidths);
-    pTreeView->set_size_request(400, -1);
 }
 
 void SvxTPView::EnableAccept(bool bFlag)

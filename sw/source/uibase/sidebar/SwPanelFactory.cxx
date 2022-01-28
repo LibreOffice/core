@@ -167,7 +167,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
             rsResourceURL,
             xFrame,
             std::move(xPanel),
-            ui::LayoutSize(-1,-1,-1));
+            ui::LayoutSize(0,-1,-1));
     }
     else if (rsResourceURL.endsWith("/WriterInspectorTextPanel"))
     {
