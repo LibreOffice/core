@@ -689,7 +689,7 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
 
     // return first x-axis as fall-back
     Reference< XAxis > xFallBack;
-    try
+    if (xDiagram.is()) try
     {
         for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : xDiagram->getBaseCoordinateSystems() )
         {
