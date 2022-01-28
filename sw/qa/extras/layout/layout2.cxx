@@ -14,20 +14,15 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
-#include <i18nlangtag/languagetag.hxx>
 #include <editeng/unolingu.hxx>
-#include <svx/svdobj.hxx>
 
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
-#include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <textboxhelper.hxx>
 #include <frameformats.hxx>
 #include <unotextrange.hxx>
 #include <fmtanchr.hxx>
-#include <editsh.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/layout/data/";
 
