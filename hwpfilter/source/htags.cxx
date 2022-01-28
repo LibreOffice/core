@@ -19,6 +19,9 @@
 
 #include "precompile.h"
 
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <unotools/tempfile.hxx>
+
 #include <string.h>
 
 #include "hwplib.h"
@@ -106,27 +109,20 @@ void OlePicture::Read(HWPFile & hwpf)
           delete [] data;
           return;
     }
-    FILE *fp;
-    char tname[200];
-    wchar_t wtname[200];
-    tmpnam(tname);
-    if (nullptr == (fp = fopen(tname, "wb")))
-    {
-         delete [] data;
-         return;
-    }
-    fwrite(data, size, 1, fp);
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    SvFileStream aOutputStream(aTempFile.GetURL(), StreamMode::WRITE);
+    aOutputStream.WriteBytes(data, size);
     delete [] data;
-    fclose(fp);
-    MultiByteToWideChar(CP_ACP, 0, tname, -1, wtname, 200);
-    if( StgOpenStorage(wtname, nullptr,
+    aOutputStream.Close();
+    if( StgOpenStorage(o3tl::toW(aTempFile.GetFileName().getStr()), nullptr,
                     STGM_READWRITE|STGM_SHARE_EXCLUSIVE|STGM_TRANSACTED,
                     nullptr, 0, &pis) != S_OK ) {
          pis = nullptr;
-         unlink(tname);
          return;
     }
-    unlink(tname);
 #else
     hwpf.SkipBlock(size);
 #endif
