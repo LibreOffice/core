@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b681d65e_b6c75a4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-28T08:33:51Z",
+      "side": 1,
+      "message": "I guess the /var/tmp/install_$$ kludge was motivated by a fear of lack of non-POSIX, GNU coreutils mktemp (cf. \u003chttps://git.libreoffice.org/core/+/458bd7894554f28548ed0c192a29f2270b8c3ecb%5E!/\u003e \"INTEGRATION: CWS native61 (1.15.78); FILE MERGED\" using it for Solaris 10 at least, and \u003chttps://git.libreoffice.org/core/+/cc26ea953860034dcbaeef699dcbc64854b450ef%5E!/\u003e \"INTEGRATION: CWS native61 (1.15.78); FILE MERGED\" introducing it commented-out for Linux even though claiming \"#i68850# mktemp also for linux\").",
+      "revId": "d93c3f2fd12393c31b132fe86df203067f7c7250",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
