@@ -134,7 +134,7 @@ SvxLongLRSpaceItem* SvxLongLRSpaceItem::Clone(SfxItemPool *) const
     return new SvxLongLRSpaceItem(*this);
 }
 
-SvxLongLRSpaceItem::SvxLongLRSpaceItem(tools::Long lLeft, tools::Long lRight, sal_uInt16 nId) :
+SvxLongLRSpaceItem::SvxLongLRSpaceItem(tools::Long lLeft, tools::Long lRight, TypedWhichId<SvxLongLRSpaceItem> nId) :
     SfxPoolItem (nId),
     mlLeft      (lLeft),
     mlRight     (lRight)
@@ -253,7 +253,7 @@ SvxLongULSpaceItem* SvxLongULSpaceItem::Clone(SfxItemPool *) const
     return new SvxLongULSpaceItem(*this);
 }
 
-SvxLongULSpaceItem::SvxLongULSpaceItem(tools::Long lLeft, tools::Long lRight, sal_uInt16 nId) :
+SvxLongULSpaceItem::SvxLongULSpaceItem(tools::Long lLeft, tools::Long lRight, TypedWhichId<SvxLongULSpaceItem> nId) :
     SfxPoolItem (nId),
     mlLeft       (lLeft),
     mlRight      (lRight)

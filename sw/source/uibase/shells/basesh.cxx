@@ -572,7 +572,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
                     TransferableDataHelper::CreateFromSystemClipboard(
                                             &rSh.GetView().GetEditWin()) );
 
-                SvxClipboardFormatItem aFormatItem( nWhich );
+                SvxClipboardFormatItem aFormatItem( SID_CLIPBOARD_FORMAT_ITEMS );
                 SwTransferable::FillClipFormatItem( rSh, aDataHelper, aFormatItem );
                 rSet.Put( aFormatItem );
             }

@@ -58,7 +58,7 @@ private:
 public:
 
     static SfxPoolItem* CreateDefault();
-    SvxPageItem( const sal_uInt16 nId );
+    SvxPageItem( const TypedWhichId<SvxPageItem> nId );
     SvxPageItem( const SvxPageItem& rItem );
 
     virtual ~SvxPageItem() override;
@@ -97,9 +97,9 @@ public:
 class SVX_DLLPUBLIC SvxSetItem final : public SfxSetItem
 {
 public:
-    SvxSetItem( const sal_uInt16 nId, const SfxItemSet& rSet );
+    SvxSetItem( const TypedWhichId<SvxSetItem> nId, const SfxItemSet& rSet );
     SvxSetItem( const SvxSetItem& rItem );
-    SvxSetItem( const sal_uInt16 nId, SfxItemSet&& pSet );
+    SvxSetItem( const TypedWhichId<SvxSetItem> nId, SfxItemSet&& pSet );
 
     virtual SvxSetItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 

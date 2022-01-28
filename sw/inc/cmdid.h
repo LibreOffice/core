@@ -625,7 +625,7 @@
 #define FN_UNO_FOOTER_FIRST                 (FN_EXTRA2 + 119)
 #define FN_UNO_TABLE_BORDER2                (FN_EXTRA2 + 120)
 
-// #define free                             (FN_EXTRA2 + 121)
+#define FN_FIELD_DIALOG_DOC_PROPS           TypedWhichId<SfxUnoAnyItem>(FN_EXTRA2 + 121)
 #define FN_UNO_HIDDEN                       (FN_EXTRA2 + 122)
 #define FN_UNO_STYLE_INTEROP_GRAB_BAG       (FN_EXTRA2 + 123)
 #define FN_UNO_TABLE_TEMPLATE_NAME          (FN_EXTRA2 + 124)
@@ -861,12 +861,12 @@
 
 #define SID_ATTR_PAGE_COLUMN            (FN_SIDEBAR + 0)
 #define SID_ATTR_PAGE_HEADER            (FN_SIDEBAR + 3)
-#define SID_ATTR_PAGE_HEADER_LRMARGIN   (FN_SIDEBAR + 4)
-#define SID_ATTR_PAGE_HEADER_SPACING    (FN_SIDEBAR + 5)
+#define SID_ATTR_PAGE_HEADER_LRMARGIN   TypedWhichId<SvxLongLRSpaceItem>(FN_SIDEBAR + 4)
+#define SID_ATTR_PAGE_HEADER_SPACING    TypedWhichId<SvxLongULSpaceItem>(FN_SIDEBAR + 5)
 #define SID_ATTR_PAGE_HEADER_LAYOUT     (FN_SIDEBAR + 6)
 #define SID_ATTR_PAGE_FOOTER            (FN_SIDEBAR + 7)
-#define SID_ATTR_PAGE_FOOTER_LRMARGIN   (FN_SIDEBAR + 8)
-#define SID_ATTR_PAGE_FOOTER_SPACING    (FN_SIDEBAR + 9)
+#define SID_ATTR_PAGE_FOOTER_LRMARGIN   TypedWhichId<SvxLongLRSpaceItem>(FN_SIDEBAR + 8)
+#define SID_ATTR_PAGE_FOOTER_SPACING    TypedWhichId<SvxLongULSpaceItem>(FN_SIDEBAR + 9)
 #define SID_ATTR_PAGE_FOOTER_LAYOUT     (FN_SIDEBAR + 10)
 #define SID_ATTR_PAGE_MARGIN            (FN_SIDEBAR + 11)
 

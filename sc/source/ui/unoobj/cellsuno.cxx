@@ -2384,7 +2384,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
                     {
                         Degree100 nRot = pDataSet->Get(ATTR_ROTATE_VALUE).GetValue();
                         bool bStacked = static_cast<const ScVerticalStackCell&>(pDataSet->Get(pEntry->nWID)).GetValue();
-                        SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( rAny );
+                        SvxOrientationItem( nRot, bStacked, TypedWhichId<SvxOrientationItem>(0) ).QueryValue( rAny );
                     }
                     break;
                 default:

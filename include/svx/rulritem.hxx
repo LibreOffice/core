@@ -44,7 +44,7 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem final : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
-    SvxLongLRSpaceItem(tools::Long lLeft, tools::Long lRight, sal_uInt16 nId);
+    SvxLongLRSpaceItem(tools::Long lLeft, tools::Long lRight, TypedWhichId<SvxLongLRSpaceItem> nId);
     SvxLongLRSpaceItem();
     SvxLongLRSpaceItem(SvxLongLRSpaceItem const &) = default;
 
@@ -74,7 +74,7 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem final : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
-    SvxLongULSpaceItem(tools::Long lUpper, tools::Long lLower, sal_uInt16 nId);
+    SvxLongULSpaceItem(tools::Long lUpper, tools::Long lLower, TypedWhichId<SvxLongULSpaceItem> nId);
     SvxLongULSpaceItem();
     SvxLongULSpaceItem(SvxLongULSpaceItem const &) = default;
 

@@ -322,8 +322,8 @@ void SvxHyperlinkTabPageBase::DisableClose(bool _bDisable)
 // Click on imagebutton : Script
 IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, weld::Button&, void)
 {
-    SvxHyperlinkItem *pHyperlinkItem = const_cast<SvxHyperlinkItem*>(static_cast<const SvxHyperlinkItem *>(
-                                       GetItemSet().GetItem (SID_HYPERLINK_GETLINK)));
+    SvxHyperlinkItem *pHyperlinkItem = const_cast<SvxHyperlinkItem*>(
+                                       GetItemSet().GetItem (SID_HYPERLINK_GETLINK));
 
     if (!pHyperlinkItem || pHyperlinkItem->GetMacroEvents() == HyperDialogEvent::NONE)
         return;
@@ -371,16 +371,16 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, weld::Button&, voi
 // Get Macro-Infos
 HyperDialogEvent SvxHyperlinkTabPageBase::GetMacroEvents() const
 {
-    const SvxHyperlinkItem *pHyperlinkItem = static_cast<const SvxHyperlinkItem *>(
-                                       GetItemSet().GetItem (SID_HYPERLINK_GETLINK));
+    const SvxHyperlinkItem *pHyperlinkItem =
+                                       GetItemSet().GetItem (SID_HYPERLINK_GETLINK);
 
     return pHyperlinkItem ? pHyperlinkItem->GetMacroEvents() : HyperDialogEvent();
 }
 
 SvxMacroTableDtor* SvxHyperlinkTabPageBase::GetMacroTable()
 {
-    const SvxHyperlinkItem *pHyperlinkItem = static_cast<const SvxHyperlinkItem *>(
-                                       GetItemSet().GetItem (SID_HYPERLINK_GETLINK));
+    const SvxHyperlinkItem *pHyperlinkItem =
+                                       GetItemSet().GetItem (SID_HYPERLINK_GETLINK);
 
     return const_cast<SvxMacroTableDtor*>(pHyperlinkItem->GetMacroTable());
 }
@@ -445,8 +445,8 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
     // Set dialog-fields from create-itemset
     maStrInitURL.clear();
 
-    const SvxHyperlinkItem *pHyperlinkItem = static_cast<const SvxHyperlinkItem *>(
-                                       rItemSet.GetItem (SID_HYPERLINK_GETLINK));
+    const SvxHyperlinkItem *pHyperlinkItem =
+                                       rItemSet.GetItem (SID_HYPERLINK_GETLINK);
 
     if ( pHyperlinkItem )
     {
@@ -486,8 +486,8 @@ void SvxHyperlinkTabPageBase::ActivatePage( const SfxItemSet& rItemSet )
 {
 
     // Set dialog-fields from input-itemset
-    const SvxHyperlinkItem *pHyperlinkItem = static_cast<const SvxHyperlinkItem *>(
-                                       rItemSet.GetItem (SID_HYPERLINK_GETLINK));
+    const SvxHyperlinkItem *pHyperlinkItem =
+                                       rItemSet.GetItem (SID_HYPERLINK_GETLINK);
 
     if ( pHyperlinkItem )
     {
