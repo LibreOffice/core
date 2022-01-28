@@ -87,6 +87,24 @@
       "parentUuid": "d903a108_1ac590b8",
       "revId": "e2a55a4acda349998b8deccb355dd8231d31f7a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1958ff3_99124876",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2022-01-28T16:30:59Z",
+      "side": 1,
+      "message": "It\u0027s been fixed and properly tested, right now we aren\u0027t showing the \u0027Word Justify\u0027 option but it\u0027s still present in the fontwork alignments file for future devs to implement as per the guideline on the bugzilla page.",
+      "parentUuid": "8c74ab85_57e0f153",
+      "revId": "e2a55a4acda349998b8deccb355dd8231d31f7a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
