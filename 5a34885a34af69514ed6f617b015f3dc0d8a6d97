@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a258120_1e700a98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-01-28T18:24:26Z",
+      "side": 1,
+      "message": "Tested on deb package.\n\nNeed to test in Windows packaging build",
+      "revId": "5a34885a34af69514ed6f617b015f3dc0d8a6d97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
