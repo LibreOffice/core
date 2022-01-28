@@ -33,6 +33,24 @@
       "message": "is that supposed to have this std::min thing in it too ?",
       "revId": "71ee370163b7a9192c5ff43ed0b89870be43c149",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7a10cd6_e7dcf254",
+        "filename": "vcl/skia/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-01-28T12:16:33Z",
+      "side": 1,
+      "message": "\u003e is that supposed to have this std::min thing in it too ?\n\nThe way I understand it, the problem was that the function was called with other join type than miter and a miter angle that was zero, because it\u0027s irrelevant for all other join types. At least I checked all callers and couldn\u0027t find one that\u0027d want miter join type with the invalid value. With cairo backend I got lazy and just clamped it, but here I did the separation properly.",
+      "parentUuid": "03311bda_d643ce23",
+      "revId": "71ee370163b7a9192c5ff43ed0b89870be43c149",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
