@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59c268ca_59f6a908",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-28T11:35:47Z",
+      "side": 1,
+      "message": "I don\u0027t like the look of this tmpnam call",
+      "revId": "1009a00abbda4f6b7b8a9b3acee47fa252756ed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
