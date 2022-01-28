@@ -34,8 +34,6 @@ class UNLESS_MERGELIBS(SVT_DLLPUBLIC) AsynchronLink
 {
     Link<void*,void> _aLink;
     ImplSVEvent*     _nEventId;
-    bool             _bInCall;
-    bool*            _pDeleted;
     void*            _pArg;
     std::mutex       _aMutex;
 
@@ -45,14 +43,10 @@ public:
     AsynchronLink( const Link<void*,void>& rLink )
         : _aLink( rLink )
         , _nEventId( nullptr )
-        , _bInCall( false )
-        , _pDeleted( nullptr )
         , _pArg( nullptr )
     {}
     AsynchronLink()
         : _nEventId( nullptr )
-        , _bInCall( false )
-        , _pDeleted( nullptr )
         , _pArg( nullptr )
     {}
     ~AsynchronLink();
