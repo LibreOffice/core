@@ -38,9 +38,9 @@
 
 using namespace ::com::sun::star;
 
-SfxPoolItem* SvxPageItem::CreateDefault() { return new   SvxPageItem(0);}
+SfxPoolItem* SvxPageItem::CreateDefault() { return new SvxPageItem(TypedWhichId<SvxPageItem>(0));}
 
-SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
+SvxPageItem::SvxPageItem( const TypedWhichId<SvxPageItem> nId ) : SfxPoolItem( nId ),
 
     eNumType    ( SVX_NUM_ARABIC ),
     bLandscape  ( false ),
@@ -250,7 +250,7 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 // HeaderFooterSet
-SvxSetItem::SvxSetItem( const sal_uInt16 nId, const SfxItemSet& rSet ) :
+SvxSetItem::SvxSetItem( const TypedWhichId<SvxSetItem> nId, const SfxItemSet& rSet ) :
 
     SfxSetItem( nId, rSet )
 {
@@ -262,7 +262,7 @@ SvxSetItem::SvxSetItem( const SvxSetItem& rItem ) :
 {
 }
 
-SvxSetItem::SvxSetItem( const sal_uInt16 nId, SfxItemSet&& _pSet ) :
+SvxSetItem::SvxSetItem( const TypedWhichId<SvxSetItem> nId, SfxItemSet&& _pSet ) :
 
     SfxSetItem( nId, std::move(_pSet) )
 {

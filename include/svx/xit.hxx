@@ -43,8 +43,8 @@ protected:
 
 public:
             NameOrIndex() { nPalIndex = -1; }
-            NameOrIndex(sal_uInt16 nWhich, sal_Int32 nIndex);
-            NameOrIndex(sal_uInt16 nWhich, const OUString& rName);
+            NameOrIndex(TypedWhichId<NameOrIndex> nWhich, sal_Int32 nIndex);
+            NameOrIndex(TypedWhichId<NameOrIndex> nWhich, const OUString& rName);
             NameOrIndex(const NameOrIndex& rNameOrIndex);
 
     virtual bool         operator==(const SfxPoolItem& rItem) const override;

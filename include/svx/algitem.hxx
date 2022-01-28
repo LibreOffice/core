@@ -35,11 +35,11 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxOrientationItem final : public SfxEnumIte
 public:
     SvxOrientationItem(
         const SvxCellOrientation eOrientation,
-        const sal_uInt16 nId );
+        const TypedWhichId<SvxOrientationItem> nId );
 
     SvxOrientationItem(
         Degree100 nRotation, bool bStacked,
-        const sal_uInt16 nId );
+        const TypedWhichId<SvxOrientationItem> nId );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -67,10 +67,10 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxMarginItem final : public SfxPoolItem
     sal_Int16       nBottomMargin;
 public:
     static SfxPoolItem* CreateDefault();
-    SvxMarginItem( const sal_uInt16 nId  );
+    SvxMarginItem( const TypedWhichId<SvxMarginItem> nId  );
     SvxMarginItem( sal_Int16 nLeft, sal_Int16 nTop /*= 0*/,
                    sal_Int16 nRight /*= 0*/, sal_Int16 nBottom /*= 0*/,
-                   const sal_uInt16 nId  );
+                   const TypedWhichId<SvxMarginItem> nId  );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

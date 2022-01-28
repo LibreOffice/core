@@ -74,7 +74,7 @@ class SVX_DLLPUBLIC SvxGridItem : public SvxOptionsGrid, public SfxPoolItem
     friend class SvxGridTabPage;
 
 public:
-    SvxGridItem( sal_uInt16 _nWhich) : SfxPoolItem(_nWhich){};
+    SvxGridItem( TypedWhichId<SvxGridItem> _nWhich) : SfxPoolItem(_nWhich){};
 
     virtual SvxGridItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;

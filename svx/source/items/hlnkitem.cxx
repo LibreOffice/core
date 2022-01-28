@@ -22,7 +22,7 @@
 #include <svx/hlnkitem.hxx>
 
 
-SfxPoolItem* SvxHyperlinkItem::CreateDefault() { return new  SvxHyperlinkItem(0);}
+SfxPoolItem* SvxHyperlinkItem::CreateDefault() { return new  SvxHyperlinkItem(TypedWhichId<SvxHyperlinkItem>(0));}
 
 SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
             SfxPoolItem(rHyperlinkItem)
@@ -39,7 +39,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
 
 };
 
-SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, const OUString& rName, const OUString& rURL,
+SvxHyperlinkItem::SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich, const OUString& rName, const OUString& rURL,
                                     const OUString& rTarget, const OUString& rIntName, SvxLinkInsertMode eTyp,
                                     HyperDialogEvent nEvents, SvxMacroTableDtor const *pMacroTbl ):
     SfxPoolItem (_nWhich),

@@ -1818,7 +1818,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
                         {
                             Degree100 nRot = pItemSet->Get(ATTR_ROTATE_VALUE).GetValue();
                             bool bStacked = static_cast<const ScVerticalStackCell&>(pItemSet->Get(nWhich)).GetValue();
-                            SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aAny );
+                            SvxOrientationItem( nRot, bStacked, TypedWhichId<SvxOrientationItem>(0) ).QueryValue( aAny );
                         }
                         break;
                     case ATTR_PAGE_SCALE:

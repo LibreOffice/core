@@ -60,10 +60,10 @@ class SVX_DLLPUBLIC SvxHyperlinkItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxHyperlinkItem( sal_uInt16 _nWhich = SID_HYPERLINK_GETLINK ):
+    SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich = SID_HYPERLINK_GETLINK ):
                 SfxPoolItem(_nWhich) { eType = HLINK_DEFAULT; nMacroEvents=HyperDialogEvent::NONE; };
     SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem );
-    SvxHyperlinkItem( sal_uInt16 nWhich, const OUString& rName, const OUString& rURL,
+    SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> nWhich, const OUString& rName, const OUString& rURL,
                                     const OUString& rTarget, const OUString& rIntName,
                                     SvxLinkInsertMode eTyp,
                                     HyperDialogEvent nEvents,

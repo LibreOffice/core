@@ -20,7 +20,7 @@
 #include <svx/numinf.hxx>
 
 
-SvxNumberInfoItem::SvxNumberInfoItem( const sal_uInt16 nId ) :
+SvxNumberInfoItem::SvxNumberInfoItem( const TypedWhichId<SvxNumberInfoItem> nId ) :
     SfxPoolItem     ( nId ),
     pFormatter      ( nullptr ),
     eValueType      ( SvxNumberValueType::Undefined ),
@@ -31,7 +31,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( const sal_uInt16 nId ) :
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
-                                      const sal_uInt16 nId ) :
+                                      const TypedWhichId<SvxNumberInfoItem> nId ) :
     SfxPoolItem     ( nId ),
     pFormatter      ( pNumFormatter ),
     eValueType      ( SvxNumberValueType::Undefined ),
@@ -42,7 +42,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
-                                      const OUString& rVal, const sal_uInt16 nId ) :
+                                      const OUString& rVal, const TypedWhichId<SvxNumberInfoItem> nId ) :
     SfxPoolItem     ( nId ),
     pFormatter      ( pNumFormatter ),
     eValueType      ( SvxNumberValueType::String ),
@@ -53,7 +53,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
-                                      const double& rVal, const sal_uInt16 nId ) :
+                                      const double& rVal, const TypedWhichId<SvxNumberInfoItem> nId ) :
     SfxPoolItem     ( nId ),
     pFormatter      ( pNumFormatter ),
     eValueType      ( SvxNumberValueType::Number ),
@@ -65,7 +65,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const double& rVal, const OUString& rValueStr,
-                                      const sal_uInt16 nId ) :
+                                      const TypedWhichId<SvxNumberInfoItem> nId ) :
     SfxPoolItem     ( nId ),
     pFormatter      ( pNumFormatter ),
     eValueType      ( SvxNumberValueType::Number ),

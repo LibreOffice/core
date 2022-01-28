@@ -1130,7 +1130,7 @@ void SwDocTest::testTableAutoFormats()
     SfxBoolItem aStacked(0, true);
     aBoxAF.SetStacked(aStacked);
     //Set m_aMargin
-    SvxMarginItem aSvxMarginItem(sal_Int16(4), sal_Int16(2), sal_Int16(3), sal_Int16(3), 0);
+    SvxMarginItem aSvxMarginItem(sal_Int16(4), sal_Int16(2), sal_Int16(3), sal_Int16(3), TypedWhichId<SvxMarginItem>(0));
     aBoxAF.SetMargin(aSvxMarginItem);
     //Set m_aLinebreak
     SfxBoolItem aLBreak(0, true);

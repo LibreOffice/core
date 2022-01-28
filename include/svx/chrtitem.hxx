@@ -81,7 +81,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxChartRegressItem final : public SfxEn
 {
 public:
     SvxChartRegressItem(SvxChartRegress eRegress /*= SvxChartRegress::Linear*/,
-                        sal_uInt16 nId );
+                        TypedWhichId<SvxChartRegressItem> nId );
 
     virtual SvxChartRegressItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
@@ -92,7 +92,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxChartTextOrderItem final : public Sfx
 {
 public:
     SvxChartTextOrderItem(SvxChartTextOrder eOrder /*= SvxChartTextOrder::SideBySide*/,
-                          sal_uInt16 nId );
+                          TypedWhichId<SvxChartTextOrderItem> nId );
 
     virtual SvxChartTextOrderItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
@@ -106,7 +106,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxChartKindErrorItem final : public Sfx
 {
 public:
     SvxChartKindErrorItem(SvxChartKindError /*eOrient = SvxChartKindError::NONE*/,
-                           sal_uInt16 nId );
+                           TypedWhichId<SvxChartKindErrorItem> nId );
 
     virtual SvxChartKindErrorItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
@@ -117,7 +117,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxChartIndicateItem final : public SfxE
 {
 public:
     SvxChartIndicateItem(SvxChartIndicate eOrient /*= SvxChartIndicate::NONE*/,
-                           sal_uInt16 nId );
+                           TypedWhichId<SvxChartIndicateItem> nId );
 
     virtual SvxChartIndicateItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
@@ -130,7 +130,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxDoubleItem final : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
-    SvxDoubleItem(double fValue /*= 0.0*/, sal_uInt16 nId );
+    SvxDoubleItem(double fValue /*= 0.0*/, TypedWhichId<SvxDoubleItem> nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

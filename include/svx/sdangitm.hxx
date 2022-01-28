@@ -27,7 +27,7 @@
 
 class SVXCORE_DLLPUBLIC SdrAngleItem: public SfxInt32Item {
 public:
-    SdrAngleItem(sal_uInt16 nId, Degree100 nAngle): SfxInt32Item(nId,nAngle.get()) {}
+    SdrAngleItem(TypedWhichId<SdrAngleItem> nId, Degree100 nAngle): SfxInt32Item(nId,nAngle.get()) {}
     virtual SdrAngleItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
     virtual bool GetPresentation(SfxItemPresentation ePres,

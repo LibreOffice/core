@@ -29,6 +29,7 @@
 #include <fldbas.hxx>
 #include <docufld.hxx>
 #include <wrtsh.hxx>
+#include <cmdid.h>
 
 #include "flddinf.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -73,7 +74,7 @@ SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogControl
     m_xFormatLB->SetShowLanguageControl(true);
 
     const SfxUnoAnyItem* pItem = pCoreSet
-        ? pCoreSet->GetItem<SfxUnoAnyItem>(SID_DOCINFO, false)
+        ? pCoreSet->GetItem(FN_FIELD_DIALOG_DOC_PROPS, false)
         : nullptr;
     if ( pItem )
         pItem->GetValue() >>= xCustomPropertySet;

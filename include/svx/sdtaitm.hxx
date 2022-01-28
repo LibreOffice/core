@@ -35,7 +35,7 @@ enum SdrTextVertAdjust {SDRTEXTVERTADJUST_TOP,      // aligned to top (normally 
 class SVXCORE_DLLPUBLIC SdrTextVertAdjustItem final : public SfxEnumItem<SdrTextVertAdjust> {
 public:
     SdrTextVertAdjustItem(SdrTextVertAdjust eAdj=SDRTEXTVERTADJUST_TOP): SfxEnumItem(SDRATTR_TEXT_VERTADJUST, eAdj) {}
-    SdrTextVertAdjustItem(SdrTextVertAdjust eAdj, sal_uInt16 nWhich): SfxEnumItem(nWhich, eAdj) {}
+    SdrTextVertAdjustItem(SdrTextVertAdjust eAdj, TypedWhichId<SdrTextVertAdjustItem> nWhich): SfxEnumItem(nWhich, eAdj) {}
     virtual SdrTextVertAdjustItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16        GetValueCount() const override; // { return 5; }
 
