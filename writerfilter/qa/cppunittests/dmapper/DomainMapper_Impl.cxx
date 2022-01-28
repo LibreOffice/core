@@ -19,6 +19,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
 #include <vcl/scheduler.hxx>
 
@@ -229,6 +230,31 @@ CPPUNIT_TEST_FIXTURE(Test, testChartZOrder)
     // Without the accompanying fix in place, this test would have failed, as the chart was on top
     // of the shape.
     CPPUNIT_ASSERT(xChart->supportsService("com.sun.star.text.TextEmbeddedObject"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPTab)
+{
+    // Given a document that has a <w:ptab> to render a linebreak:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ptab.docx";
+
+    // When opening that file:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the Writer doc model contains that linebreak:
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
+                                                        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
+    auto xFooter = xStyle->getPropertyValue("FooterText").get<uno::Reference<text::XTextRange>>();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: <space><newline>1\n
+    // - Actual:   <space><tab>1\n
+    // i.e. the layout height of the footer text was incorrect, the page number field was not
+    // visually inside the background shape.
+    CPPUNIT_ASSERT_EQUAL(OUString(" \n1" SAL_NEWLINE_STRING), xFooter->getString());
 }
 }
 
