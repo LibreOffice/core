@@ -52,7 +52,7 @@ OUString get_this_libpath() {
 }
 
 OUString cppu::getUnoIniUri() {
-#if defined ANDROID || defined EMSCRIPTEN
+#if defined ANDROID
     // Wouldn't it be lovely to avoid this ugly hard-coding.
     // The problem is that the 'create_bootstrap_macro_expander_factory()'
     // required for bootstrapping services, calls cppu::get_unorc directly
