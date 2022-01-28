@@ -33,6 +33,24 @@
       "message": "Now gtk3 remembers both pos and size but kf5 and gen none.",
       "revId": "3d77021c2be5c59db32b62286edd9802b8f02bc0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3033c50_e77dcc3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-28T07:58:53Z",
+      "side": 1,
+      "message": "Yes, please keep the other changes. I moved the internal action buttons out of the bottom panel and adjusted the table resizing, IIRC.\n\nMichael, Jmux: added you for attention on the kf5 topic.",
+      "parentUuid": "f5926f9f_dbd9805e",
+      "revId": "3d77021c2be5c59db32b62286edd9802b8f02bc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
