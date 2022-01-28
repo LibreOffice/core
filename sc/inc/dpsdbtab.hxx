@@ -29,6 +29,7 @@
 class ScDocument;
 class ScDPCache;
 class ScDPDimensionSaveData;
+enum class ScEmptyRowHandling : sal_Int8;
 
 struct ScImportSourceDesc
 {
@@ -67,7 +68,7 @@ public:
     virtual bool                    getIsDataLayoutDimension(sal_Int32 nColumn) override;
     virtual bool                    IsDateDimension(sal_Int32 nDim) override;
     virtual void                    DisposeData() override;
-    virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) override;
+    virtual void                    SetEmptyFlags( ScEmptyRowHandling aEmptyRowHandling, bool bRepeatIfEmpty ) override;
 
     virtual void                    CreateCacheTable() override;
     virtual void                    FilterCacheTable(std::vector<ScDPFilteredCache::Criterion>&& rCriteria, std::unordered_set<sal_Int32>&& rDataDims) override;

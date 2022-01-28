@@ -49,6 +49,8 @@ class ScDPLevel;
 class ScDPInitState;
 class ScDocument;
 
+enum class ScEmptyRowHandling : sal_Int8;
+
 /**
  * Base class that abstracts different data source types of a datapilot
  * table.
@@ -104,7 +106,7 @@ public:
     virtual sal_uInt32              GetNumberFormat(sal_Int32 nDim);
     sal_uInt32                      GetNumberFormatByIdx( NfIndexTableOffset );
     virtual void                    DisposeData() = 0;
-    virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) = 0;
+    virtual void                    SetEmptyFlags( ScEmptyRowHandling aEmptyRowHandling, bool bRepeatIfEmpty ) = 0;
 
     virtual bool                    IsRepeatIfEmpty();
 

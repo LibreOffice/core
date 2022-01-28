@@ -43,6 +43,8 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <generalfunction.hxx>
+#include <emptyrowhandling.hxx>
+#include <comphelper/extract.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -106,7 +108,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotDescriptorBaseMap()
         { SC_UNO_DP_COLGRAND,     0,  cppu::UnoType<bool>::get(),  0, 0 },
         { SC_UNO_DP_DRILLDOWN,    0,  cppu::UnoType<bool>::get(),  0, 0 },
         { SC_UNO_DP_GRANDTOTAL_NAME,0,cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
-        { SC_UNO_DP_IGNORE_EMPTYROWS,   0,  cppu::UnoType<bool>::get(),  0, 0 },
+        { SC_UNO_DP_EMPTYROW_HANDLING,   0,  cppu::UnoType<sal_uInt8>::get(),  0, 0 },
         { SC_UNO_DP_IMPORTDESC,   0,  cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get(), 0, 0 },
         { SC_UNO_DP_REPEATEMPTY,     0,  cppu::UnoType<bool>::get(),  0, 0 },
         { SC_UNO_DP_ROWGRAND,     0,  cppu::UnoType<bool>::get(),  0, 0 },
@@ -707,9 +709,20 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
         {
             aNewData.SetColumnGrand(::cppu::any2bool( aValue ));
         }
-        else if ( aPropertyName == SC_UNO_DP_IGNORE_EMPTYROWS )
+        else if ( aPropertyName == SC_UNO_DP_EMPTYROW_HANDLING )
         {
-            aNewData.SetIgnoreEmptyRows(::cppu::any2bool( aValue ));
+            OUString sEmptyRowHandling;
+            if (aValue >>= sEmptyRowHandling)
+            {
+                auto aEmptyRowHandling = ScEmptyRowHandling::DEFAULT;
+                if ( sEmptyRowHandling == "LIST" )
+                    aEmptyRowHandling = ScEmptyRowHandling::LIST;
+                if ( sEmptyRowHandling == "COUNT" )
+                    aEmptyRowHandling = ScEmptyRowHandling::COUNT;
+                if ( sEmptyRowHandling == "IGNORE" )
+                    aEmptyRowHandling = ScEmptyRowHandling::IGNORE;
+                aNewData.SetEmptyRowHandling(aEmptyRowHandling);
+            }
         }
         else if ( aPropertyName == SC_UNO_DP_REPEATEMPTY )
         {
@@ -849,9 +862,22 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
             {
                 aRet <<= aNewData.GetColumnGrand();
             }
-            else if ( aPropertyName == SC_UNO_DP_IGNORE_EMPTYROWS )
+            else if ( aPropertyName == SC_UNO_DP_EMPTYROW_HANDLING )
             {
-                aRet <<= aNewData.GetIgnoreEmptyRows();
+                OUString sEmptyRowHandling;
+                switch(aNewData.GetEmptyRowHandling())
+                {
+                    case ScEmptyRowHandling::LIST:
+                        sEmptyRowHandling = "LIST";
+                        break;
+                    case ScEmptyRowHandling::COUNT:
+                        sEmptyRowHandling = "COUNT";
+                        break;
+                    case ScEmptyRowHandling::IGNORE:
+                        sEmptyRowHandling = "IGNORE";
+                        break;
+                }
+                aRet <<= sEmptyRowHandling;
             }
             else if ( aPropertyName == SC_UNO_DP_REPEATEMPTY )
             {
@@ -1267,7 +1293,7 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     // set defaults like in ScPivotParam constructor
     aSaveData.SetColumnGrand( true );
     aSaveData.SetRowGrand( true );
-    aSaveData.SetIgnoreEmptyRows( false );
+    aSaveData.SetEmptyRowHandling( ScEmptyRowHandling::DEFAULT );
     aSaveData.SetRepeatIfEmpty( false );
     mpDPObject->SetSaveData(aSaveData);
     ScSheetSourceDesc aSheetDesc(pDocSh ? &pDocSh->GetDocument() : nullptr);

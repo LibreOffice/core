@@ -42,6 +42,8 @@ class ScDPCache;
 struct ScDPValue;
 struct ScQueryParam;
 
+enum class ScEmptyRowHandling : sal_Int8;
+
 /**
  * This class is only a wrapper to the actual cache, to provide filtering on
  * the raw data based on the query filter and/or page field filters.
@@ -107,7 +109,8 @@ public:
 
     const ScDPCache& getCache() const { return mrCache; }
 
-    void fillTable(const ScQueryParam& rQuery, bool bIgnoreEmptyRows, bool bRepeatIfEmpty);
+    void fillTable(const ScQueryParam& rQuery, ScEmptyRowHandling eEmptyRowHandling,
+                   bool bRepeatIfEmpty);
 
     void fillTable();
 

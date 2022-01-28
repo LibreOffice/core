@@ -85,7 +85,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     , mxListBoxColumn(new ScPivotLayoutTreeList(m_xBuilder->weld_tree_view("listbox-column")))
     , mxListBoxRow(new ScPivotLayoutTreeList(m_xBuilder->weld_tree_view("listbox-row")))
     , mxListBoxData(new ScPivotLayoutTreeListData(m_xBuilder->weld_tree_view("listbox-data")))
-    , mxCheckIgnoreEmptyRows(m_xBuilder->weld_check_button("check-ignore-empty-rows"))
+    , mxEmptyRowsBox(m_xBuilder->weld_combo_box("combo-empty-handling"))
     , mxCheckTotalColumns(m_xBuilder->weld_check_button("check-total-columns"))
     , mxCheckAddFilter(m_xBuilder->weld_check_button("check-add-filter"))
     , mxCheckIdentifyCategories(m_xBuilder->weld_check_button("check-identify-categories"))
@@ -176,7 +176,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
         mxCheckDrillToDetail->set_active(pSaveData->GetDrillDown());
     }
 
-    mxCheckIgnoreEmptyRows->set_active(maPivotParameters.bIgnoreEmptyRows);
+    mxEmptyRowsBox->set_active(static_cast<int>(maPivotParameters.nEmptyRowsHandling));
     mxCheckIdentifyCategories->set_active(maPivotParameters.bDetectCategories);
     mxCheckTotalColumns->set_active(maPivotParameters.bMakeTotalCol);
     mxCheckTotalRows->set_active(maPivotParameters.bMakeTotalRow);
@@ -515,7 +515,7 @@ void ScPivotLayoutDialog::ApplyChanges()
 
 void ScPivotLayoutDialog::ApplySaveData(ScDPSaveData& rSaveData)
 {
-    rSaveData.SetIgnoreEmptyRows(mxCheckIgnoreEmptyRows->get_active());
+    rSaveData.SetEmptyRowHandling(static_cast<ScEmptyRowHandling>(mxEmptyRowsBox->get_active()));
     rSaveData.SetRepeatIfEmpty(mxCheckIdentifyCategories->get_active());
     rSaveData.SetColumnGrand(mxCheckTotalColumns->get_active());
     rSaveData.SetRowGrand(mxCheckTotalRows->get_active());

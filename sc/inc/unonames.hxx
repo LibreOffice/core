@@ -605,7 +605,7 @@ inline constexpr OUStringLiteral SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER = 
 #define SC_UNO_DP_REPEATITEMLABELS     "RepeatItemLabels"
 #define SC_UNO_DP_ISVISIBLE            "IsVisible"
 #define SC_UNO_DP_SHOWDETAILS          "ShowDetails"
-#define SC_UNO_DP_IGNOREEMPTY          "IgnoreEmptyRows"
+#define SC_UNO_DP_EMPTY_ROWS           "EmptyRowHandling"
 #define SC_UNO_DP_REPEATEMPTY          "RepeatIfEmpty"
 #define SC_UNO_DP_DATADESC             "DataDescription"
 #define SC_UNO_DP_NUMBERFO             SC_UNONAME_NUMFMT
@@ -624,7 +624,7 @@ inline constexpr OUStringLiteral SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER = 
 #define SC_UNO_DP_LAYOUT               "Layout"
 
 // data pilot descriptor
-#define SC_UNO_DP_IGNORE_EMPTYROWS     "IgnoreEmptyRows"
+#define SC_UNO_DP_EMPTYROW_HANDLING     "EmptyRowHandling"
 #define SC_UNO_DP_DRILLDOWN            "DrillDownOnDoubleClick"
 #define SC_UNO_DP_SHOWFILTER           "ShowFilterButton"
 #define SC_UNO_DP_IMPORTDESC           "ImportDescriptor"

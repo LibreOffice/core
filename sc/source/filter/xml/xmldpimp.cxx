@@ -29,6 +29,7 @@
 #include <rangeutl.hxx>
 #include <dpoutputgeometry.hxx>
 #include <generalfunction.hxx>
+#include <emptyrowhandling.hxx>
 
 #include "pivotsource.hxx"
 
@@ -94,7 +95,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     mnDataFieldCount(0),
     mnDataLayoutType(sheet::DataPilotFieldOrientation_HIDDEN),
     bIsNative(true),
-    bIgnoreEmptyRows(false),
+    sEmptyRowHandling ("DEFAULT"), // see ScEmptyRowHandling::DEFAULT
     bIdentifyCategories(false),
     bTargetRangeAddress(false),
     bSourceCellRange(false),
@@ -145,7 +146,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             break;
             case XML_ELEMENT( TABLE, XML_IGNORE_EMPTY_ROWS ):
             {
-                bIgnoreEmptyRows = IsXMLToken(aIter, XML_TRUE);
+                sEmptyRowHandling = aIter.toString();
             }
             break;
             case XML_ELEMENT( TABLE, XML_IDENTIFY_CATEGORIES ):
@@ -508,7 +509,15 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
         // now.
         pDPSave->SetGrandTotalName(maRowGrandTotal.maDisplayName);
 
-    pDPSave->SetIgnoreEmptyRows(bIgnoreEmptyRows);
+    auto emptyRowHandling = ScEmptyRowHandling::DEFAULT;
+    if ( sEmptyRowHandling == "LIST")
+        emptyRowHandling = ScEmptyRowHandling::LIST;
+    else if ( sEmptyRowHandling == "IGNORE")
+        emptyRowHandling = ScEmptyRowHandling::IGNORE;
+    else if ( sEmptyRowHandling == "COUNT")
+        emptyRowHandling = ScEmptyRowHandling::COUNT;
+    pDPSave->SetEmptyRowHandling(emptyRowHandling);
+
     pDPSave->SetRepeatIfEmpty(bIdentifyCategories);
     pDPSave->SetFilterButton(bShowFilter);
     pDPSave->SetDrillDown(bDrillDown);
