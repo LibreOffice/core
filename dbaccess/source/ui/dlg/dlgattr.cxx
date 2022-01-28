@@ -34,7 +34,7 @@ SbaSbAttrDlg::SbaSbAttrDlg(weld::Widget* pParent, const SfxItemSet* pCellAttrs,
     SvNumberFormatter* pFormatter, bool bHasFormat)
     : SfxTabDialogController(pParent, "dbaccess/ui/fielddialog.ui", "FieldDialog", pCellAttrs)
 {
-    pNumberInfoItem.reset( new SvxNumberInfoItem( pFormatter, 0 ) );
+    pNumberInfoItem.reset( new SvxNumberInfoItem( pFormatter, SID_ATTR_NUMBERFORMAT_INFO ) );
 
     if (bHasFormat)
         AddTabPage("format", RID_SVXPAGE_NUMBERFORMAT);
@@ -52,7 +52,7 @@ void SbaSbAttrDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rPageId == "format")
     {
-        aSet.Put (SvxNumberInfoItem( pNumberInfoItem->GetNumberFormatter(), static_cast<sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO)));
+        aSet.Put (SvxNumberInfoItem( pNumberInfoItem->GetNumberFormatter(), SID_ATTR_NUMBERFORMAT_INFO));
         rTabPage.PageCreated(aSet);
     }
 }

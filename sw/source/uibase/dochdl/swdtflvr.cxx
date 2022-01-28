@@ -3342,7 +3342,7 @@ bool SwTransferable::IsPasteSpecial( const SwWrtShell& rWrtShell,
                                      const TransferableDataHelper& rData )
 {
     // we can paste-special if there's an entry in the paste-special-format list
-    SvxClipboardFormatItem aClipboardFormatItem(0);
+    SvxClipboardFormatItem aClipboardFormatItem(TypedWhichId<SvxClipboardFormatItem>(0));
     FillClipFormatItem( rWrtShell, rData, aClipboardFormatItem);
     return aClipboardFormatItem.Count() > 0;
 }

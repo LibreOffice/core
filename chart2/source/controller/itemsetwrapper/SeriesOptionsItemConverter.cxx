@@ -394,7 +394,7 @@ void SeriesOptionsItemConverter::FillSpecialItem(
         case SCHATTR_STARTING_ANGLE:
         {
             if( m_bSupportingStartingAngle )
-                rOutItemSet.Put( SdrAngleItem(nWhichId, Degree100(m_nStartingAngle*100)) );
+                rOutItemSet.Put( SdrAngleItem(SCHATTR_STARTING_ANGLE, Degree100(m_nStartingAngle*100)) );
             break;
         }
         case SCHATTR_CLOCKWISE:

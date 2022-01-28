@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/string.hxx>
 #include <svx/svxids.hrc>
+#include <svx/sdmetitm.hxx>
 #include <svx/hlnkitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>

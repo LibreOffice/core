@@ -34,15 +34,15 @@
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SvxMarginItem::CreateDefault() { return new  SvxMarginItem(0) ;}
+SfxPoolItem* SvxMarginItem::CreateDefault() { return new  SvxMarginItem(TypedWhichId<SvxMarginItem>(0)) ;}
 
 SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
-                                        const sal_uInt16 nId):
+                                        const TypedWhichId<SvxOrientationItem> nId):
     SfxEnumItem( nId, eOrientation )
 {
 }
 
-SvxOrientationItem::SvxOrientationItem( Degree100 nRotation, bool bStacked, const sal_uInt16 nId ) :
+SvxOrientationItem::SvxOrientationItem( Degree100 nRotation, bool bStacked, const TypedWhichId<SvxOrientationItem> nId ) :
     SfxEnumItem( nId, SvxCellOrientation::Standard )
 {
     if( bStacked )
@@ -141,7 +141,7 @@ Degree100 SvxOrientationItem::GetRotation( Degree100 nStdAngle ) const
     return nAngle;
 }
 
-SvxMarginItem::SvxMarginItem( const sal_uInt16 nId ) :
+SvxMarginItem::SvxMarginItem( const TypedWhichId<SvxMarginItem> nId ) :
 
     SfxPoolItem( nId ),
 
@@ -157,7 +157,7 @@ SvxMarginItem::SvxMarginItem( sal_Int16 nLeft,
                               sal_Int16 nTop,
                               sal_Int16 nRight,
                               sal_Int16 nBottom,
-                              const sal_uInt16 nId ) :
+                              const TypedWhichId<SvxMarginItem> nId ) :
     SfxPoolItem( nId ),
 
     nLeftMargin  ( nLeft ),

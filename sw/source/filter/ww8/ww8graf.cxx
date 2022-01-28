@@ -23,6 +23,7 @@
 #include <osl/endian.h>
 #include <sal/log.hxx>
 #include <editeng/lrspitem.hxx>
+#include <svx/xflbmtit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
@@ -1909,7 +1910,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
             case drawing::FillStyle_BITMAP:
                 {
                     GraphicObject aGrfObj(rOldSet.Get(XATTR_FILLBITMAP).GetGraphicObject());
-                    const bool bTile(WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE, SfxBoolItem));
+                    const bool bTile(WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE, XFillBmpTileItem));
 
                     if(bBrushItemOk) // has trans
                     {

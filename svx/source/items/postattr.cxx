@@ -21,19 +21,19 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
-SfxPoolItem* SvxPostItAuthorItem::CreateDefault() { return new SvxPostItAuthorItem(0); }
-SfxPoolItem* SvxPostItDateItem::CreateDefault() { return new SvxPostItDateItem(0); }
-SfxPoolItem* SvxPostItTextItem::CreateDefault() { return new SvxPostItTextItem(0); }
-SfxPoolItem* SvxPostItIdItem::CreateDefault() { return new SvxPostItIdItem(0); }
+SfxPoolItem* SvxPostItAuthorItem::CreateDefault() { return new SvxPostItAuthorItem(TypedWhichId<SvxPostItAuthorItem>(0)); }
+SfxPoolItem* SvxPostItDateItem::CreateDefault() { return new SvxPostItDateItem(TypedWhichId<SvxPostItDateItem>(0)); }
+SfxPoolItem* SvxPostItTextItem::CreateDefault() { return new SvxPostItTextItem(TypedWhichId<SvxPostItTextItem>(0)); }
+SfxPoolItem* SvxPostItIdItem::CreateDefault() { return new SvxPostItIdItem(TypedWhichId<SvxPostItIdItem>(0)); }
 
-SvxPostItAuthorItem::SvxPostItAuthorItem( sal_uInt16 _nWhich )
+SvxPostItAuthorItem::SvxPostItAuthorItem( TypedWhichId<SvxPostItAuthorItem> _nWhich )
 {
     SetWhich( _nWhich );
 }
 
 
 SvxPostItAuthorItem::SvxPostItAuthorItem( const OUString& rAuthor,
-                                          sal_uInt16 _nWhich ) :
+                                          TypedWhichId<SvxPostItAuthorItem> _nWhich ) :
     SfxStringItem( _nWhich, rAuthor )
 {
 }
@@ -65,14 +65,13 @@ SvxPostItAuthorItem* SvxPostItAuthorItem::Clone( SfxItemPool * ) const
     return new SvxPostItAuthorItem( *this );
 }
 
-SvxPostItDateItem::SvxPostItDateItem( sal_uInt16 _nWhich )
+SvxPostItDateItem::SvxPostItDateItem( TypedWhichId<SvxPostItDateItem> _nWhich )
+    : SfxStringItem(_nWhich)
 {
-    SetWhich( _nWhich );
 }
 
 
-SvxPostItDateItem::SvxPostItDateItem( const OUString& rDate, sal_uInt16 _nWhich ) :
-
+SvxPostItDateItem::SvxPostItDateItem( const OUString& rDate, TypedWhichId<SvxPostItDateItem> _nWhich ) :
     SfxStringItem( _nWhich, rDate )
 {
 }
@@ -105,12 +104,12 @@ SvxPostItDateItem* SvxPostItDateItem::Clone( SfxItemPool * ) const
     return new SvxPostItDateItem( *this );
 }
 
-SvxPostItTextItem::SvxPostItTextItem( sal_uInt16 _nWhich )
+SvxPostItTextItem::SvxPostItTextItem( TypedWhichId<SvxPostItTextItem> _nWhich )
 {
     SetWhich( _nWhich );
 }
 
-SvxPostItTextItem::SvxPostItTextItem( const OUString& rText, sal_uInt16 _nWhich ) :
+SvxPostItTextItem::SvxPostItTextItem( const OUString& rText, TypedWhichId<SvxPostItTextItem> _nWhich ) :
 
     SfxStringItem( _nWhich, rText )
 {
@@ -142,7 +141,7 @@ SvxPostItTextItem* SvxPostItTextItem::Clone( SfxItemPool * ) const
     return new SvxPostItTextItem( *this );
 }
 
-SvxPostItIdItem::SvxPostItIdItem( sal_uInt16 _nWhich )
+SvxPostItIdItem::SvxPostItIdItem( TypedWhichId<SvxPostItIdItem> _nWhich )
 {
     SetWhich( _nWhich );
 }

@@ -29,7 +29,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxB3DVectorItem final : public SfxPoolI
     basegfx::B3DVector  aVal;
 
 public:
-                            SvxB3DVectorItem( sal_uInt16 nWhich, const basegfx::B3DVector& rVal );
+                            SvxB3DVectorItem( TypedWhichId<SvxB3DVectorItem> nWhich, const basegfx::B3DVector& rVal );
                             SvxB3DVectorItem( const SvxB3DVectorItem& );
                             virtual ~SvxB3DVectorItem() override;
 

@@ -556,8 +556,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(GetDoc()));
                 pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
 
-                const SvxLongLRSpaceItem& rLRSpace = static_cast<const SvxLongLRSpaceItem&>(
-                        pArgs->Get(SID_ATTR_LONG_LRSPACE));
+                const SvxLongLRSpaceItem& rLRSpace =
+                        pArgs->Get(SID_ATTR_LONG_LRSPACE);
 
                 if( mpDrawView->IsTextEdit() )
                 {
@@ -621,8 +621,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(GetDoc()));
                 pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
 
-                const SvxLongULSpaceItem& rULSpace = static_cast<const SvxLongULSpaceItem&>(
-                        pArgs->Get(SID_ATTR_LONG_ULSPACE));
+                const SvxLongULSpaceItem& rULSpace =
+                        pArgs->Get(SID_ATTR_LONG_ULSPACE);
 
                 if( mpDrawView->IsTextEdit() )
                 {

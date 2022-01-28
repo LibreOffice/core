@@ -262,8 +262,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     case SID_ATTR_LONG_LRSPACE:
         if ( pReqArgs )
         {
-            SvxLongLRSpaceItem aLongLR( static_cast<const SvxLongLRSpaceItem&>(pReqArgs->
-                                                        Get( SID_ATTR_LONG_LRSPACE )) );
+            SvxLongLRSpaceItem aLongLR( pReqArgs->Get( SID_ATTR_LONG_LRSPACE ) );
             SvxLRSpaceItem aLR(RES_LR_SPACE);
             if ( !bSect && (bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY) )
             {
@@ -421,8 +420,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     case SID_ATTR_LONG_ULSPACE:
         if ( pReqArgs )
         {
-            SvxLongULSpaceItem aLongULSpace( static_cast<const SvxLongULSpaceItem&>(pReqArgs->
-                                                            Get( SID_ATTR_LONG_ULSPACE )));
+            SvxLongULSpaceItem aLongULSpace( pReqArgs->Get( SID_ATTR_LONG_ULSPACE ) );
 
             if( bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY )
             {
@@ -1186,7 +1184,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     {
         if ( pReqArgs && rDesc.GetMaster().GetHeader().IsActive() )
         {
-            const SvxLongLRSpaceItem& aLongLR = static_cast<const SvxLongLRSpaceItem&>(pReqArgs->Get(SID_ATTR_PAGE_HEADER_LRMARGIN));
+            const SvxLongLRSpaceItem& aLongLR = pReqArgs->Get(SID_ATTR_PAGE_HEADER_LRMARGIN);
             SvxLRSpaceItem aLR(RES_LR_SPACE);
             SwPageDesc aDesc(rDesc);
             aLR.SetLeft(aLongLR.GetLeft());
@@ -1201,7 +1199,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     {
         if ( pReqArgs && rDesc.GetMaster().GetHeader().IsActive())
         {
-            const SvxLongULSpaceItem& aLongUL = static_cast<const SvxLongULSpaceItem&>(pReqArgs->Get(SID_ATTR_PAGE_HEADER_SPACING));
+            const SvxLongULSpaceItem& aLongUL = pReqArgs->Get(SID_ATTR_PAGE_HEADER_SPACING);
             SwPageDesc aDesc(rDesc);
             SvxULSpaceItem aUL(0, aLongUL.GetLower(), RES_UL_SPACE );
             SwFrameFormat* pFormat = const_cast<SwFrameFormat*>(aDesc.GetMaster().GetHeader().GetHeaderFormat());
@@ -1239,7 +1237,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     {
         if ( pReqArgs && rDesc.GetMaster().GetFooter().IsActive() )
         {
-            const SvxLongLRSpaceItem& aLongLR = static_cast<const SvxLongLRSpaceItem&>(pReqArgs->Get(SID_ATTR_PAGE_FOOTER_LRMARGIN));
+            const SvxLongLRSpaceItem& aLongLR = pReqArgs->Get(SID_ATTR_PAGE_FOOTER_LRMARGIN);
             SvxLRSpaceItem aLR(RES_LR_SPACE);
             SwPageDesc aDesc(rDesc);
             aLR.SetLeft(aLongLR.GetLeft());
@@ -1254,7 +1252,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     {
         if ( pReqArgs && rDesc.GetMaster().GetFooter().IsActive())
         {
-            const SvxLongULSpaceItem& aLongUL = static_cast<const SvxLongULSpaceItem&>(pReqArgs->Get(SID_ATTR_PAGE_FOOTER_SPACING));
+            const SvxLongULSpaceItem& aLongUL = pReqArgs->Get(SID_ATTR_PAGE_FOOTER_SPACING);
             SwPageDesc aDesc(rDesc);
             SvxULSpaceItem aUL(aLongUL.GetUpper(), 0, RES_UL_SPACE );
             SwFrameFormat* pFormat = const_cast<SwFrameFormat*>(aDesc.GetMaster().GetFooter().GetFooterFormat());
