@@ -42,6 +42,7 @@
 #include <dpresfilter.hxx>
 #include <calcmacros.hxx>
 #include <generalfunction.hxx>
+#include <emptyrowhandling.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -95,13 +96,13 @@ ScDPSource::ScDPSource( ScDPTableData* pD ) :
     pData( pD ),
     bColumnGrand( true ),       // default is true
     bRowGrand( true ),
-    bIgnoreEmptyRows( false ),
+    aEmptyRowHandling( ScEmptyRowHandling::DEFAULT ),
     bRepeatIfEmpty( false ),
     nDupCount( 0 ),
     bResultOverflow( false ),
     bPageFiltered( false )
 {
-    pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
+    pData->SetEmptyFlags( aEmptyRowHandling, bRepeatIfEmpty );
 }
 
 ScDPSource::~ScDPSource()
@@ -484,16 +485,16 @@ OUString ScDPSource::getDataDescription()
     return aRet;
 }
 
-void ScDPSource::setIgnoreEmptyRows(bool bSet)
+void ScDPSource::setEmptyRowsHandling(ScEmptyRowHandling emptyRowHandling)
 {
-    bIgnoreEmptyRows = bSet;
-    pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
+    aEmptyRowHandling = emptyRowHandling;
+    pData->SetEmptyFlags( aEmptyRowHandling, bRepeatIfEmpty );
 }
 
 void ScDPSource::setRepeatIfEmpty(bool bSet)
 {
     bRepeatIfEmpty = bSet;
-    pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
+    pData->SetEmptyFlags( aEmptyRowHandling, bRepeatIfEmpty );
 }
 
 void ScDPSource::disposeData()
@@ -1070,7 +1071,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
     {
         { SC_UNO_DP_COLGRAND, 0,  cppu::UnoType<bool>::get(),              0, 0 },
         { SC_UNO_DP_DATADESC, 0,  cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::READONLY, 0 },
-        { SC_UNO_DP_IGNOREEMPTY, 0,  cppu::UnoType<bool>::get(),              0, 0 },     // for sheet data only
+        { SC_UNO_DP_EMPTY_ROWS, 0,
+            cppu::UnoType<std::underlying_type<ScEmptyRowHandling>::type>::get(), 0, 0 },     // for sheet data only
         { SC_UNO_DP_REPEATEMPTY, 0,  cppu::UnoType<bool>::get(),              0, 0 },     // for sheet data only
         { SC_UNO_DP_ROWGRAND, 0,  cppu::UnoType<bool>::get(),              0, 0 },
         { SC_UNO_DP_ROWFIELDCOUNT,    0, cppu::UnoType<sal_Int32>::get(), READONLY, 0 },
@@ -1090,8 +1092,18 @@ void SAL_CALL ScDPSource::setPropertyValue( const OUString& aPropertyName, const
         bColumnGrand = lcl_GetBoolFromAny(aValue);
     else if (aPropertyName == SC_UNO_DP_ROWGRAND)
         bRowGrand = lcl_GetBoolFromAny(aValue);
-    else if (aPropertyName == SC_UNO_DP_IGNOREEMPTY)
-        setIgnoreEmptyRows( lcl_GetBoolFromAny( aValue ) );
+    else if (aPropertyName == SC_UNO_DP_EMPTY_ROWS)
+    {
+        OUString emptyRowHandlingString;
+        if (! (aValue >>= emptyRowHandlingString ))
+            aEmptyRowHandling = ScEmptyRowHandling::DEFAULT;
+        else if (emptyRowHandlingString == "LIST")
+            aEmptyRowHandling = ScEmptyRowHandling::LIST;
+        else if (emptyRowHandlingString == "COUNT")
+            aEmptyRowHandling = ScEmptyRowHandling::COUNT;
+        else if (emptyRowHandlingString == "IGNORE")
+            aEmptyRowHandling = ScEmptyRowHandling::IGNORE;
+    }
     else if (aPropertyName == SC_UNO_DP_REPEATEMPTY)
         setRepeatIfEmpty( lcl_GetBoolFromAny( aValue ) );
     else if (aPropertyName == SC_UNO_DP_GRANDTOTAL_NAME)
@@ -1114,8 +1126,21 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const OUString& aPropertyName )
         aRet <<= bColumnGrand;
     else if ( aPropertyName == SC_UNO_DP_ROWGRAND )
         aRet <<= bRowGrand;
-    else if ( aPropertyName == SC_UNO_DP_IGNOREEMPTY )
-        aRet <<= bIgnoreEmptyRows;
+    else if ( aPropertyName == SC_UNO_DP_EMPTY_ROWS )
+    {
+        switch (aEmptyRowHandling)
+        {
+            case ScEmptyRowHandling::COUNT:
+                aRet <<= OUString("COUNT");
+                break;
+            case ScEmptyRowHandling::IGNORE:
+                aRet <<= OUString("IGNORE");
+                break;
+            case ScEmptyRowHandling::LIST:
+                aRet <<= OUString("LIST");
+                break;
+        }
+    }
     else if ( aPropertyName == SC_UNO_DP_REPEATEMPTY )
         aRet <<= bRepeatIfEmpty;
     else if ( aPropertyName == SC_UNO_DP_DATADESC )             // read-only

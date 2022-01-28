@@ -23,6 +23,7 @@
 #include <document.hxx>
 #include <dpfilteredcache.hxx>
 #include <dputil.hxx>
+#include <emptyrowhandling.hxx>
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
@@ -606,9 +607,9 @@ void ScDPGroupTableData::DisposeData()
     pSourceData->DisposeData();
 }
 
-void ScDPGroupTableData::SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty )
+void ScDPGroupTableData::SetEmptyFlags( ScEmptyRowHandling aEmptyRowHandling, bool bRepeatIfEmpty )
 {
-    pSourceData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
+    pSourceData->SetEmptyFlags( aEmptyRowHandling, bRepeatIfEmpty );
 }
 
 bool ScDPGroupTableData::IsRepeatIfEmpty()

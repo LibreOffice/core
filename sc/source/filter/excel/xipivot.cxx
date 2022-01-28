@@ -47,6 +47,7 @@
 #include <xihelper.hxx>
 #include <xilink.hxx>
 #include <xiescher.hxx>
+#include <emptyrowhandling.hxx>
 
 //TODO ExcelToSc usage
 #include <excform.hxx>
@@ -1423,7 +1424,7 @@ void XclImpPivotTable::Convert()
     aSaveData.SetColumnGrand( ::get_flag( maPTInfo.mnFlags, EXC_SXVIEW_COLGRAND ) );
     aSaveData.SetFilterButton( false );
     aSaveData.SetDrillDown( ::get_flag( maPTExtInfo.mnFlags, EXC_SXEX_DRILLDOWN ) );
-    aSaveData.SetIgnoreEmptyRows( false );
+    aSaveData.SetEmptyRowHandling( ScEmptyRowHandling::DEFAULT );
     aSaveData.SetRepeatIfEmpty( false );
 
     // *** fields ***

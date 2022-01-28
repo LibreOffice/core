@@ -54,7 +54,7 @@ private:
     std::unique_ptr<ScPivotLayoutTreeList> mxListBoxRow;
     std::unique_ptr<ScPivotLayoutTreeListData>  mxListBoxData;
 
-    std::unique_ptr<weld::CheckButton> mxCheckIgnoreEmptyRows;
+    std::unique_ptr<weld::ComboBox> mxEmptyRowsBox;
     std::unique_ptr<weld::CheckButton> mxCheckTotalColumns;
     std::unique_ptr<weld::CheckButton> mxCheckAddFilter;
     std::unique_ptr<weld::CheckButton> mxCheckIdentifyCategories;

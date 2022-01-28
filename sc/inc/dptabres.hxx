@@ -163,7 +163,7 @@ private:
 public:
             ScDPAggData() : fVal(0.0), fAux(0.0), nCount(SC_DPAGG_EMPTY) {}
 
-    void    Update( const ScDPValue& rNext, ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
+    void    Update( const ScDPValue& rNext, ScSubTotalFunc eFunc, ScEmptyRowHandling aEmptyRowHandling, const ScDPSubTotalState& rSubState );
     void    Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
     bool IsCalculated() const;
 

@@ -27,6 +27,7 @@
 #include <scresid.hxx>
 #include <dpitemdata.hxx>
 #include <generalfunction.hxx>
+#include <emptyrowhandling.hxx>
 
 #include <document.hxx>
 #include <dpresfilter.hxx>
@@ -371,13 +372,23 @@ ScDPRelativePos::ScDPRelativePos( tools::Long nBase, tools::Long nDir ) :
 {
 }
 
-void ScDPAggData::Update( const ScDPValue& rNext, ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState )
+void ScDPAggData::Update( const ScDPValue& rNext, ScSubTotalFunc eFunc, ScEmptyRowHandling aEmptyRowHandling, const ScDPSubTotalState& rSubState )
 {
     if (nCount<0)       // error?
         return;         // nothing more...
 
-    if (rNext.meType == ScDPValue::Empty)
-        return;
+    switch (aEmptyRowHandling)
+    {
+        case ScEmptyRowHandling::COUNT:
+            // don't skip counting this empty value
+            break;
+        case ScEmptyRowHandling::IGNORE:
+        case ScEmptyRowHandling::LIST:
+            // skip counting this empty value
+            if (rNext.meType == ScDPValue::Empty)
+                return;
+            break;
+    }
 
     if ( rSubState.eColForce != SUBTOTAL_FUNC_NONE && rSubState.eRowForce != SUBTOTAL_FUNC_NONE &&
                                                         rSubState.eColForce != rSubState.eRowForce )
@@ -1923,7 +1934,8 @@ void ScDPDataMember::UpdateValues( const vector<ScDPValue>& aValues, const ScDPS
     size_t nCount = aValues.size();
     for (size_t nPos = 0; nPos < nCount; ++nPos)
     {
-        pAgg->Update(aValues[nPos], pResultData->GetMeasureFunction(nPos), rSubState);
+        pAgg->Update(aValues[nPos], pResultData->GetMeasureFunction(nPos),
+                pResultData->GetSource().GetEmptyRowHandling(), rSubState);
         pAgg = pAgg->GetChild();
     }
 }
