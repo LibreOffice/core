@@ -7,13 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
-
-#include <string_view>
-
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 
-#include <comphelper/configuration.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <officecfg/Office/Common.hxx>
 

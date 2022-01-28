@@ -7,14 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
-
-#include <string_view>
-
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -22,18 +17,13 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 
-#include <config_features.h>
 #include <config_fonts.h>
-#include <unotools/tempfile.hxx>
-#include <comphelper/configuration.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <vcl/svapp.hxx>
 

@@ -10,22 +10,16 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XDocumentIndex.hpp>
-#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
-#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
-#include <com/sun/star/text/XTextSectionsSupplier.hpp>
 
-#include <o3tl/cppunittraitshelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <ndindex.hxx>
 #include <pam.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>

@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
-#include <string_view>
 
 #ifdef MACOSX
 #define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0
@@ -21,30 +19,15 @@
 
 #include <IDocumentSettingAccess.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/style/BreakType.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/text/XNumberingRulesSupplier.hpp>
-#include <com/sun/star/text/XTextTablesSupplier.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
 #include <tools/UnitConversion.hxx>
 #include <unotools/fltrcfg.hxx>
@@ -54,7 +37,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 #include <IDocumentMarkAccess.hxx>
-#include <IMark.hxx>
 #include <bordertest.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>

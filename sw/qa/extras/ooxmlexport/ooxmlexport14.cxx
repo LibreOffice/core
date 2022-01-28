@@ -12,13 +12,9 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
-#include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
@@ -34,9 +30,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <tools/lineend.hxx>
 #include <unotools/fltrcfg.hxx>
-#include <unotools/mediadescriptor.hxx>
 
 using namespace com::sun::star;
 

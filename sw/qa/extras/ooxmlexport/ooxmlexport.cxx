@@ -12,7 +12,6 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -27,7 +26,6 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
-#include <o3tl/cppunittraitshelper.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>

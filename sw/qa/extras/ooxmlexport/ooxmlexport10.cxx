@@ -7,49 +7,29 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
-#include <string_view>
-
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
-#include <com/sun/star/text/XTextFramesSupplier.hpp>
-#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
-#include <com/sun/star/table/XTableRows.hpp>
-#include <com/sun/star/text/XFootnotesSupplier.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
-#include <com/sun/star/text/XEndnotesSupplier.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
 
 #include <tools/UnitConversion.hxx>
 #include <unotools/fltrcfg.hxx>
@@ -60,7 +40,6 @@
 #include <svx/svdpage.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
-#include <swtypes.hxx>
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <unotxdoc.hxx>

@@ -9,17 +9,12 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <config_features.h>
 #include <config_fonts.h>
 
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
-#include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -33,7 +28,6 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 

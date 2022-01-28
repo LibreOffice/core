@@ -9,22 +9,16 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
-#include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/style/TabStop.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <comphelper/processfactory.hxx>

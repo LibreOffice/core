@@ -9,8 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <string>
-
 #include <tools/UnitConversion.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -22,10 +20,8 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
