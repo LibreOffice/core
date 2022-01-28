@@ -11,16 +11,13 @@
 
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
-#include <config_features.h>
 #include <config_fonts.h>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <pagedesc.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 

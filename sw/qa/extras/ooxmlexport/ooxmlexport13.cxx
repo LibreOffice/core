@@ -7,25 +7,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
-
-#include <string_view>
-
 #include <swmodeltestbase.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
-#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
 #include <editeng/escapementitem.hxx>
-#include <editeng/frmdiritem.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <xmloff/odffields.hxx>
 #include <comphelper/sequenceashashmap.hxx>

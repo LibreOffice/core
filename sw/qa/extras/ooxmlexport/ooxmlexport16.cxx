@@ -7,34 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
-
-#include <string_view>
-
 #include <swmodeltestbase.hxx>
 
 #include <svx/svddef.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/svdobj.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/text/XEndnotesSupplier.hpp>
-#include <com/sun/star/text/XFootnotesSupplier.hpp>
-#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <com/sun/star/text/XTextTable.hpp>
-#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/view/XViewCursor.hpp>
 #include <comphelper/configuration.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <editeng/escapementitem.hxx>
 #include <unotools/fltrcfg.hxx>
-#include <textboxhelper.hxx>
 #include <unoprnms.hxx>
 #include <unotxdoc.hxx> //XChapterNumberingSupplier
 
