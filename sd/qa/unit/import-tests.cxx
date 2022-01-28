@@ -7,27 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
-
 #include <config_poppler.h>
-#include <memory>
-#include <ostream>
-#include <sdpage.hxx>
 
 #include "sdmodeltestbase.hxx"
 
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/outlobj.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/unoprnms.hxx>
-#include <svl/style.hxx>
 
-#include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoole2.hxx>
@@ -39,66 +30,35 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/sdmetitm.hxx>
-#include <svx/sdooitm.hxx>
 #include <animations/animationnodehelper.hxx>
 #include <sax/tools/converter.hxx>
 
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
-#include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
-#include <com/sun/star/drawing/BitmapMode.hpp>
-#include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
-#include <com/sun/star/drawing/GluePoint2.hpp>
-#include <com/sun/star/container/XIdentifierAccess.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
-#include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
-#include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/style/LineSpacing.hpp>
-#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/table/XTableRows.hpp>
-#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/text/GraphicCrop.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
-#include <com/sun/star/text/XTextColumns.hpp>
-#include <com/sun/star/xml/dom/XDocument.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 
 #include <stlpool.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/graphicmimetype.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/linkmgr.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/BitmapReadAccess.hxx>
-#include <vcl/dibtools.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 
