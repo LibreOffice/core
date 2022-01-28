@@ -7,16 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
-
-#include <string_view>
-
 #include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
 #include <Outliner.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/outlobj.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/colritem.hxx>
@@ -27,8 +22,6 @@
 
 #include <oox/drawingml/drawingmltypes.hxx>
 
-#include <svx/svdoutl.hxx>
-#include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xflclit.hxx>
@@ -36,19 +29,13 @@
 #include <svx/sdooitm.hxx>
 #include <svx/sdmetitm.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <rtl/ustring.hxx>
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
-#include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 
 #include <svx/svdotable.hxx>
