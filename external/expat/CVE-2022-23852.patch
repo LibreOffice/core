@@ -1,0 +1,115 @@
+From 847a645152f5ebc10ac63b74b604d0c1a79fae40 Mon Sep 17 00:00:00 2001
+From: Samanta Navarro <ferivoz@riseup.net>
+Date: Sat, 22 Jan 2022 17:48:00 +0100
+Subject: [PATCH 1/3] lib: Detect and prevent integer overflow in XML_GetBuffer
+ (CVE-2022-23852)
+
+---
+ expat/lib/xmlparse.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/expat/lib/xmlparse.c b/expat/lib/xmlparse.c
+index d54af683..5ce31402 100644
+--- a/expat/lib/xmlparse.c
++++ b/expat/lib/xmlparse.c
+@@ -2067,6 +2067,11 @@ XML_GetBuffer(XML_Parser parser, int len) {
+     keep = (int)EXPAT_SAFE_PTR_DIFF(parser->m_bufferPtr, parser->m_buffer);
+     if (keep > XML_CONTEXT_BYTES)
+       keep = XML_CONTEXT_BYTES;
++    /* Detect and prevent integer overflow */
++    if (keep > INT_MAX - neededSize) {
++      parser->m_errorCode = XML_ERROR_NO_MEMORY;
++      return NULL;
++    }
+     neededSize += keep;
+ #endif /* defined XML_CONTEXT_BYTES */
+     if (neededSize
+
+From acf956f14bf79a5e6383a969aaffec98bfbc2e44 Mon Sep 17 00:00:00 2001
+From: Sebastian Pipping <sebastian@pipping.org>
+Date: Sun, 23 Jan 2022 18:17:04 +0100
+Subject: [PATCH 2/3] tests: Cover integer overflow in XML_GetBuffer
+ (CVE-2022-23852)
+
+---
+ expat/tests/runtests.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/expat/tests/runtests.c b/expat/tests/runtests.c
+index e89e8220..579dad1a 100644
+--- a/expat/tests/runtests.c
++++ b/expat/tests/runtests.c
+@@ -3847,6 +3847,30 @@ START_TEST(test_get_buffer_2) {
+ }
+ END_TEST
+ 
++/* Test for signed integer overflow CVE-2022-23852 */
++#if defined(XML_CONTEXT_BYTES)
++START_TEST(test_get_buffer_3_overflow) {
++  XML_Parser parser = XML_ParserCreate(NULL);
++  assert(parser != NULL);
++
++  const char *const text = "\n";
++  const int expectedKeepValue = (int)strlen(text);
++
++  // After this call, variable "keep" in XML_GetBuffer will
++  // have value expectedKeepValue
++  if (XML_Parse(parser, text, (int)strlen(text), XML_FALSE /* isFinal */)
++      == XML_STATUS_ERROR)
++    xml_failure(parser);
++
++  assert(expectedKeepValue > 0);
++  if (XML_GetBuffer(parser, INT_MAX - expectedKeepValue + 1) != NULL)
++    fail("enlarging buffer not failed");
++
++  XML_ParserFree(parser);
++}
++END_TEST
++#endif // defined(XML_CONTEXT_BYTES)
++
+ /* Test position information macros */
+ START_TEST(test_byte_info_at_end) {
+   const char *text = "<doc></doc>";
+@@ -11731,6 +11755,9 @@ make_suite(void) {
+   tcase_add_test(tc_basic, test_empty_parse);
+   tcase_add_test(tc_basic, test_get_buffer_1);
+   tcase_add_test(tc_basic, test_get_buffer_2);
++#if defined(XML_CONTEXT_BYTES)
++  tcase_add_test(tc_basic, test_get_buffer_3_overflow);
++#endif
+   tcase_add_test(tc_basic, test_byte_info_at_end);
+   tcase_add_test(tc_basic, test_byte_info_at_error);
+   tcase_add_test(tc_basic, test_byte_info_at_cdata);
+
+From 99cec436fbd9444f57ee74ca8ae4c0a13e561a4f Mon Sep 17 00:00:00 2001
+From: Sebastian Pipping <sebastian@pipping.org>
+Date: Sat, 22 Jan 2022 17:49:17 +0100
+Subject: [PATCH 3/3] Changes: Document CVE-2022-23852
+
+---
+ expat/Changes | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/expat/Changes b/expat/Changes
+index 7540d38c..64d75d05 100644
+--- a/expat/Changes
++++ b/expat/Changes
+@@ -2,6 +2,18 @@ NOTE: We are looking for help with a few things:
+       https://github.com/libexpat/libexpat/labels/help%20wanted
+       If you can help, please get in touch.  Thanks!
+ 
++Release x.x.x xxx xxxxxxx xx xxxx
++        Security fixes:
++            #550  CVE-2022-23852 -- Fix signed integer overflow
++                    (undefined behavior) in function XML_GetBuffer
++                    (that is also called by function XML_Parse internally)
++                    for when XML_CONTEXT_BYTES is defined to >0 (which is both
++                    common and default).
++                    Impact is denial of service or more.
++
++        Special thanks to:
++            Samanta Navarro
++
+ Release 2.4.3 Sun January 16 2022
+         Security fixes:
+        #531 #534  CVE-2021-45960 -- Fix issues with left shifts by >=29 places
