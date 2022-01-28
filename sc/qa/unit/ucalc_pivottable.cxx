@@ -7,13 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <memory>
-#include <string>
-
-#include <cppunit/TestAssert.h>
-
-#include <sal/types.h>
 #include <rtl/math.hxx>
 #include <scdll.hxx>
 #include "helper/qahelper.hxx"
@@ -21,18 +14,13 @@
 #include <dpobject.hxx>
 #include <dpsave.hxx>
 #include <dpdimsave.hxx>
-#include <dpcache.hxx>
-#include <dpfilteredcache.hxx>
 #include <scopetools.hxx>
-#include <queryentry.hxx>
 #include <stringutil.hxx>
 #include <dbdocfun.hxx>
 #include <generalfunction.hxx>
 
 #include <formula/errorcodes.hxx>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
-#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 

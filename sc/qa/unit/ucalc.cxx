@@ -10,68 +10,40 @@
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 
-#include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
-
 #include <svl/asiancfg.hxx>
-#include <svl/gridprinter.hxx>
 
 #include <scdll.hxx>
 #include <simpleformulacalc.hxx>
-#include <formulaopt.hxx>
 #include <stringutil.hxx>
 #include <scmatrix.hxx>
-#include <drwlayer.hxx>
 #include <scitems.hxx>
 #include <reffind.hxx>
-#include <markdata.hxx>
 #include <clipparam.hxx>
-#include <refundo.hxx>
-#include <undoblk.hxx>
 #include <undotab.hxx>
-#include <queryentry.hxx>
-#include <postit.hxx>
 #include <attrib.hxx>
 #include <dbdata.hxx>
 #include <reftokenhelper.hxx>
 #include <userdat.hxx>
-#include <clipcontext.hxx>
 #include <refdata.hxx>
 
-#include <docsh.hxx>
 #include <docfunc.hxx>
 #include <funcdesc.hxx>
 
-#include <calcconfig.hxx>
 #include <columniterator.hxx>
-#include <types.hxx>
-#include <tokenarray.hxx>
 #include <scopetools.hxx>
 #include <dociter.hxx>
-#include <queryparam.hxx>
 #include <edittextiterator.hxx>
 #include <editutil.hxx>
-#include <cellform.hxx>
 #include <asciiopt.hxx>
 #include <impex.hxx>
-#include <docoptio.hxx>
-#include <patattr.hxx>
 #include <docpool.hxx>
 #include <globalnames.hxx>
-#include <inputopt.hxx>
 #include <columnspanset.hxx>
 
 #include <editable.hxx>
-#include <bcaslot.hxx>
-#include <sharedformula.hxx>
 #include <tabprotection.hxx>
-#include <scmod.hxx>
 
-#include <formula/IFunctionDescription.hxx>
-
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <editeng/borderline.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -84,17 +56,9 @@
 #include <svx/svdocapt.hxx>
 #include <svl/numformat.hxx>
 #include <svl/srchitem.hxx>
-#include <svl/sharedstringpool.hxx>
-#include <tools/UnitConversion.hxx>
 #include <unotools/collatorwrapper.hxx>
 
-#include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
-
-#include <iostream>
-#include <limits>
-#include <memory>
-#include <vector>
 
 class ScUndoPaste;
 class ScUndoCut;

@@ -7,45 +7,28 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
-#include <markdata.hxx>
-#include <calcconfig.hxx>
 #include <clipparam.hxx>
-#include <compiler.hxx>
-#include <tokenarray.hxx>
-#include <refdata.hxx>
 #include <scopetools.hxx>
 #include <formulacell.hxx>
-#include <docsh.hxx>
 #include <docfunc.hxx>
 #include <inputopt.hxx>
-#include <paramisc.hxx>
 #include <tokenstringcontext.hxx>
 #include <refupdatecontext.hxx>
 #include <dbdata.hxx>
 #include <scmatrix.hxx>
 #include <validat.hxx>
 #include <scitems.hxx>
-#include <patattr.hxx>
 #include <docpool.hxx>
-#include <docoptio.hxx>
-#include <formulaopt.hxx>
 #include <externalrefmgr.hxx>
 #include <scdll.hxx>
 #include <scmod.hxx>
-#include <svl/itemset.hxx>
 
 #include <formula/vectortoken.hxx>
 #include <svl/broadcast.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/docfile.hxx>
-
-#include <memory>
-#include <functional>
-#include <set>
-#include <algorithm>
 
 using namespace formula;
 
