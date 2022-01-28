@@ -7,86 +7,49 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
-
-#include <memory>
-#include <string_view>
-
 #include <unotest/filters-test.hxx>
-#include <test/bootstrapfixture.hxx>
-#include <osl/file.hxx>
-#include <config_features.h>
 
 #include <vcl/svapp.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
-#include <svl/stritem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/svxids.hrc>
 
-#include <drwlayer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/postitem.hxx>
 #include <editeng/crossedoutitem.hxx>
-#include <editeng/udlnitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/borderline.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/colritem.hxx>
 #include <dbdata.hxx>
 #include <validat.hxx>
 #include <formulacell.hxx>
-#include <formulaopt.hxx>
-#include <userdat.hxx>
-#include <stlsheet.hxx>
 #include <docfunc.hxx>
-#include <markdata.hxx>
-#include <colorscale.hxx>
 #include <olinetab.hxx>
-#include <patattr.hxx>
 #include <postit.hxx>
 #include <scitems.hxx>
 #include <docsh.hxx>
-#include <editutil.hxx>
 #include <cellvalue.hxx>
 #include <attrib.hxx>
-#include <fillinfo.hxx>
-#include <scopetools.hxx>
 #include <columnspanset.hxx>
 #include <tokenstringcontext.hxx>
-#include <formula/errorcodes.hxx>
 #include <externalrefmgr.hxx>
 #include <stlpool.hxx>
 #include <hints.hxx>
 #include <detfunc.hxx>
-#include <cellmergeoption.hxx>
-#include <undoblk.hxx>
-
-#include <orcusfilters.hxx>
-#include <filter.hxx>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/text/textfield/Type.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <tools/UnitConversion.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include "helper/qahelper.hxx"
-#include "helper/shared_test_impl.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
