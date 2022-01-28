@@ -1743,7 +1743,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     {
         sSym = static_cast<const SfxStringItem*>(pItem)->GetValue();
         const SfxPoolItem* pFtItem = nullptr;
-        pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
+        pArgs->GetItemState( SID_ATTR_SPECIALCHAR, false, &pFtItem);
 
         if (const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>(pFtItem))
             sFontName = pFontItem->GetValue();
