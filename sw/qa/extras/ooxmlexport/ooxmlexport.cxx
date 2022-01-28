@@ -26,6 +26,7 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
+#include <o3tl/cppunittraitshelper.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>

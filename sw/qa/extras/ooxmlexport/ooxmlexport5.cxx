@@ -19,6 +19,7 @@
 #include <com/sun/star/rdf/Statement.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <o3tl/cppunittraitshelper.hxx>
 
 #include <pam.hxx>
 #include <unotxdoc.hxx>
