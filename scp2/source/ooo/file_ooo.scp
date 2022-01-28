@@ -357,6 +357,15 @@ End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ckb
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-ckb.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
+	TXT_FILE_BODY;
+End
+#endif
+
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Cs
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-cs.filelist";
