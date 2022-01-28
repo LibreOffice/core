@@ -31,7 +31,7 @@
 class SVXCORE_DLLPUBLIC SdrPercentItem : public SfxUInt16Item
 {
 public:
-    SdrPercentItem(sal_uInt16 nId, sal_uInt16 nVal): SfxUInt16Item(nId,nVal) {}
+    SdrPercentItem(TypedWhichId<SdrPercentItem> nId, sal_uInt16 nVal): SfxUInt16Item(nId,nVal) {}
     virtual SdrPercentItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;

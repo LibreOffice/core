@@ -38,7 +38,7 @@ SvxViewLayoutItem::SvxViewLayoutItem
 (
     sal_uInt16      nColumns,
     bool        bBookMode,
-    sal_uInt16  _nWhich
+    TypedWhichId<SvxViewLayoutItem>  _nWhich
 )
 :   SfxUInt16Item( _nWhich, nColumns ),
     mbBookMode( bBookMode )

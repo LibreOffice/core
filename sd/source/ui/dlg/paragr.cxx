@@ -24,6 +24,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
+#include <svx/xcolit.hxx>
 
 #include <paragr.hxx>
 #include <sdattr.hrc>

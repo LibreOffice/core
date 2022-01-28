@@ -30,7 +30,7 @@ SvxB3DVectorItem::~SvxB3DVectorItem()
 }
 
 
-SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, const basegfx::B3DVector& rVal ) :
+SvxB3DVectorItem::SvxB3DVectorItem( TypedWhichId<SvxB3DVectorItem> _nWhich, const basegfx::B3DVector& rVal ) :
     SfxPoolItem( _nWhich ),
     aVal( rVal )
 {

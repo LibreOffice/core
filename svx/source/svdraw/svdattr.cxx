@@ -716,7 +716,7 @@ SdrScaleItem* SdrScaleItem::Clone(SfxItemPool * /*pPool*/) const
 
 SdrOnOffItem* SdrOnOffItem::Clone(SfxItemPool* /*pPool*/) const
 {
-    return new SdrOnOffItem(Which(),GetValue());
+    return new SdrOnOffItem(TypedWhichId<SdrOnOffItem>(Which()),GetValue());
 }
 
 OUString SdrOnOffItem::GetValueTextByVal(bool bVal) const
@@ -751,7 +751,7 @@ void SdrOnOffItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SdrYesNoItem* SdrYesNoItem::Clone(SfxItemPool* /*pPool*/) const
 {
-    return new SdrYesNoItem(Which(),GetValue());
+    return new SdrYesNoItem(TypedWhichId<SdrYesNoItem>(Which()),GetValue());
 }
 
 OUString SdrYesNoItem::GetValueTextByVal(bool bVal) const
@@ -773,7 +773,7 @@ bool SdrYesNoItem::GetPresentation(SfxItemPresentation ePres,
 
 SdrPercentItem* SdrPercentItem::Clone(SfxItemPool* /*pPool*/) const
 {
-    return new SdrPercentItem(Which(),GetValue());
+    return new SdrPercentItem(TypedWhichId<SdrPercentItem>(Which()),GetValue());
 }
 
 bool SdrPercentItem::GetPresentation(
@@ -807,7 +807,7 @@ void SdrPercentItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SdrAngleItem* SdrAngleItem::Clone(SfxItemPool* /*pPool*/) const
 {
-    return new SdrAngleItem(Which(),GetValue());
+    return new SdrAngleItem(TypedWhichId<SdrAngleItem>(Which()),GetValue());
 }
 
 bool SdrAngleItem::GetPresentation(
@@ -872,7 +872,7 @@ bool SdrAngleItem::GetPresentation(
 
 SdrMetricItem* SdrMetricItem::Clone(SfxItemPool* /*pPool*/) const
 {
-    return new SdrMetricItem(Which(),GetValue());
+    return new SdrMetricItem(TypedWhichId<SdrMetricItem>(Which()),GetValue());
 }
 
 bool SdrMetricItem::HasMetrics() const

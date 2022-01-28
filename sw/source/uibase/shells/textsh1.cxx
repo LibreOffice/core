@@ -2087,7 +2087,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                      const OUString& aApplicationName( rSmartTagMgr.GetApplicationName() );
                      const OUString aRangeText = xRange->getString();
 
-                     const SvxSmartTagItem aItem( nWhich,
+                     const SvxSmartTagItem aItem( SID_OPEN_SMARTTAGMENU,
                                                   aActionComponentsSequence,
                                                   aActionIndicesSequence,
                                                   aStringKeyMaps,

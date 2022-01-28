@@ -311,7 +311,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     }
 
     // Flush the SetItem
-    SvxSetItem aSetItem( GetWhich( nId ), aSet );
+    SvxSetItem aSetItem( TypedWhichId<SvxSetItem>(GetWhich( nId )), aSet );
     rSet->Put( aSetItem );
 
     return true;

@@ -36,15 +36,13 @@ class SVXCORE_DLLPUBLIC XColorItem : public NameOrIndex
 public:
             static SfxPoolItem* CreateDefault();
             XColorItem() {}
-            XColorItem(sal_uInt16 nWhich, sal_Int32 nIndex, const Color& rTheColor);
+            XColorItem(TypedWhichId<XColorItem> nWhich, sal_Int32 nIndex, const Color& rTheColor);
+            XColorItem(TypedWhichId<XColorItem> nWhich, const Color& rTheColor);
+            XColorItem(TypedWhichId<XColorItem> nWhich, const OUString& rName, const Color& rTheColor);
+            XColorItem(const XColorItem& rItem);
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-
-            XColorItem(sal_uInt16 nWhich, const Color& rTheColor);
-            XColorItem(sal_uInt16 nWhich, const OUString& rName, const Color& rTheColor);
-            XColorItem(const XColorItem& rItem);
-
     virtual bool            operator==(const SfxPoolItem& rItem) const override;
     virtual XColorItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
