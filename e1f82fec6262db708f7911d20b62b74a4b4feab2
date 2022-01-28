@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2ed2655_0672c0c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-28T05:11:42Z",
+      "side": 1,
+      "message": "tdf#111733",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 17
+      },
+      "revId": "e1f82fec6262db708f7911d20b62b74a4b4feab2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b36beb99_fa616bd8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-28T05:11:42Z",
+      "side": 1,
+      "message": "comments (not draw text).",
+      "range": {
+        "startLine": 10,
+        "startChar": 21,
+        "endLine": 10,
+        "endChar": 49
+      },
+      "revId": "e1f82fec6262db708f7911d20b62b74a4b4feab2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3be3a3c_7be58a8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-28T05:11:42Z",
+      "side": 1,
+      "message": "commit message really needed some work before pushing. Oops.",
+      "revId": "e1f82fec6262db708f7911d20b62b74a4b4feab2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
