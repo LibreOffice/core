@@ -34,6 +34,24 @@
       "parentUuid": "fd452d93_0c7e9393",
       "revId": "7a2269757cb0c8a8539ee13e0d8753a2b90054d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84457c31_88ee5b71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-28T12:46:23Z",
+      "side": 1,
+      "message": "Thx for your help. Do I just get the top focus window and the select it? I had no luck to extract the text of the entire widget.",
+      "parentUuid": "80267e20_72e46bde",
+      "revId": "7a2269757cb0c8a8539ee13e0d8753a2b90054d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
