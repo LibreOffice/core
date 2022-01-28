@@ -254,6 +254,8 @@ private:
 
     DECL_LINK(SetDropdownPosHdl, void*, void);
 
+    void DropPendingEvents();
+
 private:
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Popover> mxPopover;
