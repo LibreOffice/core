@@ -1041,7 +1041,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
     OptionsUserData aPostBreakData(m_xLinguOptionsCLB->get_id(EID_NUM_POST_BREAK).toUInt32());
     if ( aPreBreakData.IsModified() || aPostBreakData.IsModified() )
     {
-        SfxHyphenRegionItem aHyp( GetWhich( SID_ATTR_HYPHENREGION ) );
+        SfxHyphenRegionItem aHyp( SID_ATTR_HYPHENREGION );
         aHyp.GetMinLead()  = static_cast<sal_uInt8>(aPreBreakData.GetNumericValue());
         aHyp.GetMinTrail() = static_cast<sal_uInt8>(aPostBreakData.GetNumericValue());
         rCoreSet->Put( aHyp );
@@ -1224,9 +1224,8 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     nUPN_HYPH_MIN_WORD_LENGTH = nEntry;
 
     const SfxHyphenRegionItem *pHyp = nullptr;
-    sal_uInt16 nWhich = GetWhich( SID_ATTR_HYPHENREGION );
-    if ( rSet->GetItemState( nWhich, false ) == SfxItemState::SET )
-        pHyp = &static_cast<const SfxHyphenRegionItem &>( rSet->Get( nWhich ) );
+    if ( rSet->GetItemState( SID_ATTR_HYPHENREGION, false ) == SfxItemState::SET )
+        pHyp = & rSet->Get( SID_ATTR_HYPHENREGION );
 
     m_xLinguOptionsCLB->append();
     ++nEntry;

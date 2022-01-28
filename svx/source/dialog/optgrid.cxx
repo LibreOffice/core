@@ -159,8 +159,7 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
         aGridItem.bSynchronize  = m_xCbxSynchronize->get_active();
         aGridItem.bGridVisible  = m_xCbxGridVisible->get_active();
 
-        MapUnit eUnit =
-            rCoreSet->GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
+        MapUnit eUnit = rCoreSet->GetPool()->GetMetric( SID_ATTR_GRID_OPTIONS );
         tools::Long nX = GetCoreValue(  *m_xMtrFldDrawX, eUnit );
         tools::Long nY = GetCoreValue( *m_xMtrFldDrawY, eUnit );
 
@@ -186,8 +185,7 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
         m_xCbxSynchronize->set_active(pGridAttr->bSynchronize);
         m_xCbxGridVisible->set_active(pGridAttr->bGridVisible);
 
-        MapUnit eUnit =
-            rSet->GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
+        MapUnit eUnit = rSet->GetPool()->GetMetric( SID_ATTR_GRID_OPTIONS );
         SetMetricValue( *m_xMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
         SetMetricValue( *m_xMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
 

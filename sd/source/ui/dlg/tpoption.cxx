@@ -378,9 +378,8 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
     // tabulator space
     if( m_xMtrFldTabstop->get_value_changed_from_saved() )
     {
-        sal_uInt16 nWh = GetWhich( SID_ATTR_DEFTABSTOP );
-        MapUnit eUnit = rAttrs->GetPool()->GetMetric( nWh );
-        SfxUInt16Item aDef( nWh,static_cast<sal_uInt16>(GetCoreValue( *m_xMtrFldTabstop, eUnit )) );
+        MapUnit eUnit = rAttrs->GetPool()->GetMetric( SID_ATTR_DEFTABSTOP );
+        SfxUInt16Item aDef( SID_ATTR_DEFTABSTOP, static_cast<sal_uInt16>(GetCoreValue( *m_xMtrFldTabstop, eUnit )) );
         rAttrs->Put( aDef );
         bModified = true;
     }
@@ -446,11 +445,11 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     }
 
     // tabulator space
-    nWhich = GetWhich( SID_ATTR_DEFTABSTOP );
-    if( rAttrs->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
+    constexpr auto nWhich2 = SID_ATTR_DEFTABSTOP;
+    if( rAttrs->GetItemState( nWhich2 ) >= SfxItemState::DEFAULT )
     {
-        MapUnit eUnit = rAttrs->GetPool()->GetMetric( nWhich );
-        const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rAttrs->Get( nWhich ));
+        MapUnit eUnit = rAttrs->GetPool()->GetMetric( nWhich2 );
+        const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rAttrs->Get( nWhich2 ));
         SetMetricValue( *m_xMtrFldTabstop, rItem.GetValue(), eUnit );
     }
     m_xLbMetric->save_value();
