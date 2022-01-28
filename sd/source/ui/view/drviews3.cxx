@@ -557,7 +557,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
 
                 const SvxLongLRSpaceItem& rLRSpace = static_cast<const SvxLongLRSpaceItem&>(
-                        pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_LRSPACE)));
+                        pArgs->Get(SID_ATTR_LONG_LRSPACE));
 
                 if( mpDrawView->IsTextEdit() )
                 {
@@ -622,7 +622,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
 
                 const SvxLongULSpaceItem& rULSpace = static_cast<const SvxLongULSpaceItem&>(
-                        pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_ULSPACE)));
+                        pArgs->Get(SID_ATTR_LONG_ULSPACE));
 
                 if( mpDrawView->IsTextEdit() )
                 {
@@ -784,7 +784,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             if (pArgs)
             {
                 SvxULSpaceItem aULSP = static_cast<const SvxULSpaceItem&>(pArgs->Get(
-                    GetPool().GetWhich(SID_ATTR_PARA_ULSPACE)));
+                    SID_ATTR_PARA_ULSPACE));
                 SfxItemSetFixed<EE_PARA_ULSPACE, EE_PARA_ULSPACE> aEditAttr( GetPool() );
                 aULSP.SetWhich( EE_PARA_ULSPACE );
 
@@ -798,7 +798,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             if (pArgs)
             {
                 SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
-                    GetPool().GetWhich(SID_ATTR_PARA_LRSPACE)));
+                    SID_ATTR_PARA_LRSPACE));
 
                 SfxItemSetFixed<EE_PARA_LRSPACE, EE_PARA_LRSPACE> aEditAttr( GetPool() );
                 aLRSpace.SetWhich( EE_PARA_LRSPACE );
@@ -922,10 +922,10 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
     SvxLongLRSpaceItem aLRSpace(aPagePos.X() + mpActualPage->GetLeftBorder(),
                                 aRect.Right() + mpActualPage->GetRightBorder(),
-                                GetPool().GetWhich(SID_ATTR_LONG_LRSPACE));
+                                SID_ATTR_LONG_LRSPACE);
     SvxLongULSpaceItem aULSpace(aPagePos.Y() + mpActualPage->GetUpperBorder(),
                                 aRect.Bottom() + mpActualPage->GetLowerBorder(),
-                                GetPool().GetWhich(SID_ATTR_LONG_ULSPACE));
+                                SID_ATTR_LONG_ULSPACE);
     rSet.Put(SvxPagePosSizeItem(Point(0,0) - aPagePos, aViewSize.Width(),
                                                        aViewSize.Height()));
     SfxPointItem aPointItem( SID_RULER_NULL_OFFSET, aPagePos + aOrigin );

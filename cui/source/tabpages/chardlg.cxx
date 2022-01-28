@@ -2804,9 +2804,8 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     else
         m_xScaleWidthMF->set_value(100, FieldUnit::PERCENT);
 
-    nWhich = GetWhich( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE );
-    if ( rSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
-        m_nScaleWidthItemSetVal = static_cast<const SfxUInt16Item&>( rSet->Get( nWhich )).GetValue();
+    if ( rSet->GetItemState( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE ) >= SfxItemState::DEFAULT )
+        m_nScaleWidthItemSetVal = static_cast<const SfxUInt16Item&>( rSet->Get( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE )).GetValue();
 
     // Rotation
     nWhich = GetWhich( SID_ATTR_CHAR_ROTATED );
@@ -2854,8 +2853,8 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         m_xFitToLineCB->set_sensitive(!m_x0degRB->get_active());
 
         // is this value set?
-        if( SfxItemState::UNKNOWN == rSet->GetItemState( GetWhich(
-                                        SID_ATTR_CHAR_WIDTH_FIT_TO_LINE ) ))
+        if( SfxItemState::UNKNOWN == rSet->GetItemState(
+                                        SID_ATTR_CHAR_WIDTH_FIT_TO_LINE ))
             m_xFitToLineCB->hide();
     }
     ChangesApplied();

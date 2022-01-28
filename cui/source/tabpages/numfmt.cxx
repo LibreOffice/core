@@ -360,7 +360,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     double                      nValDouble      = 0;
     OUString                    aValString;
 
-    SfxItemState eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_NOLANGUAGE ),true,&pItem);
+    SfxItemState eState = rSet->GetItemState( SID_ATTR_NUMBERFORMAT_NOLANGUAGE,true,&pItem);
 
     if(eState==SfxItemState::SET)
     {
@@ -411,7 +411,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         }
     }
 
-    eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE ) );
+    eState = rSet->GetItemState( SID_ATTR_NUMBERFORMAT_SOURCE );
 
     if ( eState == SfxItemState::SET )
     {
@@ -512,7 +512,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     {
         SetCategory(nCatLbSelPos );
     }
-    eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_ADD_AUTO ) );
+    eState = rSet->GetItemState( SID_ATTR_NUMBERFORMAT_ADD_AUTO );
     if(SfxItemState::SET == eState)
          pAutoEntryAttr = static_cast<const SfxBoolItem*>(
                       GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ADD_AUTO ));
@@ -734,12 +734,11 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
         if ( m_xCbSourceFormat->get_sensitive() )
         {
-            sal_uInt16 _nWhich = GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE );
-            SfxItemState _eItemState = rMyItemSet.GetItemState( _nWhich, false );
+            SfxItemState _eItemState = rMyItemSet.GetItemState( SID_ATTR_NUMBERFORMAT_SOURCE, false );
             const SfxBoolItem* pBoolItem = static_cast<const SfxBoolItem*>(
                         GetItem( rMyItemSet, SID_ATTR_NUMBERFORMAT_SOURCE ));
             bool bOld = pBoolItem && pBoolItem->GetValue();
-            rCoreAttrs->Put( SfxBoolItem( _nWhich, m_xCbSourceFormat->get_active() ) );
+            rCoreAttrs->Put( SfxBoolItem( SID_ATTR_NUMBERFORMAT_SOURCE, m_xCbSourceFormat->get_active() ) );
             if ( !bDataChanged )
                 bDataChanged = (bOld != m_xCbSourceFormat->get_active() ||
                     _eItemState != SfxItemState::SET);
