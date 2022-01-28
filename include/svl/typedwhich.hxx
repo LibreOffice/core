@@ -11,6 +11,7 @@
 
 #include <sal/config.h>
 #include <sal/types.h>
+#include <type_traits>
 
 /**
  * A very thin wrapper around the sal_uInt16 WhichId whose purpose is mostly to carry type information,
@@ -23,10 +24,20 @@ public:
         : mnWhich(nWhich)
     {
     }
+
+    /** Up-casting conversion constructor
+    */
+    template <class derived_type>
+    constexpr TypedWhichId(TypedWhichId<derived_type> other,
+                           std::enable_if_t<std::is_base_of_v<T, derived_type>, int> = 0)
+        : mnWhich(sal_uInt16(other))
+    {
+    }
+
     constexpr operator sal_uInt16() const { return mnWhich; }
 
 private:
-    sal_uInt16 const mnWhich;
+    sal_uInt16 mnWhich;
 };
 
 template <class T> constexpr bool operator==(sal_uInt16 lhs, TypedWhichId<T> const& rhs)

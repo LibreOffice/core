@@ -249,10 +249,10 @@ SwBoxAutoFormat::SwBoxAutoFormat()
     m_aHorJustify = std::make_unique<SvxHorJustifyItem>(SvxCellHorJustify::Standard, 0);
     m_aVerJustify = std::make_unique<SvxVerJustifyItem>(SvxCellVerJustify::Standard, 0);
     m_aStacked = std::make_unique<SfxBoolItem>(0 );
-    m_aMargin = std::make_unique<SvxMarginItem>(0 );
+    m_aMargin = std::make_unique<SvxMarginItem>( TypedWhichId<SvxMarginItem>(0) );
     m_aLinebreak = std::make_unique<SfxBoolItem>(0 );
     m_aRotateAngle = std::make_unique<SfxInt32Item>(0 );
-    m_aRotateMode = std::make_unique<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, 0 );
+    m_aRotateMode = std::make_unique<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, TypedWhichId<SvxRotateModeItem>(0) );
 
 // FIXME - add attribute IDs for the diagonal line items
 //    aTLBR( RES_... ),

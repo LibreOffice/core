@@ -29,7 +29,7 @@
 
 class SVXCORE_DLLPUBLIC SdrMetricItem: public SfxInt32Item {
 public:
-    SdrMetricItem(sal_uInt16 nId, sal_Int32 nVal):  SfxInt32Item(nId,nVal) {}
+    SdrMetricItem(TypedWhichId<SdrMetricItem> nId, sal_Int32 nVal):  SfxInt32Item(nId,nVal) {}
     virtual SdrMetricItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual bool HasMetrics() const override;
     virtual void ScaleMetrics(tools::Long nMul, tools::Long nDiv) override;

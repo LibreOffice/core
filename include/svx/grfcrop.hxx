@@ -30,10 +30,10 @@ class SVXCORE_DLLPUBLIC SvxGrfCrop : public SfxPoolItem
 {
     sal_Int32   nLeft, nRight, nTop, nBottom;
 public:
-    SvxGrfCrop( sal_uInt16  );
+    SvxGrfCrop( TypedWhichId<SvxGrfCrop>  );
     SvxGrfCrop( sal_Int32 nLeft,    sal_Int32 nRight,
                 sal_Int32 nTop,     sal_Int32 nBottom,
-                sal_uInt16  );
+                TypedWhichId<SvxGrfCrop>  );
     virtual ~SvxGrfCrop() override;
 
     SvxGrfCrop(SvxGrfCrop const &) = default;

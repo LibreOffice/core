@@ -93,13 +93,13 @@ using namespace ::com::sun::star;
 
 typedef std::map<OUString, OUString> StringMap;
 
-NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, sal_Int32 nIndex) :
+NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, sal_Int32 nIndex) :
     SfxStringItem(_nWhich, OUString()),
     nPalIndex(nIndex)
 {
 }
 
-NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, const OUString& rName) :
+NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, const OUString& rName) :
     SfxStringItem(_nWhich, rName),
     nPalIndex(-1)
 {
@@ -259,19 +259,19 @@ void NameOrIndex::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SfxPoolItem* XColorItem::CreateDefault() { return new XColorItem; }
 
-XColorItem::XColorItem(sal_uInt16 _nWhich, sal_Int32 nIndex, const Color& rTheColor) :
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, sal_Int32 nIndex, const Color& rTheColor) :
     NameOrIndex(_nWhich, nIndex),
     aColor(rTheColor)
 {
 }
 
-XColorItem::XColorItem(sal_uInt16 _nWhich, const OUString& rName, const Color& rTheColor) :
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const OUString& rName, const Color& rTheColor) :
     NameOrIndex(_nWhich, rName),
     aColor(rTheColor)
 {
 }
 
-XColorItem::XColorItem(sal_uInt16 _nWhich, const Color& rTheColor)
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const Color& rTheColor)
     : NameOrIndex(_nWhich, OUString())
     , aColor(rTheColor)
 {
@@ -2128,7 +2128,7 @@ XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
 }
 
 XFillGradientItem::XFillGradientItem(const OUString& rName,
-                                   const XGradient& rTheGradient, sal_uInt16 nWhich)
+                                   const XGradient& rTheGradient, TypedWhichId<XFillGradientItem> nWhich)
     : NameOrIndex(nWhich, rName)
     , aGradient(rTheGradient)
 {
@@ -2409,7 +2409,7 @@ std::unique_ptr<XFillGradientItem> XFillGradientItem::checkForUniqueItem( SdrMod
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-            return std::make_unique<XFillGradientItem>( aUniqueName, aGradient, Which() );
+            return std::make_unique<XFillGradientItem>( aUniqueName, aGradient, TypedWhichId<XFillGradientItem>(Which()) );
     }
 
     return nullptr;

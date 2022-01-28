@@ -32,7 +32,7 @@ public:
 
                             SvxColorListItem();
                             SvxColorListItem( XColorListRef const & pTable,
-                                    sal_uInt16 nWhich  );
+                                    TypedWhichId<SvxColorListItem> nWhich  );
                             SvxColorListItem( const SvxColorListItem& );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -57,7 +57,7 @@ public:
 
                             SvxGradientListItem();
                             SvxGradientListItem( XGradientListRef const & pList,
-                                    sal_uInt16 nWhich  );
+                                    TypedWhichId<SvxGradientListItem> nWhich  );
                             SvxGradientListItem( const SvxGradientListItem& );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -81,7 +81,7 @@ public:
                             static SfxPoolItem* CreateDefault();
                             SvxHatchListItem();
                             SvxHatchListItem( XHatchListRef const & pList,
-                                    sal_uInt16 nWhich  );
+                                    TypedWhichId<SvxHatchListItem> nWhich  );
                             SvxHatchListItem( const SvxHatchListItem& );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -106,7 +106,7 @@ public:
 
                             SvxBitmapListItem();
                             SvxBitmapListItem( XBitmapListRef const & pBL,
-                                    sal_uInt16 nWhich  );
+                                    TypedWhichId<SvxBitmapListItem> nWhich  );
                             SvxBitmapListItem( const SvxBitmapListItem& );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -131,7 +131,7 @@ public:
 
                             SvxPatternListItem();
                             SvxPatternListItem( XPatternListRef const & pBL,
-                                   sal_uInt16 nWhich   );
+                                   TypedWhichId<SvxPatternListItem> nWhich   );
                             SvxPatternListItem( const SvxPatternListItem& );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -155,7 +155,7 @@ public:
 
                             SvxDashListItem();
                             SvxDashListItem( XDashListRef const & pList,
-                                    sal_uInt16 nWhich  );
+                                    TypedWhichId<SvxDashListItem> nWhich  );
                             SvxDashListItem( const SvxDashListItem& );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -180,7 +180,7 @@ public:
 
                             SvxLineEndListItem();
                             SvxLineEndListItem( XLineEndListRef const & pList,
-                                    sal_uInt16 nWhich  );
+                                    TypedWhichId<SvxLineEndListItem> nWhich  );
                             SvxLineEndListItem( const SvxLineEndListItem& );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,

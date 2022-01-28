@@ -197,7 +197,7 @@ void TitleItemConverter::FillSpecialItem(
 
             if( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fVal )
             {
-                rOutItemSet.Put( SdrAngleItem( nWhichId, Degree100(static_cast< sal_Int32 >(
+                rOutItemSet.Put( SdrAngleItem( SCHATTR_TEXT_DEGREES, Degree100(static_cast< sal_Int32 >(
                                                    ::rtl::math::round( fVal * 100.0 ) ) )));
             }
         }

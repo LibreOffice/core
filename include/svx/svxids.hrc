@@ -24,6 +24,7 @@
 #include <editeng/editids.hrc>
 #include <svl/typedwhich.hxx>
 
+class OfaPtrItem;
 class SdrAngleItem;
 class SfxBoolItem;
 class SfxInt32Item;
@@ -41,6 +42,7 @@ class SvxColorItem;
 class SvxColorListItem;
 class SvxColumnItem;
 class SvxDashListItem;
+class SvxDoubleItem;
 class SvxGradientListItem;
 class SvxGridItem;
 class SvxHatchListItem;
@@ -60,8 +62,10 @@ class SvxPostItTextItem;
 class SvxRulerItem;
 class SvxSetItem;
 class SvxSizeItem;
+class SvxSmartTagItem;
 class SvxViewLayoutItem;
-
+class SvxZoomSliderItem;
+class XFillGradientItem;
 
 // member IDs
 
@@ -393,12 +397,12 @@ class SvxViewLayoutItem;
 #define SID_GALLERY_FORMATS                             ( SID_SVX_START + 280 )
 #define SID_OBJECT_HELL                                 ( SID_SVX_START + 282 )
 #define SID_OBJECT_HEAVEN                               ( SID_SVX_START + 283 )
-#define SID_ATTR_LONG_ULSPACE                           ( SID_SVX_START + 284 )
-#define SID_ATTR_LONG_LRSPACE                           ( SID_SVX_START + 285 )
+#define SID_ATTR_LONG_ULSPACE                           TypedWhichId<SvxLongULSpaceItem>( SID_SVX_START + 284 )
+#define SID_ATTR_LONG_LRSPACE                           TypedWhichId<SvxLongLRSpaceItem>( SID_SVX_START + 285 )
 #define SID_FRAME_TO_TOP                                ( SID_SVX_START + 286 )
 #define SID_FRAME_TO_BOTTOM                             ( SID_SVX_START + 287 )
-#define SID_SEARCH_SEARCHSET                            ( SID_SVX_START + 292 )
-#define SID_SEARCH_REPLACESET                           ( SID_SVX_START + 293 )
+#define SID_SEARCH_SEARCHSET                            TypedWhichId<SvxSetItem>( SID_SVX_START + 292 )
+#define SID_SEARCH_REPLACESET                           TypedWhichId<SvxSetItem>( SID_SVX_START + 293 )
 #define SID_SET_SUPER_SCRIPT                            ( SID_SVX_START + 294 )
 #define SID_SET_SUB_SCRIPT                              ( SID_SVX_START + 295 )
 #define SID_CHAR_DLG                                    ( SID_SVX_START + 296 )
@@ -792,7 +796,7 @@ class SvxViewLayoutItem;
 #define SID_EXTRUSION_LIGHTING_FLOATER                  ( SID_SVX_START + 967 )
 #define SID_EXTRUSION_SURFACE_FLOATER                   ( SID_SVX_START + 968 )
 #define SID_EXTRUSION_3D_COLOR                          ( SID_SVX_START + 969 )
-#define SID_EXTRUSION_DEPTH                             ( SID_SVX_START + 970 )
+#define SID_EXTRUSION_DEPTH                             TypedWhichId<SvxDoubleItem>( SID_SVX_START + 970 )
 #define SID_EXTRUSION_DIRECTION                         ( SID_SVX_START + 971 )
 #define SID_EXTRUSION_PROJECTION                        ( SID_SVX_START + 972 )
 #define SID_EXTRUSION_LIGHTING_DIRECTION                ( SID_SVX_START + 973 )
@@ -843,7 +847,7 @@ class SvxViewLayoutItem;
 #define SID_DLG_TYPE                                    ( SID_SVX_START + 1018 )
 #define SID_TABPAGE_POS                                 ( SID_SVX_START + 1019 )
 #define SID_GRAPHIC                                     ( SID_SVX_START + 1020 )
-#define SID_OBJECT_LIST                                 ( SID_SVX_START + 1021 )
+#define SID_OBJECT_LIST                                 TypedWhichId<OfaPtrItem>( SID_SVX_START + 1021 )
 #define SID_ATTR_SET                                    ( SID_SVX_START + 1022 )
 #define SID_CHAR_FMT_LIST_BOX                           ( SID_SVX_START + 1023 )
 #define SID_METRIC_ITEM                                 TypedWhichId<SfxUInt16Item>( SID_SVX_START + 1024 )
@@ -884,7 +888,7 @@ class SvxViewLayoutItem;
 #define SID_INSERT_ZWSP                                 ( SID_SVX_START + 1058 )   /* insert ZWJ - invisible space, keep words together*/
 #define SID_INSERT_WJ                                   ( SID_SVX_START + 1059 )   /* insert WJ  - Word Joiner */
 #define SID_OPTIONS_DATABASES                           ( SID_SVX_START + 1060 )
-#define SID_OPEN_SMARTTAGMENU                           ( SID_SVX_START + 1061 )
+#define SID_OPEN_SMARTTAGMENU                           TypedWhichId<SvxSmartTagItem>( SID_SVX_START + 1061 )
 
 // CAUTION! Range <1062 .. 1069> used by include/sfx2/sfxsids.hrc
 
@@ -981,7 +985,7 @@ class SvxViewLayoutItem;
 
 #define SID_ATTR_PAGE_COLOR                             ( SID_SVX_START + 1152 )
 // 1153 is used by editeng (SID_ATTR_CHAR_BACK_COLOR)
-#define SID_ATTR_PAGE_GRADIENT                          ( SID_SVX_START + 1154 )
+#define SID_ATTR_PAGE_GRADIENT                          TypedWhichId<XFillGradientItem>( SID_SVX_START + 1154 )
 #define SID_ATTR_PAGE_HATCH                             ( SID_SVX_START + 1155 )
 #define SID_ATTR_PAGE_BITMAP                            ( SID_SVX_START + 1156 )
 #define SID_ATTR_PAGE_FILLSTYLE                         ( SID_SVX_START + 1157 )
@@ -1041,7 +1045,7 @@ class SvxViewLayoutItem;
 
 #define SID_INSERT_TREECONTROL                          ( SID_SVX_START + 1206 )
 #define SID_ATTR_VIEWLAYOUT                             TypedWhichId<SvxViewLayoutItem>( SID_SVX_START + 1207 )
-#define SID_ATTR_ZOOMSLIDER                             ( SID_SVX_START + 1208 )
+#define SID_ATTR_ZOOMSLIDER                             TypedWhichId<SvxZoomSliderItem>( SID_SVX_START + 1208 )
 #define SID_LANGUAGE_STATUS                             ( SID_SVX_START + 1209 )
 #define SID_CHAR_DLG_FOR_PARAGRAPH                      ( SID_SVX_START + 1210 )
 #define SID_SET_DOCUMENT_LANGUAGE                       TypedWhichId<SfxBoolItem>( SID_SVX_START + 1211 )
