@@ -286,7 +286,6 @@ private:
     std::unique_ptr<weld::RadioButton> mxLeft;
     std::unique_ptr<weld::RadioButton> mxCenter;
     std::unique_ptr<weld::RadioButton> mxRight;
-    std::unique_ptr<weld::RadioButton> mxWord;
     std::unique_ptr<weld::RadioButton> mxStretch;
     bool mbSettingValue;
 
@@ -305,14 +304,12 @@ FontworkAlignmentWindow::FontworkAlignmentWindow(svt::PopupWindowController* pCo
     , mxLeft(m_xBuilder->weld_radio_button("left"))
     , mxCenter(m_xBuilder->weld_radio_button("center"))
     , mxRight(m_xBuilder->weld_radio_button("right"))
-    , mxWord(m_xBuilder->weld_radio_button("word"))
     , mxStretch(m_xBuilder->weld_radio_button("stretch"))
     , mbSettingValue(false)
 {
     mxLeft->connect_toggled(LINK(this, FontworkAlignmentWindow, SelectHdl));
     mxCenter->connect_toggled(LINK(this, FontworkAlignmentWindow, SelectHdl));
     mxRight->connect_toggled(LINK(this, FontworkAlignmentWindow, SelectHdl));
-    mxWord->connect_toggled(LINK(this, FontworkAlignmentWindow, SelectHdl));
     mxStretch->connect_toggled(LINK(this, FontworkAlignmentWindow, SelectHdl));
 
     AddStatusListener( gsFontworkAlignment );
@@ -328,8 +325,6 @@ void FontworkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
     mxCenter->set_sensitive(bEnabled);
     mxRight->set_active(nSurface == 2 && bEnabled);
     mxRight->set_sensitive(bEnabled);
-    mxWord->set_active(nSurface == 3 && bEnabled);
-    mxWord->set_sensitive(bEnabled);
     mxStretch->set_active(nSurface == 4 && bEnabled);
     mxStretch->set_sensitive(bEnabled);
     mbSettingValue = bSettingValue;
@@ -364,13 +359,11 @@ IMPL_LINK(FontworkAlignmentWindow, SelectHdl, weld::Toggleable&, rButton, void)
         nAlignment = 1;
     else if (mxRight->get_active())
         nAlignment = 2;
-    else if (mxWord->get_active())
-        nAlignment = 3;
     else
         nAlignment = 4;
 
     Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
-        OUString(gsFontworkAlignment).copy(5), nAlignment) };
+        OUString(gsFontworkAlignment).copy(4), nAlignment) };
 
     mxControl->dispatchCommand( gsFontworkAlignment, aArgs );
 

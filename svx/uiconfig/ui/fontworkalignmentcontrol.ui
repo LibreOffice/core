@@ -17,11 +17,6 @@
     <property name="can_focus">False</property>
     <property name="icon_name">svx/res/fontworkalignright_16.png</property>
   </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/fontworkalignjustified_16.png</property>
-  </object>
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -92,23 +87,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkRadioButton" id="word">
-            <property name="label" translatable="yes" context="fontworkalignmentcontrol|RID_SVXSTR_ALIGN_WORD">_Word Justify</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="image">image4</property>
-            <property name="use_underline">True</property>
-            <property name="always_show_image">True</property>
-            <property name="draw_indicator">True</property>
-            <property name="group">left</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkRadioButton" id="stretch">
             <property name="label" translatable="yes" context="fontworkalignmentcontrol|RID_SVXSTR_ALIGN_STRETCH">S_tretch Justify</property>
             <property name="visible">True</property>
@@ -122,7 +100,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
       </object>
