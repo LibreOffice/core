@@ -95,7 +95,11 @@ class ScXMLDataPilotTableContext : public ScXMLImportContext
     css::sheet::DataPilotFieldOrientation
                     mnDataLayoutType;
     bool            bIsNative:1;
-    bool            bIgnoreEmptyRows:1;
+    /*!
+      \brief Way to handle empty rows when pivotting
+      \see ScEmptyRowHandling
+    */
+    OUString        sEmptyRowHandling;
     bool            bIdentifyCategories:1;
     bool            bTargetRangeAddress:1;
     bool            bSourceCellRange:1;

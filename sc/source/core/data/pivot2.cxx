@@ -18,6 +18,7 @@
  */
 
 #include <pivot.hxx>
+#include <emptyrowhandling.hxx>
 
 #if DEBUG_PIVOT_TABLE
 using std::cout;
@@ -89,7 +90,7 @@ tools::Long ScPivotField::getOriginalDim() const
 
 ScPivotParam::ScPivotParam() :
     nCol(0), nRow(0), nTab(0),
-    bIgnoreEmptyRows(false), bDetectCategories(false),
+    nEmptyRowsHandling(ScEmptyRowHandling::DEFAULT), bDetectCategories(false),
     bMakeTotalCol(true), bMakeTotalRow(true)
 {}
 
@@ -99,7 +100,7 @@ ScPivotParam::ScPivotParam( const ScPivotParam& r )
         maColFields(r.maColFields),
         maRowFields(r.maRowFields),
         maDataFields(r.maDataFields),
-        bIgnoreEmptyRows(r.bIgnoreEmptyRows),
+        nEmptyRowsHandling(r.nEmptyRowsHandling),
         bDetectCategories(r.bDetectCategories),
         bMakeTotalCol(r.bMakeTotalCol),
         bMakeTotalRow(r.bMakeTotalRow)
@@ -126,7 +127,7 @@ ScPivotParam& ScPivotParam::operator=( const ScPivotParam& rPivotParam )
     nCol              = rPivotParam.nCol;
     nRow              = rPivotParam.nRow;
     nTab              = rPivotParam.nTab;
-    bIgnoreEmptyRows  = rPivotParam.bIgnoreEmptyRows;
+    nEmptyRowsHandling = rPivotParam.nEmptyRowsHandling;
     bDetectCategories = rPivotParam.bDetectCategories;
     bMakeTotalCol     = rPivotParam.bMakeTotalCol;
     bMakeTotalRow     = rPivotParam.bMakeTotalRow;

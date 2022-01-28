@@ -25,6 +25,7 @@
 #include <dputil.hxx>
 #include <generalfunction.hxx>
 #include <dptabdat.hxx>
+#include <emptyrowhandling.hxx>
 
 #include <sal/types.h>
 #include <sal/log.hxx>
@@ -690,7 +691,7 @@ void ScDPSaveDimension::Dump(int nIndent) const
 ScDPSaveData::ScDPSaveData() :
     nColumnGrandMode( SC_DPSAVEMODE_DONTKNOW ),
     nRowGrandMode( SC_DPSAVEMODE_DONTKNOW ),
-    nIgnoreEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
+    aEmptyRowHandling( ScEmptyRowHandling::DEFAULT ),
     nRepeatEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bFilterButton( true ),
     bDrillDown( true ),
@@ -701,7 +702,7 @@ ScDPSaveData::ScDPSaveData() :
 ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     nColumnGrandMode( r.nColumnGrandMode ),
     nRowGrandMode( r.nRowGrandMode ),
-    nIgnoreEmptyMode( r.nIgnoreEmptyMode ),
+    aEmptyRowHandling( r.aEmptyRowHandling ),
     nRepeatEmptyMode( r.nRepeatEmptyMode ),
     bFilterButton( r.bFilterButton ),
     bDrillDown( r.bDrillDown ),
@@ -729,13 +730,20 @@ ScDPSaveData& ScDPSaveData::operator= ( const ScDPSaveData& r )
 
 bool ScDPSaveData::operator== ( const ScDPSaveData& r ) const
 {
-    if ( nColumnGrandMode != r.nColumnGrandMode ||
-         nRowGrandMode    != r.nRowGrandMode    ||
-         nIgnoreEmptyMode != r.nIgnoreEmptyMode ||
-         nRepeatEmptyMode != r.nRepeatEmptyMode ||
-         bFilterButton    != r.bFilterButton    ||
-         bDrillDown       != r.bDrillDown       ||
-         mbDimensionMembersBuilt != r.mbDimensionMembersBuilt)
+    auto e2c=[](const ScDPSaveData& sd)
+    {
+        // easy-to-compare members (either they're the same as they come or they ar not)
+        // FIXME I think `pDimensionData` and `mpGrandTotalName` can be added here without hitches (although I cannot check right now)
+        return std::make_tuple(
+                sd.nColumnGrandMode,
+                sd.nRowGrandMode,
+                sd.aEmptyRowHandling,
+                sd.nRepeatEmptyMode,
+                sd.bFilterButton,
+                sd.bDrillDown,
+                sd.mbDimensionMembersBuilt);
+    };
+    if (e2c(*this) != e2c(r))
         return false;
 
     if ( pDimensionData || r.pDimensionData )
@@ -990,9 +998,9 @@ void ScDPSaveData::SetRowGrand(bool bSet)
     nRowGrandMode = sal_uInt16(bSet);
 }
 
-void ScDPSaveData::SetIgnoreEmptyRows(bool bSet)
+void ScDPSaveData::SetEmptyRowHandling(ScEmptyRowHandling mode)
 {
-    nIgnoreEmptyMode = sal_uInt16(bSet);
+    aEmptyRowHandling = mode;
 }
 
 void ScDPSaveData::SetRepeatIfEmpty(bool bSet)
@@ -1041,9 +1049,23 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
 
         try
         {
-            if ( nIgnoreEmptyMode != SC_DPSAVEMODE_DONTKNOW )
-                lcl_SetBoolProperty( xSourceProp,
-                    SC_UNO_DP_IGNOREEMPTY, static_cast<bool>(nIgnoreEmptyMode) );
+            if ( aEmptyRowHandling != ScEmptyRowHandling::DEFAULT )
+            {
+                OUString sEmptyRowHandling;
+                switch(aEmptyRowHandling)
+                {
+                    case ScEmptyRowHandling::COUNT:
+                        sEmptyRowHandling = "COUNT";
+                        break;
+                    case ScEmptyRowHandling::LIST:
+                        sEmptyRowHandling = "LIST";
+                        break;
+                    case ScEmptyRowHandling::IGNORE:
+                        sEmptyRowHandling = "IGNORE";
+                        break;
+                }
+                xSourceProp->setPropertyValue(SC_UNO_DP_EMPTY_ROWS, uno::Any(sEmptyRowHandling));
+            }
             if ( nRepeatEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
                     SC_UNO_DP_REPEATEMPTY, static_cast<bool>(nRepeatEmptyMode) );

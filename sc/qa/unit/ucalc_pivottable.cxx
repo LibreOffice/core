@@ -28,6 +28,7 @@
 #include <stringutil.hxx>
 #include <dbdocfun.hxx>
 #include <generalfunction.hxx>
+#include <emptyrowhandling.hxx>
 
 #include <formula/errorcodes.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -107,7 +108,7 @@ ScDPObject* createDPFromSourceDesc(
 
     ScDPSaveData aSaveData;
     // Set data pilot table output options.
-    aSaveData.SetIgnoreEmptyRows(false);
+    aSaveData.SetEmptyRowHandling(ScEmptyRowHandling::LIST);
     aSaveData.SetRepeatIfEmpty(false);
     aSaveData.SetColumnGrand(true);
     aSaveData.SetRowGrand(true);
@@ -254,7 +255,17 @@ public:
     void testPivotTableNormalGrouping();
     void testPivotTableNumberGrouping();
     void testPivotTableDateGrouping();
+
+    /**
+     * Test for pivot table containing empty data fields and how they (don't) sum,
+     * but still may get reported
+     */
     void testPivotTableEmptyRows();
+
+    /**
+     * Test for pivot table containing empty data fields and how they are counted
+     */
+    void testPivotTableCountingEmptyRows();
     void testPivotTableTextNumber();
 
     /**
@@ -310,6 +321,7 @@ public:
     CPPUNIT_TEST(testPivotTableNumberGrouping);
     CPPUNIT_TEST(testPivotTableDateGrouping);
     CPPUNIT_TEST(testPivotTableEmptyRows);
+    CPPUNIT_TEST(testPivotTableCountingEmptyRows);
     CPPUNIT_TEST(testPivotTableTextNumber);
     CPPUNIT_TEST(testPivotTableCaseInsensitiveStrings);
     CPPUNIT_TEST(testPivotTableNumStability);
@@ -1656,7 +1668,7 @@ void TestPivottable::testPivotTableEmptyRows()
     // Dimension definition
     static const DPFieldDef aFields[] = {
         { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false }, // TODO felipel this, but with ScGeneralFunction::COUNT
     };
 
     ScAddress aPos(1,1,0);
@@ -1690,13 +1702,35 @@ void TestPivottable::testPivotTableEmptyRows()
         };
 
         bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Include empty rows");
-        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed when listing empty rows", bSuccess);
+    }
+
+    // now, count empty rows
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("Save data doesn't exist.", pSaveData);
+    pSaveData->SetEmptyRowHandling(ScEmptyRowHandling::COUNT);
+    pDPObj->ClearTableData();
+    aOutRange = refresh(pDPObj);
+
+    {
+        // Expected output table content.  0 = empty cell
+        std::vector<std::vector<const char*>> aOutputCheck = {
+            { "Name", "Sum - Value" },
+            { "A", "1" },
+            { "B", "2" },
+            { "C", "3" },
+            { "D", "4" },
+            { "(empty)", "0" /* empty values don't sum (empty values sum 0) */},
+            { "Total Result", "10" },
+        };
+
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Ignore empty rows");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed when counting empty rows", bSuccess);
     }
 
     // This time, ignore empty rows.
-    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT_MESSAGE("Save data doesn't exist.", pSaveData);
-    pSaveData->SetIgnoreEmptyRows(true);
+    pSaveData->SetEmptyRowHandling(ScEmptyRowHandling::IGNORE);
     pDPObj->ClearTableData();
     aOutRange = refresh(pDPObj);
 
@@ -1712,7 +1746,7 @@ void TestPivottable::testPivotTableEmptyRows()
         };
 
         bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Ignore empty rows");
-        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed when ignoring empty rows", bSuccess);
     }
 
     // Modify the source to remove member 'A', then refresh the table.
@@ -1742,6 +1776,112 @@ void TestPivottable::testPivotTableEmptyRows()
         bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Ignore empty rows");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           size_t(0), pDPs->GetSheetCaches().size());
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void TestPivottable::testPivotTableCountingEmptyRows()
+{
+    // see https://bugs.documentfoundation.org/show_bug.cgi?id=47523
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
+
+    // Raw data
+    const std::vector<std::vector<const char*>> aData = {
+        {"Answer", },
+        { "Yes", },
+        { "Yes", },
+        { "No", },
+        { "", },
+        { "Yes", },
+        { "No", },
+        { "", },
+        { "", },
+        { "No", },
+        { "Yes", },
+    };
+
+    // Dimension definition
+    static constexpr DPFieldDef aFields[] = {
+        { "Answer", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE , false },
+        { "Answer", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT , false },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScRange aOutRange = refresh(pDPObj);
+
+    {
+        // Expected output table content.
+        std::vector<std::vector<const char*>> aOutputCheck = {
+            { "Answer", "Count - Answer" },
+            { "No", "3" },
+            { "Yes", "4" },
+            { "(empty)", nullptr },
+            { "Total Result", "7" },
+        };
+
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Include empty rows");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed when listing empty rows when counting", bSuccess);
+    }
+
+    // now, count empty rows
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("Save data doesn't exist.", pSaveData);
+    pSaveData->SetEmptyRowHandling(ScEmptyRowHandling::COUNT);
+    pDPObj->ClearTableData();
+    aOutRange = refresh(pDPObj);
+
+    {
+        // Expected output table content.  0 = empty cell
+        std::vector<std::vector<const char*>> aOutputCheck = {
+            { "Answer", "Count - Answer" },
+            { "No", "3" },
+            { "Yes", "4" },
+            { "(empty)", "3" },
+            { "Total Result", "10" },
+        };
+
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Ignore empty rows");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed when counting empty rows when counting", bSuccess);
+    }
+
+    // This time, ignore empty rows.
+    CPPUNIT_ASSERT_MESSAGE("Save data doesn't exist.", pSaveData);
+    pSaveData->SetEmptyRowHandling(ScEmptyRowHandling::IGNORE);
+    pDPObj->ClearTableData();
+    aOutRange = refresh(pDPObj);
+
+    {
+        // Expected output table content.  0 = empty cell
+        std::vector<std::vector<const char*>> aOutputCheck = {
+            { "Answer", "Count - Answer" },
+            { "No", "3" },
+            { "Yes", "4" },
+            { "Total Result", "7" },
+        };
+
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Ignore empty rows");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed when ignoring empty rows", bSuccess);
+    }
+
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());

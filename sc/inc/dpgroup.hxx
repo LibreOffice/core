@@ -29,6 +29,7 @@
 #include "dpnumgroupinfo.hxx"
 
 class ScDocument;
+enum class ScEmptyRowHandling;
 
 typedef ::std::vector<ScDPItemData> ScDPItemDataVec;
 
@@ -151,7 +152,7 @@ public:
     virtual bool                    IsDateDimension(sal_Int32 nDim) override;
     virtual sal_uInt32              GetNumberFormat(sal_Int32 nDim) override;
     virtual void                    DisposeData() override;
-    virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) override;
+    virtual void                    SetEmptyFlags( ScEmptyRowHandling aEmptyRowHandling, bool bRepeatIfEmpty ) override;
 
     virtual bool                    IsRepeatIfEmpty() override;
 

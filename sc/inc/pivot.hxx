@@ -127,6 +127,7 @@ struct ScPivotField
 };
 
 typedef std::vector< ScPivotField > ScPivotFieldVector;
+enum class ScEmptyRowHandling;
 
 struct ScPivotParam
 {
@@ -140,7 +141,12 @@ struct ScPivotParam
     ScPivotFieldVector  maRowFields;
     ScPivotFieldVector  maDataFields;
 
-    bool bIgnoreEmptyRows;
+    /*!
+     * How empty rows should be handled / presented
+     *
+     * The order of this enum matches that of ScPivotLayoutDialog::mxEmptyRowsBox
+     */
+    ScEmptyRowHandling nEmptyRowsHandling;
     bool bDetectCategories;
     bool bMakeTotalCol;
     bool bMakeTotalRow;

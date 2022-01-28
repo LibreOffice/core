@@ -39,6 +39,7 @@
 #include <globstr.hrc>
 #include <queryentry.hxx>
 #include <dputil.hxx>
+#include <emptyrowhandling.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
@@ -749,7 +750,7 @@ void ScDPObject::CreateObjects()
                 if (pSaveData)
                     // Make sure to transfer these flags to the table data
                     // since they may have changed.
-                    pData->SetEmptyFlags(pSaveData->GetIgnoreEmptyRows(), pSaveData->GetRepeatIfEmpty());
+                    pData->SetEmptyFlags(pSaveData->GetEmptyRowHandling(), pSaveData->GetRepeatIfEmpty());
 
                 pData->ReloadCacheTable();
                 xSource = new ScDPSource( pData );
@@ -988,7 +989,7 @@ bool ScDPObject::SyncAllDimensionMembers()
         return false;
 
     // Refresh the cache wrapper since the cache may have changed.
-    pData->SetEmptyFlags(pSaveData->GetIgnoreEmptyRows(), pSaveData->GetRepeatIfEmpty());
+    pData->SetEmptyFlags(pSaveData->GetEmptyRowHandling(), pSaveData->GetRepeatIfEmpty());
     pData->ReloadCacheTable();
     pSaveData->SyncAllDimensionMembers(pData);
     return true;
@@ -2318,8 +2319,10 @@ void ScDPObject::FillOldParam(ScPivotParam& rParam) const
                     SC_UNO_DP_ROWGRAND, true );
 
         // following properties may be missing for external sources
-        rParam.bIgnoreEmptyRows = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                    SC_UNO_DP_IGNOREEMPTY );
+        static constexpr auto aDefaultEmptyRowHandling = static_cast<std::underlying_type<ScEmptyRowHandling>::type>(ScEmptyRowHandling::DEFAULT);
+        rParam.nEmptyRowsHandling = static_cast<ScEmptyRowHandling>(
+                ScUnoHelpFunctions::GetShortProperty( xProp,
+                    SC_UNO_DP_EMPTY_ROWS, aDefaultEmptyRowHandling ));
         rParam.bDetectCategories = ScUnoHelpFunctions::GetBoolProperty( xProp,
                     SC_UNO_DP_REPEATEMPTY );
     }

@@ -40,6 +40,7 @@
 #include <dputil.hxx>
 #include <rangeutl.hxx>
 #include <queryentry.hxx>
+#include <emptyrowhandling.hxx>
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
@@ -794,8 +795,25 @@ void ScXMLExportDataPilot::WriteDataPilots()
             else
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GRAND_TOTAL, XML_NONE);
         }
-        if (pDPSave->GetIgnoreEmptyRows())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IGNORE_EMPTY_ROWS, XML_TRUE);
+        const auto aEmptyRowHandling = pDPSave->GetEmptyRowHandling();
+        if (aEmptyRowHandling != ScEmptyRowHandling::DEFAULT)
+        {
+            OUString sEmptyRowHandling;
+            switch( aEmptyRowHandling )
+            {
+                case ScEmptyRowHandling::COUNT:
+                    sEmptyRowHandling = "COUNT";
+                    break;
+                case ScEmptyRowHandling::LIST:
+                    sEmptyRowHandling = "LIST";
+                    break;
+                case ScEmptyRowHandling::IGNORE:
+                    sEmptyRowHandling = "IGNORE";
+                    break;
+            }
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IGNORE_EMPTY_ROWS,
+                    sEmptyRowHandling);
+        }
         if (pDPSave->GetRepeatIfEmpty())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IDENTIFY_CATEGORIES, XML_TRUE);
         if (!pDPSave->GetFilterButton())

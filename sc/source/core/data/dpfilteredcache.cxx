@@ -22,6 +22,7 @@
 #include <address.hxx>
 #include <queryparam.hxx>
 #include <dpitemdata.hxx>
+#include <emptyrowhandling.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
@@ -93,11 +94,11 @@ sal_Int32 ScDPFilteredCache::getColSize() const
 }
 
 void ScDPFilteredCache::fillTable(
-    const ScQueryParam& rQuery, bool bIgnoreEmptyRows, bool bRepeatIfEmpty)
+    const ScQueryParam& rQuery, ScEmptyRowHandling eEmptyRowHandling, bool bRepeatIfEmpty)
 {
-    SCROW nRowCount = getRowSize();
-    SCROW nDataSize = mrCache.GetDataSize();
-    SCCOL nColCount = getColSize();
+    const SCROW nRowCount = getRowSize();
+    const SCROW nDataSize = mrCache.GetDataSize();
+    const SCCOL nColCount = getColSize();
     if (nRowCount <= 0 || nColCount <= 0)
         return;
 
@@ -105,21 +106,40 @@ void ScDPFilteredCache::fillTable(
     maShowByPage.clear();
     maShowByPage.build_tree();
 
-    // Process the non-empty data rows.
+    // Process the non-empty data rows
+    // traverse and add row indices with non-empty data
     for (SCROW nRow = 0; nRow < nDataSize; ++nRow)
     {
         if (!getCache().ValidQuery(nRow, rQuery))
             continue;
 
-        if (bIgnoreEmptyRows && getCache().IsRowEmpty(nRow))
-            continue;
-
+        if (getCache().IsRowEmpty(nRow))
+        {
+            switch(eEmptyRowHandling)
+            {
+                case ScEmptyRowHandling::LIST:
+                case ScEmptyRowHandling::COUNT:
+                    // don't skip this row → also add it
+                    break;
+                case ScEmptyRowHandling::IGNORE:
+                    // skip this row → don't add it
+                    continue;
+                    break;
+            }
+        }
         maShowByFilter.insert_back(nRow, nRow+1, true);
     }
 
     // Process the trailing empty rows.
-    if (!bIgnoreEmptyRows)
-        maShowByFilter.insert_back(nDataSize, nRowCount, true);
+    switch(eEmptyRowHandling)
+    {
+        case ScEmptyRowHandling::LIST:
+        case ScEmptyRowHandling::COUNT:
+            maShowByFilter.insert_back(nDataSize, nRowCount, true);
+            break;
+        case ScEmptyRowHandling::IGNORE:
+            break;
+    }
 
     maShowByFilter.build_tree();
 
@@ -131,11 +151,11 @@ void ScDPFilteredCache::fillTable(
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
         maFieldEntries.emplace_back( );
-        SCROW nMemCount = getCache().GetDimMemberCount( nCol );
-        if (!nMemCount)
+        const SCROW nMemCount = getCache().GetDimMemberCount( nCol );
+        if (nMemCount == 0)
             continue;
 
-        std::vector<SCROW> aAdded(nMemCount, -1);
+        std::vector<std::optional<SCROW>> aAdded(nMemCount);
         bool bShow = false;
         SCROW nEndSegment = -1;
         for (SCROW nRow = 0; nRow < nRowCount; ++nRow)
@@ -166,8 +186,8 @@ void ScDPFilteredCache::fillTable(
         }
         for (SCROW nRow = 0; nRow < nMemCount; ++nRow)
         {
-            if (aAdded[nRow] != -1)
-                maFieldEntries.back().push_back(aAdded[nRow]);
+            if (aAdded[nRow].has_value())
+                maFieldEntries.back().push_back(*aAdded[nRow]);
         }
     }
 }

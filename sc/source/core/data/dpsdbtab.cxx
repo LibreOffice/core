@@ -23,6 +23,7 @@
 #include <dpfilteredcache.hxx>
 #include <document.hxx>
 #include <dpobject.hxx>
+#include <emptyrowhandling.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 
@@ -107,7 +108,7 @@ bool ScDatabaseDPData::IsDateDimension(sal_Int32 /* nDim */)
     return false;
 }
 
-void ScDatabaseDPData::SetEmptyFlags( bool /* bIgnoreEmptyRows */, bool /* bRepeatIfEmpty */ )
+void ScDatabaseDPData::SetEmptyFlags( ScEmptyRowHandling /* bIgnoreEmptyRows */, bool /* bRepeatIfEmpty */ )
 {
     //  not used for database data
     //TODO: disable flags

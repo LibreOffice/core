@@ -68,6 +68,7 @@ class ScDPLevel;
 class ScDPMembers;
 class ScDPMember;
 enum class ScGeneralFunction;
+enum class ScEmptyRowHandling;
 
 //  implementation of DataPilotSource using ScDPTableData
 
@@ -92,7 +93,7 @@ private:
 
     bool                    bColumnGrand;
     bool                    bRowGrand;
-    bool                    bIgnoreEmptyRows;
+    ScEmptyRowHandling      aEmptyRowHandling;
     bool                    bRepeatIfEmpty;
 
     sal_Int32               nDupCount;
@@ -131,7 +132,7 @@ private:
 
     OUString getDataDescription();       //! ???
 
-    void setIgnoreEmptyRows(bool bSet);
+    void setEmptyRowsHandling(ScEmptyRowHandling emptyRowHandling);
     void setRepeatIfEmpty(bool bSet);
 
     void disposeData();
@@ -165,6 +166,7 @@ public:
     bool                        SubTotalAllowed(sal_Int32 nColumn);      //! move to ScDPResultData
 
     ScDPDimension* AddDuplicated(std::u16string_view rNewName);
+    ScEmptyRowHandling           GetEmptyRowHandling() const { return aEmptyRowHandling; }
     sal_Int32                    GetDupCount() const { return nDupCount; }
 
     sal_Int32                    GetSourceDim(sal_Int32 nDim);

@@ -30,6 +30,7 @@
 #include <scresid.hxx>
 #include <rangenam.hxx>
 #include <queryentry.hxx>
+#include <emptyrowhandling.hxx>
 
 #include <osl/diagnose.h>
 
@@ -43,7 +44,7 @@ using ::std::vector;
 ScSheetDPData::ScSheetDPData(const ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache) :
     ScDPTableData(pD),
     aQuery ( rDesc.GetQueryParam() ),
-    bIgnoreEmptyRows( false ),
+    aEmptyRowHandling( ScEmptyRowHandling::DEFAULT ),
     bRepeatIfEmpty(false),
     aCacheTable(rCache)
 {
@@ -153,10 +154,10 @@ bool ScSheetDPData::getIsDataLayoutDimension(sal_Int32 nColumn)
     return (nColumn ==static_cast<tools::Long>( aCacheTable.getColSize()));
 }
 
-void ScSheetDPData::SetEmptyFlags( bool bIgnoreEmptyRowsP, bool bRepeatIfEmptyP )
+void ScSheetDPData::SetEmptyFlags( ScEmptyRowHandling emptyRowHandlingP, bool bRepeatIfEmptyP )
 {
-    bIgnoreEmptyRows = bIgnoreEmptyRowsP;
-    bRepeatIfEmpty   = bRepeatIfEmptyP;
+    aEmptyRowHandling = emptyRowHandlingP;
+    bRepeatIfEmpty    = bRepeatIfEmptyP;
 }
 
 bool ScSheetDPData::IsRepeatIfEmpty()
@@ -171,7 +172,7 @@ void ScSheetDPData::CreateCacheTable()
         // already cached.
         return;
 
-    aCacheTable.fillTable(aQuery, bIgnoreEmptyRows, bRepeatIfEmpty);
+    aCacheTable.fillTable(aQuery, aEmptyRowHandling, bRepeatIfEmpty);
 }
 
 void ScSheetDPData::FilterCacheTable(std::vector<ScDPFilteredCache::Criterion>&& rCriteria, std::unordered_set<sal_Int32>&& rCatDims)

@@ -45,6 +45,7 @@ namespace com::sun::star::sheet {
 class ScDPDimensionSaveData;
 class ScDPTableData;
 enum class ScGeneralFunction;
+enum class ScEmptyRowHandling;
 
 // classes to save Data Pilot settings
 
@@ -243,7 +244,13 @@ private:
     std::unique_ptr<ScDPDimensionSaveData> pDimensionData; // settings that create new dimensions
     sal_uInt16 nColumnGrandMode;
     sal_uInt16 nRowGrandMode;
-    sal_uInt16 nIgnoreEmptyMode;
+    /*!
+     * How empty rows should be handled when pivoting
+     *
+     * \see ScEmptyRowHandling
+     * \see emptyrowhandling.hxx
+     */
+    ScEmptyRowHandling aEmptyRowHandling;
     sal_uInt16 nRepeatEmptyMode;
     bool bFilterButton; // not passed to DataPilotSource
     bool bDrillDown; // not passed to DataPilotSource
@@ -326,9 +333,9 @@ public:
     bool GetRowGrand() const
         { return bool(nRowGrandMode); }
 
-    SC_DLLPUBLIC void SetIgnoreEmptyRows( bool bSet );
-    bool GetIgnoreEmptyRows() const
-        { return bool(nIgnoreEmptyMode); }
+    SC_DLLPUBLIC void SetEmptyRowHandling( ScEmptyRowHandling mode );
+    ScEmptyRowHandling GetEmptyRowHandling() const
+        { return aEmptyRowHandling; }
 
     SC_DLLPUBLIC void SetRepeatIfEmpty( bool bSet );
     bool GetRepeatIfEmpty() const
