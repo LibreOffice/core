@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a5fef8e_60f22163",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1591,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2022-01-28T13:59:30Z",
+      "side": 1,
+      "message": "Was the problem that fMiterMinimumAngle can be 0? If so, shouldn\u0027t these be using std::max? Assuming that fMiterMinimumAngle is positive... disclaimer: I\u0027m not familiar with the code.",
+      "range": {
+        "startLine": 1591,
+        "startChar": 44,
+        "endLine": 1591,
+        "endChar": 62
+      },
+      "revId": "109c8fe6d2ad01df46fb39bfc7bfca063fcb722e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
