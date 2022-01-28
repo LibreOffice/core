@@ -16,6 +16,23 @@
       "message": "I don\u0027t like the look of this tmpnam call",
       "revId": "1009a00abbda4f6b7b8a9b3acee47fa252756ed5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c339bedf_2173f5aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-28T11:59:35Z",
+      "side": 1,
+      "message": "IIUC, using our class has another - very important IMO - advantage to obey the \"Temporary files\" directory setting. Using anything else for temptiles is wrong.",
+      "revId": "1009a00abbda4f6b7b8a9b3acee47fa252756ed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
