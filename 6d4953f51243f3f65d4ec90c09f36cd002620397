@@ -249,6 +249,54 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eade4663_9bd23d65",
+        "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-01-28T12:05:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5aaaca80_bbfd99c4",
+      "range": {
+        "startLine": 584,
+        "startChar": 193,
+        "endLine": 584,
+        "endChar": 215
+      },
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aa1488f_2cbfd908",
+        "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-01-28T12:05:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "623f39bf_6291446c",
+      "range": {
+        "startLine": 584,
+        "startChar": 155,
+        "endLine": 584,
+        "endChar": 163
+      },
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1321b354_a3371f0f",
@@ -286,6 +334,30 @@
       "side": 1,
       "message": "Same here.",
       "parentUuid": "1321b354_a3371f0f",
+      "range": {
+        "startLine": 605,
+        "startChar": 154,
+        "endLine": 605,
+        "endChar": 158
+      },
+      "revId": "6d4953f51243f3f65d4ec90c09f36cd002620397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6db2a8af_b7af7966",
+        "filename": "sw/uiconfig/swriter/ui/indexentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-01-28T12:05:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d02ae2b_1d1c20fd",
       "range": {
         "startLine": 605,
         "startChar": 154,
