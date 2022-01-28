@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_NFKEYTAB_HXX
 #define INCLUDED_SVL_NFKEYTAB_HXX
 
-#include <vector>
+#include <array>
 #include <rtl/ustring.hxx>
 
 //! For ImpSvNumberformatScan: first the short symbols, then the long symbols!
@@ -95,29 +95,7 @@ enum NfKeywordIndex
     NF_KEYWORD_ENTRIES_COUNT
 };
 
-class NfKeywordTable final
-{
-    typedef ::std::vector<OUString> Keywords_t;
-    Keywords_t m_keywords;
-
-public:
-    NfKeywordTable() : m_keywords(NF_KEYWORD_ENTRIES_COUNT) {};
-    NfKeywordTable( const std::initializer_list<OUString> & l ) : m_keywords(l)
-    {
-        assert(m_keywords.size() == NF_KEYWORD_ENTRIES_COUNT);
-    }
-
-    OUString & operator[] (Keywords_t::size_type n) { return m_keywords[n]; }
-    const OUString & operator[] (Keywords_t::size_type n) const { return m_keywords[n]; }
-
-    Keywords_t::size_type size() const { return m_keywords.size(); }
-
-    NfKeywordTable& operator=( const NfKeywordTable& r )
-    {
-        m_keywords = r.m_keywords;
-        return *this;
-    }
-};
+typedef ::std::array<OUString, NF_KEYWORD_ENTRIES_COUNT> NfKeywordTable;
 
 #endif // INCLUDED_SVL_NFKEYTAB_HXX
 
