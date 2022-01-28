@@ -273,19 +273,19 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
     else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
         rSet->InvalidateItem(nWhich);
 
-    nWhich = GetWhich(SID_ATTR_ALIGN_LOCKPOS);
+    TypedWhichId<SvxRotateModeItem> nWhichLockPos(GetWhich(SID_ATTR_ALIGN_LOCKPOS));
     if (m_aVsRefEdge.IsValueChangedFromSaved())
     {
         switch (m_aVsRefEdge.GetSelectedItemId())
         {
             case IID_CELLLOCK:
-                rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_STANDARD, nWhich));
+                rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_STANDARD, nWhichLockPos));
                 break;
             case IID_TOPLOCK:
-                rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_TOP, nWhich));
+                rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_TOP, nWhichLockPos));
                 break;
             case IID_BOTTOMLOCK:
-                rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_BOTTOM, nWhich));
+                rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_BOTTOM, nWhichLockPos));
                 break;
             default:
                 m_aVsRefEdge.SetNoSelection();
@@ -293,8 +293,8 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         }
         bChanged = true;
     }
-    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
-        rSet->InvalidateItem(nWhich);
+    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhichLockPos, false))
+        rSet->InvalidateItem(nWhichLockPos);
 
     nWhich = GetWhich(SID_ATTR_ALIGN_STACKED);
     if (m_xCbStacked->get_state_changed_from_saved())

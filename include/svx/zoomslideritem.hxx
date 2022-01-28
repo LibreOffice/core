@@ -34,7 +34,7 @@ class SVX_DLLPUBLIC SvxZoomSliderItem final : public SfxUInt16Item
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxZoomSliderItem( sal_uInt16 nCurrentZoom = 100, sal_uInt16 nMinZoom = 20, sal_uInt16 nMaxZoom = 600, sal_uInt16 nWhich = SID_ATTR_ZOOMSLIDER );
+    SvxZoomSliderItem( sal_uInt16 nCurrentZoom = 100, sal_uInt16 nMinZoom = 20, sal_uInt16 nMaxZoom = 600, TypedWhichId<SvxZoomSliderItem> nWhich = SID_ATTR_ZOOMSLIDER );
 
     void AddSnappingPoint( sal_Int32 nNew );
     const css::uno::Sequence < sal_Int32 >& GetSnappingPoints() const { return maValues;}

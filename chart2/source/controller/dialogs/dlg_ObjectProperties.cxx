@@ -570,7 +570,7 @@ void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     }
     else if (rId == "numberformat")
     {
-        aSet.Put (SvxNumberInfoItem( m_pNumberFormatter, static_cast<sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO)));
+        aSet.Put (SvxNumberInfoItem( m_pNumberFormatter, SID_ATTR_NUMBERFORMAT_INFO));
         rPage.PageCreated(aSet);
     }
     else if (rId == "xerrorbar")

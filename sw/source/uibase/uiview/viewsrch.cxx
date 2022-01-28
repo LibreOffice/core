@@ -426,7 +426,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 aSet.MergeRange(RES_PARATR_SCRIPTSPACE, RES_PARATR_FORBIDDEN_RULES);
             }
 
-            sal_uInt16 nWhich = SID_SEARCH_SEARCHSET;
+            TypedWhichId<SvxSetItem> nWhich = SID_SEARCH_SEARCHSET;
 
             if ( FID_SEARCH_REPLACESET == nSlot )
             {
