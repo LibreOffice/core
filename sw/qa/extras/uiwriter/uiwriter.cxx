@@ -86,7 +86,6 @@
 #include <sfx2/watermarkitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
-#include <test/htmltesttools.hxx>
 #include <fmthdft.hxx>
 #include <iodetect.hxx>
 #include <frameformats.hxx>
@@ -125,7 +124,7 @@ void lcl_selectCharacters(SwPaM& rPaM, sal_Int32 first, sal_Int32 end)
 }
 } //namespace
 
-class SwUiWriterTest : public SwModelTestBase, public HtmlTestTools
+class SwUiWriterTest : public SwModelTestBase
 {
 public:
     std::unique_ptr<SwTextBlocks> readDOCXAutotext(
