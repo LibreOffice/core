@@ -526,6 +526,7 @@ public:
     virtual bool execute() override
     {
         mpWindow->RefreshAutoFilterButton(maPos);
+        mpWindow->GrabFocus();
         return false; // this is called after the popup has been closed
     }
 };
