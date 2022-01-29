@@ -1144,7 +1144,7 @@ public:
 
         if (node.type == sc::element_type_empty)
         {
-            if (bCopyCellNotes && !mrCxt.isSkipAttrForEmptyCells())
+            if (bCopyCellNotes && !mrCxt.isSkipEmptyCells())
             {
                 bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
                 duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );
@@ -1394,7 +1394,7 @@ void ScColumn::CopyFromClip(
 {
     if ((rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
     {
-        if (rCxt.isSkipAttrForEmptyCells())
+        if (rCxt.isSkipEmptyCells())
         {
             //  copy only attributes for non-empty cells between nRow1-nDy and nRow2-nDy.
             sc::SingleColumnSpanSet aSpanSet(GetDoc().GetSheetLimits());

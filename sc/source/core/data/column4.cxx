@@ -211,7 +211,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
 
     if ((nFlags & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
     {
-        if (!rCxt.isSkipAttrForEmptyCells() || rSrcCell.meType != CELLTYPE_NONE)
+        if (!rCxt.isSkipEmptyCells() || rSrcCell.meType != CELLTYPE_NONE)
         {
             const ScPatternAttr* pAttr = (bSameDocPool ? rCxt.getSingleCellPattern(nColOffset) :
                     rCxt.getSingleCellPattern(nColOffset)->PutInPool( &rDocument, rCxt.getClipDoc()));
