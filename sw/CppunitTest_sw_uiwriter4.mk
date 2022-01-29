@@ -11,6 +11,10 @@
 
 $(eval $(call sw_uiwriter_test,4))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_uiwriter4,\
+    officecfg/registry \
+))
+
 $(call gb_CppunitTest_get_target,sw_uiwriter4): $(call gb_Package_get_target,extras_autocorr)
 
 # vim: set noet sw=4 ts=4:

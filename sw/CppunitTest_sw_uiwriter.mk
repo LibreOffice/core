@@ -12,4 +12,9 @@
 # empty second argument (i.e. no 1)
 $(eval $(call sw_uiwriter_test,))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_uiwriter,\
+    officecfg/registry \
+))
+
+
 # vim: set noet sw=4 ts=4:
