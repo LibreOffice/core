@@ -65,11 +65,10 @@ rtl::Reference< Legend > LegendHelper::showLegend( ChartModel& rModel
 
 void LegendHelper::hideLegend( ChartModel& rModel )
 {
-    uno::Reference< chart2::XLegend > xLegend = LegendHelper::getLegend( rModel, nullptr );
-    uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
-    if( xProp.is())
+    rtl::Reference< Legend > xLegend = LegendHelper::getLegend( rModel, nullptr );
+    if( xLegend.is())
     {
-        xProp->setPropertyValue( "Show", uno::Any(false) );
+        xLegend->setPropertyValue( "Show", uno::Any(false) );
     }
 }
 
