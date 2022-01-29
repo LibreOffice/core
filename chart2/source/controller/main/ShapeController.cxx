@@ -23,6 +23,7 @@
 #include <ViewElementListProvider.hxx>
 #include <dlg_ShapeFont.hxx>
 #include <dlg_ShapeParagraph.hxx>
+#include <ChartModel.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
@@ -78,7 +79,7 @@ FeatureState ShapeController::getState( const OUString& rCommand )
     bool bWritable = false;
     if ( m_pChartController )
     {
-        Reference< frame::XStorable > xStorable( m_pChartController->getModel(), uno::UNO_QUERY );
+        rtl::Reference< ChartModel > xStorable = m_pChartController->getChartModel();
         if ( xStorable.is() )
         {
             bWritable = !xStorable->isReadonly();

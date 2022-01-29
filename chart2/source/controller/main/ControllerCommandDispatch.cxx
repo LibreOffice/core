@@ -548,12 +548,11 @@ void ControllerCommandDispatch::updateCommandAvailability()
             }
         }
 
-        Reference< chart2::XChartDocument > xChartDoc(m_xChartController->getModel(), uno::UNO_QUERY);
-        OSL_ENSURE(xChartDoc.is(), "Invalid XChartDocument");
-        if ( xChartDoc.is() )
+        rtl::Reference< ChartModel > xChartModel = m_xChartController->getChartModel();
+        OSL_ENSURE(xChartModel.is(), "Invalid XChartDocument");
+        if ( xChartModel.is() )
         {
-            ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc);
-            css::uno::Reference< com::sun::star::chart2::XDataProviderAccess > xCreatorDoc(rModel.getParent(), uno::UNO_QUERY);
+            css::uno::Reference< com::sun::star::chart2::XDataProviderAccess > xCreatorDoc(xChartModel->getParent(), uno::UNO_QUERY);
             bCanCreateDataProvider = xCreatorDoc.is();
         }
     }

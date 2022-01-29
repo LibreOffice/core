@@ -120,7 +120,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
             bAddSelectionToList = true;
 
         Reference< uno::XInterface > xChartView;
-        Reference< lang::XMultiServiceFactory > xFact( xChartController->getModel(), uno::UNO_QUERY );
+        rtl::Reference< ChartModel > xFact = xChartController->getChartModel();
         if( xFact.is() )
             xChartView = xFact->createInstance( CHART_VIEW_SERVICE_NAME );
         ExplicitValueProvider* pExplicitValueProvider = nullptr; //ExplicitValueProvider::getExplicitValueProvider(xChartView); this creates all visible data points, that's too much

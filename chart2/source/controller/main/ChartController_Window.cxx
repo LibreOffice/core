@@ -464,7 +464,7 @@ void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const to
 {
     try
     {
-        uno::Reference<frame::XModel> xModel(getModel());
+        rtl::Reference<ChartModel> xModel(getChartModel());
         //OSL_ENSURE( xModel.is(), "ChartController::execute_Paint: have no model to paint");
         if (!xModel.is())
             return;
@@ -867,14 +867,12 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                             m_xUndoManager );
 
                         bool bChanged = false;
-                        css::uno::Reference< css::frame::XModel > xModel = getModel();
-                        ChartModel* pModel = dynamic_cast<ChartModel*>(xModel.get());
-                        assert(pModel);
+                        rtl::Reference< ChartModel > xModel = getChartModel();
                         if ( eObjectType == OBJECTTYPE_LEGEND )
-                            bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( *pModel, false , true );
+                            bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( *xModel, false , true );
 
                         bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
-                                        , getChartModel()
+                                        , xModel
                                         , awt::Rectangle(aObjectRect.Left(),aObjectRect.Top(),aObjectRect.getWidth(),aObjectRect.getHeight())
                                         , awt::Rectangle(aOldObjectRect.Left(), aOldObjectRect.Top(), 0, 0)
                                         , awt::Rectangle(aPageRect.Left(),aPageRect.Top(),aPageRect.getWidth(),aPageRect.getHeight()) );
@@ -1570,7 +1568,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     // dumping the shape
     if( !bReturn && bCtrl && nCode == KEY_F12)
     {
-        uno::Reference< qa::XDumper > xChartModel( getModel(), uno::UNO_QUERY );
+        rtl::Reference< ChartModel > xChartModel = getChartModel();
         if(xChartModel.is())
         {
             OUString aDump = xChartModel->dump();

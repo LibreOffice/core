@@ -755,8 +755,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         SchAttribTabDlg aDlg(
                 GetChartFrame(), &aItemSet, &aDialogParameter,
                 &aViewElementListProvider,
-                uno::Reference< util::XNumberFormatsSupplier >(
-                        getModel(), uno::UNO_QUERY ) );
+                getChartModel() );
 
         if(aDialogParameter.HasSymbolProperties())
         {
