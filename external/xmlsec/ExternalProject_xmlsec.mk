@@ -67,7 +67,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 					), \
 					--without-openssl) \
 			) \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			$(if $(SYSBASE),CFLAGS="-I$(SYSBASE)/usr/include" \
 			LDFLAGS="-L$(SYSBASE)/usr/lib $(if $(filter-out LINUX FREEBSD,$(OS)),",-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN)) \
 		&& $(MAKE) \

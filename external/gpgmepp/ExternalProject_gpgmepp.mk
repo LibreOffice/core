@@ -70,7 +70,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 		   $(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
-		   $(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+		   --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 		   $(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	           $(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 	  && $(MAKE) \
