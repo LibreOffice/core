@@ -30,6 +30,7 @@
 #include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <Legend.hxx>
 
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -413,20 +414,14 @@ void ChartModel::insertDefaultChart()
                     AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
 
                 // create and attach legend
-                Reference< chart2::XLegend > xLegend(
-                    m_xContext->getServiceManager()->createInstanceWithContext(
-                        "com.sun.star.chart2.Legend", m_xContext ), uno::UNO_QUERY_THROW );
-                Reference< beans::XPropertySet > xLegendProperties( xLegend, uno::UNO_QUERY );
-                if( xLegendProperties.is() )
-                {
-                    xLegendProperties->setPropertyValue( "FillStyle", uno::Any( drawing::FillStyle_NONE ));
-                    xLegendProperties->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ));
-                    xLegendProperties->setPropertyValue( "LineColor", uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ));  // gray30
-                    xLegendProperties->setPropertyValue( "FillColor", uno::Any( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
+                rtl::Reference< Legend > xLegend = new Legend();
+                xLegend->setPropertyValue( "FillStyle", uno::Any( drawing::FillStyle_NONE ));
+                xLegend->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ));
+                xLegend->setPropertyValue( "LineColor", uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ));  // gray30
+                xLegend->setPropertyValue( "FillColor", uno::Any( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
 
-                    if( bIsRTL )
-                        xLegendProperties->setPropertyValue( "AnchorPosition", uno::Any( chart2::LegendPosition_LINE_START ));
-                }
+                if( bIsRTL )
+                    xLegend->setPropertyValue( "AnchorPosition", uno::Any( chart2::LegendPosition_LINE_START ));
                 if(xDiagram.is())
                     xDiagram->setLegend( xLegend );
 
