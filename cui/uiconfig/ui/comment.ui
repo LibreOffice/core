@@ -38,7 +38,6 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use-underline">True</property>
-                <property name="yalign">0.5</property>
               </object>
               <packing>
                 <property name="expand">False</property>
