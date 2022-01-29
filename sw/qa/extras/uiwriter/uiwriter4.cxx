@@ -52,7 +52,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <comphelper/configurationhelper.hxx>
+#include <comphelper/configuration.hxx>
 #include <editeng/unolingu.hxx>
 #include <vcl/scheduler.hxx>
 #include <config_fonts.h>
@@ -62,6 +62,7 @@
 #include <unotxdoc.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 namespace
 {
@@ -1670,9 +1671,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf105625)
     uno::Reference<uno::XComponentContext> xComponentContext(
         comphelper::getProcessComponentContext());
     // Ensure correct initial setting
-    comphelper::ConfigurationHelper::writeDirectKey(
-        xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea",
-        css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create(xComponentContext));
+    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
+    batch->commit();
     // We should be able to edit at positions adjacent to fields.
     // Check if the start and the end of the 1st paragraph are not protected
     // (they are adjacent to FORMCHECKBOX)
@@ -1705,9 +1707,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf125151_protected)
     uno::Reference<uno::XComponentContext> xComponentContext(
         comphelper::getProcessComponentContext());
     // Ensure correct initial setting
-    comphelper::ConfigurationHelper::writeDirectKey(
-        xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea",
-        css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create(xComponentContext));
+    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
+    batch->commit();
     pWrtShell->Down(/*bSelect=*/false);
     // The cursor moved inside of the FieldMark textbox.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 1", false, pWrtShell->HasReadonlySel());
@@ -1724,9 +1727,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf125151_protectedB)
     uno::Reference<uno::XComponentContext> xComponentContext(
         comphelper::getProcessComponentContext());
     // Ensure correct initial setting
-    comphelper::ConfigurationHelper::writeDirectKey(
-        xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea",
-        css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create(xComponentContext));
+    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
+    batch->commit();
     // The cursor starts inside of the FieldMark textbox.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 1", false, pWrtShell->HasReadonlySel());
     // Move left to the start/definition of the textbox

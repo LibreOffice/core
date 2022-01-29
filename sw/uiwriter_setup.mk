@@ -51,6 +51,10 @@ $(eval $(call gb_CppunitTest_use_externals,sw_uiwriter$(1),\
     libxml2 \
 ))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_uiwriter$(1),\
+    officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_set_include,sw_uiwriter$(1),\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \

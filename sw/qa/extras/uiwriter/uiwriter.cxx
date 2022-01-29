@@ -79,7 +79,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <comphelper/configurationhelper.hxx>
+#include <comphelper/configuration.hxx>
 #include <vcl/scheduler.hxx>
 #include <config_features.h>
 #include <config_fonts.h>
@@ -92,6 +92,7 @@
 #include <unotxdoc.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rootfrm.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 namespace
 {
@@ -3351,17 +3352,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf90362)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     // Ensure correct initial setting
-    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create(xComponentContext));
+    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
+    batch->commit();
     // First check if the end of the second paragraph is indeed protected.
     pWrtShell->EndPara();
     pWrtShell->Down(/*bSelect=*/false);
     CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
 
     // Then enable ignoring of protected areas and make sure that this time the cursor is read-write.
-    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(true), comphelper::EConfigurationModes::Standard);
+    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(true, batch);
+    batch->commit();
     CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
     // Clean up, otherwise following tests will have that option set
-    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
+    batch->commit();
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testUndoDelAsCharTdf107512)
