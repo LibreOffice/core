@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78d0838c_0e6e5f50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-29T09:09:48Z",
+      "side": 1,
+      "message": "Andrea: odt file had to be changed since there was a comparison between string retrieved from this file and string in the function.",
+      "revId": "cca605819e6724cdad9565481d6b0bca9dee40a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
