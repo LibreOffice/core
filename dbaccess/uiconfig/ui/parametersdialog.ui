@@ -20,7 +20,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <property name="gravity">north</property>
     <child>
       <placeholder/>
     </child>
