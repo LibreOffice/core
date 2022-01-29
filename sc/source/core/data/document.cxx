@@ -2818,11 +2818,11 @@ public:
 
 }
 
-void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
-                                InsertDeleteFlags nInsFlag,
-                                ScDocument* pRefUndoDoc, ScDocument* pClipDoc, bool bResetCut,
-                                bool bAsLink, bool bIncludeFiltered, bool bSkipAttrForEmpty,
-                                const ScRangeList * pDestRanges )
+void ScDocument::CopyFromClip(
+    const ScRange& rDestRange, const ScMarkData& rMark, InsertDeleteFlags nInsFlag,
+    ScDocument* pRefUndoDoc, ScDocument* pClipDoc, bool bResetCut,
+    bool bAsLink, bool bIncludeFiltered, bool bSkipEmptyCells,
+    const ScRangeList * pDestRanges )
 {
     if (bIsClip)
         return;
@@ -2887,7 +2887,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     if (nInsFlag & InsertDeleteFlags::ATTRIB)
         nDelFlag |= InsertDeleteFlags::ATTRIB;
 
-    sc::CopyFromClipContext aCxt(*this, pRefUndoDoc, pClipDoc, nInsFlag, bAsLink, bSkipAttrForEmpty);
+    sc::CopyFromClipContext aCxt(*this, pRefUndoDoc, pClipDoc, nInsFlag, bAsLink, bSkipEmptyCells);
     std::pair<SCTAB,SCTAB> aTabRanges = getMarkedTableRange(maTabs, rMark);
     aCxt.setTabRange(aTabRanges.first, aTabRanges.second);
     aCxt.setDeleteFlag(nDelFlag);
@@ -2914,14 +2914,8 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         SCCOL nCol2 = rRange.aEnd.Col();
         SCROW nRow2 = rRange.aEnd.Row();
 
-        if (bSkipAttrForEmpty)
-        {
-            // Delete cells in the destination only if their corresponding clip cells are not empty.
-            aCxt.setDestRange(nCol1, nRow1, nCol2, nRow2);
-            DeleteBeforeCopyFromClip(aCxt, rMark, aBroadcastSpans);
-        }
-        else
-            DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag, false, &aBroadcastSpans);
+        aCxt.setDestRange(nCol1, nRow1, nCol2, nRow2);
+        DeleteBeforeCopyFromClip(aCxt, rMark, aBroadcastSpans);
 
         if (CopyOneCellFromClip(aCxt, nCol1, nRow1, nCol2, nRow2))
             continue;
