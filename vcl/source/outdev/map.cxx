@@ -475,6 +475,9 @@ basegfx::B2DPolygon OutputDevice::ImplLogicToDevicePixel(const basegfx::B2DPolyg
     sal_uInt32 nPoints = rLogicPoly.count();
     basegfx::B2DPolygon aPoly(rLogicPoly);
 
+    basegfx::B2DPoint aC1;
+    basegfx::B2DPoint aC2;
+
     if (mbMap)
     {
         for (sal_uInt32 i = 0; i < nPoints; ++i)
@@ -484,7 +487,36 @@ basegfx::B2DPolygon OutputDevice::ImplLogicToDevicePixel(const basegfx::B2DPolyg
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX )+mnOutOffX+mnOutOffOrigX,
                                   ImplLogicToPixel( rPt.getY()+maMapRes.mnMapOfsY, mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY )+mnOutOffY+mnOutOffOrigY);
+
+            const bool bC1 = aPoly.isPrevControlPointUsed(i);
+            if (bC1)
+            {
+                const basegfx::B2DPoint aB2DC1(aPoly.getPrevControlPoint(i));
+
+                aC1 = basegfx::B2DPoint(ImplLogicToPixel( aB2DC1.getX()+maMapRes.mnMapOfsX, mnDPIX,
+                                            maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX )+mnOutOffX+mnOutOffOrigX,
+                                        ImplLogicToPixel( aB2DC1.getY()+maMapRes.mnMapOfsY, mnDPIY,
+                                            maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY )+mnOutOffY+mnOutOffOrigY);
+            }
+
+            const bool bC2 = aPoly.isNextControlPointUsed(i);
+            if (bC2)
+            {
+                const basegfx::B2DPoint aB2DC2(aPoly.getNextControlPoint(i));
+
+                aC2 = basegfx::B2DPoint(ImplLogicToPixel( aB2DC2.getX()+maMapRes.mnMapOfsX, mnDPIX,
+                                            maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX )+mnOutOffX+mnOutOffOrigX,
+                                        ImplLogicToPixel( aB2DC2.getY()+maMapRes.mnMapOfsY, mnDPIY,
+                                            maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY )+mnOutOffY+mnOutOffOrigY);
+            }
+
             aPoly.setB2DPoint(i, aPt);
+
+            if (bC1)
+                aPoly.setPrevControlPoint(i, aC1);
+
+            if (bC2)
+                aPoly.setNextControlPoint(i, aC2);
         }
     }
     else
@@ -493,7 +525,30 @@ basegfx::B2DPolygon OutputDevice::ImplLogicToDevicePixel(const basegfx::B2DPolyg
         {
             const basegfx::B2DPoint& rPt = aPoly.getB2DPoint(i);
             basegfx::B2DPoint aPt(rPt.getX() + mnOutOffX, rPt.getY() + mnOutOffY);
+
+            const bool bC1 = aPoly.isPrevControlPointUsed(i);
+            if (bC1)
+            {
+                const basegfx::B2DPoint aB2DC1(aPoly.getPrevControlPoint(i));
+
+                aC1 = basegfx::B2DPoint(aB2DC1.getX() + mnOutOffX, aB2DC1.getY() + mnOutOffY);
+            }
+
+            const bool bC2 = aPoly.isNextControlPointUsed(i);
+            if (bC2)
+            {
+                const basegfx::B2DPoint aB2DC2(aPoly.getNextControlPoint(i));
+
+                aC1 = basegfx::B2DPoint(aB2DC2.getX() + mnOutOffX, aB2DC2.getY() + mnOutOffY);
+            }
+
             aPoly.setB2DPoint(i, aPt);
+
+            if (bC1)
+                aPoly.setPrevControlPoint(i, aC1);
+
+            if (bC2)
+                aPoly.setNextControlPoint(i, aC2);
         }
     }
 
