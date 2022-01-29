@@ -364,6 +364,18 @@ def remove_skip_pager_hint(current):
   if skip_pager_hint != None:
     current.remove(skip_pager_hint)
 
+def remove_gravity(current):
+  gravity = None
+  for child in current:
+    remove_gravity(child)
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "gravity":
+        gravity = child
+
+  if gravity != None:
+    current.remove(gravity)
+
 def remove_expander_label_fill(current):
   label_fill = None
   isexpander = current.get('class') == "GtkExpander"
@@ -600,6 +612,7 @@ enforce_entry_text_column_id_column_for_gtkcombobox(root)
 remove_entry_shadow_type(root)
 remove_double_buffered(root)
 remove_skip_pager_hint(root)
+remove_gravity(root)
 remove_toolbutton_focus(root)
 enforce_toolbar_can_focus(root)
 enforce_button_always_show_image(root)
