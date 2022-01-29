@@ -63,7 +63,7 @@ class SC_DLLPUBLIC CopyFromClipContext final : public ClipContextBase
 
     ScConditionalFormatList* mpCondFormatList;
     bool mbAsLink:1;
-    bool mbSkipAttrForEmptyCells:1;
+    bool mbSkipEmptyCells:1;
     bool mbCloneNotes:1;
     bool mbTableProtected:1;
 
@@ -126,7 +126,7 @@ public:
     bool isTableProtected() const;
 
     bool isAsLink() const;
-    bool isSkipAttrForEmptyCells() const;
+    bool isSkipEmptyCells() const;
     bool isCloneNotes() const;
     bool isDateCell( const ScColumn& rCol, SCROW nRow ) const;
 };

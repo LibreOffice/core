@@ -163,14 +163,14 @@ private:
 struct ScUndoPasteOptions
 {
     ScPasteFunc  nFunction;
-    bool       bSkipEmpty;
+    bool       bSkipEmptyCells;
     bool       bTranspose;
     bool       bAsLink;
     InsCellCmd eMoveMode;
 
     ScUndoPasteOptions() :
         nFunction( ScPasteFunc::NONE ),
-        bSkipEmpty( false ),
+        bSkipEmptyCells( false ),
         bTranspose( false ),
         bAsLink( false ),
         eMoveMode( INS_NONE )
