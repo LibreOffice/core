@@ -22951,7 +22951,6 @@ public:
 
     virtual std::unique_ptr<weld::Window> create_screenshot_window() override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pTopLevel = nullptr;
 
         for (GSList* l = m_pObjectList; l; l = g_slist_next(l))
@@ -22979,16 +22978,18 @@ public:
             ::set_help_id(GTK_WIDGET(pDialog), ::get_help_id(pTopLevel));
 
             GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG(pDialog));
+#if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_container_add(GTK_CONTAINER(pContentArea), pTopLevel);
             gtk_widget_show_all(pTopLevel);
+#else
+            gtk_box_append(GTK_BOX(pContentArea), pTopLevel);
+            gtk_widget_show(pTopLevel);
+#endif
         }
 
         if (m_pParentWidget)
             gtk_window_set_transient_for(pDialog, GTK_WINDOW(widget_get_toplevel(m_pParentWidget)));
         return std::make_unique<GtkInstanceDialog>(pDialog, this, true);
-#else
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::Widget> weld_widget(const OString &id) override
