@@ -484,5 +484,4 @@
       </object>
     </child>
   </object>
-  <object class="GtkAction" id="action1"/>
 </interface>
