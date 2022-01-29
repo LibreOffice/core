@@ -368,6 +368,18 @@ def remove_double_buffered(current):
   if double_buffered != None:
     current.remove(double_buffered)
 
+def remove_label_yalign(current):
+  label_yalign = None
+  for child in current:
+    remove_label_yalign(child)
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "label_yalign" or attributes.get("name") == "label-yalign":
+        label_yalign = child
+
+  if label_yalign != None:
+    current.remove(label_yalign)
+
 def remove_skip_pager_hint(current):
   skip_pager_hint = None
   for child in current:
@@ -628,6 +640,7 @@ enforce_active_in_group_consistency(root)
 enforce_entry_text_column_id_column_for_gtkcombobox(root)
 remove_entry_shadow_type(root)
 remove_double_buffered(root)
+remove_label_yalign(root)
 remove_skip_pager_hint(root)
 remove_gravity(root)
 remove_toolbutton_focus(root)
