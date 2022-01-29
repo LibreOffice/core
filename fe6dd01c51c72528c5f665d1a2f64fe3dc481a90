@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08fd8465_c6b00b09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-29T08:53:29Z",
+      "side": 1,
+      "message": "If I understand correctly, this changes the ODF, namely 19.654 table:ignore-empty-rows [1]:\n\n\u003e The table:identify-categories attribute has the data type boolean\n\nThe change therefore:\n\n1. Is incompatible with ODF;\n2. Writes data that can\u0027t be used by older versions, and by other compliant ODF implementations;\n3. Breaks opening legacy documents in newer versions.\n\nIt also lacks unit tests that would read both old and new documents to make sure they are imported correctly, and that would write the data to make sure they are written correctly (depending on the ODF format version on options).\n\nI suggest you instead to keep the table:ignore-empty-rows as is, and add another optional loext:count-empty-rows attribute (boolean, subject to following ODF standardization), that would only be considered when table:ignore-empty-rows is false, and would be false by default. That way, you would keep compatibility both with standard, and with other implementations.\n\nWhat do you think?\n\n[1] http://docs.oasis-open.org/office/OpenDocument/v1.3/OpenDocument-v1.3-part3-schema.html#attribute-table_identify-categories",
+      "revId": "fe6dd01c51c72528c5f665d1a2f64fe3dc481a90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b418205_71d1615e",
+        "filename": "sc/source/filter/xml/xmldpimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-29T08:53:29Z",
+      "side": 1,
+      "message": "Here it doesn\u0027t consider older data",
+      "revId": "fe6dd01c51c72528c5f665d1a2f64fe3dc481a90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
