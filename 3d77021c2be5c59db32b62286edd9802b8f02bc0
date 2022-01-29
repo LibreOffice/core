@@ -87,6 +87,24 @@
       "parentUuid": "27b55234_aa9f0a77",
       "revId": "3d77021c2be5c59db32b62286edd9802b8f02bc0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b77f0cf8_7747f4d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-01-29T04:06:24Z",
+      "side": 1,
+      "message": "I confirm https://gerrit.libreoffice.org/c/core/+/129115/1 fixes the x11 dialog parent window observation. \n\nTo the side note: The qt5/kf5 patch seems to work as expected when the menuBarOffset is not added in the nY +\u003d aParentGeometry.nY/* + menuBarOffset()*/; in QtFrame::SetPosSize. Had a note on that line when I was trying to figure this stuff out.",
+      "parentUuid": "947ac0b6_e0b21486",
+      "revId": "3d77021c2be5c59db32b62286edd9802b8f02bc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
