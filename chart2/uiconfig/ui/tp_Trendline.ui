@@ -449,7 +449,6 @@
                 <property name="can-focus">True</property>
                 <property name="activates-default">True</property>
                 <property name="truncate-multiline">True</property>
-                <property name="caps-lock-warning">False</property>
                 <property name="adjustment">adjustmentForwardBackward</property>
                 <property name="digits">2</property>
               </object>
@@ -577,7 +576,6 @@
                 <property name="activates-default">True</property>
                 <property name="text">0</property>
                 <property name="truncate-multiline">True</property>
-                <property name="caps-lock-warning">False</property>
                 <property name="adjustment">adjustmentForwardBackward2</property>
                 <property name="digits">2</property>
                 <accessibility>

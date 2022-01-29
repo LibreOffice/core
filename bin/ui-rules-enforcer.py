@@ -242,6 +242,22 @@ def remove_spin_button_input_purpose(current):
     if input_purpose != None:
       current.remove(input_purpose)
 
+def remove_spin_button_caps_lock_warning(current):
+  caps_lock_warning = None
+  isspinbutton = current.get('class') == "GtkSpinButton"
+  for child in current:
+    remove_spin_button_caps_lock_warning(child)
+    if not isspinbutton:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "caps_lock_warning" or attributes.get("name") == "caps-lock-warning":
+        caps_lock_warning = child
+
+  if isspinbutton:
+    if caps_lock_warning != None:
+      current.remove(caps_lock_warning)
+
 def remove_spin_button_max_length(current):
   max_length = None
   isspinbutton = current.get('class') == "GtkSpinButton"
@@ -600,6 +616,7 @@ remove_check_button_align(root)
 remove_check_button_relief(root)
 remove_check_button_image_position(root)
 remove_spin_button_input_purpose(root)
+remove_spin_button_caps_lock_warning(root)
 remove_spin_button_max_length(root)
 remove_track_visited_links(root)
 remove_label_pad(root)
