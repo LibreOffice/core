@@ -752,15 +752,15 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                 locale = aLocale;
                 break;
           case NUMBER_LOWER_ZH:
-                natNum = NativeNumberMode::NATNUM7;
+                natNum = NativeNumberMode::NATNUM12;
                 locale.Language = "zh";
                 break;
           case NUMBER_UPPER_ZH:
-                natNum = NativeNumberMode::NATNUM8;
+                natNum = NativeNumberMode::NATNUM5;
                 locale.Language = "zh";
                 break;
           case NUMBER_UPPER_ZH_TW:
-                natNum = NativeNumberMode::NATNUM8;
+                natNum = NativeNumberMode::NATNUM5;
                 locale.Language = "zh";
                 locale.Country = "TW";
                 break;
@@ -1054,7 +1054,9 @@ const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::NATIVE_NUMBERING,        "Native Numbering", LANG_CJK|LANG_CTL},
         {style::NumberingType::FULLWIDTH_ARABIC,        nullptr, LANG_CJK},
         {style::NumberingType::CIRCLE_NUMBER,           nullptr, LANG_CJK},
-        {style::NumberingType::NUMBER_LOWER_ZH,         nullptr, LANG_CJK},
+        // The cSymbol is defined here for compatibility with files created by old releases.
+        // Otherwise if nullptr, these 3 digits may change as NATNUM12 depends on 3rd-party lib.
+        {style::NumberingType::NUMBER_LOWER_ZH,         "一, 二, 三, ...", LANG_CJK},
         {style::NumberingType::NUMBER_UPPER_ZH,         nullptr, LANG_CJK},
         {style::NumberingType::NUMBER_UPPER_ZH_TW,      nullptr, LANG_CJK},
         {style::NumberingType::TIAN_GAN_ZH,             nullptr, LANG_CJK},
