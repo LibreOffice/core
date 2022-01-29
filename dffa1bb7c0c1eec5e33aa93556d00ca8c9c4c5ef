@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68c17bbd_9e3a68a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-01-29T16:09:56Z",
+      "side": 1,
+      "message": "Xisco: could you help to rerun the Jenkins build? Windows build stuck again.",
+      "revId": "dffa1bb7c0c1eec5e33aa93556d00ca8c9c4c5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
