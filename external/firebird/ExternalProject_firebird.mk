@@ -70,7 +70,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 		&& MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--without-editline \
 			--with-wire-compress=no \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(DISABLE_DYNLOADING), \
 				--enable-static --disable-shared \
 			, \

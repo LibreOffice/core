@@ -45,7 +45,7 @@ $(call gb_ExternalProject_get_state_target,libebook,build) :
 			LANGTAG_LIBS="$(LIBLANGTAG_LIBS)" \
 			XML_CFLAGS="$(LIBXML_CFLAGS)" \
 			XML_LIBS="$(LIBXML_LIBS)" \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(gb_CONFIGURE_PLATFORMS) \
 		&& $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,libebook,EXTERNAL)

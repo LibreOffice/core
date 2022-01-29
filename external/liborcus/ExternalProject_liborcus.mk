@@ -114,7 +114,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 				boost_cv_lib_system=yes \
 				boost_cv_lib_filesystem=yes \
 			) \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(gb_CONFIGURE_PLATFORMS) \
 		&& $(if $(verbose),V=1) \
 		   $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\

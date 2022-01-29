@@ -29,7 +29,7 @@ $(call gb_ExternalProject_get_state_target,libffi,build):
 		export LIB="$(ILIB)" && \
 		MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--enable-option-checking=fatal \
-			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
+			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter LINUX,$(OS)), \
 			    --disable-shared \
 			    CC="$(CC) -fvisibility=hidden" \
