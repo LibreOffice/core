@@ -184,8 +184,7 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
             bool bChanged = false;
             if ( eObjectType == OBJECTTYPE_LEGEND )
             {
-                ChartModel& rModel = dynamic_cast<ChartModel&>(*getModel());
-                bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning(rModel, false , true);
+                bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning(*getChartModel(), false , true);
             }
 
             bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID(), getChartModel()

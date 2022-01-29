@@ -197,8 +197,7 @@ void ChartController::executeDispatch_DeleteLegend()
             ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_LEGEND )),
         m_xUndoManager );
 
-    ChartModel& rModel = dynamic_cast<ChartModel&>(*getModel());
-    LegendHelper::hideLegend(rModel);
+    LegendHelper::hideLegend(*getChartModel());
     aUndoGuard.commit();
 }
 
@@ -209,8 +208,7 @@ void ChartController::executeDispatch_InsertLegend()
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_LEGEND )),
         m_xUndoManager );
 
-    ChartModel& rModel = dynamic_cast<ChartModel&>(*getModel());
-    LegendHelper::showLegend(rModel, m_xCC);
+    LegendHelper::showLegend(*getChartModel(), m_xCC);
     aUndoGuard.commit();
 }
 
@@ -272,7 +270,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
             getChartModel(),
             m_pDrawModelWrapper->GetItemPool(),
             m_pDrawModelWrapper->getSdrModel(),
-            uno::Reference< lang::XMultiServiceFactory >( getModel(), uno::UNO_QUERY ));
+            getChartModel() );
         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
         aItemConverter.FillItemSet( aItemSet );
 
@@ -280,8 +278,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         SolarMutexGuard aGuard;
 
         //get number formatter
-        uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( getModel(), uno::UNO_QUERY );
-        NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
+        NumberFormatterWrapper aNumberFormatterWrapper( getChartModel() );
         SvNumberFormatter* pNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
 
         DataLabelsDialog aDlg(GetChartFrame(), aItemSet, pNumberFormatter);
@@ -378,7 +375,7 @@ void ChartController::executeDispatch_InsertTrendline()
     wrapper::RegressionCurveItemConverter aItemConverter(
         xProperties, xRegressionCurveContainer, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
         m_pDrawModelWrapper->getSdrModel(),
-        uno::Reference< lang::XMultiServiceFactory >( getModel(), uno::UNO_QUERY ));
+        getChartModel() );
 
     // open dialog
     SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
@@ -393,8 +390,7 @@ void ChartController::executeDispatch_InsertTrendline()
     SchAttribTabDlg aDialog(
         GetChartFrame(), &aItemSet, &aDialogParameter,
         &aViewElementListProvider,
-        uno::Reference< util::XNumberFormatsSupplier >(
-                getModel(), uno::UNO_QUERY ) );
+        getChartModel() );
 
     // note: when a user pressed "OK" but didn't change any settings in the
     // dialog, the SfxTabDialog returns "Cancel"
@@ -434,9 +430,9 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
         // get an appropriate item converter
         wrapper::ErrorBarItemConverter aItemConverter(
-            getModel(), xErrorBarProp, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
+            getChartModel(), xErrorBarProp, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
             m_pDrawModelWrapper->getSdrModel(),
-            uno::Reference< lang::XMultiServiceFactory >( getModel(), uno::UNO_QUERY ));
+            getChartModel() );
 
         // open dialog
         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
@@ -451,8 +447,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         SchAttribTabDlg aDlg(
                 GetChartFrame(), &aItemSet, &aDialogParameter,
                 &aViewElementListProvider,
-                uno::Reference< util::XNumberFormatsSupplier >(
-                        getModel(), uno::UNO_QUERY ) );
+                getChartModel() );
         aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
             InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getChartModel(),
                                                                              m_xChartView, m_aSelection.getSelectedCID()));

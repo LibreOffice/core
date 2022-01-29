@@ -365,13 +365,13 @@ void SAL_CALL ChartController::attachFrame(
 
     mpSelectionChangeHandler->Connect();
 
-    uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getModel());
+    uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getChartModel());
     if (xSidebar.is())
     {
         auto pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
         assert(pSidebar);
         sfx2::sidebar::SidebarController::registerSidebarForFrame(pSidebar, this);
-        pSidebar->updateModel(getModel());
+        pSidebar->updateModel(getChartModel());
         css::lang::EventObject aEvent;
         mpSelectionChangeHandler->selectionChanged(aEvent);
     }
@@ -588,7 +588,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     // select chart area per default:
     // select( uno::Any( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
 
-    uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
+    rtl::Reference< ChartModel > xFact = getChartModel();
     if( xFact.is())
     {
         m_xChartView = xFact->createInstance( CHART_VIEW_SERVICE_NAME );
@@ -606,8 +606,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
             pChartWindow->Invalidate();
     }
 
-    uno::Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
-    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_SET_THROW );
+    m_xUndoManager.set( getChartModel()->getUndoManager(), uno::UNO_SET_THROW );
 
     return true;
 }
@@ -704,7 +703,7 @@ void ChartController::impl_createDrawViewController()
         if( m_pDrawModelWrapper )
         {
             m_pDrawViewWrapper.reset( new DrawViewWrapper(m_pDrawModelWrapper->getSdrModel(),GetChartWindow()->GetOutDev()) );
-            m_pDrawViewWrapper->attachParentReferenceDevice( getModel() );
+            m_pDrawViewWrapper->attachParentReferenceDevice( getChartModel() );
         }
     }
 }
@@ -731,7 +730,7 @@ void SAL_CALL ChartController::dispose()
 
     if (getModel().is())
     {
-        uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getModel());
+        uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getChartModel());
         if (sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get()))
         {
             sfx2::sidebar::SidebarController::unregisterSidebarForFrame(pSidebar, this);
@@ -757,7 +756,7 @@ void SAL_CALL ChartController::dispose()
         if( m_aModel.is())
         {
             uno::Reference< view::XSelectionChangeListener > xSelectionChangeListener;
-            uno::Reference< chart2::data::XDataReceiver > xDataReceiver( getModel(), uno::UNO_QUERY );
+            rtl::Reference< ChartModel > xDataReceiver = getChartModel();
             if( xDataReceiver.is() )
                 xSelectionChangeListener.set( xDataReceiver->getRangeHighlighter(), uno::UNO_QUERY );
             if( xSelectionChangeListener.is() )
@@ -1125,7 +1124,7 @@ void SAL_CALL ChartController::dispatch(
         this->executeDispatch_SourceData();
     else if(aCommand == "Update" ) //Update Chart
     {
-        ChartViewHelper::setViewToDirtyState( getModel() );
+        ChartViewHelper::setViewToDirtyState( getChartModel() );
         SolarMutexGuard aGuard;
         auto pChartWindow(GetChartWindow());
         if( pChartWindow )
@@ -1463,7 +1462,7 @@ void ChartController::NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> pUndoA
 
     try
     {
-        const Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
+        rtl::Reference< ChartModel > xSuppUndo = getChartModel();
         const Reference< document::XUndoManager > xUndoManager( xSuppUndo->getUndoManager(), uno::UNO_SET_THROW );
         const Reference< document::XUndoAction > xAction( new impl::ShapeUndoElement( std::move(pUndoAction) ) );
         xUndoManager->addUndoAction( xAction );

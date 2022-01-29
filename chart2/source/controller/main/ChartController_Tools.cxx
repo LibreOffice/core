@@ -345,9 +345,9 @@ void ChartController::impl_PasteGraphic(
     DBG_TESTSOLARMUTEX();
     // note: the XPropertySet of the model is the old API. Also the property
     // "AdditionalShapes" that is used there.
-    uno::Reference< beans::XPropertySet > xModelProp( getModel(), uno::UNO_QUERY );
+    rtl::Reference< ChartModel > xModel = getChartModel();
     DrawModelWrapper * pDrawModelWrapper( GetDrawModelWrapper());
-    if( ! (xGraphic.is() && xModelProp.is()))
+    if( ! (xGraphic.is() && xModel.is()))
         return;
     rtl::Reference<SvxGraphicObject> xGraphicShape = new SvxGraphicObject(nullptr);
     xGraphicShape->setShapeKind(SdrObjKind::Graphic);
@@ -357,11 +357,7 @@ void ChartController::impl_PasteGraphic(
     {
         xPage->add( xGraphicShape );
         //need to change the model state manually
-        {
-            uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY );
-            if( xModifiable.is() )
-                xModifiable->setModified( true );
-        }
+        xModel->setModified( true );
         //select new shape
         m_aSelection.setSelection( xGraphicShape );
         m_aSelection.applySelection( m_pDrawViewWrapper.get() );
@@ -422,7 +418,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
         }
     }
 
-    Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY );
+    rtl::Reference< ChartModel > xModifiable = getChartModel();
     if ( xModifiable.is() )
     {
         xModifiable->setModified( true );
@@ -593,7 +589,7 @@ bool ChartController::executeDispatch_Delete()
             return false;
 
         //remove chart object
-        uno::Reference< chart2::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
+        rtl::Reference< ChartModel > xChartDoc = getChartModel();
         if( !xChartDoc.is() )
             return false;
 
@@ -821,11 +817,10 @@ bool ChartController::executeDispatch_Delete()
 
 void ChartController::executeDispatch_ToggleLegend()
 {
-    Reference< frame::XModel > xModel( getModel() );
+    rtl::Reference< ChartModel > xModel = getChartModel();
     UndoGuard aUndoGuard(
         SchResId( STR_ACTION_TOGGLE_LEGEND ), m_xUndoManager );
-    ChartModel& rModel = dynamic_cast<ChartModel&>(*xModel);
-    rtl::Reference< Legend > xLegendProp = LegendHelper::getLegend(rModel);
+    rtl::Reference< Legend > xLegendProp = LegendHelper::getLegend(*xModel);
     bool bChanged = false;
     if( xLegendProp.is())
     {
@@ -845,7 +840,7 @@ void ChartController::executeDispatch_ToggleLegend()
     }
     else
     {
-        xLegendProp = LegendHelper::getLegend(rModel, m_xCC, true);
+        xLegendProp = LegendHelper::getLegend(*xModel, m_xCC, true);
         if( xLegendProp.is())
             bChanged = true;
     }
@@ -1101,8 +1096,7 @@ void ChartController::impl_switchDiagramPositioningToExcludingPositioning()
         ActionDescriptionProvider::ActionType::PosSize,
         ObjectNameProvider::getName( OBJECTTYPE_DIAGRAM)),
         m_xUndoManager );
-    ChartModel& rModel = dynamic_cast<ChartModel&>(*m_aModel->getModel());
-    if (DiagramHelper::switchDiagramPositioningToExcludingPositioning(rModel, true, true))
+    if (DiagramHelper::switchDiagramPositioningToExcludingPositioning(*getChartModel(), true, true))
         aUndoGuard.commit();
 }
 
