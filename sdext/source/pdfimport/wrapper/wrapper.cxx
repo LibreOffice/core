@@ -492,7 +492,15 @@ void LineParser::parseFontFamilyName( FontAttributes& rResult )
         {
             rResult.familyName = rResult.familyName.replaceAll(fontAttributesSuffix, "");
             SAL_INFO("sdext.pdfimport", rResult.familyName);
-            if (fontAttributesSuffix == u"Bold")
+            if (fontAttributesSuffix == u"Heavy" || fontAttributesSuffix == u"Black")
+            {
+                rResult.fontWeight = u"900";
+            }
+            else if (fontAttributesSuffix == u"ExtraBold" || fontAttributesSuffix == u"UltraBold")
+            {
+                rResult.fontWeight = u"800";
+            }
+            else if (fontAttributesSuffix == u"Bold")
             {
                 rResult.fontWeight = u"bold";
             }
@@ -500,9 +508,25 @@ void LineParser::parseFontFamilyName( FontAttributes& rResult )
             {
                 rResult.fontWeight = u"600";
             }
+            else if (fontAttributesSuffix == u"Medium")
+            {
+                rResult.fontWeight = u"500";
+            }
+            else if (fontAttributesSuffix == u"Normal" || fontAttributesSuffix == u"Regular" || fontAttributesSuffix == u"Book")
+            {
+                rResult.fontWeight = u"400";
+            }
             else if (fontAttributesSuffix == u"Light")
             {
                 rResult.fontWeight = u"300";
+            }
+            else if (fontAttributesSuffix == u"ExtraLight" || fontAttributesSuffix == u"UltraLight")
+            {
+                rResult.fontWeight = u"200";
+            }
+            else if (fontAttributesSuffix == u"Thin")
+            {
+                rResult.fontWeight = u"100";
             }
 
             if ( (fontAttributesSuffix == "Italic") or (fontAttributesSuffix == "Oblique") )
