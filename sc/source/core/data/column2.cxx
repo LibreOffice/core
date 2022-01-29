@@ -1229,10 +1229,13 @@ public:
 
 }
 
-void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
+void ScColumn::RemoveEditAttribs( sc::ColumnBlockPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow )
 {
     RemoveEditAttribsHandler aFunc(maCells, &GetDoc());
-    sc::ProcessEditText(maCells.begin(), maCells, nStartRow, nEndRow, aFunc);
+
+    rBlockPos.miCellPos = sc::ProcessEditText(
+        rBlockPos.miCellPos, maCells, nStartRow, nEndRow, aFunc);
+
     aFunc.commitStrings();
 }
 

@@ -1177,7 +1177,7 @@ void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
     if (pOwnClip)
     {
         pViewSh->PasteFromClip( nFlags, pOwnClip->GetDocument(),
-                                aPasteOptions.nFunction, aPasteOptions.bSkipEmpty, aPasteOptions.bTranspose,
+                                aPasteOptions.nFunction, aPasteOptions.bSkipEmptyCells, aPasteOptions.bTranspose,
                                 aPasteOptions.bAsLink, aPasteOptions.eMoveMode, InsertDeleteFlags::NONE,
                                 true );     // allow warning dialog
     }

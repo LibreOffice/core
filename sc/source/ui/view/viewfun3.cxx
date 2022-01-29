@@ -869,7 +869,7 @@ bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument
 }
 
 bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
-                                ScPasteFunc nFunction, bool bSkipEmpty,
+                                ScPasteFunc nFunction, bool bSkipEmptyCells,
                                 bool bTranspose, bool bAsLink,
                                 InsCellCmd eMoveMode, InsertDeleteFlags nUndoExtraFlags,
                                 bool bAllowDialogs )
@@ -900,7 +900,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     if (rClipParam.isMultiRange())
     {
         // Source data is multi-range.
-        return PasteMultiRangesFromClip(nFlags, pClipDoc, nFunction, bSkipEmpty, false, bTranspose,
+        return PasteMultiRangesFromClip(nFlags, pClipDoc, nFunction, bSkipEmptyCells, false, bTranspose,
                                         bAsLink, bAllowDialogs, eMoveMode, nUndoFlags);
     }
 
@@ -909,7 +909,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     {
         // Source data is single-range but destination is multi-range.
         return PasteFromClipToMultiRanges(
-            nFlags, pClipDoc, nFunction, bSkipEmpty, bTranspose, bAsLink, bAllowDialogs,
+            nFlags, pClipDoc, nFunction, bSkipEmptyCells, bTranspose, bAsLink, bAllowDialogs,
             eMoveMode, nUndoFlags);
     }
 
@@ -1281,7 +1281,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     ScDocumentUniquePtr pMixDoc;
     if (nFunction != ScPasteFunc::NONE)
     {
-        bSkipEmpty = false;
+        bSkipEmptyCells = false;
         if ( nFlags & InsertDeleteFlags::CONTENTS )
         {
             pMixDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
@@ -1306,7 +1306,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         //  copy normally (original range)
         rDoc.CopyFromClip( aUserRange, aFilteredMark, nNoObjFlags,
                 pRefUndoDoc.get(), pClipDoc, true, false, bIncludeFiltered,
-                bSkipEmpty, (bMarkIsFiltered ? &aRangeList : nullptr) );
+                bSkipEmptyCells, (bMarkIsFiltered ? &aRangeList : nullptr) );
 
         // adapt refs manually in case of transpose
         if ( bTranspose && bCutMode && (nFlags & InsertDeleteFlags::CONTENTS) )
@@ -1316,7 +1316,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     {
         //  copy with bAsLink=TRUE
         rDoc.CopyFromClip( aUserRange, aFilteredMark, nNoObjFlags, pRefUndoDoc.get(), pClipDoc,
-                                true, true, bIncludeFiltered, bSkipEmpty );
+                                true, true, bIncludeFiltered, bSkipEmptyCells );
     }
     else
     {
@@ -1333,7 +1333,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     if ( pMixDoc )              // calculate with original data?
     {
-        rDoc.MixDocument( aUserRange, nFunction, bSkipEmpty, *pMixDoc );
+        rDoc.MixDocument( aUserRange, nFunction, bSkipEmptyCells, *pMixDoc );
     }
     pMixDoc.reset();
 
@@ -1405,7 +1405,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
         ScUndoPasteOptions aOptions;            // store options for repeat
         aOptions.nFunction  = nFunction;
-        aOptions.bSkipEmpty = bSkipEmpty;
+        aOptions.bSkipEmptyCells = bSkipEmptyCells;
         aOptions.bTranspose = bTranspose;
         aOptions.bAsLink    = bAsLink;
         aOptions.eMoveMode  = eMoveMode;
@@ -1464,7 +1464,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 }
 
 bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* pClipDoc,
-                                          ScPasteFunc nFunction, bool bSkipEmpty,
+                                          ScPasteFunc nFunction, bool bSkipEmptyCells,
                                           bool bIncludeFiltered, bool bTranspose, bool bAsLink,
                                           bool bAllowDialogs, InsCellCmd eMoveMode,
                                           InsertDeleteFlags nUndoFlags)
@@ -1554,7 +1554,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
     }
 
     ScDocumentUniquePtr pMixDoc;
-    if ( bSkipEmpty || nFunction != ScPasteFunc::NONE)
+    if ( bSkipEmptyCells || nFunction != ScPasteFunc::NONE)
     {
         if ( nFlags & InsertDeleteFlags::CONTENTS )
         {
@@ -1578,10 +1578,10 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
     if (bAsLink && bTranspose)
         nCopyFlags |= InsertDeleteFlags::FORMULA;
     rDoc.CopyMultiRangeFromClip(rCurPos, aMark, nCopyFlags, pClipDoc, true, bAsLink && !bTranspose,
-                                bIncludeFiltered, bSkipEmpty);
+                                bIncludeFiltered, bSkipEmptyCells);
 
     if (pMixDoc)
-        rDoc.MixDocument(aMarkedRange, nFunction, bSkipEmpty, *pMixDoc);
+        rDoc.MixDocument(aMarkedRange, nFunction, bSkipEmptyCells, *pMixDoc);
 
     AdjustBlockHeight();            // update row heights before pasting objects
 
@@ -1611,7 +1611,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
 
         ScUndoPasteOptions aOptions;            // store options for repeat
         aOptions.nFunction  = nFunction;
-        aOptions.bSkipEmpty = bSkipEmpty;
+        aOptions.bSkipEmptyCells = bSkipEmptyCells;
         aOptions.bTranspose = bTranspose;
         aOptions.bAsLink    = bAsLink;
         aOptions.eMoveMode  = eMoveMode;
@@ -1634,7 +1634,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
 
 bool ScViewFunc::PasteFromClipToMultiRanges(
     InsertDeleteFlags nFlags, ScDocument* pClipDoc, ScPasteFunc nFunction,
-    bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
+    bool bSkipEmptyCells, bool bTranspose, bool bAsLink, bool bAllowDialogs,
     InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags )
 {
     if (bTranspose)
@@ -1714,7 +1714,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     }
 
     ScDocumentUniquePtr pMixDoc;
-    if (bSkipEmpty || nFunction != ScPasteFunc::NONE)
+    if (bSkipEmptyCells || nFunction != ScPasteFunc::NONE)
     {
         if (nFlags & InsertDeleteFlags::CONTENTS)
         {
@@ -1738,13 +1738,13 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     {
         rDoc.CopyFromClip(
             aRanges[i], aMark, (nFlags & ~InsertDeleteFlags::OBJECTS), nullptr, pClipDoc,
-            false, false, true, bSkipEmpty);
+            false, false, true, bSkipEmptyCells);
     }
 
     if (pMixDoc)
     {
         for (size_t i = 0, n = aRanges.size(); i < n; ++i)
-            rDoc.MixDocument(aRanges[i], nFunction, bSkipEmpty, *pMixDoc);
+            rDoc.MixDocument(aRanges[i], nFunction, bSkipEmptyCells, *pMixDoc);
     }
 
     AdjustBlockHeight();            // update row heights before pasting objects
@@ -1756,7 +1756,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         {
             rDoc.CopyFromClip(
                 aRanges[i], aMark, InsertDeleteFlags::OBJECTS, nullptr, pClipDoc,
-                false, false, true, bSkipEmpty);
+                false, false, true, bSkipEmptyCells);
         }
     }
 
@@ -1777,7 +1777,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
         ScUndoPasteOptions aOptions;            // store options for repeat
         aOptions.nFunction  = nFunction;
-        aOptions.bSkipEmpty = bSkipEmpty;
+        aOptions.bSkipEmptyCells = bSkipEmptyCells;
         aOptions.bTranspose = bTranspose;
         aOptions.bAsLink    = bAsLink;
         aOptions.eMoveMode  = eMoveMode;

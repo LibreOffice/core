@@ -100,6 +100,50 @@ void ScColumn::DeleteBeforeCopyFromClip(
     if (!rDocument.ValidRow(aRange.mnRow1) || !rDocument.ValidRow(aRange.mnRow2))
         return;
 
+    sc::ColumnBlockPosition* pBlockPos = rCxt.getBlockPosition(nTab, nCol);
+    if (!pBlockPos)
+        return;
+
+    InsertDeleteFlags nDelFlag = rCxt.getDeleteFlag();
+
+    if (!rCxt.isSkipEmptyCells())
+    {
+        // Delete the whole destination range.
+
+        if (nDelFlag & InsertDeleteFlags::CONTENTS)
+        {
+            sc::SingleColumnSpanSet aDeletedRows(GetDoc().GetSheetLimits());
+            DeleteCells(*pBlockPos, aRange.mnRow1, aRange.mnRow2, nDelFlag, aDeletedRows);
+            rBroadcastSpans.set(GetDoc(), nTab, nCol, aDeletedRows, true);
+        }
+
+        if (nDelFlag & InsertDeleteFlags::NOTE)
+            DeleteCellNotes(*pBlockPos, aRange.mnRow1, aRange.mnRow2, false);
+
+        if (nDelFlag & InsertDeleteFlags::EDITATTR)
+            RemoveEditAttribs(*pBlockPos, aRange.mnRow1, aRange.mnRow2);
+
+        if (nDelFlag & InsertDeleteFlags::ATTRIB)
+        {
+            pAttrArray->DeleteArea(aRange.mnRow1, aRange.mnRow2);
+
+            if (rCxt.isTableProtected())
+            {
+                ScPatternAttr aPattern(rDocument.GetPool());
+                aPattern.GetItemSet().Put(ScProtectionAttr(false));
+                ApplyPatternArea(aRange.mnRow1, aRange.mnRow2, aPattern);
+            }
+
+            ScConditionalFormatList* pCondList = rCxt.getCondFormatList();
+            if (pCondList)
+                pCondList->DeleteArea(nCol, aRange.mnRow1, nCol, aRange.mnRow2);
+        }
+        else if ((nDelFlag & InsertDeleteFlags::HARDATTR) == InsertDeleteFlags::HARDATTR)
+            pAttrArray->DeleteHardAttr(aRange.mnRow1, aRange.mnRow2);
+
+        return;
+    }
+
     ScRange aClipRange = rCxt.getClipDoc()->GetClipParam().getWholeRange();
     SCROW nClipRow1 = aClipRange.aStart.Row();
     SCROW nClipRow2 = aClipRange.aEnd.Row();
@@ -149,10 +193,6 @@ void ScColumn::DeleteBeforeCopyFromClip(
         nDestOffset += nClipRowLen;
     }
 
-    InsertDeleteFlags nDelFlag = rCxt.getDeleteFlag();
-    sc::ColumnBlockPosition aBlockPos;
-    InitBlockPosition(aBlockPos);
-
     for (const auto& rDestSpan : aDestSpans)
     {
         SCROW nRow1 = rDestSpan.mnRow1;
@@ -161,15 +201,15 @@ void ScColumn::DeleteBeforeCopyFromClip(
         if (nDelFlag & InsertDeleteFlags::CONTENTS)
         {
             sc::SingleColumnSpanSet aDeletedRows(GetDoc().GetSheetLimits());
-            DeleteCells(aBlockPos, nRow1, nRow2, nDelFlag, aDeletedRows);
+            DeleteCells(*pBlockPos, nRow1, nRow2, nDelFlag, aDeletedRows);
             rBroadcastSpans.set(GetDoc(), nTab, nCol, aDeletedRows, true);
         }
 
         if (nDelFlag & InsertDeleteFlags::NOTE)
-            DeleteCellNotes(aBlockPos, nRow1, nRow2, false);
+            DeleteCellNotes(*pBlockPos, nRow1, nRow2, false);
 
         if (nDelFlag & InsertDeleteFlags::EDITATTR)
-            RemoveEditAttribs(nRow1, nRow2);
+            RemoveEditAttribs(*pBlockPos, nRow1, nRow2);
 
         // Delete attributes just now
         if (nDelFlag & InsertDeleteFlags::ATTRIB)
@@ -211,7 +251,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
 
     if ((nFlags & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
     {
-        if (!rCxt.isSkipAttrForEmptyCells() || rSrcCell.meType != CELLTYPE_NONE)
+        if (!rCxt.isSkipEmptyCells() || rSrcCell.meType != CELLTYPE_NONE)
         {
             const ScPatternAttr* pAttr = (bSameDocPool ? rCxt.getSingleCellPattern(nColOffset) :
                     rCxt.getSingleCellPattern(nColOffset)->PutInPool( &rDocument, rCxt.getClipDoc()));

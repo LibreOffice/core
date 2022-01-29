@@ -465,7 +465,7 @@ void TestCopyPaste::prepareUndoAfterPaste(ScDocumentUniquePtr& pPasteUndoDoc,
 
     ScUndoPasteOptions aOptions; // store options for repeat
     aOptions.nFunction = nFunction;
-    aOptions.bSkipEmpty = bSkipEmpty;
+    aOptions.bSkipEmptyCells = bSkipEmpty;
     aOptions.bTranspose = bTranspose;
     aOptions.bAsLink = bAsLink;
     aOptions.eMoveMode = eMoveMode;

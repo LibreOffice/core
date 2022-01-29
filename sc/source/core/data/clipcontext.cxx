@@ -36,7 +36,7 @@ ColumnBlockPosition* ClipContextBase::getBlockPosition(SCTAB nTab, SCCOL nCol)
 
 CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
     ScDocument* pRefUndoDoc, ScDocument* pClipDoc, InsertDeleteFlags nInsertFlag,
-    bool bAsLink, bool bSkipAttrForEmptyCells) :
+    bool bAsLink, bool bSkipEmptyCells) :
     ClipContextBase(rDoc),
     mnDestCol1(-1), mnDestCol2(-1),
     mnDestRow1(-1), mnDestRow2(-1),
@@ -45,7 +45,7 @@ CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
     mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc),
     mnInsertFlag(nInsertFlag), mnDeleteFlag(InsertDeleteFlags::NONE),
     mpCondFormatList(nullptr),
-    mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells),
+    mbAsLink(bAsLink), mbSkipEmptyCells(bSkipEmptyCells),
     mbCloneNotes (mnInsertFlag & (InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES)),
     mbTableProtected(false)
 {
@@ -325,9 +325,9 @@ bool CopyFromClipContext::isAsLink() const
     return mbAsLink;
 }
 
-bool CopyFromClipContext::isSkipAttrForEmptyCells() const
+bool CopyFromClipContext::isSkipEmptyCells() const
 {
-    return mbSkipAttrForEmptyCells;
+    return mbSkipEmptyCells;
 }
 
 bool CopyFromClipContext::isCloneNotes() const
