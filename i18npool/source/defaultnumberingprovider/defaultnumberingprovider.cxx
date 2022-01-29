@@ -752,15 +752,15 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                 locale = aLocale;
                 break;
           case NUMBER_LOWER_ZH:
-                natNum = NativeNumberMode::NATNUM7;
+                natNum = NativeNumberMode::NATNUM12;
                 locale.Language = "zh";
                 break;
           case NUMBER_UPPER_ZH:
-                natNum = NativeNumberMode::NATNUM8;
+                natNum = NativeNumberMode::NATNUM5;
                 locale.Language = "zh";
                 break;
           case NUMBER_UPPER_ZH_TW:
-                natNum = NativeNumberMode::NATNUM8;
+                natNum = NativeNumberMode::NATNUM5;
                 locale.Language = "zh";
                 locale.Country = "TW";
                 break;
