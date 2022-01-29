@@ -29,8 +29,8 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			 --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
 			--with-www=xml \
 			--without-xslt-config \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-			$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
+			$(gb_CONFIGURE_PLATFORMS) \
+			$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(DISABLE_DYNLOADING), \
 				--enable-static --disable-shared \

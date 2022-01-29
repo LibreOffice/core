@@ -57,7 +57,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			--disable-rtsp --disable-smb --disable-smtp --disable-telnet  \
 			--disable-tftp  \
 			$(if $(filter LINUX,$(OS)),--without-ca-bundle --without-ca-path) \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 			$(if $(ENABLE_DEBUG),--enable-debug) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \

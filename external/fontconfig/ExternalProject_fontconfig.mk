@@ -29,7 +29,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			$(if $(filter ANDROID,$(OS)),--with-arch=arm) \
 			--with-expat-includes=$(call gb_UnpackedTarball_get_dir,expat)/lib \
 			--with-expat-lib=$(gb_StaticLibrary_WORKDIR) \
-			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
+			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter EMSCRIPTEN,$(OS)), \
 			    --with-baseconfigdir=/instdir/share/fontconfig \
 			    --with-cache-dir=/instdir/share/fontconfig/cache \

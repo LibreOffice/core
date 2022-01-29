@@ -27,7 +27,8 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			INSTALL=`cygpath -m /usr/bin/install` $(if $(MSVC_USE_DEBUG_RUNTIME),LDFLAGS="-DEBUG") \
 			$(gb_RUN_CONFIGURE) ./configure \
 				$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
-				$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
+				$(gb_CONFIGURE_PLATFORMS) \
+				$(if $(CROSS_COMPILING), \
 					--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source \
 					--disable-tools --disable-extras) \
 		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) $(if $(verbose),VERBOSE=1) \
@@ -78,7 +79,8 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
 				--with-data-packaging=static --enable-static --disable-shared --disable-dyload,\
 				--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
+			$(gb_CONFIGURE_PLATFORMS) \
+			$(if $(CROSS_COMPILING), \
 				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source \
 				--disable-tools --disable-extras) \
 			AR="$(AR)" RANLIB="$(RANLIB)" \
