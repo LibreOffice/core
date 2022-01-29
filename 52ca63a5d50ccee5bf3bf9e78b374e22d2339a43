@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0443354a_2fc26514",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-29T10:01:44Z",
+      "side": 1,
+      "message": "This is similar area to something you did a couple of years ago in tdf#132788. The function is called surprisingly often, but almost never with a colour change.",
+      "revId": "52ca63a5d50ccee5bf3bf9e78b374e22d2339a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
