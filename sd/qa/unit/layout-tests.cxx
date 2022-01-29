@@ -10,29 +10,9 @@
 
 class SdLayoutTest : public SdModelTestBaseXML
 {
-public:
-    void testTdf104722();
-    void testTdf135843();
-    void testTdf136949();
-    void testTdf128212();
-    void testColumnsLayout();
-    void tdf143258_testTbRlLayout();
-    void testTdf146731();
-
-    CPPUNIT_TEST_SUITE(SdLayoutTest);
-
-    CPPUNIT_TEST(testTdf104722);
-    CPPUNIT_TEST(testTdf135843);
-    CPPUNIT_TEST(testTdf136949);
-    CPPUNIT_TEST(testTdf128212);
-    CPPUNIT_TEST(testColumnsLayout);
-    CPPUNIT_TEST(tdf143258_testTbRlLayout);
-    CPPUNIT_TEST(testTdf146731);
-
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void SdLayoutTest::testTdf104722()
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf104722)
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf104722.pptx"), PPTX);
@@ -53,7 +33,7 @@ void SdLayoutTest::testTdf104722()
     xDocShRef->DoClose();
 }
 
-void SdLayoutTest::testTdf135843()
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843)
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf135843.pptx"), PPTX);
@@ -76,7 +56,7 @@ void SdLayoutTest::testTdf135843()
     xDocShRef->DoClose();
 }
 
-void SdLayoutTest::testTdf136949()
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf136949)
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf136949.odp"), ODP);
@@ -96,7 +76,7 @@ void SdLayoutTest::testTdf136949()
     xDocShRef->DoClose();
 }
 
-void SdLayoutTest::testTdf128212()
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf128212.pptx"), PPTX);
@@ -116,7 +96,7 @@ void SdLayoutTest::testTdf128212()
     xDocShRef->DoClose();
 }
 
-void SdLayoutTest::testColumnsLayout()
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testColumnsLayout)
 {
     // This tests a 2-column text box's layout
 
@@ -217,7 +197,7 @@ void SdLayoutTest::testColumnsLayout()
     xDocShRef->DoClose();
 }
 
-void SdLayoutTest::tdf143258_testTbRlLayout()
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, tdf143258_testTbRlLayout)
 {
     // This tests a 1-column and a 2-column text boxes' layout
 
@@ -278,7 +258,7 @@ void SdLayoutTest::tdf143258_testTbRlLayout()
     xDocShRef->DoClose();
 }
 
-void SdLayoutTest::testTdf146731()
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146731)
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf146731.pptx"), PPTX);
@@ -301,8 +281,6 @@ void SdLayoutTest::testTdf146731()
 
     xDocShRef->DoClose();
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(SdLayoutTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
