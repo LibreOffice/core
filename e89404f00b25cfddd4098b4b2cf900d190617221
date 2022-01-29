@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49159c48_f2319d39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-29T08:26:17Z",
+      "side": 1,
+      "message": "Wow - this speeds up the following code tenfold:\n\n  Sub TestFormat\n    Dim i As Long, t As Long, v\n    t \u003d getSystemTicks\n    For i \u003d 1 To 100000\n      v \u003d Format(i, \"DD.MM.YYYY\")\n    Next i\n    MsgBox getSystemTicks - t\n  End Sub\n\nIt gives \u003e36s prior to this, and ~3.5s after this on my system.",
+      "revId": "e89404f00b25cfddd4098b4b2cf900d190617221",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
