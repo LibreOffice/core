@@ -41,7 +41,7 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 			$(if $(filter LINUX,$(OS)),$(if $(SYSTEM_REVENGE),, \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(gb_CONFIGURE_PLATFORMS) \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \

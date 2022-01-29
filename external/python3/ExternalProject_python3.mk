@@ -85,7 +85,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			) \
 		) \
 		$(gb_RUN_CONFIGURE) ./configure \
-		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+		$(gb_CONFIGURE_PLATFORMS) \
 		$(if $(ENABLE_VALGRIND),--with-valgrind) \
 		$(if $(ENABLE_DBGUTIL),--with-pydebug) \
 		--prefix=/python-inst \

@@ -69,7 +69,7 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 			--without-readline \
 			--without-zlib \
 			--with-ldap \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(ENABLE_OPENSSL),--with-openssl \
 				$(if $(WITH_GSSAPI),--with-gssapi)) \
 				$(if $(ENABLE_LDAP),,--with-ldap=no) \

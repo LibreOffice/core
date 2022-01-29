@@ -58,7 +58,7 @@ $(call gb_ExternalProject_get_state_target,libwps,build) :
 			$(if $(libwps_CXXFLAGS),CXXFLAGS='$(libwps_CXXFLAGS)') \
 			$(if $(libwps_CPPFLAGS),CPPFLAGS='$(libwps_CPPFLAGS)') \
 			$(if $(libwps_LDFLAGS),LDFLAGS='$(libwps_LDFLAGS)') \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\

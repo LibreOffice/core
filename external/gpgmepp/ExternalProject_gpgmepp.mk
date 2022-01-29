@@ -27,6 +27,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_
 		$(gb_WIN_GPG_cross_setup_exports) \
 		&& autoreconf \
 		&& $(gb_RUN_CONFIGURE) ./configure \
+		   $(gb_CONFIGURE_PLATFORMS) \
 		   --disable-shared \
 		   --disable-languages \
 		   --disable-gpgconf-test \
@@ -70,7 +71,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 		   $(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
-		   $(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+		   $(gb_CONFIGURE_PLATFORMS) \
 		   $(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	           $(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 	  && $(MAKE) \
