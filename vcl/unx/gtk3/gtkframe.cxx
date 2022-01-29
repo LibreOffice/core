@@ -1619,7 +1619,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
             m_pParent->addGrabLevel();
         }
 
-#if defined(GDK_WINDOWING_WAYLAND)
+#if defined(GDK_WINDOWING_WAYLAND) && !GTK_CHECK_VERSION(4,0,0)
         /*
          rhbz#1334915, gnome#779143, tdf#100158
          https://gitlab.gnome.org/GNOME/gtk/-/issues/767
