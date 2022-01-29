@@ -610,20 +610,16 @@ bool ChartController::executeDispatch_Delete()
             }
             case OBJECTTYPE_LEGEND:
             {
-                uno::Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
+                rtl::Reference< Diagram > xDiagram( xChartDoc->getFirstChartDiagram());
                 if( xDiagram.is())
                 {
-                    uno::Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );
-                    if( xLegendProp.is())
-                    {
-                        UndoGuard aUndoGuard(
-                            ActionDescriptionProvider::createDescription(
-                                ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_LEGEND )),
-                            m_xUndoManager );
-                        xLegendProp->setPropertyValue( "Show", uno::Any( false ));
-                        bReturn = true;
-                        aUndoGuard.commit();
-                    }
+                    UndoGuard aUndoGuard(
+                        ActionDescriptionProvider::createDescription(
+                            ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_LEGEND )),
+                        m_xUndoManager );
+                    xDiagram->setPropertyValue( "Show", uno::Any( false ));
+                    bReturn = true;
+                    aUndoGuard.commit();
                 }
                 break;
             }

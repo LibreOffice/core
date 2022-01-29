@@ -56,7 +56,7 @@ namespace
 void lcl_applyDefaultStyle(
     const Reference< XDataSeries > & xSeries,
     sal_Int32 nIndex,
-    const Reference< XDiagram > & xDiagram )
+    const rtl::Reference< ::chart::Diagram > & xDiagram )
 {
     // @deprecated: correct default color should be found by view without
     // setting color as hard attribute
@@ -107,18 +107,17 @@ void lcl_resetLabelPlacementIfDefault( const Reference< beans::XPropertySet >& x
     }
 }
 
-void lcl_ensureCorrectMissingValueTreatment( const Reference< chart2::XDiagram >& xDiagram, const rtl::Reference< ::chart::ChartType >& xChartType )
+void lcl_ensureCorrectMissingValueTreatment( const rtl::Reference< ::chart::Diagram >& xDiagram, const rtl::Reference< ::chart::ChartType >& xChartType )
 {
-    Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
-    if( xDiaProp.is() )
+    if( xDiagram.is() )
     {
         uno::Sequence < sal_Int32 > aAvailableMissingValueTreatment(
             ::chart::ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
 
         if( aAvailableMissingValueTreatment.hasElements() )
-            xDiaProp->setPropertyValue( "MissingValueTreatment", uno::Any( aAvailableMissingValueTreatment[0] ) );
+            xDiagram->setPropertyValue( "MissingValueTreatment", uno::Any( aAvailableMissingValueTreatment[0] ) );
         else
-            xDiaProp->setPropertyValue( "MissingValueTreatment", uno::Any() );
+            xDiagram->setPropertyValue( "MissingValueTreatment", uno::Any() );
     }
 }
 
