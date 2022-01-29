@@ -1622,17 +1622,23 @@ public:
                            const ScMarkData& rMark,  InsertDeleteFlags nInsFlag,
                            sc::ColumnSpanSet& rBroadcastSpans );
 
-    /** If pDestRanges is given it overrides rDestRange, rDestRange in this
-        case is the overall encompassing range. */
-    SC_DLLPUBLIC void   CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
-                                        InsertDeleteFlags nInsFlag,
-                                        ScDocument* pRefUndoDoc,
-                                        ScDocument* pClipDoc,
-                                        bool bResetCut = true,
-                                        bool bAsLink = false,
-                                        bool bIncludeFiltered = true,
-                                        bool bSkipAttrForEmpty = false,
-                                        const ScRangeList * pDestRanges = nullptr );
+    /**
+     * Paste data from a clipboard document into this document.
+     *
+     * @param rDestRange destination range.
+     * @param pClipDoc pointer to the clipboard document to copy data from.
+     * @param bSkipEmptyCells if this flag is set, empty cells in the source
+     *                        range in the clipboard document will not overwrite
+     *                        the target destination cells.
+     * @param pDestRanges If pDestRanges is given it overrides rDestRange, where
+     *                    rDestRange becomes the overall encompassing range.
+     */
+    SC_DLLPUBLIC void CopyFromClip(
+        const ScRange& rDestRange, const ScMarkData& rMark, InsertDeleteFlags nInsFlag,
+        ScDocument* pRefUndoDoc, ScDocument* pClipDoc,
+        bool bResetCut = true, bool bAsLink = false,
+        bool bIncludeFiltered = true, bool bSkipEmptyCells = false,
+        const ScRangeList* pDestRanges = nullptr );
 
     void                CopyMultiRangeFromClip(const ScAddress& rDestPos, const ScMarkData& rMark,
                                                InsertDeleteFlags nInsFlag, ScDocument* pClipDoc,

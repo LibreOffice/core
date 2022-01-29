@@ -281,7 +281,7 @@ public:
     void CopyFromClip(
         sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, tools::Long nDy, ScColumn& rColumn );
 
-    void        RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow );
+    void RemoveEditAttribs( sc::ColumnBlockPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow );
 
                 //  Selection (?) of this document
     void MixMarked(

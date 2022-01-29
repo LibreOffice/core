@@ -63,7 +63,7 @@ class SC_DLLPUBLIC CopyFromClipContext final : public ClipContextBase
 
     ScConditionalFormatList* mpCondFormatList;
     bool mbAsLink:1;
-    bool mbSkipAttrForEmptyCells:1;
+    bool mbSkipEmptyCells:1;
     bool mbCloneNotes:1;
     bool mbTableProtected:1;
 
@@ -126,7 +126,14 @@ public:
     bool isTableProtected() const;
 
     bool isAsLink() const;
-    bool isSkipAttrForEmptyCells() const;
+
+    /**
+     * Get the flag that indicates whether the "skip empty cells" paste option
+     * is selected. When this option is selected, empty cells in the clipboard
+     * document will not overwrite the corresponding non-empty cells in the
+     * destination range.
+     */
+    bool isSkipEmptyCells() const;
     bool isCloneNotes() const;
     bool isDateCell( const ScColumn& rCol, SCROW nRow ) const;
 };
