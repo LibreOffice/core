@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b26fe24a_7f845635",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-29T04:26:56Z",
+      "side": 1,
+      "message": "Jenkins approved - last rebase was only a clang failure (always passed before) and previous ones were typical Windows failures (passed this time).",
+      "revId": "663338a9ac621b82ea88e093bd0eaf4644a42ca5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
