@@ -28,7 +28,6 @@
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="xalign">0.5</property>
                 <property name="use-underline">True</property>
                 <property name="yalign">0.5</property>
               </object>
