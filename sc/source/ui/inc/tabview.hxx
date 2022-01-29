@@ -521,7 +521,7 @@ public:
     void            InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                    bool bTestNeg = false,
                                    bool bCols = false, bool bRows = false, bool bForceNeg = false );
-    void            InitOwnBlockMode();
+    void            InitOwnBlockMode( const ScRange& rMarkRange );
     void            DoneBlockMode( bool bContinue = false );
 
     bool            IsBlockMode() const;

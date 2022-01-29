@@ -587,10 +587,10 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
     pDBData->SetArea( nTab, aNewParam.nCol1,aNewParam.nRow1, aNewParam.nCol2,aNewParam.nRow2 );
     rDoc.CompileDBFormula();
 
+    const ScRange aMarkRange( aNewParam.nCol1, aNewParam.nRow1, nTab, aNewParam.nCol2, aNewParam.nRow2, nTab);
     DoneBlockMode();
-    InitOwnBlockMode();
-    rMark.SetMarkArea( ScRange( aNewParam.nCol1,aNewParam.nRow1,nTab,
-                                aNewParam.nCol2,aNewParam.nRow2,nTab ) );
+    InitOwnBlockMode( aMarkRange );
+    rMark.SetMarkArea( aMarkRange );
     MarkDataChanged();
 
     pDocSh->PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),

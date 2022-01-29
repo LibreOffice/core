@@ -111,7 +111,7 @@ void ScViewFunc::CutToClip()
         if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )          // mark the range if not marked yet
         {
             DoneBlockMode();
-            InitOwnBlockMode();
+            InitOwnBlockMode( aRange );
             rMark.SetMarkArea( aRange );
             MarkDataChanged();
         }
@@ -1270,7 +1270,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     if (GetViewData().IsActive())
     {
         DoneBlockMode();
-        InitOwnBlockMode();
+        InitOwnBlockMode( aUserRange );
     }
     rMark.SetMarkArea( aUserRange );
     MarkDataChanged();
