@@ -58,16 +58,28 @@ namespace pdfi
         // and they are checked from the suffix, thus the order matters.
         // e.g. for "TimesNewRomanPS-BoldItalic", to get "TimesNewRoman", you should
         //      first have "Italic", and then "Bold", then "-", and then "PS".
+        "-VKana",
         "MT",
         "PS",
         "PSMT",
         "Regular",
+        "Normal",
+        "Book",
+        "Medium",
+        "ExtraBold",
+        "UltraBold",
+        "ExtraLight",
+        "UltraLight",
         "Bold",
+        "Heavy",
+        "Black",
         "Italic",
         "Oblique",
         "Bold", //BoldItalic, BoldOblique
         "Light",
+        "Thin",
         "Semibold",
+        "-Roman",
         "Reg",
         "VKana",
         "-",
