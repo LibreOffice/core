@@ -31,6 +31,7 @@
 #include <SceneProperties.hxx>
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <Legend.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -274,7 +275,8 @@ Diagram::Diagram( const Diagram & rOther ) :
     if ( rOther.m_xFloor )
         m_xFloor = new Wall( *rOther.m_xFloor );
     m_xTitle.set( CloneHelper::CreateRefClone< chart2::XTitle >()( rOther.m_xTitle ));
-    m_xLegend.set( CloneHelper::CreateRefClone< chart2::XLegend >()( rOther.m_xLegend ));
+    if (rOther.m_xLegend)
+        m_xLegend = new Legend(*rOther.m_xLegend);
 
     if ( m_xWall )
         m_xWall->addModifyListener( m_xModifyEventForwarder );
@@ -349,7 +351,14 @@ uno::Reference< chart2::XLegend > SAL_CALL Diagram::getLegend()
 
 void SAL_CALL Diagram::setLegend( const uno::Reference< chart2::XLegend >& xNewLegend )
 {
-    Reference< chart2::XLegend > xOldLegend;
+    auto pLegend = dynamic_cast<Legend*>(xNewLegend.get());
+    assert(!xNewLegend || pLegend);
+    setLegend(rtl::Reference< Legend >(pLegend));
+}
+
+void Diagram::setLegend( const rtl::Reference< Legend >& xNewLegend )
+{
+    rtl::Reference< Legend > xOldLegend;
     {
         MutexGuard aGuard( m_aMutex );
         if( m_xLegend == xNewLegend )

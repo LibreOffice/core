@@ -34,6 +34,7 @@
 #include <chartview/DrawModelWrapper.hxx>
 #include "ChartTransferable.hxx"
 #include <DrawViewWrapper.hxx>
+#include <Legend.hxx>
 #include <LegendHelper.hxx>
 #include <AxisHelper.hxx>
 #include <RegressionCurveHelper.hxx>
@@ -824,7 +825,7 @@ void ChartController::executeDispatch_ToggleLegend()
     UndoGuard aUndoGuard(
         SchResId( STR_ACTION_TOGGLE_LEGEND ), m_xUndoManager );
     ChartModel& rModel = dynamic_cast<ChartModel&>(*xModel);
-    Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend(rModel), uno::UNO_QUERY );
+    rtl::Reference< Legend > xLegendProp = LegendHelper::getLegend(rModel);
     bool bChanged = false;
     if( xLegendProp.is())
     {
@@ -844,7 +845,7 @@ void ChartController::executeDispatch_ToggleLegend()
     }
     else
     {
-        xLegendProp.set( LegendHelper::getLegend(rModel, m_xCC, true), uno::UNO_QUERY );
+        xLegendProp = LegendHelper::getLegend(rModel, m_xCC, true);
         if( xLegendProp.is())
             bChanged = true;
     }

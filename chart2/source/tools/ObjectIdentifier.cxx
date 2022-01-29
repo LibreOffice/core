@@ -372,6 +372,27 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     return aRet;
 }
 
+OUString ObjectIdentifier::createClassifiedIdentifierForObject(
+          const rtl::Reference< Legend >& xLegend
+        , const rtl::Reference<::chart::ChartModel>& xChartModel )
+{
+    try
+    {
+        if( xLegend.is() )
+        {
+            return createClassifiedIdentifierForParticle( createParticleForLegend( xChartModel ) );
+        }
+    }
+    catch(const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    OSL_FAIL("give object could not be identified in createClassifiedIdentifierForObject");
+
+    return OUString();
+}
+
 OUString ObjectIdentifier::createClassifiedIdentifierForParticle(
         const OUString& rParticle )
 {
