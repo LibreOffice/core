@@ -19,6 +19,7 @@
 
 #include <res_LegendPosition.hxx>
 #include <ChartModelHelper.hxx>
+#include <Legend.hxx>
 #include <LegendHelper.hxx>
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
@@ -121,7 +122,7 @@ void LegendPositionResources::writeToModel( const rtl::Reference<::chart::ChartM
     {
         bool bShowLegend = m_xCbxShow && m_xCbxShow->get_active();
         ChartModel& rModel = *xChartModel;
-        uno::Reference< beans::XPropertySet > xProp(LegendHelper::getLegend(rModel, m_xCC, bShowLegend), uno::UNO_QUERY);
+        rtl::Reference< Legend > xProp = LegendHelper::getLegend(rModel, m_xCC, bShowLegend);
         if( xProp.is() )
         {
             //show

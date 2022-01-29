@@ -28,6 +28,7 @@
 #include <ChartController.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <Legend.hxx>
 #include <LegendHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
@@ -76,7 +77,7 @@ bool isLegendVisible(const css::uno::Reference<css::frame::XModel>& xModel)
     if (!pModel)
         return false;
 
-    Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend(*pModel), uno::UNO_QUERY );
+    rtl::Reference< Legend > xLegendProp = LegendHelper::getLegend(*pModel);
     if( xLegendProp.is())
     {
         try
@@ -113,7 +114,7 @@ bool isLegendOverlay(const css::uno::Reference<css::frame::XModel>& xModel)
     if (!pModel)
         return false;
 
-    Reference< beans::XPropertySet > xLegendProp(LegendHelper::getLegend(*pModel), uno::UNO_QUERY);
+    rtl::Reference< Legend > xLegendProp = LegendHelper::getLegend(*pModel);
     if( xLegendProp.is())
     {
         try
@@ -138,7 +139,7 @@ void setLegendOverlay(const css::uno::Reference<css::frame::XModel>& xModel, boo
     if (!pModel)
         return;
 
-    Reference<beans::XPropertySet> xLegendProp(LegendHelper::getLegend(*pModel), uno::UNO_QUERY);
+    rtl::Reference<Legend> xLegendProp = LegendHelper::getLegend(*pModel);
     if (!xLegendProp.is())
         return;
 
@@ -239,7 +240,7 @@ sal_Int32 getLegendPos(const css::uno::Reference<css::frame::XModel>& xModel)
     if (!pModel)
         return -1;
 
-    Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend(*pModel), uno::UNO_QUERY );
+    rtl::Reference< Legend > xLegendProp = LegendHelper::getLegend(*pModel);
     if (!xLegendProp.is())
         return -1;
 
@@ -266,7 +267,7 @@ void setLegendPos(const css::uno::Reference<css::frame::XModel>& xModel, sal_Int
     if (!pModel)
         return;
 
-    Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend(*pModel), uno::UNO_QUERY );
+    rtl::Reference< Legend > xLegendProp = LegendHelper::getLegend(*pModel);
     if (!xLegendProp.is())
         return;
 

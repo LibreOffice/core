@@ -35,12 +35,13 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart
 {
 
+class Legend;
 class LegendEntryProvider;
 
 class VLegend
 {
 public:
-    VLegend( const css::uno::Reference< css::chart2::XLegend > & xLegend,
+    VLegend( const rtl::Reference< ::chart::Legend > & xLegend,
              const css::uno::Reference< css::uno::XComponentContext > & xContext,
              std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
              const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
@@ -68,10 +69,12 @@ public:
 
     static bool isVisible(
         const css::uno::Reference< css::chart2::XLegend > & xLegend );
+    static bool isVisible(
+        const rtl::Reference< ::chart::Legend > & xLegend );
 
 private:
     rtl::Reference<SvxShapeGroupAnyD>            m_xTarget;
-    css::uno::Reference< css::chart2::XLegend >             m_xLegend;
+    rtl::Reference<::chart::Legend>              m_xLegend;
     rtl::Reference< SvxShapeGroup >                         m_xShape;
 
     ChartModel& mrModel;

@@ -39,8 +39,9 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
-class Wall;
 class BaseCoordinateSystem;
+class Legend;
+class Wall;
 
 namespace impl
 {
@@ -144,6 +145,9 @@ public:
 
     const tCoordinateSystemContainerType & getBaseCoordinateSystems() { return m_aCoordSystems; }
 
+    const rtl::Reference< ::chart::Legend > & getLegend2() const { return m_xLegend; }
+    void setLegend(const rtl::Reference< ::chart::Legend > &);
+
 private:
 
     // ____ XModifyListener ____
@@ -171,8 +175,7 @@ private:
     css::uno::Reference< css::chart2::XTitle >
                         m_xTitle;
 
-    css::uno::Reference< css::chart2::XLegend >
-                        m_xLegend;
+    rtl::Reference< ::chart::Legend > m_xLegend;
 
     css::uno::Reference< css::chart2::XColorScheme >
                         m_xColorScheme;

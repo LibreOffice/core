@@ -18,6 +18,7 @@
  */
 
 #include <LegendHelper.hxx>
+#include <Legend.hxx>
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
@@ -32,31 +33,30 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-Reference< chart2::XLegend > LegendHelper::showLegend( ChartModel& rModel
+rtl::Reference< Legend > LegendHelper::showLegend( ChartModel& rModel
                                                     , const uno::Reference< uno::XComponentContext >& xContext )
 {
-    uno::Reference< chart2::XLegend > xLegend = LegendHelper::getLegend( rModel, xContext, true );
-    uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
-    if( xProp.is())
+    rtl::Reference< Legend > xLegend = LegendHelper::getLegend( rModel, xContext, true );
+    if( xLegend.is())
     {
-        xProp->setPropertyValue( "Show", uno::Any(true) );
+        xLegend->setPropertyValue( "Show", uno::Any(true) );
 
         chart2::RelativePosition aRelativePosition;
-        if( !(xProp->getPropertyValue( "RelativePosition") >>=  aRelativePosition) )
+        if( !(xLegend->getPropertyValue( "RelativePosition") >>=  aRelativePosition) )
         {
             chart2::LegendPosition ePos = chart2::LegendPosition_LINE_END;
-            if( !(xProp->getPropertyValue( "AnchorPosition") >>= ePos ) )
-                xProp->setPropertyValue( "AnchorPosition", uno::Any( ePos ));
+            if( !(xLegend->getPropertyValue( "AnchorPosition") >>= ePos ) )
+                xLegend->setPropertyValue( "AnchorPosition", uno::Any( ePos ));
 
             css::chart::ChartLegendExpansion eExpansion =
                     ( ePos == chart2::LegendPosition_LINE_END ||
                       ePos == chart2::LegendPosition_LINE_START )
                     ? css::chart::ChartLegendExpansion_HIGH
                     : css::chart::ChartLegendExpansion_WIDE;
-            if( !(xProp->getPropertyValue( "Expansion") >>= eExpansion ) )
-                xProp->setPropertyValue( "Expansion", uno::Any( eExpansion ));
+            if( !(xLegend->getPropertyValue( "Expansion") >>= eExpansion ) )
+                xLegend->setPropertyValue( "Expansion", uno::Any( eExpansion ));
 
-            xProp->setPropertyValue( "RelativePosition", uno::Any());
+            xLegend->setPropertyValue( "RelativePosition", uno::Any());
         }
 
     }
@@ -73,23 +73,22 @@ void LegendHelper::hideLegend( ChartModel& rModel )
     }
 }
 
-uno::Reference< chart2::XLegend > LegendHelper::getLegend(
+rtl::Reference< Legend > LegendHelper::getLegend(
       ChartModel& rModel
     , const uno::Reference< uno::XComponentContext >& xContext
     , bool bCreate )
 {
-    uno::Reference< chart2::XLegend > xResult;
+    rtl::Reference< Legend > xResult;
 
     try
     {
-        uno::Reference< chart2::XDiagram > xDia( rModel.getFirstDiagram());
+        rtl::Reference< Diagram > xDia( rModel.getFirstChartDiagram());
         if( xDia.is() )
         {
-            xResult.set( xDia->getLegend() );
+            xResult = xDia->getLegend2();
             if( bCreate && !xResult.is() && xContext.is() )
             {
-                xResult.set( xContext->getServiceManager()->createInstanceWithContext(
-                            "com.sun.star.chart2.Legend", xContext ), uno::UNO_QUERY );
+                xResult = new Legend();
                 xDia->setLegend( xResult );
             }
         }
