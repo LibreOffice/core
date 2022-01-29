@@ -2391,11 +2391,11 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
                 // Remember that wsd expects int and that aEnd.X() is
                 // in pixels and will be converted in twips, before performing
                 // the lok callback, so we need to avoid that an overflow occurs.
-                aEnd.setX( (!bIsTiledRendering && bLayoutRTL) ? 0 : std::numeric_limits<int>::max() / 1000 );
+                aEnd.setX( std::numeric_limits<int>::max() / 1000 );
             }
             else
             {
-                aEnd.setX( (!bIsTiledRendering && bLayoutRTL) ? 0 : pGridWin[i]->GetOutputSizePixel().Width() );
+                aEnd.setX( bLayoutRTL ? 0 : pGridWin[i]->GetOutputSizePixel().Width() );
             }
         }
         aEnd.AdjustX( -nLayoutSign );
