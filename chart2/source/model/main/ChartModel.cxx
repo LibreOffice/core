@@ -836,7 +836,7 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
             Reference< chart2::data::XDataSource > xDataSource( m_xDataProvider->createDataSource( aArguments ) );
             if( xDataSource.is() )
             {
-                Reference< chart2::XDiagram > xDia( getFirstDiagram() );
+                rtl::Reference< Diagram > xDia = getFirstChartDiagram();
                 if( !xDia.is() )
                 {
                     rtl::Reference< ::chart::ChartTypeTemplate > xTemplate( impl_createDefaultChartTypeTemplate() );

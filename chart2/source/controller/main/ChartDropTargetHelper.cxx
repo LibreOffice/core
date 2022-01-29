@@ -20,6 +20,7 @@
 #include "ChartDropTargetHelper.hxx"
 #include <DataSourceHelper.hxx>
 #include <ChartModel.hxx>
+#include <Diagram.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -119,7 +120,7 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                             // @todo: get the title somehow and compare it to
                             // aDocName if successful (the document is the
                             // parent)
-                            Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram() );
+                            rtl::Reference< Diagram > xDiagram = m_xChartDocument->getFirstChartDiagram();
                             Reference< chart2::data::XDataProvider > xDataProvider( m_xChartDocument->getDataProvider());
                             if( xDataProvider.is() && xDiagram.is() &&
                                 DataSourceHelper::allArgumentsForRectRangeDetected( m_xChartDocument ))

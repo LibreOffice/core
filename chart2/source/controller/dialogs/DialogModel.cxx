@@ -779,7 +779,7 @@ void DialogModel::applyInterpretedData(
         return;
 
     m_aTimerTriggeredControllerLock.startTimer();
-    Reference< XDiagram > xDiagram( m_xChartDocument->getFirstDiagram());
+    rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram());
     if( !xDiagram.is())
         return;
 
@@ -850,10 +850,7 @@ sal_Int32 DialogModel::countSeries() const
 
 ChartModel& DialogModel::getModel() const
 {
-    uno::Reference< frame::XModel > xModel = getChartModel();
-    ChartModel* pModel = dynamic_cast<ChartModel*>(xModel.get());
-    assert(pModel);
-    return *pModel;
+    return *m_xChartDocument;
 }
 
 } //  namespace chart
