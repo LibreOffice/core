@@ -18,14 +18,15 @@
  */
 #pragma once
 
-#include <OPropertySet.hxx>
+#include "OPropertySet.hxx"
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <ModifyListenerHelper.hxx>
+#include "ModifyListenerHelper.hxx"
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
@@ -41,7 +42,7 @@ typedef ::cppu::WeakImplHelper<
     Legend_Base;
 }
 
-class Legend final :
+class OOO_DLLPUBLIC_CHARTTOOLS Legend final :
     public cppu::BaseMutex,
     public impl::Legend_Base,
     public ::property::OPropertySet
@@ -60,15 +61,16 @@ public:
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 
-private:
     explicit Legend( const Legend & rOther );
 
+private:
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
 
     // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
+public:
     // ____ XPropertySet ____
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
@@ -82,6 +84,7 @@ private:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
+private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
         const css::lang::EventObject& aEvent ) override;

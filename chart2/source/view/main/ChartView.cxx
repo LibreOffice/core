@@ -33,6 +33,7 @@
 #include <VSeriesPlotter.hxx>
 #include <CommonConverters.hxx>
 #include <TitleHelper.hxx>
+#include <Legend.hxx>
 #include <LegendHelper.hxx>
 #include "VLegend.hxx"
 #include <PropertyMapper.hxx>
@@ -2176,7 +2177,7 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     return apVTitle;
 }
 
-bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
+bool lcl_createLegend( const rtl::Reference< Legend > & xLegend
                    , const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes
                    , const uno::Reference< uno::XComponentContext > & xContext
                    , awt::Rectangle & rRemainingSpace

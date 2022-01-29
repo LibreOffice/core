@@ -1036,6 +1036,7 @@ chart2/source/inc/FormattedStringHelper.hxx
 chart2/source/inc/InternalData.hxx
 chart2/source/inc/InternalDataProvider.hxx
 chart2/source/inc/LabeledDataSequence.hxx
+chart2/source/inc/Legend.hxx
 chart2/source/inc/LegendHelper.hxx
 chart2/source/inc/LifeTime.hxx
 chart2/source/inc/LinePropertiesHelper.hxx
@@ -1100,7 +1101,6 @@ chart2/source/model/main/FormattedString.hxx
 chart2/source/model/main/GridProperties.cxx
 chart2/source/model/main/GridProperties.hxx
 chart2/source/model/main/Legend.cxx
-chart2/source/model/main/Legend.hxx
 chart2/source/model/main/PageBackground.cxx
 chart2/source/model/main/PageBackground.hxx
 chart2/source/model/main/PolarCoordinateSystem.cxx

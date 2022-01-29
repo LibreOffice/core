@@ -30,17 +30,18 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart
 {
 class Diagram;
+class Legend;
 
 class OOO_DLLPUBLIC_CHARTTOOLS LegendHelper
 {
 public:
-    static css::uno::Reference< css::chart2::XLegend >
+    static rtl::Reference< ::chart::Legend >
         showLegend( ChartModel& rModel
                   , const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     static  void hideLegend( ChartModel& rModel );
 
-    static css::uno::Reference< css::chart2::XLegend >
+    static rtl::Reference< ::chart::Legend >
         getLegend( ChartModel& rModel
                  , const css::uno::Reference< css::uno::XComponentContext >& xContext = nullptr
                  , bool bCreate = false );

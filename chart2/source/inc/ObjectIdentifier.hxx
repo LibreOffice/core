@@ -44,6 +44,7 @@ namespace chart
 {
 class BaseCoordinateSystem;
 class Diagram;
+class Legend;
 
 enum ObjectType
 {
@@ -106,6 +107,9 @@ public:
 
     static OUString createClassifiedIdentifierForObject(
           const css::uno::Reference< css::uno::XInterface >& xObject
+        , const rtl::Reference<::chart::ChartModel>& xChartModel );
+    static OUString createClassifiedIdentifierForObject(
+          const rtl::Reference< ::chart::Legend >& xObject
         , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     static OUString createClassifiedIdentifierForParticle(

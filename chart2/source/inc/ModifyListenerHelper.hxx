@@ -157,6 +157,14 @@ void addListener(
         aFunctor( xObject );
     }
 }
+template< class T >
+void addListener(
+    const rtl::Reference<T> & xBroadcaster,
+    const css::uno::Reference< css::util::XModifyListener > & xListener )
+{
+    if( xBroadcaster && xListener  )
+        xBroadcaster->addModifyListener( xListener );
+}
 
 template< class Container >
 void addListenerToAllElements(
@@ -198,6 +206,15 @@ void removeListener(
         impl::removeListenerFunctor< InterfaceRef > aFunctor( xListener );
         aFunctor( xObject );
     }
+}
+
+template< class T >
+void removeListener(
+    const rtl::Reference<T> & xBroadcaster,
+    const css::uno::Reference< css::util::XModifyListener > & xListener )
+{
+    if( xBroadcaster && xListener  )
+        xBroadcaster->removeModifyListener( xListener );
 }
 
 template< class Container >
