@@ -50,6 +50,7 @@
 #include <ErrorBarItemConverter.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ObjectNameProvider.hxx>
+#include <Legend.hxx>
 #include <LegendHelper.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>

@@ -24,6 +24,7 @@
 #include <servicenames.hxx>
 #include <PropertyHelper.hxx>
 #include <TitleHelper.hxx>
+#include <Legend.hxx>
 #include <LegendHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <DisposeHelper.hxx>
@@ -464,15 +465,14 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
 
     try
     {
-        Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( *m_spChart2ModelContact->getDocumentModel(), m_spChart2ModelContact->m_xContext,bNewValue ));
+        rtl::Reference< Legend > xLegend = LegendHelper::getLegend( *m_spChart2ModelContact->getDocumentModel(), m_spChart2ModelContact->m_xContext,bNewValue );
         if(xLegend.is())
         {
-            Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY_THROW );
             bool bOldValue = true;
-            Any aAOld = xLegendProp->getPropertyValue("Show");
+            Any aAOld = xLegend->getPropertyValue("Show");
             aAOld >>= bOldValue;
             if( bOldValue != bNewValue )
-                xLegendProp->setPropertyValue("Show", uno::Any( bNewValue ));
+                xLegend->setPropertyValue("Show", uno::Any( bNewValue ));
         }
     }
     catch (const uno::Exception&)
@@ -486,10 +486,10 @@ Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropert
     Any aRet;
     try
     {
-        Reference< beans::XPropertySet > xLegendProp(
-            LegendHelper::getLegend( *m_spChart2ModelContact->getDocumentModel() ), uno::UNO_QUERY );
-        if( xLegendProp.is())
-            aRet = xLegendProp->getPropertyValue("Show");
+        rtl::Reference< Legend > xLegend =
+            LegendHelper::getLegend( *m_spChart2ModelContact->getDocumentModel() );
+        if( xLegend.is())
+            aRet = xLegend->getPropertyValue("Show");
         else
             aRet <<= false;
     }

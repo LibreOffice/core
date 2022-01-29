@@ -19,6 +19,7 @@
 
 #include "Chart2ModelContact.hxx"
 #include <ChartModelHelper.hxx>
+#include <Legend.hxx>
 #include <LegendHelper.hxx>
 #include <CommonConverters.hxx>
 #include <servicenames.hxx>
@@ -229,7 +230,7 @@ awt::Size Chart2ModelContact::GetLegendSize() const
     ExplicitValueProvider* pProvider( getExplicitValueProvider() );
     if( pProvider )
     {
-        uno::Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( *m_xChartModel.get() ) );
+        rtl::Reference< Legend > xLegend = LegendHelper::getLegend( *m_xChartModel.get() );
         OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
         aSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
     }
@@ -242,7 +243,7 @@ awt::Point Chart2ModelContact::GetLegendPosition() const
     ExplicitValueProvider* pProvider( getExplicitValueProvider() );
     if( pProvider )
     {
-        uno::Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( *m_xChartModel.get() ) );
+        rtl::Reference< Legend > xLegend = LegendHelper::getLegend( *m_xChartModel.get() );
         OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
         aPoint = ToPoint( pProvider->getRectangleOfObject( aCID ) );
     }

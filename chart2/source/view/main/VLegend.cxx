@@ -19,6 +19,7 @@
 
 #include "VLegend.hxx"
 #include "VButton.hxx"
+#include <Legend.hxx>
 #include <PropertyMapper.hxx>
 #include <ChartModel.hxx>
 #include <ObjectIdentifier.hxx>
@@ -869,7 +870,7 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
 } // anonymous namespace
 
 VLegend::VLegend(
-    const Reference< XLegend > & xLegend,
+    const rtl::Reference< Legend > & xLegend,
     const Reference< uno::XComponentContext > & xContext,
     std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
     const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
@@ -907,6 +908,24 @@ bool VLegend::isVisible( const Reference< XLegend > & xLegend )
     return bShow;
 }
 
+bool VLegend::isVisible( const rtl::Reference< Legend > & xLegend )
+{
+    if( ! xLegend.is())
+        return false;
+
+    bool bShow = false;
+    try
+    {
+        xLegend->getPropertyValue( "Show") >>= bShow;
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    return bShow;
+}
+
 void VLegend::createShapes(
     const awt::Size & rAvailableSpace,
     const awt::Size & rPageSize,
@@ -930,36 +949,32 @@ void VLegend::createShapes(
             tPropertyValues aLineFillProperties;
             tPropertyValues aTextProperties;
 
-            Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY );
             css::chart::ChartLegendExpansion eExpansion = css::chart::ChartLegendExpansion_HIGH;
             awt::Size aLegendSize( rAvailableSpace );
 
             bool bCustom = false;
             LegendPosition eLegendPosition = LegendPosition_LINE_END;
-            if (xLegendProp.is())
+            // get Expansion property
+            m_xLegend->getPropertyValue("Expansion") >>= eExpansion;
+            if( eExpansion == css::chart::ChartLegendExpansion_CUSTOM )
             {
-                // get Expansion property
-                xLegendProp->getPropertyValue("Expansion") >>= eExpansion;
-                if( eExpansion == css::chart::ChartLegendExpansion_CUSTOM )
+                RelativeSize aRelativeSize;
+                if (m_xLegend->getPropertyValue("RelativeSize") >>= aRelativeSize)
                 {
-                    RelativeSize aRelativeSize;
-                    if (xLegendProp->getPropertyValue("RelativeSize") >>= aRelativeSize)
-                    {
-                        aLegendSize.Width = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Primary * rPageSize.Width ));
-                        aLegendSize.Height = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Secondary * rPageSize.Height ));
-                        bCustom = true;
-                    }
-                    else
-                    {
-                        eExpansion = css::chart::ChartLegendExpansion_HIGH;
-                    }
+                    aLegendSize.Width = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Primary * rPageSize.Width ));
+                    aLegendSize.Height = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Secondary * rPageSize.Height ));
+                    bCustom = true;
                 }
-                xLegendProp->getPropertyValue("AnchorPosition") >>= eLegendPosition;
-                lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties, rPageSize );
+                else
+                {
+                    eExpansion = css::chart::ChartLegendExpansion_HIGH;
+                }
             }
+            m_xLegend->getPropertyValue("AnchorPosition") >>= eLegendPosition;
+            lcl_getProperties( m_xLegend, aLineFillProperties, aTextProperties, rPageSize );
 
             // create entries
-            double fViewFontSize = lcl_CalcViewFontSize( xLegendProp, rPageSize );//todo
+            double fViewFontSize = lcl_CalcViewFontSize( m_xLegend, rPageSize );//todo
             // #i109336# Improve auto positioning in chart
             sal_Int32 nSymbolHeight = static_cast< sal_Int32 >( fViewFontSize * 0.6  );
             sal_Int32 nSymbolWidth = nSymbolHeight;
@@ -985,13 +1000,13 @@ void VLegend::createShapes(
                 if (pLegendEntryProvider)
                 {
                     std::vector<ViewLegendEntry> aNewEntries = pLegendEntryProvider->createLegendEntries(
-                                                                    aMaxSymbolExtent, eLegendPosition, xLegendProp,
+                                                                    aMaxSymbolExtent, eLegendPosition, m_xLegend,
                                                                     xLegendContainer, m_xContext, mrModel);
                     aViewEntries.insert( aViewEntries.end(), aNewEntries.begin(), aNewEntries.end() );
                 }
             }
 
-            bool bSymbolsLeftSide = lcl_shouldSymbolsBePlacedOnTheLeftSide( xLegendProp, m_nDefaultWritingMode );
+            bool bSymbolsLeftSide = lcl_shouldSymbolsBePlacedOnTheLeftSide( m_xLegend, m_nDefaultWritingMode );
 
             uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider( mrModel.getDataProvider(), uno::UNO_QUERY );
             bool bIsPivotChart = xPivotTableDataProvider.is();
@@ -1055,18 +1070,17 @@ void VLegend::changePosition(
     {
         // determine position and alignment depending on default position
         awt::Size aLegendSize = m_xShape->getSize();
-        Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY_THROW );
         chart2::RelativePosition aRelativePosition;
 
         bool bDefaultLegendSize = rDefaultLegendSize.Width != 0 || rDefaultLegendSize.Height != 0;
         bool bAutoPosition =
-            ! (xLegendProp->getPropertyValue( "RelativePosition") >>= aRelativePosition);
+            ! (m_xLegend->getPropertyValue( "RelativePosition") >>= aRelativePosition);
 
         LegendPosition ePos = LegendPosition_LINE_END;
-        xLegendProp->getPropertyValue( "AnchorPosition") >>= ePos;
+        m_xLegend->getPropertyValue( "AnchorPosition") >>= ePos;
 
         bool bOverlay = false;
-        xLegendProp->getPropertyValue("Overlay") >>= bOverlay;
+        m_xLegend->getPropertyValue("Overlay") >>= bOverlay;
         //calculate position
         if( bAutoPosition )
         {
