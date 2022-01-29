@@ -5106,9 +5106,11 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
     rView.GetPostItMgr()->SetActiveSidebarWin(nullptr);
     rView.GetEditWin().GrabFocus();
 
-    // assure visible view area is at cursor position
-    if (!m_pActiveShell->IsCursorVisible() && !m_pActiveShell->IsFrameSelected() &&
-            !m_pActiveShell->IsObjSelected())
+    // Assure cursor is in visible view area.
+    // (tdf#147041) Always show the navigated outline at the top of the visible view area.
+    if (pCnt->GetParent()->GetType() == ContentTypeId::OUTLINE ||
+            (!m_pActiveShell->IsCursorVisible() && !m_pActiveShell->IsFrameSelected() &&
+            !m_pActiveShell->IsObjSelected()))
     {
         Point rPoint = m_pActiveShell->GetCursorDocPos();
         rPoint.setX(0);
