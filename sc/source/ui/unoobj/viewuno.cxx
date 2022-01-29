@@ -724,7 +724,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 if ( !lcl_TabInRanges( rViewData.GetTabNo(), rRanges ) )
                     pViewSh->SetTabNo( rFirst.aStart.Tab() );
                 pViewSh->DoneBlockMode();
-                pViewSh->InitOwnBlockMode();
+                pViewSh->InitOwnBlockMode( rFirst );    /* TODO: or even the overall range? */
                 rViewData.GetMarkData().MarkFromRangeList( rRanges, true );
                 pViewSh->MarkDataChanged();
                 rViewData.GetDocShell()->PostPaintGridAll();   // Marks (old&new)

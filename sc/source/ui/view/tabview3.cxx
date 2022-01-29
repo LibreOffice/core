@@ -1241,7 +1241,7 @@ void ScTabView::MoveCursorAbs( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
             {
                 rMark.ResetMark();
                 DoneBlockMode();
-                InitOwnBlockMode();
+                InitOwnBlockMode( ScRange( nCurX, nCurY, aViewData.GetTabNo()));
                 MarkDataChanged();
             }
         }
@@ -1737,7 +1737,9 @@ void ScTabView::Unmark()
 void ScTabView::SetMarkData( const ScMarkData& rNew )
 {
     DoneBlockMode();
-    InitOwnBlockMode();
+    ScRange aMarkArea( ScAddress::UNINITIALIZED );
+    rNew.GetMarkArea( aMarkArea );
+    InitOwnBlockMode( aMarkArea );
     aViewData.GetMarkData() = rNew;
 
     MarkDataChanged();

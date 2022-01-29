@@ -329,7 +329,7 @@ bool ScTabView::IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
         && nBlockStartZ == nTab;
 }
 
-void ScTabView::InitOwnBlockMode()
+void ScTabView::InitOwnBlockMode( const ScRange& rMarkRange )
 {
     if (IsBlockMode())
         return;
@@ -340,12 +340,12 @@ void ScTabView::InitOwnBlockMode()
         GetSelEngine()->CursorPosChanging( false, false );
 
     meBlockMode = Own;
-    nBlockStartX = 0;
-    nBlockStartY = 0;
-    nBlockStartZ = 0;
-    nBlockEndX = 0;
-    nBlockEndY = 0;
-    nBlockEndZ = 0;
+    nBlockStartX = rMarkRange.aStart.Col();
+    nBlockStartY = rMarkRange.aStart.Row();
+    nBlockStartZ = rMarkRange.aStart.Tab();
+    nBlockEndX = rMarkRange.aEnd.Col();
+    nBlockEndY = rMarkRange.aEnd.Row();
+    nBlockEndZ = rMarkRange.aEnd.Tab();
 
     SelectionChanged();     // status is checked with mark set
 }

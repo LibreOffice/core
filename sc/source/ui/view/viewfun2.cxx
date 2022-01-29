@@ -2008,7 +2008,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     }
 
     DoneBlockMode(true);                // don't delete mark
-    InitOwnBlockMode();
+    InitOwnBlockMode( ScRange( nCol, nRow, nStartTab, nCol, nRow, nEndTab));
 
     //  If search starts at the beginning don't ask again whether it shall start at the beginning
     bool bFirst = true;
@@ -2359,7 +2359,7 @@ void ScViewFunc::UseScenario( const OUString& rName )
     SCTAB       nTab    = GetViewData().GetTabNo();
 
     DoneBlockMode();
-    InitOwnBlockMode();
+    InitOwnBlockMode( ScRange( GetViewData().GetCurX(), GetViewData().GetCurY(), nTab));
     pDocSh->UseScenario( nTab, rName );
 }
 

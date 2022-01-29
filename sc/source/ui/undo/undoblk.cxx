@@ -1690,7 +1690,7 @@ void ScUndoUseScenario::Undo()
     if (pViewShell)
     {
         pViewShell->DoneBlockMode();
-        pViewShell->InitOwnBlockMode();
+        pViewShell->InitOwnBlockMode( aRange );
     }
 
     ScDocument& rDoc = pDocShell->GetDocument();
@@ -1747,7 +1747,7 @@ void ScUndoUseScenario::Redo()
     {
         pViewShell->SetTabNo( nTab );
         pViewShell->DoneBlockMode();
-        pViewShell->InitOwnBlockMode();
+        pViewShell->InitOwnBlockMode( aRange );
     }
 
     pDocShell->UseScenario( nTab, aName, false );

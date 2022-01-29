@@ -1063,7 +1063,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
         aMarkRange = ScRange( GetViewData().GetCurX(),
                             GetViewData().GetCurY(), GetViewData().GetTabNo() );
         DoneBlockMode();
-        InitOwnBlockMode();
+        InitOwnBlockMode( aMarkRange );
         aFuncMark.SetMarkArea(aMarkRange);
         MarkDataChanged();
     }
@@ -2366,9 +2366,10 @@ void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt
         SCCOL nCol = GetViewData().GetCurX();
         SCROW nRow = GetViewData().GetCurY();
         SCTAB nTab = GetViewData().GetTabNo();
+        const ScRange aMarkRange( nCol, nRow, nTab);
         DoneBlockMode();
-        InitOwnBlockMode();
-        rMark.SetMultiMarkArea( ScRange( nCol,nRow,nTab ) );
+        InitOwnBlockMode( aMarkRange );
+        rMark.SetMultiMarkArea( aMarkRange );
         MarkDataChanged();
     }
 
