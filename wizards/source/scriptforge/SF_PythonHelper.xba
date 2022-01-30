@@ -795,6 +795,10 @@ Try:
 			&apos;	Methods in class modules are invoked with CallByName
 			ElseIf bBasicClass And ((CallType And vbMethod) = vbMethod) Then
 				Select Case UBound(vArgs)
+					&apos;	Dirty alternatives to process usual and ParamArray cases
+					&apos;	But, up to ... how many ?
+					&apos;		- The OFFSETADDRESSERROR has 12 arguments
+					&apos;		- The &quot;.uno:DataSort&quot; command may have 14 property name-value pairs
 					Case -1	:	vReturn = CallByName(vBasicObject, Script, vbMethod)
 					Case 0	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0))
 					Case 1	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1))
@@ -804,6 +808,37 @@ Try:
 					Case 5	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5))
 					Case 6	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6))
 					Case 7	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7))
+					Case 8	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8))
+					Case 9	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8), vArgs(9))
+					Case 10	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8), vArgs(9), vArgs(10))
+					Case 11	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8), vArgs(9), vArgs(10), vArgs(11))
+					Case 12, 13	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8), vArgs(9), vArgs(10), vArgs(11), vArgs(12))
+					Case 14, 15	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8), vArgs(9), vArgs(10), vArgs(11), vArgs(12), vArgs(13), vArgs(14))
+					Case 16, 17	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8), vArgs(9), vArgs(10), vArgs(11), vArgs(12), vArgs(13), vArgs(14), vArgs(15), vArgs(16))
+					Case 18, 19	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8), vArgs(9), vArgs(10), vArgs(11), vArgs(12), vArgs(13), vArgs(14), vArgs(15), vArgs(16), vArgs(17), vArgs(18))
+					Case 20, 21	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8), vArgs(9), vArgs(10), vArgs(11), vArgs(12), vArgs(13), vArgs(14), vArgs(15), vArgs(16), vArgs(17), vArgs(18) _
+											, vArgs(19), vArgs(20))
+					Case 22, 23	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8), vArgs(9), vArgs(10), vArgs(11), vArgs(12), vArgs(13), vArgs(14), vArgs(15), vArgs(16), vArgs(17), vArgs(18) _
+											, vArgs(19), vArgs(20), vArgs(21), vArgs(22))
+					Case 24, 25	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8), vArgs(9), vArgs(10), vArgs(11), vArgs(12), vArgs(13), vArgs(14), vArgs(15), vArgs(16), vArgs(17), vArgs(18) _
+											, vArgs(19), vArgs(20), vArgs(21), vArgs(22), vArgs(23), vArgs(24))
+					Case 26, 27	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8), vArgs(9), vArgs(10), vArgs(11), vArgs(12), vArgs(13), vArgs(14), vArgs(15), vArgs(16), vArgs(17), vArgs(18) _
+											, vArgs(19), vArgs(20), vArgs(21), vArgs(22), vArgs(23), vArgs(24), vArgs(25), vArgs(26))
+					Case &gt;= 28	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7) _
+											, vArgs(8), vArgs(9), vArgs(10), vArgs(11), vArgs(12), vArgs(13), vArgs(14), vArgs(15), vArgs(16), vArgs(17), vArgs(18) _
+											, vArgs(19), vArgs(20), vArgs(21), vArgs(22), vArgs(23), vArgs(24), vArgs(25), vArgs(26), vArgs(27), vArgs(28))
 				End Select
 			End If
 
@@ -824,7 +859,7 @@ Try:
 	If IsArray(vReturn) Then
 		ReDim vReturnArray(0 To 2)
 		iDims = SF_Array.CountDims(vReturn)
-		&apos;	Replace dates by ISO notation
+		&apos;	Replace dates by UNO format
 		If iDims = 1 Then
 			For i = LBound(vReturn) To UBound(vReturn)
 				If VarType(vReturn(i)) = V_DATE Then vReturn(i) = CDateToUnoDateTime(vReturn(i))

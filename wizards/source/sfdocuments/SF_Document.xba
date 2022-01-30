@@ -813,40 +813,67 @@ Catch:
 End Function   &apos;   SFDocuments.SF_Document.RemoveMenu
 
 REM -----------------------------------------------------------------------------
-Public Sub RunCommand(Optional ByVal Command As Variant)
-&apos;&apos;&apos; Run on the document the given menu command. The command is executed without arguments
+Public Sub RunCommand(Optional ByVal Command As Variant _
+									, ParamArray Args As Variant _
+									)
+&apos;&apos;&apos; Run on the current document window the given menu command. The command is executed with or without arguments
 &apos;&apos;&apos;	A few typical commands:
 &apos;&apos;&apos;		Save, SaveAs, ExportToPDF, SetDocumentProperties, Undo, Copy, Paste, ...
-&apos;&apos;&apos;	Dozens can be found in the directory $install/share/config/soffice.cfg/modules
+&apos;&apos;&apos;	Dozens can be found on next page: https://wiki.documentfoundation.org/Development/DispatchCommands
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Command: Case-sensitive. The command itself is not checked.
+&apos;&apos;&apos;			If the command does not contain the &quot;.uno:&quot; prefix, it is added.
 &apos;&apos;&apos;			If nothing happens, then the command is probably wrong
+&apos;&apos;&apos;		Args: Pairs of arguments name (string), value (any)	
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oDoc.RunCommand(&quot;About&quot;)
+&apos;&apos;&apos;		oDoc.RunCommand(&quot;EditDoc&quot;, &quot;Editable&quot;, False)	&apos;	Toggle edit mode
 
+Dim vArgs As Variant		&apos;	Alias of Args
 Dim oDispatch				&apos;	com.sun.star.frame.DispatchHelper
-Const cstThisSub = &quot;SFDocuments.Document.RunCommand&quot;
-Const cstSubArgs = &quot;Command&quot;
+Dim vProps As Variant		&apos;	Array of PropertyValues
+Dim vValue As Variant		&apos;	A single value argument
+Dim sCommand As String		&apos;	Alias of Command
+Dim i As Long
+Const cstPrefix = &quot;.uno:&quot;
 
-	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+Const cstThisSub = &quot;SFDocuments.Document.RunCommand&quot;
+Const cstSubArgs = &quot;Command, [arg0Name, arg0Value], [arg1Name, arg1Value], ...&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 
 Check:
+	&apos;	When called from a subclass (Calc, Writer, ..) the arguments are gathered into one single array item
+	vArgs = Args
+	If IsArray(Args) Then
+		If UBound(Args) &gt;= 0 And IsArray(Args(0)) Then vArgs = Args(0)
+	End If
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Command, &quot;Command&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._ValidateArray(vArgs, &quot;Args&quot;, 1) Then GoTo Finally
+		For i = 0 To UBound(vArgs) - 1 Step 2
+			If Not ScriptForge.SF_Utils._Validate(vArgs(i), &quot;Arg&quot; &amp; CStr(i/2) &amp; &quot;Name&quot;, V_STRING) Then GoTo Finally
+		Next i
 	End If
 
 Try:
+	&apos;	Build array of property values
+	vProps = Array()
+	For i = 0 To UBound(vArgs) - 1 Step 2
+		If IsEmpty(vArgs(i + 1)) Then vValue = Null Else vValue = vArgs(i + 1)
+		vProps = ScriptForge.SF_Array.Append(vProps, ScriptForge.SF_Utils._MakePropertyValue(vArgs(i), vValue))
+	Next i
 	Set oDispatch = ScriptForge.SF_Utils._GetUNOService(&quot;DispatchHelper&quot;)
-	oDispatch.executeDispatch(_Frame, &quot;.uno:&quot; &amp; Command, &quot;&quot;, 0, Array())
+	If ScriptForge.SF_String.StartsWith(Command, cstPrefix) Then sCommand = Command Else sCommand = cstPrefix &amp; Command
+	oDispatch.executeDispatch(_Frame, sCommand, &quot;&quot;, 0, vProps)
 
 Finally:
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
 	Exit Sub
 Catch:
 	GoTo Finally
-End Sub		  &apos;   SFDocuments.SF_Document.RunCommand
+End Sub			&apos;	SFDocuments.SF_Document.RunCommand
 
 REM -----------------------------------------------------------------------------
 Public Function Save() As Boolean
