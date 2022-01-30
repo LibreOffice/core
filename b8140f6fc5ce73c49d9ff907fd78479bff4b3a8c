@@ -16,6 +16,24 @@
       "message": "This is hard to debug, as a bad sURI will merely trigger a actual\u003d0 vs. expected\u003d1 CPPUNIT_ASSERT_EQUAL failure, instead of stating the actual and expected URI values.  If the five URIs are guaranteed to appear in a specific order in pAnnots-GetElements(), it would be better to check for them with string-comparing CPPUNIT_ASSERT_EQUALs.\n\n(In a similar vein, I wonder if it wouldn\u0027t be better for maintainability and debuggability to programmatically construct a document here, instead of loading a pre-canned one, even though that appears to be a common pattern for all the tests in this source file.)",
       "revId": "b8140f6fc5ce73c49d9ff907fd78479bff4b3a8c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47d841f6_45e8f3e0",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3077,
+      "author": {
+        "id": 1002778
+      },
+      "writtenOn": "2022-01-30T19:45:21Z",
+      "side": 1,
+      "message": "Hi Stephan,\n  As suggested I\u0027ve rebuilt this from scratch to build the document on the fly; it was a bit of a fight, but you\u0027re right it does make it easier to debug and you get a nice error showing you the expected/actual strings.\n(Now, I still need to take your comment on the actual fix)",
+      "parentUuid": "341ddae9_341a6051",
+      "revId": "b8140f6fc5ce73c49d9ff907fd78479bff4b3a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
