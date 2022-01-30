@@ -42,6 +42,7 @@ namespace com::sun::star::drawing { class XShapes; }
 namespace chart
 {
 class ChartType;
+class DataSeries;
 
 class VDataSequence
 {
@@ -61,14 +62,14 @@ public:
 class VDataSeries final
 {
 public:
-    VDataSeries( const css::uno::Reference<css::chart2::XDataSeries>& xDataSeries );
+    VDataSeries( const rtl::Reference<::chart::DataSeries>& xDataSeries );
 
     ~VDataSeries();
 
     VDataSeries(const VDataSeries&) = delete;
     const VDataSeries& operator=(const VDataSeries&) = delete;
 
-    const css::uno::Reference<css::chart2::XDataSeries>& getModel() const;
+    const rtl::Reference<::chart::DataSeries>& getModel() const;
 
     void setCategoryXAxis();
     void setXValues( const css::uno::Reference<css::chart2::data::XDataSequence>& xValues );
@@ -195,7 +196,7 @@ public: //member
     rtl::Reference<SvxShapeGroupAnyD> m_xBackSubGroupShape;
 
 private: //member
-    css::uno::Reference<css::chart2::XDataSeries> m_xDataSeries;
+    rtl::Reference<::chart::DataSeries> m_xDataSeries;
     css::uno::Reference<css::beans::XPropertySet> m_xDataSeriesProps; // cached
 
     //all points given by the model data (here are not only the visible points meant)

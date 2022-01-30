@@ -35,6 +35,7 @@
 
 namespace chart
 {
+class DataSeries;
 class ModifyEventForwarder;
 
 namespace impl
@@ -93,6 +94,14 @@ public:
         
     virtual rtl::Reference<ChartType> cloneChartType() const = 0;
 
+    void addDataSeries(
+        const rtl::Reference< ::chart::DataSeries >& aDataSeries );
+    void removeDataSeries(
+        const rtl::Reference< ::chart::DataSeries >& aDataSeries );
+    void setDataSeries(
+        const std::vector< rtl::Reference< ::chart::DataSeries > >& aDataSeries );
+    const std::vector< rtl::Reference< ::chart::DataSeries > > & getDataSeries2() const { return m_aDataSeries; }
+
 protected:
 
     // ____ XModifyListener ____
@@ -124,11 +133,11 @@ protected:
 
 private:
     void impl_addDataSeriesWithoutNotification(
-        const css::uno::Reference< css::chart2::XDataSeries >& aDataSeries );
+        const rtl::Reference< ::chart::DataSeries >& aDataSeries );
 
 private:
     typedef
-        std::vector< css::uno::Reference< css::chart2::XDataSeries > >  tDataSeriesContainerType;
+        std::vector< rtl::Reference< ::chart::DataSeries > >  tDataSeriesContainerType;
 
     // --- mutable members: the following members need mutex guard ---
 
