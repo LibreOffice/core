@@ -25,6 +25,7 @@
 #include <ShapeFactory.hxx>
 #include <Diagram.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <DataSeries.hxx>
 
 #include <CommonConverters.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -38,6 +39,7 @@
 #include <servicenames_charttypes.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <DataSeriesHelper.hxx>
+#include <RegressionCurveModel.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <VLegendSymbolFactory.hxx>
 #include <FormattedStringHelper.hxx>
@@ -514,7 +516,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
                         OUString aRole;
                         if ( m_xChartTypeModel )
                             aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
-                        const uno::Reference< XDataSeries >& xSeries( rDataSeries.getModel() );
+                        const rtl::Reference< DataSeries >& xSeries( rDataSeries.getModel() );
                         pTextList[i] = DataSeriesHelper::getDataSeriesLabel( xSeries, aRole );
                         break;
                     }
@@ -572,7 +574,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
                 OUString aRole;
                 if ( m_xChartTypeModel )
                     aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
-                const uno::Reference< XDataSeries >& xSeries( rDataSeries.getModel() );
+                const rtl::Reference< DataSeries >& xSeries( rDataSeries.getModel() );
                 pTextList[1] = DataSeriesHelper::getDataSeriesLabel( xSeries, aRole );
             }
 
@@ -1294,24 +1296,23 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
 {
     if(m_nDimension!=2)
         return;
-    uno::Reference< XRegressionCurveContainer > xContainer( rVDataSeries.getModel(), uno::UNO_QUERY );
+    rtl::Reference< DataSeries > xContainer( rVDataSeries.getModel() );
     if(!xContainer.is())
         return;
 
     if (!m_pPosHelper)
         return;
 
-    uno::Sequence< uno::Reference< XRegressionCurve > > aCurveList = xContainer->getRegressionCurves();
+    const std::vector< rtl::Reference< ::chart::RegressionCurveModel > > & aCurveList = xContainer->getRegressionCurves2();
 
-    for(sal_Int32 nN=0; nN<aCurveList.getLength(); nN++)
+    for(sal_Int32 nN=0; nN<static_cast<sal_Int32>(aCurveList.size()); nN++)
     {
-        uno::Reference< XRegressionCurveCalculator > xCalculator( aCurveList[nN]->getCalculator() );
+        const auto & rCurve = aCurveList[nN];
+        uno::Reference< XRegressionCurveCalculator > xCalculator( rCurve->getCalculator() );
         if( !xCalculator.is())
             continue;
 
-        uno::Reference< beans::XPropertySet > xProperties( aCurveList[nN], uno::UNO_QUERY );
-
-        bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurveList[nN] );
+        bool bAverageLine = RegressionCurveHelper::isMeanValueLine( rCurve );
 
         sal_Int32 aDegree = 2;
         sal_Int32 aPeriod = 2;
@@ -1321,16 +1322,16 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
         bool bForceIntercept = false;
         double aInterceptValue = 0.0;
 
-        if ( xProperties.is() && !bAverageLine )
+        if ( !bAverageLine )
         {
-            xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
-            xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
-            xProperties->getPropertyValue( "MovingAverageType") >>= aMovingAverageType;
-            xProperties->getPropertyValue( "ExtrapolateForward") >>= aExtrapolateForward;
-            xProperties->getPropertyValue( "ExtrapolateBackward") >>= aExtrapolateBackward;
-            xProperties->getPropertyValue( "ForceIntercept") >>= bForceIntercept;
+            rCurve->getPropertyValue( "PolynomialDegree") >>= aDegree;
+            rCurve->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
+            rCurve->getPropertyValue( "MovingAverageType") >>= aMovingAverageType;
+            rCurve->getPropertyValue( "ExtrapolateForward") >>= aExtrapolateForward;
+            rCurve->getPropertyValue( "ExtrapolateBackward") >>= aExtrapolateBackward;
+            rCurve->getPropertyValue( "ForceIntercept") >>= bForceIntercept;
             if (bForceIntercept)
-                xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
+                rCurve->getPropertyValue( "InterceptValue") >>= aInterceptValue;
         }
 
         double fChartMinX = m_pPosHelper->getLogicMinX();
@@ -1422,7 +1423,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
         if( aRegressionPoly.SequenceX.hasElements() && aRegressionPoly.SequenceX[0].hasElements() )
         {
             VLineProperties aVLineProperties;
-            aVLineProperties.initFromPropertySet( xProperties );
+            aVLineProperties.initFromPropertySet( rCurve );
 
             //create an extra group shape for each curve for selection handling
             rtl::Reference<SvxShapeGroupAnyD> xRegressionGroupShapes =
@@ -1434,7 +1435,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
         }
 
         // curve equation and correlation coefficient
-        uno::Reference< beans::XPropertySet > xEquationProperties( aCurveList[nN]->getEquationProperties());
+        uno::Reference< beans::XPropertySet > xEquationProperties( rCurve->getEquationProperties());
         if( xEquationProperties.is())
         {
             createRegressionCurveEquationShapes(
@@ -2469,19 +2470,11 @@ bool lcl_HasVisibleLine( const uno::Reference< beans::XPropertySet >& xProps, bo
 bool lcl_HasRegressionCurves( const VDataSeries& rSeries, bool& rbHasDashedLine )
 {
     bool bHasRegressionCurves = false;
-    Reference< XRegressionCurveContainer > xRegrCont( rSeries.getModel(), uno::UNO_QUERY );
-    if( xRegrCont.is())
+    rtl::Reference< DataSeries > xRegrCont( rSeries.getModel() );
+    for( const rtl::Reference< RegressionCurveModel > & rCurve : xRegrCont->getRegressionCurves2() )
     {
-        Sequence< Reference< XRegressionCurve > > aCurves( xRegrCont->getRegressionCurves() );
-        sal_Int32 i = 0, nCount = aCurves.getLength();
-        for( i=0; i<nCount; ++i )
-        {
-            if( aCurves[i].is() )
-            {
-                bHasRegressionCurves = true;
-                lcl_HasVisibleLine( uno::Reference< beans::XPropertySet >( aCurves[i], uno::UNO_QUERY ), rbHasDashedLine );
-            }
-        }
+        bHasRegressionCurves = true;
+        lcl_HasVisibleLine( rCurve, rbHasDashedLine );
     }
     return bHasRegressionCurves;
 }
@@ -2743,44 +2736,41 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
         if (!ChartTypeHelper::isSupportingStatisticProperties( m_xChartTypeModel, m_nDimension ))
             return aResult;
 
-        Reference< XRegressionCurveContainer > xRegrCont( rSeries.getModel(), uno::UNO_QUERY );
+        rtl::Reference< DataSeries > xRegrCont = rSeries.getModel();
         if( xRegrCont.is())
         {
-            Sequence< Reference< XRegressionCurve > > aCurves( xRegrCont->getRegressionCurves());
-            sal_Int32 i = 0, nCount = aCurves.getLength();
+            const std::vector< rtl::Reference< RegressionCurveModel > > & aCurves = xRegrCont->getRegressionCurves2();
+            sal_Int32 i = 0, nCount = aCurves.size();
             for( i=0; i<nCount; ++i )
             {
-                if( aCurves[i].is() )
+                //label
+                OUString aResStr( RegressionCurveHelper::getUINameForRegressionCurve( aCurves[i] ) );
+                replaceParamterInString( aResStr, "%SERIESNAME", aLabelText );
+                aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( xContext, aResStr, xTextProperties );
+
+                // symbol
+                rtl::Reference<SvxShapeGroup> xSymbolGroup(ShapeFactory::createGroup2D( xTarget ));
+
+                // create the symbol
+                rtl::Reference<SvxShapeGroup> xShape = VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
+                    xSymbolGroup, LegendSymbolStyle::Line,
+                    aCurves[i],
+                    VLegendSymbolFactory::PropertyType::Line, uno::Any() );
+
+                // set CID to symbol for selection
+                if( xShape.is())
                 {
-                    //label
-                    OUString aResStr( RegressionCurveHelper::getUINameForRegressionCurve( aCurves[i] ) );
-                    replaceParamterInString( aResStr, "%SERIESNAME", aLabelText );
-                    aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( xContext, aResStr, xTextProperties );
+                    aEntry.xSymbol = xSymbolGroup;
 
-                    // symbol
-                    rtl::Reference<SvxShapeGroup> xSymbolGroup(ShapeFactory::createGroup2D( xTarget ));
-
-                    // create the symbol
-                    rtl::Reference<SvxShapeGroup> xShape = VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
-                        xSymbolGroup, LegendSymbolStyle::Line,
-                        Reference< beans::XPropertySet >( aCurves[i], uno::UNO_QUERY ),
-                        VLegendSymbolFactory::PropertyType::Line, uno::Any() );
-
-                    // set CID to symbol for selection
-                    if( xShape.is())
-                    {
-                        aEntry.xSymbol = xSymbolGroup;
-
-                        bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurves[i] );
-                        ObjectType eObjectType = bAverageLine ? OBJECTTYPE_DATA_AVERAGE_LINE : OBJECTTYPE_DATA_CURVE;
-                        OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( eObjectType, i ) );
-                        aChildParticle = ObjectIdentifier::addChildParticle( aChildParticle, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
-                        OUString aCID = ObjectIdentifier::createClassifiedIdentifierForParticles( rSeries.getSeriesParticle(), aChildParticle );
-                        ShapeFactory::setShapeName( xShape, aCID );
-                    }
-
-                    aResult.push_back(aEntry);
+                    bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurves[i] );
+                    ObjectType eObjectType = bAverageLine ? OBJECTTYPE_DATA_AVERAGE_LINE : OBJECTTYPE_DATA_CURVE;
+                    OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( eObjectType, i ) );
+                    aChildParticle = ObjectIdentifier::addChildParticle( aChildParticle, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
+                    OUString aCID = ObjectIdentifier::createClassifiedIdentifierForParticles( rSeries.getSeriesParticle(), aChildParticle );
+                    ShapeFactory::setShapeName( xShape, aCID );
                 }
+
+                aResult.push_back(aEntry);
             }
         }
     }

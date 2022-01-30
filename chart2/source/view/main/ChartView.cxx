@@ -23,6 +23,7 @@
 #include <chartview/DrawModelWrapper.hxx>
 #include <Diagram.hxx>
 #include <ChartType.hxx>
+#include <DataSeries.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <VDiagram.hxx>
 #include "VTitle.hxx"
@@ -531,12 +532,10 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             sal_Int32 zSlot=-1;
             sal_Int32 xSlot=-1;
             sal_Int32 ySlot=-1;
-            uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xChartType->getDataSeries() );
-            for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
+            const std::vector< rtl::Reference< DataSeries > > & aSeriesList = xChartType->getDataSeries2();
+            for( sal_Int32 nS = 0; nS < static_cast<sal_Int32>(aSeriesList.size()); ++nS )
             {
-                uno::Reference< XDataSeries > const & xDataSeries = aSeriesList[nS];
-                if(!xDataSeries.is())
-                    continue;
+                rtl::Reference<DataSeries> const & xDataSeries = aSeriesList[nS];
                 if( !bIncludeHiddenCells && !DataSeriesHelper::hasUnhiddenData(xDataSeries) )
                     continue;
 

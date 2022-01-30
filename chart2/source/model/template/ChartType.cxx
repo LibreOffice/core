@@ -23,6 +23,7 @@
 #include <CloneHelper.hxx>
 #include <AxisIndexDefines.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <DataSeries.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -51,7 +52,7 @@ ChartType::ChartType( const ChartType & rOther ) :
 {
     {
         SolarMutexGuard g; // access to rOther.m_aDataSeries
-        CloneHelper::CloneRefVector<css::chart2::XDataSeries>(
+        CloneHelper::CloneRefVector(
                 rOther.m_aDataSeries, m_aDataSeries);
     }
     ModifyListenerHelper::addListenerToAllElements( m_aDataSeries, m_xModifyEventForwarder );
@@ -117,7 +118,7 @@ OUString SAL_CALL ChartType::getRoleOfSequenceForSeriesLabel()
 }
 
 void ChartType::impl_addDataSeriesWithoutNotification(
-        const Reference< chart2::XDataSeries >& xDataSeries )
+        const rtl::Reference< DataSeries >& xDataSeries )
 {
     if( std::find( m_aDataSeries.begin(), m_aDataSeries.end(), xDataSeries )
         != m_aDataSeries.end())
@@ -130,6 +131,13 @@ void ChartType::impl_addDataSeriesWithoutNotification(
 // ____ XDataSeriesContainer ____
 void SAL_CALL ChartType::addDataSeries( const Reference< chart2::XDataSeries >& xDataSeries )
 {
+    rtl::Reference<DataSeries> xTmp = dynamic_cast<DataSeries*>(xDataSeries.get());
+    assert(xTmp);
+    addDataSeries(xTmp);
+}
+
+void ChartType::addDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
+{
     SolarMutexGuard g;
 
     impl_addDataSeriesWithoutNotification( xDataSeries );
@@ -138,13 +146,19 @@ void SAL_CALL ChartType::addDataSeries( const Reference< chart2::XDataSeries >& 
 
 void SAL_CALL ChartType::removeDataSeries( const Reference< chart2::XDataSeries >& xDataSeries )
 {
+    rtl::Reference<DataSeries> xTmp = dynamic_cast<DataSeries*>(xDataSeries.get());
+    assert(xTmp);
+    removeDataSeries(xTmp);
+}
+
+void ChartType::removeDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
+{
     if( !xDataSeries.is())
         throw container::NoSuchElementException();
 
     SolarMutexGuard g;
 
-    tDataSeriesContainerType::iterator aIt(
-            std::find( m_aDataSeries.begin(), m_aDataSeries.end(), xDataSeries ) );
+    auto aIt = std::find( m_aDataSeries.begin(), m_aDataSeries.end(), xDataSeries );
 
     if( aIt == m_aDataSeries.end())
         throw container::NoSuchElementException(
@@ -160,18 +174,29 @@ Sequence< Reference< chart2::XDataSeries > > SAL_CALL ChartType::getDataSeries()
 {
     SolarMutexGuard g;
 
-    return comphelper::containerToSequence( m_aDataSeries );
+    return comphelper::containerToSequence< Reference< chart2::XDataSeries > >( m_aDataSeries );
 }
 
 void SAL_CALL ChartType::setDataSeries( const Sequence< Reference< chart2::XDataSeries > >& aDataSeries )
+{
+    std::vector< rtl::Reference<DataSeries> > aTmp;
+    for (auto const & i : aDataSeries)
+    {
+        auto p = dynamic_cast<DataSeries*>(i.get());
+        assert(p);
+        aTmp.push_back(p);
+    }
+    setDataSeries(aTmp);
+}
+
+void ChartType::setDataSeries( const std::vector< rtl::Reference< DataSeries > >& aDataSeries )
 {
     SolarMutexGuard g;
 
     m_bNotifyChanges = false;
     try
     {
-        const Sequence< Reference< chart2::XDataSeries > > aOldSeries( getDataSeries() );
-        for( auto const & i : aOldSeries )
+        for( auto const & i : m_aDataSeries )
             ModifyListenerHelper::removeListener( i, m_xModifyEventForwarder );
         m_aDataSeries.clear();
 
