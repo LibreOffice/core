@@ -72,14 +72,12 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-void lcl_InsertMeanValueLine( const uno::Reference< chart2::XDataSeries > & xSeries )
+void lcl_InsertMeanValueLine( const rtl::Reference< ::chart::DataSeries > & xSeries )
 {
-    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
-        xSeries, uno::UNO_QUERY );
-    if( xRegCurveCnt.is())
+    if( xSeries.is())
     {
         ::chart::RegressionCurveHelper::addMeanValueLine(
-            xRegCurveCnt, uno::Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ));
+            xSeries, xSeries);
     }
 }
 
@@ -319,7 +317,7 @@ void ChartController::executeDispatch_InsertMenu_MeanValues()
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_AVERAGE_LINE )),
         m_xUndoManager );
 
-    uno::Reference< chart2::XDataSeries > xSeries =
+    rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
     if( xSeries.is() )
     {
