@@ -2610,7 +2610,9 @@ private:
 
     bool    HasPartOfMerged( const ScRange& rRange );
 
+public:
     ScRefCellValue GetRefCellValue( const ScAddress& rPos );
+private:
     ScRefCellValue GetRefCellValue( const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos );
 
     std::map< SCTAB, ScSortParam > mSheetSortParams;
