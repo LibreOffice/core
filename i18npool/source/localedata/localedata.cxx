@@ -100,6 +100,7 @@ const struct {
     { "es_UY",  lcl_DATA_ES },
     { "es_VE",  lcl_DATA_ES },
     { "gl_ES",  lcl_DATA_ES },
+    { "oc_ES",  lcl_DATA_ES },
 
     { "de_DE",  lcl_DATA_EURO },
     { "de_AT",  lcl_DATA_EURO },
