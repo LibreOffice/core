@@ -68,7 +68,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 
 // include search util
-#include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/i18n/Transliteration.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <i18nutil/searchopt.hxx>
 #include <unotools/textsearch.hxx>
@@ -1269,6 +1269,7 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
             return;
         }
     }
+    --lStartPos; // Make it 0-based
 
     sal_Int32 lCount = -1;
     if (nArgCount >= 5)
@@ -1304,40 +1305,52 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
     }
 
     const OUString aExpStr = rPar.Get(1)->GetOUString();
-    const OUString aFindStr = rPar.Get(2)->GetOUString();
+    OUString aFindStr = rPar.Get(2)->GetOUString();
     const OUString aReplaceStr = rPar.Get(3)->GetOUString();
-    const sal_Int32 nExpStrLen = aExpStr.getLength();
-    const sal_Int32 nFindStrLen = aFindStr.getLength();
 
-    // tdf#142487 - use utl::TextSearch in order to implement the replace algorithm
-    i18nutil::SearchOptions2 aSearchOptions;
-    aSearchOptions.searchString = aFindStr;
-    aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
+    OUString aSrcStr(aExpStr);
+    sal_Int32 nPrevPos = std::min(lStartPos, aSrcStr.getLength());
+    css::uno::Sequence<sal_Int32> aOffset;
     if (bCaseInsensitive)
-        aSearchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
-    utl::TextSearch textSearch(aSearchOptions);
+    {
+        // tdf#132389: case-insensitive operation for non-ASCII characters
+        // tdf#142487: use css::i18n::Transliteration to correctly handle ß -> ss expansion
+        // tdf#132388: We can't use utl::TextSearch (css::i18n::XTextSearch), because each call to
+        //             css::i18n::XTextSearch::SearchForward transliterates input string, making
+        //             performance of repeated calls unacceptable
+        auto xTrans = css::i18n::Transliteration::create(comphelper::getProcessComponentContext());
+        xTrans->loadModule(css::i18n::TransliterationModules_IGNORE_CASE, {});
+        aFindStr = xTrans->transliterate(aFindStr, 0, aFindStr.getLength(), aOffset);
+        aSrcStr = xTrans->transliterate(aSrcStr, nPrevPos, aSrcStr.getLength() - nPrevPos, aOffset);
+        nPrevPos = std::distance(aOffset.begin(),
+                                 std::lower_bound(aOffset.begin(), aOffset.end(), nPrevPos));
+    }
+
+    auto getExpStrPos = [aOffset, nExpLen = aExpStr.getLength()](sal_Int32 nSrcStrPos) -> sal_Int32
+    {
+        assert(!aOffset.hasElements() || aOffset.getLength() >= nSrcStrPos);
+        if (!aOffset.hasElements())
+            return nSrcStrPos;
+        return aOffset.getLength() > nSrcStrPos ? aOffset[nSrcStrPos] : nExpLen;
+    };
 
     // Note: the result starts from lStartPos, removing everything to the left. See i#94895.
-    sal_Int32 nPrevPos = std::min(lStartPos - 1, nExpStrLen);
-    OUStringBuffer sResult(nExpStrLen - nPrevPos);
+    OUStringBuffer sResult(aSrcStr.getLength() - nPrevPos);
     sal_Int32 nCounts = 0;
     while (lCount == -1 || lCount > nCounts)
     {
-        sal_Int32 nStartPos = nPrevPos;
-        sal_Int32 aEndPos = aExpStr.getLength();
-        if (textSearch.SearchForward(aExpStr, &nStartPos, &aEndPos))
-        {
-            sResult.append(aExpStr.getStr() + nPrevPos, nStartPos - nPrevPos);
-            sResult.append(aReplaceStr);
-            nPrevPos = nStartPos + nFindStrLen;
-            nCounts++;
-        }
-        else
-        {
+        sal_Int32 nPos = aSrcStr.indexOf(aFindStr, nPrevPos);
+        if (nPos < 0)
             break;
-        }
+
+        lStartPos = getExpStrPos(nPrevPos);
+        sResult.append(aExpStr.getStr() + lStartPos, getExpStrPos(nPos) - lStartPos);
+        sResult.append(aReplaceStr);
+        nPrevPos = nPos + aFindStr.getLength();
+        nCounts++;
     }
-    sResult.append(aExpStr.getStr() + nPrevPos, nExpStrLen - nPrevPos);
+    lStartPos = getExpStrPos(nPrevPos);
+    sResult.append(aExpStr.getStr() + lStartPos, aExpStr.getLength() - lStartPos);
     rPar.Get(0)->PutString(sResult.makeStringAndClear());
 }
 
