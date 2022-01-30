@@ -1029,15 +1029,15 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="up1cb">
+                      <object class="GtkToggleButton" id="up1cb">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="tooltip-text" translatable="yes" context="tocentriespage|up1cb|tooltip_text">Ascending</property>
                         <property name="image">image1</property>
                         <property name="use-underline">True</property>
+                        <property name="always-show-image">True</property>
                         <property name="active">True</property>
-                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="up1cb-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|up1cb">Sorts the bibliography entries in ascending alphanumerical order.</property>
@@ -1050,15 +1050,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="down1cb">
+                      <object class="GtkToggleButton" id="down1cb">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="tooltip-text" translatable="yes" context="tocentriespage|down1cb|tooltip_text">Descending</property>
                         <property name="image">image2</property>
                         <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">up1cb</property>
+                        <property name="always-show-image">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="down1cb-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|down1cb">Sorts the bibliography entries in a descending alphanumerical order.</property>
@@ -1071,15 +1070,15 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="up2cb">
+                      <object class="GtkToggleButton" id="up2cb">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="tooltip-text" translatable="yes" context="tocentriespage|up2cb|tooltip_text">Ascending</property>
                         <property name="image">image3</property>
                         <property name="use-underline">True</property>
+                        <property name="always-show-image">True</property>
                         <property name="active">True</property>
-                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="up2cb-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|up2cb">Sorts the bibliography entries in ascending alphanumerical order.</property>
@@ -1092,15 +1091,15 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="up3cb">
+                      <object class="GtkToggleButton" id="up3cb">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="tooltip-text" translatable="yes" context="tocentriespage|up3cb|tooltip_text">Ascending</property>
                         <property name="image">image4</property>
                         <property name="use-underline">True</property>
+                        <property name="always-show-image">True</property>
                         <property name="active">True</property>
-                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="up3cb-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|up3cb">Sorts the bibliography entries in ascending alphanumerical order.</property>
@@ -1113,15 +1112,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="down2cb">
+                      <object class="GtkToggleButton" id="down2cb">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="tooltip-text" translatable="yes" context="tocentriespage|down2cb|tooltip_text">Descending</property>
                         <property name="image">image5</property>
                         <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">up2cb</property>
+                        <property name="always-show-image">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="down2cb-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|down2cb">Sorts the bibliography entries in a descending alphanumerical order.</property>
@@ -1134,15 +1132,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="down3cb">
+                      <object class="GtkToggleButton" id="down3cb">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="tooltip-text" translatable="yes" context="tocentriespage|down3cb|tooltip_text">Descending</property>
                         <property name="image">image6</property>
                         <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">up3cb</property>
+                        <property name="always-show-image">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="down3cb-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|down3cb">Sorts the bibliography entries in a descending alphanumerical order.</property>
