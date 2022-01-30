@@ -1058,6 +1058,7 @@ chart2/source/inc/ReferenceSizeProvider.hxx
 chart2/source/inc/RegressionCalculationHelper.hxx
 chart2/source/inc/RegressionCurveCalculator.hxx
 chart2/source/inc/RegressionCurveHelper.hxx
+chart2/source/inc/RegressionCurveModel.hxx
 chart2/source/inc/RelativePositionHelper.hxx
 chart2/source/inc/RelativeSizeHelper.hxx
 chart2/source/inc/Scaling.hxx
@@ -1203,7 +1204,6 @@ chart2/source/tools/ReferenceSizeProvider.cxx
 chart2/source/tools/RegressionCurveCalculator.cxx
 chart2/source/tools/RegressionCurveHelper.cxx
 chart2/source/tools/RegressionCurveModel.cxx
-chart2/source/tools/RegressionCurveModel.hxx
 chart2/source/tools/RegressionEquation.cxx
 chart2/source/tools/RegressionEquation.hxx
 chart2/source/tools/RelativePositionHelper.cxx

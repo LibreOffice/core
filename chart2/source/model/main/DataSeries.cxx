@@ -25,6 +25,7 @@
 #include "DataPoint.hxx"
 #include <DataSeriesHelper.hxx>
 #include <CloneHelper.hxx>
+#include <RegressionCurveModel.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <EventListenerHelper.hxx>
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -144,7 +145,7 @@ DataSeries::DataSeries( const DataSeries & rOther ) :
         ModifyListenerHelper::addListenerToAllElements( m_aDataSequences, m_xModifyEventForwarder );
     }
 
-    CloneHelper::CloneRefVector< chart2::XRegressionCurve >( rOther.m_aRegressionCurves, m_aRegressionCurves );
+    CloneHelper::CloneRefVector( rOther.m_aRegressionCurves, m_aRegressionCurves );
     ModifyListenerHelper::addListenerToAllElements( m_aRegressionCurves, m_xModifyEventForwarder );
 
     // add as listener to XPropertySet properties
@@ -415,16 +416,18 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSeries:
 void SAL_CALL DataSeries::addRegressionCurve(
     const uno::Reference< chart2::XRegressionCurve >& xRegressionCurve )
 {
+    auto pRegressionCurve = dynamic_cast<RegressionCurveModel*>(xRegressionCurve.get());
+    assert(pRegressionCurve);
     Reference< util::XModifyListener > xModifyEventForwarder;
     {
         MutexGuard aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
-        if( std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), xRegressionCurve )
+        if( std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), pRegressionCurve )
             != m_aRegressionCurves.end())
             throw lang::IllegalArgumentException("curve not found", static_cast<cppu::OWeakObject*>(this), 1);
-        m_aRegressionCurves.push_back( xRegressionCurve );
+        m_aRegressionCurves.push_back( pRegressionCurve );
     }
-    ModifyListenerHelper::addListener( xRegressionCurve, xModifyEventForwarder );
+    ModifyListenerHelper::addListener( rtl::Reference<RegressionCurveModel>(pRegressionCurve), xModifyEventForwarder );
     fireModifyEvent();
 }
 
@@ -433,13 +436,15 @@ void SAL_CALL DataSeries::removeRegressionCurve(
 {
     if( !xRegressionCurve.is() )
         throw container::NoSuchElementException();
+    auto pRegressionCurve = dynamic_cast<RegressionCurveModel*>(xRegressionCurve.get());
+    assert(pRegressionCurve);
 
     Reference< util::XModifyListener > xModifyEventForwarder;
     {
         MutexGuard aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
         tRegressionCurveContainerType::iterator aIt(
-            std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), xRegressionCurve ) );
+            std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), pRegressionCurve ) );
         if( aIt == m_aRegressionCurves.end())
             throw container::NoSuchElementException(
                 "The given regression curve is no element of this series",
@@ -447,21 +452,27 @@ void SAL_CALL DataSeries::removeRegressionCurve(
         m_aRegressionCurves.erase( aIt );
     }
 
-    ModifyListenerHelper::removeListener( xRegressionCurve, xModifyEventForwarder );
+    ModifyListenerHelper::removeListener( rtl::Reference<RegressionCurveModel>(pRegressionCurve), xModifyEventForwarder );
     fireModifyEvent();
 }
 
 uno::Sequence< uno::Reference< chart2::XRegressionCurve > > SAL_CALL DataSeries::getRegressionCurves()
 {
     MutexGuard aGuard( m_aMutex );
-    return comphelper::containerToSequence( m_aRegressionCurves );
+    return comphelper::containerToSequence<uno::Reference< chart2::XRegressionCurve >>( m_aRegressionCurves );
 }
 
 void SAL_CALL DataSeries::setRegressionCurves(
     const Sequence< Reference< chart2::XRegressionCurve > >& aRegressionCurves )
 {
     tRegressionCurveContainerType aOldCurves;
-    auto aNewCurves( comphelper::sequenceToContainer<tRegressionCurveContainerType>( aRegressionCurves ) );
+    tRegressionCurveContainerType aNewCurves;
+    for (const auto & i : aRegressionCurves)
+    {
+        auto pRegressionCurve = dynamic_cast<RegressionCurveModel*>(i.get());
+        assert(pRegressionCurve);
+        aNewCurves.push_back(pRegressionCurve);
+    }
     Reference< util::XModifyListener > xModifyEventForwarder;
     {
         MutexGuard aGuard( m_aMutex );
