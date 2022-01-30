@@ -20,6 +20,7 @@
 #include <limits>
 #include <memory>
 #include <VDataSeries.hxx>
+#include <DataSeries.hxx>
 #include <ObjectIdentifier.hxx>
 #include <CommonConverters.hxx>
 #include <LabelPositionHelper.hxx>
@@ -138,7 +139,7 @@ void lcl_maybeReplaceNanWithZero( double& rfValue, sal_Int32 nMissingValueTreatm
 
 }
 
-VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
+VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
     : m_nPolygonIndex(0)
     , m_fLogicMinX(0.0)
     , m_fLogicMaxX(0.0)
@@ -160,12 +161,11 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , mpOldSeries(nullptr)
     , mnPercent(0.0)
 {
-    m_xDataSeriesProps.set(m_xDataSeries, css::uno::UNO_QUERY);
-    uno::Reference<data::XDataSource> xDataSource( xDataSeries, uno::UNO_QUERY );
+    m_xDataSeriesProps = m_xDataSeries;
 
     uno::Sequence< uno::Reference<
         chart2::data::XLabeledDataSequence > > aDataSequences =
-            xDataSource->getDataSequences();
+            m_xDataSeries->getDataSequences();
 
     for(sal_Int32 nN = aDataSequences.getLength();nN--;)
     {
@@ -227,18 +227,17 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
             m_nPointCount = m_aValues_Y_Last.getLength();
     }
 
-    uno::Reference<beans::XPropertySet> xProp(xDataSeries, uno::UNO_QUERY );
-    if( !xProp.is())
+    if( !xDataSeries.is())
         return;
 
     try
     {
         //get AttributedDataPoints
-        xProp->getPropertyValue("AttributedDataPoints") >>= m_aAttributedDataPointIndexList;
+        xDataSeries->getPropertyValue("AttributedDataPoints") >>= m_aAttributedDataPointIndexList;
 
-        xProp->getPropertyValue("StackingDirection") >>= m_eStackingDirection;
+        xDataSeries->getPropertyValue("StackingDirection") >>= m_eStackingDirection;
 
-        xProp->getPropertyValue("AttachedAxisIndex") >>= m_nAxisIndex;
+        xDataSeries->getPropertyValue("AttachedAxisIndex") >>= m_nAxisIndex;
         if(m_nAxisIndex<0)
             m_nAxisIndex=0;
     }
@@ -300,7 +299,7 @@ void VDataSeries::releaseShapes()
     m_nPolygonIndex = 0;
 }
 
-const uno::Reference<css::chart2::XDataSeries>& VDataSeries::getModel() const
+const rtl::Reference<::chart::DataSeries>& VDataSeries::getModel() const
 {
     return m_xDataSeries;
 }
