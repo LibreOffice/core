@@ -18,6 +18,7 @@
  */
 
 #include <DataSeriesHelper.hxx>
+#include <DataSeries.hxx>
 #include <DataSource.hxx>
 #include <ChartType.hxx>
 #include <unonames.hxx>
@@ -363,6 +364,36 @@ OUString getDataSeriesLabel(
             // special case: labeled data series with only a label and no values may
             // serve as label
             xLabeledSeq.set( lcl_findLSequenceWithOnlyLabel( xSource ));
+            if( xLabeledSeq.is())
+            {
+                Reference< chart2::data::XDataSequence > xSeq( xLabeledSeq->getLabel());
+                if( xSeq.is())
+                    aResult = lcl_getDataSequenceLabel( xSeq );
+            }
+        }
+
+    }
+
+    return aResult;
+}
+
+OUString getDataSeriesLabel(
+    const rtl::Reference< DataSeries > & xSeries,
+    const OUString & rLabelSequenceRole )
+{
+    OUString aResult;
+
+    if( xSeries.is())
+    {
+        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
+            ::chart::DataSeriesHelper::getDataSequenceByRole( xSeries, rLabelSequenceRole ));
+        if( xLabeledSeq.is())
+            aResult = getLabelForLabeledDataSequence( xLabeledSeq );
+        else
+        {
+            // special case: labeled data series with only a label and no values may
+            // serve as label
+            xLabeledSeq.set( lcl_findLSequenceWithOnlyLabel( xSeries ));
             if( xLabeledSeq.is())
             {
                 Reference< chart2::data::XDataSequence > xSeq( xLabeledSeq->getLabel());
