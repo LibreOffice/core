@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8567593f_790dd69f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-30T23:06:49Z",
+      "side": 1,
+      "message": "Rebasing every time the build fails for non-related reasons isn\u0027t the best way as it completely retriggers builds on all testing platforms. Rather some people like me can reschedule/continue builds for only failing platforms in Jenkins.\n\nApart from that, having this change and the changes of https://gerrit.libreoffice.org/c/core/+/129186 in different gerrit changes doesn\u0027t make sense as one doesn\u0027t do anything without the other (and the other change depends on this one). Best squash the two commits into one, keep only one of the two Change-Id lines (move it to the end of the commit message) and push to gerrit again to update, then abandon the other gerrit change.",
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
