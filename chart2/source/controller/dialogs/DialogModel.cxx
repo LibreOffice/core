@@ -20,6 +20,7 @@
 #include "DialogModel.hxx"
 #include <RangeSelectionHelper.hxx>
 #include <DataInterpreter.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <DiagramHelper.hxx>
@@ -724,12 +725,12 @@ void DialogModel::setData(
             rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram() );
             ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
 
-            std::vector< Reference< XDataSeries > > aSeriesToReUse(
-                DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+            std::vector< rtl::Reference< DataSeries > > aSeriesToReUse =
+                DiagramHelper::getDataSeriesFromDiagram( xDiagram );
             applyInterpretedData(
                 xInterpreter->interpretDataSource(
                     xDataSource, rArguments,
-                    comphelper::containerToSequence( aSeriesToReUse )),
+                    aSeriesToReUse ),
                 aSeriesToReUse);
 
             ThreeDHelper::setScheme( xDiagram, e3DScheme );
@@ -773,7 +774,7 @@ sal_Int32 DialogModel::GetRoleIndexForSorting( const OUString & rInternalRoleStr
 
 void DialogModel::applyInterpretedData(
     const InterpretedData & rNewData,
-    const std::vector< Reference< XDataSeries > > & rSeriesToReUse )
+    const std::vector< rtl::Reference< DataSeries > > & rSeriesToReUse )
 {
     if( ! m_xChartDocument.is())
         return;
@@ -797,7 +798,9 @@ void DialogModel::applyInterpretedData(
             const sal_Int32 nSeriesInGroup = aSeries.getLength();
             for( sal_Int32 nSeries=0; nSeries<nSeriesInGroup; ++nSeries, ++nSeriesCounter )
             {
-                if( std::find( rSeriesToReUse.begin(), rSeriesToReUse.end(), aSeries[nSeries] )
+                auto pSeries = dynamic_cast<DataSeries*>(aSeries[nSeries].get());
+                assert(pSeries);
+                if( std::find( rSeriesToReUse.begin(), rSeriesToReUse.end(), pSeries )
                     == rSeriesToReUse.end())
                 {
                     Reference< beans::XPropertySet > xSeriesProp( aSeries[nSeries], uno::UNO_QUERY );

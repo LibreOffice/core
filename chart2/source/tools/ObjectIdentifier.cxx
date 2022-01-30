@@ -32,6 +32,8 @@
 #include <Diagram.hxx>
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <DataSeries.hxx>
+#include <RegressionCurveModel.hxx>
 
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -1130,10 +1132,10 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
             case OBJECTTYPE_DATA_LABELS:
             case OBJECTTYPE_DATA_SERIES:
                 {
-                    Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID(
+                    rtl::Reference< DataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID(
                         rObjectCID, xChartModel ) );
                     if( xSeries.is() )
-                        xObjectProperties.set( xSeries, uno::UNO_QUERY );
+                        xObjectProperties = xSeries;
 
                     break;
                 }
@@ -1180,19 +1182,19 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
             case OBJECTTYPE_DATA_CURVE:
             case OBJECTTYPE_DATA_CURVE_EQUATION:
                 {
-                    Reference< XRegressionCurveContainer > xRegressionContainer( ObjectIdentifier::getDataSeriesForCID(
-                        rObjectCID, xChartModel ), uno::UNO_QUERY );
+                    rtl::Reference< DataSeries > xRegressionContainer = ObjectIdentifier::getDataSeriesForCID(
+                        rObjectCID, xChartModel );
                     if(xRegressionContainer.is())
                     {
                         sal_Int32 nIndex = aParticleID.toInt32();
-                        uno::Sequence< Reference< XRegressionCurve > > aCurveList =
-                            xRegressionContainer->getRegressionCurves();
-                        if( nIndex >= 0 && nIndex <aCurveList.getLength() )
+                        const std::vector< rtl::Reference< RegressionCurveModel > > & aCurveList =
+                            xRegressionContainer->getRegressionCurves2();
+                        if( nIndex >= 0 && nIndex < static_cast<sal_Int32>(aCurveList.size()) )
                         {
                             if( eObjectType == OBJECTTYPE_DATA_CURVE_EQUATION )
-                                xObjectProperties.set( aCurveList[nIndex]->getEquationProperties());
+                                xObjectProperties = aCurveList[nIndex]->getEquationProperties();
                             else
-                                xObjectProperties.set( aCurveList[nIndex], uno::UNO_QUERY );
+                                xObjectProperties = aCurveList[nIndex];
                         }
                     }
                     break;
@@ -1239,12 +1241,10 @@ Reference< XAxis > ObjectIdentifier::getAxisForCID(
     return AxisHelper::getAxis( nDimensionIndex, nAxisIndex, xCooSys );
 }
 
-Reference< XDataSeries > ObjectIdentifier::getDataSeriesForCID(
+rtl::Reference< DataSeries > ObjectIdentifier::getDataSeriesForCID(
                 const OUString& rObjectCID
                 , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
-    Reference< XDataSeries > xSeries;
-
     rtl::Reference< Diagram > xDiagram;
     rtl::Reference< BaseCoordinateSystem > xCooSys;
     lcl_getDiagramAndCooSys( rObjectCID, xChartModel, xDiagram, xCooSys );
@@ -1254,12 +1254,13 @@ Reference< XDataSeries > ObjectIdentifier::getDataSeriesForCID(
     sal_Int32 nPointIndex = -1;
     lcl_parseSeriesIndices( nChartTypeIndex, nSeriesIndex, nPointIndex, rObjectCID );
 
+    rtl::Reference< DataSeries > xSeries;
     rtl::Reference< ChartType > xDataSeriesContainer( DiagramHelper::getChartTypeByIndex( xDiagram, nChartTypeIndex ) );
     if( xDataSeriesContainer.is() )
     {
-        uno::Sequence< uno::Reference< XDataSeries > > aDataSeriesSeq( xDataSeriesContainer->getDataSeries() );
-        if( nSeriesIndex >= 0 && nSeriesIndex < aDataSeriesSeq.getLength() )
-            xSeries.set( aDataSeriesSeq[nSeriesIndex] );
+        const std::vector< rtl::Reference< DataSeries > > & aDataSeriesSeq( xDataSeriesContainer->getDataSeries2() );
+        if( nSeriesIndex >= 0 && nSeriesIndex < static_cast<sal_Int32>(aDataSeriesSeq.size()) )
+            xSeries = aDataSeriesSeq[nSeriesIndex];
     }
 
     return xSeries;

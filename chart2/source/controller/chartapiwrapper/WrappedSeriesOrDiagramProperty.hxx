@@ -22,6 +22,7 @@
 #include "Chart2ModelContact.hxx"
 #include <DiagramHelper.hxx>
 #include <com/sun/star/chart2/XDataSeries.hpp>
+#include <DataSeries.hxx>
 
 #include <memory>
 #include <vector>
@@ -64,11 +65,11 @@ public:
         if( m_ePropertyType == DIAGRAM &&
             m_spChart2ModelContact )
         {
-            std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
-                ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getDiagram() ) );
+            std::vector< rtl::Reference< DataSeries > > aSeriesVector =
+                ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getDiagram() );
             for (auto const& series : aSeriesVector)
             {
-                PROPERTYTYPE aCurValue = getValueFromSeries( css::uno::Reference< css::beans::XPropertySet >::query(series) );
+                PROPERTYTYPE aCurValue = getValueFromSeries( series );
                 if( !bHasDetectableInnerValue )
                     rValue = aCurValue;
                 else
@@ -91,15 +92,11 @@ public:
         if( m_ePropertyType == DIAGRAM &&
             m_spChart2ModelContact )
         {
-            std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
-                ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getDiagram() ) );
+            std::vector< rtl::Reference< DataSeries > > aSeriesVector =
+                ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getDiagram() );
             for (auto const& series : aSeriesVector)
             {
-                css::uno::Reference< css::beans::XPropertySet > xSeriesPropertySet(series, css::uno::UNO_QUERY);
-                if( xSeriesPropertySet.is() )
-                {
-                    setValueToSeries( xSeriesPropertySet, aNewValue );
-                }
+                setValueToSeries( series, aNewValue );
             }
         }
     }

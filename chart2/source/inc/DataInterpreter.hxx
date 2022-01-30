@@ -25,9 +25,12 @@
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include "charttoolsdllapi.hxx"
+#include <rtl/ref.hxx>
+#include <vector>
 
 namespace chart
 {
+class DataSeries;
 
 /** offers tooling to interpret different data sources in a structural
     and chart-type-dependent way.
@@ -81,10 +84,15 @@ public:
             use all the data series given here for the result before
             creating new ones.
      */
-    virtual css::chart2::InterpretedData interpretDataSource(
+    css::chart2::InterpretedData interpretDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
         const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aSeriesToReUse );
+
+    virtual css::chart2::InterpretedData interpretDataSource(
+        const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
+        const std::vector< rtl::Reference< ::chart::DataSeries > >& aSeriesToReUse );
 
     /** Re-interprets the data given in <code>aInterpretedData</code>
         while keeping the number of data series and the categories.

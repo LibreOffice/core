@@ -31,6 +31,7 @@
 #include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
+#include <DataSeries.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <chartview/DrawModelWrapper.hxx>
@@ -247,7 +248,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         m_xUndoManager );
 
     //if a series is selected insert labels for that series only:
-    uno::Reference< chart2::XDataSeries > xSeries =
+    rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel());
     if( xSeries.is() )
     {
@@ -327,8 +328,8 @@ void ChartController::executeDispatch_InsertMenu_MeanValues()
     }
     else
     {
-        std::vector< uno::Reference< chart2::XDataSeries > > aSeries(
-            DiagramHelper::getDataSeriesFromDiagram( getFirstDiagram()));
+        std::vector< rtl::Reference< DataSeries > > aSeries =
+            DiagramHelper::getDataSeriesFromDiagram( getFirstDiagram());
 
         for( const auto& xSrs : aSeries )
             lcl_InsertMeanValueLine( xSrs );
@@ -351,8 +352,8 @@ void ChartController::executeDispatch_InsertMenu_Trendlines()
 
 void ChartController::executeDispatch_InsertTrendline()
 {
-    uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel()), uno::UNO_QUERY );
+    rtl::Reference< DataSeries > xRegressionCurveContainer =
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel());
 
     if( !xRegressionCurveContainer.is() )
         return;
@@ -516,8 +517,8 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
         ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getChartModel() ), uno::UNO_QUERY );
     if( !xRegCurve.is() )
     {
-        uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
-            ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() ), uno::UNO_QUERY );
+        rtl::Reference< DataSeries > xRegCurveCnt =
+            ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
         xRegCurve.set( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) );
     }
     if( !xRegCurve.is())
@@ -570,8 +571,8 @@ void ChartController::executeDispatch_DeleteR2Value()
 
 void ChartController::executeDispatch_DeleteMeanValue()
 {
-    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() ), uno::UNO_QUERY );
+    rtl::Reference< DataSeries > xRegCurveCnt =
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
     if( xRegCurveCnt.is())
     {
         UndoGuard aUndoGuard(
@@ -585,8 +586,8 @@ void ChartController::executeDispatch_DeleteMeanValue()
 
 void ChartController::executeDispatch_DeleteTrendline()
 {
-    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() ), uno::UNO_QUERY );
+    rtl::Reference< DataSeries > xRegCurveCnt =
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
     if( xRegCurveCnt.is())
     {
         UndoGuard aUndoGuard(
@@ -600,8 +601,8 @@ void ChartController::executeDispatch_DeleteTrendline()
 
 void ChartController::executeDispatch_DeleteTrendlineEquation()
 {
-    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() ), uno::UNO_QUERY );
+    rtl::Reference< DataSeries > xRegCurveCnt =
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
     if( xRegCurveCnt.is())
     {
         UndoGuard aUndoGuard(

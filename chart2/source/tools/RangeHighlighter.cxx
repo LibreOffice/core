@@ -23,6 +23,7 @@
 #include <ChartModelHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <ObjectIdentifier.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <Diagram.hxx>
 
@@ -112,7 +113,7 @@ void RangeHighlighter::determineRanges()
             {
                 ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
                 sal_Int32 nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aCID );
-                Reference< chart2::XDataSeries > xDataSeries( ObjectIdentifier::getDataSeriesForCID( aCID, m_xChartModel ) );
+                rtl::Reference< DataSeries > xDataSeries( ObjectIdentifier::getDataSeriesForCID( aCID, m_xChartModel ) );
                 if( eObjectType == OBJECTTYPE_LEGEND_ENTRY )
                 {
                     OUString aParentParticel( ObjectIdentifier::getFullParentParticle( aCID ) );
@@ -263,18 +264,14 @@ void RangeHighlighter::fillRangesForCategories( const Reference< chart2::XAxis >
                     defaultPreferredColor );
 }
 
-void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface > & xDataSeries, sal_Int32 nIndex )
+void RangeHighlighter::fillRangesForDataPoint( const rtl::Reference< DataSeries > & xDataSeries, sal_Int32 nIndex )
 {
     if( !xDataSeries.is())
         return;
 
-    Reference< chart2::data::XDataSource > xSource( xDataSeries, uno::UNO_QUERY );
-    if( !xSource.is() )
-        return;
-
     Color nPreferredColor = defaultPreferredColor;
     std::vector< chart2::data::HighlightedRange > aHilightedRanges;
-    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqSeq( xSource->getDataSequences());
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqSeq( xDataSeries->getDataSequences());
     for( Reference< chart2::data::XLabeledDataSequence > const & labelDataSeq : aLSeqSeq )
     {
         Reference< chart2::data::XDataSequence > xLabel( labelDataSeq->getLabel());

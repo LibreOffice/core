@@ -19,6 +19,7 @@
 
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <AxisHelper.hxx>
 #include <ChartType.hxx>
@@ -565,6 +566,13 @@ uno::Reference< XAxis > DiagramHelper::getAttachedAxis(
     return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), xDiagram );
 }
 
+uno::Reference< XAxis > DiagramHelper::getAttachedAxis(
+        const rtl::Reference< DataSeries >& xSeries,
+        const rtl::Reference< Diagram >& xDiagram )
+{
+    return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), xDiagram );
+}
+
 rtl::Reference< ChartType > DiagramHelper::getChartTypeOfSeries(
                                 const rtl::Reference< Diagram >&   xDiagram
                               , const uno::Reference< XDataSeries >&        xGivenDataSeries )
@@ -597,11 +605,11 @@ rtl::Reference< ChartType > DiagramHelper::getChartTypeOfSeries(
     return nullptr;
 }
 
-std::vector< Reference< XDataSeries > >
+std::vector< rtl::Reference< ::chart::DataSeries > >
     DiagramHelper::getDataSeriesFromDiagram(
         const rtl::Reference< Diagram > & xDiagram )
 {
-    std::vector< Reference< XDataSeries > > aResult;
+    std::vector< rtl::Reference< DataSeries > > aResult;
     if (!xDiagram)
         return aResult;
 
@@ -611,7 +619,7 @@ std::vector< Reference< XDataSeries > >
         {
             for( rtl::Reference< ChartType> const & chartType : coords->getChartTypes2() )
             {
-                const Sequence< Reference< XDataSeries > > aSeriesSeq( chartType->getDataSeries() );
+                const std::vector< rtl::Reference< DataSeries > > aSeriesSeq( chartType->getDataSeries2() );
                 aResult.insert( aResult.end(), aSeriesSeq.begin(), aSeriesSeq.end() );
             }
         }
@@ -1361,8 +1369,8 @@ sal_Int32 DiagramHelper::getGeometry3D(
     rbFound = false;
     rbAmbiguous = false;
 
-    std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+    std::vector< rtl::Reference< DataSeries > > aSeriesVec =
+        DiagramHelper::getDataSeriesFromDiagram( xDiagram );
 
     if( aSeriesVec.empty())
         rbAmbiguous = true;
@@ -1372,8 +1380,7 @@ sal_Int32 DiagramHelper::getGeometry3D(
         try
         {
             sal_Int32 nGeom = 0;
-            Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY_THROW);
-            if( xProp->getPropertyValue( "Geometry3D") >>= nGeom )
+            if( series->getPropertyValue( "Geometry3D") >>= nGeom )
             {
                 if( ! rbFound )
                 {
@@ -1402,8 +1409,8 @@ void DiagramHelper::setGeometry3D(
     const rtl::Reference< Diagram > & xDiagram,
     sal_Int32 nNewGeometry )
 {
-    std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+    std::vector< rtl::Reference< DataSeries > > aSeriesVec =
+        DiagramHelper::getDataSeriesFromDiagram( xDiagram );
 
     for (auto const& series : aSeriesVec)
     {

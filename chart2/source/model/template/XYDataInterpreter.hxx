@@ -34,7 +34,7 @@ protected:
     virtual css::chart2::InterpretedData interpretDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aSeriesToReUse ) override;
+        const std::vector< rtl::Reference< ::chart::DataSeries > >& aSeriesToReUse ) override;
     virtual css::chart2::InterpretedData reinterpretDataSeries(
         const css::chart2::InterpretedData& aInterpretedData ) override;
     virtual bool isDataCompatible(

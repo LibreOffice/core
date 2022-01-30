@@ -21,6 +21,7 @@
 #include "ColumnChartType.hxx"
 #include "CandleStickChartType.hxx"
 #include "LineChartType.hxx"
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include "StockDataInterpreter.hxx"
 #include <DiagramHelper.hxx>
@@ -239,13 +240,11 @@ void StockChartTypeTemplate::resetStyles(
     ChartTypeTemplate::resetStyles( xDiagram );
     if( getDimension() == 3 )
     {
-        std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+        std::vector< rtl::Reference< DataSeries > > aSeriesVec =
+            DiagramHelper::getDataSeriesFromDiagram( xDiagram );
         for (auto const& series : aSeriesVec)
         {
-            Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY);
-            if( xProp.is() )
-                xProp->setPropertyValue( "AttachedAxisIndex", uno::Any( sal_Int32(0) ) );
+            series->setPropertyValue( "AttachedAxisIndex", uno::Any( sal_Int32(0) ) );
         }
     }
 

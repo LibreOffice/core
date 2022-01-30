@@ -28,6 +28,7 @@
 #include <Diagram.hxx>
 #include <AxisHelper.hxx>
 #include <ObjectNameProvider.hxx>
+#include <DataSeries.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/servicehelper.hxx>
@@ -77,7 +78,7 @@ double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
     {
         Reference< XAxis > xAxis;
         rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-        Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rSelectedObjectCID, xChartModel );
+        rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rSelectedObjectCID, xChartModel );
         xAxis = DiagramHelper::getAttachedAxis( xSeries, xDiagram );
         if(!xAxis.is())
             xAxis = AxisHelper::getAxis( 1/*nDimensionIndex*/, true/*bMainAxis*/, xDiagram );

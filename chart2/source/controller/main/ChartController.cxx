@@ -29,6 +29,7 @@
 #include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include "ControllerCommandDispatch.hxx"
+#include <DataSeries.hxx>
 #include <Diagram.hxx>
 #include <strings.hrc>
 #include <chartview/ExplicitValueProvider.hxx>
@@ -1394,8 +1395,8 @@ void ChartController::executeDispatch_MoveSeries( bool bForward )
 
     //get selected series
     OUString aObjectCID(m_aSelection.getSelectedCID());
-    uno::Reference< XDataSeries > xGivenDataSeries( ObjectIdentifier::getDataSeriesForCID( //yyy todo also legend entries and labels?
-            aObjectCID, getChartModel() ) );
+    rtl::Reference< DataSeries > xGivenDataSeries = ObjectIdentifier::getDataSeriesForCID( //yyy todo also legend entries and labels?
+            aObjectCID, getChartModel() );
 
     UndoGuardWithSelection aUndoGuard(
         ActionDescriptionProvider::createDescription(
