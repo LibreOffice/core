@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37ba7a3a_5dadfe1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-30T07:12:07Z",
+      "side": 1,
+      "message": "This looks very wrong itself. It simply disallows the strict search-and-replace function. The matching of typographical apostrophe with ASCII one fits very much with diacritic-insensitive mode, so it should had been only done in that case.",
+      "revId": "d40f2d02df26e216f367b5da3f9546b73f250469",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
