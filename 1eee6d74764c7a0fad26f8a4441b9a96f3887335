@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ad0e239_21da3431",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-30T11:21:53Z",
+      "side": 1,
+      "message": "Eike: could you please advise if this is correct? Or should I do something more to make sure the logic is correct?",
+      "revId": "1eee6d74764c7a0fad26f8a4441b9a96f3887335",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
