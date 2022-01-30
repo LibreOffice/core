@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <OPropertySet.hxx>
+#include "OPropertySet.hxx"
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <ModifyListenerHelper.hxx>
+#include "ModifyListenerHelper.hxx"
 
 namespace chart
 {
@@ -83,6 +83,7 @@ protected:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
 
+public:
     // ____ XRegressionCurve ____
     virtual css::uno::Reference< css::chart2::XRegressionCurveCalculator > SAL_CALL getCalculator() override;
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getEquationProperties() override;
@@ -98,6 +99,7 @@ protected:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
+protected:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
         const css::lang::EventObject& aEvent ) override;

@@ -176,6 +176,17 @@ void addListenerToAllElements(
                          impl::addListenerFunctor< typename Container::value_type >( xListener ));
 }
 
+template< class T >
+void addListenerToAllElements(
+    const std::vector<rtl::Reference<T>> & rContainer,
+    const css::uno::Reference< css::util::XModifyListener > & xListener )
+{
+    if( !xListener )
+        return;
+    for (auto const & i : rContainer)
+        i->addModifyListener(xListener);
+}
+
 template< class Container >
 void addListenerToAllMapElements(
     const Container & rContainer,
@@ -225,6 +236,17 @@ void removeListenerFromAllElements(
     if( xListener.is())
         std::for_each( rContainer.begin(), rContainer.end(),
                          impl::removeListenerFunctor< typename Container::value_type >( xListener ));
+}
+
+template< class T >
+void removeListenerFromAllElements(
+    const std::vector<rtl::Reference<T>> & rContainer,
+    const css::uno::Reference< css::util::XModifyListener > & xListener )
+{
+    if( !xListener )
+        return;
+    for (auto const & i : rContainer)
+        i->removeModifyListener(xListener);
 }
 
 template< class Container >
