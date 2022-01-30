@@ -77,11 +77,7 @@ public:
     /// merge XTypeProvider implementations
     DECLARE_XTYPEPROVIDER()
 
-private:
     explicit DataSeries( const DataSeries & rOther );
-
-    // late initialization to call after copy-constructing
-    void Init( const DataSeries & rOther );
 
     // ____ XDataSeries ____
     /// @see css::chart2::XDataSeries
@@ -134,6 +130,17 @@ private:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
+    typedef
+        std::vector< rtl::Reference< ::chart::RegressionCurveModel > >
+        tRegressionCurveContainerType;
+
+    const tRegressionCurveContainerType & getRegressionCurves2() const { return m_aRegressionCurves; }
+
+private:
+
+    // late initialization to call after copy-constructing
+    void Init( const DataSeries & rOther );
+
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
         const css::lang::EventObject& aEvent ) override;
@@ -155,9 +162,6 @@ private:
         css::uno::Reference< css::beans::XPropertySet > > tDataPointAttributeContainer;
     tDataPointAttributeContainer  m_aAttributedDataPoints;
 
-    typedef
-        std::vector< rtl::Reference< ::chart::RegressionCurveModel > >
-        tRegressionCurveContainerType;
     tRegressionCurveContainerType m_aRegressionCurves;
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;

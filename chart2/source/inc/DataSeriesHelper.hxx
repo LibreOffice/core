@@ -39,6 +39,7 @@ namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace chart { class BaseCoordinateSystem; }
 namespace chart { class ChartType; }
 namespace chart { class Diagram; }
+namespace chart { class DataSeries; }
 
 namespace chart::DataSeriesHelper
 {
@@ -95,6 +96,9 @@ OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XDataSource >
  */
 OOO_DLLPUBLIC_CHARTTOOLS OUString getDataSeriesLabel(
     const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+    const OUString & rLabelSequenceRole );
+OOO_DLLPUBLIC_CHARTTOOLS OUString getDataSeriesLabel(
+    const rtl::Reference< ::chart::DataSeries > & xSeries,
     const OUString & rLabelSequenceRole );
 
 /** Get the label of a labeled sequence including necessary automatic generation
