@@ -23,7 +23,7 @@
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
@@ -44,7 +44,7 @@ namespace com::sun::star {
 
     //= OGeometryControlModel_Base
 
-    typedef ::cppu::WeakAggComponentImplHelper2 <   css::util::XCloneable
+    typedef ::cppu::WeakComponentImplHelper <   css::util::XCloneable
                                                 ,   css::script::XScriptEventsSupplier
                                                 >   OGCM_Base;
     class OGeometryControlModel_Base
@@ -100,9 +100,6 @@ namespace com::sun::star {
 
     protected:
         virtual ~OGeometryControlModel_Base() override;
-
-        // XAggregation
-        css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _aType ) override;
 
     public:
         // XInterface

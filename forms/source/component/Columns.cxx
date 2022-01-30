@@ -162,30 +162,6 @@ Sequence<Type> SAL_CALL OGridColumn::getTypes()
 }
 
 
-Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType )
-{
-    Any aReturn;
-    // some functionality at our aggregate cannot be reasonably fulfilled here.
-    if  (   _rType.equals(cppu::UnoType<XFormComponent>::get())
-        ||  _rType.equals(cppu::UnoType<XServiceInfo>::get())
-        ||  _rType.equals(cppu::UnoType<XBindableValue>::get())
-        ||  _rType.equals(cppu::UnoType<XPropertyContainer>::get())
-        ||  comphelper::isAssignableFrom(cppu::UnoType<XTextRange>::get(),_rType)
-        )
-        return aReturn;
-
-    aReturn = OGridColumn_BASE::queryAggregation(_rType);
-    if (!aReturn.hasValue())
-    {
-        aReturn = OPropertySetAggregationHelper::queryInterface(_rType);
-        if (!aReturn.hasValue() && m_xAggregate.is())
-            aReturn = m_xAggregate->queryAggregation(_rType);
-    }
-
-    return aReturn;
-}
-
-
 OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const OUString& _sModelName )
     :OGridColumn_BASE(m_aMutex)
     ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)

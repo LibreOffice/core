@@ -241,32 +241,6 @@ constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
         }
     }
 
-
-    Any SAL_CALL OGeometryControlModel_Base::queryAggregation( const Type& _rType )
-    {
-        Any aReturn;
-        if (_rType.equals(cppu::UnoType<XCloneable>::get()) && !m_bCloneable)
-            // somebody is asking for the XCloneable interface, but our aggregate does not support it
-            // -> outta here
-            // (need this extra check, cause OGCM_Base::queryAggregation would return this interface
-            // in every case)
-            return aReturn;
-
-        aReturn = OGCM_Base::queryAggregation(_rType);
-            // the basic interfaces (XInterface, XAggregation etc)
-
-        if (!aReturn.hasValue())
-            aReturn = OPropertySetAggregationHelper::queryInterface(_rType);
-            // the property set related interfaces
-
-        if (!aReturn.hasValue() && m_xAggregate.is())
-            aReturn = m_xAggregate->queryAggregation(_rType);
-            // the interfaces our aggregate can provide
-
-        return aReturn;
-    }
-
-
     Any SAL_CALL OGeometryControlModel_Base::queryInterface( const Type& _rType )
     {
         return OGCM_Base::queryInterface(_rType);

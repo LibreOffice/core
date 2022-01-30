@@ -31,7 +31,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
 using namespace comphelper;
@@ -40,7 +40,7 @@ using namespace comphelper;
 namespace frm
 {
 
-typedef ::cppu::WeakAggComponentImplHelper2 <   css::lang::XUnoTunnel
+typedef ::cppu::WeakComponentImplHelper <   css::lang::XUnoTunnel
                                             ,   css::util::XCloneable > OGridColumn_BASE;
 class OGridColumn   :public ::cppu::BaseMutex
                     ,public OGridColumn_BASE
@@ -66,7 +66,6 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OGridColumn_BASE)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
     // XUnoTunnel
