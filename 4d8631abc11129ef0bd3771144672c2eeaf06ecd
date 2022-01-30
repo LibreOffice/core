@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6502e92f_760ee1a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-30T17:55:49Z",
+      "side": 1,
+      "message": "I noticed in include/cppuhelper/compbase.hxx:\n// A replacement for WeakAggComponentImplHelper1 has deliberately been left out,\n// as the underlying aggregation mechanism is known broken in general and should\n// not be used.\n\nSo is it ok to just remove queryAggregation and replace WeakAggComponentImplHelper2 by WeakComponentImplHelper or does it need some testing more than just building locally and Jenkins checks?",
+      "revId": "4d8631abc11129ef0bd3771144672c2eeaf06ecd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
