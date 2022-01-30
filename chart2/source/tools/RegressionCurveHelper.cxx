@@ -26,7 +26,7 @@
 #include <ExponentialRegressionCurveCalculator.hxx>
 #include <PotentialRegressionCurveCalculator.hxx>
 #include <CommonConverters.hxx>
-#include "RegressionCurveModel.hxx"
+#include <RegressionCurveModel.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartModel.hxx>
