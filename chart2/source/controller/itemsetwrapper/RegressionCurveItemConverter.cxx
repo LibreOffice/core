@@ -21,6 +21,7 @@
 #include <RegressionCurveItemConverter.hxx>
 #include "SchWhichPairs.hxx"
 #include <GraphicPropertyItemConverter.hxx>
+#include <DataSeries.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <osl/diagnose.h>
@@ -85,7 +86,7 @@ namespace chart::wrapper
 
 RegressionCurveItemConverter::RegressionCurveItemConverter(
     const uno::Reference< beans::XPropertySet >& rPropertySet,
-    const uno::Reference< chart2::XRegressionCurveContainer >& xContainer,
+    const rtl::Reference< DataSeries >& xContainer,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory ) :
