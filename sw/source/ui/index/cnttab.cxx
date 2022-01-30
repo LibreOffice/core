@@ -1812,14 +1812,14 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogControl
     , m_xSortContentRB(m_xBuilder->weld_radio_button("sortcontents"))
     , m_xSortKeyFrame(m_xBuilder->weld_widget("sortkeyframe"))
     , m_xFirstKeyLB(m_xBuilder->weld_combo_box("key1lb"))
-    , m_xFirstSortUpRB(m_xBuilder->weld_radio_button("up1cb"))
-    , m_xFirstSortDownRB(m_xBuilder->weld_radio_button("down1cb"))
+    , m_xFirstSortUpRB(m_xBuilder->weld_toggle_button("up1cb"))
+    , m_xFirstSortDownRB(m_xBuilder->weld_toggle_button("down1cb"))
     , m_xSecondKeyLB(m_xBuilder->weld_combo_box("key2lb"))
-    , m_xSecondSortUpRB(m_xBuilder->weld_radio_button("up2cb"))
-    , m_xSecondSortDownRB(m_xBuilder->weld_radio_button("down2cb"))
+    , m_xSecondSortUpRB(m_xBuilder->weld_toggle_button("up2cb"))
+    , m_xSecondSortDownRB(m_xBuilder->weld_toggle_button("down2cb"))
     , m_xThirdKeyLB(m_xBuilder->weld_combo_box("key3lb"))
-    , m_xThirdSortUpRB(m_xBuilder->weld_radio_button("up3cb"))
-    , m_xThirdSortDownRB(m_xBuilder->weld_radio_button("down3cb"))
+    , m_xThirdSortUpRB(m_xBuilder->weld_toggle_button("up3cb"))
+    , m_xThirdSortDownRB(m_xBuilder->weld_toggle_button("down3cb"))
     , m_xTokenWIN(new SwTokenWindow(m_xBuilder->weld_container("token")))
 {
     const OUString sNoCharSortKey(SwResId(STR_NOSORTKEY));
@@ -1861,6 +1861,17 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogControl
     m_xAlphaDelimCB->connect_toggled(LINK(this, SwTOXEntryTabPage, ModifyClickHdl));
     m_xCommaSeparatedCB->connect_toggled(LINK(this, SwTOXEntryTabPage, ModifyClickHdl));
     m_xRelToStyleCB->connect_toggled(LINK(this, SwTOXEntryTabPage, ModifyClickHdl));
+
+    m_xFirstSortUpRB->set_active(true);
+    m_xSecondSortUpRB->set_active(true);
+    m_xThirdSortUpRB->set_active(true);
+
+    m_xFirstSortUpRB->connect_toggled(LINK(this, SwTOXEntryTabPage, ToggleHdl));
+    m_xFirstSortDownRB->connect_toggled(LINK(this, SwTOXEntryTabPage, ToggleHdl));
+    m_xSecondSortUpRB->connect_toggled(LINK(this, SwTOXEntryTabPage, ToggleHdl));
+    m_xSecondSortDownRB->connect_toggled(LINK(this, SwTOXEntryTabPage, ToggleHdl));
+    m_xThirdSortUpRB->connect_toggled(LINK(this, SwTOXEntryTabPage, ToggleHdl));
+    m_xThirdSortDownRB->connect_toggled(LINK(this, SwTOXEntryTabPage, ToggleHdl));
 
     FieldUnit aMetric = ::GetDfltMetric(false);
     ::SetFieldUnit(*m_xTabPosMF, aMetric);
@@ -1919,6 +1930,22 @@ IMPL_LINK_NOARG(SwTOXEntryTabPage, ModifyClickHdl, weld::Toggleable&, void)
 IMPL_LINK_NOARG(SwTOXEntryTabPage, ModifyHdl, LinkParamNone*, void)
 {
     OnModify(false);
+}
+
+IMPL_LINK(SwTOXEntryTabPage, ToggleHdl, weld::Toggleable&, rToggle, void)
+{
+    if (&rToggle == m_xFirstSortUpRB.get())
+        m_xFirstSortDownRB->set_active(!m_xFirstSortUpRB->get_active());
+    else if (&rToggle == m_xFirstSortDownRB.get())
+        m_xFirstSortUpRB->set_active(!m_xFirstSortDownRB->get_active());
+    else if (&rToggle == m_xSecondSortUpRB.get())
+        m_xSecondSortDownRB->set_active(!m_xSecondSortUpRB->get_active());
+    else if (&rToggle == m_xSecondSortDownRB.get())
+        m_xSecondSortUpRB->set_active(!m_xSecondSortDownRB->get_active());
+    else if (&rToggle == m_xThirdSortUpRB.get())
+        m_xThirdSortDownRB->set_active(!m_xThirdSortUpRB->get_active());
+    else if (&rToggle == m_xThirdSortDownRB.get())
+        m_xThirdSortUpRB->set_active(!m_xThirdSortDownRB->get_active());
 }
 
 // bAllLevels is used as signal to change all levels of the example
