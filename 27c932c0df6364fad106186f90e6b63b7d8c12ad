@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f645981_ee91b4d1",
+        "filename": "sw/CppunitTest_sw_uiwriter.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-30T21:09:06Z",
+      "side": 1,
+      "message": "probably better to add this centrally in sw/uiwriter_setup.mk",
+      "revId": "27c932c0df6364fad106186f90e6b63b7d8c12ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1c224fc_0a6ce90e",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-30T21:09:06Z",
+      "side": 1,
+      "message": "why insert an empty line here?",
+      "revId": "27c932c0df6364fad106186f90e6b63b7d8c12ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
