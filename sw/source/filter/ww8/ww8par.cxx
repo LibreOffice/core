@@ -3020,7 +3020,15 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     if (nRequestedStrLen <= 0)
         return true;
 
-    sal_Int32 nRequestedPos = m_xSBase->WW8Cp2Fc(nCpOfs+rPos, &m_bIsUnicode);
+    WW8_CP nCp;
+    const bool bFail = o3tl::checked_add(nCpOfs, rPos, nCp);
+    if (bFail)
+    {
+        rPos+=nRequestedStrLen;
+        return true;
+    }
+
+    sal_Int32 nRequestedPos = m_xSBase->WW8Cp2Fc(nCp, &m_bIsUnicode);
     bool bValidPos = checkSeek(*m_pStrm, nRequestedPos);
     OSL_ENSURE(bValidPos, "Document claimed to have more text than available");
     if (!bValidPos)
